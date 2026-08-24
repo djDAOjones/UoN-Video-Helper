@@ -36,6 +36,13 @@
   averaged 21.96 fps, and we round the conform target from that. Worth checking
   which of its frame-rate figures best matches real Teams and Zoom captures
   before D8 fixes the published limits. (from: VH-6)
+- The macro-levelling envelope is indexed by frame count from the start of the
+  audio, which assumes the track begins at t=0 and has no gaps. True for
+  everything seen so far; would misalign on a source with a delayed or
+  discontinuous audio track. (from: VH-7)
+- The compressor detects RMS where the spec says only "attack 20 ms, release
+  200 ms". That is a choice inside the spec rather than a departure from it,
+  but it is a choice, and it belongs in the decision log at close. (from: VH-7)
 - `npm run check` now takes ~27 s, up from ~2 s: the chain tests process
   minutes of synthesised audio each, and LRA needs 60 s of material to settle
   (Tech 3342). Still fine to run on every change, but worth watching — the gate

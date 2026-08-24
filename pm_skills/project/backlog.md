@@ -40,7 +40,10 @@
 - [ ] **VH-10 UI workflow**
       Intent: a novice completes the whole job without being taught anything.
       Done when: the spec §9.1 flow works end to end; every §5.4 warning and
-      §7.3 outcome renders in plain language; progress shows named stages,
+      §7.3 outcome renders in plain language — note that the §5.4 conditions
+      (clipping, very quiet, highly variable, noise floor, extended silence,
+      target missed) are not merely unrendered but undetected: the analysis
+      pass produces the data they need, nothing yet derives them; progress shows named stages,
       not one opaque bar; cancel is always available; the result saves via
       the File System Access API with a blob fallback; the AAA design-review
       gate in `UI-STANDARDS.md` passes, with any exception documented.
@@ -54,7 +57,10 @@
       needs camera-like motion: on near-static fixtures both presets are
       content-limited and produce almost identical files, so the difference
       cannot be observed — and the criteria
-      that need VH-M1 / VH-M2 are named as outstanding.
+      that need VH-M1 / VH-M2 are named as outstanding. Acceptance criterion 4
+      is confirmed "by listening and by short-term loudness plot" — the plot
+      side is automated, the listening side is a maintainer check on real
+      material and cannot be claimed without it.
 
 - [ ] **VH-M1 Provide the real test corpus** [maintainer] (2026-08-24)
       Intent: acceptance criteria 1, 5 and 6 need real material; synthesised
@@ -63,6 +69,14 @@
       webcam, PowerPoint screen recording with fine text, talking head,
       mixed speech and music, a variable-frame-rate Teams recording, a 4:3
       legacy recording, and one with badly inconsistent levels.
+
+- [ ] **VH-20 Flush the audio chain's tail**
+      Intent: the limiter delays by its 5 ms look-ahead, and the streaming path
+      never flushes it, so the output loses roughly 5 ms from the end of the
+      audio. Inaudible on a lecture that ends in silence; still undocumented
+      behaviour rather than a decision.
+      Done when: either the tail is emitted as a final sample, or the loss is
+      measured, judged acceptable, and recorded in the spec-facing notes.
 
 - [ ] **VH-18 Check A/V sync end to end** [sign-off]
       Intent: acceptance criterion 6. In VH-6 verification the output's audio
