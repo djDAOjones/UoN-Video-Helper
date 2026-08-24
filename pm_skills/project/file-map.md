@@ -15,12 +15,13 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 74 file(s) across 6 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 89 file(s) across 7 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 10 file(s)
 - `.claude` — 1 file(s)
 - `docs` — 5 file(s)
-- `scripts` — 1 file(s)
-- `src` — 53 file(s)
+- `public` — 9 file(s)
+- `scripts` — 2 file(s)
+- `src` — 58 file(s)
 - `test` — 4 file(s)
 <!-- /file-map-index -->
 
@@ -49,9 +50,14 @@
 - `docs/03-open-decisions.md` — D1-D13: what still needs a human. The four blocking ones shape config, not code.
 - `docs/04-init-prompt.md` — The prompt that seeded this project's PM Skills run. Historical record.
 
+## public
+
+- `public/branding/README.md` — How to replace the placeholders with the real After Effects renders.
+
 ## scripts
 
 - `scripts/check-placeholders.mjs` — Tier 0 of the gate: fails on stray template markers, reports key-shaped strings.
+- `scripts/gen-placeholder-branding.mjs` — Generates the placeholder masters with a local ffmpeg. Authoring tool only.
 
 ## src
 
@@ -75,6 +81,8 @@
 - `src/audio/truepeak.test.ts` — Proves it finds inter-sample peaks and never reads below sample peak.
 - `src/audio/truepeak.ts` — 4x oversampled true peak. Polyphase FIR with exact pruning, so quiet passages cost little.
 - `src/config/audio.ts` — Project audio choices — targets, thresholds, chain constants. Standard-defined values live in src/audio/.
+- `src/config/branding.test.ts` — Pins master selection: frame rate first, resolution second, never upscaled.
+- `src/config/branding.ts` — Branding durations (D2), the four master variants, and master selection.
 - `src/config/presets.test.ts` — Pins the preset rules, including that the smaller preset preserves resolution.
 - `src/config/presets.ts` — The two output presets and the encoder config they imply. Purpose-named, never technique-named.
 - `src/config/thresholds.ts` — Pre-flight bands and probe constants — the numbers D8 will replace with measurements.
@@ -85,7 +93,10 @@
 - `src/core/redact.ts` — Redaction. This app's sensitive asset is the user's media and filename, not a token.
 - `src/core/version.ts` — Reads the injected product version and build identity.
 - `src/main.ts` — App entry: installs diagnostics first, mounts the shell, runs the system check.
+- `src/media/audio-frames.ts` — AudioSample to planar Float32 and back, shared by the chain and branding.
 - `src/media/audio-plan.ts` — The three audio passes, and the per-sample hook the encoder calls.
+- `src/media/branding-fade.test.ts` — Pins what "hard cut with a 100 ms fade" means at sample level (D3).
+- `src/media/branding.ts` — Conform, concatenate and pass the bed through untouched; the boundary fade.
 - `src/media/capability.ts` — Device checks asked against the exact target config, not a generic capability flag.
 - `src/media/conform.test.ts` — Proves fit/pad never distorts, across 4:3, vertical and ultrawide sources.
 - `src/media/conform.ts` — Scale-to-fit and pad geometry, and the reusable frame scaler the pipeline and probe share.

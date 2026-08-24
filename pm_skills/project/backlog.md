@@ -14,15 +14,6 @@
      comes out, through a UI a novice can finish. Built in this order:
      the meter is proved before anything depends on it. -->
 
-- [ ] **VH-8 Branding conform and concatenation**
-      Intent: prepend and append approved branding that matches the content.
-      Done when: placeholder masters are generated for all four §4.2
-      variants; the nearest-frame-rate master is selected, scaled to fit,
-      padded with the brand-background token, and re-encoded with the same
-      settings as the content; branding audio passes through **unprocessed**
-      and is excluded from loudness analysis; a 100 ms fade sits at each
-      boundary; durations come from config, never hard-coded.
-
 - [ ] **VH-9 Subtitle, chapter and metadata handling**
       Intent: carry non-A/V tracks through correctly, or fail loudly — never
       lose them silently.

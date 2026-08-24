@@ -51,6 +51,16 @@ const processActions = required<HTMLDivElement>('#process-actions')
 const processProgress = required<HTMLProgressElement>('#process-progress')
 const processResult = required<HTMLDivElement>('#process-result')
 const presetChoice = required<HTMLFieldSetElement>('#preset-choice')
+const brandingChoice = required<HTMLFieldSetElement>('#branding-choice')
+const brandingOpening = required<HTMLInputElement>('#branding-opening')
+const brandingClosing = required<HTMLInputElement>('#branding-closing')
+
+/** The D1 brand background, resolved from the token so answering D1 is one line. */
+function brandBackground(): string {
+  return (
+    getComputedStyle(document.documentElement).getPropertyValue('--uon-brand-bg').trim() || '#000000'
+  )
+}
 
 /** Which output the user asked for. Defaults to the quality-preserving one. */
 function chosenPreset(): PresetId {
@@ -274,6 +284,7 @@ fileInput.addEventListener('change', () => {
   processActions.replaceChildren()
   processActions.hidden = true
   presetChoice.hidden = true
+  brandingChoice.hidden = true
   processResult.replaceChildren()
 
   void (async () => {
@@ -325,6 +336,7 @@ async function runPreflight(file: File): Promise<void> {
       renderPreflight(preflightReport, reply.summary)
       setStatus(summarisePreflight(reply.summary))
       presetChoice.hidden = false
+      brandingChoice.hidden = false
       if (reply.summary.verdict.outcome !== 'block') showProcessControls(file)
       return
     }
@@ -391,7 +403,13 @@ function showProcessControls(file: File): void {
     processResult.replaceChildren()
 
     const { id, promise } = requestWithId(
-      { kind: 'process', file, presetId: chosenPreset() },
+      {
+        kind: 'process',
+        file,
+        presetId: chosenPreset(),
+        branding: { opening: brandingOpening.checked, closing: brandingClosing.checked },
+        backgroundColour: brandBackground(),
+      },
       3_600_000,
     )
     cancel.addEventListener('click', () => {

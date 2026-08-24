@@ -47,6 +47,10 @@ export type WorkerRequest =
       readonly id: number
       readonly file: Blob
       readonly presetId: PresetId
+      /** Spec 4.1: independent toggles, all four combinations valid. */
+      readonly branding: { readonly opening: boolean; readonly closing: boolean }
+      /** Resolved D1 brand background; the worker has no document. */
+      readonly backgroundColour: string
     }
   /** Stop the job started by `cancelId`. Answered by that job, not by this request. */
   | { readonly kind: 'cancel'; readonly id: number; readonly cancelId: number }

@@ -11,7 +11,7 @@
  * own it means the probe and the real job cannot drift apart.
  */
 
-import type { AudioEncodingConfig, AudioSample, VideoEncodingConfig } from 'mediabunny'
+import type { AudioEncodingConfig, VideoEncodingConfig } from 'mediabunny'
 
 import { KEYFRAME_INTERVAL_SECONDS, OUTPUT_SAMPLE_RATE, type OutputShape, type Preset } from '../config/presets'
 
@@ -39,25 +39,17 @@ export function videoEncodingConfigFor(
 }
 
 /**
- * @param processSample - Where the audio chain hooks in (VH-7). Until then the
- *   audio is decoded and re-encoded untouched, which is still the correct
- *   behaviour for the branding bed: it is mastered at target and must pass
- *   through unprocessed (spec section 4.4).
+ * No `process` hook. The audio chain runs in the pipeline's feed loop instead,
+ * because that hook sees every sample — including the branding bed, which is
+ * mastered at target and must pass through unprocessed (spec section 4.4).
  */
-export function audioEncodingConfigFor(
-  preset: Preset,
-  channelCount: number,
-  processSample?: (sample: AudioSample) => AudioSample | AudioSample[] | null,
-): AudioEncodingConfig {
+export function audioEncodingConfigFor(preset: Preset, channelCount: number): AudioEncodingConfig {
   const bitrate =
     channelCount <= 1 ? preset.audioBitrateMonoBps : preset.audioBitrateStereoBps
 
   return {
     codec: 'aac',
     bitrate,
-    transform: {
-      sampleRate: OUTPUT_SAMPLE_RATE,
-      ...(processSample ? { process: processSample } : {}),
-    },
+    transform: { sampleRate: OUTPUT_SAMPLE_RATE },
   }
 }

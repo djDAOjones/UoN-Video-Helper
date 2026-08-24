@@ -23,7 +23,14 @@ import {
 
 import { log } from '../core/logger'
 import type { OutputShape, Preset } from '../config/presets'
-import { createAudioProcessor, planAudio } from './audio-plan'
+import { createContentAudioProcessor, planAudio } from './audio-plan'
+import {
+  BrandingRenderer,
+  feedBrandingAudio,
+  feedBrandingVideo,
+  loadBrandingClip,
+  type BrandingClip,
+} from './branding'
 import { audioEncodingConfigFor, videoEncodingConfigFor } from './encoding'
 import type { OpfsWorkspace } from './opfs'
 
@@ -49,6 +56,10 @@ export interface PipelineOptions {
   readonly preset: Preset
   readonly durationSeconds: number
   readonly workspace: OpfsWorkspace
+  /** Spec 4.1: two independent toggles, giving all four combinations. */
+  readonly branding: { readonly opening: boolean; readonly closing: boolean }
+  /** Resolved D1 brand background; the worker has no document to read it from. */
+  readonly backgroundColour: string
   readonly signal?: AbortSignal
   readonly onProgress?: (progress: PipelineProgress) => void
 }
@@ -65,7 +76,8 @@ function throwIfAborted(signal: AbortSignal | undefined): void {
  * section 13, acceptance criterion 8.
  */
 export async function runPipeline(options: PipelineOptions): Promise<File> {
-  const { input, shape, preset, durationSeconds, workspace, signal, onProgress } = options
+  const { input, shape, preset, durationSeconds, workspace, branding, signal, onProgress } =
+    options
 
   throwIfAborted(signal)
   onProgress?.({ stage: 'preparing', fraction: 0 })
@@ -82,6 +94,20 @@ export async function runPipeline(options: PipelineOptions): Promise<File> {
     audioPlan = await planAudio(audioTrack, signal)
     throwIfAborted(signal)
   }
+
+  // Branding is fetched before anything is written, so a missing asset is
+  // known about while the job can still be described honestly.
+  const opening: BrandingClip | null = branding.opening
+    ? await loadBrandingClip('opening', shape)
+    : null
+  const closing: BrandingClip | null = branding.closing
+    ? await loadBrandingClip('closing', shape)
+    : null
+
+  const openingSeconds = opening?.durationSeconds ?? 0
+  const closingSeconds = closing?.durationSeconds ?? 0
+  const contentOffset = openingSeconds
+  const closingOffset = openingSeconds + durationSeconds
 
   const outputFile = await workspace.createFile(`output-${preset.id}.mp4`)
 
@@ -105,48 +131,89 @@ export async function runPipeline(options: PipelineOptions): Promise<File> {
 
   let audioSource: AudioSampleSource | null = null
   if (audioTrack && audioPlan) {
-    audioSource = new AudioSampleSource(
-      audioEncodingConfigFor(preset, audioPlan.channelCount, createAudioProcessor(audioPlan)),
-    )
+    audioSource = new AudioSampleSource(audioEncodingConfigFor(preset, audioPlan.channelCount))
     output.addAudioTrack(audioSource)
   }
 
-  const expectedFrames = Math.max(1, Math.round(durationSeconds * shape.frameRate))
+  const timelineSeconds = openingSeconds + durationSeconds + closingSeconds
+  const expectedFrames = Math.max(1, Math.round(timelineSeconds * shape.frameRate))
   let framesFed = 0
 
+  const renderer = new BrandingRenderer(shape, options.backgroundColour)
+
+  // Everything is fed in timeline order within its own track, and the two
+  // tracks are fed concurrently — the muxer interleaves them, so running one
+  // track to completion first would make it buffer the whole of that track.
   const feedVideo = async (): Promise<void> => {
+    if (opening) await feedBrandingVideo(opening, videoSource, 0, renderer, signal)
+
     const sink = new VideoSampleSink(videoTrack)
-    // Mediabunny's transform normalises this stream to a constant frame rate,
-    // so source frames are consumed as they come and the output grid is
-    // regular regardless of how variable the input was.
+    // Mediabunny's transform normalises the whole stream to a constant frame
+    // rate, so the branding and the content land on one regular grid however
+    // variable the source was.
+    //
+    // Timestamps are taken relative to the track's own first sample. Real
+    // recordings do not reliably start at zero — encoder priming shows up as a
+    // negative first timestamp — and with no opening sequence the offset is
+    // zero, so an unnormalised negative timestamp would be rejected outright.
+    let contentOrigin: number | null = null
     for await (const sample of sink.samples()) {
       throwIfAborted(signal)
       try {
+        contentOrigin ??= sample.timestamp
+        sample.setTimestamp(contentOffset + Math.max(0, sample.timestamp - contentOrigin))
         await videoSource.add(sample)
       } finally {
         sample.close()
       }
       framesFed++
       if (framesFed % 30 === 0) {
-        onProgress?.({
-          stage: 'encoding',
-          fraction: Math.min(0.98, framesFed / expectedFrames),
-        })
+        onProgress?.({ stage: 'encoding', fraction: Math.min(0.98, framesFed / expectedFrames) })
       }
     }
+
+    if (closing) await feedBrandingVideo(closing, videoSource, closingOffset, renderer, signal)
     videoSource.close()
   }
 
   const feedAudio = async (): Promise<void> => {
-    if (!audioTrack || !audioSource) return
+    if (!audioTrack || !audioSource || !audioPlan) return
+
+    if (opening) {
+      await feedBrandingAudio(opening, audioSource, 0, { fadeIn: false, fadeOut: true }, signal)
+    }
+
+    const processContent = createContentAudioProcessor(audioPlan, {
+      offsetSeconds: contentOffset,
+      durationSeconds,
+      fadeIn: opening !== null,
+      fadeOut: closing !== null,
+    })
     const sink = new AudioSampleSink(audioTrack)
     for await (const sample of sink.samples()) {
       throwIfAborted(signal)
+      let processed
       try {
-        await audioSource.add(sample)
+        processed = processContent(sample)
       } finally {
         sample.close()
       }
+      if (!processed) continue
+      try {
+        await audioSource.add(processed)
+      } finally {
+        processed.close()
+      }
+    }
+
+    if (closing) {
+      await feedBrandingAudio(
+        closing,
+        audioSource,
+        closingOffset,
+        { fadeIn: true, fadeOut: false },
+        signal,
+      )
     }
     audioSource.close()
   }
@@ -169,6 +236,9 @@ export async function runPipeline(options: PipelineOptions): Promise<File> {
       height: shape.height,
       frameRate: shape.frameRate,
       audioGainDb: audioPlan ? Math.round(audioPlan.gainDb * 10) / 10 : null,
+      openingSeconds,
+      closingSeconds,
+      timelineSeconds,
     })
     return file
   } catch (cause) {

@@ -64,7 +64,7 @@ self.addEventListener('message', (event: MessageEvent<WorkerRequest>) => {
       break
 
     case 'process':
-      void handleProcess(request.id, request.file, request.presetId)
+      void handleProcess(request.id, request)
       break
 
     case 'cancel':
@@ -101,7 +101,16 @@ async function releaseFinished(): Promise<void> {
   await Promise.all(workspaces.map((workspace) => workspace.dispose()))
 }
 
-async function handleProcess(id: number, file: Blob, presetId: PresetId): Promise<void> {
+async function handleProcess(
+  id: number,
+  options: {
+    readonly file: Blob
+    readonly presetId: PresetId
+    readonly branding: { readonly opening: boolean; readonly closing: boolean }
+    readonly backgroundColour: string
+  },
+): Promise<void> {
+  const { file, presetId } = options
   // Bound the retained set to one before adding to it.
   await releaseFinished()
 
@@ -126,6 +135,8 @@ async function handleProcess(id: number, file: Blob, presetId: PresetId): Promis
       preset,
       durationSeconds: report.durationSeconds,
       workspace,
+      branding: options.branding,
+      backgroundColour: options.backgroundColour,
       signal: controller.signal,
       onProgress: ({ stage, fraction }) => post({ kind: 'stage', id, stage, fraction }),
     })
@@ -141,16 +152,20 @@ async function handleProcess(id: number, file: Blob, presetId: PresetId): Promis
       post({ kind: 'cancelled', id })
       return
     }
-    log.warn('worker', 'processing failed', {
-      reason: cause instanceof Error ? cause.message : String(cause),
-    })
+    const reason = cause instanceof Error ? cause.message : String(cause)
+    log.warn('worker', 'processing failed', { reason })
     post({
       kind: 'failed',
       id,
       message:
         cause instanceof UnreadableFileError
           ? cause.message
-          : 'Something went wrong while creating the video. Your original file has not been changed.',
+          : // The user-facing sentence never changes. In development the
+            // underlying reason is appended, because "something went wrong"
+            // tells a maintainer nothing and this is the one place the real
+            // cause is known.
+            'Something went wrong while creating the video. Your original file has not been changed.' +
+            (import.meta.env.DEV ? ` [dev: ${reason}]` : ''),
     })
   } finally {
     running.delete(id)

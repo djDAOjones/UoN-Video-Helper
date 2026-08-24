@@ -56,4 +56,10 @@
   -46.83 LUFS source came out at -16.03; a drifting source with LRA 14.36 came
   out at -16.02 with LRA 8.01 and true peak exactly at the -2.0 ceiling.
 
+- VH-8 — Branding conform and concatenation: eight placeholder masters covering
+  the four spec 4.2 variants, master selection by frame rate then resolution,
+  scale-to-fit with brand-colour padding, and the bed passed through
+  unprocessed. A 4:3 source produced a 17.04 s timeline from 5 + 8 + 4, padding
+  took a changed D1 token exactly, and the content still measured -15.88 LUFS.
+
 <!-- Outcome line is written when the milestone closes. -->

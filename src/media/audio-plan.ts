@@ -17,13 +17,15 @@
  * did is worth far more than the seconds it costs.
  */
 
-import { AudioSample, AudioSampleSink, type InputAudioTrack } from 'mediabunny'
+import { AudioSampleSink, type AudioSample, type InputAudioTrack } from 'mediabunny'
 
 import { AudioAnalyser, type AudioAnalysis } from '../audio/analyse'
 import { AudioChain } from '../audio/chain'
 import { buildGainEnvelope, type GainEnvelope } from '../audio/macrolevel'
 import { TARGET_INTEGRATED_LUFS } from '../config/audio'
 import { log } from '../core/logger'
+import { applyBoundaryFade } from './branding'
+import { toPlanar, toSample } from './audio-frames'
 
 export interface AudioPlan {
   readonly analysis: AudioAnalysis
@@ -32,36 +34,6 @@ export interface AudioPlan {
   readonly gainDb: number
   readonly sampleRate: number
   readonly channelCount: number
-}
-
-/** Pulls one sample's audio out as planar `Float32Array`s. */
-function toPlanar(sample: AudioSample, channelCount: number): Float32Array[] {
-  const frames = sample.numberOfFrames
-  const channels: Float32Array[] = []
-  for (let ch = 0; ch < channelCount; ch++) {
-    const data = new Float32Array(frames)
-    sample.copyTo(data, { planeIndex: ch, format: 'f32-planar' })
-    channels.push(data)
-  }
-  return channels
-}
-
-/** Packs planar channels back into one interleaved-by-plane buffer for `AudioSample`. */
-function toSample(
-  channels: readonly Float32Array[],
-  sampleRate: number,
-  timestamp: number,
-): AudioSample {
-  const frames = channels[0]?.length ?? 0
-  const packed = new Float32Array(frames * channels.length)
-  for (let ch = 0; ch < channels.length; ch++) packed.set(channels[ch]!, ch * frames)
-  return new AudioSample({
-    data: packed,
-    format: 'f32-planar',
-    numberOfChannels: channels.length,
-    sampleRate,
-    timestamp,
-  })
 }
 
 /** Runs one traversal of the track, optionally through a chain, into an analyser. */
@@ -136,25 +108,50 @@ export async function planAudio(
 }
 
 /**
- * Builds the per-sample hook for pass C.
+ * The pass-C processor for CONTENT audio only.
  *
- * Timestamps come from a running frame count rather than from the incoming
- * sample. The chain drops the limiter's look-ahead delay from the head of the
- * stream, so counting frames out is what keeps the result both contiguous and
- * aligned with the picture; copying the input timestamps would leave a gap at
- * the first join.
+ * Deliberately not wired into the encoder's transform hook. That hook sees
+ * every sample, including the branding bed — which is mastered at target and
+ * must pass through unprocessed (spec 4.4). Levelling it would undo the
+ * mastering and, worse, would do so inconsistently depending on where it fell
+ * relative to the content.
+ *
+ * Timestamps come from a running frame count rather than the incoming sample:
+ * the chain drops the limiter's look-ahead from the head of the stream, so
+ * counting frames out is what keeps the result contiguous and aligned.
  */
-export function createAudioProcessor(plan: AudioPlan): (sample: AudioSample) => AudioSample | null {
+export function createContentAudioProcessor(
+  plan: AudioPlan,
+  options: {
+    /** Where the content sits on the output timeline. */
+    readonly offsetSeconds: number
+    readonly durationSeconds: number
+    /** Fade the content in — true when an opening sequence precedes it. */
+    readonly fadeIn: boolean
+    /** Fade the content out — true when a closing sequence follows it. */
+    readonly fadeOut: boolean
+  },
+): (sample: AudioSample) => AudioSample | null {
   const { sampleRate, channelCount, envelope, gainDb } = plan
   const chain = new AudioChain({ sampleRate, channelCount, envelope, gainDb })
   let emittedFrames = 0
 
   return (sample: AudioSample): AudioSample | null => {
     const processed = chain.process(toPlanar(sample, channelCount))
-    if ((processed[0]?.length ?? 0) === 0) return null
+    const frames = processed[0]?.length ?? 0
+    if (frames === 0) return null
 
-    const output = toSample(processed, sampleRate, emittedFrames / sampleRate)
-    emittedFrames += processed[0]!.length
+    const chunkStartSeconds = emittedFrames / sampleRate
+    applyBoundaryFade(processed, {
+      chunkStartSeconds,
+      segmentDurationSeconds: options.durationSeconds,
+      sampleRate,
+      fadeIn: options.fadeIn,
+      fadeOut: options.fadeOut,
+    })
+
+    const output = toSample(processed, sampleRate, options.offsetSeconds + chunkStartSeconds)
+    emittedFrames += frames
     return output
   }
 }
