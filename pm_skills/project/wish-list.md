@@ -36,6 +36,10 @@
   averaged 21.96 fps, and we round the conform target from that. Worth checking
   which of its frame-rate figures best matches real Teams and Zoom captures
   before D8 fixes the published limits. (from: VH-6)
+- `npm run check` now takes ~27 s, up from ~2 s: the chain tests process
+  minutes of synthesised audio each, and LRA needs 60 s of material to settle
+  (Tech 3342). Still fine to run on every change, but worth watching — the gate
+  earns its keep only if people actually run it. (from: VH-7)
 - Progress is emitted every 30 frames, which is invisible on short jobs. Fine
   for an hour of video; revisit if the UI feels dead on short ones. (from: VH-6)
 - TypeScript 7 is released but typescript-eslint caps at <6.1.0. Revisit the

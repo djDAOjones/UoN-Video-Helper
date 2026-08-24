@@ -358,6 +358,7 @@ presetChoice.addEventListener('change', () => {
 
 const STAGE_WORDS: Record<string, string> = {
   preparing: 'Getting ready',
+  analysing: 'Analysing audio',
   encoding: 'Encoding video',
   finishing: 'Finishing the file',
 }

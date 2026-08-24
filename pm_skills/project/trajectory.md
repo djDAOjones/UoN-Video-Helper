@@ -50,4 +50,10 @@
   in a real decoder; a 2560x1440 source downscaled to 1920x1080 on the smaller
   preset; cancelling removed the job's scratch entirely.
 
+- VH-7 — Audio chain: high-pass, conditional macro-levelling, gentle
+  compression, one linear gain and a true-peak limiter, planned over three
+  audio passes so the gain is measured rather than estimated. End to end, a
+  -46.83 LUFS source came out at -16.03; a drifting source with LRA 14.36 came
+  out at -16.02 with LRA 8.01 and true peak exactly at the -2.0 ceiling.
+
 <!-- Outcome line is written when the milestone closes. -->

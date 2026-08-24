@@ -15,12 +15,12 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 63 file(s) across 6 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 74 file(s) across 6 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 10 file(s)
 - `.claude` — 1 file(s)
 - `docs` — 5 file(s)
 - `scripts` — 1 file(s)
-- `src` — 42 file(s)
+- `src` — 53 file(s)
 - `test` — 4 file(s)
 <!-- /file-map-index -->
 
@@ -58,10 +58,20 @@
 - `src/audio/analyse.test.ts` — Proves the facade measures the same thing the components do separately.
 - `src/audio/analyse.ts` — The analysis pass: loudness and true peak over one traversal of source audio only.
 - `src/audio/biquad.ts` — Second-order IIR section, Direct Form II transposed, Float64 state to resist hour-long drift.
+- `src/audio/chain.test.ts` — Acceptance criteria 2 and 4 — target loudness, ceiling, and no pumping the chain caused.
+- `src/audio/chain.ts` — Assembles spec 5.2 steps 2-6 in order; two shapes, one for measuring and one for applying.
+- `src/audio/compressor.test.ts` — Pins the static curve, the knee, and that the stereo image never shifts.
+- `src/audio/compressor.ts` — Gentle 2:1 compression. RMS detection, because sample peaks are the limiter's job.
+- `src/audio/highpass.test.ts` — Checks the -3 dB cutoff, rumble rejection, and that channels stay independent.
+- `src/audio/highpass.ts` — 60 Hz Butterworth high-pass: rumble out, speech untouched.
 - `src/audio/kweighting.test.ts` — Asserts the derivation reproduces the standard's published 48 kHz coefficients.
 - `src/audio/kweighting.ts` — BS.1770-4 K-weighting, derived at the source's real sample rate rather than resampling to a table.
+- `src/audio/limiter.test.ts` — The ceiling promise, including a signal that reaches full scale between samples.
+- `src/audio/limiter.ts` — True-peak limiter sharing the meter's oversampling, so detection and limiting agree.
 - `src/audio/loudness.test.ts` — Meter behaviour, with every expected value derived from BS.1770-4's equations.
 - `src/audio/loudness.ts` — Gated integrated loudness, momentary and short-term curves, and LRA. Streaming.
+- `src/audio/macrolevel.test.ts` — Each anti-pumping property tested alone — conditional, window, slew, freeze.
+- `src/audio/macrolevel.ts` — Conditional macro-levelling: the four properties that separate it from an AGC.
 - `src/audio/truepeak.test.ts` — Proves it finds inter-sample peaks and never reads below sample peak.
 - `src/audio/truepeak.ts` — 4x oversampled true peak. Polyphase FIR with exact pruning, so quiet passages cost little.
 - `src/config/audio.ts` — Project audio choices — targets, thresholds, chain constants. Standard-defined values live in src/audio/.
@@ -75,6 +85,7 @@
 - `src/core/redact.ts` — Redaction. This app's sensitive asset is the user's media and filename, not a token.
 - `src/core/version.ts` — Reads the injected product version and build identity.
 - `src/main.ts` — App entry: installs diagnostics first, mounts the shell, runs the system check.
+- `src/media/audio-plan.ts` — The three audio passes, and the per-sample hook the encoder calls.
 - `src/media/capability.ts` — Device checks asked against the exact target config, not a generic capability flag.
 - `src/media/conform.test.ts` — Proves fit/pad never distorts, across 4:3, vertical and ultrawide sources.
 - `src/media/conform.ts` — Scale-to-fit and pad geometry, and the reusable frame scaler the pipeline and probe share.

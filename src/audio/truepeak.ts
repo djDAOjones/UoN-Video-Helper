@@ -62,7 +62,8 @@ function buildPhases(): Float64Array[] {
   })
 }
 
-const PHASES = buildPhases()
+/** Shared with the limiter, so detection and limiting agree by construction. */
+export const OVERSAMPLE_PHASES: readonly Float64Array[] = buildPhases()
 
 /**
  * L1 norm of the widest phase. The interpolated magnitude can never exceed
@@ -70,9 +71,12 @@ const PHASES = buildPhases()
  * detector skip the full convolution for quiet passages without changing the
  * answer.
  */
-const MAX_PHASE_GAIN = Math.max(
-  ...PHASES.map((taps) => taps.reduce((sum, tap) => sum + Math.abs(tap), 0)),
+export const MAX_PHASE_GAIN = Math.max(
+  ...OVERSAMPLE_PHASES.map((taps) => taps.reduce((sum, tap) => sum + Math.abs(tap), 0)),
 )
+
+/** Taps per polyphase branch; the limiter sizes its delay line from this. */
+export const PHASE_TAPS = TAPS_PER_PHASE
 
 /**
  * Streaming true-peak detector.
@@ -135,7 +139,7 @@ export class TruePeakDetector {
       if (windowMax * MAX_PHASE_GAIN <= peak) continue
 
       for (let phase = 0; phase < OVERSAMPLE; phase++) {
-        const taps = PHASES[phase]!
+        const taps = OVERSAMPLE_PHASES[phase]!
         let sum = 0
         for (let j = 0; j < TAPS_PER_PHASE; j++) sum += taps[j]! * window[j]!
         const magnitude = Math.abs(sum)

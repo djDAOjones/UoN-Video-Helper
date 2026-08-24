@@ -14,16 +14,6 @@
      comes out, through a UI a novice can finish. Built in this order:
      the meter is proved before anything depends on it. -->
 
-- [ ] **VH-7 Audio chain**
-      Intent: the spec §5.2 chain, applied in order, transparently.
-      Done when: high-pass, conditional macro-levelling (LRA > 9 LU only,
-      15 s window, ±6 dB clamp, 1 dB/s slew, freeze below −45 LUFS), 2:1
-      compression, a single linear gain and a −2.0 dBTP true-peak limiter
-      are implemented as separate tested modules and integrated into pass 2;
-      measured output loudness is −16 ±0.5 LUFS and true peak never exceeds
-      −2.0 dBTP; a deliberately variable-level recording shows no audible
-      pumping and a smooth short-term plot.
-
 - [ ] **VH-8 Branding conform and concatenation**
       Intent: prepend and append approved branding that matches the content.
       Done when: placeholder masters are generated for all four §4.2

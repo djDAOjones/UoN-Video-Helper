@@ -87,3 +87,62 @@ export function feedInChunks(
     sink.addFrames(channels.map((channel) => channel.subarray(offset, end)))
   }
 }
+
+/**
+ * Speech-like material: a voiced carrier with harmonics, gated into syllables,
+ * with pauses and a slow level drift.
+ *
+ * Not speech, but it has the properties the audio chain actually reacts to —
+ * a syllable rate the compressor must not chase, pauses the macro-leveller
+ * must not amplify, and drift it should correct. Fully deterministic, so a
+ * failure is reproducible.
+ */
+export function speechLike(options: {
+  readonly sampleRate: number
+  readonly seconds: number
+  readonly channelCount: number
+  /** Peak amplitude in dBFS at the start of the recording. */
+  readonly startPeakDbfs: number
+  /** Peak amplitude in dBFS at the end — differ from the start to create drift. */
+  readonly endPeakDbfs?: number
+  /** Seconds of silence inserted every `pauseEverySeconds`. */
+  readonly pauseSeconds?: number
+  readonly pauseEverySeconds?: number
+}): Float32Array[] {
+  const { sampleRate, seconds, channelCount, startPeakDbfs } = options
+  const endPeakDbfs = options.endPeakDbfs ?? startPeakDbfs
+  const pauseSeconds = options.pauseSeconds ?? 0
+  const pauseEverySeconds = options.pauseEverySeconds ?? 0
+  const frames = Math.round(sampleRate * seconds)
+
+  const mono = new Float32Array(frames)
+  for (let i = 0; i < frames; i++) {
+    const t = i / sampleRate
+
+    if (pauseSeconds > 0 && pauseEverySeconds > 0) {
+      const phase = t % (pauseEverySeconds + pauseSeconds)
+      if (phase >= pauseEverySeconds) continue
+    }
+
+    // Syllables: ~4 per second, raised-cosine so there are no edges of their own.
+    const syllable = t * 4
+    const within = syllable - Math.floor(syllable)
+    const envelope = within < 0.7 ? 0.5 - 0.5 * Math.cos((Math.PI * within) / 0.35) : 0
+    if (envelope <= 0) continue
+
+    // Drift from start level to end level across the recording.
+    const drift = startPeakDbfs + (endPeakDbfs - startPeakDbfs) * (t / seconds)
+    const amplitude = dbfsToAmplitude(drift)
+
+    const f0 = 150 + 20 * Math.sin(2 * Math.PI * 0.3 * t)
+    const voiced =
+      0.6 * Math.sin(2 * Math.PI * f0 * t) +
+      0.3 * Math.sin(2 * Math.PI * 2 * f0 * t) +
+      0.15 * Math.sin(2 * Math.PI * 3 * f0 * t) +
+      0.08 * Math.sin(2 * Math.PI * 5 * f0 * t)
+
+    mono[i] = amplitude * envelope * voiced * 0.75
+  }
+
+  return Array.from({ length: channelCount }, () => mono.slice())
+}

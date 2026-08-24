@@ -23,11 +23,12 @@ import {
 
 import { log } from '../core/logger'
 import type { OutputShape, Preset } from '../config/presets'
+import { createAudioProcessor, planAudio } from './audio-plan'
 import { audioEncodingConfigFor, videoEncodingConfigFor } from './encoding'
 import type { OpfsWorkspace } from './opfs'
 
 /** Named stages, per spec section 9.2 — not one opaque bar. */
-export type PipelineStage = 'preparing' | 'encoding' | 'finishing'
+export type PipelineStage = 'preparing' | 'analysing' | 'encoding' | 'finishing'
 
 export interface PipelineProgress {
   readonly stage: PipelineStage
@@ -73,6 +74,15 @@ export async function runPipeline(options: PipelineOptions): Promise<File> {
   if (!videoTrack) throw new Error('The source has no video track')
   const audioTrack = await input.getPrimaryAudioTrack()
 
+  // Passes A and B. The encode cannot start until the single linear gain is
+  // known, and the gain is not knowable until the chain has been measured.
+  let audioPlan = null
+  if (audioTrack) {
+    onProgress?.({ stage: 'analysing', fraction: 0 })
+    audioPlan = await planAudio(audioTrack, signal)
+    throwIfAborted(signal)
+  }
+
   const outputFile = await workspace.createFile(`output-${preset.id}.mp4`)
 
   const output = new Output({
@@ -94,9 +104,10 @@ export async function runPipeline(options: PipelineOptions): Promise<File> {
   output.addVideoTrack(videoSource, { frameRate: shape.frameRate })
 
   let audioSource: AudioSampleSource | null = null
-  if (audioTrack) {
-    const channelCount = await audioTrack.getNumberOfChannels()
-    audioSource = new AudioSampleSource(audioEncodingConfigFor(preset, channelCount))
+  if (audioTrack && audioPlan) {
+    audioSource = new AudioSampleSource(
+      audioEncodingConfigFor(preset, audioPlan.channelCount, createAudioProcessor(audioPlan)),
+    )
     output.addAudioTrack(audioSource)
   }
 
@@ -157,6 +168,7 @@ export async function runPipeline(options: PipelineOptions): Promise<File> {
       width: shape.width,
       height: shape.height,
       frameRate: shape.frameRate,
+      audioGainDb: audioPlan ? Math.round(audioPlan.gainDb * 10) / 10 : null,
     })
     return file
   } catch (cause) {
