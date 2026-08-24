@@ -24,5 +24,12 @@
 
 ## Open
 
-<!-- Append captured deltas below, one checkbox line each. Delete this comment
-     once you add the first real item. -->
+- [ ] 2026-08-24 SPEC §6.3 — "nearest standard value (24/25/30/50/60)" snaps a
+      15 fps source up to 24, adding 60% duplicate frames; Teams/Zoom drop to
+      15-20 fps under load (source: VH-4)
+- [ ] 2026-08-24 SPEC §8.3.3 — the sidecar `.vtt` fallback for non-preservable
+      subtitle tracks is unachievable: Mediabunny cannot read subtitle tracks
+      at all, so there is nothing to export (source: VH-4, Phase A verification)
+- [ ] 2026-08-24 SPEC §8.3.2 — "where present and preservable, re-embed" has no
+      reachable branch for embedded tracks for the same reason; preservation
+      applies only to a user-supplied sidecar (source: Phase A verification)

@@ -47,7 +47,8 @@ is not hand-edited.
 | `format` | `prettier --write .` | Auto-fix. **Never** part of `check`. |
 | `docs:lint` | `markdownlint-cli2 "**/*.md" "#node_modules"` | Markdown lint |
 | `docs:links` | `node check-links.mjs` | Internal Markdown link check |
-| `fixtures` | `node scripts/gen-fixtures.mjs` | Regenerate test media fixtures |
+| `check:placeholders` | `node scripts/check-placeholders.mjs` | Stray template markers, plus a report-only key-shape scan |
+| `fixtures` | `node scripts/gen-fixtures.mjs` | Regenerate test media fixtures — **arrives with VH-16**; not yet in `package.json` |
 | `check` | see **Quality gate** below | The one gate |
 
 Any script added here is added to this table in the same change. A script

@@ -19,5 +19,13 @@
 
 ## Open
 
-<!-- Append captured ideas below, one bullet each. Delete this comment once
-     you add the first real item. -->
+- Momentary and short-term curves are kept in full at 100 Hz — about 5.8 MB per
+  hour of audio. Fine at v1 scope; worth revisiting if anyone points this at a
+  multi-hour recording. (from: VH-3)
+- EBU Tech 3341 cases 20-23 pass on my reading of "continuous in phase at both
+  sides of the single period", which Table 1 does not define. Confirm against
+  the EBU's own signal files if they are ever downloaded. (from: VH-3)
+- Worker bundle is 181 kB, mostly Mediabunny demuxers. Could narrow further if
+  MOV/MKV/WebM input turns out to be rare in practice. (from: VH-4)
+- TypeScript 7 is released but typescript-eslint caps at <6.1.0. Revisit the
+  pin when the linter catches up. (from: VH-1)

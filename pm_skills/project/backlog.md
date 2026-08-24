@@ -94,6 +94,14 @@
       mixed speech and music, a variable-frame-rate Teams recording, a 4:3
       legacy recording, and one with badly inconsistent levels.
 
+- [ ] **VH-16 Fixture generator**
+      Intent: `npm run fixtures` — the synthetic corpus VH-11 verifies against
+      and VH-4's unverified cases need. Named in `DEV-INFRASTRUCTURE.md` but
+      not yet written.
+      Done when: a script produces slide-like frames with fine text, a
+      variable-level speech bed, a deliberately variable-frame-rate clip, a 4:3
+      source, and a rotated source; output is gitignored and reproducible.
+
 - [ ] **VH-M2 Measure the device envelope** [maintainer] (2026-08-24)
       Intent: spec §7.4 — published limits come from measurement, and this
       is what closes D8.
@@ -136,6 +144,12 @@
       for who approves a variant before it needs an implementation.
 - [ ] **D13 Batch processing** — the most likely first request from anyone
       with a module's worth of recordings. Revisit when v1 is in use.
+- [ ] **EBU Tech 3341 cases 7 and 8** — the authentic-programme segments,
+      which the EBU distributes as audio and cannot be synthesised. Would need
+      the files checked in as gitignored fixtures. Cases 3-5 already cover the
+      same gating behaviour.
+- [ ] **TypeScript 7** — blocked on typescript-eslint supporting `>=6.1.0`.
+      A one-line change to the pin when it does.
 - [ ] **Full embedded-subtitle extraction** — would need a bespoke MP4 box
       walker for `tx3g` / `wvtt` / `stpp` samples, since Mediabunny cannot
       read subtitle tracks. Revisit only if embedded tracks turn out to be
