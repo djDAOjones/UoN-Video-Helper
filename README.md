@@ -3,20 +3,39 @@
 A browser-based tool that helps University of Nottingham staff prepare
 educational video for publication: approved opening and closing branding,
 consistent audio levels, and a correctly encoded MP4 — with no software to
-install and no media leaving the user's device.
+install and **no media leaving the user's device**.
 
 ## Status
 
-**Specification phase.** No application code yet.
+**Foundation set, build not started.** Project memory is populated; the
+first milestone is the MVP in [`pm_skills/project/backlog.md`](pm_skills/project/backlog.md).
+
+## Quick start
+
+```bash
+npm install && npm run dev
+```
+
+Then open <http://localhost:5173>. Readiness is a page that mounts and a
+`boot` line in the console — not merely a running process.
+
+| Command | Does |
+| --- | --- |
+| `npm run dev` | Dev server at http://localhost:5173 |
+| `npm run build` | Static output to `dist/` |
+| `npm run check` | The one quality gate — types, lint, tests, build, docs |
+| `npm test` | Test suite, including the EBU Tech 3341 meter validation |
+
+Full detail: [`DEV-INFRASTRUCTURE.md`](DEV-INFRASTRUCTURE.md).
 
 ## Documents
 
 | Document | Purpose |
 | --- | --- |
+| [`docs/01-specification.md`](docs/01-specification.md) | The specification. **Start here.** Authoritative. |
+| [`docs/02-technical-rationale.md`](docs/02-technical-rationale.md) | Why each decision was made, with evidence. Read before re-opening one. |
+| [`docs/03-open-decisions.md`](docs/03-open-decisions.md) | What still needs a human decision (D1–D13). |
 | [`docs/00-original-brief.md`](docs/00-original-brief.md) | The original brief, verbatim. Historical record. |
-| [`docs/01-specification.md`](docs/01-specification.md) | The current specification. **Start here.** |
-| [`docs/02-technical-rationale.md`](docs/02-technical-rationale.md) | Why each decision was made, with evidence. |
-| [`docs/03-open-decisions.md`](docs/03-open-decisions.md) | What still needs a human decision. |
 
 ## How it works
 
@@ -29,11 +48,63 @@ possible, keeps the University clear of codec licensing obligations, and
 allows deployment as plain static files. See
 [`docs/02-technical-rationale.md`](docs/02-technical-rationale.md).
 
+A job is two passes over the source. Pass 1 decodes audio only and
+measures loudness; pass 2 decodes video and audio, conforms to constant
+frame rate, applies the audio chain with the now-known gain, encodes, and
+muxes to OPFS. Branding joins as a third lane at the muxer. The whole job
+runs in one Web Worker; the main thread only renders UI.
+
+## Key entry points
+
+| Path | What |
+| --- | --- |
+| `src/main.ts` | App entry — mounts the shell, installs diagnostics |
+| `src/workers/job.worker.ts` | The job: both passes, progress, cancellation |
+| `src/audio/loudness.ts` | The BS.1770-4 meter everything downstream trusts |
+| `src/media/pipeline.ts` | Decode → conform → encode → mux |
+| `src/config/` | Every tuneable value in the project |
+| `test/ebu3341/` | The meter's acceptance harness |
+
+## Invariants — do not break these
+
+1. **No media egress.** No fetch, upload, beacon or analytics call carries
+   media, filenames, or media characteristics. Verifiable by network
+   inspection.
+2. **The source file is never modified.**
+3. **One runtime dependency:** `mediabunny`. Adding another stops and asks.
+4. **Nothing buffers the whole file.** Streaming throughout. `fastStart`
+   is always set explicitly — unset lets Mediabunny choose `'in-memory'`,
+   which buffers everything.
+5. **Loudness is measured on source content only** — never on the
+   concatenated timeline with branding included.
+6. **The meter is validated against EBU Tech 3341** (±0.1 LU) before
+   anything that consumes loudness data ships.
+7. **Numbers live in `src/config/`** or a CSS token, nowhere else.
+8. **Cancel leaves no partial file and no orphaned OPFS data.**
+
+Full rules: [`AGENTS.md`](AGENTS.md), [`UI-STANDARDS.md`](UI-STANDARDS.md),
+[`DEV-INFRASTRUCTURE.md`](DEV-INFRASTRUCTURE.md).
+
+## Gotchas
+
+- **OPFS and the File System Access API need a secure context.**
+  `localhost` counts; a LAN IP does not.
+- **No COOP/COEP headers are needed, ever.** If something seems to want
+  `SharedArrayBuffer`, the design is wrong (rationale §1.3).
+- **WebCodecs cannot be mocked usefully.** A mocked encoder proves nothing
+  about whether the real one accepts the config. Browser-only checks are
+  verified by hand and recorded.
+- **Mediabunny cannot even see subtitle tracks** — a subtitle-bearing MP4
+  reads back as zero tracks. It writes them fine. Detecting one needs our
+  own `hdlr` scan. See
+  [`architecture.md`](pm_skills/project/architecture.md) → "Known
+  constraints in the dependency".
+- **This repo lives on OneDrive.** Cloud sync can revert tracked files
+  mid-session. Consider excluding it from sync, or pausing sync during
+  work.
+
 ## Project management
 
 This repository uses the [PM Skills](https://github.com/djDAOjones/PM-Skills-lab)
 framework (v4.9.2) in [`pm_skills/`](pm_skills/) for AI-assisted
-development: project memory, standards, and workflows.
-
-Project memory lives in `pm_skills/project/` and is populated by running
-`pm_skills/integrations/init-mvp.md`.
+development. Project memory is in [`pm_skills/project/`](pm_skills/project/).

@@ -1,78 +1,109 @@
 # Conventions
 
-<!-- Fill this in before or during your first implementation task. -->
-<!-- Skip at init if you're not sure yet — capture conventions as they emerge. -->
 <!-- Hot whole-file read. See pm_skills/memory-policy.md for limits. -->
 
 ## Code style
 
-<!-- Language-specific style rules. Formatter or linter config if any. -->
+- TypeScript, `strict: true`. `noUncheckedIndexedAccess` on — this is a
+  codebase full of buffer indexing, and an off-by-one in a DSP loop is
+  invisible at runtime.
+- ES modules only. All imports at the top (an `AGENTS.md` hard rule).
+- Prefer pure functions over classes. The DSP, the conform maths and the
+  threshold logic are all pure; only the pipeline, the OPFS store and the
+  UI hold state.
+- No `any`. Where a browser API is ahead of its types, declare a narrow
+  local interface and comment why.
 
 ## Naming
 
-<!-- File naming, variable naming, component naming patterns. -->
+- Files: `kebab-case.ts`. Directories: lower-case, singular where it reads
+  better (`audio/`, `media/`, `config/`).
+- Units live in the identifier, always: `thresholdDbfs`, `windowSeconds`,
+  `slewDbPerSecond`, `ceilingDbtp`, `offsetMicroseconds`. An unqualified
+  number in a signature is a bug waiting to happen.
+- Loudness units are never mixed silently. LUFS (absolute), LU
+  (relative), dBFS (sample peak), dBTP (true peak) are distinct — convert
+  explicitly through a named helper, never inline.
+- Timestamps: WebCodecs works in **microseconds**. Say so in the name
+  (`timestampUs`) whenever a number crosses a module boundary.
 
 ## Commit messages
 
-<!-- Format, scope, conventions. -->
+Short imperative subject, no type prefix. Body when the change needs a
+why. Reference the backlog ID when there is one: `VH-3: validate meter
+against EBU Tech 3341 cases 1-9`.
 
 ## Documentation
 
-<!-- Project-specific documentation conventions. The permanent rules
-     (JSDoc, explain why not what, no boilerplate) are in AGENTS.md.
-     This section captures how they apply to this project as
-     conventions emerge. Example:
-     - What to document: all exported functions, hooks, db/ methods.
-     - Depth: purpose, parameters, return values, side effects.
-     - Exceptions: trivial getters don't need JSDoc. -->
+- JSDoc on everything exported. For DSP modules, the doc block must cite
+  the spec section or standard clause it implements — e.g. `BS.1770-4
+  §4.1` or `spec §5.2 step 3` — so the code can be checked against the
+  source of truth without archaeology.
+- Every magic-looking constant in `config/` carries a one-line comment
+  saying where the number came from. If the answer is "we chose it",
+  say that too.
+- Skip JSDoc on trivial internal helpers.
 
 ## Testing
 
-<!-- Project-specific testing policy. The permanent doctrine (invariants
-     over coverage, named categories, fast-and-hermetic, two layers,
-     never silently weaken a test) is in AGENTS.md. Capture here: the
-     runner and its config — with non-obvious reasons, e.g. sequential
-     execution when tests mutate env or reset module singletons — the
-     coverage bar if any, and the specific invariants this project must
-     protect. Default for JS/Node: Vitest (safety net) + Playwright
-     (critical journeys); swap per stack. -->
+- Runner: **Vitest**. The DSP suite runs in Node — it is pure maths over
+  `Float32Array` and needs no browser.
+- Anything touching WebCodecs, OPFS or the File System Access API cannot
+  run in Node. Those are verified in a real browser and the check is
+  recorded in the task's verification notes. Do not mock WebCodecs — a
+  mocked encoder proves nothing about whether the real one accepts the
+  config.
+- Invariants this project must protect, in priority order:
+  1. Meter accuracy against EBU Tech 3341 (±0.1 LU). Non-negotiable.
+  2. Output loudness −16 ±0.5 LUFS, true peak never above −2.0 dBTP.
+  3. CFR conform preserves A/V sync across the full duration.
+  4. Cancellation leaves no partial file and no orphaned OPFS data.
+  5. Zero media egress.
+- Fixtures are **generated**, not committed. `test/fixtures/` is built by
+  a script so the repo stays free of binaries and the fixtures stay
+  reproducible.
 
 ## Patterns to follow
 
-<!-- Recurring patterns that should be consistent across the codebase. -->
+- **Config is the only home for numbers.** Every threshold, target,
+  duration, bitrate and colour lives in `src/config/` or a CSS token. A
+  literal threshold anywhere else is a defect, not a style preference —
+  it is how the open decisions (D1, D2, D3, D8) stay one-line changes.
+- **The worker owns the job; the main thread owns the UI.** No DOM in the
+  worker, no decoding on the main thread.
+- **Transfer, never copy.** `ArrayBuffer`s cross the worker boundary as
+  transferables.
+- **Fail loudly on data loss.** Anything that cannot be carried through
+  (a subtitle track we cannot read, a chapter list) produces a visible
+  warning before processing starts. Silent loss is the worst outcome
+  available to this app.
+- **Streaming everywhere.** If a design step would hold the whole media
+  file in memory, it is the wrong design step — that is the ceiling this
+  architecture exists to escape.
 
 ## Patterns to avoid
 
-<!-- Project-specific anti-patterns. The permanent anti-patterns
-     (Carbon, accessibility, dependencies) are in AGENTS.md. This
-     section captures patterns specific to this project's codebase. -->
+- `fastStart: 'in-memory'` on the Mediabunny output — or, just as bad,
+  leaving `fastStart` unset, because the library then picks between
+  `false` and `'in-memory'` on its own. Always name the value.
+- Measuring loudness on the concatenated timeline. Analysis runs on
+  **source content only** — a 5-second music sting averaged with 50
+  minutes of speech mis-levels the whole video (spec §4.4).
+- Applying macro-levelling unconditionally. It is gated on LRA > 9 LU
+  precisely because processing that is not needed can only do harm.
+- Reaching for a library. One runtime dependency, and it is Mediabunny.
+- Exposing a technical setting "just in case". Every exposed control is a
+  decision a novice is forced to make (spec §9.2).
 
 ## Tooling
 
-<!-- Bundler, test runner, formatter/linter, editor config.
-     Example:
-     - Bundler: esbuild (via custom build.js)
-     - Test runner: Vitest
-     - Formatter: .editorconfig (mechanical), no additional formatter yet
-     - Linter: none yet
-     Recommended defaults by stack (the framework's opinion — adopt,
-     swap, or drop per project):
-     - JS/TS: Prettier (format) + ESLint with typescript-eslint
-       (correctness) + tsc --noEmit (types).
-     - Python: ruff format (format) + ruff (correctness) + mypy or
-       pyright (types).
-     - Go: gofmt (format) + go vet and staticcheck (correctness).
-     - Rust: rustfmt (format) + clippy (correctness).
-     - Any stack (docs): EditorConfig + the scaffolded markdownlint
-       baseline + check-links.mjs.
-     Opinionation dial: be strict (error, in `check`) on correctness —
-     broken/unused imports, dead code, type errors, broken links,
-     accessibility violations. Make formatting invisible (auto-fix on
-     save, never a gate failure). Keep taste/complexity rules opt-in and
-     off by default — a noisy rule that gets inline-disabled erodes
-     trust in the whole gate. Defer spell-check until you have a domain
-     dictionary.
-     This section captures tool choices. The specific tools the quality
-     gate runs are named here; the `check` command that composes them and
-     the build/dev/deploy rules live in DEV-INFRASTRUCTURE.md → "Quality
-     gate". -->
+- Bundler / dev server: **Vite**
+- Test runner: **Vitest**
+- Types: `tsc --noEmit`
+- Linter: **ESLint** + `typescript-eslint`, strict on correctness
+  (unused/broken imports, floating promises, dead code), taste rules off
+- Formatter: **Prettier**, auto-fix on save — never a `check` failure
+- Docs: `markdownlint` + `check-links.mjs` (scaffolded)
+
+The `check` command that composes these is defined in
+`DEV-INFRASTRUCTURE.md` → "Quality gate".
