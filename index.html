@@ -41,6 +41,21 @@
           </p>
         </div>
         <div id="source-report"></div>
+        <div class="field" id="subtitle-field" hidden>
+          <label class="label" for="subtitle-input">Subtitle file (optional)</label>
+          <input
+            class="file-input"
+            type="file"
+            id="subtitle-input"
+            accept=".vtt,text/vtt"
+            aria-describedby="subtitle-help"
+          />
+          <p class="helper" id="subtitle-help">
+            A WebVTT (.vtt) file. Its timings are shifted to match the opening sequence; the words
+            are never changed.
+          </p>
+          <p class="helper" id="subtitle-status"></p>
+        </div>
         <fieldset class="choice" id="branding-choice" hidden>
           <legend class="label">Branding</legend>
           <label class="radio">

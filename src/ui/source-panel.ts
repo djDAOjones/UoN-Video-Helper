@@ -92,6 +92,31 @@ function buildRows(report: SourceReport): Row[] {
     })
   }
 
+  const { tracks } = report
+  if (tracks.scanned) {
+    const found: string[] = []
+    if (tracks.subtitleTracks > 0) {
+      found.push(
+        tracks.subtitleTracks === 1 ? '1 subtitle track' : `${tracks.subtitleTracks} subtitle tracks`,
+      )
+    }
+    if (tracks.chapterTracks > 0) {
+      found.push(tracks.chapterTracks === 1 ? '1 chapter track' : `${tracks.chapterTracks} chapter tracks`)
+    }
+
+    rows.push(
+      found.length > 0
+        ? {
+            term: 'Subtitles',
+            detail: `Found ${found.join(' and ')}`,
+            // Said before processing, not after: this is the one thing that
+            // cannot be carried over, and finding out afterwards is too late.
+            note: 'These cannot be carried into the new file. If you need them, keep the original alongside, or add a subtitle file below and it will be timed to match.',
+          }
+        : { term: 'Subtitles', detail: 'None found in this file' },
+    )
+  }
+
   rows.push({ term: 'Container', detail: report.container })
   return rows
 }
@@ -133,13 +158,15 @@ export function renderSourceReport(container: HTMLElement, report: SourceReport)
 
   container.append(list)
 
-  // Stated every time a file is read, because Mediabunny genuinely cannot see
-  // these tracks and a silent omission would read as "there are none".
-  const caveat = document.createElement('p')
-  caveat.className = 'fact-caveat'
-  caveat.textContent =
-    'Subtitle and chapter tracks are not examined yet. If your file has them, that check arrives later.'
-  container.append(caveat)
+  // Only for containers the handler scan cannot read. Saying "no subtitles"
+  // about a file we never checked would be worse than admitting we did not.
+  if (!report.tracks.scanned) {
+    const caveat = document.createElement('p')
+    caveat.className = 'fact-caveat'
+    caveat.textContent =
+      'Subtitle and chapter tracks could not be checked in this kind of file. If yours has them, they will not be carried over.'
+    container.append(caveat)
+  }
 }
 
 /** Replaces `container`'s contents with a readable failure. */

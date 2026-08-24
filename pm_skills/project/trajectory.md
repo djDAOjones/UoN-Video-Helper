@@ -62,4 +62,11 @@
   unprocessed. A 4:3 source produced a 17.04 s timeline from 5 + 8 + 4, padding
   took a changed D1 token exactly, and the content still measured -15.88 LUFS.
 
+- VH-9 — Subtitle, chapter and metadata handling: an ISOBMFF handler scan finds
+  the tracks Mediabunny reports as absent, a sidecar WebVTT is offset by the
+  opening duration with its words untouched, and file-level metadata round-trips.
+  On a subtitle-bearing MP4, Mediabunny saw 2 tracks and the scan saw 3; the
+  muxed sidecar's sample boundaries landed at exactly 7 / 11.5 / 35 / 38.25 s
+  against source cues at 2 / 6.5 / 30 / 33.25.
+
 <!-- Outcome line is written when the milestone closes. -->

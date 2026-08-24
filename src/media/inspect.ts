@@ -21,6 +21,7 @@ import {
 
 import { log } from '../core/logger'
 import { conformCost, type ConformDecision } from './framerate'
+import { scanTrackHandlers, type TrackScan } from './isobmff'
 
 /**
  * The containers this tool accepts, rather than Mediabunny's `ALL_FORMATS`.
@@ -108,6 +109,12 @@ export interface SourceReport {
    * impossible to misread.
    */
   readonly reportedTrackCount: number
+  /**
+   * What a direct read of the container's handler types found — including the
+   * tracks Mediabunny cannot see. `scanned: false` for non-ISOBMFF files,
+   * where the caller must say nothing rather than guess.
+   */
+  readonly tracks: TrackScan
 }
 
 /** Raised when a file cannot be read at all, as opposed to being readable but unusable. */
@@ -159,10 +166,13 @@ export async function inspectFile(
     )
   }
 
-  const [videoTracks, audioTracks, allTracks] = await Promise.all([
+  const [videoTracks, audioTracks, allTracks, tracks] = await Promise.all([
     input.getVideoTracks(),
     input.getAudioTracks(),
     input.getTracks(),
+    // Runs alongside, never instead of, the demux. A failed scan costs a
+    // warning we cannot give; it must never cost the inspection.
+    scanTrackHandlers(file),
   ])
 
   const videoTrack = videoTracks[0]
@@ -267,6 +277,7 @@ export async function inspectFile(
     video,
     audio,
     reportedTrackCount: allTracks.length,
+    tracks,
   }
 
   // Deliberately logs characteristics and not the filename — see
@@ -280,6 +291,8 @@ export async function inspectFile(
     variableFrameRate: video?.isVariableFrameRate ?? null,
     audioCodec: audio?.codec ?? null,
     channels: audio?.channelCount ?? null,
+    subtitleTracks: tracks.scanned ? tracks.subtitleTracks : null,
+    chapterTracks: tracks.scanned ? tracks.chapterTracks : null,
   })
 
   return report

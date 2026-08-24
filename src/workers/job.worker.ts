@@ -20,6 +20,7 @@ import { ACCEPTED_FORMATS, UnreadableFileError, inspectFile } from '../media/ins
 import { OpfsWorkspace, sweepOrphanedJobs } from '../media/opfs'
 import { CancelledError, runPipeline } from '../media/pipeline'
 import { preflightVerdict, type PreflightSummary } from '../media/preflight'
+import { InvalidVttError } from '../media/vtt'
 import { calibrationProbe } from '../media/probe'
 import { BlobSource, Input } from 'mediabunny'
 import type { WorkerOutbound, WorkerRequest } from './protocol'
@@ -108,6 +109,7 @@ async function handleProcess(
     readonly presetId: PresetId
     readonly branding: { readonly opening: boolean; readonly closing: boolean }
     readonly backgroundColour: string
+    readonly subtitleVtt?: string
   },
 ): Promise<void> {
   const { file, presetId } = options
@@ -137,6 +139,7 @@ async function handleProcess(
       workspace,
       branding: options.branding,
       backgroundColour: options.backgroundColour,
+      ...(options.subtitleVtt ? { subtitleVtt: options.subtitleVtt } : {}),
       signal: controller.signal,
       onProgress: ({ stage, fraction }) => post({ kind: 'stage', id, stage, fraction }),
     })
@@ -191,7 +194,9 @@ async function handleInspect(id: number, file: Blob): Promise<void> {
     post({ kind: 'inspected', id, report: await inspectFile(file) })
   } catch (cause) {
     const message =
-      cause instanceof UnreadableFileError
+      cause instanceof InvalidVttError
+        ? cause.message
+        : cause instanceof UnreadableFileError
         ? cause.message
         : 'Something went wrong reading this file. It may be corrupted, or in a format this tool cannot read.'
     log.warn('worker', 'inspection failed', {
@@ -257,7 +262,9 @@ async function handlePreflight(
     post({ kind: 'preflighted', id, summary })
   } catch (cause) {
     const message =
-      cause instanceof UnreadableFileError
+      cause instanceof InvalidVttError
+        ? cause.message
+        : cause instanceof UnreadableFileError
         ? cause.message
         : 'Something went wrong checking this file against your device.'
     log.warn('worker', 'preflight failed', {

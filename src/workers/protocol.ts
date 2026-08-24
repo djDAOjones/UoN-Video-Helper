@@ -51,6 +51,8 @@ export type WorkerRequest =
       readonly branding: { readonly opening: boolean; readonly closing: boolean }
       /** Resolved D1 brand background; the worker has no document. */
       readonly backgroundColour: string
+      /** A user-supplied WebVTT sidecar, verbatim. */
+      readonly subtitleVtt?: string
     }
   /** Stop the job started by `cancelId`. Answered by that job, not by this request. */
   | { readonly kind: 'cancel'; readonly id: number; readonly cancelId: number }

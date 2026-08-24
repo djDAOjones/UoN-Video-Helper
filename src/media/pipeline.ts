@@ -16,6 +16,7 @@ import {
   AudioSampleSource,
   Mp4OutputFormat,
   Output,
+  TextSubtitleSource,
   VideoSampleSink,
   VideoSampleSource,
   type Input,
@@ -33,6 +34,7 @@ import {
 } from './branding'
 import { audioEncodingConfigFor, videoEncodingConfigFor } from './encoding'
 import type { OpfsWorkspace } from './opfs'
+import { offsetVtt } from './vtt'
 
 /** Named stages, per spec section 9.2 — not one opaque bar. */
 export type PipelineStage = 'preparing' | 'analysing' | 'encoding' | 'finishing'
@@ -60,6 +62,11 @@ export interface PipelineOptions {
   readonly branding: { readonly opening: boolean; readonly closing: boolean }
   /** Resolved D1 brand background; the worker has no document to read it from. */
   readonly backgroundColour: string
+  /**
+   * A user-supplied WebVTT sidecar, verbatim. Its cue times are offset by the
+   * opening sequence's duration; its text is never touched (spec 8.1).
+   */
+  readonly subtitleVtt?: string
   readonly signal?: AbortSignal
   readonly onProgress?: (progress: PipelineProgress) => void
 }
@@ -129,10 +136,41 @@ export async function runPipeline(options: PipelineOptions): Promise<File> {
   const videoSource = new VideoSampleSource(videoEncodingConfigFor(shape))
   output.addVideoTrack(videoSource, { frameRate: shape.frameRate })
 
+  // Spec 8.3.4: preserve creation metadata where the muxer supports it.
+  // Mediabunny reads and writes file-level tags even though it cannot see
+  // subtitle tracks, so this much genuinely survives.
+  try {
+    const tags = await input.getMetadataTags()
+    if (tags && Object.keys(tags).length > 0) {
+      output.setMetadataTags(tags)
+      log.debug('pipeline', 'metadata tags carried over', { keys: Object.keys(tags).length })
+    }
+  } catch (cause) {
+    log.warn('pipeline', 'could not carry metadata tags', {
+      reason: cause instanceof Error ? cause.message : String(cause),
+    })
+  }
+
   let audioSource: AudioSampleSource | null = null
   if (audioTrack && audioPlan) {
     audioSource = new AudioSampleSource(audioEncodingConfigFor(preset, audioPlan.channelCount))
     output.addAudioTrack(audioSource)
+  }
+
+  // Spec 8.1: offset the timing, never the words. The offset is the opening
+  // clip's ACTUAL duration, not the nominal one from config — if the real
+  // asset is 5.2 s, captions must move 5.2 s.
+  let subtitleSource: TextSubtitleSource | null = null
+  let subtitleCues = 0
+  if (options.subtitleVtt) {
+    const offset = offsetVtt(options.subtitleVtt, openingSeconds)
+    subtitleCues = offset.cueCount
+    subtitleSource = new TextSubtitleSource('webvtt')
+    // 'und' — undetermined. The sidecar carries no language declaration, and
+    // inventing one would be worse than admitting we do not know.
+    output.addSubtitleTrack(subtitleSource, { languageCode: 'und' })
+    // Held until after start(); fed below.
+    options = { ...options, subtitleVtt: offset.text }
   }
 
   const timelineSeconds = openingSeconds + durationSeconds + closingSeconds
@@ -220,6 +258,12 @@ export async function runPipeline(options: PipelineOptions): Promise<File> {
 
   try {
     await output.start()
+
+    if (subtitleSource && options.subtitleVtt) {
+      await subtitleSource.add(options.subtitleVtt)
+      subtitleSource.close()
+    }
+
     await Promise.all([feedVideo(), feedAudio()])
 
     throwIfAborted(signal)
@@ -239,6 +283,7 @@ export async function runPipeline(options: PipelineOptions): Promise<File> {
       openingSeconds,
       closingSeconds,
       timelineSeconds,
+      subtitleCues,
     })
     return file
   } catch (cause) {

@@ -15,13 +15,13 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 89 file(s) across 7 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 93 file(s) across 7 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 10 file(s)
 - `.claude` — 1 file(s)
 - `docs` — 5 file(s)
 - `public` — 9 file(s)
 - `scripts` — 2 file(s)
-- `src` — 58 file(s)
+- `src` — 62 file(s)
 - `test` — 4 file(s)
 <!-- /file-map-index -->
 
@@ -53,6 +53,14 @@
 ## public
 
 - `public/branding/README.md` — How to replace the placeholders with the real After Effects renders.
+- `public/branding/closing-1080p25.mp4` — Placeholder closing master, 1080p25. Replaced by the real AE render; see the README beside it.
+- `public/branding/closing-1080p30.mp4` — Placeholder closing master, 1080p30. Replaced by the real AE render; see the README beside it.
+- `public/branding/closing-2160p25.mp4` — Placeholder closing master, 2160p25. Replaced by the real AE render; see the README beside it.
+- `public/branding/closing-2160p30.mp4` — Placeholder closing master, 2160p30. Replaced by the real AE render; see the README beside it.
+- `public/branding/opening-1080p25.mp4` — Placeholder opening master, 1080p25. Replaced by the real AE render; see the README beside it.
+- `public/branding/opening-1080p30.mp4` — Placeholder opening master, 1080p30. Replaced by the real AE render; see the README beside it.
+- `public/branding/opening-2160p25.mp4` — Placeholder opening master, 2160p25. Replaced by the real AE render; see the README beside it.
+- `public/branding/opening-2160p30.mp4` — Placeholder opening master, 2160p30. Replaced by the real AE render; see the README beside it.
 
 ## scripts
 
@@ -104,11 +112,15 @@
 - `src/media/framerate.test.ts` — Proves the rounding rule and that timestamps derive from the index so error cannot accumulate.
 - `src/media/framerate.ts` — CFR conform decisions: nearest standard rate, what conforming costs, and the timestamp grid.
 - `src/media/inspect.ts` — Demuxes a chosen file into a SourceReport. Rejects files with no video track.
+- `src/media/isobmff.test.ts` — Synthetic boxes covering subtitle handlers, chapters, moov-at-end and non-ISOBMFF.
+- `src/media/isobmff.ts` — A minimal box walk for the handler types Mediabunny cannot see at all.
 - `src/media/opfs.ts` — The OPFS working store: one directory per job, sync-handle writes, cleanup on every exit path.
 - `src/media/pipeline.ts` — Decode to encode to mux, streaming to OPFS, with progress and cancellation.
 - `src/media/preflight.test.ts` — Triggers all four spec 7.3 outcomes deliberately — acceptance criterion 7.
 - `src/media/preflight.ts` — The pure verdict: given what was measured, proceed / warn / discourage / block.
 - `src/media/probe.ts` — The 3-second calibration probe: real decode and encode on the real file and device.
+- `src/media/vtt.test.ts` — Proves cue text, settings, comments and line endings survive byte for byte.
+- `src/media/vtt.ts` — Offsets WebVTT timings by rewriting only timestamp lines; never touches the words.
 - `src/styles/app.css` — App shell styles. Carbon productive language at AAA.
 - `src/styles/tokens.brand.css` — UoN brand tokens. Holds the D1 placeholder and nothing invented.
 - `src/styles/tokens.carbon.css` — Carbon structural tokens. Every pair is contrast-asserted by test/contrast.test.ts.

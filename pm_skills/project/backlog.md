@@ -14,20 +14,6 @@
      comes out, through a UI a novice can finish. Built in this order:
      the meter is proved before anything depends on it. -->
 
-- [ ] **VH-9 Subtitle, chapter and metadata handling**
-      Intent: carry non-A/V tracks through correctly, or fail loudly — never
-      lose them silently.
-      Done when: file-level metadata tags are read and re-written via
-      `getMetadataTags()` / `setMetadataTags()`; a user-supplied sidecar
-      `.vtt` is parsed, offset by the opening duration, and muxed in as a
-      WebVTT subtitle track; a minimal ISOBMFF `hdlr` scan detects embedded
-      subtitle (`sbtl` / `subt` / `text`) and chapter (`tref`/`chap`) tracks
-      and warns clearly before processing, naming what the user should do
-      instead; cue **content** is never altered.
-      Scope: the `hdlr` scan is ours because Mediabunny cannot see subtitle
-      tracks at all — verified by round-trip, a subtitle-bearing MP4 reads
-      back as zero tracks. Handler types only, no sample parsing.
-
 - [ ] **VH-10 UI workflow**
       Intent: a novice completes the whole job without being taught anything.
       Done when: the spec §9.1 flow works end to end; every §5.4 warning and
