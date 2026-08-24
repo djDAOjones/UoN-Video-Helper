@@ -39,4 +39,9 @@
   from Mediabunny's own verdict. Files with no video track are rejected rather
   than described. Verified against a MediaRecorder-produced WebM.
 
+- VH-5 — Pre-flight and calibration probe: capability checked against the exact
+  encoder config, OPFS quota against 2.5x the projected output, device class,
+  and a 3-second decode-and-encode of the real file on the real device. All four
+  spec 7.3 outcomes tested. Measured 303 fps on a 720p25 fixture.
+
 <!-- Outcome line is written when the milestone closes. -->

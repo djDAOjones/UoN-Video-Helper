@@ -9,7 +9,9 @@
 
 import type { CapturedError } from '../core/diagnostics'
 import type { LogRecord } from '../core/logger'
+import type { PresetId } from '../config/presets'
 import type { SourceReport } from '../media/inspect'
+import type { PreflightSummary } from '../media/preflight'
 
 /** Main thread -> worker. */
 export type WorkerRequest =
@@ -27,12 +29,26 @@ export type WorkerRequest =
    * never happen where the UI runs.
    */
   | { readonly kind: 'inspect'; readonly id: number; readonly file: Blob }
+  /**
+   * Check the device against this exact job and measure it. Separate from
+   * `inspect` so the UI can show what the file is straight away, while the
+   * probe — which really does decode and encode three seconds — runs after.
+   */
+  | {
+      readonly kind: 'preflight'
+      readonly id: number
+      readonly file: Blob
+      readonly presetId: PresetId
+      /** Resolved D1 brand colour; the worker has no document to read it from. */
+      readonly backgroundColour: string
+    }
 
 /** Worker -> main thread, in reply to a request. */
 export type WorkerResponse =
   | { readonly kind: 'pong'; readonly id: number; readonly workerBootMs: number }
   | { readonly kind: 'logs'; readonly id: number; readonly records: readonly LogRecord[] }
   | { readonly kind: 'inspected'; readonly id: number; readonly report: SourceReport }
+  | { readonly kind: 'preflighted'; readonly id: number; readonly summary: PreflightSummary }
   /** A request that failed for a reason the user should read, not a crash. */
   | { readonly kind: 'failed'; readonly id: number; readonly message: string }
 

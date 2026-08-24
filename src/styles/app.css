@@ -329,3 +329,42 @@ body {
     margin-bottom: var(--spacing-04);
   }
 }
+
+/* --- Pre-flight verdict --- */
+
+.verdict {
+  margin-top: var(--spacing-06);
+  padding: var(--spacing-05);
+  border-left: 4px solid var(--border-strong);
+  background: var(--layer-02);
+}
+
+.verdict[data-outcome='proceed'] {
+  border-left-color: var(--support-success);
+}
+
+.verdict[data-outcome='warn'],
+.verdict[data-outcome='discourage'] {
+  border-left-color: var(--support-warning);
+}
+
+.verdict[data-outcome='block'] {
+  border-left-color: var(--support-error);
+}
+
+.verdict-heading {
+  margin: 0;
+  font-weight: 600;
+}
+
+.verdict-detail {
+  margin: var(--spacing-04) 0 0;
+  font-size: var(--type-body-compact);
+  color: var(--text-secondary);
+}
+
+.verdict .facts {
+  margin-top: var(--spacing-05);
+  padding-top: var(--spacing-05);
+  border-top: 1px solid var(--border-subtle);
+}

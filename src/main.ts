@@ -17,6 +17,7 @@ import {
 } from './core/diagnostics'
 import { adoptLogRecords, log, setMinimumLogLevel } from './core/logger'
 import { APP_VERSION, BUILD_ID } from './core/version'
+import { renderPreflight, summarisePreflight } from './ui/preflight-panel'
 import { renderSourceError, renderSourceReport, summarise } from './ui/source-panel'
 import type { WorkerOutbound, WorkerRequest } from './workers/protocol'
 
@@ -43,6 +44,7 @@ const errorsContainer = required<HTMLDivElement>('#errors')
 const devActions = required<HTMLDivElement>('#dev-actions')
 const fileInput = required<HTMLInputElement>('#file-input')
 const sourceReport = required<HTMLDivElement>('#source-report')
+const preflightReport = required<HTMLDivElement>('#preflight-report')
 
 versionLine.textContent = isDev ? `${APP_VERSION} · ${BUILD_ID} · development` : APP_VERSION
 
@@ -242,6 +244,7 @@ fileInput.addEventListener('change', () => {
   log.info('ui', 'file chosen', { sizeBytes: file.size, type: file.type })
   setStatus('Reading the video…')
   sourceReport.replaceChildren()
+  preflightReport.replaceChildren()
 
   void (async () => {
     try {
@@ -252,6 +255,9 @@ fileInput.addEventListener('change', () => {
       if (reply.kind === 'inspected') {
         renderSourceReport(sourceReport, reply.report)
         setStatus(summarise(reply.report))
+        // Structure first, then the measurement — the probe really does decode
+        // and encode three seconds, so it must not hold up what we already know.
+        await runPreflight(file)
         return
       }
       if (reply.kind === 'failed') {
@@ -272,6 +278,44 @@ fileInput.addEventListener('change', () => {
     }
   })()
 })
+
+/**
+ * Runs the device check for the chosen file.
+ *
+ * The preset is fixed to "Best quality" until VH-10 puts the choice in front
+ * of the user; the panel names which one it assessed so this is visible rather
+ * than assumed.
+ */
+async function runPreflight(file: File): Promise<void> {
+  setStatus('Checking this video against your device…')
+  const backgroundColour =
+    getComputedStyle(document.documentElement).getPropertyValue('--uon-brand-bg').trim() || '#000000'
+
+  try {
+    const reply = await request(
+      { kind: 'preflight', file, presetId: 'best', backgroundColour },
+      180_000,
+    )
+    if (reply.kind === 'preflighted') {
+      renderPreflight(preflightReport, reply.summary)
+      setStatus(summarisePreflight(reply.summary))
+      return
+    }
+    if (reply.kind === 'failed') {
+      renderSourceError(preflightReport, reply.message)
+      return
+    }
+    throw new Error(`Unexpected reply to preflight: ${reply.kind}`)
+  } catch (cause) {
+    renderSourceError(
+      preflightReport,
+      'The device check did not finish. You can still see what the file is above.',
+    )
+    log.error('ui', 'preflight request failed', {
+      reason: cause instanceof Error ? cause.message : String(cause),
+    })
+  }
+}
 
 // --- Dev-only affordances --------------------------------------------------
 // Hidden in production per UI-STANDARDS.md -> "Diagnostics affordance".

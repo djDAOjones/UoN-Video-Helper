@@ -8,7 +8,18 @@
 
 import { installGlobalErrorCapture, type CapturedError } from '../core/diagnostics'
 import { getLogRecords, log } from '../core/logger'
-import { UnreadableFileError, inspectFile } from '../media/inspect'
+import {
+  PRESETS,
+  outputShapeFor,
+  projectedOutputBytes,
+  videoEncoderConfigFor,
+  type PresetId,
+} from '../config/presets'
+import { checkEncodeSupport, inspectCapabilities } from '../media/capability'
+import { ACCEPTED_FORMATS, UnreadableFileError, inspectFile } from '../media/inspect'
+import { preflightVerdict, type PreflightSummary } from '../media/preflight'
+import { calibrationProbe } from '../media/probe'
+import { BlobSource, Input } from 'mediabunny'
 import type { WorkerOutbound, WorkerRequest } from './protocol'
 
 const bootAt = performance.now()
@@ -45,6 +56,10 @@ self.addEventListener('message', (event: MessageEvent<WorkerRequest>) => {
     case 'inspect':
       void handleInspect(request.id, request.file)
       break
+
+    case 'preflight':
+      void handlePreflight(request.id, request.file, request.presetId, request.backgroundColour)
+      break
   }
 })
 
@@ -69,3 +84,69 @@ async function handleInspect(id: number, file: Blob): Promise<void> {
 }
 
 log.info('worker', 'job worker ready')
+
+/**
+ * Checks the device against this exact job, then measures it.
+ *
+ * Order matters: capability first, because there is no point spending three
+ * seconds probing an encoder the browser has already said it cannot provide.
+ */
+async function handlePreflight(
+  id: number,
+  file: Blob,
+  presetId: PresetId,
+  backgroundColour: string,
+): Promise<void> {
+  try {
+    const report = await inspectFile(file)
+    const preset = PRESETS[presetId]
+    const shape = outputShapeFor(preset, {
+      width: report.video.displayWidth,
+      height: report.video.displayHeight,
+      frameRate: report.video.conform.frameRate,
+    })
+    const projected = projectedOutputBytes(shape, report.durationSeconds)
+
+    const [capability, encode] = await Promise.all([
+      inspectCapabilities(),
+      checkEncodeSupport(videoEncoderConfigFor(shape)),
+    ])
+
+    const probe =
+      capability.hasWebCodecs && encode.supported
+        ? await calibrationProbe({
+            input: new Input({ formats: ACCEPTED_FORMATS, source: new BlobSource(file) }),
+            shape,
+            durationSeconds: report.durationSeconds,
+            backgroundColour,
+          })
+        : { measured: false, framesEncoded: 0, videoFramesPerSecond: 0, audioRealtimeFactor: null, estimatedSeconds: null }
+
+    const summary: PreflightSummary = {
+      presetId,
+      capability,
+      encode,
+      probe,
+      shape,
+      projectedOutputBytes: projected,
+      verdict: preflightVerdict({
+        hasWebCodecs: capability.hasWebCodecs,
+        canEncodeH264: encode.supported,
+        availableStorageBytes: capability.storage.availableBytes,
+        projectedOutputBytes: projected,
+        isMobileDevice: capability.deviceClass === 'mobile',
+        estimatedSeconds: probe.estimatedSeconds,
+      }),
+    }
+    post({ kind: 'preflighted', id, summary })
+  } catch (cause) {
+    const message =
+      cause instanceof UnreadableFileError
+        ? cause.message
+        : 'Something went wrong checking this file against your device.'
+    log.warn('worker', 'preflight failed', {
+      reason: cause instanceof Error ? cause.message : String(cause),
+    })
+    post({ kind: 'failed', id, message })
+  }
+}

@@ -1,0 +1,106 @@
+/**
+ * Renders the pre-flight verdict.
+ *
+ * Spec section 9.2: every message says what happened, whether the original
+ * file is affected (it never is), and what to do next. A block in particular
+ * must name a browser that will work — an app that says "unsupported" and
+ * stops has told the user nothing they can act on.
+ */
+
+import { PRESETS } from '../config/presets'
+import type { PreflightOutcome, PreflightReasonCode, PreflightSummary } from '../media/preflight'
+import { formatDuration, formatFileSize, formatFrameRate, formatResolution } from './format'
+
+const OUTCOME_HEADING: Record<PreflightOutcome, string> = {
+  proceed: 'Ready to go',
+  warn: 'Ready, with one thing to know',
+  discourage: 'This will work, but it will be slow',
+  block: 'This cannot run here',
+}
+
+function reasonText(code: PreflightReasonCode, summary: PreflightSummary): string {
+  const estimate = summary.probe.estimatedSeconds
+  switch (code) {
+    case 'no-webcodecs':
+      return 'This browser cannot process video. Chrome or Edge on a computer will work, as will Safari 26 or later on a Mac.'
+    case 'no-h264-encode':
+      return 'This browser cannot create the video format this tool needs. Chrome or Edge on a computer will work.'
+    case 'insufficient-storage':
+      return `There is not enough free space on this device. This job needs about ${formatFileSize(summary.verdict.requiredStorageBytes)} of working space. Free some space and try again.`
+    case 'storage-unknown':
+      return 'This browser will not say how much free space there is. If it runs out part-way, the job stops and nothing is saved — your original file is not affected.'
+    case 'very-long-job':
+      return `This will take about ${estimate === null ? 'a long time' : formatDuration(estimate)}. You can carry on, but a desktop computer would be considerably faster.`
+    case 'long-job':
+      return `This will take about ${estimate === null ? 'a while' : formatDuration(estimate)}. Keep this tab open while it runs — closing it stops the job.`
+    case 'mobile-device':
+      return 'Phones and tablets are much slower at this than a computer, and are more likely to stop part-way. Use a computer if you can.'
+    case 'estimate-unavailable':
+      return 'We could not work out how long this will take on this device. You can still continue.'
+  }
+}
+
+/** Replaces `container` with the rendered verdict. */
+export function renderPreflight(container: HTMLElement, summary: PreflightSummary): void {
+  container.replaceChildren()
+
+  const { verdict, shape, probe } = summary
+  const section = document.createElement('div')
+  section.className = 'verdict'
+  section.dataset['outcome'] = verdict.outcome
+
+  const heading = document.createElement('p')
+  heading.className = 'verdict-heading'
+  heading.textContent = OUTCOME_HEADING[verdict.outcome]
+  section.append(heading)
+
+  if (verdict.outcome === 'proceed' && probe.estimatedSeconds !== null) {
+    const estimate = document.createElement('p')
+    estimate.className = 'verdict-detail'
+    estimate.textContent = `This should take about ${formatDuration(probe.estimatedSeconds)}.`
+    section.append(estimate)
+  }
+
+  for (const reason of verdict.reasons) {
+    const paragraph = document.createElement('p')
+    paragraph.className = 'verdict-detail'
+    paragraph.textContent = reasonText(reason.code, summary)
+    section.append(paragraph)
+  }
+
+  const output = document.createElement('dl')
+  output.className = 'facts'
+  const rows: ReadonlyArray<readonly [string, string]> = [
+    ['Setting', PRESETS[summary.presetId].label],
+    [
+      'Output',
+      `${formatResolution(shape.width, shape.height)} at ${formatFrameRate(shape.frameRate)}`,
+    ],
+    ['Estimated size', formatFileSize(summary.projectedOutputBytes)],
+    [
+      'Measured speed',
+      probe.measured
+        ? `${Math.round(probe.videoFramesPerSecond)} frames per second on this device`
+        : 'not measured',
+    ],
+  ]
+  for (const [term, detail] of rows) {
+    const dt = document.createElement('dt')
+    dt.textContent = term
+    const dd = document.createElement('dd')
+    dd.textContent = detail
+    output.append(dt, dd)
+  }
+  section.append(output)
+
+  container.append(section)
+}
+
+/** One line for the live region. */
+export function summarisePreflight(summary: PreflightSummary): string {
+  const estimate = summary.probe.estimatedSeconds
+  if (summary.verdict.outcome === 'block') return 'This video cannot be processed in this browser.'
+  return estimate === null
+    ? 'Device check complete. The processing time could not be estimated.'
+    : `Device check complete. This should take about ${formatDuration(estimate)}.`
+}

@@ -14,16 +14,6 @@
      comes out, through a UI a novice can finish. Built in this order:
      the meter is proved before anything depends on it. -->
 
-- [ ] **VH-5 Pre-flight and calibration probe**
-      Intent: answer "will this work on this machine, and how long?" with a
-      measurement rather than a guess.
-      Done when: WebCodecs presence and `canEncodeVideo()` are checked
-      against the exact target config; OPFS quota is checked against 2.5x
-      the projected output; device class is detected; a 3-second probe on
-      the real file yields a throughput figure and a time estimate; and the
-      four spec §7.3 outcomes (proceed / warn / block / discourage) each
-      resolve correctly.
-
 - [ ] **VH-6 Video pipeline**
       Intent: decode to encode to mux, streaming, with no memory ceiling.
       Done when: a source file produces a valid MP4 in both presets;
@@ -81,10 +71,7 @@
       or real UoN material is exercised and recorded — including zero media
       egress under network inspection, clean cancellation, and correct A/V
       sync on a synthesised variable-frame-rate fixture — and the criteria
-      that need VH-M1 / VH-M2 are named as outstanding. Carries two checks
-      VH-4 could not make headlessly: a rotated source reports upright, and a
-      normal-frame-rate source reports its true rate (the browser pane throttles
-      timers, so only a degenerate ~1 fps fixture could be produced there).
+      that need VH-M1 / VH-M2 are named as outstanding.
 
 - [ ] **VH-M1 Provide the real test corpus** [maintainer] (2026-08-24)
       Intent: acceptance criteria 1, 5 and 6 need real material; synthesised

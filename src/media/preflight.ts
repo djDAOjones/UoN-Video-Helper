@@ -1,0 +1,101 @@
+/**
+ * The pre-flight verdict, spec section 7.3.
+ *
+ * Pure: given what was measured, decide what to do. Every input arrives from
+ * `capability.ts` or `probe.ts`, both of which need a browser; keeping the
+ * decision separate means the part that is easy to get subtly wrong is the
+ * part that is fully tested.
+ */
+
+import type { OutputShape, PresetId } from '../config/presets'
+import { ESTIMATE_BANDS, STORAGE_HEADROOM_MULTIPLE } from '../config/thresholds'
+import type { CapabilityReport, EncodeSupport } from './capability'
+import type { ProbeResult } from './probe'
+
+/** Spec 7.3. Ordered by severity: a block always wins, a proceed never does. */
+export type PreflightOutcome = 'block' | 'discourage' | 'warn' | 'proceed'
+
+export type PreflightReasonCode =
+  | 'no-webcodecs'
+  | 'no-h264-encode'
+  | 'insufficient-storage'
+  | 'storage-unknown'
+  | 'very-long-job'
+  | 'mobile-device'
+  | 'long-job'
+  | 'estimate-unavailable'
+
+export interface PreflightReason {
+  readonly code: PreflightReasonCode
+  readonly outcome: PreflightOutcome
+}
+
+export interface PreflightInput {
+  readonly hasWebCodecs: boolean
+  readonly canEncodeH264: boolean
+  /** Free storage the browser will admit to, or `null` when it will not say. */
+  readonly availableStorageBytes: number | null
+  readonly projectedOutputBytes: number
+  readonly isMobileDevice: boolean
+  /** Measured estimate for the whole job, or `null` if the probe could not run. */
+  readonly estimatedSeconds: number | null
+}
+
+export interface PreflightVerdict {
+  readonly outcome: PreflightOutcome
+  readonly reasons: readonly PreflightReason[]
+  /** Free storage the job needs, for the UI to quote. */
+  readonly requiredStorageBytes: number
+}
+
+const SEVERITY: Record<PreflightOutcome, number> = {
+  block: 3,
+  discourage: 2,
+  warn: 1,
+  proceed: 0,
+}
+
+export function preflightVerdict(input: PreflightInput): PreflightVerdict {
+  const reasons: PreflightReason[] = []
+  const requiredStorageBytes = Math.round(input.projectedOutputBytes * STORAGE_HEADROOM_MULTIPLE)
+
+  if (!input.hasWebCodecs) reasons.push({ code: 'no-webcodecs', outcome: 'block' })
+  else if (!input.canEncodeH264) reasons.push({ code: 'no-h264-encode', outcome: 'block' })
+
+  if (input.availableStorageBytes === null) {
+    // Not a block. Some browsers decline to report a quota, and refusing a job
+    // that would have worked is worse than starting one that might run out —
+    // the failure is recoverable and the source file is never at risk.
+    reasons.push({ code: 'storage-unknown', outcome: 'warn' })
+  } else if (input.availableStorageBytes < requiredStorageBytes) {
+    reasons.push({ code: 'insufficient-storage', outcome: 'block' })
+  }
+
+  if (input.isMobileDevice) reasons.push({ code: 'mobile-device', outcome: 'discourage' })
+
+  if (input.estimatedSeconds === null) {
+    reasons.push({ code: 'estimate-unavailable', outcome: 'warn' })
+  } else if (input.estimatedSeconds > ESTIMATE_BANDS.discourageAboveSeconds) {
+    reasons.push({ code: 'very-long-job', outcome: 'discourage' })
+  } else if (input.estimatedSeconds >= ESTIMATE_BANDS.proceedBelowSeconds) {
+    reasons.push({ code: 'long-job', outcome: 'warn' })
+  }
+
+  const outcome = reasons.reduce<PreflightOutcome>(
+    (worst, reason) => (SEVERITY[reason.outcome] > SEVERITY[worst] ? reason.outcome : worst),
+    'proceed',
+  )
+
+  return { outcome, reasons, requiredStorageBytes }
+}
+
+/** Everything pre-flight found, as one value the UI can render. */
+export interface PreflightSummary {
+  readonly presetId: PresetId
+  readonly capability: CapabilityReport
+  readonly encode: EncodeSupport
+  readonly probe: ProbeResult
+  readonly verdict: PreflightVerdict
+  readonly shape: OutputShape
+  readonly projectedOutputBytes: number
+}

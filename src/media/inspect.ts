@@ -34,7 +34,7 @@ import { conformCost, type ConformDecision } from './framerate'
  * This covers what the sources in spec section 2 actually produce: Teams,
  * Zoom, PowerPoint, QuickTime and OBS all write MP4, MOV, MKV or WebM.
  */
-const ACCEPTED_FORMATS = [
+export const ACCEPTED_FORMATS = [
   new Mp4InputFormat(),
   new QuickTimeInputFormat(),
   new MatroskaInputFormat(),

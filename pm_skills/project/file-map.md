@@ -15,12 +15,12 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 50 file(s) across 6 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 60 file(s) across 6 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 10 file(s)
 - `.claude` — 1 file(s)
 - `docs` — 5 file(s)
 - `scripts` — 1 file(s)
-- `src` — 29 file(s)
+- `src` — 39 file(s)
 - `test` — 4 file(s)
 <!-- /file-map-index -->
 
@@ -65,6 +65,9 @@
 - `src/audio/truepeak.test.ts` — Proves it finds inter-sample peaks and never reads below sample peak.
 - `src/audio/truepeak.ts` — 4x oversampled true peak. Polyphase FIR with exact pruning, so quiet passages cost little.
 - `src/config/audio.ts` — Project audio choices — targets, thresholds, chain constants. Standard-defined values live in src/audio/.
+- `src/config/presets.test.ts` — Pins the preset rules, including that the smaller preset preserves resolution.
+- `src/config/presets.ts` — The two output presets and the encoder config they imply. Purpose-named, never technique-named.
+- `src/config/thresholds.ts` — Pre-flight bands and probe constants — the numbers D8 will replace with measurements.
 - `src/core/diagnostics.ts` — Global error capture on both threads, plus the redacted copy-diagnostics bundle.
 - `src/core/logger.test.ts` — Proves the log buffer is bounded — a one-hour encode must not grow it without limit.
 - `src/core/logger.ts` — The single structured logger. Console plus a bounded ring buffer; no DOM, so the worker shares it.
@@ -72,14 +75,21 @@
 - `src/core/redact.ts` — Redaction. This app's sensitive asset is the user's media and filename, not a token.
 - `src/core/version.ts` — Reads the injected product version and build identity.
 - `src/main.ts` — App entry: installs diagnostics first, mounts the shell, runs the system check.
+- `src/media/capability.ts` — Device checks asked against the exact target config, not a generic capability flag.
+- `src/media/conform.test.ts` — Proves fit/pad never distorts, across 4:3, vertical and ultrawide sources.
+- `src/media/conform.ts` — Scale-to-fit and pad geometry, and the reusable frame scaler the pipeline and probe share.
 - `src/media/framerate.test.ts` — Proves the rounding rule and that timestamps derive from the index so error cannot accumulate.
 - `src/media/framerate.ts` — CFR conform decisions: nearest standard rate, what conforming costs, and the timestamp grid.
 - `src/media/inspect.ts` — Demuxes a chosen file into a SourceReport. Rejects files with no video track.
+- `src/media/preflight.test.ts` — Triggers all four spec 7.3 outcomes deliberately — acceptance criterion 7.
+- `src/media/preflight.ts` — The pure verdict: given what was measured, proceed / warn / discourage / block.
+- `src/media/probe.ts` — The 3-second calibration probe: real decode and encode on the real file and device.
 - `src/styles/app.css` — App shell styles. Carbon productive language at AAA.
 - `src/styles/tokens.brand.css` — UoN brand tokens. Holds the D1 placeholder and nothing invented.
 - `src/styles/tokens.carbon.css` — Carbon structural tokens. Every pair is contrast-asserted by test/contrast.test.ts.
 - `src/ui/format.test.ts` — Pins the wording, so phrasing is tested rather than reviewed by opinion.
 - `src/ui/format.ts` — Technical facts as plain language — durations, sizes, codecs, channel layouts.
+- `src/ui/preflight-panel.ts` — Renders the verdict, naming a browser that works when the answer is no.
 - `src/ui/source-panel.ts` — Renders a SourceReport, including the standing caveat about tracks we cannot see.
 - `src/vite-env.d.ts` — Ambient types: the injected build globals and the File System Access API surface.
 - `src/workers/job.worker.ts` — The job worker. Owns the pipeline when it lands; today proves the boundary and its error path.
