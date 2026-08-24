@@ -60,7 +60,10 @@
       Done when: every acceptance criterion reachable without real hardware
       or real UoN material is exercised and recorded — including zero media
       egress under network inspection, clean cancellation, and correct A/V
-      sync on a synthesised variable-frame-rate fixture — and the criteria
+      sync on a synthesised variable-frame-rate fixture. Preset comparison
+      needs camera-like motion: on near-static fixtures both presets are
+      content-limited and produce almost identical files, so the difference
+      cannot be observed — and the criteria
       that need VH-M1 / VH-M2 are named as outstanding.
 
 - [ ] **VH-M1 Provide the real test corpus** [maintainer] (2026-08-24)
@@ -70,6 +73,28 @@
       webcam, PowerPoint screen recording with fine text, talking head,
       mixed speech and music, a variable-frame-rate Teams recording, a 4:3
       legacy recording, and one with badly inconsistent levels.
+
+- [ ] **VH-18 Check A/V sync end to end** [sign-off]
+      Intent: acceptance criterion 6. In VH-6 verification the output's audio
+      track measured 5.163 s against a 5.077 s source audio track and a 5.000 s
+      output video track — roughly 86 ms of growth, more than AAC encoder
+      priming alone explains.
+      Done when: the source of the difference is identified (encoder delay,
+      edit list, or muxer timestamp handling), and sync is measured at the
+      start, middle and end of a long recording rather than inferred from
+      durations.
+      Risks: an 86 ms constant offset is near the edge of perceptible on
+      speech; drift that grows with duration would be far worse and would not
+      show on a 5-second fixture.
+
+- [ ] **VH-19 Content-adaptive bitrate for the smaller preset**
+      Intent: spec §6.2 sets ~1.5 Mbps for slides/screen and ~2.5 Mbps for
+      camera/motion. `ContentClass` exists but nothing sets it, so every job
+      currently uses the higher figure.
+      Done when: screen-like and camera-like content are distinguished — the
+      calibration probe already decodes three seconds and is the natural place
+      to measure inter-frame difference — and the chosen class is visible to
+      the user in plain language rather than applied silently.
 
 - [ ] **VH-17 Evaluate `fastStart: 'reserve'` for the smaller preset**
       Intent: the "smaller file" preset goes to OneDrive and SharePoint, where

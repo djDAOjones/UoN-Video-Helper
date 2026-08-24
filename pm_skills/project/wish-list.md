@@ -25,7 +25,18 @@
 - EBU Tech 3341 cases 20-23 pass on my reading of "continuous in phase at both
   sides of the single period", which Table 1 does not define. Confirm against
   the EBU's own signal files if they are ever downloaded. (from: VH-3)
-- Worker bundle is 181 kB, mostly Mediabunny demuxers. Could narrow further if
-  MOV/MKV/WebM input turns out to be rare in practice. (from: VH-4)
+- Worker bundle is now 404 kB — demux, decode, encode and mux paths. Spec §11
+  wants the app usable offline after first load, and first load is on a managed
+  University network. Worth measuring gzipped and deciding whether it needs
+  splitting before launch. (from: VH-6)
+- The time estimate covers decode, encode and audio analysis. It does not yet
+  include the audio chain (VH-7) or branding conform (VH-8), so it will
+  under-report once those land. Revisit the extrapolation then. (from: VH-5)
+- Mediabunny's `bestGuessFrameRate` read 32.25 fps on a fixture whose frames
+  averaged 21.96 fps, and we round the conform target from that. Worth checking
+  which of its frame-rate figures best matches real Teams and Zoom captures
+  before D8 fixes the published limits. (from: VH-6)
+- Progress is emitted every 30 frames, which is invisible on short jobs. Fine
+  for an hour of video; revisit if the UI feels dead on short ones. (from: VH-6)
 - TypeScript 7 is released but typescript-eslint caps at <6.1.0. Revisit the
   pin when the linter catches up. (from: VH-1)
