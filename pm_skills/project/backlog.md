@@ -60,6 +60,8 @@
       `node_modules` — 598 cloud-only files in the first 3000 checked — so
       every read became a network fetch. `npm ci` rewrites them locally and
       fixes it in seconds, but nothing stops it recurring.
+      Status: syncing was PAUSED on 2026-08-25, which clears it for now. Pausing
+      is per-session and reverts on its own, so the item stays open.
       Done when: this folder is excluded from OneDrive sync, or marked "Always
       keep on this device". `AGENTS.md` already declares cloud-synced paths
       unsupported for project memory; this is the same hazard reaching the
