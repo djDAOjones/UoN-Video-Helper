@@ -23,4 +23,9 @@
   worker round-trips, and an uncaught throw on either thread is captured and
   surfaced with a stack. `npm run check` runs seven steps green.
 
+- VH-2 — BS.1770-4 loudness meter: gated integrated loudness, momentary and
+  short-term curves, LRA per Tech 3342, and 4x oversampled true peak. Pure
+  arithmetic, no browser APIs, streaming, and chunk-size invariant. Projected
+  3.6 s + 8.8 s for a one-hour stereo file.
+
 <!-- Outcome line is written when the milestone closes. -->

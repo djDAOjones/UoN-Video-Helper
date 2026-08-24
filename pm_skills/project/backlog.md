@@ -14,13 +14,6 @@
      comes out, through a UI a novice can finish. Built in this order:
      the meter is proved before anything depends on it. -->
 
-- [ ] **VH-2 Loudness meter (BS.1770-4)**
-      Intent: gated integrated loudness, short-term curve, LRA, and 4x
-      oversampled true peak — the foundation everything downstream trusts.
-      Done when: K-weighting, gating and LRA are implemented as pure
-      functions over `Float32Array` blocks, unit-tested, and run in the
-      worker with no browser APIs required.
-
 - [ ] **VH-3 EBU Tech 3341 validation** [sign-off] (2026-08-24)
       Intent: convert "the meter looks about right" into pass/fail.
       Done when: the Tech 3341 compliance cases are synthesised from their

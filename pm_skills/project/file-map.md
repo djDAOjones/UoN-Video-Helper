@@ -15,13 +15,13 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 31 file(s) across 6 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 42 file(s) across 6 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 10 file(s)
 - `.claude` — 1 file(s)
 - `docs` — 5 file(s)
 - `scripts` — 1 file(s)
-- `src` — 13 file(s)
-- `test` — 1 file(s)
+- `src` — 23 file(s)
+- `test` — 2 file(s)
 <!-- /file-map-index -->
 
 ## (root)
@@ -55,6 +55,16 @@
 
 ## src
 
+- `src/audio/analyse.test.ts` — Proves the facade measures the same thing the components do separately.
+- `src/audio/analyse.ts` — The analysis pass: loudness and true peak over one traversal of source audio only.
+- `src/audio/biquad.ts` — Second-order IIR section, Direct Form II transposed, Float64 state to resist hour-long drift.
+- `src/audio/kweighting.test.ts` — Asserts the derivation reproduces the standard's published 48 kHz coefficients.
+- `src/audio/kweighting.ts` — BS.1770-4 K-weighting, derived at the source's real sample rate rather than resampling to a table.
+- `src/audio/loudness.test.ts` — Meter behaviour, with every expected value derived from BS.1770-4's equations.
+- `src/audio/loudness.ts` — Gated integrated loudness, momentary and short-term curves, and LRA. Streaming.
+- `src/audio/truepeak.test.ts` — Proves it finds inter-sample peaks and never reads below sample peak.
+- `src/audio/truepeak.ts` — 4x oversampled true peak. Polyphase FIR with exact pruning, so quiet passages cost little.
+- `src/config/audio.ts` — Project audio choices — targets, thresholds, chain constants. Standard-defined values live in src/audio/.
 - `src/core/diagnostics.ts` — Global error capture on both threads, plus the redacted copy-diagnostics bundle.
 - `src/core/logger.test.ts` — Proves the log buffer is bounded — a one-hour encode must not grow it without limit.
 - `src/core/logger.ts` — The single structured logger. Console plus a bounded ring buffer; no DOM, so the worker shares it.
@@ -72,3 +82,4 @@
 ## test
 
 - `test/contrast.test.ts` — Makes the AAA contrast claim mechanical: every rendered pair >= 7:1 in both themes.
+- `test/helpers/signals.ts` — Synthesised tones and silence shared by the meter tests and the EBU harness.
