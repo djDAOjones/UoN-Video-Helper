@@ -32,7 +32,7 @@ allows deployment as plain static files. See
 ## Project management
 
 This repository uses the [PM Skills](https://github.com/djDAOjones/PM-Skills-lab)
-framework (v4.6.0) in [`pm_skills/`](pm_skills/) for AI-assisted
+framework (v4.9.2) in [`pm_skills/`](pm_skills/) for AI-assisted
 development: project memory, standards, and workflows.
 
 Project memory lives in `pm_skills/project/` and is populated by running

@@ -85,6 +85,12 @@ For every path in the work list, look up its class in the source
   scaffold file named by a changelog entry's Upgrade actions is copied
   in once (it cannot carry local edits yet). Otherwise skip.
 
+An entry's literal action list never overrides a path's class: if an
+Upgrade actions block says "replace" a path whose class is
+`project-memory` (or `scaffold` with an existing copy), the class
+wins — apply the class treatment and note the entry's wording as a
+defect for upstream correction.
+
 If a path in the work list is not covered by the manifest, treat it
 as the directory default (`prompts/` and `integrations/` are
 `framework`; `project/` is `project-memory`) and note the gap so the

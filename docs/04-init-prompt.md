@@ -23,7 +23,7 @@ University of Nottingham staff add approved branding to an educational
 video, normalise its audio loudness, and export a correctly encoded MP4 —
 with no upload, no server, and no media leaving their device.
 
-The PM Skills framework (v4.6.0) is already installed at pm_skills/.
+The PM Skills framework (v4.9.2) is already installed at pm_skills/.
 This IS a git repository with a remote (github.com/djDAOjones/UoN-Video-Helper,
 branch main). Treat commits as the rollback checkpoints.
 
@@ -86,6 +86,11 @@ match the specified master format so the real assets drop in unchanged.
 ACCESSIBILITY
 WCAG 2.2 AA minimum, AAA where achievable, per specification section 9.3.
 The audience is novice users on managed University devices.
+
+BACKLOG FORMAT
+Use a normal prose backlog. Records mode (pm_skills/GUIDE.md → "Records
+mode") is not needed yet — its payoff is parallel lanes and multi-machine
+merges, neither of which applies to a solo v1 build.
 
 SCOPE BAND
 I intend Band 0 (local MVP, no deploy) — hosting is not yet decided (D5).

@@ -102,9 +102,9 @@ Run a quick consistency check:
 
 ```sh
 echo "VERSION: $(cat pm_skills/VERSION)"
-echo "Top changelog heading:"; grep -m1 '^## ' pm_skills/CHANGELOG.md
+echo "Top changelog heading:"; grep -m1 '^## [0-9]' pm_skills/CHANGELOG.md
 echo "Changed distributed files not named in the top entry:"
-TOP=$(awk '/^## /{n++} n==1' pm_skills/CHANGELOG.md)
+TOP=$(awk '/^## [0-9]/{n++} n==1' pm_skills/CHANGELOG.md)
 git status --porcelain | awk '{print $2}' | \
   grep -E '^(pm_skills/|AGENTS\.md|UI-STANDARDS\.md|DEV-INFRASTRUCTURE\.md)' | \
   grep -v 'CHANGELOG.md\|VERSION' | while read -r f; do
@@ -116,10 +116,41 @@ for f in pm_skills/prompts/* pm_skills/integrations/*; do
   echo "  (ok if covered by a /* wildcard) $f"
 done
 echo "Top-level files missing from the GUIDE tree:"
+GLOB_RE=$(grep -oE '[A-Za-z0-9_.-]*\*[A-Za-z0-9_.-]*\.[a-z]+' pm_skills/GUIDE.md \
+  | sort -u | sed 's/\./\\./g; s/\*/.*/g' | paste -s -d '|' -)
 for f in pm_skills/VERSION pm_skills/*.md; do
-  grep -q "$(basename "$f")" pm_skills/GUIDE.md || echo "  MISSING: $f"
+  b=$(basename "$f")
+  grep -q "$b" pm_skills/GUIDE.md && continue
+  [ -n "$GLOB_RE" ] && echo "$b" | grep -qE "^($GLOB_RE)$" && continue
+  echo "  MISSING: $f"
 done
 ```
+
+(The tree may list a file family on one glob line — `CHANGELOG-*.md`
+for the archived epochs — so the last loop accepts a basename that
+matches any `*` pattern in the guide, not only a literal mention.)
+
+## 7. Harness check (advisory)
+
+If the repo keeps a behavioural eval harness for the framework
+(scenario specs with end-state assertions), run the scenarios
+applicable to this release and note the results in the closing
+report:
+
+- **Upgrade scenario** — when the release changes the upgrade
+  machinery: `prompts/upgrade.md`, manifest rows or classes,
+  changelog structure, or any rename/removal of distributed files.
+  The routine prepend of this release's own entry never qualifies
+  by itself.
+- **Close scenario** — when the release changes the close protocol:
+  `prompts/end-of-task.md`, the close steps of
+  `integrations/task.md`, or the `Close: lite` trailer grammar.
+- **Neither** — note "harness: no applicable scenarios" and the
+  one-line reason; the note is the evidence the check ran.
+
+Advisory, never a gate: a red scenario informs the closing report
+and lands in the backlog as a finding — it never blocks the
+release. Repos without a harness skip this section.
 
 ## Rules
 

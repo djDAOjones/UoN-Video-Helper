@@ -226,7 +226,11 @@ From the backlog Active section, choose the next logical unit:
 - Otherwise take the first unstarted item (`[ ]`) under **Current
   milestone**.
 - Fall back to **Next milestone** only if Current is empty or done.
-- Do not pull from **Icebox** unless Active has nothing committed.
+- Do not pull from **Icebox** unless Active has nothing committed —
+  and then propose a **Re-assess** pass
+  (`prompts/memory-maintenance.md`) first, so the pull stands on
+  current grades rather than stale ones. When Current and Next are
+  both empty, that pass is the refill mechanism.
 - Skip blocked items and say why they're blocked.
 
 ### 3. Present the pick, then stop

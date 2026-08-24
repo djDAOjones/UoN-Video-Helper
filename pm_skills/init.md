@@ -410,6 +410,12 @@ your project root, if they don't already exist:
   (Node only). Catches broken cross-references in your docs and memory
   files. Delete it if your project link-checks another way.
 
+The scaffold also carries run-in-place tooling nothing copies at
+init: `gen-file-map.mjs` (file-map skeletons), and the optional
+records-mode pair `gen-backlog.mjs` + `check-memory.mjs` — only
+projects that later adopt a generated backlog need those (see
+`pm_skills/GUIDE.md` → "Records mode").
+
 ---
 
 ## Step 10: Readiness check

@@ -22,6 +22,10 @@ same files). The trigger ships exactly that, then stops and reports —
 run it again for the next one. It never burns down the whole backlog
 unattended.
 
+To run two or three genuinely disjoint items at once in parallel
+chats, use `integrations/dispatch.md` — it assigns lanes and briefs
+and integrates the results; this trigger stays strictly one-item.
+
 ## Guardrails (never weakened)
 
 This trigger normalises gateless runs, so the guardrails that make

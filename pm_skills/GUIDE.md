@@ -23,7 +23,8 @@ the end of every task**:
   building, what's next, what shipped, and why choices were made.
 - **Rulebooks** (`AGENTS.md`, `UI-STANDARDS.md`,
   `DEV-INFRASTRUCTURE.md` in your project root — copied out of
-  `templates/` at init) — the permanent rules: invariants, UI and
+  `templates/` at init, plus an optional `PROCESS.md` for complex
+  multi-phase projects) — the permanent rules: invariants, UI and
   accessibility standards, build and deploy facts. Populated once
   during setup; updated only when big decisions change.
 - **Workflows** (`integrations/` and `prompts/`) — the procedures:
@@ -36,9 +37,10 @@ Two habits make the memory work:
   reasoning goes to `decision-log.md` (why). Nothing is written twice,
   so the files the agent reads every day stay small.
 - **Read tiers.** Not every file is read every time. Hot files (the
-  brief, the architecture) are read every task; `backlog.md` and the
-  file map are read by section; `trajectory.md` only on demand; the
-  wish-list and archives never load automatically. This keeps each
+  root README, the brief, the architecture, the conventions) are read
+  every task; `backlog.md` and the file map are read by section;
+  `trajectory.md` only on demand; the wish-list and archives never
+  load automatically. This keeps each
   session's context — and token bill — bounded as the project grows.
   The canonical tier policy lives in `AGENTS.md` → "Before every
   task"; the size budgets live in `memory-policy.md`.
@@ -63,7 +65,7 @@ VERSION          Current framework version (semver). The upgrade check.
 CHANGELOG.md     Append-only release log; each entry is an upgrade plan.
 CHANGELOG-*.md   Archived epochs (1.x/2.x/3.x), verbatim; the upgrade
                  walk follows the live file's index into them.
-MANIFEST.md      Path classes: framework / template / memory / scaffold.
+MANIFEST.md      Path classes: framework / root-template / project-memory / scaffold.
 GUIDE.md         This guide.
 init.md          Project setup, step by step (manual or agent-run).
 memory-policy.md Memory size budgets + overrun actions (read at task close only).
@@ -97,7 +99,7 @@ prompts/         Reusable per-task prompts (paste, or run as commands).
   bug-scoping.md          Bug diagnosis: reproduce, root cause, minimal fix.
   end-of-task.md          The closing ritual: quality gate + memory updates.
   review.md               Read-only audit of an autonomous run or feature area.
-  memory-maintenance.md   Diagnose / Prune / Refactor / Reconcile / Doc-sync project memory.
+  memory-maintenance.md   Diagnose / Prune / Refactor / Re-assess / Reconcile / Doc-sync project memory.
   backlog-authoring.md    Ideas or a transcript → grammar-true backlog items + tickets; the ticket skeleton and external authoring contract.
   upgrade.md              Move a project to a newer framework version.
   release.md              Maintainer release checklist (source repo only).
@@ -106,6 +108,7 @@ prompts/         Reusable per-task prompts (paste, or run as commands).
 integrations/    Tool-workflow files (copy to your AI tool's workflow dir).
   task.md      The task workflow — modes: full / checkpoint (default) / auto-jazz / auto-jazz-lite / spike / refactor.
   next.md      One-word "run the next backlog item": Start B pick → auto-jazz build → close. One item per invocation.
+  dispatch.md  Initiate parallel chats: disjoint pick, lane briefs; the dispatching chat integrates.
   bugfix.md    Diagnosis-before-fix workflow for bugs.
   init-mvp.md  Sign off foundation + scope band, then autonomous build (and optional deploy).
   adopt.md     Retrofit pm-skills onto an existing codebase; reverse-engineer memory, interview for gaps.
@@ -117,15 +120,20 @@ scaffold/        Starter config to copy into your project root once.
   check-links.mjs     Dependency-free internal Markdown link checker (Node).
   gen-file-map.mjs    Dependency-free file-map skeleton generator (Node).
                       Runs in place from scaffold/; copy it out only to customise.
+  gen-backlog.mjs     Records mode (optional): backlog-view generator.
+                      Runs in place, like gen-file-map.mjs.
+  check-memory.mjs    Records-aware memory validator against the
+                      memory-policy budgets. Runs in place.
 ```
 
 ## Two ways to drive it
 
 - **Workflow-capable AI tools** (slash commands or similar): copy the
   files from `integrations/` into your tool's workflow directory —
-  plus `prompts/upgrade.md` and `prompts/memory-maintenance.md` if you
-  want those as commands too (they carry workflow frontmatter). Then
-  you just invoke a workflow and talk.
+  plus `prompts/upgrade.md`, `prompts/memory-maintenance.md`, and
+  `prompts/backlog-authoring.md` if you want those as commands too
+  (they carry workflow frontmatter). Then you just invoke a workflow
+  and talk.
 - **Any other AI tool**: paste the prompt files into chat at the right
   moments. The "Manual paste flow" section below gives the exact
   sequences. Same rigour, more copy-paste.
@@ -186,7 +194,14 @@ also surfaces the **age of standing items** — the
 `[maintainer]`/`[sign-off]`/`[blocked]` work that waits across sessions
 — so long-lived items can't fade into wallpaper; and any open
 `[security]` item (a live exposure) banners at every session start
-until it's closed.
+until it's closed. When nothing committed is left — Current and Next
+both empty, only the Icebox to pull from — it proposes a
+**Re-assess** pass (`memory-maintenance.md`) before pulling, so the
+next pick stands on current grades and hold reasons rather than
+stale ones. A project that keeps a generated **janitor report**
+(fresh, on this branch) lets session start read those counts and
+banners from the report instead of recomputing them — see
+`session-start.md` → "Janitor report".
 
 Or, when you trust the backlog order, run
 [`integrations/next.md`](./integrations/next.md): one word picks the
@@ -196,6 +211,12 @@ the invocation itself is the go-ahead, so it doesn't wait. The
 guardrails still hold: `[sign-off]` items escalate to full mode,
 wish-list triage and the reconcile gate still run, and every hard
 limit still stops and asks.
+
+With two or three genuinely independent items and attention to
+spare, [`integrations/dispatch.md`](./integrations/dispatch.md)
+initiates parallel chats instead: a disjoint pick, one lane and one
+paste-ready brief per chat, and integration back in the dispatching
+session.
 
 ### Build
 
@@ -238,10 +259,14 @@ Say "run end-of-task" (`prompts/end-of-task.md`). The agent:
 1. Runs the project's one-command quality gate (`check`).
 2. Verifies the app still boots, if the task touched the runtime.
 3. Updates project memory — removes the shipped backlog item, records
-   the why in `decision-log.md`, adds the trajectory line, refreshes
-   the file map and any rulebook that changed.
+   the why in `decision-log.md`, adds the trajectory line, notes any
+   protected-doc drift in `doc-deltas.md`, refreshes the file map and
+   any rulebook that changed.
 4. Size-checks the memory files (a fast path skips the full audit on
-   most tasks) and proposes maintenance if a budget tripped.
+   most tasks) and proposes maintenance if a budget tripped. Where
+   the project wires `scaffold/check-memory.mjs`, that one command
+   is the whole step: structural failures block the close, budget
+   warnings feed the proposal.
 5. Reports what it did.
 
 This ritual is what makes the *next* session start smart. Don't skip
@@ -342,6 +367,11 @@ never a lock (a crashed session must never block the next one):
   protocol above remains for prose-memory projects and for the
   genuinely shared files — decision log, trajectory — where
   same-file appends stay git's weakest case.
+- **Initiating a parallel set.** The entry move is packaged as
+  `integrations/dispatch.md`: pick two or three disjoint items,
+  assign lanes (branch, mode, a working tree each) and the one
+  primary, emit paste-ready briefs, then integrate in the
+  dispatching session — merges, handoffs, one release.
 - **Multi-machine: git is the sync channel, never the filesystem.** Work
   crosses machines as commits and branches — pull the branch; don't let
   a sync folder (OneDrive, Dropbox, iCloud) carry a working tree between
@@ -413,7 +443,7 @@ what changes when:
 
 **When a size budget trips** (the end-of-task check tells you), the
 agent proposes `prompts/memory-maintenance.md` and waits for your
-approval. Its five verbs:
+approval. Its six verbs:
 
 - **Diagnose** — read-only health check; finds structural drift and
   points at the right fix. Also worth running after a long gap.
@@ -421,6 +451,9 @@ approval. Its five verbs:
   never summarised) and leaves an index pointer in the live file.
 - **Refactor** — tidies a drifted backlog: evicts shipped work,
   merges duplicates, regroups by milestone.
+- **Re-assess** — re-judges the standing queue when the milestones
+  run empty or items age: grades, hold reasons, ordering, and the
+  refill, proposed for your sign-off; never auto-run.
 - **Reconcile** — back-fills memory from `Close: lite` commit trailers:
   evicts the reconciled backlog items, adds their trajectory lines, and
   writes one consolidated decision-log entry for the batch.
@@ -431,13 +464,19 @@ approval. Its five verbs:
 
 Budgets and the actions per file live in
 [`memory-policy.md`](./memory-policy.md) — the agent reads it at task
-close; you never need to.
+close; you never need to. The mechanical half of all this — every
+budget, the ticket grammar, the hygiene checks, Diagnose's greps —
+ships as one command, `scaffold/check-memory.mjs` (runs in place; no
+records mode required). Wire it into your `check` gate and the size
+check stops being a ritual the agent performs and becomes a gate the
+agent cannot skip.
 
 **Which model tier?** Memory maintenance is mostly mechanical — counts,
 greps, `tail`/`diff` verification, log harvesting — and that half runs
 fine on a cheaper, faster model. Two things do not: judgement steps
 (scoping, design options, validation, review, and any **propose** step,
-such as Prune's archive proposal or Reconcile's batch write), and
+such as Prune's archive proposal, Re-assess's re-grading, or
+Reconcile's batch write), and
 multi-step protocol closes (the release and end-of-task checklists).
 Both want the stronger tier — protocol adherence and judgement are the
 first things to degrade on a cheap model. Split the work per-step, not
@@ -460,19 +499,56 @@ the ticket grammar grouped by milestone, and authors
 that outgrow one line. The same file is the contract an external
 agent follows when asked to write tickets.
 
+**Records mode (optional).** By default the backlog is a hand-edited
+file. A project whose backlog churns fast — parallel sessions,
+automation, a dialect of its own — may instead run it as **records**:
+one `tickets/<ID>.md` per open item (flat frontmatter over the ticket
+body), with the Active section of `backlog.md` **generated** between
+markers by `pm_skills/scaffold/gen-backlog.mjs`. Prose backlogs stay
+first-class; records mode is opt-in and reversible (the view is a
+normal backlog file — retire the markers and `tickets/_meta.md` to go
+back). To adopt:
+
+1. Create `tickets/_meta.md`: optional per-group `<key>-intent:`
+   lines, plus — where your milestones or flags differ from the
+   canonical taxonomy — the dialect keys `milestones: key=Title, …`
+   and `flags: …` (grammar and field list:
+   `prompts/backlog-authoring.md` → "Records mode").
+2. Write one record per open item and delete the hand-maintained
+   item lines the records replace (every item needs an ID, icebox
+   lines included).
+3. Run `node pm_skills/scaffold/gen-backlog.mjs` — in place, like
+   `gen-file-map.mjs`; add `--project-dir` if your memory lives
+   elsewhere. First generation appends the block inside `## Active`,
+   creating that heading if the file lacks one.
+4. Optionally wire `--check` plus
+   `node pm_skills/scaffold/check-memory.mjs` into your `check` gate:
+   the validator detects records mode and enforces record↔view
+   coherence mechanically.
+
+The one rule: **edit records and regenerate — never hand-edit
+between the generated markers.** Any workflow instruction that says
+"edit the backlog" means "edit the record, regenerate the view"
+here; a shipped item's record moves to your archive before the
+regenerate. Parallel sessions get simpler, not harder — see
+"Parallel and multi-machine work" for branch-per-session and the
+regenerate-on-conflict merge rule.
+
 Two folders are created lazily, so don't be surprised they're missing
 on a fresh project: `project/archive/` (first prune) and
 `project/tickets/` (first item that needs a detail file).
 
 ## Saving session transcripts
 
-Whenever your AI tool can export a conversation, save it to a
-`_transcripts/` folder at your project root. It costs nothing during
-the work and compounds into evidence: future evaluations,
-retrospectives, and prompt-tuning get to read what actually happened in
-a session instead of inferring it from the decision log. (The framework
-itself learned this the hard way — a later review was blind to months
-of sessions because no transcripts existed for them.)
+An optional practice for projects that want a record of their
+sessions: if your AI tool can export a conversation, save it to a
+`_transcripts/` folder at your project root. It costs nothing
+during the work and compounds into evidence: future evaluations,
+retrospectives, and prompt-tuning get to read what actually
+happened in a session instead of inferring it from the decision
+log. (The framework itself learned this the hard way — a later
+review was blind to months of sessions because no transcripts
+existed for them.)
 
 The convention:
 
@@ -493,10 +569,9 @@ The convention:
   same "redact by default" rule as the diagnostics bundle
   (`AGENTS.md` → "Self-explaining runtime").
 
-`end-of-task.md`'s closing report carries a one-line reminder to save
-the transcript; it never blocks the close. If you later run a
-retrospective evaluation of your sessions, point it here — the evidence
-lives in `_transcripts/`.
+Nothing in the close depends on this — save or skip as your project
+needs. If you later run a retrospective evaluation of your sessions,
+point it here — the evidence lives in `_transcripts/`.
 
 ## Quick answers
 

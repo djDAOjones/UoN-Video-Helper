@@ -1,10 +1,10 @@
 ---
-description: Maintain project memory — diagnose drift, prune by size, refactor the roadmap, reconcile lite closes, sync protected docs
+description: Maintain project memory — diagnose drift, prune by size, refactor the roadmap, re-assess the queue, reconcile lite closes, sync protected docs
 ---
 
 # Memory Maintenance
 
-The one file for keeping project memory healthy. Five verbs, each a
+The one file for keeping project memory healthy. Six verbs, each a
 self-contained procedure — run only the section you were asked for
 (the others are context, not obligations):
 
@@ -15,6 +15,9 @@ self-contained procedure — run only the section you were asked for
   flags a file over budget.
 - **Refactor** — repair the roadmap's structure. Run when the backlog
   has drifted (done-work mixed in, dated rounds, duplicates).
+- **Re-assess** — re-judge the standing queue. Run when the milestones
+  are empty, standing items have aged past threshold, or the next pick
+  would otherwise rest on stale grades and hold reasons.
 - **Reconcile** — back-fill project memory from git history after
   `Close: lite` closes (`end-of-task.md`). Run when lite closes have
   accumulated, or when session-start / the cap says one is due.
@@ -28,7 +31,7 @@ verbs. Budgets and the reconcile cap come from
 `pm_skills/memory-policy.md`; tier names from `AGENTS.md` → "Read
 tiers". Read them from there; do not restate the numbers.
 
-Shared rules for all five verbs: prefer plain shell (`wc`, `head`,
+Shared rules for all six verbs: prefer plain shell (`wc`, `head`,
 `tail`, `grep`, `ls`, `cp`, `mv`, `git log`, output redirection) and
 no retry loops — if a step fails, **stop and report**; never
 improvise around a failed move. Minimise meta-cost: single pass,
@@ -37,7 +40,8 @@ batch the work.
 Model tier (per-*step*, not per-*verb*): the mechanical halves — every
 count, Diagnose's greps, Prune's P1/P4/P5 detect/execute/verify,
 Reconcile's log harvesting — run fine on a cheaper, faster model; the
-**propose** steps (Prune P2, Refactor R3, Reconcile RE3) and any
+**propose** steps (Prune P2, Refactor R3, Re-assess RA3, Reconcile
+RE3) and any
 judgement call want the stronger tier. See `GUIDE.md` → "Looking after
 project memory".
 
@@ -226,9 +230,10 @@ Detail | Proposed action**.
     age threshold in `memory-policy.md`; list the oldest few with their
     age. Also flag any open `[security]` item regardless of age (live
     exposure). WARN past the threshold, or on any open `[security]`.
-    Action: maintainer review — they surface at the next Start B pick,
-    and a `[security]` ager banners at every session start until closed.
-    Diagnose never reorders the queue; age is informational.
+    Action: **Re-assess** — ageing standing items are its input queue;
+    they also surface at the next Start B pick, and a `[security]` ager
+    banners at every session start until closed. Diagnose never
+    reorders the queue; age is informational.
 
 Report: the health table, FAILs first; below it, a short prioritised
 action list grouping checks by the verb that fixes them (e.g. "Run
@@ -539,6 +544,104 @@ sign-off. Never rewrite the roadmap silently.
   history moves to the trajectory/log, it is not erased.
 - Preserve append-only files verbatim when moving entries.
 - If the backlog is already lean and lifecycle-clean, say so and stop.
+
+---
+
+## Re-assess (re-judge the queue)
+
+Run when the next pick would stand on stale judgement: **Current and
+Next are both empty** after an arc ships; Diagnose check 13 or a
+janitor report shows standing items past the age threshold; a large
+intake has just landed a pile in the Icebox; or the maintainer asks
+for a fresh view. Where **Refactor** repairs the map's *structure* (a
+drifted backlog) and stops when the map is clean, Re-assess re-judges
+its *substance* — grades, hold reasons, ordering, and what deserves
+the milestones — which a structurally clean backlog can need all the
+same.
+
+### RA1. Load
+
+- `pm_skills/project/backlog.md` — the whole Active section, every
+  milestone (the Icebox is the point here, not an exclusion).
+- `pm_skills/project/wish-list.md` — parked ideas compete for the
+  same refill.
+- `pm_skills/project/trajectory.md` (latest phase) and
+  `pm_skills/project/decision-log.md` (latest entries) — what shipped
+  and what was recently decided is the evidence items are re-judged
+  against.
+- The freshest Diagnose output or janitor report, if one exists —
+  its ageing and staleness lines are this verb's input signals.
+- `pm_skills/project/tickets/<ITEM-ID>.md` for each item whose
+  assessment may change — one hop via its `[detail]` link, never a
+  bulk read.
+
+### RA2. Assess
+
+Work through the open items and answer, per item:
+
+- **Holds** — does each `[blocked: …]` reason still hold, and has
+  its trigger fired? A fired trigger makes a promotion candidate; a
+  reason that no longer matches reality gets refreshed wording and
+  a current date.
+- **Grades** — are the recorded grades (the project's own legend,
+  e.g. Impact / Difficulty / Risk / OpΔ) still true against the
+  evidence loaded in RA1? Re-grade only where something changed,
+  and keep the one-line why.
+- **Order and refill** — is the ordering still dependency-true, and
+  which held or parked items now deserve Current / Next? Wish-list
+  promotions follow the Start B triage rules
+  (`prompts/session-start.md`).
+- **Cuts** — any item whose intent is dead (superseded, disproven,
+  absorbed elsewhere). Cutting is explicit and reasoned, never
+  silent.
+- **Milestone intents** — do the per-milestone intent lines still
+  describe reality?
+
+### RA3. Propose (one read, before write)
+
+Present a single proposal: grade changes (each with its one-line
+why), holds confirmed or refreshed (dated), promotions with
+placement rationale, cuts with reasons, and the refilled milestone
+intent lines. STOP and wait for sign-off — priorities are the
+maintainer's. In a run the maintainer has explicitly delegated
+(gateless), state each placement as a one-line assumption and apply
+directly, exactly as `prompts/backlog-authoring.md` does.
+
+### RA4. Apply (after sign-off)
+
+- Apply the confirmed changes: item lines, or — in records mode —
+  record frontmatter plus the `_meta.md` intent lines, then
+  regenerate the view (never hand-edit between the markers).
+- Date what changed: an item whose assessment changed something
+  gains a `Last assessed: YYYY-MM-DD` line in its ticket body.
+  Items whose holds were merely confirmed are **not** re-stamped —
+  the pass's decision-log entry carries the batch date, so
+  unchanged records stay diff-quiet.
+- A cut item's intent moves to the decision-log with the reason;
+  history is never erased.
+
+### RA5. Record
+
+- Append one entry to `decision-log.md` (top): date, "Re-assess",
+  the counts (assessed / promoted / held / cut), and the why for
+  each judgement call that changed something.
+- Stage the changed memory files; committing stays with the task
+  close.
+
+### Re-assess rules
+
+- Judgement stays with the maintainer: the verb structures the pass
+  and records its outcome; it never auto-decides priorities.
+- **Never auto-run.** This verb is excluded from any automated
+  maintenance a project builds (janitor write ladders, schedulers):
+  automation may *surface* that a pass is due, never run one.
+- Age and staleness inform the assessment; they never reorder the
+  queue by themselves — ordering stays dependency-driven.
+- If nothing material has changed since the last pass, say so in
+  one line and stop.
+- Grammar stays canonical: items keep the backlog template grammar;
+  records-mode edits follow `prompts/backlog-authoring.md` →
+  "Records mode".
 
 ---
 

@@ -133,6 +133,9 @@ Update each of the following if relevant to this task:
 - `pm_skills/project/backlog.md` — when this task ships, **remove** its
   item (there is no Completed section); add any follow-ups to Active as
   open items. If the task isn't finished, update its status in place.
+  (Records mode: apply all of these as record edits — a shipped item's
+  record moves to the archive — then regenerate the view; never
+  hand-edit between the generated markers.)
 - `pm_skills/project/tickets/<ITEM-ID>.md` — if the active item carries
   the `[detail]` flag: when it ships or is cut, fold any durable
   conclusions into `decision-log.md` (the why) + `trajectory.md` (the
@@ -285,11 +288,5 @@ Output a one-line summary:
   `integrations/task.md` → step 11. A project may restore
   propose-only behaviour in its root `AGENTS.md`. Say "not a git
   repo" and skip if it isn't one.
-
-Then add one non-blocking reminder: if your tool can export the
-conversation, save it to `_transcripts/` with the session's starting
-commit on the first line (`Start SHA: <sha>`), and redact before
-committing — see `GUIDE.md` → "Saving session transcripts". This
-never gates the close.
 
 Present the report to the user before closing the task.

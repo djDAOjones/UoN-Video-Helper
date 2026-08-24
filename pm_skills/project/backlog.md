@@ -58,3 +58,8 @@
      active task, so Active stays terse. Working context only; the "why"
      still goes to decision-log.md on ship. The file is deleted when the
      item ships or is cut — it does not outlive the item. -->
+
+<!-- Records mode (optional): the Active section can instead be
+     GENERATED from per-item records in tickets/ — adoption and
+     tooling: pm_skills/GUIDE.md → "Records mode"; record grammar:
+     pm_skills/prompts/backlog-authoring.md → "Records mode". -->

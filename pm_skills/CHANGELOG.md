@@ -36,6 +36,277 @@ oldest file its version gap touches:
 - 3.x — `CHANGELOG-3x.md` (3.17.1, the final 3.x entry, stays
   below so a one-gap upgrade never opens the archive)
 
+## 4.9.2 — 2026-08-23
+
+RELEASE-TREE-GLOB: the release checklist's GUIDE-tree check now
+honours glob lines. Since 4.5.0 the guide's folder tree lists the
+archived changelog epochs as one `CHANGELOG-*.md` line, and the step 6
+snippet grepped each shipped basename literally — so the three
+archive files reported MISSING at every release (a false positive
+reproduced at the 4.9.1 close). Wording and snippet only; no new
+files, no behaviour change for consuming projects.
+
+### Changed
+
+- `pm_skills/prompts/release.md` — step 6's "Top-level files missing
+  from the GUIDE tree" loop: a basename that matches any `*` pattern
+  token in the guide (file-shaped tokens only, `name*name.ext`) now
+  passes; a name the guide neither mentions nor covers by pattern
+  still reports MISSING. Shell-agnostic (regex via `grep -E`, no
+  word-splitting or pathname-expansion dependence); verified under
+  sh, bash, and zsh. One explanatory paragraph follows the snippet.
+
+### Upgrade actions
+
+- Replace `pm_skills/prompts/release.md` with this version's copy
+  (`framework` class). Source-repo maintainers only — consuming
+  projects never run the release checklist; nothing else to do.
+
+## 4.9.1 — 2026-08-23
+
+GUIDE-SYNC: the guide's prose catches up with behaviour that shipped
+across 4.4.0–4.9.0 but was only ever reflected in the file tree or
+the verb list. Wording only — no new files, no behaviour change.
+
+### Changed
+
+- `pm_skills/GUIDE.md` — the mental model names the optional
+  `PROCESS.md` rulebook and the full hot-tier set (root README,
+  brief, architecture, conventions); the folder tree states the
+  `MANIFEST.md` class names exactly (`root-template`,
+  `project-memory`); "Two ways to drive it" lists
+  `prompts/backlog-authoring.md` among the prompts carrying workflow
+  frontmatter; the daily-loop Pick describes the 4.9.0 empty-queue
+  rule (a Re-assess pass is proposed before any Icebox pull) and the
+  optional janitor report; the Close steps name the `doc-deltas.md`
+  capture and `scaffold/check-memory.mjs` as the whole of step 4
+  where it is wired; "Looking after project memory" presents the
+  validator as a gate for any project, not only records mode, and
+  the model-tier note adds Re-assess's re-grading to the propose
+  steps.
+
+### Upgrade actions
+
+- Replace `pm_skills/GUIDE.md` with this version's copy (`framework`
+  class).
+- No file adds, renames, or removals; no memory migration; nothing
+  to do in a consuming project beyond the replace.
+
+## 4.9.0 — 2026-08-18
+
+PLAN-ORDER: memory maintenance gains a sixth verb, **Re-assess
+(re-judge the queue)** — a maintainer-gated pass that re-grades
+standing items, refreshes hold reasons and triggers, re-orders, and
+refills empty milestones, so the next pick stands on current
+judgement rather than stale grades. Refactor repairs the map's
+structure and stops when it is clean; Re-assess re-judges its
+substance, which a structurally clean backlog can need all the same
+(evidence: two manual precedents on the source repo, 2026-08-17 and
+2026-08-18).
+
+### Changed
+
+- `pm_skills/prompts/memory-maintenance.md` — new **Re-assess** verb
+  (RA1–RA5 + rules: propose-only, never auto-run, age informs but
+  never reorders, quiet no-op when nothing changed); the intro and
+  shared-rules lines now count six verbs; the model-tier note adds
+  RA3 to the propose steps; Diagnose check 13's action now routes
+  ageing standing items to Re-assess.
+- `pm_skills/prompts/session-start.md` — Start B step 2: an Icebox
+  pull with nothing committed in Active now proposes a Re-assess
+  pass first; with Current and Next both empty, that pass is the
+  refill mechanism.
+- `pm_skills/GUIDE.md` — the folder-tree line and the "Looking after
+  project memory" verb list carry all six verbs.
+
+### Upgrade actions
+
+- Re-copy `pm_skills/prompts/memory-maintenance.md`,
+  `pm_skills/prompts/session-start.md`, and `pm_skills/GUIDE.md`
+  (all `framework` class — replace wholesale).
+- No file adds, renames, or removals; no memory migration. Records
+  mode needs no record changes: `Last assessed:` is a ticket-body
+  line the new verb writes only when an assessment changes
+  something.
+
+## 4.8.0 — 2026-08-17
+
+RECORDS-DIST: records mode becomes distributable (BACKLOG-STATE
+phase 2) — run-in-place scaffold tooling, a configurable dialect
+surface, and adoption grammar guidance. Evidence base: the first
+records adoption on a consuming project (2026-08-17), which
+canon-shaped tooling mis-served three ways.
+
+### Added
+
+- `pm_skills/scaffold/gen-backlog.mjs` — records-mode backlog-view
+  generator (`scaffold` class, the directory default): flat
+  frontmatter records under `tickets/` render the backlog's Active
+  section between generated markers. Takes `--project-dir` (default
+  `pm_skills/project`) and `--check`; first generation creates the
+  `## Active` heading when the file lacks one; a record naming a
+  milestone outside the configured groups is an error, never a
+  silent drop. Dialect
+  keys in `tickets/_meta.md`: `milestones: key=Title, …` (ordered;
+  absent → Current / Next / Icebox) and per-group `<key>-intent:`
+  lines.
+- `pm_skills/scaffold/check-memory.mjs` — memory validator: the
+  end-of-task size check and the mechanical half of Diagnose as one
+  command, reading budgets from `pm_skills/memory-policy.md`.
+  Records-aware (record↔view coherence, records-mode repair
+  messages, dialect `flags:` extension — custom flags are known,
+  never standing); structural failures exit 1, budget overruns
+  warn. Optionally wired into a project's `check` gate.
+
+### Changed
+
+- `pm_skills/prompts/backlog-authoring.md` — new "Records mode"
+  section: the record frontmatter grammar and field list, the
+  `_meta.md` dialect keys, and the grammar the frontmatter forces —
+  every item needs an ID (icebox lines included), IDs are
+  SCREAMING-KEBAB with no dots, `summary:` is one physical line,
+  edit-records-regenerate. The ticket-file lifecycle rule notes the
+  records-mode inversion.
+- `pm_skills/GUIDE.md` — "Records mode (optional)" adoption path
+  under "Looking after project memory"; the scaffold file tree
+  lists the two new tools.
+- `pm_skills/init.md` — Step 9 notes the run-in-place scaffold
+  tooling (nothing new to copy at init).
+- `pm_skills/prompts/end-of-task.md` — the step 3 backlog bullet
+  gains the records-mode aside: apply changes as record edits and
+  regenerate; never hand-edit between the generated markers.
+- `pm_skills/project/backlog.md` (template) — one pointer comment
+  to the records-mode docs.
+- `pm_skills/MANIFEST.md` — the class-inheritance rule now names
+  `pm_skills/scaffold/` → `scaffold` explicitly (the paths table's
+  wildcard already covered it).
+
+### Upgrade actions
+
+- Add `pm_skills/scaffold/gen-backlog.mjs` and
+  `pm_skills/scaffold/check-memory.mjs` from this version
+  (`scaffold` class; both run in place from `pm_skills/scaffold/` —
+  nothing to copy into the project root).
+- Replace `pm_skills/GUIDE.md`, `pm_skills/init.md`,
+  `pm_skills/prompts/backlog-authoring.md`,
+  `pm_skills/prompts/end-of-task.md`, and `pm_skills/MANIFEST.md`
+  with this version's copies.
+- Do **not** replace `pm_skills/project/backlog.md` in a consuming
+  project (`project-memory` class — the class wins): the template's
+  records-mode pointer comment reaches populated backlogs by
+  adoption at the next backlog touch, never by file replacement.
+- Optional adoption: a project that wants a generated backlog
+  follows `pm_skills/GUIDE.md` → "Records mode" (records under
+  `tickets/`, `_meta.md` dialect keys, the two tools optionally in
+  its `check` gate). Prose backlogs remain first-class; no action
+  otherwise.
+
+## 4.7.2 — 2026-08-17
+
+Correction release (CL-440-WORDING): 4.4.0's Upgrade actions name a
+project-memory path in a replace list; plus the precedence rule in
+`prompts/upgrade.md` and a `prompts/release.md` snippet completion.
+
+### Corrections
+
+- **4.4.0 → Upgrade actions** (published entry stays byte-untouched
+  — append-only rule): the replace list names
+  `pm_skills/project/backlog.md` "(template)". That path is
+  `project-memory` class in `MANIFEST.md` and is **never replaced**
+  in a consuming project — a populated backlog must survive every
+  upgrade. What 4.4.0 should have said: the backlog-template deltas
+  (linked `[detail]` grammar, legibility guidance) reach populated
+  backlogs by adoption at the next backlog touch — see that entry's
+  own "Optional adoptions" line — never by file replacement. For
+  every walk: when an entry's literal action list conflicts with a
+  path's MANIFEST class, **the class wins** (`prompts/upgrade.md`
+  Step 3).
+
+### Changed
+
+- `prompts/upgrade.md` — Step 3 now states the precedence rule: an
+  entry's action list never overrides a path's class; a
+  `project-memory` path is never replaced whatever an entry says.
+- `prompts/release.md` — step 6 snippet: the `TOP=` awk anchors to
+  version headings (`^## [0-9]`), completing 4.7.1's grep fix (the
+  coverage check was comparing against the "Archived epochs"
+  section).
+
+### Upgrade actions
+
+- Replace `pm_skills/prompts/upgrade.md` and
+  `pm_skills/prompts/release.md` with the 4.7.2 copies (`framework`
+  class).
+- No memory changes. If a past upgrade across 4.4.0 replaced a
+  populated `pm_skills/project/backlog.md`, restore it from git
+  history — 4.4.0 never licensed that replace.
+
+## 4.7.1 — 2026-08-17
+
+Advisory harness check joins the release close (RELEASE-EVALS).
+
+### Changed
+
+- `prompts/release.md` — new step 7, "Harness check (advisory)":
+  repos keeping a behavioural eval harness run the scenarios
+  applicable to the release — upgrade scenario for upgrade-machinery
+  changes, close scenario for close-protocol changes — and note the
+  results (or "no applicable scenarios" plus the reason) in the
+  closing report. Advisory, never a gate; repos without a harness
+  skip it. Also fixes the step 6 consistency snippet: the top-entry
+  grep now matches version headings (`^## [0-9]`), not the
+  "Archived epochs" section CL-HORIZON added above the entries.
+
+### Upgrade actions
+
+- Replace `pm_skills/prompts/release.md` with the 4.7.1 copy
+  (`framework` class — no customisation check expected). No memory
+  migration. Projects without an eval harness see no behavioural
+  change.
+
+## 4.7.0 — 2026-08-17
+
+PAR-DISPATCH: a dispatch verb initiates parallel dev work in
+parallel chats; the per-close transcript reminder retires.
+
+### Added
+
+- `pm_skills/integrations/dispatch.md` — the parallel-work entry
+  move: pick two or three disjoint backlog items (at most one
+  touching the release-bearing tree), assign lanes (branch, mode,
+  a working tree each) and the primary, and emit one paste-ready
+  brief per chat; the dispatching session integrates the returning
+  lanes, applies their handoff blocks, and releases once. Composes
+  the Start B pick, the GUIDE parallel conventions, and the
+  secondary close; verified by a live two-lane dispatched exercise
+  before release.
+
+### Changed
+
+- `pm_skills/integrations/next.md` — gains a pointer to the
+  dispatch verb; the trigger itself stays strictly one-item.
+- `pm_skills/GUIDE.md` — the file tree, the daily-loop Pick, and
+  "Parallel and multi-machine work" gain dispatch pointers;
+  "Saving session transcripts" is demoted to an optional on-demand
+  reference (the 4.2.0 per-close reminder never fired in consuming
+  evidence).
+- `pm_skills/prompts/end-of-task.md` — the closing report's
+  non-blocking save-your-transcript reminder paragraph is removed;
+  the report step is otherwise unchanged.
+
+### Upgrade actions
+
+- Copy the new `pm_skills/integrations/dispatch.md` into place; if
+  your AI tool runs workflows from a directory, copy it there
+  alongside `task.md` and `next.md`.
+- Replace `pm_skills/integrations/next.md`, `pm_skills/GUIDE.md`,
+  and `pm_skills/prompts/end-of-task.md` with this version's
+  copies (all `framework` class).
+- Behaviour note: task closes no longer print the
+  save-your-transcript reminder. The `_transcripts/` convention is
+  unchanged and stays documented in `GUIDE.md` → "Saving session
+  transcripts".
+
 ## 4.6.0 — 2026-08-17
 
 PAR-BRANCH: branch-per-session coordination for records-mode

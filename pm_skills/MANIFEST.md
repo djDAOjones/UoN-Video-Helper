@@ -54,7 +54,8 @@ project**, not inside this source repo.
 - A new file added under `pm_skills/prompts/` or
   `pm_skills/integrations/` inherits the `framework` class. A new file
   under `pm_skills/project/` inherits `project-memory`; under
-  `pm_skills/templates/`, `root-template`. The changelog
+  `pm_skills/templates/`, `root-template`; under
+  `pm_skills/scaffold/`, `scaffold`. The changelog
   entry that introduces it states its class only if it differs from
   the directory default.
 - **Never customise a `framework` file in place** in a consuming
