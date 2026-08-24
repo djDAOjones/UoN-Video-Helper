@@ -17,14 +17,10 @@
      (Prune) moves the oldest phases to archive/trajectory/trajectory-NNNN-<range>.md
      and adds a row to archive/INDEX.md. Archives are append-only; never rewrite. -->
 
-<!--
-Example phase (delete when you add your first real one):
+## Milestone 1 — MVP (in progress)
 
-## Phase 1 — Text-only skeleton (shipped 2026-04-20)
+- VH-1 — Runnable skeleton: the app boots in dev and production, the job
+  worker round-trips, and an uncaught throw on either thread is captured and
+  surfaced with a stack. `npm run check` runs seven steps green.
 
-- A1-1 — Hub control plane + event-log projections. See decision-log 2026-04-12.
-- A1-2 — Audience submit (anonymous, cooldown). See decision-log 2026-04-14.
-- A1-3 — Moderator console v0 (four-pane shell). See decision-log 2026-04-15.
-
-Outcome: an end-to-end text path runs locally; submit → moderate → display.
--->
+<!-- Outcome line is written when the milestone closes. -->

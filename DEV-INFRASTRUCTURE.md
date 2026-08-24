@@ -36,9 +36,9 @@ is not hand-edited.
 
 | Script | Command | Purpose |
 | --- | --- | --- |
-| `dev` | `vite` | Dev server with HMR at http://localhost:5173 |
+| `dev` | `vite` | Dev server with HMR at <http://localhost:5173> |
 | `build` | `tsc --noEmit && vite build` | Static production output to `dist/` |
-| `preview` | `vite preview` | Serve the built output at http://localhost:4173 |
+| `preview` | `vite preview` | Serve the built output at <http://localhost:4173> |
 | `test` | `vitest run` | Full test suite, once |
 | `test:watch` | `vitest` | Watch mode during development |
 | `typecheck` | `tsc --noEmit` | Types only |
@@ -57,7 +57,7 @@ that exists in `package.json` and not here is a defect.
 
 ## Dev server
 
-**Canonical URL: http://localhost:5173** (Vite's default; do not change
+**Canonical URL: <http://localhost:5173>** (Vite's default; do not change
 it — it is referenced in the runtime lifecycle below).
 
 ```bash
@@ -213,7 +213,7 @@ makes the bundle useful. The filename is not. `redact()` in
 npm run check
 ```
 
-```
+```bash
 npm run typecheck && npm run lint && npm run test && npm run build && npm run docs:lint && npm run docs:links && npm run check:placeholders
 ```
 

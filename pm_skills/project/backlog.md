@@ -14,13 +14,6 @@
      comes out, through a UI a novice can finish. Built in this order:
      the meter is proved before anything depends on it. -->
 
-- [ ] **VH-1 Runnable skeleton**
-      Intent: the smallest thing that runs, with failures already legible.
-      Done when: `npm run dev` serves a page that loads; a worker round-trips
-      one message; the structured logger and the global error /
-      unhandledrejection hooks capture and surface an uncaught throw;
-      `npm run check` is green.
-
 - [ ] **VH-2 Loudness meter (BS.1770-4)**
       Intent: gated integrated loudness, short-term curve, LRA, and 4x
       oversampled true peak — the foundation everything downstream trusts.

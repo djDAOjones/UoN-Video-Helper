@@ -21,7 +21,7 @@ Then open <http://localhost:5173>. Readiness is a page that mounts and a
 
 | Command | Does |
 | --- | --- |
-| `npm run dev` | Dev server at http://localhost:5173 |
+| `npm run dev` | Dev server at <http://localhost:5173> |
 | `npm run build` | Static output to `dist/` |
 | `npm run check` | The one quality gate — types, lint, tests, build, docs |
 | `npm test` | Test suite, including the EBU Tech 3341 meter validation |

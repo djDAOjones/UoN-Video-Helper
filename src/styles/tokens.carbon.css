@@ -1,0 +1,91 @@
+/*
+ * Carbon structural tokens.
+ *
+ * Implemented to match IBM Carbon's productive design language in this
+ * project's own code — Carbon is never installed as a package
+ * (`AGENTS.md` -> "Carbon-first UI").
+ *
+ * Every text/background pair below is asserted at >= 7:1 by
+ * test/contrast.test.ts, so the AAA claim in `UI-STANDARDS.md` is mechanical
+ * rather than aspirational. Changing a value here fails that test until the
+ * new value is checked.
+ *
+ * Why these steps and not Carbon's defaults: clearing 7:1 against all three
+ * surfaces forces the far ends of each ramp — the -80/-90 steps in light, the
+ * -10/-20 steps in dark. Carbon's mid-ramp status colours (green-50, red-60)
+ * meet AA, not AAA. This is the documented adaptation `UI-STANDARDS.md`
+ * anticipates. The visible consequence is that status colour reads as
+ * near-black or near-white rather than as "green" or "red" — which is
+ * acceptable precisely because colour is never the carrier of meaning here:
+ * every status also states its outcome in words.
+ */
+
+:root {
+  /* Surfaces, lightest to deepest */
+  --layer-00: #ffffff;
+  --layer-01: #f4f4f4;
+  --layer-02: #e0e0e0;
+
+  /* Text */
+  --text-primary: #161616; /* gray-100 */
+  --text-secondary: #393939; /* gray-80 */
+  --text-on-interactive: #ffffff;
+
+  /* Interaction */
+  --interactive: #002d9c; /* blue-80 */
+  --interactive-hover: #001d6c; /* blue-90 */
+  --focus: #002d9c;
+
+  /* Status — reinforcement only; never the sole carrier of meaning */
+  --support-error: #750e13; /* red-80 */
+  --support-success: #044317; /* green-80 */
+  --support-warning: #483700; /* yellow-80 */
+
+  /* Borders. 3:1 against their surface, per WCAG 1.4.11 */
+  --border-subtle: #6f6f6f; /* gray-60 */
+  --border-strong: #525252; /* gray-70 */
+
+  /* Spacing scale (Carbon) */
+  --spacing-01: 0.125rem;
+  --spacing-02: 0.25rem;
+  --spacing-03: 0.5rem;
+  --spacing-04: 0.75rem;
+  --spacing-05: 1rem;
+  --spacing-06: 1.5rem;
+  --spacing-07: 2rem;
+  --spacing-08: 2.5rem;
+  --spacing-09: 3rem;
+
+  /* Type scale (Carbon productive) */
+  --type-body-compact: 0.875rem;
+  --type-body: 1rem;
+  --type-heading-compact: 1rem;
+  --type-heading-03: 1.25rem;
+  --type-heading-04: 1.75rem;
+
+  /* The AAA pointer-target floor. Never shrink a control below this. */
+  --target-min: 44px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --layer-00: #161616;
+    --layer-01: #262626;
+    --layer-02: #393939;
+
+    --text-primary: #f4f4f4; /* gray-10 */
+    --text-secondary: #e0e0e0; /* gray-20 */
+    --text-on-interactive: #161616;
+
+    --interactive: #d0e2ff; /* blue-20 */
+    --interactive-hover: #edf5ff; /* blue-10 */
+    --focus: #d0e2ff;
+
+    --support-error: #ffd7d9; /* red-20 */
+    --support-success: #a7f0ba; /* green-20 */
+    --support-warning: #fddc69; /* yellow-20 */
+
+    --border-subtle: #8d8d8d; /* gray-50 */
+    --border-strong: #c6c6c6; /* gray-30 */
+  }
+}

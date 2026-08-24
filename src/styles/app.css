@@ -1,0 +1,230 @@
+/*
+ * App shell styles. Carbon productive language, AAA targets.
+ * See UI-STANDARDS.md before changing anything here.
+ */
+
+@import './tokens.carbon.css';
+@import './tokens.brand.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  background: var(--layer-00);
+  color: var(--text-primary);
+  font-family: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: var(--type-body);
+  line-height: 1.5;
+}
+
+/* Skip link — visible on focus, never a hidden-only affordance */
+.skip-link {
+  position: absolute;
+  left: var(--spacing-05);
+  top: -100%;
+  z-index: 10;
+  padding: var(--spacing-04) var(--spacing-05);
+  background: var(--interactive);
+  color: var(--text-on-interactive);
+  text-decoration: none;
+}
+
+.skip-link:focus-visible {
+  top: var(--spacing-05);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-03) var(--spacing-05);
+  align-items: baseline;
+  justify-content: space-between;
+  padding: var(--spacing-05) var(--spacing-06);
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--layer-01);
+}
+
+.header h1 {
+  margin: 0;
+  font-size: var(--type-heading-04);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.header .version {
+  font-size: var(--type-body-compact);
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.main {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: var(--spacing-07) var(--spacing-06) var(--spacing-09);
+}
+
+.lede {
+  margin: 0 0 var(--spacing-07);
+  max-width: 46rem;
+  color: var(--text-secondary);
+}
+
+.panel {
+  border: 1px solid var(--border-subtle);
+  background: var(--layer-01);
+  padding: var(--spacing-06);
+  margin-bottom: var(--spacing-06);
+}
+
+.panel h2 {
+  margin: 0 0 var(--spacing-05);
+  font-size: var(--type-heading-03);
+  font-weight: 600;
+}
+
+/* Status list — every row states its outcome in words, never colour alone */
+.checks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--spacing-04);
+}
+
+.check {
+  display: grid;
+  grid-template-columns: 1.5rem 1fr auto;
+  gap: var(--spacing-04);
+  align-items: baseline;
+  padding-bottom: var(--spacing-04);
+  border-bottom: 1px solid var(--layer-02);
+}
+
+.check:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.check .mark {
+  font-weight: 700;
+  font-size: var(--type-body-compact);
+}
+
+.check[data-state='pass'] .mark,
+.check[data-state='pass'] .value {
+  color: var(--support-success);
+}
+
+.check[data-state='fail'] .mark,
+.check[data-state='fail'] .value {
+  color: var(--support-error);
+}
+
+.check[data-state='warn'] .mark,
+.check[data-state='warn'] .value {
+  color: var(--support-warning);
+}
+
+.check .value {
+  font-size: var(--type-body-compact);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-04);
+  margin-top: var(--spacing-06);
+}
+
+.button {
+  min-height: var(--target-min);
+  min-width: var(--target-min);
+  padding: var(--spacing-03) var(--spacing-06);
+  border: 1px solid transparent;
+  background: var(--interactive);
+  color: var(--text-on-interactive);
+  font: inherit;
+  font-size: var(--type-body-compact);
+  cursor: pointer;
+}
+
+.button:hover {
+  background: var(--interactive-hover);
+}
+
+.button--secondary {
+  background: transparent;
+  color: var(--interactive);
+  border-color: var(--interactive);
+}
+
+.button--secondary:hover {
+  background: var(--layer-02);
+}
+
+.status {
+  margin-top: var(--spacing-05);
+  font-size: var(--type-body-compact);
+  color: var(--text-secondary);
+  min-height: 1.5rem;
+}
+
+.errors:empty {
+  display: none;
+}
+
+.error-item {
+  border-left: 4px solid var(--support-error);
+  padding: var(--spacing-04) var(--spacing-05);
+  margin-bottom: var(--spacing-04);
+  background: var(--layer-02);
+}
+
+.error-item strong {
+  color: var(--support-error);
+}
+
+.error-item pre {
+  margin: var(--spacing-03) 0 0;
+  font-size: var(--type-body-compact);
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 12rem;
+  overflow: auto;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

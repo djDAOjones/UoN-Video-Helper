@@ -275,7 +275,7 @@ asks — capturing the one line is the whole interaction.
   may carry media, filenames, or media characteristics. This is a
   headline promise to the user and is verifiable by inspecting network
   activity. Branding assets are the only media that crosses the network,
-  and they travel *inbound* only.
+  and they travel _inbound_ only.
 - **The source file is never modified.** It is opened read-only. Every
   output is a new file.
 - **WebCodecs, not ffmpeg.wasm.** Settled and load-bearing (rationale
@@ -300,7 +300,7 @@ asks — capturing the one line is the whole interaction.
   is what keeps the open decisions (D1, D2, D3, D8) one-line changes.
 - **Silent data loss is the worst available outcome.** Anything that
   cannot be carried through — a subtitle track, a chapter list — warns
-  visibly *before* processing starts.
+  visibly _before_ processing starts.
 - **Cancel leaves nothing behind.** No partial file, no orphaned OPFS
   data, ever.
 
@@ -313,8 +313,8 @@ down — never mutated in place by a consumer.
 
 | Object | Created by | Holds |
 | --- | --- | --- |
-| `SourceReport` | `media/inspect.ts` | What the file *is*: dimensions, rotation, duration, average frame rate, VFR verdict, codecs, audio presence, non-A/V track counts. |
-| `Capability` | `media/capability.ts` + `probe.ts` | What this *device* can do: encode support for the exact target config, OPFS headroom, device class, measured throughput, time estimate. |
+| `SourceReport` | `media/inspect.ts` | What the file _is_: dimensions, rotation, duration, average frame rate, VFR verdict, codecs, audio presence, non-A/V track counts. |
+| `Capability` | `media/capability.ts` + `probe.ts` | What this _device_ can do: encode support for the exact target config, OPFS headroom, device class, measured throughput, time estimate. |
 | `LoudnessReport` | `audio/loudness.ts` | Integrated LUFS, short-term curve, LRA, true peak — measured on **source content only**. |
 | `JobSpec` | the UI | What the user asked for: preset, opening on/off, closing on/off, sidecar subtitle if supplied. The only object that crosses into the worker as a command. |
 
@@ -571,7 +571,7 @@ Project-specific:
 - Measuring loudness on the concatenated timeline instead of source
   content only.
 - Applying macro-levelling unconditionally, with a short window, or
-  without the slew limit and pause freeze. That combination *is* the
+  without the slew limit and pause freeze. That combination _is_ the
   pumping the spec exists to avoid.
 - Adding a control "for power users". Every exposed control is a decision
   a novice is forced to make.

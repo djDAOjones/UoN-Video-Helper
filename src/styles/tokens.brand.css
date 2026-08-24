@@ -1,0 +1,26 @@
+/*
+ * UoN brand tokens.
+ *
+ * One of the two token systems in `UI-STANDARDS.md`. This one owns colour
+ * that means "this is the University". Structural colour — surfaces, borders,
+ * interaction states — belongs to `tokens.carbon.css` and the two must not be
+ * collapsed into one.
+ *
+ * The approved UoN palette is not yet available. Only the token the app
+ * actually needs today is defined; the rest arrives with the brand guidance
+ * that answers D1. Do not invent values here.
+ */
+
+:root {
+  /*
+   * PLACEHOLDER — open decision D1.
+   *
+   * The background colour used to pad non-16:9 sources around the branding
+   * (spec section 4.3). Awaiting a hex value from the UoN brand guidelines.
+   * Black is a safe interim and is NOT the approved answer.
+   *
+   * See docs/03-open-decisions.md. Answering D1 must be a one-line change:
+   * reference this as var(--uon-brand-bg) and never inline the hex.
+   */
+  --uon-brand-bg: #000000;
+}
