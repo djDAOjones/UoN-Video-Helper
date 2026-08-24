@@ -14,16 +14,6 @@
      comes out, through a UI a novice can finish. Built in this order:
      the meter is proved before anything depends on it. -->
 
-- [ ] **VH-6 Video pipeline**
-      Intent: decode to encode to mux, streaming, with no memory ceiling.
-      Done when: a source file produces a valid MP4 in both presets;
-      output is conformed to constant frame rate at the rounded average
-      rate; the "smaller file" preset preserves resolution up to 1080p and
-      downscales only above it; output streams to OPFS through a seekable
-      target with `fastStart` set explicitly (never `'in-memory'`, and never
-      left undefined for the library to choose); cancel mid-job leaves
-      no partial file and no orphaned OPFS data.
-
 - [ ] **VH-7 Audio chain**
       Intent: the spec §5.2 chain, applied in order, transparently.
       Done when: high-pass, conditional macro-levelling (LRA > 9 LU only,
@@ -80,6 +70,15 @@
       webcam, PowerPoint screen recording with fine text, talking head,
       mixed speech and music, a variable-frame-rate Teams recording, a 4:3
       legacy recording, and one with badly inconsistent levels.
+
+- [ ] **VH-17 Evaluate `fastStart: 'reserve'` for the smaller preset**
+      Intent: the "smaller file" preset goes to OneDrive and SharePoint, where
+      students may stream it. `fastStart: false` puts the moov box at the end,
+      which can force a full download before playback starts.
+      Done when: either `'reserve'` is adopted with a packet count derived from
+      the CFR grid plus a safe margin and verified on a real SharePoint upload,
+      or the current behaviour is confirmed adequate and the reason recorded.
+      Scope: `'in-memory'` is not an option — it reinstates the memory ceiling.
 
 - [ ] **VH-16 Fixture generator**
       Intent: `npm run fixtures` — the synthetic corpus VH-11 verifies against

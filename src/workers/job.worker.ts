@@ -17,6 +17,8 @@ import {
 } from '../config/presets'
 import { checkEncodeSupport, inspectCapabilities } from '../media/capability'
 import { ACCEPTED_FORMATS, UnreadableFileError, inspectFile } from '../media/inspect'
+import { OpfsWorkspace, sweepOrphanedJobs } from '../media/opfs'
+import { CancelledError, runPipeline } from '../media/pipeline'
 import { preflightVerdict, type PreflightSummary } from '../media/preflight'
 import { calibrationProbe } from '../media/probe'
 import { BlobSource, Input } from 'mediabunny'
@@ -58,10 +60,111 @@ self.addEventListener('message', (event: MessageEvent<WorkerRequest>) => {
       break
 
     case 'preflight':
-      void handlePreflight(request.id, request.file, request.presetId, request.backgroundColour)
+      void handlePreflight(request.id, request.file, request.presetId)
+      break
+
+    case 'process':
+      void handleProcess(request.id, request.file, request.presetId)
+      break
+
+    case 'cancel':
+      running.get(request.cancelId)?.abort()
+      break
+
+    case 'discard':
+      void handleDiscard(request.id, request.jobId)
       break
   }
 })
+
+/** In-flight jobs, so `cancel` can reach the right one. */
+const running = new Map<number, AbortController>()
+/** Finished jobs whose scratch still holds a file the main thread may read. */
+const finished = new Map<string, OpfsWorkspace>()
+
+// A crashed or force-closed tab leaves scratch behind, and the user's disk is
+// not ours to fill (AGENTS.md -> "OPFS working-store checklist").
+void sweepOrphanedJobs()
+
+/**
+ * Releases every retained result.
+ *
+ * A finished job's scratch is kept so the main thread can read the file out of
+ * it, and `discard` normally releases it. But that depends on the UI getting
+ * as far as saving, and a user who processes three files without saving any of
+ * them would otherwise leave three full outputs on disk. Only the most recent
+ * result can be saved, so only the most recent needs keeping.
+ */
+async function releaseFinished(): Promise<void> {
+  const workspaces = [...finished.values()]
+  finished.clear()
+  await Promise.all(workspaces.map((workspace) => workspace.dispose()))
+}
+
+async function handleProcess(id: number, file: Blob, presetId: PresetId): Promise<void> {
+  // Bound the retained set to one before adding to it.
+  await releaseFinished()
+
+  const controller = new AbortController()
+  running.set(id, controller)
+  const jobId = `job-${id}`
+  let workspace: OpfsWorkspace | null = null
+
+  try {
+    const report = await inspectFile(file)
+    const preset = PRESETS[presetId]
+    const shape = outputShapeFor(preset, {
+      width: report.video.displayWidth,
+      height: report.video.displayHeight,
+      frameRate: report.video.conform.frameRate,
+    })
+
+    workspace = await OpfsWorkspace.open(jobId)
+    const result = await runPipeline({
+      input: new Input({ formats: ACCEPTED_FORMATS, source: new BlobSource(file) }),
+      shape,
+      preset,
+      durationSeconds: report.durationSeconds,
+      workspace,
+      signal: controller.signal,
+      onProgress: ({ stage, fraction }) => post({ kind: 'stage', id, stage, fraction }),
+    })
+
+    finished.set(jobId, workspace)
+    post({ kind: 'processed', id, jobId, file: result })
+  } catch (cause) {
+    // runPipeline disposes its own workspace on failure; this covers a failure
+    // before it ever started.
+    if (workspace && !finished.has(jobId)) await workspace.dispose()
+
+    if (cause instanceof CancelledError || controller.signal.aborted) {
+      post({ kind: 'cancelled', id })
+      return
+    }
+    log.warn('worker', 'processing failed', {
+      reason: cause instanceof Error ? cause.message : String(cause),
+    })
+    post({
+      kind: 'failed',
+      id,
+      message:
+        cause instanceof UnreadableFileError
+          ? cause.message
+          : 'Something went wrong while creating the video. Your original file has not been changed.',
+    })
+  } finally {
+    running.delete(id)
+  }
+}
+
+async function handleDiscard(id: number, jobId: string): Promise<void> {
+  const workspace = finished.get(jobId)
+  if (workspace) {
+    await workspace.dispose()
+    finished.delete(jobId)
+  }
+  post({ kind: 'discarded', id })
+}
 
 /**
  * Reading a file the user chose is the one place a failure is expected rather
@@ -95,7 +198,6 @@ async function handlePreflight(
   id: number,
   file: Blob,
   presetId: PresetId,
-  backgroundColour: string,
 ): Promise<void> {
   try {
     const report = await inspectFile(file)
@@ -118,7 +220,6 @@ async function handlePreflight(
             input: new Input({ formats: ACCEPTED_FORMATS, source: new BlobSource(file) }),
             shape,
             durationSeconds: report.durationSeconds,
-            backgroundColour,
           })
         : { measured: false, framesEncoded: 0, videoFramesPerSecond: 0, audioRealtimeFactor: null, estimatedSeconds: null }
 

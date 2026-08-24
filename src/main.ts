@@ -17,6 +17,8 @@ import {
 } from './core/diagnostics'
 import { adoptLogRecords, log, setMinimumLogLevel } from './core/logger'
 import { APP_VERSION, BUILD_ID } from './core/version'
+import type { PresetId } from './config/presets'
+import { formatFileSize } from './ui/format'
 import { renderPreflight, summarisePreflight } from './ui/preflight-panel'
 import { renderSourceError, renderSourceReport, summarise } from './ui/source-panel'
 import type { WorkerOutbound, WorkerRequest } from './workers/protocol'
@@ -45,6 +47,16 @@ const devActions = required<HTMLDivElement>('#dev-actions')
 const fileInput = required<HTMLInputElement>('#file-input')
 const sourceReport = required<HTMLDivElement>('#source-report')
 const preflightReport = required<HTMLDivElement>('#preflight-report')
+const processActions = required<HTMLDivElement>('#process-actions')
+const processProgress = required<HTMLProgressElement>('#process-progress')
+const processResult = required<HTMLDivElement>('#process-result')
+const presetChoice = required<HTMLFieldSetElement>('#preset-choice')
+
+/** Which output the user asked for. Defaults to the quality-preserving one. */
+function chosenPreset(): PresetId {
+  const checked = presetChoice.querySelector<HTMLInputElement>('input[name="preset"]:checked')
+  return checked?.value === 'smaller' ? 'smaller' : 'best'
+}
 
 versionLine.textContent = isDev ? `${APP_VERSION} · ${BUILD_ID} · development` : APP_VERSION
 
@@ -152,8 +164,16 @@ function request(
   payload: DistributiveOmit<WorkerRequest, 'id'>,
   timeoutMs = 5000,
 ): Promise<WorkerOutbound> {
+  return requestWithId(payload, timeoutMs).promise
+}
+
+/** As {@link request}, but exposes the id so the job can be cancelled. */
+function requestWithId(
+  payload: DistributiveOmit<WorkerRequest, 'id'>,
+  timeoutMs = 5000,
+): { id: number; promise: Promise<WorkerOutbound> } {
   const id = nextRequestId++
-  return new Promise((resolve, reject) => {
+  const promise = new Promise<WorkerOutbound>((resolve, reject) => {
     const timer = setTimeout(() => {
       pending.delete(id)
       reject(new Error(`Worker did not answer "${payload.kind}" within ${timeoutMs} ms`))
@@ -164,6 +184,7 @@ function request(
     })
     worker.postMessage({ ...payload, id })
   })
+  return { id, promise }
 }
 
 /** `Omit` applied across a union rather than collapsing it into one member. */
@@ -173,6 +194,11 @@ worker.addEventListener('message', (event: MessageEvent<WorkerOutbound>) => {
   const message = event.data
   if (message.kind === 'uncaught') {
     recordUncaught(message.error)
+    return
+  }
+  if (message.kind === 'stage') {
+    // Progress never resolves the job's request — it reports on one in flight.
+    onStage(message.stage, message.fraction)
     return
   }
   pending.get(message.id)?.(message)
@@ -245,6 +271,10 @@ fileInput.addEventListener('change', () => {
   setStatus('Reading the video…')
   sourceReport.replaceChildren()
   preflightReport.replaceChildren()
+  processActions.replaceChildren()
+  processActions.hidden = true
+  presetChoice.hidden = true
+  processResult.replaceChildren()
 
   void (async () => {
     try {
@@ -288,17 +318,14 @@ fileInput.addEventListener('change', () => {
  */
 async function runPreflight(file: File): Promise<void> {
   setStatus('Checking this video against your device…')
-  const backgroundColour =
-    getComputedStyle(document.documentElement).getPropertyValue('--uon-brand-bg').trim() || '#000000'
 
   try {
-    const reply = await request(
-      { kind: 'preflight', file, presetId: 'best', backgroundColour },
-      180_000,
-    )
+    const reply = await request({ kind: 'preflight', file, presetId: chosenPreset() }, 180_000)
     if (reply.kind === 'preflighted') {
       renderPreflight(preflightReport, reply.summary)
       setStatus(summarisePreflight(reply.summary))
+      presetChoice.hidden = false
+      if (reply.summary.verdict.outcome !== 'block') showProcessControls(file)
       return
     }
     if (reply.kind === 'failed') {
@@ -315,6 +342,114 @@ async function runPreflight(file: File): Promise<void> {
       reason: cause instanceof Error ? cause.message : String(cause),
     })
   }
+}
+
+presetChoice.addEventListener('change', () => {
+  const file = fileInput.files?.[0]
+  // The output shape, projected size and estimate all change with the preset,
+  // so the verdict must be recomputed rather than left describing the other one.
+  if (file) void runPreflight(file)
+})
+
+// --- Processing ---
+//
+// A minimal trigger so the pipeline is reachable and demonstrable. The real
+// workflow — preset choice, branding toggles, named stages, save — is VH-10.
+
+const STAGE_WORDS: Record<string, string> = {
+  preparing: 'Getting ready',
+  encoding: 'Encoding video',
+  finishing: 'Finishing the file',
+}
+
+function onStage(stage: string, fraction: number): void {
+  const percent = Math.round(fraction * 100)
+  setStatus(`${STAGE_WORDS[stage] ?? stage} — ${percent}%`)
+  processProgress.value = fraction
+  processProgress.hidden = false
+}
+
+function showProcessControls(file: File): void {
+  processActions.replaceChildren()
+  processActions.hidden = false
+
+  const start = document.createElement('button')
+  start.type = 'button'
+  start.className = 'button'
+  start.textContent = 'Create the video'
+
+  const cancel = document.createElement('button')
+  cancel.type = 'button'
+  cancel.className = 'button button--secondary'
+  cancel.textContent = 'Cancel'
+  cancel.hidden = true
+
+  start.addEventListener('click', () => {
+    start.disabled = true
+    cancel.hidden = false
+    processResult.replaceChildren()
+
+    const { id, promise } = requestWithId(
+      { kind: 'process', file, presetId: chosenPreset() },
+      3_600_000,
+    )
+    cancel.addEventListener('click', () => {
+      cancel.disabled = true
+      setStatus('Cancelling…')
+      worker.postMessage({ kind: 'cancel', id: nextRequestId++, cancelId: id })
+    })
+
+    void promise
+      .then((reply) => {
+        if (reply.kind === 'processed') {
+          renderResult(reply.file, reply.jobId)
+          setStatus('Your video is ready.')
+        } else if (reply.kind === 'cancelled') {
+          // Nothing was written anywhere the user can see, and the source is
+          // untouched — say so rather than leaving them wondering.
+          setStatus('Cancelled. Nothing was saved, and your original file is unchanged.')
+        } else if (reply.kind === 'failed') {
+          renderSourceError(processResult, reply.message)
+          setStatus('The video could not be created.')
+        }
+      })
+      .catch((cause: unknown) => {
+        renderSourceError(processResult, 'The job did not finish.')
+        log.error('ui', 'process request failed', {
+          reason: cause instanceof Error ? cause.message : String(cause),
+        })
+      })
+      .finally(() => {
+        start.disabled = false
+        cancel.hidden = true
+        cancel.disabled = false
+        processProgress.hidden = true
+      })
+  })
+
+  processActions.append(start, cancel)
+}
+
+function renderResult(file: File, jobId: string): void {
+  processResult.replaceChildren()
+  const paragraph = document.createElement('p')
+  paragraph.className = 'verdict-detail'
+  paragraph.textContent = `Finished: ${formatFileSize(file.size)}.`
+
+  const link = document.createElement('a')
+  link.href = URL.createObjectURL(file)
+  link.download = 'branded-video.mp4'
+  link.textContent = 'Download the video'
+  link.className = 'result-link'
+  // Provisional. VH-10 saves through the File System Access API so a
+  // multi-gigabyte result never has to become an object URL.
+  link.addEventListener('click', () => {
+    setTimeout(() => {
+      void request({ kind: 'discard', jobId }, 10_000)
+    }, 2000)
+  })
+
+  processResult.append(paragraph, link)
 }
 
 // --- Dev-only affordances --------------------------------------------------

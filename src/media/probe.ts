@@ -13,13 +13,22 @@
  * assuming it away would under-promise in exactly the wrong direction.
  */
 
-import { AudioSampleSink, VideoSampleSink, type Input, type InputVideoTrack } from 'mediabunny'
+import {
+  AudioSampleSink,
+  Mp4OutputFormat,
+  NullTarget,
+  Output,
+  VideoSampleSink,
+  VideoSampleSource,
+  type Input,
+  type InputVideoTrack,
+} from 'mediabunny'
 
 import { AudioAnalyser } from '../audio/analyse'
 import { log } from '../core/logger'
 import { CALIBRATION_PROBE_SECONDS, MINIMUM_CREDIBLE_PROBE_FRAMES } from '../config/thresholds'
-import { videoEncoderConfigFor, type OutputShape } from '../config/presets'
-import { FrameScaler, matchesShape, toOutputFrame } from './conform'
+import type { OutputShape } from '../config/presets'
+import { videoEncodingConfigFor } from './encoding'
 
 export interface ProbeResult {
   /** False when too little was processed to believe the number. */
@@ -40,50 +49,46 @@ const UNMEASURED: ProbeResult = {
   estimatedSeconds: null,
 }
 
-/** Keeps the encoder fed without letting its queue grow without bound. */
-async function drainTo(encoder: VideoEncoder, limit: number): Promise<void> {
-  while (encoder.encodeQueueSize > limit) {
-    await new Promise((resolve) => setTimeout(resolve, 1))
-  }
-}
-
+/**
+ * Encodes the first few seconds exactly as the pipeline would.
+ *
+ * Uses the same `Output`, the same `VideoSampleSource` and the same encoding
+ * config the real job uses — into a `NullTarget`, which discards the bytes.
+ * Measuring a cheaper path than the job will actually run is the one way a
+ * calibration probe can be worse than no probe at all.
+ */
 async function probeVideo(
   track: InputVideoTrack,
   shape: OutputShape,
-  backgroundColour: string,
   signal: AbortSignal | undefined,
 ): Promise<{ frames: number; seconds: number }> {
-  const encoder = new VideoEncoder({
-    // Output is counted, not kept: the probe measures throughput and throws
-    // the bytes away. Nothing here is written to storage.
-    output: () => {},
-    error: (error) => log.warn('probe', 'encoder error during probe', { message: error.message }),
+  const output = new Output({
+    format: new Mp4OutputFormat({ fastStart: false }),
+    target: new NullTarget(),
   })
-  encoder.configure(videoEncoderConfigFor(shape))
+  const source = new VideoSampleSource(videoEncodingConfigFor(shape))
+  output.addVideoTrack(source, { frameRate: shape.frameRate })
 
   const sink = new VideoSampleSink(track)
-  let scaler: FrameScaler | null = null
   let frames = 0
   const startedAt = performance.now()
 
   try {
+    await output.start()
     for await (const sample of sink.samples(0, CALIBRATION_PROBE_SECONDS)) {
       if (signal?.aborted) break
-      await drainTo(encoder, 4)
-
-      // Built lazily and reused: the real pipeline pays the same scaling cost,
-      // so the probe must too or the estimate flatters the machine.
-      if (!scaler && !matchesShape(sample, shape)) scaler = new FrameScaler(shape, backgroundColour)
-
-      const frame = toOutputFrame(sample, shape, scaler)
-      encoder.encode(frame, { keyFrame: frames === 0 })
-      frame.close()
-      sample.close()
+      try {
+        await source.add(sample)
+      } finally {
+        sample.close()
+      }
       frames++
     }
-    await encoder.flush()
-  } finally {
-    if (encoder.state !== 'closed') encoder.close()
+    source.close()
+    await output.finalize()
+  } catch (cause) {
+    await output.cancel().catch(() => undefined)
+    throw cause
   }
 
   return { frames, seconds: (performance.now() - startedAt) / 1000 }
@@ -140,17 +145,15 @@ export async function calibrationProbe(options: {
   readonly input: Input
   readonly shape: OutputShape
   readonly durationSeconds: number
-  /** Resolved D1 brand colour, passed in because the worker has no document. */
-  readonly backgroundColour: string
   readonly signal?: AbortSignal
 }): Promise<ProbeResult> {
-  const { input, shape, durationSeconds, backgroundColour, signal } = options
+  const { input, shape, durationSeconds, signal } = options
 
   try {
     const videoTrack = await input.getPrimaryVideoTrack()
     if (!videoTrack) return UNMEASURED
 
-    const video = await probeVideo(videoTrack, shape, backgroundColour, signal)
+    const video = await probeVideo(videoTrack, shape, signal)
     if (video.frames < MINIMUM_CREDIBLE_PROBE_FRAMES || video.seconds <= 0) {
       log.warn('probe', 'too few frames to trust the measurement', { frames: video.frames })
       return { ...UNMEASURED, framesEncoded: video.frames }

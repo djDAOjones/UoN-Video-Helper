@@ -15,12 +15,12 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 60 file(s) across 6 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 63 file(s) across 6 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 10 file(s)
 - `.claude` — 1 file(s)
 - `docs` — 5 file(s)
 - `scripts` — 1 file(s)
-- `src` — 39 file(s)
+- `src` — 42 file(s)
 - `test` — 4 file(s)
 <!-- /file-map-index -->
 
@@ -78,9 +78,12 @@
 - `src/media/capability.ts` — Device checks asked against the exact target config, not a generic capability flag.
 - `src/media/conform.test.ts` — Proves fit/pad never distorts, across 4:3, vertical and ultrawide sources.
 - `src/media/conform.ts` — Scale-to-fit and pad geometry, and the reusable frame scaler the pipeline and probe share.
+- `src/media/encoding.ts` — Mediabunny encoding configs derived from the presets; where VH-7's audio chain will hook in.
 - `src/media/framerate.test.ts` — Proves the rounding rule and that timestamps derive from the index so error cannot accumulate.
 - `src/media/framerate.ts` — CFR conform decisions: nearest standard rate, what conforming costs, and the timestamp grid.
 - `src/media/inspect.ts` — Demuxes a chosen file into a SourceReport. Rejects files with no video track.
+- `src/media/opfs.ts` — The OPFS working store: one directory per job, sync-handle writes, cleanup on every exit path.
+- `src/media/pipeline.ts` — Decode to encode to mux, streaming to OPFS, with progress and cancellation.
 - `src/media/preflight.test.ts` — Triggers all four spec 7.3 outcomes deliberately — acceptance criterion 7.
 - `src/media/preflight.ts` — The pure verdict: given what was measured, proceed / warn / discourage / block.
 - `src/media/probe.ts` — The 3-second calibration probe: real decode and encode on the real file and device.

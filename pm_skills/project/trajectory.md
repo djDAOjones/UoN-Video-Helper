@@ -44,4 +44,10 @@
   and a 3-second decode-and-encode of the real file on the real device. All four
   spec 7.3 outcomes tested. Measured 303 fps on a 720p25 fixture.
 
+- VH-6 — Video pipeline: decode to encode to mux, streaming to OPFS through a
+  sync-handle-backed StreamTarget, both presets, with progress and cancellation.
+  A VFR source (min 10.4, max 55.6 fps) produced a CFR 30 fps output that plays
+  in a real decoder; a 2560x1440 source downscaled to 1920x1080 on the smaller
+  preset; cancelling removed the job's scratch entirely.
+
 <!-- Outcome line is written when the milestone closes. -->

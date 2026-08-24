@@ -41,7 +41,21 @@
           </p>
         </div>
         <div id="source-report"></div>
+        <fieldset class="choice" id="preset-choice" hidden>
+          <legend class="label">What is this video for</legend>
+          <label class="radio">
+            <input type="radio" name="preset" value="best" checked />
+            <span>Best quality — for EchoVideo or YouTube</span>
+          </label>
+          <label class="radio">
+            <input type="radio" name="preset" value="smaller" />
+            <span>Smaller file — for OneDrive, SharePoint or email</span>
+          </label>
+        </fieldset>
         <div id="preflight-report"></div>
+        <div class="actions" id="process-actions" hidden></div>
+        <progress class="progress" id="process-progress" max="1" value="0" hidden></progress>
+        <div id="process-result"></div>
       </section>
 
       <section class="panel" aria-labelledby="system-check-heading">
