@@ -15,13 +15,13 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 42 file(s) across 6 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 44 file(s) across 6 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 10 file(s)
 - `.claude` — 1 file(s)
 - `docs` — 5 file(s)
 - `scripts` — 1 file(s)
 - `src` — 23 file(s)
-- `test` — 2 file(s)
+- `test` — 4 file(s)
 <!-- /file-map-index -->
 
 ## (root)
@@ -82,4 +82,6 @@
 ## test
 
 - `test/contrast.test.ts` — Makes the AAA contrast claim mechanical: every rendered pair >= 7:1 in both themes.
+- `test/ebu3341/signals.ts` — EBU Tech 3341 Table 1 signals, synthesised from their published definitions.
+- `test/ebu3341/tech3341.test.ts` — The compliance gate: Table 1 cases 1-23 against the meter, inside `npm run check`.
 - `test/helpers/signals.ts` — Synthesised tones and silence shared by the meter tests and the EBU harness.

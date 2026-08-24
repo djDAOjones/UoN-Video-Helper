@@ -179,15 +179,37 @@ describe('loudness range', () => {
 })
 
 describe('curves', () => {
-  it('emits momentary and short-term values on the 100 ms grid', () => {
+  it('emits momentary and short-term values on the 10 ms grid', () => {
     const report = measure(
       tone({ sampleRate: SAMPLE_RATE, seconds: 10, frequency: 1000, peakDbfs: -23, channelCount: 2 }),
       2,
     )
-    expect(report.stepSeconds).toBe(0.1)
-    // 10 s = 100 hops. Momentary needs 4 hops, short-term needs 30.
-    expect(report.momentaryLufs).toHaveLength(100 - 4 + 1)
-    expect(report.shortTermLufs).toHaveLength(100 - 30 + 1)
+    // 10 ms rather than BS.1770-4's 100 ms block hop, so EBU Tech 3341 tests
+    // 10-14 — which offset tones by i*20 ms and i*150 ms — land on a hop.
+    expect(report.stepSeconds).toBe(0.01)
+
+    // 10 s = 1000 hops. Momentary needs 40 hops of history, short-term 300.
+    expect(report.momentaryLufs).toHaveLength(1000 - 40 + 1)
+    expect(report.shortTermLufs).toHaveLength(1000 - 300 + 1)
     expect(report.durationSeconds).toBeCloseTo(10, 6)
+  })
+
+  it('keeps gating blocks on the standard 100 ms grid despite the finer curves', () => {
+    // The finer accumulator must not change the integrated measurement:
+    // BS.1770-4 mandates 400 ms blocks at 75% overlap, and that is derived by
+    // stepping ten 10 ms hops, not by measuring more often.
+    //
+    // 20 s of tone then 20 s of silence. The gated blocks are the 197 sitting
+    // wholly inside the tone plus the three straddling the boundary at 3/4,
+    // 2/4 and 1/4 energy:
+    //   drop = -10log10((197 + 1.5) / 200) = 0.0327 LU
+    // A finer block grid would admit more straddling blocks and shift this.
+    const toneOnly = tone({
+      sampleRate: SAMPLE_RATE, seconds: 20, frequency: 1000, peakDbfs: -23, channelCount: 2,
+    })
+    const withSilence = concat(toneOnly, silence(SAMPLE_RATE, 20, 2))
+
+    const drop = measure(toneOnly, 2).integratedLufs - measure(withSilence, 2).integratedLufs
+    expect(drop).toBeCloseTo(0.0327, 3)
   })
 })

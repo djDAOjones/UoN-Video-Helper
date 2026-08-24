@@ -26,9 +26,26 @@ import { designKWeighting } from './kweighting'
 const LOUDNESS_OFFSET = -0.691
 /** BS.1770-4 section 3: gating block length and hop (75% overlap). */
 const BLOCK_SECONDS = 0.4
-const HOP_SECONDS = 0.1
+const INTEGRATED_HOP_SECONDS = 0.1
 /** EBU Tech 3341: the short-term window. */
 const SHORT_TERM_SECONDS = 3
+
+/**
+ * The accumulator's resolution, and the step of the momentary and short-term
+ * curves.
+ *
+ * NOT the 100 ms implied by BS.1770-4's 75% block overlap, and deliberately
+ * so. EBU Tech 3341 tests 10-14 offset their tones by i * 20 ms and
+ * i * 150 ms precisely to probe a meter's update-rate resolution: on a 100 ms
+ * grid the best-aligned 400 ms window catches only 360-380 ms of a 400 ms
+ * tone, reading up to 0.46 LU low against a +/-0.1 LU tolerance. 10 ms is the
+ * greatest common divisor of 20 and 150, so every one of those offsets lands
+ * exactly on a hop.
+ *
+ * The integrated measurement is unaffected: its gating blocks are still taken
+ * every 100 ms, by stepping {@link INTEGRATED_STEP_HOPS} of these.
+ */
+const HOP_SECONDS = 0.01
 /** BS.1770-4 section 3: absolute and relative gate thresholds. */
 const ABSOLUTE_GATE_LUFS = -70
 const RELATIVE_GATE_LU = -10
@@ -37,8 +54,12 @@ const LRA_RELATIVE_GATE_LU = -20
 const LRA_LOW_PERCENTILE = 0.1
 const LRA_HIGH_PERCENTILE = 0.95
 
-const HOPS_PER_BLOCK = Math.round(BLOCK_SECONDS / HOP_SECONDS) // 4
-const HOPS_PER_SHORT_TERM = Math.round(SHORT_TERM_SECONDS / HOP_SECONDS) // 30
+const HOPS_PER_BLOCK = Math.round(BLOCK_SECONDS / HOP_SECONDS) // 40
+const HOPS_PER_SHORT_TERM = Math.round(SHORT_TERM_SECONDS / HOP_SECONDS) // 300
+/** Hops between consecutive gating blocks, preserving BS.1770-4's 75% overlap. */
+const INTEGRATED_STEP_HOPS = Math.round(INTEGRATED_HOP_SECONDS / HOP_SECONDS) // 10
+/** LRA is taken from short-term values at 10 Hz, matching reference implementations. */
+const LRA_SUBSAMPLE_HOPS = INTEGRATED_STEP_HOPS
 
 export interface LoudnessReport {
   /** Gated integrated loudness. `-Infinity` when nothing passed the gates. */
@@ -51,7 +72,10 @@ export interface LoudnessReport {
   readonly momentaryLufs: readonly number[]
   /** Seconds of audio analysed. */
   readonly durationSeconds: number
-  /** Step between consecutive curve values, in seconds. */
+  /**
+   * Step between consecutive momentary and short-term values, in seconds.
+   * Finer than BS.1770-4's block hop — see HOP_SECONDS in this module.
+   */
   readonly stepSeconds: number
 }
 
@@ -68,7 +92,12 @@ export function channelWeights(channelCount: number): readonly number[] {
       return [1]
     case 2:
       return [1, 1]
+    case 5:
+      // 5.0 — L, R, C, Ls, Rs. No LFE channel at all, which is exactly the
+      // configuration EBU Tech 3341 test case 6 uses.
+      return [1, 1, 1, 1.41, 1.41]
     case 6:
+      // 5.1 — L, R, C, LFE, Ls, Rs.
       return [1, 1, 1, 0, 1.41, 1.41]
     default:
       // Unusual layouts (3, 4, 8...) are rare in lecture recordings. Treating
@@ -118,9 +147,14 @@ export class LoudnessAnalyser {
   private readonly hopHistory: Float64Array
   private hopsCompleted = 0
 
-  /** Per-block per-channel mean square, flat: `[block0ch0, block0ch1, ...]`. */
+  /** Running sums over the momentary (400 ms) and short-term (3 s) windows. */
+  private readonly momentarySums: Float64Array
+  private readonly shortTermSums: Float64Array
+
+  /** Per-gating-block per-channel mean square, flat: `[block0ch0, block0ch1, ...]`. */
   private readonly blockMeanSquares: number[] = []
   private readonly blockLoudness: number[] = []
+  private readonly momentaryLoudness: number[] = []
   private readonly shortTermLoudness: number[] = []
 
   private framesSeen = 0
@@ -145,6 +179,8 @@ export class LoudnessAnalyser {
 
     this.hopSums = new Float64Array(channelCount)
     this.hopHistory = new Float64Array(channelCount * HOPS_PER_SHORT_TERM)
+    this.momentarySums = new Float64Array(channelCount)
+    this.shortTermSums = new Float64Array(channelCount)
     this.scratch = new Float32Array(4096)
   }
 
@@ -195,48 +231,60 @@ export class LoudnessAnalyser {
     this.framesSeen += frameCount
   }
 
-  /** Completes a 100 ms hop and emits any block or short-term value it finishes. */
+  /** Completes a hop, updating the running windows and emitting whatever it finishes. */
   private closeHop(): void {
     const slot = this.hopsCompleted % HOPS_PER_SHORT_TERM
-    for (let ch = 0; ch < this.channelCount; ch++) {
-      this.hopHistory[slot * this.channelCount + ch] = this.hopSums[ch]!
+    const channels = this.channelCount
+
+    for (let ch = 0; ch < channels; ch++) {
+      const incoming = this.hopSums[ch]!
+
+      // Drop the hop leaving each window before it is overwritten. The ring is
+      // HOPS_PER_SHORT_TERM long, so only the short-term window's departing
+      // hop shares a slot with the arriving one.
+      if (this.hopsCompleted >= HOPS_PER_SHORT_TERM) {
+        this.shortTermSums[ch]! -= this.hopHistory[slot * channels + ch]!
+      }
+      if (this.hopsCompleted >= HOPS_PER_BLOCK) {
+        const leaving = (this.hopsCompleted - HOPS_PER_BLOCK) % HOPS_PER_SHORT_TERM
+        this.momentarySums[ch]! -= this.hopHistory[leaving * channels + ch]!
+      }
+
+      this.hopHistory[slot * channels + ch] = incoming
+      this.momentarySums[ch]! += incoming
+      this.shortTermSums[ch]! += incoming
       this.hopSums[ch] = 0
     }
+
     this.hopFill = 0
     this.hopsCompleted++
 
     if (this.hopsCompleted >= HOPS_PER_BLOCK) {
-      const meanSquares = this.windowMeanSquares(HOPS_PER_BLOCK)
+      const samples = HOPS_PER_BLOCK * this.hopSamples
       let weightedSum = 0
-      for (let ch = 0; ch < this.channelCount; ch++) {
-        this.blockMeanSquares.push(meanSquares[ch]!)
-        weightedSum += this.weights[ch]! * meanSquares[ch]!
+      for (let ch = 0; ch < channels; ch++) {
+        weightedSum += this.weights[ch]! * (this.momentarySums[ch]! / samples)
       }
-      this.blockLoudness.push(toLoudness(weightedSum))
+      this.momentaryLoudness.push(toLoudness(weightedSum))
+
+      // Gating blocks stay on BS.1770-4's 100 ms grid: the first completes one
+      // block-length in, and every INTEGRATED_STEP_HOPS after that.
+      if ((this.hopsCompleted - HOPS_PER_BLOCK) % INTEGRATED_STEP_HOPS === 0) {
+        for (let ch = 0; ch < channels; ch++) {
+          this.blockMeanSquares.push(this.momentarySums[ch]! / samples)
+        }
+        this.blockLoudness.push(toLoudness(weightedSum))
+      }
     }
 
     if (this.hopsCompleted >= HOPS_PER_SHORT_TERM) {
-      const meanSquares = this.windowMeanSquares(HOPS_PER_SHORT_TERM)
+      const samples = HOPS_PER_SHORT_TERM * this.hopSamples
       let weightedSum = 0
-      for (let ch = 0; ch < this.channelCount; ch++) {
-        weightedSum += this.weights[ch]! * meanSquares[ch]!
+      for (let ch = 0; ch < channels; ch++) {
+        weightedSum += this.weights[ch]! * (this.shortTermSums[ch]! / samples)
       }
       this.shortTermLoudness.push(toLoudness(weightedSum))
     }
-  }
-
-  /** Mean square per channel over the most recent `hopCount` hops. */
-  private windowMeanSquares(hopCount: number): Float64Array {
-    const out = new Float64Array(this.channelCount)
-    for (let back = 0; back < hopCount; back++) {
-      const slot = (this.hopsCompleted - 1 - back + HOPS_PER_SHORT_TERM) % HOPS_PER_SHORT_TERM
-      for (let ch = 0; ch < this.channelCount; ch++) {
-        out[ch]! += this.hopHistory[slot * this.channelCount + ch]!
-      }
-    }
-    const samples = hopCount * this.hopSamples
-    for (let ch = 0; ch < this.channelCount; ch++) out[ch]! /= samples
-    return out
   }
 
   /**
@@ -251,7 +299,7 @@ export class LoudnessAnalyser {
       integratedLufs: this.computeIntegrated(),
       loudnessRangeLu: this.computeLoudnessRange(),
       shortTermLufs: this.shortTermLoudness,
-      momentaryLufs: this.blockLoudness,
+      momentaryLufs: this.momentaryLoudness,
       durationSeconds: this.framesSeen / this.sampleRate,
       stepSeconds: HOP_SECONDS,
     }
@@ -293,9 +341,17 @@ export class LoudnessAnalyser {
     return toLoudness(weightedSumOf(meanOver(gated)))
   }
 
-  /** EBU Tech 3342: 95th minus 10th percentile of gated short-term loudness. */
+  /**
+   * EBU Tech 3342: 95th minus 10th percentile of gated short-term loudness.
+   *
+   * Sampled at 10 Hz rather than from the full 100 Hz curve. The finer curve
+   * exists for the EBU max-S tests; feeding it to LRA would weight the
+   * percentile distribution differently from every reference implementation
+   * for no gain in accuracy.
+   */
   private computeLoudnessRange(): number {
-    const aboveAbsolute = this.shortTermLoudness.filter((v) => v > ABSOLUTE_GATE_LUFS)
+    const atTenHertz = this.shortTermLoudness.filter((_v, i) => i % LRA_SUBSAMPLE_HOPS === 0)
+    const aboveAbsolute = atTenHertz.filter((v) => v > ABSOLUTE_GATE_LUFS)
     if (aboveAbsolute.length === 0) return 0
 
     let energySum = 0

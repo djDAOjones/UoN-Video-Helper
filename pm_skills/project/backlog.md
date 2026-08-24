@@ -14,16 +14,6 @@
      comes out, through a UI a novice can finish. Built in this order:
      the meter is proved before anything depends on it. -->
 
-- [ ] **VH-3 EBU Tech 3341 validation** [sign-off] (2026-08-24)
-      Intent: convert "the meter looks about right" into pass/fail.
-      Done when: the Tech 3341 compliance cases are synthesised from their
-      published definitions, VH-2 matches every published expected value
-      within **±0.1 LU**, and the harness runs inside `npm run check`.
-      Scope: this is a hard gate — spec §13 acceptance criterion 3. Nothing
-      that consumes loudness data is built until it passes.
-      Risks: if a case fails and the cause is not found quickly, stop and
-      report rather than tuning constants until the number matches.
-
 - [ ] **VH-4 File inspection**
       Intent: turn a selected file into an honest report of what it is.
       Done when: Mediabunny demuxes a chosen file and reports resolution,

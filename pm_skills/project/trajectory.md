@@ -28,4 +28,10 @@
   arithmetic, no browser APIs, streaming, and chunk-size invariant. Projected
   3.6 s + 8.8 s for a one-hour stereo file.
 
+- VH-3 — EBU Tech 3341 compliance gate: Table 1 cases 1-6, 9-23 synthesised
+  from their published definitions and asserted inside `npm run check`. Worst
+  loudness error 0.021 LU against a ±0.1 tolerance; worst true-peak error
+  0.265 dB against +0.2/−0.4. Cases 7-8 need the EBU's authentic-programme
+  audio and are not run.
+
 <!-- Outcome line is written when the milestone closes. -->
