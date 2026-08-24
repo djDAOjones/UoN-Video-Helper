@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+.cache/
+
+# Editor / OS
+.DS_Store
+*.swp
+.vscode/
+.idea/
+
+# Local env
+.env
+.env.local
+
+# Media scratch — never commit source video
+/samples/
+*.mov
+*.mkv
