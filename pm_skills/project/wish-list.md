@@ -43,6 +43,13 @@
 - The compressor detects RMS where the spec says only "attack 20 ms, release
   200 ms". That is a choice inside the spec rather than a departure from it,
   but it is a choice, and it belongs in the decision log at close. (from: VH-7)
+- Branding assets are fetched at runtime with no caching. Spec §11 wants the
+  app usable offline after first load "except for branding assets, which are
+  cached" — nothing caches them yet. Belongs with the deploy decision (D5) but
+  the caching itself is app-level. (from: VH-8)
+- Every branding frame is redrawn through a canvas to get brand-colour padding.
+  Fine at 1080p; at 4K that is 150 canvas compositions per sequence. Worth
+  measuring before the real 4K masters land. (from: VH-8)
 - `npm run check` now takes ~27 s, up from ~2 s: the chain tests process
   minutes of synthesised audio each, and LRA needs 60 s of material to settle
   (Tech 3342). Still fine to run on every change, but worth watching — the gate

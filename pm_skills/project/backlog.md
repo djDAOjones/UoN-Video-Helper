@@ -53,6 +53,19 @@
       side is automated, the listening side is a maintainer check on real
       material and cannot be claimed without it.
 
+- [ ] **VH-M3 Stop OneDrive syncing this project** [maintainer] (2026-08-25)
+      Intent: on 2026-08-25 the quality gate began failing with
+      `ETIMEDOUT: connection timed out, read` from `readFileSync`, and `tsc`
+      hung indefinitely. OneDrive Files-On-Demand had dehydrated
+      `node_modules` — 598 cloud-only files in the first 3000 checked — so
+      every read became a network fetch. `npm ci` rewrites them locally and
+      fixes it in seconds, but nothing stops it recurring.
+      Done when: this folder is excluded from OneDrive sync, or marked "Always
+      keep on this device". `AGENTS.md` already declares cloud-synced paths
+      unsupported for project memory; this is the same hazard reaching the
+      build.
+      Note: `.gitignore` has no effect here — OneDrive does not read it.
+
 - [ ] **VH-M1 Provide the real test corpus** [maintainer] (2026-08-24)
       Intent: acceptance criteria 1, 5 and 6 need real material; synthesised
       fixtures prove the mechanics but not the outcome.
@@ -60,6 +73,22 @@
       webcam, PowerPoint screen recording with fine text, talking head,
       mixed speech and music, a variable-frame-rate Teams recording, a 4:3
       legacy recording, and one with badly inconsistent levels.
+
+- [ ] **VH-21 Keep the branding bed when the source has no audio**
+      Intent: a screen recording made without a microphone has no audio track,
+      which spec §5.4 treats as a warning rather than a failure. But the audio
+      output is currently created only when the SOURCE has audio, so branding
+      is added silently — the bed is dropped with it.
+      Done when: a silent source with branding produces an output carrying the
+      branding bed, with silence across the content region.
+
+- [ ] **VH-22 Tell the user when branding could not be loaded**
+      Intent: `loadBrandingClip` warns to the log and continues without the
+      sequence, so a user who asked for branding can get a video without it and
+      never be told. Spec §9.2 requires every error to say what happened and
+      what to do next.
+      Done when: a failed branding fetch surfaces in the UI before or during
+      processing, and the result states plainly that the sequence is missing.
 
 - [ ] **VH-20 Flush the audio chain's tail**
       Intent: the limiter delays by its 5 ms look-ahead, and the streaming path
@@ -74,10 +103,14 @@
       track measured 5.163 s against a 5.077 s source audio track and a 5.000 s
       output video track — roughly 86 ms of growth, more than AAC encoder
       priming alone explains.
-      Done when: the source of the difference is identified (encoder delay,
-      edit list, or muxer timestamp handling), and sync is measured at the
-      start, middle and end of a long recording rather than inferred from
-      durations.
+      Done when: the source of the difference is identified and sync is
+      measured at the start, middle and end of a long recording rather than
+      inferred from durations.
+      Note: VH-8 found AAC encoder priming surfacing as a negative first
+      timestamp (-21.3 ms, 1024 samples at 48 kHz) and now normalises each
+      segment against its own track origin. That is very likely the same root
+      cause, but normalising the start does not by itself prove the durations
+      now agree — which is what this item measures.
       Risks: an 86 ms constant offset is near the edge of perceptible on
       speech; drift that grows with duration would be far worse and would not
       show on a 5-second fixture.
@@ -120,7 +153,13 @@
 - [ ] **VH-12 Real branding assets** [blocked: D1, D2] (2026-08-24)
       Swap generated placeholders for the rendered After Effects masters
       once the brand colour and durations are confirmed. Placeholders match
-      the §4.2 master format so this is a file swap, not a rebuild.
+      the §4.2 master format so this is a file swap, not a rebuild — see
+      `public/branding/README.md`.
+      Two things easy to miss: the bed must be MASTERED at −16 LUFS because it
+      bypasses the chain entirely (the placeholder closing sits at −15.61, and
+      that error would reach the viewer verbatim); and at the real ~20 Mbps the
+      eight masters are roughly 100 MB against the placeholders' 1.1 MB, which
+      is a repository question, not just an asset one.
 
 - [ ] **VH-13 Published limits copy** [blocked: VH-M2] (2026-08-24)
       Turn the measured envelope into the user-facing wording. Closes D8.

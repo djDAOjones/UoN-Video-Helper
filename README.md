@@ -99,9 +99,14 @@ Full rules: [`AGENTS.md`](AGENTS.md), [`UI-STANDARDS.md`](UI-STANDARDS.md),
   own `hdlr` scan. See
   [`architecture.md`](pm_skills/project/architecture.md) → "Known
   constraints in the dependency".
-- **This repo lives on OneDrive.** Cloud sync can revert tracked files
-  mid-session. Consider excluding it from sync, or pausing sync during
-  work.
+- **This repo lives on OneDrive, and that has already bitten.** Files-On-Demand
+  dehydrates `node_modules`, after which every read is a network fetch. The
+  symptom is `tsc` hanging or ESLint failing with
+  `ETIMEDOUT: connection timed out, read` — neither of which looks like a
+  storage problem. `npm ci` rewrites the files locally and fixes it in seconds.
+  Cloud sync can also revert tracked files mid-session. Exclude this folder
+  from sync, or mark it "always keep on this device"; `.gitignore` has no
+  effect, because OneDrive does not read it.
 
 ## Project management
 
