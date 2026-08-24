@@ -2,3 +2,12 @@ dist
 node_modules
 pm_skills
 coverage
+
+# Markdown is governed by markdownlint, not Prettier (conventions.md -> Tooling).
+# Prettier pads table cells to align them, which rewrites every table in the
+# specification set for no gain — and docs/ is protected infrastructure that
+# agents read rather than rewrite (AGENTS.md -> "Protected infrastructure").
+*.md
+
+# Scaffolded by the framework and replaced on upgrade; not ours to restyle.
+check-links.mjs

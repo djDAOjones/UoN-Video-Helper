@@ -17,6 +17,7 @@ import {
 } from './core/diagnostics'
 import { adoptLogRecords, log, setMinimumLogLevel } from './core/logger'
 import { APP_VERSION, BUILD_ID } from './core/version'
+import { renderSourceError, renderSourceReport, summarise } from './ui/source-panel'
 import type { WorkerOutbound, WorkerRequest } from './workers/protocol'
 
 const isDev = import.meta.env.DEV
@@ -40,6 +41,8 @@ const versionLine = required<HTMLParagraphElement>('#version-line')
 const errorsPanel = required<HTMLElement>('#errors-panel')
 const errorsContainer = required<HTMLDivElement>('#errors')
 const devActions = required<HTMLDivElement>('#dev-actions')
+const fileInput = required<HTMLInputElement>('#file-input')
+const sourceReport = required<HTMLDivElement>('#source-report')
 
 versionLine.textContent = isDev ? `${APP_VERSION} · ${BUILD_ID} · development` : APP_VERSION
 
@@ -56,7 +59,8 @@ function renderCheck(id: string, label: string, state: CheckState, value: string
     row = document.createElement('li')
     row.id = `check-${id}`
     row.className = 'check'
-    row.innerHTML = '<span class="mark" aria-hidden="true"></span><span></span><span class="value"></span>'
+    row.innerHTML =
+      '<span class="mark" aria-hidden="true"></span><span></span><span class="value"></span>'
     checksList.append(row)
   }
   row.dataset['state'] = state
@@ -135,20 +139,33 @@ const worker = new Worker(new URL('./workers/job.worker.ts', import.meta.url), {
 let nextRequestId = 1
 const pending = new Map<number, (message: WorkerOutbound) => void>()
 
-function request(kind: WorkerRequest['kind']): Promise<WorkerOutbound> {
+/**
+ * Sends a request and resolves with its reply.
+ *
+ * @param payload - The request without its `id`, which is assigned here.
+ * @param timeoutMs - Inspection of a multi-gigabyte file legitimately takes
+ *   longer than a ping, so the caller sets the bound rather than sharing one.
+ */
+function request(
+  payload: DistributiveOmit<WorkerRequest, 'id'>,
+  timeoutMs = 5000,
+): Promise<WorkerOutbound> {
   const id = nextRequestId++
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => {
       pending.delete(id)
-      reject(new Error(`Worker did not answer "${kind}" within 5 seconds`))
-    }, 5000)
+      reject(new Error(`Worker did not answer "${payload.kind}" within ${timeoutMs} ms`))
+    }, timeoutMs)
     pending.set(id, (message) => {
       clearTimeout(timer)
       resolve(message)
     })
-    worker.postMessage({ kind, id } satisfies WorkerRequest)
+    worker.postMessage({ ...payload, id })
   })
 }
+
+/** `Omit` applied across a union rather than collapsing it into one member. */
+type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never
 
 worker.addEventListener('message', (event: MessageEvent<WorkerOutbound>) => {
   const message = event.data
@@ -186,7 +203,7 @@ worker.addEventListener('error', (event) => {
 
 async function checkWorker(): Promise<void> {
   const startedAt = performance.now()
-  const reply = await request('ping')
+  const reply = await request({ kind: 'ping' })
   if (reply.kind !== 'pong') throw new Error(`Unexpected reply to ping: ${reply.kind}`)
   const roundTripMs = Math.round(performance.now() - startedAt)
   workerReady = true
@@ -215,6 +232,47 @@ void checkWorker()
     })
   })
 
+// --- File selection ---
+
+fileInput.addEventListener('change', () => {
+  const file = fileInput.files?.[0]
+  if (!file) return
+
+  // Never log the filename — DEV-INFRASTRUCTURE.md -> "Redaction".
+  log.info('ui', 'file chosen', { sizeBytes: file.size, type: file.type })
+  setStatus('Reading the video…')
+  sourceReport.replaceChildren()
+
+  void (async () => {
+    try {
+      // Two minutes: reading structure is fast, but a multi-gigabyte file on a
+      // slow disk is not, and timing out on a file that would have worked is
+      // worse than waiting.
+      const reply = await request({ kind: 'inspect', file }, 120_000)
+      if (reply.kind === 'inspected') {
+        renderSourceReport(sourceReport, reply.report)
+        setStatus(summarise(reply.report))
+        return
+      }
+      if (reply.kind === 'failed') {
+        renderSourceError(sourceReport, reply.message)
+        setStatus('That file could not be read.')
+        return
+      }
+      throw new Error(`Unexpected reply to inspect: ${reply.kind}`)
+    } catch (cause) {
+      renderSourceError(
+        sourceReport,
+        'Reading this file took longer than expected, or the tool ran into a problem.',
+      )
+      setStatus('That file could not be read.')
+      log.error('ui', 'inspection request failed', {
+        reason: cause instanceof Error ? cause.message : String(cause),
+      })
+    }
+  })()
+})
+
 // --- Dev-only affordances --------------------------------------------------
 // Hidden in production per UI-STANDARDS.md -> "Diagnostics affordance".
 
@@ -227,7 +285,7 @@ if (isDev) {
   copyButton.textContent = 'Copy diagnostics'
   copyButton.addEventListener('click', () => {
     void (async () => {
-      const drained = await request('drainLogs')
+      const drained = await request({ kind: 'drainLogs' })
       if (drained.kind === 'logs') adoptLogRecords(drained.records)
       const copied = await copyDiagnostics()
       setStatus(

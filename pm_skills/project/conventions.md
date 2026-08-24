@@ -102,7 +102,11 @@ against EBU Tech 3341 cases 1-9`.
 - Types: `tsc --noEmit`
 - Linter: **ESLint** + `typescript-eslint`, strict on correctness
   (unused/broken imports, floating promises, dead code), taste rules off
-- Formatter: **Prettier**, auto-fix on save — never a `check` failure
+- Formatter: **Prettier**, auto-fix on save — never a `check` failure.
+  **Markdown is out of its scope** (`.prettierignore`): Prettier pads table
+  cells to align them, which rewrites every table in `docs/` for no gain, and
+  `docs/` is protected infrastructure agents read rather than restyle.
+  markdownlint governs Markdown.
 - Docs: `markdownlint` + `check-links.mjs` (scaffolded)
 
 The `check` command that composes these is defined in

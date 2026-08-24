@@ -14,15 +14,6 @@
      comes out, through a UI a novice can finish. Built in this order:
      the meter is proved before anything depends on it. -->
 
-- [ ] **VH-4 File inspection**
-      Intent: turn a selected file into an honest report of what it is.
-      Done when: Mediabunny demuxes a chosen file and reports resolution,
-      display dimensions, rotation, duration, average frame rate, codecs,
-      audio presence and channel count; variable frame rate is detected via
-      `computeFrameRateMetrics()`. Note: Mediabunny reports video and audio
-      tracks only — anything else needs the VH-9 `hdlr` scan, so VH-4 does
-      not claim to have seen it.
-
 - [ ] **VH-5 Pre-flight and calibration probe**
       Intent: answer "will this work on this machine, and how long?" with a
       measurement rather than a guess.
@@ -90,7 +81,10 @@
       or real UoN material is exercised and recorded — including zero media
       egress under network inspection, clean cancellation, and correct A/V
       sync on a synthesised variable-frame-rate fixture — and the criteria
-      that need VH-M1 / VH-M2 are named as outstanding.
+      that need VH-M1 / VH-M2 are named as outstanding. Carries two checks
+      VH-4 could not make headlessly: a rotated source reports upright, and a
+      normal-frame-rate source reports its true rate (the browser pane throttles
+      timers, so only a degenerate ~1 fps fixture could be produced there).
 
 - [ ] **VH-M1 Provide the real test corpus** [maintainer] (2026-08-24)
       Intent: acceptance criteria 1, 5 and 6 need real material; synthesised

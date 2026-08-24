@@ -9,6 +9,7 @@
 
 import type { CapturedError } from '../core/diagnostics'
 import type { LogRecord } from '../core/logger'
+import type { SourceReport } from '../media/inspect'
 
 /** Main thread -> worker. */
 export type WorkerRequest =
@@ -20,11 +21,20 @@ export type WorkerRequest =
    * a dev-gated control; never reachable in a production build.
    */
   | { readonly kind: 'throwTest'; readonly id: number }
+  /**
+   * Read a chosen file's structure. The `Blob` is structured-cloned rather
+   * than read on the main thread, keeping the rule that decoding and demuxing
+   * never happen where the UI runs.
+   */
+  | { readonly kind: 'inspect'; readonly id: number; readonly file: Blob }
 
 /** Worker -> main thread, in reply to a request. */
 export type WorkerResponse =
   | { readonly kind: 'pong'; readonly id: number; readonly workerBootMs: number }
   | { readonly kind: 'logs'; readonly id: number; readonly records: readonly LogRecord[] }
+  | { readonly kind: 'inspected'; readonly id: number; readonly report: SourceReport }
+  /** A request that failed for a reason the user should read, not a crash. */
+  | { readonly kind: 'failed'; readonly id: number; readonly message: string }
 
 /**
  * Worker -> main thread, unsolicited. An uncaught throw inside the worker is

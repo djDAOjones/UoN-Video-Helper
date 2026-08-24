@@ -53,9 +53,10 @@ const CONSOLE_METHOD: Record<LogLevel, 'log' | 'info' | 'warn' | 'error'> = {
 function record(level: LogLevel, scope: LogScope, message: string, data?: LogData): void {
   if (LEVEL_RANK[level] < LEVEL_RANK[minimumLevel]) return
 
-  const entry: LogRecord = data === undefined
-    ? { ts: Date.now(), level, scope, message }
-    : { ts: Date.now(), level, scope, message, data }
+  const entry: LogRecord =
+    data === undefined
+      ? { ts: Date.now(), level, scope, message }
+      : { ts: Date.now(), level, scope, message, data }
 
   buffer.push(entry)
   if (buffer.length > LOG_BUFFER_CAPACITY) buffer.shift()
@@ -69,10 +70,12 @@ function record(level: LogLevel, scope: LogScope, message: string, data?: LogDat
 }
 
 export const log = {
-  debug: (scope: LogScope, message: string, data?: LogData) => record('debug', scope, message, data),
+  debug: (scope: LogScope, message: string, data?: LogData) =>
+    record('debug', scope, message, data),
   info: (scope: LogScope, message: string, data?: LogData) => record('info', scope, message, data),
   warn: (scope: LogScope, message: string, data?: LogData) => record('warn', scope, message, data),
-  error: (scope: LogScope, message: string, data?: LogData) => record('error', scope, message, data),
+  error: (scope: LogScope, message: string, data?: LogData) =>
+    record('error', scope, message, data),
 }
 
 /** A copy of the buffered records, oldest first. */

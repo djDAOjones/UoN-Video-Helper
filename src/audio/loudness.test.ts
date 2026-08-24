@@ -27,7 +27,13 @@ describe('integrated loudness', () => {
   // sine's PEAK level in dBFS, not its RMS.
   it('reads a stereo 1 kHz sine at its peak dBFS level', () => {
     const report = measure(
-      tone({ sampleRate: SAMPLE_RATE, seconds: 10, frequency: 1000, peakDbfs: -23, channelCount: 2 }),
+      tone({
+        sampleRate: SAMPLE_RATE,
+        seconds: 10,
+        frequency: 1000,
+        peakDbfs: -23,
+        channelCount: 2,
+      }),
       2,
     )
     expect(report.integratedLufs).toBeCloseTo(-23, 1)
@@ -35,7 +41,13 @@ describe('integrated loudness', () => {
 
   it('tracks level changes one-for-one', () => {
     const report = measure(
-      tone({ sampleRate: SAMPLE_RATE, seconds: 10, frequency: 1000, peakDbfs: -33, channelCount: 2 }),
+      tone({
+        sampleRate: SAMPLE_RATE,
+        seconds: 10,
+        frequency: 1000,
+        peakDbfs: -33,
+        channelCount: 2,
+      }),
       2,
     )
     expect(report.integratedLufs).toBeCloseTo(-33, 1)
@@ -45,7 +57,13 @@ describe('integrated loudness', () => {
   // for the same per-channel amplitude.
   it('reads mono 3.01 LU below the equivalent stereo', () => {
     const report = measure(
-      tone({ sampleRate: SAMPLE_RATE, seconds: 10, frequency: 1000, peakDbfs: -23, channelCount: 1 }),
+      tone({
+        sampleRate: SAMPLE_RATE,
+        seconds: 10,
+        frequency: 1000,
+        peakDbfs: -23,
+        channelCount: 1,
+      }),
       1,
     )
     expect(report.integratedLufs).toBeCloseTo(-26.01, 1)
@@ -57,7 +75,13 @@ describe('integrated loudness', () => {
 
   it('returns -Infinity when there is less than one 400 ms block', () => {
     const report = measure(
-      tone({ sampleRate: SAMPLE_RATE, seconds: 0.2, frequency: 1000, peakDbfs: -23, channelCount: 2 }),
+      tone({
+        sampleRate: SAMPLE_RATE,
+        seconds: 0.2,
+        frequency: 1000,
+        peakDbfs: -23,
+        channelCount: 2,
+      }),
       2,
     )
     expect(report.integratedLufs).toBe(Number.NEGATIVE_INFINITY)
@@ -83,7 +107,11 @@ describe('gating', () => {
   // straddling blocks are handled correctly.
   it('excludes silence via the absolute gate, keeping straddling blocks', () => {
     const toneOnly = tone({
-      sampleRate: SAMPLE_RATE, seconds: 10, frequency: 1000, peakDbfs: -23, channelCount: 2,
+      sampleRate: SAMPLE_RATE,
+      seconds: 10,
+      frequency: 1000,
+      peakDbfs: -23,
+      channelCount: 2,
     })
     const withSilence = concat(toneOnly, silence(SAMPLE_RATE, 10, 2))
 
@@ -95,10 +123,18 @@ describe('gating', () => {
   // down is excluded and barely moves the result.
   it('excludes a passage far below the relative gate', () => {
     const loud = tone({
-      sampleRate: SAMPLE_RATE, seconds: 20, frequency: 1000, peakDbfs: -23, channelCount: 2,
+      sampleRate: SAMPLE_RATE,
+      seconds: 20,
+      frequency: 1000,
+      peakDbfs: -23,
+      channelCount: 2,
     })
     const quiet = tone({
-      sampleRate: SAMPLE_RATE, seconds: 20, frequency: 1000, peakDbfs: -50, channelCount: 2,
+      sampleRate: SAMPLE_RATE,
+      seconds: 20,
+      frequency: 1000,
+      peakDbfs: -50,
+      channelCount: 2,
     })
 
     const gated = measure(concat(loud, quiet), 2).integratedLufs
@@ -111,7 +147,11 @@ describe('streaming', () => {
   // align to the 100 ms hop grid. The reading must not depend on that.
   it('gives an identical result regardless of chunk size', () => {
     const signal = tone({
-      sampleRate: SAMPLE_RATE, seconds: 12, frequency: 1000, peakDbfs: -20, channelCount: 2,
+      sampleRate: SAMPLE_RATE,
+      seconds: 12,
+      frequency: 1000,
+      peakDbfs: -20,
+      channelCount: 2,
     })
     const readings = [1, 999, 4096, 65536, signal[0]!.length].map(
       (chunk) => measure(signal, 2, chunk).integratedLufs,
@@ -142,28 +182,39 @@ describe('channel weighting', () => {
 
   it('ignores content in the LFE channel entirely', () => {
     const frontsOnly = tone({
-      sampleRate: SAMPLE_RATE, seconds: 10, frequency: 1000, peakDbfs: -23,
-      channelCount: 6, silentChannels: [2, 3, 4, 5],
+      sampleRate: SAMPLE_RATE,
+      seconds: 10,
+      frequency: 1000,
+      peakDbfs: -23,
+      channelCount: 6,
+      silentChannels: [2, 3, 4, 5],
     })
     const withLfe = frontsOnly.map((channel, ch) => {
       if (ch !== 3) return channel
       const loud = tone({
-        sampleRate: SAMPLE_RATE, seconds: 10, frequency: 60, peakDbfs: -6, channelCount: 1,
+        sampleRate: SAMPLE_RATE,
+        seconds: 10,
+        frequency: 60,
+        peakDbfs: -6,
+        channelCount: 1,
       })
       return loud[0]!
     })
 
-    expect(measure(withLfe, 6).integratedLufs).toBeCloseTo(
-      measure(frontsOnly, 6).integratedLufs,
-      6,
-    )
+    expect(measure(withLfe, 6).integratedLufs).toBeCloseTo(measure(frontsOnly, 6).integratedLufs, 6)
   })
 })
 
 describe('loudness range', () => {
   it('is near zero for a steady tone', () => {
     const report = measure(
-      tone({ sampleRate: SAMPLE_RATE, seconds: 30, frequency: 1000, peakDbfs: -23, channelCount: 2 }),
+      tone({
+        sampleRate: SAMPLE_RATE,
+        seconds: 30,
+        frequency: 1000,
+        peakDbfs: -23,
+        channelCount: 2,
+      }),
       2,
     )
     expect(report.loudnessRangeLu).toBeLessThan(1)
@@ -171,8 +222,20 @@ describe('loudness range', () => {
 
   it('reports the spread of a two-level signal', () => {
     const signal = concat(
-      tone({ sampleRate: SAMPLE_RATE, seconds: 30, frequency: 1000, peakDbfs: -18, channelCount: 2 }),
-      tone({ sampleRate: SAMPLE_RATE, seconds: 30, frequency: 1000, peakDbfs: -28, channelCount: 2 }),
+      tone({
+        sampleRate: SAMPLE_RATE,
+        seconds: 30,
+        frequency: 1000,
+        peakDbfs: -18,
+        channelCount: 2,
+      }),
+      tone({
+        sampleRate: SAMPLE_RATE,
+        seconds: 30,
+        frequency: 1000,
+        peakDbfs: -28,
+        channelCount: 2,
+      }),
     )
     expect(measure(signal, 2).loudnessRangeLu).toBeCloseTo(10, 0)
   })
@@ -181,7 +244,13 @@ describe('loudness range', () => {
 describe('curves', () => {
   it('emits momentary and short-term values on the 10 ms grid', () => {
     const report = measure(
-      tone({ sampleRate: SAMPLE_RATE, seconds: 10, frequency: 1000, peakDbfs: -23, channelCount: 2 }),
+      tone({
+        sampleRate: SAMPLE_RATE,
+        seconds: 10,
+        frequency: 1000,
+        peakDbfs: -23,
+        channelCount: 2,
+      }),
       2,
     )
     // 10 ms rather than BS.1770-4's 100 ms block hop, so EBU Tech 3341 tests
@@ -205,7 +274,11 @@ describe('curves', () => {
     //   drop = -10log10((197 + 1.5) / 200) = 0.0327 LU
     // A finer block grid would admit more straddling blocks and shift this.
     const toneOnly = tone({
-      sampleRate: SAMPLE_RATE, seconds: 20, frequency: 1000, peakDbfs: -23, channelCount: 2,
+      sampleRate: SAMPLE_RATE,
+      seconds: 20,
+      frequency: 1000,
+      peakDbfs: -23,
+      channelCount: 2,
     })
     const withSilence = concat(toneOnly, silence(SAMPLE_RATE, 20, 2))
 

@@ -42,7 +42,8 @@ function buildPhases(): Float64Array[] {
   const cutoff = 1 / (2 * OVERSAMPLE)
   const prototype = new Float64Array(PROTOTYPE_TAPS)
   for (let n = 0; n < PROTOTYPE_TAPS; n++) {
-    prototype[n] = 2 * cutoff * sinc(2 * cutoff * (n - CENTRE)) * blackman(n, PROTOTYPE_TAPS) * OVERSAMPLE
+    prototype[n] =
+      2 * cutoff * sinc(2 * cutoff * (n - CENTRE)) * blackman(n, PROTOTYPE_TAPS) * OVERSAMPLE
   }
 
   return Array.from({ length: OVERSAMPLE }, (_unused, phase) => {

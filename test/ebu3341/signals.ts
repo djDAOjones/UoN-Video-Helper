@@ -98,7 +98,8 @@ export function truePeakTone(
   for (let i = 0; i < frames; i++) {
     const envelope =
       fadeFrames > 0 ? Math.min(1, (i + 1) / fadeFrames, (frames - i) / fadeFrames) : 1
-    mono[i] = envelope * options.amplitude * Math.sin((2 * Math.PI * frequency * i) / sampleRate + phase)
+    mono[i] =
+      envelope * options.amplitude * Math.sin((2 * Math.PI * frequency * i) / sampleRate + phase)
   }
   return [mono, mono.slice()]
 }

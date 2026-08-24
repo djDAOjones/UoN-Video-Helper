@@ -15,12 +15,12 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 44 file(s) across 6 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 50 file(s) across 6 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 10 file(s)
 - `.claude` — 1 file(s)
 - `docs` — 5 file(s)
 - `scripts` — 1 file(s)
-- `src` — 23 file(s)
+- `src` — 29 file(s)
 - `test` — 4 file(s)
 <!-- /file-map-index -->
 
@@ -72,9 +72,15 @@
 - `src/core/redact.ts` — Redaction. This app's sensitive asset is the user's media and filename, not a token.
 - `src/core/version.ts` — Reads the injected product version and build identity.
 - `src/main.ts` — App entry: installs diagnostics first, mounts the shell, runs the system check.
+- `src/media/framerate.test.ts` — Proves the rounding rule and that timestamps derive from the index so error cannot accumulate.
+- `src/media/framerate.ts` — CFR conform decisions: nearest standard rate, what conforming costs, and the timestamp grid.
+- `src/media/inspect.ts` — Demuxes a chosen file into a SourceReport. Rejects files with no video track.
 - `src/styles/app.css` — App shell styles. Carbon productive language at AAA.
 - `src/styles/tokens.brand.css` — UoN brand tokens. Holds the D1 placeholder and nothing invented.
 - `src/styles/tokens.carbon.css` — Carbon structural tokens. Every pair is contrast-asserted by test/contrast.test.ts.
+- `src/ui/format.test.ts` — Pins the wording, so phrasing is tested rather than reviewed by opinion.
+- `src/ui/format.ts` — Technical facts as plain language — durations, sizes, codecs, channel layouts.
+- `src/ui/source-panel.ts` — Renders a SourceReport, including the standing caveat about tracks we cannot see.
 - `src/vite-env.d.ts` — Ambient types: the injected build globals and the File System Access API surface.
 - `src/workers/job.worker.ts` — The job worker. Owns the pipeline when it lands; today proves the boundary and its error path.
 - `src/workers/protocol.ts` — The typed message contract across the worker boundary.

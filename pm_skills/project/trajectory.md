@@ -34,4 +34,9 @@
   0.265 dB against +0.2/−0.4. Cases 7-8 need the EBU's authentic-programme
   audio and are not run.
 
+- VH-4 — File inspection: Mediabunny demux in the worker reporting resolution,
+  rotation, duration, frame-rate metrics, codecs and channels, with VFR taken
+  from Mediabunny's own verdict. Files with no video track are rejected rather
+  than described. Verified against a MediaRecorder-produced WebM.
+
 <!-- Outcome line is written when the milestone closes. -->

@@ -20,7 +20,13 @@ body {
   margin: 0;
   background: var(--layer-00);
   color: var(--text-primary);
-  font-family: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    'IBM Plex Sans',
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
   font-size: var(--type-body);
   line-height: 1.5;
 }
@@ -226,5 +232,100 @@ body {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* --- Form field (Carbon productive) --- */
+
+.field {
+  margin-bottom: var(--spacing-05);
+}
+
+.label {
+  display: block;
+  font-size: var(--type-body-compact);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-03);
+}
+
+.file-input {
+  display: block;
+  width: 100%;
+  min-height: var(--target-min);
+  padding: var(--spacing-03) var(--spacing-04);
+  border: 1px solid var(--border-subtle);
+  background: var(--layer-00);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--type-body-compact);
+}
+
+.file-input::file-selector-button {
+  min-height: 2rem;
+  margin-right: var(--spacing-04);
+  padding: var(--spacing-02) var(--spacing-05);
+  border: 1px solid var(--interactive);
+  background: transparent;
+  color: var(--interactive);
+  font: inherit;
+  font-size: var(--type-body-compact);
+  cursor: pointer;
+}
+
+.helper {
+  margin: var(--spacing-03) 0 0;
+  font-size: var(--type-body-compact);
+  color: var(--text-secondary);
+}
+
+/* --- Source report --- */
+
+.facts {
+  display: grid;
+  grid-template-columns: minmax(8rem, max-content) 1fr;
+  gap: var(--spacing-04) var(--spacing-06);
+  margin: var(--spacing-06) 0 0;
+}
+
+.facts dt {
+  font-size: var(--type-body-compact);
+  color: var(--text-secondary);
+}
+
+.facts dd {
+  margin: 0;
+}
+
+.fact-note {
+  display: block;
+  margin-top: var(--spacing-02);
+  font-size: var(--type-body-compact);
+  color: var(--text-secondary);
+}
+
+.fact-caveat {
+  margin: var(--spacing-06) 0 0;
+  padding-top: var(--spacing-04);
+  border-top: 1px solid var(--layer-02);
+  font-size: var(--type-body-compact);
+  color: var(--text-secondary);
+}
+
+.fact-error {
+  margin: var(--spacing-06) 0 0;
+  padding: var(--spacing-04) var(--spacing-05);
+  border-left: 4px solid var(--support-error);
+  background: var(--layer-02);
+  color: var(--support-error);
+}
+
+@media (max-width: 34rem) {
+  .facts {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-02) 0;
+  }
+
+  .facts dd {
+    margin-bottom: var(--spacing-04);
   }
 }

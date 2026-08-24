@@ -1,5 +1,5 @@
 {
   "config": { "extends": "./.markdownlint.json" },
   "globs": ["**/*.md"],
-  "ignores": ["node_modules", "pm_skills", "dist"]
+  "ignores": ["node_modules", "pm_skills", "dist"],
 }

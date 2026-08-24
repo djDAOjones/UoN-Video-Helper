@@ -24,6 +24,25 @@
         the original file is never changed.
       </p>
 
+      <section class="panel" aria-labelledby="choose-heading">
+        <h2 id="choose-heading">Choose a video</h2>
+        <div class="field">
+          <label class="label" for="file-input">Video file</label>
+          <input
+            class="file-input"
+            type="file"
+            id="file-input"
+            accept="video/*,.mp4,.mov,.m4v,.mkv,.webm"
+            aria-describedby="file-help"
+          />
+          <p class="helper" id="file-help">
+            Your video is read on this device. It is never uploaded, and the original file is never
+            changed.
+          </p>
+        </div>
+        <div id="source-report"></div>
+      </section>
+
       <section class="panel" aria-labelledby="system-check-heading">
         <h2 id="system-check-heading">System check</h2>
         <ul class="checks" id="checks"></ul>

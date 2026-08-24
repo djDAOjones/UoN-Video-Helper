@@ -57,8 +57,15 @@ that exists in `package.json` and not here is a defect.
 
 ## Dev server
 
-**Canonical URL: <http://localhost:5173>** (Vite's default; do not change
-it — it is referenced in the runtime lifecycle below).
+**Canonical URL: <http://localhost:5173>** — Vite's default, and what the
+runtime lifecycle below assumes.
+
+Vite falls back to the next free port if 5173 is occupied (another project,
+another session), and honours `PORT` when something upstream assigns one.
+Read the port it prints rather than assuming. `strictPort` is deliberately
+not set: failing to boot because a neighbour holds a port is a worse default
+than moving, and nothing here depends on 5173 — there are no OAuth callbacks,
+webhooks, or CORS origins to keep stable.
 
 ```bash
 npm run dev

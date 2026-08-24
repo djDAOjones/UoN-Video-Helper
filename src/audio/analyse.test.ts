@@ -15,8 +15,12 @@ const SAMPLE_RATE = 48000
 
 describe('AudioAnalyser', () => {
   const signal = tone({
-    sampleRate: SAMPLE_RATE, seconds: 8, frequency: 997, peakDbfs: -12,
-    channelCount: 2, fadeSeconds: 0.01,
+    sampleRate: SAMPLE_RATE,
+    seconds: 8,
+    frequency: 997,
+    peakDbfs: -12,
+    channelCount: 2,
+    fadeSeconds: 0.01,
   })
 
   it('agrees with the components run separately', () => {

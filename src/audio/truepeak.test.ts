@@ -22,8 +22,13 @@ describe('true peak', () => {
   it('finds the inter-sample peak sample peak misses', () => {
     // sin(pi*i/2 + pi/4) samples at +/-0.7071 but peaks at 1.0 between them.
     const channels = tone({
-      sampleRate: SAMPLE_RATE, seconds: 1, frequency: SAMPLE_RATE / 4,
-      peakDbfs: 0, channelCount: 1, phase: Math.PI / 4, fadeSeconds: 0.01,
+      sampleRate: SAMPLE_RATE,
+      seconds: 1,
+      frequency: SAMPLE_RATE / 4,
+      peakDbfs: 0,
+      channelCount: 1,
+      phase: Math.PI / 4,
+      fadeSeconds: 0.01,
     })
 
     let samplePeak = 0
@@ -38,8 +43,12 @@ describe('true peak', () => {
     // sample is considered as-is. A measurement below sample peak would mean
     // the interpolator was attenuating the signal.
     const channels = tone({
-      sampleRate: SAMPLE_RATE, seconds: 1, frequency: 997, peakDbfs: -6,
-      channelCount: 1, fadeSeconds: 0.01,
+      sampleRate: SAMPLE_RATE,
+      seconds: 1,
+      frequency: 997,
+      peakDbfs: -6,
+      channelCount: 1,
+      fadeSeconds: 0.01,
     })
     let samplePeak = 0
     for (const value of channels[0]!) samplePeak = Math.max(samplePeak, Math.abs(value))
@@ -50,7 +59,11 @@ describe('true peak', () => {
   it('reads a low-frequency tone at close to its nominal level', () => {
     // At 100 Hz there is very little between samples to miss.
     const channels = tone({
-      sampleRate: SAMPLE_RATE, seconds: 1, frequency: 100, peakDbfs: -6, channelCount: 1,
+      sampleRate: SAMPLE_RATE,
+      seconds: 1,
+      frequency: 100,
+      peakDbfs: -6,
+      channelCount: 1,
     })
     expect(measure(channels)).toBeCloseTo(-6, 1)
   })
@@ -61,10 +74,18 @@ describe('true peak', () => {
 
   it('reports the loudest channel', () => {
     const quiet = tone({
-      sampleRate: SAMPLE_RATE, seconds: 1, frequency: 100, peakDbfs: -20, channelCount: 1,
+      sampleRate: SAMPLE_RATE,
+      seconds: 1,
+      frequency: 100,
+      peakDbfs: -20,
+      channelCount: 1,
     })
     const loud = tone({
-      sampleRate: SAMPLE_RATE, seconds: 1, frequency: 100, peakDbfs: -6, channelCount: 1,
+      sampleRate: SAMPLE_RATE,
+      seconds: 1,
+      frequency: 100,
+      peakDbfs: -6,
+      channelCount: 1,
     })
     expect(measure([quiet[0]!, loud[0]!])).toBeCloseTo(-6, 1)
   })
@@ -74,8 +95,12 @@ describe('true peak', () => {
     // reconstruction really does exceed the sample values. A meter that
     // missed this would under-report exactly the transients that clip.
     const shared = {
-      sampleRate: SAMPLE_RATE, seconds: 1, frequency: SAMPLE_RATE / 4,
-      peakDbfs: -6, channelCount: 1, phase: Math.PI / 4,
+      sampleRate: SAMPLE_RATE,
+      seconds: 1,
+      frequency: SAMPLE_RATE / 4,
+      peakDbfs: -6,
+      channelCount: 1,
+      phase: Math.PI / 4,
     } as const
 
     const faded = measure(tone({ ...shared, fadeSeconds: 0.01 }))
@@ -89,12 +114,28 @@ describe('true peak', () => {
     // The delay line spans chunk boundaries; if the tail carry is wrong, a
     // peak straddling a boundary is missed or invented.
     const channels = concat(
-      tone({ sampleRate: SAMPLE_RATE, seconds: 0.5, frequency: 997, peakDbfs: -20, channelCount: 2 }),
       tone({
-        sampleRate: SAMPLE_RATE, seconds: 0.5, frequency: SAMPLE_RATE / 4,
-        peakDbfs: -1, channelCount: 2, phase: Math.PI / 4,
+        sampleRate: SAMPLE_RATE,
+        seconds: 0.5,
+        frequency: 997,
+        peakDbfs: -20,
+        channelCount: 2,
       }),
-      tone({ sampleRate: SAMPLE_RATE, seconds: 0.5, frequency: 997, peakDbfs: -20, channelCount: 2 }),
+      tone({
+        sampleRate: SAMPLE_RATE,
+        seconds: 0.5,
+        frequency: SAMPLE_RATE / 4,
+        peakDbfs: -1,
+        channelCount: 2,
+        phase: Math.PI / 4,
+      }),
+      tone({
+        sampleRate: SAMPLE_RATE,
+        seconds: 0.5,
+        frequency: 997,
+        peakDbfs: -20,
+        channelCount: 2,
+      }),
     )
 
     const readings = [1, 7, 512, 4096, channels[0]!.length].map((chunk) => measure(channels, chunk))
@@ -104,8 +145,13 @@ describe('true peak', () => {
   it('scales linearly with level', () => {
     for (const level of [-1, -6, -12, -23]) {
       const channels = tone({
-        sampleRate: SAMPLE_RATE, seconds: 0.5, frequency: SAMPLE_RATE / 4,
-        peakDbfs: level, channelCount: 1, phase: Math.PI / 4, fadeSeconds: 0.01,
+        sampleRate: SAMPLE_RATE,
+        seconds: 0.5,
+        frequency: SAMPLE_RATE / 4,
+        peakDbfs: level,
+        channelCount: 1,
+        phase: Math.PI / 4,
+        fadeSeconds: 0.01,
       })
       expect(measure(channels)).toBeCloseTo(level, 1)
       expect(dbfsToAmplitude(level)).toBeGreaterThan(0)
