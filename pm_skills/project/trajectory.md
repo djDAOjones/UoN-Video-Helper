@@ -17,7 +17,7 @@
      (Prune) moves the oldest phases to archive/trajectory/trajectory-NNNN-<range>.md
      and adds a row to archive/INDEX.md. Archives are append-only; never rewrite. -->
 
-## Milestone 1 — MVP (in progress)
+## Phase 1 — Band 0 MVP (shipped 2026-08-25)
 
 - VH-1 — Runnable skeleton: the app boots in dev and production, the job
   worker round-trips, and an uncaught throw on either thread is captured and
@@ -89,4 +89,7 @@
   by the measured delay, and the pipeline adds 0.0 ms at every marker on a
   constant-frame-rate source. Acceptance criterion 6 passes.
 
-<!-- Outcome line is written when the milestone closes. -->
+Outcome: a static browser-only app that takes a recorded lecture and returns a
+branded, correctly-levelled, correctly-encoded MP4, with nothing leaving the
+device. Acceptance run: 5 pass, 0 fail, 4 need real material and a person.
+See decision-log 2026-08-25.
