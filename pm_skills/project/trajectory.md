@@ -168,3 +168,14 @@ The deployed site was also confirmed working on a University machine, so
   every remaining orphan after one undeletable directory (Firefox), and
   `dispose` on the cancel path was never exercised. Both fixed; all three
   engines pass `/spike-opfs.html`.
+
+### VH-36 — the screen locks while a job runs
+
+- VH-36 — Shipped 2026-08-25. Start and Cancel are built once at module scope
+  and never replaced, so a preset change no longer detaches the running job's
+  Cancel or hands back an enabled Start; the cancel listener is bound once
+  rather than per Start click. One `setJobInFlight` flag disables the file,
+  subtitle, preset and branding controls for the duration — the state model
+  VH-32 inherits. Also fixed what made the lock invisible: `.button` set its own
+  colours, so a disabled Start looked identical to a live one, and a disabled
+  file input still drew a blue `::file-selector-button`.

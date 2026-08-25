@@ -48,18 +48,6 @@
       the UI is part of this item, and spec §4.1 carries a doc-delta until it
       happens.
 
-- [ ] **VH-36 The screen does not lock while a job runs** (2026-08-25)
-      Intent: only start, cancel and save are ever disabled. Changing the preset
-      or the file mid-job re-runs preflight, and on success `showProcessControls()`
-      calls `processActions.replaceChildren()` (`main.ts:482`) — destroying the
-      running job's Cancel button and handing back a fresh enabled Start. The job
-      becomes uncancellable and a second concurrent job can be launched. Separately,
-      the cancel listener is registered inside the Start handler (`main.ts:518`), so
-      one accumulates per Start click.
-      Done when: a job in flight blocks the controls that would invalidate it,
-      cancel survives any re-render, and the listener is bound once. VH-32
-      inherits the state model rather than re-deciding it.
-
 - [ ] **VH-42 The closing keys off the wrong duration** (2026-08-25)
       Intent: split from VH-24. `pipeline.ts:289` derives `overlayFrom` from
       `durationSeconds`, which `inspect.ts:287` sets to `max(video, audio)`. So

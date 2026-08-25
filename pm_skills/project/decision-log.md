@@ -11,6 +11,42 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-25 — VH-36: one flag, and buttons that outlive the render
+
+**Decision:** Build Start and Cancel once at module scope and never replace
+them; hold the job's request id in `jobCancelId`; gate the screen on a single
+`setJobInFlight` that disables the file, subtitle, preset and branding controls.
+
+**Rationale:** The bug was not that the wrong controls were disabled, it was
+that the controls were being REBUILT — `showProcessControls` ran
+`processActions.replaceChildren()` on every preflight, so changing the preset
+mid-job detached the running job's Cancel and appended a fresh, enabled Start.
+Guarding each call site would have left the rebuild in place for the next
+caller to trip over. Long-lived nodes remove the failure rather than defend
+against it, and they are also why the cancel listener can be bound once
+instead of once per Start click.
+
+One flag with one applier, because VH-32 inherits this: the alternative — each
+control deciding for itself — is what VH-36 was.
+
+**A second defect, found by looking:** disabling was already happening to Start
+and did nothing visible. `.button` sets its own background and colour, so the
+browser's native greying never applied, and a disabled file input still drew a
+live blue `::file-selector-button`. A lock nobody can see is not a lock. The
+disabled look drops the solid fill rather than washing out the text, so it uses
+`--text-secondary` on `--layer-02` — a pair `test/contrast.test.ts` already
+pins at AAA — instead of taking WCAG's exemption for inactive controls.
+
+**Verified in the browser**, since none of this is testable in Node: a preset
+change leaves both button nodes identical (`dataset` markers survive); during a
+job the file, subtitle, preset, branding and Start are all disabled and Cancel
+is the only live control; three extra Start clicks do nothing; a cancel at
+"Encoding video — 15%" settles as cancelled and restores every control.
+Computed styles confirm the disabled Start is `--layer-02` / `--text-secondary`
+at `not-allowed` against a live blue idle state.
+
+**Link:** `src/main.ts`, `src/styles/app.css`, backlog VH-32.
+
 ## 2026-08-25 — VH-35: Web Locks, not job ids, protect another tab's scratch
 
 **Decision:** A live `OpfsWorkspace` holds an exclusive Web Lock named for its

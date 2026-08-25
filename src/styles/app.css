@@ -183,6 +183,30 @@ body {
   background: var(--layer-02);
 }
 
+/*
+ * A disabled button must not look like a live one. `.button` sets its own
+ * background and colour, so the browser's native greying never showed — a
+ * disabled Start was indistinguishable from an enabled one (VH-36).
+ *
+ * The "disabled" signal is losing the solid fill, NOT washing out the text:
+ * `--text-secondary` on `--layer-02` is already a pinned AAA pair in
+ * `test/contrast.test.ts`, so this stays readable at 7:1 rather than taking
+ * WCAG's exemption for inactive controls.
+ */
+.button:disabled,
+.button--secondary:disabled {
+  background: var(--layer-02);
+  color: var(--text-secondary);
+  border-color: var(--border-subtle);
+  cursor: not-allowed;
+}
+
+.button:disabled:hover,
+.button--secondary:disabled:hover {
+  background: var(--layer-02);
+}
+
+
 .status {
   margin-top: var(--spacing-05);
   font-size: var(--type-body-compact);
@@ -272,6 +296,20 @@ body {
   font: inherit;
   font-size: var(--type-body-compact);
   cursor: pointer;
+}
+
+/* The browser draws this one, so it needs saying separately — a disabled file
+   input still rendered a live-looking blue "Choose file" while a job ran. */
+.file-input:disabled {
+  color: var(--text-secondary);
+  cursor: not-allowed;
+}
+
+.file-input:disabled::file-selector-button {
+  border-color: var(--border-subtle);
+  background: var(--layer-02);
+  color: var(--text-secondary);
+  cursor: not-allowed;
 }
 
 .helper {

@@ -362,8 +362,10 @@ fileInput.addEventListener('change', () => {
   sourceReport.replaceChildren()
   preflightReport.replaceChildren()
   audioWarnings.replaceChildren()
-  processActions.replaceChildren()
+  // Hidden, not replaced: the Start and Cancel buttons live for the whole
+  // session now, and emptying this container would throw them away (VH-36).
   processActions.hidden = true
+  jobFile = null
   presetChoice.hidden = true
   brandingChoice.hidden = true
   subtitleField.hidden = true
@@ -471,87 +473,133 @@ function onStage(stage: string, fraction: number): void {
   processProgress.hidden = false
 }
 
-function showProcessControls(file: File): void {
-  processActions.replaceChildren()
-  processActions.hidden = false
+/**
+ * The one fact the screen is arranged around: is a job running right now?
+ *
+ * It is a single flag with a single applier because the alternative — each
+ * control deciding for itself — is what VH-36 was. VH-32 inherits this rather
+ * than re-deciding it.
+ */
+let jobInFlight = false
 
-  const start = document.createElement('button')
-  start.type = 'button'
-  start.className = 'button'
-  start.textContent = 'Create the video'
+/** The file the Start button will act on. Set by {@link showProcessControls}. */
+let jobFile: File | null = null
 
-  const cancel = document.createElement('button')
-  cancel.type = 'button'
-  cancel.className = 'button button--secondary'
-  cancel.textContent = 'Cancel'
-  cancel.hidden = true
+/** The running job's request id, so Cancel reaches the right one. */
+let jobCancelId: number | null = null
 
-  start.addEventListener('click', () => {
-    start.disabled = true
-    cancel.hidden = false
-    processResult.replaceChildren()
+// Built ONCE, at module scope, and never replaced. The previous version
+// rebuilt both buttons on every preflight — so changing the preset mid-job
+// detached the running job's Cancel and handed back a fresh, enabled Start,
+// leaving the job uncancellable and a second one launchable (VH-36).
+const startButton = document.createElement('button')
+startButton.type = 'button'
+startButton.className = 'button'
+startButton.textContent = 'Create the video'
 
-    const { id, promise } = requestWithId(
-      {
-        kind: 'process',
-        file,
-        presetId: chosenPreset(),
-        branding: {
-          opening: brandingOpening.checked,
-          closing: brandingClosing.checked,
-          style: chosenBranding('style', CLOSING_DEFAULTS.style),
-          colour: chosenBranding('colour', CLOSING_DEFAULTS.colour),
-          mode: chosenBranding('mode', CLOSING_DEFAULTS.mode),
-        },
-        backgroundColour: brandBackground(),
-        ...(subtitleVtt ? { subtitleVtt } : {}),
+const cancelButton = document.createElement('button')
+cancelButton.type = 'button'
+cancelButton.className = 'button button--secondary'
+cancelButton.textContent = 'Cancel'
+cancelButton.hidden = true
+
+processActions.append(startButton, cancelButton)
+
+/**
+ * Locks or releases everything a running job must not have changed under it.
+ *
+ * Changing the file or the preset mid-job re-runs preflight and invalidates
+ * what the job was started for; changing the branding changes what is being
+ * built. Disabling is the mechanism spec 9.2 and `UI-STANDARDS.md` ->
+ * "Error prevention" call for — constrain rather than warn afterwards.
+ */
+function setJobInFlight(running: boolean): void {
+  jobInFlight = running
+  fileInput.disabled = running
+  subtitleInput.disabled = running
+  presetChoice.disabled = running
+  brandingChoice.disabled = running
+  startButton.disabled = running
+  cancelButton.hidden = !running
+  cancelButton.disabled = false
+}
+
+startButton.addEventListener('click', () => {
+  const file = jobFile
+  if (!file || jobInFlight) return
+
+  processResult.replaceChildren()
+
+  const { id, promise } = requestWithId(
+    {
+      kind: 'process',
+      file,
+      presetId: chosenPreset(),
+      branding: {
+        opening: brandingOpening.checked,
+        closing: brandingClosing.checked,
+        style: chosenBranding('style', CLOSING_DEFAULTS.style),
+        colour: chosenBranding('colour', CLOSING_DEFAULTS.colour),
+        mode: chosenBranding('mode', CLOSING_DEFAULTS.mode),
       },
-      3_600_000,
-    )
-    cancel.addEventListener('click', () => {
-      cancel.disabled = true
-      setStatus('Cancelling…')
-      worker.postMessage({ kind: 'cancel', id: nextRequestId++, cancelId: id })
-    })
+      backgroundColour: brandBackground(),
+      ...(subtitleVtt ? { subtitleVtt } : {}),
+    },
+    3_600_000,
+  )
+  jobCancelId = id
+  setJobInFlight(true)
 
-    void promise
-      .then((reply) => {
-        if (reply.kind === 'processed') {
-          renderResult(
-            reply.file,
-            reply.jobId,
-            file.name,
-            reply.brandingApplied,
-            reply.brandingRequested,
-          )
-          renderWarnings(audioWarnings, reply.outputWarnings, {
-            heading: 'Worth knowing about the finished video',
-          })
-          setStatus('Your video is ready.')
-        } else if (reply.kind === 'cancelled') {
-          // Nothing was written anywhere the user can see, and the source is
-          // untouched — say so rather than leaving them wondering.
-          setStatus('Cancelled. Nothing was saved, and your original file is unchanged.')
-        } else if (reply.kind === 'failed') {
-          renderSourceError(processResult, reply.message)
-          setStatus('The video could not be created.')
-        }
-      })
-      .catch((cause: unknown) => {
-        renderSourceError(processResult, 'The job did not finish.')
-        log.error('ui', 'process request failed', {
-          reason: cause instanceof Error ? cause.message : String(cause),
+  void promise
+    .then((reply) => {
+      if (reply.kind === 'processed') {
+        renderResult(
+          reply.file,
+          reply.jobId,
+          file.name,
+          reply.brandingApplied,
+          reply.brandingRequested,
+        )
+        renderWarnings(audioWarnings, reply.outputWarnings, {
+          heading: 'Worth knowing about the finished video',
         })
+        setStatus('Your video is ready.')
+      } else if (reply.kind === 'cancelled') {
+        // Nothing was written anywhere the user can see, and the source is
+        // untouched — say so rather than leaving them wondering.
+        setStatus('Cancelled. Nothing was saved, and your original file is unchanged.')
+      } else if (reply.kind === 'failed') {
+        renderSourceError(processResult, reply.message)
+        setStatus('The video could not be created.')
+      }
+    })
+    .catch((cause: unknown) => {
+      renderSourceError(processResult, 'The job did not finish.')
+      log.error('ui', 'process request failed', {
+        reason: cause instanceof Error ? cause.message : String(cause),
       })
-      .finally(() => {
-        start.disabled = false
-        cancel.hidden = true
-        cancel.disabled = false
-        processProgress.hidden = true
-      })
-  })
+    })
+    .finally(() => {
+      jobCancelId = null
+      setJobInFlight(false)
+      processProgress.hidden = true
+    })
+})
 
-  processActions.append(start, cancel)
+// Bound once, here, rather than inside the Start handler — where it added
+// another listener on every Start click, so the second job posted two cancels
+// (VH-36).
+cancelButton.addEventListener('click', () => {
+  if (jobCancelId === null) return
+  cancelButton.disabled = true
+  setStatus('Cancelling…')
+  worker.postMessage({ kind: 'cancel', id: nextRequestId++, cancelId: jobCancelId })
+})
+
+/** Points the Start button at this file and reveals the controls. */
+function showProcessControls(file: File): void {
+  jobFile = file
+  processActions.hidden = false
 }
 
 function renderResult(
