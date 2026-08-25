@@ -178,3 +178,24 @@ everywhere, not a workaround for Chrome.
 The first real job on the deployed site worked. It also exposed two things the
 harness could not: the size estimate overstates by 3.6x (VH-31), and the
 interface needs a deliberate design pass rather than tweaks (VH-32).
+
+### All three engines verified — and they disagree
+
+Firefox 152 joined Chrome 151 and Safari 26.5.2 in decoding VP9 alpha through
+the app's own loader, so every closing mode works in every supported browser.
+
+The same runs found something worth more than the pass. Compositing the onset
+over white via `drawImage` returns 202 in Chrome and Safari but **255 in
+Firefox**: the engines disagree about whether a decoded frame's colour is
+premultiplied. 255 is the correct answer, so Firefox happens to be right — but
+a composite that is correct in one engine and double-darkened in the other two
+is unusable, and no `drawImage` call is portable. Doing the blend on the CPU in
+`composite.ts` was chosen when only Chrome had been measured; it turns out to
+be the only choice that produces the same picture everywhere.
+
+A smaller difference in the same output: asking for exactly t=0.40 s returned
+the neighbouring frame in Firefox. Invisible at 40 ms, but a reminder not to
+key logic off exact multiples of the frame period.
+
+The deployed site was also confirmed working on a University machine, so
+`github.io` is not filtered there — the last unknown in VH-14's technical half.

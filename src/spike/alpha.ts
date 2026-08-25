@@ -132,12 +132,17 @@ try {
 
   say(`  onset over white via drawImage -> R=${r}`)
   if (r !== undefined && r >= 250) {
-    say('  canvas composites PREMULTIPLIED — drawImage is correct, use the GPU')
+    say('  this engine composites PREMULTIPLIED (correct here)')
   } else if (r !== undefined && r >= 190 && r <= 215) {
-    say('  canvas composites STRAIGHT — drawImage double-darkens; use composite.ts')
+    say('  this engine composites STRAIGHT (double-darkens here)')
   } else {
-    say('  inconclusive — neither 255 nor ~202; inspect before choosing')
+    say(`  neither 255 nor ~202 — inspect before drawing any conclusion`)
   }
+  // Measured 2026-08-25: Chrome 151 and Safari 26.5 return 202, Firefox 152
+  // returns 255. The engines disagree, so NO drawImage call is portable and
+  // the answer here changes nothing — the blend stays in composite.ts.
+  say('  (engines disagree — Chrome/Safari 202, Firefox 255 — so we never')
+  say('   rely on drawImage for this; composite.ts does the blend itself)')
 } catch (error) {
   say(`  ERROR — ${error instanceof Error ? error.message : String(error)}`)
 }

@@ -203,9 +203,11 @@
       on a personal account is public, it would serve UoN branding from
       `djdaojones.github.io`, and D5 asked for a hosting decision from UoN IT.
       The trigger is `workflow_dispatch` only so that stays a decision.
-      Done when: the hosting question is answered, the site is reachable from a
-      managed University machine (github.io may be filtered — untested), and
-      the cache strategy for offline-after-first-load is in place.
+      Confirmed 2026-08-25: the deployed site loads and works on a University
+      machine, so `github.io` is not filtered. Public hosting accepted for an
+      unadvertised pilot; the intended home is an internal server.
+      Done when: the move to internal hosting is planned, and the cache
+      strategy for offline-after-first-load is in place.
 
 - [ ] **VH-15 Confirm the browser exclusion** [maintainer] [blocked: D4] (2026-08-24)
       Sign-off from UoN IT that Safari below 26 may be excluded. The one

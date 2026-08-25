@@ -16,12 +16,25 @@
  * fringe on every edge. It looks plausible, which is what makes it dangerous —
  * `compositePremultiplied` is unit-tested against exactly that mistake.
  *
- * Canvas `drawImage` cannot do this for us, which was measured rather than
- * assumed. Canvas composites in premultiplied space internally, but it treats
- * a decoded frame's colour as STRAIGHT, so it multiplies by alpha a second
- * time. Drawing the white onset (RGB 75, alpha 75) over white returns 202
- * where the correct answer is 255 — the exact straight-alpha value. So the
- * blend happens here, on the CPU, over the ~25 frames of the onset.
+ * Canvas `drawImage` cannot do this for us, and the reason is stronger than
+ * it first looked: **the browsers disagree with each other.** Drawing the
+ * white onset (RGB 75, alpha 75) over white was measured in all three
+ * supported engines:
+ *
+ *     Chrome 151    -> 202   treats the decoded colour as STRAIGHT
+ *     Safari 26.5   -> 202   treats the decoded colour as STRAIGHT
+ *     Firefox 152   -> 255   treats the decoded colour as PREMULTIPLIED
+ *
+ * 255 is the correct answer, so Firefox 152 happens to be right — but a
+ * composite that is correct in one engine and double-darkened in the other two
+ * is not usable at any price.
+ *
+ * Those are three point measurements on three versions, and that is the whole
+ * argument: whichever way a later release moves, behaviour we would have to
+ * re-measure per engine and per version cannot be depended on. The blend
+ * therefore happens HERE, on the CPU, over the ~25 frames of the onset. Doing
+ * the arithmetic ourselves is the only way the picture does not depend on
+ * which browser — or which build of it — the user happened to open.
  */
 
 import { VideoSample } from 'mediabunny'
