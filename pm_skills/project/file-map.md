@@ -15,13 +15,13 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 104 file(s) across 7 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 106 file(s) across 7 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 11 file(s)
 - `.claude` — 1 file(s)
 - `docs` — 5 file(s)
 - `public` — 9 file(s)
 - `scripts` — 2 file(s)
-- `src` — 72 file(s)
+- `src` — 74 file(s)
 - `test` — 4 file(s)
 <!-- /file-map-index -->
 
@@ -72,6 +72,7 @@
 
 - `src/acceptance/fixtures.ts` — Synthesised sources for the acceptance run, including paired A/V sync markers.
 - `src/acceptance/main.ts` — Entry point for the acceptance page. Development only; never built.
+- `src/acceptance/measure.test.ts` — Pins the drift estimator — an endpoint difference read the trend backwards.
 - `src/acceptance/measure.ts` — Sync by marker, loudness by region, and two independent egress instruments.
 - `src/acceptance/run.ts` — The spec 13 run: what is checked, and what is reported as needing a person.
 - `src/audio/analyse.test.ts` — Proves the facade measures the same thing the components do separately.
@@ -115,6 +116,7 @@
 - `src/media/capability.ts` — Device checks asked against the exact target config, not a generic capability flag.
 - `src/media/conform.test.ts` — Proves fit/pad never distorts, across 4:3, vertical and ultrawide sources.
 - `src/media/conform.ts` — Scale-to-fit and pad geometry, and the reusable frame scaler the pipeline and probe share.
+- `src/media/encoder-delay.ts` — Measures the audio encoder's own delay and shifts the timeline to cancel it.
 - `src/media/encoding.ts` — Mediabunny encoding configs derived from the presets; where VH-7's audio chain will hook in.
 - `src/media/framerate.test.ts` — Proves the rounding rule and that timestamps derive from the index so error cannot accumulate.
 - `src/media/framerate.ts` — CFR conform decisions: nearest standard rate, what conforming costs, and the timestamp grid.

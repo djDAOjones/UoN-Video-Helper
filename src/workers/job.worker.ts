@@ -19,13 +19,12 @@ import { detectOutputWarning, detectSourceWarnings, type AudioWarning } from '..
 import { TARGET_INTEGRATED_LUFS } from '../config/audio'
 import { analyseSourceAudio } from '../media/audio-plan'
 import { checkEncodeSupport, inspectCapabilities } from '../media/capability'
-import { ACCEPTED_FORMATS, UnreadableFileError, inspectFile } from '../media/inspect'
+import { UnreadableFileError, inspectFile, openInput } from '../media/inspect'
 import { OpfsWorkspace, sweepOrphanedJobs } from '../media/opfs'
 import { CancelledError, runPipeline } from '../media/pipeline'
 import { preflightVerdict, type PreflightSummary } from '../media/preflight'
 import { InvalidVttError } from '../media/vtt'
 import { calibrationProbe } from '../media/probe'
-import { BlobSource, Input } from 'mediabunny'
 import type { WorkerOutbound, WorkerRequest } from './protocol'
 
 const bootAt = performance.now()
@@ -135,7 +134,7 @@ async function handleProcess(
 
     workspace = await OpfsWorkspace.open(jobId)
     const result = await runPipeline({
-      input: new Input({ formats: ACCEPTED_FORMATS, source: new BlobSource(file) }),
+      input: openInput(file),
       shape,
       preset,
       durationSeconds: report.durationSeconds,
@@ -152,7 +151,7 @@ async function handleProcess(
     // answer it is to measure the finished file rather than trust the plan.
     const outputWarnings: AudioWarning[] = []
     try {
-      const check = new Input({ formats: ACCEPTED_FORMATS, source: new BlobSource(result.file) })
+      const check = openInput(result.file)
       const checkTrack = await check.getPrimaryAudioTrack()
       if (checkTrack) {
         const measured = await analyseSourceAudio(checkTrack)
@@ -273,7 +272,7 @@ async function handlePreflight(
     // Spec 5.4: derived from the analysis pass and shown BEFORE processing.
     // A lecturer who is told their recording is inaudible only after waiting
     // forty minutes has been told too late.
-    const audioInput = new Input({ formats: ACCEPTED_FORMATS, source: new BlobSource(file) })
+    const audioInput = openInput(file)
     const audioTrack = await audioInput.getPrimaryAudioTrack()
     const audioWarnings = detectSourceWarnings(
       audioTrack ? await analyseSourceAudio(audioTrack) : null,
@@ -282,7 +281,7 @@ async function handlePreflight(
     const probe =
       capability.hasWebCodecs && encode.supported
         ? await calibrationProbe({
-            input: new Input({ formats: ACCEPTED_FORMATS, source: new BlobSource(file) }),
+            input: openInput(file),
             shape,
             durationSeconds: report.durationSeconds,
           })

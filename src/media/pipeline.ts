@@ -19,6 +19,7 @@ import {
   TextSubtitleSource,
   VideoSampleSink,
   VideoSampleSource,
+  type AudioSample,
   type Input,
 } from 'mediabunny'
 
@@ -33,6 +34,7 @@ import {
   type BrandingClip,
 } from './branding'
 import { audioEncodingConfigFor, videoEncodingConfigFor } from './encoding'
+import { AudioTimelineShift, measureEncoderDelay } from './encoder-delay'
 import type { OpfsWorkspace } from './opfs'
 import { offsetVtt } from './vtt'
 
@@ -183,9 +185,18 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
   }
 
   let audioSource: AudioSampleSource | null = null
+  let timelineShift: AudioTimelineShift | null = null
   if (audioTrack && audioPlan) {
-    audioSource = new AudioSampleSource(audioEncodingConfigFor(preset, audioPlan.channelCount))
+    const audioConfig = audioEncodingConfigFor(preset, audioPlan.channelCount)
+    audioSource = new AudioSampleSource(audioConfig)
     output.addAudioTrack(audioSource)
+
+    // The encoder's own delay, cancelled by shifting the audio timeline
+    // earlier. Measured rather than assumed: it is a property of whichever
+    // encoder this browser provides, and applying a number we had not
+    // measured would be worse than leaving it alone.
+    const delaySeconds = await measureEncoderDelay(audioConfig)
+    timelineShift = new AudioTimelineShift(delaySeconds, audioPlan.channelCount)
   }
 
   // Spec 8.1: offset the timing, never the words. The offset is the opening
@@ -248,8 +259,20 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
   const feedAudio = async (): Promise<void> => {
     if (!audioTrack || !audioSource || !audioPlan) return
 
+    // Every sample fed to the encoder passes through the shift, so the whole
+    // timeline moves together — branding and content alike.
+    const emit = async (sample: AudioSample): Promise<void> => {
+      const shifted = timelineShift ? timelineShift.apply(sample, audioPlan.sampleRate) : sample
+      if (!shifted) return
+      try {
+        await audioSource.add(shifted)
+      } finally {
+        shifted.close()
+      }
+    }
+
     if (opening) {
-      await feedBrandingAudio(opening, audioSource, 0, { fadeIn: false, fadeOut: true }, signal)
+      await feedBrandingAudio(opening, emit, 0, { fadeIn: false, fadeOut: true }, signal)
     }
 
     const processContent = createContentAudioProcessor(audioPlan, {
@@ -268,21 +291,11 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
         sample.close()
       }
       if (!processed) continue
-      try {
-        await audioSource.add(processed)
-      } finally {
-        processed.close()
-      }
+      await emit(processed)
     }
 
     if (closing) {
-      await feedBrandingAudio(
-        closing,
-        audioSource,
-        closingOffset,
-        { fadeIn: true, fadeOut: false },
-        signal,
-      )
+      await feedBrandingAudio(closing, emit, closingOffset, { fadeIn: true, fadeOut: false }, signal)
     }
     audioSource.close()
   }

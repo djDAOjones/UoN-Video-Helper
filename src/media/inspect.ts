@@ -117,6 +117,17 @@ export interface SourceReport {
   readonly tracks: TrackScan
 }
 
+/**
+ * Opens a file for reading with the formats this tool accepts.
+ *
+ * One place, because every caller must use the same list: a reader that
+ * accepts more than the pipeline can process would let a file through
+ * inspection only to fail later.
+ */
+export function openInput(file: Blob): Input {
+  return new Input({ formats: ACCEPTED_FORMATS, source: new BlobSource(file) })
+}
+
 /** Raised when a file cannot be read at all, as opposed to being readable but unusable. */
 export class UnreadableFileError extends Error {
   override readonly name = 'UnreadableFileError'
@@ -153,7 +164,7 @@ export async function inspectFile(
   file: Blob,
   options: { readonly frameRateProbePackets?: number } = {},
 ): Promise<SourceReport> {
-  const input = new Input({ formats: ACCEPTED_FORMATS, source: new BlobSource(file) })
+  const input = openInput(file)
 
   let container: string
   try {

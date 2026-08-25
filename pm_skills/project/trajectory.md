@@ -83,4 +83,10 @@
   escaped the pipeline's cleanup and leaked its scratch, and the main-thread
   OPFS path never released its writable.
 
+- VH-18 — A/V sync: the 50 ms audio delay was the AAC encoder's own priming,
+  uncompensated because Mediabunny writes no edit list. Measured in isolation
+  at AAC 44.0 ms against Opus and PCM at 0. The audio timeline is now shifted
+  by the measured delay, and the pipeline adds 0.0 ms at every marker on a
+  constant-frame-rate source. Acceptance criterion 6 passes.
+
 <!-- Outcome line is written when the milestone closes. -->

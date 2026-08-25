@@ -23,9 +23,10 @@ export interface SyncMeasurement {
   readonly offsetsMs: readonly number[]
   readonly worstOffsetMs: number
   /**
-   * Change in offset from the first marker to the last, in milliseconds. This
-   * is the number that matters: a constant offset is a fixed delay, while a
-   * growing one is drift, and only the second gets worse with duration.
+   * Trend in the offset across the recording, in milliseconds, fitted across
+   * every marker rather than taken between the endpoints. This is the number
+   * that matters: a constant offset is a fixed delay, while a growing one is
+   * drift, and only the second gets worse with duration.
    */
   readonly driftMs: number
 }
@@ -50,9 +51,33 @@ export function relativeSync(source: SyncMeasurement, output: SyncMeasurement): 
   return {
     offsetsMs,
     worstOffsetMs: offsetsMs.reduce((worst, value) => Math.max(worst, Math.abs(value)), 0),
-    driftMs: offsetsMs.length >= 2 ? offsetsMs[offsetsMs.length - 1]! - offsetsMs[0]! : 0,
+    driftMs: fittedChange(offsetsMs),
     paired: pairs,
   }
+}
+
+/**
+ * Trend across a series, as the fitted change from first point to last.
+ *
+ * A least-squares slope rather than the difference of the endpoints. With
+ * frame quantisation scattering each point by up to half a frame period, an
+ * endpoint difference is decided by the noise at exactly two samples — on real
+ * data here it reported -16 ms where the fit through all twelve points
+ * reported +9 ms, which is both a different magnitude and a different sign.
+ */
+export function fittedChange(values: readonly number[]): number {
+  if (values.length < 2) return 0
+  const n = values.length
+  const meanX = (n - 1) / 2
+  const meanY = values.reduce((total, value) => total + value, 0) / n
+  let covariance = 0
+  let variance = 0
+  for (let i = 0; i < n; i++) {
+    covariance += (i - meanX) * (values[i]! - meanY)
+    variance += (i - meanX) ** 2
+  }
+  if (variance === 0) return 0
+  return (covariance / variance) * (n - 1)
 }
 
 /** Mean luminance of a frame, from a small downscale. */
@@ -122,10 +147,8 @@ export async function measureSync(file: Blob): Promise<SyncMeasurement> {
   }
 
   const worstOffsetMs = offsetsMs.reduce((worst, value) => Math.max(worst, Math.abs(value)), 0)
-  const driftMs =
-    offsetsMs.length >= 2 ? offsetsMs[offsetsMs.length - 1]! - offsetsMs[0]! : 0
 
-  return { videoMarkers, audioMarkers, offsetsMs, worstOffsetMs, driftMs }
+  return { videoMarkers, audioMarkers, offsetsMs, worstOffsetMs, driftMs: fittedChange(offsetsMs) }
 }
 
 /** Loudness of a whole file, or of one region of it. */

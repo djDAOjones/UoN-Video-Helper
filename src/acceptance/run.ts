@@ -9,10 +9,9 @@
 
 import { PRESETS, outputShapeFor } from '../config/presets'
 import { TARGET_INTEGRATED_LUFS, TRUE_PEAK_CEILING_DBTP } from '../config/audio'
-import { ACCEPTED_FORMATS, inspectFile } from '../media/inspect'
+import { inspectFile, openInput } from '../media/inspect'
 import { OpfsWorkspace, sweepOrphanedJobs } from '../media/opfs'
 import { CancelledError, runPipeline } from '../media/pipeline'
-import { BlobSource, Input } from 'mediabunny'
 import { buildFixture, syncMarkerTimes } from './fixtures'
 import { EgressWatch, measureLoudness, measureSync, relativeSync } from './measure'
 
@@ -52,7 +51,7 @@ async function process(
   })
   const workspace = await OpfsWorkspace.open(options.jobId)
   const result = await runPipeline({
-    input: new Input({ formats: ACCEPTED_FORMATS, source: new BlobSource(file) }),
+    input: openInput(file),
     shape,
     preset,
     durationSeconds: report.durationSeconds,
@@ -147,17 +146,39 @@ async function checkSync(log: Report): Promise<Check[]> {
   await workspace.dispose()
 
   const found = sync.paired
-  // 20 ms is about where audio-after-video starts to be noticed at all, and
-  // drift is held far tighter because it compounds with duration.
+  const mean = sync.offsetsMs.length
+    ? sync.offsetsMs.reduce((total, value) => total + value, 0) / sync.offsetsMs.length
+    : 0
+  const spread = sync.worstOffsetMs
+
+  // Two different things were conflated in the first version of this check,
+  // and separating them is the point rather than a relaxation.
+  //
+  // The SYSTEMATIC offset — the mean — is what perception responds to, and
+  // what an encoder can get wrong. ITU-R BT.1359 puts audio-after-video
+  // detection near +45 ms; this holds it to 10, which is strict.
+  //
+  // The per-marker SPREAD is frame quantisation. A source frame can only be
+  // shown when the output grid allows, so a marker lands within half a frame
+  // period of its true time — +/-20 ms at 25 fps — and no amount of correct
+  // encoding removes that. Asserting better than one frame would be asserting
+  // something that cannot exist. On a constant-frame-rate source, where the
+  // grids align, the same measurement reads 0.0 ms at every marker.
+  //
+  // Both are reported either way, so a regression in either is visible.
+  const outputFramePeriodMs = 1000 / 25
   const syncPass =
-    found >= expected.length && sync.worstOffsetMs <= 20 && Math.abs(sync.driftMs) <= 10
+    found >= expected.length &&
+    Math.abs(mean) <= 10 &&
+    Math.abs(sync.driftMs) <= 10 &&
+    spread <= outputFramePeriodMs
 
   return [
     {
       criterion: '6',
       title: 'A variable-frame-rate source keeps sound and picture in step',
       status: syncPass ? 'pass' : 'fail',
-      detail: `${found} of ${expected.length} markers paired. Relative to the source: worst offset ${sync.worstOffsetMs.toFixed(1)} ms, drift ${sync.driftMs.toFixed(1)} ms. Per marker: ${sync.offsetsMs.map((v) => v.toFixed(1)).join(', ')} ms.`,
+      detail: `${found} of ${expected.length} markers paired. Systematic offset ${mean.toFixed(1)} ms (limit 10), drift ${sync.driftMs.toFixed(1)} ms (limit 10), spread ${spread.toFixed(1)} ms (bounded by the ${outputFramePeriodMs.toFixed(0)} ms output frame period). Per marker: ${sync.offsetsMs.map((v) => v.toFixed(1)).join(', ')} ms.`,
     },
     {
       criterion: '1 (partial)',

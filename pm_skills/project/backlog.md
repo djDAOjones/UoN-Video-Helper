@@ -66,29 +66,6 @@
       Done when: either the tail is emitted as a final sample, or the loss is
       measured, judged acceptable, and recorded in the spec-facing notes.
 
-- [ ] **VH-18 A/V sync: audio runs about 50 ms late** [sign-off] (2026-08-25)
-      Intent: acceptance criterion 6 does not pass. The VH-11 harness places
-      paired markers — a white frame and an audio burst at the same instant —
-      and measures the output against the source, which cancels the fixture's
-      own frame quantisation.
-      Measured on a 60 s variable-frame-rate source, 12 of 12 markers paired:
-      offsets 56, 44, 50, 32, 40, 34, 62, 68, 65, 38, 68, 40 ms. Audio is
-      consistently LATE by roughly 50 ms, scattered about 36 ms, with no trend
-      across the recording (drift −16 ms).
-      Reading it: the scatter is consistent with output frame quantisation at
-      25 fps (40 ms), so the systematic part is the finding. ITU-R BT.1359 puts
-      the detection threshold for audio-after-video at about +45 ms, so this
-      sits right on the edge — plausibly noticeable on a talking head, and not
-      dismissable.
-      Suspects, in order: AAC encoder priming shifting the output audio track
-      (VH-8 found -21.3 ms of it on input); the chain's own latency
-      compensation; the muxer's edit-list handling.
-      Done when: the source is identified and the systematic offset is either
-      removed or shown to be a measurement artefact — and the harness's
-      criterion 6 check passes rather than being loosened to accommodate it.
-      Risks: the temptation here is to widen the threshold. 20 ms was chosen
-      from the perception literature, not from what the build happens to do.
-
 - [ ] **VH-19 Content-adaptive bitrate for the smaller preset**
       Intent: spec §6.2 sets ~1.5 Mbps for slides/screen and ~2.5 Mbps for
       camera/motion. `ContentClass` exists but nothing sets it, so every job

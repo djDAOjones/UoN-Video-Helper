@@ -19,7 +19,7 @@ import {
   Mp4InputFormat,
   VideoSample,
   VideoSampleSink,
-  type AudioSampleSource,
+  type AudioSample,
   type VideoSampleSource,
 } from 'mediabunny'
 
@@ -200,10 +200,14 @@ export async function feedBrandingVideo(
  *
  * Passed through untouched apart from the boundary fade — no high-pass, no
  * levelling, no compression. The bed is already at target.
+ *
+ * Emitted through a callback rather than added to the source directly, so the
+ * encoder-delay shift applies to branding and content alike. A bed that
+ * skipped it would sit at a different offset from the speech.
  */
 export async function feedBrandingAudio(
   clip: BrandingClip,
-  target: AudioSampleSource,
+  emit: (sample: AudioSample) => Promise<void>,
   offsetSeconds: number,
   fades: { readonly fadeIn: boolean; readonly fadeOut: boolean },
   signal: AbortSignal | undefined,
@@ -230,12 +234,7 @@ export async function feedBrandingAudio(
         fadeIn: fades.fadeIn,
         fadeOut: fades.fadeOut,
       })
-      const out = toSample(channels, sampleRate, offsetSeconds + relative)
-      try {
-        await target.add(out)
-      } finally {
-        out.close()
-      }
+      await emit(toSample(channels, sampleRate, offsetSeconds + relative))
     } finally {
       sample.close()
     }
