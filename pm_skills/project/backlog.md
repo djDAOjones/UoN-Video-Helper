@@ -19,9 +19,10 @@
 <!-- Committed. What a staff member meets on the deployed site today that is
      wrong, misleading, or a risk. The order is load-bearing. VH-34..VH-33 are
      small, severe and independent — a false published claim, data loss, an
-     uncancellable job, a brand risk — so they lead. VH-24 then settles the
-     output shape that VH-31 and VH-19 key off, and VH-32 is LAST because it
-     must lay out what everything above it decides.
+     uncancellable job, a wrong boundary, a brand risk — so they lead. VH-24,
+     VH-41, VH-31 and VH-19 are then ONE visit to the output shape and what we
+     claim about it, not a queue; VH-43 proves odd sources survive it. VH-32 is
+     LAST because it must lay out what everything above it decides.
      VH-34..VH-40 came from an external code review, 2026-08-25; its findings
      were verified against the source before being written up. -->
 
@@ -64,6 +65,19 @@
       cancel survives any re-render, and the listener is bound once. VH-32
       inherits the state model rather than re-deciding it.
 
+- [ ] **VH-42 The closing keys off the wrong duration** (2026-08-25)
+      Intent: split from VH-24. `pipeline.ts:289` derives `overlayFrom` from
+      `durationSeconds`, which `inspect.ts:287` sets to `max(video, audio)`. So
+      audio running more than a second past the picture silently composites no
+      build at all — `sourceTime` never reaches the overlay point — and the same
+      figure opens a video gap before the closing. A source shorter than the
+      1.00 s build computes a negative start (inherited from VH-22 on its close).
+      Both are the same defect: a branding boundary measured against a duration
+      that is not the picture's.
+      Done when: the boundary keys off the video duration, a source shorter than
+      the build degrades to `over-freeze` and says so rather than erroring, and
+      an audio-longer-than-video fixture proves the build still composites.
+
 - [ ] **VH-33 Withdraw the opening control until real assets exist** (2026-08-25)
       Intent: split from VH-23. The live site still shows "Add the opening
       sequence" over a generated placeholder; only helper text stands between a
@@ -74,32 +88,26 @@
       off, the pipeline's opening path is left intact for VH-23, and spec §4.1's
       two-toggle model is recorded as diverged (the doc-delta already exists).
 
-- [ ] **VH-24 Survive real-world source properties** [detail](tickets/VH-24.md) (2026-08-25)
-      Intent: awkward input is the common case. All eight frame-rate anomalies
-      trace to one tool (PowerPoint, writing a nominal 30 fps as 1000/33), and
-      Teams is 16.000 fps CFR, so neither produces the VFR the conform path was
-      built for. Reading the rate is already correct — verified against a real
-      file, the app measures 30.3030 and ignores the declared 30/1. What remains
-      is the SNAPPING: `STANDARD_FRAME_RATES` is literally `[24, 25, 30, 50, 60]`,
-      so 16 fps rounds up to 24, duplicating 50% of frames for no benefit
-      (spec §6.3 delta). Plus two files with no audio, one mono, one PCM, mixed
-      sample rates, and one at 16:10.
-      Done when: low rates stop snapping upward; **`outputShapeFor` gains a
-      never-exceed-source bitrate guard**, without which "Smaller file" asks for
-      2.50 Mbps on a 1.006 Mbps Teams recording and inflates it (spec §6.2
-      delta); odd geometry survives without distortion; mono, PCM and
-      16/44.1 kHz sources all reach a correct output; **`overlayFrom` stops
-      keying off the wrong duration** — `pipeline.ts:289` derives it from
-      `durationSeconds`, which `inspect.ts:287` sets to `max(video, audio)`, so
-      audio running more than a second past the picture silently composites no
-      build at all and opens a video gap before the closing, while a source
-      shorter than the 1.00 s build computes a negative start (the VH-22
-      inheritance); and each is exercised by a named fixture.
-      Note: a mono source plus an opening also mixes channel counts into one
-      track — the encoder is configured from the source (`pipeline.ts:235`)
-      while `feedBrandingAudio` emits at the clip's own count, and the opening
-      placeholders are stereo. Latent only: VH-33 removes the control, and the
-      real masters are silent by decision.
+- [ ] **VH-24 Stop conforming low frame rates upward** [detail](tickets/VH-24.md)
+      (2026-08-25)
+      Intent: `STANDARD_FRAME_RATES` holds the five values 24, 25, 30, 50 and
+      60, and the rule rounds to the nearest, so the Teams recording's 16.000 fps
+      becomes 24 — half the output frames duplicated for no visible benefit
+      (spec §6.3, reconciled 2026-08-25). Reading the rate is already correct:
+      the app measures 30.3030 on a real PowerPoint export and ignores its
+      declared 30/1, so this is the snapping alone.
+      Done when: a source below the lowest standard rate conforms to its own
+      measured rate, `conformCost` reports the change honestly, and the Teams
+      fixture and a 30.303 fps fixture both prove it.
+
+- [ ] **VH-41 "Smaller file" can be bigger than the source** (2026-08-25)
+      Intent: split from VH-24. `outputShapeFor` has no never-exceed-source
+      guard, so the preset named for making files smaller asks 2.50 Mbps of a
+      Teams recording carrying 1.006 Mbps at 1920×1080, and inflates it. Spec
+      §6.2 now states the cap (reconciled 2026-08-25); nothing implements it.
+      Done when: the requested video bitrate is capped at the source's measured
+      bitrate, the Teams fixture comes out no larger than it went in, and the
+      cap is visible in the estimate rather than applied silently.
 
 - [ ] **VH-31 The size estimate is ~3.6x too high** [detail](tickets/VH-31.md)
       (2026-08-25)
@@ -125,6 +133,22 @@
       the user in plain language rather than applied silently. Sequenced after
       VH-31 because it rides the same probe machinery; if VH-31 lands real
       measurement, this may reduce to naming the class rather than choosing on it.
+
+- [ ] **VH-43 Odd source shapes reach a correct output** (2026-08-25)
+      Intent: split from VH-24, and mostly verification rather than known
+      breakage. Evidence and fixtures are in `tickets/VH-24.md`, which stayed
+      whole as the shared corpus characterisation. The corpus carries one mono
+      source, one PCM `.mov`, sample rates split nine/nine between 44.1 and
+      48 kHz, three files at 852×480 (not 854, awkward for chroma subsampling),
+      one at 640×480, and one 3840×2400 — 16:10, not 16:9, which the branding
+      composite has never been fed.
+      Done when: each reaches a correct output without distortion or resampling
+      artefacts, and each is pinned by a named fixture.
+      Note: a mono source plus an opening also mixes channel counts into one
+      track — the encoder is configured from the source (`pipeline.ts:235`) while
+      `feedBrandingAudio` emits at the clip's own count, and the opening
+      placeholders are stereo. Latent only: VH-33 removes the control and the
+      real masters are silent by decision, so fix it here or record it as closed.
 
 - [ ] **VH-25 Boundary fades** [detail](tickets/VH-25.md) (2026-08-25)
       Intent: sources cut hard into the branding, and the two ends differ.
