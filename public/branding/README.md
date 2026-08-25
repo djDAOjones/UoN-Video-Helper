@@ -25,8 +25,13 @@ Total 0.74 MB for all twelve. The tails measure PSNR 63 dB / SSIM 0.9999
 against the masters, so CRF 18 is visually lossless on this content.
 
 Verify alpha decode in a browser by serving the app and opening
-`/spike-alpha.html`. It reports pass/fail per asset. Chromium passes; Safari
-and Firefox are unverified.
+`/spike-alpha.html`. It reports pass/fail per asset.
+
+**Chrome 151 and Safari 26.5.2 both pass** (2026-08-25), including through the
+app's own loader — so all three closing modes work in both. Firefox is still
+unverified. Both browsers also independently report `drawImage -> R=202`,
+confirming that treating our premultiplied colour as straight is standard
+canvas behaviour rather than one engine's quirk.
 
 ## The opening placeholders (still in use)
 

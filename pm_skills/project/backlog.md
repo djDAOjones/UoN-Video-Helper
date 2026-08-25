@@ -104,6 +104,12 @@
       frame, not the last decoded one.
 
 - [ ] **VH-23 Opening graphics** (2026-08-25)
+      Now urgent-ish rather than purely deferred: the site is public, and the
+      opening toggle defaulted ON with only a generated placeholder behind it,
+      so a real video could have shipped carrying a stand-in UoN graphic. It
+      now defaults OFF and says what it is. Consider removing the control
+      entirely until real assets exist — a public tool offering an unapproved
+      brand asset is a brand risk, not just an unfinished feature.
       Intent: there are no opening assets and the maintainer's position is that
       there should not be yet — brand-recognition-first openings suit external
       video, while this tool is primarily internal, where a closing is the norm.
@@ -122,6 +128,29 @@
       audio-starts-mid-speech case — a notice that fires every time is not a
       notice. Lengths live in `src/config/`; D3's 100 ms fade is reconciled
       with them.
+
+- [ ] **VH-32 Interface quality pass** [detail](tickets/VH-32.md) (2026-08-25)
+      Intent: maintainer request after using the deployed app — a deliberate
+      design pass, not a bug list. The screen accretes rather than progresses
+      (the finished state looks like the working state with more underneath),
+      speaks in codecs rather than outcomes, disables controls that still look
+      live, and never shows moving picture despite being a video tool. The
+      plain-language framing and the never-uploaded reassurance are already
+      right and should survive.
+      Done when: a considered redesign is agreed and implemented, reviewed
+      against `UI-STANDARDS.md` §6.
+
+- [ ] **VH-31 The size estimate is ~3.6x too high** [detail](tickets/VH-31.md)
+      (2026-08-25)
+      Intent: the app said 27.7 MB and produced 7.5 MB on the first real file
+      anyone ran. `projectedOutputBytes` assumes the encoder spends its whole
+      bitrate budget; VBR undershoots badly on slide content. It is shown
+      before the user commits, so it is the number they decide on — someone
+      watching a OneDrive limit may pick "Smaller file" they did not need. It
+      also feeds VH-13's published limits, which would inherit the error.
+      Done when: the estimate is grounded in the real content — the calibration
+      probe already decodes three seconds and could encode them — or is
+      presented honestly as an upper bound.
 
 - [ ] **VH-30 Trim the source** [detail](tickets/VH-30.md) (2026-08-25)
       Intent: maintainer request. Recordings carry material nobody wants — the

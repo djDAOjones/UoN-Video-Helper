@@ -59,9 +59,13 @@
         <fieldset class="choice" id="branding-choice" hidden>
           <legend class="label">Branding</legend>
           <label class="radio">
-            <input type="checkbox" id="branding-opening" checked />
+            <input type="checkbox" id="branding-opening" aria-describedby="branding-opening-help" />
             <span>Add the opening sequence</span>
           </label>
+          <p class="helper" id="branding-opening-help">
+            Not yet available — the opening is a stand-in graphic, not an approved University
+            sequence. Leave this off unless you are testing.
+          </p>
           <label class="radio">
             <input type="checkbox" id="branding-closing" checked />
             <span>Add the closing sequence</span>

@@ -160,3 +160,21 @@ decode, all three modes produce their promised timelines (+3.97, +3.97, +4.97
 against 4/4/5), and the build is fetched only for the modes that composite it —
 duration alone would not have caught a silent fallback. Safari and Firefox
 remain unverified; `/spike-alpha.html` exists so that check is one URL.
+
+### Deployed, and verified in the browsers that mattered
+
+The app went live at `djdaojones.github.io/UoN-Video-Helper/` on 2026-08-25 as
+an unadvertised pilot; the intended home is an internal server. The WebCodecs
+decision is what made GitHub Pages viable at all — no `SharedArrayBuffer`
+means no COOP/COEP headers, which Pages cannot set.
+
+Chrome 151 and Safari 26.5.2 both decode VP9 alpha, through the app's own
+loader, so all three closing modes work in both. Firefox is still unchecked.
+Both browsers independently return `drawImage -> R=202` on the premultiplied
+onset, confirming that treating that colour as straight is standard canvas
+behaviour rather than one engine's quirk — the CPU composite is necessary
+everywhere, not a workaround for Chrome.
+
+The first real job on the deployed site worked. It also exposed two things the
+harness could not: the size estimate overstates by 3.6x (VH-31), and the
+interface needs a deliberate design pass rather than tweaks (VH-32).
