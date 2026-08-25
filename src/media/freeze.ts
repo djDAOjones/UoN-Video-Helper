@@ -21,6 +21,8 @@
  * and the result is still a reasonable frame rather than a broken one.
  */
 
+import type { VideoSample, VideoSampleSink } from 'mediabunny'
+
 /** How far back to look. Beyond this the freeze stops matching what preceded it. */
 export const CLEAN_FRAME_SEARCH_SECONDS = 0.5
 
@@ -87,6 +89,58 @@ export function pickCleanFrameIndex(lumas: readonly number[]): number {
     if (Math.abs(lumas[i]! - reference) <= CLEAN_FRAME_TOLERANCE) return i
   }
   return lumas.length - 1
+}
+
+/**
+ * Finds the frame to freeze at the end of a track.
+ *
+ * Walks back from `endSeconds` using random access rather than buffering: a
+ * ring of candidate frames would cost 33 MB each at 4K, and the search only
+ * needs their brightness. Luma is measured on a deliberately tiny canvas —
+ * this is a whole-frame average, so resolution buys nothing.
+ *
+ * @returns The chosen sample, which the caller owns and must close, or `null`
+ *   if the track yielded nothing in the window.
+ */
+export async function findFreezeFrame(
+  sink: VideoSampleSink,
+  endSeconds: number,
+  frameRate: number,
+): Promise<VideoSample | null> {
+  const step = 1 / frameRate
+  const count = Math.max(1, Math.round(CLEAN_FRAME_SEARCH_SECONDS * frameRate))
+
+  const canvas = new OffscreenCanvas(32, 18)
+  const context = canvas.getContext('2d', { willReadFrequently: true })
+  if (!context) throw new Error('Could not get a 2d context to measure frames')
+
+  // Oldest first, so the index that `pickCleanFrameIndex` returns lines up
+  // with presentation order.
+  const candidates: { sample: VideoSample; luma: number }[] = []
+  for (let i = count - 1; i >= 0; i--) {
+    const at = endSeconds - i * step
+    if (at < 0) continue
+    const sample = await sink.getSample(at)
+    if (!sample) continue
+    // The same frame can answer two nearby timestamps on a low-rate source;
+    // keeping both would weight it twice in the median.
+    if (candidates.at(-1)?.sample.timestamp === sample.timestamp) {
+      sample.close()
+      continue
+    }
+    context.clearRect(0, 0, canvas.width, canvas.height)
+    sample.draw(context, 0, 0, canvas.width, canvas.height)
+    const { data } = context.getImageData(0, 0, canvas.width, canvas.height)
+    candidates.push({ sample, luma: meanLuma(data) })
+  }
+
+  if (candidates.length === 0) return null
+
+  const chosen = pickCleanFrameIndex(candidates.map((entry) => entry.luma))
+  for (const [index, entry] of candidates.entries()) {
+    if (index !== chosen) entry.sample.close()
+  }
+  return candidates[chosen]!.sample
 }
 
 /** Mean luma of an RGBA buffer, using Rec. 709 coefficients. */

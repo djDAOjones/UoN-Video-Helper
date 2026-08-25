@@ -24,6 +24,14 @@ import {
 } from 'mediabunny'
 
 import { log } from '../core/logger'
+import {
+  CLOSING_DEFAULTS,
+  CLOSING_ONSET_SECONDS,
+  modeNeedsOnset,
+  type BrandingColour,
+  type BrandingMode,
+  type BrandingStyle,
+} from '../config/branding'
 import type { OutputShape, Preset } from '../config/presets'
 import { createContentAudioProcessor, planAudio } from './audio-plan'
 import {
@@ -31,8 +39,12 @@ import {
   feedBrandingAudio,
   feedBrandingVideo,
   loadBrandingClip,
+  loadClosingOnset,
   type BrandingClip,
 } from './branding'
+import { BrandingCompositor } from './composite'
+import { fitRectangle } from './conform'
+import { findFreezeFrame } from './freeze'
 import { audioEncodingConfigFor, videoEncodingConfigFor } from './encoding'
 import { AudioTimelineShift, measureEncoderDelay } from './encoder-delay'
 import type { OpfsWorkspace } from './opfs'
@@ -65,14 +77,30 @@ export class CancelledError extends Error {
   }
 }
 
+/** `exactOptionalPropertyTypes` makes an explicit `undefined` an error here. */
+function colourOption(branding: {
+  readonly colour?: BrandingColour
+}): { readonly colour?: BrandingColour } {
+  return branding.colour ? { colour: branding.colour } : {}
+}
+
 export interface PipelineOptions {
   readonly input: Input
   readonly shape: OutputShape
   readonly preset: Preset
   readonly durationSeconds: number
   readonly workspace: OpfsWorkspace
-  /** Spec 4.1: two independent toggles, giving all four combinations. */
-  readonly branding: { readonly opening: boolean; readonly closing: boolean }
+  /**
+   * Spec 4.1's two toggles, plus the closing's own choices (VH-12, VH-22).
+   * Style, colour and mode fall back to `CLOSING_DEFAULTS` when unset.
+   */
+  readonly branding: {
+    readonly opening: boolean
+    readonly closing: boolean
+    readonly style?: BrandingStyle
+    readonly colour?: BrandingColour
+    readonly mode?: BrandingMode
+  }
   /** Resolved D1 brand background; the worker has no document to read it from. */
   readonly backgroundColour: string
   /**
@@ -141,13 +169,36 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     ? await loadBrandingClip('opening', shape)
     : null
   const closing: BrandingClip | null = branding.closing
-    ? await loadBrandingClip('closing', shape)
+    ? await loadBrandingClip('closing', shape, colourOption(branding))
     : null
+
+  // The build is only fetched for the modes that composite it. If it fails to
+  // load, the job degrades to a hard cut rather than losing branding entirely
+  // — which is what keeps an alpha-decode failure a degradation, not an
+  // outage (VH-12).
+  const requestedMode = branding.mode ?? CLOSING_DEFAULTS.mode
+  const build: BrandingClip | null =
+    closing && modeNeedsOnset(requestedMode)
+      ? await loadClosingOnset(shape, {
+          ...(branding.style ? { style: branding.style } : {}),
+          ...(branding.colour ? { colour: branding.colour } : {}),
+        })
+      : null
+  const mode: BrandingMode = build ? requestedMode : 'hard-cut'
+  if (build === null && modeNeedsOnset(requestedMode)) {
+    log.warn('branding', 'no build available; falling back to a hard cut', {
+      requestedMode,
+    })
+  }
 
   const openingSeconds = opening?.durationSeconds ?? 0
   const closingSeconds = closing?.durationSeconds ?? 0
+  // Only the freeze adds time of its own: it holds a frame under the build.
+  // "over picture" plays the build across source that was going to be there
+  // anyway, so it costs nothing.
+  const freezeSeconds = mode === 'over-freeze' ? CLOSING_ONSET_SECONDS : 0
   const contentOffset = openingSeconds
-  const closingOffset = openingSeconds + durationSeconds
+  const closingOffset = openingSeconds + durationSeconds + freezeSeconds
 
   const outputFile = await workspace.createFile(`output-${preset.id}.mp4`)
 
@@ -215,7 +266,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     options = { ...options, subtitleVtt: offset.text }
   }
 
-  const timelineSeconds = openingSeconds + durationSeconds + closingSeconds
+  const timelineSeconds = openingSeconds + durationSeconds + freezeSeconds + closingSeconds
   const expectedFrames = Math.max(1, Math.round(timelineSeconds * shape.frameRate))
   let framesFed = 0
 
@@ -228,6 +279,21 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     if (opening) await feedBrandingVideo(opening, videoSource, 0, renderer, signal)
 
     const sink = new VideoSampleSink(videoTrack)
+
+    const buildTrack = build ? await build.input.getPrimaryVideoTrack() : null
+    const buildSink = buildTrack ? new VideoSampleSink(buildTrack) : null
+    const compositor = buildSink ? new BrandingCompositor(shape) : null
+    // The build is authored 16:9. A source of another shape gets it centred
+    // rather than stretched; whatever it does not cover stays transparent, so
+    // the picture shows through there.
+    const buildFit = buildTrack
+      ? fitRectangle({ width: buildTrack.displayWidth, height: buildTrack.displayHeight }, shape)
+      : null
+    const canComposite = compositor !== null && buildSink !== null && buildFit !== null
+
+    /** Where the build starts, in source time, for `over-picture`. */
+    const overlayFrom = durationSeconds - CLOSING_ONSET_SECONDS
+
     // Mediabunny's transform normalises the whole stream to a constant frame
     // rate, so the branding and the content land on one regular grid however
     // variable the source was.
@@ -237,18 +303,78 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     // negative first timestamp — and with no opening sequence the offset is
     // zero, so an unnormalised negative timestamp would be rejected outright.
     let contentOrigin: number | null = null
+    let lastTrackTimestamp = 0
     for await (const sample of sink.samples()) {
       throwIfAborted(signal)
       try {
-        contentOrigin ??= sample.timestamp
-        sample.setTimestamp(contentOffset + Math.max(0, sample.timestamp - contentOrigin))
-        await videoSource.add(sample)
+        // Read before `setTimestamp`, which mutates the sample in place.
+        const original = sample.timestamp
+        contentOrigin ??= original
+        lastTrackTimestamp = original
+        const sourceTime = Math.max(0, original - contentOrigin)
+        const timestamp = contentOffset + sourceTime
+        const buildTime = sourceTime - overlayFrom
+
+        if (mode === 'over-picture' && canComposite && buildTime >= 0) {
+          // Paired by TIMESTAMP, never by frame order. The build runs at
+          // 25 fps and the source at whatever it was recorded at — 16 fps on
+          // a Teams capture — so counting frames would drift them apart.
+          const brand = await buildSink.getSample(buildTime)
+          if (brand) {
+            const composed = compositor.compose(sample, brand, buildFit, {
+              timestamp,
+              duration: sample.duration,
+            })
+            try {
+              await videoSource.add(composed)
+            } finally {
+              composed.close()
+              brand.close()
+            }
+          } else {
+            sample.setTimestamp(timestamp)
+            await videoSource.add(sample)
+          }
+        } else {
+          sample.setTimestamp(timestamp)
+          await videoSource.add(sample)
+        }
       } finally {
         sample.close()
       }
       framesFed++
       if (framesFed % 30 === 0) {
         onProgress?.({ stage: 'encoding', fraction: Math.min(0.98, framesFed / expectedFrames) })
+      }
+    }
+
+    // `over-freeze` holds the last clean frame while the build runs over it,
+    // so nothing the source showed is ever covered.
+    if (mode === 'over-freeze' && canComposite) {
+      const frozen = await findFreezeFrame(sink, lastTrackTimestamp, shape.frameRate)
+      if (frozen) {
+        try {
+          const step = 1 / shape.frameRate
+          const held = Math.round(CLOSING_ONSET_SECONDS * shape.frameRate)
+          for (let index = 0; index < held; index++) {
+            throwIfAborted(signal)
+            const brand = await buildSink.getSample(index * step)
+            if (!brand) continue
+            const composed = compositor.compose(frozen, brand, buildFit, {
+              timestamp: contentOffset + durationSeconds + index * step,
+              duration: step,
+            })
+            try {
+              await videoSource.add(composed)
+            } finally {
+              composed.close()
+              brand.close()
+            }
+            framesFed++
+          }
+        } finally {
+          frozen.close()
+        }
       }
     }
 
