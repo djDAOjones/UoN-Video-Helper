@@ -10,6 +10,12 @@
 
 ### Current milestone — MVP (Band 0, local, no deploy)
 
+<!-- The band signed off on 2026-08-24 was VH-1..VH-11 plus VH-M1 and VH-M2.
+     All of those are done. Everything below was found while building them and
+     sits BEYOND that ceiling — except VH-18, which is spec §13 criterion 6 and
+     so belongs to the original definition of done. Anything else here needs a
+     new sign-off before it is built. -->
+
 <!-- A file goes in; a branded, correctly-levelled, correctly-encoded MP4
      comes out, through a UI a novice can finish. Built in this order:
      the meter is proved before anything depends on it. -->
@@ -100,14 +106,6 @@
       the CFR grid plus a safe margin and verified on a real SharePoint upload,
       or the current behaviour is confirmed adequate and the reason recorded.
       Scope: `'in-memory'` is not an option — it reinstates the memory ceiling.
-
-- [ ] **VH-16 Fixture generator**
-      Intent: `npm run fixtures` — the synthetic corpus VH-11 verifies against
-      and VH-4's unverified cases need. Named in `DEV-INFRASTRUCTURE.md` but
-      not yet written.
-      Done when: a script produces slide-like frames with fine text, a
-      variable-level speech bed, a deliberately variable-frame-rate clip, a 4:3
-      source, and a rotated source; output is gitignored and reproducible.
 
 - [ ] **VH-M2 Measure the device envelope** [maintainer] (2026-08-24)
       Intent: spec §7.4 — published limits come from measurement, and this
