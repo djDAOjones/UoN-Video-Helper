@@ -41,13 +41,12 @@
       all three engines — probed at startup against a known branding frame, the
       shape `capability.ts` already uses, refusing the overlay modes loudly if
       no route matches — and a regression test pins the expected RGBA per route.
-      Note: VH-45 withdrew both controls from the code on 2026-08-25, so every
-      job now takes the hard cut and nothing reaches the broken path — but the
-      Pages workflow is `workflow_dispatch` only (VH-14), so THE DEPLOYED SITE
-      STILL OFFERS THEM until someone dispatches a deploy. That is the action
-      that closes the exposure. Even then it is a holding action, not the fix:
-      restoring the two modes to the UI is part of this item, and spec §4.1
-      carries a doc-delta until it happens.
+      Note: the live exposure is closed. VH-45 withdrew both controls on
+      2026-08-25 and the push deployed itself, verified on the deployed site —
+      no mode or style inputs remain in the DOM, so every job takes the hard
+      cut. That is a holding action, not the fix: restoring the two modes to
+      the UI is part of this item, and spec §4.1 carries a doc-delta until it
+      happens.
 
 - [ ] **VH-35 A second tab deletes the first tab's work** (2026-08-25)
       Intent: `sweepOrphanedJobs()` is called at worker boot with no arguments
@@ -342,15 +341,18 @@
       Intent: GitHub Pages is technically viable and the build is ready for it
       — the app needs no COOP/COEP headers (nothing uses SharedArrayBuffer),
       which is the usual thing that rules Pages out, and asset URLs now derive
-      from `import.meta.env.BASE_URL` so a `/<repo>/` subpath works. A manual
-      workflow exists at `.github/workflows/deploy-pages.yml`.
+      from `import.meta.env.BASE_URL` so a `/<repo>/` subpath works. The
+      workflow lives at `.github/workflows/deploy-pages.yml`.
       What is NOT settled is whether it should be published there: a Pages site
       on a personal account is public, it would serve UoN branding from
       `djdaojones.github.io`, and D5 asked for a hosting decision from UoN IT.
-      The trigger is `workflow_dispatch` only so that stays a decision.
       Confirmed 2026-08-25: the deployed site loads and works on a University
       machine, so `github.io` is not filtered. Public hosting accepted for an
       unadvertised pilot; the intended home is an internal server.
+      **Every push to `main` deploys** — the workflow carries
+      `push: branches: [main]` as well as `workflow_dispatch`, added by the
+      session that accepted public hosting. This item said the opposite until
+      2026-08-25; nothing here is a separate act of publishing.
       Done when: the move to internal hosting is planned, and the cache
       strategy for offline-after-first-load is in place.
 
