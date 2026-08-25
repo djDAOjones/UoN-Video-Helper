@@ -28,15 +28,14 @@ Verify alpha decode in a browser by serving the app and opening
 `/spike-alpha.html`. It reports pass/fail per asset. Chromium passes; Safari
 and Firefox are unverified.
 
-## The placeholders (still in use)
+## The opening placeholders (still in use)
 
-**The app still loads these**, because the code that selects and composites the
-new two-part assets is not written yet. They stay until that lands, so the
-build never references a file that is not there.
+Only the `opening-*` files remain, and only because opening sequences are
+deferred (VH-23) — no real opening assets exist. The closing placeholders were
+deleted once the real assets replaced them.
 
 **These are placeholders.** They exist so the pipeline can be built and tested
-before the approved UoN sequences are rendered, and so those renders drop in
-without any code change.
+before approved opening sequences are rendered.
 
 | File | Variant | Duration |
 | --- | --- | --- |
@@ -44,26 +43,28 @@ without any code change.
 | `opening-1080p30.mp4` | 1920×1080, 30 fps | 5 s |
 | `opening-2160p25.mp4` | 3840×2160, 25 fps | 5 s |
 | `opening-2160p30.mp4` | 3840×2160, 30 fps | 5 s |
-| `closing-*` | as above | 4 s |
 
-## Replacing them with the real thing
+## When real opening assets arrive
 
-Render from the After Effects source to the four variants in spec §4.2 —
-H.264 MP4, High profile, visually lossless, ~20 Mbps — keep these filenames,
-and overwrite. Nothing else changes.
+Do NOT follow the closing pattern blindly, and do not assume this section is
+still right — it describes the model the closings were expected to use, and the
+real closings did not use it. Re-measure first.
 
-Two requirements that are easy to miss:
+What the closings actually turned out to need, and openings probably will too:
 
-- **The audio bed must be mastered at −16 LUFS integrated**, because it passes
-  through the app **unprocessed** (spec §4.4). Whatever level the file carries
-  is the level the viewer hears next to the levelled speech. The placeholders
-  measure −15.99 (opening) and −15.61 (closing).
-- **Both frame rates are rendered from the source**, not converted from one
-  another. That is the whole reason there are four files rather than two: a
-  frame-rate conversion would judder on motion.
+- **A build-time transcode**, because After Effects masters are `qtrle`/`argb`
+  and no browser decodes that. `scripts/build-branding.mjs` is the pattern.
+- **One master, scaled at runtime**, rather than a rendered variant per
+  resolution and frame rate. Only one was ever delivered for the closings.
+- **The premultiplied composite**, if the opening has a transparent build. See
+  `src/media/composite.ts`; canvas `drawImage` gets this wrong.
+- **No audio bed.** Spec §4.4 requires one mastered at −16 LUFS; the real
+  closings have no audio at all, which the maintainer confirms is intended.
+  The opening placeholders still carry a bed, measuring −15.99.
 
-Durations are open decision D2 (5 s / 4 s, unconfirmed). If they change, update
-`BRANDING_DURATIONS` in `src/config/branding.ts` — nothing else hard-codes them.
+Opening durations are open decision D2 (5 s, unconfirmed). If that changes,
+update `BRANDING_DURATIONS` in `src/config/branding.ts` — nothing else
+hard-codes it.
 
 ## Regenerating the placeholders
 

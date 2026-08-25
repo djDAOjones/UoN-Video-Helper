@@ -66,6 +66,47 @@
             <input type="checkbox" id="branding-closing" checked />
             <span>Add the closing sequence</span>
           </label>
+          <details class="disclosure" id="branding-options">
+            <summary class="disclosure-summary">Closing sequence options</summary>
+            <fieldset class="choice" id="branding-mode-choice">
+              <legend class="label">How the logo arrives</legend>
+              <label class="radio">
+                <input type="radio" name="branding-mode" value="hard-cut" checked />
+                <span>Hard cut — the video cuts straight to the finished logo</span>
+              </label>
+              <label class="radio">
+                <input type="radio" name="branding-mode" value="over-picture" />
+                <span>Over the picture — the logo animates in over your closing second</span>
+              </label>
+              <label class="radio">
+                <input type="radio" name="branding-mode" value="over-freeze" />
+                <span>Over a freeze frame — your last frame holds while the logo animates in</span>
+              </label>
+            </fieldset>
+            <fieldset class="choice" id="branding-style-choice">
+              <legend class="label">Animation</legend>
+              <label class="radio">
+                <input type="radio" name="branding-style" value="fade" checked />
+                <span>Fade</span>
+              </label>
+              <label class="radio">
+                <input type="radio" name="branding-style" value="slide" />
+                <span>Slide</span>
+              </label>
+              <p class="helper" id="branding-style-help"></p>
+            </fieldset>
+            <fieldset class="choice">
+              <legend class="label">Colour</legend>
+              <label class="radio">
+                <input type="radio" name="branding-colour" value="blue" checked />
+                <span>Blue</span>
+              </label>
+              <label class="radio">
+                <input type="radio" name="branding-colour" value="white" />
+                <span>White</span>
+              </label>
+            </fieldset>
+          </details>
         </fieldset>
         <fieldset class="choice" id="preset-choice" hidden>
           <legend class="label">What is this video for</legend>

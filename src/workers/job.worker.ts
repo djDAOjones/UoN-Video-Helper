@@ -17,6 +17,7 @@ import {
 } from '../config/presets'
 import { detectOutputWarning, detectSourceWarnings, type AudioWarning } from '../audio/warnings'
 import { TARGET_INTEGRATED_LUFS } from '../config/audio'
+import type { BrandingChoice } from '../config/branding'
 import { analyseSourceAudio } from '../media/audio-plan'
 import { checkEncodeSupport, inspectCapabilities } from '../media/capability'
 import { UnreadableFileError, inspectFile, openInput } from '../media/inspect'
@@ -109,7 +110,7 @@ async function handleProcess(
   options: {
     readonly file: Blob
     readonly presetId: PresetId
-    readonly branding: { readonly opening: boolean; readonly closing: boolean }
+    readonly branding: BrandingChoice
     readonly backgroundColour: string
     readonly subtitleVtt?: string
   },

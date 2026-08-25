@@ -130,3 +130,33 @@ Deriving the K-weighting coefficients analytically per sample rate, rather than
 hardcoding the 48 kHz set, is what makes this hold — the choice made in
 `kweighting.ts` during VH-3 paid off on material that did not exist yet.
 
+
+### VH-12 — real branding, end to end
+
+The masters were not the file swap the item assumed: `qtrle`/`argb`, which no
+browser decodes; a 1.00 s premultiplied-alpha build meant for compositing
+rather than concatenation; no audio bed; and one 4K25 master where the spec
+expected a matrix of four.
+
+What shipped instead: a build-time transcode (`scripts/build-branding.mjs`)
+producing eight 1 s onsets as VP9+alpha WebM and four 4 s tails as H.264 —
+twelve files, 0.74 MB, against the ~100 MB first estimated. Two tails rather
+than four, because Fade and Slide are byte-identical after the build within a
+colour, which the maintainer confirmed was deliberate. Tails are H.264 on
+purpose: hard cut uses only the tail, so that mode survives anywhere alpha
+decode does not.
+
+Three findings were worth more than the code. The alpha is premultiplied, so
+the composite is `brand + source×(1−a)` and the conventional straight-alpha
+form double-darkens — measured, not reasoned: canvas `drawImage` returns 202
+where 255 is correct, so the blend had to stay on the CPU. Source and build
+frames pair by timestamp, never frame order, because the build is 25 fps and
+sources are not. And the freeze must hold the last CLEAN frame, distinguishing
+a defect from a deliberate fade — a trend needs two significant steps one way,
+a flash is a single jump.
+
+Verified in a browser at each step rather than by compiling: alpha survives
+decode, all three modes produce their promised timelines (+3.97, +3.97, +4.97
+against 4/4/5), and the build is fetched only for the modes that composite it —
+duration alone would not have caught a silent fallback. Safari and Firefox
+remain unverified; `/spike-alpha.html` exists so that check is one URL.

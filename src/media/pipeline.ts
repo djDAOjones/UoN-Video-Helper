@@ -28,9 +28,9 @@ import {
   CLOSING_DEFAULTS,
   CLOSING_ONSET_SECONDS,
   modeNeedsOnset,
+  type BrandingChoice,
   type BrandingColour,
   type BrandingMode,
-  type BrandingStyle,
 } from '../config/branding'
 import type { OutputShape, Preset } from '../config/presets'
 import { createContentAudioProcessor, planAudio } from './audio-plan'
@@ -94,13 +94,7 @@ export interface PipelineOptions {
    * Spec 4.1's two toggles, plus the closing's own choices (VH-12, VH-22).
    * Style, colour and mode fall back to `CLOSING_DEFAULTS` when unset.
    */
-  readonly branding: {
-    readonly opening: boolean
-    readonly closing: boolean
-    readonly style?: BrandingStyle
-    readonly colour?: BrandingColour
-    readonly mode?: BrandingMode
-  }
+  readonly branding: BrandingChoice
   /** Resolved D1 brand background; the worker has no document to read it from. */
   readonly backgroundColour: string
   /**

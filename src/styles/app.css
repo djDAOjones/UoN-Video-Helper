@@ -430,6 +430,39 @@ body {
   accent-color: var(--interactive);
 }
 
+/* --- Disclosure for options that are perks, not decisions --- */
+
+.disclosure {
+  margin-top: var(--spacing-05);
+}
+
+.disclosure-summary {
+  display: flex;
+  align-items: center;
+  min-height: var(--target-min);
+  font-size: var(--type-body-compact);
+  color: var(--interactive);
+  cursor: pointer;
+}
+
+.disclosure-summary:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.disclosure .choice {
+  margin-top: var(--spacing-05);
+  padding-left: var(--spacing-05);
+  border-left: 2px solid var(--border-subtle);
+}
+
+/* A disabled group still reads, but must not look available. */
+.choice:disabled .radio,
+.choice[disabled] .radio {
+  color: var(--text-secondary);
+  cursor: not-allowed;
+}
+
 /* --- Audio-quality warnings (spec 5.4) --- */
 
 .warnings {

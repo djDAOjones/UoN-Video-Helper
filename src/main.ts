@@ -17,6 +17,7 @@ import {
 } from './core/diagnostics'
 import { adoptLogRecords, log, setMinimumLogLevel } from './core/logger'
 import { APP_VERSION, BUILD_ID } from './core/version'
+import { CLOSING_DEFAULTS } from './config/branding'
 import type { PresetId } from './config/presets'
 import { saveFile, suggestedFileName } from './media/save'
 import { countCues } from './media/vtt'
@@ -58,6 +59,9 @@ const presetChoice = required<HTMLFieldSetElement>('#preset-choice')
 const brandingChoice = required<HTMLFieldSetElement>('#branding-choice')
 const brandingOpening = required<HTMLInputElement>('#branding-opening')
 const brandingClosing = required<HTMLInputElement>('#branding-closing')
+const brandingOptions = required<HTMLDetailsElement>('#branding-options')
+const brandingStyleChoice = required<HTMLFieldSetElement>('#branding-style-choice')
+const brandingStyleHelp = required<HTMLParagraphElement>('#branding-style-help')
 const subtitleField = required<HTMLDivElement>('#subtitle-field')
 const subtitleInput = required<HTMLInputElement>('#subtitle-input')
 const subtitleStatus = required<HTMLParagraphElement>('#subtitle-status')
@@ -101,6 +105,55 @@ function chosenPreset(): PresetId {
   const checked = presetChoice.querySelector<HTMLInputElement>('input[name="preset"]:checked')
   return checked?.value === 'smaller' ? 'smaller' : 'best'
 }
+
+/**
+ * Reads one closing-sequence radio group, falling back to the default.
+ *
+ * The value is trusted only if it is one the config actually knows: the DOM is
+ * editable, and an unrecognised mode would reach the pipeline as a string that
+ * matches no branch.
+ */
+function chosenBranding<T extends string>(
+  group: 'style' | 'colour' | 'mode',
+  fallback: T,
+  allowed: readonly string[] = BRANDING_VALUES[group],
+): T {
+  const checked = brandingChoice.querySelector<HTMLInputElement>(
+    `input[name="branding-${group}"]:checked`,
+  )
+  const value = checked?.value
+  return value !== undefined && allowed.includes(value) ? (value as T) : fallback
+}
+
+const BRANDING_VALUES = {
+  style: ['fade', 'slide'],
+  colour: ['blue', 'white'],
+  mode: ['hard-cut', 'over-picture', 'over-freeze'],
+} as const
+
+/**
+ * Keeps the animation choice honest.
+ *
+ * Fade and Slide differ ONLY during the one-second build, and a hard cut
+ * discards that build — the two styles share an identical card, so the choice
+ * would change nothing. Leaving it live would be a control that silently does
+ * not work.
+ */
+function syncBrandingOptions(): void {
+  const mode = chosenBranding('mode', CLOSING_DEFAULTS.mode)
+  const buildIsShown = mode !== 'hard-cut'
+  brandingStyleChoice.disabled = !buildIsShown
+  brandingStyleHelp.textContent = buildIsShown
+    ? ''
+    : 'A hard cut skips the animated build, so Fade and Slide would look the same.'
+
+  const wantsClosing = brandingClosing.checked
+  brandingOptions.hidden = !wantsClosing
+  if (!wantsClosing) brandingOptions.open = false
+}
+
+brandingChoice.addEventListener('change', syncBrandingOptions)
+syncBrandingOptions()
 
 versionLine.textContent = isDev ? `${APP_VERSION} · ${BUILD_ID} · development` : APP_VERSION
 
@@ -450,7 +503,13 @@ function showProcessControls(file: File): void {
         kind: 'process',
         file,
         presetId: chosenPreset(),
-        branding: { opening: brandingOpening.checked, closing: brandingClosing.checked },
+        branding: {
+          opening: brandingOpening.checked,
+          closing: brandingClosing.checked,
+          style: chosenBranding('style', CLOSING_DEFAULTS.style),
+          colour: chosenBranding('colour', CLOSING_DEFAULTS.colour),
+          mode: chosenBranding('mode', CLOSING_DEFAULTS.mode),
+        },
         backgroundColour: brandBackground(),
         ...(subtitleVtt ? { subtitleVtt } : {}),
       },

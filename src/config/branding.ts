@@ -63,6 +63,18 @@ export const CLOSING_DEFAULTS = {
   mode: 'hard-cut',
 } as const satisfies { style: BrandingStyle; colour: BrandingColour; mode: BrandingMode }
 
+/**
+ * What the user chose. Every closing field is optional and falls back to
+ * {@link CLOSING_DEFAULTS}, so a caller that does not care says nothing.
+ */
+export interface BrandingChoice {
+  readonly opening: boolean
+  readonly closing: boolean
+  readonly style?: BrandingStyle
+  readonly colour?: BrandingColour
+  readonly mode?: BrandingMode
+}
+
 /** Seconds a closing adds to the output, which is mode-dependent. */
 export function closingAddedSeconds(mode: BrandingMode): number {
   return mode === 'over-freeze'

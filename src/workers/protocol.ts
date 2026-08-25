@@ -9,6 +9,7 @@
 
 import type { CapturedError } from '../core/diagnostics'
 import type { LogRecord } from '../core/logger'
+import type { BrandingChoice } from '../config/branding'
 import type { PresetId } from '../config/presets'
 import type { SourceReport } from '../media/inspect'
 import type { PreflightSummary } from '../media/preflight'
@@ -49,7 +50,7 @@ export type WorkerRequest =
       readonly file: Blob
       readonly presetId: PresetId
       /** Spec 4.1: independent toggles, all four combinations valid. */
-      readonly branding: { readonly opening: boolean; readonly closing: boolean }
+      readonly branding: BrandingChoice
       /** Resolved D1 brand background; the worker has no document. */
       readonly backgroundColour: string
       /** A user-supplied WebVTT sidecar, verbatim. */

@@ -97,7 +97,6 @@
       the VH-25 fade-out defaults ON for hard cut only, since in the other two
       the build IS the transition; and over freeze frame holds the last CLEAN
       frame, not the last decoded one.
-      Blocked on VH-12's alpha decode for modes 2 and 3.
 
 - [ ] **VH-23 Opening graphics** (2026-08-25)
       Intent: there are no opening assets and the maintainer's position is that
@@ -141,22 +140,6 @@
       correct output; and each is exercised by a named fixture.
 
 ### Next milestone
-
-- [ ] **VH-12 Real branding assets** [sign-off] [detail](tickets/VH-12.md) (2026-08-24)
-      Intent: reopened 2026-08-25 — the masters arrived and they are not the
-      file swap this item assumed. They are `qtrle`/`argb` — a codec WebCodecs
-      cannot decode — they carry a 1.00 s alpha ramp meant for compositing
-      rather than concatenation, they have no audio bed (which spec §4.4
-      depends on), and there is one 4K25 master in four styles rather than the
-      §4.2 matrix of four resolution variants. Style is a choice the spec does
-      not model.
-      Settled: all four styles ship, Fade Blue is the default, the 2023 asset
-      is retired, and the shared tail is deliberate (two tails, four onsets).
-      Done when: the build transcodes them to an alpha format the browsers
-      decode, the compositor handles alpha, and branding scales and
-      frame-rate-converts to the source.
-      First step is a spike: verify alpha decode in every supported browser.
-      If it fails, "hard cut" still ships — that mode never composites.
 
 - [ ] **VH-13 Published limits copy** [blocked: VH-M2] (2026-08-24)
       Turn the measured envelope into the user-facing wording. Closes D8.
