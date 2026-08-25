@@ -32,10 +32,6 @@
 - The time estimate covers decode, encode and audio analysis. It does not yet
   include the audio chain (VH-7) or branding conform (VH-8), so it will
   under-report once those land. Revisit the extrapolation then. (from: VH-5)
-- Mediabunny's `bestGuessFrameRate` read 32.25 fps on a fixture whose frames
-  averaged 21.96 fps, and we round the conform target from that. Worth checking
-  which of its frame-rate figures best matches real Teams and Zoom captures
-  before D8 fixes the published limits. (from: VH-6)
 - The macro-levelling envelope is indexed by frame count from the start of the
   audio, which assumes the track begins at t=0 and has no gaps. True for
   everything seen so far; would misalign on a source with a delayed or
@@ -58,5 +54,41 @@
   earns its keep only if people actually run it. (from: VH-7)
 - Progress is emitted every 30 frames, which is invisible on short jobs. Fine
   for an hour of video; revisit if the UI feels dead on short ones. (from: VH-6)
-- TypeScript 7 is released but typescript-eslint caps at <6.1.0. Revisit the
-  pin when the linter catches up. (from: VH-1)
+- `inspectFile` runs three times per job (inspect, preflight, process), each
+  re-probing frame-rate metrics and re-running `scanTrackHandlers`, which
+  slices up to 64 MB — 128 MB when the head misses and the tail fallback
+  fires. The most real of the review's efficiency findings. (from: 2026-08-25
+  external review)
+- The ISOBMFF tail fallback rarely works: `file.slice(tailStart)` starts at an
+  arbitrary offset, so `readBoxes` from position 0 parses mid-`mdat`. It fails
+  safe — reports "not ISOBMFF" — but does not do its job. Walking top-level box
+  headers forward with 16-byte slices would find a trailing `moov` for
+  kilobytes. (from: 2026-08-25 external review)
+- Preflight is uncancellable: `handlePreflight` never registers in `running`
+  and passes no signal into `analyseSourceAudio`, so a user who picks a
+  two-hour file waits out a full audio decode with no way out. (from:
+  2026-08-25 external review)
+- Audio is traversed four to five times per job. Declined as premature — the
+  measured cost is 3.6 s + 8.8 s per hour against a video path at 6.3× real
+  time — but `audio-plan.ts:70`'s preflight duplicate is the one that is pure
+  waste, and caching pass A against the file would remove it. Revisit if the
+  audio path ever shows up in a profile. (from: 2026-08-25 external review)
+- `detectSourceWarnings` calls `percentile()` twice, each copying and sorting
+  the full short-term curve — 720k values on a two-hour file. One sort would
+  do. (from: 2026-08-25 external review)
+- The `TruePeakLimiter` and `TruePeakDetector` hot loops shift a 13-element
+  window per sample per channel; a ring buffer removes ~13 writes per sample.
+  The largest single win in the audio path, and still not a bottleneck.
+  (from: 2026-08-25 external review)
+- `loudness.ts`'s module header still says "a handful of running sums plus one
+  value per 100 ms" — true before the hop dropped to 10 ms for the EBU tests.
+  Pairs with the existing 5.8 MB/hour note above. (from: 2026-08-25 external
+  review)
+- The subtitle helper text promises timings are "shifted to match the opening
+  sequence", but the opening is off by default and VH-33 removes it, so the
+  offset is usually zero. Revisit as part of VH-32's copy pass. (from:
+  2026-08-25 external review)
+- Spec §6.3 and §6.5 now carry corpus evidence inline, though the spec's own
+  header points at `02-technical-rationale.md` as where evidence lives (2,008
+  words, room to spare). Moving it there would clear the 3,500-word reference
+  guideline without losing a sentence. (from: 2026-08-25 spec copy-edit)

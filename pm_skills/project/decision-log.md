@@ -11,6 +11,114 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-25 — Pruned project memory
+
+**Decision:** Swept the 12 doc-deltas ticked by the same session's doc-sync, and
+deleted two dead wish-list lines. No file was archived — nothing was over an
+archivable budget.
+
+**Rationale:** The ledger shrinks by ticking-then-sweeping, so the sweep was due
+the moment doc-sync ticked; the audit trail it held now lives in this log and in
+git. The two wish-list lines were not deferrals but errors: the TypeScript 7 pin
+duplicated Icebox item VH-28 verbatim and should have been deleted when VH-28 was
+minted (the wish-list is pre-triage, the Icebox post-triage — an item cannot sit
+in both), and the `bestGuessFrameRate` concern was answered by VH-24's
+verification that `inspect.ts` reads the rate from `computeFrameRateMetrics()`,
+measured from packets, and never from `bestGuessFrameRate`.
+
+Backlog Active stays over its word budget (2,479 / 1,500) by standing decision —
+the inline detail is doing real work and the open-item count is well within
+budget. `tickets/VH-24.md` and `VH-25.md` are over their soft budgets for the
+same reason. The P3 backup was deleted after verification: both files were
+byte-identical to what git already held, so committing them into the tracked
+archive would have been duplication, not history.
+
+**Watch:** `trajectory.md` is at 1,972 of 2,000 words. The next shipped item
+trips it, and the prune-to target is 70% — so the first archive split is due
+then, not now.
+
+**Link:** `pm_skills/project/doc-deltas.md`, `wish-list.md`.
+
+## 2026-08-25 — Doc-sync: the specification meets the real assets
+
+**Decision:** Reconcile `docs/01-specification.md` against all 12 open
+doc-deltas in one signed-off batch, plus 3 consequential edits derived from
+the same sources that the ledger had not captured. 15 edits, 0 deferred.
+Spec grows 2,761 → 3,772 words (3,841 before a follow-on copy-edit pass
+tightened §4.1, §4.3, §6.3 and §8.3 without dropping a fact).
+
+**Rationale:**
+
+- **Ten deltas were the spec going stale.** Reality differed and the code was
+  already right: the branding is silent (§4.4 bed struck), one 4K25 master
+  exists rather than a four-variant matrix (§4.2), four style variants exist
+  that the spec never anticipated, the alpha is premultiplied and the
+  operation is compositing rather than concatenation (§4.3), v1 is
+  closing-only (§4.1), embedded subtitle tracks cannot be read at all so two
+  of §8.3's four steps had no reachable branch, the frame rate is measured
+  rather than declared (§6.3), and colour/HDR was specified nowhere (new
+  §6.5, which states the behaviour is undefined rather than inventing one).
+- **Two were the opposite** — the code faithfully implements the spec and the
+  spec's rule is the defect: §6.2's bitrate targets with no never-exceed-source
+  cap, and §6.3's round-to-nearest-standard, which snaps Teams' 16.000 fps to
+  24. Both are written as the corrected rule, so the spec leads the code by one
+  band; VH-24 in Band 1 closes the gap, and §13 is where "is it built" is
+  tracked.
+- **Three edits went beyond the ledger.** §13.1 required "both animations",
+  impossible in a closing-only v1; §13.6 and the corpus note required a
+  variable-frame-rate test source, and no corpus file classifies as variable.
+  The ledger captures where drift was *noticed*; the edit is derived from the
+  source and reaches wherever that source reaches.
+
+**Alternatives:** Holding the two rule-defects until VH-24 ships was rejected —
+it would have built VH-24 against a spec still asserting the rule it exists to
+overturn. Pending-markers in the body were rejected as duplicating §13.
+
+**Link:** `pm_skills/project/doc-deltas.md` (12 ticked); spec §§4.1–4.4, 6.2,
+6.3, 6.5, 8.3, 13.
+
+## 2026-08-25 — Band 1: what the pilot owes its first real users
+
+**Decision:** Open the gate the post-Band-0 bucket was holding. Band 1 is
+**VH-33, VH-24, VH-31, VH-19, VH-25, VH-32**, in that order. Band 2 (VH-16,
+VH-20, VH-17) and Band 3 (VH-26, VH-23, VH-30) are recorded but not committed.
+Maintainer work (VH-M2, VH-M3, VH-14, VH-15) is listed apart from the bands so
+it cannot read as waiting on one. Alongside it: **VH-22 closes** (shipped),
+**VH-21 is cut** (premise gone), and **VH-23 is split**, with the live risk
+pulled forward as VH-33.
+
+**Rationale:**
+
+- **The band question changed when the app went live.** Band 0 asked "does it
+  work?" Every item found since was found by real material or a real run, so
+  Band 1 asks "is what it produces right, and does it read right?" That is what
+  sorts the sixteen: the four things a staff member currently meets that are
+  wrong or misleading go in; the rest wait.
+- **Order is dependency, not ID.** VH-24 settles the output shape, so VH-31's
+  estimate and VH-19's content class both key off it, and all three land on
+  `outputShapeFor` and the same three-second probe. Touching that function
+  three times in three bands would be the expensive way to do one piece of work.
+- **VH-32 goes last on purpose.** The redesign has to lay out the estimate
+  wording, the content class and the fade toggles that the four items above
+  decide. Running the design pass first means running it twice.
+- **VH-33 goes first because it is a live brand risk, not a feature.** The
+  deployed site still offers "Add the opening sequence" over a stand-in UoN
+  graphic, held back only by helper text. Removing a control is small; leaving
+  it queued behind engineering work was the actual mistake.
+- **VH-22 was already done.** All three modes, the default, the alpha-decode
+  fallback and the clean-frame freeze are in the code and verified in all three
+  engines. Its two unmet clauses belonged to other items and moved there.
+- **VH-21 lost its premise.** It asks to preserve a branding audio bed when the
+  source is silent; the masters are silent by design and the bed is struck from
+  spec §4.4 (doc-delta, 2026-08-25). There is nothing to preserve.
+
+**Alternatives:** Putting VH-32 first — the maintainer's most recent request —
+was rejected on the rework it forces. One undifferentiated band of everything
+found after Band 0 was rejected as a holding pen with a new name: it carries no
+ordering signal and no gate.
+
+**Link:** `pm_skills/project/backlog.md`; VH-22's outcome in `trajectory.md`.
+
 ## 2026-08-25 — Branding: real assets, four styles, and a shared tail
 
 **Decision:** Build VH-12 in full (approved by the maintainer 2026-08-25).

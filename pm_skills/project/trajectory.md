@@ -201,3 +201,14 @@ key logic off exact multiples of the frame period.
 
 The deployed site was also confirmed working on a University machine, so
 `github.io` is not filtered there — the last unknown in VH-14's technical half.
+
+### VH-22 — the three boundary modes, closed
+
+- VH-22 — Closing boundary modes shipped with VH-12 and closed on review
+  2026-08-25: `hard-cut`, `over-picture` and `over-freeze` live in
+  `config/branding.ts`, `pipeline.ts` and `freeze.ts`, hard cut is the default
+  and the alpha-decode fallback, the freeze holds the last CLEAN frame rather
+  than the last decoded one, and all three were verified in Chrome 151,
+  Safari 26.5.2 and Firefox 152. Two clauses outlived the code and moved rather
+  than closing: the fade-out defaulting on for hard cut only went to VH-25, and
+  the unguarded negative overlay start on a sub-1-second source went to VH-24.

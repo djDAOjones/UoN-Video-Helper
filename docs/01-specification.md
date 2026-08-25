@@ -70,46 +70,99 @@ carrying media.
 
 ### 4.1 Behaviour
 
-Two independent toggles — opening animation and closing animation — giving
-all four combinations (both / opening only / closing only / neither).
-Sequences are **prepended and appended**, not overlaid.
+**v1 is closing-only.** No approved opening asset exists, and the
+maintainer's position is that opening sequences suit external video while
+this tool is primarily internal, where a closing is the norm. The opening
+path remains in the code against future assets but carries no user control:
+the two-toggle end state — opening and closing, all four combinations — is
+deferred, not withdrawn.
 
-### 4.2 Master asset requirements
+The closing sequence is **appended**. Whether it also composites over the
+closing second of picture is the user's choice of boundary mode (§4.3).
 
-Rendered from the existing After Effects source. Deliver as H.264 MP4
-(High profile, visually lossless, ~20 Mbps):
+### 4.2 Master assets, as delivered
 
-| Variant | Resolution | Frame rate | Purpose |
+The four-variant matrix this section originally specified **does not exist**.
+What was delivered is one 3840×2160 25 fps master per style and colour,
+rendered from After Effects as `qtrle`/`argb` — a codec no browser can decode
+— opening with a 1.00 s premultiplied-alpha build over a 4.00 s opaque card.
+
+**Four style variants are delivered, which this specification did not
+anticipate:** Fade and Slide, each in Blue and White. **Fade Blue is the
+default.** Who owns the set, and who approves any future variant, is an open
+decision (D12).
+
+A build step converts the masters into what the browser actually fetches:
+
+| Part | Format | Count | Why |
 | --- | --- | --- | --- |
-| A | 1920×1080 | 25 fps | Default; UK-native and most screen recordings |
-| B | 1920×1080 | 30 fps | 29.97/30 fps sources (Teams, US-configured tools) |
-| C | 3840×2160 | 25 fps | Fetched only when source exceeds 1080p |
-| D | 3840×2160 | 30 fps | As above |
+| Onset, 0.00–1.00 s | VP9 + alpha, WebM | 8 (style × colour × 1080p/2160p) | Alpha is needed only where the build composites |
+| Tail, 1.00–5.00 s | H.264, MP4 | 4 (colour × 1080p/2160p) | Fade and Slide are byte-identical after the build, within a colour |
 
-Only the two variants matching the job are downloaded. Rendering both frame
-rates from the AE source avoids frame-rate conversion judder entirely.
+Twelve files, 0.74 MB in total. The tails are H.264 deliberately: the default
+boundary mode uses the tail alone, so branding still works in a browser that
+cannot decode transparency.
 
-### 4.3 Conforming to the source
+Frame-rate variants went with the matrix. One 25 fps master serves every
+source, converted at runtime.
 
-1. Choose the master whose frame rate is nearest the output frame rate.
-2. Scale to **fit** the output frame, preserving the branding's aspect ratio.
-3. Pad any remainder with the UoN brand background colour (hex TBC — see
-   open decisions) so 4:3 and vertical sources are handled correctly.
+### 4.3 Conforming to the source, and the three boundary modes
+
+1. Scale to **fit** the output frame, preserving the branding's aspect ratio.
+2. Pad any remainder with the UoN brand background colour (hex TBC — see
+   open decisions) so 4:3, 16:10 and vertical sources are handled correctly.
+3. Convert to the output frame rate. With one master rate this always runs;
+   source and branding frames pair **by timestamp, never by frame index**.
 4. Re-encode the branding frames with the same encoder settings as the main
    content, so the whole file is a single consistent stream.
 
+**Concatenation is not the whole operation.** The masters open with a 1.00 s
+alpha build intended for compositing, so what sits *under* that build is an
+editorial choice. Three modes, named with the conventional edit terms, where
+`T` is the source duration:
+
+| Mode | Output length | Composites |
+| --- | --- | --- |
+| **hard cut** (default) | `T + 4.00` | nothing — the build is discarded |
+| **over picture** | `T + 4.00` | the build over the closing second of content |
+| **over freeze frame** | `T + 5.00` | the build over a held final *clean* frame |
+
+`hard cut` is both the default and the fallback: it is the only mode needing
+no alpha decode, so branding survives a browser without transparency support.
+The freeze holds the last frame that resembles its neighbours, not simply the
+last decoded one — a torn or black-flashed final frame would otherwise be
+held full-screen for a second.
+
+**The alpha is premultiplied**, matted with black — measured on the masters,
+not assumed. The composite is therefore
+
+    out = brand + source × (1 − a)
+
+and **not** the straight-alpha form, which multiplies by alpha twice and
+leaves a dark fringe on every edge. Canvas `drawImage` cannot perform it: the
+supported engines disagree over whether a decoded frame is premultiplied, so
+the blend is done on the CPU, where the answer is ours rather than the
+engine's.
+
 ### 4.4 Branding audio
 
-The branding carries its own audio bed. It must be **mastered at the target
-loudness and passed through unprocessed at runtime.**
+**The branding is silent.** The delivered masters carry no audio track, and
+the maintainer confirms this is deliberate — silent graphics are more native
+to this material. The audio bed this section originally required, and the
+rule that it be mastered at the target loudness, are **struck**.
 
-**Critical:** loudness analysis in Section 5 runs on the *source content
-only*, never on the concatenated timeline. Measuring a 5-second music sting
-together with 50 minutes of speech biases the integrated measurement and
-would mis-level the whole video.
+Source audio therefore runs to `T` in every mode and the remainder of the
+output is silence: 4.00 s for hard cut and over picture, 5.00 s for over
+freeze frame.
+
+**Critical (unchanged):** loudness analysis in Section 5 runs on the *source
+content only*, never on the concatenated timeline. The original reason was a
+music sting biasing the integrated measurement; the rule still holds, because
+measuring appended silence would drag the gated figure the other way.
 
 Apply a 100 ms audio fade at each branding/content boundary to prevent
-discontinuity clicks.
+discontinuity clicks. Picture fades at those boundaries are a separate
+question and are **not yet specified**.
 
 ## 5. Audio processing
 
@@ -211,7 +264,7 @@ For files students may download directly.
 | Codec / container | H.264 High profile, MP4 |
 | Resolution | Preserved up to 1080p; downscaled to 1080p only if larger |
 | Frame rate | Source, capped at 30 fps |
-| Bitrate | Content-adaptive: ~1.5 Mbps for slides/screen, ~2.5 Mbps for camera/motion at 1080p30 |
+| Bitrate | Content-adaptive: ~1.5 Mbps for slides/screen, ~2.5 Mbps for camera/motion at 1080p30 — **never above the source's own video bitrate** |
 | Keyframe interval | 2 seconds |
 | Audio | AAC-LC, 128 kbps stereo / 96 kbps mono, 48 kHz |
 
@@ -220,18 +273,56 @@ legibility depends far more on resolution than on bitrate; dropping 1080p
 to 720p to save space is the single most damaging thing that could be done
 to this content. Save the space in bitrate instead.
 
+**Never exceed the source.** The figures above are targets for material that
+needs them, not floors. A Teams recording carries 1.006 Mbps of video at
+1920×1080; requesting 2.5 Mbps of it would make the output named "smaller"
+larger than what went in. The requested bitrate is capped at the source's
+measured video bitrate.
+
 ### 6.3 Frame-rate handling
 
-Screen and meeting recordings are frequently variable frame rate. Output is
-always conformed to **constant frame rate** at the source's average rate,
-rounded to the nearest standard value (24/25/30/50/60). This ensures MP4
-compatibility, correct A/V sync, and clean branding conform.
+Output is always conformed to **constant frame rate**, which is what ensures
+MP4 compatibility, correct A/V sync and a clean branding conform. Two rules
+govern the rate it is conformed *to*, and the real corpus revised both.
+
+**Measure the rate; never trust the declared one.** Three corpus files
+declare `30/1` while actually running PowerPoint's 1000/33 = 30.303 fps, and
+a Mac export declares `600/1` — its timebase, not a rate at all. Conforming
+from the header would drift roughly a second over a 96-second file, so the
+rate is taken from packet timestamps.
+
+**Do not round upward.** The original rule — nearest standard value from
+24/25/30/50/60 — is withdrawn below the lowest standard value: Teams records
+a rock-solid 16.000 fps, and snapping that to 24 duplicates half the frames
+for no visible benefit. Such a source is conformed to its own measured rate.
+
+The corpus also retires this specification's assumption that screen and
+meeting recordings are "frequently variable frame rate": no file in it
+classifies as variable. *Odd but stable* — 16.000 and 30.303 — is the real
+pattern, and it is precisely what a nearest-standard-value rule handles worst.
 
 ### 6.4 WebM
 
 Not implemented in v1, not exposed in the UI. The Mediabunny muxer supports
 WebM, so adding it later is a configuration change rather than a redesign —
 which satisfies the brief's intent without carrying the cost now.
+
+### 6.5 Colour and dynamic range
+
+**Not specified, and currently undefined behaviour.** The pipeline carries no
+colour-space, transfer-characteristic or tone-map handling: a decoded frame is
+drawn through a canvas and encoded as 8-bit SDR H.264 with no profile
+requested. Whatever conversion happens in between is the browser's, and is
+neither chosen here nor tested.
+
+That is safe for the corpus, which is entirely SDR screen and camera capture.
+It is not safe for phone footage: every iPhone since the 12 records HDR 10-bit
+by default, as do recent Android flagships. The outcomes range from a
+reasonable automatic tone-map to a washed-out or highlight-crushed picture
+depending on the engine — and the file always plays, so nothing surfaces as an
+error. A silently wrong picture is the worst available failure mode.
+
+A decided and tested behaviour is required before phone sources are supported.
 
 ## 7. Limits and device pre-flight
 
@@ -300,14 +391,23 @@ source file. Embedded subtitle tracks will be rare.
 
 ### 8.3 Behaviour
 
-1. Detect subtitle, chapter, and metadata tracks during demux.
-2. Where present and preservable: offset all timings by the opening
-   duration and re-embed.
-3. Where present and not preservable: **warn clearly before processing**,
-   and offer to export the track as a sidecar `.vtt` with corrected timings
-   so nothing is lost.
+1. Detect subtitle, chapter, and metadata tracks during demux. Subtitle
+   tracks are found by an ISOBMFF handler scan, which sees tracks the demuxer
+   reports as absent.
+2. Offset every cue of a **user-supplied sidecar** `.vtt` by the opening
+   duration and embed it.
+3. **Warn clearly before processing** when an embedded subtitle track is
+   detected, since it will not be carried through.
 4. Preserve language tags, track labels and creation metadata where the
    muxer supports them.
+
+**Embedded subtitle tracks cannot be read.** Mediabunny does not expose
+subtitle tracks at all, so the original steps 2 and 3 — re-embed where
+preservable, export a sidecar where not — had no reachable branch: there is
+nothing to re-embed, and nothing to export. Reading their samples would need a
+bespoke MP4 box walker for `tx3g` / `wvtt` / `stpp`, which §8.2's rarity
+finding does not justify. Detection is enough to tell the user honestly, and
+preservation therefore applies only to a sidecar the user supplies.
 
 ## 9. User experience
 
@@ -385,8 +485,9 @@ per-configuration.
 
 v1 is complete when:
 
-1. A 1080p source with both animations produces a valid MP4 that plays in
-   VLC, QuickTime, Chrome, and after upload to EchoVideo.
+1. A 1080p source with the closing animation produces a valid MP4 that plays
+   in VLC, QuickTime, Chrome, and after upload to EchoVideo. (Originally
+   "both animations"; v1 is closing-only per §4.1.)
 2. Measured integrated loudness of the output content is **−16 ±0.5 LUFS**
    and true peak never exceeds −2.0 dBTP, across the full test corpus.
 3. The loudness meter matches **EBU Tech 3341** reference values within
@@ -395,8 +496,10 @@ v1 is complete when:
    confirmed by listening and by short-term loudness plot.
 5. Slide text in the "Smaller file" output remains legible at 100% zoom
    against the source.
-6. A variable-frame-rate screen recording produces output with correct A/V
-   sync across the full duration.
+6. A screen recording on a non-standard frame-rate grid — 16.000 or
+   30.303 fps — produces output with correct A/V sync across the full
+   duration. (Originally "variable-frame-rate"; no corpus file classifies as
+   variable, so the criterion tests the defect that actually arrives.)
 7. Every pre-flight block and warning has been triggered deliberately and
    reads clearly to a non-technical reader.
 8. Cancelling mid-process leaves no partial file and no orphaned OPFS data.
@@ -406,6 +509,9 @@ v1 is complete when:
 
 Representative real material, per the original brief: webcam recordings,
 PowerPoint presentations, screen recordings with fine text, talking heads,
-mixed speech and music, and — added — a variable-frame-rate Teams
-recording, a 4:3 legacy recording, and a recording with badly inconsistent
-levels.
+mixed speech and music, and — added — a Teams recording, a 4:3 legacy
+recording, and a recording with badly inconsistent levels.
+
+Twenty-two files were supplied and measured. The corpus contains no true
+variable-frame-rate source, no phone footage, and nothing approaching the
+60-minute case §7.4 publishes limits for; all three remain gaps.
