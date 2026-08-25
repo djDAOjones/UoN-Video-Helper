@@ -1,12 +1,38 @@
 # Branding assets
 
-> **Superseded in part, 2026-08-25.** The real masters now exist in `samples/`
-> and do NOT match the format described below. They are `qtrle`/`argb` `.mov`
-> files that WebCodecs cannot decode, they carry a 1.00 s alpha ramp intended
-> for compositing, they have no audio track, and there is one 4K25 master in
-> four styles rather than four resolution variants. Replacing the placeholders
-> is therefore a build-time transcode plus a compositor, not a file swap.
-> See backlog VH-12 before acting on anything in this file.
+Two generations of asset live here.
+
+## The real closing assets (VH-12)
+
+Built from the After Effects masters by `scripts/build-branding.mjs`, which runs
+on a maintainer's machine — not during `npm run build` — because the masters are
+`qtrle`/`argb` QuickTime files that no browser can decode. **Do not hand-edit
+these; re-run the script.**
+
+Each 5 s master splits at exactly 1.00 s, where the alpha ramp completes:
+
+| Part | Files | Format | Why |
+| --- | --- | --- | --- |
+| `closing-onset-{style}-{colour}-{height}p.webm` | 8 | VP9 + alpha in WebM | The 1 s transition needs transparency. Used only by the "transition" and "transition with freeze frame" modes. |
+| `closing-tail-{colour}-{height}p.mp4` | 4 | H.264 High, CRF 18 | Fully opaque. Deliberately the most universally decodable format, so "clean cut" works even where alpha decode does not. |
+
+Styles are `fade` and `slide`; colours are `blue` and `white`; heights are
+`1080p` and `2160p`. **Fade Blue is the default.** There are only two tails
+because Fade and Slide are byte-identical after the onset within a colour —
+confirmed by the maintainer as deliberate, not an export artefact.
+
+Total 0.74 MB for all twelve. The tails measure PSNR 63 dB / SSIM 0.9999
+against the masters, so CRF 18 is visually lossless on this content.
+
+Verify alpha decode in a browser by serving the app and opening
+`/spike-alpha.html`. It reports pass/fail per asset. Chromium passes; Safari
+and Firefox are unverified.
+
+## The placeholders (still in use)
+
+**The app still loads these**, because the code that selects and composites the
+new two-part assets is not written yet. They stay until that lands, so the
+build never references a file that is not there.
 
 **These are placeholders.** They exist so the pipeline can be built and tested
 before the approved UoN sequences are rendered, and so those renders drop in
