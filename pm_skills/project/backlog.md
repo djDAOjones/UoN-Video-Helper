@@ -118,6 +118,19 @@
       notice. Lengths live in `src/config/`; D3's 100 ms fade is reconciled
       with them.
 
+- [ ] **VH-30 Trim the source** [detail](tickets/VH-30.md) (2026-08-25)
+      Intent: maintainer request. Recordings carry material nobody wants — the
+      wait before people join, the fumble for the stop button — and today the
+      only fix is another tool first, which defeats a one-step app. Ranged
+      reads are native to Mediabunny, so the mechanics are cheap; the work is
+      the interactions. The one that matters most: loudness must measure the
+      TRIMMED region, or leading silence drags the gated figure and the single
+      linear gain mis-levels what the viewer actually sees. The closing
+      boundary, subtitle offsets, duration estimates and the calibration probe
+      all key off the trim points too.
+      Done when: scoped and signed off — this is a future feature, recorded
+      rather than scheduled.
+
 - [ ] **VH-26 Mobile phone sources** [detail](tickets/VH-26.md) (2026-08-25)
       Intent: staff may upload phone footage and none is in the corpus. Rotation
       was traced end to end and is correct — recorded so it is not
@@ -130,14 +143,16 @@
 
 - [ ] **VH-24 Survive real-world source properties** [detail](tickets/VH-24.md) (2026-08-25)
       Intent: awkward input is the common case. All eight frame-rate anomalies
-      trace to one tool (PowerPoint, which writes a nominal 30 fps as 1000/33
-      and sometimes declares 30/1 anyway — ~6 s drift over 10 minutes), and
+      trace to one tool (PowerPoint, writing a nominal 30 fps as 1000/33), and
       Teams is 16.000 fps CFR, so neither produces the VFR the conform path was
-      built for. Two files have no audio, one is mono, one is PCM, rates are
-      mixed, and one is 16:10.
-      Done when: frame rate comes from measurement not the header; odd geometry
-      survives without distortion; mono, PCM and 16/44.1 kHz sources all reach a
-      correct output; and each is exercised by a named fixture.
+      built for. Reading the rate is already correct — verified against a real
+      file, the app measures 30.3030 and ignores the declared 30/1. What remains
+      is the SNAPPING: 16 fps rounds up to 24, duplicating 50% of frames for no
+      benefit (spec §6.3 delta). Plus two files with no audio, one mono, one
+      PCM, mixed sample rates, and one at 16:10.
+      Done when: low rates stop snapping upward; odd geometry survives without
+      distortion; mono, PCM and 16/44.1 kHz sources all reach a correct output;
+      and each is exercised by a named fixture.
 
 ### Next milestone
 

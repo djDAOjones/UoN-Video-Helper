@@ -20,3 +20,7 @@ build/
 /samples/
 *.mov
 *.mkv
+
+# Spike fixtures are copied in from samples/ by hand and are large. The spike
+# pages document which file they expect; nothing here is a build input.
+public/spike/

@@ -33,6 +33,7 @@
 - `UI-STANDARDS.md` — UI, usability and accessibility rules. Two token systems; the AAA design-review gate.
 - `acceptance.html` — Maintainer page for the acceptance run. Excluded from the production build.
 - `spike-alpha.html` — Maintainer page: does this browser decode transparent video? Excluded from the build.
+- `spike-framerate.html` — Maintainer page: does the app measure the frame rate or trust the header?
 - `spike-modes.html` — Maintainer page: do the three closing modes produce the timelines they promise?
 - `check-links.mjs` — Scaffolded internal Markdown link checker. Runs in `check`.
 - `eslint.config.js` — Flat ESLint config. Strict on correctness, silent on taste; formatting is Prettier's job.
@@ -139,6 +140,7 @@
 - `src/styles/tokens.brand.css` — UoN brand tokens. Holds the D1 placeholder and nothing invented.
 - `src/styles/tokens.carbon.css` — Carbon structural tokens. Every pair is contrast-asserted by test/contrast.test.ts.
 - `src/spike/alpha.ts` — VH-12 spike: decodes each branding onset and reads back pixel alpha. Dev-only, not built.
+- `src/spike/framerate.ts` — VH-24 spike: reads a real PowerPoint export and reports measured vs declared rate.
 - `src/spike/modes.ts` — VH-22 spike: runs a fixture through all three closing modes and checks output length.
 - `src/ui/format.test.ts` — Pins the wording, so phrasing is tested rather than reviewed by opinion.
 - `src/ui/format.ts` — Technical facts as plain language — durations, sizes, codecs, channel layouts.

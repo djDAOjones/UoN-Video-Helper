@@ -13,7 +13,7 @@
  * writing *about* the marker, not an unpopulated one.
  */
 
-import { readdirSync, readFileSync, statSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
 
 const ROOT = process.cwd()
@@ -68,6 +68,28 @@ for (const file of walk(ROOT)) {
       if (re.test(raw)) notices.push(`${rel}:${index + 1}  possible ${name}`)
     }
   })
+}
+
+/**
+ * `public/` is copied verbatim into `dist`, so anything left there ships.
+ *
+ * Spike fixtures are real lecture recordings copied in from `samples/` by
+ * hand. They are gitignored, which stops them being committed but does NOT
+ * stop Vite copying them into a build — and this project's first invariant is
+ * that no media leaves the device. A forgotten fixture in a deployed build
+ * would publish someone's lecture.
+ */
+const spikeDir = join(ROOT, 'public', 'spike')
+if (existsSync(spikeDir)) {
+  const strays = readdirSync(spikeDir).filter((name) => !name.startsWith('.'))
+  if (strays.length > 0) {
+    console.error(
+      `check-placeholders: ${strays.length} file(s) in public/spike/ would be copied into the build:`,
+    )
+    for (const stray of strays) console.error(`  public/spike/${stray}`)
+    console.error('  Spike fixtures are real recordings. Remove them before building.')
+    process.exit(1)
+  }
 }
 
 if (notices.length) {
