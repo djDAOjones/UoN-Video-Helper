@@ -11,6 +11,34 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-25 — Pruned project memory: the first trajectory split
+
+**Decision:** Moved Phase 1 (Band 0 MVP, 76 lines / 722 words) verbatim to
+`archive/trajectory/trajectory-0001-band-0-mvp.md`, left a one-line pointer in
+its place, and created `archive/INDEX.md`. Trajectory 2,069 → 1,358 words
+against a 2,000 budget and a 1,400 prune-to target.
+
+**Rationale:** The previous prune predicted this ("the next shipped item trips
+it") and VH-45 was that item. Phase 1 is the natural boundary: a closed
+milestone whose items are all shipped, none of which any live item still
+reasons about. Everything after it — the corpus, the real branding assets, the
+deploy, the engine divergence — is still being argued with.
+
+**Alternatives:** compressing Phase 1 in place was rejected; trajectory lines
+are already one-per-item outcomes, so compression means deleting outcomes, and
+an archive keeps them greppable at no cost to the live read.
+
+**Deviation:** the Prune procedure says to add new archive files to
+`file-map.md` under an "Archive" section. Not done, deliberately — that file is
+generator-owned and `gen-file-map.mjs` ignores `^pm_skills/`, so a hand-written
+section would be dropped on its next run. `archive/INDEX.md` is the map of cold
+storage and carries the row instead.
+
+**Verify:** three `diff` runs against the intact original proved the split
+lossless — archived slice, kept header, kept tail, all byte-identical.
+
+**Link:** `pm_skills/project/archive/INDEX.md`.
+
 ## 2026-08-25 — VH-45: withdraw the transition controls rather than wait
 
 **Decision:** Delete the "How the logo arrives" and "Animation" fieldsets from
