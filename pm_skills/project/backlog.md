@@ -41,11 +41,13 @@
       all three engines — probed at startup against a known branding frame, the
       shape `capability.ts` already uses, refusing the overlay modes loudly if
       no route matches — and a regression test pins the expected RGBA per route.
-      Note: the live exposure is closed — VH-45 withdrew both controls on
-      2026-08-25, so every job now takes the hard cut and nothing reaches the
-      broken path. That is a holding action, not the fix: restoring the two
-      modes to the UI is part of this item, and spec §4.1 carries a doc-delta
-      until it happens.
+      Note: VH-45 withdrew both controls from the code on 2026-08-25, so every
+      job now takes the hard cut and nothing reaches the broken path — but the
+      Pages workflow is `workflow_dispatch` only (VH-14), so THE DEPLOYED SITE
+      STILL OFFERS THEM until someone dispatches a deploy. That is the action
+      that closes the exposure. Even then it is a holding action, not the fix:
+      restoring the two modes to the UI is part of this item, and spec §4.1
+      carries a doc-delta until it happens.
 
 - [ ] **VH-35 A second tab deletes the first tab's work** (2026-08-25)
       Intent: `sweepOrphanedJobs()` is called at worker boot with no arguments
