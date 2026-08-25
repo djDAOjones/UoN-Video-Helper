@@ -103,4 +103,43 @@ say(
     : '  loadBrandingClip  -> null  FAIL',
 )
 
+// Decisive check for VH-22: does canvas `drawImage` treat our onset's colour
+// as PREMULTIPLIED (which it is) or as straight?
+//
+// The white onset at t=0.40s is RGB 75 with alpha 75. Composited over white:
+//   premultiplied  ->  75 + 255x(1-75/255) = 255   (white logo over white
+//                                                   background stays white)
+//   straight       ->  75x(75/255) + 255x(1-75/255) = 202   (a grey smear)
+//
+// If the canvas gets this right, compositing is a GPU drawImage. If not, every
+// frame has to go through src/media/composite.ts on the CPU.
+say('\n=== how does canvas treat our premultiplied colour?')
+try {
+  const input = new Input({
+    formats: ALL_FORMATS,
+    source: new UrlSource('/branding/closing-onset-fade-white-2160p.webm'),
+  })
+  const track = await input.getPrimaryVideoTrack()
+  const sink = new CanvasSink(track!, { alpha: true, width: 64, height: 36, fit: 'contain' })
+  const frame = await sink.getCanvas(0.4)
+
+  const scratch = new OffscreenCanvas(64, 36)
+  const ctx = scratch.getContext('2d')!
+  ctx.fillStyle = '#ffffff'
+  ctx.fillRect(0, 0, 64, 36)
+  ctx.drawImage(frame!.canvas, 0, 0)
+  const [r] = ctx.getImageData(32, 18, 1, 1).data
+
+  say(`  onset over white via drawImage -> R=${r}`)
+  if (r !== undefined && r >= 250) {
+    say('  canvas composites PREMULTIPLIED — drawImage is correct, use the GPU')
+  } else if (r !== undefined && r >= 190 && r <= 215) {
+    say('  canvas composites STRAIGHT — drawImage double-darkens; use composite.ts')
+  } else {
+    say('  inconclusive — neither 255 nor ~202; inspect before choosing')
+  }
+} catch (error) {
+  say(`  ERROR — ${error instanceof Error ? error.message : String(error)}`)
+}
+
 say('\ndone')

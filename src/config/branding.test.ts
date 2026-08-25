@@ -99,8 +99,9 @@ describe('defaults', () => {
     expect(CLOSING_DEFAULTS.colour).toBe('blue')
   })
 
-  it('names a mode default, since one is required to be stated', () => {
-    expect(modeNeedsOnset(CLOSING_DEFAULTS.mode)).toBe(true)
+  it('defaults to the mode that needs no alpha, so the default path always works', () => {
+    expect(CLOSING_DEFAULTS.mode).toBe('clean-cut')
+    expect(modeNeedsOnset(CLOSING_DEFAULTS.mode)).toBe(false)
   })
 })
 

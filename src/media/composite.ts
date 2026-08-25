@@ -15,7 +15,16 @@
  * source multiplies by alpha twice, darkening the logo and leaving a black
  * fringe on every edge. It looks plausible, which is what makes it dangerous —
  * `compositePremultiplied` is unit-tested against exactly that mistake.
+ *
+ * Canvas `drawImage` cannot do this for us, which was measured rather than
+ * assumed. Canvas composites in premultiplied space internally, but it treats
+ * a decoded frame's colour as STRAIGHT, so it multiplies by alpha a second
+ * time. Drawing the white onset (RGB 75, alpha 75) over white returns 202
+ * where the correct answer is 255 — the exact straight-alpha value. So the
+ * blend happens here, on the CPU, over the ~25 frames of the onset.
  */
+
+import { VideoSample } from 'mediabunny'
 
 /** Bytes per pixel in the RGBA buffers `getImageData` and `VideoFrame` use. */
 const RGBA = 4
@@ -57,5 +66,66 @@ export function compositePremultiplied(source: Uint8ClampedArray, brand: Uint8Cl
     source[i + 1] = brand[i + 1]! + source[i + 1]! * keep
     source[i + 2] = brand[i + 2]! + source[i + 2]! * keep
     source[i + 3] = 255
+  }
+}
+
+/**
+ * Composites branding frames over picture frames for the transition modes.
+ *
+ * Holds its two canvases open across frames rather than allocating per frame,
+ * as {@link BrandingRenderer} does — at 4K these are 33 MB each.
+ *
+ * The overlay is cleared to TRANSPARENT rather than to the brand background.
+ * During a transition, anything outside the branding's fitted rectangle must
+ * show the picture underneath; padding it with background would cover the very
+ * content the transition modes exist to preserve. That differs from the opaque
+ * segments, where the background is correct.
+ */
+export class BrandingCompositor {
+  private readonly base: OffscreenCanvas
+  private readonly baseContext: OffscreenCanvasRenderingContext2D
+  private readonly overlay: OffscreenCanvas
+  private readonly overlayContext: OffscreenCanvasRenderingContext2D
+
+  constructor(private readonly shape: { readonly width: number; readonly height: number }) {
+    this.base = new OffscreenCanvas(shape.width, shape.height)
+    this.overlay = new OffscreenCanvas(shape.width, shape.height)
+    const base = this.base.getContext('2d', { willReadFrequently: true })
+    const overlay = this.overlay.getContext('2d', { willReadFrequently: true })
+    if (!base || !overlay) throw new Error('Could not get a 2d context for compositing')
+    this.baseContext = base
+    this.overlayContext = overlay
+  }
+
+  /**
+   * Draws `brand` over `picture` and returns the result.
+   *
+   * @param picture - The frame underneath. Drawn to fill the output shape.
+   * @param brand - The branding frame, with premultiplied alpha. Fitted into
+   *   the same shape; whatever it does not cover stays transparent, so the
+   *   picture shows through.
+   * @param fit - Where the branding sits within the frame.
+   * @param timing - Timestamp and duration for the returned sample, in seconds.
+   */
+  compose(
+    picture: VideoSample,
+    brand: VideoSample,
+    fit: { readonly x: number; readonly y: number; readonly width: number; readonly height: number },
+    timing: { readonly timestamp: number; readonly duration: number },
+  ): VideoSample {
+    const { width, height } = this.shape
+
+    this.baseContext.clearRect(0, 0, width, height)
+    picture.draw(this.baseContext, 0, 0, width, height)
+
+    this.overlayContext.clearRect(0, 0, width, height)
+    brand.draw(this.overlayContext, fit.x, fit.y, fit.width, fit.height)
+
+    const under = this.baseContext.getImageData(0, 0, width, height)
+    const over = this.overlayContext.getImageData(0, 0, width, height)
+    compositePremultiplied(under.data, over.data)
+    this.baseContext.putImageData(under, 0, 0)
+
+    return new VideoSample(this.base, timing)
   }
 }

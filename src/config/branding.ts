@@ -46,17 +46,18 @@ export const CLOSING_ONSET_SECONDS = 1
 export const CLOSING_TAIL_SECONDS = 4
 
 /**
- * Defaults. Style and colour are the maintainer's choice (2026-08-25).
+ * Defaults, all the maintainer's choice (2026-08-25).
  *
- * The mode default is mine and is the one worth revisiting: `transition` is
- * what the assets were designed for — the transparent onset exists precisely
- * to be composited over the picture — but it is also the only default that
- * obscures a second of content.
+ * `clean-cut` is the default because it is the least for a user to think
+ * about; the transitions are perks for people who want them. It also happens
+ * to be the most robust choice — it is the one mode that composites nothing,
+ * so the default path keeps working even in a browser that cannot decode
+ * transparency at all.
  */
 export const CLOSING_DEFAULTS = {
   style: 'fade',
   colour: 'blue',
-  mode: 'transition',
+  mode: 'clean-cut',
 } as const satisfies { style: BrandingStyle; colour: BrandingColour; mode: BrandingMode }
 
 /** Seconds a closing adds to the output, which is mode-dependent. */
