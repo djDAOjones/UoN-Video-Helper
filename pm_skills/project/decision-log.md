@@ -11,6 +11,41 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-26 — VH-37: report the disease, not the symptom
+
+**Decision:** Move the `InvalidVttError` case to `handleProcess` and delete it
+from the two handlers that cannot raise it. Replace `Promise.all` over the feed
+lanes with `settleLanes`, which waits for both, aborts the survivor, and
+rethrows the original cause in preference to a `CancelledError`.
+
+**Rationale:** both defects turned a known cause into "something went wrong",
+which is the one thing `AGENTS.md` says an error must never do. The VTT check
+was in two handlers by copy rather than by reason — `offsetVtt` is called from
+exactly one place, `pipeline.ts:293`, which only `handleProcess` reaches. Keeping
+the dead branches would have left the next reader believing inspection can
+produce a subtitle error.
+
+**The lane bug was two bugs.** `Promise.all` rejects on the first failure and
+abandons the second promise, so the survivor kept feeding an `Output` that was
+already cancelling and then rejected with nothing awaiting it — and because
+`diagnostics.ts` hooks `unhandledrejection`, that reached the user as a second
+error they had no way to interpret. The fix has to do both things: observe both
+rejections, and stop the survivor rather than merely ignoring it.
+
+**Why the cause is preferred over the cancellation:** when the video lane fails,
+the audio lane's `CancelledError` is an EFFECT of that failure. Reporting it
+would name the symptom. `settleLanes` picks the first non-cancellation cause and
+falls back to cancellation only when that is genuinely all that happened — a
+user pressing Cancel, where both lanes raise it and there is no truer cause.
+
+**Extracted to be testable.** Inline in `encode()` this needed WebCodecs to
+reach. As a pure function over promises it is seven assertions, including the
+one that matters most: that no rejection is left unobserved when both lanes fail
+independently.
+
+**Link:** `src/media/pipeline.ts`, `src/workers/job.worker.ts`,
+`src/media/lanes.test.ts`.
+
 ## 2026-08-26 — VH-42: split the duration that was doing two jobs
 
 **Decision:** `PipelineOptions.durationSeconds` becomes `videoDurationSeconds`

@@ -159,19 +159,6 @@
       or the current behaviour is confirmed adequate and the reason recorded.
       Scope: `'in-memory'` is not an option — it reinstates the memory ceiling.
 
-- [ ] **VH-37 Failures report themselves dishonestly** (2026-08-25)
-      Intent: two small defects that turn a known cause into "Something went
-      wrong". `InvalidVttError` is special-cased in `handleInspect` and
-      `handlePreflight`, neither of which touches VTT, and is missing from
-      `handleProcess` where `offsetVtt` actually throws — so a malformed sidecar
-      surfaces as the generic message. And `Promise.all([feedVideo(), feedAudio()])`
-      (`pipeline.ts:431`) has no mutual abort, so when one lane throws the other
-      keeps pushing into a cancelling `Output`; its later rejection is unhandled,
-      and `diagnostics.ts` hooks `unhandledrejection`, so the user gets the real
-      error plus a spurious entry in the errors panel.
-      Done when: a bad sidecar names itself, and one lane failing settles the
-      other instead of producing a second error.
-
 - [ ] **VH-38 The one-hour ceiling nobody decided** (2026-08-25)
       Intent: the `process` request carries a 3,600,000 ms client timeout
       (`main.ts:516`) that rejects **without** sending `cancel`. Preflight only

@@ -209,7 +209,11 @@ async function handleProcess(
       kind: 'failed',
       id,
       message:
-        cause instanceof UnreadableFileError
+        // A bad sidecar names itself. `offsetVtt` throws here and nowhere else
+        // — `pipeline.ts` is the only caller — yet this was the one handler
+        // that did not check for it, so "your subtitle file is not valid
+        // WebVTT" reached the user as "something went wrong" (VH-37).
+        cause instanceof InvalidVttError || cause instanceof UnreadableFileError
           ? cause.message
           : // The user-facing sentence never changes. In development the
             // underlying reason is appended, because "something went wrong"
@@ -242,9 +246,7 @@ async function handleInspect(id: number, file: Blob): Promise<void> {
     post({ kind: 'inspected', id, report: await inspectFile(file) })
   } catch (cause) {
     const message =
-      cause instanceof InvalidVttError
-        ? cause.message
-        : cause instanceof UnreadableFileError
+      cause instanceof UnreadableFileError
         ? cause.message
         : 'Something went wrong reading this file. It may be corrupted, or in a format this tool cannot read.'
     log.warn('worker', 'inspection failed', {
@@ -325,9 +327,7 @@ async function handlePreflight(
     post({ kind: 'preflighted', id, summary })
   } catch (cause) {
     const message =
-      cause instanceof InvalidVttError
-        ? cause.message
-        : cause instanceof UnreadableFileError
+      cause instanceof UnreadableFileError
         ? cause.message
         : 'Something went wrong checking this file against your device.'
     log.warn('worker', 'preflight failed', {

@@ -71,6 +71,46 @@ export interface PipelineResult {
   readonly subtitleCues: number
 }
 
+/**
+ * Runs both feed lanes, stops the survivor when one fails, and reports the
+ * cause that actually mattered (VH-37).
+ *
+ * `Promise.all` was wrong twice over. It rejects on the FIRST failure and
+ * leaves the other lane running unobserved — still pushing into an `Output`
+ * that is already cancelling — so that lane rejected later with nothing
+ * awaiting it. `diagnostics.ts` hooks `unhandledrejection`, so the user was
+ * shown the real error AND a second, spurious entry for the lane that only
+ * failed because the first one did.
+ *
+ * `allSettled` waits for both, so nothing is left unobserved. `onFailure`
+ * aborts the signal the lanes share, so the survivor stops promptly rather than
+ * running to completion. And the rethrow prefers a real cause over a
+ * {@link CancelledError}, because the cancellation is an EFFECT of the failure
+ * and reporting it would name the symptom rather than the disease.
+ *
+ * @param lanes - Started here, not before, so nothing is in flight if this
+ *   throws synchronously.
+ * @param onFailure - Called as soon as any lane rejects.
+ */
+export async function settleLanes(
+  lanes: ReadonlyArray<() => Promise<void>>,
+  onFailure: () => void,
+): Promise<void> {
+  const settled = await Promise.allSettled(
+    lanes.map((lane) =>
+      lane().catch((cause: unknown) => {
+        onFailure()
+        throw cause
+      }),
+    ),
+  )
+  const failures = settled
+    .filter((result): result is PromiseRejectedResult => result.status === 'rejected')
+    .map((result) => result.reason as unknown)
+  if (failures.length === 0) return
+  throw failures.find((cause) => !(cause instanceof CancelledError)) ?? failures[0]
+}
+
 export class CancelledError extends Error {
   override readonly name = 'CancelledError'
   constructor() {
@@ -306,11 +346,27 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
 
   const renderer = new BrandingRenderer(shape, options.backgroundColour)
 
+  // One failing lane must stop the other (VH-37). Both push into the same
+  // `Output`, so a lane that keeps feeding one that is already cancelling
+  // rejects later with nothing awaiting it — and `diagnostics.ts` hooks
+  // `unhandledrejection`, so the user was shown the real error AND a spurious
+  // second entry in the errors panel for the lane that only failed because the
+  // first one did.
+  //
+  // The lanes watch this signal rather than the caller's, and the caller's
+  // aborts it, so user cancellation still reaches them.
+  const lanes = new AbortController()
+  const abortLanes = (): void => {
+    lanes.abort()
+  }
+  signal?.addEventListener('abort', abortLanes, { once: true })
+  const laneSignal = lanes.signal
+
   // Everything is fed in timeline order within its own track, and the two
   // tracks are fed concurrently — the muxer interleaves them, so running one
   // track to completion first would make it buffer the whole of that track.
   const feedVideo = async (): Promise<void> => {
-    if (opening) await feedBrandingVideo(opening, videoSource, 0, renderer, signal)
+    if (opening) await feedBrandingVideo(opening, videoSource, 0, renderer, laneSignal)
 
     const sink = new VideoSampleSink(videoTrack)
 
@@ -339,7 +395,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     let contentOrigin: number | null = null
     let lastTrackTimestamp = 0
     for await (const sample of sink.samples()) {
-      throwIfAborted(signal)
+      throwIfAborted(laneSignal)
       try {
         // Read before `setTimestamp`, which mutates the sample in place.
         const original = sample.timestamp
@@ -391,7 +447,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
           const step = 1 / shape.frameRate
           const held = Math.round(CLOSING_ONSET_SECONDS * shape.frameRate)
           for (let index = 0; index < held; index++) {
-            throwIfAborted(signal)
+            throwIfAborted(laneSignal)
             const brand = await buildSink.getSample(index * step)
             if (!brand) continue
             const composed = compositor.compose(frozen, brand, buildFit, {
@@ -412,7 +468,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       }
     }
 
-    if (closing) await feedBrandingVideo(closing, videoSource, closingOffset, renderer, signal)
+    if (closing) await feedBrandingVideo(closing, videoSource, closingOffset, renderer, laneSignal)
     videoSource.close()
   }
 
@@ -432,7 +488,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     }
 
     if (opening) {
-      await feedBrandingAudio(opening, emit, 0, { fadeIn: false, fadeOut: true }, signal)
+      await feedBrandingAudio(opening, emit, 0, { fadeIn: false, fadeOut: true }, laneSignal)
     }
 
     const processContent = createContentAudioProcessor(audioPlan, {
@@ -445,7 +501,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     })
     const sink = new AudioSampleSink(audioTrack)
     for await (const sample of sink.samples()) {
-      throwIfAborted(signal)
+      throwIfAborted(laneSignal)
       let processed
       try {
         processed = processContent(sample)
@@ -457,7 +513,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     }
 
     if (closing) {
-      await feedBrandingAudio(closing, emit, closingOffset, { fadeIn: true, fadeOut: false }, signal)
+      await feedBrandingAudio(closing, emit, closingOffset, { fadeIn: true, fadeOut: false }, laneSignal)
     }
     audioSource.close()
   }
@@ -470,7 +526,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       subtitleSource.close()
     }
 
-    await Promise.all([feedVideo(), feedAudio()])
+    await settleLanes([feedVideo, feedAudio], abortLanes)
 
     throwIfAborted(signal)
     onProgress?.({ stage: 'finishing', fraction: 0.99 })
@@ -507,5 +563,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       // Already finalized or never started. Nothing to undo.
     }
     throw cause
+  } finally {
+    signal?.removeEventListener('abort', abortLanes)
   }
 }

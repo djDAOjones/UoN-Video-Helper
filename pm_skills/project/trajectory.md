@@ -246,3 +246,17 @@ The deployed site was also confirmed working on a University machine, so
   shipped with VH-22. `presets.ts` commented `avc1.640033` as "level 4.2" where
   `0x33` is 51 — level 5.1 — and the comment was wrong in the direction that
   matters, since 4.2 tops out below the 4K sources spec §2 contains.
+
+### VH-37 — failures that name themselves
+
+- VH-37 — Shipped 2026-08-26. `InvalidVttError` was checked in `handleInspect`
+  and `handlePreflight`, neither of which parses VTT, and not in
+  `handleProcess`, which is the only path that reaches `offsetVtt` — so a
+  malformed sidecar surfaced as "something went wrong". The check moved to
+  where the throw is and the two dead ones are gone. And the two feed lanes now
+  fail together: `Promise.all` left the survivor pushing into a cancelling
+  `Output`, and its later rejection reached the user as a second, unexplained
+  entry in the errors panel via `diagnostics.ts`'s `unhandledrejection` hook.
+  `settleLanes` waits for both, aborts the survivor, and reports the cause
+  rather than the cancellation it triggered — extracted so it is testable
+  without WebCodecs.
