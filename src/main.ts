@@ -19,6 +19,8 @@ import { adoptLogRecords, log, setMinimumLogLevel } from './core/logger'
 import { APP_VERSION, BUILD_ID } from './core/version'
 import { CLOSING_DEFAULTS } from './config/branding'
 import type { PresetId } from './config/presets'
+import { WORKER_SILENCE_LIMIT_MS } from './config/thresholds'
+import { createWatchdog } from './core/watchdog'
 import { saveFile, suggestedFileName } from './media/save'
 import { countCues } from './media/vtt'
 import { formatFileSize } from './ui/format'
@@ -241,6 +243,8 @@ const worker = new Worker(new URL('./workers/job.worker.ts', import.meta.url), {
 
 let nextRequestId = 1
 const pending = new Map<number, (message: WorkerOutbound) => void>()
+/** Resets the watchdog for a request that is still being answered. */
+const keepAlive = new Map<number, () => void>()
 
 /**
  * Sends a request and resolves with its reply.
@@ -256,19 +260,48 @@ function request(
   return requestWithId(payload, timeoutMs).promise
 }
 
-/** As {@link request}, but exposes the id so the job can be cancelled. */
+/**
+ * As {@link request}, but exposes the id so the job can be cancelled.
+ *
+ * `bound` chooses what the watchdog measures. A number is a deadline for the
+ * whole exchange, which suits a request that should answer promptly. `idleMs`
+ * measures SILENCE instead, resetting on every message the worker sends about
+ * this request — which is what a job needs, because spec section 7 opens with
+ * "no arbitrary file-size or duration cap" and a whole-exchange deadline is
+ * exactly such a cap (VH-38). A three-hour lecture that is reporting progress
+ * every few seconds is healthy; one that has said nothing for a minute is not,
+ * however long it has been running.
+ */
 function requestWithId(
   payload: DistributiveOmit<WorkerRequest, 'id'>,
-  timeoutMs = 5000,
+  bound: number | { readonly idleMs: number } = 5000,
 ): { id: number; promise: Promise<WorkerOutbound> } {
   const id = nextRequestId++
+  const idleMs = typeof bound === 'number' ? null : bound.idleMs
+  const limitMs = typeof bound === 'number' ? bound : bound.idleMs
+
   const promise = new Promise<WorkerOutbound>((resolve, reject) => {
-    const timer = setTimeout(() => {
+    const watchdog = createWatchdog(limitMs, () => {
       pending.delete(id)
-      reject(new Error(`Worker did not answer "${payload.kind}" within ${timeoutMs} ms`))
-    }, timeoutMs)
+      keepAlive.delete(id)
+      // Tell the worker to stop before walking away. Without this the job kept
+      // encoding, its result landed in the worker's `finished` map, and nothing
+      // ever released it — the user was told the job had not finished while it
+      // quietly ran to completion and held its output forever (VH-38).
+      worker.postMessage({ kind: 'cancel', id: nextRequestId++, cancelId: id })
+      reject(
+        new Error(
+          idleMs === null
+            ? `Worker did not answer "${payload.kind}" within ${limitMs} ms`
+            : `Worker went quiet for ${limitMs} ms during "${payload.kind}"`,
+        ),
+      )
+    })
+
+    if (idleMs !== null) keepAlive.set(id, () => watchdog.reset())
     pending.set(id, (message) => {
-      clearTimeout(timer)
+      watchdog.clear()
+      keepAlive.delete(id)
       resolve(message)
     })
     worker.postMessage({ ...payload, id })
@@ -286,12 +319,15 @@ worker.addEventListener('message', (event: MessageEvent<WorkerOutbound>) => {
     return
   }
   if (message.kind === 'stage') {
-    // Progress never resolves the job's request — it reports on one in flight.
+    // Progress never resolves the job's request — it reports on one in flight,
+    // which is exactly what the watchdog needs to hear.
+    keepAlive.get(message.id)?.()
     onStage(message.stage, message.fraction)
     return
   }
   pending.get(message.id)?.(message)
   pending.delete(message.id)
+  keepAlive.delete(message.id)
 })
 
 /**
@@ -547,7 +583,10 @@ startButton.addEventListener('click', () => {
       backgroundColour: brandBackground(),
       ...(subtitleVtt ? { subtitleVtt } : {}),
     },
-    3_600_000,
+    // Silence, not duration. A job reports a stage every thirty frames, so a
+    // minute without a word means something is genuinely wrong — while an
+    // hour of honest work no longer trips anything (VH-38).
+    { idleMs: WORKER_SILENCE_LIMIT_MS },
   )
   jobCancelId = id
   setJobInFlight(true)

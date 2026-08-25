@@ -284,3 +284,17 @@ The deployed site was also confirmed working on a University machine, so
   The inconsistency was sharper than the 5 ms suggests: the ANALYSIS pass
   already flushed, so loudness was being measured over audio the output did not
   contain. Pinned by a frame-conservation test — in equals out, flush included.
+
+### VH-38 — the one-hour ceiling removed
+
+- VH-38 — Shipped 2026-08-26. The `process` request carried a 3,600,000 ms
+  deadline on the whole job — a duration cap of exactly the kind spec §7 opens
+  by disclaiming — and it rejected WITHOUT telling the worker, so the job ran on,
+  finished, and held its output in the `finished` map while the user was told it
+  had not finished. The watchdog now measures SILENCE: `pipeline.ts` reports a
+  stage every thirty frames, so a healthy job speaks several times a second
+  however long it runs, and `WORKER_SILENCE_LIMIT_MS` (60 s) catches a wedged
+  one. Giving up posts `cancel` first, so nothing is retained. Extracted as
+  `createWatchdog` and pinned with fake timers, including that a late progress
+  message cannot resurrect a request whose caller has already been told it
+  failed.

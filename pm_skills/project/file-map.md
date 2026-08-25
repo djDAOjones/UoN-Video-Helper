@@ -15,14 +15,14 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 134 file(s) across 8 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 136 file(s) across 8 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 16 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
 - `docs` — 5 file(s)
 - `public` — 17 file(s)
 - `scripts` — 4 file(s)
-- `src` — 86 file(s)
+- `src` — 88 file(s)
 - `test` — 4 file(s)
 <!-- /file-map-index -->
 
@@ -128,6 +128,8 @@
 - `src/core/redact.test.ts` — Proves the bundle carries media characteristics but never the media, its name, or its path.
 - `src/core/redact.ts` — Redaction. This app's sensitive asset is the user's media and filename, not a token.
 - `src/core/version.ts` — Reads the injected product version and build identity.
+- `src/core/watchdog.test.ts` — Pins the silence watchdog, including that a late sign of life cannot resurrect a request already given up on.
+- `src/core/watchdog.ts` — A timer that measures SILENCE rather than elapsed time, so a long job is never mistaken for a stuck one.
 - `src/main.ts` — App entry: installs diagnostics first, mounts the shell, runs the system check.
 - `src/media/audio-frames.ts` — AudioSample to planar Float32 and back, shared by the chain and branding.
 - `src/media/audio-plan.ts` — The three audio passes, and the per-sample hook the encoder calls.

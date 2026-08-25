@@ -10,6 +10,24 @@
 /** Spec 7.2: require this multiple of the projected output size in free storage. */
 export const STORAGE_HEADROOM_MULTIPLE = 2.5
 
+/**
+ * How long the worker may say nothing during a job before the main thread
+ * gives up on it, in milliseconds.
+ *
+ * This replaced a one-hour bound on the whole job (VH-38), which was a duration
+ * cap of exactly the kind spec section 7 opens by disclaiming — and it rejected
+ * without telling the worker, so the job ran on, finished, and held its output
+ * in memory while the user was told it had failed.
+ *
+ * Silence is the honest signal. `pipeline.ts` reports a stage every thirty
+ * frames, so even the slowest device measured (6.3x real time) speaks several
+ * times a second; a minute of nothing means the worker is wedged, not busy.
+ * Generous on purpose: the figure only has to be longer than the longest gap a
+ * HEALTHY job can produce, and being wrong in the impatient direction would
+ * cancel real work.
+ */
+export const WORKER_SILENCE_LIMIT_MS = 60_000
+
 /** Spec 7.1: seconds of the user's actual file to decode and re-encode when calibrating. */
 export const CALIBRATION_PROBE_SECONDS = 3
 

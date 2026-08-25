@@ -11,6 +11,38 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-26 — VH-38: measure silence, not duration
+
+**Decision:** the `process` request's watchdog resets on every message the
+worker sends about it, and gives up only after `WORKER_SILENCE_LIMIT_MS` of
+quiet. Giving up posts `cancel` before rejecting.
+
+**Rationale:** the old bound asked the wrong question. "Has this job been
+running for more than an hour?" is a duration cap, and spec section 7 opens by
+saying there is not one; it also gets slow devices exactly backwards, punishing
+the machines that most need patience. "Has this job said anything in the last
+minute?" is the question that actually separates a wedged worker from a busy
+one, and it is answerable because `pipeline.ts` reports a stage every thirty
+frames — so a healthy job speaks several times a second however long it runs.
+
+**The retention half mattered as much.** Rejecting without telling the worker
+left the job encoding, its result landing in `finished`, and nothing ever
+releasing it. The user was told the job had failed while it quietly succeeded
+and held its output for the tab's lifetime.
+
+**Why 60 s:** it only has to exceed the longest gap a HEALTHY job can produce,
+and the errors are asymmetric — too patient costs a wedged worker some seconds
+nobody is watching, too impatient cancels real work. Recorded in
+`thresholds.ts` with that reasoning rather than as a bare number.
+
+**Extracted to be testable:** inline in `requestWithId` this needed a worker and
+an hour. As `createWatchdog` it is seven assertions under fake timers, including
+the one that is easy to miss — a late sign of life must not resurrect a request
+whose caller has already been told it failed and whose worker has already been
+sent a cancel.
+
+**Link:** `src/core/watchdog.ts`, `src/config/thresholds.ts`, `src/main.ts`.
+
 ## 2026-08-26 — VH-20: emit the tail rather than document the loss
 
 **Decision:** `createContentAudioProcessor` returns `{ process, flush }`, and

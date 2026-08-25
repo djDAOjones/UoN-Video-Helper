@@ -151,19 +151,6 @@
       or the current behaviour is confirmed adequate and the reason recorded.
       Scope: `'in-memory'` is not an option — it reinstates the memory ceiling.
 
-- [ ] **VH-38 The one-hour ceiling nobody decided** (2026-08-25)
-      Intent: the `process` request carries a 3,600,000 ms client timeout
-      (`main.ts:516`) that rejects **without** sending `cancel`. Preflight only
-      *discourages* jobs it estimates above an hour, so one can start. The worker
-      then keeps encoding, its result lands in the `finished` map and is never
-      released, and the user is told the job did not finish. Spec §7 opens with
-      "no arbitrary file-size or duration cap"; this is one, by the back door.
-      Done when: a long job either completes or is cancelled for a stated reason,
-      and nothing is retained after a client-side give-up. How likely this is
-      remains unknown until VH-M2 measures the slow devices — at the one
-      measured figure (6.3× real time) an hour of source takes ten minutes, but
-      a device at 0.5× real time would trip it on a 30-minute lecture.
-
 ### Band 3 — New capability, or waiting on material
 
 <!-- Not committed, and none of it can start today: two wait on assets that
