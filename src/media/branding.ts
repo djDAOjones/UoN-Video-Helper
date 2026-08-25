@@ -4,7 +4,7 @@
  * Sequences are currently prepended and appended, never overlaid. Overlaying
  * is what the "transition" modes need and is not built yet (VH-22); this
  * module handles the opaque parts, which is every mode's tail and all of
- * "clean cut".
+ * "hard cut".
  *
  * The real closing masters carry NO audio, which the maintainer confirms is
  * intended (2026-08-25) — so spec 4.4's mastered audio bed, and the rule that
@@ -175,7 +175,7 @@ async function fetchClip(url: string, segment: BrandingSegment): Promise<Brandin
 /**
  * Loads the opaque part of a segment.
  *
- * For `closing` this is the real 4 s tail, which is the whole of "clean cut".
+ * For `closing` this is the real 4 s tail, which is the whole of "hard cut".
  * For `opening` it is still a generated placeholder (VH-23).
  */
 export async function loadBrandingClip(
@@ -199,7 +199,7 @@ export async function loadBrandingClip(
  *
  * Kept separate from {@link loadBrandingClip} because it is optional in a way
  * the tail is not: if this returns `null` the job can still fall back to
- * "clean cut" and produce branding, which is why alpha decode failing in some
+ * "hard cut" and produce branding, which is why alpha decode failing in some
  * browser is a degradation rather than an outage (VH-12).
  */
 export async function loadClosingOnset(

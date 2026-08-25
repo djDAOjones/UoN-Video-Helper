@@ -13,8 +13,8 @@ Each 5 s master splits at exactly 1.00 s, where the alpha ramp completes:
 
 | Part | Files | Format | Why |
 | --- | --- | --- | --- |
-| `closing-onset-{style}-{colour}-{height}p.webm` | 8 | VP9 + alpha in WebM | The 1 s transition needs transparency. Used only by the "transition" and "transition with freeze frame" modes. |
-| `closing-tail-{colour}-{height}p.mp4` | 4 | H.264 High, CRF 18 | Fully opaque. Deliberately the most universally decodable format, so "clean cut" works even where alpha decode does not. |
+| `closing-onset-{style}-{colour}-{height}p.webm` | 8 | VP9 + alpha in WebM | The 1 s build needs transparency. Used only by the "over picture" and "over freeze frame" modes. |
+| `closing-tail-{colour}-{height}p.mp4` | 4 | H.264 High, CRF 18 | Fully opaque. Deliberately the most universally decodable format, so "hard cut" works even where alpha decode does not. |
 
 Styles are `fade` and `slide`; colours are `blue` and `white`; heights are
 `1080p` and `2160p`. **Fade Blue is the default.** There are only two tails

@@ -27,19 +27,23 @@ export type BrandingStyle = 'fade' | 'slide'
 export type BrandingColour = 'blue' | 'white'
 
 /**
- * How the closing graphic meets the source (VH-22), named as the maintainer
- * named them. `T` is the source duration.
+ * How the closing graphic meets the source (VH-22). `T` is the source
+ * duration.
  *
- * - `clean-cut` — the onset is discarded and the tail follows the source.
- *   Output `T + 4.00`. Composites nothing, so it is the only mode that works
- *   without alpha decode.
- * - `transition` — the onset plays over the closing second of source.
- *   Output `T + 4.00`. Nothing is cut; the last second is progressively
- *   obscured.
- * - `transition-freeze` — the final source frame sustains under the onset.
- *   Output `T + 5.00`. Nothing is obscured, at the cost of a frozen second.
+ * The graphic opens with a 1 s animated build. What the three modes really
+ * choose between is what sits UNDERNEATH that build, so they are named for
+ * that — using the conventional edit terms rather than invented ones.
+ *
+ * - `hard-cut` — the build is discarded and the picture cuts straight to the
+ *   finished card. Output `T + 4.00`. Composites nothing, so it is the only
+ *   mode that works without alpha decode.
+ * - `over-picture` — the build plays over the closing second of moving
+ *   picture. Output `T + 4.00`. Nothing is cut, but that second is
+ *   progressively covered.
+ * - `over-freeze` — the final frame sustains under the build. Output
+ *   `T + 5.00`. Nothing is covered, at the cost of a frozen second.
  */
-export type BrandingMode = 'clean-cut' | 'transition' | 'transition-freeze'
+export type BrandingMode = 'hard-cut' | 'over-picture' | 'over-freeze'
 
 /** Measured from the masters, not assumed. See tickets/VH-12.md. */
 export const CLOSING_ONSET_SECONDS = 1
@@ -48,28 +52,27 @@ export const CLOSING_TAIL_SECONDS = 4
 /**
  * Defaults, all the maintainer's choice (2026-08-25).
  *
- * `clean-cut` is the default because it is the least for a user to think
- * about; the transitions are perks for people who want them. It also happens
- * to be the most robust choice — it is the one mode that composites nothing,
- * so the default path keeps working even in a browser that cannot decode
- * transparency at all.
+ * `hard-cut` is the default because it is the least for a user to think about;
+ * the other two are perks for people who want them. It also happens to be the
+ * most robust choice — the one mode that composites nothing, so the default
+ * path keeps working even in a browser that cannot decode transparency.
  */
 export const CLOSING_DEFAULTS = {
   style: 'fade',
   colour: 'blue',
-  mode: 'clean-cut',
+  mode: 'hard-cut',
 } as const satisfies { style: BrandingStyle; colour: BrandingColour; mode: BrandingMode }
 
 /** Seconds a closing adds to the output, which is mode-dependent. */
 export function closingAddedSeconds(mode: BrandingMode): number {
-  return mode === 'transition-freeze'
+  return mode === 'over-freeze'
     ? CLOSING_ONSET_SECONDS + CLOSING_TAIL_SECONDS
     : CLOSING_TAIL_SECONDS
 }
 
 /** Whether a mode needs the transparent onset, and so alpha decode. */
 export function modeNeedsOnset(mode: BrandingMode): boolean {
-  return mode !== 'clean-cut'
+  return mode !== 'hard-cut'
 }
 
 /** The two shipped asset heights. */

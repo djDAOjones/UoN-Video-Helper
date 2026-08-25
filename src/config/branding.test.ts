@@ -21,13 +21,13 @@ describe('closing duration by mode', () => {
   // The mode changes the output length, so anything that estimates time or
   // offsets subtitles has to ask rather than assume 4 seconds.
   it('adds only the tail for the two modes that end with the source', () => {
-    expect(closingAddedSeconds('clean-cut')).toBe(4)
-    expect(closingAddedSeconds('transition')).toBe(4)
+    expect(closingAddedSeconds('hard-cut')).toBe(4)
+    expect(closingAddedSeconds('over-picture')).toBe(4)
   })
 
   it('adds a second more for the freeze, which sustains under the onset', () => {
-    expect(closingAddedSeconds('transition-freeze')).toBe(5)
-    expect(closingAddedSeconds('transition-freeze') - closingAddedSeconds('transition')).toBe(
+    expect(closingAddedSeconds('over-freeze')).toBe(5)
+    expect(closingAddedSeconds('over-freeze') - closingAddedSeconds('over-picture')).toBe(
       CLOSING_ONSET_SECONDS,
     )
   })
@@ -38,12 +38,12 @@ describe('closing duration by mode', () => {
 })
 
 describe('which modes need alpha', () => {
-  // Clean cut must stay reachable without alpha decode: it is the fallback if
+  // Hard cut must stay reachable without alpha decode: it is the fallback if
   // a browser cannot handle transparent video (VH-12).
-  it('needs the onset for both transition modes and not for clean cut', () => {
-    expect(modeNeedsOnset('clean-cut')).toBe(false)
-    expect(modeNeedsOnset('transition')).toBe(true)
-    expect(modeNeedsOnset('transition-freeze')).toBe(true)
+  it('needs the onset for both overlay modes and not for the hard cut', () => {
+    expect(modeNeedsOnset('hard-cut')).toBe(false)
+    expect(modeNeedsOnset('over-picture')).toBe(true)
+    expect(modeNeedsOnset('over-freeze')).toBe(true)
   })
 })
 
@@ -81,7 +81,7 @@ describe('closing asset naming', () => {
 
   it('serves onsets as WebM and tails as MP4', () => {
     // Not cosmetic: the tail is the most universally decodable format on
-    // purpose, so clean cut survives where alpha decode does not.
+    // purpose, so hard cut survives where alpha decode does not.
     expect(closingOnsetName('fade', 'blue', 1080).endsWith('.webm')).toBe(true)
     expect(closingTailName('blue', 1080).endsWith('.mp4')).toBe(true)
   })
@@ -100,7 +100,7 @@ describe('defaults', () => {
   })
 
   it('defaults to the mode that needs no alpha, so the default path always works', () => {
-    expect(CLOSING_DEFAULTS.mode).toBe('clean-cut')
+    expect(CLOSING_DEFAULTS.mode).toBe('hard-cut')
     expect(modeNeedsOnset(CLOSING_DEFAULTS.mode)).toBe(false)
   })
 })

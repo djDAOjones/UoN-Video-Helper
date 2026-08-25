@@ -87,16 +87,16 @@
       device.
 
 - [ ] **VH-22 Branding boundary modes** [detail](tickets/VH-22.md) (2026-08-25)
-      Intent: the closing graphic is a 1.00 s alpha onset plus a 4.00 s opaque
-      tail, so what sits under that second is an editorial choice. Three modes,
-      named and confirmed by the maintainer on 2026-08-25: **hard transition**
-      (discard the onset, T+4.00, no compositing), **transition** (onset over
-      the closing second, T+4.00), **transition with still frame** (final frame
-      sustains under the onset, T+5.00).
-      Done when: all three work and are named this way with a stated default;
-      the VH-25 fade-out defaults ON for hard transition only, since elsewhere
-      the onset IS the transition; and mode 3 freezes the last CLEAN frame, not
-      the last decoded one.
+      Intent: the closing graphic opens with a 1.00 s animated build over a
+      4.00 s opaque card, so what sits UNDER the build is an editorial choice.
+      Three modes, using the conventional edit terms: **hard cut** (discard the
+      build, T+4.00, composites nothing), **over picture** (build plays over
+      the closing second, T+4.00), **over freeze frame** (final frame sustains
+      under the build, T+5.00).
+      Done when: all three work, with **hard cut** the default (2026-08-25);
+      the VH-25 fade-out defaults ON for hard cut only, since in the other two
+      the build IS the transition; and over freeze frame holds the last CLEAN
+      frame, not the last decoded one.
       Blocked on VH-12's alpha decode for modes 2 and 3.
 
 - [ ] **VH-23 Opening graphics** (2026-08-25)
@@ -156,7 +156,7 @@
       decode, the compositor handles alpha, and branding scales and
       frame-rate-converts to the source.
       First step is a spike: verify alpha decode in every supported browser.
-      If it fails, "clean cut" still ships — that mode never composites.
+      If it fails, "hard cut" still ships — that mode never composites.
 
 - [ ] **VH-13 Published limits copy** [blocked: VH-M2] (2026-08-24)
       Turn the measured envelope into the user-facing wording. Closes D8.
