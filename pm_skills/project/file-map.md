@@ -42,6 +42,10 @@
 - `tsconfig.json` — Strict TypeScript. `noUncheckedIndexedAccess` matters here — this codebase indexes buffers.
 - `vite.config.ts` — Build config and the build-identity injection (`__APP_VERSION__`, `__BUILD_ID__`).
 
+## .github
+
+- `.github/workflows/deploy-pages.yml` — Manual GitHub Pages deploy. Runs the full gate, then publishes `dist`.
+
 ## .claude
 
 - `.claude/launch.json` — Dev-server definition so the preview tooling can boot the app by name.

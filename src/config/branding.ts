@@ -168,8 +168,16 @@ export function selectOpeningMaster(output: {
 
 /* ---------------------------------------------------------------------- */
 
-/** Where the assets are served from. Copied verbatim by the build; stable URLs. */
-export const BRANDING_ASSET_BASE = '/branding'
+/**
+ * Where the assets are served from.
+ *
+ * Derived from Vite's `BASE_URL` rather than hard-coded to `/branding`,
+ * because a GitHub Pages project site serves from `/<repo>/` and every
+ * branding fetch would 404 against an absolute path. `BASE_URL` always ends
+ * in a slash, so this is `/branding` locally and `/UoN-Video-Helper/branding`
+ * when deployed.
+ */
+export const BRANDING_ASSET_BASE = `${import.meta.env.BASE_URL}branding`
 
 export function brandingAssetUrl(name: string): string {
   return `${BRANDING_ASSET_BASE}/${name}`

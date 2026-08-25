@@ -1,0 +1,67 @@
+# Deploys the app to GitHub Pages.
+#
+# Deliberately MANUAL (`workflow_dispatch`) rather than on push. A Pages site
+# on a personal account is public, and this one carries University of
+# Nottingham branding, so the first publish is a decision rather than a side
+# effect of a commit. Add a `push` trigger once that decision is made and the
+# hosting question (D5 / VH-14) is settled.
+#
+# The app processes video entirely on the viewer's device, so deploying it
+# exposes no media. What deploying DOES expose is the branding assets and the
+# tool itself.
+
+name: Deploy to GitHub Pages
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never publish two builds at once; let a queued run supersede a waiting one,
+# but do not cancel one that is mid-deploy.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      # The full gate, not just a build. A deploy is the one place where
+      # shipping a broken bundle is expensive to undo.
+      - run: npm run check
+        env:
+          BASE_PATH: /${{ github.event.repository.name }}/
+
+      # Derived from the repo name so a fork or a rename does not silently
+      # produce a site whose asset URLs all 404.
+      - run: npm run build
+        env:
+          BASE_PATH: /${{ github.event.repository.name }}/
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

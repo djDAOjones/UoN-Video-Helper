@@ -87,9 +87,12 @@ describe('closing asset naming', () => {
   })
 
   it('builds urls under the stable asset base', () => {
+    // Anchored to BASE_URL, not to a leading slash: the deployed site serves
+    // from a subpath and an absolute URL would 404 there.
     expect(brandingAssetUrl(closingTailName('blue', 2160))).toBe(
-      '/branding/closing-tail-blue-2160p.mp4',
+      `${import.meta.env.BASE_URL}branding/closing-tail-blue-2160p.mp4`,
     )
+    expect(brandingAssetUrl('x.mp4').startsWith(import.meta.env.BASE_URL)).toBe(true)
   })
 })
 

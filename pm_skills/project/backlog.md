@@ -159,9 +159,19 @@
 - [ ] **VH-13 Published limits copy** [blocked: VH-M2] (2026-08-24)
       Turn the measured envelope into the user-facing wording. Closes D8.
 
-- [ ] **VH-14 Deployment** [blocked: D5] (2026-08-24)
-      Static hosting, cache strategy for branding assets, offline-after-
-      first-load. Needs a hosting decision from UoN IT / web team.
+- [ ] **VH-14 Deployment** [maintainer] (2026-08-24)
+      Intent: GitHub Pages is technically viable and the build is ready for it
+      — the app needs no COOP/COEP headers (nothing uses SharedArrayBuffer),
+      which is the usual thing that rules Pages out, and asset URLs now derive
+      from `import.meta.env.BASE_URL` so a `/<repo>/` subpath works. A manual
+      workflow exists at `.github/workflows/deploy-pages.yml`.
+      What is NOT settled is whether it should be published there: a Pages site
+      on a personal account is public, it would serve UoN branding from
+      `djdaojones.github.io`, and D5 asked for a hosting decision from UoN IT.
+      The trigger is `workflow_dispatch` only so that stays a decision.
+      Done when: the hosting question is answered, the site is reachable from a
+      managed University machine (github.io may be filtered — untested), and
+      the cache strategy for offline-after-first-load is in place.
 
 - [ ] **VH-15 Confirm the browser exclusion** [maintainer] [blocked: D4] (2026-08-24)
       Sign-off from UoN IT that Safari below 26 may be excluded. The one

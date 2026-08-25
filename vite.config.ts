@@ -23,6 +23,11 @@ function buildId(): string {
 }
 
 export default defineConfig({
+  // A GitHub Pages project site serves from `/<repo>/`, not the root. The
+  // deploy workflow sets BASE_PATH; local dev and the acceptance run leave it
+  // unset and stay at `/`. Runtime asset URLs read `import.meta.env.BASE_URL`
+  // so they follow this automatically.
+  base: process.env['BASE_PATH'] ?? '/',
   server: {
     // Honour PORT when something upstream assigns one (preview tooling, a
     // container, a shared machine). Falls back to Vite's default otherwise,
