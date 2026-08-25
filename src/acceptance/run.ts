@@ -7,6 +7,7 @@
  * outstanding by name, so the gap is visible rather than assumed closed.
  */
 
+import { BRANDING_DURATIONS } from '../config/branding'
 import { PRESETS, outputShapeFor } from '../config/presets'
 import { TARGET_INTEGRATED_LUFS, TRUE_PEAK_CEILING_DBTP } from '../config/audio'
 import { inspectFile, openInput } from '../media/inspect'
@@ -61,7 +62,9 @@ async function process(
     ...(options.signal ? { signal: options.signal } : {}),
   })
   // Branding shifts everything; the loudness check needs to know by how much.
-  const openingSeconds = result.brandingApplied.opening ? 5 : 0
+  // Taken from config rather than repeated here: the closing figure is about
+  // to become mode-dependent (VH-22), and a copy would drift silently.
+  const openingSeconds = result.brandingApplied.opening ? BRANDING_DURATIONS.openingSeconds : 0
   return { file: result.file, workspace, openingSeconds }
 }
 

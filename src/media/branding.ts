@@ -1,15 +1,20 @@
 /**
  * Branding conform and concatenation, spec section 4.
  *
- * Sequences are prepended and appended, never overlaid. The branding carries
- * its own audio bed which is mastered at the target loudness and passes
- * through UNPROCESSED — which is why the audio chain cannot live in the
- * encoder's transform hook: that would apply to every sample, and levelling a
- * sting that is already at target would undo the mastering.
+ * Sequences are currently prepended and appended, never overlaid. Overlaying
+ * is what the "transition" modes need and is not built yet (VH-22); this
+ * module handles the opaque parts, which is every mode's tail and all of
+ * "clean cut".
  *
- * The same reasoning drives the loudness analysis running on source content
- * only (spec 4.4). Measuring a five-second sting together with fifty minutes
- * of speech biases the integrated figure and mis-levels the whole video.
+ * The real closing masters carry NO audio, which the maintainer confirms is
+ * intended (2026-08-25) — so spec 4.4's mastered audio bed, and the rule that
+ * it passes through unprocessed, describe nothing on current assets. The
+ * pass-through path is kept because the placeholders still have a bed and a
+ * future master might, but nothing depends on it.
+ *
+ * Loudness analysis still runs on source content only (spec 4.4): measuring a
+ * five-second sting together with fifty minutes of speech would bias the
+ * integrated figure and mis-level the whole video.
  */
 
 import {
@@ -23,7 +28,17 @@ import {
   type VideoSampleSource,
 } from 'mediabunny'
 
-import { BRANDING_DURATIONS, brandingAssetUrl, selectBrandingMaster, type BrandingSegment } from '../config/branding'
+import {
+  BRANDING_DURATIONS,
+  CLOSING_DEFAULTS,
+  brandingAssetHeight,
+  brandingAssetUrl,
+  closingTailName,
+  openingAssetName,
+  selectOpeningMaster,
+  type BrandingColour,
+  type BrandingSegment,
+} from '../config/branding'
 import { BOUNDARY_FADE_MS } from '../config/audio'
 import { log } from '../core/logger'
 import type { OutputShape } from '../config/presets'
@@ -122,9 +137,20 @@ export interface BrandingClip {
 export async function loadBrandingClip(
   segment: BrandingSegment,
   shape: OutputShape,
+  options: { readonly colour?: BrandingColour } = {},
 ): Promise<BrandingClip | null> {
-  const master = selectBrandingMaster({ height: shape.height, frameRate: shape.frameRate })
-  const url = brandingAssetUrl(segment, master)
+  // Closing uses the real 2025 assets and loads the opaque TAIL only. That is
+  // exactly "clean cut"; the transparent onset the other two modes composite
+  // is VH-22 and is not wired yet, so mode is not a parameter here.
+  const url =
+    segment === 'closing'
+      ? brandingAssetUrl(
+          closingTailName(options.colour ?? CLOSING_DEFAULTS.colour, brandingAssetHeight(shape.height)),
+        )
+      : brandingAssetUrl(
+          openingAssetName(selectOpeningMaster({ height: shape.height, frameRate: shape.frameRate })),
+        )
+
   try {
     const response = await fetch(url)
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
@@ -136,11 +162,7 @@ export async function loadBrandingClip(
     if (!track) throw new Error('Branding asset has no video track')
 
     const durationSeconds = await track.computeDuration()
-    log.info('branding', 'clip loaded', {
-      segment,
-      master: `${master.width}x${master.height}@${master.frameRate}`,
-      durationSeconds,
-    })
+    log.info('branding', 'clip loaded', { segment, url, durationSeconds })
     return { input, durationSeconds, segment }
   } catch (cause) {
     log.warn('branding', 'clip unavailable; continuing without it', {
