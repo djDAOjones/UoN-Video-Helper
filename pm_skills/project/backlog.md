@@ -14,22 +14,12 @@
      comes out, through a UI a novice can finish. Built in this order:
      the meter is proved before anything depends on it. -->
 
-- [ ] **VH-11 Acceptance verification**
-      Intent: prove the MVP against spec §13, not against a vibe.
-      Done when: every acceptance criterion reachable without real hardware
-      or real UoN material is exercised and recorded — including zero media
-      egress under network inspection, clean cancellation, and correct A/V
-      sync on a synthesised variable-frame-rate fixture. Preset comparison
-      needs camera-like motion: on near-static fixtures both presets are
-      content-limited and produce almost identical files, so the difference
-      cannot be observed — and the criteria
-      that need VH-M1 / VH-M2 are named as outstanding. Acceptance criterion 4
-      is confirmed "by listening and by short-term loudness plot" — the plot
-      side is automated, the listening side is a maintainer check on real
-      material and cannot be claimed without it.
-      Also carries what VH-10 could not automate: the File System Access save
-      opens a native dialogue, so the picker path itself needs a human. The
-      object-URL fallback and the filename logic are covered by tests.
+- [ ] **VH-16 Extend the acceptance harness** (2026-08-25)
+      Intent: the harness from VH-11 covers what it covers; two gaps are known.
+      Done when: it runs the pipeline in a worker as well as on the main thread
+      (today it exercises the `createWritable` path, not the sync-handle path
+      the app actually uses), and preset comparison is done on camera-like
+      motion, where the two presets can actually differ.
 
 - [ ] **VH-M3 Stop OneDrive syncing this project** [maintainer] (2026-08-25)
       Intent: on 2026-08-25 the quality gate began failing with
@@ -70,22 +60,28 @@
       Done when: either the tail is emitted as a final sample, or the loss is
       measured, judged acceptable, and recorded in the spec-facing notes.
 
-- [ ] **VH-18 Check A/V sync end to end** [sign-off]
-      Intent: acceptance criterion 6. In VH-6 verification the output's audio
-      track measured 5.163 s against a 5.077 s source audio track and a 5.000 s
-      output video track — roughly 86 ms of growth, more than AAC encoder
-      priming alone explains.
-      Done when: the source of the difference is identified and sync is
-      measured at the start, middle and end of a long recording rather than
-      inferred from durations.
-      Note: VH-8 found AAC encoder priming surfacing as a negative first
-      timestamp (-21.3 ms, 1024 samples at 48 kHz) and now normalises each
-      segment against its own track origin. That is very likely the same root
-      cause, but normalising the start does not by itself prove the durations
-      now agree — which is what this item measures.
-      Risks: an 86 ms constant offset is near the edge of perceptible on
-      speech; drift that grows with duration would be far worse and would not
-      show on a 5-second fixture.
+- [ ] **VH-18 A/V sync: audio runs about 50 ms late** [sign-off] (2026-08-25)
+      Intent: acceptance criterion 6 does not pass. The VH-11 harness places
+      paired markers — a white frame and an audio burst at the same instant —
+      and measures the output against the source, which cancels the fixture's
+      own frame quantisation.
+      Measured on a 60 s variable-frame-rate source, 12 of 12 markers paired:
+      offsets 56, 44, 50, 32, 40, 34, 62, 68, 65, 38, 68, 40 ms. Audio is
+      consistently LATE by roughly 50 ms, scattered about 36 ms, with no trend
+      across the recording (drift −16 ms).
+      Reading it: the scatter is consistent with output frame quantisation at
+      25 fps (40 ms), so the systematic part is the finding. ITU-R BT.1359 puts
+      the detection threshold for audio-after-video at about +45 ms, so this
+      sits right on the edge — plausibly noticeable on a talking head, and not
+      dismissable.
+      Suspects, in order: AAC encoder priming shifting the output audio track
+      (VH-8 found -21.3 ms of it on input); the chain's own latency
+      compensation; the muxer's edit-list handling.
+      Done when: the source is identified and the systematic offset is either
+      removed or shown to be a measurement artefact — and the harness's
+      criterion 6 check passes rather than being loosened to accommodate it.
+      Risks: the temptation here is to widen the threshold. 20 ms was chosen
+      from the perception literature, not from what the build happens to do.
 
 - [ ] **VH-19 Content-adaptive bitrate for the smaller preset**
       Intent: spec §6.2 sets ~1.5 Mbps for slides/screen and ~2.5 Mbps for

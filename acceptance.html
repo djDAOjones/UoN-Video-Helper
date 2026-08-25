@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Acceptance run — UoN Video Helper</title>
+  </head>
+  <body>
+    <header class="header">
+      <h1>Acceptance run</h1>
+      <p class="version" id="version-line"></p>
+    </header>
+    <main class="main" id="main">
+      <p class="lede">
+        Checks the build against the acceptance criteria in
+        <code>docs/01-specification.md</code> §13, using synthesised material. Criteria that need
+        real recordings or real hardware are listed as needing a person rather than passed.
+      </p>
+      <div class="actions">
+        <button class="button" type="button" id="run">Run the checks</button>
+      </div>
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+      <pre class="log" id="log"></pre>
+      <div id="results"></div>
+    </main>
+    <script type="module" src="/src/acceptance/main.ts"></script>
+  </body>
+</html>

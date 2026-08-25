@@ -94,6 +94,26 @@ function throwIfAborted(signal: AbortSignal | undefined): void {
  * section 13, acceptance criterion 8.
  */
 export async function runPipeline(options: PipelineOptions): Promise<PipelineResult> {
+  const { workspace, signal } = options
+
+  try {
+    return await encode(options)
+  } catch (cause) {
+    // Cleanup belongs to the whole function, not to the encode alone.
+    // Cancelling during the analysis pass used to escape before the encode's
+    // own catch existed, leaving the job's scratch behind — the acceptance
+    // harness found it, because it calls this directly and has no worker
+    // fallback to hide it.
+    await workspace.dispose()
+    if (cause instanceof CancelledError || signal?.aborted) {
+      log.info('pipeline', 'cancelled; workspace disposed')
+      throw new CancelledError()
+    }
+    throw cause
+  }
+}
+
+async function encode(options: PipelineOptions): Promise<PipelineResult> {
   const { input, shape, preset, durationSeconds, workspace, branding, signal, onProgress } =
     options
 
@@ -304,18 +324,12 @@ export async function runPipeline(options: PipelineOptions): Promise<PipelineRes
       subtitleCues,
     }
   } catch (cause) {
-    // Abandon the output before the workspace goes, so no handle is left
-    // holding a file that is about to be removed.
+    // Abandon the output so no writer is left holding a file the caller is
+    // about to remove. Disposal itself is the outer handler's job.
     try {
       await output.cancel()
     } catch {
       // Already finalized or never started. Nothing to undo.
-    }
-    await workspace.dispose()
-
-    if (cause instanceof CancelledError || signal?.aborted) {
-      log.info('pipeline', 'cancelled; workspace disposed', { framesFed })
-      throw new CancelledError()
     }
     throw cause
   }

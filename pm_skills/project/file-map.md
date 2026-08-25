@@ -15,13 +15,13 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 99 file(s) across 7 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
-- `(root)` — 10 file(s)
+<!-- 104 file(s) across 7 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+- `(root)` — 11 file(s)
 - `.claude` — 1 file(s)
 - `docs` — 5 file(s)
 - `public` — 9 file(s)
 - `scripts` — 2 file(s)
-- `src` — 68 file(s)
+- `src` — 72 file(s)
 - `test` — 4 file(s)
 <!-- /file-map-index -->
 
@@ -31,6 +31,7 @@
 - `DEV-INFRASTRUCTURE.md` — Build, dev server, runtime lifecycle, diagnostics, quality gate, versioning, security.
 - `README.md` — Entry point for a human: what this is, how to run it, the invariants, the gotchas.
 - `UI-STANDARDS.md` — UI, usability and accessibility rules. Two token systems; the AAA design-review gate.
+- `acceptance.html` — Maintainer page for the acceptance run. Excluded from the production build.
 - `check-links.mjs` — Scaffolded internal Markdown link checker. Runs in `check`.
 - `eslint.config.js` — Flat ESLint config. Strict on correctness, silent on taste; formatting is Prettier's job.
 - `index.html` — The single page. Landmarks, skip link, and the polite live region the app announces into.
@@ -69,6 +70,10 @@
 
 ## src
 
+- `src/acceptance/fixtures.ts` — Synthesised sources for the acceptance run, including paired A/V sync markers.
+- `src/acceptance/main.ts` — Entry point for the acceptance page. Development only; never built.
+- `src/acceptance/measure.ts` — Sync by marker, loudness by region, and two independent egress instruments.
+- `src/acceptance/run.ts` — The spec 13 run: what is checked, and what is reported as needing a person.
 - `src/audio/analyse.test.ts` — Proves the facade measures the same thing the components do separately.
 - `src/audio/analyse.ts` — The analysis pass: loudness and true peak over one traversal of source audio only.
 - `src/audio/biquad.ts` — Second-order IIR section, Direct Form II transposed, Float64 state to resist hour-long drift.

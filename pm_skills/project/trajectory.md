@@ -76,4 +76,11 @@
   unlabelled section and a 32 px browser-drawn button; both fixed, and the
   audit then reported no target under 44x44 and no unlabelled landmark.
 
+- VH-11 — Acceptance verification: a repeatable in-browser harness against
+  spec 13. Four criteria pass, four need a person and are named as such, and
+  one fails honestly — audio runs about 50 ms late, now VH-18. The harness
+  found two real bugs on its first run: cancelling during the analysis pass
+  escaped the pipeline's cleanup and leaked its scratch, and the main-thread
+  OPFS path never released its writable.
+
 <!-- Outcome line is written when the milestone closes. -->

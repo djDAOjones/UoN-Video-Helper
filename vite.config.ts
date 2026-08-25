@@ -37,6 +37,12 @@ export default defineConfig({
   build: {
     target: 'esnext',
     sourcemap: true,
+    rollupOptions: {
+      // Only the app ships. `acceptance.html` is a maintainer tool served in
+      // development; building it would put a test harness in production for
+      // no one's benefit.
+      input: { app: 'index.html' },
+    },
   },
   test: {
     environment: 'node',

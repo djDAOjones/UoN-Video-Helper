@@ -50,6 +50,8 @@
 - Every branding frame is redrawn through a canvas to get brand-colour padding.
   Fine at 1080p; at 4K that is 150 canvas compositions per sequence. Worth
   measuring before the real 4K masters land. (from: VH-8)
+- The acceptance run takes ~94 s, mostly building fixtures. Fine as a
+  maintainer tool; too slow to fold into `npm run check`. (from: VH-11)
 - `npm run check` now takes ~27 s, up from ~2 s: the chain tests process
   minutes of synthesised audio each, and LRA needs 60 s of material to settle
   (Tech 3342). Still fine to run on every change, but worth watching — the gate
