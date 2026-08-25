@@ -147,3 +147,13 @@ The deployed site was also confirmed working on a University machine, so
   with them — Fade and Slide differ only during the build a hard cut discards.
   `chosenBranding` already fell back to `CLOSING_DEFAULTS`, so the pipeline
   keeps all three modes for VH-44 and nothing else moved.
+
+### VH-46 — the three-engine check, repeatable
+
+- VH-46 — Shipped 2026-08-25: `scripts/run-in-engines.mjs` runs a spike page in
+  Chrome (CDP), Firefox (WebDriver BiDi) and Safari (`safaridriver`) and prints
+  all three. It knows only the `<pre id="log">` … `done` contract the spike
+  pages share, so it works on any of them. Documented in DEV-INFRASTRUCTURE
+  with the reason it must stay out of `npm run check`. The same run also
+  cleared 15 missing file-map roles and the two glob lines the generator could
+  not resolve.

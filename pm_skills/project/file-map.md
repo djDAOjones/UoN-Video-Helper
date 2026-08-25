@@ -15,13 +15,14 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 106 file(s) across 7 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
-- `(root)` — 11 file(s)
+<!-- 129 file(s) across 8 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+- `(root)` — 15 file(s)
 - `.claude` — 1 file(s)
+- `.github` — 1 file(s)
 - `docs` — 5 file(s)
-- `public` — 9 file(s)
-- `scripts` — 2 file(s)
-- `src` — 74 file(s)
+- `public` — 17 file(s)
+- `scripts` — 4 file(s)
+- `src` — 82 file(s)
 - `test` — 4 file(s)
 <!-- /file-map-index -->
 
@@ -32,24 +33,24 @@
 - `README.md` — Entry point for a human: what this is, how to run it, the invariants, the gotchas.
 - `UI-STANDARDS.md` — UI, usability and accessibility rules. Two token systems; the AAA design-review gate.
 - `acceptance.html` — Maintainer page for the acceptance run. Excluded from the production build.
-- `spike-alpha.html` — Maintainer page: does this browser decode transparent video? Excluded from the build.
-- `spike-framerate.html` — Maintainer page: does the app measure the frame rate or trust the header?
-- `spike-modes.html` — Maintainer page: do the three closing modes produce the timelines they promise?
-- `spike-real.html` — Maintainer page: runs a real recording end to end and reports what came out.
 - `check-links.mjs` — Scaffolded internal Markdown link checker. Runs in `check`.
 - `eslint.config.js` — Flat ESLint config. Strict on correctness, silent on taste; formatting is Prettier's job.
 - `index.html` — The single page. Landmarks, skip link, and the polite live region the app announces into.
 - `package.json` — Scripts, the one runtime dependency, and the product version.
+- `spike-alpha.html` — Maintainer page: does this browser decode transparent video? Excluded from the build.
+- `spike-framerate.html` — Maintainer page: does the app measure the frame rate or trust the header?
+- `spike-modes.html` — Maintainer page: do the three closing modes produce the timelines they promise?
+- `spike-real.html` — Maintainer page: runs a real recording end to end and reports what came out.
 - `tsconfig.json` — Strict TypeScript. `noUncheckedIndexedAccess` matters here — this codebase indexes buffers.
 - `vite.config.ts` — Build config and the build-identity injection (`__APP_VERSION__`, `__BUILD_ID__`).
-
-## .github
-
-- `.github/workflows/deploy-pages.yml` — Manual GitHub Pages deploy. Runs the full gate, then publishes `dist`.
 
 ## .claude
 
 - `.claude/launch.json` — Dev-server definition so the preview tooling can boot the app by name.
+
+## .github
+
+- `.github/workflows/deploy-pages.yml` — Manual GitHub Pages deploy. Runs the full gate, then publishes `dist`.
 
 ## docs
 
@@ -62,8 +63,18 @@
 ## public
 
 - `public/branding/README.md` — What the real assets are, how they are built, and which placeholders remain.
-- `public/branding/closing-onset-{fade,slide}-{blue,white}-{1080,2160}p.webm` — Eight real 1 s onsets, VP9 + alpha.
-- `public/branding/closing-tail-{blue,white}-{1080,2160}p.mp4` — Four real 4 s opaque tails, H.264. Shared across styles.
+- `public/branding/closing-onset-fade-blue-1080p.webm` — Real closing onset, fade blue at 1080p: the 1.00 s premultiplied-alpha build. VP9+alpha WebM; used only by the compositing modes.
+- `public/branding/closing-onset-fade-blue-2160p.webm` — Real closing onset, fade blue at 2160p: the 1.00 s premultiplied-alpha build. VP9+alpha WebM; used only by the compositing modes.
+- `public/branding/closing-onset-fade-white-1080p.webm` — Real closing onset, fade white at 1080p: the 1.00 s premultiplied-alpha build. VP9+alpha WebM; used only by the compositing modes.
+- `public/branding/closing-onset-fade-white-2160p.webm` — Real closing onset, fade white at 2160p: the 1.00 s premultiplied-alpha build. VP9+alpha WebM; used only by the compositing modes.
+- `public/branding/closing-onset-slide-blue-1080p.webm` — Real closing onset, slide blue at 1080p: the 1.00 s premultiplied-alpha build. VP9+alpha WebM; used only by the compositing modes.
+- `public/branding/closing-onset-slide-blue-2160p.webm` — Real closing onset, slide blue at 2160p: the 1.00 s premultiplied-alpha build. VP9+alpha WebM; used only by the compositing modes.
+- `public/branding/closing-onset-slide-white-1080p.webm` — Real closing onset, slide white at 1080p: the 1.00 s premultiplied-alpha build. VP9+alpha WebM; used only by the compositing modes.
+- `public/branding/closing-onset-slide-white-2160p.webm` — Real closing onset, slide white at 2160p: the 1.00 s premultiplied-alpha build. VP9+alpha WebM; used only by the compositing modes.
+- `public/branding/closing-tail-blue-1080p.mp4` — Real closing tail, blue at 1080p: the 4.00 s opaque card. H.264 so hard cut works without alpha decode.
+- `public/branding/closing-tail-blue-2160p.mp4` — Real closing tail, blue at 2160p: the 4.00 s opaque card. H.264 so hard cut works without alpha decode.
+- `public/branding/closing-tail-white-1080p.mp4` — Real closing tail, white at 1080p: the 4.00 s opaque card. H.264 so hard cut works without alpha decode.
+- `public/branding/closing-tail-white-2160p.mp4` — Real closing tail, white at 2160p: the 4.00 s opaque card. H.264 so hard cut works without alpha decode.
 - `public/branding/opening-1080p25.mp4` — Placeholder opening master, 1080p25. Replaced by the real AE render; see the README beside it.
 - `public/branding/opening-1080p30.mp4` — Placeholder opening master, 1080p30. Replaced by the real AE render; see the README beside it.
 - `public/branding/opening-2160p25.mp4` — Placeholder opening master, 2160p25. Replaced by the real AE render; see the README beside it.
@@ -71,9 +82,10 @@
 
 ## scripts
 
-- `scripts/check-placeholders.mjs` — Tier 0 of the gate: fails on stray template markers, reports key-shaped strings.
 - `scripts/build-branding.mjs` — Converts the UoN masters into the shipped onset/tail assets. Run by hand, not by `build`.
+- `scripts/check-placeholders.mjs` — Tier 0 of the gate: fails on stray template markers, reports key-shaped strings.
 - `scripts/gen-placeholder-branding.mjs` — Generates the placeholder masters with a local ffmpeg. Authoring tool only.
+- `scripts/run-in-engines.mjs` — Runs a spike page in Chrome, Firefox and Safari and prints all three. Maintainer tool; never part of `check`.
 
 ## src
 
@@ -121,14 +133,16 @@
 - `src/media/branding-fade.test.ts` — Pins what "hard cut with a 100 ms fade" means at sample level (D3).
 - `src/media/branding.ts` — Conform and concatenate the opaque parts; load the real closing tail; the boundary fade.
 - `src/media/capability.ts` — Device checks asked against the exact target config, not a generic capability flag.
-- `src/media/conform.test.ts` — Proves fit/pad never distorts, across 4:3, vertical and ultrawide sources.
+- `src/media/composite.test.ts` — Pins `compositePremultiplied` against the straight-alpha mistake that looks plausible and double-darkens.
 - `src/media/composite.ts` — Premultiplied-alpha compositing. `out = brand + source×(1−a)`; the straight form double-darkens.
-- `src/media/freeze.ts` — Picks the frame `over freeze frame` holds: walks back past defects, keeps a deliberate fade.
+- `src/media/conform.test.ts` — Proves fit/pad never distorts, across 4:3, vertical and ultrawide sources.
 - `src/media/conform.ts` — Scale-to-fit and pad geometry, and the reusable frame scaler the pipeline and probe share.
 - `src/media/encoder-delay.ts` — Measures the audio encoder's own delay and shifts the timeline to cancel it.
 - `src/media/encoding.ts` — Mediabunny encoding configs derived from the presets; where VH-7's audio chain will hook in.
 - `src/media/framerate.test.ts` — Proves the rounding rule and that timestamps derive from the index so error cannot accumulate.
 - `src/media/framerate.ts` — CFR conform decisions: nearest standard rate, what conforming costs, and the timestamp grid.
+- `src/media/freeze.test.ts` — Pins the freeze frame on the last CLEAN frame, not simply the last decoded one.
+- `src/media/freeze.ts` — Picks the frame `over freeze frame` holds: walks back past defects, keeps a deliberate fade.
 - `src/media/inspect.ts` — Demuxes a chosen file into a SourceReport. Rejects files with no video track.
 - `src/media/isobmff.test.ts` — Synthetic boxes covering subtitle handlers, chapters, moov-at-end and non-ISOBMFF.
 - `src/media/isobmff.ts` — A minimal box walk for the handler types Mediabunny cannot see at all.
@@ -141,13 +155,13 @@
 - `src/media/save.ts` — Streams the result to the user's chosen location; object-URL fallback where there is no picker.
 - `src/media/vtt.test.ts` — Proves cue text, settings, comments and line endings survive byte for byte.
 - `src/media/vtt.ts` — Offsets WebVTT timings by rewriting only timestamp lines; never touches the words.
-- `src/styles/app.css` — App shell styles. Carbon productive language at AAA.
-- `src/styles/tokens.brand.css` — UoN brand tokens. Holds the D1 placeholder and nothing invented.
-- `src/styles/tokens.carbon.css` — Carbon structural tokens. Every pair is contrast-asserted by test/contrast.test.ts.
 - `src/spike/alpha.ts` — VH-12 spike: decodes each branding onset and reads back pixel alpha. Dev-only, not built.
 - `src/spike/framerate.ts` — VH-24 spike: reads a real PowerPoint export and reports measured vs declared rate.
 - `src/spike/modes.ts` — VH-22 spike: runs a fixture through all three closing modes and checks output length.
 - `src/spike/real.ts` — Runs a real recording from `public/spike/` through the pipeline; reports levels and speed.
+- `src/styles/app.css` — App shell styles. Carbon productive language at AAA.
+- `src/styles/tokens.brand.css` — UoN brand tokens. Holds the D1 placeholder and nothing invented.
+- `src/styles/tokens.carbon.css` — Carbon structural tokens. Every pair is contrast-asserted by test/contrast.test.ts.
 - `src/ui/format.test.ts` — Pins the wording, so phrasing is tested rather than reviewed by opinion.
 - `src/ui/format.ts` — Technical facts as plain language — durations, sizes, codecs, channel layouts.
 - `src/ui/preflight-panel.ts` — Renders the verdict, naming a browser that works when the answer is no.

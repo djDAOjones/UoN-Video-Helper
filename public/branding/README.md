@@ -25,7 +25,9 @@ Total 0.74 MB for all twelve. The tails measure PSNR 63 dB / SSIM 0.9999
 against the masters, so CRF 18 is visually lossless on this content.
 
 Verify alpha decode in a browser by serving the app and opening
-`/spike-alpha.html`. It reports pass/fail per asset.
+`/spike-alpha.html`. It reports pass/fail per asset. To check all three
+supported engines at once, run `node scripts/run-in-engines.mjs
+/spike-alpha.html` against a running dev server.
 
 **Chrome 151, Safari 26.5.2 and Firefox 152 all decode the alpha** (2026-08-25),
 including through the app's own loader. That is what was tested, and it is all

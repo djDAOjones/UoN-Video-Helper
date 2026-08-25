@@ -11,6 +11,37 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-25 — VH-46: make the three-engine check repeatable
+
+**Decision:** Promoted the ad-hoc VH-34 harness to `scripts/run-in-engines.mjs`
+and deleted its wish-list line. It runs any spike page in Chrome, Firefox and
+Safari and prints all three, keying off the `<pre id="log">` … `done` contract
+every spike page already shares.
+
+**Rationale:** `conventions.md` requires browser-only checks to be verified in a
+real browser and recorded, and VH-34 found a shipped defect only because all
+three engines were finally measured together — by hand, which is the chore that
+stops getting done. VH-44's regression test has to hold in three engines, so
+this is its dependency rather than speculative tooling.
+
+**Alternatives:** Playwright would bring a dev dependency and its own browser
+downloads to replace ~300 lines using protocols already on the machine.
+Firefox's `--screenshot` was tried and rejected: it fires at load, long before
+an async decode finishes.
+
+**Gate surface:** `eslint.config.js` gained four Node globals — `fetch`,
+`setTimeout`, `AbortSignal`, `WebSocket` — in the existing `**/*.mjs` block. No
+rule was weakened; the block already listed three globals by hand, and a
+`globals` package would be a dependency for a lookup table.
+
+**Watch:** it must never join `npm run check`. Three browsers saturate the
+machine and the DSP suite fails on timeout rather than on merit —
+`chain.test.ts` took 540 s and failed a test the one time they overlapped,
+against ~4 s idle. Recorded in the script header and in DEV-INFRASTRUCTURE.
+
+**Link:** `DEV-INFRASTRUCTURE.md` → "Cross-engine verification",
+`tickets/VH-44.md`.
+
 ## 2026-08-25 — Pruned project memory: the first trajectory split
 
 **Decision:** Moved Phase 1 (Band 0 MVP, 76 lines / 722 words) verbatim to

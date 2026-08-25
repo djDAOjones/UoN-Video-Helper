@@ -29,7 +29,17 @@ export default tseslint.config(
     files: ['**/*.mjs', 'scripts/**/*.js'],
     extends: [tseslint.configs.disableTypeChecked],
     languageOptions: {
-      globals: { console: 'readonly', process: 'readonly', URL: 'readonly' },
+      // Node's own globals, declared one at a time rather than pulled from a
+      // `globals` package — that would be a dependency for a lookup table.
+      globals: {
+        console: 'readonly',
+        process: 'readonly',
+        URL: 'readonly',
+        fetch: 'readonly',
+        setTimeout: 'readonly',
+        AbortSignal: 'readonly',
+        WebSocket: 'readonly',
+      },
     },
   },
   {
