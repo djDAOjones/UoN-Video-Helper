@@ -61,27 +61,6 @@
       the build degrades to `over-freeze` and says so rather than erroring, and
       an audio-longer-than-video fixture proves the build still composites.
 
-- [ ] **VH-24 Stop conforming low frame rates upward** [detail](tickets/VH-24.md)
-      (2026-08-25)
-      Intent: `STANDARD_FRAME_RATES` holds the five values 24, 25, 30, 50 and
-      60, and the rule rounds to the nearest, so the Teams recording's 16.000 fps
-      becomes 24 — half the output frames duplicated for no visible benefit
-      (spec §6.3, reconciled 2026-08-25). Reading the rate is already correct:
-      the app measures 30.3030 on a real PowerPoint export and ignores its
-      declared 30/1, so this is the snapping alone.
-      Done when: a source below the lowest standard rate conforms to its own
-      measured rate, `conformCost` reports the change honestly, and the Teams
-      fixture and a 30.303 fps fixture both prove it.
-
-- [ ] **VH-41 "Smaller file" can be bigger than the source** (2026-08-25)
-      Intent: split from VH-24. `outputShapeFor` has no never-exceed-source
-      guard, so the preset named for making files smaller asks 2.50 Mbps of a
-      Teams recording carrying 1.006 Mbps at 1920×1080, and inflates it. Spec
-      §6.2 now states the cap (reconciled 2026-08-25); nothing implements it.
-      Done when: the requested video bitrate is capped at the source's measured
-      bitrate, the Teams fixture comes out no larger than it went in, and the
-      cap is visible in the estimate rather than applied silently.
-
 - [ ] **VH-31 The size estimate is ~3.6x too high** [detail](tickets/VH-31.md)
       (2026-08-25)
       Intent: the app said 27.7 MB and produced 7.5 MB on the first real file
@@ -92,9 +71,16 @@
       also feeds VH-13's published limits, which would inherit the error.
       Done when: the estimate is grounded in the real content — the calibration
       probe already decodes three seconds and could encode them — or is
-      presented honestly as an upper bound. Shares `outputShapeFor` with VH-24's
-      bitrate guard and with VH-19, so the three are one visit to that function
-      rather than a queue — the measurement here is what would verify the guard.
+      presented honestly as an upper bound.
+      One concrete contributor, measured 2026-08-25 while verifying VH-41:
+      `projectedOutputBytes` adds `shape.audioBitrateBps` unconditionally, so a
+      source with NO audio track is charged 128 kbps of stereo AAC for an audio
+      track the output will not contain. On a silent 4 s fixture that was 64 kB
+      of an 82 kB estimate; on the 215 s silent slide deck it is ~3.4 MB. The
+      call sites know (`report.audio !== null`), the function does not.
+      VH-24's frame-rate rule and VH-41's bitrate cap shipped 2026-08-25, so
+      what remains of that shared visit to `outputShapeFor` is this item and
+      VH-19.
 
 - [ ] **VH-19 Content-adaptive bitrate for the smaller preset**
       Intent: spec §6.2 sets ~1.5 Mbps for slides/screen and ~2.5 Mbps for
@@ -107,10 +93,12 @@
       VH-31 because it rides the same probe machinery; if VH-31 lands real
       measurement, this may reduce to naming the class rather than choosing on it.
 
-- [ ] **VH-43 Odd source shapes reach a correct output** (2026-08-25)
+- [ ] **VH-43 Odd source shapes reach a correct output**
+      [detail](tickets/VH-43.md) (2026-08-25)
       Intent: split from VH-24, and mostly verification rather than known
-      breakage. Evidence and fixtures are in `tickets/VH-24.md`, which stayed
-      whole as the shared corpus characterisation. The corpus carries one mono
+      breakage. The ticket file is the corpus characterisation the whole VH-24
+      family rests on; it kept its content and took this item's name when VH-24
+      shipped, because VH-43 is the open item still standing on it. The corpus carries one mono
       source, one PCM `.mov`, sample rates split nine/nine between 44.1 and
       48 kHz, three files at 852×480 (not 854, awkward for chroma subsampling),
       one at 640×480, and one 3840×2400 — 16:10, not 16:9, which the branding

@@ -71,6 +71,15 @@ export interface VideoStreamReport {
   readonly frameRate: FrameRateReport
   /** True when no single consistent rate was found — common in screen and meeting captures. */
   readonly isVariableFrameRate: boolean
+  /**
+   * Bits per second the video track actually carries, from its packets.
+   *
+   * MEASURED, not declared — the same reason the frame rate is. It is what
+   * spec 6.2's never-exceed-source cap is measured against, so a container
+   * claiming a bitrate it does not carry must not be able to set it. `null`
+   * when the packets could not be summed.
+   */
+  readonly averageBitrateBps: number | null
   /** The constant rate the output will use, and what conforming to it costs. */
   readonly conform: ConformDecision
   /** Whether this browser can decode this specific configuration. */
@@ -212,6 +221,7 @@ export async function inspectFile(
       rotation,
       durationSeconds,
       metrics,
+      packetStats,
       canDecode,
     ] = await Promise.all([
       videoTrack.getCodec(),
@@ -227,6 +237,9 @@ export async function inspectFile(
           ? undefined
           : { targetPacketCount: options.frameRateProbePackets },
       ),
+      // Same packet walk the frame-rate metrics do, and the same probe budget.
+      // A failure here costs the never-exceed-source cap, not the job.
+      videoTrack.computePacketStats(options.frameRateProbePackets).catch(() => null),
       safeCanDecode(videoTrack),
     ])
 
@@ -254,6 +267,10 @@ export async function inspectFile(
         probedPacketCount: metrics.probedPacketCount,
       },
       isVariableFrameRate: !metrics.frameRateIsConstant,
+      averageBitrateBps:
+        packetStats && Number.isFinite(packetStats.averageBitrate) && packetStats.averageBitrate > 0
+          ? packetStats.averageBitrate
+          : null,
       conform: conformCost(measured),
       canDecode,
     } satisfies VideoStreamReport

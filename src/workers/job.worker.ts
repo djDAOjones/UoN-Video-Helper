@@ -137,6 +137,7 @@ async function handleProcess(
       width: report.video.displayWidth,
       height: report.video.displayHeight,
       frameRate: report.video.conform.frameRate,
+      videoBitrateBps: report.video.averageBitrateBps,
     })
 
     workspace = await OpfsWorkspace.open(jobId)
@@ -268,6 +269,7 @@ async function handlePreflight(
       width: report.video.displayWidth,
       height: report.video.displayHeight,
       frameRate: report.video.conform.frameRate,
+      videoBitrateBps: report.video.averageBitrateBps,
     })
     const projected = projectedOutputBytes(shape, report.durationSeconds)
 

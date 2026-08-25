@@ -37,7 +37,8 @@ export const PRESETS: Readonly<Record<PresetId, Preset>> = {
   best: {
     id: 'best',
     label: 'Best quality',
-    description: 'For EchoVideo or YouTube. These re-encode your video when you upload it, so it is worth sending them the best copy.',
+    description:
+      'For EchoVideo or YouTube. These re-encode your video when you upload it, so it is worth sending them the best copy.',
     // Spec 6.1: resolution and frame rate unchanged.
     maxHeight: null,
     maxFrameRate: null,
@@ -47,7 +48,8 @@ export const PRESETS: Readonly<Record<PresetId, Preset>> = {
   smaller: {
     id: 'smaller',
     label: 'Smaller file',
-    description: 'For OneDrive, SharePoint or email. Students often download these directly, so a smaller file is kinder.',
+    description:
+      'For OneDrive, SharePoint or email. Students often download these directly, so a smaller file is kinder.',
     // Spec 6.2: resolution PRESERVED up to 1080p, reduced only above it.
     // Slide legibility depends far more on resolution than on bitrate, so the
     // saving is taken from bitrate instead. See rationale section 4.1.
@@ -83,8 +85,22 @@ export interface OutputShape {
   readonly width: number
   readonly height: number
   readonly frameRate: number
+  /** What the encoder is asked for, after spec 6.2's never-exceed-source cap. */
   readonly videoBitrateBps: number
+  /**
+   * What the preset alone would have asked for, before the cap.
+   *
+   * Kept so the cap is VISIBLE rather than silent: when this exceeds
+   * {@link videoBitrateBps}, the preset wanted more than the source carries
+   * and the user is told so instead of wondering why the figures moved.
+   */
+  readonly requestedVideoBitrateBps: number
   readonly audioBitrateBps: number
+}
+
+/** Whether spec 6.2's never-exceed-source cap actually bit on this shape. */
+export function bitrateWasCappedToSource(shape: OutputShape): boolean {
+  return shape.requestedVideoBitrateBps > shape.videoBitrateBps
 }
 
 /** Even dimensions, because H.264 chroma subsampling requires them. */
@@ -96,13 +112,23 @@ function toEvenDimension(value: number): number {
  * Works out the output shape for a preset and source.
  *
  * @param preset - Which of the two the user chose.
- * @param source - Display dimensions and the conformed constant frame rate.
+ * @param source - Display dimensions, the conformed constant frame rate, and
+ *   the video bitrate the source actually carries. Omit `videoBitrateBps` when
+ *   it could not be measured; the cap is then not applied rather than guessed.
  * @param content - What the picture is mostly made of; affects the smaller
  *   preset's bitrate only.
  */
 export function outputShapeFor(
   preset: Preset,
-  source: { readonly width: number; readonly height: number; readonly frameRate: number },
+  source: {
+    readonly width: number
+    readonly height: number
+    readonly frameRate: number
+    // `undefined` is spelled out because `exactOptionalPropertyTypes` is on:
+    // a caller spreading a report whose field is undefined is the normal case,
+    // not a mistake to reject.
+    readonly videoBitrateBps?: number | null | undefined
+  },
   content: ContentClass = 'unknown',
 ): OutputShape {
   const scale =
@@ -113,19 +139,37 @@ export function outputShapeFor(
   const width = toEvenDimension(source.width * scale)
   const height = toEvenDimension(source.height * scale)
   const frameRate =
-    preset.maxFrameRate !== null ? Math.min(source.frameRate, preset.maxFrameRate) : source.frameRate
+    preset.maxFrameRate !== null
+      ? Math.min(source.frameRate, preset.maxFrameRate)
+      : source.frameRate
 
   const pixelRate = width * height * frameRate
-  const videoBitrateBps =
+  const requestedVideoBitrateBps =
     preset.id === 'best'
       ? Math.round(pixelRate * BEST_BITS_PER_PIXEL_PER_FRAME)
       : Math.round((pixelRate / SMALLER_REFERENCE_PIXEL_RATE) * SMALLER_REFERENCE_BPS[content])
+
+  // Spec 6.2: "never above the source's own video bitrate". The reference
+  // figures are targets for material that needs them, not floors — a Teams
+  // recording carries 1.006 Mbps at 1920x1080, and asking 2.5 Mbps of it makes
+  // the output named "smaller" larger than what went in (VH-41).
+  //
+  // The cap is deliberately NOT applied to "best quality", and that asymmetry
+  // is the spec's: that preset goes to destinations which re-encode on ingest,
+  // where headroom above the source is what keeps a second generation from
+  // showing. Only the preset that promises a smaller file has to honour it.
+  const sourceBitrate = source.videoBitrateBps
+  const capped =
+    preset.id !== 'best' && typeof sourceBitrate === 'number' && sourceBitrate > 0
+      ? Math.min(requestedVideoBitrateBps, Math.round(sourceBitrate))
+      : requestedVideoBitrateBps
 
   return {
     width,
     height,
     frameRate,
-    videoBitrateBps,
+    videoBitrateBps: capped,
+    requestedVideoBitrateBps,
     audioBitrateBps: preset.audioBitrateStereoBps,
   }
 }

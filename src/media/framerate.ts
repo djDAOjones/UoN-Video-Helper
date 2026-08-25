@@ -8,20 +8,21 @@
  */
 
 /**
- * Spec section 6.3: "rounded to the nearest standard value (24/25/30/50/60)".
+ * Spec section 6.3: the standard values a rate may be rounded *to*.
  *
- * Taken literally, and the literal reading has two consequences worth knowing
- * about — both surfaced through {@link conformCost} rather than silently
- * absorbed:
+ * NTSC rates are deliberately not in the set. A 29.97 fps source conforms to
+ * 30, which duplicates about 1 frame in 1000; sync is unaffected because
+ * output frames are chosen by timestamp rather than by index, but the frame
+ * count grows. That cost is surfaced through {@link conformCost} rather than
+ * silently absorbed.
  *
- *  - NTSC rates are not in the set. A 29.97 fps source conforms to 30, which
- *    duplicates about 1 frame in 1000. Sync is unaffected because output
- *    frames are chosen by timestamp, not by index, but the frame count grows.
- *  - Low-rate sources snap upward. A 15 fps screen recording conforms to 24,
- *    duplicating 37.5% of frames for no visible benefit. Teams and Zoom do
- *    drop to 15-20 fps under load, so this is not hypothetical.
+ * The rule does NOT apply below the lowest value here — see
+ * {@link conformedFrameRate}.
  */
 export const STANDARD_FRAME_RATES = [24, 25, 30, 50, 60] as const
+
+/** The lowest rate the rounding rule applies at. Derived, so reordering the set above cannot break it. */
+const LOWEST_STANDARD_FRAME_RATE = Math.min(...STANDARD_FRAME_RATES)
 
 export interface ConformDecision {
   /** The constant rate the output will run at. */
@@ -52,9 +53,31 @@ export function nearestStandardFrameRate(rate: number): number {
   return best
 }
 
-/** What conforming `sourceFrameRate` to a constant standard rate will cost. */
+/**
+ * The constant rate the output runs at, spec section 6.3.
+ *
+ * Nearest standard value — but **never upward from below the lowest one**.
+ * Teams records a rock-solid 16.000 fps, and the literal round-to-nearest rule
+ * made that 24: half the output frames duplicated, for a file that gains
+ * nothing visible and grows. Such a source is conformed to its own measured
+ * rate instead (VH-24; spec 6.3 reconciled 2026-08-25).
+ *
+ * Above the floor the rule is unchanged, which is what a PowerPoint export at
+ * 30.303 fps wants — 30 is a real standard rate and a 1% drop, not a 50%
+ * invention. The output is still constant-rate either way; that is the part
+ * MP4 compatibility and the branding conform actually depend on.
+ */
+export function conformedFrameRate(sourceFrameRate: number): number {
+  if (!Number.isFinite(sourceFrameRate) || sourceFrameRate <= 0) {
+    throw new RangeError(`Frame rate must be a positive number, got ${sourceFrameRate}`)
+  }
+  if (sourceFrameRate < LOWEST_STANDARD_FRAME_RATE) return sourceFrameRate
+  return nearestStandardFrameRate(sourceFrameRate)
+}
+
+/** What conforming `sourceFrameRate` to a constant rate will cost. */
 export function conformCost(sourceFrameRate: number): ConformDecision {
-  const frameRate = nearestStandardFrameRate(sourceFrameRate)
+  const frameRate = conformedFrameRate(sourceFrameRate)
   return {
     frameRate,
     sourceFrameRate,

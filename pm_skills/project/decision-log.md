@@ -11,6 +11,40 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-25 — VH-24 and VH-41: one visit to the output shape
+
+**Decision:** Two rules the spec already carried and the code did not.
+`conformedFrameRate` stops rounding upward below the lowest standard rate, and
+`outputShapeFor` caps the smaller preset's request at the source's measured
+video bitrate. `inspect` gained `averageBitrateBps` from
+`computePacketStats`, and `OutputShape` gained `requestedVideoBitrateBps` so
+the cap can be seen rather than inferred.
+
+**Rationale:** the doc-sync put both corrected rules in the spec on 2026-08-25
+and deliberately let the spec lead the code by one band. This is that band.
+Measuring the bitrate rather than reading the container's declared figure is
+the same discipline the frame rate already follows, and for the same reason —
+the corpus contains files whose headers say things that are not true.
+
+**The asymmetry is deliberate:** the cap applies to "Smaller file" and not to
+"Best quality". Only one of them promises a smaller file; the other goes to
+EchoVideo and YouTube, which re-encode on ingest, where headroom above the
+source is what keeps a second generation from showing.
+
+**A pinned test was rewritten, not deleted.** `framerate.test.ts` asserted
+`conformCost(15).frameRate === 24` with a 0.6 delta ratio — it pinned the
+defect. It now pins the rule, with a comment saying so, because a reader
+finding the change in `git log` should not have to wonder whether coverage was
+quietly dropped to make something pass.
+
+**Found while verifying:** on a silent source the estimate charges 128 kbps for
+an audio track the output will not have — 64 kB of an 82 kB figure on a 4 s
+fixture. Recorded against VH-31 rather than fixed here; it is that item's
+subject and deserves its own test.
+
+**Link:** spec §6.2, §6.3; `src/media/framerate.ts`, `src/config/presets.ts`,
+`src/media/inspect.ts`, `src/ui/preflight-panel.ts`.
+
 ## 2026-08-25 — VH-33: helper text is not a safeguard
 
 **Decision:** Remove the opening checkbox and its helper paragraph from

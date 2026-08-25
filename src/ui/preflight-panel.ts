@@ -7,7 +7,7 @@
  * stops has told the user nothing they can act on.
  */
 
-import { PRESETS } from '../config/presets'
+import { PRESETS, bitrateWasCappedToSource } from '../config/presets'
 import type { PreflightOutcome, PreflightReasonCode, PreflightSummary } from '../media/preflight'
 import { formatDuration, formatFileSize, formatFrameRate, formatResolution } from './format'
 
@@ -92,6 +92,20 @@ export function renderPreflight(container: HTMLElement, summary: PreflightSummar
     output.append(dt, dd)
   }
   section.append(output)
+
+  // Spec 6.2's never-exceed-source cap, said out loud (VH-41). Someone who
+  // picked "Smaller file" to fit a storage limit has to know when it will not
+  // make the file smaller — silently returning the same size is the version of
+  // this that wastes their time. No bitrates: spec 9.2 keeps those out of the
+  // interface, and the fact that matters here is about size, not encoding.
+  if (bitrateWasCappedToSource(shape)) {
+    const capped = document.createElement('p')
+    capped.className = 'verdict-detail'
+    capped.textContent =
+      'Your video is already compressed as far as this setting would take it, so it will come ' +
+      'out about the same size. The branding and sound levelling are still applied.'
+    section.append(capped)
+  }
 
   container.append(section)
 }

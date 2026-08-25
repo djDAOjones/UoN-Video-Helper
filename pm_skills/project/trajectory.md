@@ -188,3 +188,20 @@ The deployed site was also confirmed working on a University machine, so
   placeholder assets stay on disk and keep shipping, which is harmless: they
   render the words "PLACEHOLDER — opening — 1080p25" and carry no University
   branding, so the risk was only ever putting one INTO a video.
+
+### VH-24, VH-41 — the output shape stops lying about the source
+
+- VH-24 — Shipped 2026-08-25. `conformedFrameRate` withdraws the
+  round-to-nearest-standard rule below 24 fps, so a Teams recording stays at its
+  measured 16.000 instead of becoming 24 with half its frames duplicated. Above
+  the floor nothing changes: a PowerPoint export at 30.303 still conforms to 30.
+  The test that pinned the old behaviour was rewritten to pin the new rule
+  rather than deleted.
+- VH-41 — Shipped 2026-08-25. `inspect` now measures the source's real video
+  bitrate from its packets, and the smaller preset's request is capped at it, so
+  the preset named for making files smaller can no longer inflate one. The cap
+  is stated in the preflight panel in plain language rather than applied
+  silently. Deliberately not applied to "best quality" — that preset's
+  destinations re-encode on ingest, where headroom is what prevents generation
+  loss. Verified in the browser on a synthesised 16 fps source: output reads
+  "640 × 360 at 16 fps" and the estimate falls from 324 kB to 82 kB.

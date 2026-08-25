@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import {
   PRESETS,
+  bitrateWasCappedToSource,
   outputShapeFor,
   projectedOutputBytes,
   videoEncoderConfigFor,
@@ -107,5 +108,67 @@ describe('videoEncoderConfigFor', () => {
     expect(config.avc?.format).toBe('avc')
     expect(config.width).toBe(1920)
     expect(config.framerate).toBe(30)
+  })
+})
+
+/**
+ * VH-41: spec 6.2's never-exceed-source cap.
+ *
+ * The figures are the real ones, measured across the corpus on 2026-08-25 and
+ * recorded in `tickets/VH-43.md`. They are named rather than inlined because
+ * the whole defect was a preset asking for more than a real file carries.
+ */
+describe('never exceeding the source bitrate', () => {
+  /** Teams meeting recording: 1920x1080, 16.000 fps, 1.006 Mbps of video. */
+  const TEAMS = { width: 1920, height: 1080, frameRate: 16, videoBitrateBps: 1_006_000 }
+  /** Engineering Placements briefing: a Mac export carrying 2.08 Mbps. */
+  const MAC_EXPORT = { width: 1920, height: 1080, frameRate: 25, videoBitrateBps: 2_080_000 }
+
+  it('does not inflate the Teams recording, which is the whole defect', () => {
+    const shape = outputShapeFor(PRESETS.smaller, TEAMS)
+    expect(shape.requestedVideoBitrateBps).toBeGreaterThan(1_006_000)
+    expect(shape.videoBitrateBps).toBe(1_006_000)
+    expect(bitrateWasCappedToSource(shape)).toBe(true)
+  })
+
+  it('caps the second real case too', () => {
+    const shape = outputShapeFor(PRESETS.smaller, MAC_EXPORT)
+    expect(shape.videoBitrateBps).toBe(2_080_000)
+    expect(bitrateWasCappedToSource(shape)).toBe(true)
+  })
+
+  it('leaves a generous source alone — the cap is a ceiling, not a target', () => {
+    const shape = outputShapeFor(PRESETS.smaller, { ...TEAMS, videoBitrateBps: 20_000_000 })
+    expect(shape.videoBitrateBps).toBe(shape.requestedVideoBitrateBps)
+    expect(bitrateWasCappedToSource(shape)).toBe(false)
+  })
+
+  it("does not apply the cap to best quality, and that asymmetry is the spec's", () => {
+    // Best quality goes where the file is re-encoded on ingest; headroom above
+    // the source is what stops a second generation showing.
+    const shape = outputShapeFor(PRESETS.best, TEAMS)
+    expect(shape.videoBitrateBps).toBeGreaterThan(1_006_000)
+    expect(bitrateWasCappedToSource(shape)).toBe(false)
+  })
+
+  it('does not guess when the source bitrate could not be measured', () => {
+    for (const unmeasured of [undefined, null, 0]) {
+      const shape = outputShapeFor(PRESETS.smaller, { ...TEAMS, videoBitrateBps: unmeasured })
+      expect(shape.videoBitrateBps).toBe(shape.requestedVideoBitrateBps)
+      expect(bitrateWasCappedToSource(shape)).toBe(false)
+    }
+  })
+
+  it('shrinks the projected size along with the capped bitrate', () => {
+    // The estimate must follow the cap, or the storage check and the figure the
+    // user decides on would both describe a bitrate nothing will ask for.
+    const capped = outputShapeFor(PRESETS.smaller, TEAMS)
+    const uncapped = outputShapeFor(PRESETS.smaller, { ...TEAMS, videoBitrateBps: null })
+    expect(projectedOutputBytes(capped, 60)).toBeLessThan(projectedOutputBytes(uncapped, 60))
+  })
+
+  it('asks the encoder for the capped figure, not the requested one', () => {
+    const shape = outputShapeFor(PRESETS.smaller, TEAMS)
+    expect(videoEncoderConfigFor(shape).bitrate).toBe(1_006_000)
   })
 })
