@@ -213,3 +213,12 @@ The deployed site was also confirmed working on a University machine, so
   found. Two clauses outlived the code and moved rather than closing: the
   fade-out defaulting on for hard cut only went to VH-25, and the unguarded
   negative overlay start on a sub-1-second source went to VH-42.
+
+### VH-45 — the transition controls withdrawn
+
+- VH-45 — Shipped 2026-08-25, hours after VH-34 measured the defect: the "How
+  the logo arrives" and "Animation" fieldsets are gone from `index.html`, so
+  every job takes the hard cut that was already the default. Animation went
+  with them — Fade and Slide differ only during the build a hard cut discards.
+  `chosenBranding` already fell back to `CLOSING_DEFAULTS`, so the pipeline
+  keeps all three modes for VH-44 and nothing else moved.

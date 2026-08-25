@@ -41,10 +41,11 @@
       all three engines — probed at startup against a known branding frame, the
       shape `capability.ts` already uses, refusing the overlay modes loudly if
       no route matches — and a regression test pins the expected RGBA per route.
-      Note: `over-picture` and `over-freeze` are not the default but ARE
-      offered as radio buttons on the live site (`index.html:82`), so a Firefox
-      user can select a broken closing today. If the fix is not immediate,
-      withdraw the two controls first, as VH-33 does for the opening.
+      Note: the live exposure is closed — VH-45 withdrew both controls on
+      2026-08-25, so every job now takes the hard cut and nothing reaches the
+      broken path. That is a holding action, not the fix: restoring the two
+      modes to the UI is part of this item, and spec §4.1 carries a doc-delta
+      until it happens.
 
 - [ ] **VH-35 A second tab deletes the first tab's work** (2026-08-25)
       Intent: `sweepOrphanedJobs()` is called at worker boot with no arguments

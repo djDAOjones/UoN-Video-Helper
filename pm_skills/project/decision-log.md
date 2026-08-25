@@ -11,6 +11,31 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-25 — VH-45: withdraw the transition controls rather than wait
+
+**Decision:** Delete the "How the logo arrives" and "Animation" fieldsets from
+`index.html` and their wiring in `main.ts`. The pipeline keeps all three modes;
+`chosenBranding` already fell back to `CLOSING_DEFAULTS`, so removing the radios
+is the whole change.
+
+**Rationale:** VH-34 found `over-picture` and `over-freeze` wrong in Firefox
+hours after the site went live, and both were offered as radio buttons. The
+exposure is a user choosing a broken closing today; VH-44's fix is a startup
+probe with a regression test, which is not a today-sized piece of work. VH-33
+set the precedent — a control that should not be chosen is removed, not
+defaulted off — and removal costs nothing to reverse when VH-44 lands. Animation
+went with the modes because Fade and Slide differ only during the build a hard
+cut discards: `syncBrandingOptions` was already disabling it on every default
+job, and a permanently-disabled control is exactly what VH-32 objects to.
+
+**Alternatives:** hiding the modes in Firefox alone was rejected — engine
+sniffing is what VH-44's ticket rejects for the fix, and it would make the
+control set depend on the browser. Leaving them with a warning was rejected:
+spec §9.2 says every exposed control is a decision a novice is forced to make,
+and this one has a wrong answer.
+
+**Link:** `index.html`, `src/main.ts`, backlog VH-44, doc-deltas SPEC §4.1.
+
 ## 2026-08-25 — VH-34 spike: the composite is engine-dependent after all
 
 **Question:** `composite.ts` moved the blend to the CPU because the engines

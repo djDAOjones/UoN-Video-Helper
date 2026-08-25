@@ -31,4 +31,5 @@
       wholly on the opening animation, so the sidecar cue offset is always
       zero in a closing-only v1 (source: copy-edit review of the 2026-08-25
       doc-sync; UI-copy twin already on the wish-list)
-
+- [ ] 2026-08-25 SPEC §4.1 — "the user's choice of boundary mode" describes a
+      control withdrawn by VH-45; the modes remain in the pipeline, not the UI

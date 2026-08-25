@@ -60,8 +60,6 @@ const brandingChoice = required<HTMLFieldSetElement>('#branding-choice')
 const brandingOpening = required<HTMLInputElement>('#branding-opening')
 const brandingClosing = required<HTMLInputElement>('#branding-closing')
 const brandingOptions = required<HTMLDetailsElement>('#branding-options')
-const brandingStyleChoice = required<HTMLFieldSetElement>('#branding-style-choice')
-const brandingStyleHelp = required<HTMLParagraphElement>('#branding-style-help')
 const subtitleField = required<HTMLDivElement>('#subtitle-field')
 const subtitleInput = required<HTMLInputElement>('#subtitle-input')
 const subtitleStatus = required<HTMLParagraphElement>('#subtitle-status')
@@ -132,21 +130,16 @@ const BRANDING_VALUES = {
 } as const
 
 /**
- * Keeps the animation choice honest.
+ * Shows the closing options only when a closing is wanted.
  *
- * Fade and Slide differ ONLY during the one-second build, and a hard cut
- * discards that build — the two styles share an identical card, so the choice
- * would change nothing. Leaving it live would be a control that silently does
- * not work.
+ * Mode and animation used to be chosen here too. VH-45 withdrew both controls
+ * on 2026-08-25 — the compositing modes are wrong in Firefox (VH-44), and Fade
+ * and Slide differ only during the build a hard cut discards, so with the
+ * modes gone the animation choice could not change anything. {@link
+ * chosenBranding} still falls back to {@link CLOSING_DEFAULTS} for both, which
+ * is what now decides them.
  */
 function syncBrandingOptions(): void {
-  const mode = chosenBranding('mode', CLOSING_DEFAULTS.mode)
-  const buildIsShown = mode !== 'hard-cut'
-  brandingStyleChoice.disabled = !buildIsShown
-  brandingStyleHelp.textContent = buildIsShown
-    ? ''
-    : 'A hard cut skips the animated build, so Fade and Slide would look the same.'
-
   const wantsClosing = brandingClosing.checked
   brandingOptions.hidden = !wantsClosing
   if (!wantsClosing) brandingOptions.open = false
