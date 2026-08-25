@@ -110,3 +110,23 @@ carry a 1.00 s alpha ramp meant for compositing rather than concatenation,
 have no audio bed, and ship as one 4K25 master in four styles rather than the
 four resolution variants the spec anticipated. VH-12 was reopened as a
 sign-off item; the boundary modes it implies are VH-22.
+
+### Loudness meter verified at 16 kHz
+
+The Teams recording's audio is 16 kHz mono — a third of the rate the meter was
+validated at, and far enough outside EBU Tech 3341's 48 kHz signals that the
+K-weighting derivation could plausibly have drifted. Checked against ffmpeg's
+`ebur128` over the first 180 s:
+
+| | integrated | LRA |
+| --- | --- | --- |
+| ffmpeg, native 16 kHz | −20.9 LUFS | 12.8 LU |
+| ours, native 16 kHz | −20.88 LUFS | 12.8 LU |
+| ffmpeg, resampled 48 kHz | −21.0 LUFS | 12.8 LU |
+| ours, resampled 48 kHz | −20.97 LUFS | 12.8 LU |
+
+0.02–0.03 LU from the reference at both rates, with LRA matching exactly.
+Deriving the K-weighting coefficients analytically per sample rate, rather than
+hardcoding the 48 kHz set, is what makes this hold — the choice made in
+`kweighting.ts` during VH-3 paid off on material that did not exist yet.
+

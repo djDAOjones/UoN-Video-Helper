@@ -26,7 +26,8 @@
 
 - [ ] 2026-08-24 SPEC §6.3 — "nearest standard value (24/25/30/50/60)" snaps a
       15 fps source up to 24, adding 60% duplicate frames; Teams/Zoom drop to
-      15-20 fps under load (source: VH-4)
+      15-20 fps under load (source: VH-4). CONFIRMED 2026-08-25: the real Teams
+      recording is 16.000 fps CFR and would snap to 24 (+50% duplicates)
 - [ ] 2026-08-24 SPEC §8.3.3 — the sidecar `.vtt` fallback for non-preservable
       subtitle tracks is unachievable: Mediabunny cannot read subtitle tracks
       at all, so there is nothing to export (source: VH-4, Phase A verification)
@@ -51,3 +52,9 @@
 - [ ] 2026-08-25 SPEC §6.3 — the frame-rate rule reads the DECLARED rate;
       four corpus files declare a rate that disagrees with their actual one by
       ~1% (30/1 declared, 30.3028 actual) (source: VH-24)
+- [ ] 2026-08-25 SPEC §4.3 — branding alpha is premultiplied (matted with
+      black), so the composite is `brand + source×(1−a)`; the straight-alpha
+      form the spec implies would double-darken the logo (source: VH-12)
+- [ ] 2026-08-25 SPEC §6.2 — the "smaller file" bitrate targets (1.5/2.5 Mbps)
+      exceed the Teams recording's own 1.0 Mbps, so the preset would inflate it;
+      needs a never-exceed-source guard (source: VH-24)

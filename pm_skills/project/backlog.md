@@ -85,8 +85,9 @@
       Done when: 5 / 20 / 60 minute jobs at 720p and 1080p are timed on a
       managed University laptop, a modern MacBook and a low-spec Windows
       device, and the numbers are recorded.
-      Note (2026-08-25): the delivered corpus tops out at 13.8 minutes, so the
-      20 and 60 minute cases still need material as well as a device.
+      Note (2026-08-25): the Teams recording is 29.25 minutes, which covers the
+      20 minute case. The 60 minute case still needs material as well as a
+      device.
 
 - [ ] **VH-22 Branding boundary modes** (2026-08-25)
       Intent: the closing masters open with a 1.00 s alpha transition, so what
@@ -111,18 +112,29 @@
       Done when: opening assets exist. They will need the same three boundary
       modes as VH-22, mirrored — the onset ramp runs the other way.
 
+- [ ] **VH-25 Boundary fades** [detail](tickets/VH-25.md) (2026-08-25)
+      Intent: sources cut hard into the branding. Measured across the corpus,
+      21 of 21 end on a bright frame, so the picture always needs a fade-out
+      before the graphics — but 0 of 19 end above −69 dBFS, so the audio has
+      already stopped and its fade-out is a no-op. Four start mid-speech.
+      Done when: picture fade-out defaults ON silently, picture fade-in is
+      offered and defaults OFF, and the modal is reserved for the
+      audio-starts-mid-speech case — a notice that fires every time is not a
+      notice. Lengths live in `src/config/`; D3's 100 ms fade is reconciled
+      with them rather than left alongside.
+
 - [ ] **VH-24 Survive real-world source properties**
       [detail](tickets/VH-24.md) (2026-08-25)
-      Intent: the corpus shows awkward input is the common case, not the edge.
-      Six of 20 files run at 30.303 fps (1000/33 — a screen-recorder grid), and
-      on four of them the DECLARED rate disagrees with the actual by ~1%, which
-      is ~6 s of drift over a 10 minute lecture. Two files have no audio track,
-      one is mono, one carries PCM rather than AAC, sample rates are mixed, and
-      one is 3840×2400 — 16:10, not 16:9.
-      Done when: frame rate comes from measurement rather than the declared
-      header value; non-16:9 and sub-720p geometry survive without distortion;
-      mono, PCM and 44.1 kHz sources all reach a correct output; and each is
-      exercised by a named fixture in the harness.
+      Intent: awkward input is the common case, not the edge. The Teams
+      recording is **16.000 fps CFR** with zero interval variance — so Teams
+      does not produce the VFR the conform path was built for, but a low stable
+      rate §6.3 would snap to 24 (+50% duplicate frames). Six more files run at
+      30.303 fps, and four declare a rate ~1% off their actual one, which is
+      ~6 s of drift over 10 minutes. Two files have no audio, one is mono, one
+      is PCM, rates are mixed, and one is 16:10.
+      Done when: frame rate comes from measurement not the header; odd geometry
+      survives without distortion; mono, PCM and 16/44.1 kHz sources all reach
+      a correct output; and each is exercised by a named fixture.
 
 ### Next milestone
 
