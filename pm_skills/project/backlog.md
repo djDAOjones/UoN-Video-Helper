@@ -185,15 +185,6 @@
       measured figure (6.3× real time) an hour of source takes ten minutes, but
       a device at 0.5× real time would trip it on a 30-minute lecture.
 
-- [ ] **VH-39 Stale claims in code and docs** (2026-08-25)
-      Intent: `README.md` — the public front door of a deployed app — still says
-      "Foundation set, build not started". `branding.ts:5` says the transition
-      modes are "not built yet (VH-22)"; they are built. `presets.ts:147`
-      comments `avc1.640033` as "level 4.2"; `0x33` is 51, so it is level 5.1 —
-      the code is right and covers 4K, and 4.2 would not.
-      Done when: each reads true. `public/branding/README.md`'s browser-support
-      claim is VH-34's to settle, not this item's.
-
 - [ ] **VH-40 Build and publish hygiene** (2026-08-25)
       Intent: three things the pilot ships without having decided to. `npm run
       check` runs `build` **before** `check:placeholders`, so the spike-fixture

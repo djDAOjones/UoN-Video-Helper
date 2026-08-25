@@ -236,3 +236,13 @@ The deployed site was also confirmed working on a University machine, so
   closing master carries a bed of its own. Both cases are synthesised fixtures in
   `/spike-modes.html`: audio two seconds past the picture produces 8.00 s where
   the old code gave 10.08 s, and a 0.5 s source produces 5.52 s via the freeze.
+
+### VH-39 — three claims that had stopped being true
+
+- VH-39 — Shipped 2026-08-26. `README.md` said "Foundation set, build not
+  started" on the front page of a deployed app; it now says what the pilot is
+  and names the two things withdrawn from it (VH-33, VH-44).
+  `src/media/branding.ts` described the transition modes as not built; they
+  shipped with VH-22. `presets.ts` commented `avc1.640033` as "level 4.2" where
+  `0x33` is 51 — level 5.1 — and the comment was wrong in the direction that
+  matters, since 4.2 tops out below the 4K sources spec §2 contains.

@@ -7,8 +7,15 @@ install and **no media leaving the user's device**.
 
 ## Status
 
-**Foundation set, build not started.** Project memory is populated; the
-first milestone is the MVP in [`pm_skills/project/backlog.md`](pm_skills/project/backlog.md).
+**Live as an unadvertised pilot**, built from `main` on every push. The MVP
+shipped 2026-08-25: a real recording goes in and a branded, correctly-levelled
+MP4 comes out, entirely on the user's device.
+
+What it does NOT yet do is in [`pm_skills/project/backlog.md`](pm_skills/project/backlog.md).
+Two things are worth knowing before using it in anger: opening sequences are
+withdrawn because no approved asset exists (VH-33), and so are the two closing
+transition modes, which are wrong in Firefox (VH-44). Every job takes the hard
+cut, which composites nothing and works everywhere.
 
 ## Quick start
 

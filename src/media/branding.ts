@@ -1,10 +1,14 @@
 /**
  * Branding conform and concatenation, spec section 4.
  *
- * Sequences are currently prepended and appended, never overlaid. Overlaying
- * is what the "transition" modes need and is not built yet (VH-22); this
- * module handles the opaque parts, which is every mode's tail and all of
- * "hard cut".
+ * Sequences are prepended and appended; the two "transition" modes ALSO overlay
+ * the build over picture, which shipped with VH-22 and lives in
+ * `composite.ts` and `pipeline.ts`. This module handles the opaque parts —
+ * every mode's tail, all of "hard cut" — plus where each segment sits on the
+ * timeline ({@link closingTimeline}, VH-42).
+ *
+ * Both overlay modes are withdrawn from the interface until VH-44: their
+ * readback is wrong in Firefox. The pipeline paths are intact.
  *
  * The real closing masters carry NO audio, which the maintainer confirms is
  * intended (2026-08-25) — so spec 4.4's mastered audio bed, and the rule that

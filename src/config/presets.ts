@@ -330,8 +330,11 @@ export function projectedOutputBytes(shape: OutputShape, durationSeconds: number
 /** The WebCodecs config this shape implies, for `isConfigSupported` and the encoder alike. */
 export function videoEncoderConfigFor(shape: OutputShape): VideoEncoderConfig {
   return {
-    // H.264 High profile, level 4.2 — covers 1080p60 and 4K30, which is the
-    // ceiling anything in spec section 2 arrives at.
+    // H.264 High profile, level 5.1. The comment here read "level 4.2" until
+    // 2026-08-26, which the string never said: `0x33` is 51. The code was right
+    // and the comment was wrong in the direction that matters — 4.2 tops out
+    // below 4K, and spec section 2 has 4K sources in it, so anyone trusting the
+    // comment would have "fixed" the string into refusing them.
     codec: 'avc1.640033',
     width: shape.width,
     height: shape.height,
