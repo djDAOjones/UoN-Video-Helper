@@ -32,6 +32,7 @@
 - `README.md` — Entry point for a human: what this is, how to run it, the invariants, the gotchas.
 - `UI-STANDARDS.md` — UI, usability and accessibility rules. Two token systems; the AAA design-review gate.
 - `acceptance.html` — Maintainer page for the acceptance run. Excluded from the production build.
+- `spike-alpha.html` — Maintainer page: does this browser decode transparent video? Excluded from the build.
 - `check-links.mjs` — Scaffolded internal Markdown link checker. Runs in `check`.
 - `eslint.config.js` — Flat ESLint config. Strict on correctness, silent on taste; formatting is Prettier's job.
 - `index.html` — The single page. Landmarks, skip link, and the polite live region the app announces into.
@@ -53,7 +54,9 @@
 
 ## public
 
-- `public/branding/README.md` — How to replace the placeholders with the real After Effects renders.
+- `public/branding/README.md` — What the real assets are, how they are built, and which placeholders remain.
+- `public/branding/closing-onset-{fade,slide}-{blue,white}-{1080,2160}p.webm` — Eight real 1 s onsets, VP9 + alpha.
+- `public/branding/closing-tail-{blue,white}-{1080,2160}p.mp4` — Four real 4 s opaque tails, H.264. Shared across styles.
 - `public/branding/closing-1080p25.mp4` — Placeholder closing master, 1080p25. Replaced by the real AE render; see the README beside it.
 - `public/branding/closing-1080p30.mp4` — Placeholder closing master, 1080p30. Replaced by the real AE render; see the README beside it.
 - `public/branding/closing-2160p25.mp4` — Placeholder closing master, 2160p25. Replaced by the real AE render; see the README beside it.
@@ -66,6 +69,7 @@
 ## scripts
 
 - `scripts/check-placeholders.mjs` — Tier 0 of the gate: fails on stray template markers, reports key-shaped strings.
+- `scripts/build-branding.mjs` — Converts the UoN masters into the shipped onset/tail assets. Run by hand, not by `build`.
 - `scripts/gen-placeholder-branding.mjs` — Generates the placeholder masters with a local ffmpeg. Authoring tool only.
 
 ## src
@@ -98,7 +102,7 @@
 - `src/audio/warnings.ts` — Detects the spec 5.4 audio-quality conditions; thresholds live with the numbers.
 - `src/config/audio.ts` — Project audio choices — targets, thresholds, chain constants. Standard-defined values live in src/audio/.
 - `src/config/branding.test.ts` — Pins master selection: frame rate first, resolution second, never upscaled.
-- `src/config/branding.ts` — Branding durations (D2), the four master variants, and master selection.
+- `src/config/branding.ts` — Closing style/colour/mode, the 1 s/4 s split and per-mode duration; opening placeholders.
 - `src/config/presets.test.ts` — Pins the preset rules, including that the smaller preset preserves resolution.
 - `src/config/presets.ts` — The two output presets and the encoder config they imply. Purpose-named, never technique-named.
 - `src/config/thresholds.ts` — Pre-flight bands and probe constants — the numbers D8 will replace with measurements.
@@ -112,9 +116,10 @@
 - `src/media/audio-frames.ts` — AudioSample to planar Float32 and back, shared by the chain and branding.
 - `src/media/audio-plan.ts` — The three audio passes, and the per-sample hook the encoder calls.
 - `src/media/branding-fade.test.ts` — Pins what "hard cut with a 100 ms fade" means at sample level (D3).
-- `src/media/branding.ts` — Conform, concatenate and pass the bed through untouched; the boundary fade.
+- `src/media/branding.ts` — Conform and concatenate the opaque parts; load the real closing tail; the boundary fade.
 - `src/media/capability.ts` — Device checks asked against the exact target config, not a generic capability flag.
 - `src/media/conform.test.ts` — Proves fit/pad never distorts, across 4:3, vertical and ultrawide sources.
+- `src/media/composite.ts` — Premultiplied-alpha compositing. `out = brand + source×(1−a)`; the straight form double-darkens.
 - `src/media/conform.ts` — Scale-to-fit and pad geometry, and the reusable frame scaler the pipeline and probe share.
 - `src/media/encoder-delay.ts` — Measures the audio encoder's own delay and shifts the timeline to cancel it.
 - `src/media/encoding.ts` — Mediabunny encoding configs derived from the presets; where VH-7's audio chain will hook in.
@@ -135,6 +140,7 @@
 - `src/styles/app.css` — App shell styles. Carbon productive language at AAA.
 - `src/styles/tokens.brand.css` — UoN brand tokens. Holds the D1 placeholder and nothing invented.
 - `src/styles/tokens.carbon.css` — Carbon structural tokens. Every pair is contrast-asserted by test/contrast.test.ts.
+- `src/spike/alpha.ts` — VH-12 spike: decodes each branding onset and reads back pixel alpha. Dev-only, not built.
 - `src/ui/format.test.ts` — Pins the wording, so phrasing is tested rather than reviewed by opinion.
 - `src/ui/format.ts` — Technical facts as plain language — durations, sizes, codecs, channel layouts.
 - `src/ui/preflight-panel.ts` — Renders the verdict, naming a browser that works when the answer is no.
