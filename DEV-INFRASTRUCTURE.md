@@ -45,9 +45,10 @@ is not hand-edited.
 | `lint` | `eslint . --max-warnings 0` | Correctness lint, non-mutating |
 | `lint:fix` | `eslint . --fix` | Auto-fix. **Never** part of `check`. |
 | `format` | `prettier --write .` | Auto-fix. **Never** part of `check`. |
-| `docs:lint` | `markdownlint-cli2 "**/*.md" "#node_modules"` | Markdown lint |
+| `docs:lint` | `markdownlint-cli2 "**/*.md" "#node_modules" "#pm_skills"` | Markdown lint |
 | `docs:links` | `node check-links.mjs` | Internal Markdown link check |
 | `check:placeholders` | `node scripts/check-placeholders.mjs` | Stray template markers, plus a report-only key-shape scan |
+| `check:memory` | `node pm_skills/scaffold/check-memory.mjs` | Project-memory structure and budgets. Structural drift exits 1; budget overruns are advisory |
 | `fixtures` | `node scripts/gen-fixtures.mjs` | Regenerate test media fixtures — **arrives with VH-16**; not yet in `package.json` |
 | `check` | see **Quality gate** below | The one gate |
 
@@ -237,7 +238,7 @@ npm run check
 ```
 
 ```bash
-npm run typecheck && npm run lint && npm run test && npm run build && npm run docs:lint && npm run docs:links && npm run check:placeholders
+npm run typecheck && npm run lint && npm run test && npm run build && npm run docs:lint && npm run docs:links && npm run check:placeholders && npm run check:memory
 ```
 
 **Non-mutating and CI-safe.** It reports; it never reformats or writes.
@@ -254,6 +255,7 @@ Runs, in order:
 | `build` | Anything that only breaks in a production bundle |
 | `docs:lint` + `docs:links` | Broken Markdown and dead cross-references in `docs/` and project memory |
 | `check:placeholders` | Stray `CUSTOMISE` / `[Project Name]` markers (the init Step 10 lint, folded in) |
+| `check:memory` | Project-memory drift — shipped items left in the backlog, ticket-grammar violations, dangling `[detail]` links, stale file-map paths |
 
 **The EBU Tech 3341 harness is inside `check`, deliberately.** It is the
 project's headline acceptance criterion, and a change that silently

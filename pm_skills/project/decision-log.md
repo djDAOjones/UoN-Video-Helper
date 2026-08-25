@@ -11,6 +11,35 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-25 — Branding: real assets, four styles, and a shared tail
+
+**Decision:** Build VH-12 in full (approved by the maintainer 2026-08-25).
+Ship all four 2025 closing styles; **Fade Blue is the default**; retire
+`UoN Logo Exit Animation JB 2023`. Treat the shared 4 s tail as a guaranteed
+property, not a coincidence.
+
+**Rationale:**
+
+- **The masters are not a file swap.** `qtrle`/`argb` is undecodable by
+  WebCodecs, the 1.00 s alpha onset is meant for compositing rather than
+  concatenation, and one 4K25 master must serve sources from 640×480 to 4K at
+  16–50 fps. That is a converter, a compositor and a resizer, not a copy.
+- **The shared tail is deliberate.** The maintainer authored the assets by
+  duplicating one After Effects composition and varying the onset animation
+  and the colour, so frames after t=1.00 s are byte-identical *within a
+  colour*. Confirmed by frame hashes before asking. This is safe to build on:
+  ship **two tails** (Blue, White) and **four onsets**, which cuts the
+  alpha-carrying material to 4 seconds total and the download substantially.
+- **Alpha decode is the risk, so it is verified first.** Browser support for
+  transparent video is thinner than for ordinary video. If it fails, "clean
+  cut" still works — that mode never composites — so branding ships either
+  way, with fewer modes.
+
+**Alternatives:** Asking for re-exports in a browser-ready format was
+rejected — the master format is correct for a master, and converting at build
+time keeps the authoring tool free to change. Collapsing the tail to a still
+image was rejected on measurement: it is animated throughout.
+
 ## 2026-08-25 — Band 0 MVP: stack, scope, and the decisions that shaped it
 
 **Decision:** Build the first milestone as a static TypeScript app on

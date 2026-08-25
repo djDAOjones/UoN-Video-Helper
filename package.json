@@ -21,7 +21,8 @@
     "docs:lint": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#pm_skills\"",
     "docs:links": "node check-links.mjs",
     "check:placeholders": "node scripts/check-placeholders.mjs",
-    "check": "npm run typecheck && npm run lint && npm run test && npm run build && npm run docs:lint && npm run docs:links && npm run check:placeholders"
+    "check:memory": "node pm_skills/scaffold/check-memory.mjs",
+    "check": "npm run typecheck && npm run lint && npm run test && npm run build && npm run docs:lint && npm run docs:links && npm run check:placeholders && npm run check:memory"
   },
   "dependencies": {
     "mediabunny": "^1.55.2"

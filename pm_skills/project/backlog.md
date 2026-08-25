@@ -86,14 +86,13 @@
       20 minute case. The 60 minute case still needs material as well as a
       device.
 
-- [ ] **VH-22 Branding boundary modes** [detail](tickets/VH-22.md)
-      (2026-08-25, definitions confirmed 2026-08-25)
+- [ ] **VH-22 Branding boundary modes** [detail](tickets/VH-22.md) (2026-08-25)
       Intent: the closing graphic is a 1.00 s alpha onset plus a 4.00 s opaque
       tail, so what sits under that second is an editorial choice. Three modes,
-      named by the maintainer: **hard transition** (discard the onset, T+4.00,
-      no compositing), **transition** (onset over the closing second, T+4.00),
-      **transition with still frame** (final frame sustains under the onset,
-      T+5.00).
+      named and confirmed by the maintainer on 2026-08-25: **hard transition**
+      (discard the onset, T+4.00, no compositing), **transition** (onset over
+      the closing second, T+4.00), **transition with still frame** (final frame
+      sustains under the onset, T+5.00).
       Done when: all three work and are named this way with a stated default;
       the VH-25 fade-out defaults ON for hard transition only, since elsewhere
       the onset IS the transition; and mode 3 freezes the last CLEAN frame, not
@@ -130,8 +129,7 @@
       Done when: phone footage is in `samples/`, the colour path has a decided
       and tested behaviour, and portrait branding composition is specified.
 
-- [ ] **VH-24 Survive real-world source properties**
-      [detail](tickets/VH-24.md) (2026-08-25)
+- [ ] **VH-24 Survive real-world source properties** [detail](tickets/VH-24.md) (2026-08-25)
       Intent: awkward input is the common case. All eight frame-rate anomalies
       trace to one tool (PowerPoint, which writes a nominal 30 fps as 1000/33
       and sometimes declares 30/1 anyway — ~6 s drift over 10 minutes), and
@@ -144,18 +142,21 @@
 
 ### Next milestone
 
-- [ ] **VH-12 Real branding assets** [sign-off]
-      [detail](tickets/VH-12.md) (2026-08-24, reopened 2026-08-25)
-      Intent: the masters arrived and they are not the file swap this item
-      assumed. They are `qtrle`/`argb` — a codec WebCodecs cannot decode — they
-      carry a 1.00 s alpha ramp meant for compositing rather than
-      concatenation, they have no audio bed (which spec §4.4 depends on), and
-      there is one 4K25 master in four styles rather than the §4.2 matrix of
-      four resolution variants. Style is a choice the spec does not model.
+- [ ] **VH-12 Real branding assets** [sign-off] [detail](tickets/VH-12.md) (2026-08-24)
+      Intent: reopened 2026-08-25 — the masters arrived and they are not the
+      file swap this item assumed. They are `qtrle`/`argb` — a codec WebCodecs
+      cannot decode — they carry a 1.00 s alpha ramp meant for compositing
+      rather than concatenation, they have no audio bed (which spec §4.4
+      depends on), and there is one 4K25 master in four styles rather than the
+      §4.2 matrix of four resolution variants. Style is a choice the spec does
+      not model.
+      Settled: all four styles ship, Fade Blue is the default, the 2023 asset
+      is retired, and the shared tail is deliberate (two tails, four onsets).
       Done when: the build transcodes them to an alpha format the browsers
-      decode, the compositor handles alpha, branding scales and frame-rate-
-      converts to the source, and the style default has an owner.
-      Needs scope sign-off — materially more than the item it replaces.
+      decode, the compositor handles alpha, and branding scales and
+      frame-rate-converts to the source.
+      First step is a spike: verify alpha decode in every supported browser.
+      If it fails, "clean cut" still ships — that mode never composites.
 
 - [ ] **VH-13 Published limits copy** [blocked: VH-M2] (2026-08-24)
       Turn the measured envelope into the user-facing wording. Closes D8.
@@ -185,13 +186,13 @@
       for who approves a variant before it needs an implementation.
 - [ ] **D13 Batch processing** — the most likely first request from anyone
       with a module's worth of recordings. Revisit when v1 is in use.
-- [ ] **EBU Tech 3341 cases 7 and 8** — the authentic-programme segments,
+- [ ] **VH-27 EBU Tech 3341 cases 7 and 8** — the authentic-programme segments,
       which the EBU distributes as audio and cannot be synthesised. Would need
       the files checked in as gitignored fixtures. Cases 3-5 already cover the
       same gating behaviour.
-- [ ] **TypeScript 7** — blocked on typescript-eslint supporting `>=6.1.0`.
+- [ ] **VH-28 TypeScript 7** — blocked on typescript-eslint supporting `>=6.1.0`.
       A one-line change to the pin when it does.
-- [ ] **Full embedded-subtitle extraction** — would need a bespoke MP4 box
+- [ ] **VH-29 Full embedded-subtitle extraction** — would need a bespoke MP4 box
       walker for `tx3g` / `wvtt` / `stpp` samples, since Mediabunny cannot
       read subtitle tracks. Revisit only if embedded tracks turn out to be
       common in practice; spec §8.2 says they will not be.
