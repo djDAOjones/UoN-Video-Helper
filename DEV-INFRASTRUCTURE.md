@@ -233,6 +233,13 @@ makes the bundle useful. The filename is not. `redact()` in
 
 ## Quality gate
 
+The gate also runs in CI before every deploy (`.github/workflows/deploy-pages.yml`).
+A GitHub-hosted runner is roughly 1.5x slower than a development machine, which
+is why `testTimeout` is raised to 30 s in `vite.config.ts`: the audio chain
+tests process 90-120 seconds of audio and three of them timed out against
+vitest's 5 s default the first time the gate ran in CI. If a test starts
+failing only in CI, check its duration before its assertions.
+
 ```bash
 npm run check
 ```

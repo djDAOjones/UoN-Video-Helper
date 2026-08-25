@@ -52,5 +52,15 @@ export default defineConfig({
   test: {
     environment: 'node',
     include: ['test/**/*.test.ts', 'src/**/*.test.ts'],
+    // The audio chain tests push 90-120 seconds of synthesised speech through
+    // the full DSP chain, which legitimately takes seconds rather than
+    // milliseconds. Locally the slowest sits at ~3.9 s, comfortably under
+    // vitest's 5 s default — but a shared CI runner is around 1.5x slower and
+    // three of them timed out on the first deploy that ran the gate in CI.
+    //
+    // Raised rather than shortened, because the signal lengths are what make
+    // the gating and anti-pumping assertions meaningful. This only changes how
+    // long a HUNG test takes to fail; it weakens no assertion.
+    testTimeout: 30_000,
   },
 })
