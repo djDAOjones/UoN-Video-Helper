@@ -92,3 +92,12 @@
   header points at `02-technical-rationale.md` as where evidence lives (2,008
   words, room to spare). Moving it there would clear the 3,500-word reference
   guideline without losing a sentence. (from: 2026-08-25 spec copy-edit)
+- A `scripts/run-in-engines.mjs` that drives the spike pages headlessly in all
+  three supported browsers and prints their output side by side. Built ad hoc
+  for VH-34 and thrown away: Firefox over WebDriver BiDi (`--remote-debugging-port`,
+  no CDP since it was dropped), Chrome over CDP, Safari over `safaridriver`
+  (needs Develop → Allow Remote Automation ticked once). ~120 lines, no
+  dependency, no runtime cost. Conventions say browser-only checks are
+  hand-verified and recorded; this makes recorded checks re-runnable, and VH-44
+  needs exactly it to prove its regression test in three engines. (from:
+  2026-08-25 VH-34 spike)

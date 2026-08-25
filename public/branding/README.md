@@ -27,9 +27,9 @@ against the masters, so CRF 18 is visually lossless on this content.
 Verify alpha decode in a browser by serving the app and opening
 `/spike-alpha.html`. It reports pass/fail per asset.
 
-**Chrome 151, Safari 26.5.2 and Firefox 152 all pass** (2026-08-25), including
-through the app's own loader — so all three closing modes work in every
-supported browser.
+**Chrome 151, Safari 26.5.2 and Firefox 152 all decode the alpha** (2026-08-25),
+including through the app's own loader. That is what was tested, and it is all
+that claim covers — `hard-cut`, which composites nothing, works everywhere.
 
 The same runs found something that matters more. Compositing the onset over
 white via `drawImage` returns **202 in Chrome 151 and Safari 26.5.2** but
@@ -40,6 +40,23 @@ frame's colour is premultiplied, and it is not a bug on its way out.
 255 is correct, so Gecko is the one in the right; that does not help. No
 `drawImage` call renders the same picture in all three, which is why
 `src/media/composite.ts` does the blend on the CPU instead of the GPU.
+
+**Moving the blend to the CPU did not finish the job.** The same disagreement
+reappears where the branding pixels leave the frame, and every route out of a
+decoded frame was measured on 2026-08-25 against the RGBA the WebM holds:
+
+| Route | Chrome 151 | Firefox 154 | Safari 26.5.2 |
+| --- | --- | --- | --- |
+| `draw` then `getImageData` — what `compose()` uses | correct | un-premultiplied | correct |
+| `new VideoFrame(canvas).copyTo` | double-premultiplied | correct | BGRA order |
+| `VideoSample.copyTo` — no canvas at all | correct | correct | luma plane |
+
+So `over-picture` and `over-freeze` are **wrong in Firefox**: the white onset
+overflows and wraps (74 x 255/69 = 273, reported as 17) and blue comes back
+3.7x too bright. Both modes are opt-in and off by default, so nothing ships
+broken — but neither may be defaulted on until **VH-44** lands. Safari's two
+failures are one cause: it ignores `VideoFrameCopyToOptions.format` silently,
+which the white onset hides and the blue one exposes.
 
 ## The opening placeholders (still in use)
 

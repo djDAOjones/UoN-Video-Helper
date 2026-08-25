@@ -11,6 +11,61 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-25 — VH-34 spike: the composite is engine-dependent after all
+
+**Question:** `composite.ts` moved the blend to the CPU because the engines
+disagree over whether a decoded frame is premultiplied. `compose()` still reads
+the branding frame back through `getImageData`, which un-premultiplies by
+specification. Does the disagreement reappear at the readback? Timebox: one
+session.
+
+**Method:** `spike-alpha.html` gained the measurement, run headlessly in all
+three engines — Firefox over WebDriver BiDi, Chrome over CDP, Safari over
+`safaridriver`. Ground truth came from ffmpeg decoding the onsets straight from
+the WebM: the frame at t=0.40 s is uniform, white `(73,73,73,75)` and blue
+`(4,10,17,75)`, premultiplied. Measured on the real `compose()` over a black
+picture, the maximum-error case and the one a real closing over dark footage
+would show.
+
+**Finding — yes, and every alternative route is broken somewhere too:**
+
+| Route | Chrome 151 | Firefox 154 | Safari 26.5.2 |
+| --- | --- | --- | --- |
+| `draw` then `getImageData` (today) | correct | un-premultiplied | correct |
+| `new VideoFrame(canvas).copyTo` | double-premultiplied | correct | BGRA |
+| `VideoSample.copyTo` (no canvas) | correct | correct | luma plane |
+
+In Firefox blue returns 3.7x too bright — `5 x 255/69 = 18.5`, exact on all
+three channels — and white overflows and WRAPS rather than clamping:
+`74 x 255/69 = 273`, reported as 17. So the white closing over dark picture
+does not glow, it inverts. Safari's two failures are one cause: it ignores
+`VideoFrameCopyToOptions.format` silently. Blue caught it and white would have
+hidden it — `(17,10,7)` is `(4,10,17)` reversed, invisible on grey. Firefox
+also expands the alpha plane as limited range (75 becomes 69), which is what
+pushes the white case over 255 in the first place.
+
+**Recommendation:** no single route is portable, so the fix is a startup probe
+against a known branding frame that picks a working route and refuses the
+overlay modes if none matches — the shape `capability.ts` already uses, and
+consistent with failing loudly rather than silently. Raised as VH-44, which
+inherits this entry's numbers as its expected values. Not attempted here: a
+spike's code does not merge.
+
+**Alternatives:** correcting Firefox's readback arithmetically was rejected —
+the overflow wrap destroys the value, and it survives only because Firefox's
+alpha rescaling breaks the `RGB <= alpha` invariant the correction would rely
+on. Re-tagging the assets full-range would remove the wrap but not the
+un-premultiply, so it fixes the symptom that is easiest to see and leaves the
+error.
+
+**Scope note:** the measurement stayed in `src/spike/alpha.ts` rather than a
+scratch directory, matching how VH-12's alpha check is kept — dev-only, never
+built, and re-runnable as one URL. A spike normally leaves nothing behind; a
+verification that cannot be re-run is not a verification.
+
+**Link:** `src/media/composite.ts`, `src/spike/alpha.ts`,
+`public/branding/README.md`, backlog VH-44.
+
 ## 2026-08-25 — Pruned project memory
 
 **Decision:** Swept the 12 doc-deltas ticked by the same session's doc-sync, and

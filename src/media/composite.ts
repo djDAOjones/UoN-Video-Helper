@@ -35,6 +35,12 @@
  * it is not going to resolve itself. The blend therefore happens HERE, on the
  * CPU, over the ~25 frames of the onset. Doing the arithmetic ourselves is the
  * only way the picture does not depend on which browser the user opened.
+ *
+ * THE ARITHMETIC IS PORTABLE. THE READBACK THAT FEEDS IT IS NOT — see
+ * {@link BrandingCompositor.compose}, measured in all three engines under
+ * VH-34 on 2026-08-25 and open as VH-44. Moving the blend off the GPU was
+ * necessary and did not finish the job: the disagreement reappears one step
+ * later, where the branding pixels leave the frame.
  */
 
 import { VideoSample } from 'mediabunny'
@@ -112,6 +118,24 @@ export class BrandingCompositor {
 
   /**
    * Draws `brand` over `picture` and returns the result.
+   *
+   * **Correct in Chrome and Safari, wrong in Firefox (VH-44).** Every route
+   * out of a decoded frame was measured on 2026-08-25, on the blue and white
+   * onsets, against the RGBA the WebM actually holds:
+   *
+   * | Route | Chrome 151 | Firefox 154 | Safari 26.5.2 |
+   * | --- | --- | --- | --- |
+   * | `draw` then `getImageData` (below) | correct | UN-PREMULTIPLIED | correct |
+   * | `new VideoFrame(canvas).copyTo` | double-premultiplied | correct | BGRA |
+   * | `VideoSample.copyTo` (no canvas) | correct | correct | luma plane |
+   *
+   * `getImageData` returns STRAIGHT RGBA by specification, so an engine that
+   * holds the decoded frame as premultiplied divides the alpha back out here.
+   * On the white onset that overflows and WRAPS: 74 x 255/69 = 273, reported
+   * as 17. Blue comes back 3.7x too bright. Both compositing modes are opt-in
+   * and off by default, so nothing ships broken today — but no mode that uses
+   * this may be defaulted on until VH-44 lands. `/spike-alpha.html` re-runs
+   * the measurement.
    *
    * @param picture - The frame underneath. Drawn to fill the output shape.
    * @param brand - The branding frame, with premultiplied alpha. Fitted into

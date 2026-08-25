@@ -182,7 +182,8 @@ interface needs a deliberate design pass rather than tweaks (VH-32).
 ### All three engines verified — and they disagree
 
 Firefox joined Chrome 151 and Safari 26.5.2 in decoding VP9 alpha through the
-app's own loader, so every closing mode works in every supported browser.
+app's own loader. Decode is all that proved: VH-34 later measured the PIXELS
+and found the two compositing modes wrong in Firefox (see below).
 
 The same runs found something worth more than the pass. Compositing the onset
 over white via `drawImage` returns 202 in Chrome and Safari but **255 in
@@ -191,9 +192,8 @@ genuinely disagree about whether a decoded frame's colour is premultiplied, and
 it is not a regression on its way out. 255 is the correct answer, so Gecko is
 the one in the right — but a composite that is correct in one engine and
 double-darkened in the other two is unusable, and no `drawImage` call is
-portable. Doing the blend on the CPU in
-`composite.ts` was chosen when only Chrome had been measured; it turns out to
-be the only choice that produces the same picture everywhere.
+portable. Doing the blend on the CPU in `composite.ts` was chosen when only
+Chrome had been measured, and it was right to move; it was not sufficient.
 
 A smaller difference in the same output: asking for exactly t=0.40 s returned
 the neighbouring frame in Firefox. Invisible at 40 ms, but a reminder not to
@@ -208,7 +208,8 @@ The deployed site was also confirmed working on a University machine, so
   2026-08-25: `hard-cut`, `over-picture` and `over-freeze` live in
   `config/branding.ts`, `pipeline.ts` and `freeze.ts`, hard cut is the default
   and the alpha-decode fallback, the freeze holds the last CLEAN frame rather
-  than the last decoded one, and all three were verified in Chrome 151,
-  Safari 26.5.2 and Firefox 152. Two clauses outlived the code and moved rather
-  than closing: the fade-out defaulting on for hard cut only went to VH-25, and
-  the unguarded negative overlay start on a sub-1-second source went to VH-24.
+  than the last decoded one, and all three DECODED in Chrome 151, Safari 26.5.2
+  and Firefox 152 — which is not the same as compositing correctly, as VH-34
+  found. Two clauses outlived the code and moved rather than closing: the
+  fade-out defaulting on for hard cut only went to VH-25, and the unguarded
+  negative overlay start on a sub-1-second source went to VH-42.

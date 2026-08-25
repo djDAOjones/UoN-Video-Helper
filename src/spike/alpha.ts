@@ -6,9 +6,18 @@
  * support — but "should not" is why the spike exists. Dev-only; not built.
  */
 
-import { ALL_FORMATS, CanvasSink, Input, UrlSource } from 'mediabunny'
+import {
+  ALL_FORMATS,
+  CanvasSink,
+  Input,
+  UrlSource,
+  VideoSample,
+  VideoSampleSink,
+} from 'mediabunny'
 
 import { loadBrandingClip, loadClosingOnset } from '../media/branding'
+import { BrandingCompositor } from '../media/composite'
+import { fitRectangle } from '../media/conform'
 import { outputShapeFor, PRESETS } from '../config/presets'
 
 const log = document.getElementById('log') as HTMLPreElement
@@ -145,6 +154,154 @@ try {
   say('   rely on drawImage for this; composite.ts does the blend itself)')
 } catch (error) {
   say(`  ERROR — ${error instanceof Error ? error.message : String(error)}`)
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// VH-34: does compose()'s READBACK put the engine divergence back?
+//
+// The blend moved to the CPU because `drawImage` disagrees across engines. But
+// `BrandingCompositor.compose()` still reaches the branding pixels through
+// `brand.draw(ctx, …)` followed by `getImageData` — and `getImageData` is
+// specified to return STRAIGHT (un-premultiplied) RGBA. If an engine holds the
+// decoded frame as premultiplied, that readback divides the alpha back out and
+// hands `compositePremultiplied` a colour up to 3.4x too bright.
+//
+// Ground truth, decoded straight from the WebM with ffmpeg (2026-08-25). The
+// frame at t=0.40s is uniform across all 1920x1080 pixels, so any pixel does:
+//
+//     fade white  RGBA (73, 73, 73, 75)     un-premultiplied: (248, 248, 248)
+//     fade blue   RGBA ( 4, 10, 17, 75)     un-premultiplied: ( 14,  34,  58)
+//
+// Both are premultiplied — RGB never exceeds alpha. Composited over BLACK, the
+// correct output IS the stored colour; an un-premultiplying engine returns the
+// second figure instead. Black is used deliberately: it is the maximum-error
+// case and the one a real closing over dark picture would show.
+
+const ONSET_SECONDS = 0.4
+
+const GROUND_TRUTH = {
+  white: { premultiplied: [73, 73, 73], straight: [248, 248, 248] },
+  blue: { premultiplied: [4, 10, 17], straight: [14, 34, 58] },
+} as const
+
+/** Nearest match wins; 6 is wider than any observed YUV rounding and far
+ *  narrower than the gap between the two candidates. */
+function classify(rgb: readonly number[], colour: 'white' | 'blue'): string {
+  const truth = GROUND_TRUTH[colour]
+  const distance = (want: readonly number[]): number =>
+    Math.max(...want.map((v, i) => Math.abs(v - (rgb[i] ?? -999))))
+  const pre = distance(truth.premultiplied)
+  const str = distance(truth.straight)
+  if (pre <= 6 && pre < str) return `PREMULTIPLIED (matches the file, ±${pre})`
+  if (str <= 6 && str < pre) return `STRAIGHT — un-premultiplied on readback (±${str})`
+  return 'neither — inspect before concluding anything'
+}
+
+async function measureReadback(colour: 'white' | 'blue'): Promise<void> {
+  say(`\n=== VH-34 · fade ${colour} onset at t=${ONSET_SECONDS}s`)
+  const shape = outputShapeFor(PRESETS.best, { width: 1920, height: 1080, frameRate: 25 })
+  const clip = await loadClosingOnset(shape, { style: 'fade', colour })
+  const track = clip ? await clip.input.getPrimaryVideoTrack() : null
+  if (!track) {
+    say('  FAIL — onset did not load')
+    return
+  }
+
+  const brand = await new VideoSampleSink(track).getSample(ONSET_SECONDS)
+  if (!brand) {
+    say(`  FAIL — no sample at ${ONSET_SECONDS}s`)
+    return
+  }
+
+  const centreX = shape.width >> 1
+  const centreY = shape.height >> 1
+  const fit = fitRectangle({ width: track.displayWidth, height: track.displayHeight }, shape)
+
+  try {
+    // 1. The readback alone, performed exactly as compose() performs it.
+    const overlay = new OffscreenCanvas(shape.width, shape.height)
+    const overlayContext = overlay.getContext('2d', { willReadFrequently: true })
+    if (!overlayContext) {
+      say('  FAIL — no 2d context')
+      return
+    }
+    overlayContext.clearRect(0, 0, shape.width, shape.height)
+    brand.draw(overlayContext, fit.x, fit.y, fit.width, fit.height)
+    const read = [...overlayContext.getImageData(centreX, centreY, 1, 1).data]
+    say(`  getImageData    RGBA(${read.join(', ')})`)
+    say(`                  ${classify(read, colour)}`)
+
+    // 2. The whole path: compose() over a black picture. The result is fully
+    //    opaque, so premultiplied and straight agree on it and this second
+    //    readback cannot distort the answer.
+    const picture = new OffscreenCanvas(shape.width, shape.height)
+    const pictureContext = picture.getContext('2d', { alpha: false })
+    if (!pictureContext) {
+      say('  FAIL — no 2d context for the picture')
+      return
+    }
+    pictureContext.fillStyle = '#000000'
+    pictureContext.fillRect(0, 0, shape.width, shape.height)
+
+    const timing = { timestamp: 0, duration: 1 / shape.frameRate }
+    const under = new VideoSample(picture, timing)
+    const composed = new BrandingCompositor(shape).compose(under, brand, fit, timing)
+    const result = new OffscreenCanvas(shape.width, shape.height)
+    const resultContext = result.getContext('2d', { willReadFrequently: true })
+    if (!resultContext) {
+      say('  FAIL — no 2d context for the result')
+      return
+    }
+    composed.draw(resultContext, 0, 0, shape.width, shape.height)
+    const out = [...resultContext.getImageData(centreX, centreY, 1, 1).data]
+    composed.close()
+    under.close()
+    say(`  compose/black   RGBA(${out.join(', ')})`)
+    say(`                  ${classify(out, colour)}`)
+
+    // 3. Does the CANVAS's own bytes come back un-mangled through a
+    //    canvas-backed VideoFrame? The canvas stores premultiplied; the
+    //    question is whether copyTo divides the alpha out as getImageData
+    //    does. If it does not, the fix is one line and keeps canvas scaling.
+    try {
+      const frame = new VideoFrame(overlay, { timestamp: 0 })
+      try {
+        const buffer = new Uint8Array(frame.allocationSize({ format: 'RGBA' }))
+        await frame.copyTo(buffer, { format: 'RGBA' })
+        const offset = (centreY * shape.width + centreX) * 4
+        const canvasBytes = [...buffer.slice(offset, offset + 4)]
+        say(`  canvas copyTo   RGBA(${canvasBytes.join(', ')})  (canvas -> VideoFrame)`)
+        say(`                  ${classify(canvasBytes, colour)}`)
+      } finally {
+        frame.close()
+      }
+    } catch (error) {
+      say(
+        `  canvas copyTo   unsupported here — ${error instanceof Error ? error.message : String(error)}`,
+      )
+    }
+
+    // 4. The ticket's open question: is there a readback with no canvas in it?
+    try {
+      const buffer = new Uint8Array(brand.allocationSize({ format: 'RGBA' }))
+      await brand.copyTo(buffer, { format: 'RGBA' })
+      const direct = [...buffer.slice(0, 4)]
+      say(`  copyTo RGBA     RGBA(${direct.join(', ')})  (no canvas)`)
+      say(`                  ${classify(direct, colour)}`)
+    } catch (error) {
+      say(`  copyTo RGBA     unsupported here — ${error instanceof Error ? error.message : String(error)}`)
+    }
+  } finally {
+    brand.close()
+  }
+}
+
+for (const colour of ['white', 'blue'] as const) {
+  try {
+    await measureReadback(colour)
+  } catch (error) {
+    say(`  ERROR — ${error instanceof Error ? error.message : String(error)}`)
+  }
 }
 
 say('\ndone')

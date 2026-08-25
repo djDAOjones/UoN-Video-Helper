@@ -12,6 +12,11 @@
       modes "transition" and "transition with freeze frame" are buildable. If it cannot, only
       "clean cut" is.
     </p>
+    <p>
+      VH-34, at the end: does <code>compose()</code>'s <code>getImageData</code> readback hand the
+      CPU blend the premultiplied colour the file actually holds, or an un-premultiplied one? Run
+      this page in Chrome, Firefox and Safari and compare the three.
+    </p>
     <pre id="log">running…</pre>
     <script type="module" src="/src/spike/alpha.ts"></script>
   </body>

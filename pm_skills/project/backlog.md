@@ -26,22 +26,25 @@
      VH-34..VH-40 came from an external code review, 2026-08-25; its findings
      were verified against the source before being written up. -->
 
-- [ ] **VH-34 The composite may still be engine-dependent** [spike]
-      [detail](tickets/VH-34.md) (2026-08-25)
-      Intent: the blend moved to the CPU because the engines disagree over
-      whether a decoded frame is premultiplied — but `compose()` still reads the
-      branding frame back through `getImageData`, which un-premultiplies by
-      spec, so the same disagreement plausibly reappears at the readback.
-      Nothing exercises it: the existing Firefox check measured `drawImage` over
-      white, where the error is invisible. Both affected modes are off by
-      default, so this is an unverified claim rather than a shipped bug — but
-      `public/branding/README.md` and `trajectory.md` both assert all three
-      modes work everywhere.
-      Done when: the readback RGBA is measured in all three engines on the blue
-      and white onsets, and either the claim is extended honestly with a
-      regression test, or the fix lands and the claim is narrowed to what was
-      tested. First in the band: one measurement decides whether this is a
-      no-op or a correctness fix.
+- [ ] **VH-44 The closing transitions are wrong in Firefox**
+      [detail](tickets/VH-44.md) (2026-08-25)
+      Intent: VH-34 measured it and the answer was yes — moving the blend to the
+      CPU did not escape the engines' disagreement, it moved it one step later,
+      to `compose()`'s `getImageData` readback. In Firefox the blue onset comes
+      back 3.7x too bright and the white one OVERFLOWS AND WRAPS, so a white
+      closing over dark picture inverts rather than glowing. Neither alternative
+      route is portable either: `VideoSample.copyTo` is correct in Chrome and
+      Firefox but returns the luma plane in Safari, which ignores the requested
+      format silently. Numbers are in the ticket and in decision-log
+      2026-08-25 "VH-34 spike".
+      Done when: the branding pixels reach `compositePremultiplied` unchanged in
+      all three engines — probed at startup against a known branding frame, the
+      shape `capability.ts` already uses, refusing the overlay modes loudly if
+      no route matches — and a regression test pins the expected RGBA per route.
+      Note: `over-picture` and `over-freeze` are not the default but ARE
+      offered as radio buttons on the live site (`index.html:82`), so a Firefox
+      user can select a broken closing today. If the fix is not immediate,
+      withdraw the two controls first, as VH-33 does for the opening.
 
 - [ ] **VH-35 A second tab deletes the first tab's work** (2026-08-25)
       Intent: `sweepOrphanedJobs()` is called at worker boot with no arguments
