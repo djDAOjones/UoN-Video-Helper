@@ -89,19 +89,20 @@
       20 minute case. The 60 minute case still needs material as well as a
       device.
 
-- [ ] **VH-22 Branding boundary modes** (2026-08-25)
-      Intent: the closing masters open with a 1.00 s alpha transition, so what
-      sits underneath that second is a real editorial choice, not a default.
-      Maintainer proposed three modes by name:
-      - "Clean cut" — skip the transition, start at t=1.00 s where the frame is
-        already fully opaque. Output = source + 4 s. Needs no compositing, and
-        is the only mode reachable without alpha support.
-      - "Transition" — composite the 1 s onset over the last second of source.
-        Output = source + 4 s, and the source loses nothing.
-      - "Transition with freeze frame" — hold the final source frame under the
-        onset. Output = source + 5 s, and no content is covered.
-      Done when: all three are implementable and named this way in the UI, with
-      a stated default. Blocked on VH-12's alpha decode for the latter two.
+- [ ] **VH-22 Branding boundary modes** [detail](tickets/VH-22.md)
+      (2026-08-25, definitions confirmed 2026-08-25)
+      Intent: the closing graphic is a 1.00 s alpha onset plus a 4.00 s opaque
+      tail, so what sits under that second is an editorial choice. Three modes,
+      named by the maintainer: **hard transition** (discard the onset; output
+      T+4.00; no compositing, so the only mode reachable without alpha),
+      **transition** (onset plays over the closing second of source; output
+      T+4.00; nothing cut but the last second is obscured), and **transition
+      with still frame** (final frame sustains under the onset; output T+5.00;
+      nothing obscured, at the cost of a frozen second).
+      Done when: all three are implementable and named this way, with a stated
+      default, and the VH-25 picture fade-out defaults ON for hard transition
+      and OFF for the other two — in those the graphic's onset is the
+      transition. Blocked on VH-12's alpha decode for modes 2 and 3.
 
 - [ ] **VH-23 Opening graphics** (2026-08-25)
       Intent: there are no opening assets and the maintainer's position is that
