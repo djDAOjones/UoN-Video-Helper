@@ -82,6 +82,11 @@
       Done when: 5 / 20 / 60 minute jobs at 720p and 1080p are timed on a
       managed University laptop, a modern MacBook and a low-spec Windows
       device, and the numbers are recorded.
+      First real figure (2026-08-25, this MacBook, via `/spike-real.html`):
+      1080p, 215 s of slides with no audio, "best quality" — 34.2 s, or
+      **6.3× real time**. Extrapolated, an hour of that material is ~10
+      minutes. One device, one content type; the envelope still needs the
+      others.
       Note (2026-08-25): the Teams recording is 29.25 minutes, which covers the
       20 minute case. The 60 minute case still needs material as well as a
       device.

@@ -1,10 +1,9 @@
 # Deploys the app to GitHub Pages.
 #
-# Deliberately MANUAL (`workflow_dispatch`) rather than on push. A Pages site
-# on a personal account is public, and this one carries University of
-# Nottingham branding, so the first publish is a decision rather than a side
-# effect of a commit. Add a `push` trigger once that decision is made and the
-# hosting question (D5 / VH-14) is settled.
+# The maintainer accepted a public site on 2026-08-25 for piloting — it is
+# unadvertised, and the intended home is an internal server once this is ready
+# to show. So `main` deploys automatically, with manual dispatch kept for
+# re-running without a commit.
 #
 # The app processes video entirely on the viewer's device, so deploying it
 # exposes no media. What deploying DOES expose is the branding assets and the
@@ -13,6 +12,8 @@
 name: Deploy to GitHub Pages
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
