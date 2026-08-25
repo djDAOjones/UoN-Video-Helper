@@ -7,7 +7,7 @@
  */
 
 import { installGlobalErrorCapture, type CapturedError } from '../core/diagnostics'
-import { getLogRecords, log } from '../core/logger'
+import { getLogRecords, log, setMinimumLogLevel } from '../core/logger'
 import {
   PRESETS,
   outputShapeFor,
@@ -85,6 +85,12 @@ self.addEventListener('message', (event: MessageEvent<WorkerRequest>) => {
 const running = new Map<number, AbortController>()
 /** Finished jobs whose scratch still holds a file the main thread may read. */
 const finished = new Map<string, OpfsWorkspace>()
+
+// The worker has its own module scope, so `main.ts:32` does not reach it and
+// every debug line the job emitted was reaching a production console (VH-40).
+// The two threads share one diagnostics bundle, so they have to share a level
+// or the bundle is half verbose and half not.
+if (!import.meta.env.DEV) setMinimumLogLevel('info')
 
 // A crashed or force-closed tab leaves scratch behind, and the user's disk is
 // not ours to fill (AGENTS.md -> "OPFS working-store checklist").

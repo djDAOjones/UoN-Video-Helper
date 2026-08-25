@@ -172,22 +172,6 @@
       measured figure (6.3× real time) an hour of source takes ten minutes, but
       a device at 0.5× real time would trip it on a 30-minute lecture.
 
-- [ ] **VH-40 Build and publish hygiene** (2026-08-25)
-      Intent: three things the pilot ships without having decided to. `npm run
-      check` runs `build` **before** `check:placeholders`, so the spike-fixture
-      guard — the single best safeguard for the no-egress invariant — fires only
-      after `dist/` already contains the recording, and a bare `npm run build` is
-      unguarded entirely. `dist/` publishes `branding/README.md` (maintainer
-      notes and ticket IDs) and full sourcemaps. And the worker never calls
-      `setMinimumLogLevel('info')` — only `main.ts:32` does — so worker debug
-      lines reach a production console.
-      Checked against the live site 2026-08-25: the spike pages do NOT ship —
-      `rollupOptions.input` names `index.html` alone, and every `spike-*.html`
-      404s, so that third claim was wrong. `branding/README.md` and
-      `assets/app-*.js.map` both return 200; those two hold.
-      Done when: the guard runs before anything is written, what ships is what
-      was meant to ship, and both threads log at the same level.
-
 ### Band 3 — New capability, or waiting on material
 
 <!-- Not committed, and none of it can start today: two wait on assets that

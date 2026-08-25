@@ -260,3 +260,17 @@ The deployed site was also confirmed working on a University machine, so
   `settleLanes` waits for both, aborts the survivor, and reports the cause
   rather than the cancellation it triggered — extracted so it is testable
   without WebCodecs.
+
+### VH-40 — the guard runs before anything is written
+
+- VH-40 — Shipped 2026-08-26. `check:placeholders` — the safeguard that stops a
+  real lecture recording being copied into a deployed build — ran AFTER `build`
+  in the gate, and not at all for a bare `npm run build`, which is what the
+  deploy workflow calls. It is now a `prebuild` script, so nothing can write
+  `dist/` without it. A small Vite plugin drops `branding/README.md` from the
+  output, which the live site was serving with its ticket IDs. The worker now
+  sets its own log level: it has a separate module scope, so `main.ts` never
+  reached it and every debug line reached a production console.
+- Two of the item's claims did not survive checking, and both are recorded
+  rather than "fixed": the spike pages do not ship (every `spike-*.html` 404s),
+  and the sourcemaps expose nothing, because the repository is public.

@@ -10,6 +10,7 @@
   },
   "scripts": {
     "dev": "vite",
+    "prebuild": "npm run check:placeholders",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run",
@@ -22,7 +23,7 @@
     "docs:links": "node check-links.mjs",
     "check:placeholders": "node scripts/check-placeholders.mjs",
     "check:memory": "node pm_skills/scaffold/check-memory.mjs",
-    "check": "npm run typecheck && npm run lint && npm run test && npm run build && npm run docs:lint && npm run docs:links && npm run check:placeholders && npm run check:memory"
+    "check": "npm run check:placeholders && npm run typecheck && npm run lint && npm run test && npm run build && npm run docs:lint && npm run docs:links && npm run check:memory"
   },
   "dependencies": {
     "mediabunny": "^1.55.2"

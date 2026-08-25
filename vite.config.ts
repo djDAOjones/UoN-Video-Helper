@@ -1,5 +1,7 @@
 import { execSync } from 'node:child_process'
-import { defineConfig } from 'vitest/config'
+import { existsSync, rmSync } from 'node:fs'
+import { resolve } from 'node:path'
+import { defineConfig, type Plugin } from 'vitest/config'
 
 import pkg from './package.json' with { type: 'json' }
 
@@ -22,7 +24,40 @@ function buildId(): string {
   return `v${pkg.version}+${stamp}.${sha}`
 }
 
+/**
+ * Keeps maintainer-only files out of the published build.
+ *
+ * Vite copies `public/` wholesale, which is exactly right for the branding
+ * assets and exactly wrong for the notes sitting beside them: ticket IDs, build
+ * instructions and an alpha-decode measurement table are for whoever maintains
+ * the assets, not for the site's visitors. Confirmed shipping — the deployed
+ * site returned 200 for `/branding/README.md` on 2026-08-25 (VH-40).
+ *
+ * Deleting after the copy rather than filtering before it, because Vite offers
+ * no per-file exclusion for `publicDir` and moving the notes away from the
+ * assets they describe would cost more than it saves.
+ */
+function excludeFromBuild(relativePaths: readonly string[]): Plugin {
+  let outDir = 'dist'
+  return {
+    name: 'uon-exclude-from-build',
+    apply: 'build',
+    configResolved(config) {
+      outDir = config.build.outDir
+    },
+    closeBundle() {
+      for (const relativePath of relativePaths) {
+        const full = resolve(outDir, relativePath)
+        if (!existsSync(full)) continue
+        rmSync(full, { force: true })
+        this.info(`excluded ${relativePath} from the build`)
+      }
+    },
+  }
+}
+
 export default defineConfig({
+  plugins: [excludeFromBuild(['branding/README.md'])],
   // A GitHub Pages project site serves from `/<repo>/`, not the root. The
   // deploy workflow sets BASE_PATH; local dev and the acceptance run leave it
   // unset and stay at `/`. Runtime asset URLs read `import.meta.env.BASE_URL`
@@ -41,6 +76,13 @@ export default defineConfig({
   },
   build: {
     target: 'esnext',
+    // Kept, deliberately, and re-decided on 2026-08-26 rather than assumed.
+    // Shipping sourcemaps normally exposes source — but this repository is
+    // PUBLIC, so every line they reveal is already at
+    // github.com/djDAOjones/UoN-Video-Helper, and they are what make a
+    // diagnostics bundle from a lecturer's machine name real functions instead
+    // of minified identifiers. Revisit if the repository ever goes private:
+    // that, not the deploy, is the condition this rests on (VH-40).
     sourcemap: true,
     rollupOptions: {
       // Only the app ships. `acceptance.html` is a maintainer tool served in

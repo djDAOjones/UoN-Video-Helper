@@ -11,6 +11,39 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-26 — VH-40: two of three claims survived checking
+
+**Decision:** `check:placeholders` becomes a `prebuild` script; a Vite plugin
+removes `branding/README.md` from the output; the worker sets its own minimum
+log level. Sourcemaps stay.
+
+**Rationale for the ordering fix:** the guard exists to stop a real lecture
+recording reaching a deployed build — the single most direct protection for the
+no-egress invariant — and it ran after `build` in the gate and not at all for a
+bare `npm run build`, which is exactly what `.github/workflows/deploy-pages.yml`
+calls. A guard that fires after the thing it guards is decoration. As `prebuild`
+npm runs it before `build` however `build` is invoked.
+
+**Why the worker needed its own line:** it has a separate module scope, so
+`main.ts:32` never reached it. The two threads share one diagnostics bundle, so
+a bundle was half verbose and half not.
+
+**Two claims did not survive, and this is the more useful half of the item.**
+The spike pages do not ship — `rollupOptions.input` names `index.html` alone and
+every `spike-*.html` returns 404 on the live site. And the sourcemaps expose
+nothing: the repository is PUBLIC, so every line they reveal is already on
+GitHub, while they are what turns a diagnostics bundle from a lecturer's machine
+into real function names. Removing them would have cost real diagnostic value to
+protect nothing. That decision rests on the repository's visibility, not on the
+deploy, so the comment in `vite.config.ts` names the condition to revisit.
+
+**Alternatives:** moving `public/branding/README.md` out of `public/` was
+rejected — the notes describe the assets beside them and Vite offers no
+per-file exclusion for `publicDir`, so deleting after the copy is the smaller
+cost.
+
+**Link:** `package.json`, `vite.config.ts`, `src/workers/job.worker.ts`.
+
 ## 2026-08-26 — VH-37: report the disease, not the symptom
 
 **Decision:** Move the `InvalidVttError` case to `handleProcess` and delete it
