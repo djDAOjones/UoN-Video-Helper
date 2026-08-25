@@ -274,3 +274,13 @@ The deployed site was also confirmed working on a University machine, so
 - Two of the item's claims did not survive checking, and both are recorded
   rather than "fixed": the spike pages do not ship (every `spike-*.html` 404s),
   and the sourcemaps expose nothing, because the repository is public.
+
+### VH-20 — the audio chain's tail is emitted
+
+- VH-20 — Shipped 2026-08-26. `AudioChain.flush()` already existed and the
+  encode path never called it, so every job lost the limiter's look-ahead window
+  from the end of its audio. `createContentAudioProcessor` returns
+  `{ process, flush }` and the pipeline emits the tail after the last sample.
+  The inconsistency was sharper than the 5 ms suggests: the ANALYSIS pass
+  already flushed, so loudness was being measured over audio the output did not
+  contain. Pinned by a frame-conservation test — in equals out, flush included.

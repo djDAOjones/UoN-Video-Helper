@@ -142,14 +142,6 @@
       (`run.ts:66`) — the pipeline insists on the clip's *actual* duration, and
       the two agree only because the placeholder happens to be exactly 5.000 s.
 
-- [ ] **VH-20 Flush the audio chain's tail**
-      Intent: the limiter delays by its 5 ms look-ahead, and the streaming path
-      never flushes it, so the output loses roughly 5 ms from the end of the
-      audio. Inaudible on a lecture that ends in silence; still undocumented
-      behaviour rather than a decision.
-      Done when: either the tail is emitted as a final sample, or the loss is
-      measured, judged acceptable, and recorded in the spec-facing notes.
-
 - [ ] **VH-17 Evaluate `fastStart: 'reserve'` for the smaller preset**
       Intent: the "smaller file" preset goes to OneDrive and SharePoint, where
       students may stream it. `fastStart: false` puts the moov box at the end,

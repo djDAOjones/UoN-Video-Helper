@@ -11,6 +11,27 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-26 — VH-20: emit the tail rather than document the loss
+
+**Decision:** `createContentAudioProcessor` returns `{ process, flush }`, and
+`feedAudio` emits the flush after the last source sample.
+
+**Rationale:** the ticket offered a choice — emit the tail, or measure the loss
+and record it as accepted. Emitting won on a fact that was not in the ticket:
+`AudioChain.flush()` already existed and `analyseSourceAudio` already called it.
+So the analysis pass measured the whole signal while the encode path dropped its
+last look-ahead window, and the two things that are supposed to describe the
+same audio disagreed. Documenting that as acceptable would have meant writing
+down that the meter and the output measure different things, when the fix was to
+call a method that was already there.
+
+**Testing:** frame conservation — in equals out once the flush is included, and
+strictly less before it. That is the invariant the pipeline was breaking, and it
+holds without asserting anything about the audio's content.
+
+**Link:** `src/media/audio-plan.ts`, `src/media/pipeline.ts`,
+`src/audio/chain.test.ts`.
+
 ## 2026-08-26 — VH-40: two of three claims survived checking
 
 **Decision:** `check:placeholders` becomes a `prebuild` script; a Vite plugin

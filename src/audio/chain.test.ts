@@ -87,6 +87,36 @@ describe('acceptance criterion 2: -16 +/-0.5 LUFS and -2.0 dBTP', () => {
 })
 
 describe('acceptance criterion 4: no pumping', () => {
+  it('emits exactly as many frames as it was given, flush included (VH-20)', () => {
+    // The limiter delays by its look-ahead and the chain drops that many frames
+    // from the head, so the only way the count balances is if the tail comes
+    // back out of `flush()`. The pipeline used to just stop, losing it — while
+    // the ANALYSIS pass flushed, so loudness was measured over audio the output
+    // did not contain.
+    const seconds = 3
+    const frames = SAMPLE_RATE * seconds
+    const source = [new Float32Array(frames), new Float32Array(frames)]
+    for (let i = 0; i < frames; i++) {
+      const value = Math.sin((2 * Math.PI * 220 * i) / SAMPLE_RATE) * 0.25
+      source[0]![i] = value
+      source[1]![i] = value
+    }
+
+    // An empty envelope is the "consistent enough to leave alone" case, which
+    // keeps this test about frame counts rather than about macro-levelling.
+    const envelope = { gainDb: new Float64Array(0), stepSeconds: 1 }
+    const chain = new AudioChain({ sampleRate: SAMPLE_RATE, channelCount: 2, envelope, gainDb: 0 })
+    let emitted = 0
+    for (let offset = 0; offset < frames; offset += 4096) {
+      const end = Math.min(offset + 4096, frames)
+      emitted += chain.process(source.map((c) => c.slice(offset, end)))[0]!.length
+    }
+    // Short by exactly the look-ahead until the tail is asked for.
+    expect(emitted).toBeLessThan(frames)
+    emitted += chain.flush()[0]!.length
+    expect(emitted).toBe(frames)
+  })
+
   it('leaves a consistent recording alone rather than processing it anyway', () => {
     const source = speechLike({
       sampleRate: SAMPLE_RATE, seconds: 60, channelCount: 2, startPeakDbfs: -14,

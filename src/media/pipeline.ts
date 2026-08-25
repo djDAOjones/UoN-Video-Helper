@@ -504,13 +504,19 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       throwIfAborted(laneSignal)
       let processed
       try {
-        processed = processContent(sample)
+        processed = processContent.process(sample)
       } finally {
         sample.close()
       }
       if (!processed) continue
       await emit(processed)
     }
+
+    // The limiter holds a look-ahead window, so the stream simply stopping lost
+    // that much from the end of every job (VH-20). The analysis pass already
+    // flushed, so loudness was measured over audio the output did not contain.
+    const tail = processContent.flush()
+    if (tail) await emit(tail)
 
     if (closing) {
       await feedBrandingAudio(closing, emit, closingOffset, { fadeIn: true, fadeOut: false }, laneSignal)

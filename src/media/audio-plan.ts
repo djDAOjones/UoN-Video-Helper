@@ -151,13 +151,13 @@ export function createContentAudioProcessor(
     /** Fade the content out — true when a closing sequence follows it. */
     readonly fadeOut: boolean
   },
-): (sample: AudioSample) => AudioSample | null {
+): ContentAudioProcessor {
   const { sampleRate, channelCount, envelope, gainDb } = plan
   const chain = new AudioChain({ sampleRate, channelCount, envelope, gainDb })
   let emittedFrames = 0
 
-  return (sample: AudioSample): AudioSample | null => {
-    const processed = chain.process(toPlanar(sample, channelCount))
+  /** Fades, timestamps and emits one block of already-processed audio. */
+  const emit = (processed: Float32Array[]): AudioSample | null => {
     const frames = processed[0]?.length ?? 0
     if (frames === 0) return null
 
@@ -174,4 +174,31 @@ export function createContentAudioProcessor(
     emittedFrames += frames
     return output
   }
+
+  return {
+    process: (sample: AudioSample) => emit(chain.process(toPlanar(sample, channelCount))),
+    flush: () => emit(chain.flush()),
+  }
+}
+
+/**
+ * The content audio path, as two calls rather than one.
+ *
+ * `flush` exists because the limiter delays its output by a look-ahead window
+ * and the streaming path used to just stop, dropping that window from the end
+ * of every job (VH-20). The analysis pass already flushed
+ * (`analyseSourceAudio`), so loudness was being MEASURED over samples the
+ * output did not contain — a small inconsistency, but between the two things
+ * that are supposed to describe the same audio.
+ */
+export interface ContentAudioProcessor {
+  /** @returns `null` when the chain emitted nothing for this input. */
+  process(sample: AudioSample): AudioSample | null
+  /**
+   * The limiter's remaining look-ahead, timestamped to follow the last block.
+   * Call once, after the last sample.
+   *
+   * @returns `null` when there is no tail — no limiter, or nothing buffered.
+   */
+  flush(): AudioSample | null
 }
