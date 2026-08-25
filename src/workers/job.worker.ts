@@ -138,6 +138,10 @@ async function handleProcess(
       height: report.video.displayHeight,
       frameRate: report.video.conform.frameRate,
       videoBitrateBps: report.video.averageBitrateBps,
+      // The rate the source ACTUALLY runs at, which is what its bitrate was
+      // spread over. Conforming can move the rate (40 fps conforms to 30), and
+      // dividing by the conformed one would misread the source's density.
+      sourceFrameRate: report.video.conform.sourceFrameRate,
     })
 
     workspace = await OpfsWorkspace.open(jobId)
@@ -270,6 +274,10 @@ async function handlePreflight(
       height: report.video.displayHeight,
       frameRate: report.video.conform.frameRate,
       videoBitrateBps: report.video.averageBitrateBps,
+      // The rate the source ACTUALLY runs at, which is what its bitrate was
+      // spread over. Conforming can move the rate (40 fps conforms to 30), and
+      // dividing by the conformed one would misread the source's density.
+      sourceFrameRate: report.video.conform.sourceFrameRate,
     })
     const projected = projectedOutputBytes(shape, report.durationSeconds)
 

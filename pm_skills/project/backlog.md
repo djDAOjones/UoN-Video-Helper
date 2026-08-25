@@ -61,22 +61,6 @@
       the build degrades to `over-freeze` and says so rather than erroring, and
       an audio-longer-than-video fixture proves the build still composites.
 
-- [ ] **VH-47 "Best quality" ignores the source bitrate**
-      [detail](tickets/VH-47.md) (2026-08-25)
-      Intent: VH-41 capped the smaller preset at the source and deliberately
-      exempted this one, for a sound reason — a second generation needs
-      headroom, because the source's own compression artefacts are detail the
-      next encoder must spend bits on. But §6.1's figure is `pixelRate x 0.12`,
-      which never looks at the source, so the headroom bears no relation to
-      what the source needs: the Teams recording is granted 4.0x its own
-      bitrate, a 20 Mbps camera master 0.37x. Inverted with respect to its
-      purpose, and a 60 MB recording becomes ~240 MB carrying no more detail.
-      Done when: the figure is a source-relative band — clamped between roughly
-      1.2x and 2.0x the measured source, with `pixelRate x 0.12` still the
-      fallback when the bitrate cannot be measured — and §6.1 carries a
-      doc-delta. First of the three: the estimate should be grounded against
-      the bitrate that will actually be requested.
-
 - [ ] **VH-31 The size estimate is ~3.6x too high** [detail](tickets/VH-31.md)
       (2026-08-25)
       Intent: the app said 27.7 MB and produced 7.5 MB on the first real file

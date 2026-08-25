@@ -11,6 +11,70 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-26 — VH-47: the band may only ever lower the figure
+
+**Decision:** "Best quality" asks for the geometric mean of spec 6.1's anchor
+and the source's measured bits-per-pixel-per-frame, clamped to
+`[0.03, 0.12]` bpp — the upper bound being the anchor itself. `OutputShape`
+gained `bitrateBasis`, and `bitrateWasCappedToSource` now reads it instead of
+comparing two numbers.
+
+**Rationale:** VH-41 exempted this preset from the never-exceed-source cap for a
+sound reason, but the figure it exempted never looked at the source, so the
+headroom was inverted — 4.0x for the file with nothing left to protect. A
+geometric mean gives the ratio the shape it should have, `sqrt(anchor/sourceBpp)`,
+which shrinks as the source approaches transparency.
+
+**Method:** an eight-agent workflow — one scout, three independent designs, a
+judge, three adversarial refuters. It was worth it. The scout found that the
+change breaks a test I wrote the day before and that two harnesses
+(`acceptance/run.ts`, `spike/real.ts`) never pass a source bitrate, so the rule
+would have shipped having run on no real material. Two refuters returned
+BLOCKING findings against the judge's own recommendation.
+
+**What the refutation changed.** The judge proposed a 0.18 bpp ceiling, above
+the 0.12 anchor. A refuter encoded the real files and scored them: that ceiling
+adds 77-933 MB to 7 of 23 corpus files for +0.60 VMAF against a roughly
+6-point JND, and raises required free storage by up to 50%, which can turn a job
+that runs today into a hard `insufficient-storage` block. Setting the ceiling to
+the anchor returns all 7 raises to exactly today's figure, leaves all 16
+reductions untouched, and buys a property worth more than the bits: **the figure
+can only fall**, so nothing that runs today can be refused tomorrow.
+
+**Half the ticket was retired by measurement.** VH-47 argued two defects — over-
+asking on thin sources and under-serving pristine masters. The first is real and
+fixed. The second is not a defect: the destination re-encodes on ingest, so the
+extra bits die there. The ticket's proposed 1.2x floor would have forbidden the
+correct answer on 7 real files.
+
+**Also corrected, found by the scout:** `MAC_EXPORT` in `presets.test.ts` carried
+frame rate 25 where the file measures 1000/33 and conforms to 30 — my error from
+2026-08-25. At 25 its assertion cleared the cap by 0.16%. And `sourceBpp` must
+divide by the SOURCE's rate, not the conformed one; they differ by the conform
+ratio, which reaches 15% on a 40 fps source.
+
+**Verified independently:** I re-measured six corpus files with ffprobe rather
+than trusting the agents. Teams 1,005,714, AMCS3068 484,914 and Nonreligion
+19,105,327 match to the byte.
+
+**Alternatives:** a ratio cap at 2.0x the source (the ticket's, and one
+refuter's blocking finding) was NOT adopted. It is unmeasured, and the same
+refuter that measured the reductions found today's cuts already visually
+transparent; going further would act on argument over evidence. The absolute
+50 Mbps backstop was dropped as out of scope — it would change behaviour on a
+shape the corpus does not contain, and dropping it makes "never above today's
+figure" true universally rather than nearly.
+
+**Open, and deliberately not decided here:** `BEST_SOURCE_BLEND = 0.5` is the
+one constant that is judgement. The calibration probe already decodes three
+seconds of the real file, so encoding that sample at a spread of multiples and
+scoring each through a second encode would measure it — two files at widely
+separated densities determine it, a third validates. On the wish-list; the
+ticket file was evicted on ship, so this entry is the record.
+
+**Link:** spec §6.1 and §6.2 doc-deltas; `src/config/presets.ts`; workflow
+`wf_00530dba-cb8`.
+
 ## 2026-08-25 — VH-24 and VH-41: one visit to the output shape
 
 **Decision:** Two rules the spec already carried and the code did not.

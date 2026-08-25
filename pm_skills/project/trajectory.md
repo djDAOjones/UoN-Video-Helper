@@ -205,3 +205,20 @@ The deployed site was also confirmed working on a University machine, so
   destinations re-encode on ingest, where headroom is what prevents generation
   loss. Verified in the browser on a synthesised 16 fps source: output reads
   "640 × 360 at 16 fps" and the estimate falls from 324 kB to 82 kB.
+
+### VH-47 — best quality stops ignoring the source
+
+- VH-47 — Shipped 2026-08-26. The "best quality" bitrate is the geometric mean
+  of spec 6.1's `pixelRate x 0.12` anchor and the source's own measured density,
+  bounded below at 0.03 bits/pixel/frame and ABOVE AT THE ANCHOR — so the rule
+  can only ever lower the figure, never raise it. Teams falls 3.98 to 2.00 Mbps
+  (still 1.99x its source), the thinnest corpus file falls to a quarter of
+  today, and a well-encoded master is left exactly where it is. Designed and
+  adversarially verified by an eight-agent workflow which measured all 23 corpus
+  sources with ffprobe and scored real encodes; two of three refuters returned
+  blocking findings and the design shipped is the corrected one. Half the
+  ticket's diagnosis was retired by measurement: raising a pristine master's
+  bitrate buys +0.60 VMAF for up to 933 MB, below the perceptual threshold.
+  `bitrateBasis` replaced the figure comparison that decided the pre-flight
+  cap message, which would otherwise have announced "already compressed as far
+  as this setting would take it" over outputs running at twice the source.

@@ -41,3 +41,6 @@
       so half the rejection no longer holds (source: VH-48)
 - [ ] 2026-08-25 DECISIONS D10 — still listed as deferred with an unmet
       revisit trigger; the trigger fired and it is now VH-48 (source: VH-48)
+- [ ] 2026-08-26 SPEC §6.2 — its prose presents consulting the source as the
+      SMALLER preset's distinguishing property; since VH-47 both presets do,
+      one capped at the source and one anchored to it (source: VH-47)

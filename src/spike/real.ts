@@ -53,6 +53,11 @@ try {
     width: report.video.displayWidth,
     height: report.video.displayHeight,
     frameRate: report.video.conform.frameRate,
+    // Both source-relative bitrate rules key off these (VH-41, VH-47). Without
+    // them this harness silently takes the unmeasured fallback and proves the
+    // new rules on nothing.
+    videoBitrateBps: report.video.averageBitrateBps,
+    sourceFrameRate: report.video.conform.sourceFrameRate,
   })
   workspace = await OpfsWorkspace.open('spike-real')
 

@@ -60,8 +60,41 @@ export const PRESETS: Readonly<Record<PresetId, Preset>> = {
   },
 }
 
-/** Spec 6.1: ~0.12 bits per pixel per frame, which is ≈7.5 Mbps at 1080p30. */
+/**
+ * Spec 6.1: ~0.12 bits per pixel per frame, which is ≈7.5 Mbps at 1080p30.
+ *
+ * Two roles since VH-47, and it is the same number in both: the ANCHOR the
+ * blend below pulls against, and the CEILING no output may exceed. What it is
+ * no longer is the answer on its own — a figure derived from pixel count alone
+ * cannot know that a Teams recording carries 1.0 Mbps and asked four times
+ * that of it.
+ */
 const BEST_BITS_PER_PIXEL_PER_FRAME = 0.12
+
+/**
+ * How far the measured source pulls the figure away from the anchor, in log
+ * space. 0.5 is the geometric mean: the claim that we have no basis yet to
+ * trust either estimate over the other.
+ *
+ * This is the one number here that is judgement rather than measurement, and
+ * it is worth knowing what would settle it: the calibration probe already
+ * decodes three seconds of the real file, so encoding that sample at a spread
+ * of multiples and scoring each through a second encode would measure it on
+ * two files at widely separated densities. Recorded on VH-47's ticket.
+ */
+const BEST_SOURCE_BLEND = 0.5
+
+/**
+ * The floor the blend may not fall through, in bits per pixel per frame.
+ *
+ * 0.03 is a quarter of the anchor, and just above what the "smaller file"
+ * preset targets for slides (0.024) — "best quality" must never ask for less
+ * than "smaller file" would. It bounds a mis-measured source rather than a
+ * genuinely thin one: `inspect.ts` walks every packet today, so a wrong figure
+ * would take a change there to produce. It binds on no corpus file; the lowest
+ * blended figure measured is 0.0306 (AMCS3068, a 0.48 Mbps 1080p export).
+ */
+const BEST_FLOOR_BITS_PER_PIXEL_PER_FRAME = 0.03
 
 /**
  * Spec 6.2 reference bitrates, quoted at 1080p30 and scaled from there by
@@ -85,22 +118,54 @@ export interface OutputShape {
   readonly width: number
   readonly height: number
   readonly frameRate: number
-  /** What the encoder is asked for, after spec 6.2's never-exceed-source cap. */
+  /** What the encoder is asked for, after whichever source-relative rule applied. */
   readonly videoBitrateBps: number
   /**
-   * What the preset alone would have asked for, before the cap.
+   * What the preset alone would have asked for, before any source-relative rule.
    *
-   * Kept so the cap is VISIBLE rather than silent: when this exceeds
-   * {@link videoBitrateBps}, the preset wanted more than the source carries
-   * and the user is told so instead of wondering why the figures moved.
+   * Kept so the decision is legible rather than silent — in a support bundle,
+   * and in the pre-flight panel when it is worth telling the user. It exceeds
+   * {@link videoBitrateBps} on BOTH presets now, for different reasons, so
+   * comparing the two says only "something lowered it" and never which thing:
+   * read {@link bitrateBasis} for that.
    */
   readonly requestedVideoBitrateBps: number
+  /** Which rule decided {@link videoBitrateBps}. See {@link BitrateBasis}. */
+  readonly bitrateBasis: BitrateBasis
   readonly audioBitrateBps: number
 }
 
-/** Whether spec 6.2's never-exceed-source cap actually bit on this shape. */
+/**
+ * Which rule produced the figure, so a support bundle and the interface can
+ * both tell WHY rather than inferring it from a comparison.
+ *
+ * Inferring it is what went wrong: `requestedVideoBitrateBps > videoBitrateBps`
+ * meant "capped at the source" while only the smaller preset could lower a
+ * figure. VH-47 gave the best preset a way to lower one too, at which point
+ * that comparison started reporting "already compressed as far as this setting
+ * would take it" about outputs running at twice the source.
+ */
+export type BitrateBasis =
+  /** The preset's own figure; the source bitrate could not be measured. */
+  | 'preset'
+  /** Spec 6.2's never-exceed-source cap bit. "Smaller file" only. */
+  | 'capped-to-source'
+  /** Spec 6.1's blend of the anchor and the measured source. "Best quality" only. */
+  | 'blended-with-source'
+  /** The blend exceeded the anchor, so the anchor held. "Best quality" only. */
+  | 'anchor-ceiling'
+  /** The blend fell through the floor, so the floor held. "Best quality" only. */
+  | 'floor'
+
+/**
+ * Whether spec 6.2's never-exceed-source cap actually bit on this shape.
+ *
+ * Reads the basis rather than comparing the two figures: since VH-47 the best
+ * preset also reports a `videoBitrateBps` below its request, and it is not
+ * capped at the source — it is usually well above it.
+ */
 export function bitrateWasCappedToSource(shape: OutputShape): boolean {
-  return shape.requestedVideoBitrateBps > shape.videoBitrateBps
+  return shape.bitrateBasis === 'capped-to-source'
 }
 
 /** Even dimensions, because H.264 chroma subsampling requires them. */
@@ -114,7 +179,8 @@ function toEvenDimension(value: number): number {
  * @param preset - Which of the two the user chose.
  * @param source - Display dimensions, the conformed constant frame rate, and
  *   the video bitrate the source actually carries. Omit `videoBitrateBps` when
- *   it could not be measured; the cap is then not applied rather than guessed.
+ *   it could not be measured; both source-relative rules then decline to act
+ *   rather than guessing, and the preset's own figure stands.
  * @param content - What the picture is mostly made of; affects the smaller
  *   preset's bitrate only.
  */
@@ -128,6 +194,13 @@ export function outputShapeFor(
     // a caller spreading a report whose field is undefined is the normal case,
     // not a mistake to reject.
     readonly videoBitrateBps?: number | null | undefined
+    /**
+     * The rate the source actually runs at, before conforming. Defaults to
+     * `frameRate`, which is the CONFORMED rate — they differ whenever
+     * conforming moves the rate, and dividing a bitrate by the wrong one
+     * misreads the source's density by exactly that ratio.
+     */
+    readonly sourceFrameRate?: number | null | undefined
   },
   content: ContentClass = 'unknown',
 ): OutputShape {
@@ -149,29 +222,97 @@ export function outputShapeFor(
       ? Math.round(pixelRate * BEST_BITS_PER_PIXEL_PER_FRAME)
       : Math.round((pixelRate / SMALLER_REFERENCE_PIXEL_RATE) * SMALLER_REFERENCE_BPS[content])
 
-  // Spec 6.2: "never above the source's own video bitrate". The reference
-  // figures are targets for material that needs them, not floors — a Teams
-  // recording carries 1.006 Mbps at 1920x1080, and asking 2.5 Mbps of it makes
-  // the output named "smaller" larger than what went in (VH-41).
-  //
-  // The cap is deliberately NOT applied to "best quality", and that asymmetry
-  // is the spec's: that preset goes to destinations which re-encode on ingest,
-  // where headroom above the source is what keeps a second generation from
-  // showing. Only the preset that promises a smaller file has to honour it.
   const sourceBitrate = source.videoBitrateBps
-  const capped =
-    preset.id !== 'best' && typeof sourceBitrate === 'number' && sourceBitrate > 0
-      ? Math.min(requestedVideoBitrateBps, Math.round(sourceBitrate))
-      : requestedVideoBitrateBps
+  // `Number.isFinite`, not `typeof === 'number'`: Infinity is a number and
+  // would sail through the second test into a division that yields Infinity.
+  const measured = Number.isFinite(sourceBitrate) && (sourceBitrate as number) > 0
+  const { videoBitrateBps, bitrateBasis } = measured
+    ? bitrateFromSource(preset, pixelRate, requestedVideoBitrateBps, sourceBitrate as number, {
+        width: source.width,
+        height: source.height,
+        frameRate: Number.isFinite(source.sourceFrameRate)
+          ? (source.sourceFrameRate as number)
+          : source.frameRate,
+      })
+    : { videoBitrateBps: requestedVideoBitrateBps, bitrateBasis: 'preset' as const }
 
   return {
     width,
     height,
     frameRate,
-    videoBitrateBps: capped,
+    videoBitrateBps,
     requestedVideoBitrateBps,
+    bitrateBasis,
     audioBitrateBps: preset.audioBitrateStereoBps,
   }
+}
+
+/**
+ * Both source-relative bitrate rules, for a source whose bitrate we measured.
+ *
+ * The two presets consult the source for opposite reasons and the asymmetry is
+ * spec 6's, not a convenience:
+ *
+ * - **"Smaller file" is CAPPED at the source** (spec 6.2). The reference
+ *   figures are targets for material that needs them, not floors. A Teams
+ *   recording carries 1.006 Mbps at 1920x1080; asking 2.5 Mbps of it makes the
+ *   output named "smaller" larger than what went in (VH-41).
+ * - **"Best quality" is ANCHORED to the source with headroom** (spec 6.1). It
+ *   is not capped, because re-encoding at exactly the source bitrate is worse
+ *   than the source: the decoded frames already carry the first encoder's
+ *   artefacts, and to the second encoder those are detail it must spend bits
+ *   preserving. But a figure of `pixelRate x 0.12` never looked at the source
+ *   at all, so the headroom it granted bore no relation to what was there to
+ *   protect — 4.0x for the Teams recording, which had nothing left (VH-47).
+ *
+ * The blend is the geometric mean of the two independent estimates in bits per
+ * pixel per frame, which gives the ratio the shape it should have: headroom
+ * pays for the first encoder's artefacts, so it must SHRINK as those artefacts
+ * approach nothing. `ratio = sqrt(anchor / sourceBpp)` does exactly that.
+ *
+ * **It may only ever lower the figure, never raise it.** That is measured, not
+ * cautious: raising a well-encoded master toward its own density was tried at
+ * 0.18 bpp and scored — it costs up to 933 MB per file for +0.60 VMAF against a
+ * roughly 6-point just-noticeable difference, and the destination re-encodes on
+ * ingest anyway. Holding at the anchor also means no job that runs today can be
+ * refused tomorrow for storage it suddenly needs.
+ */
+function bitrateFromSource(
+  preset: Preset,
+  pixelRate: number,
+  requested: number,
+  sourceBitrate: number,
+  sourceShape: { width: number; height: number; frameRate: number },
+): { videoBitrateBps: number; bitrateBasis: BitrateBasis } {
+  if (preset.id !== 'best') {
+    return {
+      videoBitrateBps: Math.min(requested, Math.round(sourceBitrate)),
+      bitrateBasis: requested > sourceBitrate ? 'capped-to-source' : 'preset',
+    }
+  }
+
+  // Density, not raw bitrate. The two agree today because "best quality"
+  // neither downscales nor caps the rate, so the output shape IS the source
+  // shape — but writing it in bits per pixel per frame is what keeps the rule
+  // correct if that ever stops being true.
+  const sourcePixelRate = sourceShape.width * sourceShape.height * sourceShape.frameRate
+  const sourceBpp = sourceBitrate / sourcePixelRate
+  const blended =
+    BEST_BITS_PER_PIXEL_PER_FRAME ** (1 - BEST_SOURCE_BLEND) * sourceBpp ** BEST_SOURCE_BLEND
+
+  if (blended > BEST_BITS_PER_PIXEL_PER_FRAME) {
+    return {
+      videoBitrateBps: Math.round(pixelRate * BEST_BITS_PER_PIXEL_PER_FRAME),
+      bitrateBasis: 'anchor-ceiling',
+    }
+  }
+  if (blended < BEST_FLOOR_BITS_PER_PIXEL_PER_FRAME) {
+    return {
+      videoBitrateBps: Math.round(pixelRate * BEST_FLOOR_BITS_PER_PIXEL_PER_FRAME),
+      bitrateBasis: 'floor',
+    }
+  }
+  return { videoBitrateBps: Math.round(pixelRate * blended), bitrateBasis: 'blended-with-source' }
 }
 
 /**

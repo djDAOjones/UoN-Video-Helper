@@ -60,9 +60,17 @@ describe('smaller file preset', () => {
     expect(unknown.videoBitrateBps).toBe(camera.videoBitrateBps)
   })
 
-  it('is markedly smaller than best quality at the same resolution', () => {
+  it('is markedly smaller than best quality when neither consults the source', () => {
+    // Scoped deliberately to the unmeasured fixture. Once a source bitrate is
+    // present the two presets converge — VH-41 caps this one AT the source
+    // while VH-47 blends the other DOWN toward it — and they meet at exactly a
+    // factor of two wherever both bounds bind, so a `/ 2` strict inequality is
+    // false. The ordering invariant that holds in every case is pinned in
+    // "anchoring best quality to the source".
     const best = outputShapeFor(PRESETS.best, source1080p30)
     const smaller = outputShapeFor(PRESETS.smaller, source1080p30)
+    expect(best.bitrateBasis).toBe('preset')
+    expect(smaller.bitrateBasis).toBe('preset')
     expect(smaller.videoBitrateBps).toBeLessThan(best.videoBitrateBps / 2)
   })
 })
@@ -112,49 +120,101 @@ describe('videoEncoderConfigFor', () => {
 })
 
 /**
- * VH-41: spec 6.2's never-exceed-source cap.
+ * Real corpus sources, re-measured with ffprobe on 2026-08-25 rather than taken
+ * on trust: packet sizes summed over the video stream, divided by the stream
+ * duration. `samples/` is gitignored, so these figures ARE the record — nobody
+ * without the corpus can re-derive them, which is why each names its file.
  *
- * The figures are the real ones, measured across the corpus on 2026-08-25 and
- * recorded in `tickets/VH-43.md`. They are named rather than inlined because
- * the whole defect was a preset asking for more than a real file carries.
+ * `frameRate` is the CONFORMED rate the pipeline will use; `sourceFrameRate` is
+ * what the file actually runs at. They differ on the PowerPoint exports and
+ * that difference is load-bearing: a bitrate divided by the wrong rate misreads
+ * the source's density by exactly that ratio.
+ */
+const CORPUS = {
+  /** `Meeting with Joe Bell…` — Teams, 28081 packets over 1755.008 s = 16.000 fps. */
+  teams: {
+    width: 1920,
+    height: 1080,
+    frameRate: 16,
+    sourceFrameRate: 16,
+    videoBitrateBps: 1_005_714,
+  },
+  /** `AMCS3068 North American Film Adaptations 2023.mov` — the thinnest in the corpus. */
+  amcs3068: {
+    width: 1920,
+    height: 1080,
+    frameRate: 30,
+    sourceFrameRate: 30,
+    videoBitrateBps: 484_914,
+  },
+  /** `Engineering Placements…` — a PowerPoint export at 1000/33, conforming to 30. */
+  placements: {
+    width: 1920,
+    height: 1080,
+    frameRate: 30,
+    sourceFrameRate: 1000 / 33,
+    videoBitrateBps: 2_084_821,
+  },
+  /** `Paul Smith NSS 2026-01-21.mp4` — 17.3 Mbps at 1080p25, far above the anchor. */
+  paulSmith: {
+    width: 1920,
+    height: 1080,
+    frameRate: 25,
+    sourceFrameRate: 25,
+    videoBitrateBps: 17_295_540,
+  },
+  /** `Nonreligion 1 v3.mp4` — 19.1 Mbps at 4K25; blends DOWN without hitting the ceiling. */
+  nonreligion: {
+    width: 3840,
+    height: 2160,
+    frameRate: 25,
+    sourceFrameRate: 25,
+    videoBitrateBps: 19_105_327,
+  },
+} as const
+
+/**
+ * VH-41: spec 6.2's never-exceed-source cap, on "Smaller file".
+ *
+ * The whole defect was a preset asking for more than a real file carries, so
+ * every figure here is a real file's.
  */
 describe('never exceeding the source bitrate', () => {
-  /** Teams meeting recording: 1920x1080, 16.000 fps, 1.006 Mbps of video. */
-  const TEAMS = { width: 1920, height: 1080, frameRate: 16, videoBitrateBps: 1_006_000 }
-  /** Engineering Placements briefing: a Mac export carrying 2.08 Mbps. */
-  const MAC_EXPORT = { width: 1920, height: 1080, frameRate: 25, videoBitrateBps: 2_080_000 }
-
   it('does not inflate the Teams recording, which is the whole defect', () => {
-    const shape = outputShapeFor(PRESETS.smaller, TEAMS)
-    expect(shape.requestedVideoBitrateBps).toBeGreaterThan(1_006_000)
-    expect(shape.videoBitrateBps).toBe(1_006_000)
+    const shape = outputShapeFor(PRESETS.smaller, CORPUS.teams)
+    expect(shape.requestedVideoBitrateBps).toBeGreaterThan(1_005_714)
+    expect(shape.videoBitrateBps).toBe(1_005_714)
+    expect(shape.bitrateBasis).toBe('capped-to-source')
     expect(bitrateWasCappedToSource(shape)).toBe(true)
   })
 
   it('caps the second real case too', () => {
-    const shape = outputShapeFor(PRESETS.smaller, MAC_EXPORT)
-    expect(shape.videoBitrateBps).toBe(2_080_000)
-    expect(bitrateWasCappedToSource(shape)).toBe(true)
+    // The frame rate here was wrong until 2026-08-25 — 25, where the file
+    // measures 1000/33 and conforms to 30. At 25 the assertion cleared the cap
+    // by 3,333 bps (0.16%) and would have flipped on any nudge to the
+    // reference figure; at the real rate it clears by 420,000.
+    const shape = outputShapeFor(PRESETS.smaller, CORPUS.placements)
+    expect(shape.videoBitrateBps).toBe(2_084_821)
+    expect(shape.bitrateBasis).toBe('capped-to-source')
   })
 
   it('leaves a generous source alone — the cap is a ceiling, not a target', () => {
-    const shape = outputShapeFor(PRESETS.smaller, { ...TEAMS, videoBitrateBps: 20_000_000 })
+    const shape = outputShapeFor(PRESETS.smaller, {
+      ...CORPUS.teams,
+      videoBitrateBps: 20_000_000,
+    })
     expect(shape.videoBitrateBps).toBe(shape.requestedVideoBitrateBps)
-    expect(bitrateWasCappedToSource(shape)).toBe(false)
-  })
-
-  it("does not apply the cap to best quality, and that asymmetry is the spec's", () => {
-    // Best quality goes where the file is re-encoded on ingest; headroom above
-    // the source is what stops a second generation showing.
-    const shape = outputShapeFor(PRESETS.best, TEAMS)
-    expect(shape.videoBitrateBps).toBeGreaterThan(1_006_000)
     expect(bitrateWasCappedToSource(shape)).toBe(false)
   })
 
   it('does not guess when the source bitrate could not be measured', () => {
     for (const unmeasured of [undefined, null, 0]) {
-      const shape = outputShapeFor(PRESETS.smaller, { ...TEAMS, videoBitrateBps: unmeasured })
+      const shape = outputShapeFor(PRESETS.smaller, {
+        ...CORPUS.teams,
+        videoBitrateBps: unmeasured,
+      })
       expect(shape.videoBitrateBps).toBe(shape.requestedVideoBitrateBps)
+      expect(shape.bitrateBasis).toBe('preset')
       expect(bitrateWasCappedToSource(shape)).toBe(false)
     }
   })
@@ -162,13 +222,187 @@ describe('never exceeding the source bitrate', () => {
   it('shrinks the projected size along with the capped bitrate', () => {
     // The estimate must follow the cap, or the storage check and the figure the
     // user decides on would both describe a bitrate nothing will ask for.
-    const capped = outputShapeFor(PRESETS.smaller, TEAMS)
-    const uncapped = outputShapeFor(PRESETS.smaller, { ...TEAMS, videoBitrateBps: null })
+    const capped = outputShapeFor(PRESETS.smaller, CORPUS.teams)
+    const uncapped = outputShapeFor(PRESETS.smaller, { ...CORPUS.teams, videoBitrateBps: null })
     expect(projectedOutputBytes(capped, 60)).toBeLessThan(projectedOutputBytes(uncapped, 60))
   })
 
   it('asks the encoder for the capped figure, not the requested one', () => {
-    const shape = outputShapeFor(PRESETS.smaller, TEAMS)
-    expect(videoEncoderConfigFor(shape).bitrate).toBe(1_006_000)
+    const shape = outputShapeFor(PRESETS.smaller, CORPUS.teams)
+    expect(videoEncoderConfigFor(shape).bitrate).toBe(1_005_714)
+  })
+})
+
+/**
+ * VH-47: spec 6.1's source-anchored band, on "Best quality".
+ *
+ * The preset is exempt from VH-41's CAP — re-encoding at exactly the source
+ * bitrate compounds the first encoder's artefacts — but it was exempt from
+ * looking at the source at all, which made its headroom meaningless: 4.0x for
+ * the file with nothing left to protect, 0.37x for a pristine master.
+ *
+ * The rule may only ever LOWER the figure. That is measured rather than
+ * cautious: raising a well-encoded master toward its own density was scored
+ * with real encodes and costs up to 933 MB per file for +0.60 VMAF against a
+ * roughly 6-point just-noticeable difference. See decision-log 2026-08-25.
+ */
+describe('anchoring best quality to the source', () => {
+  it('halves the ask on the Teams recording — the headline case', () => {
+    const shape = outputShapeFor(PRESETS.best, CORPUS.teams)
+    expect(shape.videoBitrateBps).toBe(2_001_015)
+    expect(shape.requestedVideoBitrateBps).toBe(3_981_312)
+    expect(shape.bitrateBasis).toBe('blended-with-source')
+    // Still nearly 2x the source: headroom, not a cap.
+    expect(shape.videoBitrateBps / 1_005_714).toBeGreaterThan(1.9)
+  })
+
+  it("never reports the smaller preset's cap message on best quality", () => {
+    // The regression guard for an inversion this nearly shipped with: while
+    // `bitrateWasCappedToSource` compared the two figures, best quality
+    // reported TRUE (3,981,312 > 2,001,015) and the pre-flight panel announced
+    // "already compressed as far as this setting would take it" about an output
+    // running at twice the source.
+    for (const source of Object.values(CORPUS)) {
+      expect(bitrateWasCappedToSource(outputShapeFor(PRESETS.best, source))).toBe(false)
+    }
+  })
+
+  it('cuts the thinnest source in the corpus to a quarter of today', () => {
+    const shape = outputShapeFor(PRESETS.best, CORPUS.amcs3068)
+    expect(shape.videoBitrateBps).toBe(1_902_594)
+    expect(shape.requestedVideoBitrateBps).toBe(7_464_960)
+  })
+
+  it('divides by the SOURCE rate, not the conformed one', () => {
+    // Engineering Placements runs at 1000/33 and conforms to 30. Dividing by 30
+    // would read its density 1% high; the error grows with the conform ratio and
+    // reaches 15% on a 40 fps source conforming to 30.
+    const correct = outputShapeFor(PRESETS.best, CORPUS.placements)
+    const wrong = outputShapeFor(PRESETS.best, { ...CORPUS.placements, sourceFrameRate: 30 })
+    expect(correct.videoBitrateBps).toBe(3_925_236)
+    expect(wrong.videoBitrateBps).toBeGreaterThan(correct.videoBitrateBps)
+  })
+
+  it('holds at the anchor rather than raising a well-encoded master', () => {
+    const shape = outputShapeFor(PRESETS.best, CORPUS.paulSmith)
+    expect(shape.videoBitrateBps).toBe(6_220_800)
+    expect(shape.videoBitrateBps).toBe(shape.requestedVideoBitrateBps)
+    expect(shape.bitrateBasis).toBe('anchor-ceiling')
+  })
+
+  it('still blends down a 4K source that sits below the anchor', () => {
+    const shape = outputShapeFor(PRESETS.best, CORPUS.nonreligion)
+    expect(shape.videoBitrateBps).toBe(21_803_708)
+    expect(shape.bitrateBasis).toBe('blended-with-source')
+  })
+
+  it('bounds a mis-measured source at the floor', () => {
+    // Unreachable through the app — inspect.ts walks every packet — but it is
+    // the guard that keeps a future packet budget from producing a prefix
+    // average and a genuinely under-encoded output.
+    const shape = outputShapeFor(PRESETS.best, { ...CORPUS.amcs3068, videoBitrateBps: 150_000 })
+    expect(shape.videoBitrateBps).toBe(1_866_240)
+    expect(shape.bitrateBasis).toBe('floor')
+  })
+
+  it('takes the fallback for every unmeasurable value, Infinity included', () => {
+    // Infinity is the one that nearly slipped through: it is a number and it is
+    // greater than zero, so a `typeof` guard admits it and the division that
+    // follows yields Infinity.
+    for (const unmeasured of [undefined, null, 0, Number.NaN, Number.POSITIVE_INFINITY, -1]) {
+      const shape = outputShapeFor(PRESETS.best, {
+        ...CORPUS.amcs3068,
+        videoBitrateBps: unmeasured,
+      })
+      expect(shape.videoBitrateBps).toBe(7_464_960)
+      expect(shape.bitrateBasis).toBe('preset')
+    }
+  })
+
+  it('NEVER asks for more than the preset alone would have', () => {
+    // The safety property the whole design rests on. Because the figure can
+    // only fall, no job that runs today can be refused tomorrow for storage it
+    // suddenly needs, and no encoder config that is supported today can become
+    // unsupported.
+    for (const [w, h] of [
+      [640, 480],
+      [852, 480],
+      [1280, 720],
+      [1920, 1080],
+      [3840, 2160],
+      [3840, 2400],
+    ]) {
+      for (const fps of [16, 24, 25, 30, 50, 60]) {
+        for (let src = 50_000; src <= 120_000_000; src *= 1.3) {
+          const shape = outputShapeFor(PRESETS.best, {
+            width: w!,
+            height: h!,
+            frameRate: fps,
+            sourceFrameRate: fps,
+            videoBitrateBps: src,
+          })
+          expect(shape.videoBitrateBps).toBeLessThanOrEqual(shape.requestedVideoBitrateBps)
+        }
+      }
+    }
+  })
+
+  it('is never below what "Smaller file" would ask for the same source', () => {
+    // Replaces the old `smaller < best / 2`, which held only because its
+    // fixture carried no bitrate. Once one does, the two presets meet exactly
+    // at a factor of two wherever both bounds bind, and a strict inequality is
+    // false. The real invariant is ordering, not separation.
+    for (const [w, h] of [
+      [852, 480],
+      [1280, 720],
+      [1920, 1080],
+      [3840, 2160],
+    ]) {
+      for (const fps of [16, 25, 30, 60]) {
+        for (let src = 50_000; src <= 60_000_000; src *= 1.4) {
+          const source = {
+            width: w!,
+            height: h!,
+            frameRate: fps,
+            sourceFrameRate: fps,
+            videoBitrateBps: src,
+          }
+          const best = outputShapeFor(PRESETS.best, source)
+          for (const content of ['screen', 'camera', 'unknown'] as const) {
+            const smaller = outputShapeFor(PRESETS.smaller, source, content)
+            expect(best.videoBitrateBps).toBeGreaterThanOrEqual(smaller.videoBitrateBps)
+          }
+        }
+      }
+    }
+  })
+
+  it('rises monotonically with the source bitrate, with no cliff at a bound', () => {
+    // Guards against a future edit reintroducing branches that cross.
+    for (const [w, h, fps] of [
+      [1920, 1080, 30],
+      [3840, 2160, 25],
+      [852, 480, 30],
+    ]) {
+      let previous = 0
+      for (let src = 10_000; src <= 200_000_000; src *= 1.05) {
+        const shape = outputShapeFor(PRESETS.best, {
+          width: w!,
+          height: h!,
+          frameRate: fps!,
+          sourceFrameRate: fps!,
+          videoBitrateBps: src,
+        })
+        expect(shape.videoBitrateBps).toBeGreaterThanOrEqual(previous - 1)
+        previous = shape.videoBitrateBps
+      }
+    }
+  })
+
+  it('carries the lower figure all the way to the encoder and the estimate', () => {
+    const shape = outputShapeFor(PRESETS.best, CORPUS.teams)
+    expect(videoEncoderConfigFor(shape).bitrate).toBe(2_001_015)
+    const unmeasured = outputShapeFor(PRESETS.best, { ...CORPUS.teams, videoBitrateBps: null })
+    expect(projectedOutputBytes(shape, 60)).toBeLessThan(projectedOutputBytes(unmeasured, 60))
   })
 })

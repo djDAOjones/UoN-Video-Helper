@@ -100,3 +100,13 @@
   `error` and `unhandledrejection`, not `console.error`, so it never reaches the
   errors panel — but it is noise in every diagnostics bundle and it would mask a
   real leak of ours. (from: 2026-08-25, seen while verifying VH-33)
+- Measure `BEST_SOURCE_BLEND` instead of judging it. VH-47 shipped with 0.5 —
+  the geometric mean, i.e. "no basis to trust the source estimate over the shape
+  estimate" — and it is the only constant in that rule not backed by a number.
+  The experiment is bounded and the machinery exists: the calibration probe
+  already decodes `CALIBRATION_PROBE_SECONDS` of the real file, so encode that
+  same sample at source x{1.0, 1.25, 1.5, 2.0, 3.0}, put each through a second
+  encode standing in for the destination's ingest, and score against the first
+  decode. Two corpus files at widely separated densities determine it; a third
+  validates. It matters most on the Teams file: at 0.6 its figure falls from
+  2.00 to about 1.6 Mbps. (from: 2026-08-26 VH-47)
