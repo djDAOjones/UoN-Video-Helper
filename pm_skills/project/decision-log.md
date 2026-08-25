@@ -11,6 +11,38 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-25 — VH-35: Web Locks, not job ids, protect another tab's scratch
+
+**Decision:** A live `OpfsWorkspace` holds an exclusive Web Lock named for its
+directory until `dispose`, and `sweepOrphanedJobs` removes a directory only
+when that lock is free. Directory names gained a per-tab session prefix.
+
+**Rationale:** The ticket proposed passing the live job ids to the sweep. That
+fixes nothing: the sweep runs at worker BOOT, when this context has no jobs, and
+the directories at risk belong to another tab whose ids it cannot see. Web Locks
+are origin-scoped, so they cross tabs, and the browser releases them when the
+holder dies — which is the exact case the sweep exists for. No heartbeat, no
+staleness threshold, no window in which a live job looks dead. The session
+prefix fixes a second defect found on the way: `job-${id}` is a per-worker
+counter, so two tabs both opened `job-1` and wrote into one directory.
+
+**Alternatives:** a heartbeat file needs a tuned threshold and tolerates clock
+weirdness badly. Namespacing per session without a sweep rule means a crashed
+tab's scratch is never reclaimed, which is what the sweep is for.
+
+**Found by measuring:** `/spike-opfs.html` run in all three engines caught two
+things the unit test could not. One undeletable directory threw out of the
+removal loop and abandoned every orphan after it (Firefox) — now per-entry.
+And the spike's own first draft called `finish()` with no Mediabunny `Output`
+to close the writable, which is not a real sequence; rewritten to exercise
+the cancel path, which is the one criterion 8 cares about.
+
+**Testing:** the selection rule is pure and unit-tested in Node
+(`selectSweepable`); OPFS and Web Locks do not exist there, so the browser half
+is `/spike-opfs.html`, ALL PASS in Chrome 151, Firefox 154 and Safari 26.5.2.
+
+**Link:** `src/media/opfs.ts`, `src/spike/opfs.ts`, `src/workers/job.worker.ts`.
+
 ## 2026-08-25 — VH-46: make the three-engine check repeatable
 
 **Decision:** Promoted the ad-hoc VH-34 harness to `scripts/run-in-engines.mjs`

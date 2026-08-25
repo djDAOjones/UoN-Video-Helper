@@ -88,6 +88,12 @@ const finished = new Map<string, OpfsWorkspace>()
 
 // A crashed or force-closed tab leaves scratch behind, and the user's disk is
 // not ours to fill (AGENTS.md -> "OPFS working-store checklist").
+//
+// No argument, and that is now correct rather than an omission: OPFS is
+// origin-scoped, so at boot this sees OTHER TABS' directories and knows none of
+// their job ids. What protects them is the Web Lock each live job holds — see
+// `sweepOrphanedJobs`. Passing this worker's own ids would be theatre; it has
+// none yet (VH-35).
 void sweepOrphanedJobs()
 
 /**

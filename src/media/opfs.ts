@@ -24,33 +24,128 @@ import { StreamTarget, type StreamTargetChunk } from 'mediabunny'
 import { log } from '../core/logger'
 
 /** Every job's scratch lives under this one directory, so a sweep knows where to look. */
-const ROOT_DIRECTORY = 'uon-video-helper-jobs'
+export const ROOT_DIRECTORY = 'uon-video-helper-jobs'
 
-async function jobsRoot(): Promise<FileSystemDirectoryHandle> {
-  const root = await navigator.storage.getDirectory()
-  return root.getDirectoryHandle(ROOT_DIRECTORY, { create: true })
+/**
+ * This context's share of the directory namespace.
+ *
+ * OPFS is ORIGIN-scoped, so every tab sees the same root. Job ids come from a
+ * per-worker counter, which means two tabs both open `job-1` and write into the
+ * same directory. The prefix makes that impossible. It is deliberately not
+ * derived from anything persistent — a reload is a new session and its old
+ * scratch is genuinely orphaned.
+ */
+const SESSION = `s${crypto.randomUUID().slice(0, 8)}`
+
+/** The directory a job writes into. Distinct per tab; see {@link SESSION}. */
+function directoryFor(jobId: string): string {
+  return `${SESSION}-${jobId}`
+}
+
+/**
+ * The lock a live job holds for as long as its directory must survive.
+ *
+ * Web Locks are origin-scoped, so they cross tabs, and the browser releases
+ * them when the holder goes away — including a crash or a force-close, which
+ * is precisely the case the sweep exists to clean up after. That is why this
+ * is a lock rather than a heartbeat file or a timestamp: there is no threshold
+ * to tune and no window in which a live job looks dead.
+ */
+function lockFor(directoryName: string): string {
+  return `opfs-job:${directoryName}`
+}
+
+/** Whether some tab — this one included — still needs that directory. */
+async function isClaimed(directoryName: string): Promise<boolean> {
+  if (!navigator.locks) {
+    // Every supported browser has Web Locks (Safari 15.4, Firefox 96), so this
+    // is a should-not-happen. If it does, keep everything: leaking scratch
+    // costs disk, and deleting another tab's finished output costs the user
+    // their work.
+    log.warn('opfs', 'no Web Locks; sweeping nothing rather than guessing', {})
+    return true
+  }
+  try {
+    return await navigator.locks.request(
+      lockFor(directoryName),
+      { ifAvailable: true },
+      (lock) => lock === null,
+    )
+  } catch (cause) {
+    log.warn('opfs', 'could not test job claim; keeping the directory', {
+      directoryName,
+      reason: cause instanceof Error ? cause.message : String(cause),
+    })
+    return true
+  }
+}
+
+/**
+ * Chooses which job directories a sweep may remove.
+ *
+ * Split out from {@link sweepOrphanedJobs} so the rule can be tested without a
+ * browser: OPFS and Web Locks do not exist in Node, and the rule — never
+ * remove anything still claimed, and never remove anything we failed to ask
+ * about — is the part worth pinning.
+ *
+ * @param names - Directory names found under the jobs root.
+ * @param claimed - Answers whether a directory is still in use. A rejection is
+ *   treated as "claimed": uncertainty must not delete a user's output.
+ * @returns The names safe to remove, in the order given.
+ */
+export async function selectSweepable(
+  names: readonly string[],
+  claimed: (name: string) => Promise<boolean>,
+): Promise<string[]> {
+  const sweepable: string[] = []
+  for (const name of names) {
+    // `true` on both the claimed answer and the rejection: the only way into
+    // the removal list is an explicit, successful "nobody wants this".
+    const keep = await claimed(name).catch(() => true)
+    if (!keep) sweepable.push(name)
+  }
+  return sweepable
 }
 
 /**
  * Removes scratch left behind by a crashed or force-closed tab.
  *
- * @param keepJobIds - Jobs currently running, which must not be swept.
+ * Runs at worker boot, when this context has no jobs of its own — so the
+ * directories it finds belong to OTHER TABS, and it cannot see their job ids.
+ * Sweeping on directory name alone is what made a second tab destroy the
+ * first tab's in-flight scratch and its finished-but-unsaved output (VH-35).
+ * A directory is removed only when nobody holds its lock.
+ *
+ * @param keepJobIds - This context's own live jobs. Redundant while they hold
+ *   their locks, and kept as belt and braces for the ones that do not.
  * @returns How many orphaned directories were removed.
  */
 export async function sweepOrphanedJobs(keepJobIds: readonly string[] = []): Promise<number> {
   let removed = 0
   try {
     const root = await jobsRoot()
-    const keep = new Set(keepJobIds)
+    const keep = new Set(keepJobIds.map(directoryFor))
     // `keys()` is an async iterator on the directory handle; the DOM lib does
     // not type it yet.
     const directory = root as FileSystemDirectoryHandle & {
       keys(): AsyncIterableIterator<string>
     }
-    for await (const name of directory.keys()) {
-      if (keep.has(name)) continue
-      await root.removeEntry(name, { recursive: true })
-      removed++
+    const names: string[] = []
+    for await (const name of directory.keys()) if (!keep.has(name)) names.push(name)
+
+    for (const name of await selectSweepable(names, isClaimed)) {
+      try {
+        await root.removeEntry(name, { recursive: true })
+        removed++
+      } catch (cause) {
+        // Per entry, not per sweep. A directory can be undeletable — a handle
+        // somewhere still holds a file open — and letting that throw abandoned
+        // every orphan after it in the list. Found in Firefox, VH-35.
+        log.warn('opfs', 'could not remove an orphaned job directory', {
+          name,
+          reason: cause instanceof Error ? cause.message : String(cause),
+        })
+      }
     }
     if (removed > 0) log.info('opfs', 'swept orphaned job directories', { removed })
   } catch (cause) {
@@ -60,6 +155,11 @@ export async function sweepOrphanedJobs(keepJobIds: readonly string[] = []): Pro
     })
   }
   return removed
+}
+
+async function jobsRoot(): Promise<FileSystemDirectoryHandle> {
+  const root = await navigator.storage.getDirectory()
+  return root.getDirectoryHandle(ROOT_DIRECTORY, { create: true })
 }
 
 /** A file being written, and the means to finish or abandon it. */
@@ -79,17 +179,65 @@ export class OpfsWorkspace {
    */
   private readonly releases = new Set<() => Promise<void>>()
   private disposed = false
+  /** Drops this job's claim. Set while the lock is held; see {@link lockFor}. */
+  private releaseClaim: (() => void) | null = null
 
   private constructor(
     readonly jobId: string,
+    private readonly directoryName: string,
     private readonly directory: FileSystemDirectoryHandle,
   ) {}
 
   static async open(jobId: string): Promise<OpfsWorkspace> {
     const root = await jobsRoot()
-    const directory = await root.getDirectoryHandle(jobId, { create: true })
-    log.debug('opfs', 'workspace opened', { jobId })
-    return new OpfsWorkspace(jobId, directory)
+    const directoryName = directoryFor(jobId)
+    const directory = await root.getDirectoryHandle(directoryName, { create: true })
+    const workspace = new OpfsWorkspace(jobId, directoryName, directory)
+    await workspace.claim()
+    log.debug('opfs', 'workspace opened', { jobId, directoryName })
+    return workspace
+  }
+
+  /**
+   * Takes this directory's lock and holds it until {@link dispose}.
+   *
+   * The lock is what tells another tab's sweep that the directory is still
+   * wanted. Resolving happens on GRANT, not on release: the held promise
+   * outlives this call by design.
+   */
+  private async claim(): Promise<void> {
+    if (!navigator.locks) return
+    try {
+      await new Promise<void>((granted, failed) => {
+        void navigator.locks
+          .request(
+            lockFor(this.directoryName),
+            { ifAvailable: true },
+            (lock) =>
+              new Promise<void>((release) => {
+                if (!lock) {
+                  // The session prefix should make this unreachable. If it is
+                  // not, say so — an unheld lock is a directory another tab
+                  // may sweep out from under a running job.
+                  log.warn('opfs', 'job directory was already claimed', {
+                    directoryName: this.directoryName,
+                  })
+                  release()
+                  granted()
+                  return
+                }
+                this.releaseClaim = release
+                granted()
+              }),
+          )
+          .catch(failed)
+      })
+    } catch (cause) {
+      log.warn('opfs', 'could not claim the job directory', {
+        directoryName: this.directoryName,
+        reason: cause instanceof Error ? cause.message : String(cause),
+      })
+    }
   }
 
   /** Creates a file in this job's directory and a target that streams into it. */
@@ -196,13 +344,19 @@ export class OpfsWorkspace {
 
     try {
       const root = await jobsRoot()
-      await root.removeEntry(this.jobId, { recursive: true })
+      await root.removeEntry(this.directoryName, { recursive: true })
       log.debug('opfs', 'workspace disposed', { jobId: this.jobId })
     } catch (cause) {
       log.warn('opfs', 'could not remove workspace', {
         jobId: this.jobId,
         reason: cause instanceof Error ? cause.message : String(cause),
       })
+    } finally {
+      // Last, and unconditionally: while this is held, every other tab's sweep
+      // treats the directory as live. Releasing before the removal would open
+      // a window where a sweep could race the removal for the same entry.
+      this.releaseClaim?.()
+      this.releaseClaim = null
     }
   }
 }

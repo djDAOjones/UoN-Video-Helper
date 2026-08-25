@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OPFS sweep spike — UoN Video Helper</title>
+  </head>
+  <body>
+    <h1>OPFS sweep spike</h1>
+    <p>
+      VH-35: OPFS is origin-scoped, so every tab shares one root and the boot sweep used to delete
+      every directory it found — including whatever another tab was mid-way through. A live job now
+      holds a Web Lock on its directory and the sweep skips anything still locked. This page checks
+      that the lock behaves that way in this engine.
+    </p>
+    <pre id="log">running…</pre>
+    <script type="module" src="/src/spike/opfs.ts"></script>
+  </body>
+</html>

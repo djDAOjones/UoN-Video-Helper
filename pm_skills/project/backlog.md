@@ -48,16 +48,6 @@
       the UI is part of this item, and spec §4.1 carries a doc-delta until it
       happens.
 
-- [ ] **VH-35 A second tab deletes the first tab's work** (2026-08-25)
-      Intent: `sweepOrphanedJobs()` is called at worker boot with no arguments
-      (`job.worker.ts:91`), and its `keepJobIds` defaults to empty — so it
-      removes **every** directory under the OPFS root. OPFS is origin-scoped
-      and shared across tabs, so opening the app a second time destroys the
-      first tab's in-flight scratch and any finished-but-unsaved output. The
-      parameter exists for exactly this and is never passed.
-      Done when: the sweep is given the live job ids, and a test covers a sweep
-      running while a job is retained.
-
 - [ ] **VH-36 The screen does not lock while a job runs** (2026-08-25)
       Intent: only start, cancel and save are ever disabled. Changing the preset
       or the file mid-job re-runs preflight, and on success `showProcessControls()`
@@ -257,10 +247,13 @@
       guard — the single best safeguard for the no-egress invariant — fires only
       after `dist/` already contains the recording, and a bare `npm run build` is
       unguarded entirely. `dist/` publishes `branding/README.md` (maintainer
-      notes and ticket IDs), full sourcemaps, and the `spike/` pages, whose
-      fixtures are gitignored so they are broken pages on a public site. And the
-      worker never calls `setMinimumLogLevel('info')` — only `main.ts:32` does —
-      so worker debug lines reach a production console.
+      notes and ticket IDs) and full sourcemaps. And the worker never calls
+      `setMinimumLogLevel('info')` — only `main.ts:32` does — so worker debug
+      lines reach a production console.
+      Checked against the live site 2026-08-25: the spike pages do NOT ship —
+      `rollupOptions.input` names `index.html` alone, and every `spike-*.html`
+      404s, so that third claim was wrong. `branding/README.md` and
+      `assets/app-*.js.map` both return 200; those two hold.
       Done when: the guard runs before anything is written, what ships is what
       was meant to ship, and both threads log at the same level.
 

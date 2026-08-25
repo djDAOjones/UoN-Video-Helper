@@ -157,3 +157,14 @@ The deployed site was also confirmed working on a University machine, so
   with the reason it must stay out of `npm run check`. The same run also
   cleared 15 missing file-map roles and the two glob lines the generator could
   not resolve.
+
+### VH-35 — a second tab no longer deletes the first tab's work
+
+- VH-35 — Shipped 2026-08-25. A live job now holds an origin-wide Web Lock on
+  its scratch directory and the sweep removes only what nobody holds, so a
+  second tab's boot sweep leaves an in-flight job and an unsaved result alone.
+  Directory names gained a per-tab session prefix, which also stops two tabs
+  both opening `job-1`. The three-engine check found two more: a sweep abandoned
+  every remaining orphan after one undeletable directory (Firefox), and
+  `dispose` on the cancel path was never exercised. Both fixed; all three
+  engines pass `/spike-opfs.html`.

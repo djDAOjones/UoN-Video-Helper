@@ -15,14 +15,14 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 129 file(s) across 8 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
-- `(root)` — 15 file(s)
+<!-- 132 file(s) across 8 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+- `(root)` — 16 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
 - `docs` — 5 file(s)
 - `public` — 17 file(s)
 - `scripts` — 4 file(s)
-- `src` — 82 file(s)
+- `src` — 84 file(s)
 - `test` — 4 file(s)
 <!-- /file-map-index -->
 
@@ -40,6 +40,7 @@
 - `spike-alpha.html` — Maintainer page: does this browser decode transparent video? Excluded from the build.
 - `spike-framerate.html` — Maintainer page: does the app measure the frame rate or trust the header?
 - `spike-modes.html` — Maintainer page: do the three closing modes produce the timelines they promise?
+- `spike-opfs.html` — Maintainer page: does a sweep leave a live job's scratch alone in this engine?
 - `spike-real.html` — Maintainer page: runs a real recording end to end and reports what came out.
 - `tsconfig.json` — Strict TypeScript. `noUncheckedIndexedAccess` matters here — this codebase indexes buffers.
 - `vite.config.ts` — Build config and the build-identity injection (`__APP_VERSION__`, `__BUILD_ID__`).
@@ -146,6 +147,7 @@
 - `src/media/inspect.ts` — Demuxes a chosen file into a SourceReport. Rejects files with no video track.
 - `src/media/isobmff.test.ts` — Synthetic boxes covering subtitle handlers, chapters, moov-at-end and non-ISOBMFF.
 - `src/media/isobmff.ts` — A minimal box walk for the handler types Mediabunny cannot see at all.
+- `src/media/opfs.test.ts` — Pins the sweep rule: never remove a claimed directory, never remove one it could not ask about.
 - `src/media/opfs.ts` — The OPFS working store: one directory per job, sync-handle writes, cleanup on every exit path.
 - `src/media/pipeline.ts` — Decode to encode to mux, streaming to OPFS, with progress and cancellation.
 - `src/media/preflight.test.ts` — Triggers all four spec 7.3 outcomes deliberately — acceptance criterion 7.
@@ -158,6 +160,7 @@
 - `src/spike/alpha.ts` — VH-12 spike: decodes each branding onset and reads back pixel alpha. Dev-only, not built.
 - `src/spike/framerate.ts` — VH-24 spike: reads a real PowerPoint export and reports measured vs declared rate.
 - `src/spike/modes.ts` — VH-22 spike: runs a fixture through all three closing modes and checks output length.
+- `src/spike/opfs.ts` — Drives the VH-35 sweep checks against real OPFS and real Web Locks. Dev-only; not built.
 - `src/spike/real.ts` — Runs a real recording from `public/spike/` through the pipeline; reports levels and speed.
 - `src/styles/app.css` — App shell styles. Carbon productive language at AAA.
 - `src/styles/tokens.brand.css` — UoN brand tokens. Holds the D1 placeholder and nothing invented.

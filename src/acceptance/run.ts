@@ -11,7 +11,7 @@ import { BRANDING_DURATIONS } from '../config/branding'
 import { PRESETS, outputShapeFor } from '../config/presets'
 import { TARGET_INTEGRATED_LUFS, TRUE_PEAK_CEILING_DBTP } from '../config/audio'
 import { inspectFile, openInput } from '../media/inspect'
-import { OpfsWorkspace, sweepOrphanedJobs } from '../media/opfs'
+import { OpfsWorkspace, ROOT_DIRECTORY, sweepOrphanedJobs } from '../media/opfs'
 import { CancelledError, runPipeline } from '../media/pipeline'
 import { buildFixture, syncMarkerTimes } from './fixtures'
 import { EgressWatch, measureLoudness, measureSync, relativeSync } from './measure'
@@ -205,7 +205,7 @@ async function checkCancellation(log: Report): Promise<Check> {
   const countJobs = async (): Promise<number> => {
     let count = 0
     try {
-      const dir = await root.getDirectoryHandle('uon-video-helper-jobs', { create: true })
+      const dir = await root.getDirectoryHandle(ROOT_DIRECTORY, { create: true })
       const iterable = dir as FileSystemDirectoryHandle & { keys(): AsyncIterableIterator<string> }
       for await (const name of iterable.keys()) if (name) count++
     } catch {

@@ -484,14 +484,25 @@ See `DEV-INFRASTRUCTURE.md` for the concrete list of protected paths.
 OPFS is scratch space, not a database — but it outlives a reload, so it
 needs discipline. Every job that writes to it must:
 
-1. Write under a single job-scoped directory named for the job id.
+1. Write under a single job-scoped directory named for the job id **and a
+   per-tab session prefix**. OPFS is ORIGIN-scoped: without the prefix two
+   tabs both open `job-1` and write into the same directory (VH-35).
 2. Register cleanup on **all** exit paths: success, error, and cancel.
 3. Close every writable stream (or sync access handle) before removing
    its file — an open handle blocks deletion, including on the cancel
    path, which is where it will actually bite.
 4. Sweep orphaned job directories at app start. A crashed or force-closed
    tab leaves data behind, and the user's disk is not ours to fill.
-5. Never write user media anywhere else — not `localStorage`, not
+5. **Hold a Web Lock on the directory for as long as the job needs it, and
+   sweep only what is unlocked.** The sweep runs at boot, when it can see
+   every tab's directories and knows none of their job ids — so a name is
+   not evidence of anything. Locks are origin-scoped and the browser
+   releases them when a tab dies, which is exactly the case the sweep
+   exists for. Uncertainty keeps the directory: leaked scratch costs disk,
+   a wrong deletion costs the user their output.
+6. Remove orphans **one at a time, failing independently.** A directory
+   that cannot be deleted must not abandon the ones after it.
+7. Never write user media anywhere else — not `localStorage`, not
    IndexedDB, not a cache.
 
 ---
