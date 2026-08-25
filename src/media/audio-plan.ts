@@ -60,6 +60,26 @@ async function traverse(
   return analyser.finish()
 }
 
+/**
+ * Pass A alone: measure the source.
+ *
+ * Used by pre-flight, because spec 5.4 requires the audio-quality warnings to
+ * be shown BEFORE processing rather than discovered during it. The pipeline
+ * measures again when it runs, which costs a second traversal of the audio —
+ * around 3.6 s for an hour — and buys not having to hold analysis state
+ * between two independent worker requests.
+ */
+export async function analyseSourceAudio(
+  track: InputAudioTrack,
+  signal?: AbortSignal,
+): Promise<AudioAnalysis> {
+  const [sampleRate, channelCount] = await Promise.all([
+    track.getSampleRate(),
+    track.getNumberOfChannels(),
+  ])
+  return traverse(track, sampleRate, channelCount, null, signal)
+}
+
 /** Passes A and B: everything needed before the encode can start. */
 export async function planAudio(
   track: InputAudioTrack,

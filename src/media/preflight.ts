@@ -9,6 +9,7 @@
 
 import type { OutputShape, PresetId } from '../config/presets'
 import { ESTIMATE_BANDS, STORAGE_HEADROOM_MULTIPLE } from '../config/thresholds'
+import type { AudioWarning } from '../audio/warnings'
 import type { CapabilityReport, EncodeSupport } from './capability'
 import type { ProbeResult } from './probe'
 
@@ -98,4 +99,10 @@ export interface PreflightSummary {
   readonly verdict: PreflightVerdict
   readonly shape: OutputShape
   readonly projectedOutputBytes: number
+  /**
+   * Spec 5.4 audio-quality warnings. Advisory, shown before processing, and
+   * never a reason to stop — which is why they sit beside the verdict rather
+   * than inside it.
+   */
+  readonly audioWarnings: readonly AudioWarning[]
 }

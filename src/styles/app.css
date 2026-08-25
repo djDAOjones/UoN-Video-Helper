@@ -261,9 +261,11 @@ body {
 }
 
 .file-input::file-selector-button {
-  min-height: 2rem;
+  /* 44 px, like every other target. The browser draws this button, but it is
+     still a pointer target and WCAG 2.5.5 does not exempt it. */
+  min-height: var(--target-min);
   margin-right: var(--spacing-04);
-  padding: var(--spacing-02) var(--spacing-05);
+  padding: var(--spacing-03) var(--spacing-05);
   border: 1px solid var(--interactive);
   background: transparent;
   color: var(--interactive);
@@ -426,4 +428,39 @@ body {
   width: 1.25rem;
   height: 1.25rem;
   accent-color: var(--interactive);
+}
+
+/* --- Audio-quality warnings (spec 5.4) --- */
+
+.warnings {
+  margin-top: var(--spacing-06);
+  padding: var(--spacing-05);
+  border-left: 4px solid var(--support-warning);
+  background: var(--layer-01);
+}
+
+.warnings-heading {
+  margin: 0 0 var(--spacing-04);
+  font-size: var(--type-heading-compact);
+  font-weight: 600;
+}
+
+.warning-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--spacing-05);
+}
+
+.warning-title {
+  margin: 0;
+  font-weight: 600;
+  font-size: var(--type-body-compact);
+}
+
+.warning-detail {
+  margin: var(--spacing-02) 0 0;
+  font-size: var(--type-body-compact);
+  color: var(--text-secondary);
 }

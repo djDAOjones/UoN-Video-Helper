@@ -14,17 +14,6 @@
      comes out, through a UI a novice can finish. Built in this order:
      the meter is proved before anything depends on it. -->
 
-- [ ] **VH-10 UI workflow**
-      Intent: a novice completes the whole job without being taught anything.
-      Done when: the spec §9.1 flow works end to end; every §5.4 warning and
-      §7.3 outcome renders in plain language — note that the §5.4 conditions
-      (clipping, very quiet, highly variable, noise floor, extended silence,
-      target missed) are not merely unrendered but undetected: the analysis
-      pass produces the data they need, nothing yet derives them; progress shows named stages,
-      not one opaque bar; cancel is always available; the result saves via
-      the File System Access API with a blob fallback; the AAA design-review
-      gate in `UI-STANDARDS.md` passes, with any exception documented.
-
 - [ ] **VH-11 Acceptance verification**
       Intent: prove the MVP against spec §13, not against a vibe.
       Done when: every acceptance criterion reachable without real hardware
@@ -38,6 +27,9 @@
       is confirmed "by listening and by short-term loudness plot" — the plot
       side is automated, the listening side is a maintainer check on real
       material and cannot be claimed without it.
+      Also carries what VH-10 could not automate: the File System Access save
+      opens a native dialogue, so the picker path itself needs a human. The
+      object-URL fallback and the filename logic are covered by tests.
 
 - [ ] **VH-M3 Stop OneDrive syncing this project** [maintainer] (2026-08-25)
       Intent: on 2026-08-25 the quality gate began failing with
@@ -69,14 +61,6 @@
       is added silently — the bed is dropped with it.
       Done when: a silent source with branding produces an output carrying the
       branding bed, with silence across the content region.
-
-- [ ] **VH-22 Tell the user when branding could not be loaded**
-      Intent: `loadBrandingClip` warns to the log and continues without the
-      sequence, so a user who asked for branding can get a video without it and
-      never be told. Spec §9.2 requires every error to say what happened and
-      what to do next.
-      Done when: a failed branding fetch surfaces in the UI before or during
-      processing, and the result states plainly that the sequence is missing.
 
 - [ ] **VH-20 Flush the audio chain's tail**
       Intent: the limiter delays by its 5 ms look-ahead, and the streaming path

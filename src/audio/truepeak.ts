@@ -87,16 +87,27 @@ export const PHASE_TAPS = TAPS_PER_PHASE
  */
 export class TruePeakDetector {
   private readonly channelCount: number
+  /** Level at or above which a sample counts as clipped, linear. */
+  private readonly clipThreshold: number
+  private clippedSamples = 0
   /** Last {@link TAPS_PER_PHASE} - 1 samples of the previous chunk, per channel. */
   private readonly tails: Float64Array[]
   private readonly window: Float64Array
   private peak = 0
+  /** One flag per frame in the current chunk, so a frame is counted once. */
+  private clipFlags = new Uint8Array(0)
 
-  constructor(channelCount: number) {
+  /**
+   * @param clipThresholdDbtp - Level at or above which a sample is counted as
+   *   clipped. Spec 5.4 uses -0.1 dBTP: ten or more such samples is the
+   *   trigger for the distortion warning.
+   */
+  constructor(channelCount: number, clipThresholdDbtp = -0.1) {
     if (!Number.isInteger(channelCount) || channelCount < 1) {
       throw new RangeError(`Channel count must be a positive integer, got ${channelCount}`)
     }
     this.channelCount = channelCount
+    this.clipThreshold = 10 ** (clipThresholdDbtp / 20)
     this.tails = Array.from({ length: channelCount }, () => new Float64Array(TAPS_PER_PHASE - 1))
     this.window = new Float64Array(TAPS_PER_PHASE)
   }
@@ -106,15 +117,24 @@ export class TruePeakDetector {
       throw new RangeError(`Expected ${this.channelCount} channels, got ${channels.length}`)
     }
 
+    const frameCount = channels[0]?.length ?? 0
+    if (this.clipFlags.length < frameCount) this.clipFlags = new Uint8Array(frameCount)
+    this.clipFlags.fill(0, 0, frameCount)
+
     for (let ch = 0; ch < this.channelCount; ch++) {
       this.processChannel(channels[ch]!, this.tails[ch]!)
     }
+
+    // Summed after every channel has had its say, so a stereo file clipping on
+    // both sides is one problem rather than two.
+    for (let i = 0; i < frameCount; i++) if (this.clipFlags[i]) this.clippedSamples++
   }
 
   private processChannel(samples: Float32Array, tail: Float64Array): void {
     const tailLength = tail.length
     const window = this.window
     let peak = this.peak
+    const clipFlags = this.clipFlags
 
     for (let i = 0; i < samples.length; i++) {
       // window[0] is x[i], window[j] is x[i - j] — the polyphase convolution
@@ -133,18 +153,25 @@ export class TruePeakDetector {
         const magnitude = Math.abs(window[j]!)
         if (magnitude > windowMax) windowMax = magnitude
       }
-      // No phase can beat the current peak if even the loudest sample in the
-      // window, amplified by the filter's largest possible gain, cannot.
-      // Skipping here is exact, not approximate.
-      if (windowMax * MAX_PHASE_GAIN <= peak) continue
+      // Two reasons to do the work: the sample might set a new peak, or it
+      // might be loud enough to count as clipped. Skip only when neither is
+      // possible — the bound is the filter's largest gain times the loudest
+      // sample in the window, so skipping is exact rather than approximate.
+      const bound = windowMax * MAX_PHASE_GAIN
+      if (bound <= peak && bound < this.clipThreshold) continue
 
+      let sampleTruePeak = 0
       for (let phase = 0; phase < OVERSAMPLE; phase++) {
         const taps = OVERSAMPLE_PHASES[phase]!
         let sum = 0
         for (let j = 0; j < TAPS_PER_PHASE; j++) sum += taps[j]! * window[j]!
         const magnitude = Math.abs(sum)
-        if (magnitude > peak) peak = magnitude
+        if (magnitude > sampleTruePeak) sampleTruePeak = magnitude
       }
+      if (sampleTruePeak > peak) peak = sampleTruePeak
+      // Counted per frame position, not per channel, so a stereo file with
+      // both sides clipping is not reported as twice the problem.
+      if (sampleTruePeak >= this.clipThreshold) clipFlags[i] = 1
     }
 
     // Carry the last samples forward: tail[0] is the most recent.
@@ -168,5 +195,16 @@ export class TruePeakDetector {
   /** Highest true peak seen so far, as a linear magnitude. */
   get peakLinear(): number {
     return this.peak
+  }
+
+  /**
+   * Sample positions whose true peak reached the clipping threshold.
+   *
+   * Spec 5.4 triggers the distortion warning at ten or more. Counted once per
+   * frame position across all channels, so a stereo file clipping on both
+   * sides is one problem rather than two.
+   */
+  get clippedSampleCount(): number {
+    return this.clippedSamples
   }
 }

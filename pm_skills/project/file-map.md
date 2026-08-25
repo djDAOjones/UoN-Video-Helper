@@ -15,13 +15,13 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 93 file(s) across 7 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 99 file(s) across 7 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 10 file(s)
 - `.claude` — 1 file(s)
 - `docs` — 5 file(s)
 - `public` — 9 file(s)
 - `scripts` — 2 file(s)
-- `src` — 62 file(s)
+- `src` — 68 file(s)
 - `test` — 4 file(s)
 <!-- /file-map-index -->
 
@@ -88,6 +88,8 @@
 - `src/audio/macrolevel.ts` — Conditional macro-levelling: the four properties that separate it from an AGC.
 - `src/audio/truepeak.test.ts` — Proves it finds inter-sample peaks and never reads below sample peak.
 - `src/audio/truepeak.ts` — 4x oversampled true peak. Polyphase FIR with exact pruning, so quiet passages cost little.
+- `src/audio/warnings.test.ts` — Triggers every 5.4 row deliberately, including the gapless false-positive guard.
+- `src/audio/warnings.ts` — Detects the spec 5.4 audio-quality conditions; thresholds live with the numbers.
 - `src/config/audio.ts` — Project audio choices — targets, thresholds, chain constants. Standard-defined values live in src/audio/.
 - `src/config/branding.test.ts` — Pins master selection: frame rate first, resolution second, never upscaled.
 - `src/config/branding.ts` — Branding durations (D2), the four master variants, and master selection.
@@ -119,6 +121,8 @@
 - `src/media/preflight.test.ts` — Triggers all four spec 7.3 outcomes deliberately — acceptance criterion 7.
 - `src/media/preflight.ts` — The pure verdict: given what was measured, proceed / warn / discourage / block.
 - `src/media/probe.ts` — The 3-second calibration probe: real decode and encode on the real file and device.
+- `src/media/save.test.ts` — Pins the suggested filename, including that it can never overwrite the source.
+- `src/media/save.ts` — Streams the result to the user's chosen location; object-URL fallback where there is no picker.
 - `src/media/vtt.test.ts` — Proves cue text, settings, comments and line endings survive byte for byte.
 - `src/media/vtt.ts` — Offsets WebVTT timings by rewriting only timestamp lines; never touches the words.
 - `src/styles/app.css` — App shell styles. Carbon productive language at AAA.
@@ -128,6 +132,8 @@
 - `src/ui/format.ts` — Technical facts as plain language — durations, sizes, codecs, channel layouts.
 - `src/ui/preflight-panel.ts` — Renders the verdict, naming a browser that works when the answer is no.
 - `src/ui/source-panel.ts` — Renders a SourceReport, including the standing caveat about tracks we cannot see.
+- `src/ui/warning-text.test.ts` — Mechanical half of "reads clearly": no jargon, no blame, always a next step.
+- `src/ui/warning-text.ts` — The 5.4 warnings in words, and their rendering. Possibilities, never verdicts.
 - `src/vite-env.d.ts` — Ambient types: the injected build globals and the File System Access API surface.
 - `src/workers/job.worker.ts` — The job worker. Owns the pipeline when it lands; today proves the boundary and its error path.
 - `src/workers/protocol.ts` — The typed message contract across the worker boundary.

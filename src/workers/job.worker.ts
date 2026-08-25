@@ -15,6 +15,9 @@ import {
   videoEncoderConfigFor,
   type PresetId,
 } from '../config/presets'
+import { detectOutputWarning, detectSourceWarnings, type AudioWarning } from '../audio/warnings'
+import { TARGET_INTEGRATED_LUFS } from '../config/audio'
+import { analyseSourceAudio } from '../media/audio-plan'
 import { checkEncodeSupport, inspectCapabilities } from '../media/capability'
 import { ACCEPTED_FORMATS, UnreadableFileError, inspectFile } from '../media/inspect'
 import { OpfsWorkspace, sweepOrphanedJobs } from '../media/opfs'
@@ -144,8 +147,41 @@ async function handleProcess(
       onProgress: ({ stage, fraction }) => post({ kind: 'stage', id, stage, fraction }),
     })
 
+    // Spec 5.4's last row: did the output actually land on target? It is the
+    // only warning that cannot be known in advance, and the only honest way to
+    // answer it is to measure the finished file rather than trust the plan.
+    const outputWarnings: AudioWarning[] = []
+    try {
+      const check = new Input({ formats: ACCEPTED_FORMATS, source: new BlobSource(result.file) })
+      const checkTrack = await check.getPrimaryAudioTrack()
+      if (checkTrack) {
+        const measured = await analyseSourceAudio(checkTrack)
+        const missed = detectOutputWarning(measured.integratedLufs, TARGET_INTEGRATED_LUFS)
+        if (missed) outputWarnings.push(missed)
+        log.info('worker', 'output verified', {
+          integratedLufs: Math.round(measured.integratedLufs * 100) / 100,
+          truePeakDbtp: Math.round(measured.truePeakDbtp * 100) / 100,
+          onTarget: missed === null,
+        })
+      }
+    } catch (cause) {
+      // A check that fails costs a warning, never the result.
+      log.warn('worker', 'could not verify the output', {
+        reason: cause instanceof Error ? cause.message : String(cause),
+      })
+    }
+
     finished.set(jobId, workspace)
-    post({ kind: 'processed', id, jobId, file: result })
+    post({
+      kind: 'processed',
+      id,
+      jobId,
+      file: result.file,
+      brandingApplied: result.brandingApplied,
+      brandingRequested: options.branding,
+      subtitleCues: result.subtitleCues,
+      outputWarnings,
+    })
   } catch (cause) {
     // runPipeline disposes its own workspace on failure; this covers a failure
     // before it ever started.
@@ -234,6 +270,15 @@ async function handlePreflight(
       checkEncodeSupport(videoEncoderConfigFor(shape)),
     ])
 
+    // Spec 5.4: derived from the analysis pass and shown BEFORE processing.
+    // A lecturer who is told their recording is inaudible only after waiting
+    // forty minutes has been told too late.
+    const audioInput = new Input({ formats: ACCEPTED_FORMATS, source: new BlobSource(file) })
+    const audioTrack = await audioInput.getPrimaryAudioTrack()
+    const audioWarnings = detectSourceWarnings(
+      audioTrack ? await analyseSourceAudio(audioTrack) : null,
+    )
+
     const probe =
       capability.hasWebCodecs && encode.supported
         ? await calibrationProbe({
@@ -250,6 +295,7 @@ async function handlePreflight(
       probe,
       shape,
       projectedOutputBytes: projected,
+      audioWarnings,
       verdict: preflightVerdict({
         hasWebCodecs: capability.hasWebCodecs,
         canEncodeH264: encode.supported,

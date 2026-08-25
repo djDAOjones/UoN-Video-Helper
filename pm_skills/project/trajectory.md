@@ -69,4 +69,11 @@
   muxed sidecar's sample boundaries landed at exactly 7 / 11.5 / 35 / 38.25 s
   against source cues at 2 / 6.5 / 30 / 33.25.
 
+- VH-10 — UI workflow: the spec 5.4 warnings detected and worded, named
+  progress stages, always-available cancel, streaming save through the File
+  System Access API, and the finished file measured to answer 5.4's
+  post-processing row. Absorbs VH-22. The AAA design review found one
+  unlabelled section and a 32 px browser-drawn button; both fixed, and the
+  audit then reported no target under 44x44 and no unlabelled landmark.
+
 <!-- Outcome line is written when the milestone closes. -->

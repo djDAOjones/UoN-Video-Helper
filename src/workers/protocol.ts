@@ -12,6 +12,7 @@ import type { LogRecord } from '../core/logger'
 import type { PresetId } from '../config/presets'
 import type { SourceReport } from '../media/inspect'
 import type { PreflightSummary } from '../media/preflight'
+import type { AudioWarning } from '../audio/warnings'
 import type { PipelineStage } from '../media/pipeline'
 
 /** Main thread -> worker. */
@@ -77,6 +78,12 @@ export type WorkerResponse =
       readonly id: number
       readonly jobId: string
       readonly file: File
+      /** What was actually applied — a branding asset may have failed to load. */
+      readonly brandingApplied: { readonly opening: boolean; readonly closing: boolean }
+      readonly brandingRequested: { readonly opening: boolean; readonly closing: boolean }
+      readonly subtitleCues: number
+      /** Measured from the finished file — spec 5.4's post-processing row. */
+      readonly outputWarnings: readonly AudioWarning[]
     }
   | { readonly kind: 'cancelled'; readonly id: number }
   | { readonly kind: 'discarded'; readonly id: number }

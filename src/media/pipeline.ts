@@ -45,6 +45,17 @@ export interface PipelineProgress {
   readonly fraction: number
 }
 
+export interface PipelineResult {
+  readonly file: File
+  /**
+   * What was actually applied, which is not always what was asked for: a
+   * branding asset that fails to load is skipped rather than failing the job,
+   * and the caller has to be able to say so.
+   */
+  readonly brandingApplied: { readonly opening: boolean; readonly closing: boolean }
+  readonly subtitleCues: number
+}
+
 export class CancelledError extends Error {
   override readonly name = 'CancelledError'
   constructor() {
@@ -82,7 +93,7 @@ function throwIfAborted(signal: AbortSignal | undefined): void {
  * disposed, so no partial file and no orphaned OPFS data survive — spec
  * section 13, acceptance criterion 8.
  */
-export async function runPipeline(options: PipelineOptions): Promise<File> {
+export async function runPipeline(options: PipelineOptions): Promise<PipelineResult> {
   const { input, shape, preset, durationSeconds, workspace, branding, signal, onProgress } =
     options
 
@@ -284,8 +295,14 @@ export async function runPipeline(options: PipelineOptions): Promise<File> {
       closingSeconds,
       timelineSeconds,
       subtitleCues,
+      brandingRequested: `${branding.opening}/${branding.closing}`,
+      brandingApplied: `${opening !== null}/${closing !== null}`,
     })
-    return file
+    return {
+      file,
+      brandingApplied: { opening: opening !== null, closing: closing !== null },
+      subtitleCues,
+    }
   } catch (cause) {
     // Abandon the output before the workspace goes, so no handle is left
     // holding a file that is about to be removed.

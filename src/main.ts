@@ -18,9 +18,11 @@ import {
 import { adoptLogRecords, log, setMinimumLogLevel } from './core/logger'
 import { APP_VERSION, BUILD_ID } from './core/version'
 import type { PresetId } from './config/presets'
+import { saveFile, suggestedFileName } from './media/save'
 import { countCues } from './media/vtt'
 import { formatFileSize } from './ui/format'
 import { renderPreflight, summarisePreflight } from './ui/preflight-panel'
+import { renderWarnings } from './ui/warning-text'
 import { renderSourceError, renderSourceReport, summarise } from './ui/source-panel'
 import type { WorkerOutbound, WorkerRequest } from './workers/protocol'
 
@@ -48,6 +50,7 @@ const devActions = required<HTMLDivElement>('#dev-actions')
 const fileInput = required<HTMLInputElement>('#file-input')
 const sourceReport = required<HTMLDivElement>('#source-report')
 const preflightReport = required<HTMLDivElement>('#preflight-report')
+const audioWarnings = required<HTMLDivElement>('#audio-warnings')
 const processActions = required<HTMLDivElement>('#process-actions')
 const processProgress = required<HTMLProgressElement>('#process-progress')
 const processResult = required<HTMLDivElement>('#process-result')
@@ -312,6 +315,7 @@ fileInput.addEventListener('change', () => {
   setStatus('Reading the video…')
   sourceReport.replaceChildren()
   preflightReport.replaceChildren()
+  audioWarnings.replaceChildren()
   processActions.replaceChildren()
   processActions.hidden = true
   presetChoice.hidden = true
@@ -369,6 +373,9 @@ async function runPreflight(file: File): Promise<void> {
     const reply = await request({ kind: 'preflight', file, presetId: chosenPreset() }, 180_000)
     if (reply.kind === 'preflighted') {
       renderPreflight(preflightReport, reply.summary)
+      renderWarnings(audioWarnings, reply.summary.audioWarnings, {
+        heading: 'Worth knowing about the sound',
+      })
       setStatus(summarisePreflight(reply.summary))
       presetChoice.hidden = false
       brandingChoice.hidden = false
@@ -458,7 +465,16 @@ function showProcessControls(file: File): void {
     void promise
       .then((reply) => {
         if (reply.kind === 'processed') {
-          renderResult(reply.file, reply.jobId)
+          renderResult(
+            reply.file,
+            reply.jobId,
+            file.name,
+            reply.brandingApplied,
+            reply.brandingRequested,
+          )
+          renderWarnings(audioWarnings, reply.outputWarnings, {
+            heading: 'Worth knowing about the finished video',
+          })
           setStatus('Your video is ready.')
         } else if (reply.kind === 'cancelled') {
           // Nothing was written anywhere the user can see, and the source is
@@ -486,26 +502,61 @@ function showProcessControls(file: File): void {
   processActions.append(start, cancel)
 }
 
-function renderResult(file: File, jobId: string): void {
+function renderResult(
+  file: File,
+  jobId: string,
+  sourceName: string,
+  applied: { opening: boolean; closing: boolean },
+  requested: { opening: boolean; closing: boolean },
+): void {
   processResult.replaceChildren()
-  const paragraph = document.createElement('p')
-  paragraph.className = 'verdict-detail'
-  paragraph.textContent = `Finished: ${formatFileSize(file.size)}.`
 
-  const link = document.createElement('a')
-  link.href = URL.createObjectURL(file)
-  link.download = 'branded-video.mp4'
-  link.textContent = 'Download the video'
-  link.className = 'result-link'
-  // Provisional. VH-10 saves through the File System Access API so a
-  // multi-gigabyte result never has to become an object URL.
-  link.addEventListener('click', () => {
-    setTimeout(() => {
-      void request({ kind: 'discard', jobId }, 10_000)
-    }, 2000)
+  const summary = document.createElement('p')
+  summary.className = 'verdict-detail'
+  summary.textContent = `Your video is ready — ${formatFileSize(file.size)}.`
+  processResult.append(summary)
+
+  // VH-22: branding that was asked for but could not be loaded is skipped
+  // rather than failing the job, so the result has to say so. A video missing
+  // its branding, delivered silently, is the failure this prevents.
+  const missing: string[] = []
+  if (requested.opening && !applied.opening) missing.push('opening')
+  if (requested.closing && !applied.closing) missing.push('closing')
+  if (missing.length > 0) {
+    const notice = document.createElement('p')
+    notice.className = 'verdict-detail'
+    notice.textContent = `The ${missing.join(' and ')} sequence could not be loaded, so it is not in this video. Everything else was applied as asked.`
+    processResult.append(notice)
+  }
+
+  const save = document.createElement('button')
+  save.type = 'button'
+  save.className = 'button'
+  save.textContent = 'Save the video'
+  save.addEventListener('click', () => {
+    save.disabled = true
+    void (async () => {
+      try {
+        const outcome = await saveFile(file, suggestedFileName(sourceName))
+        if (outcome === 'cancelled') {
+          setStatus('Not saved. The video is still here when you want it.')
+          return
+        }
+        setStatus('Saved.')
+        // Only once it is safely out: the File reads from OPFS, so releasing
+        // the workspace first would hand back something unreadable.
+        await request({ kind: 'discard', jobId }, 10_000)
+      } catch (cause) {
+        setStatus('The video could not be saved. It is still here to try again.')
+        log.error('ui', 'save failed', {
+          reason: cause instanceof Error ? cause.message : String(cause),
+        })
+      } finally {
+        save.disabled = false
+      }
+    })()
   })
-
-  processResult.append(paragraph, link)
+  processResult.append(save)
 }
 
 // --- Dev-only affordances --------------------------------------------------

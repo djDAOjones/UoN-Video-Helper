@@ -18,6 +18,8 @@ import { TruePeakDetector } from './truepeak'
 export interface AudioAnalysis extends LoudnessReport {
   /** Highest true peak in the source, dBTP. `-Infinity` for pure silence. */
   readonly truePeakDbtp: number
+  /** Frame positions reaching the clipping threshold — spec 5.4's distortion trigger. */
+  readonly clippedSampleCount: number
   readonly sampleRate: number
   readonly channelCount: number
 }
@@ -43,6 +45,7 @@ export class AudioAnalyser {
     return {
       ...this.loudness.finish(),
       truePeakDbtp: this.truePeak.peakDbtp,
+      clippedSampleCount: this.truePeak.clippedSampleCount,
       sampleRate: this.options.sampleRate,
       channelCount: this.options.channelCount,
     }
