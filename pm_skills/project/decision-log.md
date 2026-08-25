@@ -11,6 +11,44 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-26 — VH-42: split the duration that was doing two jobs
+
+**Decision:** `PipelineOptions.durationSeconds` becomes `videoDurationSeconds`
+and `audioDurationSeconds`. All branding boundaries key off the picture; the
+arithmetic moves to a pure `closingTimeline()` in `branding.ts`.
+
+**Rationale:** the bug was not a wrong sum, it was one name meaning two things.
+`SourceReport.durationSeconds` is `max(video, audio)`, and the pipeline treated
+it as "how long the picture runs". Splitting the field rather than adding one
+made the type checker enumerate all four call sites, which is the difference
+between fixing this and fixing it everywhere.
+
+**Why the arithmetic moved out:** it sat inside `encode()`, which needs
+WebCodecs, so neither failure was reachable from a Node test — and neither case
+exists in the corpus, so nothing would have caught them by being run either. A
+defect that no test can express is a defect that comes back. It is fourteen
+assertions now.
+
+**What trailing audio does.** It keeps playing under the closing rather than
+being truncated at the picture's end. The real closing masters carry no audio,
+so nothing collides, and cutting a lecturer's last words to match the picture is
+the worse error. If a future master does carry a bed, two sources would write
+the same stretch of one track — corruption, not a mix — so the content yields
+and takes its fade at the boundary instead. That branch is pinned.
+
+**Alternatives:** holding the last frame to cover the gap was rejected — it
+invents a freeze the user did not ask for, where letting audio run under opaque
+branding is ordinary. Truncating the audio was rejected as losing content.
+
+**Verified:** unit tests for the arithmetic, plus two synthesised fixtures in
+`/spike-modes.html`, since the corpus contains neither shape. Audio two seconds
+past the picture yields 8.00 s (old code: 10.08 s, with two seconds of empty
+video timeline); a 0.5 s source yields 5.52 s, proving the `over-freeze`
+downgrade fired rather than a negative overlay start.
+
+**Link:** `src/media/branding.ts`, `src/media/pipeline.ts`,
+`src/media/branding-timeline.test.ts`.
+
 ## 2026-08-26 — VH-47: the band may only ever lower the figure
 
 **Decision:** "Best quality" asks for the geometric mean of spec 6.1's anchor

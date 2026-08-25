@@ -25,6 +25,13 @@ export interface FixtureOptions {
   readonly width: number
   readonly height: number
   readonly seconds: number
+  /**
+   * How long the AUDIO runs, when it must differ from the picture. Defaults to
+   * `seconds`. Real recordings whose audio outruns their picture are the case
+   * VH-42 exists for, and the corpus contains none — so the only way to have
+   * one is to build it.
+   */
+  readonly audioSeconds?: number
   /** Nominal frame rate. Ignored when `variableFrameRate` is set. */
   readonly frameRate: number
   /** Irregular frame gaps, as a screen recorder under load produces. */
@@ -113,12 +120,13 @@ function drawFrame(
 
 function buildAudio(options: FixtureOptions, sampleRate: number, channels: number): Float32Array {
   const shape = options.audio
-  const frames = Math.round(options.seconds * sampleRate)
+  const seconds = options.audioSeconds ?? options.seconds
+  const frames = Math.round(seconds * sampleRate)
   const data = new Float32Array(frames * channels)
   if (!shape) return data
 
   const markerStarts = shape.syncMarkers
-    ? syncMarkerTimes(options.seconds).map((t) => Math.round(t * sampleRate))
+    ? syncMarkerTimes(seconds).map((t) => Math.round(t * sampleRate))
     : []
   const markerFrames = Math.round(sampleRate * SYNC_MARKER_SECONDS)
   const endPeak = shape.endPeakDbfs ?? shape.startPeakDbfs
@@ -145,7 +153,7 @@ function buildAudio(options: FixtureOptions, sampleRate: number, channels: numbe
           ? t % (shape.pauseEverySeconds + shape.pauseSeconds) >= shape.pauseEverySeconds
           : false
       if (!paused) {
-        const drift = shape.startPeakDbfs + (endPeak - shape.startPeakDbfs) * (t / options.seconds)
+        const drift = shape.startPeakDbfs + (endPeak - shape.startPeakDbfs) * (t / seconds)
         const amplitude = 10 ** (drift / 20)
         const syllable = t * 4
         const within = syllable - Math.floor(syllable)

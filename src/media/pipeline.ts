@@ -36,6 +36,7 @@ import type { OutputShape, Preset } from '../config/presets'
 import { createContentAudioProcessor, planAudio } from './audio-plan'
 import {
   BrandingRenderer,
+  closingTimeline,
   feedBrandingAudio,
   feedBrandingVideo,
   loadBrandingClip,
@@ -88,7 +89,18 @@ export interface PipelineOptions {
   readonly input: Input
   readonly shape: OutputShape
   readonly preset: Preset
-  readonly durationSeconds: number
+  /**
+   * How long the PICTURE runs. Every branding boundary is measured against
+   * this and never against the file's overall duration (VH-42).
+   *
+   * `SourceReport.durationSeconds` is `max(video, audio)`, and using it here
+   * put the closing where the LONGER track ended: audio outrunning the picture
+   * opened a video gap before the closing and pushed the composite point past
+   * anything the source reached, so the build silently never appeared.
+   */
+  readonly videoDurationSeconds: number
+  /** How long the source's audio runs, or `null` when it has none. */
+  readonly audioDurationSeconds: number | null
   readonly workspace: OpfsWorkspace
   /**
    * Spec 4.1's two toggles, plus the closing's own choices (VH-12, VH-22).
@@ -138,8 +150,17 @@ export async function runPipeline(options: PipelineOptions): Promise<PipelineRes
 }
 
 async function encode(options: PipelineOptions): Promise<PipelineResult> {
-  const { input, shape, preset, durationSeconds, workspace, branding, signal, onProgress } =
-    options
+  const {
+    input,
+    shape,
+    preset,
+    videoDurationSeconds,
+    audioDurationSeconds,
+    workspace,
+    branding,
+    signal,
+    onProgress,
+  } = options
 
   throwIfAborted(signal)
   onProgress?.({ stage: 'preparing', fraction: 0 })
@@ -178,7 +199,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
           ...(branding.colour ? { colour: branding.colour } : {}),
         })
       : null
-  const mode: BrandingMode = build ? requestedMode : 'hard-cut'
+  const requestedOrFallback: BrandingMode = build ? requestedMode : 'hard-cut'
   if (build === null && modeNeedsOnset(requestedMode)) {
     log.warn('branding', 'no build available; falling back to a hard cut', {
       requestedMode,
@@ -187,12 +208,31 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
 
   const openingSeconds = opening?.durationSeconds ?? 0
   const closingSeconds = closing?.durationSeconds ?? 0
-  // Only the freeze adds time of its own: it holds a frame under the build.
-  // "over picture" plays the build across source that was going to be there
-  // anyway, so it costs nothing.
-  const freezeSeconds = mode === 'over-freeze' ? CLOSING_ONSET_SECONDS : 0
-  const contentOffset = openingSeconds
-  const closingOffset = openingSeconds + durationSeconds + freezeSeconds
+  // Whether the closing master carries a bed of its own decides whether source
+  // audio may run underneath it. The real masters carry none.
+  const closingHasAudio = closing ? (await closing.input.getPrimaryAudioTrack()) !== null : false
+
+  // All of it measured against the PICTURE (VH-42), and pure, so the arithmetic
+  // is unit-tested in `branding.test.ts` rather than only reachable through a
+  // browser.
+  const timeline = closingTimeline({
+    videoDurationSeconds,
+    audioDurationSeconds,
+    mode: requestedOrFallback,
+    openingSeconds,
+    closingSeconds,
+    onsetSeconds: CLOSING_ONSET_SECONDS,
+    closingHasAudio,
+  })
+  const { mode, contentOffsetSeconds: contentOffset, closingOffsetSeconds: closingOffset } = timeline
+  const audioEndsAt = timeline.audioEndsAtSeconds
+
+  if (timeline.downgradedForShortSource) {
+    log.warn('branding', 'source is shorter than the build; holding a freeze frame instead', {
+      videoDurationSeconds,
+      buildSeconds: CLOSING_ONSET_SECONDS,
+    })
+  }
 
   const outputFile = await workspace.createFile(`output-${preset.id}.mp4`)
 
@@ -260,7 +300,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     options = { ...options, subtitleVtt: offset.text }
   }
 
-  const timelineSeconds = openingSeconds + durationSeconds + freezeSeconds + closingSeconds
+  const timelineSeconds = timeline.timelineSeconds
   const expectedFrames = Math.max(1, Math.round(timelineSeconds * shape.frameRate))
   let framesFed = 0
 
@@ -286,7 +326,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     const canComposite = compositor !== null && buildSink !== null && buildFit !== null
 
     /** Where the build starts, in source time, for `over-picture`. */
-    const overlayFrom = durationSeconds - CLOSING_ONSET_SECONDS
+    const overlayFrom = timeline.overlayFromSeconds
 
     // Mediabunny's transform normalises the whole stream to a constant frame
     // rate, so the branding and the content land on one regular grid however
@@ -355,7 +395,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
             const brand = await buildSink.getSample(index * step)
             if (!brand) continue
             const composed = compositor.compose(frozen, brand, buildFit, {
-              timestamp: contentOffset + durationSeconds + index * step,
+              timestamp: contentOffset + videoDurationSeconds + index * step,
               duration: step,
             })
             try {
@@ -397,7 +437,9 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
 
     const processContent = createContentAudioProcessor(audioPlan, {
       offsetSeconds: contentOffset,
-      durationSeconds,
+      // The audio's OWN length, so its fade lands where it actually ends rather
+      // than where the picture did.
+      durationSeconds: audioEndsAt,
       fadeIn: opening !== null,
       fadeOut: closing !== null,
     })

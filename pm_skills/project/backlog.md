@@ -48,19 +48,6 @@
       the UI is part of this item, and spec §4.1 carries a doc-delta until it
       happens.
 
-- [ ] **VH-42 The closing keys off the wrong duration** (2026-08-25)
-      Intent: split from VH-24. `pipeline.ts:289` derives `overlayFrom` from
-      `durationSeconds`, which `inspect.ts:287` sets to `max(video, audio)`. So
-      audio running more than a second past the picture silently composites no
-      build at all — `sourceTime` never reaches the overlay point — and the same
-      figure opens a video gap before the closing. A source shorter than the
-      1.00 s build computes a negative start (inherited from VH-22 on its close).
-      Both are the same defect: a branding boundary measured against a duration
-      that is not the picture's.
-      Done when: the boundary keys off the video duration, a source shorter than
-      the build degrades to `over-freeze` and says so rather than erroring, and
-      an audio-longer-than-video fixture proves the build still composites.
-
 - [ ] **VH-31 The size estimate is ~3.6x too high** [detail](tickets/VH-31.md)
       (2026-08-25)
       Intent: the app said 27.7 MB and produced 7.5 MB on the first real file

@@ -222,3 +222,17 @@ The deployed site was also confirmed working on a University machine, so
   `bitrateBasis` replaced the figure comparison that decided the pre-flight
   cap message, which would otherwise have announced "already compressed as far
   as this setting would take it" over outputs running at twice the source.
+
+### VH-42 — branding boundaries measured against the picture
+
+- VH-42 — Shipped 2026-08-26. `PipelineOptions.durationSeconds` was
+  `max(video, audio)` and every branding boundary keyed off it; it is replaced
+  by `videoDurationSeconds` plus `audioDurationSeconds`, which made the compiler
+  find all four call sites. The arithmetic moved out of the pipeline into a pure
+  `closingTimeline()` so the defect is unit-testable at all — it needed WebCodecs
+  to reach before. A source shorter than the build now degrades to `over-freeze`
+  and logs why instead of computing a negative start, and trailing audio plays
+  under the closing rather than opening a video gap ahead of it, unless the
+  closing master carries a bed of its own. Both cases are synthesised fixtures in
+  `/spike-modes.html`: audio two seconds past the picture produces 8.00 s where
+  the old code gave 10.08 s, and a 0.5 s source produces 5.52 s via the freeze.

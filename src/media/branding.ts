@@ -39,6 +39,7 @@ import {
   openingAssetName,
   selectOpeningMaster,
   type BrandingColour,
+  type BrandingMode,
   type BrandingSegment,
   type BrandingStyle,
 } from '../config/branding'
@@ -121,6 +122,93 @@ export function applyBoundaryFade(
     }
     if (gain >= 1) continue
     for (const channel of channels) channel[i]! *= gain
+  }
+}
+
+/**
+ * Where each segment sits on the output timeline, spec section 4.3 (VH-42).
+ *
+ * Pure, and separate from the pipeline, because this is the arithmetic that was
+ * wrong: every boundary was measured against `SourceReport.durationSeconds`,
+ * which is `max(video, audio)`. A source whose audio outran its picture
+ * therefore put the closing where the AUDIO ended — opening a video gap with
+ * nothing in it — and pushed the composite point past anything the picture
+ * reached, so the build silently never appeared. None of that is visible in a
+ * unit test while it lives inline in a function that needs WebCodecs to run.
+ *
+ * The rule: **branding boundaries are measured against the picture.** Audio
+ * that outruns it keeps playing underneath, because the real closing masters
+ * carry no audio of their own and truncating a lecturer's last words to match
+ * the picture would be the worse error.
+ */
+export interface ClosingTimeline {
+  /** Where the content starts. */
+  readonly contentOffsetSeconds: number
+  /** Where the closing card starts, on the picture's clock. */
+  readonly closingOffsetSeconds: number
+  /** Where the build starts within the source, for `over-picture`. */
+  readonly overlayFromSeconds: number
+  /** Where the source's audio stops being emitted. */
+  readonly audioEndsAtSeconds: number
+  /** Whole-output length, used for progress. */
+  readonly timelineSeconds: number
+  /** The mode actually used, which a too-short source can downgrade. */
+  readonly mode: BrandingMode
+  /** True when the source was too short to run the build across. */
+  readonly downgradedForShortSource: boolean
+}
+
+export function closingTimeline(options: {
+  readonly videoDurationSeconds: number
+  readonly audioDurationSeconds: number | null
+  readonly mode: BrandingMode
+  readonly openingSeconds: number
+  readonly closingSeconds: number
+  readonly onsetSeconds: number
+  /** Whether the closing master carries an audio bed of its own. */
+  readonly closingHasAudio: boolean
+}): ClosingTimeline {
+  const {
+    videoDurationSeconds,
+    audioDurationSeconds,
+    openingSeconds,
+    closingSeconds,
+    onsetSeconds,
+    closingHasAudio,
+  } = options
+
+  // A source shorter than the build has no closing second to run the build
+  // across, so `over-picture` would compute a negative start. `over-freeze`
+  // holds one frame under the build and needs no content length at all.
+  const downgradedForShortSource =
+    options.mode === 'over-picture' && videoDurationSeconds < onsetSeconds
+  const mode: BrandingMode = downgradedForShortSource ? 'over-freeze' : options.mode
+
+  // Only the freeze adds time of its own: it holds a frame under the build.
+  // "over picture" plays the build across content that was going to be there
+  // anyway, so it costs nothing.
+  const freezeSeconds = mode === 'over-freeze' ? onsetSeconds : 0
+
+  const contentAudioSeconds = audioDurationSeconds ?? videoDurationSeconds
+  const audioEndsAtSeconds = closingHasAudio
+    ? Math.min(contentAudioSeconds, videoDurationSeconds)
+    : contentAudioSeconds
+
+  return {
+    contentOffsetSeconds: openingSeconds,
+    closingOffsetSeconds: openingSeconds + videoDurationSeconds + freezeSeconds,
+    // Clamped, so the downgrade above is a belt and this is the braces: even if
+    // a caller reaches here with a short source in `over-picture`, the start is
+    // never negative.
+    overlayFromSeconds: Math.max(0, videoDurationSeconds - onsetSeconds),
+    audioEndsAtSeconds,
+    timelineSeconds:
+      openingSeconds +
+      Math.max(videoDurationSeconds, audioEndsAtSeconds) +
+      freezeSeconds +
+      closingSeconds,
+    mode,
+    downgradedForShortSource,
   }
 }
 

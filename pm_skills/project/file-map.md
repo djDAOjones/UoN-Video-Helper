@@ -15,14 +15,14 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 132 file(s) across 8 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 133 file(s) across 8 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 16 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
 - `docs` — 5 file(s)
 - `public` — 17 file(s)
 - `scripts` — 4 file(s)
-- `src` — 84 file(s)
+- `src` — 85 file(s)
 - `test` — 4 file(s)
 <!-- /file-map-index -->
 
@@ -132,6 +132,7 @@
 - `src/media/audio-frames.ts` — AudioSample to planar Float32 and back, shared by the chain and branding.
 - `src/media/audio-plan.ts` — The three audio passes, and the per-sample hook the encoder calls.
 - `src/media/branding-fade.test.ts` — Pins what "hard cut with a 100 ms fade" means at sample level (D3).
+- `src/media/branding-timeline.test.ts` — Pins where branding sits on the timeline: boundaries measured against the picture, never the longer track.
 - `src/media/branding.ts` — Conform and concatenate the opaque parts; load the real closing tail; the boundary fade.
 - `src/media/capability.ts` — Device checks asked against the exact target config, not a generic capability flag.
 - `src/media/composite.test.ts` — Pins `compositePremultiplied` against the straight-alpha mistake that looks plausible and double-darkens.
