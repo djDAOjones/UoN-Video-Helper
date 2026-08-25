@@ -8,17 +8,14 @@
 
 ## Active
 
-### Current milestone — MVP (Band 0, local, no deploy)
+### Found after Band 0 — needs a new band before it is built
 
-<!-- The band signed off on 2026-08-24 was VH-1..VH-11 plus VH-M1 and VH-M2.
-     All of those are done. Everything below was found while building them and
-     sits BEYOND that ceiling — except VH-18, which is spec §13 criterion 6 and
-     so belongs to the original definition of done. Anything else here needs a
-     new sign-off before it is built. -->
-
-<!-- A file goes in; a branded, correctly-levelled, correctly-encoded MP4
-     comes out, through a UI a novice can finish. Built in this order:
-     the meter is proved before anything depends on it. -->
+<!-- Band 0 (VH-1..VH-11, VH-M1, VH-M2) shipped 2026-08-25: a file goes in, a
+     branded, correctly-levelled, correctly-encoded MP4 comes out. Everything
+     in this section was found during or after that work and sits BEYOND the
+     signed-off ceiling, so none of it is picked without a new sign-off.
+     Maintainer-owned items ([maintainer]) are the exception — they are not
+     agent work and are not gated. -->
 
 - [ ] **VH-16 Extend the acceptance harness** (2026-08-25)
       Intent: the harness from VH-11 covers what it covers; two gaps are known.
@@ -93,16 +90,15 @@
       (2026-08-25, definitions confirmed 2026-08-25)
       Intent: the closing graphic is a 1.00 s alpha onset plus a 4.00 s opaque
       tail, so what sits under that second is an editorial choice. Three modes,
-      named by the maintainer: **hard transition** (discard the onset; output
-      T+4.00; no compositing, so the only mode reachable without alpha),
-      **transition** (onset plays over the closing second of source; output
-      T+4.00; nothing cut but the last second is obscured), and **transition
-      with still frame** (final frame sustains under the onset; output T+5.00;
-      nothing obscured, at the cost of a frozen second).
-      Done when: all three are implementable and named this way, with a stated
-      default, and the VH-25 picture fade-out defaults ON for hard transition
-      and OFF for the other two — in those the graphic's onset is the
-      transition. Blocked on VH-12's alpha decode for modes 2 and 3.
+      named by the maintainer: **hard transition** (discard the onset, T+4.00,
+      no compositing), **transition** (onset over the closing second, T+4.00),
+      **transition with still frame** (final frame sustains under the onset,
+      T+5.00).
+      Done when: all three work and are named this way with a stated default;
+      the VH-25 fade-out defaults ON for hard transition only, since elsewhere
+      the onset IS the transition; and mode 3 freezes the last CLEAN frame, not
+      the last decoded one.
+      Blocked on VH-12's alpha decode for modes 2 and 3.
 
 - [ ] **VH-23 Opening graphics** (2026-08-25)
       Intent: there are no opening assets and the maintainer's position is that
@@ -114,28 +110,37 @@
       modes as VH-22, mirrored — the onset ramp runs the other way.
 
 - [ ] **VH-25 Boundary fades** [detail](tickets/VH-25.md) (2026-08-25)
-      Intent: sources cut hard into the branding. Measured across the corpus,
-      21 of 21 end on a bright frame, so the picture always needs a fade-out
-      before the graphics — but 0 of 19 end above −69 dBFS, so the audio has
-      already stopped and its fade-out is a no-op. Four start mid-speech.
+      Intent: sources cut hard into the branding, and the two ends differ.
+      21 of 21 end on a bright frame so the picture always needs a fade-out,
+      but 0 of 19 end above −69 dBFS so the audio has already stopped. Four
+      start mid-speech.
       Done when: picture fade-out defaults ON silently, picture fade-in is
       offered and defaults OFF, and the modal is reserved for the
       audio-starts-mid-speech case — a notice that fires every time is not a
       notice. Lengths live in `src/config/`; D3's 100 ms fade is reconciled
-      with them rather than left alongside.
+      with them.
+
+- [ ] **VH-26 Mobile phone sources** [detail](tickets/VH-26.md) (2026-08-25)
+      Intent: staff may upload phone footage and none is in the corpus. Rotation
+      was traced end to end and is correct — recorded so it is not
+      re-investigated. The real gap is colour: `src/` has no colour-space or
+      tone-map handling at all, and phones record HDR 10-bit by default, so the
+      picture is silently washed out or crushed depending on the browser. It
+      always plays, so nothing surfaces as an error.
+      Done when: phone footage is in `samples/`, the colour path has a decided
+      and tested behaviour, and portrait branding composition is specified.
 
 - [ ] **VH-24 Survive real-world source properties**
       [detail](tickets/VH-24.md) (2026-08-25)
-      Intent: awkward input is the common case, not the edge. The Teams
-      recording is **16.000 fps CFR** with zero interval variance — so Teams
-      does not produce the VFR the conform path was built for, but a low stable
-      rate §6.3 would snap to 24 (+50% duplicate frames). Six more files run at
-      30.303 fps, and four declare a rate ~1% off their actual one, which is
-      ~6 s of drift over 10 minutes. Two files have no audio, one is mono, one
-      is PCM, rates are mixed, and one is 16:10.
+      Intent: awkward input is the common case. All eight frame-rate anomalies
+      trace to one tool (PowerPoint, which writes a nominal 30 fps as 1000/33
+      and sometimes declares 30/1 anyway — ~6 s drift over 10 minutes), and
+      Teams is 16.000 fps CFR, so neither produces the VFR the conform path was
+      built for. Two files have no audio, one is mono, one is PCM, rates are
+      mixed, and one is 16:10.
       Done when: frame rate comes from measurement not the header; odd geometry
-      survives without distortion; mono, PCM and 16/44.1 kHz sources all reach
-      a correct output; and each is exercised by a named fixture.
+      survives without distortion; mono, PCM and 16/44.1 kHz sources all reach a
+      correct output; and each is exercised by a named fixture.
 
 ### Next milestone
 

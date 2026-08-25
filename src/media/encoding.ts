@@ -34,6 +34,12 @@ export function videoEncodingConfigFor(
       // dimensions, so this only bites for branding (VH-8).
       fit: options.fit ?? 'contain',
       frameRate: shape.frameRate,
+      // No `rotate` here, deliberately. Mediabunny ADDS it to the rotation it
+      // read from the file (`sample.js`: `this.rotation + (options.rotate ?? 0)`),
+      // so setting it to "make the output upright" would double-rotate every
+      // phone video that is already tagged. Rotation is applied for us: the
+      // decoder stamps it on each sample and the output shape is built from
+      // rotation-corrected display dimensions. See VH-26.
     },
   }
 }

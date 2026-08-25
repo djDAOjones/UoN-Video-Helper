@@ -59,3 +59,7 @@
 - [ ] 2026-08-25 SPEC §6.2 — the "smaller file" bitrate targets (1.5/2.5 Mbps)
       exceed the Teams recording's own 1.0 Mbps, so the preset would inflate it;
       needs a never-exceed-source guard (source: VH-24)
+- [ ] 2026-08-25 SPEC — no colour/HDR behaviour is specified anywhere, and
+      phone sources are HDR 10-bit by default; the pipeline has no colour
+      handling, so the result is whatever the browser's canvas does
+      (source: VH-26)
