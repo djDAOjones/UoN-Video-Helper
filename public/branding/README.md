@@ -31,12 +31,15 @@ Verify alpha decode in a browser by serving the app and opening
 through the app's own loader — so all three closing modes work in every
 supported browser.
 
-The same run found something that matters more. Compositing the onset over
-white via `drawImage` returns **202 in Chrome and Safari** but **255 in
-Firefox**: the engines disagree about whether a decoded frame's colour is
-premultiplied. 255 is correct, so Firefox happens to be right — but no
-`drawImage` call is portable, which is why `src/media/composite.ts` does the
-blend on the CPU instead of on the GPU.
+The same runs found something that matters more. Compositing the onset over
+white via `drawImage` returns **202 in Chrome 151 and Safari 26.5.2** but
+**255 in Firefox** — measured on both 152 and 154, two major versions apart,
+with the same result. The engines genuinely disagree about whether a decoded
+frame's colour is premultiplied, and it is not a bug on its way out.
+
+255 is correct, so Gecko is the one in the right; that does not help. No
+`drawImage` call renders the same picture in all three, which is why
+`src/media/composite.ts` does the blend on the CPU instead of the GPU.
 
 ## The opening placeholders (still in use)
 

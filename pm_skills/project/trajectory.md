@@ -181,15 +181,17 @@ interface needs a deliberate design pass rather than tweaks (VH-32).
 
 ### All three engines verified — and they disagree
 
-Firefox 152 joined Chrome 151 and Safari 26.5.2 in decoding VP9 alpha through
-the app's own loader, so every closing mode works in every supported browser.
+Firefox joined Chrome 151 and Safari 26.5.2 in decoding VP9 alpha through the
+app's own loader, so every closing mode works in every supported browser.
 
 The same runs found something worth more than the pass. Compositing the onset
 over white via `drawImage` returns 202 in Chrome and Safari but **255 in
-Firefox**: the engines disagree about whether a decoded frame's colour is
-premultiplied. 255 is the correct answer, so Firefox happens to be right — but
-a composite that is correct in one engine and double-darkened in the other two
-is unusable, and no `drawImage` call is portable. Doing the blend on the CPU in
+Firefox**, on 152 and again on 154 two major versions later: the engines
+genuinely disagree about whether a decoded frame's colour is premultiplied, and
+it is not a regression on its way out. 255 is the correct answer, so Gecko is
+the one in the right — but a composite that is correct in one engine and
+double-darkened in the other two is unusable, and no `drawImage` call is
+portable. Doing the blend on the CPU in
 `composite.ts` was chosen when only Chrome had been measured; it turns out to
 be the only choice that produces the same picture everywhere.
 

@@ -21,20 +21,20 @@
  * white onset (RGB 75, alpha 75) over white was measured in all three
  * supported engines:
  *
- *     Chrome 151    -> 202   treats the decoded colour as STRAIGHT
- *     Safari 26.5   -> 202   treats the decoded colour as STRAIGHT
- *     Firefox 152   -> 255   treats the decoded colour as PREMULTIPLIED
+ *     Chrome 151        -> 202   treats the decoded colour as STRAIGHT
+ *     Safari 26.5.2     -> 202   treats the decoded colour as STRAIGHT
+ *     Firefox 152, 154  -> 255   treats the decoded colour as PREMULTIPLIED
  *
- * 255 is the correct answer, so Firefox 152 happens to be right — but a
+ * 255 is the correct answer, so Gecko is the engine in the right — but a
  * composite that is correct in one engine and double-darkened in the other two
  * is not usable at any price.
  *
- * Those are three point measurements on three versions, and that is the whole
- * argument: whichever way a later release moves, behaviour we would have to
- * re-measure per engine and per version cannot be depended on. The blend
- * therefore happens HERE, on the CPU, over the ~25 frames of the onset. Doing
- * the arithmetic ourselves is the only way the picture does not depend on
- * which browser — or which build of it — the user happened to open.
+ * Firefox was measured twice, two major versions apart, and returned the same
+ * 255 both times. So this is not a regression waiting to be fixed; it is a
+ * settled difference in how the engines interpret a decoded frame's alpha, and
+ * it is not going to resolve itself. The blend therefore happens HERE, on the
+ * CPU, over the ~25 frames of the onset. Doing the arithmetic ourselves is the
+ * only way the picture does not depend on which browser the user opened.
  */
 
 import { VideoSample } from 'mediabunny'
