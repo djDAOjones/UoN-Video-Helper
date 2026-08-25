@@ -11,6 +11,27 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-25 — VH-33: helper text is not a safeguard
+
+**Decision:** Remove the opening checkbox and its helper paragraph from
+`index.html`; pass `opening: false` in the job spec. The pipeline's opening
+path, the config and the placeholder assets are all left alone.
+
+**Rationale:** The control was already defaulted off and captioned "Not yet
+available… leave this off unless you are testing." That is an instruction, not
+a constraint, and what it guards is a published video carrying an unapproved
+University graphic. Same reasoning as VH-45 hours earlier, and the same shape:
+remove the control, keep the capability, restore it when there is something
+approved to restore (VH-23).
+
+**Checked rather than assumed:** the placeholder assets stay in `public/` and
+keep being served. `gen-placeholder-branding.mjs` draws the literal text
+"PLACEHOLDER — opening — 1080p25" and no University branding, so a public URL
+serving one is not a brand risk — the risk was only ever compositing it into
+someone's video, which is now unreachable.
+
+**Link:** `index.html`, `src/main.ts`, doc-deltas SPEC §9.1 (already open), VH-23.
+
 ## 2026-08-25 — VH-36: one flag, and buttons that outlive the render
 
 **Decision:** Build Start and Cancel once at module scope and never replace

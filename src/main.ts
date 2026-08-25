@@ -57,7 +57,6 @@ const processProgress = required<HTMLProgressElement>('#process-progress')
 const processResult = required<HTMLDivElement>('#process-result')
 const presetChoice = required<HTMLFieldSetElement>('#preset-choice')
 const brandingChoice = required<HTMLFieldSetElement>('#branding-choice')
-const brandingOpening = required<HTMLInputElement>('#branding-opening')
 const brandingClosing = required<HTMLInputElement>('#branding-closing')
 const brandingOptions = required<HTMLDetailsElement>('#branding-options')
 const subtitleField = required<HTMLDivElement>('#subtitle-field')
@@ -536,7 +535,10 @@ startButton.addEventListener('click', () => {
       file,
       presetId: chosenPreset(),
       branding: {
-        opening: brandingOpening.checked,
+        // Always false: VH-33 withdrew the control, and no approved opening
+        // asset exists to turn back on. The pipeline's opening path is intact
+        // and VH-23 restores the choice when there is something to choose.
+        opening: false,
         closing: brandingClosing.checked,
         style: chosenBranding('style', CLOSING_DEFAULTS.style),
         colour: chosenBranding('colour', CLOSING_DEFAULTS.colour),

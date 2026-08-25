@@ -179,3 +179,12 @@ The deployed site was also confirmed working on a University machine, so
   VH-32 inherits. Also fixed what made the lock invisible: `.button` set its own
   colours, so a disabled Start looked identical to a live one, and a disabled
   file input still drew a blue `::file-selector-button`.
+
+### VH-33 — the opening control withdrawn
+
+- VH-33 — Shipped 2026-08-25. The "Add the opening sequence" checkbox and its
+  "leave this off" helper text are gone from `index.html`; the job spec passes
+  `opening: false` and the pipeline's opening path is untouched for VH-23. The
+  placeholder assets stay on disk and keep shipping, which is harmless: they
+  render the words "PLACEHOLDER — opening — 1080p25" and carry no University
+  branding, so the risk was only ever putting one INTO a video.

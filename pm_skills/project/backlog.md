@@ -61,16 +61,6 @@
       the build degrades to `over-freeze` and says so rather than erroring, and
       an audio-longer-than-video fixture proves the build still composites.
 
-- [ ] **VH-33 Withdraw the opening control until real assets exist** (2026-08-25)
-      Intent: split from VH-23. The live site still shows "Add the opening
-      sequence" over a generated placeholder; only helper text stands between a
-      user and a stand-in UoN graphic in a real video. A public tool offering an
-      unapproved brand asset is a brand risk, not an unfinished feature, and it
-      should not queue behind engineering work.
-      Done when: the control is gone from the UI rather than merely defaulted
-      off, the pipeline's opening path is left intact for VH-23, and spec §4.1's
-      two-toggle model is recorded as diverged (the doc-delta already exists).
-
 - [ ] **VH-24 Stop conforming low frame rates upward** [detail](tickets/VH-24.md)
       (2026-08-25)
       Intent: `STANDARD_FRAME_RATES` holds the five values 24, 25, 30, 50 and

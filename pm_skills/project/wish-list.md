@@ -92,3 +92,11 @@
   header points at `02-technical-rationale.md` as where evidence lives (2,008
   words, room to spare). Moving it there would clear the 3,500-word reference
   guideline without losing a sentence. (from: 2026-08-25 spec copy-edit)
+- Two "A VideoSample was garbage collected without first being closed" warnings
+  land in the console on every inspect+preflight. Our own loops close every
+  sample (`probe.ts:76-84` uses try/finally), so this looks like Mediabunny
+  decoding ahead of the `samples(0, CALIBRATION_PROBE_SECONDS)` range and
+  dropping what it does not need. No user impact — `diagnostics.ts` hooks
+  `error` and `unhandledrejection`, not `console.error`, so it never reaches the
+  errors panel — but it is noise in every diagnostics bundle and it would mask a
+  real leak of ours. (from: 2026-08-25, seen while verifying VH-33)
