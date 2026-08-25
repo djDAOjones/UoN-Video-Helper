@@ -19,9 +19,9 @@
 <!-- Committed. What a staff member meets on the deployed site today that is
      wrong, misleading, or a risk. The order is load-bearing. VH-34..VH-33 are
      small, severe and independent — a false published claim, data loss, an
-     uncancellable job, a wrong boundary, a brand risk — so they lead. VH-24,
-     VH-41, VH-31 and VH-19 are then ONE visit to the output shape and what we
-     claim about it, not a queue; VH-43 proves odd sources survive it. VH-32 is
+     uncancellable job, a wrong boundary, a brand risk — so they lead. VH-47,
+     VH-31 and VH-19 are then ONE visit to the output shape and what we claim
+     about it, not a queue; VH-43 proves odd sources survive it. VH-32 is
      LAST because it must lay out what everything above it decides.
      VH-34..VH-40 came from an external code review, 2026-08-25; its findings
      were verified against the source before being written up. -->
@@ -60,6 +60,22 @@
       Done when: the boundary keys off the video duration, a source shorter than
       the build degrades to `over-freeze` and says so rather than erroring, and
       an audio-longer-than-video fixture proves the build still composites.
+
+- [ ] **VH-47 "Best quality" ignores the source bitrate**
+      [detail](tickets/VH-47.md) (2026-08-25)
+      Intent: VH-41 capped the smaller preset at the source and deliberately
+      exempted this one, for a sound reason — a second generation needs
+      headroom, because the source's own compression artefacts are detail the
+      next encoder must spend bits on. But §6.1's figure is `pixelRate x 0.12`,
+      which never looks at the source, so the headroom bears no relation to
+      what the source needs: the Teams recording is granted 4.0x its own
+      bitrate, a 20 Mbps camera master 0.37x. Inverted with respect to its
+      purpose, and a 60 MB recording becomes ~240 MB carrying no more detail.
+      Done when: the figure is a source-relative band — clamped between roughly
+      1.2x and 2.0x the measured source, with `pixelRate x 0.12` still the
+      fallback when the bitrate cannot be measured — and §6.1 carries a
+      doc-delta. First of the three: the estimate should be grounded against
+      the bitrate that will actually be requested.
 
 - [ ] **VH-31 The size estimate is ~3.6x too high** [detail](tickets/VH-31.md)
       (2026-08-25)
@@ -226,7 +242,7 @@
 ### Band 3 — New capability, or waiting on material
 
 <!-- Not committed, and none of it can start today: two wait on assets that
-     do not exist, one on a scoping pass. -->
+     do not exist, two on a scoping pass. -->
 
 - [ ] **VH-26 Mobile phone sources** [detail](tickets/VH-26.md) (2026-08-25)
       Intent: staff may upload phone footage and none is in the corpus. Rotation
@@ -260,6 +276,21 @@
       all key off the trim points too.
       Done when: scoped and signed off — this is a future feature, recorded
       rather than scheduled.
+
+- [ ] **VH-48 Stream-copy fast path for "best quality"**
+      [detail](tickets/VH-48.md) (2026-08-25) [sign-off]
+      Intent: promoted from icebox D10. Leave the source video untouched and
+      encode only the branding: the content region becomes generationally
+      lossless rather than merely good, and the job near-instant rather than
+      the 6.3x real time VH-M2 measured. Rationale §4.3 rejected it on two
+      grounds and only ONE has fallen — VH-24 measured the corpus as
+      effectively CFR, which was D10's stated revisit trigger, but byte-exact
+      codec parameter matching between copied source and encoded branding
+      still stands, with silent A/V drift after publication as its failure.
+      Done when: scoped and signed off. The deliverable is a `canStreamCopy`
+      predicate — already CFR, hard cut, no picture fade, parameters matched —
+      not a switch, because VH-25's fades and VH-44's overlay modes each remove
+      the conditions that make it safe.
 
 ### Standing — maintainer-owned, never band-gated
 
@@ -334,9 +365,6 @@
 - [ ] **D9 Pumping detection on pre-existing audio** — unreliable to
       measure; a false accusation is worse than silence. Revisit if staff
       report a gap the current warnings miss.
-- [ ] **D10 Stream-copy fast path for "best quality"** — near-instant and
-      generationally lossless, but degrades badly on VFR sources, which are
-      common here. Revisit when v1 is stable and there is CFR data.
 - [ ] **D11 WebM output** — supported by the muxer, not exposed. Revisit if
       a destination platform requires it. None currently does.
 - [ ] **D12 Custom or per-department branding** — needs a governance answer

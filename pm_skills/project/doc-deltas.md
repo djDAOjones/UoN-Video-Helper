@@ -33,3 +33,11 @@
       doc-sync; UI-copy twin already on the wish-list)
 - [ ] 2026-08-25 SPEC §4.1 — "the user's choice of boundary mode" describes a
       control withdrawn by VH-45; the modes remain in the pipeline, not the UI
+- [ ] 2026-08-25 SPEC §6.1 — the "best quality" bitrate is a fixed
+      ~0.12 bits/pixel/frame, which never looks at the source; VH-47 makes it
+      a source-relative band (source: VH-41 review)
+- [ ] 2026-08-25 RATIONALE §4.3 — stream copy is rejected partly because VFR
+      sources "are common here"; VH-24 measured the corpus as effectively CFR,
+      so half the rejection no longer holds (source: VH-48)
+- [ ] 2026-08-25 DECISIONS D10 — still listed as deferred with an unmet
+      revisit trigger; the trigger fired and it is now VH-48 (source: VH-48)
