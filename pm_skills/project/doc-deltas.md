@@ -37,9 +37,10 @@
 - [ ] 2026-08-25 SPEC §4.1 — two independent branding toggles (opening and
       closing) assumes opening assets exist; there are none, and the maintainer
       scopes MVP as closing-only, opening as a later feature (source: VH-23)
-- [ ] 2026-08-25 SPEC §4.4 — "the branding carries its own audio bed… passed
-      through unprocessed", and the −16 LUFS mastering rule that depends on it,
-      describe nothing: the delivered masters have no audio track (source: VH-12)
+- [ ] 2026-08-25 SPEC §4.4 — the branding audio bed does not exist and is not
+      wanted: maintainer confirms silent graphics are "more native" (2026-08-25).
+      Strike the bed and the −16 LUFS mastering rule that depends on it; this is
+      a decision to record, not a gap to fill (source: VH-12)
 - [ ] 2026-08-25 SPEC §4.2 — the four-variant master matrix (1080p/2160p ×
       25/30) does not exist; one 4K25 master is delivered, so branding must be
       scaled and frame-rate-converted per source (source: VH-12)
