@@ -33,3 +33,21 @@
 - [ ] 2026-08-24 SPEC §8.3.2 — "where present and preservable, re-embed" has no
       reachable branch for embedded tracks for the same reason; preservation
       applies only to a user-supplied sidecar (source: Phase A verification)
+- [ ] 2026-08-25 SPEC §4.1 — two independent branding toggles (opening and
+      closing) assumes opening assets exist; there are none, and the maintainer
+      scopes MVP as closing-only, opening as a later feature (source: VH-23)
+- [ ] 2026-08-25 SPEC §4.4 — "the branding carries its own audio bed… passed
+      through unprocessed", and the −16 LUFS mastering rule that depends on it,
+      describe nothing: the delivered masters have no audio track (source: VH-12)
+- [ ] 2026-08-25 SPEC §4.2 — the four-variant master matrix (1080p/2160p ×
+      25/30) does not exist; one 4K25 master is delivered, so branding must be
+      scaled and frame-rate-converted per source (source: VH-12)
+- [ ] 2026-08-25 SPEC §4 — no notion of a branding STYLE variant, but four are
+      delivered (Fade/Slide × Blue/White); needs a default and an owner
+      (source: VH-12)
+- [ ] 2026-08-25 SPEC §4.3 — branding is specified as concatenated segments;
+      the real assets open with a 1.00 s alpha ramp and are meant to be
+      composited, which is a different operation (source: VH-22)
+- [ ] 2026-08-25 SPEC §6.3 — the frame-rate rule reads the DECLARED rate;
+      four corpus files declare a rate that disagrees with their actual one by
+      ~1% (30/1 declared, 30.3028 actual) (source: VH-24)

@@ -93,3 +93,20 @@ Outcome: a static browser-only app that takes a recorded lecture and returns a
 branded, correctly-levelled, correctly-encoded MP4, with nothing leaving the
 device. Acceptance run: 5 pass, 0 fail, 4 need real material and a person.
 See decision-log 2026-08-25.
+
+## 2026-08-25 — Real material arrives
+
+The maintainer supplied the test corpus (VH-M1) and the branding masters. Both
+changed the picture rather than confirming it, so nothing was built this
+session; the findings were recorded and the affected tickets reopened.
+
+The corpus (26 files, 16 GB, 20 lecture sources) shows the awkward input is the
+common case: 30.303 fps screen recordings, declared frame rates that disagree
+with actual ones by ~1%, 16:10 geometry, mono and PCM audio, mixed sample
+rates, and two files with no audio at all. VH-24 carries the detail.
+
+The branding masters are `qtrle`/`argb` — a codec WebCodecs cannot decode —
+carry a 1.00 s alpha ramp meant for compositing rather than concatenation,
+have no audio bed, and ship as one 4K25 master in four styles rather than the
+four resolution variants the spec anticipated. VH-12 was reopened as a
+sign-off item; the boundary modes it implies are VH-22.

@@ -34,21 +34,13 @@
       `node_modules` — 598 cloud-only files in the first 3000 checked — so
       every read became a network fetch. `npm ci` rewrites them locally and
       fixes it in seconds, but nothing stops it recurring.
-      Status: syncing was PAUSED on 2026-08-25, which clears it for now. Pausing
-      is per-session and reverts on its own, so the item stays open.
+      Status: syncing was paused again on 2026-08-25, for an 8-hour window.
+      Pausing is time-boxed and reverts on its own, so the item stays open.
       Done when: this folder is excluded from OneDrive sync, or marked "Always
       keep on this device". `AGENTS.md` already declares cloud-synced paths
       unsupported for project memory; this is the same hazard reaching the
       build.
       Note: `.gitignore` has no effect here — OneDrive does not read it.
-
-- [ ] **VH-M1 Provide the real test corpus** [maintainer] (2026-08-24)
-      Intent: acceptance criteria 1, 5 and 6 need real material; synthesised
-      fixtures prove the mechanics but not the outcome.
-      Done when: representative recordings are in `samples/` (gitignored) —
-      webcam, PowerPoint screen recording with fine text, talking head,
-      mixed speech and music, a variable-frame-rate Teams recording, a 4:3
-      legacy recording, and one with badly inconsistent levels.
 
 - [ ] **VH-21 Keep the branding bed when the source has no audio**
       Intent: a screen recording made without a microphone has no audio track,
@@ -57,6 +49,9 @@
       is added silently — the bed is dropped with it.
       Done when: a silent source with branding produces an output carrying the
       branding bed, with silence across the content region.
+      Note (2026-08-25): the real closing masters have NO audio track at all,
+      so on current assets there is no bed to keep and this is cosmetic. It
+      becomes real again only if a future master carries audio. See VH-22.
 
 - [ ] **VH-20 Flush the audio chain's tail**
       Intent: the limiter delays by its 5 ms look-ahead, and the streaming path
@@ -90,19 +85,59 @@
       Done when: 5 / 20 / 60 minute jobs at 720p and 1080p are timed on a
       managed University laptop, a modern MacBook and a low-spec Windows
       device, and the numbers are recorded.
+      Note (2026-08-25): the delivered corpus tops out at 13.8 minutes, so the
+      20 and 60 minute cases still need material as well as a device.
+
+- [ ] **VH-22 Branding boundary modes** (2026-08-25)
+      Intent: the closing masters open with a 1.00 s alpha transition, so what
+      sits underneath that second is a real editorial choice, not a default.
+      Maintainer proposed three modes by name:
+      - "Clean cut" — skip the transition, start at t=1.00 s where the frame is
+        already fully opaque. Output = source + 4 s. Needs no compositing, and
+        is the only mode reachable without alpha support.
+      - "Transition" — composite the 1 s onset over the last second of source.
+        Output = source + 4 s, and the source loses nothing.
+      - "Transition with freeze frame" — hold the final source frame under the
+        onset. Output = source + 5 s, and no content is covered.
+      Done when: all three are implementable and named this way in the UI, with
+      a stated default. Blocked on VH-12's alpha decode for the latter two.
+
+- [ ] **VH-23 Opening graphics** (2026-08-25)
+      Intent: there are no opening assets and the maintainer's position is that
+      there should not be yet — brand-recognition-first openings suit external
+      video, while this tool is primarily internal, where a closing is the norm.
+      So the MVP is CLOSING-ONLY, which contradicts spec §4.1's two independent
+      toggles (recorded in doc-deltas).
+      Done when: opening assets exist. They will need the same three boundary
+      modes as VH-22, mirrored — the onset ramp runs the other way.
+
+- [ ] **VH-24 Survive real-world source properties**
+      [detail](tickets/VH-24.md) (2026-08-25)
+      Intent: the corpus shows awkward input is the common case, not the edge.
+      Six of 20 files run at 30.303 fps (1000/33 — a screen-recorder grid), and
+      on four of them the DECLARED rate disagrees with the actual by ~1%, which
+      is ~6 s of drift over a 10 minute lecture. Two files have no audio track,
+      one is mono, one carries PCM rather than AAC, sample rates are mixed, and
+      one is 3840×2400 — 16:10, not 16:9.
+      Done when: frame rate comes from measurement rather than the declared
+      header value; non-16:9 and sub-720p geometry survive without distortion;
+      mono, PCM and 44.1 kHz sources all reach a correct output; and each is
+      exercised by a named fixture in the harness.
 
 ### Next milestone
 
-- [ ] **VH-12 Real branding assets** [blocked: D1, D2] (2026-08-24)
-      Swap generated placeholders for the rendered After Effects masters
-      once the brand colour and durations are confirmed. Placeholders match
-      the §4.2 master format so this is a file swap, not a rebuild — see
-      `public/branding/README.md`.
-      Two things easy to miss: the bed must be MASTERED at −16 LUFS because it
-      bypasses the chain entirely (the placeholder closing sits at −15.61, and
-      that error would reach the viewer verbatim); and at the real ~20 Mbps the
-      eight masters are roughly 100 MB against the placeholders' 1.1 MB, which
-      is a repository question, not just an asset one.
+- [ ] **VH-12 Real branding assets** [sign-off]
+      [detail](tickets/VH-12.md) (2026-08-24, reopened 2026-08-25)
+      Intent: the masters arrived and they are not the file swap this item
+      assumed. They are `qtrle`/`argb` — a codec WebCodecs cannot decode — they
+      carry a 1.00 s alpha ramp meant for compositing rather than
+      concatenation, they have no audio bed (which spec §4.4 depends on), and
+      there is one 4K25 master in four styles rather than the §4.2 matrix of
+      four resolution variants. Style is a choice the spec does not model.
+      Done when: the build transcodes them to an alpha format the browsers
+      decode, the compositor handles alpha, branding scales and frame-rate-
+      converts to the source, and the style default has an owner.
+      Needs scope sign-off — materially more than the item it replaces.
 
 - [ ] **VH-13 Published limits copy** [blocked: VH-M2] (2026-08-24)
       Turn the measured envelope into the user-facing wording. Closes D8.

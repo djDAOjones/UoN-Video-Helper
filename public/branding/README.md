@@ -1,5 +1,13 @@
 # Branding assets
 
+> **Superseded in part, 2026-08-25.** The real masters now exist in `samples/`
+> and do NOT match the format described below. They are `qtrle`/`argb` `.mov`
+> files that WebCodecs cannot decode, they carry a 1.00 s alpha ramp intended
+> for compositing, they have no audio track, and there is one 4K25 master in
+> four styles rather than four resolution variants. Replacing the placeholders
+> is therefore a build-time transcode plus a compositor, not a file swap.
+> See backlog VH-12 before acting on anything in this file.
+
 **These are placeholders.** They exist so the pipeline can be built and tested
 before the approved UoN sequences are rendered, and so those renders drop in
 without any code change.
