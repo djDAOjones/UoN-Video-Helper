@@ -8,6 +8,9 @@
 
 import { ALL_FORMATS, CanvasSink, Input, UrlSource } from 'mediabunny'
 
+import { loadBrandingClip, loadClosingOnset } from '../media/branding'
+import { outputShapeFor, PRESETS } from '../config/presets'
+
 const log = document.getElementById('log') as HTMLPreElement
 const lines: string[] = []
 
@@ -81,5 +84,23 @@ for (const style of ['fade', 'slide'] as const) {
   }
 }
 await probe('tail blue (opaque, H.264)', '/branding/closing-tail-blue-2160p.mp4')
+
+// The checks above go straight to Mediabunny. This one drives the app's own
+// loader, which is the path that actually has to work — it must accept WebM
+// for the onsets as well as MP4 for the tails.
+say('\n=== through the app loader (src/media/branding.ts)')
+const shape = outputShapeFor(PRESETS.best, { width: 3840, height: 2160, frameRate: 25 })
+const onset = await loadClosingOnset(shape, { style: 'slide', colour: 'white' })
+say(
+  onset
+    ? `  loadClosingOnset  -> ${onset.durationSeconds.toFixed(3)}s  PASS`
+    : '  loadClosingOnset  -> null  FAIL (WebM not accepted?)',
+)
+const tail = await loadBrandingClip('closing', shape, { colour: 'white' })
+say(
+  tail
+    ? `  loadBrandingClip  -> ${tail.durationSeconds.toFixed(3)}s  PASS`
+    : '  loadBrandingClip  -> null  FAIL',
+)
 
 say('\ndone')

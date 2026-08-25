@@ -23,6 +23,7 @@ import {
   Input,
   Mp4InputFormat,
   VideoSample,
+  WebMInputFormat,
   VideoSampleSink,
   type AudioSample,
   type VideoSampleSource,
@@ -33,11 +34,13 @@ import {
   CLOSING_DEFAULTS,
   brandingAssetHeight,
   brandingAssetUrl,
+  closingOnsetName,
   closingTailName,
   openingAssetName,
   selectOpeningMaster,
   type BrandingColour,
   type BrandingSegment,
+  type BrandingStyle,
 } from '../config/branding'
 import { BOUNDARY_FADE_MS } from '../config/audio'
 import { log } from '../core/logger'
@@ -134,28 +137,23 @@ export interface BrandingClip {
  *   relative to a correctly levelled video: a missing asset warns and is
  *   skipped rather than failing the whole job.
  */
-export async function loadBrandingClip(
-  segment: BrandingSegment,
-  shape: OutputShape,
-  options: { readonly colour?: BrandingColour } = {},
-): Promise<BrandingClip | null> {
-  // Closing uses the real 2025 assets and loads the opaque TAIL only. That is
-  // exactly "clean cut"; the transparent onset the other two modes composite
-  // is VH-22 and is not wired yet, so mode is not a parameter here.
-  const url =
-    segment === 'closing'
-      ? brandingAssetUrl(
-          closingTailName(options.colour ?? CLOSING_DEFAULTS.colour, brandingAssetHeight(shape.height)),
-        )
-      : brandingAssetUrl(
-          openingAssetName(selectOpeningMaster({ height: shape.height, frameRate: shape.frameRate })),
-        )
-
+/**
+ * Fetches one branding asset.
+ *
+ * Both container formats are offered every time rather than chosen by file
+ * extension: the tails are MP4 and the onsets are WebM, and a URL is not a
+ * reliable statement about what is inside it.
+ *
+ * @returns `null` when the asset cannot be fetched. Branding is a nice-to-have
+ *   relative to a correctly levelled video, so a missing asset warns and is
+ *   skipped rather than failing the job.
+ */
+async function fetchClip(url: string, segment: BrandingSegment): Promise<BrandingClip | null> {
   try {
     const response = await fetch(url)
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
     const input = new Input({
-      formats: [new Mp4InputFormat()],
+      formats: [new Mp4InputFormat(), new WebMInputFormat()],
       source: new BlobSource(await response.blob()),
     })
     const track = await input.getPrimaryVideoTrack()
@@ -167,10 +165,55 @@ export async function loadBrandingClip(
   } catch (cause) {
     log.warn('branding', 'clip unavailable; continuing without it', {
       segment,
+      url,
       reason: cause instanceof Error ? cause.message : String(cause),
     })
     return null
   }
+}
+
+/**
+ * Loads the opaque part of a segment.
+ *
+ * For `closing` this is the real 4 s tail, which is the whole of "clean cut".
+ * For `opening` it is still a generated placeholder (VH-23).
+ */
+export async function loadBrandingClip(
+  segment: BrandingSegment,
+  shape: OutputShape,
+  options: { readonly colour?: BrandingColour } = {},
+): Promise<BrandingClip | null> {
+  const url =
+    segment === 'closing'
+      ? brandingAssetUrl(
+          closingTailName(options.colour ?? CLOSING_DEFAULTS.colour, brandingAssetHeight(shape.height)),
+        )
+      : brandingAssetUrl(
+          openingAssetName(selectOpeningMaster({ height: shape.height, frameRate: shape.frameRate })),
+        )
+  return fetchClip(url, segment)
+}
+
+/**
+ * Loads the 1 s transparent onset that the two transition modes composite.
+ *
+ * Kept separate from {@link loadBrandingClip} because it is optional in a way
+ * the tail is not: if this returns `null` the job can still fall back to
+ * "clean cut" and produce branding, which is why alpha decode failing in some
+ * browser is a degradation rather than an outage (VH-12).
+ */
+export async function loadClosingOnset(
+  shape: OutputShape,
+  options: { readonly style?: BrandingStyle; readonly colour?: BrandingColour } = {},
+): Promise<BrandingClip | null> {
+  const url = brandingAssetUrl(
+    closingOnsetName(
+      options.style ?? CLOSING_DEFAULTS.style,
+      options.colour ?? CLOSING_DEFAULTS.colour,
+      brandingAssetHeight(shape.height),
+    ),
+  )
+  return fetchClip(url, 'closing')
 }
 
 /** Nominal duration for a segment, used before the asset is loaded. */
