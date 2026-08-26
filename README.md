@@ -125,3 +125,14 @@ Full rules: [`AGENTS.md`](AGENTS.md), [`UI-STANDARDS.md`](UI-STANDARDS.md),
 This repository uses the [PM Skills](https://github.com/djDAOjones/PM-Skills-lab)
 framework (v4.9.2) in [`pm_skills/`](pm_skills/) for AI-assisted
 development. Project memory is in [`pm_skills/project/`](pm_skills/project/).
+
+## AI project context
+
+- Codex loads [`AGENTS.md`](AGENTS.md) automatically. It contains the shared
+  standing instructions and the tiered rules for loading project memory.
+- Claude Desktop Code loads [`CLAUDE.md`](CLAUDE.md), a small adapter that
+  imports the same `AGENTS.md` rather than maintaining a duplicate.
+- Durable project knowledge belongs in the version-controlled files named by
+  `AGENTS.md`. Tool-maintained memories are local recall aids, not the shared
+  project record. Personal Claude instructions belong in the ignored
+  `CLAUDE.local.md`.

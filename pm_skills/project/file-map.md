@@ -15,8 +15,8 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 142 file(s) across 8 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
-- `(root)` — 19 file(s)
+<!-- 143 file(s) across 8 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+- `(root)` — 20 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
 - `docs` — 5 file(s)
@@ -29,6 +29,7 @@
 ## (root)
 
 - `AGENTS.md` — Permanent behavioural contract for agents: invariants, data model, subsystems, protected paths.
+- `CLAUDE.md` — Claude Desktop Code adapter: imports the canonical shared `AGENTS.md` and adds only tool-specific memory boundaries.
 - `DEV-INFRASTRUCTURE.md` — Build, dev server, runtime lifecycle, diagnostics, quality gate, versioning, security.
 - `README.md` — Entry point for a human: what this is, how to run it, the invariants, the gotchas.
 - `UI-STANDARDS.md` — UI, usability and accessibility rules. Two token systems; the AAA design-review gate.

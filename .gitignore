@@ -12,6 +12,10 @@ build/
 .vscode/
 .idea/
 
+# Tool-local AI preferences
+/CLAUDE.local.md
+/.claude/settings.local.json
+
 # Local env
 .env
 .env.local

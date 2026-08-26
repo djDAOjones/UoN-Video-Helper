@@ -11,6 +11,25 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-26 — VH-53: one shared contract, two native entry points
+
+**Decision:** keep `AGENTS.md` as the canonical shared behavioural contract and
+add a short `CLAUDE.md` that imports it. Claude-specific text is limited to the
+memory boundary: automatic memory is local recall, while durable facts and task
+close-out stay in the repository locations assigned by `AGENTS.md`.
+
+**Rationale:** Codex discovers `AGENTS.md` natively, while Claude Desktop Code
+discovers `CLAUDE.md` and supports repository-relative imports. The adapter
+therefore gives both tools the same mature invariants and tiered PM Skills read
+policy without a second hand-maintained summary. A symlink was rejected because
+it leaves no tool-specific layer and is less portable across Windows and synced
+filesystems; an independent summary was rejected because it would drift.
+
+**Unchanged:** `AGENTS.md`, application behaviour, the specification set, and
+both tools' machine-local generated memory stores.
+
+**Link:** `CLAUDE.md`, `README.md` → "AI project context".
+
 ## 2026-08-26 — VH-31: measured, designed, and deliberately not built
 
 **Decision:** run the design workflow, record everything it measured on the

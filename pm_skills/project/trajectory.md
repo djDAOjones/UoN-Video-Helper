@@ -21,6 +21,12 @@
 
 ## Archived: real material and Band 1's first half — see archive/trajectory/trajectory-0002-real-material-and-band-1.md
 
+### VH-53 — one project contract for both coding agents
+
+- VH-53 — Shipped 2026-08-26. Claude Desktop Code now imports the same root
+  `AGENTS.md` that Codex loads; tool-managed memories remain local recall aids,
+  not the shared project record. See decision-log.
+
 ### VH-42 — branding boundaries measured against the picture
 
 - VH-42 — Shipped 2026-08-26. `PipelineOptions.durationSeconds` was
