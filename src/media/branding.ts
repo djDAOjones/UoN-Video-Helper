@@ -38,6 +38,7 @@ import {
 import {
   BRANDING_DURATIONS,
   CLOSING_DEFAULTS,
+  PICTURE_FADE_SECONDS,
   brandingAssetHeight,
   brandingAssetUrl,
   closingOnsetName,
@@ -89,6 +90,71 @@ export class BrandingRenderer {
     this.context.fillRect(0, 0, this.shape.width, this.shape.height)
     sample.draw(this.context, fit.x, fit.y, fit.width, fit.height)
 
+    return new VideoSample(this.canvas, {
+      timestamp: timestampSeconds,
+      duration: durationSeconds,
+    })
+  }
+}
+
+/**
+ * Returns source-picture opacity at one point on its own timeline.
+ *
+ * When both fades overlap on a very short source, each is shortened to half
+ * the source so the middle frame can still reach full opacity.
+ */
+export function pictureFadeOpacityAt(
+  timeSeconds: number,
+  durationSeconds: number,
+  fades: { readonly fadeIn: boolean; readonly fadeOut: boolean },
+): number {
+  if (durationSeconds <= 0) return 0
+  const edgeCount = Number(fades.fadeIn) + Number(fades.fadeOut)
+  const fadeSeconds = Math.min(
+    PICTURE_FADE_SECONDS,
+    edgeCount === 2 ? durationSeconds / 2 : durationSeconds,
+  )
+  if (fadeSeconds <= 0) return 1
+
+  const time = Math.max(0, Math.min(durationSeconds, timeSeconds))
+  let opacity = 1
+  if (fades.fadeIn) opacity = Math.min(opacity, time / fadeSeconds)
+  if (fades.fadeOut) opacity = Math.min(opacity, (durationSeconds - time) / fadeSeconds)
+  return Math.max(0, Math.min(1, opacity))
+}
+
+/** Renders the source picture over the configured transition colour. */
+export class PictureFadeRenderer {
+  private readonly canvas: OffscreenCanvas
+  private readonly context: OffscreenCanvasRenderingContext2D
+
+  constructor(
+    private readonly shape: OutputShape,
+    private readonly backgroundColour: string,
+  ) {
+    this.canvas = new OffscreenCanvas(shape.width, shape.height)
+    const context = this.canvas.getContext('2d', { alpha: false })
+    if (!context) throw new Error('Could not create a 2D context for picture fades')
+    this.context = context
+  }
+
+  /** @returns A sample the caller owns and must close. */
+  render(
+    sample: VideoSample,
+    opacity: number,
+    timestampSeconds: number,
+    durationSeconds: number,
+  ): VideoSample {
+    const fit = fitRectangle(
+      { width: sample.displayWidth, height: sample.displayHeight },
+      this.shape,
+    )
+    this.context.globalAlpha = 1
+    this.context.fillStyle = this.backgroundColour
+    this.context.fillRect(0, 0, this.shape.width, this.shape.height)
+    this.context.globalAlpha = opacity
+    sample.draw(this.context, fit.x, fit.y, fit.width, fit.height)
+    this.context.globalAlpha = 1
     return new VideoSample(this.canvas, {
       timestamp: timestampSeconds,
       duration: durationSeconds,

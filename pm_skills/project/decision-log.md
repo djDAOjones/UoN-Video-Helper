@@ -11,6 +11,35 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-26 — VH-25: soften the picture boundary, preserve the prompt boundary
+
+**Decision:** source picture fades last 0.5 seconds over the existing UoN brand
+background. Fade-out defaults on only for `hard-cut`; it defaults off for the
+two modes whose animated build already is the transition. Fade-in remains an
+explicit opt-in. The source's existing 100 ms audio fade-out follows the same
+closing choice rather than every closing indiscriminately.
+
+**Rationale:** 21 of 21 corpus sources end bright, so the hard visual cut is
+universal enough to fix silently. Half a second is at least eight frames at the
+corpus floor of 16 fps, while reusing the click-prevention audio length would
+often be one or two frames and still read as a cut. One choice controlling both
+picture and audio keeps the conveyor model intact without inventing a technical
+audio control.
+
+**Boundary:** the rare abrupt audio starts remain open. Detection is
+mechanical, but this app has no agreed modal pattern and VH-32 owns its interface
+redesign. Shipping a generic warning now would decide presentation by accident
+and make the later redesign unwind it.
+
+**Verified:** pure timing tests cover each edge and overlapping fades on a
+short source. The real WebCodecs harness measured the final picture at mean
+luminance 1.1 with the default fade versus 25.8 when explicitly disabled, and
+proved all three closing timelines, including explicitly faded overlays and a
+freeze that retains its faded state.
+
+**Link:** `src/config/branding.ts`, `src/media/branding.ts`,
+`src/media/pipeline.ts`, `tickets/VH-25.md`.
+
 ## 2026-08-26 — VH-53: storage and egress evidence stay fail-closed
 
 **Decision:** put Mediabunny's fallback `StreamTarget` over a project-owned

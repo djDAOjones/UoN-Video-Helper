@@ -9,7 +9,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { BOUNDARY_FADE_MS } from '../config/audio'
-import { applyBoundaryFade } from './branding'
+import { applyBoundaryFade, pictureFadeOpacityAt } from './branding'
 
 const SAMPLE_RATE = 48000
 const FADE = BOUNDARY_FADE_MS / 1000
@@ -88,5 +88,27 @@ describe('applyBoundaryFade', () => {
       fadeIn: true, fadeOut: true,
     })
     expect(Math.max(...channels[0]!)).toBeLessThanOrEqual(1)
+  })
+})
+
+describe('pictureFadeOpacityAt', () => {
+  it('fades in and out only at the requested picture boundaries', () => {
+    expect(pictureFadeOpacityAt(0, 10, { fadeIn: true, fadeOut: false })).toBe(0)
+    expect(pictureFadeOpacityAt(0.25, 10, { fadeIn: true, fadeOut: false })).toBeCloseTo(0.5)
+    expect(pictureFadeOpacityAt(5, 10, { fadeIn: true, fadeOut: true })).toBe(1)
+    expect(pictureFadeOpacityAt(9.75, 10, { fadeIn: false, fadeOut: true })).toBeCloseTo(0.5)
+    expect(pictureFadeOpacityAt(10, 10, { fadeIn: false, fadeOut: true })).toBe(0)
+  })
+
+  it('leaves the whole source opaque when both choices are off', () => {
+    for (const time of [0, 5, 10]) {
+      expect(pictureFadeOpacityAt(time, 10, { fadeIn: false, fadeOut: false })).toBe(1)
+    }
+  })
+
+  it('shortens overlapping fades so a very short source still reaches full opacity', () => {
+    expect(pictureFadeOpacityAt(0, 0.4, { fadeIn: true, fadeOut: true })).toBe(0)
+    expect(pictureFadeOpacityAt(0.2, 0.4, { fadeIn: true, fadeOut: true })).toBe(1)
+    expect(pictureFadeOpacityAt(0.4, 0.4, { fadeIn: true, fadeOut: true })).toBe(0)
   })
 })

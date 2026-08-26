@@ -69,13 +69,17 @@
           <p class="helper" id="subtitle-status"></p>
         </div>
         <fieldset class="choice" id="branding-choice" hidden>
-          <legend class="label">Branding</legend>
+          <legend class="label">Finishing touches</legend>
           <!-- VH-33: the opening toggle was withdrawn on 2026-08-25. No approved
                opening asset exists — only a generated stand-in — and helper text
                saying "leave this off" is not what stands between a user and an
                unapproved University graphic in a published video. The pipeline
                keeps its opening path intact for VH-23; only the control is gone,
                and spec §4.1's two-toggle model is a recorded doc-delta. -->
+          <label class="radio">
+            <input type="checkbox" id="picture-fade-in" />
+            <span>Fade the picture in at the start</span>
+          </label>
           <label class="radio">
             <input type="checkbox" id="branding-closing" checked />
             <span>Add the closing sequence</span>
@@ -90,6 +94,10 @@
                  with them: Fade and Slide differ only during the build a hard
                  cut discards, so the choice would change nothing. The pipeline
                  keeps all three modes; only the controls are gone. -->
+            <label class="radio">
+              <input type="checkbox" id="picture-fade-out" checked />
+              <span>Fade the picture into the closing sequence</span>
+            </label>
             <fieldset class="choice">
               <legend class="label">Colour</legend>
               <label class="radio">

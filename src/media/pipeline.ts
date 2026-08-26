@@ -28,6 +28,7 @@ import {
   CLOSING_DEFAULTS,
   CLOSING_ONSET_SECONDS,
   modeNeedsOnset,
+  pictureFadeOutByDefault,
   type BrandingChoice,
   type BrandingColour,
   type BrandingMode,
@@ -36,11 +37,13 @@ import type { OutputShape, Preset } from '../config/presets'
 import { createContentAudioProcessor, planAudio } from './audio-plan'
 import {
   BrandingRenderer,
+  PictureFadeRenderer,
   closingTimeline,
   feedBrandingAudio,
   feedBrandingVideo,
   loadBrandingClip,
   loadClosingOnset,
+  pictureFadeOpacityAt,
   type BrandingClip,
 } from './branding'
 import { BrandingCompositor } from './composite'
@@ -381,6 +384,9 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     closingOffsetSeconds: closingOffset,
   } = timeline
   const audioEndsAt = timeline.audioEndsAtSeconds
+  const pictureFadeIn = branding.pictureFadeIn ?? false
+  const pictureFadeOut =
+    closing !== null && (branding.pictureFadeOut ?? pictureFadeOutByDefault(mode))
 
   if (timeline.downgradedForShortSource) {
     log.warn('branding', 'source is shorter than the build; holding a freeze frame instead', {
@@ -452,6 +458,10 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
   let framesFed = 0
 
   const renderer = new BrandingRenderer(shape, options.backgroundColour)
+  const pictureFader =
+    pictureFadeIn || pictureFadeOut
+      ? new PictureFadeRenderer(shape, options.backgroundColour)
+      : null
 
   // One failing lane must stop the other (VH-37). Both push into the same
   // `Output`, so a lane that keeps feeding one that is already cancelling
@@ -518,6 +528,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     // keeps delayed audio or video delayed while mapping a negative container
     // origin into the encoder's non-negative domain.
     let lastTrackTimestamp = 0
+    let lastPictureOpacity = 1
     for await (const sample of sink.samples()) {
       try {
         throwIfAborted(laneSignal)
@@ -527,33 +538,52 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
         const sourceTime = mapSourceTimestamp(sourceTimeline, original)
         const timestamp = presentationDelaySeconds + contentOffset + sourceTime
         const buildTime = sourceTime - overlayFrom
+        const opacity = pictureFadeOpacityAt(
+          sourceTime + sample.duration / 2,
+          videoDurationSeconds,
+          { fadeIn: pictureFadeIn, fadeOut: pictureFadeOut },
+        )
+        lastPictureOpacity = opacity
+        const faded =
+          opacity < 1 && pictureFader
+            ? pictureFader.render(sample, opacity, timestamp, sample.duration)
+            : null
+        const picture = faded ?? sample
 
-        if (mode === 'over-picture' && canComposite && buildTime >= 0) {
-          // Paired by TIMESTAMP, never by frame order. The build runs at
-          // 25 fps and the source at whatever it was recorded at — 16 fps on
-          // a Teams capture — so counting frames would drift them apart.
-          const brand = await buildSink.getSample(buildTime)
-          if (brand) {
-            try {
-              const composed = await compositor.compose(sample, brand, buildFit, {
-                timestamp,
-                duration: sample.duration,
-              })
+        try {
+          if (mode === 'over-picture' && canComposite && buildTime >= 0) {
+            // Paired by TIMESTAMP, never by frame order. The build runs at
+            // 25 fps and the source at whatever it was recorded at — 16 fps on
+            // a Teams capture — so counting frames would drift them apart.
+            const brand = await buildSink.getSample(buildTime)
+            if (brand) {
               try {
-                await videoSource.add(composed)
+                const composed = await compositor.compose(picture, brand, buildFit, {
+                  timestamp,
+                  duration: sample.duration,
+                })
+                try {
+                  await videoSource.add(composed)
+                } finally {
+                  composed.close()
+                }
               } finally {
-                composed.close()
+                brand.close()
               }
-            } finally {
-              brand.close()
+            } else if (faded) {
+              await videoSource.add(faded)
+            } else {
+              sample.setTimestamp(timestamp)
+              await videoSource.add(sample)
             }
+          } else if (faded) {
+            await videoSource.add(faded)
           } else {
             sample.setTimestamp(timestamp)
             await videoSource.add(sample)
           }
-        } else {
-          sample.setTimestamp(timestamp)
-          await videoSource.add(sample)
+        } finally {
+          faded?.close()
         }
       } finally {
         sample.close()
@@ -569,6 +599,11 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     if (mode === 'over-freeze' && canComposite) {
       const frozen = await findFreezeFrame(sink, lastTrackTimestamp, shape.frameRate)
       if (frozen) {
+        const fadedFreeze =
+          lastPictureOpacity < 1 && pictureFader
+            ? pictureFader.render(frozen, lastPictureOpacity, 0, frozen.duration)
+            : null
+        const frozenPicture = fadedFreeze ?? frozen
         try {
           const step = 1 / shape.frameRate
           const held = Math.round(CLOSING_ONSET_SECONDS * shape.frameRate)
@@ -577,7 +612,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
             const brand = await buildSink.getSample(index * step)
             if (!brand) continue
             try {
-              const composed = await compositor.compose(frozen, brand, buildFit, {
+              const composed = await compositor.compose(frozenPicture, brand, buildFit, {
                 timestamp:
                   presentationDelaySeconds + contentOffset + videoDurationSeconds + index * step,
                 duration: step,
@@ -593,6 +628,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
             framesFed++
           }
         } finally {
+          fadedFreeze?.close()
           frozen.close()
         }
       }
@@ -634,7 +670,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       // than where the picture did.
       durationSeconds: audioEndsAt,
       fadeIn: opening !== null,
-      fadeOut: closing !== null,
+      fadeOut: pictureFadeOut,
       checkCancelled: () => throwIfAborted(laneSignal),
     })
     const sink = new AudioSampleSink(audioTrack)
@@ -701,6 +737,8 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       subtitleCues,
       brandingRequested: `${branding.opening}/${branding.closing}`,
       brandingApplied: `${opening !== null}/${closing !== null}`,
+      pictureFadeIn,
+      pictureFadeOut,
     })
     return {
       file,

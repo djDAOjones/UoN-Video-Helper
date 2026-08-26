@@ -9,6 +9,8 @@
  * Dev-only; not part of the production build.
  */
 
+import { ALL_FORMATS, BlobSource, Input, VideoSampleSink } from 'mediabunny'
+
 import { PRESETS, outputShapeFor } from '../config/presets'
 import { CLOSING_TAIL_SECONDS, type BrandingMode } from '../config/branding'
 import { buildFixture } from '../acceptance/fixtures'
@@ -25,6 +27,30 @@ function say(text: string): void {
 
 const SOURCE_SECONDS = 4
 
+/** Mean frame luminance through a tiny readback; enough to prove the fade reached the output. */
+async function meanLuminanceAt(file: Blob, seconds: number): Promise<number> {
+  const input = new Input({ formats: ALL_FORMATS, source: new BlobSource(file) })
+  const track = await input.getPrimaryVideoTrack()
+  if (!track) throw new Error('Fade measurement needs a picture track')
+  const sample = await new VideoSampleSink(track).getSample(seconds)
+  if (!sample) throw new Error(`No picture sample at ${seconds.toFixed(3)} s`)
+  try {
+    const size = 16
+    const canvas = new OffscreenCanvas(size, size)
+    const context = canvas.getContext('2d', { alpha: false })
+    if (!context) throw new Error('Could not create fade measurement canvas')
+    sample.draw(context, 0, 0, size, size)
+    const { data } = context.getImageData(0, 0, size, size)
+    let sum = 0
+    for (let index = 0; index < data.length; index += 4) {
+      sum += 0.2126 * data[index]! + 0.7152 * data[index + 1]! + 0.0722 * data[index + 2]!
+    }
+    return sum / (data.length / 4)
+  } finally {
+    sample.close()
+  }
+}
+
 async function run(
   mode: BrandingMode,
   expected: number,
@@ -32,6 +58,8 @@ async function run(
     readonly label?: string
     readonly seconds?: number
     readonly audioSeconds?: number
+    readonly pictureFadeOut?: boolean
+    readonly expectFadeOut?: boolean
     /** Absolute output length to check, when the added-seconds delta is not the point. */
     readonly expectedOutputSeconds?: number
   } = {},
@@ -62,7 +90,14 @@ async function run(
       preset,
       sourceTimeline: report.timeline,
       workspace,
-      branding: { opening: false, closing: true, mode },
+      branding: {
+        opening: false,
+        closing: true,
+        mode,
+        ...(variant.pictureFadeOut === undefined
+          ? {}
+          : { pictureFadeOut: variant.pictureFadeOut }),
+      },
       backgroundColour: '#000000',
     })
 
@@ -80,6 +115,19 @@ async function run(
         `(wanted ${wanted.toFixed(2)}s)  ` +
         (ok ? 'PASS' : 'FAIL'),
     )
+    if (variant.expectFadeOut !== undefined) {
+      const sourceAt = Math.max(0, report.video.durationSeconds - 1 / shape.frameRate)
+      const outputAt = result.contentOffsetSeconds + sourceAt
+      const [sourceLuma, outputLuma] = await Promise.all([
+        meanLuminanceAt(fixture, sourceAt),
+        meanLuminanceAt(result.file, outputAt),
+      ])
+      const faded = outputLuma < sourceLuma * 0.3
+      say(
+        `    picture end source ${sourceLuma.toFixed(1)} -> output ${outputLuma.toFixed(1)}  ` +
+          (faded === variant.expectFadeOut ? 'PASS' : 'FAIL'),
+      )
+    }
   } catch (error) {
     say(`  ${name.padEnd(13)} ERROR — ${error instanceof Error ? error.message : String(error)}`)
   } finally {
@@ -88,9 +136,22 @@ async function run(
 }
 
 say('mode           result')
-await run('hard-cut', CLOSING_TAIL_SECONDS)
+await run('hard-cut', CLOSING_TAIL_SECONDS, { expectFadeOut: true })
+await run('hard-cut', CLOSING_TAIL_SECONDS, {
+  label: 'hard cut raw',
+  pictureFadeOut: false,
+  expectFadeOut: false,
+})
 await run('over-picture', CLOSING_TAIL_SECONDS)
 await run('over-freeze', CLOSING_TAIL_SECONDS + 1)
+await run('over-picture', CLOSING_TAIL_SECONDS, {
+  label: 'overlay fade',
+  pictureFadeOut: true,
+})
+await run('over-freeze', CLOSING_TAIL_SECONDS + 1, {
+  label: 'freeze fade',
+  pictureFadeOut: true,
+})
 
 // VH-42. Neither shape exists in the corpus, so both are synthesised. The
 // arithmetic is unit-tested in `branding-timeline.test.ts`; these prove the

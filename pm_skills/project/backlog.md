@@ -75,7 +75,7 @@
       VH-31 because it rides the same probe machinery; if VH-31 lands real
       measurement, this may reduce to naming the class rather than choosing on it.
 
-- [ ] **VH-25 Boundary fades** [detail](tickets/VH-25.md) (2026-08-25)
+- [~] **VH-25 Boundary fades** [detail](tickets/VH-25.md) (2026-08-25)
       Intent: sources cut hard into the branding, and the two ends differ.
       21 of 21 end on a bright frame so the picture always needs a fade-out,
       but 0 of 19 end above −69 dBFS so the audio has already stopped. Four
@@ -88,6 +88,11 @@
       audio-starts-mid-speech case. A notice that fires every time is not a
       notice. Lengths live in `src/config/`; D3's 100 ms fade is reconciled
       with them.
+      Picture handling shipped on the experimental branch 2026-08-26: a
+      configurable 0.5 s fade, the mode-dependent closing default, the
+      opt-in opening fade and coupled source-audio fade-out are browser-proved.
+      Remaining: detect the rare abrupt audio starts and agree their prompt
+      with VH-32 rather than introduce a one-off modal pattern.
 
 - [ ] **VH-32 Interface quality pass** [sign-off] [detail](tickets/VH-32.md) (2026-08-25)
       Intent: maintainer request after using the deployed app — a deliberate

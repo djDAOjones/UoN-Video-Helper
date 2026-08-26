@@ -5,6 +5,7 @@ import {
   CLOSING_DEFAULTS,
   CLOSING_ONSET_SECONDS,
   CLOSING_TAIL_SECONDS,
+  PICTURE_FADE_SECONDS,
   brandingAssetHeight,
   brandingAssetUrl,
   closingAddedSeconds,
@@ -12,6 +13,7 @@ import {
   closingTailName,
   modeNeedsOnset,
   openingAssetName,
+  pictureFadeOutByDefault,
   selectOpeningMaster,
   type BrandingColour,
   type BrandingStyle,
@@ -105,6 +107,16 @@ describe('defaults', () => {
   it('defaults to the mode that needs no alpha, so the default path always works', () => {
     expect(CLOSING_DEFAULTS.mode).toBe('hard-cut')
     expect(modeNeedsOnset(CLOSING_DEFAULTS.mode)).toBe(false)
+  })
+
+  it('softens hard cut only, because overlay builds already are transitions', () => {
+    expect(pictureFadeOutByDefault('hard-cut')).toBe(true)
+    expect(pictureFadeOutByDefault('over-picture')).toBe(false)
+    expect(pictureFadeOutByDefault('over-freeze')).toBe(false)
+  })
+
+  it('keeps the picture fade distinct from the 100 ms audio click prevention', () => {
+    expect(PICTURE_FADE_SECONDS).toBe(0.5)
   })
 })
 

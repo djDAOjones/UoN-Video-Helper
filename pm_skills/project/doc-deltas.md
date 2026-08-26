@@ -57,3 +57,6 @@
 - [ ] 2026-08-26 DECISIONS D3 — branding-boundary audio choices remain open
       even though SPEC §4.4 now records the delivered branding as silent
       (source: protected-doc sync review)
+- [ ] 2026-08-26 SPEC §4.4 — picture fades are no longer wholly unspecified:
+      VH-25 fixes a 0.5 s source fade and mode-dependent closing default
+      (source: VH-25 decision entry)

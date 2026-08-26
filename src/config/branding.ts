@@ -51,6 +51,13 @@ export const CLOSING_ONSET_SECONDS = 1
 export const CLOSING_TAIL_SECONDS = 4
 
 /**
+ * Picture fades need enough frames to read as a transition rather than a cut.
+ * Half a second is eight frames even at the corpus floor of 16 fps; the
+ * separate 100 ms audio fade exists only to prevent boundary clicks.
+ */
+export const PICTURE_FADE_SECONDS = 0.5
+
+/**
  * Defaults, all the maintainer's choice (2026-08-25).
  *
  * `hard-cut` is the default because it is the least for a user to think about;
@@ -74,6 +81,15 @@ export interface BrandingChoice {
   readonly style?: BrandingStyle
   readonly colour?: BrandingColour
   readonly mode?: BrandingMode
+  /** Editorial choice at the start of the source; off unless explicitly chosen. */
+  readonly pictureFadeIn?: boolean
+  /** Defaults on for hard cut and off for the two modes whose build is the transition. */
+  readonly pictureFadeOut?: boolean
+}
+
+/** A hard cut needs softening; the two overlay builds already are transitions. */
+export function pictureFadeOutByDefault(mode: BrandingMode): boolean {
+  return mode === 'hard-cut'
 }
 
 /** Seconds a closing adds to the output, which is mode-dependent. */

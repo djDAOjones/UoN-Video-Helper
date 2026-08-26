@@ -26,7 +26,7 @@ import {
   type SelectionAttempt,
 } from './core/selection-authority'
 import { APP_VERSION, BUILD_ID } from './core/version'
-import { CLOSING_DEFAULTS } from './config/branding'
+import { CLOSING_DEFAULTS, pictureFadeOutByDefault } from './config/branding'
 import type { PresetId } from './config/presets'
 import { WORKER_SILENCE_LIMIT_MS } from './config/thresholds'
 import { createWatchdog } from './core/watchdog'
@@ -81,6 +81,8 @@ const presetChoice = required<HTMLFieldSetElement>('#preset-choice')
 const brandingChoice = required<HTMLFieldSetElement>('#branding-choice')
 const brandingClosing = required<HTMLInputElement>('#branding-closing')
 const brandingOptions = required<HTMLDetailsElement>('#branding-options')
+const pictureFadeIn = required<HTMLInputElement>('#picture-fade-in')
+const pictureFadeOut = required<HTMLInputElement>('#picture-fade-out')
 const subtitleField = required<HTMLDivElement>('#subtitle-field')
 const subtitleInput = required<HTMLInputElement>('#subtitle-input')
 const subtitleStatus = required<HTMLParagraphElement>('#subtitle-status')
@@ -214,12 +216,22 @@ const BRANDING_VALUES = {
  * hidden the animation choice could not change anything. {@link
  * chosenBranding} falls back to {@link CLOSING_DEFAULTS} for both.
  */
+let pictureFadeOutChanged = false
+
 function syncBrandingOptions(): void {
   const wantsClosing = brandingClosing.checked
   brandingOptions.hidden = !wantsClosing
   if (!wantsClosing) brandingOptions.open = false
+  if (!pictureFadeOutChanged) {
+    pictureFadeOut.checked = pictureFadeOutByDefault(
+      chosenBranding('mode', CLOSING_DEFAULTS.mode),
+    )
+  }
 }
 
+pictureFadeOut.addEventListener('change', () => {
+  pictureFadeOutChanged = true
+})
 brandingChoice.addEventListener('change', syncBrandingOptions)
 syncBrandingOptions()
 
@@ -930,6 +942,8 @@ startButton.addEventListener('click', () => {
     style: chosenBranding('style', CLOSING_DEFAULTS.style),
     colour: chosenBranding('colour', CLOSING_DEFAULTS.colour),
     mode: chosenBranding('mode', CLOSING_DEFAULTS.mode),
+    pictureFadeIn: pictureFadeIn.checked,
+    pictureFadeOut: pictureFadeOut.checked,
   })
 
   setDiagnosticsContext({
