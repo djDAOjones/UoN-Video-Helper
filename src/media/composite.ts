@@ -89,6 +89,94 @@ export function compositePremultiplied(source: Uint8ClampedArray, brand: Uint8Cl
 }
 
 /**
+ * Whether this engine will actually return RGBA when asked for RGBA.
+ *
+ * `VideoFrameCopyToOptions.format` is a request, and Safari 26.5 ignores it:
+ * it returns the frame's native planar data and reports an `allocationSize`
+ * to match, so a caller that trusts the format reads luma as if it were red.
+ * That is invisible on grey and catastrophic on colour — the blue onset came
+ * back as its own bytes reversed.
+ *
+ * Asking about the SIZE rather than the pixels is what keeps this honest: an
+ * engine that means RGBA needs exactly four bytes per pixel, and no expected
+ * colour constants are involved, so re-rendering the branding masters cannot
+ * quietly invalidate the check (VH-44).
+ */
+export function honoursRgbaReadback(sample: VideoSample): boolean {
+  try {
+    return (
+      sample.allocationSize({ format: 'RGBA' }) === sample.codedWidth * sample.codedHeight * 4
+    )
+  } catch {
+    // An engine that will not even size the request is one to route around.
+    return false
+  }
+}
+
+/**
+ * Composites a premultiplied branding buffer over an opaque source frame,
+ * scaling the branding into `fit` as it goes.
+ *
+ * Bilinear, and correct to do so: interpolating PREMULTIPLIED colour is the
+ * well-defined operation — it is straight alpha that needs weighting by its
+ * own alpha before it can be averaged. So the same buffer the decoder gave us
+ * is the one that scales properly.
+ *
+ * @param source - RGBA of the picture underneath, modified in place.
+ * @param brand - Premultiplied RGBA of the branding, at its own resolution.
+ */
+export function compositeSampled(
+  source: Uint8ClampedArray,
+  brand: Uint8Array,
+  brandSize: { readonly width: number; readonly height: number },
+  fit: { readonly x: number; readonly y: number; readonly width: number; readonly height: number },
+  output: { readonly width: number; readonly height: number },
+): void {
+  const xScale = brandSize.width / fit.width
+  const yScale = brandSize.height / fit.height
+  const left = Math.max(0, Math.floor(fit.x))
+  const top = Math.max(0, Math.floor(fit.y))
+  const right = Math.min(output.width, Math.ceil(fit.x + fit.width))
+  const bottom = Math.min(output.height, Math.ceil(fit.y + fit.height))
+
+  for (let y = top; y < bottom; y++) {
+    // Sample at the pixel CENTRE, so the scaled image is not shifted by half a
+    // pixel against the rectangle it is supposed to fill.
+    const sourceY = (y + 0.5 - fit.y) * yScale - 0.5
+    const y0 = Math.max(0, Math.min(brandSize.height - 1, Math.floor(sourceY)))
+    const y1 = Math.min(brandSize.height - 1, y0 + 1)
+    const wy = Math.max(0, Math.min(1, sourceY - y0))
+
+    for (let x = left; x < right; x++) {
+      const sourceX = (x + 0.5 - fit.x) * xScale - 0.5
+      const x0 = Math.max(0, Math.min(brandSize.width - 1, Math.floor(sourceX)))
+      const x1 = Math.min(brandSize.width - 1, x0 + 1)
+      const wx = Math.max(0, Math.min(1, sourceX - x0))
+
+      const i00 = (y0 * brandSize.width + x0) * RGBA
+      const i01 = (y0 * brandSize.width + x1) * RGBA
+      const i10 = (y1 * brandSize.width + x0) * RGBA
+      const i11 = (y1 * brandSize.width + x1) * RGBA
+
+      const alpha =
+        (brand[i00 + 3]! * (1 - wx) + brand[i01 + 3]! * wx) * (1 - wy) +
+        (brand[i10 + 3]! * (1 - wx) + brand[i11 + 3]! * wx) * wy
+      if (alpha < 0.5) continue
+
+      const out = (y * output.width + x) * RGBA
+      const keep = (255 - alpha) / 255
+      for (let channel = 0; channel < 3; channel++) {
+        const value =
+          (brand[i00 + channel]! * (1 - wx) + brand[i01 + channel]! * wx) * (1 - wy) +
+          (brand[i10 + channel]! * (1 - wx) + brand[i11 + channel]! * wx) * wy
+        source[out + channel] = value + source[out + channel]! * keep
+      }
+      source[out + 3] = 255
+    }
+  }
+}
+
+/**
  * Composites branding frames over picture frames for the transition modes.
  *
  * Holds its two canvases open across frames rather than allocating per frame,
@@ -105,6 +193,10 @@ export class BrandingCompositor {
   private readonly baseContext: OffscreenCanvasRenderingContext2D
   private readonly overlay: OffscreenCanvas
   private readonly overlayContext: OffscreenCanvasRenderingContext2D
+  /** Whether this engine honours a request for RGBA. Decided on the first frame. */
+  private direct: boolean | null = null
+  /** Reused across frames; at 4K this is 33 MB. */
+  private brandBuffer: Uint8Array | null = null
 
   constructor(private readonly shape: { readonly width: number; readonly height: number }) {
     this.base = new OffscreenCanvas(shape.width, shape.height)
@@ -119,23 +211,26 @@ export class BrandingCompositor {
   /**
    * Draws `brand` over `picture` and returns the result.
    *
-   * **Correct in Chrome and Safari, wrong in Firefox (VH-44).** Every route
-   * out of a decoded frame was measured on 2026-08-25, on the blue and white
-   * onsets, against the RGBA the WebM actually holds:
+   * **Correct in all three engines since VH-44 (2026-08-26)**, and it takes two
+   * routes to be so. Every way out of a decoded frame was measured, on the blue
+   * and white onsets, against the RGBA the WebM actually holds:
    *
    * | Route | Chrome 151 | Firefox 154 | Safari 26.5.2 |
    * | --- | --- | --- | --- |
-   * | `draw` then `getImageData` (below) | correct | UN-PREMULTIPLIED | correct |
+   * | `draw` then `getImageData` | correct | UN-PREMULTIPLIED | correct |
    * | `new VideoFrame(canvas).copyTo` | double-premultiplied | correct | BGRA |
    * | `VideoSample.copyTo` (no canvas) | correct | correct | luma plane |
    *
-   * `getImageData` returns STRAIGHT RGBA by specification, so an engine that
-   * holds the decoded frame as premultiplied divides the alpha back out here.
-   * On the white onset that overflows and WRAPS: 74 x 255/69 = 273, reported
-   * as 17. Blue comes back 3.7x too bright. Both compositing modes are opt-in
-   * and off by default, so nothing ships broken today — but no mode that uses
-   * this may be defaulted on until VH-44 lands. `/spike-alpha.html` re-runs
-   * the measurement.
+   * No route is portable and their union is, so this picks per engine — by
+   * {@link honoursRgbaReadback}, which asks whether a request for RGBA is
+   * honoured rather than which browser this is.
+   *
+   * What made the canvas route wrong: `getImageData` returns STRAIGHT RGBA by
+   * specification, so an engine holding the decoded frame as premultiplied
+   * divides the alpha back out. On the white onset that overflowed and WRAPPED
+   * — 74 x 255/69 = 273, reported as 17 — so white inverted to near-black and
+   * blue came back 3.7x too bright. `/spike-alpha.html` re-runs the whole
+   * measurement in every engine.
    *
    * @param picture - The frame underneath. Drawn to fill the output shape.
    * @param brand - The branding frame, with premultiplied alpha. Fitted into
@@ -144,25 +239,48 @@ export class BrandingCompositor {
    * @param fit - Where the branding sits within the frame.
    * @param timing - Timestamp and duration for the returned sample, in seconds.
    */
-  compose(
+  async compose(
     picture: VideoSample,
     brand: VideoSample,
     fit: { readonly x: number; readonly y: number; readonly width: number; readonly height: number },
     timing: { readonly timestamp: number; readonly duration: number },
-  ): VideoSample {
+  ): Promise<VideoSample> {
     const { width, height } = this.shape
 
     this.baseContext.clearRect(0, 0, width, height)
     picture.draw(this.baseContext, 0, 0, width, height)
-
-    this.overlayContext.clearRect(0, 0, width, height)
-    brand.draw(this.overlayContext, fit.x, fit.y, fit.width, fit.height)
-
     const under = this.baseContext.getImageData(0, 0, width, height)
-    const over = this.overlayContext.getImageData(0, 0, width, height)
-    compositePremultiplied(under.data, over.data)
-    this.baseContext.putImageData(under, 0, 0)
 
+    // Decided once per job, on the first branding frame, because the answer is
+    // a property of the engine rather than of the frame.
+    this.direct ??= honoursRgbaReadback(brand)
+
+    if (this.direct) {
+      // The branding pixels never touch a canvas, so nothing gets the chance to
+      // un-premultiply them. This is the path Chrome and Firefox take.
+      const size = brand.codedWidth * brand.codedHeight * RGBA
+      if (!this.brandBuffer || this.brandBuffer.byteLength !== size) {
+        this.brandBuffer = new Uint8Array(size)
+      }
+      await brand.copyTo(this.brandBuffer, { format: 'RGBA' })
+      compositeSampled(
+        under.data,
+        this.brandBuffer,
+        { width: brand.codedWidth, height: brand.codedHeight },
+        fit,
+        { width, height },
+      )
+    } else {
+      // Safari, which ignores the requested format. Its canvas readback IS
+      // correct, so the round-trip is the right route here — the one thing
+      // that must not happen is trusting both, or neither.
+      this.overlayContext.clearRect(0, 0, width, height)
+      brand.draw(this.overlayContext, fit.x, fit.y, fit.width, fit.height)
+      const over = this.overlayContext.getImageData(0, 0, width, height)
+      compositePremultiplied(under.data, over.data)
+    }
+
+    this.baseContext.putImageData(under, 0, 0)
     return new VideoSample(this.base, timing)
   }
 }

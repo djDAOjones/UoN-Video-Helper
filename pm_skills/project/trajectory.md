@@ -330,3 +330,23 @@ The deployed site was also confirmed working on a University machine, so
   `AudioEncoder.isConfigSupported` and pre-flight blocks with `no-aac-encode`
   before a job starts, naming a browser that works. What Firefox users should
   actually get is VH-49, and needs a person.
+
+### VH-44 — the composite agrees in all three engines
+
+- VH-44 — Shipped 2026-08-26. `compose()` now reads the branding pixels with
+  whichever route the engine actually honours: `VideoSample.copyTo` where a
+  request for RGBA is respected, the canvas readback where it is not. Firefox
+  over black went from `(17,17,17)` and `(18,40,66)` — white inverted, blue
+  3.7x too bright — to `(74,74,74)` and `(5,11,18)`, against a file holding
+  `(73,73,73)` and `(4,10,17)`. Chrome and Safari unchanged and still correct.
+- The engine is identified by a PROPERTY rather than a table or a pixel
+  comparison: ask `allocationSize` for RGBA and check it equals `width x height
+  x 4`. Safari answers 5,184,000 where the answer is 8,294,400, which is it
+  saying it will not honour the format. No expected-colour constants, so
+  re-rendering the masters cannot invalidate the check.
+- `copyTo` returns the frame at its own resolution, so scaling moved out of the
+  canvas into `compositeSampled` — bilinear, which is well-defined on
+  premultiplied colour and is exactly why the decoder's own buffer is the right
+  thing to interpolate.
+- The controls stay withdrawn. The engineering is done and verified; putting
+  them back in front of users is a decision, raised as VH-46b.

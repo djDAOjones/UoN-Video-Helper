@@ -11,6 +11,48 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-26 — VH-44: detect the property, not the engine
+
+**Decision:** `compose()` reads the branding pixels through
+`VideoSample.copyTo` when the engine honours a request for RGBA, and through
+the canvas readback when it does not. Which is which is decided by asking
+`allocationSize({ format: 'RGBA' })` whether it equals `width x height x 4`.
+
+**Rationale:** the ticket proposed probing a known branding frame at startup and
+comparing the returned RGBA against expected values. That works, and it ages
+badly: the expected values are the ASSETS' values, so re-running
+`build-branding.mjs` would silently invalidate the check that protects the
+assets. Asking about the size instead tests the same thing — does this engine
+mean RGBA when it says RGBA — and depends on nothing that can drift. Safari
+answers 5,184,000 where four bytes per pixel is 8,294,400; Chrome and Firefox
+answer exactly.
+
+**The route table, measured rather than assumed:** `copyTo` is correct in
+Chrome and Firefox and returns the luma plane in Safari; the canvas readback is
+correct in Chrome and Safari and un-premultiplies in Firefox. Neither route is
+portable, and their union is. The property check happens to select the correct
+one in each — which is the point of choosing a property that describes the
+actual failure.
+
+**Scaling had to move.** `copyTo` hands back the frame at its own resolution,
+so the canvas is no longer doing the fitting. `compositeSampled` interpolates
+bilinearly — correct on PREMULTIPLIED colour, which is the space interpolation
+is defined in, and another reason the decoder's own buffer is the right thing
+to work from.
+
+**Verified:** `compose()` over black — the maximum-error case — now returns
+`(74,74,74)` / `(5,11,18)` in Firefox against a file holding `(73,73,73)` /
+`(4,10,17)`, where it returned `(17,17,17)` / `(18,40,66)` before. Chrome and
+Safari unchanged. Fifteen unit tests pin the sampler, including that it touches
+nothing outside the fit rectangle and interpolates rather than steps.
+
+**Deliberately NOT done:** restoring the two controls VH-45 withdrew. The
+engineering is finished and verified, but putting controls back in front of
+users on a live site is a decision, and VH-32's interface pass may present them
+differently anyway. Raised as VH-46b.
+
+**Link:** `src/media/composite.ts`, `src/spike/alpha.ts`, backlog VH-46b.
+
 ## 2026-08-26 — VH-43, and the Firefox audio gap it surfaced
 
 **Decision:** verify the corpus's odd shapes with synthesised fixtures carrying

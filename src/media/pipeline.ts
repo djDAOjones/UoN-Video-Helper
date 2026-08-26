@@ -422,7 +422,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
           // a Teams capture — so counting frames would drift them apart.
           const brand = await buildSink.getSample(buildTime)
           if (brand) {
-            const composed = compositor.compose(sample, brand, buildFit, {
+            const composed = await compositor.compose(sample, brand, buildFit, {
               timestamp,
               duration: sample.duration,
             })
@@ -461,7 +461,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
             throwIfAborted(laneSignal)
             const brand = await buildSink.getSample(index * step)
             if (!brand) continue
-            const composed = compositor.compose(frozen, brand, buildFit, {
+            const composed = await compositor.compose(frozen, brand, buildFit, {
               timestamp: contentOffset + videoDurationSeconds + index * step,
               duration: step,
             })

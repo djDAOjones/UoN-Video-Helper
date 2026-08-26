@@ -46,27 +46,19 @@
       Done when: the choice is made and the browser-support claim in spec §10,
       `README.md` and `docs/03-open-decisions.md` D4 matches it.
 
-- [ ] **VH-44 The closing transitions are wrong in Firefox**
-      [detail](tickets/VH-44.md) (2026-08-25)
-      Intent: VH-34 measured it and the answer was yes — moving the blend to the
-      CPU did not escape the engines' disagreement, it moved it one step later,
-      to `compose()`'s `getImageData` readback. In Firefox the blue onset comes
-      back 3.7x too bright and the white one OVERFLOWS AND WRAPS, so a white
-      closing over dark picture inverts rather than glowing. Neither alternative
-      route is portable either: `VideoSample.copyTo` is correct in Chrome and
-      Firefox but returns the luma plane in Safari, which ignores the requested
-      format silently. Numbers are in the ticket and in decision-log
-      2026-08-25 "VH-34 spike".
-      Done when: the branding pixels reach `compositePremultiplied` unchanged in
-      all three engines — probed at startup against a known branding frame, the
-      shape `capability.ts` already uses, refusing the overlay modes loudly if
-      no route matches — and a regression test pins the expected RGBA per route.
-      Note: the live exposure is closed. VH-45 withdrew both controls on
-      2026-08-25 and the push deployed itself, verified on the deployed site —
-      no mode or style inputs remain in the DOM, so every job takes the hard
-      cut. That is a holding action, not the fix: restoring the two modes to
-      the UI is part of this item, and spec §4.1 carries a doc-delta until it
-      happens.
+- [ ] **VH-46b Restore the closing transition controls** (2026-08-26)
+      Intent: VH-45 withdrew "over the picture" and "over a freeze frame" from
+      the interface because they were wrong in Firefox. VH-44 fixed that on
+      2026-08-26 and it is verified in all three engines, so the reason the
+      controls came out no longer exists. Putting user-facing controls back on a
+      live site is a decision rather than a fix, which is why it did not ride
+      along with VH-44.
+      Done when: the two radios are back in `index.html` (the markup is in the
+      VH-45 comment there, and the pipeline never lost the modes), or the
+      decision is taken to leave them out and VH-32 lays out what replaces them.
+      Note: VH-25's picture fades interact — its Done-when says the fade-out is
+      for hard cut ONLY, because in the overlay modes the build IS the
+      transition.
 
 - [ ] **VH-31 The size estimate is ~3.6x too high** [detail](tickets/VH-31.md)
       (2026-08-25)

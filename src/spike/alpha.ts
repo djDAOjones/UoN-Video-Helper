@@ -245,7 +245,7 @@ async function measureReadback(colour: 'white' | 'blue'): Promise<void> {
 
     const timing = { timestamp: 0, duration: 1 / shape.frameRate }
     const under = new VideoSample(picture, timing)
-    const composed = new BrandingCompositor(shape).compose(under, brand, fit, timing)
+    const composed = await new BrandingCompositor(shape).compose(under, brand, fit, timing)
     const result = new OffscreenCanvas(shape.width, shape.height)
     const resultContext = result.getContext('2d', { willReadFrequently: true })
     if (!resultContext) {
@@ -278,6 +278,24 @@ async function measureReadback(colour: 'white' | 'blue'): Promise<void> {
     } catch (error) {
       say(
         `  canvas copyTo   unsupported here — ${error instanceof Error ? error.message : String(error)}`,
+      )
+    }
+
+    // 5. Is the broken copyTo DETECTABLE without knowing the pixel values?
+    //    If it is, the fix needs no per-engine table and no expected-RGBA
+    //    constants that go stale when the assets are re-rendered: ask for RGBA,
+    //    check the engine actually gave you RGBA, and fall back if not.
+    try {
+      const rgbaSize = brand.allocationSize({ format: 'RGBA' })
+      const expected = brand.codedWidth * brand.codedHeight * 4
+      const planar = brand.codedWidth * brand.codedHeight * 1.5
+      say(
+        `  allocationSize  RGBA asks ${rgbaSize}, w*h*4 = ${expected}, I420 would be ${planar}` +
+          ` -> ${rgbaSize === expected ? 'HONOURS the format' : 'IGNORES the format'}`,
+      )
+    } catch (error) {
+      say(
+        `  allocationSize  threw — ${error instanceof Error ? error.message : String(error)}`,
       )
     }
 
