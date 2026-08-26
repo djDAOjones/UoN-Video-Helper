@@ -14,13 +14,15 @@
 
 import { LoudnessAnalyser, type LoudnessReport } from './loudness'
 import { PHASE_TAPS, TruePeakDetector } from './truepeak'
-import { WARNING_THRESHOLDS } from '../config/audio'
+import { ABRUPT_AUDIO_START, WARNING_THRESHOLDS } from '../config/audio'
 
 export interface AudioAnalysis extends LoudnessReport {
   /** Highest true peak in the source, dBTP. `-Infinity` for pure silence. */
   readonly truePeakDbtp: number
   /** Frame positions reaching the clipping threshold — spec 5.4's distortion trigger. */
   readonly clippedSampleCount: number
+  /** RMS level across the opening source window, dBFS. `-Infinity` for silence. */
+  readonly leadingRmsDbfs: number
   readonly sampleRate: number
   readonly channelCount: number
 }
@@ -28,16 +30,33 @@ export interface AudioAnalysis extends LoudnessReport {
 export class AudioAnalyser {
   private readonly loudness: LoudnessAnalyser
   private readonly truePeak: TruePeakDetector
+  private readonly leadingFrameLimit: number
+  private leadingFrames = 0
+  private leadingSquareSum = 0
 
   constructor(
     private readonly options: { readonly sampleRate: number; readonly channelCount: number },
   ) {
     this.loudness = new LoudnessAnalyser(options)
     this.truePeak = new TruePeakDetector(options.channelCount, WARNING_THRESHOLDS.clippingDbtp)
+    this.leadingFrameLimit = Math.round(options.sampleRate * ABRUPT_AUDIO_START.windowSeconds)
   }
 
   /** @param channels - Planar audio, one `Float32Array` per channel, equal lengths. */
   addFrames(channels: readonly Float32Array[]): void {
+    const framesToMeasure = Math.min(
+      channels[0]?.length ?? 0,
+      this.leadingFrameLimit - this.leadingFrames,
+    )
+    if (framesToMeasure > 0) {
+      for (const channel of channels) {
+        for (let frame = 0; frame < framesToMeasure; frame++) {
+          const sample = channel[frame]!
+          this.leadingSquareSum += sample * sample
+        }
+      }
+      this.leadingFrames += framesToMeasure
+    }
     this.loudness.addFrames(channels)
     this.truePeak.addFrames(channels)
   }
@@ -49,10 +68,15 @@ export class AudioAnalyser {
     this.truePeak.addFrames(
       Array.from({ length: this.options.channelCount }, () => new Float32Array(PHASE_TAPS - 1)),
     )
+    const leadingSampleCount = this.leadingFrames * this.options.channelCount
+    const leadingMeanSquare =
+      leadingSampleCount === 0 ? 0 : this.leadingSquareSum / leadingSampleCount
     return {
       ...this.loudness.finish(),
       truePeakDbtp: this.truePeak.peakDbtp,
       clippedSampleCount: this.truePeak.clippedSampleCount,
+      leadingRmsDbfs:
+        leadingMeanSquare === 0 ? Number.NEGATIVE_INFINITY : 10 * Math.log10(leadingMeanSquare),
       sampleRate: this.options.sampleRate,
       channelCount: this.options.channelCount,
     }

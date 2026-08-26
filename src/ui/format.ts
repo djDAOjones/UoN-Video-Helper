@@ -36,6 +36,14 @@ export function formatDuration(seconds: number): string {
   return plural(remainder, 'second')
 }
 
+/** A complete estimate phrase that never produces "about less than". */
+export function formatTimeEstimate(seconds: number): string {
+  const duration = formatDuration(seconds)
+  if (duration === 'unknown') return 'Time could not be estimated'
+  if (duration === 'less than a second') return 'Less than a second'
+  return `About ${duration}`
+}
+
 /**
  * e.g. `1.2 GB`, `340 MB`.
  *

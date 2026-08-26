@@ -24,123 +24,196 @@
         the original file is never changed.
       </p>
 
-      <section class="panel" aria-labelledby="choose-heading">
-        <h2 id="choose-heading">Choose a video</h2>
-        <div class="field">
-          <span class="label" id="file-label">Video file</span>
-          <div class="actions" id="source-picker-actions" hidden>
-            <button
-              class="button button--secondary"
-              type="button"
-              id="source-picker-button"
-              aria-describedby="file-help"
-            >
-              Choose video file
-            </button>
-            <p class="helper" id="source-picker-status" role="status" aria-live="polite"></p>
-          </div>
-          <input
-            class="file-input"
-            type="file"
-            id="file-input"
-            accept="video/*,.mp4,.mov,.m4v,.mkv,.webm"
-            aria-labelledby="file-label"
-            aria-describedby="file-help"
-          />
-          <p class="helper" id="file-help">
-            Your video is read on this device. It is never uploaded, and the original file is never
-            changed.
-          </p>
-        </div>
-        <div id="source-report"></div>
-        <div class="field" id="subtitle-field" hidden>
-          <label class="label" for="subtitle-input">Subtitle file (optional)</label>
-          <input
-            class="file-input"
-            type="file"
-            id="subtitle-input"
-            accept=".vtt,text/vtt"
-            aria-describedby="subtitle-help"
-          />
-          <p class="helper" id="subtitle-help">
-            A WebVTT (.vtt) file. Its timings are shifted to match the opening sequence; the words
-            are never changed.
-          </p>
-          <p class="helper" id="subtitle-status"></p>
-        </div>
-        <fieldset class="choice" id="branding-choice" hidden>
-          <legend class="label">Finishing touches</legend>
-          <!-- VH-33: the opening toggle was withdrawn on 2026-08-25. No approved
-               opening asset exists — only a generated stand-in — and helper text
-               saying "leave this off" is not what stands between a user and an
-               unapproved University graphic in a published video. The pipeline
-               keeps its opening path intact for VH-23; only the control is gone,
-               and spec §4.1's two-toggle model is a recorded doc-delta. -->
-          <label class="radio">
-            <input type="checkbox" id="picture-fade-in" />
-            <span>Fade the picture in at the start</span>
-          </label>
-          <label class="radio">
-            <input type="checkbox" id="branding-closing" checked />
-            <span>Add the closing sequence</span>
-          </label>
-          <details class="disclosure" id="branding-options">
-            <summary class="disclosure-summary">Closing sequence options</summary>
-            <!-- VH-46b: the two compositing modes ("over the picture", "over a
-                 freeze frame") remain intentionally hidden until VH-32 decides
-                 whether and how to present them. VH-44 fixed their Firefox
-                 rendering. Every job now takes the hard cut, which
-                 composites nothing and was already the default. Animation went
-                 with them: Fade and Slide differ only during the build a hard
-                 cut discards, so the choice would change nothing. The pipeline
-                 keeps all three modes; only the controls are gone. -->
-            <label class="radio">
-              <input type="checkbox" id="picture-fade-out" checked />
-              <span>Fade the picture into the closing sequence</span>
-            </label>
-            <fieldset class="choice">
-              <legend class="label">Colour</legend>
-              <label class="radio">
-                <input type="radio" name="branding-colour" value="blue" checked />
-                <span>Blue</span>
-              </label>
-              <label class="radio">
-                <input type="radio" name="branding-colour" value="white" />
-                <span>White</span>
-              </label>
-            </fieldset>
-          </details>
-        </fieldset>
-        <fieldset class="choice" id="preset-choice" hidden>
-          <legend class="label">What is this video for</legend>
-          <label class="radio">
-            <input type="radio" name="preset" value="best" checked />
-            <span>Best quality — for EchoVideo or YouTube</span>
-          </label>
-          <label class="radio">
-            <input type="radio" name="preset" value="smaller" />
-            <span>Smaller file — for OneDrive, SharePoint or email</span>
-          </label>
-        </fieldset>
-        <div id="preflight-report"></div>
-        <div id="audio-warnings"></div>
-        <div class="actions" id="process-actions" hidden></div>
-        <progress
-          class="progress"
-          id="process-progress"
-          max="1"
-          value="0"
-          aria-label="Processing progress"
-          hidden
-        ></progress>
-        <div id="process-result"></div>
+      <section class="panel workflow-panel" aria-labelledby="workflow-heading">
+        <h2 id="workflow-heading">Create your video</h2>
+        <ol class="workflow" aria-label="Video creation progress">
+          <li class="workflow-step" data-workflow-step="select" data-state="current">
+            <div class="workflow-step-heading">
+              <span class="workflow-step-number" aria-hidden="true">1</span>
+              <div>
+                <h3>Choose your video</h3>
+                <p class="workflow-step-summary" id="select-step-summary" hidden></p>
+              </div>
+            </div>
+            <div class="workflow-step-body" id="select-step-body">
+              <div class="field">
+                <span class="label" id="file-label">Video file</span>
+                <div class="actions" id="source-picker-actions" hidden>
+                  <button
+                    class="button button--secondary"
+                    type="button"
+                    id="source-picker-button"
+                    aria-describedby="file-help"
+                  >
+                    Choose video file
+                  </button>
+                  <p class="helper" id="source-picker-status" role="status" aria-live="polite"></p>
+                </div>
+                <input
+                  class="file-input"
+                  type="file"
+                  id="file-input"
+                  accept="video/*,.mp4,.mov,.m4v,.mkv,.webm"
+                  aria-labelledby="file-label"
+                  aria-describedby="file-help"
+                />
+                <p class="helper" id="file-help">
+                  Your video is read on this device. It is never uploaded, and the original file is
+                  never changed.
+                </p>
+              </div>
+            </div>
+          </li>
+
+          <li class="workflow-step" data-workflow-step="review" data-state="upcoming">
+            <div class="workflow-step-heading">
+              <span class="workflow-step-number" aria-hidden="true">2</span>
+              <div>
+                <h3>Review your choices</h3>
+                <p class="workflow-step-summary" id="review-step-summary" hidden></p>
+              </div>
+            </div>
+            <div class="workflow-step-body" id="review-step-body" hidden>
+              <div class="actions actions--compact">
+                <button class="button button--secondary" type="button" id="change-video-button">
+                  Choose a different video
+                </button>
+              </div>
+              <div id="source-report"></div>
+              <fieldset class="choice" id="preset-choice" hidden>
+                <legend class="label">What is this video for?</legend>
+                <label class="radio">
+                  <input type="radio" name="preset" value="best" checked />
+                  <span>Best quality — for EchoVideo or YouTube</span>
+                </label>
+                <label class="radio">
+                  <input type="radio" name="preset" value="smaller" />
+                  <span>Smaller file — for OneDrive, SharePoint or email</span>
+                </label>
+              </fieldset>
+              <fieldset class="choice" id="branding-choice" hidden>
+                <legend class="label">Finishing touches</legend>
+                <!-- VH-33: the opening toggle stays withdrawn until an approved asset exists. -->
+                <label class="radio">
+                  <input type="checkbox" id="picture-fade-in" />
+                  <span>Fade the picture in at the start</span>
+                </label>
+                <label class="radio">
+                  <input type="checkbox" id="branding-closing" checked />
+                  <span>Add the closing sequence</span>
+                </label>
+                <div class="branding-preview" id="branding-preview">
+                  <video
+                    id="branding-preview-video"
+                    muted
+                    loop
+                    playsinline
+                    preload="metadata"
+                    aria-label="Preview of the selected closing card"
+                  ></video>
+                  <p class="branding-preview-fallback" id="branding-preview-fallback" hidden>
+                    The preview could not be shown. The approved closing sequence can still be
+                    added.
+                  </p>
+                  <div class="actions actions--compact">
+                    <button
+                      class="button button--secondary"
+                      type="button"
+                      id="branding-preview-toggle"
+                      aria-pressed="false"
+                    >
+                      Play preview
+                    </button>
+                  </div>
+                  <p class="helper" id="branding-preview-caption">
+                    Preview of the closing card. Your video cuts to this card.
+                  </p>
+                </div>
+                <details class="disclosure" id="branding-options">
+                  <summary class="disclosure-summary">Closing sequence options</summary>
+                  <!-- VH-46b: transition modes remain intentionally hidden. The hard cut is the
+                       established default and its onset style would not change the output. -->
+                  <label class="radio">
+                    <input type="checkbox" id="picture-fade-out" checked />
+                    <span>Fade the picture into the closing sequence</span>
+                  </label>
+                  <fieldset class="choice">
+                    <legend class="label">Colour</legend>
+                    <label class="radio">
+                      <input type="radio" name="branding-colour" value="blue" checked />
+                      <span>Blue</span>
+                    </label>
+                    <label class="radio">
+                      <input type="radio" name="branding-colour" value="white" />
+                      <span>White</span>
+                    </label>
+                  </fieldset>
+                </details>
+              </fieldset>
+              <div class="field" id="subtitle-field" hidden>
+                <label class="label" for="subtitle-input">Subtitle file (optional)</label>
+                <input
+                  class="file-input"
+                  type="file"
+                  id="subtitle-input"
+                  accept=".vtt,text/vtt"
+                  aria-describedby="subtitle-help"
+                />
+                <p class="helper" id="subtitle-help">
+                  A WebVTT (.vtt) file. Its timings are shifted to match the opening sequence; the
+                  words are never changed.
+                </p>
+                <p class="helper" id="subtitle-status"></p>
+              </div>
+              <div id="preflight-report"></div>
+              <div id="audio-warnings"></div>
+              <div id="abrupt-start-check"></div>
+            </div>
+          </li>
+
+          <li class="workflow-step" data-workflow-step="processing" data-state="upcoming">
+            <div class="workflow-step-heading">
+              <span class="workflow-step-number" aria-hidden="true">3</span>
+              <div>
+                <h3>Create the video</h3>
+                <p class="workflow-step-summary" id="processing-step-summary" hidden></p>
+              </div>
+            </div>
+            <div class="workflow-step-body" id="processing-step-body" hidden>
+              <p class="helper">Keep this tab open while the video is being created.</p>
+              <div class="actions" id="process-actions" hidden></div>
+              <progress
+                class="progress"
+                id="process-progress"
+                max="1"
+                value="0"
+                aria-label="Processing progress"
+                hidden
+              ></progress>
+              <div id="process-result"></div>
+            </div>
+          </li>
+
+          <li class="workflow-step" data-workflow-step="result" data-state="upcoming">
+            <div class="workflow-step-heading">
+              <span class="workflow-step-number" aria-hidden="true">4</span>
+              <div>
+                <h3>Save your video</h3>
+                <p class="workflow-step-summary" id="result-step-summary" hidden></p>
+              </div>
+            </div>
+            <div class="workflow-step-body" id="result-step-body" hidden>
+              <div id="output-audio-warnings"></div>
+            </div>
+          </li>
+        </ol>
+        <p class="status workflow-status" id="status" role="status" aria-live="polite"></p>
       </section>
 
-      <section class="panel" aria-labelledby="system-check-heading">
-        <h2 id="system-check-heading">System check</h2>
+      <details class="panel system-check">
+        <summary class="disclosure-summary">Browser readiness</summary>
         <ul class="checks" id="checks"></ul>
-        <p class="status" id="status" role="status" aria-live="polite"></p>
-      </section>
+      </details>
 
       <section class="panel" aria-labelledby="errors-heading" id="errors-panel" hidden>
         <h2 id="errors-heading">Errors captured</h2>

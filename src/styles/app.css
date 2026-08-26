@@ -31,6 +31,11 @@ body {
   line-height: 1.5;
 }
 
+/* Author display rules must never override semantic workflow visibility. */
+[hidden] {
+  display: none !important;
+}
+
 /* Skip link — visible on focus, never a hidden-only affordance */
 .skip-link {
   position: absolute;
@@ -74,9 +79,12 @@ body {
   font-size: var(--type-body-compact);
   color: var(--text-secondary);
   font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
 }
 
 .main {
+  width: 100%;
+  min-width: 0;
   max-width: 60rem;
   margin: 0 auto;
   padding: var(--spacing-07) var(--spacing-06) var(--spacing-09);
@@ -99,6 +107,158 @@ body {
   margin: 0 0 var(--spacing-05);
   font-size: var(--type-heading-03);
   font-weight: 600;
+}
+
+/* --- Guided one-way workflow (VH-32) --- */
+
+.workflow-panel {
+  padding: 0;
+}
+
+.workflow-panel > h2 {
+  padding: var(--spacing-06) var(--spacing-06) 0;
+}
+
+.workflow {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.workflow-step {
+  min-width: 0;
+  border-top: 1px solid var(--border-subtle);
+  padding: var(--spacing-05) var(--spacing-06);
+}
+
+.workflow-step[data-state='current'] {
+  border-left: 4px solid var(--interactive);
+  padding-left: calc(var(--spacing-06) - 4px);
+  background: var(--layer-00);
+}
+
+.workflow-step-heading {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: var(--spacing-04);
+  align-items: start;
+}
+
+.workflow-step-heading h3 {
+  margin: var(--spacing-02) 0 0;
+  font-size: var(--type-heading-compact);
+  font-weight: 600;
+}
+
+.workflow-step[data-state='upcoming'] .workflow-step-heading h3 {
+  color: var(--text-secondary);
+}
+
+.workflow-step-number {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  font-size: var(--type-body-compact);
+  font-weight: 600;
+}
+
+.workflow-step[data-state='current'] .workflow-step-number {
+  border-color: var(--interactive);
+  background: var(--interactive);
+  color: var(--text-on-interactive);
+}
+
+.workflow-step[data-state='complete'] .workflow-step-number {
+  border-color: var(--support-success);
+  color: var(--support-success);
+}
+
+.workflow-step-summary {
+  margin: var(--spacing-02) 0 0;
+  color: var(--text-secondary);
+  font-size: var(--type-body-compact);
+}
+
+.workflow-step-body {
+  min-width: 0;
+  margin: var(--spacing-05) 0 0 calc(2rem + var(--spacing-04));
+}
+
+.workflow-status {
+  margin: 0;
+  padding: var(--spacing-05) var(--spacing-06);
+  border-top: 1px solid var(--border-subtle);
+  background: var(--layer-02);
+}
+
+.system-check > .disclosure-summary {
+  margin: calc(-1 * var(--spacing-06));
+  padding: var(--spacing-06);
+  font-size: var(--type-heading-03);
+  font-weight: 600;
+}
+
+.system-check[open] > .disclosure-summary {
+  margin-bottom: var(--spacing-05);
+}
+
+.actions--compact {
+  margin-top: 0;
+}
+
+.source-ready {
+  margin: var(--spacing-05) 0 0;
+  font-weight: 600;
+}
+
+.facts--summary {
+  max-width: 42rem;
+}
+
+.facts--risks {
+  padding: var(--spacing-05);
+  border-left: 4px solid var(--support-warning);
+  background: var(--layer-01);
+}
+
+.branding-preview {
+  max-width: 28rem;
+  margin-top: var(--spacing-05);
+  padding: var(--spacing-04);
+  border: 1px solid var(--border-subtle);
+  background: var(--layer-01);
+}
+
+.branding-preview video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  background: #000000;
+}
+
+.branding-preview-fallback {
+  margin: 0;
+  min-height: 8rem;
+  padding: var(--spacing-05);
+  border-left: 4px solid var(--support-warning);
+  background: var(--layer-02);
+  color: var(--text-secondary);
+  font-size: var(--type-body-compact);
+}
+
+.acknowledgement {
+  margin-top: var(--spacing-06);
+  padding: var(--spacing-05);
+  border-left: 4px solid var(--support-warning);
+  background: var(--layer-01);
+}
+
+.acknowledgement-check {
+  margin-top: var(--spacing-04);
 }
 
 /* Status list — every row states its outcome in words, never colour alone */
@@ -206,7 +366,6 @@ body {
   background: var(--layer-02);
 }
 
-
 .status {
   margin-top: var(--spacing-05);
   font-size: var(--type-body-compact);
@@ -275,6 +434,8 @@ body {
 .file-input {
   display: block;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   min-height: var(--target-min);
   padding: var(--spacing-03) var(--spacing-04);
   border: 1px solid var(--border-subtle);
@@ -360,6 +521,33 @@ body {
 }
 
 @media (max-width: 34rem) {
+  .workflow-panel > h2,
+  .workflow-step,
+  .workflow-status {
+    padding-right: var(--spacing-05);
+    padding-left: var(--spacing-05);
+  }
+
+  .workflow-step[data-state='current'] {
+    padding-left: calc(var(--spacing-05) - 4px);
+  }
+
+  .workflow-step-body {
+    margin-left: 0;
+  }
+
+  /* Native file inputs include an unbreakable browser-supplied filename.
+     The app reports selection separately and deliberately never displays a
+     filename, so remove that intrinsic-width source on narrow screens. */
+  .file-input {
+    font-size: 0;
+  }
+
+  .file-input::file-selector-button {
+    margin-right: 0;
+    font-size: var(--type-body-compact);
+  }
+
   .facts {
     grid-template-columns: 1fr;
     gap: var(--spacing-02) 0;

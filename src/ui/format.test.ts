@@ -9,6 +9,7 @@ import {
   formatFrameRate,
   formatOutputSizeGuidance,
   formatResolution,
+  formatTimeEstimate,
 } from './format'
 
 describe('formatContentClass', () => {
@@ -34,6 +35,17 @@ describe('formatDuration', () => {
   it('says unknown rather than NaN', () => {
     expect(formatDuration(Number.NaN)).toBe('unknown')
     expect(formatDuration(-5)).toBe('unknown')
+  })
+})
+
+describe('formatTimeEstimate', () => {
+  it('uses a grammatical phrase at the sub-second boundary', () => {
+    expect(formatTimeEstimate(0.4)).toBe('Less than a second')
+    expect(formatTimeEstimate(252)).toBe('About 4 minutes 12 seconds')
+  })
+
+  it('does not put an invalid duration into a sentence', () => {
+    expect(formatTimeEstimate(Number.NaN)).toBe('Time could not be estimated')
   })
 })
 

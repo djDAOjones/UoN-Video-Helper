@@ -42,8 +42,10 @@ import { countCues } from './media/vtt'
 import type { OutputVerification } from './media/output-verification'
 import { formatFileSize } from './ui/format'
 import { renderPreflight, summarisePreflight } from './ui/preflight-panel'
-import { renderWarnings } from './ui/warning-text'
+import { closingPreviewMayAutoplay, closingPreviewUrl } from './ui/branding-preview'
+import { renderAbruptStartAcknowledgement, renderWarnings } from './ui/warning-text'
 import { renderSourceError, renderSourceReport, summarise } from './ui/source-panel'
+import { WORKFLOW_STAGES, workflowStepState, type WorkflowStage } from './ui/workflow'
 import type { WorkerOutbound, WorkerRequest } from './workers/protocol'
 
 const isDev = import.meta.env.DEV
@@ -74,6 +76,8 @@ const sourcePickerStatus = required<HTMLParagraphElement>('#source-picker-status
 const sourceReport = required<HTMLDivElement>('#source-report')
 const preflightReport = required<HTMLDivElement>('#preflight-report')
 const audioWarnings = required<HTMLDivElement>('#audio-warnings')
+const abruptStartCheck = required<HTMLDivElement>('#abrupt-start-check')
+const outputAudioWarnings = required<HTMLDivElement>('#output-audio-warnings')
 const processActions = required<HTMLDivElement>('#process-actions')
 const processProgress = required<HTMLProgressElement>('#process-progress')
 const processResult = required<HTMLDivElement>('#process-result')
@@ -86,6 +90,59 @@ const pictureFadeOut = required<HTMLInputElement>('#picture-fade-out')
 const subtitleField = required<HTMLDivElement>('#subtitle-field')
 const subtitleInput = required<HTMLInputElement>('#subtitle-input')
 const subtitleStatus = required<HTMLParagraphElement>('#subtitle-status')
+const changeVideoButton = required<HTMLButtonElement>('#change-video-button')
+const processingStepBody = required<HTMLDivElement>('#processing-step-body')
+const resultStepBody = required<HTMLDivElement>('#result-step-body')
+const brandingPreview = required<HTMLDivElement>('#branding-preview')
+const brandingPreviewVideo = required<HTMLVideoElement>('#branding-preview-video')
+const brandingPreviewFallback = required<HTMLParagraphElement>('#branding-preview-fallback')
+const brandingPreviewToggle = required<HTMLButtonElement>('#branding-preview-toggle')
+
+const workflowElements = new Map(
+  WORKFLOW_STAGES.map((stage) => {
+    const step = required<HTMLLIElement>(`[data-workflow-step="${stage}"]`)
+    const body = required<HTMLDivElement>(`#${stage}-step-body`)
+    const summary = required<HTMLParagraphElement>(`#${stage}-step-summary`)
+    return [stage, { step, body, summary }] as const
+  }),
+)
+
+let workflowStage: WorkflowStage = 'select'
+
+/** Applies the guided-conveyor display without becoming job-state authority. */
+function showWorkflowStage(stage: WorkflowStage): void {
+  workflowStage = stage
+  for (const [name, elements] of workflowElements) {
+    const state = workflowStepState(stage, name)
+    elements.step.dataset['state'] = state
+    if (state === 'current') elements.step.setAttribute('aria-current', 'step')
+    else elements.step.removeAttribute('aria-current')
+    elements.body.hidden = state !== 'current'
+    elements.summary.hidden = state !== 'complete'
+  }
+
+  if (stage === 'review') workflowElements.get('review')!.body.append(processActions)
+  else processingStepBody.insertBefore(processActions, processProgress)
+
+  // Failures and cleanup remain part of Create; a retained successful output
+  // moves into Save. Moving one owned node avoids duplicate result surfaces.
+  if (stage === 'result') resultStepBody.prepend(processResult)
+  else processingStepBody.append(processResult)
+
+  if (stage !== 'review') brandingPreviewVideo.pause()
+}
+
+function updateWorkflowSummaries(): void {
+  workflowElements.get('select')!.summary.textContent = 'Video selected on this device.'
+  const quality = chosenPreset() === 'smaller' ? 'Smaller file' : 'Best quality'
+  const closing = brandingClosing.checked
+    ? `${chosenBranding('colour', CLOSING_DEFAULTS.colour)} closing card`
+    : 'No closing card'
+  workflowElements.get('review')!.summary.textContent = `${quality} · ${closing}.`
+  workflowElements.get('processing')!.summary.textContent = 'Video created.'
+}
+
+showWorkflowStage('select')
 
 /** The chosen sidecar's text, held until the job runs. */
 let subtitleVtt: string | null = null
@@ -103,6 +160,9 @@ const selectionAuthority = new SelectionAuthority<SelectedSource, PresetId>()
 let currentSource: SelectedSource | null = null
 /** Source-summary metadata failures that were actually rendered before Start. */
 const disclosedMetadataReadFailures = new WeakSet<SelectedSource>()
+/** Selection generation whose abrupt opening still needs an explicit check. */
+let abruptStartRequiredGeneration: number | null = null
+let abruptStartAcknowledgedGeneration: number | null = null
 
 /**
  * Prefer handles whenever source/destination identity can be proved.
@@ -218,6 +278,59 @@ const BRANDING_VALUES = {
  */
 let pictureFadeOutChanged = false
 
+const previewReducedMotion = globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
+let previewPlaybackWanted = closingPreviewMayAutoplay(previewReducedMotion)
+
+function chosenBrandingColour(): 'blue' | 'white' {
+  return chosenBranding('colour', CLOSING_DEFAULTS.colour)
+}
+
+function reflectPreviewPlayback(): void {
+  const playing = !brandingPreviewVideo.paused && !brandingPreviewVideo.ended
+  brandingPreviewToggle.textContent = playing ? 'Pause preview' : 'Play preview'
+  brandingPreviewToggle.setAttribute('aria-pressed', String(playing))
+}
+
+function setPreviewPlayback(wantsPlayback: boolean): void {
+  previewPlaybackWanted = wantsPlayback
+  if (!wantsPlayback) {
+    brandingPreviewVideo.pause()
+    reflectPreviewPlayback()
+    return
+  }
+  void brandingPreviewVideo.play().catch((cause: unknown) => {
+    previewPlaybackWanted = false
+    reflectPreviewPlayback()
+    log.warn('ui', 'local branding preview did not start', {
+      errorName: cause instanceof Error ? cause.name : 'unknown',
+    })
+  })
+}
+
+function syncBrandingPreview(): void {
+  const wantsClosing = brandingClosing.checked
+  brandingPreview.hidden = !wantsClosing
+  if (!wantsClosing) {
+    brandingPreviewVideo.pause()
+    return
+  }
+  if (workflowStage !== 'review') {
+    brandingPreviewVideo.pause()
+    reflectPreviewPlayback()
+    return
+  }
+
+  const source = closingPreviewUrl(chosenBrandingColour())
+  if (brandingPreviewVideo.getAttribute('src') !== source) {
+    brandingPreviewFallback.hidden = true
+    brandingPreviewVideo.hidden = false
+    brandingPreviewToggle.hidden = false
+    brandingPreviewVideo.src = source
+    brandingPreviewVideo.load()
+  }
+  if (previewPlaybackWanted) setPreviewPlayback(true)
+}
+
 function syncBrandingOptions(): void {
   const wantsClosing = brandingClosing.checked
   brandingOptions.hidden = !wantsClosing
@@ -227,12 +340,30 @@ function syncBrandingOptions(): void {
       chosenBranding('mode', CLOSING_DEFAULTS.mode),
     )
   }
+  syncBrandingPreview()
+  updateWorkflowSummaries()
 }
 
 pictureFadeOut.addEventListener('change', () => {
   pictureFadeOutChanged = true
 })
 brandingChoice.addEventListener('change', syncBrandingOptions)
+brandingPreviewToggle.addEventListener('click', () => {
+  setPreviewPlayback(brandingPreviewVideo.paused)
+})
+brandingPreviewVideo.addEventListener('play', reflectPreviewPlayback)
+brandingPreviewVideo.addEventListener('pause', reflectPreviewPlayback)
+brandingPreviewVideo.addEventListener('loadeddata', () => {
+  brandingPreviewFallback.hidden = true
+  brandingPreviewVideo.hidden = false
+  brandingPreviewToggle.hidden = false
+})
+brandingPreviewVideo.addEventListener('error', () => {
+  brandingPreviewVideo.hidden = true
+  brandingPreviewToggle.hidden = true
+  brandingPreviewFallback.hidden = false
+  log.warn('ui', 'local branding preview could not be loaded')
+})
 syncBrandingOptions()
 
 versionLine.textContent = `${APP_VERSION} · ${BUILD_ID}${isDev ? ' · development' : ''}`
@@ -532,7 +663,7 @@ void checkWorker()
     setStatus(
       blocking
         ? 'This browser is missing something the tool needs. Full guidance arrives with the pre-flight checks.'
-        : 'Everything needed is available. Ready for the next milestone.',
+        : 'Everything needed is available. Choose a video to begin.',
     )
   })
   .catch((cause: unknown) => {
@@ -549,9 +680,22 @@ void checkWorker()
 
 // --- File selection ---
 
+function resetAbruptStartAcknowledgement(): void {
+  abruptStartRequiredGeneration = null
+  abruptStartAcknowledgedGeneration = null
+  abruptStartCheck.replaceChildren()
+  syncStartAvailability()
+}
+
 fileInput.addEventListener('change', () => {
   const file = fileInput.files?.[0]
   selectSource(file ? Object.freeze({ file, handle: null }) : null)
+})
+
+changeVideoButton.addEventListener('click', () => {
+  if (jobInFlight || workerFailed || resultAuthority.active) return
+  if (useHandleSourcePicker) sourcePickerButton.click()
+  else fileInput.click()
 })
 
 sourcePickerButton.addEventListener('click', () => {
@@ -595,6 +739,8 @@ function selectSource(source: SelectedSource | null): void {
   sourceReport.replaceChildren()
   preflightReport.replaceChildren()
   audioWarnings.replaceChildren()
+  outputAudioWarnings.replaceChildren()
+  resetAbruptStartAcknowledgement()
   // Hidden, not replaced: the Start and Cancel buttons live for the whole
   // session now, and emptying this container would throw them away (VH-36).
   hideProcessControls()
@@ -610,12 +756,15 @@ function selectSource(source: SelectedSource | null): void {
 
   if (!file || !selection) {
     selectionAuthority.invalidate()
+    showWorkflowStage('select')
     setStatus('Choose a video to begin.')
     return
   }
 
   // Never log the filename — DEV-INFRASTRUCTURE.md -> "Redaction".
   log.info('ui', 'file chosen', { sizeBytes: file.size, type: file.type })
+  showWorkflowStage('review')
+  updateWorkflowSummaries()
   setStatus('Reading the video…')
 
   void (async () => {
@@ -699,13 +848,31 @@ async function runPreflight(selection: SelectionAttempt<SelectedSource, PresetId
           }
         },
       })
-      renderWarnings(audioWarnings, reply.summary.audioWarnings, {
-        heading: 'Worth knowing about the sound',
+      const abruptStart = reply.summary.audioWarnings.some(
+        (warning) => warning.code === 'abrupt-start',
+      )
+      abruptStartRequiredGeneration = abruptStart ? selection.generation : null
+      abruptStartAcknowledgedGeneration = null
+      renderWarnings(
+        audioWarnings,
+        reply.summary.audioWarnings.filter((warning) => warning.code !== 'abrupt-start'),
+        {
+          heading: 'Worth knowing about the sound',
+        },
+      )
+      renderAbruptStartAcknowledgement(abruptStartCheck, abruptStart, {
+        onAcknowledgement: (acknowledged) => {
+          if (!selectionAuthority.isCurrent(selection)) return
+          abruptStartAcknowledgedGeneration = acknowledged ? selection.generation : null
+          syncStartAvailability()
+        },
       })
       setStatus(summarisePreflight(reply.summary))
       presetChoice.hidden = false
       brandingChoice.hidden = false
       subtitleField.hidden = false
+      syncBrandingPreview()
+      updateWorkflowSummaries()
       if (reply.summary.verdict.outcome === 'proceed' || reply.summary.verdict.outcome === 'warn') {
         showProcessControls(selection)
       }
@@ -738,9 +905,11 @@ presetChoice.addEventListener('change', () => {
     return
   }
   const selection = selectionAuthority.begin(source, chosenPreset())
+  resetAbruptStartAcknowledgement()
   hideProcessControls()
   preflightReport.replaceChildren()
   audioWarnings.replaceChildren()
+  updateWorkflowSummaries()
   void runPreflight(selection)
 })
 
@@ -785,17 +954,40 @@ let cancelRequestedForId: number | null = null
 // leaving the job uncancellable and a second one launchable (VH-36).
 const startButton = document.createElement('button')
 startButton.type = 'button'
+startButton.id = 'start-processing-button'
 startButton.className = 'button'
 startButton.textContent = 'Create the video'
 startButton.disabled = true
 
 const cancelButton = document.createElement('button')
 cancelButton.type = 'button'
+cancelButton.id = 'cancel-processing-button'
 cancelButton.className = 'button button--secondary'
 cancelButton.textContent = 'Cancel'
 cancelButton.hidden = true
 
 processActions.append(startButton, cancelButton)
+
+function abruptStartIsCleared(): boolean {
+  const readyJob = selectionAuthority.readyJob
+  return (
+    readyJob === null ||
+    abruptStartRequiredGeneration !== readyJob.generation ||
+    abruptStartAcknowledgedGeneration === readyJob.generation
+  )
+}
+
+/** Applies every existing Start gate plus VH-25's selection-scoped check. */
+function syncStartAvailability(): void {
+  startButton.disabled =
+    processInterlock.locked ||
+    subtitleReadPending ||
+    workerFailed ||
+    pendingCleanupJobId !== null ||
+    selectionAuthority.readyJob === null ||
+    resultAuthority.active !== null ||
+    !abruptStartIsCleared()
+}
 
 /** Moves focus to the next visible workflow control before removing its owner. */
 function focusNextWorkflowControl(includeResult = true): void {
@@ -847,13 +1039,8 @@ function setJobInFlight(running: boolean): void {
   subtitleInput.disabled = locked || workerFailed
   presetChoice.disabled = locked || workerFailed
   brandingChoice.disabled = locked || workerFailed
-  startButton.disabled =
-    locked ||
-    subtitleReadPending ||
-    workerFailed ||
-    pendingCleanupJobId !== null ||
-    selectionAuthority.readyJob === null ||
-    resultAuthority.active !== null
+  changeVideoButton.disabled = locked || workerFailed || resultAuthority.active !== null
+  syncStartAvailability()
   if (!running && document.activeElement === cancelButton) focusNextWorkflowControl()
   cancelButton.hidden = !running
   cancelButton.disabled = false
@@ -873,6 +1060,7 @@ function completeCleanupOwnership(jobId: string, status: string): void {
   processingGuard.setRetainedResult(resultAuthority.active !== null)
   setDiagnosticsContext({ view: currentSource ? 'preflight' : 'select', jobSpec: null })
   setStatus(status)
+  showWorkflowStage(currentSource ? 'review' : 'select')
   setJobInFlight(jobInFlight)
   focusNextWorkflowControl(false)
   processResult.replaceChildren()
@@ -884,6 +1072,7 @@ function completeCleanupOwnership(jobId: string, status: string): void {
  */
 function renderCleanupRetry(jobId: string, message: string): void {
   holdCleanupOwnership(jobId)
+  showWorkflowStage('processing')
   processResult.replaceChildren()
 
   const notice = document.createElement('p')
@@ -937,7 +1126,8 @@ startButton.addEventListener('click', () => {
     workerFailed ||
     processInterlock.locked ||
     resultAuthority.active ||
-    pendingCleanupJobId !== null
+    pendingCleanupJobId !== null ||
+    !abruptStartIsCleared()
   )
     return
   const { file: source, presetId, generation } = readyJob
@@ -964,6 +1154,8 @@ startButton.addEventListener('click', () => {
   })
 
   processResult.replaceChildren()
+  outputAudioWarnings.replaceChildren()
+  showWorkflowStage('processing')
 
   const { id, promise } = requestWithId(
     {
@@ -997,6 +1189,7 @@ startButton.addEventListener('click', () => {
             if (discardReply.kind === 'discarded') {
               setStatus('Cancelled. Nothing was saved, and your original file is unchanged.')
               setDiagnosticsContext({ view: 'preflight', jobSpec: null })
+              showWorkflowStage('review')
               return
             }
             log.error('ui', 'late-cancel result was not discarded', {
@@ -1029,9 +1222,11 @@ startButton.addEventListener('click', () => {
         processingGuard.setRetainedResult(true)
         setDiagnosticsContext({ view: 'result' })
         renderResult(result, reply.outputVerification)
-        renderWarnings(audioWarnings, reply.outputWarnings, {
+        renderWarnings(outputAudioWarnings, reply.outputWarnings, {
           heading: 'Worth knowing about the finished video',
         })
+        showWorkflowStage('result')
+        focusNextWorkflowControl()
         if (cancellationWasRequested) {
           setStatus(
             'The video finished before cancellation could be confirmed. The result is still here to save or discard.',
@@ -1048,6 +1243,8 @@ startButton.addEventListener('click', () => {
         // untouched — say so rather than leaving them wondering.
         setStatus('Cancelled. Nothing was saved, and your original file is unchanged.')
         setDiagnosticsContext({ view: 'preflight', jobSpec: null })
+        processResult.replaceChildren()
+        showWorkflowStage('review')
       } else if (reply.kind === 'failed') {
         if (reply.retainedJobId) {
           renderCleanupRetry(reply.retainedJobId, reply.message)
@@ -1056,11 +1253,13 @@ startButton.addEventListener('click', () => {
           setStatus('The video could not be created.')
         }
         setDiagnosticsContext({ view: 'preflight', jobSpec: null })
+        showWorkflowStage('processing')
       }
     })
     .catch((cause: unknown) => {
       if (!resultAuthority.active) renderSourceError(processResult, 'The job did not finish.')
       setDiagnosticsContext({ view: 'preflight', jobSpec: null })
+      showWorkflowStage('processing')
       log.error('ui', 'process request failed', {
         reason: cause instanceof Error ? cause.message : String(cause),
       })
@@ -1094,12 +1293,8 @@ function hideProcessControls(): void {
 function showProcessControls(selection: SelectionAttempt<SelectedSource, PresetId>): void {
   if (!selectionAuthority.accept(selection)) return
   processActions.hidden = false
-  startButton.disabled =
-    jobInFlight ||
-    subtitleReadPending ||
-    workerFailed ||
-    pendingCleanupJobId !== null ||
-    resultAuthority.active !== null
+  showWorkflowStage('review')
+  syncStartAvailability()
 }
 
 function renderResult(result: RetainedOutput, verification: OutputVerification): void {
@@ -1149,8 +1344,7 @@ function renderResult(result: RetainedOutput, verification: OutputVerification):
 
   const ownership = document.createElement('p')
   ownership.className = 'verdict-detail'
-  ownership.textContent =
-    'Save or discard this result before creating another video. Choosing a different source will not remove it.'
+  ownership.textContent = 'Save or discard this result before creating another video.'
   processResult.append(ownership)
 
   const save = document.createElement('button')
@@ -1253,6 +1447,8 @@ function renderResult(result: RetainedOutput, verification: OutputVerification):
     processingGuard.setRetainedResult(false)
     setDiagnosticsContext({ view: currentSource ? 'preflight' : 'select', jobSpec: null })
     releaseFallbackDownloads(file)
+    outputAudioWarnings.replaceChildren()
+    showWorkflowStage(currentSource ? 'review' : 'select')
     setJobInFlight(jobInFlight)
     focusNextWorkflowControl(false)
     processResult.replaceChildren()

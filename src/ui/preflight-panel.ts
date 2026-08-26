@@ -10,13 +10,18 @@
 import { PRESETS, bitrateWasCappedToSource } from '../config/presets'
 import type { PreflightOutcome, PreflightReasonCode, PreflightSummary } from '../media/preflight'
 import {
-  formatDuration,
   formatFileSize,
   formatFrameRate,
   formatContentClass,
   formatOutputSizeGuidance,
   formatResolution,
+  formatTimeEstimate,
 } from './format'
+
+const estimatePhrase = (seconds: number): string => {
+  const estimate = formatTimeEstimate(seconds)
+  return estimate === 'Less than a second' ? 'less than a second' : estimate.toLowerCase()
+}
 
 const OUTCOME_HEADING: Record<PreflightOutcome, string> = {
   proceed: 'Ready to go',
@@ -50,9 +55,9 @@ function reasonText(code: PreflightReasonCode, summary: PreflightSummary): strin
     case 'storage-unknown':
       return 'This browser will not say how much free space there is. If it runs out part-way, the job stops and nothing is saved — your original file is not affected.'
     case 'very-long-job':
-      return `This will take about ${estimate === null ? 'a long time' : formatDuration(estimate)}. You can carry on, but a desktop computer would be considerably faster.`
+      return `This will take ${estimate === null ? 'a long time' : estimatePhrase(estimate)}. You can carry on, but a desktop computer would be considerably faster.`
     case 'long-job':
-      return `This will take about ${estimate === null ? 'a while' : formatDuration(estimate)}. Keep this tab open while it runs — closing it stops the job.`
+      return `This will take ${estimate === null ? 'a while' : estimatePhrase(estimate)}. Keep this tab open while it runs — closing it stops the job.`
     case 'mobile-device':
       return 'Phones and tablets are much slower at this than a computer, and are more likely to stop part-way. Use a computer if you can.'
     case 'estimate-unavailable':
@@ -86,7 +91,7 @@ export function renderPreflight(
   if (verdict.outcome === 'proceed' && probe.estimatedSeconds !== null) {
     const estimate = document.createElement('p')
     estimate.className = 'verdict-detail'
-    estimate.textContent = `This should take about ${formatDuration(probe.estimatedSeconds)}.`
+    estimate.textContent = `This should take ${estimatePhrase(probe.estimatedSeconds)}.`
     section.append(estimate)
   }
 
@@ -113,24 +118,17 @@ export function renderPreflight(
   }
 
   const output = document.createElement('dl')
-  output.className = 'facts'
+  output.className = 'facts facts--summary'
   const rows: Array<readonly [string, string]> = [
-    ['Setting', PRESETS[summary.presetId].label],
-    [
-      'Output',
-      `${formatResolution(shape.width, shape.height)} at ${formatFrameRate(shape.frameRate)}`,
-    ],
+    ['Purpose', PRESETS[summary.presetId].label],
     ['File size', formatOutputSizeGuidance(summary.outputSizeGuidanceBytes)],
     [
-      'Measured speed',
-      probe.measured
-        ? `${Math.round(probe.videoFramesPerSecond)} frames per second on this device`
-        : 'not measured',
+      'Time needed',
+      probe.estimatedSeconds === null
+        ? 'Could not be estimated'
+        : formatTimeEstimate(probe.estimatedSeconds),
     ],
   ]
-  if (summary.presetId === 'smaller') {
-    rows.splice(1, 0, ['Picture type', formatContentClass(summary.contentClass)])
-  }
   for (const [term, detail] of rows) {
     const dt = document.createElement('dt')
     dt.textContent = term
@@ -139,6 +137,32 @@ export function renderPreflight(
     output.append(dt, dd)
   }
   section.append(output)
+
+  const technical = document.createElement('details')
+  technical.className = 'disclosure'
+  const technicalSummary = document.createElement('summary')
+  technicalSummary.className = 'disclosure-summary'
+  technicalSummary.textContent = 'Technical output details'
+  const technicalFacts = document.createElement('dl')
+  technicalFacts.className = 'facts'
+  const technicalRows: Array<readonly [string, string]> = [
+    [
+      'Picture',
+      `${formatResolution(shape.width, shape.height)} at ${formatFrameRate(shape.frameRate)}`,
+    ],
+  ]
+  if (summary.presetId === 'smaller') {
+    technicalRows.push(['Picture type', formatContentClass(summary.contentClass)])
+  }
+  for (const [term, detail] of technicalRows) {
+    const dt = document.createElement('dt')
+    dt.textContent = term
+    const dd = document.createElement('dd')
+    dd.textContent = detail
+    technicalFacts.append(dt, dd)
+  }
+  technical.append(technicalSummary, technicalFacts)
+  section.append(technical)
 
   // Spec 6.2's never-exceed-source cap, said out loud (VH-41). Someone who
   // picked "Smaller file" to fit a storage limit has to know when it will not
@@ -163,5 +187,5 @@ export function summarisePreflight(summary: PreflightSummary): string {
   if (summary.verdict.outcome === 'block') return 'This video cannot be processed in this browser.'
   return estimate === null
     ? 'Device check complete. The processing time could not be estimated.'
-    : `Device check complete. This should take about ${formatDuration(estimate)}.`
+    : `Device check complete. This should take ${estimatePhrase(estimate)}.`
 }

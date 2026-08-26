@@ -145,6 +145,18 @@ export const LIMITER = {
 export const BOUNDARY_FADE_MS = 100
 
 /**
+ * VH-25's corpus-backed check for a recording that begins mid-sound.
+ *
+ * The first 300 ms separated the four abrupt starts in the 21-file corpus
+ * from recordings that began quietly. This is an editorial prompt, not a DSP
+ * control: the measured source is never altered because it crosses the line.
+ */
+export const ABRUPT_AUDIO_START = {
+  windowSeconds: 0.3,
+  atOrAboveDbfs: -45,
+} as const
+
+/**
  * Spec section 5.4. Advisory only: every one of these is shown before
  * processing and none of them blocks it.
  */

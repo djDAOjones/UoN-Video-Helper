@@ -19,6 +19,14 @@
 
 ### Repository-review real-source closure
 
+- VH-32 — Shipped 2026-08-26. A four-stage guided conveyor now separates
+  selection, review, creation and saving, collapses settled work, leads with
+  purpose, previews the approved local closing card and keeps technical detail
+  optional; see decision-log.
+- VH-25 — Shipped 2026-08-26. The existing picture-boundary work is complete:
+  the streaming analysis now identifies rare abrupt audio starts and the review
+  stage requires a selection-scoped check of the original opening; see
+  decision-log.
 - VH-19 — Shipped 2026-08-26. The Smaller preset now distinguishes clear
   slides/screen from moving picture across the source timeline, exposes the
   result plainly and keeps uncertain material on the safer quality budget; see

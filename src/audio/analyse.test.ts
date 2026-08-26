@@ -63,4 +63,27 @@ describe('AudioAnalyser', () => {
     // Loudness is K-weighted and stereo-summed, so it tracks the peak level.
     expect(report.integratedLufs).toBeCloseTo(-12, 1)
   })
+
+  it('measures only the first 300 ms for the abrupt-start check', () => {
+    const analyser = new AudioAnalyser({ sampleRate: 1000, channelCount: 1 })
+    analyser.addFrames([new Float32Array(250).fill(0.1)])
+    analyser.addFrames([
+      Float32Array.from({ length: 250 }, (_value, index) => (index < 50 ? 0.1 : 1)),
+    ])
+
+    expect(analyser.finish().leadingRmsDbfs).toBeCloseTo(-20, 5)
+  })
+
+  it('uses every available frame when the source is shorter than 300 ms', () => {
+    const analyser = new AudioAnalyser({ sampleRate: 1000, channelCount: 2 })
+    analyser.addFrames([new Float32Array(100).fill(0.01), new Float32Array(100).fill(0.01)])
+
+    expect(analyser.finish().leadingRmsDbfs).toBeCloseTo(-40, 5)
+  })
+
+  it('reports silence rather than an invalid number for an empty opening', () => {
+    const analyser = new AudioAnalyser({ sampleRate: SAMPLE_RATE, channelCount: 1 })
+
+    expect(analyser.finish().leadingRmsDbfs).toBe(Number.NEGATIVE_INFINITY)
+  })
 })

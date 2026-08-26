@@ -21,6 +21,10 @@ export interface WarningText {
   readonly detail: string
 }
 
+export interface AbruptStartRenderOptions {
+  readonly onAcknowledgement: (acknowledged: boolean) => void
+}
+
 const round = (value: number, places = 1): string =>
   Number.isFinite(value) ? value.toFixed(places) : '—'
 
@@ -32,6 +36,13 @@ export function warningText(warning: AudioWarning): WarningText {
         heading: 'This video has no sound',
         detail:
           'Branding will still be added and the video re-encoded, but there is no audio to even out. If you expected sound, check the recording before publishing.',
+      }
+
+    case 'abrupt-start':
+      return {
+        heading: 'The sound starts immediately',
+        detail:
+          'The recording may begin part-way through speech. Check the beginning of the original video, then confirm below that it starts where you intended.',
       }
 
     case 'clipping':
@@ -124,5 +135,47 @@ export function renderWarnings(
     'None of these stop you continuing. Your original file is not changed either way.'
   section.append(reassurance)
 
+  container.append(section)
+}
+
+/**
+ * Renders VH-25's rare editorial check separately from advisory warnings.
+ *
+ * The checkbox does not claim to repair the recording. It only confirms that
+ * the user has checked the original opening and accepts the intended edit.
+ */
+export function renderAbruptStartAcknowledgement(
+  container: HTMLElement,
+  required: boolean,
+  options: AbruptStartRenderOptions,
+): void {
+  container.replaceChildren()
+  if (!required) return
+
+  const warning = warningText({ code: 'abrupt-start', detail: {} })
+  const section = document.createElement('section')
+  section.className = 'acknowledgement'
+
+  const heading = document.createElement('h3')
+  heading.className = 'warnings-heading'
+  heading.id = `abrupt-start-heading-${container.id || 'default'}`
+  heading.textContent = warning.heading
+  section.setAttribute('aria-labelledby', heading.id)
+
+  const detail = document.createElement('p')
+  detail.className = 'warning-detail'
+  detail.textContent = warning.detail
+
+  const label = document.createElement('label')
+  label.className = 'radio acknowledgement-check'
+  const checkbox = document.createElement('input')
+  checkbox.type = 'checkbox'
+  checkbox.id = 'abrupt-start-acknowledgement'
+  const text = document.createElement('span')
+  text.textContent = 'I have checked that the recording starts where I intended.'
+  checkbox.addEventListener('change', () => options.onAcknowledgement(checkbox.checked))
+  label.append(checkbox, text)
+
+  section.append(heading, detail, label)
   container.append(section)
 }

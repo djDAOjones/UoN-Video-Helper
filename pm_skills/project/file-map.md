@@ -15,14 +15,14 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 192 file(s) across 8 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 196 file(s) across 8 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 20 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
 - `docs` — 5 file(s)
 - `public` — 17 file(s)
 - `scripts` — 9 file(s)
-- `src` — 133 file(s)
+- `src` — 137 file(s)
 - `test` — 6 file(s)
 <!-- /file-map-index -->
 
@@ -215,6 +215,8 @@
 - `src/styles/app.css` — App shell styles. Carbon productive language at AAA.
 - `src/styles/tokens.brand.css` — UoN brand tokens. Holds the D1 placeholder and nothing invented.
 - `src/styles/tokens.carbon.css` — Carbon structural tokens. Every pair is contrast-asserted by test/contrast.test.ts.
+- `src/ui/branding-preview.test.ts` — Pins approved local asset selection and reduced-motion autoplay policy.
+- `src/ui/branding-preview.ts` — Selects the accurate local hard-cut closing-card preview without exposing hidden transition modes.
 - `src/ui/format.test.ts` — Pins the wording, so phrasing is tested rather than reviewed by opinion.
 - `src/ui/format.ts` — Technical facts as plain language — durations, sizes, codecs, channel layouts and picture class.
 - `src/ui/preflight-panel.ts` — Renders the verdict, including Smaller's picture class and a working browser when blocked.
@@ -222,6 +224,8 @@
 - `src/ui/source-panel.ts` — Renders a SourceReport, including the standing caveat about tracks we cannot see.
 - `src/ui/warning-text.test.ts` — Mechanical half of "reads clearly": no jargon, no blame, always a next step.
 - `src/ui/warning-text.ts` — The 5.4 warnings in words, and their rendering. Possibilities, never verdicts.
+- `src/ui/workflow.test.ts` — Pins current, complete and upcoming conveyor states, including failure return and result completion.
+- `src/ui/workflow.ts` — Pure presentation rules for the four-stage conveyor; processing authorities remain elsewhere.
 - `src/vite-env.d.ts` — Ambient types: the injected build globals and the File System Access API surface.
 - `src/workers/job.worker.test.ts` — Proves non-abortable inspection is serialized and stale queued work is skipped.
 - `src/workers/job.worker.ts` — Owns serialized readiness, processing, cancellation, verification and retained workspaces.

@@ -66,3 +66,9 @@
 - [ ] 2026-08-26 SPEC §6.2 — Smaller now derives screen/camera bitrate from a
       conservative timeline-wide measurement and visibly names the result
       (source: VH-19 decision entry)
+- [ ] 2026-08-26 SPEC §4.1/§9.1 — VH-32 keeps transition modes hidden and
+      replaces the stale control sequence with a four-stage guided conveyor
+      (source: VH-32/VH-25 decision entry)
+- [ ] 2026-08-26 SPEC §5.4/§9.1 — an abrupt source-audio start now requires an
+      inline, selection-scoped check of the original opening before creation
+      (source: VH-32/VH-25 decision entry)

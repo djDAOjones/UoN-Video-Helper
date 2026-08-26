@@ -27,6 +27,7 @@ function healthy(overrides: Partial<AudioAnalysis> = {}): AudioAnalysis {
     stepSeconds: 0.1,
     truePeakDbtp: -6,
     clippedSampleCount: 0,
+    leadingRmsDbfs: Number.NEGATIVE_INFINITY,
     sampleRate: 48000,
     channelCount: 2,
     ...overrides,
@@ -64,6 +65,12 @@ describe('spec 5.4 source warnings', () => {
 
   it('no audio track', () => {
     expect(codes(null)).toEqual(['no-audio'])
+  })
+
+  it('abrupt start — the opening 300 ms is at or above -45 dBFS', () => {
+    expect(codes(healthy({ leadingRmsDbfs: -45.01 }))).not.toContain('abrupt-start')
+    expect(codes(healthy({ leadingRmsDbfs: -45 }))).toContain('abrupt-start')
+    expect(codes(healthy({ leadingRmsDbfs: -24.9 }))).toContain('abrupt-start')
   })
 
   it('clipping — ten or more samples at the threshold', () => {

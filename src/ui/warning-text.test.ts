@@ -11,6 +11,7 @@ import { warningText } from './warning-text'
 
 const ALL: AudioWarningCode[] = [
   'no-audio',
+  'abrupt-start',
   'clipping',
   'very-quiet',
   'highly-variable',

@@ -11,6 +11,45 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-26 — VH-32 / VH-25: the interface is a guided conveyor
+
+**Decision:** present Select, Review, Create and Save as one ordered conveyor.
+Only the current step is expanded; settled steps collapse to plain summaries,
+and a finished result replaces processing. Review leads with purpose and the
+choices a lecturer can act on, while codec, frame-rate and output-shape facts
+sit behind disclosures. Closing transition modes remain hidden. The preview
+uses only the approved local opaque closing tail because the current hard-cut
+output discards the animated onset; showing that onset would promise an effect
+the result does not contain.
+
+An opening 300 ms RMS level at or above −45 dBFS identifies VH-25's rare
+abrupt audio starts during the existing streaming analysis pass. It produces
+an inline check of the original opening, not a modal and not an audio control.
+Acknowledgement is tied to the immutable source-and-preset generation, so a new
+file or output choice resets it and stale asynchronous results cannot enable
+Create.
+
+**Rationale:** progressive disclosure removes the old accreting page without
+inventing a second job-state model. Existing selection, process and result
+authorities still own every lifecycle decision. The corpus threshold finds the
+four measured mid-speech starts; requiring a brief check preserves the user's
+editorial choice without modifying the source or pretending the app can repair
+a cut-off word.
+
+**Alternatives rejected:** a dashboard of simultaneously visible panels, a
+wizard with Back/Next navigation, restoring technical transition radios, and
+a generic or modal warning. Each either obscures progress, increases navigation
+cost, exposes a technical choice, or gives a rare warning disproportionate
+weight.
+
+**Verified:** 601 tests passed (one intentional skip), including threshold,
+boundary, wording, preview and workflow rules; the full build/gate passed.
+Chrome browser rehearsal covered empty, review, acknowledgement reset,
+processing, cancel, result, discard/focus, colour preview and narrow layout.
+
+**Link:** `src/ui/workflow.ts`, `src/ui/branding-preview.ts`, `src/main.ts`,
+`src/audio/analyse.ts`, `src/audio/warnings.ts`.
+
 ## 2026-08-26 — VH-19: uncertainty keeps the safer picture budget
 
 **Decision:** classify the Smaller preset from five one-second windows spread
@@ -98,7 +137,7 @@ proved all three closing timelines, including explicitly faded overlays and a
 freeze that retains its faded state.
 
 **Link:** `src/config/branding.ts`, `src/media/branding.ts`,
-`src/media/pipeline.ts`, `tickets/VH-25.md`.
+`src/media/pipeline.ts`, `src/config/audio.ts`.
 
 ## 2026-08-26 — VH-53: storage and egress evidence stay fail-closed
 

@@ -193,27 +193,73 @@ export function summarise(report: SourceReport): string {
 export function renderSourceReport(container: HTMLElement, report: SourceReport): void {
   container.replaceChildren()
 
-  const list = document.createElement('dl')
-  list.className = 'facts'
+  const ready = document.createElement('p')
+  ready.className = 'source-ready'
+  ready.textContent = 'Video read successfully.'
+  container.append(ready)
 
-  for (const row of buildRows(report)) {
-    const term = document.createElement('dt')
-    term.textContent = row.term
+  const rows = buildRows(report)
 
-    const detail = document.createElement('dd')
-    detail.textContent = row.detail
+  const appendRows = (list: HTMLDListElement, selected: readonly Row[]): void => {
+    for (const row of selected) {
+      const term = document.createElement('dt')
+      term.textContent = row.term
 
-    if (row.note) {
-      const note = document.createElement('span')
-      note.className = 'fact-note'
-      note.textContent = row.note
-      detail.append(note)
+      const detail = document.createElement('dd')
+      detail.textContent = row.detail
+
+      if (row.note) {
+        const note = document.createElement('span')
+        note.className = 'fact-note'
+        note.textContent = row.note
+        detail.append(note)
+      }
+
+      list.append(term, detail)
     }
-
-    list.append(term, detail)
   }
 
+  const list = document.createElement('dl')
+  list.className = 'facts facts--summary'
+  appendRows(
+    list,
+    rows.filter((row) => ['Length', 'File size', 'Sound'].includes(row.term)),
+  )
   container.append(list)
+
+  // Anything that may not survive the one-way conversion stays visible. It
+  // must never be hidden inside optional technical detail.
+  const visibleRisks = rows.filter(
+    (row) =>
+      ['Picture support', 'Sound support', 'Additional tracks', 'File details'].includes(
+        row.term,
+      ) ||
+      (row.term === 'Subtitles' && row.note !== undefined),
+  )
+  if (visibleRisks.length > 0) {
+    const risks = document.createElement('dl')
+    risks.className = 'facts facts--risks'
+    appendRows(risks, visibleRisks)
+    container.append(risks)
+  }
+
+  const technical = document.createElement('details')
+  technical.className = 'disclosure'
+  const technicalSummary = document.createElement('summary')
+  technicalSummary.className = 'disclosure-summary'
+  technicalSummary.textContent = 'Technical video details'
+  const technicalFacts = document.createElement('dl')
+  technicalFacts.className = 'facts'
+  appendRows(
+    technicalFacts,
+    rows.filter(
+      (row) =>
+        ['Picture', 'Frame rate', 'Container'].includes(row.term) ||
+        (row.term === 'Subtitles' && row.note === undefined),
+    ),
+  )
+  technical.append(technicalSummary, technicalFacts)
+  container.append(technical)
 
   // Only for containers the handler scan cannot read. Saying "no subtitles"
   // about a file we never checked would be worse than admitting we did not.

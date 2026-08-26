@@ -10,11 +10,12 @@
  * belong in the UI. Keeping them apart is what lets both be tested.
  */
 
-import { WARNING_THRESHOLDS } from '../config/audio'
+import { ABRUPT_AUDIO_START, WARNING_THRESHOLDS } from '../config/audio'
 import type { AudioAnalysis } from './analyse'
 
 export type AudioWarningCode =
   | 'no-audio'
+  | 'abrupt-start'
   | 'clipping'
   | 'very-quiet'
   | 'highly-variable'
@@ -70,7 +71,12 @@ export function detectSourceWarnings(analysis: AudioAnalysis | null): AudioWarni
   if (!analysis) return [{ code: 'no-audio', detail: {} }]
 
   const warnings: AudioWarning[] = []
-  const { clippedSampleCount, truePeakDbtp, integratedLufs, loudnessRangeLu } = analysis
+  const { clippedSampleCount, truePeakDbtp, integratedLufs, loudnessRangeLu, leadingRmsDbfs } =
+    analysis
+
+  if (leadingRmsDbfs >= ABRUPT_AUDIO_START.atOrAboveDbfs) {
+    warnings.push({ code: 'abrupt-start', detail: { leadingRmsDbfs } })
+  }
 
   // Either enough individual samples reached the ceiling, or the peak went
   // over full scale outright — the second needs no count to be a problem.

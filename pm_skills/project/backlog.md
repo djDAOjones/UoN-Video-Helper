@@ -39,39 +39,6 @@
       Safari none. Keep open for directory/fallback, private/multi-tab/player/
       device/AT rehearsal, full supported-engine egress proof and protected DSP.
 
-- [~] **VH-25 Boundary fades** [detail](tickets/VH-25.md) (2026-08-25)
-      Intent: sources cut hard into the branding, and the two ends differ.
-      21 of 21 end on a bright frame so the picture always needs a fade-out,
-      but 0 of 19 end above −69 dBFS so the audio has already stopped. Four
-      start mid-speech. No picture fade exists anywhere in `src/` today;
-      `BOUNDARY_FADE_MS = 100` is D3's AUDIO fade at the branding join.
-      Done when: picture fade-out defaults ON silently **for hard cut only** —
-      in the two overlay modes the build IS the transition and a fade would
-      double up (clause inherited from VH-22 on its close) — picture fade-in is
-      offered and defaults OFF, and the modal is reserved for the
-      audio-starts-mid-speech case. A notice that fires every time is not a
-      notice. Lengths live in `src/config/`; D3's 100 ms fade is reconciled
-      with them.
-      Picture handling shipped on the experimental branch 2026-08-26: a
-      configurable 0.5 s fade, the mode-dependent closing default, the
-      opt-in opening fade and coupled source-audio fade-out are browser-proved.
-      Remaining: detect the rare abrupt audio starts and agree their prompt
-      with VH-32 rather than introduce a one-off modal pattern.
-
-- [ ] **VH-32 Interface quality pass** [sign-off] [detail](tickets/VH-32.md) (2026-08-25)
-      Intent: maintainer request after using the deployed app — a deliberate
-      design pass, not a bug list. The screen accretes rather than progresses
-      (the finished state looks like the working state with more underneath),
-      speaks in codecs rather than outcomes, and never shows moving picture
-      despite being a video tool. It also owns whether and how the currently
-      hidden closing-transition choices return; there will be no piecemeal
-      control restoration ahead of that design. The plain-language framing and
-      the never-uploaded reassurance are already right and should survive.
-      Done when: a considered redesign is agreed and implemented, reviewed
-      against `UI-STANDARDS.md` §6. Last in the band by design: it must lay out
-      the estimate wording, the content class and the fade toggles that the
-      four items above decide.
-
 ### Band 2 — The edges hold
 
 <!-- Not committed. Known gaps not currently biting anyone. VH-16 earns
@@ -137,6 +104,8 @@
       VH-33; what remains here is the feature itself.
       Done when: opening assets exist. They will need the same three boundary
       modes as VH-22, mirrored — the onset ramp runs the other way.
+      Decide then whether the source picture fade-in remains inside the source
+      boundary when an opening returns; do not add a second fade control.
       Inherited from VH-43 on its close (2026-08-26): a mono source plus an
       opening mixes channel counts into one audio track — the encoder is
       configured from the source while `feedBrandingAudio` emits at the clip's
