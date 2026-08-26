@@ -27,12 +27,24 @@
       <section class="panel" aria-labelledby="choose-heading">
         <h2 id="choose-heading">Choose a video</h2>
         <div class="field">
-          <label class="label" for="file-input">Video file</label>
+          <span class="label" id="file-label">Video file</span>
+          <div class="actions" id="source-picker-actions" hidden>
+            <button
+              class="button button--secondary"
+              type="button"
+              id="source-picker-button"
+              aria-describedby="file-help"
+            >
+              Choose video file
+            </button>
+            <p class="helper" id="source-picker-status" role="status" aria-live="polite"></p>
+          </div>
           <input
             class="file-input"
             type="file"
             id="file-input"
             accept="video/*,.mp4,.mov,.m4v,.mkv,.webm"
+            aria-labelledby="file-label"
             aria-describedby="file-help"
           />
           <p class="helper" id="file-help">
@@ -104,7 +116,14 @@
         <div id="preflight-report"></div>
         <div id="audio-warnings"></div>
         <div class="actions" id="process-actions" hidden></div>
-        <progress class="progress" id="process-progress" max="1" value="0" hidden></progress>
+        <progress
+          class="progress"
+          id="process-progress"
+          max="1"
+          value="0"
+          aria-label="Processing progress"
+          hidden
+        ></progress>
         <div id="process-result"></div>
       </section>
 

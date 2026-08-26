@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Generates placeholder branding masters.
+ * Generates the opening placeholder branding masters.
  *
  * WHY FFMPEG IS ACCEPTABLE HERE, AND ONLY HERE.
  *
@@ -11,9 +11,13 @@
  *
  * None of that is engaged by using a locally-installed ffmpeg as an authoring
  * tool to make stand-in assets. Nothing it produces is code; the output is
- * eight short MP4 files that exist only until the real After Effects renders
+ * four short opening MP4 files that exist only until approved opening renders
  * arrive, and it is not a build or runtime dependency of the app. Running this
  * script is optional: the assets it makes are committed.
+ *
+ * Real closing assets have their own measured onset/tail model and are built
+ * by `scripts/build-branding.mjs`; this generator must never replace them with
+ * the obsolete monolithic placeholder shape.
  *
  * Usage: node scripts/gen-placeholder-branding.mjs
  * Requires: ffmpeg on PATH (brew install ffmpeg).
@@ -34,11 +38,8 @@ const MASTERS = [
   { label: '2160p30', width: 3840, height: 2160, frameRate: 30 },
 ]
 
-/** Open decision D2. Kept in step with BRANDING_DURATIONS. */
-const SEGMENTS = [
-  { name: 'opening', seconds: 5 },
-  { name: 'closing', seconds: 4 },
-]
+/** Open decision D2. Kept in step with BRANDING_DURATIONS.openingSeconds. */
+const OPENING = { name: 'opening', seconds: 5 }
 
 /**
  * Reads the D1 brand colour from the token file, so there is exactly one place
@@ -97,11 +98,9 @@ const colour = brandBackground()
 console.log(`Brand background (open decision D1): ${colour}`)
 
 let total = 0
-for (const segment of SEGMENTS) {
-  for (const master of MASTERS) {
-    const { file, bytes } = build(segment, master, colour)
-    total += bytes
-    console.log(`  ${file.replace(process.cwd() + '/', '')} — ${(bytes / 1024).toFixed(0)} kB`)
-  }
+for (const master of MASTERS) {
+  const { file, bytes } = build(OPENING, master, colour)
+  total += bytes
+  console.log(`  ${file.replace(process.cwd() + '/', '')} — ${(bytes / 1024).toFixed(0)} kB`)
 }
 console.log(`Total: ${(total / 1024 / 1024).toFixed(2)} MB`)

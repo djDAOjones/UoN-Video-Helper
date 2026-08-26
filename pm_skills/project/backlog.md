@@ -26,6 +26,17 @@
      VH-34..VH-40 came from an external code review, 2026-08-25; its findings
      were verified against the source before being written up. -->
 
+- [~] **VH-53 Repository review remediation**
+      [detail](tickets/VH-53.md) (2026-08-26)
+      Intent: turn the critique-driven repository review into tested fixes,
+      starting with incorrect output, source/result loss, stale job state,
+      cancellation, OPFS races and false-green release evidence.
+      State: a substantial non-protected tranche is implemented on its
+      isolated branch and the canonical gate is green. Keep open through
+      real-engine and real-material rehearsal, and an explicit decision on the
+      remaining protected loudness work; pilot blockers do not close from unit
+      evidence.
+
 - [ ] **VH-49 Firefox cannot make the audio, and is not told so** [sign-off]
       [detail](tickets/VH-49.md) (2026-08-26)
       Intent: Firefox 154 has the `AudioEncoder` class and REFUSES `mp4a.40.2`

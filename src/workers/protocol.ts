@@ -15,6 +15,7 @@ import type { SourceReport } from '../media/inspect'
 import type { PreflightSummary } from '../media/preflight'
 import type { AudioWarning } from '../audio/warnings'
 import type { PipelineStage } from '../media/pipeline'
+import type { OutputVerification } from '../media/output-verification'
 
 /** Main thread -> worker. */
 export type WorkerRequest =
@@ -49,6 +50,10 @@ export type WorkerRequest =
       readonly id: number
       readonly file: Blob
       readonly presetId: PresetId
+      /** The accepted file-and-preset generation that authorised this job. */
+      readonly selectionGeneration: number
+      /** Whether the visible source summary warned that metadata was unreadable. */
+      readonly metadataReadFailureDisclosed: boolean
       /** Spec 4.1: independent toggles, all four combinations valid. */
       readonly branding: BrandingChoice
       /** Resolved D1 brand background; the worker has no document. */
@@ -58,7 +63,7 @@ export type WorkerRequest =
     }
   /** Stop the job started by `cancelId`. Answered by that job, not by this request. */
   | { readonly kind: 'cancel'; readonly id: number; readonly cancelId: number }
-  /** Release a finished job's OPFS scratch once the result has been saved. */
+  /** Release a result after durable picker success or explicit user discard. */
   | { readonly kind: 'discard'; readonly id: number; readonly jobId: string }
 
 /** Worker -> main thread, in reply to a request. */
@@ -71,8 +76,9 @@ export type WorkerResponse =
    * The finished file, plus the job whose scratch still holds it. The
    * workspace is deliberately NOT disposed here: the `File` reads from it, so
    * removing it first would hand back a file that cannot be read. The caller
-   * sends `discard` once the result is safely saved, and an app-start sweep
-   * catches anything a closed tab left behind.
+   * sends `discard` after a durable picker save or explicit user confirmation;
+   * a fallback download click is not completion. An app-start sweep catches
+   * anything a closed tab left behind.
    */
   | {
       readonly kind: 'processed'
@@ -85,11 +91,19 @@ export type WorkerResponse =
       readonly subtitleCues: number
       /** Measured from the finished file — spec 5.4's post-processing row. */
       readonly outputWarnings: readonly AudioWarning[]
+      /** Pass/fail is the strict acceptance pair; inability to measure stays explicit. */
+      readonly outputVerification: OutputVerification
     }
   | { readonly kind: 'cancelled'; readonly id: number }
   | { readonly kind: 'discarded'; readonly id: number }
   /** A request that failed for a reason the user should read, not a crash. */
-  | { readonly kind: 'failed'; readonly id: number; readonly message: string }
+  | {
+      readonly kind: 'failed'
+      readonly id: number
+      readonly message: string
+      /** Retryable worker ownership when temporary cleanup could not complete. */
+      readonly retainedJobId?: string
+    }
 
 /**
  * Worker -> main thread, unsolicited. An uncaught throw inside the worker is

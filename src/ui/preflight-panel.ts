@@ -21,8 +21,16 @@ const OUTCOME_HEADING: Record<PreflightOutcome, string> = {
 function reasonText(code: PreflightReasonCode, summary: PreflightSummary): string {
   const estimate = summary.probe.estimatedSeconds
   switch (code) {
+    case 'insecure-context':
+      return 'This page is not open from its secure HTTPS address, so the browser will not allow private video processing. Open the published HTTPS version in Chrome or Edge on a computer, or Safari 26 or later on a Mac.'
     case 'no-webcodecs':
       return 'This browser cannot process video. Chrome or Edge on a computer will work, as will Safari 26 or later on a Mac.'
+    case 'working-storage-unavailable':
+      return 'This browser cannot open the private working space this job needs. Try the published HTTPS version in Chrome or Edge on a computer, or Safari 26 or later on a Mac.'
+    case 'video-decode-unsupported':
+      return 'This browser cannot read the main picture track in this file. Try the file in Chrome or Edge on a computer, or export it as a standard H.264 MP4 first.'
+    case 'audio-decode-unsupported':
+      return 'This browser cannot read the main sound track in this file. Try the file in Chrome or Edge on a computer, or export it with AAC sound first.'
     case 'no-aac-encode':
       // Names the browser that will work, as every block here must. Firefox
       // encodes the picture fine and refuses the sound, which is why the
@@ -45,8 +53,17 @@ function reasonText(code: PreflightReasonCode, summary: PreflightSummary): strin
   }
 }
 
+export interface PreflightRenderOptions {
+  /** Required before Start may appear for a discourage outcome. */
+  readonly onDiscourageAcknowledgement?: (acknowledged: boolean) => void
+}
+
 /** Replaces `container` with the rendered verdict. */
-export function renderPreflight(container: HTMLElement, summary: PreflightSummary): void {
+export function renderPreflight(
+  container: HTMLElement,
+  summary: PreflightSummary,
+  options: PreflightRenderOptions = {},
+): void {
   container.replaceChildren()
 
   const { verdict, shape, probe } = summary
@@ -71,6 +88,21 @@ export function renderPreflight(container: HTMLElement, summary: PreflightSummar
     paragraph.className = 'verdict-detail'
     paragraph.textContent = reasonText(reason.code, summary)
     section.append(paragraph)
+  }
+
+  if (verdict.outcome === 'discourage') {
+    const acknowledgement = document.createElement('label')
+    acknowledgement.className = 'radio'
+    const checkbox = document.createElement('input')
+    checkbox.type = 'checkbox'
+    const text = document.createElement('span')
+    text.textContent =
+      'I understand this device may take a long time or stop the job, and I want to continue here.'
+    checkbox.addEventListener('change', () => {
+      options.onDiscourageAcknowledgement?.(checkbox.checked)
+    })
+    acknowledgement.append(checkbox, text)
+    section.append(acknowledgement)
   }
 
   const output = document.createElement('dl')

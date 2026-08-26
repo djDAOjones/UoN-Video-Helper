@@ -55,56 +55,142 @@ function lockFor(directoryName: string): string {
   return `opfs-job:${directoryName}`
 }
 
-/** Whether some tab — this one included — still needs that directory. */
-async function isClaimed(directoryName: string): Promise<boolean> {
+/** The narrow Web Locks surface used by the storage orchestration and its fakes. */
+export type ExclusiveLockRequest = (
+  name: string,
+  callback: (available: boolean) => Promise<void>,
+) => Promise<void>
+
+/** Creates the real exclusive Web Lock request in queued or probe mode. */
+function browserExclusiveLockRequest(mode: 'wait' | 'if-available'): ExclusiveLockRequest {
   if (!navigator.locks) {
-    // Every supported browser has Web Locks (Safari 15.4, Firefox 96), so this
-    // is a should-not-happen. If it does, keep everything: leaking scratch
-    // costs disk, and deleting another tab's finished output costs the user
-    // their work.
-    log.warn('opfs', 'no Web Locks; sweeping nothing rather than guessing', {})
-    return true
+    throw new Error('Web Locks are unavailable; refusing an unsafe OPFS operation')
   }
-  try {
-    return await navigator.locks.request(
-      lockFor(directoryName),
-      { ifAvailable: true },
-      (lock) => lock === null,
-    )
-  } catch (cause) {
-    log.warn('opfs', 'could not test job claim; keeping the directory', {
-      directoryName,
-      reason: cause instanceof Error ? cause.message : String(cause),
+  const locks = navigator.locks
+  if (mode === 'wait') {
+    return async (name, callback) => {
+      await locks.request(name, { mode: 'exclusive' }, async () => {
+        await callback(true)
+      })
+    }
+  }
+  return async (name, callback) => {
+    await locks.request(name, { ifAvailable: true, mode: 'exclusive' }, async (lock) => {
+      await callback(lock !== null)
     })
-    return true
   }
 }
 
+/** A resource initialised while its exclusive claim is held. */
+export interface HeldClaim<T> {
+  /** The resource created while the claim was held. */
+  readonly value: T
+  /** Ends the lifetime claim; safe to call more than once. */
+  readonly release: () => void
+}
+
 /**
- * Chooses which job directories a sweep may remove.
+ * Initialises a resource only after taking its lock, then keeps that lock held.
  *
- * Split out from {@link sweepOrphanedJobs} so the rule can be tested without a
- * browser: OPFS and Web Locks do not exist in Node, and the rule — never
- * remove anything still claimed, and never remove anything we failed to ask
- * about — is the part worth pinning.
+ * The caller receives the resource as soon as initialisation finishes; the
+ * lock request itself stays pending until `release` is called. A missing,
+ * rejected or unavailable claim rejects before `initialise` runs, so a job
+ * directory can never exist without its lifetime lock already being held.
  *
- * @param names - Directory names found under the jobs root.
- * @param claimed - Answers whether a directory is still in use. A rejection is
- *   treated as "claimed": uncertainty must not delete a user's output.
- * @returns The names safe to remove, in the order given.
+ * @param requestLock - Web Lock request or deterministic test double.
+ * @param lockName - The exclusive lock protecting the resource.
+ * @param initialise - Creates or opens the resource under the granted lock.
  */
-export async function selectSweepable(
+export function initialiseUnderHeldClaim<T>(
+  requestLock: ExclusiveLockRequest,
+  lockName: string,
+  initialise: () => Promise<T>,
+): Promise<HeldClaim<T>> {
+  let resolveReady!: (claim: HeldClaim<T>) => void
+  let rejectReady!: (cause: unknown) => void
+  const ready = new Promise<HeldClaim<T>>((resolve, reject) => {
+    resolveReady = resolve
+    rejectReady = reject
+  })
+
+  void requestLock(lockName, async (available) => {
+    if (!available) {
+      rejectReady(new Error(`Exclusive lock is already held: ${lockName}`))
+      return
+    }
+
+    let releaseHold!: () => void
+    let released = false
+    const hold = new Promise<void>((resolve) => {
+      releaseHold = resolve
+    })
+    const release = (): void => {
+      if (released) return
+      released = true
+      releaseHold()
+    }
+
+    try {
+      const value = await initialise()
+      resolveReady({ value, release })
+      await hold
+    } catch (cause) {
+      release()
+      rejectReady(cause)
+    }
+  }).catch(rejectReady)
+
+  return ready
+}
+
+/**
+ * Runs an operation only while an immediately available lock remains held.
+ *
+ * Lock refusal returns `false`. Lock-manager or operation errors reject, so
+ * the caller can keep the entry and report the uncertainty independently.
+ *
+ * @param requestLock - Web Lock request or deterministic test double.
+ * @param lockName - The exclusive lock protecting the operation.
+ * @param operation - Mutation that must finish before the lock is released.
+ * @returns Whether the claim was granted and the operation completed.
+ */
+export async function runWithAvailableClaim(
+  requestLock: ExclusiveLockRequest,
+  lockName: string,
+  operation: () => Promise<void>,
+): Promise<boolean> {
+  let ran = false
+  await requestLock(lockName, async (available) => {
+    if (!available) return
+    ran = true
+    await operation()
+  })
+  return ran
+}
+
+/**
+ * Attempts every orphan independently, so one locked or broken entry cannot
+ * abandon the entries after it.
+ *
+ * @param names - Directory entries observed during this sweep.
+ * @param remove - Atomically claims and removes one entry.
+ * @param failed - Reports an entry failure without stopping the sweep.
+ * @returns The number of entries successfully removed.
+ */
+export async function sweepEntries(
   names: readonly string[],
-  claimed: (name: string) => Promise<boolean>,
-): Promise<string[]> {
-  const sweepable: string[] = []
+  remove: (name: string) => Promise<boolean>,
+  failed: (name: string, cause: unknown) => void,
+): Promise<number> {
+  let removed = 0
   for (const name of names) {
-    // `true` on both the claimed answer and the rejection: the only way into
-    // the removal list is an explicit, successful "nobody wants this".
-    const keep = await claimed(name).catch(() => true)
-    if (!keep) sweepable.push(name)
+    try {
+      if (await remove(name)) removed++
+    } catch (cause) {
+      failed(name, cause)
+    }
   }
-  return sweepable
+  return removed
 }
 
 /**
@@ -124,6 +210,7 @@ export async function sweepOrphanedJobs(keepJobIds: readonly string[] = []): Pro
   let removed = 0
   try {
     const root = await jobsRoot()
+    const requestLock = browserExclusiveLockRequest('if-available')
     const keep = new Set(keepJobIds.map(directoryFor))
     // `keys()` is an async iterator on the directory handle; the DOM lib does
     // not type it yet.
@@ -133,20 +220,22 @@ export async function sweepOrphanedJobs(keepJobIds: readonly string[] = []): Pro
     const names: string[] = []
     for await (const name of directory.keys()) if (!keep.has(name)) names.push(name)
 
-    for (const name of await selectSweepable(names, isClaimed)) {
-      try {
-        await root.removeEntry(name, { recursive: true })
-        removed++
-      } catch (cause) {
-        // Per entry, not per sweep. A directory can be undeletable — a handle
-        // somewhere still holds a file open — and letting that throw abandoned
-        // every orphan after it in the list. Found in Firefox, VH-35.
+    removed = await sweepEntries(
+      names,
+      (name) =>
+        runWithAvailableClaim(requestLock, lockFor(name), () =>
+          root.removeEntry(name, { recursive: true }),
+        ),
+      (name, cause) => {
+        // Per entry, not per sweep. A failed lock request or an undeletable
+        // directory keeps that entry but must not abandon every orphan after
+        // it in the list. The latter was found in Firefox, VH-35.
         log.warn('opfs', 'could not remove an orphaned job directory', {
           name,
           reason: cause instanceof Error ? cause.message : String(cause),
         })
-      }
-    }
+      },
+    )
     if (removed > 0) log.info('opfs', 'swept orphaned job directories', { removed })
   } catch (cause) {
     // A failed sweep costs disk, not correctness. Never let it stop a job.
@@ -170,6 +259,67 @@ export interface OpfsOutputFile {
   finish(): Promise<File>
 }
 
+type WritableSyncHandle = Pick<FileSystemSyncAccessHandle, 'write' | 'flush' | 'close'>
+
+/** A stream adapter and its idempotent close operation. */
+export interface SyncHandleSink {
+  /** Positioned chunks consumed by Mediabunny's `StreamTarget`. */
+  readonly writable: WritableStream<StreamTargetChunk>
+  /** Flushes and closes the underlying handle once. */
+  close(): void
+}
+
+/**
+ * Adapts an OPFS synchronous handle without assuming a write consumed it all.
+ *
+ * `FileSystemSyncAccessHandle.write` returns the byte count rather than
+ * promising an all-or-nothing write. Mediabunny has already applied its own
+ * backpressure before this boundary, so a short count is a storage failure;
+ * rejecting is safer than silently finalising a corrupt MP4.
+ *
+ * @param handle - The synchronous OPFS handle receiving positioned writes.
+ * @param onClosed - Releases the workspace's handle bookkeeping.
+ * @returns The writable adapter and its idempotent close operation.
+ */
+export function createSyncHandleSink(
+  handle: WritableSyncHandle,
+  onClosed: () => void,
+): SyncHandleSink {
+  let closed = false
+  const close = (): void => {
+    if (closed) return
+    let flushFailure: Error | null = null
+    try {
+      handle.flush()
+    } catch (cause) {
+      flushFailure = cause instanceof Error ? cause : new Error(String(cause))
+    }
+    // Do not unregister or mark closed until close itself succeeds. A transient
+    // close failure must leave the raw handle under workspace ownership so a
+    // later disposal attempt can genuinely retry it.
+    handle.close()
+    closed = true
+    onClosed()
+    if (flushFailure !== null) throw flushFailure
+  }
+
+  return {
+    writable: new WritableStream<StreamTargetChunk>({
+      write: (chunk) => {
+        const written = handle.write(chunk.data, { at: chunk.position })
+        if (written !== chunk.data.byteLength) {
+          throw new Error(
+            `OPFS short write at byte ${chunk.position}: wrote ${written} of ${chunk.data.byteLength} bytes`,
+          )
+        }
+      },
+      close,
+      abort: close,
+    }),
+    close,
+  }
+}
+
 export class OpfsWorkspace {
   private readonly openHandles = new Set<FileSystemSyncAccessHandle>()
   /**
@@ -179,6 +329,8 @@ export class OpfsWorkspace {
    */
   private readonly releases = new Set<() => Promise<void>>()
   private disposed = false
+  /** One shared cleanup attempt; cleared after failure so a later call can retry. */
+  private disposeAttempt: Promise<void> | null = null
   /** Drops this job's claim. Set while the lock is held; see {@link lockFor}. */
   private releaseClaim: (() => void) | null = null
 
@@ -191,52 +343,22 @@ export class OpfsWorkspace {
   static async open(jobId: string): Promise<OpfsWorkspace> {
     const root = await jobsRoot()
     const directoryName = directoryFor(jobId)
-    const directory = await root.getDirectoryHandle(directoryName, { create: true })
-    const workspace = new OpfsWorkspace(jobId, directoryName, directory)
-    await workspace.claim()
-    log.debug('opfs', 'workspace opened', { jobId, directoryName })
-    return workspace
-  }
-
-  /**
-   * Takes this directory's lock and holds it until {@link dispose}.
-   *
-   * The lock is what tells another tab's sweep that the directory is still
-   * wanted. Resolving happens on GRANT, not on release: the held promise
-   * outlives this call by design.
-   */
-  private async claim(): Promise<void> {
-    if (!navigator.locks) return
     try {
-      await new Promise<void>((granted, failed) => {
-        void navigator.locks
-          .request(
-            lockFor(this.directoryName),
-            { ifAvailable: true },
-            (lock) =>
-              new Promise<void>((release) => {
-                if (!lock) {
-                  // The session prefix should make this unreachable. If it is
-                  // not, say so — an unheld lock is a directory another tab
-                  // may sweep out from under a running job.
-                  log.warn('opfs', 'job directory was already claimed', {
-                    directoryName: this.directoryName,
-                  })
-                  release()
-                  granted()
-                  return
-                }
-                this.releaseClaim = release
-                granted()
-              }),
-          )
-          .catch(failed)
-      })
+      const claim = await initialiseUnderHeldClaim(
+        browserExclusiveLockRequest('wait'),
+        lockFor(directoryName),
+        () => root.getDirectoryHandle(directoryName, { create: true }),
+      )
+      const workspace = new OpfsWorkspace(jobId, directoryName, claim.value)
+      workspace.releaseClaim = claim.release
+      log.debug('opfs', 'workspace opened', { jobId, directoryName })
+      return workspace
     } catch (cause) {
-      log.warn('opfs', 'could not claim the job directory', {
-        directoryName: this.directoryName,
+      log.warn('opfs', 'could not claim the job directory; workspace not opened', {
+        directoryName,
         reason: cause instanceof Error ? cause.message : String(cause),
       })
+      throw cause
     }
   }
 
@@ -250,71 +372,84 @@ export class OpfsWorkspace {
       typeof (fileHandle as { createSyncAccessHandle?: unknown }).createSyncAccessHandle ===
       'function'
 
-    if (!supportsSyncHandles) {
-      // Main thread. `createWritable()` already speaks the shape StreamTarget
-      // wants — positioned writes — so no adapter is needed, only the slower
-      // staging behaviour.
-      const writable = await fileHandle.createWritable()
+    if (!supportsSyncHandles) return this.createWritableFile(fileHandle)
 
-      // Not closed by `finish`. `StreamTarget` takes a writer on the stream,
-      // which locks it, and closes it itself during `finalize()`. Closing it
-      // again from this side throws on a locked stream — the sync-handle path
-      // below differs only because the handle is ours rather than the target's.
-      //
-      // It IS closed by `dispose`, though. On the cancel path `finalize` never
-      // runs, so nothing else would release it, and the directory could not
-      // then be removed.
-      const release = async (): Promise<void> => {
-        try {
-          await writable.abort()
-        } catch {
-          // Already closed or locked by a writer that is itself gone.
-        }
-      }
-      this.releases.add(release)
-
-      const finish = async (): Promise<File> => {
-        this.releases.delete(release)
-        return fileHandle.getFile()
-      }
-      return {
-        // No adapter: `FileSystemWritableFileStream` already accepts the
-        // positioned-write chunks StreamTarget produces.
-        target: new StreamTarget(writable, { chunked: true }),
-        finish,
-      }
+    let handle: FileSystemSyncAccessHandle
+    try {
+      handle = await fileHandle.createSyncAccessHandle()
+    } catch (cause) {
+      // Some engines expose the worker-only method but reject it under a
+      // storage policy where createWritable still works. Pre-flight proves the
+      // fallback lifecycle, so use that exact path rather than approving a job
+      // which then fails solely because feature presence was misleading.
+      log.warn('opfs', 'sync access handle unavailable; using writable fallback', {
+        reason: cause instanceof Error ? cause.message : String(cause),
+      })
+      return this.createWritableFile(fileHandle)
     }
 
-    const handle = await fileHandle.createSyncAccessHandle()
-    handle.truncate(0)
     this.openHandles.add(handle)
-
-    let closed = false
-    const closeHandle = (): void => {
-      if (closed) return
-      closed = true
+    try {
+      handle.truncate(0)
+    } catch (cause) {
+      // A successfully opened handle remains ours even when initialisation
+      // fails. Close it before propagating the storage error so disposal is
+      // never asked to remove a file behind an untracked live handle.
       try {
-        handle.flush()
-      } finally {
         handle.close()
         this.openHandles.delete(handle)
+      } catch {
+        // Keep the handle registered so workspace disposal can retry closing it.
       }
+      throw cause
     }
 
-    const writable = new WritableStream<StreamTargetChunk>({
-      write: (chunk) => {
-        handle.write(chunk.data, { at: chunk.position })
-      },
-      close: closeHandle,
-      abort: closeHandle,
-    })
+    const sink = createSyncHandleSink(handle, () => this.openHandles.delete(handle))
 
     return {
-      target: new StreamTarget(writable, { chunked: true }),
+      target: new StreamTarget(sink.writable, { chunked: true }),
       finish: async () => {
-        closeHandle()
+        sink.close()
         return fileHandle.getFile()
       },
+    }
+  }
+
+  /** Slower seekable writer used when a synchronous handle is genuinely unavailable. */
+  private async createWritableFile(fileHandle: FileSystemFileHandle): Promise<OpfsOutputFile> {
+    // Main thread. `createWritable()` already speaks the shape StreamTarget
+    // wants — positioned writes — so no adapter is needed, only the slower
+    // staging behaviour.
+    const writable = await fileHandle.createWritable()
+
+    // Not closed by `finish`. `StreamTarget` takes a writer on the stream,
+    // which locks it, and closes it itself during `finalize()`. Closing it
+    // again from this side throws on a locked stream — the sync-handle path
+    // below differs only because the handle is ours rather than the target's.
+    //
+    // It IS closed by `dispose`, though. On the cancel path `finalize` never
+    // runs, so nothing else would release it, and the directory could not
+    // then be removed.
+    const release = async (): Promise<void> => {
+      try {
+        await writable.abort()
+      } catch (cause) {
+        // An unlocked rejected stream is already closed/errored. A locked one
+        // still has an owner and must remain retryable until Output releases it.
+        if (writable.locked) throw cause
+      }
+    }
+    this.releases.add(release)
+
+    const finish = async (): Promise<File> => {
+      this.releases.delete(release)
+      return fileHandle.getFile()
+    }
+    return {
+      // No adapter: `FileSystemWritableFileStream` already accepts the
+      // positioned-write chunks StreamTarget produces.
+      target: new StreamTarget(writable, { chunked: true }),
+      finish,
     }
   }
 
@@ -326,37 +461,67 @@ export class OpfsWorkspace {
    * half-written file left in OPFS is exactly what acceptance criterion 8
    * forbids.
    */
-  async dispose(): Promise<void> {
-    if (this.disposed) return
-    this.disposed = true
+  dispose(): Promise<void> {
+    if (this.disposed) return Promise.resolve()
+    if (this.disposeAttempt) return this.disposeAttempt
 
-    for (const handle of this.openHandles) {
+    const attempt = this.disposeOnce()
+    this.disposeAttempt = attempt
+    void attempt.then(
+      () => {
+        if (this.disposeAttempt === attempt) this.disposeAttempt = null
+      },
+      () => {
+        if (this.disposeAttempt === attempt) this.disposeAttempt = null
+      },
+    )
+    return attempt
+  }
+
+  /** Performs one removal attempt while {@link dispose} owns caller joining. */
+  private async disposeOnce(): Promise<void> {
+    let releaseFailure: unknown = null
+    for (const handle of [...this.openHandles]) {
       try {
         handle.close()
-      } catch {
-        // Already closed. Nothing to recover.
+        this.openHandles.delete(handle)
+      } catch (cause) {
+        releaseFailure ??= cause
       }
     }
-    this.openHandles.clear()
 
-    for (const release of this.releases) await release()
-    this.releases.clear()
+    for (const release of [...this.releases]) {
+      try {
+        await release()
+        this.releases.delete(release)
+      } catch (cause) {
+        releaseFailure ??= cause
+      }
+    }
 
+    if (releaseFailure !== null) {
+      throw new Error('Temporary file handles could not be closed', { cause: releaseFailure })
+    }
+
+    const root = await jobsRoot()
     try {
-      const root = await jobsRoot()
       await root.removeEntry(this.directoryName, { recursive: true })
-      log.debug('opfs', 'workspace disposed', { jobId: this.jobId })
     } catch (cause) {
       log.warn('opfs', 'could not remove workspace', {
         jobId: this.jobId,
         reason: cause instanceof Error ? cause.message : String(cause),
       })
-    } finally {
-      // Last, and unconditionally: while this is held, every other tab's sweep
-      // treats the directory as live. Releasing before the removal would open
-      // a window where a sweep could race the removal for the same entry.
-      this.releaseClaim?.()
-      this.releaseClaim = null
+      // The directory and its lifetime claim remain live. Marking this
+      // workspace disposed or dropping the claim here would make a retry lie
+      // while allowing another tab's sweep to race the still-present entry.
+      throw cause
     }
+
+    // Only successful removal is disposal. A failed attempt remains retryable
+    // and continues to exclude orphan sweeping until a later call succeeds.
+    this.disposed = true
+    this.releaseClaim?.()
+    this.releaseClaim = null
+    log.debug('opfs', 'workspace disposed', { jobId: this.jobId })
   }
 }

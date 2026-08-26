@@ -13,6 +13,7 @@
  */
 
 import { Compressor } from './compressor'
+import { COMPRESSOR } from '../config/audio'
 import { HighPassFilter } from './highpass'
 import { TruePeakLimiter } from './limiter'
 import { MacroLeveller, type GainEnvelope } from './macrolevel'
@@ -42,7 +43,7 @@ export class AudioChain {
     const { sampleRate, channelCount, envelope, gainDb } = options
     this.highPass = new HighPassFilter(sampleRate, channelCount)
     this.leveller = new MacroLeveller(envelope, sampleRate)
-    this.compressor = new Compressor({ sampleRate })
+    this.compressor = new Compressor({ sampleRate, kneeDb: COMPRESSOR.kneeDb })
     this.gain = gainDb === null ? 1 : 10 ** (gainDb / 20)
     this.limiter = gainDb === null ? null : new TruePeakLimiter({ sampleRate, channelCount })
     this.latencyToDrop = this.limiter?.latencySamples ?? 0

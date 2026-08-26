@@ -10,7 +10,14 @@
 
 import { describe, expect, it } from 'vitest'
 
-import { fittedChange } from './measure'
+import {
+  AcceptanceAudioAnalyser,
+  AudioFrameCoverageTracker,
+  audioFrameSlice,
+  findAudioImpulseMarkers,
+  fittedChange,
+  withClosedSample,
+} from './measure'
 
 describe('fittedChange', () => {
   it('finds no trend in a flat series', () => {
@@ -51,5 +58,75 @@ describe('fittedChange', () => {
   it('handles degenerate input rather than returning NaN', () => {
     expect(fittedChange([])).toBe(0)
     expect(fittedChange([7])).toBe(0)
+  })
+})
+
+describe('acceptance audio measurement', () => {
+  const sampleRate = 48_000
+
+  it('uses each decoded sample timestamp, preserving track onset and timestamp gaps', () => {
+    const atOnset = new Float32Array(480)
+    atOnset[240] = 1
+    const first = findAudioImpulseMarkers(2, atOnset, sampleRate)
+
+    const afterGap = new Float32Array(480)
+    afterGap[0] = 1
+    const second = findAudioImpulseMarkers(4.5, afterGap, sampleRate, first.refractoryUntilSeconds)
+
+    expect(first.markers).toEqual([2.005])
+    expect(second.markers).toEqual([4.5])
+  })
+
+  it('drains the independent true-peak detector past a final-sample impulse', () => {
+    const analyser = new AcceptanceAudioAnalyser({ sampleRate, channelCount: 1 })
+    analyser.addFrames([Float32Array.of(1)])
+
+    expect(analyser.finish().truePeakDbtp).toBeCloseTo(0, 12)
+  })
+
+  it('clips decoded samples to the exact half-open content interval', () => {
+    const region = { fromSeconds: 1, toSeconds: 1.02 }
+    const beforeStart = audioFrameSlice(0.99, 1_024, sampleRate, region)
+    const acrossEnd = audioFrameSlice(1.01, 1_024, sampleRate, region)
+
+    expect(beforeStart).toEqual({
+      frameOffset: 480,
+      frameCount: 544,
+      timelineStartFrame: 48_000,
+    })
+    expect(acrossEnd).toEqual({
+      frameOffset: 0,
+      frameCount: 480,
+      timelineStartFrame: 48_480,
+    })
+  })
+
+  it('fails coverage when the decoded content tail is truncated', () => {
+    const region = { fromSeconds: 5, toSeconds: 75 }
+    const tracker = new AudioFrameCoverageTracker(region, sampleRate)
+    tracker.add({
+      frameOffset: 0,
+      frameCount: 70 * sampleRate - 1,
+      timelineStartFrame: 5 * sampleRate,
+    })
+
+    expect(tracker.finish()).toMatchObject({
+      expectedFrames: 70 * sampleRate,
+      coveredFrames: 70 * sampleRate - 1,
+      gapFrames: 1,
+      complete: false,
+    })
+  })
+
+  it('closes a decoded sample even when its consumer throws', () => {
+    let closes = 0
+    const sample = { close: () => closes++ }
+
+    expect(() =>
+      withClosedSample(sample, () => {
+        throw new Error('copy failed')
+      }),
+    ).toThrow('copy failed')
+    expect(closes).toBe(1)
   })
 })

@@ -13,16 +13,31 @@ import {
   installGlobalErrorCapture,
   onUncaughtError,
   recordUncaught,
+  setDiagnosticsContext,
   type CapturedError,
 } from './core/diagnostics'
 import { adoptLogRecords, log, setMinimumLogLevel } from './core/logger'
+import { browserProcessingGuardEnvironment, ProcessingGuard } from './core/processing-guard'
+import { ResultAuthority } from './core/result-authority'
+import {
+  SelectionAuthority,
+  type ReadyJob,
+  type SelectionAttempt,
+} from './core/selection-authority'
 import { APP_VERSION, BUILD_ID } from './core/version'
 import { CLOSING_DEFAULTS } from './config/branding'
 import type { PresetId } from './config/presets'
 import { WORKER_SILENCE_LIMIT_MS } from './config/thresholds'
 import { createWatchdog } from './core/watchdog'
-import { saveFile, suggestedFileName } from './media/save'
+import {
+  releaseFallbackDownloads,
+  saveFile,
+  SourceOverwriteError,
+  suggestedFileName,
+} from './media/save'
+import { pickSourceFile, sourceHandlePickerAvailable } from './media/source-picker'
 import { countCues } from './media/vtt'
+import type { OutputVerification } from './media/output-verification'
 import { formatFileSize } from './ui/format'
 import { renderPreflight, summarisePreflight } from './ui/preflight-panel'
 import { renderWarnings } from './ui/warning-text'
@@ -51,6 +66,9 @@ const errorsPanel = required<HTMLElement>('#errors-panel')
 const errorsContainer = required<HTMLDivElement>('#errors')
 const devActions = required<HTMLDivElement>('#dev-actions')
 const fileInput = required<HTMLInputElement>('#file-input')
+const sourcePickerActions = required<HTMLDivElement>('#source-picker-actions')
+const sourcePickerButton = required<HTMLButtonElement>('#source-picker-button')
+const sourcePickerStatus = required<HTMLParagraphElement>('#source-picker-status')
 const sourceReport = required<HTMLDivElement>('#source-report')
 const preflightReport = required<HTMLDivElement>('#preflight-report')
 const audioWarnings = required<HTMLDivElement>('#audio-warnings')
@@ -67,10 +85,46 @@ const subtitleStatus = required<HTMLParagraphElement>('#subtitle-status')
 
 /** The chosen sidecar's text, held until the job runs. */
 let subtitleVtt: string | null = null
+let subtitleReadGeneration = 0
+let subtitleReadPending = false
+
+interface SelectedSource {
+  readonly file: File
+  /** Present only when source and destination identity can be compared safely. */
+  readonly handle: FileSystemFileHandle | null
+}
+
+/** The sole authority for which checked source-and-preset pair Start may use. */
+const selectionAuthority = new SelectionAuthority<SelectedSource, PresetId>()
+let currentSource: SelectedSource | null = null
+/** Source-summary metadata failures that were actually rendered before Start. */
+const disclosedMetadataReadFailures = new WeakSet<SelectedSource>()
+
+/** Prefer handles whenever both pickers and same-entry comparison are present. */
+const useHandleSourcePicker = sourceHandlePickerAvailable()
+sourcePickerActions.hidden = !useHandleSourcePicker
+fileInput.hidden = useHandleSourcePicker
+fileInput.disabled = useHandleSourcePicker
+
+interface RetainedOutput {
+  readonly file: File
+  readonly jobId: string
+  readonly sourceName: string
+  readonly sourceHandle: FileSystemFileHandle | null
+  readonly brandingApplied: { readonly opening: boolean; readonly closing: boolean }
+  readonly brandingRequested: { readonly opening: boolean; readonly closing: boolean }
+}
+
+/** The one result whose worker workspace must remain readable until release. */
+const resultAuthority = new ResultAuthority<RetainedOutput>()
+const processingGuard = new ProcessingGuard(browserProcessingGuardEnvironment())
 
 subtitleInput.addEventListener('change', () => {
   const file = subtitleInput.files?.[0]
+  const generation = ++subtitleReadGeneration
   subtitleVtt = null
+  subtitleReadPending = file !== undefined
+  setJobInFlight(jobInFlight)
   if (!file) {
     subtitleStatus.textContent = ''
     return
@@ -78,6 +132,7 @@ subtitleInput.addEventListener('change', () => {
   void (async () => {
     try {
       const text = await file.text()
+      if (generation !== subtitleReadGeneration) return
       const cues = countCues(text)
       if (cues === 0) {
         subtitleStatus.textContent =
@@ -87,7 +142,13 @@ subtitleInput.addEventListener('change', () => {
       subtitleVtt = text
       subtitleStatus.textContent = `${cues} subtitle${cues === 1 ? '' : 's'} will be included, timed to match.`
     } catch {
+      if (generation !== subtitleReadGeneration) return
       subtitleStatus.textContent = 'That subtitle file could not be read.'
+    } finally {
+      if (generation === subtitleReadGeneration) {
+        subtitleReadPending = false
+        setJobInFlight(jobInFlight)
+      }
     }
   })()
 })
@@ -95,7 +156,8 @@ subtitleInput.addEventListener('change', () => {
 /** The D1 brand background, resolved from the token so answering D1 is one line. */
 function brandBackground(): string {
   return (
-    getComputedStyle(document.documentElement).getPropertyValue('--uon-brand-bg').trim() || '#000000'
+    getComputedStyle(document.documentElement).getPropertyValue('--uon-brand-bg').trim() ||
+    '#000000'
   )
 }
 
@@ -149,7 +211,7 @@ function syncBrandingOptions(): void {
 brandingChoice.addEventListener('change', syncBrandingOptions)
 syncBrandingOptions()
 
-versionLine.textContent = isDev ? `${APP_VERSION} · ${BUILD_ID} · development` : APP_VERSION
+versionLine.textContent = `${APP_VERSION} · ${BUILD_ID}${isDev ? ' · development' : ''}`
 
 // --- System check rendering ------------------------------------------------
 
@@ -240,11 +302,25 @@ const worker = new Worker(new URL('./workers/job.worker.ts', import.meta.url), {
   type: 'module',
   name: 'uon-video-helper-job',
 })
+let workerFailed = false
 
 let nextRequestId = 1
-const pending = new Map<number, (message: WorkerOutbound) => void>()
+const pending = new Map<
+  number,
+  {
+    readonly resolve: (message: WorkerOutbound) => void
+    readonly reject: (cause: Error) => void
+  }
+>()
 /** Resets the watchdog for a request that is still being answered. */
 const keepAlive = new Map<number, () => void>()
+/**
+ * Process requests whose caller timed out but whose worker may still answer.
+ *
+ * The terminal reply cannot simply be ignored: a late `processed` owns an
+ * OPFS workspace until the main thread explicitly discards it.
+ */
+const timedOutProcessRequests = new Set<number>()
 
 /**
  * Sends a request and resolves with its reply.
@@ -255,7 +331,7 @@ const keepAlive = new Map<number, () => void>()
  */
 function request(
   payload: DistributiveOmit<WorkerRequest, 'id'>,
-  timeoutMs = 5000,
+  timeoutMs: number | null = 5000,
 ): Promise<WorkerOutbound> {
   return requestWithId(payload, timeoutMs).promise
 }
@@ -274,35 +350,52 @@ function request(
  */
 function requestWithId(
   payload: DistributiveOmit<WorkerRequest, 'id'>,
-  bound: number | { readonly idleMs: number } = 5000,
+  bound: number | { readonly idleMs: number } | null = 5000,
 ): { id: number; promise: Promise<WorkerOutbound> } {
   const id = nextRequestId++
-  const idleMs = typeof bound === 'number' ? null : bound.idleMs
-  const limitMs = typeof bound === 'number' ? bound : bound.idleMs
+  if (workerFailed) {
+    return {
+      id,
+      promise: Promise.reject(
+        new Error('The background worker is unavailable. Reload the page to restart it.'),
+      ),
+    }
+  }
+  const idleMs = bound !== null && typeof bound !== 'number' ? bound.idleMs : null
+  const limitMs = bound === null ? null : typeof bound === 'number' ? bound : bound.idleMs
 
   const promise = new Promise<WorkerOutbound>((resolve, reject) => {
-    const watchdog = createWatchdog(limitMs, () => {
-      pending.delete(id)
-      keepAlive.delete(id)
-      // Tell the worker to stop before walking away. Without this the job kept
-      // encoding, its result landed in the worker's `finished` map, and nothing
-      // ever released it — the user was told the job had not finished while it
-      // quietly ran to completion and held its output forever (VH-38).
-      worker.postMessage({ kind: 'cancel', id: nextRequestId++, cancelId: id })
-      reject(
-        new Error(
-          idleMs === null
-            ? `Worker did not answer "${payload.kind}" within ${limitMs} ms`
-            : `Worker went quiet for ${limitMs} ms during "${payload.kind}"`,
-        ),
-      )
-    })
+    const watchdog =
+      limitMs === null
+        ? null
+        : createWatchdog(limitMs, () => {
+            pending.delete(id)
+            keepAlive.delete(id)
+            if (payload.kind === 'process') timedOutProcessRequests.add(id)
+            // Tell the worker to stop before walking away. Without this the job kept
+            // encoding, its result landed in the worker's `finished` map, and nothing
+            // ever released it — the user was told the job had not finished while it
+            // quietly ran to completion and held its output forever (VH-38).
+            worker.postMessage({ kind: 'cancel', id: nextRequestId++, cancelId: id })
+            reject(
+              new Error(
+                idleMs === null
+                  ? `Worker did not answer "${payload.kind}" within ${limitMs} ms`
+                  : `Worker went quiet for ${limitMs} ms during "${payload.kind}"`,
+              ),
+            )
+          })
 
-    if (idleMs !== null) keepAlive.set(id, () => watchdog.reset())
-    pending.set(id, (message) => {
-      watchdog.clear()
+    if (idleMs !== null && watchdog !== null) keepAlive.set(id, () => watchdog.reset())
+    const settle = (complete: () => void): void => {
+      watchdog?.clear()
       keepAlive.delete(id)
-      resolve(message)
+      pending.delete(id)
+      complete()
+    }
+    pending.set(id, {
+      resolve: (message) => settle(() => resolve(message)),
+      reject: (cause) => settle(() => reject(cause)),
     })
     worker.postMessage({ ...payload, id })
   })
@@ -319,15 +412,54 @@ worker.addEventListener('message', (event: MessageEvent<WorkerOutbound>) => {
     return
   }
   if (message.kind === 'stage') {
+    if (timedOutProcessRequests.has(message.id)) return
     // Progress never resolves the job's request — it reports on one in flight,
     // which is exactly what the watchdog needs to hear.
     keepAlive.get(message.id)?.()
     onStage(message.stage, message.fraction)
     return
   }
-  pending.get(message.id)?.(message)
-  pending.delete(message.id)
-  keepAlive.delete(message.id)
+
+  if (timedOutProcessRequests.delete(message.id)) {
+    if (message.kind === 'processed') {
+      holdCleanupOwnership(message.jobId)
+      const cleanupNotice = document.createElement('p')
+      cleanupNotice.className = 'verdict-detail'
+      cleanupNotice.textContent =
+        'The stopped job returned a late result. Its temporary files are being removed before another video can start.'
+      processResult.replaceChildren(cleanupNotice)
+      setStatus('Removing a late result from the stopped job…')
+      void request({ kind: 'discard', jobId: message.jobId }, null)
+        .then((reply) => {
+          if (reply.kind === 'failed' && reply.retainedJobId) {
+            renderCleanupRetry(reply.retainedJobId, reply.message)
+            return
+          }
+          if (reply.kind !== 'discarded')
+            throw new Error(`Unexpected late-result discard reply: ${reply.kind}`)
+          log.info('ui', 'late result from timed-out job was discarded')
+          completeCleanupOwnership(
+            message.jobId,
+            'The stopped job was cleaned up. Your original video is unchanged.',
+          )
+        })
+        .catch((cause: unknown) => {
+          log.error('ui', 'late result from timed-out job could not be discarded', {
+            errorName: cause instanceof Error ? cause.name : 'unknown',
+          })
+          renderCleanupRetry(
+            message.jobId,
+            workerFailed
+              ? 'The stopped job left temporary files. Save any visible result and reload this page to release them.'
+              : 'The stopped job left a temporary result that could not be removed. Try the cleanup again.',
+          )
+        })
+    } else if (message.kind === 'failed' && message.retainedJobId) {
+      renderCleanupRetry(message.retainedJobId, message.message)
+    }
+    return
+  }
+  pending.get(message.id)?.resolve(message)
 })
 
 /**
@@ -335,15 +467,15 @@ worker.addEventListener('message', (event: MessageEvent<WorkerOutbound>) => {
  * from "started and later threw" — only the first is a startup failure, and
  * only the first leaves the worker's own error hook uninstalled.
  */
-let workerReady = false
-
 worker.addEventListener('error', (event) => {
   event.preventDefault()
-
-  // A worker that booted claims its own errors and forwards them with a
-  // stack (see diagnostics.ts). Reaching here after boot would mean a
-  // duplicate, so only a genuine startup failure is reported.
-  if (workerReady) return
+  workerFailed = true
+  worker.terminate()
+  const failure = new Error(event.message || 'The background worker failed')
+  for (const request of [...pending.values()]) request.reject(failure)
+  pending.clear()
+  keepAlive.clear()
+  timedOutProcessRequests.clear()
 
   recordUncaught({
     ts: Date.now(),
@@ -351,7 +483,9 @@ worker.addEventListener('error', (event) => {
     origin: 'error',
     thread: 'worker',
   })
-  renderCheck('worker', 'Background processing', 'fail', 'failed to start')
+  renderCheck('worker', 'Background processing', 'fail', 'stopped')
+  setStatus('Background processing stopped. Save any visible result, then reload this page.')
+  setJobInFlight(false)
 })
 
 async function checkWorker(): Promise<void> {
@@ -359,7 +493,6 @@ async function checkWorker(): Promise<void> {
   const reply = await request({ kind: 'ping' })
   if (reply.kind !== 'pong') throw new Error(`Unexpected reply to ping: ${reply.kind}`)
   const roundTripMs = Math.round(performance.now() - startedAt)
-  workerReady = true
   renderCheck('worker', 'Background processing', 'pass', `ready in ${roundTripMs} ms`)
   log.info('boot', 'worker round-trip complete', { roundTripMs, workerBootMs: reply.workerBootMs })
 }
@@ -389,25 +522,72 @@ void checkWorker()
 
 fileInput.addEventListener('change', () => {
   const file = fileInput.files?.[0]
-  if (!file) return
+  selectSource(file ? Object.freeze({ file, handle: null }) : null)
+})
 
-  // Never log the filename — DEV-INFRASTRUCTURE.md -> "Redaction".
-  log.info('ui', 'file chosen', { sizeBytes: file.size, type: file.type })
-  setStatus('Reading the video…')
+sourcePickerButton.addEventListener('click', () => {
+  if (jobInFlight || workerFailed) return
+  sourcePickerButton.disabled = true
+  void (async () => {
+    try {
+      const outcome = await pickSourceFile()
+      if (outcome.kind === 'cancelled') {
+        setStatus('No different video was chosen.')
+        return
+      }
+      // Never display or log the filename. The File itself remains the source
+      // of the eventual suggested output name, entirely on this device.
+      sourcePickerStatus.textContent = 'Video selected.'
+      fileInput.value = ''
+      selectSource(outcome.source)
+    } catch (cause) {
+      setStatus('The video picker could not be opened. Try again.')
+      log.error('ui', 'source picker failed', {
+        errorName: cause instanceof Error ? cause.name : 'unknown',
+      })
+    } finally {
+      sourcePickerButton.disabled = jobInFlight || workerFailed
+    }
+  })()
+})
+
+/** Starts a new generation for a source selected by either accessible route. */
+function selectSource(source: SelectedSource | null): void {
+  currentSource = source
+  setDiagnosticsContext({
+    view: source ? 'inspect' : 'select',
+    sourceReport: null,
+    capability: null,
+    jobSpec: null,
+  })
+  const file = source?.file
+  const selection = source ? selectionAuthority.begin(source, chosenPreset()) : null
+
   sourceReport.replaceChildren()
   preflightReport.replaceChildren()
   audioWarnings.replaceChildren()
   // Hidden, not replaced: the Start and Cancel buttons live for the whole
   // session now, and emptying this container would throw them away (VH-36).
-  processActions.hidden = true
-  jobFile = null
+  hideProcessControls()
   presetChoice.hidden = true
   brandingChoice.hidden = true
   subtitleField.hidden = true
   subtitleInput.value = ''
   subtitleStatus.textContent = ''
   subtitleVtt = null
-  processResult.replaceChildren()
+  subtitleReadGeneration++
+  subtitleReadPending = false
+  if (!resultAuthority.active && pendingCleanupJobId === null) processResult.replaceChildren()
+
+  if (!file || !selection) {
+    selectionAuthority.invalidate()
+    setStatus('Choose a video to begin.')
+    return
+  }
+
+  // Never log the filename — DEV-INFRASTRUCTURE.md -> "Redaction".
+  log.info('ui', 'file chosen', { sizeBytes: file.size, type: file.type })
+  setStatus('Reading the video…')
 
   void (async () => {
     try {
@@ -415,12 +595,16 @@ fileInput.addEventListener('change', () => {
       // slow disk is not, and timing out on a file that would have worked is
       // worse than waiting.
       const reply = await request({ kind: 'inspect', file }, 120_000)
+      if (!selectionAuthority.isCurrent(selection)) return
       if (reply.kind === 'inspected') {
+        setDiagnosticsContext({ sourceReport: reply.report })
         renderSourceReport(sourceReport, reply.report)
+        if (reply.report.metadata.readable) disclosedMetadataReadFailures.delete(selection.file)
+        else disclosedMetadataReadFailures.add(selection.file)
         setStatus(summarise(reply.report))
         // Structure first, then the measurement — the probe really does decode
         // and encode three seconds, so it must not hold up what we already know.
-        await runPreflight(file)
+        await runPreflight(selection)
         return
       }
       if (reply.kind === 'failed') {
@@ -430,6 +614,7 @@ fileInput.addEventListener('change', () => {
       }
       throw new Error(`Unexpected reply to inspect: ${reply.kind}`)
     } catch (cause) {
+      if (!selectionAuthority.isCurrent(selection)) return
       renderSourceError(
         sourceReport,
         'Reading this file took longer than expected, or the tool ran into a problem.',
@@ -440,22 +625,45 @@ fileInput.addEventListener('change', () => {
       })
     }
   })()
-})
+}
 
 /**
  * Runs the device check for the chosen file.
  *
- * The preset is fixed to "Best quality" until VH-10 puts the choice in front
- * of the user; the panel names which one it assessed so this is visible rather
- * than assumed.
+ * The captured selection, rather than current DOM state, decides what is
+ * measured. That same generation must still be current before any reply is
+ * rendered or accepted as runnable.
  */
-async function runPreflight(file: File): Promise<void> {
+async function runPreflight(selection: SelectionAttempt<SelectedSource, PresetId>): Promise<void> {
   setStatus('Checking this video against your device…')
 
   try {
-    const reply = await request({ kind: 'preflight', file, presetId: chosenPreset() }, 180_000)
+    const reply = await request(
+      { kind: 'preflight', file: selection.file.file, presetId: selection.presetId },
+      180_000,
+    )
+    if (!selectionAuthority.isCurrent(selection)) return
     if (reply.kind === 'preflighted') {
-      renderPreflight(preflightReport, reply.summary)
+      setDiagnosticsContext({
+        view: 'preflight',
+        capability: {
+          capability: reply.summary.capability,
+          encode: reply.summary.encode,
+          probe: reply.summary.probe,
+          shape: reply.summary.shape,
+          verdict: reply.summary.verdict,
+        },
+      })
+      renderPreflight(preflightReport, reply.summary, {
+        onDiscourageAcknowledgement: (acknowledged) => {
+          if (!selectionAuthority.isCurrent(selection)) return
+          if (acknowledged) showProcessControls(selection)
+          else {
+            selectionAuthority.revoke(selection)
+            hideProcessControls()
+          }
+        },
+      })
       renderWarnings(audioWarnings, reply.summary.audioWarnings, {
         heading: 'Worth knowing about the sound',
       })
@@ -463,7 +671,9 @@ async function runPreflight(file: File): Promise<void> {
       presetChoice.hidden = false
       brandingChoice.hidden = false
       subtitleField.hidden = false
-      if (reply.summary.verdict.outcome !== 'block') showProcessControls(file)
+      if (reply.summary.verdict.outcome === 'proceed' || reply.summary.verdict.outcome === 'warn') {
+        showProcessControls(selection)
+      }
       return
     }
     if (reply.kind === 'failed') {
@@ -472,6 +682,7 @@ async function runPreflight(file: File): Promise<void> {
     }
     throw new Error(`Unexpected reply to preflight: ${reply.kind}`)
   } catch (cause) {
+    if (!selectionAuthority.isCurrent(selection)) return
     renderSourceError(
       preflightReport,
       'The device check did not finish. You can still see what the file is above.',
@@ -483,10 +694,19 @@ async function runPreflight(file: File): Promise<void> {
 }
 
 presetChoice.addEventListener('change', () => {
-  const file = fileInput.files?.[0]
+  const source = currentSource
   // The output shape, projected size and estimate all change with the preset,
   // so the verdict must be recomputed rather than left describing the other one.
-  if (file) void runPreflight(file)
+  if (!source) {
+    selectionAuthority.invalidate()
+    hideProcessControls()
+    return
+  }
+  const selection = selectionAuthority.begin(source, chosenPreset())
+  hideProcessControls()
+  preflightReport.replaceChildren()
+  audioWarnings.replaceChildren()
+  void runPreflight(selection)
 })
 
 // --- Processing ---
@@ -516,12 +736,13 @@ function onStage(stage: string, fraction: number): void {
  * than re-deciding it.
  */
 let jobInFlight = false
-
-/** The file the Start button will act on. Set by {@link showProcessControls}. */
-let jobFile: File | null = null
+/** A failed/cancelled job whose temporary workspace still needs a confirmed retry. */
+let pendingCleanupJobId: string | null = null
 
 /** The running job's request id, so Cancel reaches the right one. */
 let jobCancelId: number | null = null
+/** The exact job for which the user has asked to cancel, including a late reply race. */
+let cancelRequestedForId: number | null = null
 
 // Built ONCE, at module scope, and never replaced. The previous version
 // rebuilt both buttons on every preflight — so changing the preset mid-job
@@ -531,6 +752,7 @@ const startButton = document.createElement('button')
 startButton.type = 'button'
 startButton.className = 'button'
 startButton.textContent = 'Create the video'
+startButton.disabled = true
 
 const cancelButton = document.createElement('button')
 cancelButton.type = 'button'
@@ -550,18 +772,124 @@ processActions.append(startButton, cancelButton)
  */
 function setJobInFlight(running: boolean): void {
   jobInFlight = running
-  fileInput.disabled = running
-  subtitleInput.disabled = running
-  presetChoice.disabled = running
-  brandingChoice.disabled = running
-  startButton.disabled = running
+  if (running) processingGuard.start()
+  else void processingGuard.stop()
+  fileInput.disabled = running || workerFailed || useHandleSourcePicker
+  sourcePickerButton.disabled = running || workerFailed
+  subtitleInput.disabled = running || workerFailed
+  presetChoice.disabled = running || workerFailed
+  brandingChoice.disabled = running || workerFailed
+  startButton.disabled =
+    running ||
+    subtitleReadPending ||
+    workerFailed ||
+    pendingCleanupJobId !== null ||
+    selectionAuthority.readyJob === null ||
+    resultAuthority.active !== null
   cancelButton.hidden = !running
   cancelButton.disabled = false
 }
 
+/** Makes one worker workspace a first-class owner before starting its cleanup. */
+function holdCleanupOwnership(jobId: string): void {
+  pendingCleanupJobId = jobId
+  processingGuard.setRetainedResult(true)
+  setJobInFlight(jobInFlight)
+}
+
+/** Clears cleanup ownership only after the worker acknowledges removal. */
+function completeCleanupOwnership(jobId: string, status: string): void {
+  if (pendingCleanupJobId !== jobId) return
+  pendingCleanupJobId = null
+  processingGuard.setRetainedResult(resultAuthority.active !== null)
+  processResult.replaceChildren()
+  setDiagnosticsContext({ view: currentSource ? 'preflight' : 'select', jobSpec: null })
+  setStatus(status)
+  setJobInFlight(jobInFlight)
+}
+
+/**
+ * Keeps failed temporary storage under visible UI ownership until removal is
+ * acknowledged. Reload remains protected while the worker still holds it.
+ */
+function renderCleanupRetry(jobId: string, message: string): void {
+  holdCleanupOwnership(jobId)
+  processResult.replaceChildren()
+
+  const notice = document.createElement('p')
+  notice.className = 'verdict-detail'
+  notice.textContent = message
+
+  const retry = document.createElement('button')
+  retry.type = 'button'
+  retry.className = 'button button--secondary'
+  retry.textContent = 'Retry temporary-file cleanup'
+  retry.addEventListener('click', () => {
+    if (pendingCleanupJobId !== jobId) return
+    retry.disabled = true
+    setStatus('Removing temporary working files…')
+    void request({ kind: 'discard', jobId }, null)
+      .then((reply) => {
+        if (reply.kind !== 'discarded') {
+          notice.textContent =
+            reply.kind === 'failed'
+              ? reply.message
+              : 'The temporary files could not be confirmed as removed. Try again.'
+          retry.disabled = false
+          setStatus('Temporary cleanup did not finish. The files remain protected for another try.')
+          return
+        }
+        completeCleanupOwnership(
+          jobId,
+          'Temporary working files removed. Your original video is unchanged.',
+        )
+      })
+      .catch((cause: unknown) => {
+        retry.disabled = false
+        setStatus(
+          'Cleanup could not contact the background worker. Reload this page before retrying.',
+        )
+        log.error('ui', 'temporary cleanup retry failed', {
+          errorName: cause instanceof Error ? cause.name : 'unknown',
+        })
+      })
+  })
+
+  processResult.append(notice, retry)
+  setStatus('Temporary working files still need to be removed before another video can start.')
+  setJobInFlight(jobInFlight)
+}
+
 startButton.addEventListener('click', () => {
-  const file = jobFile
-  if (!file || jobInFlight) return
+  const readyJob: ReadyJob<SelectedSource, PresetId> | null = selectionAuthority.readyJob
+  if (
+    !readyJob ||
+    workerFailed ||
+    jobInFlight ||
+    resultAuthority.active ||
+    pendingCleanupJobId !== null
+  )
+    return
+  const { file: source, presetId, generation } = readyJob
+  const { file } = source
+  const branding = Object.freeze({
+    opening: false,
+    closing: brandingClosing.checked,
+    style: chosenBranding('style', CLOSING_DEFAULTS.style),
+    colour: chosenBranding('colour', CLOSING_DEFAULTS.colour),
+    mode: chosenBranding('mode', CLOSING_DEFAULTS.mode),
+  })
+
+  setDiagnosticsContext({
+    view: 'processing',
+    jobSpec: {
+      selectionGeneration: generation,
+      metadataReadFailureDisclosed: disclosedMetadataReadFailures.has(source),
+      presetId,
+      branding,
+      sidecarPresent: subtitleVtt !== null,
+    },
+  })
 
   processResult.replaceChildren()
 
@@ -569,17 +897,12 @@ startButton.addEventListener('click', () => {
     {
       kind: 'process',
       file,
-      presetId: chosenPreset(),
-      branding: {
-        // Always false: VH-33 withdrew the control, and no approved opening
-        // asset exists to turn back on. The pipeline's opening path is intact
-        // and VH-23 restores the choice when there is something to choose.
-        opening: false,
-        closing: brandingClosing.checked,
-        style: chosenBranding('style', CLOSING_DEFAULTS.style),
-        colour: chosenBranding('colour', CLOSING_DEFAULTS.colour),
-        mode: chosenBranding('mode', CLOSING_DEFAULTS.mode),
-      },
+      presetId,
+      selectionGeneration: generation,
+      metadataReadFailureDisclosed: disclosedMetadataReadFailures.has(source),
+      // Opening stays false: VH-33 withdrew the control until an approved
+      // asset exists. The immutable value above also enters diagnostics.
+      branding,
       backgroundColour: brandBackground(),
       ...(subtitleVtt ? { subtitleVtt } : {}),
     },
@@ -589,39 +912,90 @@ startButton.addEventListener('click', () => {
     { idleMs: WORKER_SILENCE_LIMIT_MS },
   )
   jobCancelId = id
+  cancelRequestedForId = null
   setJobInFlight(true)
 
   void promise
-    .then((reply) => {
+    .then(async (reply) => {
       if (reply.kind === 'processed') {
-        renderResult(
-          reply.file,
-          reply.jobId,
-          file.name,
-          reply.brandingApplied,
-          reply.brandingRequested,
-        )
+        const cancellationWasRequested = cancelRequestedForId === id
+        if (cancellationWasRequested) {
+          try {
+            const discardReply = await request({ kind: 'discard', jobId: reply.jobId }, null)
+            if (discardReply.kind === 'discarded') {
+              setStatus('Cancelled. Nothing was saved, and your original file is unchanged.')
+              setDiagnosticsContext({ view: 'preflight', jobSpec: null })
+              return
+            }
+            log.error('ui', 'late-cancel result was not discarded', {
+              replyKind: discardReply.kind,
+            })
+          } catch (cause) {
+            // Retain the completed file when cleanup cannot be proved. Losing a
+            // readable result is worse than asking for an explicit retry.
+            log.error('ui', 'late-cancel result discard failed', {
+              errorName: cause instanceof Error ? cause.name : 'unknown',
+            })
+          }
+        }
+
+        const result = Object.freeze({
+          file: reply.file,
+          jobId: reply.jobId,
+          sourceName: file.name,
+          sourceHandle: source.handle,
+          brandingApplied: reply.brandingApplied,
+          brandingRequested: reply.brandingRequested,
+        })
+        if (!resultAuthority.retain(result)) {
+          // The worker rejects a second result, so this is defensive only. Keep
+          // the earlier user-visible result and release the impossible extra.
+          log.error('ui', 'worker returned a second retained result')
+          void request({ kind: 'discard', jobId: reply.jobId }, null)
+          return
+        }
+        processingGuard.setRetainedResult(true)
+        setDiagnosticsContext({ view: 'result' })
+        renderResult(result, reply.outputVerification)
         renderWarnings(audioWarnings, reply.outputWarnings, {
           heading: 'Worth knowing about the finished video',
         })
-        setStatus('Your video is ready.')
+        if (cancellationWasRequested) {
+          setStatus(
+            'The video finished before cancellation could be confirmed. The result is still here to save or discard.',
+          )
+        } else if (reply.outputVerification.status === 'failed') {
+          setStatus('Your video is ready, but its finished sound did not pass the checks.')
+        } else if (reply.outputVerification.status === 'unverified') {
+          setStatus('Your video is ready, but its finished sound could not be checked.')
+        } else {
+          setStatus('Your video is ready.')
+        }
       } else if (reply.kind === 'cancelled') {
         // Nothing was written anywhere the user can see, and the source is
         // untouched — say so rather than leaving them wondering.
         setStatus('Cancelled. Nothing was saved, and your original file is unchanged.')
+        setDiagnosticsContext({ view: 'preflight', jobSpec: null })
       } else if (reply.kind === 'failed') {
-        renderSourceError(processResult, reply.message)
-        setStatus('The video could not be created.')
+        if (reply.retainedJobId) {
+          renderCleanupRetry(reply.retainedJobId, reply.message)
+        } else {
+          if (!resultAuthority.active) renderSourceError(processResult, reply.message)
+          setStatus('The video could not be created.')
+        }
+        setDiagnosticsContext({ view: 'preflight', jobSpec: null })
       }
     })
     .catch((cause: unknown) => {
-      renderSourceError(processResult, 'The job did not finish.')
+      if (!resultAuthority.active) renderSourceError(processResult, 'The job did not finish.')
+      setDiagnosticsContext({ view: 'preflight', jobSpec: null })
       log.error('ui', 'process request failed', {
         reason: cause instanceof Error ? cause.message : String(cause),
       })
     })
     .finally(() => {
       jobCancelId = null
+      if (cancelRequestedForId === id) cancelRequestedForId = null
       setJobInFlight(false)
       processProgress.hidden = true
     })
@@ -632,30 +1006,48 @@ startButton.addEventListener('click', () => {
 // (VH-36).
 cancelButton.addEventListener('click', () => {
   if (jobCancelId === null) return
+  cancelRequestedForId = jobCancelId
   cancelButton.disabled = true
   setStatus('Cancelling…')
   worker.postMessage({ kind: 'cancel', id: nextRequestId++, cancelId: jobCancelId })
 })
 
-/** Points the Start button at this file and reveals the controls. */
-function showProcessControls(file: File): void {
-  jobFile = file
-  processActions.hidden = false
+/** Hides and disables Start while a new selection is being checked. */
+function hideProcessControls(): void {
+  processActions.hidden = true
+  startButton.disabled = true
 }
 
-function renderResult(
-  file: File,
-  jobId: string,
-  sourceName: string,
-  applied: { opening: boolean; closing: boolean },
-  requested: { opening: boolean; closing: boolean },
-): void {
+/** Accepts this checked selection as Start's immutable authority and reveals it. */
+function showProcessControls(selection: SelectionAttempt<SelectedSource, PresetId>): void {
+  if (!selectionAuthority.accept(selection)) return
+  processActions.hidden = false
+  startButton.disabled =
+    jobInFlight ||
+    subtitleReadPending ||
+    workerFailed ||
+    pendingCleanupJobId !== null ||
+    resultAuthority.active !== null
+}
+
+function renderResult(result: RetainedOutput, verification: OutputVerification): void {
+  const { file, jobId, sourceName, brandingApplied: applied, brandingRequested: requested } = result
   processResult.replaceChildren()
 
   const summary = document.createElement('p')
   summary.className = 'verdict-detail'
   summary.textContent = `Your video is ready — ${formatFileSize(file.size)}.`
   processResult.append(summary)
+
+  if (verification.status === 'failed' || verification.status === 'unverified') {
+    const verificationNotice = document.createElement('p')
+    verificationNotice.className = 'verdict-detail'
+    verificationNotice.textContent =
+      verification.status === 'failed'
+        ? 'The finished audio did not meet one or more required sound checks. Review it before sharing.'
+        : 'The finished audio could not be checked. Listen to it before sharing.'
+    processResult.append(verificationNotice)
+  }
 
   // VH-22: branding that was asked for but could not be loaded is skipped
   // rather than failing the job, so the result has to say so. A video missing
@@ -670,34 +1062,180 @@ function renderResult(
     processResult.append(notice)
   }
 
+  const ownership = document.createElement('p')
+  ownership.className = 'verdict-detail'
+  ownership.textContent =
+    'Save or discard this result before creating another video. Choosing a different source will not remove it.'
+  processResult.append(ownership)
+
   const save = document.createElement('button')
   save.type = 'button'
   save.className = 'button'
   save.textContent = 'Save the video'
+
+  const discard = document.createElement('button')
+  discard.type = 'button'
+  discard.className = 'button button--secondary'
+  discard.textContent = 'Discard this result'
+
+  const confirmation = document.createElement('div')
+  confirmation.id = `discard-confirmation-${jobId}`
+  confirmation.hidden = true
+  confirmation.setAttribute('role', 'group')
+
+  const confirmationText = document.createElement('p')
+  confirmationText.id = `discard-confirmation-text-${jobId}`
+  confirmationText.className = 'verdict-detail'
+  confirmationText.textContent =
+    'Discard this result? You will not be able to save it afterwards. If a browser download is still running, it may not finish. Your original video is unchanged.'
+  confirmation.setAttribute('aria-labelledby', confirmationText.id)
+
+  const keep = document.createElement('button')
+  keep.type = 'button'
+  keep.className = 'button button--secondary'
+  keep.textContent = 'Keep result'
+
+  const confirmDiscard = document.createElement('button')
+  confirmDiscard.type = 'button'
+  confirmDiscard.className = 'button'
+  confirmDiscard.textContent = 'Discard result'
+
+  const resultActions = document.createElement('div')
+  resultActions.className = 'actions'
+  resultActions.append(save, discard)
+
+  const confirmationActions = document.createElement('div')
+  confirmationActions.className = 'actions'
+  confirmationActions.append(keep, confirmDiscard)
+  confirmation.append(confirmationText, confirmationActions)
+
+  discard.setAttribute('aria-controls', confirmation.id)
+  discard.setAttribute('aria-expanded', 'false')
+
+  /** Keeps every ownership-changing control in one coherent busy state. */
+  const setResultBusy = (busy: boolean): void => {
+    save.disabled = busy
+    discard.disabled = busy
+    keep.disabled = busy
+    confirmDiscard.disabled = busy
+  }
+
+  /** Releases the UI only after the worker confirms workspace disposal. */
+  const finishDiscard = async (): Promise<void> => {
+    const reply = await request({ kind: 'discard', jobId }, null)
+    if (reply.kind !== 'discarded') {
+      throw new Error(`Unexpected reply to discard: ${reply.kind}`)
+    }
+    if (!resultAuthority.release(result)) {
+      throw new Error('Discard completed for a result that is no longer current')
+    }
+    processingGuard.setRetainedResult(false)
+    setDiagnosticsContext({ view: currentSource ? 'preflight' : 'select', jobSpec: null })
+    releaseFallbackDownloads(file)
+    processResult.replaceChildren()
+    setJobInFlight(jobInFlight)
+    if (!processActions.hidden && !startButton.disabled) startButton.focus()
+    else if (useHandleSourcePicker) sourcePickerButton.focus()
+    else fileInput.focus()
+  }
+
   save.addEventListener('click', () => {
-    save.disabled = true
+    if (!resultAuthority.beginSave(result)) return
+    setResultBusy(true)
+    setStatus('Saving the video…')
     void (async () => {
       try {
-        const outcome = await saveFile(file, suggestedFileName(sourceName))
+        const outcome = await saveFile(file, suggestedFileName(sourceName), result.sourceHandle)
         if (outcome === 'cancelled') {
+          resultAuthority.retainAfterSave(result)
           setStatus('Not saved. The video is still here when you want it.')
           return
         }
+        if (outcome === 'download-started') {
+          resultAuthority.markDownloadStarted(result)
+          ownership.textContent =
+            'A download was started, but the browser cannot confirm when it finishes. Keep this result until the download is safely complete, then discard it.'
+          setStatus(
+            'Download started. The browser does not report when it finishes, so this result is still available. Discard it only after the download is safely complete.',
+          )
+          return
+        }
+
+        // `saved` means the picker pipe closed successfully. Until then the
+        // OPFS-backed File is still owned here and must remain readable.
+        if (!resultAuthority.beginDiscard(result)) {
+          throw new Error('Saved result could not enter the discard state')
+        }
+        setStatus('Saved. Releasing the temporary working copy…')
+        await finishDiscard()
         setStatus('Saved.')
-        // Only once it is safely out: the File reads from OPFS, so releasing
-        // the workspace first would hand back something unreadable.
-        await request({ kind: 'discard', jobId }, 10_000)
       } catch (cause) {
-        setStatus('The video could not be saved. It is still here to try again.')
+        const discardFailed = resultAuthority.active?.status === 'discarding'
+        const sourceOverwrite = cause instanceof SourceOverwriteError
+        if (discardFailed) resultAuthority.retainAfterDiscardFailure(result)
+        else resultAuthority.retainAfterSave(result)
+        if (discardFailed) {
+          ownership.textContent =
+            'The video was saved, but its temporary result is still retained. Discard it before creating another video.'
+        }
+        setStatus(
+          discardFailed
+            ? 'The video was saved, but its temporary working copy could not be released. The result is still here to discard.'
+            : sourceOverwrite
+              ? 'Choose a different destination. The original source file cannot be replaced.'
+              : 'The video could not be saved. It is still here to try again.',
+        )
         log.error('ui', 'save failed', {
-          reason: cause instanceof Error ? cause.message : String(cause),
+          errorName: cause instanceof Error ? cause.name : 'unknown',
         })
       } finally {
-        save.disabled = false
+        if (resultAuthority.owns(result)) setResultBusy(false)
       }
     })()
   })
-  processResult.append(save)
+
+  discard.addEventListener('click', () => {
+    confirmation.hidden = false
+    discard.disabled = true
+    save.disabled = true
+    discard.setAttribute('aria-expanded', 'true')
+    keep.focus()
+  })
+
+  keep.addEventListener('click', () => {
+    confirmation.hidden = true
+    discard.disabled = false
+    save.disabled = false
+    discard.setAttribute('aria-expanded', 'false')
+    discard.focus()
+  })
+
+  confirmDiscard.addEventListener('click', () => {
+    if (!resultAuthority.beginDiscard(result)) return
+    setResultBusy(true)
+    setStatus('Discarding the result…')
+    void (async () => {
+      try {
+        await finishDiscard()
+        setStatus('Result discarded. Your original video is unchanged.')
+      } catch (cause) {
+        resultAuthority.retainAfterDiscardFailure(result)
+        confirmation.hidden = true
+        discard.setAttribute('aria-expanded', 'false')
+        setStatus('The result could not be discarded. It is still here to save or try again.')
+        log.error('ui', 'result discard failed', {
+          reason: cause instanceof Error ? cause.message : String(cause),
+        })
+      } finally {
+        if (resultAuthority.owns(result)) {
+          setResultBusy(false)
+          discard.focus()
+        }
+      }
+    })()
+  })
+
+  processResult.append(resultActions, confirmation)
 }
 
 // --- Dev-only affordances --------------------------------------------------

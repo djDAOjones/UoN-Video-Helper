@@ -13,16 +13,6 @@
 import { WARNING_THRESHOLDS } from '../config/audio'
 import type { AudioAnalysis } from './analyse'
 
-/**
- * How far below the median the quiet passages must fall before the noise floor
- * is treated as measurable at all.
- *
- * A genuinely noisy recording still clears this easily — speech at -20 with
- * room tone at -45 is a 25 LU gap. What it excludes is continuous narration
- * with no pauses, where the "floor" is just the speech itself.
- */
-const MINIMUM_GAP_DEPTH_LU = 10
-
 export type AudioWarningCode =
   | 'no-audio'
   | 'clipping'
@@ -50,18 +40,24 @@ function longestRunBelow(
   curve: readonly number[],
   threshold: number,
   stepSeconds: number,
+  startupSeconds: number,
 ): number {
   let longest = 0
-  let run = 0
-  for (const value of curve) {
+  let runStart = -1
+  for (let i = 0; i < curve.length; i++) {
+    const value = curve[i]!
     if (value < threshold) {
-      run++
-      if (run > longest) longest = run
+      if (runStart < 0) runStart = i
+      const represented = (i - runStart + 1) * stepSeconds
+      // Every short-term point represents a full overlapping window. A run of
+      // N points therefore spans the window pre-roll plus N curve steps,
+      // whether it begins at file start or in the middle of the programme.
+      longest = Math.max(longest, startupSeconds + represented)
     } else {
-      run = 0
+      runStart = -1
     }
   }
-  return longest * stepSeconds
+  return longest
 }
 
 /**
@@ -78,10 +74,7 @@ export function detectSourceWarnings(analysis: AudioAnalysis | null): AudioWarni
 
   // Either enough individual samples reached the ceiling, or the peak went
   // over full scale outright — the second needs no count to be a problem.
-  if (
-    clippedSampleCount >= WARNING_THRESHOLDS.clippingSampleCount ||
-    truePeakDbtp > 0
-  ) {
+  if (clippedSampleCount >= WARNING_THRESHOLDS.clippingSampleCount || truePeakDbtp > 0) {
     warnings.push({
       code: 'clipping',
       detail: { samples: clippedSampleCount, truePeakDbtp },
@@ -109,20 +102,35 @@ export function detectSourceWarnings(analysis: AudioAnalysis | null): AudioWarni
   if (audible.length > 0) {
     const noiseFloor = percentile(audible, 0.1)
     const median = percentile(audible, 0.5)
-    const hasMeasurableGaps = median - noiseFloor >= MINIMUM_GAP_DEPTH_LU
+    const hasMeasurableGaps = median - noiseFloor >= WARNING_THRESHOLDS.minimumGapDepthLu
 
     if (hasMeasurableGaps && noiseFloor > WARNING_THRESHOLDS.noisyAboveLufs) {
-      warnings.push({ code: 'noisy', detail: { noiseFloorLufs: noiseFloor, gapDepthLu: median - noiseFloor } })
+      warnings.push({
+        code: 'noisy',
+        detail: { noiseFloorLufs: noiseFloor, gapDepthLu: median - noiseFloor },
+      })
     }
+  }
 
-    const silence = longestRunBelow(
-      analysis.shortTermLufs,
-      WARNING_THRESHOLDS.extendedSilenceBelowLufs,
-      analysis.stepSeconds,
-    )
-    if (silence > WARNING_THRESHOLDS.extendedSilenceSeconds) {
-      warnings.push({ code: 'extended-silence', detail: { seconds: silence } })
-    }
+  // A short-term value represents a full window, not merely one curve step.
+  // Attribute the otherwise-unrepresented window pre-roll to every run, so a
+  // 30.00 s gap stays below the strict threshold while 30.01 s crosses it.
+  // This also lets an all-silent curve of -Infinity values reach the check
+  // without making it "audible".
+  const startupSeconds = Math.max(
+    0,
+    analysis.durationSeconds - analysis.shortTermLufs.length * analysis.stepSeconds,
+  )
+  const silence = longestRunBelow(
+    analysis.shortTermLufs,
+    WARNING_THRESHOLDS.extendedSilenceBelowLufs,
+    analysis.stepSeconds,
+    startupSeconds,
+  )
+  const boundary = WARNING_THRESHOLDS.extendedSilenceSeconds
+  const comparisonEpsilon = Number.EPSILON * Math.max(1, silence, boundary) * 4
+  if (silence - boundary > comparisonEpsilon) {
+    warnings.push({ code: 'extended-silence', detail: { seconds: silence } })
   }
 
   return warnings

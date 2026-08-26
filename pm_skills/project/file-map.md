@@ -15,15 +15,15 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 142 file(s) across 8 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 183 file(s) across 8 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 19 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
 - `docs` — 5 file(s)
 - `public` — 17 file(s)
-- `scripts` — 4 file(s)
-- `src` — 91 file(s)
-- `test` — 4 file(s)
+- `scripts` — 9 file(s)
+- `src` — 125 file(s)
+- `test` — 6 file(s)
 <!-- /file-map-index -->
 
 ## (root)
@@ -54,7 +54,7 @@
 
 ## .github
 
-- `.github/workflows/deploy-pages.yml` — Manual GitHub Pages deploy. Runs the full gate, then publishes `dist`.
+- `.github/workflows/deploy-pages.yml` — Automatic main-branch and manual-dispatch Pages deploy; gates and builds before publishing `dist`.
 
 ## docs
 
@@ -87,9 +87,14 @@
 ## scripts
 
 - `scripts/build-branding.mjs` — Converts the UoN masters into the shipped onset/tail assets. Run by hand, not by `build`.
-- `scripts/check-placeholders.mjs` — Tier 0 of the gate: fails on stray template markers, reports key-shaped strings.
+- `scripts/check-build.mjs` — Runs Vite into a disposable temporary directory so the quality gate stays non-mutating.
+- `scripts/check-placeholders.mjs` — Tier 0 gate: exact public allowlist/hash/symlink guard plus template and key-shape scans.
 - `scripts/gen-placeholder-branding.mjs` — Generates the placeholder masters with a local ffmpeg. Authoring tool only.
-- `scripts/run-in-engines.mjs` — Runs a spike page in Chrome, Firefox and Safari and prints all three. Maintainer tool; never part of `check`.
+- `scripts/public-inventory.d.mts` — Type declarations for the public-asset inventory helper used by tests and the gate.
+- `scripts/public-inventory.mjs` — Recursively verifies the exact allowlisted public files, hashes and regular-file boundaries.
+- `scripts/run-in-engines-lib.d.mts` — Type declarations for cross-engine argument, terminal-result and summary helpers.
+- `scripts/run-in-engines-lib.mjs` — Pure parsing and honest pass/fail/skip accounting for the cross-engine runner.
+- `scripts/run-in-engines.mjs` — Runs maintainer pages across requested engines with explicit pass/fail/skip/manual accounting; never part of `check`.
 
 ## src
 
@@ -97,7 +102,10 @@
 - `src/acceptance/main.ts` — Entry point for the acceptance page. Development only; never built.
 - `src/acceptance/measure.test.ts` — Pins the drift estimator — an endpoint difference read the trend backwards.
 - `src/acceptance/measure.ts` — Sync by marker, loudness by region, and two independent egress instruments.
+- `src/acceptance/run.test.ts` — Pins OPFS enumeration evidence and requires cancellation after a partial writer exists.
 - `src/acceptance/run.ts` — The spec 13 run: what is checked, and what is reported as needing a person.
+- `src/acceptance/verdicts.test.ts` — Proves missing, non-finite or truncated loudness evidence fails the corpus verdict.
+- `src/acceptance/verdicts.ts` — Fail-closed loudness, true-peak and decoded-coverage classification for acceptance.
 - `src/audio/analyse.test.ts` — Proves the facade measures the same thing the components do separately.
 - `src/audio/analyse.ts` — The analysis pass: loudness and true peak over one traversal of source audio only.
 - `src/audio/biquad.ts` — Second-order IIR section, Direct Form II transposed, Float64 state to resist hour-long drift.
@@ -125,43 +133,66 @@
 - `src/config/presets.test.ts` — Pins the preset rules, including that the smaller preset preserves resolution.
 - `src/config/presets.ts` — The two output presets and the encoder config they imply. Purpose-named, never technique-named.
 - `src/config/thresholds.ts` — Pre-flight bands and probe constants — the numbers D8 will replace with measurements.
+- `src/core/diagnostics.test.ts` — Pins durable diagnostic context and redaction of accidental media-identifying fields.
 - `src/core/diagnostics.ts` — Global error capture on both threads, plus the redacted copy-diagnostics bundle.
 - `src/core/logger.test.ts` — Proves the log buffer is bounded — a one-hour encode must not grow it without limit.
 - `src/core/logger.ts` — The single structured logger. Console plus a bounded ring buffer; no DOM, so the worker shares it.
+- `src/core/processing-guard.test.ts` — Pins wake-lock, visibility, unload and retained-result lifecycle ownership.
+- `src/core/processing-guard.ts` — Owns screen-wake and unload protection for processing and unsaved-result lifetimes.
 - `src/core/redact.test.ts` — Proves the bundle carries media characteristics but never the media, its name, or its path.
 - `src/core/redact.ts` — Redaction. This app's sensitive asset is the user's media and filename, not a token.
+- `src/core/result-authority.test.ts` — Proves one result remains owned until durable save or acknowledged discard.
+- `src/core/result-authority.ts` — Identity-based state machine for the one retained, saving or discarding result.
+- `src/core/selection-authority.test.ts` — Proves stale file/preset checks can never restore Start authority.
+- `src/core/selection-authority.ts` — Monotonic immutable selection and readiness authority for the Start command.
 - `src/core/version.ts` — Reads the injected product version and build identity.
 - `src/core/watchdog.test.ts` — Pins the silence watchdog, including that a late sign of life cannot resurrect a request already given up on.
 - `src/core/watchdog.ts` — A timer that measures SILENCE rather than elapsed time, so a long job is never mistaken for a stuck one.
-- `src/main.ts` — App entry: installs diagnostics first, mounts the shell, runs the system check.
+- `src/main.ts` — Installs diagnostics, renders the UI and coordinates selection, worker, save and discard lifecycles.
 - `src/media/audio-frames.ts` — AudioSample to planar Float32 and back, shared by the chain and branding.
-- `src/media/audio-plan.ts` — The three audio passes, and the per-sample hook the encoder calls.
+- `src/media/audio-gain-solver.test.ts` — Pins convergence, limiter feedback, bounded exits and silence handling through the real chain.
+- `src/media/audio-gain-solver.ts` — Bounded scalar feedback solve for one gain measured through the complete streaming chain.
+- `src/media/audio-ownership.test.ts` — Proves pending audio samples close without materialising a failed stream's tail.
+- `src/media/audio-plan.test.ts` — Pins shared-clock gap fill, overlap rejection, bounded streaming, cancellation and EOF accounting.
+- `src/media/audio-plan.ts` — Streams source analysis, envelope derivation, iterative chain solving and final encode application with bounded gap fill.
 - `src/media/branding-fade.test.ts` — Pins what "hard cut with a 100 ms fade" means at sample level (D3).
+- `src/media/branding-ownership.test.ts` — Proves branding samples yielded at cancellation remain closed by their consumer.
 - `src/media/branding-timeline.test.ts` — Pins where branding sits on the timeline: boundaries measured against the picture, never the longer track.
 - `src/media/branding.ts` — Conform and concatenate the opaque parts; load the real closing tail; the boundary fade.
+- `src/media/capability.test.ts` — Pins the fail-closed locked OPFS create/write/close/delete canary and cleanup paths.
 - `src/media/capability.ts` — Device checks asked against the exact target config, not a generic capability flag.
 - `src/media/composite.test.ts` — Pins `compositePremultiplied` against the straight-alpha mistake that looks plausible and double-darkens.
 - `src/media/composite.ts` — Premultiplied-alpha compositing. `out = brand + source×(1−a)`; the straight form double-darkens.
 - `src/media/conform.test.ts` — Proves fit/pad never distorts, across 4:3, vertical and ultrawide sources.
 - `src/media/conform.ts` — Scale-to-fit and pad geometry, and the reusable frame scaler the pipeline and probe share.
-- `src/media/encoder-delay.ts` — Measures the audio encoder's own delay and shifts the timeline to cancel it.
-- `src/media/encoding.ts` — Mediabunny encoding configs derived from the presets; where VH-7's audio chain will hook in.
+- `src/media/encoder-delay.ts` — Measures actual AAC round-trip presentation delay for the pipeline's timeline compensation.
+- `src/media/encoding.ts` — Derives the exact Mediabunny audio and video encoder configurations from the output shape.
 - `src/media/framerate.test.ts` — Proves the rounding rule and that timestamps derive from the index so error cannot accumulate.
 - `src/media/framerate.ts` — CFR conform decisions: nearest standard rate, what conforming costs, and the timestamp grid.
 - `src/media/freeze.test.ts` — Pins the freeze frame on the last CLEAN frame, not simply the last decoded one.
 - `src/media/freeze.ts` — Picks the frame `over freeze frame` holds: walks back past defects, keeps a deliberate fade.
-- `src/media/inspect.ts` — Demuxes a chosen file into a SourceReport. Rejects files with no video track.
+- `src/media/inspect.test.ts` — Pins readable metadata reporting and visible fail-closed disclosure when tag reads fail.
+- `src/media/inspect.ts` — Inspects selected primary tracks into a SourceReport with shared timing, multiplicity and metadata disclosure.
 - `src/media/isobmff.test.ts` — Synthetic boxes covering subtitle handlers, chapters, moov-at-end and non-ISOBMFF.
 - `src/media/isobmff.ts` — A minimal box walk for the handler types Mediabunny cannot see at all.
 - `src/media/lanes.test.ts` — Pins how the two feed lanes fail together: survivor stopped, cause reported over the cancellation it caused.
-- `src/media/opfs.test.ts` — Pins the sweep rule: never remove a claimed directory, never remove one it could not ask about.
-- `src/media/opfs.ts` — The OPFS working store: one directory per job, sync-handle writes, cleanup on every exit path.
+- `src/media/opfs.test.ts` — Pins lock-before-create, locked sweeping, positioned writes and retryable handle/directory cleanup.
+- `src/media/opfs.ts` — Lifetime-locked per-job OPFS storage with positioned streaming writes, safe sweeping and retryable cleanup.
+- `src/media/output-verification.test.ts` — Pins strict output limits, unverified states and EOF true-peak drainage.
+- `src/media/output-verification.ts` — Streams finished audio into independent loudness/true-peak measurement and fail-closed classification.
 - `src/media/pipeline.ts` — Decode to encode to mux, streaming to OPFS, with progress and cancellation.
 - `src/media/preflight.test.ts` — Triggers all four spec 7.3 outcomes deliberately — acceptance criterion 7.
 - `src/media/preflight.ts` — The pure verdict: given what was measured, proceed / warn / discourage / block.
+- `src/media/probe.test.ts` — Pins video-only duration estimates and the explicit unavailable estimate for multi-pass audio jobs.
 - `src/media/probe.ts` — The 3-second calibration probe: real decode and encode on the real file and device.
-- `src/media/save.test.ts` — Pins the suggested filename, including that it can never overwrite the source.
-- `src/media/save.ts` — Streams the result to the user's chosen location; object-URL fallback where there is no picker.
+- `src/media/save.test.ts` — Pins names, same-entry refusal, close-before-success, picker cancellation and fallback retention.
+- `src/media/save.ts` — Refuses same-entry writes, streams durable picker saves and retains the object-URL fallback result.
+- `src/media/source-picker.test.ts` — Pins read-only handle selection, cancellation and the complete same-entry capability gate.
+- `src/media/source-picker.ts` — Selects a read-only handle-backed source when safe overwrite comparison is available.
+- `src/media/source-timeline.test.ts` — Pins aligned, delayed and negative selected-track origins on one source clock.
+- `src/media/source-timeline.ts` — Maps selected audio and video timestamps onto one immutable non-negative timeline.
+- `src/media/track-selection.test.ts` — Pins primary-track reuse, missing-audio handling, multiplicity and metadata copy.
+- `src/media/track-selection.ts` — Selects Mediabunny primary tracks once and reads their preservable output metadata.
 - `src/media/vtt.test.ts` — Proves cue text, settings, comments and line endings survive byte for byte.
 - `src/media/vtt.ts` — Offsets WebVTT timings by rewriting only timestamp lines; never touches the words.
 - `src/spike/alpha.ts` — VH-12 spike: decodes each branding onset and reads back pixel alpha. Dev-only, not built.
@@ -178,16 +209,26 @@
 - `src/ui/format.test.ts` — Pins the wording, so phrasing is tested rather than reviewed by opinion.
 - `src/ui/format.ts` — Technical facts as plain language — durations, sizes, codecs, channel layouts.
 - `src/ui/preflight-panel.ts` — Renders the verdict, naming a browser that works when the answer is no.
+- `src/ui/source-panel.test.ts` — Pins visible extra-track and unreadable-metadata warnings before processing.
 - `src/ui/source-panel.ts` — Renders a SourceReport, including the standing caveat about tracks we cannot see.
 - `src/ui/warning-text.test.ts` — Mechanical half of "reads clearly": no jargon, no blame, always a next step.
 - `src/ui/warning-text.ts` — The 5.4 warnings in words, and their rendering. Possibilities, never verdicts.
 - `src/vite-env.d.ts` — Ambient types: the injected build globals and the File System Access API surface.
-- `src/workers/job.worker.ts` — The job worker. Owns the pipeline when it lands; today proves the boundary and its error path.
+- `src/workers/job.worker.test.ts` — Proves non-abortable inspection is serialized and stale queued work is skipped.
+- `src/workers/job.worker.ts` — Owns serialized readiness, processing, cancellation, verification and retained workspaces.
+- `src/workers/latest-request.test.ts` — Pins synchronous supersession without letting an old finalizer clear a newer request.
+- `src/workers/latest-request.ts` — Tracks the newest readiness request and marks superseded work aborted.
+- `src/workers/output-integrity.test.ts` — Proves finished output needs one real picture sample and closes it on every path.
+- `src/workers/output-integrity.ts` — Refuses a saveable result until its primary picture decodes at least one sample.
 - `src/workers/protocol.ts` — The typed message contract across the worker boundary.
+- `src/workers/workspace-release.test.ts` — Pins retryable workspace ownership when disposal fails.
+- `src/workers/workspace-release.ts` — Removes retained-workspace ownership only after disposal succeeds.
 
 ## test
 
+- `test/check-placeholders.test.ts` — Pins exact public inventory, reviewed hashes and rejection of symlinks or stray files.
 - `test/contrast.test.ts` — Makes the AAA contrast claim mechanical: every rendered pair >= 7:1 in both themes.
 - `test/ebu3341/signals.ts` — EBU Tech 3341 Table 1 signals, synthesised from their published definitions.
 - `test/ebu3341/tech3341.test.ts` — The compliance gate: Table 1 cases 1-23 against the meter, inside `npm run check`.
 - `test/helpers/signals.ts` — Synthesised tones and silence shared by the meter tests and the EBU harness.
+- `test/run-in-engines.test.ts` — Pins cross-engine CLI parsing and honest terminal pass/fail/skip accounting.

@@ -12,8 +12,13 @@ const GB = 1_000_000_000
 
 /** A healthy desktop with a short job. Each test perturbs one thing. */
 const healthy: PreflightInput = {
+  isSecureContext: true,
   hasWebCodecs: true,
-  canEncodeH264: true,
+  canUseOpfs: true,
+  canDecodeVideo: true,
+  canDecodeAudio: true,
+  videoProbeStatus: 'supported',
+  probeFailureStage: null,
   canEncodeAac: true,
   availableStorageBytes: 50 * GB,
   projectedOutputBytes: 2 * GB,
@@ -42,17 +47,66 @@ describe('block', () => {
     expect(verdict.reasons.map((r) => r.code)).toContain('no-webcodecs')
   })
 
-  it('blocks when H.264 encoding is unavailable', () => {
-    const verdict = preflightVerdict({ ...healthy, canEncodeH264: false })
+  it('blocks outside a secure context before subordinate feature checks', () => {
+    expect(codesOf({ ...healthy, isSecureContext: false, canUseOpfs: false })).toEqual([
+      'insecure-context',
+    ])
+  })
+
+  it('blocks when working storage cannot actually be opened', () => {
+    expect(codesOf({ ...healthy, canUseOpfs: false })).toContain('working-storage-unavailable')
+  })
+
+  it('blocks when the selected video track cannot be decoded', () => {
+    expect(codesOf({ ...healthy, canDecodeVideo: false })).toContain('video-decode-unsupported')
+  })
+
+  it('blocks when the selected audio track cannot be decoded', () => {
+    expect(codesOf({ ...healthy, canDecodeAudio: false })).toContain('audio-decode-unsupported')
+  })
+
+  it('blocks when the real-path video probe fails', () => {
+    const verdict = preflightVerdict({
+      ...healthy,
+      videoProbeStatus: 'failed',
+      probeFailureStage: 'video-encode',
+    })
     expect(verdict.outcome).toBe('block')
-    expect(codesOf({ ...healthy, canEncodeH264: false })).toContain('no-h264-encode')
+    expect(
+      codesOf({
+        ...healthy,
+        videoProbeStatus: 'failed',
+        probeFailureStage: 'video-encode',
+      }),
+    ).toContain('no-h264-encode')
+  })
+
+  it('names a real-path video decode failure as decode support', () => {
+    expect(
+      codesOf({
+        ...healthy,
+        videoProbeStatus: 'failed',
+        probeFailureStage: 'video-decode',
+      }),
+    ).toContain('video-decode-unsupported')
+  })
+
+  it('blocks when the selected audio path fails during calibration', () => {
+    expect(codesOf({ ...healthy, probeFailureStage: 'audio-decode' })).toContain(
+      'audio-decode-unsupported',
+    )
   })
 
   it('reports only the root cause when WebCodecs is missing entirely', () => {
     // "Cannot encode H.264" is noise when there is no encoder at all.
-    expect(codesOf({ ...healthy, hasWebCodecs: false, canEncodeH264: false })).not.toContain(
-      'no-h264-encode',
-    )
+    expect(
+      codesOf({
+        ...healthy,
+        hasWebCodecs: false,
+        videoProbeStatus: 'failed',
+        probeFailureStage: 'video-encode',
+      }),
+    ).not.toContain('no-h264-encode')
   })
 
   it('blocks when the browser cannot encode the AUDIO (VH-49)', () => {
@@ -74,7 +128,12 @@ describe('block', () => {
   it('reports the video failure rather than the audio one when both fail', () => {
     // Both are blocks, so the outcome is the same either way — but naming the
     // picture first is the more useful sentence when neither works.
-    const codes = codesOf({ ...healthy, canEncodeH264: false, canEncodeAac: false })
+    const codes = codesOf({
+      ...healthy,
+      videoProbeStatus: 'failed',
+      probeFailureStage: 'video-encode',
+      canEncodeAac: false,
+    })
     expect(codes).toContain('no-h264-encode')
     expect(codes).not.toContain('no-aac-encode')
   })

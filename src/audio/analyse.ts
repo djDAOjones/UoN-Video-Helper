@@ -13,7 +13,8 @@
  */
 
 import { LoudnessAnalyser, type LoudnessReport } from './loudness'
-import { TruePeakDetector } from './truepeak'
+import { PHASE_TAPS, TruePeakDetector } from './truepeak'
+import { WARNING_THRESHOLDS } from '../config/audio'
 
 export interface AudioAnalysis extends LoudnessReport {
   /** Highest true peak in the source, dBTP. `-Infinity` for pure silence. */
@@ -32,7 +33,7 @@ export class AudioAnalyser {
     private readonly options: { readonly sampleRate: number; readonly channelCount: number },
   ) {
     this.loudness = new LoudnessAnalyser(options)
-    this.truePeak = new TruePeakDetector(options.channelCount)
+    this.truePeak = new TruePeakDetector(options.channelCount, WARNING_THRESHOLDS.clippingDbtp)
   }
 
   /** @param channels - Planar audio, one `Float32Array` per channel, equal lengths. */
@@ -42,6 +43,12 @@ export class AudioAnalyser {
   }
 
   finish(): AudioAnalysis {
+    // Complete only the causal true-peak FIR. Feeding the same zeros through
+    // loudness would invent programme duration, but without this independent
+    // post-roll a transient in the last few source frames is invisible.
+    this.truePeak.addFrames(
+      Array.from({ length: this.options.channelCount }, () => new Float32Array(PHASE_TAPS - 1)),
+    )
     return {
       ...this.loudness.finish(),
       truePeakDbtp: this.truePeak.peakDbtp,

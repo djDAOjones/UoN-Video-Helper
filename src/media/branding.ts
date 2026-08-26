@@ -352,17 +352,23 @@ export async function feedBrandingVideo(
   let origin: number | null = null
 
   for await (const sample of sink.samples()) {
-    if (signal?.aborted) break
-    origin ??= sample.timestamp
-    const conformed = renderer.render(
-      sample,
-      offsetSeconds + Math.max(0, sample.timestamp - origin),
-      sample.duration,
-    )
     try {
-      await target.add(conformed)
+      // The iterator has transferred ownership before this check. An abort can
+      // arrive while `next()` is pending, so breaking outside the ownership
+      // block would leak the sample that was just yielded.
+      if (signal?.aborted) break
+      origin ??= sample.timestamp
+      const conformed = renderer.render(
+        sample,
+        offsetSeconds + Math.max(0, sample.timestamp - origin),
+        sample.duration,
+      )
+      try {
+        await target.add(conformed)
+      } finally {
+        conformed.close()
+      }
     } finally {
-      conformed.close()
       sample.close()
     }
   }
@@ -395,8 +401,10 @@ export async function feedBrandingAudio(
   let origin: number | null = null
 
   for await (const sample of sink.samples()) {
-    if (signal?.aborted) break
     try {
+      // See the video lane above: a yielded decoder sample is already ours even
+      // when cancellation wins the race before its first use.
+      if (signal?.aborted) break
       origin ??= sample.timestamp
       const relative = Math.max(0, sample.timestamp - origin)
       const channels = toPlanar(sample, channelCount)

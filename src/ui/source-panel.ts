@@ -24,6 +24,51 @@ interface Row {
   readonly note?: string
 }
 
+export interface AdditionalTrackWarning {
+  readonly detail: string
+  readonly note: string
+}
+
+/** Describes file-level details that cannot be promised in the new container. */
+export function describeMetadataRisk(readable: boolean): AdditionalTrackWarning | null {
+  if (readable) return null
+  return {
+    detail: 'Some file details could not be read',
+    note: 'Creation, title or other file details may not be carried into the new video. Keep the original alongside if those details matter.',
+  }
+}
+
+/**
+ * Describes A/V tracks that cannot be carried into the one-way output.
+ *
+ * The app deliberately does not expose track selection. It therefore has to
+ * say before Start when Mediabunny selected one primary track from several.
+ */
+export function describeAdditionalTracks(
+  videoTrackCount: number,
+  audioTrackCount: number,
+): AdditionalTrackWarning | null {
+  const found: string[] = []
+  if (videoTrackCount > 1) {
+    found.push(`${videoTrackCount} picture tracks`)
+  }
+  if (audioTrackCount > 1) {
+    found.push(`${audioTrackCount} sound tracks`)
+  }
+  if (found.length === 0) return null
+  const selectedDescription =
+    videoTrackCount > 1 && audioTrackCount > 1
+      ? 'main picture and main sound'
+      : videoTrackCount > 1
+        ? 'main picture'
+        : 'main sound'
+
+  return {
+    detail: `Found ${found.join(' and ')}`,
+    note: `Only the ${selectedDescription} described above will be used. The other tracks cannot be carried into the new file. Check that the summary matches what you expect before continuing.`,
+  }
+}
+
 function buildRows(report: SourceReport): Row[] {
   const rows: Row[] = [
     { term: 'Length', detail: formatDuration(report.durationSeconds) },
@@ -92,16 +137,28 @@ function buildRows(report: SourceReport): Row[] {
     })
   }
 
+  const additionalTracks = describeAdditionalTracks(report.videoTrackCount, report.audioTrackCount)
+  if (additionalTracks) {
+    rows.push({ term: 'Additional tracks', ...additionalTracks })
+  }
+
+  const metadataRisk = describeMetadataRisk(report.metadata.readable)
+  if (metadataRisk) rows.push({ term: 'File details', ...metadataRisk })
+
   const { tracks } = report
   if (tracks.scanned) {
     const found: string[] = []
     if (tracks.subtitleTracks > 0) {
       found.push(
-        tracks.subtitleTracks === 1 ? '1 subtitle track' : `${tracks.subtitleTracks} subtitle tracks`,
+        tracks.subtitleTracks === 1
+          ? '1 subtitle track'
+          : `${tracks.subtitleTracks} subtitle tracks`,
       )
     }
     if (tracks.chapterTracks > 0) {
-      found.push(tracks.chapterTracks === 1 ? '1 chapter track' : `${tracks.chapterTracks} chapter tracks`)
+      found.push(
+        tracks.chapterTracks === 1 ? '1 chapter track' : `${tracks.chapterTracks} chapter tracks`,
+      )
     }
 
     rows.push(

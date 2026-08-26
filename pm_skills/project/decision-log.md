@@ -11,6 +11,39 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-26 — VH-53: ownership first, evidence fail-closed
+
+**Decision:** implement the highest-severity verified non-protected review findings on
+`codex/repository-review-implementation` from an isolated `/private/tmp`
+worktree, while carrying the tracked project-memory record on that branch.
+Keep the protected specification, `audio/loudness.ts` and EBU Tech 3341
+harness unchanged until the maintainer explicitly approves that coupled meter
+and acceptance change.
+
+**Rationale:** the normal checkout is OneDrive-synced, so a separate git
+worktree removes sync races from a large multi-file remediation without
+creating a second source of PM truth. The confirmed failures shared one shape:
+ownership or evidence was implicit. The implementation therefore gives a
+single authority to selection, retained results, worker requests and OPFS
+workspaces; maps audio and video onto one immutable source clock; fills gaps in
+bounded blocks; and measures the complete audio chain and finished output.
+The unprotected analyser and limiter callers explicitly clock their causal
+true-peak state through EOF, so terminal transients no longer escape either
+limiting or verification without changing the protected detector.
+Acceptance and release tooling now report absent or manual evidence as such
+rather than turning it into a pass.
+
+**Alternatives rejected:** editing the synced checkout in place; a new global
+store or event framework; timestamp normalization per track; freeing scratch
+on download click; and declaring the pilot ready from Node tests. Each either
+reintroduces the reproduced race/data-loss path or makes a browser-only claim
+the evidence cannot support.
+
+**Boundary:** VH-53 stays in progress through real-engine and real-material
+rehearsal, and the protected LRA-tail and derived-curve-retention decision.
+
+**Link:** `tickets/VH-53.md`.
+
 ## 2026-08-26 — VH-31: measured, designed, and deliberately not built
 
 **Decision:** run the design workflow, record everything it measured on the

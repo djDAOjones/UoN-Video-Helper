@@ -13,6 +13,38 @@
 import { AudioSampleSink, BlobSource, Input, VideoSampleSink, ALL_FORMATS } from 'mediabunny'
 
 import { AudioAnalyser, type AudioAnalysis } from '../audio/analyse'
+import { PHASE_TAPS, TruePeakDetector } from '../audio/truepeak'
+
+export interface AudioRegion {
+  readonly fromSeconds: number
+  readonly toSeconds: number
+}
+
+export interface AudioFrameSlice {
+  /** First frame to copy from this decoded sample. */
+  readonly frameOffset: number
+  readonly frameCount: number
+  /** Absolute output-timeline frame index after applying {@link frameOffset}. */
+  readonly timelineStartFrame: number
+}
+
+export interface AudioFrameCoverage {
+  readonly expectedStartFrame: number
+  readonly expectedEndFrame: number
+  readonly expectedFrames: number
+  /** Unique frames covered; overlapping decoder output is not counted twice. */
+  readonly coveredFrames: number
+  readonly gapFrames: number
+  readonly overlapFrames: number
+  readonly firstCoveredFrame: number | null
+  readonly lastCoveredFrameExclusive: number | null
+  readonly complete: boolean
+}
+
+export interface AcceptanceAudioAnalysis extends AudioAnalysis {
+  /** Present for a requested region; `null` when measuring the entire track. */
+  readonly coverage: AudioFrameCoverage | null
+}
 
 export interface SyncMeasurement {
   /** Times, in seconds, of each white marker frame found in the video. */
@@ -39,7 +71,10 @@ export interface SyncMeasurement {
  * nominal time before anything is processed. Comparing output against source
  * marker by marker cancels that, leaving only what the pipeline did.
  */
-export function relativeSync(source: SyncMeasurement, output: SyncMeasurement): {
+export function relativeSync(
+  source: SyncMeasurement,
+  output: SyncMeasurement,
+): {
   readonly offsetsMs: readonly number[]
   readonly worstOffsetMs: number
   readonly driftMs: number
@@ -80,11 +115,223 @@ export function fittedChange(values: readonly number[]): number {
   return (covariance / variance) * (n - 1)
 }
 
+export interface AudioImpulseScan {
+  readonly markers: readonly number[]
+  readonly refractoryUntilSeconds: number
+}
+
+/**
+ * Finds fixture impulses in one decoded sample using its presentation timestamp.
+ *
+ * Counting decoded frames from zero would erase a track's real onset and any
+ * timestamp gaps between samples, allowing the sync check to approve exactly
+ * the timing loss it exists to catch.
+ */
+export function findAudioImpulseMarkers(
+  sampleTimestampSeconds: number,
+  frames: Float32Array,
+  sampleRate: number,
+  initialRefractoryUntilSeconds = Number.NEGATIVE_INFINITY,
+): AudioImpulseScan {
+  if (!Number.isFinite(sampleTimestampSeconds)) {
+    throw new RangeError(`Audio sample timestamp must be finite, got ${sampleTimestampSeconds}`)
+  }
+  if (!Number.isInteger(sampleRate) || sampleRate < 1) {
+    throw new RangeError(`Sample rate must be a positive integer, got ${sampleRate}`)
+  }
+
+  const markers: number[] = []
+  let refractoryUntilSeconds = initialRefractoryUntilSeconds
+  for (let frame = 0; frame < frames.length; frame++) {
+    const timestampSeconds = sampleTimestampSeconds + frame / sampleRate
+    if (timestampSeconds < refractoryUntilSeconds) continue
+    if (Math.abs(frames[frame]!) > 0.5) {
+      markers.push(timestampSeconds)
+      // Fixture impulses last 10 ms; a quarter-second gap cannot merge two.
+      refractoryUntilSeconds = timestampSeconds + 0.25
+    }
+  }
+
+  return { markers, refractoryUntilSeconds }
+}
+
+/** Runs a synchronous sample consumer and closes the resource on success or failure. */
+export function withClosedSample<T extends { close(): void }, Result>(
+  sample: T,
+  consume: (sample: T) => Result,
+): Result {
+  try {
+    return consume(sample)
+  } finally {
+    sample.close()
+  }
+}
+
+function regionFrameBounds(
+  region: AudioRegion,
+  sampleRate: number,
+): { readonly start: number; readonly end: number } {
+  if (!Number.isFinite(region.fromSeconds) || !Number.isFinite(region.toSeconds)) {
+    throw new RangeError('Audio region boundaries must be finite')
+  }
+  if (region.fromSeconds < 0 || region.toSeconds <= region.fromSeconds) {
+    throw new RangeError(
+      `Audio region must have a non-negative start before its end, got ${region.fromSeconds}..${region.toSeconds}`,
+    )
+  }
+  if (!Number.isInteger(sampleRate) || sampleRate < 1) {
+    throw new RangeError(`Sample rate must be a positive integer, got ${sampleRate}`)
+  }
+  return {
+    start: Math.round(region.fromSeconds * sampleRate),
+    end: Math.round(region.toSeconds * sampleRate),
+  }
+}
+
+/**
+ * Clips one decoded sample to the exact sample-grid interval `[from, to)`.
+ *
+ * Mediabunny's range iterator deliberately returns samples that overlap the
+ * requested edges. Copying them whole would include branding frames outside
+ * the content window, so the acceptance meter performs the final frame trim.
+ */
+export function audioFrameSlice(
+  sampleTimestampSeconds: number,
+  sampleFrameCount: number,
+  sampleRate: number,
+  region: AudioRegion,
+): AudioFrameSlice {
+  if (!Number.isFinite(sampleTimestampSeconds)) {
+    throw new RangeError(`Audio sample timestamp must be finite, got ${sampleTimestampSeconds}`)
+  }
+  if (!Number.isInteger(sampleFrameCount) || sampleFrameCount < 0) {
+    throw new RangeError(
+      `Audio sample frame count must be a non-negative integer, got ${sampleFrameCount}`,
+    )
+  }
+
+  const bounds = regionFrameBounds(region, sampleRate)
+  const sampleStart = Math.round(sampleTimestampSeconds * sampleRate)
+  const sampleEnd = sampleStart + sampleFrameCount
+  const overlapStart = Math.max(sampleStart, bounds.start)
+  const overlapEnd = Math.min(sampleEnd, bounds.end)
+  if (overlapEnd <= overlapStart) {
+    return { frameOffset: 0, frameCount: 0, timelineStartFrame: overlapStart }
+  }
+
+  return {
+    frameOffset: overlapStart - sampleStart,
+    frameCount: overlapEnd - overlapStart,
+    timelineStartFrame: overlapStart,
+  }
+}
+
+/** Streaming, constant-space proof that a requested audio interval was fully decoded once. */
+export class AudioFrameCoverageTracker {
+  private readonly expectedStartFrame: number
+  private readonly expectedEndFrame: number
+  private coveredFrames = 0
+  private gapFrames = 0
+  private overlapFrames = 0
+  private firstCoveredFrame: number | null = null
+  private lastCoveredFrameExclusive: number | null = null
+  private cursor: number
+
+  constructor(region: AudioRegion, sampleRate: number) {
+    const bounds = regionFrameBounds(region, sampleRate)
+    this.expectedStartFrame = bounds.start
+    this.expectedEndFrame = bounds.end
+    this.cursor = bounds.start
+  }
+
+  /** Adds a slice after it has been copied and accepted by the analysers. */
+  add(slice: AudioFrameSlice): void {
+    if (slice.frameCount === 0) return
+    const start = slice.timelineStartFrame
+    const end = start + slice.frameCount
+    if (start < this.expectedStartFrame || end > this.expectedEndFrame) {
+      throw new RangeError(`Audio slice ${start}..${end} falls outside the requested region`)
+    }
+
+    this.firstCoveredFrame ??= start
+    if (start > this.cursor) this.gapFrames += start - this.cursor
+    if (start < this.cursor) this.overlapFrames += Math.min(this.cursor, end) - start
+
+    const newlyCoveredStart = Math.max(start, this.cursor)
+    if (end > newlyCoveredStart) this.coveredFrames += end - newlyCoveredStart
+    this.cursor = Math.max(this.cursor, end)
+    this.lastCoveredFrameExclusive = Math.max(this.lastCoveredFrameExclusive ?? end, end)
+  }
+
+  /** Final coverage, including any missing tail after the last decoded sample. */
+  finish(): AudioFrameCoverage {
+    const trailingGap = Math.max(0, this.expectedEndFrame - this.cursor)
+    const gapFrames = this.gapFrames + trailingGap
+    const expectedFrames = this.expectedEndFrame - this.expectedStartFrame
+    return {
+      expectedStartFrame: this.expectedStartFrame,
+      expectedEndFrame: this.expectedEndFrame,
+      expectedFrames,
+      coveredFrames: this.coveredFrames,
+      gapFrames,
+      overlapFrames: this.overlapFrames,
+      firstCoveredFrame: this.firstCoveredFrame,
+      lastCoveredFrameExclusive: this.lastCoveredFrameExclusive,
+      complete:
+        this.firstCoveredFrame === this.expectedStartFrame &&
+        this.lastCoveredFrameExclusive === this.expectedEndFrame &&
+        this.coveredFrames === expectedFrames &&
+        gapFrames === 0 &&
+        this.overlapFrames === 0,
+    }
+  }
+}
+
+/**
+ * Acceptance-only analyser whose independent true-peak detector is drained at EOF.
+ *
+ * The zero post-roll clocks the causal FIR without feeding synthetic duration
+ * into the production loudness analyser. This makes the harness able to detect
+ * an output transient in the final {@link PHASE_TAPS} samples while the
+ * protected production detector remains unchanged.
+ */
+export class AcceptanceAudioAnalyser {
+  private readonly analyser: AudioAnalyser
+  private readonly truePeak: TruePeakDetector
+  private readonly channelCount: number
+  private finished = false
+
+  constructor(options: { readonly sampleRate: number; readonly channelCount: number }) {
+    this.analyser = new AudioAnalyser(options)
+    this.truePeak = new TruePeakDetector(options.channelCount)
+    this.channelCount = options.channelCount
+  }
+
+  addFrames(channels: readonly Float32Array[]): void {
+    if (this.finished) throw new Error('Acceptance audio analyser has already finished')
+    this.analyser.addFrames(channels)
+    this.truePeak.addFrames(channels)
+  }
+
+  finish(): AudioAnalysis {
+    if (this.finished) throw new Error('Acceptance audio analyser has already finished')
+    this.finished = true
+    const measured = this.analyser.finish()
+    this.truePeak.addFrames(
+      Array.from({ length: this.channelCount }, () => new Float32Array(PHASE_TAPS - 1)),
+    )
+    return {
+      ...measured,
+      truePeakDbtp: this.truePeak.peakDbtp,
+      // The post-roll is synthetic. Keep the source-frame clip count from the
+      // undrained analyser while using the drained detector only for its peak.
+      clippedSampleCount: measured.clippedSampleCount,
+    }
+  }
+}
+
 /** Mean luminance of a frame, from a small downscale. */
-function meanLuminance(
-  context: OffscreenCanvasRenderingContext2D,
-  size: number,
-): number {
+function meanLuminance(context: OffscreenCanvasRenderingContext2D, size: number): number {
   const { data } = context.getImageData(0, 0, size, size)
   let sum = 0
   for (let i = 0; i < data.length; i += 4) {
@@ -108,35 +355,29 @@ export async function measureSync(file: Blob): Promise<SyncMeasurement> {
   const videoMarkers: number[] = []
   let wasMarker = false
   for await (const sample of new VideoSampleSink(videoTrack).samples()) {
-    sample.draw(context, 0, 0, size, size)
-    const isMarker = meanLuminance(context, size) > 200
-    // Leading edge only: a marker held across two frames is one marker.
-    if (isMarker && !wasMarker) videoMarkers.push(sample.timestamp)
-    wasMarker = isMarker
-    sample.close()
+    withClosedSample(sample, (current) => {
+      current.draw(context, 0, 0, size, size)
+      const isMarker = meanLuminance(context, size) > 200
+      // Leading edge only: a marker held across two frames is one marker.
+      if (isMarker && !wasMarker) videoMarkers.push(current.timestamp)
+      wasMarker = isMarker
+    })
   }
 
   const sampleRate = await audioTrack.getSampleRate()
   const channelCount = await audioTrack.getNumberOfChannels()
   const audioMarkers: number[] = []
-  let refractoryUntil = -1
-  let elapsedFrames = 0
+  let refractoryUntil = Number.NEGATIVE_INFINITY
 
   for await (const sample of new AudioSampleSink(audioTrack).samples()) {
-    const frames = sample.numberOfFrames
-    const plane = new Float32Array(frames)
-    sample.copyTo(plane, { planeIndex: 0, format: 'f32-planar' })
-    for (let i = 0; i < frames; i++) {
-      const t = (elapsedFrames + i) / sampleRate
-      if (t < refractoryUntil) continue
-      if (Math.abs(plane[i]!) > 0.5) {
-        audioMarkers.push(t)
-        // Impulses are 10 ms; a quarter-second gap cannot merge two of them.
-        refractoryUntil = t + 0.25
-      }
-    }
-    elapsedFrames += frames
-    sample.close()
+    withClosedSample(sample, (current) => {
+      const frames = current.numberOfFrames
+      const plane = new Float32Array(frames)
+      current.copyTo(plane, { planeIndex: 0, format: 'f32-planar' })
+      const found = findAudioImpulseMarkers(current.timestamp, plane, sampleRate, refractoryUntil)
+      audioMarkers.push(...found.markers)
+      refractoryUntil = found.refractoryUntilSeconds
+    })
     if (channelCount < 1) break
   }
 
@@ -154,37 +395,54 @@ export async function measureSync(file: Blob): Promise<SyncMeasurement> {
 /** Loudness of a whole file, or of one region of it. */
 export async function measureLoudness(
   file: Blob,
-  region?: { readonly fromSeconds: number; readonly toSeconds: number },
-): Promise<AudioAnalysis | null> {
+  region?: AudioRegion,
+): Promise<AcceptanceAudioAnalysis | null> {
   const input = new Input({ formats: ALL_FORMATS, source: new BlobSource(file) })
   const track = await input.getPrimaryAudioTrack()
   if (!track) return null
 
   const sampleRate = await track.getSampleRate()
   const channelCount = await track.getNumberOfChannels()
-  const analyser = new AudioAnalyser({ sampleRate, channelCount })
+  const analyser = new AcceptanceAudioAnalyser({ sampleRate, channelCount })
+  const coverage = region ? new AudioFrameCoverageTracker(region, sampleRate) : null
 
   const samples = region
     ? new AudioSampleSink(track).samples(region.fromSeconds, region.toSeconds)
     : new AudioSampleSink(track).samples()
 
   for await (const sample of samples) {
-    const planes: Float32Array[] = []
-    for (let ch = 0; ch < channelCount; ch++) {
-      const data = new Float32Array(sample.numberOfFrames)
-      sample.copyTo(data, { planeIndex: ch, format: 'f32-planar' })
-      planes.push(data)
-    }
-    analyser.addFrames(planes)
-    sample.close()
+    withClosedSample(sample, (current) => {
+      const slice = region
+        ? audioFrameSlice(current.timestamp, current.numberOfFrames, sampleRate, region)
+        : {
+            frameOffset: 0,
+            frameCount: current.numberOfFrames,
+            timelineStartFrame: Math.round(current.timestamp * sampleRate),
+          }
+      if (slice.frameCount === 0) return
+
+      const planes: Float32Array[] = []
+      for (let ch = 0; ch < channelCount; ch++) {
+        const data = new Float32Array(slice.frameCount)
+        current.copyTo(data, {
+          planeIndex: ch,
+          format: 'f32-planar',
+          frameOffset: slice.frameOffset,
+          frameCount: slice.frameCount,
+        })
+        planes.push(data)
+      }
+      analyser.addFrames(planes)
+      coverage?.add(slice)
+    })
   }
-  return analyser.finish()
+  return { ...analyser.finish(), coverage: coverage?.finish() ?? null }
 }
 
 export interface EgressRecord {
   readonly url: string
   readonly method: string
-  /** Bytes sent in the request body, which is what "media egress" would mean. */
+  /** Bytes sent, or 1 when a streaming body's exact size is not observable. */
   readonly bodyBytes: number
 }
 
@@ -205,10 +463,10 @@ export interface EgressReport {
  *
  * `fetch` and `sendBeacon` are wrapped to catch request BODIES, which is what
  * an upload actually is and which no passive observer reports. Separately, the
- * browser's own resource timeline is read, which catches every request however
- * it was made — including by code that does not exist yet and would not think
- * to use the wrapped paths. Neither XHR nor any other API can hide from the
- * second, which is why the first does not need to cover them.
+ * browser's own resource timeline is read, which catches main-context request
+ * URLs however they were made. Worker resource timing is not guaranteed to
+ * appear in this context, so a clean report remains manual evidence rather
+ * than a criterion-9 pass until the worker has its own instrument.
  */
 export class EgressWatch {
   private readonly records: EgressRecord[] = []
@@ -223,7 +481,8 @@ export class EgressWatch {
     globalThis.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
       const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url
       const method = init?.method ?? (input instanceof Request ? input.method : 'GET')
-      records.push({ url, method, bodyBytes: bodySize(init?.body) })
+      const body = init?.body ?? (input instanceof Request ? input.body : null)
+      records.push({ url, method, bodyBytes: bodySize(body) })
       return originalFetch(input, init)
     }
     this.restore.push(() => {
@@ -272,5 +531,8 @@ function bodySize(body: unknown): number {
   if (body instanceof ArrayBuffer) return body.byteLength
   if (ArrayBuffer.isView(body)) return body.byteLength
   if (body instanceof FormData || body instanceof URLSearchParams) return 1
-  return 0
+  // A Request can carry a streaming body whose exact byte count is not
+  // synchronously observable. Presence is enough for this safety check: one
+  // is a sentinel meaning "non-empty or unknown", not a claimed byte length.
+  return body === null || body === undefined ? 0 : 1
 }

@@ -13,7 +13,7 @@
 
 import { describe, expect, it } from 'vitest'
 
-import { CancelledError, settleLanes } from './pipeline'
+import { CancelledError, carryMetadataTags, settleLanes, throwIfAborted } from './pipeline'
 
 /** A lane that resolves after `ticks` microtask turns, unless aborted first. */
 function lane(options: {
@@ -147,5 +147,99 @@ describe('settleLanes', () => {
       ),
     ).rejects.toThrow('first')
     expect(started).toBe(2)
+  })
+
+  it('starts cancellation immediately so it can release a stuck sibling lane', async () => {
+    let releaseStuck: (() => void) | undefined
+    let cancellations = 0
+    const stuck = new Promise<void>((resolve) => {
+      releaseStuck = resolve
+    })
+
+    await expect(
+      settleLanes([() => Promise.reject(new Error('encoder failed')), () => stuck], () => {
+        cancellations++
+        releaseStuck?.()
+      }),
+    ).rejects.toThrow('encoder failed')
+    expect(cancellations).toBe(1)
+  })
+})
+
+describe('throwIfAborted', () => {
+  it('does nothing while the job is live', () => {
+    expect(() => throwIfAborted(new AbortController().signal)).not.toThrow()
+  })
+
+  it('turns a cancellation checkpoint into the canonical pipeline error', () => {
+    const controller = new AbortController()
+    controller.abort()
+
+    expect(() => throwIfAborted(controller.signal)).toThrow(CancelledError)
+  })
+})
+
+describe('carryMetadataTags', () => {
+  it('copies readable file metadata', async () => {
+    const received: unknown[] = []
+    await expect(
+      carryMetadataTags(
+        { getMetadataTags: () => Promise.resolve({ title: 'Lecture' }) },
+        {
+          setMetadataTags: (tags: unknown) => {
+            received.push(tags)
+          },
+        },
+      ),
+    ).resolves.toBe('copied')
+    expect(received).toEqual([{ title: 'Lecture' }])
+  })
+
+  it('fails when output metadata writing breaks without a prior warning', async () => {
+    await expect(
+      carryMetadataTags(
+        { getMetadataTags: () => Promise.resolve({ title: 'Lecture' }) },
+        {
+          setMetadataTags: () => {
+            throw new Error('muxer rejected metadata')
+          },
+        },
+      ),
+    ).rejects.toThrow('File metadata could not be preserved safely')
+  })
+
+  it('fails when source metadata becomes unreadable without a visible warning', async () => {
+    await expect(
+      carryMetadataTags(
+        { getMetadataTags: () => Promise.reject(new Error('transient read failure')) },
+        { setMetadataTags: () => undefined },
+      ),
+    ).rejects.toThrow('File metadata could not be preserved safely')
+  })
+
+  it('continues only when unreadable metadata was disclosed before Start', async () => {
+    await expect(
+      carryMetadataTags(
+        {
+          getMetadataTags: () => Promise.reject(new Error('unsupported metadata')),
+        },
+        { setMetadataTags: () => undefined },
+        true,
+      ),
+    ).resolves.toBe('disclosed-unavailable')
+  })
+
+  it('never hides an output-write failure behind an earlier read warning', async () => {
+    await expect(
+      carryMetadataTags(
+        { getMetadataTags: () => Promise.resolve({ title: 'Lecture' }) },
+        {
+          setMetadataTags: () => {
+            throw new Error('muxer rejected metadata')
+          },
+        },
+        true,
+      ),
+    ).rejects.toThrow('File metadata could not be preserved safely')
   })
 })

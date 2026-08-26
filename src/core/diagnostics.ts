@@ -23,6 +23,10 @@ export interface DiagnosticsBundle {
   readonly appVersion: string
   readonly buildId: string
   readonly capturedAt: string
+  readonly view: string
+  readonly sourceReport: unknown
+  readonly capability: unknown
+  readonly jobSpec: unknown
   readonly environment: Record<string, unknown>
   readonly errors: readonly CapturedError[]
   readonly logs: readonly unknown[]
@@ -30,6 +34,28 @@ export interface DiagnosticsBundle {
 
 const errors: CapturedError[] = []
 const MAX_ERRORS = 50
+
+/** Stable task context kept outside the bounded log ring. */
+let context: {
+  view: string
+  sourceReport: unknown
+  capability: unknown
+  jobSpec: unknown
+} = {
+  view: 'select',
+  sourceReport: null,
+  capability: null,
+  jobSpec: null,
+}
+
+/**
+ * Updates first-class diagnostic context without logging media or filenames.
+ * Callers pass deliberately shaped values; the bundle still redacts every
+ * field at copy time as the final safety boundary.
+ */
+export function setDiagnosticsContext(update: Partial<typeof context>): void {
+  context = { ...context, ...update }
+}
 
 /** Listeners notified when an uncaught error arrives, so the UI can surface it. */
 type ErrorListener = (error: CapturedError) => void
@@ -122,6 +148,10 @@ export function buildDiagnosticsBundle(): DiagnosticsBundle {
     appVersion: APP_VERSION,
     buildId: BUILD_ID,
     capturedAt: new Date().toISOString(),
+    view: context.view,
+    sourceReport: redact(context.sourceReport),
+    capability: redact(context.capability),
+    jobSpec: redact(context.jobSpec),
     environment: redact(environment()) as Record<string, unknown>,
     errors: redact(errors) as readonly CapturedError[],
     logs: redact(logs) as readonly unknown[],

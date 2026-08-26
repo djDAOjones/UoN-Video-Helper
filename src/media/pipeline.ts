@@ -47,8 +47,14 @@ import { BrandingCompositor } from './composite'
 import { fitRectangle } from './conform'
 import { findFreezeFrame } from './freeze'
 import { audioEncodingConfigFor, videoEncodingConfigFor } from './encoding'
-import { AudioTimelineShift, measureEncoderDelay } from './encoder-delay'
+import { measureEncoderDelay } from './encoder-delay'
 import type { OpfsWorkspace } from './opfs'
+import {
+  readOutputTrackMetadata,
+  selectProcessingTracks,
+  type ProcessingTrackSelection,
+} from './track-selection'
+import { mapSourceTimestamp, type SourceTimeline } from './source-timeline'
 import { offsetVtt } from './vtt'
 
 /** Named stages, per spec section 9.2 — not one opaque bar. */
@@ -110,12 +116,12 @@ export interface PipelineResult {
  */
 export async function settleLanes(
   lanes: ReadonlyArray<() => Promise<void>>,
-  onFailure: () => void,
+  onFailure: () => unknown,
 ): Promise<void> {
   const settled = await Promise.allSettled(
     lanes.map((lane) =>
-      lane().catch((cause: unknown) => {
-        onFailure()
+      lane().catch(async (cause: unknown) => {
+        await onFailure()
         throw cause
       }),
     ),
@@ -127,6 +133,41 @@ export async function settleLanes(
   throw failures.find((cause) => !(cause instanceof CancelledError)) ?? failures[0]
 }
 
+/**
+ * Carries file-level tags or fails unless inspection already disclosed that
+ * those tags were unreadable before Start.
+ */
+export async function carryMetadataTags(
+  input: Pick<Input, 'getMetadataTags'>,
+  output: Pick<Output, 'setMetadataTags'>,
+  knownReadFailure = false,
+): Promise<'copied' | 'none' | 'disclosed-unavailable'> {
+  let tags: Awaited<ReturnType<Input['getMetadataTags']>>
+  try {
+    tags = await input.getMetadataTags()
+  } catch (cause) {
+    if (!knownReadFailure) {
+      throw new Error('File metadata could not be preserved safely', { cause })
+    }
+    log.warn('pipeline', 'could not carry metadata tags', {
+      reason: cause instanceof Error ? cause.message : String(cause),
+      disclosedBeforeStart: true,
+    })
+    return 'disclosed-unavailable'
+  }
+
+  if (!tags || Object.keys(tags).length === 0) return 'none'
+  try {
+    output.setMetadataTags(tags)
+  } catch (cause) {
+    // A warning that source tags were unreadable cannot excuse a different,
+    // unexpected output failure after a later read succeeded.
+    throw new Error('File metadata could not be preserved safely', { cause })
+  }
+  log.debug('pipeline', 'metadata tags carried over', { keys: Object.keys(tags).length })
+  return 'copied'
+}
+
 export class CancelledError extends Error {
   override readonly name = 'CancelledError'
   constructor() {
@@ -135,28 +176,28 @@ export class CancelledError extends Error {
 }
 
 /** `exactOptionalPropertyTypes` makes an explicit `undefined` an error here. */
-function colourOption(branding: {
+function colourOption(branding: { readonly colour?: BrandingColour }): {
   readonly colour?: BrandingColour
-}): { readonly colour?: BrandingColour } {
+} {
   return branding.colour ? { colour: branding.colour } : {}
 }
 
 export interface PipelineOptions {
   readonly input: Input
+  /** The same selected source tracks described and probed before Start. */
+  readonly processingTracks?: ProcessingTrackSelection
   readonly shape: OutputShape
   readonly preset: Preset
   /**
-   * How long the PICTURE runs. Every branding boundary is measured against
-   * this and never against the file's overall duration (VH-42).
+   * One source clock for both selected tracks. Every branding boundary is
+   * measured against its mapped picture endpoint, never the overall endpoint.
    *
-   * `SourceReport.durationSeconds` is `max(video, audio)`, and using it here
-   * put the closing where the LONGER track ended: audio outrunning the picture
-   * opened a video gap before the closing and pushed the composite point past
-   * anything the source reached, so the build silently never appeared.
+   * Normalising the tracks independently destroys a real delayed start, while
+   * passing only the overall endpoint puts the closing after the longer track.
    */
-  readonly videoDurationSeconds: number
-  /** How long the source's audio runs, or `null` when it has none. */
-  readonly audioDurationSeconds: number | null
+  readonly sourceTimeline: SourceTimeline
+  /** True only when the inspection UI already warned that metadata was unreadable. */
+  readonly knownMetadataReadFailure?: boolean
   readonly workspace: OpfsWorkspace
   /**
    * Spec 4.1's two toggles, plus the closing's own choices (VH-12, VH-22).
@@ -174,8 +215,61 @@ export interface PipelineOptions {
   readonly onProgress?: (progress: PipelineProgress) => void
 }
 
-function throwIfAborted(signal: AbortSignal | undefined): void {
+/** Throws the pipeline's canonical cancellation error at an async boundary. */
+export function throwIfAborted(signal: AbortSignal | undefined): void {
   if (signal?.aborted) throw new CancelledError()
+}
+
+/** Keeps `Array.isArray` from erasing the sample type to `any[]`. */
+function isSampleArray<T>(samples: Iterable<T> | AsyncIterable<T>): samples is T[] {
+  return Array.isArray(samples)
+}
+
+/**
+ * Transfers an owned stream of samples to an async emitter.
+ *
+ * Lazy streams materialise only the current sample, so a failure closes it and
+ * terminates the generator without constructing a long-gap tail. Arrays are
+ * retained as a compatibility path and close their already-created tail.
+ */
+export async function emitOwnedAudioSamples<T extends { close(): void }>(
+  samples: Iterable<T> | AsyncIterable<T>,
+  emit: (sample: T) => Promise<void>,
+): Promise<void> {
+  if (isSampleArray(samples)) {
+    for (const [index, sample] of samples.entries()) {
+      try {
+        await emit(sample)
+      } catch (cause) {
+        for (const remaining of samples.slice(index)) {
+          try {
+            remaining.close()
+          } catch (closeCause) {
+            log.warn('pipeline', 'could not close queued audio sample', {
+              reason: closeCause instanceof Error ? closeCause.message : String(closeCause),
+            })
+          }
+        }
+        throw cause
+      }
+    }
+    return
+  }
+
+  for await (const sample of samples) {
+    try {
+      await emit(sample)
+    } catch (cause) {
+      try {
+        sample.close()
+      } catch (closeCause) {
+        log.warn('pipeline', 'could not close current audio sample', {
+          reason: closeCause instanceof Error ? closeCause.message : String(closeCause),
+        })
+      }
+      throw cause
+    }
+  }
 }
 
 /**
@@ -206,36 +300,29 @@ export async function runPipeline(options: PipelineOptions): Promise<PipelineRes
 }
 
 async function encode(options: PipelineOptions): Promise<PipelineResult> {
-  const {
-    input,
-    shape,
-    preset,
-    videoDurationSeconds,
-    audioDurationSeconds,
-    workspace,
-    branding,
-    signal,
-    onProgress,
-  } = options
+  const { input, shape, preset, sourceTimeline, workspace, branding, signal, onProgress } = options
 
   throwIfAborted(signal)
   onProgress?.({ stage: 'preparing', fraction: 0 })
 
-  const videoTrack = await input.getPrimaryVideoTrack()
+  const processingTracks = options.processingTracks ?? (await selectProcessingTracks(input))
+  const videoTrack = processingTracks.video
   if (!videoTrack) throw new Error('The source has no video track')
-  const audioTrack = await input.getPrimaryAudioTrack()
+  const audioTrack = processingTracks.audio
+  const videoDurationSeconds = sourceTimeline.videoEndSeconds
+  const audioDurationSeconds = sourceTimeline.audioEndSeconds
 
-  // Passes A and B. The encode cannot start until the single linear gain is
-  // known, and the gain is not knowable until the chain has been measured.
+  // Planning passes plus the bounded complete-chain solve. The encode cannot
+  // start until the single linear gain is known, and the gain is not knowable
+  // until the limiter's actual response has been measured (R-01).
   let audioPlan = null
   if (audioTrack) {
     onProgress?.({ stage: 'analysing', fraction: 0 })
-    // Both traversals report, throttled: the analysis is two full passes over
-    // the track with nothing to say in between, and since VH-38 made silence
-    // the signal that a worker is wedged, saying nothing for minutes is how a
-    // healthy long job got itself cancelled (VH-51).
+    // Every traversal reports, throttled. Since VH-38 made silence the signal
+    // that a worker is wedged, saying nothing for minutes is how a healthy long
+    // job got itself cancelled (VH-51).
     let analysed = 0
-    audioPlan = await planAudio(audioTrack, signal, () => {
+    audioPlan = await planAudio(audioTrack, sourceTimeline, signal, () => {
       analysed++
       if (analysed % 200 === 0) onProgress?.({ stage: 'analysing', fraction: 0 })
     })
@@ -288,7 +375,11 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     onsetSeconds: CLOSING_ONSET_SECONDS,
     closingHasAudio,
   })
-  const { mode, contentOffsetSeconds: contentOffset, closingOffsetSeconds: closingOffset } = timeline
+  const {
+    mode,
+    contentOffsetSeconds: contentOffset,
+    closingOffsetSeconds: closingOffset,
+  } = timeline
   const audioEndsAt = timeline.audioEndsAtSeconds
 
   if (timeline.downgradedForShortSource) {
@@ -316,36 +407,28 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
   })
 
   const videoSource = new VideoSampleSource(videoEncodingConfigFor(shape))
-  output.addVideoTrack(videoSource, { frameRate: shape.frameRate })
+  const videoMetadata = await readOutputTrackMetadata(videoTrack)
+  throwIfAborted(signal)
+  output.addVideoTrack(videoSource, { ...videoMetadata, frameRate: shape.frameRate })
 
   // Spec 8.3.4: preserve creation metadata where the muxer supports it.
   // Mediabunny reads and writes file-level tags even though it cannot see
   // subtitle tracks, so this much genuinely survives.
-  try {
-    const tags = await input.getMetadataTags()
-    if (tags && Object.keys(tags).length > 0) {
-      output.setMetadataTags(tags)
-      log.debug('pipeline', 'metadata tags carried over', { keys: Object.keys(tags).length })
-    }
-  } catch (cause) {
-    log.warn('pipeline', 'could not carry metadata tags', {
-      reason: cause instanceof Error ? cause.message : String(cause),
-    })
-  }
+  await carryMetadataTags(input, output, options.knownMetadataReadFailure === true)
 
   let audioSource: AudioSampleSource | null = null
-  let timelineShift: AudioTimelineShift | null = null
+  let presentationDelaySeconds = 0
   if (audioTrack && audioPlan) {
     const audioConfig = audioEncodingConfigFor(preset, audioPlan.channelCount)
+    // AAC priming moves the decoded waveform later than its packet timestamp.
+    // Move picture and subtitle presentation by that measured amount instead
+    // of deleting the beginning of the user's sound to pull audio earlier.
+    presentationDelaySeconds = await measureEncoderDelay(audioConfig, audioPlan.channelCount)
+    throwIfAborted(signal)
     audioSource = new AudioSampleSource(audioConfig)
-    output.addAudioTrack(audioSource)
-
-    // The encoder's own delay, cancelled by shifting the audio timeline
-    // earlier. Measured rather than assumed: it is a property of whichever
-    // encoder this browser provides, and applying a number we had not
-    // measured would be worse than leaving it alone.
-    const delaySeconds = await measureEncoderDelay(audioConfig)
-    timelineShift = new AudioTimelineShift(delaySeconds, audioPlan.channelCount)
+    const audioMetadata = await readOutputTrackMetadata(audioTrack)
+    throwIfAborted(signal)
+    output.addAudioTrack(audioSource, audioMetadata)
   }
 
   // Spec 8.1: offset the timing, never the words. The offset is the opening
@@ -354,7 +437,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
   let subtitleSource: TextSubtitleSource | null = null
   let subtitleCues = 0
   if (options.subtitleVtt) {
-    const offset = offsetVtt(options.subtitleVtt, openingSeconds)
+    const offset = offsetVtt(options.subtitleVtt, openingSeconds + presentationDelaySeconds)
     subtitleCues = offset.cueCount
     subtitleSource = new TextSubtitleSource('webvtt')
     // 'und' — undetermined. The sidecar carries no language declaration, and
@@ -364,7 +447,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     options = { ...options, subtitleVtt: offset.text }
   }
 
-  const timelineSeconds = timeline.timelineSeconds
+  const timelineSeconds = timeline.timelineSeconds + presentationDelaySeconds
   const expectedFrames = Math.max(1, Math.round(timelineSeconds * shape.frameRate))
   let framesFed = 0
 
@@ -383,19 +466,33 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
   const abortLanes = (): void => {
     lanes.abort()
   }
-  signal?.addEventListener('abort', abortLanes, { once: true })
+  let outputCancellation: Promise<void> | null = null
+  const cancelOutput = (): Promise<void> => {
+    abortLanes()
+    outputCancellation ??= output.cancel().catch((cause: unknown) => {
+      log.warn('pipeline', 'could not cancel output cleanly', {
+        reason: cause instanceof Error ? cause.message : String(cause),
+      })
+    })
+    return outputCancellation
+  }
+  const cancelFromCaller = (): void => {
+    void cancelOutput()
+  }
+  signal?.addEventListener('abort', cancelFromCaller, { once: true })
   // A listener attached to an ALREADY-aborted signal never fires, so without
   // this line a cancel landing between the last `throwIfAborted` and here was
   // lost outright and the job encoded the whole file (VH-51). Checked after
   // attaching, never before: the other order leaves the same race, narrower.
-  if (signal?.aborted) abortLanes()
+  if (signal?.aborted) cancelFromCaller()
   const laneSignal = lanes.signal
 
   // Everything is fed in timeline order within its own track, and the two
   // tracks are fed concurrently — the muxer interleaves them, so running one
   // track to completion first would make it buffer the whole of that track.
   const feedVideo = async (): Promise<void> => {
-    if (opening) await feedBrandingVideo(opening, videoSource, 0, renderer, laneSignal)
+    if (opening)
+      await feedBrandingVideo(opening, videoSource, presentationDelaySeconds, renderer, laneSignal)
 
     const sink = new VideoSampleSink(videoTrack)
 
@@ -417,21 +514,18 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     // rate, so the branding and the content land on one regular grid however
     // variable the source was.
     //
-    // Timestamps are taken relative to the track's own first sample. Real
-    // recordings do not reliably start at zero — encoder priming shows up as a
-    // negative first timestamp — and with no opening sequence the offset is
-    // zero, so an unnormalised negative timestamp would be rejected outright.
-    let contentOrigin: number | null = null
+    // Both lanes subtract the selected tracks' ONE shared source origin. This
+    // keeps delayed audio or video delayed while mapping a negative container
+    // origin into the encoder's non-negative domain.
     let lastTrackTimestamp = 0
     for await (const sample of sink.samples()) {
-      throwIfAborted(laneSignal)
       try {
+        throwIfAborted(laneSignal)
         // Read before `setTimestamp`, which mutates the sample in place.
         const original = sample.timestamp
-        contentOrigin ??= original
         lastTrackTimestamp = original
-        const sourceTime = Math.max(0, original - contentOrigin)
-        const timestamp = contentOffset + sourceTime
+        const sourceTime = mapSourceTimestamp(sourceTimeline, original)
+        const timestamp = presentationDelaySeconds + contentOffset + sourceTime
         const buildTime = sourceTime - overlayFrom
 
         if (mode === 'over-picture' && canComposite && buildTime >= 0) {
@@ -440,14 +534,17 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
           // a Teams capture — so counting frames would drift them apart.
           const brand = await buildSink.getSample(buildTime)
           if (brand) {
-            const composed = await compositor.compose(sample, brand, buildFit, {
-              timestamp,
-              duration: sample.duration,
-            })
             try {
-              await videoSource.add(composed)
+              const composed = await compositor.compose(sample, brand, buildFit, {
+                timestamp,
+                duration: sample.duration,
+              })
+              try {
+                await videoSource.add(composed)
+              } finally {
+                composed.close()
+              }
             } finally {
-              composed.close()
               brand.close()
             }
           } else {
@@ -479,14 +576,18 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
             throwIfAborted(laneSignal)
             const brand = await buildSink.getSample(index * step)
             if (!brand) continue
-            const composed = await compositor.compose(frozen, brand, buildFit, {
-              timestamp: contentOffset + videoDurationSeconds + index * step,
-              duration: step,
-            })
             try {
-              await videoSource.add(composed)
+              const composed = await compositor.compose(frozen, brand, buildFit, {
+                timestamp:
+                  presentationDelaySeconds + contentOffset + videoDurationSeconds + index * step,
+                duration: step,
+              })
+              try {
+                await videoSource.add(composed)
+              } finally {
+                composed.close()
+              }
             } finally {
-              composed.close()
               brand.close()
             }
             framesFed++
@@ -497,22 +598,28 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       }
     }
 
-    if (closing) await feedBrandingVideo(closing, videoSource, closingOffset, renderer, laneSignal)
+    if (closing)
+      await feedBrandingVideo(
+        closing,
+        videoSource,
+        presentationDelaySeconds + closingOffset,
+        renderer,
+        laneSignal,
+      )
     videoSource.close()
   }
 
   const feedAudio = async (): Promise<void> => {
     if (!audioTrack || !audioSource || !audioPlan) return
 
-    // Every sample fed to the encoder passes through the shift, so the whole
-    // timeline moves together — branding and content alike.
+    // The encoder receives every source frame. AAC priming is a container or
+    // codec timing concern; deleting PCM to conceal it destroyed real speech
+    // at the start of recordings (R-03).
     const emit = async (sample: AudioSample): Promise<void> => {
-      const shifted = timelineShift ? timelineShift.apply(sample, audioPlan.sampleRate) : sample
-      if (!shifted) return
       try {
-        await audioSource.add(shifted)
+        await audioSource.add(sample)
       } finally {
-        shifted.close()
+        sample.close()
       }
     }
 
@@ -522,33 +629,39 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
 
     const processContent = createContentAudioProcessor(audioPlan, {
       offsetSeconds: contentOffset,
+      sourceTimeline,
       // The audio's OWN length, so its fade lands where it actually ends rather
       // than where the picture did.
       durationSeconds: audioEndsAt,
       fadeIn: opening !== null,
       fadeOut: closing !== null,
+      checkCancelled: () => throwIfAborted(laneSignal),
     })
     const sink = new AudioSampleSink(audioTrack)
     for await (const sample of sink.samples()) {
-      throwIfAborted(laneSignal)
-      let processed
+      let processed: AsyncIterable<AudioSample>
       try {
+        throwIfAborted(laneSignal)
         processed = processContent.process(sample)
       } finally {
         sample.close()
       }
-      if (!processed) continue
-      await emit(processed)
+      await emitOwnedAudioSamples(processed, emit)
     }
 
     // The limiter holds a look-ahead window, so the stream simply stopping lost
     // that much from the end of every job (VH-20). The analysis pass already
     // flushed, so loudness was measured over audio the output did not contain.
-    const tail = processContent.flush()
-    if (tail) await emit(tail)
+    await emitOwnedAudioSamples(processContent.flush(), emit)
 
     if (closing) {
-      await feedBrandingAudio(closing, emit, closingOffset, { fadeIn: true, fadeOut: false }, laneSignal)
+      await feedBrandingAudio(
+        closing,
+        emit,
+        closingOffset,
+        { fadeIn: true, fadeOut: false },
+        laneSignal,
+      )
     }
     audioSource.close()
   }
@@ -561,13 +674,17 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       subtitleSource.close()
     }
 
-    await settleLanes([feedVideo, feedAudio], abortLanes)
+    await settleLanes([feedVideo, feedAudio], cancelOutput)
 
     throwIfAborted(signal)
     onProgress?.({ stage: 'finishing', fraction: 0.99 })
     await output.finalize()
+    // Mediabunny does not accept an AbortSignal for finalization. Honour any
+    // cancel that arrived while it held control before exposing the result.
+    throwIfAborted(signal)
 
     const file = await outputFile.finish()
+    throwIfAborted(signal)
     onProgress?.({ stage: 'finishing', fraction: 1 })
     log.info('pipeline', 'encode complete', {
       preset: preset.id,
@@ -577,6 +694,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       height: shape.height,
       frameRate: shape.frameRate,
       audioGainDb: audioPlan ? Math.round(audioPlan.gainDb * 10) / 10 : null,
+      presentationDelayMs: Math.round(presentationDelaySeconds * 10000) / 10,
       openingSeconds,
       closingSeconds,
       timelineSeconds,
@@ -588,18 +706,14 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       file,
       brandingApplied: { opening: opening !== null, closing: closing !== null },
       subtitleCues,
-      contentOffsetSeconds: contentOffset,
+      contentOffsetSeconds: contentOffset + presentationDelaySeconds,
     }
   } catch (cause) {
     // Abandon the output so no writer is left holding a file the caller is
     // about to remove. Disposal itself is the outer handler's job.
-    try {
-      await output.cancel()
-    } catch {
-      // Already finalized or never started. Nothing to undo.
-    }
+    await cancelOutput()
     throw cause
   } finally {
-    signal?.removeEventListener('abort', abortLanes)
+    signal?.removeEventListener('abort', cancelFromCaller)
   }
 }

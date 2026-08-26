@@ -11,13 +11,17 @@ import type { OutputShape, PresetId } from '../config/presets'
 import { ESTIMATE_BANDS, STORAGE_HEADROOM_MULTIPLE } from '../config/thresholds'
 import type { AudioWarning } from '../audio/warnings'
 import type { CapabilityReport, EncodeSupport } from './capability'
-import type { ProbeResult } from './probe'
+import type { ProbeFailureStage, ProbeResult, VideoProbeStatus } from './probe'
 
 /** Spec 7.3. Ordered by severity: a block always wins, a proceed never does. */
 export type PreflightOutcome = 'block' | 'discourage' | 'warn' | 'proceed'
 
 export type PreflightReasonCode =
+  | 'insecure-context'
   | 'no-webcodecs'
+  | 'working-storage-unavailable'
+  | 'video-decode-unsupported'
+  | 'audio-decode-unsupported'
   | 'no-h264-encode'
   | 'no-aac-encode'
   | 'insufficient-storage'
@@ -33,13 +37,21 @@ export interface PreflightReason {
 }
 
 export interface PreflightInput {
+  readonly isSecureContext: boolean
   readonly hasWebCodecs: boolean
-  readonly canEncodeH264: boolean
+  readonly canUseOpfs: boolean
+  readonly canDecodeVideo: boolean
+  /** `true` for a silent source, which asks nothing of an audio decoder. */
+  readonly canDecodeAudio: boolean
+  /** Result of the real selected-track decode-transform-encode path. */
+  readonly videoProbeStatus: VideoProbeStatus
+  /** Exact stage returned by the real calibration path, when it failed. */
+  readonly probeFailureStage: ProbeFailureStage | null
   /**
    * Whether this browser will encode the AAC track the output needs.
    *
    * `true` when the source has no audio, since nothing will be asked of the
-   * audio encoder. Separate from {@link canEncodeH264} because the answers
+   * audio encoder. Separate from the video probe because the answers
    * genuinely differ: Firefox 154 encodes every video configuration we ask for
    * and refuses AAC at every bitrate (VH-49).
    */
@@ -70,8 +82,21 @@ export function preflightVerdict(input: PreflightInput): PreflightVerdict {
   const reasons: PreflightReason[] = []
   const requiredStorageBytes = Math.round(input.projectedOutputBytes * STORAGE_HEADROOM_MULTIPLE)
 
-  if (!input.hasWebCodecs) reasons.push({ code: 'no-webcodecs', outcome: 'block' })
-  else if (!input.canEncodeH264) reasons.push({ code: 'no-h264-encode', outcome: 'block' })
+  if (!input.isSecureContext) reasons.push({ code: 'insecure-context', outcome: 'block' })
+  else if (!input.hasWebCodecs) reasons.push({ code: 'no-webcodecs', outcome: 'block' })
+  else if (!input.canUseOpfs) {
+    reasons.push({ code: 'working-storage-unavailable', outcome: 'block' })
+  } else if (!input.canDecodeVideo) {
+    reasons.push({ code: 'video-decode-unsupported', outcome: 'block' })
+  } else if (!input.canDecodeAudio) {
+    reasons.push({ code: 'audio-decode-unsupported', outcome: 'block' })
+  } else if (input.probeFailureStage === 'video-decode') {
+    reasons.push({ code: 'video-decode-unsupported', outcome: 'block' })
+  } else if (input.probeFailureStage === 'audio-decode') {
+    reasons.push({ code: 'audio-decode-unsupported', outcome: 'block' })
+  } else if (input.probeFailureStage === 'video-encode' || input.videoProbeStatus === 'failed') {
+    reasons.push({ code: 'no-h264-encode', outcome: 'block' })
+  }
   // Blocks rather than warns, and blocks BEFORE the job starts. The failure it
   // replaces was a job that ran, showed progress, and died at the audio encoder
   // with "something went wrong" — the worst version of this available.

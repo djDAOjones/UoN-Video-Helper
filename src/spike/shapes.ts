@@ -119,7 +119,9 @@ const canEncodeAac = await canEncodeAudio({
   numberOfChannels: 2,
   bitrate: PRESETS.best.audioBitrateStereoBps,
 })
-say(`this engine encodes AAC: ${canEncodeAac}${canEncodeAac ? '' : ' — audio cases will be SKIPPED (VH-49)'}\n`)
+say(
+  `this engine encodes AAC: ${canEncodeAac}${canEncodeAac ? '' : ' — audio cases will be SKIPPED (VH-49)'}\n`,
+)
 
 for (const testCase of CASES) {
   say(`=== ${testCase.name} — ${testCase.why}`)
@@ -151,8 +153,7 @@ for (const testCase of CASES) {
       input: openInput(fixture),
       shape,
       preset,
-      videoDurationSeconds: report.video.durationSeconds,
-      audioDurationSeconds: report.audio?.durationSeconds ?? null,
+      sourceTimeline: report.timeline,
       workspace,
       // Closing on: 16:10 and 4:3 sources are exactly where the branding
       // conform has to letterbox rather than stretch.

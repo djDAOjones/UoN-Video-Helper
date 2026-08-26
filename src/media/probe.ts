@@ -8,9 +8,10 @@
  * and an Apple-silicon MacBook. A fixed limit is simultaneously too strict for
  * one and too permissive for the other.
  *
- * Both passes are measured, not just the visible one. Video decode-encode
- * dominates, but pass 1's audio analysis is real time on a slow machine and
- * assuming it away would under-promise in exactly the wrong direction.
+ * Video throughput can be extrapolated from the encoded sample. Audio is
+ * still calibrated to prove the exact decode path and report its measured
+ * speed, but the production planner may traverse it repeatedly. Until those
+ * adaptive traversals are modelled, an audio job has no honest total estimate.
  */
 
 import {
@@ -20,7 +21,7 @@ import {
   Output,
   VideoSampleSink,
   VideoSampleSource,
-  type Input,
+  type InputAudioTrack,
   type InputVideoTrack,
 } from 'mediabunny'
 
@@ -29,24 +30,48 @@ import { log } from '../core/logger'
 import { CALIBRATION_PROBE_SECONDS, MINIMUM_CREDIBLE_PROBE_FRAMES } from '../config/thresholds'
 import type { OutputShape } from '../config/presets'
 import { videoEncodingConfigFor } from './encoding'
+import type { ProcessingTrackSelection } from './track-selection'
+
+export type ProbeFailureStage = 'video-decode' | 'video-encode' | 'audio-decode'
+export type VideoProbeStatus = 'supported' | 'failed' | 'not-run'
 
 export interface ProbeResult {
+  /** Verdict from the real decode-transform-encode path, not a codec-string query. */
+  readonly videoSupport: VideoProbeStatus
+  /** The pipeline stage that prevented measurement, when one did. */
+  readonly failureStage: ProbeFailureStage | null
   /** False when too little was processed to believe the number. */
   readonly measured: boolean
   readonly framesEncoded: number
   readonly videoFramesPerSecond: number
   /** Seconds of audio analysed per second of wall clock. */
   readonly audioRealtimeFactor: number | null
-  /** Estimated wall-clock seconds for the whole job. `null` when unmeasured. */
+  /** Estimated wall-clock seconds for the whole job, or `null` when unavailable. */
   readonly estimatedSeconds: number | null
 }
 
-const UNMEASURED: ProbeResult = {
+export const PROBE_NOT_RUN: ProbeResult = Object.freeze({
+  videoSupport: 'not-run',
+  failureStage: null,
   measured: false,
   framesEncoded: 0,
   videoFramesPerSecond: 0,
   audioRealtimeFactor: null,
   estimatedSeconds: null,
+})
+
+class ProbeStageError extends Error {
+  constructor(
+    readonly stage: ProbeFailureStage,
+    override readonly cause: unknown,
+  ) {
+    super(`Calibration failed during ${stage}`)
+    this.name = 'ProbeStageError'
+  }
+}
+
+function throwIfProbeAborted(signal: AbortSignal | undefined): void {
+  signal?.throwIfAborted()
 }
 
 /**
@@ -62,32 +87,61 @@ async function probeVideo(
   shape: OutputShape,
   signal: AbortSignal | undefined,
 ): Promise<{ frames: number; seconds: number }> {
-  const output = new Output({
-    format: new Mp4OutputFormat({ fastStart: false }),
-    target: new NullTarget(),
-  })
-  const source = new VideoSampleSource(videoEncodingConfigFor(shape))
-  output.addVideoTrack(source, { frameRate: shape.frameRate })
-
-  const sink = new VideoSampleSink(track)
+  let output: Output | null = null
   let frames = 0
   const startedAt = performance.now()
 
   try {
-    await output.start()
-    for await (const sample of sink.samples(0, CALIBRATION_PROBE_SECONDS)) {
-      if (signal?.aborted) break
-      try {
-        await source.add(sample)
-      } finally {
-        sample.close()
-      }
-      frames++
+    throwIfProbeAborted(signal)
+    output = new Output({
+      format: new Mp4OutputFormat({ fastStart: false }),
+      target: new NullTarget(),
+    })
+    const source = new VideoSampleSource(videoEncodingConfigFor(shape))
+    try {
+      output.addVideoTrack(source, { frameRate: shape.frameRate })
+      await output.start()
+      throwIfProbeAborted(signal)
+    } catch (cause) {
+      if (signal?.aborted) throw cause
+      throw new ProbeStageError('video-encode', cause)
     }
-    source.close()
-    await output.finalize()
+
+    try {
+      const sink = new VideoSampleSink(track)
+      for await (const sample of sink.samples(0, CALIBRATION_PROBE_SECONDS)) {
+        // Cancellation after the iterator yields must still close the decoder
+        // sample, so the abort check lives inside the ownership block.
+        try {
+          throwIfProbeAborted(signal)
+          try {
+            await source.add(sample)
+          } catch (cause) {
+            throw new ProbeStageError('video-encode', cause)
+          }
+          frames++
+        } finally {
+          sample.close()
+        }
+      }
+      throwIfProbeAborted(signal)
+    } catch (cause) {
+      if (signal?.aborted || cause instanceof ProbeStageError) throw cause
+      throw new ProbeStageError('video-decode', cause)
+    }
+
+    try {
+      source.close()
+      await output.finalize()
+      // Finalization cannot accept a signal; cancellation while it held
+      // control must not become a successful support result.
+      throwIfProbeAborted(signal)
+    } catch (cause) {
+      if (signal?.aborted) throw cause
+      throw new ProbeStageError('video-encode', cause)
+    }
   } catch (cause) {
-    await output.cancel().catch(() => undefined)
+    if (output) await output.cancel().catch(() => undefined)
     throw cause
   }
 
@@ -95,16 +149,17 @@ async function probeVideo(
 }
 
 async function probeAudio(
-  input: Input,
+  track: InputAudioTrack | null,
   signal: AbortSignal | undefined,
 ): Promise<{ seconds: number; wallSeconds: number } | null> {
-  const track = await input.getPrimaryAudioTrack()
   if (!track) return null
 
+  throwIfProbeAborted(signal)
   const [sampleRate, channelCount] = await Promise.all([
     track.getSampleRate(),
     track.getNumberOfChannels(),
   ])
+  throwIfProbeAborted(signal)
   const analyser = new AudioAnalyser({ sampleRate, channelCount })
   const sink = new AudioSampleSink(track)
 
@@ -112,18 +167,23 @@ async function probeAudio(
   const startedAt = performance.now()
 
   for await (const sample of sink.samples(0, CALIBRATION_PROBE_SECONDS)) {
-    if (signal?.aborted) break
-    const perChannel = sample.numberOfFrames
-    const channels: Float32Array[] = []
-    for (let ch = 0; ch < channelCount; ch++) {
-      const data = new Float32Array(perChannel)
-      sample.copyTo(data, { planeIndex: ch, format: 'f32-planar' })
-      channels.push(data)
+    try {
+      throwIfProbeAborted(signal)
+      const perChannel = sample.numberOfFrames
+      const channels: Float32Array[] = []
+      for (let ch = 0; ch < channelCount; ch++) {
+        const data = new Float32Array(perChannel)
+        sample.copyTo(data, { planeIndex: ch, format: 'f32-planar' })
+        channels.push(data)
+      }
+      analyser.addFrames(channels)
+      framesSeen += perChannel
+    } finally {
+      // Copy failures and cancellation both release the yielded sample.
+      sample.close()
     }
-    analyser.addFrames(channels)
-    framesSeen += perChannel
-    sample.close()
   }
+  throwIfProbeAborted(signal)
   analyser.finish()
 
   return {
@@ -132,66 +192,105 @@ async function probeAudio(
   }
 }
 
+function failedProbe(
+  stage: ProbeFailureStage,
+  options: { readonly videoSupport: VideoProbeStatus; readonly framesEncoded?: number },
+): ProbeResult {
+  return {
+    ...PROBE_NOT_RUN,
+    videoSupport: options.videoSupport,
+    failureStage: stage,
+    framesEncoded: options.framesEncoded ?? 0,
+  }
+}
+
+/**
+ * Returns a defensible whole-job estimate from the work this probe represents.
+ *
+ * Audio planning, gain solving, encoding and finished-output verification can
+ * require a data-dependent number of full traversals. Reporting only the two
+ * traversals this probe used would present a precise structural underestimate.
+ */
+export function estimateJobDurationSeconds(videoSeconds: number, hasAudio: boolean): number | null {
+  return hasAudio ? null : Math.round(videoSeconds)
+}
+
 /**
  * Measures throughput on the real file and extrapolates to the whole job.
  *
- * @param file - The user's chosen file, opened read-only.
+ * @param processingTracks - The exact tracks inspection described to the user.
  * @param shape - The output the job will actually produce; the probe encodes
  *   at exactly this configuration or the measurement means nothing.
- * @param durationSeconds - Full source duration, for the extrapolation.
- * @param formats - Input formats to accept, matching `inspect.ts`.
+ * @param videoWorkSeconds - Selected picture span whose frames are decoded and
+ *   encoded. A delayed picture start is not itself another set of frames.
  */
 export async function calibrationProbe(options: {
-  readonly input: Input
+  readonly processingTracks: ProcessingTrackSelection
   readonly shape: OutputShape
-  readonly durationSeconds: number
+  readonly videoWorkSeconds: number
   readonly signal?: AbortSignal
 }): Promise<ProbeResult> {
-  const { input, shape, durationSeconds, signal } = options
+  const { processingTracks, shape, videoWorkSeconds, signal } = options
+  const videoTrack = processingTracks.video
+  if (!videoTrack) return PROBE_NOT_RUN
 
+  let video: { frames: number; seconds: number }
   try {
-    const videoTrack = await input.getPrimaryVideoTrack()
-    if (!videoTrack) return UNMEASURED
-
-    const video = await probeVideo(videoTrack, shape, signal)
-    if (video.frames < MINIMUM_CREDIBLE_PROBE_FRAMES || video.seconds <= 0) {
-      log.warn('probe', 'too few frames to trust the measurement', { frames: video.frames })
-      return { ...UNMEASURED, framesEncoded: video.frames }
-    }
-
-    const audio = await probeAudio(input, signal)
-
-    const videoFramesPerSecond = video.frames / video.seconds
-    const totalFrames = durationSeconds * shape.frameRate
-    const videoSeconds = totalFrames / videoFramesPerSecond
-
-    // Pass 1 analyses audio a second time, before pass 2 processes it, so the
-    // audio cost is counted twice.
-    const audioRealtimeFactor =
-      audio && audio.wallSeconds > 0 ? audio.seconds / audio.wallSeconds : null
-    const audioSeconds =
-      audioRealtimeFactor !== null ? (durationSeconds / audioRealtimeFactor) * 2 : 0
-
-    const result: ProbeResult = {
-      measured: true,
-      framesEncoded: video.frames,
-      videoFramesPerSecond,
-      audioRealtimeFactor,
-      estimatedSeconds: Math.round(videoSeconds + audioSeconds),
-    }
-    log.info('probe', 'calibration complete', {
-      framesEncoded: result.framesEncoded,
-      videoFramesPerSecond: Math.round(videoFramesPerSecond),
-      audioRealtimeFactor: audioRealtimeFactor === null ? null : Math.round(audioRealtimeFactor),
-      estimatedSeconds: result.estimatedSeconds,
-    })
-    return result
+    video = await probeVideo(videoTrack, shape, signal)
   } catch (cause) {
-    // A probe that fails is not a job that fails: the estimate is unavailable,
-    // pre-flight warns, and the user may still proceed.
-    log.warn('probe', 'calibration probe failed', {
+    if (signal?.aborted) throw cause
+    const stage = cause instanceof ProbeStageError ? cause.stage : 'video-encode'
+    log.warn('probe', 'calibration video path failed', {
+      stage,
       reason: cause instanceof Error ? cause.message : String(cause),
     })
-    return UNMEASURED
+    return failedProbe(stage, { videoSupport: 'failed' })
   }
+
+  if (video.frames < MINIMUM_CREDIBLE_PROBE_FRAMES || video.seconds <= 0) {
+    log.warn('probe', 'too few frames to trust the measurement', { frames: video.frames })
+    return {
+      ...PROBE_NOT_RUN,
+      videoSupport: 'supported',
+      framesEncoded: video.frames,
+    }
+  }
+
+  let audio: { seconds: number; wallSeconds: number } | null
+  try {
+    audio = await probeAudio(processingTracks.audio, signal)
+  } catch (cause) {
+    if (signal?.aborted) throw cause
+    log.warn('probe', 'calibration audio path failed', {
+      reason: cause instanceof Error ? cause.message : String(cause),
+    })
+    return failedProbe('audio-decode', {
+      videoSupport: 'supported',
+      framesEncoded: video.frames,
+    })
+  }
+
+  const videoFramesPerSecond = video.frames / video.seconds
+  const totalFrames = videoWorkSeconds * shape.frameRate
+  const videoSeconds = totalFrames / videoFramesPerSecond
+
+  const audioRealtimeFactor =
+    audio && audio.wallSeconds > 0 ? audio.seconds / audio.wallSeconds : null
+
+  const result: ProbeResult = {
+    videoSupport: 'supported',
+    failureStage: null,
+    measured: true,
+    framesEncoded: video.frames,
+    videoFramesPerSecond,
+    audioRealtimeFactor,
+    estimatedSeconds: estimateJobDurationSeconds(videoSeconds, audio !== null),
+  }
+  log.info('probe', 'calibration complete', {
+    framesEncoded: result.framesEncoded,
+    videoFramesPerSecond: Math.round(videoFramesPerSecond),
+    audioRealtimeFactor: audioRealtimeFactor === null ? null : Math.round(audioRealtimeFactor),
+    estimatedSeconds: result.estimatedSeconds,
+  })
+  return result
 }

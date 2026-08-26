@@ -28,27 +28,36 @@ const MINIMUM_MAGNITUDE = 1e-12
  */
 class SlidingMinimum {
   private readonly values: Float64Array
-  private readonly indices: Int32Array
+  private readonly indices: Float64Array
   private head = 0
   private tail = 0
   private position = 0
 
   constructor(private readonly windowSize: number) {
     this.values = new Float64Array(windowSize + 1)
-    this.indices = new Int32Array(windowSize + 1)
+    this.indices = new Float64Array(windowSize + 1)
   }
 
   push(value: number): number {
     const capacity = this.values.length
-    while (this.tail !== this.head && this.values[(this.tail - 1 + capacity) % capacity]! >= value) {
+
+    // Expire before inserting. The ring can otherwise become temporarily full,
+    // where head === tail is ambiguous with empty and an empty-queue guard
+    // cannot safely stop a corrupt index from cycling forever.
+    const oldest = this.position - this.windowSize + 1
+    while (this.head !== this.tail && this.indices[this.head]! < oldest) {
+      this.head = (this.head + 1) % capacity
+    }
+
+    while (
+      this.tail !== this.head &&
+      this.values[(this.tail - 1 + capacity) % capacity]! >= value
+    ) {
       this.tail = (this.tail - 1 + capacity) % capacity
     }
     this.values[this.tail] = value
     this.indices[this.tail] = this.position
     this.tail = (this.tail + 1) % capacity
-
-    const oldest = this.position - this.windowSize + 1
-    while (this.indices[this.head]! < oldest) this.head = (this.head + 1) % capacity
 
     this.position++
     return this.values[this.head]!
@@ -82,7 +91,10 @@ export class TruePeakLimiter {
     const { sampleRate, channelCount } = options
     this.channelCount = channelCount
     this.ceiling = 10 ** ((options.ceilingDbtp ?? LIMITER.ceilingDbtp) / 20)
-    this.lookAhead = Math.max(1, Math.round((options.lookAheadMs ?? LIMITER.lookAheadMs) * sampleRate / 1000))
+    this.lookAhead = Math.max(
+      1,
+      Math.round(((options.lookAheadMs ?? LIMITER.lookAheadMs) * sampleRate) / 1000),
+    )
     this.release = Math.exp(-1 / (((options.releaseMs ?? LIMITER.releaseMs) / 1000) * sampleRate))
 
     this.delay = Array.from({ length: channelCount }, () => new Float32Array(this.lookAhead))
@@ -144,7 +156,10 @@ export class TruePeakLimiter {
       this.currentGain =
         windowMinimum < this.currentGain
           ? windowMinimum
-          : Math.min(windowMinimum, windowMinimum + this.release * (this.currentGain - windowMinimum))
+          : Math.min(
+              windowMinimum,
+              windowMinimum + this.release * (this.currentGain - windowMinimum),
+            )
 
       for (let ch = 0; ch < this.channelCount; ch++) {
         const line = this.delay[ch]!
@@ -156,15 +171,19 @@ export class TruePeakLimiter {
     }
   }
 
-  /** Samples still held in the delay line, which the caller must append. */
+  /**
+   * Samples still held in the delay line, which the caller must append.
+   *
+   * Silence is clocked through the ordinary detector and gain path. A fixed
+   * final gain is unsafe because the oversampling FIR can reveal a terminal
+   * inter-sample peak only after several post-roll frames; the look-ahead
+   * window then keeps that reduction in force until the delayed source sample
+   * is emitted. Exactly `lookAhead` source frames come back and the synthetic
+   * silence remains in the emptied delay line.
+   */
   flush(): Float32Array[] {
     const tail = Array.from({ length: this.channelCount }, () => new Float32Array(this.lookAhead))
-    for (let i = 0; i < this.lookAhead; i++) {
-      const index = (this.delayIndex + i) % this.lookAhead
-      for (let ch = 0; ch < this.channelCount; ch++) {
-        tail[ch]![i] = this.delay[ch]![index]! * this.currentGain
-      }
-    }
+    this.process(tail)
     return tail
   }
 

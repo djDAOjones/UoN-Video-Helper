@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { tone } from '../../test/helpers/signals'
+import { COMPRESSOR } from '../config/audio'
 import { Compressor } from './compressor'
 
 const SAMPLE_RATE = 48000
@@ -14,12 +15,13 @@ function settledRmsDb(data: Float32Array): number {
 }
 
 /** A sine's RMS sits 3.01 dB below its peak. */
-function compressRms(inputRmsDbfs: number): number {
+function compressRms(inputRmsDbfs: number, kneeDb?: number): number {
   const channels = tone({
     sampleRate: SAMPLE_RATE, seconds: 2, frequency: 500,
     peakDbfs: inputRmsDbfs + 3.0103, channelCount: 1,
   })
-  new Compressor({ sampleRate: SAMPLE_RATE }).process(channels)
+  new Compressor({ sampleRate: SAMPLE_RATE, ...(kneeDb === undefined ? {} : { kneeDb }) })
+    .process(channels)
   return settledRmsDb(channels[0]!)
 }
 
@@ -45,6 +47,12 @@ describe('compressor', () => {
       expect(reductions[i]!).toBeGreaterThanOrEqual(reductions[i - 1]! - 0.05)
       expect(reductions[i]! - reductions[i - 1]!).toBeLessThan(1)
     }
+  })
+
+  it('uses the configured knee width rather than a private hard-coded value', () => {
+    const configured = compressRms(-19)
+    expect(configured).toBeCloseTo(compressRms(-19, COMPRESSOR.kneeDb), 6)
+    expect(configured).toBeLessThan(compressRms(-19, 0) - 0.1)
   })
 
   it('is gentle by design — never more than a few dB on speech', () => {

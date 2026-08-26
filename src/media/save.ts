@@ -12,7 +12,18 @@
 
 import { log } from '../core/logger'
 
-export type SaveOutcome = 'saved' | 'downloaded' | 'cancelled'
+export type SaveOutcome = 'saved' | 'download-started' | 'cancelled'
+
+/** Raised before write access when the chosen destination is the source entry. */
+export class SourceOverwriteError extends Error {
+  override readonly name = 'SourceOverwriteError'
+  constructor() {
+    super('The destination is the original source file')
+  }
+}
+
+/** Fallback URLs live for exactly as long as their retained result does. */
+const fallbackUrls = new WeakMap<File, Set<string>>()
 
 /** Typed here because the DOM lib does not describe the picker yet. */
 interface SaveFilePickerOptions {
@@ -27,23 +38,34 @@ function pickerAvailable(): boolean {
 /**
  * Saves `file` under `suggestedName`.
  *
- * @returns `cancelled` when the user dismissed the dialogue, which is a normal
- *   outcome and not an error — the result stays available to save again.
+ * @returns `saved` only after the picker stream has closed successfully.
+ *   `download-started` means a fallback anchor was clicked, not that the
+ *   browser finished downloading; both it and `cancelled` retain the result.
  */
-export async function saveFile(file: File, suggestedName: string): Promise<SaveOutcome> {
-  if (pickerAvailable()) {
+export async function saveFile(
+  file: File,
+  suggestedName: string,
+  sourceHandle: FileSystemFileHandle | null,
+): Promise<SaveOutcome> {
+  // A picker is safe only when the source came from a handle too. A plain File
+  // cannot be compared to the destination, so that path uses download instead.
+  if (pickerAvailable() && sourceHandle) {
     try {
       const options: SaveFilePickerOptions = {
         suggestedName,
         types: [{ description: 'MP4 video', accept: { 'video/mp4': ['.mp4'] } }],
       }
       const handle = await showSaveFilePicker(options)
+      if (await handle.isSameEntry(sourceHandle)) throw new SourceOverwriteError()
       const writable = await handle.createWritable()
       // Streamed, not buffered: the point of the whole architecture.
       await file.stream().pipeTo(writable)
       log.info('save', 'saved through the file picker', { bytes: file.size })
       return 'saved'
     } catch (cause) {
+      // Never downgrade this to a download or request write access. The user
+      // explicitly chose the source entry as the destination.
+      if (cause instanceof SourceOverwriteError) throw cause
       // AbortError is the user closing the dialogue. Anything else falls
       // through to the download route rather than failing outright.
       if (cause instanceof DOMException && cause.name === 'AbortError') {
@@ -51,7 +73,7 @@ export async function saveFile(file: File, suggestedName: string): Promise<SaveO
         return 'cancelled'
       }
       log.warn('save', 'file picker failed; falling back to a download', {
-        reason: cause instanceof Error ? cause.message : String(cause),
+        errorName: cause instanceof Error ? cause.name : 'unknown',
       })
     }
   }
@@ -62,12 +84,23 @@ export async function saveFile(file: File, suggestedName: string): Promise<SaveO
     anchor.href = url
     anchor.download = suggestedName
     anchor.click()
-    log.info('save', 'saved through a download', { bytes: file.size })
-    return 'downloaded'
-  } finally {
-    // Given a moment for the download to start before the URL is revoked.
-    setTimeout(() => URL.revokeObjectURL(url), 60_000)
+    const urls = fallbackUrls.get(file) ?? new Set<string>()
+    urls.add(url)
+    fallbackUrls.set(file, urls)
+    log.info('save', 'fallback download requested', { bytes: file.size })
+    return 'download-started'
+  } catch (cause) {
+    URL.revokeObjectURL(url)
+    throw cause
   }
+}
+
+/** Revokes fallback URLs only when their retained result is explicitly released. */
+export function releaseFallbackDownloads(file: File): void {
+  const urls = fallbackUrls.get(file)
+  if (!urls) return
+  for (const url of urls) URL.revokeObjectURL(url)
+  fallbackUrls.delete(file)
 }
 
 /**

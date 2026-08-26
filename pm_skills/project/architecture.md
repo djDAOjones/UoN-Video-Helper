@@ -18,8 +18,8 @@ resolution-preserving compression without new evidence.
 | Video/audio codec | **WebCodecs** (`VideoDecoder`/`VideoEncoder`/`AudioDecoder`/`AudioEncoder`) | Browser built-in. Streams frame-by-frame, reaches hardware encoders, no GPL/patent exposure, no COOP/COEP headers. |
 | Container demux/mux | **Mediabunny** 1.55.x, MPL-2.0 | The only runtime dependency. WebCodecs handles codecs but not containers. Zero runtime deps of its own (`@types/*` only). |
 | Loudness DSP | **Bespoke TypeScript** in a Web Worker | No filter graph exists in a WebCodecs architecture, and a wasm audio build would reintroduce the licensing question for no gain. |
-| Working storage | **OPFS**, written through Mediabunny's `StreamTarget` | `StreamTarget` takes a `WritableStream<{type,data,position}>` — positioned, seekable writes with backpressure that propagates back and throttles the encoders. An OPFS file handle's `createWritable()` produces exactly that shape, so no bespoke target is needed. |
-| Save to disk | **File System Access API**, blob download fallback | Lets a multi-GB result stream straight to the user's chosen location. |
+| Working storage | **OPFS**, exposed to Mediabunny as a `StreamTarget` | A worker-only sync access handle writes positioned chunks in place; `createWritable()` is the tested fallback. A Web Lock is acquired before the job directory exists and held until its result is durably saved or explicitly discarded. |
+| Save to disk | **File System Access API**, retained blob-download fallback | A handle-backed source permits an identity check before opening the destination. Where identity cannot be proved, the app uses a download and retains the OPFS result until explicit discard. |
 | UI | **Vanilla TS + our own components** | Carbon productive design language implemented in project code — never the Carbon packages. See `UI-STANDARDS.md`. |
 
 No framework, no CSS library, no polyfills. If the browser cannot do it
@@ -28,24 +28,29 @@ natively, the browser is not supported (spec §10) and says so plainly.
 ## The shape of a job
 
 The single most important structural fact: **the whole job runs in one
-Web Worker.** The main thread renders UI and nothing else. A one-hour
-encode that stutters the UI is indistinguishable from a hung tab, and
-spec §7.5 requires the page stay responsive throughout.
+Web Worker.** The main thread coordinates UI, worker requests, result ownership
+and saving; media inspection, pre-flight, encoding and verification stay in
+the worker. A one-hour encode that stutters the UI is indistinguishable from a
+hung tab, and spec §7.5 requires the page stay responsive throughout.
 
-The second most important: **audio is inherently two-pass, video is
-one-pass.** The single linear gain in spec §5.2 step 5 cannot be known
-until integrated loudness over the *whole* file has been measured. So:
+The second most important: **audio has a planning phase before its encode;
+video is encoded once.** The single linear gain in spec §5.2 step 5 cannot be
+known until integrated loudness over the *whole* file has been measured. The
+planning phase may traverse audio more than once to measure the pre-gain chain
+and solve through the non-linear limiter, but every traversal streams bounded
+blocks and retains no decoded PCM. The protected meter still retains derived
+loudness curves in memory; VH-53 keeps that separate performance change open
+because it requires a coupled EBU-harness run. So:
 
 ```
-Pass 1  decode audio only ──▶ K-weighting ──▶ integrated / short-term / LRA / true peak
-        (fast — audio-only decode of an hour takes seconds)
-                                        │
-                                        ▼
-                            measurements + warnings + the gain figure
-                                        │
-Pass 2  decode video ─▶ conform (CFR, scale) ─▶ VideoEncoder ─┐
-        decode audio ─▶ chain (§5.2 steps 2–6) ─▶ AudioEncoder┤─▶ Mediabunny Output ─▶ OPFS
-        branding ────▶ re-encode to match, audio bed UNPROCESSED ┘
+Plan    source analysis ─▶ macro envelope ─▶ pre-gain measurement
+                                   └──────▶ bounded complete-chain gain solve
+                                                     │
+Encode  video ─▶ shared source clock ─▶ CFR / scale ─▶ VideoEncoder ─┐
+        audio ─▶ shared clock + bounded gap fill ─▶ chain ─▶ encoder ┤─▶ Output ─▶ OPFS
+        branding ─────────▶ re-encode; audio bed UNPROCESSED ────────┘
+                                                     │
+Verify  reopen finished file ─▶ readable picture + strict sound measurement
 ```
 
 The third: **loudness is measured on source content only, never on the
@@ -57,26 +62,34 @@ two lanes that meet only at the muxer.
 
 ```
 src/
-  main.ts                  entry — mounts the shell, installs diagnostics
+  main.ts                  direct-DOM UI and worker request coordinator
   config/                  ALL tuneable values. No magic numbers elsewhere.
     presets.ts             the two output presets (spec §6.1, §6.2)
-    audio.ts               loudness targets + every chain constant (§5.1, §5.2)
+    audio.ts               loudness targets, warning thresholds and chain constants
     branding.ts            durations (D2), master variant table (§4.2)
-    thresholds.ts          pre-flight bands (§7.3), warning triggers (§5.4)
+    thresholds.ts          pre-flight bands, probe bounds and worker silence (§7)
   core/
     logger.ts              structured logger + bounded ring buffer
     diagnostics.ts         global error/unhandledrejection capture, redacted bundle
-    bus.ts                 tiny typed pub-sub (main thread only)
-    store.ts               app state, observable
+    selection-authority.ts immutable file/preset readiness generations
+    result-authority.ts    one retained result and its save/discard transitions
+    processing-guard.ts    wake-lock and unload protection lifetimes
+    watchdog.ts            progress-silence watchdog
   media/
-    inspect.ts             Mediabunny demux → SourceReport
-    capability.ts          WebCodecs + canEncodeVideo + OPFS quota + device class
-    probe.ts               3-second calibration probe → throughput + estimate
-    conform.ts             CFR conform, scale-to-fit, pad maths
-    pipeline.ts            pass 1 / pass 2 orchestration
-    opfs.ts                working store + a seekable Mediabunny target
-    save.ts                File System Access API, blob fallback
-    sidecar.ts             subtitle detection, WebVTT parse/offset/emit, metadata carry
+    inspect.ts             selected tracks + SourceReport + shared source timeline
+    track-selection.ts     one primary-track choice for inspect/probe/encode
+    source-timeline.ts     shared clock preserving selected-track offsets
+    capability.ts          secure context, WebCodecs, OPFS/locks and storage
+    probe.ts               real-path decode/encode probe + throughput estimate
+    audio-plan.ts          streaming analysis, gap fill and chain planning
+    audio-gain-solver.ts   bounded feedback solve through the complete chain
+    encoder-delay.ts       AAC round-trip presentation-delay measurement
+    pipeline.ts            concurrent bounded A/V and branding orchestration
+    opfs.ts                locked job workspace + seekable output + orphan sweep
+    source-picker.ts       read-only handle-backed source selection
+    save.ts                same-entry guard, streamed picker save, retained fallback
+    output-verification.ts finished-output loudness and EOF true-peak measurement
+    isobmff.ts / vtt.ts    track-handler scan and WebVTT validation/offset
   audio/
     kweighting.ts          BS.1770-4 pre-filter + RLB biquads
     loudness.ts            gated integrated, short-term, LRA
@@ -84,24 +97,27 @@ src/
     highpass.ts            60 Hz
     macrolevel.ts          conditional envelope, 15 s smoothing, 1 dB/s slew, pause freeze
     compressor.ts          2:1, -18 dBFS, 20 ms / 200 ms, soft knee
-    limiter.ts             5 ms look-ahead, 50 ms release, -2.0 dBTP
+    limiter.ts             5 ms look-ahead, 50 ms release, codec-headroom ceiling
     chain.ts               the ordered chain, assembled
-  branding/
-    assets.ts              variant selection (§4.2), fetch + cache
-    placeholder.ts         generated stand-in clips matching the master format
   workers/
-    job.worker.ts          the whole job
-    protocol.ts            typed messages across the boundary
+    job.worker.ts          latest checks, one job, retained workspace and cleanup
+    protocol.ts            correlated requests/replies plus lossy progress events
+    latest-request.ts      tracks and invalidates superseded readiness requests
+    output-integrity.ts    proves a readable finished picture
   ui/
-    shell.ts               app shell, landmarks, live region
-    components/            Carbon-spec'd controls, our own code
-    views/                 select / inspect / options / progress / done / blocked
+    source-panel.ts        source report and extra-track disclosure
+    preflight-panel.ts     blocked/warn/discourage/proceed rendering
+    warning-text.ts        user-facing audio warning mapping
   styles/
     tokens.brand.css       UoN palette — the D1 token lives here, once
     tokens.carbon.css      Carbon structural tokens (spacing, type, layer, state)
 test/
   ebu3341/                 signal synthesis + published expected values
   fixtures/                synthesised video/audio fixtures (generated, not committed)
+scripts/
+  check-build.mjs          isolated, non-mutating production-build check
+  check-placeholders.mjs   exact public-asset inventory and hash guard
+  run-in-engines.mjs       fail/manual-aware cross-engine acceptance runner
 samples/                   YOUR real recordings. Gitignored. Never committed.
 ```
 
@@ -109,32 +125,33 @@ samples/                   YOUR real recordings. Gitignored. Never committed.
 
 | Module | Responsibility |
 | --- | --- |
-| `media/inspect.ts` | Turn a `File` into a `SourceReport`: resolution, duration, codecs, rotation, audio presence, and a VFR verdict from `computeFrameRateMetrics()`. |
-| `media/capability.ts` | Answer "can this device do this job?" — `canEncodeVideo()` for the exact target config, `navigator.storage.estimate()` against 2.5x the projected output, device class. |
-| `media/probe.ts` | Decode+encode 3 s of the *actual* file, measure throughput, extrapolate. Turns spec §7.3's thresholds from guesses into measurements. |
+| `media/inspect.ts` + `track-selection.ts` | Choose Mediabunny's primary A/V tracks once, report multiplicity and timing, and carry those exact objects into probe and encode. |
+| `media/source-timeline.ts` | Map both selected lanes from their container timestamps onto one non-negative clock without erasing their relative offset. |
+| `media/capability.ts` + `probe.ts` | Prove the exact video/audio configurations and real decode/encode path, secure OPFS plus Web Locks, storage headroom and throughput before Start. |
 | `media/conform.ts` | All the geometry and timing maths: CFR timestamp generation at the rounded average rate, scale-to-fit, pad rectangle. Pure functions, heavily unit-tested. |
-| `media/opfs.ts` | The working store: a job-scoped OPFS directory, `createWritable()` handles wrapped for `StreamTarget`, and the orphan sweep at app start. Output lands in OPFS first and is copied to the user's destination only on success — writing straight to their chosen file would leave a partial on cancel, breaking spec §13 criterion 8. |
+| `media/opfs.ts` | Create each job directory only under its lifetime Web Lock, write through a seekable bounded target, retry disposal without dropping ownership, and sweep only unlocked orphans. |
 | `audio/loudness.ts` | The meter. Everything downstream trusts it, so it is built and validated first. |
-| `audio/chain.ts` | Assembles steps 2-6 in order and applies them to a stream of `Float32Array` blocks. Each step is a separate, independently testable module. |
-| `branding/assets.ts` | Picks the master variant nearest the output frame rate and resolution class, fetches, caches. Falls back to `placeholder.ts` until real assets exist. |
-| `workers/job.worker.ts` | Owns the job lifecycle: pass 1, pass 2, progress reporting, cancellation, OPFS cleanup. |
+| `media/audio-plan.ts` + `audio-gain-solver.ts` | Preserve the shared timeline with bounded silence blocks, derive the envelope, and solve the complete chain without retaining PCM. |
+| `media/output-verification.ts` | Decode the finished audio, drain an independent true-peak detector at EOF, and classify strict acceptance without changing protected meter code. |
+| `core/selection-authority.ts` + `result-authority.ts` | Make stale pre-flight responses and implicit result replacement impossible by identity and monotonic generation. |
+| `workers/job.worker.ts` | Own inspection, pre-flight, processing, cancellation, verification and every OPFS workspace until acknowledged release. |
 
 ## Communication patterns
 
-- **Across the worker boundary** — a typed request/response + progress-event
-  protocol in `workers/protocol.ts`. The main thread sends one `start` with
-  the job spec and receives `stage`, `progress`, `warning`, `done`, `error`.
-  Cancellation is an `AbortController` signal mirrored by a `cancel`
-  message. No shared mutable state; transfer `ArrayBuffer`s, never copy.
+- **Across the worker boundary** — correlated typed requests and replies in
+  `workers/protocol.ts`: inspect, pre-flight, process, cancel and discard.
+  Terminal replies carry success, cancellation or a user-legible failure;
+  `stage` is the only unsolicited lossy progress event. A retained result is
+  released only after an acknowledged `discard`.
 - **Within the worker** — direct imports and plain function composition.
   The pipeline is a pipeline; it does not need an event bus.
-- **Within the main thread** — a small observable `store.ts` for app state,
-  and `bus.ts` for cross-cutting notices (a warning raised, a stage
-  changed). Views subscribe; they never reach into each other.
+- **Within the main thread** — `main.ts` owns the DOM and request table;
+  focused authority objects own selection, retained-result and browser-lifecycle
+  transitions. There is no global store or event bus.
 
-Exception worth naming: the progress path is deliberately one-way and
-lossy. Dropping a progress frame is fine; dropping a `warning` or `error`
-is not, so those are acknowledged.
+Exception worth naming: dropping a progress frame is fine. Pre-flight warnings,
+finished-output warnings and failures travel in correlated terminal replies,
+where the main thread cannot mistake them for unrelated work.
 
 ## Dependency policy
 
@@ -188,11 +205,10 @@ Verified against Mediabunny 1.55.2, not assumed:
   reads back as `getTracks().length === 0`. `Input` exposes only
   `getTracks`, `getVideoTracks`, `getAudioTracks` and the two
   `getPrimary*` variants — there is no subtitle getter at all.
-  **Consequence:** detecting an embedded subtitle or chapter track needs
-  our own minimal ISOBMFF scan — walk `moov` → `trak` → `mdia` → `hdlr`
-  and read the handler type (`sbtl` / `subt` / `text`), plus `tref`/`chap`
-  for chapters. Handler types only; no sample parsing. That scan lives in
-  `media/sidecar.ts` and is the whole of VH-9's detection half.
+  **Consequence:** `media/isobmff.ts` performs a minimal handler scan — it
+  walks `moov` → `trak` → `mdia` → `hdlr` and reads handler types, plus
+  `tref`/`chap` for chapters. It detects risk before processing but does not
+  claim to preserve samples Mediabunny cannot expose.
 - **Subtitle writing works.** `addSubtitleTrack` +
   `TextSubtitleSource('webvtt')`; `Mp4OutputFormat.getSupportedSubtitleCodecs()`
   returns `['webvtt']`. Verified by writing a valid subtitle-bearing MP4.

@@ -123,10 +123,35 @@ describe('property 4: the pause freeze', () => {
       stepSeconds: STEP,
     })
     // The speech before the pause wants a boost; the pause must not undo it.
-    const beforePause = envelope.gainDb[Math.round(38 / envelope.stepSeconds)]!
-    const insidePause = envelope.gainDb[Math.round(52 / envelope.stepSeconds)]!
+    const pauseStart = Math.round(40 / envelope.stepSeconds)
+    const beforePause = envelope.gainDb[pauseStart - 1]!
+    const pause = envelope.gainDb.slice(pauseStart)
     expect(beforePause).toBeGreaterThan(0.5)
-    expect(insidePause).toBeGreaterThan(beforePause - 0.5)
+    for (const value of pause) expect(value).toBeCloseTo(beforePause, 12)
+  })
+
+  it('resumes from the held value at the slew limit after a pause', () => {
+    const envelope = buildGainEnvelope({
+      integratedLufs: -20,
+      loudnessRangeLu: 15,
+      shortTermLufs: curve([
+        [40, -25],
+        [20, -70],
+        [40, -15],
+      ]),
+      stepSeconds: STEP,
+    })
+    const pauseStart = Math.round(40 / envelope.stepSeconds)
+    const pauseEnd = Math.round(60 / envelope.stepSeconds)
+    const held = envelope.gainDb[pauseStart - 1]!
+
+    for (let i = pauseStart; i < pauseEnd; i++) {
+      expect(envelope.gainDb[i]!).toBeCloseTo(held, 12)
+    }
+    expect(Math.abs(envelope.gainDb[pauseEnd]! - held)).toBeLessThanOrEqual(
+      MACRO_LEVEL.slewDbPerSecond * envelope.stepSeconds + 1e-9,
+    )
+    expect(envelope.gainDb.at(-1)!).toBeLessThan(held - 1)
   })
 })
 

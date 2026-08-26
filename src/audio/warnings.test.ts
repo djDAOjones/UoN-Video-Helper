@@ -35,6 +35,28 @@ function healthy(overrides: Partial<AudioAnalysis> = {}): AudioAnalysis {
 
 const codes = (analysis: AudioAnalysis | null) => detectSourceWarnings(analysis).map((w) => w.code)
 
+/** Curve length emitted by the 3 s short-term window on its 10 ms grid. */
+function shortTermLength(durationSeconds: number, stepSeconds = 0.01): number {
+  const completedSteps = Math.floor(durationSeconds / stepSeconds + 1e-9)
+  const windowSteps = Math.round(3 / stepSeconds)
+  return Math.max(0, completedSteps - windowSteps + 1)
+}
+
+function silent(durationSeconds: number): AudioAnalysis {
+  const stepSeconds = 0.01
+  return healthy({
+    integratedLufs: Number.NEGATIVE_INFINITY,
+    shortTermLufs: Array.from(
+      { length: shortTermLength(durationSeconds, stepSeconds) },
+      () => Number.NEGATIVE_INFINITY,
+    ),
+    momentaryLufs: [],
+    durationSeconds,
+    stepSeconds,
+    truePeakDbtp: Number.NEGATIVE_INFINITY,
+  })
+}
+
 describe('spec 5.4 source warnings', () => {
   it('says nothing about a healthy recording', () => {
     expect(detectSourceWarnings(healthy())).toEqual([])
@@ -95,8 +117,53 @@ describe('spec 5.4 source warnings', () => {
       ...Array.from({ length: 350 }, () => -70), // 35 s
       ...Array.from({ length: 100 }, () => -20),
     ]
-    expect(codes(healthy({ shortTermLufs: under, stepSeconds }))).not.toContain('extended-silence')
-    expect(codes(healthy({ shortTermLufs: over, stepSeconds }))).toContain('extended-silence')
+    expect(codes(healthy({
+      shortTermLufs: under, durationSeconds: under.length * stepSeconds + 2.9, stepSeconds,
+    }))).not.toContain('extended-silence')
+    expect(codes(healthy({
+      shortTermLufs: over, durationSeconds: over.length * stepSeconds + 2.9, stepSeconds,
+    }))).toContain('extended-silence')
+  })
+
+  it('extended silence — an entirely silent file uses the exact strict boundary', () => {
+    expect(codes(silent(30))).not.toContain('extended-silence')
+
+    const oneSampleOver = 30 + 1 / 48000
+    const warnings = detectSourceWarnings(silent(oneSampleOver))
+    const extended = warnings.find((warning) => warning.code === 'extended-silence')
+    expect(extended?.detail['seconds']).toBeCloseTo(oneSampleOver, 8)
+  })
+
+  it('extended silence — accounts for the short-term window at startup', () => {
+    const stepSeconds = 0.01
+    const durationSeconds = 40
+    const length = shortTermLength(durationSeconds, stepSeconds)
+    const leading = (seconds: number) => [
+      ...Array.from({ length: Math.round((seconds - 2.99) / stepSeconds) }, () => -70),
+      ...Array.from({ length }, () => -20),
+    ].slice(0, length)
+
+    expect(codes(healthy({
+      shortTermLufs: leading(30), durationSeconds, stepSeconds,
+    }))).not.toContain('extended-silence')
+    expect(codes(healthy({
+      shortTermLufs: leading(30.01), durationSeconds, stepSeconds,
+    }))).toContain('extended-silence')
+  })
+
+  it('extended silence — accounts for the short-term window inside the file', () => {
+    const stepSeconds = 0.01
+    const exact = Array.from({ length: Math.round((30 - 2.99) / stepSeconds) }, () => -70)
+    const curve = [-20, ...exact, -20]
+
+    expect(codes(healthy({
+      shortTermLufs: curve, durationSeconds: curve.length * stepSeconds + 2.99, stepSeconds,
+    }))).not.toContain('extended-silence')
+    expect(codes(healthy({
+      shortTermLufs: [-20, ...exact, -70, -20],
+      durationSeconds: (curve.length + 1) * stepSeconds + 2.99,
+      stepSeconds,
+    }))).toContain('extended-silence')
   })
 
   it('does not mistake many short gaps for one long silence', () => {

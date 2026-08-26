@@ -9,7 +9,7 @@ import { describe, expect, it } from 'vitest'
 import { feedInChunks, tone } from '../../test/helpers/signals'
 import { AudioAnalyser } from './analyse'
 import { LoudnessAnalyser } from './loudness'
-import { TruePeakDetector } from './truepeak'
+import { PHASE_TAPS, TruePeakDetector } from './truepeak'
 
 const SAMPLE_RATE = 48000
 
@@ -31,10 +31,23 @@ describe('AudioAnalyser', () => {
     feedInChunks(signal, 1024, combined)
     feedInChunks(signal, 1024, loudness)
     feedInChunks(signal, 1024, truePeak)
+    truePeak.addFrames(Array.from({ length: 2 }, () => new Float32Array(PHASE_TAPS - 1)))
 
     const report = combined.finish()
     expect(report.integratedLufs).toBe(loudness.finish().integratedLufs)
     expect(report.truePeakDbtp).toBe(truePeak.peakDbtp)
+  })
+
+  it('sees a true-peak transient in the final source frame without extending duration', () => {
+    const analyser = new AudioAnalyser({ sampleRate: SAMPLE_RATE, channelCount: 1 })
+    const finalImpulse = new Float32Array(480)
+    finalImpulse[finalImpulse.length - 1] = 1
+
+    analyser.addFrames([finalImpulse])
+    const report = analyser.finish()
+
+    expect(report.truePeakDbtp).toBeCloseTo(0, 12)
+    expect(report.durationSeconds).toBeCloseTo(0.01, 12)
   })
 
   it('carries the stream shape into the report', () => {

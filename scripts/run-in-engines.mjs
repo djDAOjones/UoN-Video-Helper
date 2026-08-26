@@ -9,9 +9,10 @@
  * composite broken in Firefox only because all three were finally measured
  * together. This is that measurement, made repeatable.
  *
- * Every spike page follows the same contract: a `<pre id="log">` that the page
- * appends to, ending with a line of exactly `done`. Nothing here knows what a
- * page measures — it navigates, waits for that sentinel, and prints the text.
+ * The terminal contract is a `<pre id="log">` ending with
+ * `result: pass|fail|informational` and then a line of exactly `done`. Legacy
+ * assertion markers are recognised while existing pages migrate; a visible
+ * FAIL is never counted as a completed engine run.
  *
  * Each engine needs a different protocol, and the differences are not
  * negotiable:
@@ -34,12 +35,20 @@
  *   node scripts/run-in-engines.mjs /spike-alpha.html
  *   node scripts/run-in-engines.mjs /spike-modes.html --base http://localhost:5173
  *   node scripts/run-in-engines.mjs /spike-alpha.html --engines chrome,firefox
+ *   node scripts/run-in-engines.mjs /spike-alpha.html --require-all
  */
 
 import { spawn } from 'node:child_process'
 import { existsSync, mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
+
+import {
+  formatEngineSummary,
+  parsePageTerminal,
+  parseRunnerArgs,
+  summarizeEngineResults,
+} from './run-in-engines-lib.mjs'
 
 /** Where each engine lives, and how it is started. macOS paths. */
 const ENGINES = {
@@ -65,6 +74,8 @@ const POLL_MS = 500
  *  timeout reads as "the browser is broken" when it only means "the machine is
  *  busy". */
 const START_TIMEOUT_MS = 60_000
+/** Bounds every automation protocol round-trip, including setup before page polling. */
+const PROTOCOL_TIMEOUT_MS = 30_000
 
 const children = []
 const scratchDirs = []
@@ -137,28 +148,79 @@ async function waitForPort(url) {
 async function connect(url) {
   const socket = new WebSocket(url)
   const pending = new Map()
+  const failPending = (cause) => {
+    for (const { reject, timer } of pending.values()) {
+      globalThis.clearTimeout(timer)
+      reject(cause)
+    }
+    pending.clear()
+  }
   socket.addEventListener('message', (event) => {
     const message = JSON.parse(event.data)
-    const resolve = message.id !== undefined ? pending.get(message.id) : undefined
-    if (resolve) {
+    const call = message.id !== undefined ? pending.get(message.id) : undefined
+    if (call) {
       pending.delete(message.id)
-      resolve(message)
+      globalThis.clearTimeout(call.timer)
+      call.resolve(message)
     }
   })
+  socket.addEventListener('close', () => {
+    failPending(new Error(`automation socket closed: ${url}`))
+  })
+  socket.addEventListener('error', () => {
+    failPending(new Error(`automation socket failed: ${url}`))
+  })
   await new Promise((resolve, reject) => {
-    socket.addEventListener('open', resolve, { once: true })
-    socket.addEventListener('error', () => reject(new Error(`could not connect to ${url}`)), {
-      once: true,
-    })
+    const timer = setTimeout(
+      () => {
+        socket.close()
+        reject(new Error(`automation socket did not open within ${PROTOCOL_TIMEOUT_MS} ms`))
+      },
+      PROTOCOL_TIMEOUT_MS,
+    )
+    socket.addEventListener(
+      'open',
+      () => {
+        globalThis.clearTimeout(timer)
+        resolve()
+      },
+      { once: true },
+    )
+    socket.addEventListener(
+      'error',
+      () => {
+        globalThis.clearTimeout(timer)
+        reject(new Error(`could not connect to ${url}`))
+      },
+      { once: true },
+    )
+    socket.addEventListener(
+      'close',
+      () => {
+        globalThis.clearTimeout(timer)
+        reject(new Error(`automation socket closed before opening: ${url}`))
+      },
+      { once: true },
+    )
   })
 
   let nextId = 1
   return {
     send(method, params, extra = {}) {
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         const id = nextId++
-        pending.set(id, resolve)
-        socket.send(JSON.stringify({ id, method, params, ...extra }))
+        const timer = setTimeout(() => {
+          pending.delete(id)
+          reject(new Error(`${method} did not answer within ${PROTOCOL_TIMEOUT_MS} ms`))
+        }, PROTOCOL_TIMEOUT_MS)
+        pending.set(id, { resolve, reject, timer })
+        try {
+          socket.send(JSON.stringify({ id, method, params, ...extra }))
+        } catch (cause) {
+          globalThis.clearTimeout(timer)
+          pending.delete(id)
+          reject(cause)
+        }
       })
     },
     close: () => socket.close(),
@@ -166,7 +228,7 @@ async function connect(url) {
 }
 
 /**
- * Polls the page's `#log` until it ends with the `done` sentinel.
+ * Polls the page's `#log` until it ends with an exact terminal result and `done`.
  *
  * @param read - Evaluates an expression in the page and returns its value.
  * @returns The log text, plus whether the page finished or the wait timed out.
@@ -176,10 +238,11 @@ async function readUntilDone(read) {
   let text = ''
   while (Date.now() < deadline) {
     text = String((await read("document.getElementById('log')?.textContent ?? ''")) ?? '')
-    if (text.trimEnd().endsWith('done')) return { text, finished: true }
+    const terminal = parsePageTerminal(text)
+    if (terminal.finished) return { text, ...terminal }
     await sleep(POLL_MS)
   }
-  return { text, finished: false }
+  return { text, finished: false, result: null }
 }
 
 async function runChrome(url) {
@@ -274,6 +337,7 @@ async function runSafari(url) {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(body),
+      signal: AbortSignal.timeout(PROTOCOL_TIMEOUT_MS),
     })
     return response.json()
   }
@@ -296,31 +360,20 @@ async function runSafari(url) {
       return reply.value
     })
   } finally {
-    await fetch(`${base}/session/${sessionId}`, { method: 'DELETE' }).catch(() => {})
+    await fetch(`${base}/session/${sessionId}`, {
+      method: 'DELETE',
+      signal: AbortSignal.timeout(PROTOCOL_TIMEOUT_MS),
+    }).catch(() => {})
   }
 }
 
 const RUNNERS = { chrome: runChrome, firefox: runFirefox, safari: runSafari }
 
-function parseArgs(argv) {
-  const positional = []
-  const options = {}
-  for (let i = 0; i < argv.length; i++) {
-    const arg = argv[i]
-    if (arg.startsWith('--')) {
-      const [name, inline] = arg.slice(2).split('=')
-      options[name] = inline ?? argv[++i]
-    } else {
-      positional.push(arg)
-    }
-  }
-  return { positional, options }
-}
-
-const { positional, options } = parseArgs(process.argv.slice(2))
+const { positional, options } = parseRunnerArgs(process.argv.slice(2))
 const page = positional[0] ?? '/spike-alpha.html'
 const base = options.base ?? 'http://localhost:5173'
 const wanted = (options.engines ?? 'chrome,firefox,safari').split(',').map((name) => name.trim())
+const requireAll = options['require-all'] === true || options['require-all'] === 'true'
 const url = new URL(page, base).href
 
 if (typeof WebSocket === 'undefined') {
@@ -340,7 +393,7 @@ if (!(await waitForPort(url))) {
 }
 
 console.log(`run-in-engines: ${url}`)
-let failures = 0
+const results = []
 
 for (const name of wanted) {
   const engine = ENGINES[name]
@@ -348,25 +401,34 @@ for (const name of wanted) {
 
   if (!existsSync(engine.binary)) {
     console.log(`  SKIPPED — ${engine.binary} is not installed`)
+    results.push('skipped')
     continue
   }
 
   try {
-    const { text, finished } = await RUNNERS[name](url)
+    const { text, finished, result } = await RUNNERS[name](url)
     console.log(text.trim() || '  (the page reported nothing)')
     if (!finished) {
       console.log(`\n  INCOMPLETE — no "done" after ${PAGE_TIMEOUT_MS / 1000}s; output is partial`)
-      failures++
+      results.push('failed')
+    } else if (result === 'fail') {
+      console.log('\n  FAILED — the page reported a failing terminal result')
+      results.push('failed')
+    } else {
+      console.log(`\n  RESULT — ${result}`)
+      results.push('completed')
     }
   } catch (error) {
     console.log(`  FAILED — ${error instanceof Error ? error.message : String(error)}`)
-    failures++
+    results.push('failed')
   } finally {
     cleanUp()
   }
 }
 
-console.log(
-  `\nrun-in-engines: ${wanted.length - failures}/${wanted.length} engine(s) reported a complete run.`,
-)
-process.exit(failures ? 1 : 0)
+const summary = summarizeEngineResults(results, requireAll)
+console.log(`\nrun-in-engines: ${formatEngineSummary(summary)}.`)
+if (requireAll && summary.skipped > 0) {
+  console.log('run-in-engines: strict matrix requested; skipped engines make this run fail.')
+}
+process.exit(summary.exitCode)

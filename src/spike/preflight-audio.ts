@@ -36,8 +36,13 @@ const supported = await canEncodeAudio({
 say(`this engine encodes AAC: ${supported}`)
 
 const base = {
+  isSecureContext: true,
   hasWebCodecs: true,
-  canEncodeH264: true,
+  canUseOpfs: true,
+  canDecodeVideo: true,
+  canDecodeAudio: true,
+  videoProbeStatus: 'supported' as const,
+  probeFailureStage: null,
   availableStorageBytes: 50_000_000_000,
   projectedOutputBytes: 100_000_000,
   isMobileDevice: false,
@@ -46,11 +51,16 @@ const base = {
 
 say('\n=== a source WITH audio')
 const withAudio = preflightVerdict({ ...base, canEncodeAac: supported })
-say(`  outcome: ${withAudio.outcome}  reasons: ${withAudio.reasons.map((r) => r.code).join(', ') || 'none'}`)
+say(
+  `  outcome: ${withAudio.outcome}  reasons: ${withAudio.reasons.map((r) => r.code).join(', ') || 'none'}`,
+)
 if (supported) {
   check(withAudio.outcome === 'proceed', 'an engine that can encode AAC is not blocked')
 } else {
-  check(withAudio.outcome === 'block', 'an engine that cannot encode AAC is BLOCKED before the job starts')
+  check(
+    withAudio.outcome === 'block',
+    'an engine that cannot encode AAC is BLOCKED before the job starts',
+  )
   check(
     withAudio.reasons.some((r) => r.code === 'no-aac-encode'),
     'and the reason names the audio encoder rather than something vague',

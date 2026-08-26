@@ -22,6 +22,8 @@ import {
 import { log } from '../core/logger'
 import { conformCost, type ConformDecision } from './framerate'
 import { scanTrackHandlers, type TrackScan } from './isobmff'
+import { deriveSourceTimeline, type SourceTimeline } from './source-timeline'
+import { selectProcessingTracks, type ProcessingTrackSelection } from './track-selection'
 
 /**
  * The containers this tool accepts, rather than Mediabunny's `ALL_FORMATS`.
@@ -67,6 +69,11 @@ export interface VideoStreamReport {
   readonly displayWidth: number
   readonly displayHeight: number
   readonly rotation: number
+  /** Raw first packet timestamp; may be positive or negative. */
+  readonly firstTimestampSeconds: number
+  /** Raw end timestamp of the last packet, not `end - first`. */
+  readonly endTimestampSeconds: number
+  /** Track endpoint on the shared source clock (`endTimestampSeconds - origin`). */
   readonly durationSeconds: number
   readonly frameRate: FrameRateReport
   /** True when no single consistent rate was found — common in screen and meeting captures. */
@@ -91,6 +98,11 @@ export interface AudioStreamReport {
   readonly codecString: string | null
   readonly sampleRate: number
   readonly channelCount: number
+  /** Raw first packet timestamp; may be positive or negative. */
+  readonly firstTimestampSeconds: number
+  /** Raw end timestamp of the last packet, not `end - first`. */
+  readonly endTimestampSeconds: number
+  /** Track endpoint on the shared source clock (`endTimestampSeconds - origin`). */
   readonly durationSeconds: number
   readonly canDecode: boolean
 }
@@ -99,6 +111,9 @@ export interface SourceReport {
   /** Container as detected, e.g. `MP4`, `Matroska`. */
   readonly container: string
   readonly fileSizeBytes: number
+  /** Selected video/audio timing normalised once onto their shared source clock. */
+  readonly timeline: SourceTimeline
+  /** The later mapped endpoint of the selected tracks. */
   readonly durationSeconds: number
   /**
    * Always present. A file with no video track cannot be branded or encoded,
@@ -112,6 +127,10 @@ export interface SourceReport {
    * levelling has nothing to do.
    */
   readonly audio: AudioStreamReport | null
+  /** Video tracks Mediabunny exposed, including the selected primary track. */
+  readonly videoTrackCount: number
+  /** Audio tracks Mediabunny exposed, including the selected primary track. */
+  readonly audioTrackCount: number
   /**
    * Tracks Mediabunny reported. NOT the number of tracks in the file:
    * subtitle and chapter tracks are invisible to it. Named to make that
@@ -124,6 +143,25 @@ export interface SourceReport {
    * where the caller must say nothing rather than guess.
    */
   readonly tracks: TrackScan
+  /** Whether file-level metadata could be read for later preservation. */
+  readonly metadata: MetadataInspection
+}
+
+/** File-level metadata evidence collected before Start. */
+export interface MetadataInspection {
+  readonly readable: boolean
+  readonly tagCount: number | null
+}
+
+/**
+ * Worker-local inspection state. Track objects are intentionally not sent
+ * across the worker boundary; they keep every phase of this attempt on the
+ * exact selection described by {@link report}.
+ */
+export interface InspectedSource {
+  readonly input: Input
+  readonly processingTracks: ProcessingTrackSelection
+  readonly report: SourceReport
 }
 
 /**
@@ -149,6 +187,24 @@ export class UnreadableFileError extends Error {
   }
 }
 
+/**
+ * Checks file-level metadata before processing so an unreadable tag set cannot
+ * disappear silently from an otherwise successful output.
+ */
+export async function inspectMetadataTags(
+  input: Pick<Input, 'getMetadataTags'>,
+): Promise<MetadataInspection> {
+  try {
+    const tags = await input.getMetadataTags()
+    return Object.freeze({ readable: true, tagCount: Object.keys(tags).length })
+  } catch (cause) {
+    log.warn('inspect', 'file metadata could not be read', {
+      reason: cause instanceof Error ? cause.message : String(cause),
+    })
+    return Object.freeze({ readable: false, tagCount: null })
+  }
+}
+
 /** `canDecode()` reaches for WebCodecs; treat any failure as "no", never as a crash. */
 async function safeCanDecode(track: { canDecode(): Promise<boolean> }): Promise<boolean> {
   try {
@@ -169,10 +225,10 @@ async function safeCanDecode(track: { canDecode(): Promise<boolean> }): Promise<
  *   deriving frame-rate metrics. More is more certain and slower. The default
  *   leaves Mediabunny's own choice alone.
  */
-export async function inspectFile(
+export async function inspectSource(
   file: Blob,
   options: { readonly frameRateProbePackets?: number } = {},
-): Promise<SourceReport> {
+): Promise<InspectedSource> {
   const input = openInput(file)
 
   let container: string
@@ -186,17 +242,16 @@ export async function inspectFile(
     )
   }
 
-  const [videoTracks, audioTracks, allTracks, tracks] = await Promise.all([
-    input.getVideoTracks(),
-    input.getAudioTracks(),
+  const [processingTracks, allTracks, tracks, metadata] = await Promise.all([
+    selectProcessingTracks(input),
     input.getTracks(),
     // Runs alongside, never instead of, the demux. A failed scan costs a
     // warning we cannot give; it must never cost the inspection.
     scanTrackHandlers(file),
+    inspectMetadataTags(input),
   ])
 
-  const videoTrack = videoTracks[0]
-  const audioTrack = audioTracks[0] ?? null
+  const { video: videoTrack, audio: audioTrack } = processingTracks
 
   if (!videoTrack) {
     // Reached by a truncated or header-only file as readily as by a genuine
@@ -210,7 +265,7 @@ export async function inspectFile(
     )
   }
 
-  const video: VideoStreamReport = await (async () => {
+  const rawVideo: VideoStreamReport = await (async () => {
     const [
       codec,
       codecString,
@@ -219,6 +274,7 @@ export async function inspectFile(
       displayWidth,
       displayHeight,
       rotation,
+      firstTimestampSeconds,
       durationSeconds,
       metrics,
       packetStats,
@@ -231,6 +287,7 @@ export async function inspectFile(
       videoTrack.getDisplayWidth(),
       videoTrack.getDisplayHeight(),
       videoTrack.getRotation(),
+      videoTrack.getFirstTimestamp(),
       videoTrack.computeDuration(),
       videoTrack.computeFrameRateMetrics(
         options.frameRateProbePackets === undefined
@@ -255,6 +312,8 @@ export async function inspectFile(
       displayWidth,
       displayHeight,
       rotation,
+      firstTimestampSeconds,
+      endTimestampSeconds: durationSeconds,
       durationSeconds,
       frameRate: {
         bestGuess: metrics.bestGuessFrameRate,
@@ -276,36 +335,72 @@ export async function inspectFile(
     } satisfies VideoStreamReport
   })()
 
-  const audio: AudioStreamReport | null = audioTrack
+  const rawAudio: AudioStreamReport | null = audioTrack
     ? await (async () => {
-        const [codec, codecString, sampleRate, channelCount, durationSeconds, canDecode] =
-          await Promise.all([
-            audioTrack.getCodec(),
-            audioTrack.getCodecParameterString(),
-            audioTrack.getSampleRate(),
-            audioTrack.getNumberOfChannels(),
-            audioTrack.computeDuration(),
-            safeCanDecode(audioTrack),
-          ])
+        const [
+          codec,
+          codecString,
+          sampleRate,
+          channelCount,
+          firstTimestampSeconds,
+          durationSeconds,
+          canDecode,
+        ] = await Promise.all([
+          audioTrack.getCodec(),
+          audioTrack.getCodecParameterString(),
+          audioTrack.getSampleRate(),
+          audioTrack.getNumberOfChannels(),
+          audioTrack.getFirstTimestamp(),
+          audioTrack.computeDuration(),
+          safeCanDecode(audioTrack),
+        ])
         return {
           codec,
           codecString,
           sampleRate,
           channelCount,
+          firstTimestampSeconds,
+          endTimestampSeconds: durationSeconds,
           durationSeconds,
           canDecode,
         } satisfies AudioStreamReport
       })()
     : null
 
+  const timeline = deriveSourceTimeline(
+    {
+      firstTimestampSeconds: rawVideo.firstTimestampSeconds,
+      endTimestampSeconds: rawVideo.endTimestampSeconds,
+    },
+    rawAudio
+      ? {
+          firstTimestampSeconds: rawAudio.firstTimestampSeconds,
+          endTimestampSeconds: rawAudio.endTimestampSeconds,
+        }
+      : null,
+  )
+  const video: VideoStreamReport = Object.freeze({
+    ...rawVideo,
+    durationSeconds: timeline.videoEndSeconds,
+  })
+  const audio: AudioStreamReport | null = rawAudio
+    ? Object.freeze({ ...rawAudio, durationSeconds: timeline.audioEndSeconds! })
+    : null
   const report: SourceReport = {
     container,
     fileSizeBytes: file.size,
-    durationSeconds: Math.max(video?.durationSeconds ?? 0, audio?.durationSeconds ?? 0),
+    timeline,
+    durationSeconds: Math.max(
+      timeline.videoEndSeconds,
+      timeline.audioEndSeconds ?? timeline.videoEndSeconds,
+    ),
     video,
     audio,
+    videoTrackCount: processingTracks.videoTrackCount,
+    audioTrackCount: processingTracks.audioTrackCount,
     reportedTrackCount: allTracks.length,
     tracks,
+    metadata,
   }
 
   // Deliberately logs characteristics and not the filename — see
@@ -323,5 +418,13 @@ export async function inspectFile(
     chapterTracks: tracks.scanned ? tracks.chapterTracks : null,
   })
 
-  return report
+  return Object.freeze({ input, processingTracks, report })
+}
+
+/** Reads a file into the plain-data report sent to the main thread. */
+export async function inspectFile(
+  file: Blob,
+  options: { readonly frameRateProbePackets?: number } = {},
+): Promise<SourceReport> {
+  return (await inspectSource(file, options)).report
 }

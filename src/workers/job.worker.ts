@@ -19,15 +19,25 @@ import {
 import { detectOutputWarning, detectSourceWarnings, type AudioWarning } from '../audio/warnings'
 import { TARGET_INTEGRATED_LUFS } from '../config/audio'
 import type { BrandingChoice } from '../config/branding'
-import { analyseSourceAudio } from '../media/audio-plan'
+import { UnsupportedAudioTimelineError, analyseSourceAudio } from '../media/audio-plan'
 import { canEncodeAudio, checkEncodeSupport, inspectCapabilities } from '../media/capability'
-import { UnreadableFileError, inspectFile, openInput } from '../media/inspect'
+import { UnreadableFileError, inspectSource, openInput } from '../media/inspect'
 import { OpfsWorkspace, sweepOrphanedJobs } from '../media/opfs'
-import { CancelledError, runPipeline } from '../media/pipeline'
+import {
+  classifyOutputVerification,
+  measureFinishedOutputAudio,
+  type OutputVerification,
+} from '../media/output-verification'
+import { CancelledError, runPipeline, throwIfAborted } from '../media/pipeline'
 import { preflightVerdict, type PreflightSummary } from '../media/preflight'
 import { InvalidVttError } from '../media/vtt'
-import { calibrationProbe } from '../media/probe'
+import { calibrationProbe, PROBE_NOT_RUN } from '../media/probe'
+import { LatestRequest } from './latest-request'
+import { OutputIntegrityError, requireReadableOutputVideo } from './output-integrity'
 import type { WorkerOutbound, WorkerRequest } from './protocol'
+import { releaseWorkspace } from './workspace-release'
+
+type ProcessTerminal = Extract<WorkerOutbound, { kind: 'processed' | 'cancelled' | 'failed' }>
 
 const bootAt = performance.now()
 
@@ -61,11 +71,13 @@ self.addEventListener('message', (event: MessageEvent<WorkerRequest>) => {
       break
 
     case 'inspect':
-      void handleInspect(request.id, request.file)
+      scheduleCheck(request.id, (controller) => handleInspect(request.id, request.file, controller))
       break
 
     case 'preflight':
-      void handlePreflight(request.id, request.file, request.presetId)
+      scheduleCheck(request.id, (controller) =>
+        handlePreflight(request.id, request.file, request.presetId, controller),
+      )
       break
 
     case 'process':
@@ -74,6 +86,7 @@ self.addEventListener('message', (event: MessageEvent<WorkerRequest>) => {
 
     case 'cancel':
       running.get(request.cancelId)?.abort()
+      checking.cancel(request.cancelId)
       break
 
     case 'discard':
@@ -84,8 +97,28 @@ self.addEventListener('message', (event: MessageEvent<WorkerRequest>) => {
 
 /** In-flight jobs, so `cancel` can reach the right one. */
 const running = new Map<number, AbortController>()
+/** Inspection and pre-flight share one latest-only lane. */
+const checking = new LatestRequest()
+/**
+ * Mediabunny inspection does not accept an AbortSignal. Keep one physical
+ * inspection/pre-flight traversal active while newer requests synchronously
+ * invalidate older results and wait their turn.
+ */
+let checkingTail: Promise<void> = Promise.resolve()
 /** Finished jobs whose scratch still holds a file the main thread may read. */
 const finished = new Map<string, OpfsWorkspace>()
+
+function scheduleCheck(id: number, task: (controller: AbortController) => Promise<void>): void {
+  const controller = checking.begin(id)
+  const scheduled = checkingTail.then(() => task(controller))
+  checkingTail = scheduled.catch((cause: unknown) => {
+    // Both handlers own their correlated terminal response. This guard keeps
+    // an unexpected implementation error from permanently rejecting the lane.
+    log.error('worker', 'serialized device check escaped its handler', {
+      reason: cause instanceof Error ? cause.message : String(cause),
+    })
+  })
+}
 
 // The worker has its own module scope, so `main.ts:32` does not reach it and
 // every debug line the job emitted was reaching a production console (VH-40).
@@ -103,47 +136,67 @@ if (!import.meta.env.DEV) setMinimumLogLevel('info')
 // none yet (VH-35).
 void sweepOrphanedJobs()
 
-/**
- * Releases every retained result.
- *
- * A finished job's scratch is kept so the main thread can read the file out of
- * it, and `discard` normally releases it. But that depends on the UI getting
- * as far as saving, and a user who processes three files without saving any of
- * them would otherwise leave three full outputs on disk. Only the most recent
- * result can be saved, so only the most recent needs keeping.
- */
-async function releaseFinished(): Promise<void> {
-  const workspaces = [...finished.values()]
-  finished.clear()
-  await Promise.all(workspaces.map((workspace) => workspace.dispose()))
-}
-
 async function handleProcess(
   id: number,
   options: {
     readonly file: Blob
     readonly presetId: PresetId
+    readonly selectionGeneration: number
+    readonly metadataReadFailureDisclosed: boolean
     readonly branding: BrandingChoice
     readonly backgroundColour: string
     readonly subtitleVtt?: string
   },
 ): Promise<void> {
   const { file, presetId } = options
-  // Bound the retained set to one before adding to it.
-  await releaseFinished()
-
   const controller = new AbortController()
+  // Register synchronously, before the first await, so a cancel queued directly
+  // after `process` cannot arrive while this request is still unreachable.
   running.set(id, controller)
   const jobId = `job-${id}`
   let workspace: OpfsWorkspace | null = null
+  let terminalSent = false
+  const postTerminal = (message: ProcessTerminal): void => {
+    if (terminalSent) return
+    post(message)
+    terminalSent = true
+  }
 
   try {
+    // A retained File reads from its OPFS workspace. Starting another job must
+    // never delete that workspace, and retaining two full outputs is forbidden;
+    // the main thread normally prevents both cases, while this is the boundary
+    // that preserves ownership if a stale or duplicate command gets through.
+    if (finished.size > 0) {
+      postTerminal({
+        kind: 'failed',
+        id,
+        message: 'Save or discard the existing result before creating another video.',
+      })
+      return
+    }
+    if (running.size > 1) {
+      postTerminal({
+        kind: 'failed',
+        id,
+        message: 'A video is already being created. Wait for it to finish or cancel it first.',
+      })
+      return
+    }
+
+    log.info('worker', 'processing accepted selection', {
+      selectionGeneration: options.selectionGeneration,
+      presetId,
+    })
+
     // Said BEFORE the inspection rather than after it. Reading the structure of
     // a multi-gigabyte file is slow, and since VH-38 made silence the signal
     // that a worker is wedged, a job that says nothing until the first frame is
     // encoded is a job that can be cancelled for being slow (VH-51).
     post({ kind: 'stage', id, stage: 'preparing', fraction: 0 })
-    const report = await inspectFile(file)
+    const inspected = await inspectSource(file)
+    const { report } = inspected
+    throwIfAborted(controller.signal)
     const preset = PRESETS[presetId]
     const shape = outputShapeFor(preset, {
       width: report.video.displayWidth,
@@ -157,12 +210,16 @@ async function handleProcess(
     })
 
     workspace = await OpfsWorkspace.open(jobId)
+    throwIfAborted(controller.signal)
     const result = await runPipeline({
-      input: openInput(file),
+      input: inspected.input,
+      processingTracks: inspected.processingTracks,
       shape,
       preset,
-      videoDurationSeconds: report.video.durationSeconds,
-      audioDurationSeconds: report.audio?.durationSeconds ?? null,
+      sourceTimeline: report.timeline,
+      // Only the report the user actually saw may authorise lossy continuation.
+      // This process-time inspection is hidden and cannot disclose a new loss.
+      knownMetadataReadFailure: options.metadataReadFailureDisclosed,
       workspace,
       branding: options.branding,
       backgroundColour: options.backgroundColour,
@@ -170,36 +227,70 @@ async function handleProcess(
       signal: controller.signal,
       onProgress: ({ stage, fraction }) => post({ kind: 'stage', id, stage, fraction }),
     })
+    throwIfAborted(controller.signal)
 
     // Spec 5.4's last row: did the output actually land on target? It is the
     // only warning that cannot be known in advance, and the only honest way to
     // answer it is to measure the finished file rather than trust the plan.
     const outputWarnings: AudioWarning[] = []
-    try {
-      // Another window the encode loop's progress does not cover: this walks
-      // the whole finished file (VH-51).
-      post({ kind: 'stage', id, stage: 'finishing', fraction: 1 })
-      const check = openInput(result.file)
-      const checkTrack = await check.getPrimaryAudioTrack()
-      if (checkTrack) {
-        const measured = await analyseSourceAudio(checkTrack)
-        const missed = detectOutputWarning(measured.integratedLufs, TARGET_INTEGRATED_LUFS)
-        if (missed) outputWarnings.push(missed)
-        log.info('worker', 'output verified', {
-          integratedLufs: Math.round(measured.integratedLufs * 100) / 100,
-          truePeakDbtp: Math.round(measured.truePeakDbtp * 100) / 100,
-          onTarget: missed === null,
+    const check = openInput(result.file)
+    await requireReadableOutputVideo(check, controller.signal)
+    throwIfAborted(controller.signal)
+    let outputVerification: OutputVerification = report.audio
+      ? { status: 'unverified', reason: 'measurement-failed' }
+      : { status: 'not-applicable', reason: 'no-audio' }
+    if (report.audio) {
+      try {
+        // Another window the encode loop's progress does not cover: this walks
+        // the whole finished file (VH-51).
+        post({ kind: 'stage', id, stage: 'finishing', fraction: 1 })
+        const checkTrack = await check.getPrimaryAudioTrack()
+        throwIfAborted(controller.signal)
+        if (!checkTrack) {
+          outputVerification = { status: 'unverified', reason: 'missing-audio-track' }
+          log.warn('worker', 'finished output audio track is missing')
+        } else {
+          const measured = await measureFinishedOutputAudio(checkTrack, controller.signal)
+          throwIfAborted(controller.signal)
+          outputVerification = classifyOutputVerification(measured)
+
+          // Kept deliberately separate from strict verification: spec 5.4's
+          // user advisory fires only beyond 1 LU, while acceptance is +/-0.5.
+          const missed = detectOutputWarning(measured.integratedLufs, TARGET_INTEGRATED_LUFS)
+          if (missed) outputWarnings.push(missed)
+
+          const details = {
+            status: outputVerification.status,
+            integratedLufs: Number.isFinite(measured.integratedLufs)
+              ? Math.round(measured.integratedLufs * 100) / 100
+              : null,
+            truePeakDbtp: Number.isFinite(measured.truePeakDbtp)
+              ? Math.round(measured.truePeakDbtp * 100) / 100
+              : null,
+          }
+          if (outputVerification.status === 'passed') {
+            log.info('worker', 'finished output audio verified', details)
+          } else {
+            log.warn('worker', 'finished output audio did not verify', details)
+          }
+        }
+      } catch (cause) {
+        if (cause instanceof CancelledError || controller.signal.aborted) {
+          throw new CancelledError()
+        }
+        outputVerification = { status: 'unverified', reason: 'measurement-failed' }
+        // A check that fails costs an explicit unverified result, never the file.
+        log.warn('worker', 'could not verify the output', {
+          reason: cause instanceof Error ? cause.message : String(cause),
         })
       }
-    } catch (cause) {
-      // A check that fails costs a warning, never the result.
-      log.warn('worker', 'could not verify the output', {
-        reason: cause instanceof Error ? cause.message : String(cause),
-      })
     }
 
+    throwIfAborted(controller.signal)
+    // The guards above and the one-process worker contract make this a
+    // single-entry map. Never replace or dispose an earlier retained result.
     finished.set(jobId, workspace)
-    post({
+    postTerminal({
       kind: 'processed',
       id,
       jobId,
@@ -208,19 +299,48 @@ async function handleProcess(
       brandingRequested: options.branding,
       subtitleCues: result.subtitleCues,
       outputWarnings,
+      outputVerification,
     })
   } catch (cause) {
-    // runPipeline disposes its own workspace on failure; this covers a failure
-    // before it ever started.
-    if (workspace && !finished.has(jobId)) await workspace.dispose()
+    let cleanupFailure: unknown = null
+    if (workspace && !finished.has(jobId)) {
+      try {
+        await workspace.dispose()
+      } catch (disposeCause) {
+        cleanupFailure = disposeCause
+        // Disposal is explicitly retryable. Keep the exact workspace under
+        // worker ownership and expose its id with the terminal response.
+        finished.set(jobId, workspace)
+      }
+    }
+
+    if (cleanupFailure !== null) {
+      log.error('worker', 'temporary job files could not be removed', {
+        reason:
+          cleanupFailure instanceof Error
+            ? cleanupFailure.message
+            : typeof cleanupFailure === 'string'
+              ? cleanupFailure
+              : 'unknown cleanup failure',
+      })
+      postTerminal({
+        kind: 'failed',
+        id,
+        retainedJobId: jobId,
+        message: controller.signal.aborted
+          ? 'The job stopped, but its temporary working files could not be removed. Try discarding them again before creating another video.'
+          : 'The video could not be completed, and its temporary working files could not be removed. Try discarding them again before creating another video. Your original file has not been changed.',
+      })
+      return
+    }
 
     if (cause instanceof CancelledError || controller.signal.aborted) {
-      post({ kind: 'cancelled', id })
+      postTerminal({ kind: 'cancelled', id })
       return
     }
     const reason = cause instanceof Error ? cause.message : String(cause)
     log.warn('worker', 'processing failed', { reason })
-    post({
+    postTerminal({
       kind: 'failed',
       id,
       message:
@@ -230,12 +350,14 @@ async function handleProcess(
         // WebVTT" reached the user as "something went wrong" (VH-37).
         cause instanceof InvalidVttError || cause instanceof UnreadableFileError
           ? cause.message
-          : // The user-facing sentence never changes. In development the
-            // underlying reason is appended, because "something went wrong"
-            // tells a maintainer nothing and this is the one place the real
-            // cause is known.
-            'Something went wrong while creating the video. Your original file has not been changed.' +
-            (import.meta.env.DEV ? ` [dev: ${reason}]` : ''),
+          : cause instanceof OutputIntegrityError
+            ? 'The new video could not be verified, so it was not offered for saving. Your original file has not been changed.'
+            : // The user-facing sentence never changes. In development the
+              // underlying reason is appended, because "something went wrong"
+              // tells a maintainer nothing and this is the one place the real
+              // cause is known.
+              'Something went wrong while creating the video. Your original file has not been changed.' +
+              (import.meta.env.DEV ? ` [dev: ${reason}]` : ''),
     })
   } finally {
     running.delete(id)
@@ -243,12 +365,21 @@ async function handleProcess(
 }
 
 async function handleDiscard(id: number, jobId: string): Promise<void> {
-  const workspace = finished.get(jobId)
-  if (workspace) {
-    await workspace.dispose()
-    finished.delete(jobId)
+  try {
+    await releaseWorkspace(finished, jobId)
+    post({ kind: 'discarded', id })
+  } catch (cause) {
+    log.warn('worker', 'temporary result could not be discarded', {
+      reason: cause instanceof Error ? cause.message : String(cause),
+    })
+    post({
+      kind: 'failed',
+      id,
+      retainedJobId: jobId,
+      message:
+        'The temporary result could not be removed. It is still available; try discarding it again.',
+    })
   }
-  post({ kind: 'discarded', id })
 }
 
 /**
@@ -256,10 +387,19 @@ async function handleDiscard(id: number, jobId: string): Promise<void> {
  * than exceptional — people do pick the wrong file. An unreadable file is
  * answered with a `failed` message the UI can show, not an uncaught throw.
  */
-async function handleInspect(id: number, file: Blob): Promise<void> {
+async function handleInspect(id: number, file: Blob, controller: AbortController): Promise<void> {
   try {
-    post({ kind: 'inspected', id, report: await inspectFile(file) })
+    // A request can be superseded while it waits behind a non-abortable
+    // Mediabunny inspection. Do not start another traversal for stale work.
+    throwIfAborted(controller.signal)
+    const inspected = await inspectSource(file)
+    throwIfAborted(controller.signal)
+    post({ kind: 'inspected', id, report: inspected.report })
   } catch (cause) {
+    if (controller.signal.aborted) {
+      post({ kind: 'cancelled', id })
+      return
+    }
     const message =
       cause instanceof UnreadableFileError
         ? cause.message
@@ -268,6 +408,8 @@ async function handleInspect(id: number, file: Blob): Promise<void> {
       reason: cause instanceof Error ? cause.message : String(cause),
     })
     post({ kind: 'failed', id, message })
+  } finally {
+    checking.finish(id, controller)
   }
 }
 
@@ -283,9 +425,13 @@ async function handlePreflight(
   id: number,
   file: Blob,
   presetId: PresetId,
+  controller: AbortController,
 ): Promise<void> {
   try {
-    const report = await inspectFile(file)
+    throwIfAborted(controller.signal)
+    const inspected = await inspectSource(file)
+    throwIfAborted(controller.signal)
+    const { report, processingTracks } = inspected
     const preset = PRESETS[presetId]
     const shape = outputShapeFor(preset, {
       width: report.video.displayWidth,
@@ -318,24 +464,40 @@ async function handlePreflight(
           })
         : Promise.resolve(true),
     ])
+    throwIfAborted(controller.signal)
+
+    const canRunMediaChecks =
+      capability.isSecureContext &&
+      capability.hasWebCodecs &&
+      capability.canUseOpfs &&
+      report.video.canDecode &&
+      (report.audio?.canDecode ?? true) &&
+      canEncodeAac
 
     // Spec 5.4: derived from the analysis pass and shown BEFORE processing.
     // A lecturer who is told their recording is inaudible only after waiting
     // forty minutes has been told too late.
-    const audioInput = openInput(file)
-    const audioTrack = await audioInput.getPrimaryAudioTrack()
-    const audioWarnings = detectSourceWarnings(
-      audioTrack ? await analyseSourceAudio(audioTrack) : null,
-    )
+    const audioWarnings = report.audio
+      ? canRunMediaChecks && processingTracks.audio
+        ? detectSourceWarnings(
+            await analyseSourceAudio(processingTracks.audio, report.timeline, controller.signal),
+          )
+        : []
+      : detectSourceWarnings(null)
+    throwIfAborted(controller.signal)
 
-    const probe =
-      capability.hasWebCodecs && encode.supported
-        ? await calibrationProbe({
-            input: openInput(file),
-            shape,
-            durationSeconds: report.durationSeconds,
-          })
-        : { measured: false, framesEncoded: 0, videoFramesPerSecond: 0, audioRealtimeFactor: null, estimatedSeconds: null }
+    const probe = canRunMediaChecks
+      ? await calibrationProbe({
+          processingTracks,
+          shape,
+          videoWorkSeconds: Math.max(
+            0,
+            report.video.endTimestampSeconds - report.video.firstTimestampSeconds,
+          ),
+          signal: controller.signal,
+        })
+      : PROBE_NOT_RUN
+    throwIfAborted(controller.signal)
 
     const summary: PreflightSummary = {
       presetId,
@@ -346,8 +508,13 @@ async function handlePreflight(
       projectedOutputBytes: projected,
       audioWarnings,
       verdict: preflightVerdict({
+        isSecureContext: capability.isSecureContext,
         hasWebCodecs: capability.hasWebCodecs,
-        canEncodeH264: encode.supported,
+        canUseOpfs: capability.canUseOpfs,
+        canDecodeVideo: report.video.canDecode,
+        canDecodeAudio: report.audio?.canDecode ?? true,
+        videoProbeStatus: probe.videoSupport,
+        probeFailureStage: probe.failureStage,
         canEncodeAac,
         availableStorageBytes: capability.storage.availableBytes,
         projectedOutputBytes: projected,
@@ -357,13 +524,19 @@ async function handlePreflight(
     }
     post({ kind: 'preflighted', id, summary })
   } catch (cause) {
+    if (controller.signal.aborted) {
+      post({ kind: 'cancelled', id })
+      return
+    }
     const message =
-      cause instanceof UnreadableFileError
+      cause instanceof UnreadableFileError || cause instanceof UnsupportedAudioTimelineError
         ? cause.message
         : 'Something went wrong checking this file against your device.'
     log.warn('worker', 'preflight failed', {
       reason: cause instanceof Error ? cause.message : String(cause),
     })
     post({ kind: 'failed', id, message })
+  } finally {
+    checking.finish(id, controller)
   }
 }

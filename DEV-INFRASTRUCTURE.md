@@ -47,7 +47,8 @@ is not hand-edited.
 | `format` | `prettier --write .` | Auto-fix. **Never** part of `check`. |
 | `docs:lint` | `markdownlint-cli2 "**/*.md" "#node_modules" "#pm_skills"` | Markdown lint |
 | `docs:links` | `node check-links.mjs` | Internal Markdown link check |
-| `check:placeholders` | `node scripts/check-placeholders.mjs` | Stray template markers, plus a report-only key-shape scan |
+| `check:placeholders` | `node scripts/check-placeholders.mjs` | Stray template markers, exact public-file allowlist, plus a report-only key-shape scan |
+| `check:build` | `node scripts/check-build.mjs` | Production bundle verification in an automatically removed temporary directory |
 | `check:memory` | `node pm_skills/scaffold/check-memory.mjs` | Project-memory structure and budgets. Structural drift exits 1; budget overruns are advisory |
 | `fixtures` | `node scripts/gen-fixtures.mjs` | Regenerate test media fixtures — **arrives with VH-16**; not yet in `package.json` |
 | `check` | see **Quality gate** below | The one gate |
@@ -256,7 +257,7 @@ npm run check
 ```
 
 ```bash
-npm run typecheck && npm run lint && npm run test && npm run build && npm run docs:lint && npm run docs:links && npm run check:placeholders && npm run check:memory
+npm run typecheck && npm run lint && npm run test && npm run check:build && npm run docs:lint && npm run docs:links && npm run check:placeholders && npm run check:memory
 ```
 
 **Non-mutating and CI-safe.** It reports; it never reformats or writes.
@@ -270,7 +271,7 @@ Runs, in order:
 | `typecheck` | Type errors, broken imports |
 | `lint` | Unused/broken imports, dead code, floating promises |
 | `test` | Unit suite — **including the EBU Tech 3341 harness** |
-| `build` | Anything that only breaks in a production bundle |
+| `check:build` | Anything that only breaks in a production bundle, without writing `dist/` |
 | `docs:lint` + `docs:links` | Broken Markdown and dead cross-references in `docs/` and project memory |
 | `check:placeholders` | Stray `CUSTOMISE` / `[Project Name]` markers (the init Step 10 lint, folded in) |
 | `check:memory` | Project-memory drift — shipped items left in the backlog, ticket-grammar violations, dangling `[detail]` links, stale file-map paths |
@@ -308,6 +309,10 @@ media.**
   `node_modules/`, and `.env*` are ignored. `samples/` matters most —
   real recordings of University staff must never reach a public remote.
   Verify before any first push to a new remote.
+- **Exact public-file allowlist.** `check:placeholders` rejects every file under
+  `public/` that is not individually named. This catches a real recording in
+  any public folder or with any suffix before Vite can copy it into `dist/`.
+  Add a new branding asset only after its provenance has been reviewed.
 - **The secret-shaped scan** in `check:placeholders` also greps for
   key-shaped strings (long base64/hex runs, `sk-`, `ghp_`, AWS-style
   ids). Report-only. It exists to catch a pasted credential, not to
@@ -376,14 +381,17 @@ The MVP starts at **`v0.1.0`**.
 
 ## Deployment
 
-**Not yet defined — open decision D5.** Hosting location and URL are
-with UoN IT / the web team.
+The unadvertised pilot deploys publicly to GitHub Pages from every push to
+`main`; the maintainer accepted that interim host on 2026-08-25. The permanent
+University-owned location remains open under D5. The Pages workflow runs the
+full gate, builds for the repository subpath, uploads `dist/`, and deploys only
+after the build job succeeds.
 
-The Band 0 MVP is **local only**. Nothing deploys until D5 is answered
-and this section is populated with sign-off, per `prompts/deploy.md`
-step 1.
+Permissions are job-scoped: build receives `contents: read`; only deploy gets
+`pages: write` and `id-token: write`. The exact `public/` allowlist runs before
+both local and CI builds so a forgotten real-media fixture cannot be published.
 
-What is already known, and constrains the eventual answer:
+The permanent host remains constrained by:
 
 - Static files only. No server-side processing, no build step on the
   host, no special response headers.
@@ -400,9 +408,9 @@ What is already known, and constrains the eventual answer:
 | Script | Path | Purpose |
 | --- | --- | --- |
 | `build-branding.mjs` | `scripts/` | Transcodes the After Effects closing masters into the WebM onsets and MP4 tails the app ships. Maintainer-run; needs `ffmpeg`. Its output is committed. |
-| `check-placeholders.mjs` | `scripts/` | Tier 0 of the quality gate: stray template markers fail, key-shaped strings are reported. |
+| `check-placeholders.mjs` | `scripts/` | Tier 0 of the quality gate: placeholders and unapproved public files fail; key-shaped strings are reported. |
 | `run-in-engines.mjs` | `scripts/` | Runs a spike page in Chrome, Firefox and Safari and prints all three side by side. See "Cross-engine verification" below. |
-| `gen-placeholder-branding.mjs` | `scripts/` | Generates stand-in branding masters for all four §4.2 variants, so real After Effects renders drop in unchanged (VH-12). |
+| `gen-placeholder-branding.mjs` | `scripts/` | Generates only the four deferred opening placeholders; real closing onset/tail assets belong to `build-branding.mjs`. |
 | `check-links.mjs` | root | Scaffolded internal Markdown link checker. |
 | `gen-fixtures.mjs` | `scripts/` | **Not written yet — arrives with VH-16.** Will generate synthesised test media: slide-like frames with fine text, a variable-level speech bed, a VFR clip. |
 
@@ -418,12 +426,18 @@ npm run dev                                        # in one terminal
 node scripts/run-in-engines.mjs /spike-alpha.html  # in another
 ```
 
-Every spike page carries the same contract — a `<pre id="log">` ending with a
-line of exactly `done` — and the script knows nothing beyond that: it
-navigates, waits for the sentinel, prints the text. `--base` points at a
-different origin (the dev server moves off 5173 when something else holds it);
-`--engines chrome,firefox` narrows the set. A missing browser is skipped, not
-an error.
+The runner's terminal contract in `<pre id="log">` is:
+`result: pass`, `result: fail` or `result: informational`, followed by a line of
+exactly `done`. The runner waits for that exact sentinel, prints the text, and
+counts a page-level fail as a failed engine rather than a completed one. Exact
+legacy `ALL PASS` / `N FAILURE(S)` summaries and uppercase PASS/FAIL markers are
+recognised while the existing pages migrate; a page with measurements but no
+verdict is informational. `--base` points at a different origin (the dev server
+moves off 5173 when something else holds it); `--engines chrome,firefox` narrows
+the set. The final tally reports completed, skipped and failed engines
+separately. A missing browser is skipped by default; pass `--require-all` when
+evidence requires the complete requested matrix, in which case any skip makes
+the command fail.
 
 Each engine speaks a different protocol and there is no choice about it:
 Chrome over CDP, Firefox over WebDriver BiDi (it dropped CDP), Safari over
