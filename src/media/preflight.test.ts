@@ -55,6 +55,30 @@ describe('block', () => {
     )
   })
 
+  it('blocks when the browser cannot encode the AUDIO (VH-49)', () => {
+    // Firefox 154 encodes every video configuration this app asks for and
+    // refuses AAC at every bitrate. Before this, only the video question was
+    // asked, so the job started, showed progress, and died at the audio
+    // encoder with "Something went wrong".
+    const verdict = preflightVerdict({ ...healthy, canEncodeAac: false })
+    expect(verdict.outcome).toBe('block')
+    expect(codesOf({ ...healthy, canEncodeAac: false })).toContain('no-aac-encode')
+  })
+
+  it('does not blame the audio encoder when there is no encoder at all', () => {
+    expect(codesOf({ ...healthy, hasWebCodecs: false, canEncodeAac: false })).not.toContain(
+      'no-aac-encode',
+    )
+  })
+
+  it('reports the video failure rather than the audio one when both fail', () => {
+    // Both are blocks, so the outcome is the same either way — but naming the
+    // picture first is the more useful sentence when neither works.
+    const codes = codesOf({ ...healthy, canEncodeH264: false, canEncodeAac: false })
+    expect(codes).toContain('no-h264-encode')
+    expect(codes).not.toContain('no-aac-encode')
+  })
+
   it('blocks when storage cannot hold 2.5x the output', () => {
     const verdict = preflightVerdict({ ...healthy, availableStorageBytes: 4 * GB })
     expect(verdict.outcome).toBe('block')
