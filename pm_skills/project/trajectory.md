@@ -19,6 +19,10 @@
 
 ### Repository-review real-source closure
 
+- VH-19 — Shipped 2026-08-26. The Smaller preset now distinguishes clear
+  slides/screen from moving picture across the source timeline, exposes the
+  result plainly and keeps uncertain material on the safer quality budget; see
+  decision-log.
 - VH-31 — Shipped 2026-08-26. The bitrate-budget ceiling is now named as
   cautious file-size guidance, separated from the hard storage gate and made
   safe across all 46 measured corpus combinations; see decision-log.

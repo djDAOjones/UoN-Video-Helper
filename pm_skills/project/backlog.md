@@ -39,17 +39,6 @@
       Safari none. Keep open for directory/fallback, private/multi-tab/player/
       device/AT rehearsal, full supported-engine egress proof and protected DSP.
 
-- [ ] **VH-19 Content-adaptive bitrate for the smaller preset**
-      Intent: spec §6.2 sets ~1.5 Mbps for slides/screen and ~2.5 Mbps for
-      camera/motion. `ContentClass` exists but nothing sets it, so every job
-      currently uses the higher figure.
-      Done when: screen-like and camera-like content are distinguished — the
-      calibration probe already decodes three seconds and is the natural place
-      to measure inter-frame difference — and the chosen class is visible to
-      the user in plain language rather than applied silently. VH-31 shipped
-      without extending the probe, so this item still owns both classification
-      and the Smaller-file bitrate choice.
-
 - [~] **VH-25 Boundary fades** [detail](tickets/VH-25.md) (2026-08-25)
       Intent: sources cut hard into the branding, and the two ends differ.
       21 of 21 end on a bright frame so the picture always needs a fade-out,

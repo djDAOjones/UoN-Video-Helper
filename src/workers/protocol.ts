@@ -43,6 +43,8 @@ export type WorkerRequest =
       readonly id: number
       readonly file: Blob
       readonly presetId: PresetId
+      /** File-and-preset generation whose measured class may authorise Start. */
+      readonly selectionGeneration: number
     }
   /** Run the job. Progress arrives as `stage` events carrying this same id. */
   | {

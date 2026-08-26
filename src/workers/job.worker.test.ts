@@ -107,7 +107,13 @@ describe('job worker inspection lane', () => {
 
     // Pre-flight and inspection share one physical lane. The third request
     // makes the queued second one stale before either may overlap the first.
-    dispatch({ kind: 'preflight', id: 2, file: supersededFile, presetId: 'best' })
+    dispatch({
+      kind: 'preflight',
+      id: 2,
+      file: supersededFile,
+      presetId: 'best',
+      selectionGeneration: 1,
+    })
     dispatch({ kind: 'inspect', id: 3, file: latestFile })
     await Promise.resolve()
     expect(inspectSource).toHaveBeenCalledTimes(1)

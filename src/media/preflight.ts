@@ -7,7 +7,7 @@
  * part that is fully tested.
  */
 
-import type { OutputShape, PresetId } from '../config/presets'
+import type { ContentClass, OutputShape, PresetId } from '../config/presets'
 import { ESTIMATE_BANDS, STORAGE_HEADROOM_MULTIPLE } from '../config/thresholds'
 import type { AudioWarning } from '../audio/warnings'
 import type { CapabilityReport, EncodeSupport } from './capability'
@@ -132,6 +132,8 @@ export function preflightVerdict(input: PreflightInput): PreflightVerdict {
 /** Everything pre-flight found, as one value the UI can render. */
 export interface PreflightSummary {
   readonly presetId: PresetId
+  /** Measured picture type; `unknown` deliberately uses the safer bitrate. */
+  readonly contentClass: ContentClass
   readonly capability: CapabilityReport
   readonly encode: EncodeSupport
   readonly probe: ProbeResult

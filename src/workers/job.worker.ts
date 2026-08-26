@@ -16,6 +16,7 @@ import {
   outputShapeFor,
   projectedOutputBytes,
   videoEncoderConfigFor,
+  type ContentClass,
   type PresetId,
 } from '../config/presets'
 import { detectOutputWarning, detectSourceWarnings, type AudioWarning } from '../audio/warnings'
@@ -27,6 +28,7 @@ import {
 } from '../config/branding'
 import { UnsupportedAudioTimelineError, analyseSourceAudio } from '../media/audio-plan'
 import { canEncodeAudio, checkEncodeSupport, inspectCapabilities } from '../media/capability'
+import { measureContentClass } from '../media/content-class'
 import { UnreadableFileError, inspectSource, openInput } from '../media/inspect'
 import { OpfsWorkspace, sweepOrphanedJobs } from '../media/opfs'
 import {
@@ -82,7 +84,13 @@ self.addEventListener('message', (event: MessageEvent<WorkerRequest>) => {
 
     case 'preflight':
       scheduleCheck(request.id, (controller) =>
-        handlePreflight(request.id, request.file, request.presetId, controller),
+        handlePreflight(
+          request.id,
+          request.file,
+          request.presetId,
+          request.selectionGeneration,
+          controller,
+        ),
       )
       break
 
@@ -111,6 +119,12 @@ const checking = new LatestRequest()
  * invalidate older results and wait their turn.
  */
 let checkingTail: Promise<void> = Promise.resolve()
+/** Last successful pre-flight's derived picture type, keyed to Start authority. */
+let acceptedContentClass: {
+  readonly selectionGeneration: number
+  readonly presetId: PresetId
+  readonly value: ContentClass
+} | null = null
 /** Finished jobs whose scratch still holds a file the main thread may read. */
 const finished = new Map<string, OpfsWorkspace>()
 
@@ -204,16 +218,31 @@ async function handleProcess(
     const { report } = inspected
     throwIfAborted(controller.signal)
     const preset = PRESETS[presetId]
-    const shape = outputShapeFor(preset, {
-      width: report.video.displayWidth,
-      height: report.video.displayHeight,
-      frameRate: report.video.conform.frameRate,
-      videoBitrateBps: report.video.averageBitrateBps,
-      // The rate the source ACTUALLY runs at, which is what its bitrate was
-      // spread over. Conforming can move the rate (40 fps conforms to 30), and
-      // dividing by the conformed one would misread the source's density.
-      sourceFrameRate: report.video.conform.sourceFrameRate,
-      audioChannelCount: report.audio?.channelCount ?? null,
+    const contentClass =
+      presetId === 'smaller' &&
+      acceptedContentClass?.selectionGeneration === options.selectionGeneration &&
+      acceptedContentClass.presetId === presetId
+        ? acceptedContentClass.value
+        : 'unknown'
+    const shape = outputShapeFor(
+      preset,
+      {
+        width: report.video.displayWidth,
+        height: report.video.displayHeight,
+        frameRate: report.video.conform.frameRate,
+        videoBitrateBps: report.video.averageBitrateBps,
+        // The rate the source ACTUALLY runs at, which is what its bitrate was
+        // spread over. Conforming can move the rate (40 fps conforms to 30), and
+        // dividing by the conformed one would misread the source's density.
+        sourceFrameRate: report.video.conform.sourceFrameRate,
+        audioChannelCount: report.audio?.channelCount ?? null,
+      },
+      contentClass,
+    )
+    log.info('worker', 'output shape selected', {
+      contentClass,
+      videoBitrateBps: shape.videoBitrateBps,
+      bitrateBasis: shape.bitrateBasis,
     })
 
     workspace = await OpfsWorkspace.open(jobId)
@@ -432,6 +461,7 @@ async function handlePreflight(
   id: number,
   file: Blob,
   presetId: PresetId,
+  selectionGeneration: number,
   controller: AbortController,
 ): Promise<void> {
   try {
@@ -440,7 +470,7 @@ async function handlePreflight(
     throwIfAborted(controller.signal)
     const { report, processingTracks } = inspected
     const preset = PRESETS[presetId]
-    const shape = outputShapeFor(preset, {
+    const sourceShape = {
       width: report.video.displayWidth,
       height: report.video.displayHeight,
       frameRate: report.video.conform.frameRate,
@@ -450,7 +480,49 @@ async function handlePreflight(
       // dividing by the conformed one would misread the source's density.
       sourceFrameRate: report.video.conform.sourceFrameRate,
       audioChannelCount: report.audio?.channelCount ?? null,
-    })
+    }
+
+    const capabilityPromise = inspectCapabilities()
+    // A silent source asks nothing of the audio encoder, so it cannot be
+    // blocked by one. Everything else asks for the exact configuration the
+    // job will use, at the source's own channel count — the figure differs
+    // between mono and stereo, and so might the answer.
+    const canEncodeAacPromise = report.audio
+      ? canEncodeAudio({
+          codec: 'mp4a.40.2',
+          sampleRate: OUTPUT_SAMPLE_RATE,
+          numberOfChannels: report.audio.channelCount,
+          bitrate: audioBitrateFor(preset, report.audio.channelCount),
+        })
+      : Promise.resolve(true)
+    const [capability, canEncodeAac] = await Promise.all([capabilityPromise, canEncodeAacPromise])
+    throwIfAborted(controller.signal)
+
+    const canMeasureContent =
+      presetId === 'smaller' &&
+      capability.isSecureContext &&
+      capability.hasWebCodecs &&
+      capability.canUseOpfs &&
+      report.video.canDecode &&
+      (report.audio?.canDecode ?? true) &&
+      canEncodeAac &&
+      processingTracks.video !== null
+    const contentClass = canMeasureContent
+      ? await measureContentClass(processingTracks.video, {
+          firstTimestampSeconds: report.video.firstTimestampSeconds,
+          endTimestampSeconds: report.video.endTimestampSeconds,
+          width: report.video.displayWidth,
+          height: report.video.displayHeight,
+          sourceFrameRate: report.video.conform.sourceFrameRate,
+          sourceBitrateBps: report.video.averageBitrateBps,
+          signal: controller.signal,
+        })
+      : 'unknown'
+    throwIfAborted(controller.signal)
+
+    // The calibration probe must encode the exact bitrate the final job will
+    // use, so the measured class precedes both shape and encoder support.
+    const shape = outputShapeFor(preset, sourceShape, contentClass)
     // Pre-flight does not re-run when the user changes finishing touches. Use
     // the longest existing closing timeline so both figures remain cautious
     // whether closing is later unchecked or an overlay mode returns in VH-32.
@@ -459,22 +531,7 @@ async function handlePreflight(
     const storageProjection = projectedOutputBytes(shape, planningDurationSeconds)
     const outputSizeGuidance = outputSizeGuidanceBytes(shape, planningDurationSeconds)
 
-    const [capability, encode, canEncodeAac] = await Promise.all([
-      inspectCapabilities(),
-      checkEncodeSupport(videoEncoderConfigFor(shape)),
-      // A silent source asks nothing of the audio encoder, so it cannot be
-      // blocked by one. Everything else asks for the exact configuration the
-      // job will use, at the source's own channel count — the figure differs
-      // between mono and stereo, and so might the answer.
-      report.audio
-        ? canEncodeAudio({
-            codec: 'mp4a.40.2',
-            sampleRate: OUTPUT_SAMPLE_RATE,
-            numberOfChannels: report.audio.channelCount,
-            bitrate: audioBitrateFor(preset, report.audio.channelCount),
-          })
-        : Promise.resolve(true),
-    ])
+    const encode = await checkEncodeSupport(videoEncoderConfigFor(shape))
     throwIfAborted(controller.signal)
 
     const canRunMediaChecks =
@@ -512,6 +569,7 @@ async function handlePreflight(
 
     const summary: PreflightSummary = {
       presetId,
+      contentClass,
       capability,
       encode,
       probe,
@@ -533,6 +591,7 @@ async function handlePreflight(
         estimatedSeconds: probe.estimatedSeconds,
       }),
     }
+    acceptedContentClass = { selectionGeneration, presetId, value: contentClass }
     post({ kind: 'preflighted', id, summary })
   } catch (cause) {
     if (controller.signal.aborted) {

@@ -3,12 +3,21 @@ import { describe, expect, it } from 'vitest'
 import {
   formatChannels,
   formatCodec,
+  formatContentClass,
   formatDuration,
   formatFileSize,
   formatFrameRate,
   formatOutputSizeGuidance,
   formatResolution,
 } from './format'
+
+describe('formatContentClass', () => {
+  it('states the classification and explains the conservative fallback', () => {
+    expect(formatContentClass('screen')).toBe('Mostly slides or screen content')
+    expect(formatContentClass('camera')).toBe('Mostly camera or moving picture')
+    expect(formatContentClass('unknown')).toBe('Mixed or unclear — using the safer quality setting')
+  })
+})
 
 describe('formatDuration', () => {
   it('reads naturally at every scale a lecture recording reaches', () => {

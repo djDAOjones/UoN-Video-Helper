@@ -15,14 +15,14 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 190 file(s) across 8 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 192 file(s) across 8 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 20 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
 - `docs` — 5 file(s)
 - `public` — 17 file(s)
 - `scripts` — 9 file(s)
-- `src` — 131 file(s)
+- `src` — 133 file(s)
 - `test` — 6 file(s)
 <!-- /file-map-index -->
 
@@ -133,7 +133,7 @@
 - `src/config/branding.ts` — Closing style/colour/mode, the 1 s/4 s split and per-mode duration; opening placeholders.
 - `src/config/presets.test.ts` — Pins the preset rules, including that the smaller preset preserves resolution.
 - `src/config/presets.ts` — The two output presets and the encoder config they imply. Purpose-named, never technique-named.
-- `src/config/thresholds.ts` — Pre-flight bands and probe constants — the numbers D8 will replace with measurements.
+- `src/config/thresholds.ts` — Pre-flight, probe and conservative picture-class thresholds — measured defaults D8 can replace.
 - `src/core/diagnostics.test.ts` — Pins durable diagnostic context and redaction of accidental media-identifying fields.
 - `src/core/diagnostics.ts` — Global error capture on both threads, plus the redacted copy-diagnostics bundle.
 - `src/core/logger.test.ts` — Proves the log buffer is bounded — a one-hour encode must not grow it without limit.
@@ -168,6 +168,8 @@
 - `src/media/composite.ts` — Premultiplied-alpha compositing. `out = brand + source×(1−a)`; the straight form double-darkens.
 - `src/media/conform.test.ts` — Proves fit/pad never distorts, across 4:3, vertical and ultrawide sources.
 - `src/media/conform.ts` — Scale-to-fit and pad geometry, and the reusable frame scaler the pipeline and probe share.
+- `src/media/content-class.test.ts` — Pins decisive screen/motion boundaries, uncertainty and the high-density camera guard.
+- `src/media/content-class.ts` — Sparse timeline-wide luma measurement that classifies picture type conservatively for Smaller.
 - `src/media/encoder-delay.ts` — Measures actual AAC round-trip presentation delay for the pipeline's timeline compensation.
 - `src/media/encoding.test.ts` — Pins the shared mono/stereo bitrate decision used by the Mediabunny audio encoder configuration.
 - `src/media/encoding.ts` — Derives the exact Mediabunny audio and video encoder configurations from the output shape.
@@ -214,8 +216,8 @@
 - `src/styles/tokens.brand.css` — UoN brand tokens. Holds the D1 placeholder and nothing invented.
 - `src/styles/tokens.carbon.css` — Carbon structural tokens. Every pair is contrast-asserted by test/contrast.test.ts.
 - `src/ui/format.test.ts` — Pins the wording, so phrasing is tested rather than reviewed by opinion.
-- `src/ui/format.ts` — Technical facts as plain language — durations, sizes, codecs, channel layouts.
-- `src/ui/preflight-panel.ts` — Renders the verdict, naming a browser that works when the answer is no.
+- `src/ui/format.ts` — Technical facts as plain language — durations, sizes, codecs, channel layouts and picture class.
+- `src/ui/preflight-panel.ts` — Renders the verdict, including Smaller's picture class and a working browser when blocked.
 - `src/ui/source-panel.test.ts` — Pins visible extra-track and unreadable-metadata warnings before processing.
 - `src/ui/source-panel.ts` — Renders a SourceReport, including the standing caveat about tracks we cannot see.
 - `src/ui/warning-text.test.ts` — Mechanical half of "reads clearly": no jargon, no blame, always a next step.

@@ -63,3 +63,6 @@
 - [ ] 2026-08-26 SPEC §7.3 — the 2.5x storage gate now uses a private storage
       projection distinct from the cautious file-size guidance shown to users
       (source: VH-31 decision entry)
+- [ ] 2026-08-26 SPEC §6.2 — Smaller now derives screen/camera bitrate from a
+      conservative timeline-wide measurement and visibly names the result
+      (source: VH-19 decision entry)

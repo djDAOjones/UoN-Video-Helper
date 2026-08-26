@@ -668,7 +668,12 @@ async function runPreflight(selection: SelectionAttempt<SelectedSource, PresetId
 
   try {
     const reply = await request(
-      { kind: 'preflight', file: selection.file.file, presetId: selection.presetId },
+      {
+        kind: 'preflight',
+        file: selection.file.file,
+        presetId: selection.presetId,
+        selectionGeneration: selection.generation,
+      },
       180_000,
     )
     if (!selectionAuthority.isCurrent(selection)) return
@@ -680,6 +685,7 @@ async function runPreflight(selection: SelectionAttempt<SelectedSource, PresetId
           encode: reply.summary.encode,
           probe: reply.summary.probe,
           shape: reply.summary.shape,
+          contentClass: reply.summary.contentClass,
           verdict: reply.summary.verdict,
         },
       })

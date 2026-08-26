@@ -13,6 +13,7 @@ import {
   formatDuration,
   formatFileSize,
   formatFrameRate,
+  formatContentClass,
   formatOutputSizeGuidance,
   formatResolution,
 } from './format'
@@ -113,7 +114,7 @@ export function renderPreflight(
 
   const output = document.createElement('dl')
   output.className = 'facts'
-  const rows: ReadonlyArray<readonly [string, string]> = [
+  const rows: Array<readonly [string, string]> = [
     ['Setting', PRESETS[summary.presetId].label],
     [
       'Output',
@@ -127,6 +128,9 @@ export function renderPreflight(
         : 'not measured',
     ],
   ]
+  if (summary.presetId === 'smaller') {
+    rows.splice(1, 0, ['Picture type', formatContentClass(summary.contentClass)])
+  }
   for (const [term, detail] of rows) {
     const dt = document.createElement('dt')
     dt.textContent = term

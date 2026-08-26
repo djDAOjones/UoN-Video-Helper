@@ -11,6 +11,37 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-26 — VH-19: uncertainty keeps the safer picture budget
+
+**Decision:** classify the Smaller preset from five one-second windows spread
+across the source timeline, sampled at 10 fps and 64 × 36. Use `screen` only
+when every window's mean adjacent-frame luma change is at most 0.001 and source
+density is at most 0.08 bits/pixel/frame; use `camera` at 0.003 or above. The
+ambiguous band, missing density and incomplete measurement remain `unknown`,
+which deliberately maps to the camera budget. The accepted pre-flight class is
+keyed to the immutable selection generation so processing uses exactly what
+the user saw.
+
+**Rationale:** the proposed reuse of the opening three-second probe was unsafe:
+several real camera and mixed recordings begin on a static title or black
+frame. Across 23 local source recordings, the spread sample identified seven
+clear screen/module captures without an obvious camera false positive; the
+density guard specifically prevented a nearly still camera recording from
+being called slides. The asymmetric fallback spends bytes instead of risking
+visible damage to the user's only output.
+
+**Alternatives rejected:** opening-only motion, metadata or source size alone,
+and asking a novice to choose a picture type. The first failed against the
+corpus, the second cannot observe motion, and the third exposes an encoding
+decision the conveyor model exists to remove.
+
+**Verified:** threshold and regression tests, browser classification of static
+and moving synthetic MP4s, and a complete static Smaller run whose retained
+result was explicitly discarded after success.
+
+**Link:** `src/media/content-class.ts`, `src/config/thresholds.ts`,
+`src/workers/job.worker.ts`, `src/ui/preflight-panel.ts`.
+
 ## 2026-08-26 — VH-31: a ceiling called a ceiling
 
 **Decision:** the interface says `File size — Allow up to about …`, backed by

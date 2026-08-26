@@ -53,3 +53,40 @@ export const ESTIMATE_BANDS = {
  * Throughput below this is treated as unmeasured rather than believed.
  */
 export const MINIMUM_CREDIBLE_PROBE_FRAMES = 10
+
+/**
+ * VH-19 samples short windows across the recording rather than trusting its
+ * opening. Real lecture captures often begin on a static title or black frame,
+ * so five positions are the smallest spread that covers both ends and the
+ * body without turning classification into another full-file pass.
+ */
+export const CONTENT_SAMPLE_WINDOW_FRACTIONS = [0, 0.25, 0.5, 0.75, 1] as const
+
+/** One second catches normal slide changes while keeping the sparse decode cheap. */
+export const CONTENT_SAMPLE_WINDOW_SECONDS = 1
+
+/** Ten observations per second resolved motion cleanly in the VH-19 source corpus. */
+export const CONTENT_SAMPLE_FRAMES_PER_SECOND = 10
+
+/** Tiny analysis dimensions: enough for gross motion, bounded to 2,304 luma bytes. */
+export const CONTENT_SAMPLE_WIDTH = 64
+export const CONTENT_SAMPLE_HEIGHT = 36
+
+/**
+ * Maximum mean adjacent-frame luma change for an unambiguously static source.
+ * Measured against the local VH-19 lecture corpus; the ambiguous band above it
+ * deliberately keeps the safer camera bitrate.
+ */
+export const CONTENT_SCREEN_MAX_MEAN_DIFFERENCE = 0.001
+
+/**
+ * Minimum mean adjacent-frame luma change that makes motion unambiguous in the
+ * VH-19 corpus. Values between this and the screen threshold remain unknown.
+ */
+export const CONTENT_CAMERA_MIN_MEAN_DIFFERENCE = 0.003
+
+/**
+ * Static-looking, high-density video may be a nearly still camera shot rather
+ * than slides. This VH-19 corpus guard prevented that false screen result.
+ */
+export const CONTENT_SCREEN_MAX_SOURCE_BITS_PER_PIXEL_PER_FRAME = 0.08

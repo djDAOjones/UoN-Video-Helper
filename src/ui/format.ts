@@ -9,6 +9,8 @@
  * discovered at review time.
  */
 
+import type { ContentClass } from '../config/presets'
+
 /** e.g. `1 hour 23 minutes`, `4 minutes 12 seconds`, `38 seconds`. */
 export function formatDuration(seconds: number): string {
   if (!Number.isFinite(seconds) || seconds < 0) return 'unknown'
@@ -58,6 +60,18 @@ export function formatFileSize(bytes: number): string {
 export function formatOutputSizeGuidance(bytes: number): string {
   const size = formatFileSize(bytes)
   return size === 'unknown' ? 'Could not be estimated' : `Allow up to about ${size}`
+}
+
+/** Explains the derived picture class without exposing bitrate terminology. */
+export function formatContentClass(contentClass: ContentClass): string {
+  switch (contentClass) {
+    case 'screen':
+      return 'Mostly slides or screen content'
+    case 'camera':
+      return 'Mostly camera or moving picture'
+    case 'unknown':
+      return 'Mixed or unclear — using the safer quality setting'
+  }
 }
 
 /** e.g. `1920 × 1080`. Uses a real multiplication sign, not a letter x. */
