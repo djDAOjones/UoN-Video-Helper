@@ -240,6 +240,17 @@ tests process 90-120 seconds of audio and three of them timed out against
 vitest's 5 s default the first time the gate ran in CI. If a test starts
 failing only in CI, check its duration before its assertions.
 
+**Gate on a settled machine.** The 30 s bound covers CI's ~1.5x, and it cannot
+cover contention — nothing sensible can. Measured here on 2026-08-26:
+`chain.test.ts` took **540 s** and failed a test while three headless browsers
+were encoding alongside it, against ~4 s idle. That is ~138x, so a timeout large
+enough to survive it would take nine minutes to report a genuinely hung test.
+The bound is the wrong lever for this and the operating rule is the right one:
+do not run `npm run check` next to anything heavy — a browser fleet, an ffmpeg
+batch, `scripts/run-in-engines.mjs`. A DSP test that fails after an unusually
+long duration is reporting the machine, not the code; re-run it idle before
+believing it.
+
 ```bash
 npm run check
 ```

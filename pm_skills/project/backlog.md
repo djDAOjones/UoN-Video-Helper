@@ -154,6 +154,31 @@
      harness that misses the path the app actually uses matters far more when
      the pipeline is moving. -->
 
+- [ ] **VH-52 The DSP timeout cannot mean what it looks like it means**
+      (2026-08-26)
+      Intent: raised by a parallel session reviewing this backlog, which noticed
+      `testTimeout: 30_000` was reached here (79355f0) for CI slowness — a ~1.5x
+      runner against a ~3.9 s slowest test — while the same constant in another
+      project was set as a STARVATION bound with ~34x headroom over a 889 ms
+      test. Same number, very different cover: 30 s over 3.9 s is ~7.7x.
+      Both premises verified against this repo. What changes the conclusion is a
+      measurement taken here on 2026-08-26: `chain.test.ts` ran **540 s and
+      failed a test** with three headless browsers encoding alongside it, which
+      is ~138x. So deriving the timeout from measured duration times a starvation
+      factor — the shape suggested — produces a bound of minutes, and a
+      genuinely hung test would then take minutes to fail. The constant is doing
+      the CI job correctly and cannot do the starvation job at all.
+      The operational half is already done: DEV-INFRASTRUCTURE's quality-gate
+      section now carries the measurement and the "gate on a settled machine"
+      rule, which previously existed only in the other project.
+      Done when: a DSP timeout failure is LEGIBLE as contention rather than
+      looking like a real failure — the cheapest form is vitest reporting the
+      file duration beside the failure and a line in the gate output saying what
+      an unusually long run means — or the current bound is confirmed adequate
+      for CI and the starvation case is accepted as an operating rule only.
+      Note: this is why `scripts/run-in-engines.mjs` carries "never run it
+      alongside `npm run check`" in its header.
+
 - [ ] **VH-17 Evaluate `fastStart: 'reserve'` for the smaller preset**
       Intent: the "smaller file" preset goes to OneDrive and SharePoint, where
       students may stream it. `fastStart: false` puts the moov box at the end,
