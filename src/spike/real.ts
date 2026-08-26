@@ -4,10 +4,12 @@
  * The acceptance harness works from synthesised fixtures, which prove the
  * mechanics but not the outcome — several §13 criteria are recorded as
  * "needs a person and real material" for exactly that reason (VH-M1). This
- * closes part of that gap for anything sitting in `public/spike/`.
+ * closes part of that gap for a non-sensitive fixture in `public/spike/`.
  *
  * Dev-only; not built. Fixtures are gitignored and the placeholder check
- * refuses to build while any remain, because they are real lectures.
+ * refuses to build while any remain, so transient media cannot ship.
+ * Real staff media must instead use the normal app's development-only
+ * `/?source-picker=file-input` route and must never be copied into `public/`.
  */
 
 import { TARGET_INTEGRATED_LUFS, TRUE_PEAK_CEILING_DBTP } from '../config/audio'
@@ -31,7 +33,9 @@ let workspace: OpfsWorkspace | null = null
 try {
   say(`file: ${name}`)
   const response = await fetch(`/spike/${name}`)
-  if (!response.ok) throw new Error(`HTTP ${response.status} — is the fixture in public/spike/?`)
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status} — is a non-sensitive fixture in public/spike/?`)
+  }
   const file = new File([await response.blob()], name, { type: 'video/mp4' })
 
   const report = await inspectFile(file)

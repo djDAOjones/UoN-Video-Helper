@@ -11,6 +11,25 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-26 — VH-50: measure the chain the user actually receives
+
+**Decision:** replace one-shot loudness gain with bounded feedback over the
+complete audio chain, reserve AAC reconstruction headroom, and classify a
+decoded finished file against both strict limits. Keep real staff media out of
+`public/`; private rehearsals use the normal app's development-only file-input
+route.
+
+**Rationale:** AMCS3059 needed substantial gain while already close to the
+peak ceiling. The old calculation measured before the fixed gain, then let the
+limiter take gain back without feeding that attenuation into the answer. A
+real Chromium rerun now measures −16.46 LUFS and −2.06 dBTP, where the former
+branch produced −16.75 and −1.98. The complete-chain regression fails under
+the old one-shot rule, and finished-output verification prevents a synthetic
+harness from overruling the file a user actually receives.
+
+**Link:** `src/media/audio-gain-solver.ts`,
+`src/media/output-verification.ts`; VH-50.
+
 ## 2026-08-26 — VH-M3 and the repository-review pilot operating model
 
 **Decision:** accept OneDrive as the permanent reference location, but do

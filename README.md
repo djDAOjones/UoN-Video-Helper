@@ -12,7 +12,7 @@ install and **no media leaving the user's device**.
 green gate. `main` remains the automatic stable deployment and the one-command
 rollback source. The MVP shipped 2026-08-25: a real recording goes in and a
 branded MP4 comes out entirely on the user's device. Real-material loudness
-conformance is still being corrected and re-proved under VH-50.
+conformance has now been re-proved on the source that exposed VH-50.
 
 What it does NOT yet do is in [`pm_skills/project/backlog.md`](pm_skills/project/backlog.md).
 Three things are worth knowing before using it in anger:

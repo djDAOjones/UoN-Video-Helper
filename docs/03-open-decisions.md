@@ -42,10 +42,15 @@ audibly wrong.
 
 ### D4. Sign-off on the browser exclusion
 
-The WebCodecs decision means **Safari below 26 is not supported.** If
-managed University devices are pinned to an older macOS, this needs
-checking with IT before the architecture is locked, since it is the one
-decision that would be expensive to reverse later.
+The browser policy is now: **Safari below 26 is not supported**, and desktop
+Firefox supports silent sources only. Current Firefox fails the exact AAC-LC
+capability check, so audio-bearing sources are blocked before processing; the
+app does not silently strip their audio. A WebM alternative remains deferred
+(D11).
+
+The Firefox behaviour is settled. The remaining sign-off is whether managed
+University devices are pinned to an older macOS; check that with IT before
+launch.
 
 **Owner:** Joe, with UoN IT.
 

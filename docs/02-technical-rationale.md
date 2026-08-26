@@ -81,15 +81,19 @@ exposure, no special headers, hardware acceleration.
 
 ### 2.1 The cost
 
-Browser support is narrower. As of 2026: Chrome/Edge since 94, Firefox
-desktop since 130 (not Android), and Safari reached full parity — including
-audio — only in **Safari 26**. Coverage sits around 95% of active browsers,
-with the shortfall almost entirely older Safari.
+Browser support is narrower, and WebCodecs presence alone does not prove the
+complete output path. As of 2026, Chrome/Edge expose the required path from
+version 94, while Safari reached full parity — including audio — only in
+**Safari 26**. Firefox desktop exposes the video path, but current Firefox
+refuses the AAC-LC track required by an audio-bearing MP4 output; Firefox on
+Android does not expose WebCodecs.
 
-This is a real exclusion and is stated plainly in the spec rather than
-hidden. The mitigation is a clear, non-technical message naming a browser
-that will work — which is a better outcome than an app that appears to work
-and then fails after forty minutes of processing.
+Pre-flight therefore asks `AudioEncoder.isConfigSupported()` about the exact
+`mp4a.40.2` configuration for the selected source and preset: 48 kHz, source
+channel count and preset bitrate. When that check fails, an audio-bearing
+source is blocked before processing and the message names Chrome or Edge.
+Silent sources remain supported because they need no audio encoder. This is
+preferable to an app that appears to work and then fails after a long job.
 
 ### 2.2 Why Mediabunny
 

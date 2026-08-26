@@ -21,6 +21,7 @@ build/
 *.mov
 *.mkv
 
-# Spike fixtures are copied in from samples/ by hand and are large. The spike
-# pages document which file they expect; nothing here is a build input.
+# Dev-only spike fixtures in public/spike/ are transient and must be
+# non-sensitive. Real staff media stays outside public/ and is selected through
+# the normal app at /?source-picker=file-input in development.
 public/spike/

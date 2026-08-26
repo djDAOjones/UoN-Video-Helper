@@ -43,7 +43,7 @@
 - `spike-modes.html` — Maintainer page: do the three closing modes produce the timelines they promise?
 - `spike-opfs.html` — Maintainer page: does a sweep leave a live job's scratch alone in this engine?
 - `spike-preflight-audio.html` — Maintainer page: does pre-flight refuse exactly what the audio encoder will refuse?
-- `spike-real.html` — Maintainer page: runs a real recording end to end and reports what came out.
+- `spike-real.html` — Maintainer page: runs a non-sensitive development fixture end to end and reports what came out; real staff media uses the normal app's development-only file picker.
 - `spike-shapes.html` — Maintainer page: do the corpus's odd shapes — 852x480, 4:3, 16:10, mono, 44.1 kHz, silent — reach a correct output?
 - `tsconfig.json` — Strict TypeScript. `noUncheckedIndexedAccess` matters here — this codebase indexes buffers.
 - `vite.config.ts` — Build config and the build-identity injection (`__APP_VERSION__`, `__BUILD_ID__`).
@@ -201,7 +201,7 @@
 - `src/spike/modes.ts` — VH-22 spike: runs a fixture through all three closing modes and checks output length.
 - `src/spike/opfs.ts` — Drives the VH-35 sweep checks against real OPFS and real Web Locks. Dev-only; not built.
 - `src/spike/preflight-audio.ts` — Checks the no-aac-encode block fires where the encoder refuses, and nowhere else.
-- `src/spike/real.ts` — Runs a real recording from `public/spike/` through the pipeline; reports levels and speed.
+- `src/spike/real.ts` — Runs a non-sensitive fixture from `public/spike/` through the pipeline; real staff media stays outside `public/` and uses `/?source-picker=file-input`.
 - `src/spike/shapes.ts` — Runs the corpus's awkward properties through the pipeline, synthesised so it runs on any machine.
 - `src/styles/app.css` — App shell styles. Carbon productive language at AAA.
 - `src/styles/tokens.brand.css` — UoN brand tokens. Holds the D1 placeholder and nothing invented.

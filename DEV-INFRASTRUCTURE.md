@@ -90,6 +90,21 @@ Two things to know:
 
 The built output is testable the same way via `npm run preview`.
 
+### Private real-source rehearsal
+
+Never copy a staff recording into `public/` to make a browser harness see it.
+For a local development run, open:
+
+```text
+http://127.0.0.1:5173/?source-picker=file-input
+```
+
+The development-only query selects the app's existing accessible file-input
+fallback instead of the operating-system handle picker. The browser reads the
+chosen file locally, the production bundle ignores the query, and the file
+never enters Vite's public asset tree. Use the normal URL when testing
+source/destination identity protection itself.
+
 ---
 
 ## Runtime lifecycle

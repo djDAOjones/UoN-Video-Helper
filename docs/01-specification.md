@@ -77,8 +77,9 @@ path remains in the code against future assets but carries no user control:
 the two-toggle end state — opening and closing, all four combinations — is
 deferred, not withdrawn.
 
-The closing sequence is **appended**. Whether it also composites over the
-closing second of picture is the user's choice of boundary mode (§4.3).
+The closing sequence is currently **appended with a hard cut**. The two
+verified compositing modes remain internal pipeline paths, not user choices;
+VH-32 will decide whether and how to present them (§4.3).
 
 ### 4.2 Master assets, as delivered
 
@@ -339,7 +340,10 @@ real time estimate. This directly satisfies the brief's requirement to
 
 ### 7.2 Pre-flight checks
 
-- WebCodecs availability and H.264 encode support (`isConfigSupported`)
+- WebCodecs availability and exact H.264 encode support
+  (`isConfigSupported`)
+- Exact AAC-LC encode support for an audio-bearing source
+  (`AudioEncoder.isConfigSupported`)
 - Source resolution, duration, frame rate, codec, audio presence
 - OPFS quota via `navigator.storage.estimate()` — require **2.5×** the
   estimated output size
@@ -352,7 +356,7 @@ real time estimate. This directly satisfies the brief's requirement to
 | --- | --- | --- |
 | **Proceed** | Estimate < 20 min, checks pass | Start, show estimate |
 | **Warn** | Estimate 20–60 min | Show estimate and a keep-this-tab-open notice; allow continue |
-| **Block** | No WebCodecs / no H.264 encode / insufficient storage | Explain, and name a browser that will work |
+| **Block** | No WebCodecs / no required H.264 or AAC encode / insufficient storage | Explain, and name a browser that will work |
 | **Discourage** | Estimate > 60 min, or phone/tablet | Recommend a desktop; allow continue after acknowledgement |
 
 ### 7.4 Validated envelope for v1
@@ -450,15 +454,18 @@ Responsive and fully readable on phones and tablets. Processing is
 | Browser | Status |
 | --- | --- |
 | Chrome / Edge (desktop) 94+ | Supported |
-| Firefox (desktop) 130+ | Supported |
+| Firefox (desktop) 130+ | Silent sources supported; current Firefox blocks audio-bearing sources before processing because the required AAC-LC encode configuration is unavailable |
 | Safari (macOS/iOS) 26+ | Supported |
 | Safari below 26 | Not supported — clear message |
 | Firefox on Android | Not supported — WebCodecs not exposed |
 | Any browser without WebCodecs | Not supported — clear message |
 
-Approximate coverage: ~95% of active browsers. The support check runs at
-load and again against the specific source file, since codec support is
-per-configuration.
+Support is checked at load and again against the selected source and exact
+output configuration. For a source with audio, pre-flight asks
+`AudioEncoder.isConfigSupported()` about the required AAC-LC track. Current
+Firefox refuses that configuration, so the app blocks before processing and
+names Chrome or Edge. A silent source needs no audio encoder and remains
+supported.
 
 ## 11. Non-functional requirements
 

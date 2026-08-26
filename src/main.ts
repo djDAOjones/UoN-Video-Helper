@@ -100,8 +100,18 @@ let currentSource: SelectedSource | null = null
 /** Source-summary metadata failures that were actually rendered before Start. */
 const disclosedMetadataReadFailures = new WeakSet<SelectedSource>()
 
-/** Prefer handles whenever both pickers and same-entry comparison are present. */
-const useHandleSourcePicker = sourceHandlePickerAvailable()
+/**
+ * Prefer handles whenever source/destination identity can be proved.
+ *
+ * The development-only override keeps private real-file rehearsals on the
+ * accessible input path. Browser automation cannot populate the operating
+ * system picker, and copying staff media into `public/` would risk publishing
+ * it. Vite removes the override from production builds.
+ */
+const forceFileInput =
+  import.meta.env.DEV &&
+  new URLSearchParams(globalThis.location.search).get('source-picker') === 'file-input'
+const useHandleSourcePicker = sourceHandlePickerAvailable() && !forceFileInput
 sourcePickerActions.hidden = !useHandleSourcePicker
 fileInput.hidden = useHandleSourcePicker
 fileInput.disabled = useHandleSourcePicker
@@ -1047,6 +1057,19 @@ function renderResult(result: RetainedOutput, verification: OutputVerification):
         ? 'The finished audio did not meet one or more required sound checks. Review it before sharing.'
         : 'The finished audio could not be checked. Listen to it before sharing.'
     processResult.append(verificationNotice)
+  }
+
+  // Exact decoded-output figures are useful during a private real-file
+  // rehearsal, but are implementation detail for the production audience.
+  // Keeping them dev-only preserves the app's novice-facing conveyor model.
+  if (isDev && (verification.status === 'passed' || verification.status === 'failed')) {
+    const verificationMeasurement = document.createElement('p')
+    verificationMeasurement.className = 'verdict-detail'
+    verificationMeasurement.dataset.outputVerification = verification.status
+    verificationMeasurement.textContent =
+      `Development verification: ${verification.integratedLufs.toFixed(2)} LUFS; ` +
+      `${verification.truePeakDbtp.toFixed(2)} dBTP (${verification.status}).`
+    processResult.append(verificationMeasurement)
   }
 
   // VH-22: branding that was asked for but could not be loaded is skipped

@@ -17,6 +17,12 @@
      (Prune) moves the oldest phases to archive/trajectory/trajectory-NNNN-<range>.md
      and adds a row to archive/INDEX.md. Archives are append-only; never rewrite. -->
 
+### Repository-review real-source closure
+
+- VH-50 — Shipped 2026-08-26. Complete-chain gain feedback and strict decoded
+  output verification now cover the limiter interaction the synthetic harness
+  missed; real AMCS3059 output passed at −16.46 LUFS and −2.06 dBTP.
+
 ### Repository-review pilot operating decisions
 
 - VH-M3 — Closed 2026-08-26. OneDrive remains the reference location; active

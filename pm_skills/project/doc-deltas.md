@@ -31,7 +31,7 @@
       wholly on the opening animation, so the sidecar cue offset is always
       zero in a closing-only v1 (source: copy-edit review of the 2026-08-25
       doc-sync; UI-copy twin already on the wish-list)
-- [ ] 2026-08-25 SPEC §4.1 — "the user's choice of boundary mode" describes a
+- [x] 2026-08-25 SPEC §4.1 — "the user's choice of boundary mode" describes a
       control withdrawn by VH-45; the modes remain in the pipeline, not the UI
 - [ ] 2026-08-25 SPEC §6.1 — the "best quality" bitrate is a fixed
       ~0.12 bits/pixel/frame, which never looks at the source; VH-47 makes it
@@ -44,13 +44,16 @@
 - [ ] 2026-08-26 SPEC §6.2 — its prose presents consulting the source as the
       SMALLER preset's distinguishing property; since VH-47 both presets do,
       one capped at the source and one anchored to it (source: VH-47)
-- [ ] 2026-08-26 SPEC §10 — desktop Firefox supports silent sources only;
+- [x] 2026-08-26 SPEC §10 — desktop Firefox supports silent sources only;
       audio-bearing sources are blocked before processing because required AAC
       encoding is unavailable (source: VH-49)
-- [ ] 2026-08-26 RATIONALE §2.1 — the browser-support cost and coverage omit
+- [x] 2026-08-26 RATIONALE §2.1 — the browser-support cost and coverage omit
       desktop Firefox's AAC limitation and pre-flight block (source: VH-49)
-- [ ] 2026-08-26 DECISIONS D4 — the browser-exclusion record mentions only
+- [x] 2026-08-26 DECISIONS D4 — the browser-exclusion record mentions only
       Safari below 26; Firefox audio blocking is settled while WebM remains
       deferred (source: VH-49)
-- [ ] 2026-08-26 SPEC §4.1 — VH-46b deliberately leaves boundary-mode controls
+- [x] 2026-08-26 SPEC §4.1 — VH-46b deliberately leaves boundary-mode controls
       to the VH-32 redesign while the verified modes remain in the pipeline
+- [ ] 2026-08-26 DECISIONS D3 — branding-boundary audio choices remain open
+      even though SPEC §4.4 now records the delivered branding as silent
+      (source: protected-doc sync review)

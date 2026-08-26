@@ -31,34 +31,11 @@
       Intent: turn the critique-driven repository review into tested fixes,
       starting with incorrect output, source/result loss, stale job state,
       cancellation, OPFS races and false-green release evidence.
-      State: a substantial non-protected tranche is implemented on its
-      isolated branch and the canonical gate is green. Keep open through
-      real-engine and real-material rehearsal, and an explicit decision on the
-      remaining protected loudness work; pilot blockers do not close from unit
-      evidence.
-
-- [ ] **VH-50 Real material misses the loudness invariant, and the harness
-      says it does not** (2026-08-26)
-      Intent: `AMCS3059` — 852×480, 130 s, the same file VH-31 was measured on —
-      comes out at **−16.75 LUFS** against a −16 ±0.5 target and **−1.98 dBTP**
-      against a ceiling of −2.00. Both miss. `conventions.md` lists that pair as
-      invariant 2 and spec §13 criterion 2 requires it, so this is the project's
-      second-most-protected property failing on the first real file anyone
-      checked it against.
-      Not a regression: re-run on `de0b94f`, before the 2026-08-26 session, and
-      the figures are identical to the hundredth. It has always done this.
-      The worse half is that the acceptance harness PASSES criterion 2. Its
-      corpus is synthesised, and whatever real speech does — most likely the
-      limiter engaging on a source already peaking at −1.86 dBTP and pulling the
-      integrated figure down with it — the fixtures do not reproduce. A harness
-      that passes the invariant the product misses is worse than no harness.
-      Done when: the cause is identified rather than guessed at, the output
-      meets both figures on real material, and the harness gains a case that
-      would have caught it. Whether the fix is in the gain staging, the
-      limiter's interaction with it, or a second gain pass is the open question.
-      Note: measured with `/spike-real.html?file=…`, which needs a real
-      recording in `public/spike/` — the guard refuses a build while one is
-      there, so remove it afterwards.
+      State: the non-protected remediation tranche is implemented on its
+      isolated branch; Chromium real-material rehearsal closes VH-50 and
+      accepts CULT2011 through pre-flight. Keep open through the remaining
+      real-engine/device rehearsal and the explicit protected-loudness
+      decisions; pilot blockers do not close from unit evidence.
 
 - [ ] **VH-31 The size estimate is ~1.7x too high** [detail](tickets/VH-31.md)
       (2026-08-25)
