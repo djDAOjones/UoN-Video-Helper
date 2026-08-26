@@ -12,10 +12,15 @@ shipped 2026-08-25: a real recording goes in and a branded, correctly-levelled
 MP4 comes out, entirely on the user's device.
 
 What it does NOT yet do is in [`pm_skills/project/backlog.md`](pm_skills/project/backlog.md).
-Two things are worth knowing before using it in anger: opening sequences are
-withdrawn because no approved asset exists (VH-33), and so are the two closing
-transition modes, which are wrong in Firefox (VH-44). Every job takes the hard
-cut, which composites nothing and works everywhere.
+Three things are worth knowing before using it in anger:
+
+- **Firefox cannot make the audio.** It refuses to encode AAC at any bitrate, so
+  a video with sound is refused before the job starts, with a message naming a
+  browser that works. Silent sources are fine there (VH-49).
+- **Opening sequences are withdrawn**, because no approved asset exists (VH-33).
+- **So are the two closing transition modes**, and every job takes the hard cut.
+  They were withdrawn for being wrong in Firefox; that is fixed and verified,
+  and putting the controls back is an open decision (VH-46b).
 
 ## Quick start
 

@@ -43,6 +43,7 @@ async function traverse(
   channelCount: number,
   chain: AudioChain | null,
   signal: AbortSignal | undefined,
+  onSample?: () => void,
 ): Promise<AudioAnalysis> {
   const analyser = new AudioAnalyser({ sampleRate, channelCount })
   const sink = new AudioSampleSink(track)
@@ -55,6 +56,10 @@ async function traverse(
     } finally {
       sample.close()
     }
+    // The analysis pass used to say nothing at all from start to finish, and it
+    // scales with the file. That was invisible until VH-38 made silence the
+    // signal a job is wedged (VH-51).
+    onSample?.()
   }
   if (chain) analyser.addFrames(chain.flush())
   return analyser.finish()
@@ -84,13 +89,15 @@ export async function analyseSourceAudio(
 export async function planAudio(
   track: InputAudioTrack,
   signal?: AbortSignal,
+  /** Called for every sample analysed, so a long analysis can prove it is alive. */
+  onSample?: () => void,
 ): Promise<AudioPlan> {
   const [sampleRate, channelCount] = await Promise.all([
     track.getSampleRate(),
     track.getNumberOfChannels(),
   ])
 
-  const analysis = await traverse(track, sampleRate, channelCount, null, signal)
+  const analysis = await traverse(track, sampleRate, channelCount, null, signal, onSample)
   const envelope = buildGainEnvelope({
     integratedLufs: analysis.integratedLufs,
     loudnessRangeLu: analysis.loudnessRangeLu,
@@ -104,6 +111,7 @@ export async function planAudio(
     channelCount,
     new AudioChain({ sampleRate, channelCount, envelope, gainDb: null }),
     signal,
+    onSample,
   )
 
   // A source with no measurable loudness (pure silence) gets no gain: lifting

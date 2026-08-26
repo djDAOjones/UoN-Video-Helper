@@ -138,6 +138,11 @@ async function handleProcess(
   let workspace: OpfsWorkspace | null = null
 
   try {
+    // Said BEFORE the inspection rather than after it. Reading the structure of
+    // a multi-gigabyte file is slow, and since VH-38 made silence the signal
+    // that a worker is wedged, a job that says nothing until the first frame is
+    // encoded is a job that can be cancelled for being slow (VH-51).
+    post({ kind: 'stage', id, stage: 'preparing', fraction: 0 })
     const report = await inspectFile(file)
     const preset = PRESETS[presetId]
     const shape = outputShapeFor(preset, {
@@ -171,6 +176,9 @@ async function handleProcess(
     // answer it is to measure the finished file rather than trust the plan.
     const outputWarnings: AudioWarning[] = []
     try {
+      // Another window the encode loop's progress does not cover: this walks
+      // the whole finished file (VH-51).
+      post({ kind: 'stage', id, stage: 'finishing', fraction: 1 })
       const check = openInput(result.file)
       const checkTrack = await check.getPrimaryAudioTrack()
       if (checkTrack) {

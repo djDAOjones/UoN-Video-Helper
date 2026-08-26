@@ -11,6 +11,53 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-26 — VH-51: reviewing the unattended run was worth more than another item
+
+**Decision:** run a 25-agent adversarial review over the night's 14 commits
+before the maintainer woke, and fix what it confirmed. 15 findings confirmed,
+3 refuted.
+
+**Rationale:** `integrations/task.md` says to suggest `review.md` after a
+gateless run, and ten items shipped unattended to a live pilot is the strongest
+possible case for it. It found a regression that no test caught and that I would
+have reported as a clean night's work.
+
+**The regression.** VH-38 replaced a one-hour job deadline with a 60-second
+SILENCE bound, justified by "the encode loop reports every thirty frames". True
+— and true of the encode loop alone. `inspectFile`, both `planAudio`
+traversals and the post-encode verification emit nothing, and all three scale
+with the source. So the fix for a duration cap reintroduced one at a much lower
+threshold, on exactly the long jobs the original item existed to protect. Three
+lenses found it independently. All three phases report now and the bound is
+120 s, matching what `main.ts` already allows a standalone inspection.
+
+**The cancellation hole.** VH-37 moved both lanes onto a derived `AbortSignal`
+wired with `addEventListener`. A listener attached to an already-aborted signal
+never fires — reproduced in Node — so a cancel landing in the window between the
+last `throwIfAborted` and that line was lost and the job encoded the whole file.
+One line: check `aborted` after attaching.
+
+**Three of my own claims were false**, and correcting them matters more than the
+code fixes because they would have been believed:
+- `Promise.all` does not leak an unhandled rejection. `PerformPromiseAll` calls
+  `.then` on every element as it iterates. I reproduced it: zero events. The
+  real defect is that it rejects early and leaves the loser RUNNING into an
+  output being torn down — still worth fixing, but not for the stated reason.
+- A test named "leaves no rejection unobserved" could not fail, because the
+  detection mechanism does not exist in the test environment. Replaced with one
+  that asserts the ordering property that actually matters.
+- VH-39's "make three stale claims read true" sweep wrote a FOURTH, which VH-44
+  falsified four commits later in the same session.
+
+**What the review cleared** is worth recording too, because absence of findings
+is only informative if someone looked: the VH-47 bitrate band's arithmetic and
+guards, the VH-20 flush's interaction with the limiter's gain, VH-42's A/V sync,
+the one-dependency and no-egress invariants, and VH-49's pre-flight config
+matching what the job actually asks for.
+
+**Link:** workflow `wf_c248dbde-11f`; `src/config/thresholds.ts`,
+`src/media/pipeline.ts`, `src/media/composite.ts`, `src/media/branding.ts`.
+
 ## 2026-08-26 — Pruned project memory: the overnight run's own overflow
 
 **Decision:** Split `decision-log.md` at its read-tier floor — the latest ten

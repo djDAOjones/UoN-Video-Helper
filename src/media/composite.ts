@@ -104,9 +104,15 @@ export function compositePremultiplied(source: Uint8ClampedArray, brand: Uint8Cl
  */
 export function honoursRgbaReadback(sample: VideoSample): boolean {
   try {
-    return (
-      sample.allocationSize({ format: 'RGBA' }) === sample.codedWidth * sample.codedHeight * 4
-    )
+    // Against the VISIBLE rect, because that is what `allocationSize` and
+    // `copyTo` both measure when no `rect` is given. Comparing against the
+    // CODED size — which is what this did until VH-51 — would disagree on any
+    // frame whose coded size is padded, and disagree by FAILING CLOSED: onto
+    // the canvas route, which is the one that is wrong in Firefox. Getting the
+    // basis wrong here would have quietly undone VH-44 on exactly the assets
+    // most likely to need it.
+    const { width, height } = sample.visibleRect
+    return sample.allocationSize({ format: 'RGBA' }) === width * height * 4
   } catch {
     // An engine that will not even size the request is one to route around.
     return false
@@ -157,13 +163,31 @@ export function compositeSampled(
       const i01 = (y0 * brandSize.width + x1) * RGBA
       const i10 = (y1 * brandSize.width + x0) * RGBA
       const i11 = (y1 * brandSize.width + x1) * RGBA
+      const out = (y * output.width + x) * RGBA
+
+      // The two fast paths `compositePremultiplied` has, kept here because four
+      // of the branding's five seconds are fully opaque and most of a 16:9
+      // frame under a logo is fully transparent. Without them this does sixteen
+      // typed-array reads and eight lerps for every pixel of a 4K frame —
+      // ~133 M reads a frame — to compute answers that are already known
+      // (VH-51). Only taken when all four taps agree, so no edge is smoothed
+      // away.
+      const a00 = brand[i00 + 3]!
+      const uniform = a00 === brand[i01 + 3]! && a00 === brand[i10 + 3]! && a00 === brand[i11 + 3]!
+      if (uniform && a00 === 0) continue
+      if (uniform && a00 === 255) {
+        source[out] = brand[i00]!
+        source[out + 1] = brand[i00 + 1]!
+        source[out + 2] = brand[i00 + 2]!
+        source[out + 3] = 255
+        continue
+      }
 
       const alpha =
-        (brand[i00 + 3]! * (1 - wx) + brand[i01 + 3]! * wx) * (1 - wy) +
+        (a00 * (1 - wx) + brand[i01 + 3]! * wx) * (1 - wy) +
         (brand[i10 + 3]! * (1 - wx) + brand[i11 + 3]! * wx) * wy
       if (alpha < 0.5) continue
 
-      const out = (y * output.width + x) * RGBA
       const keep = (255 - alpha) / 255
       for (let channel = 0; channel < 3; channel++) {
         const value =
@@ -258,7 +282,10 @@ export class BrandingCompositor {
     if (this.direct) {
       // The branding pixels never touch a canvas, so nothing gets the chance to
       // un-premultiply them. This is the path Chrome and Firefox take.
-      const size = brand.codedWidth * brand.codedHeight * RGBA
+      // The visible rect, for the same reason: it is what `copyTo` writes, so
+      // it is what the buffer must hold and what the sampler must index by.
+      const visible = brand.visibleRect
+      const size = visible.width * visible.height * RGBA
       if (!this.brandBuffer || this.brandBuffer.byteLength !== size) {
         this.brandBuffer = new Uint8Array(size)
       }
@@ -266,7 +293,7 @@ export class BrandingCompositor {
       compositeSampled(
         under.data,
         this.brandBuffer,
-        { width: brand.codedWidth, height: brand.codedHeight },
+        { width: visible.width, height: visible.height },
         fit,
         { width, height },
       )

@@ -68,7 +68,15 @@ describe('closingTimeline', () => {
       // The real masters carry no audio, so nothing collides — and truncating a
       // lecturer's last words to match the picture is the worse error.
       expect(t.audioEndsAtSeconds).toBe(604)
-      expect(t.timelineSeconds).toBe(608)
+    })
+
+    it('reports the output as long as the LATER track, not the sum', () => {
+      // Video ends at 600 + 0 freeze + 4 closing = 604; the audio also ends at
+      // 604. This asserted 608 until 2026-08-26 — the audio overrun added ON TOP
+      // of the closing — which is a length no track reaches. The test was
+      // written against the implementation rather than against the timeline,
+      // and locked the error in.
+      expect(t.timelineSeconds).toBe(604)
     })
   })
 
@@ -127,7 +135,7 @@ describe('closingTimeline', () => {
 
     it('adds the freeze second the downgraded mode implies', () => {
       // over-freeze holds a frame under the build, so it costs its own second
-      // where over-picture would not have.
+      // where over-picture would not have. 0.4 picture + 1.0 freeze + 4.0 tail.
       expect(t.closingOffsetSeconds).toBeCloseTo(1.4, 6)
       expect(t.timelineSeconds).toBeCloseTo(5.4, 6)
     })

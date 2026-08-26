@@ -86,18 +86,23 @@ export interface PipelineResult {
  * Runs both feed lanes, stops the survivor when one fails, and reports the
  * cause that actually mattered (VH-37).
  *
- * `Promise.all` was wrong twice over. It rejects on the FIRST failure and
- * leaves the other lane running unobserved — still pushing into an `Output`
- * that is already cancelling — so that lane rejected later with nothing
- * awaiting it. `diagnostics.ts` hooks `unhandledrejection`, so the user was
- * shown the real error AND a second, spurious entry for the lane that only
- * failed because the first one did.
+ * What `Promise.all` got wrong is narrower than this comment first claimed, and
+ * the correction is worth keeping: it does NOT leak an unhandled rejection.
+ * `PerformPromiseAll` calls `.then` on every element as it iterates, so a
+ * later-rejecting sibling is always observed. Reproduced in Node — zero
+ * `unhandledrejection` events (VH-51 review).
  *
- * `allSettled` waits for both, so nothing is left unobserved. `onFailure`
- * aborts the signal the lanes share, so the survivor stops promptly rather than
- * running to completion. And the rethrow prefers a real cause over a
- * {@link CancelledError}, because the cancellation is an EFFECT of the failure
- * and reporting it would name the symptom rather than the disease.
+ * The real defect is that `Promise.all` REJECTS EARLY AND LEAVES THE LOSER
+ * RUNNING. The surviving lane goes on decoding, converting and pushing frames
+ * into an `Output` the caller is already tearing down — wasted work on a job
+ * that has failed, and muxer errors raised against a half-cancelled output that
+ * can outrank the cause in the log.
+ *
+ * `allSettled` waits for both, so teardown cannot start while a lane is still
+ * writing. `onFailure` aborts the signal the lanes share, so the survivor stops
+ * at its next checkpoint instead of running to completion. And the rethrow
+ * prefers a real cause over a {@link CancelledError}, because the cancellation
+ * is an EFFECT of the failure and reporting it would name the symptom.
  *
  * @param lanes - Started here, not before, so nothing is in flight if this
  *   throws synchronously.
@@ -225,7 +230,15 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
   let audioPlan = null
   if (audioTrack) {
     onProgress?.({ stage: 'analysing', fraction: 0 })
-    audioPlan = await planAudio(audioTrack, signal)
+    // Both traversals report, throttled: the analysis is two full passes over
+    // the track with nothing to say in between, and since VH-38 made silence
+    // the signal that a worker is wedged, saying nothing for minutes is how a
+    // healthy long job got itself cancelled (VH-51).
+    let analysed = 0
+    audioPlan = await planAudio(audioTrack, signal, () => {
+      analysed++
+      if (analysed % 200 === 0) onProgress?.({ stage: 'analysing', fraction: 0 })
+    })
     throwIfAborted(signal)
   }
 
@@ -371,6 +384,11 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     lanes.abort()
   }
   signal?.addEventListener('abort', abortLanes, { once: true })
+  // A listener attached to an ALREADY-aborted signal never fires, so without
+  // this line a cancel landing between the last `throwIfAborted` and here was
+  // lost outright and the job encoded the whole file (VH-51). Checked after
+  // attaching, never before: the other order leaves the same race, narrower.
+  if (signal?.aborted) abortLanes()
   const laneSignal = lanes.signal
 
   // Everything is fed in timeline order within its own track, and the two

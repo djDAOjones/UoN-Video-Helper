@@ -291,10 +291,12 @@ function bitrateFromSource(
     }
   }
 
-  // Density, not raw bitrate. The two agree today because "best quality"
-  // neither downscales nor caps the rate, so the output shape IS the source
-  // shape — but writing it in bits per pixel per frame is what keeps the rule
-  // correct if that ever stops being true.
+  // Density, not raw bitrate. The two pixel rates USUALLY agree, because "best
+  // quality" neither downscales nor caps the rate — but not always, and the
+  // corpus already contains the exception: a PowerPoint export runs at 1000/33
+  // and conforms to 30, so its source rate is 30.303 and its output rate is 30.
+  // Working in bits per pixel per frame is what makes that a 1% difference
+  // rather than a misread density (VH-51).
   const sourcePixelRate = sourceShape.width * sourceShape.height * sourceShape.frameRate
   const sourceBpp = sourceBitrate / sourcePixelRate
   const blended =

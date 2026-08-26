@@ -194,6 +194,21 @@ describe('compositeSampled', () => {
     expect(source[7 * 4]).toBe(200)
   })
 
+  it('does not let the opaque fast path swallow an edge', () => {
+    // The fast paths only fire when all four sampled taps agree. At the
+    // boundary between an opaque logo and transparency they do not, so the
+    // pixel must still be interpolated — otherwise scaling would harden every
+    // edge into a staircase (VH-51).
+    const brand = new Uint8Array(2 * 1 * 4)
+    brand.set([0, 0, 0, 0], 0)
+    brand.set([200, 200, 200, 255], 4)
+    const source = picture(8, 1, 0)
+    compositeSampled(source, brand, { width: 2, height: 1 }, full(8, 1), { width: 8, height: 1 })
+    const reds = Array.from({ length: 8 }, (_unused, i) => source[i * 4]!)
+    // Intermediate values exist: neither 0 nor 200 everywhere.
+    expect(reds.some((v) => v > 0 && v < 200)).toBe(true)
+  })
+
   it('interpolates across a ramp rather than stepping', () => {
     // Premultiplied colour is the space interpolation is DEFINED in, so a
     // gradient scaled up should be smooth rather than blocky.

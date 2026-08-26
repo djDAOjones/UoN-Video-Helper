@@ -148,3 +148,28 @@
   thing to interpolate.
 - The controls stay withdrawn. The engineering is done and verified; putting
   them back in front of users is a decision, raised as VH-46b.
+
+### VH-51 — the overnight run reviewed itself, and found a regression
+
+- VH-51 — Shipped 2026-08-26. A 25-agent adversarial review of the night's 14
+  commits confirmed 15 defects and refuted 3. The worst was mine: VH-38's
+  60-second SILENCE watchdog rested on "the encode loop reports every thirty
+  frames", which is true of the encode loop and of nothing else. Inspection,
+  both audio-analysis traversals and the post-encode verification each emitted
+  nothing and each scale with the source — so a long job could sit silent and be
+  cancelled for being slow, which is the duration cap spec §7 disclaims,
+  reintroduced at a lower threshold. All three now report; the bound is 120 s.
+- Also fixed: a cancel arriving between the last checkpoint and the lane
+  controller was lost outright, because a listener attached to an
+  ALREADY-aborted signal never fires (reproduced in Node); `honoursRgbaReadback`
+  compared `allocationSize` against CODED dimensions where it measures the
+  VISIBLE rect, so a padded master would have failed closed onto the
+  Firefox-broken path and quietly undone VH-44; `timelineSeconds` added the
+  audio overrun on top of the closing instead of taking the later of the two
+  tracks; and `compositeSampled` had dropped the opaque and transparent fast
+  paths, costing ~133 M reads a frame at 4K.
+- Three claims the run made were false and are corrected rather than quietly
+  dropped: `Promise.all` does NOT leak an unhandled rejection (reproduced —
+  zero events), so VH-37's recorded root cause was wrong; a test named for that
+  mechanism could not fail and is replaced; and VH-39's "stale claims" sweep
+  wrote a fresh stale claim that VH-44 falsified four commits later.

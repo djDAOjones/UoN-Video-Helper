@@ -7,8 +7,10 @@
  * every mode's tail, all of "hard cut" — plus where each segment sits on the
  * timeline ({@link closingTimeline}, VH-42).
  *
- * Both overlay modes are withdrawn from the interface until VH-44: their
- * readback is wrong in Firefox. The pipeline paths are intact.
+ * Both overlay modes are withdrawn from the interface. Their readback WAS
+ * wrong in Firefox; VH-44 fixed that and verified it in all three engines, so
+ * what keeps them out now is VH-45's decision rather than a defect — restoring
+ * them is VH-46b. The pipeline paths never left.
  *
  * The real closing masters carry NO audio, which the maintainer confirms is
  * intended (2026-08-25) — so spec 4.4's mastered audio bed, and the rule that
@@ -152,7 +154,18 @@ export interface ClosingTimeline {
   readonly closingOffsetSeconds: number
   /** Where the build starts within the source, for `over-picture`. */
   readonly overlayFromSeconds: number
-  /** Where the source's audio stops being emitted. */
+  /**
+   * Where the source's audio is treated as ending, for the boundary fade.
+   *
+   * NOT a truncation point, despite an earlier version of this comment saying
+   * so: nothing in the audio lane stops emitting here — it feeds the whole
+   * `AudioSampleSink` and then flushes. So if a closing master ever carries a
+   * bed of its own AND the source audio outruns the picture, both still write
+   * the same stretch of one track; pulling this back to the boundary softens
+   * the overlap rather than removing it. No shipped asset does — the real
+   * closings are silent — so it is a recorded limit, not a live bug. VH-23 is
+   * what would create the first branding with a bed.
+   */
   readonly audioEndsAtSeconds: number
   /** Whole-output length, used for progress. */
   readonly timelineSeconds: number
@@ -206,11 +219,14 @@ export function closingTimeline(options: {
     // never negative.
     overlayFromSeconds: Math.max(0, videoDurationSeconds - onsetSeconds),
     audioEndsAtSeconds,
+    // The two tracks end independently, so the output lasts as long as the
+    // LATER of them — not the audio overrun stacked on top of the closing.
+    // Video ends at opening + picture + freeze + closing; audio at opening +
+    // its own length. Adding them over-reported whenever audio outran the
+    // picture (VH-51).
     timelineSeconds:
       openingSeconds +
-      Math.max(videoDurationSeconds, audioEndsAtSeconds) +
-      freezeSeconds +
-      closingSeconds,
+      Math.max(videoDurationSeconds + freezeSeconds + closingSeconds, audioEndsAtSeconds),
     mode,
     downgradedForShortSource,
   }
