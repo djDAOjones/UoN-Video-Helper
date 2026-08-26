@@ -9,7 +9,13 @@
 
 import { PRESETS, bitrateWasCappedToSource } from '../config/presets'
 import type { PreflightOutcome, PreflightReasonCode, PreflightSummary } from '../media/preflight'
-import { formatDuration, formatFileSize, formatFrameRate, formatResolution } from './format'
+import {
+  formatDuration,
+  formatFileSize,
+  formatFrameRate,
+  formatOutputSizeGuidance,
+  formatResolution,
+} from './format'
 
 const OUTCOME_HEADING: Record<PreflightOutcome, string> = {
   proceed: 'Ready to go',
@@ -113,7 +119,7 @@ export function renderPreflight(
       'Output',
       `${formatResolution(shape.width, shape.height)} at ${formatFrameRate(shape.frameRate)}`,
     ],
-    ['Estimated size', formatFileSize(summary.projectedOutputBytes)],
+    ['File size', formatOutputSizeGuidance(summary.outputSizeGuidanceBytes)],
     [
       'Measured speed',
       probe.measured

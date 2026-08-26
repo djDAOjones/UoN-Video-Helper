@@ -11,6 +11,35 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-26 — VH-31: a ceiling called a ceiling
+
+**Decision:** the interface says `File size — Allow up to about …`, backed by
+a 1.04 allowance over the requested A/V byte budget and the longest existing
+closing timeline. The user-facing guidance and the storage-gate projection are
+separate fields computed separately in the worker; only the latter reaches
+`PreflightInput` and its 2.5x working-space rule.
+
+**Rationale:** a point estimate was a false claim. VBR makes highly static
+material underspend by as much as 4.7x, while four Smaller-file corpus jobs
+slightly exceeded the old figure. The worst measured actual-to-budget ratio was
+about 1.035, so 1.04 covers all 46 measured preset/file combinations without
+claiming to predict content. Adding the possible five-second closing corrects
+the other known under-call and stays cautious when closing is unchecked.
+
+**Why not the apparently better estimate:** the three-window prototype was
+accurate on this corpus but failed every adversarial review. It changed the
+device-speed estimate, could not keep its own wall budget, moved the hard
+storage block, and remained sensitive to where expensive content happened to
+sit. Honest guidance is more useful than an untrustworthy measurement that
+costs pre-flight time.
+
+**Boundary:** VH-19 still decides the Smaller-file encoding bitrate from
+content. It may improve actual output size, but it no longer has to rescue this
+copy or share a number with the storage gate.
+
+**Link:** `src/config/presets.ts`, `src/workers/job.worker.ts`,
+`src/media/preflight.ts`, `src/ui/preflight-panel.ts`.
+
 ## 2026-08-26 — VH-25: soften the picture boundary, preserve the prompt boundary
 
 **Decision:** source picture fades last 0.5 seconds over the existing UoN brand
@@ -208,7 +237,8 @@ than one, with the shown estimate never reaching `PreflightInput`; a single
 missed); and wording that states its own nature — but `requiredStorageBytes`
 must round UP, or the block can ask for less space than the gate demands.
 
-**Link:** `tickets/VH-31.md`, workflow `wf_e01102b9-014`.
+**Evidence:** workflow `wf_e01102b9-014`; the working ticket was evicted when
+VH-31 shipped, after its durable conclusions were folded into this log.
 
 ## 2026-08-26 — VH-51: reviewing the unattended run was worth more than another item
 

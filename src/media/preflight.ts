@@ -137,7 +137,8 @@ export interface PreflightSummary {
   readonly probe: ProbeResult
   readonly verdict: PreflightVerdict
   readonly shape: OutputShape
-  readonly projectedOutputBytes: number
+  /** Cautious user-facing planning figure; never feeds the hard storage gate. */
+  readonly outputSizeGuidanceBytes: number
   /**
    * Spec 5.4 audio-quality warnings. Advisory, shown before processing, and
    * never a reason to stop — which is why they sit beside the verdict rather

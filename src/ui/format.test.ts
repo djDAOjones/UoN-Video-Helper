@@ -6,6 +6,7 @@ import {
   formatDuration,
   formatFileSize,
   formatFrameRate,
+  formatOutputSizeGuidance,
   formatResolution,
 } from './format'
 
@@ -37,6 +38,16 @@ describe('formatFileSize', () => {
 
   it('drops the decimal once the number is large enough not to need it', () => {
     expect(formatFileSize(150_000_000)).toBe('150 MB')
+  })
+})
+
+describe('formatOutputSizeGuidance', () => {
+  it('describes a cautious planning figure instead of claiming a prediction', () => {
+    expect(formatOutputSizeGuidance(340_000_000)).toBe('Allow up to about 340 MB')
+  })
+
+  it('does not put an invalid number into a sentence', () => {
+    expect(formatOutputSizeGuidance(Number.NaN)).toBe('Could not be estimated')
   })
 })
 

@@ -39,31 +39,6 @@
       Safari none. Keep open for directory/fallback, private/multi-tab/player/
       device/AT rehearsal, full supported-engine egress proof and protected DSP.
 
-- [~] **VH-31 The size estimate is ~1.7x too high** [detail](tickets/VH-31.md)
-      (2026-08-25)
-      Intent: the app said 27.7 MB and produced 7.5 MB on the first real file
-      anyone ran. **That was 3.6x; it is 1.7x now** — VH-47 shipped on
-      2026-08-26 and more than halved it without touching this code, and the
-      same measurement pass found that the over-estimate is NOT the safety
-      margin this item assumed: at "Smaller file" the projection already falls
-      BELOW the produced file on 4 of 23 real jobs. The ticket carries the
-      measurements and the objections that stopped a design shipping. `projectedOutputBytes` assumes the encoder spends its whole
-      bitrate budget; VBR undershoots badly on slide content. It is shown
-      before the user commits, so it is the number they decide on — someone
-      watching a OneDrive limit may pick "Smaller file" they did not need. It
-      also feeds VH-13's published limits, which would inherit the error.
-      Done when: the estimate is grounded in the real content — the calibration
-      probe already decodes three seconds and could encode them — or is
-      presented honestly as an upper bound.
-      First sub-tranche complete: the projection now receives the real audio
-      channel count, charges silent sources no audio bytes, and shares one
-      mono/stereo bitrate rule with the encoder and AAC capability check. This
-      removes ~3.4 MB of false audio from the 215 s silent slide deck. The
-      content-dependent video estimate remains open.
-      VH-24's frame-rate rule and VH-41's bitrate cap shipped 2026-08-25, so
-      what remains of that shared visit to `outputShapeFor` is this item and
-      VH-19.
-
 - [ ] **VH-19 Content-adaptive bitrate for the smaller preset**
       Intent: spec §6.2 sets ~1.5 Mbps for slides/screen and ~2.5 Mbps for
       camera/motion. `ContentClass` exists but nothing sets it, so every job
@@ -71,9 +46,9 @@
       Done when: screen-like and camera-like content are distinguished — the
       calibration probe already decodes three seconds and is the natural place
       to measure inter-frame difference — and the chosen class is visible to
-      the user in plain language rather than applied silently. Sequenced after
-      VH-31 because it rides the same probe machinery; if VH-31 lands real
-      measurement, this may reduce to naming the class rather than choosing on it.
+      the user in plain language rather than applied silently. VH-31 shipped
+      without extending the probe, so this item still owns both classification
+      and the Smaller-file bitrate choice.
 
 - [~] **VH-25 Boundary fades** [detail](tickets/VH-25.md) (2026-08-25)
       Intent: sources cut hard into the branding, and the two ends differ.
@@ -256,8 +231,6 @@
 
 - [ ] **VH-13 Published limits copy** [blocked: VH-M2] (2026-08-24)
       Turn the measured envelope into the user-facing wording. Closes D8.
-      Now also waits on VH-31: publishing figures derived from an estimate
-      that overstates by 3.6x would publish the same error.
 
 ### Icebox
 

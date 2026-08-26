@@ -4,6 +4,7 @@ import {
   PRESETS,
   audioBitrateFor,
   bitrateWasCappedToSource,
+  outputSizeGuidanceBytes,
   outputShapeFor,
   projectedOutputBytes,
   videoEncoderConfigFor,
@@ -126,6 +127,13 @@ describe('projectedOutputBytes', () => {
       audioChannelCount: 1,
     })
     expect(mono.audioBitrateBps).toBe(PRESETS.smaller.audioBitrateMonoBps)
+  })
+
+  it('keeps user guidance separate and above the storage-projection basis', () => {
+    const shape = outputShapeFor(PRESETS.smaller, source1080p30)
+    const bitrateBudgetBytes = ((shape.videoBitrateBps + shape.audioBitrateBps) / 8) * 60
+    expect(projectedOutputBytes(shape, 60) / bitrateBudgetBytes).toBeCloseTo(1.02, 5)
+    expect(outputSizeGuidanceBytes(shape, 60) / bitrateBudgetBytes).toBeCloseTo(1.04, 5)
   })
 })
 

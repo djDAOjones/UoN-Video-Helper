@@ -12,6 +12,7 @@ import {
   OUTPUT_SAMPLE_RATE,
   PRESETS,
   audioBitrateFor,
+  outputSizeGuidanceBytes,
   outputShapeFor,
   projectedOutputBytes,
   videoEncoderConfigFor,
@@ -19,7 +20,11 @@ import {
 } from '../config/presets'
 import { detectOutputWarning, detectSourceWarnings, type AudioWarning } from '../audio/warnings'
 import { TARGET_INTEGRATED_LUFS } from '../config/audio'
-import type { BrandingChoice } from '../config/branding'
+import {
+  CLOSING_ONSET_SECONDS,
+  CLOSING_TAIL_SECONDS,
+  type BrandingChoice,
+} from '../config/branding'
 import { UnsupportedAudioTimelineError, analyseSourceAudio } from '../media/audio-plan'
 import { canEncodeAudio, checkEncodeSupport, inspectCapabilities } from '../media/capability'
 import { UnreadableFileError, inspectSource, openInput } from '../media/inspect'
@@ -446,7 +451,13 @@ async function handlePreflight(
       sourceFrameRate: report.video.conform.sourceFrameRate,
       audioChannelCount: report.audio?.channelCount ?? null,
     })
-    const projected = projectedOutputBytes(shape, report.durationSeconds)
+    // Pre-flight does not re-run when the user changes finishing touches. Use
+    // the longest existing closing timeline so both figures remain cautious
+    // whether closing is later unchecked or an overlay mode returns in VH-32.
+    const planningDurationSeconds =
+      report.durationSeconds + CLOSING_ONSET_SECONDS + CLOSING_TAIL_SECONDS
+    const storageProjection = projectedOutputBytes(shape, planningDurationSeconds)
+    const outputSizeGuidance = outputSizeGuidanceBytes(shape, planningDurationSeconds)
 
     const [capability, encode, canEncodeAac] = await Promise.all([
       inspectCapabilities(),
@@ -505,7 +516,7 @@ async function handlePreflight(
       encode,
       probe,
       shape,
-      projectedOutputBytes: projected,
+      outputSizeGuidanceBytes: outputSizeGuidance,
       audioWarnings,
       verdict: preflightVerdict({
         isSecureContext: capability.isSecureContext,
@@ -517,7 +528,7 @@ async function handlePreflight(
         probeFailureStage: probe.failureStage,
         canEncodeAac,
         availableStorageBytes: capability.storage.availableBytes,
-        projectedOutputBytes: projected,
+        projectedOutputBytes: storageProjection,
         isMobileDevice: capability.deviceClass === 'mobile',
         estimatedSeconds: probe.estimatedSeconds,
       }),

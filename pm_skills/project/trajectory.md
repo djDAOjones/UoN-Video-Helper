@@ -19,6 +19,9 @@
 
 ### Repository-review real-source closure
 
+- VH-31 — Shipped 2026-08-26. The bitrate-budget ceiling is now named as
+  cautious file-size guidance, separated from the hard storage gate and made
+  safe across all 46 measured corpus combinations; see decision-log.
 - VH-50 — Shipped 2026-08-26. Complete-chain gain feedback and strict decoded
   output verification now cover the limiter interaction the synthetic harness
   missed; real AMCS3059 output passed at −16.46 LUFS and −2.06 dBTP.

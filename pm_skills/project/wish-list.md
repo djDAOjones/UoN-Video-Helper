@@ -110,3 +110,5 @@
   decode. Two corpus files at widely separated densities determine it; a third
   validates. It matters most on the Teams file: at 0.6 its figure falls from
   2.00 to about 1.6 Mbps. (from: 2026-08-26 VH-47)
+- Pre-flight says “about less than a second” for sub-second jobs; make the
+  duration sentence grammar-aware in the VH-32 copy pass. (from: VH-31 browser review)

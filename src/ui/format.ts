@@ -54,6 +54,12 @@ export function formatFileSize(bytes: number): string {
   return `${value >= 100 ? Math.round(value) : Number(value.toFixed(1))} ${units[unit]}`
 }
 
+/** States the bitrate-budget figure as guidance rather than false precision. */
+export function formatOutputSizeGuidance(bytes: number): string {
+  const size = formatFileSize(bytes)
+  return size === 'unknown' ? 'Could not be estimated' : `Allow up to about ${size}`
+}
+
 /** e.g. `1920 × 1080`. Uses a real multiplication sign, not a letter x. */
 export function formatResolution(width: number, height: number): string {
   return `${Math.round(width)} × ${Math.round(height)}`

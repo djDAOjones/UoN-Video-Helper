@@ -60,3 +60,6 @@
 - [ ] 2026-08-26 SPEC §4.4 — picture fades are no longer wholly unspecified:
       VH-25 fixes a 0.5 s source fade and mode-dependent closing default
       (source: VH-25 decision entry)
+- [ ] 2026-08-26 SPEC §7.3 — the 2.5x storage gate now uses a private storage
+      projection distinct from the cautious file-size guidance shown to users
+      (source: VH-31 decision entry)

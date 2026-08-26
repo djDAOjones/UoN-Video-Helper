@@ -122,6 +122,23 @@ const SMALLER_REFERENCE_BPS: Readonly<Record<ContentClass, number>> = {
 }
 const SMALLER_REFERENCE_PIXEL_RATE = 1920 * 1080 * 30
 
+/**
+ * Container allowance used only as the basis of the separate 2.5x working-
+ * storage gate. It stays at the existing value so an honesty improvement in
+ * the displayed figure cannot silently tighten the hard block.
+ */
+const STORAGE_PROJECTION_OVERHEAD_MULTIPLE = 1.02
+
+/**
+ * Corpus-backed allowance for the size figure shown to the user (VH-31).
+ *
+ * The worst measured output used 1.035x its requested A/V byte budget once
+ * encoder overspend and container overhead were combined. Rounding that up to
+ * 1.04 makes all 46 measured preset/file combinations fit the displayed
+ * planning figure without pretending it is a content-derived prediction.
+ */
+const OUTPUT_SIZE_GUIDANCE_OVERHEAD_MULTIPLE = 1.04
+
 /** Spec 6.1 and 6.2: a keyframe every 2 seconds. */
 export const KEYFRAME_INTERVAL_SECONDS = 2
 
@@ -334,15 +351,32 @@ function bitrateFromSource(
 }
 
 /**
- * Projected output size in bytes. Deliberately an over-estimate: it assumes
- * the encoder spends its whole bitrate budget and adds container overhead, so
- * the storage check in `capability.ts` errs toward refusing a job that would
- * have just fit rather than running out of disk an hour in.
+ * Storage-projection basis in bytes. This is never user-facing: the pre-flight
+ * gate multiplies it by its separate 2.5x working-space headroom.
+ *
+ * Keeping this function distinct from {@link outputSizeGuidanceBytes} means a
+ * future measured estimate cannot accidentally weaken or tighten the hard
+ * storage gate (VH-31).
  */
 export function projectedOutputBytes(shape: OutputShape, durationSeconds: number): number {
   const bitsPerSecond = shape.videoBitrateBps + shape.audioBitrateBps
-  const containerOverhead = 1.02
-  return Math.round((bitsPerSecond / 8) * durationSeconds * containerOverhead)
+  return Math.round(
+    (bitsPerSecond / 8) * durationSeconds * STORAGE_PROJECTION_OVERHEAD_MULTIPLE,
+  )
+}
+
+/**
+ * Cautious output-size guidance for a person planning disk space or an upload.
+ *
+ * It is a bitrate-budget ceiling, not a prediction of how compressible the
+ * content is. The interface says that explicitly instead of presenting false
+ * precision as an estimate (VH-31).
+ */
+export function outputSizeGuidanceBytes(shape: OutputShape, durationSeconds: number): number {
+  const bitsPerSecond = shape.videoBitrateBps + shape.audioBitrateBps
+  return Math.round(
+    (bitsPerSecond / 8) * durationSeconds * OUTPUT_SIZE_GUIDANCE_OVERHEAD_MULTIPLE,
+  )
 }
 
 /** The WebCodecs config this shape implies, for `isConfigSupported` and the encoder alike. */
