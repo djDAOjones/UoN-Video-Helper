@@ -140,6 +140,20 @@ function requestWorker(
 }
 
 /**
+ * Retries explicit cleanup only when a failed process reply says the worker
+ * still owns an OPFS result. Injecting the discard operation keeps this edge
+ * independently testable without pretending a Node fake is a browser worker.
+ */
+export async function discardRetainedWorkerResult(
+  reply: WorkerOutbound,
+  discard: (jobId: string) => Promise<void>,
+): Promise<boolean> {
+  if (reply.kind !== 'failed' || !reply.retainedJobId) return false
+  await discard(reply.retainedJobId)
+  return true
+}
+
+/**
  * Runs one file through the WORKER, as the app does, rather than in-process.
  *
  * The difference is not cosmetic: this proves module loading, structured
@@ -150,7 +164,12 @@ function requestWorker(
 async function processInWorker(
   file: File,
   presetId: 'best' | 'smaller',
-): Promise<{ file: File; jobId: string; worker: Worker }> {
+): Promise<{
+  file: File
+  jobId: string
+  worker: Worker
+  outputVerification: Extract<WorkerOutbound, { kind: 'processed' }>['outputVerification']
+}> {
   const worker = new Worker(new URL('../workers/job.worker.ts', import.meta.url), {
     type: 'module',
     name: 'uon-acceptance-job',
@@ -172,11 +191,23 @@ async function processInWorker(
       180_000,
     )
     if (reply.kind !== 'processed') {
-      throw new Error(
-        `the worker did not produce a file: ${reply.kind}${reply.kind === 'failed' ? ` — ${reply.message}` : ''}`,
-      )
+      const processFailure = `the worker did not produce a file: ${reply.kind}${reply.kind === 'failed' ? ` — ${reply.message}` : ''}`
+      try {
+        await discardRetainedWorkerResult(reply, (jobId) => discardWorkerResult(worker, jobId))
+      } catch (cause) {
+        throw new Error(
+          `${processFailure}; its retained result could not be discarded: ${cause instanceof Error ? cause.message : String(cause)}`,
+          { cause },
+        )
+      }
+      throw new Error(processFailure)
     }
-    return { file: reply.file, jobId: reply.jobId, worker }
+    return {
+      file: reply.file,
+      jobId: reply.jobId,
+      worker,
+      outputVerification: reply.outputVerification,
+    }
   } catch (cause) {
     worker.terminate()
     throw cause
@@ -189,6 +220,64 @@ async function discardWorkerResult(worker: Worker, jobId: string): Promise<void>
   if (reply.kind !== 'discarded') {
     throw new Error(`the worker did not discard its result: ${reply.kind}`)
   }
+}
+
+export interface SilentWorkerProof {
+  readonly bytes: number
+  readonly durationSeconds: number
+  readonly discarded: true
+}
+
+/**
+ * Proves the real production worker can finish a job without relying on an
+ * AAC encoder, then waits for acknowledged OPFS cleanup before returning.
+ * This is the cross-engine baseline for the egress rehearsal: Firefox's known
+ * AAC-LC gap must not prevent its worker traffic from being observed.
+ */
+export async function runSilentWorkerProof(): Promise<SilentWorkerProof> {
+  const fixture = await buildFixture({
+    width: 320,
+    height: 180,
+    seconds: 1,
+    frameRate: 10,
+  })
+  const { file, jobId, worker, outputVerification } = await processInWorker(fixture, 'best')
+
+  try {
+    const produced = await inspectFile(file)
+    if (file.size <= 0 || produced.video.durationSeconds < 0.9) {
+      throw new Error(
+        `the silent worker output was incomplete: ${file.size} bytes, ${produced.video.durationSeconds.toFixed(2)}s`,
+      )
+    }
+    if (
+      outputVerification.status !== 'not-applicable' ||
+      outputVerification.reason !== 'no-audio'
+    ) {
+      throw new Error('the silent worker output unexpectedly required audio verification')
+    }
+
+    return {
+      bytes: file.size,
+      durationSeconds: produced.video.durationSeconds,
+      discarded: true,
+    }
+  } finally {
+    try {
+      await discardWorkerResult(worker, jobId)
+    } finally {
+      worker.terminate()
+    }
+  }
+}
+
+/** Recognises only Mediabunny's exact unsupported AAC-LC encoder error. */
+export function isKnownAacEncoderUnsupported(cause: unknown): boolean {
+  const message = cause instanceof Error ? cause.message : String(cause)
+  return (
+    message.startsWith('This specific encoder configuration (mp4a.40.2,') &&
+    message.includes('is not supported in this environment.')
+  )
 }
 
 /** Criterion 1, through the path the app actually uses. */

@@ -7,10 +7,9 @@ declare const __BUILD_ID__: string
 
 /**
  * File System Access API. Not in TypeScript's DOM lib at the version this
- * project pins, and we only feature-detect it today (`save.ts` will use it
- * properly). Declared narrowly rather than reaching for `any`.
+ * project pins. Declared narrowly rather than reaching for `any`.
  */
-declare function showSaveFilePicker(options?: {
-  suggestedName?: string
-  types?: { description?: string; accept: Record<string, string[]> }[]
-}): Promise<FileSystemFileHandle>
+declare function showDirectoryPicker(options?: {
+  id?: string
+  mode?: 'read' | 'readwrite'
+}): Promise<FileSystemDirectoryHandle>

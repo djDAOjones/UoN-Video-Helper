@@ -1,10 +1,10 @@
 /**
- * Browser lifecycle protection for one in-flight processing job.
+ * Browser lifecycle protection for processing and saving.
  *
  * Long local encodes must not silently pause with the display or disappear on
  * a casual reload. The guard owns those two browser policies for exactly the
- * interval between `start()` and `stop()`; unsupported or denied wake locks
- * degrade to unload protection rather than blocking the job.
+ * interval while processing or a streamed save is active; unsupported or
+ * denied wake locks degrade to unload protection rather than blocking either.
  */
 
 import { log } from './logger'
@@ -46,21 +46,23 @@ export function browserProcessingGuardEnvironment(): ProcessingGuardEnvironment 
 
 export class ProcessingGuard {
   private active = false
+  private saving = false
   private retainedResult = false
   private unloadProtected = false
+  private wakeProtected = false
   private wakeLock: WakeLockSentinelLike | null = null
   private wakeLockReleaseListener: EventListener | null = null
   private wakeRequest: Promise<void> | null = null
   private reacquireAfterRequest = false
 
   private readonly onBeforeUnload: EventListener = (event) => {
-    if (!this.active && !this.retainedResult) return
+    if (!this.active && !this.saving && !this.retainedResult) return
     event.preventDefault()
     event.returnValue = true
   }
 
   private readonly onVisibilityChange: EventListener = () => {
-    if (!this.active) return
+    if (!this.shouldKeepAwake()) return
     if (this.environment.visibility.visibilityState === 'visible') {
       this.acquireWakeLock()
     } else {
@@ -75,18 +77,23 @@ export class ProcessingGuard {
     if (this.active) return
     this.active = true
     this.syncUnloadProtection()
-    this.environment.visibility.addEventListener('visibilitychange', this.onVisibilityChange)
-    this.acquireWakeLock()
+    void this.syncWakeProtection()
   }
 
-  /** Releases every policy owned by the current processing interval. */
+  /** Releases processing's policies without interrupting an overlapping save. */
   public async stop(): Promise<void> {
     if (!this.active) return
     this.active = false
-    this.reacquireAfterRequest = false
-    this.environment.visibility.removeEventListener('visibilitychange', this.onVisibilityChange)
     this.syncUnloadProtection()
-    await this.releaseWakeLock()
+    await this.syncWakeProtection()
+  }
+
+  /** Extends wake and unload protection across a potentially long streamed save. */
+  public async setSaving(saving: boolean): Promise<void> {
+    if (this.saving === saving) return
+    this.saving = saving
+    this.syncUnloadProtection()
+    await this.syncWakeProtection()
   }
 
   /** Extends reload protection while an output remains unsaved or undiscarded. */
@@ -97,7 +104,7 @@ export class ProcessingGuard {
   }
 
   private syncUnloadProtection(): void {
-    const shouldProtect = this.active || this.retainedResult
+    const shouldProtect = this.active || this.saving || this.retainedResult
     if (shouldProtect === this.unloadProtected) return
     this.unloadProtected = shouldProtect
     if (shouldProtect) {
@@ -107,21 +114,48 @@ export class ProcessingGuard {
     }
   }
 
+  /** Keeps one visibility listener and wake-lock lifetime across overlapping work. */
+  private async syncWakeProtection(): Promise<void> {
+    const shouldProtect = this.shouldKeepAwake()
+    if (shouldProtect === this.wakeProtected) return
+    this.wakeProtected = shouldProtect
+    if (shouldProtect) {
+      this.environment.visibility.addEventListener('visibilitychange', this.onVisibilityChange)
+      this.acquireWakeLock()
+      return
+    }
+
+    this.reacquireAfterRequest = false
+    this.environment.visibility.removeEventListener('visibilitychange', this.onVisibilityChange)
+    await this.releaseWakeLock()
+  }
+
+  private shouldKeepAwake(): boolean {
+    return this.active || this.saving
+  }
+
   private acquireWakeLock(): void {
     if (
-      !this.active ||
+      !this.shouldKeepAwake() ||
       this.environment.visibility.visibilityState !== 'visible' ||
       this.wakeLock !== null ||
-      this.wakeRequest !== null ||
       this.environment.requestWakeLock === undefined
     ) {
+      return
+    }
+
+    // A request can still be awaiting release after the page became hidden or
+    // work stopped. If work becomes eligible again in that window, remember
+    // the request rather than losing it behind the in-flight guard.
+    if (this.wakeRequest !== null) {
+      this.reacquireAfterRequest = true
       return
     }
 
     this.wakeRequest = this.environment
       .requestWakeLock()
       .then(async (wakeLock) => {
-        if (!this.active || this.environment.visibility.visibilityState !== 'visible') {
+        if (!this.shouldKeepAwake() || this.environment.visibility.visibilityState !== 'visible') {
           await wakeLock.release()
           return
         }
@@ -147,7 +181,8 @@ export class ProcessingGuard {
     const onRelease: EventListener = () => {
       if (!this.detachWakeLock(wakeLock)) return
       log.info('lifecycle', 'screen wake lock released by the platform')
-      if (!this.active || this.environment.visibility.visibilityState !== 'visible') return
+      if (!this.shouldKeepAwake() || this.environment.visibility.visibilityState !== 'visible')
+        return
 
       // A platform is allowed to revoke immediately after resolving a request.
       // In that case the current request's `finally` has not cleared yet, so

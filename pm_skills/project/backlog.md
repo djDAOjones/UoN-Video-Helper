@@ -31,11 +31,12 @@
       Intent: turn the critique-driven repository review into tested fixes,
       starting with incorrect output, source/result loss, stale job state,
       cancellation, OPFS races and false-green release evidence.
-      State: the non-protected remediation tranche is implemented on its
-      isolated branch; Chromium real-material rehearsal closes VH-50 and
-      accepts CULT2011 through pre-flight. Keep open through the remaining
-      real-engine/device rehearsal and the explicit protected-loudness
-      decisions; pilot blockers do not close from unit evidence.
+      State: directory-selected non-overwriting save, cancellable save/wake and
+      watchdog ownership, independent output measurement and protocol egress
+      evidence are implemented. OPFS is green in all three engines; Chrome
+      proves all 11 egress controls, Firefox 10 request-lifecycle controls and
+      Safari none. Keep open for directory/fallback, private/multi-tab/player/
+      device/AT rehearsal, full supported-engine egress proof and protected DSP.
 
 - [ ] **VH-31 The size estimate is ~1.7x too high** [detail](tickets/VH-31.md)
       (2026-08-25)

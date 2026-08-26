@@ -11,7 +11,9 @@
       VH-35: OPFS is origin-scoped, so every tab shares one root and the boot sweep used to delete
       every directory it found — including whatever another tab was mid-way through. A live job now
       holds a Web Lock on its directory and the sweep skips anything still locked. This page checks
-      that the lock behaves that way in this engine.
+      the fallback writer through Mediabunny's public lifecycle, exact claim release,
+      worker-to-worker exclusion, the worker sync path when supported, and bounded forced-worker
+      termination recovery in this engine.
     </p>
     <pre id="log">running…</pre>
     <script type="module" src="/src/spike/opfs.ts"></script>

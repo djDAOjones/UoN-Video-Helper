@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { Mp4OutputFormat, Output } from 'mediabunny'
 
 import {
   OpfsWorkspace,
@@ -86,29 +87,199 @@ function installWorkspaceFs(
 }
 
 describe('OpfsWorkspace.createFile', () => {
-  it('uses the proven writable fallback when an exposed sync handle is rejected', async () => {
-    const writable = new WritableStream() as FileSystemWritableFileStream
+  it('rejects premature fallback finish and retains disposal ownership', async () => {
+    let rawReleased = false
+    const abortRaw = vi.fn(() => {
+      rawReleased = true
+    })
+    const writable = new WritableStream<FileSystemWriteChunkType>({
+      abort: abortRaw,
+    }) as FileSystemWritableFileStream
     const createWritable = vi.fn(() => Promise.resolve(writable))
     const createSyncAccessHandle = vi.fn(() =>
       Promise.reject(new DOMException('Denied', 'SecurityError')),
     )
+    const getFile = vi.fn(() => Promise.resolve(new File([], 'output.mp4')))
     const fileHandle = {
       createSyncAccessHandle,
       createWritable,
-      getFile: vi.fn(() => Promise.resolve(new File([], 'output.mp4'))),
+      getFile,
     } as unknown as FileSystemFileHandle
     const workspaceDirectory = {
       getFileHandle: vi.fn(() => Promise.resolve(fileHandle)),
     } as unknown as FileSystemDirectoryHandle
-    installWorkspaceFs(() => Promise.resolve(), workspaceDirectory)
+    const removeEntry = vi.fn(() => {
+      if (!rawReleased) return Promise.reject(new Error('raw writer is still open'))
+      return Promise.resolve()
+    })
+    installWorkspaceFs(removeEntry, workspaceDirectory)
     const workspace = await OpfsWorkspace.open('sync-fallback')
 
     const output = await workspace.createFile('output.mp4')
 
     expect(createSyncAccessHandle).toHaveBeenCalledOnce()
     expect(createWritable).toHaveBeenCalledOnce()
-    await expect(output.finish()).resolves.toBeInstanceOf(File)
-    await workspace.dispose()
+    expect(output.writerKind).toBe('create-writable-fallback')
+    expect(output.syncAccessAdvertised).toBe(true)
+    const pendingOwner = new Output({
+      format: new Mp4OutputFormat({ fastStart: false }),
+      target: output.target,
+    })
+    await expect(output.finish(pendingOwner)).rejects.toThrow(
+      'OPFS output must be successfully finalized before finish()',
+    )
+    expect(getFile).not.toHaveBeenCalled()
+    expect(abortRaw).not.toHaveBeenCalled()
+    expect(removeEntry).not.toHaveBeenCalled()
+
+    await expect(workspace.dispose()).resolves.toBeUndefined()
+    expect(abortRaw).toHaveBeenCalledOnce()
+    expect(removeEntry).toHaveBeenCalledOnce()
+  })
+
+  it('commits and finishes the fallback through Mediabunny public lifecycle', async () => {
+    let writtenEnd = 0
+    let rawClosed = false
+    const rawStream = new WritableStream<FileSystemWriteChunkType>()
+    const nativeClose = rawStream.close.bind(rawStream)
+    const nativeAbort = rawStream.abort.bind(rawStream)
+    const writeRaw = vi.fn(async (chunk: FileSystemWriteChunkType) => {
+      const positioned = chunk as unknown as {
+        readonly data: Uint8Array
+        readonly position: number
+      }
+      writtenEnd = Math.max(writtenEnd, positioned.position + positioned.data.byteLength)
+      const writer = rawStream.getWriter()
+      try {
+        await writer.write(chunk)
+      } finally {
+        writer.releaseLock()
+      }
+    })
+    const closeRaw = vi.fn(async () => {
+      await nativeClose()
+      rawClosed = true
+    })
+    const abortRaw = vi.fn(() => nativeAbort())
+    const rawWritable = Object.assign(rawStream, {
+      write: writeRaw,
+      close: closeRaw,
+      abort: abortRaw,
+    }) as unknown as FileSystemWritableFileStream
+    const getFile = vi.fn(() =>
+      Promise.resolve(new File([new Uint8Array(writtenEnd)], 'output.mp4', { type: 'video/mp4' })),
+    )
+    const fileHandle = {
+      createWritable: vi.fn(() => Promise.resolve(rawWritable)),
+      getFile,
+    } as unknown as FileSystemFileHandle
+    const workspaceDirectory = {
+      getFileHandle: vi.fn(() => Promise.resolve(fileHandle)),
+    } as unknown as FileSystemDirectoryHandle
+    const removeEntry = vi.fn(() => {
+      if (!rawClosed) return Promise.reject(new Error('raw writer is still open'))
+      return Promise.resolve()
+    })
+    installWorkspaceFs(removeEntry, workspaceDirectory)
+    const workspace = await OpfsWorkspace.open('fallback-retained-lock')
+    const outputFile = await workspace.createFile('output.mp4')
+
+    // MP4's public format contract permits zero tracks. That gives this storage
+    // regression the smallest real Output lifecycle: start writes the container
+    // header and finalize closes the StreamTarget without codecs or browser APIs.
+    const output = new Output({
+      format: new Mp4OutputFormat({ fastStart: false }),
+      target: outputFile.target,
+    })
+    await output.start()
+    await output.finalize()
+
+    expect(output.state).toBe('finalized')
+    expect(rawWritable.locked).toBe(false)
+    expect(writeRaw).toHaveBeenCalledOnce()
+    expect(closeRaw).toHaveBeenCalledOnce()
+    const file = await outputFile.finish(output)
+    expect(file).toBeInstanceOf(File)
+    expect(file.size).toBeGreaterThan(0)
+    expect(getFile).toHaveBeenCalledOnce()
+
+    await expect(workspace.dispose()).resolves.toBeUndefined()
+    expect(abortRaw).not.toHaveBeenCalled()
+    expect(removeEntry).toHaveBeenCalledOnce()
+  })
+
+  it('refuses bytes after cancellation even though cancellation closed the stream', async () => {
+    const abortRaw = vi.fn(() => Promise.resolve())
+    const rawWritable = {
+      locked: false,
+      write: vi.fn(() => Promise.resolve()),
+      close: vi.fn(() => Promise.resolve()),
+      abort: abortRaw,
+    } as unknown as FileSystemWritableFileStream
+    const getFile = vi.fn(() => Promise.resolve(new File(['partial'], 'output.mp4')))
+    const fileHandle = {
+      createWritable: vi.fn(() => Promise.resolve(rawWritable)),
+      getFile,
+    } as unknown as FileSystemFileHandle
+    const workspaceDirectory = {
+      getFileHandle: vi.fn(() => Promise.resolve(fileHandle)),
+    } as unknown as FileSystemDirectoryHandle
+    const removeEntry = vi.fn(() => Promise.resolve())
+    installWorkspaceFs(removeEntry, workspaceDirectory)
+    const workspace = await OpfsWorkspace.open('cancelled-output')
+    const outputFile = await workspace.createFile('output.mp4')
+    const output = new Output({
+      format: new Mp4OutputFormat({ fastStart: false }),
+      target: outputFile.target,
+    })
+
+    await output.start()
+    await output.cancel()
+
+    expect(output.state).toBe('canceled')
+    await expect(outputFile.finish(output)).rejects.toThrow(
+      'OPFS output must be successfully finalized before finish()',
+    )
+    expect(getFile).not.toHaveBeenCalled()
+    await expect(workspace.dispose()).resolves.toBeUndefined()
+    expect(removeEntry).toHaveBeenCalledOnce()
+  })
+
+  it('refuses bytes after finalize fails even when the raw writer was released', async () => {
+    const abortRaw = vi.fn(() => Promise.resolve())
+    const rawWritable = {
+      locked: false,
+      write: vi.fn(() => Promise.resolve()),
+      close: vi.fn(() => Promise.reject(new Error('commit failed'))),
+      abort: abortRaw,
+    } as unknown as FileSystemWritableFileStream
+    const getFile = vi.fn(() => Promise.resolve(new File(['partial'], 'output.mp4')))
+    const fileHandle = {
+      createWritable: vi.fn(() => Promise.resolve(rawWritable)),
+      getFile,
+    } as unknown as FileSystemFileHandle
+    const workspaceDirectory = {
+      getFileHandle: vi.fn(() => Promise.resolve(fileHandle)),
+    } as unknown as FileSystemDirectoryHandle
+    const removeEntry = vi.fn(() => Promise.resolve())
+    installWorkspaceFs(removeEntry, workspaceDirectory)
+    const workspace = await OpfsWorkspace.open('failed-finalize')
+    const outputFile = await workspace.createFile('output.mp4')
+    const output = new Output({
+      format: new Mp4OutputFormat({ fastStart: false }),
+      target: outputFile.target,
+    })
+
+    await output.start()
+    await expect(output.finalize()).rejects.toThrow('commit failed')
+
+    expect(output.state).not.toBe('finalized')
+    await expect(outputFile.finish(output)).rejects.toThrow(
+      'OPFS output must be successfully finalized before finish()',
+    )
+    expect(getFile).not.toHaveBeenCalled()
+    await expect(workspace.dispose()).resolves.toBeUndefined()
+    expect(removeEntry).toHaveBeenCalledOnce()
   })
 
   it('closes an opened sync handle when initial truncation fails', async () => {

@@ -17,6 +17,7 @@ import {
   type CapturedError,
 } from './core/diagnostics'
 import { adoptLogRecords, log, setMinimumLogLevel } from './core/logger'
+import { ProcessInterlock } from './core/process-interlock'
 import { browserProcessingGuardEnvironment, ProcessingGuard } from './core/processing-guard'
 import { ResultAuthority } from './core/result-authority'
 import {
@@ -30,6 +31,7 @@ import type { PresetId } from './config/presets'
 import { WORKER_SILENCE_LIMIT_MS } from './config/thresholds'
 import { createWatchdog } from './core/watchdog'
 import {
+  DestinationCleanupError,
   releaseFallbackDownloads,
   saveFile,
   SourceOverwriteError,
@@ -325,12 +327,13 @@ const pending = new Map<
 /** Resets the watchdog for a request that is still being answered. */
 const keepAlive = new Map<number, () => void>()
 /**
- * Process requests whose caller timed out but whose worker may still answer.
+ * Process ownership whose caller timed out but whose worker may still answer.
  *
  * The terminal reply cannot simply be ignored: a late `processed` owns an
- * OPFS workspace until the main thread explicitly discards it.
+ * OPFS workspace until the main thread explicitly discards it. The interlock
+ * also keeps Start and browser lifecycle protection closed over that gap.
  */
-const timedOutProcessRequests = new Set<number>()
+const processInterlock = new ProcessInterlock()
 
 /**
  * Sends a request and resolves with its reply.
@@ -381,7 +384,7 @@ function requestWithId(
         : createWatchdog(limitMs, () => {
             pending.delete(id)
             keepAlive.delete(id)
-            if (payload.kind === 'process') timedOutProcessRequests.add(id)
+            if (payload.kind === 'process') processInterlock.markTimedOut(id)
             // Tell the worker to stop before walking away. Without this the job kept
             // encoding, its result landed in the worker's `finished` map, and nothing
             // ever released it — the user was told the job had not finished while it
@@ -422,7 +425,7 @@ worker.addEventListener('message', (event: MessageEvent<WorkerOutbound>) => {
     return
   }
   if (message.kind === 'stage') {
-    if (timedOutProcessRequests.has(message.id)) return
+    if (processInterlock.hasTimedOut(message.id)) return
     // Progress never resolves the job's request — it reports on one in flight,
     // which is exactly what the watchdog needs to hear.
     keepAlive.get(message.id)?.()
@@ -430,7 +433,7 @@ worker.addEventListener('message', (event: MessageEvent<WorkerOutbound>) => {
     return
   }
 
-  if (timedOutProcessRequests.delete(message.id)) {
+  if (processInterlock.acknowledgeTimedOut(message.id)) {
     if (message.kind === 'processed') {
       holdCleanupOwnership(message.jobId)
       const cleanupNotice = document.createElement('p')
@@ -466,6 +469,10 @@ worker.addEventListener('message', (event: MessageEvent<WorkerOutbound>) => {
         })
     } else if (message.kind === 'failed' && message.retainedJobId) {
       renderCleanupRetry(message.retainedJobId, message.message)
+    } else {
+      // Cancelled, or failed without retained scratch: the terminal reply is
+      // the proof that watchdog ownership may finally be released.
+      setJobInFlight(jobInFlight)
     }
     return
   }
@@ -485,7 +492,7 @@ worker.addEventListener('error', (event) => {
   for (const request of [...pending.values()]) request.reject(failure)
   pending.clear()
   keepAlive.clear()
-  timedOutProcessRequests.clear()
+  processInterlock.clearTimedOut()
 
   recordUncaught({
     ts: Date.now(),
@@ -772,6 +779,37 @@ cancelButton.hidden = true
 
 processActions.append(startButton, cancelButton)
 
+/** Moves focus to the next visible workflow control before removing its owner. */
+function focusNextWorkflowControl(includeResult = true): void {
+  if (includeResult) {
+    const resultControl = [...processResult.querySelectorAll<HTMLButtonElement>('button')].find(
+      (button) =>
+        !button.disabled && !button.hidden && button.closest<HTMLElement>('[hidden]') === null,
+    )
+    if (resultControl) {
+      resultControl.focus()
+      return
+    }
+  }
+
+  if (!processActions.hidden && !startButton.disabled) {
+    startButton.focus()
+    return
+  }
+  if (useHandleSourcePicker && !sourcePickerButton.disabled && !sourcePickerButton.hidden) {
+    sourcePickerButton.focus()
+    return
+  }
+  if (!fileInput.disabled && !fileInput.hidden) {
+    fileInput.focus()
+    return
+  }
+
+  statusLine.tabIndex = -1
+  statusLine.focus()
+  statusLine.removeAttribute('tabindex')
+}
+
 /**
  * Locks or releases everything a running job must not have changed under it.
  *
@@ -782,20 +820,23 @@ processActions.append(startButton, cancelButton)
  */
 function setJobInFlight(running: boolean): void {
   jobInFlight = running
-  if (running) processingGuard.start()
+  processInterlock.setRunning(running)
+  const locked = processInterlock.locked
+  if (locked) processingGuard.start()
   else void processingGuard.stop()
-  fileInput.disabled = running || workerFailed || useHandleSourcePicker
-  sourcePickerButton.disabled = running || workerFailed
-  subtitleInput.disabled = running || workerFailed
-  presetChoice.disabled = running || workerFailed
-  brandingChoice.disabled = running || workerFailed
+  fileInput.disabled = locked || workerFailed || useHandleSourcePicker
+  sourcePickerButton.disabled = locked || workerFailed
+  subtitleInput.disabled = locked || workerFailed
+  presetChoice.disabled = locked || workerFailed
+  brandingChoice.disabled = locked || workerFailed
   startButton.disabled =
-    running ||
+    locked ||
     subtitleReadPending ||
     workerFailed ||
     pendingCleanupJobId !== null ||
     selectionAuthority.readyJob === null ||
     resultAuthority.active !== null
+  if (!running && document.activeElement === cancelButton) focusNextWorkflowControl()
   cancelButton.hidden = !running
   cancelButton.disabled = false
 }
@@ -812,10 +853,11 @@ function completeCleanupOwnership(jobId: string, status: string): void {
   if (pendingCleanupJobId !== jobId) return
   pendingCleanupJobId = null
   processingGuard.setRetainedResult(resultAuthority.active !== null)
-  processResult.replaceChildren()
   setDiagnosticsContext({ view: currentSource ? 'preflight' : 'select', jobSpec: null })
   setStatus(status)
   setJobInFlight(jobInFlight)
+  focusNextWorkflowControl(false)
+  processResult.replaceChildren()
 }
 
 /**
@@ -875,7 +917,7 @@ startButton.addEventListener('click', () => {
   if (
     !readyJob ||
     workerFailed ||
-    jobInFlight ||
+    processInterlock.locked ||
     resultAuthority.active ||
     pendingCleanupJobId !== null
   )
@@ -1101,6 +1143,13 @@ function renderResult(result: RetainedOutput, verification: OutputVerification):
   discard.className = 'button button--secondary'
   discard.textContent = 'Discard this result'
 
+  const cancelSaving = document.createElement('button')
+  cancelSaving.type = 'button'
+  cancelSaving.className = 'button button--secondary'
+  cancelSaving.textContent = 'Cancel saving'
+  cancelSaving.hidden = true
+  cancelSaving.disabled = true
+
   const confirmation = document.createElement('div')
   confirmation.id = `discard-confirmation-${jobId}`
   confirmation.hidden = true
@@ -1125,7 +1174,7 @@ function renderResult(result: RetainedOutput, verification: OutputVerification):
 
   const resultActions = document.createElement('div')
   resultActions.className = 'actions'
-  resultActions.append(save, discard)
+  resultActions.append(save, discard, cancelSaving)
 
   const confirmationActions = document.createElement('div')
   confirmationActions.className = 'actions'
@@ -1143,6 +1192,35 @@ function renderResult(result: RetainedOutput, verification: OutputVerification):
     confirmDiscard.disabled = busy
   }
 
+  let activeSaveController: AbortController | null = null
+  let statusHasTemporaryFocus = false
+
+  /** Never leave keyboard focus on a button at the instant it becomes hidden. */
+  const hideCancelSaving = (): void => {
+    if (document.activeElement === cancelSaving) {
+      statusLine.tabIndex = -1
+      statusLine.focus()
+      statusHasTemporaryFocus = true
+    }
+    cancelSaving.hidden = true
+    cancelSaving.disabled = true
+  }
+
+  /** Removes the programmatic stop only after the final intentional focus move. */
+  const releaseTemporaryStatusFocus = (): void => {
+    if (!statusHasTemporaryFocus) return
+    statusLine.removeAttribute('tabindex')
+    statusHasTemporaryFocus = false
+  }
+
+  cancelSaving.addEventListener('click', () => {
+    const controller = activeSaveController
+    if (!controller || controller.signal.aborted) return
+    controller.abort()
+    cancelSaving.disabled = true
+    setStatus('Stopping the save…')
+  })
+
   /** Releases the UI only after the worker confirms workspace disposal. */
   const finishDiscard = async (): Promise<void> => {
     const reply = await request({ kind: 'discard', jobId }, null)
@@ -1155,32 +1233,48 @@ function renderResult(result: RetainedOutput, verification: OutputVerification):
     processingGuard.setRetainedResult(false)
     setDiagnosticsContext({ view: currentSource ? 'preflight' : 'select', jobSpec: null })
     releaseFallbackDownloads(file)
-    processResult.replaceChildren()
     setJobInFlight(jobInFlight)
-    if (!processActions.hidden && !startButton.disabled) startButton.focus()
-    else if (useHandleSourcePicker) sourcePickerButton.focus()
-    else fileInput.focus()
+    focusNextWorkflowControl(false)
+    processResult.replaceChildren()
   }
 
   save.addEventListener('click', () => {
     if (!resultAuthority.beginSave(result)) return
+    const saveController = new AbortController()
+    activeSaveController = saveController
     setResultBusy(true)
+    // A comparable source handle means this route can stream through the save
+    // picker. Its write may be large enough to need an explicit way back out.
+    cancelSaving.hidden = result.sourceHandle === null
+    cancelSaving.disabled = result.sourceHandle === null
+    if (!cancelSaving.hidden) cancelSaving.focus()
+    void processingGuard.setSaving(true)
     setStatus('Saving the video…')
     void (async () => {
       try {
-        const outcome = await saveFile(file, suggestedFileName(sourceName), result.sourceHandle)
-        if (outcome === 'cancelled') {
+        const outcome = await saveFile(
+          file,
+          suggestedFileName(sourceName),
+          result.sourceHandle,
+          saveController.signal,
+        )
+        // The cancellable part ends with the picker write. Workspace cleanup
+        // may still be running, but presenting Cancel then would be a lie.
+        if (activeSaveController === saveController) activeSaveController = null
+        if (outcome.kind === 'cancelled') {
           resultAuthority.retainAfterSave(result)
           setStatus('Not saved. The video is still here when you want it.')
+          hideCancelSaving()
           return
         }
-        if (outcome === 'download-started') {
+        if (outcome.kind === 'download-started') {
           resultAuthority.markDownloadStarted(result)
           ownership.textContent =
             'A download was started, but the browser cannot confirm when it finishes. Keep this result until the download is safely complete, then discard it.'
           setStatus(
-            'Download started. The browser does not report when it finishes, so this result is still available. Discard it only after the download is safely complete.',
+            `Download of “${outcome.fileName}” started. The browser does not report when it finishes, so this result is still available. Discard it only after the download is safely complete.`,
           )
+          hideCancelSaving()
           return
         }
 
@@ -1189,12 +1283,14 @@ function renderResult(result: RetainedOutput, verification: OutputVerification):
         if (!resultAuthority.beginDiscard(result)) {
           throw new Error('Saved result could not enter the discard state')
         }
-        setStatus('Saved. Releasing the temporary working copy…')
+        setStatus(`Saved as “${outcome.fileName}”. Releasing the temporary working copy…`)
+        hideCancelSaving()
         await finishDiscard()
-        setStatus('Saved.')
+        setStatus(`Saved as “${outcome.fileName}”.`)
       } catch (cause) {
         const discardFailed = resultAuthority.active?.status === 'discarding'
         const sourceOverwrite = cause instanceof SourceOverwriteError
+        const destinationUncertain = cause instanceof DestinationCleanupError
         if (discardFailed) resultAuthority.retainAfterDiscardFailure(result)
         else resultAuthority.retainAfterSave(result)
         if (discardFailed) {
@@ -1206,13 +1302,22 @@ function renderResult(result: RetainedOutput, verification: OutputVerification):
             ? 'The video was saved, but its temporary working copy could not be released. The result is still here to discard.'
             : sourceOverwrite
               ? 'Choose a different destination. The original source file cannot be replaced.'
-              : 'The video could not be saved. It is still here to try again.',
+              : destinationUncertain
+                ? 'The save stopped because the destination could not be verified safely. Check the folder you chose. The video is still here to try again.'
+                : 'The video could not be saved. It is still here to try again.',
         )
         log.error('ui', 'save failed', {
           errorName: cause instanceof Error ? cause.name : 'unknown',
         })
       } finally {
-        if (resultAuthority.owns(result)) setResultBusy(false)
+        if (activeSaveController === saveController) activeSaveController = null
+        hideCancelSaving()
+        await processingGuard.setSaving(false)
+        if (resultAuthority.owns(result)) {
+          setResultBusy(false)
+          save.focus()
+        }
+        releaseTemporaryStatusFocus()
       }
     })()
   })
@@ -1226,11 +1331,11 @@ function renderResult(result: RetainedOutput, verification: OutputVerification):
   })
 
   keep.addEventListener('click', () => {
-    confirmation.hidden = true
     discard.disabled = false
     save.disabled = false
     discard.setAttribute('aria-expanded', 'false')
     discard.focus()
+    confirmation.hidden = true
   })
 
   confirmDiscard.addEventListener('click', () => {
@@ -1243,7 +1348,6 @@ function renderResult(result: RetainedOutput, verification: OutputVerification):
         setStatus('Result discarded. Your original video is unchanged.')
       } catch (cause) {
         resultAuthority.retainAfterDiscardFailure(result)
-        confirmation.hidden = true
         discard.setAttribute('aria-expanded', 'false')
         setStatus('The result could not be discarded. It is still here to save or try again.')
         log.error('ui', 'result discard failed', {
@@ -1253,6 +1357,7 @@ function renderResult(result: RetainedOutput, verification: OutputVerification):
         if (resultAuthority.owns(result)) {
           setResultBusy(false)
           discard.focus()
+          confirmation.hidden = true
         }
       }
     })()

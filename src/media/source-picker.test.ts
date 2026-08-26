@@ -20,15 +20,39 @@ function fakeHandle(file: File): {
 describe('sourceHandlePickerAvailable', () => {
   const openPicker = vi.fn() as unknown as SourceOpenPicker
 
-  it('requires open, save and same-entry support together', () => {
+  it('requires open, directory, same-entry and lock support together', () => {
     expect(
-      sourceHandlePickerAvailable({ openPicker, savePicker: vi.fn(), sameEntrySupported: true }),
+      sourceHandlePickerAvailable({
+        openPicker,
+        directoryPicker: vi.fn(),
+        sameEntrySupported: true,
+        locksSupported: true,
+      }),
     ).toBe(true)
-    expect(sourceHandlePickerAvailable({ savePicker: vi.fn(), sameEntrySupported: true })).toBe(
-      false,
-    )
-    expect(sourceHandlePickerAvailable({ openPicker, sameEntrySupported: true })).toBe(false)
-    expect(sourceHandlePickerAvailable({ openPicker, savePicker: vi.fn() })).toBe(false)
+    expect(
+      sourceHandlePickerAvailable({
+        directoryPicker: vi.fn(),
+        sameEntrySupported: true,
+        locksSupported: true,
+      }),
+    ).toBe(false)
+    expect(
+      sourceHandlePickerAvailable({ openPicker, sameEntrySupported: true, locksSupported: true }),
+    ).toBe(false)
+    expect(
+      sourceHandlePickerAvailable({
+        openPicker,
+        directoryPicker: vi.fn(),
+        locksSupported: true,
+      }),
+    ).toBe(false)
+    expect(
+      sourceHandlePickerAvailable({
+        openPicker,
+        directoryPicker: vi.fn(),
+        sameEntrySupported: true,
+      }),
+    ).toBe(false)
   })
 })
 

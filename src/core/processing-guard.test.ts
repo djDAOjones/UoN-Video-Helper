@@ -31,9 +31,7 @@ function environment(requestWakeLock?: ProcessingGuardEnvironment['requestWakeLo
   const visibility = new FakeVisibility()
   const unload = new EventTarget()
   const value =
-    requestWakeLock === undefined
-      ? { visibility, unload }
-      : { visibility, unload, requestWakeLock }
+    requestWakeLock === undefined ? { visibility, unload } : { visibility, unload, requestWakeLock }
   return { value, visibility, unload }
 }
 
@@ -156,9 +154,7 @@ describe('ProcessingGuard', () => {
   })
 
   it('continues unload protection when the wake-lock request rejects', async () => {
-    const fixture = environment(() =>
-      Promise.reject(new DOMException('denied', 'NotAllowedError')),
-    )
+    const fixture = environment(() => Promise.reject(new DOMException('denied', 'NotAllowedError')))
     const guard = new ProcessingGuard(fixture.value)
 
     guard.start()
@@ -190,5 +186,92 @@ describe('ProcessingGuard', () => {
     const releasedResult = beforeUnloadEvent()
     fixture.unload.dispatchEvent(releasedResult)
     expect(releasedResult.defaultPrevented).toBe(false)
+  })
+
+  it('keeps one wake lifetime across a processing-to-save handoff', async () => {
+    const wakeLock = new FakeWakeLock()
+    const requestWakeLock = vi.fn(() => Promise.resolve(wakeLock))
+    const fixture = environment(requestWakeLock)
+    const guard = new ProcessingGuard(fixture.value)
+
+    guard.start()
+    await settle()
+    guard.setRetainedResult(true)
+    await guard.setSaving(true)
+    await guard.stop()
+
+    expect(requestWakeLock).toHaveBeenCalledOnce()
+    expect(wakeLock.release).not.toHaveBeenCalled()
+    const saving = beforeUnloadEvent()
+    fixture.unload.dispatchEvent(saving)
+    expect(saving.defaultPrevented).toBe(true)
+
+    await guard.setSaving(false)
+    expect(wakeLock.release).toHaveBeenCalledOnce()
+    const retained = beforeUnloadEvent()
+    fixture.unload.dispatchEvent(retained)
+    expect(retained.defaultPrevented).toBe(true)
+
+    guard.setRetainedResult(false)
+    const complete = beforeUnloadEvent()
+    fixture.unload.dispatchEvent(complete)
+    expect(complete.defaultPrevented).toBe(false)
+  })
+
+  it('protects a streamed save even when no processing job is active', async () => {
+    const wakeLock = new FakeWakeLock()
+    const requestWakeLock = vi.fn(() => Promise.resolve(wakeLock))
+    const fixture = environment(requestWakeLock)
+    const guard = new ProcessingGuard(fixture.value)
+
+    await guard.setSaving(true)
+    await settle()
+    expect(requestWakeLock).toHaveBeenCalledOnce()
+    const during = beforeUnloadEvent()
+    fixture.unload.dispatchEvent(during)
+    expect(during.defaultPrevented).toBe(true)
+
+    await guard.setSaving(false)
+    expect(wakeLock.release).toHaveBeenCalledOnce()
+    const after = beforeUnloadEvent()
+    fixture.unload.dispatchEvent(after)
+    expect(after.defaultPrevented).toBe(false)
+  })
+
+  it('retries when visibility returns while a stale pending lock is still releasing', async () => {
+    let resolveRequest: ((value: FakeWakeLock) => void) | undefined
+    let finishRelease: (() => void) | undefined
+    const staleLock = new FakeWakeLock()
+    staleLock.release.mockImplementation(
+      () =>
+        new Promise<void>((resolve) => {
+          finishRelease = resolve
+        }),
+    )
+    const replacement = new FakeWakeLock()
+    const requestWakeLock = vi
+      .fn<() => Promise<FakeWakeLock>>()
+      .mockImplementationOnce(
+        () =>
+          new Promise<FakeWakeLock>((resolve) => {
+            resolveRequest = resolve
+          }),
+      )
+      .mockResolvedValueOnce(replacement)
+    const fixture = environment(requestWakeLock)
+    const guard = new ProcessingGuard(fixture.value)
+
+    guard.start()
+    fixture.visibility.setVisibility('hidden')
+    resolveRequest?.(staleLock)
+    await settle()
+    expect(staleLock.release).toHaveBeenCalledOnce()
+
+    fixture.visibility.setVisibility('visible')
+    expect(requestWakeLock).toHaveBeenCalledOnce()
+    finishRelease?.()
+    await vi.waitFor(() => expect(requestWakeLock).toHaveBeenCalledTimes(2))
+    await guard.stop()
+    expect(replacement.release).toHaveBeenCalledOnce()
   })
 })

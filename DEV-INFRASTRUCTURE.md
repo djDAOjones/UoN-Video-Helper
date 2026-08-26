@@ -356,7 +356,11 @@ media.**
   here, and it is enforced as a product invariant, not a config: no
   fetch, upload, beacon, or analytics call may carry media, filenames,
   or media characteristics. It is verified by network inspection during
-  a full job (spec §13 criterion 9).
+  a full job (spec §13 criterion 9). The dev-only protocol rehearsal below
+  also requires eleven synthetic controls spanning page and worker bodies,
+  XHR, beacon, cross-origin traffic, URL and both scripted/on-wire headers,
+  plus WebSocket handshake and frame observation. It retains only redacted
+  request facts, never bodies, paths, headers or frame contents.
 - **Diagnostics redaction** is the other real exposure and is covered
   under **Maintainer diagnostics** above — the filename is treated as
   sensitive.
@@ -474,6 +478,23 @@ them in all three supported engines and prints what each reported:
 npm run dev                                        # in one terminal
 node scripts/run-in-engines.mjs /spike-alpha.html  # in another
 ```
+
+For the no-media-egress rehearsal, start the same dev server and run:
+
+```bash
+node scripts/run-in-engines.mjs --watch-egress --engines chrome --require-all
+```
+
+This mode first completes and discards a silent job through the production
+worker, then runs the broader acceptance corpus and eleven deliberate network
+controls. Chrome's CDP path observes main/worker requests, on-wire headers,
+WebSocket handshakes and outgoing frames, so it can produce full evidence.
+Firefox's BiDi path observes all ten request-lifecycle controls but has no
+outgoing WebSocket-frame event; the runner prints **partial** and fails the
+full-proof result. Safari's current
+safaridriver/WebDriver Classic path exposes no usable request-event stream and
+is reported unsupported. These are evidence boundaries, not browser-support
+changes, and neither partial nor unsupported is counted as a pass.
 
 The runner's terminal contract in `<pre id="log">` is:
 `result: pass`, `result: fail` or `result: informational`, followed by a line of

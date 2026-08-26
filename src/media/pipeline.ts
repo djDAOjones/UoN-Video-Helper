@@ -683,7 +683,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     // cancel that arrived while it held control before exposing the result.
     throwIfAborted(signal)
 
-    const file = await outputFile.finish()
+    const file = await outputFile.finish(output)
     throwIfAborted(signal)
     onProgress?.({ stage: 'finishing', fraction: 1 })
     log.info('pipeline', 'encode complete', {

@@ -15,14 +15,14 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 183 file(s) across 8 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
-- `(root)` — 19 file(s)
+<!-- 189 file(s) across 8 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+- `(root)` — 20 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
 - `docs` — 5 file(s)
 - `public` — 17 file(s)
 - `scripts` — 9 file(s)
-- `src` — 125 file(s)
+- `src` — 130 file(s)
 - `test` — 6 file(s)
 <!-- /file-map-index -->
 
@@ -39,6 +39,7 @@
 - `package.json` — Scripts, the one runtime dependency, and the product version.
 - `spike-alpha.html` — Maintainer page: does this browser decode transparent video? Excluded from the build.
 - `spike-codecs.html` — Maintainer page: which encoder configurations does this engine actually accept, video AND audio?
+- `spike-egress.html` — Maintainer page for protocol-level no-media-egress evidence and its deliberate negative controls.
 - `spike-framerate.html` — Maintainer page: does the app measure the frame rate or trust the header?
 - `spike-modes.html` — Maintainer page: do the three closing modes produce the timelines they promise?
 - `spike-opfs.html` — Maintainer page: does a sweep leave a live job's scratch alone in this engine?
@@ -92,9 +93,9 @@
 - `scripts/gen-placeholder-branding.mjs` — Generates the placeholder masters with a local ffmpeg. Authoring tool only.
 - `scripts/public-inventory.d.mts` — Type declarations for the public-asset inventory helper used by tests and the gate.
 - `scripts/public-inventory.mjs` — Recursively verifies the exact allowlisted public files, hashes and regular-file boundaries.
-- `scripts/run-in-engines-lib.d.mts` — Type declarations for cross-engine argument, terminal-result and summary helpers.
-- `scripts/run-in-engines-lib.mjs` — Pure parsing and honest pass/fail/skip accounting for the cross-engine runner.
-- `scripts/run-in-engines.mjs` — Runs maintainer pages across requested engines with explicit pass/fail/skip/manual accounting; never part of `check`.
+- `scripts/run-in-engines-lib.d.mts` — Type declarations for cross-engine results and redacted protocol-egress records.
+- `scripts/run-in-engines-lib.mjs` — Pure runner accounting plus redaction, negative-control and egress-assessment helpers.
+- `scripts/run-in-engines.mjs` — Drives maintainer pages through each engine's automation protocol, optionally observing egress; never part of `check`.
 
 ## src
 
@@ -102,8 +103,8 @@
 - `src/acceptance/main.ts` — Entry point for the acceptance page. Development only; never built.
 - `src/acceptance/measure.test.ts` — Pins the drift estimator — an endpoint difference read the trend backwards.
 - `src/acceptance/measure.ts` — Sync by marker, loudness by region, and two independent egress instruments.
-- `src/acceptance/run.test.ts` — Pins OPFS enumeration evidence and requires cancellation after a partial writer exists.
-- `src/acceptance/run.ts` — The spec 13 run: what is checked, and what is reported as needing a person.
+- `src/acceptance/run.test.ts` — Pins OPFS/cancellation evidence and retained-worker cleanup plus known AAC-gap classification.
+- `src/acceptance/run.ts` — The spec 13 run, including a cross-engine silent production-worker proof and acknowledged cleanup.
 - `src/acceptance/verdicts.test.ts` — Proves missing, non-finite or truncated loudness evidence fails the corpus verdict.
 - `src/acceptance/verdicts.ts` — Fail-closed loudness, true-peak and decoded-coverage classification for acceptance.
 - `src/audio/analyse.test.ts` — Proves the facade measures the same thing the components do separately.
@@ -137,8 +138,10 @@
 - `src/core/diagnostics.ts` — Global error capture on both threads, plus the redacted copy-diagnostics bundle.
 - `src/core/logger.test.ts` — Proves the log buffer is bounded — a one-hour encode must not grow it without limit.
 - `src/core/logger.ts` — The single structured logger. Console plus a bounded ring buffer; no DOM, so the worker shares it.
+- `src/core/process-interlock.test.ts` — Pins Start and lifecycle protection until a watchdog-cancelled worker answers terminally.
+- `src/core/process-interlock.ts` — Owns worker work that outlives the normal progress UI after a silence timeout.
 - `src/core/processing-guard.test.ts` — Pins wake-lock, visibility, unload and retained-result lifecycle ownership.
-- `src/core/processing-guard.ts` — Owns screen-wake and unload protection for processing and unsaved-result lifetimes.
+- `src/core/processing-guard.ts` — Owns screen-wake and unload protection across processing, saving and retained-result lifetimes.
 - `src/core/redact.test.ts` — Proves the bundle carries media characteristics but never the media, its name, or its path.
 - `src/core/redact.ts` — Redaction. This app's sensitive asset is the user's media and filename, not a token.
 - `src/core/result-authority.test.ts` — Proves one result remains owned until durable save or acknowledged discard.
@@ -176,8 +179,8 @@
 - `src/media/isobmff.test.ts` — Synthetic boxes covering subtitle handlers, chapters, moov-at-end and non-ISOBMFF.
 - `src/media/isobmff.ts` — A minimal box walk for the handler types Mediabunny cannot see at all.
 - `src/media/lanes.test.ts` — Pins how the two feed lanes fail together: survivor stopped, cause reported over the cancellation it caused.
-- `src/media/opfs.test.ts` — Pins lock-before-create, locked sweeping, positioned writes and retryable handle/directory cleanup.
-- `src/media/opfs.ts` — Lifetime-locked per-job OPFS storage with positioned streaming writes, safe sweeping and retryable cleanup.
+- `src/media/opfs.test.ts` — Pins lock-before-create, public output finalisation, both writer paths and retryable cleanup.
+- `src/media/opfs.ts` — Lifetime-locked OPFS storage with project-owned raw-writer cleanup, safe sweeping and positioned writes.
 - `src/media/output-verification.test.ts` — Pins strict output limits, unverified states and EOF true-peak drainage.
 - `src/media/output-verification.ts` — Streams finished audio into independent loudness/true-peak measurement and fail-closed classification.
 - `src/media/pipeline.ts` — Decode to encode to mux, streaming to OPFS, with progress and cancellation.
@@ -186,9 +189,9 @@
 - `src/media/probe.test.ts` — Pins video-only duration estimates and the explicit unavailable estimate for multi-pass audio jobs.
 - `src/media/probe.ts` — The 3-second calibration probe: real decode and encode on the real file and device.
 - `src/media/save.test.ts` — Pins names, same-entry refusal, close-before-success, picker cancellation and fallback retention.
-- `src/media/save.ts` — Refuses same-entry writes, streams durable picker saves and retains the object-URL fallback result.
-- `src/media/source-picker.test.ts` — Pins read-only handle selection, cancellation and the complete same-entry capability gate.
-- `src/media/source-picker.ts` — Selects a read-only handle-backed source when safe overwrite comparison is available.
+- `src/media/save.ts` — Streams into app-named files in a selected directory, refuses uncertain writes and retains fallback results.
+- `src/media/source-picker.test.ts` — Pins read-only selection, cancellation and the complete locked-directory capability gate.
+- `src/media/source-picker.ts` — Selects a handle-backed source only when locked directory saving and identity checks are available.
 - `src/media/source-timeline.test.ts` — Pins aligned, delayed and negative selected-track origins on one source clock.
 - `src/media/source-timeline.ts` — Maps selected audio and video timestamps onto one immutable non-negative timeline.
 - `src/media/track-selection.test.ts` — Pins primary-track reuse, missing-audio handling, multiplicity and metadata copy.
@@ -197,9 +200,12 @@
 - `src/media/vtt.ts` — Offsets WebVTT timings by rewriting only timestamp lines; never touches the words.
 - `src/spike/alpha.ts` — VH-12 spike: decodes each branding onset and reads back pixel alpha. Dev-only, not built.
 - `src/spike/codecs.ts` — Probes VideoEncoder and AudioEncoder support per preset and shape. How the Firefox AAC gap was found.
+- `src/spike/egress.ts` — Dev-only clean-job and synthetic-control driver for the browser-protocol egress watcher.
+- `src/spike/egress.worker.ts` — Dedicated-worker request-body control proving worker traffic reaches the egress observer.
 - `src/spike/framerate.ts` — VH-24 spike: reads a real PowerPoint export and reports measured vs declared rate.
 - `src/spike/modes.ts` — VH-22 spike: runs a fixture through all three closing modes and checks output length.
-- `src/spike/opfs.ts` — Drives the VH-35 sweep checks against real OPFS and real Web Locks. Dev-only; not built.
+- `src/spike/opfs-context.worker.ts` — Independent holder/sweeper context for real-browser OPFS lock and crash recovery evidence.
+- `src/spike/opfs.ts` — Drives real fallback/sync writers, cross-context locks and forced-worker OPFS recovery. Dev-only; not built.
 - `src/spike/preflight-audio.ts` — Checks the no-aac-encode block fires where the encoder refuses, and nowhere else.
 - `src/spike/real.ts` — Runs a non-sensitive fixture from `public/spike/` through the pipeline; real staff media stays outside `public/` and uses `/?source-picker=file-input`.
 - `src/spike/shapes.ts` — Runs the corpus's awkward properties through the pipeline, synthesised so it runs on any machine.
@@ -231,4 +237,4 @@
 - `test/ebu3341/signals.ts` — EBU Tech 3341 Table 1 signals, synthesised from their published definitions.
 - `test/ebu3341/tech3341.test.ts` — The compliance gate: Table 1 cases 1-23 against the meter, inside `npm run check`.
 - `test/helpers/signals.ts` — Synthesised tones and silence shared by the meter tests and the EBU harness.
-- `test/run-in-engines.test.ts` — Pins cross-engine CLI parsing and honest terminal pass/fail/skip accounting.
+- `test/run-in-engines.test.ts` — Pins runner accounting, protocol redaction, egress controls and fail-closed assessment.

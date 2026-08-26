@@ -131,13 +131,22 @@ export function installGlobalErrorCapture(
 /** Non-identifying environment facts. Deliberately excludes anything about the user's media. */
 function environment(): Record<string, unknown> {
   const nav: Navigator | undefined = typeof navigator === 'undefined' ? undefined : navigator
+  const fileSystemScope = globalThis as typeof globalThis & {
+    readonly showOpenFilePicker?: unknown
+    readonly showDirectoryPicker?: unknown
+    readonly FileSystemHandle?: { readonly prototype?: { readonly isSameEntry?: unknown } }
+  }
   return {
     userAgent: nav?.userAgent ?? 'unknown',
     hardwareConcurrency: nav?.hardwareConcurrency ?? null,
     language: nav?.language ?? null,
     hasWebCodecs: typeof globalThis.VideoEncoder !== 'undefined',
     hasOpfs: typeof navigator !== 'undefined' && 'storage' in navigator,
-    hasFileSystemAccess: typeof globalThis.showSaveFilePicker === 'function',
+    hasFileSystemAccess:
+      typeof fileSystemScope.showOpenFilePicker === 'function' &&
+      typeof fileSystemScope.showDirectoryPicker === 'function' &&
+      typeof fileSystemScope.FileSystemHandle?.prototype?.isSameEntry === 'function' &&
+      typeof nav?.locks?.request === 'function',
   }
 }
 

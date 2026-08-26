@@ -27,12 +27,14 @@ export type SourcePickOutcome =
 /** Injectable capability surface used by the UI decision and its Node tests. */
 export interface SourcePickerCapabilities {
   readonly openPicker?: SourceOpenPicker
-  readonly savePicker?: unknown
+  readonly directoryPicker?: unknown
   readonly sameEntrySupported?: boolean
+  readonly locksSupported?: boolean
 }
 
 type SourcePickerGlobal = typeof globalThis & {
   readonly showOpenFilePicker?: SourceOpenPicker
+  readonly showDirectoryPicker?: unknown
   readonly FileSystemHandle?: {
     readonly prototype?: { readonly isSameEntry?: unknown }
   }
@@ -43,26 +45,29 @@ function browserCapabilities(): SourcePickerCapabilities {
   const scope = globalThis as SourcePickerGlobal
   return {
     ...(scope.showOpenFilePicker ? { openPicker: scope.showOpenFilePicker } : {}),
-    ...(typeof globalThis.showSaveFilePicker === 'function'
-      ? { savePicker: globalThis.showSaveFilePicker }
+    ...(typeof scope.showDirectoryPicker === 'function'
+      ? { directoryPicker: scope.showDirectoryPicker }
       : {}),
     sameEntrySupported: typeof scope.FileSystemHandle?.prototype?.isSameEntry === 'function',
+    locksSupported: typeof navigator.locks?.request === 'function',
   }
 }
 
 /**
  * Whether the app can choose a handle-backed source and compare it at save.
  *
- * All three capabilities are required. A file input plus a save picker cannot
- * prove identity and therefore must use the download fallback instead.
+ * All four capabilities are required. A file input plus a directory picker
+ * cannot prove identity, while an unlocked name allocation can race another
+ * tab, so either incomplete surface must use the download fallback instead.
  */
 export function sourceHandlePickerAvailable(
   capabilities: SourcePickerCapabilities = browserCapabilities(),
 ): boolean {
   return (
     typeof capabilities.openPicker === 'function' &&
-    typeof capabilities.savePicker === 'function' &&
-    capabilities.sameEntrySupported === true
+    typeof capabilities.directoryPicker === 'function' &&
+    capabilities.sameEntrySupported === true &&
+    capabilities.locksSupported === true
   )
 }
 

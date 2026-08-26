@@ -11,6 +11,37 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-26 — VH-53: storage and egress evidence stay fail-closed
+
+**Decision:** put Mediabunny's fallback `StreamTarget` over a project-owned
+bridge and expose bytes only after the exact `Output` is finalized. Save into a
+user-selected directory under an app-owned numbered name; never invoke
+`showSaveFilePicker()`. Keep save cancellation and a watchdog interlock under
+wake/unload protection until storage or worker ownership is conclusively
+released. Verify no-egress at browser-protocol level with a real silent worker
+job and nonce-bound HTTP/worker/WebSocket controls. Record Chrome as full,
+Firefox as partial and Safari as unsupported where protocol evidence is absent.
+
+**Rationale:** a consumer-retained stream lock otherwise hides cleanup, and the
+single-file save picker may clear an existing selection before returning it, so
+a later identity check is too late. A download click or page-global `fetch`
+wrapper is likewise not proof of durable save or worker traffic. OPFS now
+passes in all three engines; Chrome proves all 11 controls. Firefox proves all
+10 observable request-lifecycle controls but WebDriver BiDi has no outgoing
+WebSocket-frame event. Calling either gap complete recreates false-green proof.
+
+**Boundary:** specification criterion 9 remains open across the full supported
+browser set; partial and unsupported observations never count as a pass.
+
+**Alternatives rejected:** Mediabunny private-field tests, timed fallback
+release, the truncating single-file save picker, releasing a silent worker
+before terminal acknowledgement, page API monkey-patching as release evidence,
+and treating an unavailable protocol event as a pass.
+
+**Link:** `src/media/opfs.ts`, `src/media/save.ts`,
+`src/core/process-interlock.ts`, `scripts/run-in-engines.mjs`;
+`tickets/VH-53.md`.
+
 ## 2026-08-26 — VH-50: measure the chain the user actually receives
 
 **Decision:** replace one-shot loudness gain with bounded feedback over the

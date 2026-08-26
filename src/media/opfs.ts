@@ -19,7 +19,7 @@
  * one context is a storage layer that cannot be tested from the other.
  */
 
-import { StreamTarget, type StreamTargetChunk } from 'mediabunny'
+import { StreamTarget, type Output, type StreamTargetChunk } from 'mediabunny'
 
 import { log } from '../core/logger'
 
@@ -255,8 +255,32 @@ async function jobsRoot(): Promise<FileSystemDirectoryHandle> {
 export interface OpfsOutputFile {
   /** Hand this to a Mediabunny `Output`. */
   readonly target: StreamTarget
-  /** Closes the handle and returns the finished bytes. */
-  finish(): Promise<File>
+  /** Which browser writer this file actually reached; useful in dev/browser evidence. */
+  readonly writerKind: OpfsWriterKind
+  /** Whether the engine exposed the sync-handle API, even if opening it failed. */
+  readonly syncAccessAdvertised: boolean
+  /** Closes the handle and returns bytes only after this exact output finalized. */
+  finish(output: Pick<Output, 'state' | 'target'>): Promise<File>
+}
+
+/** The two bounded OPFS writer paths supported by this project. */
+export type OpfsWriterKind = 'sync-access-handle' | 'create-writable-fallback'
+
+/**
+ * Requires public Mediabunny lifecycle evidence from the owner of this target.
+ *
+ * A filesystem stream closing is not finalization authority: it can also close
+ * after cancellation or a failed finalize. Requiring the exact `Output` and its
+ * public `finalized` state keeps storage from exposing a plausible but corrupt
+ * MP4 merely because the browser released its writer.
+ */
+function requireFinalizedOwner(
+  output: Pick<Output, 'state' | 'target'>,
+  target: StreamTarget,
+): void {
+  if (output.target !== target || output.state !== 'finalized') {
+    throw new Error('OPFS output must be successfully finalized before finish()')
+  }
 }
 
 type WritableSyncHandle = Pick<FileSystemSyncAccessHandle, 'write' | 'flush' | 'close'>
@@ -372,7 +396,7 @@ export class OpfsWorkspace {
       typeof (fileHandle as { createSyncAccessHandle?: unknown }).createSyncAccessHandle ===
       'function'
 
-    if (!supportsSyncHandles) return this.createWritableFile(fileHandle)
+    if (!supportsSyncHandles) return this.createWritableFile(fileHandle, false)
 
     let handle: FileSystemSyncAccessHandle
     try {
@@ -385,7 +409,7 @@ export class OpfsWorkspace {
       log.warn('opfs', 'sync access handle unavailable; using writable fallback', {
         reason: cause instanceof Error ? cause.message : String(cause),
       })
-      return this.createWritableFile(fileHandle)
+      return this.createWritableFile(fileHandle, true)
     }
 
     this.openHandles.add(handle)
@@ -405,10 +429,16 @@ export class OpfsWorkspace {
     }
 
     const sink = createSyncHandleSink(handle, () => this.openHandles.delete(handle))
+    const writerKind: OpfsWriterKind = 'sync-access-handle'
+    log.debug('opfs', 'output writer selected', { jobId: this.jobId, writerKind })
 
+    const target = new StreamTarget(sink.writable, { chunked: true })
     return {
-      target: new StreamTarget(sink.writable, { chunked: true }),
-      finish: async () => {
+      target,
+      writerKind,
+      syncAccessAdvertised: true,
+      finish: async (output) => {
+        requireFinalizedOwner(output, target)
         sink.close()
         return fileHandle.getFile()
       },
@@ -416,16 +446,28 @@ export class OpfsWorkspace {
   }
 
   /** Slower seekable writer used when a synchronous handle is genuinely unavailable. */
-  private async createWritableFile(fileHandle: FileSystemFileHandle): Promise<OpfsOutputFile> {
-    // Main thread. `createWritable()` already speaks the shape StreamTarget
-    // wants — positioned writes — so no adapter is needed, only the slower
-    // staging behaviour.
+  private async createWritableFile(
+    fileHandle: FileSystemFileHandle,
+    syncAccessAdvertised: boolean,
+  ): Promise<OpfsOutputFile> {
+    // `StreamTarget` keeps its writer attached after closing it. Handing it the
+    // raw OPFS stream therefore leaves `writable.locked === true` forever, and
+    // a later cleanup cannot call `abort()` even though Mediabunny has already
+    // closed the filesystem writer. A project-owned bridge keeps that retained
+    // lock on the bridge while the raw stream remains under workspace control.
     const writable = await fileHandle.createWritable()
+    let committed = false
+    const bridge = new WritableStream<StreamTargetChunk>({
+      write: (chunk) => writable.write(chunk),
+      close: async () => {
+        await writable.close()
+        committed = true
+      },
+      abort: () => writable.abort(),
+    })
 
-    // Not closed by `finish`. `StreamTarget` takes a writer on the stream,
-    // which locks it, and closes it itself during `finalize()`. Closing it
-    // again from this side throws on a locked stream — the sync-handle path
-    // below differs only because the handle is ours rather than the target's.
+    // Not closed by `finish`. `StreamTarget` takes a writer on the BRIDGE and
+    // closes it during `finalize()`; the bridge in turn closes this raw stream.
     //
     // It IS closed by `dispose`, though. On the cancel path `finalize` never
     // runs, so nothing else would release it, and the directory could not
@@ -441,14 +483,27 @@ export class OpfsWorkspace {
     }
     this.releases.add(release)
 
-    const finish = async (): Promise<File> => {
+    const target = new StreamTarget(bridge, { chunked: true })
+    const finish = async (output: Pick<Output, 'state' | 'target'>): Promise<File> => {
+      requireFinalizedOwner(output, target)
+      // `getFile()` can return a snapshot while createWritable's swap file is
+      // still open. Only the bridge's successful close proves Mediabunny has
+      // finalized and the browser has committed those bytes. Crucially, a
+      // premature call keeps `release` registered so cancel/dispose can still
+      // abort the raw writer before removing the directory.
+      if (!committed) {
+        throw new Error('OPFS output must be finalized before finish()')
+      }
+      const file = await fileHandle.getFile()
       this.releases.delete(release)
-      return fileHandle.getFile()
+      return file
     }
+    const writerKind: OpfsWriterKind = 'create-writable-fallback'
+    log.debug('opfs', 'output writer selected', { jobId: this.jobId, writerKind })
     return {
-      // No adapter: `FileSystemWritableFileStream` already accepts the
-      // positioned-write chunks StreamTarget produces.
-      target: new StreamTarget(writable, { chunked: true }),
+      target,
+      writerKind,
+      syncAccessAdvertised,
       finish,
     }
   }

@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Protocol egress evidence — UoN Video Helper</title>
+  </head>
+  <body>
+    <h1>Protocol egress evidence</h1>
+    <p>
+      Development-only rehearsal for specification criterion 9. It requires a silent job through the
+      production worker, runs the broader AAC acceptance corpus where supported, then sends tiny
+      synthetic controls so the browser-protocol watcher must see page and worker bodies, foreign
+      origins, raw headers, WebSocket handshakes and frames, and filename or media characteristics
+      in URLs and headers. No user media is used.
+    </p>
+    <pre id="log">running…</pre>
+    <script type="module" src="/src/spike/egress.ts"></script>
+  </body>
+</html>
