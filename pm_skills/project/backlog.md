@@ -60,6 +60,29 @@
       for hard cut ONLY, because in the overlay modes the build IS the
       transition.
 
+- [ ] **VH-50 Real material misses the loudness invariant, and the harness
+      says it does not** (2026-08-26)
+      Intent: `AMCS3059` — 852×480, 130 s, the same file VH-31 was measured on —
+      comes out at **−16.75 LUFS** against a −16 ±0.5 target and **−1.98 dBTP**
+      against a ceiling of −2.00. Both miss. `conventions.md` lists that pair as
+      invariant 2 and spec §13 criterion 2 requires it, so this is the project's
+      second-most-protected property failing on the first real file anyone
+      checked it against.
+      Not a regression: re-run on `de0b94f`, before the 2026-08-26 session, and
+      the figures are identical to the hundredth. It has always done this.
+      The worse half is that the acceptance harness PASSES criterion 2. Its
+      corpus is synthesised, and whatever real speech does — most likely the
+      limiter engaging on a source already peaking at −1.86 dBTP and pulling the
+      integrated figure down with it — the fixtures do not reproduce. A harness
+      that passes the invariant the product misses is worse than no harness.
+      Done when: the cause is identified rather than guessed at, the output
+      meets both figures on real material, and the harness gains a case that
+      would have caught it. Whether the fix is in the gain staging, the
+      limiter's interaction with it, or a second gain pass is the open question.
+      Note: measured with `/spike-real.html?file=…`, which needs a real
+      recording in `public/spike/` — the guard refuses a build while one is
+      there, so remove it afterwards.
+
 - [ ] **VH-31 The size estimate is ~3.6x too high** [detail](tickets/VH-31.md)
       (2026-08-25)
       Intent: the app said 27.7 MB and produced 7.5 MB on the first real file
