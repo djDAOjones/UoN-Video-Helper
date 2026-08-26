@@ -83,10 +83,15 @@
       recording in `public/spike/` — the guard refuses a build while one is
       there, so remove it afterwards.
 
-- [ ] **VH-31 The size estimate is ~3.6x too high** [detail](tickets/VH-31.md)
+- [ ] **VH-31 The size estimate is ~1.7x too high** [detail](tickets/VH-31.md)
       (2026-08-25)
       Intent: the app said 27.7 MB and produced 7.5 MB on the first real file
-      anyone ran. `projectedOutputBytes` assumes the encoder spends its whole
+      anyone ran. **That was 3.6x; it is 1.7x now** — VH-47 shipped on
+      2026-08-26 and more than halved it without touching this code, and the
+      same measurement pass found that the over-estimate is NOT the safety
+      margin this item assumed: at "Smaller file" the projection already falls
+      BELOW the produced file on 4 of 23 real jobs. The ticket carries the
+      measurements and the objections that stopped a design shipping. `projectedOutputBytes` assumes the encoder spends its whole
       bitrate budget; VBR undershoots badly on slide content. It is shown
       before the user commits, so it is the number they decide on — someone
       watching a OneDrive limit may pick "Smaller file" they did not need. It

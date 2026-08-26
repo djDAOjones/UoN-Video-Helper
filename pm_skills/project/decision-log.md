@@ -11,6 +11,53 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-26 — VH-31: measured, designed, and deliberately not built
+
+**Decision:** run the design workflow, record everything it measured on the
+ticket, and DO NOT implement. Two of three adversarial refuters returned
+blocking findings against the recommendation.
+
+**Rationale:** the measurement was worth having and the design was not ready.
+Building it at 4am, with no time left for the review pass that had just caught a
+regression in work from midnight, would have repeated exactly the mistake that
+review existed to find. A measured design plus its confirmed objections is a
+better thing to hand over than a half-verified change to the number a lecturer
+decides on.
+
+**Two of the ticket's own premises turned out false**, which is the most useful
+result and would not have surfaced without measuring:
+- The 3.6x headline is stale. VH-47 shipped hours earlier and more than halved
+  it — 1.70x now, which I verified by hand against the same file rather than
+  taking the agent's figure.
+- The over-estimate is not a safety margin. At "Smaller file" the projection
+  already falls BELOW the produced file on 4 of 23 real jobs, because the
+  encoder overspends its target while the 1.02 container constant is fully
+  consumed by real overhead. So this is not "the number is too big" — it is too
+  big at one preset and slightly too small at the other, and a fix that only
+  shrinks it makes the second half worse.
+
+**What the bake-off settled:** the first three seconds are useless as a sample
+(0.049 of actual on one file), because a 3-second encode reproduces its
+requested bitrate to ~99.8% and so says nothing about the file. The
+source-byte ratio is worse (15.6x on a black lead-in). Only long concatenated
+windows track, and even they are driven by WHERE the expensive content sits
+rather than by how much is sampled.
+
+**Why the recommendation was refused:** it raises `requiredStorageBytes` on 42
+of 46 corpus combinations — a hard block with no override — while its own text
+promises it does not; its longer probe moves `estimatedSeconds` across spec
+7.3's bands; its wall budget is checked between windows and so cannot bound the
+probe; and it puts its largest new cost inside a pre-flight exchange that
+already runs against a hard 180 s deadline.
+
+**What survived and should be kept when this is picked up:** two numbers rather
+than one, with the shown estimate never reaching `PreflightInput`; a single
+`audioBitrateFor` decision site (a refuter found a third caller the design
+missed); and wording that states its own nature — but `requiredStorageBytes`
+must round UP, or the block can ask for less space than the gate demands.
+
+**Link:** `tickets/VH-31.md`, workflow `wf_e01102b9-014`.
+
 ## 2026-08-26 — VH-51: reviewing the unattended run was worth more than another item
 
 **Decision:** run a 25-agent adversarial review over the night's 14 commits
