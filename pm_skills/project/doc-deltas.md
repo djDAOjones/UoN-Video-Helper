@@ -44,3 +44,13 @@
 - [ ] 2026-08-26 SPEC §6.2 — its prose presents consulting the source as the
       SMALLER preset's distinguishing property; since VH-47 both presets do,
       one capped at the source and one anchored to it (source: VH-47)
+- [ ] 2026-08-26 SPEC §10 — desktop Firefox supports silent sources only;
+      audio-bearing sources are blocked before processing because required AAC
+      encoding is unavailable (source: VH-49)
+- [ ] 2026-08-26 RATIONALE §2.1 — the browser-support cost and coverage omit
+      desktop Firefox's AAC limitation and pre-flight block (source: VH-49)
+- [ ] 2026-08-26 DECISIONS D4 — the browser-exclusion record mentions only
+      Safari below 26; Firefox audio blocking is settled while WebM remains
+      deferred (source: VH-49)
+- [ ] 2026-08-26 SPEC §4.1 — VH-46b deliberately leaves boundary-mode controls
+      to the VH-32 redesign while the verified modes remain in the pipeline

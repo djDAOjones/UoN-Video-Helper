@@ -7,10 +7,10 @@
  * every mode's tail, all of "hard cut" — plus where each segment sits on the
  * timeline ({@link closingTimeline}, VH-42).
  *
- * Both overlay modes are withdrawn from the interface. Their readback WAS
- * wrong in Firefox; VH-44 fixed that and verified it in all three engines, so
- * what keeps them out now is VH-45's decision rather than a defect — restoring
- * them is VH-46b. The pipeline paths never left.
+ * Both overlay modes are intentionally hidden from the interface. Their
+ * readback WAS wrong in Firefox; VH-44 fixed that in all three engines, and
+ * VH-46b settled that VH-32 will decide whether and how to present them in the
+ * redesigned interface. The pipeline paths never left.
  *
  * The real closing masters carry NO audio, which the maintainer confirms is
  * intended (2026-08-25) — so spec 4.4's mastered audio bed, and the rule that

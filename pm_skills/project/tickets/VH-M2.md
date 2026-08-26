@@ -1,16 +1,16 @@
-# VH-49 — Firefox's audio gap, and the corpus it surfaced in
+# VH-M2 — Device-envelope evidence and the real sample corpus
 
-## Why this file is named VH-49
+## Why this file belongs to VH-M2
 
 It is the corpus characterisation the whole VH-24 family rested on, and it has
 outlived three of them. VH-24 and VH-41 shipped 2026-08-25, VH-43 on 2026-08-26.
-It keeps taking the name of whichever item still stands on it, because
-`samples/` is gitignored — so these measurements exist in no other place, and
-evicting the file would delete the only record of what the real material is.
+Because `samples/` is gitignored, these measurements exist in no other tracked
+place. The evidence now belongs to VH-M2, the remaining device-envelope task
+that needs real material of known shapes and durations.
 
-VH-49 is that item now: its subject is which browsers can encode what, and the
-audio characterisation below — channel counts, sample rates, which files are
-silent — is what any answer has to cover.
+VH-49's Firefox decision is retained below because it was discovered by this
+corpus, but it is settled: desktop Firefox supports silent sources and blocks
+audio-bearing sources before processing.
 
 ## The Firefox measurement (2026-08-26)
 
@@ -24,8 +24,10 @@ Consequence before the fix: pre-flight checked only that the class existed, so a
 Firefox user was passed through to a job that showed a progress bar and then
 died at the audio encoder. Now `capability.ts` asks
 `AudioEncoder.isConfigSupported` for the exact configuration the job will use
-and pre-flight blocks with `no-aac-encode`, verified in all three engines. What
-Firefox users should actually GET is the open half.
+and pre-flight blocks with `no-aac-encode`, verified in all three engines. The
+maintainer accepted that block as the product policy on 2026-08-26; silent
+sources remain supported, WebM/Opus remains deferred, and audio is never
+dropped.
 
 ---
 
@@ -42,9 +44,9 @@ characterisation all four rest on, so it stays whole rather than being torn up
 with the items.
 
 **VH-24 and VH-41 shipped on 2026-08-25**, so their rows below are now a record
-of what was fixed rather than a to-do; the file was renamed to VH-43 because
-that is the open item still resting on it, and VH-42's fixture gap (see below)
-is the other. Start at the fixture map.
+of what was fixed rather than a to-do. VH-43 later carried the evidence through
+its odd-source verification; VH-M2 now retains it for the remaining device and
+duration envelope. Start at the fixture map.
 
 ## Fixture map — which file exercises which defect
 
@@ -139,10 +141,11 @@ whose file behaves oddly.
 ## Audio
 
 - **No audio track at all**: `Branded video graphics demo`, `River Evolution
-  3-3`. Spec §5.4 treats this as a warning, not a failure. See VH-21.
-- **Mono**: `CULT1027 Producing Film and Television` (1 channel).
+  3-3`, `Engineering Placements Pre-Placement Briefing`. Spec §5.4 treats this
+  as a warning, not a failure. See VH-21.
+- **Mono**: `CULT1027 Producing Film and Television` and the Teams recording.
 - **PCM s16le, not AAC**: `AMCS3068 North American Film Adaptations` (`.mov`).
-- **Mixed sample rates**: 44.1 kHz on nine files, 48 kHz on nine.
+- **Mixed sample rates**: 16, 44.1 and 48 kHz are all present.
 
 ## Geometry
 
@@ -158,7 +161,7 @@ whose file behaves oddly.
 
 ## Coverage gap
 
-Durations run 1.4–13.8 min. Nothing approaches the 60 minute jobs spec §7.4
+Durations run 83 s–29.25 min. Nothing approaches the 60 minute jobs spec §7.4
 publishes limits for, and there is no true VFR file — the screen recordings
 are CFR on an odd grid, which is a different defect from the VFR the conform
 path was built for. Both gaps carry into VH-M2.
@@ -208,3 +211,23 @@ a clip will find it.
 `over-freeze` always works, since it manufactures the second it needs. The
 degradation should be to that mode, and it should say so rather than silently
 changing what was asked for.
+
+## Repository-review re-audit (2026-08-26)
+
+The current folder contains 28 files: five branding masters and 23 real source
+candidates totalling 16.6 GB and 2 h 13 min. Twenty sources carry audio and
+three are silent. The content spans 83 s–29 min 15 s, 640×480–3840×2400,
+16–50 fps, AAC plus PCM, mono plus stereo, and 16/44.1/48 kHz. That is strong
+coverage of ordinary University material, not a defective corpus.
+
+It is sufficient for VH-50: excluding one decoder anomaly, an independent
+FFmpeg EBU scan spans approximately −30.1 to −13.5 LUFS, 2.7–21.9 LU LRA and
+−6.5 to +1.0 dBFS true peak. It is not sufficient for VH-26 or the complete
+device envelope: every source is landscape H.264 8-bit 4:2:0, with no
+portrait/rotation, HEVC, 10-bit, HDR, phone-style VFR, 60-minute recording,
+genuinely short source or large A/V offset.
+
+`CULT2011.mp4` is a compatibility fixture, not loudness ground truth, until a
+browser decode explains three impossible FFmpeg AAC peaks (maximum +56.7 dBFS)
+and macOS AudioToolbox's `-9405` header refusal. Do not tune the meter or chain
+against that decoder result.

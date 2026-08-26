@@ -82,9 +82,10 @@
           </label>
           <details class="disclosure" id="branding-options">
             <summary class="disclosure-summary">Closing sequence options</summary>
-            <!-- VH-45: the two compositing modes ("over the picture", "over a
-                 freeze frame") were withdrawn on 2026-08-25 — they are wrong in
-                 Firefox, see VH-44. Every job now takes the hard cut, which
+            <!-- VH-46b: the two compositing modes ("over the picture", "over a
+                 freeze frame") remain intentionally hidden until VH-32 decides
+                 whether and how to present them. VH-44 fixed their Firefox
+                 rendering. Every job now takes the hard cut, which
                  composites nothing and was already the default. Animation went
                  with them: Fade and Slide differ only during the build a hard
                  cut discards, so the choice would change nothing. The pipeline

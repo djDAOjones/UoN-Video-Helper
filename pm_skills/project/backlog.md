@@ -37,40 +37,6 @@
       remaining protected loudness work; pilot blockers do not close from unit
       evidence.
 
-- [ ] **VH-49 Firefox cannot make the audio, and is not told so** [sign-off]
-      [detail](tickets/VH-49.md) (2026-08-26)
-      Intent: Firefox 154 has the `AudioEncoder` class and REFUSES `mp4a.40.2`
-      at every bitrate and channel count — 64k to 256k, mono and stereo —
-      while accepting Opus and every video configuration the app asks for.
-      Measured headless and in a normal window. So every lecture with sound
-      failed mid-job in a browser spec §10 lists as supported, after showing a
-      progress bar, with "Something went wrong".
-      Half is fixed and shipped: `capability.ts` now asks
-      `AudioEncoder.isConfigSupported` for the exact configuration the job will
-      use, and pre-flight blocks with `no-aac-encode` before anything starts,
-      naming a browser that works. Verified in all three engines.
-      What is NOT decided is what Firefox users should get, and it needs a
-      person: block them (honest, and excludes a supported browser from a
-      University tool), ship WebM/Opus to Firefox (spec §6.4 has WebM behind
-      D11 and §6.1 says MP4), or drop audio (never). A silent source is
-      unaffected and still works there.
-      Done when: the choice is made and the browser-support claim in spec §10,
-      `README.md` and `docs/03-open-decisions.md` D4 matches it.
-
-- [ ] **VH-46b Restore the closing transition controls** (2026-08-26)
-      Intent: VH-45 withdrew "over the picture" and "over a freeze frame" from
-      the interface because they were wrong in Firefox. VH-44 fixed that on
-      2026-08-26 and it is verified in all three engines, so the reason the
-      controls came out no longer exists. Putting user-facing controls back on a
-      live site is a decision rather than a fix, which is why it did not ride
-      along with VH-44.
-      Done when: the two radios are back in `index.html` (the markup is in the
-      VH-45 comment there, and the pipeline never lost the modes), or the
-      decision is taken to leave them out and VH-32 lays out what replaces them.
-      Note: VH-25's picture fades interact — its Done-when says the fade-out is
-      for hard cut ONLY, because in the overlay modes the build IS the
-      transition.
-
 - [ ] **VH-50 Real material misses the loudness invariant, and the harness
       says it does not** (2026-08-26)
       Intent: `AMCS3059` — 852×480, 130 s, the same file VH-31 was measured on —
@@ -149,10 +115,11 @@
       Intent: maintainer request after using the deployed app — a deliberate
       design pass, not a bug list. The screen accretes rather than progresses
       (the finished state looks like the working state with more underneath),
-      speaks in codecs rather than outcomes, disables controls that still look
-      live, and never shows moving picture despite being a video tool. The
-      plain-language framing and the never-uploaded reassurance are already
-      right and should survive.
+      speaks in codecs rather than outcomes, and never shows moving picture
+      despite being a video tool. It also owns whether and how the currently
+      hidden closing-transition choices return; there will be no piecemeal
+      control restoration ahead of that design. The plain-language framing and
+      the never-uploaded reassurance are already right and should survive.
       Done when: a considered redesign is agreed and implemented, reviewed
       against `UI-STANDARDS.md` §6. Last in the band by design: it must lay out
       the estimate wording, the content class and the fade toggles that the
@@ -263,22 +230,8 @@
 <!-- Human work, not agent work. It is listed apart from the bands precisely
      so it cannot be read as waiting on one. -->
 
-- [ ] **VH-M3 Stop OneDrive syncing this project** [maintainer] (2026-08-25)
-      Intent: on 2026-08-25 the quality gate began failing with
-      `ETIMEDOUT: connection timed out, read` from `readFileSync`, and `tsc`
-      hung indefinitely. OneDrive Files-On-Demand had dehydrated
-      `node_modules` — 598 cloud-only files in the first 3000 checked — so
-      every read became a network fetch. `npm ci` rewrites them locally and
-      fixes it in seconds, but nothing stops it recurring.
-      Status: syncing was paused again on 2026-08-25, for an 8-hour window.
-      Pausing is time-boxed and reverts on its own, so the item stays open.
-      Done when: this folder is excluded from OneDrive sync, or marked "Always
-      keep on this device". `AGENTS.md` already declares cloud-synced paths
-      unsupported for project memory; this is the same hazard reaching the
-      build.
-      Note: `.gitignore` has no effect here — OneDrive does not read it.
-
-- [ ] **VH-M2 Measure the device envelope** [maintainer] (2026-08-24)
+- [ ] **VH-M2 Measure the device envelope** [maintainer]
+      [detail](tickets/VH-M2.md) (2026-08-24)
       Intent: spec §7.4 — published limits come from measurement, and this
       is what closes D8.
       Done when: 5 / 20 / 60 minute jobs at 720p and 1080p are timed on a

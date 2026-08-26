@@ -11,6 +11,45 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-26 — VH-M3 and the repository-review pilot operating model
+
+**Decision:** accept OneDrive as the permanent reference location, but do
+substantial development in one isolated local worktree with pre/post HEAD and
+status checks. Push a green branch as the durable recovery point. Run the
+existing pilot manually from `codex/repository-review-implementation`, while
+`main` stays unchanged as the automatic stable source and manual rollback ref.
+
+**Rationale:** moving or excluding the project is not available to the
+maintainer. Isolating the write/test surface prevents Files-On-Demand from
+dehydrating active dependencies and narrows sync-race exposure without forking
+project memory. A manual experimental deployment cannot overwrite a rollback
+merely because another feature commit is pushed.
+
+**Rollback:** dispatch `.github/workflows/deploy-pages.yml` from `main`, then
+verify the live build identity against that run's head SHA. No revert,
+force-push or branch deletion is required.
+
+**Link:** `DEV-INFRASTRUCTURE.md`; VH-M3.
+
+## 2026-08-26 — VH-49 and VH-46b: honest support, fewer choices
+
+**Decision:** desktop Firefox supports silent sources only. An audio-bearing
+source is blocked in pre-flight when the exact AAC configuration is refused,
+with a working-browser recommendation. Do not add WebM/Opus and never strip
+audio. Keep closing transition and animation controls hidden; every current
+job uses a hard cut, and VH-32 owns whether and how the verified compositing
+paths return.
+
+**Rationale:** capability probing describes the device more truthfully than
+browser sniffing and prevents a long job from failing at the encoder. Restoring
+old radios independently would force novice users to make a choice immediately
+before the interface is deliberately redesigned.
+
+**Alternatives rejected:** treating Firefox as fully supported, dropping
+audio, adding a second output format now, or restoring controls piecemeal.
+
+**Link:** `src/media/capability.ts`, `src/config/branding.ts`, VH-32.
+
 ## 2026-08-26 — VH-53: ownership first, evidence fail-closed
 
 **Decision:** implement the highest-severity verified non-protected review findings on

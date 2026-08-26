@@ -6,7 +6,8 @@
  * **Closing** uses the real 2025 masters (VH-12). Each 5 s master is shipped
  * as two parts split at exactly 1.00 s, where its alpha ramp completes: a
  * transparent `onset` and a fully opaque `tail`. What sits under the onset is
- * the user's choice of mode (VH-22).
+ * the mode (VH-22); the current UI fixes it to `hard-cut`, while VH-32 owns any
+ * future presentation of the other verified paths.
  *
  * **Opening** is deferred (VH-23) — no opening assets exist, and the
  * maintainer's position is that closings are the norm for internal video. It

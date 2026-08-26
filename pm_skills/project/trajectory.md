@@ -17,6 +17,19 @@
      (Prune) moves the oldest phases to archive/trajectory/trajectory-NNNN-<range>.md
      and adds a row to archive/INDEX.md. Archives are append-only; never rewrite. -->
 
+### Repository-review pilot operating decisions
+
+- VH-M3 — Closed 2026-08-26. OneDrive remains the reference location; active
+  development uses one isolated local worktree, pre/post repository checks and
+  a pushed branch as the recovery point. The pilot can run the experimental
+  branch manually while `main` remains the stable rollback.
+- VH-49 — Shipped 2026-08-26. Desktop Firefox supports silent sources only;
+  audio-bearing sources are blocked before processing when the exact AAC
+  capability probe fails. WebM remains deferred and audio is never stripped.
+- VH-46b — Shipped 2026-08-26. Closing transition and animation controls stay
+  hidden, every current job uses a hard cut, and VH-32 owns whether and how the
+  verified compositing paths return in the redesigned interface.
+
 ## Archived: Phase 1 — Band 0 MVP — see archive/trajectory/trajectory-0001-band-0-mvp.md
 
 ## Archived: real material and Band 1's first half — see archive/trajectory/trajectory-0002-real-material-and-band-1.md

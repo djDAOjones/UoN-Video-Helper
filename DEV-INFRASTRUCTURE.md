@@ -126,20 +126,40 @@ lsof -ti tcp:5173 | xargs -r kill
 That command kills only what is listening on **this project's** port. It
 does not pattern-match process names, and it never touches anything else.
 
-### When the toolchain stalls on this filesystem
+### Cloud-synced source checkout
 
-The repository sits on a OneDrive path. If `tsc` hangs, or ESLint fails with
-`ETIMEDOUT: connection timed out, read`, the cause is almost certainly that
-Files-On-Demand has dehydrated `node_modules` and reads are waiting on the
-network — not anything in the code.
+The repository must remain on OneDrive. That location is the reference
+checkout, not the place for a substantial write/test session. Active work uses
+one git worktree on the local filesystem, normally under `/private/tmp`, and
+only that worktree writes project memory. Before and after a session, record:
 
 ```bash
-rm -rf node_modules && npm ci
+git rev-parse --show-toplevel
+git status --short --branch
+git rev-parse HEAD
 ```
 
-That rewrites every dependency locally and takes a few seconds. It is a
-recovery, not a fix: see the `[maintainer]` backlog item on excluding this
-folder from sync.
+Create the worktree from the exact branch being developed, install its own
+dependencies there, run `npm run check`, then commit and push the branch. Check
+the OneDrive checkout's HEAD and status again before handing off. A changed
+HEAD, unexpected conflict copy, or unrelated tracked edit is a stop signal.
+The remote branch is the durable recovery point; the temporary worktree is
+disposable only after its commit is pushed.
+
+If `tsc` hangs in the OneDrive checkout, or ESLint fails with
+`ETIMEDOUT: connection timed out, read`, Files-On-Demand has probably
+dehydrated `node_modules` and reads are waiting on the network rather than on
+the code.
+
+```bash
+git rev-parse --show-toplevel
+npm ci
+```
+
+Proceed only when the first command prints this project's exact checkout.
+`npm ci` replaces the dependency tree itself; no separate recursive deletion
+is needed. This is recovery for the reference checkout, while the
+isolated-worktree operating model is the standing mitigation for sync races.
 
 ### Generated output — safe to delete
 
@@ -381,11 +401,25 @@ The MVP starts at **`v0.1.0`**.
 
 ## Deployment
 
-The unadvertised pilot deploys publicly to GitHub Pages from every push to
-`main`; the maintainer accepted that interim host on 2026-08-25. The permanent
-University-owned location remains open under D5. The Pages workflow runs the
-full gate, builds for the repository subpath, uploads `dist/`, and deploys only
-after the build job succeeds.
+The unadvertised pilot deploys publicly to GitHub Pages. `main` is the stable
+source and deploys automatically on every push. The current repository-review
+experiment is deployed manually from `codex/repository-review-implementation`;
+feature-branch pushes do not overwrite the pilot by themselves. The
+`github-pages` environment allowlist contains both exact branch names.
+
+Deploy the experimental branch, or roll back to `main`, by choosing that ref in
+the workflow-dispatch UI or with one command:
+
+```bash
+gh workflow run deploy-pages.yml --ref codex/repository-review-implementation
+gh workflow run deploy-pages.yml --ref main
+```
+
+After either dispatch, the run's head SHA and the live build identity must
+match the selected ref. Rolling back needs no revert, force-push or branch
+deletion. The permanent University-owned location remains open under D5. The
+Pages workflow runs the full gate, builds for the repository subpath, uploads
+`dist/`, and deploys only after the build job succeeds.
 
 Permissions are job-scoped: build receives `contents: read`; only deploy gets
 `pages: write` and `id-token: write`. The exact `public/` allowlist runs before

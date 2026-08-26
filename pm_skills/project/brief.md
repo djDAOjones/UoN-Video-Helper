@@ -52,8 +52,10 @@ reason WebCodecs was chosen over ffmpeg.wasm — see rationale §1.3). Must
 work offline after first load, except for branding assets, which are
 cached.
 
-Hosting location and URL are **not yet decided** (D5) and are not needed
-for the MVP, which is built and verified locally.
+An unadvertised public pilot runs on GitHub Pages while the permanent
+University-owned location remains open under D5. `main` is the automatic
+stable deployment; the current experimental branch is deployed manually and
+can be rolled back by dispatching the same workflow from `main`.
 
 ## Core features (v1)
 
@@ -97,9 +99,11 @@ for the MVP, which is built and verified locally.
   every AAA exception is recorded explicitly. Carbon productive design
   language, implemented in our own code, with a separate UoN brand token
   layer. See `UI-STANDARDS.md`.
-- **Browser support** excludes Safari below 26 and Firefox on Android —
-  roughly 5% of active browsers, shown a clear explanation rather than a
-  broken app.
+- **Browser support** excludes Safari below 26 and Firefox on Android. Desktop
+  Firefox supports silent sources only: audio-bearing sources are blocked in
+  pre-flight because Firefox cannot encode the AAC track required by the MP4
+  output. Every exclusion names a browser that works rather than failing
+  during processing.
 - **The loudness meter must validate against EBU Tech 3341** reference
   values within ±0.1 LU before anything is built on top of it. This is an
   acceptance criterion, not an optional extra.

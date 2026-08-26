@@ -7,20 +7,23 @@ install and **no media leaving the user's device**.
 
 ## Status
 
-**Live as an unadvertised pilot**, built from `main` on every push. The MVP
-shipped 2026-08-25: a real recording goes in and a branded, correctly-levelled
-MP4 comes out, entirely on the user's device.
+**Live as an unadvertised pilot.** The pilot currently runs the experimental
+`codex/repository-review-implementation` branch, deployed manually after a
+green gate. `main` remains the automatic stable deployment and the one-command
+rollback source. The MVP shipped 2026-08-25: a real recording goes in and a
+branded MP4 comes out entirely on the user's device. Real-material loudness
+conformance is still being corrected and re-proved under VH-50.
 
 What it does NOT yet do is in [`pm_skills/project/backlog.md`](pm_skills/project/backlog.md).
 Three things are worth knowing before using it in anger:
 
-- **Firefox cannot make the audio.** It refuses to encode AAC at any bitrate, so
-  a video with sound is refused before the job starts, with a message naming a
-  browser that works. Silent sources are fine there (VH-49).
+- **Firefox cannot make the audio.** It refuses to encode the AAC track needed
+  by the MP4 output, so a video with sound is refused before the job starts,
+  with a message naming a browser that works. Silent sources are supported.
 - **Opening sequences are withdrawn**, because no approved asset exists (VH-33).
-- **So are the two closing transition modes**, and every job takes the hard cut.
-  They were withdrawn for being wrong in Firefox; that is fixed and verified,
-  and putting the controls back is an open decision (VH-46b).
+- **Every closing currently uses a hard cut.** The two compositing paths remain
+  implemented and verified, but their controls stay hidden until the interface
+  redesign decides whether and how to present them (VH-32).
 
 ## Quick start
 
@@ -111,14 +114,13 @@ Full rules: [`AGENTS.md`](AGENTS.md), [`UI-STANDARDS.md`](UI-STANDARDS.md),
   own `hdlr` scan. See
   [`architecture.md`](pm_skills/project/architecture.md) → "Known
   constraints in the dependency".
-- **This repo lives on OneDrive, and that has already bitten.** Files-On-Demand
-  dehydrates `node_modules`, after which every read is a network fetch. The
-  symptom is `tsc` hanging or ESLint failing with
-  `ETIMEDOUT: connection timed out, read` — neither of which looks like a
-  storage problem. `npm ci` rewrites the files locally and fixes it in seconds.
-  Cloud sync can also revert tracked files mid-session. Exclude this folder
-  from sync, or mark it "always keep on this device"; `.gitignore` has no
-  effect, because OneDrive does not read it.
+- **This repo must live on OneDrive.** Files-On-Demand can dehydrate
+  `node_modules`, and sync can replace a tracked file mid-session. Substantial
+  development therefore happens in one isolated worktree under `/private/tmp`,
+  with the OneDrive checkout treated as the source/reference copy. The branch
+  is pushed after a green gate, so the remote is the durable recovery point.
+  See [`DEV-INFRASTRUCTURE.md`](DEV-INFRASTRUCTURE.md) for the exact operating
+  checks and the dependency-recovery command.
 
 ## Project management
 

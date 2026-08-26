@@ -195,12 +195,12 @@ const BRANDING_VALUES = {
 /**
  * Shows the closing options only when a closing is wanted.
  *
- * Mode and animation used to be chosen here too. VH-45 withdrew both controls
- * on 2026-08-25 — the compositing modes are wrong in Firefox (VH-44), and Fade
- * and Slide differ only during the build a hard cut discards, so with the
- * modes gone the animation choice could not change anything. {@link
- * chosenBranding} still falls back to {@link CLOSING_DEFAULTS} for both, which
- * is what now decides them.
+ * Mode and animation used to be chosen here too. VH-44 fixed and verified the
+ * Firefox compositing defect; VH-46b then kept both controls hidden until the
+ * VH-32 interface redesign decides whether and how to present them. Fade and
+ * Slide differ only during the build a hard cut discards, so with the modes
+ * hidden the animation choice could not change anything. {@link
+ * chosenBranding} falls back to {@link CLOSING_DEFAULTS} for both.
  */
 function syncBrandingOptions(): void {
   const wantsClosing = brandingClosing.checked
