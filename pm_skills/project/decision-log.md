@@ -11,6 +11,37 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-26 — VH-16: a harness that had never run the real path
+
+**Decision:** the acceptance harness gains a worker-driven check, a
+camera-motion fixture for preset comparison, and takes its loudness offset from
+the pipeline's own reported figure.
+
+**Rationale, and the one that matters most:** `OpfsWorkspace.createFile` prefers
+a `FileSystemSyncAccessHandle` and falls back to `createWritable()` when one is
+unavailable — and sync handles are worker-only. The harness called `runPipeline`
+on the main thread, so every acceptance run this project has ever done exercised
+the FALLBACK and never the path the app takes. That is the kind of gap that
+makes a passing harness worse than none, because it is evidence pointing at the
+wrong thing.
+
+**Why camera motion:** on the screen-like default fixture — static background,
+one moving box — H.264 predicts almost everything for free, both presets land
+within a few percent, and comparing them measures nothing. On a field that
+changes everywhere every frame they separate properly: 1223 kB against 468 kB,
+38%. The fixture is deterministic rather than random, because a fixture that
+differs between runs turns a size comparison into a coin toss.
+
+**The offset was a latent trap.** The harness derived it from
+`BRANDING_DURATIONS.openingSeconds` — what the opening is SUPPOSED to be — while
+the pipeline uses the clip's actual decoded duration. They agree only because
+the placeholder is exactly 5.000 s. A real asset a few frames off would have
+shifted every loudness window the harness measured, and the harness would have
+gone on passing. `PipelineResult` reports the truth now.
+
+**Link:** `src/acceptance/run.ts`, `src/acceptance/fixtures.ts`,
+`src/media/pipeline.ts`.
+
 ## 2026-08-26 — VH-38: measure silence, not duration
 
 **Decision:** the `process` request's watchdog resets on every message the

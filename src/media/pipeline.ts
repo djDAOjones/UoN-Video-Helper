@@ -69,6 +69,17 @@ export interface PipelineResult {
    */
   readonly brandingApplied: { readonly opening: boolean; readonly closing: boolean }
   readonly subtitleCues: number
+  /**
+   * Where the source's own content starts in the output, in seconds.
+   *
+   * Reported rather than left for the caller to reconstruct. The acceptance
+   * harness used to derive it from `BRANDING_DURATIONS.openingSeconds`, which
+   * is what the opening is SUPPOSED to be — while the pipeline uses the clip's
+   * actual decoded duration. The two agreed only because the placeholder is
+   * exactly 5.000 s, so a real asset a few frames off would have quietly
+   * shifted every loudness window the harness measured (VH-16).
+   */
+  readonly contentOffsetSeconds: number
 }
 
 /**
@@ -559,6 +570,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       file,
       brandingApplied: { opening: opening !== null, closing: closing !== null },
       subtitleCues,
+      contentOffsetSeconds: contentOffset,
     }
   } catch (cause) {
     // Abandon the output so no writer is left holding a file the caller is

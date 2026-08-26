@@ -38,6 +38,15 @@ export interface FixtureOptions {
   readonly variableFrameRate?: boolean
   /** Draw fine text, to stand in for slide content. */
   readonly slideText?: boolean
+  /**
+   * Change the WHOLE frame every frame, to stand in for camera motion.
+   *
+   * The default fixture is screen-like: a static background with one moving
+   * box, which H.264 predicts almost for free. Both presets therefore produce
+   * nearly the same file on it, so comparing them there measures nothing —
+   * which is why the acceptance harness needs this (VH-16).
+   */
+  readonly cameraMotion?: boolean
   /** Lossless audio, so clipping and exact levels survive into the file. */
   readonly losslessAudio?: boolean
   readonly audio?: AudioShape
@@ -101,6 +110,28 @@ function drawFrame(
         Math.round(height * 0.1) + row * Math.round(size * 1.6),
       )
     }
+  }
+
+  if (options.cameraMotion) {
+    // A field that is different everywhere on every frame, so inter-frame
+    // prediction has nothing cheap to lean on. Deterministic rather than
+    // random: a fixture that differs between runs turns a size comparison into
+    // a coin toss.
+    let seed = (index + 1) * 2654435761
+    const next = (): number => {
+      seed = (seed ^ (seed << 13)) >>> 0
+      seed = (seed ^ (seed >>> 17)) >>> 0
+      seed = (seed ^ (seed << 5)) >>> 0
+      return seed / 0xffffffff
+    }
+    const cell = Math.max(8, Math.round(width / 40))
+    for (let y = 0; y < height; y += cell) {
+      for (let x = 0; x < width; x += cell) {
+        context.fillStyle = `hsl(${Math.round(next() * 360)} 60% ${Math.round(25 + next() * 50)}%)`
+        context.fillRect(x, y, cell, cell)
+      }
+    }
+    return
   }
 
   // Something moving, so the encoder is not handed a static image.

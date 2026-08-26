@@ -298,3 +298,17 @@ The deployed site was also confirmed working on a University machine, so
   `createWatchdog` and pinned with fake timers, including that a late progress
   message cannot resurrect a request whose caller has already been told it
   failed.
+
+### VH-16 — the harness covers the path the app takes
+
+- VH-16 — Shipped 2026-08-26, all three gaps closed. The harness now runs a
+  fixture through the WORKER, which is the only way to reach OPFS's
+  sync-access-handle path — every previous run had exercised the
+  `createWritable` fallback and never the real one. Preset comparison moved to a
+  new camera-motion fixture, where the two presets land at 1223 kB and 468 kB
+  (38%); on the screen-like default H.264 predicts nearly everything and the
+  comparison measured nothing. And the loudness window takes its offset from
+  `PipelineResult.contentOffsetSeconds` rather than
+  `BRANDING_DURATIONS.openingSeconds` — the pipeline offsets by the clip's
+  actual decoded duration, and the two agreed only because the placeholder is
+  exactly 5.000 s.

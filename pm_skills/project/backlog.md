@@ -132,16 +132,6 @@
      harness that misses the path the app actually uses matters far more when
      the pipeline is moving. -->
 
-- [ ] **VH-16 Extend the acceptance harness** (2026-08-25)
-      Intent: the harness from VH-11 covers what it covers; two gaps are known.
-      Done when: it runs the pipeline in a worker as well as on the main thread
-      (today it exercises the `createWritable` path, not the sync-handle path
-      the app actually uses), preset comparison is done on camera-like motion,
-      where the two presets can actually differ, and the loudness window stops
-      deriving its offset from `BRANDING_DURATIONS.openingSeconds`
-      (`run.ts:66`) — the pipeline insists on the clip's *actual* duration, and
-      the two agree only because the placeholder happens to be exactly 5.000 s.
-
 - [ ] **VH-17 Evaluate `fastStart: 'reserve'` for the smaller preset**
       Intent: the "smaller file" preset goes to OneDrive and SharePoint, where
       students may stream it. `fastStart: false` puts the moov box at the end,
