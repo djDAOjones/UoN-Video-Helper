@@ -13,7 +13,13 @@
 
 import type { AudioEncodingConfig, VideoEncodingConfig } from 'mediabunny'
 
-import { KEYFRAME_INTERVAL_SECONDS, OUTPUT_SAMPLE_RATE, type OutputShape, type Preset } from '../config/presets'
+import {
+  KEYFRAME_INTERVAL_SECONDS,
+  OUTPUT_SAMPLE_RATE,
+  audioBitrateFor,
+  type OutputShape,
+  type Preset,
+} from '../config/presets'
 
 /** How the source is fitted into the output frame when the aspect ratio differs. */
 export type FitBehaviour = 'contain' | 'fill'
@@ -50,12 +56,9 @@ export function videoEncodingConfigFor(
  * mastered at target and must pass through unprocessed (spec section 4.4).
  */
 export function audioEncodingConfigFor(preset: Preset, channelCount: number): AudioEncodingConfig {
-  const bitrate =
-    channelCount <= 1 ? preset.audioBitrateMonoBps : preset.audioBitrateStereoBps
-
   return {
     codec: 'aac',
-    bitrate,
+    bitrate: audioBitrateFor(preset, channelCount),
     transform: { sampleRate: OUTPUT_SAMPLE_RATE },
   }
 }

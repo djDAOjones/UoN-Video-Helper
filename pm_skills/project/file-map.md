@@ -15,14 +15,14 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 189 file(s) across 8 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 190 file(s) across 8 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 20 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
 - `docs` — 5 file(s)
 - `public` — 17 file(s)
 - `scripts` — 9 file(s)
-- `src` — 130 file(s)
+- `src` — 131 file(s)
 - `test` — 6 file(s)
 <!-- /file-map-index -->
 
@@ -169,6 +169,7 @@
 - `src/media/conform.test.ts` — Proves fit/pad never distorts, across 4:3, vertical and ultrawide sources.
 - `src/media/conform.ts` — Scale-to-fit and pad geometry, and the reusable frame scaler the pipeline and probe share.
 - `src/media/encoder-delay.ts` — Measures actual AAC round-trip presentation delay for the pipeline's timeline compensation.
+- `src/media/encoding.test.ts` — Pins the shared mono/stereo bitrate decision used by the Mediabunny audio encoder configuration.
 - `src/media/encoding.ts` — Derives the exact Mediabunny audio and video encoder configurations from the output shape.
 - `src/media/framerate.test.ts` — Proves the rounding rule and that timestamps derive from the index so error cannot accumulate.
 - `src/media/framerate.ts` — CFR conform decisions: nearest standard rate, what conforming costs, and the timestamp grid.

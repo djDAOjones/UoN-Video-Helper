@@ -11,6 +11,7 @@ import { getLogRecords, log, setMinimumLogLevel } from '../core/logger'
 import {
   OUTPUT_SAMPLE_RATE,
   PRESETS,
+  audioBitrateFor,
   outputShapeFor,
   projectedOutputBytes,
   videoEncoderConfigFor,
@@ -207,6 +208,7 @@ async function handleProcess(
       // spread over. Conforming can move the rate (40 fps conforms to 30), and
       // dividing by the conformed one would misread the source's density.
       sourceFrameRate: report.video.conform.sourceFrameRate,
+      audioChannelCount: report.audio?.channelCount ?? null,
     })
 
     workspace = await OpfsWorkspace.open(jobId)
@@ -442,6 +444,7 @@ async function handlePreflight(
       // spread over. Conforming can move the rate (40 fps conforms to 30), and
       // dividing by the conformed one would misread the source's density.
       sourceFrameRate: report.video.conform.sourceFrameRate,
+      audioChannelCount: report.audio?.channelCount ?? null,
     })
     const projected = projectedOutputBytes(shape, report.durationSeconds)
 
@@ -457,10 +460,7 @@ async function handlePreflight(
             codec: 'mp4a.40.2',
             sampleRate: OUTPUT_SAMPLE_RATE,
             numberOfChannels: report.audio.channelCount,
-            bitrate:
-              report.audio.channelCount <= 1
-                ? preset.audioBitrateMonoBps
-                : preset.audioBitrateStereoBps,
+            bitrate: audioBitrateFor(preset, report.audio.channelCount),
           })
         : Promise.resolve(true),
     ])

@@ -584,6 +584,34 @@ ticket file was evicted on ship, so this entry is the record.
 **Link:** spec §6.1 and §6.2 doc-deltas; `src/config/presets.ts`; workflow
 `wf_00530dba-cb8`.
 
+## 2026-08-26 — VH-31: audio absence is part of the output shape
+
+**Decision:** `audioBitrateFor(preset, channelCount)` is the single decision
+site for silent, mono and stereo output accounting. `null` means no output
+audio; omitting the count retains the previous conservative stereo assumption
+for video-only utilities. The preflight and process workers pass the inspected
+source count explicitly, while the encoder and AAC support probe share the
+same helper.
+
+**Rationale:** the projection charged every silent file for a stereo AAC track
+the pipeline never creates, and charged mono smaller-preset files at 128 kbps
+while the encoder requests 96 kbps. Keeping separate conditionals in the
+projector, encoder and capability block had already allowed those three views
+of one job to disagree.
+
+**Scope boundary:** this is the smallest safe part of VH-31. It does not add
+the closing duration, relabel the current number as a hard upper bound, or
+revive the rejected multi-window estimator; each would change the hard 2.5x
+storage gate without resolving the ticket's measured under-estimates.
+
+**Verification:** 576 automated tests pass (one intentional skip), including
+new silent/mono/stereo and encoder-agreement cases. The production build is
+green, and a cold local browser boot mounted the app with all four system
+checks and an 85 ms worker round trip.
+
+**Link:** `src/config/presets.ts`, `src/media/encoding.ts`,
+`src/workers/job.worker.ts`; VH-31 ticket.
+
 ## 2026-08-25 — VH-24 and VH-41: one visit to the output shape
 
 **Decision:** Two rules the spec already carried and the code did not.

@@ -61,6 +61,20 @@ export const PRESETS: Readonly<Record<PresetId, Preset>> = {
 }
 
 /**
+ * Returns the AAC bitrate the selected preset will actually request.
+ *
+ * `null` means the source has no audio track, so the output has no audio
+ * bitrate to project. An omitted count retains the conservative stereo
+ * default for callers that only model video shape.
+ */
+export function audioBitrateFor(preset: Preset, channelCount?: number | null): number {
+  if (channelCount === null) return 0
+  return channelCount !== undefined && channelCount <= 1
+    ? preset.audioBitrateMonoBps
+    : preset.audioBitrateStereoBps
+}
+
+/**
  * Spec 6.1: ~0.12 bits per pixel per frame, which is ≈7.5 Mbps at 1080p30.
  *
  * Two roles since VH-47, and it is the same number in both: the ANCHOR the
@@ -201,6 +215,8 @@ export function outputShapeFor(
      * misreads the source's density by exactly that ratio.
      */
     readonly sourceFrameRate?: number | null | undefined
+    /** `null` means no audio track; omitted callers conservatively assume stereo. */
+    readonly audioChannelCount?: number | null | undefined
   },
   content: ContentClass = 'unknown',
 ): OutputShape {
@@ -243,7 +259,7 @@ export function outputShapeFor(
     videoBitrateBps,
     requestedVideoBitrateBps,
     bitrateBasis,
-    audioBitrateBps: preset.audioBitrateStereoBps,
+    audioBitrateBps: audioBitrateFor(preset, source.audioChannelCount),
   }
 }
 

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import {
   PRESETS,
+  audioBitrateFor,
   bitrateWasCappedToSource,
   outputShapeFor,
   projectedOutputBytes,
@@ -106,6 +107,37 @@ describe('projectedOutputBytes', () => {
     const bytes = projectedOutputBytes(outputShapeFor(PRESETS.best, source1080p30), 3600)
     expect(bytes / 1e9).toBeGreaterThan(3)
     expect(bytes / 1e9).toBeLessThan(4)
+  })
+
+  it('charges no audio bitrate when the source is silent', () => {
+    const silent = outputShapeFor(PRESETS.smaller, {
+      ...source1080p30,
+      audioChannelCount: null,
+    })
+    expect(silent.audioBitrateBps).toBe(0)
+    expect(projectedOutputBytes(silent, 60)).toBeLessThan(
+      projectedOutputBytes(outputShapeFor(PRESETS.smaller, source1080p30), 60),
+    )
+  })
+
+  it('projects the mono bitrate the encoder will request', () => {
+    const mono = outputShapeFor(PRESETS.smaller, {
+      ...source1080p30,
+      audioChannelCount: 1,
+    })
+    expect(mono.audioBitrateBps).toBe(PRESETS.smaller.audioBitrateMonoBps)
+  })
+})
+
+describe('audioBitrateFor', () => {
+  it('selects silent, mono and stereo output consistently', () => {
+    expect(audioBitrateFor(PRESETS.smaller, null)).toBe(0)
+    expect(audioBitrateFor(PRESETS.smaller, 1)).toBe(96_000)
+    expect(audioBitrateFor(PRESETS.smaller, 2)).toBe(128_000)
+  })
+
+  it('keeps stereo as the conservative default for video-only callers', () => {
+    expect(audioBitrateFor(PRESETS.smaller)).toBe(PRESETS.smaller.audioBitrateStereoBps)
   })
 })
 

@@ -33,12 +33,13 @@
       cancellation, OPFS races and false-green release evidence.
       State: directory-selected non-overwriting save, cancellable save/wake and
       watchdog ownership, independent output measurement and protocol egress
-      evidence are implemented. OPFS is green in all three engines; Chrome
+      evidence are implemented and deployed to the pilot at
+      `v0.1.0+20260826.d2efde4`. OPFS is green in all three engines; Chrome
       proves all 11 egress controls, Firefox 10 request-lifecycle controls and
       Safari none. Keep open for directory/fallback, private/multi-tab/player/
       device/AT rehearsal, full supported-engine egress proof and protected DSP.
 
-- [ ] **VH-31 The size estimate is ~1.7x too high** [detail](tickets/VH-31.md)
+- [~] **VH-31 The size estimate is ~1.7x too high** [detail](tickets/VH-31.md)
       (2026-08-25)
       Intent: the app said 27.7 MB and produced 7.5 MB on the first real file
       anyone ran. **That was 3.6x; it is 1.7x now** — VH-47 shipped on
@@ -54,12 +55,11 @@
       Done when: the estimate is grounded in the real content — the calibration
       probe already decodes three seconds and could encode them — or is
       presented honestly as an upper bound.
-      One concrete contributor, measured 2026-08-25 while verifying VH-41:
-      `projectedOutputBytes` adds `shape.audioBitrateBps` unconditionally, so a
-      source with NO audio track is charged 128 kbps of stereo AAC for an audio
-      track the output will not contain. On a silent 4 s fixture that was 64 kB
-      of an 82 kB estimate; on the 215 s silent slide deck it is ~3.4 MB. The
-      call sites know (`report.audio !== null`), the function does not.
+      First sub-tranche complete: the projection now receives the real audio
+      channel count, charges silent sources no audio bytes, and shares one
+      mono/stereo bitrate rule with the encoder and AAC capability check. This
+      removes ~3.4 MB of false audio from the 215 s silent slide deck. The
+      content-dependent video estimate remains open.
       VH-24's frame-rate rule and VH-41's bitrate cap shipped 2026-08-25, so
       what remains of that shared visit to `outputShapeFor` is this item and
       VH-19.
