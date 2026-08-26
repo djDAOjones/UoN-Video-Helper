@@ -14,8 +14,9 @@
 ## 2026-08-26 — VH-31: measured, designed, and deliberately not built
 
 **Decision:** run the design workflow, record everything it measured on the
-ticket, and DO NOT implement. Two of three adversarial refuters returned
-blocking findings against the recommendation.
+ticket, and DO NOT implement. All three adversarial refuters returned blocking
+findings against the recommendation — the third reported after this entry was
+first written and only strengthened the conclusion.
 
 **Rationale:** the measurement was worth having and the design was not ready.
 Building it at 4am, with no time left for the review pass that had just caught a
