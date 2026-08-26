@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Odd source shapes spike — UoN Video Helper</title>
+  </head>
+  <body>
+    <h1>Odd source shapes spike</h1>
+    <p>
+      VH-43: runs the awkward properties the real corpus actually has — 852×480, 4:3, 16:10, mono,
+      44.1 kHz, and no audio at all — through the pipeline, and checks each reaches a correct output
+      without distortion or a silently changed channel count. Synthesised rather than the real
+      lectures, so it runs anywhere rather than only on the maintainer's machine.
+    </p>
+    <pre id="log">running…</pre>
+    <script type="module" src="/src/spike/shapes.ts"></script>
+  </body>
+</html>

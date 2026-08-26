@@ -54,6 +54,16 @@ export interface FixtureOptions {
 
 export interface AudioShape {
   readonly startPeakDbfs: number
+  /**
+   * 1 for mono. The corpus has one mono lecture, and mono is where the
+   * estimate and the encoder disagree about which bitrate is being spent.
+   */
+  readonly channels?: number
+  /**
+   * Source sample rate. The corpus splits nine/nine between 44.1 and 48 kHz,
+   * and everything downstream is conformed to 48 (VH-43).
+   */
+  readonly sampleRate?: number
   readonly endPeakDbfs?: number
   /** Impulses at whole-second marks, paired with a white video frame. */
   readonly syncMarkers?: boolean
@@ -211,8 +221,8 @@ const VFR_GAPS = [0.02, 0.055, 0.031, 0.078, 0.024, 0.096, 0.04, 0.018]
 
 /** Builds one fixture and returns it as a file. */
 export async function buildFixture(options: FixtureOptions): Promise<File> {
-  const sampleRate = 48000
-  const channels = 2
+  const sampleRate = options.audio?.sampleRate ?? 48000
+  const channels = options.audio?.channels ?? 2
 
   const output = new Output({
     format: new Mp4OutputFormat({ fastStart: false }),

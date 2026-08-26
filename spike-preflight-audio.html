@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Audio pre-flight spike — UoN Video Helper</title>
+  </head>
+  <body>
+    <h1>Audio pre-flight spike</h1>
+    <p>
+      VH-49: pre-flight asked whether the browser could encode the picture and never whether it
+      could encode the sound. Firefox has the <code>AudioEncoder</code> class, accepts every video
+      configuration, and refuses AAC — so a job started, showed progress, and died at the audio
+      encoder. This checks the block now fires where the encoder will refuse, and nowhere else.
+    </p>
+    <pre id="log">running…</pre>
+    <script type="module" src="/src/spike/preflight-audio.ts"></script>
+  </body>
+</html>

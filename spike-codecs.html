@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Encoder support spike — UoN Video Helper</title>
+  </head>
+  <body>
+    <h1>Encoder support spike</h1>
+    <p>
+      Asks this engine which encoder configurations it will actually accept — video AND audio.
+      <code>capability.ts</code> asks only about video, and only checks that the
+      <code>AudioEncoder</code> class exists, so an engine that has the class and refuses the config
+      passes pre-flight and fails mid-job.
+    </p>
+    <pre id="log">running…</pre>
+    <script type="module" src="/src/spike/codecs.ts"></script>
+  </body>
+</html>

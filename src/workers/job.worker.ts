@@ -9,6 +9,7 @@
 import { installGlobalErrorCapture, type CapturedError } from '../core/diagnostics'
 import { getLogRecords, log, setMinimumLogLevel } from '../core/logger'
 import {
+  OUTPUT_SAMPLE_RATE,
   PRESETS,
   outputShapeFor,
   projectedOutputBytes,
@@ -19,7 +20,7 @@ import { detectOutputWarning, detectSourceWarnings, type AudioWarning } from '..
 import { TARGET_INTEGRATED_LUFS } from '../config/audio'
 import type { BrandingChoice } from '../config/branding'
 import { analyseSourceAudio } from '../media/audio-plan'
-import { checkEncodeSupport, inspectCapabilities } from '../media/capability'
+import { canEncodeAudio, checkEncodeSupport, inspectCapabilities } from '../media/capability'
 import { UnreadableFileError, inspectFile, openInput } from '../media/inspect'
 import { OpfsWorkspace, sweepOrphanedJobs } from '../media/opfs'
 import { CancelledError, runPipeline } from '../media/pipeline'
@@ -290,9 +291,24 @@ async function handlePreflight(
     })
     const projected = projectedOutputBytes(shape, report.durationSeconds)
 
-    const [capability, encode] = await Promise.all([
+    const [capability, encode, canEncodeAac] = await Promise.all([
       inspectCapabilities(),
       checkEncodeSupport(videoEncoderConfigFor(shape)),
+      // A silent source asks nothing of the audio encoder, so it cannot be
+      // blocked by one. Everything else asks for the exact configuration the
+      // job will use, at the source's own channel count — the figure differs
+      // between mono and stereo, and so might the answer.
+      report.audio
+        ? canEncodeAudio({
+            codec: 'mp4a.40.2',
+            sampleRate: OUTPUT_SAMPLE_RATE,
+            numberOfChannels: report.audio.channelCount,
+            bitrate:
+              report.audio.channelCount <= 1
+                ? preset.audioBitrateMonoBps
+                : preset.audioBitrateStereoBps,
+          })
+        : Promise.resolve(true),
     ])
 
     // Spec 5.4: derived from the analysis pass and shown BEFORE processing.
@@ -324,6 +340,7 @@ async function handlePreflight(
       verdict: preflightVerdict({
         hasWebCodecs: capability.hasWebCodecs,
         canEncodeH264: encode.supported,
+        canEncodeAac,
         availableStorageBytes: capability.storage.availableBytes,
         projectedOutputBytes: projected,
         isMobileDevice: capability.deviceClass === 'mobile',

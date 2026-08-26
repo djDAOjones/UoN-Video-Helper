@@ -19,6 +19,7 @@ export type PreflightOutcome = 'block' | 'discourage' | 'warn' | 'proceed'
 export type PreflightReasonCode =
   | 'no-webcodecs'
   | 'no-h264-encode'
+  | 'no-aac-encode'
   | 'insufficient-storage'
   | 'storage-unknown'
   | 'very-long-job'
@@ -34,6 +35,15 @@ export interface PreflightReason {
 export interface PreflightInput {
   readonly hasWebCodecs: boolean
   readonly canEncodeH264: boolean
+  /**
+   * Whether this browser will encode the AAC track the output needs.
+   *
+   * `true` when the source has no audio, since nothing will be asked of the
+   * audio encoder. Separate from {@link canEncodeH264} because the answers
+   * genuinely differ: Firefox 154 encodes every video configuration we ask for
+   * and refuses AAC at every bitrate (VH-49).
+   */
+  readonly canEncodeAac: boolean
   /** Free storage the browser will admit to, or `null` when it will not say. */
   readonly availableStorageBytes: number | null
   readonly projectedOutputBytes: number
@@ -62,6 +72,10 @@ export function preflightVerdict(input: PreflightInput): PreflightVerdict {
 
   if (!input.hasWebCodecs) reasons.push({ code: 'no-webcodecs', outcome: 'block' })
   else if (!input.canEncodeH264) reasons.push({ code: 'no-h264-encode', outcome: 'block' })
+  // Blocks rather than warns, and blocks BEFORE the job starts. The failure it
+  // replaces was a job that ran, showed progress, and died at the audio encoder
+  // with "something went wrong" — the worst version of this available.
+  else if (!input.canEncodeAac) reasons.push({ code: 'no-aac-encode', outcome: 'block' })
 
   if (input.availableStorageBytes === null) {
     // Not a block. Some browsers decline to report a quota, and refusing a job

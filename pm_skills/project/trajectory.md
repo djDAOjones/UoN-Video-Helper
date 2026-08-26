@@ -312,3 +312,21 @@ The deployed site was also confirmed working on a University machine, so
   `BRANDING_DURATIONS.openingSeconds` — the pipeline offsets by the clip's
   actual decoded duration, and the two agreed only because the placeholder is
   exactly 5.000 s.
+
+### VH-43 — the odd shapes reach a correct output, and Firefox does not
+
+- VH-43 — Shipped 2026-08-26. `/spike-shapes.html` runs the awkward properties
+  the real corpus has — 852x480, 4:3, 16:10, mono, 44.1 kHz, and no audio —
+  through the pipeline and checks each for distortion, dimension parity, sample
+  rate conform and channel preservation. ALL PASS in Chrome and Safari.
+  Synthesised rather than the real lectures so it runs anywhere rather than only
+  on the maintainer's machine. The mono-plus-opening channel-count note is
+  recorded as closed by condition: VH-33 removed the opening control and the
+  real closings are silent, so nothing can mix counts until VH-23 restores
+  openings, and it is named on that item.
+- It also found something much larger. Firefox 154 refuses to encode AAC at any
+  bitrate, so every lecture with sound failed mid-job in a browser spec §10
+  lists as supported. `capability.ts` now asks
+  `AudioEncoder.isConfigSupported` and pre-flight blocks with `no-aac-encode`
+  before a job starts, naming a browser that works. What Firefox users should
+  actually get is VH-49, and needs a person.

@@ -11,6 +11,46 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-26 — VH-43, and the Firefox audio gap it surfaced
+
+**Decision:** verify the corpus's odd shapes with synthesised fixtures carrying
+the same properties, in every engine. Then, on what that found: make
+`capability.ts` ask `AudioEncoder.isConfigSupported` and let pre-flight block
+with `no-aac-encode`.
+
+**Rationale for synthesising:** `samples/` is gitignored and irreplaceable, so a
+check that depends on it runs on exactly one machine. The properties are what
+matter — 852x480 is interesting because 852 is not a multiple of 4, not because
+of what the lecture is about — and those travel.
+
+**What it found, which was not what it was looking for.** Firefox 154 has the
+`AudioEncoder` class and refuses `mp4a.40.2` at every bitrate from 64k to 256k
+and at both channel counts, while accepting Opus and every video configuration
+we ask for. Measured headless and in a normal window, so not an artefact of
+headless mode. `capability.ts` checked that the CLASS existed — a different
+question — so a Firefox user passed pre-flight, watched a progress bar, and got
+"Something went wrong" when the audio track reached the encoder. Every lecture
+with sound, in a browser spec section 10 lists as supported.
+
+**Why block rather than warn:** the alternative to blocking is what already
+happened, which is the worst version available — the user spends the encode
+time before being told. The message names a browser that works, as every block
+in this app must.
+
+**What is deliberately NOT decided:** what Firefox users should get. Blocking is
+honest and excludes a supported browser from a University tool; WebM/Opus is
+behind D11 and contradicts spec 6.1's MP4; dropping audio is not an option. That
+is a product decision, so it is VH-49 with `[sign-off]` rather than something to
+settle at 2am.
+
+**A closed-by-condition note:** VH-43 carried a warning that a mono source plus
+an opening mixes channel counts into one track. Unreachable — VH-33 removed the
+opening control and the real closings are silent — so it is recorded against
+VH-23, which is what would revive it.
+
+**Link:** `src/spike/shapes.ts`, `src/spike/codecs.ts`,
+`src/media/capability.ts`, `tickets/VH-49.md`.
+
 ## 2026-08-26 — VH-16: a harness that had never run the real path
 
 **Decision:** the acceptance harness gains a worker-driven check, a

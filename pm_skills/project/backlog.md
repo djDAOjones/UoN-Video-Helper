@@ -26,6 +26,26 @@
      VH-34..VH-40 came from an external code review, 2026-08-25; its findings
      were verified against the source before being written up. -->
 
+- [ ] **VH-49 Firefox cannot make the audio, and is not told so** [sign-off]
+      [detail](tickets/VH-49.md) (2026-08-26)
+      Intent: Firefox 154 has the `AudioEncoder` class and REFUSES `mp4a.40.2`
+      at every bitrate and channel count — 64k to 256k, mono and stereo —
+      while accepting Opus and every video configuration the app asks for.
+      Measured headless and in a normal window. So every lecture with sound
+      failed mid-job in a browser spec §10 lists as supported, after showing a
+      progress bar, with "Something went wrong".
+      Half is fixed and shipped: `capability.ts` now asks
+      `AudioEncoder.isConfigSupported` for the exact configuration the job will
+      use, and pre-flight blocks with `no-aac-encode` before anything starts,
+      naming a browser that works. Verified in all three engines.
+      What is NOT decided is what Firefox users should get, and it needs a
+      person: block them (honest, and excludes a supported browser from a
+      University tool), ship WebM/Opus to Firefox (spec §6.4 has WebM behind
+      D11 and §6.1 says MP4), or drop audio (never). A silent source is
+      unaffected and still works there.
+      Done when: the choice is made and the browser-support claim in spec §10,
+      `README.md` and `docs/03-open-decisions.md` D4 matches it.
+
 - [ ] **VH-44 The closing transitions are wrong in Firefox**
       [detail](tickets/VH-44.md) (2026-08-25)
       Intent: VH-34 measured it and the answer was yes — moving the blend to the
@@ -79,24 +99,6 @@
       the user in plain language rather than applied silently. Sequenced after
       VH-31 because it rides the same probe machinery; if VH-31 lands real
       measurement, this may reduce to naming the class rather than choosing on it.
-
-- [ ] **VH-43 Odd source shapes reach a correct output**
-      [detail](tickets/VH-43.md) (2026-08-25)
-      Intent: split from VH-24, and mostly verification rather than known
-      breakage. The ticket file is the corpus characterisation the whole VH-24
-      family rests on; it kept its content and took this item's name when VH-24
-      shipped, because VH-43 is the open item still standing on it. The corpus carries one mono
-      source, one PCM `.mov`, sample rates split nine/nine between 44.1 and
-      48 kHz, three files at 852×480 (not 854, awkward for chroma subsampling),
-      one at 640×480, and one 3840×2400 — 16:10, not 16:9, which the branding
-      composite has never been fed.
-      Done when: each reaches a correct output without distortion or resampling
-      artefacts, and each is pinned by a named fixture.
-      Note: a mono source plus an opening also mixes channel counts into one
-      track — the encoder is configured from the source (`pipeline.ts:235`) while
-      `feedBrandingAudio` emits at the clip's own count, and the opening
-      placeholders are stereo. Latent only: VH-33 removes the control and the
-      real masters are silent by decision, so fix it here or record it as closed.
 
 - [ ] **VH-25 Boundary fades** [detail](tickets/VH-25.md) (2026-08-25)
       Intent: sources cut hard into the branding, and the two ends differ.
@@ -165,6 +167,12 @@
       VH-33; what remains here is the feature itself.
       Done when: opening assets exist. They will need the same three boundary
       modes as VH-22, mirrored — the onset ramp runs the other way.
+      Inherited from VH-43 on its close (2026-08-26): a mono source plus an
+      opening mixes channel counts into one audio track — the encoder is
+      configured from the source while `feedBrandingAudio` emits at the clip's
+      own count, and the opening placeholders are stereo. Unreachable today
+      because the opening control is gone and the closings are silent, so it
+      was closed by condition; restoring openings revives it.
 
 - [ ] **VH-30 Trim the source** [detail](tickets/VH-30.md) (2026-08-25) [sign-off]
       Intent: maintainer request. Recordings carry material nobody wants — the

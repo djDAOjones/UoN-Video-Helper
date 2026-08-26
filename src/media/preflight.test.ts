@@ -14,6 +14,7 @@ const GB = 1_000_000_000
 const healthy: PreflightInput = {
   hasWebCodecs: true,
   canEncodeH264: true,
+  canEncodeAac: true,
   availableStorageBytes: 50 * GB,
   projectedOutputBytes: 2 * GB,
   isMobileDevice: false,

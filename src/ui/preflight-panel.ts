@@ -23,6 +23,11 @@ function reasonText(code: PreflightReasonCode, summary: PreflightSummary): strin
   switch (code) {
     case 'no-webcodecs':
       return 'This browser cannot process video. Chrome or Edge on a computer will work, as will Safari 26 or later on a Mac.'
+    case 'no-aac-encode':
+      // Names the browser that will work, as every block here must. Firefox
+      // encodes the picture fine and refuses the sound, which is why the
+      // message is about sound rather than about video (VH-49).
+      return 'This browser cannot add sound to a video file. Chrome or Edge on a computer will work, as will Safari 26 or later on a Mac. Firefox can play video but cannot create the audio this needs.'
     case 'no-h264-encode':
       return 'This browser cannot create the video format this tool needs. Chrome or Edge on a computer will work.'
     case 'insufficient-storage':

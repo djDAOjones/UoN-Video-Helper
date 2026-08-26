@@ -71,6 +71,40 @@ export function detectDeviceClass(): 'desktop' | 'mobile' {
   return coarsePointer && touchPoints > 1 ? 'mobile' : 'desktop'
 }
 
+/**
+ * Asks the browser whether it will encode the AUDIO this job needs.
+ *
+ * It was never asked. `hasWebCodecs` checks that the `AudioEncoder` CLASS
+ * exists, which is a different question — Firefox 154 has the class, refuses
+ * `mp4a.40.2` at every bitrate and channel count, and accepts Opus and every
+ * video configuration we ask for. So a Firefox user passed pre-flight, watched
+ * the progress bar, and got "something went wrong" the moment the audio track
+ * reached the encoder. Measured 2026-08-26 in headless AND normal Firefox.
+ *
+ * @returns `true` when the configuration is supported, `false` when it is
+ *   refused or the class is missing. Never throws: a browser that cannot answer
+ *   is treated as unable, because the alternative is failing mid-job.
+ */
+export async function canEncodeAudio(config: AudioEncoderConfig): Promise<boolean> {
+  if (typeof globalThis.AudioEncoder === 'undefined') return false
+  try {
+    const result = await AudioEncoder.isConfigSupported(config)
+    const supported = result.supported === true
+    log.info('capability', 'audio encode support checked', {
+      supported,
+      codec: config.codec,
+      numberOfChannels: config.numberOfChannels,
+      bitrate: config.bitrate,
+    })
+    return supported
+  } catch (cause) {
+    log.warn('capability', 'audio encode support could not be determined', {
+      reason: cause instanceof Error ? cause.message : String(cause),
+    })
+    return false
+  }
+}
+
 /** Asks the browser about the exact encoder configuration this job needs. */
 export async function checkEncodeSupport(config: VideoEncoderConfig): Promise<EncodeSupport> {
   if (typeof globalThis.VideoEncoder === 'undefined') {
