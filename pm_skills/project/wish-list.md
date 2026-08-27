@@ -19,9 +19,12 @@
 
 ## Open
 
-- Momentary and short-term curves are kept in full at 100 Hz — about 5.8 MB per
-  hour of audio. Fine at v1 scope; worth revisiting if anyone points this at a
-  multi-hour recording. (from: VH-3)
+- The short-term curve is still kept in full at 100 Hz — LRA needs the whole
+  distribution, so it cannot simply be dropped. VH-67 removed the momentary
+  curve and halved the block store, taking a stereo hour from ~1.4 MB to
+  ~580 kB; what is left is the irreducible part unless LRA is computed
+  incrementally. Worth revisiting only for a multi-hour recording.
+  (from: VH-3, revised 2026-08-27 by VH-67)
 - EBU Tech 3341 cases 20-23 pass on my reading of "continuous in phase at both
   sides of the single period", which Table 1 does not define. Confirm against
   the EBU's own signal files if they are ever downloaded. (from: VH-3)
@@ -64,10 +67,6 @@
   safe — reports "not ISOBMFF" — but does not do its job. Walking top-level box
   headers forward with 16-byte slices would find a trailing `moov` for
   kilobytes. (from: 2026-08-25 external review)
-- Preflight is uncancellable: `handlePreflight` never registers in `running`
-  and passes no signal into `analyseSourceAudio`, so a user who picks a
-  two-hour file waits out a full audio decode with no way out. (from:
-  2026-08-25 external review)
 - Audio is traversed four to five times per job. Declined as premature — the
   measured cost is 3.6 s + 8.8 s per hour against a video path at 6.3× real
   time — but `audio-plan.ts:70`'s preflight duplicate is the one that is pure
@@ -80,10 +79,6 @@
   window per sample per channel; a ring buffer removes ~13 writes per sample.
   The largest single win in the audio path, and still not a bottleneck.
   (from: 2026-08-25 external review)
-- `loudness.ts`'s module header still says "a handful of running sums plus one
-  value per 100 ms" — true before the hop dropped to 10 ms for the EBU tests.
-  Pairs with the existing 5.8 MB/hour note above. (from: 2026-08-25 external
-  review)
 - The subtitle helper text promises timings are "shifted to match the opening
   sequence", but the opening is off by default and VH-33 removes it, so the
   offset is usually zero. Revisit as part of VH-32's copy pass. (from:
@@ -92,7 +87,10 @@
   header points at `02-technical-rationale.md` as where evidence lives (2,008
   words, room to spare). Moving it there would clear the 3,500-word reference
   guideline without losing a sentence. (from: 2026-08-25 spec copy-edit)
-- Two "A VideoSample was garbage collected without first being closed" warnings
+- Mediabunny reports samples garbage-collected without being closed — two
+  VideoSamples on every inspect+preflight, and three AudioSamples during an
+  interrupted acceptance run (2026-08-27). Same shape, two paths. Original
+  note: two "A VideoSample was garbage collected without first being closed" warnings
   land in the console on every inspect+preflight. Our own loops close every
   sample (`probe.ts:76-84` uses try/finally), so this looks like Mediabunny
   decoding ahead of the `samples(0, CALIBRATION_PROBE_SECONDS)` range and
@@ -128,11 +126,6 @@
   main thread, and the run was abandoned after four of them. A harness nobody
   can sit through is a harness that never goes red, whatever its statuses say.
   Run the corpus in the worker, or shorten the fixtures and say so.
-  (from: 2026-08-27 VH-62)
-- Mediabunny logged "An AudioSample was garbage collected without first being
-  closed" three times during an interrupted acceptance run. Possibly just the
-  interruption, possibly a real leak on an abandoned traversal — worth ten
-  minutes with a completed run before assuming the former.
   (from: 2026-08-27 VH-62)
 - Resource-timing entries are added when a request COMPLETES, so
   `EgressWatch.stop()` can miss a request that is still in flight — a HEAD to a
