@@ -221,7 +221,7 @@
 - [ ] **D11 WebM output** — supported by the muxer, not exposed. Revisit if
       a destination platform requires it. VH-49 decided AGAINST it for Firefox
       on 2026-08-27; VH-69 is the pathway if that is ever reopened.
-- [ ] **VH-23 Opening graphics** (2026-08-25) [low]
+- [ ] **VH-23 Opening graphics** (2026-08-25)
       Intent: the MVP is closing-only. Cut to the icebox 2026-08-27 — the
       maintainer's position is that openings are for external, brand-
       recognition-first video, and this tool is internal, where a closing is
@@ -233,7 +233,7 @@
       Revisit when approved opening assets exist AND there is a reason to want
       them. They need VH-22's three boundary modes mirrored, and a mono source
       plus a stereo opening mixes channel counts into one audio track (VH-43).
-- [ ] **VH-69 A pathway for Firefox users** (2026-08-27) [low]
+- [ ] **VH-69 A pathway for Firefox users** (2026-08-27)
       Intent: VH-49 blocks Firefox for any source with audio and names a
       browser that works, which is honest but excludes a supported browser from
       a University tool. A pathway would be WebM/Opus (D11) or an Opus-in-MP4
