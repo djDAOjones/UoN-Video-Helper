@@ -23,6 +23,14 @@
 
 ## Archived: the review remediation and Band 1's close — see archive/trajectory/trajectory-0003-review-remediation-and-band-1-close.md
 
+### Band 1a closed — one clock for both lanes
+
+- VH-74 + VH-55 — Shipped 2026-08-28. Both source lanes are measured from one
+  origin, audio keeps its own start offset, midstream holes become explicit
+  silence, and the encoder's delay is cancelled on the picture rather than by
+  discarding the first 44 ms of sound. Verified in Chrome on three synthesised
+  sources and a real lecture. See decision-log.
+
 ### VH-77 — the hygiene remainder
 
 - VH-77 — Shipped 2026-08-27. Four stray tuneables moved into `src/config/`;

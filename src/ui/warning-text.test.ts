@@ -12,7 +12,7 @@ import { warningText } from './warning-text'
 /**
  * Exhaustive by construction, not by hand. A `Record` keyed on the union makes
  * TypeScript refuse to compile when a code is added without words to go with
- * it — which is how `onset-trimmed` would otherwise have shipped untested.
+ * it — which is how a warning would otherwise ship untested.
  */
 const ALL = Object.keys({
   'no-audio': true,
@@ -22,7 +22,6 @@ const ALL = Object.keys({
   noisy: true,
   'extended-silence': true,
   'target-missed': true,
-  'onset-trimmed': true,
   'metadata-lost': true,
 } satisfies Record<AudioWarningCode, true>) as AudioWarningCode[]
 

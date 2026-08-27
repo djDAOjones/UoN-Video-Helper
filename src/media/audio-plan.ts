@@ -30,6 +30,7 @@ import { buildGainEnvelope, type GainEnvelope } from '../audio/macrolevel'
 import { log } from '../core/logger'
 import { applyBoundaryFade } from './branding'
 import { toPlanar, toSample } from './audio-frames'
+import { AudioGapFiller } from './source-timeline'
 
 export interface AudioPlan {
   readonly analysis: AudioAnalysis
@@ -51,6 +52,10 @@ async function traverse(
 ): Promise<AudioAnalysis> {
   const analyser = new AudioAnalyser({ sampleRate, channelCount })
   const sink = new AudioSampleSink(track)
+  // Every pass fills gaps identically, or the short-term curve this pass
+  // produces would be indexed differently from the envelope pass C applies
+  // (VH-74).
+  const gaps = new AudioGapFiller(sampleRate, channelCount)
 
   for await (const sample of sink.samples()) {
     // Closed before breaking. The loop is handed a decoded sample and only
@@ -64,7 +69,10 @@ async function traverse(
       break
     }
     try {
+      const silence = gaps.silenceBefore(sample.timestamp)
+      if (silence) analyser.addFrames(chain ? chain.process(silence) : silence)
       const planar = toPlanar(sample, channelCount)
+      gaps.accept(planar[0]?.length ?? 0)
       analyser.addFrames(chain ? chain.process(planar) : planar)
     } finally {
       sample.close()
@@ -75,6 +83,11 @@ async function traverse(
     onSample?.()
   }
   if (chain) analyser.addFrames(chain.flush())
+  if (gaps.insertedFrames > 0) {
+    log.info('audio', 'source audio has gaps; filled with silence', {
+      insertedSeconds: Math.round((gaps.insertedFrames / sampleRate) * 1000) / 1000,
+    })
+  }
   return analyser.finish()
 }
 
@@ -150,6 +163,19 @@ export async function planAudio(
   return { analysis, envelope, gainDb: solution.gainDb, sampleRate, channelCount }
 }
 
+/** Joins two planar blocks channel by channel. Only a gap makes one needed. */
+function concatPlanar(a: Float32Array[], b: Float32Array[]): Float32Array[] {
+  if (a.length === 0) return b
+  if (b.length === 0) return a
+  return a.map((plane, channel) => {
+    const other = b[channel] ?? new Float32Array(0)
+    const joined = new Float32Array(plane.length + other.length)
+    joined.set(plane)
+    joined.set(other, plane.length)
+    return joined
+  })
+}
+
 /**
  * The pass-C processor for CONTENT audio only.
  *
@@ -159,15 +185,27 @@ export async function planAudio(
  * mastering and, worse, would do so inconsistently depending on where it fell
  * relative to the content.
  *
- * Timestamps come from a running frame count rather than the incoming sample:
- * the chain drops the limiter's look-ahead from the head of the stream, so
- * counting frames out is what keeps the result contiguous and aligned.
+ * Timestamps come from a running frame count, NOT from each incoming sample:
+ * the chain drops the limiter's look-ahead from the head of the stream, so a
+ * block's output is not the same audio as its input, and stamping it with the
+ * input's timestamp would be wrong by the look-ahead.
+ *
+ * Counting is only sound while nothing is skipped, which is why the gap filler
+ * runs first: a hole in the source becomes the silence it stands for, and the
+ * count keeps meaning source time (VH-74). Where the audio STARTS is carried
+ * separately, in `startOffsetSeconds` — padding a late start would move its
+ * end as well.
  */
 export function createContentAudioProcessor(
   plan: AudioPlan,
   options: {
     /** Where the content sits on the output timeline. */
     readonly offsetSeconds: number
+    /**
+     * How far after the shared source origin this track's own audio starts.
+     * Zero when audio is the earlier of the two lanes.
+     */
+    readonly startOffsetSeconds: number
     readonly durationSeconds: number
     /** Fade the content in — true when an opening sequence precedes it. */
     readonly fadeIn: boolean
@@ -177,6 +215,7 @@ export function createContentAudioProcessor(
 ): ContentAudioProcessor {
   const { sampleRate, channelCount, envelope, gainDb } = plan
   const chain = new AudioChain({ sampleRate, channelCount, envelope, gainDb })
+  const gaps = new AudioGapFiller(sampleRate, channelCount)
   let emittedFrames = 0
 
   /** Fades, timestamps and emits one block of already-processed audio. */
@@ -184,7 +223,9 @@ export function createContentAudioProcessor(
     const frames = processed[0]?.length ?? 0
     if (frames === 0) return null
 
-    const chunkStartSeconds = emittedFrames / sampleRate
+    // Measured from the shared origin, because that is the clock the fade
+    // boundaries and the picture are on.
+    const chunkStartSeconds = options.startOffsetSeconds + emittedFrames / sampleRate
     applyBoundaryFade(processed, {
       chunkStartSeconds,
       segmentDurationSeconds: options.durationSeconds,
@@ -199,7 +240,16 @@ export function createContentAudioProcessor(
   }
 
   return {
-    process: (sample: AudioSample) => emit(chain.process(toPlanar(sample, channelCount))),
+    process: (sample: AudioSample) => {
+      // Silence for the hole this sample sits after, then the sample itself.
+      // Fed through the chain as one continuous stream, and emitted as one
+      // block, so the caller never has to know a gap happened.
+      const silence = gaps.silenceBefore(sample.timestamp)
+      const planar = toPlanar(sample, channelCount)
+      gaps.accept(planar[0]?.length ?? 0)
+      if (!silence) return emit(chain.process(planar))
+      return emit(concatPlanar(chain.process(silence), chain.process(planar)))
+    },
     flush: () => emit(chain.flush()),
   }
 }

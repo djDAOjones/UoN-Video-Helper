@@ -23,7 +23,7 @@ import {
   type Input,
 } from 'mediabunny'
 
-import { detectOnsetWarning, type AudioWarning } from '../audio/warnings'
+import type { AudioWarning } from '../audio/warnings'
 import { log } from '../core/logger'
 import {
   CLOSING_DEFAULTS,
@@ -48,8 +48,9 @@ import { BrandingCompositor } from './composite'
 import { fitRectangle } from './conform'
 import { findFreezeFrame } from './freeze'
 import { audioEncodingConfigFor, videoEncodingConfigFor } from './encoding'
-import { AudioTimelineShift, measureEncoderDelay } from './encoder-delay'
+import { measureEncoderDelay } from './encoder-delay'
 import type { OpfsWorkspace } from './opfs'
+import { deriveSourceTimeline } from './source-timeline'
 import { carryTrackMetadata } from './track-metadata'
 import { offsetVtt } from './vtt'
 
@@ -73,7 +74,7 @@ export interface PipelineResult {
   readonly subtitleCues: number
   /**
    * Warnings about what PRODUCING the file cost, as opposed to what the source
-   * was. Empty on almost every job; see `detectOnsetWarning` (VH-55).
+   * was. Empty on almost every job.
    */
   readonly outputWarnings: readonly AudioWarning[]
   /**
@@ -239,6 +240,22 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
   if (!videoTrack) throw new Error('The source has no video track')
   const audioTrack = await input.getPrimaryAudioTrack()
 
+  // One origin for both lanes. Rebasing each track to its own first sample is
+  // what silently destroyed the offset between them (VH-74): a capture whose
+  // audio joins five seconds late came out five seconds early against its
+  // picture, because the video lane kept its offset and the audio lane did not.
+  const sourceTimeline = deriveSourceTimeline(
+    await videoTrack.getFirstTimestamp(),
+    audioTrack ? await audioTrack.getFirstTimestamp() : null,
+  )
+  const { originSeconds } = sourceTimeline
+  if (sourceTimeline.videoOffsetSeconds > 0 || sourceTimeline.audioOffsetSeconds > 0) {
+    log.info('pipeline', 'source lanes do not start together', {
+      videoOffsetSeconds: Math.round(sourceTimeline.videoOffsetSeconds * 1000) / 1000,
+      audioOffsetSeconds: Math.round(sourceTimeline.audioOffsetSeconds * 1000) / 1000,
+    })
+  }
+
   // Passes A and B. The encode cannot start until the single linear gain is
   // known, and the gain is not knowable until the chain has been measured.
   let audioPlan = null
@@ -293,9 +310,15 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
   // All of it measured against the PICTURE (VH-42), and pure, so the arithmetic
   // is unit-tested in `branding.test.ts` rather than only reachable through a
   // browser.
+  // Spans measured from the shared origin, not absolute track ends. With both
+  // lanes starting at zero — every ordinary file — these are unchanged.
+  const videoSpanSeconds = Math.max(0, videoDurationSeconds - originSeconds)
+  const audioSpanSeconds =
+    audioDurationSeconds === null ? null : Math.max(0, audioDurationSeconds - originSeconds)
+
   const timeline = closingTimeline({
-    videoDurationSeconds,
-    audioDurationSeconds,
+    videoDurationSeconds: videoSpanSeconds,
+    audioDurationSeconds: audioSpanSeconds,
     mode: requestedOrFallback,
     openingSeconds,
     closingSeconds,
@@ -364,21 +387,29 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
   }
 
   let audioSource: AudioSampleSource | null = null
-  let timelineShift: AudioTimelineShift | null = null
+  /**
+   * The AAC encoder's own delay, cancelled by moving the PICTURE later rather
+   * than the sound earlier (VH-55).
+   *
+   * Shifting audio earlier was the obvious fix and it discarded whatever
+   * landed before zero — three files in the real corpus carry energy in that
+   * first 44 ms, sometimes the attack of the first word. Moving the video
+   * instead costs a frame period of picture at the head, which nobody sees,
+   * and no sound at all. `AGENTS.md` puts silent data loss above everything
+   * else on the list of outcomes to avoid, and this removes the last of it.
+   */
+  let videoDelaySeconds = 0
   if (audioTrack && audioPlan) {
     const audioConfig = audioEncodingConfigFor(preset, audioPlan.channelCount)
     audioSource = new AudioSampleSource(audioConfig)
     output.addAudioTrack(audioSource, audioMetadata)
 
-    // The encoder's own delay, cancelled by shifting the audio timeline
-    // earlier. Measured rather than assumed: it is a property of whichever
-    // encoder this browser provides, and applying a number we had not
-    // measured would be worse than leaving it alone.
-    const delaySeconds = await measureEncoderDelay(audioConfig)
-    // `null` is an unmeasurable encoder, not a zero-delay one. Both go
-    // uncompensated; only one of them is right to (review R-03), and the
-    // warning is raised by `measureEncoderDelay` itself.
-    timelineShift = new AudioTimelineShift(delaySeconds ?? 0, audioPlan.channelCount)
+    // Measured rather than assumed: it is a property of whichever encoder this
+    // browser provides, and applying a number we had not measured would be
+    // worse than leaving it alone. `null` is an unmeasurable encoder, not a
+    // zero-delay one; both go uncompensated, only one of them is right to
+    // (review R-03), and the warning is raised by `measureEncoderDelay`.
+    videoDelaySeconds = (await measureEncoderDelay(audioConfig)) ?? 0
   }
 
   // Spec 8.1: offset the timing, never the words. The offset is the opening
@@ -428,7 +459,9 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
   // tracks are fed concurrently — the muxer interleaves them, so running one
   // track to completion first would make it buffer the whole of that track.
   const feedVideo = async (): Promise<void> => {
-    if (opening) await feedBrandingVideo(opening, videoSource, 0, renderer, laneSignal)
+    if (opening) {
+      await feedBrandingVideo(opening, videoSource, videoDelaySeconds, renderer, laneSignal)
+    }
 
     const sink = new VideoSampleSink(videoTrack)
 
@@ -461,10 +494,13 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       try {
         // Read before `setTimestamp`, which mutates the sample in place.
         const original = sample.timestamp
-        contentOrigin ??= original
+        // The SHARED origin, not this lane's first frame (VH-74). Falling back
+        // to the lane's own only when the shared one is somehow later, so the
+        // guard below never has anything to clamp.
+        contentOrigin ??= Math.min(originSeconds, original)
         lastTrackTimestamp = original
         const sourceTime = Math.max(0, original - contentOrigin)
-        const timestamp = contentOffset + sourceTime
+        const timestamp = contentOffset + videoDelaySeconds + sourceTime
         const buildTime = sourceTime - overlayFrom
 
         if (mode === 'over-picture' && canComposite && buildTime >= 0) {
@@ -513,7 +549,9 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
             const brand = await buildSink.getSample(index * step)
             if (!brand) continue
             const composed = await compositor.compose(frozen, brand, buildFit, {
-              timestamp: contentOffset + videoDurationSeconds + index * step,
+              // The span, so the freeze starts where the picture actually
+              // ended rather than where an absolute duration says it did.
+              timestamp: contentOffset + videoDelaySeconds + videoSpanSeconds + index * step,
               duration: step,
             })
             try {
@@ -530,22 +568,29 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       }
     }
 
-    if (closing) await feedBrandingVideo(closing, videoSource, closingOffset, renderer, laneSignal)
+    if (closing) {
+      await feedBrandingVideo(
+        closing,
+        videoSource,
+        closingOffset + videoDelaySeconds,
+        renderer,
+        laneSignal,
+      )
+    }
     videoSource.close()
   }
 
   const feedAudio = async (): Promise<void> => {
     if (!audioTrack || !audioSource || !audioPlan) return
 
-    // Every sample fed to the encoder passes through the shift, so the whole
-    // timeline moves together — branding and content alike.
+    // Audio goes where the source put it. The encoder's delay is cancelled on
+    // the picture's side now (VH-55), so nothing here moves and nothing here
+    // is discarded.
     const emit = async (sample: AudioSample): Promise<void> => {
-      const shifted = timelineShift ? timelineShift.apply(sample, audioPlan.sampleRate) : sample
-      if (!shifted) return
       try {
-        await audioSource.add(shifted)
+        await audioSource.add(sample)
       } finally {
-        shifted.close()
+        sample.close()
       }
     }
 
@@ -555,6 +600,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
 
     const processContent = createContentAudioProcessor(audioPlan, {
       offsetSeconds: contentOffset,
+      startOffsetSeconds: sourceTimeline.audioOffsetSeconds,
       // The audio's OWN length, so its fade lands where it actually ends rather
       // than where the picture did.
       durationSeconds: audioEndsAt,
@@ -619,13 +665,6 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     })
     const outputWarnings: AudioWarning[] = []
     if (!metadataCarried) outputWarnings.push({ code: 'metadata-lost', detail: {} })
-    if (timelineShift && audioPlan) {
-      const onset = detectOnsetWarning(timelineShift.discarded, audioPlan.sampleRate)
-      if (onset) {
-        log.warn('pipeline', 'encoder-delay compensation discarded audible onset', onset.detail)
-        outputWarnings.push(onset)
-      }
-    }
 
     return {
       file,

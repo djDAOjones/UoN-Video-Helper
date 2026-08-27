@@ -11,6 +11,72 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-28 — VH-74 + VH-55: one clock for both lanes, and nothing discarded
+
+Executed together: they re-time the same four sites, and each one's fixtures
+grade the other.
+
+**VH-74, the source timeline.** The video lane preserved its offsets. The audio
+lane timestamped from a running count of frames emitted and never read
+`AudioSample.timestamp` at all. So a capture whose sound joins five seconds
+late came out five seconds early against its picture, and a hole in the middle
+pulled everything after it forward — silently, which `AGENTS.md` ranks as the
+worst outcome available.
+
+Both lanes now measure from one origin: the earlier of the two first
+timestamps. Audio carries its own start offset instead of being packed from
+zero, and a real hole becomes the silence it stands for. Three non-obvious
+decisions inside that:
+
+A late FIRST sample is never padded — it is an offset, not a gap, and padding
+moves the track's end as well as its start. A NEGATIVE one is treated as
+absent: measured on `CULT1027`, whose audio reports -21.3 ms, which is decoder
+priming the edit list says to skip rather than sound anyone recorded. Delaying
+the picture to "preserve" it would move the whole video to match samples nobody
+is meant to hear.
+
+Gap positions come from each sample's own timestamp against the frames
+consumed, never from accumulated per-gap corrections, so error stays bounded at
+half a frame for the file rather than growing with the gap count. A test walks
+200 gaps to hold that.
+
+Gaps are filled in EVERY pass. The analysis pass produces the short-term curve
+the macro-level envelope is indexed by, and the encode pass applies it by
+position — fill one and not the other and the envelope lands elsewhere.
+
+**VH-55, the onset.** Cancelling the AAC encoder's ~44 ms delay by shifting
+audio earlier discarded whatever fell before zero. The picture is delayed
+instead: it arrives as late as the priming makes the audio arrive, and the two
+are in step with no sound lost. `AudioTimelineShift` and the `onset-trimmed`
+warning are gone — the warning existed to make that loss visible, and one that
+can no longer fire is worse than none.
+
+**The ticket's open question, answered:** Mediabunny's demuxer DOES report the
+delayed video timestamps, so this is measurable rather than only believed —
+every output below reads `videoFirst: 0.04`.
+
+**Measured in Chrome, three synthesised sources plus a real lecture:**
+
+| Case | Source | Output |
+| --- | --- | --- |
+| Burst inside the first 44 ms (WebM/Opus, no priming) | onsets 0.000, 2.000, 4.000 | 0.0441, 2.0441, 4.0441 — the first one survives |
+| Audio joins 2 s late | audio starts 2.000 | audio starts 2.000; onsets 2.088, 4.088 against flashes 2.04, 4.04 |
+| 2 s hole mid-file | marks 3.5 s apart | marks 3.5 s apart |
+| `CULT1027`, audio at -21.3 ms | span 89.685 s | span 89.749 s, nothing lost |
+
+A/V separation is unchanged in every case, within the 40 ms video frame grid.
+That is the real invariant: the tool must not alter the relationship the source
+recorded, only cancel the delay its own re-encode adds.
+
+**Fixtures first, as the ticket required** — but as Node tests, not
+acceptance-harness pages: a full harness run takes over an hour and is itself a
+known false-pass route (VH-62). Four of the five fail on the old behaviour; the
+fifth, an ordinary file with both lanes starting together, stays green.
+
+**Link:** VH-74, VH-55, VH-71 WP2, review P1-02 and R-03;
+`src/media/source-timeline.ts`, `src/media/audio-plan.ts`,
+`src/media/pipeline.ts`, `src/media/encoder-delay.ts`.
+
 ## 2026-08-27 — VH-77: the four small debts
 
 **Tuneables came home.** `MINIMUM_GAP_DEPTH_LU`, the compressor's detector

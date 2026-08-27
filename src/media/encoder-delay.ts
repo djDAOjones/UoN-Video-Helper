@@ -10,10 +10,14 @@
  * the threshold where audio-after-video starts to be noticed at all
  * (ITU-R BT.1359 puts it near 45 ms), so it is not something to wave through.
  *
- * The compensation here shifts the whole audio timeline earlier by the
- * measured delay, which costs the first few tens of milliseconds of sound. On
- * a lecture that is either silence or the start of a branding fade, and it
- * buys sync that a viewer would otherwise notice.
+ * The compensation is applied to the PICTURE, not the sound: the pipeline
+ * delays every video timestamp by this figure, so the video arrives as late as
+ * the priming makes the audio arrive and the two are in step. Shifting the
+ * audio earlier instead was the first fix and it discarded whatever landed
+ * before timestamp zero — three files in the real corpus carry energy there,
+ * sometimes the attack of the first word (VH-55, review R-03).
+ *
+ * This module only measures. Where the number is applied is `pipeline.ts`.
  */
 
 import {
@@ -30,7 +34,6 @@ import {
 } from 'mediabunny'
 
 import { log } from '../core/logger'
-import { toPlanar, toSample } from './audio-frames'
 
 /** Measured once per codec configuration; the delay is a property of the encoder. */
 const cache = new Map<string, Promise<number | null>>()
@@ -134,83 +137,4 @@ export async function measureEncoderDelay(config: AudioEncodingConfig): Promise<
 
   cache.set(key, measurement)
   return measurement
-}
-
-/**
- * Shifts an audio sample earlier to cancel the encoder's delay.
- *
- * Content that would land before zero is dropped rather than clamped: clamping
- * would pile the first few frames on top of each other at timestamp zero,
- * which is worse than losing them.
- *
- * Dropping is not free, and it used to be silent (review R-03). Three files in
- * the real corpus carry energy in their first 44 ms — two around -26 dBFS, one
- * around -48 — so what goes is sometimes the attack of the first word rather
- * than room tone. `AGENTS.md` puts silent data loss at the top of the list of
- * outcomes to avoid, so this measures what it discards and the pipeline says
- * so.
- *
- * The compensation itself still costs those samples. Preserving them means
- * delaying the VIDEO by the encoder delay instead — an empty edit list, which
- * Mediabunny does write — and that moves the axis the acceptance sync meter is
- * least able to measure, because it reads audio in decoded-sample time and
- * video in presentation time. VH-55 carries that half, sequenced after VH-62.
- */
-export class AudioTimelineShift {
-  /** Loudest sample discarded ahead of timestamp zero, linear. */
-  private discardedPeak = 0
-  private discardedFrames = 0
-
-  constructor(
-    private readonly delaySeconds: number,
-    private readonly channelCount: number,
-  ) {}
-
-  get isNoOp(): boolean {
-    return this.delaySeconds <= 0
-  }
-
-  /** What the shift threw away: frame count, and the loudest sample among them. */
-  get discarded(): { readonly frames: number; readonly peakDbfs: number } {
-    return {
-      frames: this.discardedFrames,
-      peakDbfs: this.discardedPeak > 0 ? 20 * Math.log10(this.discardedPeak) : -Infinity,
-    }
-  }
-
-  private record(planes: readonly Float32Array[]): void {
-    for (const plane of planes) {
-      for (const value of plane) {
-        const magnitude = Math.abs(value)
-        if (magnitude > this.discardedPeak) this.discardedPeak = magnitude
-      }
-    }
-    this.discardedFrames += planes[0]?.length ?? 0
-  }
-
-  apply(sample: AudioSample, sampleRate: number): AudioSample | null {
-    if (this.isNoOp) return sample
-
-    const shifted = sample.timestamp - this.delaySeconds
-    const durationSeconds = sample.numberOfFrames / sampleRate
-
-    if (shifted + durationSeconds <= 0) {
-      this.record(toPlanar(sample, this.channelCount))
-      sample.close()
-      return null
-    }
-
-    if (shifted >= 0) {
-      sample.setTimestamp(shifted)
-      return sample
-    }
-
-    // Straddles zero: keep the part at or after it.
-    const dropFrames = Math.round(-shifted * sampleRate)
-    const planes = toPlanar(sample, this.channelCount)
-    this.record(planes.map((plane) => plane.subarray(0, dropFrames)))
-    const kept = planes.map((plane) => plane.subarray(dropFrames))
-    sample.close()
-    return toSample(kept, sampleRate, 0)
-  }
 }

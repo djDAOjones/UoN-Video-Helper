@@ -15,7 +15,7 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 166 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 168 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 20 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
@@ -23,7 +23,7 @@
 - `public` — 13 file(s)
 - `reviews` — 7 file(s)
 - `scripts` — 5 file(s)
-- `src` — 110 file(s)
+- `src` — 112 file(s)
 - `test` — 4 file(s)
 <!-- /file-map-index -->
 
@@ -150,6 +150,7 @@
 - `src/core/watchdog.ts` — A timer that measures SILENCE rather than elapsed time, so a long job is never mistaken for a stuck one.
 - `src/main.ts` — App entry: installs diagnostics first, mounts the shell, runs the system check.
 - `src/media/audio-frames.ts` — AudioSample to planar Float32 and back, shared by the chain and branding.
+- `src/media/audio-plan.test.ts` — Pins that the content processor keeps a late audio start and a midstream hole.
 - `src/media/audio-plan.ts` — The three audio passes, and the per-sample hook the encoder calls.
 - `src/media/branding-fade.test.ts` — Pins what "hard cut with a 100 ms fade" means at sample level (D3).
 - `src/media/branding-timeline.test.ts` — Pins where branding sits on the timeline: boundaries measured against the picture, never the longer track.
@@ -159,8 +160,7 @@
 - `src/media/composite.ts` — Premultiplied-alpha compositing. `out = brand + source×(1−a)`; the straight form double-darkens.
 - `src/media/conform.test.ts` — Proves fit/pad never distorts, across 4:3, vertical and ultrawide sources.
 - `src/media/conform.ts` — Scale-to-fit and pad geometry, and the reusable frame scaler the pipeline and probe share.
-- `src/media/encoder-delay.test.ts` — Pins that delay compensation measures the onset it discards, at the levels the corpus carries.
-- `src/media/encoder-delay.ts` — Measures the audio encoder's own delay and shifts the timeline to cancel it.
+- `src/media/encoder-delay.ts` — Measures the audio encoder's own delay; the pipeline cancels it on the picture.
 - `src/media/encoding.test.ts` — Pins that pre-flight validates the same codec string production encodes with.
 - `src/media/encoding.ts` — Mediabunny encoding configs derived from the presets; where VH-7's audio chain will hook in.
 - `src/media/framerate.test.ts` — Proves the rounding rule and that timestamps derive from the index so error cannot accumulate.
@@ -183,6 +183,8 @@
 - `src/media/probe.ts` — The 3-second calibration probe: real decode and encode on the real file and device.
 - `src/media/save.test.ts` — Pins the suggested filename and the guard that refuses the source as a destination.
 - `src/media/save.ts` — Streams the result to the user's chosen location, refuses the source, and hands back what to release.
+- `src/media/source-timeline.test.ts` — The shared-origin and gap arithmetic, including that rounding does not accumulate.
+- `src/media/source-timeline.ts` — Where the source's two lanes actually start, and turning holes into the silence they stand for.
 - `src/media/track-metadata.test.ts` — Pins the carry rules: 'und' omitted, the lone track made default, a read failure reported not fatal.
 - `src/media/track-metadata.ts` — Carries a source track's language, name and disposition onto the output track.
 - `src/media/vtt.test.ts` — Proves cue text, settings, comments and line endings survive byte for byte.

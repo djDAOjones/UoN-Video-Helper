@@ -162,16 +162,6 @@ export const WARNING_THRESHOLDS = {
   extendedSilenceBelowLufs: -60,
   /** Post-processing miss against the target. */
   targetMissedByLu: 1,
-  /**
-   * Peak level at which onset trimmed by encoder-delay compensation counts as
-   * real content rather than room tone.
-   *
-   * The compensation discards whatever falls before timestamp zero — about
-   * 44 ms for AAC. Measured across the real corpus (2026-08-27, VH-55), three
-   * files carry energy in that window: two near -26 dBFS and one near -48.
-   * -50 catches all three and leaves a genuine noise floor alone.
-   */
-  onsetTrimmedAboveDbfs: -50,
 } as const
 
 /**

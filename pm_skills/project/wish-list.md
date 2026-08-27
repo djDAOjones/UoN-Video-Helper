@@ -132,3 +132,4 @@
   branding asset did not appear in `allRequests` during a direct test. The
   body-wrapping instrument is unaffected; the passive timeline is not a
   complete census. (from: 2026-08-27 VH-62)
+- The "Discard it and start again" button holds the file that was current when the question was raised, so choosing a different file while the question is on screen and then clicking it processes the file the user just replaced (found 2026-08-28 while verifying VH-74).

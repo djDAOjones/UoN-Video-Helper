@@ -23,50 +23,6 @@
      Both sets were re-verified against source before banding, and where a
      review's own remedy was shown unsafe the item says so. -->
 
-### Band 1a — The output is what we say it is (signed off 2026-08-25)
-
-<!-- Committed. Everything a staff member meets today that is wrong,
-     misleading, or a risk. VH-54, VH-50 and VH-58 shipped 2026-08-27 and the
-     output contract now holds on real material, and VH-56 shipped with it so
-     a finished file survives the next click and VH-57 made every phase answer
-     Cancel, VH-55 made its onset loss visible and VH-59 made track loss
-     visible. What remains is VH-55's second half and its timeline sibling
-     VH-74, which are ONE piece of work: both re-time the same four timestamp
-     sites, and VH-74's fixtures are what would grade VH-55's change. Doing
-     either alone means touching A/V sync twice. -->
-
-- [~] **VH-55 Source onset can be replaced by encoder priming** (2026-08-27)
-      Intent: R-03. `AudioTimelineShift.apply()` drops AAC samples landing
-      before timestamp zero. Sync survives; content does not — three files in
-      the real corpus carry energy in their first 44 ms.
-      Done 2026-08-27: the probe distinguishes an unmeasurable encoder from a
-      zero-delay one, and a discarded onset above −50 dBFS now raises a visible
-      `onset-trimmed` warning, so the loss is no longer silent.
-      Remaining: stop discarding it. Delay the VIDEO by the encoder delay
-      instead — Mediabunny writes the empty edit list — which is ~6 lines
-      across four timestamp sites. UNBLOCKED 2026-08-27: VH-62 put the sync
-      meter on one clock, so the change can now be measured. The open question
-      the measurement answers is whether Mediabunny's demuxer applies a video
-      edit list to the timestamps it reports; if it does not, the meter cannot
-      grade the change even though players would honour it.
-      Done when: no source sample is discarded, and a sync meter that measures
-      both tracks on one clock says so.
-      Coupled 2026-08-27: execute with VH-74 — the P1-02 source-gap/offset fix
-      shares the same four timestamp sites, and its late-audio and
-      midstream-gap fixtures land first.
-
-- [ ] **VH-74 Preserve the source timeline** (2026-08-27)
-      Intent: P1-02, the one review P1 the remediation arc never covered —
-      `audio-plan.ts` timestamps audio from a contiguous frame counter and
-      never reads `AudioSample.timestamp`, so a late-starting audio track or a
-      midstream gap is silently collapsed while the video lane keeps offsets.
-      Order: criterion-5 late-audio and midstream-gap fixtures first (they
-      must go red on today's behaviour), then the shared-origin port, then
-      VH-55's video-delay change measured by the same fixtures.
-      Done when: one A/V origin; audio keeps its own start offset; real gaps
-      become explicit silence; the fixtures pass; nothing ships fixture-less.
-      Detail: [VH-71 WP2](tickets/VH-71.md).
-
 ### Band 2 — The edges hold
 
 <!-- Not committed, and all of it is agent work. Ordered by dependency rather
@@ -107,6 +63,10 @@
       in-process pipeline helper, never the real worker protocol (P2-07), and
       criterion 2's verdict checks neither content frame count nor gap/overlap
       coverage — see [VH-71 WP4](tickets/VH-71.md).
+      Unblocked 2026-08-28: Band 1a is done, so the pipeline has stopped moving
+      under it. VH-55/VH-74's late-audio, midstream-gap and onset-at-zero
+      fixtures are built and measured — porting them into criterion 5 is now
+      transcription rather than design.
 
 ### Band 3 — Blocked on the maintainer
 
