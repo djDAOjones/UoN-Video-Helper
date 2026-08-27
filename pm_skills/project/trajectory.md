@@ -21,6 +21,14 @@
 
 ## Archived: real material and Band 1's first half — see archive/trajectory/trajectory-0002-real-material-and-band-1.md
 
+### VH-66 — the documents and the code agree again
+
+- VH-66 — Shipped 2026-08-27. Production shows the build identity its own
+  documentation promised, the Deployment section says that `main` publishes,
+  `architecture.md` names modules that exist, and the placeholder generator
+  stopped emitting closings the app does not fetch. Two spec deltas captured
+  rather than edited. See decision-log.
+
 ### VH-64 — progress says what it is, and a slow job is agreed to
 
 - VH-64 — Shipped 2026-08-27. The progress bar carries an accessible name that

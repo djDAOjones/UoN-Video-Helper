@@ -11,6 +11,50 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-66: correct the code where the doc was right
+
+**Decision:** fix the drift in whichever direction is true. Where the code had
+fallen behind a published promise, change the code; where a document described
+a project that no longer exists, change the document; where the document is
+protected, capture a delta and change nothing.
+
+**Rationale (review R-15):** four drifts, and they did not all point the same
+way.
+
+`DEV-INFRASTRUCTURE.md` said both the product version and the build identity
+appear "in the UI's About/footer line". Production showed the product version
+alone, and the diagnostics bundle that carries the build id is dev-only — so a
+running production app could answer "what release is this?" and not "exactly
+what code is live?", which is the whole point of having two. The document was
+right; `main.ts` was wrong. Non-secret: this repository is public and the
+commit is already in the shipped sourcemaps.
+
+Its Deployment section said the MVP is "local only" and that "nothing deploys
+until D5 is answered". Every push to `main` has published since 2026-08-25.
+The document was wrong, and updating it is squarely within its ownership.
+
+`architecture.md`'s source tree named `core/bus.ts`, `core/store.ts`,
+`media/sidecar.ts`, `branding/assets.ts`, `ui/shell.ts`, `ui/components/` and
+`ui/views/` — none of which exist — and described a store-and-bus main thread
+that was never built. Replaced with what is on disk, and the communication
+section now says the main thread holds its state directly and that adding a
+store is a decision rather than a default.
+
+`gen-placeholder-branding.mjs` still emitted a flat `closing-{label}.mp4`.
+The real closings arrived with VH-12 and are built by `build-branding.mjs` as
+`closing-tail-*` and `closing-onset-*`, so running the old generator dropped
+four stale files beside the real ones. It builds openings only now — there are
+still no approved opening assets, which is what it is for.
+
+**Captured, not edited:** two spec deltas. §5.2 step 6 states the limiter's
+ceiling as −2.0 dBTP, which is now the ceiling of the FILE while the limiter
+targets 1.0 dB below it (VH-50); and §5.2 step 3 lists the pause freeze once
+where the implementation needs it twice (VH-61). `docs/` is protected, so
+those go to `doc-deltas.md` for a sign-off pass.
+
+**Link:** VH-66; review R-15; `DEV-INFRASTRUCTURE.md`, `src/main.ts`,
+`pm_skills/project/architecture.md`, `scripts/gen-placeholder-branding.mjs`.
+
 ## 2026-08-27 — VH-64: name the progress, and ask before the slow job
 
 **Decision:** give the progress bar an accessible name that tracks the stage,

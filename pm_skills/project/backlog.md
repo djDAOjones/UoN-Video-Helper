@@ -152,15 +152,6 @@
       LRA > 9 gate is modelled on a boundary corpus, and neither direction is
       made worse. Protected DSP — re-run the EBU harness.
 
-- [ ] **VH-66 Operational and documentation contracts have drifted**
-      (2026-08-27)
-      Intent: R-15. Recovery, deployment, privacy, version and diagnostics
-      statements no longer all match the code, and some of it is protected
-      documentation.
-      Done when: each drift is corrected in the implementation or captured in
-      `doc-deltas.md` for the next doc-sync. Never narrow a published promise
-      to make it true.
-
 - [ ] **VH-17 Evaluate `fastStart: 'reserve'` for the smaller preset**
       Intent: the "smaller file" preset goes to OneDrive and SharePoint, where
       students may stream it. `fastStart: false` puts the moov box at the end,

@@ -379,14 +379,21 @@ The MVP starts at **`v0.1.0`**.
 
 ## Deployment
 
-**Not yet defined — open decision D5.** Hosting location and URL are
-with UoN IT / the web team.
+**Live as an unadvertised pilot on GitHub Pages**, built from `main` by
+`.github/workflows/deploy-pages.yml`. The maintainer accepted public
+hosting on 2026-08-25 for piloting; the intended home is still an
+internal server, and **D5 remains open** for that.
 
-The Band 0 MVP is **local only**. Nothing deploys until D5 is answered
-and this section is populated with sign-off, per `prompts/deploy.md`
-step 1.
+**Every push to `main` publishes.** There is no separate act of
+deploying, and no gate beyond the workflow's own `npm run check`. That
+is what makes the release boundary worth hardening: the build job holds
+`contents: read` only, Pages and OIDC credentials belong to the deploy
+job, and every action is pinned to a commit SHA (VH-65).
 
-What is already known, and constrains the eventual answer:
+`BASE_PATH` is derived from the repository name so a fork or a rename
+does not silently produce a site whose asset URLs all 404.
+
+What is known, and constrains the eventual internal answer:
 
 - Static files only. No server-side processing, no build step on the
   host, no special response headers.

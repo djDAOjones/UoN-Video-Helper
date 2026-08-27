@@ -57,51 +57,70 @@ two lanes that meet only at the muxer.
 
 ```
 src/
-  main.ts                  entry — mounts the shell, installs diagnostics
+  main.ts                  entry — the whole UI, worker client, job lifecycle
   config/                  ALL tuneable values. No magic numbers elsewhere.
-    presets.ts             the two output presets (spec §6.1, §6.2)
+    presets.ts             the two output presets, output shape, AVC level (§6.1, §6.2)
     audio.ts               loudness targets + every chain constant (§5.1, §5.2)
-    branding.ts            durations (D2), master variant table (§4.2)
-    thresholds.ts          pre-flight bands (§7.3), warning triggers (§5.4)
+    branding.ts            durations (D2), variant table, closing defaults (§4.2)
+    thresholds.ts          pre-flight bands (§7.3), probe length, worker limits
   core/
     logger.ts              structured logger + bounded ring buffer
     diagnostics.ts         global error/unhandledrejection capture, redacted bundle
-    bus.ts                 tiny typed pub-sub (main thread only)
-    store.ts               app state, observable
+    redact.ts              what never leaves the machine, applied to the bundle
+    egress.ts              per-realm watch on what leaves; the worker runs its own
+    keep-awake.ts          screen wake lock + the unload-warning rule (§7.5)
+    watchdog.ts            silence-based timeouts for worker requests
+    version.ts             product version and build identity
   media/
-    inspect.ts             Mediabunny demux → SourceReport
-    capability.ts          WebCodecs + canEncodeVideo + OPFS quota + device class
+    inspect.ts             Mediabunny demux → SourceReport, on the PRIMARY tracks
+    isobmff.ts             handler-type scan for the tracks Mediabunny cannot see
+    capability.ts          WebCodecs + canEncode* + OPFS quota + device class
     probe.ts               3-second calibration probe → throughput + estimate
+    preflight.ts           the §7.3 verdict, pure
+    framerate.ts           VFR verdict and conform cost
     conform.ts             CFR conform, scale-to-fit, pad maths
-    pipeline.ts            pass 1 / pass 2 orchestration
-    opfs.ts                working store + a seekable Mediabunny target
-    save.ts                File System Access API, blob fallback
-    sidecar.ts             subtitle detection, WebVTT parse/offset/emit, metadata carry
+    pipeline.ts            pass 1 / pass 2 orchestration, both feed lanes
+    audio-plan.ts          the gain solve and the content audio processor
+    audio-frames.ts        planar/interleaved conversion at the Mediabunny edge
+    encoding.ts            the encoder configs Mediabunny is given
+    encoder-delay.ts       measures the AAC encoder's own delay, and compensates
+    branding.ts            variant selection, fetch, boundary fades, timeline
+    composite.ts           the build over picture, for the overlay modes
+    freeze.ts              picks the held final frame for `over-freeze`
+    opfs.ts                job-scoped working store, Web Locks, orphan sweep
+    save.ts                File System Access API, blob fallback, source guard
+    output-verification.ts the §13 criterion 2 postcondition, pure
+    vtt.ts                 WebVTT parse, cue offset, emit
   audio/
     kweighting.ts          BS.1770-4 pre-filter + RLB biquads
+    biquad.ts              the second-order section both filters are built from
     loudness.ts            gated integrated, short-term, LRA
-    truepeak.ts            4x oversampled true peak
+    truepeak.ts            4x oversampled true peak, drained at end of stream
+    analyse.ts             loudness + true peak over one traversal
     highpass.ts            60 Hz
-    macrolevel.ts          conditional envelope, 15 s smoothing, 1 dB/s slew, pause freeze
+    macrolevel.ts          conditional envelope, 15 s smoothing, slew, pause freeze
     compressor.ts          2:1, -18 dBFS, 20 ms / 200 ms, soft knee
-    limiter.ts             5 ms look-ahead, 50 ms release, -2.0 dBTP
+    limiter.ts             5 ms look-ahead, 50 ms release, working ceiling
     chain.ts               the ordered chain, assembled
-  branding/
-    assets.ts              variant selection (§4.2), fetch + cache
-    placeholder.ts         generated stand-in clips matching the master format
+    gain-solve.ts          §5.2 step 5's gain, solved against the chain that limits
+    warnings.ts            the §5.4 rows, plus what production cost the user
   workers/
     job.worker.ts          the whole job
+    cancellation.ts        the registry that makes a request cancellable
     protocol.ts            typed messages across the boundary
   ui/
-    shell.ts               app shell, landmarks, live region
-    components/            Carbon-spec'd controls, our own code
-    views/                 select / inspect / options / progress / done / blocked
+    source-panel.ts        what the file is, and what cannot be carried over
+    preflight-panel.ts     the verdict, in plain language
+    warning-text.ts        one sentence per warning code
+    format.ts             durations, sizes, rates
+  acceptance/              the §13 harness. Dev-only; not built.
+  spike/                   maintainer probes. Dev-only; not built.
   styles/
     tokens.brand.css       UoN palette — the D1 token lives here, once
     tokens.carbon.css      Carbon structural tokens (spacing, type, layer, state)
 test/
   ebu3341/                 signal synthesis + published expected values
-  fixtures/                synthesised video/audio fixtures (generated, not committed)
+  helpers/                 shared signal generators
 samples/                   YOUR real recordings. Gitignored. Never committed.
 ```
 
@@ -116,21 +135,28 @@ samples/                   YOUR real recordings. Gitignored. Never committed.
 | `media/opfs.ts` | The working store: a job-scoped OPFS directory, `createWritable()` handles wrapped for `StreamTarget`, and the orphan sweep at app start. Output lands in OPFS first and is copied to the user's destination only on success — writing straight to their chosen file would leave a partial on cancel, breaking spec §13 criterion 8. |
 | `audio/loudness.ts` | The meter. Everything downstream trusts it, so it is built and validated first. |
 | `audio/chain.ts` | Assembles steps 2-6 in order and applies them to a stream of `Float32Array` blocks. Each step is a separate, independently testable module. |
-| `branding/assets.ts` | Picks the master variant nearest the output frame rate and resolution class, fetches, caches. Falls back to `placeholder.ts` until real assets exist. |
+| `media/branding.ts` | Picks the master variant nearest the output frame rate and resolution class, fetches it, and owns the boundary fades and the output timeline. |
+| `media/save.ts` | Streams the result to the user's chosen location, and refuses a destination that IS the source (VH-56). |
+| `audio/gain-solve.ts` | Solves spec §5.2 step 5's gain against the chain that limits, over an injected measurement, so the harness and the product cannot diverge (VH-50). |
+| `workers/cancellation.ts` | The registry that makes a request cancellable from before its first await (VH-57). |
 | `workers/job.worker.ts` | Owns the job lifecycle: pass 1, pass 2, progress reporting, cancellation, OPFS cleanup. |
 
 ## Communication patterns
 
 - **Across the worker boundary** — a typed request/response + progress-event
-  protocol in `workers/protocol.ts`. The main thread sends one `start` with
-  the job spec and receives `stage`, `progress`, `warning`, `done`, `error`.
-  Cancellation is an `AbortController` signal mirrored by a `cancel`
-  message. No shared mutable state; transfer `ArrayBuffer`s, never copy.
+  protocol in `workers/protocol.ts`. The main thread sends `inspect`,
+  `preflight`, `process`, `cancel`, `discard`, `lease` and `egress`, and
+  receives `inspected`, `preflighted`, `stage`, `processed`, `cancelled`,
+  `discarded`, `failed` and `uncaught`. Cancellation is an `AbortController`
+  registered before the handler's first await (`workers/cancellation.ts`) and
+  reached by a `cancel` message. No shared mutable state; transfer
+  `ArrayBuffer`s, never copy.
 - **Within the worker** — direct imports and plain function composition.
   The pipeline is a pipeline; it does not need an event bus.
-- **Within the main thread** — a small observable `store.ts` for app state,
-  and `bus.ts` for cross-cutting notices (a warning raised, a stage
-  changed). Views subscribe; they never reach into each other.
+- **Within the main thread** — `main.ts` holds the state directly: a
+  selection epoch, the in-flight flags, and the retained result. There is no
+  store and no bus, and adding either is a decision rather than a default —
+  the surface is one screen with one job on it.
 
 Exception worth naming: the progress path is deliberately one-way and
 lossy. Dropping a progress frame is fine; dropping a `warning` or `error`
@@ -192,7 +218,7 @@ Verified against Mediabunny 1.55.2, not assumed:
   our own minimal ISOBMFF scan — walk `moov` → `trak` → `mdia` → `hdlr`
   and read the handler type (`sbtl` / `subt` / `text`), plus `tref`/`chap`
   for chapters. Handler types only; no sample parsing. That scan lives in
-  `media/sidecar.ts` and is the whole of VH-9's detection half.
+  `media/isobmff.ts` and is the whole of VH-9's detection half.
 - **Subtitle writing works.** `addSubtitleTrack` +
   `TextSubtitleSource('webvtt')`; `Mp4OutputFormat.getSupportedSubtitleCodecs()`
   returns `['webvtt']`. Verified by writing a valid subtitle-bearing MP4.

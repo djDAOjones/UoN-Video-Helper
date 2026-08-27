@@ -34,11 +34,16 @@ const MASTERS = [
   { label: '2160p30', width: 3840, height: 2160, frameRate: 30 },
 ]
 
-/** Open decision D2. Kept in step with BRANDING_DURATIONS. */
-const SEGMENTS = [
-  { name: 'opening', seconds: 5 },
-  { name: 'closing', seconds: 4 },
-]
+/**
+ * Open decision D2. Kept in step with BRANDING_DURATIONS.
+ *
+ * Openings only. The real closing assets arrived with VH-12 and are built by
+ * `build-branding.mjs` as `closing-tail-*` and `closing-onset-*`; this script
+ * went on emitting a flat `closing-{label}.mp4` that nothing fetches, so
+ * running it dropped four stale files beside the real ones (VH-66). There are
+ * still no approved OPENING assets (VH-23), which is what this is for.
+ */
+const SEGMENTS = [{ name: 'opening', seconds: 5 }]
 
 /**
  * Reads the D1 brand colour from the token file, so there is exactly one place

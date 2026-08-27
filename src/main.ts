@@ -173,7 +173,12 @@ function syncBrandingOptions(): void {
 brandingChoice.addEventListener('change', syncBrandingOptions)
 syncBrandingOptions()
 
-versionLine.textContent = isDev ? `${APP_VERSION} · ${BUILD_ID} · development` : APP_VERSION
+// Both, in production too. `AGENTS.md` -> "Traceable version identity" wants
+// "what release is this?" AND "exactly what code is live?" answerable from a
+// running app, and the diagnostics bundle that carries the build id is
+// dev-only — so production could answer neither (VH-66). Non-secret: this
+// repository is public and the commit is already in the shipped sourcemaps.
+versionLine.textContent = isDev ? `${APP_VERSION} · ${BUILD_ID} · development` : BUILD_ID
 
 // --- System check rendering ------------------------------------------------
 
