@@ -50,6 +50,16 @@ const EXTERNAL_PREFIXES = ['http://', 'https://', 'mailto:', 'tel:', '//'];
  * stalls on cloud-synced / on-demand checkouts.
  * @returns {string[]} repo-relative paths to each checkable `*.md` file
  */
+/**
+ * Field-report exports, skipped for the same reason `.markdownlint-cli2.jsonc`
+ * skips them: each file is a transcript of other documents, so its links were
+ * written relative to where the ORIGINALS live and resolve to nothing from the
+ * export's own directory. Checking them measures the concatenation, not the
+ * repository. Mirrored rather than shared, because reading the lint config
+ * from here would couple two tools that only happen to agree.
+ */
+const EXPORTS = /^field-report-/
+
 function markdownFiles() {
   const tracked = execSync('git ls-files "*.md"', { encoding: 'utf8' });
   const untracked = execSync(
@@ -63,7 +73,9 @@ function markdownFiles() {
   // `git ls-files` lists what Git knows about, which includes a tracked file
   // deleted in the working tree but not yet staged — an entirely ordinary
   // state that made the gate crash with ENOENT rather than report anything.
-  return [...new Set(all)].filter((file) => existsSync(file));
+  return [...new Set(all)]
+    .filter((file) => existsSync(file))
+    .filter((file) => !EXPORTS.test(file));
 }
 
 /**

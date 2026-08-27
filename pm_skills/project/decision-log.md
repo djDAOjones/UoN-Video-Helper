@@ -11,6 +11,44 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-73: the finished file's picture is checked too
+
+**Decision:** a job does not report `processed` until one frame decodes out of
+the finished file's primary video track.
+
+**Rationale:** `verifyOutputAudio` enforces spec §13 criterion 2 and looks only
+at sound. Nothing looked at the picture, so a file whose video track decoded to
+nothing would still reach "Your video is ready" — the exact shape of failure
+this project calls the worst available, since the user is told the opposite of
+what happened.
+
+One frame, not a traversal. The failure being caught is a track that decodes to
+nothing, not a subtly wrong one, and the finishing pass already walks the whole
+output once for loudness — VH-51 made that window visible precisely because it
+is long.
+
+Ported from the archived branch (VH-71 WP1) but not verbatim. The original used
+`AbortSignal.throwIfAborted`, which raises a `DOMException` named `AbortError`
+— and `job.worker.ts` reports that as a FAILED job. Ours raises
+`CancelledError`, which it reports as cancelled. VH-57 made every phase answer
+Cancel honestly and this is a phase, so the port uses the project's own
+`throwIfAborted`. A verbatim copy would have quietly regressed it.
+
+**Verified:** six unit cases including cancel-reports-cancelled and
+stops-after-one-frame, plus a real 12-second job in Chrome whose finished file
+passes the check.
+
+**Also, unblocking the gate:** a `field-report-*` export directory appeared
+untracked while this was in flight, and broke both `docs:lint` (each export
+concatenates several documents, so it has several H1s by construction) and
+`docs:links` (211 links written relative to where the originals live). Both
+tools now skip it. Not gitignored — whether that export belongs in the
+repository is the maintainer's call, not a side effect of my needing a green
+gate.
+
+**Link:** VH-73, VH-71 WP1, VH-57; `src/media/output-integrity.ts`,
+`src/workers/job.worker.ts`, `check-links.mjs`, `.markdownlint-cli2.jsonc`.
+
 ## 2026-08-27 — VH-72: one codec string, and a correction to VH-60
 
 **Decision:** production passes pre-flight's own codec string to Mediabunny

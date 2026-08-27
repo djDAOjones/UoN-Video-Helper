@@ -5,6 +5,10 @@
     "node_modules",
     "pm_skills",
     "dist",
-    "reviews/2026-08-26/uon-video-helper-comprehensive-review-2026-08-26.md"
+    "reviews/2026-08-26/uon-video-helper-comprehensive-review-2026-08-26.md",
+    // Field-report exports: each file concatenates several documents, so it
+    // has as many H1s as it has sources and fails MD025 by construction.
+    // Linting a transcript of other files says nothing about either.
+    "field-report-uon-video-helper"
   ],
 }

@@ -71,8 +71,8 @@
 
 <!-- Not committed, and all of it is agent work. Ordered by dependency rather
      than by ID. VH-76 shipped first, 2026-08-27, so everything below it is
-     now judged by a gate that does not rewrite `dist/`, and VH-72 shipped
-     with it. VH-73 is an independent one-visit fix; VH-75 groups four verified holes of
+     now judged by a gate that does not rewrite `dist/`, and VH-72 and VH-73
+     shipped with it. VH-75 groups four verified holes of
      one shape; VH-77 is the swept-up remainder. VH-62 is LAST because its
      remaining half is harness work whose value depends on what Band 1a does
      to the pipeline — and Band 1a is about to move it, so VH-62 earns
@@ -87,13 +87,6 @@
       order, and the decided-not-to-reconcile list.
       Done when: every child is shipped or explicitly cut; then delete the
       ticket.
-
-- [ ] **VH-73 Verify the finished file's picture** (2026-08-27)
-      Intent: `verifyOutputAudio` checks audio only — a finished file whose
-      video track yields no decodable sample still announces "Your video is
-      ready". Port the archived `output-integrity.ts` beside it.
-      Done when: a broken-video fixture turns the job red; one frame decoded
-      per job otherwise. Detail: [VH-71 WP1](tickets/VH-71.md).
 
 - [ ] **VH-75 Four lifecycle guards** (2026-08-27)
       Intent: verified holes, VH-68's pattern — a superseded inspect/preflight

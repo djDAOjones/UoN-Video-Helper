@@ -15,7 +15,7 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 159 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 161 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 20 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
@@ -23,7 +23,7 @@
 - `public` — 13 file(s)
 - `reviews` — 7 file(s)
 - `scripts` — 5 file(s)
-- `src` — 103 file(s)
+- `src` — 105 file(s)
 - `test` — 4 file(s)
 <!-- /file-map-index -->
 
@@ -172,6 +172,8 @@
 - `src/media/lanes.test.ts` — Pins how the two feed lanes fail together: survivor stopped, cause reported over the cancellation it caused.
 - `src/media/opfs.test.ts` — Pins the sweep rule: never remove a claimed directory, never remove one it could not ask about.
 - `src/media/opfs.ts` — The OPFS working store: one directory per job, sync-handle writes, cleanup on every exit path.
+- `src/media/output-integrity.test.ts` — Pins the empty-track case, and that a cancel reports as cancelled rather than as a broken file.
+- `src/media/output-integrity.ts` — Requires the finished file to yield one decodable frame; the picture half of the output contract.
 - `src/media/output-verification.test.ts` — Pins every decoded-output compliance boundary and each fail-closed result.
 - `src/media/output-verification.ts` — Shared pure postcondition for finite, in-range output loudness and true peak.
 - `src/media/pipeline.ts` — Decode to encode to mux, streaming to OPFS, with progress and cancellation.

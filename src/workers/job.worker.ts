@@ -24,6 +24,7 @@ import { analyseSourceAudio } from '../media/audio-plan'
 import { canEncodeAudio, checkEncodeSupport, inspectCapabilities } from '../media/capability'
 import { UnreadableFileError, inspectFile, openInput } from '../media/inspect'
 import { OpfsWorkspace, sweepOrphanedJobs } from '../media/opfs'
+import { requireReadableOutputVideo } from '../media/output-integrity'
 import { verifyOutputAudio } from '../media/output-verification'
 import { CancelledError, runPipeline, throwIfAborted } from '../media/pipeline'
 import { preflightVerdict, type PreflightSummary } from '../media/preflight'
@@ -273,6 +274,13 @@ async function handleProcess(
     // lecture for the user to press Cancel and be told the video was ready.
     throwIfAborted(signal)
     const check = openInput(result.file)
+
+    // The picture, before the sound. `verifyOutputAudio` below is the §13
+    // criterion 2 contract and it only ever looked at audio, so a finished
+    // file whose video track decoded to nothing still announced "Your video is
+    // ready" (VH-73). One frame settles it.
+    await requireReadableOutputVideo(check, signal)
+
     const checkTrack = await check.getPrimaryAudioTrack()
     if (report.audio) {
       const measured = checkTrack ? await analyseSourceAudio(checkTrack, signal) : null

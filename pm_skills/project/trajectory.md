@@ -23,6 +23,12 @@
 
 ## Archived: the review remediation and Band 1's close — see archive/trajectory/trajectory-0003-review-remediation-and-band-1-close.md
 
+### VH-73 — the picture is verified, not assumed
+
+- VH-73 — Shipped 2026-08-27. One frame must decode out of the finished file
+  before a job reports success, so "Your video is ready" can no longer be said
+  over a file with no picture in it. See decision-log.
+
 ### VH-72 — pre-flight and production share one codec string
 
 - VH-72 — Shipped 2026-08-27. `fullCodecString` carries pre-flight's own
