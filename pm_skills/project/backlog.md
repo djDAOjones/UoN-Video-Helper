@@ -71,8 +71,8 @@
 
 <!-- Not committed, and all of it is agent work. Ordered by dependency rather
      than by ID. VH-76 shipped first, 2026-08-27, so everything below it is
-     now judged by a gate that does not rewrite `dist/`. VH-72 and VH-73
-     are independent one-visit fixes; VH-75 groups four verified holes of
+     now judged by a gate that does not rewrite `dist/`, and VH-72 shipped
+     with it. VH-73 is an independent one-visit fix; VH-75 groups four verified holes of
      one shape; VH-77 is the swept-up remainder. VH-62 is LAST because its
      remaining half is harness work whose value depends on what Band 1a does
      to the pipeline — and Band 1a is about to move it, so VH-62 earns
@@ -87,15 +87,6 @@
       order, and the decided-not-to-reconcile list.
       Done when: every child is shipped or explicitly cut; then delete the
       ticket.
-
-- [ ] **VH-72 One codec string for preflight and production** (2026-08-27)
-      Intent: P2-02 residual — production hands Mediabunny abstract
-      `codec: 'avc'` and gets a frame-rate-blind AVC level (4K60 → 5.1) while
-      preflight correctly derives 5.2. Pass the preflight-derived string
-      through Mediabunny's unused `fullCodecString` override so both validate
-      one string.
-      Done when: preflight and production provably share the string, with
-      4K60 and 1080p60 equality tests. Detail: [VH-71 WP1](tickets/VH-71.md).
 
 - [ ] **VH-73 Verify the finished file's picture** (2026-08-27)
       Intent: `verifyOutputAudio` checks audio only — a finished file whose

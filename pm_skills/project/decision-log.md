@@ -11,6 +11,44 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-72: one codec string, and a correction to VH-60
+
+**Decision:** production passes pre-flight's own codec string to Mediabunny
+through `fullCodecString`, so one string is validated and used.
+
+**Rationale:** `videoEncodingConfigFor` handed Mediabunny the abstract
+`codec: 'avc'` and let it derive the rest. Its `buildVideoCodecString` picks
+the AVC level from macroblock count and bitrate and never looks at frame rate,
+so 4K60 and 4K30 resolve identically — production asked for Level 5.1 where
+pre-flight had derived 5.2.
+
+**Correcting VH-60.** That entry says the fixed 5.1 string meant "a stream
+declaring a level it exceeds, for a strict downstream decoder to reject after
+publication". That is wrong, and it was inferred rather than measured — from
+`isConfigSupported` accepting the config, which says nothing about the
+bitstream. Measured directly on 2026-08-27, by reading the level byte out of
+the `avcC` record the encoder emits:
+
+| Asked for | Content | Encoder wrote |
+| --- | --- | --- |
+| `avc1.640033` (5.1) | 4K60 | `avc1.640034` (5.2) |
+| `avc1.640034` (5.2) | 4K60 | `avc1.640034` (5.2) |
+| `avc1.64002a` (4.2) | 852x480p30 | `avc1.64001f` (3.1) |
+
+Chrome treats the requested level as a floor and writes what the content
+actually needs. No malformed file was ever produced, and the level was never
+the user-facing risk. This is append-only, so VH-60's entry stands as written
+and this corrects it.
+
+**What was actually wrong** is narrower and still worth fixing:
+`isConfigSupported` vetted a configuration the encoder never received, so
+pre-flight's "yes, this will encode" described something else. On a codebase
+whose one live capability block exists because an engine's answer differed from
+the obvious guess (Firefox and AAC, VH-49), checking the wrong configuration is
+not a theoretical complaint.
+
+**Link:** VH-72, VH-60, VH-71 WP1; `src/media/encoding.ts`.
+
 ## 2026-08-27 — VH-76: a gate that overwrote its own evidence
 
 **Decision:** the quality gate builds to a temporary directory. `npm run build`

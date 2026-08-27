@@ -23,6 +23,13 @@
 
 ## Archived: the review remediation and Band 1's close — see archive/trajectory/trajectory-0003-review-remediation-and-band-1-close.md
 
+### VH-72 — pre-flight and production share one codec string
+
+- VH-72 — Shipped 2026-08-27. `fullCodecString` carries pre-flight's own
+  frame-rate-aware string into the encoder, so the capability check vets the
+  configuration that is actually used. Measurement along the way corrected
+  VH-60's claim about non-conformant levels. See decision-log.
+
 ### VH-76 — the gate stopped writing
 
 - VH-76 — Shipped 2026-08-27. `check` builds to a temp directory, so a green

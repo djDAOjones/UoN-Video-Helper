@@ -15,7 +15,7 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 158 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 159 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 20 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
@@ -23,7 +23,7 @@
 - `public` — 13 file(s)
 - `reviews` — 7 file(s)
 - `scripts` — 5 file(s)
-- `src` — 102 file(s)
+- `src` — 103 file(s)
 - `test` — 4 file(s)
 <!-- /file-map-index -->
 
@@ -160,6 +160,7 @@
 - `src/media/conform.ts` — Scale-to-fit and pad geometry, and the reusable frame scaler the pipeline and probe share.
 - `src/media/encoder-delay.test.ts` — Pins that delay compensation measures the onset it discards, at the levels the corpus carries.
 - `src/media/encoder-delay.ts` — Measures the audio encoder's own delay and shifts the timeline to cancel it.
+- `src/media/encoding.test.ts` — Pins that pre-flight validates the same codec string production encodes with.
 - `src/media/encoding.ts` — Mediabunny encoding configs derived from the presets; where VH-7's audio chain will hook in.
 - `src/media/framerate.test.ts` — Proves the rounding rule and that timestamps derive from the index so error cannot accumulate.
 - `src/media/framerate.ts` — CFR conform decisions: nearest standard rate, what conforming costs, and the timestamp grid.

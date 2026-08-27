@@ -13,7 +13,13 @@
 
 import type { AudioEncodingConfig, VideoEncodingConfig } from 'mediabunny'
 
-import { KEYFRAME_INTERVAL_SECONDS, OUTPUT_SAMPLE_RATE, type OutputShape, type Preset } from '../config/presets'
+import {
+  KEYFRAME_INTERVAL_SECONDS,
+  OUTPUT_SAMPLE_RATE,
+  videoEncoderConfigFor,
+  type OutputShape,
+  type Preset,
+} from '../config/presets'
 
 /** How the source is fitted into the output frame when the aspect ratio differs. */
 export type FitBehaviour = 'contain' | 'fill'
@@ -24,6 +30,24 @@ export function videoEncodingConfigFor(
 ): VideoEncodingConfig {
   return {
     codec: 'avc',
+    // The SAME string pre-flight validated, not one Mediabunny derives for
+    // itself. Left to itself it calls `buildVideoCodecString`, which picks the
+    // AVC level from macroblock count and bitrate and never looks at frame
+    // rate — so 4K60 and 4K30 come out identical, and production asked for
+    // Level 5.1 where pre-flight had derived 5.2 (VH-72, P2-02).
+    //
+    // What that costs is NOT a malformed file. Measured 2026-08-27: Chrome's
+    // encoder treats the level as a floor and writes what the content actually
+    // needs — asked for 5.1 at 4K60 it still emits an avcC declaring 5.2, and
+    // asked for 4.2 at 852x480 it emits 3.1. The output was always conformant.
+    //
+    // What it costs is the capability check. `isConfigSupported` was asked
+    // about a configuration the encoder was never given, so a "yes, this will
+    // encode" described something else — and on the one engine where that
+    // answer already differs from the obvious guess (Firefox and AAC, VH-49),
+    // guessing is exactly what we must not do. `fullCodecString` is
+    // Mediabunny's own override for this, and the two are now one string.
+    fullCodecString: videoEncoderConfigFor(shape).codec,
     bitrate: shape.videoBitrateBps,
     keyFrameInterval: KEYFRAME_INTERVAL_SECONDS,
     transform: {
@@ -50,8 +74,7 @@ export function videoEncodingConfigFor(
  * mastered at target and must pass through unprocessed (spec section 4.4).
  */
 export function audioEncodingConfigFor(preset: Preset, channelCount: number): AudioEncodingConfig {
-  const bitrate =
-    channelCount <= 1 ? preset.audioBitrateMonoBps : preset.audioBitrateStereoBps
+  const bitrate = channelCount <= 1 ? preset.audioBitrateMonoBps : preset.audioBitrateStereoBps
 
   return {
     codec: 'aac',
