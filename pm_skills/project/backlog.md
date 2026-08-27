@@ -54,15 +54,32 @@
 
 - [ ] **VH-19 Content-adaptive bitrate for the smaller preset**
       Intent: spec §6.2 sets ~1.5 Mbps for slides and ~2.5 Mbps for camera.
-      `ContentClass` exists but nothing sets it, so every job uses the higher
-      figure.
-      Done when: screen-like and camera-like content are distinguished by the
-      calibration probe and the class is stated in plain language rather than
-      applied silently.
-      Note: this rides the calibration probe, and VH-31 closed 2026-08-27
-      WITHOUT lengthening it — the refuters' objection to a longer probe (it
-      re-calibrates `videoFramesPerSecond` by 34-66% and moves the §7.3 bands)
-      applies here too and has to be answered, not inherited.
+      `ContentClass` exists and `outputShapeFor` already takes it; nothing sets
+      it, so every job uses the higher figure.
+      Blocked 2026-08-27 by a measurement, not by missing code. Mean absolute
+      inter-frame difference on a 64x36 luma, four points through five real
+      lectures:
+
+      | File | 0% | 25% | 50% | 75% |
+      | --- | ---: | ---: | ---: | ---: |
+      | AMCS3059 | 0.00 | 0.25 | 0.00 | 0.00 |
+      | CULT1027 | 0.00 | 1.86 | 1.35 | 1.58 |
+      | MLAC 3139 | 0.00 | 0.01 | 0.02 | 0.32 |
+      | AMCS2007 | 0.00 | 0.00 | 0.00 | 0.68 |
+      | Engineering Placements | 0.01 | 0.09 | 0.30 | 0.00 |
+
+      Camera content separates cleanly from slides — 1.35–1.86 against
+      ≤0.68 — but **every file reads 0.00 at the start**, because a lecture
+      opens on a title card. The calibration probe samples exactly there, so
+      classifying from its existing window would call every source "screen",
+      including the one that is plainly camera. That is the 40% bitrate cut
+      applied to the content that most needs the bits, decided silently.
+      Done when: the class comes from a sample that is representative — several
+      points through the file, in a pass separate from the timed probe so it
+      cannot re-calibrate `videoFramesPerSecond` — the threshold is set from
+      more than five files, and the chosen class is stated in plain language.
+      Note: mis-classifying camera as screen costs picture quality; the reverse
+      costs only file size. The threshold must be biased accordingly.
 
 - [ ] **VH-32 Interface quality pass** [sign-off] [detail](tickets/VH-32.md)
       (2026-08-25)

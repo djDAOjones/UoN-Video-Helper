@@ -11,6 +11,37 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-19: the probe samples the one part that says nothing
+
+**Decision:** do not classify content from the calibration probe's existing
+window. VH-19 stays open, blocked by a measurement rather than by missing code.
+
+**Rationale:** everything needed to ship this looked present — `ContentClass`
+exists, `outputShapeFor` already takes it, and the probe already decodes three
+seconds. So the obvious move was to measure inter-frame difference on those
+frames and set the class. Measuring the real corpus first is what stopped it.
+
+Mean absolute inter-frame difference on a 64x36 luma, sampled at four points
+through five real lectures, separates camera from slides cleanly: CULT1027
+reads 1.35 to 1.86, everything else 0.68 or below. But **every one of the five
+reads 0.00 at the start**, because a lecture opens on a title card. The probe
+samples exactly there. Classifying from it would have called every source
+"screen" — including the one that is plainly camera — and "screen" cuts the
+smaller preset from 2.5 Mbps to 1.5.
+
+The error is asymmetric. Calling camera content "screen" takes 40% of the
+bitrate off the material that most needs it, silently, on someone's lecture.
+Calling slides "camera" costs only file size, on the preset whose entire
+purpose is a smaller file. Any threshold has to be biased hard toward camera,
+and five files is not enough to place one.
+
+This is the same shape as the finding that stopped VH-31's estimator: where you
+sample drives the answer more than how long you sample for. A representative
+classification needs several points through the file, in a pass separate from
+the timed probe so it cannot re-calibrate `videoFramesPerSecond`.
+
+**Link:** VH-19, VH-31; spec §6.2; `src/config/presets.ts`, `src/media/probe.ts`.
+
 ## 2026-08-27 — VH-31: an upper bound that is actually one
 
 **Decision:** keep the estimate as an upper bound, say so on screen, and fix
