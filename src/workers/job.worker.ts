@@ -24,10 +24,11 @@ import { canEncodeAudio, checkEncodeSupport, inspectCapabilities } from '../medi
 import { UnreadableFileError, inspectFile, openInput } from '../media/inspect'
 import { OpfsWorkspace, sweepOrphanedJobs } from '../media/opfs'
 import { verifyOutputAudio } from '../media/output-verification'
-import { CancelledError, runPipeline } from '../media/pipeline'
+import { CancelledError, runPipeline, throwIfAborted } from '../media/pipeline'
 import { preflightVerdict, type PreflightSummary } from '../media/preflight'
 import { InvalidVttError } from '../media/vtt'
 import { calibrationProbe } from '../media/probe'
+import { CancellationRegistry } from './cancellation'
 import type { WorkerOutbound, WorkerRequest } from './protocol'
 
 const bootAt = performance.now()
@@ -62,19 +63,23 @@ self.addEventListener('message', (event: MessageEvent<WorkerRequest>) => {
       break
 
     case 'inspect':
-      void handleInspect(request.id, request.file)
+      void running.run(request.id, (signal) => handleInspect(request.id, request.file, signal))
       break
 
     case 'preflight':
-      void handlePreflight(request.id, request.file, request.presetId)
+      void running.run(request.id, (signal) =>
+        handlePreflight(request.id, request.file, request.presetId, signal),
+      )
       break
 
     case 'process':
-      void handleProcess(request.id, request)
+      void running.run(request.id, (signal) => handleProcess(request.id, request, signal))
       break
 
     case 'cancel':
-      running.get(request.cancelId)?.abort()
+      if (!running.cancel(request.cancelId)) {
+        log.debug('worker', 'cancel reached nothing', { cancelId: request.cancelId })
+      }
       break
 
     case 'discard':
@@ -87,8 +92,14 @@ self.addEventListener('message', (event: MessageEvent<WorkerRequest>) => {
   }
 })
 
-/** In-flight jobs, so `cancel` can reach the right one. */
-const running = new Map<number, AbortController>()
+/**
+ * In-flight requests, so `cancel` can reach the right one.
+ *
+ * Registration happens before the handler's first await — see
+ * `cancellation.ts` for why that sentence is the whole point.
+ */
+const running = new CancellationRegistry()
+
 /** Finished jobs whose scratch still holds a file the main thread may read. */
 const finished = new Map<string, OpfsWorkspace>()
 
@@ -177,23 +188,24 @@ async function handleProcess(
     readonly backgroundColour: string
     readonly subtitleVtt?: string
   },
+  signal: AbortSignal,
 ): Promise<void> {
   const { file, presetId } = options
-  // Bound the retained set to one before adding to it.
-  await releaseFinished()
-
-  const controller = new AbortController()
-  running.set(id, controller)
   const jobId = `job-${id}`
   let workspace: OpfsWorkspace | null = null
 
   try {
+    // Bound the retained set to one before adding to it. Inside the `try`, and
+    // after the registry has registered the signal, because this can wait on
+    // a save lease and a cancel during that wait used to vanish.
+    await releaseFinished()
+    throwIfAborted(signal)
     // Said BEFORE the inspection rather than after it. Reading the structure of
     // a multi-gigabyte file is slow, and since VH-38 made silence the signal
     // that a worker is wedged, a job that says nothing until the first frame is
     // encoded is a job that can be cancelled for being slow (VH-51).
     post({ kind: 'stage', id, stage: 'preparing', fraction: 0 })
-    const report = await inspectFile(file)
+    const report = await inspectFile(file, { signal })
     const preset = PRESETS[presetId]
     const shape = outputShapeFor(preset, {
       width: report.video.displayWidth,
@@ -217,7 +229,7 @@ async function handleProcess(
       branding: options.branding,
       backgroundColour: options.backgroundColour,
       ...(options.subtitleVtt ? { subtitleVtt: options.subtitleVtt } : {}),
-      signal: controller.signal,
+      signal,
       onProgress: ({ stage, fraction }) => post({ kind: 'stage', id, stage, fraction }),
     })
 
@@ -227,10 +239,18 @@ async function handleProcess(
     // Another window the encode loop's progress does not cover: this walks
     // the whole finished file (VH-51).
     post({ kind: 'stage', id, stage: 'finishing', fraction: 1 })
+    // Cancel used to stop being heard the moment the pipeline returned, and
+    // this walks the whole finished file again — long enough on an hour-long
+    // lecture for the user to press Cancel and be told the video was ready.
+    throwIfAborted(signal)
     const check = openInput(result.file)
     const checkTrack = await check.getPrimaryAudioTrack()
     if (report.audio) {
-      const measured = checkTrack ? await analyseSourceAudio(checkTrack) : null
+      const measured = checkTrack ? await analyseSourceAudio(checkTrack, signal) : null
+      // A cancelled traversal stops early and returns a partial measurement,
+      // which would then fail the contract and be reported as a broken output
+      // rather than as the cancellation it is.
+      throwIfAborted(signal)
       const verification = verifyOutputAudio(measured)
       if (!verification.ok) {
         log.warn('worker', 'output failed verification', {
@@ -249,6 +269,9 @@ async function handleProcess(
       log.info('worker', 'output verified', { audio: 'not-applicable' })
     }
 
+    // The last commit boundary: after this the main thread owns a result and
+    // the workspace behind it is retained rather than swept.
+    throwIfAborted(signal)
     finished.set(jobId, workspace)
     post({
       kind: 'processed',
@@ -262,10 +285,14 @@ async function handleProcess(
     })
   } catch (cause) {
     // runPipeline disposes its own workspace on failure; this covers a failure
-    // before it ever started.
-    if (workspace && !finished.has(jobId)) await workspace.dispose()
+    // before it ever started, and a cancel landing between `finished.set` and
+    // the post — where the main thread never learns the workspace exists, so
+    // nothing would ever discard it.
+    finished.delete(jobId)
+    leases.delete(jobId)
+    if (workspace) await workspace.dispose()
 
-    if (cause instanceof CancelledError || controller.signal.aborted) {
+    if (cause instanceof CancelledError || signal.aborted) {
       post({ kind: 'cancelled', id })
       return
     }
@@ -288,8 +315,6 @@ async function handleProcess(
             'Something went wrong while creating the video. Your original file has not been changed.' +
             (import.meta.env.DEV ? ` [dev: ${reason}]` : ''),
     })
-  } finally {
-    running.delete(id)
   }
 }
 
@@ -311,10 +336,18 @@ async function handleDiscard(id: number, jobId: string): Promise<void> {
  * than exceptional — people do pick the wrong file. An unreadable file is
  * answered with a `failed` message the UI can show, not an uncaught throw.
  */
-async function handleInspect(id: number, file: Blob): Promise<void> {
+async function handleInspect(id: number, file: Blob, signal: AbortSignal): Promise<void> {
   try {
-    post({ kind: 'inspected', id, report: await inspectFile(file) })
+    const report = await inspectFile(file, { signal })
+    // The commit boundary. A report for a file the user has moved on from is
+    // not a result, it is a screen describing the wrong thing.
+    throwIfAborted(signal)
+    post({ kind: 'inspected', id, report })
   } catch (cause) {
+    if (cause instanceof CancelledError || signal.aborted) {
+      post({ kind: 'cancelled', id })
+      return
+    }
     const message =
       cause instanceof UnreadableFileError
         ? cause.message
@@ -338,9 +371,10 @@ async function handlePreflight(
   id: number,
   file: Blob,
   presetId: PresetId,
+  signal: AbortSignal,
 ): Promise<void> {
   try {
-    const report = await inspectFile(file)
+    const report = await inspectFile(file, { signal })
     const preset = PRESETS[presetId]
     const shape = outputShapeFor(preset, {
       width: report.video.displayWidth,
@@ -377,11 +411,16 @@ async function handlePreflight(
     // Spec 5.4: derived from the analysis pass and shown BEFORE processing.
     // A lecturer who is told their recording is inaudible only after waiting
     // forty minutes has been told too late.
+    throwIfAborted(signal)
     const audioInput = openInput(file)
     const audioTrack = await audioInput.getPrimaryAudioTrack()
     const audioWarnings = detectSourceWarnings(
-      audioTrack ? await analyseSourceAudio(audioTrack) : null,
+      audioTrack ? await analyseSourceAudio(audioTrack, signal) : null,
     )
+    // `analyseSourceAudio` stops at the next sample rather than throwing, so
+    // an aborted traversal returns a report of PART of the file. Warnings
+    // derived from half a lecture are worse than none.
+    throwIfAborted(signal)
 
     const probe =
       capability.hasWebCodecs && encode.supported
@@ -389,6 +428,7 @@ async function handlePreflight(
             input: openInput(file),
             shape,
             durationSeconds: report.durationSeconds,
+            signal,
           })
         : { measured: false, framesEncoded: 0, videoFramesPerSecond: 0, audioRealtimeFactor: null, estimatedSeconds: null }
 
@@ -410,8 +450,13 @@ async function handlePreflight(
         estimatedSeconds: probe.estimatedSeconds,
       }),
     }
+    throwIfAborted(signal)
     post({ kind: 'preflighted', id, summary })
   } catch (cause) {
+    if (cause instanceof CancelledError || signal.aborted) {
+      post({ kind: 'cancelled', id })
+      return
+    }
     const message =
       cause instanceof UnreadableFileError
         ? cause.message

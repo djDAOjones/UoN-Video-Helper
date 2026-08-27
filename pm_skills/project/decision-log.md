@@ -11,6 +11,41 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-57: cancellation is a property of every request
+
+**Decision:** register a request's `AbortController` before its handler can
+await, make inspection and pre-flight cancellable, and re-check the signal at
+every boundary that commits a result.
+
+**Rationale:** `Cancel leaves nothing behind` is an `AGENTS.md` invariant, and
+three separate paths broke it (review R-07). `handleProcess` registered its
+controller after `await releaseFinished()`, so a Cancel pressed during cleanup
+found an empty map and vanished — a window VH-56 then widened, because cleanup
+can now wait on a save lease. Only `process` registered at all, while `main.ts`
+posts a `cancel` for any request that exceeds its bound, so a timed-out
+inspection or pre-flight went on doing full analysis and probing for a screen
+that had given up on it. And the signal stopped at `runPipeline`: the
+finished-file verification walks the whole output again with no signal at all,
+then posts `processed` unconditionally, so Cancel during the longest silent
+phase of a long job answered "Your video is ready."
+
+`analyseSourceAudio` is the subtle one. It stops at the next sample rather than
+throwing, so an aborted traversal returns a measurement of PART of the file —
+which would then fail the output contract and be reported as a broken video
+rather than as the cancellation it was. Every caller now re-checks after it.
+
+The registry moved to `workers/cancellation.ts` because the rule deserves a
+test and importing the worker runs its boot. The invariant it pins is one
+sentence: a request is cancellable from before its first await.
+
+**Verified in Chrome on a real recording:** Cancel during preparing, analysing
+and finishing each returns `cancelled`, leaves no Save control, and leaves the
+OPFS jobs root empty. Finishing is the new one — the phase that used to answer
+"ready".
+
+**Link:** VH-57; review R-07; `src/workers/cancellation.ts`,
+`src/workers/job.worker.ts`, `src/media/inspect.ts`, `src/media/pipeline.ts`.
+
 ## 2026-08-27 — VH-56: a finished result is owned, not merely displayed
 
 **Decision:** hold a finished result until the user has it somewhere, protect

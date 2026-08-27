@@ -25,18 +25,9 @@
 <!-- Committed. Everything a staff member meets today that is wrong,
      misleading, or a risk. VH-54, VH-50 and VH-58 shipped 2026-08-27 and the
      output contract now holds on real material, and VH-56 shipped with it so
-     a finished file survives the next click. What remains is silent loss:
-     VH-57, VH-55 and VH-59 are independent, and each ends with the user
-     losing something without being told. -->
-
-- [ ] **VH-57 Cancel is not authoritative** (2026-08-27)
-      Intent: R-07. Controllers register after the first await, some request
-      kinds are not cancellable, the signal never reaches verification, and
-      ownership checks sit outside `try/finally` — so a cancelled job can leak
-      resources or report something other than cancelled. `Cancel leaves
-      nothing behind` is an AGENTS.md invariant.
-      Done when: every phase returns only cancelled, every commit boundary is
-      re-checked, and nothing survives in OPFS or on the encoder.
+     a finished file survives the next click and VH-57 made every phase answer
+     Cancel. What remains is silent loss: VH-55 and VH-59 are independent, and
+     each ends with the user losing something without being told. -->
 
 - [ ] **VH-55 Source onset can be replaced by encoder priming** (2026-08-27)
       Intent: R-03. `AudioTimelineShift.apply()` drops AAC samples landing

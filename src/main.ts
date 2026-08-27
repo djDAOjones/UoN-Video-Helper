@@ -431,6 +431,10 @@ fileInput.addEventListener('change', () => {
         setStatus('That file could not be read.')
         return
       }
+      // Reachable since VH-57 made inspection cancellable. It means this
+      // request was abandoned for a newer one, so it says nothing: whatever
+      // replaced it owns the screen now.
+      if (reply.kind === 'cancelled') return
       throw new Error(`Unexpected reply to inspect: ${reply.kind}`)
     } catch (cause) {
       renderSourceError(
@@ -473,6 +477,8 @@ async function runPreflight(file: File): Promise<void> {
       renderSourceError(preflightReport, reply.message)
       return
     }
+    // Abandoned for a newer check — see the inspect path (VH-57).
+    if (reply.kind === 'cancelled') return
     throw new Error(`Unexpected reply to preflight: ${reply.kind}`)
   } catch (cause) {
     renderSourceError(

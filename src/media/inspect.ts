@@ -21,6 +21,7 @@ import {
 
 import { log } from '../core/logger'
 import { conformCost, type ConformDecision } from './framerate'
+import { throwIfAborted } from './pipeline'
 import { scanTrackHandlers, type TrackScan } from './isobmff'
 
 /**
@@ -169,11 +170,20 @@ async function safeCanDecode(track: { canDecode(): Promise<boolean> }): Promise<
  *   deriving frame-rate metrics. More is more certain and slower. The default
  *   leaves Mediabunny's own choice alone.
  */
+/**
+ * @param options.signal - Checked at each seam. Mediabunny's packet walk takes
+ *   no signal of its own, so cancellation is granular to the step rather than
+ *   to the packet — but a cancelled inspection stops at the next boundary and
+ *   raises `CancelledError` instead of returning a report nobody asked for any
+ *   more (VH-57).
+ */
 export async function inspectFile(
   file: Blob,
-  options: { readonly frameRateProbePackets?: number } = {},
+  options: { readonly frameRateProbePackets?: number; readonly signal?: AbortSignal } = {},
 ): Promise<SourceReport> {
   const input = openInput(file)
+  const { signal } = options
+  throwIfAborted(signal)
 
   let container: string
   try {
@@ -194,6 +204,8 @@ export async function inspectFile(
     // warning we cannot give; it must never cost the inspection.
     scanTrackHandlers(file),
   ])
+
+  throwIfAborted(signal)
 
   const videoTrack = videoTracks[0]
   const audioTrack = audioTracks[0] ?? null

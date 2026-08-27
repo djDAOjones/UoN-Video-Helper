@@ -174,7 +174,14 @@ export interface PipelineOptions {
   readonly onProgress?: (progress: PipelineProgress) => void
 }
 
-function throwIfAborted(signal: AbortSignal | undefined): void {
+/**
+ * Turns an aborted signal into the one error every cancel path recognises.
+ *
+ * Exported because cancellation does not stop at the pipeline: inspection,
+ * pre-flight and the finished-file verification all run outside it, and each
+ * has to reach the same conclusion rather than its own (VH-57).
+ */
+export function throwIfAborted(signal: AbortSignal | undefined): void {
   if (signal?.aborted) throw new CancelledError()
 }
 

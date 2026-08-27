@@ -15,7 +15,7 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 153 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 155 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 20 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
@@ -23,7 +23,7 @@
 - `public` — 17 file(s)
 - `reviews` — 7 file(s)
 - `scripts` — 4 file(s)
-- `src` — 94 file(s)
+- `src` — 96 file(s)
 - `test` — 4 file(s)
 <!-- /file-map-index -->
 
@@ -197,6 +197,8 @@
 - `src/ui/warning-text.test.ts` — Mechanical half of "reads clearly": no jargon, no blame, always a next step.
 - `src/ui/warning-text.ts` — The 5.4 warnings in words, and their rendering. Possibilities, never verdicts.
 - `src/vite-env.d.ts` — Ambient types: the injected build globals and the File System Access API surface.
+- `src/workers/cancellation.test.ts` — Pins the one rule: a request is cancellable from before its first await.
+- `src/workers/cancellation.ts` — The worker's cancellation registry, kept apart from the worker so it can be tested in Node.
 - `src/workers/job.worker.ts` — The job worker. Owns the pipeline when it lands; today proves the boundary and its error path.
 - `src/workers/protocol.ts` — The typed message contract across the worker boundary.
 
