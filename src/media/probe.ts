@@ -76,7 +76,11 @@ async function probeVideo(
   try {
     await output.start()
     for await (const sample of sink.samples(0, CALIBRATION_PROBE_SECONDS)) {
-      if (signal?.aborted) break
+      // Closed before breaking; see `audio-plan.ts` for the same shape.
+      if (signal?.aborted) {
+        sample.close()
+        break
+      }
       try {
         await source.add(sample)
       } finally {
@@ -112,7 +116,10 @@ async function probeAudio(
   const startedAt = performance.now()
 
   for await (const sample of sink.samples(0, CALIBRATION_PROBE_SECONDS)) {
-    if (signal?.aborted) break
+    if (signal?.aborted) {
+      sample.close()
+      break
+    }
     const perChannel = sample.numberOfFrames
     const channels: Float32Array[] = []
     for (let ch = 0; ch < channelCount; ch++) {

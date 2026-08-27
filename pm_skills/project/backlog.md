@@ -72,7 +72,7 @@
 <!-- Not committed, and all of it is agent work. Ordered by dependency rather
      than by ID. VH-76 shipped first, 2026-08-27, so everything below it is
      now judged by a gate that does not rewrite `dist/`, and VH-72 and VH-73
-     shipped with it. VH-75 groups four verified holes of
+     shipped with it, and VH-75 after them. VH-75 groups four verified holes of
      one shape; VH-77 is the swept-up remainder. VH-62 is LAST because its
      remaining half is harness work whose value depends on what Band 1a does
      to the pipeline — and Band 1a is about to move it, so VH-62 earns
@@ -88,19 +88,13 @@
       Done when: every child is shipped or explicitly cut; then delete the
       ticket.
 
-- [ ] **VH-75 Four lifecycle guards** (2026-08-27)
-      Intent: verified holes, VH-68's pattern — a superseded inspect/preflight
-      keeps running; Start re-arms before the worker acknowledges a watchdog
-      cancel; saves run without the wake lock; `finished.delete` precedes
-      `await dispose()`.
-      Done when: each has a regression and none reproduces.
-      Detail: [VH-71 WP3](tickets/VH-71.md).
-
 - [ ] **VH-77 Hygiene remainder from the cross-check** (2026-08-27)
       Intent: four small debts — tuneables outside `src/config/` (P3-02);
       diagnostics bundle without job context (P2-10); track
       language/name/disposition not carried (P1-08 residual); the manual
       rollback recipe undocumented in DEV-INFRASTRUCTURE.
+      Done 2026-08-27 by VH-75: the unclosed-sample-on-abort leak, which
+      VH-75's supersede test made reproducible on demand.
       Done when: each is fixed or explicitly cut; the diagnostics addition
       carries a redaction test. Detail: [VH-71 WP6](tickets/VH-71.md).
 

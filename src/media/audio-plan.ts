@@ -53,7 +53,16 @@ async function traverse(
   const sink = new AudioSampleSink(track)
 
   for await (const sample of sink.samples()) {
-    if (signal?.aborted) break
+    // Closed before breaking. The loop is handed a decoded sample and only
+    // then checks the signal, so an aborted traversal used to drop that one on
+    // the floor — Mediabunny then reported "An AudioSample was garbage
+    // collected without first being closed", which is how VH-75's supersede
+    // test found it (VH-77 hygiene, fixed here because the cancel path is
+    // what makes it reachable).
+    if (signal?.aborted) {
+      sample.close()
+      break
+    }
     try {
       const planar = toPlanar(sample, channelCount)
       analyser.addFrames(chain ? chain.process(planar) : planar)

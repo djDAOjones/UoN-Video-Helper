@@ -49,6 +49,19 @@ export const WORKER_SILENCE_LIMIT_MS = 120_000
  */
 export const SAVE_LEASE_LIMIT_MS = 600_000
 
+/**
+ * How long the interface waits for the worker to acknowledge a job it has
+ * stopped waiting on.
+ *
+ * The watchdog posts `cancel` and rejects immediately, so the promise settles
+ * while the worker is still winding down. Start must not re-arm in that
+ * window: the next `process` begins by disposing every retained workspace.
+ * Bounded because a worker that never answers must not lock the interface out
+ * of starting another job — that failure is worse than the one it guards
+ * against (VH-75).
+ */
+export const WORKER_ACKNOWLEDGEMENT_LIMIT_MS = 10_000
+
 /** Spec 7.1: seconds of the user's actual file to decode and re-encode when calibrating. */
 export const CALIBRATION_PROBE_SECONDS = 3
 

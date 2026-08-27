@@ -363,7 +363,11 @@ export async function feedBrandingVideo(
   let origin: number | null = null
 
   for await (const sample of sink.samples()) {
-    if (signal?.aborted) break
+    // Closed before breaking; see `audio-plan.ts` for why.
+    if (signal?.aborted) {
+      sample.close()
+      break
+    }
     origin ??= sample.timestamp
     const conformed = renderer.render(
       sample,
@@ -406,7 +410,11 @@ export async function feedBrandingAudio(
   let origin: number | null = null
 
   for await (const sample of sink.samples()) {
-    if (signal?.aborted) break
+    // Closed before breaking; see `audio-plan.ts` for why.
+    if (signal?.aborted) {
+      sample.close()
+      break
+    }
     try {
       origin ??= sample.timestamp
       const relative = Math.max(0, sample.timestamp - origin)

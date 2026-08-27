@@ -6,7 +6,7 @@
 
 import { describe, expect, it } from 'vitest'
 
-import { shouldWarnBeforeLeaving } from './keep-awake'
+import { shouldHoldWakeLock, shouldWarnBeforeLeaving } from './keep-awake'
 
 const state = (over: Partial<Parameters<typeof shouldWarnBeforeLeaving>[0]> = {}) => ({
   jobInFlight: false,
@@ -42,5 +42,38 @@ describe('shouldWarnBeforeLeaving', () => {
         state({ jobInFlight: true, saveInFlight: true, hasUnsavedResult: true }),
       ),
     ).toBe(true)
+  })
+})
+
+/**
+ * VH-75. VH-63 tied the wake lock to a running JOB only, so a multi-gigabyte
+ * save — pure sustained I/O, no keypress, no progress bar moving — was exactly
+ * the phase during which the machine was free to sleep.
+ */
+describe('shouldHoldWakeLock', () => {
+  const state = (over: Partial<Parameters<typeof shouldHoldWakeLock>[0]> = {}) => ({
+    jobInFlight: false,
+    saveInFlight: false,
+    ...over,
+  })
+
+  it('holds while a job is encoding', () => {
+    expect(shouldHoldWakeLock(state({ jobInFlight: true }))).toBe(true)
+  })
+
+  it('holds while a save is streaming', () => {
+    expect(shouldHoldWakeLock(state({ saveInFlight: true }))).toBe(true)
+  })
+
+  it('lets go when nothing is running', () => {
+    expect(shouldHoldWakeLock(state())).toBe(false)
+  })
+
+  it('does not hold merely because a result is unsaved', () => {
+    // Deliberately narrower than the unload warning. Nothing is running, and
+    // keeping a screen awake over a file already safely on disk spends the
+    // user's battery for nothing.
+    expect(shouldWarnBeforeLeaving({ ...state(), hasUnsavedResult: true })).toBe(true)
+    expect(shouldHoldWakeLock(state())).toBe(false)
   })
 })

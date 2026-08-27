@@ -15,12 +15,20 @@ import {
   recordUncaught,
   type CapturedError,
 } from './core/diagnostics'
-import { KeepAwake, shouldWarnBeforeLeaving, warnBeforeLeaving } from './core/keep-awake'
+import {
+  KeepAwake,
+  shouldHoldWakeLock,
+  shouldWarnBeforeLeaving,
+  warnBeforeLeaving,
+} from './core/keep-awake'
 import { adoptLogRecords, log, setMinimumLogLevel } from './core/logger'
 import { APP_VERSION, BUILD_ID } from './core/version'
 import { CLOSING_DEFAULTS, type BrandingMode } from './config/branding'
 import type { PresetId } from './config/presets'
-import { WORKER_SILENCE_LIMIT_MS } from './config/thresholds'
+import {
+  WORKER_ACKNOWLEDGEMENT_LIMIT_MS,
+  WORKER_SILENCE_LIMIT_MS,
+} from './config/thresholds'
 import { createWatchdog } from './core/watchdog'
 import { saveFile, suggestedFileName } from './media/save'
 import { countCues } from './media/vtt'
@@ -80,10 +88,53 @@ const subtitleStatus = required<HTMLParagraphElement>('#subtitle-status')
  */
 let selectionEpoch = 0
 
+/**
+ * Worker requests belonging to the current selection, so a superseded one can
+ * be stopped rather than merely ignored.
+ *
+ * VH-60 made a stale ANSWER harmless; it did not make the work stop. Choosing
+ * a two-hour file and then another left the first file's whole-audio analysis
+ * and its encode probe running to completion, competing for the same cores as
+ * the selection the user is actually waiting on (VH-75).
+ */
+const selectionRequests = new Set<number>()
+
+/**
+ * Requests whose promise has already settled but whose worker-side work has
+ * not. Resolved by the message handler when the worker finally answers.
+ */
+const abandoned = new Map<number, () => void>()
+
 /** Reads the current epoch and gives back a test for whether it still holds. */
 function beginSelection(): () => boolean {
+  // Everything still running belongs to the selection being replaced.
+  for (const id of selectionRequests) {
+    worker.postMessage({ kind: 'cancel', id: nextRequestId++, cancelId: id })
+  }
+  selectionRequests.clear()
+
   const mine = ++selectionEpoch
   return () => mine === selectionEpoch
+}
+
+/**
+ * Issues a request that belongs to the current selection.
+ *
+ * Registered while it runs so {@link beginSelection} can cancel it, and
+ * deregistered however it settles — a cancelled request must not be cancelled
+ * again under a later id.
+ */
+async function selectionRequest(
+  payload: DistributiveOmit<WorkerRequest, 'id'>,
+  timeoutMs: number,
+): Promise<WorkerOutbound> {
+  const { id, promise } = requestWithId(payload, timeoutMs)
+  selectionRequests.add(id)
+  try {
+    return await promise
+  } finally {
+    selectionRequests.delete(id)
+  }
 }
 
 /** The chosen sidecar's text, held until the job runs. */
@@ -375,6 +426,9 @@ worker.addEventListener('message', (event: MessageEvent<WorkerOutbound>) => {
   pending.get(message.id)?.(message)
   pending.delete(message.id)
   keepAlive.delete(message.id)
+  // An answer to something nobody is waiting for any more still matters: it is
+  // how a timed-out job says it has finished winding down (VH-75).
+  abandoned.get(message.id)?.()
 })
 
 /**
@@ -466,7 +520,7 @@ fileInput.addEventListener('change', () => {
       // Two minutes: reading structure is fast, but a multi-gigabyte file on a
       // slow disk is not, and timing out on a file that would have worked is
       // worse than waiting.
-      const reply = await request({ kind: 'inspect', file }, 120_000)
+      const reply = await selectionRequest({ kind: 'inspect', file }, 120_000)
       // The commit boundary on this side. A report for a file the picker no
       // longer shows must not reach the screen, whatever order it arrived in.
       if (!current()) return
@@ -518,7 +572,10 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
   setStatus('Checking this video against your device…')
 
   try {
-    const reply = await request({ kind: 'preflight', file, presetId: chosenPreset() }, 180_000)
+    const reply = await selectionRequest(
+      { kind: 'preflight', file, presetId: chosenPreset() },
+      180_000,
+    )
     // A verdict about a file or preset the user has since changed must not
     // reach the screen — and above all must not reveal Start (review R-05).
     if (!current()) return
@@ -726,10 +783,21 @@ function setJobInFlight(running: boolean): void {
   cancelButton.hidden = !running
   cancelButton.disabled = false
   applyControlLock()
-  // Requested on the way in, released on the way out — including the cancel
-  // and failure paths, which both come through here.
-  void (running ? keepAwake.start() : keepAwake.stop())
+  applyKeepAwake()
   updateLeaveWarning()
+}
+
+/**
+ * Holds the screen wake lock for as long as there is work to lose.
+ *
+ * A save counts. It streams a whole file out of OPFS, which on a multi-
+ * gigabyte result takes long enough for an idle machine to sleep — and VH-63
+ * only ever tied the lock to a running JOB, so the one phase that is pure
+ * sustained I/O was the one phase it did not cover (VH-75).
+ */
+function applyKeepAwake(): void {
+  const wanted = shouldHoldWakeLock({ jobInFlight, saveInFlight })
+  void (wanted ? keepAwake.start() : keepAwake.stop())
 }
 
 /**
@@ -741,6 +809,7 @@ function setJobInFlight(running: boolean): void {
 function setSaveInFlight(saving: boolean): void {
   saveInFlight = saving
   applyControlLock()
+  applyKeepAwake()
   updateLeaveWarning()
 }
 
@@ -867,11 +936,17 @@ function beginJob(file: File): void {
         setStatus('The video could not be created.')
       }
     })
-    .catch((cause: unknown) => {
+    .catch(async (cause: unknown) => {
       renderSourceError(processResult, 'The job did not finish.')
       log.error('ui', 'process request failed', {
         reason: cause instanceof Error ? cause.message : String(cause),
       })
+      // The watchdog posts `cancel` and rejects in the same breath, so this
+      // path is reached while the worker is still winding the job down. Start
+      // must not re-arm yet: the next `process` begins by disposing every
+      // retained workspace, and doing that to a job still finalizing is how a
+      // finished file gets deleted out from under its own muxer (VH-75).
+      await settled(id)
     })
     .finally(() => {
       jobCancelId = null
@@ -879,6 +954,29 @@ function beginJob(file: File): void {
       processProgress.hidden = true
       processProgressLabel.hidden = true
     })
+}
+
+/**
+ * Waits for the worker to answer conclusively about a request we have stopped
+ * waiting on.
+ *
+ * Bounded, because a worker that never answers must not lock the interface out
+ * of ever starting another job — the failure this guards against is worse than
+ * the one it would create.
+ */
+function settled(id: number): Promise<void> {
+  return new Promise<void>((resolve) => {
+    const timer = setTimeout(() => {
+      abandoned.delete(id)
+      log.warn('ui', 'worker never acknowledged an abandoned job', { id })
+      resolve()
+    }, WORKER_ACKNOWLEDGEMENT_LIMIT_MS)
+    abandoned.set(id, () => {
+      clearTimeout(timer)
+      abandoned.delete(id)
+      resolve()
+    })
+  })
 }
 
 // Bound once, here, rather than inside the Start handler — where it added

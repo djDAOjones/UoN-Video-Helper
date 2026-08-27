@@ -23,6 +23,14 @@
 
 ## Archived: the review remediation and Band 1's close — see archive/trajectory/trajectory-0003-review-remediation-and-band-1-close.md
 
+### VH-75 — four lifecycle guards
+
+- VH-75 — Shipped 2026-08-27. Superseded analysis is cancelled, an abandoned
+  job is not replaced until the worker acknowledges it, the wake lock covers a
+  save, and a failed disposal is retryable instead of fatal to the next job.
+  Verifying it found and fixed the unclosed-sample-on-abort leak. See
+  decision-log.
+
 ### VH-73 — the picture is verified, not assumed
 
 - VH-73 — Shipped 2026-08-27. One frame must decode out of the finished file

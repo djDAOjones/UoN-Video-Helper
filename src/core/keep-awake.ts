@@ -130,3 +130,23 @@ export function shouldWarnBeforeLeaving(state: {
 }): boolean {
   return state.jobInFlight || state.saveInFlight || state.hasUnsavedResult
 }
+
+/**
+ * Whether the device should be kept awake right now.
+ *
+ * A save counts, and that is the part VH-63 missed. It streams a whole file
+ * out of OPFS, which on a multi-gigabyte result takes long enough for an idle
+ * machine to sleep — so the one phase that is pure sustained I/O, with no
+ * keypress and no progress bar moving, was the one phase the lock did not
+ * cover (VH-75).
+ *
+ * An unsaved result deliberately does NOT count: nothing is running, and
+ * holding a wake lock over a screen the user has walked away from would be
+ * taking their battery to protect a file that is already safely on disk.
+ */
+export function shouldHoldWakeLock(state: {
+  readonly jobInFlight: boolean
+  readonly saveInFlight: boolean
+}): boolean {
+  return state.jobInFlight || state.saveInFlight
+}

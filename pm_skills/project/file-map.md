@@ -15,7 +15,7 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 161 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 163 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 20 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
@@ -23,7 +23,7 @@
 - `public` — 13 file(s)
 - `reviews` — 7 file(s)
 - `scripts` — 5 file(s)
-- `src` — 105 file(s)
+- `src` — 107 file(s)
 - `test` — 4 file(s)
 <!-- /file-map-index -->
 
@@ -207,6 +207,8 @@
 - `src/workers/cancellation.ts` — The worker's cancellation registry, kept apart from the worker so it can be tested in Node.
 - `src/workers/job.worker.ts` — The job worker. Owns the pipeline when it lands; today proves the boundary and its error path.
 - `src/workers/protocol.ts` — The typed message contract across the worker boundary.
+- `src/workers/retained.test.ts` — Pins that a failed disposal is retryable and never fails the next job.
+- `src/workers/retained.ts` — Finished jobs still held for the main thread, their read leases, and the release ordering.
 
 ## test
 

@@ -17,7 +17,6 @@ import {
   videoEncoderConfigFor,
   type PresetId,
 } from '../config/presets'
-import { SAVE_LEASE_LIMIT_MS } from '../config/thresholds'
 import { detectSourceWarnings, type AudioWarning } from '../audio/warnings'
 import { LONGEST_CLOSING_SECONDS, type BrandingChoice } from '../config/branding'
 import { analyseSourceAudio } from '../media/audio-plan'
@@ -31,6 +30,7 @@ import { preflightVerdict, type PreflightSummary } from '../media/preflight'
 import { InvalidVttError } from '../media/vtt'
 import { calibrationProbe } from '../media/probe'
 import { CancellationRegistry } from './cancellation'
+import { RetainedResults } from './retained'
 import type { WorkerOutbound, WorkerRequest } from './protocol'
 
 const bootAt = performance.now()
@@ -89,7 +89,7 @@ self.addEventListener('message', (event: MessageEvent<WorkerRequest>) => {
       break
 
     case 'lease':
-      setLease(request.jobId, request.held)
+      finished.lease(request.jobId, request.held)
       break
 
     case 'egress':
@@ -106,8 +106,28 @@ self.addEventListener('message', (event: MessageEvent<WorkerRequest>) => {
  */
 const running = new CancellationRegistry()
 
-/** Finished jobs whose scratch still holds a file the main thread may read. */
-const finished = new Map<string, OpfsWorkspace>()
+/**
+ * Finished jobs whose scratch still holds a file the main thread may read,
+ * with the leases that keep a save from being deleted mid-stream. The rules
+ * live in `retained.ts` so they can be tested without booting the worker.
+ */
+const finished = new RetainedResults()
+
+// The worker has its own module scope, so `main.ts:32` does not reach it and
+// every debug line the job emitted was reaching a production console (VH-40).
+// The two threads share one diagnostics bundle, so they have to share a level
+// or the bundle is half verbose and half not.
+if (!import.meta.env.DEV) setMinimumLogLevel('info')
+
+// A crashed or force-closed tab leaves scratch behind, and the user's disk is
+// not ours to fill (AGENTS.md -> "OPFS working-store checklist").
+//
+// No argument, and that is now correct rather than an omission: OPFS is
+// origin-scoped, so at boot this sees OTHER TABS' directories and knows none of
+// their job ids. What protects them is the Web Lock each live job holds — see
+// `sweepOrphanedJobs`. Passing this worker's own ids would be theatre; it has
+// none yet (VH-35).
+void sweepOrphanedJobs()
 
 /**
  * The worker's own egress watch, for acceptance criterion 9.
@@ -132,82 +152,6 @@ function setEgressWatch(watching: boolean): EgressReport {
   return report
 }
 
-// The worker has its own module scope, so `main.ts:32` does not reach it and
-// every debug line the job emitted was reaching a production console (VH-40).
-// The two threads share one diagnostics bundle, so they have to share a level
-// or the bundle is half verbose and half not.
-if (!import.meta.env.DEV) setMinimumLogLevel('info')
-
-// A crashed or force-closed tab leaves scratch behind, and the user's disk is
-// not ours to fill (AGENTS.md -> "OPFS working-store checklist").
-//
-// No argument, and that is now correct rather than an omission: OPFS is
-// origin-scoped, so at boot this sees OTHER TABS' directories and knows none of
-// their job ids. What protects them is the Web Lock each live job holds — see
-// `sweepOrphanedJobs`. Passing this worker's own ids would be theatre; it has
-// none yet (VH-35).
-void sweepOrphanedJobs()
-
-/**
- * Read leases on retained results, by job id.
- *
- * A save streams out of the job's scratch, and the scratch is what
- * {@link releaseFinished} disposes. Nothing stopped those overlapping, so a
- * second job could delete the file a `pipeTo()` was still reading (review
- * R-04). A lease is held for the length of a read and disposal waits for it.
- */
-const leases = new Map<string, { readonly settled: Promise<void>; readonly release: () => void }>()
-
-/**
- * Opens or closes a read lease on a finished job's scratch.
- *
- * The held promise is resolved by the matching release, or by
- * {@link SAVE_LEASE_LIMIT_MS} — a lease that outlives its reader must not
- * become a workspace nobody can ever dispose.
- */
-function setLease(jobId: string, held: boolean): void {
-  if (!held) {
-    leases.get(jobId)?.release()
-    leases.delete(jobId)
-    return
-  }
-  if (leases.has(jobId)) return
-
-  let release = (): void => {}
-  const settled = new Promise<void>((resolve) => {
-    const expiry = setTimeout(() => {
-      log.warn('worker', 'save lease expired', { jobId })
-      resolve()
-    }, SAVE_LEASE_LIMIT_MS)
-    release = () => {
-      clearTimeout(expiry)
-      resolve()
-    }
-  })
-  leases.set(jobId, { settled, release })
-}
-
-/**
- * Releases every retained result, once nothing is reading it.
- *
- * A finished job's scratch is kept so the main thread can read the file out of
- * it, and `discard` normally releases it. But that depends on the UI getting
- * as far as saving, and a user who processes three files without saving any of
- * them would otherwise leave three full outputs on disk. Only the most recent
- * result can be saved, so only the most recent needs keeping.
- */
-async function releaseFinished(): Promise<void> {
-  const entries = [...finished.entries()]
-  finished.clear()
-  await Promise.all(
-    entries.map(async ([jobId, workspace]) => {
-      await leases.get(jobId)?.settled
-      leases.delete(jobId)
-      await workspace.dispose()
-    }),
-  )
-}
-
 async function handleProcess(
   id: number,
   options: {
@@ -227,7 +171,7 @@ async function handleProcess(
     // Bound the retained set to one before adding to it. Inside the `try`, and
     // after the registry has registered the signal, because this can wait on
     // a save lease and a cancel during that wait used to vanish.
-    await releaseFinished()
+    await finished.releaseAll()
     throwIfAborted(signal)
     // Said BEFORE the inspection rather than after it. Reading the structure of
     // a multi-gigabyte file is slow, and since VH-38 made silence the signal
@@ -309,7 +253,7 @@ async function handleProcess(
     // The last commit boundary: after this the main thread owns a result and
     // the workspace behind it is retained rather than swept.
     throwIfAborted(signal)
-    finished.set(jobId, workspace)
+    finished.retain(jobId, workspace)
     post({
       kind: 'processed',
       id,
@@ -325,8 +269,7 @@ async function handleProcess(
     // before it ever started, and a cancel landing between `finished.set` and
     // the post — where the main thread never learns the workspace exists, so
     // nothing would ever discard it.
-    finished.delete(jobId)
-    leases.delete(jobId)
+    finished.forget(jobId)
     if (workspace) await workspace.dispose()
 
     if (cause instanceof CancelledError || signal.aborted) {
@@ -356,15 +299,13 @@ async function handleProcess(
 }
 
 async function handleDiscard(id: number, jobId: string): Promise<void> {
-  const workspace = finished.get(jobId)
-  if (workspace) {
-    // The caller normally discards only after its save has resolved, but a
-    // lease is the thing that makes that a guarantee rather than an ordering.
-    await leases.get(jobId)?.settled
-    leases.delete(jobId)
-    finished.delete(jobId)
-    await workspace.dispose()
-  }
+  // The caller normally discards only after its save has resolved, but the
+  // lease inside `RetainedResults.release` is what makes that a guarantee
+  // rather than an ordering. A disposal that fails keeps its entry so the
+  // next job can retry, and `discarded` is posted either way — the main thread
+  // has let go of the result regardless, and leaving it waiting would be
+  // worse than leaking a directory the boot sweep collects.
+  await finished.release(jobId)
   post({ kind: 'discarded', id })
 }
 

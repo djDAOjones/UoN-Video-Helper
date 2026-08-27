@@ -11,6 +11,57 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-75: four lifecycle guards, and the leak they exposed
+
+**Decision:** cancel superseded analysis rather than merely ignoring it; hold
+job ownership until the worker acknowledges an abandoned job; hold the wake
+lock across a save; and dispose a retained workspace before forgetting it.
+
+**Rationale, one by one.**
+
+VH-60 made a stale ANSWER harmless. It did not make the work stop, so choosing
+a two-hour file and then another left the first file's whole-audio analysis and
+its encode probe running to completion, competing for the cores the user is
+actually waiting on. `beginSelection` now cancels what it supersedes — the
+registry, the message and the reply handling all existed already since VH-57.
+
+The watchdog posts `cancel` and rejects in the same breath, so the job's promise
+settles while the worker is still winding down. Start re-armed there, and the
+next `process` begins by disposing every retained workspace — which is how a
+finished file gets deleted out from under its own muxer. Ownership is now held
+until the worker answers conclusively, bounded by
+`WORKER_ACKNOWLEDGEMENT_LIMIT_MS` because a worker that never answers must not
+lock the interface out of ever starting another job.
+
+VH-63 tied the wake lock to a running JOB. A save streams a whole file out of
+OPFS — pure sustained I/O, no keypress, no progress bar moving — so the one
+phase during which a machine is most likely to sleep was the one phase the lock
+did not cover.
+
+And releasing a retained result deleted the map entry BEFORE disposing, so a
+disposal that threw left nothing in the session able to retry. Worse, letting
+the rejection escape would fail the NEXT job, because releasing is the first
+thing a new job awaits: one undeletable directory would stop the user working
+at all. The entry now survives a failure and the failure is contained — the
+rule the orphan sweep already follows (VH-58). Those rules moved to
+`workers/retained.ts` for the same reason `cancellation.ts` exists: importing
+the worker runs its boot, and this is control flow worth proving in Node.
+
+**The leak it exposed.** Verifying the supersede showed Mediabunny reporting
+"An AudioSample was garbage collected without first being closed", exactly at
+the cancel point — a wish-list note since 2026-08-25, now reproducible on
+demand. Five loops checked `signal?.aborted` and broke BEFORE closing the
+sample the iteration had just been handed. Fixed in `audio-plan.ts`, `probe.ts`
+(twice) and `branding.ts` (twice); the same supersede now reports zero.
+
+**Verified in Chrome:** the superseded file's pre-flight never reaches
+`calibration complete` where the surviving one does; zero GC warnings after the
+fix against one before; and a wake lock is requested for a save as well as for
+a job. Plus 13 new unit cases over the retained-result and wake-lock rules.
+
+**Link:** VH-75, VH-71 WP3, VH-57, VH-58, VH-60, VH-63;
+`src/workers/retained.ts`, `src/main.ts`, `src/core/keep-awake.ts`.
+
 ## 2026-08-27 — VH-73: the finished file's picture is checked too
 
 **Decision:** a job does not report `processed` until one frame decodes out of
