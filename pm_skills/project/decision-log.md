@@ -11,6 +11,40 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-65: the build job does not need to be able to publish
+
+**Decision:** move `pages: write` and `id-token: write` off the top level and
+onto the `deploy` job alone, pin every action to a commit SHA, and make the
+publishable-media guard allow "committed to this repository" rather than a
+directory.
+
+**Rationale:** every push to `main` publishes (VH-14), so this workflow IS the
+act of publishing and its blast radius is the University's pilot site.
+Top-level permissions applied to both jobs, and `build` runs `npm ci` and the
+whole test suite — a great deal of third-party code holding a token that can
+deploy. It needs to read the repository and nothing else.
+
+A major-version tag is mutable. `actions/checkout@v4` is whatever the tag
+points at today, and whoever controls it can move it to any commit, which then
+runs on every push to `main` with this workflow's permissions. SHAs resolved
+deliberately and named with the version each is, so updating is a decision
+rather than a drift.
+
+The media guard scanned `public/spike/` only, so a recording copied anywhere
+else under `public/` shipped. The fix is not a list of branding filenames — a
+list has to be updated whenever an asset is added, and the day it is not is the
+day the guard stops guarding. Git already knows: the branding assets are
+tracked, a lecture copied in by hand is not, wherever it was put. Without a
+checkout it falls back to the old directory rule rather than to trusting
+everything.
+
+**Verified:** an untracked MP4 placed in `public/assets/` — outside the only
+directory the old guard looked at — now fails the gate with exit 1 and names
+the file.
+
+**Link:** VH-65; review R-13; `.github/workflows/deploy-pages.yml`,
+`scripts/check-placeholders.mjs`.
+
 ## 2026-08-27 — VH-63: warn only when there is something to lose
 
 **Decision:** hold a screen wake lock for the length of a job, re-taking it

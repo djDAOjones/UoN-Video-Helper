@@ -174,15 +174,6 @@
       Done when: the analyser keeps only what warnings and envelopes need and
       releases the curves once derived, with equivalence shown.
 
-- [ ] **VH-65 The release boundary is not least-privilege** (2026-08-27)
-      Intent: R-13. The Pages workflow grants more than the build needs,
-      actions float rather than pin, and `check-placeholders.mjs` has no exact
-      allowlist of what may be published from `public/`. VH-14 makes every push
-      to `main` a publication, which is what raises the consequence.
-      Done when: build has `contents: read`, Pages/OIDC is scoped to deploy,
-      actions are SHA-pinned with a stated update route, and the publishable
-      media set is an explicit allowlist.
-
 - [ ] **VH-66 Operational and documentation contracts have drifted**
       (2026-08-27)
       Intent: R-15. Recovery, deployment, privacy, version and diagnostics

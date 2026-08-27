@@ -13,8 +13,9 @@
  * writing *about* the marker, not an unpopulated one.
  */
 
+import { execFileSync } from 'node:child_process'
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
-import { join, relative } from 'node:path'
+import { join, relative, sep } from 'node:path'
 
 const ROOT = process.cwd()
 const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', 'coverage', 'pm_skills', 'samples'])
@@ -78,15 +79,73 @@ for (const file of walk(ROOT)) {
  * stop Vite copying them into a build — and this project's first invariant is
  * that no media leaves the device. A forgotten fixture in a deployed build
  * would publish someone's lecture.
+ *
+ * The allow-list is "committed to this repository", not a list of names
+ * (VH-65). The branding assets are tracked; a lecture copied in by hand is
+ * not, wherever under `public/` it was put. A list of names would have to be
+ * updated every time an asset is added, and the day it is not is the day the
+ * guard stops guarding.
  */
-const spikeDir = join(ROOT, 'public', 'spike')
+const MEDIA_EXTENSIONS = /\.(mp4|mov|mkv|webm|m4v|avi|mp3|wav|m4a|aac|flac|ogg)$/i
+
+/** Files git knows about, or `null` when this is not a checkout. */
+function trackedFiles() {
+  try {
+    const listed = execFileSync('git', ['ls-files', '-z', 'public'], {
+      cwd: ROOT,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    })
+    return new Set(listed.split('\0').filter(Boolean))
+  } catch {
+    // Not a checkout, or no git. Fall back to the directory rule below rather
+    // than to trusting everything.
+    return null
+  }
+}
+
+function mediaUnder(dir, found = []) {
+  if (!existsSync(dir)) return found
+  for (const name of readdirSync(dir)) {
+    if (name.startsWith('.')) continue
+    const full = join(dir, name)
+    if (statSync(full).isDirectory()) mediaUnder(full, found)
+    else if (MEDIA_EXTENSIONS.test(name)) found.push(relative(ROOT, full).split(sep).join('/'))
+  }
+  return found
+}
+
+const publicDir = join(ROOT, 'public')
+const tracked = trackedFiles()
+const strays = mediaUnder(publicDir).filter((path) =>
+  // Without git, fall back to the original rule: anything under public/spike/
+  // is a hand-copied fixture by definition.
+  tracked ? !tracked.has(path) : path.startsWith('public/spike/'),
+)
+
+if (strays.length > 0) {
+  console.error(
+    `check-placeholders: ${strays.length} media file(s) under public/ would be copied into the build:`,
+  )
+  for (const stray of strays) console.error(`  ${stray}`)
+  console.error(
+    tracked
+      ? '  Only media committed to this repository may be published. These are not.'
+      : '  Spike fixtures are real recordings. Remove them before building.',
+  )
+  process.exit(1)
+}
+
+// Anything else left in public/spike/ still says so, because that directory
+// exists only for hand-copied fixtures.
+const spikeDir = join(publicDir, 'spike')
 if (existsSync(spikeDir)) {
-  const strays = readdirSync(spikeDir).filter((name) => !name.startsWith('.'))
-  if (strays.length > 0) {
+  const leftovers = readdirSync(spikeDir).filter((name) => !name.startsWith('.'))
+  if (leftovers.length > 0) {
     console.error(
-      `check-placeholders: ${strays.length} file(s) in public/spike/ would be copied into the build:`,
+      `check-placeholders: ${leftovers.length} file(s) in public/spike/ would be copied into the build:`,
     )
-    for (const stray of strays) console.error(`  public/spike/${stray}`)
+    for (const stray of leftovers) console.error(`  public/spike/${stray}`)
     console.error('  Spike fixtures are real recordings. Remove them before building.')
     process.exit(1)
   }

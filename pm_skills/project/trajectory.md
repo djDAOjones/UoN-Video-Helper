@@ -21,6 +21,13 @@
 
 ## Archived: real material and Band 1's first half — see archive/trajectory/trajectory-0002-real-material-and-band-1.md
 
+### VH-65 — least privilege where publishing happens
+
+- VH-65 — Shipped 2026-08-27. Deploy credentials belong to the deploy job
+  alone, every action is pinned to a commit SHA with its version named, and the
+  publishable-media guard allows what git tracks rather than what directory a
+  file sits in. See decision-log.
+
 ### VH-63 — a long job survives a tab switch
 
 - VH-63 — Shipped 2026-08-27. A screen wake lock is held for the length of a
