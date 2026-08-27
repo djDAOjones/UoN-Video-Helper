@@ -11,6 +11,40 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-59: inspect the track that will be encoded
+
+**Decision:** have inspection call `getPrimaryVideoTrack()` and
+`getPrimaryAudioTrack()` — the same calls production makes — and say before
+processing how many tracks a file holds that the output cannot keep.
+
+**Rationale:** inspection read `getVideoTracks()[0]` and `getAudioTracks()[0]`
+while the pipeline asks Mediabunny for its primary tracks, and those are not
+the same selection. Mediabunny picks a primary by position, disposition,
+bitrate — higher wins — and pairing with the primary video track. An OBS
+recording with programme audio on track 0 and a higher-bitrate commentary mic
+on track 1 would therefore be inspected against one and encoded from the other,
+so the loudness plan, the audio warnings and the whole pre-flight would describe
+sound the user will not hear (review R-09). Calling the same API in both places
+makes divergence impossible rather than unlikely.
+
+The output carries one video and one audio track by design, so anything beyond
+that is content the user loses. `AGENTS.md` requires saying so before
+processing, and the source panel already has the pattern — the subtitle notice
+sits two rows below. Metadata that fails to copy now reports too, through the
+`outputWarnings` channel VH-55 gave a first member.
+
+**Note:** `TrackScan` also counts tracks, from a direct ISOBMFF handler walk.
+That count exists to see what Mediabunny cannot — subtitles and chapters — and
+is `scanned: false` for WebM. The new counts come from Mediabunny and work for
+every container, so the two are complementary rather than duplicated.
+
+**Verified:** a two-audio-track MP4, synthesised with ffmpeg because the real
+corpus has none, is described as "This file has 1 more sound track" with the
+note before Start is available, and processes to a correct single-track output.
+
+**Link:** VH-59; review R-09; `src/media/inspect.ts`, `src/ui/source-panel.ts`,
+`src/media/pipeline.ts`.
+
 ## 2026-08-27 — VH-55: measure the loss now, move the video later
 
 **Decision:** make the encoder-delay probe report "unmeasurable" separately

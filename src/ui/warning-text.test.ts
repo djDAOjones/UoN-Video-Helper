@@ -23,6 +23,7 @@ const ALL = Object.keys({
   'extended-silence': true,
   'target-missed': true,
   'onset-trimmed': true,
+  'metadata-lost': true,
 } satisfies Record<AudioWarningCode, true>) as AudioWarningCode[]
 
 const sample = (code: AudioWarningCode) =>

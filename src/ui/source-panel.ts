@@ -17,14 +17,21 @@ import {
   formatResolution,
 } from './format'
 
-interface Row {
+export interface Row {
   readonly term: string
   readonly detail: string
   /** Advisory note shown beneath the value, for things worth knowing but not alarming. */
   readonly note?: string
 }
 
-function buildRows(report: SourceReport): Row[] {
+/**
+ * Turns a report into rows.
+ *
+ * Exported for tests. Rendering needs a DOM and the suite runs in Node, but
+ * the decisions worth protecting are all here — above all which losses get
+ * said out loud before processing starts.
+ */
+export function buildRows(report: SourceReport): Row[] {
   const rows: Row[] = [
     { term: 'Length', detail: formatDuration(report.durationSeconds) },
     { term: 'File size', detail: formatFileSize(report.fileSizeBytes) },
@@ -89,6 +96,27 @@ function buildRows(report: SourceReport): Row[] {
       term: 'Sound',
       detail: 'No audio track found',
       note: 'Levelling needs sound. Branding and re-encoding will still work.',
+    })
+  }
+
+  // Said before processing, like the subtitle notice below and for the same
+  // reason: the output carries one video and one audio track, so anything
+  // beyond that is content the user loses (review R-09). Finding out
+  // afterwards is too late.
+  const extraVideo = Math.max(0, report.videoTrackCount - 1)
+  const extraAudio = Math.max(0, report.audioTrackCount - 1)
+  if (extraVideo > 0 || extraAudio > 0) {
+    const found: string[] = []
+    if (extraVideo > 0) {
+      found.push(extraVideo === 1 ? '1 more video track' : `${extraVideo} more video tracks`)
+    }
+    if (extraAudio > 0) {
+      found.push(extraAudio === 1 ? '1 more sound track' : `${extraAudio} more sound tracks`)
+    }
+    rows.push({
+      term: 'Extra tracks',
+      detail: `This file has ${found.join(' and ')}`,
+      note: 'The new file keeps one picture and one sound track — the ones described above. The others will not be carried over. If you need them, keep the original alongside.',
     })
   }
 

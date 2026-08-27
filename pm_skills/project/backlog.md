@@ -26,9 +26,9 @@
      misleading, or a risk. VH-54, VH-50 and VH-58 shipped 2026-08-27 and the
      output contract now holds on real material, and VH-56 shipped with it so
      a finished file survives the next click and VH-57 made every phase answer
-     Cancel, and VH-55 made its onset loss visible. What remains is silent
-     loss: VH-55's second half waits on VH-62's sync meter, and VH-59 is
-     independent. -->
+     Cancel, VH-55 made its onset loss visible and VH-59 made track loss
+     visible. What remains of 1a is VH-55's second half, which waits on VH-62's
+     sync meter. -->
 
 - [~] **VH-55 Source onset can be replaced by encoder priming** (2026-08-27)
       Intent: R-03. `AudioTimelineShift.apply()` drops AAC samples landing
@@ -44,14 +44,6 @@
       presentation time, so it cannot yet prove the one axis this moves.
       Done when: no source sample is discarded, and a sync meter that measures
       both tracks on one clock says so.
-
-- [ ] **VH-59 Multi-track sources lose tracks silently** (2026-08-27)
-      Intent: R-09. Inspection and processing can pick different primary
-      tracks, extra tracks are neither counted nor carried, and nothing warns.
-      `Silent data loss is the worst available outcome` is an AGENTS.md
-      invariant.
-      Done when: inspection reports the tracks processing will use, all track
-      counts are surfaced, and a lossy job is blocked or acknowledged first.
 
 ### Band 1b — Decisions the maintainer owns (signed off 2026-08-25)
 

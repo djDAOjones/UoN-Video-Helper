@@ -71,6 +71,11 @@ export function warningText(warning: AudioWarning): WarningText {
         heading: 'The finished sound is not quite at the usual level',
         detail: `It came out about ${round(detail['missedBy'] ?? Number.NaN)} LU away from the target. The video is fine to use; it may just sound slightly quieter or louder than other videos levelled with this tool.`,
       }
+    case 'metadata-lost':
+      return {
+        heading: 'The file’s title and date could not be copied across',
+        detail: 'The picture and sound are unaffected. If your original carried a title, author or date, the new file will not have them — you can still add them wherever you upload it.',
+      }
     case 'onset-trimmed':
       return {
         heading: 'A moment of sound at the very start was removed',

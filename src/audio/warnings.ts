@@ -32,6 +32,7 @@ export type AudioWarningCode =
   | 'extended-silence'
   | 'target-missed'
   | 'onset-trimmed'
+  | 'metadata-lost'
 
 export interface AudioWarning {
   readonly code: AudioWarningCode

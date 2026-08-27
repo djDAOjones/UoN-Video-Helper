@@ -21,6 +21,13 @@
 
 ## Archived: real material and Band 1's first half — see archive/trajectory/trajectory-0002-real-material-and-band-1.md
 
+### VH-59 — the track that is inspected is the track that is encoded
+
+- VH-59 — Shipped 2026-08-27. Inspection and production now call the same
+  primary-track API, extra video and sound tracks are named before Start, and
+  metadata that fails to copy reports rather than only logging. See
+  decision-log.
+
 ### VH-55 (part) — the onset loss is no longer silent
 
 - VH-55 — Partly shipped 2026-08-27. An unmeasurable encoder delay is now

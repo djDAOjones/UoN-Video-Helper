@@ -334,6 +334,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
   // Spec 8.3.4: preserve creation metadata where the muxer supports it.
   // Mediabunny reads and writes file-level tags even though it cannot see
   // subtitle tracks, so this much genuinely survives.
+  let metadataCarried = true
   try {
     const tags = await input.getMetadataTags()
     if (tags && Object.keys(tags).length > 0) {
@@ -341,6 +342,10 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       log.debug('pipeline', 'metadata tags carried over', { keys: Object.keys(tags).length })
     }
   } catch (cause) {
+    // Logged AND reported. It is only a title and a date, but it is still the
+    // user's, and losing it into a console line nobody reads is the shape
+    // `AGENTS.md` forbids (review R-09).
+    metadataCarried = false
     log.warn('pipeline', 'could not carry metadata tags', {
       reason: cause instanceof Error ? cause.message : String(cause),
     })
@@ -601,6 +606,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       brandingApplied: `${opening !== null}/${closing !== null}`,
     })
     const outputWarnings: AudioWarning[] = []
+    if (!metadataCarried) outputWarnings.push({ code: 'metadata-lost', detail: {} })
     if (timelineShift && audioPlan) {
       const onset = detectOnsetWarning(timelineShift.discarded, audioPlan.sampleRate)
       if (onset) {

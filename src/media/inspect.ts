@@ -120,6 +120,16 @@ export interface SourceReport {
    */
   readonly reportedTrackCount: number
   /**
+   * How many video and audio tracks the file holds.
+   *
+   * The output carries exactly one of each — the primary tracks this report
+   * describes — so anything above one is content that will not survive, and
+   * `AGENTS.md` requires saying so before processing rather than after
+   * (review R-09).
+   */
+  readonly videoTrackCount: number
+  readonly audioTrackCount: number
+  /**
    * What a direct read of the container's handler types found — including the
    * tracks Mediabunny cannot see. `scanned: false` for non-ISOBMFF files,
    * where the caller must say nothing rather than guess.
@@ -196,19 +206,25 @@ export async function inspectFile(
     )
   }
 
-  const [videoTracks, audioTracks, allTracks, tracks] = await Promise.all([
+  const [videoTracks, audioTracks, allTracks, tracks, videoTrack, audioTrack] = await Promise.all([
     input.getVideoTracks(),
     input.getAudioTracks(),
     input.getTracks(),
     // Runs alongside, never instead of, the demux. A failed scan costs a
     // warning we cannot give; it must never cost the inspection.
     scanTrackHandlers(file),
+    // The PRIMARY tracks, not the first ones. Mediabunny picks a primary by
+    // position, disposition, bitrate and pairing with the primary video track,
+    // so on a file with two sound tracks `getAudioTracks()[0]` and
+    // `getPrimaryAudioTrack()` are not the same track — and the pipeline uses
+    // the second. Inspecting one and encoding the other means the loudness
+    // plan, the warnings and the pre-flight all describe audio the user will
+    // not hear (review R-09).
+    input.getPrimaryVideoTrack(),
+    input.getPrimaryAudioTrack(),
   ])
 
   throwIfAborted(signal)
-
-  const videoTrack = videoTracks[0]
-  const audioTrack = audioTracks[0] ?? null
 
   if (!videoTrack) {
     // Reached by a truncated or header-only file as readily as by a genuine
@@ -317,6 +333,8 @@ export async function inspectFile(
     video,
     audio,
     reportedTrackCount: allTracks.length,
+    videoTrackCount: videoTracks.length,
+    audioTrackCount: audioTracks.length,
     tracks,
   }
 
@@ -333,6 +351,8 @@ export async function inspectFile(
     channels: audio?.channelCount ?? null,
     subtitleTracks: tracks.scanned ? tracks.subtitleTracks : null,
     chapterTracks: tracks.scanned ? tracks.chapterTracks : null,
+    videoTracks: videoTracks.length,
+    audioTracks: audioTracks.length,
   })
 
   return report
