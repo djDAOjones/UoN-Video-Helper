@@ -11,6 +11,49 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-46b: one question, four answers
+
+**Decision:** the closing is a single four-way radio — Clean cut, Over the
+picture, Over a freeze frame, No closing sequence — with Animation revealed
+only for the two modes that play the build, and Colour whenever a closing is
+chosen.
+
+**Rationale:** the maintainer asked for all four options back plus a GUI
+analysis of the best way to offer them. The analysis turns on three facts.
+
+"None" is not a different KIND of answer from "clean cut" — it is a fourth
+value of the same question. It had been a checkbox with the three modes behind
+it as a separate group, so the user was asked twice about one thing, and the
+second question looked optional when it was not. One radio group asks once.
+
+Animation only means something for `over-picture` and `over-freeze`. A clean
+cut discards the 1 s build entirely, so under it Fade and Slide differ by
+nothing — precisely the control `AGENTS.md` names as the one never to expose.
+It is hidden rather than disabled: a disabled control still says "there is a
+decision here you may not make", and there is not one.
+
+What separates the modes for a user is what happens to their last second and
+how many seconds they gain, neither of which is guessable from a two-word
+label. Each option carries a sentence saying both. Clean cut stays the default
+— least to think about, and the only mode that composites nothing, so it works
+even where alpha decode does not.
+
+**On the processing being sound:** the compositing that VH-45 withdrew is
+correct because of VH-44, which detects whether the engine honours an RGBA
+`copyTo` and takes the canvas round-trip only where it does not. That is a
+property test rather than a browser sniff, which is why it survives. Verified
+end to end here in Chrome across five combinations — every mode, both styles,
+both colours — and each produced the duration its configuration promises:
+`hard-cut` and `over-picture` +3.99 s, `over-freeze` +4.99 s against nominal
+4.00 and 5.00, the remainder being frame quantisation at 30 fps.
+
+**Rejected:** keeping the checkbox and adding a separate mode group, which is
+the shape that caused the problem; and a select, which hides three of four
+options behind a click for no gain at this length.
+
+**Link:** VH-46b, VH-44, VH-45; `index.html`, `src/main.ts`,
+`src/styles/app.css`.
+
 ## 2026-08-27 — VH-25 cut, VH-23 iceboxed: less to decide, not more
 
 **Decision (VH-25):** do not build picture fades at the branding boundary, in

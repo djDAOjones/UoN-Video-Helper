@@ -206,7 +206,6 @@ body {
   background: var(--layer-02);
 }
 
-
 .status {
   margin-top: var(--spacing-05);
   font-size: var(--type-body-compact);
@@ -466,6 +465,35 @@ body {
   width: 1.25rem;
   height: 1.25rem;
   accent-color: var(--interactive);
+}
+
+/*
+ * A radio whose choice needs a sentence, not just a name.
+ *
+ * The closing options differ by what they do to the last second of the user's
+ * video and by how many seconds they add, and neither is guessable from a
+ * two-word label (VH-46b).
+ */
+.radio--described {
+  align-items: flex-start;
+  padding-block: var(--spacing-02);
+}
+
+.radio--described input {
+  /* Aligned to the first line of text rather than to the whole block. */
+  margin-top: 0.15rem;
+  flex: none;
+}
+
+.radio-label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-01);
+}
+
+.radio-detail {
+  font-size: var(--type-body-compact);
+  color: var(--text-secondary);
 }
 
 /* --- Disclosure for options that are perks, not decisions --- */

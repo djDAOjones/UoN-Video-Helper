@@ -21,6 +21,13 @@
 
 ## Archived: real material and Band 1's first half — see archive/trajectory/trajectory-0002-real-material-and-band-1.md
 
+### VH-46b — the closing is one question again
+
+- VH-46b — Shipped 2026-08-27. The closing is a four-way radio (clean cut,
+  over the picture, over a freeze frame, none), Animation appears only where
+  it can change anything, and every mode was verified end to end across both
+  styles and both colours. See decision-log.
+
 ### VH-25, VH-23 — two features decided away
 
 - VH-25 — Cut 2026-08-27. No picture fades at the branding boundary, either

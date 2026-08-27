@@ -21,9 +21,10 @@ Three things are worth knowing before using it in anger:
   told to switch rather than served a different format — spec §6.1 says MP4,
   and a WebM/Opus path for them is iceboxed behind D11 (VH-49).
 - **Opening sequences are withdrawn**, because no approved asset exists (VH-33).
-- **So are the two closing transition modes**, and every job takes the hard cut.
-  They were withdrawn for being wrong in Firefox; that is fixed and verified,
-  and putting the controls back is an open decision (VH-46b).
+- **All four closing choices are available** — clean cut, over the picture,
+  over a freeze frame, or none. The two compositing modes were withdrawn in
+  August for being wrong in Firefox; VH-44 fixed that by detecting the engine's
+  behaviour rather than its name, and VH-46b put them back on 2026-08-27.
 
 ## Quick start
 

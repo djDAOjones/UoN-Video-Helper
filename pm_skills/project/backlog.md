@@ -52,17 +52,6 @@
 <!-- Committed work that cannot proceed without a product call. Listed apart
      from 1a so agent work is never read as waiting on these. -->
 
-- [ ] **VH-46b Restore the closing transition controls** (2026-08-26)
-      Intent: VH-45 withdrew "over the picture" and "over a freeze frame"
-      because they were wrong in Firefox. VH-44 fixed that in all three
-      engines, so the reason is gone — but returning controls to a live site is
-      a decision, not a fix.
-      Done when: the two radios are back in `index.html` (markup is in the
-      VH-45 comment; the pipeline never lost the modes), or they stay out and
-      VH-32 says what replaces them.
-      Note: VH-25's picture fade-out is for hard cut ONLY — in the overlay
-      modes the build IS the transition.
-
 - [ ] **VH-31 The size estimate is ~1.7x too high** [detail](tickets/VH-31.md)
       (2026-08-25)
       Intent: it is shown before the user commits, so it is the number they

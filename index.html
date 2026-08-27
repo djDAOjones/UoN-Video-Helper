@@ -57,26 +57,72 @@
           <p class="helper" id="subtitle-status"></p>
         </div>
         <fieldset class="choice" id="branding-choice" hidden>
-          <legend class="label">Branding</legend>
-          <!-- VH-33: the opening toggle was withdrawn on 2026-08-25. No approved
-               opening asset exists — only a generated stand-in — and helper text
-               saying "leave this off" is not what stands between a user and an
-               unapproved University graphic in a published video. The pipeline
-               keeps its opening path intact for VH-23; only the control is gone,
-               and spec §4.1's two-toggle model is a recorded doc-delta. -->
-          <label class="radio">
-            <input type="checkbox" id="branding-closing" checked />
-            <span>Add the closing sequence</span>
+          <legend class="label">How your video ends</legend>
+          <!-- VH-46b, 2026-08-27. One question instead of two.
+               "Add the closing sequence" was a checkbox, and the three ways a
+               closing can meet the picture were a separate set of radios that
+               VH-45 withdrew. But "none" is not a different KIND of answer from
+               "clean cut" — it is a fourth value of the same question, and
+               asking it twice made the second question look optional when it
+               was not.
+               Each option says what it costs in seconds, because that is the
+               only difference a user can act on: two of them add 4 s and one
+               adds 5. VH-33's opening toggle stays gone (VH-23, iceboxed). -->
+          <label class="radio radio--described">
+            <input type="radio" name="branding-mode" value="hard-cut" checked />
+            <span class="radio-label">
+              <span>Clean cut</span>
+              <span class="radio-detail"
+                >Your video ends, then the closing card appears. Adds 4 seconds.</span
+              >
+            </span>
+          </label>
+          <label class="radio radio--described">
+            <input type="radio" name="branding-mode" value="over-picture" />
+            <span class="radio-label">
+              <span>Over the picture</span>
+              <span class="radio-detail"
+                >The closing builds over your last second of video, which is progressively covered.
+                Adds 4 seconds.</span
+              >
+            </span>
+          </label>
+          <label class="radio radio--described">
+            <input type="radio" name="branding-mode" value="over-freeze" />
+            <span class="radio-label">
+              <span>Over a freeze frame</span>
+              <span class="radio-detail"
+                >Your last frame holds still while the closing builds over it, so nothing is
+                covered. Adds 5 seconds.</span
+              >
+            </span>
+          </label>
+          <label class="radio radio--described">
+            <input type="radio" name="branding-mode" value="none" />
+            <span class="radio-label">
+              <span>No closing sequence</span>
+              <span class="radio-detail"
+                >Your video ends where it ends, with no University branding.</span
+              >
+            </span>
           </label>
           <details class="disclosure" id="branding-options">
             <summary class="disclosure-summary">Closing sequence options</summary>
-            <!-- VH-45: the two compositing modes ("over the picture", "over a
-                 freeze frame") were withdrawn on 2026-08-25 — they are wrong in
-                 Firefox, see VH-44. Every job now takes the hard cut, which
-                 composites nothing and was already the default. Animation went
-                 with them: Fade and Slide differ only during the build a hard
-                 cut discards, so the choice would change nothing. The pipeline
-                 keeps all three modes; only the controls are gone. -->
+            <!-- Animation is shown only for the two modes that play the build.
+                 A clean cut discards it, so Fade and Slide would be a choice
+                 that changes nothing — which is the control this project's
+                 rules single out as the one never to offer. -->
+            <fieldset class="choice" id="branding-style-choice" hidden>
+              <legend class="label">Animation</legend>
+              <label class="radio">
+                <input type="radio" name="branding-style" value="fade" checked />
+                <span>Fade</span>
+              </label>
+              <label class="radio">
+                <input type="radio" name="branding-style" value="slide" />
+                <span>Slide</span>
+              </label>
+            </fieldset>
             <fieldset class="choice">
               <legend class="label">Colour</legend>
               <label class="radio">

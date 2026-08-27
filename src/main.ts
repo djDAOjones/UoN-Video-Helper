@@ -18,7 +18,7 @@ import {
 import { KeepAwake, shouldWarnBeforeLeaving, warnBeforeLeaving } from './core/keep-awake'
 import { adoptLogRecords, log, setMinimumLogLevel } from './core/logger'
 import { APP_VERSION, BUILD_ID } from './core/version'
-import { CLOSING_DEFAULTS } from './config/branding'
+import { CLOSING_DEFAULTS, type BrandingMode } from './config/branding'
 import type { PresetId } from './config/presets'
 import { WORKER_SILENCE_LIMIT_MS } from './config/thresholds'
 import { createWatchdog } from './core/watchdog'
@@ -61,8 +61,8 @@ const processProgressLabel = required<HTMLParagraphElement>('#process-progress-l
 const processResult = required<HTMLDivElement>('#process-result')
 const presetChoice = required<HTMLFieldSetElement>('#preset-choice')
 const brandingChoice = required<HTMLFieldSetElement>('#branding-choice')
-const brandingClosing = required<HTMLInputElement>('#branding-closing')
 const brandingOptions = required<HTMLDetailsElement>('#branding-options')
+const brandingStyleChoice = required<HTMLFieldSetElement>('#branding-style-choice')
 const subtitleField = required<HTMLDivElement>('#subtitle-field')
 const subtitleInput = required<HTMLInputElement>('#subtitle-input')
 const subtitleStatus = required<HTMLParagraphElement>('#subtitle-status')
@@ -119,7 +119,8 @@ subtitleInput.addEventListener('change', () => {
 /** The D1 brand background, resolved from the token so answering D1 is one line. */
 function brandBackground(): string {
   return (
-    getComputedStyle(document.documentElement).getPropertyValue('--uon-brand-bg').trim() || '#000000'
+    getComputedStyle(document.documentElement).getPropertyValue('--uon-brand-bg').trim() ||
+    '#000000'
   )
 }
 
@@ -151,23 +152,40 @@ function chosenBranding<T extends string>(
 const BRANDING_VALUES = {
   style: ['fade', 'slide'],
   colour: ['blue', 'white'],
-  mode: ['hard-cut', 'over-picture', 'over-freeze'],
+  // `none` is a UI value, not a pipeline one: it means "no closing at all",
+  // which the pipeline expresses as `closing: false` rather than as a mode
+  // (VH-46b). Every other value is a `BrandingMode`.
+  mode: ['none', 'hard-cut', 'over-picture', 'over-freeze'],
 } as const
 
+/** Modes that play the 1 s animated build, and so make Animation mean something. */
+const MODES_USING_THE_BUILD = ['over-picture', 'over-freeze']
+
+/** The chosen mode, or `null` for "no closing sequence". */
+function chosenClosingMode(): BrandingMode | null {
+  // Widened explicitly: `chosenBranding` infers its return from the fallback,
+  // which is a `BrandingMode` literal and cannot represent "none".
+  const mode = chosenBranding<BrandingMode | 'none'>('mode', CLOSING_DEFAULTS.mode)
+  return mode === 'none' ? null : mode
+}
+
 /**
- * Shows the closing options only when a closing is wanted.
+ * Keeps the refinements in step with the choice they refine.
  *
- * Mode and animation used to be chosen here too. VH-45 withdrew both controls
- * on 2026-08-25 — the compositing modes are wrong in Firefox (VH-44), and Fade
- * and Slide differ only during the build a hard cut discards, so with the
- * modes gone the animation choice could not change anything. {@link
- * chosenBranding} still falls back to {@link CLOSING_DEFAULTS} for both, which
- * is what now decides them.
+ * Two rules, and both exist so no control is ever offered that cannot change
+ * anything (VH-46b). The options disclosure is meaningless without a closing.
+ * Animation is meaningless without the build: a clean cut discards it, so Fade
+ * and Slide would differ by nothing at all — the exact control `AGENTS.md`
+ * singles out as the one never to expose.
+ *
+ * Hidden rather than disabled. A disabled control still says "there is a
+ * decision here you are not allowed to make", and there is not one.
  */
 function syncBrandingOptions(): void {
-  const wantsClosing = brandingClosing.checked
-  brandingOptions.hidden = !wantsClosing
-  if (!wantsClosing) brandingOptions.open = false
+  const mode = chosenClosingMode()
+  brandingOptions.hidden = mode === null
+  if (mode === null) brandingOptions.open = false
+  brandingStyleChoice.hidden = mode === null || !MODES_USING_THE_BUILD.includes(mode)
 }
 
 brandingChoice.addEventListener('change', syncBrandingOptions)
@@ -813,10 +831,13 @@ function beginJob(file: File): void {
         // asset exists to turn back on. The pipeline's opening path is intact
         // and VH-23 restores the choice when there is something to choose.
         opening: false,
-        closing: brandingClosing.checked,
+        // `none` is the absence of a closing, not a way of having one, so it
+        // becomes `closing: false` and the mode falls back to the default
+        // nothing will read (VH-46b).
+        closing: chosenClosingMode() !== null,
         style: chosenBranding('style', CLOSING_DEFAULTS.style),
         colour: chosenBranding('colour', CLOSING_DEFAULTS.colour),
-        mode: chosenBranding('mode', CLOSING_DEFAULTS.mode),
+        mode: chosenClosingMode() ?? CLOSING_DEFAULTS.mode,
       },
       backgroundColour: brandBackground(),
       ...(subtitleVtt ? { subtitleVtt } : {}),
