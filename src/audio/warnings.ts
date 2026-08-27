@@ -31,6 +31,7 @@ export type AudioWarningCode =
   | 'noisy'
   | 'extended-silence'
   | 'target-missed'
+  | 'onset-trimmed'
 
 export interface AudioWarning {
   readonly code: AudioWarningCode
@@ -126,6 +127,32 @@ export function detectSourceWarnings(analysis: AudioAnalysis | null): AudioWarni
   }
 
   return warnings
+}
+
+/**
+ * Encoder-delay compensation discarded audio that was not silence.
+ *
+ * Not a spec 5.4 row: it describes something the tool DID, not something the
+ * recording is. It exists because `AGENTS.md` forbids losing content quietly,
+ * and until VH-55's second half lands the compensation genuinely costs the
+ * first few tens of milliseconds (review R-03).
+ *
+ * @param discarded - What `AudioTimelineShift` threw away.
+ * @param sampleRate - Needed to turn a frame count into something sayable.
+ */
+export function detectOnsetWarning(
+  discarded: { readonly frames: number; readonly peakDbfs: number },
+  sampleRate: number,
+): AudioWarning | null {
+  if (discarded.frames === 0) return null
+  if (!(discarded.peakDbfs > WARNING_THRESHOLDS.onsetTrimmedAboveDbfs)) return null
+  return {
+    code: 'onset-trimmed',
+    detail: {
+      milliseconds: Math.round((discarded.frames / sampleRate) * 1000),
+      peakDbfs: Math.round(discarded.peakDbfs * 10) / 10,
+    },
+  }
 }
 
 /**

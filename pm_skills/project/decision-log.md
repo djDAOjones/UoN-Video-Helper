@@ -11,6 +11,44 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-55: measure the loss now, move the video later
+
+**Decision:** make the encoder-delay probe report "unmeasurable" separately
+from "zero", and make the onset the compensation discards a visible warning —
+but do NOT re-time the video lane in the same task.
+
+**Rationale:** compensating the AAC encoder's ~44 ms delay shifts the audio
+timeline earlier and discards whatever lands before zero. Three files in the
+real corpus carry energy there — two near -26 dBFS, one near -48 — so what goes
+is sometimes the attack of a first word (review R-03). Two separate faults sat
+on top of that. The probe returned 0 both for an encoder with genuinely no
+delay (Opus, PCM) and for a probe that threw or found no impulse, so nothing
+could tell an uncompensated job from a job that needed no compensation. And the
+loss was silent, which `AGENTS.md` names as the worst outcome available.
+
+Preserving the samples is possible and the mechanism is known: delay the VIDEO
+by the encoder delay instead, which Mediabunny expresses as an empty edit list
+(`isobmff-boxes.js` writes `edts` whenever a track's first timestamp is
+positive — the module comment saying it writes no edit list is wrong, though
+its conclusion stands, because an empty edit cannot express priming-skip
+either). The edit itself is about six lines across four timestamp sites.
+
+What is not six lines is proving it. The change moves A/V sync, and the
+acceptance meter reads audio markers in decoded-sample time and video markers
+in presentation time — so it would measure the one axis this change moves using
+two different clocks, and could report either a false pass or a false 44 ms
+failure. Making a sync change whose verification is known to be blind is how
+silent drift reaches published video. VH-55 keeps the second half, sequenced
+after VH-62.
+
+**Rejected:** encoding at the source sample rate; leaving the delay
+uncompensated (44 ms sits right on ITU-R BT.1359's detectability threshold);
+and shifting the video by a whole number of frames, which would trade exact
+sync for 22 ms of audio lead — tighter than the tolerance for audio leading.
+
+**Link:** VH-55; review R-03; `src/media/encoder-delay.ts`,
+`src/audio/warnings.ts`, `src/config/audio.ts`.
+
 ## 2026-08-27 — VH-57: cancellation is a property of every request
 
 **Decision:** register a request's `AbortController` before its handler can

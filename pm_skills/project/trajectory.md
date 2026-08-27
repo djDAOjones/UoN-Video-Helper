@@ -21,6 +21,13 @@
 
 ## Archived: real material and Band 1's first half — see archive/trajectory/trajectory-0002-real-material-and-band-1.md
 
+### VH-55 (part) — the onset loss is no longer silent
+
+- VH-55 — Partly shipped 2026-08-27. An unmeasurable encoder delay is now
+  distinguishable from a zero one, and audio discarded by delay compensation
+  raises a warning above −50 dBFS. Preserving it needs the video lane re-timed
+  and a sync meter that can prove it. See decision-log.
+
 ### VH-57 — cancel is answered by every phase
 
 - VH-57 — Shipped 2026-08-27. Every request registers its controller before it

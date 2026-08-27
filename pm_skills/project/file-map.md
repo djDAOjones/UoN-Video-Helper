@@ -15,7 +15,7 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 155 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 156 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 20 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
@@ -23,7 +23,7 @@
 - `public` — 17 file(s)
 - `reviews` — 7 file(s)
 - `scripts` — 4 file(s)
-- `src` — 96 file(s)
+- `src` — 97 file(s)
 - `test` — 4 file(s)
 <!-- /file-map-index -->
 
@@ -157,6 +157,7 @@
 - `src/media/composite.ts` — Premultiplied-alpha compositing. `out = brand + source×(1−a)`; the straight form double-darkens.
 - `src/media/conform.test.ts` — Proves fit/pad never distorts, across 4:3, vertical and ultrawide sources.
 - `src/media/conform.ts` — Scale-to-fit and pad geometry, and the reusable frame scaler the pipeline and probe share.
+- `src/media/encoder-delay.test.ts` — Pins that delay compensation measures the onset it discards, at the levels the corpus carries.
 - `src/media/encoder-delay.ts` — Measures the audio encoder's own delay and shifts the timeline to cancel it.
 - `src/media/encoding.ts` — Mediabunny encoding configs derived from the presets; where VH-7's audio chain will hook in.
 - `src/media/framerate.test.ts` — Proves the rounding rule and that timestamps derive from the index so error cannot accumulate.

@@ -71,6 +71,13 @@ export function warningText(warning: AudioWarning): WarningText {
         heading: 'The finished sound is not quite at the usual level',
         detail: `It came out about ${round(detail['missedBy'] ?? Number.NaN)} LU away from the target. The video is fine to use; it may just sound slightly quieter or louder than other videos levelled with this tool.`,
       }
+    case 'onset-trimmed':
+      return {
+        heading: 'A moment of sound at the very start was removed',
+        // Says what happened and what to do, not why the encoder needs it. The
+        // number is tiny and the fix is entirely in the user's hands.
+        detail: `About ${round(detail['milliseconds'] ?? Number.NaN, 0)} milliseconds had to come off the beginning to keep the sound in step with the picture, and there was something audible in it. The video is fine to use; if it starts mid-word, leave a moment of quiet before you begin next time.`,
+      }
   }
 }
 

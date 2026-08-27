@@ -26,16 +26,24 @@
      misleading, or a risk. VH-54, VH-50 and VH-58 shipped 2026-08-27 and the
      output contract now holds on real material, and VH-56 shipped with it so
      a finished file survives the next click and VH-57 made every phase answer
-     Cancel. What remains is silent loss: VH-55 and VH-59 are independent, and
-     each ends with the user losing something without being told. -->
+     Cancel, and VH-55 made its onset loss visible. What remains is silent
+     loss: VH-55's second half waits on VH-62's sync meter, and VH-59 is
+     independent. -->
 
-- [ ] **VH-55 Source onset can be replaced by encoder priming** (2026-08-27)
+- [~] **VH-55 Source onset can be replaced by encoder priming** (2026-08-27)
       Intent: R-03. `AudioTimelineShift.apply()` drops AAC samples landing
       before timestamp zero. Sync survives; content does not — three files in
-      the real corpus carry energy in their first 44 ms. Probe failure and a
-      genuine zero delay are also indistinguishable.
-      Done when: priming is compensated without discarding samples, and a
-      failed probe is distinguishable from zero.
+      the real corpus carry energy in their first 44 ms.
+      Done 2026-08-27: the probe distinguishes an unmeasurable encoder from a
+      zero-delay one, and a discarded onset above −50 dBFS now raises a visible
+      `onset-trimmed` warning, so the loss is no longer silent.
+      Remaining: stop discarding it. Delay the VIDEO by the encoder delay
+      instead — Mediabunny writes the empty edit list — which is ~6 lines
+      across four timestamp sites. Sequenced after VH-62 because the
+      acceptance sync meter reads audio in decoded-sample time and video in
+      presentation time, so it cannot yet prove the one axis this moves.
+      Done when: no source sample is discarded, and a sync meter that measures
+      both tracks on one clock says so.
 
 - [ ] **VH-59 Multi-track sources lose tracks silently** (2026-08-27)
       Intent: R-09. Inspection and processing can pick different primary

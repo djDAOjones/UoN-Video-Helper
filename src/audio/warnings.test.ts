@@ -7,9 +7,9 @@
 
 import { describe, expect, it } from 'vitest'
 
-import { TARGET_INTEGRATED_LUFS } from '../config/audio'
+import { TARGET_INTEGRATED_LUFS, WARNING_THRESHOLDS } from '../config/audio'
 import type { AudioAnalysis } from './analyse'
-import { detectOutputWarning, detectSourceWarnings } from './warnings'
+import { detectOnsetWarning, detectOutputWarning, detectSourceWarnings } from './warnings'
 
 /** A healthy recording. Each test perturbs exactly one thing. */
 function healthy(overrides: Partial<AudioAnalysis> = {}): AudioAnalysis {
@@ -139,5 +139,43 @@ describe('spec 5.4 output warning', () => {
 
   it('says nothing about a silent result rather than reporting -Infinity', () => {
     expect(detectOutputWarning(Number.NEGATIVE_INFINITY, TARGET_INTEGRATED_LUFS)).toBeNull()
+  })
+})
+
+/**
+ * VH-55 / review R-03. Encoder-delay compensation discards whatever falls
+ * before timestamp zero. Room tone going is fine; the attack of the first word
+ * going quietly is not, and `AGENTS.md` puts silent data loss top of the list.
+ */
+describe('detectOnsetWarning', () => {
+  const SAMPLE_RATE = 48000
+  const frames = Math.round(SAMPLE_RATE * 0.044)
+
+  it('says nothing when nothing was discarded', () => {
+    expect(detectOnsetWarning({ frames: 0, peakDbfs: -Infinity }, SAMPLE_RATE)).toBeNull()
+  })
+
+  it('says nothing about discarded silence', () => {
+    expect(detectOnsetWarning({ frames, peakDbfs: -Infinity }, SAMPLE_RATE)).toBeNull()
+    // Room tone, comfortably under the threshold.
+    expect(detectOnsetWarning({ frames, peakDbfs: -72 }, SAMPLE_RATE)).toBeNull()
+  })
+
+  it('warns about the levels the real corpus actually carries', () => {
+    // The three measured files: -26.4, -27.0 and -47.8 dBFS in the first 44 ms.
+    for (const peakDbfs of [-26.4, -27, -47.8]) {
+      const warning = detectOnsetWarning({ frames, peakDbfs }, SAMPLE_RATE)
+      expect(warning?.code, `${peakDbfs} dBFS`).toBe('onset-trimmed')
+      expect(warning?.detail['milliseconds']).toBe(44)
+      expect(warning?.detail['peakDbfs']).toBeCloseTo(peakDbfs, 1)
+    }
+  })
+
+  it('holds the line exactly at the configured threshold', () => {
+    const at = WARNING_THRESHOLDS.onsetTrimmedAboveDbfs
+    expect(detectOnsetWarning({ frames, peakDbfs: at }, SAMPLE_RATE)).toBeNull()
+    expect(detectOnsetWarning({ frames, peakDbfs: at + 0.1 }, SAMPLE_RATE)?.code).toBe(
+      'onset-trimmed',
+    )
   })
 })

@@ -9,20 +9,33 @@ import { describe, expect, it } from 'vitest'
 import type { AudioWarningCode } from '../audio/warnings'
 import { warningText } from './warning-text'
 
-const ALL: AudioWarningCode[] = [
-  'no-audio',
-  'clipping',
-  'very-quiet',
-  'highly-variable',
-  'noisy',
-  'extended-silence',
-  'target-missed',
-]
+/**
+ * Exhaustive by construction, not by hand. A `Record` keyed on the union makes
+ * TypeScript refuse to compile when a code is added without words to go with
+ * it — which is how `onset-trimmed` would otherwise have shipped untested.
+ */
+const ALL = Object.keys({
+  'no-audio': true,
+  clipping: true,
+  'very-quiet': true,
+  'highly-variable': true,
+  noisy: true,
+  'extended-silence': true,
+  'target-missed': true,
+  'onset-trimmed': true,
+} satisfies Record<AudioWarningCode, true>) as AudioWarningCode[]
 
 const sample = (code: AudioWarningCode) =>
   warningText({
     code,
-    detail: { integratedLufs: -42, loudnessRangeLu: 18.4, seconds: 95, missedBy: 2.5 },
+    detail: {
+      integratedLufs: -42,
+      loudnessRangeLu: 18.4,
+      seconds: 95,
+      missedBy: 2.5,
+      milliseconds: 44,
+      peakDbfs: -26.4,
+    },
   })
 
 describe('every warning has words', () => {

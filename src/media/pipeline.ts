@@ -23,6 +23,7 @@ import {
   type Input,
 } from 'mediabunny'
 
+import { detectOnsetWarning, type AudioWarning } from '../audio/warnings'
 import { log } from '../core/logger'
 import {
   CLOSING_DEFAULTS,
@@ -69,6 +70,11 @@ export interface PipelineResult {
    */
   readonly brandingApplied: { readonly opening: boolean; readonly closing: boolean }
   readonly subtitleCues: number
+  /**
+   * Warnings about what PRODUCING the file cost, as opposed to what the source
+   * was. Empty on almost every job; see `detectOnsetWarning` (VH-55).
+   */
+  readonly outputWarnings: readonly AudioWarning[]
   /**
    * Where the source's own content starts in the output, in seconds.
    *
@@ -352,7 +358,10 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     // encoder this browser provides, and applying a number we had not
     // measured would be worse than leaving it alone.
     const delaySeconds = await measureEncoderDelay(audioConfig)
-    timelineShift = new AudioTimelineShift(delaySeconds, audioPlan.channelCount)
+    // `null` is an unmeasurable encoder, not a zero-delay one. Both go
+    // uncompensated; only one of them is right to (review R-03), and the
+    // warning is raised by `measureEncoderDelay` itself.
+    timelineShift = new AudioTimelineShift(delaySeconds ?? 0, audioPlan.channelCount)
   }
 
   // Spec 8.1: offset the timing, never the words. The offset is the opening
@@ -591,10 +600,20 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       brandingRequested: `${branding.opening}/${branding.closing}`,
       brandingApplied: `${opening !== null}/${closing !== null}`,
     })
+    const outputWarnings: AudioWarning[] = []
+    if (timelineShift && audioPlan) {
+      const onset = detectOnsetWarning(timelineShift.discarded, audioPlan.sampleRate)
+      if (onset) {
+        log.warn('pipeline', 'encoder-delay compensation discarded audible onset', onset.detail)
+        outputWarnings.push(onset)
+      }
+    }
+
     return {
       file,
       brandingApplied: { opening: opening !== null, closing: closing !== null },
       subtitleCues,
+      outputWarnings,
       contentOffsetSeconds: contentOffset,
     }
   } catch (cause) {

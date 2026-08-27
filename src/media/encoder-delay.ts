@@ -33,7 +33,7 @@ import { log } from '../core/logger'
 import { toPlanar, toSample } from './audio-frames'
 
 /** Measured once per codec configuration; the delay is a property of the encoder. */
-const cache = new Map<string, Promise<number>>()
+const cache = new Map<string, Promise<number | null>>()
 
 const PROBE_SAMPLE_RATE = 48000
 const PROBE_SECONDS = 0.5
@@ -43,15 +43,19 @@ const IMPULSE_AT_SECONDS = 0.2
  * Encodes an impulse at a known time, decodes it back, and reports how far it
  * moved.
  *
- * @returns The delay in seconds. Zero when nothing could be measured, which
- *   leaves behaviour exactly as it was rather than applying a guess.
+ * @returns The delay in seconds, or `null` when it could not be measured.
+ *
+ * The two are different facts and used to be the same number (review R-03):
+ * Opus and PCM genuinely have no delay, and an encoder whose probe threw also
+ * reported zero. Both left the audio uncompensated, but only one of them was
+ * correct to. A caller that cannot tell them apart cannot say so either.
  */
-export async function measureEncoderDelay(config: AudioEncodingConfig): Promise<number> {
+export async function measureEncoderDelay(config: AudioEncodingConfig): Promise<number | null> {
   const key = JSON.stringify({ codec: config.codec, bitrate: config.bitrate })
   const existing = cache.get(key)
   if (existing) return existing
 
-  const measurement = (async (): Promise<number> => {
+  const measurement = (async (): Promise<number | null> => {
     try {
       const channels = 2
       const output = new Output({
@@ -83,14 +87,14 @@ export async function measureEncoderDelay(config: AudioEncodingConfig): Promise<
       await output.finalize()
 
       const buffer = output.target.buffer
-      if (!buffer) return 0
+      if (!buffer) return null
 
       const input = new Input({
         formats: [new Mp4InputFormat()],
         source: new BlobSource(new Blob([new Uint8Array(buffer)])),
       })
       const track = await input.getPrimaryAudioTrack()
-      if (!track) return 0
+      if (!track) return null
 
       let elapsed = 0
       let foundAt: number | null = null
@@ -104,7 +108,15 @@ export async function measureEncoderDelay(config: AudioEncodingConfig): Promise<
         decoded.close()
       }
 
-      const delay = foundAt === null ? 0 : Math.max(0, foundAt - IMPULSE_AT_SECONDS)
+      // No impulse found at all is a failed probe, not a zero delay: the
+      // impulse was put there by this function.
+      if (foundAt === null) {
+        log.warn('encoder-delay', 'probe found no impulse; continuing uncompensated', {
+          codec: config.codec,
+        })
+        return null
+      }
+      const delay = Math.max(0, foundAt - IMPULSE_AT_SECONDS)
       log.info('encoder-delay', 'measured', {
         codec: config.codec,
         delayMs: Math.round(delay * 10000) / 10,
@@ -116,7 +128,7 @@ export async function measureEncoderDelay(config: AudioEncodingConfig): Promise<
       log.warn('encoder-delay', 'could not measure; continuing uncompensated', {
         reason: cause instanceof Error ? cause.message : String(cause),
       })
-      return 0
+      return null
     }
   })()
 
@@ -130,8 +142,25 @@ export async function measureEncoderDelay(config: AudioEncodingConfig): Promise<
  * Content that would land before zero is dropped rather than clamped: clamping
  * would pile the first few frames on top of each other at timestamp zero,
  * which is worse than losing them.
+ *
+ * Dropping is not free, and it used to be silent (review R-03). Three files in
+ * the real corpus carry energy in their first 44 ms — two around -26 dBFS, one
+ * around -48 — so what goes is sometimes the attack of the first word rather
+ * than room tone. `AGENTS.md` puts silent data loss at the top of the list of
+ * outcomes to avoid, so this measures what it discards and the pipeline says
+ * so.
+ *
+ * The compensation itself still costs those samples. Preserving them means
+ * delaying the VIDEO by the encoder delay instead — an empty edit list, which
+ * Mediabunny does write — and that moves the axis the acceptance sync meter is
+ * least able to measure, because it reads audio in decoded-sample time and
+ * video in presentation time. VH-55 carries that half, sequenced after VH-62.
  */
 export class AudioTimelineShift {
+  /** Loudest sample discarded ahead of timestamp zero, linear. */
+  private discardedPeak = 0
+  private discardedFrames = 0
+
   constructor(
     private readonly delaySeconds: number,
     private readonly channelCount: number,
@@ -141,6 +170,24 @@ export class AudioTimelineShift {
     return this.delaySeconds <= 0
   }
 
+  /** What the shift threw away: frame count, and the loudest sample among them. */
+  get discarded(): { readonly frames: number; readonly peakDbfs: number } {
+    return {
+      frames: this.discardedFrames,
+      peakDbfs: this.discardedPeak > 0 ? 20 * Math.log10(this.discardedPeak) : -Infinity,
+    }
+  }
+
+  private record(planes: readonly Float32Array[]): void {
+    for (const plane of planes) {
+      for (const value of plane) {
+        const magnitude = Math.abs(value)
+        if (magnitude > this.discardedPeak) this.discardedPeak = magnitude
+      }
+    }
+    this.discardedFrames += planes[0]?.length ?? 0
+  }
+
   apply(sample: AudioSample, sampleRate: number): AudioSample | null {
     if (this.isNoOp) return sample
 
@@ -148,6 +195,7 @@ export class AudioTimelineShift {
     const durationSeconds = sample.numberOfFrames / sampleRate
 
     if (shifted + durationSeconds <= 0) {
+      this.record(toPlanar(sample, this.channelCount))
       sample.close()
       return null
     }
@@ -159,8 +207,10 @@ export class AudioTimelineShift {
 
     // Straddles zero: keep the part at or after it.
     const dropFrames = Math.round(-shifted * sampleRate)
-    const planes = toPlanar(sample, this.channelCount).map((plane) => plane.subarray(dropFrames))
+    const planes = toPlanar(sample, this.channelCount)
+    this.record(planes.map((plane) => plane.subarray(0, dropFrames)))
+    const kept = planes.map((plane) => plane.subarray(dropFrames))
     sample.close()
-    return toSample(planes, sampleRate, 0)
+    return toSample(kept, sampleRate, 0)
   }
 }

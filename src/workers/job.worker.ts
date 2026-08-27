@@ -235,7 +235,8 @@ async function handleProcess(
 
     // The finished file is the only honest place to enforce criterion 2: the
     // limiter, resampler and AAC encoder all sit after the planning pass.
-    const outputWarnings: AudioWarning[] = []
+    // Anything the pipeline already knows it cost the user rides along.
+    const outputWarnings: AudioWarning[] = [...result.outputWarnings]
     // Another window the encode loop's progress does not cover: this walks
     // the whole finished file (VH-51).
     post({ kind: 'stage', id, stage: 'finishing', fraction: 1 })
