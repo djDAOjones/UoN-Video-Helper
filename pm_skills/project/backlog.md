@@ -44,6 +44,58 @@
       Done when: every child is shipped or explicitly cut; then delete the
       ticket.
 
+- [ ] **VH-79 The discard button holds a superseded file** (2026-08-28)
+      Intent: "Discard it and start again" captures the file that was current
+      when the question was raised. Choosing a different file while the question
+      is on screen and then clicking it processes the file just replaced —
+      `handleFileChange` deliberately keeps the panel when a result is unsaved.
+      Done when: the button starts the job for the file the picker now shows,
+      or the stale question is dismissed when the file changes.
+
+- [ ] **VH-80 The subtitle helper text promises an offset that is zero** (2026-08-28)
+      Intent: it says timings are "shifted to match the opening sequence", but
+      openings are dormant (VH-23) so the shift is always zero. The tool
+      describes something it is not doing.
+      Done when: the wording matches what happens, and still says the words are
+      never changed.
+
+- [ ] **VH-81 The ISOBMFF tail fallback never finds a trailing moov** (2026-08-28)
+      Intent: `file.slice(tailStart)` starts at an arbitrary offset, so
+      `readBoxes` from position 0 parses mid-`mdat`. It fails safe — reports
+      "not ISOBMFF", so track counts go unreported rather than wrong — but it
+      does not do its job, and a `fastStart: false` source is exactly the shape
+      it exists for.
+      Done when: a file whose `moov` is at the end has its subtitle and chapter
+      tracks counted, proved by a fixture built that way.
+
+- [ ] **VH-82 `inspectFile` runs three times per job** (2026-08-28)
+      Intent: inspect, preflight and process each re-probe frame-rate metrics
+      and re-run `scanTrackHandlers`, which slices up to 64 MB — 128 MB when the
+      head misses and the tail fallback fires. The external review's most real
+      efficiency finding.
+      Done when: a job inspects once and the later stages are handed the report,
+      with the worker protocol carrying it rather than re-deriving it.
+
+- [ ] **VH-83 Measure the codec's cost instead of carrying corpus constants** (2026-08-28)
+      Intent: three constants stand in for a measurement the calibration probe
+      could take on the user's own file — `BEST_SOURCE_BLEND` (0.5, the only
+      value in VH-47's rule with no number behind it),
+      `ENCODE_TRUE_PEAK_HEADROOM_DB` (1.0 dB from four lectures ranging
+      0.02-0.44), and the integrated-loudness AAC costs that nothing models
+      (0.02-0.41 LU on the same four, worst on the most limited material — up to
+      80% of the ±0.5 budget spent on the codec).
+      Done when: each is either derived per job from a probe round trip or
+      confirmed adequate as a constant with the measurement recorded.
+      Scope: one probe round trip serves all three; do not add a second pass.
+
+- [ ] **VH-84 Criterion 9's passive timeline is not a census** (2026-08-28)
+      Intent: resource-timing entries are added when a request COMPLETES, so
+      `EgressWatch.stop()` can miss one still in flight — a HEAD to a branding
+      asset did not appear during a direct test. The body-wrapping instrument is
+      unaffected, so the no-egress claim stands; the request COUNT does not.
+      Done when: the check says which half of it is a census and which is a
+      sample, or the timeline is drained before it is read.
+
 ### Band 3 — Blocked on the maintainer
 
 <!-- Agent work that cannot start until something arrives from outside the

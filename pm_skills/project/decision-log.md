@@ -11,6 +11,24 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-28 — The compressor detects RMS, and the spec does not say so
+
+Spec 5.2 step 4 gives the compressor a ratio, a threshold, an attack and a
+release, and says nothing about what it measures. `compressor.ts` smooths mean
+square and feeds that to the static curve — RMS detection, not peak.
+
+Recorded because it is a choice made inside the spec's silence rather than a
+departure from it, and because the two behave differently on speech: a peak
+detector reacts to every plosive and would need a slower attack to stay
+transparent, where RMS follows syllables. A 10 ms window is long enough to
+ignore the waveform itself — a 100 Hz cycle is 10 ms, and anything below has
+been high-passed away (spec 5.2 step 2) — and short enough to follow speech.
+
+Carried from a VH-7 wish-list note that asked for exactly this entry, and now
+tuneable as `COMPRESSOR.detectorMs` rather than a literal (VH-77).
+
+**Link:** `src/audio/compressor.ts`, `src/config/audio.ts`, spec §5.2 step 4.
+
 ## 2026-08-28 — VH-62: the harness stops flattering itself, and is not slow
 
 **Criterion 8 was testing the wrong thing.** It built an `AbortController`,
