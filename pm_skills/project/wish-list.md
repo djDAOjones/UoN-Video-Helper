@@ -110,3 +110,16 @@
   decode. Two corpus files at widely separated densities determine it; a third
   validates. It matters most on the Teams file: at 0.6 its figure falls from
   2.00 to about 1.6 Mbps. (from: 2026-08-26 VH-47)
+- Measure the AAC true-peak overshoot per job rather than carrying a corpus
+  constant. `ENCODE_TRUE_PEAK_HEADROOM_DB` is 1.0 dB because four real
+  lectures ranged 0.02-0.44; the calibration probe already decodes
+  `CALIBRATION_PROBE_SECONDS` of the real file, so encoding and decoding that
+  same excerpt at the job's exact audio config would give the actual figure and
+  let the limiter stop holding headroom nobody's file needs.
+  (from: 2026-08-27 VH-50)
+- AAC costs integrated loudness as well as peak, and nothing models it. The
+  same four files lost 0.02-0.41 LU between the limiter's output and the
+  decoded file, worst on the most heavily limited material, so a job can sit at
+  -16.4 while the chain solved -16.0 — 80% of the +/-0.5 budget spent on the
+  codec. Measurable by the same probe round-trip as the item above.
+  (from: 2026-08-27 VH-50)

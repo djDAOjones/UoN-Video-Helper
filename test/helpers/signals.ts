@@ -146,3 +146,47 @@ export function speechLike(options: {
 
   return Array.from({ length: channelCount }, () => mono.slice())
 }
+
+/**
+ * Adds sparse plosive-like transients to an existing signal, in place.
+ *
+ * This is the property that separates a real lecture from `speechLike`, and
+ * the one the audio chain is most sensitive to. Synthesised speech has a crest
+ * factor around 7 dB, so a normalising gain never drives it into the limiter;
+ * a real recording sits near 20 dB — quiet continuous narration punctuated by
+ * plosives, coughs and desk knocks that reach within a decibel or two of full
+ * scale. `AMCS3059` measured -21.86 LUFS with a -1.86 dBTP peak.
+ *
+ * Without this, the acceptance harness could pass the output-loudness
+ * invariant that real material was missing by up to 2.4 LU (VH-50).
+ *
+ * @param channels - Modified in place and returned, for chaining.
+ */
+export function withTransients(
+  channels: Float32Array[],
+  options: {
+    readonly sampleRate: number
+    /** Peak amplitude of each transient, in dBFS. */
+    readonly peakDbfs: number
+    readonly everySeconds: number
+    readonly durationMs?: number
+  },
+): Float32Array[] {
+  const { sampleRate, peakDbfs, everySeconds } = options
+  const amplitude = dbfsToAmplitude(peakDbfs)
+  const length = Math.round(((options.durationMs ?? 12) / 1000) * sampleRate)
+  const stride = Math.round(everySeconds * sampleRate)
+  const frames = channels[0]?.length ?? 0
+
+  // Offset by one stride so the first transient is never at frame 0, where a
+  // fade-in would mask it.
+  for (let start = stride; start + length < frames; start += stride) {
+    for (let i = 0; i < length; i++) {
+      // Raised cosine, so the burst has no edge of its own to measure.
+      const envelope = 0.5 - 0.5 * Math.cos((2 * Math.PI * i) / length)
+      const value = amplitude * envelope * Math.sin((2 * Math.PI * 900 * i) / sampleRate)
+      for (const channel of channels) channel[start + i] = value
+    }
+  }
+  return channels
+}

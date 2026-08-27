@@ -21,6 +21,18 @@
 
 ## Archived: real material and Band 1's first half — see archive/trajectory/trajectory-0002-real-material-and-band-1.md
 
+### VH-50, VH-54 — the output contract holds on real material
+
+- VH-54 — Shipped 2026-08-27. The true-peak interpolator is drained at end of
+  stream and the limiter clocks its tail out through the normal detection and
+  gain path, so a transient in the final frames is measured and limited instead
+  of reading −64 dBTP and leaving at 0. See decision-log.
+- VH-50 — Shipped 2026-08-27. The step 5 gain is solved against the chain that
+  limits, and the limiter holds 1.0 dB below the published ceiling for our own
+  AAC encode. Four real lectures now meet −16 ±0.5 LUFS and −2.0 dBTP; before,
+  none met both. The acceptance harness calls the product's own solver and
+  carries a real-shaped crest-factor case. See decision-log.
+
 ### VH-52 — DSP timeout failures carry their operating context
 
 - VH-52 — Shipped 2026-08-27. The 30-second test timeout remains the measured

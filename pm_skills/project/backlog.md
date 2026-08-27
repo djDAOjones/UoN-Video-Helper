@@ -23,39 +23,10 @@
 ### Band 1a — The output is what we say it is (signed off 2026-08-25)
 
 <!-- Committed. Everything a staff member meets today that is wrong,
-     misleading, or a risk. VH-54 leads because VH-50 waits on it and both are
-     the same promise. VH-55..VH-59 are silent-loss and lifecycle defects, each
-     independent, each ending with the user losing something without being
-     told; VH-58 is first among them only because it is the cheapest. -->
-
-- [ ] **VH-54 True peak is not measured at the end of the file** (2026-08-27)
-      Intent: R-02. The 4x-oversampling FIR is causal and gets no post-roll, so
-      the last samples are never measured, and `flush()` emits its tail on one
-      frozen gain. A full-scale impulse at EOF reads −64 dBTP; zero-padded it
-      reads 0. Both the limiter and the final verifier trust that detector.
-      Done when: the detector finalizes over a zero tail, flush advances
-      detector and gain at preserved output length, a final-position impulse
-      case is pinned, and the EBU 3341 harness is re-run (protected DSP).
-
-- [~] **VH-50 Real material misses the loudness invariant** (2026-08-26)
-      Intent: R-01. `AMCS3059` comes out at **−16.75 LUFS / −1.98 dBTP**
-      against −16 ±0.5 and a −2.00 ceiling. Never a regression. The cause is a
-      gain loop, not VH-54: `chain.ts` measures with `gainDb: null`, which also
-      sets `limiter = null`, so gain is solved against an unlimited chain and
-      then used in one that limits.
-      Done when: gain is solved against the complete path, real material meets
-      both figures, and the harness carries a case that would have caught it.
-      Progress 2026-08-27: verification fails closed and the harness calls the
-      same verifier, so the miss is visible rather than passed.
-      Note: `/spike-real.html?file=…` needs a recording in `public/spike/`; the
-      build guard refuses while one is there.
-
-- [ ] **VH-58 A job directory can be swept while it is live** (2026-08-27)
-      Intent: R-08. The directory is created before its Web Lock is claimed,
-      and the boot sweeper decides availability inside `ifAvailable` but
-      deletes outside it. Either window ends with a live workspace removed.
-      Done when: the lock is claimed before the directory is created, and
-      removal happens inside the successful lock callback.
+     misleading, or a risk. VH-54, VH-50 and VH-58 shipped 2026-08-27 and the
+     output contract now holds on real material. What remains is silent loss
+     and lifecycle: VH-56, VH-57, VH-55 and VH-59 are independent, and each
+     ends with the user losing something without being told. -->
 
 - [ ] **VH-56 A finished result is not owned transactionally** (2026-08-27)
       Intent: R-04 plus one omission. Three routes lose a finished file: a
@@ -170,7 +141,10 @@
       Intent: one visit, four latent faults, no user-facing change. (a)
       `SlidingMinimum` stores an ever-increasing position in an `Int32Array`
       and wraps after ~12.4 h at 48 kHz. (b) `WARNING_THRESHOLDS.clippingDbtp`
-      and `COMPRESSOR.softKnee` are declared and never read. (c) an entirely
+      and `COMPRESSOR.softKnee` are declared and never read — and since VH-50
+      made the output contract fail closed at 0.5 LU, `targetMissedByLu` (1 LU)
+      and `detectOutputWarning` cannot fire either, while the worker builds
+      `outputWarnings` empty and posts it. (c) an entirely
       silent source can never raise the extended-silence warning, because the
       check is nested under `if (audible.length > 0)`. (d)
       `scripts/run-in-engines.mjs` counts a missing engine as skipped without

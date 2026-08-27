@@ -6,12 +6,19 @@
 
 import { describe, expect, it } from 'vitest'
 
+import { ENCODE_TRUE_PEAK_HEADROOM_DB, LIMITER, TRUE_PEAK_CEILING_DBTP } from '../config/audio'
 import { concat, silence, tone } from '../../test/helpers/signals'
 import { TruePeakLimiter } from './limiter'
 import { TruePeakDetector } from './truepeak'
 
 const SAMPLE_RATE = 48000
-const CEILING = -2
+/**
+ * What the limiter promises about its OWN output, which is below the published
+ * ceiling by the headroom AAC needs (VH-50). Read from config rather than
+ * written as -2, so retuning the headroom cannot leave this asserting a figure
+ * the limiter no longer targets.
+ */
+const CEILING = LIMITER.ceilingDbtp
 
 function limit(channels: Float32Array[], chunkFrames = 1024): Float32Array[] {
   const limiter = new TruePeakLimiter({ sampleRate: SAMPLE_RATE, channelCount: channels.length })
@@ -37,6 +44,15 @@ function truePeakDbtp(channels: readonly Float32Array[]): number {
 }
 
 describe('true-peak limiter', () => {
+  it('targets a working ceiling below the ceiling the file must meet', () => {
+    // The limiter is not the last thing that touches the signal: AAC is. A
+    // stream limited to exactly the published ceiling decodes above it, which
+    // is how four of four real lectures breached criterion 2 while the limiter
+    // was doing exactly what it said (VH-50).
+    expect(CEILING).toBeLessThan(TRUE_PEAK_CEILING_DBTP)
+    expect(CEILING).toBeCloseTo(TRUE_PEAK_CEILING_DBTP - ENCODE_TRUE_PEAK_HEADROOM_DB, 9)
+  })
+
   it('holds the ceiling on a signal that reaches full scale between samples', () => {
     // fs/4 at 45 degrees: every sample sits at +/-0.707 while the waveform
     // itself touches 0 dBFS. A sample-peak limiter would not even see this.

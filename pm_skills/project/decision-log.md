@@ -11,6 +11,53 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-50 and VH-54: the contract is measured on the file
+
+**Decision:** solve the step 5 gain against the chain that actually runs, and
+hold the limiter a measured 1.0 dB below the published true-peak ceiling.
+
+**Rationale:** two independent reasons the delivered file missed spec §13
+criterion 2 while every fixture passed.
+
+The gain was solved against an unlimited chain (`gainDb: null` also sets
+`limiter = null`) and then used in one that limits, so the limiter took back
+whatever it took back. Invisible on synthesised speech — a ~7 dB crest factor
+never reaches the limiter — and up to 2.4 LU on material shaped like a real
+lecture. `solveChainGainDb` now measures the real chain and corrects, and the
+harness calls that same function instead of re-implementing the rule, which is
+what let the two diverge in the first place.
+
+Separately, the limiter is not the last thing to touch the signal: AAC-LC is,
+and an MDCT codec does not preserve peak level. Four real lectures, all limited
+to exactly −2.0 dBTP, decoded at −1.98, −1.91, −1.90 and −1.61. Resampling was
+ruled out — the worst is the one 48 kHz file, which is never resampled. The
+limiter's working ceiling is therefore a config value below the published one.
+1.0 dB rather than the 0.44 dB worst case because the trade is asymmetric: too
+little headroom refuses the user's job, too much costs a decibel of gain
+reduction on transients and nothing else.
+
+VH-54 is the same promise one layer down: the oversampling FIR is causal and
+had no post-roll, so a full-scale sample in the last frame measured −64 dBTP,
+and `flush()` emitted its tail at one frozen gain — 0 dBTP out of a limiter
+that guarantees −2.0.
+
+**Measured (2026-08-27, `best` preset, `/spike-real.html`):**
+
+| File | Source | Before | After |
+| --- | --- | --- | --- |
+| AMCS3059 | −21.86 LUFS / −1.86 dBTP | −16.75 / −1.98 | −16.41 / −2.98 |
+| CULT1027 | −23.29 / −3.42 | −16.13 / −1.61 | −16.10 / −2.56 |
+| MLAC3139 | −27.24 / −4.50 | −16.08 / −1.91 | −16.10 / −2.94 |
+| AMCS2007 | −26.07 / −3.77 | −16.11 / −1.90 | −16.15 / −2.95 |
+
+**Rejected:** encoding at the source sample rate to avoid resampling — spec
+§6.1 and §6.2 require 48 kHz, and the measurement showed resampling was not the
+cause. Also rejected: a re-encode when the postcondition fails, which would
+double an hour-long job to fix a decibel.
+
+**Link:** VH-50, VH-54; review R-01, R-02; `src/audio/gain-solve.ts`,
+`src/config/audio.ts`, `src/audio/truepeak.ts`, `src/audio/limiter.ts`.
+
 ## 2026-08-27 — VH-31: audio presence is an estimator input
 
 **Decision:** require every output-size projection call to state whether the

@@ -15,7 +15,7 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 152 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 153 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 20 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
@@ -23,7 +23,7 @@
 - `public` — 17 file(s)
 - `reviews` — 7 file(s)
 - `scripts` — 4 file(s)
-- `src` — 93 file(s)
+- `src` — 94 file(s)
 - `test` — 4 file(s)
 <!-- /file-map-index -->
 
@@ -113,10 +113,11 @@
 - `src/audio/analyse.test.ts` — Proves the facade measures the same thing the components do separately.
 - `src/audio/analyse.ts` — The analysis pass: loudness and true peak over one traversal of source audio only.
 - `src/audio/biquad.ts` — Second-order IIR section, Direct Form II transposed, Float64 state to resist hour-long drift.
-- `src/audio/chain.test.ts` — Acceptance criteria 2 and 4 — target loudness, ceiling, and no pumping the chain caused.
+- `src/audio/chain.test.ts` — Acceptance criteria 2 and 4, including material with a real lecture's crest factor.
 - `src/audio/chain.ts` — Assembles spec 5.2 steps 2-6 in order; two shapes, one for measuring and one for applying.
 - `src/audio/compressor.test.ts` — Pins the static curve, the knee, and that the stereo image never shifts.
 - `src/audio/compressor.ts` — Gentle 2:1 compression. RMS detection, because sample peaks are the limiter's job.
+- `src/audio/gain-solve.ts` — Solves spec 5.2 step 5's gain against the chain that limits, over an injected measurement.
 - `src/audio/highpass.test.ts` — Checks the -3 dB cutoff, rumble rejection, and that channels stay independent.
 - `src/audio/highpass.ts` — 60 Hz Butterworth high-pass: rumble out, speech untouched.
 - `src/audio/kweighting.test.ts` — Asserts the derivation reproduces the standard's published 48 kHz coefficients.
@@ -128,7 +129,7 @@
 - `src/audio/macrolevel.test.ts` — Each anti-pumping property tested alone — conditional, window, slew, freeze.
 - `src/audio/macrolevel.ts` — Conditional macro-levelling: the four properties that separate it from an AGC.
 - `src/audio/truepeak.test.ts` — Proves it finds inter-sample peaks and never reads below sample peak.
-- `src/audio/truepeak.ts` — 4x oversampled true peak. Polyphase FIR with exact pruning, so quiet passages cost little.
+- `src/audio/truepeak.ts` — 4x oversampled true peak. Polyphase FIR with exact pruning, drained at end of stream.
 - `src/audio/warnings.test.ts` — Triggers every 5.4 row deliberately, including the gapless false-positive guard.
 - `src/audio/warnings.ts` — Detects the spec 5.4 audio-quality conditions; thresholds live with the numbers.
 - `src/config/audio.ts` — Project audio choices — targets, thresholds, chain constants. Standard-defined values live in src/audio/.

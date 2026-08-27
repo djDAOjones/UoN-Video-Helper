@@ -57,11 +57,70 @@ export const COMPRESSOR = {
   softKnee: true,
 } as const
 
+/**
+ * Solving spec section 5.2 step 5's single linear gain.
+ *
+ * The gain must land the *finished* file on target, and step 6 — the limiter —
+ * sits after it. On real speech, whose peaks are already close to full scale,
+ * the limiter takes back a few tenths of a LU that a measurement of steps 2-4
+ * alone never sees. VH-50: a real lecture came out 0.75 LU low while every
+ * synthetic fixture passed, because none of them made the limiter work.
+ *
+ * So the gain is refined against the chain that actually runs. Correcting by
+ * the measured error converges quickly — raising the gain by a tenth of a
+ * decibel provokes only a small fraction of that in extra limiting — so the
+ * loop is bounded rather than run to convergence.
+ */
+export const GAIN_SOLVE = {
+  /** Close enough to stop. Well inside the +/-0.5 LU release contract. */
+  toleranceLu: 0.1,
+  /**
+   * Extra audio-only traversals the refinement may cost. A traversal is around
+   * 3.6 s for an hour of audio and the loop stops as soon as it is inside
+   * tolerance, so an easy source pays two and only a heavily-limited one pays
+   * the third. `AMCS3059` — the hottest source in the corpus, and the one the
+   * limiter works hardest on — was still 0.18 LU out after two.
+   * The decoded-output check is the backstop if a pathological source needs
+   * more than three.
+   */
+  maximumRefinementPasses: 3,
+} as const
+
+/**
+ * Headroom the limiter holds below the published ceiling, for OUR OWN encode.
+ *
+ * The ceiling above governs the finished file. The limiter governs the signal
+ * handed to `AudioEncoder`, and AAC-LC sits between them: an MDCT codec does
+ * not preserve peak level, so a stream limited to exactly -2.0 dBTP decodes
+ * above it. Measured on four real lectures at the "best quality" preset
+ * (2026-08-27, VH-50), the encode raised true peak by:
+ *
+ *   AMCS3059  44.1 kHz stereo  0.02 dB      MLAC3139  44.1 kHz stereo  0.09 dB
+ *   AMCS2007  44.1 kHz stereo  0.10 dB      CULT1027  48 kHz mono      0.39 dB
+ *
+ * Every one of them therefore breached spec 13 criterion 2 in the delivered
+ * file while the limiter had done exactly what it promised. Resampling was
+ * ruled out as the cause: the worst of the four is the one file that needs no
+ * resampling at all.
+ *
+ * 1.0 dB rather than the 0.39 measured, because the trade is asymmetric.
+ * Too little headroom means a job the user is REFUSED — the decoded-output
+ * check fails closed. Too much means a decibel more gain reduction on the
+ * loudest transients and nothing else: the target loudness is solved after the
+ * limiter, so nothing gets quieter. 1.0 dB is also the customary allowance
+ * before a lossy encode rather than a figure fitted to four files.
+ *
+ * This does not spend the ceiling's own downstream allowance. Spec 5.1 keeps
+ * -2.0 to absorb EchoVideo's and YouTube's re-encode; this absorbs ours.
+ */
+export const ENCODE_TRUE_PEAK_HEADROOM_DB = 1.0
+
 /** Spec section 5.2 step 6. */
 export const LIMITER = {
   lookAheadMs: 5,
   releaseMs: 50,
-  ceilingDbtp: TRUE_PEAK_CEILING_DBTP,
+  /** Below the published ceiling; see {@link ENCODE_TRUE_PEAK_HEADROOM_DB}. */
+  ceilingDbtp: TRUE_PEAK_CEILING_DBTP - ENCODE_TRUE_PEAK_HEADROOM_DB,
 } as const
 
 /**

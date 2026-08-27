@@ -7,9 +7,10 @@
 import { describe, expect, it } from 'vitest'
 
 import { TARGET_INTEGRATED_LUFS, TRUE_PEAK_CEILING_DBTP } from '../config/audio'
-import { feedInChunks, speechLike, tone } from '../../test/helpers/signals'
+import { feedInChunks, speechLike, tone, withTransients } from '../../test/helpers/signals'
 import { AudioAnalyser } from './analyse'
 import { AudioChain } from './chain'
+import { solveChainGainDb } from './gain-solve'
 import { buildGainEnvelope } from './macrolevel'
 
 const SAMPLE_RATE = 48000
@@ -49,8 +50,15 @@ function runChain(source: readonly Float32Array[], gainDb: number | null, envelo
   })
 }
 
-/** The three passes the pipeline runs: measure, measure-through-the-chain, apply. */
-function normalise(source: readonly Float32Array[]) {
+/**
+ * The passes the pipeline runs: measure, solve the gain, apply.
+ *
+ * The gain comes from the same `solveChainGainDb` the pipeline uses, not from
+ * a local copy of the rule. This test used to re-implement it — and so proved
+ * a gain rule the product did not have, which is half of why VH-50's real-file
+ * miss survived a green harness.
+ */
+async function normalise(source: readonly Float32Array[]) {
   const analysis = analyse(source)
   const envelope = buildGainEnvelope({
     integratedLufs: analysis.integratedLufs,
@@ -58,11 +66,11 @@ function normalise(source: readonly Float32Array[]) {
     shortTermLufs: analysis.shortTermLufs,
     stepSeconds: analysis.stepSeconds,
   })
-  // Steps 2-4 only, to find out what they leave behind.
-  const measured = analyse(runChain(source, null, envelope))
-  const gainDb = TARGET_INTEGRATED_LUFS - measured.integratedLufs
-  const output = runChain(source, gainDb, envelope)
-  return { analysis, envelope, gainDb, output, result: analyse(output) }
+  const solution = await solveChainGainDb((gainDb) =>
+    Promise.resolve(analyse(runChain(source, gainDb, envelope)).integratedLufs),
+  )
+  const output = runChain(source, solution.gainDb, envelope)
+  return { analysis, envelope, gainDb: solution.gainDb, solution, output, result: analyse(output) }
 }
 
 describe('acceptance criterion 2: -16 +/-0.5 LUFS and -2.0 dBTP', () => {
@@ -73,16 +81,78 @@ describe('acceptance criterion 2: -16 +/-0.5 LUFS and -2.0 dBTP', () => {
     ['a speaker drifting away', { startPeakDbfs: -10, endPeakDbfs: -28 }],
   ] as const
 
-  it.each(cases)('lands on target for %s', (_name, levels) => {
+  it.each(cases)('lands on target for %s', async (_name, levels) => {
     const source = speechLike({
       sampleRate: SAMPLE_RATE, seconds: 90, channelCount: 2,
       pauseSeconds: 1.5, pauseEverySeconds: 12, ...levels,
     })
-    const { result } = normalise(source)
+    const { result } = await normalise(source)
 
     expect(result.integratedLufs).toBeGreaterThan(TARGET_INTEGRATED_LUFS - 0.5)
     expect(result.integratedLufs).toBeLessThan(TARGET_INTEGRATED_LUFS + 0.5)
     expect(result.truePeakDbtp).toBeLessThanOrEqual(TRUE_PEAK_CEILING_DBTP + 0.01)
+  })
+})
+
+/**
+ * VH-50. The corpus above is synthesised speech with a ~7 dB crest factor, so
+ * a normalising gain never drives it into the limiter and criterion 2 passes
+ * without the limiter ever having an opinion. Real lectures are not like that:
+ * `AMCS3059` measured -21.86 LUFS with peaks at -1.86 dBTP, a 20 dB crest
+ * factor, and came out at -16.75 LUFS — outside the +/-0.5 contract the
+ * harness was reporting green.
+ */
+describe('acceptance criterion 2 on real-shaped material (VH-50)', () => {
+  const cases = [
+    ['a lecture with plosives', -12],
+    ['a quiet lecture with plosives', -16],
+    ['a very quiet lecture with plosives', -20],
+  ] as const
+
+  it.each(cases)('lands on target for %s', async (_name, basePeakDbfs) => {
+    const source = withTransients(
+      speechLike({
+        sampleRate: SAMPLE_RATE, seconds: 60, channelCount: 2,
+        startPeakDbfs: basePeakDbfs, pauseSeconds: 1.5, pauseEverySeconds: 12,
+      }),
+      { sampleRate: SAMPLE_RATE, peakDbfs: -1, everySeconds: 6 },
+    )
+    const { analysis, result, solution } = await normalise(source)
+
+    // The fixture's whole point is the crest factor. If a future edit tames it,
+    // this fails here rather than silently going back to proving nothing.
+    expect(analysis.truePeakDbtp).toBeGreaterThan(-2.5)
+    expect(analysis.integratedLufs).toBeLessThan(-20)
+
+    // ...and the limiter must actually bite, or the solver has nothing to fix.
+    expect(solution.measuredLufs).not.toBeNull()
+    expect(TARGET_INTEGRATED_LUFS - solution.unlimitedLufs).toBeGreaterThan(4)
+
+    expect(result.integratedLufs).toBeGreaterThan(TARGET_INTEGRATED_LUFS - 0.5)
+    expect(result.integratedLufs).toBeLessThan(TARGET_INTEGRATED_LUFS + 0.5)
+    expect(result.truePeakDbtp).toBeLessThanOrEqual(TRUE_PEAK_CEILING_DBTP + 0.01)
+  })
+
+  it('reaches the target by correcting a measurement, not by predicting one', () => {
+    // The proof that the loop is load-bearing rather than decorative: a chain
+    // whose limiter costs 1.2 LU is solved to target, and the first estimate —
+    // the value the product used before VH-50 — is not.
+    const limiterCostLu = 1.2
+    const measure = (gainDb: number | null): Promise<number> =>
+      Promise.resolve(gainDb === null ? -30 : -30 + gainDb - limiterCostLu)
+
+    return solveChainGainDb(measure).then((solution) => {
+      expect(solution.converged).toBe(true)
+      expect(solution.gainDb).toBeCloseTo(14 + limiterCostLu, 6)
+      expect(solution.measuredLufs).toBeCloseTo(TARGET_INTEGRATED_LUFS, 6)
+      expect(solution.refinementPasses).toBe(2)
+    })
+  })
+
+  it('gives silence no gain at all', async () => {
+    const solution = await solveChainGainDb(() => Promise.resolve(Number.NEGATIVE_INFINITY))
+    expect(solution.gainDb).toBe(0)
+    expect(solution.refinementPasses).toBe(0)
   })
 })
 
@@ -117,23 +187,23 @@ describe('acceptance criterion 4: no pumping', () => {
     expect(emitted).toBe(frames)
   })
 
-  it('leaves a consistent recording alone rather than processing it anyway', () => {
+  it('leaves a consistent recording alone rather than processing it anyway', async () => {
     const source = speechLike({
       sampleRate: SAMPLE_RATE, seconds: 60, channelCount: 2, startPeakDbfs: -14,
     })
-    const { analysis, envelope } = normalise(source)
+    const { analysis, envelope } = await normalise(source)
     // Consistent material: LRA under the 9 LU gate, so the macro-leveller is
     // not merely small — it does not run.
     expect(analysis.loudnessRangeLu).toBeLessThan(9)
     expect(envelope.gainDb).toHaveLength(0)
   })
 
-  it('adds no swing of its own to deliberately variable material', () => {
+  it('adds no swing of its own to deliberately variable material', async () => {
     const source = speechLike({
       sampleRate: SAMPLE_RATE, seconds: 120, channelCount: 2,
       startPeakDbfs: -8, endPeakDbfs: -30, pauseSeconds: 2, pauseEverySeconds: 10,
     })
-    const { analysis, result } = normalise(source)
+    const { analysis, result } = await normalise(source)
 
     // Measured relatively, not against a fixed number. Speech swings between
     // syllables and pauses on its own, and an absolute threshold cannot tell
@@ -157,12 +227,12 @@ describe('acceptance criterion 4: no pumping', () => {
     expect(after).toBeLessThan(before + 1.5)
   })
 
-  it('reduces loudness range on a drifting recording rather than flattening it', () => {
+  it('reduces loudness range on a drifting recording rather than flattening it', async () => {
     const source = speechLike({
       sampleRate: SAMPLE_RATE, seconds: 120, channelCount: 2,
       startPeakDbfs: -8, endPeakDbfs: -30, pauseSeconds: 2, pauseEverySeconds: 10,
     })
-    const { analysis, result } = normalise(source)
+    const { analysis, result } = await normalise(source)
 
     expect(analysis.loudnessRangeLu).toBeGreaterThan(9)
     // Narrowed, because the drift was corrected...
@@ -175,12 +245,12 @@ describe('acceptance criterion 4: no pumping', () => {
 })
 
 describe('the limiter only engages when it must', () => {
-  it('does not touch material that already fits under the ceiling', () => {
+  it('does not touch material that already fits under the ceiling', async () => {
     const source = tone({
       sampleRate: SAMPLE_RATE, seconds: 20, frequency: 300, peakDbfs: -20,
       channelCount: 2, fadeSeconds: 0.05,
     })
-    const { result, gainDb } = normalise(source)
+    const { result, gainDb } = await normalise(source)
     expect(result.integratedLufs).toBeCloseTo(TARGET_INTEGRATED_LUFS, 0)
     expect(Number.isFinite(gainDb)).toBe(true)
   })

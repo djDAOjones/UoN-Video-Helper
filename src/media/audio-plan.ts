@@ -2,27 +2,31 @@
  * Planning and applying the audio chain over a real file.
  *
  * The chain needs a number it cannot know until it has been run: the single
- * linear gain in spec 5.2 step 5 must land the *output* on -16 LUFS, and
- * steps 2-4 change the loudness on the way. So the audio is traversed three
- * times:
+ * linear gain in spec 5.2 step 5 must land the *output* on -16 LUFS, and both
+ * the stages above it and the limiter below it change the loudness on the way.
+ * So the audio is traversed several times:
  *
  *   A. Measure the source — integrated, LRA, short-term curve, true peak.
  *      LRA decides whether the macro-leveller runs at all.
- *   B. Run steps 2-4 and measure what they leave behind.
- *   C. Apply steps 2-6, with the gain that pass B made computable.
+ *   B. Run steps 2-4 and measure what they leave behind — the first estimate.
+ *   B'. Run the WHOLE chain at that estimate and correct it, until the number
+ *      the chain really produces is on target. See `audio/gain-solve.ts`:
+ *      solving against a chain that does not limit is what put a real lecture
+ *      0.75 LU below target while the synthetic corpus passed (VH-50).
+ *   C. Apply steps 2-6 with the solved gain.
  *
- * Three passes sounds expensive and is not: audio-only decode of an hour
+ * Several passes sounds expensive and is not: audio-only decode of an hour
  * measured around 3.6 s, and the DSP is cheap next to video encoding. Getting
  * the gain right by measurement rather than by estimating what the compressor
- * did is worth far more than the seconds it costs.
+ * and limiter did is worth far more than the seconds it costs.
  */
 
 import { AudioSampleSink, type AudioSample, type InputAudioTrack } from 'mediabunny'
 
 import { AudioAnalyser, type AudioAnalysis } from '../audio/analyse'
 import { AudioChain } from '../audio/chain'
+import { solveChainGainDb } from '../audio/gain-solve'
 import { buildGainEnvelope, type GainEnvelope } from '../audio/macrolevel'
-import { TARGET_INTEGRATED_LUFS } from '../config/audio'
 import { log } from '../core/logger'
 import { applyBoundaryFade } from './branding'
 import { toPlanar, toSample } from './audio-frames'
@@ -105,34 +109,36 @@ export async function planAudio(
     stepSeconds: analysis.stepSeconds,
   })
 
-  const measured = await traverse(
-    track,
-    sampleRate,
-    channelCount,
-    new AudioChain({ sampleRate, channelCount, envelope, gainDb: null }),
-    signal,
-    onSample,
-  )
-
-  // A source with no measurable loudness (pure silence) gets no gain: lifting
-  // silence by 60 dB would produce nothing but noise.
-  const gainDb = Number.isFinite(measured.integratedLufs)
-    ? TARGET_INTEGRATED_LUFS - measured.integratedLufs
-    : 0
-
-  log.info('audio', 'chain planned', {
-    sourceIntegratedLufs: Number.isFinite(analysis.integratedLufs)
-      ? Math.round(analysis.integratedLufs * 10) / 10
-      : null,
-    loudnessRangeLu: Math.round(analysis.loudnessRangeLu * 10) / 10,
-    macroLevelling: envelope.gainDb.length > 0,
-    afterChainLufs: Number.isFinite(measured.integratedLufs)
-      ? Math.round(measured.integratedLufs * 10) / 10
-      : null,
-    gainDb: Math.round(gainDb * 10) / 10,
+  const solution = await solveChainGainDb(async (candidateGainDb) => {
+    const measured = await traverse(
+      track,
+      sampleRate,
+      channelCount,
+      new AudioChain({ sampleRate, channelCount, envelope, gainDb: candidateGainDb }),
+      signal,
+      onSample,
+    )
+    return measured.integratedLufs
   })
 
-  return { analysis, envelope, gainDb, sampleRate, channelCount }
+  const round = (value: number): number | null =>
+    Number.isFinite(value) ? Math.round(value * 100) / 100 : null
+
+  log.info('audio', 'chain planned', {
+    sourceIntegratedLufs: round(analysis.integratedLufs),
+    loudnessRangeLu: Math.round(analysis.loudnessRangeLu * 10) / 10,
+    macroLevelling: envelope.gainDb.length > 0,
+    afterChainLufs: round(solution.unlimitedLufs),
+    // What the chain that actually runs produced at the solved gain. The
+    // difference between this and `afterChainLufs` is the limiter's bite, and
+    // it is the number VH-50 was hiding.
+    limitedLufs: solution.measuredLufs === null ? null : round(solution.measuredLufs),
+    refinementPasses: solution.refinementPasses,
+    converged: solution.converged,
+    gainDb: Math.round(solution.gainDb * 100) / 100,
+  })
+
+  return { analysis, envelope, gainDb: solution.gainDb, sampleRate, channelCount }
 }
 
 /**
