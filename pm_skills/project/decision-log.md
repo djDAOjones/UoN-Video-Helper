@@ -11,6 +11,49 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-60: an answer belongs to the question that asked it
+
+**Decision:** stamp every selection with an epoch and drop any answer that
+arrives for a superseded one; add secure context, OPFS and source-decode to the
+pre-flight verdict as blocks; and derive the H.264 level from the shape instead
+of fixing it.
+
+**Rationale:** three separate ways the screen could describe one job while
+Start submitted another (review R-05, R-06).
+
+Nothing checked, on the way back, which selection an asynchronous answer was
+about — so whichever finished LAST won. Choosing file A then file B could leave
+B on screen with Start pointing at A, and a slow pre-flight for the old preset
+could arm Start after the user had chosen a different one. `beginSelection()`
+returns the test; inspection, pre-flight and the subtitle read all take it, and
+a preset change additionally takes Start down for the interval, because the
+verdict that revealed it described the other preset.
+
+`hasOpfs`, `isSecureContext` and both tracks' `canDecode` were all measured and
+then never consulted, so a job could reach a live Start button on a device that
+could not finish it — and the source panel says in as many words that full
+guidance arrives with pre-flight. All three are now required inputs rather than
+optional ones, so a future call site cannot omit them by accident. They are
+ordered by what the user can act on: an insecure context is fixable from the
+address bar, so it is named before "install another browser".
+
+The codec string declared level 5.1 for every shape. ITU-T H.264 Table A-1
+caps 5.1 at 983,040 macroblocks a second; 3840x2160 at 60 fps needs 240 x 135
+x 60 = 1,944,000. Chrome ACCEPTS the over-declaration, which makes this the bad
+kind of bug: not a refusal, a stream declaring a level it exceeds, for a strict
+downstream decoder to reject after publication. The level now comes from the
+shape, which also drops 1080p to 4.2 — more widely hardware-accelerated than
+5.1 and correct for everything up to 1080p60.
+
+**Verified in Chrome:** picking A then B leaves B on screen AND submits B (the
+produced file is 11.3 MB, B's size; A's is ~7 MB); a preset change hides Start
+until the new verdict lands; `isConfigSupported` accepts the derived level at
+720p30, 1080p30, 1080p60, 1440p30, 4K30 and 4K60; and a real job encodes and
+verifies at level 4.2 with a byte-identical result.
+
+**Link:** VH-60; review R-05, R-06; `src/main.ts`, `src/media/preflight.ts`,
+`src/config/presets.ts`, `src/ui/preflight-panel.ts`.
+
 ## 2026-08-27 — VH-61 and VH-67: freeze the envelope, and keep less of the curve
 
 **Decision:** apply the pause freeze to the FINISHED envelope as well as to the

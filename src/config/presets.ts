@@ -338,15 +338,54 @@ export function projectedOutputBytes(
   return Math.round((bitsPerSecond / 8) * durationSeconds * containerOverhead)
 }
 
+/**
+ * H.264 levels, by the throughput each one allows.
+ *
+ * ITU-T H.264 Table A-1, `MaxMbPs` — macroblocks per second. The level has to
+ * be chosen from the shape rather than fixed, because a single level either
+ * refuses shapes it should carry or claims shapes it cannot: 5.1 allows
+ * 983,040 MB/s, and 3840x2160 at 60 fps needs 240 x 135 x 60 = 1,944,000. The
+ * string said 5.1 for every shape, so a 4K60 job either failed the capability
+ * probe or produced a stream that did not conform to the level it declared
+ * (VH-60 / review R-06).
+ *
+ * Only the levels this app can reach are listed; 4.2 is the floor because
+ * spec section 6.1 preserves resolution to 1080p and beyond.
+ */
+const AVC_LEVELS = [
+  { hex: '2a', maxMacroblocksPerSecond: 522_240, maxMacroblocks: 8_704 }, // 4.2
+  { hex: '32', maxMacroblocksPerSecond: 589_824, maxMacroblocks: 22_080 }, // 5.0
+  { hex: '33', maxMacroblocksPerSecond: 983_040, maxMacroblocks: 36_864 }, // 5.1
+  { hex: '34', maxMacroblocksPerSecond: 2_073_600, maxMacroblocks: 36_864 }, // 5.2
+  { hex: '3c', maxMacroblocksPerSecond: 4_177_920, maxMacroblocks: 139_264 }, // 6.0
+] as const
+
+/**
+ * The lowest H.264 level that can carry this shape.
+ *
+ * Falls back to the highest known level rather than throwing: a shape past
+ * 6.0 is not something to refuse in a config builder, and the capability probe
+ * is where an impossible request should be answered.
+ */
+export function avcLevelFor(width: number, height: number, frameRate: number): string {
+  const macroblocks = Math.ceil(width / 16) * Math.ceil(height / 16)
+  const perSecond = macroblocks * frameRate
+  const level =
+    AVC_LEVELS.find(
+      (candidate) =>
+        macroblocks <= candidate.maxMacroblocks &&
+        perSecond <= candidate.maxMacroblocksPerSecond,
+    ) ?? AVC_LEVELS[AVC_LEVELS.length - 1]!
+  return level.hex
+}
+
 /** The WebCodecs config this shape implies, for `isConfigSupported` and the encoder alike. */
 export function videoEncoderConfigFor(shape: OutputShape): VideoEncoderConfig {
   return {
-    // H.264 High profile, level 5.1. The comment here read "level 4.2" until
-    // 2026-08-26, which the string never said: `0x33` is 51. The code was right
-    // and the comment was wrong in the direction that matters — 4.2 tops out
-    // below 4K, and spec section 2 has 4K sources in it, so anyone trusting the
-    // comment would have "fixed" the string into refusing them.
-    codec: 'avc1.640033',
+    // H.264 High profile (`6400`), level chosen from the shape. It read a
+    // fixed `33` — level 5.1 — until 2026-08-27, and before that the COMMENT
+    // said 4.2 while the string said 5.1.
+    codec: `avc1.6400${avcLevelFor(shape.width, shape.height, shape.frameRate)}`,
     width: shape.width,
     height: shape.height,
     bitrate: shape.videoBitrateBps,

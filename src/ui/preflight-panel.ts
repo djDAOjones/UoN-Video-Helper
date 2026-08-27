@@ -30,6 +30,16 @@ function reasonText(code: PreflightReasonCode, summary: PreflightSummary): strin
       return 'This browser cannot add sound to a video file. Chrome or Edge on a computer will work, as will Safari 26 or later on a Mac. Firefox can play video but cannot create the audio this needs.'
     case 'no-h264-encode':
       return 'This browser cannot create the video format this tool needs. Chrome or Edge on a computer will work.'
+    case 'no-source-decode':
+      // The source panel promises that full guidance arrives here, so it has
+      // to actually arrive (VH-60).
+      return 'This browser cannot read the picture or sound inside this file. Chrome or Edge on a computer will open more formats. If it still will not open, the file may have been saved in an unusual format — re-exporting it as an MP4 usually fixes it.'
+    case 'no-opfs':
+      return 'This browser will not give the tool the working space it needs to build your video. Chrome or Edge on a computer will work. If you are browsing privately, an ordinary window usually works.'
+    case 'insecure-context':
+      // The one block the user can fix by changing the address, so it says so
+      // first and names nothing else.
+      return 'This page needs a secure connection before it can work with your video. Open it at an https:// address, or at localhost if you are running it yourself.'
     case 'insufficient-storage':
       return `There is not enough free space on this device. This job needs about ${formatFileSize(summary.verdict.requiredStorageBytes)} of working space. Free some space and try again.`
     case 'storage-unknown':

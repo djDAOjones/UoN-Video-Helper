@@ -21,6 +21,13 @@
 
 ## Archived: real material and Band 1's first half — see archive/trajectory/trajectory-0002-real-material-and-band-1.md
 
+### VH-60 — the screen and the Start button describe one job
+
+- VH-60 — Shipped 2026-08-27. Every asynchronous answer carries the selection
+  it was asked for and a stale one is dropped; secure context, OPFS and
+  source-decode became pre-flight blocks; and the H.264 level is derived from
+  the shape rather than declared 5.1 for everything. See decision-log.
+
 ### VH-61 (part), VH-67 — the envelope holds, the meter keeps less
 
 - VH-67 — Shipped 2026-08-27. Gating blocks are stored pre-weighted, which is

@@ -66,11 +66,31 @@ const subtitleField = required<HTMLDivElement>('#subtitle-field')
 const subtitleInput = required<HTMLInputElement>('#subtitle-input')
 const subtitleStatus = required<HTMLParagraphElement>('#subtitle-status')
 
+/**
+ * Which selection the screen is currently describing.
+ *
+ * Every asynchronous answer — inspection, pre-flight, a subtitle read — is
+ * about the file and preset that were chosen when it was asked for. Nothing
+ * checked that on the way back, so whichever finished LAST won: picking file A
+ * then file B could leave B on screen with Start pointing at A, and a slow
+ * pre-flight for the old preset could arm Start after the user had chosen
+ * another (review R-05). Bumped on every change that invalidates an answer in
+ * flight; a stale answer is dropped rather than rendered.
+ */
+let selectionEpoch = 0
+
+/** Reads the current epoch and gives back a test for whether it still holds. */
+function beginSelection(): () => boolean {
+  const mine = ++selectionEpoch
+  return () => mine === selectionEpoch
+}
+
 /** The chosen sidecar's text, held until the job runs. */
 let subtitleVtt: string | null = null
 
 subtitleInput.addEventListener('change', () => {
   const file = subtitleInput.files?.[0]
+  const current = beginSelection()
   subtitleVtt = null
   if (!file) {
     subtitleStatus.textContent = ''
@@ -79,6 +99,8 @@ subtitleInput.addEventListener('change', () => {
   void (async () => {
     try {
       const text = await file.text()
+      // A large sidecar read can outlive the choice that started it.
+      if (!current()) return
       const cues = countCues(text)
       if (cues === 0) {
         subtitleStatus.textContent =
@@ -391,6 +413,8 @@ void checkWorker()
 fileInput.addEventListener('change', () => {
   const file = fileInput.files?.[0]
   if (!file) return
+  // Everything already in flight described the previous file.
+  const current = beginSelection()
 
   // Never log the filename — DEV-INFRASTRUCTURE.md -> "Redaction".
   log.info('ui', 'file chosen', { sizeBytes: file.size, type: file.type })
@@ -419,12 +443,15 @@ fileInput.addEventListener('change', () => {
       // slow disk is not, and timing out on a file that would have worked is
       // worse than waiting.
       const reply = await request({ kind: 'inspect', file }, 120_000)
+      // The commit boundary on this side. A report for a file the picker no
+      // longer shows must not reach the screen, whatever order it arrived in.
+      if (!current()) return
       if (reply.kind === 'inspected') {
         renderSourceReport(sourceReport, reply.report)
         setStatus(summarise(reply.report))
         // Structure first, then the measurement — the probe really does decode
         // and encode three seconds, so it must not hold up what we already know.
-        await runPreflight(file)
+        await runPreflight(file, current)
         return
       }
       if (reply.kind === 'failed') {
@@ -438,6 +465,7 @@ fileInput.addEventListener('change', () => {
       if (reply.kind === 'cancelled') return
       throw new Error(`Unexpected reply to inspect: ${reply.kind}`)
     } catch (cause) {
+      if (!current()) return
       renderSourceError(
         sourceReport,
         'Reading this file took longer than expected, or the tool ran into a problem.',
@@ -457,11 +485,19 @@ fileInput.addEventListener('change', () => {
  * of the user; the panel names which one it assessed so this is visible rather
  * than assumed.
  */
-async function runPreflight(file: File): Promise<void> {
+/**
+ * @param current - Whether the selection this was started for still holds.
+ *   Passed in rather than taken here, so a pre-flight that follows an
+ *   inspection belongs to the SAME epoch as the inspection did.
+ */
+async function runPreflight(file: File, current: () => boolean): Promise<void> {
   setStatus('Checking this video against your device…')
 
   try {
     const reply = await request({ kind: 'preflight', file, presetId: chosenPreset() }, 180_000)
+    // A verdict about a file or preset the user has since changed must not
+    // reach the screen — and above all must not reveal Start (review R-05).
+    if (!current()) return
     if (reply.kind === 'preflighted') {
       renderPreflight(preflightReport, reply.summary)
       renderWarnings(audioWarnings, reply.summary.audioWarnings, {
@@ -482,6 +518,7 @@ async function runPreflight(file: File): Promise<void> {
     if (reply.kind === 'cancelled') return
     throw new Error(`Unexpected reply to preflight: ${reply.kind}`)
   } catch (cause) {
+    if (!current()) return
     renderSourceError(
       preflightReport,
       'The device check did not finish. You can still see what the file is above.',
@@ -494,9 +531,16 @@ async function runPreflight(file: File): Promise<void> {
 
 presetChoice.addEventListener('change', () => {
   const file = fileInput.files?.[0]
+  if (!file) return
   // The output shape, projected size and estimate all change with the preset,
-  // so the verdict must be recomputed rather than left describing the other one.
-  if (file) void runPreflight(file)
+  // so the verdict must be recomputed rather than left describing the other
+  // one — and the one it replaces must not be allowed to land afterwards.
+  // Start comes down for the interval, because the verdict that revealed it
+  // described a different preset (review R-05).
+  const current = beginSelection()
+  processActions.hidden = true
+  jobFile = null
+  void runPreflight(file, current)
 })
 
 // --- Processing ---

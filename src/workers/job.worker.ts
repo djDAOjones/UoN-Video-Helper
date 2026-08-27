@@ -471,6 +471,11 @@ async function handlePreflight(
       audioWarnings,
       verdict: preflightVerdict({
         hasWebCodecs: capability.hasWebCodecs,
+        hasOpfs: capability.hasOpfs,
+        isSecureContext: capability.isSecureContext,
+        // Both tracks, and a silent source asks nothing of the audio decoder.
+        // Measured during inspection and, until VH-60, never consulted again.
+        canDecodeSource: report.video.canDecode && (report.audio?.canDecode ?? true),
         canEncodeH264: encode.supported,
         canEncodeAac,
         availableStorageBytes: capability.storage.availableBytes,

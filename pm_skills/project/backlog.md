@@ -151,18 +151,6 @@
       LRA > 9 gate is modelled on a boundary corpus, and neither direction is
       made worse. Protected DSP — re-run the EBU harness.
 
-- [ ] **VH-60 Preflight does not bind to the job that runs** (2026-08-27)
-      Intent: R-05 and R-06, one visit. Results are not tied to the selected
-      file and preset, so a late response can approve a job the user has since
-      changed; and the verdict omits secure context, OPFS and primary-track
-      decode, flattens probe failure causes, and probes `avc1.640033` while
-      Mediabunny is handed the abstract `avc`.
-      Done when: one immutable accepted `JobSpec` per selection epoch, stale
-      responses ignored, and the probed config derived from the same candidate
-      the encoder receives.
-      Note: the review's AAC half is stale — VH-49 already probes the runtime
-      configuration. Check its Level 5.1 claim against the H.264 tables.
-
 - [ ] **VH-64 Progress and the discourage acknowledgement are incomplete**
       (2026-08-27)
       Intent: R-14. Progress has no stable accessible label or stage

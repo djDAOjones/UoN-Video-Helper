@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import {
   PRESETS,
+  avcLevelFor,
   bitrateWasCappedToSource,
   outputShapeFor,
   projectedOutputBytes,
@@ -416,5 +417,58 @@ describe('anchoring best quality to the source', () => {
     expect(projectedOutputBytes(shape, 60, true)).toBeLessThan(
       projectedOutputBytes(unmeasured, 60, true),
     )
+  })
+})
+
+/**
+ * VH-60 / review R-06. The codec string declared level 5.1 for every shape.
+ * ITU-T H.264 Table A-1 gives 5.1 a ceiling of 983,040 macroblocks per second,
+ * and 3840x2160 at 60 fps needs 1,944,000 — so a 4K60 job either failed the
+ * capability probe or declared a level it did not conform to.
+ */
+describe('avcLevelFor', () => {
+  const level = (w: number, h: number, fps: number) => avcLevelFor(w, h, fps)
+
+  it('asks for no more than the shape needs', () => {
+    // 1080p30 is 120 x 68 = 8,160 macroblocks, 244,800 a second. Level 4.2
+    // carries it with room to spare, and is more widely accelerated than 5.1.
+    expect(level(1920, 1080, 30)).toBe('2a')
+    expect(level(1280, 720, 30)).toBe('2a')
+    expect(level(1920, 1080, 60)).toBe('2a')
+  })
+
+  it('reaches 5.2 for 4K60, which 5.1 cannot carry', () => {
+    // 240 x 135 x 60 = 1,944,000 MB/s against 5.1's 983,040.
+    expect(level(3840, 2160, 60)).toBe('34')
+  })
+
+  it('still uses 5.1 for 4K30, which it can carry', () => {
+    // 972,000 MB/s, just inside 983,040 — the case the old fixed string was
+    // right about, and the reason it survived this long.
+    expect(level(3840, 2160, 30)).toBe('33')
+  })
+
+  it('rounds partial macroblocks up rather than down', () => {
+    // 852x480 is not a multiple of 16 in either direction; a level chosen from
+    // the rounded-down count would be chosen from a smaller picture.
+    expect(level(852, 480, 30)).toBe('2a')
+  })
+
+  it('does not throw on a shape past every listed level', () => {
+    expect(level(15360, 8640, 120)).toBe('3c')
+  })
+})
+
+describe('videoEncoderConfigFor codec string', () => {
+  it('declares High profile at the level the shape needs', () => {
+    const uhd = outputShapeFor(PRESETS.best, {
+      width: 3840, height: 2160, frameRate: 60, videoBitrateBps: null, sourceFrameRate: 60,
+    })
+    expect(videoEncoderConfigFor(uhd).codec).toBe('avc1.640034')
+
+    const hd = outputShapeFor(PRESETS.best, {
+      width: 1920, height: 1080, frameRate: 30, videoBitrateBps: null, sourceFrameRate: 30,
+    })
+    expect(videoEncoderConfigFor(hd).codec).toBe('avc1.64002a')
   })
 })

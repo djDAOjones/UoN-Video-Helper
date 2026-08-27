@@ -20,6 +20,9 @@ export type PreflightReasonCode =
   | 'no-webcodecs'
   | 'no-h264-encode'
   | 'no-aac-encode'
+  | 'no-source-decode'
+  | 'no-opfs'
+  | 'insecure-context'
   | 'insufficient-storage'
   | 'storage-unknown'
   | 'very-long-job'
@@ -44,6 +47,29 @@ export interface PreflightInput {
    * and refuses AAC at every bitrate (VH-49).
    */
   readonly canEncodeAac: boolean
+  /**
+   * Whether this browser will DECODE the source's own tracks.
+   *
+   * Measured during inspection and then never consulted, so a source in a
+   * format this browser cannot read reached a live Start button — and the
+   * source panel says in as many words that full guidance arrives with
+   * pre-flight, which it did not (review R-06).
+   */
+  readonly canDecodeSource: boolean
+  /**
+   * Whether the origin private file system is usable.
+   *
+   * The whole output is written there before it is offered to the user. If it
+   * is unavailable the job cannot run at all, and finding that out at the
+   * first write is forty minutes too late.
+   */
+  readonly hasOpfs: boolean
+  /**
+   * A secure context. OPFS and the File System Access API both require one, so
+   * a page served over plain HTTP on a LAN address can inspect a file and can
+   * never finish a job with it.
+   */
+  readonly isSecureContext: boolean
   /** Free storage the browser will admit to, or `null` when it will not say. */
   readonly availableStorageBytes: number | null
   readonly projectedOutputBytes: number
@@ -70,7 +96,13 @@ export function preflightVerdict(input: PreflightInput): PreflightVerdict {
   const reasons: PreflightReason[] = []
   const requiredStorageBytes = Math.round(input.projectedOutputBytes * STORAGE_HEADROOM_MULTIPLE)
 
-  if (!input.hasWebCodecs) reasons.push({ code: 'no-webcodecs', outcome: 'block' })
+  // Ordered by what the user can do about it. A missing secure context is
+  // fixable by opening the page differently; an engine that cannot encode is
+  // not, and naming a browser is the only useful thing to say.
+  if (!input.isSecureContext) reasons.push({ code: 'insecure-context', outcome: 'block' })
+  else if (!input.hasWebCodecs) reasons.push({ code: 'no-webcodecs', outcome: 'block' })
+  else if (!input.hasOpfs) reasons.push({ code: 'no-opfs', outcome: 'block' })
+  else if (!input.canDecodeSource) reasons.push({ code: 'no-source-decode', outcome: 'block' })
   else if (!input.canEncodeH264) reasons.push({ code: 'no-h264-encode', outcome: 'block' })
   // Blocks rather than warns, and blocks BEFORE the job starts. The failure it
   // replaces was a job that ran, showed progress, and died at the audio encoder

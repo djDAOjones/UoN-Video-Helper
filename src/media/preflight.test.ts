@@ -13,6 +13,9 @@ const GB = 1_000_000_000
 /** A healthy desktop with a short job. Each test perturbs one thing. */
 const healthy: PreflightInput = {
   hasWebCodecs: true,
+  hasOpfs: true,
+  isSecureContext: true,
+  canDecodeSource: true,
   canEncodeH264: true,
   canEncodeAac: true,
   availableStorageBytes: 50 * GB,
@@ -151,5 +154,48 @@ describe('severity ordering', () => {
       availableStorageBytes: null,
     })
     expect(verdict.outcome).toBe('discourage')
+  })
+})
+
+/**
+ * VH-60 / review R-06. Three facts were measured and then never consulted, so
+ * a job could reach a live Start button on a device that could not finish it.
+ * The source panel even tells the user that full guidance arrives here.
+ */
+describe('blocks the job cannot survive', () => {
+  it('blocks a page served without a secure context', () => {
+    const verdict = preflightVerdict({ ...healthy, isSecureContext: false })
+    expect(verdict.outcome).toBe('block')
+    expect(verdict.reasons.map((r) => r.code)).toContain('insecure-context')
+  })
+
+  it('blocks when there is no working storage to build in', () => {
+    const verdict = preflightVerdict({ ...healthy, hasOpfs: false })
+    expect(verdict.outcome).toBe('block')
+    expect(verdict.reasons.map((r) => r.code)).toContain('no-opfs')
+  })
+
+  it('blocks a source this browser cannot decode', () => {
+    const verdict = preflightVerdict({ ...healthy, canDecodeSource: false })
+    expect(verdict.outcome).toBe('block')
+    expect(verdict.reasons.map((r) => r.code)).toContain('no-source-decode')
+  })
+
+  it('names the one the user can act on first', () => {
+    // Everything is wrong at once. An insecure context is the only one with a
+    // fix in the user's hands, so listing "this browser cannot process video"
+    // above it would send them to install Chrome for nothing.
+    const verdict = preflightVerdict({
+      ...healthy,
+      isSecureContext: false,
+      hasWebCodecs: false,
+      hasOpfs: false,
+      canDecodeSource: false,
+    })
+    expect(verdict.reasons[0]?.code).toBe('insecure-context')
+  })
+
+  it('still proceeds when all three are satisfied', () => {
+    expect(preflightVerdict(healthy).outcome).toBe('proceed')
   })
 })

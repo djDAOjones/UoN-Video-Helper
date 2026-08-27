@@ -38,6 +38,9 @@ say(`this engine encodes AAC: ${supported}`)
 const base = {
   hasWebCodecs: true,
   canEncodeH264: true,
+  hasOpfs: true,
+  isSecureContext: true,
+  canDecodeSource: true,
   availableStorageBytes: 50_000_000_000,
   projectedOutputBytes: 100_000_000,
   isMobileDevice: false,
