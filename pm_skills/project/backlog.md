@@ -12,160 +12,252 @@
      2026-08-25 and the app went live as an unadvertised pilot. Bands are
      ordered; within a band, order is dependency-driven, not by ID, and each
      item says what it waits on. Maintainer work is never band-gated — see
-     Standing. Why these bands: decision-log 2026-08-25 "Band 1". -->
+     Standing. Why these bands: decision-log 2026-08-25 "Band 1".
+     VH-54..VH-68 came from an external repository review (2026-08-26) and its
+     two critiques. All three documents live in `reviews/2026-08-26/`, which is
+     the detail source for those items — cite the R-number rather than
+     restating the evidence here. Findings were re-verified against source
+     before banding; where the review's own remedy was shown unsafe, the item
+     says so. -->
 
-### Band 1 — Honest output on real files (signed off 2026-08-25)
+### Band 1a — The output is what we say it is (signed off 2026-08-25)
 
-<!-- Committed. What a staff member meets on the deployed site today that is
-     wrong, misleading, or a risk. The order is load-bearing. VH-34..VH-33 are
-     small, severe and independent — a false published claim, data loss, an
-     uncancellable job, a wrong boundary, a brand risk — so they lead. VH-47,
-     VH-31 and VH-19 are then ONE visit to the output shape and what we claim
-     about it, not a queue; VH-43 proves odd sources survive it. VH-32 is
-     LAST because it must lay out what everything above it decides.
-     VH-34..VH-40 came from an external code review, 2026-08-25; its findings
-     were verified against the source before being written up. -->
+<!-- Committed. Everything a staff member meets today that is wrong,
+     misleading, or a risk. VH-54 leads because VH-50 waits on it and both are
+     the same promise. VH-55..VH-59 are silent-loss and lifecycle defects, each
+     independent, each ending with the user losing something without being
+     told; VH-58 is first among them only because it is the cheapest. -->
+
+- [ ] **VH-54 True peak is not measured at the end of the file** (2026-08-27)
+      Intent: R-02. The 4x-oversampling FIR is causal and gets no post-roll, so
+      the last samples are never measured, and `flush()` emits its tail on one
+      frozen gain. A full-scale impulse at EOF reads −64 dBTP; zero-padded it
+      reads 0. Both the limiter and the final verifier trust that detector.
+      Done when: the detector finalizes over a zero tail, flush advances
+      detector and gain at preserved output length, a final-position impulse
+      case is pinned, and the EBU 3341 harness is re-run (protected DSP).
+
+- [~] **VH-50 Real material misses the loudness invariant** (2026-08-26)
+      Intent: R-01. `AMCS3059` comes out at **−16.75 LUFS / −1.98 dBTP**
+      against −16 ±0.5 and a −2.00 ceiling. Never a regression. The cause is a
+      gain loop, not VH-54: `chain.ts` measures with `gainDb: null`, which also
+      sets `limiter = null`, so gain is solved against an unlimited chain and
+      then used in one that limits.
+      Done when: gain is solved against the complete path, real material meets
+      both figures, and the harness carries a case that would have caught it.
+      Progress 2026-08-27: verification fails closed and the harness calls the
+      same verifier, so the miss is visible rather than passed.
+      Note: `/spike-real.html?file=…` needs a recording in `public/spike/`; the
+      build guard refuses while one is there.
+
+- [ ] **VH-58 A job directory can be swept while it is live** (2026-08-27)
+      Intent: R-08. The directory is created before its Web Lock is claimed,
+      and the boot sweeper decides availability inside `ifAvailable` but
+      deletes outside it. Either window ends with a live workspace removed.
+      Done when: the lock is claimed before the directory is created, and
+      removal happens inside the successful lock callback.
+
+- [ ] **VH-56 A finished result is not owned transactionally** (2026-08-27)
+      Intent: R-04 plus one omission. Three routes lose a finished file: a
+      fallback download counts as complete when `anchor.click()` returns;
+      starting another job disposes the workspace mid-`pipeTo()`; and starting
+      another job discards an unsaved result outright. The save picker also
+      lets the user overwrite their own source.
+      Done when: a result holds a read lease that blocks disposal, an unsaved
+      result cannot be destroyed silently, and `isSameEntry()` rejects the
+      source as a destination.
+      Note: the review's partial-OPFS-write claim was never reproduced. Guard
+      the return value; do not bill it as a defect.
+
+- [ ] **VH-57 Cancel is not authoritative** (2026-08-27)
+      Intent: R-07. Controllers register after the first await, some request
+      kinds are not cancellable, the signal never reaches verification, and
+      ownership checks sit outside `try/finally` — so a cancelled job can leak
+      resources or report something other than cancelled. `Cancel leaves
+      nothing behind` is an AGENTS.md invariant.
+      Done when: every phase returns only cancelled, every commit boundary is
+      re-checked, and nothing survives in OPFS or on the encoder.
+
+- [ ] **VH-55 Source onset can be replaced by encoder priming** (2026-08-27)
+      Intent: R-03. `AudioTimelineShift.apply()` drops AAC samples landing
+      before timestamp zero. Sync survives; content does not — three files in
+      the real corpus carry energy in their first 44 ms. Probe failure and a
+      genuine zero delay are also indistinguishable.
+      Done when: priming is compensated without discarding samples, and a
+      failed probe is distinguishable from zero.
+
+- [ ] **VH-59 Multi-track sources lose tracks silently** (2026-08-27)
+      Intent: R-09. Inspection and processing can pick different primary
+      tracks, extra tracks are neither counted nor carried, and nothing warns.
+      `Silent data loss is the worst available outcome` is an AGENTS.md
+      invariant.
+      Done when: inspection reports the tracks processing will use, all track
+      counts are surfaced, and a lossy job is blocked or acknowledged first.
+
+### Band 1b — Decisions the maintainer owns (signed off 2026-08-25)
+
+<!-- Committed work that cannot proceed without a product call. Listed apart
+     from 1a so agent work is never read as waiting on these. -->
 
 - [ ] **VH-49 Firefox cannot make the audio, and is not told so** [sign-off]
       [detail](tickets/VH-49.md) (2026-08-26)
-      Intent: Firefox 154 has the `AudioEncoder` class and REFUSES `mp4a.40.2`
-      at every bitrate and channel count — 64k to 256k, mono and stereo —
-      while accepting Opus and every video configuration the app asks for.
-      Measured headless and in a normal window. So every lecture with sound
-      failed mid-job in a browser spec §10 lists as supported, after showing a
-      progress bar, with "Something went wrong".
-      Half is fixed and shipped: `capability.ts` now asks
-      `AudioEncoder.isConfigSupported` for the exact configuration the job will
-      use, and pre-flight blocks with `no-aac-encode` before anything starts,
-      naming a browser that works. Verified in all three engines.
-      What is NOT decided is what Firefox users should get, and it needs a
-      person: block them (honest, and excludes a supported browser from a
-      University tool), ship WebM/Opus to Firefox (spec §6.4 has WebM behind
-      D11 and §6.1 says MP4), or drop audio (never). A silent source is
-      unaffected and still works there.
-      Done when: the choice is made and the browser-support claim in spec §10,
-      `README.md` and `docs/03-open-decisions.md` D4 matches it.
+      Intent: Firefox 154 has `AudioEncoder` and refuses `mp4a.40.2` at every
+      bitrate and channel count. Pre-flight now blocks with `no-aac-encode`
+      before anything starts, so the failure is honest. Undecided is what
+      Firefox users get: block them, ship WebM/Opus (D11), or drop audio
+      (never).
+      Done when: the choice is made and spec §10, `README.md` and D4 match it.
 
 - [ ] **VH-46b Restore the closing transition controls** (2026-08-26)
-      Intent: VH-45 withdrew "over the picture" and "over a freeze frame" from
-      the interface because they were wrong in Firefox. VH-44 fixed that on
-      2026-08-26 and it is verified in all three engines, so the reason the
-      controls came out no longer exists. Putting user-facing controls back on a
-      live site is a decision rather than a fix, which is why it did not ride
-      along with VH-44.
-      Done when: the two radios are back in `index.html` (the markup is in the
-      VH-45 comment there, and the pipeline never lost the modes), or the
-      decision is taken to leave them out and VH-32 lays out what replaces them.
-      Note: VH-25's picture fades interact — its Done-when says the fade-out is
-      for hard cut ONLY, because in the overlay modes the build IS the
-      transition.
-
-- [~] **VH-50 Real material misses the loudness invariant, and the harness
-      says it does not** (2026-08-26)
-      Intent: `AMCS3059` — 852×480, 130 s, the same file VH-31 was measured on —
-      comes out at **−16.75 LUFS** against a −16 ±0.5 target and **−1.98 dBTP**
-      against a ceiling of −2.00. Both miss. `conventions.md` lists that pair as
-      invariant 2 and spec §13 criterion 2 requires it, so this is the project's
-      second-most-protected property failing on the first real file anyone
-      checked it against.
-      Not a regression: re-run on `de0b94f`, before the 2026-08-26 session, and
-      the figures are identical to the hundredth. It has always done this.
-      The worse half is that the acceptance harness PASSES criterion 2. Its
-      corpus is synthesised, and whatever real speech does — most likely the
-      limiter engaging on a source already peaking at −1.86 dBTP and pulling the
-      integrated figure down with it — the fixtures do not reproduce. A harness
-      that passes the invariant the product misses is worse than no harness.
-      Done when: the cause is identified rather than guessed at, the output
-      meets both figures on real material, and the harness gains a case that
-      would have caught it. Whether the fix is in the gain staging, the
-      limiter's interaction with it, or a second gain pass is the open question.
-      Note: measured with `/spike-real.html?file=…`, which needs a real
-      recording in `public/spike/` — the guard refuses a build while one is
-      there, so remove it afterwards.
-      Progress 2026-08-27: decoded-output verification fails closed, and the
-      Chromium corpus now reports every failed measurement. Its two synthetic
-      misses are −1.9968 and −1.9989 dBTP — evidence for strict finalization,
-      not for a guessed codec margin. Remaining: land R-02's protected-DSP FIR
-      drain, then identify and correct the gain/limiter cause on real material.
+      Intent: VH-45 withdrew "over the picture" and "over a freeze frame"
+      because they were wrong in Firefox. VH-44 fixed that in all three
+      engines, so the reason is gone — but returning controls to a live site is
+      a decision, not a fix.
+      Done when: the two radios are back in `index.html` (markup is in the
+      VH-45 comment; the pipeline never lost the modes), or they stay out and
+      VH-32 says what replaces them.
+      Note: VH-25's picture fade-out is for hard cut ONLY — in the overlay
+      modes the build IS the transition.
 
 - [ ] **VH-31 The size estimate is ~1.7x too high** [detail](tickets/VH-31.md)
       (2026-08-25)
-      Intent: the app said 27.7 MB and produced 7.5 MB on the first real file
-      anyone ran. **That was 3.6x; it is 1.7x now** — VH-47 shipped on
-      2026-08-26 and more than halved it without touching this code, and the
-      same measurement pass found that the over-estimate is NOT the safety
-      margin this item assumed: at "Smaller file" the projection already falls
-      BELOW the produced file on 4 of 23 real jobs. The ticket carries the
-      measurements and the objections that stopped a design shipping. `projectedOutputBytes` assumes the encoder spends its whole
-      bitrate budget; VBR undershoots badly on slide content. It is shown
-      before the user commits, so it is the number they decide on — someone
-      watching a OneDrive limit may pick "Smaller file" they did not need. It
-      also feeds VH-13's published limits, which would inherit the error.
-      Done when: the estimate is grounded in the real content — the calibration
-      probe already decodes three seconds and could encode them — or is
-      presented honestly as an upper bound.
-      One concrete contributor, measured 2026-08-25 while verifying VH-41:
-      `projectedOutputBytes` adds `shape.audioBitrateBps` unconditionally, so a
-      source with NO audio track is charged 128 kbps of stereo AAC for an audio
-      track the output will not contain. On a silent 4 s fixture that was 64 kB
-      of an 82 kB estimate; on the 215 s silent slide deck it is ~3.4 MB. The
-      call sites know (`report.audio !== null`), the function does not.
-      VH-24's frame-rate rule and VH-41's bitrate cap shipped 2026-08-25, so
-      what remains of that shared visit to `outputShapeFor` is this item and
-      VH-19.
+      Intent: it is shown before the user commits, so it is the number they
+      decide on, and it feeds VH-13's published limits. It is not a safety
+      margin — at "Smaller file" the projection already falls BELOW the
+      produced file on 4 of 23 real jobs. One measured contributor:
+      `projectedOutputBytes` charges 128 kbps of AAC to sources with no audio
+      track, ~3.4 MB on a 215 s silent deck, and the call sites know.
+      Done when: the estimate is grounded in real content — the calibration
+      probe already decodes three seconds — or presented honestly as an upper
+      bound.
 
 - [ ] **VH-19 Content-adaptive bitrate for the smaller preset**
-      Intent: spec §6.2 sets ~1.5 Mbps for slides/screen and ~2.5 Mbps for
-      camera/motion. `ContentClass` exists but nothing sets it, so every job
-      currently uses the higher figure.
-      Done when: screen-like and camera-like content are distinguished — the
-      calibration probe already decodes three seconds and is the natural place
-      to measure inter-frame difference — and the chosen class is visible to
-      the user in plain language rather than applied silently. Sequenced after
-      VH-31 because it rides the same probe machinery; if VH-31 lands real
-      measurement, this may reduce to naming the class rather than choosing on it.
+      Intent: spec §6.2 sets ~1.5 Mbps for slides and ~2.5 Mbps for camera.
+      `ContentClass` exists but nothing sets it, so every job uses the higher
+      figure.
+      Done when: screen-like and camera-like content are distinguished by the
+      calibration probe and the class is stated in plain language rather than
+      applied silently. After VH-31 — same probe.
 
 - [ ] **VH-25 Boundary fades** [detail](tickets/VH-25.md) (2026-08-25)
-      Intent: sources cut hard into the branding, and the two ends differ.
-      21 of 21 end on a bright frame so the picture always needs a fade-out,
-      but 0 of 19 end above −69 dBFS so the audio has already stopped. Four
-      start mid-speech. No picture fade exists anywhere in `src/` today;
-      `BOUNDARY_FADE_MS = 100` is D3's AUDIO fade at the branding join.
-      Done when: picture fade-out defaults ON silently **for hard cut only** —
-      in the two overlay modes the build IS the transition and a fade would
-      double up (clause inherited from VH-22 on its close) — picture fade-in is
+      Intent: sources cut hard into the branding and the two ends differ. 21 of
+      21 end on a bright frame; 0 of 19 end above −69 dBFS. Four start
+      mid-speech. No picture fade exists in `src/` today.
+      Done when: picture fade-out defaults ON for hard cut only, fade-in is
       offered and defaults OFF, and the modal is reserved for the
-      audio-starts-mid-speech case. A notice that fires every time is not a
-      notice. Lengths live in `src/config/`; D3's 100 ms fade is reconciled
-      with them.
+      audio-starts-mid-speech case. Lengths live in `src/config/`.
 
-- [ ] **VH-32 Interface quality pass** [sign-off] [detail](tickets/VH-32.md) (2026-08-25)
-      Intent: maintainer request after using the deployed app — a deliberate
-      design pass, not a bug list. The screen accretes rather than progresses
-      (the finished state looks like the working state with more underneath),
-      speaks in codecs rather than outcomes, disables controls that still look
-      live, and never shows moving picture despite being a video tool. The
-      plain-language framing and the never-uploaded reassurance are already
-      right and should survive.
-      Done when: a considered redesign is agreed and implemented, reviewed
-      against `UI-STANDARDS.md` §6. Last in the band by design: it must lay out
-      the estimate wording, the content class and the fade toggles that the
-      four items above decide.
+- [ ] **VH-32 Interface quality pass** [sign-off] [detail](tickets/VH-32.md)
+      (2026-08-25)
+      Intent: maintainer request after using the deployed app — a design pass,
+      not a bug list. The screen accretes rather than progresses, speaks in
+      codecs rather than outcomes, disables controls that still look live, and
+      never shows moving picture. The plain-language framing and the
+      never-uploaded reassurance should survive.
+      Done when: a considered redesign is agreed and implemented against
+      `UI-STANDARDS.md` §6. Last in the band by design: it must lay out the
+      estimate wording, the content class, the fade toggles and VH-64.
 
 ### Band 2 — The edges hold
 
-<!-- Not committed. Known gaps not currently biting anyone. VH-16 earns
-     promotion into Band 1 if Band 1's pipeline changes turn out large: a
-     harness that misses the path the app actually uses matters far more when
-     the pipeline is moving. -->
+<!-- Not committed. Known gaps not currently biting anyone, plus review
+     findings that are real but not user-facing today. VH-62 earns promotion
+     into Band 1a the moment Band 1a's pipeline changes turn out large: a
+     harness with false-pass routes matters far more when the pipeline moves. -->
+
+- [ ] **VH-68 Four small defects the review's consolidation dropped**
+      (2026-08-27)
+      Intent: one visit, four latent faults, no user-facing change. (a)
+      `SlidingMinimum` stores an ever-increasing position in an `Int32Array`
+      and wraps after ~12.4 h at 48 kHz. (b) `WARNING_THRESHOLDS.clippingDbtp`
+      and `COMPRESSOR.softKnee` are declared and never read. (c) an entirely
+      silent source can never raise the extended-silence warning, because the
+      check is nested under `if (audible.length > 0)`. (d)
+      `scripts/run-in-engines.mjs` counts a missing engine as skipped without
+      saying so in its tally.
+      Done when: each is fixed or explicitly recorded as intended.
+
+- [ ] **VH-62 The acceptance harness has false-pass routes** (2026-08-27)
+      Intent: R-11. Criterion 2's missing-measurement and cropped-peak routes
+      closed on 2026-08-27. Remaining: resource warnings do not fail a run,
+      compliance status does not reflect which fixtures executed, and egress
+      observation does not cover every request context.
+      Done when: the harness cannot report green on an unexecuted or unmeasured
+      invariant, and an injected defect turns it red.
+
+- [ ] **VH-61 LRA and pause freeze are wrong at the boundaries** (2026-08-27)
+      Intent: R-10, but NOT its remedy. EOF suppression of LRA is real; the
+      prescribed 1.5 s of silence was tested and is unsafe — on a quiet ending
+      it took a measured 3.79 LRA to 15.32, and `shouldApplyMacroLevelling()`
+      fires above 9, so padding would switch on macro-levelling because a
+      recording ends in room tone. The second half is likely stronger than the
+      review states: spec §5.2 step 3 freezes pauses AFTER smoothing and slew
+      limiting; `macrolevel.ts` freezes the raw correction before smoothing.
+      Done when: LRA state alone advances over a tail without touching
+      integrated loudness, duration, or the gate, the pause hold is reapplied
+      to the final envelope, and neither worsens a boundary corpus. Protected
+      DSP — re-run the EBU harness.
+
+- [ ] **VH-60 Preflight does not bind to the job that runs** (2026-08-27)
+      Intent: R-05 and R-06, one visit. Results are not tied to the selected
+      file and preset, so a late response can approve a job the user has since
+      changed; and the verdict omits secure context, OPFS and primary-track
+      decode, flattens probe failure causes, and probes `avc1.640033` while
+      Mediabunny is handed the abstract `avc`.
+      Done when: one immutable accepted `JobSpec` per selection epoch, stale
+      responses ignored, and the probed config derived from the same candidate
+      the encoder receives.
+      Note: the review's AAC half is stale — VH-49 already probes the runtime
+      configuration. Check its Level 5.1 claim against the H.264 tables.
+
+- [ ] **VH-63 Long jobs have no survival controls** (2026-08-27)
+      Intent: R-12. A job can run for tens of minutes with no wake lock, so the
+      device sleeps and the work is lost; `beforeunload` is not attached while
+      processing or while an unsaved result exists.
+      Done when: a wake lock is held during processing and re-acquired on
+      visibility change, and `beforeunload` is attached only while there is
+      something to lose. Both degrade quietly where unsupported.
+
+- [ ] **VH-64 Progress and the discourage acknowledgement are incomplete**
+      (2026-08-27)
+      Intent: R-14. Progress has no stable accessible label or stage
+      description, and a "discourage" preflight outcome has no acknowledge
+      action, so consent is inferred from the user continuing.
+      Done when: progress announces its stage, and a discouraged job requires a
+      deliberate acknowledgement. Feeds VH-32.
+
+- [ ] **VH-67 Loudness analysis retains one array per window** (2026-08-27)
+      Intent: R-16. Retention grows linearly with duration, contradicting the
+      "few hundred kilobytes" comment and the bounded-state contract. Not
+      whole-file buffering, and not biting at one hour.
+      Done when: the analyser keeps only what warnings and envelopes need and
+      releases the curves once derived, with equivalence shown.
+
+- [ ] **VH-65 The release boundary is not least-privilege** (2026-08-27)
+      Intent: R-13. The Pages workflow grants more than the build needs,
+      actions float rather than pin, and `check-placeholders.mjs` has no exact
+      allowlist of what may be published from `public/`. VH-14 makes every push
+      to `main` a publication, which is what raises the consequence.
+      Done when: build has `contents: read`, Pages/OIDC is scoped to deploy,
+      actions are SHA-pinned with a stated update route, and the publishable
+      media set is an explicit allowlist.
+
+- [ ] **VH-66 Operational and documentation contracts have drifted**
+      (2026-08-27)
+      Intent: R-15. Recovery, deployment, privacy, version and diagnostics
+      statements no longer all match the code, and some of it is protected
+      documentation.
+      Done when: each drift is corrected in the implementation or captured in
+      `doc-deltas.md` for the next doc-sync. Never narrow a published promise
+      to make it true.
 
 - [ ] **VH-17 Evaluate `fastStart: 'reserve'` for the smaller preset**
       Intent: the "smaller file" preset goes to OneDrive and SharePoint, where
       students may stream it. `fastStart: false` puts the moov box at the end,
       which can force a full download before playback starts.
-      Done when: either `'reserve'` is adopted with a packet count derived from
-      the CFR grid plus a safe margin and verified on a real SharePoint upload,
-      or the current behaviour is confirmed adequate and the reason recorded.
+      Done when: `'reserve'` is adopted with a packet count derived from the
+      CFR grid plus a margin and verified on a real SharePoint upload, or the
+      current behaviour is confirmed adequate and the reason recorded.
       Scope: `'in-memory'` is not an option — it reinstates the memory ceiling.
 
 ### Band 3 — New capability, or waiting on material
@@ -174,123 +266,93 @@
      do not exist, two on a scoping pass. -->
 
 - [ ] **VH-26 Mobile phone sources** [detail](tickets/VH-26.md) (2026-08-25)
-      Intent: staff may upload phone footage and none is in the corpus. Rotation
-      was traced end to end and is correct — recorded so it is not
-      re-investigated. The real gap is colour: `src/` has no colour-space or
-      tone-map handling at all, and phones record HDR 10-bit by default, so the
-      picture is silently washed out or crushed depending on the browser. It
-      always plays, so nothing surfaces as an error.
+      Intent: staff may upload phone footage and none is in the corpus.
+      Rotation was traced end to end and is correct. The gap is colour: `src/`
+      has no colour-space or tone-map handling and phones record HDR 10-bit by
+      default, so the picture is silently washed out or crushed. It always
+      plays, so nothing surfaces.
       Done when: phone footage is in `samples/`, the colour path has a decided
       and tested behaviour, and portrait branding composition is specified.
 
 - [ ] **VH-23 Opening graphics** (2026-08-25) [blocked: no assets]
       Intent: there are no opening assets and the maintainer's position is that
-      there should not be yet — brand-recognition-first openings suit external
-      video, while this tool is primarily internal, where a closing is the norm.
-      So the MVP is CLOSING-ONLY, which contradicts spec §4.1's two independent
-      toggles (recorded in doc-deltas). The user-facing risk was split out as
-      VH-33; what remains here is the feature itself.
-      Done when: opening assets exist. They will need the same three boundary
-      modes as VH-22, mirrored — the onset ramp runs the other way.
-      Inherited from VH-43 on its close (2026-08-26): a mono source plus an
-      opening mixes channel counts into one audio track — the encoder is
-      configured from the source while `feedBrandingAudio` emits at the clip's
-      own count, and the opening placeholders are stereo. Unreachable today
-      because the opening control is gone and the closings are silent, so it
-      was closed by condition; restoring openings revives it.
+      there should not be yet — the MVP is CLOSING-ONLY, contradicting spec
+      §4.1 (recorded in doc-deltas). The user-facing risk was split out as
+      VH-33.
+      Done when: opening assets exist. They need VH-22's three boundary modes,
+      mirrored.
+      Inherited from VH-43: a mono source plus a stereo opening mixes channel
+      counts into one audio track. Unreachable today; restoring openings
+      revives it.
 
-- [ ] **VH-30 Trim the source** [detail](tickets/VH-30.md) (2026-08-25) [sign-off]
-      Intent: maintainer request. Recordings carry material nobody wants — the
-      wait before people join, the fumble for the stop button — and today the
-      only fix is another tool first, which defeats a one-step app. Ranged
-      reads are native to Mediabunny, so the mechanics are cheap; the work is
-      the interactions. The one that matters most: loudness must measure the
-      TRIMMED region, or leading silence drags the gated figure and the single
-      linear gain mis-levels what the viewer actually sees. The closing
-      boundary, subtitle offsets, duration estimates and the calibration probe
-      all key off the trim points too.
-      Done when: scoped and signed off — this is a future feature, recorded
-      rather than scheduled.
+- [ ] **VH-30 Trim the source** [detail](tickets/VH-30.md) (2026-08-25)
+      [sign-off]
+      Intent: maintainer request. Recordings carry material nobody wants and
+      today the only fix is another tool first, which defeats a one-step app.
+      Ranged reads are native to Mediabunny; the work is the interactions. The
+      one that matters most: loudness must measure the TRIMMED region, or
+      leading silence drags the gated figure.
+      Done when: scoped and signed off — recorded rather than scheduled.
 
 - [ ] **VH-48 Stream-copy fast path for "best quality"**
       [detail](tickets/VH-48.md) (2026-08-25) [sign-off]
       Intent: promoted from icebox D10. Leave the source video untouched and
-      encode only the branding: the content region becomes generationally
-      lossless rather than merely good, and the job near-instant rather than
-      the 6.3x real time VH-M2 measured. Rationale §4.3 rejected it on two
-      grounds and only ONE has fallen — VH-24 measured the corpus as
-      effectively CFR, which was D10's stated revisit trigger, but byte-exact
-      codec parameter matching between copied source and encoded branding
-      still stands, with silent A/V drift after publication as its failure.
+      encode only the branding. Of rationale §4.3's two objections only ONE has
+      fallen — VH-24 measured the corpus as effectively CFR — while byte-exact
+      parameter matching still stands, with silent A/V drift after publication
+      as its failure.
       Done when: scoped and signed off. The deliverable is a `canStreamCopy`
-      predicate — already CFR, hard cut, no picture fade, parameters matched —
-      not a switch, because VH-25's fades and VH-44's overlay modes each remove
-      the conditions that make it safe.
+      predicate, not a switch: VH-25's fades and VH-44's overlay modes each
+      remove the conditions that make it safe.
 
 ### Standing — maintainer-owned, never band-gated
 
-<!-- Human work, not agent work. It is listed apart from the bands precisely
-     so it cannot be read as waiting on one. -->
+<!-- Human work, not agent work. Listed apart from the bands precisely so it
+     cannot be read as waiting on one. -->
 
 - [ ] **VH-M3 Stop OneDrive syncing this project** [maintainer] (2026-08-25)
-      Intent: on 2026-08-25 the quality gate began failing with
-      `ETIMEDOUT: connection timed out, read` from `readFileSync`, and `tsc`
-      hung indefinitely. OneDrive Files-On-Demand had dehydrated
-      `node_modules` — 598 cloud-only files in the first 3000 checked — so
-      every read became a network fetch. `npm ci` rewrites them locally and
-      fixes it in seconds, but nothing stops it recurring.
-      Status: syncing was paused again on 2026-08-25, for an 8-hour window.
-      Pausing is time-boxed and reverts on its own, so the item stays open.
+      Intent: OneDrive Files-On-Demand dehydrated `node_modules` on 2026-08-25
+      — 598 cloud-only files in the first 3000 — so every read became a network
+      fetch, `readFileSync` returned `ETIMEDOUT` and `tsc` hung. `npm ci` fixes
+      it in seconds; nothing stops it recurring. Pausing is time-boxed and
+      reverts on its own.
       Done when: this folder is excluded from OneDrive sync, or marked "Always
-      keep on this device". `AGENTS.md` already declares cloud-synced paths
-      unsupported for project memory; this is the same hazard reaching the
-      build.
-      Note: `.gitignore` has no effect here — OneDrive does not read it.
+      keep on this device". `.gitignore` has no effect — OneDrive does not read
+      it.
 
 - [ ] **VH-M2 Measure the device envelope** [maintainer] (2026-08-24)
       Intent: spec §7.4 — published limits come from measurement, and this
-      is what closes D8.
+      closes D8.
       Done when: 5 / 20 / 60 minute jobs at 720p and 1080p are timed on a
       managed University laptop, a modern MacBook and a low-spec Windows
-      device, and the numbers are recorded.
-      First real figure (2026-08-25, this MacBook, via `/spike-real.html`):
-      1080p, 215 s of slides with no audio, "best quality" — 34.2 s, or
-      **6.3× real time**. Extrapolated, an hour of that material is ~10
-      minutes. One device, one content type; the envelope still needs the
-      others.
-      Note (2026-08-25): the Teams recording is 29.25 minutes, which covers the
-      20 minute case. The 60 minute case still needs material as well as a
       device.
+      First figure (2026-08-25, this MacBook): 1080p, 215 s of silent slides,
+      "best quality" — 34.2 s, or **6.3x real time**. The 29.25-minute Teams
+      recording covers the 20-minute case; 60 minutes needs material as well as
+      a device.
 
 - [ ] **VH-14 Deployment** [maintainer] (2026-08-24)
-      Intent: GitHub Pages is technically viable and the build is ready for it
-      — the app needs no COOP/COEP headers (nothing uses SharedArrayBuffer),
-      which is the usual thing that rules Pages out, and asset URLs now derive
-      from `import.meta.env.BASE_URL` so a `/<repo>/` subpath works. The
-      workflow lives at `.github/workflows/deploy-pages.yml`.
-      What is NOT settled is whether it should be published there: a Pages site
-      on a personal account is public, it would serve UoN branding from
-      `djdaojones.github.io`, and D5 asked for a hosting decision from UoN IT.
-      Confirmed 2026-08-25: the deployed site loads and works on a University
-      machine, so `github.io` is not filtered. Public hosting accepted for an
+      Intent: Pages is viable — no COOP/COEP needed, and asset URLs derive from
+      `import.meta.env.BASE_URL`. What is unsettled is whether it should stay
+      there: a Pages site on a personal account is public and serves UoN
+      branding from `djdaojones.github.io`. Public hosting was accepted for an
       unadvertised pilot; the intended home is an internal server.
-      **Every push to `main` deploys** — the workflow carries
-      `push: branches: [main]` as well as `workflow_dispatch`, added by the
-      session that accepted public hosting. This item said the opposite until
-      2026-08-25; nothing here is a separate act of publishing.
-      Done when: the move to internal hosting is planned, and the cache
-      strategy for offline-after-first-load is in place.
+      **Every push to `main` deploys** — there is no separate act of
+      publishing. VH-65 hardens that boundary.
+      Done when: the move to internal hosting is planned and the cache strategy
+      for offline-after-first-load is in place.
 
-- [ ] **VH-15 Confirm the browser exclusion** [maintainer] [blocked: D4] (2026-08-24)
-      Sign-off from UoN IT that Safari below 26 may be excluded. The one
-      open decision that would be expensive to reverse.
+- [ ] **VH-15 Confirm the browser exclusion** [maintainer] [blocked: D4]
+      (2026-08-24)
+      Sign-off from UoN IT that Safari below 26 may be excluded. The one open
+      decision that would be expensive to reverse.
 
 ### Launch milestone
 
 - [ ] **VH-13 Published limits copy** [blocked: VH-M2] (2026-08-24)
-      Turn the measured envelope into the user-facing wording. Closes D8.
-      Now also waits on VH-31: publishing figures derived from an estimate
-      that overstates by 3.6x would publish the same error.
+      Turn the measured envelope into user-facing wording. Closes D8. Also
+      waits on VH-31: publishing figures derived from an estimate that
+      overstates would publish the same error.
 
 ### Icebox
 
@@ -301,7 +363,7 @@
       measure; a false accusation is worse than silence. Revisit if staff
       report a gap the current warnings miss.
 - [ ] **D11 WebM output** — supported by the muxer, not exposed. Revisit if
-      a destination platform requires it. None currently does.
+      a destination platform requires it, or if VH-49 chooses it for Firefox.
 - [ ] **D12 Custom or per-department branding** — needs a governance answer
       for who approves a variant before it needs an implementation.
 - [ ] **D13 Batch processing** — the most likely first request from anyone
