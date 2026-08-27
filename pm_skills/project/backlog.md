@@ -13,12 +13,15 @@
      ordered; within a band, order is dependency-driven, not by ID, and each
      item says what it waits on. Maintainer work is never band-gated — see
      Standing. Why these bands: decision-log 2026-08-25 "Band 1".
+     Two provenance groups, and they cite different sources.
      VH-54..VH-68 came from an external repository review (2026-08-26) and its
-     two critiques. All three documents live in `reviews/2026-08-26/`, which is
-     the detail source for those items — cite the R-number rather than
-     restating the evidence here. Findings were re-verified against source
-     before banding; where the review's own remedy was shown unsafe, the item
-     says so. -->
+     two critiques, all three in `reviews/2026-08-26/` — cite the R-number
+     rather than restating the evidence here.
+     VH-71..VH-78 came from the 2026-08-27 cross-check of the archived
+     implementation branch; `tickets/VH-71.md` is their detail source and
+     VH-71 is their umbrella — cite the work package.
+     Both sets were re-verified against source before banding, and where a
+     review's own remedy was shown unsafe the item says so. -->
 
 ### Band 1a — The output is what we say it is (signed off 2026-08-25)
 
@@ -27,8 +30,10 @@
      output contract now holds on real material, and VH-56 shipped with it so
      a finished file survives the next click and VH-57 made every phase answer
      Cancel, VH-55 made its onset loss visible and VH-59 made track loss
-     visible. What remains of 1a is VH-55's second half and its timeline
-     sibling VH-74 (from the VH-71 cross-check), which execute together. -->
+     visible. What remains is VH-55's second half and its timeline sibling
+     VH-74, which are ONE piece of work: both re-time the same four timestamp
+     sites, and VH-74's fixtures are what would grade VH-55's change. Doing
+     either alone means touching A/V sync twice. -->
 
 - [~] **VH-55 Source onset can be replaced by encoder priming** (2026-08-27)
       Intent: R-03. `AudioTimelineShift.apply()` drops AAC samples landing
@@ -62,10 +67,95 @@
       become explicit silence; the fixtures pass; nothing ships fixture-less.
       Detail: [VH-71 WP2](tickets/VH-71.md).
 
-### Band 1b — Decisions the maintainer owns (signed off 2026-08-25)
+### Band 2 — The edges hold
 
-<!-- Committed work that cannot proceed without a product call. Listed apart
-     from 1a so agent work is never read as waiting on these. -->
+<!-- Not committed, and all of it is agent work. Ordered by dependency rather
+     than by ID: VH-76 leads because everything below it is judged by a gate
+     that currently rewrites `dist/` on every run, and a gate that writes
+     cannot honestly certify a change to the thing it writes. VH-72 and VH-73
+     are then independent one-visit fixes; VH-75 groups four verified holes of
+     one shape; VH-77 is the swept-up remainder. VH-62 is LAST because its
+     remaining half is harness work whose value depends on what Band 1a does
+     to the pipeline — and Band 1a is about to move it, so VH-62 earns
+     promotion the moment VH-55/VH-74 turn out large. -->
+
+- [ ] **VH-71 Reconcile the archived implementation branch** [detail](tickets/VH-71.md) (2026-08-27)
+      Intent: umbrella and detail source for the 2026-08-27 feature-by-feature
+      cross-check of tag `archive/repository-review-implementation` against
+      HEAD. Children: VH-74 (Band 1a, with VH-55), VH-72, VH-73, VH-75,
+      VH-76, VH-77 below, VH-78 (Icebox), VH-19's adoption note, and the
+      VH-62/VH-70 amendments. The ticket holds per-package detail, execution
+      order, and the decided-not-to-reconcile list.
+      Done when: every child is shipped or explicitly cut; then delete the
+      ticket.
+
+- [ ] **VH-76 A check that does not write** (2026-08-27)
+      Intent: `npm run check` runs `build`, which rewrites `dist/` — against
+      the non-mutating-gate hard rule. Port the archived `check-build.mjs`
+      (vite build to a temp dir, removed on every exit path).
+      Done when: a green `check` leaves the working tree byte-identical.
+      Detail: [VH-71 WP4](tickets/VH-71.md).
+
+- [ ] **VH-72 One codec string for preflight and production** (2026-08-27)
+      Intent: P2-02 residual — production hands Mediabunny abstract
+      `codec: 'avc'` and gets a frame-rate-blind AVC level (4K60 → 5.1) while
+      preflight correctly derives 5.2. Pass the preflight-derived string
+      through Mediabunny's unused `fullCodecString` override so both validate
+      one string.
+      Done when: preflight and production provably share the string, with
+      4K60 and 1080p60 equality tests. Detail: [VH-71 WP1](tickets/VH-71.md).
+
+- [ ] **VH-73 Verify the finished file's picture** (2026-08-27)
+      Intent: `verifyOutputAudio` checks audio only — a finished file whose
+      video track yields no decodable sample still announces "Your video is
+      ready". Port the archived `output-integrity.ts` beside it.
+      Done when: a broken-video fixture turns the job red; one frame decoded
+      per job otherwise. Detail: [VH-71 WP1](tickets/VH-71.md).
+
+- [ ] **VH-75 Four lifecycle guards** (2026-08-27)
+      Intent: verified holes, VH-68's pattern — a superseded inspect/preflight
+      keeps running; Start re-arms before the worker acknowledges a watchdog
+      cancel; saves run without the wake lock; `finished.delete` precedes
+      `await dispose()`.
+      Done when: each has a regression and none reproduces.
+      Detail: [VH-71 WP3](tickets/VH-71.md).
+
+- [ ] **VH-77 Hygiene remainder from the cross-check** (2026-08-27)
+      Intent: four small debts — tuneables outside `src/config/` (P3-02);
+      diagnostics bundle without job context (P2-10); track
+      language/name/disposition not carried (P1-08 residual); the manual
+      rollback recipe undocumented in DEV-INFRASTRUCTURE.
+      Done when: each is fixed or explicitly cut; the diagnostics addition
+      carries a redaction test. Detail: [VH-71 WP6](tickets/VH-71.md).
+
+- [~] **VH-62 The acceptance harness has false-pass routes** (2026-08-27)
+      Intent: R-11. Criterion 2's missing-measurement and cropped-peak routes
+      closed 2026-08-27.
+      Done 2026-08-27: criterion 3 no longer claims a `pass` this page did not
+      run (`external`); the sync meter reads both tracks on one clock, which
+      unblocks VH-55; the worker's realm is watched and merged, so the branding
+      fetch is visible at all; and a negative control proves the egress
+      instrument fires on both body shapes.
+      Remaining: resource warnings still do not fail a run; a complete run
+      takes over an hour in a browser — four minutes per synthesised corpus
+      entry, in-process on the main thread — so nobody sits through it, which
+      is its own false-pass route (see wish-list).
+      Done when: the harness cannot report green on an unexecuted or unmeasured
+      invariant, an injected defect turns it red, and a run is short enough
+      that it is actually run.
+      Added 2026-08-27 (VH-71 cross-check): criterion 8 still cancels an
+      in-process pipeline helper, never the real worker protocol (P2-07), and
+      criterion 2's verdict checks neither content frame count nor gap/overlap
+      coverage — see [VH-71 WP4](tickets/VH-71.md).
+
+### Band 3 — Blocked on the maintainer
+
+<!-- Agent work that cannot start until something arrives from outside the
+     repository: a corpus, a test result, a sign-off. Listed apart from Band 2
+     so nothing here reads as available to pick up, and apart from Standing
+     because the WORK is mine — only the unblocking is not. This band replaces
+     the old Band 1b, which existed for maintainer DECISIONS and emptied on
+     2026-08-27 when VH-49, VH-46b, VH-31, VH-25 and VH-32 all closed. -->
 
 - [ ] **VH-19 Content-adaptive bitrate for the smaller preset**
       Intent: spec §6.2 sets ~1.5 Mbps for slides and ~2.5 Mbps for camera.
@@ -103,82 +193,6 @@
       Adopt via [VH-71 WP5](tickets/VH-71.md) and re-verify the thresholds on
       our own corpus rather than redesign.
 
-### Band 2 — The edges hold
-
-<!-- Not committed. Known gaps not currently biting anyone, plus review
-     findings that are real but not user-facing today. VH-62 earns promotion
-     into Band 1a the moment Band 1a's pipeline changes turn out large: a
-     harness with false-pass routes matters far more when the pipeline moves. -->
-
-- [~] **VH-62 The acceptance harness has false-pass routes** (2026-08-27)
-      Intent: R-11. Criterion 2's missing-measurement and cropped-peak routes
-      closed 2026-08-27.
-      Done 2026-08-27: criterion 3 no longer claims a `pass` this page did not
-      run (`external`); the sync meter reads both tracks on one clock, which
-      unblocks VH-55; the worker's realm is watched and merged, so the branding
-      fetch is visible at all; and a negative control proves the egress
-      instrument fires on both body shapes.
-      Remaining: resource warnings still do not fail a run; a complete run
-      takes over an hour in a browser — four minutes per synthesised corpus
-      entry, in-process on the main thread — so nobody sits through it, which
-      is its own false-pass route (see wish-list).
-      Done when: the harness cannot report green on an unexecuted or unmeasured
-      invariant, an injected defect turns it red, and a run is short enough
-      that it is actually run.
-      Added 2026-08-27 (VH-71 cross-check): criterion 8 still cancels an
-      in-process pipeline helper, never the real worker protocol (P2-07), and
-      criterion 2's verdict checks neither content frame count nor gap/overlap
-      coverage — see [VH-71 WP4](tickets/VH-71.md).
-
-- [ ] **VH-71 Reconcile the archived implementation branch** [detail](tickets/VH-71.md) (2026-08-27)
-      Intent: umbrella and detail source for the 2026-08-27 feature-by-feature
-      cross-check of tag `archive/repository-review-implementation` against
-      HEAD. Children: VH-74 (Band 1a, with VH-55), VH-72, VH-73, VH-75,
-      VH-76, VH-77 below, VH-78 (Icebox), VH-19's adoption note, and the
-      VH-62/VH-70 amendments. The ticket holds per-package detail, execution
-      order, and the decided-not-to-reconcile list.
-      Done when: every child is shipped or explicitly cut; then delete the
-      ticket.
-
-- [ ] **VH-72 One codec string for preflight and production** (2026-08-27)
-      Intent: P2-02 residual — production hands Mediabunny abstract
-      `codec: 'avc'` and gets a frame-rate-blind AVC level (4K60 → 5.1) while
-      preflight correctly derives 5.2. Pass the preflight-derived string
-      through Mediabunny's unused `fullCodecString` override so both validate
-      one string.
-      Done when: preflight and production provably share the string, with
-      4K60 and 1080p60 equality tests. Detail: [VH-71 WP1](tickets/VH-71.md).
-
-- [ ] **VH-73 Verify the finished file's picture** (2026-08-27)
-      Intent: `verifyOutputAudio` checks audio only — a finished file whose
-      video track yields no decodable sample still announces "Your video is
-      ready". Port the archived `output-integrity.ts` beside it.
-      Done when: a broken-video fixture turns the job red; one frame decoded
-      per job otherwise. Detail: [VH-71 WP1](tickets/VH-71.md).
-
-- [ ] **VH-75 Four lifecycle guards** (2026-08-27)
-      Intent: verified holes, VH-68's pattern — a superseded inspect/preflight
-      keeps running; Start re-arms before the worker acknowledges a watchdog
-      cancel; saves run without the wake lock; `finished.delete` precedes
-      `await dispose()`.
-      Done when: each has a regression and none reproduces.
-      Detail: [VH-71 WP3](tickets/VH-71.md).
-
-- [ ] **VH-76 A check that does not write** (2026-08-27)
-      Intent: `npm run check` runs `build`, which rewrites `dist/` — against
-      the non-mutating-gate hard rule. Port the archived `check-build.mjs`
-      (vite build to a temp dir, removed on every exit path).
-      Done when: a green `check` leaves the working tree byte-identical.
-      Detail: [VH-71 WP4](tickets/VH-71.md).
-
-- [ ] **VH-77 Hygiene remainder from the cross-check** (2026-08-27)
-      Intent: four small debts — tuneables outside `src/config/` (P3-02);
-      diagnostics bundle without job context (P2-10); track
-      language/name/disposition not carried (P1-08 residual); the manual
-      rollback recipe undocumented in DEV-INFRASTRUCTURE.
-      Done when: each is fixed or explicitly cut; the diagnostics addition
-      carries a redaction test. Detail: [VH-71 WP6](tickets/VH-71.md).
-
 - [ ] **VH-17 Evaluate `fastStart: 'reserve'` for the smaller preset**
       Intent: the "smaller file" preset goes to OneDrive and SharePoint, where
       students may stream it. `fastStart: false` puts the moov box at the end,
@@ -195,11 +209,6 @@
       no longer worth designing around before it.
       Note: it also means most jobs should be taking "Best quality", which is
       already the default and already what §6.1 names for EchoVideo.
-
-### Band 3 — New capability, or waiting on material
-
-<!-- Not committed. VH-26 waits on material; the other two wait on a scoping
-     pass. VH-23 went to the icebox 2026-08-27. -->
 
 - [ ] **VH-26 Mobile phone sources** [detail](tickets/VH-26.md) (2026-08-25)
       Intent: staff may upload phone footage and none was in the corpus.
