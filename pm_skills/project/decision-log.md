@@ -11,6 +11,44 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-32 closed, VH-61 closed, VH-17 reframed
+
+**VH-32 — no redesign. The simplicity is the design.** The maintainer's answer
+to the interface pass he asked for: he likes it as it is, and the only thing
+that would justify a SECOND screen is a trim function. So the ticket closes on
+"nothing to change" rather than on a delivered redesign, and the screen-count
+question moves to VH-30, which is what would raise it.
+
+That is a stronger outcome than it looks. The original complaint was that the
+screen accretes rather than progresses and speaks in codecs rather than
+outcomes. Most of it has since been answered piecemeal by items that were not
+UI tickets — VH-64 gave the progress bar a name and a stage and made a
+discouraged job ask before it proceeds; VH-56 gave the finished result an
+owner, so the screen stops offering a Save for a file that is gone; VH-46b
+collapsed the closing from a checkbox plus a hidden mode set into one question
+with four plainly-worded answers; VH-31 made the size estimate say "at most"
+instead of quoting a figure it beats by 3.6x. What is left of the original
+complaint is largely what those fixed.
+
+**VH-61 — leave it.** The maintainer accepted the recommendation. Loudness
+range goes blind in the final second of a file, which under-reports, which
+keeps the macro-leveller OFF — the safe direction, and the same judgement spec
+§5.2 step 3 already makes. The review's remedy inverts it. Closed as accepted
+behaviour with the evidence recorded rather than as a defect deferred.
+
+**VH-17 — EchoVideo (Engage) is the key platform**, which changes the stakes
+rather than the answer. EchoVideo re-encodes on ingest, so where the moov box
+sits cannot reach a viewer there on either preset. That removes the question
+from the path most videos take and leaves it a secondary concern for OneDrive
+and SharePoint. Still worth the upload test; no longer worth designing around
+beforehand.
+
+It is also a useful confirmation elsewhere: if EchoVideo is where most videos
+go, most jobs should be taking "Best quality", which is already the default and
+already what spec §6.1 names for EchoVideo.
+
+**Link:** VH-32, VH-61, VH-17, VH-30; spec §6.1, §5.2 step 3.
+
 ## 2026-08-27 — VH-19: the probe samples the one part that says nothing
 
 **Decision:** do not classify content from the calibration probe's existing

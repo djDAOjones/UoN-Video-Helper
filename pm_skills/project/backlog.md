@@ -81,18 +81,6 @@
       Note: mis-classifying camera as screen costs picture quality; the reverse
       costs only file size. The threshold must be biased accordingly.
 
-- [ ] **VH-32 Interface quality pass** [sign-off] [detail](tickets/VH-32.md)
-      (2026-08-25)
-      Intent: maintainer request after using the deployed app — a design pass,
-      not a bug list. The screen accretes rather than progresses, speaks in
-      codecs rather than outcomes, disables controls that still look live, and
-      never shows moving picture. The plain-language framing and the
-      never-uploaded reassurance should survive.
-      Done when: a considered redesign is agreed and implemented against
-      `UI-STANDARDS.md` §6. Last in the band by design: it must lay out the
-      estimate wording, the content class and the fade toggles. VH-64's
-      acknowledgement step shipped 2026-08-27 and is the pattern to build on.
-
 ### Band 2 — The edges hold
 
 <!-- Not committed. Known gaps not currently biting anyone, plus review
@@ -116,23 +104,6 @@
       invariant, an injected defect turns it red, and a run is short enough
       that it is actually run.
 
-- [~] **VH-61 LRA is suppressed at end of file** (2026-08-27)
-      Intent: R-10, but NOT its remedy.
-      Done 2026-08-27: the pause freeze is applied to the FINISHED envelope as
-      well as the raw correction, so a centred 15 s window can no longer reach
-      past a pause and move a gain that was frozen (-5 dB entering a pause read
-      -1.29 dB inside it; leading silence read +1.85 dB).
-      Remaining, and needing a decision rather than a patch: a loud passage in
-      the final second reads LRA 0.00 against 10.80 mid-file. The 1.5 s
-      silence pad is disproved — on a quiet ending it took a measured 3.79 to
-      15.32 against a mid-file truth of 6.51. Direction matters: suppression
-      under-reports, so `shouldApplyMacroLevelling` stays OFF, which is the safe
-      failure; padding over-reports and switches the leveller on because a
-      recording ends in room tone.
-      Done when: a standards-grounded correction exists, its effect on the
-      LRA > 9 gate is modelled on a boundary corpus, and neither direction is
-      made worse. Protected DSP — re-run the EBU harness.
-
 - [ ] **VH-17 Evaluate `fastStart: 'reserve'` for the smaller preset**
       Intent: the "smaller file" preset goes to OneDrive and SharePoint, where
       students may stream it. `fastStart: false` puts the moov box at the end,
@@ -141,10 +112,14 @@
       CFR grid plus a margin and verified on a real SharePoint upload, or the
       current behaviour is confirmed adequate and the reason recorded.
       Scope: `'in-memory'` is not an option — it reinstates the memory ceiling.
-      Maintainer 2026-08-27: can test a real SharePoint upload within the week.
-      That test IS the deciding evidence — until it exists there is nothing to
-      choose between, because whether the moov position matters depends on
-      whether SharePoint streams the file or serves its own rendition.
+      Maintainer 2026-08-27: **EchoVideo (Engage) is the key platform**, and it
+      re-encodes on ingest — so the moov position cannot reach a viewer there
+      at all, on either preset. That removes the stakes from the path most
+      videos take and leaves this a secondary-path question about OneDrive and
+      SharePoint only. Still worth the upload test he can run within the week;
+      no longer worth designing around before it.
+      Note: it also means most jobs should be taking "Best quality", which is
+      already the default and already what §6.1 names for EchoVideo.
 
 ### Band 3 — New capability, or waiting on material
 

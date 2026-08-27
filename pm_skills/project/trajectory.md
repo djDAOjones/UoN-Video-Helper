@@ -21,6 +21,15 @@
 
 ## Archived: real material and Band 1's first half — see archive/trajectory/trajectory-0002-real-material-and-band-1.md
 
+### VH-32, VH-61 — closed on the maintainer's judgement
+
+- VH-32 — Closed 2026-08-27. No redesign wanted: the simplicity is the design,
+  and only a trim function would justify a second screen. See decision-log.
+- VH-61 — Closed 2026-08-27 as accepted behaviour. The LRA blind spot
+  under-reports, which keeps macro-levelling off — the safe direction.
+- VH-17 — Reframed 2026-08-27: EchoVideo re-encodes on ingest, so this is a
+  secondary-path question rather than a headline one.
+
 ### VH-31 — the estimate is a bound, and says so
 
 - VH-31 — Closed 2026-08-27. The projection now covers the whole output rather
