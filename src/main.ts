@@ -407,7 +407,10 @@ fileInput.addEventListener('change', () => {
   subtitleInput.value = ''
   subtitleStatus.textContent = ''
   subtitleVtt = null
-  processResult.replaceChildren()
+  // Kept when there is something to lose: the result panel describes a video
+  // that already exists, and the source panel describes what was just chosen.
+  // Clearing it here removed the only route to a finished file (VH-56).
+  if (!unsavedResult) processResult.replaceChildren()
 
   void (async () => {
     try {
@@ -523,6 +526,45 @@ let jobFile: File | null = null
 /** The running job's request id, so Cancel reaches the right one. */
 let jobCancelId: number | null = null
 
+/**
+ * A finished result the user has not put anywhere yet.
+ *
+ * The worker keeps its OPFS scratch alive so the `File` stays readable, and
+ * releases it when the next job starts. That made starting again a silent
+ * destruction of finished work — one click, no warning, nothing recoverable
+ * (VH-56). Holding it here is what lets Start ask first.
+ */
+interface RetainedResult {
+  readonly file: File
+  readonly jobId: string
+  /** The file this result was made from — the one a save must never write over. */
+  readonly source: File
+  /**
+   * True once a fallback download has been started for it.
+   *
+   * Not the same as saved. `anchor.click()` returns before the browser has
+   * read a byte, and an object URL over an OPFS-backed file reads lazily — so
+   * a "delivered" result is one whose bytes may still be being pulled out of
+   * the scratch this is holding open.
+   */
+  readonly delivered: boolean
+  readonly applied: { opening: boolean; closing: boolean }
+  readonly requested: { opening: boolean; closing: boolean }
+  /** Frees whatever the last save attempt still held — see `save.ts`. */
+  readonly release: () => void
+}
+
+let unsavedResult: RetainedResult | null = null
+
+/**
+ * True while a save is streaming out of OPFS.
+ *
+ * A picker save reads from the job's scratch for as long as it takes, and
+ * starting another job disposes exactly that scratch. Nothing stopped the two
+ * overlapping, because saving disabled only the Save button.
+ */
+let saveInFlight = false
+
 // Built ONCE, at module scope, and never replaced. The previous version
 // rebuilt both buttons on every preflight — so changing the preset mid-job
 // detached the running job's Cancel and handed back a fresh, enabled Start,
@@ -550,19 +592,96 @@ processActions.append(startButton, cancelButton)
  */
 function setJobInFlight(running: boolean): void {
   jobInFlight = running
-  fileInput.disabled = running
-  subtitleInput.disabled = running
-  presetChoice.disabled = running
-  brandingChoice.disabled = running
-  startButton.disabled = running
   cancelButton.hidden = !running
   cancelButton.disabled = false
+  applyControlLock()
+}
+
+/**
+ * Locks the same controls while a save is streaming.
+ *
+ * A save is not a job, so Cancel stays hidden — but everything a new job would
+ * pull out from under it is held exactly as if one were running.
+ */
+function setSaveInFlight(saving: boolean): void {
+  saveInFlight = saving
+  applyControlLock()
+}
+
+/** Applies whichever of the two locks is active. */
+function applyControlLock(): void {
+  const locked = jobInFlight || saveInFlight
+  fileInput.disabled = locked
+  subtitleInput.disabled = locked
+  presetChoice.disabled = locked
+  brandingChoice.disabled = locked
+  startButton.disabled = locked
 }
 
 startButton.addEventListener('click', () => {
   const file = jobFile
-  if (!file || jobInFlight) return
+  if (!file || jobInFlight || saveInFlight) return
 
+  // Starting again disposes the previous result's scratch, and the previous
+  // result may be the only copy of an hour's work (VH-56). Ask once; the
+  // answer starts the job.
+  if (unsavedResult) {
+    confirmDiscardThenStart(file)
+    return
+  }
+  beginJob(file)
+})
+
+/**
+ * Asks before a new job destroys a finished one nobody saved.
+ *
+ * Inline rather than a modal: the result and the question belong in the same
+ * place, and a dialogue that steals focus to say "are you sure" is the pattern
+ * `UI-STANDARDS.md` reserves for something irreversible the user did not
+ * initiate. VH-32 owns how this looks.
+ */
+function confirmDiscardThenStart(file: File): void {
+  processResult.replaceChildren()
+
+  const question = document.createElement('p')
+  question.className = 'verdict-detail'
+  question.textContent = unsavedResult?.delivered
+    ? 'Your download may still be finishing. Starting again will discard the video you just made.'
+    : 'You have not saved the video you just made. Starting again will discard it.'
+
+  const discard = document.createElement('button')
+  discard.type = 'button'
+  discard.className = 'button'
+  discard.textContent = 'Discard it and start again'
+  discard.addEventListener('click', () => {
+    releaseUnsavedResult()
+    beginJob(file)
+  })
+
+  const keep = document.createElement('button')
+  keep.type = 'button'
+  keep.className = 'button button--secondary'
+  keep.textContent = 'Keep it'
+  keep.addEventListener('click', () => {
+    const kept = unsavedResult
+    if (kept) renderResult(kept.file, kept.jobId, kept.source, kept.applied, kept.requested)
+  })
+
+  const actions = document.createElement('div')
+  actions.className = 'actions'
+  actions.append(discard, keep)
+  processResult.append(question, actions)
+  setStatus('Your video is not saved yet.')
+  discard.focus()
+}
+
+/** Forgets the retained result, freeing whatever the save route still held. */
+function releaseUnsavedResult(): void {
+  unsavedResult?.release()
+  unsavedResult = null
+}
+
+function beginJob(file: File): void {
   processResult.replaceChildren()
 
   const { id, promise } = requestWithId(
@@ -594,13 +713,7 @@ startButton.addEventListener('click', () => {
   void promise
     .then((reply) => {
       if (reply.kind === 'processed') {
-        renderResult(
-          reply.file,
-          reply.jobId,
-          file.name,
-          reply.brandingApplied,
-          reply.brandingRequested,
-        )
+        renderResult(reply.file, reply.jobId, file, reply.brandingApplied, reply.brandingRequested)
         renderWarnings(audioWarnings, reply.outputWarnings, {
           heading: 'Worth knowing about the finished video',
         })
@@ -625,7 +738,7 @@ startButton.addEventListener('click', () => {
       setJobInFlight(false)
       processProgress.hidden = true
     })
-})
+}
 
 // Bound once, here, rather than inside the Start handler — where it added
 // another listener on every Start click, so the second job posted two cancels
@@ -646,7 +759,7 @@ function showProcessControls(file: File): void {
 function renderResult(
   file: File,
   jobId: string,
-  sourceName: string,
+  source: File,
   applied: { opening: boolean; closing: boolean },
   requested: { opening: boolean; closing: boolean },
 ): void {
@@ -670,22 +783,87 @@ function renderResult(
     processResult.append(notice)
   }
 
+  // Retained until the user has it somewhere. Everything that would destroy it
+  // now has to go through `unsavedResult` first (VH-56).
+  //
+  // Preserved when this is a re-render of the same job — "Keep it" comes back
+  // through here, and a fresh record would drop the download's object URL and
+  // the worker lease that record is holding.
+  unsavedResult =
+    unsavedResult?.jobId === jobId
+      ? unsavedResult
+      : { file, jobId, source, applied, requested, delivered: false, release: () => {} }
+
   const save = document.createElement('button')
   save.type = 'button'
   save.className = 'button'
   save.textContent = 'Save the video'
+  /** Set once the file is out and the scratch has gone; the control is then spent. */
+  let saved = false
   save.addEventListener('click', () => {
+    if (saved) return
     save.disabled = true
+    // Not just this button: a save streams out of the job's OPFS scratch, and
+    // starting another job disposes exactly that scratch.
+    setSaveInFlight(true)
+    // A multi-gigabyte save streams for a while and used to say nothing at
+    // all, which is the same silence VH-38 established means "wedged".
+    setStatus('Saving…')
+    // Declared to the worker as well as locked in the UI: the UI lock is a
+    // convention, and a convention is what VH-36 turned out to be.
+    worker.postMessage({ kind: 'lease', id: nextRequestId++, jobId, held: true })
+    // Cleared by whichever route takes ownership of the lease instead.
+    let leaseHeld = true
     void (async () => {
       try {
-        const outcome = await saveFile(file, suggestedFileName(sourceName))
-        if (outcome === 'cancelled') {
+        const result = await saveFile(file, suggestedFileName(source.name), {
+          identity: { name: source.name, size: source.size, lastModified: source.lastModified },
+        })
+        if (result.outcome === 'cancelled') {
           setStatus('Not saved. The video is still here when you want it.')
+          return
+        }
+        if (result.outcome === 'refused-source') {
+          setStatus(
+            'That is the file you started with. Choose a different name or folder — this tool never changes your original.',
+          )
+          return
+        }
+        if (result.outcome === 'downloaded') {
+          // `anchor.click()` returns before the browser has read a byte, and
+          // an object URL over an OPFS-backed file reads lazily — so the
+          // scratch, the URL and the worker's lease all have to outlive this
+          // handler. They are released together when the result is.
+          leaseHeld = false
+          unsavedResult = {
+            file,
+            jobId,
+            source,
+            applied,
+            requested,
+            delivered: true,
+            release: () => {
+              result.release()
+              worker.postMessage({ kind: 'lease', id: nextRequestId++, jobId, held: false })
+            },
+          }
+          setStatus('Saving to your downloads. The video stays here until you start another one.')
           return
         }
         setStatus('Saved.')
         // Only once it is safely out: the File reads from OPFS, so releasing
         // the workspace first would hand back something unreadable.
+        //
+        // The lease goes back BEFORE the discard, not in the `finally` after
+        // it. `discard` waits on the lease, so releasing it afterwards is a
+        // deadlock the request timeout would break ten seconds later.
+        unsavedResult = null
+        leaseHeld = false
+        worker.postMessage({ kind: 'lease', id: nextRequestId++, jobId, held: false })
+        // Saving again would read a workspace that no longer exists, so the
+        // control stops offering it rather than failing when taken up.
+        saved = true
+        save.textContent = 'Saved'
         await request({ kind: 'discard', jobId }, 10_000)
       } catch (cause) {
         setStatus('The video could not be saved. It is still here to try again.')
@@ -693,7 +871,11 @@ function renderResult(
           reason: cause instanceof Error ? cause.message : String(cause),
         })
       } finally {
-        save.disabled = false
+        if (leaseHeld) {
+          worker.postMessage({ kind: 'lease', id: nextRequestId++, jobId, held: false })
+        }
+        save.disabled = saved
+        setSaveInFlight(false)
       }
     })()
   })

@@ -175,8 +175,8 @@
 - `src/media/preflight.test.ts` — Triggers all four spec 7.3 outcomes deliberately — acceptance criterion 7.
 - `src/media/preflight.ts` — The pure verdict: given what was measured, proceed / warn / discourage / block.
 - `src/media/probe.ts` — The 3-second calibration probe: real decode and encode on the real file and device.
-- `src/media/save.test.ts` — Pins the suggested filename, including that it can never overwrite the source.
-- `src/media/save.ts` — Streams the result to the user's chosen location; object-URL fallback where there is no picker.
+- `src/media/save.test.ts` — Pins the suggested filename and the guard that refuses the source as a destination.
+- `src/media/save.ts` — Streams the result to the user's chosen location, refuses the source, and hands back what to release.
 - `src/media/vtt.test.ts` — Proves cue text, settings, comments and line endings survive byte for byte.
 - `src/media/vtt.ts` — Offsets WebVTT timings by rewriting only timestamp lines; never touches the words.
 - `src/spike/alpha.ts` — VH-12 spike: decodes each branding onset and reads back pixel alpha. Dev-only, not built.

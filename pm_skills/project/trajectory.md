@@ -21,6 +21,17 @@
 
 ## Archived: real material and Band 1's first half — see archive/trajectory/trajectory-0002-real-material-and-band-1.md
 
+### VH-56, VH-58 — a finished file survives the user's next click
+
+- VH-58 — Shipped 2026-08-27. A job claims its OPFS directory before creating
+  it and the boot sweep deletes only inside a granted lock, closing both
+  windows in which a live workspace could be swept. See decision-log.
+- VH-56 — Shipped 2026-08-27. A finished result is retained until the user has
+  it somewhere: a read lease blocks disposal while a save streams, starting
+  again asks before discarding, a fallback download keeps its scratch and
+  object URL, and a save destination that is the source is refused. See
+  decision-log.
+
 ### VH-50, VH-54 — the output contract holds on real material
 
 - VH-54 — Shipped 2026-08-27. The true-peak interpolator is drained at end of

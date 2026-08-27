@@ -16,6 +16,7 @@ import {
   videoEncoderConfigFor,
   type PresetId,
 } from '../config/presets'
+import { SAVE_LEASE_LIMIT_MS } from '../config/thresholds'
 import { detectSourceWarnings, type AudioWarning } from '../audio/warnings'
 import type { BrandingChoice } from '../config/branding'
 import { analyseSourceAudio } from '../media/audio-plan'
@@ -79,6 +80,10 @@ self.addEventListener('message', (event: MessageEvent<WorkerRequest>) => {
     case 'discard':
       void handleDiscard(request.id, request.jobId)
       break
+
+    case 'lease':
+      setLease(request.jobId, request.held)
+      break
   }
 })
 
@@ -104,7 +109,46 @@ if (!import.meta.env.DEV) setMinimumLogLevel('info')
 void sweepOrphanedJobs()
 
 /**
- * Releases every retained result.
+ * Read leases on retained results, by job id.
+ *
+ * A save streams out of the job's scratch, and the scratch is what
+ * {@link releaseFinished} disposes. Nothing stopped those overlapping, so a
+ * second job could delete the file a `pipeTo()` was still reading (review
+ * R-04). A lease is held for the length of a read and disposal waits for it.
+ */
+const leases = new Map<string, { readonly settled: Promise<void>; readonly release: () => void }>()
+
+/**
+ * Opens or closes a read lease on a finished job's scratch.
+ *
+ * The held promise is resolved by the matching release, or by
+ * {@link SAVE_LEASE_LIMIT_MS} — a lease that outlives its reader must not
+ * become a workspace nobody can ever dispose.
+ */
+function setLease(jobId: string, held: boolean): void {
+  if (!held) {
+    leases.get(jobId)?.release()
+    leases.delete(jobId)
+    return
+  }
+  if (leases.has(jobId)) return
+
+  let release = (): void => {}
+  const settled = new Promise<void>((resolve) => {
+    const expiry = setTimeout(() => {
+      log.warn('worker', 'save lease expired', { jobId })
+      resolve()
+    }, SAVE_LEASE_LIMIT_MS)
+    release = () => {
+      clearTimeout(expiry)
+      resolve()
+    }
+  })
+  leases.set(jobId, { settled, release })
+}
+
+/**
+ * Releases every retained result, once nothing is reading it.
  *
  * A finished job's scratch is kept so the main thread can read the file out of
  * it, and `discard` normally releases it. But that depends on the UI getting
@@ -113,9 +157,15 @@ void sweepOrphanedJobs()
  * result can be saved, so only the most recent needs keeping.
  */
 async function releaseFinished(): Promise<void> {
-  const workspaces = [...finished.values()]
+  const entries = [...finished.entries()]
   finished.clear()
-  await Promise.all(workspaces.map((workspace) => workspace.dispose()))
+  await Promise.all(
+    entries.map(async ([jobId, workspace]) => {
+      await leases.get(jobId)?.settled
+      leases.delete(jobId)
+      await workspace.dispose()
+    }),
+  )
 }
 
 async function handleProcess(
@@ -246,8 +296,12 @@ async function handleProcess(
 async function handleDiscard(id: number, jobId: string): Promise<void> {
   const workspace = finished.get(jobId)
   if (workspace) {
-    await workspace.dispose()
+    // The caller normally discards only after its save has resolved, but a
+    // lease is the thing that makes that a guarantee rather than an ordering.
+    await leases.get(jobId)?.settled
+    leases.delete(jobId)
     finished.delete(jobId)
+    await workspace.dispose()
   }
   post({ kind: 'discarded', id })
 }

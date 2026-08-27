@@ -24,21 +24,10 @@
 
 <!-- Committed. Everything a staff member meets today that is wrong,
      misleading, or a risk. VH-54, VH-50 and VH-58 shipped 2026-08-27 and the
-     output contract now holds on real material. What remains is silent loss
-     and lifecycle: VH-56, VH-57, VH-55 and VH-59 are independent, and each
-     ends with the user losing something without being told. -->
-
-- [ ] **VH-56 A finished result is not owned transactionally** (2026-08-27)
-      Intent: R-04 plus one omission. Three routes lose a finished file: a
-      fallback download counts as complete when `anchor.click()` returns;
-      starting another job disposes the workspace mid-`pipeTo()`; and starting
-      another job discards an unsaved result outright. The save picker also
-      lets the user overwrite their own source.
-      Done when: a result holds a read lease that blocks disposal, an unsaved
-      result cannot be destroyed silently, and `isSameEntry()` rejects the
-      source as a destination.
-      Note: the review's partial-OPFS-write claim was never reproduced. Guard
-      the return value; do not bill it as a defect.
+     output contract now holds on real material, and VH-56 shipped with it so
+     a finished file survives the next click. What remains is silent loss:
+     VH-57, VH-55 and VH-59 are independent, and each ends with the user
+     losing something without being told. -->
 
 - [ ] **VH-57 Cancel is not authoritative** (2026-08-27)
       Intent: R-07. Controllers register after the first await, some request

@@ -60,6 +60,22 @@ export type WorkerRequest =
   | { readonly kind: 'cancel'; readonly id: number; readonly cancelId: number }
   /** Release a finished job's OPFS scratch once the result has been saved. */
   | { readonly kind: 'discard'; readonly id: number; readonly jobId: string }
+  /**
+   * Declare that the main thread is reading a finished job's file, or has
+   * stopped.
+   *
+   * The `File` in a `processed` reply reads out of that job's OPFS scratch, so
+   * anything that disposes the scratch while a save is streaming destroys the
+   * file mid-write. A held lease makes the worker wait rather than trusting the
+   * UI to sequence it (VH-56). Fire-and-forget in both directions; a lease that
+   * is never released expires.
+   */
+  | {
+      readonly kind: 'lease'
+      readonly id: number
+      readonly jobId: string
+      readonly held: boolean
+    }
 
 /** Worker -> main thread, in reply to a request. */
 export type WorkerResponse =

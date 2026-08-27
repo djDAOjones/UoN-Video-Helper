@@ -11,6 +11,51 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-56: a finished result is owned, not merely displayed
+
+**Decision:** hold a finished result until the user has it somewhere, protect
+its scratch with a worker-side read lease as well as a UI lock, and refuse a
+save destination that is the source file.
+
+**Rationale:** the result was a `File` on the screen and nothing more. Four
+ways it could be lost, all on ordinary paths (review R-04). A fallback download
+was treated as complete the moment `anchor.click()` returned, and the caller
+then discarded the OPFS scratch the object URL still reads from lazily.
+Starting another job disposed that scratch while a picker save was streaming
+out of it, because saving disabled only the Save button. Starting another job
+also discarded an unsaved result outright, one click, no question. And the save
+picker returns whatever the user selected, so selecting their own source was
+allowed — which makes "the original file is never changed" falsifiable in the
+interface that says it.
+
+The lease is deliberately belt and braces. The UI lock alone would be enough if
+the UI were always right, and VH-36 is what happens when it is not; the lease
+makes disposal wait on the reader rather than on a convention. It expires after
+{@link SAVE_LEASE_LIMIT_MS} because a lease that cannot expire is a user who
+can never start another job.
+
+`isSameEntry()` is the exact identity test and needs a handle for the source,
+which the app does not have: the file arrives through `<input type="file">`.
+Name, size and modification time together are conclusive enough — a different
+file matching all three is the same file by any practical definition — and
+`saveFile` uses `isSameEntry` instead whenever a handle is supplied, so
+acquiring one later (a VH-32 question) upgrades the guard rather than
+replacing it.
+
+**Rejected:** a modal confirmation. The question belongs beside the result it
+is about, and `UI-STANDARDS.md` reserves focus-stealing dialogues for something
+irreversible the user did not initiate.
+
+**Verified in Chrome on a real recording:** Start asks before discarding and
+"Keep it" restores the result intact; a save that is the source is refused
+without reaching `createWritable`; Start, the file input and Save are all
+locked while a save streams and a programmatic Start click is inert; and the
+worker disposes the workspace only after the lease comes back — the ordering
+that would otherwise deadlock `discard`.
+
+**Link:** VH-56; review R-04; `src/media/save.ts`, `src/main.ts`,
+`src/workers/job.worker.ts`, `src/workers/protocol.ts`.
+
 ## 2026-08-27 — VH-50 and VH-54: the contract is measured on the file
 
 **Decision:** solve the step 5 gain against the chain that actually runs, and

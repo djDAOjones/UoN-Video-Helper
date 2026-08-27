@@ -36,6 +36,19 @@ export const STORAGE_HEADROOM_MULTIPLE = 2.5
  */
 export const WORKER_SILENCE_LIMIT_MS = 120_000
 
+/**
+ * How long the worker waits for a save to finish reading before it disposes
+ * that job's scratch anyway.
+ *
+ * A save streams from OPFS to the user's disk and the main thread holds a
+ * lease for the length of it, so this is only reached when the reader vanished
+ * without releasing — which, since the reader is the tab that owns this
+ * worker, essentially means never. Ten minutes because the alternative failure
+ * is worse than waiting: a lease that never expires is a user who can never
+ * start another job (VH-56).
+ */
+export const SAVE_LEASE_LIMIT_MS = 600_000
+
 /** Spec 7.1: seconds of the user's actual file to decode and re-encode when calibrating. */
 export const CALIBRATION_PROBE_SECONDS = 3
 
