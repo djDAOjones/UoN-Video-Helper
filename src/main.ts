@@ -15,6 +15,7 @@ import {
   recordUncaught,
   type CapturedError,
 } from './core/diagnostics'
+import { KeepAwake, shouldWarnBeforeLeaving, warnBeforeLeaving } from './core/keep-awake'
 import { adoptLogRecords, log, setMinimumLogLevel } from './core/logger'
 import { APP_VERSION, BUILD_ID } from './core/version'
 import { CLOSING_DEFAULTS } from './config/branding'
@@ -589,6 +590,36 @@ cancelButton.hidden = true
 processActions.append(startButton, cancelButton)
 
 /**
+ * Spec 7.5: keep the device awake while a job runs, and warn before the page
+ * is closed with something to lose.
+ *
+ * Neither existed (VH-63). A forty-minute encode on a laptop that sleeps is
+ * forty minutes gone, and a reload during one — or with an unsaved result on
+ * screen — discards it without a word.
+ */
+const keepAwake = new KeepAwake()
+let stopLeaveWarning: (() => void) | null = null
+
+/**
+ * Attaches the leave warning only while there is genuinely something to lose.
+ *
+ * A page that always warns is a page whose warning is ignored, and the browser
+ * will not show one at all without a user gesture behind it.
+ */
+function updateLeaveWarning(): void {
+  const atRisk = shouldWarnBeforeLeaving({
+    jobInFlight,
+    saveInFlight,
+    hasUnsavedResult: unsavedResult !== null,
+  })
+  if (atRisk && !stopLeaveWarning) stopLeaveWarning = warnBeforeLeaving()
+  if (!atRisk && stopLeaveWarning) {
+    stopLeaveWarning()
+    stopLeaveWarning = null
+  }
+}
+
+/**
  * Locks or releases everything a running job must not have changed under it.
  *
  * Changing the file or the preset mid-job re-runs preflight and invalidates
@@ -601,6 +632,10 @@ function setJobInFlight(running: boolean): void {
   cancelButton.hidden = !running
   cancelButton.disabled = false
   applyControlLock()
+  // Requested on the way in, released on the way out — including the cancel
+  // and failure paths, which both come through here.
+  void (running ? keepAwake.start() : keepAwake.stop())
+  updateLeaveWarning()
 }
 
 /**
@@ -612,6 +647,7 @@ function setJobInFlight(running: boolean): void {
 function setSaveInFlight(saving: boolean): void {
   saveInFlight = saving
   applyControlLock()
+  updateLeaveWarning()
 }
 
 /** Applies whichever of the two locks is active. */
@@ -685,6 +721,7 @@ function confirmDiscardThenStart(file: File): void {
 function releaseUnsavedResult(): void {
   unsavedResult?.release()
   unsavedResult = null
+  updateLeaveWarning()
 }
 
 function beginJob(file: File): void {
@@ -799,6 +836,7 @@ function renderResult(
     unsavedResult?.jobId === jobId
       ? unsavedResult
       : { file, jobId, source, applied, requested, delivered: false, release: () => {} }
+  updateLeaveWarning()
 
   const save = document.createElement('button')
   save.type = 'button'
@@ -864,6 +902,7 @@ function renderResult(
         // it. `discard` waits on the lease, so releasing it afterwards is a
         // deadlock the request timeout would break ten seconds later.
         unsavedResult = null
+        updateLeaveWarning()
         leaseHeld = false
         worker.postMessage({ kind: 'lease', id: nextRequestId++, jobId, held: false })
         // Saving again would read a workspace that no longer exists, so the

@@ -11,6 +11,39 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-63: warn only when there is something to lose
+
+**Decision:** hold a screen wake lock for the length of a job, re-taking it
+when the tab returns to view, and attach `beforeunload` for exactly the
+interval in which work could be lost — which includes an unsaved result, not
+just a running job.
+
+**Rationale:** spec 7.5 asks for both and neither existed anywhere in `src/`
+(review R-12). A forty-minute encode on a laptop that sleeps is forty minutes
+gone, and a reload during one discards it without a word.
+
+Re-acquisition on `visibilitychange` is the part that is easy to leave out and
+does most of the work: the browser releases a wake lock whenever the document
+is hidden, so a user who switches tabs during a long encode returns to a
+machine free to sleep — the exact case the lock was taken for.
+
+The unload warning covers a wider interval than the review proposed. A job in
+flight is obvious; a save still streaming out of OPFS is the same risk with a
+different name; and a finished file the user has not put anywhere is an hour of
+work sitting in scratch that a reload discards. All three, and nothing else —
+a page that always warns trains people to dismiss the warning, and then it
+protects nothing.
+
+**Verified in Chrome:** no listener and no request while idle; one of each once
+a job starts; the warning STAYS attached after the job finishes because the
+result is unsaved; and it comes off when the file is saved. The lock itself was
+refused with `NotAllowedError` because the pane is not visible — which is the
+quiet-degradation path working. Whether a GRANTED lock prevents sleep needs a
+visible window and a real sleep, and is not verified here.
+
+**Link:** VH-63; review R-12; spec 7.5; `src/core/keep-awake.ts`,
+`src/main.ts`.
+
 ## 2026-08-27 — VH-68: four faults that were nobody's ticket
 
 **Decision:** fix all four in one visit — the sliding minimum's counter type,

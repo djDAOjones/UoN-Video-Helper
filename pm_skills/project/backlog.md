@@ -159,14 +159,6 @@
       Note: the review's AAC half is stale — VH-49 already probes the runtime
       configuration. Check its Level 5.1 claim against the H.264 tables.
 
-- [ ] **VH-63 Long jobs have no survival controls** (2026-08-27)
-      Intent: R-12. A job can run for tens of minutes with no wake lock, so the
-      device sleeps and the work is lost; `beforeunload` is not attached while
-      processing or while an unsaved result exists.
-      Done when: a wake lock is held during processing and re-acquired on
-      visibility change, and `beforeunload` is attached only while there is
-      something to lose. Both degrade quietly where unsupported.
-
 - [ ] **VH-64 Progress and the discourage acknowledgement are incomplete**
       (2026-08-27)
       Intent: R-14. Progress has no stable accessible label or stage

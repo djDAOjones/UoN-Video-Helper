@@ -15,7 +15,7 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 159 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 161 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 20 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
@@ -23,7 +23,7 @@
 - `public` — 17 file(s)
 - `reviews` — 7 file(s)
 - `scripts` — 4 file(s)
-- `src` — 100 file(s)
+- `src` — 102 file(s)
 - `test` — 4 file(s)
 <!-- /file-map-index -->
 
@@ -141,6 +141,8 @@
 - `src/core/diagnostics.ts` — Global error capture on both threads, plus the redacted copy-diagnostics bundle.
 - `src/core/egress.test.ts` — Pins that a body is a finding however it was attached, and that both realms are counted.
 - `src/core/egress.ts` — Watches what leaves ONE realm. Per-global, so the worker runs its own and the two are merged.
+- `src/core/keep-awake.test.ts` — Pins when the leave warning is attached: both ways of getting it wrong cost the user.
+- `src/core/keep-awake.ts` — Spec 7.5: a screen wake lock across a job, re-taken on visibility, and the unload warning rule.
 - `src/core/logger.test.ts` — Proves the log buffer is bounded — a one-hour encode must not grow it without limit.
 - `src/core/logger.ts` — The single structured logger. Console plus a bounded ring buffer; no DOM, so the worker shares it.
 - `src/core/redact.test.ts` — Proves the bundle carries media characteristics but never the media, its name, or its path.

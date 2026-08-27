@@ -21,6 +21,13 @@
 
 ## Archived: real material and Band 1's first half — see archive/trajectory/trajectory-0002-real-material-and-band-1.md
 
+### VH-63 — a long job survives a tab switch
+
+- VH-63 — Shipped 2026-08-27. A screen wake lock is held for the length of a
+  job and re-taken when the tab returns to view, and `beforeunload` is attached
+  while a job runs, a save streams, or a finished file is still unsaved. See
+  decision-log.
+
 ### VH-68 — four faults too small to schedule
 
 - VH-68 — Shipped 2026-08-27. The limiter's sample counter no longer wraps at
