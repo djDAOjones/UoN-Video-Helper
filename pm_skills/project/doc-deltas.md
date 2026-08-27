@@ -44,6 +44,13 @@
 - [ ] 2026-08-26 SPEC §6.2 — its prose presents consulting the source as the
       SMALLER preset's distinguishing property; since VH-47 both presets do,
       one capped at the source and one anchored to it (source: VH-47)
+- [ ] 2026-08-27 DECISIONS D4/D5/D6/D7/D12 — all five answered 2026-08-27 and
+      still listed as open: D4 signed off, D5 is a UoN-hosted app, D6 is
+      AA-floor/AAA-goal, D7 closed as a residual risk, D12 deferred to the
+      handover (source: maintainer)
+- [ ] 2026-08-27 DECISIONS D10 — VH-48 was cut 2026-08-27; D10's icebox entry
+      should record that the revisit happened and the answer was no
+      (source: VH-48)
 - [ ] 2026-08-27 SPEC §10 — Firefox desktop 130+ is listed "Supported", and
       since VH-49 it is blocked for any source WITH audio; only silent sources
       run. D4's browser-support claim inherits the same correction

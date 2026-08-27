@@ -11,6 +11,56 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — Seven maintainer answers, recorded
+
+**D4 / VH-15 — the browser exclusion is signed off.** Safari below 26 may be
+excluded. This was the one decision flagged as expensive to reverse, and it is
+now closed rather than standing. VH-15 is removed.
+
+**D5 / VH-14 — the intended home is a UoN-hosted web app**, in the shape of
+`xerte.nottingham.ac.uk`: University server, University URL, not public GitHub
+Pages. Answered in principle; who provisions it is what remains, so VH-14
+stays open with the target named. Pages continues as the unadvertised pilot in
+the meantime.
+
+**D6 — AA is the floor, AAA is the goal.** Which is what `UI-STANDARDS.md`
+already implements. No change beyond recording that the ambition is deliberate
+rather than aspirational, and that an AAA exception has to be argued for.
+
+**D7 — Legal will not engage, and there is nothing to escalate.** Worth being
+plain about what the question was: the app ships no codec. It uses the codecs
+already in the user's browser through WebCodecs, which is why ffmpeg.wasm was
+rejected — that would have meant UoN distributing an x264 binary and inheriting
+both GPL obligations and AVC patent-pool exposure. The current architecture has
+neither. The sign-off was a confirmation of a position already believed sound,
+not a request for permission, so its absence is a small residual risk rather
+than a blocker. Recorded and closed on that basis.
+
+**D12 — per-department branding is a later possibility, not a requirement.**
+The plan is to build it, show it around, and hand it to the maintainer's
+central department, which would then own any variant governance. Stays
+iceboxed; the revisit trigger is that handover.
+
+**VH-48 — cut. Keep re-encoding.** The maintainer asked for the most reliable
+option and that is the current one. Stream copy would leave the source video
+untouched and encode only the branding, which is generationally lossless and
+near-instant — but it requires the copied source and the encoded branding to
+match byte-exactly in codec parameters, and when they do not the failure is
+silent A/V drift discovered after publication. Rationale §4.3 rejected it on
+two grounds; VH-24 removed one (the corpus is effectively CFR) and this one
+still stands. Re-encoding is slower and predictable, and predictable wins.
+
+**VH-M3 — the OneDrive exclusion will not happen.** So the hazard is
+permanent, and the response is to make it legible rather than to keep asking.
+The symptom is `ETIMEDOUT` from `readFileSync` or `tsc` hanging, the cause is
+Files-On-Demand dehydrating `node_modules`, and the fix is `npm ci` — all three
+are in `README.md` → Gotchas and in `AGENTS.md`'s hostile-filesystem rule. No
+detector was built: nothing is dehydrated right now, so it could not be tested,
+and an untested guard for a condition that cannot be reproduced is worse than
+a documented one.
+
+**Link:** D4, D5, D6, D7, D12; VH-15, VH-14, VH-48, VH-M3.
+
 ## 2026-08-27 — VH-46b: one question, four answers
 
 **Decision:** the closing is a single four-way radio — Clean cut, Over the

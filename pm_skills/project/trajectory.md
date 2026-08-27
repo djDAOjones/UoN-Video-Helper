@@ -21,6 +21,13 @@
 
 ## Archived: real material and Band 1's first half — see archive/trajectory/trajectory-0002-real-material-and-band-1.md
 
+### Seven decisions closed
+
+- VH-15 — Closed 2026-08-27. UoN IT signed off the Safari-below-26 exclusion
+  (D4). VH-48 — Cut: re-encoding is the reliable option. VH-M3 — Won't do;
+  the OneDrive hazard is permanent and documented. D5, D6, D7, D12 answered.
+  See decision-log.
+
 ### VH-46b — the closing is one question again
 
 - VH-46b — Shipped 2026-08-27. The closing is a four-way radio (clean cut,

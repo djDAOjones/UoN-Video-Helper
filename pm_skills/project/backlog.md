@@ -132,6 +132,10 @@
       CFR grid plus a margin and verified on a real SharePoint upload, or the
       current behaviour is confirmed adequate and the reason recorded.
       Scope: `'in-memory'` is not an option — it reinstates the memory ceiling.
+      Maintainer 2026-08-27: can test a real SharePoint upload within the week.
+      That test IS the deciding evidence — until it exists there is nothing to
+      choose between, because whether the moov position matters depends on
+      whether SharePoint streams the file or serves its own rendition.
 
 ### Band 3 — New capability, or waiting on material
 
@@ -146,6 +150,7 @@
       plays, so nothing surfaces.
       Done when: phone footage is in `samples/`, the colour path has a decided
       and tested behaviour, and portrait branding composition is specified.
+      Maintainer 2026-08-27: looking into sourcing footage.
 
 - [ ] **VH-30 Trim the source** [detail](tickets/VH-30.md) (2026-08-25)
       [sign-off]
@@ -156,31 +161,10 @@
       leading silence drags the gated figure.
       Done when: scoped and signed off — recorded rather than scheduled.
 
-- [ ] **VH-48 Stream-copy fast path for "best quality"**
-      [detail](tickets/VH-48.md) (2026-08-25) [sign-off]
-      Intent: promoted from icebox D10. Leave the source video untouched and
-      encode only the branding. Of rationale §4.3's two objections only ONE has
-      fallen — VH-24 measured the corpus as effectively CFR — while byte-exact
-      parameter matching still stands, with silent A/V drift after publication
-      as its failure.
-      Done when: scoped and signed off. The deliverable is a `canStreamCopy`
-      predicate, not a switch: VH-25's fades and VH-44's overlay modes each
-      remove the conditions that make it safe.
-
 ### Standing — maintainer-owned, never band-gated
 
 <!-- Human work, not agent work. Listed apart from the bands precisely so it
      cannot be read as waiting on one. -->
-
-- [ ] **VH-M3 Stop OneDrive syncing this project** [maintainer] (2026-08-25)
-      Intent: OneDrive Files-On-Demand dehydrated `node_modules` on 2026-08-25
-      — 598 cloud-only files in the first 3000 — so every read became a network
-      fetch, `readFileSync` returned `ETIMEDOUT` and `tsc` hung. `npm ci` fixes
-      it in seconds; nothing stops it recurring. Pausing is time-boxed and
-      reverts on its own.
-      Done when: this folder is excluded from OneDrive sync, or marked "Always
-      keep on this device". `.gitignore` has no effect — OneDrive does not read
-      it.
 
 - [ ] **VH-M2 Measure the device envelope** [maintainer] (2026-08-24)
       Intent: spec §7.4 — published limits come from measurement, and this
@@ -188,12 +172,18 @@
       Done when: 5 / 20 / 60 minute jobs at 720p and 1080p are timed on a
       managed University laptop, a modern MacBook and a low-spec Windows
       device.
+      Maintainer 2026-08-27: a 60-minute recording within the week; the
+      three-device timings in about six weeks.
       First figure (2026-08-25, this MacBook): 1080p, 215 s of silent slides,
       "best quality" — 34.2 s, or **6.3x real time**. The 29.25-minute Teams
       recording covers the 20-minute case; 60 minutes needs material as well as
       a device.
 
 - [ ] **VH-14 Deployment** [maintainer] (2026-08-24)
+      Maintainer 2026-08-27: the intended home is a UoN-hosted web app in the
+      shape of <https://xerte.nottingham.ac.uk/play_56450> — a University
+      server, University URL, no public GitHub Pages. D5 answered in principle;
+      what remains is who provisions it.
       Intent: Pages is viable — no COOP/COEP needed, and asset URLs derive from
       `import.meta.env.BASE_URL`. What is unsettled is whether it should stay
       there: a Pages site on a personal account is public and serves UoN
@@ -203,11 +193,6 @@
       publishing. VH-65 hardens that boundary.
       Done when: the move to internal hosting is planned and the cache strategy
       for offline-after-first-load is in place.
-
-- [ ] **VH-15 Confirm the browser exclusion** [maintainer] [blocked: D4]
-      (2026-08-24)
-      Sign-off from UoN IT that Safari below 26 may be excluded. The one open
-      decision that would be expensive to reverse.
 
 ### Launch milestone
 
