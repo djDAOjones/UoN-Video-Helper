@@ -21,6 +21,14 @@
 
 ## Archived: real material and Band 1's first half — see archive/trajectory/trajectory-0002-real-material-and-band-1.md
 
+### VH-25, VH-23 — two features decided away
+
+- VH-25 — Cut 2026-08-27. No picture fades at the branding boundary, either
+  direction: no benefit in a lecture viewing context. The 100 ms audio fade
+  stays — it prevents a click, not a fade. See decision-log.
+- VH-23 — Iceboxed 2026-08-27. Openings are dormant rather than deleted, and
+  the four placeholder assets no longer ship. See decision-log.
+
 ### VH-49 — Firefox is told to switch
 
 - VH-49 — Closed 2026-08-27. The block stands as the answer: Firefox users are

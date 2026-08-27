@@ -83,14 +83,6 @@
       calibration probe and the class is stated in plain language rather than
       applied silently. After VH-31 — same probe.
 
-- [ ] **VH-25 Boundary fades** [detail](tickets/VH-25.md) (2026-08-25)
-      Intent: sources cut hard into the branding and the two ends differ. 21 of
-      21 end on a bright frame; 0 of 19 end above −69 dBFS. Four start
-      mid-speech. No picture fade exists in `src/` today.
-      Done when: picture fade-out defaults ON for hard cut only, fade-in is
-      offered and defaults OFF, and the modal is reserved for the
-      audio-starts-mid-speech case. Lengths live in `src/config/`.
-
 - [ ] **VH-32 Interface quality pass** [sign-off] [detail](tickets/VH-32.md)
       (2026-08-25)
       Intent: maintainer request after using the deployed app — a design pass,
@@ -154,8 +146,8 @@
 
 ### Band 3 — New capability, or waiting on material
 
-<!-- Not committed, and none of it can start today: two wait on assets that
-     do not exist, two on a scoping pass. -->
+<!-- Not committed. VH-26 waits on material; the other two wait on a scoping
+     pass. VH-23 went to the icebox 2026-08-27. -->
 
 - [ ] **VH-26 Mobile phone sources** [detail](tickets/VH-26.md) (2026-08-25)
       Intent: staff may upload phone footage and none is in the corpus.
@@ -165,17 +157,6 @@
       plays, so nothing surfaces.
       Done when: phone footage is in `samples/`, the colour path has a decided
       and tested behaviour, and portrait branding composition is specified.
-
-- [ ] **VH-23 Opening graphics** (2026-08-25) [blocked: no assets]
-      Intent: there are no opening assets and the maintainer's position is that
-      there should not be yet — the MVP is CLOSING-ONLY, contradicting spec
-      §4.1 (recorded in doc-deltas). The user-facing risk was split out as
-      VH-33.
-      Done when: opening assets exist. They need VH-22's three boundary modes,
-      mirrored.
-      Inherited from VH-43: a mono source plus a stereo opening mixes channel
-      counts into one audio track. Unreachable today; restoring openings
-      revives it.
 
 - [ ] **VH-30 Trim the source** [detail](tickets/VH-30.md) (2026-08-25)
       [sign-off]
@@ -257,6 +238,18 @@
 - [ ] **D11 WebM output** — supported by the muxer, not exposed. Revisit if
       a destination platform requires it. VH-49 decided AGAINST it for Firefox
       on 2026-08-27; VH-69 is the pathway if that is ever reopened.
+- [ ] **VH-23 Opening graphics** (2026-08-25) [low]
+      Intent: the MVP is closing-only. Cut to the icebox 2026-08-27 — the
+      maintainer's position is that openings are for external, brand-
+      recognition-first video, and this tool is internal, where a closing is
+      the norm. Not to be addressed until far later in the product's life.
+      The pipeline path is dormant rather than deleted: `loadBrandingClip`
+      refuses an opening and returns `null`, the generated placeholders are
+      gone from `public/branding/`, and the timeline still speaks in terms of
+      an opening duration that is currently zero.
+      Revisit when approved opening assets exist AND there is a reason to want
+      them. They need VH-22's three boundary modes mirrored, and a mono source
+      plus a stereo opening mixes channel counts into one audio track (VH-43).
 - [ ] **VH-69 A pathway for Firefox users** (2026-08-27) [low]
       Intent: VH-49 blocks Firefox for any source with audio and names a
       browser that works, which is honest but excludes a supported browser from

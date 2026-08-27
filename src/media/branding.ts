@@ -42,8 +42,6 @@ import {
   brandingAssetUrl,
   closingOnsetName,
   closingTailName,
-  openingAssetName,
-  selectOpeningMaster,
   type BrandingColour,
   type BrandingMode,
   type BrandingSegment,
@@ -284,21 +282,34 @@ async function fetchClip(url: string, segment: BrandingSegment): Promise<Brandin
  * Loads the opaque part of a segment.
  *
  * For `closing` this is the real 4 s tail, which is the whole of "hard cut".
- * For `opening` it is still a generated placeholder (VH-23).
+ *
+ * `opening` is DORMANT and returns `null` (VH-23, iceboxed 2026-08-27). There
+ * are no approved opening assets and the maintainer's position is that there
+ * will not be until far later in the product's life; the generated
+ * placeholders that used to stand in have been removed from `public/branding/`
+ * so that no unapproved University graphic can be served by a deployed build,
+ * which is the risk VH-33 named.
+ *
+ * The path is refused here rather than deleted throughout. Everything
+ * downstream — the timeline offsets, the subtitle shift, the estimate — is
+ * written in terms of an opening duration that is currently zero, and is
+ * tested that way. Tearing that out would cost more than it saves and would
+ * have to be rebuilt to bring the feature back. Returning `null` is the same
+ * answer the pipeline already handles for branding that fails to load: the
+ * segment is skipped, and the caller reports what was applied.
  */
 export async function loadBrandingClip(
   segment: BrandingSegment,
   shape: OutputShape,
   options: { readonly colour?: BrandingColour } = {},
 ): Promise<BrandingClip | null> {
-  const url =
-    segment === 'closing'
-      ? brandingAssetUrl(
-          closingTailName(options.colour ?? CLOSING_DEFAULTS.colour, brandingAssetHeight(shape.height)),
-        )
-      : brandingAssetUrl(
-          openingAssetName(selectOpeningMaster({ height: shape.height, frameRate: shape.frameRate })),
-        )
+  if (segment === 'opening') {
+    log.info('branding', 'opening requested but dormant', { reason: 'no approved asset (VH-23)' })
+    return null
+  }
+  const url = brandingAssetUrl(
+    closingTailName(options.colour ?? CLOSING_DEFAULTS.colour, brandingAssetHeight(shape.height)),
+  )
   return fetchClip(url, segment)
 }
 

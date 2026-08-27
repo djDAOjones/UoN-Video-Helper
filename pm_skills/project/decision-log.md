@@ -11,6 +11,53 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-25 cut, VH-23 iceboxed: less to decide, not more
+
+**Decision (VH-25):** do not build picture fades at the branding boundary, in
+either direction. The ticket is cut, not deferred.
+
+**Rationale:** the maintainer's call, and it overrides the corpus evidence that
+raised the ticket — 21 of 21 real recordings end on a bright frame, which is
+what made a fade-out look obviously right. The objection is about the viewing
+context rather than the frame: a lecture is watched by an audience who have
+just been told something, a fade to the closing card adds nothing they need,
+and it costs a second of attention at exactly the point the branding is trying
+to land. No benefit, a possible negative, so it does not get offered.
+
+Nothing is lost by cutting it, because nothing was built: there is no picture
+fade anywhere in `src/`. What DOES exist and stays is the 100 ms audio fade at
+the branding join (`BOUNDARY_FADE_MS`, open decision D3). That is not an
+aesthetic fade — it is a click preventer. Two unrelated pieces of audio butted
+together produce an audible click, and 100 ms is short enough that nobody
+perceives it as a fade at all. Removing it would make every job click.
+
+The ticket's third clause — a notice for the four corpus files that start
+mid-speech — goes with it, and is already covered: VH-55's `onset-trimmed`
+warning fires when audible content sits in the window that encoder-delay
+compensation discards, which is that case.
+
+**Decision (VH-23):** opening graphics to the icebox, low priority, not to be
+addressed until far later in the product's life. The pipeline path is dormant,
+not deleted.
+
+**Rationale:** the maintainer's position, unchanged since 2026-08-25 and now
+made permanent enough to move: openings suit external video where brand
+recognition comes first, and this tool is internal, where a closing is the
+norm. `loadBrandingClip` refuses an opening and returns `null` — the same
+answer the pipeline already handles for branding that fails to load. The four
+generated placeholder openings are removed from `public/branding/`, which is
+the substantive part: they were shipping in every build, and an unapproved
+University graphic reaching a published video is the risk VH-33 named.
+
+The timeline maths stays. Every offset downstream — content start, subtitle
+shift, closing position, the estimate — is written in terms of an opening
+duration that is currently zero, and is tested that way. Deleting it would
+cost more than it saves and would have to be rebuilt to bring the feature
+back.
+
+**Link:** VH-25, VH-23, VH-33, VH-55; D3; `src/media/branding.ts`,
+`public/branding/`.
+
 ## 2026-08-27 — VH-49: Firefox is told to switch, not served a lesser file
 
 **Decision:** Firefox stays blocked for any source with audio, with a message
