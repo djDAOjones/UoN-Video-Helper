@@ -11,6 +11,28 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-49: Firefox is told to switch, not served a lesser file
+
+**Decision:** Firefox stays blocked for any source with audio, with a message
+naming a browser that works. No WebM/Opus path, no dropped audio.
+
+**Rationale:** the maintainer's call. The three options were block, ship
+WebM/Opus, or drop audio. Dropping audio was never real — a silent lecture is
+not a lecture. WebM/Opus means a second output contract: spec §6.1 says MP4,
+EchoVideo and OneDrive both take MP4 without question, and a Firefox-only
+format would have to be specified, tested across the same corpus, and
+explained to a user who did not ask for it. Blocking is honest, already built,
+and already names the way out.
+
+It does exclude a supported browser from a University tool, which is a real
+cost and not one to pretend away. VH-69 is the pathway if it is ever worth
+paying for, kept low because the block is correct today.
+
+Spec §10 still lists Firefox desktop as "Supported" — a doc-delta, since only
+silent sources run there now. `README.md` says what actually happens.
+
+**Link:** VH-49, VH-69; D11; `README.md`, `pm_skills/project/doc-deltas.md`.
+
 ## 2026-08-27 — D1 answered: the padding is Nottingham Blue
 
 **Decision:** `--uon-brand-bg` is Nottingham Blue `#10263B`, the University's

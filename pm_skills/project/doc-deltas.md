@@ -44,6 +44,10 @@
 - [ ] 2026-08-26 SPEC §6.2 — its prose presents consulting the source as the
       SMALLER preset's distinguishing property; since VH-47 both presets do,
       one capped at the source and one anchored to it (source: VH-47)
+- [ ] 2026-08-27 SPEC §10 — Firefox desktop 130+ is listed "Supported", and
+      since VH-49 it is blocked for any source WITH audio; only silent sources
+      run. D4's browser-support claim inherits the same correction
+      (source: VH-49)
 - [ ] 2026-08-27 SPEC §5.2 step 6 — the limiter's ceiling is stated as
       −2.0 dBTP, which is now the ceiling of the FILE; the limiter itself
       targets 1.0 dB below it because AAC raises true peak after it

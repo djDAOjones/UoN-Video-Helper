@@ -52,15 +52,6 @@
 <!-- Committed work that cannot proceed without a product call. Listed apart
      from 1a so agent work is never read as waiting on these. -->
 
-- [ ] **VH-49 Firefox cannot make the audio, and is not told so** [sign-off]
-      [detail](tickets/VH-49.md) (2026-08-26)
-      Intent: Firefox 154 has `AudioEncoder` and refuses `mp4a.40.2` at every
-      bitrate and channel count. Pre-flight now blocks with `no-aac-encode`
-      before anything starts, so the failure is honest. Undecided is what
-      Firefox users get: block them, ship WebM/Opus (D11), or drop audio
-      (never).
-      Done when: the choice is made and spec §10, `README.md` and D4 match it.
-
 - [ ] **VH-46b Restore the closing transition controls** (2026-08-26)
       Intent: VH-45 withdrew "over the picture" and "over a freeze frame"
       because they were wrong in Firefox. VH-44 fixed that in all three
@@ -264,7 +255,25 @@
       measure; a false accusation is worse than silence. Revisit if staff
       report a gap the current warnings miss.
 - [ ] **D11 WebM output** — supported by the muxer, not exposed. Revisit if
-      a destination platform requires it, or if VH-49 chooses it for Firefox.
+      a destination platform requires it. VH-49 decided AGAINST it for Firefox
+      on 2026-08-27; VH-69 is the pathway if that is ever reopened.
+- [ ] **VH-69 A pathway for Firefox users** (2026-08-27) [low]
+      Intent: VH-49 blocks Firefox for any source with audio and names a
+      browser that works, which is honest but excludes a supported browser from
+      a University tool. A pathway would be WebM/Opus (D11) or an Opus-in-MP4
+      variant, either of which is a second output contract to specify, test and
+      explain. Low priority: the block is correct today and the message is
+      clear.
+      Revisit if staff report being stuck on Firefox, or if D11 opens for
+      another reason.
+- [ ] **VH-70 The manual gates nobody has run** (2026-08-27) [maintainer]
+      Intent: four checks no automated harness can reach — a job running while
+      the device sleeps and wakes, the progress bar under a screen reader, a
+      throttled multi-gigabyte fallback download completing, and an output
+      accepted by EchoVideo's ingest. Each covers something already built and
+      believed to work; none has been confirmed by a person.
+      Revisit when there is a real pilot user, or before VH-13's published
+      limits go out.
 - [ ] **D12 Custom or per-department branding** — needs a governance answer
       for who approves a variant before it needs an implementation.
 - [ ] **D13 Batch processing** — the most likely first request from anyone

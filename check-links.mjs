@@ -60,7 +60,10 @@ function markdownFiles() {
     .split('\n')
     .map((s) => s.trim())
     .filter(Boolean);
-  return [...new Set(all)];
+  // `git ls-files` lists what Git knows about, which includes a tracked file
+  // deleted in the working tree but not yet staged — an entirely ordinary
+  // state that made the gate crash with ENOENT rather than report anything.
+  return [...new Set(all)].filter((file) => existsSync(file));
 }
 
 /**

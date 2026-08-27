@@ -21,6 +21,12 @@
 
 ## Archived: real material and Band 1's first half — see archive/trajectory/trajectory-0002-real-material-and-band-1.md
 
+### VH-49 — Firefox is told to switch
+
+- VH-49 — Closed 2026-08-27. The block stands as the answer: Firefox users are
+  told to use a browser that works rather than served a different format. A
+  pathway is iceboxed as VH-69. See decision-log.
+
 ### D1 — the padding has a brand colour
 
 - D1 — Answered 2026-08-27. `--uon-brand-bg` is Nottingham Blue #10263B,

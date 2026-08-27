@@ -14,9 +14,12 @@ MP4 comes out, entirely on the user's device.
 What it does NOT yet do is in [`pm_skills/project/backlog.md`](pm_skills/project/backlog.md).
 Three things are worth knowing before using it in anger:
 
-- **Firefox cannot make the audio.** It refuses to encode AAC at any bitrate, so
-  a video with sound is refused before the job starts, with a message naming a
-  browser that works. Silent sources are fine there (VH-49).
+- **Firefox cannot make the audio, and is refused.** It has an `AudioEncoder`
+  and rejects `mp4a.40.2` at every bitrate and channel count, so a video with
+  sound is blocked before the job starts, with a message naming a browser that
+  works. Silent sources still run there. Decided 2026-08-27: Firefox users are
+  told to switch rather than served a different format — spec §6.1 says MP4,
+  and a WebM/Opus path for them is iceboxed behind D11 (VH-49).
 - **Opening sequences are withdrawn**, because no approved asset exists (VH-33).
 - **So are the two closing transition modes**, and every job takes the hard cut.
   They were withdrawn for being wrong in Firefox; that is fixed and verified,
