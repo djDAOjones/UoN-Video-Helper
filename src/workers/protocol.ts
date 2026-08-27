@@ -8,6 +8,7 @@
  */
 
 import type { CapturedError } from '../core/diagnostics'
+import type { EgressReport } from '../core/egress'
 import type { LogRecord } from '../core/logger'
 import type { BrandingChoice } from '../config/branding'
 import type { PresetId } from '../config/presets'
@@ -58,6 +59,16 @@ export type WorkerRequest =
     }
   /** Stop the job started by `cancelId`. Answered by that job, not by this request. */
   | { readonly kind: 'cancel'; readonly id: number; readonly cancelId: number }
+  /**
+   * Start or stop the worker's own egress watch, and report what it saw.
+   *
+   * Criterion 9's instruments are per-realm: a worker has its own `fetch` and
+   * its own resource timeline, and the job — including the branding fetch,
+   * which is the only request this app makes at runtime — runs here. A verdict
+   * drawn from the main thread alone describes a realm the media never enters
+   * (VH-62). Development only; the acceptance page is not built.
+   */
+  | { readonly kind: 'egress'; readonly id: number; readonly watching: boolean }
   /** Release a finished job's OPFS scratch once the result has been saved. */
   | { readonly kind: 'discard'; readonly id: number; readonly jobId: string }
   /**
@@ -103,6 +114,8 @@ export type WorkerResponse =
       readonly outputWarnings: readonly AudioWarning[]
     }
   | { readonly kind: 'cancelled'; readonly id: number }
+  /** What the worker's own egress watch recorded. Empty until it is stopped. */
+  | { readonly kind: 'egressed'; readonly id: number; readonly report: EgressReport }
   | { readonly kind: 'discarded'; readonly id: number }
   /** A request that failed for a reason the user should read, not a crash. */
   | { readonly kind: 'failed'; readonly id: number; readonly message: string }

@@ -21,6 +21,14 @@
 
 ## Archived: real material and Band 1's first half — see archive/trajectory/trajectory-0002-real-material-and-band-1.md
 
+### VH-62 (part) — the harness stops flattering itself
+
+- VH-62 — Partly shipped 2026-08-27. Criterion 3 reports `external` rather than
+  a pass it did not run, the sync meter uses one clock for both tracks
+  (unblocking VH-55), the worker's realm is watched and merged into criterion 9,
+  and a negative control proves the egress instrument can fire. See
+  decision-log.
+
 ### VH-59 — the track that is inspected is the track that is encoded
 
 - VH-59 — Shipped 2026-08-27. Inspection and production now call the same

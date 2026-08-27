@@ -11,6 +11,54 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-62: a status the harness did not earn
+
+**Decision:** give the acceptance report an `external` status, measure both
+tracks of the sync meter on one clock, watch the worker's realm as well as the
+page's, and make the egress instrument prove it can fire.
+
+**Rationale:** four ways the page could be green without having looked
+(review R-11).
+
+Criterion 3 was hard-coded `pass`. The meter conformance it describes is
+asserted by `npm run check`, not by that page — so the page could be entirely
+green while the gate had never run, or was failing. `external` says where the
+evidence is instead of borrowing its colour, and the summary counts it
+separately rather than folding it into "passed".
+
+The sync meter read video markers as presentation timestamps and audio markers
+as a running count of decoded frames. On a contiguous track starting at zero
+those agree, which is why it went unnoticed — but they diverge on a track that
+starts late, a gap mid-file, or an edit list, which is precisely the set of
+cases the meter exists to judge. That is also why VH-55's second half was
+sequenced behind this: it moves the audio start, and would have been graded by
+a meter using two clocks.
+
+Criterion 9's instruments are per-realm. A worker has its own `fetch` and its
+own resource timeline, and the job runs in a worker — so the only request this
+app makes at runtime, for branding, was invisible to a watch on the main
+thread, and the criterion was reporting a clean timeline that contained none of
+the app's real requests. The worker now runs a watch of its own and reports it
+over the protocol; `mergeEgress` joins them, and criterion 1's fixture runs
+WITH branding so the fetch actually happens.
+
+And a watch that never fires is indistinguishable from a watch that cannot.
+A new check deliberately uploads two bodies — one on `init`, one built into a
+`Request`, the shape that used to slip past because only `init.body` was read —
+and fails if either goes unseen.
+
+**Note:** `EgressWatch` moved to `core/egress.ts`. The worker needs it, and
+production code importing the acceptance harness is the wrong direction.
+
+**Verified directly in Chrome:** both body shapes are caught, the
+`Request`-carried one as "present, size unmeasurable". NOT verified: a complete
+acceptance run. It takes over an hour in this browser — four minutes per
+synthesised corpus entry — which is a finding of its own and is on the
+wish-list.
+
+**Link:** VH-62; review R-11; `src/core/egress.ts`, `src/acceptance/run.ts`,
+`src/acceptance/measure.ts`, `src/workers/protocol.ts`.
+
 ## 2026-08-27 — VH-59: inspect the track that will be encoded
 
 **Decision:** have inspection call `getPrimaryVideoTrack()` and

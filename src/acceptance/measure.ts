@@ -120,14 +120,20 @@ export async function measureSync(file: Blob): Promise<SyncMeasurement> {
   const channelCount = await audioTrack.getNumberOfChannels()
   const audioMarkers: number[] = []
   let refractoryUntil = -1
-  let elapsedFrames = 0
 
   for await (const sample of new AudioSampleSink(audioTrack).samples()) {
     const frames = sample.numberOfFrames
     const plane = new Float32Array(frames)
     sample.copyTo(plane, { planeIndex: 0, format: 'f32-planar' })
     for (let i = 0; i < frames; i++) {
-      const t = (elapsedFrames + i) / sampleRate
+      // The sample's OWN presentation time, not a running count of decoded
+      // frames. Both are the same on a contiguous track starting at zero,
+      // which is why the difference went unnoticed — but a count measures
+      // audio in decoded-sample time while the video markers above are
+      // presentation timestamps, so the two clocks diverge on exactly the
+      // cases this meter exists to judge: a track that starts late, a gap in
+      // the middle, or an edit list (VH-62, and the reason VH-55 waited).
+      const t = sample.timestamp + i / sampleRate
       if (t < refractoryUntil) continue
       if (Math.abs(plane[i]!) > 0.5) {
         audioMarkers.push(t)
@@ -135,7 +141,6 @@ export async function measureSync(file: Blob): Promise<SyncMeasurement> {
         refractoryUntil = t + 0.25
       }
     }
-    elapsedFrames += frames
     sample.close()
     if (channelCount < 1) break
   }
@@ -181,96 +186,13 @@ export async function measureLoudness(
   return analyser.finish()
 }
 
-export interface EgressRecord {
-  readonly url: string
-  readonly method: string
-  /** Bytes sent in the request body, which is what "media egress" would mean. */
-  readonly bodyBytes: number
-}
-
-export interface EgressReport {
-  /** Requests that carried an outbound body. Any entry here is a finding. */
-  readonly withBody: readonly EgressRecord[]
-  /** Every request the page made, from the browser's own resource timeline. */
-  readonly allRequests: readonly string[]
-  /** Requests to an origin other than this one. */
-  readonly crossOrigin: readonly string[]
-}
-
-/**
- * Watches for any data leaving the page.
- *
- * Spec section 13, criterion 9: zero media egress. Two instruments, because
- * neither is sufficient alone.
- *
- * `fetch` and `sendBeacon` are wrapped to catch request BODIES, which is what
- * an upload actually is and which no passive observer reports. Separately, the
- * browser's own resource timeline is read, which catches every request however
- * it was made — including by code that does not exist yet and would not think
- * to use the wrapped paths. Neither XHR nor any other API can hide from the
- * second, which is why the first does not need to cover them.
- */
-export class EgressWatch {
-  private readonly records: EgressRecord[] = []
-  private restore: (() => void)[] = []
-  private startedAt = 0
-
-  start(): void {
-    this.startedAt = performance.now()
-    const records = this.records
-
-    const originalFetch = globalThis.fetch
-    globalThis.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
-      const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url
-      const method = init?.method ?? (input instanceof Request ? input.method : 'GET')
-      records.push({ url, method, bodyBytes: bodySize(init?.body) })
-      return originalFetch(input, init)
-    }
-    this.restore.push(() => {
-      globalThis.fetch = originalFetch
-    })
-
-    if (typeof navigator.sendBeacon === 'function') {
-      const originalBeacon = navigator.sendBeacon.bind(navigator)
-      navigator.sendBeacon = (url: string | URL, data?: BodyInit | null) => {
-        records.push({ url: String(url), method: 'beacon', bodyBytes: bodySize(data) })
-        return originalBeacon(url, data)
-      }
-      this.restore.push(() => {
-        navigator.sendBeacon = originalBeacon
-      })
-    }
-  }
-
-  stop(): EgressReport {
-    for (const undo of this.restore) undo()
-    this.restore = []
-
-    const since = this.startedAt
-    const entries = performance
-      .getEntriesByType('resource')
-      .filter((entry) => entry.startTime >= since)
-      .map((entry) => entry.name)
-
-    return {
-      withBody: this.records.filter((record) => record.bodyBytes > 0),
-      allRequests: entries,
-      crossOrigin: entries.filter((url) => {
-        try {
-          return new URL(url, location.href).origin !== location.origin
-        } catch {
-          return true
-        }
-      }),
-    }
-  }
-}
-
-function bodySize(body: unknown): number {
-  if (typeof body === 'string') return body.length
-  if (body instanceof Blob) return body.size
-  if (body instanceof ArrayBuffer) return body.byteLength
-  if (ArrayBuffer.isView(body)) return body.byteLength
-  if (body instanceof FormData || body instanceof URLSearchParams) return 1
-  return 0
-}
+// The egress instruments moved to `core/egress.ts` when the worker had to run
+// one too (VH-62). Re-exported so the harness keeps one import for everything
+// it measures.
+export {
+  EgressWatch,
+  carriedBody,
+  mergeEgress,
+  type EgressRecord,
+  type EgressReport,
+} from '../core/egress'

@@ -14,10 +14,25 @@ import { OpfsWorkspace, ROOT_DIRECTORY, sweepOrphanedJobs } from '../media/opfs'
 import { verifyOutputAudio } from '../media/output-verification'
 import { CancelledError, runPipeline } from '../media/pipeline'
 import { buildFixture, syncMarkerTimes } from './fixtures'
-import { EgressWatch, measureLoudness, measureSync, relativeSync } from './measure'
+import {
+  EgressWatch,
+  carriedBody,
+  measureLoudness,
+  measureSync,
+  mergeEgress,
+  relativeSync,
+  type EgressReport,
+} from './measure'
 import type { WorkerOutbound } from '../workers/protocol'
 
-export type CheckStatus = 'pass' | 'fail' | 'manual'
+/**
+ * `external` is the one that needed adding. A criterion this harness does not
+ * execute was being reported as `pass`, so the page could be entirely green
+ * while the gate that actually asserts it had never been run — or was failing
+ * (review R-11). `external` says where the evidence is instead of borrowing
+ * its colour.
+ */
+export type CheckStatus = 'pass' | 'fail' | 'manual' | 'external'
 
 export interface Check {
   readonly criterion: string
@@ -86,48 +101,71 @@ async function process(
  * calls `runPipeline` on the main thread exercises the FALLBACK on every run
  * and has never once touched the path the app actually takes (VH-16).
  */
-async function processInWorker(
-  file: File,
-  presetId: 'best' | 'smaller',
-): Promise<{ file: File; jobId: string; worker: Worker }> {
-  const worker = new Worker(new URL('../workers/job.worker.ts', import.meta.url), {
-    type: 'module',
-    name: 'uon-acceptance-job',
-  })
-  const id = 1
-  const reply = await new Promise<WorkerOutbound>((resolve, reject) => {
-    const timer = setTimeout(() => reject(new Error('the worker never answered')), 180_000)
-    worker.addEventListener('message', (event: MessageEvent<WorkerOutbound>) => {
+/** One request/response exchange with a worker, correlated by id. */
+function ask(worker: Worker, request: Record<string, unknown>, timeoutMs = 180_000) {
+  return new Promise<WorkerOutbound>((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error('the worker never answered')), timeoutMs)
+    const onMessage = (event: MessageEvent<WorkerOutbound>): void => {
       const message = event.data
-      // Progress reports on the job; it never answers it.
+      // Progress reports on a request; it never answers one.
       if (message.kind === 'stage' || message.kind === 'uncaught') return
+      if (message.id !== request['id']) return
       clearTimeout(timer)
+      worker.removeEventListener('message', onMessage)
       resolve(message)
-    })
+    }
+    worker.addEventListener('message', onMessage)
     worker.addEventListener('error', () => {
       clearTimeout(timer)
       reject(new Error('the worker failed to start'))
     })
-    worker.postMessage({
-      kind: 'process',
-      id,
-      file,
-      presetId,
-      branding: { opening: false, closing: false },
-      backgroundColour: '#000000',
-    })
+    worker.postMessage(request)
   })
+}
+
+async function processInWorker(
+  file: File,
+  presetId: 'best' | 'smaller',
+): Promise<{ file: File; jobId: string; worker: Worker; egress: EgressReport }> {
+  const worker = new Worker(new URL('../workers/job.worker.ts', import.meta.url), {
+    type: 'module',
+    name: 'uon-acceptance-job',
+  })
+
+  // Started before the job and stopped after it. The worker has its own
+  // `fetch` and its own resource timeline, so this is the only vantage point
+  // from which the branding request — the one request this app makes at
+  // runtime — can be seen at all (VH-62).
+  await ask(worker, { kind: 'egress', id: 10, watching: true }, 10_000)
+
+  const reply = await ask(worker, {
+    kind: 'process',
+    id: 1,
+    file,
+    presetId,
+    // Branding ON, so the run exercises the fetch rather than proving zero
+    // requests by never making one.
+    branding: { opening: false, closing: true },
+    backgroundColour: '#000000',
+  })
+
+  const stopped = await ask(worker, { kind: 'egress', id: 11, watching: false }, 10_000)
+  const egress =
+    stopped.kind === 'egressed'
+      ? stopped.report
+      : { withBody: [], allRequests: [], crossOrigin: [] }
+
   if (reply.kind !== 'processed') {
     worker.terminate()
     throw new Error(
       `the worker did not produce a file: ${reply.kind}${reply.kind === 'failed' ? ` — ${reply.message}` : ''}`,
     )
   }
-  return { file: reply.file, jobId: reply.jobId, worker }
+  return { file: reply.file, jobId: reply.jobId, worker, egress }
 }
 
 /** Criterion 1, through the path the app actually uses. */
-async function checkWorkerPath(log: Report): Promise<Check> {
+async function checkWorkerPath(log: Report): Promise<{ check: Check; egress: EgressReport }> {
   log('  running a fixture through the worker, not in-process')
   try {
     const fixture = await buildFixture({
@@ -137,18 +175,24 @@ async function checkWorkerPath(log: Report): Promise<Check> {
       frameRate: 25,
       audio: { startPeakDbfs: -20 },
     })
-    const { file, jobId, worker } = await processInWorker(fixture, 'best')
+    const { file, jobId, worker, egress } = await processInWorker(fixture, 'best')
     try {
       const produced = await inspectFile(file)
       const ok = file.size > 0 && produced.video.durationSeconds > 3
-      log(`  worker produced ${(file.size / 1024).toFixed(0)} kB, ${produced.durationSeconds.toFixed(2)}s`)
+      log(
+        `  worker produced ${(file.size / 1024).toFixed(0)} kB, ${produced.durationSeconds.toFixed(2)}s; ` +
+          `${egress.allRequests.length} request(s) seen inside the worker`,
+      )
       return {
-        criterion: '1',
-        title: 'The pipeline runs in a worker, on the sync-handle path',
-        status: ok ? 'pass' : 'fail',
-        detail: ok
-          ? `A worker job produced a playable ${(file.size / 1024).toFixed(0)} kB MP4. This is the OPFS sync-access-handle path; the main-thread checks below exercise the createWritable fallback, so both are now covered.`
-          : `The worker returned a file of ${file.size} bytes lasting ${produced.durationSeconds.toFixed(2)}s.`,
+        egress,
+        check: {
+          criterion: '1',
+          title: 'The pipeline runs in a worker, on the sync-handle path',
+          status: ok ? 'pass' : 'fail',
+          detail: ok
+            ? `A worker job produced a playable ${(file.size / 1024).toFixed(0)} kB MP4. This is the OPFS sync-access-handle path; the main-thread checks below exercise the createWritable fallback, so both are now covered.`
+            : `The worker returned a file of ${file.size} bytes lasting ${produced.durationSeconds.toFixed(2)}s.`,
+        },
       }
     } finally {
       worker.postMessage({ kind: 'discard', id: 2, jobId })
@@ -158,11 +202,52 @@ async function checkWorkerPath(log: Report): Promise<Check> {
     }
   } catch (cause) {
     return {
-      criterion: '1',
-      title: 'The pipeline runs in a worker, on the sync-handle path',
-      status: 'fail',
-      detail: cause instanceof Error ? cause.message : String(cause),
+      egress: { withBody: [], allRequests: [], crossOrigin: [] },
+      check: {
+        criterion: '1',
+        title: 'The pipeline runs in a worker, on the sync-handle path',
+        status: 'fail',
+        detail: cause instanceof Error ? cause.message : String(cause),
+      },
     }
+  }
+}
+
+/**
+ * Proves the egress instrument can go red.
+ *
+ * Criterion 9 is the headline promise, and a watch that never fires is
+ * indistinguishable from a watch that cannot (review R-11). This deliberately
+ * sends two bodies — one on `init`, one built into a `Request`, which is the
+ * shape that used to slip past — and fails if either goes unseen.
+ *
+ * Run OUTSIDE the real criterion 9 window, obviously: it is the exact thing
+ * that criterion forbids.
+ */
+async function checkEgressInstrument(log: Report): Promise<Check> {
+  log('  proving the egress watch fires on a deliberate upload')
+  const probe = new EgressWatch()
+  probe.start()
+  const target = new URL('/__acceptance-egress-probe', location.href).href
+  try {
+    await fetch(target, { method: 'POST', body: 'init-body' }).catch(() => undefined)
+    await fetch(new Request(target, { method: 'POST', body: 'request-body' })).catch(
+      () => undefined,
+    )
+  } finally {
+    // Nothing here depends on the responses; the point is what was observed.
+  }
+  const report = probe.stop()
+  const caught = report.withBody.filter(carriedBody).length
+
+  return {
+    criterion: '9',
+    title: 'The egress watch itself detects an upload',
+    status: caught >= 2 ? 'pass' : 'fail',
+    detail:
+      caught >= 2
+        ? 'Two deliberate POSTs — one body on `init`, one built into a `Request` — were both recorded. The criterion 9 result above is therefore an observation rather than an absence of instrumentation.'
+        : `Only ${caught} of 2 deliberate uploads were recorded. Criterion 9 cannot be trusted until this passes.`,
   }
 }
 
@@ -239,7 +324,11 @@ async function checkLoudnessCorpus(log: Report): Promise<Check> {
   for (const [index, entry] of corpus.entries()) {
     log(`  measuring: ${entry.name}`)
     const fixture = await buildFixture({
-      width: 640, height: 360, seconds: 70, frameRate: 25, audio: entry.audio,
+      width: 640,
+      height: 360,
+      seconds: 70,
+      frameRate: 25,
+      audio: entry.audio,
     })
     const { file, workspace, openingSeconds } = await process(fixture, {
       presetId: 'best',
@@ -299,7 +388,11 @@ async function checkLoudnessCorpus(log: Report): Promise<Check> {
 async function checkSync(log: Report): Promise<Check[]> {
   log('  building a variable-frame-rate fixture with paired markers')
   const fixture = await buildFixture({
-    width: 854, height: 480, seconds: 60, frameRate: 25, variableFrameRate: true,
+    width: 854,
+    height: 480,
+    seconds: 60,
+    frameRate: 25,
+    variableFrameRate: true,
     audio: { startPeakDbfs: -20, syncMarkers: true },
   })
   const expected = syncMarkerTimes(60)
@@ -374,7 +467,10 @@ async function checkSync(log: Report): Promise<Check[]> {
 async function checkCancellation(log: Report): Promise<Check> {
   log('  starting a job and cancelling it mid-encode')
   const fixture = await buildFixture({
-    width: 854, height: 480, seconds: 60, frameRate: 25,
+    width: 854,
+    height: 480,
+    seconds: 60,
+    frameRate: 25,
     audio: { startPeakDbfs: -20 },
   })
 
@@ -441,45 +537,56 @@ export async function runAcceptance(log: Report): Promise<AcceptanceReport> {
   checks.push(await checkCancellation(log))
 
   log('Criterion 1 — the worker path')
-  checks.push(await checkWorkerPath(log))
+  const workerPath = await checkWorkerPath(log)
+  checks.push(workerPath.check)
 
   log('Criterion 5 — preset separation')
   checks.push(await checkPresetSeparation(log))
 
   log('Criterion 9 — media egress')
-  const report = egress.stop()
+  // Both realms, merged. The main thread's watch cannot see the worker's
+  // `fetch` or its resource timeline, and the job — branding request included
+  // — runs in the worker, so a verdict from one of them describes the realm
+  // the media never enters (VH-62).
+  const report = mergeEgress(egress.stop(), workerPath.egress)
   checks.push({
     criterion: '9',
     title: 'Nothing leaves the device',
     status: report.withBody.length === 0 && report.crossOrigin.length === 0 ? 'pass' : 'fail',
-    detail: `${report.allRequests.length} requests, all same-origin, none carrying a request body. Cross-origin: ${report.crossOrigin.length}. With a body: ${report.withBody.length}.`,
+    detail: `${report.allRequests.length} requests across the page and the job worker, all same-origin, none carrying a request body. Cross-origin: ${report.crossOrigin.length}. With a body: ${report.withBody.length}.`,
   })
+  checks.push(await checkEgressInstrument(log))
 
   // Covered elsewhere, named here so the picture is complete rather than
-  // flattering.
+  // flattering. NOT `pass`: this page did not run it, and a status it did not
+  // earn is the difference between a report and an advertisement.
   checks.push({
     criterion: '3',
     title: 'The meter matches EBU Tech 3341 within ±0.1 LU',
-    status: 'pass',
-    detail: 'Asserted on every run of `npm run check` — test/ebu3341. Worst error 0.021 LU. Cases 7 and 8 need the EBU audio files and are skipped.',
+    status: 'external',
+    detail:
+      'Asserted by `npm run check` — test/ebu3341 — not by this page, so this run is no evidence either way. At the last run: worst error 0.021 LU, and cases 7 and 8 skipped for want of the EBU audio files.',
   })
   checks.push({
     criterion: '4',
     title: 'No audible pumping on variable material',
     status: 'manual',
-    detail: 'The short-term plot side is asserted in src/audio/chain.test.ts — the chain adds under 1.5 LU to the worst one-second swing. The listening half needs a person and real material (VH-M1).',
+    detail:
+      'The short-term plot side is asserted in src/audio/chain.test.ts — the chain adds under 1.5 LU to the worst one-second swing. The listening half needs a person and real material (VH-M1).',
   })
   checks.push({
     criterion: '5',
     title: 'Slide text stays legible in the smaller output',
     status: 'manual',
-    detail: 'The size half is now measured above, on camera-like motion. That resolution is preserved to 1080p is asserted in src/config/presets.test.ts. Whether text is legible to a person still needs real slides (VH-M1).',
+    detail:
+      'The size half is now measured above, on camera-like motion. That resolution is preserved to 1080p is asserted in src/config/presets.test.ts. Whether text is legible to a person still needs real slides (VH-M1).',
   })
   checks.push({
     criterion: '7',
     title: 'Every block and warning triggers deliberately and reads clearly',
     status: 'manual',
-    detail: 'All four §7.3 outcomes and all seven §5.4 warnings are triggered in unit tests, and the wording is checked for jargon and blame. Whether it reads clearly to a lecturer needs a lecturer.',
+    detail:
+      'All four §7.3 outcomes and all seven §5.4 warnings are triggered in unit tests, and the wording is checked for jargon and blame. Whether it reads clearly to a lecturer needs a lecturer.',
   })
 
   return {

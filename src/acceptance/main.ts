@@ -17,7 +17,12 @@ const versionLine = document.querySelector<HTMLParagraphElement>('#version-line'
 
 if (versionLine) versionLine.textContent = `${APP_VERSION} · ${BUILD_ID}`
 
-const MARK: Record<Check['status'], string> = { pass: 'PASS', fail: 'FAIL', manual: 'NEEDS A PERSON' }
+const MARK: Record<Check['status'], string> = {
+  pass: 'PASS',
+  fail: 'FAIL',
+  manual: 'NEEDS A PERSON',
+  external: 'CHECKED ELSEWHERE',
+}
 
 function render(checks: readonly Check[], seconds: number): void {
   if (!results) return
@@ -45,11 +50,16 @@ function render(checks: readonly Check[], seconds: number): void {
   }
   results.append(list)
 
+  // Counted separately, all four. A summary that folds "checked elsewhere"
+  // into "passed" is the same false comfort the status was added to remove.
   const failed = checks.filter((c) => c.status === 'fail').length
   const manual = checks.filter((c) => c.status === 'manual').length
+  const external = checks.filter((c) => c.status === 'external').length
   const summary = document.createElement('p')
   summary.className = 'verdict-detail'
-  summary.textContent = `${checks.length - failed - manual} passed, ${failed} failed, ${manual} need a person. ${seconds.toFixed(1)} s.`
+  summary.textContent =
+    `${checks.length - failed - manual - external} passed here, ${failed} failed, ` +
+    `${manual} need a person, ${external} checked elsewhere. ${seconds.toFixed(1)} s.`
   results.append(summary)
 }
 

@@ -7,6 +7,7 @@
  */
 
 import { installGlobalErrorCapture, type CapturedError } from '../core/diagnostics'
+import { EgressWatch, type EgressReport } from '../core/egress'
 import { getLogRecords, log, setMinimumLogLevel } from '../core/logger'
 import {
   OUTPUT_SAMPLE_RATE,
@@ -89,6 +90,10 @@ self.addEventListener('message', (event: MessageEvent<WorkerRequest>) => {
     case 'lease':
       setLease(request.jobId, request.held)
       break
+
+    case 'egress':
+      post({ kind: 'egressed', id: request.id, report: setEgressWatch(request.watching) })
+      break
   }
 })
 
@@ -102,6 +107,29 @@ const running = new CancellationRegistry()
 
 /** Finished jobs whose scratch still holds a file the main thread may read. */
 const finished = new Map<string, OpfsWorkspace>()
+
+/**
+ * The worker's own egress watch, for acceptance criterion 9.
+ *
+ * `fetch` and the resource timeline are per-realm, and the job runs here — so
+ * the branding fetch, the only request this app makes at runtime, is invisible
+ * to a watch on the main thread. The harness starts one here too and merges
+ * the two (VH-62).
+ */
+let egressWatch: EgressWatch | null = null
+
+const EMPTY_EGRESS = { withBody: [], allRequests: [], crossOrigin: [] } as const
+
+function setEgressWatch(watching: boolean): EgressReport {
+  if (watching) {
+    egressWatch ??= new EgressWatch()
+    egressWatch.start()
+    return EMPTY_EGRESS
+  }
+  const report = egressWatch?.stop() ?? EMPTY_EGRESS
+  egressWatch = null
+  return report
+}
 
 // The worker has its own module scope, so `main.ts:32` does not reach it and
 // every debug line the job emitted was reaching a production console (VH-40).

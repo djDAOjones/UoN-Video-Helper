@@ -123,3 +123,19 @@
   -16.4 while the chain solved -16.0 — 80% of the +/-0.5 budget spent on the
   codec. Measurable by the same probe round-trip as the item above.
   (from: 2026-08-27 VH-50)
+- The acceptance page takes over an hour in a browser: criterion 2's corpus
+  alone spent roughly four minutes per synthesised entry, in-process on the
+  main thread, and the run was abandoned after four of them. A harness nobody
+  can sit through is a harness that never goes red, whatever its statuses say.
+  Run the corpus in the worker, or shorten the fixtures and say so.
+  (from: 2026-08-27 VH-62)
+- Mediabunny logged "An AudioSample was garbage collected without first being
+  closed" three times during an interrupted acceptance run. Possibly just the
+  interruption, possibly a real leak on an abandoned traversal — worth ten
+  minutes with a completed run before assuming the former.
+  (from: 2026-08-27 VH-62)
+- Resource-timing entries are added when a request COMPLETES, so
+  `EgressWatch.stop()` can miss a request that is still in flight — a HEAD to a
+  branding asset did not appear in `allRequests` during a direct test. The
+  body-wrapping instrument is unaffected; the passive timeline is not a
+  complete census. (from: 2026-08-27 VH-62)

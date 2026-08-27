@@ -131,13 +131,21 @@
       saying so in its tally.
       Done when: each is fixed or explicitly recorded as intended.
 
-- [ ] **VH-62 The acceptance harness has false-pass routes** (2026-08-27)
+- [~] **VH-62 The acceptance harness has false-pass routes** (2026-08-27)
       Intent: R-11. Criterion 2's missing-measurement and cropped-peak routes
-      closed on 2026-08-27. Remaining: resource warnings do not fail a run,
-      compliance status does not reflect which fixtures executed, and egress
-      observation does not cover every request context.
+      closed 2026-08-27.
+      Done 2026-08-27: criterion 3 no longer claims a `pass` this page did not
+      run (`external`); the sync meter reads both tracks on one clock, which
+      unblocks VH-55; the worker's realm is watched and merged, so the branding
+      fetch is visible at all; and a negative control proves the egress
+      instrument fires on both body shapes.
+      Remaining: resource warnings still do not fail a run; a complete run
+      takes over an hour in a browser — four minutes per synthesised corpus
+      entry, in-process on the main thread — so nobody sits through it, which
+      is its own false-pass route (see wish-list).
       Done when: the harness cannot report green on an unexecuted or unmeasured
-      invariant, and an injected defect turns it red.
+      invariant, an injected defect turns it red, and a run is short enough
+      that it is actually run.
 
 - [ ] **VH-61 LRA and pause freeze are wrong at the boundaries** (2026-08-27)
       Intent: R-10, but NOT its remedy. EOF suppression of LRA is real; the
