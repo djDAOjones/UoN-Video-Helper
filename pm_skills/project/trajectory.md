@@ -23,6 +23,12 @@
 
 ## Archived: the review remediation and Band 1's close — see archive/trajectory/trajectory-0003-review-remediation-and-band-1-close.md
 
+### VH-76 — the gate stopped writing
+
+- VH-76 — Shipped 2026-08-27. `check` builds to a temp directory, so a green
+  run leaves `dist/` byte-identical instead of replacing the artifact it had
+  just certified. See decision-log.
+
 ### VH-32, VH-61 — closed on the maintainer's judgement
 
 - VH-32 — Closed 2026-08-27. No redesign wanted: the simplicity is the design,

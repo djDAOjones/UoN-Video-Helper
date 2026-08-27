@@ -259,12 +259,19 @@ npm run check
 ```
 
 ```bash
-npm run typecheck && npm run lint && npm run test && npm run build && npm run docs:lint && npm run docs:links && npm run check:placeholders && npm run check:memory
+npm run check:placeholders && npm run typecheck && npm run lint && npm run test && npm run check:build && npm run docs:lint && npm run docs:links && npm run check:memory
 ```
 
 **Non-mutating and CI-safe.** It reports; it never reformats or writes.
 `lint:fix` and `format` are separate verbs and are never part of the
 gate.
+
+That was a claim before it was true. The gate ran `build`, which rewrites
+`dist/` — so every green run replaced the artifact it had just certified,
+and a gate that overwrites its own evidence cannot vouch for it. Since
+VH-76 the bundle step is `check:build`, which builds to a temporary
+directory and removes it on every exit path, signals included. `build`
+is unchanged and still produces `dist/` for a deploy.
 
 Runs, in order:
 
@@ -273,7 +280,7 @@ Runs, in order:
 | `typecheck` | Type errors, broken imports |
 | `lint` | Unused/broken imports, dead code, floating promises |
 | `test` | Unit suite — **including the EBU Tech 3341 harness** |
-| `build` | Anything that only breaks in a production bundle |
+| `check:build` | Anything that only breaks in a production bundle. Builds to a temp directory, never `dist/` |
 | `docs:lint` + `docs:links` | Broken Markdown and dead cross-references in `docs/` and project memory |
 | `check:placeholders` | Stray `CUSTOMISE` / `[Project Name]` markers (the init Step 10 lint, folded in) |
 | `check:memory` | Project-memory drift — shipped items left in the backlog, ticket-grammar violations, dangling `[detail]` links, stale file-map paths |

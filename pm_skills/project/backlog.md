@@ -70,10 +70,9 @@
 ### Band 2 — The edges hold
 
 <!-- Not committed, and all of it is agent work. Ordered by dependency rather
-     than by ID: VH-76 leads because everything below it is judged by a gate
-     that currently rewrites `dist/` on every run, and a gate that writes
-     cannot honestly certify a change to the thing it writes. VH-72 and VH-73
-     are then independent one-visit fixes; VH-75 groups four verified holes of
+     than by ID. VH-76 shipped first, 2026-08-27, so everything below it is
+     now judged by a gate that does not rewrite `dist/`. VH-72 and VH-73
+     are independent one-visit fixes; VH-75 groups four verified holes of
      one shape; VH-77 is the swept-up remainder. VH-62 is LAST because its
      remaining half is harness work whose value depends on what Band 1a does
      to the pipeline — and Band 1a is about to move it, so VH-62 earns
@@ -88,13 +87,6 @@
       order, and the decided-not-to-reconcile list.
       Done when: every child is shipped or explicitly cut; then delete the
       ticket.
-
-- [ ] **VH-76 A check that does not write** (2026-08-27)
-      Intent: `npm run check` runs `build`, which rewrites `dist/` — against
-      the non-mutating-gate hard rule. Port the archived `check-build.mjs`
-      (vite build to a temp dir, removed on every exit path).
-      Done when: a green `check` leaves the working tree byte-identical.
-      Detail: [VH-71 WP4](tickets/VH-71.md).
 
 - [ ] **VH-72 One codec string for preflight and production** (2026-08-27)
       Intent: P2-02 residual — production hands Mediabunny abstract

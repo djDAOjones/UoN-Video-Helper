@@ -11,6 +11,34 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-76: a gate that overwrote its own evidence
+
+**Decision:** the quality gate builds to a temporary directory. `npm run build`
+keeps writing `dist/` for deploys; `npm run check` no longer writes anything.
+
+**Rationale:** `AGENTS.md` → "One-command quality gate" says check reports and
+never writes, and `DEV-INFRASTRUCTURE.md` repeated the claim under the heading
+"Non-mutating and CI-safe". It was not true: `check` ran `build`, which
+rewrites `dist/`.
+
+That is not a tidiness point. Every green run replaced the artifact it had just
+certified, so the gate could never vouch for what was on disk — and `dist/` is
+what a deploy publishes. Proven rather than argued: the fingerprint of `dist/`
+before a gate run and after it differ.
+
+Ported from the archived implementation branch (VH-71 WP4) rather than written
+fresh, with one addition — the original removed its temp directory in a
+`finally`, which does not run on SIGINT. A gate interrupted with Ctrl-C is an
+ordinary event, so the handlers are explicit.
+
+**Verified:** the `dist/` fingerprint is byte-identical either side of a green
+`check`, and no temp directory survives the run. The documented gate command in
+`DEV-INFRASTRUCTURE.md` matches `package.json` again, and says plainly that the
+non-mutating claim preceded the behaviour.
+
+**Link:** VH-76, VH-71 WP4; `scripts/check-build.mjs`, `package.json`,
+`DEV-INFRASTRUCTURE.md`.
+
 ## 2026-08-27 — VH-71: the archived branch, cross-checked feature by feature
 
 **Decision:** before letting the archived branch rest, reconcile it against
