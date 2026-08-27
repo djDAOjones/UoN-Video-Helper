@@ -481,6 +481,59 @@ ticket file was evicted on ship, so this entry is the record.
 **Link:** spec §6.1 and §6.2 doc-deltas; `src/config/presets.ts`; workflow
 `wf_00530dba-cb8`.
 
+## 2026-08-27 — VH-52: keep the CI bound; explain contention at failure
+
+**Decision:** Keep `testTimeout: 30_000` unchanged. `npm test` now prints one
+settled-machine instruction immediately before Vitest, whose default failure
+report already names the failing file and includes both file and test-case
+durations. A timeout after an unusually long duration is a reason to rerun
+idle before changing an assertion or extending the bound; it is not automatic
+proof that the test is wrong.
+
+**Rationale:** The 30-second value was measured for a roughly 1.5x CI runner,
+whereas local browser contention has stretched a roughly four-second DSP file
+to 540 seconds. Enlarging the timeout enough to cover that starvation would
+make a genuinely hung test take minutes to report. A custom reporter, wrapper
+script or verbose output would add machinery or noise without adding evidence
+the built-in reporter lacks. Auto-jazz therefore chose the smallest reversible
+quality-gate change and preserved the existing bound.
+
+**Verification:** An intentional `--testTimeout=1` run failed
+`chain.test.ts`, printed the new instruction, the 25.9-second file duration and
+each case duration. The normal `npm run check` then passed 361 tests plus type,
+lint, build, documentation and memory checks.
+
+**Link:** `package.json`; `DEV-INFRASTRUCTURE.md` Quality gate.
+
+## 2026-08-26 — VH-50: output compliance is a postcondition, not advice
+
+**Decision:** A finalized MP4 is not reported as `processed` until its decoded
+output audio passes one shared, pure postcondition: finite measurements,
+integrated loudness within −16 ±0.5 LUFS, and true peak at or below −2 dBTP.
+Missing or non-finite audio on an audio-bearing source is also a failure. The
+worker disposes the output through its existing error path; the acceptance
+harness calls the same verifier.
+
+**Rationale:** Warning thresholds describe source material and cannot certify
+the exported file. The old acceptance criterion measured a synthetic corpus
+but defaulted missing measurements to passing values and never made an
+out-of-range result fail. That let the harness pass the product's protected
+invariant while real material missed it. Integrated loudness is still measured
+over content, while true peak is measured over the whole output because the
+ceiling applies to branding boundaries too.
+
+**Limit:** This slice makes failure honest; it does not calibrate it away. The
+Chromium corpus now reports the two synthetic misses as −1.9968 and −1.9989
+dBTP rather than rounding both to a misleading −2.00, while the worker-path
+fixture and four other browser criteria pass. A 0.0032 dB miss does not justify
+guessing an AAC margin: R-02's confirmed FIR/limiter finalization repair comes
+first and crosses protected DSP. VH-50 remains open until that repair lands,
+the gain/limiter cause is measured on real material, both figures pass, and the
+regression case is pinned.
+
+**Link:** spec §13.2; `src/media/output-verification.ts`;
+`src/workers/job.worker.ts`; `src/acceptance/run.ts`.
+
 ## 2026-08-25 — VH-24 and VH-41: one visit to the output shape
 
 **Decision:** Two rules the spec already carried and the code did not.

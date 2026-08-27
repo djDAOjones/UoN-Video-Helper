@@ -8,9 +8,10 @@
  */
 
 import { PRESETS, outputShapeFor } from '../config/presets'
-import { TARGET_INTEGRATED_LUFS, TRUE_PEAK_CEILING_DBTP } from '../config/audio'
+import { TARGET_INTEGRATED_LUFS } from '../config/audio'
 import { inspectFile, openInput } from '../media/inspect'
 import { OpfsWorkspace, ROOT_DIRECTORY, sweepOrphanedJobs } from '../media/opfs'
+import { verifyOutputAudio } from '../media/output-verification'
 import { CancelledError, runPipeline } from '../media/pipeline'
 import { buildFixture, syncMarkerTimes } from './fixtures'
 import { EgressWatch, measureLoudness, measureSync, relativeSync } from './measure'
@@ -233,6 +234,7 @@ async function checkLoudnessCorpus(log: Report): Promise<Check> {
   const results: string[] = []
   let worstLoudness = 0
   let worstPeak = Number.NEGATIVE_INFINITY
+  let allVerified = true
 
   for (const [index, entry] of corpus.entries()) {
     log(`  measuring: ${entry.name}`)
@@ -246,27 +248,51 @@ async function checkLoudnessCorpus(log: Report): Promise<Check> {
     })
     // Content region only: the branding bed is mastered separately and
     // measuring it alongside would answer a different question.
-    const measured = await measureLoudness(file, {
+    const measuredContent = await measureLoudness(file, {
       fromSeconds: openingSeconds + 1,
       toSeconds: openingSeconds + 69,
     })
+    // Peak is a whole-file ceiling. Cropping it with the loudness region hid
+    // precisely the t=0/EOF failures this criterion exists to catch (VH-50).
+    const measuredFull = await measureLoudness(file)
     await workspace.dispose()
-    if (!measured) continue
+    const measurement =
+      measuredContent && measuredFull
+        ? {
+            integratedLufs: measuredContent.integratedLufs,
+            truePeakDbtp: measuredFull.truePeakDbtp,
+          }
+        : null
+    if (!measurement) {
+      allVerified = false
+      results.push(`${entry.name}: FAIL (missing-audio)`)
+      continue
+    }
 
-    const off = Math.abs(measured.integratedLufs - TARGET_INTEGRATED_LUFS)
-    worstLoudness = Math.max(worstLoudness, off)
-    worstPeak = Math.max(worstPeak, measured.truePeakDbtp)
-    results.push(
-      `${entry.name}: ${measured.integratedLufs.toFixed(2)} LUFS, peak ${measured.truePeakDbtp.toFixed(2)} dBTP`,
-    )
+    const off = Math.abs(measurement.integratedLufs - TARGET_INTEGRATED_LUFS)
+    if (Number.isFinite(off)) worstLoudness = Math.max(worstLoudness, off)
+    if (Number.isFinite(measurement.truePeakDbtp)) {
+      worstPeak = Math.max(worstPeak, measurement.truePeakDbtp)
+    }
+    const measuredSummary =
+      `${measurement.integratedLufs.toFixed(2)} LUFS, ` +
+      `peak ${measurement.truePeakDbtp.toFixed(4)} dBTP`
+    const verification = verifyOutputAudio(measurement)
+    if (!verification.ok) {
+      allVerified = false
+      results.push(`${entry.name}: ${measuredSummary} — FAIL (${verification.code})`)
+      continue
+    }
+
+    results.push(`${entry.name}: ${measuredSummary}`)
   }
 
-  const pass = worstLoudness <= 0.5 && worstPeak <= TRUE_PEAK_CEILING_DBTP + 0.01
+  const highestPeak = Number.isFinite(worstPeak) ? `${worstPeak.toFixed(4)} dBTP` : 'unavailable'
   return {
     criterion: '2',
     title: 'Output is −16 ±0.5 LUFS and never exceeds −2.0 dBTP',
-    status: pass ? 'pass' : 'fail',
-    detail: `${results.join('; ')}. Worst deviation ${worstLoudness.toFixed(2)} LU, highest peak ${worstPeak.toFixed(2)} dBTP.`,
+    status: allVerified ? 'pass' : 'fail',
+    detail: `${results.join('; ')}. Worst deviation ${worstLoudness.toFixed(2)} LU, highest peak ${highestPeak}.`,
   }
 }
 

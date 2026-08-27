@@ -21,6 +21,13 @@
 
 ## Archived: real material and Band 1's first half — see archive/trajectory/trajectory-0002-real-material-and-band-1.md
 
+### VH-52 — DSP timeout failures carry their operating context
+
+- VH-52 — Shipped 2026-08-27. The 30-second test timeout remains the measured
+  CI bound; test output now pairs Vitest's file/test durations with an explicit
+  settled-machine rerun instruction, so contention is legible without turning
+  a genuinely hung test into a minutes-long wait. See decision-log.
+
 ### VH-53 — one project contract for both coding agents
 
 - VH-53 — Shipped 2026-08-26. Claude Desktop Code now imports the same root

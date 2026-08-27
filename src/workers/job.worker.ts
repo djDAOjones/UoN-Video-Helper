@@ -16,13 +16,13 @@ import {
   videoEncoderConfigFor,
   type PresetId,
 } from '../config/presets'
-import { detectOutputWarning, detectSourceWarnings, type AudioWarning } from '../audio/warnings'
-import { TARGET_INTEGRATED_LUFS } from '../config/audio'
+import { detectSourceWarnings, type AudioWarning } from '../audio/warnings'
 import type { BrandingChoice } from '../config/branding'
 import { analyseSourceAudio } from '../media/audio-plan'
 import { canEncodeAudio, checkEncodeSupport, inspectCapabilities } from '../media/capability'
 import { UnreadableFileError, inspectFile, openInput } from '../media/inspect'
 import { OpfsWorkspace, sweepOrphanedJobs } from '../media/opfs'
+import { verifyOutputAudio } from '../media/output-verification'
 import { CancelledError, runPipeline } from '../media/pipeline'
 import { preflightVerdict, type PreflightSummary } from '../media/preflight'
 import { InvalidVttError } from '../media/vtt'
@@ -171,31 +171,32 @@ async function handleProcess(
       onProgress: ({ stage, fraction }) => post({ kind: 'stage', id, stage, fraction }),
     })
 
-    // Spec 5.4's last row: did the output actually land on target? It is the
-    // only warning that cannot be known in advance, and the only honest way to
-    // answer it is to measure the finished file rather than trust the plan.
+    // The finished file is the only honest place to enforce criterion 2: the
+    // limiter, resampler and AAC encoder all sit after the planning pass.
     const outputWarnings: AudioWarning[] = []
-    try {
-      // Another window the encode loop's progress does not cover: this walks
-      // the whole finished file (VH-51).
-      post({ kind: 'stage', id, stage: 'finishing', fraction: 1 })
-      const check = openInput(result.file)
-      const checkTrack = await check.getPrimaryAudioTrack()
-      if (checkTrack) {
-        const measured = await analyseSourceAudio(checkTrack)
-        const missed = detectOutputWarning(measured.integratedLufs, TARGET_INTEGRATED_LUFS)
-        if (missed) outputWarnings.push(missed)
-        log.info('worker', 'output verified', {
-          integratedLufs: Math.round(measured.integratedLufs * 100) / 100,
-          truePeakDbtp: Math.round(measured.truePeakDbtp * 100) / 100,
-          onTarget: missed === null,
+    // Another window the encode loop's progress does not cover: this walks
+    // the whole finished file (VH-51).
+    post({ kind: 'stage', id, stage: 'finishing', fraction: 1 })
+    const check = openInput(result.file)
+    const checkTrack = await check.getPrimaryAudioTrack()
+    if (report.audio) {
+      const measured = checkTrack ? await analyseSourceAudio(checkTrack) : null
+      const verification = verifyOutputAudio(measured)
+      if (!verification.ok) {
+        log.warn('worker', 'output failed verification', {
+          code: verification.code,
+          integratedLufs: verification.integratedLufs,
+          truePeakDbtp: verification.truePeakDbtp,
         })
+        throw new Error(`Output audio failed verification: ${verification.code}`)
       }
-    } catch (cause) {
-      // A check that fails costs a warning, never the result.
-      log.warn('worker', 'could not verify the output', {
-        reason: cause instanceof Error ? cause.message : String(cause),
+      log.info('worker', 'output verified', {
+        integratedLufs: Math.round(measured!.integratedLufs * 100) / 100,
+        truePeakDbtp: Math.round(measured!.truePeakDbtp * 100) / 100,
+        onTarget: true,
       })
+    } else {
+      log.info('worker', 'output verified', { audio: 'not-applicable' })
     }
 
     finished.set(jobId, workspace)

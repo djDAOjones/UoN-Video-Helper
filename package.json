@@ -13,7 +13,7 @@
     "prebuild": "npm run check:placeholders",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "test": "vitest run",
+    "test": "node -e \"console.log('test context: an unusually long DSP timeout may be machine contention; rerun on a settled machine before changing the timeout or assertion')\" && vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --max-warnings 0",

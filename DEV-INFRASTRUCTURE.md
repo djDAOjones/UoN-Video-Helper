@@ -249,7 +249,10 @@ The bound is the wrong lever for this and the operating rule is the right one:
 do not run `npm run check` next to anything heavy — a browser fleet, an ffmpeg
 batch, `scripts/run-in-engines.mjs`. A DSP test that fails after an unusually
 long duration is reporting the machine, not the code; re-run it idle before
-believing it.
+believing it. Vitest's default failure report names the file and prints both
+file and test-case durations; `npm test` precedes that report with the same
+settled-machine instruction so the contention interpretation is visible at the
+point of failure rather than only in this document.
 
 ```bash
 npm run check

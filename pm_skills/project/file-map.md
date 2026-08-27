@@ -15,14 +15,15 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 143 file(s) across 8 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 152 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 20 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
 - `docs` — 5 file(s)
 - `public` — 17 file(s)
+- `reviews` — 7 file(s)
 - `scripts` — 4 file(s)
-- `src` — 91 file(s)
+- `src` — 93 file(s)
 - `test` — 4 file(s)
 <!-- /file-map-index -->
 
@@ -84,6 +85,16 @@
 - `public/branding/opening-1080p30.mp4` — Placeholder opening master, 1080p30. Replaced by the real AE render; see the README beside it.
 - `public/branding/opening-2160p25.mp4` — Placeholder opening master, 2160p25. Replaced by the real AE render; see the README beside it.
 - `public/branding/opening-2160p30.mp4` — Placeholder opening master, 2160p30. Replaced by the real AE render; see the README beside it.
+
+## reviews
+
+- `reviews/2026-08-26/README.md` — Index, baseline and provenance for the self-contained repository-review evidence bundle.
+- `reviews/2026-08-26/continuation-prompt.md` — Self-contained handoff prompt for continuing the evidence-led review on a newer checkout.
+- `reviews/2026-08-26/uon-video-helper-comprehensive-review-2026-08-26.md` — Portable reading copy of the original external comprehensive review.
+- `reviews/2026-08-26/uon-video-helper-comprehensive-review-2026-08-26.source.txt` — Byte-for-byte archive of the externally supplied review source.
+- `reviews/2026-08-26/uon-video-helper-internal-code-review-2026-08-26.md` — Durable copy of the earlier in-repository review used as a lead source.
+- `reviews/2026-08-26/uon-video-helper-review-critique-2026-08-26.md` — Independent critique, reproductions, disagreements and corrected priority order.
+- `reviews/2026-08-26/uon-video-helper-updated-review-critique-2026-08-26.md` — Source-verified finding verdicts, omitted findings, provenance corrections and release gates.
 
 ## scripts
 
@@ -157,6 +168,8 @@
 - `src/media/lanes.test.ts` — Pins how the two feed lanes fail together: survivor stopped, cause reported over the cancellation it caused.
 - `src/media/opfs.test.ts` — Pins the sweep rule: never remove a claimed directory, never remove one it could not ask about.
 - `src/media/opfs.ts` — The OPFS working store: one directory per job, sync-handle writes, cleanup on every exit path.
+- `src/media/output-verification.test.ts` — Pins every decoded-output compliance boundary and each fail-closed result.
+- `src/media/output-verification.ts` — Shared pure postcondition for finite, in-range output loudness and true peak.
 - `src/media/pipeline.ts` — Decode to encode to mux, streaming to OPFS, with progress and cancellation.
 - `src/media/preflight.test.ts` — Triggers all four spec 7.3 outcomes deliberately — acceptance criterion 7.
 - `src/media/preflight.ts` — The pure verdict: given what was measured, proceed / warn / discourage / block.
