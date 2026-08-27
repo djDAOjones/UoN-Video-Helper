@@ -15,12 +15,12 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 161 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 157 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 20 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
 - `docs` — 5 file(s)
-- `public` — 17 file(s)
+- `public` — 13 file(s)
 - `reviews` — 7 file(s)
 - `scripts` — 4 file(s)
 - `src` — 102 file(s)
@@ -81,10 +81,6 @@
 - `public/branding/closing-tail-blue-2160p.mp4` — Real closing tail, blue at 2160p: the 4.00 s opaque card. H.264 so hard cut works without alpha decode.
 - `public/branding/closing-tail-white-1080p.mp4` — Real closing tail, white at 1080p: the 4.00 s opaque card. H.264 so hard cut works without alpha decode.
 - `public/branding/closing-tail-white-2160p.mp4` — Real closing tail, white at 2160p: the 4.00 s opaque card. H.264 so hard cut works without alpha decode.
-- `public/branding/opening-1080p25.mp4` — Placeholder opening master, 1080p25. Replaced by the real AE render; see the README beside it.
-- `public/branding/opening-1080p30.mp4` — Placeholder opening master, 1080p30. Replaced by the real AE render; see the README beside it.
-- `public/branding/opening-2160p25.mp4` — Placeholder opening master, 2160p25. Replaced by the real AE render; see the README beside it.
-- `public/branding/opening-2160p30.mp4` — Placeholder opening master, 2160p30. Replaced by the real AE render; see the README beside it.
 
 ## reviews
 

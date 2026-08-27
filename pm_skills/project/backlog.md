@@ -27,8 +27,8 @@
      output contract now holds on real material, and VH-56 shipped with it so
      a finished file survives the next click and VH-57 made every phase answer
      Cancel, VH-55 made its onset loss visible and VH-59 made track loss
-     visible. What remains of 1a is VH-55's second half, which waits on VH-62's
-     sync meter. -->
+     visible. What remains of 1a is VH-55's second half and its timeline
+     sibling VH-74 (from the VH-71 cross-check), which execute together. -->
 
 - [~] **VH-55 Source onset can be replaced by encoder priming** (2026-08-27)
       Intent: R-03. `AudioTimelineShift.apply()` drops AAC samples landing
@@ -46,6 +46,21 @@
       grade the change even though players would honour it.
       Done when: no source sample is discarded, and a sync meter that measures
       both tracks on one clock says so.
+      Coupled 2026-08-27: execute with VH-74 — the P1-02 source-gap/offset fix
+      shares the same four timestamp sites, and its late-audio and
+      midstream-gap fixtures land first.
+
+- [ ] **VH-74 Preserve the source timeline** (2026-08-27)
+      Intent: P1-02, the one review P1 the remediation arc never covered —
+      `audio-plan.ts` timestamps audio from a contiguous frame counter and
+      never reads `AudioSample.timestamp`, so a late-starting audio track or a
+      midstream gap is silently collapsed while the video lane keeps offsets.
+      Order: criterion-5 late-audio and midstream-gap fixtures first (they
+      must go red on today's behaviour), then the shared-origin port, then
+      VH-55's video-delay change measured by the same fixtures.
+      Done when: one A/V origin; audio keeps its own start offset; real gaps
+      become explicit silence; the fixtures pass; nothing ships fixture-less.
+      Detail: [VH-71 WP2](tickets/VH-71.md).
 
 ### Band 1b — Decisions the maintainer owns (signed off 2026-08-25)
 
@@ -56,7 +71,8 @@
       Intent: spec §6.2 sets ~1.5 Mbps for slides and ~2.5 Mbps for camera.
       `ContentClass` exists and `outputShapeFor` already takes it; nothing sets
       it, so every job uses the higher figure.
-      Blocked 2026-08-27 by a measurement, not by missing code. Mean absolute
+      Was blocked 2026-08-27 by a measurement; unblocked the same day by the
+      recovered implementation (note below). The evidence stands: mean absolute
       inter-frame difference on a 64x36 luma, four points through five real
       lectures:
 
@@ -80,6 +96,12 @@
       more than five files, and the chosen class is stated in plain language.
       Note: mis-classifying camera as screen costs picture quality; the reverse
       costs only file size. The threshold must be biased accordingly.
+      Recovered 2026-08-27: the archived implementation branch built exactly
+      this — five spread windows in a separate pass, asymmetric thresholds
+      with a density guard, plain-language result (tag
+      `archive/repository-review-implementation`, evidence: 23 recordings).
+      Adopt via [VH-71 WP5](tickets/VH-71.md) and re-verify the thresholds on
+      our own corpus rather than redesign.
 
 ### Band 2 — The edges hold
 
@@ -103,6 +125,59 @@
       Done when: the harness cannot report green on an unexecuted or unmeasured
       invariant, an injected defect turns it red, and a run is short enough
       that it is actually run.
+      Added 2026-08-27 (VH-71 cross-check): criterion 8 still cancels an
+      in-process pipeline helper, never the real worker protocol (P2-07), and
+      criterion 2's verdict checks neither content frame count nor gap/overlap
+      coverage — see [VH-71 WP4](tickets/VH-71.md).
+
+- [ ] **VH-71 Reconcile the archived implementation branch** [detail](tickets/VH-71.md) (2026-08-27)
+      Intent: umbrella and detail source for the 2026-08-27 feature-by-feature
+      cross-check of tag `archive/repository-review-implementation` against
+      HEAD. Children: VH-74 (Band 1a, with VH-55), VH-72, VH-73, VH-75,
+      VH-76, VH-77 below, VH-78 (Icebox), VH-19's adoption note, and the
+      VH-62/VH-70 amendments. The ticket holds per-package detail, execution
+      order, and the decided-not-to-reconcile list.
+      Done when: every child is shipped or explicitly cut; then delete the
+      ticket.
+
+- [ ] **VH-72 One codec string for preflight and production** (2026-08-27)
+      Intent: P2-02 residual — production hands Mediabunny abstract
+      `codec: 'avc'` and gets a frame-rate-blind AVC level (4K60 → 5.1) while
+      preflight correctly derives 5.2. Pass the preflight-derived string
+      through Mediabunny's unused `fullCodecString` override so both validate
+      one string.
+      Done when: preflight and production provably share the string, with
+      4K60 and 1080p60 equality tests. Detail: [VH-71 WP1](tickets/VH-71.md).
+
+- [ ] **VH-73 Verify the finished file's picture** (2026-08-27)
+      Intent: `verifyOutputAudio` checks audio only — a finished file whose
+      video track yields no decodable sample still announces "Your video is
+      ready". Port the archived `output-integrity.ts` beside it.
+      Done when: a broken-video fixture turns the job red; one frame decoded
+      per job otherwise. Detail: [VH-71 WP1](tickets/VH-71.md).
+
+- [ ] **VH-75 Four lifecycle guards** (2026-08-27)
+      Intent: verified holes, VH-68's pattern — a superseded inspect/preflight
+      keeps running; Start re-arms before the worker acknowledges a watchdog
+      cancel; saves run without the wake lock; `finished.delete` precedes
+      `await dispose()`.
+      Done when: each has a regression and none reproduces.
+      Detail: [VH-71 WP3](tickets/VH-71.md).
+
+- [ ] **VH-76 A check that does not write** (2026-08-27)
+      Intent: `npm run check` runs `build`, which rewrites `dist/` — against
+      the non-mutating-gate hard rule. Port the archived `check-build.mjs`
+      (vite build to a temp dir, removed on every exit path).
+      Done when: a green `check` leaves the working tree byte-identical.
+      Detail: [VH-71 WP4](tickets/VH-71.md).
+
+- [ ] **VH-77 Hygiene remainder from the cross-check** (2026-08-27)
+      Intent: four small debts — tuneables outside `src/config/` (P3-02);
+      diagnostics bundle without job context (P2-10); track
+      language/name/disposition not carried (P1-08 residual); the manual
+      rollback recipe undocumented in DEV-INFRASTRUCTURE.
+      Done when: each is fixed or explicitly cut; the diagnostics addition
+      carries a redaction test. Detail: [VH-71 WP6](tickets/VH-71.md).
 
 - [ ] **VH-17 Evaluate `fastStart: 'reserve'` for the smaller preset**
       Intent: the "smaller file" preset goes to OneDrive and SharePoint, where
@@ -222,13 +297,23 @@
       Revisit if staff report being stuck on Firefox, or if D11 opens for
       another reason.
 - [ ] **VH-70 The manual gates nobody has run** (2026-08-27) [maintainer]
-      Intent: four checks no automated harness can reach — a job running while
+      Intent: six checks no automated harness can reach — a job running while
       the device sleeps and wakes, the progress bar under a screen reader, a
-      throttled multi-gigabyte fallback download completing, and an output
-      accepted by EchoVideo's ingest. Each covers something already built and
-      believed to work; none has been confirmed by a person.
+      throttled multi-gigabyte fallback download completing, an output
+      accepted by EchoVideo's ingest, an independent external true-peak meter
+      run against one produced MP4 (VH-50's numbers come from our own meter),
+      and a multi-tab OPFS boot/start stress in real engines. Each covers
+      something already built and believed to work; none has been confirmed by
+      a person.
       Revisit when there is a real pilot user, or before VH-13's published
       limits go out.
+- [ ] **VH-78 Show the closing card being chosen** (2026-08-27) [maintainer]
+      Intent: the blue/white closing choice is made blind; the archived branch
+      has a small preview (`branding-preview.ts`, recoverable from the
+      archive tag). Post-VH-32 ("the simplicity is the design") this is a
+      deliberate-simplicity call, not default work.
+      Revisit when the maintainer wants the choice visible, or a pilot user
+      asks what the options look like.
 - [ ] **D12 Custom or per-department branding** — needs a governance answer
       for who approves a variant before it needs an implementation.
 - [ ] **D13 Batch processing** — the most likely first request from anyone
