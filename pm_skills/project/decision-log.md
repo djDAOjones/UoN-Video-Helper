@@ -11,6 +11,32 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — D1 answered: the padding is Nottingham Blue
+
+**Decision:** `--uon-brand-bg` is Nottingham Blue `#10263B`, the University's
+primary brand colour, aliased from a named `--uon-brand-blue`.
+
+**Rationale:** the maintainer supplied
+<https://www.nottingham.ac.uk/brand/visual/colour.aspx> as the palette the
+branding masters were made from. Verified rather than taken on trust: the
+shipped `closing-tail-blue-1080p.mp4` decodes to `#10263a` at its corners —
+one unit off in the blue channel, which is YUV-to-RGB rounding in an H.264
+encode. The asset is that colour.
+
+Padding a non-16:9 source in the same blue the closing card ends on makes the
+whole output one field of colour rather than black bars round a brand graphic.
+Black remains one line away if that reads worse on real material.
+
+The two neutrals are defined alongside it because the white closing variant and
+the interface both need them. The nine accent colours are on that page and are
+not invented into this file until something needs one.
+
+**Also:** `gen-placeholder-branding.mjs` read the token with a regex that only
+accepted a literal hex, so the alias broke it. It follows one `var()` hop now.
+
+**Link:** D1; `src/styles/tokens.brand.css`,
+`scripts/gen-placeholder-branding.mjs`.
+
 ## 2026-08-27 — VH-66: correct the code where the doc was right
 
 **Decision:** fix the drift in whichever direction is true. Where the code had

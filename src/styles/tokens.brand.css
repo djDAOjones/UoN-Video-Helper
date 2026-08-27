@@ -6,21 +6,32 @@
  * interaction states — belongs to `tokens.carbon.css` and the two must not be
  * collapsed into one.
  *
- * The approved UoN palette is not yet available. Only the token the app
- * actually needs today is defined; the rest arrives with the brand guidance
- * that answers D1. Do not invent values here.
+ * Source: <https://www.nottingham.ac.uk/brand/visual/colour.aspx>, supplied by
+ * the maintainer 2026-08-27 as the palette the branding masters were made
+ * from. Only the values the app has a use for are defined; the nine accent
+ * colours are on that page and can be added when something needs one.
  */
 
 :root {
   /*
-   * PLACEHOLDER — open decision D1.
+   * Nottingham Blue — the primary brand colour, and open decision D1's answer.
    *
-   * The background colour used to pad non-16:9 sources around the branding
-   * (spec section 4.3). Awaiting a hex value from the UoN brand guidelines.
-   * Black is a safe interim and is NOT the approved answer.
+   * Used to pad non-16:9 sources around the branding (spec section 4.3).
+   * Verified against the assets rather than taken on trust: the shipped
+   * `closing-tail-blue-1080p.mp4` decodes to #10263a at its corners, one unit
+   * off in the blue channel, which is YUV-to-RGB rounding in the H.264 encode.
+   * The padding therefore matches the closing card exactly, so a 4:3 lecture
+   * sits in the same field of colour it ends on.
    *
-   * See docs/03-open-decisions.md. Answering D1 must be a one-line change:
-   * reference this as var(--uon-brand-bg) and never inline the hex.
+   * PMS 539 C. CMYK 100, 79, 47, 56.
    */
-  --uon-brand-bg: #000000;
+  --uon-brand-blue: #10263b;
+  --uon-brand-bg: var(--uon-brand-blue);
+
+  /*
+   * The neutrals. Portland Stone is the warm off-white the brand pairs with
+   * the blue; plain white is the second closing variant's field.
+   */
+  --uon-portland-stone: #faf6ef;
+  --uon-white: #ffffff;
 }

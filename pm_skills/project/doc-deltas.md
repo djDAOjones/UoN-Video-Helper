@@ -48,6 +48,9 @@
       −2.0 dBTP, which is now the ceiling of the FILE; the limiter itself
       targets 1.0 dB below it because AAC raises true peak after it
       (source: VH-50)
+- [ ] 2026-08-27 DECISIONS D1 — answered 2026-08-27: Nottingham Blue #10263B,
+      verified against the shipped closing tail; the entry still reads as open
+      with black as the interim (source: D1)
 - [ ] 2026-08-27 SPEC §5.2 step 3 — the freeze is listed once, and the
       implementation needs it twice: on the raw correction and on the
       finished envelope, because the smoothing window is centred

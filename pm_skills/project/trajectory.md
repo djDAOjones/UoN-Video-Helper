@@ -21,6 +21,11 @@
 
 ## Archived: real material and Band 1's first half — see archive/trajectory/trajectory-0002-real-material-and-band-1.md
 
+### D1 — the padding has a brand colour
+
+- D1 — Answered 2026-08-27. `--uon-brand-bg` is Nottingham Blue #10263B,
+  confirmed against the shipped closing tail's own pixels. See decision-log.
+
 ### VH-66 — the documents and the code agree again
 
 - VH-66 — Shipped 2026-08-27. Production shows the build identity its own

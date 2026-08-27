@@ -51,9 +51,19 @@ const SEGMENTS = [{ name: 'opening', seconds: 5 }]
  */
 function brandBackground() {
   const css = readFileSync(join(process.cwd(), 'src', 'styles', 'tokens.brand.css'), 'utf8')
-  const match = /--uon-brand-bg:\s*(#[0-9a-fA-F]{6})/.exec(css)
-  if (!match) throw new Error('Could not find --uon-brand-bg in src/styles/tokens.brand.css')
-  return match[1]
+  const read = (name) => new RegExp(`${name}:\\s*([^;]+);`).exec(css)?.[1]?.trim()
+
+  // Follows one `var()` hop. D1's answer made `--uon-brand-bg` an alias for
+  // `--uon-brand-blue`, and a regex that only accepted a literal hex started
+  // throwing on a file that was perfectly correct.
+  let value = read('--uon-brand-bg')
+  const alias = value && /^var\(\s*(--[\w-]+)\s*\)$/.exec(value)
+  if (alias) value = read(alias[1])
+
+  if (!value || !/^#[0-9a-fA-F]{6}$/.test(value)) {
+    throw new Error(`Could not resolve --uon-brand-bg to a hex in tokens.brand.css (got ${value})`)
+  }
+  return value
 }
 
 function build(segment, master, colour) {
