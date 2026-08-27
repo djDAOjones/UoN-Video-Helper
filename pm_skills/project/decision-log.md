@@ -11,6 +11,52 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-61 and VH-67: freeze the envelope, and keep less of the curve
+
+**Decision:** apply the pause freeze to the FINISHED envelope as well as to the
+raw correction; halve the meter's block store by pre-weighting; keep the
+momentary curve only for callers that ask. Do NOT touch the LRA end-of-file
+suppression.
+
+**Rationale (VH-61):** spec 5.2 step 3 lists the freeze last — after smoothing,
+clamping and slew limiting — and the code applied it first, to the raw
+correction only. The smoothing window is CENTRED, so speech fifteen seconds
+past a pause reached back into it and moved a gain that was supposed to be
+frozen: measured at -5 dB entering a pause and -1.29 dB inside it, and +1.85 dB
+in the silence before a recording's first word. The freeze now appears twice
+and the two do different jobs — the first keeps a pause's enormous raw demand
+out of the smoother, the second stops the smoother reaching into the pause.
+Expressed as "do not advance the slew", so it can never introduce a step the
+slew limit forbids.
+
+**Rationale (VH-67):** `computeIntegrated` averaged per-channel mean squares
+across the gated blocks and then applied channel weights. Those commute, so
+weighting on the way in stores one number per block instead of one per channel
+per block at an identical result — the EBU harness passes unchanged, which is
+the equivalence proof. And nothing in the pipeline reads the momentary curve;
+the envelope and the warnings both work from the short-term one, while the EBU
+max-M cases need every value. It is retained on request, defaulting to on, and
+the pipeline asks for off. A stereo hour goes from ~1.4 MB to ~580 kB, which is
+what the module's comment always claimed.
+
+**Not done, deliberately (VH-61's other half):** a loud passage in the final
+second reads LRA 0.00 against 10.80 for the same event mid-file. Real, and
+recorded. But the review's remedy — 1.5 s of silence before finalising LRA —
+was measured and is worse: on a recording ending quietly it took LRA from 3.79
+to 15.32 against a mid-file truth of 6.51. It cannot be fixed by inventing
+audio, because the only audio there is to invent is silence, and silence in a
+partial short-term window survives the relative gate.
+
+The direction matters more than the magnitude. LRA gates macro-levelling at
+9 LU. Suppression makes the meter UNDER-report, so the leveller stays off — the
+safe failure, and the same judgement spec 5.2 step 3 already makes ("processing
+that is not needed can only do harm"). Padding makes it OVER-report, switching
+the leveller on because a recording ends in room tone. Correcting this needs a
+standards-grounded design and a model of its effect on that gate, not a patch.
+
+**Link:** VH-61, VH-67; review R-10, R-16; `src/audio/macrolevel.ts`,
+`src/audio/loudness.ts`, `src/audio/analyse.ts`.
+
 ## 2026-08-27 — VH-65: the build job does not need to be able to publish
 
 **Decision:** move `pages: write` and `id-token: write` off the top level and

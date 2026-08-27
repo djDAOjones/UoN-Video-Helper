@@ -286,3 +286,67 @@ describe('curves', () => {
     expect(drop).toBeCloseTo(0.0327, 3)
   })
 })
+
+/**
+ * VH-67 / review R-16. Retention grew with duration faster than the module's
+ * own comment claimed. Both reductions have to be free of any change to the
+ * measurement, which is what these pin — the EBU harness proves it against
+ * published values, and these prove it against the analyser's own arithmetic.
+ */
+describe('what the analyser keeps', () => {
+  const signal = tone({
+    sampleRate: 48000, seconds: 6, frequency: 997, peakDbfs: -20, channelCount: 2,
+    fadeSeconds: 0.05,
+  })
+
+  const measure = (retainMomentary: boolean) => {
+    const analyser = new LoudnessAnalyser({ sampleRate: 48000, channelCount: 2, retainMomentary })
+    feedInChunks(signal, 4096, analyser)
+    return analyser.finish()
+  }
+
+  it('reports the same loudness whether or not the momentary curve is kept', () => {
+    const kept = measure(true)
+    const dropped = measure(false)
+    expect(dropped.integratedLufs).toBe(kept.integratedLufs)
+    expect(dropped.loudnessRangeLu).toBe(kept.loudnessRangeLu)
+    expect(dropped.shortTermLufs).toEqual(kept.shortTermLufs)
+  })
+
+  it('keeps the momentary curve only when asked', () => {
+    expect(measure(true).momentaryLufs.length).toBeGreaterThan(0)
+    expect(measure(false).momentaryLufs).toHaveLength(0)
+  })
+
+  it('defaults to keeping it, because the EBU cases measure it', () => {
+    const analyser = new LoudnessAnalyser({ sampleRate: 48000, channelCount: 2 })
+    feedInChunks(signal, 4096, analyser)
+    expect(analyser.finish().momentaryLufs.length).toBeGreaterThan(0)
+  })
+
+  it('gates on a stereo signal whose channels differ, not on one of them', () => {
+    // The block store went from one mean square per channel to one weighted
+    // value per block. If the weighting had been dropped rather than folded
+    // in, a signal with unequal channels would read differently from one with
+    // equal channels at the same total power.
+    const frames = 48000 * 6
+    const loud = new Float32Array(frames)
+    const quiet = new Float32Array(frames)
+    for (let i = 0; i < frames; i++) {
+      loud[i] = 0.1 * Math.sin((2 * Math.PI * 997 * i) / 48000)
+      quiet[i] = 0.01 * Math.sin((2 * Math.PI * 997 * i) / 48000)
+    }
+    const uneven = new LoudnessAnalyser({ sampleRate: 48000, channelCount: 2 })
+    feedInChunks([loud, quiet], 4096, uneven)
+    const single = new LoudnessAnalyser({ sampleRate: 48000, channelCount: 1 })
+    feedInChunks([loud], 4096, single)
+
+    // Two channels at 0.1 and 0.01 carry more power than one at 0.1, so the
+    // stereo reading must be the louder of the two — and by the amount the
+    // channel weights say, not by an accident of storage.
+    const stereo = uneven.finish().integratedLufs
+    const mono = single.finish().integratedLufs
+    expect(stereo).toBeGreaterThan(mono)
+    expect(stereo - mono).toBeCloseTo(10 * Math.log10(1 + 0.01), 6)
+  })
+})

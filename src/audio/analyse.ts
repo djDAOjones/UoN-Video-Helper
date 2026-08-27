@@ -31,7 +31,11 @@ export class AudioAnalyser {
   constructor(
     private readonly options: { readonly sampleRate: number; readonly channelCount: number },
   ) {
-    this.loudness = new LoudnessAnalyser(options)
+    // The momentary curve is not read anywhere in the pipeline — the envelope
+    // and the warnings both work from the short-term one — and keeping it costs
+    // roughly 290 kB an hour of source (VH-67). The EBU harness constructs its
+    // own analyser and asks for it.
+    this.loudness = new LoudnessAnalyser({ ...options, retainMomentary: false })
     this.truePeak = new TruePeakDetector(options.channelCount)
   }
 

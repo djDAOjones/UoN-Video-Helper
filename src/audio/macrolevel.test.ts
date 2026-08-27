@@ -130,6 +130,86 @@ describe('property 4: the pause freeze', () => {
   })
 })
 
+/**
+ * VH-61 / review R-10. The freeze was applied to the raw correction only, and
+ * the 15 s window is CENTRED — so speech on the far side of a pause reached
+ * back and moved the gain inside it, which is the pumping the freeze exists to
+ * prevent, arriving by a longer route.
+ */
+describe('property 4 again: the freeze holds the FINISHED envelope', () => {
+  const gainAt = (envelope: ReturnType<typeof buildGainEnvelope>, seconds: number) =>
+    envelope.gainDb[Math.round(seconds / envelope.stepSeconds)]!
+
+  it('does not move the gain during a pause between two speech levels', () => {
+    // Loud, pause, quiet. The quiet half wants a boost; the centred window
+    // used to start delivering it while the pause was still running.
+    const envelope = buildGainEnvelope({
+      integratedLufs: -20,
+      loudnessRangeLu: 15,
+      shortTermLufs: curve([
+        [40, -14],
+        [12, -70],
+        [40, -26],
+      ]),
+      stepSeconds: STEP,
+    })
+    const entering = gainAt(envelope, 40)
+    for (const t of [42, 45, 48, 51]) {
+      expect(gainAt(envelope, t), `${t}s into the pause`).toBeCloseTo(entering, 9)
+    }
+  })
+
+  it('leaves the silence before the first word at unity', () => {
+    // Nothing has been measured yet, so there is nothing to correct toward.
+    // The centred window used to lift this to +1.85 dB from speech that had
+    // not started.
+    const envelope = buildGainEnvelope({
+      integratedLufs: -20,
+      loudnessRangeLu: 15,
+      shortTermLufs: curve([
+        [10, -70],
+        [60, -26],
+      ]),
+      stepSeconds: STEP,
+    })
+    for (const t of [1, 4, 8]) expect(gainAt(envelope, t), `${t}s`).toBe(0)
+  })
+
+  it('resumes from where it froze, without a jump the slew limit forbids', () => {
+    const envelope = buildGainEnvelope({
+      integratedLufs: -20,
+      loudnessRangeLu: 15,
+      shortTermLufs: curve([
+        [40, -14],
+        [12, -70],
+        [40, -26],
+      ]),
+      stepSeconds: STEP,
+    })
+    const maxStep = 1 * envelope.stepSeconds
+    for (let i = 1; i < envelope.gainDb.length; i++) {
+      expect(Math.abs(envelope.gainDb[i]! - envelope.gainDb[i - 1]!)).toBeLessThanOrEqual(
+        maxStep + 1e-9,
+      )
+    }
+  })
+
+  it('still corrects the drift once speech comes back', () => {
+    // The freeze must not become "never move again".
+    const envelope = buildGainEnvelope({
+      integratedLufs: -20,
+      loudnessRangeLu: 15,
+      shortTermLufs: curve([
+        [40, -14],
+        [12, -70],
+        [60, -28],
+      ]),
+      stepSeconds: STEP,
+    })
+    expect(gainAt(envelope, 100)).toBeGreaterThan(gainAt(envelope, 45) + 1)
+  })
+})
+
 describe('correcting real drift', () => {
   it('lifts a speaker who moved away from the microphone', () => {
     const envelope = buildGainEnvelope({

@@ -11,6 +11,13 @@
  * produces; state is a handful of running sums plus one value per 100 ms of
  * source, so an hour costs a few hundred kilobytes rather than a decoded copy
  * of the file.
+ *
+ * That claim was once generous — retention was nearer 1.4 MB an hour, because
+ * gating blocks were kept per channel and the momentary curve was kept whether
+ * anyone wanted it or not (VH-67 / review R-16). Both are fixed: gating stores
+ * one pre-weighted value per block, which is the same arithmetic by the
+ * identity in `computeIntegrated`, and the momentary curve is retained only
+ * for callers that ask. A stereo hour is now around 580 kB.
  */
 
 import { BiquadCascade } from './biquad'
@@ -68,7 +75,14 @@ export interface LoudnessReport {
   readonly loudnessRangeLu: number
   /** Short-term (3 s) loudness at 100 ms steps. */
   readonly shortTermLufs: readonly number[]
-  /** Momentary (400 ms) loudness at 100 ms steps. */
+  /**
+   * Momentary (400 ms) loudness at 100 ms steps.
+   *
+   * Empty unless the analyser was constructed with `retainMomentary`. Nothing
+   * in the pipeline reads it — the envelope and the warnings both work from
+   * the short-term curve — while the EBU max-M cases need every value, so it
+   * is kept on request rather than always (VH-67).
+   */
   readonly momentaryLufs: readonly number[]
   /** Seconds of audio analysed. */
   readonly durationSeconds: number
@@ -152,16 +166,37 @@ export class LoudnessAnalyser {
   private readonly shortTermSums: Float64Array
 
   /** Per-gating-block per-channel mean square, flat: `[block0ch0, block0ch1, ...]`. */
+  /**
+   * One PRE-WEIGHTED mean square per gating block, not one per channel.
+   *
+   * `computeIntegrated` averages mean squares over the gated blocks and then
+   * applies the channel weights, and those two commute:
+   * `sum_ch w_ch * mean_i(ms[i][ch])` is `mean_i(sum_ch w_ch * ms[i][ch])`.
+   * Weighting on the way in is therefore the identical figure at half the
+   * storage for stereo (VH-67).
+   */
   private readonly blockMeanSquares: number[] = []
   private readonly blockLoudness: number[] = []
   private readonly momentaryLoudness: number[] = []
+  private readonly retainMomentary: boolean
   private readonly shortTermLoudness: number[] = []
 
   private framesSeen = 0
   private scratch: Float32Array
 
-  constructor(options: { readonly sampleRate: number; readonly channelCount: number }) {
+  /**
+   * @param options.retainMomentary - Keep the momentary curve in the report.
+   *   Defaults to `true`: the EBU harness needs it, and a meter that silently
+   *   stopped reporting a published measurement would be the wrong default.
+   *   The pipeline passes `false`.
+   */
+  constructor(options: {
+    readonly sampleRate: number
+    readonly channelCount: number
+    readonly retainMomentary?: boolean
+  }) {
     const { sampleRate, channelCount } = options
+    this.retainMomentary = options.retainMomentary ?? true
     if (!Number.isFinite(sampleRate) || sampleRate <= 0) {
       throw new RangeError(`Sample rate must be positive, got ${sampleRate}`)
     }
@@ -265,14 +300,14 @@ export class LoudnessAnalyser {
       for (let ch = 0; ch < channels; ch++) {
         weightedSum += this.weights[ch]! * (this.momentarySums[ch]! / samples)
       }
-      this.momentaryLoudness.push(toLoudness(weightedSum))
+      if (this.retainMomentary) this.momentaryLoudness.push(toLoudness(weightedSum))
 
       // Gating blocks stay on BS.1770-4's 100 ms grid: the first completes one
       // block-length in, and every INTEGRATED_STEP_HOPS after that.
       if ((this.hopsCompleted - HOPS_PER_BLOCK) % INTEGRATED_STEP_HOPS === 0) {
-        for (let ch = 0; ch < channels; ch++) {
-          this.blockMeanSquares.push(this.momentarySums[ch]! / samples)
-        }
+        // `weightedSum` IS the channel-weighted mean square for this block —
+        // the same value `toLoudness` is about to be given. Stored once.
+        this.blockMeanSquares.push(weightedSum)
         this.blockLoudness.push(toLoudness(weightedSum))
       }
     }
@@ -310,21 +345,18 @@ export class LoudnessAnalyser {
     const blockCount = this.blockLoudness.length
     if (blockCount === 0) return Number.NEGATIVE_INFINITY
 
-    const meanOver = (indices: readonly number[]): Float64Array => {
-      const means = new Float64Array(this.channelCount)
-      for (const index of indices) {
-        for (let ch = 0; ch < this.channelCount; ch++) {
-          means[ch]! += this.blockMeanSquares[index * this.channelCount + ch]!
-        }
-      }
-      for (let ch = 0; ch < this.channelCount; ch++) means[ch]! /= indices.length
-      return means
-    }
-
-    const weightedSumOf = (means: Float64Array): number => {
+    /**
+     * Mean of the channel-weighted mean squares over the given blocks.
+     *
+     * BS.1770-4 section 3 averages per channel and then weights; this averages
+     * the already-weighted value. The two are equal — weighting is a linear
+     * combination and the mean is linear — and this way the analyser holds one
+     * number per block instead of one per channel per block (VH-67).
+     */
+    const weightedMeanOver = (indices: readonly number[]): number => {
       let sum = 0
-      for (let ch = 0; ch < this.channelCount; ch++) sum += this.weights[ch]! * means[ch]!
-      return sum
+      for (const index of indices) sum += this.blockMeanSquares[index]!
+      return sum / indices.length
     }
 
     const aboveAbsolute: number[] = []
@@ -333,12 +365,12 @@ export class LoudnessAnalyser {
     }
     if (aboveAbsolute.length === 0) return Number.NEGATIVE_INFINITY
 
-    const relativeGate = toLoudness(weightedSumOf(meanOver(aboveAbsolute))) + RELATIVE_GATE_LU
+    const relativeGate = toLoudness(weightedMeanOver(aboveAbsolute)) + RELATIVE_GATE_LU
 
     const gated = aboveAbsolute.filter((i) => this.blockLoudness[i]! > relativeGate)
     if (gated.length === 0) return Number.NEGATIVE_INFINITY
 
-    return toLoudness(weightedSumOf(meanOver(gated)))
+    return toLoudness(weightedMeanOver(gated))
   }
 
   /**

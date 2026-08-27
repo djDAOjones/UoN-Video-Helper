@@ -19,7 +19,10 @@
  *     by definition a fast level change, and this makes a fast change
  *     impossible however much the envelope wants one.
  *  4. A pause freeze below -45 LUFS. Without it, silence is "too quiet" and
- *     gets turned up into a wash of room tone and air conditioning.
+ *     gets turned up into a wash of room tone and air conditioning. Applied to
+ *     the raw correction AND to the finished envelope: the first keeps a
+ *     pause's enormous demand out of the smoother, the second stops the
+ *     centred window reaching forward into the pause and undoing the freeze.
  *
  * The envelope only ever corrects long-term drift. Hitting the target loudness
  * is the single linear gain's job, one stage later.
@@ -69,16 +72,20 @@ export function buildGainEnvelope(input: MacroLevelInput): GainEnvelope {
   for (let i = 0; i < input.shortTermLufs.length; i += stride) shortTerm.push(input.shortTermLufs[i]!)
   if (shortTerm.length === 0) return empty
 
-  // 1. Raw correction, with pauses frozen BEFORE smoothing. A pause reads
-  //    -60 LUFS or lower, which would otherwise demand a large boost and drag
-  //    the smoothed envelope up with it for the surrounding 15 seconds.
+  /** Whether step `i` carries speech rather than a pause. */
+  const audibleAt = (i: number): boolean => {
+    const value = shortTerm[i]
+    return value !== undefined && Number.isFinite(value) && value >= MACRO_LEVEL.freezeBelowLufs
+  }
+
+  // 1. Raw correction, with pauses held at the last real value BEFORE
+  //    smoothing. A pause reads -60 LUFS or lower, which would otherwise
+  //    demand a large boost and drag the smoothed envelope up with it for the
+  //    surrounding 15 seconds.
   const raw = new Float64Array(shortTerm.length)
   let lastValid = 0
   for (let i = 0; i < shortTerm.length; i++) {
-    const value = shortTerm[i]!
-    if (Number.isFinite(value) && value >= MACRO_LEVEL.freezeBelowLufs) {
-      lastValid = input.integratedLufs - value
-    }
+    if (audibleAt(i)) lastValid = input.integratedLufs - shortTerm[i]!
     raw[i] = lastValid
   }
 
@@ -107,15 +114,32 @@ export function buildGainEnvelope(input: MacroLevelInput): GainEnvelope {
     smoothed[i] = sum / Math.max(1, count)
   }
 
-  // 3. Clamp, then 4. slew-limit. Order matters: clamping after the slew limit
-  //    would let the envelope creep past the bound between steps.
+  // 3. Clamp, 4. slew-limit, and 5. freeze — in that order, which is spec
+  //    5.2 step 3's own order and not the one this used to have.
+  //
+  //    Clamping before the slew limit matters because clamping after it would
+  //    let the envelope creep past the bound between steps.
+  //
+  //    The freeze appears twice on purpose, and the two are doing different
+  //    jobs (VH-61 / review R-10). Step 1 stops a pause's enormous raw demand
+  //    entering the smoother. This one stops the SMOOTHED envelope moving
+  //    during the pause at all — and it is needed because the window is
+  //    centred, so speech fifteen seconds later was reaching back and lifting
+  //    the gain inside a pause that had been frozen. Measured: a gain frozen
+  //    at -5 dB drifted to -1.29 dB mid-pause, and to +1.85 dB in the silence
+  //    before a recording's first word. Freezing the applied envelope is what
+  //    spec 5.2 step 3 asks for when it lists the freeze last.
+  //
+  //    Expressed as "do not advance", not as "hold a saved value", so it can
+  //    never introduce a step the slew limit would have forbidden.
   const maxStep = MACRO_LEVEL.slewDbPerSecond * ENVELOPE_STEP_SECONDS
   const gainDb = new Float64Array(smoothed.length)
   let previous = 0
   for (let i = 0; i < smoothed.length; i++) {
-    const clamped = Math.max(-MACRO_LEVEL.clampDb, Math.min(MACRO_LEVEL.clampDb, smoothed[i]!))
-    const delta = Math.max(-maxStep, Math.min(maxStep, clamped - previous))
-    previous += delta
+    if (audibleAt(i)) {
+      const clamped = Math.max(-MACRO_LEVEL.clampDb, Math.min(MACRO_LEVEL.clampDb, smoothed[i]!))
+      previous += Math.max(-maxStep, Math.min(maxStep, clamped - previous))
+    }
     gainDb[i] = previous
   }
 

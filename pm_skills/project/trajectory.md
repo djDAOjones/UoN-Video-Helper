@@ -21,6 +21,15 @@
 
 ## Archived: real material and Band 1's first half — see archive/trajectory/trajectory-0002-real-material-and-band-1.md
 
+### VH-61 (part), VH-67 — the envelope holds, the meter keeps less
+
+- VH-67 — Shipped 2026-08-27. Gating blocks are stored pre-weighted, which is
+  the same arithmetic at half the size, and the momentary curve is kept only
+  for callers that ask. A stereo hour: ~1.4 MB to ~580 kB. See decision-log.
+- VH-61 — Partly shipped 2026-08-27. The pause freeze now holds the finished
+  envelope, so a centred window can no longer reach into a pause and undo it.
+  The LRA end-of-file half is left alone on purpose. See decision-log.
+
 ### VH-65 — least privilege where publishing happens
 
 - VH-65 — Shipped 2026-08-27. Deploy credentials belong to the deploy job

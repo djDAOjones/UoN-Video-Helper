@@ -134,18 +134,22 @@
       invariant, an injected defect turns it red, and a run is short enough
       that it is actually run.
 
-- [ ] **VH-61 LRA and pause freeze are wrong at the boundaries** (2026-08-27)
-      Intent: R-10, but NOT its remedy. EOF suppression of LRA is real; the
-      prescribed 1.5 s of silence was tested and is unsafe — on a quiet ending
-      it took a measured 3.79 LRA to 15.32, and `shouldApplyMacroLevelling()`
-      fires above 9, so padding would switch on macro-levelling because a
-      recording ends in room tone. The second half is likely stronger than the
-      review states: spec §5.2 step 3 freezes pauses AFTER smoothing and slew
-      limiting; `macrolevel.ts` freezes the raw correction before smoothing.
-      Done when: LRA state alone advances over a tail without touching
-      integrated loudness, duration, or the gate, the pause hold is reapplied
-      to the final envelope, and neither worsens a boundary corpus. Protected
-      DSP — re-run the EBU harness.
+- [~] **VH-61 LRA is suppressed at end of file** (2026-08-27)
+      Intent: R-10, but NOT its remedy.
+      Done 2026-08-27: the pause freeze is applied to the FINISHED envelope as
+      well as the raw correction, so a centred 15 s window can no longer reach
+      past a pause and move a gain that was frozen (-5 dB entering a pause read
+      -1.29 dB inside it; leading silence read +1.85 dB).
+      Remaining, and needing a decision rather than a patch: a loud passage in
+      the final second reads LRA 0.00 against 10.80 mid-file. The 1.5 s
+      silence pad is disproved — on a quiet ending it took a measured 3.79 to
+      15.32 against a mid-file truth of 6.51. Direction matters: suppression
+      under-reports, so `shouldApplyMacroLevelling` stays OFF, which is the safe
+      failure; padding over-reports and switches the leveller on because a
+      recording ends in room tone.
+      Done when: a standards-grounded correction exists, its effect on the
+      LRA > 9 gate is modelled on a boundary corpus, and neither direction is
+      made worse. Protected DSP — re-run the EBU harness.
 
 - [ ] **VH-60 Preflight does not bind to the job that runs** (2026-08-27)
       Intent: R-05 and R-06, one visit. Results are not tied to the selected
@@ -166,13 +170,6 @@
       action, so consent is inferred from the user continuing.
       Done when: progress announces its stage, and a discouraged job requires a
       deliberate acknowledgement. Feeds VH-32.
-
-- [ ] **VH-67 Loudness analysis retains one array per window** (2026-08-27)
-      Intent: R-16. Retention grows linearly with duration, contradicting the
-      "few hundred kilobytes" comment and the bounded-state contract. Not
-      whole-file buffering, and not biting at one hour.
-      Done when: the analyser keeps only what warnings and envelopes need and
-      releases the curves once derived, with equivalence shown.
 
 - [ ] **VH-66 Operational and documentation contracts have drifted**
       (2026-08-27)
