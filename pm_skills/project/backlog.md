@@ -109,7 +109,8 @@
       never-uploaded reassurance should survive.
       Done when: a considered redesign is agreed and implemented against
       `UI-STANDARDS.md` §6. Last in the band by design: it must lay out the
-      estimate wording, the content class, the fade toggles and VH-64.
+      estimate wording, the content class and the fade toggles. VH-64's
+      acknowledgement step shipped 2026-08-27 and is the pattern to build on.
 
 ### Band 2 — The edges hold
 
@@ -150,14 +151,6 @@
       Done when: a standards-grounded correction exists, its effect on the
       LRA > 9 gate is modelled on a boundary corpus, and neither direction is
       made worse. Protected DSP — re-run the EBU harness.
-
-- [ ] **VH-64 Progress and the discourage acknowledgement are incomplete**
-      (2026-08-27)
-      Intent: R-14. Progress has no stable accessible label or stage
-      description, and a "discourage" preflight outcome has no acknowledge
-      action, so consent is inferred from the user continuing.
-      Done when: progress announces its stage, and a discouraged job requires a
-      deliberate acknowledgement. Feeds VH-32.
 
 - [ ] **VH-66 Operational and documentation contracts have drifted**
       (2026-08-27)

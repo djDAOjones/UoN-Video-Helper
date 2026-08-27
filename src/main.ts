@@ -57,6 +57,7 @@ const preflightReport = required<HTMLDivElement>('#preflight-report')
 const audioWarnings = required<HTMLDivElement>('#audio-warnings')
 const processActions = required<HTMLDivElement>('#process-actions')
 const processProgress = required<HTMLProgressElement>('#process-progress')
+const processProgressLabel = required<HTMLParagraphElement>('#process-progress-label')
 const processResult = required<HTMLDivElement>('#process-result')
 const presetChoice = required<HTMLFieldSetElement>('#preset-choice')
 const brandingChoice = required<HTMLFieldSetElement>('#branding-choice')
@@ -507,7 +508,9 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
       presetChoice.hidden = false
       brandingChoice.hidden = false
       subtitleField.hidden = false
-      if (reply.summary.verdict.outcome !== 'block') showProcessControls(file)
+      if (reply.summary.verdict.outcome !== 'block') {
+        showProcessControls(file, reply.summary.verdict.outcome === 'discourage')
+      }
       return
     }
     if (reply.kind === 'failed') {
@@ -559,6 +562,10 @@ function onStage(stage: string, fraction: number): void {
   const percent = Math.round(fraction * 100)
   setStatus(`${STAGE_WORDS[stage] ?? stage} — ${percent}%`)
   processProgress.value = fraction
+  // The bar's accessible name tracks the stage, so it announces "Encoding
+  // video, 63%" rather than "63%" of nothing in particular (VH-64).
+  processProgressLabel.textContent = STAGE_WORDS[stage] ?? stage
+  processProgressLabel.hidden = false
   processProgress.hidden = false
 }
 
@@ -631,7 +638,27 @@ cancelButton.className = 'button button--secondary'
 cancelButton.textContent = 'Cancel'
 cancelButton.hidden = true
 
-processActions.append(startButton, cancelButton)
+/**
+ * Spec 7.3: a discouraged job may continue "after acknowledgement".
+ *
+ * There was no acknowledgement. Start appeared for every outcome short of a
+ * block, so agreement was inferred from the user pressing the button they were
+ * being warned about (review R-14). This is the deliberate act that separates
+ * "read the warning" from "clicked past it", and it is built once for the same
+ * reason Start and Cancel are (VH-36).
+ */
+const acknowledgeButton = document.createElement('button')
+acknowledgeButton.type = 'button'
+acknowledgeButton.className = 'button button--secondary'
+acknowledgeButton.textContent = 'I understand — carry on anyway'
+acknowledgeButton.hidden = true
+acknowledgeButton.addEventListener('click', () => {
+  acknowledgeButton.hidden = true
+  startButton.hidden = false
+  startButton.focus()
+})
+
+processActions.append(acknowledgeButton, startButton, cancelButton)
 
 /**
  * Spec 7.5: keep the device awake while a job runs, and warn before the page
@@ -824,6 +851,7 @@ function beginJob(file: File): void {
       jobCancelId = null
       setJobInFlight(false)
       processProgress.hidden = true
+      processProgressLabel.hidden = true
     })
 }
 
@@ -837,9 +865,18 @@ cancelButton.addEventListener('click', () => {
   worker.postMessage({ kind: 'cancel', id: nextRequestId++, cancelId: jobCancelId })
 })
 
-/** Points the Start button at this file and reveals the controls. */
-function showProcessControls(file: File): void {
+/**
+ * Points the Start button at this file and reveals the controls.
+ *
+ * @param needsAcknowledgement - True for a `discourage` verdict, where spec 7.3
+ *   allows continuing only after the user says so. Start is withheld until
+ *   they do, and every new selection asks again — an acknowledgement is about
+ *   one job, not about the session.
+ */
+function showProcessControls(file: File, needsAcknowledgement = false): void {
   jobFile = file
+  acknowledgeButton.hidden = !needsAcknowledgement
+  startButton.hidden = needsAcknowledgement
   processActions.hidden = false
 }
 

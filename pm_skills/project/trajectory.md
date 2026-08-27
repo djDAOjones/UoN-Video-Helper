@@ -21,6 +21,12 @@
 
 ## Archived: real material and Band 1's first half — see archive/trajectory/trajectory-0002-real-material-and-band-1.md
 
+### VH-64 — progress says what it is, and a slow job is agreed to
+
+- VH-64 — Shipped 2026-08-27. The progress bar carries an accessible name that
+  follows the stage, and a discouraged verdict withholds Start until the user
+  acknowledges it. See decision-log.
+
 ### VH-60 — the screen and the Start button describe one job
 
 - VH-60 — Shipped 2026-08-27. Every asynchronous answer carries the selection

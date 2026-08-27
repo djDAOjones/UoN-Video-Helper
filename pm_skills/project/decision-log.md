@@ -11,6 +11,36 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-64: name the progress, and ask before the slow job
+
+**Decision:** give the progress bar an accessible name that tracks the stage,
+and withhold Start on a `discourage` verdict until the user says to carry on.
+
+**Rationale:** a bare `<progress>` announces a percentage and nothing else, so
+a screen-reader user heard "63%" with no way to know 63% of what — and the
+stage is the half that carries the meaning. It is labelled by a visible line
+that follows the stage, rather than by an `aria-label` nobody sighted can see,
+so the two cannot drift.
+
+Spec 7.3 allows a discouraged job to continue "after acknowledgement", and
+there was no acknowledgement: Start appeared for every outcome short of a
+block, so agreement was inferred from the user pressing the button they were
+being warned about (review R-14). The acknowledgement is a deliberate second
+act, per selection rather than per session — an acknowledgement is about one
+job.
+
+**Rejected:** a modal. `UI-STANDARDS.md` reserves those for something
+irreversible the user did not initiate; this is a recommendation they may
+disagree with, and it belongs beside the recommendation.
+
+**Verified in Chrome, with the mobile device class emulated:** a discouraged
+verdict shows the acknowledgement and hides Start; acknowledging reveals Start
+and moves focus to it; a desktop `proceed` verdict shows Start immediately and
+never the acknowledgement; and the bar announces "Analysing audio" rather than
+nothing while it runs.
+
+**Link:** VH-64; review R-14; spec 7.3; `index.html`, `src/main.ts`.
+
 ## 2026-08-27 — VH-60: an answer belongs to the question that asked it
 
 **Decision:** stamp every selection with an epoch and drop any answer that

@@ -104,7 +104,19 @@
         <div id="preflight-report"></div>
         <div id="audio-warnings"></div>
         <div class="actions" id="process-actions" hidden></div>
-        <progress class="progress" id="process-progress" max="1" value="0" hidden></progress>
+        <!-- Named and described. A bare <progress> announces a percentage and
+             nothing else, so a screen-reader user heard "63%" with no way to
+             know 63% of what — and the stage is the half that carries the
+             meaning (VH-64). -->
+        <p class="helper" id="process-progress-label" hidden>Creating your video</p>
+        <progress
+          class="progress"
+          id="process-progress"
+          max="1"
+          value="0"
+          aria-labelledby="process-progress-label"
+          hidden
+        ></progress>
         <div id="process-result"></div>
       </section>
 
