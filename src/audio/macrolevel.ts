@@ -30,9 +30,6 @@
 
 import { MACRO_LEVEL } from '../config/audio'
 
-/** Envelope resolution. 10 Hz is ample for something that moves at 1 dB/s. */
-const ENVELOPE_STEP_SECONDS = 0.1
-
 export interface MacroLevelInput {
   /** Gated integrated loudness of the source, the level the envelope pulls toward. */
   readonly integratedLufs: number
@@ -62,12 +59,12 @@ export function shouldApplyMacroLevelling(loudnessRangeLu: number): boolean {
  * the same arithmetic but not the same intent.
  */
 export function buildGainEnvelope(input: MacroLevelInput): GainEnvelope {
-  const empty: GainEnvelope = { gainDb: new Float64Array(0), stepSeconds: ENVELOPE_STEP_SECONDS }
+  const empty: GainEnvelope = { gainDb: new Float64Array(0), stepSeconds: MACRO_LEVEL.envelopeStepSeconds }
   if (!shouldApplyMacroLevelling(input.loudnessRangeLu)) return empty
   if (input.shortTermLufs.length === 0 || !Number.isFinite(input.integratedLufs)) return empty
 
   // Resample the short-term curve onto the envelope grid.
-  const stride = Math.max(1, Math.round(ENVELOPE_STEP_SECONDS / input.stepSeconds))
+  const stride = Math.max(1, Math.round(MACRO_LEVEL.envelopeStepSeconds / input.stepSeconds))
   const shortTerm: number[] = []
   for (let i = 0; i < input.shortTermLufs.length; i += stride) shortTerm.push(input.shortTermLufs[i]!)
   if (shortTerm.length === 0) return empty
@@ -90,7 +87,7 @@ export function buildGainEnvelope(input: MacroLevelInput): GainEnvelope {
   }
 
   // 2. Smooth over 15 s, centred, using a running sum.
-  const half = Math.max(1, Math.round(MACRO_LEVEL.windowSeconds / ENVELOPE_STEP_SECONDS / 2))
+  const half = Math.max(1, Math.round(MACRO_LEVEL.windowSeconds / MACRO_LEVEL.envelopeStepSeconds / 2))
   const smoothed = new Float64Array(raw.length)
   let sum = 0
   let count = 0
@@ -132,7 +129,7 @@ export function buildGainEnvelope(input: MacroLevelInput): GainEnvelope {
   //
   //    Expressed as "do not advance", not as "hold a saved value", so it can
   //    never introduce a step the slew limit would have forbidden.
-  const maxStep = MACRO_LEVEL.slewDbPerSecond * ENVELOPE_STEP_SECONDS
+  const maxStep = MACRO_LEVEL.slewDbPerSecond * MACRO_LEVEL.envelopeStepSeconds
   const gainDb = new Float64Array(smoothed.length)
   let previous = 0
   for (let i = 0; i < smoothed.length; i++) {
@@ -143,7 +140,7 @@ export function buildGainEnvelope(input: MacroLevelInput): GainEnvelope {
     gainDb[i] = previous
   }
 
-  return { gainDb, stepSeconds: ENVELOPE_STEP_SECONDS }
+  return { gainDb, stepSeconds: MACRO_LEVEL.envelopeStepSeconds }
 }
 
 /**

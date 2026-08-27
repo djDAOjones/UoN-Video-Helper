@@ -11,6 +11,60 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-77: the four small debts
+
+**Tuneables came home.** `MINIMUM_GAP_DEPTH_LU`, the compressor's detector
+window, the macro-leveller's envelope step and the two selection deadlines were
+literals in the modules that used them. Each is now in `src/config/` — the
+first three in `audio.ts` beside the values they qualify, the deadlines in
+`thresholds.ts` as `SELECTION_DEADLINE_MS`. No behaviour changed; what changed
+is that tuning any of them is a one-line edit in the place `AGENTS.md` says to
+look for it.
+
+**The bundle now says what the app was doing.** A diagnostics bundle was a
+stack trace and a user agent, and the first three questions anyone reading one
+asks — what file, what did the device say, what had the user chosen — it
+answered only by inference. `setDiagnosticsContext` records a stage, the
+`SourceReport`, the pre-flight summary and the three choices; `resetDiagnosticsContext`
+drops all of it when a new file is picked, so a bundle never describes the
+file before this one.
+
+The risk this adds is obvious: it is the largest new surface through which the
+user's media could escape. Two lines of defence. Call sites pass already-safe
+shapes — never a `File`, never subtitle text; and `subtitleVtt`, `vtt` and
+`cues` joined the redactor's deny list, because a transcript is not path-like
+and not name-like, so no heuristic was going to catch it. Verified in Chrome on
+a real lecture: the bundle carries container, duration, codec strings, frame-rate
+statistics and a `proceed` verdict, and contains neither the filename nor any
+path. 12 kB — still something a person can paste.
+
+**Track identity is carried.** `pipeline.ts` carried the file-level tags and
+dropped the per-track ones, so a player offering "English" for the source
+offered "Undetermined" for the output. `carryTrackMetadata` reads language,
+name and disposition onto both output tracks. Two deliberate departures from a
+straight copy: `'und'` is omitted rather than restated, and `default`/`primary`
+are forced true — they describe standing among tracks of the same type, and the
+output has exactly one of each, so a lone audio track marked non-default is one
+some players will not select. A read failure is warned and surfaced as the
+existing `metadata-lost` warning, never a failed job.
+
+Measured, not assumed: an MP4 written with `eng`/"Main Presentation" and
+`fra`/"Director Commentary" came back out of the pipeline with both intact.
+The same measurement showed MP4 stores only `default` of the disposition flags
+— `commentary` did not survive even a direct write-and-read — so the rest are
+carried in hope of a container that keeps them, and the module says so.
+
+**Rollback is written down.** DEV-INFRASTRUCTURE's deployment section gains the
+recipe: there is no undo button because there is no deploy button, so a
+rollback is a revert on `main` (never a force-push, which is the one move that
+can lose another session's work), with `gh workflow run` only if the push does
+not trigger, and a `buildId` check against the head SHA — because the version
+identity exists so "exactly what code is live?" has an answer that does not
+depend on trusting the deployment log.
+
+**Link:** VH-77, VH-71 WP6; `src/config/audio.ts`, `src/config/thresholds.ts`,
+`src/core/diagnostics.ts`, `src/media/track-metadata.ts`, `DEV-INFRASTRUCTURE.md`.
+
 ## 2026-08-27 — VH-75: four lifecycle guards, and the leak they exposed
 
 **Decision:** cancel superseded analysis rather than merely ignoring it; hold

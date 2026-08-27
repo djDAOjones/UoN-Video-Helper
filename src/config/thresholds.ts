@@ -79,3 +79,17 @@ export const ESTIMATE_BANDS = {
  * Throughput below this is treated as unmeasured rather than believed.
  */
 export const MINIMUM_CREDIBLE_PROBE_FRAMES = 10
+
+/**
+ * How long a file selection waits for the worker before giving up on it.
+ *
+ * Both are generous on purpose: timing out on a file that would have worked
+ * costs the user the job, while waiting costs them a progress message they are
+ * already reading. Reading structure is fast, but a multi-gigabyte file on a
+ * slow disk is not; the pre-flight then decodes and re-encodes a real sample of
+ * it, so it gets half again as long.
+ */
+export const SELECTION_DEADLINE_MS = {
+  inspect: 120_000,
+  preflight: 180_000,
+} as const

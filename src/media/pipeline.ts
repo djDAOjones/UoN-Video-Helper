@@ -50,6 +50,7 @@ import { findFreezeFrame } from './freeze'
 import { audioEncodingConfigFor, videoEncodingConfigFor } from './encoding'
 import { AudioTimelineShift, measureEncoderDelay } from './encoder-delay'
 import type { OpfsWorkspace } from './opfs'
+import { carryTrackMetadata } from './track-metadata'
 import { offsetVtt } from './vtt'
 
 /** Named stages, per spec section 9.2 — not one opaque bar. */
@@ -328,13 +329,24 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     target: outputFile.target,
   })
 
+  // Spec 8.3.4's per-track half: the language a player lists in its audio menu,
+  // the name the user gave the track, and what the track is for. Read before
+  // the tracks are added, because metadata is fixed at that moment.
+  let metadataCarried = true
+  const noteLoss = (): void => {
+    metadataCarried = false
+  }
+  const [videoMetadata, audioMetadata] = await Promise.all([
+    carryTrackMetadata(videoTrack, noteLoss),
+    carryTrackMetadata(audioTrack, noteLoss),
+  ])
+
   const videoSource = new VideoSampleSource(videoEncodingConfigFor(shape))
-  output.addVideoTrack(videoSource, { frameRate: shape.frameRate })
+  output.addVideoTrack(videoSource, { frameRate: shape.frameRate, ...videoMetadata })
 
   // Spec 8.3.4: preserve creation metadata where the muxer supports it.
   // Mediabunny reads and writes file-level tags even though it cannot see
   // subtitle tracks, so this much genuinely survives.
-  let metadataCarried = true
   try {
     const tags = await input.getMetadataTags()
     if (tags && Object.keys(tags).length > 0) {
@@ -356,7 +368,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
   if (audioTrack && audioPlan) {
     const audioConfig = audioEncodingConfigFor(preset, audioPlan.channelCount)
     audioSource = new AudioSampleSource(audioConfig)
-    output.addAudioTrack(audioSource)
+    output.addAudioTrack(audioSource, audioMetadata)
 
     // The encoder's own delay, cancelled by shifting the audio timeline
     // earlier. Measured rather than assumed: it is a property of whichever

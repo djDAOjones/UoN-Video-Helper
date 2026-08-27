@@ -73,7 +73,7 @@
      than by ID. VH-76 shipped first, 2026-08-27, so everything below it is
      now judged by a gate that does not rewrite `dist/`, and VH-72 and VH-73
      shipped with it, and VH-75 after them. VH-75 groups four verified holes of
-     one shape; VH-77 is the swept-up remainder. VH-62 is LAST because its
+     one shape. VH-62 is LAST because its
      remaining half is harness work whose value depends on what Band 1a does
      to the pipeline — and Band 1a is about to move it, so VH-62 earns
      promotion the moment VH-55/VH-74 turn out large. -->
@@ -87,16 +87,6 @@
       order, and the decided-not-to-reconcile list.
       Done when: every child is shipped or explicitly cut; then delete the
       ticket.
-
-- [ ] **VH-77 Hygiene remainder from the cross-check** (2026-08-27)
-      Intent: four small debts — tuneables outside `src/config/` (P3-02);
-      diagnostics bundle without job context (P2-10); track
-      language/name/disposition not carried (P1-08 residual); the manual
-      rollback recipe undocumented in DEV-INFRASTRUCTURE.
-      Done 2026-08-27 by VH-75: the unclosed-sample-on-abort leak, which
-      VH-75's supersede test made reproducible on demand.
-      Done when: each is fixed or explicitly cut; the diagnostics addition
-      carries a redaction test. Detail: [VH-71 WP6](tickets/VH-71.md).
 
 - [~] **VH-62 The acceptance harness has false-pass routes** (2026-08-27)
       Intent: R-11. Criterion 2's missing-measurement and cropped-peak routes

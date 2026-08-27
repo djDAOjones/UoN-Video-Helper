@@ -26,13 +26,6 @@ function coefficientFor(ms: number, sampleRate: number): number {
 
 const MINIMUM_POWER = 1e-24
 
-/**
- * RMS detector window. Long enough to ignore the waveform itself — a 100 Hz
- * cycle is 10 ms, and anything below that has been high-passed away — and
- * short enough to follow syllables.
- */
-const DETECTOR_MS = 10
-
 export interface CompressorOptions {
   readonly sampleRate: number
   readonly ratio?: number
@@ -61,7 +54,7 @@ export class Compressor {
     this.knee = options.kneeDb ?? COMPRESSOR.kneeDb
     this.attack = coefficientFor(options.attackMs ?? COMPRESSOR.attackMs, options.sampleRate)
     this.release = coefficientFor(options.releaseMs ?? COMPRESSOR.releaseMs, options.sampleRate)
-    this.detector = coefficientFor(DETECTOR_MS, options.sampleRate)
+    this.detector = coefficientFor(COMPRESSOR.detectorMs, options.sampleRate)
   }
 
   /** Static curve: input level in dBFS to output level in dBFS. */

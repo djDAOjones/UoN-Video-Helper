@@ -46,6 +46,8 @@ export const MACRO_LEVEL = {
   slewDbPerSecond: 1,
   /** Freeze below this so pauses and room tone are never turned up. */
   freezeBelowLufs: -45,
+  /** Envelope resolution. 10 Hz is ample for something that moves at 1 dB/s. */
+  envelopeStepSeconds: 0.1,
 } as const
 
 /** Spec section 5.2 step 4. Gentle by design — this is not a loudness tool. */
@@ -63,6 +65,12 @@ export const COMPRESSOR = {
    *decided it, in different files (VH-68).
    */
   kneeDb: 6,
+  /**
+   * RMS detector window. Long enough to ignore the waveform itself — a 100 Hz
+   * cycle is 10 ms, and anything below that has been high-passed away — and
+   * short enough to follow syllables.
+   */
+  detectorMs: 10,
 } as const
 
 /**
@@ -165,3 +173,13 @@ export const WARNING_THRESHOLDS = {
    */
   onsetTrimmedAboveDbfs: -50,
 } as const
+
+/**
+ * How far below the median the quiet passages must fall before the noise floor
+ * is treated as measurable at all.
+ *
+ * A genuinely noisy recording still clears this easily — speech at -20 with
+ * room tone at -45 is a 25 LU gap. What it excludes is continuous narration
+ * with no pauses, where the "floor" is just the speech itself.
+ */
+export const MINIMUM_GAP_DEPTH_LU = 10

@@ -10,18 +10,8 @@
  * belong in the UI. Keeping them apart is what lets both be tested.
  */
 
-import { WARNING_THRESHOLDS } from '../config/audio'
+import { MINIMUM_GAP_DEPTH_LU, WARNING_THRESHOLDS } from '../config/audio'
 import type { AudioAnalysis } from './analyse'
-
-/**
- * How far below the median the quiet passages must fall before the noise floor
- * is treated as measurable at all.
- *
- * A genuinely noisy recording still clears this easily — speech at -20 with
- * room tone at -45 is a 25 LU gap. What it excludes is continuous narration
- * with no pauses, where the "floor" is just the speech itself.
- */
-const MINIMUM_GAP_DEPTH_LU = 10
 
 export type AudioWarningCode =
   | 'no-audio'

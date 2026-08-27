@@ -13,6 +13,8 @@ import {
   installGlobalErrorCapture,
   onUncaughtError,
   recordUncaught,
+  resetDiagnosticsContext,
+  setDiagnosticsContext,
   type CapturedError,
 } from './core/diagnostics'
 import {
@@ -26,6 +28,7 @@ import { APP_VERSION, BUILD_ID } from './core/version'
 import { CLOSING_DEFAULTS, type BrandingMode } from './config/branding'
 import type { PresetId } from './config/presets'
 import {
+  SELECTION_DEADLINE_MS,
   WORKER_ACKNOWLEDGEMENT_LIMIT_MS,
   WORKER_SILENCE_LIMIT_MS,
 } from './config/thresholds'
@@ -496,6 +499,8 @@ fileInput.addEventListener('change', () => {
 
   // Never log the filename — DEV-INFRASTRUCTURE.md -> "Redaction".
   log.info('ui', 'file chosen', { sizeBytes: file.size, type: file.type })
+  // A bundle taken now must not describe the file before this one.
+  resetDiagnosticsContext('inspecting')
   setStatus('Reading the video…')
   sourceReport.replaceChildren()
   preflightReport.replaceChildren()
@@ -517,16 +522,14 @@ fileInput.addEventListener('change', () => {
 
   void (async () => {
     try {
-      // Two minutes: reading structure is fast, but a multi-gigabyte file on a
-      // slow disk is not, and timing out on a file that would have worked is
-      // worse than waiting.
-      const reply = await selectionRequest({ kind: 'inspect', file }, 120_000)
+      const reply = await selectionRequest({ kind: 'inspect', file }, SELECTION_DEADLINE_MS.inspect)
       // The commit boundary on this side. A report for a file the picker no
       // longer shows must not reach the screen, whatever order it arrived in.
       if (!current()) return
       if (reply.kind === 'inspected') {
         renderSourceReport(sourceReport, reply.report)
         setStatus(summarise(reply.report))
+        setDiagnosticsContext({ stage: 'inspected', source: reply.report })
         // Structure first, then the measurement — the probe really does decode
         // and encode three seconds, so it must not hold up what we already know.
         await runPreflight(file, current)
@@ -535,6 +538,7 @@ fileInput.addEventListener('change', () => {
       if (reply.kind === 'failed') {
         renderSourceError(sourceReport, reply.message)
         setStatus('That file could not be read.')
+        setDiagnosticsContext({ stage: 'failed' })
         return
       }
       // Reachable since VH-57 made inspection cancellable. It means this
@@ -570,11 +574,12 @@ fileInput.addEventListener('change', () => {
  */
 async function runPreflight(file: File, current: () => boolean): Promise<void> {
   setStatus('Checking this video against your device…')
+  setDiagnosticsContext({ stage: 'preflighting' })
 
   try {
     const reply = await selectionRequest(
       { kind: 'preflight', file, presetId: chosenPreset() },
-      180_000,
+      SELECTION_DEADLINE_MS.preflight,
     )
     // A verdict about a file or preset the user has since changed must not
     // reach the screen — and above all must not reveal Start (review R-05).
@@ -585,6 +590,10 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
         heading: 'Worth knowing about the sound',
       })
       setStatus(summarisePreflight(reply.summary))
+      setDiagnosticsContext({
+        stage: reply.summary.verdict.outcome === 'block' ? 'blocked' : 'ready',
+        capability: reply.summary,
+      })
       presetChoice.hidden = false
       brandingChoice.hidden = false
       subtitleField.hidden = false
@@ -808,6 +817,7 @@ function applyKeepAwake(): void {
  */
 function setSaveInFlight(saving: boolean): void {
   saveInFlight = saving
+  setDiagnosticsContext({ stage: saving ? 'saving' : 'finished' })
   applyControlLock()
   applyKeepAwake()
   updateLeaveWarning()
@@ -918,6 +928,17 @@ function beginJob(file: File): void {
   )
   jobCancelId = id
   setJobInFlight(true)
+  // The three choices, and whether a sidecar was supplied — never its text.
+  setDiagnosticsContext({
+    stage: 'processing',
+    job: {
+      presetId: chosenPreset(),
+      closing: chosenClosingMode(),
+      style: chosenBranding('style', CLOSING_DEFAULTS.style),
+      colour: chosenBranding('colour', CLOSING_DEFAULTS.colour),
+      subtitleSupplied: subtitleVtt !== null,
+    },
+  })
 
   void promise
     .then((reply) => {
@@ -927,17 +948,21 @@ function beginJob(file: File): void {
           heading: 'Worth knowing about the finished video',
         })
         setStatus('Your video is ready.')
+        setDiagnosticsContext({ stage: 'finished' })
       } else if (reply.kind === 'cancelled') {
         // Nothing was written anywhere the user can see, and the source is
         // untouched — say so rather than leaving them wondering.
         setStatus('Cancelled. Nothing was saved, and your original file is unchanged.')
+        setDiagnosticsContext({ stage: 'idle' })
       } else if (reply.kind === 'failed') {
         renderSourceError(processResult, reply.message)
         setStatus('The video could not be created.')
+        setDiagnosticsContext({ stage: 'failed' })
       }
     })
     .catch(async (cause: unknown) => {
       renderSourceError(processResult, 'The job did not finish.')
+      setDiagnosticsContext({ stage: 'failed' })
       log.error('ui', 'process request failed', {
         reason: cause instanceof Error ? cause.message : String(cause),
       })

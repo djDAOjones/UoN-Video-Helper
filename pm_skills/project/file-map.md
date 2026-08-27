@@ -15,7 +15,7 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 163 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 166 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 20 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
@@ -23,7 +23,7 @@
 - `public` — 13 file(s)
 - `reviews` — 7 file(s)
 - `scripts` — 5 file(s)
-- `src` — 107 file(s)
+- `src` — 110 file(s)
 - `test` — 4 file(s)
 <!-- /file-map-index -->
 
@@ -135,6 +135,7 @@
 - `src/config/presets.test.ts` — Pins the preset rules, including that the smaller preset preserves resolution.
 - `src/config/presets.ts` — The two output presets and the encoder config they imply. Purpose-named, never technique-named.
 - `src/config/thresholds.ts` — Pre-flight bands and probe constants — the numbers D8 will replace with measurements.
+- `src/core/diagnostics.test.ts` — Proves the bundle's job context carries what the file is and never which file.
 - `src/core/diagnostics.ts` — Global error capture on both threads, plus the redacted copy-diagnostics bundle.
 - `src/core/egress.test.ts` — Pins that a body is a finding however it was attached, and that both realms are counted.
 - `src/core/egress.ts` — Watches what leaves ONE realm. Per-global, so the worker runs its own and the two are merged.
@@ -182,6 +183,8 @@
 - `src/media/probe.ts` — The 3-second calibration probe: real decode and encode on the real file and device.
 - `src/media/save.test.ts` — Pins the suggested filename and the guard that refuses the source as a destination.
 - `src/media/save.ts` — Streams the result to the user's chosen location, refuses the source, and hands back what to release.
+- `src/media/track-metadata.test.ts` — Pins the carry rules: 'und' omitted, the lone track made default, a read failure reported not fatal.
+- `src/media/track-metadata.ts` — Carries a source track's language, name and disposition onto the output track.
 - `src/media/vtt.test.ts` — Proves cue text, settings, comments and line endings survive byte for byte.
 - `src/media/vtt.ts` — Offsets WebVTT timings by rewriting only timestamp lines; never touches the words.
 - `src/spike/alpha.ts` — VH-12 spike: decodes each branding onset and reads back pixel alpha. Dev-only, not built.

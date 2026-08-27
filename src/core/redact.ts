@@ -27,6 +27,11 @@ const DENIED_KEYS = new Set([
   'comment',
   'description',
   'lyrics',
+  // The user's own transcript. Not path-like, not name-like, and every word of
+  // it is the lecture — so it is denied by name rather than left to a heuristic.
+  'subtitlevtt',
+  'vtt',
+  'cues',
 ])
 
 /**

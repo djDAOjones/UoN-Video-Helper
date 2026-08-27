@@ -24,8 +24,59 @@ export interface DiagnosticsBundle {
   readonly buildId: string
   readonly capturedAt: string
   readonly environment: Record<string, unknown>
+  readonly context: DiagnosticsContext
   readonly errors: readonly CapturedError[]
   readonly logs: readonly unknown[]
+}
+
+/**
+ * What the app was doing when the bundle was taken.
+ *
+ * Without it a bundle is a stack trace and a user agent, and the first thing
+ * anyone reading one asks is what file, what device verdict, and what the user
+ * had chosen — the three questions the logs answer only by inference.
+ *
+ * `stage` is deliberately not a route: this app is one page whose sections
+ * appear in turn, so what matters is how far the user has got.
+ *
+ * Callers pass **already-safe shapes** — never a `File`, never subtitle text,
+ * never a filename. `redact()` is the second line of defence, not the first.
+ */
+export interface DiagnosticsContext {
+  readonly stage?: DiagnosticsStage
+  /** Redacted {@link SourceReport} shape: what the file is, never which file. */
+  readonly source?: unknown
+  /** Redacted pre-flight summary: what this device said it could do. */
+  readonly capability?: unknown
+  /** The three choices the user made, plus whether a sidecar was supplied. */
+  readonly job?: unknown
+}
+
+export type DiagnosticsStage =
+  | 'idle'
+  | 'inspecting'
+  | 'inspected'
+  | 'preflighting'
+  | 'ready'
+  | 'blocked'
+  | 'processing'
+  | 'finished'
+  | 'saving'
+  | 'failed'
+
+let context: DiagnosticsContext = { stage: 'idle' }
+
+/**
+ * Merges into the recorded context. Absent keys are left alone, so a stage
+ * change does not erase the source report it happened to.
+ */
+export function setDiagnosticsContext(patch: DiagnosticsContext): void {
+  context = { ...context, ...patch }
+}
+
+/** Drops everything about the previous file. Called when a new one is chosen. */
+export function resetDiagnosticsContext(stage: DiagnosticsStage): void {
+  context = { stage }
 }
 
 const errors: CapturedError[] = []
@@ -123,6 +174,7 @@ export function buildDiagnosticsBundle(): DiagnosticsBundle {
     buildId: BUILD_ID,
     capturedAt: new Date().toISOString(),
     environment: redact(environment()) as Record<string, unknown>,
+    context: redact(context) as DiagnosticsContext,
     errors: redact(errors) as readonly CapturedError[],
     logs: redact(logs) as readonly unknown[],
   }

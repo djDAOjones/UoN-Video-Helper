@@ -400,6 +400,39 @@ job, and every action is pinned to a commit SHA (VH-65).
 `BASE_PATH` is derived from the repository name so a fork or a rename
 does not silently produce a site whose asset URLs all 404.
 
+### Rolling back a bad deploy
+
+There is no "undo" button, because there is no deploy button. Publishing
+is a property of `main`, so **rolling back means making `main` good
+again** and letting the workflow run — not reaching into Pages.
+
+1. Put the good code back on `main`, as a new commit. Prefer
+   `git revert <bad-sha>` over a force-push: the history stays readable,
+   and a forced rewrite of `main` is the one move that can lose work
+   another session has already pushed.
+2. That push deploys on its own. Only if it does not — a cancelled run,
+   a transient Actions failure — dispatch it by hand:
+
+   ```bash
+   gh workflow run deploy-pages.yml --ref main
+   ```
+
+3. **Verify what is actually live**, rather than what the run says it
+   published. Open the site, copy the diagnostics bundle, and check
+   `buildId` — its short SHA is the commit that built it. It must equal
+   the head of `main`:
+
+   ```bash
+   gh run list --workflow deploy-pages.yml --limit 1 --json headSha,conclusion
+   ```
+
+   A stale `buildId` after a green run means a cache, not a deploy —
+   hard-reload before concluding anything.
+
+The reason step 3 is not optional: the version identity exists so
+"exactly what code is live?" has an answer that does not depend on
+trusting the deployment log.
+
 What is known, and constrains the eventual internal answer:
 
 - Static files only. No server-side processing, no build step on the

@@ -23,6 +23,14 @@
 
 ## Archived: the review remediation and Band 1's close — see archive/trajectory/trajectory-0003-review-remediation-and-band-1-close.md
 
+### VH-77 — the hygiene remainder
+
+- VH-77 — Shipped 2026-08-27. Four stray tuneables moved into `src/config/`;
+  the diagnostics bundle gained stage, source, capability and job context
+  behind a widened redaction deny-list; output tracks carry the source's
+  language, name and disposition; the manual rollback recipe is documented.
+  See decision-log.
+
 ### VH-75 — four lifecycle guards
 
 - VH-75 — Shipped 2026-08-27. Superseded analysis is cancelled, an abandoned
