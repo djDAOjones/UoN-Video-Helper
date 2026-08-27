@@ -42,6 +42,9 @@ repository links and `:line` suffixes with portable repository-relative links.
 The absolute Downloads path is recorded here only as provenance. No
 continuation task depends on it.
 
-The internal review is copied from the pre-existing untracked file
-`pm_skills/project/code-review-2026-08-26.md`. That source file was not
-modified, staged or deleted while this bundle was assembled.
+The internal review was copied from what was then an untracked file at
+`pm_skills/project/code-review-2026-08-26.md`. That source was left untouched
+while this bundle was assembled, then swept into commit `d02b3c8` by a
+`git add -A` and removed again on 2026-08-27 once the two were confirmed
+byte-identical apart from one link rewritten for this directory. The copy here
+is the surviving record; project memory holds no second one.
