@@ -39,9 +39,11 @@
       `onset-trimmed` warning, so the loss is no longer silent.
       Remaining: stop discarding it. Delay the VIDEO by the encoder delay
       instead — Mediabunny writes the empty edit list — which is ~6 lines
-      across four timestamp sites. Sequenced after VH-62 because the
-      acceptance sync meter reads audio in decoded-sample time and video in
-      presentation time, so it cannot yet prove the one axis this moves.
+      across four timestamp sites. UNBLOCKED 2026-08-27: VH-62 put the sync
+      meter on one clock, so the change can now be measured. The open question
+      the measurement answers is whether Mediabunny's demuxer applies a video
+      edit list to the timestamps it reports; if it does not, the meter cannot
+      grade the change even though players would honour it.
       Done when: no source sample is discarded, and a sync meter that measures
       both tracks on one clock says so.
 
@@ -115,21 +117,6 @@
      findings that are real but not user-facing today. VH-62 earns promotion
      into Band 1a the moment Band 1a's pipeline changes turn out large: a
      harness with false-pass routes matters far more when the pipeline moves. -->
-
-- [ ] **VH-68 Four small defects the review's consolidation dropped**
-      (2026-08-27)
-      Intent: one visit, four latent faults, no user-facing change. (a)
-      `SlidingMinimum` stores an ever-increasing position in an `Int32Array`
-      and wraps after ~12.4 h at 48 kHz. (b) `WARNING_THRESHOLDS.clippingDbtp`
-      and `COMPRESSOR.softKnee` are declared and never read — and since VH-50
-      made the output contract fail closed at 0.5 LU, `targetMissedByLu` (1 LU)
-      and `detectOutputWarning` cannot fire either, while the worker builds
-      `outputWarnings` empty and posts it. (c) an entirely
-      silent source can never raise the extended-silence warning, because the
-      check is nested under `if (audible.length > 0)`. (d)
-      `scripts/run-in-engines.mjs` counts a missing engine as skipped without
-      saying so in its tally.
-      Done when: each is fixed or explicitly recorded as intended.
 
 - [~] **VH-62 The acceptance harness has false-pass routes** (2026-08-27)
       Intent: R-11. Criterion 2's missing-measurement and cropped-peak routes

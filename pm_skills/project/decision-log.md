@@ -11,6 +11,45 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-68: four faults that were nobody's ticket
+
+**Decision:** fix all four in one visit — the sliding minimum's counter type,
+two config values nothing read, the silence warning's misplaced guard, and the
+cross-engine tally.
+
+**Rationale:** the review's consolidation dropped these, and each is the kind
+of fault that survives precisely because it is too small to schedule.
+
+`SlidingMinimum.position` counts samples for the length of a file and never
+resets, in an `Int32Array` that wraps past 2^31 — 12.4 hours at 48 kHz. After
+the wrap the expiry comparison goes negative and the ring cycles forever. Well
+outside this tool's envelope; a latent hang is still a latent hang. A
+`Float64Array` holds every integer to 2^53 exactly.
+
+`WARNING_THRESHOLDS.clippingDbtp` and `COMPRESSOR.softKnee` were declared and
+never read, while `truepeak.ts` carried its own `-0.1` and `compressor.ts` its
+own `6`. That is worse than a plain literal: a literal admits where the number
+lives, whereas a config entry nobody reads invites someone to tune it and watch
+nothing happen. `softKnee: true` also described the shape while a different
+file decided the width, so it becomes `kneeDb: 6` — a soft knee is how wide it
+is.
+
+`extended-silence` sat inside a guard written for the NOISE test. That guard
+exists so a recording with no pauses is not accused of background noise it may
+not have — a judgement about noise, applied by accident to silence. An entirely
+silent track has every short-term value at `-Infinity`, so the guard emptied and
+the one warning that describes it could never fire.
+
+And `run-in-engines.mjs` reported `wanted.length - failures` complete runs, so
+"3/3" could mean one ran and two were not installed. Three independent counters
+now, and a skip fails the run only when that engine was named explicitly —
+defaulting to all three means "whatever is installed"; naming one means "this
+one".
+
+**Link:** VH-68; review's dropped findings; `src/audio/limiter.ts`,
+`src/audio/truepeak.ts`, `src/audio/compressor.ts`, `src/audio/warnings.ts`,
+`src/config/audio.ts`, `scripts/run-in-engines.mjs`.
+
 ## 2026-08-27 — VH-62: a status the harness did not earn
 
 **Decision:** give the acceptance report an `external` status, measure both

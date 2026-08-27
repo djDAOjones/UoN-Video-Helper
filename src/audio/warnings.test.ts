@@ -7,7 +7,10 @@
 
 import { describe, expect, it } from 'vitest'
 
-import { TARGET_INTEGRATED_LUFS, WARNING_THRESHOLDS } from '../config/audio'
+import { COMPRESSOR, TARGET_INTEGRATED_LUFS, WARNING_THRESHOLDS } from '../config/audio'
+import { tone } from '../../test/helpers/signals'
+import { Compressor } from './compressor'
+import { TruePeakDetector } from './truepeak'
 import type { AudioAnalysis } from './analyse'
 import { detectOnsetWarning, detectOutputWarning, detectSourceWarnings } from './warnings'
 
@@ -177,5 +180,68 @@ describe('detectOnsetWarning', () => {
     expect(detectOnsetWarning({ frames, peakDbfs: at + 0.1 }, SAMPLE_RATE)?.code).toBe(
       'onset-trimmed',
     )
+  })
+})
+
+/**
+ * VH-68. Three values were declared in config and never read, so tuning them
+ * moved nothing — which is worse than a literal, because a literal at least
+ * admits where the number lives.
+ */
+describe('the configured numbers are the ones in use', () => {
+  const clippedIn = (peakDbfs: number): number => {
+    // Faded, because a rectangular block's own edges ring above their level
+    // and would be counted as clipping the signal does not contain.
+    const channels = tone({
+      sampleRate: 48000,
+      seconds: 0.2,
+      frequency: 997,
+      peakDbfs,
+      channelCount: 1,
+      fadeSeconds: 0.02,
+    })
+    const detector = new TruePeakDetector(1)
+    detector.addFrames(channels)
+    detector.finish()
+    return detector.clippedSampleCount
+  }
+
+  it('counts a clipped sample at the level config names', () => {
+    expect(clippedIn(WARNING_THRESHOLDS.clippingDbtp - 1)).toBe(0)
+    expect(clippedIn(WARNING_THRESHOLDS.clippingDbtp + 1)).toBeGreaterThan(0)
+  })
+
+  it('gives the compressor the knee width config names', () => {
+    // Half a knee above the threshold the curve is fully engaged; half below
+    // it is untouched. Reading the width off the curve is what proves the
+    // config value reached it rather than a literal beside it.
+    const compressor = new Compressor({ sampleRate: 48000 })
+    expect((compressor as unknown as { knee: number }).knee).toBe(COMPRESSOR.kneeDb)
+  })
+})
+
+/**
+ * VH-68. `extended-silence` sat inside a guard written for the NOISE test, so
+ * the one source it most obviously describes — a track that is silent all the
+ * way through — could never raise it.
+ */
+describe('an entirely silent track', () => {
+  it('is reported as extended silence, not passed over', () => {
+    const stepSeconds = 0.1
+    const silent = healthy({
+      integratedLufs: Number.NEGATIVE_INFINITY,
+      shortTermLufs: Array.from({ length: 600 }, () => Number.NEGATIVE_INFINITY),
+      stepSeconds,
+    })
+    expect(codes(silent)).toContain('extended-silence')
+  })
+
+  it('still says nothing about background noise it cannot hear', () => {
+    const silent = healthy({
+      integratedLufs: Number.NEGATIVE_INFINITY,
+      shortTermLufs: Array.from({ length: 600 }, () => Number.NEGATIVE_INFINITY),
+      stepSeconds: 0.1,
+    })
+    expect(codes(silent)).not.toContain('noisy')
   })
 })

@@ -340,7 +340,15 @@ if (!(await waitForPort(url))) {
 }
 
 console.log(`run-in-engines: ${url}`)
-let failures = 0
+// Named explicitly means required. Defaulting to all three means "whatever is
+// installed", so a missing engine there is a gap in coverage to report, not a
+// failure to stop on (VH-68).
+const enginesRequired = options.engines !== undefined
+// Three independent counters. Deriving one from the others is what let a
+// skipped engine be reported as a complete run (VH-68).
+let completed = 0
+let skipped = 0
+let failed = 0
 
 for (const name of wanted) {
   const engine = ENGINES[name]
@@ -348,25 +356,36 @@ for (const name of wanted) {
 
   if (!existsSync(engine.binary)) {
     console.log(`  SKIPPED — ${engine.binary} is not installed`)
+    skipped++
     continue
   }
 
   try {
     const { text, finished } = await RUNNERS[name](url)
     console.log(text.trim() || '  (the page reported nothing)')
-    if (!finished) {
+    if (finished) {
+      completed++
+    } else {
       console.log(`\n  INCOMPLETE — no "done" after ${PAGE_TIMEOUT_MS / 1000}s; output is partial`)
-      failures++
+      failed++
     }
   } catch (error) {
     console.log(`  FAILED — ${error instanceof Error ? error.message : String(error)}`)
-    failures++
+    failed++
   } finally {
     cleanUp()
   }
 }
 
 console.log(
-  `\nrun-in-engines: ${wanted.length - failures}/${wanted.length} engine(s) reported a complete run.`,
+  `\nrun-in-engines: ${completed} completed, ${skipped} skipped, ${failed} failed, ` +
+    `of ${wanted.length} requested.` +
+    (skipped
+      ? enginesRequired
+        ? ' A skipped engine was named explicitly, so this run did not cover what it was asked to.'
+        : ' Skipped engines are not installed and were not required.'
+      : ''),
 )
-process.exit(failures ? 1 : 0)
+// A skip only fails the run when the engine was asked for by name. Defaulting
+// to all three means "whatever is installed"; naming one means "this one".
+process.exit(failed || (enginesRequired && skipped) ? 1 : 0)

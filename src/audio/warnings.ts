@@ -117,14 +117,21 @@ export function detectSourceWarnings(analysis: AudioAnalysis | null): AudioWarni
       warnings.push({ code: 'noisy', detail: { noiseFloorLufs: noiseFloor, gapDepthLu: median - noiseFloor } })
     }
 
-    const silence = longestRunBelow(
-      analysis.shortTermLufs,
-      WARNING_THRESHOLDS.extendedSilenceBelowLufs,
-      analysis.stepSeconds,
-    )
-    if (silence > WARNING_THRESHOLDS.extendedSilenceSeconds) {
-      warnings.push({ code: 'extended-silence', detail: { seconds: silence } })
-    }
+  }
+
+  // Outside the `audible` guard, deliberately. That guard exists so a
+  // recording with no pauses is not accused of background noise it may not
+  // have — a judgement about the NOISE test. Applying it here meant an
+  // entirely silent track, whose every short-term value is -Infinity, left
+  // `audible` empty and could never raise the one warning that describes it
+  // (VH-68). Silence is exactly what this row is for.
+  const silence = longestRunBelow(
+    analysis.shortTermLufs,
+    WARNING_THRESHOLDS.extendedSilenceBelowLufs,
+    analysis.stepSeconds,
+  )
+  if (silence > WARNING_THRESHOLDS.extendedSilenceSeconds) {
+    warnings.push({ code: 'extended-silence', detail: { seconds: silence } })
   }
 
   return warnings

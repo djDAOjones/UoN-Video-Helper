@@ -58,7 +58,7 @@ export class Compressor {
   constructor(options: CompressorOptions) {
     this.threshold = options.thresholdDbfs ?? COMPRESSOR.thresholdDbfs
     this.ratio = options.ratio ?? COMPRESSOR.ratio
-    this.knee = options.kneeDb ?? 6
+    this.knee = options.kneeDb ?? COMPRESSOR.kneeDb
     this.attack = coefficientFor(options.attackMs ?? COMPRESSOR.attackMs, options.sampleRate)
     this.release = coefficientFor(options.releaseMs ?? COMPRESSOR.releaseMs, options.sampleRate)
     this.detector = coefficientFor(DETECTOR_MS, options.sampleRate)

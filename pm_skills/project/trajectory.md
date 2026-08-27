@@ -21,6 +21,14 @@
 
 ## Archived: real material and Band 1's first half — see archive/trajectory/trajectory-0002-real-material-and-band-1.md
 
+### VH-68 — four faults too small to schedule
+
+- VH-68 — Shipped 2026-08-27. The limiter's sample counter no longer wraps at
+  12.4 hours, two config values that nothing read now drive the code that
+  duplicated them, an entirely silent track can raise the silence warning, and
+  the cross-engine tally counts completed, skipped and failed apart. See
+  decision-log.
+
 ### VH-62 (part) — the harness stops flattering itself
 
 - VH-62 — Partly shipped 2026-08-27. Criterion 3 reports `external` rather than

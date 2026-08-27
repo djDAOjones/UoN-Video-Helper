@@ -28,14 +28,22 @@ const MINIMUM_MAGNITUDE = 1e-12
  */
 class SlidingMinimum {
   private readonly values: Float64Array
-  private readonly indices: Int32Array
+  /**
+   * Float64, not Int32. `position` counts samples for the length of the file
+   * and never resets, so an `Int32Array` wraps past 2^31 — about 12.4 hours at
+   * 48 kHz — after which `indices[head] < oldest` compares a negative number
+   * and the expiry loop cycles the whole ring forever. Outside the envelope
+   * this tool is built for, and a latent hang is still a latent hang (VH-68).
+   * A double holds every integer to 2^53 exactly: 285,000 years of audio.
+   */
+  private readonly indices: Float64Array
   private head = 0
   private tail = 0
   private position = 0
 
   constructor(private readonly windowSize: number) {
     this.values = new Float64Array(windowSize + 1)
-    this.indices = new Int32Array(windowSize + 1)
+    this.indices = new Float64Array(windowSize + 1)
   }
 
   push(value: number): number {

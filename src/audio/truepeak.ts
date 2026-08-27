@@ -13,6 +13,8 @@
  * measurement can never read *below* sample peak.
  */
 
+import { WARNING_THRESHOLDS } from '../config/audio'
+
 /** Taps in the prototype filter. Odd, so the centre lands on a phase boundary. */
 const PROTOTYPE_TAPS = 49
 const OVERSAMPLE = 4
@@ -101,10 +103,12 @@ export class TruePeakDetector {
 
   /**
    * @param clipThresholdDbtp - Level at or above which a sample is counted as
-   *   clipped. Spec 5.4 uses -0.1 dBTP: ten or more such samples is the
-   *   trigger for the distortion warning.
+   *   clipped. Defaults to spec 5.4's figure, taken from config rather than
+   *   repeated here: it is a project choice, and it was declared in
+   *   `WARNING_THRESHOLDS` and separately written out as a literal, so tuning
+   *   one moved nothing (VH-68).
    */
-  constructor(channelCount: number, clipThresholdDbtp = -0.1) {
+  constructor(channelCount: number, clipThresholdDbtp = WARNING_THRESHOLDS.clippingDbtp) {
     if (!Number.isInteger(channelCount) || channelCount < 1) {
       throw new RangeError(`Channel count must be a positive integer, got ${channelCount}`)
     }

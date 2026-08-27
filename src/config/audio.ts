@@ -54,7 +54,15 @@ export const COMPRESSOR = {
   thresholdDbfs: -18,
   attackMs: 20,
   releaseMs: 200,
-  softKnee: true,
+  /**
+   * Width of the soft knee, in dB, centred on the threshold.
+   *
+   * Spec 5.2 step 4 asks for a soft knee; this is how wide it is. It replaces
+   * a `softKnee: true` that nothing ever read while `compressor.ts` carried
+   * its own literal 6 — a boolean that described the shape and a number that
+   *decided it, in different files (VH-68).
+   */
+  kneeDb: 6,
 } as const
 
 /**

@@ -57,8 +57,13 @@ describe('true-peak limiter', () => {
     // fs/4 at 45 degrees: every sample sits at +/-0.707 while the waveform
     // itself touches 0 dBFS. A sample-peak limiter would not even see this.
     const channels = tone({
-      sampleRate: SAMPLE_RATE, seconds: 2, frequency: SAMPLE_RATE / 4,
-      peakDbfs: 0, channelCount: 2, phase: Math.PI / 4, fadeSeconds: 0.01,
+      sampleRate: SAMPLE_RATE,
+      seconds: 2,
+      frequency: SAMPLE_RATE / 4,
+      peakDbfs: 0,
+      channelCount: 2,
+      phase: Math.PI / 4,
+      fadeSeconds: 0.01,
     })
     expect(truePeakDbtp(channels)).toBeGreaterThan(CEILING)
     expect(truePeakDbtp(limit(channels))).toBeLessThanOrEqual(CEILING + 0.01)
@@ -66,20 +71,27 @@ describe('true-peak limiter', () => {
 
   it('holds the ceiling on a signal far above it', () => {
     const channels = tone({
-      sampleRate: SAMPLE_RATE, seconds: 1, frequency: 997, peakDbfs: 0,
-      channelCount: 2, fadeSeconds: 0.01,
+      sampleRate: SAMPLE_RATE,
+      seconds: 1,
+      frequency: 997,
+      peakDbfs: 0,
+      channelCount: 2,
+      fadeSeconds: 0.01,
     })
     expect(truePeakDbtp(limit(channels))).toBeLessThanOrEqual(CEILING + 0.01)
   })
 
   it('leaves material below the ceiling completely untouched', () => {
     const channels = tone({
-      sampleRate: SAMPLE_RATE, seconds: 1, frequency: 997, peakDbfs: -12,
-      channelCount: 2, fadeSeconds: 0.01,
+      sampleRate: SAMPLE_RATE,
+      seconds: 1,
+      frequency: 997,
+      peakDbfs: -12,
+      channelCount: 2,
+      fadeSeconds: 0.01,
     })
     const limited = limit(channels)
-    const latency = new TruePeakLimiter({ sampleRate: SAMPLE_RATE, channelCount: 2 })
-      .latencySamples
+    const latency = new TruePeakLimiter({ sampleRate: SAMPLE_RATE, channelCount: 2 }).latencySamples
     // Aligned for the look-ahead delay, the samples should be identical.
     for (let i = 5000; i < 20000; i += 97) {
       expect(limited[0]![i + latency]!).toBeCloseTo(channels[0]![i]!, 6)
@@ -89,9 +101,21 @@ describe('true-peak limiter', () => {
   it('recovers after a loud passage instead of holding the level down', () => {
     // A burst, then quiet. Without a release the quiet part would stay ducked.
     const signal = concat(
-      tone({ sampleRate: SAMPLE_RATE, seconds: 0.3, frequency: 997, peakDbfs: -20, channelCount: 1 }),
+      tone({
+        sampleRate: SAMPLE_RATE,
+        seconds: 0.3,
+        frequency: 997,
+        peakDbfs: -20,
+        channelCount: 1,
+      }),
       tone({ sampleRate: SAMPLE_RATE, seconds: 0.2, frequency: 997, peakDbfs: 0, channelCount: 1 }),
-      tone({ sampleRate: SAMPLE_RATE, seconds: 0.5, frequency: 997, peakDbfs: -20, channelCount: 1 }),
+      tone({
+        sampleRate: SAMPLE_RATE,
+        seconds: 0.5,
+        frequency: 997,
+        peakDbfs: -20,
+        channelCount: 1,
+      }),
     )
     const limited = limit(signal)
 
@@ -99,14 +123,20 @@ describe('true-peak limiter', () => {
     // material should be back to its own level.
     const wellAfter = Math.round(SAMPLE_RATE * 0.72)
     let peak = 0
-    for (let i = wellAfter; i < wellAfter + 4000; i++) peak = Math.max(peak, Math.abs(limited[0]![i]!))
+    for (let i = wellAfter; i < wellAfter + 4000; i++)
+      peak = Math.max(peak, Math.abs(limited[0]![i]!))
     expect(20 * Math.log10(peak)).toBeCloseTo(-20, 0)
   })
 
   it('gives the same result regardless of chunk size', () => {
     const channels = tone({
-      sampleRate: SAMPLE_RATE, seconds: 0.5, frequency: SAMPLE_RATE / 4,
-      peakDbfs: -1, channelCount: 2, phase: Math.PI / 4, fadeSeconds: 0.01,
+      sampleRate: SAMPLE_RATE,
+      seconds: 0.5,
+      frequency: SAMPLE_RATE / 4,
+      peakDbfs: -1,
+      channelCount: 2,
+      phase: Math.PI / 4,
+      fadeSeconds: 0.01,
     })
     const readings = [1, 33, 1024, channels[0]!.length].map((n) => truePeakDbtp(limit(channels, n)))
     for (const reading of readings) expect(reading).toBeCloseTo(readings[0]!, 9)
@@ -133,6 +163,26 @@ describe('true-peak limiter', () => {
         CEILING + 0.01,
       )
     }
+  })
+
+  it('does not wrap its sample counter on an impossibly long stream (VH-68)', () => {
+    // The sliding minimum counts samples for the length of the file and never
+    // resets. In an Int32Array that wraps past 2^31 — 12.4 hours at 48 kHz —
+    // after which the expiry comparison goes negative and the ring cycles
+    // forever. Reached here by pushing the counter past the boundary directly,
+    // because clocking 2.1 billion samples through is not a test.
+    const limiter = new TruePeakLimiter({ sampleRate: SAMPLE_RATE, channelCount: 1 })
+    const minimum = (
+      limiter as unknown as { minimum: { position: number; push(v: number): number } }
+    ).minimum
+    minimum.position = 2 ** 31 + 1000
+
+    // Ten pushes either side of where the wrap used to be. Each must return
+    // the running minimum and, above all, must return.
+    for (let i = 0; i < 20; i++) {
+      expect(minimum.push(1 - i / 100)).toBeCloseTo(1 - i / 100, 9)
+    }
+    expect(minimum.position).toBeGreaterThan(2 ** 31)
   })
 
   it('passes silence through as silence', () => {
