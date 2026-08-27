@@ -15,6 +15,7 @@ const SAMPLE_RATE = 48000
 function measure(channels: Float32Array[], chunkFrames = 4096): number {
   const detector = new TruePeakDetector(channels.length)
   feedInChunks(channels, chunkFrames, detector)
+  detector.finish()
   return detector.peakDbtp
 }
 
@@ -36,6 +37,34 @@ describe('true peak', () => {
     expect(20 * Math.log10(samplePeak)).toBeCloseTo(-3.01, 1)
 
     expect(measure(channels)).toBeCloseTo(0, 1)
+  })
+
+  it('measures a full-scale sample in the very last frame (VH-50)', () => {
+    // The interpolator is causal, so without a drain the final PHASE_TAPS - 1
+    // frames are never convolved at all. A file ending on a plosive read
+    // -64.05 dBTP — silence — for a sample sitting at 0 dBFS, which is how a
+    // 2 dB ceiling breach reached both the runtime verifier and the acceptance
+    // harness looking safe.
+    const frames = new Float32Array(480)
+    frames[frames.length - 1] = 1
+    expect(measure([frames])).toBeCloseTo(0, 6)
+  })
+
+  it('measures a transient in a stream shorter than the interpolator', () => {
+    // Fewer frames than the delay line: the drain is the only thing that ever
+    // convolves them.
+    const frames = new Float32Array(4)
+    frames[1] = 1
+    expect(measure([frames])).toBeGreaterThanOrEqual(-1e-9)
+  })
+
+  it('refuses frames after the drain rather than splicing silence into them', () => {
+    const detector = new TruePeakDetector(1)
+    detector.addFrames([new Float32Array(64)])
+    detector.finish()
+    expect(() => detector.addFrames([new Float32Array(64)])).toThrow(RangeError)
+    // Draining twice is a no-op, so a double finish() cannot move the reading.
+    detector.finish()
   })
 
   it('never reads below sample peak', () => {

@@ -33,6 +33,7 @@ describe('AudioAnalyser', () => {
     feedInChunks(signal, 1024, truePeak)
 
     const report = combined.finish()
+    truePeak.finish()
     expect(report.integratedLufs).toBe(loudness.finish().integratedLufs)
     expect(report.truePeakDbtp).toBe(truePeak.peakDbtp)
   })

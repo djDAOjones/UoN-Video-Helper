@@ -38,6 +38,9 @@ function measure(channels: readonly Float32Array[]) {
 function truePeakOf(channels: readonly Float32Array[]): number {
   const detector = new TruePeakDetector(channels.length)
   detector.addFrames(channels)
+  // The interpolator is causal, so the final frames are only measured once
+  // silence has been clocked through it (VH-50 / review R-02).
+  detector.finish()
   return detector.peakDbtp
 }
 

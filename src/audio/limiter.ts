@@ -156,15 +156,25 @@ export class TruePeakLimiter {
     }
   }
 
-  /** Samples still held in the delay line, which the caller must append. */
+  /**
+   * Samples still held in the delay line, which the caller must append.
+   *
+   * Clocked out through {@link process} rather than copied, because the last
+   * look-ahead window of a file is exactly where the ceiling used to be lost.
+   * Two things only silence can reveal: the detector's causal FIR needs
+   * {@link PHASE_TAPS} - 1 further frames before it has seen a sample's own
+   * inter-sample overshoot, and the sliding minimum needs the window that
+   * follows a sample before it knows what gain that sample must take. Copying
+   * the delay line out at one frozen gain skipped both, and a full-scale
+   * transient in the final frames left the limiter at 0 dBTP — 2 dB above the
+   * ceiling this class exists to guarantee (VH-50 / review R-02).
+   *
+   * Feeding silence in also leaves the delay line silent, so a second call
+   * returns silence rather than repeating the tail.
+   */
   flush(): Float32Array[] {
     const tail = Array.from({ length: this.channelCount }, () => new Float32Array(this.lookAhead))
-    for (let i = 0; i < this.lookAhead; i++) {
-      const index = (this.delayIndex + i) % this.lookAhead
-      for (let ch = 0; ch < this.channelCount; ch++) {
-        tail[ch]![i] = this.delay[ch]![index]! * this.currentGain
-      }
-    }
+    this.process(tail)
     return tail
   }
 

@@ -42,6 +42,11 @@ export class AudioAnalyser {
   }
 
   finish(): AudioAnalysis {
+    // The interpolator is causal, so the last frames of the stream are not
+    // measured until silence has been clocked through it. Draining here rather
+    // than at every call site is what stopped a full-scale transient at end of
+    // file reading -64 dBTP (VH-50 / review R-02). Idempotent.
+    this.truePeak.finish()
     return {
       ...this.loudness.finish(),
       truePeakDbtp: this.truePeak.peakDbtp,

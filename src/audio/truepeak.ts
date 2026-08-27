@@ -96,6 +96,8 @@ export class TruePeakDetector {
   private peak = 0
   /** One flag per frame in the current chunk, so a frame is counted once. */
   private clipFlags = new Uint8Array(0)
+  /** Set by {@link finish}; the interpolator has been drained and is closed. */
+  private drained = false
 
   /**
    * @param clipThresholdDbtp - Level at or above which a sample is counted as
@@ -113,6 +115,9 @@ export class TruePeakDetector {
   }
 
   addFrames(channels: readonly Float32Array[]): void {
+    if (this.drained) {
+      throw new RangeError('Cannot add frames after finish(): the interpolator is drained')
+    }
     if (channels.length !== this.channelCount) {
       throw new RangeError(`Expected ${this.channelCount} channels, got ${channels.length}`)
     }
@@ -187,7 +192,37 @@ export class TruePeakDetector {
     this.peak = peak
   }
 
-  /** Highest true peak seen so far, in dBTP. `-Infinity` for pure silence. */
+  /**
+   * Drains the interpolator so the last samples of the stream are measured.
+   *
+   * The polyphase convolution is causal — BS.1770-4 Annex 2's interpolated
+   * output y[4i + p] = sum_j h_p[j] * x[i - j] — so the inter-sample peaks a
+   * frame contributes to are only evaluated once the following
+   * {@link PHASE_TAPS} - 1 frames have been clocked in. At end of stream there
+   * are none, and the tail is simply never looked at: a single full-scale
+   * sample in the last frame of a file measured **-64.05 dBTP** instead of 0
+   * (VH-50 / review R-02). Feeding silence completes every window.
+   *
+   * Call once, after the last real frames. Adding frames afterwards would
+   * splice silence into the middle of the signal, so it throws.
+   */
+  finish(): void {
+    if (this.drained) return
+    const silence = Array.from(
+      { length: this.channelCount },
+      () => new Float32Array(TAPS_PER_PHASE - 1),
+    )
+    this.addFrames(silence)
+    // Set after the drain, not before, or addFrames would reject its own call.
+    this.drained = true
+  }
+
+  /**
+   * Highest true peak seen so far, in dBTP. `-Infinity` for pure silence.
+   *
+   * Read this after {@link finish}; before it, the final {@link PHASE_TAPS} - 1
+   * frames have not been interpolated yet.
+   */
   get peakDbtp(): number {
     return this.peak > 0 ? 20 * Math.log10(this.peak) : Number.NEGATIVE_INFINITY
   }

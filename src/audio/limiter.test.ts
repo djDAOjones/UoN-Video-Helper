@@ -32,6 +32,7 @@ function limit(channels: Float32Array[], chunkFrames = 1024): Float32Array[] {
 function truePeakDbtp(channels: readonly Float32Array[]): number {
   const detector = new TruePeakDetector(channels.length)
   detector.addFrames(channels)
+  detector.finish()
   return detector.peakDbtp
 }
 
@@ -93,6 +94,29 @@ describe('true-peak limiter', () => {
     })
     const readings = [1, 33, 1024, channels[0]!.length].map((n) => truePeakDbtp(limit(channels, n)))
     for (const reading of readings) expect(reading).toBeCloseTo(readings[0]!, 9)
+  })
+
+  it('holds the ceiling on a transient in the final frames (VH-50)', () => {
+    // The tail used to be copied out of the delay line at one frozen gain,
+    // which skipped both the detector post-roll and the sliding minimum. A
+    // full-scale sample in the last frame therefore left the limiter at
+    // 0 dBTP — 2 dB above the ceiling — while the meter reported -64.
+    const frames = new Float32Array(480)
+    frames[frames.length - 1] = 1
+    const limited = limit([frames])
+    expect(truePeakDbtp(limited)).toBeLessThanOrEqual(CEILING + 0.01)
+  })
+
+  it('holds the ceiling wherever the transient sits relative to the end', () => {
+    // Swept, because the defect was position-dependent: 0, 1 and 3 frames from
+    // the end escaped the limiter while 6 and beyond did not.
+    for (const fromEnd of [0, 1, 3, 6, 7, 12, 240, 480]) {
+      const frames = new Float32Array(1200)
+      frames[frames.length - 1 - fromEnd] = 1
+      expect(truePeakDbtp(limit([frames])), `${fromEnd} frames from EOF`).toBeLessThanOrEqual(
+        CEILING + 0.01,
+      )
+    }
   })
 
   it('passes silence through as silence', () => {
