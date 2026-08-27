@@ -11,6 +11,53 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-28 — VH-62: the harness stops flattering itself, and is not slow
+
+**Criterion 8 was testing the wrong thing.** It built an `AbortController`,
+handed it to `runPipeline` on the MAIN thread, and aborted it. That proves the
+pipeline unwinds. It says nothing about what Cancel actually does: post a
+message to a worker that owns the job, and have that worker abort, release its
+Web Lock, delete its scratch, and answer `cancelled`. Every one of those was
+outside the check (P2-07). It now drives the real protocol, and waits for a job
+directory to appear before cancelling — cancelling a job that has not started
+writing proves nothing, and a fixed delay is how that becomes a flaky pass.
+
+**Criterion 2 measured an average and called it correctness.** Loudness is
+nearly blind to missing content: a file can hit -16 LUFS exactly having dropped
+a third of its frames. It now also asks three separate questions — is the
+source still all there, do the frames fill the span they claim, and are there
+holes or pile-ups — because each can fail with the others intact.
+
+Measured from PACKETS, not decoded frames. Timestamps and durations live in the
+container, and decoding 1,850 frames per corpus entry to count them would have
+made the run slower to fix a complaint about the run being slow. It costs
+nothing measurable.
+
+**Resource warnings now fail a run.** Mediabunny prints "An AudioSample was
+garbage collected without first being closed" and nothing was reading it, so a
+run could print a leak and still come out green. VH-75 found a real one this
+way. Main-thread only — a worker has its own console — and the check says so
+rather than implying coverage it does not have.
+
+**A late-starting or gapped audio track now has an acceptance-level guard.**
+The Node tests prove VH-74's arithmetic; this proves it survives a real encoder
+round trip. Audio joining 8 s late comes out starting at 8.00 s, and a 6 s hole
+comes out with its full 30 s span. On the old behaviour the first would start
+at 0 and the second would span 24 s.
+
+**And the run is not slow.** The backlog said over an hour, four minutes per
+corpus entry. Measured per phase: build 6 s, pipeline 6-14 s, both loudness
+measurements 2 s, coverage 0. A complete run — now ten executed checks — is
+**114.5 s**. The earlier figure appears to have been taken while something else
+was encoding: two tabs competing for the same hardware encoder turned 20 s into
+three minutes, which I reproduced by accident and then eliminated. No
+optimisation was needed; the record was wrong.
+
+**Result: 9 passed, 0 failed, 4 need a person, 1 checked elsewhere.**
+
+**Link:** VH-62, VH-71 WP4, review R-11 and P2-07; `src/acceptance/run.ts`,
+`src/acceptance/measure.ts`, `src/acceptance/fixtures.ts`.
+
 ## 2026-08-28 — VH-74 + VH-55: one clock for both lanes, and nothing discarded
 
 Executed together: they re-time the same four sites, and each one's fixtures

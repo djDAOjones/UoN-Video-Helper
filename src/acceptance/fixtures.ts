@@ -69,6 +69,21 @@ export interface AudioShape {
   readonly syncMarkers?: boolean
   readonly pauseSeconds?: number
   readonly pauseEverySeconds?: number
+  /**
+   * Seconds of picture before the audio track starts at all.
+   *
+   * A capture that joins late. The pipeline used to pack audio contiguously
+   * from the content offset regardless, so this came out that many seconds
+   * early against its picture (VH-74).
+   */
+  readonly startSeconds?: number
+  /**
+   * A hole in the middle of the audio track, as `[fromSeconds, toSeconds)`.
+   *
+   * Measured against the audio's OWN clock, so it is independent of
+   * `startSeconds`. Collapsing this pulled everything after it forward.
+   */
+  readonly gap?: readonly [number, number]
 }
 
 /** Times, in seconds, at which a sync marker starts. */
@@ -270,15 +285,32 @@ export async function buildFixture(options: FixtureOptions): Promise<File> {
   video.close()
 
   if (audioSource) {
-    const sample = new AudioSample({
-      data: buildAudio(options, sampleRate, channels),
-      format: 'f32',
-      numberOfChannels: channels,
-      sampleRate,
-      timestamp: 0,
-    })
-    await audioSource.add(sample)
-    sample.close()
+    const data = buildAudio(options, sampleRate, channels)
+    const startSeconds = options.audio?.startSeconds ?? 0
+    const gap = options.audio?.gap ?? null
+
+    // One sample unless the fixture asks for a discontinuity. Splitting
+    // unconditionally would change every existing fixture's packet layout for
+    // the sake of two checks that need it.
+    const regions: Array<readonly [number, number]> = gap
+      ? [
+          [0, Math.round(gap[0] * sampleRate)],
+          [Math.round(gap[1] * sampleRate), Math.round(data.length / channels)],
+        ]
+      : [[0, Math.round(data.length / channels)]]
+
+    for (const [fromFrame, toFrame] of regions) {
+      if (toFrame <= fromFrame) continue
+      const sample = new AudioSample({
+        data: data.subarray(fromFrame * channels, toFrame * channels),
+        format: 'f32',
+        numberOfChannels: channels,
+        sampleRate,
+        timestamp: startSeconds + fromFrame / sampleRate,
+      })
+      await audioSource.add(sample)
+      sample.close()
+    }
     audioSource.close()
   }
 

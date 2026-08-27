@@ -23,6 +23,14 @@
 
 ## Archived: the review remediation and Band 1's close — see archive/trajectory/trajectory-0003-review-remediation-and-band-1-close.md
 
+### VH-62 — the harness stops flattering itself
+
+- VH-62 — Shipped 2026-08-28. Criterion 8 drives the real worker cancel
+  protocol; criterion 2 checks completeness as well as loudness, from packets;
+  a leaked decoded sample fails the run; a late or gapped audio track has an
+  acceptance-level guard. A complete run measures 114.5 s, not the hour the
+  backlog claimed. See decision-log.
+
 ### Band 1a closed — one clock for both lanes
 
 - VH-74 + VH-55 — Shipped 2026-08-28. Both source lanes are measured from one

@@ -44,30 +44,6 @@
       Done when: every child is shipped or explicitly cut; then delete the
       ticket.
 
-- [~] **VH-62 The acceptance harness has false-pass routes** (2026-08-27)
-      Intent: R-11. Criterion 2's missing-measurement and cropped-peak routes
-      closed 2026-08-27.
-      Done 2026-08-27: criterion 3 no longer claims a `pass` this page did not
-      run (`external`); the sync meter reads both tracks on one clock, which
-      unblocks VH-55; the worker's realm is watched and merged, so the branding
-      fetch is visible at all; and a negative control proves the egress
-      instrument fires on both body shapes.
-      Remaining: resource warnings still do not fail a run; a complete run
-      takes over an hour in a browser — four minutes per synthesised corpus
-      entry, in-process on the main thread — so nobody sits through it, which
-      is its own false-pass route (see wish-list).
-      Done when: the harness cannot report green on an unexecuted or unmeasured
-      invariant, an injected defect turns it red, and a run is short enough
-      that it is actually run.
-      Added 2026-08-27 (VH-71 cross-check): criterion 8 still cancels an
-      in-process pipeline helper, never the real worker protocol (P2-07), and
-      criterion 2's verdict checks neither content frame count nor gap/overlap
-      coverage — see [VH-71 WP4](tickets/VH-71.md).
-      Unblocked 2026-08-28: Band 1a is done, so the pipeline has stopped moving
-      under it. VH-55/VH-74's late-audio, midstream-gap and onset-at-zero
-      fixtures are built and measured — porting them into criterion 5 is now
-      transcription rather than design.
-
 ### Band 3 — Blocked on the maintainer
 
 <!-- Agent work that cannot start until something arrives from outside the

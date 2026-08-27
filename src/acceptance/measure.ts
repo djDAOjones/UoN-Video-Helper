@@ -10,7 +10,14 @@
  * can never reveal.
  */
 
-import { AudioSampleSink, BlobSource, Input, VideoSampleSink, ALL_FORMATS } from 'mediabunny'
+import {
+  ALL_FORMATS,
+  AudioSampleSink,
+  BlobSource,
+  EncodedPacketSink,
+  Input,
+  VideoSampleSink,
+} from 'mediabunny'
 
 import { AudioAnalyser, type AudioAnalysis } from '../audio/analyse'
 
@@ -154,6 +161,130 @@ export async function measureSync(file: Blob): Promise<SyncMeasurement> {
   const worstOffsetMs = offsetsMs.reduce((worst, value) => Math.max(worst, Math.abs(value)), 0)
 
   return { videoMarkers, audioMarkers, offsetsMs, worstOffsetMs, driftMs: fittedChange(offsetsMs) }
+}
+
+/** What a track's samples actually tile, as opposed to what its duration claims. */
+export interface CoverageMeasurement {
+  readonly sampleCount: number
+  readonly firstSeconds: number
+  readonly lastEndSeconds: number
+  /** Largest hole between one sample's end and the next one's start. */
+  readonly largestGapSeconds: number
+  /** Largest amount by which one sample runs into the next. */
+  readonly largestOverlapSeconds: number
+}
+
+/**
+ * Walks a track's PACKETS and reports how completely they cover its own span.
+ *
+ * Criterion 2 measured loudness and true peak and called that "the output is
+ * correct". A file can hit -16 LUFS exactly while having dropped a third of
+ * its frames or collapsed a gap, and nothing in the verdict noticed (VH-62).
+ * Loudness is an average; it is nearly blind to missing content.
+ *
+ * Packets rather than decoded samples on purpose. Timestamps and durations are
+ * what this asks about, and they are in the container — decoding 1,950 frames
+ * to count them would add minutes per corpus entry to a run that is already
+ * too long for anyone to sit through, which is its own false-pass route.
+ *
+ * @param kind - Which lane to walk.
+ * @param toleranceSeconds - Below this a hole is timestamp rounding rather
+ *   than a gap. Callers pass a frame or packet period.
+ */
+export async function measureCoverage(
+  file: Blob,
+  kind: 'video' | 'audio',
+  toleranceSeconds: number,
+): Promise<CoverageMeasurement | null> {
+  const input = new Input({ formats: ALL_FORMATS, source: new BlobSource(file) })
+  const track =
+    kind === 'video' ? await input.getPrimaryVideoTrack() : await input.getPrimaryAudioTrack()
+  if (!track) return null
+
+  const sink = new EncodedPacketSink(track)
+
+  let sampleCount = 0
+  let first = Number.NaN
+  let previousEnd = Number.NaN
+  let largestGap = 0
+  let largestOverlap = 0
+
+  // Presentation order, not decode order: B-frames make the two differ, and a
+  // gap measured in decode order would be an artefact of the codec rather than
+  // a hole in the timeline.
+  const starts: number[] = []
+  const ends: number[] = []
+  for await (const packet of sink.packets()) {
+    starts.push(packet.timestamp)
+    // A packet with no stated duration covers nothing measurable; treat it as
+    // a point rather than inventing a length for it.
+    ends.push(packet.timestamp + (packet.duration || 0))
+    sampleCount++
+  }
+  starts.sort((a, b) => a - b)
+  ends.sort((a, b) => a - b)
+
+  for (let i = 0; i < starts.length; i++) {
+    const start = starts[i]!
+    if (i === 0) first = start
+    else if (Number.isFinite(previousEnd)) {
+      const difference = start - previousEnd
+      if (difference > toleranceSeconds) largestGap = Math.max(largestGap, difference)
+      else if (-difference > toleranceSeconds) largestOverlap = Math.max(largestOverlap, -difference)
+    }
+    previousEnd = ends[i]!
+  }
+
+  if (sampleCount === 0) return null
+  return {
+    sampleCount,
+    firstSeconds: first,
+    lastEndSeconds: previousEnd,
+    largestGapSeconds: largestGap,
+    largestOverlapSeconds: largestOverlap,
+  }
+}
+
+/**
+ * Watches for resource warnings the runtime prints but nothing acts on.
+ *
+ * Mediabunny reports "An AudioSample was garbage collected without first being
+ * closed" on the console when the pipeline leaks a decoded sample. That is a
+ * real defect — VH-75 found one on the cancel path this way — and a run could
+ * be entirely green while printing it, because nothing was reading (VH-62).
+ *
+ * Main-thread only: a worker has its own console, and this cannot see it. The
+ * check that reports this says so rather than implying full coverage.
+ */
+export class ResourceWatch {
+  private readonly seen: string[] = []
+  private restore: (() => void) | null = null
+
+  private static readonly PATTERN = /garbage collected without first being closed|was not closed/i
+
+  start(): void {
+    if (this.restore) return
+    const original = { error: console.error, warn: console.warn }
+    const capture = (next: typeof console.error) => {
+      return (...args: unknown[]): void => {
+        const text = args.map((value) => String(value)).join(' ')
+        if (ResourceWatch.PATTERN.test(text)) this.seen.push(text.slice(0, 200))
+        next(...(args as []))
+      }
+    }
+    console.error = capture(original.error.bind(console))
+    console.warn = capture(original.warn.bind(console))
+    this.restore = () => {
+      console.error = original.error
+      console.warn = original.warn
+    }
+  }
+
+  stop(): readonly string[] {
+    this.restore?.()
+    this.restore = null
+    return [...this.seen]
+  }
 }
 
 /** Loudness of a whole file, or of one region of it. */

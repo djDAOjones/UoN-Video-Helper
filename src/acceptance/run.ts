@@ -12,11 +12,13 @@ import { TARGET_INTEGRATED_LUFS } from '../config/audio'
 import { inspectFile, openInput } from '../media/inspect'
 import { OpfsWorkspace, ROOT_DIRECTORY, sweepOrphanedJobs } from '../media/opfs'
 import { verifyOutputAudio } from '../media/output-verification'
-import { CancelledError, runPipeline } from '../media/pipeline'
+import { runPipeline } from '../media/pipeline'
 import { buildFixture, syncMarkerTimes } from './fixtures'
 import {
   EgressWatch,
+  ResourceWatch,
   carriedBody,
+  measureCoverage,
   measureLoudness,
   measureSync,
   mergeEgress,
@@ -58,7 +60,7 @@ async function process(
     readonly jobId: string
     readonly signal?: AbortSignal
   },
-): Promise<{ file: File; workspace: OpfsWorkspace; openingSeconds: number }> {
+): Promise<{ file: File; workspace: OpfsWorkspace; openingSeconds: number; frameRate: number }> {
   const report = await inspectFile(file)
   const preset = PRESETS[options.presetId]
   const shape = outputShapeFor(preset, {
@@ -89,7 +91,12 @@ async function process(
   // what that duration is supposed to be. They agree only because the
   // placeholder is exactly 5.000 s — a real asset a few frames off would have
   // shifted every window measured here, silently (VH-16).
-  return { file: result.file, workspace, openingSeconds: result.contentOffsetSeconds }
+  return {
+    file: result.file,
+    workspace,
+    openingSeconds: result.contentOffsetSeconds,
+    frameRate: shape.frameRate,
+  }
 }
 
 /**
@@ -330,7 +337,7 @@ async function checkLoudnessCorpus(log: Report): Promise<Check> {
       frameRate: 25,
       audio: entry.audio,
     })
-    const { file, workspace, openingSeconds } = await process(fixture, {
+    const { file, workspace, openingSeconds, frameRate } = await process(fixture, {
       presetId: 'best',
       branding: { opening: true, closing: true },
       jobId: `acceptance-loudness-${index}`,
@@ -344,6 +351,10 @@ async function checkLoudnessCorpus(log: Report): Promise<Check> {
     // Peak is a whole-file ceiling. Cropping it with the loudness region hid
     // precisely the t=0/EOF failures this criterion exists to catch (VH-50).
     const measuredFull = await measureLoudness(file)
+    // Loudness is an average and is nearly blind to missing content: a file
+    // can hit target exactly having dropped a third of its frames. So the
+    // verdict also asks whether the samples tile the span they claim (VH-62).
+    const videoCoverage = await measureCoverage(file, 'video', 1 / 25 + 0.001)
     await workspace.dispose()
     const measurement =
       measuredContent && measuredFull
@@ -355,6 +366,43 @@ async function checkLoudnessCorpus(log: Report): Promise<Check> {
     if (!measurement) {
       allVerified = false
       results.push(`${entry.name}: FAIL (missing-audio)`)
+      continue
+    }
+
+    if (!videoCoverage) {
+      allVerified = false
+      results.push(`${entry.name}: FAIL (no video packets)`)
+      continue
+    }
+    // Three separate questions, because each can fail with the others intact.
+    //
+    // Truncation: the output must still contain the 70 s of source, whatever
+    // branding was added around it. Derived from the fixture rather than from
+    // the branding lengths, which vary by mode.
+    const spanSeconds = videoCoverage.lastEndSeconds - videoCoverage.firstSeconds
+    if (spanSeconds < 70 + openingSeconds - 0.5) {
+      allVerified = false
+      results.push(`${entry.name}: FAIL (picture spans ${spanSeconds.toFixed(2)}s, source was 70s)`)
+      continue
+    }
+    // Silent drops: the frames must actually fill the span they claim. A file
+    // can state the right duration while having encoded a third of the frames.
+    const expectedFrames = Math.round(spanSeconds * frameRate)
+    if (Math.abs(videoCoverage.sampleCount - expectedFrames) / expectedFrames > 0.02) {
+      allVerified = false
+      results.push(
+        `${entry.name}: FAIL (${videoCoverage.sampleCount} frames across ${spanSeconds.toFixed(2)}s at ${frameRate} fps, expected ~${expectedFrames})`,
+      )
+      continue
+    }
+    // Holes and pile-ups: one frame period of slack absorbs the CFR grid's
+    // rounding at the branding joins; anything larger is a real discontinuity.
+    const slack = 1 / frameRate + 0.001
+    if (videoCoverage.largestGapSeconds > slack || videoCoverage.largestOverlapSeconds > slack) {
+      allVerified = false
+      results.push(
+        `${entry.name}: FAIL (largest gap ${videoCoverage.largestGapSeconds.toFixed(3)}s, largest overlap ${videoCoverage.largestOverlapSeconds.toFixed(3)}s)`,
+      )
       continue
     }
 
@@ -379,9 +427,9 @@ async function checkLoudnessCorpus(log: Report): Promise<Check> {
   const highestPeak = Number.isFinite(worstPeak) ? `${worstPeak.toFixed(4)} dBTP` : 'unavailable'
   return {
     criterion: '2',
-    title: 'Output is −16 ±0.5 LUFS and never exceeds −2.0 dBTP',
+    title: 'Output is −16 ±0.5 LUFS, never exceeds −2.0 dBTP, and is complete',
     status: allVerified ? 'pass' : 'fail',
-    detail: `${results.join('; ')}. Worst deviation ${worstLoudness.toFixed(2)} LU, highest peak ${highestPeak}.`,
+    detail: `${results.join('; ')}. Worst deviation ${worstLoudness.toFixed(2)} LU, highest peak ${highestPeak}. Frame count and timeline coverage checked on every entry, because loudness alone cannot tell a complete file from one missing a third of its frames.`,
   }
 }
 
@@ -464,8 +512,103 @@ async function checkSync(log: Report): Promise<Check[]> {
   ]
 }
 
+/**
+ * Criterion 6's other half: the source's own timeline, not just its sync.
+ *
+ * The sync check pairs markers on a fixture whose lanes start together and
+ * run without holes. Neither of the two ways a real capture breaks that —
+ * audio joining late, and a hole mid-track — was measured anywhere until
+ * VH-74, and both used to be collapsed silently. These are the acceptance-level
+ * guard for that: the Node tests prove the arithmetic, and this proves it
+ * survives a real encoder round trip.
+ */
+async function checkSourceTimeline(log: Report): Promise<Check> {
+  const AUDIO_PACKET_SLACK = 0.05
+  const cases = [
+    {
+      name: 'audio joining 8 s late',
+      audio: { startPeakDbfs: -20, startSeconds: 8 },
+      jobId: 'acceptance-timeline-late',
+      // The picture starts at the origin, so the sound must still be 8 s in.
+      expect: (source: { firstSeconds: number }, output: { firstSeconds: number }, offset: number) =>
+        Math.abs(output.firstSeconds - (offset + source.firstSeconds)) <= 0.15,
+      describe: 'the sound still starts where the source put it',
+    },
+    {
+      name: 'a 6 s hole mid-track',
+      audio: { startPeakDbfs: -20, gap: [10, 16] as const },
+      jobId: 'acceptance-timeline-gap',
+      // Filled with silence rather than left as a hole, so what must survive
+      // is the SPAN: collapsing the hole shortened it by six seconds.
+      expect: (
+        source: { firstSeconds: number; lastEndSeconds: number },
+        output: { firstSeconds: number; lastEndSeconds: number },
+      ) =>
+        Math.abs(
+          output.lastEndSeconds -
+            output.firstSeconds -
+            (source.lastEndSeconds - source.firstSeconds),
+        ) <= 0.3,
+      describe: 'the sound still lasts as long as the source did',
+    },
+  ]
+
+  const results: string[] = []
+  let allHeld = true
+
+  for (const testCase of cases) {
+    log(`  ${testCase.name}`)
+    const fixture = await buildFixture({
+      width: 640,
+      height: 360,
+      seconds: 30,
+      frameRate: 25,
+      audio: testCase.audio,
+    })
+    const source = await measureCoverage(fixture, 'audio', AUDIO_PACKET_SLACK)
+    const { file, workspace, openingSeconds } = await process(fixture, {
+      presetId: 'best',
+      branding: { opening: false, closing: false },
+      jobId: testCase.jobId,
+    })
+    const output = await measureCoverage(file, 'audio', AUDIO_PACKET_SLACK)
+    await workspace.dispose()
+
+    if (!source || !output) {
+      allHeld = false
+      results.push(`${testCase.name}: FAIL (no audio packets)`)
+      continue
+    }
+    const held = testCase.expect(source, output, openingSeconds)
+    if (!held) allHeld = false
+    results.push(
+      `${testCase.name}: ${held ? 'held' : 'FAIL'} — source starts ${source.firstSeconds.toFixed(2)}s ` +
+        `spanning ${(source.lastEndSeconds - source.firstSeconds).toFixed(2)}s, ` +
+        `output starts ${output.firstSeconds.toFixed(2)}s spanning ` +
+        `${(output.lastEndSeconds - output.firstSeconds).toFixed(2)}s`,
+    )
+  }
+
+  return {
+    criterion: '6',
+    title: 'A late-starting or gapped audio track keeps its place',
+    status: allHeld ? 'pass' : 'fail',
+    detail: `${results.join('; ')}. Each case asserts ${cases.map((c) => c.describe).join(', and ')}.`,
+  }
+}
+
+/**
+ * Criterion 8, through the protocol the app actually uses.
+ *
+ * It used to build an `AbortController`, hand it to `runPipeline` on the main
+ * thread, and abort it — which proves the PIPELINE unwinds. It says nothing
+ * about the thing a user's Cancel actually does: post a `cancel` message to a
+ * worker that owns the job, and have that worker abort it, release its Web
+ * Lock, delete its scratch directory, and answer `cancelled`. Every one of
+ * those steps was outside the check (P2-07).
+ */
 async function checkCancellation(log: Report): Promise<Check> {
-  log('  starting a job and cancelling it mid-encode')
+  log('  starting a worker job and cancelling it through the worker protocol')
   const fixture = await buildFixture({
     width: 854,
     height: 480,
@@ -475,47 +618,107 @@ async function checkCancellation(log: Report): Promise<Check> {
   })
 
   const root = await navigator.storage.getDirectory()
-  const countJobs = async (): Promise<number> => {
-    let count = 0
+  const jobDirectories = async (): Promise<string[]> => {
+    const names: string[] = []
     try {
       const dir = await root.getDirectoryHandle(ROOT_DIRECTORY, { create: true })
       const iterable = dir as FileSystemDirectoryHandle & { keys(): AsyncIterableIterator<string> }
-      for await (const name of iterable.keys()) if (name) count++
+      for await (const name of iterable.keys()) if (name) names.push(name)
     } catch {
-      return 0
+      return []
     }
-    return count
+    return names
   }
 
-  await sweepOrphanedJobs()
-  const before = await countJobs()
-
-  const controller = new AbortController()
-  const job = process(fixture, {
-    presetId: 'best',
-    branding: { opening: false, closing: false },
-    jobId: 'acceptance-cancel',
-    signal: controller.signal,
-  })
-  await new Promise((resolve) => setTimeout(resolve, 900))
-  const during = await countJobs()
-  controller.abort()
-
-  let cancelled = false
-  try {
-    await job
-  } catch (cause) {
-    cancelled = cause instanceof CancelledError
-  }
-  await new Promise((resolve) => setTimeout(resolve, 500))
-  const after = await countJobs()
-
-  const pass = cancelled && during > before && after === before
-  return {
+  const fail = (detail: string): Check => ({
     criterion: '8',
     title: 'Cancelling leaves no partial file and no orphaned data',
-    status: pass ? 'pass' : 'fail',
-    detail: `Job directories before ${before}, during ${during}, after ${after}. Cancellation reported: ${cancelled}.`,
+    status: 'fail',
+    detail,
+  })
+
+  await sweepOrphanedJobs()
+  const before = await jobDirectories()
+
+  const worker = new Worker(new URL('../workers/job.worker.ts', import.meta.url), {
+    type: 'module',
+    name: 'uon-acceptance-cancel',
+  })
+
+  try {
+    const PROCESS_ID = 1
+    const replied = new Promise<WorkerOutbound>((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error('the worker never answered')), 180_000)
+      worker.addEventListener('message', (event: MessageEvent<WorkerOutbound>) => {
+        const message = event.data
+        if (message.kind === 'stage' || message.kind === 'uncaught') return
+        if (message.id !== PROCESS_ID) return
+        clearTimeout(timer)
+        resolve(message)
+      })
+      worker.addEventListener('error', () => {
+        clearTimeout(timer)
+        reject(new Error('the worker failed to start'))
+      })
+    })
+
+    worker.postMessage({
+      kind: 'process',
+      id: PROCESS_ID,
+      file: fixture,
+      presetId: 'best',
+      branding: { opening: false, closing: false },
+      backgroundColour: '#000000',
+    })
+
+    // Cancel only once the job has genuinely started writing. Cancelling a job
+    // that has not opened its workspace yet proves nothing about cleanup, and
+    // a fixed delay is exactly how that becomes a flaky pass.
+    let during: string[] = []
+    const deadline = performance.now() + 30_000
+    while (performance.now() < deadline) {
+      await new Promise((resolve) => setTimeout(resolve, 100))
+      during = await jobDirectories()
+      if (during.length > before.length) break
+    }
+    if (during.length <= before.length) {
+      return fail(
+        `No job directory ever appeared, so nothing was cancelled mid-write and this check proves nothing. Directories before: ${before.length}.`,
+      )
+    }
+
+    worker.postMessage({ kind: 'cancel', id: 2, cancelId: PROCESS_ID })
+    const reply = await replied
+
+    if (reply.kind !== 'cancelled') {
+      return fail(
+        `The worker answered \`${reply.kind}\` rather than \`cancelled\`. A job that finishes anyway, or fails, is not a cancellation.`,
+      )
+    }
+
+    // The worker answers before its cleanup has necessarily settled, so give it
+    // a bounded window rather than a fixed sleep that is either flaky or slow.
+    let after = await jobDirectories()
+    const cleanupBy = performance.now() + 10_000
+    while (after.length > before.length && performance.now() < cleanupBy) {
+      await new Promise((resolve) => setTimeout(resolve, 100))
+      after = await jobDirectories()
+    }
+
+    const leaked = after.filter((name) => !before.includes(name))
+    return {
+      criterion: '8',
+      title: 'Cancelling leaves no partial file and no orphaned data',
+      status: leaked.length === 0 ? 'pass' : 'fail',
+      detail:
+        leaked.length === 0
+          ? `A worker job was started, confirmed writing (${during.length} directories against ${before.length}), cancelled by the \`cancel\` message the Cancel button sends, and answered \`cancelled\`. Its scratch directory was gone afterwards. This exercises the worker's own abort, lock release and cleanup — not an in-process AbortController.`
+          : `${leaked.length} job director${leaked.length === 1 ? 'y' : 'ies'} survived the cancellation: ${leaked.join(', ')}.`,
+    }
+  } catch (cause) {
+    return fail(cause instanceof Error ? cause.message : String(cause))
+  } finally {
+    worker.terminate()
   }
 }
 
@@ -527,11 +730,20 @@ export async function runAcceptance(log: Report): Promise<AcceptanceReport> {
   const egress = new EgressWatch()
   egress.start()
 
+  // Running for the whole suite: a leaked decoded sample is reported on the
+  // console and by nothing else, so a run could print it and still come out
+  // green (VH-62). VH-75 found a real one on the cancel path exactly this way.
+  const resources = new ResourceWatch()
+  resources.start()
+
   log('Criterion 2 — loudness and true peak across a corpus')
   checks.push(await checkLoudnessCorpus(log))
 
   log('Criterion 6 — A/V sync on a variable-frame-rate source')
   checks.push(...(await checkSync(log)))
+
+  log('Criterion 6 — the source timeline')
+  checks.push(await checkSourceTimeline(log))
 
   log('Criterion 8 — cancellation')
   checks.push(await checkCancellation(log))
@@ -587,6 +799,17 @@ export async function runAcceptance(log: Report): Promise<AcceptanceReport> {
     status: 'manual',
     detail:
       'All four §7.3 outcomes and all seven §5.4 warnings are triggered in unit tests, and the wording is checked for jargon and blame. Whether it reads clearly to a lecturer needs a lecturer.',
+  })
+
+  const leaks = resources.stop()
+  checks.push({
+    criterion: '8',
+    title: 'The run leaks no decoded samples',
+    status: leaks.length === 0 ? 'pass' : 'fail',
+    detail:
+      leaks.length === 0
+        ? 'No resource warning was printed during this run. Main-thread work only: a worker has its own console and this cannot see it, so a leak inside the worker job would not appear here.'
+        : `${leaks.length} resource warning(s): ${[...new Set(leaks)].join(' | ')}. A decoded sample was dropped without being closed, which is a leak whatever else the run reported.`,
   })
 
   return {
