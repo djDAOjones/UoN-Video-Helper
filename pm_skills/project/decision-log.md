@@ -11,6 +11,33 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-28 — VH-79 and VH-80: two things the interface said that were not true
+
+**VH-79.** "Starting again will discard the video you just made" is raised with
+the file that was current when it was asked, and its Discard button keeps that
+file in a closure. `handleFileChange` deliberately leaves the result panel
+alone when a result is unsaved (VH-56 — clearing it removed the only route to
+a finished file), so choosing a different file left the QUESTION on screen
+still bound to the old one. Clicking it processed the file the user had just
+replaced.
+
+Fixed by re-rendering rather than merely keeping: on a file change with an
+unsaved result, the result panel is drawn again. That drops the stale question
+and restores the Save button, which is what VH-56 wanted there in the first
+place. Verified in Chrome — process A, press Start again to raise the question,
+choose B: the question is gone, A's result and its Save button are back, and
+the source panel describes B.
+
+**VH-80.** The subtitle field said timings are "shifted to match the opening
+sequence". Openings are dormant (VH-23), so the shift is always zero — the tool
+was describing something it does not do, in the one place a user is deciding
+whether to trust it with their transcript. It now says the file is carried into
+the finished video, timed to the picture, with the words never changed. The
+offset code is untouched; it is correct and it will matter again if VH-23 ever
+returns.
+
+**Link:** VH-79, VH-80, VH-56, VH-23; `src/main.ts`, `index.html`.
+
 ## 2026-08-28 — The compressor detects RMS, and the spec does not say so
 
 Spec 5.2 step 4 gives the compressor a ratio, a threshold, an attack and a

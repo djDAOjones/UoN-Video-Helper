@@ -23,6 +23,12 @@
 
 ## Archived: the review remediation and Band 1's close — see archive/trajectory/trajectory-0003-review-remediation-and-band-1-close.md
 
+### VH-79, VH-80 — two things the interface said that were not true
+
+- VH-79 + VH-80 — Shipped 2026-08-28. The discard question no longer survives a
+  file change bound to the replaced file, and the subtitle helper no longer
+  promises an offset that is always zero. See decision-log.
+
 ### VH-62 — the harness stops flattering itself
 
 - VH-62 — Shipped 2026-08-28. Criterion 8 drives the real worker cancel

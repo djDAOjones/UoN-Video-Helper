@@ -44,21 +44,6 @@
       Done when: every child is shipped or explicitly cut; then delete the
       ticket.
 
-- [ ] **VH-79 The discard button holds a superseded file** (2026-08-28)
-      Intent: "Discard it and start again" captures the file that was current
-      when the question was raised. Choosing a different file while the question
-      is on screen and then clicking it processes the file just replaced —
-      `handleFileChange` deliberately keeps the panel when a result is unsaved.
-      Done when: the button starts the job for the file the picker now shows,
-      or the stale question is dismissed when the file changes.
-
-- [ ] **VH-80 The subtitle helper text promises an offset that is zero** (2026-08-28)
-      Intent: it says timings are "shifted to match the opening sequence", but
-      openings are dormant (VH-23) so the shift is always zero. The tool
-      describes something it is not doing.
-      Done when: the wording matches what happens, and still says the words are
-      never changed.
-
 - [ ] **VH-81 The ISOBMFF tail fallback never finds a trailing moov** (2026-08-28)
       Intent: `file.slice(tailStart)` starts at an arbitrary offset, so
       `readBoxes` from position 0 parses mid-`mdat`. It fails safe — reports

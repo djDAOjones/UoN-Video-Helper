@@ -518,7 +518,19 @@ fileInput.addEventListener('change', () => {
   // Kept when there is something to lose: the result panel describes a video
   // that already exists, and the source panel describes what was just chosen.
   // Clearing it here removed the only route to a finished file (VH-56).
-  if (!unsavedResult) processResult.replaceChildren()
+  //
+  // Re-rendered rather than merely kept, because what is on screen may be the
+  // "starting again will discard it" question — and that question's Discard
+  // button is bound to the file that was current when it was asked. Leaving it
+  // there after the picker has moved on offers to process the file the user
+  // just replaced (VH-79). Re-rendering restores the result the question
+  // interrupted, which is also the only route back to saving it.
+  if (unsavedResult) {
+    const kept = unsavedResult
+    renderResult(kept.file, kept.jobId, kept.source, kept.applied, kept.requested)
+  } else {
+    processResult.replaceChildren()
+  }
 
   void (async () => {
     try {
