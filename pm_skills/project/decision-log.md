@@ -11,6 +11,46 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-26: the colour fear did not reproduce
+
+**Decision:** take five phone samples into `samples/phone/`, and reduce VH-26
+from "the picture is silently wrong" to two specific, smaller questions.
+
+**Rationale:** the maintainer supplied a curated list of directly-downloadable
+phone recordings. Five were taken — HLG 1080p, Dolby Vision 4K60, an 8-bit 4K30
+pair and a legacy 3GP — and every one was classified with `ffprobe` rather than
+from its filename, which turned out to matter: the two files published as "SDR"
+and "HDR" are both plain 8-bit H.264 bt709. The supplied document warns about
+exactly that and was right.
+
+VH-26 has said since 2026-08-25 that phone HDR would come out "silently washed
+out or crushed", because `src/` has no colour-space or tone-map handling at
+all. Measured, it does not. One frame from each of the two genuinely-HDR files,
+source against output, read through a `<video>` element so the numbers describe
+what a viewer sees: the HLG 1080p file reads mean 110 / p05 5 / p50 109 / p95
+219 at source and 110 / 5 / 108 / 219 out; the Dolby Vision 4K60 file reads
+130 / 11 / 137 / 233 in and 131 / 13 / 139 / 233 out. Within two units
+everywhere.
+
+The reason is that the browser tone-maps HLG to SDR when it decodes, and the
+pipeline encodes what it is handed. Having no colour handling of our own turns
+out to be correct here rather than merely absent — though it is correct by
+inheritance, which is worth knowing rather than relying on.
+
+Two smaller questions survive. Firefox is untested, and the question there is
+not colour but whether an undecodable HEVC source hits VH-60's
+`no-source-decode` block cleanly instead of failing mid-job. And portrait is
+still absent from the corpus, so portrait branding composition remains
+unspecified.
+
+**Incidental, and worth a note:** 4K60 encodes at about 1.3x real time on this
+MacBook (16.5 s for 21.7 s), which is far better than feared — but a 4K60 phone
+video comes out BIGGER than it went in, 139 MB to 154 MB, because "best
+quality" anchors to a ~51 Mbps source (VH-47). Not a defect; a surprise, and
+the smaller preset is the answer.
+
+**Link:** VH-26, VH-60, VH-47; `samples/phone/`, `pm_skills/project/tickets/VH-26.md`.
+
 ## 2026-08-27 — VH-32 closed, VH-61 closed, VH-17 reframed
 
 **VH-32 — no redesign. The simplicity is the design.** The maintainer's answer

@@ -127,14 +127,18 @@
      pass. VH-23 went to the icebox 2026-08-27. -->
 
 - [ ] **VH-26 Mobile phone sources** [detail](tickets/VH-26.md) (2026-08-25)
-      Intent: staff may upload phone footage and none is in the corpus.
-      Rotation was traced end to end and is correct. The gap is colour: `src/`
-      has no colour-space or tone-map handling and phones record HDR 10-bit by
-      default, so the picture is silently washed out or crushed. It always
-      plays, so nothing surfaces.
-      Done when: phone footage is in `samples/`, the colour path has a decided
-      and tested behaviour, and portrait branding composition is specified.
-      Maintainer 2026-08-27: looking into sourcing footage.
+      Intent: staff may upload phone footage and none was in the corpus.
+      Rotation was traced end to end and is correct.
+      Material acquired 2026-08-27 — five samples in `samples/phone/`, covering
+      HLG 1080p, Dolby Vision 4K60, 8-bit 4K30 and a legacy 3GP.
+      The central fear did NOT reproduce: HLG and Dolby Vision both round-trip
+      in Chrome with luma percentiles within two units of the source, because
+      the browser tone-maps on decode and the pipeline encodes what it is
+      given. Chrome decodes HEVC Main 10 at 1080p and 4K60.
+      Done when: Firefox is checked — the question there is whether an
+      undecodable HEVC source hits VH-60's `no-source-decode` block cleanly,
+      not whether the colour is right — and portrait branding composition is
+      specified against a portrait sample, which the corpus still lacks.
 
 - [ ] **VH-30 Trim the source** [detail](tickets/VH-30.md) (2026-08-25)
       [sign-off]
