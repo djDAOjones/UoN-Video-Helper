@@ -97,15 +97,23 @@ describe('dimensions', () => {
 describe('projectedOutputBytes', () => {
   it('over-estimates rather than under-estimates', () => {
     const shape = outputShapeFor(PRESETS.best, source1080p30)
-    const bytes = projectedOutputBytes(shape, 3600)
+    const bytes = projectedOutputBytes(shape, 3600, true)
     const naive = ((shape.videoBitrateBps + shape.audioBitrateBps) / 8) * 3600
     expect(bytes).toBeGreaterThan(naive)
   })
 
   it('projects roughly 3.4 GB for an hour at best quality 1080p30', () => {
-    const bytes = projectedOutputBytes(outputShapeFor(PRESETS.best, source1080p30), 3600)
+    const bytes = projectedOutputBytes(outputShapeFor(PRESETS.best, source1080p30), 3600, true)
     expect(bytes / 1e9).toBeGreaterThan(3)
     expect(bytes / 1e9).toBeLessThan(4)
+  })
+
+  it('does not charge a silent source for an audio track it will not contain', () => {
+    const shape = outputShapeFor(PRESETS.smaller, source1080p30)
+    const durationSeconds = 4
+    expect(projectedOutputBytes(shape, durationSeconds, false)).toBe(
+      Math.round((shape.videoBitrateBps / 8) * durationSeconds * 1.02),
+    )
   })
 })
 
@@ -224,7 +232,9 @@ describe('never exceeding the source bitrate', () => {
     // user decides on would both describe a bitrate nothing will ask for.
     const capped = outputShapeFor(PRESETS.smaller, CORPUS.teams)
     const uncapped = outputShapeFor(PRESETS.smaller, { ...CORPUS.teams, videoBitrateBps: null })
-    expect(projectedOutputBytes(capped, 60)).toBeLessThan(projectedOutputBytes(uncapped, 60))
+    expect(projectedOutputBytes(capped, 60, true)).toBeLessThan(
+      projectedOutputBytes(uncapped, 60, true),
+    )
   })
 
   it('asks the encoder for the capped figure, not the requested one', () => {
@@ -403,6 +413,8 @@ describe('anchoring best quality to the source', () => {
     const shape = outputShapeFor(PRESETS.best, CORPUS.teams)
     expect(videoEncoderConfigFor(shape).bitrate).toBe(2_001_015)
     const unmeasured = outputShapeFor(PRESETS.best, { ...CORPUS.teams, videoBitrateBps: null })
-    expect(projectedOutputBytes(shape, 60)).toBeLessThan(projectedOutputBytes(unmeasured, 60))
+    expect(projectedOutputBytes(shape, 60, true)).toBeLessThan(
+      projectedOutputBytes(unmeasured, 60, true),
+    )
   })
 })

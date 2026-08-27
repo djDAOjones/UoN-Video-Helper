@@ -319,12 +319,21 @@ function bitrateFromSource(
 
 /**
  * Projected output size in bytes. Deliberately an over-estimate: it assumes
- * the encoder spends its whole bitrate budget and adds container overhead, so
- * the storage check in `capability.ts` errs toward refusing a job that would
- * have just fit rather than running out of disk an hour in.
+ * each encoder that the job will use spends its whole bitrate budget and adds
+ * container overhead, so the storage check in `capability.ts` errs toward
+ * refusing a job that would have just fit rather than running out of disk an
+ * hour in.
+ *
+ * @param shape - The output's video shape and configured bitrate budgets.
+ * @param durationSeconds - The projected content duration.
+ * @param hasAudio - Whether this job will create an audio track.
  */
-export function projectedOutputBytes(shape: OutputShape, durationSeconds: number): number {
-  const bitsPerSecond = shape.videoBitrateBps + shape.audioBitrateBps
+export function projectedOutputBytes(
+  shape: OutputShape,
+  durationSeconds: number,
+  hasAudio: boolean,
+): number {
+  const bitsPerSecond = shape.videoBitrateBps + (hasAudio ? shape.audioBitrateBps : 0)
   const containerOverhead = 1.02
   return Math.round((bitsPerSecond / 8) * durationSeconds * containerOverhead)
 }

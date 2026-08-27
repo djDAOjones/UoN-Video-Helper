@@ -11,6 +11,20 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-31: audio presence is an estimator input
+
+**Decision:** require every output-size projection call to state whether the
+inspected source has audio, and charge the configured audio bitrate only when
+the job will create an audio track.
+
+**Rationale:** the worker already has the authoritative fact in `SourceReport`.
+Making it explicit at the pure-function boundary prevents silent sources from
+inflating both the displayed estimate and the storage gate, while leaving the
+blocked content-estimator redesign untouched. A default was rejected because
+it would preserve the original failure mode for future callers.
+
+**Link:** VH-31; `src/config/presets.ts`, `src/workers/job.worker.ts`.
+
 ## 2026-08-26 — VH-53: one shared contract, two native entry points
 
 **Decision:** keep `AGENTS.md` as the canonical shared behavioural contract and

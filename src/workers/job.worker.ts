@@ -298,7 +298,7 @@ async function handlePreflight(
       // dividing by the conformed one would misread the source's density.
       sourceFrameRate: report.video.conform.sourceFrameRate,
     })
-    const projected = projectedOutputBytes(shape, report.durationSeconds)
+    const projected = projectedOutputBytes(shape, report.durationSeconds, report.audio !== null)
 
     const [capability, encode, canEncodeAac] = await Promise.all([
       inspectCapabilities(),
