@@ -52,25 +52,17 @@
 <!-- Committed work that cannot proceed without a product call. Listed apart
      from 1a so agent work is never read as waiting on these. -->
 
-- [ ] **VH-31 The size estimate is ~1.7x too high** [detail](tickets/VH-31.md)
-      (2026-08-25)
-      Intent: it is shown before the user commits, so it is the number they
-      decide on, and it feeds VH-13's published limits. It is not a safety
-      margin — at "Smaller file" the projection already falls BELOW the
-      produced file on 4 of 23 real jobs. One measured contributor:
-      `projectedOutputBytes` charges 128 kbps of AAC to sources with no audio
-      track, ~3.4 MB on a 215 s silent deck, and the call sites know.
-      Done when: the estimate is grounded in real content — the calibration
-      probe already decodes three seconds — or presented honestly as an upper
-      bound.
-
 - [ ] **VH-19 Content-adaptive bitrate for the smaller preset**
       Intent: spec §6.2 sets ~1.5 Mbps for slides and ~2.5 Mbps for camera.
       `ContentClass` exists but nothing sets it, so every job uses the higher
       figure.
       Done when: screen-like and camera-like content are distinguished by the
       calibration probe and the class is stated in plain language rather than
-      applied silently. After VH-31 — same probe.
+      applied silently.
+      Note: this rides the calibration probe, and VH-31 closed 2026-08-27
+      WITHOUT lengthening it — the refuters' objection to a longer probe (it
+      re-calibrates `videoFramesPerSecond` by 34-66% and moves the §7.3 bands)
+      applies here too and has to be answered, not inherited.
 
 - [ ] **VH-32 Interface quality pass** [sign-off] [detail](tickets/VH-32.md)
       (2026-08-25)

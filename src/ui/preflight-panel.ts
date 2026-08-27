@@ -91,7 +91,12 @@ export function renderPreflight(container: HTMLElement, summary: PreflightSummar
       'Output',
       `${formatResolution(shape.width, shape.height)} at ${formatFrameRate(shape.frameRate)}`,
     ],
-    ['Estimated size', formatFileSize(summary.projectedOutputBytes)],
+    // "At most", not a bare figure. It is an upper bound by construction — it
+    // assumes the encoder spends its whole bitrate budget and that the longest
+    // closing is appended — and a bare number reads as a prediction, which is
+    // what made a 27.7 MB label for a 7.5 MB file look like a defect rather
+    // than a margin (VH-31).
+    ['Estimated size', `at most ${formatFileSize(summary.projectedOutputBytes)}`],
     [
       'Measured speed',
       probe.measured

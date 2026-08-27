@@ -82,6 +82,17 @@ export function closingAddedSeconds(mode: BrandingMode): number {
     : CLOSING_TAIL_SECONDS
 }
 
+/**
+ * The most a closing can add, whichever mode is chosen.
+ *
+ * Pre-flight runs before the branding choice is known, and the size estimate
+ * it produces is an upper bound, so it assumes the longest closing (VH-31).
+ * Over-stating by a second on a job that turns out to be a clean cut is the
+ * safe direction; under-stating is what let four real "Smaller file" jobs
+ * produce a file larger than the figure the user decided on.
+ */
+export const LONGEST_CLOSING_SECONDS = CLOSING_ONSET_SECONDS + CLOSING_TAIL_SECONDS
+
 /** Whether a mode needs the transparent onset, and so alpha decode. */
 export function modeNeedsOnset(mode: BrandingMode): boolean {
   return mode !== 'hard-cut'

@@ -11,6 +11,40 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-27 — VH-31: an upper bound that is actually one
+
+**Decision:** keep the estimate as an upper bound, say so on screen, and fix
+the one way it was not a bound. The content-derived estimator stays unbuilt.
+
+**Rationale:** the maintainer chose the upper bound and asked for improvement
+where it was cheap. Two things were cheap and one was not.
+
+The projection multiplied by the SOURCE duration, while the output is longer
+by whatever branding is appended — the tail was omitted outright, about 3% on
+a 130 s lecture, and part of why four real "Smaller file" jobs produced a file
+LARGER than the figure the user had decided on. A bound that can be exceeded
+is not a bound. Pre-flight does not know the mode yet, so it assumes the
+longest closing: over-stating by a second on a job that turns out to be a
+clean cut is the safe direction.
+
+And the panel said "Estimated size: 27.7 MB" for a file that came out at 7.5.
+A bare figure reads as a prediction, so the margin read as a defect. "At most
+27.7 MB" is the same number describing itself honestly, and costs nothing.
+
+What stays unbuilt is the content-derived estimator, and the reason is in the
+ticket rather than in taste: all three adversarial refuters returned blocking
+findings. It raises `requiredStorageBytes` on 42 of 46 corpus combinations
+into a hard block with no override; the longer probe it needs re-calibrates
+`videoFramesPerSecond` by 34-66%, moving the estimate across spec 7.3's 20-
+and 60-minute bands; and the wall budget withdraws the fix from exactly the
+large files it exists to fix, on hardware only 1.8x slower than the machine it
+was costed on. The ticket file goes, and those findings come with it into
+VH-19's note, because VH-19 rides the same probe and would inherit the same
+objections unanswered.
+
+**Link:** VH-31, VH-19; `src/config/branding.ts`, `src/workers/job.worker.ts`,
+`src/ui/preflight-panel.ts`.
+
 ## 2026-08-27 — Seven maintainer answers, recorded
 
 **D4 / VH-15 — the browser exclusion is signed off.** Safari below 26 may be

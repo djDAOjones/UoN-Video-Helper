@@ -5,6 +5,7 @@ import {
   CLOSING_DEFAULTS,
   CLOSING_ONSET_SECONDS,
   CLOSING_TAIL_SECONDS,
+  LONGEST_CLOSING_SECONDS,
   brandingAssetHeight,
   brandingAssetUrl,
   closingAddedSeconds,
@@ -131,5 +132,23 @@ describe('durations', () => {
   it('holds D2 in one place, since the subtitle offset depends on it', () => {
     expect(BRANDING_DURATIONS.openingSeconds).toBe(5)
     expect(BRANDING_DURATIONS.closingSeconds).toBe(CLOSING_TAIL_SECONDS)
+  })
+})
+
+/**
+ * VH-31. The size estimate multiplied by the SOURCE duration, so it omitted
+ * whatever branding is appended — about 3% on a 130 s lecture, and part of why
+ * four real "Smaller file" jobs produced a file larger than the figure the
+ * user had decided on.
+ */
+describe('LONGEST_CLOSING_SECONDS', () => {
+  it('is the longest any mode can add, not the commonest', () => {
+    for (const mode of ['hard-cut', 'over-picture', 'over-freeze'] as const) {
+      expect(closingAddedSeconds(mode)).toBeLessThanOrEqual(LONGEST_CLOSING_SECONDS)
+    }
+  })
+
+  it('is actually reached, so the bound is tight rather than invented', () => {
+    expect(closingAddedSeconds('over-freeze')).toBe(LONGEST_CLOSING_SECONDS)
   })
 })

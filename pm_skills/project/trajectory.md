@@ -21,6 +21,13 @@
 
 ## Archived: real material and Band 1's first half — see archive/trajectory/trajectory-0002-real-material-and-band-1.md
 
+### VH-31 — the estimate is a bound, and says so
+
+- VH-31 — Closed 2026-08-27. The projection now covers the whole output rather
+  than the source alone, and the panel says "at most". The content-derived
+  estimator stays unbuilt; its refuters' findings moved to VH-19, which rides
+  the same probe. See decision-log.
+
 ### Seven decisions closed
 
 - VH-15 — Closed 2026-08-27. UoN IT signed off the Safari-below-26 exclusion

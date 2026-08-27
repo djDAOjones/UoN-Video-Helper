@@ -19,7 +19,7 @@ import {
 } from '../config/presets'
 import { SAVE_LEASE_LIMIT_MS } from '../config/thresholds'
 import { detectSourceWarnings, type AudioWarning } from '../audio/warnings'
-import type { BrandingChoice } from '../config/branding'
+import { LONGEST_CLOSING_SECONDS, type BrandingChoice } from '../config/branding'
 import { analyseSourceAudio } from '../media/audio-plan'
 import { canEncodeAudio, checkEncodeSupport, inspectCapabilities } from '../media/capability'
 import { UnreadableFileError, inspectFile, openInput } from '../media/inspect'
@@ -415,7 +415,17 @@ async function handlePreflight(
       // dividing by the conformed one would misread the source's density.
       sourceFrameRate: report.video.conform.sourceFrameRate,
     })
-    const projected = projectedOutputBytes(shape, report.durationSeconds, report.audio !== null)
+    // The SOURCE duration plus the longest closing. The output is longer than
+    // the source by whatever branding is appended, and the estimate used to
+    // multiply by the source alone — omitting the tail outright, about 3% on a
+    // 130 s lecture, and part of why four real "Smaller file" jobs produced a
+    // file bigger than the number the user had decided on. The mode is not
+    // known here, so an upper bound assumes the longest (VH-31).
+    const projected = projectedOutputBytes(
+      shape,
+      report.durationSeconds + LONGEST_CLOSING_SECONDS,
+      report.audio !== null,
+    )
 
     const [capability, encode, canEncodeAac] = await Promise.all([
       inspectCapabilities(),
