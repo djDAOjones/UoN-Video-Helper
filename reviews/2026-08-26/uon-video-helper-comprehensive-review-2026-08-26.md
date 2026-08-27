@@ -1,0 +1,929 @@
+# UoN Video Helper — Read-Only Comprehensive Repository Review
+
+Review date: 26 August 2026  
+Repository commit: `66227e51dc0905c1853d79fb927d8f009be80ad4`
+
+## 1. Executive summary
+
+UoN Video Helper has a coherent browser-only architecture, strong privacy intent, explicit streaming constraints, useful diagnostics, and a substantial automated safety net. However, it is not ready for general production use. The review found no Critical issues, but identified 9 High, 6 Medium, and 1 Low consolidated findings.
+
+The clearest release blocker is that the current pipeline can create an MP4 that fails both stated audio requirements while still reporting success. In an isolated Chrome run using a real repository sample, the source measured −21.86 LUFS/−1.86 dBTP and the output measured −16.75 LUFS/−1.98 dBTP, outside the required −16 ±0.5 LUFS and ≤−2.0 dBTP limits. Separate executable checks demonstrated an end-of-file true-peak defect capable of leaving a final transient at 0 dBTP.
+
+Other serious risks involve source-onset deletion, stale preflight results, partial OPFS writes, output deletion during saving, cancellation races, multi-track data loss, and a Web Lock race capable of deleting a live workspace.
+
+Strong aspects include:
+
+- Source media remains local and read-only.
+- No production source-media, filename, or media-characteristic egress was found.
+- Media processing is streamed with backpressure.
+- Every Mediabunny output explicitly disables in-memory fast-start behaviour.
+- The worker protocol and major data objects are typed and well separated.
+- The isolated canonical quality gate passed 355 tests with one skip.
+- Dependency audits reported no known vulnerabilities.
+
+The five highest-priority actions are:
+
+1. Finalize true-peak detection and limiting correctly at EOF.
+2. Calibrate loudness against the complete output chain and enforce final decoded-output acceptance.
+3. Preserve every source audio sample and its source timeline.
+4. Make OPFS writing, verification, saving, and deletion one explicit ownership transaction.
+5. Bind preflight to an immutable file/preset job and make cancellation authoritative across every phase.
+
+The current UI also does not yet expose the final opening/closing branding choices, so the repository is not feature-complete for the stated product even apart from these defects.
+
+No suggested change was applied. The original repository remained unchanged.
+
+## 2. Repository status and review environment
+
+| Item | Observed state |
+|---|---|
+| Repository | [UoN Video Helper](../..) |
+| Branch | `main`, tracking `origin/main`, ahead/behind 0/0 |
+| Starting and final commit | `66227e51dc0905c1853d79fb927d8f009be80ad4` |
+| Starting status | No staged or unstaged tracked changes; one pre-existing untracked file: `pm_skills/project/code-review-2026-08-26.md` |
+| Final status | Identical to starting status |
+| Submodules | None |
+| Worktrees | One, at the repository root |
+| Remote | `https://github.com/djDAOjones/UoN-Video-Helper.git`; no embedded credential |
+| Tags | None observed |
+| OS | macOS 26.5.2 / Darwin build 25F84, arm64 |
+| Tools | Node 24.5.0; npm 11.5.1; Git 2.49.0; ripgrep 15.2.0; Python 3.10.13 |
+| Installed build tool | Vite 8.2.2 in the isolated copy |
+| Network | Restricted initially; approved read-only access was used for npm registry metadata and authoritative standards documentation |
+| Credentials | None required; no backend, database, authentication service, or production environment was accessed |
+| Isolation | `/private/tmp/uon-video-review.Y90uPA`, populated from `git archive HEAD`; dependencies, caches, build output, and custom validation stayed there |
+| Browser validation | Local isolated Vite server at `127.0.0.1:5179`, inspected in the in-app Chromium browser |
+| Repository integrity | `git diff` and `git diff --cached` were empty at close; branch, commit, remote, worktree, and untracked status were unchanged |
+
+The pre-existing untracked review document was used only as a lead index. Every material claim reported below was independently checked against current source, callers, tests, configuration, or executable behaviour. It was not modified.
+
+The repository resides in OneDrive. That is a documented hostile-filesystem risk for project-memory surgery, but no unexpected divergence or conflict copy appeared during this read-only run.
+
+## 3. System purpose and architecture
+
+The product is a static, browser-only conveyor for turning a local educational video into a newly encoded, University-branded, loudness-normalised MP4. Its intended users are University staff who should not have to choose codecs, bitrates, levels, or technical settings.
+
+Principal technologies:
+
+- TypeScript and vanilla browser UI
+- Vite
+- Web Workers
+- WebCodecs
+- Mediabunny 1.55.2
+- Origin Private File System
+- Vitest, ESLint, TypeScript, Prettier check, Markdownlint
+- GitHub Actions/GitHub Pages deployment configuration
+
+There is no server, database, account system, authentication, authorisation, tenant model, queue, webhook, analytics backend, or production API.
+
+```text
+Untrusted local File/Blob — opened read-only
+            │
+            ▼
+     Main-thread coordinator
+     file selection + UI state
+            │ typed messages
+            ▼
+         Job worker
+     ┌────────┴─────────┐
+     │ inspect source   │ → SourceReport
+     │ preflight device │ → Capability/verdict
+     └────────┬─────────┘
+              ▼
+        Processing pipeline
+     ┌───────────────────────┐
+     │ Pass A: source audio  │
+     │ Pass B: gain planning │
+     │ Pass C: encode/mux    │
+     └─────────┬─────────────┘
+               │
+       inbound same-origin
+       branding assets ────────► video/audio mux lanes
+               │
+               ▼
+       job-scoped OPFS MP4
+               │ OPFS-backed File
+               ▼
+      picker stream or download
+               │
+               ▼
+      explicit workspace cleanup
+```
+
+Important boundaries:
+
+- The local source file is untrusted input but is never opened for writing.
+- Source media crosses from main thread to the worker but not off-device.
+- Branding assets are fetched inbound from the same origin.
+- OPFS is persistent scratch storage scoped to the browser origin.
+- Saving crosses from OPFS into a user-selected filesystem destination or browser download.
+- CI has GitHub Pages and OIDC permissions and is therefore the main privileged repository-side process.
+- Browser codecs, filesystem implementations, and Mediabunny are critical operational dependencies.
+
+The main application enters through [index.html](../../index.html) and [src/main.ts](../../src/main.ts). The independent browser acceptance surface enters through [acceptance.html](../../acceptance.html).
+
+## 4. Review coverage matrix
+
+Finding counts use primary ownership and are not double-counted across components.
+
+| Component | Purpose | Depth | Important material inspected | Validation | Primary findings | Limitations |
+|---|---|---:|---|---|---:|---|
+| Root configuration | Build, package, documentation, tool configuration | Full | `package*.json`, Vite, TypeScript, ESLint, README, agent rules | Install, build, lint, typecheck, docs checks | 1M | Hosting settings outside Git were unavailable |
+| `src/audio/` | Loudness, K-weighting, macro-level, compression, true peak | Full | All implementation and tests; protected DSP traced end-to-end | Unit suite plus custom EOF/LRA reproductions | 1H / 1M / 1L | Official downloaded EBU corpus not run |
+| `src/media/` | Inspection, preflight, branding, encode, mux, OPFS, save | Full | All first-party files and relevant Mediabunny internals | Unit suite, real browser processing, custom sample analysis | 6H | Safari/Firefox and destructive fault injection not run |
+| `src/workers/`, `src/main.ts`, `src/core/` | Request coordination, state, cancellation, diagnostics | Full | Protocol, worker handlers, state transitions, timeouts, logger | Unit suite and browser acceptance | 2H / 1M | Every asynchronous interleaving was not executable |
+| `src/ui/`, `src/styles/`, `index.html` | User workflow and presentation | Full plus browser inspection | All UI modules, semantics, tokens, states, responsive layout | Desktop and 390×844 browser inspection; contrast tests | 1M | No screen reader or voice-control session |
+| `src/acceptance/` | Real-browser acceptance criteria and fixtures | Full | Fixture generation and all acceptance criteria | Full local Chrome acceptance run | 1M | Four criteria remain expressly manual |
+| `test/` | Unit, integration, EBU and policy tests | Full for first-party tests | 32 test files and generated-fixture rules | 355 pass, 1 skipped | Included above | Generated binary fixtures were not hand-edited or exhaustively decoded |
+| `src/config/` | Presets and load-bearing numbers | Full | Presets, thresholds, branding, version | Typecheck/tests/build | Cross-cutting | Configuration accuracy still depends on real devices |
+| `scripts/`, `.github/`, `public/` | Build guards, CI, public assets | Targeted/full for text; sampled for binaries | Placeholder guard, workflow, branding inventory | Build inventory, static inspection, audit | 1M | Branding binaries were not visually inspected frame-by-frame |
+| `docs/` | Protected specification and rationale | Full | Specification, rationale, open decisions | Markdown lint and link validation | 1M | Proposed corrections were not written because docs are protected |
+| `pm_skills/project/` | Current decisions, backlog and architecture memory | Targeted per project rules | Hot sections, relevant decisions/tickets, untracked review lead | Memory structural check | Informational | Framework-owned `pm_skills` internals were sampled, not reviewed as product code |
+| `node_modules/` | Third-party implementation | Sampled | Mediabunny paths needed to verify primary-track selection and encoder config | npm audit and metadata analysis | None assigned | Transitive source was not manually reviewed package by package |
+| `dist/` | Generated deployment output | Generated only in isolation | Bundle inventory and source maps | Vite production build | None assigned | Not reviewed as authoritative source |
+| `samples/` | Maintainer recordings | Targeted, read-only | Onset energy and one full output case | Browser processing and independent audio measurements | Evidence only | Not every sample was processed |
+| Backend/database/auth | Not present | Excluded | Repository-wide search | N/A | 0 | Irrelevant to this static application |
+
+The repository contains 209 tracked files. The review inspected every significant first-party component; generated binaries, third-party packages, real recordings, and framework-owned project-management internals received risk-based rather than line-by-line review.
+
+## 5. Validation results
+
+### Completed successfully
+
+| Command/check | Location | Tool | Result and relevant output | Interpretation | Original unchanged |
+|---|---|---|---|---|---|
+| `git status --short --branch`, `git rev-parse HEAD`, diffs, worktree and remote inspection | Original repository | Git 2.49.0 | Exit 0; starting and final states identical | Integrity confirmed | Yes |
+| `npm ci --ignore-scripts --no-audit --no-fund` using a temp npm cache | Isolated copy | npm 11.5.1 | Exit 0; 243 packages installed | Lockfile resolves reproducibly on this environment without lifecycle scripts | Yes |
+| `npm run check` | Isolated copy with read-only copied Git metadata | Node 24.5.0/npm 11.5.1 | Exit 0; placeholders, typecheck, lint, tests, build, docs and memory structure passed | Canonical gate is green but does not cover the demonstrated boundary defects | Yes |
+| Vitest portion of `npm run check` | Isolated copy | Vitest | 32 files; 355 passed, 1 skipped; 23.05 seconds | Broad and fast safety net; one standards case remains skipped | Yes |
+| Vite production build | Isolated copy | Vite 8.2.2 | 19 modules; worker 435.77 kB uncompressed; app 23.23 kB; CSS 9.21 kB | Production bundle builds successfully | Yes |
+| Documentation lint/link checks | Isolated copy | Markdownlint/custom link checker | 10 linted Markdown files, zero issues; 63 checked files, zero broken links | Documentation is structurally healthy | Yes |
+| `npm audit --json` | Isolated copy | npm 11.5.1 | Exit 0; zero known vulnerabilities at all severities | No current npm advisory finding | Yes |
+| `npm audit --omit=dev --json` | Isolated copy | npm 11.5.1 | Exit 0; zero production vulnerabilities | Runtime dependency audit clean | Yes |
+| Responsive browser inspection | Local isolated server | In-app Chromium | No 390 px horizontal overflow; panels remained within viewport | Basic mobile reflow is sound | Yes |
+
+The memory check emitted five non-blocking size warnings and zero structural failures. The warnings concern backlog/ticket word budgets, not product correctness, and were not “fixed” during this review.
+
+### Completed with failures or material findings
+
+| Command/check | Location | Result | Classification |
+|---|---|---|---|
+| Initial `npm ci --ignore-scripts --no-audit --no-fund` | Isolated sandbox | `ENOTFOUND` plus npm exit-handler error | Review-environment network restriction; rerun successfully with approved read-only network access |
+| Initial `npm run check` in the `git archive` copy | Isolated copy without `.git` | Documentation link check could not resolve tracked-file metadata | Isolation-construction issue, not repository defect; exact rerun passed after supplying copied Git metadata |
+| `npm outdated --json` | Isolated copy | Exit 1 because TypeScript 6.0.3 has 7.0.2 available | Update available, already represented by backlog ecosystem-upgrade work; not an urgent defect |
+| `/acceptance.html` run | Local isolated Chrome; 85.8 seconds | 7 pass, 0 fail, 4 manual; produced playable worker output and cleaned OPFS | Functional acceptance succeeded, but console emitted unclosed `AudioSample` and `VideoSample` warnings |
+| Real sample processing through current browser pipeline | Isolated Chrome | Output −16.75 LUFS/−1.98 dBTP against −16 ±0.5/≤−2.0 | Confirmed production-output failure |
+| Custom true-peak/limiter EOF harness | Temporary isolated scripts | Final-frame impulse remained at 0 dBTP; moving it six frames earlier produced about −2.0 dBTP | Confirmed EOF defect |
+| Custom file-LRA harness | Temporary isolated scripts | Current vs correctly padded examples differed by 2.69 LU and 6.02 LU | Confirmed file-finalization defect |
+| Browser accessible-name inspection | Local isolated server | Initial hidden `<progress>` had no label, `aria-label`, or `aria-labelledby` | Probable WCAG name/role/value defect |
+
+The browser acceptance’s synthetic results were:
+
+- quiet: −16.00 LUFS / −7.87 dBTP
+- hot: −16.00 / −7.24
+- drift: −16.11 / −2.14
+- inconsistent: −16.08 / −2.95
+- VFR markers: 12/12, systematic 5.8 ms, drift 9.0 ms, spread 24 ms
+- cancellation OPFS directories: 0 → 1 → 0
+- worker-path file: 81 kB, 4.10 seconds
+- smaller-output result: 468 kB versus 1,223 kB
+- egress observer: 47 same-origin requests and no observed request body
+
+### Not run
+
+- Safari and Firefox browser acceptance
+- Screen-reader, voice-control, switch-control, and browser-zoom rehearsal
+- Official full EBU test-set download and execution
+- Subjective listening for pumping, clipping, transitions, or sync
+- Every real recording and 5/20/60-minute device matrix
+- Large multi-gigabyte fallback-download lifetime test
+- Deterministic multi-tab Web Lock race
+- Sleep, wake-lock, reload, crash, and tab-force-close recovery
+- Deliberate disk-quota exhaustion or actual OPFS short writes
+- Real malformed/fuzzed media corpus
+- Live GitHub Pages deployment, repository permissions, branch protection, or hosting headers
+- Penetration test against a deployed origin
+- Disaster-recovery exercise; there is no backend data store to restore
+
+These were unavailable, unsafe for a read-only review, required unsupported browsers/hardware, or require stakeholder-owned infrastructure.
+
+## 6. Prioritised findings
+
+### R-01 Final output can fail stated loudness and true-peak acceptance
+
+- **Severity:** High
+- **Confidence:** High
+- **Classification:** Confirmed defect
+- **Category:** Audio correctness / misleading success
+- **Location:** [src/media/audio-plan.ts](../../src/media/audio-plan.ts), [src/audio/chain.ts](../../src/audio/chain.ts), [src/media/encoding.ts](../../src/media/encoding.ts), [src/workers/job.worker.ts](../../src/workers/job.worker.ts)
+- **Affected component or flow:** Source analysis → gain planning → limiting → resampling/AAC → final verification
+- **Evidence:** A real 44.1 kHz sample produced −16.75 LUFS and −1.98 dBTP. Pass B measured −22.47 LUFS without the limiter, selected +6.47 dB, and the limited pre-encode output was already −16.41 LUFS. Resampling and AAC moved it further.
+- **Current behaviour:** Gain planning assumes the nonlinear limiter does not change integrated loudness. Final verification warns only beyond a 1 LU miss, logs true peak without enforcing it, and swallows verification exceptions.
+- **Why it matters:** The application’s main promise is a correctly levelled output. A green UI can presently deliver an out-of-contract file.
+- **Realistic scenario:** High-crest speech activates limiting; the file is accepted by the synthetic harness but rejected by an institutional ingest or fails internal quality review.
+- **Existing mitigation:** Source-only analysis, limiter, final decoded measurement, and synthetic acceptance. Their thresholds and corpus are insufficient.
+- **Recommended change:** Solve gain against the complete DSP path, limit at final sample rate or establish encoded-output headroom, then enforce ±0.5 LU and ≤−2 dBTP on the decoded MP4. A failed postcondition must retry safely or fail visibly.
+- **Illustrative patch or implementation outline:** Not applied. Add a bounded gain-calibration loop around the full chain; decode and verify the finalized MP4 before placing it in the `finished` map.
+- **Tests to add or amend:** 44.1→48 kHz high-crest speech; real-material regression; AAC/resampler matrix; hard failures for loudness and peak misses.
+- **Validation approach:** Independent decoded-output meter plus ffmpeg comparison on representative samples.
+- **Estimated effort:** Large
+- **Implementation risk:** High
+- **Dependencies or sequencing:** Fix R-02 first; then tighten R-11.
+- **Relevant standard or classification:** Project specification §§4.4, 5.2 and acceptance criterion 2. Existing backlog VH-50 already tracks the core real-output miss.
+
+### R-02 True-peak detection and limiting miss end-of-file transients
+
+- **Severity:** High
+- **Confidence:** High
+- **Classification:** Confirmed defect
+- **Category:** DSP boundary correctness
+- **Location:** [src/audio/truepeak.ts](../../src/audio/truepeak.ts), [src/audio/limiter.ts](../../src/audio/limiter.ts)
+- **Affected component or flow:** Final interpolation FIR state and limiter look-ahead drain
+- **Evidence:** A one-sample full-scale signal was reported as −64.05 dBTP without tail finalization. Correct zero padding reports 0 dBTP. A final-frame impulse also emerged from the limiter at 0 dBTP.
+- **Current behaviour:** The detector advances only when another input sample arrives. Limiter flush drains delayed samples using stale gain without advancing the detector through a zero-padded tail.
+- **Why it matters:** A legal-looking output can contain a peak 2 dB above the hard ceiling.
+- **Realistic scenario:** A cut, click, or consonant transient at the final sample is neither detected nor attenuated.
+- **Existing mitigation:** Sustained-tone and faded-tone tests; they do not exercise the final interpolation positions.
+- **Recommended change:** Add explicit detector finalization with FIR zero padding. During limiter flush, continue advancing detector and gain while preserving exact output length.
+- **Illustrative patch or implementation outline:** Not applied. Introduce `finish()`/`flushTail()` semantics shared by measurement and limiting rather than duplicating padding rules.
+- **Tests to add or amend:** One-frame full scale; final-frame impulse; every final FIR offset; chunk-size invariance; independent zero-padded output measurement.
+- **Validation approach:** Protected DSP suite, Tech 3341 harness, property tests, and real decoded output.
+- **Estimated effort:** Medium
+- **Implementation risk:** High
+- **Dependencies or sequencing:** First implementation item; protected files require the full acceptance harness.
+- **Relevant standard or classification:** ITU-R BS.1770-4 true-peak measurement.
+
+### R-03 Source audio timing and onset are not preserved
+
+- **Severity:** High
+- **Confidence:** High
+- **Classification:** Confirmed defect
+- **Category:** Silent data loss / A/V synchronisation
+- **Location:** [src/media/audio-plan.ts](../../src/media/audio-plan.ts), [src/media/encoder-delay.ts](../../src/media/encoder-delay.ts), [src/media/pipeline.ts](../../src/media/pipeline.ts)
+- **Affected component or flow:** Decoded audio → chain output timestamps → AAC priming compensation
+- **Evidence:** Processed audio timestamps are reconstructed from emitted frame count rather than source timestamps, collapsing initial offsets and gaps. AAC compensation then deliberately discards approximately 44 ms from the start. Three real sources contained audible energy in that interval.
+- **Current behaviour:** Video retains source-relative time while audio is re-clocked continuously and shifted earlier, deleting negative-time samples.
+- **Why it matters:** Speech onsets, meaningful gaps, and A/V alignment can change without warning.
+- **Realistic scenario:** A lecture starts immediately with a consonant; the first sound is clipped while later sync appears normal.
+- **Existing mitigation:** AAC delay measurement improves later systematic sync. It assumes the removed interval is silence or branding, which current UI behaviour does not guarantee.
+- **Recommended change:** Preserve source timestamp offsets and gaps. Compensate priming with supported container edit-list/priming metadata or a timeline/picture adjustment that retains all samples. Represent probe failure separately from zero delay.
+- **Illustrative patch or implementation outline:** Not applied. Carry input timestamp and duration through each processed audio block; express padding/gaps explicitly instead of deriving time solely from `emittedFrames`.
+- **Tests to add or amend:** Impulse at t=0; initial non-zero timestamp; internal gap; no-opening/opening cases; channel-count variants; beginning-waveform equality; A/V markers at start, middle, and end.
+- **Validation approach:** Decode output and compare sample conservation and marker timing across supported browsers.
+- **Estimated effort:** Large
+- **Implementation risk:** High
+- **Dependencies or sequencing:** Coordinate with R-01 and any branding-boundary work.
+
+### R-04 Output success is not transactional from OPFS write through user save
+
+- **Severity:** High
+- **Confidence:** High for partial-write handling; Medium-high for browser-specific save failure
+- **Classification:** Confirmed defect plus strongly supported lifetime risk
+- **Category:** Data integrity / filesystem ownership
+- **Location:** [src/media/opfs.ts](../../src/media/opfs.ts), [src/media/save.ts](../../src/media/save.ts), [src/main.ts](../../src/main.ts), [src/workers/job.worker.ts](../../src/workers/job.worker.ts)
+- **Affected component or flow:** Mux write → postcondition check → OPFS-backed `File` → picker/download → cleanup
+- **Evidence:** The sync writer ignores the returned byte count, although the [File System Standard requires callers to account for partial writes](https://fs.spec.whatwg.org/#api-filesystemsyncaccesshandle-write). Verification exceptions are swallowed. Fallback download returns immediately after `anchor.click()`, after which main discards the backing OPFS entry; the standard notes that such a `File` may become unreadable after entry removal. A new job can also delete a result while picker streaming is active.
+- **Current behaviour:** Corrupt or partially consumed output can be reported as ready/saved. The picker can also select the original source destination; no same-entry check protects the “source never modified” invariant.
+- **Why it matters:** This is the principal irreversible user-data boundary.
+- **Realistic scenario:** Quota pressure produces a short write, or a multi-gigabyte fallback download loses its OPFS backing before consumption completes.
+- **Existing mitigation:** Storage headroom, OS overwrite confirmation, 60-second object URL, and awaited picker `pipeTo`.
+- **Recommended change:** Implement write-all semantics, require readable expected tracks, introduce an explicit result read lease/exclusive saving state, and compare source/destination handles with `isSameEntry()` where handles are available. [MDN documents the file-handle identity API](https://developer.mozilla.org/en-US/docs/Web/API/FileSystemHandle/isSameEntry).
+- **Illustrative patch or implementation outline:** Not applied.
+
+  ```text
+  while bytes remain:
+      written = handle.write(remaining, at=currentOffset)
+      if written <= 0: throw OutputWriteError
+      advance by written
+
+  verify video and expected audio
+  acquire result lease
+  consume save stream
+  release lease
+  only then permit workspace disposal
+  ```
+
+- **Tests to add or amend:** Short-write fake; corrupt MP4; missing expected audio; slow picker plus second process; early fallback discard; byte comparison; source/destination same-entry case.
+- **Validation approach:** Unit fault injection and real multi-gigabyte browser tests in each supported engine.
+- **Estimated effort:** Large
+- **Implementation risk:** Medium
+- **Dependencies or sequencing:** Release blocker independent of DSP work.
+
+### R-05 Preflight results are not bound to the selected file and preset
+
+- **Severity:** High
+- **Confidence:** High
+- **Classification:** Confirmed defect
+- **Category:** Asynchronous state race
+- **Location:** [src/main.ts](../../src/main.ts), [src/workers/job.worker.ts](../../src/workers/job.worker.ts)
+- **Affected component or flow:** File selection/preset change → concurrent inspect/preflight → visible Create control → process request
+- **Evidence:** Late inspect or preflight responses can call `showProcessControls(file)` and replace the mutable `jobFile`. Start re-reads the current preset instead of using the preflighted combination. Worker request handlers run concurrently.
+- **Current behaviour:** A result for file A or preset X can enable a job using file B or preset Y.
+- **Why it matters:** Storage, codec, and duration conclusions can be bypassed without user awareness.
+- **Realistic scenario:** A slow file A finishes after file B; the UI names B but processing receives A. Alternatively, a preset is changed and Create is clicked before its new preflight completes.
+- **Existing mitigation:** Request IDs correlate individual promises, but no selection generation binds their effects to current UI state.
+- **Recommended change:** Add a monotonically increasing selection epoch, disable Create immediately on relevant change, ignore stale responses, and store one immutable accepted `JobSpec`.
+- **Illustrative patch or implementation outline:** Not applied.
+
+  ```text
+  epoch = ++selectionEpoch
+  candidate = {epoch, fileIdentity, presetId}
+  result = await preflight(candidate)
+  if epoch != selectionEpoch: ignore
+  acceptedJob = freeze(candidate + result)
+  Start sends acceptedJob unchanged
+  ```
+
+- **Tests to add or amend:** Deferred A/B replies; preset change mid-preflight; stale errors; assert processed file and preset exactly match the enabling summary.
+- **Validation approach:** Deterministic coordinator tests plus browser rapid-selection rehearsal.
+- **Estimated effort:** Medium
+- **Implementation risk:** Medium
+- **Dependencies or sequencing:** Pair with R-06 and R-07.
+
+### R-06 Preflight does not prove that the exact executable job is supported
+
+- **Severity:** High
+- **Confidence:** High
+- **Classification:** Confirmed defect
+- **Category:** Capability validation / configuration drift
+- **Location:** [src/media/capability.ts](../../src/media/capability.ts), [src/media/inspect.ts](../../src/media/inspect.ts), [src/media/preflight.ts](../../src/media/preflight.ts), [src/config/presets.ts](../../src/config/presets.ts), [src/media/encoding.ts](../../src/media/encoding.ts)
+- **Affected component or flow:** Inspection/capability probe → verdict → Mediabunny runtime encoder
+- **Evidence:** Secure-context and OPFS capability are measured but omitted from the blocking input. Per-track decode support is reported but not made a hard prerequisite. Probe failures can become “estimate unavailable.” Manual support probing uses fixed AVC/AAC configurations that differ from Mediabunny’s runtime configuration.
+- **Current behaviour:** Start can be enabled for an undecodable source or an environment that cannot create OPFS. Conversely, a fixed probe can reject a runtime-supported candidate.
+- **Why it matters:** A supposedly approved job can predictably fail after expensive processing begins.
+- **Realistic scenario:** An unsupported HEVC MOV reaches `VideoSampleSink`, or an insecure deployment reaches workspace creation before failing.
+- **Existing mitigation:** Boot status, source support rows, manual `isConfigSupported`, and a real-path calibration probe.
+- **Recommended change:** Put secure context, OPFS, and primary-track decode support into the verdict; preserve typed probe failure causes; derive the exact `isConfigSupported()` input from the same encoder candidate used at runtime. WebCodecs support is explicitly configuration-specific in the [W3C specification](https://www.w3.org/TR/webcodecs/).
+- **Illustrative patch or implementation outline:** Not applied. Create one `EncoderCandidate` object and pass it to support probing, calibration, runtime setup, diagnostics, and tests.
+- **Tests to add or amend:** Every missing prerequisite; unsupported real codec; exact captured Mediabunny candidate; probe timing failure versus capability failure.
+- **Validation approach:** Real browser matrix using runtime-captured configurations.
+- **Estimated effort:** Medium
+- **Implementation risk:** Medium
+- **Dependencies or sequencing:** Resolve with R-05 before estimate refinement.
+- **Relevant standard or classification:** The fixed `avc1.640033` Level 5.1 probe also cannot represent 3840×2160 at 60 fps: the [ITU H.264 Table A-1](https://www.itu.int/rec/dologin_pub.asp?id=T-REC-H.264-202408-I%21%21PDF-E&lang=e&type=items) limit is lower than the required macroblock rate, which requires Level 5.2.
+
+### R-07 Cancellation is neither authoritative nor resource-safe
+
+- **Severity:** High
+- **Confidence:** High
+- **Classification:** Confirmed defect
+- **Category:** Cancellation / native resource lifetime
+- **Location:** [src/workers/job.worker.ts](../../src/workers/job.worker.ts), [src/media/pipeline.ts](../../src/media/pipeline.ts), [src/media/audio-plan.ts](../../src/media/audio-plan.ts)
+- **Affected component or flow:** Inspect, preflight, processing, finalization, verification, cleanup
+- **Evidence:** The process controller is registered after awaiting previous-result cleanup, so an early cancel is lost. There are no post-finalize or post-verification abort checks. Inspect/preflight cancellation messages have no controller. Several loops check abort before entering the `try/finally` that closes a yielded sample. Chrome emitted unclosed `AudioSample` and `VideoSample` warnings.
+- **Current behaviour:** Cancel can produce success, allow superseded work to continue, or defer native cleanup to garbage collection.
+- **Why it matters:** Users are explicitly promised that cancellation stops work and leaves nothing behind.
+- **Realistic scenario:** Cancel during verification returns “ready,” or repeated aborts accumulate decoder/GPU pressure.
+- **Existing mitigation:** Abort signals, ordinary mid-pipeline cancellation, OPFS disposal, and a passing directory-count acceptance case.
+- **Recommended change:** Register controllers before the first await; make all request kinds cancellable/latest-only; check after every non-cancellable commit boundary; pass the signal into verification; initiate output cancellation while lanes await; place ownership checks inside `try/finally`.
+- **Illustrative patch or implementation outline:** Not applied.
+
+  ```text
+  for await sample:
+      try:
+          throwIfAborted(signal)
+          await consume(sample)
+      finally:
+          sample.close()
+  ```
+
+- **Tests to add or amend:** Barriers after iterator yield, result cleanup, finalize, finish, and verification; exactly one cancelled response; no processed response; every sample closed once; wedged `add()` released by output cancellation.
+- **Validation approach:** Deterministic unit barriers and browser cancellation in every phase/engine.
+- **Estimated effort:** Medium
+- **Implementation risk:** High
+- **Dependencies or sequencing:** Clarify result ownership from R-04 first.
+
+### R-08 OPFS claim checking and deletion have a Web Lock race
+
+- **Severity:** High
+- **Confidence:** Medium
+- **Classification:** Strongly supported risk
+- **Category:** Filesystem concurrency / silent data loss
+- **Location:** [src/media/opfs.ts](../../src/media/opfs.ts)
+- **Affected component or flow:** New workspace creation and cross-tab orphan sweeping
+- **Evidence:** A directory becomes visible before its live claim is obtained. Sweep briefly acquires and releases a candidate lock while classifying, then removes the directory later outside that lock.
+- **Current behaviour:** Classification and deletion are not one atomic critical section.
+- **Why it matters:** A rare interleaving can delete a newly live job workspace—the exact outcome the Web Lock design is intended to prevent.
+- **Realistic scenario:** Tab A creates a directory; Tab B classifies it as orphaned; A acquires the live claim; B then removes it.
+- **Existing mitigation:** Per-session names, long-held live-job locks, fail-closed uncertainty, and per-entry sweep failures.
+- **Recommended change:** Acquire the job lock before creating/opening the directory. In sweep, perform removal inside the successful `ifAvailable` lock callback.
+- **Illustrative patch or implementation outline:** Not applied. Lock ownership must cover both observation and mutation; the [Web Locks API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API) provides the coordination primitive, not automatic filesystem exclusion.
+- **Tests to add or amend:** Injected lock scheduler with barriers; two-worker/two-tab browser spike; open-wins and sweep-wins interleavings.
+- **Validation approach:** Deterministic concurrency model plus real multi-tab repetition.
+- **Estimated effort:** Medium
+- **Implementation risk:** High
+- **Dependencies or sequencing:** Land separately from other OPFS changes.
+
+### R-09 Multi-track files can be inspected and processed inconsistently, with silent track loss
+
+- **Severity:** High
+- **Confidence:** High
+- **Classification:** Confirmed defect
+- **Category:** Silent data loss / source interpretation
+- **Location:** [src/media/inspect.ts](../../src/media/inspect.ts), [src/media/pipeline.ts](../../src/media/pipeline.ts), [src/ui/source-panel.ts](../../src/ui/source-panel.ts)
+- **Affected component or flow:** Track inspection → preflight → primary-track selection → output mux
+- **Evidence:** Inspection uses array element zero, while processing uses Mediabunny’s `getPrimary*Track()` selection. Only one video and audio stream are emitted. Extra A/V track counts are not presented as a pre-processing loss warning.
+- **Current behaviour:** Capability can be reported for one stream while another is processed, and additional language/commentary/angle tracks disappear silently.
+- **Why it matters:** Silent track loss is a protected project invariant.
+- **Realistic scenario:** A lecture contains a default low-bitrate stream and a higher-bitrate alternate; the UI describes one, processes another, and drops the remainder.
+- **Existing mitigation:** Subtitles and chapters are disclosed. Extra A/V tracks are not.
+- **Recommended change:** Inspect the exact primary tracks selected for processing; surface all track counts; block or require an explicit purpose-written acknowledgement before lossy processing.
+- **Illustrative patch or implementation outline:** Not applied. Centralize `selectProcessingTracks(input)` and reuse its result in inspection, preflight, processing, diagnostics, and warnings.
+- **Tests to add or amend:** Multi-video, multi-audio, language/default flags, commentary track, different codec capabilities, no-primary edge cases.
+- **Validation approach:** Synthetic MP4/WebM/MKV fixtures and real-player inspection.
+- **Estimated effort:** Medium
+- **Implementation risk:** Medium
+- **Dependencies or sequencing:** Immediate safe option is to block unsupported multiplicity; preservation policy is a later product decision.
+
+### R-10 File-LRA and pause-freeze semantics diverge at boundaries
+
+- **Severity:** Medium
+- **Confidence:** High for LRA; Medium for pause behaviour
+- **Classification:** Confirmed defect
+- **Category:** Protected DSP correctness
+- **Location:** [src/audio/loudness.ts](../../src/audio/loudness.ts), [src/audio/macrolevel.ts](../../src/audio/macrolevel.ts)
+- **Affected component or flow:** LRA finalization and macro-level gain envelope
+- **Evidence:** The file analyser does not append the 1.5 seconds of silence prescribed for final file LRA. Reproductions changed LRA by 2.69 and 6.02 LU. Separately, raw pause correction is frozen before centred smoothing and slew limiting, so post-pause speech can still change gain through the paused interval.
+- **Current behaviour:** End-of-file level changes are underrepresented; “freeze during pauses” is not a strict final-envelope invariant.
+- **Why it matters:** Both can change whether macro-level processing activates and whether pauses audibly pump.
+- **Realistic scenario:** A late level change is hidden from the LRA gate, or a pause ramps toward future correction.
+- **Existing mitigation:** Macro gating, clamp, slew limit, pause mask, and extensive common-path tests.
+- **Recommended change:** Advance only LRA state with a 1.5-second zero tail; do not alter integrated loudness or duration. Reapply a pause hold to the final smoothed/slew-limited envelope.
+- **Illustrative patch or implementation outline:** Not applied.
+- **Tests to add or amend:** Official Tech 3342 material; EOF level changes; opposite pre/post corrections around a long pause; chunk invariance.
+- **Validation approach:** Protected DSP suite and subjective real-speech listening.
+- **Estimated effort:** Medium
+- **Implementation risk:** High
+- **Dependencies or sequencing:** After R-01/R-02; re-run all protected harnesses.
+- **Relevant standard or classification:** [EBU Tech 3342](https://tech.ebu.ch/docs/tech/tech3342.pdf) file-measurement procedure.
+
+### R-11 The acceptance harness has false-pass paths
+
+- **Severity:** Medium
+- **Confidence:** High
+- **Classification:** Confirmed defect
+- **Category:** Test effectiveness / unsupported assurance
+- **Location:** [src/acceptance/run.ts](../../src/acceptance/run.ts), [test/ebu3341/tech3341.test.ts](../../test/ebu3341/tech3341.test.ts), [test/ebu3341/signals.ts](../../test/ebu3341/signals.ts)
+- **Affected component or flow:** Browser release acceptance
+- **Evidence:** Criterion 2 crops the first and last content seconds, uses the crop for true peak, and skips missing audio while defaults allow the criterion to pass. Criterion 3 is hardcoded to pass. Authentic EBU programme cases are skipped; some peak cases use an acknowledged local interpretation. The egress observer does not comprehensively observe worker/XHR request bodies, and cancellation passed despite native-resource warnings.
+- **Current behaviour:** The exact defects in R-01/R-02/R-07 evade an all-green automated result.
+- **Why it matters:** The harness is treated as release evidence.
+- **Realistic scenario:** An output loses audio or has a final over-peak transient but criterion 2 still passes.
+- **Existing mitigation:** Real WebCodecs, OPFS, worker, VFR, playback and network activity are exercised.
+- **Recommended change:** Require one finite decoded measurement per expected audio output; use full output for true peak; fail resource warnings; make compliance status reflect actually executed fixtures; observe all browser request contexts.
+- **Illustrative patch or implementation outline:** Not applied.
+- **Tests to add or amend:** Missing audio, t=0/EOF transients, real high-crest material, result-count assertions, worker/XHR egress, official EBU cases/checksums.
+- **Validation approach:** Run repaired harness in all supported engines.
+- **Estimated effort:** Medium
+- **Implementation risk:** Medium
+- **Dependencies or sequencing:** Tighten immediately after product corrections, not before.
+- **Relevant standard or classification:** [EBU Tech 3341](https://tech.ebu.ch/docs/tech/tech3341.pdf) describes its cases as minimum evidence rather than universal proof.
+
+### R-12 Long-running jobs lack required survival controls
+
+- **Severity:** Medium
+- **Confidence:** High
+- **Classification:** Confirmed defect
+- **Category:** Reliability / recovery
+- **Location:** [docs/01-specification.md](../../docs/01-specification.md), [src/main.ts](../../src/main.ts)
+- **Affected component or flow:** Processing lifecycle and unsaved result
+- **Evidence:** The specification requires screen wake lock and unload protection. No implementation was found.
+- **Current behaviour:** Sleep, reload, or navigation can destroy a long job without a contextual warning.
+- **Why it matters:** Processing may consume tens of minutes on slower devices.
+- **Realistic scenario:** A laptop sleeps during a one-hour encode; scratch is later swept, but the user loses all elapsed work.
+- **Existing mitigation:** Progress, cancellation, OPFS cleanup, and bounded recovery.
+- **Recommended change:** Acquire/release and visibility-reacquire a wake lock; attach `beforeunload` only while processing or holding an unsaved output. Wake lock availability is platform-dependent; [MDN documents the visibility lifecycle](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API). `beforeunload` is also unreliable on some mobile paths and should remain conditional, as [MDN cautions](https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event).
+- **Illustrative patch or implementation outline:** Not applied.
+- **Tests to add or amend:** Stubbed wake-lock lifecycle, rejection, visibility change, unload handler registration, manual sleep/reload.
+- **Validation approach:** Real laptops and mobile browsers.
+- **Estimated effort:** Medium
+- **Implementation risk:** Low
+- **Dependencies or sequencing:** Near term; independent.
+
+### R-13 The release boundary lacks least privilege and a strict public-media allowlist
+
+- **Severity:** Medium
+- **Confidence:** High
+- **Classification:** Strongly supported risk
+- **Category:** Supply chain / privacy
+- **Location:** [.github/workflows/deploy-pages.yml](../../.github/workflows/deploy-pages.yml), [scripts/check-placeholders.mjs](../../scripts/check-placeholders.mjs)
+- **Affected component or flow:** CI build/deploy and Vite public-directory publication
+- **Evidence:** Pages/OIDC permissions are granted at workflow scope, so build and dependency-install steps inherit them. Actions use mutable major tags rather than full commit SHAs. The media guard rejects recordings only under `public/spike`; a misplaced real recording elsewhere under `public/` would be copied into the deployment.
+- **Current behaviour:** No current media leak or CI exploit was found, but the preventions are weaker than the repository’s privacy promise.
+- **Why it matters:** Public deployment and privileged CI are high-consequence boundaries.
+- **Realistic scenario:** A sample is accidentally committed under a different public subdirectory, or a compromised mutable action tag executes with deploy permissions.
+- **Existing mitigation:** Current public inventory contains only expected branding media; lockfile integrities are present; secrets scan passed.
+- **Recommended change:** Add an exact public-media allowlist; scope build permissions to `contents: read`; grant Pages/OIDC only to deploy; pin actions by full SHA with an update mechanism. GitHub recommends least-privilege permissions and full-length SHA pinning in its [Actions security guidance](https://docs.github.com/en/code-security/tutorials/secure-your-organization/protect-against-threats).
+- **Illustrative patch or implementation outline:** Not applied.
+- **Tests to add or amend:** Build failure on an unexpected public media file; workflow policy test for permission scope and immutable action refs.
+- **Validation approach:** Static CI policy check and deployment inventory diff.
+- **Estimated effort:** Medium
+- **Implementation risk:** Low
+- **Dependencies or sequencing:** Near term; does not require product-code changes.
+
+### R-14 Progress semantics and “discourage” acknowledgement are incomplete
+
+- **Severity:** Medium
+- **Confidence:** High
+- **Classification:** Confirmed defect
+- **Category:** Accessibility / error prevention
+- **Location:** [index.html](../../index.html), [src/main.ts](../../src/main.ts)
+- **Affected component or flow:** Processing progress and preflight warning state
+- **Evidence:** The progress element has no accessible name. A non-blocking “discourage” verdict exposes Create directly even though the specification calls for acknowledgement.
+- **Current behaviour:** Assistive technology may announce an unnamed progressbar; a consequential warning can be bypassed by a routine click.
+- **Why it matters:** Both obscure current system state and weaken informed consent.
+- **Realistic scenario:** A screen-reader user hears only a percentage with no task context, or starts a highly unsuitable job without acknowledging its warning.
+- **Existing mitigation:** Semantic regions, fieldsets, visible labels, live status region, skip link, focus rings, contrast tests, 44 px targets, reduced motion, and sound mobile reflow.
+- **Recommended change:** Add a stable accessible progress label and stage-specific description; introduce an explicit acknowledge action for discourage outcomes.
+- **Illustrative patch or implementation outline:** Not applied.
+- **Tests to add or amend:** Accessible-tree assertions, keyboard-only warning flow, live-region/stage announcements, screen-reader rehearsal.
+- **Validation approach:** Axe or equivalent plus NVDA, VoiceOver, and TalkBack manual checks.
+- **Estimated effort:** Small
+- **Implementation risk:** Low
+- **Dependencies or sequencing:** Can land independently.
+- **Relevant standard or classification:** Probable WCAG 2.2 SC 4.1.2 issue for the unnamed progress control.
+
+### R-15 Operational and documentation contracts have drifted
+
+- **Severity:** Medium
+- **Confidence:** High
+- **Classification:** Confirmed defect
+- **Category:** Documentation / operational correctness
+- **Location:** [DEV-INFRASTRUCTURE.md](../../DEV-INFRASTRUCTURE.md), [.github/workflows/deploy-pages.yml](../../.github/workflows/deploy-pages.yml), [src/core/diagnostics.ts](../../src/core/diagnostics.ts), [src/main.ts](../../src/main.ts), [package.json](../../package.json)
+- **Affected component or flow:** Quality gate, deployment, offline promise, diagnostics, version identity
+- **Evidence:** Infrastructure documentation describes deployment as undecided/local while a Pages workflow deploys `main`. The offline-after-first-load promise has no service-worker/cache implementation. Production UI exposes the product version but not the full build identity described by infrastructure rules. Diagnostics omit several promised job/capability details. The quality gate is documented as non-mutating but includes `vite build`, which writes ignored `dist/`.
+- **Current behaviour:** Maintainers and users can rely on contracts the implementation does not satisfy.
+- **Why it matters:** Operational trust depends on accurate recovery, deployment, privacy, and version information.
+- **Realistic scenario:** A maintainer expects a report-only gate but it rewrites generated output, or a user expects offline reuse after the browser evicts assets.
+- **Existing mitigation:** Build identity exists in diagnostics, docs are structurally checked, and offline/deployment work is partly tracked in the backlog.
+- **Recommended change:** Reconcile implementation and documentation deliberately. Protected specification changes must go through the doc-delta/sign-off process; implementation gaps should not be papered over by silently narrowing promises.
+- **Illustrative patch or implementation outline:** Not applied.
+- **Tests to add or amend:** Check-command write-set test; offline reload; production version/build display; diagnostics schema/redaction; deployment-doc consistency.
+- **Validation approach:** Clean temporary checkout before/after snapshots plus deployed-site rehearsal.
+- **Estimated effort:** Medium
+- **Implementation risk:** Low
+- **Dependencies or sequencing:** Coordinate with VH-14 and protected-document ownership.
+
+### R-16 Loudness-analysis retention grows linearly with duration
+
+- **Severity:** Low
+- **Confidence:** High
+- **Classification:** Confirmed defect
+- **Category:** Performance / documentation accuracy
+- **Location:** [src/audio/loudness.ts](../../src/audio/loudness.ts), [src/media/audio-plan.ts](../../src/media/audio-plan.ts)
+- **Affected component or flow:** Pass-A analysis retained through encoding
+- **Evidence:** Block energy, block loudness, momentary, and short-term arrays accumulate with duration. Curves are retained at approximately 100 Hz despite 100 ms interface commentary.
+- **Current behaviour:** A one-hour stereo input retains roughly 828,000 JavaScript numbers—at least about 6.6 MB before array overhead.
+- **Why it matters:** It is not whole-file buffering, but it contradicts the “few hundred kilobytes” comment and bounded-state aspiration.
+- **Realistic scenario:** Long files on low-memory devices add unnecessary pressure alongside decoder and encoder resources.
+- **Existing mitigation:** PCM/video frames remain streaming and bounded; current documented one-hour scope keeps this moderate.
+- **Recommended change:** Add a runtime-retention mode with only required 10 Hz/LRA/maxima data, and release curves once warnings/envelopes are derived.
+- **Illustrative patch or implementation outline:** Not applied.
+- **Tests to add or amend:** Retained-element count by duration and equivalence of final metrics.
+- **Validation approach:** Heap profiling on 5-, 20-, and 60-minute files.
+- **Estimated effort:** Medium
+- **Implementation risk:** Medium
+- **Dependencies or sequencing:** Optional until correctness work is complete.
+
+## 7. Root-cause themes
+
+| Theme | Connected findings | Structural response |
+|---|---|---|
+| Internal plans are treated as proof of final output | R-01, R-04, R-06, R-11 | Define executable postconditions on the finalized MP4 and make success contingent on them |
+| Boundary conditions are under-tested | R-02, R-03, R-07, R-10, R-11 | Add start/EOF/cancel/finalize/save boundary fixtures before expanding happy-path coverage |
+| Mutable asynchronous state lacks ownership | R-04, R-05, R-07 | Model accepted job, active operation, finished result, and save lease as explicit immutable states |
+| Filesystem coordination is split across observations and mutations | R-04, R-08 | Hold ownership through the entire critical operation: write, validate, read, save, delete |
+| Source interpretation is not single-sourced | R-03, R-06, R-09 | Reuse exact selected tracks, encoder configuration, and timebase across inspection, validation, processing, and diagnostics |
+| Synthetic acceptance is too forgiving | R-01, R-02, R-07, R-11 | Add representative real/high-crest material and make missing evidence fail closed |
+| Documentation runs ahead of implementation | R-12, R-14, R-15 | Add contract tests and reconcile protected claims through the established sign-off process |
+| Resource limits are treated mainly as capacity estimates | R-07, R-12, R-16 | Test lifecycle survival and retained resources, not only estimated runtime/storage |
+
+The highest leverage structural improvement is a small job/result state model that owns an immutable accepted job and a leased output. It would address significant parts of R-04, R-05, and R-07 without requiring a broad rewrite.
+
+## 8. Positive findings
+
+- The one-way conveyor model is consistently reflected in the main architecture; technical options are not exposed as “advanced” settings.
+- Source files are passed as local `Blob` objects and never opened for writing.
+- Production source inspection found no analytics, beacon, upload, WebSocket, or outbound request carrying source media or characteristics.
+- All reviewed Mediabunny outputs specify `fastStart: false`; no implicit or explicit in-memory output mode was found.
+- Audio and video lanes run concurrently, respect backpressure, and settle sibling work after failure.
+- Source loudness is measured before branding joins the timeline.
+- The DSP implementation is pure TypeScript over `Float32Array`, allowing Node-based standards tests.
+- K-weighting and ordinary 44.1/48 kHz integrated gating are well structured and extensively tested.
+- The typed worker protocol distinguishes request-correlated terminal responses from droppable progress.
+- OPFS workspaces have per-session prefixes, centralized handle cleanup, idempotent disposal, and fail-independent orphan deletion.
+- Subtitle and chapter limitations are disclosed before processing; supplied VTT cue content is preserved while timing is shifted.
+- Structured logging is bounded, copied diagnostics are redacted, and global error hooks exist.
+- User-controlled text is rendered through safe text APIs; no material DOM injection path was found.
+- UI code includes landmarks, fieldsets, labels, a skip link, status announcements, strong focus treatment, AAA-oriented contrast tests, reduced-motion handling, and 44 px targets.
+- TypeScript is strict, lint runs with zero warnings, the lockfile has integrity hashes, and there is only one declared runtime dependency.
+- The acceptance harness uses real WebCodecs and OPFS rather than mocked encoders.
+- The repository has a documented one-command runtime and quality model, even though the non-mutating quality-gate detail needs correction.
+
+## 9. Test-gap analysis
+
+| Behaviour | Risk and current coverage | Proposed level/scenarios | Fixture/infrastructure | CI? | Priority |
+|---|---|---|---|---:|---:|
+| Final decoded audio contract | Synthetic corpus missed a real failure | Browser integration: high-crest 44.1/48 kHz, AAC matrix, hard postconditions | Small licence-safe speech fixtures | Engine CI where WebCodecs exists | Immediate |
+| EOF true peak | Sustained/faded tones only | Unit/property: every final FIR position and chunk split | Generated impulses | Yes | Immediate |
+| Source onset and timestamp gaps | Markers begin at one second | Integration: t=0 impulse, non-zero offset, internal gap, sample conservation | Generated A/V fixture | Yes/browser | Immediate |
+| Partial writes/output verification | Normal OPFS only | Unit fault injection: short writes, malformed MP4, missing expected track | Fake sync handle/corrupt fixture | Yes | Immediate |
+| Save lifetime/source overwrite | Filename-only unit tests | Browser: slow picker, early discard, large download, same-entry destination | Multi-GB sparse/generated file | Manual/engine CI | Immediate |
+| File/preset ordering | Pure verdict only | Coordinator tests with controllable deferred replies | Fake worker transport | Yes | Immediate |
+| Cancellation phase coverage | One fixed mid-encode cancel | Barriers at yield, cleanup, finalize, verification and save | Injected hooks plus browser | Mostly | Immediate |
+| OPFS lock atomicity | Sequential sweep tests | Deterministic lock scheduler and two-tab stress | Injectable Web Lock layer | Unit + browser | Near |
+| Multi-track behaviour | No representative multi-A/V fixture | Contract/E2E for defaults, language, alternate angle, unsupported codec | MP4/WebM/MKV generators | Yes/browser | Immediate |
+| LRA tail and pause freeze | Common speech patterns only | Protected unit tests and official Tech 3342 cases | Checksum-pinned official/generated files | Yes if licensing permits | Near |
+| Acceptance self-verification | Missing audio/resource warnings can pass | Meta-tests proving each criterion fails on an injected defect | Controlled broken outputs | Yes/browser | Near |
+| Cross-engine support | Current run only in Chromium | Safari/Firefox/Chrome acceptance matrix | Real devices or hosted runners | Partly | Near |
+| Accessibility | Contrast and layout strong; no AT | Automated tree plus keyboard, VoiceOver, NVDA, TalkBack | Browser/AT matrix | Automation plus manual | Near |
+| Sleep/reload/recovery | Not implemented | Wake/visibility/unload unit tests and real sleep rehearsal | Laptop/mobile | Partly | Near |
+| Long-file performance | No current device matrix | Heap/CPU/OPFS profiling for 5, 20, 60 minutes | Representative 1080p/4K/VFR/HDR | Usually manual | Medium |
+| Public-media privacy guard | Only `public/spike` protected | Static negative test with unexpected public media | Tiny dummy media file | Yes | Near |
+| Official compliance evidence | Authentic EBU programme cases skipped | Checksum/provenance workflow and official cases | EBU/ITU material | Subject to distribution rights | Medium |
+
+## 10. Dependency and supply-chain assessment
+
+- [package.json](../../package.json) declares one runtime dependency: Mediabunny 1.55.2.
+- `package-lock.json` is lockfile version 3. Registry tarballs have integrity values; no Git dependencies or unpinned direct runtime dependency were found.
+- The isolated install resolved 243 package entries without running lifecycle scripts. The only detected install script belonged to optional `fsevents`.
+- Both full and production-only npm audits reported zero known vulnerabilities.
+- No deprecated package metadata or missing dependency licence metadata was observed.
+- Observed dependency licences were permissive or weak-copyleft licences normally compatible with web-tool distribution, including MIT, ISC, BSD, Apache-2.0, MPL-2.0, BlueOak and Python-2.0. This is a technical inventory, not legal advice.
+- Package metadata says MIT, but no root `LICENSE` file was found. Add the intended licence text or correct the metadata.
+- Branding assets should have a distinct provenance/usage notice because institutional artwork rights are separate from source-code licensing.
+- TypeScript 7.0.2 was newer than the pinned/wanted 6.0.3. The current version passes; upgrade only after Vite/ESLint/type-definition compatibility is confirmed. Existing VH-28 work already represents the ecosystem-upgrade dependency.
+- No Dependabot/Renovate-style update configuration was found.
+- CI actions should be full-SHA pinned and updated automatically; job permissions should be reduced as described in R-13.
+- Public source maps are produced. Given the public repository this is not a source-secrecy issue, but deployment should confirm that this is intentional.
+- No package replacement or new runtime dependency is justified by this review.
+
+## 11. Security and privacy assessment
+
+The application’s attack surface is relatively narrow because it is static and has no accounts or server-side state.
+
+- **Authentication, authorisation, tenants:** Not applicable. There is no privileged in-app user role.
+- **Primary untrusted input:** User-selected media and optional sidecar content. Parsing occurs in browser/Mediabunny/WebCodecs.
+- **Source handling:** Local, read-only `Blob`; no source upload.
+- **Network:** Production source contains only scoped inbound branding fetches. Static inspection and the observed browser run found no source-media, filename, or media-characteristic egress.
+- **Storage:** Source remains in browser memory/file handles; output uses job-scoped OPFS until saved or discarded.
+- **Retention:** Normal success/error/cancel cleanup exists, but R-04/R-07/R-08 show lifetime and concurrency gaps. Crashed tabs can leave scratch until sweep.
+- **Logging:** Structured, bounded, and redacted by default. No live secrets were found.
+- **Third parties:** Static host/CDN, browser codecs, npm/GitHub Actions, and Mediabunny. There is no analytics processor in source.
+- **Output handling:** The most serious misuse path is choosing the original source as the save destination. An OS prompt is mitigation but does not enforce the invariant.
+- **CI exposure:** Workflow-wide Pages/OIDC permissions and mutable action tags increase supply-chain consequence.
+- **Accidental publication:** Vite publishes `public/`; the current guard is not a complete institutional-media allowlist.
+- **XSS:** No material path was identified; user-facing dynamic strings use safe DOM text operations.
+- **Secrets:** Placeholder scan passed and no live credential was identified. External hosting/repository secrets were not accessible.
+- **Security headers:** No conclusion can be reached without inspecting the deployed response. CSP, COOP/COEP, Referrer-Policy and Permissions-Policy should be verified on the real origin rather than inferred from source.
+- **Compliance:** The implementation supports data minimisation and local processing, but this review does not assert GDPR, institutional-policy, or security-standard compliance.
+
+Required manual security work is limited but should include malformed-media fuzzing, deployed-header inspection, CI/repository permission review, object-URL/save abuse paths, and confirmation that public assets contain no personal recordings.
+
+## 12. Accessibility and user-facing assessment
+
+Observed strengths:
+
+- Meaningful page landmarks, fieldsets and labels
+- Skip link
+- Visible focus styles
+- Status/live-region support
+- Carbon-derived token system
+- Automated contrast tests
+- Minimum 44×44 px targets
+- Reduced-motion handling
+- No 390 px horizontal overflow
+- Clear conveyor-style hierarchy rather than an editor interface
+
+Material issues:
+
+- The progressbar lacks a programmatic accessible name.
+- “Discourage” preflight outcomes do not require acknowledgement.
+- Current branding choices are not yet enabled, so the final three-choice workflow cannot be evaluated end-to-end.
+- Browser acceptance still leaves playback, subjective audio quality, slide legibility, and wording as manual.
+- The application has no implemented offline recovery despite documentation implying offline-after-first-load behaviour.
+- Long jobs lack sleep/reload protection.
+- Screen-reader announcements for changing stages and percentages have not been tested and could be either insufficient or overly chatty.
+- No VoiceOver, NVDA, TalkBack, voice-control, high-zoom, forced-colours, or keyboard-only end-to-end rehearsal was performed.
+
+The demonstrated issue is a probable WCAG 2.2 SC 4.1.2 failure. Broader WCAG conformance cannot be concluded from code and automated tests alone.
+
+## 13. Architecture and maintainability assessment
+
+The architecture is appropriate for the product and does not need a rewrite.
+
+Strengths:
+
+- Main thread, worker boundary, pipeline, DSP, configuration and UI are separated coherently.
+- Four immutable conceptual data objects avoid a global mutable job blob.
+- Direct composition inside the worker is simpler than an unnecessary event bus.
+- Load-bearing values reside primarily in `src/config/`.
+- Runtime dependency count is intentionally small.
+- DSP is pure and testable outside a browser.
+- Media paths stream and apply backpressure.
+- Diagnostics are centralized rather than scattered `console.log` calls.
+
+Hot spots:
+
+- `src/main.ts` owns asynchronous request coordination and mutable UI/job references without a generation model.
+- `job.worker.ts` combines request routing, result ownership, cancellation, processing and post-output verification.
+- OPFS ownership is implicit across worker/main/save layers.
+- Inspection, preflight, calibration and runtime encoding do not share one exact track/configuration object.
+- The acceptance page reports some externally run or manual criteria as though they were locally proved.
+- Protected DSP boundary semantics are distributed among detector, limiter, analyser and acceptance cropping.
+
+Recommended structural improvements:
+
+1. Introduce a small immutable `AcceptedJob` containing file identity, selected tracks, preset, exact encoder candidates, capability verdict and epoch.
+2. Model output state as `processing → verifying → ready(leaseable) → saving → discarded`.
+3. Centralize processing-track selection and encoder-candidate creation.
+4. Define explicit `finish()` semantics for stateful DSP units.
+5. Keep these targeted; do not introduce a generalized framework or global state machine library.
+
+## 14. Performance and scalability assessment
+
+Demonstrated evidence:
+
+- The full synthetic browser acceptance run took 85.8 seconds on the review host.
+- The output worker bundle is 435.77 kB uncompressed.
+- One-hour analysis retains at least roughly 6.6 MB of numeric array payload before JavaScript-array overhead.
+- Cancellation produced native sample-lifetime warnings.
+- The pipeline does not buffer complete video/audio content and all output muxers avoid in-memory fast-start.
+
+Likely bottlenecks:
+
+- Browser video decode/encode is the dominant CPU/GPU cost.
+- Three audio traversals add proportional I/O and decode cost.
+- Post-output audio verification adds another potentially long traversal without granular heartbeat.
+- Multiple unsuperseded preflights can contend within one worker.
+- Large OPFS writes are sensitive to quota and partial-write behaviour.
+- Long files add analysis arrays linearly.
+
+Not demonstrated:
+
+- Performance on Windows, managed University devices, integrated GPUs, Safari or Firefox
+- 4K60/HDR throughput
+- One-hour reliability
+- Memory peaks during branding transition composition
+- OPFS quota behaviour near exhaustion
+- Thermal throttling or battery impact
+
+Safe optimisation priorities are correctness first, cancellation/resource closure second, then retention reduction. Avoid speculative parallelism: video and audio lanes already run concurrently, and more encoder concurrency could worsen device pressure.
+
+Recommended profiling:
+
+- 5-, 20-, and 60-minute 1080p and 4K inputs
+- CFR/VFR, 30/60 fps, mono/stereo/5.1, 44.1/48 kHz
+- Heap snapshots after each audio pass
+- Native sample counts during repeated cancellation
+- OPFS throughput/quota curves
+- Stage timings and long-phase heartbeat gaps
+
+## 15. Documentation assessment
+
+| Document/section | Problem | Proposed change |
+|---|---|---|
+| [DEV-INFRASTRUCTURE.md — Quality gate](../../DEV-INFRASTRUCTURE.md) | Says the gate is non-mutating, while `npm run check` invokes Vite build and writes `dist/` | Either build into a temporary directory during `check`, or document/approve the generated-output write |
+| [DEV-INFRASTRUCTURE.md — Deployment](../../DEV-INFRASTRUCTURE.md) | Describes deployment as undecided/local while GitHub Pages deploys `main` | Document the actual pilot deployment, permissions, rollback and verification |
+| [docs/01-specification.md](../../docs/01-specification.md) / brief | Offline-after-first-load behaviour is not implemented | Implement VH-14 or capture a protected-doc reconciliation proposal |
+| DEV infrastructure version section | Promises product version and build identity in production | Expose both consistently in UI/diagnostics or narrow the documented UI promise |
+| DEV infrastructure diagnostics section | Describes capability, source and job details absent from copied diagnostics | Add a redacted schema-aligned summary and tests |
+| Audio source comments | “Few hundred kilobytes” understates retained one-hour state | Correct after deciding the runtime retention mode |
+| Acceptance criterion 3 | UI labels EBU compliance as passed without executing all official cases | Report partial/external/manual status until authentic material runs |
+| Root legal documentation | Package metadata says MIT but no `LICENSE` exists | Add the intended licence and separate branding-asset provenance notice |
+| Operational guidance | No browser-specific save, wake lock, storage quota or large-job troubleshooting | Add after the related implementation is stable |
+
+Protected specification and rationale files should not be edited as ordinary implementation documentation. Any factual correction belongs in the established doc-delta/sign-off batch.
+
+## 16. Suggested change set
+
+No change below was applied.
+
+| Change group | Objective and findings | Proposed files/work | Tests and acceptance | Effort/risk |
+|---|---|---|---|---|
+| A. Finish DSP correctly | R-01, R-02, R-10 | Add explicit true-peak/limiter finalization; perform complete-chain gain calibration; enforce decoded-output criteria; add LRA tail and strict pause hold | EOF FIR matrix, official DSP material, real high-crest encoded output within both limits | Large / High |
+| B. Preserve source content | R-03, R-09 | Carry source audio timestamps/gaps; replace destructive AAC shift; centralize primary-track selection; block or warn on extra A/V tracks | t=0 sample conservation, gaps, multi-track fixtures, cross-browser sync | Large / High |
+| C. Transactional output ownership | R-04, R-08 | Implement write-all; hard output postconditions; `ResultLease`; exclusive save state; same-entry protection; atomic lock/delete sections | Short-write, corrupt output, slow save, multi-tab race, byte equality | Large / High |
+| D. Immutable request lifecycle | R-05, R-06, R-07 | Add selection epoch and `AcceptedJob`; derive exact encoder candidates once; controllers for every request; commit-boundary abort checks; close samples in ownership `finally` | Out-of-order replies, unsupported prerequisites, cancellation barriers, no late UI updates | Large / High |
+| E. Make acceptance capable of refuting the product | R-11 | Measure full-output peaks; require expected audio; fail resource warnings; represent partial/manual criteria honestly; add real-material corpus | Each injected defect must make the relevant criterion fail | Medium / Medium |
+| F. Complete user/operational protections | R-12, R-14, R-15 | Wake lock, conditional unload warning, progress naming, discourage acknowledgement, diagnostics/version alignment, non-mutating check implementation | Accessibility tree, sleep/reload, clean-tree snapshots, production bundle identity | Medium / Low–medium |
+| G. Harden release inputs | R-13 | Narrow CI permissions, pin actions, add public-media allowlist, add licence/provenance files | Workflow policy and negative publication tests | Medium / Low |
+| H. Reduce retained analysis state | R-16 | Runtime retention mode and early curve release | Metric equivalence and heap/element-count limits | Medium / Medium |
+
+Rollout should use small, separately reviewable commits. Protected DSP and OPFS concurrency changes should not be combined. Each group should retain a straightforward Git rollback and should not require stored-data migration because OPFS is scratch state.
+
+## 17. Prioritised remediation roadmap
+
+### Immediate
+
+| Item | Benefit / risk if deferred | Prerequisites | Effort / risk | Owner | Verification |
+|---|---|---|---|---|---|
+| R-02 EOF true-peak repair | Removes a demonstrated hard-ceiling violation | None | M / High | DSP engineer | Final-position impulse matrix and protected suite |
+| R-01 full-chain audio acceptance | Makes the core output promise honest | R-02 | L / High | DSP + media engineer | Decoded real corpus within ±0.5 LU and ≤−2 dBTP |
+| R-04 output transaction | Prevents corrupt, truncated, prematurely deleted, or source-overwriting outputs | None | L / Medium | Browser storage engineer | Fault injection and large-save byte comparison |
+| R-03 onset/timeline preservation | Stops silent deletion and sync distortion | Encoder/container timing decision | L / High | Media engineer | t=0 conservation and full-duration sync |
+| R-05/R-06 immutable exact preflight | Prevents the wrong or unsupported job from starting | Shared candidate design | M / Medium | UI/worker engineer | Deferred-response and exact-config browser tests |
+| R-07 authoritative cancellation | Makes cancel trustworthy and closes native resources | Result ownership clarified | M / High | Worker/media engineer | Every phase returns only cancelled and leaks nothing |
+| R-09 multi-track protection | Prevents silent loss | Product decision: block versus preserve | M / Medium | Product + media | Multi-track warning/block acceptance |
+
+These are release blockers for general production. A narrowly controlled single-track pilot would still need R-01 through R-07 addressed or explicitly disabled behind a non-production gate.
+
+### Near term
+
+| Item | Benefit / risk if deferred | Prerequisites | Effort / risk | Owner | Verification |
+|---|---|---|---|---|---|
+| R-08 atomic OPFS locks | Removes rare live-workspace deletion | Deterministic lock abstraction | M / High | Storage/concurrency | Two-tab stress and barrier tests |
+| R-10 LRA/pause semantics | Corrects protected analysis and macro behaviour | DSP baseline stable | M / High | DSP engineer | Tech 3342 plus pause fixture |
+| R-11 acceptance hardening | Prevents future green false positives | Product fixes landed | M / Medium | Test engineer | Mutation/injected-defect checks |
+| R-12 long-job controls | Protects elapsed processing work | Stable lifecycle state | M / Low | UI/platform engineer | Sleep, visibility and unload rehearsal |
+| R-13 release hardening | Reduces CI and publication consequence | None | M / Low | DevOps/security | Workflow policy and deploy inventory |
+| R-14 accessible progress/acknowledgement | Improves state clarity and error prevention | None | S / Low | UI/accessibility | AT and keyboard run |
+
+### Medium term
+
+| Item | Benefit / risk if deferred | Prerequisites | Effort / risk | Owner | Verification |
+|---|---|---|---|---|---|
+| R-15 contract reconciliation | Restores operational/documentation trust | Relevant implementation decisions | M / Low | Maintainer + technical writer | Clean-check, offline, version and diagnostics rehearsal |
+| Cross-engine matrix | Establishes actual browser support | Stable output pipeline | M / Medium | QA | Chrome/Firefox/Safari acceptance |
+| Official EBU/ITU corpus | Strengthens compliance evidence | Licensing/cache workflow | M / Medium | DSP/QA | Checksummed official cases |
+| Long-file/device capacity matrix | Establishes honest estimates and limits | Stable lifecycle | L / Low | Performance QA | 5/20/60-minute device report |
+| Channel-layout/sample-rate spike | Avoids false multichannel claims | Representative fixtures | M / Medium | DSP/media | Isolated-channel 5.1 and 22.05 kHz cases |
+
+### Optional
+
+| Item | Benefit / risk if deferred | Prerequisites | Effort / risk | Owner | Verification |
+|---|---|---|---|---|---|
+| R-16 analysis retention reduction | Lowers long-file heap pressure | Correct metrics stabilized | M / Medium | DSP/performance | Heap and equivalence tests |
+| Dormant closing-transition repairs | Prevents opaque-gradient sampling and decode-fallback defects when re-enabled | Approved branding/UI milestone | S–M / Medium | Media/UI | Gradient scaling and corrupt-onset fallback |
+| Automated dependency updates | Keeps pinned actions/tooling current | Review policy | S / Low | DevOps | Update PR checks |
+| Additional malformed-media fuzzing | Improves parser resilience | Stable supported-format policy | M / Medium | Security/QA | Hermetic fuzz corpus |
+
+## 18. Unresolved uncertainties
+
+| Unknown | Evidence inspected and safest assumption | Why it matters / verification | Dependent findings |
+|---|---|---|---|
+| Safari/Firefox WebCodecs, OPFS and save behaviour | Source and Chromium were inspected; do not assume parity | Run full acceptance and save/cancel cases on supported versions | R-03, R-04, R-06, R-07 |
+| Exact fallback-download failure mode after OPFS deletion | Standards and lifetime sequence strongly support risk; manifestation is browser-dependent | Large-file early-discard byte comparison | R-04 |
+| Frequency of the Web Lock interleaving | Race exists in source, but was not reproduced live | Deterministic barriers and long two-tab stress | R-08 |
+| Actual Mediabunny encoder candidate across engines | Relevant library source sampled; candidates can vary by engine/input | Capture and compare runtime candidate to probed config | R-06 |
+| Intended treatment of multiple A/V tracks | Specification demands visible warning for loss but does not define full preservation | Product decision followed by multi-track fixtures | R-09 |
+| Complete EBU accuracy | Current synthetic/common cases pass; authentic programme cases were not run | Checksum-pinned official test set and BS.2217 coverage | R-01, R-10, R-11 |
+| Multichannel layout semantics | Channel count is available, semantic labels are not clearly carried | Isolated-channel 5.1/7.1 AAC fixtures | Audio support claim |
+| 22.05 kHz block timing | Current common 44.1/48 kHz paths are exact; rounded-hop behaviour may differ | Generate reference signals at uncommon rates | Audio support claim |
+| Production hosting headers/permissions | Workflow is visible; deployed response and GitHub settings are not | Inspect real Pages headers, environments, permissions and branch protection | R-13, security assessment |
+| Branding licences and approved masters | Binary inventory exists; legal provenance was not available | Institutional confirmation and committed notice | Supply-chain assessment |
+| Final branding workflow | Current choices are disabled/dormant | Stakeholder approval plus end-to-end branded acceptance | Production readiness |
+
+## 19. Manual verification checklist
+
+- [ ] Run the repaired output pipeline on a representative University corpus: quiet/hot speech, music, slides, VFR, 44.1/48 kHz, mono/stereo, immediate speech onset, long silence, and EOF transient.
+- [ ] Confirm loudness and true peak independently with a trusted meter.
+- [ ] Listen for pumping, consonant loss, clicks, clipping, transition artefacts, and branding-level mismatch.
+- [ ] Inspect output in Chrome, Firefox, Safari, VLC, QuickTime and EchoVideo.
+- [ ] Run 5-, 20-, and 60-minute jobs on representative managed Windows/macOS hardware.
+- [ ] Cancel during every stage, including cleanup, finalization, verification and saving.
+- [ ] Repeatedly exercise two-tab OPFS creation/sweep interleavings.
+- [ ] Save a multi-gigabyte result through both picker and fallback download; byte-compare after early lifecycle events.
+- [ ] Attempt to save over the source and confirm it is blocked.
+- [ ] Force sleep, visibility changes, reload, navigation, browser crash and tab close.
+- [ ] Exercise low disk quota and denied filesystem permissions.
+- [ ] Test multi-video/multi-audio files and confirm all loss is disclosed before processing.
+- [ ] Run VoiceOver, NVDA and TalkBack; verify keyboard-only flow, announcements, focus recovery, 200–400% zoom and forced colours.
+- [ ] Verify deployed CSP and other security headers, GitHub Actions permissions, environment approvals and branch protections.
+- [ ] Inspect the final public deployment inventory for recordings, source filenames, debug artefacts and unexpected media.
+- [ ] Run checksum-pinned official EBU/ITU material where licensing permits.
+- [ ] Confirm branding masters, wording, licences and opening/closing interaction with institutional stakeholders.
+- [ ] Verify production diagnostics contain product/build identity and no sensitive media information.
+
+## 20. Handover summary
+
+The five most important findings are:
+
+1. A real output missed both loudness and true-peak requirements while being reported as successful.
+2. EOF true-peak detection and limiting can miss a final transient completely.
+3. Audio timing reconstruction and AAC compensation can delete source onset and collapse gaps.
+4. OPFS writes, output verification, saving and deletion do not form a safe ownership transaction.
+5. Mutable asynchronous preflight/cancellation state can run the wrong, unsupported, or supposedly cancelled job.
+
+The five most valuable proposed changes are:
+
+1. Add correct DSP finalization and full-chain encoded-output acceptance.
+2. Preserve source timestamps and every source sample.
+3. Add write-all semantics, hard output postconditions and a result lease.
+4. Introduce an immutable epoch-bound `AcceptedJob`.
+5. Make cancellation and sample ownership authoritative across every phase.
+
+General-production release blockers are R-01 through R-07 and R-09. R-08 should also be resolved before multi-tab use is relied upon. Current disabled branding choices are a separate feature-completeness gate.
+
+After implementation, another developer should run:
+
+```bash
+npm ci
+npm run check
+npm audit
+npm run dev
+```
+
+They should then open `/acceptance.html` on the documented local server and complete the browser/manual checklist above. Because `npm run check` currently writes ignored `dist/`, clean-tree immutability should either be tested in a temporary checkout or repaired as part of R-15.
+
+No illustrative patch or suggested edit was applied. No branch, commit, remote, issue, pull request, deployment, database, credential, or external system was modified. The original repository remained on `main` at `66227e51dc0905c1853d79fb927d8f009be80ad4`, with no tracked or staged changes and the same pre-existing untracked review file.
