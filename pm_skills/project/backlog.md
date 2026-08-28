@@ -64,14 +64,6 @@
       confirmed adequate as a constant with the measurement recorded.
       Scope: one probe round trip serves all three; do not add a second pass.
 
-- [ ] **VH-84 Criterion 9's passive timeline is not a census** (2026-08-28)
-      Intent: resource-timing entries are added when a request COMPLETES, so
-      `EgressWatch.stop()` can miss one still in flight — a HEAD to a branding
-      asset did not appear during a direct test. The body-wrapping instrument is
-      unaffected, so the no-egress claim stands; the request COUNT does not.
-      Done when: the check says which half of it is a census and which is a
-      sample, or the timeline is drained before it is read.
-
 ### Band 3 — Blocked on the maintainer
 
 <!-- Agent work that cannot start until something arrives from outside the

@@ -765,7 +765,7 @@ export async function runAcceptance(log: Report): Promise<AcceptanceReport> {
     criterion: '9',
     title: 'Nothing leaves the device',
     status: report.withBody.length === 0 && report.crossOrigin.length === 0 ? 'pass' : 'fail',
-    detail: `${report.allRequests.length} requests across the page and the job worker, all same-origin, none carrying a request body. Cross-origin: ${report.crossOrigin.length}. With a body: ${report.withBody.length}.`,
+    detail: `${report.allRequests.length} requests across the page and the job worker, all same-origin, none carrying a request body. Cross-origin: ${report.crossOrigin.length}. With a body: ${report.withBody.length}. The verdict rests on the body wrapper, which records at the moment of the call; the count joins that with the resource timeline, which only lists requests that finished (VH-84).`,
   })
   checks.push(await checkEgressInstrument(log))
 

@@ -6,7 +6,13 @@
 
 import { describe, expect, it } from 'vitest'
 
-import { carriedBody, mergeEgress, type EgressRecord, type EgressReport } from './egress'
+import {
+  EgressWatch,
+  carriedBody,
+  mergeEgress,
+  type EgressRecord,
+  type EgressReport,
+} from './egress'
 
 const record = (over: Partial<EgressRecord> = {}): EgressRecord => ({
   url: '/branding/closing-tail-blue-1080p.mp4',
@@ -65,5 +71,52 @@ describe('mergeEgress', () => {
 
   it('merging nothing with nothing is still nothing', () => {
     expect(mergeEgress(report(), report())).toEqual(report())
+  })
+})
+
+describe('EgressWatch', () => {
+  /**
+   * VH-84. A resource-timing entry appears when a request COMPLETES, so
+   * anything still in flight when the watch stops is absent from the timeline.
+   * A HEAD to a branding asset went unlisted that way — the no-egress verdict
+   * was unaffected, because that rests on the body wrapper, but the request
+   * COUNT was reported as a census when it was not one.
+   */
+  it('lists a request the timeline has not finished, because the wrapper saw it', () => {
+    const originalFetch = globalThis.fetch
+    // Never settles: the request is still in flight when the watch stops,
+    // which is exactly the case the timeline cannot report.
+    globalThis.fetch = () => new Promise<Response>(() => {})
+
+    try {
+      const watch = new EgressWatch()
+      watch.start()
+      void globalThis.fetch('https://example.test/branding.mp4', { method: 'HEAD' })
+      const report = watch.stop()
+
+      expect(report.allRequests).toContain('https://example.test/branding.mp4')
+      expect(report.crossOrigin).toContain('https://example.test/branding.mp4')
+      // Still no finding: a HEAD carries no body, and that is what egress means.
+      expect(report.withBody).toEqual([])
+    } finally {
+      globalThis.fetch = originalFetch
+    }
+  })
+
+  it('counts a request both instruments saw once, not twice', () => {
+    const originalFetch = globalThis.fetch
+    globalThis.fetch = () => new Promise<Response>(() => {})
+
+    try {
+      const watch = new EgressWatch()
+      watch.start()
+      void globalThis.fetch('https://example.test/a')
+      void globalThis.fetch('https://example.test/a')
+      const report = watch.stop()
+
+      expect(report.allRequests.filter((url) => url === 'https://example.test/a')).toHaveLength(1)
+    } finally {
+      globalThis.fetch = originalFetch
+    }
   })
 })

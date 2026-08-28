@@ -23,6 +23,12 @@
 
 ## Archived: the review remediation and Band 1's close — see archive/trajectory/trajectory-0003-review-remediation-and-band-1-close.md
 
+### VH-84 — the request count was not a census
+
+- VH-84 — Shipped 2026-08-28. `EgressWatch` joins its body wrapper with the
+  resource timeline, so a request still in flight is counted instead of
+  vanishing. See decision-log.
+
 ### VH-81 — the tail fallback that never once worked
 
 - VH-81 — Shipped 2026-08-28. `scanTrackHandlers` walks top-level box headers

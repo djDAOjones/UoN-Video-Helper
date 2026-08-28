@@ -44,7 +44,18 @@ export function mergeEgress(...reports: readonly EgressReport[]): EgressReport {
 export interface EgressReport {
   /** Requests that carried an outbound body. Any entry here is a finding. */
   readonly withBody: readonly EgressRecord[]
-  /** Every request the page made, from the browser's own resource timeline. */
+  /**
+   * Every request this realm made, as far as either instrument can tell.
+   *
+   * The union of the browser's resource timeline and the URLs the wrapped
+   * `fetch` and `sendBeacon` saw. The timeline alone is not a census: an entry
+   * is added when a request COMPLETES, so anything still in flight at
+   * {@link EgressWatch.stop} is missing from it — a HEAD to a branding asset
+   * went unlisted that way. The wrapper records at the moment of the call, so
+   * joining the two closes that hole for everything routed through `fetch`
+   * (VH-84). A request made by some other API AND still in flight would still
+   * be missed; nothing in this app makes one.
+   */
   readonly allRequests: readonly string[]
   /** Requests to an origin other than this one. */
   readonly crossOrigin: readonly string[]
@@ -115,17 +126,32 @@ export class EgressWatch {
     this.restore = []
 
     const since = this.startedAt
-    const entries = performance
+    const timeline = performance
       .getEntriesByType('resource')
       .filter((entry) => entry.startTime >= since)
       .map((entry) => entry.name)
+
+    // Absolute, so the same request seen by both instruments is one entry
+    // rather than two spellings of one.
+    const base = globalThis.location?.href
+    const absolute = (url: string): string => {
+      try {
+        return new URL(url, base).href
+      } catch {
+        return url
+      }
+    }
+
+    const entries = [
+      ...new Set([...timeline, ...this.records.map((record) => record.url)].map(absolute)),
+    ]
 
     return {
       withBody: this.records.filter(carriedBody),
       allRequests: entries,
       crossOrigin: entries.filter((url) => {
         try {
-          return new URL(url, location.href).origin !== location.origin
+          return new URL(url, base).origin !== globalThis.location?.origin
         } catch {
           return true
         }

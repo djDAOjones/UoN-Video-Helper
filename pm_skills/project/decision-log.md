@@ -11,6 +11,31 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-28 — VH-84: the request count was not the census it read as
+
+Criterion 9 reported "N requests across the page and the job worker, all
+same-origin". N came from the browser's resource timeline, and a
+resource-timing entry is added when a request COMPLETES — so anything still in
+flight when the watch stopped was simply absent. A HEAD to a branding asset
+went unlisted during a direct test.
+
+The no-egress VERDICT was never at risk: that rests on the wrapped `fetch` and
+`sendBeacon`, which record at the moment of the call and cannot miss one. What
+was wrong was the count, and the count is what a reader takes as the census.
+
+Fixed by joining the two rather than by draining the timeline: `allRequests`
+and `crossOrigin` are now the union of the timeline and the URLs the wrapper
+saw, deduplicated by absolute URL. That closes the hole for everything routed
+through `fetch` — which is everything this app does. A request made by some
+other API AND still in flight would still be missed; the check now says so
+rather than implying a completeness it does not have.
+
+Two tests pin it, both using a `fetch` that never settles: the in-flight
+request is listed and counted as cross-origin while still producing no finding,
+and a request both instruments see is counted once.
+
+**Link:** VH-84, VH-62, review R-11; `src/core/egress.ts`, `src/acceptance/run.ts`.
+
 ## 2026-08-28 — VH-81: the tail fallback that never once worked
 
 `scanTrackHandlers` read the first 64 MB looking for `moov`, and if it was not
