@@ -11,6 +11,50 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-28 — VH-26: every portrait phone upload failed, and the guard hid it
+
+Asking whether the phone samples had been obtained is what found this. Five
+were, on 27 August, and all five are landscape — verified with `ffprobe`, none
+carrying a rotation flag — so portrait was never once exercised.
+
+**What happened.** Portrait phone video is landscape PIXELS plus a rotation
+flag: an iPhone writes 1920x1080 coded with `rotation: 90`. Content samples
+therefore arrive at 1920x1080 while the branding card is rendered at the
+1080x1920 output shape. Mediabunny's constant-size guard runs on the sample as
+it ARRIVES — before the `transform` that would have normalised both — so it
+refused the job with `Video sample size must remain constant`. The closing card
+is on by default, so this was every portrait upload rather than an edge case.
+
+**Why nothing caught it.** Without branding the two lanes never disagree, so
+the same source produced a perfectly good file. And a fixture that simply swaps
+width and height does not reproduce it either — that is the case that always
+worked. Only a genuine rotation flag combined with branding fails, which is a
+corner no existing fixture occupied.
+
+**The fix is one line**, and it is not a workaround: `sizeChangeBehavior:
+'passThrough'` lifts the guard on the INPUT only, while the `transform` already
+present continues to normalise every frame to exactly `shape`. What reaches the
+encoder is one constant size either way — the invariant the guard existed to
+protect. It is also the combination Mediabunny sanctions, since `fit` may not
+be set alongside a `sizeChangeBehavior` of `deny`, `fill` or `contain`.
+
+Notably the `transform` block already carried a comment about VH-26 and
+rotation, and it was right — rotation was handled. The guard sitting upstream
+of it was the part nobody had reason to suspect.
+
+**Measured after the fix**, on the phone convention with branding: output
+1080x1920 with rotation baked to 0, so a player that ignores the flag still
+shows it upright. Content fills the frame edge to edge; the 16:9 card sits as a
+centred band on the brand background across 31% of the height, against the
+31.6% the arithmetic gives. That settles the composition question the ticket
+raised, rather than only the crash.
+
+**Guarded** by acceptance criterion 1, covering both conventions. The full run
+is 10 passed, 0 failed, 133 s.
+
+**Link:** VH-26; `src/media/encoding.ts`, `src/acceptance/fixtures.ts`,
+`src/acceptance/run.ts`.
+
 ## 2026-08-28 — The codec spends most of the loudness budget, measured
 
 Scoping VH-83 turned up a number worth recording on its own, because it is

@@ -39,6 +39,14 @@ export interface FixtureOptions {
   /** Draw fine text, to stand in for slide content. */
   readonly slideText?: boolean
   /**
+   * A rotation flag on the video track, as a phone writes.
+   *
+   * Portrait phone video is landscape PIXELS plus this flag, not portrait
+   * pixels — which is why a fixture that simply swaps width and height does
+   * not stand in for one (VH-26).
+   */
+  readonly rotation?: 90 | 180 | 270
+  /**
    * Change the WHOLE frame every frame, to stand in for camera motion.
    *
    * The default fixture is screen-like: a static background with one moving
@@ -244,10 +252,10 @@ export async function buildFixture(options: FixtureOptions): Promise<File> {
     target: new BufferTarget(),
   })
   const video = new VideoSampleSource({ codec: 'avc', bitrate: 6_000_000 })
-  output.addVideoTrack(
-    video,
-    options.variableFrameRate ? {} : { frameRate: options.frameRate },
-  )
+  output.addVideoTrack(video, {
+    ...(options.variableFrameRate ? {} : { frameRate: options.frameRate }),
+    ...(options.rotation ? { rotation: options.rotation } : {}),
+  })
 
   const hasAudio = options.audio !== undefined
   const audioSource = hasAudio

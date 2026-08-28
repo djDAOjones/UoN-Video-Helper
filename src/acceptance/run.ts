@@ -598,6 +598,73 @@ async function checkSourceTimeline(log: Report): Promise<Check> {
 }
 
 /**
+ * Criterion 1, on the shape a phone actually produces.
+ *
+ * Portrait phone video is landscape PIXELS plus a rotation flag. Every frame
+ * therefore arrives at 1920x1080 while the branding card is rendered at the
+ * 1080x1920 output shape, and the encoder's constant-size guard — which runs
+ * before the transform that would have normalised both — refused the job. The
+ * closing card is on by default, so that was every portrait upload (VH-26).
+ *
+ * Both conventions are covered because a fixture that simply swaps width and
+ * height does NOT stand in for a phone file, and only the flagged one failed.
+ */
+async function checkPortrait(log: Report): Promise<Check> {
+  const cases = [
+    { name: 'rotation flag, as a phone writes', width: 1920, height: 1080, rotation: 90 as const },
+    { name: 'portrait pixels, no flag', width: 1080, height: 1920, rotation: undefined },
+  ]
+
+  const results: string[] = []
+  let allHeld = true
+
+  for (const [index, testCase] of cases.entries()) {
+    log(`  ${testCase.name}`)
+    let workspace: OpfsWorkspace | null = null
+    try {
+      const fixture = await buildFixture({
+        width: testCase.width,
+        height: testCase.height,
+        seconds: 4,
+        frameRate: 25,
+        audio: { startPeakDbfs: -20 },
+        ...(testCase.rotation ? { rotation: testCase.rotation } : {}),
+      })
+      // Branding ON: without it the two lanes never disagree and this proves
+      // nothing. That is exactly why the bug survived — it needs the card.
+      const produced = await process(fixture, {
+        presetId: 'best',
+        branding: { opening: false, closing: true },
+        jobId: `acceptance-portrait-${index}`,
+      })
+      workspace = produced.workspace
+      const report = await inspectFile(produced.file)
+      const upright =
+        report.video.displayHeight > report.video.displayWidth &&
+        report.video.codedHeight > report.video.codedWidth
+      if (!upright) allHeld = false
+      results.push(
+        `${testCase.name}: ${upright ? 'upright' : 'FAIL'} ${report.video.codedWidth}x${report.video.codedHeight}`,
+      )
+    } catch (cause) {
+      allHeld = false
+      results.push(
+        `${testCase.name}: FAIL — ${cause instanceof Error ? cause.message : String(cause)}`,
+      )
+    } finally {
+      if (workspace) await workspace.dispose()
+    }
+  }
+
+  return {
+    criterion: '1',
+    title: 'A portrait phone video survives branding and comes out upright',
+    status: allHeld ? 'pass' : 'fail',
+    detail: `${results.join('; ')}. The output is portrait in CODED pixels, not merely flagged as rotated, so a player that ignores the flag still shows it the right way up.`,
+  }
+}
+
+/**
  * Criterion 8, through the protocol the app actually uses.
  *
  * It used to build an `AbortController`, hand it to `runPipeline` on the main
@@ -741,6 +808,9 @@ export async function runAcceptance(log: Report): Promise<AcceptanceReport> {
 
   log('Criterion 6 — A/V sync on a variable-frame-rate source')
   checks.push(...(await checkSync(log)))
+
+  log('Criterion 1 — portrait sources')
+  checks.push(await checkPortrait(log))
 
   log('Criterion 6 — the source timeline')
   checks.push(await checkSourceTimeline(log))

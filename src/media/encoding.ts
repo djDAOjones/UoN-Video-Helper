@@ -50,6 +50,20 @@ export function videoEncodingConfigFor(
     fullCodecString: videoEncoderConfigFor(shape).codec,
     bitrate: shape.videoBitrateBps,
     keyFrameInterval: KEYFRAME_INTERVAL_SECONDS,
+    // The guard runs on the sample as it ARRIVES, before `transform` resizes
+    // it, and the two lanes do not arrive the same size: content is whatever
+    // the decoder hands over — 1920x1080 for a portrait phone video, which
+    // stores landscape pixels plus a rotation flag — while branding is
+    // rendered at the output shape. Every portrait phone upload therefore died
+    // on "Video sample size must remain constant", and the closing card is on
+    // by default, so that was all of them (VH-26).
+    //
+    // `passThrough` lifts the guard on the INPUT only. `transform` below still
+    // normalises every frame to exactly `shape`, so what reaches the encoder is
+    // one constant size either way — which is the invariant the guard existed
+    // to protect. This is the combination Mediabunny sanctions: `fit` may not
+    // be set alongside a `sizeChangeBehavior` of `deny`, `fill` or `contain`.
+    sizeChangeBehavior: 'passThrough',
     transform: {
       width: shape.width,
       height: shape.height,

@@ -135,18 +135,15 @@
       in Chrome with luma percentiles within two units of the source, because
       the browser tone-maps on decode and the pipeline encodes what it is
       given. Chrome decodes HEVC Main 10 at 1080p and 4K60.
-      **Portrait fails the job, found 2026-08-28** — and needs no material, so
-      that half is no longer blocked. A 1920x1080 source carrying `rotation: 90`
-      (what an iPhone writes) plus the closing card, which is on by default,
-      dies on `Video sample size must remain constant`. Without branding the
-      same source is fine and comes out a correct upright 1080x1920, so the
-      content lane conforms and the branding lane does not. Reproduced from
-      synthesised sources in both phone conventions; see the ticket.
-      Done when: a portrait source completes with branding and the composition
-      is specified; and Firefox is checked — the question there is whether an
-      undecodable HEVC source hits VH-60's `no-source-decode` block cleanly,
-      not whether the colour is right. Only the Firefox half needs the
-      maintainer.
+      Portrait found and FIXED 2026-08-28: every portrait phone upload died on
+      `Video sample size must remain constant`, because the encoder's guard
+      runs on the arriving sample, before the transform that would have
+      normalised it. Guarded by acceptance criterion 1. See decision-log.
+      Remaining, and the only part that needs a person: **Firefox**. The
+      question there is whether an undecodable HEVC source hits VH-60's
+      `no-source-decode` block cleanly, not whether the colour is right.
+      Done when: an iPhone HEVC file is opened in Firefox and either decodes or
+      is refused with the block's own wording rather than failing mid-job.
 
 - [ ] **VH-30 Trim the source** [detail](tickets/VH-30.md) (2026-08-25)
       [sign-off]

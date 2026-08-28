@@ -23,6 +23,14 @@
 
 ## Archived: the review remediation and Band 1's close — see archive/trajectory/trajectory-0003-review-remediation-and-band-1-close.md
 
+### VH-26 — portrait phone video
+
+- Portrait half shipped 2026-08-28. Every portrait phone upload failed on the
+  encoder's constant-size guard, which runs before the transform that would
+  have normalised the frame. Fixed, composition specified, guarded by
+  acceptance criterion 1. Firefox remains, and needs a person. See
+  decision-log.
+
 ### VH-84 — the request count was not a census
 
 - VH-84 — Shipped 2026-08-28. `EgressWatch` joins its body wrapper with the
