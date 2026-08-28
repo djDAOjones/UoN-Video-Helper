@@ -44,25 +44,25 @@
       Done when: every child is shipped or explicitly cut; then delete the
       ticket.
 
-- [ ] **VH-82 `inspectFile` runs three times per job** (2026-08-28)
-      Intent: inspect, preflight and process each re-derive the same report.
-      The 64 MB slicing is gone — VH-81 made `scanTrackHandlers` read kilobytes
-      — so what remains is the frame-rate probe, which decodes 256 packets each
-      time, and the duplicated container reads around it.
-      Done when: a job inspects once and the later stages are handed the report,
-      with the worker protocol carrying it rather than re-deriving it.
-
-- [ ] **VH-83 Measure the codec's cost instead of carrying corpus constants** (2026-08-28)
-      Intent: three constants stand in for a measurement the calibration probe
-      could take on the user's own file — `BEST_SOURCE_BLEND` (0.5, the only
-      value in VH-47's rule with no number behind it),
-      `ENCODE_TRUE_PEAK_HEADROOM_DB` (1.0 dB from four lectures ranging
-      0.02-0.44), and the integrated-loudness AAC costs that nothing models
-      (0.02-0.41 LU on the same four, worst on the most limited material — up to
-      80% of the ±0.5 budget spent on the codec).
-      Done when: each is either derived per job from a probe round trip or
-      confirmed adequate as a constant with the measurement recorded.
-      Scope: one probe round trip serves all three; do not add a second pass.
+- [ ] **VH-83 The AAC round trip costs loudness nobody is compensating** (2026-08-28)
+      Intent: the chain solves for the target and the codec then moves it, and
+      nothing models that. **Measured 2026-08-28 on `AMCS3059`:** the chain
+      solved -16.06 LUFS (`limitedLufs`), the delivered file measures
+      **-16.44** — 0.38 LU lost to AAC, 88% of the +/-0.5 budget spent after
+      the only stage that aims. It passes, and it would not survive a slightly
+      worse round trip.
+      The same run shows the other half: true peak came out -2.969 dBTP against
+      a -2.0 ceiling, so `ENCODE_TRUE_PEAK_HEADROOM_DB`'s full 1.0 dB was held
+      and the file's actual overshoot was ~0.03 dB.
+      Done when: the gain solve aims at a target corrected by the codec's
+      measured cost — one encode/decode round trip of a short excerpt at the
+      job's exact audio config gives both figures — and the four real corpus
+      files land closer to -16.00 than they do now, with none worse.
+      Risk: this changes the stage VH-50 fixed by measurement. Nothing ships
+      without re-measuring all four real files, not just the synthetic corpus.
+      Note: `BEST_SOURCE_BLEND` (0.5, the only value in VH-47's rule with no
+      number behind it) is a VIDEO-bitrate question needing its own experiment;
+      it was scoped in here by mistake and belongs on its own.
 
 ### Band 3 — Blocked on the maintainer
 
@@ -247,6 +247,14 @@
       which the EBU distributes as audio and cannot be synthesised. Would need
       the files checked in as gitignored fixtures. Cases 3-5 already cover the
       same gating behaviour.
+- [ ] **VH-82 `inspectFile` runs three times per job** (2026-08-28)
+      Measured out 2026-08-28, not done. The cost was the 64 MB slicing, and
+      VH-81 removed it: an inspect is now 7-18 ms on 18-28 MB files and
+      **34-57 ms on a 4.55 GB one**, so three of them cost ~130 ms of a job
+      measured in minutes. What remains is a bounded 256-packet frame-rate
+      probe, not something that scales with the file.
+      Revisit if inspect ever appears in a profile, or if a stage needs the
+      report for a reason other than speed.
 - [ ] **VH-28 TypeScript 7** — blocked on typescript-eslint supporting `>=6.1.0`.
       A one-line change to the pin when it does.
 - [ ] **VH-29 Full embedded-subtitle extraction** — would need a bespoke MP4 box

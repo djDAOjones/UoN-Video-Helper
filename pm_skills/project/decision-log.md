@@ -11,6 +11,41 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-28 — The codec spends most of the loudness budget, measured
+
+Scoping VH-83 turned up a number worth recording on its own, because it is
+about the app's headline audio promise and it was previously known only as a
+range in a wish-list note.
+
+On `AMCS3059`, a real corpus lecture, through the production pipeline:
+
+| | |
+| --- | ---: |
+| Chain solved (`limitedLufs`, what the DSP really produced) | -16.06 LUFS |
+| Delivered file, decoded and re-measured | **-16.44 LUFS** |
+| Cost of the AAC round trip | **0.38 LU** |
+| Error against target | -0.44 LU, against a +/-0.5 tolerance |
+| Delivered true peak | -2.969 dBTP against a -2.0 ceiling |
+
+Two things follow. The gain solve is doing its job — VH-50 made it solve
+against the chain that actually runs, and it landed within 0.06 LU. Everything
+after that is the codec, and nothing models it: 88% of the tolerance is spent
+downstream of the only stage that aims.
+
+And `ENCODE_TRUE_PEAK_HEADROOM_DB` held its full 1.0 dB while this file's
+actual overshoot was around 0.03 dB. The constant is doing what it was set to
+do; it is simply much larger than this file needed.
+
+**Not fixed here, deliberately.** The fix is a probe round trip feeding a
+corrected target into `solveChainGainDb`, and that is the stage VH-50 repaired
+by measurement — the one place where a plausible change can quietly put every
+output off target. It wants validation across all four real files, which is a
+task rather than a corollary. VH-83 now carries the numbers and the acceptance
+condition.
+
+**Link:** VH-83, VH-50, VH-47, spec §13 criterion 2; measurement by the
+production `runPipeline`, not a harness fixture.
+
 ## 2026-08-28 — VH-84: the request count was not the census it read as
 
 Criterion 9 reported "N requests across the page and the job worker, all
