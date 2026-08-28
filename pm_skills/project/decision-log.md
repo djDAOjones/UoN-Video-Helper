@@ -11,6 +11,40 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-08-28 — VH-81: the tail fallback that never once worked
+
+`scanTrackHandlers` read the first 64 MB looking for `moov`, and if it was not
+there read the LAST 64 MB instead. The second read starts at
+`file.size - 64 MB` — an arbitrary offset, almost always mid-`mdat` — and then
+parsed it from byte zero as though it were a box boundary. It found nothing,
+concluded "not ISOBMFF", and reported no subtitle or chapter tracks.
+
+It failed safe, which is why nobody noticed: the report says nothing rather
+than something wrong. But a file with `moov` at the end is exactly the shape
+the fallback exists for — a recorder that did not finalise for streaming — and
+on any such file over 64 MB, a caption track would have gone unmentioned. Spec
+§8.2 says that must never happen silently.
+
+Replaced by a forward walk of top-level boxes: read a 16-byte header, jump by
+the declared size, repeat. Only the `moov` is ever read whole, wherever it
+sits. The 64 MB budget is gone because size no longer enters into it.
+
+**Measured.** On a synthetic file with a 4 MB `mdat` before its `moov`, the old
+scan read 4,000,152 bytes; the new one reads under 4,096. On three real corpus
+files of 7, 18 and 28 MB: 50 kB, 98 kB and 17 kB, in 1-2 ms, with identical
+results — including the QuickTime file's `tmcd` timecode track.
+
+**The test is about bytes read, not bytes present.** Every existing case passed
+on the broken code because each fixture is smaller than 64 MB and the head read
+swallowed it whole; a fixture big enough to reach the bug would be a 64 MB
+allocation in the suite. What the fix has to be is size-independent, so that is
+what is asserted.
+
+This also removes most of what VH-82 was about, which has been narrowed to the
+frame-rate probe.
+
+**Link:** VH-81, VH-82, spec §8.2; `src/media/isobmff.ts`.
+
 ## 2026-08-28 — VH-79 and VH-80: two things the interface said that were not true
 
 **VH-79.** "Starting again will discard the video you just made" is raised with

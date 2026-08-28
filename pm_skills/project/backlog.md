@@ -44,20 +44,11 @@
       Done when: every child is shipped or explicitly cut; then delete the
       ticket.
 
-- [ ] **VH-81 The ISOBMFF tail fallback never finds a trailing moov** (2026-08-28)
-      Intent: `file.slice(tailStart)` starts at an arbitrary offset, so
-      `readBoxes` from position 0 parses mid-`mdat`. It fails safe — reports
-      "not ISOBMFF", so track counts go unreported rather than wrong — but it
-      does not do its job, and a `fastStart: false` source is exactly the shape
-      it exists for.
-      Done when: a file whose `moov` is at the end has its subtitle and chapter
-      tracks counted, proved by a fixture built that way.
-
 - [ ] **VH-82 `inspectFile` runs three times per job** (2026-08-28)
-      Intent: inspect, preflight and process each re-probe frame-rate metrics
-      and re-run `scanTrackHandlers`, which slices up to 64 MB — 128 MB when the
-      head misses and the tail fallback fires. The external review's most real
-      efficiency finding.
+      Intent: inspect, preflight and process each re-derive the same report.
+      The 64 MB slicing is gone — VH-81 made `scanTrackHandlers` read kilobytes
+      — so what remains is the frame-rate probe, which decodes 256 packets each
+      time, and the duplicated container reads around it.
       Done when: a job inspects once and the later stages are handed the report,
       with the worker protocol carrying it rather than re-deriving it.
 

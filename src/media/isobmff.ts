@@ -18,8 +18,25 @@ const SUBTITLE_HANDLERS = new Set(['sbtl', 'subt', 'text', 'clcp'])
 const VIDEO_HANDLER = 'vide'
 const AUDIO_HANDLER = 'soun'
 
-/** How much of the file to search for `moov`. */
-const MAX_SCAN_BYTES = 64 * 1024 * 1024
+/**
+ * Largest `moov` payload to buffer.
+ *
+ * Only the `moov` is ever read whole; the walk that finds it reads box headers.
+ * A `moov` beyond this is not a lecture recording, and refusing to allocate for
+ * it costs a warning rather than the job.
+ */
+const MAX_MOOV_BYTES = 64 * 1024 * 1024
+
+/** Bytes read per step of the top-level walk: enough for a 64-bit box header. */
+const HEADER_BYTES = 16
+
+/**
+ * Ceiling on top-level boxes walked.
+ *
+ * A real file has a handful. A corrupt one could otherwise describe boxes for
+ * as long as the arithmetic keeps landing inside the file.
+ */
+const MAX_TOP_LEVEL_BOXES = 1024
 
 export interface TrackScan {
   /** False when the file is not ISOBMFF at all — Matroska, WebM, or unreadable. */
@@ -129,6 +146,56 @@ function trackId(view: DataView, trak: Box): number | null {
 }
 
 /**
+ * Walks the file's top-level boxes, reading only their headers.
+ *
+ * Each step reads {@link HEADER_BYTES} and jumps by the declared size, so a
+ * `moov` at the end of a multi-gigabyte recording costs kilobytes to find
+ * rather than a 64 MB read that lands mid-`mdat` (VH-81).
+ *
+ * @returns Payload extents by box type, first occurrence winning. Empty when
+ *   the first box does not parse — which is how a Matroska file, or anything
+ *   that is not ISOBMFF, leaves here saying nothing.
+ */
+async function walkTopLevel(file: Blob): Promise<Map<string, { start: number; end: number }>> {
+  const found = new Map<string, { start: number; end: number }>()
+  let offset = 0
+
+  for (let steps = 0; steps < MAX_TOP_LEVEL_BOXES; steps++) {
+    if (offset + 8 > file.size) break
+    const header = new DataView(
+      await file.slice(offset, Math.min(offset + HEADER_BYTES, file.size)).arrayBuffer(),
+    )
+    if (header.byteLength < 8) break
+
+    let size = header.getUint32(0)
+    const type = String.fromCharCode(
+      header.getUint8(4),
+      header.getUint8(5),
+      header.getUint8(6),
+      header.getUint8(7),
+    )
+    let headerSize = 8
+
+    if (size === 1) {
+      if (header.byteLength < 16) break
+      size = Number(header.getBigUint64(8))
+      headerSize = 16
+    } else if (size === 0) {
+      // Extends to the end of the file.
+      size = file.size - offset
+    }
+
+    // A box that does not fit is a truncated or corrupt file. What has been
+    // found so far still stands; guessing past it does not.
+    if (size < headerSize || offset + size > file.size) break
+    if (!found.has(type)) found.set(type, { start: offset + headerSize, end: offset + size })
+    offset += size
+  }
+
+  return found
+}
+
+/**
  * Scans a file for track handler types.
  *
  * @param file - The user's chosen file, read read-only and only in part.
@@ -138,26 +205,23 @@ function trackId(view: DataView, trak: Box): number | null {
  */
 export async function scanTrackHandlers(file: Blob): Promise<TrackScan> {
   try {
-    // `moov` may sit at the end of the file, which is where a recorder that
-    // did not finalise for streaming will have put it. Read the head for the
-    // usual case and fall back to the tail rather than pulling in gigabytes.
-    const headBytes = Math.min(file.size, MAX_SCAN_BYTES)
-    let buffer = await file.slice(0, headBytes).arrayBuffer()
-    let view = new DataView(buffer)
-    let moov = findBox(view, 0, buffer.byteLength, 'moov')
+    const top = await walkTopLevel(file)
+    const moovExtent = top.get('moov')
 
-    if (!moov && file.size > headBytes) {
-      const tailStart = Math.max(0, file.size - MAX_SCAN_BYTES)
-      buffer = await file.slice(tailStart).arrayBuffer()
-      view = new DataView(buffer)
-      moov = findBox(view, 0, buffer.byteLength, 'moov')
-    }
+    // No `moov` at all. `ftyp` still tells us whether this was ISOBMFF, which
+    // is the difference between "no subtitle tracks" and "cannot say".
+    if (!moovExtent) return top.has('ftyp') ? { ...EMPTY, scanned: true } : EMPTY
+    if (moovExtent.end - moovExtent.start > MAX_MOOV_BYTES) return { ...EMPTY, scanned: true }
 
-    // No ftyp and no moov: not ISOBMFF. Say nothing rather than guess.
-    if (!moov) {
-      const isIsobmff = findBox(view, 0, buffer.byteLength, 'ftyp') !== null
-      return isIsobmff ? { ...EMPTY, scanned: true } : EMPTY
-    }
+    // Only the `moov` is read whole, wherever in the file it sits. The old
+    // code read the first 64 MB and, failing that, the LAST 64 MB — starting
+    // at an arbitrary offset that is almost always mid-`mdat`, so parsing it
+    // from byte zero found nothing. It failed safe and never did its job
+    // (VH-81). A forward walk finds a trailing `moov` for the cost of a few
+    // box headers, whatever the file's size.
+    const buffer = await file.slice(moovExtent.start, moovExtent.end).arrayBuffer()
+    const view = new DataView(buffer)
+    const moov: Box = { type: 'moov', start: 0, end: buffer.byteLength }
 
     const traks = readBoxes(view, moov.start, moov.end).filter((box) => box.type === 'trak')
     const handlers: string[] = []

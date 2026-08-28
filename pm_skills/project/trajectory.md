@@ -23,6 +23,13 @@
 
 ## Archived: the review remediation and Band 1's close — see archive/trajectory/trajectory-0003-review-remediation-and-band-1-close.md
 
+### VH-81 — the tail fallback that never once worked
+
+- VH-81 — Shipped 2026-08-28. `scanTrackHandlers` walks top-level box headers
+  forward instead of reading 64 MB from each end, so a trailing `moov` is
+  actually found and the scan costs kilobytes rather than megabytes. See
+  decision-log.
+
 ### VH-79, VH-80 — two things the interface said that were not true
 
 - VH-79 + VH-80 — Shipped 2026-08-28. The discard question no longer survives a

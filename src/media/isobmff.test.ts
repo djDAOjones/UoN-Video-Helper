@@ -139,4 +139,36 @@ describe('scanTrackHandlers', () => {
     )
     expect(scan.subtitleTracks).toBe(1)
   })
+
+  it('reads only headers and the moov, so file size cannot defeat it', async () => {
+    // VH-81: the old scan read the first 64 MB and, failing that, the LAST
+    // 64 MB — from an arbitrary offset that is almost always mid-`mdat`, so it
+    // parsed nothing and reported "not ISOBMFF". Every existing case above
+    // passed anyway, because each fixture is smaller than 64 MB and the head
+    // read swallowed it whole. What the fix has to be is size-independent, so
+    // that is what this measures: bytes read, not bytes present.
+    const blob = new Blob([
+      box('ftyp', new Uint8Array(8)),
+      box('mdat', new Uint8Array(4_000_000)),
+      box('moov', trak(1, 'vide'), trak(2, 'sbtl')),
+    ])
+
+    let bytesRead = 0
+    const counted = {
+      size: blob.size,
+      slice: (start?: number, end?: number) => {
+        const part = blob.slice(start, end)
+        bytesRead += part.size
+        return part
+      },
+    } as unknown as Blob
+
+    const scan = await scanTrackHandlers(counted)
+
+    expect(scan.scanned).toBe(true)
+    expect(scan.subtitleTracks).toBe(1)
+    // Three box headers plus a moov of a few hundred bytes. The 4 MB `mdat` is
+    // jumped over, so a 4 GB one would cost exactly the same.
+    expect(bytesRead).toBeLessThan(4096)
+  })
 })
