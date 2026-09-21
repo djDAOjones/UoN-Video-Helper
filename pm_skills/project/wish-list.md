@@ -47,3 +47,6 @@
   points at `02-technical-rationale.md` as where evidence lives. Moving it
   would clear the reference guideline without losing a sentence. Needs a
   doc-delta. (from: 2026-08-25 spec copy-edit)
+- Script the Xerte package — relocatable build, `README-HOSTING.txt`, zip named
+  for its build id — as one command, so the next upload is not rediscovered.
+  The recipe is in DEV-INFRASTRUCTURE.md -> "Xerte package". (from: VH-14)

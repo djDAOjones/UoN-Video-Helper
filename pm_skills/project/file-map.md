@@ -130,8 +130,8 @@
 - `src/audio/warnings.test.ts` — Triggers every 5.4 row deliberately, including the gapless false-positive guard.
 - `src/audio/warnings.ts` — Detects the spec 5.4 audio-quality conditions; thresholds live with the numbers.
 - `src/config/audio.ts` — Project audio choices — targets, thresholds, chain constants. Standard-defined values live in src/audio/.
-- `src/config/branding.test.ts` — Pins master selection: frame rate first, resolution second, never upscaled.
-- `src/config/branding.ts` — Closing style/colour/mode, the 1 s/4 s split and per-mode duration; opening placeholders.
+- `src/config/branding.test.ts` — Pins master selection: frame rate first, resolution second, never upscaled; and the asset base for dev, Pages and a relocatable build.
+- `src/config/branding.ts` — Closing style/colour/mode, the 1 s/4 s split and per-mode duration; the asset base, resolved against the page for the worker; opening placeholders.
 - `src/config/presets.test.ts` — Pins the preset rules, including that the smaller preset preserves resolution.
 - `src/config/presets.ts` — The two output presets and the encoder config they imply. Purpose-named, never technique-named.
 - `src/config/thresholds.ts` — Pre-flight bands and probe constants — the numbers D8 will replace with measurements.

@@ -23,6 +23,14 @@
 
 ## Archived: the review remediation and Band 1's close — see archive/trajectory/trajectory-0003-review-remediation-and-band-1-close.md
 
+### VH-14 — the Xerte package
+
+- Package half shipped 2026-09-21. A relocatable build that runs from any
+  folder, first zipped as `v0.1.0+20260921.833636a`. Making it found that the
+  worker fetched branding relative to its own script, so under a relative base
+  every job lost its closing; fixed. Caching and the fate of Pages remain. See
+  decision-log.
+
 ### VH-26 — portrait phone video
 
 - Portrait half shipped 2026-08-28. Every portrait phone upload failed on the

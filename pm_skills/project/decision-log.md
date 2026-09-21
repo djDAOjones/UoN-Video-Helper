@@ -11,6 +11,37 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-09-21 — VH-14: a worker resolves a relative URL against itself
+
+**Decision:** the Xerte package is a relocatable build (`BASE_PATH=./`), and
+the branding base is resolved against the page on the main thread and handed
+to the worker in the `process` request, as `backgroundColour` already is.
+
+**Rationale:** Xerte serves an upload from a folder whose path does not exist
+until the upload does, so no absolute base can be baked in; Route Plotter's
+live upload is already this shape. But `BASE_URL` then becomes `./`, and the
+app's only runtime fetch — branding — runs in the worker, where
+`./branding/…` resolves against `assets/job.worker-*.js`. Every closing 404'd,
+and because a branding fetch degrades rather than fails, every job still
+finished, with the result's own notice the only sign.
+
+**Alternatives:** anchoring to the chunk (`new URL('../', import.meta.url)`) is
+one file, but silently couples to `build.assetsDir`'s depth; copying
+`branding/` into `assets/` is a packaging hack that fixes nothing for the next
+host. Resolving where the document is costs one field and holds for any
+layout.
+
+**Verified:** headless Chrome, a real 12 s job, the app served from
+`USER-FILES/…/media/` both directly and inside a same-origin frame. Unfixed:
+404 on `media/assets/branding/closing-tail-blue-1080p.mp4`, output 12.10 s,
+"The closing sequence could not be loaded". Fixed (`833636a`): tail and onset
+200 from `media/branding/`, output 16.04 s ending on the closing card,
+−16.0 LUFS; the dev server gives the same 16.04 s. Xerte itself serves `.js`
+as `application/javascript`, with no CSP, framing or `Cache-Control` headers.
+
+**Link:** VH-14; `src/config/branding.ts` (`resolveBrandingBase`),
+`src/workers/protocol.ts`, `DEV-INFRASTRUCTURE.md` → "Xerte package".
+
 ## 2026-08-28 — VH-26: every portrait phone upload failed, and the guard hid it
 
 Asking whether the phone samples had been obtained is what found this. Five
