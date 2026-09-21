@@ -90,37 +90,42 @@ describe('closing asset naming', () => {
   })
 
   it('builds urls under the base it is given', () => {
-    const base = 'https://static.example/app/branding'
+    const base = 'https://static.example/app/branding/'
     expect(brandingAssetUrl(closingTailName('blue', 2160), base)).toBe(
-      `${base}/closing-tail-blue-2160p.mp4`,
+      `${base}closing-tail-blue-2160p.mp4`,
     )
   })
 
   it('anchors the asset base to BASE_URL, not to a leading slash', () => {
     // The deployed site serves from a subpath, and an absolute URL would 404
-    // there.
-    expect(BRANDING_ASSET_BASE).toBe(`${import.meta.env.BASE_URL}branding`)
+    // there. Every build but the flat Xerte package keeps the masters in their
+    // own folder.
+    expect(BRANDING_ASSET_BASE).toBe(`${import.meta.env.BASE_URL}branding/`)
   })
 
   it('resolves the asset base against the page, for every hosting shape', () => {
     // Regression. The worker fetched a relocatable build's `./branding` against
     // its own script in `assets/`, so every asset 404'd and the job shipped
     // with no closing. The page is the only correct anchor.
-    expect(resolveBrandingBase('http://localhost:5173/', '/branding')).toBe(
-      'http://localhost:5173/branding',
+    expect(resolveBrandingBase('http://localhost:5173/', '/branding/')).toBe(
+      'http://localhost:5173/branding/',
     )
     expect(
       resolveBrandingBase(
         'https://djdaojones.github.io/UoN-Video-Helper/',
-        '/UoN-Video-Helper/branding',
+        '/UoN-Video-Helper/branding/',
       ),
-    ).toBe('https://djdaojones.github.io/UoN-Video-Helper/branding')
+    ).toBe('https://djdaojones.github.io/UoN-Video-Helper/branding/')
     expect(
       resolveBrandingBase(
         'https://host.example/USER-FILES/1-user-site/media/index.html',
-        './branding',
+        './branding/',
       ),
-    ).toBe('https://host.example/USER-FILES/1-user-site/media/branding')
+    ).toBe('https://host.example/USER-FILES/1-user-site/media/branding/')
+    // The flat Xerte package: the masters sit beside the page itself.
+    expect(
+      resolveBrandingBase('https://host.example/USER-FILES/1-user-site/media/index.html', './'),
+    ).toBe('https://host.example/USER-FILES/1-user-site/media/')
   })
 })
 
