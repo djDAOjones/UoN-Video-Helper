@@ -11,6 +11,33 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-09-21 — VH-14: the Xerte package is one flat folder
+
+**Decision:** the Xerte package has its own build, `npm run build:xerte`
+(`vite build --mode xerte`): relocatable as before, and flat — every file
+beside `index.html`, no folders — because that is how the maintainer uploads
+it. `check:build` builds it and fails if it ever contains a folder.
+
+**Rationale:** the layout is a property of the upload, not of the app, so it
+is decided once in `vite.config.ts` and the app reads it: `__BRANDING_DIR__`
+is `branding/` everywhere else and empty here. The masters are emitted by a
+plugin rather than moved after Vite's `public/` copy, because `closeBundle`
+hooks run in parallel and ordering a move against the README exclusion would
+be luck; with `publicDir` off, nothing else from `public/` can ride along.
+
+**Alternatives:** post-processing `dist/` (moving files, rewriting
+`index.html`) leaves the bundle fetching branding from a folder that no longer
+exists; moving `public/branding/` to the root for every build changes the URLs
+Pages serves, for the sake of one host.
+
+**Verified:** the harness in the entry below, on the build from `899a448`:
+framed and direct, every request a file directly beside `index.html`, all 200;
+output 16.04 s ending on the closing; dev-only controls hidden. The folder
+check rejects the previous package (`assets/`, `branding/`).
+
+**Link:** VH-14; `vite.config.ts`, `scripts/check-build.mjs`,
+`src/config/branding.ts`.
+
 ## 2026-09-21 — VH-14: a worker resolves a relative URL against itself
 
 **Decision:** the Xerte package is a relocatable build (`BASE_PATH=./`), and

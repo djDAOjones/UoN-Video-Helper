@@ -184,11 +184,12 @@
       unadvertised pilot; the intended home is an internal server.
       **Every push to `main` deploys** — there is no separate act of
       publishing. VH-65 hardens that boundary.
-      2026-09-21: the maintainer is uploading it to Xerte by hand, as a
-      relocatable build (DEV-INFRASTRUCTURE.md -> "Xerte package"); first zip
-      `v0.1.0+20260921.833636a`. Making it found every closing 404'ing under a
-      relative base — fixed, see decision-log. Still open: the cache strategy,
-      and whether Pages stays up once Xerte is live.
+      2026-09-21: the maintainer is uploading it to Xerte by hand, as a flat,
+      relocatable package from `npm run build:xerte` (DEV-INFRASTRUCTURE.md ->
+      "Xerte package"); first zip `v0.1.0+20260921.899a448`. Making it found
+      every closing 404'ing under a relative base — fixed, see decision-log.
+      Still open: the cache strategy, and whether Pages stays up once Xerte is
+      live.
       Done when: the move to internal hosting is planned and the cache strategy
       for offline-after-first-load is in place.
 

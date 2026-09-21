@@ -25,11 +25,11 @@
 
 ### VH-14 — the Xerte package
 
-- Package half shipped 2026-09-21. A relocatable build that runs from any
-  folder, first zipped as `v0.1.0+20260921.833636a`. Making it found that the
-  worker fetched branding relative to its own script, so under a relative base
-  every job lost its closing; fixed. Caching and the fate of Pages remain. See
-  decision-log.
+- Package half shipped 2026-09-21. `npm run build:xerte` makes a relocatable,
+  flat package that runs from any folder; first zipped as
+  `v0.1.0+20260921.899a448`. Making it found that the worker fetched branding
+  relative to its own script, so under a relative base every job lost its
+  closing; fixed. Caching and the fate of Pages remain. See decision-log.
 
 ### VH-26 — portrait phone video
 

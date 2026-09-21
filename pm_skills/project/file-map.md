@@ -48,7 +48,7 @@
 - `spike-real.html` — Maintainer page: runs a real recording end to end and reports what came out.
 - `spike-shapes.html` — Maintainer page: do the corpus's odd shapes — 852x480, 4:3, 16:10, mono, 44.1 kHz, silent — reach a correct output?
 - `tsconfig.json` — Strict TypeScript. `noUncheckedIndexedAccess` matters here — this codebase indexes buffers.
-- `vite.config.ts` — Build config and the build-identity injection (`__APP_VERSION__`, `__BUILD_ID__`).
+- `vite.config.ts` — Build config, the build-identity injection (`__APP_VERSION__`, `__BUILD_ID__`), and the flat Xerte mode (`--mode xerte`, `__BRANDING_DIR__`).
 
 ## .claude
 
@@ -95,7 +95,7 @@
 ## scripts
 
 - `scripts/build-branding.mjs` — Converts the UoN masters into the shipped onset/tail assets. Run by hand, not by `build`.
-- `scripts/check-build.mjs` — Builds the production bundle to a temp directory, so the gate can check it without writing dist/.
+- `scripts/check-build.mjs` — Builds both production bundles, the site and the flat Xerte package, to a temp directory without writing dist/; fails if the package has a folder.
 - `scripts/check-placeholders.mjs` — Tier 0 of the gate: fails on stray template markers, reports key-shaped strings.
 - `scripts/gen-placeholder-branding.mjs` — Generates the placeholder masters with a local ffmpeg. Authoring tool only.
 - `scripts/run-in-engines.mjs` — Runs a spike page in Chrome, Firefox and Safari and prints all three. Maintainer tool; never part of `check`.
