@@ -10,7 +10,7 @@
  */
 
 import { PRESETS, outputShapeFor } from '../config/presets'
-import { CLOSING_TAIL_SECONDS, type BrandingMode } from '../config/branding'
+import { CLOSING_TAIL_SECONDS, resolveBrandingBase, type BrandingMode } from '../config/branding'
 import { buildFixture } from '../acceptance/fixtures'
 import { inspectFile, openInput } from '../media/inspect'
 import { OpfsWorkspace } from '../media/opfs'
@@ -65,6 +65,7 @@ async function run(
       workspace,
       branding: { opening: false, closing: true, mode },
       backgroundColour: '#000000',
+      brandingBaseUrl: resolveBrandingBase(document.baseURI),
     })
 
     const produced = await inspectFile(result.file)

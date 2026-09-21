@@ -18,6 +18,7 @@
  */
 
 import { OUTPUT_SAMPLE_RATE, PRESETS, outputShapeFor } from '../config/presets'
+import { resolveBrandingBase } from '../config/branding'
 import { buildFixture } from '../acceptance/fixtures'
 import { canEncodeAudio } from '../media/capability'
 import { inspectFile, openInput } from '../media/inspect'
@@ -158,6 +159,7 @@ for (const testCase of CASES) {
       // conform has to letterbox rather than stretch.
       branding: { opening: false, closing: true },
       backgroundColour: '#000000',
+      brandingBaseUrl: resolveBrandingBase(document.baseURI),
     })
 
     const produced = await inspectFile(result.file)

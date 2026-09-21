@@ -159,6 +159,7 @@ async function handleProcess(
     readonly presetId: PresetId
     readonly branding: BrandingChoice
     readonly backgroundColour: string
+    readonly brandingBaseUrl: string
     readonly subtitleVtt?: string
   },
   signal: AbortSignal,
@@ -201,6 +202,7 @@ async function handleProcess(
       workspace,
       branding: options.branding,
       backgroundColour: options.backgroundColour,
+      brandingBaseUrl: options.brandingBaseUrl,
       ...(options.subtitleVtt ? { subtitleVtt: options.subtitleVtt } : {}),
       signal,
       onProgress: ({ stage, fraction }) => post({ kind: 'stage', id, stage, fraction }),

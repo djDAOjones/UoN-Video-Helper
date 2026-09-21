@@ -54,6 +54,12 @@ export type WorkerRequest =
       readonly branding: BrandingChoice
       /** Resolved D1 brand background; the worker has no document. */
       readonly backgroundColour: string
+      /**
+       * Where the branding masters are, resolved against the page for the same
+       * reason: relative to the worker's own script, a relocatable build's
+       * `./branding` misses every asset (`resolveBrandingBase`).
+       */
+      readonly brandingBaseUrl: string
       /** A user-supplied WebVTT sidecar, verbatim. */
       readonly subtitleVtt?: string
     }

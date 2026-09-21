@@ -25,7 +25,7 @@ import {
 } from './core/keep-awake'
 import { adoptLogRecords, log, setMinimumLogLevel } from './core/logger'
 import { APP_VERSION, BUILD_ID } from './core/version'
-import { CLOSING_DEFAULTS, type BrandingMode } from './config/branding'
+import { CLOSING_DEFAULTS, resolveBrandingBase, type BrandingMode } from './config/branding'
 import type { PresetId } from './config/presets'
 import {
   SELECTION_DEADLINE_MS,
@@ -931,6 +931,7 @@ function beginJob(file: File): void {
         mode: chosenClosingMode() ?? CLOSING_DEFAULTS.mode,
       },
       backgroundColour: brandBackground(),
+      brandingBaseUrl: resolveBrandingBase(document.baseURI),
       ...(subtitleVtt ? { subtitleVtt } : {}),
     },
     // Silence, not duration. A job reports a stage every thirty frames, so a

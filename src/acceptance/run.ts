@@ -9,6 +9,7 @@
 
 import { PRESETS, outputShapeFor } from '../config/presets'
 import { TARGET_INTEGRATED_LUFS } from '../config/audio'
+import { resolveBrandingBase } from '../config/branding'
 import { inspectFile, openInput } from '../media/inspect'
 import { OpfsWorkspace, ROOT_DIRECTORY, sweepOrphanedJobs } from '../media/opfs'
 import { verifyOutputAudio } from '../media/output-verification'
@@ -83,6 +84,7 @@ async function process(
     workspace,
     branding: options.branding,
     backgroundColour: '#000000',
+    brandingBaseUrl: resolveBrandingBase(document.baseURI),
     ...(options.signal ? { signal: options.signal } : {}),
   })
   // Branding shifts everything; the loudness check needs to know by how much.
@@ -154,6 +156,7 @@ async function processInWorker(
     // requests by never making one.
     branding: { opening: false, closing: true },
     backgroundColour: '#000000',
+    brandingBaseUrl: resolveBrandingBase(document.baseURI),
   })
 
   const stopped = await ask(worker, { kind: 'egress', id: 11, watching: false }, 10_000)
@@ -736,6 +739,7 @@ async function checkCancellation(log: Report): Promise<Check> {
       presetId: 'best',
       branding: { opening: false, closing: false },
       backgroundColour: '#000000',
+      brandingBaseUrl: resolveBrandingBase(document.baseURI),
     })
 
     // Cancel only once the job has genuinely started writing. Cancelling a job

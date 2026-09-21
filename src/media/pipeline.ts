@@ -174,6 +174,11 @@ export interface PipelineOptions {
   /** Resolved D1 brand background; the worker has no document to read it from. */
   readonly backgroundColour: string
   /**
+   * Where the branding masters are, as an absolute URL — resolved against the
+   * page for the same reason, by `resolveBrandingBase`.
+   */
+  readonly brandingBaseUrl: string
+  /**
    * A user-supplied WebVTT sidecar, verbatim. Its cue times are offset by the
    * opening sequence's duration; its text is never touched (spec 8.1).
    */
@@ -229,6 +234,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     audioDurationSeconds,
     workspace,
     branding,
+    brandingBaseUrl,
     signal,
     onProgress,
   } = options
@@ -276,10 +282,10 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
   // Branding is fetched before anything is written, so a missing asset is
   // known about while the job can still be described honestly.
   const opening: BrandingClip | null = branding.opening
-    ? await loadBrandingClip('opening', shape)
+    ? await loadBrandingClip('opening', shape, { brandingBaseUrl })
     : null
   const closing: BrandingClip | null = branding.closing
-    ? await loadBrandingClip('closing', shape, colourOption(branding))
+    ? await loadBrandingClip('closing', shape, { brandingBaseUrl, ...colourOption(branding) })
     : null
 
   // The build is only fetched for the modes that composite it. If it fails to
@@ -290,6 +296,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
   const build: BrandingClip | null =
     closing && modeNeedsOnset(requestedMode)
       ? await loadClosingOnset(shape, {
+          brandingBaseUrl,
           ...(branding.style ? { style: branding.style } : {}),
           ...(branding.colour ? { colour: branding.colour } : {}),
         })

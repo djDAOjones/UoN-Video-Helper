@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import {
+  BRANDING_ASSET_BASE,
   BRANDING_DURATIONS,
   CLOSING_DEFAULTS,
   CLOSING_ONSET_SECONDS,
@@ -13,6 +14,7 @@ import {
   closingTailName,
   modeNeedsOnset,
   openingAssetName,
+  resolveBrandingBase,
   selectOpeningMaster,
   type BrandingColour,
   type BrandingStyle,
@@ -87,13 +89,38 @@ describe('closing asset naming', () => {
     expect(closingTailName('blue', 1080).endsWith('.mp4')).toBe(true)
   })
 
-  it('builds urls under the stable asset base', () => {
-    // Anchored to BASE_URL, not to a leading slash: the deployed site serves
-    // from a subpath and an absolute URL would 404 there.
-    expect(brandingAssetUrl(closingTailName('blue', 2160))).toBe(
-      `${import.meta.env.BASE_URL}branding/closing-tail-blue-2160p.mp4`,
+  it('builds urls under the base it is given', () => {
+    const base = 'https://static.example/app/branding'
+    expect(brandingAssetUrl(closingTailName('blue', 2160), base)).toBe(
+      `${base}/closing-tail-blue-2160p.mp4`,
     )
-    expect(brandingAssetUrl('x.mp4').startsWith(import.meta.env.BASE_URL)).toBe(true)
+  })
+
+  it('anchors the asset base to BASE_URL, not to a leading slash', () => {
+    // The deployed site serves from a subpath, and an absolute URL would 404
+    // there.
+    expect(BRANDING_ASSET_BASE).toBe(`${import.meta.env.BASE_URL}branding`)
+  })
+
+  it('resolves the asset base against the page, for every hosting shape', () => {
+    // Regression. The worker fetched a relocatable build's `./branding` against
+    // its own script in `assets/`, so every asset 404'd and the job shipped
+    // with no closing. The page is the only correct anchor.
+    expect(resolveBrandingBase('http://localhost:5173/', '/branding')).toBe(
+      'http://localhost:5173/branding',
+    )
+    expect(
+      resolveBrandingBase(
+        'https://djdaojones.github.io/UoN-Video-Helper/',
+        '/UoN-Video-Helper/branding',
+      ),
+    ).toBe('https://djdaojones.github.io/UoN-Video-Helper/branding')
+    expect(
+      resolveBrandingBase(
+        'https://host.example/USER-FILES/1-user-site/media/index.html',
+        './branding',
+      ),
+    ).toBe('https://host.example/USER-FILES/1-user-site/media/branding')
   })
 })
 

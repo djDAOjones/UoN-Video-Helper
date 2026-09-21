@@ -443,6 +443,35 @@ What is known, and constrains the eventual internal answer:
   work offline after first load (spec §11).
 - No analytics that carries filenames or media characteristics.
 
+### Xerte package
+
+The intended home is a UoN-hosted app on `xerte.nottingham.ac.uk` (D5,
+VH-14), uploaded by hand as a zip. Xerte serves an upload from a folder whose
+path is not known until it exists, so the package is a **relocatable** build —
+every URL relative to `index.html`:
+
+```bash
+BASE_PATH=./ npm run build
+```
+
+Zip the *contents* of `dist/`, so `index.html` sits at the top level beside
+`assets/` and `branding/`, and add a `README-HOSTING.txt` — the shape Route
+Plotter's Xerte upload already runs in. Name the zip for its build identity
+(`uon-video-helper-v0.1.0-<sha>-site.zip`), and build it from a commit, never
+a dirty tree, or the `buildId` inside it names code it does not contain.
+
+A relative base has one trap, handled in code rather than in the packaging: a
+worker resolves a relative URL against its own script in `assets/`, not the
+page, so the branding base is resolved on the main thread and passed in
+(`resolveBrandingBase`). Before that, every closing asset 404'd under a
+relative base and jobs shipped with no branding.
+
+What Xerte sends, checked 2026-09-21: `.js` as `application/javascript`, no
+CSP, no framing or permissions headers, and no `Cache-Control`. The last one
+matters on update: a browser may hold a heuristically cached `index.html`, so
+upload the new files over the old rather than clearing `assets/` first, and a
+stale page still finds the chunks it names.
+
 ---
 
 ## Utility scripts

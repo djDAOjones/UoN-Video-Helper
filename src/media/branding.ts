@@ -301,7 +301,7 @@ async function fetchClip(url: string, segment: BrandingSegment): Promise<Brandin
 export async function loadBrandingClip(
   segment: BrandingSegment,
   shape: OutputShape,
-  options: { readonly colour?: BrandingColour } = {},
+  options: { readonly brandingBaseUrl: string; readonly colour?: BrandingColour },
 ): Promise<BrandingClip | null> {
   if (segment === 'opening') {
     log.info('branding', 'opening requested but dormant', { reason: 'no approved asset (VH-23)' })
@@ -309,6 +309,7 @@ export async function loadBrandingClip(
   }
   const url = brandingAssetUrl(
     closingTailName(options.colour ?? CLOSING_DEFAULTS.colour, brandingAssetHeight(shape.height)),
+    options.brandingBaseUrl,
   )
   return fetchClip(url, segment)
 }
@@ -323,7 +324,11 @@ export async function loadBrandingClip(
  */
 export async function loadClosingOnset(
   shape: OutputShape,
-  options: { readonly style?: BrandingStyle; readonly colour?: BrandingColour } = {},
+  options: {
+    readonly brandingBaseUrl: string
+    readonly style?: BrandingStyle
+    readonly colour?: BrandingColour
+  },
 ): Promise<BrandingClip | null> {
   const url = brandingAssetUrl(
     closingOnsetName(
@@ -331,6 +336,7 @@ export async function loadClosingOnset(
       options.colour ?? CLOSING_DEFAULTS.colour,
       brandingAssetHeight(shape.height),
     ),
+    options.brandingBaseUrl,
   )
   return fetchClip(url, 'closing')
 }

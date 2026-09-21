@@ -180,16 +180,39 @@ export function selectOpeningMaster(output: {
 /* ---------------------------------------------------------------------- */
 
 /**
- * Where the assets are served from.
+ * Where the assets are served from, relative to the page.
  *
  * Derived from Vite's `BASE_URL` rather than hard-coded to `/branding`,
  * because a GitHub Pages project site serves from `/<repo>/` and every
  * branding fetch would 404 against an absolute path. `BASE_URL` always ends
- * in a slash, so this is `/branding` locally and `/UoN-Video-Helper/branding`
- * when deployed.
+ * in a slash, so this is `/branding` locally, `/UoN-Video-Helper/branding` on
+ * Pages, and `./branding` in a relocatable build (`BASE_PATH=./`, the Xerte
+ * package). Page-relative, so nothing fetches it directly: see
+ * {@link resolveBrandingBase}.
  */
 export const BRANDING_ASSET_BASE = `${import.meta.env.BASE_URL}branding`
 
-export function brandingAssetUrl(name: string): string {
-  return `${BRANDING_ASSET_BASE}/${name}`
+/**
+ * Resolves {@link BRANDING_ASSET_BASE} against the page, for the worker.
+ *
+ * The branding fetch runs in the worker, and a worker resolves a relative URL
+ * against its own script, not the page. A relocatable build's `./branding`
+ * therefore pointed into `assets/`, next to `job.worker-*.js`: every asset
+ * 404'd, and since a branding fetch degrades rather than fails, every job
+ * finished without its closing. Only the main thread knows the page, so it
+ * resolves here and the worker is handed an absolute URL — the same reason
+ * `backgroundColour` crosses the boundary already resolved.
+ *
+ * @param pageUrl - The document's base URL, `document.baseURI`.
+ * @param base - The page-relative base; a parameter so each hosting shape can
+ *   be tested, where `BASE_URL` is fixed per build.
+ * @returns An absolute URL with no trailing slash.
+ */
+export function resolveBrandingBase(pageUrl: string, base = BRANDING_ASSET_BASE): string {
+  return new URL(base, pageUrl).href
+}
+
+/** @param baseUrl - From {@link resolveBrandingBase}. */
+export function brandingAssetUrl(name: string, baseUrl: string): string {
+  return `${baseUrl}/${name}`
 }

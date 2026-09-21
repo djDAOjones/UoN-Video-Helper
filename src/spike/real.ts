@@ -11,6 +11,7 @@
  */
 
 import { TARGET_INTEGRATED_LUFS, TRUE_PEAK_CEILING_DBTP } from '../config/audio'
+import { resolveBrandingBase } from '../config/branding'
 import { PRESETS, outputShapeFor } from '../config/presets'
 import { measureLoudness } from '../acceptance/measure'
 import { inspectFile, openInput } from '../media/inspect'
@@ -71,6 +72,7 @@ try {
     workspace,
     branding: { opening: false, closing: true },
     backgroundColour: '#000000',
+    brandingBaseUrl: resolveBrandingBase(document.baseURI),
     onProgress: ({ stage, fraction }) => {
       log.textContent = `${lines.join('\n')}\n… ${stage} ${(fraction * 100).toFixed(0)}%`
     },

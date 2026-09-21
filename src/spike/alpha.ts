@@ -19,6 +19,7 @@ import { loadBrandingClip, loadClosingOnset } from '../media/branding'
 import { BrandingCompositor } from '../media/composite'
 import { fitRectangle } from '../media/conform'
 import { outputShapeFor, PRESETS } from '../config/presets'
+import { resolveBrandingBase } from '../config/branding'
 
 const log = document.getElementById('log') as HTMLPreElement
 const lines: string[] = []
@@ -99,13 +100,20 @@ await probe('tail blue (opaque, H.264)', '/branding/closing-tail-blue-2160p.mp4'
 // for the onsets as well as MP4 for the tails.
 say('\n=== through the app loader (src/media/branding.ts)')
 const shape = outputShapeFor(PRESETS.best, { width: 3840, height: 2160, frameRate: 25 })
-const onset = await loadClosingOnset(shape, { style: 'slide', colour: 'white' })
+const onset = await loadClosingOnset(shape, {
+  brandingBaseUrl: resolveBrandingBase(document.baseURI),
+  style: 'slide',
+  colour: 'white',
+})
 say(
   onset
     ? `  loadClosingOnset  -> ${onset.durationSeconds.toFixed(3)}s  PASS`
     : '  loadClosingOnset  -> null  FAIL (WebM not accepted?)',
 )
-const tail = await loadBrandingClip('closing', shape, { colour: 'white' })
+const tail = await loadBrandingClip('closing', shape, {
+  brandingBaseUrl: resolveBrandingBase(document.baseURI),
+  colour: 'white',
+})
 say(
   tail
     ? `  loadBrandingClip  -> ${tail.durationSeconds.toFixed(3)}s  PASS`
@@ -200,7 +208,11 @@ function classify(rgb: readonly number[], colour: 'white' | 'blue'): string {
 async function measureReadback(colour: 'white' | 'blue'): Promise<void> {
   say(`\n=== VH-34 · fade ${colour} onset at t=${ONSET_SECONDS}s`)
   const shape = outputShapeFor(PRESETS.best, { width: 1920, height: 1080, frameRate: 25 })
-  const clip = await loadClosingOnset(shape, { style: 'fade', colour })
+  const clip = await loadClosingOnset(shape, {
+    brandingBaseUrl: resolveBrandingBase(document.baseURI),
+    style: 'fade',
+    colour,
+  })
   const track = clip ? await clip.input.getPrimaryVideoTrack() : null
   if (!track) {
     say('  FAIL — onset did not load')
