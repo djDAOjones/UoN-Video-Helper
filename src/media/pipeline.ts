@@ -671,14 +671,18 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       : sink.samples()
     for await (const sample of samples) {
       throwIfAborted(laneSignal)
-      let processed
+      let processed: Iterable<AudioSample>
       try {
         processed = processContent.process(sample)
       } finally {
         sample.close()
       }
-      if (!processed) continue
-      await emit(processed)
+      // More than one block only where a hole is filled, which can be long;
+      // so cancel is heard between them.
+      for (const block of processed) {
+        throwIfAborted(laneSignal)
+        await emit(block)
+      }
     }
 
     // The limiter holds a look-ahead window, so the stream simply stopping lost

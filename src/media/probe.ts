@@ -142,6 +142,41 @@ async function probeAudio(
 }
 
 /**
+ * The time a job will take, from what the probe measured.
+ *
+ * Audio that the probe window did not reach — a track that starts late, or a
+ * trim that starts before the sound does — is unmeasured, not infinitely
+ * slow. Dividing by its zero speed made the estimate infinite, and every such
+ * job was told it would be "very long" (found on VH-95's review). Unmeasured
+ * audio counts nothing: it is cheap next to the video.
+ */
+export function probeEstimate(measured: {
+  readonly videoFrames: number
+  readonly videoSeconds: number
+  readonly frameRate: number
+  readonly durationSeconds: number
+  readonly audio: { readonly seconds: number; readonly wallSeconds: number } | null
+}): { videoFramesPerSecond: number; audioRealtimeFactor: number | null; estimatedSeconds: number } {
+  const videoFramesPerSecond = measured.videoFrames / measured.videoSeconds
+  const totalFrames = measured.durationSeconds * measured.frameRate
+  const videoSeconds = totalFrames / videoFramesPerSecond
+
+  // Pass 1 analyses audio a second time, before pass 2 processes it, so the
+  // audio cost is counted twice.
+  const { audio } = measured
+  const audioRealtimeFactor =
+    audio && audio.wallSeconds > 0 && audio.seconds > 0 ? audio.seconds / audio.wallSeconds : null
+  const audioSeconds =
+    audioRealtimeFactor !== null ? (measured.durationSeconds / audioRealtimeFactor) * 2 : 0
+
+  return {
+    videoFramesPerSecond,
+    audioRealtimeFactor,
+    estimatedSeconds: Math.round(videoSeconds + audioSeconds),
+  }
+}
+
+/**
  * Measures throughput on the real file and extrapolates to the whole job.
  *
  * @param file - The user's chosen file, opened read-only.
@@ -174,24 +209,20 @@ export async function calibrationProbe(options: {
     }
 
     const audio = await probeAudio(input, signal, fromSeconds)
-
-    const videoFramesPerSecond = video.frames / video.seconds
-    const totalFrames = durationSeconds * shape.frameRate
-    const videoSeconds = totalFrames / videoFramesPerSecond
-
-    // Pass 1 analyses audio a second time, before pass 2 processes it, so the
-    // audio cost is counted twice.
-    const audioRealtimeFactor =
-      audio && audio.wallSeconds > 0 ? audio.seconds / audio.wallSeconds : null
-    const audioSeconds =
-      audioRealtimeFactor !== null ? (durationSeconds / audioRealtimeFactor) * 2 : 0
+    const { videoFramesPerSecond, audioRealtimeFactor, estimatedSeconds } = probeEstimate({
+      videoFrames: video.frames,
+      videoSeconds: video.seconds,
+      frameRate: shape.frameRate,
+      durationSeconds,
+      audio,
+    })
 
     const result: ProbeResult = {
       measured: true,
       framesEncoded: video.frames,
       videoFramesPerSecond,
       audioRealtimeFactor,
-      estimatedSeconds: Math.round(videoSeconds + audioSeconds),
+      estimatedSeconds,
     }
     log.info('probe', 'calibration complete', {
       framesEncoded: result.framesEncoded,

@@ -15,7 +15,7 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 194 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 195 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 23 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
@@ -23,7 +23,7 @@
 - `public` — 13 file(s)
 - `reviews` — 7 file(s)
 - `scripts` — 5 file(s)
-- `src` — 133 file(s)
+- `src` — 134 file(s)
 - `test` — 6 file(s)
 <!-- /file-map-index -->
 
@@ -195,6 +195,7 @@
 - `src/media/pipeline.ts` — Decode to encode to mux, streaming to OPFS, with progress and cancellation.
 - `src/media/preflight.test.ts` — Triggers all four spec 7.3 outcomes deliberately — acceptance criterion 7.
 - `src/media/preflight.ts` — The pure verdict: given what was measured, proceed / warn / discourage / block.
+- `src/media/probe.test.ts` — The probe's estimate stays finite: audio its window never reached is unmeasured, not infinitely slow.
 - `src/media/probe.ts` — The 3-second calibration probe: real decode and encode on the real file and device.
 - `src/media/save.test.ts` — Pins the suggested filename and the guard that refuses the source as a destination.
 - `src/media/save.ts` — Streams the result to the user's chosen location, refuses the source, and hands back what to release.

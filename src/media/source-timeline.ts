@@ -117,32 +117,52 @@ export class AudioGapFiller {
   }
 
   /**
-   * Silence that must precede the sample at `timestampSeconds`, or `null`.
+   * How many frames of silence must precede the sample at `timestampSeconds`;
+   * zero for none. Counted as consumed here, so the caller emits exactly that
+   * much — through {@link AudioGapFiller.silence}, never as one allocation.
    *
    * The FIRST sample never produces silence however late it is: a track that
    * starts late is offset, not gapped, and padding it would move its end as
-   * well as its start. The caller carries that offset instead.
+   * well as its start. The caller carries that offset instead. (With an
+   * anchor, the first sample is measured from the anchor like any other.)
    *
    * A sample arriving EARLIER than expected — an overlap — yields nothing.
    * There is no correct amount of audio to remove, and running the two
    * regions contiguously is what a player does with them.
    */
-  silenceBefore(timestampSeconds: number): Float32Array[] | null {
+  framesMissingBefore(timestampSeconds: number): number {
     if (this.first === null) {
       if (this.anchorSeconds === null) {
         this.first = Number.isFinite(timestampSeconds) ? timestampSeconds : 0
-        return null
+        return 0
       }
       this.first = this.anchorSeconds
     }
 
     const expected = Math.round((timestampSeconds - this.first) * this.sampleRate)
     const missing = expected - this.framesConsumed
-    if (!Number.isFinite(missing) || missing <= 0) return null
+    if (!Number.isFinite(missing) || missing <= 0) return 0
 
     this.framesConsumed += missing
     this.inserted += missing
-    return Array.from({ length: this.channelCount }, () => new Float32Array(missing))
+    return missing
+  }
+
+  /**
+   * Silence, as blocks of at most `blockFrames`, each made only when it is
+   * asked for.
+   *
+   * A hole can be half an hour long. Made in one piece it would hold the
+   * whole of it in memory; made like this, it holds one block (AGENTS.md,
+   * "Streaming, not buffering"). A fresh block each time, because the chain
+   * may process a block in place.
+   */
+  *silence(frames: number, blockFrames: number): Generator<Float32Array[]> {
+    const size = Math.max(1, Math.floor(blockFrames))
+    for (let done = 0; done < frames; done += size) {
+      const length = Math.min(size, frames - done)
+      yield Array.from({ length: this.channelCount }, () => new Float32Array(length))
+    }
   }
 
   /** Records frames of real audio consumed, after any silence for them. */

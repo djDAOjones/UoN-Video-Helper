@@ -36,7 +36,7 @@ import { AudioAnalyser, type AudioAnalysis } from '../audio/analyse'
 import { AudioChain } from '../audio/chain'
 import { solveChainGainDb } from '../audio/gain-solve'
 import { buildGainEnvelope, type GainEnvelope } from '../audio/macrolevel'
-import { LIMITER } from '../config/audio'
+import { GAP_SILENCE_BLOCK_SECONDS, LIMITER } from '../config/audio'
 import { log } from '../core/logger'
 import { applyBoundaryFade } from './branding'
 import { toPlanar, toSample } from './audio-frames'
@@ -134,8 +134,10 @@ async function traverse(
     try {
       const kept = clipAudioBlock(toPlanar(sample, channelCount), sample.timestamp, sampleRate, range)
       if (kept) {
-        const silence = gaps.silenceBefore(kept.timestampSeconds)
-        if (silence) await emit(chain ? chain.process(silence) : silence)
+        const missing = gaps.framesMissingBefore(kept.timestampSeconds)
+        for (const silence of gaps.silence(missing, sampleRate * GAP_SILENCE_BLOCK_SECONDS)) {
+          await emit(chain ? chain.process(silence) : silence)
+        }
         gaps.accept(kept.planar[0]?.length ?? 0)
         await emit(chain ? chain.process(kept.planar) : kept.planar)
       }
@@ -370,19 +372,6 @@ export async function planAudio(
   }
 }
 
-/** Joins two planar blocks channel by channel. Only a gap makes one needed. */
-function concatPlanar(a: Float32Array[], b: Float32Array[]): Float32Array[] {
-  if (a.length === 0) return b
-  if (b.length === 0) return a
-  return a.map((plane, channel) => {
-    const other = b[channel] ?? new Float32Array(0)
-    const joined = new Float32Array(plane.length + other.length)
-    joined.set(plane)
-    joined.set(other, plane.length)
-    return joined
-  })
-}
-
 /**
  * The pass-C processor for CONTENT audio only.
  *
@@ -459,20 +448,28 @@ export function createContentAudioProcessor(
 
   return {
     process: (sample: AudioSample) => {
+      // Read out of the sample now: the caller closes it as soon as this
+      // returns, before the blocks below are made.
       const kept = clipAudioBlock(
         toPlanar(sample, channelCount),
         sample.timestamp,
         sampleRate,
         options.keptRange,
       )
-      if (!kept) return null
-      // Silence for the hole this sample sits after, then the sample itself.
-      // Fed through the chain as one continuous stream, and emitted as one
-      // block, so the caller never has to know a gap happened.
-      const silence = gaps.silenceBefore(kept.timestampSeconds)
+      if (!kept) return []
+      const missing = gaps.framesMissingBefore(kept.timestampSeconds)
       gaps.accept(kept.planar[0]?.length ?? 0)
-      if (!silence) return emit(chain.process(kept.planar))
-      return emit(concatPlanar(chain.process(silence), chain.process(kept.planar)))
+      // Silence for the hole this sample sits after, then the sample itself,
+      // through the chain as one continuous stream. Made a block at a time as
+      // the caller takes them, so a long hole never sits in memory whole.
+      return (function* (): Generator<AudioSample> {
+        for (const silence of gaps.silence(missing, sampleRate * GAP_SILENCE_BLOCK_SECONDS)) {
+          const block = emit(chain.process(silence))
+          if (block) yield block
+        }
+        const block = emit(chain.process(kept.planar))
+        if (block) yield block
+      })()
     },
     flush: () => emit(chain.flush()),
   }
@@ -489,8 +486,12 @@ export function createContentAudioProcessor(
  * that are supposed to describe the same audio.
  */
 export interface ContentAudioProcessor {
-  /** @returns `null` when the chain emitted nothing for this input. */
-  process(sample: AudioSample): AudioSample | null
+  /**
+   * The processed audio for one source sample: silence for any hole before
+   * it, then the sample. Made lazily, so take every block before the next
+   * call — the chain is one stream and they come out in its order.
+   */
+  process(sample: AudioSample): Iterable<AudioSample>
   /**
    * The limiter's remaining look-ahead, timestamped to follow the last block.
    * Call once, after the last sample.

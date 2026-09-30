@@ -448,24 +448,7 @@ async function handlePreflight(
       report.audio !== null,
     )
 
-    const [encode, canEncodeAac] = await Promise.all([
-      checkEncodeSupport(videoEncoderConfigFor(shape)),
-      // A silent source asks nothing of the audio encoder, so it cannot be
-      // blocked by one. Everything else asks for the exact configuration the
-      // job will use, at the source's own channel count — the figure differs
-      // between mono and stereo, and so might the answer.
-      report.audio
-        ? canEncodeAudio({
-            codec: 'mp4a.40.2',
-            sampleRate: OUTPUT_SAMPLE_RATE,
-            numberOfChannels: report.audio.channelCount,
-            bitrate:
-              report.audio.channelCount <= 1
-                ? preset.audioBitrateMonoBps
-                : preset.audioBitrateStereoBps,
-          })
-        : Promise.resolve(true),
-    ])
+    const encode = await checkEncodeSupport(videoEncoderConfigFor(shape))
 
     // Spec 5.4: derived from the analysis pass and shown BEFORE processing.
     // A lecturer who is told their recording is inaudible only after waiting
@@ -479,17 +462,40 @@ async function handlePreflight(
     // disclosure. Nothing is lost by skipping: the job is blocked, and the
     // block says why and what to do.
     let audioWarnings: readonly AudioWarning[] = []
+    /** Whether the job will carry sound: the source has some, in the part kept. */
+    let keptHasSound = report.audio !== null
     if (report.audio === null || report.audio.canDecode) {
       const audioInput = openInput(file)
       const audioTrack = await audioInput.getPrimaryAudioTrack()
-      audioWarnings = detectSourceWarnings(
-        audioTrack ? await analyseSourceAudio(audioTrack, signal, keptRange) : null,
-      )
+      const analysis = audioTrack ? await analyseSourceAudio(audioTrack, signal, keptRange) : null
+      audioWarnings = detectSourceWarnings(analysis)
+      // A trim can keep a part with no sound; the job is then a silent one
+      // (VH-95), and asks nothing of the audio encoder.
+      if (analysis === null) keptHasSound = false
     }
     // `analyseSourceAudio` stops at the next sample rather than throwing, so
     // an aborted traversal returns a report of PART of the file. Warnings
     // derived from half a lecture are worse than none.
     throwIfAborted(signal)
+
+    // A silent job asks nothing of the audio encoder, so it cannot be blocked
+    // by one — a silent source, or a keep with no sound in it, which Firefox
+    // would otherwise refuse for an encoder the job never opens (Codex
+    // review). Everything else asks for the exact configuration the job will
+    // use, at the source's own channel count — the figure differs between mono
+    // and stereo, and so might the answer.
+    const canEncodeAac =
+      report.audio && keptHasSound
+        ? await canEncodeAudio({
+            codec: 'mp4a.40.2',
+            sampleRate: OUTPUT_SAMPLE_RATE,
+            numberOfChannels: report.audio.channelCount,
+            bitrate:
+              report.audio.channelCount <= 1
+                ? preset.audioBitrateMonoBps
+                : preset.audioBitrateStereoBps,
+          })
+        : true
 
     // Not for a source that cannot be decoded: the probe would encode three
     // seconds, fail on the track inspection already ruled out, and throw the

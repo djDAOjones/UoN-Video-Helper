@@ -51,6 +51,13 @@ out-point, or the cut sits inside a hole — is a silent job: `planAudio` and
 verifies audio only when the pipeline reports it included some; before, the
 job failed. And the whole of a file shorter than the 3 s minimum is no cut,
 checked before the minimum, so untouched handles never refuse a short file.
+A second review round: gap silence is now made lazily in one-second blocks
+(`GAP_SILENCE_BLOCK_SECONDS`) on every path, mid-track holes included —
+whole, a 30-minute hole was about 690 MB; pre-flight asks for the AAC
+encoder only when the kept part has sound, so Firefox no longer blocks a
+silent keep; and the probe counts audio its window never reached as
+unmeasured — it was dividing by zero, and every such file, trimmed or late-
+starting, was called a "very long job".
 
 **Verified:** acceptance harness, 13 passed, 0 failed. Trimmed loudness: a
 source drifting from −4 to −34 dBFS, kept 40–70 s — −16.12 LUFS on the kept

@@ -144,8 +144,8 @@ try {
   const gaps = new AudioGapFiller(sampleRate, channelCount)
   const blocks: Float32Array[][] = []
   for await (const sample of new AudioSampleSink(track).samples()) {
-    const silence = gaps.silenceBefore(sample.timestamp)
-    if (silence) blocks.push(chain.process(silence))
+    const missing = gaps.framesMissingBefore(sample.timestamp)
+    for (const silence of gaps.silence(missing, sampleRate)) blocks.push(chain.process(silence))
     const planar = toPlanar(sample, channelCount)
     gaps.accept(planar[0]?.length ?? 0)
     blocks.push(chain.process(planar))

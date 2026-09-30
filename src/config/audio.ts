@@ -240,3 +240,14 @@ export const WARNING_THRESHOLDS = {
  * with no pauses, where the "floor" is just the speech itself.
  */
 export const MINIMUM_GAP_DEPTH_LU = 10
+
+/**
+ * The longest block of silence made at once when a hole in the source audio
+ * is filled, in seconds.
+ *
+ * A hole is filled with the silence it stands for (VH-74), and a trim can
+ * start inside one (VH-95). Made whole, a 30-minute stereo hole is about
+ * 690 MB of zeros; made a block at a time as the chain asks for it, it costs
+ * one block, whatever its length (AGENTS.md, "Streaming, not buffering").
+ */
+export const GAP_SILENCE_BLOCK_SECONDS = 1

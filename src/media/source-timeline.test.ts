@@ -50,12 +50,12 @@ describe('deriveSourceTimeline with a trim (VH-95)', () => {
 describe('AudioGapFiller anchored at a cut (VH-95)', () => {
   it('pads a first sample that arrives after the anchor, as it would any late sample', () => {
     const gaps = new AudioGapFiller(SAMPLE_RATE, 2, 7)
-    expect(gaps.silenceBefore(10)?.[0]?.length).toBe(3 * SAMPLE_RATE)
+    expect(gaps.framesMissingBefore(10)).toBe(3 * SAMPLE_RATE)
   })
 
   it('pads nothing when the first sample is at the anchor', () => {
     const gaps = new AudioGapFiller(SAMPLE_RATE, 2, 7)
-    expect(gaps.silenceBefore(7)).toBeNull()
+    expect(gaps.framesMissingBefore(7)).toBe(0)
   })
 })
 
@@ -117,9 +117,9 @@ describe('AudioGapFiller', () => {
   it('inserts nothing for a contiguous stream', () => {
     const filler = new AudioGapFiller(SAMPLE_RATE, 2)
 
-    expect(filler.silenceBefore(0)).toBeNull()
+    expect(filler.framesMissingBefore(0)).toBe(0)
     filler.accept(1024)
-    expect(filler.silenceBefore(1024 / SAMPLE_RATE)).toBeNull()
+    expect(filler.framesMissingBefore(1024 / SAMPLE_RATE)).toBe(0)
     filler.accept(1024)
 
     expect(filler.insertedFrames).toBe(0)
@@ -130,23 +130,24 @@ describe('AudioGapFiller', () => {
     // carries the offset instead.
     const filler = new AudioGapFiller(SAMPLE_RATE, 2)
 
-    expect(filler.silenceBefore(5)).toBeNull()
+    expect(filler.framesMissingBefore(5)).toBe(0)
     expect(filler.firstTimestampSeconds).toBe(5)
     expect(filler.insertedFrames).toBe(0)
   })
 
   it('fills a midstream hole with exactly the silence it stands for', () => {
     const filler = new AudioGapFiller(SAMPLE_RATE, 2)
-    filler.silenceBefore(0)
+    filler.framesMissingBefore(0)
     filler.accept(SAMPLE_RATE) // one second of audio
 
     // Next sample says it belongs at three seconds: two seconds are missing.
-    const silence = filler.silenceBefore(3)
+    const missing = filler.framesMissingBefore(3)
+    const blocks = [...filler.silence(missing, SAMPLE_RATE)]
 
-    expect(silence).not.toBeNull()
-    expect(silence).toHaveLength(2)
-    expect(silence?.[0]?.length).toBe(2 * SAMPLE_RATE)
-    expect(silence?.[0]?.every((value) => value === 0)).toBe(true)
+    expect(missing).toBe(2 * SAMPLE_RATE)
+    expect(blocks.every((block) => block.length === 2)).toBe(true)
+    expect(blocks.reduce((total, block) => total + block[0]!.length, 0)).toBe(2 * SAMPLE_RATE)
+    expect(blocks.every((block) => block.every((plane) => plane.every((value) => value === 0)))).toBe(true)
     expect(filler.insertedFrames).toBe(2 * SAMPLE_RATE)
   })
 
@@ -158,14 +159,13 @@ describe('AudioGapFiller', () => {
     const filler = new AudioGapFiller(SAMPLE_RATE, 1)
     const blockFrames = 1000
     const gapFrames = 333
-    filler.silenceBefore(0)
+    filler.framesMissingBefore(0)
 
     let position = 0
     for (let i = 0; i < 200; i++) {
       filler.accept(blockFrames)
       position += blockFrames + gapFrames
-      const silence = filler.silenceBefore(position / SAMPLE_RATE)
-      expect(silence?.[0]?.length).toBe(gapFrames)
+      expect(filler.framesMissingBefore(position / SAMPLE_RATE)).toBe(gapFrames)
     }
 
     expect(filler.insertedFrames).toBe(200 * gapFrames)
@@ -173,11 +173,26 @@ describe('AudioGapFiller', () => {
 
   it('runs an overlap contiguously rather than inventing audio to remove', () => {
     const filler = new AudioGapFiller(SAMPLE_RATE, 2)
-    filler.silenceBefore(0)
+    filler.framesMissingBefore(0)
     filler.accept(SAMPLE_RATE)
 
     // Claims to start half a second in, when a second has already been read.
-    expect(filler.silenceBefore(0.5)).toBeNull()
+    expect(filler.framesMissingBefore(0.5)).toBe(0)
     expect(filler.insertedFrames).toBe(0)
+  })
+
+  it('makes a long hole one bounded block at a time, never all at once', () => {
+    // Codex review of VH-95: a trim starting inside a 30-minute hole made the
+    // whole of it as one array — about 690 MB of zeros for stereo at 48 kHz.
+    const filler = new AudioGapFiller(SAMPLE_RATE, 2)
+    const blocks = filler.silence(30 * 60 * SAMPLE_RATE, SAMPLE_RATE)
+    let largest = 0
+    let total = 0
+    for (const block of blocks) {
+      largest = Math.max(largest, block[0]!.length)
+      total += block[0]!.length
+    }
+    expect(largest).toBe(SAMPLE_RATE)
+    expect(total).toBe(30 * 60 * SAMPLE_RATE)
   })
 })

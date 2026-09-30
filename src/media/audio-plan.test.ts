@@ -86,8 +86,9 @@ function run(
     sample.close()
   }
   for (const input of blocks) {
-    record(processor.process(input))
+    const output = processor.process(input)
     input.close()
+    for (const sample of output) record(sample)
   }
   record(processor.flush())
   return { starts, totalFrames, ends }
