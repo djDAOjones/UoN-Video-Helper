@@ -84,6 +84,12 @@ cannot run here" with the decode reason, no Start, and "Dolby Digital — this
 browser cannot read this audio format" under Video properties. Browser-only:
 the handler needs WebCodecs, so there is no Node test for it.
 
+**Follow-up, same day (second Codex pass):** the calibration probe is skipped
+too when either track cannot be decoded. It would encode three seconds, fail
+on the track already ruled out and discard the estimate — work that only
+delays the block, and on a slow device could outrun the pre-flight deadline
+and put the generic failure back. The AC-3 block now lands in ~120 ms.
+
 **Link:** VH-87, VH-60; `src/workers/job.worker.ts` (`handlePreflight`).
 
 ## 2026-09-30 — VH-88: the system check folds, and the status line leaves it

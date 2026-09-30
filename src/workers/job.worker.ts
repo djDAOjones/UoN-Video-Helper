@@ -416,8 +416,17 @@ async function handlePreflight(
     // derived from half a lecture are worse than none.
     throwIfAborted(signal)
 
+    // Both tracks, and a silent source asks nothing of the audio decoder.
+    // Measured during inspection and, until VH-60, never consulted again.
+    const canDecodeSource = report.video.canDecode && (report.audio?.canDecode ?? true)
+
+    // Not for a source that cannot be decoded: the probe would encode three
+    // seconds, fail on the track inspection already ruled out, and throw the
+    // estimate away — work that only delays the block, and on a slow device
+    // can outrun the pre-flight deadline and replace it with a generic
+    // failure.
     const probe =
-      capability.hasWebCodecs && encode.supported
+      capability.hasWebCodecs && encode.supported && canDecodeSource
         ? await calibrationProbe({
             input: openInput(file),
             shape,
@@ -438,9 +447,7 @@ async function handlePreflight(
         hasWebCodecs: capability.hasWebCodecs,
         hasOpfs: capability.hasOpfs,
         isSecureContext: capability.isSecureContext,
-        // Both tracks, and a silent source asks nothing of the audio decoder.
-        // Measured during inspection and, until VH-60, never consulted again.
-        canDecodeSource: report.video.canDecode && (report.audio?.canDecode ?? true),
+        canDecodeSource,
         canEncodeH264: encode.supported,
         canEncodeAac,
         availableStorageBytes: capability.storage.availableBytes,
