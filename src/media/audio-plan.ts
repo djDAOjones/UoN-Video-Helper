@@ -142,6 +142,10 @@ async function traverse(
           await emit(chain ? chain.process(silence) : silence)
           onSample?.()
         }
+        // Out of the whole pass, not just the hole: the sample is closed by
+        // the `finally` below, and nothing after the cancel is fed (Codex
+        // review).
+        if (signal?.aborted) break
         gaps.accept(kept.planar[0]?.length ?? 0)
         await emit(chain ? chain.process(kept.planar) : kept.planar)
       }
