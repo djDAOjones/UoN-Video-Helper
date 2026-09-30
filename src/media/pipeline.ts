@@ -264,10 +264,18 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     // the signal that a worker is wedged, saying nothing for minutes is how a
     // healthy long job got itself cancelled (VH-51).
     let analysed = 0
-    audioPlan = await planAudio(audioTrack, signal, () => {
-      analysed++
-      if (analysed % 200 === 0) onProgress?.({ stage: 'analysing', fraction: 0 })
-    })
+    audioPlan = await planAudio(
+      audioTrack,
+      signal,
+      () => {
+        analysed++
+        if (analysed % 200 === 0) onProgress?.({ stage: 'analysing', fraction: 0 })
+      },
+      // The job's exact audio config, so the gain allows for what THIS encode
+      // will cost in loudness rather than aiming at the encoder's input
+      // (VH-83).
+      (channelCount) => audioEncodingConfigFor(preset, channelCount),
+    )
     throwIfAborted(signal)
   }
 

@@ -85,3 +85,8 @@
       user's one choice among three; on screen it is three controls — animation
       type, onset, colour — that map onto the same three modes, plus "None"
       for no closing at all (source: VH-90)
+- [ ] 2026-09-30 SPEC §5.2 steps 5–6 — the single gain is solved to land the
+      DELIVERED file on −16 LUFS, allowing for the AAC encode's measured
+      loudness cost, not to land the encoder's input on it; and the limiter's
+      working ceiling is at least 1.0 dB below −2.0 dBTP and lower when that
+      job's encode is measured to overshoot by more (source: VH-83)

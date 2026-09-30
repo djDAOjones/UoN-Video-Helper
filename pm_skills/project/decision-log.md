@@ -11,6 +11,63 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-09-30 — VH-83: the gain aims through the codec, and so does the limiter
+
+**Decision:** the first refinement pass of the gain solve also encodes a
+sample of its own output at the job's exact audio config, decodes it and
+measures both sides (`media/codec-probe.ts`). The loudness it lost is
+subtracted from what every pass reports, so the solver lands the DELIVERED
+file on −16 rather than the encoder's input. The true peak it gained sets the
+limiter's ceiling: `ENCODE_TRUE_PEAK_HEADROOM_DB` is now the floor, and a
+measured overshoot plus 0.5 dB replaces it when larger. `gain-solve.ts` is
+untouched.
+
+**Measured first** (`/spike-aac-cost.html`, whole-programme round trip,
+"best"): AMCS3059 0.379 LU, AMCS2007 0.090, MLAC3139 0.078, CULT1027 0.042.
+Real, and neither small nor constant. And it varies ALONG a file, which
+decided the probe's shape: on AMCS3059 one contiguous 30 s excerpt said 0.25
+at the start and 0.44 at the loudest part, and 5 s excerpts erred by up to
+0.3 LU. Windows spread evenly and encoded as one stream were within 0.05. So
+the probe is 48 x 5 s spread windows, or the whole programme when it is
+shorter than that — a fixed four minutes of audio and under 6 MB of AAC,
+whatever the file's length.
+
+**Delivered loudness, production `runPipeline`, before → after:**
+
+| File | Best | Smaller |
+| --- | --- | --- |
+| AMCS3059 | −16.440 → −16.051 | −16.459 → −16.048 |
+| CULT1027 | −16.111 → −16.068 | −16.160 → −16.093 |
+| MLAC3139 | −16.127 → −16.067 | → −16.064 |
+| AMCS2007 | −16.182 → −16.026 | → −16.029 |
+| 10-minute mix, windowed | −16.234 → −16.087 | |
+
+Every file closer, none worse. The mix is three of the lectures joined twice,
+built to exercise the windowed path: 240 of 620 s probed, 0.022 LU from the
+whole-programme figure.
+
+**The other half was a live defect.** The headroom was measured at 192 kbps
+only. The smaller output encodes mono at 96 kbps, and there CULT1027
+overshoots by 1.2–1.4 dB: limited to −3.0, the file measured −1.81 dBTP and
+the job was REFUSED after the whole encode (`true-peak-exceeded`), on HEAD,
+through the app. With the measured ceiling (−3.76 for that job) it delivers
+−2.25 dBTP and completes. Every other measured job keeps −3.0: a measurement
+can ask for more headroom, never for less.
+
+**Alternatives:** probing every refinement pass — trebled the analysis stage
+(5.8 s → 16.4 s on a 130 s lecture) for a figure that moved 0.005 LU; once
+costs 1–3 s. A whole-programme round trip — exact, and 86 MB of AAC in memory
+per hour. Correcting by a linear step after the solve — the limiter takes
+back a third of added gain on the hottest file, so it lands 0.1 short.
+
+**Verified:** the table above; the acceptance harness, 10 passed, 0 failed,
+criterion 9 still zero bodies; Node tests for the window plan, the router and
+the ceiling rule. Not covered: an hour-long real lecture — the longest run is
+the ten-minute mix.
+
+**Link:** VH-83, VH-50; `src/media/codec-probe.ts`, `src/media/audio-plan.ts`,
+`src/config/audio.ts` (`CODEC_PROBE`), doc-delta §5.2.
+
 ## 2026-09-30 — VH-92: the University's colours, on Carbon's shapes
 
 **Decision:** the brand token file takes over every colour role — surfaces,

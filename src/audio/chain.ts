@@ -27,6 +27,13 @@ export interface AudioChainOptions {
    * runs steps 2-4 only, so the caller can find out what gain is needed.
    */
   readonly gainDb: number | null
+  /**
+   * The limiter's working ceiling, in dBTP. Defaults to `LIMITER.ceilingDbtp`.
+   * Lower when this job's encode was measured to overshoot by more than the
+   * standing allowance (VH-83) — spec 5.2 step 6's ceiling is the finished
+   * file's, and what the limiter must hold to deliver it depends on the codec.
+   */
+  readonly limiterCeilingDbtp?: number
 }
 
 export class AudioChain {
@@ -39,12 +46,21 @@ export class AudioChain {
   private latencyToDrop: number
 
   constructor(private readonly options: AudioChainOptions) {
-    const { sampleRate, channelCount, envelope, gainDb } = options
+    const { sampleRate, channelCount, envelope, gainDb, limiterCeilingDbtp } = options
     this.highPass = new HighPassFilter(sampleRate, channelCount)
     this.leveller = new MacroLeveller(envelope, sampleRate)
     this.compressor = new Compressor({ sampleRate })
     this.gain = gainDb === null ? 1 : 10 ** (gainDb / 20)
-    this.limiter = gainDb === null ? null : new TruePeakLimiter({ sampleRate, channelCount })
+    this.limiter =
+      gainDb === null
+        ? null
+        : new TruePeakLimiter({
+            sampleRate,
+            channelCount,
+            // Spelled conditionally: `exactOptionalPropertyTypes` is on, and an
+            // explicit `undefined` is not the same as leaving it out.
+            ...(limiterCeilingDbtp === undefined ? {} : { ceilingDbtp: limiterCeilingDbtp }),
+          })
     this.latencyToDrop = this.limiter?.latencySamples ?? 0
   }
 

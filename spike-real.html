@@ -9,7 +9,9 @@
     <h1>Real-material run</h1>
     <p>
       Runs a real recording from <code>public/spike/</code> through the whole pipeline and reports
-      what came out. Add <code>?file=name.mp4</code> to pick one.
+      what came out. Add <code>?file=name.mp4</code> to pick one, or
+      <code>?file=/samples/name.mp4</code> to measure a recording where it sits;
+      <code>&amp;preset=smaller</code> for the other output.
     </p>
     <pre id="log">running…</pre>
     <script type="module" src="/src/spike/real.ts"></script>

@@ -25,14 +25,22 @@ function say(text: string): void {
   log.textContent = lines.join('\n')
 }
 
-const name = new URLSearchParams(location.search).get('file') ?? 'mac-powerpoint-600tb.mp4'
+const query = new URLSearchParams(location.search)
+const name = query.get('file') ?? 'mac-powerpoint-600tb.mp4'
+// A leading slash is a path the dev server can already serve — `/samples/…` —
+// so a recording can be measured where it sits instead of being copied into
+// `public/spike/`, which the placeholder check then refuses to build past. A
+// full URL is taken as it is, for a fixture served from somewhere else.
+const url = /^(\/|https?:)/.test(name) ? name : `/spike/${name}`
+const presetId = query.get('preset') === 'smaller' ? 'smaller' : 'best'
 const mb = (bytes: number): string => `${(bytes / 1048576).toFixed(1)} MB`
 
 let workspace: OpfsWorkspace | null = null
 try {
   say(`file: ${name}`)
-  const response = await fetch(`/spike/${name}`)
-  if (!response.ok) throw new Error(`HTTP ${response.status} — is the fixture in public/spike/?`)
+  say(`preset: ${presetId}`)
+  const response = await fetch(url)
+  if (!response.ok) throw new Error(`HTTP ${response.status} — is the fixture at ${url}?`)
   const file = new File([await response.blob()], name, { type: 'video/mp4' })
 
   const report = await inspectFile(file)
@@ -49,7 +57,7 @@ try {
       : '      no audio track',
   )
 
-  const preset = PRESETS.best
+  const preset = PRESETS[presetId]
   const shape = outputShapeFor(preset, {
     width: report.video.displayWidth,
     height: report.video.displayHeight,
@@ -90,7 +98,7 @@ try {
     const onTarget = Math.abs(after.integratedLufs - TARGET_INTEGRATED_LUFS) <= 0.5
     const peakOk = after.truePeakDbtp <= TRUE_PEAK_CEILING_DBTP
     say(
-      `      loudness ${after.integratedLufs.toFixed(2)} LUFS ` +
+      `      loudness ${after.integratedLufs.toFixed(3)} LUFS ` +
         `(target ${TARGET_INTEGRATED_LUFS} ±0.5) ${onTarget ? 'PASS' : 'FAIL'}`,
     )
     say(

@@ -23,6 +23,13 @@
 
 ## Archived: the review remediation and Band 1's close — see archive/trajectory/trajectory-0003-review-remediation-and-band-1-close.md
 
+### VH-83 — the gain aims through the codec
+
+- VH-83 — Shipped 2026-09-30. The gain solve allows for what the AAC encode
+  costs in loudness, and the limiter for what it adds in true peak, both
+  measured per job; four real lectures land within 0.1 LU, and a mono lecture
+  the smaller output used to refuse now completes. See decision-log.
+
 ### Band 4 — the interface pass
 
 - VH-92 — Shipped 2026-09-30. The page wears the University's palette in

@@ -15,15 +15,15 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 175 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
-- `(root)` — 20 file(s)
+<!-- 179 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+- `(root)` — 21 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
 - `docs` — 5 file(s)
 - `public` — 13 file(s)
 - `reviews` — 7 file(s)
 - `scripts` — 5 file(s)
-- `src` — 117 file(s)
+- `src` — 120 file(s)
 - `test` — 6 file(s)
 <!-- /file-map-index -->
 
@@ -39,6 +39,7 @@
 - `eslint.config.js` — Flat ESLint config. Strict on correctness, silent on taste; formatting is Prettier's job.
 - `index.html` — The single page. Landmarks, skip link, the four numbered step panels, and the two status lines the app announces into.
 - `package.json` — Scripts, the one runtime dependency, and the product version.
+- `spike-aac-cost.html` — Maintainer page: what does the AAC round trip cost a real recording in loudness and true peak, and how well do probe windows predict it?
 - `spike-alpha.html` — Maintainer page: does this browser decode transparent video? Excluded from the build.
 - `spike-codecs.html` — Maintainer page: which encoder configurations does this engine actually accept, video AND audio?
 - `spike-framerate.html` — Maintainer page: does the app measure the frame rate or trust the header?
@@ -157,6 +158,8 @@
 - `src/media/branding-timeline.test.ts` — Pins where branding sits on the timeline: boundaries measured against the picture, never the longer track.
 - `src/media/branding.ts` — Conform and concatenate the opaque parts; load the real closing tail; the boundary fade.
 - `src/media/capability.ts` — Device checks asked against the exact target config, not a generic capability flag.
+- `src/media/codec-probe.test.ts` — The probe samples the right audio — spread, bounded, no frame twice — and the limiter ceiling it derives is a floor with a cap.
+- `src/media/codec-probe.ts` — Encodes spread windows of the chain's output at the job's audio config and measures the loudness cost and true-peak overshoot.
 - `src/media/composite.test.ts` — Pins `compositePremultiplied` against the straight-alpha mistake that looks plausible and double-darkens.
 - `src/media/composite.ts` — Premultiplied-alpha compositing. `out = brand + source×(1−a)`; the straight form double-darkens.
 - `src/media/conform.test.ts` — Proves fit/pad never distorts, across 4:3, vertical and ultrawide sources.
@@ -188,6 +191,7 @@
 - `src/media/source-timeline.ts` — Where the source's two lanes actually start, and turning holes into the silence they stand for.
 - `src/media/track-metadata.test.ts` — Pins the carry rules: 'und' omitted, the lone track made default, a read failure reported not fatal.
 - `src/media/track-metadata.ts` — Carries a source track's language, name and disposition onto the output track.
+- `src/spike/aac-cost.ts` — The AAC cost spike: whole programme against excerpts, spread windows and the product's own probe.
 - `src/spike/alpha.ts` — VH-12 spike: decodes each branding onset and reads back pixel alpha. Dev-only, not built.
 - `src/spike/codecs.ts` — Probes VideoEncoder and AudioEncoder support per preset and shape. How the Firefox AAC gap was found.
 - `src/spike/framerate.ts` — VH-24 spike: reads a real PowerPoint export and reports measured vs declared rate.

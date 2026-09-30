@@ -10,6 +10,7 @@
 import { AudioSample } from 'mediabunny'
 import { describe, expect, it } from 'vitest'
 
+import { LIMITER } from '../config/audio'
 import { createContentAudioProcessor, type AudioPlan } from './audio-plan'
 
 const SAMPLE_RATE = 48000
@@ -29,6 +30,8 @@ const plan: AudioPlan = {
   gainDb: 0,
   sampleRate: SAMPLE_RATE,
   channelCount: CHANNELS,
+  codec: null,
+  limiterCeilingDbtp: LIMITER.ceilingDbtp,
 }
 
 function block(timestampSeconds: number, frames = BLOCK_FRAMES): AudioSample {

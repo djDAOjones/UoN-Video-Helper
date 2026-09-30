@@ -51,3 +51,13 @@
   build, but `README-HOSTING.txt` and the zip named for its build id are still
   by hand. The recipe is in DEV-INFRASTRUCTURE.md -> "Xerte package".
   (from: VH-14)
+- The audio analysis stage is far slower than the docs say. Measured
+  2026-09-30 on this MacBook: 9.2 s per traversal of a 620 s programme, five
+  traversals per job — about four and a half minutes of "Analysing audio" for
+  an hour-long lecture. `config/audio.ts` and `audio-plan.ts` both still say
+  "3.6 s for an hour". The 4x oversampled true-peak work in the analyser and
+  the limiter is the likely cost; profile before choosing a fix. (from: VH-83)
+- `BEST_SOURCE_BLEND` (0.5) is the one number in VH-47's bitrate rule with no
+  measurement behind it. Settling it is a VIDEO experiment — encode the probe
+  sample at a spread of multiples and score each — and was parked on VH-83 by
+  mistake. (from: VH-83)

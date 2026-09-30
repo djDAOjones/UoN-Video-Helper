@@ -44,26 +44,6 @@
       Done when: every child is shipped or explicitly cut; then delete the
       ticket.
 
-- [ ] **VH-83 The AAC round trip costs loudness nobody is compensating** (2026-08-28)
-      Intent: the chain solves for the target and the codec then moves it, and
-      nothing models that. **Measured 2026-08-28 on `AMCS3059`:** the chain
-      solved -16.06 LUFS (`limitedLufs`), the delivered file measures
-      **-16.44** — 0.38 LU lost to AAC, 88% of the +/-0.5 budget spent after
-      the only stage that aims. It passes, and it would not survive a slightly
-      worse round trip.
-      The same run shows the other half: true peak came out -2.969 dBTP against
-      a -2.0 ceiling, so `ENCODE_TRUE_PEAK_HEADROOM_DB`'s full 1.0 dB was held
-      and the file's actual overshoot was ~0.03 dB.
-      Done when: the gain solve aims at a target corrected by the codec's
-      measured cost — one encode/decode round trip of a short excerpt at the
-      job's exact audio config gives both figures — and the four real corpus
-      files land closer to -16.00 than they do now, with none worse.
-      Risk: this changes the stage VH-50 fixed by measurement. Nothing ships
-      without re-measuring all four real files, not just the synthetic corpus.
-      Note: `BEST_SOURCE_BLEND` (0.5, the only value in VH-47's rule with no
-      number behind it) is a VIDEO-bitrate question needing its own experiment;
-      it was scoped in here by mistake and belongs on its own.
-
 ### Band 3 — Blocked on the maintainer
 
 <!-- Agent work that cannot start until something arrives from outside the
@@ -166,8 +146,8 @@
      Band 2's VH-83: the defect first; then words and disclosures, which
      disturb no structure; then the closing controls; then the layout they sit
      in; then the restyle, once, over the finished structure; then the two
-     capabilities. VH-83 and VH-95 both rework `planAudio` — in series, never
-     side by side, VH-83 first.
+     capabilities. VH-83 shipped 2026-09-30, so VH-95 now has
+     `planAudio` to itself.
      Four items reverse a recorded decision at the maintainer's word, and each
      names it so the older entry is not read as binding: VH-86 (spec §8's
      sidecar), VH-89 (VH-31), VH-90 (VH-46b), VH-30 (the identity's "no

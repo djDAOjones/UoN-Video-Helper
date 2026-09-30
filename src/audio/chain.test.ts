@@ -6,7 +6,7 @@
 
 import { describe, expect, it } from 'vitest'
 
-import { TARGET_INTEGRATED_LUFS, TRUE_PEAK_CEILING_DBTP } from '../config/audio'
+import { LIMITER, TARGET_INTEGRATED_LUFS, TRUE_PEAK_CEILING_DBTP } from '../config/audio'
 import { feedInChunks, speechLike, tone, withTransients } from '../../test/helpers/signals'
 import { AudioAnalyser } from './analyse'
 import { AudioChain } from './chain'
@@ -253,5 +253,63 @@ describe('the limiter only engages when it must', () => {
     const { result, gainDb } = await normalise(source)
     expect(result.integratedLufs).toBeCloseTo(TARGET_INTEGRATED_LUFS, 0)
     expect(Number.isFinite(gainDb)).toBe(true)
+  })
+})
+
+describe('a per-job limiter ceiling (VH-83)', () => {
+  // Spec 5.2 step 6. The published ceiling is the finished file's; the limiter
+  // holds lower by whatever this job's encode was measured to add, and that is
+  // more than the standing allowance at 96 kbps mono.
+  const source = withTransients(
+    speechLike({ sampleRate: SAMPLE_RATE, seconds: 20, channelCount: 2, startPeakDbfs: -12 }),
+    { sampleRate: SAMPLE_RATE, peakDbfs: -1, everySeconds: 3 },
+  )
+
+  function chainAt(ceilingDbtp: number | undefined) {
+    const chain = new AudioChain({
+      sampleRate: SAMPLE_RATE,
+      channelCount: source.length,
+      envelope: buildGainEnvelope({
+        integratedLufs: -20,
+        loudnessRangeLu: 0,
+        shortTermLufs: [],
+        stepSeconds: 0.01,
+      }),
+      // Enough gain that the limiter has to work whatever the ceiling.
+      gainDb: 8,
+      ...(ceilingDbtp === undefined ? {} : { limiterCeilingDbtp: ceilingDbtp }),
+    })
+    const body = chain.process(source.map((plane) => plane.slice())).map((plane) => plane.slice())
+    const tail = chain.flush()
+    return analyse(
+      body.map((plane, ch) => {
+        const joined = new Float32Array(plane.length + tail[ch]!.length)
+        joined.set(plane)
+        joined.set(tail[ch]!, plane.length)
+        return joined
+      }),
+    )
+  }
+
+  it('holds the standing ceiling when none is given', () => {
+    const standing = chainAt(undefined)
+    expect(standing.truePeakDbtp).toBeLessThanOrEqual(LIMITER.ceilingDbtp + 0.01)
+    // And actually reaches it: otherwise this proves nothing about limiting.
+    expect(standing.truePeakDbtp).toBeGreaterThan(LIMITER.ceilingDbtp - 0.5)
+  })
+
+  it('holds a lower ceiling when the job asks for one', () => {
+    const lowered = chainAt(-3.9)
+    expect(lowered.truePeakDbtp).toBeLessThanOrEqual(-3.9 + 0.01)
+    expect(lowered.truePeakDbtp).toBeGreaterThan(-3.9 - 0.5)
+  })
+
+  it('costs peak level, not programme: the lower ceiling is barely quieter', () => {
+    // The trade the headroom rule rests on — more headroom takes a little off
+    // the loudest transients and leaves the programme where it was.
+    const standing = chainAt(undefined)
+    const lowered = chainAt(-3.9)
+    expect(standing.integratedLufs).toBeGreaterThanOrEqual(lowered.integratedLufs)
+    expect(standing.integratedLufs - lowered.integratedLufs).toBeLessThan(0.3)
   })
 })

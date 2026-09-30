@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AAC loudness cost spike — UoN Video Helper</title>
+  </head>
+  <body>
+    <h1>AAC loudness cost spike</h1>
+    <p>
+      VH-83: runs a real recording's audio through the chain, then through the AAC encoder and
+      back, and reports what the round trip cost in loudness and added in true peak — for the whole
+      programme and for short excerpts, so the two can be compared. Add
+      <code>?file=/samples/name.mp4</code> to pick one; <code>&amp;preset=smaller</code> for the
+      other audio bitrate.
+    </p>
+    <pre id="log">running…</pre>
+    <script type="module" src="/src/spike/aac-cost.ts"></script>
+  </body>
+</html>

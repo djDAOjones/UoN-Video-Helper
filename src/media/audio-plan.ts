@@ -13,6 +13,10 @@
  *      the chain really produces is on target. See `audio/gain-solve.ts`:
  *      solving against a chain that does not limit is what put a real lecture
  *      0.75 LU below target while the synthetic corpus passed (VH-50).
+ *      The first of these passes also encodes a sample of its own output,
+ *      and every pass subtracts what that showed the codec costs — so "on
+ *      target" means in the delivered file rather than at the encoder's input
+ *      (VH-83, `codec-probe.ts`).
  *   C. Apply steps 2-6 with the solved gain.
  *
  * Several passes sounds expensive and is not: audio-only decode of an hour
@@ -21,15 +25,22 @@
  * and limiter did is worth far more than the seconds it costs.
  */
 
-import { AudioSampleSink, type AudioSample, type InputAudioTrack } from 'mediabunny'
+import {
+  AudioSampleSink,
+  type AudioEncodingConfig,
+  type AudioSample,
+  type InputAudioTrack,
+} from 'mediabunny'
 
 import { AudioAnalyser, type AudioAnalysis } from '../audio/analyse'
 import { AudioChain } from '../audio/chain'
 import { solveChainGainDb } from '../audio/gain-solve'
 import { buildGainEnvelope, type GainEnvelope } from '../audio/macrolevel'
+import { LIMITER } from '../config/audio'
 import { log } from '../core/logger'
 import { applyBoundaryFade } from './branding'
 import { toPlanar, toSample } from './audio-frames'
+import { CodecProbe, limiterCeilingFor, type CodecCost } from './codec-probe'
 import { AudioGapFiller } from './source-timeline'
 
 export interface AudioPlan {
@@ -39,9 +50,34 @@ export interface AudioPlan {
   readonly gainDb: number
   readonly sampleRate: number
   readonly channelCount: number
+  /**
+   * What the encode was measured to cost at this gain, which the gain already
+   * allows for. `null` when it was not measured — no encoder config was given,
+   * or the probe failed — and the gain then aims the CHAIN at target, as it
+   * did before VH-83.
+   */
+  readonly codec: CodecCost | null
+  /**
+   * The ceiling the limiter holds for this job, in dBTP. The standing one
+   * unless the encode was measured to overshoot by more than it allows for.
+   */
+  readonly limiterCeilingDbtp: number
 }
 
-/** Runs one traversal of the track, optionally through a chain, into an analyser. */
+/** What one traversal produced. */
+interface Traversal {
+  readonly analysis: AudioAnalysis
+  /** Frames the traversal emitted, gap-fill and flush included. */
+  readonly frames: number
+}
+
+/**
+ * Runs one traversal of the track, optionally through a chain, into an
+ * analyser.
+ *
+ * @param tap - Given every block exactly as it goes to the analyser, in order.
+ *   Awaited, so a consumer that encodes can apply backpressure.
+ */
 async function traverse(
   track: InputAudioTrack,
   sampleRate: number,
@@ -49,13 +85,21 @@ async function traverse(
   chain: AudioChain | null,
   signal: AbortSignal | undefined,
   onSample?: () => void,
-): Promise<AudioAnalysis> {
+  tap?: (block: Float32Array[]) => Promise<void>,
+): Promise<Traversal> {
   const analyser = new AudioAnalyser({ sampleRate, channelCount })
   const sink = new AudioSampleSink(track)
   // Every pass fills gaps identically, or the short-term curve this pass
   // produces would be indexed differently from the envelope pass C applies
   // (VH-74).
   const gaps = new AudioGapFiller(sampleRate, channelCount)
+  let frames = 0
+
+  const emit = async (block: Float32Array[]): Promise<void> => {
+    frames += block[0]?.length ?? 0
+    analyser.addFrames(block)
+    if (tap) await tap(block)
+  }
 
   for await (const sample of sink.samples()) {
     // Closed before breaking. The loop is handed a decoded sample and only
@@ -70,10 +114,10 @@ async function traverse(
     }
     try {
       const silence = gaps.silenceBefore(sample.timestamp)
-      if (silence) analyser.addFrames(chain ? chain.process(silence) : silence)
+      if (silence) await emit(chain ? chain.process(silence) : silence)
       const planar = toPlanar(sample, channelCount)
       gaps.accept(planar[0]?.length ?? 0)
-      analyser.addFrames(chain ? chain.process(planar) : planar)
+      await emit(chain ? chain.process(planar) : planar)
     } finally {
       sample.close()
     }
@@ -82,13 +126,13 @@ async function traverse(
     // signal a job is wedged (VH-51).
     onSample?.()
   }
-  if (chain) analyser.addFrames(chain.flush())
+  if (chain) await emit(chain.flush())
   if (gaps.insertedFrames > 0) {
     log.info('audio', 'source audio has gaps; filled with silence', {
       insertedSeconds: Math.round((gaps.insertedFrames / sampleRate) * 1000) / 1000,
     })
   }
-  return analyser.finish()
+  return { analysis: analyser.finish(), frames }
 }
 
 /**
@@ -108,22 +152,34 @@ export async function analyseSourceAudio(
     track.getSampleRate(),
     track.getNumberOfChannels(),
   ])
-  return traverse(track, sampleRate, channelCount, null, signal)
+  return (await traverse(track, sampleRate, channelCount, null, signal)).analysis
 }
 
-/** Passes A and B: everything needed before the encode can start. */
+/**
+ * Passes A and B: everything needed before the encode can start.
+ *
+ * @param encodingFor - The audio encoder config this job will use, given the
+ *   channel count. When supplied, the gain is solved for the loudness of the
+ *   DELIVERED file: what the codec costs is measured once and the solver aims
+ *   through it (VH-83). Omit it and the chain itself is aimed at target,
+ *   which is the pre-VH-83 behaviour and what a caller with no encoder to
+ *   ask — a test, a probe of the chain alone — wants.
+ */
 export async function planAudio(
   track: InputAudioTrack,
   signal?: AbortSignal,
   /** Called for every sample analysed, so a long analysis can prove it is alive. */
   onSample?: () => void,
+  encodingFor?: (channelCount: number) => AudioEncodingConfig,
 ): Promise<AudioPlan> {
   const [sampleRate, channelCount] = await Promise.all([
     track.getSampleRate(),
     track.getNumberOfChannels(),
   ])
 
-  const analysis = await traverse(track, sampleRate, channelCount, null, signal, onSample)
+  const startedAt = performance.now()
+  const source = await traverse(track, sampleRate, channelCount, null, signal, onSample)
+  const { analysis } = source
   const envelope = buildGainEnvelope({
     integratedLufs: analysis.integratedLufs,
     loudnessRangeLu: analysis.loudnessRangeLu,
@@ -131,20 +187,84 @@ export async function planAudio(
     stepSeconds: analysis.stepSeconds,
   })
 
+  /** What the codec was measured to cost, once it has been. */
+  let codec: CodecCost | null = null
+  /** True once a probe has been tried, whether or not it produced a figure. */
+  let probed = false
+  /** What the chain itself produced on the last limited pass, before the codec. */
+  let chainLufs: number | null = null
+  /**
+   * What the limiter holds. Starts at the standing ceiling and is lowered,
+   * once, if the probe finds this job's encode overshoots by more than that
+   * allows — after which every later pass, and pass C, limits to the new one,
+   * so the gain is solved against the chain that will actually run.
+   */
+  let limiterCeilingDbtp: number = LIMITER.ceilingDbtp
+
   const solution = await solveChainGainDb(async (candidateGainDb) => {
+    // Probed ONCE, on the first pass that runs the chain as it will be
+    // encoded. The cost is a property of the programme's spectrum far more
+    // than of a few tenths of a decibel of gain — 0.379 and 0.384 LU on the
+    // same lecture, 0.6 dB apart — and probing every pass trebled the
+    // analysis stage for a figure that did not move (measured 2026-09-30:
+    // 5.8 s of planning became 16.4 s). Never for the measuring
+    // configuration: with no gain and no limiter it is not the signal that
+    // gets encoded.
+    const probe =
+      candidateGainDb !== null && encodingFor && !probed && !signal?.aborted
+        ? await CodecProbe.open({
+            config: encodingFor(channelCount),
+            sampleRate,
+            channelCount,
+            // The chain returns every frame it is given — the limiter's
+            // look-ahead comes back in the flush — so the source's length is
+            // the output's.
+            totalFrames: source.frames,
+          })
+        : null
+    if (candidateGainDb !== null) probed = true
+
     const measured = await traverse(
       track,
       sampleRate,
       channelCount,
-      new AudioChain({ sampleRate, channelCount, envelope, gainDb: candidateGainDb }),
+      new AudioChain({
+        sampleRate,
+        channelCount,
+        envelope,
+        gainDb: candidateGainDb,
+        limiterCeilingDbtp,
+      }),
       signal,
       onSample,
+      probe ? (block) => probe.add(block) : undefined,
     )
-    return measured.integratedLufs
+    if (candidateGainDb === null) return measured.analysis.integratedLufs
+
+    if (probe) {
+      // A cancelled traversal stopped early; its windows are not the
+      // programme and nothing downstream will use the answer.
+      if (signal?.aborted) await probe.cancel()
+      else codec = await probe.finish()
+      // The other figure the round trip gives. A codec that raises true peak
+      // by more than the standing allowance would put the finished file over
+      // the ceiling and have the job refused at the end (VH-83).
+      limiterCeilingDbtp = limiterCeilingFor(codec?.overshootDb ?? null)
+    }
+
+    chainLufs = measured.analysis.integratedLufs
+    // What the solver is told is the loudness AFTER the codec, so its
+    // fixed-point lands the delivered file on target instead of the encoder's
+    // input. An unmeasured cost is zero: the chain is aimed as before.
+    return measured.analysis.integratedLufs - (codec?.costLu ?? 0)
   })
 
   const round = (value: number): number | null =>
     Number.isFinite(value) ? Math.round(value * 100) / 100 : null
+
+  // Read through a widened local: TypeScript cannot see the closure's writes.
+  const cost = codec as CodecCost | null
+  const limited = chainLufs as number | null
 
   log.info('audio', 'chain planned', {
     sourceIntegratedLufs: round(analysis.integratedLufs),
@@ -154,13 +274,36 @@ export async function planAudio(
     // What the chain that actually runs produced at the solved gain. The
     // difference between this and `afterChainLufs` is the limiter's bite, and
     // it is the number VH-50 was hiding.
-    limitedLufs: solution.measuredLufs === null ? null : round(solution.measuredLufs),
+    limitedLufs:
+      limited !== null
+        ? round(limited)
+        : solution.measuredLufs === null
+          ? null
+          : round(solution.measuredLufs),
+    // What the codec then took, and what that predicts for the finished
+    // file. The decoded-output check in the worker measures the real thing.
+    codecCostLu: cost ? Math.round(cost.costLu * 1000) / 1000 : null,
+    codecOvershootDb: cost ? Math.round(cost.overshootDb * 1000) / 1000 : null,
+    codecProbedSeconds: cost ? Math.round(cost.probedSeconds) : null,
+    limiterCeilingDbtp: Math.round(limiterCeilingDbtp * 100) / 100,
+    predictedOutputLufs:
+      cost && solution.measuredLufs !== null ? round(solution.measuredLufs) : null,
     refinementPasses: solution.refinementPasses,
     converged: solution.converged,
     gainDb: Math.round(solution.gainDb * 100) / 100,
+    // Every pass above, together. The stage the user watches is this number.
+    planningMs: Math.round(performance.now() - startedAt),
   })
 
-  return { analysis, envelope, gainDb: solution.gainDb, sampleRate, channelCount }
+  return {
+    analysis,
+    envelope,
+    gainDb: solution.gainDb,
+    sampleRate,
+    channelCount,
+    codec: cost,
+    limiterCeilingDbtp,
+  }
 }
 
 /** Joins two planar blocks channel by channel. Only a gap makes one needed. */
@@ -213,8 +356,8 @@ export function createContentAudioProcessor(
     readonly fadeOut: boolean
   },
 ): ContentAudioProcessor {
-  const { sampleRate, channelCount, envelope, gainDb } = plan
-  const chain = new AudioChain({ sampleRate, channelCount, envelope, gainDb })
+  const { sampleRate, channelCount, envelope, gainDb, limiterCeilingDbtp } = plan
+  const chain = new AudioChain({ sampleRate, channelCount, envelope, gainDb, limiterCeilingDbtp })
   const gaps = new AudioGapFiller(sampleRate, channelCount)
   let emittedFrames = 0
 

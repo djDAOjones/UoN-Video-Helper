@@ -103,6 +103,65 @@ export const GAIN_SOLVE = {
 } as const
 
 /**
+ * Measuring what the AAC encode costs in loudness, so the gain can allow for it.
+ *
+ * The gain solve above lands the CHAIN on target, and the codec then moves the
+ * result: an MDCT codec does not preserve loudness any more than it preserves
+ * peak level. Measured on the four real lectures (2026-09-30, VH-83,
+ * `/spike-aac-cost.html`, "best quality"), the whole-programme round trip
+ * cost:
+ *
+ *   AMCS3059  0.379 LU      MLAC3139  0.078 LU
+ *   AMCS2007  0.090 LU      CULT1027  0.042 LU
+ *
+ * So it is neither negligible nor constant — 0.38 LU is three quarters of the
+ * +/-0.5 contract — and it has to be measured per job, at that job's exact
+ * audio configuration.
+ *
+ * It also varies ALONG a file, which is what decides the probe's shape. One
+ * contiguous excerpt predicted the whole badly: on AMCS3059 the first 30 s
+ * said 0.25 and the loudest 30 s said 0.44, and a 5 s excerpt anywhere was off
+ * by up to 0.3 LU. Windows spread evenly through the programme and encoded as
+ * one stream were within 0.05 LU on every file once there were enough of
+ * them, so the probe takes many short windows rather than one long one.
+ */
+export const CODEC_PROBE = {
+  /**
+   * Long enough that each window holds many 400 ms gating blocks and the
+   * click where two windows join is a small part of it; short enough that the
+   * budget buys coverage rather than depth.
+   */
+  windowSeconds: 5,
+  /**
+   * 48 x 5 s is four minutes of audio: about two seconds to encode and decode
+   * on the machine this was measured on (110-150x real time), and under 6 MB
+   * of AAC held in memory at the highest bitrate — a bound that does not grow
+   * with the file. A programme shorter than the budget is probed whole, which
+   * is exact.
+   */
+  maximumWindows: 48,
+  /**
+   * A figure outside this range is a failed probe, not a finding, and is
+   * ignored. The largest real cost measured is 0.38; a codec that gains
+   * loudness was seen by up to 0.09 on short excerpts.
+   */
+  plausibleCostLu: { minimum: -0.25, maximum: 1.5 },
+  /**
+   * Held above the measured true-peak overshoot when the limiter's ceiling is
+   * derived from it. The same lecture at the same settings overshot by 1.19
+   * and by 1.41 dB on two runs a tenth of a decibel of gain apart, so the
+   * measurement is good to a couple of tenths and no better.
+   */
+  overshootMarginDb: 0.5,
+  /**
+   * The most headroom a measurement may ask for. Past this the probe has
+   * measured something other than a codec, and giving it the limiter would
+   * trade a refused job for a crushed one.
+   */
+  maximumHeadroomDb: 3,
+} as const
+
+/**
  * Headroom the limiter holds below the published ceiling, for OUR OWN encode.
  *
  * The ceiling above governs the finished file. The limiter governs the signal
@@ -125,6 +184,14 @@ export const GAIN_SOLVE = {
  * loudest transients and nothing else: the target loudness is solved after the
  * limiter, so nothing gets quieter. 1.0 dB is also the customary allowance
  * before a lossy encode rather than a figure fitted to four files.
+ *
+ * It is a FLOOR, not the figure, since VH-83. Those four measurements were all
+ * taken at 192 kbps. The smaller output encodes mono at 96 kbps, and there
+ * CULT1027 overshoots by 1.2 to 1.4 dB — past this allowance, so the finished
+ * file measured -1.81 dBTP and the job was refused after the whole encode.
+ * The codec probe now measures the overshoot for the job in hand, and the
+ * limiter holds whichever is larger: this, or that plus a margin
+ * (`limiterCeilingFor`, `media/codec-probe.ts`).
  *
  * This does not spend the ceiling's own downstream allowance. Spec 5.1 keeps
  * -2.0 to absorb EchoVideo's and YouTube's re-encode; this absorbs ours.
