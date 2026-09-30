@@ -74,6 +74,14 @@ that merely behaves differently is still a finding to read, not a failure.
 **Verified:** Firefox, the iPhone file: `ALL PASS`, exit 0. Firefox, a path
 that does not exist: `2 FAILURE(S)`, "REPORTED A FAILURE", exit 1.
 
+**Follow-up, same day (second Codex pass):** the first version recognised only
+a left-margin `ERROR` and a closing `N FAILURE(S)` — the phone spike's
+spellings — and the older spikes say it differently: indented `FAIL —`, a row
+ending `FAIL`, `ERROR —` after a mode name. `spike-real` with a bad path still
+exited 0. The rule is now any `FAIL`, `FAILED` or `ERROR` as a word; every
+spike uses those for failed checks and for nothing else. Checked against eight
+sample outputs, and live: `spike-real` with a bad path exits 1.
+
 **Link:** VH-26; `scripts/run-in-engines.mjs`, `DEV-INFRASTRUCTURE.md` →
 "Cross-engine verification".
 

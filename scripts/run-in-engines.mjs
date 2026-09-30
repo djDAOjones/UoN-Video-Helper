@@ -15,11 +15,12 @@
  *
  * One thing it does read: a page's own verdict on itself. A page that reaches
  * `done` has RUN, which is not the same as having passed, and a command that
- * exits 0 either way cannot be cited as verification. So a line beginning
- * `ERROR` at the left margin, or a closing `N FAILURE(S)`, fails the run —
- * those are the two ways the spike pages already say something went wrong.
- * An engine that simply behaves differently is still a finding to read, not a
- * failure: a page reports that however it likes, short of those two lines.
+ * exits 0 either way cannot be cited as verification. So any line that says
+ * `FAIL`, `FAILED` or `ERROR` as a word, or a closing `N FAILURE(S)`, fails the
+ * run. Those are the spellings every spike page already uses for a failed
+ * check — indented or not, at the start of a line or the end of a row — and
+ * nothing else they print uses them. A page that wants an engine difference
+ * read as a finding rather than a failure must word it some other way.
  *
  * Each engine needs a different protocol, and the differences are not
  * negotiable:
@@ -362,7 +363,7 @@ let reported = 0
 
 /** Whether a finished page's own text says it failed. See the header. */
 function pageReportsFailure(text) {
-  return /^ERROR\b/m.test(text) || /^[1-9]\d* FAILURE\(S\)$/m.test(text)
+  return /\b(FAIL|FAILED|ERROR)\b/.test(text) || /^[1-9]\d* FAILURE\(S\)$/m.test(text)
 }
 
 for (const name of wanted) {

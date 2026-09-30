@@ -523,10 +523,12 @@ different origin (the dev server moves off 5173 when something else holds it);
 an error.
 
 The one thing it reads is a page's verdict on itself. Reaching `done` means a
-page ran, not that it passed, so a line beginning `ERROR` at the left margin,
-or a closing `N FAILURE(S)`, makes the run exit 1 — otherwise the command
-could not be cited as verification, because it could not fail. A page that
-wants to be usable that way ends on `ALL PASS` or `N FAILURE(S)`.
+page ran, not that it passed, so any line saying `FAIL`, `FAILED` or `ERROR`
+as a word, or a closing `N FAILURE(S)`, makes the run exit 1 — otherwise the
+command could not be cited as verification, because it could not fail. Those
+are the spellings every spike page already uses for a failed check. A page
+that means an engine difference as a finding, not a failure, words it
+otherwise.
 
 Each engine speaks a different protocol and there is no choice about it:
 Chrome over CDP, Firefox over WebDriver BiDi (it dropped CDP), Safari over
