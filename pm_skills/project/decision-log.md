@@ -11,6 +11,35 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-09-30 — VH-85: what the tool does, as a list, and the promise said once
+
+**Decision:** the opening paragraph is a three-item list and the privacy
+sentence is its own paragraph, above the file input; the helper that repeated
+it under the input is gone with its `aria-describedby`. The output question is
+"File size / quality", answered "Larger / better" and "Smaller / reduced".
+`PRESETS` labels carry the same names; the ids stay `best` and `smaller`.
+
+**Rationale:** the maintainer's wording, 2026-09-30. The one judgement was how
+an option reads. "Larger / better for EchoVideo or YouTube etc." on one line
+parses as "better for EchoVideo"; as a name with its destinations beneath — the
+described-radio pattern the closing options already use — the name answers the
+legend in the legend's own order and the words are unchanged.
+
+**Alternatives:** keeping `aria-describedby` and pointing it at the new
+paragraph. Declined as asked: the sentence is the last thing read before the
+input, and a description read again on every focus is the repetition removed.
+
+**Assumption (gateless):** "messaging or email" replaces "OneDrive, SharePoint
+or email" on screen only. Nothing about the preset changed, and VH-17's
+question about where that file is streamed from is unaffected.
+
+**Verified:** Chrome, dev build: the list, the sentence once and still visible
+with a job running, the legend and both options, no `#file-help`.
+`test/screen-text.test.ts` holds the page's names to `PRESETS`.
+
+**Link:** VH-85; `index.html`, `src/config/presets.ts`, doc-deltas §6.1, §6.2,
+§9.1.
+
 ## 2026-09-30 — VH-94: `hidden` was losing to the stylesheet
 
 **Decision:** `[hidden] { display: none !important }` in `app.css`, recovered

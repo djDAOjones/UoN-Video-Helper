@@ -25,6 +25,9 @@
 
 ### Band 4 — the interface pass
 
+- VH-85 — Shipped 2026-09-30. The page says what the tool does as a list and
+  makes the privacy promise once; the output question is "File size /
+  quality". See decision-log.
 - VH-94 — Shipped 2026-09-30. `hidden` now hides: Start and the progress bar
   no longer show before a file, under a block, or after a job. See
   decision-log.

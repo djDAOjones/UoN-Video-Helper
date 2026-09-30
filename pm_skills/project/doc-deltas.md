@@ -66,3 +66,11 @@
       implementation needs it twice: on the raw correction and on the
       finished envelope, because the smoothing window is centred
       (source: VH-61)
+- [ ] 2026-09-30 SPEC §6.1 — headed "Best quality — for EchoVideo or
+      YouTube"; on screen it is "Larger / better", "For EchoVideo or YouTube
+      etc.", under the question "File size / quality" (source: VH-85)
+- [ ] 2026-09-30 SPEC §6.2 — headed "Smaller file — for OneDrive, SharePoint
+      or email"; on screen it is "Smaller / reduced", "For messaging or email
+      etc." (source: VH-85)
+- [ ] 2026-09-30 SPEC §9.1 — step 6 reads 'Choose "Best quality" or "Smaller
+      file"'; the choice is now named as above (source: VH-85)

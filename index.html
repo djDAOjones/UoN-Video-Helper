@@ -6,7 +6,7 @@
     <title>UoN Video Helper</title>
     <meta
       name="description"
-      content="Add approved University of Nottingham branding and consistent audio levels to an educational video, without uploading it anywhere."
+      content="Add approved University of Nottingham branding and consistent audio levels to a video, and get an optimised file back, without uploading it anywhere."
     />
   </head>
   <body>
@@ -18,11 +18,22 @@
     </header>
 
     <main class="main" id="main">
-      <p class="lede">
-        This tool adds approved branding and consistent audio levels to an educational video, then
-        gives you a finished MP4. Your video is processed on this device — it is never uploaded, and
-        the original file is never changed.
-      </p>
+      <!-- The privacy sentence is said once, here, above the file input, and it
+           stays on screen through a job (spec 9.2). It used to be said again
+           under the input, and a promise repeated is a promise skimmed
+           (VH-85). -->
+      <div class="lede">
+        <p>This tool does the following to your video:</p>
+        <ul>
+          <li>Adds approved branding</li>
+          <li>Ensures consistent audio levels</li>
+          <li>Outputs an optimised file type and size</li>
+        </ul>
+        <p>
+          Your video is processed on your device, it is never uploaded, and the original file does
+          not change.
+        </p>
+      </div>
 
       <section class="panel" aria-labelledby="choose-heading">
         <h2 id="choose-heading">Choose a video</h2>
@@ -33,12 +44,7 @@
             type="file"
             id="file-input"
             accept="video/*,.mp4,.mov,.m4v,.mkv,.webm"
-            aria-describedby="file-help"
           />
-          <p class="helper" id="file-help">
-            Your video is read on this device. It is never uploaded, and the original file is never
-            changed.
-          </p>
         </div>
         <div id="source-report"></div>
         <div class="field" id="subtitle-field" hidden>
@@ -137,14 +143,24 @@
           </details>
         </fieldset>
         <fieldset class="choice" id="preset-choice" hidden>
-          <legend class="label">What is this video for</legend>
-          <label class="radio">
+          <legend class="label">File size / quality</legend>
+          <!-- Each name answers the legend in its own order — size, then
+               quality — and the line beneath says where that file is going.
+               The names are `PRESETS[id].label`; `test/screen-text.test.ts`
+               holds the two together (VH-85). -->
+          <label class="radio radio--described">
             <input type="radio" name="preset" value="best" checked />
-            <span>Best quality — for EchoVideo or YouTube</span>
+            <span class="radio-label">
+              <span>Larger / better</span>
+              <span class="radio-detail">For EchoVideo or YouTube etc.</span>
+            </span>
           </label>
-          <label class="radio">
+          <label class="radio radio--described">
             <input type="radio" name="preset" value="smaller" />
-            <span>Smaller file — for OneDrive, SharePoint or email</span>
+            <span class="radio-label">
+              <span>Smaller / reduced</span>
+              <span class="radio-detail">For messaging or email etc.</span>
+            </span>
           </label>
         </fieldset>
         <div id="preflight-report"></div>

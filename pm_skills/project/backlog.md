@@ -166,21 +166,6 @@
      "Open:" is a question for the maintainer with a working default — the
      default is what gets built if nobody answers. -->
 
-- [ ] **VH-85 Say what the tool does, as a list** (2026-09-30)
-      Intent: the opening paragraph becomes "This tool does the following to
-      your video:" over three bullets — adds approved branding, ensures
-      consistent audio levels, outputs an optimised file type and size — then
-      its own paragraph: "Your video is processed on your device, it is never
-      uploaded, and the original file does not change." The helper under the
-      file input repeats it and goes, with its `aria-describedby`.
-      The output question is relabelled: legend "File size / quality"; options
-      "Larger / better for EchoVideo or YouTube etc." and "Smaller / reduced
-      for messaging or email etc."
-      Done when: the screen reads that way; the privacy sentence appears once,
-      above the file input, and is still there during a job (spec §9.2);
-      `PRESETS` labels and the meta description agree with the new names;
-      doc-deltas record spec §6.1, §6.2 and §9.1.
-
 - [ ] **VH-86 Captions, not subtitles — and no caption file field** (2026-09-30)
       Intent: every user-facing "subtitle" becomes "caption", and the
       "Subtitle file (optional)" field goes. That withdraws spec §8.3 step 2 —

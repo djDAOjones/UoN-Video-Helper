@@ -65,7 +65,8 @@ for the MVP, which is built and verified locally.
   slew-limited to 1 dB/s), gentle compression, a single linear gain to
   −16 LUFS, and a true-peak limiter at −2.0 dBTP.
 - **Two outputs by purpose** — "Best quality" for EchoVideo/YouTube, and
-  "Smaller file" for OneDrive/SharePoint. The smaller preset **preserves
+  "Smaller file" for OneDrive/SharePoint; on screen since VH-85, "Larger /
+  better" and "Smaller / reduced" under "File size / quality". The smaller preset **preserves
   resolution** and takes the saving from bitrate, because slide legibility
   depends on resolution.
 - **Device pre-flight** — no fixed size or duration cap. A 3-second

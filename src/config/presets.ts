@@ -1,10 +1,13 @@
 /**
  * The two output presets, spec sections 6.1 and 6.2.
  *
- * Presented to the user by purpose, never by technique — "Best quality" and
- * "Smaller file", not bitrates. Spec section 9.2: no codec, bitrate or
- * loudness setting is exposed, not even in an advanced panel, because every
- * exposed control is a decision a novice is forced to make.
+ * Presented to the user by outcome, never by technique — "Larger / better" and
+ * "Smaller / reduced" under the question "File size / quality", not bitrates
+ * (VH-85; the spec's headings still say "Best quality" and "Smaller file", and
+ * the code keeps those as the ids `best` and `smaller`). Spec section 9.2: no
+ * codec, bitrate or loudness setting is exposed, not even in an advanced
+ * panel, because every exposed control is a decision a novice is forced to
+ * make.
  */
 
 export type PresetId = 'best' | 'smaller'
@@ -36,9 +39,9 @@ export interface Preset {
 export const PRESETS: Readonly<Record<PresetId, Preset>> = {
   best: {
     id: 'best',
-    label: 'Best quality',
+    label: 'Larger / better',
     description:
-      'For EchoVideo or YouTube. These re-encode your video when you upload it, so it is worth sending them the best copy.',
+      'For EchoVideo or YouTube etc. These re-encode your video when you upload it, so it is worth sending them the best copy.',
     // Spec 6.1: resolution and frame rate unchanged.
     maxHeight: null,
     maxFrameRate: null,
@@ -47,9 +50,9 @@ export const PRESETS: Readonly<Record<PresetId, Preset>> = {
   },
   smaller: {
     id: 'smaller',
-    label: 'Smaller file',
+    label: 'Smaller / reduced',
     description:
-      'For OneDrive, SharePoint or email. Students often download these directly, so a smaller file is kinder.',
+      'For messaging or email etc. These are sent and downloaded as they are, so a smaller file is kinder.',
     // Spec 6.2: resolution PRESERVED up to 1080p, reduced only above it.
     // Slide legibility depends far more on resolution than on bitrate, so the
     // saving is taken from bitrate instead. See rationale section 4.1.

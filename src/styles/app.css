@@ -99,6 +99,15 @@ body {
   color: var(--text-secondary);
 }
 
+.lede p {
+  margin: 0;
+}
+
+.lede ul {
+  margin: var(--spacing-03) 0 var(--spacing-05);
+  padding-left: var(--spacing-06);
+}
+
 .panel {
   border: 1px solid var(--border-subtle);
   background: var(--layer-01);
