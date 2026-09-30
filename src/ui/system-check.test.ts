@@ -12,25 +12,37 @@ describe('the system check summary (VH-88)', () => {
   it('says all passed, and stays closed, on a healthy device', () => {
     expect(summariseChecks(['pass', 'pass', 'pass', 'pass'])).toEqual({
       result: 'all passed',
-      failing: false,
+      problems: 0,
     })
   })
 
   it('names one problem in the singular and opens', () => {
     expect(summariseChecks(['pass', 'fail', 'pass', 'pass'])).toEqual({
       result: '1 problem',
-      failing: true,
+      problems: 1,
     })
   })
 
   it('counts several problems', () => {
-    expect(summariseChecks(['fail', 'fail', 'pass', 'fail']).result).toBe('3 problems')
+    expect(summariseChecks(['fail', 'fail', 'pass', 'fail'])).toEqual({
+      result: '3 problems',
+      problems: 3,
+    })
+  })
+
+  it('reports the same count when an unrelated check lands afterwards', () => {
+    // The panel opens when the count RISES. A failure followed by the worker
+    // check passing is the same one problem, so a panel the user has closed
+    // in between stays closed.
+    const before = summariseChecks(['fail', 'pass', 'pass', 'pending'])
+    const after = summariseChecks(['fail', 'pass', 'pass', 'pass'])
+    expect(after.problems).toBe(before.problems)
   })
 
   it('does not claim a pass while a check is still running', () => {
     expect(summariseChecks(['pass', 'pass', 'pass', 'pending'])).toEqual({
       result: 'checking',
-      failing: false,
+      problems: 0,
     })
   })
 
@@ -40,18 +52,18 @@ describe('the system check summary (VH-88)', () => {
     // ever, if the worker never does.
     expect(summariseChecks(['fail', 'pass', 'pass', 'pending'])).toEqual({
       result: '1 problem',
-      failing: true,
+      problems: 1,
     })
   })
 
   it('does not count a warning as a problem', () => {
     expect(summariseChecks(['pass', 'warn', 'pass', 'pass'])).toEqual({
       result: 'all passed',
-      failing: false,
+      problems: 0,
     })
   })
 
   it('reads as checking before any row exists', () => {
-    expect(summariseChecks([])).toEqual({ result: 'checking', failing: false })
+    expect(summariseChecks([])).toEqual({ result: 'checking', problems: 0 })
   })
 })

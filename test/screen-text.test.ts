@@ -101,3 +101,18 @@ describe('the status line (VH-88)', () => {
   })
 })
 
+describe('the System check panel (VH-88)', () => {
+  it('keeps a level-two heading, inside its summary', () => {
+    // A <details> has no heading of its own. Without one the panel drops out
+    // of the list a screen-reader user navigates by — even when a failure has
+    // opened it.
+    expect(markup).toMatch(
+      /<details[^>]*id="system-check"[^>]*>\s*<summary[^>]*>\s*<h2 id="system-check-summary">System check/,
+    )
+  })
+
+  it('starts closed', () => {
+    expect(markup).not.toMatch(/<details[^>]*id="system-check"[^>]*\sopen/)
+  })
+})
+

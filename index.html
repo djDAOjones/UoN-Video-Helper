@@ -176,10 +176,13 @@
       </section>
 
       <!-- Closed on a healthy device; `main.ts` opens it on any failure, and
-           the summary says the result in words either way (VH-88). -->
+           the summary says the result in words either way (VH-88). The words
+           are a heading INSIDE the summary, which HTML allows: a panel this
+           substantial has to stay in the list a screen-reader user navigates
+           by, open or shut. -->
       <details class="panel system-check" id="system-check">
-        <summary class="disclosure-summary" id="system-check-summary">
-          System check — checking
+        <summary class="disclosure-summary">
+          <h2 id="system-check-summary">System check — checking</h2>
         </summary>
         <ul class="checks" id="checks"></ul>
       </details>

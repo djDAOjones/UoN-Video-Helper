@@ -561,6 +561,12 @@ details[open] > .disclosure-summary::before {
   margin-bottom: var(--spacing-05);
 }
 
+/* A heading for navigation, not for size: it reads as the summary's text. */
+.system-check > .disclosure-summary h2 {
+  margin: 0;
+  font: inherit;
+}
+
 .disclosure-summary:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;

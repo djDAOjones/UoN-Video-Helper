@@ -11,6 +11,25 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-09-30 — VH-88 review: the panel keeps its heading, and opens once
+
+**Decision:** the summary's words are an `<h2>` inside the `<summary>`, and the
+panel opens itself when the count of failed checks RISES, not whenever it is
+above zero. `summariseChecks` returns that count in place of a flag.
+
+**Rationale:** both found by the Codex review of VH-88. Replacing the
+`<section>` and its `<h2>` with a bare `<details>` took System check out of
+the list a screen-reader user navigates by, failure or no. And `if (failing)
+open = true` ran on every row update, so a user who read a failure and closed
+the panel had it thrown open again when the worker check landed —
+`UI-STANDARDS.md` → "User control and freedom".
+
+**Verified:** Chrome: the accessibility tree lists "heading: System check — 1
+problem"; with `VideoEncoder` removed and the panel closed the instant it
+opened, the worker check landing afterwards left it closed (opened once).
+
+**Link:** VH-88; `index.html`, `src/ui/system-check.ts`, `src/main.ts`.
+
 ## 2026-09-30 — VH-89: ready to go, in three lines
 
 **Decision:** a `proceed` reads "Ready to go" / "This should take about 37

@@ -244,20 +244,26 @@ function renderCheck(id: string, label: string, state: CheckState, value: string
   updateSystemCheckSummary()
 }
 
+/** Failures already shown, so the panel opens for a new one and not again. */
+let problemsShown = 0
+
 /**
  * Restates the panel's result in its summary line, and opens it on a failure.
  *
  * The panel starts closed, so the summary is all most people see of it. It
  * is only ever opened here, never shut: someone who opened it to look should
- * not have it close under them when the last check lands.
+ * not have it close under them when the last check lands. And it is opened
+ * once per failure, not on every update while one stands — otherwise a user
+ * who closes it has it thrown open again by the next row to land.
  */
 function updateSystemCheckSummary(): void {
   const states = [...checksList.querySelectorAll<HTMLLIElement>('.check')].map(
     (row) => row.dataset['state'] as CheckState,
   )
-  const { result, failing } = summariseChecks(states)
+  const { result, problems } = summariseChecks(states)
   systemCheckSummary.textContent = `System check — ${result}`
-  if (failing) systemCheck.open = true
+  if (problems > problemsShown) systemCheck.open = true
+  problemsShown = problems
 }
 
 function setStatus(message: string): void {

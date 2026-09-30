@@ -12,8 +12,12 @@ export type CheckState = 'pass' | 'fail' | 'warn' | 'pending'
 export interface ChecksSummary {
   /** What the summary says after "System check — ". */
   readonly result: string
-  /** True when the panel must open itself: something failed. */
-  readonly failing: boolean
+  /**
+   * How many checks have failed. The panel opens itself when this RISES, not
+   * whenever it is above zero: a user who has read a failure and closed the
+   * panel must not have it reopened by the next, unrelated row landing.
+   */
+  readonly problems: number
 }
 
 /**
@@ -27,10 +31,10 @@ export interface ChecksSummary {
 export function summariseChecks(states: readonly CheckState[]): ChecksSummary {
   const problems = states.filter((state) => state === 'fail').length
   if (problems > 0) {
-    return { result: problems === 1 ? '1 problem' : `${problems} problems`, failing: true }
+    return { result: problems === 1 ? '1 problem' : `${problems} problems`, problems }
   }
   if (states.length === 0 || states.includes('pending')) {
-    return { result: 'checking', failing: false }
+    return { result: 'checking', problems: 0 }
   }
-  return { result: 'all passed', failing: false }
+  return { result: 'all passed', problems: 0 }
 }
