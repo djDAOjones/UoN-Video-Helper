@@ -11,6 +11,48 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-09-30 — VH-91: four numbered panels, and a status line each
+
+**Decision:** the steps are separate panels with numbered headings — 1. Choose
+a video, 2. Closing branding, 3. File size / quality, 4. Create — and they
+stay open. Steps 2 to 4 appear when the first video has been read and then
+stay for the session. Create holds the verdict, the sound warnings, the
+button, the status line, the progress bar and the result. Step 1 has a status
+line of its own.
+
+**Rationale:** the request floated sections that advance "when info was
+added". For these steps that is the wrong trigger: each holds a safe default,
+so nothing is ever "added", and a select or radio changes on every arrow key,
+so advancing on change shuts the step under a keyboard user mid-choice (WCAG
+3.2.2). Folding between STAGES is VH-97, which folds these same panels.
+
+**The second status line is forced, not chosen.** The item's default keeps
+steps 2–4 off the page until a video is read, and its done-when puts the
+status line in Create. Together those hide the only live region during
+"Reading the video…" and "That file could not be read." — exactly when it has
+most to say. So the FILE's status sits beside the file input, always on the
+page, and the JOB's status sits in Create, revealed before anything is written
+to it. Each is now beside the control it reports on, which is what VH-88
+moved it for.
+
+**Assumptions (gateless):** the steps are revealed once and not re-hidden per
+file — they hold nothing a new file invalidates, and hiding them made the page
+jump on every selection. That lets the preset be changed while a new file is
+still being read, which would have cancelled the read; `inspectedFile` makes
+that change a no-op, because the read's own continuation runs pre-flight with
+whatever preset is chosen by then. The number is heading text ("1. Choose a
+video"), not a CSS counter, so it is heard as well as seen.
+
+**Verified:** Chrome, dev build. At load: step 1 only, "Choose a video to
+begin." After a read: four panels, focus still on the file input. A second
+file with the preset changed mid-read: the report and the verdict both arrive,
+for the new preset. A job: Create reads verdict → button → status → result.
+No horizontal overflow at 375 px. Node: the numbers are consecutive, each
+region is labelled by its heading, Create's contents are in reading order.
+
+**Link:** VH-91; `index.html`, `src/main.ts`, `src/styles/app.css`. VH-97's
+detail moved to `tickets/VH-97.md`.
+
 ## 2026-09-30 — VH-90: closing branding is three controls, and one sentence
 
 **Decision:** "Animation type" (Cut, Fade, Slide, None) and "Animation onset"

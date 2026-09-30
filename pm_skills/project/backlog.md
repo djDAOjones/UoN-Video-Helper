@@ -166,24 +166,6 @@
      "Open:" is a question for the maintainer with a working default — the
      default is what gets built if nobody answers. -->
 
-- [ ] **VH-91 Steps that read as steps** [detail](tickets/VH-91.md)
-      (2026-09-30)
-      Intent: closing branding and file size / quality — and trim, when it
-      lands — stop being fieldsets stacked in one panel headed "Choose a
-      video" and become separate, numbered panels ending in Create. They stay
-      open; whether finished STAGES fold is VH-97, which folds these panels,
-      so nothing here is thrown away by it.
-      The request floated sections that advance "when info was added". For
-      these steps that is the wrong trigger: each holds a safe default, so
-      nothing is "added"; a select or radio changes on every arrow key, so
-      advancing on change would shut the section under a keyboard user
-      mid-choice (WCAG 3.2.2); and a closed step hides its choice.
-      Revisits VH-32 ("the simplicity is the design"), consistently — VH-32
-      named trim as the one thing that would justify more structure.
-      Done when: each step is a labelled region with a numbered heading; focus
-      order follows visual order; Create holds the verdict, button, progress,
-      status and result together; nothing moves focus or collapses unasked.
-
 - [ ] **VH-92 Look like the University** [detail](tickets/VH-92.md)
       (2026-09-30)
       Intent: take the visual cues from <https://www.nottingham.ac.uk/> and
@@ -275,7 +257,8 @@
       and last frames are the ones the preview showed, across the corpus;
       criterion 9 still reads zero.
 
-- [ ] **VH-97 Fold the finished stages** (2026-09-30) [sign-off]
+- [ ] **VH-97 Fold the finished stages** [detail](tickets/VH-97.md)
+      (2026-09-30) [sign-off]
       Intent: the expanding and contracting the request floated, done where it
       is safe — between STAGES, not between choices. Choose, set up, create,
       save: one open at a time, a finished one folding to a line that says
@@ -284,8 +267,8 @@
       a changed control.
       Prior art: the archived branch built and tested exactly this
       (`src/ui/workflow.ts`, `focusNextWorkflowControl`); VH-32 declined it on
-      2026-08-27 in favour of the single screen. Detail is in
-      [VH-91's ticket](tickets/VH-91.md).
+      2026-08-27 in favour of the single screen. VH-91 shipped the panels it
+      would fold, 2026-09-30.
       Open: whether it is wanted at all. Default: not built. Decide after
       using VH-91's panels with trim in them; the page may be short enough.
       Done when: signed off; then focus lands on the next control at every

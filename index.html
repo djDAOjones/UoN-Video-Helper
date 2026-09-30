@@ -35,8 +35,18 @@
         </p>
       </div>
 
-      <section class="panel" aria-labelledby="choose-heading">
-        <h2 id="choose-heading">Choose a video</h2>
+      <!-- VH-91, 2026-09-30. The steps are separate, numbered panels rather
+           than fieldsets stacked under one heading. They stay open: each of
+           steps 2 and 3 holds a safe default, so there is no moment at which
+           information "arrives" to advance on, and a select or radio changes
+           on every arrow key — advancing on change would shut a step under a
+           keyboard user mid-choice (WCAG 3.2.2). Nothing here moves focus or
+           collapses unasked.
+           Steps 2 to 4 appear once a video has been read, and then stay for
+           the session: hiding them again for every new file made the page
+           jump, and they hold nothing a new file invalidates. -->
+      <section class="panel step" id="step-choose" aria-labelledby="choose-heading">
+        <h2 id="choose-heading"><span class="step-number">1.</span> Choose a video</h2>
         <div class="field">
           <label class="label" for="file-input">Video file</label>
           <input
@@ -46,9 +56,21 @@
             accept="video/*,.mp4,.mov,.m4v,.mkv,.webm"
           />
         </div>
+        <!-- What is happening to the FILE: reading, read, could not be read.
+             A live region of its own, because it belongs beside the input it
+             reports on, and step 4's status line is not on the page until a
+             video has been read (VH-91). Never `hidden`, never in a
+             disclosure. -->
+        <p class="status" id="source-status" role="status" aria-live="polite"></p>
         <div id="source-report"></div>
-        <fieldset class="choice" id="branding-choice" hidden>
-          <legend class="label">Closing branding</legend>
+      </section>
+
+      <section class="panel step" id="step-closing" aria-labelledby="closing-heading" hidden>
+        <h2 id="closing-heading"><span class="step-number">2.</span> Closing branding</h2>
+        <fieldset class="choice" id="branding-choice">
+          <!-- The heading above is what is seen; the legend names the group
+               for assistive technology without saying it twice on screen. -->
+          <legend class="visually-hidden">Closing branding</legend>
           <!-- VH-90, 2026-09-30. Three controls, always present, in the order
                they are decided: type, onset, colour. They replace VH-46b's
                four-way radio at the maintainer's word — it had rejected a
@@ -133,9 +155,13 @@
           </div>
           <p class="closing-result" id="closing-result" aria-live="polite"></p>
         </fieldset>
-        <fieldset class="choice" id="preset-choice" hidden>
-          <legend class="label">File size / quality</legend>
-          <!-- Each name answers the legend in its own order — size, then
+      </section>
+
+      <section class="panel step" id="step-preset" aria-labelledby="preset-heading" hidden>
+        <h2 id="preset-heading"><span class="step-number">3.</span> File size / quality</h2>
+        <fieldset class="choice" id="preset-choice">
+          <legend class="visually-hidden">File size / quality</legend>
+          <!-- Each name answers the heading in its own order — size, then
                quality — and the line beneath says where that file is going.
                The names are `PRESETS[id].label`; `test/screen-text.test.ts`
                holds the two together (VH-85). -->
@@ -154,14 +180,22 @@
             </span>
           </label>
         </fieldset>
-        <div id="preflight-report"></div>
+      </section>
+
+      <!-- Everything about the JOB, together: the verdict, what is worth
+           knowing about the sound, the button, the status line, the progress
+           bar, and the result with its Save. -->
+      <section class="panel step" id="step-create" aria-labelledby="create-heading" hidden>
+        <h2 id="create-heading"><span class="step-number">4.</span> Create</h2>
+        <div class="step-lead" id="preflight-report"></div>
         <div id="audio-warnings"></div>
         <div class="actions" id="process-actions" hidden></div>
-        <!-- The app's one live region, and its only status text. It lived in
-             the System check panel, 450 px below the button it reports on —
-             and that panel now starts closed, where a live region is neither
-             seen nor announced (VH-88). Never `hidden`, never inside a
-             disclosure. -->
+        <!-- What is happening to the JOB: the device check, each stage,
+             "Your video is ready.", "Saved." It lived in the System check
+             panel, 450 px below the button it reports on — and that panel now
+             starts closed, where a live region is neither seen nor announced
+             (VH-88). Never `hidden` itself, never inside a disclosure; the
+             step it sits in is revealed before anything is written to it. -->
         <p class="status" id="status" role="status" aria-live="polite"></p>
         <!-- Named and described. A bare <progress> announces a percentage and
              nothing else, so a screen-reader user heard "63%" with no way to

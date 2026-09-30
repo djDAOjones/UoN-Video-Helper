@@ -25,6 +25,9 @@
 
 ### Band 4 — the interface pass
 
+- VH-91 — Shipped 2026-09-30. Four numbered panels that stay open; Create
+  holds everything about the job; the file and the job each have a status
+  line beside them. See decision-log.
 - VH-90 — Shipped 2026-09-30. Closing branding is three always-present
   controls — type, onset, colour — with a sentence stating the result; every
   combination makes the job its old radio did. See decision-log.

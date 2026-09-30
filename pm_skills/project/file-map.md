@@ -37,7 +37,7 @@
 - `acceptance.html` — Maintainer page for the acceptance run. Excluded from the production build.
 - `check-links.mjs` — Scaffolded internal Markdown link checker. Runs in `check`.
 - `eslint.config.js` — Flat ESLint config. Strict on correctness, silent on taste; formatting is Prettier's job.
-- `index.html` — The single page. Landmarks, skip link, and the polite live region the app announces into.
+- `index.html` — The single page. Landmarks, skip link, the four numbered step panels, and the two status lines the app announces into.
 - `package.json` — Scripts, the one runtime dependency, and the product version.
 - `spike-alpha.html` — Maintainer page: does this browser decode transparent video? Excluded from the build.
 - `spike-codecs.html` — Maintainer page: which encoder configurations does this engine actually accept, video AND audio?
@@ -224,5 +224,5 @@
 - `test/ebu3341/signals.ts` — EBU Tech 3341 Table 1 signals, synthesised from their published definitions.
 - `test/ebu3341/tech3341.test.ts` — The compliance gate: Table 1 cases 1-23 against the meter, inside `npm run check`.
 - `test/helpers/signals.ts` — Synthesised tones and silence shared by the meter tests and the EBU harness.
-- `test/screen-text.test.ts` — Holds the static page to what it must agree with: the privacy promise once, preset names as `PRESETS` has them, "caption" never "subtitle", the status line outside any disclosure.
+- `test/screen-text.test.ts` — Holds the static page to what it must agree with: the privacy promise once, preset and closing options as the config has them, "caption" never "subtitle", status lines outside any disclosure, steps numbered without a gap.
 - `test/stylesheet.test.ts` — Stylesheet invariants no component test can see: `hidden` outranks every author `display` rule.

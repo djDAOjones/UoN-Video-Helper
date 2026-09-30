@@ -82,6 +82,11 @@ describe('proceed (VH-89)', () => {
     })
   })
 
+  it('does not say "about less than a second" for a very short clip', () => {
+    const quick = summary('proceed', [], { probe: { ...summary('proceed').probe, estimatedSeconds: 0.3 } })
+    expect(verdictText(quick).lines[0]).toBe('This should take less than a second.')
+  })
+
   it('says "up to", because the figure is an upper bound and not a prediction', () => {
     // VH-31: 27.7 MB was shown for a 7.5 MB file. A bare number reads as a
     // promise; two words keep the screen true.

@@ -66,7 +66,10 @@ describe('the output choice (VH-85)', () => {
   })
 
   it('asks the question in the agreed words', () => {
-    expect(markup).toMatch(/<legend class="label">File size \/ quality<\/legend>/)
+    // Seen as the step's heading; named again, for assistive technology only,
+    // as the legend of the radio group it heads (VH-91).
+    expect(visibleText).toContain('File size / quality')
+    expect(markup).toMatch(/<legend class="visually-hidden">File size \/ quality<\/legend>/)
   })
 })
 
@@ -183,10 +186,76 @@ describe('the closing controls (VH-90)', () => {
   })
 
   it('keeps all three inside the one fieldset the job lock disables', () => {
-    const fieldset = /<fieldset[^>]*id="branding-choice"[\s\S]*?<fieldset class="choice" id="preset-choice"/.exec(markup)?.[0] ?? ''
+    const fieldset =
+      /<fieldset[^>]*id="branding-choice"[\s\S]*?<\/fieldset>\s*<\/section>/.exec(markup)?.[0] ?? ''
     for (const id of ['closing-type', 'closing-onset', 'closing-colour', 'onset-help-button']) {
       expect(fieldset).toContain(`id="${id}"`)
     }
+  })
+})
+
+describe('steps that read as steps (VH-91)', () => {
+  /** Each step panel, in document order: its id, its number, its heading text, whether it starts hidden. */
+  const steps = [
+    ...markup.matchAll(
+      /<section class="panel step" id="([^"]+)" aria-labelledby="([^"]+)"(\s+hidden)?>\s*<h2 id="([^"]+)"><span class="step-number">(\d+)\.<\/span>\s*([^<]+)<\/h2>/g,
+    ),
+  ].map((match) => ({
+    id: match[1]!,
+    labelledBy: match[2]!,
+    hidden: match[3] !== undefined,
+    headingId: match[4]!,
+    number: Number(match[5]),
+    title: match[6]!.trim(),
+  }))
+
+  it('has the four steps, in order', () => {
+    expect(steps.map((step) => step.title)).toEqual([
+      'Choose a video',
+      'Closing branding',
+      'File size / quality',
+      'Create',
+    ])
+  })
+
+  it('numbers them consecutively from 1, with no gap', () => {
+    // A missing "2" reads as a fault. When trim lands as a step the numbers
+    // move; this is what makes sure they all move.
+    expect(steps.map((step) => step.number)).toEqual(steps.map((_, index) => index + 1))
+  })
+
+  it('labels each region by its own numbered heading', () => {
+    for (const step of steps) expect(step.labelledBy).toBe(step.headingId)
+    expect(new Set(steps.map((step) => step.headingId)).size).toBe(steps.length)
+  })
+
+  it('shows only the first step until a video has been read', () => {
+    expect(steps.map((step) => step.hidden)).toEqual([false, true, true, true])
+  })
+
+  it('never reorders focus away from the visual order', () => {
+    // Focus order is document order unless something overrides it, and
+    // nothing may.
+    expect(markup).not.toMatch(/tabindex="[1-9]/)
+  })
+
+  it('keeps everything about the job together in Create, in reading order', () => {
+    const create = /<section class="panel step" id="step-create"[\s\S]*?<\/section>/.exec(markup)?.[0] ?? ''
+    const order = ['preflight-report', 'audio-warnings', 'process-actions', 'status', 'process-progress', 'process-result']
+    const positions = order.map((id) => create.indexOf(`id="${id}"`))
+    expect(positions.every((position) => position >= 0)).toBe(true)
+    expect(positions).toEqual([...positions].sort((a, b) => a - b))
+  })
+
+  it('gives the file its own status line, in the step that is always on the page', () => {
+    // Step 4's status line is inside a section that starts hidden, where a
+    // live region says nothing. "Reading the video…" and "That file could not
+    // be read." happen before that section exists.
+    const choose = /<section class="panel step" id="step-choose"[\s\S]*?<\/section>/.exec(markup)?.[0] ?? ''
+    expect(choose).toMatch(/<p class="status" id="source-status" role="status" aria-live="polite">/)
+    expect(choose).not.toMatch(/id="source-status"[^>]*\shidden/)
+    expect(choose).not.toContain('<details')
+    expect(choose.indexOf('id="source-status"')).toBeGreaterThan(choose.indexOf('id="file-input"'))
   })
 })
 

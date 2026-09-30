@@ -71,6 +71,11 @@ const checksList = required<HTMLUListElement>('#checks')
 const systemCheck = required<HTMLDetailsElement>('#system-check')
 const systemCheckSummary = required<HTMLElement>('#system-check-summary')
 const statusLine = required<HTMLParagraphElement>('#status')
+const sourceStatusLine = required<HTMLParagraphElement>('#source-status')
+/** Steps 2 to 4, which are not on the page until a video has been read. */
+const laterSteps = ['#step-closing', '#step-preset', '#step-create'].map((selector) =>
+  required<HTMLElement>(selector),
+)
 const versionLine = required<HTMLParagraphElement>('#version-line')
 const errorsPanel = required<HTMLElement>('#errors-panel')
 const errorsContainer = required<HTMLDivElement>('#errors')
@@ -293,8 +298,32 @@ function updateSystemCheckSummary(): void {
   problemsShown = problems
 }
 
+/**
+ * Says what is happening to the JOB — the device check, a stage, a save.
+ *
+ * Step 4's status line. It is not on the page until a video has been read, so
+ * anything about the FILE goes through {@link setSourceStatus} instead: a live
+ * region inside a hidden section is neither seen nor announced.
+ */
 function setStatus(message: string): void {
   statusLine.textContent = message
+}
+
+/** Says what is happening to the FILE, beside the input that chose it. */
+function setSourceStatus(message: string): void {
+  sourceStatusLine.textContent = message
+}
+
+/**
+ * Puts steps 2 to 4 on the page. Once, for the session.
+ *
+ * They hold nothing a new file invalidates — two choices with safe defaults,
+ * and a Create step whose verdict and Start are cleared and re-earned per
+ * file — so hiding them again for each new file only made the page jump. It
+ * moves no focus: the user is still on the file input they just used.
+ */
+function revealLaterSteps(): void {
+  for (const step of laterSteps) step.hidden = false
 }
 
 // --- Error surfacing -------------------------------------------------------
@@ -488,7 +517,7 @@ async function checkWorker(): Promise<void> {
 void checkWorker()
   .then(() => {
     const blocking = !hasWebCodecs || !hasOpfs || !window.isSecureContext
-    setStatus(
+    setSourceStatus(
       blocking
         ? 'This browser is missing something the tool needs. The system check below says what.'
         : 'Choose a video to begin.',
@@ -496,7 +525,9 @@ void checkWorker()
   })
   .catch((cause: unknown) => {
     renderCheck('worker', 'Background processing', 'fail', 'no response')
-    setStatus('Background processing did not start. See the system check and the errors below.')
+    setSourceStatus(
+      'Background processing did not start. See the system check and the errors below.',
+    )
     recordUncaught({
       ts: Date.now(),
       message: cause instanceof Error ? cause.message : String(cause),
@@ -508,6 +539,17 @@ void checkWorker()
 
 // --- File selection ---
 
+/**
+ * The file whose inspection has succeeded, or `null` while none has.
+ *
+ * Steps 2 to 4 stay on the page between files (VH-91), so the preset can now
+ * be changed while a NEW file is still being read. A pre-flight started then
+ * would cancel that read and run against a file with no report on screen. The
+ * read's own continuation runs pre-flight when it lands, with whatever preset
+ * is chosen by then — so a change made before that has nothing to do.
+ */
+let inspectedFile: File | null = null
+
 fileInput.addEventListener('change', () => {
   const file = fileInput.files?.[0]
   if (!file) return
@@ -518,7 +560,9 @@ fileInput.addEventListener('change', () => {
   log.info('ui', 'file chosen', { sizeBytes: file.size, type: file.type })
   // A bundle taken now must not describe the file before this one.
   resetDiagnosticsContext('inspecting')
-  setStatus('Reading the video…')
+  setSourceStatus('Reading the video…')
+  // Whatever step 4 last said was about the previous file's job.
+  setStatus('')
   sourceReport.replaceChildren()
   preflightReport.replaceChildren()
   audioWarnings.replaceChildren()
@@ -526,8 +570,7 @@ fileInput.addEventListener('change', () => {
   // session now, and emptying this container would throw them away (VH-36).
   processActions.hidden = true
   jobFile = null
-  presetChoice.hidden = true
-  brandingChoice.hidden = true
+  inspectedFile = null
   // Kept when there is something to lose: the result panel describes a video
   // that already exists, and the source panel describes what was just chosen.
   // Clearing it here removed the only route to a finished file (VH-56).
@@ -553,7 +596,9 @@ fileInput.addEventListener('change', () => {
       if (!current()) return
       if (reply.kind === 'inspected') {
         renderSourceReport(sourceReport, reply.report)
-        setStatus(summarise(reply.report))
+        setSourceStatus(summarise(reply.report))
+        inspectedFile = file
+        revealLaterSteps()
         setDiagnosticsContext({ stage: 'inspected', source: reply.report })
         // Structure first, then the measurement — the probe really does decode
         // and encode three seconds, so it must not hold up what we already know.
@@ -562,7 +607,7 @@ fileInput.addEventListener('change', () => {
       }
       if (reply.kind === 'failed') {
         renderSourceError(sourceReport, reply.message)
-        setStatus('That file could not be read.')
+        setSourceStatus('That file could not be read.')
         setDiagnosticsContext({ stage: 'failed' })
         return
       }
@@ -577,7 +622,7 @@ fileInput.addEventListener('change', () => {
         sourceReport,
         'Reading this file took longer than expected, or the tool ran into a problem.',
       )
-      setStatus('That file could not be read.')
+      setSourceStatus('That file could not be read.')
       log.error('ui', 'inspection request failed', {
         reason: cause instanceof Error ? cause.message : String(cause),
       })
@@ -635,8 +680,6 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
         stage: reply.summary.verdict.outcome === 'block' ? 'blocked' : 'ready',
         capability: reply.summary,
       })
-      presetChoice.hidden = false
-      brandingChoice.hidden = false
       if (reply.summary.verdict.outcome !== 'block') {
         showProcessControls(file, reply.summary.verdict.outcome === 'discourage')
       }
@@ -667,7 +710,8 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
 
 presetChoice.addEventListener('change', () => {
   const file = fileInput.files?.[0]
-  if (!file) return
+  // Nothing to re-check until this file has been read: see `inspectedFile`.
+  if (!file || file !== inspectedFile) return
   // The output shape, projected size and estimate all change with the preset,
   // so the verdict must be recomputed rather than left describing the other
   // one — and the one it replaces must not be allowed to land afterwards.
@@ -1195,7 +1239,12 @@ function renderResult(
       }
     })()
   })
-  processResult.append(save)
+  // In the same block as every other button row, so it is spaced from the
+  // line above it rather than butted against it.
+  const actions = document.createElement('div')
+  actions.className = 'actions'
+  actions.append(save)
+  processResult.append(actions)
 }
 
 // --- Dev-only affordances --------------------------------------------------
@@ -1213,7 +1262,8 @@ if (isDev) {
       const drained = await request({ kind: 'drainLogs' })
       if (drained.kind === 'logs') adoptLogRecords(drained.records)
       const copied = await copyDiagnostics()
-      setStatus(
+      // Step 1's line: the only status text that is always on the page.
+      setSourceStatus(
         copied
           ? 'Copied a redacted diagnostics bundle to the clipboard.'
           : 'Could not copy the diagnostics bundle. Check the console.',

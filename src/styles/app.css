@@ -121,6 +121,31 @@ body {
   font-weight: 600;
 }
 
+/*
+ * A step's number (VH-91). Part of the heading's text, so it is read out as
+ * "1. Choose a video" — a number drawn by CSS would be seen and not heard.
+ */
+.step-number {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+}
+
+/* Inside a step the fieldset is structure, not a block of its own: the panel
+   supplies the spacing a stacked fieldset used to need. */
+.step > .choice {
+  margin-top: 0;
+}
+
+/* The first thing in a step sits under the heading, not a verdict's margin
+   below it. */
+.step-lead > :first-child {
+  margin-top: 0;
+}
+
+.step > .status {
+  margin-top: var(--spacing-04);
+}
+
 /* Status list — every row states its outcome in words, never colour alone */
 .checks {
   list-style: none;

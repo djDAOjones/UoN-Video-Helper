@@ -109,7 +109,11 @@ export function verdictText(summary: PreflightSummary): VerdictText {
       REASONS_STATING_THE_TIME.includes(reason.code),
     )
     if (!timeAlreadySaid && probe.estimatedSeconds !== null) {
-      lines.push(`This should take about ${formatDuration(probe.estimatedSeconds)}.`)
+      const time = formatDuration(probe.estimatedSeconds)
+      // "About less than a second" is what a very short clip used to be told.
+      lines.push(
+        time.startsWith('less than') ? `This should take ${time}.` : `This should take about ${time}.`,
+      )
     }
 
     // "Up to", not a bare figure. It is an upper bound by construction — it
