@@ -65,4 +65,6 @@
   `N FAILURE(S)`, errors counted) and have `run-in-engines.mjs` read only
   that line. Today it reads verdict words in prose, which a contrived source
   file name can fool into a false failure. (from: VH-26 review)
-
+- Drag-and-drop onto the page to choose a video. Spec §9.1 step 1 has always
+  asked for it and it was never built or decided; the doc-sync kept it in the
+  spec. (from: doc-sync 2026-10-01)

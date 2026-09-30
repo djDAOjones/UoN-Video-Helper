@@ -19,8 +19,8 @@ and this file is wrong and should be corrected.
 A static, browser-only web app that takes a staff member's recorded
 educational video and produces a consistent, correctly-levelled,
 correctly-branded MP4 — in one pass, with no software to install, no
-upload, and no media leaving the device. It adds approved UoN opening and
-closing branding, normalises audio to −16 LUFS integrated with a −2.0 dBTP
+upload, and no media leaving the device. It adds approved UoN closing
+branding, normalises audio to −16 LUFS integrated with a −2.0 dBTP
 true-peak ceiling, and exports H.264/MP4 in one of two purpose-named
 variants. All processing runs on the user's own machine through the
 WebCodecs API.
@@ -39,8 +39,9 @@ audio, and the technical burden of expecting academics to learn FFmpeg.
 University of Nottingham academic and professional-services staff.
 Novice level, on managed or personal laptops. They arrive with a Teams or
 Zoom recording, a screen-recorded PowerPoint, a webcam talking head, or a
-screen capture — typically 720p–1080p, 25–30 fps, frequently variable
-frame rate — and they are publishing to EchoVideo (primary, including
+screen capture — typically 720p–1080p at 25–30 fps (variable frame rate
+was expected; the measured corpus has none, spec §6.3) — and they are
+publishing to EchoVideo (primary, including
 Moodle embeds), OneDrive/SharePoint, or occasionally YouTube.
 
 The destination mix defines the two outputs: EchoVideo and YouTube
@@ -55,18 +56,22 @@ reason WebCodecs was chosen over ffmpeg.wasm — see rationale §1.3). Must
 work offline after first load, except for branding assets, which are
 cached.
 
-Hosting location and URL are **not yet decided** (D5) and are not needed
-for the MVP, which is built and verified locally.
+Hosting is answered in principle (D5): a UoN-hosted web app. Who provisions
+it is open (VH-14); meanwhile the pilot runs on GitHub Pages and a flat Xerte
+package is uploaded by hand.
 
 ## Core features (v1)
 
-- **Branding** — independent opening and closing toggles, prepended and
-  appended (not overlaid), conformed to the source's resolution and frame
-  rate, with the branding's own audio bed passed through unprocessed.
+- **Branding** — a closing only (no approved opening exists, VH-23),
+  appended and chosen by three controls — type, onset, colour — or none;
+  conformed to the source's resolution and frame rate, padded in
+  Nottingham Blue, and silent (spec §4).
 - **Loudness normalisation** — BS.1770-4 measurement, then a bespoke
   chain: high-pass, conditional macro-levelling (only when LRA > 9 LU,
-  slew-limited to 1 dB/s), gentle compression, a single linear gain to
-  −16 LUFS, and a true-peak limiter at −2.0 dBTP.
+  slew-limited to 1 dB/s), gentle compression, a single linear gain that
+  lands the delivered file on −16 LUFS, and a true-peak limiter held at
+  least 1 dB under the file's −2.0 dBTP ceiling, because AAC raises peaks
+  after it (spec §5.2).
 - **Two outputs by purpose** — "Best quality" for EchoVideo/YouTube, and
   "Smaller file" for OneDrive/SharePoint; on screen since VH-85, "Larger /
   better" and "Smaller / reduced" under "File size / quality". The smaller preset **preserves
@@ -103,9 +108,10 @@ for the MVP, which is built and verified locally.
   every AAA exception is recorded explicitly. Carbon productive design
   language, implemented in our own code, with a separate UoN brand token
   layer. See `UI-STANDARDS.md`.
-- **Browser support** excludes Safari below 26 and Firefox on Android —
-  roughly 5% of active browsers, shown a clear explanation rather than a
-  broken app.
+- **Browser support** — built for Chrome, and the page says so (VH-98).
+  Firefox is refused for any video with sound (VH-49); Safari below 26 and
+  Firefox on Android lack what the app needs. Every block names Chrome, and
+  none leaves a broken app (spec §10).
 - **The loudness meter must validate against EBU Tech 3341** reference
   values within ±0.1 LU before anything is built on top of it. This is an
   acceptance criterion, not an optional extra.
@@ -120,21 +126,21 @@ supports it, the UI does not); pumping detection on pre-existing audio
 processing; noise reduction or de-reverberation; custom or per-department
 branding variants.
 
-Deferred within v1: the stream-copy fast path for the "best quality"
-output (D10) — it fails unpredictably on variable-frame-rate sources,
-which are common here.
+Cut: the stream-copy fast path for the larger output (D10, answered no on
+2026-08-27) — re-encoding is slower and predictable.
 
 ## Open questions
 
 The live list is [`docs/03-open-decisions.md`](../../docs/03-open-decisions.md).
-Four block work and are being **built around**, not answered by guesswork:
+D1 (Nottingham Blue, `#10263B`), D4 (signed off), D6, D7 and D10 are
+answered and sit under its Answered section. What remains is small:
 
 | ID | Question | Working assumption |
 | --- | --- | --- |
-| D1 | UoN brand background colour | A single named token, `#000000` interim, referenced in one place |
-| D2 | Branding durations | 5 s opening / 4 s closing, parameterised — never hard-coded |
-| D3 | Boundary audio treatment | Hard cut with a 100 ms fade each side |
-| D4 | Safari-below-26 exclusion, unsigned by UoN IT | Holds. Tracked as a standing risk, since reversing it is architectural |
+| D2 | Branding durations | Settled by the masters — a 1.00 s onset and a 4.00 s tail — and parameterised, never hard-coded |
+| D3 | Boundary audio treatment | A 100 ms fade each side; the branding is silent |
+| D5 | Hosting | A UoN-hosted web app; who provisions it is open (VH-14) |
+| D8 | Published limits | Wait on the measured device envelope (VH-M2) |
 
-Real branding assets do not exist yet. Placeholder clips matching the
-§4.2 master format stand in, so the real renders drop in unchanged.
+The real closing masters shipped with VH-12: four styles, built into twelve
+browser-ready files (spec §4.2). No approved opening exists.

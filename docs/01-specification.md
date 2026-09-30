@@ -28,7 +28,9 @@ It solves three problems in one pass:
   level, on a managed or personal laptop.
 - **Typical source material:** Teams/Zoom recordings, PowerPoint
   screen-recorded presentations, webcam talking-heads, screen captures.
-  Predominantly 720p–1080p, 25–30 fps, often variable frame rate.
+  Predominantly 720p–1080p at 25–30 fps. Variable frame rate was expected;
+  the measured corpus has none, and odd but stable rates are what arrive
+  (§6.3).
 - **Publishing destinations (confirmed):** EchoVideo (primary, including
   Moodle embeds via EchoVideo), OneDrive and SharePoint, occasionally
   YouTube.
@@ -77,8 +79,9 @@ path remains in the code against future assets but carries no user control:
 the two-toggle end state — opening and closing, all four combinations — is
 deferred, not withdrawn.
 
-The closing sequence is **appended**. Whether it also composites over the
-closing second of picture is the user's choice of boundary mode (§4.3).
+The closing sequence is **appended**. Whether there is one, and how it meets
+the picture, is the user's choice: three controls on screen, which §4.3 maps
+onto its three boundary modes.
 
 ### 4.2 Master assets, as delivered
 
@@ -89,8 +92,9 @@ rendered from After Effects as `qtrle`/`argb` — a codec no browser can decode
 
 **Four style variants are delivered, which this specification did not
 anticipate:** Fade and Slide, each in Blue and White. **Fade Blue is the
-default.** Who owns the set, and who approves any future variant, is an open
-decision (D12).
+default.** Who owns the set, and who approves any future variant, waits for
+the app's handover to the maintainer's central department, which would then
+own that governance (D12).
 
 A build step converts the masters into what the browser actually fetches:
 
@@ -109,8 +113,8 @@ source, converted at runtime.
 ### 4.3 Conforming to the source, and the three boundary modes
 
 1. Scale to **fit** the output frame, preserving the branding's aspect ratio.
-2. Pad any remainder with the UoN brand background colour (hex TBC — see
-   open decisions) so 4:3, 16:10 and vertical sources are handled correctly.
+2. Pad any remainder with the UoN brand background colour, Nottingham Blue
+   `#10263B` (D1), so 4:3, 16:10 and vertical sources are handled correctly.
 3. Convert to the output frame rate. With one master rate this always runs;
    source and branding frames pair **by timestamp, never by frame index**.
 4. Re-encode the branding frames with the same encoder settings as the main
@@ -119,7 +123,7 @@ source, converted at runtime.
 **Concatenation is not the whole operation.** The masters open with a 1.00 s
 alpha build intended for compositing, so what sits *under* that build is an
 editorial choice. Three modes, named with the conventional edit terms, where
-`T` is the source duration:
+`T` is the duration kept — the whole source unless it is trimmed (§9.1):
 
 | Mode | Output length | Composites |
 | --- | --- | --- |
@@ -132,6 +136,23 @@ no alpha decode, so branding survives a browser without transparency support.
 The freeze holds the last frame that resembles its neighbours, not simply the
 last decoded one — a torn or black-flashed final frame would otherwise be
 held full-screen for a second.
+
+**On screen the modes are three controls, not one choice** (VH-90).
+*Animation type* is Cut, Fade, Slide or None; *Animation onset* is Over
+existing or Over generated freeze frame, and means something only for Fade
+and Slide; *Colour* is Blue or White.
+
+| Type | Onset | Result |
+| --- | --- | --- |
+| Cut | — | hard cut |
+| Fade or Slide | Over existing | over picture |
+| Fade or Slide | Over generated freeze frame | over freeze frame |
+| None | — | no closing |
+
+A control that cannot change the result — onset under Cut or None, colour
+under None — is disabled, with its reason in visible text. One line beneath
+the controls says what the current selection will do, taken from the same
+mapping the job uses, so it cannot promise a different file.
 
 **The alpha is premultiplied**, matted with black — measured on the masters,
 not assumed. The composite is therefore
@@ -186,7 +207,8 @@ margin for a lossy-to-lossy chain.
 
 ### 5.2 Processing chain (in order)
 
-1. **Analysis pass** over source audio only:
+1. **Analysis pass** over source audio only — the part kept, when the video
+   is trimmed (§9.1):
    - Integrated loudness (gated, per BS.1770-4)
    - Loudness Range (LRA) from the short-term (3 s) distribution
    - Short-term loudness curve over time
@@ -200,16 +222,32 @@ margin for a lossy-to-lossy chain.
    - Clamp to **±6 dB**
    - **Slew-rate limit to 1 dB/second**
    - Freeze the envelope where short-term loudness is below −45 LUFS, so
-     pauses and room tone are never amplified
+     pauses and room tone are never amplified. The freeze applies twice:
+     to the raw correction, so a pause's enormous demand never enters the
+     smoother, and to the finished envelope, because the smoothing window
+     is centred and speech on either side would otherwise reach into the
+     pause and move a gain that should be frozen. It holds the gain where
+     it is rather than setting it, so it never makes a step the slew limit
+     forbids.
 
    The slew limit and the pause freeze are what prevent pumping. A single
    fixed window applied unconditionally is what causes it.
 4. **Gentle compression** — ratio 2:1, threshold −18 dBFS, attack 20 ms,
    release 200 ms, soft knee.
-5. **Single linear gain** to hit −16 LUFS integrated. One constant gain
-   across the file: fully transparent, no dynamic artefacts.
-6. **True-peak limiter** — 5 ms look-ahead, 50 ms release, ceiling
-   −2.0 dBTP.
+5. **Single linear gain** to land the *delivered file* on −16 LUFS
+   integrated. One constant gain across the file: fully transparent, no
+   dynamic artefacts. It is solved against the chain that actually runs,
+   limiter included, and allows for what the AAC encode then costs in
+   loudness — up to 0.38 LU on a corpus lecture, three quarters of the
+   tolerance. That cost is measured per job: windows spread through the
+   chain's own output are encoded at the job's exact audio settings,
+   decoded and measured again.
+6. **True-peak limiter** — 5 ms look-ahead, 50 ms release. −2.0 dBTP is
+   the ceiling of the *file*, not of the limiter: AAC raises true peak
+   after the limiter, so the limiter works at least 1.0 dB below it. When
+   the same probe measures that job's encode overshooting by more than
+   0.5 dB, the limiter holds the measured overshoot plus 0.5 dB below it
+   instead, up to 3 dB.
 
 ### 5.3 Validation
 
@@ -239,25 +277,43 @@ decisions.
 
 ## 6. Video outputs
 
-Presented to the user by purpose, not by technique.
+Presented to the user by purpose, not by technique, under the question
+"File size / quality" (VH-85). The headings below are the names on screen;
+the code's ids, and older references in these documents, call them "best
+quality" (`best`) and "smaller file" (`smaller`).
 
-### 6.1 "Best quality — for EchoVideo or YouTube"
+### 6.1 "Larger / better" — for EchoVideo or YouTube
 
-For destinations that re-encode on ingest. Preserves source resolution,
-aspect ratio, and frame rate.
+For destinations that re-encode on ingest ("For EchoVideo or YouTube etc." on
+screen). Preserves source resolution, aspect ratio, and frame rate.
 
 | Setting | Value |
 | --- | --- |
 | Codec / container | H.264 High profile, MP4 |
 | Resolution | Source, unchanged |
 | Frame rate | Source, conformed to constant frame rate |
-| Bitrate | ~0.12 bits/pixel/frame (≈8 Mbps at 1080p30) |
+| Bitrate | Anchored to the source, between 0.03 and ~0.12 bits/pixel/frame (≈7.5 Mbps at 1080p30) — see below |
 | Keyframe interval | 2 seconds |
 | Audio | AAC-LC, 192 kbps, 48 kHz |
 
-### 6.2 "Smaller file — for OneDrive, SharePoint or email"
+**Anchored to the source, never above the anchor** (VH-47). The figure is the
+geometric mean of ~0.12 bits/pixel/frame and the source's own measured
+density, held between 0.03 and 0.12. A figure from pixel count alone never
+looked at the source, and asked a 1.0 Mbps Teams recording for four times its
+bitrate. The headroom pays for the first encoder's artefacts, which the
+second must spend bits preserving, so it should shrink as the source
+approaches transparency, and the geometric mean does that. It is not capped
+at the source: re-encoding at exactly the source bitrate is worse than the
+source. Nor is it raised above the anchor for a pristine master. Tried at
+0.18, that added up to 933 MB per file for +0.60 VMAF, and the destination
+re-encodes on ingest anyway. So the figure can only fall. The floor keeps it
+above what "Smaller / reduced" asks of slides.
 
-For files students may download directly.
+### 6.2 "Smaller / reduced" — for messaging or email
+
+For files that are sent and downloaded as they are, which students may
+download directly: messaging and email ("For messaging or email etc." on
+screen), OneDrive and SharePoint.
 
 | Setting | Value |
 | --- | --- |
@@ -277,7 +333,10 @@ to this content. Save the space in bitrate instead.
 needs them, not floors. A Teams recording carries 1.006 Mbps of video at
 1920×1080; requesting 2.5 Mbps of it would make the output named "smaller"
 larger than what went in. The requested bitrate is capped at the source's
-measured video bitrate.
+measured video bitrate. Both outputs consult the source, for opposite
+reasons: this one is *capped* at it, because it promises a smaller file;
+"Larger / better" is *anchored* to it with headroom (§6.1), because its
+destination re-encodes.
 
 ### 6.3 Frame-rate handling
 
@@ -333,9 +392,10 @@ permissive on a slow one. Instead:
 ### 7.1 Calibration probe
 
 Before processing, the app decodes and re-encodes **3 seconds of the actual
-source file** on the actual device, measures throughput, and extrapolates a
-real time estimate. This directly satisfies the brief's requirement to
-"assess the selected file and the user's device before processing begins."
+source file** — of the part kept, when it is trimmed — on the actual device,
+measures throughput, and extrapolates a real time estimate. This directly
+satisfies the brief's requirement to "assess the selected file and the
+user's device before processing begins."
 
 ### 7.2 Pre-flight checks
 
@@ -352,7 +412,7 @@ real time estimate. This directly satisfies the brief's requirement to
 | --- | --- | --- |
 | **Proceed** | Estimate < 20 min, checks pass | Start, show estimate |
 | **Warn** | Estimate 20–60 min | Show estimate and a keep-this-tab-open notice; allow continue |
-| **Block** | No WebCodecs / no H.264 encode / insufficient storage | Explain, and name a browser that will work |
+| **Block** | The browser lacks WebCodecs, H.264 encode, AAC encode (for a video with sound), a decoder for the source, or working storage; or there is not enough storage | Explain; where the browser is the cause, name Chrome as the one that will work |
 | **Discourage** | Estimate > 60 min, or phone/tablet | Recommend a desktop; allow continue after acknowledgement |
 
 ### 7.4 Validated envelope for v1
@@ -370,18 +430,27 @@ from assumption.**
 
 ## 8. Subtitles, captions and metadata
 
+On screen these are called captions throughout (VH-86). "Subtitle" is the
+container term, ISOBMFF's and WebVTT's, and survives in identifiers.
+
 ### 8.1 The timing problem
 
-**Adding an opening animation shifts every subsequent timestamp.** A
-subtitle track preserved unmodified against a video with a 5-second intro is
-5 seconds out of sync for its entire length. Preservation therefore
-*requires* re-timing.
+**Anything that moves the picture's timeline moves every caption with it.**
+An opening animation shifts every later timestamp forward by its length, and
+trimming the start (§9.1) shifts every one back. A caption track carried
+unmodified against either is out of sync for its entire length, so carrying
+one *requires* re-timing.
 
-**Resolution:** offsetting all cue times by the opening-animation duration
-is not "editing" the captions — the words are untouched — and is
-mandatory for correctness. The brief's rule is refined to: *never alter
-subtitle **content**; always offset subtitle **timing** to match inserted
-branding.*
+**Resolution:** re-timing cues is not "editing" the captions — the words
+are untouched — and is mandatory for correctness. The brief's rule is
+refined to: *never alter caption **content**; always re-time caption
+**timing** to match the output — inserted branding and trimmed material
+alike.*
+
+**In v1 the rule has nothing to apply to.** No opening is inserted (§4.1),
+an embedded caption track cannot be read, and no caption file is taken
+(§8.3), so no caption reaches the output. The rule binds whichever of those
+returns first.
 
 ### 8.2 Practical priority
 
@@ -394,10 +463,13 @@ source file. Embedded subtitle tracks will be rare.
 1. Detect subtitle, chapter, and metadata tracks during demux. Subtitle
    tracks are found by an ISOBMFF handler scan, which sees tracks the demuxer
    reports as absent.
-2. Offset every cue of a **user-supplied sidecar** `.vtt` by the opening
-   duration and embed it.
-3. **Warn clearly before processing** when an embedded subtitle track is
-   detected, since it will not be carried through.
+2. ~~Offset every cue of a user-supplied sidecar `.vtt` by the opening
+   duration and embed it.~~ **Withdrawn** (VH-86): no caption file is taken.
+   With no opening its offset was always zero, so it embedded a file the
+   user already had, and EchoVideo writes its own captions after upload
+   (§8.2).
+3. **Warn clearly before processing** when an embedded caption or chapter
+   track is detected, since it will not be carried through.
 4. Preserve language tags, track labels and creation metadata where the
    muxer supports them.
 
@@ -407,20 +479,33 @@ preservable, export a sidecar where not — had no reachable branch: there is
 nothing to re-embed, and nothing to export. Reading their samples would need a
 bespoke MP4 box walker for `tx3g` / `wvtt` / `stpp`, which §8.2's rarity
 finding does not justify. Detection is enough to tell the user honestly, and
-preservation therefore applies only to a sidecar the user supplies.
+with no caption file taken either (step 2), nothing caption-shaped passes
+through v1.
 
 ## 9. User experience
 
 ### 9.1 Workflow
 
-1. Select a video (file picker or drag-and-drop)
-2. App inspects the file and runs the calibration probe
-3. Review any compatibility, capacity or audio-quality warnings
-4. Toggle opening animation
-5. Toggle closing animation
-6. Choose "Best quality" or "Smaller file"
-7. Process, with progress and a cancel button
-8. Download the finished file
+The screen is five numbered steps (VH-91, VH-96). Step 1 is there from the
+start; steps 2–5 appear once a video has been read, and each holds a safe
+default, so a user who changes nothing keeps the whole video and gets a
+clean-cut blue closing and the larger file.
+
+1. **Choose a video** — file picker or drag-and-drop. The app reads the file
+   and says what it found, including anything that cannot be carried into
+   the new file (§8.3).
+2. **Trim** (optional) — a preview in the browser's own player, a start and
+   an end handle on one track, "Start time" and "End time" fields, and
+   "Set start here" / "Set end here" to take the preview's position. Left
+   alone, the whole video is kept, and "Use the whole video" puts it back.
+   The part kept must be at least 3 s.
+3. **Closing branding** — animation type, onset and colour (§4.3).
+4. **File size / quality** — "Larger / better" or "Smaller / reduced"
+   (§6).
+5. **Create** — the device check's verdict for this video, the part kept
+   and the file size chosen, calibration probe included (§7); any
+   audio-quality warnings (§5.4); then "Create the video", with named
+   progress and a cancel button, and "Save the video" when it is done.
 
 ### 9.2 Principles
 
@@ -447,18 +532,24 @@ Responsive and fully readable on phones and tablets. Processing is
 
 ## 10. Browser support
 
+**The app is designed and built for Chrome, and says so** before anything is
+chosen: "This app is designed and built for Chrome, other browsers may not
+work." That is the maintainer's choice over certifying the others (VH-98,
+2026-09-30).
+
 | Browser | Status |
 | --- | --- |
-| Chrome / Edge (desktop) 94+ | Supported |
-| Firefox (desktop) 130+ | Supported |
-| Safari (macOS/iOS) 26+ | Supported |
+| Chrome (desktop) | Supported — the browser the app is built and checked in |
+| Edge (desktop), Safari (macOS/iOS) 26+ | Not certified. Not refused: runs if the support check passes |
+| Firefox (desktop) | Refused for any video with sound — it cannot create AAC audio (VH-49). A silent video runs |
 | Safari below 26 | Not supported — clear message |
 | Firefox on Android | Not supported — WebCodecs not exposed |
 | Any browser without WebCodecs | Not supported — clear message |
 
-Approximate coverage: ~95% of active browsers. The support check runs at
-load and again against the specific source file, since codec support is
-per-configuration.
+No browser is refused by name. The support check tests what the browser can
+do, at load and again against the specific source file, since codec support
+is per-configuration, and every block it raises for the browser names Chrome
+as the one that will work.
 
 ## 11. Non-functional requirements
 
@@ -473,7 +564,8 @@ per-configuration.
 
 ## 12. Out of scope for v1
 
-- Trimming, cutting, or any editing of picture content
+- Cutting from the middle, joining files, reordering, or any other editing
+  of picture content. Trimming the start and the end is in scope (§9.1).
 - Creating, editing or transcribing captions
 - Batch processing of multiple files
 - WebM output (implemented in the muxer layer, not exposed)
@@ -489,17 +581,21 @@ v1 is complete when:
    in VLC, QuickTime, Chrome, and after upload to EchoVideo. (Originally
    "both animations"; v1 is closing-only per §4.1.)
 2. Measured integrated loudness of the output content is **−16 ±0.5 LUFS**
-   and true peak never exceeds −2.0 dBTP, across the full test corpus.
+   and true peak never exceeds −2.0 dBTP, across the full test corpus. On a
+   trimmed job the content measured is the part kept, levelled on that part
+   alone.
 3. The loudness meter matches **EBU Tech 3341** reference values within
    ±0.1 LU.
 4. No audible pumping on a deliberately variable-level test recording,
    confirmed by listening and by short-term loudness plot.
-5. Slide text in the "Smaller file" output remains legible at 100% zoom
+5. Slide text in the "Smaller / reduced" output remains legible at 100% zoom
    against the source.
 6. A screen recording on a non-standard frame-rate grid — 16.000 or
    30.303 fps — produces output with correct A/V sync across the full
    duration. (Originally "variable-frame-rate"; no corpus file classifies as
-   variable, so the criterion tests the defect that actually arrives.)
+   variable, so the criterion tests the defect that actually arrives.) A
+   trimmed job holds the same sync from its cut, which moves by at most one
+   frame.
 7. Every pre-flight block and warning has been triggered deliberately and
    reads clearly to a non-technical reader.
 8. Cancelling mid-process leaves no partial file and no orphaned OPFS data.

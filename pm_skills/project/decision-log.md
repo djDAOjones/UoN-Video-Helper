@@ -11,6 +11,41 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — Doc-sync: the specification meets the trim, and six answers
+
+**Decision:** reconcile all 23 open doc-deltas in one signed-off batch across
+three docs — `01-specification.md` (25 edits), `02-technical-rationale.md` (5),
+`03-open-decisions.md` (8). 23 applied, 0 deferred. The ledger said two docs;
+four of its lines targeted the third.
+
+**Rationale:**
+
+- **22 were the spec going stale**, the code already right: the five-step
+  workflow with Trim (§9.1, §12), the three closing controls (§4.1, §4.3), the
+  screen's names for the two outputs (§6), VH-47's source-anchored bitrate
+  (§6.1, §6.2), the gain aimed through the codec and the ceiling as the file's
+  (§5.2 steps 5–6), the freeze applied twice (step 3), no caption file (§8.3),
+  built for Chrome with Firefox refused for sound (§10), and D1, D4–D7, D10 and
+  D12 answered. Three of them — §6.1, §5.2 steps 3 and 6 — began as rule
+  defects the code has since corrected.
+- **One was the rule itself.** §8.1 re-timed captions "to match inserted
+  branding"; a trimmed start moves every cue the other way. It now re-times to
+  match the output. It leads no code: v1 carries no caption at all.
+- **Edits went past the ledger where a source did:** trim reaches `T` (§4.3),
+  §5.2 step 1, §7.1 and §13 criteria 2 and 6 (where the harness files its trim
+  cases, so no criterion 10); VH-49/VH-98 reach §7.3's Block row and rationale
+  §2.1; VH-24 reaches spec §2 and rationale §4.2.
+- **Numbering kept.** §8.3 step 2 is struck through in place because code cites
+  "spec 8.3.4" and "8.3 step 2". Answered decisions moved to a new Answered
+  section of `03-open-decisions.md`, with their numbers intact.
+
+**Found, not applied:** D2, D3 and §4.4's picture fades are stale too — three
+new ledger lines. Drag-and-drop (§9.1) was never built or decided; kept in the
+spec, parked on the wish-list. `brief.md` corrected to match.
+
+**Link:** `pm_skills/project/doc-deltas.md` (23 ticked, 3 opened); spec §§2,
+4.1–4.3, 5.2, 6, 7.1, 7.3, 8, 9.1, 10, 12, 13; rationale §§2.1, 4.2, 4.3, 6.
+
 ## 2026-10-01 — VH-96: the Trim step, and VH-30 closed
 
 **Decision:** Trim is step 2 of five (Choose, Trim, Closing branding, File
