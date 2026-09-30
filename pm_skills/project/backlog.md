@@ -145,14 +145,275 @@
       Done when: an iPhone HEVC file is opened in Firefox and either decodes or
       is refused with the block's own wording rather than failing mid-job.
 
-- [ ] **VH-30 Trim the source** [detail](tickets/VH-30.md) (2026-08-25)
+### Band 4 — The interface pass
+
+<!-- Maintainer request, 2026-09-30: one list of interface changes, split so
+     each item ships alone. Agent work, unblocked except where flagged. The
+     ORDER is proposed, not committed — as is whether the band runs ahead of
+     Band 2's VH-83: the defect first; then words and disclosures, which
+     disturb no structure; then the closing controls; then the layout they sit
+     in; then the restyle, once, over the finished structure; then the two
+     capabilities. VH-83 and VH-95 both rework `planAudio` — in series, never
+     side by side, VH-83 first.
+     Four items reverse a recorded decision at the maintainer's word, and each
+     names it so the older entry is not read as binding: VH-86 (spec §8's
+     sidecar), VH-89 (VH-31), VH-90 (VH-46b), VH-30 (the identity's "no
+     trimming").
+     Four have prior art on tag `archive/repository-review-implementation`,
+     left behind on 2026-08-27 with the conveyor UI it arrived in: VH-94,
+     VH-88, VH-97 and VH-78. Recover with `git show <tag>:<path>`; do not
+     redesign.
+     "Open:" is a question for the maintainer with a working default — the
+     default is what gets built if nobody answers. -->
+
+- [ ] **VH-94 `hidden` loses to the stylesheet** (2026-09-30)
+      Intent: a defect found while planning this band, and live today.
+      `.actions { display: flex }` and `.progress { display: block }` outrank
+      the `hidden` attribute, so `#process-actions` and `#process-progress`
+      never hide — measured in Chrome 2026-09-30, both carry `hidden` and
+      compute `flex` and `block`. "Create the video" is on screen, enabled and
+      inert before any file is chosen, under a `block` verdict, and while a
+      verdict is recomputed (the window R-05 took it down for). An empty
+      progress bar sits under it, and a full one stays after the job.
+      The archived branch carries the fix — `[hidden] { display: none
+      !important }`, `src/styles/app.css:35` on the tag — and VH-71 left it
+      behind with the conveyor UI.
+      Done when: that rule is in `app.css`; a test reads the stylesheet and
+      fails without it; in a browser there is no Start before a file or on a
+      block, and no bar at rest or after a finished job.
+
+- [ ] **VH-85 Say what the tool does, as a list** (2026-09-30)
+      Intent: the opening paragraph becomes "This tool does the following to
+      your video:" over three bullets — adds approved branding, ensures
+      consistent audio levels, outputs an optimised file type and size — then
+      its own paragraph: "Your video is processed on your device, it is never
+      uploaded, and the original file does not change." The helper under the
+      file input repeats it and goes, with its `aria-describedby`.
+      The output question is relabelled: legend "File size / quality"; options
+      "Larger / better for EchoVideo or YouTube etc." and "Smaller / reduced
+      for messaging or email etc."
+      Done when: the screen reads that way; the privacy sentence appears once,
+      above the file input, and is still there during a job (spec §9.2);
+      `PRESETS` labels and the meta description agree with the new names;
+      doc-deltas record spec §6.1, §6.2 and §9.1.
+
+- [ ] **VH-86 Captions, not subtitles — and no caption file field** (2026-09-30)
+      Intent: every user-facing "subtitle" becomes "caption", and the
+      "Subtitle file (optional)" field goes. That withdraws spec §8.3 step 2 —
+      a supplied `.vtt` is no longer embedded. Little is lost: with no opening
+      the cue offset is always zero (VH-80), and EchoVideo makes its own
+      captions after upload (§8.2).
+      What must survive is §8.3 step 3: a caption or chapter track INSIDE the
+      source still cannot be carried over, so that warning stays, reworded so
+      it no longer points at a field that is gone. Identifiers keep `subtitle`
+      — it is the WebVTT and ISOBMFF term.
+      Open: the worker path (`vtt.ts`, `subtitleVtt`, `addSubtitleTrack`) —
+      deleted, or dormant as openings are (VH-23). Default: deleted. Trim
+      would otherwise have to re-time cues nobody can supply; git keeps it.
+      Done when: no screen text says "subtitle"; the field is gone from
+      `main.ts` and the diagnostics context; the embedded-track warning still
+      shows before processing; `AGENTS.md`'s `JobSpec` row and the brief's
+      "track pass-through" say what is true; a doc-delta records spec §8.
+
+- [ ] **VH-87 Video properties, collapsed** (2026-09-30)
+      Intent: the source facts move into a disclosure labelled "Video
+      properties", closed by default. Rows, in order: Duration (was Length),
+      Video codec, File size, Resolution (was Picture), Frame rate, Audio
+      codec, Audio channels, Audio sample rate (the three were one "Sound"
+      row), Captions, Container. The request said "Codec"; "Video codec" is
+      proposed because "Audio codec" sits four rows below it.
+      Risk: three of today's rows are not facts but losses — extra picture or
+      sound tracks, caption or chapter tracks found, and the "could not be
+      checked" caveat. Closed by default they would be hidden before
+      processing, the outcome this project exists to refuse. The rule: what
+      will NOT be in the new file stays in view above the disclosure; what
+      merely describes the file goes inside.
+      Also: `.disclosure-summary` is `display: flex`, which removes the native
+      triangle, so today's one disclosure shows no sign of being one. The
+      shared style gains a chevron that turns when open.
+      Done when: a native `<details>`, closed on every new file, 44 px summary,
+      visible focus ring; the three losses readable without opening it;
+      `buildRows` tests cover the new rows, no audio, and losses against facts.
+
+- [ ] **VH-88 System check, collapsed — and the status line moves** (2026-09-30)
+      Intent: the System check panel becomes a disclosure that starts closed.
+      Risk: `#status` lives inside it, and is both the app's one live region
+      and its only visible status text — "Reading the video…", "Encoding video
+      — 34%", "Saved." Inside a closed `<details>` it is neither announced nor
+      seen. It is badly placed already, 450 px below the button it reports on,
+      and greets every user with "Ready for the next milestone" — a build
+      note. It moves out, to sit with the controls it describes.
+      And a FAILED check must not hide: the summary states the result in words
+      ("System check — all passed" / "— 1 problem") and opens itself on any
+      failure.
+      Prior art: the archived branch did both halves — `<details class="panel
+      system-check">`, the status line inside the workflow panel, "Choose a
+      video to begin." as its resting text.
+      Done when: closed on a healthy device, open on a failing one; the result
+      readable from the summary without colour; status text visible without
+      scrolling to the footer; a screen reader still hears "Video read…", the
+      stage, and "Your video is ready."
+
+- [ ] **VH-89 Ready to go, in three lines** (2026-09-30)
+      Intent: a `proceed` verdict reads "Ready to go" / "This should take
+      about 37 seconds." / "Estimated size 28.5 MB." The Setting, Output and
+      Measured speed rows leave the screen and stay in the diagnostics log.
+      Reverses VH-31, which added "at most" on purpose: the figure is an upper
+      bound, and a bare number reads as a prediction — 27.7 MB was shown for a
+      7.5 MB file then, and 13.8 MB for a 7.2 MB one on 2026-09-30.
+      Open: "Estimated size 28.5 MB." as asked, or "Estimated size up to
+      28.5 MB." Default: "up to" — two words, and the screen stays true.
+      Scope: `warn` and `discourage` keep their reasons and end on the same
+      two lines, the time stated once — today a `warn` for unknown storage
+      shows no time at all. A `block` shows neither. The "already compressed,
+      about the same size" note (VH-41) stays; the user acts on it.
+      Done when: a `proceed` shows three lines and nothing else, and no other
+      outcome loses a sentence it has today.
+
+- [ ] **VH-90 Closing branding: type, onset, colour** [detail](tickets/VH-90.md)
+      (2026-09-30)
+      Intent: the four-way radio and its hidden options become three controls,
+      always present: "Animation type" (Cut, Fade, Slide, None), "Animation
+      onset" (Over existing, Over generated freeze frame, with a "?" that
+      explains both), and a Blue / White colour toggle. Onset is disabled
+      under Cut and None; colour under None. No pipeline change — a pure,
+      tested mapping onto `BrandingChoice`.
+      Reverses VH-46b twice at the maintainer's word: it rejected a select,
+      and it hid Animation rather than disabling it.
+      Risk: under "Animation type", "None" reads as "no animation" — which is
+      what Cut is — and it removes the University closing altogether. One line
+      under the controls states the result of the current selection in words,
+      which also restores what the old options said: what happens to the last
+      second, and how many seconds are added.
+      Done when: every combination produces the job its old radio did;
+      defaults unchanged (Cut, blue); the "?" works by click and keyboard,
+      never hover alone; a disabled control says why in visible text.
+
+- [ ] **VH-91 Steps that read as steps** [detail](tickets/VH-91.md)
+      (2026-09-30)
+      Intent: closing branding and file size / quality — and trim, when it
+      lands — stop being fieldsets stacked in one panel headed "Choose a
+      video" and become separate, numbered panels ending in Create. They stay
+      open; whether finished STAGES fold is VH-97, which folds these panels,
+      so nothing here is thrown away by it.
+      The request floated sections that advance "when info was added". For
+      these steps that is the wrong trigger: each holds a safe default, so
+      nothing is "added"; a select or radio changes on every arrow key, so
+      advancing on change would shut the section under a keyboard user
+      mid-choice (WCAG 3.2.2); and a closed step hides its choice.
+      Revisits VH-32 ("the simplicity is the design"), consistently — VH-32
+      named trim as the one thing that would justify more structure.
+      Done when: each step is a labelled region with a numbered heading; focus
+      order follows visual order; Create holds the verdict, button, progress,
+      status and result together; nothing moves focus or collapses unasked.
+
+- [ ] **VH-92 Look like the University** [detail](tickets/VH-92.md)
+      (2026-09-30)
+      Intent: take the visual cues from <https://www.nottingham.ac.uk/> and
+      its brand pages, read 2026-09-30 — a Nottingham Blue header and footer
+      with the white logo top-left, Nottingham Blue text in place of black, a
+      tinted ground rather than white, Lora headings.
+      The brand's rules agree with this project's: it prefers AAA, and
+      sentence case. The palette builds a whole AAA theme (measured, in the
+      ticket) except for status — Jubilee Red is 6.4:1 on white, so error red
+      stays Carbon's. Brand tokens own colour and typeface; Carbon keeps
+      shape, spacing and states.
+      Constraints: Circular, the brand's sans, is licensed and this repository
+      is public, so it cannot be committed — the brand's own substitute is
+      Arial. Lora is OFL and self-hosted; nothing is fetched from a third
+      party. Every new file lands flat in the Xerte package.
+      Open: the logo file. Default: the maintainer supplies it from the brand
+      library; nothing is copied off the website. All else ships without it.
+      Done when: `test/contrast.test.ts` covers the brand pairs in both
+      themes; the logo keeps its exclusion zone and carries `alt="University
+      of Nottingham"`; focus is visible on the blue band; `UI-STANDARDS.md`'s
+      token section, which still calls D1 open, is corrected.
+
+- [ ] **VH-93 A feedback button** [detail](tickets/VH-93.md) (2026-09-30)
       [sign-off]
-      Intent: maintainer request. Recordings carry material nobody wants and
-      today the only fix is another tool first, which defeats a one-step app.
-      Ranged reads are native to Mediabunny; the work is the interactions. The
-      one that matters most: loudness must measure the TRIMMED region, or
-      leading silence drags the gated figure.
-      Done when: scoped and signed off — recorded rather than scheduled.
+      Intent: a button opens a text box and Send; the message and the usage
+      logs reach `joe.bell@nottingham.ac.uk`.
+      Two facts collide with it. The app is static files, so it cannot send
+      mail. And "no media egress" forbids any call carrying filenames or media
+      characteristics, while the logs usefully carry resolution, duration and
+      codec.
+      Open: how it is sent. Default, and the recommendation: a `mailto:` link
+      — the user's own mail app opens with the message and a compact redacted
+      log in it; they read every word and press send. No request leaves the
+      app, so the invariant and criterion 9 stand. The alternative is a relay
+      endpoint: one click, but the app's first outbound request with a body,
+      at a URL that is either a credential in a public repository or a door
+      anyone can post through.
+      Done when: signed off; the user sees exactly what will be sent; opening
+      the mail app neither trips the leave warning nor disturbs a running job;
+      it works inside the Xerte frame; the production redaction review is
+      recorded; the address lives in `src/config/`.
+
+- [ ] **VH-30 Trim the source, with a preview** [detail](tickets/VH-30.md)
+      (2026-08-25) [sign-off]
+      Intent: maintainer request, renewed 2026-09-30 with a shape — a preview
+      of the video with handles for the start and end, before export.
+      Recordings carry material nobody wants, and today the only fix is
+      another tool first, which defeats a one-step app.
+      Feasible, and viable. No new dependency: ranged reads are native to
+      Mediabunny and the probe already uses them. No egress: the preview is a
+      `<video>` on a local object URL. Frame accuracy is free, because the
+      pipeline re-encodes anyway. It is the largest item in the band, and it
+      runs through the most recently stabilised part of the pipeline — the
+      shared clock of VH-74 and VH-55.
+      Reverses the product identity: "no trimming" is in `AGENTS.md`, the
+      brief and spec §12. It stays a conveyor with one cut — no cutting
+      mid-video, no joining — but all three have to say so; that is what the
+      sign-off is for.
+      Done when: signed off, the identity wording agreed, and its children —
+      VH-95, then VH-96 — shipped or cut.
+
+- [ ] **VH-95 Trim: the engine** [detail](tickets/VH-95.md) (2026-09-30)
+      [blocked: VH-30]
+      Intent: a kept range, in source time, carried by `preflight` and
+      `process` and honoured by everything that reads the source — no UI.
+      The part that produces a wrong file rather than a wrong duration is
+      loudness: every audio pass must traverse the SAME range, or leading
+      silence drags the gated figure and the envelope is indexed against a
+      different stream from the one it is applied to. The ticket lists the
+      other touchpoints. After VH-83, never beside it.
+      Done when: the acceptance harness runs a trimmed job that passes
+      criterion 2 (−16 ±0.5 LUFS, on the kept region) and criterion 6 (A/V
+      sync); a job with no range takes exactly today's path; cancel still
+      leaves nothing behind.
+
+- [ ] **VH-96 Trim: the preview and handles** [detail](tickets/VH-96.md)
+      (2026-09-30) [blocked: VH-95]
+      Intent: a Trim step in VH-91's layout — the video, playable, with a
+      start and an end handle beneath it. Left alone, it keeps the whole
+      video, as today.
+      Accessibility decides the shape: the handles are never drag-only (WCAG
+      2.5.7). Each is a native range input on the arrow keys, paired with a
+      time field and a "Set start here" / "Set end here" button that takes the
+      preview's current position.
+      Risk: what `<video>` can play is not what WebCodecs can decode. Where
+      the preview cannot show, the fields still work and the step says so.
+      Done when: a trim can be set, changed and cleared by keyboard alone; the
+      verdict, time and size follow the kept range; the exported file's first
+      and last frames are the ones the preview showed, across the corpus;
+      criterion 9 still reads zero.
+
+- [ ] **VH-97 Fold the finished stages** (2026-09-30) [sign-off]
+      Intent: the expanding and contracting the request floated, done where it
+      is safe — between STAGES, not between choices. Choose, set up, create,
+      save: one open at a time, a finished one folding to a line that says
+      what was chosen. It advances only on something the user did or is
+      waiting for — a video read, Create pressed, the job finished — never on
+      a changed control.
+      Prior art: the archived branch built and tested exactly this
+      (`src/ui/workflow.ts`, `focusNextWorkflowControl`); VH-32 declined it on
+      2026-08-27 in favour of the single screen. Detail is in
+      [VH-91's ticket](tickets/VH-91.md).
+      Open: whether it is wanted at all. Default: not built. Decide after
+      using VH-91's panels with trim in them; the page may be short enough.
+      Done when: signed off; then focus lands on the next control at every
+      transition, each is announced, every folded stage can be reopened, and
+      nothing folds while it shows an error.
 
 ### Standing — maintainer-owned, never band-gated
 
