@@ -11,6 +11,51 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-09-30 — VH-92: the University's colours, on Carbon's shapes
+
+**Decision:** the brand token file takes over every colour role — surfaces,
+text, borders, interactive, focus — assigned from the University's palette
+for light, dark and a Nottingham Blue band. Nottingham Blue header and footer
+bands, not sticky; System check and the version move into the footer.
+Headings in `'Lora', Georgia`; body in Arial. Carbon keeps spacing, type
+scale, motion, the 44 px floor and status colour.
+
+**Rationale:** the maintainer's request, and the brand's own rules agree with
+this project's — no black, no pure white ground, AAA preferred. The role
+NAMES stay Carbon's and only their values moved, so no rule in `app.css`
+changed meaning and none names a colour; the two systems are still two. A
+band re-assigns the roles through `.on-brand-blue` rather than being styled by
+hand, which is what makes everything inside it — System check, the focus ring
+— light on blue without a second set of rules, and lets one test cover it.
+
+**What the palette could not do:** status (Jubilee Red is 6.4:1 on white), so
+that stays Carbon's. And the dark theme needs two raised surfaces on which the
+20% tint still reads at 7:1; the brand's next step, 80%, gives 5.5. They are
+95% and 90% tints — the brand's arithmetic at steps it does not publish.
+
+**Shipped without two files, by design.** The logo is a trademark the
+maintainer must supply; Lora is a download I did not make without being asked.
+Each has a build-time slot: `import.meta.glob` finds `src/assets/
+uon-logo-white.svg` and `lora-bold.woff2` if they exist and yields nothing if
+they do not, so the page is complete either way and picks them up with no code
+change. Until then headings are Georgia, the brand's own substitute. VH-98
+tracks the files.
+
+**Alternatives:** a static `<img>` and `@font-face` — a broken image and a
+failed build until the files arrive. Circular, the brand's sans, is licensed
+and this repository is public; Arial is the brand's stated substitute.
+
+**Verified:** `test/contrast.test.ts`, 78 assertions across the three
+contexts, mutation-checked (secondary text at the 60% tint fails three).
+Chrome, light and dark: bands, panels, controls, a job; Tab into the footer
+gives a white ring on blue. With placeholder files in the slots: the logo is
+the header's first child, `alt="University of Nottingham"`, 50 px high, 25 px
+clear on every side; the flat Xerte build emits both beside `index.html` with
+no folder. Placeholders removed.
+
+**Link:** VH-92; `src/styles/tokens.brand.css`, `src/ui/brand-assets.ts`,
+`UI-STANDARDS.md` → "Token systems", `README.md` → "Licence and trademarks".
+
 ## 2026-09-30 — VH-89 review: a block says only why, and the estimate is still heard
 
 **Decision:** under a `block`, the verdict lists only the reasons that block.

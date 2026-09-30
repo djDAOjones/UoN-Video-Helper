@@ -28,3 +28,25 @@ describe('the hidden attribute (VH-94)', () => {
     expect(rules.match(/\[hidden\]/g)).toHaveLength(1)
   })
 })
+
+describe('the brand bands (VH-92)', () => {
+  it('are never sticky or fixed', () => {
+    // A band that follows the scroll can sit on top of the focused control
+    // (WCAG 2.4.11). Nothing in this stylesheet may pin itself to the window.
+    expect(rules).not.toMatch(/position:\s*(sticky|fixed)/)
+  })
+
+  it('size the logo from the brand token, not from a number', () => {
+    const logo = /\.brand-logo\s*\{([^}]*)\}/.exec(rules)?.[1] ?? ''
+    expect(logo).toMatch(/height:\s*var\(--uon-logo-height\)/)
+    // The exclusion zone: half the logo's height, on every side.
+    expect(logo).toMatch(/var\(--uon-logo-clear\)/)
+  })
+
+  it('name no colour directly: every colour in the app is a token', () => {
+    // A hex value here is a colour the contrast test never sees.
+    expect(rules).not.toMatch(/#[0-9a-fA-F]{3,8}\b/)
+    expect(rules).not.toMatch(/\brgba?\(/)
+  })
+})
+

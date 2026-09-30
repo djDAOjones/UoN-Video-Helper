@@ -5,45 +5,28 @@
  * project's own code — Carbon is never installed as a package
  * (`AGENTS.md` -> "Carbon-first UI").
  *
- * Every text/background pair below is asserted at >= 7:1 by
- * test/contrast.test.ts, so the AAA claim in `UI-STANDARDS.md` is mechanical
- * rather than aspirational. Changing a value here fails that test until the
- * new value is checked.
+ * What is here is shape: spacing, the type scale, motion, the pointer-target
+ * floor — and status colour, the one colour the brand palette cannot supply.
+ * Surface, text, border and interactive colour were here until VH-92 and are
+ * the brand's now: see `tokens.brand.css`, which assigns the same role names
+ * (`--layer-01`, `--text-primary`, …) from the University's palette.
  *
- * Why these steps and not Carbon's defaults: clearing 7:1 against all three
- * surfaces forces the far ends of each ramp — the -80/-90 steps in light, the
- * -10/-20 steps in dark. Carbon's mid-ramp status colours (green-50, red-60)
- * meet AA, not AAA. This is the documented adaptation `UI-STANDARDS.md`
- * anticipates. The visible consequence is that status colour reads as
- * near-black or near-white rather than as "green" or "red" — which is
- * acceptable precisely because colour is never the carrier of meaning here:
- * every status also states its outcome in words.
+ * Status: clearing 7:1 against every surface forces the far end of each
+ * ramp — the -80 steps on light surfaces, the -20 steps on dark ones.
+ * Carbon's mid-ramp status colours (green-50, red-60) meet AA, not AAA. This
+ * is the documented adaptation `UI-STANDARDS.md` anticipates. The visible
+ * consequence is that status colour reads as near-black or near-white rather
+ * than as "green" or "red" — which is acceptable precisely because colour is
+ * never the carrier of meaning here: every status also states its outcome in
+ * words. The dark-surface steps are set beside the dark roles, in
+ * `tokens.brand.css`; every pair is asserted by test/contrast.test.ts.
  */
 
 :root {
-  /* Surfaces, lightest to deepest */
-  --layer-00: #ffffff;
-  --layer-01: #f4f4f4;
-  --layer-02: #e0e0e0;
-
-  /* Text */
-  --text-primary: #161616; /* gray-100 */
-  --text-secondary: #393939; /* gray-80 */
-  --text-on-interactive: #ffffff;
-
-  /* Interaction */
-  --interactive: #002d9c; /* blue-80 */
-  --interactive-hover: #001d6c; /* blue-90 */
-  --focus: #002d9c;
-
   /* Status — reinforcement only; never the sole carrier of meaning */
   --support-error: #750e13; /* red-80 */
   --support-success: #044317; /* green-80 */
   --support-warning: #483700; /* yellow-80 */
-
-  /* Borders. 3:1 against their surface, per WCAG 1.4.11 */
-  --border-subtle: #6f6f6f; /* gray-60 */
-  --border-strong: #525252; /* gray-70 */
 
   /* Spacing scale (Carbon) */
   --spacing-01: 0.125rem;
@@ -69,27 +52,4 @@
   /* Motion (Carbon productive, `fast-02`). Reduced to nothing by the
      `prefers-reduced-motion` rule in app.css. */
   --motion-fast: 110ms;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --layer-00: #161616;
-    --layer-01: #262626;
-    --layer-02: #393939;
-
-    --text-primary: #f4f4f4; /* gray-10 */
-    --text-secondary: #e0e0e0; /* gray-20 */
-    --text-on-interactive: #161616;
-
-    --interactive: #d0e2ff; /* blue-20 */
-    --interactive-hover: #edf5ff; /* blue-10 */
-    --focus: #d0e2ff;
-
-    --support-error: #ffd7d9; /* red-20 */
-    --support-success: #a7f0ba; /* green-20 */
-    --support-warning: #fddc69; /* yellow-20 */
-
-    --border-subtle: #8d8d8d; /* gray-50 */
-    --border-strong: #c6c6c6; /* gray-30 */
-  }
 }

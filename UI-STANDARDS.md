@@ -37,36 +37,64 @@ other.**
 
 | System | Governs | Source |
 | --- | --- | --- |
-| **UoN brand tokens** | Brand palette, the branding background colour, accent and identity colours | `src/styles/tokens.brand.css` |
-| **Carbon conventions** | Spacing scale, type scale, layout grid, layer tokens, border tokens, interaction-state tokens | `src/styles/tokens.carbon.css` — implemented to match Carbon's spec, never installed as a package |
+| **UoN brand tokens** | Colour and typeface: the palette and its tints, and the colour ROLES assigned from it — surfaces, text, borders, interactive, focus — plus the heading and body font stacks and the logo's size and exclusion zone | `src/styles/tokens.brand.css` |
+| **Carbon conventions** | Shape: spacing scale, type scale, motion, the 44 px target floor — and status colour, which the brand palette cannot supply at AAA | `src/styles/tokens.carbon.css` — implemented to match Carbon's spec, never installed as a package |
 
 When adding a token, decide which system owns it from the table above.
-Colour that means "this is the University" is a brand token. Colour that
-means "this surface sits above that one" or "this control is focused" is
-a Carbon structural token.
+Colour is the brand's. How big, how far apart and how a control behaves is
+Carbon's. The role NAMES — `--layer-01`, `--text-primary`, `--interactive` —
+are Carbon's vocabulary and stay what `app.css` uses; since VH-92 their
+VALUES are assigned from the University's palette, in the brand file. That
+is the division, not a collapse of it: no rule in `app.css` names a brand
+colour, and no hex value appears outside the two token files.
 
-### The D1 placeholder
+The roles are assigned three times — light, dark, and `.on-brand-blue`, the
+context inside a Nottingham Blue band — and the last two are identical by
+test. A rule written inside a band names roles like any other and comes out
+light on blue, focus ring included.
 
-The UoN brand background colour (open decision D1, used to pad non-16:9
-sources around the branding, spec §4.3) is **not yet known.** It lives in
-exactly one place:
+### The brand background (D1)
+
+D1 was answered on 2026-08-27: the colour that pads non-16:9 sources around
+the branding (spec §4.3) is Nottingham Blue, verified against the shipped
+closing tail. It lives in exactly one place:
 
 ```css
-/* PLACEHOLDER — open decision D1. Awaiting a hex value from the UoN
-   brand guidelines. Black is a safe interim, not the approved answer.
-   See docs/03-open-decisions.md. */
---uon-brand-bg: #000000;
+--uon-brand-blue: #10263b;
+--uon-brand-bg: var(--uon-brand-blue);
 ```
 
 Reference it as `var(--uon-brand-bg)` everywhere. Never inline the hex.
-Answering D1 must be a one-line change.
+
+### What the brand rules require here
+
+Read from the University's brand pages, 2026-09-30, and binding on this
+interface:
+
+- **No black.** Text is Nottingham Blue or white.
+- **No pure white ground.** The page is the 5% blue tint; panels are Portland
+  Stone.
+- **Nottingham Blue dominant**, with at most two supporting colours.
+- **Bands are not sticky.** A band that follows the scroll can cover the
+  focused control (WCAG 2.4.11).
+- **Shape stays Carbon productive.** The website's pill buttons are not
+  adopted.
+- **The logo is a trademark.** It is never redrawn, recoloured or cropped; it
+  keeps an exclusion zone of half its height on every side; its `alt` is
+  "University of Nottingham". See `src/assets/README.md`.
 
 ### Contrast
 
 The AAA target (7:1 normal text, 4.5:1 large) is checked against the
-**brand** palette, not assumed from it. If a UoN brand colour cannot
-reach 7:1 against its background, that is an exception to be documented
-per the design review gate — not a reason to silently drop to AA.
+**brand** palette, not assumed from it — `test/contrast.test.ts` resolves
+every role to the hex it is drawn in and measures each pair the app renders,
+in all three contexts. If a UoN brand colour cannot reach 7:1 against its
+background, that is an exception to be documented per the design review
+gate — not a reason to silently drop to AA.
+
+One such exception is settled: **status colour is not the brand's.** Jubilee
+Red measures 6.4:1 on white, so error, success and warning keep Carbon's -80
+steps on light surfaces and -20 steps on blue ones.
 
 ---
 

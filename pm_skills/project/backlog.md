@@ -145,6 +145,19 @@
       Done when: an iPhone HEVC file is opened in Firefox and either decodes or
       is refused with the block's own wording rather than failing mid-job.
 
+- [ ] **VH-98 The logo and the heading font** [maintainer] (2026-09-30)
+      Intent: VH-92 shipped the University's look with two slots empty. The
+      white-out logo is a trademark from the brand team's library — not
+      something an agent copies off the website. Lora is OFL and only needs
+      downloading, which the agent did not do unasked.
+      Done when: `src/assets/uon-logo-white.svg` (or `.png`) and
+      `src/assets/lora-bold.woff2`, with its `OFL.txt`, are committed —
+      `src/assets/README.md` says where each comes from — and the header
+      shows the logo in both builds. No code changes: `brand-assets.ts` picks
+      both up by name.
+      Open: the logo's height. 50 px, the brand's narrowest tier, is built;
+      the brand table says 80 px at laptop widths. The brand team arbitrates.
+
 ### Band 4 — The interface pass
 
 <!-- Maintainer request, 2026-09-30: one list of interface changes, split so
@@ -165,28 +178,6 @@
      redesign.
      "Open:" is a question for the maintainer with a working default — the
      default is what gets built if nobody answers. -->
-
-- [ ] **VH-92 Look like the University** [detail](tickets/VH-92.md)
-      (2026-09-30)
-      Intent: take the visual cues from <https://www.nottingham.ac.uk/> and
-      its brand pages, read 2026-09-30 — a Nottingham Blue header and footer
-      with the white logo top-left, Nottingham Blue text in place of black, a
-      tinted ground rather than white, Lora headings.
-      The brand's rules agree with this project's: it prefers AAA, and
-      sentence case. The palette builds a whole AAA theme (measured, in the
-      ticket) except for status — Jubilee Red is 6.4:1 on white, so error red
-      stays Carbon's. Brand tokens own colour and typeface; Carbon keeps
-      shape, spacing and states.
-      Constraints: Circular, the brand's sans, is licensed and this repository
-      is public, so it cannot be committed — the brand's own substitute is
-      Arial. Lora is OFL and self-hosted; nothing is fetched from a third
-      party. Every new file lands flat in the Xerte package.
-      Open: the logo file. Default: the maintainer supplies it from the brand
-      library; nothing is copied off the website. All else ships without it.
-      Done when: `test/contrast.test.ts` covers the brand pairs in both
-      themes; the logo keeps its exclusion zone and carries `alt="University
-      of Nottingham"`; focus is visible on the blue band; `UI-STANDARDS.md`'s
-      token section, which still calls D1 open, is corrected.
 
 - [ ] **VH-93 A feedback button** [detail](tickets/VH-93.md) (2026-09-30)
       [sign-off]

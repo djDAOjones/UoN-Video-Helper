@@ -50,6 +50,7 @@ import { preflightAnnouncement, renderPreflight } from './ui/preflight-panel'
 import { renderWarnings } from './ui/warning-text'
 import { renderSourceError, renderSourceReport, summarise } from './ui/source-panel'
 import { summariseChecks, type CheckState } from './ui/system-check'
+import { installBrandAssets } from './ui/brand-assets'
 import type { WorkerOutbound, WorkerRequest } from './workers/protocol'
 
 const isDev = import.meta.env.DEV
@@ -66,6 +67,10 @@ function required<T extends Element>(selector: string): T {
   if (!element) throw new Error(`Missing required element: ${selector}`)
   return element
 }
+
+// The logo and the heading font, where their files exist. First, so the
+// header does not change shape after the rest of the page has settled.
+log.info('boot', 'brand assets', installBrandAssets(required<HTMLElement>('#brand-header')))
 
 const checksList = required<HTMLUListElement>('#checks')
 const systemCheck = required<HTMLDetailsElement>('#system-check')

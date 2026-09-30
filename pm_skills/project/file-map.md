@@ -15,7 +15,7 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 173 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 175 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 20 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
@@ -23,7 +23,7 @@
 - `public` — 13 file(s)
 - `reviews` — 7 file(s)
 - `scripts` — 5 file(s)
-- `src` — 115 file(s)
+- `src` — 117 file(s)
 - `test` — 6 file(s)
 <!-- /file-map-index -->
 
@@ -107,6 +107,7 @@
 - `src/acceptance/measure.test.ts` — Pins the drift estimator — an endpoint difference read the trend backwards.
 - `src/acceptance/measure.ts` — Sync by marker, loudness by region, and two independent egress instruments.
 - `src/acceptance/run.ts` — The spec 13 run: what is checked, and what is reported as needing a person.
+- `src/assets/README.md` — The two brand files that belong here and are not in the repository: the white-out logo and Lora Bold. What each is, where it comes from, its licence.
 - `src/audio/analyse.test.ts` — Proves the facade measures the same thing the components do separately.
 - `src/audio/analyse.ts` — The analysis pass: loudness and true peak over one traversal of source audio only.
 - `src/audio/biquad.ts` — Second-order IIR section, Direct Form II transposed, Float64 state to resist hour-long drift.
@@ -195,9 +196,10 @@
 - `src/spike/preflight-audio.ts` — Checks the no-aac-encode block fires where the encoder refuses, and nowhere else.
 - `src/spike/real.ts` — Runs a real recording from `public/spike/` through the pipeline; reports levels and speed.
 - `src/spike/shapes.ts` — Runs the corpus's awkward properties through the pipeline, synthesised so it runs on any machine.
-- `src/styles/app.css` — App shell styles. Carbon productive language at AAA.
-- `src/styles/tokens.brand.css` — UoN brand tokens. Holds the D1 placeholder and nothing invented.
-- `src/styles/tokens.carbon.css` — Carbon structural tokens. Every pair is contrast-asserted by test/contrast.test.ts.
+- `src/styles/app.css` — App shell styles: Carbon productive shapes at AAA, in the University's colours. Names roles only — no colour value.
+- `src/styles/tokens.brand.css` — UoN brand tokens: the palette and its tints, the font stacks, the logo's size, and the colour roles assigned from them for light, dark and a blue band.
+- `src/styles/tokens.carbon.css` — Carbon structural tokens: spacing, type scale, motion, the 44 px floor, and status colour.
+- `src/ui/brand-assets.ts` — Looks the logo and heading font up by name at build time and installs whichever exists; the page is complete without either.
 - `src/ui/closing-choice.test.ts` — Every closing selection's sentence states the seconds the job really adds; "None" is unmistakable; a disabled control says why.
 - `src/ui/closing-choice.ts` — The closing controls in words: the result line for the current selection, and why onset or colour is disabled.
 - `src/ui/format.test.ts` — Pins the wording, so phrasing is tested rather than reviewed by opinion.
@@ -220,9 +222,9 @@
 
 ## test
 
-- `test/contrast.test.ts` — Makes the AAA contrast claim mechanical: every rendered pair >= 7:1 in both themes.
+- `test/contrast.test.ts` — Makes the AAA contrast claim mechanical: every rendered pair >= 7:1 in light, dark and on a blue band, resolved through both token files.
 - `test/ebu3341/signals.ts` — EBU Tech 3341 Table 1 signals, synthesised from their published definitions.
 - `test/ebu3341/tech3341.test.ts` — The compliance gate: Table 1 cases 1-23 against the meter, inside `npm run check`.
 - `test/helpers/signals.ts` — Synthesised tones and silence shared by the meter tests and the EBU harness.
 - `test/screen-text.test.ts` — Holds the static page to what it must agree with: the privacy promise once, preset and closing options as the config has them, "caption" never "subtitle", status lines outside any disclosure, steps numbered without a gap.
-- `test/stylesheet.test.ts` — Stylesheet invariants no component test can see: `hidden` outranks every author `display` rule.
+- `test/stylesheet.test.ts` — Stylesheet invariants no component test can see: `hidden` outranks every author `display` rule; nothing is sticky; no colour is named outside a token.

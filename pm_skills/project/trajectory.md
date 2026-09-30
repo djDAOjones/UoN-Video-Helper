@@ -25,6 +25,9 @@
 
 ### Band 4 — the interface pass
 
+- VH-92 — Shipped 2026-09-30. The page wears the University's palette in
+  both themes, with blue header and footer bands and serif headings; slots
+  wait for the logo and Lora (VH-98). See decision-log.
 - VH-91 — Shipped 2026-09-30. Four numbered panels that stay open; Create
   holds everything about the job; the file and the job each have a status
   line beside them. See decision-log.

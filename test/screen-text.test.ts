@@ -259,3 +259,31 @@ describe('steps that read as steps (VH-91)', () => {
   })
 })
 
+describe('the page frame (VH-92)', () => {
+  const header = /<header[\s\S]*?<\/header>/.exec(markup)?.[0] ?? ''
+  const footer = /<footer[\s\S]*?<\/footer>/.exec(markup)?.[0] ?? ''
+
+  it('draws both bands as light on Nottingham Blue', () => {
+    // `on-brand-blue` is what re-assigns the colour roles. Without it a band
+    // would be blue with Nottingham Blue text on it.
+    expect(header).toMatch(/class="band band--header on-brand-blue"/)
+    expect(footer).toMatch(/class="band band--footer on-brand-blue"/)
+  })
+
+  it('heads the page with its name, once', () => {
+    expect(markup.match(/<h1>/g)).toHaveLength(1)
+    expect(header).toContain('<h1>UoN Video Helper</h1>')
+  })
+
+  it('puts System check and the version in the footer', () => {
+    expect(footer).toContain('id="system-check"')
+    expect(footer).toContain('id="version-line"')
+  })
+
+  it('ships no logo file reference in the markup', () => {
+    // The logo is inserted by `brand-assets.ts` only when its file exists. A
+    // hard-coded <img> would be a broken image until the maintainer adds it.
+    expect(markup).not.toMatch(/<img\b/)
+  })
+})
+

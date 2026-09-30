@@ -113,12 +113,14 @@ src/
     warning-text.ts        one sentence per warning code
     system-check.ts        the System check summary line, pure
     closing-choice.ts      the closing controls' result line and disabled reasons
+    brand-assets.ts        installs the logo and heading font where their files exist
     format.ts             durations, sizes, rates
   acceptance/              the §13 harness. Dev-only; not built.
   spike/                   maintainer probes. Dev-only; not built.
   styles/
-    tokens.brand.css       UoN palette — the D1 token lives here, once
-    tokens.carbon.css      Carbon structural tokens (spacing, type, layer, state)
+    tokens.brand.css       UoN palette, font stacks, and the colour roles assigned from them
+    tokens.carbon.css      Carbon structural tokens (spacing, type, motion, status)
+  assets/                  brand files that are wanted and optional at build time
 test/
   ebu3341/                 signal synthesis + published expected values
   helpers/                 shared signal generators
@@ -189,8 +191,9 @@ This is not tidiness — it is how the four open decisions stay cheap:
 | D3 boundary treatment | `config/audio.ts` (fade length) + `audio/chain.ts` | One constant |
 | D8 published limits | `config/thresholds.ts` | Three numbers |
 
-Design tokens follow `UI-STANDARDS.md`: two systems side by side, UoN brand
-palette and Carbon structural tokens, never collapsed into one.
+Design tokens follow `UI-STANDARDS.md`: two systems side by side, never
+collapsed into one. The brand file owns colour and typeface, including the
+values of the colour roles; the Carbon file owns shape and status colour.
 
 ## Dev workflow
 

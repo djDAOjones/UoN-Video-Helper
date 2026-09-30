@@ -17,18 +17,30 @@ html {
 }
 
 body {
+  /* A column the height of the window, so the footer band sits at the bottom
+     of a short page rather than halfway up it. */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   margin: 0;
   background: var(--layer-00);
   color: var(--text-primary);
-  font-family:
-    'IBM Plex Sans',
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
+  font-family: var(--font-body);
   font-size: var(--type-body);
   line-height: 1.5;
+}
+
+/* The brand's heading face. Lora where its file is present, Georgia until. */
+h1,
+h2 {
+  font-family: var(--font-heading);
+}
+
+/* `--interactive` is the text colour now, so colour no longer tells a link
+   from the words around it. The underline does. */
+a {
+  color: var(--interactive);
+  text-decoration: underline;
 }
 
 /*
@@ -63,31 +75,75 @@ body {
   outline-offset: 2px;
 }
 
-.header {
+/*
+ * The Nottingham Blue bands, top and bottom (VH-92). `.on-brand-blue`, in
+ * tokens.brand.css, re-assigns the colour roles inside them, so these rules
+ * name roles like any other and come out light on blue — including the focus
+ * ring, which is white in here.
+ */
+.band {
+  background: var(--layer-00);
+  color: var(--text-primary);
+}
+
+.band-inner {
+  width: 100%;
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: var(--spacing-05) var(--spacing-06);
+}
+
+/* In the dark theme the page is the same blue as the band, so a rule is what
+   separates them. In the light theme it is a quiet edge and nothing more. */
+.band--header {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.band--footer {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.band--header .band-inner {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-03) var(--spacing-05);
-  align-items: baseline;
-  justify-content: space-between;
-  padding: var(--spacing-05) var(--spacing-06);
-  border-bottom: 1px solid var(--border-subtle);
-  background: var(--layer-01);
+  align-items: center;
+  /* The logo's exclusion zone is kept between it and the name, too. */
+  gap: var(--uon-logo-clear);
 }
 
-.header h1 {
+/*
+ * The logo, at the brand's height and inside its exclusion zone: half the
+ * logo's own height, clear, on every side. The band's padding supplies the
+ * left edge; the margin supplies the rest.
+ */
+.brand-logo {
+  display: block;
+  height: var(--uon-logo-height);
+  width: auto;
+  margin-block: calc(var(--uon-logo-clear) - var(--spacing-05));
+  margin-inline-start: max(0px, calc(var(--uon-logo-clear) - var(--spacing-06)));
+}
+
+.band--header h1 {
   margin: 0;
   font-size: var(--type-heading-04);
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-weight: 700;
 }
 
-.header .version {
+.band--footer .system-check {
+  margin-bottom: var(--spacing-05);
+}
+
+.version {
+  margin: 0;
   font-size: var(--type-body-compact);
   color: var(--text-secondary);
   font-variant-numeric: tabular-nums;
 }
 
 .main {
+  flex: 1;
+  width: 100%;
   max-width: 60rem;
   margin: 0 auto;
   padding: var(--spacing-07) var(--spacing-06) var(--spacing-09);
@@ -118,7 +174,7 @@ body {
 .panel h2 {
   margin: 0 0 var(--spacing-05);
   font-size: var(--type-heading-03);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 /*
@@ -161,7 +217,7 @@ body {
   gap: var(--spacing-04);
   align-items: baseline;
   padding-bottom: var(--spacing-04);
-  border-bottom: 1px solid var(--layer-02);
+  border-bottom: 1px solid var(--border-divider);
 }
 
 .check:last-child {
@@ -448,11 +504,13 @@ body {
   margin-top: var(--spacing-05);
   appearance: none;
   border: 0;
-  background: var(--layer-02);
+  /* The track. `--layer-02` is a hair off the panel it sits on now, so the
+     track takes the divider colour and the bar reads against it at 3:1. */
+  background: var(--border-divider);
 }
 
 .progress::-webkit-progress-bar {
-  background: var(--layer-02);
+  background: var(--border-divider);
 }
 
 .progress::-webkit-progress-value {

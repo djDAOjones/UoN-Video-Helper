@@ -12,9 +12,16 @@
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
 
-    <header class="header">
-      <h1>UoN Video Helper</h1>
-      <p class="version" id="version-line">Loading…</p>
+    <!-- A Nottingham Blue band, as on nottingham.ac.uk, and deliberately not
+         sticky: a band that follows the scroll can sit on top of the focused
+         control (WCAG 2.4.11). `on-brand-blue` re-assigns the colour roles, so
+         everything inside is drawn — and contrast-tested — as light on blue.
+         The white-out logo is inserted before the heading when its file
+         exists: see `src/ui/brand-assets.ts` (VH-92). -->
+    <header class="band band--header on-brand-blue">
+      <div class="band-inner" id="brand-header">
+        <h1>UoN Video Helper</h1>
+      </div>
     </header>
 
     <main class="main" id="main">
@@ -215,18 +222,6 @@
         <div id="process-result"></div>
       </section>
 
-      <!-- Closed on a healthy device; `main.ts` opens it on any failure, and
-           the summary says the result in words either way (VH-88). The words
-           are a heading INSIDE the summary, which HTML allows: a panel this
-           substantial has to stay in the list a screen-reader user navigates
-           by, open or shut. -->
-      <details class="panel system-check" id="system-check">
-        <summary class="disclosure-summary">
-          <h2 id="system-check-summary">System check — checking</h2>
-        </summary>
-        <ul class="checks" id="checks"></ul>
-      </details>
-
       <section class="panel" aria-labelledby="errors-heading" id="errors-panel" hidden>
         <h2 id="errors-heading">Errors captured</h2>
         <div class="errors" id="errors"></div>
@@ -234,6 +229,24 @@
 
       <div class="actions" id="dev-actions" hidden></div>
     </main>
+
+    <!-- The footer band: what the page is running on, and what it is. -->
+    <footer class="band band--footer on-brand-blue">
+      <div class="band-inner">
+        <!-- Closed on a healthy device; `main.ts` opens it on any failure, and
+             the summary says the result in words either way (VH-88). The words
+             are a heading INSIDE the summary, which HTML allows: a panel this
+             substantial has to stay in the list a screen-reader user navigates
+             by, open or shut. -->
+        <details class="panel system-check" id="system-check">
+          <summary class="disclosure-summary">
+            <h2 id="system-check-summary">System check — checking</h2>
+          </summary>
+          <ul class="checks" id="checks"></ul>
+        </details>
+        <p class="version" id="version-line">Loading…</p>
+      </div>
+    </footer>
 
     <script type="module" src="/src/main.ts"></script>
   </body>

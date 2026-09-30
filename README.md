@@ -126,6 +126,16 @@ Full rules: [`AGENTS.md`](AGENTS.md), [`UI-STANDARDS.md`](UI-STANDARDS.md),
   from sync, or mark it "always keep on this device"; `.gitignore` has no
   effect, because OneDrive does not read it.
 
+## Licence and trademarks
+
+The code in this repository is MIT-licensed (`package.json`). That licence
+does **not** extend to the University of Nottingham's name, its logo, or the
+closing sequences in `public/branding/`: those remain the University's. They
+are here because this is the University's tool, and the repository being
+public gives nobody else a right to reuse them. Fonts keep their own licences
+— see
+[`src/assets/README.md`](src/assets/README.md).
+
 ## Project management
 
 This repository uses the [PM Skills](https://github.com/djDAOjones/PM-Skills-lab)
