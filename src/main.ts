@@ -53,7 +53,13 @@ import {
   colourDisabledReason,
   onsetDisabledReason,
 } from './ui/closing-choice'
-import { describeBrowser, feedbackDetails, feedbackMailto, feedbackText } from './ui/feedback'
+import {
+  describeBrowser,
+  feedbackDetails,
+  feedbackDisclosure,
+  feedbackMailto,
+  feedbackText,
+} from './ui/feedback'
 import { formatFileSize } from './ui/format'
 import { preflightAnnouncement, renderPreflight } from './ui/preflight-panel'
 import { renderWarnings } from './ui/warning-text'
@@ -1312,15 +1318,35 @@ fileInput.addEventListener('change', () => {
   for (const chosen of fileInput.files ?? []) chosenFileNames.add(chosen.name)
 })
 
-/** The details as last gathered: what the disclosure shows is what is sent. */
+/** The details as last gathered. Copy carries them all; the email what fits. */
 let feedbackLines: string[] = []
+
+/** The email as the message stands now: its link, and how many details it carries. */
+function feedbackEmail(): ReturnType<typeof feedbackMailto> {
+  return feedbackMailto({
+    address: FEEDBACK_ADDRESS,
+    subject: `${FEEDBACK_SUBJECT} (${BUILD_ID})`,
+    message: feedbackMessage.value,
+    details: feedbackLines,
+    maxCharacters: FEEDBACK_MAILTO_MAX_CHARACTERS,
+  })
+}
+
+/**
+ * Shows what the email will carry. Recomputed as the message is typed, since
+ * a longer message leaves room for fewer details — what the user reviews is
+ * what is sent (Codex review).
+ */
+function renderFeedbackDisclosure(): void {
+  feedbackDetailsBlock.textContent = feedbackDisclosure(feedbackLines, feedbackEmail().keptDetails)
+}
 
 function gatherFeedbackDetails(): void {
   feedbackLines = feedbackDetails(buildDiagnosticsBundle(), {
     browser: describeBrowser(navigator.userAgent),
     fileNames: [...chosenFileNames],
   })
-  feedbackDetailsBlock.textContent = feedbackLines.join('\n')
+  renderFeedbackDisclosure()
 }
 
 function openFeedback(): void {
@@ -1377,20 +1403,24 @@ function openMailto(url: string): void {
 
 feedbackMessage.addEventListener('input', () => {
   if (feedbackMessage.value.trim().length > 0) showFeedbackError(false)
+  renderFeedbackDisclosure()
 })
 
 feedbackForm.addEventListener('submit', (event) => {
   event.preventDefault()
   const message = feedbackMessageOrError()
   if (message === null) return
-  const { url, trimmed } = feedbackMailto({
-    address: FEEDBACK_ADDRESS,
-    subject: `${FEEDBACK_SUBJECT} (${BUILD_ID})`,
-    message,
-    details: feedbackLines,
-    maxCharacters: FEEDBACK_MAILTO_MAX_CHARACTERS,
-  })
+  const { url, keptDetails } = feedbackEmail()
+  if (url === null) {
+    // A mail client that cuts a long link cuts the message with it, so none
+    // is opened (Codex review). The copy route carries every word.
+    feedbackStatus.textContent =
+      `Your message is too long to hand to your email app in one go. Choose "Copy message ` +
+      `and details" and paste them into an email to ${FEEDBACK_ADDRESS}.`
+    return
+  }
   openMailto(url)
+  const trimmed = keptDetails < feedbackLines.length
   log.info('feedback', 'asked the email app to open', { trimmed })
   // "Should have": the page cannot know whether it did, or whether the email
   // was then sent.

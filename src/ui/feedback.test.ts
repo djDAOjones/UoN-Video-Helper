@@ -17,7 +17,13 @@ import {
 } from '../core/diagnostics'
 import { clearLogRecords, log } from '../core/logger'
 import { REDACTED } from '../core/redact'
-import { describeBrowser, feedbackDetails, feedbackMailto, feedbackText } from './feedback'
+import {
+  describeBrowser,
+  feedbackDetails,
+  feedbackDisclosure,
+  feedbackMailto,
+  feedbackText,
+} from './feedback'
 
 const FILE = 'Week 3 - Thermodynamics Lecture.mp4'
 
@@ -130,14 +136,15 @@ describe('the mailto link', () => {
   const lines = ['App: v0.1.0+20260930.abc1234', 'Browser: Chrome 142 on macOS', 'Stage: failed', 'Recent log:', '  info a: one', '  info a: two']
 
   it('addresses the maintainer, with the subject and a CRLF body', () => {
-    const { url, trimmed } = feedbackMailto({
+    const { url, keptDetails } = feedbackMailto({
       address: 'someone@example.ac.uk',
       subject: 'Feedback v0.1.0',
       message: 'It stopped.\nTwice.',
       details: lines,
       maxCharacters: 1800,
     })
-    expect(trimmed).toBe(false)
+    expect(keptDetails).toBe(lines.length)
+    if (url === null) throw new Error('expected a link')
     expect(url.startsWith('mailto:someone@example.ac.uk?subject=Feedback%20v0.1.0&body=')).toBe(true)
     const body = decodeURIComponent(url.split('&body=')[1]!)
     expect(body).toBe(feedbackText('It stopped.\nTwice.', lines).replace(/\n/g, '\r\n'))
@@ -145,16 +152,17 @@ describe('the mailto link', () => {
 
   it('drops details from the end to fit, never the message, and never leaves a bare heading', () => {
     const message = 'm'.repeat(150)
-    const full = feedbackMailto({ address: 'a@b.c', subject: 's', message, details: lines, maxCharacters: 10_000 }).url
-    const { url, trimmed } = feedbackMailto({
+    const full = feedbackMailto({ address: 'a@b.c', subject: 's', message, details: lines, maxCharacters: 10_000 }).url!
+    const { url, keptDetails } = feedbackMailto({
       address: 'a@b.c',
       subject: 's',
       message,
       details: lines,
       maxCharacters: full.length - 40,
     })
+    if (url === null) throw new Error('expected a link')
     const body = decodeURIComponent(url.split('&body=')[1]!)
-    expect(trimmed).toBe(true)
+    expect(keptDetails).toBe(3)
     expect(url.length).toBeLessThanOrEqual(full.length - 40)
     expect(body).toContain(message)
     expect(body).toContain('Stage: failed')
@@ -162,11 +170,37 @@ describe('the mailto link', () => {
     expect(body.trimEnd().endsWith('Recent log:')).toBe(false)
   })
 
-  it('carries a message longer than the limit whole, with no details, and says it trimmed', () => {
-    const message = 'w'.repeat(3000)
-    const { url, trimmed } = feedbackMailto({ address: 'a@b.c', subject: 's', message, details: lines, maxCharacters: 1800 })
-    expect(trimmed).toBe(true)
-    expect(decodeURIComponent(url.split('&body=')[1]!)).toBe(`${message}\r\n`)
+  it('makes no link at all when the message alone is too long, rather than one a client may cut', () => {
+    // Codex review of VH-93: a link over the limit was still opened, and a
+    // mail client that cuts a long link cuts the user's words with it.
+    const message = 'é'.repeat(700)
+    const { url, keptDetails } = feedbackMailto({ address: 'a@b.c', subject: 's', message, details: lines, maxCharacters: 1800 })
+    expect(url).toBeNull()
+    expect(keptDetails).toBe(0)
+  })
+
+  it('never returns a link over the limit, whatever it is given', () => {
+    for (const length of [0, 100, 400, 600, 900, 2000]) {
+      const { url } = feedbackMailto({ address: 'a@b.c', subject: 's', message: 'ü'.repeat(length), details: lines, maxCharacters: 1800 })
+      if (url !== null) expect(url.length).toBeLessThanOrEqual(1800)
+    }
+  })
+})
+
+describe('what the dialog shows as sent', () => {
+  const lines = ['App: v', 'Stage: failed', 'Recent log:', '  info a: one', '  info a: two']
+
+  it('shows every line when the email carries them all', () => {
+    expect(feedbackDisclosure(lines, lines.length)).toBe(lines.join('\n'))
+  })
+
+  it('marks the lines the email could not carry, so what is reviewed is what is sent', () => {
+    // Codex review of VH-93: the disclosure listed lines the link had dropped.
+    const shown = feedbackDisclosure(lines, 4)
+    const [sent, left] = shown.split('Too long for the email')
+    expect(sent).toContain('  info a: one')
+    expect(sent).not.toContain('two')
+    expect(left).toContain('  info a: two')
   })
 })
 

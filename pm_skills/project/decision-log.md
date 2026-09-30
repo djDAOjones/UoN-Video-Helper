@@ -61,7 +61,12 @@ and sends it themselves. The full bundle stays dev-only.
 egress" forbids a request carrying media characteristics. A `mailto:` link
 makes no request at all, so the invariant, criterion 9 and the egress watch
 are untouched. The message is never cut to fit the link's 1,800-character
-cap; details are dropped from the end, and Copy carries them all.
+cap; details are dropped from the end, and Copy carries them all. Two
+follow-ups from the Codex review: a message too long for the link on its own
+now opens no link at all and says to use Copy (a client that cuts a long link
+cuts the message with it), and the disclosure is recomputed as the message is
+typed, listing the lines the email carries and marking the rest as only in
+the copy — so what the user reviews is what is sent.
 
 Chrome treats a followed `mailto:` link as leaving the page: with the leave
 warning armed it raised "Leave site?" (measured, headless Chrome 154), though

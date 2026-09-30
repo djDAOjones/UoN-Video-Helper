@@ -195,11 +195,16 @@ export function feedbackText(message: string, details: readonly string[]): strin
 }
 
 /**
- * A `mailto:` link no longer than `maxCharacters`.
+ * A `mailto:` link no longer than `maxCharacters`, or none.
  *
  * The details are dropped from the end — recent log lines first — until the
  * link fits. The user's own words are never cut: if they alone are too long,
- * the link carries them and no details, and says so in `trimmed`.
+ * there is no link, because a mail client that cuts a long link cuts the
+ * message with it. The copy route carries everything instead.
+ *
+ * @returns `url` null when even the message alone does not fit; and how many
+ *   of `details`, from the start, the link carries — which is what the dialog
+ *   must show as sent.
  */
 export function feedbackMailto(options: {
   readonly address: string
@@ -207,7 +212,7 @@ export function feedbackMailto(options: {
   readonly message: string
   readonly details: readonly string[]
   readonly maxCharacters: number
-}): { readonly url: string; readonly trimmed: boolean } {
+}): { readonly url: string | null; readonly keptDetails: number } {
   // RFC 6068 §5: a line break in a mailto body is CRLF.
   const body = (details: readonly string[]) =>
     (details.length > 0 ? feedbackText(options.message, details) : `${options.message.trim()}\n`)
@@ -216,14 +221,29 @@ export function feedbackMailto(options: {
     `mailto:${options.address}?subject=${encodeURIComponent(options.subject)}` +
     `&body=${encodeURIComponent(body(details))}`
 
-  for (let count = options.details.length; count > 0; count--) {
+  for (let count = options.details.length; count >= 0; count--) {
     const first = options.details.slice(0, count)
     // A heading with nothing under it says nothing.
     const kept = first.at(-1) === 'Recent log:' ? first.slice(0, -1) : first
     const url = build(kept)
-    if (url.length <= options.maxCharacters) {
-      return { url, trimmed: kept.length < options.details.length }
-    }
+    if (url.length <= options.maxCharacters) return { url, keptDetails: kept.length }
   }
-  return { url: build([]), trimmed: options.details.length > 0 }
+  return { url: null, keptDetails: 0 }
+}
+
+/**
+ * What the dialog shows as sent: the lines the link carries, then any it could
+ * not, marked as travelling only in the copy. The user reviews what the email
+ * will actually contain, not a longer list than it has.
+ */
+export function feedbackDisclosure(details: readonly string[], keptDetails: number): string {
+  const sent = details.slice(0, keptDetails)
+  const left = details.slice(keptDetails)
+  if (left.length === 0) return sent.join('\n')
+  return [
+    ...sent,
+    ...(sent.length > 0 ? [''] : []),
+    'Too long for the email, so only in "Copy message and details":',
+    ...left,
+  ].join('\n')
 }
