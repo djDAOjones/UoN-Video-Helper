@@ -678,10 +678,15 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
         sample.close()
       }
       // More than one block only where a hole is filled, which can be long;
-      // so cancel is heard between them.
-      for (const block of processed) {
+      // so cancel is heard between them — checked BEFORE the next block is
+      // made, because a block made and then abandoned is a sample nobody
+      // closes (Codex review).
+      const blocks = processed[Symbol.iterator]()
+      for (;;) {
         throwIfAborted(laneSignal)
-        await emit(block)
+        const next = blocks.next()
+        if (next.done) break
+        await emit(next.value)
       }
     }
 

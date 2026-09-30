@@ -136,7 +136,11 @@ async function traverse(
       if (kept) {
         const missing = gaps.framesMissingBefore(kept.timestampSeconds)
         for (const silence of gaps.silence(missing, sampleRate * GAP_SILENCE_BLOCK_SECONDS)) {
+          // A long hole is thousands of blocks between two source samples, so
+          // each one proves the job alive and hears a cancel (Codex review).
+          if (signal?.aborted) break
           await emit(chain ? chain.process(silence) : silence)
+          onSample?.()
         }
         gaps.accept(kept.planar[0]?.length ?? 0)
         await emit(chain ? chain.process(kept.planar) : kept.planar)

@@ -57,7 +57,10 @@ whole, a 30-minute hole was about 690 MB; pre-flight asks for the AAC
 encoder only when the kept part has sound, so Firefox no longer blocks a
 silent keep; and the probe counts audio its window never reached as
 unmeasured — it was dividing by zero, and every such file, trimmed or late-
-starting, was called a "very long job".
+starting, was called a "very long job". A third round: each silence block
+reports liveness and hears a cancel during analysis, and the encode checks
+for a cancel before making the next block rather than after, so none is
+made and left unclosed.
 
 **Verified:** acceptance harness, 13 passed, 0 failed. Trimmed loudness: a
 source drifting from −4 to −34 dBFS, kept 40–70 s — −16.12 LUFS on the kept
