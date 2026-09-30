@@ -120,7 +120,8 @@ try {
       )
     }
   }
-  say(failures === 0 ? '\nALL PASS' : `\n${failures} FAILED`)
+  // The closing line `scripts/run-in-engines.mjs` reads: it fails the run.
+  say(`\n${failures === 0 ? 'ALL PASS' : `${failures} FAILURE(S)`}`)
 } catch (error) {
   say(`ERROR — ${error instanceof Error ? error.message : String(error)}`)
 } finally {

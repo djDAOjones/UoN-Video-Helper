@@ -11,6 +11,26 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-09-30 — VH-26 review: a check that cannot fail is not a check
+
+**Decision:** `scripts/run-in-engines.mjs` exits 1 when a page that ran to
+`done` reports its own failure — a line beginning `ERROR`, or a closing
+`N FAILURE(S)`.
+
+**Rationale:** from the Codex review of VH-26. The runner's contract was
+"navigate, wait for `done`, print", and it treated reaching `done` as success.
+I had recorded `run-in-engines /spike-phone.html --engines firefox` as the
+verification of VH-26, and that command would have exited 0 with the sample
+missing, the worker hung, or every assertion failing. The two patterns are
+the ones the spike pages already use, so nothing else had to change; an engine
+that merely behaves differently is still a finding to read, not a failure.
+
+**Verified:** Firefox, the iPhone file: `ALL PASS`, exit 0. Firefox, a path
+that does not exist: `2 FAILURE(S)`, "REPORTED A FAILURE", exit 1.
+
+**Link:** VH-26; `scripts/run-in-engines.mjs`, `DEV-INFRASTRUCTURE.md` →
+"Cross-engine verification".
+
 ## 2026-09-30 — VH-83 review: measure again under the ceiling that will be used
 
 **Decision:** when the probe lowers the limiter ceiling, the pass that probed

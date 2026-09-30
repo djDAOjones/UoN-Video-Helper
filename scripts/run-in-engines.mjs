@@ -13,6 +13,14 @@
  * appends to, ending with a line of exactly `done`. Nothing here knows what a
  * page measures — it navigates, waits for that sentinel, and prints the text.
  *
+ * One thing it does read: a page's own verdict on itself. A page that reaches
+ * `done` has RUN, which is not the same as having passed, and a command that
+ * exits 0 either way cannot be cited as verification. So a line beginning
+ * `ERROR` at the left margin, or a closing `N FAILURE(S)`, fails the run —
+ * those are the two ways the spike pages already say something went wrong.
+ * An engine that simply behaves differently is still a finding to read, not a
+ * failure: a page reports that however it likes, short of those two lines.
+ *
  * Each engine needs a different protocol, and the differences are not
  * negotiable:
  *
@@ -344,11 +352,18 @@ console.log(`run-in-engines: ${url}`)
 // installed", so a missing engine there is a gap in coverage to report, not a
 // failure to stop on (VH-68).
 const enginesRequired = options.engines !== undefined
-// Three independent counters. Deriving one from the others is what let a
-// skipped engine be reported as a complete run (VH-68).
+// Independent counters. Deriving one from the others is what let a skipped
+// engine be reported as a complete run (VH-68).
 let completed = 0
 let skipped = 0
 let failed = 0
+/** Engines where the page ran to `done` and said, itself, that it had failed. */
+let reported = 0
+
+/** Whether a finished page's own text says it failed. See the header. */
+function pageReportsFailure(text) {
+  return /^ERROR\b/m.test(text) || /^[1-9]\d* FAILURE\(S\)$/m.test(text)
+}
 
 for (const name of wanted) {
   const engine = ENGINES[name]
@@ -365,6 +380,10 @@ for (const name of wanted) {
     console.log(text.trim() || '  (the page reported nothing)')
     if (finished) {
       completed++
+      if (pageReportsFailure(text)) {
+        console.log('\n  REPORTED A FAILURE — the page ran to the end and says it did not pass')
+        reported++
+      }
     } else {
       console.log(`\n  INCOMPLETE — no "done" after ${PAGE_TIMEOUT_MS / 1000}s; output is partial`)
       failed++
@@ -380,6 +399,7 @@ for (const name of wanted) {
 console.log(
   `\nrun-in-engines: ${completed} completed, ${skipped} skipped, ${failed} failed, ` +
     `of ${wanted.length} requested.` +
+    (reported ? ` ${reported} of the completed reported a failure of their own.` : '') +
     (skipped
       ? enginesRequired
         ? ' A skipped engine was named explicitly, so this run did not cover what it was asked to.'
@@ -388,4 +408,4 @@ console.log(
 )
 // A skip only fails the run when the engine was asked for by name. Defaulting
 // to all three means "whatever is installed"; naming one means "this one".
-process.exit(failed || (enginesRequired && skipped) ? 1 : 0)
+process.exit(failed || reported || (enginesRequired && skipped) ? 1 : 0)

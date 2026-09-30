@@ -516,11 +516,17 @@ node scripts/run-in-engines.mjs /spike-alpha.html  # in another
 ```
 
 Every spike page carries the same contract — a `<pre id="log">` ending with a
-line of exactly `done` — and the script knows nothing beyond that: it
+line of exactly `done` — and the script knows almost nothing beyond that: it
 navigates, waits for the sentinel, prints the text. `--base` points at a
 different origin (the dev server moves off 5173 when something else holds it);
 `--engines chrome,firefox` narrows the set. A missing browser is skipped, not
 an error.
+
+The one thing it reads is a page's verdict on itself. Reaching `done` means a
+page ran, not that it passed, so a line beginning `ERROR` at the left margin,
+or a closing `N FAILURE(S)`, makes the run exit 1 — otherwise the command
+could not be cited as verification, because it could not fail. A page that
+wants to be usable that way ends on `ALL PASS` or `N FAILURE(S)`.
 
 Each engine speaks a different protocol and there is no choice about it:
 Chrome over CDP, Firefox over WebDriver BiDi (it dropped CDP), Safari over
