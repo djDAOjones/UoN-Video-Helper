@@ -166,26 +166,6 @@
      "Open:" is a question for the maintainer with a working default — the
      default is what gets built if nobody answers. -->
 
-- [ ] **VH-87 Video properties, collapsed** (2026-09-30)
-      Intent: the source facts move into a disclosure labelled "Video
-      properties", closed by default. Rows, in order: Duration (was Length),
-      Video codec, File size, Resolution (was Picture), Frame rate, Audio
-      codec, Audio channels, Audio sample rate (the three were one "Sound"
-      row), Captions, Container. The request said "Codec"; "Video codec" is
-      proposed because "Audio codec" sits four rows below it.
-      Risk: three of today's rows are not facts but losses — extra picture or
-      sound tracks, caption or chapter tracks found, and the "could not be
-      checked" caveat. Closed by default they would be hidden before
-      processing, the outcome this project exists to refuse. The rule: what
-      will NOT be in the new file stays in view above the disclosure; what
-      merely describes the file goes inside.
-      Also: `.disclosure-summary` is `display: flex`, which removes the native
-      triangle, so today's one disclosure shows no sign of being one. The
-      shared style gains a chevron that turns when open.
-      Done when: a native `<details>`, closed on every new file, 44 px summary,
-      visible focus ring; the three losses readable without opening it;
-      `buildRows` tests cover the new rows, no audio, and losses against facts.
-
 - [ ] **VH-88 System check, collapsed — and the status line moves** (2026-09-30)
       Intent: the System check panel becomes a disclosure that starts closed.
       Risk: `#status` lives inside it, and is both the app's one live region

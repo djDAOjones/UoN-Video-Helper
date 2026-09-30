@@ -27,85 +27,31 @@ export interface Row {
   readonly note?: string
 }
 
+/** Something in the source that will NOT be in the new file. */
+export interface Loss {
+  readonly title: string
+  readonly detail: string
+}
+
 /**
- * Turns a report into rows.
+ * What the new file will not carry, said before processing starts.
+ *
+ * Separate from {@link buildRows} because the two are shown differently, and
+ * the difference is the point (VH-87): the facts sit in a disclosure that
+ * starts closed, and a loss inside a closed disclosure is a loss nobody was
+ * told about — the outcome `AGENTS.md` ranks worst. The rule that sorts a
+ * sentence into one or the other: what will not be in the new file is a loss;
+ * what merely describes the file is a fact.
  *
  * Exported for tests. Rendering needs a DOM and the suite runs in Node, but
- * the decisions worth protecting are all here — above all which losses get
- * said out loud before processing starts.
+ * the decisions worth protecting are all here.
  */
-export function buildRows(report: SourceReport): Row[] {
-  const rows: Row[] = [
-    { term: 'Length', detail: formatDuration(report.durationSeconds) },
-    { term: 'File size', detail: formatFileSize(report.fileSizeBytes) },
-  ]
+export function buildLosses(report: SourceReport): Loss[] {
+  const losses: Loss[] = []
 
-  const { video, audio } = report
-
-  {
-    rows.push({
-      term: 'Picture',
-      detail: `${formatResolution(video.displayWidth, video.displayHeight)}, ${formatCodec(video.codec)}`,
-      ...(video.rotation !== 0
-        ? { note: `Rotated ${video.rotation}°. The output will be upright.` }
-        : {}),
-    })
-
-    const rateDetail = video.isVariableFrameRate
-      ? `${formatFrameRate(video.frameRate.bestGuess)} on average, but it varies`
-      : formatFrameRate(video.frameRate.bestGuess)
-
-    const notes: string[] = []
-    if (video.isVariableFrameRate) {
-      notes.push(
-        'Recordings from Teams, Zoom and screen capture often vary. The output will use a steady frame rate, which keeps sound and picture in step.',
-      )
-    }
-    // Only worth raising when conforming would meaningfully change the frame
-    // count — an NTSC source shifts by a tenth of a percent and nobody cares.
-    if (Math.abs(video.conform.frameDeltaRatio) > 0.1) {
-      notes.push(
-        `The output will run at ${formatFrameRate(video.conform.frameRate)}, so some frames will be repeated.`,
-      )
-    }
-    rows.push({
-      term: 'Frame rate',
-      detail: rateDetail,
-      ...(notes.length > 0 ? { note: notes.join(' ') } : {}),
-    })
-
-    if (!video.canDecode) {
-      rows.push({
-        term: 'Picture support',
-        detail: 'This browser cannot read this video format',
-        note: 'Full guidance on what to do arrives with the pre-flight checks.',
-      })
-    }
-  }
-
-  if (audio) {
-    rows.push({
-      term: 'Sound',
-      detail: `${formatChannels(audio.channelCount)}, ${formatCodec(audio.codec)}, ${Math.round(audio.sampleRate / 100) / 10} kHz`,
-    })
-    if (!audio.canDecode) {
-      rows.push({
-        term: 'Sound support',
-        detail: 'This browser cannot read this audio format',
-      })
-    }
-  } else {
-    rows.push({
-      term: 'Sound',
-      detail: 'No audio track found',
-      note: 'Levelling needs sound. Branding and re-encoding will still work.',
-    })
-  }
-
-  // Said before processing, like the caption notice below and for the same
-  // reason: the output carries one video and one audio track, so anything
-  // beyond that is content the user loses (review R-09). Finding out
-  // afterwards is too late.
+  // The output carries one video and one audio track, so anything beyond that
+  // is content the user loses (review R-09). Finding out afterwards is too
+  // late.
   const extraVideo = Math.max(0, report.videoTrackCount - 1)
   const extraAudio = Math.max(0, report.audioTrackCount - 1)
   if (extraVideo > 0 || extraAudio > 0) {
@@ -116,39 +62,134 @@ export function buildRows(report: SourceReport): Row[] {
     if (extraAudio > 0) {
       found.push(extraAudio === 1 ? '1 more sound track' : `${extraAudio} more sound tracks`)
     }
-    rows.push({
-      term: 'Extra tracks',
-      detail: `This file has ${found.join(' and ')}`,
-      note: 'The new file keeps one picture and one sound track — the ones described above. The others will not be carried over. If you need them, keep the original alongside.',
+    losses.push({
+      title: `This file has ${found.join(' and ')}`,
+      detail:
+        'The new file keeps one picture and one sound track — the ones listed under Video properties. The others will not be carried over. If you need them, keep the original alongside.',
     })
   }
 
   const { tracks } = report
-  if (tracks.scanned) {
-    const found: string[] = []
-    if (tracks.subtitleTracks > 0) {
-      found.push(
-        tracks.subtitleTracks === 1 ? '1 caption track' : `${tracks.subtitleTracks} caption tracks`,
-      )
+  if (!tracks.scanned) {
+    // Only for containers the handler scan cannot read. Saying "no captions"
+    // about a file we never checked would be worse than admitting we did not.
+    losses.push({
+      title: 'Caption and chapter tracks could not be checked',
+      detail:
+        'This kind of file cannot be checked for them. If yours has them, they will not be carried over.',
+    })
+  } else {
+    const found = embeddedTextTracks(tracks)
+    if (found.length > 0) {
+      losses.push({
+        title: `Found ${found.join(' and ')}`,
+        // It used to offer a caption file field as the way out; that field is
+        // gone (VH-86), so the advice is the one thing still true.
+        detail:
+          'These cannot be carried into the new file. If you need them, keep the original alongside.',
+      })
     }
-    if (tracks.chapterTracks > 0) {
-      found.push(tracks.chapterTracks === 1 ? '1 chapter track' : `${tracks.chapterTracks} chapter tracks`)
-    }
+  }
 
-    rows.push(
-      found.length > 0
-        ? {
-            term: 'Captions',
-            detail: `Found ${found.join(' and ')}`,
-            // Said before processing, not after: this is the one thing that
-            // cannot be carried over, and finding out afterwards is too late.
-            // It used to offer a caption file field as the way out; that field
-            // is gone (VH-86), so the advice is the one thing still true.
-            note: 'These cannot be carried into the new file. If you need them, keep the original alongside.',
-          }
-        : { term: 'Captions', detail: 'None found in this file' },
+  return losses
+}
+
+/** e.g. `['1 caption track', '2 chapter tracks']`; empty when there are none. */
+function embeddedTextTracks(tracks: SourceReport['tracks']): string[] {
+  const found: string[] = []
+  if (tracks.subtitleTracks > 0) {
+    found.push(
+      tracks.subtitleTracks === 1 ? '1 caption track' : `${tracks.subtitleTracks} caption tracks`,
     )
   }
+  if (tracks.chapterTracks > 0) {
+    found.push(tracks.chapterTracks === 1 ? '1 chapter track' : `${tracks.chapterTracks} chapter tracks`)
+  }
+  return found
+}
+
+/**
+ * Turns a report into the "Video properties" rows, in the order they are
+ * shown.
+ *
+ * Facts only. Anything the new file will not carry is {@link buildLosses}'s,
+ * and the same track may appear in both: the Captions row here says what was
+ * found, the loss says what happens to it.
+ */
+export function buildRows(report: SourceReport): Row[] {
+  const { video, audio, tracks } = report
+
+  const rateDetail = video.isVariableFrameRate
+    ? `${formatFrameRate(video.frameRate.bestGuess)} on average, but it varies`
+    : formatFrameRate(video.frameRate.bestGuess)
+
+  const rateNotes: string[] = []
+  if (video.isVariableFrameRate) {
+    rateNotes.push(
+      'Recordings from Teams, Zoom and screen capture often vary. The output will use a steady frame rate, which keeps sound and picture in step.',
+    )
+  }
+  // Only worth raising when conforming would meaningfully change the frame
+  // count — an NTSC source shifts by a tenth of a percent and nobody cares.
+  if (Math.abs(video.conform.frameDeltaRatio) > 0.1) {
+    rateNotes.push(
+      `The output will run at ${formatFrameRate(video.conform.frameRate)}, so some frames will be repeated.`,
+    )
+  }
+
+  const rows: Row[] = [
+    { term: 'Duration', detail: formatDuration(report.durationSeconds) },
+    {
+      term: 'Video codec',
+      detail: formatCodec(video.codec),
+      // The verdict below says what to do about it, in view (VH-60). This is
+      // the fact behind that verdict, for whoever opens the list.
+      ...(video.canDecode ? {} : { note: 'This browser cannot read this video format.' }),
+    },
+    { term: 'File size', detail: formatFileSize(report.fileSizeBytes) },
+    {
+      term: 'Resolution',
+      detail: formatResolution(video.displayWidth, video.displayHeight),
+      ...(video.rotation !== 0
+        ? { note: `Rotated ${video.rotation}°. The output will be upright.` }
+        : {}),
+    },
+    {
+      term: 'Frame rate',
+      detail: rateDetail,
+      ...(rateNotes.length > 0 ? { note: rateNotes.join(' ') } : {}),
+    },
+  ]
+
+  if (audio) {
+    rows.push(
+      {
+        term: 'Audio codec',
+        detail: formatCodec(audio.codec),
+        ...(audio.canDecode ? {} : { note: 'This browser cannot read this audio format.' }),
+      },
+      { term: 'Audio channels', detail: formatChannels(audio.channelCount) },
+      { term: 'Audio sample rate', detail: `${Math.round(audio.sampleRate / 100) / 10} kHz` },
+    )
+  } else {
+    // One row, not three: a codec, a channel count and a sample rate of
+    // nothing are three ways of saying the same absence.
+    rows.push({
+      term: 'Audio',
+      detail: 'No audio track found',
+      note: 'Levelling needs sound. Branding and re-encoding will still work.',
+    })
+  }
+
+  const found = tracks.scanned ? embeddedTextTracks(tracks) : []
+  rows.push({
+    term: 'Captions',
+    detail: !tracks.scanned
+      ? 'Could not be checked in this kind of file'
+      : found.length > 0
+        ? `Found ${found.join(' and ')}`
+        : 'None found in this file',
+  })
 
   rows.push({ term: 'Container', detail: report.container })
   return rows
@@ -165,9 +206,55 @@ export function summarise(report: SourceReport): string {
   return `Video read. ${parts.join(', ')}.`
 }
 
-/** Replaces `container`'s contents with the rendered report. */
+/**
+ * Replaces `container`'s contents with the rendered report.
+ *
+ * Losses first and always in view; then the facts, in a native disclosure
+ * that starts closed (VH-87). Rebuilt on every call, so a new file always
+ * starts with it closed rather than inheriting the last file's state.
+ */
 export function renderSourceReport(container: HTMLElement, report: SourceReport): void {
   container.replaceChildren()
+
+  const losses = buildLosses(report)
+  if (losses.length > 0) {
+    // The same component the sound warnings use: one visual language for
+    // "worth knowing before you start", whichever part of the file it is about.
+    const section = document.createElement('section')
+    section.className = 'warnings'
+
+    const heading = document.createElement('h3')
+    heading.className = 'warnings-heading'
+    heading.textContent = 'Not carried into the new file'
+    // Named for assistive technology, as the sound warnings' section is.
+    heading.id = 'source-losses-heading'
+    section.setAttribute('aria-labelledby', heading.id)
+    section.append(heading)
+
+    const list = document.createElement('ul')
+    list.className = 'warning-list'
+    for (const loss of losses) {
+      const item = document.createElement('li')
+      item.className = 'warning'
+      const title = document.createElement('p')
+      title.className = 'warning-title'
+      title.textContent = loss.title
+      const detail = document.createElement('p')
+      detail.className = 'warning-detail'
+      detail.textContent = loss.detail
+      item.append(title, detail)
+      list.append(item)
+    }
+    section.append(list)
+    container.append(section)
+  }
+
+  const disclosure = document.createElement('details')
+  disclosure.className = 'disclosure'
+  const summary = document.createElement('summary')
+  summary.className = 'disclosure-summary'
+  summary.textContent = 'Video properties'
+  disclosure.append(summary)
 
   const list = document.createElement('dl')
   list.className = 'facts'
@@ -189,17 +276,8 @@ export function renderSourceReport(container: HTMLElement, report: SourceReport)
     list.append(term, detail)
   }
 
-  container.append(list)
-
-  // Only for containers the handler scan cannot read. Saying "no captions"
-  // about a file we never checked would be worse than admitting we did not.
-  if (!report.tracks.scanned) {
-    const caveat = document.createElement('p')
-    caveat.className = 'fact-caveat'
-    caveat.textContent =
-      'Caption and chapter tracks could not be checked in this kind of file. If yours has them, they will not be carried over.'
-    container.append(caveat)
-  }
+  disclosure.append(list)
+  container.append(disclosure)
 }
 
 /** Replaces `container`'s contents with a readable failure. */

@@ -11,6 +11,40 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-09-30 — VH-87: the facts fold away, the losses do not
+
+**Decision:** the source facts sit in a native `<details>` labelled "Video
+properties", closed on every new file, with the ten rows in the agreed order.
+What the new file will NOT carry is no longer a row at all: `buildLosses` is a
+separate function, rendered above the disclosure in the `.warnings` block the
+sound warnings already use. The shared disclosure style gains a chevron.
+
+**Rationale:** three of the old rows were losses dressed as facts — extra
+tracks, caption or chapter tracks, and "could not be checked". Closed by
+default they would have been hidden before processing, which is the outcome
+this project exists to refuse. Separating them by FUNCTION rather than by a
+flag on a row is what makes that testable: a test asserts no row says
+"carried", so the sentence cannot survive inside the disclosure if the loss is
+ever dropped. A caption track appears in both — the row says what was found,
+the loss says what happens to it.
+
+**Assumptions (gateless):** "Video codec" rather than "Codec", as the item
+proposed. A file with no sound gets one "Audio" row, not three. The two
+"this browser cannot read…" rows became notes on the codec rows: VH-60's
+block verdict already says it in view, with what to do. An unscannable
+container gets "Captions — Could not be checked", never "None".
+
+**Alternatives:** opening the disclosure automatically when there is a loss —
+it hides nothing, but it makes the closed state mean "nothing to see", which
+is a promise the next loss added to a row would break silently.
+
+**Verified:** Chrome, dev build: closed on first file and on the next; summary
+44 px; Tab reaches it with a visible ring and Enter opens it; the chevron
+turns; a `mov_text` source shows "Not carried into the new file" above it.
+
+**Link:** VH-87; `src/ui/source-panel.ts`, `src/styles/app.css`
+(`--motion-fast` in `tokens.carbon.css`).
+
 ## 2026-09-30 — VH-86: captions, not subtitles, and no caption file
 
 **Decision:** the screen says "caption" everywhere it said "subtitle", and the

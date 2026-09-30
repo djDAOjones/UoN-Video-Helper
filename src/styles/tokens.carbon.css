@@ -65,6 +65,10 @@
 
   /* The AAA pointer-target floor. Never shrink a control below this. */
   --target-min: 44px;
+
+  /* Motion (Carbon productive, `fast-02`). Reduced to nothing by the
+     `prefers-reduced-motion` rule in app.css. */
+  --motion-fast: 110ms;
 }
 
 @media (prefers-color-scheme: dark) {

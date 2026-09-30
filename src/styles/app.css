@@ -362,14 +362,6 @@ body {
   color: var(--text-secondary);
 }
 
-.fact-caveat {
-  margin: var(--spacing-06) 0 0;
-  padding-top: var(--spacing-04);
-  border-top: 1px solid var(--layer-02);
-  font-size: var(--type-body-compact);
-  color: var(--text-secondary);
-}
-
 .fact-error {
   margin: var(--spacing-06) 0 0;
   padding: var(--spacing-04) var(--spacing-05);
@@ -525,15 +517,48 @@ body {
 .disclosure-summary {
   display: flex;
   align-items: center;
+  gap: var(--spacing-04);
   min-height: var(--target-min);
   font-size: var(--type-body-compact);
   color: var(--interactive);
   cursor: pointer;
+  list-style: none;
+}
+
+/* Safari draws its own marker through this, flex or not. */
+.disclosure-summary::-webkit-details-marker {
+  display: none;
+}
+
+/*
+ * The chevron. `display: flex` removes the native triangle, which left a
+ * disclosure that was a line of coloured text and nothing to say it opened
+ * (VH-87). Drawn from two borders so it takes the text colour in both themes;
+ * it points right when closed and down when open, as Carbon's accordion does.
+ */
+.disclosure-summary::before {
+  content: '';
+  flex: none;
+  width: var(--spacing-03);
+  height: var(--spacing-03);
+  margin-inline: var(--spacing-02);
+  border-right: var(--spacing-01) solid currentColor;
+  border-bottom: var(--spacing-01) solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform var(--motion-fast);
+}
+
+.disclosure[open] > .disclosure-summary::before {
+  transform: rotate(45deg);
 }
 
 .disclosure-summary:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
+}
+
+.disclosure .facts {
+  margin-top: var(--spacing-04);
 }
 
 .disclosure .choice {

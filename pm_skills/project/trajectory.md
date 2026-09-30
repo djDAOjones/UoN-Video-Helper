@@ -25,6 +25,9 @@
 
 ### Band 4 — the interface pass
 
+- VH-87 — Shipped 2026-09-30. Source facts fold into a closed "Video
+  properties" disclosure; what will not be carried stays in view above it.
+  See decision-log.
 - VH-86 — Shipped 2026-09-30. The screen says "caption"; the caption file
   field and its worker path are deleted; a caption or chapter track inside
   the source is still warned about before processing. See decision-log.
