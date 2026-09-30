@@ -792,6 +792,84 @@ async function checkTrimmedTimeline(log: Report): Promise<Check> {
     )
   }
 
+  // A hole in the audio that spans the in-point: sound 0–5 s and from 10 s,
+  // kept from 7 s. The hole's last three seconds are silence in the output,
+  // so the sound lasts from the cut to the end — collapsing it put the 10 s
+  // sound at the cut, three seconds ahead of its picture (Codex review).
+  log('  a hole in the audio spanning the cut')
+  {
+    const fixture = await buildFixture({
+      width: 640,
+      height: 360,
+      seconds: 30,
+      frameRate: 25,
+      audio: { startPeakDbfs: -20, gap: [5, 10] as const },
+    })
+    const { file, workspace } = await process(fixture, {
+      presetId: 'best',
+      branding: { opening: false, closing: false },
+      jobId: 'acceptance-trim-gap',
+      keptRange: { startSeconds: 7, endSeconds: 30 },
+    })
+    const output = await measureCoverage(file, 'audio', AUDIO_PACKET_SLACK)
+    await workspace.dispose()
+    const span = output ? output.lastEndSeconds - output.firstSeconds : Number.NaN
+    const held = output !== null && Math.abs(output.firstSeconds) <= 0.15 && Math.abs(span - 23) <= 0.3
+    if (!held) allHeld = false
+    results.push(
+      `kept from 7 s across a hole at 5–10 s: ${held ? 'held' : 'FAIL'} — sound runs ${output ? output.firstSeconds.toFixed(2) : '—'} s for ${Number.isFinite(span) ? span.toFixed(2) : '—'} s (expected 0 s for 23 s)`,
+    )
+  }
+
+  // A keep that ends before the sound begins is a silent video, not a
+  // failure. Through the worker, because that is where the finished file's
+  // audio is verified (Codex review).
+  log('  a keep with no sound in it, through the worker')
+  {
+    const fixture = await buildFixture({
+      width: 640,
+      height: 360,
+      seconds: 30,
+      frameRate: 25,
+      audio: { startPeakDbfs: -20, startSeconds: 20 },
+    })
+    const worker = new Worker(new URL('../workers/job.worker.ts', import.meta.url), {
+      type: 'module',
+      name: 'uon-acceptance-trim-silent',
+    })
+    try {
+      const reply = await ask(worker, {
+        kind: 'process',
+        id: 1,
+        file: fixture,
+        presetId: 'best',
+        branding: { opening: false, closing: false },
+        backgroundColour: '#000000',
+        brandingBaseUrl: resolveBrandingBase(document.baseURI),
+        contentClass: 'unknown',
+        keptRange: { startSeconds: 2, endSeconds: 15 },
+      })
+      if (reply.kind !== 'processed') {
+        allHeld = false
+        results.push(
+          `kept 2–15 s of a file whose sound starts at 20 s: FAIL — the worker answered \`${reply.kind}\`${reply.kind === 'failed' ? `: ${reply.message}` : ''}`,
+        )
+      } else {
+        const audio = await measureCoverage(reply.file, 'audio', AUDIO_PACKET_SLACK)
+        const video = await measureCoverage(reply.file, 'video', 1 / 25 + 0.001)
+        const span = video ? video.lastEndSeconds - video.firstSeconds : Number.NaN
+        const held = audio === null && Math.abs(span - 13) <= 0.3
+        if (!held) allHeld = false
+        results.push(
+          `kept 2–15 s of a file whose sound starts at 20 s: ${held ? 'held' : 'FAIL'} — ${audio === null ? 'no audio track' : 'an audio track'}, picture ${Number.isFinite(span) ? span.toFixed(2) : '—'} s (expected no audio, 13 s)`,
+        )
+        await ask(worker, { kind: 'discard', id: 2, jobId: reply.jobId }, 10_000)
+      }
+    } finally {
+      worker.terminate()
+    }
+  }
+
   return {
     criterion: '6',
     title: 'A trimmed job keeps sound and picture together at the cut',

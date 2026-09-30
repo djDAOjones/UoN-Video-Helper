@@ -41,6 +41,17 @@ error had surfaced only as 13 ms of fitted "drift" in the grid's scatter,
 which is why the trimmed sync case uses a constant-rate source and compares
 against the same file untrimmed.
 
+Three follow-ups from the Codex review, each reproduced first. A hole in the
+audio that spans the in-point is silence from the cut: the gap filler is
+anchored at the cut (or at the track's own start, if later) in every pass,
+where before the first kept sound was placed at the cut, seconds ahead of
+its picture. A keep with no sound in it — the track starts after the
+out-point, or the cut sits inside a hole — is a silent job: `planAudio` and
+`analyseSourceAudio` return `null`, no audio track is added, and the worker
+verifies audio only when the pipeline reports it included some; before, the
+job failed. And the whole of a file shorter than the 3 s minimum is no cut,
+checked before the minimum, so untouched handles never refuse a short file.
+
 **Verified:** acceptance harness, 13 passed, 0 failed. Trimmed loudness: a
 source drifting from −4 to −34 dBFS, kept 40–70 s — −16.12 LUFS on the kept
 content, −4.54 dBTP, picture 34.00 s. Trimmed sync: seven markers, 4.0 ms at

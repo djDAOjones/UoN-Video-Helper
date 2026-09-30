@@ -63,6 +63,7 @@ function run(
     startOffsetSeconds: number
     durationSeconds: number
     keptRange?: KeptRange
+    keptAudioAnchorSeconds?: number
   },
 ): { starts: number[]; totalFrames: number; ends: number[] } {
   const processor = createContentAudioProcessor(plan, {
@@ -72,6 +73,7 @@ function run(
     fadeIn: false,
     fadeOut: false,
     keptRange: options.keptRange ?? null,
+    keptAudioAnchorSeconds: options.keptAudioAnchorSeconds ?? null,
   })
   const starts: number[] = []
   const ends: number[] = []
@@ -121,6 +123,22 @@ describe('createContentAudioProcessor with a trim (VH-95)', () => {
     expect(totalFrames).toBe(Math.round(0.15 * SAMPLE_RATE))
     expect(ends[ends.length - 1]).toBeCloseTo(0.15, 6)
     expectContiguous(starts, ends)
+  })
+
+  it('keeps a hole at the cut: sound resuming after the in-point starts that much later', () => {
+    // Codex review of VH-95: audio to 0.2 s, then from 1.0 s; kept from 0.5 s.
+    // The first kept sound is at 1.0 s — half a second after the cut — and
+    // came out at the cut instead, ahead of its picture.
+    const { starts, totalFrames } = run([block(0), block(0.1), block(1.0), block(1.1)], {
+      offsetSeconds: 0,
+      startOffsetSeconds: 0,
+      durationSeconds: 20,
+      keptRange: { startSeconds: 0.5, endSeconds: 10 },
+      keptAudioAnchorSeconds: 0.5,
+    })
+    // Silence for the hole from the cut, then the two blocks.
+    expect(starts[0]).toBeCloseTo(0, 9)
+    expect(totalFrames).toBe(Math.round(0.7 * SAMPLE_RATE))
   })
 
   it('takes the untrimmed path exactly when there is no range', () => {

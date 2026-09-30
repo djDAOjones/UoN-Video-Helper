@@ -47,6 +47,18 @@ describe('deriveSourceTimeline with a trim (VH-95)', () => {
   })
 })
 
+describe('AudioGapFiller anchored at a cut (VH-95)', () => {
+  it('pads a first sample that arrives after the anchor, as it would any late sample', () => {
+    const gaps = new AudioGapFiller(SAMPLE_RATE, 2, 7)
+    expect(gaps.silenceBefore(10)?.[0]?.length).toBe(3 * SAMPLE_RATE)
+  })
+
+  it('pads nothing when the first sample is at the anchor', () => {
+    const gaps = new AudioGapFiller(SAMPLE_RATE, 2, 7)
+    expect(gaps.silenceBefore(7)).toBeNull()
+  })
+})
+
 describe('deriveSourceTimeline', () => {
   it('starts both lanes at zero when the file does', () => {
     const t = deriveSourceTimeline(0, 0)

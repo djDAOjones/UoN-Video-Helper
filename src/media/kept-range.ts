@@ -55,6 +55,10 @@ export function normaliseKeptRange(
   const start = startSeconds <= KEPT_EDGE_TOLERANCE_SECONDS ? 0 : startSeconds
   const end =
     endSeconds >= durationSeconds - KEPT_EDGE_TOLERANCE_SECONDS ? durationSeconds : endSeconds
+  // Before the minimum: the whole of a file shorter than it is no cut, and an
+  // untouched pair of handles must never refuse what no range would keep
+  // (Codex review).
+  if (start === 0 && end === durationSeconds) return null
   if (start >= durationSeconds) {
     throw new KeptRangeError('The start is after the end of the video.')
   }
@@ -64,8 +68,30 @@ export function normaliseKeptRange(
   if (end - start < KEPT_MIN_SECONDS) {
     throw new KeptRangeError(`Keep at least ${KEPT_MIN_SECONDS} seconds of the video.`)
   }
-  if (start === 0 && end === durationSeconds) return null
   return { startSeconds: start, endSeconds: end }
+}
+
+/**
+ * Where the kept audio is measured from: the in-point, or the track's own
+ * start if that is later.
+ *
+ * A track already running at the cut must count a hole that spans the cut as
+ * the silence it is. Without this, sound resuming 3 s after the in-point was
+ * placed AT it, 3 s ahead of its picture (Codex review). A track that starts
+ * after the cut is offset instead, by the shared timeline, so it is anchored
+ * at its own start and not padded twice.
+ *
+ * @returns `null` with no range, which keeps the untrimmed rule that a
+ *   track's first sample is never padded.
+ */
+export function keptAudioAnchorSeconds(
+  range: KeptRange | null,
+  firstAudioSeconds: number | null,
+): number | null {
+  if (!range) return null
+  return firstAudioSeconds !== null && Number.isFinite(firstAudioSeconds)
+    ? Math.max(range.startSeconds, firstAudioSeconds)
+    : range.startSeconds
 }
 
 /** A frame's place on the source clock, as its packet records it. */

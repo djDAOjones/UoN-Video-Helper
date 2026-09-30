@@ -49,7 +49,12 @@ import { fitRectangle } from './conform'
 import { findFreezeFrame } from './freeze'
 import { audioEncodingConfigFor, videoEncodingConfigFor } from './encoding'
 import { measureEncoderDelay } from './encoder-delay'
-import { snapKeptRangeToFrames, type FrameSpan, type KeptRange } from './kept-range'
+import {
+  keptAudioAnchorSeconds,
+  snapKeptRangeToFrames,
+  type FrameSpan,
+  type KeptRange,
+} from './kept-range'
 import type { OpfsWorkspace } from './opfs'
 import { deriveSourceTimeline } from './source-timeline'
 import { carryTrackMetadata } from './track-metadata'
@@ -87,6 +92,12 @@ export interface PipelineResult {
    * shifted every loudness window the harness measured (VH-16).
    */
   readonly contentOffsetSeconds: number
+  /**
+   * Whether the file carries the source's sound. False for a silent source,
+   * and for a trim whose kept part holds none — which the caller must not
+   * then verify as audio (VH-95, Codex review).
+   */
+  readonly audioIncluded: boolean
 }
 
 /**
@@ -274,9 +285,10 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
   // picture, because the video lane kept its offset and the audio lane did not.
   // With a trim, the in-point is that origin: both lanes are measured from the
   // cut, so the output starts on the first kept moment of each (VH-95).
+  const firstAudioSeconds = audioTrack ? await audioTrack.getFirstTimestamp() : null
   const sourceTimeline = deriveSourceTimeline(
     await videoTrack.getFirstTimestamp(),
-    audioTrack ? await audioTrack.getFirstTimestamp() : null,
+    firstAudioSeconds,
     keptRange?.startSeconds ?? null,
   )
   const { originSeconds } = sourceTimeline
@@ -358,8 +370,9 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
   // ends each lane at the out-point where it ran past it (VH-95).
   const keptEnd = keptRange?.endSeconds ?? Number.POSITIVE_INFINITY
   const videoSpanSeconds = Math.max(0, Math.min(videoDurationSeconds, keptEnd) - originSeconds)
+  // No plan means no sound in what is kept: the timeline is a silent one.
   const audioSpanSeconds =
-    audioDurationSeconds === null
+    audioDurationSeconds === null || audioPlan === null
       ? null
       : Math.max(0, Math.min(audioDurationSeconds, keptEnd) - originSeconds)
 
@@ -650,6 +663,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
         closing !== null ||
         (keptRange !== null && keptRange.endSeconds < (audioDurationSeconds ?? 0)),
       keptRange,
+      keptAudioAnchorSeconds: keptAudioAnchorSeconds(keptRange, firstAudioSeconds),
     })
     const sink = new AudioSampleSink(audioTrack)
     const samples = keptRange
@@ -715,6 +729,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       brandingApplied: { opening: opening !== null, closing: closing !== null },
       outputWarnings,
       contentOffsetSeconds: contentOffset,
+      audioIncluded: audioSource !== null,
     }
   } catch (cause) {
     // Abandon the output so no writer is left holding a file the caller is

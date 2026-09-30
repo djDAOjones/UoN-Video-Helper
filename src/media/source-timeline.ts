@@ -94,9 +94,16 @@ export class AudioGapFiller {
   private first: number | null = null
   private inserted = 0
 
+  /**
+   * @param anchorSeconds - Where the stream is measured from when it is not
+   *   its own first sample: a trim's in-point, for a track already running
+   *   there (`keptAudioAnchorSeconds`). The first sample is then padded like
+   *   any other that arrives late. `null` keeps the rule below.
+   */
   constructor(
     private readonly sampleRate: number,
     private readonly channelCount: number,
+    private readonly anchorSeconds: number | null = null,
   ) {}
 
   /** The track's own first timestamp, or `null` before the first sample. */
@@ -122,8 +129,11 @@ export class AudioGapFiller {
    */
   silenceBefore(timestampSeconds: number): Float32Array[] | null {
     if (this.first === null) {
-      this.first = Number.isFinite(timestampSeconds) ? timestampSeconds : 0
-      return null
+      if (this.anchorSeconds === null) {
+        this.first = Number.isFinite(timestampSeconds) ? timestampSeconds : 0
+        return null
+      }
+      this.first = this.anchorSeconds
     }
 
     const expected = Math.round((timestampSeconds - this.first) * this.sampleRate)

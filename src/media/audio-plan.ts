@@ -41,7 +41,7 @@ import { log } from '../core/logger'
 import { applyBoundaryFade } from './branding'
 import { toPlanar, toSample } from './audio-frames'
 import { CodecProbe, limiterCeilingFor, type CodecCost } from './codec-probe'
-import { clipAudioBlock, type KeptRange } from './kept-range'
+import { clipAudioBlock, keptAudioAnchorSeconds, type KeptRange } from './kept-range'
 import { AudioGapFiller } from './source-timeline'
 
 export interface AudioPlan {
@@ -106,8 +106,12 @@ async function traverse(
   const sink = new AudioSampleSink(track)
   // Every pass fills gaps identically, or the short-term curve this pass
   // produces would be indexed differently from the envelope pass C applies
-  // (VH-74).
-  const gaps = new AudioGapFiller(sampleRate, channelCount)
+  // (VH-74) — including a hole that spans a trim's in-point.
+  const gaps = new AudioGapFiller(
+    sampleRate,
+    channelCount,
+    keptAudioAnchorSeconds(range, range ? await track.getFirstTimestamp() : null),
+  )
   let frames = 0
 
   const emit = async (block: Float32Array[]): Promise<void> => {
@@ -166,12 +170,17 @@ export async function analyseSourceAudio(
   signal?: AbortSignal,
   /** The kept range, so the warnings describe the part that will be seen (VH-95). */
   range: KeptRange | null = null,
-): Promise<AudioAnalysis> {
+): Promise<AudioAnalysis | null> {
   const [sampleRate, channelCount] = await Promise.all([
     track.getSampleRate(),
     track.getNumberOfChannels(),
   ])
-  return (await traverse(track, sampleRate, channelCount, null, signal, range)).analysis
+  const traversal = await traverse(track, sampleRate, channelCount, null, signal, range)
+  // A kept range can hold no sound — the track starts after the out-point,
+  // or the cut sits inside a hole. That is a silent source, and says so,
+  // rather than an analysis of nothing (Codex review). Untrimmed, unchanged.
+  if (range && traversal.frames === 0) return null
+  return traversal.analysis
 }
 
 /**
@@ -196,7 +205,7 @@ export async function planAudio(
    * applied to another (VH-95).
    */
   range: KeptRange | null = null,
-): Promise<AudioPlan> {
+): Promise<AudioPlan | null> {
   const [sampleRate, channelCount] = await Promise.all([
     track.getSampleRate(),
     track.getNumberOfChannels(),
@@ -204,6 +213,12 @@ export async function planAudio(
 
   const startedAt = performance.now()
   const source = await traverse(track, sampleRate, channelCount, null, signal, range, onSample)
+  // Nothing to level: the kept range holds no sound. The job is a silent one
+  // and the caller adds no audio track (Codex review). Untrimmed, unchanged.
+  if (range && source.frames === 0) {
+    log.info('audio', 'kept range holds no sound; treating the job as silent')
+    return null
+  }
   const { analysis } = source
   const envelope = buildGainEnvelope({
     integratedLufs: analysis.integratedLufs,
@@ -409,11 +424,16 @@ export function createContentAudioProcessor(
      * envelope to the stream it was measured on (VH-95).
      */
     readonly keptRange: KeptRange | null
+    /**
+     * `keptAudioAnchorSeconds` for this track, as the planning passes used it,
+     * so a hole spanning the in-point is silence here too.
+     */
+    readonly keptAudioAnchorSeconds: number | null
   },
 ): ContentAudioProcessor {
   const { sampleRate, channelCount, envelope, gainDb, limiterCeilingDbtp } = plan
   const chain = new AudioChain({ sampleRate, channelCount, envelope, gainDb, limiterCeilingDbtp })
-  const gaps = new AudioGapFiller(sampleRate, channelCount)
+  const gaps = new AudioGapFiller(sampleRate, channelCount, options.keptAudioAnchorSeconds)
   let emittedFrames = 0
 
   /** Fades, timestamps and emits one block of already-processed audio. */

@@ -255,7 +255,9 @@ async function handleProcess(
     await requireReadableOutputVideo(check, signal)
 
     const checkTrack = await check.getPrimaryAudioTrack()
-    if (report.audio) {
+    // What the pipeline put in the file, not what the source had: a trim can
+    // keep a part with no sound, and that file has none to verify (VH-95).
+    if (result.audioIncluded) {
       const measured = checkTrack ? await analyseSourceAudio(checkTrack, signal) : null
       // A cancelled traversal stops early and returns a partial measurement,
       // which would then fail the contract and be reported as a broken output
@@ -276,7 +278,9 @@ async function handleProcess(
         onTarget: true,
       })
     } else {
-      log.info('worker', 'output verified', { audio: 'not-applicable' })
+      log.info('worker', 'output verified', {
+        audio: report.audio ? 'none-in-kept-range' : 'not-applicable',
+      })
     }
 
     // The last commit boundary: after this the main thread owns a result and

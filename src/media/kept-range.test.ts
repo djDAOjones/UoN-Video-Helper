@@ -13,6 +13,7 @@ import { KEPT_MIN_SECONDS } from '../config/trim'
 import {
   KeptRangeError,
   clipAudioBlock,
+  keptAudioAnchorSeconds,
   keptDurationSeconds,
   normaliseKeptRange,
   snapKeptRangeToFrames,
@@ -60,6 +61,12 @@ describe('normaliseKeptRange', () => {
   ])('refuses %o rather than guessing what was meant', (range, message) => {
     expect(() => normaliseKeptRange(range, 120)).toThrow(KeptRangeError)
     expect(() => normaliseKeptRange(range, 120)).toThrow(message)
+  })
+
+  it('treats the whole of a file shorter than the minimum as no cut, not a refusal', () => {
+    // Codex review of VH-95: untouched handles on a 2 s file sent 0–2 s, and
+    // the minimum refused a file an absent range would have kept whole.
+    expect(normaliseKeptRange({ startSeconds: 0, endSeconds: 2 }, 2)).toBeNull()
   })
 
   it('accepts a keep of exactly the minimum', () => {
@@ -156,5 +163,26 @@ describe('snapKeptRangeToFrames', () => {
       startSeconds: 1,
       endSeconds: 9,
     })
+  })
+})
+
+describe('keptAudioAnchorSeconds', () => {
+  const range = { startSeconds: 7, endSeconds: 30 }
+
+  it('anchors a track already running at the cut to the cut', () => {
+    expect(keptAudioAnchorSeconds(range, 0)).toBe(7)
+  })
+
+  it('anchors a track that starts after the cut to its own start, so it is not padded twice', () => {
+    expect(keptAudioAnchorSeconds(range, 8)).toBe(8)
+  })
+
+  it('is nothing without a range, keeping the untrimmed rule', () => {
+    expect(keptAudioAnchorSeconds(null, 0)).toBeNull()
+  })
+
+  it('falls back to the cut when the track start is unknown', () => {
+    expect(keptAudioAnchorSeconds(range, null)).toBe(7)
+    expect(keptAudioAnchorSeconds(range, Number.NaN)).toBe(7)
   })
 })

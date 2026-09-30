@@ -126,6 +126,7 @@ try {
   if (!track) throw new Error('no audio track')
 
   const plan = await planAudio(track)
+  if (!plan) throw new Error('no sound to plan')
   const { sampleRate, channelCount } = plan
   say(
     `source: ${fixed(plan.analysis.integratedLufs)} LUFS, LRA ${fixed(plan.analysis.loudnessRangeLu, 1)}, ` +
