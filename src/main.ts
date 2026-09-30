@@ -577,6 +577,22 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
     // reach the screen — and above all must not reveal Start (review R-05).
     if (!current()) return
     if (reply.kind === 'preflighted') {
+      // What the verdict no longer lists (VH-89): the setting, the output
+      // shape and the measured speed are the tool's decisions, not the
+      // user's, and this is where they stay legible. No filename, no title —
+      // `DEV-INFRASTRUCTURE.md` -> "Redaction".
+      log.info('ui', 'preflight verdict', {
+        outcome: reply.summary.verdict.outcome,
+        reasons: reply.summary.verdict.reasons.map((reason) => reason.code),
+        presetId: reply.summary.presetId,
+        width: reply.summary.shape.width,
+        height: reply.summary.shape.height,
+        frameRate: reply.summary.shape.frameRate,
+        projectedOutputBytes: reply.summary.projectedOutputBytes,
+        probeMeasured: reply.summary.probe.measured,
+        videoFramesPerSecond: Math.round(reply.summary.probe.videoFramesPerSecond),
+        estimatedSeconds: reply.summary.probe.estimatedSeconds,
+      })
       renderPreflight(preflightReport, reply.summary)
       renderWarnings(audioWarnings, reply.summary.audioWarnings, {
         heading: 'Worth knowing about the sound',
@@ -595,6 +611,9 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
     }
     if (reply.kind === 'failed') {
       renderSourceError(preflightReport, reply.message)
+      // The status line sits beside this now (VH-88), and left alone it went
+      // on saying "Checking this video against your device…" under an error.
+      setStatus('The device check did not finish.')
       return
     }
     // Abandoned for a newer check — see the inspect path (VH-57).
@@ -606,6 +625,7 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
       preflightReport,
       'The device check did not finish. You can still see what the file is above.',
     )
+    setStatus('The device check did not finish.')
     log.error('ui', 'preflight request failed', {
       reason: cause instanceof Error ? cause.message : String(cause),
     })

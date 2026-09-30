@@ -414,12 +414,6 @@ body {
   color: var(--text-secondary);
 }
 
-.verdict .facts {
-  margin-top: var(--spacing-05);
-  padding-top: var(--spacing-05);
-  border-top: 1px solid var(--border-subtle);
-}
-
 /* --- Processing --- */
 
 .progress {

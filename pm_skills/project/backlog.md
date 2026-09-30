@@ -166,22 +166,6 @@
      "Open:" is a question for the maintainer with a working default — the
      default is what gets built if nobody answers. -->
 
-- [ ] **VH-89 Ready to go, in three lines** (2026-09-30)
-      Intent: a `proceed` verdict reads "Ready to go" / "This should take
-      about 37 seconds." / "Estimated size 28.5 MB." The Setting, Output and
-      Measured speed rows leave the screen and stay in the diagnostics log.
-      Reverses VH-31, which added "at most" on purpose: the figure is an upper
-      bound, and a bare number reads as a prediction — 27.7 MB was shown for a
-      7.5 MB file then, and 13.8 MB for a 7.2 MB one on 2026-09-30.
-      Open: "Estimated size 28.5 MB." as asked, or "Estimated size up to
-      28.5 MB." Default: "up to" — two words, and the screen stays true.
-      Scope: `warn` and `discourage` keep their reasons and end on the same
-      two lines, the time stated once — today a `warn` for unknown storage
-      shows no time at all. A `block` shows neither. The "already compressed,
-      about the same size" note (VH-41) stays; the user acts on it.
-      Done when: a `proceed` shows three lines and nothing else, and no other
-      outcome loses a sentence it has today.
-
 - [ ] **VH-90 Closing branding: type, onset, colour** [detail](tickets/VH-90.md)
       (2026-09-30)
       Intent: the four-way radio and its hidden options become three controls,

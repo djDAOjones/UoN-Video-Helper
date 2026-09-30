@@ -7,9 +7,9 @@
  * stops has told the user nothing they can act on.
  */
 
-import { PRESETS, bitrateWasCappedToSource } from '../config/presets'
+import { bitrateWasCappedToSource } from '../config/presets'
 import type { PreflightOutcome, PreflightReasonCode, PreflightSummary } from '../media/preflight'
-import { formatDuration, formatFileSize, formatFrameRate, formatResolution } from './format'
+import { formatDuration, formatFileSize } from './format'
 
 const OUTCOME_HEADING: Record<PreflightOutcome, string> = {
   proceed: 'Ready to go',
@@ -55,86 +55,120 @@ function reasonText(code: PreflightReasonCode, summary: PreflightSummary): strin
   }
 }
 
+/**
+ * Reasons whose own sentence already states how long the job will take.
+ *
+ * The time is said once (VH-89). `estimate-unavailable` is here because its
+ * sentence is the time line for a job whose time is not known.
+ */
+const REASONS_STATING_THE_TIME: readonly PreflightReasonCode[] = [
+  'long-job',
+  'very-long-job',
+  'estimate-unavailable',
+]
+
+/** What the verdict says: a heading, then one paragraph per line. */
+export interface VerdictText {
+  readonly heading: string
+  readonly lines: readonly string[]
+}
+
+/**
+ * The verdict in words — spec 7.3's outcome, then what the user needs in
+ * order to decide.
+ *
+ * A `proceed` is three lines and nothing else: the heading, the time, the
+ * size (VH-89). `warn` and `discourage` keep every reason and end on the same
+ * two lines, with the time said once — so when a reason has already stated
+ * it, the time line is left out rather than repeated. A `block` says neither:
+ * a job that cannot run takes no time and makes no file, and until now it
+ * went on to say "You can still continue" underneath "This cannot run here".
+ *
+ * The setting, the output shape and the measured speed used to be listed
+ * here. They are what the tool decided, not what the user is deciding, and
+ * they stay in the diagnostics log instead.
+ *
+ * Exported for tests. Rendering needs a DOM and the suite runs in Node, but
+ * every decision about what is said is made here.
+ */
+export function verdictText(summary: PreflightSummary): VerdictText {
+  const { verdict, shape, probe } = summary
+  const blocked = verdict.outcome === 'block'
+  const lines: string[] = []
+
+  for (const reason of verdict.reasons) {
+    // The probe does not run for a job that cannot, so a block always arrives
+    // with "we could not work out how long this will take" attached. It is a
+    // sentence about time, and a block states none.
+    if (blocked && reason.code === 'estimate-unavailable') continue
+    lines.push(reasonText(reason.code, summary))
+  }
+
+  if (!blocked) {
+    const timeAlreadySaid = verdict.reasons.some((reason) =>
+      REASONS_STATING_THE_TIME.includes(reason.code),
+    )
+    if (!timeAlreadySaid && probe.estimatedSeconds !== null) {
+      lines.push(`This should take about ${formatDuration(probe.estimatedSeconds)}.`)
+    }
+
+    // "Up to", not a bare figure. It is an upper bound by construction — it
+    // assumes the encoder spends its whole bitrate budget and that the longest
+    // closing is appended — and a bare number reads as a prediction, which is
+    // what made a 27.7 MB label for a 7.5 MB file look like a defect rather
+    // than a margin (VH-31). VH-89 shortened the words and kept the meaning.
+    lines.push(`Estimated size up to ${formatFileSize(summary.projectedOutputBytes)}.`)
+
+    // Spec 6.2's never-exceed-source cap, said out loud (VH-41). Someone who
+    // picked the smaller output to fit a storage limit has to know when it
+    // will not make the file smaller — silently returning the same size is
+    // the version of this that wastes their time. No bitrates: spec 9.2 keeps
+    // those out of the interface, and the fact that matters here is about
+    // size, not encoding.
+    if (bitrateWasCappedToSource(shape)) {
+      lines.push(
+        'Your video is already compressed as far as this setting would take it, so it will come ' +
+          'out about the same size. The branding and sound levelling are still applied.',
+      )
+    }
+  }
+
+  return { heading: OUTCOME_HEADING[verdict.outcome], lines }
+}
+
 /** Replaces `container` with the rendered verdict. */
 export function renderPreflight(container: HTMLElement, summary: PreflightSummary): void {
   container.replaceChildren()
 
-  const { verdict, shape, probe } = summary
+  const text = verdictText(summary)
   const section = document.createElement('div')
   section.className = 'verdict'
-  section.dataset['outcome'] = verdict.outcome
+  section.dataset['outcome'] = summary.verdict.outcome
 
   const heading = document.createElement('p')
   heading.className = 'verdict-heading'
-  heading.textContent = OUTCOME_HEADING[verdict.outcome]
+  heading.textContent = text.heading
   section.append(heading)
 
-  if (verdict.outcome === 'proceed' && probe.estimatedSeconds !== null) {
-    const estimate = document.createElement('p')
-    estimate.className = 'verdict-detail'
-    estimate.textContent = `This should take about ${formatDuration(probe.estimatedSeconds)}.`
-    section.append(estimate)
-  }
-
-  for (const reason of verdict.reasons) {
+  for (const line of text.lines) {
     const paragraph = document.createElement('p')
     paragraph.className = 'verdict-detail'
-    paragraph.textContent = reasonText(reason.code, summary)
+    paragraph.textContent = line
     section.append(paragraph)
-  }
-
-  const output = document.createElement('dl')
-  output.className = 'facts'
-  const rows: ReadonlyArray<readonly [string, string]> = [
-    ['Setting', PRESETS[summary.presetId].label],
-    [
-      'Output',
-      `${formatResolution(shape.width, shape.height)} at ${formatFrameRate(shape.frameRate)}`,
-    ],
-    // "At most", not a bare figure. It is an upper bound by construction — it
-    // assumes the encoder spends its whole bitrate budget and that the longest
-    // closing is appended — and a bare number reads as a prediction, which is
-    // what made a 27.7 MB label for a 7.5 MB file look like a defect rather
-    // than a margin (VH-31).
-    ['Estimated size', `at most ${formatFileSize(summary.projectedOutputBytes)}`],
-    [
-      'Measured speed',
-      probe.measured
-        ? `${Math.round(probe.videoFramesPerSecond)} frames per second on this device`
-        : 'not measured',
-    ],
-  ]
-  for (const [term, detail] of rows) {
-    const dt = document.createElement('dt')
-    dt.textContent = term
-    const dd = document.createElement('dd')
-    dd.textContent = detail
-    output.append(dt, dd)
-  }
-  section.append(output)
-
-  // Spec 6.2's never-exceed-source cap, said out loud (VH-41). Someone who
-  // picked "Smaller file" to fit a storage limit has to know when it will not
-  // make the file smaller — silently returning the same size is the version of
-  // this that wastes their time. No bitrates: spec 9.2 keeps those out of the
-  // interface, and the fact that matters here is about size, not encoding.
-  if (bitrateWasCappedToSource(shape)) {
-    const capped = document.createElement('p')
-    capped.className = 'verdict-detail'
-    capped.textContent =
-      'Your video is already compressed as far as this setting would take it, so it will come ' +
-      'out about the same size. The branding and sound levelling are still applied.'
-    section.append(capped)
   }
 
   container.append(section)
 }
 
-/** One line for the live region. */
+/**
+ * One line for the live region.
+ *
+ * The outcome, in the verdict's own heading. It used to repeat the time
+ * estimate, which was the only place a `warn` stated one; the verdict now
+ * states it itself, and the status line sits directly beneath it (VH-88), so
+ * repeating it here put the same sentence on screen twice.
+ */
 export function summarisePreflight(summary: PreflightSummary): string {
-  const estimate = summary.probe.estimatedSeconds
   if (summary.verdict.outcome === 'block') return 'This video cannot be processed in this browser.'
-  return estimate === null
-    ? 'Device check complete. The processing time could not be estimated.'
-    : `Device check complete. This should take about ${formatDuration(estimate)}.`
+  return `Device check complete. ${OUTCOME_HEADING[summary.verdict.outcome]}.`
 }

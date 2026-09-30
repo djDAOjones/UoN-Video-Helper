@@ -11,6 +11,41 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-09-30 — VH-89: ready to go, in three lines
+
+**Decision:** a `proceed` reads "Ready to go" / "This should take about 37
+seconds." / "Estimated size up to 28.5 MB." and nothing else. The Setting,
+Output and Measured speed rows leave the screen for one `preflight verdict` log
+line. `warn` and `discourage` keep every reason and end on the same two lines;
+a `block` states neither. What is said is now a pure `verdictText`, tested.
+
+**Rationale:** the three rows were the tool's decisions, not the user's, on
+the one screen where a novice decides. Reverses VH-31's "at most" in wording
+only: the figure is still an upper bound, and "up to" — the item's default,
+nobody having answered — keeps the screen true in two words. "The time stated
+once" is a rule over reasons: `long-job`, `very-long-job` and
+`estimate-unavailable` already say it, so the time line yields to them.
+
+**Found on the way:** every block said "You can still continue". The probe
+does not run for a job that cannot, so a block always arrived with the
+unmeasured-estimate reason and its invitation, under "This cannot run here".
+A block now drops that one sentence; it is about time, and a block states
+none. The done-when says no outcome loses a sentence — this is the one it
+loses, deliberately.
+
+**Assumption (gateless):** the live-region line became "Device check complete.
+Ready to go." It used to carry the estimate, which was the only place a `warn`
+stated one; the verdict now does, and since VH-88 the status line sits directly
+under it, so the same sentence was on screen twice. A failed check also now
+replaces "Checking this video…" rather than leaving it under the error.
+
+**Verified:** Chrome, dev build: `proceed` three lines; the smaller output on
+an already-compressed file adds VH-41's note as a fourth; a ProRes block is
+heading plus one reason. `warn` and `discourage` wording is covered in Node
+only — no sample here reaches them on this machine.
+
+**Link:** VH-89; `src/ui/preflight-panel.ts`, `src/main.ts`.
+
 ## 2026-09-30 — VH-87 review: undecodable sound is blocked, not failed
 
 **Decision:** pre-flight skips the audio analysis when inspection has already

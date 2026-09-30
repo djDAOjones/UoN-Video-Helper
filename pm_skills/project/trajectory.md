@@ -25,6 +25,9 @@
 
 ### Band 4 — the interface pass
 
+- VH-89 — Shipped 2026-09-30. A `proceed` verdict is three lines; other
+  outcomes keep their reasons and gain the time and size; a block no longer
+  says "you can still continue". See decision-log.
 - VH-88 — Shipped 2026-09-30. System check is a disclosure that says its
   result in words and opens itself on a failure; the status line sits beside
   Create. See decision-log.
