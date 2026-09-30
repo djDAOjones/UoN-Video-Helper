@@ -33,7 +33,9 @@ widths the two collide — so the title went where the University's pages put
 theirs, at the head of the content. The browser sentence is the maintainer's
 choice between making Edge, Firefox and Safari work and saying plainly what the
 app is built for; it says so before anything is chosen, which is when it is
-useful.
+useful. The device check's block messages follow it (Codex review): each now
+names Chrome alone as the browser that will work, since sending a blocked user
+to Edge or Safari would promise what the page has just declined to.
 
 **Verified:** Chrome, dev build: logo 170 x 62 at 20 px from the edge, 12 px
 above; title and intro both at 24 px; Lora loaded for 700; bullets square.

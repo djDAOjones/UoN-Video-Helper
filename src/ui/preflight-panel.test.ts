@@ -188,8 +188,19 @@ describe('block (VH-89)', () => {
     // Spec 9.2: a block that says "unsupported" and stops has told the user
     // nothing they can act on.
     const { lines } = verdictText(summary('block', [['no-aac-encode', 'block']], { probe: unmeasured }))
-    expect(lines[0]).toMatch(/Chrome or Edge/)
+    expect(lines[0]).toMatch(/Chrome on a computer will work/)
   })
+
+  it.each(['no-webcodecs', 'no-aac-encode', 'no-h264-encode', 'no-source-decode', 'no-opfs'] as const)(
+    'names only Chrome when %s blocks, as the page promises nothing else',
+    (code) => {
+      // VH-98: the page says it is built for Chrome and other browsers may not
+      // work. A block that sent the user to Edge or Safari would contradict it.
+      const { lines } = verdictText(summary('block', [[code, 'block']], { probe: unmeasured }))
+      expect(lines[0]).toMatch(/Chrome on a computer/)
+      expect(lines[0]).not.toMatch(/Edge|Safari/)
+    },
+  )
 
   it('still quotes the space a job needs when storage is the block', () => {
     const { lines } = verdictText(summary('block', [['insufficient-storage', 'block']]))
@@ -323,7 +334,7 @@ describe('the status line for a finished check', () => {
     const { spokenOnly } = preflightAnnouncement(
       summary('block', [['no-aac-encode', 'block']], { probe: unmeasured }),
     )
-    expect(spokenOnly).toMatch(/cannot add sound.*Chrome or Edge/)
+    expect(spokenOnly).toMatch(/cannot add sound.*Chrome on a computer/)
   })
 
   it('speaks exactly what the verdict shows, so the two cannot drift', () => {

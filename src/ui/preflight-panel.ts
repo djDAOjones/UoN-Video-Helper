@@ -4,7 +4,10 @@
  * Spec section 9.2: every message says what happened, whether the original
  * file is affected (it never is), and what to do next. A block in particular
  * must name a browser that will work — an app that says "unsupported" and
- * stops has told the user nothing they can act on.
+ * stops has told the user nothing they can act on. The browser it names is
+ * Chrome alone, because Chrome is the one the app is built and checked in, and
+ * the page says so (VH-98). Naming another would send the user to a second
+ * unchecked browser.
  */
 
 import { PRESETS, bitrateWasCappedToSource } from '../config/presets'
@@ -22,20 +25,20 @@ function reasonText(code: PreflightReasonCode, summary: PreflightSummary): strin
   const estimate = summary.probe.estimatedSeconds
   switch (code) {
     case 'no-webcodecs':
-      return 'This browser cannot process video. Chrome or Edge on a computer will work, as will Safari 26 or later on a Mac.'
+      return 'This browser cannot process video. Chrome on a computer will work.'
     case 'no-aac-encode':
       // Names the browser that will work, as every block here must. Firefox
       // encodes the picture fine and refuses the sound, which is why the
       // message is about sound rather than about video (VH-49).
-      return 'This browser cannot add sound to a video file. Chrome or Edge on a computer will work, as will Safari 26 or later on a Mac. Firefox can play video but cannot create the audio this needs.'
+      return 'This browser cannot add sound to a video file. Chrome on a computer will work. Firefox can play video but cannot create the audio this needs.'
     case 'no-h264-encode':
-      return 'This browser cannot create the video format this tool needs. Chrome or Edge on a computer will work.'
+      return 'This browser cannot create the video format this tool needs. Chrome on a computer will work.'
     case 'no-source-decode':
       // The source panel promises that full guidance arrives here, so it has
       // to actually arrive (VH-60).
-      return 'This browser cannot read the picture or sound inside this file. Chrome or Edge on a computer will open more formats. If it still will not open, the file may have been saved in an unusual format — re-exporting it as an MP4 usually fixes it.'
+      return 'This browser cannot read the picture or sound inside this file. Chrome on a computer will open more formats. If it still will not open, the file may have been saved in an unusual format — re-exporting it as an MP4 usually fixes it.'
     case 'no-opfs':
-      return 'This browser will not give the tool the working space it needs to build your video. Chrome or Edge on a computer will work. If you are browsing privately, an ordinary window usually works.'
+      return 'This browser will not give the tool the working space it needs to build your video. Chrome on a computer will work. If you are browsing privately, an ordinary window usually works.'
     case 'insecure-context':
       // The one block the user can fix by changing the address, so it says so
       // first and names nothing else.

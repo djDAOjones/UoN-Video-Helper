@@ -93,5 +93,6 @@
 - [ ] 2026-09-30 SPEC §10 — the table lists Chrome, Edge, Firefox and Safari
       26+ as supported; the page now tells users the app "is designed and
       built for Chrome, other browsers may not work" (maintainer's choice over
-      certifying the others) (source: VH-98)
+      certifying the others), and every browser block now names Chrome alone
+      as the browser that will work (source: VH-98)
 
