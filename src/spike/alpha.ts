@@ -108,7 +108,7 @@ const onset = await loadClosingOnset(shape, {
 say(
   onset
     ? `  loadClosingOnset  -> ${onset.durationSeconds.toFixed(3)}s  PASS`
-    : '  loadClosingOnset  -> null  FAIL (WebM not accepted?)',
+    : '  loadClosingOnset  -> null  FAIL — WebM not accepted?',
 )
 const tail = await loadBrandingClip('closing', shape, {
   brandingBaseUrl: resolveBrandingBase(document.baseURI),

@@ -15,12 +15,14 @@
  *
  * One thing it does read: a page's own verdict on itself. A page that reaches
  * `done` has RUN, which is not the same as having passed, and a command that
- * exits 0 either way cannot be cited as verification. So any line that says
- * `FAIL`, `FAILED` or `ERROR` as a word, or a closing `N FAILURE(S)`, fails the
- * run. Those are the spellings every spike page already uses for a failed
- * check — indented or not, at the start of a line or the end of a row — and
- * nothing else they print uses them. A page that wants an engine difference
- * read as a finding rather than a failure must word it some other way.
+ * exits 0 either way cannot be cited as verification. So a VERDICT of
+ * `FAIL`, `FAILED` or `ERROR` fails the run, and so does a closing
+ * `N FAILURE(S)`. A verdict is the word where the spike pages put one: first
+ * on its line, however indented; or at the end of a row, or before an em dash,
+ * after a space. The word anywhere else — in a file name, say — is not one, so
+ * a source called `FAIL-test.mp4` does not fail a run that passed. A page that
+ * wants an engine difference read as a finding rather than a failure words it
+ * some other way.
  *
  * Each engine needs a different protocol, and the differences are not
  * negotiable:
@@ -363,7 +365,14 @@ let reported = 0
 
 /** Whether a finished page's own text says it failed. See the header. */
 function pageReportsFailure(text) {
-  return /\b(FAIL|FAILED|ERROR)\b/.test(text) || /^[1-9]\d* FAILURE\(S\)$/m.test(text)
+  return (
+    // First on its line: `  FAIL — …`, `ERROR — …`, `  FAILED rather than …`.
+    /^\s*(FAIL|FAILED|ERROR)\b/m.test(text) ||
+    // Closing a row, or introducing a reason: `… (ceiling -2) FAIL`,
+    // `  over-picture  ERROR — …`.
+    / (FAIL|FAILED|ERROR)( —|$)/m.test(text) ||
+    /^[1-9]\d* FAILURE\(S\)$/m.test(text)
+  )
 }
 
 for (const name of wanted) {

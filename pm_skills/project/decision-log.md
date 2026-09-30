@@ -78,9 +78,13 @@ that does not exist: `2 FAILURE(S)`, "REPORTED A FAILURE", exit 1.
 a left-margin `ERROR` and a closing `N FAILURE(S)` — the phone spike's
 spellings — and the older spikes say it differently: indented `FAIL —`, a row
 ending `FAIL`, `ERROR —` after a mode name. `spike-real` with a bad path still
-exited 0. The rule is now any `FAIL`, `FAILED` or `ERROR` as a word; every
-spike uses those for failed checks and for nothing else. Checked against eight
-sample outputs, and live: `spike-real` with a bad path exits 1.
+exited 0. A third pass then showed the fix too broad: any `FAIL` as a word
+also failed a run whose source was named `FAIL-test.mp4`. The rule is now the
+word in a verdict position — first on its line, ending a row, or before an em
+dash — which is where every spike puts it and where a file name does not go;
+one line in `spike-alpha` was reworded to fit. Checked against fifteen sample
+outputs, file names included, and live: `spike-real` with a bad path exits 1,
+the phone spike exits 0.
 
 **Link:** VH-26; `scripts/run-in-engines.mjs`, `DEV-INFRASTRUCTURE.md` →
 "Cross-engine verification".
