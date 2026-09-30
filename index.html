@@ -232,6 +232,12 @@
       <section class="panel" aria-labelledby="errors-heading" id="errors-panel" hidden>
         <h2 id="errors-heading">Errors captured</h2>
         <div class="errors" id="errors"></div>
+        <!-- Where feedback is most useful, so it is offered again here (VH-93). -->
+        <div class="actions">
+          <button type="button" class="button button--secondary" id="feedback-report">
+            Report this problem
+          </button>
+        </div>
       </section>
 
       <div class="actions" id="dev-actions" hidden></div>
@@ -251,9 +257,60 @@
           </summary>
           <ul class="checks" id="checks"></ul>
         </details>
+        <!-- On a surface that is always there, and usable during a job: a hung
+             job is the thing most worth reporting (VH-93). -->
+        <p class="feedback-entry">
+          <button type="button" class="button button--secondary" id="feedback-open">
+            Send feedback
+          </button>
+        </p>
         <p class="version" id="version-line">Loading…</p>
       </div>
     </footer>
+
+    <!-- Feedback leaves through the user's own email app, never a request the
+         page makes: they see every word, and send it as themselves. So the
+         dialog never says "Sent" — it cannot know (VH-93). -->
+    <dialog class="dialog" id="feedback-dialog" aria-labelledby="feedback-heading">
+      <form id="feedback-form" novalidate>
+        <h2 id="feedback-heading">Send feedback</h2>
+        <p class="dialog-intro">
+          Your message goes to <span id="feedback-address"></span> from your own
+          email app. You will see the email before it is sent, and a reply will
+          come to you.
+        </p>
+        <div class="field">
+          <label class="label" for="feedback-message">Your message</label>
+          <textarea
+            class="textarea"
+            id="feedback-message"
+            rows="6"
+            autofocus
+            aria-describedby="feedback-message-error"
+          ></textarea>
+          <p class="field-error" id="feedback-message-error" hidden>
+            Write a message first.
+          </p>
+        </div>
+        <details class="disclosure">
+          <summary class="disclosure-summary">What will be sent with it</summary>
+          <p class="helper">
+            Details that help find a problem: the app's version, your browser,
+            how far you got, and your video's length, size and format. Never
+            the video, its name, or anything in it.
+          </p>
+          <pre class="feedback-details" id="feedback-details"></pre>
+        </details>
+        <div class="actions">
+          <button type="submit" class="button">Open email app</button>
+          <button type="button" class="button button--secondary" id="feedback-copy">
+            Copy message and details
+          </button>
+          <button type="button" class="button button--secondary" id="feedback-close">Close</button>
+        </div>
+        <p class="status" id="feedback-status" role="status" aria-live="polite"></p>
+      </form>
+    </dialog>
 
     <script type="module" src="/src/main.ts"></script>
   </body>

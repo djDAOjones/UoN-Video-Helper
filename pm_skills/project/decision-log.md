@@ -11,6 +11,60 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-09-30 — VH-93: feedback through the user's own email app
+
+**Decision:** a "Send feedback" button in the footer band, and "Report this
+problem" in the errors panel, open a native modal dialog: a required message
+box, a "What will be sent with it" disclosure showing every line, and "Open
+email app", "Copy message and details" and "Close". Open email app follows a
+`mailto:` link to `FEEDBACK_ADDRESS` with the build identity in the subject;
+the dialog then says the app "should have opened", never "Sent". The option
+the maintainer signed off (A); no relay endpoint.
+
+**Redaction review (production).** This is the diagnostics bundle's first
+reader beyond the maintainer's machine, so it has its own profile,
+narrower than the bundle's. It starts from the already-redacted bundle and
+keeps only named facts: build id; browser as "Chrome 142 on macOS" (the full
+user agent is itself redacted, having slashes); stage; preset and closing
+choices; the device check's outcome, reason codes and picture class; the
+video's length, display size, frame rate, codec and container; audio codec,
+channels and rate; the last two captured errors; the last eight log lines,
+each cut to 140 characters. Everything else stays behind — file size, output
+projection, language, core count, stacks. On top of `redact()`, every line
+has the chosen files' names removed, whole or without the extension, in any
+case: the logs never carry one by rule, and this is the check that does not
+depend on the rule being kept. The user reads it all before anything goes,
+and sends it themselves. The full bundle stays dev-only.
+
+**Rationale:** the app is static files and cannot send mail, and "no media
+egress" forbids a request carrying media characteristics. A `mailto:` link
+makes no request at all, so the invariant, criterion 9 and the egress watch
+are untouched. The message is never cut to fit the link's 1,800-character
+cap; details are dropped from the end, and Copy carries them all.
+
+Chrome treats a followed `mailto:` link as leaving the page: with the leave
+warning armed it raised "Leave site?" (measured, headless Chrome 154), though
+the page stays. So the warning is lifted for the click and re-armed after
+`FEEDBACK_LEAVE_WARNING_PAUSE_MS`. Opening the dialog asks the worker for its
+log lines with a one-second bound, since a hung job — the thing most worth
+reporting — may never answer. `adoptLogRecords` now skips records it already
+holds: the worker answers with its whole buffer, so a second report showed
+every worker line twice.
+
+**Verified:** Chrome, dev build, mid-job on a real recording: warning removed
+at the click and re-armed 1,001 ms later, the encode went on to finish, the
+file's name in neither the details nor the link (1,733 characters). An empty
+message is refused beside the field with focus on it; Escape closes; focus
+returns to the opener; Tab stays in the dialog; phone width and dark theme
+checked. Inside a same-origin iframe (the Xerte case): the hand-off fires
+`beforeunload` in the frame only, the host page's own handler never ran, and
+the app stayed loaded. Tests: the profile's allow-list, the name scrub, the
+link's cap and CRLF body, the browser summary, and single adoption of worker
+records.
+
+**Link:** VH-93; `src/ui/feedback.ts`, `src/config/feedback.ts`, `src/main.ts`,
+`src/core/logger.ts`, `UI-STANDARDS.md` → Diagnostics affordance.
+
 ## 2026-09-30 — VH-98: the logo as the website draws it, and "built for Chrome"
 
 **Decision:** the header band holds the University's white logo alone,

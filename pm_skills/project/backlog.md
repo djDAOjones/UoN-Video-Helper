@@ -71,26 +71,6 @@
      "Open:" is a question for the maintainer with a working default — the
      default is what gets built if nobody answers. -->
 
-- [ ] **VH-93 A feedback button** [detail](tickets/VH-93.md) (2026-09-30)
-      [sign-off]
-      Intent: a button opens a text box and Send; the message and the usage
-      logs reach `joe.bell@nottingham.ac.uk`.
-      Two facts collide with it. The app is static files, so it cannot send
-      mail. And "no media egress" forbids any call carrying filenames or media
-      characteristics, while the logs usefully carry resolution, duration and
-      codec.
-      Open: how it is sent. Default, and the recommendation: a `mailto:` link
-      — the user's own mail app opens with the message and a compact redacted
-      log in it; they read every word and press send. No request leaves the
-      app, so the invariant and criterion 9 stand. The alternative is a relay
-      endpoint: one click, but the app's first outbound request with a body,
-      at a URL that is either a credential in a public repository or a door
-      anyone can post through.
-      Done when: signed off; the user sees exactly what will be sent; opening
-      the mail app neither trips the leave warning nor disturbs a running job;
-      it works inside the Xerte frame; the production redaction review is
-      recorded; the address lives in `src/config/`.
-
 - [ ] **VH-30 Trim the source, with a preview** [detail](tickets/VH-30.md)
       (2026-08-25) [sign-off]
       Intent: maintainer request, renewed 2026-09-30 with a shape — a preview

@@ -25,6 +25,13 @@
 
 ## Archived: the review's close and Band 1a — see archive/trajectory/trajectory-0004-review-close-and-band-1a.md
 
+### VH-93 — a feedback button
+
+- VH-93 — Shipped 2026-09-30. "Send feedback" in the footer, and "Report this
+  problem" beside captured errors, open the user's own email app with their
+  message and a short list of named facts. The page makes no request. See
+  decision-log.
+
 ### VH-98 — the University's logo and heading face
 
 - VH-98 — Shipped 2026-09-30. The website's white logo top-left on the blue

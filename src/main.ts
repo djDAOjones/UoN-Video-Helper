@@ -9,6 +9,7 @@
 import './styles/app.css'
 
 import {
+  buildDiagnosticsBundle,
   copyDiagnostics,
   installGlobalErrorCapture,
   onUncaughtError,
@@ -32,6 +33,13 @@ import {
   resolveBrandingBase,
   type ClosingControls,
 } from './config/branding'
+import {
+  FEEDBACK_ADDRESS,
+  FEEDBACK_LEAVE_WARNING_PAUSE_MS,
+  FEEDBACK_MAILTO_MAX_CHARACTERS,
+  FEEDBACK_SUBJECT,
+  FEEDBACK_WORKER_LOG_WAIT_MS,
+} from './config/feedback'
 import type { ContentClass, PresetId } from './config/presets'
 import {
   SELECTION_DEADLINE_MS,
@@ -45,6 +53,7 @@ import {
   colourDisabledReason,
   onsetDisabledReason,
 } from './ui/closing-choice'
+import { describeBrowser, feedbackDetails, feedbackMailto, feedbackText } from './ui/feedback'
 import { formatFileSize } from './ui/format'
 import { preflightAnnouncement, renderPreflight } from './ui/preflight-panel'
 import { renderWarnings } from './ui/warning-text'
@@ -1284,6 +1293,135 @@ function renderResult(
   actions.append(save)
   processResult.append(actions)
 }
+
+// --- Feedback (VH-93) ------------------------------------------------------
+// The user's own email app sends it. The page makes no request, so "no media
+// egress" and the network watch are exactly as they were.
+
+const feedbackDialog = required<HTMLDialogElement>('#feedback-dialog')
+const feedbackForm = required<HTMLFormElement>('#feedback-form')
+const feedbackMessage = required<HTMLTextAreaElement>('#feedback-message')
+const feedbackMessageError = required<HTMLElement>('#feedback-message-error')
+const feedbackDetailsBlock = required<HTMLElement>('#feedback-details')
+const feedbackStatus = required<HTMLElement>('#feedback-status')
+required<HTMLElement>('#feedback-address').textContent = FEEDBACK_ADDRESS
+
+/** Every file chosen in this tab, so a report cannot carry any of their names. */
+const chosenFileNames = new Set<string>()
+fileInput.addEventListener('change', () => {
+  for (const chosen of fileInput.files ?? []) chosenFileNames.add(chosen.name)
+})
+
+/** The details as last gathered: what the disclosure shows is what is sent. */
+let feedbackLines: string[] = []
+
+function gatherFeedbackDetails(): void {
+  feedbackLines = feedbackDetails(buildDiagnosticsBundle(), {
+    browser: describeBrowser(navigator.userAgent),
+    fileNames: [...chosenFileNames],
+  })
+  feedbackDetailsBlock.textContent = feedbackLines.join('\n')
+}
+
+function openFeedback(): void {
+  feedbackStatus.textContent = ''
+  showFeedbackError(false)
+  feedbackDialog.showModal()
+  // The main thread's lines at once, so the dialog is never empty and Send
+  // never waits; the worker's are added when it answers. A hung worker may
+  // never answer, and a hung job is the thing most worth reporting.
+  gatherFeedbackDetails()
+  void (async () => {
+    try {
+      const drained = await request({ kind: 'drainLogs' }, FEEDBACK_WORKER_LOG_WAIT_MS)
+      if (drained.kind === 'logs') adoptLogRecords(drained.records)
+    } catch {
+      log.warn('feedback', 'worker did not answer with its log lines; reporting without them')
+    }
+    if (feedbackDialog.open) gatherFeedbackDetails()
+  })()
+}
+
+function showFeedbackError(show: boolean): void {
+  feedbackMessageError.hidden = !show
+  if (show) feedbackMessage.setAttribute('aria-invalid', 'true')
+  else feedbackMessage.removeAttribute('aria-invalid')
+}
+
+/** The message, or null with the error shown beside the field and focus on it. */
+function feedbackMessageOrError(): string | null {
+  const message = feedbackMessage.value.trim()
+  if (message.length > 0) return message
+  showFeedbackError(true)
+  feedbackMessage.focus()
+  return null
+}
+
+/**
+ * Follows a `mailto:` link without raising "Leave site?" over a running job.
+ *
+ * Chrome treats the link as leaving the page and fires `beforeunload`,
+ * although the page stays and the job carries on. The warning is lifted for
+ * the click and put back once the hand-off is over.
+ */
+function openMailto(url: string): void {
+  if (stopLeaveWarning) {
+    stopLeaveWarning()
+    stopLeaveWarning = null
+  }
+  const link = document.createElement('a')
+  link.href = url
+  link.click()
+  setTimeout(updateLeaveWarning, FEEDBACK_LEAVE_WARNING_PAUSE_MS)
+}
+
+feedbackMessage.addEventListener('input', () => {
+  if (feedbackMessage.value.trim().length > 0) showFeedbackError(false)
+})
+
+feedbackForm.addEventListener('submit', (event) => {
+  event.preventDefault()
+  const message = feedbackMessageOrError()
+  if (message === null) return
+  const { url, trimmed } = feedbackMailto({
+    address: FEEDBACK_ADDRESS,
+    subject: `${FEEDBACK_SUBJECT} (${BUILD_ID})`,
+    message,
+    details: feedbackLines,
+    maxCharacters: FEEDBACK_MAILTO_MAX_CHARACTERS,
+  })
+  openMailto(url)
+  log.info('feedback', 'asked the email app to open', { trimmed })
+  // "Should have": the page cannot know whether it did, or whether the email
+  // was then sent.
+  feedbackStatus.textContent =
+    `Your email app should have opened with your message ready to send. If it did not, ` +
+    `choose "Copy message and details" and paste them into an email to ${FEEDBACK_ADDRESS}.` +
+    (trimmed ? ' Some details did not fit in the email; the copy has them all.' : '')
+})
+
+required<HTMLButtonElement>('#feedback-copy').addEventListener('click', () => {
+  const message = feedbackMessageOrError()
+  if (message === null) return
+  void (async () => {
+    try {
+      await navigator.clipboard.writeText(feedbackText(message, feedbackLines))
+      feedbackStatus.textContent = `Copied. Paste it into an email to ${FEEDBACK_ADDRESS}.`
+    } catch (cause) {
+      log.warn('feedback', 'could not copy', {
+        reason: cause instanceof Error ? cause.message : String(cause),
+      })
+      feedbackStatus.textContent =
+        'Could not copy. Open "What will be sent with it", select the details, and copy them with your message.'
+    }
+  })()
+})
+
+required<HTMLButtonElement>('#feedback-close').addEventListener('click', () => {
+  feedbackDialog.close()
+})
+required<HTMLButtonElement>('#feedback-open').addEventListener('click', openFeedback)
+required<HTMLButtonElement>('#feedback-report').addEventListener('click', openFeedback)
 
 // --- Dev-only affordances --------------------------------------------------
 // Hidden in production per UI-STANDARDS.md -> "Diagnostics affordance".

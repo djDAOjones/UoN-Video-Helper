@@ -133,6 +133,11 @@ a {
   margin-bottom: var(--spacing-05);
 }
 
+/* The feedback button sits between the system check and the version line. */
+.feedback-entry {
+  margin: 0 0 var(--spacing-05);
+}
+
 .version {
   margin: 0;
   font-size: var(--type-body-compact);
@@ -890,3 +895,69 @@ details[open] > .disclosure-summary::before {
   font-size: var(--type-body-compact);
   white-space: pre-wrap;
 }
+
+/* --- Feedback dialog (VH-93) --- */
+
+/*
+ * Carbon's modal: a plain layer over a dimmed page, no rounded corners. The
+ * dimming is the brand blue, so it is a token rather than a colour of its own.
+ */
+.dialog {
+  width: min(40rem, calc(100vw - 2 * var(--spacing-05)));
+  max-height: calc(100vh - 2 * var(--spacing-05));
+  padding: var(--spacing-07);
+  border: 1px solid var(--border-subtle);
+  background: var(--layer-01);
+  color: var(--text-primary);
+  overflow: auto;
+}
+
+.dialog::backdrop {
+  background: color-mix(in srgb, var(--uon-brand-blue) 60%, transparent);
+}
+
+.dialog h2 {
+  margin: 0 0 var(--spacing-05);
+  font-size: var(--type-heading-03);
+}
+
+.dialog-intro {
+  margin: 0 0 var(--spacing-05);
+}
+
+.textarea {
+  display: block;
+  width: 100%;
+  min-height: 8rem;
+  padding: var(--spacing-04);
+  border: 1px solid var(--border-strong);
+  background: var(--layer-00);
+  color: var(--text-primary);
+  font: inherit;
+  resize: vertical;
+}
+
+/* The error is said in words beside the field, with the border as a second
+   signal, never the only one. */
+.textarea[aria-invalid='true'] {
+  border: 2px solid var(--support-error);
+}
+
+.field-error {
+  margin: var(--spacing-03) 0 0;
+  font-size: var(--type-body-compact);
+  color: var(--support-error);
+}
+
+.feedback-details {
+  margin: var(--spacing-04) 0 0;
+  padding: var(--spacing-04);
+  background: var(--layer-02);
+  color: var(--text-primary);
+  font-size: var(--type-body-compact);
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 14rem;
+  overflow: auto;
+}
+

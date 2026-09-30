@@ -83,9 +83,22 @@ export function getLogRecords(): readonly LogRecord[] {
   return [...buffer]
 }
 
-/** Adopt records emitted inside the worker so one bundle covers both threads. */
+/**
+ * Adopt records emitted inside the worker so one bundle covers both threads.
+ *
+ * The worker answers `drainLogs` with a copy of its whole buffer, so asking
+ * twice hands over the same records twice. A record already held is skipped,
+ * or a second feedback report would show every worker line doubled (VH-93).
+ * "Already held" is the same moment, level, scope and message: two genuinely
+ * distinct records identical in all four would collapse, which costs a
+ * diagnostic log nothing.
+ */
 export function adoptLogRecords(records: readonly LogRecord[]): void {
+  const key = (entry: LogRecord) => `${entry.ts}\u0000${entry.level}\u0000${entry.scope}\u0000${entry.message}`
+  const held = new Set(buffer.map(key))
   for (const entry of records) {
+    if (held.has(key(entry))) continue
+    held.add(key(entry))
     buffer.push(entry)
     if (buffer.length > LOG_BUFFER_CAPACITY) buffer.shift()
   }

@@ -250,6 +250,10 @@ toasts, or critical status.
 - **Dev-only by default.** Hidden in production unless an explicit
   opt-in is set (gated per `DEV-INFRASTRUCTURE.md` → "Maintainer
   diagnostics"); production exposure requires a redaction review.
+  The one production reader is the feedback dialog (VH-93, reviewed in
+  the decision log): it sends a short allow-list of named facts
+  (`src/ui/feedback.ts`), never the whole bundle, shows every line
+  before it goes, and leaves through the user's own email app.
 - **Carbon icon button** with a tooltip naming the action in sentence
   case (e.g. "Copy diagnostics"). Visible label and accessible name
   must match.

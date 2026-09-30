@@ -15,7 +15,7 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 188 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 191 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 23 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
@@ -23,7 +23,7 @@
 - `public` — 13 file(s)
 - `reviews` — 7 file(s)
 - `scripts` — 5 file(s)
-- `src` — 127 file(s)
+- `src` — 130 file(s)
 - `test` — 6 file(s)
 <!-- /file-map-index -->
 
@@ -139,6 +139,7 @@
 - `src/config/audio.ts` — Project audio choices — targets, thresholds, chain constants. Standard-defined values live in src/audio/.
 - `src/config/branding.test.ts` — Pins master selection: frame rate first, resolution second, never upscaled; and the asset base for dev, Pages and a relocatable build.
 - `src/config/branding.ts` — Closing style/colour/mode, the 1 s/4 s split and per-mode duration; the asset base, resolved against the page for the worker; opening placeholders.
+- `src/config/feedback.ts` — Where feedback goes and how much fits: the address, subject, mailto length cap, log lines kept, and the leave-warning pause.
 - `src/config/presets.test.ts` — Pins the preset rules, including that the smaller preset preserves resolution.
 - `src/config/presets.ts` — The two output presets and the encoder config they imply. Purpose-named, never technique-named.
 - `src/config/thresholds.ts` — Pre-flight bands and probe constants — the numbers D8 will replace with measurements.
@@ -215,6 +216,8 @@
 - `src/ui/brand-assets.ts` — Looks the logo and heading font up by name at build time and installs whichever exists; the page is complete without either.
 - `src/ui/closing-choice.test.ts` — Every closing selection's sentence states the seconds the job really adds; "None" is unmistakable; a disabled control says why.
 - `src/ui/closing-choice.ts` — The closing controls in words: the result line for the current selection, and why onset or colour is disabled.
+- `src/ui/feedback.test.ts` — The feedback profile carries only named facts and never the file's name in any case; the mailto fits and never cuts the message.
+- `src/ui/feedback.ts` — The feedback email: an allow-list of facts from the redacted bundle, the file's name scrubbed, and a length-capped mailto link.
 - `src/ui/format.test.ts` — Pins the wording, so phrasing is tested rather than reviewed by opinion.
 - `src/ui/format.ts` — Technical facts as plain language — durations, sizes, codecs, channel layouts.
 - `src/ui/preflight-panel.test.ts` — A `proceed` is three lines; no other outcome loses a sentence, says the time twice, or invites a blocked job to continue.
