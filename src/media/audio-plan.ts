@@ -224,32 +224,55 @@ export async function planAudio(
         : null
     if (candidateGainDb !== null) probed = true
 
-    const measured = await traverse(
-      track,
-      sampleRate,
-      channelCount,
-      new AudioChain({
+    /** One traversal at this gain, under whatever ceiling currently stands. */
+    const measureChain = (tap?: (block: Float32Array[]) => Promise<void>): Promise<Traversal> =>
+      traverse(
+        track,
         sampleRate,
         channelCount,
-        envelope,
-        gainDb: candidateGainDb,
-        limiterCeilingDbtp,
-      }),
-      signal,
-      onSample,
-      probe ? (block) => probe.add(block) : undefined,
-    )
+        new AudioChain({
+          sampleRate,
+          channelCount,
+          envelope,
+          gainDb: candidateGainDb,
+          limiterCeilingDbtp,
+        }),
+        signal,
+        onSample,
+        tap,
+      )
+
+    let measured: Traversal
+    try {
+      measured = await measureChain(probe ? (block) => probe.add(block) : undefined)
+    } catch (cause) {
+      // The probe holds an encoder and a buffer. A traversal that throws — a
+      // source that stops decoding half-way — must not leave them to the
+      // garbage collector: the worker outlives a failed job.
+      await probe?.cancel()
+      throw cause
+    }
     if (candidateGainDb === null) return measured.analysis.integratedLufs
 
     if (probe) {
       // A cancelled traversal stopped early; its windows are not the
       // programme and nothing downstream will use the answer.
-      if (signal?.aborted) await probe.cancel()
-      else codec = await probe.finish()
-      // The other figure the round trip gives. A codec that raises true peak
-      // by more than the standing allowance would put the finished file over
-      // the ceiling and have the job refused at the end (VH-83).
-      limiterCeilingDbtp = limiterCeilingFor(codec?.overshootDb ?? null)
+      if (signal?.aborted) {
+        await probe.cancel()
+      } else {
+        codec = await probe.finish()
+        // The other figure the round trip gives. A codec that raises true peak
+        // by more than the standing allowance would put the finished file over
+        // the ceiling and have the job refused at the end (VH-83).
+        const ceilingProbedUnder = limiterCeilingDbtp
+        limiterCeilingDbtp = limiterCeilingFor(codec?.overshootDb ?? null)
+        // If that moved the ceiling, the loudness just measured belongs to a
+        // chain the job will not run: a lower ceiling limits harder. Were it
+        // inside tolerance the solver would accept this gain on the strength
+        // of it, and pass C would then deliver something else. Measured again
+        // under the ceiling that will be used, before the solver sees it.
+        if (limiterCeilingDbtp !== ceilingProbedUnder) measured = await measureChain()
+      }
     }
 
     chainLufs = measured.analysis.integratedLufs

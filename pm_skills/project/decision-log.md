@@ -11,6 +11,28 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-09-30 — VH-83 review: measure again under the ceiling that will be used
+
+**Decision:** when the probe lowers the limiter ceiling, the pass that probed
+is measured again under the new ceiling before the solver sees a figure. And a
+probe whose traversal throws is cancelled before the error propagates.
+
+**Rationale:** both from the Codex review of VH-83. The probe runs on the first
+limited pass and the ceiling it derives applies from then on — but that pass's
+own loudness was measured under the OLD ceiling. Had it been inside tolerance
+the solver would have accepted the gain on the strength of a chain the job
+does not run, and a lower ceiling limits harder: `AGENTS.md`'s rule that the
+gain is solved against the chain that actually runs, broken in exactly the
+case the ceiling rule was added for. One extra traversal, only when the
+ceiling moves. The second: the worker outlives a failed job, so an encoder
+left open by a throw is leaked until collection.
+
+**Verified:** CULT1027 at the smaller output, the one corpus job whose ceiling
+moves: −16.072 LUFS, −2.28 dBTP (−16.093 before the fix). AMCS3059 at the
+larger, whose ceiling does not: −16.051, unchanged.
+
+**Link:** VH-83; `src/media/audio-plan.ts`.
+
 ## 2026-09-30 — VH-26 closed: Firefox refuses an iPhone file cleanly
 
 **Decision:** VH-26 is done. No code changed for it; the last open question
