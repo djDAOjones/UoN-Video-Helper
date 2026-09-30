@@ -7,13 +7,20 @@ import {
   CLOSING_ONSET_SECONDS,
   CLOSING_TAIL_SECONDS,
   LONGEST_CLOSING_SECONDS,
+  CLOSING_COLOURS,
+  CLOSING_CONTROL_DEFAULTS,
+  CLOSING_ONSETS,
+  CLOSING_TYPES,
   brandingAssetHeight,
   brandingAssetUrl,
+  brandingChoiceFor,
   closingAddedSeconds,
   closingOnsetName,
   closingTailName,
   modeNeedsOnset,
+  closingTypeUsesOnset,
   openingAssetName,
+  readClosingControls,
   resolveBrandingBase,
   selectOpeningMaster,
   type BrandingColour,
@@ -182,5 +189,120 @@ describe('LONGEST_CLOSING_SECONDS', () => {
 
   it('is actually reached, so the bound is tight rather than invented', () => {
     expect(closingAddedSeconds('over-freeze')).toBe(LONGEST_CLOSING_SECONDS)
+  })
+})
+
+describe('the closing controls map onto the job (VH-90)', () => {
+  // Three controls replaced a four-way radio, and the pipeline did not change.
+  // Every combination must therefore produce the job its old radio did.
+
+  it.each(CLOSING_COLOURS)('Cut is the clean cut, in %s', (colour) => {
+    for (const onset of CLOSING_ONSETS) {
+      // Onset is disabled under Cut; whatever it still holds is unread.
+      expect(brandingChoiceFor({ type: 'cut', onset, colour })).toEqual({
+        opening: false,
+        closing: true,
+        mode: 'hard-cut',
+        style: 'fade',
+        colour,
+      })
+    }
+  })
+
+  it.each([
+    ['fade', 'existing', 'over-picture'],
+    ['fade', 'freeze', 'over-freeze'],
+    ['slide', 'existing', 'over-picture'],
+    ['slide', 'freeze', 'over-freeze'],
+  ] as const)('%s over %s is %s, in both colours', (type, onset, mode) => {
+    for (const colour of CLOSING_COLOURS) {
+      expect(brandingChoiceFor({ type, onset, colour })).toEqual({
+        opening: false,
+        closing: true,
+        mode,
+        style: type,
+        colour,
+      })
+    }
+  })
+
+  it('None asks for no closing at all, whatever the other two hold', () => {
+    for (const onset of CLOSING_ONSETS) {
+      for (const colour of CLOSING_COLOURS) {
+        expect(brandingChoiceFor({ type: 'none', onset, colour }).closing).toBe(false)
+      }
+    }
+  })
+
+  it('makes eleven distinct jobs: two for Cut, eight for Fade and Slide, one for None', () => {
+    const jobs = new Set(
+      CLOSING_TYPES.flatMap((type) =>
+        CLOSING_ONSETS.flatMap((onset) =>
+          CLOSING_COLOURS.map((colour) => JSON.stringify(brandingChoiceFor({ type, onset, colour }))),
+        ),
+      ),
+    )
+    expect(jobs.size).toBe(11)
+  })
+
+  it('never asks for an opening', () => {
+    for (const type of CLOSING_TYPES) {
+      expect(brandingChoiceFor({ ...CLOSING_CONTROL_DEFAULTS, type }).opening).toBe(false)
+    }
+  })
+
+  it('adds 4 seconds over the picture and 5 over a freeze', () => {
+    expect(closingAddedSeconds(brandingChoiceFor({ type: 'fade', onset: 'existing', colour: 'blue' }).mode!)).toBe(4)
+    expect(closingAddedSeconds(brandingChoiceFor({ type: 'slide', onset: 'freeze', colour: 'blue' }).mode!)).toBe(5)
+    expect(closingAddedSeconds(brandingChoiceFor({ type: 'cut', onset: 'freeze', colour: 'blue' }).mode!)).toBe(4)
+  })
+
+  it('only Fade and Slide use the onset', () => {
+    expect(CLOSING_TYPES.filter(closingTypeUsesOnset)).toEqual(['fade', 'slide'])
+  })
+})
+
+describe('the closing controls at rest (VH-90)', () => {
+  it('defaults to Cut, blue — the same job as before the controls changed', () => {
+    expect(CLOSING_CONTROL_DEFAULTS).toEqual({ type: 'cut', onset: 'existing', colour: 'blue' })
+    expect(brandingChoiceFor(CLOSING_CONTROL_DEFAULTS)).toEqual({
+      opening: false,
+      closing: true,
+      mode: CLOSING_DEFAULTS.mode,
+      style: CLOSING_DEFAULTS.style,
+      colour: CLOSING_DEFAULTS.colour,
+    })
+  })
+
+  it('reads recognised values as they are', () => {
+    expect(readClosingControls({ type: 'slide', onset: 'freeze', colour: 'white' })).toEqual({
+      type: 'slide',
+      onset: 'freeze',
+      colour: 'white',
+    })
+  })
+
+  it.each([
+    [{ type: 'wipe', onset: 'existing', colour: 'blue' }],
+    [{ type: 'cut', onset: 'sideways', colour: 'blue' }],
+    [{ type: 'cut', onset: 'existing', colour: 'red' }],
+    [{}],
+    [{ type: null, onset: undefined, colour: '' }],
+  ])('falls back to the default for a value it does not know: %j', (raw) => {
+    // The DOM is editable. An unrecognised value must not reach the pipeline
+    // as a string that matches no branch.
+    const read = readClosingControls(raw)
+    expect(CLOSING_TYPES).toContain(read.type)
+    expect(CLOSING_ONSETS).toContain(read.onset)
+    expect(CLOSING_COLOURS).toContain(read.colour)
+    expect(readClosingControls({})).toEqual(CLOSING_CONTROL_DEFAULTS)
+  })
+
+  it('falls back field by field, keeping the ones it does know', () => {
+    expect(readClosingControls({ type: 'fade', onset: 'nonsense', colour: 'white' })).toEqual({
+      type: 'fade',
+      onset: 'existing',
+      colour: 'white',
+    })
   })
 })

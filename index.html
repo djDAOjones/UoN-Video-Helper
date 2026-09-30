@@ -48,84 +48,90 @@
         </div>
         <div id="source-report"></div>
         <fieldset class="choice" id="branding-choice" hidden>
-          <legend class="label">How your video ends</legend>
-          <!-- VH-46b, 2026-08-27. One question instead of two.
-               "Add the closing sequence" was a checkbox, and the three ways a
-               closing can meet the picture were a separate set of radios that
-               VH-45 withdrew. But "none" is not a different KIND of answer from
-               "clean cut" — it is a fourth value of the same question, and
-               asking it twice made the second question look optional when it
-               was not.
-               Each option says what it costs in seconds, because that is the
-               only difference a user can act on: two of them add 4 s and one
-               adds 5. VH-33's opening toggle stays gone (VH-23, iceboxed). -->
-          <label class="radio radio--described">
-            <input type="radio" name="branding-mode" value="hard-cut" checked />
-            <span class="radio-label">
-              <span>Clean cut</span>
-              <span class="radio-detail"
-                >Your video ends, then the closing card appears. Adds 4 seconds.</span
-              >
-            </span>
-          </label>
-          <label class="radio radio--described">
-            <input type="radio" name="branding-mode" value="over-picture" />
-            <span class="radio-label">
-              <span>Over the picture</span>
-              <span class="radio-detail"
-                >The closing builds over your last second of video, which is progressively covered.
-                Adds 4 seconds.</span
-              >
-            </span>
-          </label>
-          <label class="radio radio--described">
-            <input type="radio" name="branding-mode" value="over-freeze" />
-            <span class="radio-label">
-              <span>Over a freeze frame</span>
-              <span class="radio-detail"
-                >Your last frame holds still while the closing builds over it, so nothing is
-                covered. Adds 5 seconds.</span
-              >
-            </span>
-          </label>
-          <label class="radio radio--described">
-            <input type="radio" name="branding-mode" value="none" />
-            <span class="radio-label">
-              <span>No closing sequence</span>
-              <span class="radio-detail"
-                >Your video ends where it ends, with no University branding.</span
-              >
-            </span>
-          </label>
-          <details class="disclosure" id="branding-options">
-            <summary class="disclosure-summary">Closing sequence options</summary>
-            <!-- Animation is shown only for the two modes that play the build.
-                 A clean cut discards it, so Fade and Slide would be a choice
-                 that changes nothing — which is the control this project's
-                 rules single out as the one never to offer. -->
-            <fieldset class="choice" id="branding-style-choice" hidden>
-              <legend class="label">Animation</legend>
-              <label class="radio">
-                <input type="radio" name="branding-style" value="fade" checked />
-                <span>Fade</span>
-              </label>
-              <label class="radio">
-                <input type="radio" name="branding-style" value="slide" />
-                <span>Slide</span>
-              </label>
-            </fieldset>
-            <fieldset class="choice">
+          <legend class="label">Closing branding</legend>
+          <!-- VH-90, 2026-09-30. Three controls, always present, in the order
+               they are decided: type, onset, colour. They replace VH-46b's
+               four-way radio at the maintainer's word — it had rejected a
+               select, and had hidden Animation rather than disabling it.
+               Nothing about the job changed: `brandingChoiceFor` maps every
+               combination onto the job its old radio produced.
+               A control that cannot change anything is disabled and says why
+               in visible text, and the line beneath states what the current
+               selection will do — which is also what stops "None" under
+               "Animation type" reading as "no animation". That is Cut. -->
+          <div class="control-grid">
+            <div class="field">
+              <label class="label" for="closing-type">Animation type</label>
+              <select class="select" id="closing-type">
+                <option value="cut" selected>Cut</option>
+                <option value="fade">Fade</option>
+                <option value="slide">Slide</option>
+                <option value="none">None</option>
+              </select>
+            </div>
+            <div class="field field--wide">
+              <label class="label" for="closing-onset">Animation onset</label>
+              <div class="control-with-help">
+                <select
+                  class="select"
+                  id="closing-onset"
+                  aria-describedby="closing-onset-reason"
+                  disabled
+                >
+                  <option value="existing" selected>Over existing</option>
+                  <option value="freeze">Over generated freeze frame</option>
+                </select>
+                <!-- A toggletip, not a tooltip: a button that discloses text,
+                     by click, Enter or Space, never by hover alone. -->
+                <button
+                  class="button button--secondary help-button"
+                  type="button"
+                  id="onset-help-button"
+                  aria-label="About animation onset"
+                  aria-expanded="false"
+                  aria-controls="onset-help"
+                >
+                  ?
+                </button>
+              </div>
+              <p class="helper" id="closing-onset-reason">Not used with Cut.</p>
+              <div aria-live="polite">
+                <div class="toggletip" id="onset-help" hidden>
+                  <p>
+                    <strong>Over existing</strong> — the closing animation plays over the last
+                    second of your video, covering it as it builds.
+                  </p>
+                  <p>
+                    <strong>Over generated freeze frame</strong> — your last frame is held for one
+                    extra second and the animation plays over that, so nothing in your video is
+                    covered.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <fieldset class="field segmented" id="closing-colour" aria-describedby="closing-colour-reason">
               <legend class="label">Colour</legend>
-              <label class="radio">
-                <input type="radio" name="branding-colour" value="blue" checked />
-                <span>Blue</span>
-              </label>
-              <label class="radio">
-                <input type="radio" name="branding-colour" value="white" />
-                <span>White</span>
-              </label>
+              <!-- Native radios under a segmented skin: the arrow keys and
+                   the checked state come with them. Carbon's content switcher
+                   is a tablist, which is the wrong role for a form value. -->
+              <div class="segments">
+                <label class="segment">
+                  <input type="radio" name="closing-colour" value="blue" checked />
+                  <span class="segment-face">
+                    <span class="swatch swatch--blue" aria-hidden="true"></span>Blue
+                  </span>
+                </label>
+                <label class="segment">
+                  <input type="radio" name="closing-colour" value="white" />
+                  <span class="segment-face">
+                    <span class="swatch swatch--white" aria-hidden="true"></span>White
+                  </span>
+                </label>
+              </div>
+              <p class="helper" id="closing-colour-reason" hidden></p>
             </fieldset>
-          </details>
+          </div>
+          <p class="closing-result" id="closing-result" aria-live="polite"></p>
         </fieldset>
         <fieldset class="choice" id="preset-choice" hidden>
           <legend class="label">File size / quality</legend>

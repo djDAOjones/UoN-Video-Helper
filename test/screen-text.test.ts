@@ -10,7 +10,14 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 
+import {
+  CLOSING_COLOURS,
+  CLOSING_CONTROL_DEFAULTS,
+  CLOSING_ONSETS,
+  CLOSING_TYPES,
+} from '../src/config/branding'
 import { PRESETS, type PresetId } from '../src/config/presets'
+import { CLOSING_TYPE_LABELS, onsetDisabledReason } from '../src/ui/closing-choice'
 
 const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8')
 
@@ -113,6 +120,73 @@ describe('the System check panel (VH-88)', () => {
 
   it('starts closed', () => {
     expect(markup).not.toMatch(/<details[^>]*id="system-check"[^>]*\sopen/)
+  })
+})
+
+describe('the closing controls (VH-90)', () => {
+  /** One `<select>`'s options, as `[value, text, selected]`. */
+  function options(id: string): Array<readonly [string, string, boolean]> {
+    const select = new RegExp(`<select[^>]*id="${id}"[^>]*>([\\s\\S]*?)</select>`).exec(markup)?.[1] ?? ''
+    return [...select.matchAll(/<option value="([^"]+)"(\s+selected)?>([^<]+)<\/option>/g)].map(
+      (match) => [match[1]!, match[3]!.trim(), match[2] !== undefined] as const,
+    )
+  }
+
+  it('offers every animation type the config knows, under the name the reasons quote', () => {
+    const shown = options('closing-type')
+    expect(shown.map(([value]) => value)).toEqual([...CLOSING_TYPES])
+    for (const [value, text] of shown) {
+      expect(text).toBe(CLOSING_TYPE_LABELS[value as keyof typeof CLOSING_TYPE_LABELS])
+    }
+  })
+
+  it('offers every onset the config knows, in the order asked for', () => {
+    expect(options('closing-onset').map(([value, text]) => [value, text])).toEqual([
+      ['existing', 'Over existing'],
+      ['freeze', 'Over generated freeze frame'],
+    ])
+    expect(options('closing-onset').map(([value]) => value)).toEqual([...CLOSING_ONSETS])
+  })
+
+  it('offers both colours as native radios', () => {
+    const values = [...markup.matchAll(/type="radio" name="closing-colour" value="([^"]+)"/g)].map(
+      (match) => match[1],
+    )
+    expect(values).toEqual([...CLOSING_COLOURS])
+  })
+
+  it('starts on the defaults: Cut, blue', () => {
+    // The page is static, so its resting state is a second copy of the
+    // default. If they drift, the first job is not the one the screen shows.
+    const selected = (id: string) => options(id).find(([, , isSelected]) => isSelected)?.[0]
+    expect(selected('closing-type')).toBe(CLOSING_CONTROL_DEFAULTS.type)
+    expect(selected('closing-onset')).toBe(CLOSING_CONTROL_DEFAULTS.onset)
+    expect(markup).toMatch(
+      new RegExp(`name="closing-colour" value="${CLOSING_CONTROL_DEFAULTS.colour}" checked`),
+    )
+  })
+
+  it('starts with onset disabled and saying why, before any script runs', () => {
+    expect(markup).toMatch(/<select[^>]*id="closing-onset"[^>]*\sdisabled/)
+    expect(visibleText).toContain(onsetDisabledReason(CLOSING_CONTROL_DEFAULTS.type))
+  })
+
+  it('names the "?" and ties it to the text it discloses', () => {
+    // A toggletip: a button that discloses, never hover alone. The name says
+    // what it is about, because "?" says nothing to a screen reader.
+    const button = /<button[^>]*id="onset-help-button"[^>]*>/.exec(markup)?.[0] ?? ''
+    expect(button).toContain('type="button"')
+    expect(button).toContain('aria-label="About animation onset"')
+    expect(button).toContain('aria-expanded="false"')
+    expect(button).toContain('aria-controls="onset-help"')
+    expect(markup).toMatch(/id="onset-help"[^>]*\shidden/)
+  })
+
+  it('keeps all three inside the one fieldset the job lock disables', () => {
+    const fieldset = /<fieldset[^>]*id="branding-choice"[\s\S]*?<fieldset class="choice" id="preset-choice"/.exec(markup)?.[0] ?? ''
+    for (const id of ['closing-type', 'closing-onset', 'closing-colour', 'onset-help-button']) {
+      expect(fieldset).toContain(`id="${id}"`)
+    }
   })
 })
 

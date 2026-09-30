@@ -75,6 +75,103 @@ export interface BrandingChoice {
   readonly mode?: BrandingMode
 }
 
+/* -------------------------------------------------------------------------
+ * Closing — the three controls, and the job they ask for (VH-90)
+ * ---------------------------------------------------------------------- */
+
+/**
+ * "Animation type". `cut` and `none` are different things that a list makes
+ * look alike: `cut` is the closing with no animation, `none` is no closing.
+ */
+export type ClosingType = 'cut' | 'fade' | 'slide' | 'none'
+
+/** "Animation onset": what sits under the 1 s build, for the types that play it. */
+export type ClosingOnset = 'existing' | 'freeze'
+
+/** The state of the three closing controls, exactly as the screen holds it. */
+export interface ClosingControls {
+  readonly type: ClosingType
+  readonly onset: ClosingOnset
+  readonly colour: BrandingColour
+}
+
+export const CLOSING_TYPES: readonly ClosingType[] = ['cut', 'fade', 'slide', 'none']
+export const CLOSING_ONSETS: readonly ClosingOnset[] = ['existing', 'freeze']
+export const CLOSING_COLOURS: readonly BrandingColour[] = ['blue', 'white']
+
+/**
+ * What the controls show before anyone touches them.
+ *
+ * `cut` is {@link CLOSING_DEFAULTS}' `hard-cut` under its on-screen name, and a
+ * test holds the two together. `existing` is first in the list as the
+ * maintainer asked for it; it is unread until a type that plays the build is
+ * chosen.
+ */
+export const CLOSING_CONTROL_DEFAULTS: ClosingControls = {
+  type: 'cut',
+  onset: 'existing',
+  colour: CLOSING_DEFAULTS.colour,
+}
+
+/** Whether a type plays the 1 s build, and so makes the onset mean something. */
+export function closingTypeUsesOnset(type: ClosingType): boolean {
+  return type === 'fade' || type === 'slide'
+}
+
+/**
+ * Reads the controls' raw values, falling back to the default for any that is
+ * not one the config knows.
+ *
+ * The DOM is editable, and an unrecognised value would otherwise reach the
+ * pipeline as a string that matches no branch.
+ */
+export function readClosingControls(raw: {
+  readonly type?: string | null | undefined
+  readonly onset?: string | null | undefined
+  readonly colour?: string | null | undefined
+}): ClosingControls {
+  const known = <T extends string>(allowed: readonly T[], value: unknown, fallback: T): T =>
+    allowed.includes(value as T) ? (value as T) : fallback
+  return {
+    type: known(CLOSING_TYPES, raw.type, CLOSING_CONTROL_DEFAULTS.type),
+    onset: known(CLOSING_ONSETS, raw.onset, CLOSING_CONTROL_DEFAULTS.onset),
+    colour: known(CLOSING_COLOURS, raw.colour, CLOSING_CONTROL_DEFAULTS.colour),
+  }
+}
+
+/**
+ * The job the three controls ask for.
+ *
+ * The pipeline did not change for VH-90: this is the whole of the difference
+ * between the old four-way radio and the new controls, and every combination
+ * maps to the job its old radio produced.
+ *
+ * | Type | Onset | `closing` | `mode` |
+ * | --- | --- | --- | --- |
+ * | cut | unread | true | `hard-cut` |
+ * | fade, slide | existing | true | `over-picture` |
+ * | fade, slide | freeze | true | `over-freeze` |
+ * | none | unread | false | unread |
+ *
+ * A field the pipeline will not read still carries its default rather than
+ * being left out, so a `BrandingChoice` is never half-specified.
+ */
+export function brandingChoiceFor(controls: ClosingControls): BrandingChoice {
+  const usesOnset = closingTypeUsesOnset(controls.type)
+  return {
+    // Always false: no approved opening asset exists (VH-23, iceboxed).
+    opening: false,
+    closing: controls.type !== 'none',
+    style: controls.type === 'slide' ? 'slide' : CLOSING_DEFAULTS.style,
+    colour: controls.type === 'none' ? CLOSING_DEFAULTS.colour : controls.colour,
+    mode: !usesOnset
+      ? CLOSING_DEFAULTS.mode
+      : controls.onset === 'freeze'
+        ? 'over-freeze'
+        : 'over-picture',
+  }
+}
+
 /** Seconds a closing adds to the output, which is mode-dependent. */
 export function closingAddedSeconds(mode: BrandingMode): number {
   return mode === 'over-freeze'

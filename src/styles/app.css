@@ -576,17 +576,188 @@ details[open] > .disclosure-summary::before {
   margin-top: var(--spacing-04);
 }
 
-.disclosure .choice {
-  margin-top: var(--spacing-05);
-  padding-left: var(--spacing-05);
-  border-left: 2px solid var(--border-subtle);
-}
-
 /* A disabled group still reads, but must not look available. */
 .choice:disabled .radio,
 .choice[disabled] .radio {
   color: var(--text-secondary);
   cursor: not-allowed;
+}
+
+/* --- Closing controls (VH-90) --- */
+
+/*
+ * Type, onset, colour: side by side where there is room, wrapping where there
+ * is not. Wrapping rather than a breakpoint, so the Xerte frame — whose width
+ * this page does not choose — gets whichever fits.
+ */
+.control-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-05) var(--spacing-06);
+  align-items: flex-start;
+}
+
+.control-grid .field {
+  flex: 1 1 12rem;
+  margin-bottom: 0;
+  min-width: 0;
+}
+
+/* Onset holds the longest option text and a help button beside it. */
+.control-grid .field--wide {
+  flex: 1.6 1 20rem;
+}
+
+/* Carbon's Select is a native <select>; so is this. */
+.select {
+  display: block;
+  width: 100%;
+  min-height: var(--target-min);
+  padding: var(--spacing-03) var(--spacing-04);
+  border: 1px solid var(--border-subtle);
+  background: var(--layer-00);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--type-body-compact);
+}
+
+/* Disabled by losing the field's fill, not by fading the text: the pair is
+   pinned at AAA in test/contrast.test.ts, like the disabled button's. */
+.select:disabled {
+  background: var(--layer-02);
+  color: var(--text-secondary);
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+.control-with-help {
+  display: flex;
+  gap: var(--spacing-03);
+}
+
+.control-with-help .select {
+  flex: 1;
+  min-width: 0;
+}
+
+/* The "?". A square at the target floor, beside the control it explains. */
+.help-button {
+  flex: none;
+  width: var(--target-min);
+  padding-inline: 0;
+  font-weight: 600;
+}
+
+.toggletip {
+  margin: var(--spacing-03) 0 0;
+  padding: var(--spacing-04) var(--spacing-05);
+  border-left: 4px solid var(--border-strong);
+  background: var(--layer-02);
+  font-size: var(--type-body-compact);
+}
+
+.toggletip p {
+  margin: 0;
+}
+
+.toggletip p + p {
+  margin-top: var(--spacing-03);
+}
+
+/*
+ * Colour: two native radios under a segmented skin. The input covers its face
+ * and is transparent rather than removed, so the pointer target is the whole
+ * segment and the keyboard behaviour is the browser's own.
+ */
+.segmented {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.segments {
+  display: flex;
+}
+
+.segment {
+  position: relative;
+  flex: 1;
+}
+
+.segment input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.segment-face {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-03);
+  min-height: var(--target-min);
+  padding: var(--spacing-03) var(--spacing-05);
+  border: 1px solid var(--interactive);
+  color: var(--interactive);
+  font-size: var(--type-body-compact);
+}
+
+.segment + .segment .segment-face {
+  border-left: 0;
+}
+
+/* Selected is the filled one AND the heavier one: fill alone is a difference
+   of colour, and state must never rest on colour alone. */
+.segment input:checked + .segment-face {
+  background: var(--interactive);
+  color: var(--text-on-interactive);
+  font-weight: 600;
+}
+
+.segment input:focus-visible + .segment-face {
+  position: relative;
+  z-index: 1;
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.segmented:disabled .segment input {
+  cursor: not-allowed;
+}
+
+.segmented:disabled .segment-face,
+.segmented:disabled .segment input:checked + .segment-face {
+  border-color: var(--border-subtle);
+  background: var(--layer-02);
+  color: var(--text-secondary);
+}
+
+/* What the closing card looks like, in the brand's own colours. Bordered in
+   the text colour so the white one shows on white and the blue one on blue. */
+.swatch {
+  flex: none;
+  width: var(--spacing-05);
+  height: var(--spacing-05);
+  border: 1px solid currentColor;
+}
+
+.swatch--blue {
+  background: var(--uon-brand-blue);
+}
+
+.swatch--white {
+  background: var(--uon-white);
+}
+
+/* The result of the current selection, in words. */
+.closing-result {
+  margin: var(--spacing-05) 0 0;
+  font-size: var(--type-body-compact);
 }
 
 /* --- Audio-quality warnings (spec 5.4) --- */

@@ -11,6 +11,46 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-09-30 — VH-90: closing branding is three controls, and one sentence
+
+**Decision:** "Animation type" (Cut, Fade, Slide, None) and "Animation onset"
+(Over existing, Over generated freeze frame) are native selects; colour is a
+Blue / White segmented pair of native radios with swatches. All three are
+always present. Onset is disabled under Cut and None, colour under None, each
+with its reason in visible text. A "?" toggletip explains the two onsets, and
+one line under the controls states what the current selection will do.
+`brandingChoiceFor` maps the controls onto `BrandingChoice`; the pipeline is
+untouched.
+
+**Rationale:** the maintainer's shape, 2026-09-30, reversing VH-46b twice — it
+rejected a select, and it hid Animation rather than disabling it. What VH-46b
+was protecting still holds and moved: a control that cannot change anything
+now says so, and the result line carries what the radios' descriptions did —
+what happens to the last second, how many seconds are added. It is also what
+stops "None" under "Animation type" reading as "no animation", which is Cut.
+The line takes its seconds from the same mapping the job uses, so it cannot
+promise a different file. Native controls throughout: a select is what Carbon's
+Select is, and radios bring arrow keys and state; Carbon's content switcher is
+a tablist, the wrong role for a form value.
+
+**Assumptions (gateless):** onset defaults to "Over existing", first in the
+list as asked; "None" is the option text, as asked. The toggletip opens by
+click, Enter and Space only — hover was optional and needs 1.4.13's three
+conditions for no gain. Its text sits in the page flow rather than floating,
+so it cannot cover the control or a focus ring. The draft sentences each gained
+a clause ("covering it as it builds" / "so nothing is covered").
+
+**Verified:** Chrome, dev build, a 2.00 s source: Cut blue → 6.00 s; Fade over
+existing → 6.00 s; Slide over freeze, white → 7.00 s; None → 2.09 s — each
+matching its sentence. Disabled states and reasons as specified; 44 px
+targets; the "?" by Enter, Space, click; closed by Escape and by a click
+elsewhere, focus staying on the button. Node: all 16 control states, eleven
+distinct jobs, unrecognised DOM values falling back field by field, and the
+page's resting markup held to the config defaults.
+
+**Link:** VH-90; `src/config/branding.ts`, `src/ui/closing-choice.ts`,
+`index.html`, doc-delta §4.1/§4.3.
+
 ## 2026-09-30 — VH-88 review: the panel keeps its heading, and opens once
 
 **Decision:** the summary's words are an `<h2>` inside the `<summary>`, and the

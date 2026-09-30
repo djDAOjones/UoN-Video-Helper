@@ -25,6 +25,9 @@
 
 ### Band 4 — the interface pass
 
+- VH-90 — Shipped 2026-09-30. Closing branding is three always-present
+  controls — type, onset, colour — with a sentence stating the result; every
+  combination makes the job its old radio did. See decision-log.
 - VH-89 — Shipped 2026-09-30. A `proceed` verdict is three lines; other
   outcomes keep their reasons and gain the time and size; a block no longer
   says "you can still continue". See decision-log.

@@ -81,3 +81,7 @@
 - [ ] 2026-09-30 SPEC §8.1 — the refined rule "always offset subtitle timing
       to match inserted branding" now has nothing to apply to; and the screen
       says "caption" throughout, where §8 says "subtitle" (source: VH-86)
+- [ ] 2026-09-30 SPEC §4.1, §4.3 — the boundary mode is described as the
+      user's one choice among three; on screen it is three controls — animation
+      type, onset, colour — that map onto the same three modes, plus "None"
+      for no closing at all (source: VH-90)

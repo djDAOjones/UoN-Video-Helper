@@ -61,7 +61,7 @@ src/
   config/                  ALL tuneable values. No magic numbers elsewhere.
     presets.ts             the two output presets, output shape, AVC level (§6.1, §6.2)
     audio.ts               loudness targets + every chain constant (§5.1, §5.2)
-    branding.ts            durations (D2), variant table, closing defaults (§4.2)
+    branding.ts            durations (D2), closing defaults, controls -> job mapping (§4.2)
     thresholds.ts          pre-flight bands (§7.3), probe length, worker limits
   core/
     logger.ts              structured logger + bounded ring buffer
@@ -112,6 +112,7 @@ src/
     preflight-panel.ts     the verdict, in plain language
     warning-text.ts        one sentence per warning code
     system-check.ts        the System check summary line, pure
+    closing-choice.ts      the closing controls' result line and disabled reasons
     format.ts             durations, sizes, rates
   acceptance/              the §13 harness. Dev-only; not built.
   spike/                   maintainer probes. Dev-only; not built.

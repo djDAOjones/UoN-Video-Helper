@@ -166,25 +166,6 @@
      "Open:" is a question for the maintainer with a working default — the
      default is what gets built if nobody answers. -->
 
-- [ ] **VH-90 Closing branding: type, onset, colour** [detail](tickets/VH-90.md)
-      (2026-09-30)
-      Intent: the four-way radio and its hidden options become three controls,
-      always present: "Animation type" (Cut, Fade, Slide, None), "Animation
-      onset" (Over existing, Over generated freeze frame, with a "?" that
-      explains both), and a Blue / White colour toggle. Onset is disabled
-      under Cut and None; colour under None. No pipeline change — a pure,
-      tested mapping onto `BrandingChoice`.
-      Reverses VH-46b twice at the maintainer's word: it rejected a select,
-      and it hid Animation rather than disabling it.
-      Risk: under "Animation type", "None" reads as "no animation" — which is
-      what Cut is — and it removes the University closing altogether. One line
-      under the controls states the result of the current selection in words,
-      which also restores what the old options said: what happens to the last
-      second, and how many seconds are added.
-      Done when: every combination produces the job its old radio did;
-      defaults unchanged (Cut, blue); the "?" works by click and keyboard,
-      never hover alone; a disabled control says why in visible text.
-
 - [ ] **VH-91 Steps that read as steps** [detail](tickets/VH-91.md)
       (2026-09-30)
       Intent: closing branding and file size / quality — and trim, when it

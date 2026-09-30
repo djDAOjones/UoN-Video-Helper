@@ -25,7 +25,13 @@ import {
 } from './core/keep-awake'
 import { adoptLogRecords, log, setMinimumLogLevel } from './core/logger'
 import { APP_VERSION, BUILD_ID } from './core/version'
-import { CLOSING_DEFAULTS, resolveBrandingBase, type BrandingMode } from './config/branding'
+import {
+  brandingChoiceFor,
+  closingTypeUsesOnset,
+  readClosingControls,
+  resolveBrandingBase,
+  type ClosingControls,
+} from './config/branding'
 import type { PresetId } from './config/presets'
 import {
   SELECTION_DEADLINE_MS,
@@ -34,6 +40,11 @@ import {
 } from './config/thresholds'
 import { createWatchdog } from './core/watchdog'
 import { saveFile, suggestedFileName } from './media/save'
+import {
+  closingResultText,
+  colourDisabledReason,
+  onsetDisabledReason,
+} from './ui/closing-choice'
 import { formatFileSize } from './ui/format'
 import { renderPreflight, summarisePreflight } from './ui/preflight-panel'
 import { renderWarnings } from './ui/warning-text'
@@ -74,8 +85,14 @@ const processProgressLabel = required<HTMLParagraphElement>('#process-progress-l
 const processResult = required<HTMLDivElement>('#process-result')
 const presetChoice = required<HTMLFieldSetElement>('#preset-choice')
 const brandingChoice = required<HTMLFieldSetElement>('#branding-choice')
-const brandingOptions = required<HTMLDetailsElement>('#branding-options')
-const brandingStyleChoice = required<HTMLFieldSetElement>('#branding-style-choice')
+const closingType = required<HTMLSelectElement>('#closing-type')
+const closingOnset = required<HTMLSelectElement>('#closing-onset')
+const closingOnsetReason = required<HTMLParagraphElement>('#closing-onset-reason')
+const closingColour = required<HTMLFieldSetElement>('#closing-colour')
+const closingColourReason = required<HTMLParagraphElement>('#closing-colour-reason')
+const closingResult = required<HTMLParagraphElement>('#closing-result')
+const onsetHelpButton = required<HTMLButtonElement>('#onset-help-button')
+const onsetHelp = required<HTMLDivElement>('#onset-help')
 
 /**
  * Which selection the screen is currently describing.
@@ -154,65 +171,75 @@ function chosenPreset(): PresetId {
 }
 
 /**
- * Reads one closing-sequence radio group, falling back to the default.
+ * What the three closing controls currently hold.
  *
- * The value is trusted only if it is one the config actually knows: the DOM is
- * editable, and an unrecognised mode would reach the pipeline as a string that
- * matches no branch.
+ * Read through `readClosingControls`, which trusts a value only if it is one
+ * the config knows: the DOM is editable, and an unrecognised value would
+ * otherwise reach the pipeline as a string that matches no branch.
  */
-function chosenBranding<T extends string>(
-  group: 'style' | 'colour' | 'mode',
-  fallback: T,
-  allowed: readonly string[] = BRANDING_VALUES[group],
-): T {
-  const checked = brandingChoice.querySelector<HTMLInputElement>(
-    `input[name="branding-${group}"]:checked`,
-  )
-  const value = checked?.value
-  return value !== undefined && allowed.includes(value) ? (value as T) : fallback
-}
-
-const BRANDING_VALUES = {
-  style: ['fade', 'slide'],
-  colour: ['blue', 'white'],
-  // `none` is a UI value, not a pipeline one: it means "no closing at all",
-  // which the pipeline expresses as `closing: false` rather than as a mode
-  // (VH-46b). Every other value is a `BrandingMode`.
-  mode: ['none', 'hard-cut', 'over-picture', 'over-freeze'],
-} as const
-
-/** Modes that play the 1 s animated build, and so make Animation mean something. */
-const MODES_USING_THE_BUILD = ['over-picture', 'over-freeze']
-
-/** The chosen mode, or `null` for "no closing sequence". */
-function chosenClosingMode(): BrandingMode | null {
-  // Widened explicitly: `chosenBranding` infers its return from the fallback,
-  // which is a `BrandingMode` literal and cannot represent "none".
-  const mode = chosenBranding<BrandingMode | 'none'>('mode', CLOSING_DEFAULTS.mode)
-  return mode === 'none' ? null : mode
+function chosenClosing(): ClosingControls {
+  return readClosingControls({
+    type: closingType.value,
+    onset: closingOnset.value,
+    colour: closingColour.querySelector<HTMLInputElement>('input[name="closing-colour"]:checked')
+      ?.value,
+  })
 }
 
 /**
- * Keeps the refinements in step with the choice they refine.
+ * Keeps the three controls in step with each other, and says what they add up
+ * to.
  *
- * Two rules, and both exist so no control is ever offered that cannot change
- * anything (VH-46b). The options disclosure is meaningless without a closing.
- * Animation is meaningless without the build: a clean cut discards it, so Fade
- * and Slide would differ by nothing at all — the exact control `AGENTS.md`
- * singles out as the one never to expose.
- *
- * Hidden rather than disabled. A disabled control still says "there is a
- * decision here you are not allowed to make", and there is not one.
+ * A control that cannot change anything is disabled rather than hidden
+ * (VH-90, reversing VH-46b at the maintainer's word), and a disabled control
+ * cannot explain itself — so the reason is visible text beside it. The line
+ * beneath states the result of the whole selection.
  */
-function syncBrandingOptions(): void {
-  const mode = chosenClosingMode()
-  brandingOptions.hidden = mode === null
-  if (mode === null) brandingOptions.open = false
-  brandingStyleChoice.hidden = mode === null || !MODES_USING_THE_BUILD.includes(mode)
+function syncClosingControls(): void {
+  const controls = chosenClosing()
+
+  const onsetReason = onsetDisabledReason(controls.type)
+  closingOnset.disabled = onsetReason !== null
+  closingOnsetReason.textContent = onsetReason ?? ''
+  closingOnsetReason.hidden = onsetReason === null
+
+  const colourReason = colourDisabledReason(controls.type)
+  closingColour.disabled = colourReason !== null
+  closingColourReason.textContent = colourReason ?? ''
+  closingColourReason.hidden = colourReason === null
+
+  closingResult.textContent = closingResultText(controls)
 }
 
-brandingChoice.addEventListener('change', syncBrandingOptions)
-syncBrandingOptions()
+brandingChoice.addEventListener('change', syncClosingControls)
+syncClosingControls()
+
+/**
+ * The "?" beside "Animation onset": a toggletip.
+ *
+ * A button that discloses text, so it works by click, Enter and Space and
+ * never by hover alone. Focus stays on the button; Escape or a click anywhere
+ * else closes it. The text sits in the page flow rather than floating, so it
+ * can never cover the control it explains or the focus ring beside it.
+ */
+function setOnsetHelp(open: boolean): void {
+  onsetHelp.hidden = !open
+  onsetHelpButton.setAttribute('aria-expanded', String(open))
+}
+
+onsetHelpButton.addEventListener('click', () =>
+  setOnsetHelp(onsetHelpButton.getAttribute('aria-expanded') !== 'true'),
+)
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && !onsetHelp.hidden) setOnsetHelp(false)
+})
+
+document.addEventListener('click', (event) => {
+  if (onsetHelp.hidden || !(event.target instanceof Node)) return
+  if (onsetHelpButton.contains(event.target) || onsetHelp.contains(event.target)) return
+  setOnsetHelp(false)
+})
 
 // Both, in production too. `AGENTS.md` -> "Traceable version identity" wants
 // "what release is this?" AND "exactly what code is live?" answerable from a
@@ -916,24 +943,16 @@ function releaseUnsavedResult(): void {
 function beginJob(file: File): void {
   processResult.replaceChildren()
 
+  // Read once, so the job and the record of it cannot disagree.
+  const closing = chosenClosing()
+  const branding = brandingChoiceFor(closing)
+
   const { id, promise } = requestWithId(
     {
       kind: 'process',
       file,
       presetId: chosenPreset(),
-      branding: {
-        // Always false: VH-33 withdrew the control, and no approved opening
-        // asset exists to turn back on. The pipeline's opening path is intact
-        // and VH-23 restores the choice when there is something to choose.
-        opening: false,
-        // `none` is the absence of a closing, not a way of having one, so it
-        // becomes `closing: false` and the mode falls back to the default
-        // nothing will read (VH-46b).
-        closing: chosenClosingMode() !== null,
-        style: chosenBranding('style', CLOSING_DEFAULTS.style),
-        colour: chosenBranding('colour', CLOSING_DEFAULTS.colour),
-        mode: chosenClosingMode() ?? CLOSING_DEFAULTS.mode,
-      },
+      branding,
       backgroundColour: brandBackground(),
       brandingBaseUrl: resolveBrandingBase(document.baseURI),
     },
@@ -949,9 +968,12 @@ function beginJob(file: File): void {
     stage: 'processing',
     job: {
       presetId: chosenPreset(),
-      closing: chosenClosingMode(),
-      style: chosenBranding('style', CLOSING_DEFAULTS.style),
-      colour: chosenBranding('colour', CLOSING_DEFAULTS.colour),
+      // The controls as the user left them, with `null` for one the type does
+      // not use — a stale onset under Cut is not something they chose.
+      closingType: closing.type,
+      closingOnset: closingTypeUsesOnset(closing.type) ? closing.onset : null,
+      closingColour: branding.closing ? closing.colour : null,
+      closingMode: branding.closing ? (branding.mode ?? null) : null,
     },
   })
 
