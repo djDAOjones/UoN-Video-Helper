@@ -396,11 +396,21 @@ async function handlePreflight(
     // A lecturer who is told their recording is inaudible only after waiting
     // forty minutes has been told too late.
     throwIfAborted(signal)
-    const audioInput = openInput(file)
-    const audioTrack = await audioInput.getPrimaryAudioTrack()
-    const audioWarnings = detectSourceWarnings(
-      audioTrack ? await analyseSourceAudio(audioTrack, signal) : null,
-    )
+    // An audio track this browser cannot decode cannot be analysed either, and
+    // trying threw from here — so the verdict that names the problem
+    // (`no-source-decode`, below) was never reached and the user was told
+    // "something went wrong" instead. The source panel's own "cannot read
+    // this audio format" covered for that until VH-87 folded it into a closed
+    // disclosure. Nothing is lost by skipping: the job is blocked, and the
+    // block says why and what to do.
+    let audioWarnings: readonly AudioWarning[] = []
+    if (report.audio === null || report.audio.canDecode) {
+      const audioInput = openInput(file)
+      const audioTrack = await audioInput.getPrimaryAudioTrack()
+      audioWarnings = detectSourceWarnings(
+        audioTrack ? await analyseSourceAudio(audioTrack, signal) : null,
+      )
+    }
     // `analyseSourceAudio` stops at the next sample rather than throwing, so
     // an aborted traversal returns a report of PART of the file. Warnings
     // derived from half a lecture are worse than none.

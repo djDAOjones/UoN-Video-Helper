@@ -11,6 +11,27 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-09-30 — VH-87 review: undecodable sound is blocked, not failed
+
+**Decision:** pre-flight skips the audio analysis when inspection has already
+said the browser cannot decode the track, so the `no-source-decode` verdict is
+reached.
+
+**Rationale:** found by the Codex review of VH-87 and reproduced with an AC-3
+source. Analysis ran before the verdict and threw on a track it could not
+decode, so the answer was "Something went wrong checking this file" — VH-60's
+block, with its named browsers and its re-export advice, was unreachable for
+sound. The old "Sound support" row had been covering for it in plain view, and
+VH-87 folded that row into a closed disclosure. The defect is older than the
+disclosure; the disclosure is what made it matter.
+
+**Verified:** Chrome, H.264 + AC-3: before, the generic failure; after, "This
+cannot run here" with the decode reason, no Start, and "Dolby Digital — this
+browser cannot read this audio format" under Video properties. Browser-only:
+the handler needs WebCodecs, so there is no Node test for it.
+
+**Link:** VH-87, VH-60; `src/workers/job.worker.ts` (`handlePreflight`).
+
 ## 2026-09-30 — VH-88: the system check folds, and the status line leaves it
 
 **Decision:** System check is a `<details>` panel, closed on a healthy device.
