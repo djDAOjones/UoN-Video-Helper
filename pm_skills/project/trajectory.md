@@ -26,7 +26,7 @@
 ### VH-19, VH-71 — slides cost less, and the archive is reconciled
 
 - VH-19 — Shipped 2026-09-30. The smaller output measures slides against
-  camera and spends less on slides, saying so in the verdict; verified on 20
+  camera and spends less on slides, saying so in the verdict; verified on 21
   recordings with no camera source read as slides. See decision-log.
 - VH-71 — Closed 2026-09-30. Its last work package was VH-19; every child of
   the archive reconciliation has shipped or been iceboxed.

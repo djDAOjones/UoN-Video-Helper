@@ -103,6 +103,9 @@ describe('the corpus the thresholds were checked against (VH-19)', () => {
     // a still moment at the start. It is the other four that decide it, which
     // is why the rule takes the loudest of five spread windows.
     ['Teams meeting, webcam', 'camera', 0.0303, [0.0003, 0.01415, 0.00432, 0.01201, 0.00629], 'camera'],
+    // A conference keynote filmed in a lecture theatre, opening and closing on
+    // still cards: two of its five windows read 0.
+    ['T&L Conf Keynote', 'camera', 0.1761, [0, 0.00809, 0.01014, 0.03883, 0], 'camera'],
     ['iPhone 12, HEVC 1080p', 'camera', 0.1379, [0.01357, 0.02174, 0.01235, 0.01316, 0.01488], 'camera'],
     ['iPhone 12 Pro Max, 4K30', 'camera', 0.1032, [0.02856, 0.02541, 0.02136, 0.02104, 0.01883], 'camera'],
     ['iPhone 12 Pro Max, 4K30 (2)', 'camera', 0.1836, [0.04418, 0.0406, 0.0318, 0.02892, 0.03195], 'camera'],

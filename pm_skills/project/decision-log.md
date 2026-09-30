@@ -30,10 +30,10 @@ camera budget, in between. The port reads the track's own timestamps and
 returns the measurement with the class.
 
 **Re-verified on our corpus** (`/spike-content-class.html`, against a contact
-sheet of each): 20 recordings. Seven slide decks read `screen`, three of them
+sheet of each): 21 recordings. Seven slide decks read `screen`, three of them
 with a webcam inset. Every camera source reads `camera` — five phone clips, a
-studio talking head, and a 29-minute Teams webcam recording at 0.03 bits per
-pixel, as thin as the slides. That last one's FIRST window reads 0.0003,
+studio talking head, a keynote filmed in a lecture theatre, and a 29-minute
+Teams webcam recording at 0.03 bits per pixel, as thin as the slides. That last one's FIRST window reads 0.0003,
 inside the screen band: the reason the rule takes the loudest of five spread
 windows, and why the old evidence found every file static at 0%. Three slide
 decks read `camera` for one animated transition each, and an animated map
