@@ -40,12 +40,3 @@ export const TRIM_PAGE_STEP_SECONDS = 10
  * only to be superseded by the next.
  */
 export const TRIM_RECHECK_DELAY_MS = 500
-
-/**
- * How far past the end of the video a typed time may be and still mean the
- * end, in seconds: half the tenth of a second the time fields show. A
- * 130.46 s video's end reads "2:10.5", and typing back what the page showed
- * must not be refused (Codex review of VH-96).
- */
-export const TRIM_FIELD_ROUNDING_SECONDS = 0.05
-

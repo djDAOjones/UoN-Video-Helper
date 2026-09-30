@@ -73,6 +73,14 @@ describe('a typed time for one end', () => {
     expect(trimFieldValue('2:10.5', 'end', 130.46)).toEqual({ seconds: 130.46 })
   })
 
+  it('refuses a time past the end that is not the end as shown', () => {
+    // Codex review: a rounding allowance let "2:10.44" through on a 130.4 s
+    // video, and moved it to the end.
+    expect(trimFieldValue('2:10.44', 'end', 130.4)).toEqual({
+      problem: 'The end time is after the end of the video, which is 2:10.4 long.',
+    })
+  })
+
   it('refuses a time past the end of the video rather than quietly moving it', () => {
     // Codex review of VH-96: "3:00" on a 2:10 video became the file's end,
     // and the page said the whole video was kept beside a field saying 3:00.

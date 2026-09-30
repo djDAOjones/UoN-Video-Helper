@@ -7,11 +7,7 @@
  * take. Pure, so the wording and the arithmetic are tested in Node.
  */
 
-import {
-  TRIM_FIELD_ROUNDING_SECONDS,
-  TRIM_KEY_STEP_SECONDS,
-  TRIM_PAGE_STEP_SECONDS,
-} from '../config/trim'
+import { TRIM_KEY_STEP_SECONDS, TRIM_PAGE_STEP_SECONDS } from '../config/trim'
 import { KeptRangeError, normaliseKeptRange, type KeptRange } from '../media/kept-range'
 import { formatDuration } from './format'
 
@@ -50,8 +46,7 @@ export function parseTrimTime(text: string): number | null {
 /**
  * A typed time for one end, or why it cannot be used.
  *
- * Refused here if it is not a time or lies past the end of the video — past
- * it by more than the fields' own rounding, since the page shows tenths. The
+ * Refused here if it is not a time or lies past the end of the video. The
  * worker would bring an end past the file back to the file's end, which is
  * right for a range that arrives that way — but a person who typed it would
  * then see "the whole video" beside a field still holding their number
@@ -66,13 +61,16 @@ export function trimFieldValue(
   if (seconds === null) {
     return { problem: `Write the ${which} time as minutes and seconds, like 1:05.5.` }
   }
-  if (seconds > durationSeconds + TRIM_FIELD_ROUNDING_SECONDS) {
-    return {
-      problem: `The ${which} time is after the end of the video, which is ${formatTrimTime(durationSeconds)} long.`,
-    }
+  if (seconds <= durationSeconds) return { seconds }
+  // The one exception: the end exactly as the fields show it, rounded to a
+  // tenth, which can read later than the video really runs — a 130.46 s
+  // video's end reads "2:10.5". Typing back what the page showed is the end;
+  // any other time past it is refused (Codex review).
+  const shownEnd = parseTrimTime(formatTrimTime(durationSeconds))
+  if (shownEnd !== null && Math.abs(seconds - shownEnd) < 1e-9) return { seconds: durationSeconds }
+  return {
+    problem: `The ${which} time is after the end of the video, which is ${formatTrimTime(durationSeconds)} long.`,
   }
-  // Within the fields' own rounding of the end, it IS the end.
-  return { seconds: Math.min(seconds, durationSeconds) }
 }
 
 /**
