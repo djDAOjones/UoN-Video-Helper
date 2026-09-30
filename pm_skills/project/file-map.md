@@ -15,15 +15,15 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 179 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
-- `(root)` — 21 file(s)
+<!-- 181 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+- `(root)` — 22 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
 - `docs` — 5 file(s)
 - `public` — 13 file(s)
 - `reviews` — 7 file(s)
 - `scripts` — 5 file(s)
-- `src` — 120 file(s)
+- `src` — 121 file(s)
 - `test` — 6 file(s)
 <!-- /file-map-index -->
 
@@ -45,6 +45,7 @@
 - `spike-framerate.html` — Maintainer page: does the app measure the frame rate or trust the header?
 - `spike-modes.html` — Maintainer page: do the three closing modes produce the timelines they promise?
 - `spike-opfs.html` — Maintainer page: does a sweep leave a live job's scratch alone in this engine?
+- `spike-phone.html` — Maintainer page: what is a user told when they choose a phone recording in this engine — read, or refused by the pre-flight block?
 - `spike-preflight-audio.html` — Maintainer page: does pre-flight refuse exactly what the audio encoder will refuse?
 - `spike-real.html` — Maintainer page: runs a real recording end to end and reports what came out.
 - `spike-shapes.html` — Maintainer page: do the corpus's odd shapes — 852x480, 4:3, 16:10, mono, 44.1 kHz, silent — reach a correct output?
@@ -197,6 +198,7 @@
 - `src/spike/framerate.ts` — VH-24 spike: reads a real PowerPoint export and reports measured vs declared rate.
 - `src/spike/modes.ts` — VH-22 spike: runs a fixture through all three closing modes and checks output length.
 - `src/spike/opfs.ts` — Drives the VH-35 sweep checks against real OPFS and real Web Locks. Dev-only; not built.
+- `src/spike/phone.ts` — The phone-source spike: the real worker's inspect and pre-flight on one file, with the verdict in the words the app shows.
 - `src/spike/preflight-audio.ts` — Checks the no-aac-encode block fires where the encoder refuses, and nowhere else.
 - `src/spike/real.ts` — Runs a real recording from `public/spike/` through the pipeline; reports levels and speed.
 - `src/spike/shapes.ts` — Runs the corpus's awkward properties through the pipeline, synthesised so it runs on any machine.

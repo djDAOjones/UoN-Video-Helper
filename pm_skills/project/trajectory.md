@@ -23,6 +23,12 @@
 
 ## Archived: the review remediation and Band 1's close — see archive/trajectory/trajectory-0003-review-remediation-and-band-1-close.md
 
+### VH-26 — phone sources, closed
+
+- VH-26 — Closed 2026-09-30. An iPhone HEVC file in Firefox is refused by the
+  pre-flight block in its own words, before the job; measured headlessly with
+  the real worker. See decision-log.
+
 ### VH-83 — the gain aims through the codec
 
 - VH-83 — Shipped 2026-09-30. The gain solve allows for what the AAC encode

@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Phone source spike — UoN Video Helper</title>
+  </head>
+  <body>
+    <h1>Phone source spike</h1>
+    <p>
+      VH-26: gives a phone recording to the real job worker and reports what the user would be
+      told — whether this engine can read it, and if not, whether it is refused by the pre-flight
+      block in plain words rather than failing part-way through a job. Add
+      <code>?file=/samples/phone/name.mov</code> to pick one.
+    </p>
+    <pre id="log">running…</pre>
+    <script type="module" src="/src/spike/phone.ts"></script>
+  </body>
+</html>

@@ -106,25 +106,6 @@
       Note: it also means most jobs should be taking "Best quality", which is
       already the default and already what §6.1 names for EchoVideo.
 
-- [ ] **VH-26 Mobile phone sources** [detail](tickets/VH-26.md) (2026-08-25)
-      Intent: staff may upload phone footage and none was in the corpus.
-      Rotation was traced end to end and is correct.
-      Material acquired 2026-08-27 — five samples in `samples/phone/`, covering
-      HLG 1080p, Dolby Vision 4K60, 8-bit 4K30 and a legacy 3GP.
-      The central fear did NOT reproduce: HLG and Dolby Vision both round-trip
-      in Chrome with luma percentiles within two units of the source, because
-      the browser tone-maps on decode and the pipeline encodes what it is
-      given. Chrome decodes HEVC Main 10 at 1080p and 4K60.
-      Portrait found and FIXED 2026-08-28: every portrait phone upload died on
-      `Video sample size must remain constant`, because the encoder's guard
-      runs on the arriving sample, before the transform that would have
-      normalised it. Guarded by acceptance criterion 1. See decision-log.
-      Remaining, and the only part that needs a person: **Firefox**. The
-      question there is whether an undecodable HEVC source hits VH-60's
-      `no-source-decode` block cleanly, not whether the colour is right.
-      Done when: an iPhone HEVC file is opened in Firefox and either decodes or
-      is refused with the block's own wording rather than failing mid-job.
-
 - [ ] **VH-98 The logo and the heading font** [maintainer] (2026-09-30)
       Intent: VH-92 shipped the University's look with two slots empty. The
       white-out logo is a trademark from the brand team's library — not

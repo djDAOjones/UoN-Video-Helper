@@ -11,6 +11,41 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-09-30 — VH-26 closed: Firefox refuses an iPhone file cleanly
+
+**Decision:** VH-26 is done. No code changed for it; the last open question
+was measured, and the ticket's findings are folded in here.
+
+**Measured:** `samples/phone/2020_iPhone12_FloreView_HEVC.MOV` (HEVC Main 10,
+HLG, 1080p30) given to the real job worker in headless Firefox 154
+(`scripts/run-in-engines.mjs /spike-phone.html --engines firefox`). Inspection
+succeeds and says the picture cannot be decoded; pre-flight answers `block` in
+284 ms with `no-source-decode`, in the block's own words — "Chrome or Edge on
+a computer will open more formats" — and nothing invites the user to continue.
+It is refused before the job, not part-way through one. Firefox's other block,
+`no-aac-encode`, does not show: the verdict names the root cause only, and
+the decode is it.
+
+**Why this was filed as needing a person and did not:** the runner that
+drives all three engines headlessly already existed. What was missing was a
+page that asked the question; `spike-phone.html` is that page, and it takes
+any file, so the next phone sample is one command.
+
+**It depended on a fix made the same day.** Before the VH-87 review fixes,
+pre-flight probed and analysed a source it had already been told it could not
+decode; this check would have been slower and, for undecodable SOUND, would
+have failed generically.
+
+**From the ticket, kept because nothing else records it:** HLG and Dolby
+Vision round-trip in Chrome with luma percentiles within two units of the
+source (mean, p05, p50, p95; measured 2026-08-27) — the browser tone-maps on
+decode and the pipeline encodes what it is handed. A 4K60 phone video comes
+out BIGGER on the larger output (139 → 154 MB), by design: VH-47 anchors to a
+~51 Mbps source; the smaller output is the answer. And published labels are
+not evidence: the sample named "HDR" is 8-bit bt709. Classify by `ffprobe`.
+
+**Link:** VH-26, VH-60, VH-49; `spike-phone.html`, `src/spike/phone.ts`.
+
 ## 2026-09-30 — VH-83: the gain aims through the codec, and so does the limiter
 
 **Decision:** the first refinement pass of the gain solve also encodes a
