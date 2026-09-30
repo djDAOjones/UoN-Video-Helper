@@ -72,7 +72,7 @@
      default is what gets built if nobody answers. -->
 
 - [ ] **VH-30 Trim the source, with a preview** [detail](tickets/VH-30.md)
-      (2026-08-25) [sign-off]
+      (2026-08-25) — signed off 2026-09-30; identity wording agreed
       Intent: maintainer request, renewed 2026-09-30 with a shape — a preview
       of the video with handles for the start and end, before export.
       Recordings carry material nobody wants, and today the only fix is
@@ -91,7 +91,6 @@
       VH-95, then VH-96 — shipped or cut.
 
 - [ ] **VH-95 Trim: the engine** [detail](tickets/VH-95.md) (2026-09-30)
-      [blocked: VH-30]
       Intent: a kept range, in source time, carried by `preflight` and
       `process` and honoured by everything that reads the source — no UI.
       The part that produces a wrong file rather than a wrong duration is

@@ -11,6 +11,27 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-09-30 — VH-30 signed off: a conveyor with one cut
+
+**Decision:** trimming the two ends is in the product. The identity in
+`AGENTS.md` and the brief now reads "a one-way conveyor with one cut": the
+user may drop unwanted material from the start and the end, and left alone
+the whole video is kept. Cutting from the middle, joining files and
+reordering stay out, in those words, so the next request has something to be
+measured against. Spec §12 is a doc-delta. VH-95 (the engine) and VH-96 (the
+preview and handles) are unblocked; VH-30 closes when they ship.
+
+**Rationale:** the maintainer's sign-off of 2026-09-30, on the ticket's case:
+lecture recordings routinely open on a meeting that has not started and end
+on the fumble for the stop button, and the only fix today is another tool
+first. It reverses the original "no trimming", recorded when the app had no
+preview; it is cheap in mechanism (ranged reads are native, and every job
+re-encodes, so a cut lands on the frame asked for) and expensive only in the
+interactions the ticket lists, which is why the engine goes first and alone.
+
+**Link:** VH-30, VH-95, VH-96; `AGENTS.md` → Product identity, `brief.md`,
+doc-delta §12.
+
 ## 2026-09-30 — VH-93: feedback through the user's own email app
 
 **Decision:** a "Send feedback" button in the footer band, and "Report this

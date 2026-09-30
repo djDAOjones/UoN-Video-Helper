@@ -6,17 +6,19 @@
 University of Nottingham branding to an educational video, normalises its
 loudness, and exports a correctly-encoded MP4._
 
-The canonical mental model is **a one-way conveyor, not an editor.** A file
-goes in; a branded, correctly-levelled, correctly-encoded file comes out.
-The user makes three choices — opening branding, closing branding, and which
-of two purpose-named outputs — and nothing else. Everything technical is
-decided for them.
+The canonical mental model is **a one-way conveyor with one cut, not an
+editor.** A file goes in; a branded, correctly-levelled, correctly-encoded
+file comes out. The user makes four choices — where the video starts and
+ends, opening branding, closing branding, and which of two purpose-named
+outputs — and nothing else. Everything technical is decided for them.
 
-It is **not** a video editor, a caption tool, or a settings panel. There is
-no trimming, no cutting, no caption authoring, and no exposed codec,
-bitrate or loudness control — not even in an "advanced" section. All
-processing happens on the user's own device; the source file is never
-modified and no media ever leaves the machine.
+It is **not** a video editor, a caption tool, or a settings panel.
+Trimming the ends is in: the user may drop unwanted material from the start
+and the end, and left alone the whole video is kept. Cutting from the
+middle, joining files and reordering stay out, as do caption authoring and
+any exposed codec, bitrate or loudness control — not even in an "advanced"
+section. All processing happens on the user's own device; the source file
+is never modified and no media ever leaves the machine.
 
 The specification is [`docs/01-specification.md`](docs/01-specification.md)
 and it is authoritative. Rationale for settled decisions is in

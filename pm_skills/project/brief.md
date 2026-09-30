@@ -25,8 +25,11 @@ true-peak ceiling, and exports H.264/MP4 in one of two purpose-named
 variants. All processing runs on the user's own machine through the
 WebCodecs API.
 
-It is **not** a video editor. No trimming, no cutting, no caption
-authoring, and no exposed codec, bitrate or loudness settings.
+It is **not** a video editor. It is a conveyor with one cut: the user may
+trim unwanted material from the start and the end (VH-30), and left alone
+the whole video is kept. No cutting from the middle, no joining or
+reordering, no caption authoring, and no exposed codec, bitrate or loudness
+settings.
 
 It solves three problems at once: inconsistent branding, inconsistent
 audio, and the technical burden of expecting academics to learn FFmpeg.
@@ -109,7 +112,9 @@ for the MVP, which is built and verified locally.
 
 ## Out of scope (for now)
 
-Per spec §12: trimming, cutting or any picture editing; creating, editing
+Per spec §12, amended by VH-30: cutting from the middle, joining,
+reordering or any other picture editing (trimming the two ends is in);
+creating, editing
 or transcribing captions; batch processing; exposed WebM output (the muxer
 supports it, the UI does not); pumping detection on pre-existing audio
 processing; noise reduction or de-reverberation; custom or per-department

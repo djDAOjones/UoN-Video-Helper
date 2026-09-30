@@ -95,4 +95,8 @@
       built for Chrome, other browsers may not work" (maintainer's choice over
       certifying the others), and every browser block now names Chrome alone
       as the browser that will work (source: VH-98)
-
+- [ ] 2026-09-30 SPEC §12 — "Trimming, cutting, or any editing of picture
+      content" is out of scope; the maintainer signed off trimming the two
+      ends (a conveyor with one cut). Proposed: "Cutting from the middle,
+      joining, reordering, or any other editing of picture content —
+      trimming the start and end is in scope (VH-30)" (source: VH-30)
