@@ -25,6 +25,9 @@
 
 ### Band 4 — the interface pass
 
+- VH-88 — Shipped 2026-09-30. System check is a disclosure that says its
+  result in words and opens itself on a failure; the status line sits beside
+  Create. See decision-log.
 - VH-87 — Shipped 2026-09-30. Source facts fold into a closed "Video
   properties" disclosure; what will not be carried stays in view above it.
   See decision-log.

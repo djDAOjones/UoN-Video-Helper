@@ -548,8 +548,23 @@ body {
   transition: transform var(--motion-fast);
 }
 
-.disclosure[open] > .disclosure-summary::before {
+details[open] > .disclosure-summary::before {
   transform: rotate(45deg);
+}
+
+/*
+ * System check: a panel that is itself a disclosure (VH-88). The summary fills
+ * the panel edge to edge, so the whole closed bar is the target rather than
+ * the width of its words.
+ */
+.system-check > .disclosure-summary {
+  margin: calc(-1 * var(--spacing-06));
+  padding: var(--spacing-04) var(--spacing-06);
+  font-weight: 600;
+}
+
+.system-check[open] > .disclosure-summary {
+  margin-bottom: var(--spacing-05);
 }
 
 .disclosure-summary:focus-visible {

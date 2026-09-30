@@ -166,25 +166,6 @@
      "Open:" is a question for the maintainer with a working default — the
      default is what gets built if nobody answers. -->
 
-- [ ] **VH-88 System check, collapsed — and the status line moves** (2026-09-30)
-      Intent: the System check panel becomes a disclosure that starts closed.
-      Risk: `#status` lives inside it, and is both the app's one live region
-      and its only visible status text — "Reading the video…", "Encoding video
-      — 34%", "Saved." Inside a closed `<details>` it is neither announced nor
-      seen. It is badly placed already, 450 px below the button it reports on,
-      and greets every user with "Ready for the next milestone" — a build
-      note. It moves out, to sit with the controls it describes.
-      And a FAILED check must not hide: the summary states the result in words
-      ("System check — all passed" / "— 1 problem") and opens itself on any
-      failure.
-      Prior art: the archived branch did both halves — `<details class="panel
-      system-check">`, the status line inside the workflow panel, "Choose a
-      video to begin." as its resting text.
-      Done when: closed on a healthy device, open on a failing one; the result
-      readable from the summary without colour; status text visible without
-      scrolling to the footer; a screen reader still hears "Video read…", the
-      stage, and "Your video is ready."
-
 - [ ] **VH-89 Ready to go, in three lines** (2026-09-30)
       Intent: a `proceed` verdict reads "Ready to go" / "This should take
       about 37 seconds." / "Estimated size 28.5 MB." The Setting, Output and

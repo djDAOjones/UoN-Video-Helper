@@ -38,6 +38,7 @@ import { formatFileSize } from './ui/format'
 import { renderPreflight, summarisePreflight } from './ui/preflight-panel'
 import { renderWarnings } from './ui/warning-text'
 import { renderSourceError, renderSourceReport, summarise } from './ui/source-panel'
+import { summariseChecks, type CheckState } from './ui/system-check'
 import type { WorkerOutbound, WorkerRequest } from './workers/protocol'
 
 const isDev = import.meta.env.DEV
@@ -56,6 +57,8 @@ function required<T extends Element>(selector: string): T {
 }
 
 const checksList = required<HTMLUListElement>('#checks')
+const systemCheck = required<HTMLDetailsElement>('#system-check')
+const systemCheckSummary = required<HTMLElement>('#system-check-summary')
 const statusLine = required<HTMLParagraphElement>('#status')
 const versionLine = required<HTMLParagraphElement>('#version-line')
 const errorsPanel = required<HTMLElement>('#errors-panel')
@@ -220,8 +223,6 @@ versionLine.textContent = isDev ? `${APP_VERSION} · ${BUILD_ID} · development`
 
 // --- System check rendering ------------------------------------------------
 
-type CheckState = 'pass' | 'fail' | 'warn' | 'pending'
-
 /** Word marks, because status must never be carried by colour alone. */
 const MARKS: Record<CheckState, string> = { pass: 'OK', fail: 'No', warn: '!', pending: '…' }
 
@@ -240,6 +241,23 @@ function renderCheck(id: string, label: string, state: CheckState, value: string
   if (mark) mark.textContent = MARKS[state]
   if (name) name.textContent = label
   if (result) result.textContent = value
+  updateSystemCheckSummary()
+}
+
+/**
+ * Restates the panel's result in its summary line, and opens it on a failure.
+ *
+ * The panel starts closed, so the summary is all most people see of it. It
+ * is only ever opened here, never shut: someone who opened it to look should
+ * not have it close under them when the last check lands.
+ */
+function updateSystemCheckSummary(): void {
+  const states = [...checksList.querySelectorAll<HTMLLIElement>('.check')].map(
+    (row) => row.dataset['state'] as CheckState,
+  )
+  const { result, failing } = summariseChecks(states)
+  systemCheckSummary.textContent = `System check — ${result}`
+  if (failing) systemCheck.open = true
 }
 
 function setStatus(message: string): void {
@@ -439,13 +457,13 @@ void checkWorker()
     const blocking = !hasWebCodecs || !hasOpfs || !window.isSecureContext
     setStatus(
       blocking
-        ? 'This browser is missing something the tool needs. Full guidance arrives with the pre-flight checks.'
-        : 'Everything needed is available. Ready for the next milestone.',
+        ? 'This browser is missing something the tool needs. The system check below says what.'
+        : 'Choose a video to begin.',
     )
   })
   .catch((cause: unknown) => {
     renderCheck('worker', 'Background processing', 'fail', 'no response')
-    setStatus('Background processing did not start. See the errors below.')
+    setStatus('Background processing did not start. See the system check and the errors below.')
     recordUncaught({
       ts: Date.now(),
       message: cause instanceof Error ? cause.message : String(cause),
@@ -1011,7 +1029,11 @@ function renderResult(
 
   const summary = document.createElement('p')
   summary.className = 'verdict-detail'
-  summary.textContent = `Your video is ready — ${formatFileSize(file.size)}.`
+  // Not "Your video is ready": the status line says that, directly above, and
+  // this block also stands on its own later — after "Keep it", or while the
+  // next file is being read — where "ready" would be news about the wrong
+  // thing (VH-88).
+  summary.textContent = `Finished video — ${formatFileSize(file.size)}.`
   processResult.append(summary)
 
   // VH-22: branding that was asked for but could not be loaded is skipped

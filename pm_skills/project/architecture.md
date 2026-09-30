@@ -111,6 +111,7 @@ src/
     source-panel.ts        what the file is, and what cannot be carried over
     preflight-panel.ts     the verdict, in plain language
     warning-text.ts        one sentence per warning code
+    system-check.ts        the System check summary line, pure
     format.ts             durations, sizes, rates
   acceptance/              the §13 harness. Dev-only; not built.
   spike/                   maintainer probes. Dev-only; not built.

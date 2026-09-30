@@ -73,3 +73,31 @@ describe('captions, not subtitles (VH-86)', () => {
     expect(markup.match(/type="file"/g)).toHaveLength(1)
   })
 })
+
+describe('the status line (VH-88)', () => {
+  const systemCheck = /<details[^>]*id="system-check"[\s\S]*?<\/details>/.exec(markup)?.[0] ?? ''
+
+  it('is a live region', () => {
+    expect(markup).toMatch(/<p class="status" id="status" role="status" aria-live="polite">/)
+  })
+
+  it('is not inside the System check disclosure', () => {
+    // That panel starts closed, and a live region inside a closed <details> is
+    // neither seen nor announced — which would silence "Reading the video…",
+    // every stage, and "Your video is ready."
+    expect(systemCheck).not.toBe('')
+    expect(systemCheck).not.toContain('id="status"')
+  })
+
+  it('sits with the controls it reports on, above the System check', () => {
+    const status = markup.indexOf('id="status"')
+    expect(status).toBeGreaterThan(markup.indexOf('id="process-actions"'))
+    expect(status).toBeLessThan(markup.indexOf('id="process-result"'))
+    expect(status).toBeLessThan(markup.indexOf('id="system-check"'))
+  })
+
+  it('is never hidden in the markup', () => {
+    expect(markup).not.toMatch(/id="status"[^>]*\shidden/)
+  })
+})
+

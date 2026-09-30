@@ -15,7 +15,7 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 168 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 170 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 20 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
@@ -23,7 +23,7 @@
 - `public` — 13 file(s)
 - `reviews` — 7 file(s)
 - `scripts` — 5 file(s)
-- `src` — 110 file(s)
+- `src` — 112 file(s)
 - `test` — 6 file(s)
 <!-- /file-map-index -->
 
@@ -203,6 +203,8 @@
 - `src/ui/preflight-panel.ts` — Renders the verdict, naming a browser that works when the answer is no.
 - `src/ui/source-panel.test.ts` — Pins which losses are named before processing — extra tracks, captions, what is not guessed — and that none lives only in the closed Video properties rows.
 - `src/ui/source-panel.ts` — Renders a SourceReport in two parts: losses, always in view, and the facts, in a "Video properties" disclosure that starts closed.
+- `src/ui/system-check.test.ts` — A failed check is in the summary's words and opens the panel, without waiting for the slow check.
+- `src/ui/system-check.ts` — The System check panel's one-line result, pure: "all passed", "N problems", and whether it must open.
 - `src/ui/warning-text.test.ts` — Mechanical half of "reads clearly": no jargon, no blame, always a next step.
 - `src/ui/warning-text.ts` — The 5.4 warnings in words, and their rendering. Possibilities, never verdicts.
 - `src/vite-env.d.ts` — Ambient types: the injected build globals and the File System Access API surface.
@@ -219,5 +221,5 @@
 - `test/ebu3341/signals.ts` — EBU Tech 3341 Table 1 signals, synthesised from their published definitions.
 - `test/ebu3341/tech3341.test.ts` — The compliance gate: Table 1 cases 1-23 against the meter, inside `npm run check`.
 - `test/helpers/signals.ts` — Synthesised tones and silence shared by the meter tests and the EBU harness.
-- `test/screen-text.test.ts` — Holds the static page's words to what they must agree with: the privacy promise once, preset names as `PRESETS` has them, "caption" never "subtitle".
+- `test/screen-text.test.ts` — Holds the static page to what it must agree with: the privacy promise once, preset names as `PRESETS` has them, "caption" never "subtitle", the status line outside any disclosure.
 - `test/stylesheet.test.ts` — Stylesheet invariants no component test can see: `hidden` outranks every author `display` rule.

@@ -11,6 +11,40 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-09-30 — VH-88: the system check folds, and the status line leaves it
+
+**Decision:** System check is a `<details>` panel, closed on a healthy device.
+Its summary carries the result in words — "System check — all passed" / "— 1
+problem" — from a pure `summariseChecks`, and `main.ts` opens it on any
+failure and never shuts it. `#status` moves out, to sit between Create and the
+progress bar. Its resting text is "Choose a video to begin."
+
+**Rationale:** `#status` is the app's only live region and its only visible
+status text, and inside a closed `<details>` it is neither seen nor announced
+— every "Reading the video…", stage and "Your video is ready." would have gone
+silent. It was badly placed already, 450 px below the button it reports on,
+greeting every user with "Ready for the next milestone", a build note. A
+failure is reported without waiting for pending rows: the worker answers last,
+and holding the panel shut until it does would hide a missing API for ever if
+it never does. Both halves follow the archived branch.
+
+**Consequences taken, all from the status line now sitting beside what it
+describes:** the progress bar's name is visually hidden — the status line
+directly above already shows stage and percentage, and the name remains for
+assistive technology (VH-64 holds). The result block is headed "Finished
+video — 7.2 MB." rather than repeating "Your video is ready" an inch below it.
+
+**Alternatives:** a second, visually hidden live region left inside the panel
+— two sources of truth for one sentence.
+
+**Verified:** Chrome, dev build. Healthy: closed, "all passed", status above
+the fold. With `VideoEncoder` removed: opens itself, "1 problem", the row says
+which, the status line points at it. A real job: the status line carried the
+read, the check, all four stages and "Your video is ready.", in that order.
+Not verified: an actual screen reader — VH-70's manual gate.
+
+**Link:** VH-88; `index.html`, `src/ui/system-check.ts`, `src/main.ts`.
+
 ## 2026-09-30 — VH-87: the facts fold away, the losses do not
 
 **Decision:** the source facts sit in a native `<details>` labelled "Video

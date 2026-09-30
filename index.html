@@ -151,11 +151,19 @@
         <div id="preflight-report"></div>
         <div id="audio-warnings"></div>
         <div class="actions" id="process-actions" hidden></div>
+        <!-- The app's one live region, and its only status text. It lived in
+             the System check panel, 450 px below the button it reports on —
+             and that panel now starts closed, where a live region is neither
+             seen nor announced (VH-88). Never `hidden`, never inside a
+             disclosure. -->
+        <p class="status" id="status" role="status" aria-live="polite"></p>
         <!-- Named and described. A bare <progress> announces a percentage and
              nothing else, so a screen-reader user heard "63%" with no way to
              know 63% of what — and the stage is the half that carries the
-             meaning (VH-64). -->
-        <p class="helper" id="process-progress-label" hidden>Creating your video</p>
+             meaning (VH-64). The name is for assistive technology only: the
+             status line directly above already shows the stage and the
+             percentage, and saying it twice an inch apart is noise. -->
+        <p class="visually-hidden" id="process-progress-label" hidden>Creating your video</p>
         <progress
           class="progress"
           id="process-progress"
@@ -167,11 +175,14 @@
         <div id="process-result"></div>
       </section>
 
-      <section class="panel" aria-labelledby="system-check-heading">
-        <h2 id="system-check-heading">System check</h2>
+      <!-- Closed on a healthy device; `main.ts` opens it on any failure, and
+           the summary says the result in words either way (VH-88). -->
+      <details class="panel system-check" id="system-check">
+        <summary class="disclosure-summary" id="system-check-summary">
+          System check — checking
+        </summary>
         <ul class="checks" id="checks"></ul>
-        <p class="status" id="status" role="status" aria-live="polite"></p>
-      </section>
+      </details>
 
       <section class="panel" aria-labelledby="errors-heading" id="errors-panel" hidden>
         <h2 id="errors-heading">Errors captured</h2>
