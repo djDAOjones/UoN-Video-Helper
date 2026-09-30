@@ -11,6 +11,32 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-09-30 — VH-89 review: a block says only why, and the estimate is still heard
+
+**Decision:** under a `block`, the verdict lists only the reasons that block.
+And the status line for a finished check shows the outcome and SPEAKS the rest
+of the verdict — the time, the size, every reason — from a visually hidden
+span inside the live region.
+
+**Rationale:** both from the Codex review of VH-89. The first fix had dropped
+one sentence, `estimate-unavailable`; but too little storage on a long job
+still produced a block that said "you can carry on, but a desktop would be
+faster". The rule is the outcome, not a list of codes: a lesser reason under a
+block is advice about running a job that cannot run. The second was a
+regression I made on purpose and should not have: taking the estimate out of
+the status line stopped it being shown twice, and also stopped it being heard
+at all, because the verdict is not a live region. Shown once and spoken once
+is the answer to both; `spokenOnly` is built from `verdictText`, so the two
+cannot drift.
+
+**Verified:** Chrome: `proceed` shows "Device check complete. Ready to go."
+and the live region's text also carries the time and size in a 1×1 span; an
+AC-3 block carries its reason and what to do. Not verified with a real screen
+reader — VH-70.
+
+**Link:** VH-89; `src/ui/preflight-panel.ts` (`preflightAnnouncement`),
+`src/main.ts` (`setStatus`).
+
 ## 2026-09-30 — VH-91: four numbered panels, and a status line each
 
 **Decision:** the steps are separate panels with numbered headings — 1. Choose

@@ -80,9 +80,10 @@ export interface VerdictText {
  * A `proceed` is three lines and nothing else: the heading, the time, the
  * size (VH-89). `warn` and `discourage` keep every reason and end on the same
  * two lines, with the time said once — so when a reason has already stated
- * it, the time line is left out rather than repeated. A `block` says neither:
- * a job that cannot run takes no time and makes no file, and until now it
- * went on to say "You can still continue" underneath "This cannot run here".
+ * it, the time line is left out rather than repeated. A `block` says only why
+ * it is blocked: a job that cannot run takes no time and makes no file, and
+ * advice about running it — "you can still continue", "you can carry on, but
+ * a desktop would be faster" — contradicts the heading it sits under.
  *
  * The setting, the output shape and the measured speed used to be listed
  * here. They are what the tool decided, not what the user is deciding, and
@@ -97,10 +98,12 @@ export function verdictText(summary: PreflightSummary): VerdictText {
   const lines: string[] = []
 
   for (const reason of verdict.reasons) {
-    // The probe does not run for a job that cannot, so a block always arrives
-    // with "we could not work out how long this will take" attached. It is a
-    // sentence about time, and a block states none.
-    if (blocked && reason.code === 'estimate-unavailable') continue
+    // Under a block, only what blocks. The verdict collects every reason that
+    // applies, and the lesser ones are all advice about running the job: an
+    // unmeasured estimate arrives with every encode block (the probe does not
+    // run), and a long job with too little storage arrived saying "you can
+    // carry on" beside a Start button that is not there.
+    if (blocked && reason.outcome !== 'block') continue
     lines.push(reasonText(reason.code, summary))
   }
 
@@ -164,15 +167,33 @@ export function renderPreflight(container: HTMLElement, summary: PreflightSummar
   container.append(section)
 }
 
+/** What the status line says when a device check lands. */
+export interface PreflightAnnouncement {
+  /** Shown and spoken: the outcome, in the verdict's own heading. */
+  readonly shown: string
+  /**
+   * Spoken only: the rest of the verdict. The status line sits directly under
+   * the verdict (VH-88), so showing these sentences again would put them on
+   * screen twice — but the verdict itself is not a live region, and a
+   * screen-reader user who hears only "Ready, with one thing to know" has
+   * been told there is something and not what.
+   */
+  readonly spokenOnly: string
+}
+
 /**
- * One line for the live region.
+ * The status line for a finished device check.
  *
- * The outcome, in the verdict's own heading. It used to repeat the time
- * estimate, which was the only place a `warn` stated one; the verdict now
- * states it itself, and the status line sits directly beneath it (VH-88), so
- * repeating it here put the same sentence on screen twice.
+ * Everything the verdict says reaches the live region; only the outcome is
+ * repeated visibly.
  */
-export function summarisePreflight(summary: PreflightSummary): string {
-  if (summary.verdict.outcome === 'block') return 'This video cannot be processed in this browser.'
-  return `Device check complete. ${OUTCOME_HEADING[summary.verdict.outcome]}.`
+export function preflightAnnouncement(summary: PreflightSummary): PreflightAnnouncement {
+  const { lines } = verdictText(summary)
+  return {
+    shown:
+      summary.verdict.outcome === 'block'
+        ? 'This video cannot be processed in this browser.'
+        : `Device check complete. ${OUTCOME_HEADING[summary.verdict.outcome]}.`,
+    spokenOnly: lines.join(' '),
+  }
 }

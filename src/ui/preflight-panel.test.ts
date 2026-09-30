@@ -15,7 +15,7 @@ import type {
   PreflightReasonCode,
   PreflightSummary,
 } from '../media/preflight'
-import { summarisePreflight, verdictText } from './preflight-panel'
+import { preflightAnnouncement, verdictText } from './preflight-panel'
 
 const shape: OutputShape = {
   width: 1920,
@@ -197,13 +197,84 @@ describe('block (VH-89)', () => {
   })
 })
 
-describe('the live-region line', () => {
+describe('a block says only why it is blocked (VH-89 review)', () => {
+  it.each([
+    ['long-job', 'warn', 45 * 60],
+    ['very-long-job', 'discourage', 3 * 60 * 60],
+  ] as const)('drops %s when storage is what blocks', (code, outcome, seconds) => {
+    // Too little space AND a long job: the verdict carries both reasons. The
+    // second is advice about running a job that cannot run — "you can carry
+    // on" beside a Start button that is not there.
+    const { lines } = verdictText(
+      summary(
+        'block',
+        [
+          ['insufficient-storage', 'block'],
+          [code, outcome],
+        ],
+        { probe: { ...summary('proceed').probe, estimatedSeconds: seconds } },
+      ),
+    )
+    expect(lines).toHaveLength(1)
+    expect(lines[0]).toContain('not enough free space')
+    expect(lines.join(' ')).not.toMatch(/carry on|will take|Keep this tab open/)
+  })
+
+  it('drops device advice too, and keeps every reason that blocks', () => {
+    const { lines } = verdictText(
+      summary(
+        'block',
+        [
+          ['no-opfs', 'block'],
+          ['insecure-context', 'block'],
+          ['mobile-device', 'discourage'],
+          ['storage-unknown', 'warn'],
+        ],
+        { probe: unmeasured },
+      ),
+    )
+    expect(lines).toHaveLength(2)
+    expect(lines[0]).toContain('working space')
+    expect(lines[1]).toContain('secure connection')
+  })
+})
+
+describe('the status line for a finished check', () => {
   it.each([
     ['proceed', 'Device check complete. Ready to go.'],
     ['warn', 'Device check complete. Ready, with one thing to know.'],
     ['discourage', 'Device check complete. This will work, but it will be slow.'],
     ['block', 'This video cannot be processed in this browser.'],
-  ] as const)('announces the outcome for %s', (outcome, expected) => {
-    expect(summarisePreflight(summary(outcome))).toBe(expected)
+  ] as const)('shows the outcome for %s', (outcome, expected) => {
+    expect(preflightAnnouncement(summary(outcome)).shown).toBe(expected)
+  })
+
+  it('still SAYS the time and size, without showing them twice', () => {
+    // The status line sits under the verdict, so it shows only the outcome —
+    // but it is the live region, and the verdict is not. A screen-reader user
+    // must hear the estimate, not just that there is one.
+    const { shown, spokenOnly } = preflightAnnouncement(summary('proceed'))
+    expect(shown).not.toMatch(/37 seconds|28\.5 MB/)
+    expect(spokenOnly).toBe('This should take about 37 seconds. Estimated size up to 28.5 MB.')
+  })
+
+  it('says what the "one thing to know" is', () => {
+    const { spokenOnly } = preflightAnnouncement(summary('warn', [['long-job', 'warn']], {
+      probe: { ...summary('proceed').probe, estimatedSeconds: 45 * 60 },
+    }))
+    expect(spokenOnly).toContain('This will take about 45 minutes')
+    expect(spokenOnly).toContain('Keep this tab open')
+  })
+
+  it('says why a block is a block, and what to do', () => {
+    const { spokenOnly } = preflightAnnouncement(
+      summary('block', [['no-aac-encode', 'block']], { probe: unmeasured }),
+    )
+    expect(spokenOnly).toMatch(/cannot add sound.*Chrome or Edge/)
+  })
+
+  it('speaks exactly what the verdict shows, so the two cannot drift', () => {
+    const warned = summary('warn', [['storage-unknown', 'warn']])
+    expect(preflightAnnouncement(warned).spokenOnly).toBe(verdictText(warned).lines.join(' '))
   })
 })

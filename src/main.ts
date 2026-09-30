@@ -46,7 +46,7 @@ import {
   onsetDisabledReason,
 } from './ui/closing-choice'
 import { formatFileSize } from './ui/format'
-import { renderPreflight, summarisePreflight } from './ui/preflight-panel'
+import { preflightAnnouncement, renderPreflight } from './ui/preflight-panel'
 import { renderWarnings } from './ui/warning-text'
 import { renderSourceError, renderSourceReport, summarise } from './ui/source-panel'
 import { summariseChecks, type CheckState } from './ui/system-check'
@@ -305,8 +305,16 @@ function updateSystemCheckSummary(): void {
  * anything about the FILE goes through {@link setSourceStatus} instead: a live
  * region inside a hidden section is neither seen nor announced.
  */
-function setStatus(message: string): void {
+function setStatus(message: string, spokenOnly = ''): void {
   statusLine.textContent = message
+  // For a message whose detail is already on screen beside it: the live region
+  // still has to say it, and must not print it a second time.
+  if (spokenOnly) {
+    const spoken = document.createElement('span')
+    spoken.className = 'visually-hidden'
+    spoken.textContent = ` ${spokenOnly}`
+    statusLine.append(spoken)
+  }
 }
 
 /** Says what is happening to the FILE, beside the input that chose it. */
@@ -675,7 +683,8 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
       renderWarnings(audioWarnings, reply.summary.audioWarnings, {
         heading: 'Worth knowing about the sound',
       })
-      setStatus(summarisePreflight(reply.summary))
+      const announcement = preflightAnnouncement(reply.summary)
+      setStatus(announcement.shown, announcement.spokenOnly)
       setDiagnosticsContext({
         stage: reply.summary.verdict.outcome === 'block' ? 'blocked' : 'ready',
         capability: reply.summary,
