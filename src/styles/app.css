@@ -31,6 +31,17 @@ body {
   line-height: 1.5;
 }
 
+/*
+ * `hidden` must win. The browser's own rule for it is `display: none` at the
+ * lowest priority there is, so any author rule that sets `display` — `.actions`
+ * is flex, `.progress` is block — silently outranks the attribute, and an
+ * element the script has hidden stays on screen. That is how "Create the video"
+ * came to be visible, enabled and inert before any file was chosen (VH-94).
+ */
+[hidden] {
+  display: none !important;
+}
+
 /* Skip link — visible on focus, never a hidden-only affordance */
 .skip-link {
   position: absolute;

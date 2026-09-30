@@ -15,7 +15,7 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 168 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 169 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 20 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
@@ -24,7 +24,7 @@
 - `reviews` — 7 file(s)
 - `scripts` — 5 file(s)
 - `src` — 112 file(s)
-- `test` — 4 file(s)
+- `test` — 5 file(s)
 <!-- /file-map-index -->
 
 ## (root)
@@ -221,3 +221,4 @@
 - `test/ebu3341/signals.ts` — EBU Tech 3341 Table 1 signals, synthesised from their published definitions.
 - `test/ebu3341/tech3341.test.ts` — The compliance gate: Table 1 cases 1-23 against the meter, inside `npm run check`.
 - `test/helpers/signals.ts` — Synthesised tones and silence shared by the meter tests and the EBU harness.
+- `test/stylesheet.test.ts` — Stylesheet invariants no component test can see: `hidden` outranks every author `display` rule.

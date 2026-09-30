@@ -23,6 +23,12 @@
 
 ## Archived: the review remediation and Band 1's close — see archive/trajectory/trajectory-0003-review-remediation-and-band-1-close.md
 
+### Band 4 — the interface pass
+
+- VH-94 — Shipped 2026-09-30. `hidden` now hides: Start and the progress bar
+  no longer show before a file, under a block, or after a job. See
+  decision-log.
+
 ### VH-14 — the Xerte package
 
 - Package half shipped 2026-09-21. `npm run build:xerte` makes a relocatable,

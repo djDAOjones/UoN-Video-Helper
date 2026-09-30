@@ -11,6 +11,30 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-09-30 — VH-94: `hidden` was losing to the stylesheet
+
+**Decision:** `[hidden] { display: none !important }` in `app.css`, recovered
+from tag `archive/repository-review-implementation`, and a stylesheet test that
+fails without it.
+
+**Rationale:** the browser's own rule for `hidden` has the lowest priority
+there is, so `.actions { display: flex }` and `.progress { display: block }`
+outranked it and every `element.hidden = true` on those two was a no-op. Start
+was visible, enabled and inert before a file, under a block, and through the
+recompute window R-05 took it down for. One rule rather than a fix per class:
+the next class to set `display` would reopen it, and nothing would say so.
+
+**Alternatives:** dropping `display` from the two classes fixes today's pair
+and leaves the trap armed.
+
+**Verified:** Chrome, dev build. At rest, and with a file being read: no Start,
+no bar. `proceed`: Start shown. Preset changed: Start down until the new
+verdict lands. Job running: bar and Cancel shown, Start disabled. Job finished:
+bar gone. `block` (a ProRes source): no Start. The test cannot see computed
+style — it reads the source — so the browser pass is the other half.
+
+**Link:** VH-94; `src/styles/app.css`, `test/stylesheet.test.ts`.
+
 ## 2026-09-21 — VH-14: the Xerte package is one flat folder
 
 **Decision:** the Xerte package has its own build, `npm run build:xerte`

@@ -166,22 +166,6 @@
      "Open:" is a question for the maintainer with a working default — the
      default is what gets built if nobody answers. -->
 
-- [ ] **VH-94 `hidden` loses to the stylesheet** (2026-09-30)
-      Intent: a defect found while planning this band, and live today.
-      `.actions { display: flex }` and `.progress { display: block }` outrank
-      the `hidden` attribute, so `#process-actions` and `#process-progress`
-      never hide — measured in Chrome 2026-09-30, both carry `hidden` and
-      compute `flex` and `block`. "Create the video" is on screen, enabled and
-      inert before any file is chosen, under a `block` verdict, and while a
-      verdict is recomputed (the window R-05 took it down for). An empty
-      progress bar sits under it, and a full one stays after the job.
-      The archived branch carries the fix — `[hidden] { display: none
-      !important }`, `src/styles/app.css:35` on the tag — and VH-71 left it
-      behind with the conveyor UI.
-      Done when: that rule is in `app.css`; a test reads the stylesheet and
-      fails without it; in a browser there is no Start before a file or on a
-      block, and no bar at rest or after a finished job.
-
 - [ ] **VH-85 Say what the tool does, as a list** (2026-09-30)
       Intent: the opening paragraph becomes "This tool does the following to
       your video:" over three bullets — adds approved branding, ensures
