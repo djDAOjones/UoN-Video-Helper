@@ -16,7 +16,6 @@ import {
   AudioSampleSource,
   Mp4OutputFormat,
   Output,
-  TextSubtitleSource,
   VideoSampleSink,
   VideoSampleSource,
   type AudioSample,
@@ -52,7 +51,6 @@ import { measureEncoderDelay } from './encoder-delay'
 import type { OpfsWorkspace } from './opfs'
 import { deriveSourceTimeline } from './source-timeline'
 import { carryTrackMetadata } from './track-metadata'
-import { offsetVtt } from './vtt'
 
 /** Named stages, per spec section 9.2 — not one opaque bar. */
 export type PipelineStage = 'preparing' | 'analysing' | 'encoding' | 'finishing'
@@ -71,7 +69,6 @@ export interface PipelineResult {
    * and the caller has to be able to say so.
    */
   readonly brandingApplied: { readonly opening: boolean; readonly closing: boolean }
-  readonly subtitleCues: number
   /**
    * Warnings about what PRODUCING the file cost, as opposed to what the source
    * was. Empty on almost every job.
@@ -178,11 +175,6 @@ export interface PipelineOptions {
    * page for the same reason, by `resolveBrandingBase`.
    */
   readonly brandingBaseUrl: string
-  /**
-   * A user-supplied WebVTT sidecar, verbatim. Its cue times are offset by the
-   * opening sequence's duration; its text is never touched (spec 8.1).
-   */
-  readonly subtitleVtt?: string
   readonly signal?: AbortSignal
   readonly onProgress?: (progress: PipelineProgress) => void
 }
@@ -419,22 +411,6 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     videoDelaySeconds = (await measureEncoderDelay(audioConfig)) ?? 0
   }
 
-  // Spec 8.1: offset the timing, never the words. The offset is the opening
-  // clip's ACTUAL duration, not the nominal one from config — if the real
-  // asset is 5.2 s, captions must move 5.2 s.
-  let subtitleSource: TextSubtitleSource | null = null
-  let subtitleCues = 0
-  if (options.subtitleVtt) {
-    const offset = offsetVtt(options.subtitleVtt, openingSeconds)
-    subtitleCues = offset.cueCount
-    subtitleSource = new TextSubtitleSource('webvtt')
-    // 'und' — undetermined. The sidecar carries no language declaration, and
-    // inventing one would be worse than admitting we do not know.
-    output.addSubtitleTrack(subtitleSource, { languageCode: 'und' })
-    // Held until after start(); fed below.
-    options = { ...options, subtitleVtt: offset.text }
-  }
-
   const timelineSeconds = timeline.timelineSeconds
   const expectedFrames = Math.max(1, Math.round(timelineSeconds * shape.frameRate))
   let framesFed = 0
@@ -642,11 +618,6 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
   try {
     await output.start()
 
-    if (subtitleSource && options.subtitleVtt) {
-      await subtitleSource.add(options.subtitleVtt)
-      subtitleSource.close()
-    }
-
     await settleLanes([feedVideo, feedAudio], abortLanes)
 
     throwIfAborted(signal)
@@ -666,7 +637,6 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       openingSeconds,
       closingSeconds,
       timelineSeconds,
-      subtitleCues,
       brandingRequested: `${branding.opening}/${branding.closing}`,
       brandingApplied: `${opening !== null}/${closing !== null}`,
     })
@@ -676,7 +646,6 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     return {
       file,
       brandingApplied: { opening: opening !== null, closing: closing !== null },
-      subtitleCues,
       outputWarnings,
       contentOffsetSeconds: contentOffset,
     }

@@ -27,7 +27,6 @@ import { requireReadableOutputVideo } from '../media/output-integrity'
 import { verifyOutputAudio } from '../media/output-verification'
 import { CancelledError, runPipeline, throwIfAborted } from '../media/pipeline'
 import { preflightVerdict, type PreflightSummary } from '../media/preflight'
-import { InvalidVttError } from '../media/vtt'
 import { calibrationProbe } from '../media/probe'
 import { CancellationRegistry } from './cancellation'
 import { RetainedResults } from './retained'
@@ -160,7 +159,6 @@ async function handleProcess(
     readonly branding: BrandingChoice
     readonly backgroundColour: string
     readonly brandingBaseUrl: string
-    readonly subtitleVtt?: string
   },
   signal: AbortSignal,
 ): Promise<void> {
@@ -203,7 +201,6 @@ async function handleProcess(
       branding: options.branding,
       backgroundColour: options.backgroundColour,
       brandingBaseUrl: options.brandingBaseUrl,
-      ...(options.subtitleVtt ? { subtitleVtt: options.subtitleVtt } : {}),
       signal,
       onProgress: ({ stage, fraction }) => post({ kind: 'stage', id, stage, fraction }),
     })
@@ -263,7 +260,6 @@ async function handleProcess(
       file: result.file,
       brandingApplied: result.brandingApplied,
       brandingRequested: options.branding,
-      subtitleCues: result.subtitleCues,
       outputWarnings,
     })
   } catch (cause) {
@@ -284,11 +280,9 @@ async function handleProcess(
       kind: 'failed',
       id,
       message:
-        // A bad sidecar names itself. `offsetVtt` throws here and nowhere else
-        // — `pipeline.ts` is the only caller — yet this was the one handler
-        // that did not check for it, so "your subtitle file is not valid
-        // WebVTT" reached the user as "something went wrong" (VH-37).
-        cause instanceof InvalidVttError || cause instanceof UnreadableFileError
+        // A file that cannot be read names itself rather than reaching the
+        // user as "something went wrong" (VH-37).
+        cause instanceof UnreadableFileError
           ? cause.message
           : // The user-facing sentence never changes. In development the
             // underlying reason is appended, because "something went wrong"

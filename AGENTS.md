@@ -316,7 +316,7 @@ down — never mutated in place by a consumer.
 | `SourceReport` | `media/inspect.ts` | What the file _is_: dimensions, rotation, duration, average frame rate, VFR verdict, codecs, audio presence, non-A/V track counts. |
 | `Capability` | `media/capability.ts` + `probe.ts` | What this _device_ can do: encode support for the exact target config, OPFS headroom, device class, measured throughput, time estimate. |
 | `LoudnessReport` | `audio/loudness.ts` | Integrated LUFS, short-term curve, LRA, true peak — measured on **source content only**. |
-| `JobSpec` | the UI | What the user asked for: preset, opening on/off, closing on/off, sidecar subtitle if supplied. The only object that crosses into the worker as a command. |
+| `JobSpec` | the UI | What the user asked for: preset, opening on/off, closing on/off and the closing's mode, style and colour. The only object that crosses into the worker as a command. |
 
 Forbidden: a single mutable "job state" blob that every module writes
 into. The stages are a pipeline, and each stage's output is the next

@@ -39,8 +39,7 @@ export interface DiagnosticsBundle {
  * `stage` is deliberately not a route: this app is one page whose sections
  * appear in turn, so what matters is how far the user has got.
  *
- * Callers pass **already-safe shapes** — never a `File`, never subtitle text,
- * never a filename. `redact()` is the second line of defence, not the first.
+ * Callers pass **already-safe shapes** — never a `File`, never a filename. `redact()` is the second line of defence, not the first.
  */
 export interface DiagnosticsContext {
   readonly stage?: DiagnosticsStage
@@ -48,7 +47,7 @@ export interface DiagnosticsContext {
   readonly source?: unknown
   /** Redacted pre-flight summary: what this device said it could do. */
   readonly capability?: unknown
-  /** The three choices the user made, plus whether a sidecar was supplied. */
+  /** The choices the user made: preset, and the closing's mode, style and colour. */
   readonly job?: unknown
 }
 

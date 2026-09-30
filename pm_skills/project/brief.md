@@ -72,9 +72,11 @@ for the MVP, which is built and verified locally.
 - **Device pre-flight** — no fixed size or duration cap. A 3-second
   calibration probe on the user's actual file and device produces a real
   time estimate, plus capability, storage and device-class checks.
-- **Track pass-through** — subtitle, chapter and metadata tracks are
-  carried through, with cue timings offset by the opening-branding
-  duration so they stay in sync. Content is never altered.
+- **Track pass-through** — file-level tags and the primary tracks' own
+  metadata are carried through. Caption and chapter tracks inside the
+  source cannot be — the demuxer cannot read them — so they are detected
+  and warned about before processing starts. No caption file is taken
+  (VH-86): EchoVideo generates captions after upload.
 - **A workflow a novice can complete** — plain language, named progress
   stages, always-available cancel, and errors that say what happened and
   what to do next.

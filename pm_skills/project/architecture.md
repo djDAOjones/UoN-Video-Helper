@@ -90,7 +90,6 @@ src/
     opfs.ts                job-scoped working store, Web Locks, orphan sweep
     save.ts                File System Access API, blob fallback, source guard
     output-verification.ts the §13 criterion 2 postcondition, pure
-    vtt.ts                 WebVTT parse, cue offset, emit
   audio/
     kweighting.ts          BS.1770-4 pre-filter + RLB biquads
     biquad.ts              the second-order section both filters are built from
@@ -219,7 +218,8 @@ Verified against Mediabunny 1.55.2, not assumed:
   and read the handler type (`sbtl` / `subt` / `text`), plus `tref`/`chap`
   for chapters. Handler types only; no sample parsing. That scan lives in
   `media/isobmff.ts` and is the whole of VH-9's detection half.
-- **Subtitle writing works.** `addSubtitleTrack` +
+- **Subtitle writing works**, and the app no longer uses it (VH-86 withdrew
+  the caption file field). `addSubtitleTrack` +
   `TextSubtitleSource('webvtt')`; `Mp4OutputFormat.getSupportedSubtitleCodecs()`
   returns `['webvtt']`. Verified by writing a valid subtitle-bearing MP4.
 - **Metadata tags round-trip.** `Input.getMetadataTags()` /

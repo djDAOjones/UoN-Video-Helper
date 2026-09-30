@@ -34,7 +34,6 @@ import {
 } from './config/thresholds'
 import { createWatchdog } from './core/watchdog'
 import { saveFile, suggestedFileName } from './media/save'
-import { countCues } from './media/vtt'
 import { formatFileSize } from './ui/format'
 import { renderPreflight, summarisePreflight } from './ui/preflight-panel'
 import { renderWarnings } from './ui/warning-text'
@@ -74,15 +73,12 @@ const presetChoice = required<HTMLFieldSetElement>('#preset-choice')
 const brandingChoice = required<HTMLFieldSetElement>('#branding-choice')
 const brandingOptions = required<HTMLDetailsElement>('#branding-options')
 const brandingStyleChoice = required<HTMLFieldSetElement>('#branding-style-choice')
-const subtitleField = required<HTMLDivElement>('#subtitle-field')
-const subtitleInput = required<HTMLInputElement>('#subtitle-input')
-const subtitleStatus = required<HTMLParagraphElement>('#subtitle-status')
 
 /**
  * Which selection the screen is currently describing.
  *
- * Every asynchronous answer — inspection, pre-flight, a subtitle read — is
- * about the file and preset that were chosen when it was asked for. Nothing
+ * Every asynchronous answer — inspection, pre-flight — is about the file and
+ * preset that were chosen when it was asked for. Nothing
  * checked that on the way back, so whichever finished LAST won: picking file A
  * then file B could leave B on screen with Start pointing at A, and a slow
  * pre-flight for the old preset could arm Start after the user had chosen
@@ -139,36 +135,6 @@ async function selectionRequest(
     selectionRequests.delete(id)
   }
 }
-
-/** The chosen sidecar's text, held until the job runs. */
-let subtitleVtt: string | null = null
-
-subtitleInput.addEventListener('change', () => {
-  const file = subtitleInput.files?.[0]
-  const current = beginSelection()
-  subtitleVtt = null
-  if (!file) {
-    subtitleStatus.textContent = ''
-    return
-  }
-  void (async () => {
-    try {
-      const text = await file.text()
-      // A large sidecar read can outlive the choice that started it.
-      if (!current()) return
-      const cues = countCues(text)
-      if (cues === 0) {
-        subtitleStatus.textContent =
-          'No subtitles were found in that file. It should be a WebVTT (.vtt) file.'
-        return
-      }
-      subtitleVtt = text
-      subtitleStatus.textContent = `${cues} subtitle${cues === 1 ? '' : 's'} will be included, timed to match.`
-    } catch {
-      subtitleStatus.textContent = 'That subtitle file could not be read.'
-    }
-  })()
-})
 
 /** The D1 brand background, resolved from the token so answering D1 is one line. */
 function brandBackground(): string {
@@ -511,10 +477,6 @@ fileInput.addEventListener('change', () => {
   jobFile = null
   presetChoice.hidden = true
   brandingChoice.hidden = true
-  subtitleField.hidden = true
-  subtitleInput.value = ''
-  subtitleStatus.textContent = ''
-  subtitleVtt = null
   // Kept when there is something to lose: the result panel describes a video
   // that already exists, and the source panel describes what was just chosen.
   // Clearing it here removed the only route to a finished file (VH-56).
@@ -608,7 +570,6 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
       })
       presetChoice.hidden = false
       brandingChoice.hidden = false
-      subtitleField.hidden = false
       if (reply.summary.verdict.outcome !== 'block') {
         showProcessControls(file, reply.summary.verdict.outcome === 'discourage')
       }
@@ -839,7 +800,6 @@ function setSaveInFlight(saving: boolean): void {
 function applyControlLock(): void {
   const locked = jobInFlight || saveInFlight
   fileInput.disabled = locked
-  subtitleInput.disabled = locked
   presetChoice.disabled = locked
   brandingChoice.disabled = locked
   startButton.disabled = locked
@@ -932,7 +892,6 @@ function beginJob(file: File): void {
       },
       backgroundColour: brandBackground(),
       brandingBaseUrl: resolveBrandingBase(document.baseURI),
-      ...(subtitleVtt ? { subtitleVtt } : {}),
     },
     // Silence, not duration. A job reports a stage every thirty frames, so a
     // minute without a word means something is genuinely wrong — while an
@@ -941,7 +900,7 @@ function beginJob(file: File): void {
   )
   jobCancelId = id
   setJobInFlight(true)
-  // The three choices, and whether a sidecar was supplied — never its text.
+  // The choices the job was started with.
   setDiagnosticsContext({
     stage: 'processing',
     job: {
@@ -949,7 +908,6 @@ function beginJob(file: File): void {
       closing: chosenClosingMode(),
       style: chosenBranding('style', CLOSING_DEFAULTS.style),
       colour: chosenBranding('colour', CLOSING_DEFAULTS.colour),
-      subtitleSupplied: subtitleVtt !== null,
     },
   })
 

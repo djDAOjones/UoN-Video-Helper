@@ -74,3 +74,10 @@
       etc." (source: VH-85)
 - [ ] 2026-09-30 SPEC §9.1 — step 6 reads 'Choose "Best quality" or "Smaller
       file"'; the choice is now named as above (source: VH-85)
+- [ ] 2026-09-30 SPEC §8.3 — step 2 (offset and embed a user-supplied `.vtt`)
+      is withdrawn: no caption file is taken. The closing paragraph's
+      "preservation therefore applies only to a sidecar the user supplies"
+      goes with it; steps 1, 3 and 4 stand (source: VH-86)
+- [ ] 2026-09-30 SPEC §8.1 — the refined rule "always offset subtitle timing
+      to match inserted branding" now has nothing to apply to; and the screen
+      says "caption" throughout, where §8 says "subtitle" (source: VH-86)

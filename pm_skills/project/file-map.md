@@ -15,7 +15,7 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 170 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 168 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 20 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
@@ -23,7 +23,7 @@
 - `public` — 13 file(s)
 - `reviews` — 7 file(s)
 - `scripts` — 5 file(s)
-- `src` — 112 file(s)
+- `src` — 110 file(s)
 - `test` — 6 file(s)
 <!-- /file-map-index -->
 
@@ -187,8 +187,6 @@
 - `src/media/source-timeline.ts` — Where the source's two lanes actually start, and turning holes into the silence they stand for.
 - `src/media/track-metadata.test.ts` — Pins the carry rules: 'und' omitted, the lone track made default, a read failure reported not fatal.
 - `src/media/track-metadata.ts` — Carries a source track's language, name and disposition onto the output track.
-- `src/media/vtt.test.ts` — Proves cue text, settings, comments and line endings survive byte for byte.
-- `src/media/vtt.ts` — Offsets WebVTT timings by rewriting only timestamp lines; never touches the words.
 - `src/spike/alpha.ts` — VH-12 spike: decodes each branding onset and reads back pixel alpha. Dev-only, not built.
 - `src/spike/codecs.ts` — Probes VideoEncoder and AudioEncoder support per preset and shape. How the Firefox AAC gap was found.
 - `src/spike/framerate.ts` — VH-24 spike: reads a real PowerPoint export and reports measured vs declared rate.
@@ -221,5 +219,5 @@
 - `test/ebu3341/signals.ts` — EBU Tech 3341 Table 1 signals, synthesised from their published definitions.
 - `test/ebu3341/tech3341.test.ts` — The compliance gate: Table 1 cases 1-23 against the meter, inside `npm run check`.
 - `test/helpers/signals.ts` — Synthesised tones and silence shared by the meter tests and the EBU harness.
-- `test/screen-text.test.ts` — Holds the static page's words to what they must agree with: the privacy promise once, preset names as `PRESETS` has them.
+- `test/screen-text.test.ts` — Holds the static page's words to what they must agree with: the privacy promise once, preset names as `PRESETS` has them, "caption" never "subtitle".
 - `test/stylesheet.test.ts` — Stylesheet invariants no component test can see: `hidden` outranks every author `display` rule.

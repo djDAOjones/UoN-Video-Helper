@@ -62,3 +62,14 @@ describe('the output choice (VH-85)', () => {
     expect(markup).toMatch(/<legend class="label">File size \/ quality<\/legend>/)
   })
 })
+
+describe('captions, not subtitles (VH-86)', () => {
+  it('never says "subtitle" on the static page', () => {
+    expect(visibleText).not.toMatch(/subtitle/i)
+  })
+
+  it('offers no caption file field', () => {
+    // Withdrawn with spec 8.3 step 2. One file input: the video.
+    expect(markup.match(/type="file"/g)).toHaveLength(1)
+  })
+})

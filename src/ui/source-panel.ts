@@ -4,7 +4,10 @@
  * Two rules shape this file. Plain language, per spec section 9.2 — the reader
  * wants to know whether their video is going to be fine. And honesty about
  * what was not examined: Mediabunny cannot see subtitle or chapter tracks, so
- * this never says "no subtitles", only what it did find.
+ * this never says "no captions", only what it did find.
+ *
+ * On screen they are "captions" — the word staff and EchoVideo use (VH-86).
+ * In code they stay `subtitle`, which is the ISOBMFF and WebVTT term.
  */
 
 import type { SourceReport } from '../media/inspect'
@@ -99,7 +102,7 @@ export function buildRows(report: SourceReport): Row[] {
     })
   }
 
-  // Said before processing, like the subtitle notice below and for the same
+  // Said before processing, like the caption notice below and for the same
   // reason: the output carries one video and one audio track, so anything
   // beyond that is content the user loses (review R-09). Finding out
   // afterwards is too late.
@@ -125,7 +128,7 @@ export function buildRows(report: SourceReport): Row[] {
     const found: string[] = []
     if (tracks.subtitleTracks > 0) {
       found.push(
-        tracks.subtitleTracks === 1 ? '1 subtitle track' : `${tracks.subtitleTracks} subtitle tracks`,
+        tracks.subtitleTracks === 1 ? '1 caption track' : `${tracks.subtitleTracks} caption tracks`,
       )
     }
     if (tracks.chapterTracks > 0) {
@@ -135,13 +138,15 @@ export function buildRows(report: SourceReport): Row[] {
     rows.push(
       found.length > 0
         ? {
-            term: 'Subtitles',
+            term: 'Captions',
             detail: `Found ${found.join(' and ')}`,
             // Said before processing, not after: this is the one thing that
             // cannot be carried over, and finding out afterwards is too late.
-            note: 'These cannot be carried into the new file. If you need them, keep the original alongside, or add a subtitle file below and it will be timed to match.',
+            // It used to offer a caption file field as the way out; that field
+            // is gone (VH-86), so the advice is the one thing still true.
+            note: 'These cannot be carried into the new file. If you need them, keep the original alongside.',
           }
-        : { term: 'Subtitles', detail: 'None found in this file' },
+        : { term: 'Captions', detail: 'None found in this file' },
     )
   }
 
@@ -186,13 +191,13 @@ export function renderSourceReport(container: HTMLElement, report: SourceReport)
 
   container.append(list)
 
-  // Only for containers the handler scan cannot read. Saying "no subtitles"
+  // Only for containers the handler scan cannot read. Saying "no captions"
   // about a file we never checked would be worse than admitting we did not.
   if (!report.tracks.scanned) {
     const caveat = document.createElement('p')
     caveat.className = 'fact-caveat'
     caveat.textContent =
-      'Subtitle and chapter tracks could not be checked in this kind of file. If yours has them, they will not be carried over.'
+      'Caption and chapter tracks could not be checked in this kind of file. If yours has them, they will not be carried over.'
     container.append(caveat)
   }
 }

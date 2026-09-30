@@ -60,8 +60,6 @@ export type WorkerRequest =
        * `./branding` misses every asset (`resolveBrandingBase`).
        */
       readonly brandingBaseUrl: string
-      /** A user-supplied WebVTT sidecar, verbatim. */
-      readonly subtitleVtt?: string
     }
   /** Stop the job started by `cancelId`. Answered by that job, not by this request. */
   | { readonly kind: 'cancel'; readonly id: number; readonly cancelId: number }
@@ -115,7 +113,6 @@ export type WorkerResponse =
       /** What was actually applied — a branding asset may have failed to load. */
       readonly brandingApplied: { readonly opening: boolean; readonly closing: boolean }
       readonly brandingRequested: { readonly opening: boolean; readonly closing: boolean }
-      readonly subtitleCues: number
       /** Measured from the finished file — spec 5.4's post-processing row. */
       readonly outputWarnings: readonly AudioWarning[]
     }

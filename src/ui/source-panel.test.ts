@@ -103,17 +103,43 @@ describe('extra tracks (VH-59)', () => {
 })
 
 describe('what the panel refuses to guess', () => {
-  it('does not claim there are no subtitles in a container it could not scan', () => {
+  it('does not claim there are no captions in a container it could not scan', () => {
     const rows = buildRows(report({ tracks: scan({ scanned: false }) }))
-    expect(rows.find((r) => r.term === 'Subtitles')).toBeUndefined()
+    expect(rows.find((r) => r.term === 'Captions')).toBeUndefined()
   })
 
-  it('says a subtitle track cannot come across', () => {
+  it('says a caption track cannot come across', () => {
     const row = rowFor(
       report({ tracks: scan({ subtitleTracks: 1 }) }),
-      'Subtitles',
+      'Captions',
     )
-    expect(row?.detail).toContain('1 subtitle track')
+    expect(row?.detail).toContain('1 caption track')
     expect(row?.note).toContain('cannot be carried')
+  })
+
+  it('does not send the user to a caption file field that no longer exists', () => {
+    // VH-86 removed the field. The warning outlived it, and must not go on
+    // promising a way out that is not on the screen.
+    const row = rowFor(report({ tracks: scan({ subtitleTracks: 2, chapterTracks: 1 }) }), 'Captions')
+    expect(row?.detail).toContain('2 caption tracks and 1 chapter track')
+    expect(row?.note).not.toMatch(/below|add a/i)
+  })
+})
+
+describe('captions, not subtitles (VH-86)', () => {
+  // Identifiers keep `subtitle`; the screen never says it. Every shape that
+  // produces a caption sentence is walked, because the word hid in three.
+  const shapes: ReadonlyArray<readonly [string, SourceReport]> = [
+    ['none found', report()],
+    ['one track', report({ tracks: scan({ subtitleTracks: 1 }) })],
+    ['several, with chapters', report({ tracks: scan({ subtitleTracks: 3, chapterTracks: 2 }) })],
+    ['a container that could not be scanned', report({ tracks: scan({ scanned: false }) })],
+  ]
+
+  it.each(shapes)('says "caption" throughout: %s', (_name, source) => {
+    const said = buildRows(source)
+      .map((row) => `${row.term} ${row.detail} ${row.note ?? ''}`)
+      .join(' ')
+    expect(said).not.toMatch(/subtitle/i)
   })
 })

@@ -166,24 +166,6 @@
      "Open:" is a question for the maintainer with a working default — the
      default is what gets built if nobody answers. -->
 
-- [ ] **VH-86 Captions, not subtitles — and no caption file field** (2026-09-30)
-      Intent: every user-facing "subtitle" becomes "caption", and the
-      "Subtitle file (optional)" field goes. That withdraws spec §8.3 step 2 —
-      a supplied `.vtt` is no longer embedded. Little is lost: with no opening
-      the cue offset is always zero (VH-80), and EchoVideo makes its own
-      captions after upload (§8.2).
-      What must survive is §8.3 step 3: a caption or chapter track INSIDE the
-      source still cannot be carried over, so that warning stays, reworded so
-      it no longer points at a field that is gone. Identifiers keep `subtitle`
-      — it is the WebVTT and ISOBMFF term.
-      Open: the worker path (`vtt.ts`, `subtitleVtt`, `addSubtitleTrack`) —
-      deleted, or dormant as openings are (VH-23). Default: deleted. Trim
-      would otherwise have to re-time cues nobody can supply; git keeps it.
-      Done when: no screen text says "subtitle"; the field is gone from
-      `main.ts` and the diagnostics context; the embedded-track warning still
-      shows before processing; `AGENTS.md`'s `JobSpec` row and the brief's
-      "track pass-through" say what is true; a doc-delta records spec §8.
-
 - [ ] **VH-87 Video properties, collapsed** (2026-09-30)
       Intent: the source facts move into a disclosure labelled "Video
       properties", closed by default. Rows, in order: Duration (was Length),

@@ -25,6 +25,9 @@
 
 ### Band 4 — the interface pass
 
+- VH-86 — Shipped 2026-09-30. The screen says "caption"; the caption file
+  field and its worker path are deleted; a caption or chapter track inside
+  the source is still warned about before processing. See decision-log.
 - VH-85 — Shipped 2026-09-30. The page says what the tool does as a list and
   makes the privacy promise once; the output question is "File size /
   quality". See decision-log.

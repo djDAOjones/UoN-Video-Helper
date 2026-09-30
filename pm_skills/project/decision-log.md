@@ -11,6 +11,38 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-09-30 — VH-86: captions, not subtitles, and no caption file
+
+**Decision:** the screen says "caption" everywhere it said "subtitle", and the
+"Subtitle file (optional)" field is gone — with its whole path, not just its
+markup: `vtt.ts`, `subtitleVtt` across the worker boundary, `addSubtitleTrack`
+in the pipeline, `subtitleCues` in the result. The warning for a caption or
+chapter track INSIDE the source stays, and no longer offers the field as the
+way out. Identifiers keep `subtitle`, the ISOBMFF and WebVTT term.
+
+**Rationale:** the maintainer's word, 2026-09-30, reversing spec §8.3 step 2.
+Little is lost: with no opening the cue offset was always zero (VH-80), so the
+field embedded a file the user already had, and EchoVideo writes its own
+captions after upload (§8.2). Deleted rather than left dormant as openings are
+(VH-23), because a dormant sidecar is a liability with a date on it: trim
+(VH-95) would have to re-time cues nobody can supply, or silently ship them
+out of sync. Git keeps the code; `architecture.md` keeps the fact that
+Mediabunny writes subtitle tracks.
+
+**Alternatives:** dormant behind the missing field — rejected above. Pointing
+the warning at EchoVideo's own captioning — true per §8.2, but a claim about
+another system's behaviour in our interface; "keep the original alongside" is
+the advice we can stand behind.
+
+**Verified:** Chrome, dev build, a source with a `mov_text` track: "Captions —
+Found 1 caption track", the warning shown before Start, one file input on the
+page, no "subtitle" in the rendered text, and the job finishes. `vtt.test.ts`
+went with the module it tested; `screen-text` and `source-panel` tests hold
+the wording and the absence of the field.
+
+**Link:** VH-86; `src/ui/source-panel.ts`, `src/media/pipeline.ts`,
+`src/workers/protocol.ts`, doc-deltas §8.1 and §8.3.
+
 ## 2026-09-30 — VH-85: what the tool does, as a list, and the promise said once
 
 **Decision:** the opening paragraph is a three-item list and the privacy
