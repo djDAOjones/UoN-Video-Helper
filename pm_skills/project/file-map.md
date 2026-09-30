@@ -15,7 +15,7 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 195 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 197 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 23 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
@@ -23,7 +23,7 @@
 - `public` — 13 file(s)
 - `reviews` — 7 file(s)
 - `scripts` — 5 file(s)
-- `src` — 134 file(s)
+- `src` — 136 file(s)
 - `test` — 6 file(s)
 <!-- /file-map-index -->
 
@@ -230,6 +230,8 @@
 - `src/ui/source-panel.ts` — Renders a SourceReport in two parts: losses, always in view, and the facts, in a "Video properties" disclosure that starts closed.
 - `src/ui/system-check.test.ts` — A failed check is in the summary's words and opens the panel, without waiting for the slow check.
 - `src/ui/system-check.ts` — The System check panel's one-line result, pure: "all passed", "N problems", and whether it must open.
+- `src/ui/trim.test.ts` — Typed times are read exactly or refused; the page accepts the ranges the worker does; handles step by a known amount.
+- `src/ui/trim.ts` — The trim step in words and numbers: times in the fields, the handles' valuetext, key steps, and the worker's own range check.
 - `src/ui/warning-text.test.ts` — Mechanical half of "reads clearly": no jargon, no blame, always a next step.
 - `src/ui/warning-text.ts` — The 5.4 warnings in words, and their rendering. Possibilities, never verdicts.
 - `src/vite-env.d.ts` — Ambient types: the injected build globals and the File System Access API surface.

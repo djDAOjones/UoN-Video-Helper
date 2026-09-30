@@ -100,3 +100,7 @@
       ends (a conveyor with one cut). Proposed: "Cutting from the middle,
       joining, reordering, or any other editing of picture content —
       trimming the start and end is in scope (VH-30)" (source: VH-30)
+- [ ] 2026-10-01 SPEC §9.1 — the workflow has an optional Trim step after
+      the file is read: a preview with start and end handles, time fields and
+      "Set start here" / "Set end here"; left alone it keeps the whole video
+      (source: VH-96)

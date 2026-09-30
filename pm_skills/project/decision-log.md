@@ -11,6 +11,52 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — VH-96: the Trim step, and VH-30 closed
+
+**Decision:** Trim is step 2 of five (Choose, Trim, Closing branding, File
+size, Create), revealed with the others once a video is read and reset to the
+whole video for each new one. It holds the browser's own `<video controls>`
+on a local object URL (no request, no autoplay, paused when a job starts);
+Carbon's range slider built from two native range inputs on one track, each
+labelled ("Start", "End") with its place in words as `aria-valuetext`;
+"Start time" / "End time" fields (`m:ss.s`, tenths shown, exact value kept)
+beside "Set start here" / "Set end here"; the kept part in words; and "Use
+the whole video". Arrow keys move a handle 1 s and Page keys 10 s
+(`TRIM_KEY_STEP_SECONDS`, `TRIM_PAGE_STEP_SECONDS`). The handles cannot cross
+or come closer than the 3 s minimum — a constraint on the slider; a typed or
+"here" time that breaks the rules is refused beside the fields in the
+worker's own words, never clamped, and Start comes down until it is put
+right. Every committed change stops what is in flight and re-runs the device
+check after 500 ms of stillness (`TRIM_RECHECK_DELAY_MS`), and the job takes
+the range its verdict was checked for. Untouched, no range is sent. A video
+shorter than 3 s cannot be trimmed and says so; a file the player cannot
+show keeps working fields and says the preview is unavailable.
+
+**Rationale:** WCAG 2.5.7 decided the shape — never drag-only, so three
+routes to each end. Validating with the worker's own `normaliseKeptRange`
+means the page and the job cannot disagree about a range. Trim sits second
+because the user watches the video before deciding how it closes and how
+big it is. VH-30 closes with it: both children shipped, and the identity
+change was signed off on 2026-09-30.
+
+**Verified:** Chrome, dev build. A real 130 s recording: five arrow presses
+and Page Up put the start at 15 s, Start came down and came back with the
+verdict for the kept part (13.8 → 12.3 MB); "1:40" typed; "abc" refused
+beside the field with the page saying to put it right; a start after the end
+refused in the worker's words on both fields; "Set start here" at 20.37 s
+kept the exact value. A trimmed job ran to 83.7 s (79.6 s kept plus the 4 s
+closing). On a generated video with a moving box, trimmed 12.3–47.7 s, the
+finished file's first frame matched the preview at 12.3 s better than its
+neighbours (4.2 against 6.0–9.7) and its last frames matched the preview at
+the out-point. Mouse drags on both handles; handles cannot cross; phone
+width stacks the fields with no sideways scroll; dark theme. A `blob:`
+preview is not egress: criterion 9 already runs across a check that loads
+one. Tests: time reading and writing, the range check, the summary and
+valuetext wording, key steps, and the step's markup.
+
+**Link:** VH-96, VH-30, VH-95; `src/ui/trim.ts`, `src/config/trim.ts`,
+`src/main.ts`, `index.html`, doc-deltas §9.1 and §12.
+
 ## 2026-09-30 — VH-95: the trim engine, with each cut on a frame edge
 
 **Decision:** `preflight` and `process` take an optional `keptRange`
@@ -60,7 +106,7 @@ unmeasured — it was dividing by zero, and every such file, trimmed or late-
 starting, was called a "very long job". A third round: each silence block
 reports liveness and hears a cancel during analysis, and the encode checks
 for a cancel before making the next block rather than after, so none is
-made and left unclosed.
+made and left unclosed; a cancel mid-hole leaves the whole analysis pass.
 
 **Verified:** acceptance harness, 13 passed, 0 failed. Trimmed loudness: a
 source drifting from −4 to −34 dBFS, kept 40–70 s — −16.12 LUFS on the kept

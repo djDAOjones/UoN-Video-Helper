@@ -71,41 +71,6 @@
      "Open:" is a question for the maintainer with a working default — the
      default is what gets built if nobody answers. -->
 
-- [ ] **VH-30 Trim the source, with a preview** [detail](tickets/VH-30.md)
-      (2026-08-25) — signed off 2026-09-30; identity wording agreed
-      Intent: maintainer request, renewed 2026-09-30 with a shape — a preview
-      of the video with handles for the start and end, before export.
-      Recordings carry material nobody wants, and today the only fix is
-      another tool first, which defeats a one-step app.
-      Feasible, and viable. No new dependency: ranged reads are native to
-      Mediabunny and the probe already uses them. No egress: the preview is a
-      `<video>` on a local object URL. Frame accuracy is free, because the
-      pipeline re-encodes anyway. It is the largest item in the band, and it
-      runs through the most recently stabilised part of the pipeline — the
-      shared clock of VH-74 and VH-55.
-      Reverses the product identity: "no trimming" is in `AGENTS.md`, the
-      brief and spec §12. It stays a conveyor with one cut — no cutting
-      mid-video, no joining — but all three have to say so; that is what the
-      sign-off is for.
-      Done when: signed off, the identity wording agreed, and its children —
-      VH-95, then VH-96 — shipped or cut.
-
-- [ ] **VH-96 Trim: the preview and handles** [detail](tickets/VH-96.md)
-      (2026-09-30)
-      Intent: a Trim step in VH-91's layout — the video, playable, with a
-      start and an end handle beneath it. Left alone, it keeps the whole
-      video, as today.
-      Accessibility decides the shape: the handles are never drag-only (WCAG
-      2.5.7). Each is a native range input on the arrow keys, paired with a
-      time field and a "Set start here" / "Set end here" button that takes the
-      preview's current position.
-      Risk: what `<video>` can play is not what WebCodecs can decode. Where
-      the preview cannot show, the fields still work and the step says so.
-      Done when: a trim can be set, changed and cleared by keyboard alone; the
-      verdict, time and size follow the kept range; the exported file's first
-      and last frames are the ones the preview showed, across the corpus;
-      criterion 9 still reads zero.
-
 - [ ] **VH-97 Fold the finished stages** [detail](tickets/VH-97.md)
       (2026-09-30) [sign-off]
       Intent: the expanding and contracting the request floated, done where it
@@ -118,8 +83,8 @@
       (`src/ui/workflow.ts`, `focusNextWorkflowControl`); VH-32 declined it on
       2026-08-27 in favour of the single screen. VH-91 shipped the panels it
       would fold, 2026-09-30.
-      Open: whether it is wanted at all. Default: not built. Decide after
-      using VH-91's panels with trim in them; the page may be short enough.
+      Open: whether it is wanted at all. Default: not built. Trim shipped
+      2026-10-01, so the page is five panels now; decide after using it.
       Done when: signed off; then focus lands on the next control at every
       transition, each is announced, every folded stage can be reopened, and
       nothing folds while it shows an error.

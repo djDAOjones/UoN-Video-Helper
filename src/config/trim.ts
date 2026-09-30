@@ -26,3 +26,17 @@ export const KEPT_MIN_SECONDS = 3
  * by the tolerance.
  */
 export const KEPT_EDGE_TOLERANCE_SECONDS = 0.001
+
+/** How far one arrow-key press moves a trim handle, in seconds. The time fields take anything finer. */
+export const TRIM_KEY_STEP_SECONDS = 1
+
+/** How far Page Up or Page Down moves a trim handle, in seconds. */
+export const TRIM_PAGE_STEP_SECONDS = 10
+
+/**
+ * How long the trim must be still before the device check re-runs for it, in
+ * milliseconds. An arrow key held down commits a change per step, and each
+ * would otherwise start a pre-flight — decoding and encoding three seconds —
+ * only to be superseded by the next.
+ */
+export const TRIM_RECHECK_DELAY_MS = 500

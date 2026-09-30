@@ -25,11 +25,15 @@
 
 ## Archived: the review's close and Band 1a — see archive/trajectory/trajectory-0004-review-close-and-band-1a.md
 
-### VH-30, VH-95 — trimming signed off, and its engine
+### VH-30, VH-95, VH-96 — trimming the ends
 
-- VH-30 — Signed off 2026-09-30: a conveyor with one cut. The identity in
-  `AGENTS.md` and the brief now says trimming the ends is in and cutting
-  from the middle is out. Closes when VH-96 ships.
+- VH-30 — Shipped 2026-10-01 with its two children. Signed off 2026-09-30 as
+  a conveyor with one cut: the identity in `AGENTS.md` and the brief says
+  trimming the ends is in and cutting from the middle is out.
+- VH-96 — Shipped 2026-10-01. A Trim step, second of five: the video in the
+  browser's own player, two handles on one track, time fields and "Set start
+  here" / "Set end here"; the verdict follows the kept part. See
+  decision-log.
 - VH-95 — Shipped 2026-09-30. A kept range on `preflight` and `process`,
   honoured by every audio pass, both lanes, the probe and the picture
   check, with each cut on a frame edge; proved in the acceptance harness.

@@ -56,9 +56,9 @@
            on every arrow key — advancing on change would shut a step under a
            keyboard user mid-choice (WCAG 3.2.2). Nothing here moves focus or
            collapses unasked.
-           Steps 2 to 4 appear once a video has been read, and then stay for
+           Steps 2 to 5 appear once a video has been read, and then stay for
            the session: hiding them again for every new file made the page
-           jump, and they hold nothing a new file invalidates. -->
+           jump. Trim is the one a new file resets, to the whole video. -->
       <section class="panel step" id="step-choose" aria-labelledby="choose-heading">
         <h2 id="choose-heading"><span class="step-number">1.</span> Choose a video</h2>
         <div class="field">
@@ -72,15 +72,91 @@
         </div>
         <!-- What is happening to the FILE: reading, read, could not be read.
              A live region of its own, because it belongs beside the input it
-             reports on, and step 4's status line is not on the page until a
-             video has been read (VH-91). Never `hidden`, never in a
+             reports on, and the Create step's status line is not on the page
+             until a video has been read (VH-91). Never `hidden`, never in a
              disclosure. -->
         <p class="status" id="source-status" role="status" aria-live="polite"></p>
         <div id="source-report"></div>
       </section>
 
+      <!-- VH-96. The one cut the conveyor makes: unwanted material off the
+           start and the end. Left alone it keeps the whole video, and no range
+           is sent. Never drag-only (WCAG 2.5.7): each handle is a native range
+           input on the arrow keys, and each end also has a time field and a
+           button that takes the preview's current position. The preview is
+           the browser's own player on a local object URL, which makes no
+           request; nothing plays until the user presses play. -->
+      <section class="panel step" id="step-trim" aria-labelledby="trim-heading" hidden>
+        <h2 id="trim-heading"><span class="step-number">2.</span> Trim</h2>
+        <p class="step-intro">
+          Optional. Cut unwanted material from the start or the end. Left alone, the whole video
+          is kept.
+        </p>
+        <video class="trim-preview" id="trim-preview" controls preload="metadata" playsinline></video>
+        <p class="helper" id="trim-preview-note" hidden>
+          A preview is not available for this file. You can still set the times.
+        </p>
+        <div class="range-slider">
+          <div class="range-labels">
+            <label class="label" for="trim-start-range">Start</label>
+            <label class="label" for="trim-end-range">End</label>
+          </div>
+          <div class="range-track" id="trim-track">
+            <div class="range-fill" aria-hidden="true"></div>
+            <input class="range-input" type="range" id="trim-start-range" min="0" max="0" step="any" value="0" />
+            <input class="range-input" type="range" id="trim-end-range" min="0" max="0" step="any" value="0" />
+          </div>
+        </div>
+        <div class="control-grid">
+          <div class="field">
+            <label class="label" for="trim-start">Start time</label>
+            <div class="control-with-help">
+              <input
+                class="text-input"
+                type="text"
+                id="trim-start"
+                inputmode="decimal"
+                autocomplete="off"
+                spellcheck="false"
+                aria-describedby="trim-format trim-error"
+              />
+              <button class="button button--secondary" type="button" id="trim-set-start">
+                Set start here
+              </button>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label" for="trim-end">End time</label>
+            <div class="control-with-help">
+              <input
+                class="text-input"
+                type="text"
+                id="trim-end"
+                inputmode="decimal"
+                autocomplete="off"
+                spellcheck="false"
+                aria-describedby="trim-format trim-error"
+              />
+              <button class="button button--secondary" type="button" id="trim-set-end">
+                Set end here
+              </button>
+            </div>
+          </div>
+        </div>
+        <p class="helper" id="trim-format">Minutes and seconds, like 1:05.5.</p>
+        <div aria-live="polite">
+          <p class="field-error" id="trim-error" hidden></p>
+        </div>
+        <p class="trim-result" id="trim-result" aria-live="polite"></p>
+        <div class="actions">
+          <button class="button button--secondary" type="button" id="trim-clear" disabled>
+            Use the whole video
+          </button>
+        </div>
+      </section>
+
       <section class="panel step" id="step-closing" aria-labelledby="closing-heading" hidden>
-        <h2 id="closing-heading"><span class="step-number">2.</span> Closing branding</h2>
+        <h2 id="closing-heading"><span class="step-number">3.</span> Closing branding</h2>
         <fieldset class="choice" id="branding-choice">
           <!-- The heading above is what is seen; the legend names the group
                for assistive technology without saying it twice on screen. -->
@@ -172,7 +248,7 @@
       </section>
 
       <section class="panel step" id="step-preset" aria-labelledby="preset-heading" hidden>
-        <h2 id="preset-heading"><span class="step-number">3.</span> File size / quality</h2>
+        <h2 id="preset-heading"><span class="step-number">4.</span> File size / quality</h2>
         <fieldset class="choice" id="preset-choice">
           <legend class="visually-hidden">File size / quality</legend>
           <!-- Each name answers the heading in its own order — size, then
@@ -200,7 +276,7 @@
            knowing about the sound, the button, the status line, the progress
            bar, and the result with its Save. -->
       <section class="panel step" id="step-create" aria-labelledby="create-heading" hidden>
-        <h2 id="create-heading"><span class="step-number">4.</span> Create</h2>
+        <h2 id="create-heading"><span class="step-number">5.</span> Create</h2>
         <div class="step-lead" id="preflight-report"></div>
         <div id="audio-warnings"></div>
         <div class="actions" id="process-actions" hidden></div>

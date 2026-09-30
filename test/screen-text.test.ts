@@ -234,9 +234,12 @@ describe('steps that read as steps (VH-91)', () => {
     title: match[6]!.trim(),
   }))
 
-  it('has the four steps, in order', () => {
+  it('has the five steps, in order', () => {
+    // Trim second (VH-96): see the video and choose its ends before deciding
+    // how it closes and how big it is.
     expect(steps.map((step) => step.title)).toEqual([
       'Choose a video',
+      'Trim',
       'Closing branding',
       'File size / quality',
       'Create',
@@ -244,8 +247,8 @@ describe('steps that read as steps (VH-91)', () => {
   })
 
   it('numbers them consecutively from 1, with no gap', () => {
-    // A missing "2" reads as a fault. When trim lands as a step the numbers
-    // move; this is what makes sure they all move.
+    // A missing "2" reads as a fault. Trim moved every number after it
+    // (VH-96); this is what makes sure they all moved.
     expect(steps.map((step) => step.number)).toEqual(steps.map((_, index) => index + 1))
   })
 
@@ -255,7 +258,7 @@ describe('steps that read as steps (VH-91)', () => {
   })
 
   it('shows only the first step until a video has been read', () => {
-    expect(steps.map((step) => step.hidden)).toEqual([false, true, true, true])
+    expect(steps.map((step) => step.hidden)).toEqual([false, true, true, true, true])
   })
 
   it('never reorders focus away from the visual order', () => {
@@ -312,6 +315,37 @@ describe('the page frame (VH-92)', () => {
     // The logo is inserted by `brand-assets.ts` only when its file exists. A
     // hard-coded <img> would be a broken image until the maintainer adds it.
     expect(markup).not.toMatch(/<img\b/)
+  })
+})
+
+describe('the trim step (VH-96)', () => {
+  const trim = /<section class="panel step" id="step-trim"[\s\S]*?<\/section>/.exec(markup)?.[0] ?? ''
+
+  it('says it is optional and that leaving it keeps the whole video', () => {
+    expect(trim).toMatch(/Optional\. Cut unwanted material from the start or the end\. Left alone, the whole video\s+is kept\./)
+  })
+
+  it('never makes a handle drag-only: each end has a range input, a time field and a button', () => {
+    // WCAG 2.5.7. The range inputs take the arrow keys; the field takes a
+    // typed time; the button takes the preview's position.
+    for (const id of ['trim-start-range', 'trim-end-range']) {
+      expect(trim).toMatch(new RegExp(`<input class="range-input" type="range" id="${id}"`))
+    }
+    expect(trim).toMatch(/<label class="label" for="trim-start-range">Start<\/label>/)
+    expect(trim).toMatch(/<label class="label" for="trim-end-range">End<\/label>/)
+    expect(trim).toMatch(/<label class="label" for="trim-start">Start time<\/label>/)
+    expect(trim).toMatch(/<label class="label" for="trim-end">End time<\/label>/)
+    expect(trim).toMatch(/>\s*Set start here\s*</)
+    expect(trim).toMatch(/>\s*Set end here\s*</)
+  })
+
+  it('ties the format and any error to both time fields', () => {
+    expect(trim.match(/aria-describedby="trim-format trim-error"/g)).toHaveLength(2)
+  })
+
+  it('plays nothing by itself', () => {
+    expect(trim).toMatch(/<video[^>]*id="trim-preview"[^>]*controls/)
+    expect(trim).not.toMatch(/autoplay/)
   })
 })
 

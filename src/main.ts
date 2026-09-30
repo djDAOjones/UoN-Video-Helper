@@ -46,7 +46,9 @@ import {
   WORKER_ACKNOWLEDGEMENT_LIMIT_MS,
   WORKER_SILENCE_LIMIT_MS,
 } from './config/thresholds'
+import { KEPT_MIN_SECONDS, TRIM_RECHECK_DELAY_MS } from './config/trim'
 import { createWatchdog } from './core/watchdog'
+import type { KeptRange } from './media/kept-range'
 import { saveFile, suggestedFileName } from './media/save'
 import {
   closingResultText,
@@ -66,6 +68,14 @@ import { renderWarnings } from './ui/warning-text'
 import { renderSourceError, renderSourceReport, summarise } from './ui/source-panel'
 import { summariseChecks, type CheckState } from './ui/system-check'
 import { installBrandAssets } from './ui/brand-assets'
+import {
+  formatTrimTime,
+  parseTrimTime,
+  trimHandleText,
+  trimKeyTarget,
+  trimRangeFor,
+  trimSummary,
+} from './ui/trim'
 import type { WorkerOutbound, WorkerRequest } from './workers/protocol'
 
 const isDev = import.meta.env.DEV
@@ -93,7 +103,7 @@ const systemCheckSummary = required<HTMLElement>('#system-check-summary')
 const statusLine = required<HTMLParagraphElement>('#status')
 const sourceStatusLine = required<HTMLParagraphElement>('#source-status')
 /** Steps 2 to 4, which are not on the page until a video has been read. */
-const laterSteps = ['#step-closing', '#step-preset', '#step-create'].map((selector) =>
+const laterSteps = ['#step-trim', '#step-closing', '#step-preset', '#step-create'].map((selector) =>
   required<HTMLElement>(selector),
 )
 const versionLine = required<HTMLParagraphElement>('#version-line')
@@ -118,6 +128,18 @@ const closingColourReason = required<HTMLParagraphElement>('#closing-colour-reas
 const closingResult = required<HTMLParagraphElement>('#closing-result')
 const onsetHelpButton = required<HTMLButtonElement>('#onset-help-button')
 const onsetHelp = required<HTMLDivElement>('#onset-help')
+const trimPreview = required<HTMLVideoElement>('#trim-preview')
+const trimPreviewNote = required<HTMLParagraphElement>('#trim-preview-note')
+const trimTrack = required<HTMLDivElement>('#trim-track')
+const trimStartRange = required<HTMLInputElement>('#trim-start-range')
+const trimEndRange = required<HTMLInputElement>('#trim-end-range')
+const trimStartField = required<HTMLInputElement>('#trim-start')
+const trimEndField = required<HTMLInputElement>('#trim-end')
+const trimSetStart = required<HTMLButtonElement>('#trim-set-start')
+const trimSetEnd = required<HTMLButtonElement>('#trim-set-end')
+const trimError = required<HTMLParagraphElement>('#trim-error')
+const trimResult = required<HTMLParagraphElement>('#trim-result')
+const trimClear = required<HTMLButtonElement>('#trim-clear')
 
 /**
  * Which selection the screen is currently describing.
@@ -321,7 +343,7 @@ function updateSystemCheckSummary(): void {
 /**
  * Says what is happening to the JOB — the device check, a stage, a save.
  *
- * Step 4's status line. It is not on the page until a video has been read, so
+ * The Create step's status line. It is not on the page until a video has been read, so
  * anything about the FILE goes through {@link setSourceStatus} instead: a live
  * region inside a hidden section is neither seen nor announced.
  */
@@ -343,12 +365,13 @@ function setSourceStatus(message: string): void {
 }
 
 /**
- * Puts steps 2 to 4 on the page. Once, for the session.
+ * Puts steps 2 to 5 on the page. Once, for the session.
  *
- * They hold nothing a new file invalidates — two choices with safe defaults,
- * and a Create step whose verdict and Start are cleared and re-earned per
- * file — so hiding them again for each new file only made the page jump. It
- * moves no focus: the user is still on the file input they just used.
+ * They hold nothing a new file invalidates that is not reset for it — the
+ * trim goes back to the whole video, two choices keep their safe defaults,
+ * and the Create step's verdict and Start are cleared and re-earned per file
+ * — so hiding them again for each new file only made the page jump. It moves
+ * no focus: the user is still on the file input they just used.
  */
 function revealLaterSteps(): void {
   for (const step of laterSteps) step.hidden = false
@@ -589,7 +612,7 @@ fileInput.addEventListener('change', () => {
   // A bundle taken now must not describe the file before this one.
   resetDiagnosticsContext('inspecting')
   setSourceStatus('Reading the video…')
-  // Whatever step 4 last said was about the previous file's job.
+  // Whatever the Create step last said was about the previous file's job.
   setStatus('')
   sourceReport.replaceChildren()
   preflightReport.replaceChildren()
@@ -599,7 +622,9 @@ fileInput.addEventListener('change', () => {
   processActions.hidden = true
   jobFile = null
   jobContentClass = 'unknown'
+  jobKeptRange = null
   inspectedFile = null
+  clearTrimPreview()
   // Kept when there is something to lose: the result panel describes a video
   // that already exists, and the source panel describes what was just chosen.
   // Clearing it here removed the only route to a finished file (VH-56).
@@ -627,6 +652,7 @@ fileInput.addEventListener('change', () => {
         renderSourceReport(sourceReport, reply.report)
         setSourceStatus(summarise(reply.report))
         inspectedFile = file
+        resetTrim(file, reply.report.durationSeconds)
         revealLaterSteps()
         setDiagnosticsContext({ stage: 'inspected', source: reply.report })
         // Structure first, then the measurement — the probe really does decode
@@ -672,12 +698,20 @@ fileInput.addEventListener('change', () => {
  *   inspection belongs to the SAME epoch as the inspection did.
  */
 async function runPreflight(file: File, current: () => boolean): Promise<void> {
+  // A trim that cannot be used has nothing to check; its error is beside the
+  // fields, and Start stays down until it is put right.
+  const trim = currentTrim()
+  if ('problem' in trim) {
+    setStatus('Put the start and end times right in step 2 to continue.')
+    return
+  }
+  const keptRange = trim.range
   setStatus('Checking this video against your device…')
   setDiagnosticsContext({ stage: 'preflighting' })
 
   try {
     const reply = await selectionRequest(
-      { kind: 'preflight', file, presetId: chosenPreset() },
+      { kind: 'preflight', file, presetId: chosenPreset(), ...(keptRange ? { keptRange } : {}) },
       SELECTION_DEADLINE_MS.preflight,
     )
     // A verdict about a file or preset the user has since changed must not
@@ -716,6 +750,7 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
         showProcessControls(
           file,
           reply.summary.contentClass,
+          keptRange,
           reply.summary.verdict.outcome === 'discourage',
         )
       }
@@ -757,7 +792,208 @@ presetChoice.addEventListener('change', () => {
   processActions.hidden = true
   jobFile = null
   jobContentClass = 'unknown'
+  jobKeptRange = null
   void runPreflight(file, current)
+})
+
+// --- Trim (VH-96) ----------------------------------------------------------
+// The one cut: unwanted material off the start and the end, over the engine
+// VH-95 built. Left alone it keeps the whole video and sends no range.
+
+/** How long the chosen video is, on the demuxer's clock — the clock the job cuts on. */
+let trimDuration = 0
+/** The trim as the user has set it, in source seconds; checked, not trusted. */
+let trimStart = 0
+let trimEnd = 0
+/** A time field whose text could not be read, with what to say about it. */
+let trimFieldProblem: { readonly field: HTMLInputElement; readonly message: string } | null = null
+/** The preview's object URL, revoked when the file changes. */
+let previewUrl: string | null = null
+let trimRecheck: ReturnType<typeof setTimeout> | null = null
+
+/** The range to send, `null` for the whole video, or why the trim cannot be used. */
+function currentTrim(): { readonly range: KeptRange | null } | { readonly problem: string } {
+  if (trimFieldProblem) return { problem: trimFieldProblem.message }
+  return trimRangeFor(trimStart, trimEnd, trimDuration)
+}
+
+/** Stops the preview and lets its object URL go. Nothing is kept for the old file. */
+function clearTrimPreview(): void {
+  trimPreview.pause()
+  trimPreview.removeAttribute('src')
+  trimPreview.load()
+  if (previewUrl) URL.revokeObjectURL(previewUrl)
+  previewUrl = null
+}
+
+/**
+ * A new video: preview it and keep all of it.
+ *
+ * The preview reads the file where it is, through a local object URL — no
+ * request, and nothing read into memory.
+ */
+function resetTrim(file: File, durationSeconds: number): void {
+  clearTrimPreview()
+  previewUrl = URL.createObjectURL(file)
+  trimPreview.src = previewUrl
+  trimPreviewNote.hidden = true
+  trimDuration = durationSeconds
+  trimStart = 0
+  trimEnd = durationSeconds
+  trimFieldProblem = null
+  for (const range of [trimStartRange, trimEndRange]) {
+    range.min = '0'
+    range.max = String(durationSeconds)
+  }
+  renderTrim()
+  applyControlLock()
+}
+
+/** Shows the trim as it stands: handles, fields, the kept part in words, and any problem. */
+function renderTrim(): void {
+  trimStartRange.value = String(trimStart)
+  trimEndRange.value = String(trimEnd)
+  trimStartRange.setAttribute('aria-valuetext', trimHandleText(trimStart, trimDuration))
+  trimEndRange.setAttribute('aria-valuetext', trimHandleText(trimEnd, trimDuration))
+  const fraction = (value: number) =>
+    trimDuration > 0 ? Math.min(1, Math.max(0, value / trimDuration)) : 0
+  trimTrack.style.setProperty('--start-fraction', String(fraction(trimStart)))
+  trimTrack.style.setProperty('--end-fraction', String(fraction(trimEnd)))
+  trimStartRange.classList.toggle('range-input--on-top', fraction(trimStart) > 0.5)
+
+  // A field the user is correcting keeps what they typed.
+  if (trimFieldProblem?.field !== trimStartField) trimStartField.value = formatTrimTime(trimStart)
+  if (trimFieldProblem?.field !== trimEndField) trimEndField.value = formatTrimTime(trimEnd)
+
+  const trim = currentTrim()
+  const problem = 'problem' in trim ? trim.problem : null
+  trimError.textContent = problem ?? ''
+  trimError.hidden = problem === null
+  for (const field of [trimStartField, trimEndField]) {
+    const invalid = problem !== null && (trimFieldProblem === null || trimFieldProblem.field === field)
+    if (invalid) field.setAttribute('aria-invalid', 'true')
+    else field.removeAttribute('aria-invalid')
+  }
+  trimResult.textContent =
+    problem !== null
+      ? ''
+      : trimSummary('range' in trim ? trim.range : null, trimDuration) +
+        (trimDuration < KEPT_MIN_SECONDS
+          ? ` It is shorter than ${KEPT_MIN_SECONDS} seconds, so it cannot be trimmed.`
+          : '')
+  trimClear.disabled =
+    jobInFlight || saveInFlight || (problem === null && 'range' in trim && trim.range === null)
+}
+
+/**
+ * A committed change to the trim. The verdict on screen described another
+ * range, so Start comes down at once and anything in flight is stopped; the
+ * device check re-runs once the trim has been still for a moment, so a held
+ * arrow key does not queue a check per step.
+ */
+function commitTrim(): void {
+  renderTrim()
+  const file = fileInput.files?.[0]
+  if (!file || file !== inspectedFile) return
+  const current = beginSelection()
+  processActions.hidden = true
+  jobFile = null
+  jobContentClass = 'unknown'
+  jobKeptRange = null
+  if (trimRecheck !== null) clearTimeout(trimRecheck)
+  trimRecheck = null
+  if ('problem' in currentTrim()) {
+    setStatus('Put the start and end times right in step 2 to continue.')
+    return
+  }
+  setStatus('Checking this video against your device…')
+  trimRecheck = setTimeout(() => {
+    trimRecheck = null
+    void runPreflight(file, current)
+  }, TRIM_RECHECK_DELAY_MS)
+}
+
+/**
+ * Keeps each handle on its own side of the other, at least the shortest keep
+ * apart. That is a constraint on the slider, never a correction of a typed
+ * time: those are refused beside the field instead.
+ */
+function onRangeInput(which: 'start' | 'end', value: number): void {
+  trimFieldProblem = null
+  if (which === 'start') trimStart = Math.max(0, Math.min(value, trimEnd - KEPT_MIN_SECONDS))
+  else trimEnd = Math.min(trimDuration, Math.max(value, trimStart + KEPT_MIN_SECONDS))
+  renderTrim()
+}
+
+trimStartRange.addEventListener('input', () => onRangeInput('start', trimStartRange.valueAsNumber))
+trimEndRange.addEventListener('input', () => onRangeInput('end', trimEndRange.valueAsNumber))
+trimStartRange.addEventListener('change', commitTrim)
+trimEndRange.addEventListener('change', commitTrim)
+
+for (const [range, which] of [
+  [trimStartRange, 'start'],
+  [trimEndRange, 'end'],
+] as const) {
+  range.addEventListener('keydown', (event) => {
+    const bounds =
+      which === 'start'
+        ? { min: 0, max: Math.max(0, trimEnd - KEPT_MIN_SECONDS) }
+        : { min: Math.min(trimDuration, trimStart + KEPT_MIN_SECONDS), max: trimDuration }
+    const target = trimKeyTarget(event.key, which === 'start' ? trimStart : trimEnd, bounds)
+    if (target === null) return
+    event.preventDefault()
+    onRangeInput(which, target)
+    commitTrim()
+  })
+}
+
+for (const [field, which] of [
+  [trimStartField, 'start'],
+  [trimEndField, 'end'],
+] as const) {
+  field.addEventListener('change', () => {
+    const seconds = parseTrimTime(field.value)
+    if (seconds === null) {
+      trimFieldProblem = {
+        field,
+        message: `Write the ${which} time as minutes and seconds, like 1:05.5.`,
+      }
+    } else {
+      trimFieldProblem = null
+      if (which === 'start') trimStart = seconds
+      else trimEnd = seconds
+    }
+    commitTrim()
+  })
+}
+
+trimSetStart.addEventListener('click', () => {
+  trimFieldProblem = null
+  trimStart = trimPreview.currentTime
+  commitTrim()
+})
+
+trimSetEnd.addEventListener('click', () => {
+  trimFieldProblem = null
+  trimEnd = trimPreview.currentTime
+  commitTrim()
+})
+
+trimClear.addEventListener('click', () => {
+  trimFieldProblem = null
+  trimStart = 0
+  trimEnd = trimDuration
+  commitTrim()
+  // The button disables itself; focus goes somewhere that still works.
+  trimStartRange.focus()
+})
+
+// The browser's player and WebCodecs do not accept the same files. A source
+// the job can process may not preview; the times still work without it.
+trimPreview.addEventListener('error', () => {
+  if (!previewUrl) return
+  trimPreviewNote.hidden = false
+  applyControlLock()
 })
 
 // --- Processing ---
@@ -802,6 +1038,13 @@ let jobFile: File | null = null
  * outlive the verdict it came from (VH-19).
  */
 let jobContentClass: ContentClass = 'unknown'
+
+/**
+ * The trim that verdict was checked for, handed to the job with the file so
+ * the file is cut where the verdict's time and size said (VH-96). Set and
+ * cleared with {@link jobFile}.
+ */
+let jobKeptRange: KeptRange | null = null
 
 /** The running job's request id, so Cancel reaches the right one. */
 let jobCancelId: number | null = null
@@ -963,6 +1206,17 @@ function applyControlLock(): void {
   presetChoice.disabled = locked
   brandingChoice.disabled = locked
   startButton.disabled = locked
+  // The trim is part of what the job was started for. A video too short to
+  // trim has nothing to move, and says so in the line beneath.
+  const trimLocked = locked || trimDuration < KEPT_MIN_SECONDS
+  for (const control of [trimStartRange, trimEndRange, trimStartField, trimEndField]) {
+    control.disabled = trimLocked
+  }
+  // "Here" is the preview's position, so without a preview there is none.
+  const noPreview = !trimPreviewNote.hidden || previewUrl === null
+  trimSetStart.disabled = trimLocked || noPreview
+  trimSetEnd.disabled = trimLocked || noPreview
+  renderTrim()
 }
 
 startButton.addEventListener('click', () => {
@@ -1031,10 +1285,13 @@ function releaseUnsavedResult(): void {
 
 function beginJob(file: File): void {
   processResult.replaceChildren()
+  // Decoding the preview competes with the encode for the same hardware.
+  trimPreview.pause()
 
   // Read once, so the job and the record of it cannot disagree.
   const closing = chosenClosing()
   const branding = brandingChoiceFor(closing)
+  const keptRange = jobKeptRange
 
   const { id, promise } = requestWithId(
     {
@@ -1045,6 +1302,7 @@ function beginJob(file: File): void {
       backgroundColour: brandBackground(),
       brandingBaseUrl: resolveBrandingBase(document.baseURI),
       contentClass: jobContentClass,
+      ...(keptRange ? { keptRange } : {}),
     },
     // Silence, not duration. A job reports a stage every thirty frames, so a
     // minute without a word means something is genuinely wrong — while an
@@ -1064,6 +1322,8 @@ function beginJob(file: File): void {
       closingOnset: closingTypeUsesOnset(closing.type) ? closing.onset : null,
       closingColour: branding.closing ? closing.colour : null,
       closingMode: branding.closing ? (branding.mode ?? null) : null,
+      // Times only, never anything about what is in them.
+      keptRange,
     },
   })
 
@@ -1146,6 +1406,7 @@ cancelButton.addEventListener('click', () => {
  *
  * @param contentClass - What pre-flight measured the picture to be, kept with
  *   the file so the job is encoded as the verdict said it would be.
+ * @param keptRange - The trim that verdict was checked for, likewise.
  * @param needsAcknowledgement - True for a `discourage` verdict, where spec 7.3
  *   allows continuing only after the user says so. Start is withheld until
  *   they do, and every new selection asks again — an acknowledgement is about
@@ -1154,10 +1415,12 @@ cancelButton.addEventListener('click', () => {
 function showProcessControls(
   file: File,
   contentClass: ContentClass,
+  keptRange: KeptRange | null,
   needsAcknowledgement = false,
 ): void {
   jobFile = file
   jobContentClass = contentClass
+  jobKeptRange = keptRange
   acknowledgeButton.hidden = !needsAcknowledgement
   startButton.hidden = needsAcknowledgement
   processActions.hidden = false

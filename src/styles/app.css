@@ -848,6 +848,187 @@ details[open] > .disclosure-summary::before {
   font-size: var(--type-body-compact);
 }
 
+/* --- Trim (VH-96) --- */
+
+.step-intro {
+  margin: 0 0 var(--spacing-05);
+  color: var(--text-secondary);
+}
+
+/*
+ * The browser's own player: full width, never taller than most of the
+ * window, and letterboxed in the brand blue rather than black (the brand
+ * allows no black).
+ */
+.trim-preview {
+  display: block;
+  width: 100%;
+  max-height: 60vh;
+  background: var(--uon-brand-bg);
+}
+
+/*
+ * Carbon's range slider, from two native range inputs on one track. The
+ * inputs are laid over each other and let pointer events through everywhere
+ * but their thumbs, so either thumb can be dragged; each stays a real range
+ * input on the keyboard, with its own label and value. The thumb is a
+ * 44 px target with a smaller visible disc drawn inside it.
+ */
+.range-slider {
+  margin: var(--spacing-05) 0;
+}
+
+.range-labels {
+  display: flex;
+  justify-content: space-between;
+}
+
+.range-labels .label {
+  margin-bottom: 0;
+}
+
+.range-track {
+  position: relative;
+  height: var(--target-min);
+}
+
+.range-track::before,
+.range-fill {
+  content: '';
+  position: absolute;
+  top: 50%;
+  height: var(--spacing-02);
+  transform: translateY(-50%);
+}
+
+/* The whole length, then the kept part over it. */
+.range-track::before {
+  left: calc(var(--target-min) / 2);
+  right: calc(var(--target-min) / 2);
+  background: var(--border-strong);
+}
+
+.range-fill {
+  left: calc(var(--target-min) / 2 + (100% - var(--target-min)) * var(--start-fraction, 0));
+  right: calc(var(--target-min) / 2 + (100% - var(--target-min)) * (1 - var(--end-fraction, 1)));
+  background: var(--interactive);
+}
+
+.range-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  background: transparent;
+  appearance: none;
+  pointer-events: none;
+}
+
+.range-input::-webkit-slider-runnable-track {
+  height: 100%;
+  background: transparent;
+}
+
+.range-input::-webkit-slider-thumb {
+  width: var(--target-min);
+  height: var(--target-min);
+  border: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    var(--interactive) 0 calc(var(--spacing-04) - 1px),
+    var(--layer-01) var(--spacing-04) calc(var(--spacing-04) + var(--spacing-01)),
+    transparent calc(var(--spacing-04) + var(--spacing-01) + 1px)
+  );
+  appearance: none;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.range-input::-moz-range-thumb {
+  width: var(--target-min);
+  height: var(--target-min);
+  border: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    var(--interactive) 0 calc(var(--spacing-04) - 1px),
+    transparent var(--spacing-04)
+  );
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/*
+ * Two thumbs pushed together overlap, and the later input wins the pointer.
+ * Past half way the start handle is raised, so pushed right against the end
+ * it can still be taken back; pushed left, the end handle can.
+ */
+.range-input--on-top {
+  z-index: 1;
+}
+
+/* The ring goes on the thumb, which is what moves, not on the whole track. */
+.range-input:focus-visible {
+  outline: none;
+}
+
+.range-input:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+
+.range-input:focus-visible::-moz-range-thumb {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+
+.range-input:disabled::-webkit-slider-thumb {
+  cursor: not-allowed;
+  background: radial-gradient(
+    circle,
+    var(--text-secondary) 0 calc(var(--spacing-04) - 1px),
+    transparent var(--spacing-04)
+  );
+}
+
+/* Carbon's text input, at the target floor, like the file input. */
+.text-input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: var(--target-min);
+  padding: var(--spacing-03) var(--spacing-04);
+  border: 1px solid var(--border-strong);
+  background: var(--layer-00);
+  color: var(--text-primary);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+}
+
+.text-input[aria-invalid='true'] {
+  border: 2px solid var(--support-error);
+}
+
+.text-input:disabled {
+  color: var(--text-secondary);
+  cursor: not-allowed;
+}
+
+.control-with-help .text-input {
+  flex: 1;
+}
+
+.control-with-help .button {
+  flex: none;
+}
+
+.trim-result {
+  margin: var(--spacing-05) 0 0;
+  font-size: var(--type-body-compact);
+}
+
 /* --- Audio-quality warnings (spec 5.4) --- */
 
 .warnings {
