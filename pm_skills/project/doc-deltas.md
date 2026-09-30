@@ -90,3 +90,8 @@
       loudness cost, not to land the encoder's input on it; and the limiter's
       working ceiling is at least 1.0 dB below −2.0 dBTP and lower when that
       job's encode is measured to overshoot by more (source: VH-83)
+- [ ] 2026-09-30 SPEC §10 — the table lists Chrome, Edge, Firefox and Safari
+      26+ as supported; the page now tells users the app "is designed and
+      built for Chrome, other browsers may not work" (maintainer's choice over
+      certifying the others) (source: VH-98)
+

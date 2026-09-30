@@ -12,34 +12,41 @@
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
 
-    <!-- A Nottingham Blue band, as on nottingham.ac.uk, and deliberately not
-         sticky: a band that follows the scroll can sit on top of the focused
-         control (WCAG 2.4.11). `on-brand-blue` re-assigns the colour roles, so
-         everything inside is drawn — and contrast-tested — as light on blue.
-         The white-out logo is inserted before the heading when its file
-         exists: see `src/ui/brand-assets.ts` (VH-92). -->
+    <!-- A Nottingham Blue band holding the white logo top-left, as the header
+         of nottingham.ac.uk does, and deliberately not sticky: a band that
+         follows the scroll can sit on top of the focused control (WCAG
+         2.4.11). `on-brand-blue` re-assigns the colour roles, so everything
+         inside is drawn — and contrast-tested — as light on blue. The logo is
+         inserted by `src/ui/brand-assets.ts` from `src/assets/` (VH-92). -->
     <header class="band band--header on-brand-blue">
-      <div class="band-inner" id="brand-header">
-        <h1>UoN Video Helper</h1>
-      </div>
+      <div class="band-inner" id="brand-header"></div>
     </header>
 
     <main class="main" id="main">
+      <!-- The page's name, aligned with the text beneath it rather than
+           pushed right by the logo in the band above (maintainer, 2026-09-30).
+           On the University's own pages the title belongs to the content,
+           not to the header. -->
+      <h1 class="page-title">UoN Video Helper</h1>
+
       <!-- The privacy sentence is said once, here, above the file input, and it
            stays on screen through a job (spec 9.2). It used to be said again
            under the input, and a promise repeated is a promise skimmed
-           (VH-85). -->
+           (VH-85). The browser sentence is the maintainer's answer to "does it
+           work everywhere": it is built and tested for Chrome, and says so
+           rather than letting another browser fail part-way (2026-09-30). -->
       <div class="lede">
         <p>This tool does the following to your video:</p>
         <ul>
-          <li>Adds approved branding</li>
-          <li>Ensures consistent audio levels</li>
-          <li>Outputs an optimised file type and size</li>
+          <li>adds approved branding</li>
+          <li>ensures consistent audio levels</li>
+          <li>outputs an optimised file type and size</li>
         </ul>
         <p>
           Your video is processed on your device, it is never uploaded, and the original file does
           not change.
         </p>
+        <p>This app is designed and built for Chrome, other browsers may not work.</p>
       </div>
 
       <!-- VH-91, 2026-09-30. The steps are separate, numbered panels rather

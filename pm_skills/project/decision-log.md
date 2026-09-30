@@ -11,6 +11,38 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-09-30 — VH-98: the logo as the website draws it, and "built for Chrome"
+
+**Decision:** the header band holds the University's white logo alone,
+top-left against the window edge, as nottingham.ac.uk's header does — the
+site's own `UoN-Logo-Dark.svg`, byte for byte, 62 px high, 12 px clear above
+and below, 20 px in. The page title moves out of the band into the content,
+in Lora, on the same left edge as the text beneath it. Lora Bold (latin, from
+`@fontsource/lora`, 21 KB) and its OFL licence are in `src/assets/`. The
+intro's bullets are square and lower-case, and a sentence follows the privacy
+promise: "This app is designed and built for Chrome, other browsers may not
+work."
+
+**Rationale:** the maintainer's answers of 2026-09-30, which reverse two
+defaults VH-92 set: the logo comes from the website rather than the brand
+library, and its size and clear space are the website's rather than the print
+guide's narrowest tier and half-height exclusion zone. The website is the
+brand team's own reading of its rules. With the logo in the band the title
+could not also sit there and stay aligned with the body text — at common
+widths the two collide — so the title went where the University's pages put
+theirs, at the head of the content. The browser sentence is the maintainer's
+choice between making Edge, Firefox and Safari work and saying plainly what the
+app is built for; it says so before anything is chosen, which is when it is
+useful.
+
+**Verified:** Chrome, dev build: logo 170 x 62 at 20 px from the edge, 12 px
+above; title and intro both at 24 px; Lora loaded for 700; bullets square.
+Tests hold the title's place, the three items' wording, the browser sentence's
+position above the file input, and the logo's tokens.
+
+**Link:** VH-98, VH-92; `index.html`, `src/assets/`, `src/styles/tokens.brand.css`,
+doc-delta §10.
+
 ## 2026-09-30 — Pruned project memory: one day's interface pass outgrew the log
 
 **Decision:** Split `decision-log.md` at the 70% prune-to target — the latest

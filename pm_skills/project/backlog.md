@@ -50,19 +50,6 @@
       Note: it also means most jobs should be taking "Best quality", which is
       already the default and already what §6.1 names for EchoVideo.
 
-- [ ] **VH-98 The logo and the heading font** [maintainer] (2026-09-30)
-      Intent: VH-92 shipped the University's look with two slots empty. The
-      white-out logo is a trademark from the brand team's library — not
-      something an agent copies off the website. Lora is OFL and only needs
-      downloading, which the agent did not do unasked.
-      Done when: `src/assets/uon-logo-white.svg` (or `.png`) and
-      `src/assets/lora-bold.woff2`, with its `OFL.txt`, are committed —
-      `src/assets/README.md` says where each comes from — and the header
-      shows the logo in both builds. No code changes: `brand-assets.ts` picks
-      both up by name.
-      Open: the logo's height. 50 px, the brand's narrowest tier, is built;
-      the brand table says 80 px at laptop widths. The brand team arbitrates.
-
 ### Band 4 — The interface pass
 
 <!-- Maintainer request, 2026-09-30: one list of interface changes, split so

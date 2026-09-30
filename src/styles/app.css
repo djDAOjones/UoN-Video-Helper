@@ -103,31 +103,30 @@ a {
   border-top: 1px solid var(--border-subtle);
 }
 
+/*
+ * The header band holds the logo alone, top-left against the window's edge as
+ * on nottingham.ac.uk — not indented to the content column, which is centred.
+ * Its height is the logo plus the clear space above and below, so the band
+ * keeps its shape even before the image has loaded.
+ */
 .band--header .band-inner {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  /* The logo's exclusion zone is kept between it and the name, too. */
-  gap: var(--uon-logo-clear);
+  max-width: none;
+  min-height: calc(var(--uon-logo-height) + 2 * var(--uon-logo-clear));
+  padding: var(--uon-logo-clear) var(--uon-logo-inset);
 }
 
-/*
- * The logo, at the brand's height and inside its exclusion zone: half the
- * logo's own height, clear, on every side. The band's padding supplies the
- * left edge; the margin supplies the rest.
- */
 .brand-logo {
   display: block;
   height: var(--uon-logo-height);
   width: auto;
-  margin-block: calc(var(--uon-logo-clear) - var(--spacing-05));
-  margin-inline-start: max(0px, calc(var(--uon-logo-clear) - var(--spacing-06)));
 }
 
-.band--header h1 {
-  margin: 0;
+/* The page's name, in the brand's heading face, on the content's left edge. */
+.page-title {
+  margin: 0 0 var(--spacing-05);
   font-size: var(--type-heading-04);
   font-weight: 700;
+  line-height: 1.25;
 }
 
 .band--footer .system-check {
@@ -162,6 +161,7 @@ a {
 .lede ul {
   margin: var(--spacing-03) 0 var(--spacing-05);
   padding-left: var(--spacing-06);
+  list-style: square;
 }
 
 .panel {

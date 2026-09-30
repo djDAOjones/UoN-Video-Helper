@@ -36,11 +36,25 @@ describe('the brand bands (VH-92)', () => {
     expect(rules).not.toMatch(/position:\s*(sticky|fixed)/)
   })
 
-  it('size the logo from the brand token, not from a number', () => {
+  it('size and place the logo from the brand tokens, not from numbers', () => {
     const logo = /\.brand-logo\s*\{([^}]*)\}/.exec(rules)?.[1] ?? ''
     expect(logo).toMatch(/height:\s*var\(--uon-logo-height\)/)
-    // The exclusion zone: half the logo's height, on every side.
-    expect(logo).toMatch(/var\(--uon-logo-clear\)/)
+    // The clear space around it, as nottingham.ac.uk draws it: above and
+    // below, and in from the window's left edge.
+    const band = /\.band--header \.band-inner\s*\{([^}]*)\}/.exec(rules)?.[1] ?? ''
+    expect(band).toMatch(/padding:\s*var\(--uon-logo-clear\)\s+var\(--uon-logo-inset\)/)
+  })
+
+  it('put the logo against the window edge, not in the centred column', () => {
+    // "Top left, as per website": the header band is full width even though
+    // the content beneath it is centred.
+    const band = /\.band--header \.band-inner\s*\{([^}]*)\}/.exec(rules)?.[1] ?? ''
+    expect(band).toMatch(/max-width:\s*none/)
+  })
+
+  it('use square bullets for the list of what the tool does', () => {
+    const list = /\.lede ul\s*\{([^}]*)\}/.exec(rules)?.[1] ?? ''
+    expect(list).toMatch(/list-style:\s*square/)
   })
 
   it('name no colour directly: every colour in the app is a token', () => {

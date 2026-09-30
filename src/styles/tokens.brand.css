@@ -80,12 +80,15 @@
   /* ---- Logo ---------------------------------------------------------- */
 
   /*
-   * The brand's narrowest height tier, used at every width; the brand team
-   * arbitrates anything larger. The exclusion zone is half the castle
-   * square's depth — half the logo's height — on every side.
+   * As the University's own site draws it, measured from nottingham.ac.uk's
+   * header on 2026-09-30: the white logo 62 px high, 12 px of clear blue above
+   * and below, 20 px in from the left edge of the window. The maintainer asked
+   * for the logo "as per website", and the website is the brand team's own
+   * reading of its rules.
    */
-  --uon-logo-height: 50px;
-  --uon-logo-clear: calc(var(--uon-logo-height) / 2);
+  --uon-logo-height: 62px;
+  --uon-logo-clear: 12px;
+  --uon-logo-inset: 20px;
 
   /* ---- Roles, light -------------------------------------------------- */
 

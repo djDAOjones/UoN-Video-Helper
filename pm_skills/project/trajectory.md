@@ -25,6 +25,12 @@
 
 ## Archived: the review's close and Band 1a — see archive/trajectory/trajectory-0004-review-close-and-band-1a.md
 
+### VH-98 — the University's logo and heading face
+
+- VH-98 — Shipped 2026-09-30. The website's white logo top-left on the blue
+  band, the title in Lora on the content's edge, and an intro that says the
+  app is built for Chrome. See decision-log.
+
 ### VH-19, VH-71 — slides cost less, and the archive is reconciled
 
 - VH-19 — Shipped 2026-09-30. The smaller output measures slides against

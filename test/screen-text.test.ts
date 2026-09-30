@@ -49,6 +49,31 @@ describe('the privacy promise (VH-85)', () => {
   })
 })
 
+describe('what the tool does, and where it works (2026-09-30)', () => {
+  const lede = /<div class="lede">([\s\S]*?)<\/div>/.exec(markup)?.[1] ?? ''
+
+  it('lists the three things it does, in the maintainer\'s words', () => {
+    const items = [...lede.matchAll(/<li>([^<]+)<\/li>/g)].map((match) => match[1]!.trim())
+    expect(items).toEqual([
+      'adds approved branding',
+      'ensures consistent audio levels',
+      'outputs an optimised file type and size',
+    ])
+  })
+
+  it('says which browser it is built for, before anything is chosen', () => {
+    // The answer to "does it work in Edge, Firefox and Safari": it is built
+    // and tested for Chrome, and says so, rather than let another browser
+    // fail part-way through a job.
+    expect(visibleText).toContain(
+      'This app is designed and built for Chrome, other browsers may not work.',
+    )
+    expect(markup.indexOf('designed and built for Chrome')).toBeLessThan(
+      markup.indexOf('id="file-input"'),
+    )
+  })
+})
+
 describe('the output choice (VH-85)', () => {
   /** The name shown beside one preset's radio. */
   function shownName(id: PresetId): string | undefined {
@@ -270,9 +295,12 @@ describe('the page frame (VH-92)', () => {
     expect(footer).toMatch(/class="band band--footer on-brand-blue"/)
   })
 
-  it('heads the page with its name, once', () => {
-    expect(markup.match(/<h1>/g)).toHaveLength(1)
-    expect(header).toContain('<h1>UoN Video Helper</h1>')
+  it('heads the page with its name, once, in the content rather than the band', () => {
+    // The band holds the logo alone; the title lines up with the text beneath
+    // it (maintainer, 2026-09-30).
+    expect(markup.match(/<h1[\s>]/g)).toHaveLength(1)
+    expect(header).not.toContain('<h1')
+    expect(markup).toMatch(/<main[^>]*>\s*<h1 class="page-title">UoN Video Helper<\/h1>/)
   })
 
   it('puts System check and the version in the footer', () => {

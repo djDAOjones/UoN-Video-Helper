@@ -15,7 +15,7 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 185 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 188 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 23 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
@@ -23,7 +23,7 @@
 - `public` — 13 file(s)
 - `reviews` — 7 file(s)
 - `scripts` — 5 file(s)
-- `src` — 124 file(s)
+- `src` — 127 file(s)
 - `test` — 6 file(s)
 <!-- /file-map-index -->
 
@@ -110,7 +110,10 @@
 - `src/acceptance/measure.test.ts` — Pins the drift estimator — an endpoint difference read the trend backwards.
 - `src/acceptance/measure.ts` — Sync by marker, loudness by region, and two independent egress instruments.
 - `src/acceptance/run.ts` — The spec 13 run: what is checked, and what is reported as needing a person.
-- `src/assets/README.md` — The two brand files that belong here and are not in the repository: the white-out logo and Lora Bold. What each is, where it comes from, its licence.
+- `src/assets/OFL.txt` — Lora's SIL Open Font License; must stay beside the font file.
+- `src/assets/README.md` — The brand files the app draws — the logo and Lora Bold — where each came from, and their licences.
+- `src/assets/lora-bold.woff2` — Lora Bold, latin subset, from `@fontsource/lora`: the University's heading face, self-hosted.
+- `src/assets/uon-logo-white.svg` — The University's white logo, byte for byte from nottingham.ac.uk's header. A trademark: never edited.
 - `src/audio/analyse.test.ts` — Proves the facade measures the same thing the components do separately.
 - `src/audio/analyse.ts` — The analysis pass: loudness and true peak over one traversal of source audio only.
 - `src/audio/biquad.ts` — Second-order IIR section, Direct Form II transposed, Float64 state to resist hour-long drift.

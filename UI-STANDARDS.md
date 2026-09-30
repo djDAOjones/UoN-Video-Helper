@@ -37,7 +37,7 @@ other.**
 
 | System | Governs | Source |
 | --- | --- | --- |
-| **UoN brand tokens** | Colour and typeface: the palette and its tints, and the colour ROLES assigned from it — surfaces, text, borders, interactive, focus — plus the heading and body font stacks and the logo's size and exclusion zone | `src/styles/tokens.brand.css` |
+| **UoN brand tokens** | Colour and typeface: the palette and its tints, and the colour ROLES assigned from it — surfaces, text, borders, interactive, focus — plus the heading and body font stacks and the logo's size and clear space | `src/styles/tokens.brand.css` |
 | **Carbon conventions** | Shape: spacing scale, type scale, motion, the 44 px target floor — and status colour, which the brand palette cannot supply at AAA | `src/styles/tokens.carbon.css` — implemented to match Carbon's spec, never installed as a package |
 
 When adding a token, decide which system owns it from the table above.
@@ -80,7 +80,8 @@ interface:
 - **Shape stays Carbon productive.** The website's pill buttons are not
   adopted.
 - **The logo is a trademark.** It is never redrawn, recoloured or cropped; it
-  keeps an exclusion zone of half its height on every side; its `alt` is
+  is drawn as nottingham.ac.uk draws it — 62 px high, top-left against the
+  window edge, 12 px clear above and below, 20 px in; its `alt` is
   "University of Nottingham". See `src/assets/README.md`.
 
 ### Contrast
