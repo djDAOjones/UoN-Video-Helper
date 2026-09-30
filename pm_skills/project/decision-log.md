@@ -32,7 +32,8 @@ the range its verdict was checked for. Untouched, no range is sent. A video
 shorter than 3 s cannot be trimmed and says so; a file the player cannot
 show keeps working fields and says the preview is unavailable. After the
 Codex review: a typed time past the video's end is refused with its length
-rather than moved to the end; a re-check waiting to run is cancelled when
+rather than moved to the end (within the fields' tenth-of-a-second rounding
+it is the end, so the end the page shows can be typed back); a re-check waiting to run is cancelled when
 the file or the output changes; and a new file empties the step — "Reading
 the video…", then either its times or "There is no video to trim: that file
 could not be read." — so nothing of the last video is shown.

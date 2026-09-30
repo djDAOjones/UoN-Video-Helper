@@ -8,7 +8,7 @@
  */
 
 import {
-  KEPT_EDGE_TOLERANCE_SECONDS,
+  TRIM_FIELD_ROUNDING_SECONDS,
   TRIM_KEY_STEP_SECONDS,
   TRIM_PAGE_STEP_SECONDS,
 } from '../config/trim'
@@ -50,7 +50,8 @@ export function parseTrimTime(text: string): number | null {
 /**
  * A typed time for one end, or why it cannot be used.
  *
- * Refused here if it is not a time or lies past the end of the video. The
+ * Refused here if it is not a time or lies past the end of the video — past
+ * it by more than the fields' own rounding, since the page shows tenths. The
  * worker would bring an end past the file back to the file's end, which is
  * right for a range that arrives that way — but a person who typed it would
  * then see "the whole video" beside a field still holding their number
@@ -65,12 +66,13 @@ export function trimFieldValue(
   if (seconds === null) {
     return { problem: `Write the ${which} time as minutes and seconds, like 1:05.5.` }
   }
-  if (seconds > durationSeconds + KEPT_EDGE_TOLERANCE_SECONDS) {
+  if (seconds > durationSeconds + TRIM_FIELD_ROUNDING_SECONDS) {
     return {
       problem: `The ${which} time is after the end of the video, which is ${formatTrimTime(durationSeconds)} long.`,
     }
   }
-  return { seconds }
+  // Within the fields' own rounding of the end, it IS the end.
+  return { seconds: Math.min(seconds, durationSeconds) }
 }
 
 /**

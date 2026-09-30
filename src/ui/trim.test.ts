@@ -66,6 +66,13 @@ describe('a typed time for one end', () => {
     })
   })
 
+  it('takes back the end exactly as the field showed it', () => {
+    // Codex review: a 130.46 s video's end reads "2:10.5", and typing that
+    // back was refused as past the end.
+    expect(formatTrimTime(130.46)).toBe('2:10.5')
+    expect(trimFieldValue('2:10.5', 'end', 130.46)).toEqual({ seconds: 130.46 })
+  })
+
   it('refuses a time past the end of the video rather than quietly moving it', () => {
     // Codex review of VH-96: "3:00" on a 2:10 video became the file's end,
     // and the page said the whole video was kept beside a field saying 3:00.
