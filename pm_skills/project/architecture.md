@@ -82,6 +82,7 @@ src/
     pipeline.ts            pass 1 / pass 2 orchestration, both feed lanes
     audio-plan.ts          the gain solve and the content audio processor
     codec-probe.ts         what the AAC encode costs this job: loudness and true peak
+    content-class.ts       slides or camera, from spread windows, for the smaller output
     audio-frames.ts        planar/interleaved conversion at the Mediabunny edge
     encoding.ts            the encoder configs Mediabunny is given
     encoder-delay.ts       measures the AAC encoder's own delay, and compensates

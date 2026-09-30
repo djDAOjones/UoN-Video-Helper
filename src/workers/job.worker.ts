@@ -10,17 +10,20 @@ import { installGlobalErrorCapture, type CapturedError } from '../core/diagnosti
 import { EgressWatch, type EgressReport } from '../core/egress'
 import { getLogRecords, log, setMinimumLogLevel } from '../core/logger'
 import {
+  CONTENT_CLASSES,
   OUTPUT_SAMPLE_RATE,
   PRESETS,
   outputShapeFor,
   projectedOutputBytes,
   videoEncoderConfigFor,
+  type ContentClass,
   type PresetId,
 } from '../config/presets'
 import { detectSourceWarnings, type AudioWarning } from '../audio/warnings'
 import { LONGEST_CLOSING_SECONDS, type BrandingChoice } from '../config/branding'
 import { analyseSourceAudio } from '../media/audio-plan'
 import { canEncodeAudio, checkEncodeSupport, inspectCapabilities } from '../media/capability'
+import { measureContentClass } from '../media/content-class'
 import { UnreadableFileError, inspectFile, openInput } from '../media/inspect'
 import { OpfsWorkspace, sweepOrphanedJobs } from '../media/opfs'
 import { requireReadableOutputVideo } from '../media/output-integrity'
@@ -159,6 +162,7 @@ async function handleProcess(
     readonly branding: BrandingChoice
     readonly backgroundColour: string
     readonly brandingBaseUrl: string
+    readonly contentClass: ContentClass
   },
   signal: AbortSignal,
 ): Promise<void> {
@@ -179,15 +183,31 @@ async function handleProcess(
     post({ kind: 'stage', id, stage: 'preparing', fraction: 0 })
     const report = await inspectFile(file, { signal })
     const preset = PRESETS[presetId]
-    const shape = outputShapeFor(preset, {
-      width: report.video.displayWidth,
-      height: report.video.displayHeight,
-      frameRate: report.video.conform.frameRate,
-      videoBitrateBps: report.video.averageBitrateBps,
-      // The rate the source ACTUALLY runs at, which is what its bitrate was
-      // spread over. Conforming can move the rate (40 fps conforms to 30), and
-      // dividing by the conformed one would misread the source's density.
-      sourceFrameRate: report.video.conform.sourceFrameRate,
+    // The class pre-flight measured, as the verdict's size was built from it.
+    // Checked, because it crossed the worker boundary as a string: anything
+    // unrecognised takes the safer, camera budget.
+    const contentClass = CONTENT_CLASSES.includes(options.contentClass)
+      ? options.contentClass
+      : 'unknown'
+    const shape = outputShapeFor(
+      preset,
+      {
+        width: report.video.displayWidth,
+        height: report.video.displayHeight,
+        frameRate: report.video.conform.frameRate,
+        videoBitrateBps: report.video.averageBitrateBps,
+        // The rate the source ACTUALLY runs at, which is what its bitrate was
+        // spread over. Conforming can move the rate (40 fps conforms to 30), and
+        // dividing by the conformed one would misread the source's density.
+        sourceFrameRate: report.video.conform.sourceFrameRate,
+      },
+      contentClass,
+    )
+    log.info('worker', 'output shape selected', {
+      presetId,
+      contentClass,
+      videoBitrateBps: shape.videoBitrateBps,
+      bitrateBasis: shape.bitrateBasis,
     })
 
     workspace = await OpfsWorkspace.open(jobId)
@@ -350,16 +370,51 @@ async function handlePreflight(
   try {
     const report = await inspectFile(file, { signal })
     const preset = PRESETS[presetId]
-    const shape = outputShapeFor(preset, {
-      width: report.video.displayWidth,
-      height: report.video.displayHeight,
-      frameRate: report.video.conform.frameRate,
-      videoBitrateBps: report.video.averageBitrateBps,
-      // The rate the source ACTUALLY runs at, which is what its bitrate was
-      // spread over. Conforming can move the rate (40 fps conforms to 30), and
-      // dividing by the conformed one would misread the source's density.
-      sourceFrameRate: report.video.conform.sourceFrameRate,
-    })
+    // Both tracks, and a silent source asks nothing of the audio decoder.
+    // Measured during inspection and, until VH-60, never consulted again.
+    const canDecodeSource = report.video.canDecode && (report.audio?.canDecode ?? true)
+    const capability = await inspectCapabilities()
+
+    // Spec 6.2: the smaller output spends less on slides than on camera, so
+    // what the picture is has to be known BEFORE the shape, which the encoder
+    // check, the size estimate and the timed probe are all built from. Only
+    // for the output it changes, and only for a job that can run — and in a
+    // pass of its own, so it cannot move the probe's measured speed (VH-19).
+    const contentTrack =
+      presetId === 'smaller' &&
+      capability.isSecureContext &&
+      capability.hasWebCodecs &&
+      capability.hasOpfs &&
+      canDecodeSource
+        ? await openInput(file).getPrimaryVideoTrack()
+        : null
+    const contentClass: ContentClass = contentTrack
+      ? (
+          await measureContentClass(contentTrack, {
+            width: report.video.displayWidth,
+            height: report.video.displayHeight,
+            sourceFrameRate: report.video.conform.sourceFrameRate,
+            sourceBitrateBps: report.video.averageBitrateBps,
+            signal,
+          })
+        ).contentClass
+      : 'unknown'
+    throwIfAborted(signal)
+
+    const shape = outputShapeFor(
+      preset,
+      {
+        width: report.video.displayWidth,
+        height: report.video.displayHeight,
+        frameRate: report.video.conform.frameRate,
+        videoBitrateBps: report.video.averageBitrateBps,
+        // The rate the source ACTUALLY runs at, which is what its bitrate was
+        // spread over. Conforming can move the rate (40 fps conforms to 30), and
+        // dividing by the conformed one would misread the source's density.
+        sourceFrameRate: report.video.conform.sourceFrameRate,
+      },
+      contentClass,
+    )
     // The SOURCE duration plus the longest closing. The output is longer than
     // the source by whatever branding is appended, and the estimate used to
     // multiply by the source alone — omitting the tail outright, about 3% on a
@@ -372,8 +427,7 @@ async function handlePreflight(
       report.audio !== null,
     )
 
-    const [capability, encode, canEncodeAac] = await Promise.all([
-      inspectCapabilities(),
+    const [encode, canEncodeAac] = await Promise.all([
       checkEncodeSupport(videoEncoderConfigFor(shape)),
       // A silent source asks nothing of the audio encoder, so it cannot be
       // blocked by one. Everything else asks for the exact configuration the
@@ -416,10 +470,6 @@ async function handlePreflight(
     // derived from half a lecture are worse than none.
     throwIfAborted(signal)
 
-    // Both tracks, and a silent source asks nothing of the audio decoder.
-    // Measured during inspection and, until VH-60, never consulted again.
-    const canDecodeSource = report.video.canDecode && (report.audio?.canDecode ?? true)
-
     // Not for a source that cannot be decoded: the probe would encode three
     // seconds, fail on the track inspection already ruled out, and throw the
     // estimate away — work that only delays the block, and on a slow device
@@ -441,6 +491,7 @@ async function handlePreflight(
       encode,
       probe,
       shape,
+      contentClass,
       projectedOutputBytes: projected,
       audioWarnings,
       verdict: preflightVerdict({

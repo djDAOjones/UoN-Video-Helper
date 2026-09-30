@@ -7,7 +7,7 @@
  * part that is fully tested.
  */
 
-import type { OutputShape, PresetId } from '../config/presets'
+import type { ContentClass, OutputShape, PresetId } from '../config/presets'
 import { ESTIMATE_BANDS, STORAGE_HEADROOM_MULTIPLE } from '../config/thresholds'
 import type { AudioWarning } from '../audio/warnings'
 import type { CapabilityReport, EncodeSupport } from './capability'
@@ -144,6 +144,13 @@ export interface PreflightSummary {
   readonly probe: ProbeResult
   readonly verdict: PreflightVerdict
   readonly shape: OutputShape
+  /**
+   * What the picture was measured to be mostly made of (spec 6.2, VH-19).
+   * `unknown` unless the smaller output was asked for and the measurement
+   * was decisive: it is the only output the class changes, and `unknown`
+   * keeps the safer, camera budget. {@link shape} was built with it.
+   */
+  readonly contentClass: ContentClass
   readonly projectedOutputBytes: number
   /**
    * Spec 5.4 audio-quality warnings. Advisory, shown before processing, and

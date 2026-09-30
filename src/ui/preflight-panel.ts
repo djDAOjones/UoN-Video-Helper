@@ -7,7 +7,7 @@
  * stops has told the user nothing they can act on.
  */
 
-import { bitrateWasCappedToSource } from '../config/presets'
+import { PRESETS, bitrateWasCappedToSource } from '../config/presets'
 import type { PreflightOutcome, PreflightReasonCode, PreflightSummary } from '../media/preflight'
 import { formatDuration, formatFileSize } from './format'
 
@@ -136,6 +136,17 @@ export function verdictText(summary: PreflightSummary): VerdictText {
       lines.push(
         'Your video is already compressed as far as this setting would take it, so it will come ' +
           'out about the same size. The branding and sound levelling are still applied.',
+      )
+    } else if (summary.presetId === 'smaller' && summary.contentClass === 'screen') {
+      // Spec 6.2 spends less on slides than on camera, and a classifier
+      // decides which this is. Said out loud, with the way out, because the
+      // one way it can be wrong — camera taken for slides — costs picture
+      // quality, and the person looking at the video is the one who can tell
+      // (VH-19). Not when the cap above already decided the size: the class
+      // changed nothing then, and claiming it did would be untrue.
+      lines.push(
+        'This looks like slides or a screen recording, so the file is made smaller still. ' +
+          `If it is mostly camera footage, choose ${PRESETS.best.label} instead.`,
       )
     }
   }

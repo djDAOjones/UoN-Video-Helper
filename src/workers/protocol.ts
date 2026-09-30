@@ -11,7 +11,7 @@ import type { CapturedError } from '../core/diagnostics'
 import type { EgressReport } from '../core/egress'
 import type { LogRecord } from '../core/logger'
 import type { BrandingChoice } from '../config/branding'
-import type { PresetId } from '../config/presets'
+import type { ContentClass, PresetId } from '../config/presets'
 import type { SourceReport } from '../media/inspect'
 import type { PreflightSummary } from '../media/preflight'
 import type { AudioWarning } from '../audio/warnings'
@@ -60,6 +60,14 @@ export type WorkerRequest =
        * `./branding` misses every asset (`resolveBrandingBase`).
        */
       readonly brandingBaseUrl: string
+      /**
+       * What pre-flight measured the picture to be, handed back so the job
+       * encodes at the bitrate its verdict described. Re-measuring here could
+       * land the other side of a threshold, and the file would then differ
+       * from the size the user decided on. Say `unknown` when there is no
+       * verdict to take it from: that is the safer, camera budget (VH-19).
+       */
+      readonly contentClass: ContentClass
     }
   /** Stop the job started by `cancelId`. Answered by that job, not by this request. */
   | { readonly kind: 'cancel'; readonly id: number; readonly cancelId: number }

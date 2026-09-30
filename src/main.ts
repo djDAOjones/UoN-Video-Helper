@@ -32,7 +32,7 @@ import {
   resolveBrandingBase,
   type ClosingControls,
 } from './config/branding'
-import type { PresetId } from './config/presets'
+import type { ContentClass, PresetId } from './config/presets'
 import {
   SELECTION_DEADLINE_MS,
   WORKER_ACKNOWLEDGEMENT_LIMIT_MS,
@@ -583,6 +583,7 @@ fileInput.addEventListener('change', () => {
   // session now, and emptying this container would throw them away (VH-36).
   processActions.hidden = true
   jobFile = null
+  jobContentClass = 'unknown'
   inspectedFile = null
   // Kept when there is something to lose: the result panel describes a video
   // that already exists, and the source panel describes what was just chosen.
@@ -676,6 +677,8 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
         outcome: reply.summary.verdict.outcome,
         reasons: reply.summary.verdict.reasons.map((reason) => reason.code),
         presetId: reply.summary.presetId,
+        contentClass: reply.summary.contentClass,
+        bitrateBasis: reply.summary.shape.bitrateBasis,
         width: reply.summary.shape.width,
         height: reply.summary.shape.height,
         frameRate: reply.summary.shape.frameRate,
@@ -695,7 +698,11 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
         capability: reply.summary,
       })
       if (reply.summary.verdict.outcome !== 'block') {
-        showProcessControls(file, reply.summary.verdict.outcome === 'discourage')
+        showProcessControls(
+          file,
+          reply.summary.contentClass,
+          reply.summary.verdict.outcome === 'discourage',
+        )
       }
       return
     }
@@ -734,6 +741,7 @@ presetChoice.addEventListener('change', () => {
   const current = beginSelection()
   processActions.hidden = true
   jobFile = null
+  jobContentClass = 'unknown'
   void runPreflight(file, current)
 })
 
@@ -771,6 +779,14 @@ let jobInFlight = false
 
 /** The file the Start button will act on. Set by {@link showProcessControls}. */
 let jobFile: File | null = null
+
+/**
+ * What pre-flight measured that file's picture to be, for the preset then
+ * chosen. Handed back with the job so it encodes at the bitrate the verdict
+ * described; set and cleared with {@link jobFile}, so a class can never
+ * outlive the verdict it came from (VH-19).
+ */
+let jobContentClass: ContentClass = 'unknown'
 
 /** The running job's request id, so Cancel reaches the right one. */
 let jobCancelId: number | null = null
@@ -1013,6 +1029,7 @@ function beginJob(file: File): void {
       branding,
       backgroundColour: brandBackground(),
       brandingBaseUrl: resolveBrandingBase(document.baseURI),
+      contentClass: jobContentClass,
     },
     // Silence, not duration. A job reports a stage every thirty frames, so a
     // minute without a word means something is genuinely wrong — while an
@@ -1112,13 +1129,20 @@ cancelButton.addEventListener('click', () => {
 /**
  * Points the Start button at this file and reveals the controls.
  *
+ * @param contentClass - What pre-flight measured the picture to be, kept with
+ *   the file so the job is encoded as the verdict said it would be.
  * @param needsAcknowledgement - True for a `discourage` verdict, where spec 7.3
  *   allows continuing only after the user says so. Start is withheld until
  *   they do, and every new selection asks again — an acknowledgement is about
  *   one job, not about the session.
  */
-function showProcessControls(file: File, needsAcknowledgement = false): void {
+function showProcessControls(
+  file: File,
+  contentClass: ContentClass,
+  needsAcknowledgement = false,
+): void {
   jobFile = file
+  jobContentClass = contentClass
   acknowledgeButton.hidden = !needsAcknowledgement
   startButton.hidden = needsAcknowledgement
   processActions.hidden = false

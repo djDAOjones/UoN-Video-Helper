@@ -55,6 +55,7 @@ function summary(
       estimatedSeconds: 37,
     },
     shape,
+    contentClass: 'unknown',
     projectedOutputBytes: 28_500_000,
     audioWarnings: [],
     verdict: {
@@ -194,6 +195,58 @@ describe('block (VH-89)', () => {
     const { lines } = verdictText(summary('block', [['insufficient-storage', 'block']]))
     expect(lines).toHaveLength(1)
     expect(lines[0]).toContain('71.3 MB')
+  })
+})
+
+describe('the picture type is said when it changes the file (VH-19)', () => {
+  const smallerScreen = (overrides: Partial<PreflightSummary> = {}) =>
+    summary('proceed', [], {
+      presetId: 'smaller',
+      contentClass: 'screen',
+      shape: { ...shape, bitrateBasis: 'preset' },
+      ...overrides,
+    })
+  const said = (value: PreflightSummary) => verdictText(value).lines.join(' ')
+
+  it('says slides were detected, and how to overrule it', () => {
+    // The one way the classifier can be wrong — camera taken for slides —
+    // costs picture quality, and only the person looking can tell. So the
+    // decision is never silent, and the way out is named.
+    const { lines } = verdictText(smallerScreen())
+    expect(lines).toHaveLength(3)
+    expect(lines[2]).toContain('slides or a screen recording')
+    expect(lines[2]).toContain('Larger / better')
+  })
+
+  it.each(['camera', 'unknown'] as const)('says nothing for %s, which is the ordinary setting', (contentClass) => {
+    expect(said(smallerScreen({ contentClass }))).not.toMatch(/slides|camera footage/)
+  })
+
+  it('says nothing on the larger output, which the class does not change', () => {
+    expect(said(smallerScreen({ presetId: 'best' }))).not.toMatch(/slides/)
+  })
+
+  it('gives way to the already-compressed note, which is what decided the size', () => {
+    // Capped to the source: the class changed nothing, and saying the file is
+    // "made smaller still" beside "about the same size" would be untrue.
+    const capped = smallerScreen({ shape: { ...shape, bitrateBasis: 'capped-to-source' } })
+    expect(said(capped)).toContain('about the same size')
+    expect(said(capped)).not.toMatch(/smaller still/)
+  })
+
+  it('says nothing under a block', () => {
+    const blocked = smallerScreen({
+      verdict: {
+        outcome: 'block',
+        reasons: [{ code: 'no-source-decode', outcome: 'block' }],
+        requiredStorageBytes: 0,
+      },
+    })
+    expect(said(blocked)).not.toMatch(/slides/)
+  })
+
+  it('uses no jargon to say it', () => {
+    expect(said(smallerScreen())).not.toMatch(/bitrate|Mbps|codec|classif/i)
   })
 })
 

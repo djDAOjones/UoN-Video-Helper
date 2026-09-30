@@ -18,76 +18,20 @@
      two critiques, all three in `reviews/2026-08-26/` — cite the R-number
      rather than restating the evidence here.
      VH-71..VH-78 came from the 2026-08-27 cross-check of the archived
-     implementation branch; `tickets/VH-71.md` is their detail source and
-     VH-71 is their umbrella — cite the work package.
+     implementation branch; VH-71 was their umbrella and closed with VH-19
+     on 2026-09-30, and VH-78 waits in the Icebox. Band 2 closed the same day
+     with VH-83.
      Both sets were re-verified against source before banding, and where a
      review's own remedy was shown unsafe the item says so. -->
-
-### Band 2 — The edges hold
-
-<!-- Not committed, and all of it is agent work. Ordered by dependency rather
-     than by ID. VH-76 shipped first, 2026-08-27, so everything below it is
-     now judged by a gate that does not rewrite `dist/`, and VH-72 and VH-73
-     shipped with it, and VH-75 after them. VH-75 groups four verified holes of
-     one shape. VH-62 is LAST because its
-     remaining half is harness work whose value depends on what Band 1a does
-     to the pipeline — and Band 1a is about to move it, so VH-62 earns
-     promotion the moment VH-55/VH-74 turn out large. -->
-
-- [ ] **VH-71 Reconcile the archived implementation branch** [detail](tickets/VH-71.md) (2026-08-27)
-      Intent: umbrella and detail source for the 2026-08-27 feature-by-feature
-      cross-check of tag `archive/repository-review-implementation` against
-      HEAD. Children: VH-74 (Band 1a, with VH-55), VH-72, VH-73, VH-75,
-      VH-76, VH-77 below, VH-78 (Icebox), VH-19's adoption note, and the
-      VH-62/VH-70 amendments. The ticket holds per-package detail, execution
-      order, and the decided-not-to-reconcile list.
-      Done when: every child is shipped or explicitly cut; then delete the
-      ticket.
 
 ### Band 3 — Blocked on the maintainer
 
 <!-- Agent work that cannot start until something arrives from outside the
-     repository: a corpus, a test result, a sign-off. Listed apart from Band 2
-     so nothing here reads as available to pick up, and apart from Standing
+     repository: a corpus, a test result, a sign-off. Listed apart from the
+     agent bands so nothing here reads as available to pick up, and apart from Standing
      because the WORK is mine — only the unblocking is not. This band replaces
      the old Band 1b, which existed for maintainer DECISIONS and emptied on
      2026-08-27 when VH-49, VH-46b, VH-31, VH-25 and VH-32 all closed. -->
-
-- [ ] **VH-19 Content-adaptive bitrate for the smaller preset**
-      Intent: spec §6.2 sets ~1.5 Mbps for slides and ~2.5 Mbps for camera.
-      `ContentClass` exists and `outputShapeFor` already takes it; nothing sets
-      it, so every job uses the higher figure.
-      Was blocked 2026-08-27 by a measurement; unblocked the same day by the
-      recovered implementation (note below). The evidence stands: mean absolute
-      inter-frame difference on a 64x36 luma, four points through five real
-      lectures:
-
-      | File | 0% | 25% | 50% | 75% |
-      | --- | ---: | ---: | ---: | ---: |
-      | AMCS3059 | 0.00 | 0.25 | 0.00 | 0.00 |
-      | CULT1027 | 0.00 | 1.86 | 1.35 | 1.58 |
-      | MLAC 3139 | 0.00 | 0.01 | 0.02 | 0.32 |
-      | AMCS2007 | 0.00 | 0.00 | 0.00 | 0.68 |
-      | Engineering Placements | 0.01 | 0.09 | 0.30 | 0.00 |
-
-      Camera content separates cleanly from slides — 1.35–1.86 against
-      ≤0.68 — but **every file reads 0.00 at the start**, because a lecture
-      opens on a title card. The calibration probe samples exactly there, so
-      classifying from its existing window would call every source "screen",
-      including the one that is plainly camera. That is the 40% bitrate cut
-      applied to the content that most needs the bits, decided silently.
-      Done when: the class comes from a sample that is representative — several
-      points through the file, in a pass separate from the timed probe so it
-      cannot re-calibrate `videoFramesPerSecond` — the threshold is set from
-      more than five files, and the chosen class is stated in plain language.
-      Note: mis-classifying camera as screen costs picture quality; the reverse
-      costs only file size. The threshold must be biased accordingly.
-      Recovered 2026-08-27: the archived implementation branch built exactly
-      this — five spread windows in a separate pass, asymmetric thresholds
-      with a density guard, plain-language result (tag
-      `archive/repository-review-implementation`, evidence: 23 recordings).
-      Adopt via [VH-71 WP5](tickets/VH-71.md) and re-verify the thresholds on
-      our own corpus rather than redesign.
 
 - [ ] **VH-17 Evaluate `fastStart: 'reserve'` for the smaller preset**
       Intent: the "smaller file" preset goes to OneDrive and SharePoint, where

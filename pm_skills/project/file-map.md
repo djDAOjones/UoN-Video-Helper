@@ -15,15 +15,15 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 181 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
-- `(root)` — 22 file(s)
+<!-- 185 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+- `(root)` — 23 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
 - `docs` — 5 file(s)
 - `public` — 13 file(s)
 - `reviews` — 7 file(s)
 - `scripts` — 5 file(s)
-- `src` — 121 file(s)
+- `src` — 124 file(s)
 - `test` — 6 file(s)
 <!-- /file-map-index -->
 
@@ -42,6 +42,7 @@
 - `spike-aac-cost.html` — Maintainer page: what does the AAC round trip cost a real recording in loudness and true peak, and how well do probe windows predict it?
 - `spike-alpha.html` — Maintainer page: does this browser decode transparent video? Excluded from the build.
 - `spike-codecs.html` — Maintainer page: which encoder configurations does this engine actually accept, video AND audio?
+- `spike-content-class.html` — Maintainer page: what does the classifier say each recording is, and from what numbers?
 - `spike-framerate.html` — Maintainer page: does the app measure the frame rate or trust the header?
 - `spike-modes.html` — Maintainer page: do the three closing modes produce the timelines they promise?
 - `spike-opfs.html` — Maintainer page: does a sweep leave a live job's scratch alone in this engine?
@@ -165,6 +166,8 @@
 - `src/media/composite.ts` — Premultiplied-alpha compositing. `out = brand + source×(1−a)`; the straight form double-darkens.
 - `src/media/conform.test.ts` — Proves fit/pad never distorts, across 4:3, vertical and ultrawide sources.
 - `src/media/conform.ts` — Scale-to-fit and pad geometry, and the reusable frame scaler the pipeline and probe share.
+- `src/media/content-class.test.ts` — The asymmetric thresholds, and the measured corpus they rest on: nothing a person sees as camera may read as screen.
+- `src/media/content-class.ts` — Decides whether the picture is mostly slides or mostly camera, from five spread one-second windows, biased to the safer answer.
 - `src/media/encoder-delay.ts` — Measures the audio encoder's own delay; the pipeline cancels it on the picture.
 - `src/media/encoding.test.ts` — Pins that pre-flight validates the same codec string production encodes with.
 - `src/media/encoding.ts` — Mediabunny encoding configs derived from the presets; where VH-7's audio chain will hook in.
@@ -195,6 +198,7 @@
 - `src/spike/aac-cost.ts` — The AAC cost spike: whole programme against excerpts, spread windows and the product's own probe.
 - `src/spike/alpha.ts` — VH-12 spike: decodes each branding onset and reads back pixel alpha. Dev-only, not built.
 - `src/spike/codecs.ts` — Probes VideoEncoder and AudioEncoder support per preset and shape. How the Firefox AAC gap was found.
+- `src/spike/content-class.ts` — The content-class spike: the product classifier over a list of recordings, with every window's measurement.
 - `src/spike/framerate.ts` — VH-24 spike: reads a real PowerPoint export and reports measured vs declared rate.
 - `src/spike/modes.ts` — VH-22 spike: runs a fixture through all three closing modes and checks output length.
 - `src/spike/opfs.ts` — Drives the VH-35 sweep checks against real OPFS and real Web Locks. Dev-only; not built.

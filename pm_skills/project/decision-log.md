@@ -11,6 +11,52 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-09-30 — VH-19: the smaller output spends less on slides, and says so
+
+**Decision:** pre-flight for the smaller output measures what the picture is
+mostly made of — `screen`, `camera`, or `unknown` — and builds the shape from
+it, so spec 6.2's ~1.5 Mbps slides budget is finally used; everything else
+keeps ~2.5 Mbps. The class travels back with the job request, so the file is
+encoded as its verdict described, and the verdict says, when it applies:
+"This looks like slides or a screen recording, so the file is made smaller
+still. If it is mostly camera footage, choose Larger / better instead."
+
+**Adopted, not redesigned** (VH-71 WP5): `content-class.ts` and its thresholds
+come from tag `archive/repository-review-implementation` unchanged — five
+one-second windows spread through the file, in a pass separate from the timed
+probe; `screen` only if every window changes by at most 0.001 AND the source
+is thin (≤0.08 bits per pixel per frame); `camera` from 0.003; `unknown`, the
+camera budget, in between. The port reads the track's own timestamps and
+returns the measurement with the class.
+
+**Re-verified on our corpus** (`/spike-content-class.html`, against a contact
+sheet of each): 20 recordings. Seven slide decks read `screen`, three of them
+with a webcam inset. Every camera source reads `camera` — five phone clips, a
+studio talking head, and a 29-minute Teams webcam recording at 0.03 bits per
+pixel, as thin as the slides. That last one's FIRST window reads 0.0003,
+inside the screen band: the reason the rule takes the loudest of five spread
+windows, and why the old evidence found every file static at 0%. Three slide
+decks read `camera` for one animated transition each, and an animated map
+reads `unknown` — the safe direction, costing only size. The loudest window of
+the quietest camera recording is 14x the screen ceiling. The corpus is now a
+table in `content-class.test.ts`.
+
+**Why the verdict names it:** the one wrong answer — camera taken for slides
+— costs picture quality, and only the person looking can tell; a 40% cut
+decided silently is what VH-19 was opened to prevent. The sentence is shown
+only when the class changed the file: not for camera or unknown, not on the
+larger output, and not when VH-41's cap to the source bitrate decided the
+size instead.
+
+**Verified:** MLAC3139 at the smaller output: verdict "up to 4.7 MB" with the
+sentence; delivered 4.49 MB from 8.40 MB, luma PSNR 42.3–48.8 dB against the
+source at three moments. An iPhone clip: `camera`, no sentence, job completes.
+Acceptance harness 10 passed, 0 failed. The classification pass takes
+0.2–0.9 s at 1080p and ~2.3 s at 4K, once per smaller-output check.
+
+**Link:** VH-19, VH-71 (closed with it); `src/media/content-class.ts`,
+`src/config/thresholds.ts`, `src/workers/job.worker.ts`, `src/ui/preflight-panel.ts`.
+
 ## 2026-09-30 — VH-26 review: a check that cannot fail is not a check
 
 **Decision:** `scripts/run-in-engines.mjs` exits 1 when a page that ran to

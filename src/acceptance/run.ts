@@ -157,6 +157,8 @@ async function processInWorker(
     branding: { opening: false, closing: true },
     backgroundColour: '#000000',
     brandingBaseUrl: resolveBrandingBase(document.baseURI),
+    // No pre-flight ran, so there is no measured class to hand back.
+    contentClass: 'unknown',
   })
 
   const stopped = await ask(worker, { kind: 'egress', id: 11, watching: false }, 10_000)
@@ -740,6 +742,7 @@ async function checkCancellation(log: Report): Promise<Check> {
       branding: { opening: false, closing: false },
       backgroundColour: '#000000',
       brandingBaseUrl: resolveBrandingBase(document.baseURI),
+      contentClass: 'unknown',
     })
 
     // Cancel only once the job has genuinely started writing. Cancelling a job

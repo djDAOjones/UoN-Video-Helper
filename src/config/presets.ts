@@ -23,6 +23,9 @@ export type PresetId = 'best' | 'smaller'
  */
 export type ContentClass = 'screen' | 'camera' | 'unknown'
 
+/** Every class, for checking a value that arrived from outside the type system. */
+export const CONTENT_CLASSES: readonly ContentClass[] = ['screen', 'camera', 'unknown']
+
 export interface Preset {
   readonly id: PresetId
   /** What the user reads. Purpose, not technique. */

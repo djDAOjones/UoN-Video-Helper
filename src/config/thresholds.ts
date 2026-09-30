@@ -93,3 +93,42 @@ export const SELECTION_DEADLINE_MS = {
   inspect: 120_000,
   preflight: 180_000,
 } as const
+
+/**
+ * Deciding what the picture is mostly made of, spec 6.2 (VH-19).
+ *
+ * Short windows across the recording rather than its opening. Real lecture
+ * captures often begin on a static title or black frame, so five positions are
+ * the smallest spread that covers both ends and the body without turning
+ * classification into another full-file pass.
+ */
+export const CONTENT_SAMPLE_WINDOW_FRACTIONS = [0, 0.25, 0.5, 0.75, 1] as const
+
+/** One second catches normal slide changes while keeping the sparse decode cheap. */
+export const CONTENT_SAMPLE_WINDOW_SECONDS = 1
+
+/** Ten observations per second resolved motion cleanly in the VH-19 source corpus. */
+export const CONTENT_SAMPLE_FRAMES_PER_SECOND = 10
+
+/** Tiny analysis dimensions: enough for gross motion, bounded to 2,304 luma bytes. */
+export const CONTENT_SAMPLE_WIDTH = 64
+export const CONTENT_SAMPLE_HEIGHT = 36
+
+/**
+ * Maximum mean adjacent-frame luma change for an unambiguously static source.
+ * The ambiguous band above it deliberately keeps the safer camera bitrate.
+ */
+export const CONTENT_SCREEN_MAX_MEAN_DIFFERENCE = 0.001
+
+/**
+ * Minimum mean adjacent-frame luma change that makes motion unambiguous.
+ * Values between this and the screen threshold remain unknown.
+ */
+export const CONTENT_CAMERA_MIN_MEAN_DIFFERENCE = 0.003
+
+/**
+ * Static-looking, high-density video may be a nearly still camera shot rather
+ * than slides. Above this density a static source is not called screen.
+ */
+export const CONTENT_SCREEN_MAX_SOURCE_BITS_PER_PIXEL_PER_FRAME = 0.08
+
