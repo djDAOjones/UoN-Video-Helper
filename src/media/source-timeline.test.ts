@@ -14,6 +14,39 @@ import { AudioGapFiller, deriveSourceTimeline } from './source-timeline'
 
 const SAMPLE_RATE = 48000
 
+describe('deriveSourceTimeline with a trim (VH-95)', () => {
+  it('changes nothing when there is no cut', () => {
+    expect(deriveSourceTimeline(0, 5, null)).toEqual(deriveSourceTimeline(0, 5))
+    expect(deriveSourceTimeline(2, 3, null)).toEqual(deriveSourceTimeline(2, 3))
+  })
+
+  it('makes the in-point the origin for both lanes', () => {
+    const t = deriveSourceTimeline(0, 0, 12.5)
+    expect(t.originSeconds).toBe(12.5)
+    expect(t.videoOffsetSeconds).toBe(0)
+    expect(t.audioOffsetSeconds).toBe(0)
+  })
+
+  it('offsets a lane that starts after the cut from the cut, not from the file', () => {
+    // Audio joins at 8 s; the user keeps from 5 s. Three seconds of picture
+    // before the sound, as in the source.
+    const t = deriveSourceTimeline(0, 8, 5)
+    expect(t.originSeconds).toBe(5)
+    expect(t.videoOffsetSeconds).toBe(0)
+    expect(t.audioOffsetSeconds).toBe(3)
+  })
+
+  it('starts a late lane at the cut when the cut is after it joined', () => {
+    const t = deriveSourceTimeline(0, 8, 10)
+    expect(t.originSeconds).toBe(10)
+    expect(t.audioOffsetSeconds).toBe(0)
+  })
+
+  it('ignores a cut before the file starts', () => {
+    expect(deriveSourceTimeline(2, 3, 1)).toEqual(deriveSourceTimeline(2, 3))
+  })
+})
+
 describe('deriveSourceTimeline', () => {
   it('starts both lanes at zero when the file does', () => {
     const t = deriveSourceTimeline(0, 0)

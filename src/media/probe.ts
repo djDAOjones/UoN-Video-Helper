@@ -61,6 +61,7 @@ async function probeVideo(
   track: InputVideoTrack,
   shape: OutputShape,
   signal: AbortSignal | undefined,
+  fromSeconds: number,
 ): Promise<{ frames: number; seconds: number }> {
   const output = new Output({
     format: new Mp4OutputFormat({ fastStart: false }),
@@ -75,7 +76,7 @@ async function probeVideo(
 
   try {
     await output.start()
-    for await (const sample of sink.samples(0, CALIBRATION_PROBE_SECONDS)) {
+    for await (const sample of sink.samples(fromSeconds, fromSeconds + CALIBRATION_PROBE_SECONDS)) {
       // Closed before breaking; see `audio-plan.ts` for the same shape.
       if (signal?.aborted) {
         sample.close()
@@ -101,6 +102,7 @@ async function probeVideo(
 async function probeAudio(
   input: Input,
   signal: AbortSignal | undefined,
+  fromSeconds: number,
 ): Promise<{ seconds: number; wallSeconds: number } | null> {
   const track = await input.getPrimaryAudioTrack()
   if (!track) return null
@@ -115,7 +117,7 @@ async function probeAudio(
   let framesSeen = 0
   const startedAt = performance.now()
 
-  for await (const sample of sink.samples(0, CALIBRATION_PROBE_SECONDS)) {
+  for await (const sample of sink.samples(fromSeconds, fromSeconds + CALIBRATION_PROBE_SECONDS)) {
     if (signal?.aborted) {
       sample.close()
       break
@@ -145,28 +147,33 @@ async function probeAudio(
  * @param file - The user's chosen file, opened read-only.
  * @param shape - The output the job will actually produce; the probe encodes
  *   at exactly this configuration or the measurement means nothing.
- * @param durationSeconds - Full source duration, for the extrapolation.
+ * @param durationSeconds - How much of the source the job encodes — the whole
+ *   file, or the kept range — for the extrapolation.
+ * @param fromSeconds - Where to start measuring: the in-point of a trim, so the
+ *   probe times material that will actually be encoded (VH-95). Zero otherwise.
  * @param formats - Input formats to accept, matching `inspect.ts`.
  */
 export async function calibrationProbe(options: {
   readonly input: Input
   readonly shape: OutputShape
   readonly durationSeconds: number
+  readonly fromSeconds?: number
   readonly signal?: AbortSignal
 }): Promise<ProbeResult> {
   const { input, shape, durationSeconds, signal } = options
+  const fromSeconds = options.fromSeconds ?? 0
 
   try {
     const videoTrack = await input.getPrimaryVideoTrack()
     if (!videoTrack) return UNMEASURED
 
-    const video = await probeVideo(videoTrack, shape, signal)
+    const video = await probeVideo(videoTrack, shape, signal, fromSeconds)
     if (video.frames < MINIMUM_CREDIBLE_PROBE_FRAMES || video.seconds <= 0) {
       log.warn('probe', 'too few frames to trust the measurement', { frames: video.frames })
       return { ...UNMEASURED, framesEncoded: video.frames }
     }
 
-    const audio = await probeAudio(input, signal)
+    const audio = await probeAudio(input, signal, fromSeconds)
 
     const videoFramesPerSecond = video.frames / video.seconds
     const totalFrames = durationSeconds * shape.frameRate

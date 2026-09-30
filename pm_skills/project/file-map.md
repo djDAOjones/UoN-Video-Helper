@@ -15,7 +15,7 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 191 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 194 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 23 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
@@ -23,7 +23,7 @@
 - `public` — 13 file(s)
 - `reviews` — 7 file(s)
 - `scripts` — 5 file(s)
-- `src` — 130 file(s)
+- `src` — 133 file(s)
 - `test` — 6 file(s)
 <!-- /file-map-index -->
 
@@ -143,6 +143,7 @@
 - `src/config/presets.test.ts` — Pins the preset rules, including that the smaller preset preserves resolution.
 - `src/config/presets.ts` — The two output presets and the encoder config they imply. Purpose-named, never technique-named.
 - `src/config/thresholds.ts` — Pre-flight bands and probe constants — the numbers D8 will replace with measurements.
+- `src/config/trim.ts` — Trimming's numbers: the shortest keep the meter can level (3 s), and how near an edge a cut counts as no cut.
 - `src/core/diagnostics.test.ts` — Proves the bundle's job context carries what the file is and never which file.
 - `src/core/diagnostics.ts` — Global error capture on both threads, plus the redacted copy-diagnostics bundle.
 - `src/core/egress.test.ts` — Pins that a body is a finding however it was attached, and that both realms are counted.
@@ -182,6 +183,8 @@
 - `src/media/inspect.ts` — Demuxes a chosen file into a SourceReport. Rejects files with no video track.
 - `src/media/isobmff.test.ts` — Synthetic boxes covering subtitle handlers, chapters, moov-at-end and non-ISOBMFF.
 - `src/media/isobmff.ts` — A minimal box walk for the handler types Mediabunny cannot see at all.
+- `src/media/kept-range.test.ts` — What counts as a cut and what is refused; audio blocks sliced to the range tile it exactly; cuts snap to frame edges.
+- `src/media/kept-range.ts` — The kept range (VH-95): validated once, snapped to frame edges, and the one audio-block slice every pass uses.
 - `src/media/lanes.test.ts` — Pins how the two feed lanes fail together: survivor stopped, cause reported over the cancellation it caused.
 - `src/media/opfs.test.ts` — Pins the sweep rule: never remove a claimed directory, never remove one it could not ask about.
 - `src/media/opfs.ts` — The OPFS working store: one directory per job, sync-handle writes, cleanup on every exit path.

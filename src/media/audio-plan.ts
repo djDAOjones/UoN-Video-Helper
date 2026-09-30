@@ -41,6 +41,7 @@ import { log } from '../core/logger'
 import { applyBoundaryFade } from './branding'
 import { toPlanar, toSample } from './audio-frames'
 import { CodecProbe, limiterCeilingFor, type CodecCost } from './codec-probe'
+import { clipAudioBlock, type KeptRange } from './kept-range'
 import { AudioGapFiller } from './source-timeline'
 
 export interface AudioPlan {
@@ -72,9 +73,22 @@ interface Traversal {
 }
 
 /**
+ * Reads the track's samples, over the kept range when there is one.
+ *
+ * The one place a pass decides what it reads, so every pass reads the same
+ * thing. No range is the unranged call, exactly as before trimming.
+ */
+function keptSamples(sink: AudioSampleSink, range: KeptRange | null): AsyncGenerator<AudioSample> {
+  return range ? sink.samples(range.startSeconds, range.endSeconds) : sink.samples()
+}
+
+/**
  * Runs one traversal of the track, optionally through a chain, into an
  * analyser.
  *
+ * @param range - The kept range, or `null` for the whole track. Every pass
+ *   passes the same one: loudness is measured on the part the viewer will see,
+ *   and the envelope is applied to the stream it was measured on (VH-95).
  * @param tap - Given every block exactly as it goes to the analyser, in order.
  *   Awaited, so a consumer that encodes can apply backpressure.
  */
@@ -84,6 +98,7 @@ async function traverse(
   channelCount: number,
   chain: AudioChain | null,
   signal: AbortSignal | undefined,
+  range: KeptRange | null,
   onSample?: () => void,
   tap?: (block: Float32Array[]) => Promise<void>,
 ): Promise<Traversal> {
@@ -101,7 +116,7 @@ async function traverse(
     if (tap) await tap(block)
   }
 
-  for await (const sample of sink.samples()) {
+  for await (const sample of keptSamples(sink, range)) {
     // Closed before breaking. The loop is handed a decoded sample and only
     // then checks the signal, so an aborted traversal used to drop that one on
     // the floor — Mediabunny then reported "An AudioSample was garbage
@@ -113,11 +128,13 @@ async function traverse(
       break
     }
     try {
-      const silence = gaps.silenceBefore(sample.timestamp)
-      if (silence) await emit(chain ? chain.process(silence) : silence)
-      const planar = toPlanar(sample, channelCount)
-      gaps.accept(planar[0]?.length ?? 0)
-      await emit(chain ? chain.process(planar) : planar)
+      const kept = clipAudioBlock(toPlanar(sample, channelCount), sample.timestamp, sampleRate, range)
+      if (kept) {
+        const silence = gaps.silenceBefore(kept.timestampSeconds)
+        if (silence) await emit(chain ? chain.process(silence) : silence)
+        gaps.accept(kept.planar[0]?.length ?? 0)
+        await emit(chain ? chain.process(kept.planar) : kept.planar)
+      }
     } finally {
       sample.close()
     }
@@ -147,12 +164,14 @@ async function traverse(
 export async function analyseSourceAudio(
   track: InputAudioTrack,
   signal?: AbortSignal,
+  /** The kept range, so the warnings describe the part that will be seen (VH-95). */
+  range: KeptRange | null = null,
 ): Promise<AudioAnalysis> {
   const [sampleRate, channelCount] = await Promise.all([
     track.getSampleRate(),
     track.getNumberOfChannels(),
   ])
-  return (await traverse(track, sampleRate, channelCount, null, signal)).analysis
+  return (await traverse(track, sampleRate, channelCount, null, signal, range)).analysis
 }
 
 /**
@@ -171,6 +190,12 @@ export async function planAudio(
   /** Called for every sample analysed, so a long analysis can prove it is alive. */
   onSample?: () => void,
   encodingFor?: (channelCount: number) => AudioEncodingConfig,
+  /**
+   * The kept range, or `null` for the whole track. The same range reaches
+   * every pass here and pass C, or the gain would be solved on one stream and
+   * applied to another (VH-95).
+   */
+  range: KeptRange | null = null,
 ): Promise<AudioPlan> {
   const [sampleRate, channelCount] = await Promise.all([
     track.getSampleRate(),
@@ -178,7 +203,7 @@ export async function planAudio(
   ])
 
   const startedAt = performance.now()
-  const source = await traverse(track, sampleRate, channelCount, null, signal, onSample)
+  const source = await traverse(track, sampleRate, channelCount, null, signal, range, onSample)
   const { analysis } = source
   const envelope = buildGainEnvelope({
     integratedLufs: analysis.integratedLufs,
@@ -238,6 +263,7 @@ export async function planAudio(
           limiterCeilingDbtp,
         }),
         signal,
+        range,
         onSample,
         tap,
       )
@@ -377,6 +403,12 @@ export function createContentAudioProcessor(
     readonly fadeIn: boolean
     /** Fade the content out — true when a closing sequence follows it. */
     readonly fadeOut: boolean
+    /**
+     * The kept range, or `null` for the whole track. Blocks are sliced to it
+     * exactly as the planning passes sliced them, so pass C applies the
+     * envelope to the stream it was measured on (VH-95).
+     */
+    readonly keptRange: KeptRange | null
   },
 ): ContentAudioProcessor {
   const { sampleRate, channelCount, envelope, gainDb, limiterCeilingDbtp } = plan
@@ -407,14 +439,20 @@ export function createContentAudioProcessor(
 
   return {
     process: (sample: AudioSample) => {
+      const kept = clipAudioBlock(
+        toPlanar(sample, channelCount),
+        sample.timestamp,
+        sampleRate,
+        options.keptRange,
+      )
+      if (!kept) return null
       // Silence for the hole this sample sits after, then the sample itself.
       // Fed through the chain as one continuous stream, and emitted as one
       // block, so the caller never has to know a gap happened.
-      const silence = gaps.silenceBefore(sample.timestamp)
-      const planar = toPlanar(sample, channelCount)
-      gaps.accept(planar[0]?.length ?? 0)
-      if (!silence) return emit(chain.process(planar))
-      return emit(concatPlanar(chain.process(silence), chain.process(planar)))
+      const silence = gaps.silenceBefore(kept.timestampSeconds)
+      gaps.accept(kept.planar[0]?.length ?? 0)
+      if (!silence) return emit(chain.process(kept.planar))
+      return emit(concatPlanar(chain.process(silence), chain.process(kept.planar)))
     },
     flush: () => emit(chain.flush()),
   }

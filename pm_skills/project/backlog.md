@@ -90,21 +90,8 @@
       Done when: signed off, the identity wording agreed, and its children —
       VH-95, then VH-96 — shipped or cut.
 
-- [ ] **VH-95 Trim: the engine** [detail](tickets/VH-95.md) (2026-09-30)
-      Intent: a kept range, in source time, carried by `preflight` and
-      `process` and honoured by everything that reads the source — no UI.
-      The part that produces a wrong file rather than a wrong duration is
-      loudness: every audio pass must traverse the SAME range, or leading
-      silence drags the gated figure and the envelope is indexed against a
-      different stream from the one it is applied to. The ticket lists the
-      other touchpoints. After VH-83, never beside it.
-      Done when: the acceptance harness runs a trimmed job that passes
-      criterion 2 (−16 ±0.5 LUFS, on the kept region) and criterion 6 (A/V
-      sync); a job with no range takes exactly today's path; cancel still
-      leaves nothing behind.
-
 - [ ] **VH-96 Trim: the preview and handles** [detail](tickets/VH-96.md)
-      (2026-09-30) [blocked: VH-95]
+      (2026-09-30)
       Intent: a Trim step in VH-91's layout — the video, playable, with a
       start and an end handle beneath it. Left alone, it keeps the whole
       video, as today.

@@ -25,6 +25,16 @@
 
 ## Archived: the review's close and Band 1a — see archive/trajectory/trajectory-0004-review-close-and-band-1a.md
 
+### VH-30, VH-95 — trimming signed off, and its engine
+
+- VH-30 — Signed off 2026-09-30: a conveyor with one cut. The identity in
+  `AGENTS.md` and the brief now says trimming the ends is in and cutting
+  from the middle is out. Closes when VH-96 ships.
+- VH-95 — Shipped 2026-09-30. A kept range on `preflight` and `process`,
+  honoured by every audio pass, both lanes, the probe and the picture
+  check, with each cut on a frame edge; proved in the acceptance harness.
+  See decision-log.
+
 ### VH-93 — a feedback button
 
 - VH-93 — Shipped 2026-09-30. "Send feedback" in the footer, and "Report this

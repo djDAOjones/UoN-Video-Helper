@@ -25,6 +25,12 @@ import { analyseSourceAudio } from '../media/audio-plan'
 import { canEncodeAudio, checkEncodeSupport, inspectCapabilities } from '../media/capability'
 import { measureContentClass } from '../media/content-class'
 import { UnreadableFileError, inspectFile, openInput } from '../media/inspect'
+import {
+  KeptRangeError,
+  keptDurationSeconds,
+  normaliseKeptRange,
+  type KeptRange,
+} from '../media/kept-range'
 import { OpfsWorkspace, sweepOrphanedJobs } from '../media/opfs'
 import { requireReadableOutputVideo } from '../media/output-integrity'
 import { verifyOutputAudio } from '../media/output-verification'
@@ -72,7 +78,7 @@ self.addEventListener('message', (event: MessageEvent<WorkerRequest>) => {
 
     case 'preflight':
       void running.run(request.id, (signal) =>
-        handlePreflight(request.id, request.file, request.presetId, signal),
+        handlePreflight(request.id, request.file, request.presetId, request.keptRange, signal),
       )
       break
 
@@ -163,6 +169,7 @@ async function handleProcess(
     readonly backgroundColour: string
     readonly brandingBaseUrl: string
     readonly contentClass: ContentClass
+    readonly keptRange?: KeptRange
   },
   signal: AbortSignal,
 ): Promise<void> {
@@ -182,6 +189,8 @@ async function handleProcess(
     // encoded is a job that can be cancelled for being slow (VH-51).
     post({ kind: 'stage', id, stage: 'preparing', fraction: 0 })
     const report = await inspectFile(file, { signal })
+    // Checked against THIS file, once, before anything is written (VH-95).
+    const keptRange = normaliseKeptRange(options.keptRange, report.durationSeconds)
     const preset = PRESETS[presetId]
     // The class pre-flight measured, as the verdict's size was built from it.
     // Checked, because it crossed the worker boundary as a string: anything
@@ -221,6 +230,7 @@ async function handleProcess(
       branding: options.branding,
       backgroundColour: options.backgroundColour,
       brandingBaseUrl: options.brandingBaseUrl,
+      keptRange,
       signal,
       onProgress: ({ stage, fraction }) => post({ kind: 'stage', id, stage, fraction }),
     })
@@ -301,8 +311,9 @@ async function handleProcess(
       id,
       message:
         // A file that cannot be read names itself rather than reaching the
-        // user as "something went wrong" (VH-37).
-        cause instanceof UnreadableFileError
+        // user as "something went wrong" (VH-37), and so does a trim that
+        // cannot be honoured (VH-95).
+        cause instanceof UnreadableFileError || cause instanceof KeptRangeError
           ? cause.message
           : // The user-facing sentence never changes. In development the
             // underlying reason is appended, because "something went wrong"
@@ -365,10 +376,15 @@ async function handlePreflight(
   id: number,
   file: Blob,
   presetId: PresetId,
+  requestedRange: KeptRange | undefined,
   signal: AbortSignal,
 ): Promise<void> {
   try {
     const report = await inspectFile(file, { signal })
+    // Everything below describes the kept part: the picture class, the size,
+    // the warnings and the time (VH-95).
+    const keptRange = normaliseKeptRange(requestedRange, report.durationSeconds)
+    const keptSeconds = keptDurationSeconds(keptRange, report.durationSeconds)
     const preset = PRESETS[presetId]
     // Both tracks, and a silent source asks nothing of the audio decoder.
     // Measured during inspection and, until VH-60, never consulted again.
@@ -395,6 +411,7 @@ async function handlePreflight(
             height: report.video.displayHeight,
             sourceFrameRate: report.video.conform.sourceFrameRate,
             sourceBitrateBps: report.video.averageBitrateBps,
+            keptRange,
             signal,
           })
         ).contentClass
@@ -423,7 +440,7 @@ async function handlePreflight(
     // known here, so an upper bound assumes the longest (VH-31).
     const projected = projectedOutputBytes(
       shape,
-      report.durationSeconds + LONGEST_CLOSING_SECONDS,
+      keptSeconds + LONGEST_CLOSING_SECONDS,
       report.audio !== null,
     )
 
@@ -462,7 +479,7 @@ async function handlePreflight(
       const audioInput = openInput(file)
       const audioTrack = await audioInput.getPrimaryAudioTrack()
       audioWarnings = detectSourceWarnings(
-        audioTrack ? await analyseSourceAudio(audioTrack, signal) : null,
+        audioTrack ? await analyseSourceAudio(audioTrack, signal, keptRange) : null,
       )
     }
     // `analyseSourceAudio` stops at the next sample rather than throwing, so
@@ -480,7 +497,8 @@ async function handlePreflight(
         ? await calibrationProbe({
             input: openInput(file),
             shape,
-            durationSeconds: report.durationSeconds,
+            durationSeconds: keptSeconds,
+            fromSeconds: keptRange?.startSeconds ?? 0,
             signal,
           })
         : { measured: false, framesEncoded: 0, videoFramesPerSecond: 0, audioRealtimeFactor: null, estimatedSeconds: null }
@@ -515,7 +533,7 @@ async function handlePreflight(
       return
     }
     const message =
-      cause instanceof UnreadableFileError
+      cause instanceof UnreadableFileError || cause instanceof KeptRangeError
         ? cause.message
         : 'Something went wrong checking this file against your device.'
     log.warn('worker', 'preflight failed', {

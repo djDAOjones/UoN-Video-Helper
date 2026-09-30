@@ -36,6 +36,10 @@ export interface SourceTimeline {
  *
  * @param firstVideoSeconds - First video timestamp, or `null` for no video.
  * @param firstAudioSeconds - First audio timestamp, or `null` for no audio.
+ * @param keptFromSeconds - Where a trim starts the kept video (VH-95), or
+ *   `null`. A cut after the origin becomes the origin for BOTH lanes, and a
+ *   lane that starts later still is offset from the cut rather than from the
+ *   file's start. A cut at or before the origin changes nothing.
  *
  * A negative first timestamp is treated as ABSENT rather than as a lane that
  * starts early. Measured: `CULT1027` in the corpus reports its audio starting
@@ -48,17 +52,21 @@ export interface SourceTimeline {
 export function deriveSourceTimeline(
   firstVideoSeconds: number | null,
   firstAudioSeconds: number | null,
+  keptFromSeconds: number | null = null,
 ): SourceTimeline {
   const video = clean(firstVideoSeconds)
   const audio = clean(firstAudioSeconds)
 
   const present = [video, audio].filter((value): value is number => value !== null)
-  const originSeconds = present.length > 0 ? Math.min(...present) : 0
+  const earliest = present.length > 0 ? Math.min(...present) : 0
+  const originSeconds = keptFromSeconds === null ? earliest : Math.max(earliest, keptFromSeconds)
 
+  // `max(0, …)` changes nothing without a cut, where the origin is the earlier
+  // lane; with one, a lane already running at the cut starts at it.
   return {
     originSeconds,
-    videoOffsetSeconds: video === null ? 0 : video - originSeconds,
-    audioOffsetSeconds: audio === null ? 0 : audio - originSeconds,
+    videoOffsetSeconds: video === null ? 0 : Math.max(0, video - originSeconds),
+    audioOffsetSeconds: audio === null ? 0 : Math.max(0, audio - originSeconds),
   }
 }
 

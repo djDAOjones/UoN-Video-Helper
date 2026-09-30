@@ -13,6 +13,7 @@ import type { LogRecord } from '../core/logger'
 import type { BrandingChoice } from '../config/branding'
 import type { ContentClass, PresetId } from '../config/presets'
 import type { SourceReport } from '../media/inspect'
+import type { KeptRange } from '../media/kept-range'
 import type { PreflightSummary } from '../media/preflight'
 import type { AudioWarning } from '../audio/warnings'
 import type { PipelineStage } from '../media/pipeline'
@@ -43,6 +44,11 @@ export type WorkerRequest =
       readonly id: number
       readonly file: Blob
       readonly presetId: PresetId
+      /**
+       * The part of the file to keep (VH-95). The warnings, the size, the time
+       * and the picture class all describe this part. Absent keeps the whole.
+       */
+      readonly keptRange?: KeptRange
     }
   /** Run the job. Progress arrives as `stage` events carrying this same id. */
   | {
@@ -68,6 +74,11 @@ export type WorkerRequest =
        * verdict to take it from: that is the safer, camera budget (VH-19).
        */
       readonly contentClass: ContentClass
+      /**
+       * The part of the file to keep, in source seconds (VH-95). Validated in
+       * the worker against the file; absent keeps the whole file.
+       */
+      readonly keptRange?: KeptRange
     }
   /** Stop the job started by `cancelId`. Answered by that job, not by this request. */
   | { readonly kind: 'cancel'; readonly id: number; readonly cancelId: number }

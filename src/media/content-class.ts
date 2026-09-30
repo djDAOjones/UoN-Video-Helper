@@ -28,6 +28,7 @@ import {
   CONTENT_SCREEN_MAX_SOURCE_BITS_PER_PIXEL_PER_FRAME,
 } from '../config/thresholds'
 import { log } from '../core/logger'
+import type { KeptRange } from './kept-range'
 
 export interface ContentMotionMeasurement {
   /** Mean normalised adjacent-frame luma change for each sampled window. */
@@ -43,6 +44,12 @@ export interface ContentClassOptions {
   readonly height: number
   readonly sourceFrameRate: number
   readonly sourceBitrateBps: number | null
+  /**
+   * The part of the file a trim keeps (VH-95). The windows are spread through
+   * it rather than the whole file: a trimmed-off webcam intro must not decide
+   * the budget for the slides that remain.
+   */
+  readonly keptRange?: KeptRange | null
   readonly signal?: AbortSignal
 }
 
@@ -178,7 +185,11 @@ export async function measureContentClass(
       track.getFirstTimestamp(),
       track.computeDuration(),
     ])
-    const { points, windowCount } = samplePoints(firstTimestampSeconds, endTimestampSeconds)
+    const kept = options.keptRange ?? null
+    const { points, windowCount } = samplePoints(
+      kept ? Math.max(firstTimestampSeconds, kept.startSeconds) : firstTimestampSeconds,
+      kept ? Math.min(endTimestampSeconds, kept.endSeconds) : endTimestampSeconds,
+    )
     if (windowCount === 0 || points.length === 0) return UNMEASURED
 
     const canvas = new OffscreenCanvas(CONTENT_SAMPLE_WIDTH, CONTENT_SAMPLE_HEIGHT)

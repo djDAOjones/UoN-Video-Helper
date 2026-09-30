@@ -9,8 +9,9 @@
 
 import { PRESETS, outputShapeFor } from '../config/presets'
 import { TARGET_INTEGRATED_LUFS } from '../config/audio'
-import { resolveBrandingBase } from '../config/branding'
+import { LONGEST_CLOSING_SECONDS, resolveBrandingBase } from '../config/branding'
 import { inspectFile, openInput } from '../media/inspect'
+import { normaliseKeptRange, type KeptRange } from '../media/kept-range'
 import { OpfsWorkspace, ROOT_DIRECTORY, sweepOrphanedJobs } from '../media/opfs'
 import { verifyOutputAudio } from '../media/output-verification'
 import { runPipeline } from '../media/pipeline'
@@ -60,9 +61,12 @@ async function process(
     readonly branding: { opening: boolean; closing: boolean }
     readonly jobId: string
     readonly signal?: AbortSignal
+    /** A trim, validated as the worker validates one (VH-95). */
+    readonly keptRange?: KeptRange
   },
 ): Promise<{ file: File; workspace: OpfsWorkspace; openingSeconds: number; frameRate: number }> {
   const report = await inspectFile(file)
+  const keptRange = normaliseKeptRange(options.keptRange, report.durationSeconds)
   const preset = PRESETS[options.presetId]
   const shape = outputShapeFor(preset, {
     width: report.video.displayWidth,
@@ -85,6 +89,7 @@ async function process(
     branding: options.branding,
     backgroundColour: '#000000',
     brandingBaseUrl: resolveBrandingBase(document.baseURI),
+    keptRange,
     ...(options.signal ? { signal: options.signal } : {}),
   })
   // Branding shifts everything; the loudness check needs to know by how much.
@@ -603,6 +608,199 @@ async function checkSourceTimeline(log: Report): Promise<Check> {
 }
 
 /**
+ * Criteria 2 and 6 on a trimmed job (VH-95).
+ *
+ * The trim is the one input that could make every other check here pass while
+ * the file is wrong: measure loudness over the whole source and apply it to
+ * the kept part, and the output is mis-levelled by however much the cut-off
+ * material differed. So the loudness case is built to fail that way — a
+ * recording that starts hot and drifts away, kept from the quiet end — and the
+ * sync case checks the cut lands on the same instant in both lanes.
+ */
+async function checkTrimmedLoudness(log: Report): Promise<Check> {
+  log('  a hot start drifting away, kept from its quiet end')
+  const kept = { startSeconds: 40, endSeconds: 70 }
+  const keptSeconds = kept.endSeconds - kept.startSeconds
+  const fixture = await buildFixture({
+    width: 640,
+    height: 360,
+    seconds: 70,
+    frameRate: 25,
+    audio: { startPeakDbfs: -4, endPeakDbfs: -34 },
+  })
+  const { file, workspace, openingSeconds, frameRate } = await process(fixture, {
+    presetId: 'best',
+    branding: { opening: true, closing: true },
+    jobId: 'acceptance-trim-loudness',
+    keptRange: kept,
+  })
+  const content = await measureLoudness(file, {
+    fromSeconds: openingSeconds + 1,
+    toSeconds: openingSeconds + keptSeconds - 1,
+  })
+  const full = await measureLoudness(file)
+  const coverage = await measureCoverage(file, 'video', 1 / frameRate + 0.001)
+  await workspace.dispose()
+
+  const fail = (detail: string): Check => ({
+    criterion: '2',
+    title: 'A trimmed job is levelled on the part it keeps',
+    status: 'fail',
+    detail,
+  })
+  if (!content || !full) return fail('The output has no audio to measure.')
+  if (!coverage) return fail('The output has no video packets.')
+
+  // The kept 30 s and the branding around it, and not the 70 s source.
+  const spanSeconds = coverage.lastEndSeconds - coverage.firstSeconds
+  const shortest = openingSeconds + keptSeconds - 0.5
+  const longest = openingSeconds + keptSeconds + LONGEST_CLOSING_SECONDS + 0.5
+  if (spanSeconds < shortest || spanSeconds > longest) {
+    return fail(
+      `The picture spans ${spanSeconds.toFixed(2)} s; a ${keptSeconds} s keep with its branding spans ${shortest.toFixed(1)}–${longest.toFixed(1)} s.`,
+    )
+  }
+  const measurement = { integratedLufs: content.integratedLufs, truePeakDbtp: full.truePeakDbtp }
+  const verification = verifyOutputAudio(measurement)
+  const summary = `${measurement.integratedLufs.toFixed(2)} LUFS on the kept content, peak ${measurement.truePeakDbtp.toFixed(4)} dBTP, picture ${spanSeconds.toFixed(2)} s`
+  return {
+    criterion: '2',
+    title: 'A trimmed job is levelled on the part it keeps',
+    status: verification.ok ? 'pass' : 'fail',
+    detail: verification.ok
+      ? `${summary}. The 40 s cut off run up to 30 dB hotter than the 30 s kept, so this is on target only if the gain was measured on the part kept.`
+      : `${summary} — FAIL (${verification.code}).`,
+  }
+}
+
+async function checkTrimmedTimeline(log: Report): Promise<Check> {
+  const results: string[] = []
+  let allHeld = true
+
+  // Sync across the cut, against the same file untrimmed. Constant frame rate
+  // on purpose: there the untrimmed pipeline reads the same offset at every
+  // marker, so anything the cut adds shows to the millisecond. On the
+  // variable-rate fixture the output grid's rounding scatters each marker by
+  // up to half a frame, and a real 24 ms error at the cut hid in that scatter
+  // as "drift" (VH-95). Variable-rate sync itself is the check above. The cut
+  // at 12.3 s falls half-way through a frame, which is the case that failed;
+  // markers start every 5 s from 1 s and last 0.2 s, so seven survive whole.
+  log('  sync across a cut, against the same file untrimmed')
+  {
+    const kept = { startSeconds: 12.3, endSeconds: 47.7 }
+    const frameRate = 25
+    const fixture = await buildFixture({
+      width: 854,
+      height: 480,
+      seconds: 60,
+      frameRate,
+      audio: { startPeakDbfs: -20, syncMarkers: true },
+    })
+    const sourceSync = await measureSync(fixture)
+    const untrimmed = await process(fixture, {
+      presetId: 'best',
+      branding: { opening: false, closing: false },
+      jobId: 'acceptance-trim-sync-whole',
+    })
+    const untrimmedSync = await measureSync(untrimmed.file)
+    await untrimmed.workspace.dispose()
+    const trimmed = await process(fixture, {
+      presetId: 'best',
+      branding: { opening: false, closing: false },
+      jobId: 'acceptance-trim-sync',
+      keptRange: kept,
+    })
+    const outputSync = await measureSync(trimmed.file)
+    await trimmed.workspace.dispose()
+
+    // Only the markers the keep contains, so each pairs with its own.
+    const inKeep = sourceSync.videoMarkers
+      .map((time, index) => ({ time, index }))
+      .filter(({ time }) => time >= kept.startSeconds && time + 0.2 <= kept.endSeconds)
+    const pick = (measured: typeof sourceSync) => ({
+      ...measured,
+      offsetsMs: inKeep.map(({ index }) => measured.offsetsMs[index] ?? Number.NaN),
+    })
+    const sync = relativeSync(pick(sourceSync), outputSync)
+    const baseline = relativeSync(pick(sourceSync), pick(untrimmedSync))
+    const mean = sync.offsetsMs.length
+      ? sync.offsetsMs.reduce((total, value) => total + value, 0) / sync.offsetsMs.length
+      : Number.NaN
+    // What the cut added to sync, marker by marker: nothing, within a
+    // millisecond of measurement.
+    const addedMs = sync.offsetsMs.map((value, i) => value - (baseline.offsetsMs[i] ?? Number.NaN))
+    const worstAddedMs = addedMs.reduce((worst, value) => Math.max(worst, Math.abs(value)), 0)
+    // Where the picture landed against the untrimmed file, less the in-point:
+    // within one frame, which is as far as a cut moves to a frame edge.
+    const movedMs = inKeep.map(
+      ({ index }, i) =>
+        ((outputSync.videoMarkers[i] ?? Number.NaN) -
+          ((untrimmedSync.videoMarkers[index] ?? Number.NaN) - kept.startSeconds)) *
+        1000,
+    )
+    const worstMovedMs = movedMs.reduce((worst, value) => Math.max(worst, Math.abs(value)), 0)
+    const held =
+      inKeep.length === 7 &&
+      outputSync.videoMarkers.length === inKeep.length &&
+      Math.abs(mean) <= 10 &&
+      Math.abs(sync.driftMs) <= 10 &&
+      sync.worstOffsetMs <= 1000 / frameRate &&
+      worstAddedMs <= 1 &&
+      worstMovedMs <= 1000 / frameRate + 1
+    if (!held) allHeld = false
+    results.push(
+      `sync across a cut at ${kept.startSeconds}–${kept.endSeconds} s: ${held ? 'held' : 'FAIL'} — ${outputSync.videoMarkers.length} markers against ${inKeep.length} kept; offset ${Number.isFinite(mean) ? mean.toFixed(1) : '—'} ms, drift ${sync.driftMs.toFixed(1)} ms, spread ${sync.worstOffsetMs.toFixed(1)} ms; the cut adds at most ${worstAddedMs.toFixed(1)} ms to the untrimmed file's sync (limit 1) and moves the picture at most ${worstMovedMs.toFixed(0)} ms (limit one frame, ${(1000 / frameRate).toFixed(0)} ms). Per marker: ${sync.offsetsMs.map((v) => v.toFixed(1)).join(', ')} ms`,
+    )
+  }
+
+  // A late-starting audio track and an in-point on either side of where it
+  // joins: the case the shared origin exists for.
+  const AUDIO_PACKET_SLACK = 0.05
+  for (const testCase of [
+    { startSeconds: 5, expectFirst: 3, name: 'kept from 5 s, audio joining at 8 s' },
+    { startSeconds: 10, expectFirst: 0, name: 'kept from 10 s, audio joining at 8 s' },
+  ]) {
+    log(`  ${testCase.name}`)
+    const fixture = await buildFixture({
+      width: 640,
+      height: 360,
+      seconds: 30,
+      frameRate: 25,
+      audio: { startPeakDbfs: -20, startSeconds: 8 },
+    })
+    const { file, workspace } = await process(fixture, {
+      presetId: 'best',
+      branding: { opening: false, closing: false },
+      jobId: `acceptance-trim-late-${testCase.startSeconds}`,
+      keptRange: { startSeconds: testCase.startSeconds, endSeconds: 30 },
+    })
+    const output = await measureCoverage(file, 'audio', AUDIO_PACKET_SLACK)
+    await workspace.dispose()
+    if (!output) {
+      allHeld = false
+      results.push(`${testCase.name}: FAIL (no audio packets)`)
+      continue
+    }
+    const expectedSpan = 30 - Math.max(8, testCase.startSeconds)
+    const span = output.lastEndSeconds - output.firstSeconds
+    const held =
+      Math.abs(output.firstSeconds - testCase.expectFirst) <= 0.15 &&
+      Math.abs(span - expectedSpan) <= 0.3
+    if (!held) allHeld = false
+    results.push(
+      `${testCase.name}: ${held ? 'held' : 'FAIL'} — sound starts ${output.firstSeconds.toFixed(2)} s (expected ${testCase.expectFirst}) and lasts ${span.toFixed(2)} s (expected ${expectedSpan})`,
+    )
+  }
+
+  return {
+    criterion: '6',
+    title: 'A trimmed job keeps sound and picture together at the cut',
+    status: allHeld ? 'pass' : 'fail',
+    detail: `${results.join('; ')}.`,
+  }
+}
+
+/**
  * Criterion 1, on the shape a phone actually produces.
  *
  * Portrait phone video is landscape PIXELS plus a rotation flag. Every frame
@@ -679,8 +877,15 @@ async function checkPortrait(log: Report): Promise<Check> {
  * Lock, delete its scratch directory, and answer `cancelled`. Every one of
  * those steps was outside the check (P2-07).
  */
-async function checkCancellation(log: Report): Promise<Check> {
-  log('  starting a worker job and cancelling it through the worker protocol')
+async function checkCancellation(log: Report, keptRange?: KeptRange): Promise<Check> {
+  log(
+    keptRange
+      ? '  starting a trimmed worker job and cancelling it through the worker protocol'
+      : '  starting a worker job and cancelling it through the worker protocol',
+  )
+  const title = keptRange
+    ? 'Cancelling a trimmed job leaves no partial file and no orphaned data'
+    : 'Cancelling leaves no partial file and no orphaned data'
   const fixture = await buildFixture({
     width: 854,
     height: 480,
@@ -704,7 +909,7 @@ async function checkCancellation(log: Report): Promise<Check> {
 
   const fail = (detail: string): Check => ({
     criterion: '8',
-    title: 'Cancelling leaves no partial file and no orphaned data',
+    title,
     status: 'fail',
     detail,
   })
@@ -743,6 +948,7 @@ async function checkCancellation(log: Report): Promise<Check> {
       backgroundColour: '#000000',
       brandingBaseUrl: resolveBrandingBase(document.baseURI),
       contentClass: 'unknown',
+      ...(keptRange ? { keptRange } : {}),
     })
 
     // Cancel only once the job has genuinely started writing. Cancelling a job
@@ -782,7 +988,7 @@ async function checkCancellation(log: Report): Promise<Check> {
     const leaked = after.filter((name) => !before.includes(name))
     return {
       criterion: '8',
-      title: 'Cancelling leaves no partial file and no orphaned data',
+      title,
       status: leaked.length === 0 ? 'pass' : 'fail',
       detail:
         leaked.length === 0
@@ -822,8 +1028,13 @@ export async function runAcceptance(log: Report): Promise<AcceptanceReport> {
   log('Criterion 6 — the source timeline')
   checks.push(await checkSourceTimeline(log))
 
+  log('Criterion 2 and 6 — a trimmed job')
+  checks.push(await checkTrimmedLoudness(log))
+  checks.push(await checkTrimmedTimeline(log))
+
   log('Criterion 8 — cancellation')
   checks.push(await checkCancellation(log))
+  checks.push(await checkCancellation(log, { startSeconds: 10, endSeconds: 50 }))
 
   log('Criterion 1 — the worker path')
   const workerPath = await checkWorkerPath(log)

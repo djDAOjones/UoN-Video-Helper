@@ -12,6 +12,7 @@ import { describe, expect, it } from 'vitest'
 
 import { LIMITER } from '../config/audio'
 import { createContentAudioProcessor, type AudioPlan } from './audio-plan'
+import type { KeptRange } from './kept-range'
 
 const SAMPLE_RATE = 48000
 const CHANNELS = 2
@@ -57,12 +58,20 @@ function block(timestampSeconds: number, frames = BLOCK_FRAMES): AudioSample {
  */
 function run(
   blocks: readonly AudioSample[],
-  options: { offsetSeconds: number; startOffsetSeconds: number; durationSeconds: number },
+  options: {
+    offsetSeconds: number
+    startOffsetSeconds: number
+    durationSeconds: number
+    keptRange?: KeptRange
+  },
 ): { starts: number[]; totalFrames: number; ends: number[] } {
   const processor = createContentAudioProcessor(plan, {
-    ...options,
+    offsetSeconds: options.offsetSeconds,
+    startOffsetSeconds: options.startOffsetSeconds,
+    durationSeconds: options.durationSeconds,
     fadeIn: false,
     fadeOut: false,
+    keptRange: options.keptRange ?? null,
   })
   const starts: number[] = []
   const ends: number[] = []
@@ -86,6 +95,40 @@ function run(
 function expectContiguous(starts: readonly number[], ends: readonly number[]): void {
   for (let i = 1; i < starts.length; i++) expect(starts[i]).toBeCloseTo(ends[i - 1]!, 9)
 }
+
+describe('createContentAudioProcessor with a trim (VH-95)', () => {
+  it('starts the sound at the cut, sliced from the block that contains it', () => {
+    // Blocks of 100 ms from 9.95; the cut at 10.0 falls half-way through the
+    // first. The output starts at the content offset exactly, carrying the
+    // frames from 10.0 on.
+    const { starts, totalFrames } = run([block(9.95), block(10.05), block(10.15)], {
+      offsetSeconds: 3,
+      startOffsetSeconds: 0,
+      durationSeconds: 20,
+      keptRange: { startSeconds: 10, endSeconds: 30 },
+    })
+    expect(starts[0]).toBeCloseTo(3, 9)
+    expect(totalFrames).toBe(Math.round(0.25 * SAMPLE_RATE))
+  })
+
+  it('ends the sound at the out-point, whatever the last block carried', () => {
+    const { starts, ends, totalFrames } = run([block(29.8), block(29.9)], {
+      offsetSeconds: 0,
+      startOffsetSeconds: 0,
+      durationSeconds: 20,
+      keptRange: { startSeconds: 29.8, endSeconds: 29.95 },
+    })
+    expect(totalFrames).toBe(Math.round(0.15 * SAMPLE_RATE))
+    expect(ends[ends.length - 1]).toBeCloseTo(0.15, 6)
+    expectContiguous(starts, ends)
+  })
+
+  it('takes the untrimmed path exactly when there is no range', () => {
+    const untrimmed = run([block(0), block(0.1)], { offsetSeconds: 3, startOffsetSeconds: 0, durationSeconds: 10 })
+    expect(untrimmed.totalFrames).toBe(2 * BLOCK_FRAMES)
+    expect(untrimmed.starts[0]).toBeCloseTo(3, 9)
+  })
+})
 
 describe('createContentAudioProcessor timing', () => {
   it('starts at the content offset when the source lanes start together', () => {

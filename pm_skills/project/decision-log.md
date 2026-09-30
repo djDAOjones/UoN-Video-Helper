@@ -11,6 +11,52 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-09-30 — VH-95: the trim engine, with each cut on a frame edge
+
+**Decision:** `preflight` and `process` take an optional `keptRange`
+(`{ startSeconds, endSeconds }`, source seconds). The worker validates it
+once (`normaliseKeptRange`): a range equal to the file is no range, and takes
+exactly the untrimmed path; a start after the end or a keep under
+`KEPT_MIN_SECONDS` (3 s, the short-term window) is refused in a sentence,
+never clamped. The pipeline then moves each cut to the edge of the frame it
+falls in — in-point back to the start of the frame showing there, out-point
+on to its end — from packet metadata, before anything reads the source. The
+in-point becomes the shared origin of both lanes; every audio pass (A, B, B′
+and C) reads the same range and slices each decoded block to it with one
+function (`clipAudioBlock`); spans end at the out-point; a cut mid-sound
+fades whatever adjoins it. Pre-flight's warnings, size, time and picture
+class, and the calibration probe, all describe the kept part.
+
+**Rationale:** loudness is the one interaction that produces a wrong file
+rather than a wrong duration, so it is measured on the kept part only, and
+the same slice in every pass keeps the envelope indexed against the stream it
+is applied to (VH-74). The frame snap was not in the ticket; the harness
+found it. A cut half-way through a 25 fps frame started the sound at the cut
+and the picture on the next frame boundary: a constant 24 ms offset at every
+marker, against a 10 ms limit, where the same file untrimmed reads 4.0 ms.
+Picture is whole frames and sound is samples, so only a frame edge is an
+instant both can share; it moves a cut by at most one frame, and keeps the
+frames showing at the chosen points. On the variable-rate fixture the same
+error had surfaced only as 13 ms of fitted "drift" in the grid's scatter,
+which is why the trimmed sync case uses a constant-rate source and compares
+against the same file untrimmed.
+
+**Verified:** acceptance harness, 13 passed, 0 failed. Trimmed loudness: a
+source drifting from −4 to −34 dBFS, kept 40–70 s — −16.12 LUFS on the kept
+content, −4.54 dBTP, picture 34.00 s. Trimmed sync: seven markers, 4.0 ms at
+each, identical to the untrimmed file (added 0.0 ms, limit 1), picture moved
+20 ms (limit one frame). Audio joining at 8 s, kept from 5 s: sound starts at
+3.00 s; kept from 10 s: at 0.00 s. A trimmed job cancelled mid-write leaves
+nothing. Worker pre-flight on a real 130 s recording kept 30–90 s: probe
+measured from the in-point, estimate 19 → 9 s, size 13.8 → 6.6 MB; a 1 s keep
+refused with its sentence. Node: range validation, block slicing that tiles a
+range frame for frame, the ranged origin, the ranged processor, the snap.
+`src/audio/` untouched, so EBU Tech 3341 stands without a re-run.
+
+**Link:** VH-95, VH-30, VH-96, VH-74; `src/media/kept-range.ts`,
+`src/config/trim.ts`, `src/media/pipeline.ts`, `src/media/audio-plan.ts`,
+`src/acceptance/run.ts`.
+
 ## 2026-09-30 — VH-30 signed off: a conveyor with one cut
 
 **Decision:** trimming the two ends is in the product. The identity in

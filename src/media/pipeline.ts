@@ -14,6 +14,7 @@
 import {
   AudioSampleSink,
   AudioSampleSource,
+  EncodedPacketSink,
   Mp4OutputFormat,
   Output,
   VideoSampleSink,
@@ -48,6 +49,7 @@ import { fitRectangle } from './conform'
 import { findFreezeFrame } from './freeze'
 import { audioEncodingConfigFor, videoEncodingConfigFor } from './encoding'
 import { measureEncoderDelay } from './encoder-delay'
+import { snapKeptRangeToFrames, type FrameSpan, type KeptRange } from './kept-range'
 import type { OpfsWorkspace } from './opfs'
 import { deriveSourceTimeline } from './source-timeline'
 import { carryTrackMetadata } from './track-metadata'
@@ -175,6 +177,12 @@ export interface PipelineOptions {
    * page for the same reason, by `resolveBrandingBase`.
    */
   readonly brandingBaseUrl: string
+  /**
+   * The part of the source to keep (VH-95), already validated by
+   * `normaliseKeptRange`. Absent or `null` keeps the whole file by exactly the
+   * path that ran before trimming existed.
+   */
+  readonly keptRange?: KeptRange | null
   readonly signal?: AbortSignal
   readonly onProgress?: (progress: PipelineProgress) => void
 }
@@ -238,13 +246,38 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
   if (!videoTrack) throw new Error('The source has no video track')
   const audioTrack = await input.getPrimaryAudioTrack()
 
+  // Each cut on the edge of the frame it falls in, so the sound and the
+  // picture start and stop on the same instant (VH-95). Packet metadata only:
+  // nothing is decoded to find them.
+  let keptRange = options.keptRange ?? null
+  if (keptRange) {
+    const packets = new EncodedPacketSink(videoTrack)
+    const frameAt = async (seconds: number): Promise<FrameSpan | null> => {
+      const packet = await packets.getPacket(seconds, { metadataOnly: true })
+      return packet ? { timestampSeconds: packet.timestamp, durationSeconds: packet.duration } : null
+    }
+    const requested = keptRange
+    keptRange = snapKeptRangeToFrames(
+      requested,
+      await frameAt(requested.startSeconds),
+      await frameAt(requested.endSeconds),
+    )
+    log.info('pipeline', 'kept range placed on frame edges', {
+      requestedSeconds: [requested.startSeconds, requested.endSeconds],
+      keptSeconds: [keptRange.startSeconds, keptRange.endSeconds],
+    })
+  }
+
   // One origin for both lanes. Rebasing each track to its own first sample is
   // what silently destroyed the offset between them (VH-74): a capture whose
   // audio joins five seconds late came out five seconds early against its
   // picture, because the video lane kept its offset and the audio lane did not.
+  // With a trim, the in-point is that origin: both lanes are measured from the
+  // cut, so the output starts on the first kept moment of each (VH-95).
   const sourceTimeline = deriveSourceTimeline(
     await videoTrack.getFirstTimestamp(),
     audioTrack ? await audioTrack.getFirstTimestamp() : null,
+    keptRange?.startSeconds ?? null,
   )
   const { originSeconds } = sourceTimeline
   if (sourceTimeline.videoOffsetSeconds > 0 || sourceTimeline.audioOffsetSeconds > 0) {
@@ -275,6 +308,9 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       // will cost in loudness rather than aiming at the encoder's input
       // (VH-83).
       (channelCount) => audioEncodingConfigFor(preset, channelCount),
+      // Measured on the kept part only: a trimmed-off minute of room tone or
+      // applause must not drag the gain the viewer hears (VH-95).
+      keptRange,
     )
     throwIfAborted(signal)
   }
@@ -318,10 +354,14 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
   // is unit-tested in `branding.test.ts` rather than only reachable through a
   // browser.
   // Spans measured from the shared origin, not absolute track ends. With both
-  // lanes starting at zero — every ordinary file — these are unchanged.
-  const videoSpanSeconds = Math.max(0, videoDurationSeconds - originSeconds)
+  // lanes starting at zero — every ordinary file — these are unchanged. A trim
+  // ends each lane at the out-point where it ran past it (VH-95).
+  const keptEnd = keptRange?.endSeconds ?? Number.POSITIVE_INFINITY
+  const videoSpanSeconds = Math.max(0, Math.min(videoDurationSeconds, keptEnd) - originSeconds)
   const audioSpanSeconds =
-    audioDurationSeconds === null ? null : Math.max(0, audioDurationSeconds - originSeconds)
+    audioDurationSeconds === null
+      ? null
+      : Math.max(0, Math.min(audioDurationSeconds, keptEnd) - originSeconds)
 
   const timeline = closingTimeline({
     videoDurationSeconds: videoSpanSeconds,
@@ -480,15 +520,23 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     // zero, so an unnormalised negative timestamp would be rejected outright.
     let contentOrigin: number | null = null
     let lastTrackTimestamp = 0
-    for await (const sample of sink.samples()) {
+    // A ranged read starts on the frame SHOWING at the in-point, which began
+    // before it (Mediabunny's `samples(start, end)`); the clamp below puts that
+    // frame at the cut, and the audio is sliced to the same instant.
+    const frames = keptRange
+      ? sink.samples(keptRange.startSeconds, keptRange.endSeconds)
+      : sink.samples()
+    for await (const sample of frames) {
       throwIfAborted(laneSignal)
       try {
         // Read before `setTimestamp`, which mutates the sample in place.
         const original = sample.timestamp
         // The SHARED origin, not this lane's first frame (VH-74). Falling back
         // to the lane's own only when the shared one is somehow later, so the
-        // guard below never has anything to clamp.
-        contentOrigin ??= Math.min(originSeconds, original)
+        // guard below never has anything to clamp. Not with a trim: there the
+        // first frame starts before the cut by design, and taking it as the
+        // origin would put the picture up to a frame behind the sound.
+        contentOrigin ??= keptRange ? originSeconds : Math.min(originSeconds, original)
         lastTrackTimestamp = original
         const sourceTime = Math.max(0, original - contentOrigin)
         const timestamp = contentOffset + videoDelaySeconds + sourceTime
@@ -595,11 +643,19 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       // The audio's OWN length, so its fade lands where it actually ends rather
       // than where the picture did.
       durationSeconds: audioEndsAt,
-      fadeIn: opening !== null,
-      fadeOut: closing !== null,
+      // A cut mid-sound clicks, so a trimmed edge fades whatever adjoins it —
+      // branding or the end of the file (VH-95).
+      fadeIn: opening !== null || (keptRange !== null && keptRange.startSeconds > 0),
+      fadeOut:
+        closing !== null ||
+        (keptRange !== null && keptRange.endSeconds < (audioDurationSeconds ?? 0)),
+      keptRange,
     })
     const sink = new AudioSampleSink(audioTrack)
-    for await (const sample of sink.samples()) {
+    const samples = keptRange
+      ? sink.samples(keptRange.startSeconds, keptRange.endSeconds)
+      : sink.samples()
+    for await (const sample of samples) {
       throwIfAborted(laneSignal)
       let processed
       try {
@@ -645,6 +701,9 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       openingSeconds,
       closingSeconds,
       timelineSeconds,
+      keptRange: keptRange
+        ? `${Math.round(keptRange.startSeconds * 1000) / 1000}-${Math.round(keptRange.endSeconds * 1000) / 1000}`
+        : null,
       brandingRequested: `${branding.opening}/${branding.closing}`,
       brandingApplied: `${opening !== null}/${closing !== null}`,
     })
