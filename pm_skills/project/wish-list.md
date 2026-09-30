@@ -61,3 +61,8 @@
   measurement behind it. Settling it is a VIDEO experiment — encode the probe
   sample at a spread of multiples and score each — and was parked on VH-83 by
   mistake. (from: VH-83)
+- Give every spike page one machine-readable closing verdict (`ALL PASS` /
+  `N FAILURE(S)`, errors counted) and have `run-in-engines.mjs` read only
+  that line. Today it reads verdict words in prose, which a contrived source
+  file name can fool into a false failure. (from: VH-26 review)
+

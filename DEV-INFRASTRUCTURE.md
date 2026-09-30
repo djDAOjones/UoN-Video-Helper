@@ -528,7 +528,8 @@ or a closing `N FAILURE(S)`, makes the run exit 1 — otherwise the command
 could not be cited as verification, because it could not fail. A verdict is
 the word first on its line, or ending a row, or before an em dash; the same
 word inside a file name is not one. A page that means an engine difference as
-a finding, not a failure, words it otherwise.
+a finding, not a failure, words it otherwise. It is prose-reading and can be
+fooled by a contrived file name into a false FAILURE — never a false pass.
 
 Each engine speaks a different protocol and there is no choice about it:
 Chrome over CDP, Firefox over WebDriver BiDi (it dropped CDP), Safari over

@@ -84,7 +84,10 @@ word in a verdict position — first on its line, ending a row, or before an em
 dash — which is where every spike puts it and where a file name does not go;
 one line in `spike-alpha` was reworded to fit. Checked against fifteen sample
 outputs, file names included, and live: `spike-real` with a bad path exits 1,
-the phone spike exits 0.
+the phone spike exits 0. A fourth pass found a name contrived to sit in a
+verdict position ("lecture FAIL — retake.mp4"). Left, deliberately: it is a
+false failure, the loud direction, and closing it for good means a structured
+verdict line on all eleven spike pages — parked on the wish-list.
 
 **Link:** VH-26; `scripts/run-in-engines.mjs`, `DEV-INFRASTRUCTURE.md` →
 "Cross-engine verification".

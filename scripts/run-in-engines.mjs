@@ -24,6 +24,13 @@
  * wants an engine difference read as a finding rather than a failure words it
  * some other way.
  *
+ * It is still reading prose, and prose can be contrived to fool it: a source
+ * NAMED "lecture FAIL — retake.mp4" would read as a verdict. That error is a
+ * false failure — loud, and a rename away from gone — never a false pass,
+ * which is the direction that matters. A structured verdict line on every
+ * spike page would close it; that is a change to eleven pages, parked on the
+ * wish-list rather than made here.
+ *
  * Each engine needs a different protocol, and the differences are not
  * negotiable:
  *
