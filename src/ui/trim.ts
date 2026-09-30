@@ -7,7 +7,11 @@
  * take. Pure, so the wording and the arithmetic are tested in Node.
  */
 
-import { TRIM_KEY_STEP_SECONDS, TRIM_PAGE_STEP_SECONDS } from '../config/trim'
+import {
+  KEPT_EDGE_TOLERANCE_SECONDS,
+  TRIM_KEY_STEP_SECONDS,
+  TRIM_PAGE_STEP_SECONDS,
+} from '../config/trim'
 import { KeptRangeError, normaliseKeptRange, type KeptRange } from '../media/kept-range'
 import { formatDuration } from './format'
 
@@ -41,6 +45,32 @@ export function parseTrimTime(text: string): number | null {
   if (parts.slice(0, -1).some((part) => part.includes('.'))) return null
   if (parts.slice(1).some((part) => Number(part) >= 60)) return null
   return parts.reduce((total, part) => total * 60 + Number(part), 0)
+}
+
+/**
+ * A typed time for one end, or why it cannot be used.
+ *
+ * Refused here if it is not a time or lies past the end of the video. The
+ * worker would bring an end past the file back to the file's end, which is
+ * right for a range that arrives that way — but a person who typed it would
+ * then see "the whole video" beside a field still holding their number
+ * (Codex review).
+ */
+export function trimFieldValue(
+  text: string,
+  which: 'start' | 'end',
+  durationSeconds: number,
+): { readonly seconds: number } | { readonly problem: string } {
+  const seconds = parseTrimTime(text)
+  if (seconds === null) {
+    return { problem: `Write the ${which} time as minutes and seconds, like 1:05.5.` }
+  }
+  if (seconds > durationSeconds + KEPT_EDGE_TOLERANCE_SECONDS) {
+    return {
+      problem: `The ${which} time is after the end of the video, which is ${formatTrimTime(durationSeconds)} long.`,
+    }
+  }
+  return { seconds }
 }
 
 /**

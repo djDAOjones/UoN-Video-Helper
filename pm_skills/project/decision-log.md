@@ -30,7 +30,12 @@ right. Every committed change stops what is in flight and re-runs the device
 check after 500 ms of stillness (`TRIM_RECHECK_DELAY_MS`), and the job takes
 the range its verdict was checked for. Untouched, no range is sent. A video
 shorter than 3 s cannot be trimmed and says so; a file the player cannot
-show keeps working fields and says the preview is unavailable.
+show keeps working fields and says the preview is unavailable. After the
+Codex review: a typed time past the video's end is refused with its length
+rather than moved to the end; a re-check waiting to run is cancelled when
+the file or the output changes; and a new file empties the step — "Reading
+the video…", then either its times or "There is no video to trim: that file
+could not be read." — so nothing of the last video is shown.
 
 **Rationale:** WCAG 2.5.7 decided the shape — never drag-only, so three
 routes to each end. Validating with the worker's own `normaliseKeptRange`

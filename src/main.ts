@@ -70,7 +70,7 @@ import { summariseChecks, type CheckState } from './ui/system-check'
 import { installBrandAssets } from './ui/brand-assets'
 import {
   formatTrimTime,
-  parseTrimTime,
+  trimFieldValue,
   trimHandleText,
   trimKeyTarget,
   trimRangeFor,
@@ -624,7 +624,10 @@ fileInput.addEventListener('change', () => {
   jobContentClass = 'unknown'
   jobKeptRange = null
   inspectedFile = null
-  clearTrimPreview()
+  // The trim described the previous video. Nothing of it is kept, and a
+  // re-check still waiting to run for it must not (Codex review).
+  cancelTrimRecheck()
+  clearTrim('Reading the video…')
   // Kept when there is something to lose: the result panel describes a video
   // that already exists, and the source panel describes what was just chosen.
   // Clearing it here removed the only route to a finished file (VH-56).
@@ -663,6 +666,7 @@ fileInput.addEventListener('change', () => {
       if (reply.kind === 'failed') {
         renderSourceError(sourceReport, reply.message)
         setSourceStatus('That file could not be read.')
+        clearTrim(TRIM_NOTHING_TO_TRIM)
         setDiagnosticsContext({ stage: 'failed' })
         return
       }
@@ -678,6 +682,7 @@ fileInput.addEventListener('change', () => {
         'Reading this file took longer than expected, or the tool ran into a problem.',
       )
       setSourceStatus('That file could not be read.')
+      clearTrim(TRIM_NOTHING_TO_TRIM)
       log.error('ui', 'inspection request failed', {
         reason: cause instanceof Error ? cause.message : String(cause),
       })
@@ -789,6 +794,7 @@ presetChoice.addEventListener('change', () => {
   // Start comes down for the interval, because the verdict that revealed it
   // described a different preset (review R-05).
   const current = beginSelection()
+  cancelTrimRecheck()
   processActions.hidden = true
   jobFile = null
   jobContentClass = 'unknown'
@@ -810,9 +816,23 @@ let trimFieldProblem: { readonly field: HTMLInputElement; readonly message: stri
 /** The preview's object URL, revoked when the file changes. */
 let previewUrl: string | null = null
 let trimRecheck: ReturnType<typeof setTimeout> | null = null
+/**
+ * What the step says when it has no video to trim — while one is read, or
+ * when it could not be — in place of times that belong to another video.
+ * `null` once a video is ready.
+ */
+let trimNotice: string | null = null
+const TRIM_NOTHING_TO_TRIM = 'There is no video to trim: that file could not be read.'
+
+/** Stops a device check that is waiting to run for a trim that no longer applies. */
+function cancelTrimRecheck(): void {
+  if (trimRecheck !== null) clearTimeout(trimRecheck)
+  trimRecheck = null
+}
 
 /** The range to send, `null` for the whole video, or why the trim cannot be used. */
 function currentTrim(): { readonly range: KeptRange | null } | { readonly problem: string } {
+  if (trimNotice !== null) return { range: null }
   if (trimFieldProblem) return { problem: trimFieldProblem.message }
   return trimRangeFor(trimStart, trimEnd, trimDuration)
 }
@@ -827,6 +847,22 @@ function clearTrimPreview(): void {
 }
 
 /**
+ * No video to trim: nothing from the last one shown, every control down, and
+ * the step says why — reading, or unreadable.
+ */
+function clearTrim(notice: string): void {
+  clearTrimPreview()
+  trimPreviewNote.hidden = true
+  trimNotice = notice
+  trimDuration = 0
+  trimStart = 0
+  trimEnd = 0
+  trimFieldProblem = null
+  for (const range of [trimStartRange, trimEndRange]) range.max = '0'
+  applyControlLock()
+}
+
+/**
  * A new video: preview it and keep all of it.
  *
  * The preview reads the file where it is, through a local object URL — no
@@ -837,6 +873,7 @@ function resetTrim(file: File, durationSeconds: number): void {
   previewUrl = URL.createObjectURL(file)
   trimPreview.src = previewUrl
   trimPreviewNote.hidden = true
+  trimNotice = null
   trimDuration = durationSeconds
   trimStart = 0
   trimEnd = durationSeconds
@@ -851,6 +888,17 @@ function resetTrim(file: File, durationSeconds: number): void {
 
 /** Shows the trim as it stands: handles, fields, the kept part in words, and any problem. */
 function renderTrim(): void {
+  if (trimNotice !== null) {
+    trimStartField.value = ''
+    trimEndField.value = ''
+    for (const field of [trimStartField, trimEndField]) field.removeAttribute('aria-invalid')
+    trimError.hidden = true
+    trimResult.textContent = trimNotice
+    trimClear.disabled = true
+    trimTrack.style.setProperty('--start-fraction', '0')
+    trimTrack.style.setProperty('--end-fraction', '0')
+    return
+  }
   trimStartRange.value = String(trimStart)
   trimEndRange.value = String(trimEnd)
   trimStartRange.setAttribute('aria-valuetext', trimHandleText(trimStart, trimDuration))
@@ -900,8 +948,7 @@ function commitTrim(): void {
   jobFile = null
   jobContentClass = 'unknown'
   jobKeptRange = null
-  if (trimRecheck !== null) clearTimeout(trimRecheck)
-  trimRecheck = null
+  cancelTrimRecheck()
   if ('problem' in currentTrim()) {
     setStatus('Put the start and end times right in step 2 to continue.')
     return
@@ -909,6 +956,8 @@ function commitTrim(): void {
   setStatus('Checking this video against your device…')
   trimRecheck = setTimeout(() => {
     trimRecheck = null
+    // Belt and braces: every path that supersedes this also cancels it.
+    if (!current()) return
     void runPreflight(file, current)
   }, TRIM_RECHECK_DELAY_MS)
 }
@@ -952,16 +1001,13 @@ for (const [field, which] of [
   [trimEndField, 'end'],
 ] as const) {
   field.addEventListener('change', () => {
-    const seconds = parseTrimTime(field.value)
-    if (seconds === null) {
-      trimFieldProblem = {
-        field,
-        message: `Write the ${which} time as minutes and seconds, like 1:05.5.`,
-      }
+    const value = trimFieldValue(field.value, which, trimDuration)
+    if ('problem' in value) {
+      trimFieldProblem = { field, message: value.problem }
     } else {
       trimFieldProblem = null
-      if (which === 'start') trimStart = seconds
-      else trimEnd = seconds
+      if (which === 'start') trimStart = value.seconds
+      else trimEnd = value.seconds
     }
     commitTrim()
   })
@@ -1208,7 +1254,7 @@ function applyControlLock(): void {
   startButton.disabled = locked
   // The trim is part of what the job was started for. A video too short to
   // trim has nothing to move, and says so in the line beneath.
-  const trimLocked = locked || trimDuration < KEPT_MIN_SECONDS
+  const trimLocked = locked || trimNotice !== null || trimDuration < KEPT_MIN_SECONDS
   for (const control of [trimStartRange, trimEndRange, trimStartField, trimEndField]) {
     control.disabled = trimLocked
   }

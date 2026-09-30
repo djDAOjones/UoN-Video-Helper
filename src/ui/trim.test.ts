@@ -15,6 +15,7 @@ import {
   trimHandleText,
   trimKeyTarget,
   trimRangeFor,
+  trimFieldValue,
   trimSummary,
 } from './trim'
 
@@ -51,6 +52,26 @@ describe('times in the fields', () => {
     for (const seconds of [0, 12.3, 59.9, 61, 3599.9, 3600]) {
       expect(parseTrimTime(formatTrimTime(seconds))).toBeCloseTo(seconds, 6)
     }
+  })
+})
+
+describe('a typed time for one end', () => {
+  it('is the time when it is one, inside the video', () => {
+    expect(trimFieldValue('1:40', 'end', 130)).toEqual({ seconds: 100 })
+  })
+
+  it('refuses what is not a time', () => {
+    expect(trimFieldValue('abc', 'start', 130)).toEqual({
+      problem: 'Write the start time as minutes and seconds, like 1:05.5.',
+    })
+  })
+
+  it('refuses a time past the end of the video rather than quietly moving it', () => {
+    // Codex review of VH-96: "3:00" on a 2:10 video became the file's end,
+    // and the page said the whole video was kept beside a field saying 3:00.
+    expect(trimFieldValue('3:00', 'end', 130.4)).toEqual({
+      problem: 'The end time is after the end of the video, which is 2:10.4 long.',
+    })
   })
 })
 
