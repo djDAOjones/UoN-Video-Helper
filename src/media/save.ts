@@ -129,14 +129,19 @@ export async function saveFile(
         types: [{ description: 'MP4 video (.mp4)', accept: { 'video/mp4': ['.mp4'] } }],
       }
       handle = await showSaveFilePicker(options)
+      // Taken as the picker returns, not after the read: the read may be slow
+      // on cloud-backed storage, and the file's age is measured to here.
+      const pickedAt = Date.now()
       const existing = await existingAt(handle)
       // Nothing of the user's was at the destination: the picker made an
       // empty file there just now, which a stopped save must not leave
       // behind. An empty file written any earlier is one the user chose to
-      // replace, and stays (Codex review).
+      // replace, and stays (Codex review). The limit, accepted: an empty file
+      // the user saved moments before picking it would be removed — it held
+      // nothing, and nothing else tells the two apart.
       createdHere =
         existing === null ||
-        (existing.size === 0 && Date.now() - existing.lastModified < PICKER_CREATED_WITHIN_MS)
+        (existing.size === 0 && pickedAt - existing.lastModified < PICKER_CREATED_WITHIN_MS)
 
       if (source) {
         const sameEntry = source.handle ? await handle.isSameEntry(source.handle) : false
