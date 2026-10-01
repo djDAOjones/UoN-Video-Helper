@@ -17,10 +17,10 @@
 
 /**
  * What a drop is refused for while the page cannot start a new video.
- * `unavailable` is a browser the start-up check blocked, whose picker is
- * disabled too (VH-110).
+ * `starting` is the start-up check still running, and `unavailable` a
+ * browser it blocked; the picker is disabled for both (VH-110).
  */
-export type DropBusy = 'making' | 'saving' | 'unavailable' | null
+export type DropBusy = 'making' | 'saving' | 'starting' | 'unavailable' | null
 
 /** The parts of a dropped file the decision reads. */
 export interface DroppedFile {
@@ -68,6 +68,9 @@ export function dropProblem(
   }
   if (busy === 'saving') {
     return 'A video is being saved. Stop the save, or wait for it to finish, before choosing another.'
+  }
+  if (busy === 'starting') {
+    return 'The tool is still getting ready. Drop the video again in a moment.'
   }
   if (busy === 'unavailable') {
     return 'This browser cannot run the tool, so no video can be read here. The sentence above says what to do.'

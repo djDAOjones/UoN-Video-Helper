@@ -27,6 +27,9 @@
 
 ### Band 6 — review, then translate
 
+- VH-123 — Shipped 2026-10-01. The storage block's remedy and the file
+  name say only what is on screen and in the file; codex sol's findings on
+  VH-109 and VH-110 fixed. See decision-log.
 - VH-110 — Shipped 2026-10-01. Each failure says what happened, that the
   original is safe once, and a next step that fits; an unlevellable plan is
   refused before the encode; a start-up block is said at Choose; captured

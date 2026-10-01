@@ -18,6 +18,7 @@
  * Pure, so every sentence and every milestone is tested in Node.
  */
 
+import { PROGRESS_MILESTONE_FRACTIONS } from '../config/thresholds'
 import type { PipelineStage } from '../media/pipeline'
 
 /** Spec 9.2: named stages, not one opaque bar. */
@@ -32,12 +33,13 @@ export const STAGE_WORDS: Readonly<Record<PipelineStage, string>> = {
 /** The stages whose fraction is a measurement rather than a placeholder. */
 const MEASURED: ReadonlySet<PipelineStage> = new Set<PipelineStage>(['encoding'])
 
+/** The words for each of {@link PROGRESS_MILESTONE_FRACTIONS}, in its order. */
+const MILESTONE_WORDS = ['a quarter done', 'half done', 'three quarters done'] as const
+
 /** Fractions at which a measured stage is worth a word, and the word. */
-const MILESTONES: ReadonlyArray<readonly [number, string]> = [
-  [0.25, 'a quarter done'],
-  [0.5, 'half done'],
-  [0.75, 'three quarters done'],
-]
+const MILESTONES: ReadonlyArray<readonly [number, string]> = PROGRESS_MILESTONE_FRACTIONS.map(
+  (fraction, index) => [fraction, MILESTONE_WORDS[index]!] as const,
+)
 
 export const APP_TITLE = 'UoN Video Helper'
 

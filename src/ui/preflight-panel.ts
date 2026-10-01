@@ -30,6 +30,19 @@ export interface BlockContext {
   readonly trimmed?: boolean
 }
 
+/**
+ * Whether the setup steps can resolve a block, so they stay on the page: true
+ * when every blocking reason is too little storage, which a shorter keep or
+ * the smaller output answers (Codex review of VH-108). The page's choice of
+ * what to show and the storage sentence's remedy read this one rule, so the
+ * sentence never names a step the page has withdrawn (VH-123).
+ */
+export function setupStepsResolve(verdict: PreflightSummary['verdict']): boolean {
+  return verdict.reasons.every(
+    (reason) => reason.outcome !== 'block' || reason.code === 'insufficient-storage',
+  )
+}
+
 /** Reads {@link BlockContext} from the user agent string. Pure, so it is tested. */
 export function blockContextFor(userAgent: string, trimmed = false): BlockContext {
   const chromium = /Chrome\/\d+/.test(userAgent) && !/OPR\//.test(userAgent)
@@ -93,8 +106,13 @@ function reasonText(code: PreflightReasonCode, summary: PreflightSummary, contex
       // first and names nothing else.
       return 'This page needs a secure connection before it can work with your video. Open it at an https:// address, or at localhost if you are running it yourself.'
     case 'insufficient-storage':
-      // The one block the setup steps can resolve, so it says how.
-      return `There is not enough free space on this device. This job needs about ${formatFileSize(summary.verdict.requiredStorageBytes)} of working space. Free some space and try again, keep less of the video, or choose ${PRESETS.smaller.label}.`
+      // The one block the setup steps can resolve, so it says how — unless
+      // another block has taken those steps off the page (VH-123).
+      return `There is not enough free space on this device. This job needs about ${formatFileSize(summary.verdict.requiredStorageBytes)} of working space. ${
+        setupStepsResolve(summary.verdict)
+          ? `Free some space and try again, keep less of the video, or choose ${PRESETS.smaller.label}.`
+          : 'Free some space and try again.'
+      }`
     case 'storage-unknown':
       return 'This browser will not say how much free space there is. If it runs out part-way, the job stops and nothing is saved — your original file is not affected.'
     case 'very-long-job':

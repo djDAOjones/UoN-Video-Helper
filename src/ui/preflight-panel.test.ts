@@ -9,13 +9,18 @@
 
 import { describe, expect, it } from 'vitest'
 
-import type { OutputShape } from '../config/presets'
+import { PRESETS, type OutputShape } from '../config/presets'
 import type {
   PreflightOutcome,
   PreflightReasonCode,
   PreflightSummary,
 } from '../media/preflight'
-import { blockContextFor, preflightAnnouncement, verdictText } from './preflight-panel'
+import {
+  blockContextFor,
+  preflightAnnouncement,
+  setupStepsResolve,
+  verdictText,
+} from './preflight-panel'
 
 const shape: OutputShape = {
   width: 1920,
@@ -281,6 +286,21 @@ describe('block (VH-89)', () => {
     expect(lines[0]).toContain('71.3 MB')
     // ...and the ways out that the setup steps offer (Codex review of VH-108).
     expect(lines[0]).toContain('keep less of the video')
+  })
+
+  it('names the setup steps only while they are on the page (VH-123)', () => {
+    // Another block withdraws steps 2 to 4, so "keep less" would point at
+    // nothing; free space is still the storage reason's own remedy.
+    const both = summary('block', [
+      ['insufficient-storage', 'block'],
+      ['no-source-decode', 'block'],
+    ])
+    expect(setupStepsResolve(both.verdict)).toBe(false)
+    const said = verdictText(both).lines.join(' ')
+    expect(said).toContain('Free some space')
+    expect(said).not.toContain('keep less of the video')
+    expect(said).not.toContain(PRESETS.smaller.label)
+    expect(setupStepsResolve(summary('block', [['insufficient-storage', 'block']]).verdict)).toBe(true)
   })
 })
 

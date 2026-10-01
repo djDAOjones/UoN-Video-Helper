@@ -16,6 +16,7 @@
  * rather than this module guessing on a timer (VH-56).
  */
 
+import { PICKER_CREATED_WITHIN_MS } from '../config/thresholds'
 import { log } from '../core/logger'
 
 export type SaveOutcome = 'saved' | 'downloaded' | 'cancelled' | 'refused-source'
@@ -130,8 +131,12 @@ export async function saveFile(
       handle = await showSaveFilePicker(options)
       const existing = await existingAt(handle)
       // Nothing of the user's was at the destination: the picker made an
-      // empty file there, which a stopped save must not leave behind.
-      createdHere = existing === null || existing.size === 0
+      // empty file there just now, which a stopped save must not leave
+      // behind. An empty file written any earlier is one the user chose to
+      // replace, and stays (Codex review).
+      createdHere =
+        existing === null ||
+        (existing.size === 0 && Date.now() - existing.lastModified < PICKER_CREATED_WITHIN_MS)
 
       if (source) {
         const sameEntry = source.handle ? await handle.isSameEntry(source.handle) : false
@@ -194,15 +199,17 @@ export async function saveFile(
  * Keeps the user's own name so they can recognise the result, and marks it so
  * it cannot be confused with the original — which this tool never modifies,
  * but which sits in the same folder. The mark says what the job did: a video
- * made with no closing is not "(branded)" (U-24), and a silent one made with
- * no closing was not levelled either (Codex review of VH-114).
+ * with no branding in it is not "(branded)" (U-24), and a silent one with
+ * none was not levelled either (Codex review of VH-114). `branded` is what
+ * the file carries — a closing that could not be loaded, or an opening
+ * should VH-23 return, counts as it landed, not as it was asked for (VH-123).
  */
 export function suggestedFileName(
   sourceName: string,
-  job: { readonly closing: boolean; readonly sound: boolean } = { closing: true, sound: true },
+  job: { readonly branded: boolean; readonly sound: boolean } = { branded: true, sound: true },
 ): string {
   const withoutExtension = sourceName.replace(/\.[^./\\]+$/, '')
   const trimmed = withoutExtension.trim() || 'video'
-  const mark = job.closing ? 'branded' : job.sound ? 'levelled' : 'converted'
+  const mark = job.branded ? 'branded' : job.sound ? 'levelled' : 'converted'
   return `${trimmed} (${mark}).mp4`
 }

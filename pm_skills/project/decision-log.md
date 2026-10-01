@@ -11,6 +11,30 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — VH-123: review leftovers, and codex sol on VH-109 and VH-110
+
+**Decision:** the storage block names "keep less of the video, or choose
+Smaller / reduced" only when the setup steps stay on the page — one rule,
+`setupStepsResolve`, decides both what the page shows and what the sentence
+offers. The suggested file name follows the branding the file carries (a
+closing that could not load, or an opening should VH-23 return), not the
+closing asked for — the old rule called a file "(branded)" when its closing
+had failed to load. From codex sol on VH-110: a stopped save removes only an
+empty file written in the last `PICKER_CREATED_WITHIN_MS`, never an older
+empty file the user chose to replace; the check's stop and the save's stop
+are separate state, so a check finishing for the next file cannot hide the
+previous video's "Stop saving"; the picker and the drop stay shut until the
+start-up check settles. From codex sol on VH-109 (8c57e57): the estimate's
+rounding bands and the progress milestones' fractions moved to
+`config/thresholds.ts`; the milestone words stay in `ui/progress.ts`, paired
+by order.
+
+**Verified:** Node tests for each wording and both empty-file cases; headless
+Chrome: boot opens the picker once settled, stop and re-check unchanged.
+
+**Link:** VH-123; `src/ui/preflight-panel.ts`, `src/media/save.ts`,
+`src/main.ts`, `src/ui/drop-zone.ts`, `src/config/thresholds.ts`.
+
 ## 2026-10-01 — VH-110: failures that say what to do next, and stops for the check and the save
 
 **Decision:** the worker names each failure (`workers/failure.ts`: a

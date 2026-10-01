@@ -73,7 +73,12 @@ import {
   feedbackText,
 } from './ui/feedback'
 import { formatFileSize } from './ui/format'
-import { blockContextFor, preflightAnnouncement, renderPreflight } from './ui/preflight-panel'
+import {
+  blockContextFor,
+  preflightAnnouncement,
+  renderPreflight,
+  setupStepsResolve,
+} from './ui/preflight-panel'
 import {
   JOB_START_NOTICE,
   NO_PROGRESS,
@@ -716,7 +721,14 @@ async function checkWorker(): Promise<void> {
  * tool cannot do here and the remedy that fits, and choosing a file the tool
  * cannot process is not offered. The system check keeps the detail.
  */
-let startupBlocked = false
+/**
+ * Where the start-up check has got to. The picker and the drop stay shut
+ * until it settles: a file chosen before then could have its reading
+ * overwritten by the verdict, or its own failure overwrite a block (Codex
+ * review). It settles within the first second.
+ */
+let startup: 'pending' | 'ready' | 'blocked' = 'pending'
+fileInput.disabled = true
 
 function settleStartup(workerStarted: boolean, h264: boolean): void {
   const blocked = startupFailureText(
@@ -729,7 +741,7 @@ function settleStartup(workerStarted: boolean, h264: boolean): void {
     },
     blockContextFor(navigator.userAgent),
   )
-  startupBlocked = blocked !== null
+  startup = blocked === null ? 'ready' : 'blocked'
   applyControlLock()
   setSourceStatus(blocked ?? 'Choose a video to begin.')
 }
@@ -771,7 +783,15 @@ installDropZone({
   hint: dropHint,
   message: dropError,
   busy: () =>
-    startupBlocked ? 'unavailable' : jobInFlight ? 'making' : saveInFlight ? 'saving' : null,
+    startup === 'pending'
+      ? 'starting'
+      : startup === 'blocked'
+        ? 'unavailable'
+        : jobInFlight
+          ? 'making'
+          : saveInFlight
+            ? 'saving'
+            : null,
 })
 
 fileInput.addEventListener('change', () => {
@@ -945,9 +965,7 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
         // the re-check they trigger lands here again. And step 5 holds the
         // previous video's Save while one is unsaved: hiding it hid the only
         // way to that file.
-        const recoverable = reply.summary.verdict.reasons.every(
-          (reason) => reason.outcome !== 'block' || reason.code === 'insufficient-storage',
-        )
+        const recoverable = setupStepsResolve(reply.summary.verdict)
         revealLaterSteps({ setup: recoverable, create: recoverable || unsavedResult !== null })
         setSourceStatus(`${announcement.shown} ${announcement.spokenOnly}`)
         return
@@ -1469,13 +1487,29 @@ const checkAgainButton = stopButton('Check again')
 const stopSaveButton = stopButton('Stop saving')
 stopActions.append(stopCheckButton, checkAgainButton, stopSaveButton)
 
-/** Which stop the row offers, if any. */
-function offerStop(offer: 'check' | 'check-again' | 'save' | null): void {
+/**
+ * What the row offers for the device check. Kept apart from the save's stop:
+ * a previous video can be saving while the next file is checked, and the
+ * check finishing must not take the save's way out with it (Codex review).
+ */
+function offerStop(offer: 'check' | 'check-again' | null): void {
   stopCheckButton.hidden = offer !== 'check'
   checkAgainButton.hidden = offer !== 'check-again'
-  stopSaveButton.hidden = offer !== 'save'
+  syncStopRow()
+}
+
+/** Whether the row offers Stop saving. */
+function offerSaveStop(offered: boolean): void {
+  stopSaveButton.hidden = !offered
   stopSaveButton.disabled = false
-  stopActions.hidden = offer === null
+  syncStopRow()
+}
+
+/** The row is on the page while any of its controls is. */
+function syncStopRow(): void {
+  stopActions.hidden = [stopCheckButton, checkAgainButton, stopSaveButton].every(
+    (button) => button.hidden,
+  )
 }
 
 stopCheckButton.addEventListener('click', () => {
@@ -1588,8 +1622,8 @@ function setSaveInFlight(saving: boolean): void {
 /** Applies whichever of the two locks is active. */
 function applyControlLock(): void {
   const locked = jobInFlight || saveInFlight
-  // A browser the start-up check blocked keeps the picker shut for good.
-  fileInput.disabled = locked || startupBlocked
+  // Shut until the start-up check settles, and for good if it blocked.
+  fileInput.disabled = locked || startup !== 'ready'
   presetChoice.disabled = locked
   brandingChoice.disabled = locked
   startButton.disabled = locked
@@ -1761,6 +1795,7 @@ function beginJob(file: File): void {
             applied: reply.brandingApplied.closing,
             mode: reply.closingModeApplied,
             sound: reply.audioIncluded,
+            opening: reply.brandingApplied.opening,
           },
           release: () => {},
         })
@@ -1959,13 +1994,14 @@ function renderResult(kept: RetainedResult): void {
     let leaseHeld = true
     const stop = new AbortController()
     saveStop = stop
-    offerStop('save')
+    offerSaveStop(true)
     void (async () => {
       try {
         const result = await saveFile(
           file,
+          // What the file carries, not what was asked for (VH-123).
           suggestedFileName(source.name, {
-            closing: record.closing.type !== 'none',
+            branded: outcome.applied || (outcome.opening ?? false),
             sound: outcome.sound ?? true,
           }),
           {
@@ -2045,7 +2081,7 @@ function renderResult(kept: RetainedResult): void {
           worker.postMessage({ kind: 'lease', id: nextRequestId++, jobId, held: false })
         }
         saveStop = null
-        offerStop(null)
+        offerSaveStop(false)
         save.disabled = saved
         setSaveInFlight(false)
         // Stop saving has gone from under focus; Save is how to go on.

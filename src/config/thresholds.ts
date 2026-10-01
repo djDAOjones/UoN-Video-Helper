@@ -160,3 +160,35 @@ export const CONTENT_CAMERA_MIN_MEAN_DIFFERENCE = 0.003
  */
 export const CONTENT_SCREEN_MAX_SOURCE_BITS_PER_PIXEL_PER_FRAME = 0.08
 
+
+/**
+ * How far a shown time estimate is rounded (U-22, VH-109): to what the 3 s
+ * probe can honestly claim, which differed by a quarter between two loads of
+ * one file. Each band rounds anything below `belowSeconds` to `stepSeconds`;
+ * the last band covers everything longer. Under `fewSecondsBelow` it reads
+ * "a few seconds". We chose these; VH-116 may narrow the probe's spread.
+ */
+export const ESTIMATE_ROUNDING = {
+  fewSecondsBelow: 5,
+  bands: [
+    { belowSeconds: 60, stepSeconds: 10 },
+    { belowSeconds: 600, stepSeconds: 60 },
+    { belowSeconds: Number.POSITIVE_INFINITY, stepSeconds: 300 },
+  ],
+} as const
+
+/**
+ * Where the encode's progress is announced (VH-109), as fractions of the
+ * stage. Each names its own words in `ui/progress.ts`, which must change with
+ * it — a quarter is said as "a quarter done".
+ */
+export const PROGRESS_MILESTONE_FRACTIONS = [0.25, 0.5, 0.75] as const
+
+/**
+ * How recently an empty file at a save destination must have been written to
+ * count as the one the save picker made (VH-110). The picker creates it as
+ * the user confirms, and the save reads it straight after, so seconds is
+ * ample; an empty file the user chose to replace is older, and is never
+ * removed when a save is stopped. We chose it.
+ */
+export const PICKER_CREATED_WITHIN_MS = 10_000

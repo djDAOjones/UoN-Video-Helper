@@ -85,6 +85,10 @@ describe('dropProblem', () => {
     expect(problem).toContain('Stop the save')
   })
 
+  it('refuses a drop before the start-up check has settled (VH-110)', () => {
+    expect(dropProblem([mp4], accept, 'starting')).toContain('getting ready')
+  })
+
   it('refuses any drop in a browser the start-up check blocked (VH-110)', () => {
     const problem = dropProblem([mp4], accept, 'unavailable')
     expect(problem).toContain('cannot run the tool')

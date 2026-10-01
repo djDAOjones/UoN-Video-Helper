@@ -68,18 +68,6 @@
      item builds to the spec as written. Band 4 closed with VH-97's sign-off
      as not built (Icebox). -->
 
-- [ ] **VH-123 Two review leftovers from the Band 6 run** (2026-10-01)
-      Intent: Codex sol on VH-108's follow-up: the storage block's "keep less
-      of the video, or choose Smaller / reduced" is also said when another
-      block hides those steps — make it conditional on the setup steps staying.
-      On VH-114's follow-up: `suggestedFileName` marks a silent, closing-less
-      job "(converted)" even if an opening were applied — moot while openings
-      are withdrawn (VH-23), but pass the applied branding rather than
-      `closing` alone when VH-23 returns. Also rerun codex sol on 8c57e57
-      (VH-109); its review had not landed when the session paused.
-      Done when: both wordings depend on what is actually on screen and in the
-      file, and the VH-109 review is read.
-
 - [ ] **VH-111 Focus and announcements follow the page** (2026-10-01)
       Intent: U-09, U-10. Focus falls to the page body at Create, Cancel,
       finish and "Keep it" — after Cancel the next Tab skips Create. Caption

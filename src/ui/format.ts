@@ -9,6 +9,8 @@
  * discovered at review time.
  */
 
+import { ESTIMATE_ROUNDING } from '../config/thresholds'
+
 /** e.g. `1 hour 23 minutes`, `4 minutes 12 seconds`, `38 seconds`. */
 export function formatDuration(seconds: number): string {
   if (!Number.isFinite(seconds) || seconds < 0) return 'unknown'
@@ -37,15 +39,17 @@ export function formatDuration(seconds: number): string {
 /**
  * An estimate, rounded to what it can honestly claim (U-22): "about 5
  * minutes", never "5 minutes 20 seconds" from a probe that differs by a
- * quarter between two loads of one file. Under a minute to the nearest ten
- * seconds; under ten minutes to the minute; then to five minutes.
+ * quarter between two loads of one file. The bands are
+ * {@link ESTIMATE_ROUNDING}'s; a rounding never reaches zero.
  */
 export function formatApproximateDuration(seconds: number): string {
   if (!Number.isFinite(seconds) || seconds < 0) return 'unknown'
-  if (seconds < 5) return 'a few seconds'
-  if (seconds < 60) return formatDuration(Math.max(10, Math.round(seconds / 10) * 10))
-  if (seconds < 600) return formatDuration(Math.round(seconds / 60) * 60)
-  return formatDuration(Math.round(seconds / 300) * 300)
+  if (seconds < ESTIMATE_ROUNDING.fewSecondsBelow) return 'a few seconds'
+  const band =
+    ESTIMATE_ROUNDING.bands.find((candidate) => seconds < candidate.belowSeconds) ??
+    ESTIMATE_ROUNDING.bands[ESTIMATE_ROUNDING.bands.length - 1]!
+  const step = band.stepSeconds
+  return formatDuration(Math.max(step, Math.round(seconds / step) * step))
 }
 
 /**

@@ -9,10 +9,12 @@ describe('suggestedFileName', () => {
   })
 
   it('marks the file with what the job did (U-24, Codex review of VH-114)', () => {
-    expect(suggestedFileName('talk.mp4', { closing: true, sound: true })).toBe('talk (branded).mp4')
-    expect(suggestedFileName('talk.mp4', { closing: false, sound: true })).toBe('talk (levelled).mp4')
-    // Silent, and no closing: nothing was levelled and nothing was branded.
-    expect(suggestedFileName('talk.mp4', { closing: false, sound: false })).toBe('talk (converted).mp4')
+    expect(suggestedFileName('talk.mp4', { branded: true, sound: true })).toBe('talk (branded).mp4')
+    expect(suggestedFileName('talk.mp4', { branded: false, sound: true })).toBe('talk (levelled).mp4')
+    // Silent, and no branding: nothing was levelled and nothing was branded.
+    expect(suggestedFileName('talk.mp4', { branded: false, sound: false })).toBe('talk (converted).mp4')
+    // Silent with branding — an opening, say, and no closing — was branded (VH-123).
+    expect(suggestedFileName('talk.mp4', { branded: true, sound: false })).toBe('talk (branded).mp4')
   })
 
   it('always ends up as .mp4, whatever went in', () => {
@@ -75,7 +77,10 @@ describe('isSourceDestination', () => {
 
 describe('a streaming save can be stopped (VH-110)', () => {
   /** Saves a slow ten-chunk stream to a stubbed picker and stops it part-way. */
-  async function stopMidSave(existingBytes: number): Promise<{
+  async function stopMidSave(
+    existingBytes: number,
+    existingModified = Date.now(),
+  ): Promise<{
     outcome: string
     aborted: number
     wrote: number
@@ -95,7 +100,10 @@ describe('a streaming save can be stopped (VH-110)', () => {
     })
     let removed = 0
     const handle = {
-      getFile: () => Promise.resolve(new File([new Uint8Array(existingBytes)], 'out.mp4')),
+      getFile: () =>
+        Promise.resolve(
+          new File([new Uint8Array(existingBytes)], 'out.mp4', { lastModified: existingModified }),
+        ),
       createWritable: () => Promise.resolve(writable),
       isSameEntry: () => Promise.resolve(false),
       remove: () => {
@@ -143,6 +151,12 @@ describe('a streaming save can be stopped (VH-110)', () => {
   it('never removes a file the user chose to replace', async () => {
     // The abort discards the swap file, so their file is as it was.
     const stopped = await stopMidSave(1_000)
+    expect(stopped.outcome).toBe('cancelled')
+    expect(stopped.removed).toBe(0)
+  })
+
+  it('never removes an empty file that was there before the save (Codex review)', async () => {
+    const stopped = await stopMidSave(0, Date.now() - 24 * 60 * 60 * 1000)
     expect(stopped.outcome).toBe('cancelled')
     expect(stopped.removed).toBe(0)
   })

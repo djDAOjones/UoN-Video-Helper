@@ -35,6 +35,8 @@ export interface ClosingOutcome {
   readonly mode: BrandingMode | null
   /** Whether the file carries sound — a silent job levelled nothing. */
   readonly sound?: boolean
+  /** Whether an opening landed; none can while openings are withdrawn (VH-23). */
+  readonly opening?: boolean
 }
 
 /** "the whole video (4 minutes 12 seconds)" or "2 minutes of 4 minutes 12 seconds, from 0:30.0 to 2:30.0". */
