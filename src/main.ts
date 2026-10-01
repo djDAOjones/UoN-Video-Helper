@@ -405,8 +405,12 @@ function setSourceStatus(message: string): void {
  * steps 2 to 4 must not invite work on (U-05). It moves no focus: the user
  * is still on the file input they just used.
  */
-function revealLaterSteps(shown = true): void {
-  for (const step of laterSteps) step.hidden = !shown
+function revealLaterSteps(
+  shown: { readonly setup: boolean; readonly create: boolean } = { setup: true, create: true },
+): void {
+  const [trim, closing, preset, create] = laterSteps
+  for (const step of [trim, closing, preset]) step!.hidden = !shown.setup
+  create!.hidden = !shown.create
 }
 
 /**
@@ -865,7 +869,16 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
         renderPreflight(sourceBlock, reply.summary, context)
         withdrawVerdict()
         setStatus('')
-        revealLaterSteps(false)
+        // Two exceptions to withdrawing the steps (Codex review of VH-108).
+        // Too little storage is a block the setup steps can resolve — a
+        // shorter keep or the smaller output needs less — so they stay, and
+        // the re-check they trigger lands here again. And step 5 holds the
+        // previous video's Save while one is unsaved: hiding it hid the only
+        // way to that file.
+        const recoverable = reply.summary.verdict.reasons.every(
+          (reason) => reason.outcome !== 'block' || reason.code === 'insufficient-storage',
+        )
+        revealLaterSteps({ setup: recoverable, create: recoverable || unsavedResult !== null })
         setSourceStatus(`${announcement.shown} ${announcement.spokenOnly}`)
         return
       }

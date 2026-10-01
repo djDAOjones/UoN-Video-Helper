@@ -93,7 +93,8 @@ function reasonText(code: PreflightReasonCode, summary: PreflightSummary, contex
       // first and names nothing else.
       return 'This page needs a secure connection before it can work with your video. Open it at an https:// address, or at localhost if you are running it yourself.'
     case 'insufficient-storage':
-      return `There is not enough free space on this device. This job needs about ${formatFileSize(summary.verdict.requiredStorageBytes)} of working space. Free some space and try again.`
+      // The one block the setup steps can resolve, so it says how.
+      return `There is not enough free space on this device. This job needs about ${formatFileSize(summary.verdict.requiredStorageBytes)} of working space. Free some space and try again, keep less of the video, or choose ${PRESETS.smaller.label}.`
     case 'storage-unknown':
       return 'This browser will not say how much free space there is. If it runs out part-way, the job stops and nothing is saved — your original file is not affected.'
     case 'very-long-job':

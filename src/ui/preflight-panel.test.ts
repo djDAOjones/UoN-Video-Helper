@@ -270,6 +270,8 @@ describe('block (VH-89)', () => {
     const { lines } = verdictText(summary('block', [['insufficient-storage', 'block']]))
     expect(lines).toHaveLength(1)
     expect(lines[0]).toContain('71.3 MB')
+    // ...and the ways out that the setup steps offer (Codex review of VH-108).
+    expect(lines[0]).toContain('keep less of the video')
   })
 })
 
