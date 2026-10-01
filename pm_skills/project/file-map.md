@@ -15,7 +15,7 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 233 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 235 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 23 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
@@ -23,7 +23,7 @@
 - `public` — 13 file(s)
 - `reviews` — 26 file(s)
 - `scripts` — 9 file(s)
-- `src` — 146 file(s)
+- `src` — 148 file(s)
 - `test` — 9 file(s)
 <!-- /file-map-index -->
 
@@ -240,6 +240,8 @@
 - `src/styles/app.css` — App shell styles: Carbon productive shapes at AAA, in the University's colours. Names roles only — no colour value.
 - `src/styles/tokens.brand.css` — UoN brand tokens: the palette and its tints, the font stacks, the logo's size, and the colour roles assigned from them for light, dark and a blue band.
 - `src/styles/tokens.carbon.css` — Carbon structural tokens: spacing, type scale, motion, the 44 px floor, and status colour.
+- `src/ui/announce.test.ts` — (role needed)
+- `src/ui/announce.ts` — (role needed)
 - `src/ui/brand-assets.ts` — Looks the logo and heading font up by name at build time and installs whichever exists; the page is complete without either.
 - `src/ui/closing-choice.test.ts` — Every closing selection's sentence states the seconds the job really adds; "None" is unmistakable; a disabled control says why.
 - `src/ui/closing-choice.ts` — The closing controls in words: the result line for the current selection, and why onset or colour is disabled.
