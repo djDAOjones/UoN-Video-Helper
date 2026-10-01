@@ -190,3 +190,53 @@ export function withTransients(
   }
   return channels
 }
+
+/**
+ * Noise whose level jumps between the given levels every `stepFrames`, in a
+ * seeded order, with each channel independent.
+ *
+ * Made for the true-peak speed-up's equivalence tests (VH-99): the skips it
+ * added decide per span of frames whether anything in reach can matter, so
+ * the material must cross between "nothing can" and "something might" often,
+ * at offsets unrelated to any span or chunk, with the running peak rising at
+ * irregular times. Deterministic, so a failure is reproducible.
+ */
+export function steppedNoise(options: {
+  readonly frames: number
+  readonly channelCount: number
+  /** Peak levels to step between, in dBFS. Above 0 is allowed: a chain's gain can put it there. */
+  readonly levelsDbfs: readonly number[]
+  readonly stepFrames: number
+  readonly seed?: number
+  /**
+   * One sample at this amplitude every `impulseEveryFrames`, on every channel.
+   * The ends of a true-peak window carry taps of 6e-4 at most, so only an
+   * impulse far above full scale can tell a bound that misses an end sample
+   * from one that does not.
+   */
+  readonly impulse?: { readonly amplitude: number; readonly everyFrames: number }
+}): Float32Array[] {
+  const { frames, channelCount, levelsDbfs, stepFrames } = options
+  // A 32-bit LCG (Numerical Recipes constants): repeatable and dependency-free.
+  let state = (options.seed ?? 1) >>> 0
+  const next = (): number => {
+    state = (Math.imul(state, 1664525) + 1013904223) >>> 0
+    return state / 2 ** 32
+  }
+  return Array.from({ length: channelCount }, () => {
+    const data = new Float32Array(frames)
+    let amplitude = 0
+    for (let i = 0; i < frames; i++) {
+      if (i % stepFrames === 0) {
+        amplitude = dbfsToAmplitude(levelsDbfs[Math.floor(next() * levelsDbfs.length)]!)
+      }
+      data[i] = amplitude * (2 * next() - 1)
+    }
+    if (options.impulse) {
+      const { everyFrames } = options.impulse
+      for (let i = everyFrames - 1; i < frames; i += everyFrames)
+        data[i] = options.impulse.amplitude
+    }
+    return data
+  })
+}

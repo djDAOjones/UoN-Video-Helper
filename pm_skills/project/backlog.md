@@ -32,21 +32,6 @@
      Active that is free to start: Band 3 waits on the maintainer, and
      Band 4's VH-97 is [sign-off] with "not built" as its default. -->
 
-- [ ] **VH-99 Make the audio analysis as fast as the docs say** [detail](tickets/VH-99.md) (2026-10-01)
-      Intent: measured 2026-09-30 on this MacBook, one traversal of a 620 s
-      programme takes 9.2 s and a job makes five — about four and a half
-      minutes of "Analysing audio" for an hour-long lecture, where
-      `config/audio.ts` and `audio-plan.ts` both say 3.6 s an hour. Profile
-      before choosing a fix; the 4x oversampled true-peak work in the
-      analyser and the limiter is the likely cost. Two cheap wins ride along:
-      `detectSourceWarnings` sorts the full short-term curve twice where one
-      sort would do, and the true-peak window shifts 13 elements per sample
-      where a ring buffer would not.
-      Done when: a profile names where the time goes; the fix lands with
-      before/after timings on a real lecture; the comments quote measured
-      figures; the EBU Tech 3341 harness passes unchanged (`truepeak.ts` is
-      protected, so it re-runs in the same task) and delivered loudness on
-      the corpus lectures is unchanged.
 - [ ] **VH-100 A time estimate that counts every stage** (2026-10-01)
       Intent: the pre-flight estimate extrapolates the probe's decode and
       encode, and leaves out the audio chain and the branding conform, so it

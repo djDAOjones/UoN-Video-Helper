@@ -7,8 +7,16 @@
 
 import { describe, expect, it } from 'vitest'
 
-import { concat, dbfsToAmplitude, feedInChunks, silence, tone } from '../../test/helpers/signals'
-import { TruePeakDetector } from './truepeak'
+import { WARNING_THRESHOLDS } from '../config/audio'
+import {
+  concat,
+  dbfsToAmplitude,
+  feedInChunks,
+  silence,
+  steppedNoise,
+  tone,
+} from '../../test/helpers/signals'
+import { OVERSAMPLE_PHASES, PHASE_TAPS, SPAN_FRAMES, TruePeakDetector } from './truepeak'
 
 const SAMPLE_RATE = 48000
 
@@ -169,6 +177,65 @@ describe('true peak', () => {
 
     const readings = [1, 7, 512, 4096, channels[0]!.length].map((chunk) => measure(channels, chunk))
     for (const reading of readings) expect(reading).toBeCloseTo(readings[0]!, 10)
+  })
+
+  it('matches an exhaustive interpolation exactly, however the stream is chunked (VH-99)', () => {
+    // The detector skips a span when nothing in reach can set a new peak or
+    // count as clipped, and reads each window out of a history buffer rather
+    // than a delay line. Both are speed only. The oracle below interpolates
+    // every frame of every channel with no skip and no history — zeros before
+    // the stream, and the drain's silence after it — so the two must agree to
+    // the last bit, on the peak and on the clip count. Chunk sizes straddle
+    // the twelve frames of history and the span length. The impulses are far
+    // over full scale because the ends of a window carry taps of 6e-4 at
+    // most: nothing smaller shows a bound that misses one.
+    const channels = steppedNoise({
+      frames: 20_000,
+      channelCount: 2,
+      levelsDbfs: [-70, -40, -12, -3, -0.5, 0],
+      stepFrames: 37,
+      seed: 99,
+      impulse: { amplitude: 1e4, everyFrames: 101 },
+    })
+
+    const clipThreshold = 10 ** (WARNING_THRESHOLDS.clippingDbtp / 20)
+    const frames = channels[0]!.length
+    let expectedPeak = 0
+    let expectedClipped = 0
+    for (let i = 0; i < frames + PHASE_TAPS - 1; i++) {
+      let framePeak = 0
+      for (const channel of channels) {
+        for (const taps of OVERSAMPLE_PHASES) {
+          let sum = 0
+          for (let j = 0; j < PHASE_TAPS; j++) {
+            const k = i - j
+            sum += taps[j]! * (k >= 0 && k < frames ? channel[k]! : 0)
+          }
+          framePeak = Math.max(framePeak, Math.abs(sum))
+        }
+      }
+      expectedPeak = Math.max(expectedPeak, framePeak)
+      if (framePeak >= clipThreshold) expectedClipped++
+    }
+    expect(expectedClipped).toBeGreaterThan(0)
+
+    for (const chunk of [
+      1,
+      5,
+      PHASE_TAPS - 1,
+      PHASE_TAPS,
+      SPAN_FRAMES - 1,
+      SPAN_FRAMES,
+      SPAN_FRAMES + 1,
+      1000,
+      frames,
+    ]) {
+      const detector = new TruePeakDetector(channels.length)
+      feedInChunks(channels, chunk, detector)
+      detector.finish()
+      expect(detector.peakLinear, `chunk ${chunk}`).toBe(expectedPeak)
+      expect(detector.clippedSampleCount, `chunk ${chunk}`).toBe(expectedClipped)
+    }
   })
 
   it('scales linearly with level', () => {

@@ -7,9 +7,9 @@
 import { describe, expect, it } from 'vitest'
 
 import { ENCODE_TRUE_PEAK_HEADROOM_DB, LIMITER, TRUE_PEAK_CEILING_DBTP } from '../config/audio'
-import { concat, silence, tone } from '../../test/helpers/signals'
+import { concat, silence, steppedNoise, tone } from '../../test/helpers/signals'
 import { TruePeakLimiter } from './limiter'
-import { TruePeakDetector } from './truepeak'
+import { OVERSAMPLE_PHASES, PHASE_TAPS, SPAN_FRAMES, TruePeakDetector } from './truepeak'
 
 const SAMPLE_RATE = 48000
 /**
@@ -140,6 +140,91 @@ describe('true-peak limiter', () => {
     })
     const readings = [1, 33, 1024, channels[0]!.length].map((n) => truePeakDbtp(limit(channels, n)))
     for (const reading of readings) expect(reading).toBeCloseTo(readings[0]!, 9)
+  })
+
+  it('matches an exhaustive limiter exactly, however the stream is chunked (VH-99)', () => {
+    // The limiter decides per span whether any frame in it can need gain, and
+    // reads its windows out of a history buffer that carries across chunks.
+    // Both are speed only. The oracle below interpolates every frame of every
+    // channel with no skip, and takes the look-ahead minimum by brute force,
+    // so the samples themselves must agree to the last bit.
+    //
+    // Two sections. Noise stepping from silence to 6 dB over full scale, as a
+    // chain's gain can drive, crosses between clear and not-clear spans at
+    // every offset. Then quiet noise with an impulse every 3,001 frames: the
+    // end of a window carries a tap of 6e-4 at most, so only an impulse far
+    // over full scale shows a bound that misses it — and only with quiet
+    // before it, and the last impulse out of the look-ahead, or a smaller
+    // gain already in the window hides the mistake.
+    const channels = concat(
+      steppedNoise({
+        frames: 12_000,
+        channelCount: 2,
+        levelsDbfs: [-70, -20, -9, -6, -3, 0, 6],
+        stepFrames: 41,
+        seed: 7,
+      }),
+      steppedNoise({
+        frames: 12_000,
+        channelCount: 2,
+        levelsDbfs: [-20],
+        stepFrames: 41,
+        seed: 8,
+        impulse: { amplitude: 1e4, everyFrames: 3001 },
+      }),
+    )
+
+    const ceiling = 10 ** (CEILING / 20)
+    const lookAhead = Math.max(1, Math.round((LIMITER.lookAheadMs * SAMPLE_RATE) / 1000))
+    const release = Math.exp(-1 / ((LIMITER.releaseMs / 1000) * SAMPLE_RATE))
+    const frames = channels[0]!.length
+    // The stream as the limiter sees it: the input, then the flush's silence.
+    const input = channels.map((channel) => {
+      const padded = new Float32Array(frames + lookAhead)
+      padded.set(channel)
+      return padded
+    })
+    const required: number[] = []
+    let gain = 1
+    const expected = input.map((channel) => new Float32Array(channel.length))
+    for (let i = 0; i < frames + lookAhead; i++) {
+      let peak = 0
+      for (const channel of input) {
+        for (const taps of OVERSAMPLE_PHASES) {
+          let sum = 0
+          for (let j = 0; j < PHASE_TAPS; j++) sum += taps[j]! * (i - j >= 0 ? channel[i - j]! : 0)
+          peak = Math.max(peak, Math.abs(sum))
+        }
+      }
+      peak = Math.max(peak, 1e-12)
+      required.push(peak > ceiling ? ceiling / peak : 1)
+      const windowMinimum = Math.min(...required.slice(Math.max(0, i - lookAhead + 1)))
+      gain =
+        windowMinimum < gain
+          ? windowMinimum
+          : Math.min(windowMinimum, windowMinimum + release * (gain - windowMinimum))
+      for (let ch = 0; ch < input.length; ch++) {
+        expected[ch]![i] = (i >= lookAhead ? input[ch]![i - lookAhead]! : 0) * gain
+      }
+    }
+
+    for (const chunk of [
+      1,
+      5,
+      PHASE_TAPS - 1,
+      PHASE_TAPS,
+      SPAN_FRAMES - 1,
+      SPAN_FRAMES,
+      SPAN_FRAMES + 1,
+      1000,
+      frames,
+    ]) {
+      const limited = limit(channels, chunk)
+      for (let ch = 0; ch < channels.length; ch++) {
+        const same = limited[ch]!.every((value, i) => Object.is(value, expected[ch]![i]))
+        expect(same, `chunk ${chunk}, channel ${ch}`).toBe(true)
+      }
+    }
   })
 
   it('holds the ceiling on a transient in the final frames (VH-50)', () => {

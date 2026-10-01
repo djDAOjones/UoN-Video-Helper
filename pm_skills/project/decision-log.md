@@ -11,6 +11,55 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — VH-99: true peak skips a span at a time, and planning nearly halves
+
+**Decision:** every per-frame decision in the true-peak detector and the
+limiter is kept exactly, behind a cheaper exact test: one scan bounds all the
+windows ending in a 32-frame span (`SPAN_FRAMES`), and a span that clears it
+is done. Windows are read from a history buffer (`InterpolatorHistory`)
+rather than shifted through a delay line, and the four-phase convolution is
+one function both share. The compressor skips its `log10` below the knee's
+lower edge, less a 1e-9 margin, where the curve is the identity. Output is
+bit-identical. `SPAN_FRAMES` and `KNEE_EDGE_MARGIN` stay out of `config/`:
+they change speed, never output. The item's other cheap win rode along:
+`detectSourceWarnings` sorts the short-term curve once, as a typed array,
+not twice with a comparator — 260 → 30 ms for an hour.
+
+**Rationale:** a CPU profile of the planning passes over a real 374 s lecture
+put half the time in the detector's and limiter's window scans and shifts,
+the convolution they guard under 1%, and the compressor's `log10` and `pow`
+at a fifth. The ticket's guess — the skip rarely holds, so the convolution
+runs every sample — was the reverse; and the shift alone was not it (a ring
+buffer gained nothing). The skip had to get cheaper.
+
+**Measured (this MacBook, old and new interleaved):** per stage on that
+lecture, limiter 1,352 → 411 ms, compressor 679 → 368, true peak 805 → 117
+on the source and 832 → 140 limited; loudness untouched. Planning in headless
+Chrome, decode and codec probe included: AMCS3059 (130 s) 7.35 → 3.88 s,
+CULT2011 (335 s) 17.9 → 10.5 s, medians of three. An hour now plans in
+103–138 s (was 190–215); pass A 10–12.5 s, a whole-chain pass 17–21 s, decode
+5–7 s. The "3.6 s" comments quote these now, and `GAIN_SOLVE` says what the
+corpus shows: five of six real recordings pay all three refinement passes.
+
+**Verified:** pass-C output hash, gain, delivered LUFS and dBTP, source peak
+and clip count identical on six real recordings; EBU Tech 3341 unchanged and
+green. New tests hold the detector and limiter to exhaustive no-skip oracles
+bit for bit at chunk sizes around 12, 13 and 32, and the compressor to a
+full-curve oracle at the knee; each fails under its mutations. A bound
+missing a window's oldest sample is invisible by construction — its taps are
+0 or 5e-34.
+
+**Gates assumed (auto-jazz):** scope — the three DSP modules and the stale
+comments; option — exact skips, because bit-identity makes both of the
+maintainer's conditions checkable.
+
+**Dropped:** a `pow` skip (exact, 1–3%); comparison wraps for `%` in the
+limiter (6% of the limiter). Parked on the wish-list: true peak in the B and
+B′ passes (9%), a better solver step, and CULT2011's corrupt AAC burst.
+
+**Link:** VH-99; `src/audio/truepeak.ts`, `limiter.ts`, `compressor.ts`,
+`warnings.ts`, their tests, `test/helpers/signals.ts`.
+
 ## 2026-10-01 — Pruned project memory: room for the overnight run
 
 **Decision:** split `decision-log.md` at the latest 10 entries; the 11 older

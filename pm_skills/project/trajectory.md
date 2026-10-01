@@ -25,6 +25,13 @@
 
 ## Archived: the review's close and Band 1a — see archive/trajectory/trajectory-0004-review-close-and-band-1a.md
 
+### Band 5 — the overnight run
+
+- VH-99 — Shipped 2026-10-01. Audio planning takes about half the time, with
+  bit-identical output: true peak and the limiter skip a span of frames at a
+  time, the compressor skips its logarithm below the knee. An hour of audio
+  plans in about two minutes, down from three and a half. See decision-log.
+
 ### VH-30, VH-95, VH-96 — trimming the ends
 
 - VH-30 — Shipped 2026-10-01 with its two children. Signed off 2026-09-30 as

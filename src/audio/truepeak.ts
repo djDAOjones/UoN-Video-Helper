@@ -80,6 +80,101 @@ export const MAX_PHASE_GAIN = Math.max(
 /** Taps per polyphase branch; the limiter sizes its delay line from this. */
 export const PHASE_TAPS = TAPS_PER_PHASE
 
+/** Frames before x[i] that its window reaches back over. */
+const HISTORY = TAPS_PER_PHASE - 1
+
+/**
+ * Frames whose windows are bounded together before any one is examined.
+ *
+ * The exact skip used to be tested sample by sample, over each sample's own
+ * window, and that scan — with the shift that fed it — was most of the cost of
+ * true peak: a CPU profile of the planning passes put the scans and shifts of
+ * this detector and the limiter at half of all the time spent, and the
+ * convolution they guard at under 1% (VH-99). One scan of a span's frames
+ * bounds every window ending in it, so a quiet span costs 44 reads for 32
+ * frames rather than 416.
+ *
+ * Speed only: a span that clears the bound would have had every one of its
+ * frames skipped by the per-frame test, and a span that does not falls back to
+ * that test, so the result is identical at any value. 32 is chosen, not
+ * derived — long enough to amortise the twelve frames of history, short enough
+ * that one loud syllable spoils few quiet neighbours.
+ */
+export const SPAN_FRAMES = 32
+
+/**
+ * One channel's chunk with the interpolator's history in front of it.
+ *
+ * The convolution at frame i reads x[i - 12] .. x[i], so the first frames of a
+ * chunk need the last twelve of the chunk before. Holding them in front of it
+ * in one buffer lets every window be read where it lies — instead of shifted
+ * through a delay line a frame at a time — and lets a run of windows be
+ * bounded with one scan. Starts silent, as the delay line did.
+ */
+export class InterpolatorHistory {
+  private buffer = new Float32Array(HISTORY)
+
+  /**
+   * Places a chunk behind the history.
+   *
+   * @returns The buffer, holding the history at `[0, PHASE_TAPS - 1)` and the
+   *   chunk after it — so frame i of the chunk is at `i + PHASE_TAPS - 1`.
+   *   Valid until the next call; anything past the chunk is stale.
+   */
+  load(samples: Float32Array): Float32Array {
+    const needed = HISTORY + samples.length
+    if (this.buffer.length < needed) {
+      const grown = new Float32Array(needed)
+      grown.set(this.buffer.subarray(0, HISTORY))
+      this.buffer = grown
+    }
+    this.buffer.set(samples, HISTORY)
+    return this.buffer
+  }
+
+  /**
+   * Keeps the last frames of the chunk just loaded as the next one's history.
+   * A chunk shorter than the history keeps part of the old history too, which
+   * is what the window needs.
+   */
+  advance(frameCount: number): void {
+    this.buffer.copyWithin(0, frameCount, frameCount + HISTORY)
+  }
+}
+
+/** Largest magnitude in `input[from, to)`. A window's, or a span's. */
+export function largestMagnitude(input: Float32Array, from: number, to: number): number {
+  let largest = 0
+  for (let k = from; k < to; k++) {
+    const magnitude = Math.abs(input[k]!)
+    if (magnitude > largest) largest = magnitude
+  }
+  return largest
+}
+
+/**
+ * The true peak at one frame: the largest of its four interpolated outputs,
+ * BS.1770-4 Annex 2's y[4i + p] = sum_j h_p[j] * x[i - j] for p = 0..3.
+ *
+ * The one convolution the detector and the limiter both run, so what the
+ * limiter catches and what the meter reports agree by construction.
+ *
+ * @param input - A channel laid out by {@link InterpolatorHistory.load}.
+ * @param newest - Where x[i] sits in `input`; the window reaches back
+ *   {@link PHASE_TAPS} - 1 frames before it.
+ */
+export function interpolatedPeak(input: Float32Array, newest: number): number {
+  let peak = 0
+  for (let phase = 0; phase < OVERSAMPLE; phase++) {
+    const taps = OVERSAMPLE_PHASES[phase]!
+    let sum = 0
+    for (let j = 0; j < TAPS_PER_PHASE; j++) sum += taps[j]! * input[newest - j]!
+    const magnitude = Math.abs(sum)
+    if (magnitude > peak) peak = magnitude
+  }
+  return peak
+}
+
 /**
  * Streaming true-peak detector.
  *
@@ -92,9 +187,8 @@ export class TruePeakDetector {
   /** Level at or above which a sample counts as clipped, linear. */
   private readonly clipThreshold: number
   private clippedSamples = 0
-  /** Last {@link TAPS_PER_PHASE} - 1 samples of the previous chunk, per channel. */
-  private readonly tails: Float64Array[]
-  private readonly window: Float64Array
+  /** Each channel's last {@link PHASE_TAPS} - 1 frames, ahead of its next chunk. */
+  private readonly histories: InterpolatorHistory[]
   private peak = 0
   /** One flag per frame in the current chunk, so a frame is counted once. */
   private clipFlags = new Uint8Array(0)
@@ -114,8 +208,7 @@ export class TruePeakDetector {
     }
     this.channelCount = channelCount
     this.clipThreshold = 10 ** (clipThresholdDbtp / 20)
-    this.tails = Array.from({ length: channelCount }, () => new Float64Array(TAPS_PER_PHASE - 1))
-    this.window = new Float64Array(TAPS_PER_PHASE)
+    this.histories = Array.from({ length: channelCount }, () => new InterpolatorHistory())
   }
 
   addFrames(channels: readonly Float32Array[]): void {
@@ -131,7 +224,7 @@ export class TruePeakDetector {
     this.clipFlags.fill(0, 0, frameCount)
 
     for (let ch = 0; ch < this.channelCount; ch++) {
-      this.processChannel(channels[ch]!, this.tails[ch]!)
+      this.processChannel(channels[ch]!, this.histories[ch]!)
     }
 
     // Summed after every channel has had its say, so a stereo file clipping on
@@ -139,60 +232,41 @@ export class TruePeakDetector {
     for (let i = 0; i < frameCount; i++) if (this.clipFlags[i]) this.clippedSamples++
   }
 
-  private processChannel(samples: Float32Array, tail: Float64Array): void {
-    const tailLength = tail.length
-    const window = this.window
-    let peak = this.peak
+  private processChannel(samples: Float32Array, history: InterpolatorHistory): void {
+    // Frame i of the chunk is at i + HISTORY, behind the previous chunk's last
+    // frames, so a chunk boundary is invisible to the result.
+    const input = history.load(samples)
+    const clipThreshold = this.clipThreshold
     const clipFlags = this.clipFlags
+    let peak = this.peak
 
-    for (let i = 0; i < samples.length; i++) {
-      // window[0] is x[i], window[j] is x[i - j] — the polyphase convolution
-      // y[4i + p] = sum_j h_p[j] * x[i - j].
-      for (let j = TAPS_PER_PHASE - 1; j > 0; j--) window[j] = window[j - 1]!
-      window[0] = samples[i]!
+    for (let start = 0; start < samples.length; start += SPAN_FRAMES) {
+      const end = Math.min(samples.length, start + SPAN_FRAMES)
 
-      // Seed the delay line from the previous chunk's tail on the first
-      // samples, so a chunk boundary is invisible to the result.
-      if (i < tailLength) {
-        for (let j = i + 1; j < TAPS_PER_PHASE; j++) window[j] = tail[j - i - 1]!
+      // Two reasons to do the work: a frame might set a new peak, or be loud
+      // enough to count as clipped. Skip only when neither is possible — the
+      // bound is the filter's largest gain times the loudest sample in reach,
+      // so skipping is exact rather than approximate. Every window ending in
+      // this span lies inside [start, end + HISTORY), so one scan clears all
+      // of them (VH-99).
+      const spanBound = largestMagnitude(input, start, end + HISTORY) * MAX_PHASE_GAIN
+      if (spanBound <= peak && spanBound < clipThreshold) continue
+
+      for (let i = start; i < end; i++) {
+        const newest = i + HISTORY
+        // The same test, for this frame's window alone.
+        const bound = largestMagnitude(input, i, newest + 1) * MAX_PHASE_GAIN
+        if (bound <= peak && bound < clipThreshold) continue
+
+        const sampleTruePeak = interpolatedPeak(input, newest)
+        if (sampleTruePeak > peak) peak = sampleTruePeak
+        // Counted per frame position, not per channel, so a stereo file with
+        // both sides clipping is not reported as twice the problem.
+        if (sampleTruePeak >= clipThreshold) clipFlags[i] = 1
       }
-
-      let windowMax = 0
-      for (let j = 0; j < TAPS_PER_PHASE; j++) {
-        const magnitude = Math.abs(window[j]!)
-        if (magnitude > windowMax) windowMax = magnitude
-      }
-      // Two reasons to do the work: the sample might set a new peak, or it
-      // might be loud enough to count as clipped. Skip only when neither is
-      // possible — the bound is the filter's largest gain times the loudest
-      // sample in the window, so skipping is exact rather than approximate.
-      const bound = windowMax * MAX_PHASE_GAIN
-      if (bound <= peak && bound < this.clipThreshold) continue
-
-      let sampleTruePeak = 0
-      for (let phase = 0; phase < OVERSAMPLE; phase++) {
-        const taps = OVERSAMPLE_PHASES[phase]!
-        let sum = 0
-        for (let j = 0; j < TAPS_PER_PHASE; j++) sum += taps[j]! * window[j]!
-        const magnitude = Math.abs(sum)
-        if (magnitude > sampleTruePeak) sampleTruePeak = magnitude
-      }
-      if (sampleTruePeak > peak) peak = sampleTruePeak
-      // Counted per frame position, not per channel, so a stereo file with
-      // both sides clipping is not reported as twice the problem.
-      if (sampleTruePeak >= this.clipThreshold) clipFlags[i] = 1
     }
 
-    // Carry the last samples forward: tail[0] is the most recent.
-    //
-    // Walked high-to-low deliberately. A chunk shorter than the delay line
-    // must shift the existing tail up rather than overwrite it, and ascending
-    // order would read entries this same loop had already replaced — which
-    // silently smears one sample across the whole delay line.
-    const carried = Math.min(samples.length, tailLength)
-    for (let j = tailLength - 1; j >= carried; j--) tail[j] = tail[j - carried]!
-    for (let j = carried - 1; j >= 0; j--) tail[j] = samples[samples.length - 1 - j]!
-
+    history.advance(samples.length)
     this.peak = peak
   }
 

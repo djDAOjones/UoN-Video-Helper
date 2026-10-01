@@ -19,10 +19,13 @@
  *      (VH-83, `codec-probe.ts`).
  *   C. Apply steps 2-6 with the solved gain.
  *
- * Several passes sounds expensive and is not: audio-only decode of an hour
- * measured around 3.6 s, and the DSP is cheap next to video encoding. Getting
- * the gain right by measurement rather than by estimating what the compressor
- * and limiter did is worth far more than the seconds it costs.
+ * Several passes are the longest wait before the encode starts. Measured on
+ * 2026-10-01 (headless Chrome on the development MacBook, VH-99), planning
+ * takes 103-138 s for an hour of audio: a decode-only traversal is 5-7 s of
+ * that per pass, pass A 10-12.5 s, and each pass through the whole chain
+ * 17-21 s. Getting the gain right by measurement rather than by estimating
+ * what the compressor and limiter did is still worth it: the estimate this
+ * replaced delivered a real lecture 0.75 LU low (VH-50).
  */
 
 import {
@@ -172,8 +175,8 @@ async function traverse(
  * Used by pre-flight, because spec 5.4 requires the audio-quality warnings to
  * be shown BEFORE processing rather than discovered during it. The pipeline
  * measures again when it runs, which costs a second traversal of the audio —
- * around 3.6 s for an hour — and buys not having to hold analysis state
- * between two independent worker requests.
+ * 10-12.5 s for an hour, measured 2026-10-01 (VH-99) — and buys not having to
+ * hold analysis state between two independent worker requests.
  */
 export async function analyseSourceAudio(
   track: InputAudioTrack,

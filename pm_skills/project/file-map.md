@@ -119,21 +119,21 @@
 - `src/audio/biquad.ts` — Second-order IIR section, Direct Form II transposed, Float64 state to resist hour-long drift.
 - `src/audio/chain.test.ts` — Acceptance criteria 2 and 4, including material with a real lecture's crest factor.
 - `src/audio/chain.ts` — Assembles spec 5.2 steps 2-6 in order; two shapes, one for measuring and one for applying.
-- `src/audio/compressor.test.ts` — Pins the static curve, the knee, and that the stereo image never shifts.
+- `src/audio/compressor.test.ts` — Pins the static curve, the knee, that the stereo image never shifts, and that the below-knee shortcut matches the full curve bit for bit.
 - `src/audio/compressor.ts` — Gentle 2:1 compression. RMS detection, because sample peaks are the limiter's job.
 - `src/audio/gain-solve.ts` — Solves spec 5.2 step 5's gain against the chain that limits, over an injected measurement.
 - `src/audio/highpass.test.ts` — Checks the -3 dB cutoff, rumble rejection, and that channels stay independent.
 - `src/audio/highpass.ts` — 60 Hz Butterworth high-pass: rumble out, speech untouched.
 - `src/audio/kweighting.test.ts` — Asserts the derivation reproduces the standard's published 48 kHz coefficients.
 - `src/audio/kweighting.ts` — BS.1770-4 K-weighting, derived at the source's real sample rate rather than resampling to a table.
-- `src/audio/limiter.test.ts` — The ceiling promise, including a signal that reaches full scale between samples.
+- `src/audio/limiter.test.ts` — The ceiling promise, including a signal that reaches full scale between samples; matches an exhaustive limiter bit for bit however it is chunked.
 - `src/audio/limiter.ts` — True-peak limiter sharing the meter's oversampling, so detection and limiting agree.
 - `src/audio/loudness.test.ts` — Meter behaviour, with every expected value derived from BS.1770-4's equations.
 - `src/audio/loudness.ts` — Gated integrated loudness, momentary and short-term curves, and LRA. Streaming.
 - `src/audio/macrolevel.test.ts` — Each anti-pumping property tested alone — conditional, window, slew, freeze.
 - `src/audio/macrolevel.ts` — Conditional macro-levelling: the four properties that separate it from an AGC.
-- `src/audio/truepeak.test.ts` — Proves it finds inter-sample peaks and never reads below sample peak.
-- `src/audio/truepeak.ts` — 4x oversampled true peak. Polyphase FIR with exact pruning, drained at end of stream.
+- `src/audio/truepeak.test.ts` — Proves it finds inter-sample peaks, never reads below sample peak, and matches an exhaustive interpolation bit for bit however it is chunked.
+- `src/audio/truepeak.ts` — 4x oversampled true peak. Polyphase FIR with exact pruning a span at a time, drained at end of stream; the history buffer and convolution the limiter shares.
 - `src/audio/warnings.test.ts` — Triggers every 5.4 row deliberately, including the gapless false-positive guard.
 - `src/audio/warnings.ts` — Detects the spec 5.4 audio-quality conditions; thresholds live with the numbers.
 - `src/config/audio.ts` — Project audio choices — targets, thresholds, chain constants. Standard-defined values live in src/audio/.
@@ -247,6 +247,6 @@
 - `test/contrast.test.ts` — Makes the AAA contrast claim mechanical: every rendered pair >= 7:1 in light, dark and on a blue band, resolved through both token files.
 - `test/ebu3341/signals.ts` — EBU Tech 3341 Table 1 signals, synthesised from their published definitions.
 - `test/ebu3341/tech3341.test.ts` — The compliance gate: Table 1 cases 1-23 against the meter, inside `npm run check`.
-- `test/helpers/signals.ts` — Synthesised tones and silence shared by the meter tests and the EBU harness.
+- `test/helpers/signals.ts` — Synthesised tones, silence and seeded stepped noise shared by the meter tests and the EBU harness.
 - `test/screen-text.test.ts` — Holds the static page to what it must agree with: the privacy promise once, preset and closing options as the config has them, "caption" never "subtitle", status lines outside any disclosure, steps numbered without a gap.
 - `test/stylesheet.test.ts` — Stylesheet invariants no component test can see: `hidden` outranks every author `display` rule; nothing is sticky; no colour is named outside a token.

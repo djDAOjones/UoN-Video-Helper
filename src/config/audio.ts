@@ -91,11 +91,13 @@ export const GAIN_SOLVE = {
   /** Close enough to stop. Well inside the +/-0.5 LU release contract. */
   toleranceLu: 0.1,
   /**
-   * Extra audio-only traversals the refinement may cost. A traversal is around
-   * 3.6 s for an hour of audio and the loop stops as soon as it is inside
-   * tolerance, so an easy source pays two and only a heavily-limited one pays
-   * the third. `AMCS3059` — the hottest source in the corpus, and the one the
-   * limiter works hardest on — was still 0.18 LU out after two.
+   * Extra traversals of the whole chain the refinement may cost. Each measured
+   * 17-21 s for an hour of audio, decode included (headless Chrome on the
+   * development MacBook, 2026-10-01, VH-99), and the loop stops as soon as it
+   * is inside tolerance — but most real sources pay all three, because each
+   * correction provokes a little more limiting. Of six real recordings only
+   * `AMCS2007` was inside after two; `AMCS3059` — the hottest source in the
+   * corpus, and the one the limiter works hardest on — was still 0.18 LU out.
    * The decoded-output check is the backstop if a pathological source needs
    * more than three.
    */

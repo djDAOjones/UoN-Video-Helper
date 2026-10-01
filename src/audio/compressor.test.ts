@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import { tone } from '../../test/helpers/signals'
+import { COMPRESSOR } from '../config/audio'
+import { steppedNoise, tone } from '../../test/helpers/signals'
 import { Compressor } from './compressor'
 
 const SAMPLE_RATE = 48000
@@ -51,6 +52,55 @@ describe('compressor', () => {
     // -6 dBFS RMS is a very hot recording; 6 dB is the most this should ever
     // be doing. It is not a loudness tool.
     expect(-6 - compressRms(-6)).toBeLessThan(7)
+  })
+
+  it('skips the level calculation only where the full curve would change nothing (VH-99)', () => {
+    // Below the knee the stage skips the logarithm, on a bound placed just
+    // inside the knee's lower edge. The oracle computes every frame's level
+    // and curve in full, so the two must agree to the last bit — on material
+    // that hovers around that edge as well as either side of it. Uniform noise
+    // sits 4.8 dB below its peak in RMS, so these peaks straddle -21 dBFS RMS.
+    const channels = steppedNoise({
+      frames: SAMPLE_RATE,
+      channelCount: 2,
+      levelsDbfs: [-40, -19, -16.5, -16.2, -16, -13, -6],
+      stepFrames: 480,
+      seed: 3,
+    })
+    const expected = channels.map((channel) => channel.slice())
+
+    const coefficient = (ms: number): number => Math.exp(-1 / ((ms / 1000) * SAMPLE_RATE))
+    const attack = coefficient(COMPRESSOR.attackMs)
+    const release = coefficient(COMPRESSOR.releaseMs)
+    const smoothing = coefficient(COMPRESSOR.detectorMs)
+    const { thresholdDbfs: threshold, ratio, kneeDb: knee } = COMPRESSOR
+    let meanSquare = 0
+    let envelopeDb = 0
+    for (let i = 0; i < expected[0]!.length; i++) {
+      let power = 0
+      for (const channel of expected) power += channel[i]! * channel[i]!
+      power /= expected.length
+      meanSquare = power + smoothing * (meanSquare - power)
+      const levelDb = 10 * Math.log10(Math.max(meanSquare, 1e-24))
+      const over = levelDb - threshold
+      const x = over + knee / 2
+      const curve =
+        over <= -knee / 2
+          ? levelDb
+          : over >= knee / 2
+            ? threshold + over / ratio
+            : levelDb + ((1 / ratio - 1) * x * x) / (2 * knee)
+      const targetDb = Math.min(0, curve - levelDb)
+      const towards = targetDb < envelopeDb ? attack : release
+      envelopeDb = targetDb + towards * (envelopeDb - targetDb)
+      const gain = 10 ** (envelopeDb / 20)
+      for (const channel of expected) channel[i]! *= gain
+    }
+
+    new Compressor({ sampleRate: SAMPLE_RATE }).process(channels)
+    for (let ch = 0; ch < channels.length; ch++) {
+      expect(channels[ch]!.every((value, i) => Object.is(value, expected[ch]![i]))).toBe(true)
+    }
   })
 
   it('holds the stereo image by detecting on the louder channel', () => {

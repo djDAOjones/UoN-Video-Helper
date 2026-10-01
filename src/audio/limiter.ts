@@ -16,9 +16,19 @@
  */
 
 import { LIMITER } from '../config/audio'
-import { MAX_PHASE_GAIN, OVERSAMPLE_PHASES, PHASE_TAPS } from './truepeak'
+import {
+  interpolatedPeak,
+  InterpolatorHistory,
+  largestMagnitude,
+  MAX_PHASE_GAIN,
+  PHASE_TAPS,
+  SPAN_FRAMES,
+} from './truepeak'
 
 const MINIMUM_MAGNITUDE = 1e-12
+
+/** Frames before the newest that the oversampling window reaches back over. */
+const HISTORY = PHASE_TAPS - 1
 
 /**
  * Sliding-window minimum in amortised constant time.
@@ -81,8 +91,10 @@ export class TruePeakLimiter {
   private readonly delay: Float32Array[]
   private delayIndex = 0
 
-  /** Oversampling history, one window per channel. `window[0]` is the newest sample. */
-  private readonly windows: Float64Array[]
+  /** Each channel's last {@link PHASE_TAPS} - 1 input frames, ahead of its next chunk. */
+  private readonly histories: InterpolatorHistory[]
+  /** Each channel's current chunk behind its history, while {@link process} runs. */
+  private readonly inputs: Float32Array[]
   private readonly minimum: SlidingMinimum
   private currentGain = 1
 
@@ -94,37 +106,36 @@ export class TruePeakLimiter {
     this.release = Math.exp(-1 / (((options.releaseMs ?? LIMITER.releaseMs) / 1000) * sampleRate))
 
     this.delay = Array.from({ length: channelCount }, () => new Float32Array(this.lookAhead))
-    this.windows = Array.from({ length: channelCount }, () => new Float64Array(PHASE_TAPS))
+    this.histories = Array.from({ length: channelCount }, () => new InterpolatorHistory())
+    this.inputs = Array.from({ length: channelCount }, () => new Float32Array(0))
     this.minimum = new SlidingMinimum(this.lookAhead)
   }
 
-  /** Highest true-peak magnitude across channels for the newest sample. */
-  private truePeakMagnitude(): number {
+  /**
+   * The gain the frame at `newest` needs: the ceiling over the highest true
+   * peak across channels, or 1 when nothing is over it.
+   *
+   * @param newest - Where the frame sits in each of {@link inputs}.
+   */
+  private requiredGain(newest: number): number {
     let peak = 0
     for (let ch = 0; ch < this.channelCount; ch++) {
-      const window = this.windows[ch]!
+      const input = this.inputs[ch]!
 
       // Exact skip: no phase output can exceed the largest sample in the
       // window times the filter's L1 gain, so if that bound is under the
       // ceiling there is nothing to limit.
-      let windowMax = 0
-      for (let j = 0; j < PHASE_TAPS; j++) {
-        const magnitude = Math.abs(window[j]!)
-        if (magnitude > windowMax) windowMax = magnitude
-      }
+      const windowMax = largestMagnitude(input, newest - HISTORY, newest + 1)
       if (windowMax * MAX_PHASE_GAIN <= this.ceiling) {
         if (windowMax > peak) peak = windowMax
         continue
       }
 
-      for (const taps of OVERSAMPLE_PHASES) {
-        let sum = 0
-        for (let j = 0; j < PHASE_TAPS; j++) sum += taps[j]! * window[j]!
-        const magnitude = Math.abs(sum)
-        if (magnitude > peak) peak = magnitude
-      }
+      const interpolated = interpolatedPeak(input, newest)
+      if (interpolated > peak) peak = interpolated
     }
-    return peak
+    peak = Math.max(peak, MINIMUM_MAGNITUDE)
+    return peak > this.ceiling ? this.ceiling / peak : 1
   }
 
   /**
@@ -135,33 +146,51 @@ export class TruePeakLimiter {
    */
   process(channels: readonly Float32Array[]): void {
     const frameCount = channels[0]?.length ?? 0
-
-    for (let i = 0; i < frameCount; i++) {
-      for (let ch = 0; ch < this.channelCount; ch++) {
-        const window = this.windows[ch]!
-        for (let j = PHASE_TAPS - 1; j > 0; j--) window[j] = window[j - 1]!
-        window[0] = channels[ch]![i]!
-      }
-
-      const peak = Math.max(this.truePeakMagnitude(), MINIMUM_MAGNITUDE)
-      const required = peak > this.ceiling ? this.ceiling / peak : 1
-      const windowMinimum = this.minimum.push(required)
-
-      // Never above the window minimum: that is the ceiling guarantee. Below
-      // it, recover gently rather than snapping back and pumping.
-      this.currentGain =
-        windowMinimum < this.currentGain
-          ? windowMinimum
-          : Math.min(windowMinimum, windowMinimum + this.release * (this.currentGain - windowMinimum))
-
-      for (let ch = 0; ch < this.channelCount; ch++) {
-        const line = this.delay[ch]!
-        const delayed = line[this.delayIndex]!
-        line[this.delayIndex] = channels[ch]![i]!
-        channels[ch]![i] = delayed * this.currentGain
-      }
-      this.delayIndex = (this.delayIndex + 1) % this.lookAhead
+    // Detection reads a copy, behind each channel's history, because the
+    // output is written back over the input below.
+    for (let ch = 0; ch < this.channelCount; ch++) {
+      this.inputs[ch] = this.histories[ch]!.load(channels[ch]!)
     }
+
+    for (let start = 0; start < frameCount; start += SPAN_FRAMES) {
+      const end = Math.min(frameCount, start + SPAN_FRAMES)
+
+      // The exact skip for a whole span at once: every window ending in it, on
+      // every channel, lies inside [start, end + HISTORY) — so if the loudest
+      // sample there cannot interpolate over the ceiling, no frame in the span
+      // needs gain, and none of their windows need scanning (VH-99).
+      let spanMax = 0
+      for (let ch = 0; ch < this.channelCount; ch++) {
+        const largest = largestMagnitude(this.inputs[ch]!, start, end + HISTORY)
+        if (largest > spanMax) spanMax = largest
+      }
+      const clear = spanMax * MAX_PHASE_GAIN <= this.ceiling
+
+      for (let i = start; i < end; i++) {
+        const required = clear ? 1 : this.requiredGain(i + HISTORY)
+        const windowMinimum = this.minimum.push(required)
+
+        // Never above the window minimum: that is the ceiling guarantee. Below
+        // it, recover gently rather than snapping back and pumping.
+        this.currentGain =
+          windowMinimum < this.currentGain
+            ? windowMinimum
+            : Math.min(
+                windowMinimum,
+                windowMinimum + this.release * (this.currentGain - windowMinimum),
+              )
+
+        for (let ch = 0; ch < this.channelCount; ch++) {
+          const line = this.delay[ch]!
+          const delayed = line[this.delayIndex]!
+          line[this.delayIndex] = channels[ch]![i]!
+          channels[ch]![i] = delayed * this.currentGain
+        }
+        this.delayIndex = (this.delayIndex + 1) % this.lookAhead
+      }
+    }
+
+    for (let ch = 0; ch < this.channelCount; ch++) this.histories[ch]!.advance(frameCount)
   }
 
   /**

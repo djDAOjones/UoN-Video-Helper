@@ -45,3 +45,14 @@
   measurement behind it. Settling it is a VIDEO experiment — encode the probe
   sample at a spread of multiples and score each — and was parked on VH-83 by
   mistake. (from: VH-83)
+- Skip true peak in the B and B′ planning passes: they read only integrated
+  loudness, and the detector there is 9% of planning (measured 2026-10-01).
+  Means reshaping `traverse` in `audio-plan.ts`. (from: VH-99)
+- A better gain-solve step: five of six real recordings pay all three
+  refinement passes, at 17–21 s an hour each. A step that anticipates the
+  limiter's take-back could save one; it moves the solver's convergence, so
+  it is a design item. (from: VH-99)
+- `samples/CULT2011.mp4` decodes a +57 dBFS burst at 82.4 s, in Chrome and
+  ffmpeg alike (a corrupt AAC frame), measuring +28 LUFS. The solver still
+  lands it at -16.02; check what the warnings say and what the output sounds
+  like there. (from: VH-99)

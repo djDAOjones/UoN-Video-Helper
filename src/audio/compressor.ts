@@ -26,6 +26,15 @@ function coefficientFor(ms: number, sampleRate: number): number {
 
 const MINIMUM_POWER = 1e-24
 
+/**
+ * How far inside the knee's lower edge the no-reduction shortcut stops, as a
+ * fraction of the mean square there. Ten million times wider than the rounding
+ * in `log10`, so every frame the shortcut takes is one the full calculation
+ * would also have left alone. Exactness, not tuning: it changes the speed of
+ * the stage and never its output.
+ */
+const KNEE_EDGE_MARGIN = 1e-9
+
 export interface CompressorOptions {
   readonly sampleRate: number
   readonly ratio?: number
@@ -43,6 +52,8 @@ export class Compressor {
   private readonly attack: number
   private readonly release: number
   private readonly detector: number
+  /** Mean square below which the static curve is certainly the identity. */
+  private readonly identityBelowPower: number
   /** Smoothed mean square feeding the static curve. */
   private meanSquare = 0
   /** Current gain reduction in dB, always <= 0. */
@@ -55,6 +66,7 @@ export class Compressor {
     this.attack = coefficientFor(options.attackMs ?? COMPRESSOR.attackMs, options.sampleRate)
     this.release = coefficientFor(options.releaseMs ?? COMPRESSOR.releaseMs, options.sampleRate)
     this.detector = coefficientFor(COMPRESSOR.detectorMs, options.sampleRate)
+    this.identityBelowPower = 10 ** ((this.threshold - this.knee / 2) / 10) * (1 - KNEE_EDGE_MARGIN)
   }
 
   /** Static curve: input level in dBFS to output level in dBFS. */
@@ -82,8 +94,16 @@ export class Compressor {
       power /= channelCount
 
       this.meanSquare = power + this.detector * (this.meanSquare - power)
-      const levelDb = 10 * Math.log10(Math.max(this.meanSquare, MINIMUM_POWER))
-      const targetDb = Math.min(0, this.curve(levelDb) - levelDb)
+
+      // Below the knee the curve is the identity and the target is no
+      // reduction, so there is no level to take a logarithm of. Most of a
+      // lecture sits there, and the logarithm was a ninth of the planning
+      // passes' time (VH-99). Negated so a NaN takes the full path, as before.
+      let targetDb = 0
+      if (!(this.meanSquare < this.identityBelowPower)) {
+        const levelDb = 10 * Math.log10(Math.max(this.meanSquare, MINIMUM_POWER))
+        targetDb = Math.min(0, this.curve(levelDb) - levelDb)
+      }
 
       // Attack when the reduction deepens, release when it eases. Comparing
       // gain reduction rather than level keeps the meaning right: "attack" is

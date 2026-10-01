@@ -29,11 +29,13 @@ export interface AudioWarning {
   readonly detail: Readonly<Record<string, number>>
 }
 
-/** Nth percentile of an unsorted set, nearest-rank. */
-function percentile(values: readonly number[], fraction: number): number {
-  const sorted = [...values].sort((a, b) => a - b)
-  const index = Math.min(sorted.length - 1, Math.max(0, Math.round((sorted.length - 1) * fraction)))
-  return sorted[index] ?? Number.NEGATIVE_INFINITY
+/** Nth percentile of an ascending set, nearest-rank. */
+function percentile(ascending: Float64Array, fraction: number): number {
+  const index = Math.min(
+    ascending.length - 1,
+    Math.max(0, Math.round((ascending.length - 1) * fraction)),
+  )
+  return ascending[index] ?? Number.NEGATIVE_INFINITY
 }
 
 /** Longest continuous run below `threshold`, in seconds. */
@@ -96,7 +98,14 @@ export function detectSourceWarnings(analysis: AudioAnalysis | null): AudioWarni
   // have. There has to be a gap before a floor can be measured in it. Spec 5.4
   // dropped pumping detection for exactly this reason — a false accusation is
   // worse than silence — and the same judgement applies here.
-  const audible = analysis.shortTermLufs.filter((value) => Number.isFinite(value))
+  //
+  // Sorted once, for both percentiles below. The curve holds a value every
+  // 10 ms — 360,000 for an hour — and sorting it twice with a comparator cost
+  // about 260 ms where one typed-array sort, numeric by default, costs 30
+  // (VH-99).
+  const audible = Float64Array.from(
+    analysis.shortTermLufs.filter((value) => Number.isFinite(value)),
+  ).sort()
   if (audible.length > 0) {
     const noiseFloor = percentile(audible, 0.1)
     const median = percentile(audible, 0.5)
