@@ -386,9 +386,10 @@
 - [ ] **VH-27 EBU Tech 3341 cases 7 and 8** — the authentic-programme segments,
       which the EBU distributes as audio and cannot be synthesised. Would need
       the files checked in as gitignored fixtures. Cases 3-5 already cover the
-      same gating behaviour. The same files would settle cases 20-23, which
-      pass on a reading of "continuous in phase at both sides of the single
-      period" that Table 1 does not define (triage 2026-10-01).
+      same gating behaviour. Fetch the EBU's signal files for cases 20-23 in
+      the same pass: they are separate true-peak signals, and they pass today
+      on a reading of "continuous in phase at both sides of the single period"
+      that Table 1 does not define (triage 2026-10-01).
 - [ ] **VH-82 `inspectFile` runs three times per job** (2026-08-28)
       Measured out 2026-08-28, not done. The cost was the 64 MB slicing, and
       VH-81 removed it: an inspect is now 7-18 ms on 18-28 MB files and
