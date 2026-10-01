@@ -15,13 +15,13 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 221 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 224 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 23 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
 - `docs` — 5 file(s)
 - `public` — 13 file(s)
-- `reviews` — 23 file(s)
+- `reviews` — 26 file(s)
 - `scripts` — 9 file(s)
 - `src` — 138 file(s)
 - `test` — 8 file(s)
@@ -96,6 +96,8 @@
 - `reviews/2026-08-26/uon-video-helper-updated-review-critique-2026-08-26.md` — Source-verified finding verdicts, omitted findings, provenance corrections and release gates.
 - `reviews/2026-10-01/README.md` — Index, baseline and provenance for the VH-104 UX review bundle.
 - `reviews/2026-10-01/codex-astra-source-review-2026-10-01.md` — Codex astra's source half of VH-104, kept as written: F01–F16, a copy audit, a VH-97 view.
+- `reviews/2026-10-01/codex-astra-critique-2026-10-01.md` — Codex astra's adversarial check of the merged spec gap review: 35 corrections, kept as written.
+- `reviews/2026-10-01/codex-astra-spec-gap-review-2026-10-01.md` — Codex astra's independent half of the spec gap review, kept as written: S-01–S-13, T-01–T-12, all 86 WCAG 2.2 criteria.
 - `reviews/2026-10-01/evidence/u01-teams-failed.png` — U-01 evidence: the Create step after the Teams job failed verification.
 - `reviews/2026-10-01/evidence/u02-discard-with-invalid-trim.png` — U-02 evidence: the discard question still offered with the trim in error.
 - `reviews/2026-10-01/evidence/u02-job-without-cancel.png` — U-02 evidence: the job Discard started, running with no Cancel.
@@ -109,6 +111,7 @@
 - `reviews/2026-10-01/evidence/u12-colour-swatches.png` — U-12 evidence: the closing controls — checkbox-like swatches, a disabled select brighter than a live one.
 - `reviews/2026-10-01/evidence/u13-two-primary-buttons.png` — U-13 evidence: two primary buttons once the video is ready.
 - `reviews/2026-10-01/evidence/u19-phone-verdict.png` — U-19 evidence: the mobile verdict at phone width.
+- `reviews/2026-10-01/spec-ux-accessibility-gaps-2026-10-01.md` — The spec gap review for UX and WCAG 2.2 AAA: A-01–A-18, each a doc-delta, a Band 6 clause, or both; the §9.3 exceptions; disposition.
 - `reviews/2026-10-01/uon-video-helper-ux-review-2026-10-01.md` — The VH-104 UX review: 25 ranked findings, what held up, what was set aside, VH-97 evidence, person-only checks.
 
 ## scripts

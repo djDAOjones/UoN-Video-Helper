@@ -131,6 +131,13 @@
       video; the result says when the closing is not the one chosen; "Saved."
       is never followed by "could not be saved" for the same file. Tested where
       the logic is pure, checked in Chrome otherwise.
+      Spec gap review 2026-10-01 (A-03, A-04, A-05): the kept result and the
+      discard question carry a one-line summary of their job — file, part
+      kept, output, closing as requested and applied — fixed when the job
+      ends; the result says it is not kept if the tab closes; picker success,
+      cancel and failure, the fallback's retry, and starting again during an
+      unconfirmed download are each exercised.
+
 - [ ] **VH-108 The Create step says only what is still true** (2026-10-01)
       Intent: U-04, U-05, U-17. "Ready to go", and the sound notes under it,
       stay when the trim is in error (and Create is hidden), after a changed
@@ -145,6 +152,11 @@
       a file that cannot be made; the decode block's remedy fits the browser
       in use; no "nothing stops you" line under a block; each trim field keeps
       its own pending text and error.
+      Spec gap review 2026-10-01 (A-11, A-12): a trim re-check is timed on the
+      Teams recording first, and while it runs the step shows that it is re-
+      checking; every block's remedy fits its cause, not only the decode
+      block's, and none sends a user to the browser they are in.
+
 - [ ] **VH-110 Failures say what to do next** (2026-10-01)
       Intent: U-06, U-18. A failed job says "Something went wrong…", says the
       original is unchanged twice, then "You can choose a different one". A
@@ -156,6 +168,10 @@
       (spec §9.2); a stack sits behind a disclosure under a plain sentence; a
       start-up failure is said at Choose; a long check or save can be
       cancelled and cleans up.
+      Spec gap review 2026-10-01 (A-11, A-12): the trim re-check can be
+      cancelled like the first check; a block says what fits its cause when
+      the user is already in Chrome or cannot change browser.
+
 - [ ] **VH-109 Progress that neither freezes nor chatters** (2026-10-01)
       Intent: U-07, U-08, U-22. "Analysing audio — 0%" for the whole analysis;
       "Finishing the file — 100%" before the checks that can still fail
@@ -167,6 +183,15 @@
       announces stages and a few milestones; estimates are rounded; the tab
       title carries the stage and "ready". Spec §9.2's stage names go through
       a doc-delta if they change.
+      Spec gap review 2026-10-01 (A-03, A-06): the job says once, at start, to
+      keep this tab visible and the computer awake, and that closing the tab
+      ends it; `#trim-result` and `#closing-result` stop being live regions
+      and are read on demand through `aria-describedby`, with validation still
+      announced; the status line announces stage changes and the outcome —
+      milestones only if the maintainer prefers a way to postpone
+      announcements over the stage-only reading, which is recorded under spec
+      §9.3 either way.
+
 - [ ] **VH-111 Focus and announcements follow the page** (2026-10-01)
       Intent: U-09, U-10. Focus falls to the page body at Create, Cancel,
       finish and "Keep it" — after Cancel the next Tab skips Create. Caption
@@ -177,6 +202,13 @@
       to the result on finish or "Keep it"; the read announcement counts what
       will not be carried over and a failure's carries its next step; checked
       with the keyboard and with VoiceOver.
+      Spec gap review 2026-10-01 (A-07, A-14): on finish, focus moves only
+      when the transition displaced it, never from where a user is reading or
+      out of the modal; every self-removing control — Create, Cancel, Keep it,
+      Discard, Use the whole video, Save — has a named hand-on; pre-flight
+      sound notes, output warnings, a missing or substituted closing, the
+      caption consequence and each save outcome are announced.
+
 - [ ] **VH-112 Controls look like what they are** (2026-10-01)
       Intent: U-11, U-12, U-13, U-21. Forced colours erase the trim slider and
       the colour choice — no `forced-colors` rule exists. The colour swatches
@@ -190,6 +222,13 @@
       a checkbox; disabled fields read as disabled with the AAA pair kept
       (`test/contrast.test.ts`); one primary action per state; locked steps
       say so.
+      Spec gap review 2026-10-01 (A-08, A-09): a measure token bounds every
+      run of body text at about 70 characters and `UI-STANDARDS.md` →
+      Perceivable carries 1.4.8's five measures; `UI-STANDARDS.md` → Operable
+      states 2.4.13, and the rendered focus indicator of every control —
+      buttons, segments, thumbs, dialog — is checked for area and changed-
+      pixel contrast in each colour context, forced colours included.
+
 - [ ] **VH-113 The phone path** (2026-10-01)
       Intent: U-16, U-19, U-20. On an iPhone or iPad the mobile warning can
       be skipped: without `userAgentData` the worker falls back to
@@ -201,6 +240,11 @@
       in; the mobile verdict leads with the risk of stopping part-way; the drop
       hint hides on a coarse pointer; the time helper fits the keyboard; seen
       on a real Android phone and an iPhone (the maintainer's devices).
+      Spec gap review 2026-10-01 (A-03, A-04): the download route's sentence
+      names where the file lands (Files → Downloads on an iPhone), checked on
+      the devices; backgrounding, a released wake lock and returning to the
+      tab are seen through on both.
+
 - [ ] **VH-114 Plain words, once** (2026-10-01)
       Intent: U-23, U-24, U-25 — the last copy pass before VH-105 translates
       it. "LU", "LUFS" and "re-encoded" in novice copy; four names for
@@ -212,6 +256,17 @@
       levelling; every claim depends on the job; the status line shows only
       what the box does not, still announcing it; one sentence of what next
       after Saved; `test/screen-text.test.ts` holds any name it pins.
+      Spec gap review 2026-10-01 (A-04, A-10, A-13, A-14, A-19, A-20): the
+      what-next sentence exists for both save routes and tells a write from a
+      download hand-off; a readability check over every string the page can
+      show — markup, `src/ui/*.ts`, `src/main.ts`, `src/config/`, the worker's
+      errors — runs in the gate, with simpler supporting text where a fixed
+      term fails it, and each kept term and abbreviation (HDR, fps, MB, GB;
+      the format names one by one) has an in-place meaning; the feedback
+      dialog promises only what the maintainer will honour and says "picture
+      size", not "size"; the caption warning says the destination must supply
+      captions; the Trim step says the preview plays the original.
+
 - [ ] **VH-105 The page in Chinese and Bahasa Malaysia** (2026-10-01)
       [sign-off]
       Intent: staff at the Ningbo and Malaysia campuses use the same tool.
@@ -240,6 +295,17 @@
       per browser and nothing about it leaves the device; each language is
       signed off by its reviewer; spec §9 is amended through a doc-delta;
       verified in Chrome at desktop and phone width.
+      Spec gap review 2026-10-01 (A-17): each switcher option carries its own
+      `lang` and the switcher exposes its selected state to keyboard, touch
+      and speech; passages kept in English are marked, names and technical
+      terms excepted; switching keeps focus, a pending trim error, every
+      choice, an unsaved result and a feedback draft, and announces itself;
+      the `<title>`, `aria-valuetext`, the suggested file name and every live-
+      region string are in the table; a displayed time parses when typed back;
+      Chinese wrapping and the 40-glyph measure are verified with a chosen CJK
+      face; the preference store failing is handled, as is a missing
+      `Intl.DurationFormat`; the sentence-case rule is stated per language.
+
 
 ### Band 7 — Measured, not yet fixed
 
@@ -297,6 +363,15 @@
       they mean.
       Done when: at least three staff have been watched end to end, and what
       they stumbled on is filed as backlog items.
+      Spec gap review 2026-10-01 (A-02, A-08, A-13, A-15): until spec §13's
+      criterion 10 is signed, this item owns the walk — every state Choose to
+      Save, keyboard-only, NVDA + Chrome, VoiceOver + Safari, a Windows
+      contrast theme, 200% and 320 px, each language — with each AAA exception
+      recorded under §9.3, the preview's partial-conformance statement
+      evidenced, feedback exercised in blocked and running states (modal focus
+      return, a kept draft, no email handler, a failed clipboard), and the
+      phone and speech-input checks each completed or deferred in writing.
+
 
 - [ ] **VH-14 Deployment** [maintainer] (2026-08-24)
       Maintainer 2026-08-27: the intended home is a UoN-hosted web app in the

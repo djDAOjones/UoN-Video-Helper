@@ -18,3 +18,5 @@
      archive). See pm_skills/memory-policy.md. -->
 
 ## Open
+
+- A trim Page step that scales with the video (max(10 s, 1% of duration); `trimKeyTarget` would need the duration) so the slider is usable by keyboard on an hour — (from: 2026-10-01 spec gap review A-18)

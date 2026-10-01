@@ -11,6 +11,45 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — Spec gap review: the spec is behind the rulebook on accessibility, and two readings for Band 6
+
+**Decision:** the specification's UX and accessibility gaps are recorded in
+`reviews/2026-10-01/spec-ux-accessibility-gaps-2026-10-01.md` (A-01 to A-20),
+captured as eleven doc-delta lines for sign-off and as clauses on nine Band 6
+tickets and VH-M4; the spec itself is untouched. Two readings are set for the
+tickets to build on, both revisable by the maintainer. WCAG 2.2.4 (AAA): the
+default built is stage changes and the outcome only — no milestones, no
+per-keystroke result lines — on the reading that the user asked for them by
+pressing Create, recorded under §9.3 as the position; the strict reading
+needs a way to postpone announcements, one more control. A finished, unsaved
+video is not kept past the tab, as the OPFS checklist implies, and the page
+says so before Create and beside the result; recovery after a crash is a
+design option, not the default.
+
+**Rationale:** §9.3 says "AA minimum, AAA where achievable" while
+`AGENTS.md`, `UI-STANDARDS.md` and D6 say AAA by default with each exception
+argued, so the authoritative document is the weakest of the four, and §13 has
+no accessibility criterion at all. Two independent passes — Claude on the
+documents and source, Codex astra on the same brief with all 86 criteria —
+agreed on the headline and found each other's blind spots: the three live
+regions and the pre-flight re-run from source; the consent reading of 2.2.4,
+the result's identity and the focus-steal at finish from Codex. Codex's
+adversarial check of the merged draft made 35 corrections — seven ranks
+argued back up, two gaps added (the preview plays the original; the feedback
+dialog's "size" reads as file size), wrong lines and over-claims — and every
+one held against source.
+
+**Alternatives:** a user control for announcements (held open for the
+maintainer, since §9.2 does not name accessibility controls; not built by
+default because every control is a novice's decision); editing
+`UI-STANDARDS.md` now for 1.4.8 and 2.4.13 (deferred to VH-112, the ticket
+that implements them, as VH-112 already does for forced colours); a new Band
+6 item for the acceptance walk (VH-M4 owns it until §13 is signed, since it
+is person-only work).
+
+**Link:** `reviews/2026-10-01/`; doc-deltas 2026-10-01; VH-105, VH-107 to
+VH-114, VH-M4.
+
 ## 2026-10-01 — Deploy workflow: the pinned actions move to Node 24
 
 **Decision:** the five actions in `deploy-pages.yml` are re-pinned to their

@@ -32,6 +32,11 @@
   source: 25 ranked findings in `reviews/2026-10-01/`, filed as VH-106 to
   VH-114 or set aside, the person-only checks as VH-M4; VH-97 keeps its
   default. See decision-log.
+- Spec gap review — 2026-10-01. The specification read against every WCAG
+  2.2 criterion for the gaps Band 6 would leave, with Codex astra as the
+  second reviewer and the adversary: 20 findings in `reviews/2026-10-01/`,
+  eleven doc-deltas awaiting sign-off, clauses on nine Band 6 tickets and
+  VH-M4. See decision-log.
 
 ### Band 5 — the overnight run
 
