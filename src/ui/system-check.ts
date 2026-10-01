@@ -18,23 +18,61 @@ export interface ChecksSummary {
    * panel must not have it reopened by the next, unrelated row landing.
    */
   readonly problems: number
+  /**
+   * How many checks have warned. Counted apart from {@link problems} because
+   * a warning does not block: the one raised today is a sound encoder the
+   * browser refuses, and a silent video still runs (VH-49). It is still named
+   * in the summary, since the intro's browser sentence sends a user here to
+   * find it (2026-10-01) — a panel that said "all passed" over a warning would
+   * send them to nothing.
+   */
+  readonly warnings: number
 }
 
 /**
  * Sums the rows up.
  *
  * A failure is reported even while other rows are still pending: the worker
- * check answers last, and a missing API is already a fact by then.
+ * check answers last, and a missing API is already a fact by then. So is a
+ * warning, for the same reason.
  *
  * @param states - One per check row, in any order. Empty reads as pending.
  */
 export function summariseChecks(states: readonly CheckState[]): ChecksSummary {
   const problems = states.filter((state) => state === 'fail').length
+  const warnings = states.filter((state) => state === 'warn').length
   if (problems > 0) {
-    return { result: problems === 1 ? '1 problem' : `${problems} problems`, problems }
+    return { result: problems === 1 ? '1 problem' : `${problems} problems`, problems, warnings }
+  }
+  if (warnings > 0) {
+    return { result: warnings === 1 ? '1 warning' : `${warnings} warnings`, problems, warnings }
   }
   if (states.length === 0 || states.includes('pending')) {
-    return { result: 'checking', problems: 0 }
+    return { result: 'checking', problems, warnings }
   }
-  return { result: 'all passed', problems: 0 }
+  return { result: 'all passed', problems, warnings }
+}
+
+/**
+ * The sentence under the intro that says which browser the app is built for.
+ *
+ * The maintainer's line, "designed and built for Chrome", stays in every
+ * state; what follows it is what the load-time check found, so a browser that
+ * has passed every check — Edge on a managed laptop, say — is not told it
+ * "may not work" by a page that has just found that it does (maintainer,
+ * 2026-10-01, revising VH-98's one fixed sentence). A warning counts as not
+ * passed: the one warning the check raises is a sound encoder the browser
+ * refuses, which stops every video with sound (VH-49).
+ *
+ * @param states - One per check row, in any order. Empty reads as pending.
+ */
+export function browserNote(states: readonly CheckState[]): string {
+  const lead = 'This app is designed and built for Chrome'
+  if (states.length === 0 || states.includes('pending')) {
+    return `${lead}, other browsers may not work.`
+  }
+  if (states.includes('fail') || states.includes('warn')) {
+    return `${lead}, and this browser has not passed all of its checks. The system check at the foot of the page says what is missing.`
+  }
+  return `${lead}, and this browser has passed the checks for it.`
 }

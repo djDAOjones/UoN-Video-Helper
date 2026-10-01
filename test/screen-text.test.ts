@@ -64,10 +64,13 @@ describe('what the tool does, and where it works (2026-09-30)', () => {
   it('says which browser it is built for, before anything is chosen', () => {
     // The answer to "does it work in Edge, Firefox and Safari": it is built
     // and tested for Chrome, and says so, rather than let another browser
-    // fail part-way through a job.
+    // fail part-way through a job. Since 2026-10-01 the sentence is rewritten
+    // once the load-time check lands (`browserNote`), so this is what a
+    // browser reads before that — and what one without scripts reads at all.
     expect(visibleText).toContain(
       'This app is designed and built for Chrome, other browsers may not work.',
     )
+    expect(markup).toMatch(/<p id="browser-note">This app is designed and built for Chrome/)
     expect(markup.indexOf('designed and built for Chrome')).toBeLessThan(
       markup.indexOf('id="file-input"'),
     )

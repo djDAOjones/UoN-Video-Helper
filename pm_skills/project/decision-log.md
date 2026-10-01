@@ -11,6 +11,50 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — VH-121: the browser sentence reports the check, and three answers from the maintainer
+
+**Decision:** the intro's sentence is three, chosen by the load-time check:
+"This app is designed and built for Chrome, other browsers may not work"
+until the checks land; "…and this browser has passed the checks for it" when
+every row passes; "…and this browser has not passed all of its checks. The
+system check at the foot of the page says what is missing" on any failure or
+warning. To make that reliable the check now asks, before any file is chosen,
+for the H.264 encoder at a 1080p25 "Larger / better" shape (`BOOT_CHECK_SOURCE`)
+and the AAC encoder in stereo and mono at that preset's bitrates — what spec
+§7.2 and §10 already said happens at load. H.264 refused is a failure and
+blocks at Choose; AAC refused is a warning, since a silent video still runs
+(VH-49), and the summary now names a warning instead of reading "all passed"
+over it. Pure (`browserNote`, `summariseChecks`), tested, and seen live: Chrome
+passes; headless Firefox warns on AAC and reads the third sentence.
+
+Three answers from the maintainer, 2026-10-01, on the spec gap review's open
+points: (1) a passed check may soften the browser line — "if we can reliably
+indicate… don't turn people away unnecessarily" — which this item does and
+which revises VH-98's one fixed sentence, not its Chrome recommendation;
+(2) WCAG 2.2.4 is wanted in full, "if viable" — VH-109's clause now asks for a
+way to postpone routine announcements, one plain control, with the stage-only
+reading as the recorded fallback if a control cannot be made plain enough;
+(3) the interface is to be AAA throughout — §13's criterion 10 and VH-M4's
+walk stand as the gate, with each exception recorded under §9.3.
+
+**Rationale:** University managed Windows laptops open in Edge, which is
+Chromium and passes every check; telling those staff the app "may not work"
+from a page that has just found that it does turns people away for nothing.
+The old sentence was fixed because the old check could not back a softer one
+— it tested that WebCodecs existed, not that the encoders the job needs
+answer yes, and Firefox has the classes and refuses AAC. Asking the two
+`isConfigSupported` questions at load costs milliseconds and is what the spec
+described all along.
+
+**Alternatives:** naming Edge beside Chrome (rejected: VH-98 and §10 refuse
+no browser by name and certify none, and a passed check says more than a
+name); detecting the browser from its user agent (rejected for the same
+reason, and Edge's string contains "Chrome"); leaving AAC a failure (rejected:
+it would block a silent video Firefox can make).
+
+**Link:** VH-121; `src/ui/system-check.ts`, `src/main.ts`, `src/config/presets.ts`,
+`index.html`, `test/screen-text.test.ts`; doc-delta §7.3/§10 revised.
+
 ## 2026-10-01 — Spec gap review: the spec is behind the rulebook on accessibility, and two readings for Band 6
 
 **Decision:** the specification's UX and accessibility gaps are recorded in

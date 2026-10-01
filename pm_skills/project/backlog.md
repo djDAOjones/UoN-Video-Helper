@@ -187,10 +187,13 @@
       keep this tab visible and the computer awake, and that closing the tab
       ends it; `#trim-result` and `#closing-result` stop being live regions
       and are read on demand through `aria-describedby`, with validation still
-      announced; the status line announces stage changes and the outcome —
-      milestones only if the maintainer prefers a way to postpone
-      announcements over the stage-only reading, which is recorded under spec
-      §9.3 either way.
+      announced; the status line announces stage changes and the outcome. WCAG
+      2.2.4 (AAA) in full, the maintainer's choice 2026-10-01 "if viable": a
+      way to postpone routine progress announcements while the progress bar
+      stays inspectable — one plain control beside the status line, default
+      on, remembered per browser; if it cannot be made plain enough for a
+      novice, the stage-only reading is recorded under spec §9.3 as the
+      exception, with the reason.
 
 - [ ] **VH-111 Focus and announcements follow the page** (2026-10-01)
       Intent: U-09, U-10. Focus falls to the page body at Create, Cancel,

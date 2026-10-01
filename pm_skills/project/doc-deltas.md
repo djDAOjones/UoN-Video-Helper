@@ -68,9 +68,13 @@
 - [ ] 2026-10-01 SPEC §7.3, §10 — "name Chrome as the one that will
       work" is a promise the per-configuration check cannot make, said to
       users already in Chrome; each block needs the recovery that fits its
-      cause — revises VH-98's wording, not its Chrome recommendation; whether
-      a passed check may soften §10's introductory line is a question for the
-      maintainer (source: A-12)
+      cause — revises VH-98's wording, not its Chrome recommendation. And
+      §10's one fixed sentence is now three: the load-time check tests H.264
+      and AAC encoding as §7.2 and §10 already describe, and the sentence
+      reports what it found — "other browsers may not work" only until the
+      checks land, "has passed the checks for it" after, "has not passed all
+      of its checks" with a pointer to the System check otherwise (maintainer
+      2026-10-01: do not turn people away unnecessarily; source: A-12, VH-121)
 - [ ] 2026-10-01 SPEC §8.1, §8.3 — the caption warning stops at the
       loss: the new file carries no separate caption track and the destination
       must supply captions (EchoVideo after upload, checked; a file sent

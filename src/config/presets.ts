@@ -386,6 +386,19 @@ export function avcLevelFor(width: number, height: number, frameRate: number): s
 }
 
 /** The WebCodecs config this shape implies, for `isConfigSupported` and the encoder alike. */
+/**
+ * The source the load-time support check stands in for (spec §7.2, §10).
+ *
+ * Before any file is chosen the page asks the browser whether it can encode
+ * the output every job needs: H.264 at the shape most recordings arrive in,
+ * and AAC at the larger output's bitrates in stereo and mono. 1080p25 is the
+ * corpus's commonest shape, and the "Larger / better" preset's figure for it
+ * is the configuration a browser is likeliest to refuse. The per-file check
+ * at pre-flight still asks about the exact shape of the chosen video; this one
+ * decides only what the page may say about the browser before that.
+ */
+export const BOOT_CHECK_SOURCE = { width: 1920, height: 1080, frameRate: 25 } as const
+
 export function videoEncoderConfigFor(shape: OutputShape): VideoEncoderConfig {
   return {
     // H.264 High profile (`6400`), level chosen from the shape. It read a

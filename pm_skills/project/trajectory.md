@@ -37,6 +37,11 @@
   second reviewer and the adversary: 20 findings in `reviews/2026-10-01/`,
   eleven doc-deltas awaiting sign-off, clauses on nine Band 6 tickets and
   VH-M4. See decision-log.
+- VH-121 — Shipped 2026-10-01. The load-time check now asks for the H.264
+  and AAC encoders, and the intro's browser sentence reports what it found
+  instead of telling every browser it "may not work"; a browser that fails a
+  check is pointed at the System check, whose summary now names a warning.
+  Seen in Chrome (passed) and headless Firefox (AAC warned). See decision-log.
 
 ### Band 5 — the overnight run
 

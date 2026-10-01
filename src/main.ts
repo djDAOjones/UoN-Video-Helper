@@ -40,7 +40,15 @@ import {
   FEEDBACK_SUBJECT,
   FEEDBACK_WORKER_LOG_WAIT_MS,
 } from './config/feedback'
-import type { ContentClass, PresetId } from './config/presets'
+import {
+  BOOT_CHECK_SOURCE,
+  OUTPUT_SAMPLE_RATE,
+  PRESETS,
+  outputShapeFor,
+  videoEncoderConfigFor,
+  type ContentClass,
+  type PresetId,
+} from './config/presets'
 import {
   SELECTION_DEADLINE_MS,
   WORKER_ACKNOWLEDGEMENT_LIMIT_MS,
@@ -48,6 +56,7 @@ import {
 } from './config/thresholds'
 import { KEPT_MIN_SECONDS, TRIM_RECHECK_DELAY_MS } from './config/trim'
 import { createWatchdog } from './core/watchdog'
+import { canEncodeAudio, checkEncodeSupport } from './media/capability'
 import type { KeptRange } from './media/kept-range'
 import { saveFile, suggestedFileName } from './media/save'
 import {
@@ -67,7 +76,7 @@ import { formatFileSize } from './ui/format'
 import { preflightAnnouncement, renderPreflight } from './ui/preflight-panel'
 import { renderWarnings } from './ui/warning-text'
 import { renderSourceError, renderSourceReport, summarise } from './ui/source-panel'
-import { summariseChecks, type CheckState } from './ui/system-check'
+import { browserNote, summariseChecks, type CheckState } from './ui/system-check'
 import { installBrandAssets } from './ui/brand-assets'
 import {
   formatTrimTime,
@@ -101,6 +110,7 @@ log.info('boot', 'brand assets', installBrandAssets(required<HTMLElement>('#bran
 const checksList = required<HTMLUListElement>('#checks')
 const systemCheck = required<HTMLDetailsElement>('#system-check')
 const systemCheckSummary = required<HTMLElement>('#system-check-summary')
+const browserNoteLine = required<HTMLParagraphElement>('#browser-note')
 const statusLine = required<HTMLParagraphElement>('#status')
 const sourceStatusLine = required<HTMLParagraphElement>('#source-status')
 /** Steps 2 to 4, which are not on the page until a video has been read. */
@@ -340,6 +350,10 @@ function updateSystemCheckSummary(): void {
   )
   const { result, problems } = summariseChecks(states)
   systemCheckSummary.textContent = `System check — ${result}`
+  // The intro's browser sentence reports the same result, in the one place a
+  // user reads before choosing anything. Not a live region: it settles within
+  // the first second, long before a screen reader reaches it.
+  browserNoteLine.textContent = browserNote(states)
   if (problems > problemsShown) systemCheck.open = true
   problemsShown = problems
 }
@@ -409,6 +423,8 @@ onUncaughtError(showError)
 
 renderCheck('secure', 'Secure context (needed for storage access)', 'pending', 'checking')
 renderCheck('webcodecs', 'WebCodecs video encoding', 'pending', 'checking')
+renderCheck('h264', 'Video encoder (H.264)', 'pending', 'checking')
+renderCheck('aac', 'Sound encoder (AAC)', 'pending', 'checking')
 renderCheck('opfs', 'Private working storage', 'pending', 'checking')
 renderCheck('worker', 'Background processing', 'pending', 'checking')
 
@@ -435,6 +451,57 @@ renderCheck(
   hasOpfs ? 'pass' : 'fail',
   hasOpfs ? 'available' : 'not available',
 )
+
+/**
+ * Asks the browser, before any file is chosen, whether it can make the output
+ * every job needs (spec §7.2, §10: the support check runs at load and again
+ * against the chosen file). WebCodecs being present is not the same thing:
+ * Firefox has every class and refuses AAC at every bitrate (VH-49), and a
+ * browser can carry a decoder and no H.264 encoder. The H.264 answer is a
+ * failure, since nothing can be made without it; the AAC answer is a warning,
+ * since a silent video still runs (VH-49), and the browser sentence treats
+ * both as not passed.
+ */
+async function checkBootEncodeSupport(): Promise<{ h264: boolean; aac: boolean }> {
+  if (!hasWebCodecs) {
+    renderCheck('h264', 'Video encoder (H.264)', 'fail', 'not supported')
+    renderCheck('aac', 'Sound encoder (AAC)', 'fail', 'not supported')
+    return { h264: false, aac: false }
+  }
+  const best = PRESETS.best
+  const shape = outputShapeFor(best, BOOT_CHECK_SOURCE)
+  const [video, stereo, mono] = await Promise.all([
+    checkEncodeSupport(videoEncoderConfigFor(shape)),
+    canEncodeAudio({
+      codec: 'mp4a.40.2',
+      sampleRate: OUTPUT_SAMPLE_RATE,
+      numberOfChannels: 2,
+      bitrate: best.audioBitrateStereoBps,
+    }),
+    canEncodeAudio({
+      codec: 'mp4a.40.2',
+      sampleRate: OUTPUT_SAMPLE_RATE,
+      numberOfChannels: 1,
+      bitrate: best.audioBitrateMonoBps,
+    }),
+  ])
+  const aac = stereo && mono
+  renderCheck(
+    'h264',
+    'Video encoder (H.264)',
+    video.supported ? 'pass' : 'fail',
+    video.supported ? 'supported' : 'not supported',
+  )
+  renderCheck(
+    'aac',
+    'Sound encoder (AAC)',
+    aac ? 'pass' : 'warn',
+    aac ? 'supported' : 'not supported — a video with sound cannot be made here',
+  )
+  return { h264: video.supported, aac }
+}
+
+const bootEncodeSupport = checkBootEncodeSupport()
 
 // --- Worker round-trip -----------------------------------------------------
 
@@ -569,9 +636,9 @@ async function checkWorker(): Promise<void> {
   log.info('boot', 'worker round-trip complete', { roundTripMs, workerBootMs: reply.workerBootMs })
 }
 
-void checkWorker()
-  .then(() => {
-    const blocking = !hasWebCodecs || !hasOpfs || !window.isSecureContext
+void Promise.all([checkWorker(), bootEncodeSupport])
+  .then(([, encode]) => {
+    const blocking = !hasWebCodecs || !encode.h264 || !hasOpfs || !window.isSecureContext
     setSourceStatus(
       blocking
         ? 'This browser is missing something the tool needs. The system check below says what.'

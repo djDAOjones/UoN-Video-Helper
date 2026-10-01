@@ -6,13 +6,14 @@
 
 import { describe, expect, it } from 'vitest'
 
-import { summariseChecks } from './system-check'
+import { browserNote, summariseChecks } from './system-check'
 
 describe('the system check summary (VH-88)', () => {
   it('says all passed, and stays closed, on a healthy device', () => {
     expect(summariseChecks(['pass', 'pass', 'pass', 'pass'])).toEqual({
       result: 'all passed',
       problems: 0,
+      warnings: 0,
     })
   })
 
@@ -20,6 +21,7 @@ describe('the system check summary (VH-88)', () => {
     expect(summariseChecks(['pass', 'fail', 'pass', 'pass'])).toEqual({
       result: '1 problem',
       problems: 1,
+      warnings: 0,
     })
   })
 
@@ -27,6 +29,7 @@ describe('the system check summary (VH-88)', () => {
     expect(summariseChecks(['fail', 'fail', 'pass', 'fail'])).toEqual({
       result: '3 problems',
       problems: 3,
+      warnings: 0,
     })
   })
 
@@ -43,6 +46,7 @@ describe('the system check summary (VH-88)', () => {
     expect(summariseChecks(['pass', 'pass', 'pass', 'pending'])).toEqual({
       result: 'checking',
       problems: 0,
+      warnings: 0,
     })
   })
 
@@ -53,17 +57,56 @@ describe('the system check summary (VH-88)', () => {
     expect(summariseChecks(['fail', 'pass', 'pass', 'pending'])).toEqual({
       result: '1 problem',
       problems: 1,
+      warnings: 0,
     })
   })
 
-  it('does not count a warning as a problem', () => {
+  it('names a warning without counting it as a problem', () => {
+    // Changed 2026-10-01: a warning used to read "all passed". The intro's
+    // browser sentence now sends a user to this panel to find what was not
+    // passed, so the summary has to name it — while still not opening as a
+    // failure does, and still not counting it as one.
     expect(summariseChecks(['pass', 'warn', 'pass', 'pass'])).toEqual({
-      result: 'all passed',
+      result: '1 warning',
       problems: 0,
+      warnings: 1,
     })
+  })
+
+  it('reports a failure ahead of a warning', () => {
+    expect(summariseChecks(['warn', 'fail', 'pass', 'pass']).result).toBe('1 problem')
   })
 
   it('reads as checking before any row exists', () => {
-    expect(summariseChecks([])).toEqual({ result: 'checking', problems: 0 })
+    expect(summariseChecks([])).toEqual({ result: 'checking', problems: 0, warnings: 0 })
+  })
+})
+
+describe('the browser sentence (2026-10-01)', () => {
+  const lead = 'This app is designed and built for Chrome'
+
+  it('keeps the maintainer\'s line in every state', () => {
+    for (const states of [[], ['pending'], ['pass'], ['fail'], ['warn']] as const) {
+      expect(browserNote(states).startsWith(lead)).toBe(true)
+    }
+  })
+
+  it('says other browsers may not work until the checks are in', () => {
+    expect(browserNote([])).toBe(`${lead}, other browsers may not work.`)
+    expect(browserNote(['pass', 'pending'])).toBe(`${lead}, other browsers may not work.`)
+  })
+
+  it('does not turn away a browser that has passed every check', () => {
+    expect(browserNote(['pass', 'pass', 'pass', 'pass', 'pass', 'pass'])).toBe(
+      `${lead}, and this browser has passed the checks for it.`,
+    )
+  })
+
+  it('says a failed or a warned check has not been passed, and where to look', () => {
+    const expected = `${lead}, and this browser has not passed all of its checks. The system check at the foot of the page says what is missing.`
+    expect(browserNote(['pass', 'fail', 'pass'])).toBe(expected)
+    // The AAC refusal is a warning, not a failure, because a silent video
+    // still runs — but it is not a pass for the sentence's purpose.
+    expect(browserNote(['pass', 'warn', 'pass'])).toBe(expected)
   })
 })
