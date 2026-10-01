@@ -407,6 +407,12 @@ is what makes the release boundary worth hardening: the build job holds
 `contents: read` only, Pages and OIDC credentials belong to the deploy
 job, and every action is pinned to a commit SHA (VH-65).
 
+Work reaches `main` by pushing the working branch to it, which moves
+`origin/main` and leaves the local `main` branch where it was. Ask what
+is published of `origin/main` after a `git fetch`, never of local
+`main`: on 2026-10-01 a local `main` 103 commits stale read as an
+undeployed branch while Pages was serving its head.
+
 `BASE_PATH` is derived from the repository name so a fork or a rename
 does not silently produce a site whose asset URLs all 404.
 

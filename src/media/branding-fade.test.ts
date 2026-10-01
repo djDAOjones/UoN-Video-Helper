@@ -1,7 +1,7 @@
 /**
- * The boundary fade, spec 4.4 and open decision D3.
+ * The boundary fade, spec 4.4 and decision D3.
  *
- * A hard cut between a music sting and speech clicks. D3 assumes a hard cut
+ * A hard cut between a music sting and speech clicks. D3 chose a hard cut
  * with a short fade on each side rather than a crossfade or ducking, and these
  * pin what "hard cut with a fade" actually means at the sample level.
  */

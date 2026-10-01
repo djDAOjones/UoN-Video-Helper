@@ -209,9 +209,10 @@ export const LIMITER = {
 } as const
 
 /**
- * Open decision D3. Spec section 4.4 assumes a hard cut with a short fade at
- * each branding/content boundary — simplest, most predictable, and impossible
- * to get audibly wrong. Alternatives are a crossfade or ducking the bed.
+ * Decision D3, answered: a hard cut with a short fade at each branding/content
+ * boundary (spec section 4.4) — simplest, most predictable, and impossible to
+ * get audibly wrong. The branding is silent, so there is no bed to crossfade
+ * or duck.
  */
 export const BOUNDARY_FADE_MS = 100
 

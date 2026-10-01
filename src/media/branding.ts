@@ -95,9 +95,9 @@ export class BrandingRenderer {
 }
 
 /**
- * Applies a fade at a segment boundary, spec 4.4 and open decision D3.
+ * Applies a fade at a segment boundary, spec 4.4 and decision D3.
  *
- * A hard cut between two unrelated pieces of audio clicks. D3 assumes a hard
+ * A hard cut between two unrelated pieces of audio clicks. D3 chose a hard
  * cut with a short fade on each side rather than a crossfade or ducking:
  * simplest, most predictable, and impossible to get audibly wrong.
  */

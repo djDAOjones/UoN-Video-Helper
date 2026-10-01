@@ -254,8 +254,10 @@ varies by an order of magnitude between a managed Windows laptop and an
 Apple-silicon MacBook. A single limit is simultaneously too strict for one
 and too permissive for the other.
 
-Encoding three seconds of the user's actual file on the user's actual device
-costs a second or two and produces a real estimate for that specific job.
+Encoding three seconds of the user's actual video on the user's actual
+device costs a second or two and measures what that device does with that
+picture; timing the audio analysis pre-flight already makes prices the sound.
+Together they produce a real estimate for that specific job.
 It also satisfies the brief's own requirement to assess file and device
 before processing, and it turns the warning thresholds in Section 7.3 from
 guesses into measurements.

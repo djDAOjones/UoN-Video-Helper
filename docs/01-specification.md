@@ -18,7 +18,8 @@ without uploading media anywhere, and without understanding encoding.
 
 It solves three problems in one pass:
 
-1. **Inconsistent branding** — no approved opening/closing sequence.
+1. **Inconsistent branding** — an approved closing exists but is not applied
+   consistently.
 2. **Inconsistent audio** — some recordings are inaudible, some are hot.
 3. **Technical burden** — staff should not have to learn FFmpeg or Handbrake.
 
@@ -182,8 +183,8 @@ music sting biasing the integrated measurement; the rule still holds, because
 measuring appended silence would drag the gated figure the other way.
 
 Apply a 100 ms audio fade at each branding/content boundary to prevent
-discontinuity clicks. Picture fades at those boundaries are a separate
-question and are **not yet specified**.
+discontinuity clicks. No picture fade is applied at those boundaries; one was
+considered and cut (VH-25).
 
 ## 5. Audio processing
 
@@ -392,10 +393,14 @@ permissive on a slow one. Instead:
 ### 7.1 Calibration probe
 
 Before processing, the app decodes and re-encodes **3 seconds of the actual
-source file** — of the part kept, when it is trimmed — on the actual device,
-measures throughput, and extrapolates a real time estimate. This directly
-satisfies the brief's requirement to "assess the selected file and the
-user's device before processing begins."
+source file's video** — of the part kept, when it is trimmed — on the actual
+device, measures throughput, and extrapolates the kept video and the
+closing's frames from it. The sound is priced from pre-flight's own analysis
+pass over the kept part, which is timed rather than sampled: audio planning,
+processing and the output check are each a multiple of that pass (VH-100).
+Together these are a real time estimate, which directly satisfies the brief's
+requirement to "assess the selected file and the user's device before
+processing begins."
 
 ### 7.2 Pre-flight checks
 
@@ -404,7 +409,8 @@ user's device before processing begins."
 - OPFS quota via `navigator.storage.estimate()` — require **2.5×** the
   estimated output size
 - Device class (phone/tablet detection)
-- Measured throughput from the calibration probe
+- Measured video throughput from the calibration probe, and a timed analysis
+  pass over the kept audio
 
 ### 7.3 Thresholds
 

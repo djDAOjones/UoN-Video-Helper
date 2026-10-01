@@ -227,7 +227,7 @@ export function closingTailName(colour: BrandingColour, height: BrandingAssetHei
  * Opening — deferred, placeholders only (VH-23)
  * ---------------------------------------------------------------------- */
 
-/** Open decision D2. Only the opening figure is still a placeholder guess. */
+/** Decision D2, answered for the closing. Only the opening figure is still a placeholder guess. */
 export const BRANDING_DURATIONS = {
   openingSeconds: 5,
   closingSeconds: CLOSING_TAIL_SECONDS,

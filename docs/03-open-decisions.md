@@ -8,31 +8,6 @@ Ordered by what blocks work soonest.
 
 ---
 
-## Blocking — needed before or during the first build
-
-### D2. Branding animation duration
-
-**Needed for:** subtitle offset calculation, calibration estimates, UI copy.
-
-Proposed: **5 s opening, 4 s closing.** Long enough to register, short
-enough that staff do not resent it on a 6-minute video. Needs confirming
-against whatever the approved sequences actually are.
-
-**Owner:** Joe.
-
-### D3. Branding audio treatment at the boundaries
-
-Spec §4.4 assumes a **hard cut** with a 100 ms fade to prevent clicks. The
-alternatives are a short crossfade between the branding bed and the content,
-or ducking the branding bed under the opening words.
-
-Hard cut is recommended: simplest, most predictable, and impossible to get
-audibly wrong.
-
-**Owner:** Joe.
-
----
-
 ## Needed before launch, not before build
 
 ### D5. Hosting location and URL
@@ -103,6 +78,22 @@ YUV-to-RGB rounding. Padding a non-16:9 source in the blue the closing card
 ends on makes the output one field of colour rather than black bars around a
 brand graphic (spec §4.3). It is one token, `--uon-brand-bg`, so black is one
 line away if it reads worse on real material.
+
+### D2. Branding animation duration — answered 2026-08-25
+
+Settled by the delivered masters: a **1.00 s onset and a 4.00 s tail**. A
+hard cut uses the tail alone; over picture and over freeze frame play the
+onset first (spec §4.3). v1 has no opening (VH-23), so `openingSeconds` in
+`src/config/branding.ts` is still a placeholder, to be set from the asset if
+an opening is ever approved.
+
+### D3. Branding audio treatment at the boundaries — answered 2026-08-27
+
+**Hard cut**, with a 100 ms fade on the content's sound at the boundary to
+prevent a click (`BOUNDARY_FADE_MS`). The alternatives, a crossfade or
+ducking, needed a branding audio bed, and the delivered branding is silent
+(spec §4.4). The fade is a click preventer rather than an aesthetic choice,
+which is why VH-25 kept it when it cut picture fades.
 
 ### D4. Sign-off on the browser exclusion — signed off 2026-08-27
 
