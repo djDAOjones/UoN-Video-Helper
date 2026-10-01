@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint'
  * Formatting is Prettier's job and never fails the gate.
  */
 export default tseslint.config(
-  { ignores: ['dist/**', 'node_modules/**', 'pm_skills/**', 'coverage/**'] },
+  { ignores: ['dist/**', 'node_modules/**', 'pm_skills/**', 'coverage/**', 'tools/**'] }, // tools/ is pm-next v3's, linted upstream
   js.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   {

@@ -9,6 +9,8 @@
     // Field-report exports: each file concatenates several documents, so it
     // has as many H1s as it has sources and fails MD025 by construction.
     // Linting a transcript of other files says nothing about either.
-    "field-report-uon-video-helper"
+    "field-report-uon-video-helper",
+    // The v3 migration census and inventory quote the canon rulebooks row by row.
+    "project/migration"
   ],
 }
