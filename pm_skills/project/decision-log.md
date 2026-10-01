@@ -35,7 +35,9 @@ which revises VH-98's one fixed sentence, not its Chrome recommendation;
 way to postpone routine announcements, one plain control, with the stage-only
 reading as the recorded fallback if a control cannot be made plain enough;
 (3) the interface is to be AAA throughout — §13's criterion 10 and VH-M4's
-walk stand as the gate, with each exception recorded under §9.3.
+walk stand as the gate, with each exception recorded under §9.3 — and that
+gate is wider than WCAG: it also judges design and layout, clarity of
+language and of process, word count and distraction, by a person.
 
 **Rationale:** University managed Windows laptops open in Edge, which is
 Chromium and passes every check; telling those staff the app "may not work"

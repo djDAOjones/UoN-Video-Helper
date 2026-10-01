@@ -374,6 +374,12 @@
       evidenced, feedback exercised in blocked and running states (modal focus
       return, a kept draft, no email handler, a failed clipboard), and the
       phone and speech-input checks each completed or deferred in writing.
+      Maintainer 2026-10-01: the GUI check is wider than WCAG — it also judges
+      design and layout against Carbon's productive patterns, clarity of
+      language and of the process (does a first-time user know what to do next
+      at every step), the word count (every sentence earns its place), and
+      distraction (nothing on screen competes with the one thing to do now);
+      each judged by a person, with what fails filed as backlog items.
 
 
 - [ ] **VH-14 Deployment** [maintainer] (2026-08-24)

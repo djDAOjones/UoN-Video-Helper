@@ -41,7 +41,10 @@
 - [ ] 2026-10-01 SPEC §13 — no acceptance criterion makes a keyboard-
       only, screen-reader, contrast-theme, 200% and 320 px walk across every
       state and language a condition of done; the corpus paragraph names no
-      assistive-technology gap (source: A-02)
+      assistive-technology gap. Maintainer 2026-10-01: the same criterion also
+      judges design and layout, clarity of language and of process, word count
+      and distraction — a person's review, not only a criterion table (source:
+      A-02)
 - [ ] 2026-10-01 SPEC §7.3, §7.5 — the keep-this-tab-open notice is tied
       to the Warn band and says "open" where the wake lock needs "visible";
       nothing says closing the tab ends the job (source: A-03)
