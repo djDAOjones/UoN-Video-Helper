@@ -11,6 +11,24 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — Deploy workflow: the pinned actions move to Node 24
+
+**Decision:** the five actions in `deploy-pages.yml` are re-pinned to their
+latest releases, every one declaring `node24`: checkout v7.0.1, setup-node
+v7.0.0, configure-pages v6.0.0, upload-pages-artifact v5.0.0 (which runs
+upload-artifact v7.0.0) and deploy-pages v5.0.1. Still pinned by SHA, each
+re-resolved from its tag, as VH-65 requires.
+
+**Rationale:** every deploy warned that the Node 20 versions were being forced
+onto Node 24. The breaking changes on the way were checked against this
+workflow: setup-node now caches by itself (it already set `cache: npm`);
+upload-pages-artifact leaves dotfiles out (the build has none); both need
+runner 2.327.1, which GitHub's hosted runners exceed.
+
+**Verified:** by the deploy it triggers — see the commit's run.
+
+**Link:** `.github/workflows/deploy-pages.yml`; VH-65.
+
 ## 2026-10-01 — Doc-sync and wish-list triage: four deltas, twelve ideas
 
 **Decision:** apply all four open doc-deltas, signed off by the maintainer,
