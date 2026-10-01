@@ -149,6 +149,54 @@
       transition, each is announced, every folded stage can be reopened, and
       nothing folds while it shows an error.
 
+### Band 6 — Review, then translate
+
+<!-- Maintainer request, 2026-10-01. Agent work. Starts once Band 5 has
+     landed — VH-101 changes the Choose step, and a review of the page before
+     it would review a page about to change. Ordered: the review settles the
+     copy, then VH-105 translates it, so nothing is translated twice. -->
+
+- [ ] **VH-104 A UX review of the whole page** (2026-10-01)
+      Intent: the page was built item by item — the interface pass, Trim, the
+      drop zone — and nobody has walked it end to end as a novice would. Take
+      it as one flow: a first-time staff user with a real recording, Choose to
+      Save, in Chrome at desktop and phone width, judged against Carbon's
+      productive patterns, `UI-STANDARDS.md`, WCAG 2.2 AAA and spec §9.2
+      (plain language, named stages, errors that say what to do next). Its
+      findings are also the evidence VH-97's open question waits on.
+      Done when: a findings report sits in `reviews/<date>/` beside the
+      2026-08-26 review, each finding ranked and showing what it saw; every
+      finding is a backlog item or set aside with a reason; and what only a
+      person can judge — a session with pilot staff — is named for the
+      maintainer, not claimed.
+- [ ] **VH-105 The page in Chinese and Bahasa Malaysia** (2026-10-01)
+      [sign-off]
+      Intent: staff at the Ningbo and Malaysia campuses use the same tool.
+      Offer the page in Simplified Chinese (zh-Hans, read at both) and Bahasa
+      Malaysia (ms-MY) beside English, chosen on the page — the request floats
+      tabbed views. Every string the page can show — labels, stage names,
+      live-region announcements, warnings, errors, the browser block — comes
+      from one table per language, with no new dependency; the browser's own
+      `Intl` formats numbers, sizes and durations. Waits on VH-104.
+      Scope: the page only. The closing card is approved University media and
+      stays as issued (a language variant is D12's governance question); logs
+      and the diagnostics bundle stay English, for the maintainer.
+      Risks: machine-translated plain language reads as machine translation —
+      each language needs a native-speaking reviewer from its campus, whom the
+      maintainer sources. `--font-body` and `--font-heading` carry no CJK
+      glyphs, so Chinese falls back to whatever the OS picks until a token
+      names one. Longer Malay and denser Chinese both test phone width.
+      Open: the form of the switch. Carbon's Tabs separate different content;
+      the same content in another form is its content switcher. Default: a
+      content switcher at the top of the page, each option labelled in its own
+      language and script.
+      Done when: signed off; then a test fails if any table lacks a key
+      English has; switching re-renders the page and its `lang` without
+      losing the video, the trim or a running job; the choice is remembered
+      per browser and nothing about it leaves the device; each language is
+      signed off by its reviewer; spec §9 is amended through a doc-delta;
+      verified in Chrome at desktop and phone width.
+
 ### Standing — maintainer-owned, never band-gated
 
 <!-- Human work, not agent work. Listed apart from the bands precisely so it
