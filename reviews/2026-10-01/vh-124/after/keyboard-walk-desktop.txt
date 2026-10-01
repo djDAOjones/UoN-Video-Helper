@@ -1,0 +1,58 @@
+
+== Empty (desktop): Tab from the top
+ 1. a                -                      ring yes  Skip to main content
+ 2. input[file]      file-input             ring yes  1. Choose a video
+ 3. summary          -                      ring yes  System check — all passed
+ 4. button[button]   feedback-open          ring yes  Send feedback
+-- 4 stops, 0 out of reading order, 0 without a ring, 0 under 44 px
+
+== Ready (desktop): Tab from the top
+ 1. a                -                      ring yes  Skip to main content
+ 2. input[file]      file-input             ring yes  1. Choose a video
+ 3. summary          -                      ring yes  Video properties
+ 4. video            trim-preview           ring yes  
+ 5. input[range]     trim-start-range       ring NO   Start
+ 6. input[range]     trim-end-range         ring NO   End
+ 7. input[text]      trim-start             ring yes  Start time
+ 8. button[button]   trim-set-start         ring yes  Set start here
+ 9. input[text]      trim-end               ring yes  End time
+10. button[button]   trim-set-end           ring yes  Set end here
+11. select[select-one] closing-type           ring yes  Animation type
+12. button[button]   onset-help-button      ring yes  About animation onset
+13. input[radio]     -                      ring yes  Blue
+14. input[radio]     -                      ring yes  Larger / better For EchoVideo or YouTube etc.  <-- 20x20
+15. button[button]   -                      ring yes  Create the video
+16. summary          -                      ring yes  System check — all passed
+17. button[button]   feedback-open          ring yes  Send feedback
+-- 17 stops, 0 out of reading order, 2 without a ring, 1 under 44 px
+
+== Operating by keys alone
+Space on "?": help opened
+Escape: help closed; focus on onset-help-button
+Two ArrowRight on the start handle: 0:02.0, valuetext "2 seconds", result "Keeping 28 seconds of 30 seconds."
+Enter on Create: focus on "Cancel", Create hidden, status "Analysing audio"
+Job finished: focus on "Finished video — 10.6 MBMade from clippi" (notification)
+
+== Finished (desktop): Tab from the top
+ 1. a                -                      ring yes  Skip to main content
+ 2. input[file]      file-input             ring yes  1. Choose a video
+ 3. summary          -                      ring yes  Video properties
+ 4. video            trim-preview           ring yes  
+ 5. input[range]     trim-start-range       ring NO   Start
+ 6. input[range]     trim-end-range         ring NO   End
+ 7. input[text]      trim-start             ring yes  Start time
+ 8. button[button]   trim-set-start         ring yes  Set start here
+ 9. input[text]      trim-end               ring yes  End time
+10. button[button]   trim-set-end           ring yes  Set end here
+11. button[button]   trim-clear             ring yes  Use the whole video
+12. select[select-one] closing-type           ring yes  Animation type
+13. button[button]   onset-help-button      ring yes  About animation onset
+14. input[radio]     -                      ring yes  Blue
+15. input[radio]     -                      ring yes  Larger / better For EchoVideo or YouTube etc.  <-- 20x20
+16. button[button]   -                      ring yes  Save the video
+17. button[button]   -                      ring yes  Create the video
+18. summary          -                      ring yes  System check — all passed
+19. button[button]   feedback-open          ring yes  Send feedback
+-- 19 stops, 0 out of reading order, 2 without a ring, 1 under 44 px
+Enter on Create with an unsaved result: focus on "This video is not saved yetYou have not "; Discard is the danger button
+Tab, Tab, Enter (Keep it): focus on "Finished video — 10.6 MBMade from clippi"

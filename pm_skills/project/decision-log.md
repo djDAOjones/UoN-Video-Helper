@@ -11,6 +11,50 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — VH-124: the page designed as a page, and the readings it rests on
+
+**Decision:** three commits, each green and on `main`. Foundation: every
+length, colour and line height in `app.css` is a token (`--measure: 55ch`,
+line heights, `--paragraph-gap`, widths, edges, rings, caps, motion, a
+danger button, the backdrop), and `test/stylesheet.test.ts` fails on any
+literal left, with the structural exemptions named in it; one Carbon inline
+notification (`ui/notification.ts`) replaces the verdict, warnings, losses,
+failures and captured-error treatments, and carries the finished video
+(with Save) and the discard question (with its two choices). Choreography:
+step 1 is the heading over one filled Choose file, which steps down once a
+file is read; no resting status; step 5 reads verdict → status and stop →
+bar → outcome → action; Create hides while a job runs; the status line only
+speaks what a panel beside it shows; the pre-work's seven defects and the
+critique's eight corrections. The walk: after-screenshots of every state
+in five views, a recorded keyboard-only walk, and the phone walk.
+
+**Readings of the brief** (astra's §7, confirmed): required reassurance is
+not a repeat; the one thing to do can be a wait; "Over generated freeze
+frame", "Use the whole video" (spec §9.1) and the quoted feedback labels
+stay; the title's size is hierarchy; system colours live outside the
+tokens; the in-flow toggletip stays, for non-obscuration; the acknowledgement
+under a discouraging verdict stays secondary. VH-114's visible "Device check
+complete." is withdrawn — it was the line said twice under "Ready to go" —
+and its pin replaced, not weakened. The lede's lead-in sentence stays (the
+critique would cut it; it is the maintainer's structure, parked).
+
+**The one disagreement kept:** the critique refuses the result and the
+discard question as notifications. Kept as built: the structure is intact —
+an immutable record, the actual closing, Save as the filled primary inside
+the result; two explicit choices on the question — and one shape for every
+"worth knowing" is what lets the eye learn the page. The maintainer's walk
+decides it.
+
+**Verified:** `npm run check` green on each commit; headless Chrome 154 at
+1280, 390 (mobile), 320, dark and forced colours, before and after, in
+`reviews/2026-10-01/vh-124/`.
+
+**Open:** the `[sign-off]` walk-through is the maintainer's; a real Windows
+contrast theme and screen readers are VH-M4's.
+
+**Link:** VH-124; `index.html`, `src/main.ts`, `src/ui/notification.ts`,
+`src/styles/*.css`, `test/stylesheet.test.ts`.
+
 ## 2026-10-01 — VH-113: the phone path, in code
 
 **Decision:** the page decides phone-or-computer once at boot

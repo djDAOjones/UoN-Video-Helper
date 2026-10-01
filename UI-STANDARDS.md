@@ -201,9 +201,26 @@ implementation notes.
   alternatives for meaningful non-text content.
 - Visual presentation (WCAG 1.4.8), all five: the user's own foreground
   and background colours are not overridden; running text stops at the
-  `--measure` token (70 characters; 40 glyphs for CJK); no justified text;
-  line spacing 1.5, with paragraph spacing left to survive the user's own
-  text-spacing overrides; text enlarges to 200% without horizontal scroll.
+  `--measure` token (`55ch`, about 70 characters in Arial — a `ch` is the
+  width of a zero, so `70ch` held 90; 40 glyphs for CJK); no justified
+  text; line spacing from `--line-height-body` (1.5) and one blank line
+  between paragraphs from `--paragraph-gap` (spec §9.3's paragraph
+  spacing), both tokens so the user's own text-spacing overrides win; text
+  enlarges to 200% without horizontal scroll.
+- Every length, colour and line height in `app.css` is a token from the two
+  token files; `test/stylesheet.test.ts` fails on a literal, and names the
+  structural exemptions (zero, percentages and viewport fills, the
+  visually-hidden technique, the reduced-motion block, a media query's
+  breakpoint, the forced-colour system colours).
+- One inline notification (`src/ui/notification.ts`, Carbon's) for
+  everything worth knowing: a rail in the status colour, a title, body text,
+  titled items, an optional action row. Kinds `info`, `success`, `warning`,
+  `error`; the title says the thing, never the colour alone. Carbon's tinted
+  ground is left out — no brand tint carries text at 7:1.
+- Destructive actions take `.button--danger` (Carbon's danger button, the
+  error ramp's far end at 7:1) and never default focus: the question does.
+- A status line beside a panel that says the thing only speaks it
+  (`setStatus('', spokenOnly)`); visible status is for what no panel shows.
 - Forced colours (Windows contrast themes) are checked. Anything drawn by a
   background — a track, a fill, a chosen segment — vanishes under them, so
   it opts out with `forced-color-adjust: none` and paints itself in system

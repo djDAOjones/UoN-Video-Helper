@@ -70,6 +70,11 @@
 
 - [ ] **VH-124 The page, made excellent** [sign-off][detail](tickets/VH-124.md)
       (2026-10-01)
+      Built 2026-10-01 in three commits on `main` (decision-log "VH-124: the
+      page designed as a page"); every Done-when clause but the last is
+      met, with the audit, the before-and-after screenshots in five views
+      and the keyboard and phone walks in `reviews/2026-10-01/vh-124/`.
+      **Awaiting the maintainer's walk-through and sign-off.**
       Intent: the maintainer's brief, 2026-10-01 — an excellently accessible
       and usable interface, text, design elements and layout together:
       bulletproof, low friction, simply excellent. Band 6 fixed findings one

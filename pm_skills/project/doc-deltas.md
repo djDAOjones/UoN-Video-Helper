@@ -24,6 +24,15 @@
 
 ## Open
 
+- [ ] 2026-10-01 SPEC §9.3 — "Format identifiers (3.1.4): none accepted
+      yet", while `test/readability.test.ts` records the codec names
+      (H.264, AAC, …) and the size units as exceptions since VH-114; the
+      list belongs in §9.3 with the four fields (source: VH-124 pre-work)
+- [ ] 2026-10-01 SPEC §9.3 — "paragraph spacing 1.5× that": the page now
+      sets one blank line between paragraphs (`--paragraph-gap`, 2.5× the
+      font size top to top, the Understanding document's figure) and lets
+      the user's overrides win; state the mechanism and the figure (source:
+      VH-124)
 - [x] 2026-10-01 SPEC §6.5 — calls colour handling untested and phone HDR
       unsafe; VH-26 (2026-08-27) measured Chrome tone-mapping the HLG and
       Dolby Vision samples to SDR within two levels (source: VH-104, which set

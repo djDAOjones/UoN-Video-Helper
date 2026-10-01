@@ -113,6 +113,15 @@
 - `reviews/2026-10-01/evidence/u19-phone-verdict.png` — U-19 evidence: the mobile verdict at phone width.
 - `reviews/2026-10-01/spec-ux-accessibility-gaps-2026-10-01.md` — The spec gap review for UX and WCAG 2.2 AAA: A-01–A-18, each a doc-delta, a Band 6 clause, or both; the §9.3 exceptions; disposition.
 - `reviews/2026-10-01/uon-video-helper-ux-review-2026-10-01.md` — The VH-104 UX review: 25 ranked findings, what held up, what was set aside, VH-97 evidence, person-only checks.
+- `reviews/2026-10-01/vh-124-prework/README.md` — VH-124 pre-work index: the live page measured, seven defects confirmed in source, lines said twice, the direction proposed, VH-105's copy rules.
+- `reviews/2026-10-01/vh-124-prework/codex-astra-vh105-groundwork-2026-10-01.md` — Codex astra's VH-105 groundwork, kept as written: string sources, `Intl`, architectures, the switcher, CJK type, copy rules.
+- `reviews/2026-10-01/vh-124-prework/codex-astra-vh124-source-audit-2026-10-01.md` — Codex astra's VH-124 source audit, kept as written: every state and string, text form, tokens, controls, Carbon, a ranked list, where the brief is wrong.
+- `reviews/2026-10-01/vh-124-prework/handoff-prompt.md` — The prompt that started the VH-113/VH-124/VH-105 session, kept so the run traces to its instructions.
+- `reviews/2026-10-01/vh-124-prework/handoff-prompt-vh105.md` — The prompt that starts the fresh VH-105 session: the decisions already made, architecture A, the switcher, the production gate, the three commits.
+- `reviews/2026-10-01/vh-124/README.md` — The VH-124 audit: every state, what competes and repeats, what changed, the readings of the brief; index to `before/` and `after/`.
+- `reviews/2026-10-01/vh-124/codex-astra-critique-2026-10-01.md` — Codex astra's adversarial check of the VH-124 audit, kept as written; the decision log says what was taken.
+- `reviews/2026-10-01/vh-124/before/` — Screenshots of every state on `339cf57`, `<state>-<view>.png` at desktop, phone, 320 px, dark and forced colours, with each view's visible text in `<view>-text.json`. Synthetic fixtures only.
+- `reviews/2026-10-01/vh-124/after/` — The same states on the finished page, plus the recorded keyboard-only walks (`keyboard-walk-<view>.txt`).
 
 ## scripts
 
@@ -253,12 +262,15 @@
 - `src/ui/feedback.ts` — The feedback email: an allow-list of facts from the redacted bundle, the file's name scrubbed, and a length-capped mailto link.
 - `src/ui/format.test.ts` — Pins the wording, so phrasing is tested rather than reviewed by opinion.
 - `src/ui/format.ts` — Technical facts as plain language — durations, sizes, codecs, channel layouts.
+- `src/ui/notification.ts` — Carbon's inline notification, the one treatment for everything worth knowing: kind, title, lines, titled items, a tail; the result and the discard question use it too (VH-124).
 - `src/ui/preflight-panel.test.ts` — A `proceed` is three lines; no other outcome loses a sentence, says the time twice, or invites a blocked job to continue.
 - `src/ui/preflight-panel.ts` — The verdict in words (`verdictText`, pure) and its rendering, naming a browser that works when the answer is no.
 - `src/ui/progress.test.ts` — The milestones, the indeterminate stages, the titles and the remembered announce-progress setting.
 - `src/ui/progress.ts` — What a progress report shows, announces and titles: stage words, measured and unmeasured stages, milestones, the job-start notice and the announce-progress setting (VH-109).
 - `src/ui/result-summary.test.ts` — The record's wording: whole and trimmed, each output, each closing, and the sentence for a closing that is not the one chosen.
 - `src/ui/result-summary.ts` — The finished video's own record in one line — file, part kept, output, closing as chosen — and the sentence for a closing the file does not carry as asked (VH-107).
+- `src/ui/save-text.test.ts` — Where a download lands is named for an iPhone or iPad (a touch-screen Macintosh included) and never claimed as a completed write.
+- `src/ui/save-text.ts` — The status after a download hand-off: the Files app under Downloads on an iPhone or iPad, the downloads folder elsewhere (VH-113).
 - `src/ui/source-panel.test.ts` — Pins which losses are named before processing — extra tracks, captions, what is not guessed — and that none lives only in the closed Video properties rows.
 - `src/ui/source-panel.ts` — Renders a SourceReport in two parts: losses, always in view, and the facts, in a "Video properties" disclosure that starts closed.
 - `src/ui/system-check.test.ts` — A failed check is in the summary's words and opens the panel, without waiting for the slow check.

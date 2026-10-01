@@ -1277,6 +1277,17 @@ function renderTrim(): void {
     const own = trimFieldProblems.get(field) ?? (field === trimEndField ? rangeProblem : null)
     line.textContent = own ?? ''
     line.hidden = own === null
+    // A problem with the range is shown once, under End, and described to
+    // both fields: Start takes End's line into its description while one
+    // shows (Codex review of VH-124).
+    if (field === trimStartField) {
+      field.setAttribute(
+        'aria-describedby',
+        rangeProblem === null
+          ? 'trim-format trim-start-error trim-result'
+          : 'trim-format trim-start-error trim-end-error trim-result',
+      )
+    }
     const invalid = problem !== null && (rangeProblem !== null || trimFieldProblems.has(field))
     if (invalid) field.setAttribute('aria-invalid', 'true')
     else field.removeAttribute('aria-invalid')
@@ -1652,8 +1663,12 @@ checkAgainButton.addEventListener('click', () => {
 /** The save in progress, so Stop saving can reach it. */
 let saveStop: AbortController | null = null
 
+/** Whether Stop saving had focus when pressed; disabling it can drop focus to the body (VH-111). */
+let stopSavePressedWithFocus = false
+
 stopSaveButton.addEventListener('click', () => {
   if (!saveStop) return
+  stopSavePressedWithFocus = document.activeElement === stopSaveButton
   stopSaveButton.disabled = true
   setStatus('Stopping the save…')
   saveStop.abort()
@@ -2221,6 +2236,13 @@ function renderResult(kept: RetainedResult): HTMLElement {
     offerSaveStop(true)
     // Save has disabled itself under focus; the stop takes it (VH-111).
     fromSave(stopSaveButton)
+    stopSavePressedWithFocus = false
+    /**
+     * Whichever of Save and Stop saving held focus when the save settled —
+     * taken the moment it does, before either is hidden or spent, so the
+     * hand-on below can still tell (Codex review of VH-124).
+     */
+    let fromGone = focusHeldBy([])
     void (async () => {
       try {
         const result = await saveFile(
@@ -2235,6 +2257,7 @@ function renderResult(kept: RetainedResult): HTMLElement {
           },
           stop.signal,
         )
+        fromGone = focusHeldBy([save, stopSaveButton], stopSavePressedWithFocus)
         if (result.outcome === 'cancelled') {
           // "Nothing was kept there" would overclaim: an empty file the
           // picker made is removed where the browser allows, and may not be
@@ -2313,6 +2336,7 @@ function renderResult(kept: RetainedResult): HTMLElement {
           })
         }
       } catch (cause) {
+        fromGone = focusHeldBy([save, stopSaveButton], stopSavePressedWithFocus)
         setStatus('The video could not be saved. It is still here to try again.')
         log.error('ui', 'save failed', {
           reason: cause instanceof Error ? cause.message : String(cause),
@@ -2321,10 +2345,8 @@ function renderResult(kept: RetainedResult): HTMLElement {
         if (leaseHeld) {
           worker.postMessage({ kind: 'lease', id: nextRequestId++, jobId, held: false })
         }
-        // Whichever of the two had focus is about to go or be spent; a
-        // spent Save hands on to the result, one that can be pressed again
+        // A spent Save hands on to the result; one that can be pressed again
         // takes focus back — and a reader elsewhere is left alone (VH-111).
-        const fromGone = focusHeldBy([save, stopSaveButton])
         saveStop = null
         offerSaveStop(false)
         save.disabled = saved

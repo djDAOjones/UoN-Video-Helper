@@ -103,3 +103,55 @@ wording follows the same rules and is read in source.
 - The acknowledgement under a discouraging verdict stays secondary: a
   filled button under "this may not finish" would be the page urging the
   risk it has just named.
+
+## After
+
+The same walk on the finished page, in `after/`: 29 states at desktop and
+at phone width, and the empty, lecture and finish sections at 320 px, dark
+and forced colours; `keyboard-walk-desktop.txt` and `keyboard-walk-phone.txt`
+record a Tab through every control in the empty, ready and finished states
+and the page operated by keys alone; `focus-start-handle-desktop.png` shows
+the ring on a handle, which the recorder cannot read from a pseudo-element.
+
+What a first-time member of staff now sees:
+
+- **Empty:** the title, the three promises with their capitals and stops,
+  the privacy and browser sentences a blank line apart, and step 1 — the
+  heading over one filled Choose file in the dashed zone, "Or drop it
+  here." beneath (hidden on touch). No label, no resting status. The page
+  is 951 px tall at desktop (974 before).
+- **Ready:** the verdict is a notification; Create is the one filled button
+  in step 5 (the picker's button has stepped down to secondary); the
+  lifetime line sits under Create; nothing else in the step.
+- **Running:** the verdict is gone; the bar, its stage line, the tab
+  notice, the announce control, then Cancel. Create is hidden. One account
+  of progress; the status line only speaks.
+- **Finished:** the result notification — title, record, lifetime — with
+  Save inside it as the filled action, and Create outlined below. The
+  pre-Create lifetime line has gone.
+- **Discard:** a warning notification with the question, the record and
+  two buttons, Discard in the danger colour; focus lands on the question.
+- **Blocked, unreadable, failed, check failed:** one error notification
+  each; the status line says nothing twice.
+- **Storage block:** step 1's notification names the way out; step 5 says
+  it again in one line with Check again, and is no longer an empty panel.
+- **Phone:** one column, no horizontal scroll at 390 or 320, the mobile
+  verdict leads with the risk, "Continue anyway" outlined under it.
+- **Forced colours:** the logo keeps its band, the primary button and the
+  bar take Highlight, the slider and segments draw as VH-112 left them.
+
+Keyboard-only, from the recorded walks: every stop is in reading order,
+every stop has a ring (the two "NO" rows are the range inputs, whose ring is
+on the thumb pseudo-element the recorder cannot read — see the capture), no
+target under 44 px (the one "20x20" is the native radio glyph inside a
+44 px label row, which is the target). Space opens the onset help and Escape
+closes it with focus kept; arrows move a handle by a second and the result
+line follows; Enter on Create hides Create and hands focus to Cancel; the
+finish hands focus to the result; Enter on Create with an unsaved result
+hands focus to the question, not to Discard; Keep it hands it back to the
+result. On the phone walk the first stop shows no ring because the recorder
+focuses the skip link by script rather than by Tab.
+
+Not changed, and why: the lede's lead-in sentence (the maintainer's
+structure; parked), the toggletip's in-flow placement, the native video
+controls (the user agent's, spec §9.3), the preset helpers' "etc."

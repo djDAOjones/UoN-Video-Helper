@@ -27,6 +27,10 @@
 
 ### Band 6 — review, then translate
 
+- VH-113 — Code shipped 2026-10-01; the real-phone walk stays the
+  maintainer's. The page decides phone-or-computer; a mobile verdict leads
+  with the risk; the drop hint hides on touch; the time helper fits a phone
+  keyboard; the download sentence names Files → Downloads. See decision-log.
 - VH-112 — Shipped 2026-10-01. Forced colours draw the slider and the
   colour choice; swatches are matted chips; disabled fields read disabled;
   one primary per state; locked steps say so; running text stops at 70ch.
