@@ -105,6 +105,7 @@ import {
   type FailureText,
 } from './ui/failure-text'
 import { buildLosses, renderSourceError, renderSourceReport, summarise } from './ui/source-panel'
+import type { SourceReport } from './media/inspect'
 import { lossesSpoken, spoken, warningsSpoken } from './ui/announce'
 import { browserNote, summariseChecks, type CheckState } from './ui/system-check'
 import { installBrandAssets } from './ui/brand-assets'
@@ -191,7 +192,8 @@ const trimStartField = required<HTMLInputElement>('#trim-start')
 const trimEndField = required<HTMLInputElement>('#trim-end')
 const trimSetStart = required<HTMLButtonElement>('#trim-set-start')
 const trimSetEnd = required<HTMLButtonElement>('#trim-set-end')
-const trimError = required<HTMLParagraphElement>('#trim-error')
+const trimStartError = required<HTMLParagraphElement>('#trim-start-error')
+const trimEndError = required<HTMLParagraphElement>('#trim-end-error')
 const trimResult = required<HTMLParagraphElement>('#trim-result')
 const trimClear = required<HTMLButtonElement>('#trim-clear')
 
@@ -546,18 +548,19 @@ onUncaughtError(showError)
 
 // --- Capability checks -----------------------------------------------------
 
-renderCheck('secure', 'Secure connection (needed for storage access)', 'pending', 'checking')
-renderCheck('webcodecs', 'Video processing in the browser (WebCodecs)', 'pending', 'checking')
-renderCheck('h264', 'Video format the tool makes (H.264)', 'pending', 'checking')
-renderCheck('aac', 'Sound format the tool makes (AAC)', 'pending', 'checking')
-renderCheck('opfs', 'Private working storage', 'pending', 'checking')
-renderCheck('worker', 'Background processing', 'pending', 'checking')
+// Each value a line a person reads as a line, so it starts with a capital (VH-124).
+renderCheck('secure', 'Secure connection (needed for storage access)', 'pending', 'Checking')
+renderCheck('webcodecs', 'Video processing in the browser (WebCodecs)', 'pending', 'Checking')
+renderCheck('h264', 'Video format the tool makes (H.264)', 'pending', 'Checking')
+renderCheck('aac', 'Sound format the tool makes (AAC)', 'pending', 'Checking')
+renderCheck('opfs', 'Private working storage', 'pending', 'Checking')
+renderCheck('worker', 'Background processing', 'pending', 'Checking')
 
 renderCheck(
   'secure',
   'Secure connection (needed for storage access)',
   window.isSecureContext ? 'pass' : 'fail',
-  window.isSecureContext ? 'available' : 'not available',
+  window.isSecureContext ? 'Available' : 'Not available',
 )
 
 const hasWebCodecs =
@@ -566,7 +569,7 @@ renderCheck(
   'webcodecs',
   'Video processing in the browser (WebCodecs)',
   hasWebCodecs ? 'pass' : 'fail',
-  hasWebCodecs ? 'supported' : 'not supported',
+  hasWebCodecs ? 'Supported' : 'Not supported',
 )
 
 const hasOpfs = typeof navigator.storage?.getDirectory === 'function'
@@ -574,7 +577,7 @@ renderCheck(
   'opfs',
   'Private working storage',
   hasOpfs ? 'pass' : 'fail',
-  hasOpfs ? 'available' : 'not available',
+  hasOpfs ? 'Available' : 'Not available',
 )
 
 /**
@@ -589,8 +592,8 @@ renderCheck(
  */
 async function checkBootEncodeSupport(): Promise<{ h264: boolean; aac: boolean }> {
   if (!hasWebCodecs) {
-    renderCheck('h264', 'Video format the tool makes (H.264)', 'fail', 'not supported')
-    renderCheck('aac', 'Sound format the tool makes (AAC)', 'fail', 'not supported')
+    renderCheck('h264', 'Video format the tool makes (H.264)', 'fail', 'Not supported')
+    renderCheck('aac', 'Sound format the tool makes (AAC)', 'fail', 'Not supported')
     return { h264: false, aac: false }
   }
   const best = PRESETS.best
@@ -615,13 +618,13 @@ async function checkBootEncodeSupport(): Promise<{ h264: boolean; aac: boolean }
     'h264',
     'Video format the tool makes (H.264)',
     video.supported ? 'pass' : 'fail',
-    video.supported ? 'supported' : 'not supported',
+    video.supported ? 'Supported' : 'Not supported',
   )
   renderCheck(
     'aac',
     'Sound format the tool makes (AAC)',
     aac ? 'pass' : 'warn',
-    aac ? 'supported' : 'not supported — a video with sound cannot be made here',
+    aac ? 'Supported' : 'Not supported — a video with sound cannot be made here',
   )
   return { h264: video.supported, aac }
 }
@@ -761,7 +764,7 @@ worker.addEventListener('error', (event) => {
     origin: 'error',
     thread: 'worker',
   })
-  renderCheck('worker', 'Background processing', 'fail', 'failed to start')
+  renderCheck('worker', 'Background processing', 'fail', 'Failed to start')
 })
 
 async function checkWorker(): Promise<void> {
@@ -770,7 +773,7 @@ async function checkWorker(): Promise<void> {
   if (reply.kind !== 'pong') throw new Error(`Unexpected reply to ping: ${reply.kind}`)
   const roundTripMs = Math.round(performance.now() - startedAt)
   workerReady = true
-  renderCheck('worker', 'Background processing', 'pass', `ready in ${roundTripMs} ms`)
+  renderCheck('worker', 'Background processing', 'pass', `Ready in ${roundTripMs} ms`)
   log.info('boot', 'worker round-trip complete', { roundTripMs, workerBootMs: reply.workerBootMs })
 }
 
@@ -803,13 +806,15 @@ function settleStartup(workerStarted: boolean, h264: boolean): void {
   )
   startup = blocked === null ? 'ready' : 'blocked'
   applyControlLock()
-  setSourceStatus(blocked ?? 'Choose a video to begin.')
+  // No resting line: the heading and the one filled button already say
+  // what to do (VH-124). A block is said here, under the control it shuts.
+  setSourceStatus(blocked ?? '')
 }
 
 void Promise.all([checkWorker(), bootEncodeSupport])
   .then(([, encode]) => settleStartup(true, encode.h264))
   .catch(async (cause: unknown) => {
-    renderCheck('worker', 'Background processing', 'fail', 'no response')
+    renderCheck('worker', 'Background processing', 'fail', 'No response')
     // The encode check answers on its own, whatever became of the worker.
     settleStartup(false, (await bootEncodeSupport.catch(() => ({ h264: false }))).h264)
     recordUncaught({
@@ -833,6 +838,8 @@ void Promise.all([checkWorker(), bootEncodeSupport])
  * is chosen by then — so a change made before that has nothing to do.
  */
 let inspectedFile: File | null = null
+/** Its report, so step 1's line can be restored once a block clears (VH-124). */
+let inspectedReport: SourceReport | null = null
 
 // A dropped video arrives as a `change` on the picker, so everything below
 // reads it exactly as a chosen one (VH-101). Busy is read at the drop: the
@@ -862,6 +869,9 @@ fileInput.addEventListener('change', () => {
 
   // Never log the filename — DEV-INFRASTRUCTURE.md -> "Redaction".
   log.info('ui', 'file chosen', { sizeBytes: file.size, type: file.type })
+  // Choosing was the one thing to do; now it is one thing among the steps,
+  // and the picker's button steps down from primary (VH-124, Codex critique).
+  fileInput.classList.add('file-input--chosen')
   // A bundle taken now must not describe the file before this one.
   resetDiagnosticsContext('inspecting')
   setSourceStatus('Reading the video…')
@@ -882,6 +892,7 @@ fileInput.addEventListener('change', () => {
   jobContentClass = 'unknown'
   jobKeptRange = null
   inspectedFile = null
+  inspectedReport = null
   // The trim described the previous video. Nothing of it is kept, and a
   // re-check still waiting to run for it must not (Codex review).
   cancelTrimRecheck()
@@ -914,6 +925,7 @@ fileInput.addEventListener('change', () => {
         // too, caption consequence included (U-10, A-14).
         setSourceStatus(summarise(reply.report), lossesSpoken(buildLosses(reply.report)))
         inspectedFile = file
+        inspectedReport = reply.report
         resetTrim(file, reply.report.durationSeconds)
         revealLaterSteps()
         setDiagnosticsContext({ stage: 'inspected', source: reply.report })
@@ -925,7 +937,8 @@ fileInput.addEventListener('change', () => {
       if (reply.kind === 'failed') {
         const failure = failureFor(reply)
         renderSourceError(sourceReport, failure)
-        setSourceStatus('That file could not be read.', failureSentence(failure))
+        // The failure box beside this says it; the line only speaks it (VH-124).
+        setSourceStatus('', failureSentence(failure))
         clearTrim(TRIM_NOTHING_TO_TRIM)
         setDiagnosticsContext({ stage: 'failed' })
         return
@@ -937,14 +950,12 @@ fileInput.addEventListener('change', () => {
       throw new Error(`Unexpected reply to inspect: ${reply.kind}`)
     } catch (cause) {
       if (!current()) return
-      renderSourceError(
-        sourceReport,
-        failureText(
-          'unreadable-source',
-          'Reading this file took longer than expected, or the tool ran into a problem.',
-        ),
+      const failure = failureText(
+        'unreadable-source',
+        'Reading this file took longer than expected, or the tool ran into a problem.',
       )
-      setSourceStatus('That file could not be read.')
+      renderSourceError(sourceReport, failure)
+      setSourceStatus('', failureSentence(failure))
       clearTrim(TRIM_NOTHING_TO_TRIM)
       log.error('ui', 'inspection request failed', {
         reason: cause instanceof Error ? cause.message : String(cause),
@@ -975,6 +986,9 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
     return
   }
   const keptRange = trim.range
+  // A failed check's box, or a stale verdict, must not sit above "Checking…"
+  // (VH-124, pre-work defect 3).
+  withdrawVerdict()
   setStatus('Checking this video against your device…')
   offerStop('check')
   setDiagnosticsContext({ stage: 'preflighting' })
@@ -1032,10 +1046,27 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
         // way to that file.
         const recoverable = setupStepsResolve(reply.summary.verdict)
         revealLaterSteps({ setup: recoverable, create: recoverable || unsavedResult !== null })
-        setSourceStatus(`${announcement.shown} ${announcement.spokenOnly}`)
+        // The block panel says it; the line only speaks it (pre-work defect 1).
+        setSourceStatus('', announcement.spokenOnly)
+        if (recoverable) {
+          // Too little storage: the way out is above, and step 5 says so
+          // rather than standing empty, with a Check again for the "free
+          // some space" route that changes nothing on the page (Codex
+          // critique).
+          setStatus(
+            `Keep less of the video, choose ${PRESETS.smaller.label}, or free some space, then press Check again.`,
+          )
+          offerStop('check-again')
+        }
         // Stop the check has gone; the block is said beside the file.
         fromStop(fileInput)
         return
+      }
+      // A storage block the trim or the preset has just cleared: step 1's
+      // line goes back to the read summary it carried before the block, and
+      // says so once (pre-work defect 2).
+      if (sourceBlock.childElementCount > 0 && inspectedReport) {
+        setSourceStatus(summarise(inspectedReport))
       }
       sourceBlock.replaceChildren()
       revealLaterSteps()
@@ -1067,7 +1098,8 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
       renderSourceError(preflightReport, failure)
       // The status line sits beside this now (VH-88), and left alone it went
       // on saying "Checking this video against your device…" under an error.
-      setStatus('The device check did not finish.', failureSentence(failure))
+      // The box says what; the line speaks it (VH-124).
+      setStatus('', failureSentence(failure))
       fromStop(checkAgainButton.hidden ? fileInput : checkAgainButton)
       return
     }
@@ -1079,7 +1111,7 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
     const fromStop = focusHeldBy([stopCheckButton])
     offerStop('check-again')
     renderSourceError(preflightReport, failureText('check-failed'))
-    setStatus('The device check did not finish.', failureSentence(failureText('check-failed')))
+    setStatus('', failureSentence(failureText('check-failed')))
     fromStop(checkAgainButton)
     log.error('ui', 'preflight request failed', {
       reason: cause instanceof Error ? cause.message : String(cause),
@@ -1210,7 +1242,7 @@ function renderTrim(): void {
     trimStartField.value = ''
     trimEndField.value = ''
     for (const field of [trimStartField, trimEndField]) field.removeAttribute('aria-invalid')
-    trimError.hidden = true
+    for (const line of [trimStartError, trimEndError]) line.hidden = true
     trimResult.textContent = trimNotice
     trimClear.disabled = true
     trimTrack.style.setProperty('--start-fraction', '0')
@@ -1233,16 +1265,19 @@ function renderTrim(): void {
 
   const trim = currentTrim()
   const problem = 'problem' in trim ? trim.problem : null
-  // Every field's own problem is said, so a second bad time is not hidden
-  // behind the first; a range problem belongs to both fields.
-  const fieldProblems = [trimStartField, trimEndField]
-    .map((field) => trimFieldProblems.get(field))
-    .filter((text): text is string => text !== undefined)
-  trimError.textContent = fieldProblems.length > 0 ? fieldProblems.join(' ') : (problem ?? '')
-  trimError.hidden = problem === null
-  for (const field of [trimStartField, trimEndField]) {
-    const invalid =
-      problem !== null && (trimFieldProblems.size === 0 || trimFieldProblems.has(field))
+  // Each field's own problem beside it, so a second bad time is not hidden
+  // behind the first; a problem with the range as a whole — the end before
+  // the start, too little kept — marks both fields and is said under End
+  // (VH-124).
+  const rangeProblem = problem !== null && trimFieldProblems.size === 0 ? problem : null
+  for (const [field, line] of [
+    [trimStartField, trimStartError],
+    [trimEndField, trimEndError],
+  ] as const) {
+    const own = trimFieldProblems.get(field) ?? (field === trimEndField ? rangeProblem : null)
+    line.textContent = own ?? ''
+    line.hidden = own === null
+    const invalid = problem !== null && (rangeProblem !== null || trimFieldProblems.has(field))
     if (invalid) field.setAttribute('aria-invalid', 'true')
     else field.removeAttribute('aria-invalid')
   }
@@ -1406,7 +1441,9 @@ function onStage(stage: PipelineStage, fraction: number): void {
   // region only at a stage change or a milestone (U-08).
   processProgressText.textContent = view.shown
   processProgressText.hidden = false
-  if (view.announce) setStatus(view.announce)
+  // Spoken, not shown: the line beside the bar is the one visible account
+  // (VH-124), and "Cancelling…" is never written over (pre-work defect 7).
+  if (view.announce && !cancelRequested) setStatus('', view.announce)
   // No value at all for a stage whose progress is not measured: the bar is
   // indeterminate rather than stuck at 0% (U-07).
   if (view.indeterminate) processProgress.removeAttribute('value')
@@ -1498,6 +1535,7 @@ function withdrawDiscardQuestion(): void {
   discardAsked = false
   if (unsavedResult) renderResult(unsavedResult)
   else processResult.replaceChildren()
+  syncCreateNote()
 }
 
 /**
@@ -1536,7 +1574,7 @@ cancelButton.hidden = true
 const acknowledgeButton = document.createElement('button')
 acknowledgeButton.type = 'button'
 acknowledgeButton.className = 'button button--secondary'
-acknowledgeButton.textContent = 'I understand — carry on anyway'
+acknowledgeButton.textContent = 'Continue anyway'
 acknowledgeButton.hidden = true
 acknowledgeButton.addEventListener('click', () => {
   acknowledgeButton.hidden = true
@@ -1597,7 +1635,8 @@ stopCheckButton.addEventListener('click', () => {
   beginSelection()
   cancelTrimRecheck()
   setDiagnosticsContext({ stage: 'inspected' })
-  setStatus('Check stopped. The video can be created once it has been checked.')
+  // Check again is beside it, and explains itself (VH-124).
+  setStatus('Check stopped.')
   offerStop('check-again')
   // The control under focus has just gone; its replacement takes it.
   checkAgainButton.focus()
@@ -1662,6 +1701,11 @@ function setJobInFlight(running: boolean): void {
   jobInFlight = running
   cancelButton.hidden = !running
   cancelButton.disabled = false
+  // Cancel is the one control while a job runs; Create comes back with the
+  // outcome (VH-124). Under a discouraging verdict the acknowledgement stands
+  // where Create will.
+  startButton.hidden = running || !acknowledgeButton.hidden
+  syncCreateNote()
   // Spec 7.5: visible for the whole job, said once at its start (`beginJob`).
   jobNotice.textContent = running ? JOB_START_NOTICE : ''
   jobNotice.hidden = !running
@@ -1755,6 +1799,7 @@ function confirmDiscardThenStart(): void {
   if (!asked) return
   processResult.replaceChildren()
   discardAsked = true
+  syncCreateNote()
 
   const question = asked.delivered
     ? 'Your download may still be finishing. Starting again will discard the video you just made.'
@@ -1837,6 +1882,16 @@ function syncCreateEmphasis(): void {
   const resultShown =
     unsavedResult !== null || (savedResultFor !== null && savedResultFor === fileInput.files?.[0])
   startButton.classList.toggle('button--secondary', resultShown)
+  syncCreateNote()
+}
+
+/**
+ * Spec 7.5's "not kept past the tab", said before Create — and only then:
+ * not while a job runs, and not beside a result that carries the same
+ * sentence as its own (VH-124; spec 9.1 wants both, never both at once).
+ */
+function syncCreateNote(): void {
+  createNote.hidden = processActions.hidden || jobInFlight || processResult.childElementCount > 0
 }
 
 function beginJob(file: File): void {
@@ -1882,11 +1937,16 @@ function beginJob(file: File): void {
   jobCancelId = id
   progressMemo = NO_PROGRESS
   cancelPressedWithFocus = false
+  cancelRequested = false
+  // The verdict priced this job; while it runs, the bar and Cancel lead
+  // (VH-124). The outcome takes its place when the job ends.
+  withdrawVerdict()
   setJobInFlight(true)
   fromCreate(cancelButton)
   // Said once, at the start, whatever the estimate (spec 7.5, A-03); the
-  // stages follow in the same live region.
-  setStatus(`Creating your video. ${JOB_START_NOTICE}`)
+  // stages follow in the same live region. Spoken only: the notice is on
+  // screen beneath the bar for the whole job.
+  setStatus('', `Creating your video. ${JOB_START_NOTICE}`)
   // The choices the job was started with.
   setDiagnosticsContext({
     stage: 'processing',
@@ -1937,9 +1997,11 @@ function beginJob(file: File): void {
         processProgressText.textContent = 'Ready'
         // What the result and its warnings show is said too (U-10): a closing
         // that did not land as chosen, and each output warning.
+        // The result box says it; the line speaks it (VH-124).
         setStatus(
-          'Your video is ready.',
+          '',
           spoken(
+            'Your video is ready.',
             closingOutcomeText(record.closing, {
               applied: reply.brandingApplied.closing,
               mode: reply.closingModeApplied,
@@ -1959,8 +2021,9 @@ function beginJob(file: File): void {
       } else if (reply.kind === 'failed') {
         const failure = failureFor(reply)
         renderSourceError(processResult, failure)
-        // The failure's next step is announced, not only shown (U-10).
-        setStatus('The video could not be created.', failureSentence(failure))
+        // The failure's next step is announced, not only shown (U-10); the
+        // box says what, and the line speaks it (VH-124).
+        setStatus('', `The video could not be created. ${failureSentence(failure)}`)
         handTo = failureBlock()
         document.title = outcomeTitle('failed')
         setDiagnosticsContext({ stage: 'failed' })
@@ -1974,7 +2037,7 @@ function beginJob(file: File): void {
       // not the job going quiet.
       const failure = failureText(cause instanceof WorkerSilenceError ? 'timed-out' : 'unknown')
       renderSourceError(processResult, failure)
-      setStatus('The video could not be created.', failureSentence(failure))
+      setStatus('', `The video could not be created. ${failureSentence(failure)}`)
       handTo = failureBlock()
       document.title = outcomeTitle('failed')
       setDiagnosticsContext({ stage: 'failed' })
@@ -1985,17 +2048,27 @@ function beginJob(file: File): void {
       // path is reached while the worker is still winding the job down. Start
       // must not re-arm yet: the next `process` begins by disposing every
       // retained workspace, and doing that to a job still finalizing is how a
-      // finished file gets deleted out from under its own muxer (VH-75).
+      // finished file gets deleted out from under its own muxer (VH-75). The
+      // locks stay for that reason; the bar, its stale percentage and Cancel
+      // do not sit beside "could not be created" meanwhile (Codex critique).
+      hideProgress()
+      cancelButton.disabled = true
       await settled(id)
     })
     .finally(() => {
       jobCancelId = null
       setJobInFlight(false)
+      syncCreateNote()
       if (handTo) fromCancel(handTo)
-      processProgress.hidden = true
-      processProgressLabel.hidden = true
-      processProgressText.hidden = true
+      hideProgress()
     })
+}
+
+/** Takes the bar, its label and the stage line off the page. */
+function hideProgress(): void {
+  processProgress.hidden = true
+  processProgressLabel.hidden = true
+  processProgressText.hidden = true
 }
 
 /**
@@ -2030,10 +2103,13 @@ function settled(id: number): Promise<void> {
  * (VH-111). Reset when a job starts.
  */
 let cancelPressedWithFocus = false
+/** True from Cancel until the job answers, so no stage report overwrites "Cancelling…" (VH-124). */
+let cancelRequested = false
 
 cancelButton.addEventListener('click', () => {
   if (jobCancelId === null) return
   cancelPressedWithFocus = document.activeElement === cancelButton
+  cancelRequested = true
   cancelButton.disabled = true
   setStatus('Cancelling…')
   worker.postMessage({ kind: 'cancel', id: nextRequestId++, cancelId: jobCancelId })
@@ -2062,7 +2138,7 @@ function showProcessControls(
   acknowledgeButton.hidden = !needsAcknowledgement
   startButton.hidden = needsAcknowledgement
   processActions.hidden = false
-  createNote.hidden = false
+  syncCreateNote()
 }
 
 /**
@@ -2143,6 +2219,8 @@ function renderResult(kept: RetainedResult): HTMLElement {
     const stop = new AbortController()
     saveStop = stop
     offerSaveStop(true)
+    // Save has disabled itself under focus; the stop takes it (VH-111).
+    fromSave(stopSaveButton)
     void (async () => {
       try {
         const result = await saveFile(
@@ -2158,9 +2236,12 @@ function renderResult(kept: RetainedResult): HTMLElement {
           stop.signal,
         )
         if (result.outcome === 'cancelled') {
+          // "Nothing was kept there" would overclaim: an empty file the
+          // picker made is removed where the browser allows, and may not be
+          // (Codex critique). What is certain is said.
           setStatus(
             stop.signal.aborted
-              ? 'Save stopped. Nothing was kept where you were saving it, and the video is still here when you want it.'
+              ? 'Save stopped. The video is still here when you want it.'
               : 'Not saved. The video is still here when you want it.',
           )
           return
@@ -2187,10 +2268,12 @@ function renderResult(kept: RetainedResult): HTMLElement {
           }
           // A hand-off, not a completed write (spec 9.1 step 5): the browser
           // may still be fetching it. Where it lands, and what next, are said
-          // for this route too (VH-113).
+          // for this route too (VH-113) — and the result's own lifetime line
+          // agrees with it (Codex critique).
           setStatus(
             downloadStatusText(downloadDestinationFor(navigator.userAgent, navigator.maxTouchPoints)),
           )
+          lifetime.textContent = 'It stays here until you start another video or close this tab.'
           return
         }
         // A completed write, and what next (U-25, spec 9.1 step 5).
@@ -2212,6 +2295,13 @@ function renderResult(kept: RetainedResult): HTMLElement {
         saved = true
         save.textContent = 'Saved'
         lifetime.remove()
+        // The save is over when the file is out, not when the scratch is
+        // gone: Stop saving and the locks go now, before the clean-up below,
+        // which could otherwise be "stopped" after "Saved." (pre-work
+        // defect 4).
+        saveStop = null
+        offerSaveStop(false)
+        setSaveInFlight(false)
         // Clean-up is not delivery. The file is out; a scratch that cannot be
         // removed is logged, never announced as a failed save under a button
         // that already reads "Saved" (U-15).
@@ -2231,15 +2321,15 @@ function renderResult(kept: RetainedResult): HTMLElement {
         if (leaseHeld) {
           worker.postMessage({ kind: 'lease', id: nextRequestId++, jobId, held: false })
         }
+        // Whichever of the two had focus is about to go or be spent; a
+        // spent Save hands on to the result, one that can be pressed again
+        // takes focus back — and a reader elsewhere is left alone (VH-111).
+        const fromGone = focusHeldBy([save, stopSaveButton])
         saveStop = null
         offerSaveStop(false)
         save.disabled = saved
         setSaveInFlight(false)
-        // Stop saving has gone from under focus; Save is how to go on.
-        if (stop.signal.aborted && !saved) save.focus()
-        // A spent Save hands on to the result's first line; one that can be
-        // pressed again keeps focus (VH-111).
-        else fromSave(saved ? heading : save)
+        fromGone(saved ? heading : save)
       }
     })()
   })

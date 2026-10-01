@@ -409,23 +409,21 @@ describe('a block says only why it is blocked (VH-89 review)', () => {
 })
 
 describe('the status line for a finished check', () => {
-  it.each([
-    // Only what the box does not show (U-25): the box says the outcome.
-    ['proceed', 'Device check complete.'],
-    ['warn', 'Device check complete.'],
-    ['discourage', 'Device check complete.'],
-    ['block', 'This video cannot be processed in this browser.'],
-  ] as const)('shows the outcome for %s', (outcome, expected) => {
-    expect(preflightAnnouncement(summary(outcome)).shown).toBe(expected)
-  })
+  it.each(['proceed', 'warn', 'discourage', 'block'] as const)(
+    'shows nothing for %s: the box beside it says the outcome (VH-124)',
+    (outcome) => {
+      expect(preflightAnnouncement(summary(outcome)).shown).toBe('')
+    },
+  )
 
-  it('still SAYS the time and size, without showing them twice', () => {
-    // The status line sits under the verdict, so it shows only the outcome —
+  it('still SAYS that the check landed, the time and the size', () => {
+    // The status line sits beside the verdict, so it shows nothing twice —
     // but it is the live region, and the verdict is not. A screen-reader user
     // must hear the estimate, not just that there is one.
-    const { shown, spokenOnly } = preflightAnnouncement(summary('proceed'))
-    expect(shown).not.toMatch(/40 seconds|28\.5 MB|Ready/)
-    expect(spokenOnly).toBe('Ready to go. This should take about 40 seconds. Estimated size up to 28.5 MB.')
+    const { spokenOnly } = preflightAnnouncement(summary('proceed'))
+    expect(spokenOnly).toBe(
+      'Device check complete. Ready to go. This should take about 40 seconds. Estimated size up to 28.5 MB.',
+    )
   })
 
   it('says what the "one thing to know" is', () => {
@@ -446,6 +444,8 @@ describe('the status line for a finished check', () => {
   it('speaks exactly what the verdict shows, so the two cannot drift', () => {
     const warned = summary('warn', [['storage-unknown', 'warn']])
     const { heading, lines } = verdictText(warned)
-    expect(preflightAnnouncement(warned).spokenOnly).toBe([`${heading}.`, ...lines].join(' '))
+    expect(preflightAnnouncement(warned).spokenOnly).toBe(
+      ['Device check complete.', `${heading}.`, ...lines].join(' '),
+    )
   })
 })

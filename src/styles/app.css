@@ -464,13 +464,16 @@ a {
   margin-bottom: var(--spacing-03);
 }
 
+/* The native picker, un-boxed (VH-124): its button is the empty page's one
+   filled, primary action, and the chosen file's name sits beside it on the
+   panel. The dashed drop zone round it is the only frame. */
 .file-input {
   display: block;
   width: 100%;
   min-height: var(--target-min);
-  padding: var(--spacing-03) var(--spacing-04);
-  border: var(--border-width) solid var(--border-subtle);
-  background: var(--layer-00);
+  padding: 0;
+  border: 0;
+  background: transparent;
   color: var(--text-primary);
   font: inherit;
   font-size: var(--type-body-compact);
@@ -478,16 +481,33 @@ a {
 
 .file-input::file-selector-button {
   /* 44 px, like every other target. The browser draws this button, but it is
-     still a pointer target and WCAG 2.5.5 does not exempt it. */
+     still a pointer target and WCAG 2.5.5 does not exempt it. Drawn as
+     `.button`, the primary. */
   min-height: var(--target-min);
   margin-right: var(--spacing-04);
-  padding: var(--spacing-03) var(--spacing-05);
-  border: var(--border-width) solid var(--interactive);
-  background: transparent;
-  color: var(--interactive);
+  padding: var(--spacing-03) var(--spacing-06);
+  border: var(--border-width) solid transparent;
+  background: var(--interactive);
+  color: var(--text-on-interactive);
   font: inherit;
   font-size: var(--type-body-compact);
   cursor: pointer;
+}
+
+.file-input:hover::file-selector-button {
+  background: var(--interactive-hover);
+}
+
+/* Once a file has been chosen, choosing another is one step among five and
+   the button steps down to secondary; Create and Save lead (VH-124). */
+.file-input--chosen::file-selector-button {
+  border-color: var(--interactive);
+  background: transparent;
+  color: var(--interactive);
+}
+
+.file-input--chosen:hover::file-selector-button {
+  background: var(--layer-02);
 }
 
 /* The browser draws this one, so it needs saying separately — a disabled file
@@ -497,11 +517,22 @@ a {
   cursor: not-allowed;
 }
 
-.file-input:disabled::file-selector-button {
+.file-input:disabled::file-selector-button,
+.file-input:disabled:hover::file-selector-button {
   border-color: var(--border-subtle);
   background: var(--layer-02);
   color: var(--text-secondary);
   cursor: not-allowed;
+}
+
+/* The ring on the button people see, not round the whole-width control. */
+.file-input:focus-visible {
+  outline: none;
+}
+
+.file-input:focus-visible::file-selector-button {
+  outline: var(--focus-width) solid var(--focus);
+  outline-offset: var(--focus-offset);
 }
 
 .helper {
@@ -1285,7 +1316,8 @@ details[open] > .disclosure-summary::before {
   /* The one primary action per state keeps its emphasis: the theme's
      Highlight, as a chosen segment is, where every other button is
      ButtonFace (VH-124). */
-  .button:not(.button--secondary):not(:disabled) {
+  .button:not(.button--secondary):not(:disabled),
+  .file-input:not(:disabled):not(.file-input--chosen)::file-selector-button {
     forced-color-adjust: none;
     border-color: Highlight;
     background: Highlight;
@@ -1298,6 +1330,37 @@ details[open] > .disclosure-summary::before {
 
   .range-track::before {
     background: CanvasText;
+  }
+
+  /* The progress bar is painted by backgrounds too, and vanished with them
+     (Codex critique of VH-124): the track in the text colour, the done part
+     and the travelling band in Highlight. */
+  .progress {
+    forced-color-adjust: none;
+    background: CanvasText;
+  }
+
+  .progress::-webkit-progress-bar {
+    background: CanvasText;
+  }
+
+  .progress::-webkit-progress-value {
+    background: Highlight;
+  }
+
+  .progress::-moz-progress-bar {
+    background: Highlight;
+  }
+
+  .progress:indeterminate {
+    background: linear-gradient(
+      90deg,
+      CanvasText 0%,
+      CanvasText 40%,
+      Highlight 50%,
+      CanvasText 60%,
+      CanvasText 100%
+    );
   }
 
   .range-fill {

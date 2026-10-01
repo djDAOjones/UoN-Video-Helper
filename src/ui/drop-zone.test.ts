@@ -92,6 +92,8 @@ describe('dropProblem', () => {
   it('refuses any drop in a browser the start-up check blocked (VH-110)', () => {
     const problem = dropProblem([mp4], accept, 'unavailable')
     expect(problem).toContain('cannot run the tool')
+    // The start-up message sits under the drop zone, not above it (VH-124).
+    expect(problem).toContain('below')
   })
 })
 
@@ -111,6 +113,6 @@ describe('the drop zone on the page', () => {
   })
 
   it('invites the drop in words', () => {
-    expect(zone).toContain('Or drop a video file here.')
+    expect(zone).toContain('Or drop it here.')
   })
 })

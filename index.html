@@ -38,9 +38,9 @@
       <div class="lede">
         <p>This tool does the following to your video:</p>
         <ul>
-          <li>adds approved branding</li>
-          <li>ensures consistent audio levels</li>
-          <li>outputs an optimised file type and size</li>
+          <li>Adds approved branding.</li>
+          <li>Ensures consistent audio levels.</li>
+          <li>Outputs an optimised file type and size.</li>
         </ul>
         <p>
           Your video is processed on your device, it is never uploaded, and the original file does
@@ -64,17 +64,20 @@
         <!-- VH-101. Carbon's file-uploader drop zone around the picker, which
              stays the primary and keyboard route: a dropped video is handed to
              it and read exactly as a chosen one is. The refusal line is always
-             present, so a refusal is announced; it is empty otherwise. -->
+             present, so a refusal is announced; it is empty otherwise.
+             The heading is the input's visible label (VH-124): "Choose a
+             video" said once, over the one filled button on the empty page,
+             rather than a heading, a label, a hint and a status all saying it. -->
         <div class="field drop-zone" id="drop-zone">
-          <label class="label" for="file-input">Video file</label>
           <input
             class="file-input"
             type="file"
             id="file-input"
             accept="video/*,.mp4,.mov,.m4v,.mkv,.webm"
+            aria-labelledby="choose-heading"
             aria-describedby="drop-error"
           />
-          <p class="helper drop-hint" id="drop-hint">Or drop a video file here.</p>
+          <p class="helper drop-hint" id="drop-hint">Or drop it here.</p>
           <p class="field-error drop-error" id="drop-error" role="alert"></p>
         </div>
         <!-- What is happening to the FILE: reading, read, could not be read.
@@ -131,11 +134,16 @@
                 inputmode="decimal"
                 autocomplete="off"
                 spellcheck="false"
-                aria-describedby="trim-format trim-error trim-result"
+                aria-describedby="trim-format trim-start-error trim-result"
               />
               <button class="button button--secondary" type="button" id="trim-set-start">
                 Set start here
               </button>
+            </div>
+            <!-- Each field's error beside the field it concerns (VH-124); a
+                 problem with the range as a whole sits under End. -->
+            <div aria-live="polite">
+              <p class="field-error" id="trim-start-error" hidden></p>
             </div>
           </div>
           <div class="field">
@@ -148,29 +156,30 @@
                 inputmode="decimal"
                 autocomplete="off"
                 spellcheck="false"
-                aria-describedby="trim-format trim-error trim-result"
+                aria-describedby="trim-format trim-end-error trim-result"
               />
               <button class="button button--secondary" type="button" id="trim-set-end">
                 Set end here
               </button>
+            </div>
+            <div aria-live="polite">
+              <p class="field-error" id="trim-end-error" hidden></p>
             </div>
           </div>
         </div>
         <!-- Both forms: a phone's decimal keyboard has no colon, and seconds
              alone is what it can type (VH-113). The parser takes both. -->
         <p class="helper" id="trim-format">Minutes and seconds, like 1:05.5, or seconds, like 65.5.</p>
-        <div aria-live="polite">
-          <p class="field-error" id="trim-error" hidden></p>
-        </div>
-        <!-- Not a live region: a handle's own result is read on demand through
-             `aria-describedby`, and its `aria-valuetext` already carries the
-             time on the keystroke (A-06). Validation above stays announced. -->
-        <p class="trim-result" id="trim-result"></p>
         <div class="actions">
           <button class="button button--secondary" type="button" id="trim-clear" disabled>
             Use the whole video
           </button>
         </div>
+        <!-- The step's result, last (VH-124). Not a live region: a handle's
+             own result is read on demand through `aria-describedby`, and its
+             `aria-valuetext` already carries the time on the keystroke
+             (A-06). Validation beside each field stays announced. -->
+        <p class="trim-result" id="trim-result"></p>
       </section>
 
       <section class="panel step" id="step-closing" aria-labelledby="closing-heading" hidden>
@@ -297,24 +306,46 @@
            bar, and the result with its Save. -->
       <section class="panel step" id="step-create" aria-labelledby="create-heading" hidden>
         <h2 id="create-heading"><span class="step-number">5.</span> Create</h2>
+        <!-- In reading order for each moment (VH-124): the verdict and the
+             notes, then what is happening now — the status, its stop, the
+             bar — then the outcome, then the action that follows it. While a
+             job runs the eye lands on the bar and Cancel; when it is done, on
+             the result and Save; before it, on the verdict and Create. -->
         <div class="step-lead" id="preflight-report"></div>
         <div id="audio-warnings"></div>
-        <div class="actions" id="process-actions" hidden></div>
-        <!-- Spec 7.5: the finished video is not kept past the tab, said before
-             Create (VH-109) as well as beside the result (VH-107). -->
-        <p class="helper" id="create-note" hidden>
-          The finished video is kept here until you save it or close this tab.
-        </p>
-        <!-- What is happening to the JOB: the device check, each stage,
-             "Your video is ready.", "Saved." It lived in the System check
-             panel, 450 px below the button it reports on — and that panel now
-             starts closed, where a live region is neither seen nor announced
-             (VH-88). Never `hidden` itself, never inside a disclosure; the
-             step it sits in is revealed before anything is written to it. -->
+        <!-- What is happening to the JOB: the device check, "Saved.",
+             "Cancelled." It lived in the System check panel, 450 px below the
+             button it reports on — and that panel now starts closed, where a
+             live region is neither seen nor announced (VH-88). Never `hidden`
+             itself, never inside a disclosure; the step it sits in is revealed
+             before anything is written to it. Where a panel shows the thing,
+             the line says it out loud only (VH-111, VH-124). -->
         <p class="status" id="status" role="status" aria-live="polite"></p>
         <!-- Spec 9.2: Cancel is always available. The device check and a
              streaming save each get a stop of their own here (VH-110). -->
         <div class="actions" id="stop-actions" hidden></div>
+        <!-- Named and described. A bare <progress> announces a percentage and
+             nothing else, so a screen-reader user heard "63%" with no way to
+             know 63% of what — and the stage is the half that carries the
+             meaning (VH-64). The name is for assistive technology only: the
+             line beneath shows the stage and the percentage. -->
+        <p class="visually-hidden" id="process-progress-label" hidden>Creating your video</p>
+        <progress
+          class="progress"
+          id="process-progress"
+          max="1"
+          value="0"
+          aria-labelledby="process-progress-label"
+          hidden
+        ></progress>
+        <!-- The stage and, where it is measured, the percentage: the one
+             visible account of progress. NOT live: every percent announced
+             was WCAG 2.2.4's complaint (U-08); the status line announces
+             stages and milestones out loud. -->
+        <p class="helper progress-text" id="process-progress-text" hidden></p>
+        <!-- Spec 7.5, said once at the start of every job. Visible while the
+             job runs; announced with the first status line (VH-109). -->
+        <p class="helper" id="job-notice" hidden></p>
         <!-- WCAG 2.2.4 (AAA): routine progress announcements can be postponed
              by the user. One plain control, default on, remembered in this
              browser (VH-109). The outcome is announced whatever it says. -->
@@ -328,29 +359,15 @@
             announced.
           </p>
         </div>
-        <!-- Spec 7.5, said once at the start of every job. Visible while the
-             job runs; announced with the first status line (VH-109). -->
-        <p class="helper" id="job-notice" hidden></p>
-        <!-- Named and described. A bare <progress> announces a percentage and
-             nothing else, so a screen-reader user heard "63%" with no way to
-             know 63% of what — and the stage is the half that carries the
-             meaning (VH-64). The name is for assistive technology only: the
-             status line directly above already shows the stage and the
-             percentage, and saying it twice an inch apart is noise. -->
-        <p class="visually-hidden" id="process-progress-label" hidden>Creating your video</p>
-        <progress
-          class="progress"
-          id="process-progress"
-          max="1"
-          value="0"
-          aria-labelledby="process-progress-label"
-          hidden
-        ></progress>
-        <!-- The stage and, where it is measured, the percentage. Visible and
-             NOT live: every percent announced was WCAG 2.2.4's complaint
-             (U-08); the status line above announces stages and milestones. -->
-        <p class="helper progress-text" id="process-progress-text" hidden></p>
+        <!-- The outcome: the finished video with its Save, a failure with its
+             next step, or the question before a result is discarded. -->
         <div id="process-result"></div>
+        <div class="actions" id="process-actions" hidden></div>
+        <!-- Spec 7.5: the finished video is not kept past the tab, said before
+             Create (VH-109) — until a result's own line says it (VH-107). -->
+        <p class="helper" id="create-note" hidden>
+          The finished video is kept here until you save it or close this tab.
+        </p>
       </section>
 
       <section class="panel" aria-labelledby="errors-heading" id="errors-panel" hidden>

@@ -54,10 +54,12 @@ describe('what the tool does, and where it works (2026-09-30)', () => {
 
   it('lists the three things it does, in the maintainer\'s words', () => {
     const items = [...lede.matchAll(/<li>([^<]+)<\/li>/g)].map((match) => match[1]!.trim())
+    // Each a line a person reads as a line: a capital and a full stop
+    // (VH-124); the words are the maintainer's (VH-85).
     expect(items).toEqual([
-      'adds approved branding',
-      'ensures consistent audio levels',
-      'outputs an optimised file type and size',
+      'Adds approved branding.',
+      'Ensures consistent audio levels.',
+      'Outputs an optimised file type and size.',
     ])
   })
 
@@ -128,8 +130,11 @@ describe('the status line (VH-88)', () => {
   })
 
   it('sits with the controls it reports on, above the System check', () => {
+    // Under the verdict and above what it reports on — the bar, the outcome,
+    // Create (VH-124) — and never down in the footer.
     const status = markup.indexOf('id="status"')
-    expect(status).toBeGreaterThan(markup.indexOf('id="process-actions"'))
+    expect(status).toBeGreaterThan(markup.indexOf('id="preflight-report"'))
+    expect(status).toBeLessThan(markup.indexOf('id="process-progress"'))
     expect(status).toBeLessThan(markup.indexOf('id="process-result"'))
     expect(status).toBeLessThan(markup.indexOf('id="system-check"'))
   })
@@ -272,7 +277,9 @@ describe('steps that read as steps (VH-91)', () => {
 
   it('keeps everything about the job together in Create, in reading order', () => {
     const create = /<section class="panel step" id="step-create"[\s\S]*?<\/section>/.exec(markup)?.[0] ?? ''
-    const order = ['preflight-report', 'audio-warnings', 'process-actions', 'status', 'process-progress', 'process-result']
+    // The verdict and notes; what is happening now, with its stop and bar;
+    // the outcome; then the action that follows it (VH-124).
+    const order = ['preflight-report', 'audio-warnings', 'status', 'stop-actions', 'process-progress', 'process-result', 'process-actions']
     const positions = order.map((id) => create.indexOf(`id="${id}"`))
     expect(positions.every((position) => position >= 0)).toBe(true)
     expect(positions).toEqual([...positions].sort((a, b) => a - b))
@@ -284,6 +291,10 @@ describe('steps that read as steps (VH-91)', () => {
     // be read." happen before that section exists.
     const choose = /<section class="panel step" id="step-choose"[\s\S]*?<\/section>/.exec(markup)?.[0] ?? ''
     expect(choose).toMatch(/<p class="status" id="source-status" role="status" aria-live="polite">/)
+    // The heading is the input's one visible label (VH-124): no second
+    // "Video file" label, and the accessible name is the heading's words.
+    expect(choose).toMatch(/<input[^>]*id="file-input"[^>]*aria-labelledby="choose-heading"/)
+    expect(choose).not.toMatch(/<label[^>]*for="file-input"/)
     expect(choose).not.toMatch(/id="source-status"[^>]*\shidden/)
     expect(choose).not.toContain('<details')
     expect(choose.indexOf('id="source-status"')).toBeGreaterThan(choose.indexOf('id="file-input"'))
@@ -342,8 +353,15 @@ describe('the trim step (VH-96)', () => {
     expect(trim).toMatch(/>\s*Set end here\s*</)
   })
 
-  it('ties the format and any error to both time fields', () => {
-    expect(trim.match(/aria-describedby="trim-format trim-error trim-result"/g)).toHaveLength(2)
+  it('ties the format, its own error and the result to each time field', () => {
+    // An error beside the field it concerns (VH-124), not one shared line.
+    expect(trim).toContain('aria-describedby="trim-format trim-start-error trim-result"')
+    expect(trim).toContain('aria-describedby="trim-format trim-end-error trim-result"')
+    expect(trim.indexOf('id="trim-start-error"')).toBeLessThan(trim.indexOf('id="trim-end"'))
+  })
+
+  it('ends on its result line, after the reset action', () => {
+    expect(trim.indexOf('id="trim-clear"')).toBeLessThan(trim.indexOf('id="trim-result"'))
   })
 
   it('plays nothing by itself', () => {

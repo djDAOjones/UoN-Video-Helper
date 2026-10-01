@@ -73,7 +73,7 @@ export function dropProblem(
     return 'The tool is still getting ready. Drop the video again in a moment.'
   }
   if (busy === 'unavailable') {
-    return 'This browser cannot run the tool, so no video can be read here. The sentence above says what to do.'
+    return 'This browser cannot run the tool, so no video can be read here. The message below says what to do.'
   }
   if (files.length === 0) return 'Nothing was dropped that could be read. Drop a video file.'
   if (files.length > 1) return `That was ${files.length} files. Drop one video at a time.`

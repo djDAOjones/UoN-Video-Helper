@@ -268,14 +268,18 @@ const VERDICT_KIND: Record<PreflightOutcome, NotificationKind> = {
 
 /** What the status line says when a device check lands. */
 export interface PreflightAnnouncement {
-  /** Shown and spoken: that the check has landed. */
+  /**
+   * Shown and spoken. Empty: the verdict box is directly beside the line,
+   * and "Device check complete." under "Ready to go" was the line said twice
+   * (VH-124); a block's old line, "cannot be processed in this browser", was
+   * untrue of a block for too little storage.
+   */
   readonly shown: string
   /**
-   * Spoken only: the verdict itself, heading and all. The status line sits
-   * directly under the verdict (VH-88), so showing it again would put it on
-   * screen twice (U-25) — but the verdict is not a live region, and a
-   * screen-reader user who hears only "Device check complete" has been told
-   * there is a verdict and not what it is.
+   * Spoken only: that the check has landed, then the verdict itself, heading
+   * and all. The verdict is not a live region, and a screen-reader user who
+   * hears only that the check is complete has been told there is a verdict
+   * and not what it is.
    */
   readonly spokenOnly: string
 }
@@ -283,8 +287,8 @@ export interface PreflightAnnouncement {
 /**
  * The status line for a finished device check.
  *
- * Everything the verdict says reaches the live region; only what the box
- * does not show is shown.
+ * Everything the verdict says reaches the live region; nothing the box
+ * shows is shown twice.
  */
 export function preflightAnnouncement(
   summary: PreflightSummary,
@@ -292,10 +296,7 @@ export function preflightAnnouncement(
 ): PreflightAnnouncement {
   const { heading, lines } = verdictText(summary, context)
   return {
-    shown:
-      summary.verdict.outcome === 'block'
-        ? 'This video cannot be processed in this browser.'
-        : 'Device check complete.',
-    spokenOnly: [`${heading}.`, ...lines].join(' '),
+    shown: '',
+    spokenOnly: ['Device check complete.', `${heading}.`, ...lines].join(' '),
   }
 }
