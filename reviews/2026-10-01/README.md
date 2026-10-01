@@ -17,6 +17,7 @@ needed to read or act on it.
 | `codex-astra-spec-gap-review-2026-10-01.md` | The independent half of the spec review, by Codex astra, kept as written: thirteen findings, twelve ticket clauses, and a table of all 86 WCAG 2.2 criteria with a verdict each. |
 | `codex-astra-critique-2026-10-01.md` | Codex astra's adversarial check of the merged spec review before commit: 35 corrections, all applied; kept as written. |
 | `evidence/` | Screenshots the findings cite, named by finding (`u01-…`). Cropped so no frame of a real recording and no real file name appears. |
+| `vh-124-prework/` | Read-only groundwork for VH-124 and VH-105 from the same evening: two Codex astra passes, measurements of the live page, defects confirmed in source, and the prompt that handed the work to a fresh session. Start at its README. |
 
 ## Baseline
 
