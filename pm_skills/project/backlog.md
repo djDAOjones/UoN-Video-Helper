@@ -68,6 +68,29 @@
      item builds to the spec as written. Band 4 closed with VH-97's sign-off
      as not built (Icebox). -->
 
+- [ ] **VH-124 The page, made excellent** [sign-off][detail](tickets/VH-124.md)
+      (2026-10-01)
+      Intent: the maintainer's brief, 2026-10-01 — an excellently accessible
+      and usable interface, text, design elements and layout together:
+      bulletproof, low friction, simply excellent. Band 6 fixed findings one
+      at a time; nobody has designed the page as a whole for a first-time
+      member of staff. The live page says "choose a video" four ways in step
+      1 and opens with three lower-case bullets, which no finding named. The
+      ticket holds the full brief to paste to the agent that takes it.
+      Done when: a one-page audit of every state with before-and-after
+      screenshots sits in `reviews/`; every state shows one clear next action
+      and nothing that competes with it; no visible line repeats another in
+      view; every list item and sentence starts with a capital and ends with
+      a full stop (the three opening bullets keep their words, gain their
+      capitals; `test/screen-text.test.ts` pins the new form); layout,
+      spacing and type come only from the two token files on the Carbon
+      scale; every control meets VH-112's rules, every string the readability
+      check; keyboard-only and phone-width walks recorded headless; `check`
+      green with every pin updated, none weakened; the maintainer has walked
+      the page and signed it off. Reaches VH-111, VH-112 and VH-113's
+      surfaces — close those with its evidence where it gets there first.
+      VH-105 waits on it.
+
 - [ ] **VH-111 Focus and announcements follow the page** (2026-10-01)
       Intent: U-09, U-10. Focus falls to the page body at Create, Cancel,
       finish and "Keep it" — after Cancel the next Tab skips Create. Caption
