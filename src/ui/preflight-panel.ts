@@ -15,6 +15,7 @@
 import { PRESETS, bitrateWasCappedToSource } from '../config/presets'
 import type { PreflightOutcome, PreflightReasonCode, PreflightSummary } from '../media/preflight'
 import { formatApproximateDuration, formatFileSize } from './format'
+import { notification, type NotificationKind } from './notification'
 
 /**
  * What the verdict's sentences may assume about the job and where the user is.
@@ -252,23 +253,17 @@ export function renderPreflight(
   container.replaceChildren()
 
   const text = verdictText(summary, context)
-  const section = document.createElement('div')
-  section.className = 'verdict'
-  section.dataset['outcome'] = summary.verdict.outcome
+  container.append(
+    notification({ kind: VERDICT_KIND[summary.verdict.outcome], title: text.heading, lines: text.lines }),
+  )
+}
 
-  const heading = document.createElement('p')
-  heading.className = 'verdict-heading'
-  heading.textContent = text.heading
-  section.append(heading)
-
-  for (const line of text.lines) {
-    const paragraph = document.createElement('p')
-    paragraph.className = 'verdict-detail'
-    paragraph.textContent = line
-    section.append(paragraph)
-  }
-
-  container.append(section)
+/** Spec 7.3's outcomes on the notification's kinds: a block is an error, the rest a warning or a go. */
+const VERDICT_KIND: Record<PreflightOutcome, NotificationKind> = {
+  proceed: 'success',
+  warn: 'warning',
+  discourage: 'warning',
+  block: 'error',
 }
 
 /** What the status line says when a device check lands. */

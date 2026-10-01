@@ -12,6 +12,7 @@
 
 import type { SourceReport } from '../media/inspect'
 import { ORIGINAL_UNCHANGED, type FailureText } from './failure-text'
+import { notification } from './notification'
 import {
   formatChannels,
   formatCodec,
@@ -236,33 +237,9 @@ export function renderSourceReport(container: HTMLElement, report: SourceReport)
   if (losses.length > 0) {
     // The same component the sound warnings use: one visual language for
     // "worth knowing before you start", whichever part of the file it is about.
-    const section = document.createElement('section')
-    section.className = 'warnings'
-
-    const heading = document.createElement('h3')
-    heading.className = 'warnings-heading'
-    heading.textContent = 'Not carried into the new file'
-    // Named for assistive technology, as the sound warnings' section is.
-    heading.id = 'source-losses-heading'
-    section.setAttribute('aria-labelledby', heading.id)
-    section.append(heading)
-
-    const list = document.createElement('ul')
-    list.className = 'warning-list'
-    for (const loss of losses) {
-      const item = document.createElement('li')
-      item.className = 'warning'
-      const title = document.createElement('p')
-      title.className = 'warning-title'
-      title.textContent = loss.title
-      const detail = document.createElement('p')
-      detail.className = 'warning-detail'
-      detail.textContent = loss.detail
-      item.append(title, detail)
-      list.append(item)
-    }
-    section.append(list)
-    container.append(section)
+    container.append(
+      notification({ kind: 'warning', title: 'Not carried into the new file', items: losses }),
+    )
   }
 
   const disclosure = document.createElement('details')
@@ -301,15 +278,16 @@ export function renderSourceReport(container: HTMLElement, report: SourceReport)
  * then that the original is safe and what to do next — once each (VH-110,
  * spec 9.2). The sentences are `ui/failure-text.ts`'s, so the next step fits
  * the cause rather than always being "choose a different one".
+ *
+ * @returns The notification, so focus can be handed to it (VH-111).
  */
-export function renderSourceError(container: HTMLElement, text: FailureText): void {
+export function renderSourceError(container: HTMLElement, text: FailureText): HTMLElement {
   container.replaceChildren()
-  const paragraph = document.createElement('p')
-  paragraph.className = 'fact-error'
-  paragraph.textContent = text.what
-  const reassurance = document.createElement('span')
-  reassurance.className = 'fact-note'
-  reassurance.textContent = `${ORIGINAL_UNCHANGED} ${text.next}`
-  paragraph.append(reassurance)
-  container.append(paragraph)
+  const failure = notification({
+    kind: 'error',
+    title: text.what,
+    lines: [`${ORIGINAL_UNCHANGED} ${text.next}`],
+  })
+  container.append(failure)
+  return failure
 }

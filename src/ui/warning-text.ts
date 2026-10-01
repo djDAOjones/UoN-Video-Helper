@@ -15,6 +15,7 @@
 
 import type { AudioWarning } from '../audio/warnings'
 import { formatDuration } from './format'
+import { notification } from './notification'
 
 export interface WarningText {
   readonly heading: string
@@ -84,47 +85,17 @@ export function renderWarnings(
 ): void {
   container.replaceChildren()
   if (warnings.length === 0) return
-
-  const section = document.createElement('section')
-  section.className = 'warnings'
-
-  const heading = document.createElement('h3')
-  heading.className = 'warnings-heading'
-  heading.textContent = options.heading
-  // Named for assistive technology, like every other section on the page.
-  // A landmark a screen reader announces as "section" and nothing else is
-  // worse than no landmark at all.
-  heading.id = `warnings-heading-${container.id || 'default'}`
-  section.setAttribute('aria-labelledby', heading.id)
-  section.append(heading)
-
-  const list = document.createElement('ul')
-  list.className = 'warning-list'
-  for (const warning of warnings) {
-    const { heading: title, detail } = warningText(warning)
-    const item = document.createElement('li')
-    item.className = 'warning'
-
-    const strong = document.createElement('p')
-    strong.className = 'warning-title'
-    strong.textContent = title
-
-    const body = document.createElement('p')
-    body.className = 'warning-detail'
-    body.textContent = detail
-
-    item.append(strong, body)
-    list.append(item)
-  }
-  section.append(list)
-
-  // Advisory, always. Spec 5.4: none of these blocks anything, and saying so
-  // is what stops a warning reading like a refusal.
-  const reassurance = document.createElement('p')
-  reassurance.className = 'warning-detail'
-  reassurance.textContent =
-    'None of these stop you continuing. Your original file is not changed either way.'
-  section.append(reassurance)
-
-  container.append(section)
+  container.append(
+    notification({
+      kind: 'warning',
+      title: options.heading,
+      items: warnings.map((warning) => {
+        const { heading, detail } = warningText(warning)
+        return { title: heading, detail }
+      }),
+      // Advisory, always. Spec 5.4: none of these blocks anything, and
+      // saying so is what stops a warning reading like a refusal.
+      tail: ['None of these stop you continuing. Your original file is not changed either way.'],
+    }),
+  )
 }

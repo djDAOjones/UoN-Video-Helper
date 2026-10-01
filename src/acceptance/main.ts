@@ -56,7 +56,7 @@ function render(checks: readonly Check[], seconds: number): void {
   const manual = checks.filter((c) => c.status === 'manual').length
   const external = checks.filter((c) => c.status === 'external').length
   const summary = document.createElement('p')
-  summary.className = 'verdict-detail'
+  summary.className = 'helper'
   summary.textContent =
     `${checks.length - failed - manual - external} passed here, ${failed} failed, ` +
     `${manual} need a person, ${external} checked elsewhere. ${seconds.toFixed(1)} s.`

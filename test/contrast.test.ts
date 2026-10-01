@@ -109,6 +109,9 @@ const TEXT_PAIRS: ReadonlyArray<readonly [string, string]> = [
   ['--support-warning', '--layer-01'],
   ['--text-on-interactive', '--interactive'],
   ['--text-on-interactive', '--interactive-hover'],
+  // The danger button (VH-124): white on red-80 at rest, on red-70 hovered.
+  ['--text-on-danger', '--button-danger'],
+  ['--text-on-danger', '--button-danger-hover'],
 ]
 
 const BORDER_PAIRS: ReadonlyArray<readonly [string, string]> = [

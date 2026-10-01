@@ -64,6 +64,10 @@
   --uon-portland-stone-40: #fdfbf9;
   --uon-white: #ffffff;
 
+  /* The dimmed page behind a dialogue: the brand blue, mostly clear. A
+     derived colour, so it is named here and nowhere else. */
+  --overlay-backdrop: color-mix(in srgb, var(--uon-brand-blue) 60%, transparent);
+
   /* ---- Typeface ------------------------------------------------------ */
 
   /*
@@ -144,6 +148,9 @@
     --support-error: #ffd7d9; /* red-20 */
     --support-success: #a7f0ba; /* green-20 */
     --support-warning: #fddc69; /* yellow-20 */
+    --button-danger: var(--support-error);
+    --button-danger-hover: #ffb3b8; /* red-30 */
+    --text-on-danger: var(--uon-brand-blue);
   }
 }
 
@@ -167,4 +174,7 @@
   --support-error: #ffd7d9; /* red-20 */
   --support-success: #a7f0ba; /* green-20 */
   --support-warning: #fddc69; /* yellow-20 */
+  --button-danger: var(--support-error);
+  --button-danger-hover: #ffb3b8; /* red-30 */
+  --text-on-danger: var(--uon-brand-blue);
 }

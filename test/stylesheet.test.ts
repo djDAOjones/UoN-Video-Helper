@@ -64,3 +64,52 @@ describe('the brand bands (VH-92)', () => {
   })
 })
 
+
+/**
+ * Every length, colour and line height in the app's stylesheet comes from
+ * the two token files (VH-124; `AGENTS.md` → "Numbers live in src/config or a
+ * CSS token"). What is exempt is structural, and named here rather than
+ * waved through: zero; percentages and viewport fills, which are geometry
+ * relative to a box or the window; the `.visually-hidden` technique, whose
+ * one-pixel box is the technique; the reduced-motion block, whose near-zero
+ * duration is the technique; the breakpoint in a media query prelude, which
+ * CSS cannot read from a token; and the forced-colour system colours, which
+ * `UI-STANDARDS.md` requires outside the brand tokens.
+ */
+describe('tokens, not literals (VH-124)', () => {
+  /** Declarations only: comments gone, media preludes gone, exempt blocks gone. */
+  const declarations = rules
+    .replace(/@media \(prefers-reduced-motion: reduce\)[\s\S]*?\n\}/, '')
+    .replace(/@media[^{]*\{/g, '{')
+    .replace(/\.visually-hidden\s*\{[^}]*\}/, '')
+
+  it('names no length outside the token files', () => {
+    const lengths = [...declarations.matchAll(/-?\d*\.?\d+(?:px|rem|em|ch|vh|vw|vmin|vmax|s|ms)\b/g)]
+      .map((match) => match[0])
+      .filter((value) => !/^100v[hw]$/.test(value))
+    expect(lengths, 'literal lengths in app.css').toEqual([])
+  })
+
+  it('takes every line height from a token', () => {
+    const literal = [...declarations.matchAll(/line-height:\s*([^;]+);/g)]
+      .map((match) => match[1]!.trim())
+      .filter((value) => !/^var\(--line-height-[a-z]+\)$/.test(value) && value !== 'inherit')
+    expect(literal, 'line heights in app.css').toEqual([])
+  })
+
+  it('names no colour outside the token files, system colours aside', () => {
+    expect(declarations).not.toMatch(/\b(?:rgba?|hsla?|color-mix)\(/)
+    // Named CSS colours would pass the hex check and still be a colour nobody measured.
+    expect(declarations).not.toMatch(/:\s*(?:white|black|red|green|blue|grey|gray|yellow)\b/)
+  })
+
+  it('still holds a literal only where a token lives', () => {
+    // The guard above means nothing if the token files stop carrying the
+    // values: the measure, the line heights and the paragraph gap are
+    // where the brief's typography lands.
+    const tokens = readFileSync(new URL('../src/styles/tokens.carbon.css', import.meta.url), 'utf8')
+    expect(tokens).toMatch(/--measure:\s*55ch;/)
+    expect(tokens).toMatch(/--line-height-body:\s*1\.5;/)
+    expect(tokens).toMatch(/--paragraph-gap:\s*var\(--spacing-05\);/)
+  })
+})

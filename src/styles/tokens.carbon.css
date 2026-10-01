@@ -46,14 +46,58 @@
   --type-heading-03: 1.25rem;
   --type-heading-04: 1.75rem;
 
-  /* WCAG 1.4.8 (AAA): no more than 80 characters a line. 70ch leaves room
-     for a wide glyph run; CJK's 40-glyph limit is VH-105's to set. */
-  --measure: 70ch;
+  /* Line height: Carbon's body (1.5, WCAG 1.4.8's line spacing) and its
+     headings. Paragraph spacing is one blank line — 2.5 × the font size top
+     to top, the 1.4.8 Understanding document's figure (VH-124). */
+  --line-height-body: 1.5;
+  --line-height-heading: 1.25;
+  --paragraph-gap: var(--spacing-05);
+
+  /* WCAG 1.4.8 (AAA): no more than 80 characters a line, and the ticket's
+     ~70. In Arial a `ch` is the width of a zero, about 1.28 average
+     characters, so 70ch held 88–91 and 55ch holds about 70 (VH-124). CJK's
+     40-glyph limit is VH-105's to set. */
+  --measure: 55ch;
+
+  /* Layout: the content column, and the widths the form rows wrap at. */
+  --layout-width: 60rem;
+  --field-min-width: 12rem;
+  --field-wide-min-width: 20rem;
+  --facts-term-width: 8rem;
+  --dialog-width: 40rem;
+
+  /* Heights: the preview's cap, a details or log pane before it scrolls,
+     and a message box's resting size. */
+  --preview-max-height: 60vh;
+  --detail-max-height: 14rem;
+  --log-max-height: 18rem;
+  --textarea-min-height: 8rem;
+
+  /* Edges: a hairline, an emphasised edge (an invalid field, a swatch's
+     mat), a notification's rail, and the focus ring. */
+  --border-width: 1px;
+  --border-width-emphasis: 2px;
+  --rail-width: 4px;
+  --focus-width: 2px;
+  --focus-offset: 2px;
+
+  /* Native checkbox and radio glyphs, and the status mark column. */
+  --control-size: 1.25rem;
+  --mark-width: 1.5rem;
 
   /* The AAA pointer-target floor. Never shrink a control below this. */
   --target-min: 44px;
 
-  /* Motion (Carbon productive, `fast-02`). Reduced to nothing by the
-     `prefers-reduced-motion` rule in app.css. */
+  /* Motion (Carbon productive, `fast-02`), and the indeterminate bar's
+     sweep. Reduced to nothing by the `prefers-reduced-motion` rule. */
   --motion-fast: 110ms;
+  --motion-progress: 1.8s;
+
+  /* Carbon's danger button, for the one destructive action on the page
+     (Discard, VH-124): the error ramp's far end, which clears 7:1 for white
+     text — red-80 at rest, red-70 on hover. The dark-surface values sit
+     beside the dark status steps in `tokens.brand.css`. */
+  --button-danger: var(--support-error);
+  --button-danger-hover: #a2191f; /* red-70 */
+  --text-on-danger: #ffffff;
 }

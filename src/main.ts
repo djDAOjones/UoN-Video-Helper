@@ -94,6 +94,7 @@ import {
   type ClosingOutcome,
   type JobRecord,
 } from './ui/result-summary'
+import { body, notification } from './ui/notification'
 import { downloadDestinationFor, downloadStatusText } from './ui/save-text'
 import { renderWarnings } from './ui/warning-text'
 import {
@@ -528,16 +529,11 @@ function failureFor(reply: { readonly code: FailureCode; readonly message: strin
 
 function showError(error: CapturedError): void {
   errorsPanel.hidden = false
-  const item = document.createElement('div')
-  item.className = 'error-item'
-
-  const heading = document.createElement('p')
-  heading.style.margin = '0'
-  const strong = document.createElement('strong')
-  strong.textContent = `${error.origin} on the ${error.thread} thread`
-  heading.append(strong, document.createTextNode(` — ${error.message}`))
-  item.append(heading)
-
+  const item = notification({
+    kind: 'error',
+    title: `${error.origin} on the ${error.thread} thread`,
+    lines: [error.message],
+  })
   if (error.stack) {
     const stack = document.createElement('pre')
     stack.textContent = error.stack
@@ -1760,23 +1756,28 @@ function confirmDiscardThenStart(): void {
   processResult.replaceChildren()
   discardAsked = true
 
-  const question = document.createElement('p')
-  question.className = 'verdict-detail'
-  question.textContent = asked.delivered
+  const question = asked.delivered
     ? 'Your download may still be finishing. Starting again will discard the video you just made.'
     : 'You have not saved the video you just made. Starting again will discard it.'
 
   // The same record the result shows, so the question names what would go —
   // outcome included: a fade that became a cut is a cut here too (Codex
   // review of VH-107).
-  const summary = document.createElement('p')
-  summary.className = 'verdict-detail'
   const differs = closingOutcomeText(asked.record.closing, asked.outcome)
-  summary.textContent = differs === null ? jobSummaryText(asked.record) : `${jobSummaryText(asked.record)} ${differs}`
+  const summary = differs === null ? jobSummaryText(asked.record) : `${jobSummaryText(asked.record)} ${differs}`
 
+  const panel = notification({
+    kind: 'warning',
+    title: 'This video is not saved yet',
+    lines: [question, summary],
+  })
+
+  // Carbon's danger button: the one destructive action on the page looks
+  // like one, and does not take focus by default — the question does, so
+  // Enter pressed in haste discards nothing (VH-124).
   const discard = document.createElement('button')
   discard.type = 'button'
-  discard.className = 'button'
+  discard.className = 'button button--danger'
   discard.textContent = 'Discard it and start again'
   discard.addEventListener('click', () => {
     // The same gate as Create: a file the verdict stands for, and nothing in
@@ -1801,14 +1802,17 @@ function confirmDiscardThenStart(): void {
   const actions = document.createElement('div')
   actions.className = 'actions'
   actions.append(discard, keep)
-  processResult.append(question, summary, actions)
-  setStatus('Your video is not saved yet.')
-  discard.focus()
+  panel.append(actions)
+  panel.tabIndex = -1
+  processResult.append(panel)
+  // The panel says it; the live region only speaks it.
+  setStatus('', `This video is not saved yet. ${question}`)
+  panel.focus()
 }
 
 /** The failure just rendered under Create, made focusable so focus can land on it. */
 function failureBlock(): HTMLElement | null {
-  const block = processResult.querySelector<HTMLElement>('.fact-error')
+  const block = processResult.querySelector<HTMLElement>('.notification')
   if (block) block.tabIndex = -1
   return block
 }
@@ -2073,8 +2077,6 @@ function renderResult(kept: RetainedResult): HTMLElement {
   discardAsked = false
   const { file, jobId, source, record, outcome } = kept
 
-  const heading = document.createElement('p')
-  heading.className = 'verdict-detail'
   // Not "Your video is ready": the status line says that, directly above, and
   // this block also stands on its own later — after "Keep it", or while the
   // next file is being read — where "ready" would be news about the wrong
@@ -2082,39 +2084,30 @@ function renderResult(kept: RetainedResult): HTMLElement {
   // video, and says so: a result sitting unnamed under the next file's
   // verdict was the wrong lecture saved and published (U-03).
   const previous = fileInput.files?.[0] !== source
-  heading.textContent = `${previous ? 'Previous video' : 'Finished video'} — ${formatFileSize(file.size)}.`
-  // Where focus lands when the job finishes, "Keep it" restores this, or
-  // Save is spent (VH-111): the first line of what there now is.
-  heading.tabIndex = -1
-  processResult.append(heading)
-
-  // The job's own record, fixed when it ended (A-05): two outputs of one
-  // recording can differ in trim, output and closing, and the file's name
-  // alone does not tell them apart.
-  const summary = document.createElement('p')
-  summary.className = 'verdict-detail'
-  summary.textContent = jobSummaryText(record)
-  processResult.append(summary)
-
   // VH-22: branding that was asked for but could not be loaded is skipped
   // rather than failing the job, so the result has to say so — and so does a
   // fade or slide that fell back to a cut (U-14). A video whose closing is
   // not the one described, delivered silently, is the failure this prevents.
   const differs = closingOutcomeText(record.closing, outcome)
-  if (differs !== null) {
-    const notice = document.createElement('p')
-    notice.className = 'verdict-detail'
-    notice.textContent = differs
-    processResult.append(notice)
-  }
+  // One success notification (VH-124): the title, the job's own record —
+  // fixed when it ended (A-05), since two outputs of one recording can differ
+  // in trim, output and closing — a closing that did not land as chosen, the
+  // lifetime, and Save as its action.
+  const heading = notification({
+    kind: 'success',
+    title: `${previous ? 'Previous video' : 'Finished video'} — ${formatFileSize(file.size)}`,
+    lines: [jobSummaryText(record), ...(differs === null ? [] : [differs])],
+  })
+  // Where focus lands when the job finishes, "Keep it" restores this, or
+  // Save is spent (VH-111): what there now is.
+  heading.tabIndex = -1
+  processResult.append(heading)
 
   // Spec 7.5: not kept past the tab, and the page says so beside the result.
   // The leave warning catches a reload; it cannot catch a crash or a
   // discarded tab, which is why the sentence is here. Gone once it is saved.
-  const lifetime = document.createElement('p')
-  lifetime.className = 'verdict-detail'
-  lifetime.textContent = 'It is kept here only until you save it or close this tab.'
-  processResult.append(lifetime)
+  const lifetime = body('It is kept here only until you save it or close this tab.')
+  heading.append(lifetime)
 
   // Retained until the user has it somewhere. Everything that would destroy it
   // now has to go through `unsavedResult` first (VH-56).
@@ -2255,7 +2248,7 @@ function renderResult(kept: RetainedResult): HTMLElement {
   const actions = document.createElement('div')
   actions.className = 'actions'
   actions.append(save)
-  processResult.append(actions)
+  heading.append(actions)
   syncCreateEmphasis()
   return heading
 }

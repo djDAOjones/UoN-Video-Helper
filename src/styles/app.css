@@ -27,7 +27,7 @@ body {
   color: var(--text-primary);
   font-family: var(--font-body);
   font-size: var(--type-body);
-  line-height: 1.5;
+  line-height: var(--line-height-body);
 }
 
 /* Running text stops at the measure, whatever the panel's width (VH-112,
@@ -36,6 +36,17 @@ p,
 li,
 dd {
   max-width: var(--measure);
+}
+
+/* One blank line between paragraphs of running text (1.4.8's paragraph
+   spacing, VH-124). The lede and a notification's body are where paragraphs
+   follow each other; a helper or status line under a control keeps its own
+   closer spacing. */
+.lede p + p,
+.lede ul + p,
+.lede p + ul,
+.notification-body + .notification-body {
+  margin-top: var(--paragraph-gap);
 }
 
 /* The brand's heading face. Lora where its file is present, Georgia until. */
@@ -79,8 +90,8 @@ a {
 }
 
 :focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--focus);
+  outline-offset: var(--focus-offset);
 }
 
 /*
@@ -96,7 +107,7 @@ a {
 
 .band-inner {
   width: 100%;
-  max-width: 60rem;
+  max-width: var(--layout-width);
   margin: 0 auto;
   padding: var(--spacing-05) var(--spacing-06);
 }
@@ -104,11 +115,11 @@ a {
 /* In the dark theme the page is the same blue as the band, so a rule is what
    separates them. In the light theme it is a quiet edge and nothing more. */
 .band--header {
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: var(--border-width) solid var(--border-subtle);
 }
 
 .band--footer {
-  border-top: 1px solid var(--border-subtle);
+  border-top: var(--border-width) solid var(--border-subtle);
 }
 
 /*
@@ -134,7 +145,7 @@ a {
   margin: 0 0 var(--spacing-05);
   font-size: var(--type-heading-04);
   font-weight: 700;
-  line-height: 1.25;
+  line-height: var(--line-height-heading);
 }
 
 .band--footer .system-check {
@@ -156,15 +167,15 @@ a {
 .main {
   flex: 1;
   width: 100%;
-  max-width: 60rem;
+  max-width: var(--layout-width);
   margin: 0 auto;
   padding: var(--spacing-07) var(--spacing-06) var(--spacing-09);
 }
 
+/* The promise, in the page's own text colour: a headline, not a footnote
+   (VH-124). Its width is the measure's, like every other paragraph. */
 .lede {
   margin: 0 0 var(--spacing-07);
-  max-width: 46rem;
-  color: var(--text-secondary);
 }
 
 .lede p {
@@ -178,7 +189,7 @@ a {
 }
 
 .panel {
-  border: 1px solid var(--border-subtle);
+  border: var(--border-width) solid var(--border-subtle);
   background: var(--layer-01);
   padding: var(--spacing-06);
   margin-bottom: var(--spacing-06);
@@ -226,11 +237,11 @@ a {
 
 .check {
   display: grid;
-  grid-template-columns: 1.5rem 1fr auto;
+  grid-template-columns: var(--mark-width) 1fr auto;
   gap: var(--spacing-04);
   align-items: baseline;
   padding-bottom: var(--spacing-04);
-  border-bottom: 1px solid var(--border-divider);
+  border-bottom: var(--border-width) solid var(--border-divider);
 }
 
 .check:last-child {
@@ -275,7 +286,7 @@ a {
   min-height: var(--target-min);
   min-width: var(--target-min);
   padding: var(--spacing-03) var(--spacing-06);
-  border: 1px solid transparent;
+  border: var(--border-width) solid transparent;
   background: var(--interactive);
   color: var(--text-on-interactive);
   font: inherit;
@@ -295,6 +306,18 @@ a {
 
 .button--secondary:hover {
   background: var(--layer-02);
+}
+
+/* Carbon's danger button, for the one destructive action (Discard). */
+.button--danger {
+  background: var(--button-danger);
+  border-color: var(--button-danger);
+  color: var(--text-on-danger);
+}
+
+.button--danger:hover {
+  background: var(--button-danger-hover);
+  border-color: var(--button-danger-hover);
 }
 
 /*
@@ -320,35 +343,89 @@ a {
   background: var(--layer-02);
 }
 
+/* One line's height is reserved, so a status arriving moves nothing. */
 .status {
   margin-top: var(--spacing-05);
   font-size: var(--type-body-compact);
   color: var(--text-secondary);
-  min-height: 1.5rem;
+  min-height: calc(var(--type-body) * var(--line-height-body));
 }
 
 .errors:empty {
   display: none;
 }
 
-.error-item {
-  border-left: 4px solid var(--support-error);
-  padding: var(--spacing-04) var(--spacing-05);
-  margin-bottom: var(--spacing-04);
+/* --- Inline notification (Carbon) --- */
+
+/*
+ * The one treatment for "worth knowing": the device verdict, the sound and
+ * output notes, what the new file will not carry, a failure, a captured
+ * error, the finished video and the question before it is discarded
+ * (VH-124). Five anatomies became this one. Carbon's inline notification is
+ * a rail in the status colour, a title, body text and an optional action;
+ * the tinted ground Carbon adds is left out, because no tint of the brand
+ * palette carries text at 7:1, and the rail plus the title's words carry the
+ * kind on their own — colour is never the only signal.
+ */
+.notification {
+  margin: var(--spacing-06) 0 0;
+  padding: var(--spacing-05);
+  border: var(--border-width) solid var(--border-subtle);
+  border-left: var(--rail-width) solid var(--border-strong);
   background: var(--layer-02);
 }
 
-.error-item strong {
-  color: var(--support-error);
+.notification[data-kind='success'] {
+  border-left-color: var(--support-success);
 }
 
-.error-item pre {
+.notification[data-kind='warning'] {
+  border-left-color: var(--support-warning);
+}
+
+.notification[data-kind='error'] {
+  border-left-color: var(--support-error);
+}
+
+.notification-title {
+  margin: 0;
+  font-weight: 600;
+}
+
+.notification-body {
+  margin: var(--spacing-03) 0 0;
+  font-size: var(--type-body-compact);
+  color: var(--text-secondary);
+}
+
+/* Several things worth knowing, each with its own title. */
+.notification-list {
+  list-style: none;
+  margin: var(--spacing-04) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--spacing-04);
+}
+
+.notification-item-title {
+  margin: 0;
+  font-weight: 600;
+  font-size: var(--type-body-compact);
+}
+
+/* A captured error's stack, for whoever is helping. */
+.notification pre {
   margin: var(--spacing-03) 0 0;
   font-size: var(--type-body-compact);
   white-space: pre-wrap;
   word-break: break-word;
-  max-height: 12rem;
+  max-height: var(--detail-max-height);
   overflow: auto;
+}
+
+/* The notification's own action row sits inside it. */
+.notification .actions {
+  margin-top: var(--spacing-05);
 }
 
 .visually-hidden {
@@ -362,6 +439,8 @@ a {
   white-space: nowrap;
 }
 
+/* Reduced motion: every animation and transition collapses to nothing. The
+   near-zero duration is the standard technique, not a design value. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -390,7 +469,7 @@ a {
   width: 100%;
   min-height: var(--target-min);
   padding: var(--spacing-03) var(--spacing-04);
-  border: 1px solid var(--border-subtle);
+  border: var(--border-width) solid var(--border-subtle);
   background: var(--layer-00);
   color: var(--text-primary);
   font: inherit;
@@ -403,7 +482,7 @@ a {
   min-height: var(--target-min);
   margin-right: var(--spacing-04);
   padding: var(--spacing-03) var(--spacing-05);
-  border: 1px solid var(--interactive);
+  border: var(--border-width) solid var(--interactive);
   background: transparent;
   color: var(--interactive);
   font: inherit;
@@ -437,7 +516,7 @@ a {
    it stays the primary, keyboard route (VH-101). */
 .drop-zone {
   padding: var(--spacing-05);
-  border: 1px dashed var(--border-strong);
+  border: var(--border-width) dashed var(--border-strong);
 }
 
 /* A file held over it: solid, with the focus outline Carbon gives a drop
@@ -445,8 +524,8 @@ a {
    alone. An outline, not a thicker border, so nothing inside moves. */
 .drop-zone.is-drag-over {
   border-style: solid;
-  outline: 2px solid var(--focus);
-  outline-offset: -2px;
+  outline: var(--focus-width) solid var(--focus);
+  outline-offset: calc(-1 * var(--focus-width));
 }
 
 /* Present whether or not it has anything to say, so a refusal is announced;
@@ -468,7 +547,7 @@ a {
 
 .facts {
   display: grid;
-  grid-template-columns: minmax(8rem, max-content) 1fr;
+  grid-template-columns: minmax(var(--facts-term-width), max-content) 1fr;
   gap: var(--spacing-04) var(--spacing-06);
   margin: var(--spacing-06) 0 0;
 }
@@ -489,14 +568,6 @@ a {
   color: var(--text-secondary);
 }
 
-.fact-error {
-  margin: var(--spacing-06) 0 0;
-  padding: var(--spacing-04) var(--spacing-05);
-  border-left: 4px solid var(--support-error);
-  background: var(--layer-02);
-  color: var(--support-error);
-}
-
 @media (max-width: 34rem) {
   .facts {
     grid-template-columns: 1fr;
@@ -506,39 +577,6 @@ a {
   .facts dd {
     margin-bottom: var(--spacing-04);
   }
-}
-
-/* --- Pre-flight verdict --- */
-
-.verdict {
-  margin-top: var(--spacing-06);
-  padding: var(--spacing-05);
-  border-left: 4px solid var(--border-strong);
-  background: var(--layer-02);
-}
-
-.verdict[data-outcome='proceed'] {
-  border-left-color: var(--support-success);
-}
-
-.verdict[data-outcome='warn'],
-.verdict[data-outcome='discourage'] {
-  border-left-color: var(--support-warning);
-}
-
-.verdict[data-outcome='block'] {
-  border-left-color: var(--support-error);
-}
-
-.verdict-heading {
-  margin: 0;
-  font-weight: 600;
-}
-
-.verdict-detail {
-  margin: var(--spacing-04) 0 0;
-  font-size: var(--type-body-compact);
-  color: var(--text-secondary);
 }
 
 /* --- Processing --- */
@@ -580,7 +618,7 @@ a {
     var(--border-divider) 100%
   );
   background-size: 250% 100%;
-  animation: progress-indeterminate 1.8s linear infinite;
+  animation: progress-indeterminate var(--motion-progress) linear infinite;
 }
 
 .progress:indeterminate::-webkit-progress-bar {
@@ -615,8 +653,8 @@ a {
 }
 
 .checkbox input {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: var(--control-size);
+  height: var(--control-size);
   margin: 0;
   accent-color: var(--interactive);
 }
@@ -651,8 +689,8 @@ a {
 }
 
 .radio input {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: var(--control-size);
+  height: var(--control-size);
   accent-color: var(--interactive);
 }
 
@@ -670,7 +708,7 @@ a {
 
 .radio--described input {
   /* Aligned to the first line of text rather than to the whole block. */
-  margin-top: 0.15rem;
+  margin-top: var(--spacing-01);
   flex: none;
 }
 
@@ -751,8 +789,8 @@ details[open] > .disclosure-summary::before {
 }
 
 .disclosure-summary:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--focus);
+  outline-offset: var(--focus-offset);
 }
 
 .disclosure .facts {
@@ -781,14 +819,14 @@ details[open] > .disclosure-summary::before {
 }
 
 .control-grid .field {
-  flex: 1 1 12rem;
+  flex: 1 1 var(--field-min-width);
   margin-bottom: 0;
   min-width: 0;
 }
 
 /* Onset holds the longest option text and a help button beside it. */
 .control-grid .field--wide {
-  flex: 1.6 1 20rem;
+  flex: 1.6 1 var(--field-wide-min-width);
 }
 
 /* Carbon's Select is a native <select>; so is this. */
@@ -797,7 +835,7 @@ details[open] > .disclosure-summary::before {
   width: 100%;
   min-height: var(--target-min);
   padding: var(--spacing-03) var(--spacing-04);
-  border: 1px solid var(--border-strong);
+  border: var(--border-width) solid var(--border-strong);
   background: var(--layer-00);
   color: var(--text-primary);
   font: inherit;
@@ -812,7 +850,7 @@ details[open] > .disclosure-summary::before {
 .select:disabled,
 .text-input:disabled {
   background: transparent;
-  border: 1px dashed var(--border-subtle);
+  border: var(--border-width) dashed var(--border-subtle);
   color: var(--text-secondary);
   opacity: 1;
   cursor: not-allowed;
@@ -839,7 +877,7 @@ details[open] > .disclosure-summary::before {
 .toggletip {
   margin: var(--spacing-03) 0 0;
   padding: var(--spacing-04) var(--spacing-05);
-  border-left: 4px solid var(--border-strong);
+  border-left: var(--rail-width) solid var(--border-strong);
   background: var(--layer-02);
   font-size: var(--type-body-compact);
 }
@@ -890,7 +928,7 @@ details[open] > .disclosure-summary::before {
   gap: var(--spacing-03);
   min-height: var(--target-min);
   padding: var(--spacing-03) var(--spacing-05);
-  border: 1px solid var(--interactive);
+  border: var(--border-width) solid var(--interactive);
   color: var(--interactive);
   font-size: var(--type-body-compact);
 }
@@ -910,8 +948,8 @@ details[open] > .disclosure-summary::before {
 .segment input:focus-visible + .segment-face {
   position: relative;
   z-index: 1;
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--focus);
+  outline-offset: var(--focus-offset);
 }
 
 .segmented:disabled .segment input {
@@ -939,15 +977,16 @@ details[open] > .disclosure-summary::before {
 /* What the closing card looks like, in the brand's own colours: a chip
    wider than it is tall, so it reads as a sample and never as a checkbox
    (VH-112, U-12). It keeps its colour in every state and on every ground.
-   The mat is the one palette tint at 3:1 or more against Nottingham Blue,
-   white and Portland Stone alike, so either chip stays a filled sample on
-   either segment, in either theme — the blue chip on the chosen blue
-   segment read as an empty box with a ring in the text colour. */
+   The chip sits on a white mat with a mid-blue hairline round it, so the
+   blue chip on the chosen blue segment is a blue sample in a white frame
+   rather than a frame with nothing in it (VH-124), and the white chip on
+   stone still has an edge. */
 .swatch {
   flex: none;
   width: var(--spacing-07);
   height: var(--spacing-04);
-  border: 2px solid var(--uon-blue-60);
+  border: var(--border-width-emphasis) solid var(--uon-white);
+  outline: var(--border-width) solid var(--uon-blue-60);
 }
 
 .swatch--blue {
@@ -979,7 +1018,7 @@ details[open] > .disclosure-summary::before {
 .trim-preview {
   display: block;
   width: 100%;
-  max-height: 60vh;
+  max-height: var(--preview-max-height);
   background: var(--uon-brand-bg);
 }
 
@@ -1053,9 +1092,9 @@ details[open] > .disclosure-summary::before {
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    var(--interactive) 0 calc(var(--spacing-04) - 1px),
+    var(--interactive) 0 calc(var(--spacing-04) - var(--border-width)),
     var(--layer-01) var(--spacing-04) calc(var(--spacing-04) + var(--spacing-01)),
-    transparent calc(var(--spacing-04) + var(--spacing-01) + 1px)
+    transparent calc(var(--spacing-04) + var(--spacing-01) + var(--border-width))
   );
   appearance: none;
   pointer-events: auto;
@@ -1069,7 +1108,7 @@ details[open] > .disclosure-summary::before {
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    var(--interactive) 0 calc(var(--spacing-04) - 1px),
+    var(--interactive) 0 calc(var(--spacing-04) - var(--border-width)),
     transparent var(--spacing-04)
   );
   pointer-events: auto;
@@ -1091,20 +1130,20 @@ details[open] > .disclosure-summary::before {
 }
 
 .range-input:focus-visible::-webkit-slider-thumb {
-  outline: 2px solid var(--focus);
-  outline-offset: -2px;
+  outline: var(--focus-width) solid var(--focus);
+  outline-offset: calc(-1 * var(--focus-width));
 }
 
 .range-input:focus-visible::-moz-range-thumb {
-  outline: 2px solid var(--focus);
-  outline-offset: -2px;
+  outline: var(--focus-width) solid var(--focus);
+  outline-offset: calc(-1 * var(--focus-width));
 }
 
 .range-input:disabled::-webkit-slider-thumb {
   cursor: not-allowed;
   background: radial-gradient(
     circle,
-    var(--text-secondary) 0 calc(var(--spacing-04) - 1px),
+    var(--text-secondary) 0 calc(var(--spacing-04) - var(--border-width)),
     transparent var(--spacing-04)
   );
 }
@@ -1116,7 +1155,7 @@ details[open] > .disclosure-summary::before {
   min-width: 0;
   min-height: var(--target-min);
   padding: var(--spacing-03) var(--spacing-04);
-  border: 1px solid var(--border-strong);
+  border: var(--border-width) solid var(--border-strong);
   background: var(--layer-00);
   color: var(--text-primary);
   font: inherit;
@@ -1124,7 +1163,7 @@ details[open] > .disclosure-summary::before {
 }
 
 .text-input[aria-invalid='true'] {
-  border: 2px solid var(--support-error);
+  border: var(--border-width-emphasis) solid var(--support-error);
 }
 
 .control-with-help .text-input {
@@ -1140,50 +1179,15 @@ details[open] > .disclosure-summary::before {
   font-size: var(--type-body-compact);
 }
 
-/* --- Audio-quality warnings (spec 5.4) --- */
-
-.warnings {
-  margin-top: var(--spacing-06);
-  padding: var(--spacing-05);
-  border-left: 4px solid var(--support-warning);
-  background: var(--layer-01);
-}
-
-.warnings-heading {
-  margin: 0 0 var(--spacing-04);
-  font-size: var(--type-heading-compact);
-  font-weight: 600;
-}
-
-.warning-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: var(--spacing-05);
-}
-
-.warning-title {
-  margin: 0;
-  font-weight: 600;
-  font-size: var(--type-body-compact);
-}
-
-.warning-detail {
-  margin: var(--spacing-02) 0 0;
-  font-size: var(--type-body-compact);
-  color: var(--text-secondary);
-}
-
 /* --- Acceptance page (development only) --- */
 
 .log {
   margin: var(--spacing-05) 0 0;
   padding: var(--spacing-05);
-  max-height: 18rem;
+  max-height: var(--log-max-height);
   overflow: auto;
   background: var(--layer-01);
-  border: 1px solid var(--border-subtle);
+  border: var(--border-width) solid var(--border-subtle);
   font-size: var(--type-body-compact);
   white-space: pre-wrap;
 }
@@ -1195,17 +1199,17 @@ details[open] > .disclosure-summary::before {
  * dimming is the brand blue, so it is a token rather than a colour of its own.
  */
 .dialog {
-  width: min(40rem, calc(100vw - 2 * var(--spacing-05)));
+  width: min(var(--dialog-width), calc(100vw - 2 * var(--spacing-05)));
   max-height: calc(100vh - 2 * var(--spacing-05));
   padding: var(--spacing-07);
-  border: 1px solid var(--border-subtle);
+  border: var(--border-width) solid var(--border-subtle);
   background: var(--layer-01);
   color: var(--text-primary);
   overflow: auto;
 }
 
 .dialog::backdrop {
-  background: color-mix(in srgb, var(--uon-brand-blue) 60%, transparent);
+  background: var(--overlay-backdrop);
 }
 
 .dialog h2 {
@@ -1220,9 +1224,9 @@ details[open] > .disclosure-summary::before {
 .textarea {
   display: block;
   width: 100%;
-  min-height: 8rem;
+  min-height: var(--textarea-min-height);
   padding: var(--spacing-04);
-  border: 1px solid var(--border-strong);
+  border: var(--border-width) solid var(--border-strong);
   background: var(--layer-00);
   color: var(--text-primary);
   font: inherit;
@@ -1232,7 +1236,7 @@ details[open] > .disclosure-summary::before {
 /* The error is said in words beside the field, with the border as a second
    signal, never the only one. */
 .textarea[aria-invalid='true'] {
-  border: 2px solid var(--support-error);
+  border: var(--border-width-emphasis) solid var(--support-error);
 }
 
 .field-error {
@@ -1249,7 +1253,7 @@ details[open] > .disclosure-summary::before {
   font-size: var(--type-body-compact);
   white-space: pre-wrap;
   word-break: break-word;
-  max-height: 14rem;
+  max-height: var(--detail-max-height);
   overflow: auto;
 }
 
@@ -1270,6 +1274,28 @@ details[open] > .disclosure-summary::before {
     forced-color-adjust: none;
   }
 
+  /* The header band holds the logo alone, drawn as the University draws it
+     — white on Nottingham Blue — and a theme that paints the band Canvas
+     paints the logo away with it (VH-124). The band keeps its two colours;
+     nothing in it is read or operated. */
+  .band--header {
+    forced-color-adjust: none;
+  }
+
+  /* The one primary action per state keeps its emphasis: the theme's
+     Highlight, as a chosen segment is, where every other button is
+     ButtonFace (VH-124). */
+  .button:not(.button--secondary):not(:disabled) {
+    forced-color-adjust: none;
+    border-color: Highlight;
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  .button:not(.button--secondary):not(:disabled):focus-visible {
+    outline-color: CanvasText;
+  }
+
   .range-track::before {
     background: CanvasText;
   }
@@ -1281,18 +1307,18 @@ details[open] > .disclosure-summary::before {
   .range-input::-webkit-slider-thumb {
     background: radial-gradient(
       circle,
-      Highlight 0 calc(var(--spacing-04) - 1px),
+      Highlight 0 calc(var(--spacing-04) - var(--border-width)),
       Canvas var(--spacing-04) calc(var(--spacing-04) + var(--spacing-01)),
-      transparent calc(var(--spacing-04) + var(--spacing-01) + 1px)
+      transparent calc(var(--spacing-04) + var(--spacing-01) + var(--border-width))
     );
   }
 
   .range-input::-moz-range-thumb {
-    background: radial-gradient(circle, Highlight 0 calc(var(--spacing-04) - 1px), transparent var(--spacing-04));
+    background: radial-gradient(circle, Highlight 0 calc(var(--spacing-04) - var(--border-width)), transparent var(--spacing-04));
   }
 
   .range-input:disabled::-webkit-slider-thumb {
-    background: radial-gradient(circle, GrayText 0 calc(var(--spacing-04) - 1px), transparent var(--spacing-04));
+    background: radial-gradient(circle, GrayText 0 calc(var(--spacing-04) - var(--border-width)), transparent var(--spacing-04));
   }
 
   .range-input:focus-visible::-webkit-slider-thumb,
