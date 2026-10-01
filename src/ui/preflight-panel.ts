@@ -59,11 +59,22 @@ const OUTCOME_HEADING: Record<PreflightOutcome, string> = {
   block: 'This cannot run here',
 }
 
+/**
+ * A phone or tablet's heading leads with the risk, not with "this will work":
+ * the browser there can end the job part-way to free memory, which the body
+ * said under a heading that promised the opposite (VH-113, U-19).
+ */
+const MOBILE_HEADING = 'This may not finish on a phone or tablet'
+
 /** The heading, counted: "one thing to know" over three things was untrue (U-24). */
-function outcomeHeading(outcome: PreflightOutcome, things: number): string {
-  if (outcome !== 'warn' || things <= 1) return OUTCOME_HEADING[outcome]
+function outcomeHeading(verdict: PreflightSummary['verdict']): string {
+  const { outcome, reasons } = verdict
+  if (outcome === 'discourage' && reasons.some((reason) => reason.code === 'mobile-device')) {
+    return MOBILE_HEADING
+  }
+  if (outcome !== 'warn' || reasons.length <= 1) return OUTCOME_HEADING[outcome]
   const words = ['two', 'three', 'four', 'five', 'six']
-  return `Ready, with ${words[things - 2] ?? String(things)} things to know`
+  return `Ready, with ${words[reasons.length - 2] ?? String(reasons.length)} things to know`
 }
 
 /** The recommendation, where the browser is the cause and the user is not already in it. */
@@ -120,7 +131,7 @@ function reasonText(code: PreflightReasonCode, summary: PreflightSummary, contex
     case 'long-job':
       return `This will take about ${estimate === null ? 'a while' : formatApproximateDuration(estimate)}. Keep this tab open while it runs — closing it stops the job.`
     case 'mobile-device':
-      return 'Phones and tablets are much slower at this than a computer, and are more likely to stop part-way. Use a computer if you can.'
+      return 'Phones and tablets are much slower at this than a computer, and the browser there may end the job part-way to free memory. Use a computer if you can.'
     case 'estimate-unavailable':
       return 'We could not work out how long this will take on this device. You can still continue.'
   }
@@ -229,7 +240,7 @@ export function verdictText(summary: PreflightSummary, context: BlockContext = E
     }
   }
 
-  return { heading: outcomeHeading(verdict.outcome, verdict.reasons.length), lines }
+  return { heading: outcomeHeading(verdict), lines }
 }
 
 /** Replaces `container` with the rendered verdict. */

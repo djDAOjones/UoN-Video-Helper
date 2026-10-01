@@ -22,7 +22,12 @@ import {
 import { detectSourceWarnings, type AudioWarning } from '../audio/warnings'
 import { LONGEST_CLOSING_SECONDS, type BrandingChoice } from '../config/branding'
 import { analyseSourceAudio } from '../media/audio-plan'
-import { canEncodeAudio, checkEncodeSupport, inspectCapabilities } from '../media/capability'
+import {
+  canEncodeAudio,
+  checkEncodeSupport,
+  inspectCapabilities,
+  type DeviceClass,
+} from '../media/capability'
 import { measureContentClass } from '../media/content-class'
 import { UnreadableFileError, inspectFile, openInput } from '../media/inspect'
 import {
@@ -79,7 +84,7 @@ self.addEventListener('message', (event: MessageEvent<WorkerRequest>) => {
 
     case 'preflight':
       void running.run(request.id, (signal) =>
-        handlePreflight(request.id, request.file, request.presetId, request.keptRange, signal),
+        handlePreflight(request.id, request.file, request.presetId, request.deviceClass, request.keptRange, signal),
       )
       break
 
@@ -396,6 +401,7 @@ async function handlePreflight(
   id: number,
   file: Blob,
   presetId: PresetId,
+  deviceClass: DeviceClass,
   requestedRange: KeptRange | undefined,
   signal: AbortSignal,
 ): Promise<void> {
@@ -409,7 +415,7 @@ async function handlePreflight(
     // Both tracks, and a silent source asks nothing of the audio decoder.
     // Measured during inspection and, until VH-60, never consulted again.
     const canDecodeSource = report.video.canDecode && (report.audio?.canDecode ?? true)
-    const capability = await inspectCapabilities()
+    const capability = await inspectCapabilities(deviceClass)
 
     // Spec 6.2: the smaller output spends less on slides than on camera, so
     // what the picture is has to be known BEFORE the shape, which the encoder

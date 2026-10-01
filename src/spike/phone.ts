@@ -11,6 +11,7 @@
  * `scripts/run-in-engines.mjs` expects: a `#log` that ends with `done`.
  */
 
+import { detectDeviceClass } from '../media/capability'
 import type { SourceReport } from '../media/inspect'
 import type { PreflightSummary } from '../media/preflight'
 import { verdictText } from '../ui/preflight-panel'
@@ -81,7 +82,10 @@ try {
 
   say('\n=== preflight (best quality)')
   const startedAt = performance.now()
-  const preflighted = await ask({ kind: 'preflight', file, presetId: 'best' }, 120_000)
+  const preflighted = await ask(
+    { kind: 'preflight', file, presetId: 'best', deviceClass: detectDeviceClass() },
+    120_000,
+  )
   const tookMs = Math.round(performance.now() - startedAt)
   let summary: PreflightSummary | null = null
   if (preflighted.kind === 'preflighted') {

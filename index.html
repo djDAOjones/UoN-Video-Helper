@@ -74,7 +74,7 @@
             accept="video/*,.mp4,.mov,.m4v,.mkv,.webm"
             aria-describedby="drop-error"
           />
-          <p class="helper" id="drop-hint">Or drop a video file here.</p>
+          <p class="helper drop-hint" id="drop-hint">Or drop a video file here.</p>
           <p class="field-error drop-error" id="drop-error" role="alert"></p>
         </div>
         <!-- What is happening to the FILE: reading, read, could not be read.
@@ -156,7 +156,9 @@
             </div>
           </div>
         </div>
-        <p class="helper" id="trim-format">Minutes and seconds, like 1:05.5.</p>
+        <!-- Both forms: a phone's decimal keyboard has no colon, and seconds
+             alone is what it can type (VH-113). The parser takes both. -->
+        <p class="helper" id="trim-format">Minutes and seconds, like 1:05.5, or seconds, like 65.5.</p>
         <div aria-live="polite">
           <p class="field-error" id="trim-error" hidden></p>
         </div>

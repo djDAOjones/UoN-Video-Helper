@@ -455,6 +455,15 @@ a {
   margin: 0;
 }
 
+/* No drop hint on a touch screen (VH-113, U-20): a finger cannot drag a
+   file onto a web page, and an invitation to do so is a line to puzzle
+   over. The zone still takes a drop where one can happen. */
+@media (pointer: coarse) {
+  .drop-hint {
+    display: none;
+  }
+}
+
 /* --- Source report --- */
 
 .facts {

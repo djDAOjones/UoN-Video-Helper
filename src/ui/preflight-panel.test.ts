@@ -182,6 +182,16 @@ describe('warn and discourage keep every sentence (VH-89)', () => {
     ])
   })
 
+  it('leads with the risk on a phone or tablet, not with "this will work" (VH-113, U-19)', () => {
+    const { heading, lines } = verdictText(summary('discourage', [['mobile-device', 'discourage']]))
+    expect(heading).toBe('This may not finish on a phone or tablet')
+    expect(lines[0]).toContain('end the job part-way')
+    // A long job on a computer keeps the heading that fits it.
+    expect(verdictText(summary('discourage', [['very-long-job', 'discourage']])).heading).toBe(
+      'This will work, but it will be slow',
+    )
+  })
+
   it('keeps every reason, in order, when there are several', () => {
     const { lines } = verdictText(
       summary('discourage', [

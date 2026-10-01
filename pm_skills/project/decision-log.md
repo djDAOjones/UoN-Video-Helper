@@ -11,6 +11,36 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — VH-113: the phone path, in code
+
+**Decision:** the page decides phone-or-computer once at boot
+(`detectDeviceClass`, main thread) and hands it to the worker in every
+`preflight` request; `inspectCapabilities(deviceClass)` no longer guesses.
+A `discourage` verdict with a mobile reason is headed "This may not finish
+on a phone or tablet" and its sentence says the browser there may end the
+job to free memory; a long job on a computer keeps "This will work, but it
+will be slow". The drop hint is hidden under `(pointer: coarse)`. The time
+helper and the field error name both forms the parser takes — "1:05.5" or
+"65.5" — because a phone's decimal keyboard has no colon; `inputmode`
+stays `decimal`. The download status (`ui/save-text.ts`) names where the
+file lands: the Files app under Downloads on an iPhone or iPad, the
+downloads folder elsewhere.
+
+**Rationale:** U-16 — a worker has no `matchMedia`, so an iPhone (no
+`userAgentData`) read as a desktop and the warning never showed. U-19 —
+"This will work" over "may stop part-way" promised what the body denied.
+U-20 and A-03. Seconds-alone over a text keyboard: the field keeps its
+numeric keyboard, and the helper's examples are the parser's contract,
+pinned in `trim.test.ts`.
+
+**Open:** seen on a real Android phone and an iPhone — backgrounding, the
+wake lock and the return to the tab (spec gap A-03/A-04) — is the
+maintainer's, and VH-113 stays open for it.
+
+**Link:** VH-113; `src/media/capability.ts`, `src/workers/protocol.ts`,
+`src/workers/job.worker.ts`, `src/main.ts`, `src/ui/preflight-panel.ts`,
+`src/ui/trim.ts`, `src/ui/save-text.ts`, `index.html`, `src/styles/app.css`.
+
 ## 2026-10-01 — VH-112: controls look like what they are
 
 **Decision:** a `forced-colors` block opts the trim track, kept part,

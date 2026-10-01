@@ -91,10 +91,11 @@
       surfaces — close those with its evidence where it gets there first.
       VH-105 waits on it.
 
-- [ ] **VH-113 The phone path** (2026-10-01)
-      Next up 2026-10-01: VH-110, VH-123, VH-111 and VH-112 shipped in the
-      session before; this one was not started (the maintainer paused the
-      run). VH-105 skipped at the maintainer's word.
+- [ ] **VH-113 The phone path** [maintainer] (2026-10-01)
+      Code shipped 2026-10-01 (decision-log "VH-113: the phone path, in
+      code"): every code clause of the Done-when is met. What remains is the
+      maintainer's — the walk on a real Android phone and an iPhone, with
+      backgrounding, the wake lock and the return to the tab.
       Intent: U-16, U-19, U-20. On an iPhone or iPad the mobile warning can
       be skipped: without `userAgentData` the worker falls back to
       `matchMedia`, which a worker does not have, and calls it a desktop. The

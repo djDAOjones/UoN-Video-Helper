@@ -15,6 +15,7 @@ import type { FailureCode } from './failure'
 import type { ContentClass, PresetId } from '../config/presets'
 import type { SourceReport } from '../media/inspect'
 import type { KeptRange } from '../media/kept-range'
+import type { DeviceClass } from '../media/capability'
 import type { PreflightSummary } from '../media/preflight'
 import type { AudioWarning } from '../audio/warnings'
 import type { PipelineStage } from '../media/pipeline'
@@ -45,6 +46,12 @@ export type WorkerRequest =
       readonly id: number
       readonly file: Blob
       readonly presetId: PresetId
+      /**
+       * Phone or computer, decided on the main thread: the worker has no
+       * `matchMedia`, so left to itself it called every iPhone a desktop and
+       * skipped the mobile warning (VH-113).
+       */
+      readonly deviceClass: DeviceClass
       /**
        * The part of the file to keep (VH-95). The warnings, the size, the time
        * and the picture class all describe this part. Absent keeps the whole.

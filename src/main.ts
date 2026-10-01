@@ -56,7 +56,7 @@ import {
 } from './config/thresholds'
 import { KEPT_MIN_SECONDS, TRIM_RECHECK_DELAY_MS } from './config/trim'
 import { createWatchdog } from './core/watchdog'
-import { canEncodeAudio, checkEncodeSupport } from './media/capability'
+import { canEncodeAudio, checkEncodeSupport, detectDeviceClass } from './media/capability'
 import type { KeptRange } from './media/kept-range'
 import { saveFile, suggestedFileName } from './media/save'
 import {
@@ -94,6 +94,7 @@ import {
   type ClosingOutcome,
   type JobRecord,
 } from './ui/result-summary'
+import { downloadDestinationFor, downloadStatusText } from './ui/save-text'
 import { renderWarnings } from './ui/warning-text'
 import {
   CAPTURED_ERROR_SENTENCE,
@@ -631,6 +632,14 @@ async function checkBootEncodeSupport(): Promise<{ h264: boolean; aac: boolean }
 
 const bootEncodeSupport = checkBootEncodeSupport()
 
+/**
+ * Phone or computer, decided here and handed to every device check: the
+ * worker has no `matchMedia`, so left to decide for itself it called an
+ * iPhone a desktop and skipped the mobile warning (VH-113, U-16).
+ */
+const deviceClass = detectDeviceClass()
+log.info('boot', 'device class', { deviceClass })
+
 // --- Worker round-trip -----------------------------------------------------
 
 const worker = new Worker(new URL('./workers/job.worker.ts', import.meta.url), {
@@ -976,7 +985,7 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
 
   try {
     const reply = await selectionRequest(
-      { kind: 'preflight', file, presetId: chosenPreset(), ...(keptRange ? { keptRange } : {}) },
+      { kind: 'preflight', file, presetId: chosenPreset(), deviceClass, ...(keptRange ? { keptRange } : {}) },
       SELECTION_DEADLINE_MS.preflight,
     )
     // A verdict about a file or preset the user has since changed must not
@@ -2184,10 +2193,9 @@ function renderResult(kept: RetainedResult): HTMLElement {
             },
           }
           // A hand-off, not a completed write (spec 9.1 step 5): the browser
-          // may still be fetching it. What next is said for this route too.
-          setStatus(
-            'Saving to your downloads — the browser may still be finishing it. Once it is there, upload it where it is going, or choose another video in step 1. The video stays here until you start another one.',
-          )
+          // may still be fetching it. Where it lands, and what next, are said
+          // for this route too (VH-113).
+          setStatus(downloadStatusText(downloadDestinationFor(navigator.userAgent)))
           return
         }
         // A completed write, and what next (U-25, spec 9.1 step 5).

@@ -48,6 +48,13 @@ describe('times in the fields', () => {
     },
   )
 
+  it('accepts both examples the helper gives, as typed (VH-113)', () => {
+    // The helper's examples are the parser's contract: a phone's decimal
+    // keyboard can type the second, not the first.
+    expect(parseTrimTime('1:05.5')).toBeCloseTo(65.5, 9)
+    expect(parseTrimTime('65.5')).toBeCloseTo(65.5, 9)
+  })
+
   it('reads back what it shows', () => {
     for (const seconds of [0, 12.3, 59.9, 61, 3599.9, 3600]) {
       expect(parseTrimTime(formatTrimTime(seconds))).toBeCloseTo(seconds, 6)
@@ -62,7 +69,7 @@ describe('a typed time for one end', () => {
 
   it('refuses what is not a time', () => {
     expect(trimFieldValue('abc', 'start', 130)).toEqual({
-      problem: 'Write the start time as minutes and seconds, like 1:05.5.',
+      problem: 'Write the start time as minutes and seconds, like 1:05.5, or as seconds, like 65.5.',
     })
   })
 

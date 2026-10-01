@@ -59,7 +59,9 @@ export function trimFieldValue(
 ): { readonly seconds: number } | { readonly problem: string } {
   const seconds = parseTrimTime(text)
   if (seconds === null) {
-    return { problem: `Write the ${which} time as minutes and seconds, like 1:05.5.` }
+    // Both forms, because a phone's decimal keyboard has no colon (VH-113,
+    // U-20): seconds alone is what it can type, and the parser takes it.
+    return { problem: `Write the ${which} time as minutes and seconds, like 1:05.5, or as seconds, like 65.5.` }
   }
   if (seconds <= durationSeconds) return { seconds }
   // The one exception: the end exactly as the fields show it, rounded to a

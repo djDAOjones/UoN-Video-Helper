@@ -29,7 +29,7 @@ export interface CapabilityReport {
   readonly hasWebCodecs: boolean
   readonly hasOpfs: boolean
   readonly isSecureContext: boolean
-  readonly deviceClass: 'desktop' | 'mobile'
+  readonly deviceClass: DeviceClass
   readonly hardwareConcurrency: number | null
   readonly storage: StorageReport
 }
@@ -52,16 +52,24 @@ export function hasOpfs(): boolean {
   return typeof navigator !== 'undefined' && typeof navigator.storage?.getDirectory === 'function'
 }
 
+/** A phone or tablet, or a computer. Decided once, on the main thread. */
+export type DeviceClass = 'desktop' | 'mobile'
+
 /**
- * Whether this is a phone or tablet.
+ * Whether this is a phone or tablet. **Main thread only.**
  *
  * Spec section 7.3 discourages rather than blocks on mobile, and section 9.4
  * requires the app stay usable there — so a wrong answer costs a needless
  * warning, not a broken app. `userAgentData.mobile` is the honest signal where
  * it exists; the fallback pairs a coarse pointer with a touch screen, which
  * avoids classifying a touchscreen laptop as a phone.
+ *
+ * The fallback needs `matchMedia`, which a worker does not have — so called
+ * from the worker, an iPhone or iPad (no `userAgentData`) read as a desktop
+ * and the mobile warning was never shown (VH-113, U-16). The page decides and
+ * hands the answer to the worker with the pre-flight request.
  */
-export function detectDeviceClass(): 'desktop' | 'mobile' {
+export function detectDeviceClass(): DeviceClass {
   const data = (navigator as Navigator & { userAgentData?: UserAgentDataLike }).userAgentData
   if (typeof data?.mobile === 'boolean') return data.mobile ? 'mobile' : 'desktop'
 
@@ -166,14 +174,19 @@ export async function checkStorage(): Promise<StorageReport> {
   }
 }
 
-/** Everything that can be known before touching the user's file. */
-export async function inspectCapabilities(): Promise<CapabilityReport> {
+/**
+ * Everything that can be known before touching the user's file.
+ *
+ * @param deviceClass - Decided by the page with {@link detectDeviceClass};
+ *   the worker cannot tell (VH-113).
+ */
+export async function inspectCapabilities(deviceClass: DeviceClass): Promise<CapabilityReport> {
   const storage = await checkStorage()
   const report: CapabilityReport = {
     hasWebCodecs: hasWebCodecs(),
     hasOpfs: hasOpfs(),
     isSecureContext: typeof isSecureContext === 'boolean' ? isSecureContext : false,
-    deviceClass: detectDeviceClass(),
+    deviceClass,
     hardwareConcurrency: navigator.hardwareConcurrency ?? null,
     storage,
   }
