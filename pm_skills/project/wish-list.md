@@ -32,39 +32,16 @@
 - Branding assets are fetched at runtime with no caching. Spec §11 wants them
   cached for offline-after-first-load. Belongs with the deploy decision (D5)
   but the caching itself is app-level. (from: VH-8)
-- The time estimate does not include the audio chain or branding conform, so it
-  under-reports. Revisit the extrapolation. (from: VH-5)
 - Every branding frame is redrawn through a canvas to get brand-colour padding.
   Fine at 1080p; at 4K that is 150 canvas compositions per sequence. Worth
   measuring before the real 4K masters land. (from: VH-8)
 - Progress is emitted every 30 frames, which is invisible on short jobs.
   Revisit if the UI feels dead on short ones. (from: VH-6)
-- Two audio hot loops have a cheap win each: `detectSourceWarnings` sorts the
-  full short-term curve twice where one sort would do, and the true-peak
-  window shifts 13 elements per sample where a ring buffer would not. Neither
-  is a bottleneck. (from: 2026-08-25 external review)
 - Spec §6.3 and §6.5 carry corpus evidence inline, though the spec's header
   points at `02-technical-rationale.md` as where evidence lives. Moving it
   would clear the reference guideline without losing a sentence. Needs a
   doc-delta. (from: 2026-08-25 spec copy-edit)
-- Finish scripting the Xerte package: `npm run build:xerte` makes the flat
-  build, but `README-HOSTING.txt` and the zip named for its build id are still
-  by hand. The recipe is in DEV-INFRASTRUCTURE.md -> "Xerte package".
-  (from: VH-14)
-- The audio analysis stage is far slower than the docs say. Measured
-  2026-09-30 on this MacBook: 9.2 s per traversal of a 620 s programme, five
-  traversals per job — about four and a half minutes of "Analysing audio" for
-  an hour-long lecture. `config/audio.ts` and `audio-plan.ts` both still say
-  "3.6 s for an hour". The 4x oversampled true-peak work in the analyser and
-  the limiter is the likely cost; profile before choosing a fix. (from: VH-83)
 - `BEST_SOURCE_BLEND` (0.5) is the one number in VH-47's bitrate rule with no
   measurement behind it. Settling it is a VIDEO experiment — encode the probe
   sample at a spread of multiples and score each — and was parked on VH-83 by
   mistake. (from: VH-83)
-- Give every spike page one machine-readable closing verdict (`ALL PASS` /
-  `N FAILURE(S)`, errors counted) and have `run-in-engines.mjs` read only
-  that line. Today it reads verdict words in prose, which a contrived source
-  file name can fool into a false failure. (from: VH-26 review)
-- Drag-and-drop onto the page to choose a video. Spec §9.1 step 1 has always
-  asked for it and it was never built or decided; the doc-sync kept it in the
-  spec. (from: doc-sync 2026-10-01)

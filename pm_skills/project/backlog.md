@@ -24,6 +24,66 @@
      Both sets were re-verified against source before banding, and where a
      review's own remedy was shown unsafe the item says so. -->
 
+### Band 5 — The overnight run
+
+<!-- Promoted from the wish-list by the maintainer on 2026-10-01, for the
+     gateless run that starts at 02:02, and to be taken in this order. Agent
+     work, unblocked. Listed first because it is the only agent work in
+     Active that is free to start: Band 3 waits on the maintainer, and
+     Band 4's VH-97 is [sign-off] with "not built" as its default. -->
+
+- [ ] **VH-99 Make the audio analysis as fast as the docs say** (2026-10-01)
+      Intent: measured 2026-09-30 on this MacBook, one traversal of a 620 s
+      programme takes 9.2 s and a job makes five — about four and a half
+      minutes of "Analysing audio" for an hour-long lecture, where
+      `config/audio.ts` and `audio-plan.ts` both say 3.6 s an hour. Profile
+      before choosing a fix; the 4x oversampled true-peak work in the
+      analyser and the limiter is the likely cost. Two cheap wins ride along:
+      `detectSourceWarnings` sorts the full short-term curve twice where one
+      sort would do, and the true-peak window shifts 13 elements per sample
+      where a ring buffer would not.
+      Done when: a profile names where the time goes; the fix lands with
+      before/after timings on a real lecture; the comments quote measured
+      figures; the EBU Tech 3341 harness passes unchanged (`truepeak.ts` is
+      protected, so it re-runs in the same task) and delivered loudness on
+      the corpus lectures is unchanged.
+- [ ] **VH-100 A time estimate that counts every stage** (2026-10-01)
+      Intent: the pre-flight estimate extrapolates the probe's decode and
+      encode, and leaves out the audio chain and the branding conform, so it
+      under-reports (from VH-5). VH-99 makes the analysis share a measured
+      figure rather than a guess.
+      Done when: the estimate includes the audio passes and the branding, a
+      test pins each stage's share, and the estimate and the measured job
+      time are recorded side by side on at least two real recordings.
+- [ ] **VH-101 Drop a video onto the page** (2026-10-01)
+      Intent: spec §9.1 step 1 has always asked for "file picker or
+      drag-and-drop", and only the picker was built. The 2026-10-01 doc-sync
+      kept it in the spec.
+      Done when: a video dropped on the Choose step is read exactly as a
+      chosen one is (same path, same reset of Trim and the verdict); the file
+      input stays the primary, keyboard route; the target follows Carbon's
+      file-uploader drop zone, with AAA contrast and a visible drag-over
+      state; a non-video or several files are refused in words; a file
+      dropped anywhere else never navigates the page away, above all during
+      a job; nothing is uploaded; verified in Chrome.
+- [ ] **VH-102 One verdict line per spike page** (2026-10-01)
+      Intent: `run-in-engines.mjs` reads verdict words in prose, which a
+      contrived source file name can fool into a false failure (VH-26
+      review). Give every spike page one machine-readable closing line —
+      `ALL PASS` or `N FAILURE(S)`, errors counted — and have the runner read
+      only that.
+      Done when: all eleven spike pages emit the line; the runner exits 1 on
+      a failure line and on a page that ends without one; a source named
+      "lecture FAIL — retake.mp4" passes; `DEV-INFRASTRUCTURE.md` →
+      "Cross-engine verification" says what the line is.
+- [ ] **VH-103 Script the rest of the Xerte package** (2026-10-01)
+      Intent: `npm run build:xerte` makes the flat build, but
+      `README-HOSTING.txt` and the zip named for its build id are still made
+      by hand. The recipe is in `DEV-INFRASTRUCTURE.md` → "Xerte package".
+      Done when: one command produces the zip, named for the build id,
+      holding the flat build and `README-HOSTING.txt`; `check:build` still
+      never writes `dist/`; no new dependency without asking.
+
 ### Band 3 — Blocked on the maintainer
 
 <!-- Agent work that cannot start until something arrives from outside the
