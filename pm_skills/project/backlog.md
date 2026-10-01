@@ -50,49 +50,6 @@
       Note: it also means most jobs should be taking "Best quality", which is
       already the default and already what §6.1 names for EchoVideo.
 
-### Band 4 — The interface pass
-
-<!-- Maintainer request, 2026-09-30: one list of interface changes, split so
-     each item ships alone. Agent work, unblocked except where flagged. The
-     ORDER is proposed, not committed — as is whether the band runs ahead of
-     Band 2's VH-83: the defect first; then words and disclosures, which
-     disturb no structure; then the closing controls; then the layout they sit
-     in; then the restyle, once, over the finished structure; then the two
-     capabilities. VH-83 shipped 2026-09-30, so VH-95 now has
-     `planAudio` to itself.
-     Four items reverse a recorded decision at the maintainer's word, and each
-     names it so the older entry is not read as binding: VH-86 (spec §8's
-     sidecar), VH-89 (VH-31), VH-90 (VH-46b), VH-30 (the identity's "no
-     trimming").
-     Four have prior art on tag `archive/repository-review-implementation`,
-     left behind on 2026-08-27 with the conveyor UI it arrived in: VH-94,
-     VH-88, VH-97 and VH-78. Recover with `git show <tag>:<path>`; do not
-     redesign.
-     "Open:" is a question for the maintainer with a working default — the
-     default is what gets built if nobody answers. -->
-
-- [ ] **VH-97 Fold the finished stages** [detail](tickets/VH-97.md)
-      (2026-09-30) [sign-off]
-      Intent: the expanding and contracting the request floated, done where it
-      is safe — between STAGES, not between choices. Choose, set up, create,
-      save: one open at a time, a finished one folding to a line that says
-      what was chosen. It advances only on something the user did or is
-      waiting for — a video read, Create pressed, the job finished — never on
-      a changed control.
-      Prior art: the archived branch built and tested exactly this
-      (`src/ui/workflow.ts`, `focusNextWorkflowControl`); VH-32 declined it on
-      2026-08-27 in favour of the single screen. VH-91 shipped the panels it
-      would fold, 2026-09-30.
-      Open: whether it is wanted at all. Default: not built. Trim shipped
-      2026-10-01, so the page is five panels now; decide after using it.
-      VH-104's evidence (2026-10-01, the review's "VH-97" section): keep the
-      default. Length is not where the page fails; time is — verdicts,
-      questions and focus outliving their moment. Revisit after VH-107,
-      VH-108 and VH-111 and a pilot session (VH-M4).
-      Done when: signed off; then focus lands on the next control at every
-      transition, each is announced, every folded stage can be reopened, and
-      nothing folds while it shows an error.
-
 ### Band 6 — Review, then translate
 
 <!-- Maintainer request, 2026-10-01. Agent work. VH-104's review shipped the
@@ -101,7 +58,13 @@
      restating the evidence here. Ordered: the defect first; then the two
      rank-1 result problems; then what the page says, does and announces over
      time; then controls, the phone path and the words; then VH-105
-     translates the settled copy, so nothing is translated twice. -->
+     translates the settled copy, so nothing is translated twice.
+     Ready to pick up from VH-106, in order (2026-10-01): the spec gap review
+     (`reviews/2026-10-01/spec-ux-accessibility-gaps-2026-10-01.md`) added a
+     clause to each item's "Done when", the maintainer signed off every spec
+     correction and the spec now carries them (doc-sync 2026-10-01), so each
+     item builds to the spec as written. Band 4 closed with VH-97's sign-off
+     as not built (Icebox). -->
 
 - [ ] **VH-106 The Teams recording misses −16 LUFS** (2026-10-01)
       Intent: U-01, rank 1. The 29-minute Teams recording in `samples/` — the
@@ -271,7 +234,6 @@
       captions; the Trim step says the preview plays the original.
 
 - [ ] **VH-105 The page in Chinese and Bahasa Malaysia** (2026-10-01)
-      [sign-off]
       Intent: staff at the Ningbo and Malaysia campuses use the same tool.
       Offer the page in Simplified Chinese (zh-Hans, read at both) and Bahasa
       Malaysia (ms-MY) beside English, chosen on the page — the request floats
@@ -288,11 +250,11 @@
       maintainer sources. `--font-body` and `--font-heading` carry no CJK
       glyphs, so Chinese falls back to whatever the OS picks until a token
       names one. Longer Malay and denser Chinese both test phone width.
-      Open: the form of the switch. Carbon's Tabs separate different content;
-      the same content in another form is its content switcher. Default: a
-      content switcher at the top of the page, each option labelled in its own
-      language and script.
-      Done when: signed off; then a test fails if any table lacks a key
+      Signed off 2026-10-01: a content switcher at the top of the page, each
+      option labelled in its own language and script (Carbon's Tabs separate
+      different content; the same content in another form is its content
+      switcher). The native-speaking reviewers are the maintainer's to source.
+      Done when: a test fails if any table lacks a key
       English has; switching re-renders the page and its `lang` without
       losing the video, the trim or a running job; the choice is remembered
       per browser and nothing about it leaves the device; each language is
@@ -418,6 +380,16 @@
 <!-- Post-triage. Deferred deliberately; each has a revisit trigger in
      docs/03-open-decisions.md. -->
 
+- [ ] **VH-97 Fold the finished stages** [detail](tickets/VH-97.md)
+      (2026-09-30)
+      Intent: choose, set up, create, save — one stage open at a time, a
+      finished one folding to a line that says what was chosen, advancing only
+      on something the user did or is waiting for. Prior art on the archive
+      tag (`src/ui/workflow.ts`); VH-32 declined it for the single screen.
+      Signed off 2026-10-01 as **not built**: VH-104 found the page fails in
+      time, not length, and folding would hide that. Revisit after VH-107,
+      VH-108 and VH-111 and the pilot session (VH-M4), if staff are seen
+      hunting for Create or Save.
 - [ ] **D9 Pumping detection on pre-existing audio** — unreliable to
       measure; a false accusation is worse than silence. Revisit if staff
       report a gap the current warnings miss.

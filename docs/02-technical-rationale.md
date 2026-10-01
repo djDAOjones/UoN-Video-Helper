@@ -242,6 +242,36 @@ silently (D10, answered no). Trimming adds a reason: a copied stream can
 begin only on a keyframe, where a re-encoded one begins on the frame asked
 for.
 
+### 4.4 What the corpus showed about frame rate
+
+Measured 2026-08-27 and after, and the reason spec §6.3's two rules read as
+they do. Three corpus files declare `30/1` while actually running
+PowerPoint's 1000/33 = 30.303 fps, and a Mac export declares `600/1` — its
+timebase, not a rate at all. Conforming from the header would drift roughly
+a second over a 96-second file, which is why the rate is taken from packet
+timestamps. Teams records a rock-solid 16.000 fps, and snapping that to the
+nearest standard value, 24, duplicates half the frames for no visible
+benefit — which is why the nearest-standard rule is withdrawn below 24. And
+no file in the corpus classifies as variable frame rate: *odd but stable* —
+16.000 and 30.303 — is the real pattern, and it is precisely what a
+nearest-standard-value rule handles worst.
+
+### 4.5 Colour and HDR: measured, not handled
+
+VH-26 said from 2026-08-25 that phone HDR would come out "silently washed out
+or crushed", because the pipeline has no colour-space or tone-map handling.
+Measured on 2026-08-27, it does not. Five phone recordings were taken — HLG
+1080p, Dolby Vision 4K60, an 8-bit 4K30 pair and a legacy 3GP — and
+classified with `ffprobe` rather than by name, which mattered: two published
+as "SDR" and "HDR" were both plain 8-bit bt709. One frame from each of the
+two genuinely HDR files, source against output, read through a `<video>`
+element so the numbers describe what a viewer sees: the HLG file reads mean
+110 / p05 5 / p50 109 / p95 219 at source and 110 / 5 / 108 / 219 out; the
+Dolby Vision file 130 / 11 / 137 / 233 in and 131 / 13 / 139 / 233 out.
+Within two units everywhere. Chrome tone-maps HLG to SDR as it decodes, and
+the pipeline encodes what it is handed — correct by inheritance, which spec
+§6.5 now says, and worth re-measuring before any other engine is certified.
+
 ## 5. Why calibrate instead of setting a fixed limit
 
 The brief proposed ~1 hour and ~4 GB, flagged as arbitrary — which they

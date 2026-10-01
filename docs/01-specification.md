@@ -343,23 +343,21 @@ destination re-encodes.
 
 Output is always conformed to **constant frame rate**, which is what ensures
 MP4 compatibility, correct A/V sync and a clean branding conform. Two rules
-govern the rate it is conformed *to*, and the real corpus revised both.
+govern the rate it is conformed *to*, and the real corpus revised both — the
+measurements are in rationale §4.4.
 
-**Measure the rate; never trust the declared one.** Three corpus files
-declare `30/1` while actually running PowerPoint's 1000/33 = 30.303 fps, and
-a Mac export declares `600/1` — its timebase, not a rate at all. Conforming
-from the header would drift roughly a second over a 96-second file, so the
-rate is taken from packet timestamps.
+**Measure the rate; never trust the declared one.** The rate is taken from
+packet timestamps; the corpus's declared rates are wrong by enough to matter
+(rationale §4.4).
 
 **Do not round upward.** The original rule — nearest standard value from
-24/25/30/50/60 — is withdrawn below the lowest standard value: Teams records
-a rock-solid 16.000 fps, and snapping that to 24 duplicates half the frames
-for no visible benefit. Such a source is conformed to its own measured rate.
+24/25/30/50/60 — is withdrawn below the lowest standard value: a stable rate
+under 24 fps is conformed to its own measured rate, since snapping it up
+duplicates frames for no visible benefit.
 
-The corpus also retires this specification's assumption that screen and
-meeting recordings are "frequently variable frame rate": no file in it
-classifies as variable. *Odd but stable* — 16.000 and 30.303 — is the real
-pattern, and it is precisely what a nearest-standard-value rule handles worst.
+Variable frame rate, which this specification once assumed common in screen
+and meeting recordings, does not occur in the corpus; *odd but stable* is the
+real pattern (rationale §4.4).
 
 ### 6.4 WebM
 
@@ -369,20 +367,22 @@ which satisfies the brief's intent without carrying the cost now.
 
 ### 6.5 Colour and dynamic range
 
-**Not specified, and currently undefined behaviour.** The pipeline carries no
-colour-space, transfer-characteristic or tone-map handling: a decoded frame is
-drawn through a canvas and encoded as 8-bit SDR H.264 with no profile
-requested. Whatever conversion happens in between is the browser's, and is
-neither chosen here nor tested.
+**Inherited from the browser, and measured.** The pipeline applies no
+colour-space, transfer-characteristic or tone-map handling of its own: a
+decoded frame is drawn through a canvas and encoded as 8-bit SDR H.264 (High
+profile). Any conversion between the two is the browser's.
 
-That is safe for the corpus, which is entirely SDR screen and camera capture.
-It is not safe for phone footage: every iPhone since the 12 records HDR 10-bit
-by default, as do recent Android flagships. The outcomes range from a
-reasonable automatic tone-map to a washed-out or highlight-crushed picture
-depending on the engine — and the file always plays, so nothing surfaces as an
-error. A silently wrong picture is the worst available failure mode.
-
-A decided and tested behaviour is required before phone sources are supported.
+For the corpus, which is SDR screen and camera capture, no tone-mapping is
+needed. For phone footage — every iPhone since the 12 records HDR 10-bit by
+default, as do recent Android flagships — the feared failure did not
+reproduce in Chrome: on the HDR samples tested, the browser tone-mapped as it
+decoded and the output matched the source (VH-26, 2026-08-27; the samples,
+the measure and its limits are in rationale §4.5). Phone sources therefore
+run in Chrome, with the per-file decode check still standing. The behaviour
+is correct by inheritance rather than by design, which is worth knowing: an
+engine that does not tone-map would produce a washed-out or crushed picture
+that still plays, the worst available failure, and the measurement is
+repeated before another engine is certified.
 
 ## 7. Limits and device pre-flight
 
@@ -402,6 +402,13 @@ Together these are a real time estimate, which directly satisfies the brief's
 requirement to "assess the selected file and the user's device before
 processing begins."
 
+A change to the trim re-runs the check over the newly kept part, because the
+§5.4 warnings and the sound's presence follow from it. The re-check shows
+progress and can be cancelled like the first. Its cost grows with the kept
+audio; the bound on what it repeats is set from a timing on the longest
+corpus recording, which has not yet been taken — until it is, this sentence
+records the requirement and not the figure.
+
 ### 7.2 Pre-flight checks
 
 - WebCodecs availability and H.264 encode support (`isConfigSupported`)
@@ -417,8 +424,8 @@ processing begins."
 | Outcome | Condition | Behaviour |
 | --- | --- | --- |
 | **Proceed** | Estimate < 20 min, checks pass | Start, show estimate |
-| **Warn** | Estimate 20–60 min | Show estimate and a keep-this-tab-open notice; allow continue |
-| **Block** | The browser lacks WebCodecs, H.264 encode, AAC encode (for a video with sound), a decoder for the source, or working storage; or there is not enough storage | Explain; where the browser is the cause, name Chrome as the one that will work |
+| **Warn** | Estimate 20–60 min | Show the estimate with its weight; allow continue (the keep-alive rule in §7.5 applies to every job) |
+| **Block** | The browser lacks WebCodecs, H.264 encode, AAC encode (for a video with sound), a decoder for the source, or working storage; or there is not enough storage | Explain, with the recovery that fits the cause. Where the browser is the cause, recommend Chrome on a computer — a recommendation, not a guarantee — and say something else when the user is already in Chrome or cannot change browser |
 | **Discourage** | Estimate > 60 min, or phone/tablet | Recommend a desktop; allow continue after acknowledgement |
 
 ### 7.4 Validated envelope for v1
@@ -430,8 +437,19 @@ from assumption.**
 
 ### 7.5 Keeping the job alive
 
-- Request a **Screen Wake Lock** during processing
-- Register a `beforeunload` warning while a job is running
+- Request a **Screen Wake Lock** during processing and while a save
+  streams. The browser releases it whenever the tab is hidden and may refuse
+  it, so it is re-acquired when the tab is shown again and never relied on.
+- Say so, once, at the start of every job: keep this tab visible and the
+  computer awake, and closing the tab ends the job. The notice is not tied to
+  the estimate — a five-minute job dies with its tab as surely as a
+  fifty-minute one.
+- Register a `beforeunload` warning while a job is running, while a save
+  streams, and while a finished video is unsaved.
+- A finished, unsaved video is not kept past the tab, and the page says so
+  before Create and beside the result (§9.1 step 5). The leave warning
+  catches a reload; it cannot catch a crash, a discarded tab or a forced
+  restart, which is why the sentence is there.
 - Run all processing in a Web Worker so the UI stays responsive
 
 ## 8. Subtitles, captions and metadata
@@ -455,8 +473,9 @@ alike.*
 
 **In v1 the rule has nothing to apply to.** No opening is inserted (§4.1),
 an embedded caption track cannot be read, and no caption file is taken
-(§8.3), so no caption reaches the output. The rule binds whichever of those
-returns first.
+(§8.3), so no separate caption track reaches the output. The rule binds
+whichever of those returns first. Captions already drawn into the picture are
+picture content: they survive, trimmed and overlaid like the rest of it.
 
 ### 8.2 Practical priority
 
@@ -475,7 +494,12 @@ source file. Embedded subtitle tracks will be rare.
    user already had, and EchoVideo writes its own captions after upload
    (§8.2).
 3. **Warn clearly before processing** when an embedded caption or chapter
-   track is detected, since it will not be carried through.
+   track is detected, since it will not be carried through — and say what
+   follows: the new file carries no separate caption track, so its
+   destination must supply captions (EchoVideo writes its own after upload,
+   which still want checking; a file sent directly has no separate caption
+   track unless the user adds one), and any other dropped track may have
+   held an alternative.
 4. Preserve language tags, track labels and creation metadata where the
    muxer supports them.
 
@@ -485,8 +509,8 @@ preservable, export a sidecar where not — had no reachable branch: there is
 nothing to re-embed, and nothing to export. Reading their samples would need a
 bespoke MP4 box walker for `tx3g` / `wvtt` / `stpp`, which §8.2's rarity
 finding does not justify. Detection is enough to tell the user honestly, and
-with no caption file taken either (step 2), nothing caption-shaped passes
-through v1.
+with no caption file taken either (step 2), no separate caption track passes
+through v1 — captions drawn into the picture do (§8.1).
 
 ## 9. User experience
 
@@ -504,7 +528,8 @@ clean-cut blue closing and the larger file.
    an end handle on one track, "Start time" and "End time" fields, and
    "Set start here" / "Set end here" to take the preview's position. Left
    alone, the whole video is kept, and "Use the whole video" puts it back.
-   The part kept must be at least 3 s.
+   The part kept must be at least 3 s. The preview plays the original — the
+   sound not yet levelled, the closing not yet added — and the step says so.
 3. **Closing branding** — animation type, onset and colour (§4.3).
 4. **File size / quality** — "Larger / better" or "Smaller / reduced"
    (§6).
@@ -513,23 +538,94 @@ clean-cut blue closing and the larger file.
    audio-quality warnings (§5.4); then "Create the video", with named
    progress and a cancel button, and "Save the video" when it is done.
 
+   The finished video carries a one-line summary of its job — file, part
+   kept, output, closing as requested and as applied — fixed when the job
+   ends and never relabelled by the controls for the next one; the question
+   asked before it is discarded carries the same summary. It is not kept
+   past the tab, and the page says so before Create and beside the result;
+   it is kept until it is saved or discarded, and choosing another file
+   resets the trim to the whole video, says so, and leaves the result
+   alone. Starting again with it unsaved asks first — and a download handed
+   to the browser is not yet a save for that purpose.
+
+   After a save the page says only what it knows: the chosen location, or
+   the browser's downloads (Files → Downloads on an iPhone) — a completed
+   write distinguished from a download handed to the browser, which may
+   still be finishing — and what next: check the file, upload it, or choose
+   another video in step 1.
+
 ### 9.2 Principles
 
 - No codec, bitrate, or loudness setting is exposed. Not in an "advanced"
   panel either — every exposed control is a decision a novice must make.
-- Plain language throughout. Named stages ("Analysing audio", "Adding
-  branding", "Encoding video — 34%") rather than a single opaque bar.
+- Plain language throughout, at a lower-secondary reading level (WCAG
+  3.1.5), checked in the quality gate over every string the page can show.
+  Every term of art the page keeps and every abbreviation it uses has an
+  in-place meaning, bar the exceptions §9.3 names one by one; where a fixed
+  label fails the level, simpler supporting text sits beside it. Named stages ("Analysing audio", "Adding branding",
+  "Encoding video") rather than a single opaque bar.
 - Every error states what happened, whether the original file is affected
-  (it never is), and what to do next.
+  (it never is), and what to do next — and sits where it belongs: an input
+  error beside the control it concerns, and tied to it; a job or device
+  failure in the step it affects, with its recovery.
 - Persistent reassurance that the source file is never modified and never
   leaves the device.
 - Cancel is always available and leaves no partial file.
+- Help and feedback in one place on every state, blocked and running
+  included. Feedback is prepared as an email the user sends from their own
+  email app, seeing every word first; the details the app adds are named
+  facts about the app and the job, never the media or its name, while the
+  user's own message goes as written. A copy route stands in when email
+  cannot. The page promises only the response the maintainer will honour.
 
 ### 9.3 Accessibility
 
-WCAG 2.2 AA minimum, AAA where achievable. Full keyboard operation,
-visible focus, screen-reader-announced progress via a polite live region,
-no colour-only status indication.
+**WCAG 2.2 AAA by default** (D6). Every applicable criterion is required;
+each exception is recorded here with the criterion, the reason, the user
+impact, the mitigation and the maintainer's decision, and an accepted
+exception is a recorded limitation, never a passed criterion. The measurable
+commitments, checked in the gate where a test can reach them and in §13's
+walk where only a person can:
+
+- Contrast 7:1 for text and 3:1 for interface components and meaningful
+  graphics, in light, dark and forced colours; no colour-only meaning.
+- Pointer targets 44 × 44 CSS px; a focus indicator meeting 2.4.13's area
+  and change of contrast on every control; nothing sticky to obscure it.
+- Full keyboard operation with no exception; no drag-only route.
+- Text enlargement to 200% without horizontal scrolling and, separately,
+  reflow at 320 CSS px; text spacing overrides survive; running text no
+  wider than 80 characters (40 glyphs for CJK); line spacing 1.5 and
+  paragraph spacing 1.5× that; no justification; the user's own foreground
+  and background colours not overridden; reduced motion honoured.
+- A lower-secondary reading level, and a meaning for every kept term (§9.2).
+- Page and part language declared, and changed when the page is (VH-105).
+- A live region announces what the user did not cause or cannot see —
+  stage changes, outcomes, validation, consequential status — never a
+  control's own result on the keystroke that produced it, which is read on
+  demand. Routine progress announcements can be postponed by the user
+  (2.2.4); if that control cannot be made plain enough for a novice, stage
+  changes and the outcome alone are announced and that reading is recorded
+  below as the exception.
+- Focus is handed on, never taken: a control that removes or disables
+  itself names its successor; a job's end moves focus only if the job
+  displaced it.
+
+Exemptions WCAG itself grants, noted so they are not mistaken for
+exceptions: the native `<video>` controls are the user agent's (2.5.5); the
+logo is a logotype (1.4.9).
+
+Exceptions recorded:
+
+- **The preview's content** (1.2.1–1.2.8, 2.3.1–2.3.2). *Reason:* it is the
+  user's own recording, outside the page's control. *Impact:* its captions,
+  descriptions and flash safety are whatever the recording has; a statement
+  of partial conformance for third-party content acknowledges that
+  non-conformance rather than excusing it. *Mitigation:* nothing autoplays,
+  and the controls are the user agent's; any media the app itself supplied
+  would need alternatives of its own. *Decision:* accepted, maintainer,
+  2026-10-01.
+- **Format identifiers** (3.1.4): none accepted yet. Each left unexpanded
+  after being considered is added here by name, with the same four fields.
 
 ### 9.4 Mobile
 
@@ -539,14 +635,23 @@ Responsive and fully readable on phones and tablets. Processing is
 ## 10. Browser support
 
 **The app is designed and built for Chrome, and says so** before anything is
-chosen: "This app is designed and built for Chrome, other browsers may not
-work." That is the maintainer's choice over certifying the others (VH-98,
-2026-09-30).
+chosen — and says what the load-time support check found, so a browser that
+has passed is not turned away (VH-98, 2026-09-30; revised 2026-10-01,
+VH-121). One sentence in three forms: "This app is designed and built for
+Chrome, other browsers may not work" until the checks land; "…and this
+browser has passed the checks for it" when every check passes; "…and this
+browser has not passed all of its checks. The system check at the foot of
+the page says what is missing" otherwise. The load-time check asks for a
+secure context, WebCodecs, the H.264 encoder at a 1080p25 "Larger / better"
+configuration, the AAC encoder in stereo and mono, the presence of the
+private storage API (whether it can be written, and how much, is pre-flight's
+question) and the worker; a refused AAC encoder is a warning rather than a block, since a
+silent video still runs, and the sentence treats it as not passed.
 
 | Browser | Status |
 | --- | --- |
 | Chrome (desktop) | Supported — the browser the app is built and checked in |
-| Edge (desktop), Safari (macOS/iOS) 26+ | Not certified. Not refused: runs if the support check passes |
+| Edge (desktop), Safari (macOS/iOS) 26+ | Not certified. Not refused: runs if the support check passes, and the page says so when it does |
 | Firefox (desktop) | Refused for any video with sound — it cannot create AAC audio (VH-49). A silent video runs |
 | Safari below 26 | Not supported — clear message |
 | Firefox on Android | Not supported — WebCodecs not exposed |
@@ -554,13 +659,18 @@ work." That is the maintainer's choice over certifying the others (VH-98,
 
 No browser is refused by name. The support check tests what the browser can
 do, at load and again against the specific source file, since codec support
-is per-configuration, and every block it raises for the browser names Chrome
-as the one that will work.
+is per-configuration. Every block it raises fits its remedy to its cause;
+where the browser is the cause it recommends Chrome on a computer, as a
+recommendation rather than a guarantee, and says something else to a user
+who is already there or cannot change browser.
 
 ## 11. Non-functional requirements
 
 - **Privacy:** no media leaves the device. No analytics carrying filenames
-  or media characteristics. Verifiable by inspecting network activity.
+  or media characteristics. Verifiable by inspecting network activity. The
+  one outbound route is feedback (§9.2): an email the user sends from their
+  own app, whose app-added details are named, allow-listed facts they see
+  first.
 - **Deployment:** static files only. No server-side processing, no build
   requirement beyond a bundler, no special response headers.
 - **Licensing:** all dependencies permissive (MPL-2.0 or better). No GPL
@@ -606,6 +716,18 @@ v1 is complete when:
    reads clearly to a non-technical reader.
 8. Cancelling mid-process leaves no partial file and no orphaned OPFS data.
 9. Network inspection during a full job shows zero media egress.
+10. The interface passes a person's walk of every state, Choose to Save and
+    the error, cancel, retry, kept-result and feedback states, keyboard-only,
+    with NVDA + Chrome and VoiceOver + Safari, in a Windows contrast theme,
+    at 200% enlargement, at 320 px and under text-spacing overrides, in each
+    language the page offers.
+    Every applicable WCAG 2.2 criterion has evidence or a limitation recorded
+    under §9.3; the phone and speech-input checks are each completed or
+    deferred in writing. The same walk is the wider GUI review, beyond
+    WCAG: design and layout against Carbon's productive patterns, clarity of
+    language and of process — does a first-time user know what to do next at
+    every step — the word count, and distraction, with what fails filed as
+    work.
 
 ### Test corpus
 
@@ -614,6 +736,9 @@ PowerPoint presentations, screen recordings with fine text, talking heads,
 mixed speech and music, and — added — a Teams recording, a 4:3 legacy
 recording, and a recording with badly inconsistent levels.
 
-Twenty-two files were supplied and measured. The corpus contains no true
-variable-frame-rate source, no phone footage, and nothing approaching the
-60-minute case §7.4 publishes limits for; all three remain gaps.
+Twenty-two files were supplied and measured, and five phone recordings were
+taken for colour (§6.5). The corpus contains no true variable-frame-rate
+source, no phone footage measured for levels, and nothing approaching the
+60-minute case §7.4 publishes limits for; those remain gaps. Criterion 10's
+assistive-technology set — NVDA, VoiceOver, a Windows contrast theme, real
+phones, speech input — is the maintainer's to arrange (VH-M4).

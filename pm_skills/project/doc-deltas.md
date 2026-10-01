@@ -24,51 +24,51 @@
 
 ## Open
 
-- [ ] 2026-10-01 SPEC §6.5 — calls colour handling untested and phone HDR
+- [x] 2026-10-01 SPEC §6.5 — calls colour handling untested and phone HDR
       unsafe; VH-26 (2026-08-27) measured Chrome tone-mapping the HLG and
       Dolby Vision samples to SDR within two levels (source: VH-104, which set
       the HDR clip's "Ready to go" aside on that evidence)
-- [ ] 2026-10-01 SPEC §6.3/§6.5 — carry corpus evidence inline, though the
+- [x] 2026-10-01 SPEC §6.3/§6.5 — carry corpus evidence inline, though the
       spec's header puts evidence in `02-technical-rationale.md`; moving it
       would lose no sentence (source: wish-list triage 2026-10-01)
-- [ ] 2026-10-01 SPEC §9.3 — says "AA minimum, AAA where achievable" and
+- [x] 2026-10-01 SPEC §9.3 — says "AA minimum, AAA where achievable" and
       names four A/AA checks; the rulebook and D6 say AAA by default with each
       exception recorded (criterion, reason, impact, mitigation, decision);
       the AAA criteria that decide the page, 1.4.8's measures and what a live
       region may announce go unnamed; the exception list (preview as third-
       party content, unexpanded format names, the 2.2.4 reading) has no home
       (source: spec gap review A-01, A-06, A-08, A-10, A-15)
-- [ ] 2026-10-01 SPEC §13 — no acceptance criterion makes a keyboard-
+- [x] 2026-10-01 SPEC §13 — no acceptance criterion makes a keyboard-
       only, screen-reader, contrast-theme, 200% and 320 px walk across every
       state and language a condition of done; the corpus paragraph names no
       assistive-technology gap. Maintainer 2026-10-01: the same criterion also
       judges design and layout, clarity of language and of process, word count
       and distraction — a person's review, not only a criterion table (source:
       A-02)
-- [ ] 2026-10-01 SPEC §7.3, §7.5 — the keep-this-tab-open notice is tied
+- [x] 2026-10-01 SPEC §7.3, §7.5 — the keep-this-tab-open notice is tied
       to the Warn band and says "open" where the wake lock needs "visible";
       nothing says closing the tab ends the job (source: A-03)
-- [ ] 2026-10-01 SPEC §9.1 step 5 — silent on a finished video's
+- [x] 2026-10-01 SPEC §9.1 step 5 — silent on a finished video's
       lifetime (not kept past the tab, today, and said nowhere), on what
       follows Save on each route (the destination actually known, a write
       distinguished from a download hand-off, what next), and on a kept result
       carrying its own job summary (source: A-03, A-04, A-05)
-- [ ] 2026-10-01 SPEC §9.1 step 2 — the preview plays the original,
+- [x] 2026-10-01 SPEC §9.1 step 2 — the preview plays the original,
       unlevelled and without the closing, and nothing says so (source: A-19)
-- [ ] 2026-10-01 SPEC §9.2 — "plain language" has no reading-level
+- [x] 2026-10-01 SPEC §9.2 — "plain language" has no reading-level
       measure or check in the gate, and the terms and abbreviations the page
       keeps have no definition or expansion rule (source: A-10)
-- [ ] 2026-10-01 SPEC §9.2 — says what an error says and not where: an
+- [x] 2026-10-01 SPEC §9.2 — says what an error says and not where: an
       input error beside its control, a job or device failure in the step it
       affects (source: A-16)
-- [ ] 2026-10-01 SPEC §9.2, §11 — the feedback route (VH-93) is absent:
+- [x] 2026-10-01 SPEC §9.2, §11 — the feedback route (VH-93) is absent:
       help on every state, leaving by the user's email app with named facts
       and never media; the dialog promises a reply nobody has committed to
       (source: A-13)
-- [ ] 2026-10-01 SPEC §7.1 — the timed audio pass re-runs on every trim
+- [x] 2026-10-01 SPEC §7.1 — the timed audio pass re-runs on every trim
       change with no progress, no cancel and no bound (source: A-11; time it
       on the Teams recording first)
-- [ ] 2026-10-01 SPEC §7.3, §10 — "name Chrome as the one that will
+- [x] 2026-10-01 SPEC §7.3, §10 — "name Chrome as the one that will
       work" is a promise the per-configuration check cannot make, said to
       users already in Chrome; each block needs the recovery that fits its
       cause — revises VH-98's wording, not its Chrome recommendation. And
@@ -78,7 +78,7 @@
       checks land, "has passed the checks for it" after, "has not passed all
       of its checks" with a pointer to the System check otherwise (maintainer
       2026-10-01: do not turn people away unnecessarily; source: A-12, VH-121)
-- [ ] 2026-10-01 SPEC §8.1, §8.3 — the caption warning stops at the
+- [x] 2026-10-01 SPEC §8.1, §8.3 — the caption warning stops at the
       loss: the new file carries no separate caption track and the destination
       must supply captions (EchoVideo after upload, checked; a file sent
       directly, by the user); other dropped tracks may hold alternatives;

@@ -11,6 +11,44 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — Doc-sync: thirteen deltas applied, and the review's sign-offs
+
+**Decision:** the maintainer signed off everything the spec gap review left
+open, bar housekeeping, so the whole ledger was reconciled in one pass —
+thirteen deltas, all applied, none deferred. `docs/01-specification.md`:
+§6.3 keeps its two frame-rate rules and sends the corpus evidence to
+rationale §4.4; §6.5 says colour is inherited from the browser and measured
+(VH-26), so phone sources are supported in Chrome; §7.1 the trim re-check is
+visible, cancellable and bounded; §7.3 the Warn row loses the tab notice and
+the Block row recommends rather than guarantees; §7.5 the keep-alive rule
+for every job, and the unsaved video's lifetime; §8.1 and §8.3 captions in
+the picture survive, and the warning says what the destination must supply;
+§9.1 the preview plays the original, the result carries its job summary and
+is not kept past the tab, and what follows Save on each route; §9.2 reading
+level, definitions, error placement, help and feedback; §9.3 rewritten as
+AAA by default with the exception list; §10 the three-form browser sentence
+and the recommendation; §11 feedback as the one outbound route; §13 criterion
+10 — the accessibility and GUI walk — and the corpus paragraph.
+`docs/02-technical-rationale.md` gains §4.4 (frame rate) and §4.5 (colour).
+
+With them: the §9.1 default stands (an unsaved video dies with the tab and
+the page says so; recovery stays a design option); VH-97 is signed off as
+not built and moves to the Icebox with its revisit trigger; VH-105 is signed
+off on the content switcher and waits only on the copy. The decision-log
+archive split the gate proposes was declined.
+
+**Rationale:** the maintainer's words — "everything approved and signed
+off, except for housekeeping". Each edit was derived from its source entry
+rather than from the ledger line, and Codex astra checked the diff against
+those sources before commit: thirteen corrections, all applied — chiefly
+§6.5 claiming more than two HDR frames establish, §9.3 dropping three of
+1.4.8's measures, and evidence copied to the rationale rather than moved.
+One requirement is recorded without its figure: §7.1's bound on the trim
+re-check waits on a timing VH-108 takes.
+
+**Link:** doc-deltas 2026-10-01 (13 ticked); VH-97, VH-105;
+`reviews/2026-10-01/spec-ux-accessibility-gaps-2026-10-01.md`.
+
 ## 2026-10-01 — VH-121: the browser sentence reports the check, and three answers from the maintainer
 
 **Decision:** the intro's sentence is three, chosen by the load-time check:

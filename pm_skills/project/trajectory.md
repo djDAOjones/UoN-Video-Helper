@@ -42,6 +42,9 @@
   instead of telling every browser it "may not work"; a browser that fails a
   check is pointed at the System check, whose summary now names a warning.
   Seen in Chrome (passed) and headless Firefox (AAC warned). See decision-log.
+- Doc-sync — 2026-10-01. Thirteen spec deltas applied in one signed-off
+  pass, the review's open points decided (VH-97 not built, VH-105 on the
+  content switcher), rationale §4.4 and §4.5 added. See decision-log.
 
 ### Band 5 — the overnight run
 
