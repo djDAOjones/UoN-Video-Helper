@@ -27,6 +27,10 @@
 
 ### Band 6 — review, then translate
 
+- VH-115 — Spike closed 2026-10-01. CULT2011's corrupt bursts wreck the
+  measurement (+28 LUFS, LRA 40), make pre-flight accuse the microphone,
+  and leave a blast and a two-second dip in the output; the target still
+  lands. Follow-up VH-122. See decision-log.
 - VH-114 — Shipped 2026-10-01. Plain words, once: units and codec words off
   the main path, one name for levelling, claims that depend on the job, the
   status line showing only what the box does not, what next after both save

@@ -11,6 +11,40 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — VH-115 spike: a corrupt frame wrecks the measurement, not the target
+
+**Question:** what does CULT2011's +57 dBFS burst at 82.4 s do to the
+warnings and to the output? Timebox: one session.
+
+**Method:** a scratch spike page decoded the whole recording, measured it
+with the product's meter with and without 82.3–82.5 s, ran both outputs
+through `runPipeline`, and measured the outputs the same way, 20 ms by 20 ms
+around the burst. Headless Chrome; the page is deleted.
+
+**Findings:** the source reads +28.1 LUFS, LRA 40.1 LU, +58.4 dBTP with
+2,177 clipped samples; without those 200 ms it is −16.6 LUFS and LRA 4.6 —
+but still +37.2 dBTP with 568 clipped samples, so there is more than one
+burst. Pre-flight therefore tells the user the sound may be distorted
+because the microphone was set too high, and that the volume varies a lot —
+both untrue of the recording. Macro-levelling switches on against a bogus
+integrated level and clamps at +6 dB nearly everywhere; the solver still
+lands both outputs at −15.93 LUFS because the limiter flattens the burst.
+What is left in the output is audible on paper: a 60 ms blast at −5 dBFS
+where the speech sits at −20, and a dip of about 4 LU for two seconds after
+it (short-term −19.2 at 84.4 s against −15.5 either side) as the envelope and
+compressor recover. No output warning is raised.
+
+**Recommendation:** one follow-up, VH-122: samples a decoder cannot have
+produced from a real recording — far above full scale — are decode damage;
+silence them before analysis and processing, say so in a warning of their
+own with the time ("a damaged moment at 1:22 has been silenced"), and the
+warnings, the envelope and the gain then see the recording. The threshold is
+a config value; the warning row is a doc-delta to §5.4. The existing clipping
+and highly-variable warnings then stop lying on this file.
+
+**Link:** VH-115 → VH-122; `src/audio/warnings.ts`, `src/audio/analyse.ts`,
+`src/media/audio-plan.ts`.
+
 ## 2026-10-01 — VH-114: plain words, once — and a gate that reads them
 
 **Decision:** the last copy pass before translation, and a test that keeps

@@ -60,7 +60,7 @@
      time; then controls, the phone path and the words; then VH-105
      translates the settled copy, so nothing is translated twice.
      Maintainer 2026-10-01, after VH-108 shipped: VH-114 (shipped), then VH-115
-     (Band 7), then VH-109 and the rest in order (VH-106 to VH-108 and VH-114
+     (Band 7, closed as a spike → VH-122), then VH-109 and the rest in order (VH-106 to VH-108 and VH-114
      shipped the same day): the spec gap review
      (`reviews/2026-10-01/spec-ux-accessibility-gaps-2026-10-01.md`) added a
      clause to each item's "Done when", the maintainer signed off every spec
@@ -204,17 +204,20 @@
      parked. Agent work that touches no page, so neither waits on Band 6's
      copy; ordered by what a user would notice first. -->
 
-- [ ] **VH-115 What CULT2011's corrupt burst does to the output** [spike]
-      (2026-10-01)
-      Intent: `samples/CULT2011.mp4` decodes a +57 dBFS burst at 82.4 s — a
-      corrupt AAC frame, in Chrome and ffmpeg alike — measuring +28 LUFS on
-      its own. The solver still lands the file at −16.02 LUFS (VH-99), but
-      nobody has read the warnings it raises or listened to the output there.
-      A bad frame in a real recording is a pilot-day event. Sits beside
-      VH-106, the other real recording whose sound does not land as planned.
-      Done when: the warnings for this file and the output around 82.4 s are
-      checked; a misleading warning or an audible defect each has its own
-      follow-up, or the reason neither needs one is recorded.
+- [ ] **VH-122 Decode damage is silenced and said** (2026-10-01)
+      Intent: VH-115's finding. CULT2011 decodes bursts far above full scale
+      (+58 dBTP, 2,177 clipped samples; 568 remain after the one at 82.4 s is
+      cut out). They read as +28 LUFS integrated and LRA 40, so pre-flight
+      says the microphone was too high and the volume varies — both untrue —
+      macro-levelling switches on and clamps at +6 dB, and the output carries
+      a 60 ms blast at −5 dBFS with a 4 LU dip for two seconds after it. See
+      decision-log 2026-10-01.
+      Done when: samples a decoder cannot have produced from a real recording
+      are detected (threshold in `src/config/audio.ts`), silenced before
+      analysis and processing, and announced in a warning of their own with
+      the time; the §5.4 row lands through a doc-delta; CULT2011's clipping
+      and highly-variable warnings no longer fire and its output has no blast
+      or dip; the EBU harness runs if a protected file changes.
 - [ ] **VH-116 A video estimate that holds still** (2026-10-01)
       Intent: the 3 s video probe is now the time estimate's main error —
       PHIL read 104 fps on one run and 187 on another, and real encodes ran at
