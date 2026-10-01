@@ -123,6 +123,13 @@ export async function solveChainGainDb(
       return { gainDb, unlimitedLufs, measuredLufs, refinementPasses, converged: true }
     }
 
+    // The last pass returns the gain it MEASURED. Stepping once more and
+    // returning that would hand the chain a gain nothing has been measured at
+    // — up to 6 dB from the last figure, on exactly the material whose
+    // response is changing — with `measuredLufs` describing the previous one
+    // (Codex review of VH-106). Short by a known amount beats unknown.
+    if (pass === GAIN_SOLVE.maximumRefinementPasses - 1) break
+
     const responseLuPerDb =
       previous && gainDb !== previous.gainDb
         ? (measured - previous.measuredLufs) / (gainDb - previous.gainDb)

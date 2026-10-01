@@ -203,6 +203,21 @@ describe('acceptance criterion 2 on real-shaped material (VH-50)', () => {
     expect(gainStepDb(-9, null)).toBe(-GAIN_SOLVE.maximumStepDb)
   })
 
+  it('returns a measured gain when it runs out of passes (Codex review of VH-106)', async () => {
+    // A chain that answers every decibel with a tenth of a LU never converges
+    // inside the cap. Whatever gain comes back must be one that was measured,
+    // and the measurement must describe it.
+    const seen: number[] = []
+    const solution = await solveChainGainDb((gainDb) => {
+      if (gainDb !== null) seen.push(gainDb)
+      return Promise.resolve(gainDb === null ? -30 : -30 + 0.1 * gainDb)
+    })
+    expect(solution.converged).toBe(false)
+    expect(solution.refinementPasses).toBe(GAIN_SOLVE.maximumRefinementPasses)
+    expect(seen[seen.length - 1]).toBe(solution.gainDb)
+    expect(solution.measuredLufs).toBeCloseTo(-30 + 0.1 * solution.gainDb, 9)
+  })
+
   it('gives silence no gain at all', async () => {
     const solution = await solveChainGainDb(() => Promise.resolve(Number.NEGATIVE_INFINITY))
     expect(solution.gainDb).toBe(0)
