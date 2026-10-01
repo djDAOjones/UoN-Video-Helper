@@ -112,3 +112,7 @@
       100 ms fade is built (source: doc-sync 2026-10-01; `BOUNDARY_FADE_MS`)
 - [ ] 2026-10-01 SPEC §4.4 — picture fades at the branding boundary are "not
       yet specified"; VH-25 cut them on 2026-08-27 (source: VH-25)
+- [ ] 2026-10-01 SPEC §7.1 — only the video is extrapolated from the 3 s
+      probe; the closing's frames are added at the same rate, and every audio
+      stage is priced from pre-flight's own timed analysis pass over the kept
+      part (source: VH-100)

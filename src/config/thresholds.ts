@@ -81,6 +81,31 @@ export const ESTIMATE_BANDS = {
 export const MINIMUM_CREDIBLE_PROBE_FRAMES = 10
 
 /**
+ * What each audio stage of a job costs, in analysis passes.
+ *
+ * Pre-flight runs the analysis pass over the whole kept part for the spec 5.4
+ * warnings, and times it: that one figure, measured on this file and this
+ * device, prices every audio stage of the job (VH-100). A job makes six or
+ * seven traversals of the audio — planning's passes A, B and up to three
+ * refinements, pass C during the encode, the decoded-output check — and the
+ * estimate used to count two at the probe's three-second rate.
+ *
+ * Measured 2026-10-01 in headless Chrome on the development MacBook, against
+ * that pass, on three real recordings of 130, 335 and 374 s. Taken near the
+ * top of the range: an estimate that runs a little long only moves a job
+ * towards "keep this tab open".
+ */
+export const AUDIO_STAGE_PASSES = {
+  /** One pass through the whole chain, with or without the meter behind it: 1.6-2.1 measured. */
+  chain: 2,
+  /**
+   * The codec probe's encode and decode of up to four minutes, and the
+   * re-measure a lowered ceiling forces: 2.0-3.5 measured.
+   */
+  codecProbe: 3,
+} as const
+
+/**
  * How long a file selection waits for the worker before giving up on it.
  *
  * Both are generous on purpose: timing out on a file that would have worked

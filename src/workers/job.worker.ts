@@ -464,10 +464,14 @@ async function handlePreflight(
     let audioWarnings: readonly AudioWarning[] = []
     /** Whether the job will carry sound: the source has some, in the part kept. */
     let keptHasSound = report.audio !== null
+    /** What the pass took, the unit the estimate prices every audio stage in (VH-100). */
+    let analysisSeconds: number | null = null
     if (report.audio === null || report.audio.canDecode) {
       const audioInput = openInput(file)
       const audioTrack = await audioInput.getPrimaryAudioTrack()
+      const analysisStartedAt = performance.now()
       const analysis = audioTrack ? await analyseSourceAudio(audioTrack, signal, keptRange) : null
+      if (analysis) analysisSeconds = (performance.now() - analysisStartedAt) / 1000
       audioWarnings = detectSourceWarnings(analysis)
       // A trim can keep a part with no sound; the job is then a silent one
       // (VH-95), and asks nothing of the audio encoder.
@@ -509,6 +513,10 @@ async function handlePreflight(
             shape,
             durationSeconds: keptSeconds,
             fromSeconds: keptRange?.startSeconds ?? 0,
+            // The most a closing adds, as for the size: the closing is chosen
+            // after pre-flight (VH-31).
+            closingSeconds: LONGEST_CLOSING_SECONDS,
+            analysisSeconds,
             signal,
           })
         : { measured: false, framesEncoded: 0, videoFramesPerSecond: 0, audioRealtimeFactor: null, estimatedSeconds: null }

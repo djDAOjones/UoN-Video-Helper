@@ -11,6 +11,45 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — VH-100: the estimate counts every stage, and the video probe is the error left
+
+**Decision:** the pre-flight time estimate is five stages (`jobTimeEstimate`).
+The video at the probe's rate, as before; the closing's frames at the same
+rate, for the longest closing, since pre-flight runs before it is chosen (as
+for the size); and three audio stages priced in analysis passes — the pass
+pre-flight already runs over the kept part for the §5.4 warnings, now timed.
+Planning is 1 + 2 × (1 + 3) + 3 = 12 passes (A; B and three refinements at
+two each; the codec probe at three), pass C two, the output check one. The
+multiples are `AUDIO_STAGE_PASSES`. The probe's three-second audio sample is
+gone, so VH-95's divide-by-zero cannot recur; its three tests pinned the
+two-pass arithmetic this retires and were replaced, the finite case kept.
+
+**Rationale:** the estimate counted two audio passes at a cold 3 s rate; a job
+makes six or seven and a codec probe. Timing a pass pre-flight already makes
+adds nothing under its 180 s deadline — VH-31's objection to a longer probe.
+
+**Measured (headless Chrome, this MacBook):**
+
+| Job | Estimate: total (video / planning) | Real: total (encoding / planning) |
+| --- | --- | --- |
+| AMCS3059 130 s 480p, best, fade | 26 s (19.1 / 4.7) | 32.4 s (26.7 / 3.9) |
+| CULT2011 335 s 1080p, best, fade | 58 s (44.5 / 10.3) | 58.0 s (46.4 / 10.0) |
+| PHIL 374 s 1080p, best, fade | 111 s (90.2 / 15.7) | 60.9 s (43.5 / 15.7) |
+| AMCS3059, smaller, cut | 24 s (17.8 / 4.3) | 36.9 s (32.3 / 3.8) |
+| CULT2011, smaller, cut | 59 s (45.3 / 10.6) | 83.0 s (71.2 / 10.0) |
+
+Planning now lands within 0.8 s every time. The video does not: the probe
+read PHIL at 104 fps here and 187 minutes before, and real encodes ran at
+0.5–1.8× its figure — the error that dominates now, older than this item, and
+parked on the wish-list. (The table predates the check dropping the silent
+closing from its length, which moves no figure by 0.1 s.)
+
+**Gates assumed (auto-jazz):** scope — the stages the item names, not the
+video probe; option — time the existing pass rather than lengthen the probe.
+
+**Link:** VH-100; `src/media/probe.ts`, `src/config/thresholds.ts`,
+`src/workers/job.worker.ts`; doc-delta §7.1.
+
 ## 2026-10-01 — VH-99: true peak skips a span at a time, and planning nearly halves
 
 **Decision:** every per-frame decision in the true-peak detector and the

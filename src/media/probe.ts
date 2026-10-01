@@ -8,13 +8,12 @@
  * and an Apple-silicon MacBook. A fixed limit is simultaneously too strict for
  * one and too permissive for the other.
  *
- * Both passes are measured, not just the visible one. Video decode-encode
- * dominates, but pass 1's audio analysis is real time on a slow machine and
- * assuming it away would under-promise in exactly the wrong direction.
+ * The audio is not sampled here. Pre-flight has already run the analysis pass
+ * over the whole kept part, and its wall time prices every audio stage of the
+ * job far better than three seconds of it could (VH-100).
  */
 
 import {
-  AudioSampleSink,
   Mp4OutputFormat,
   NullTarget,
   Output,
@@ -24,9 +23,13 @@ import {
   type InputVideoTrack,
 } from 'mediabunny'
 
-import { AudioAnalyser } from '../audio/analyse'
+import { GAIN_SOLVE } from '../config/audio'
 import { log } from '../core/logger'
-import { CALIBRATION_PROBE_SECONDS, MINIMUM_CREDIBLE_PROBE_FRAMES } from '../config/thresholds'
+import {
+  AUDIO_STAGE_PASSES,
+  CALIBRATION_PROBE_SECONDS,
+  MINIMUM_CREDIBLE_PROBE_FRAMES,
+} from '../config/thresholds'
 import type { OutputShape } from '../config/presets'
 import { videoEncodingConfigFor } from './encoding'
 
@@ -35,7 +38,7 @@ export interface ProbeResult {
   readonly measured: boolean
   readonly framesEncoded: number
   readonly videoFramesPerSecond: number
-  /** Seconds of audio analysed per second of wall clock. */
+  /** Seconds of audio analysed per second of wall clock, by pre-flight's analysis pass. */
   readonly audioRealtimeFactor: number | null
   /** Estimated wall-clock seconds for the whole job. `null` when unmeasured. */
   readonly estimatedSeconds: number | null
@@ -99,80 +102,75 @@ async function probeVideo(
   return { frames, seconds: (performance.now() - startedAt) / 1000 }
 }
 
-async function probeAudio(
-  input: Input,
-  signal: AbortSignal | undefined,
-  fromSeconds: number,
-): Promise<{ seconds: number; wallSeconds: number } | null> {
-  const track = await input.getPrimaryAudioTrack()
-  if (!track) return null
-
-  const [sampleRate, channelCount] = await Promise.all([
-    track.getSampleRate(),
-    track.getNumberOfChannels(),
-  ])
-  const analyser = new AudioAnalyser({ sampleRate, channelCount })
-  const sink = new AudioSampleSink(track)
-
-  let framesSeen = 0
-  const startedAt = performance.now()
-
-  for await (const sample of sink.samples(fromSeconds, fromSeconds + CALIBRATION_PROBE_SECONDS)) {
-    if (signal?.aborted) {
-      sample.close()
-      break
-    }
-    const perChannel = sample.numberOfFrames
-    const channels: Float32Array[] = []
-    for (let ch = 0; ch < channelCount; ch++) {
-      const data = new Float32Array(perChannel)
-      sample.copyTo(data, { planeIndex: ch, format: 'f32-planar' })
-      channels.push(data)
-    }
-    analyser.addFrames(channels)
-    framesSeen += perChannel
-    sample.close()
-  }
-  analyser.finish()
-
-  return {
-    seconds: framesSeen / sampleRate,
-    wallSeconds: (performance.now() - startedAt) / 1000,
-  }
+/** The time a job will take, stage by stage. */
+export interface JobTimeEstimate {
+  /** Decoding, conforming and encoding the kept part, at the probe's measured rate. */
+  readonly videoSeconds: number
+  /** The closing's frames, at the same rate. */
+  readonly brandingSeconds: number
+  /** "Analysing audio": passes A and B, the refinements, and the codec probe. */
+  readonly audioPlanningSeconds: number
+  /** Pass C, which runs on the encode's own thread. */
+  readonly audioProcessingSeconds: number
+  /** The decoded-output check: one analysis pass over the finished file's audio. */
+  readonly verificationSeconds: number
+  readonly totalSeconds: number
 }
 
 /**
- * The time a job will take, from what the probe measured.
+ * The time a job will take, from what pre-flight measured.
  *
- * Audio that the probe window did not reach — a track that starts late, or a
- * trim that starts before the sound does — is unmeasured, not infinitely
- * slow. Dividing by its zero speed made the estimate infinite, and every such
- * job was told it would be "very long" (found on VH-95's review). Unmeasured
- * audio counts nothing: it is cheap next to the video.
+ * The video at the probe's rate, as before; the closing at the same rate,
+ * because its frames are decoded, conformed and encoded like any other; and
+ * every audio stage as a multiple of the analysis pass pre-flight timed
+ * ({@link AUDIO_STAGE_PASSES}). The refinements are counted at their most,
+ * {@link GAIN_SOLVE}'s limit, which five of six real recordings reached.
+ *
+ * A job with no sound counts no audio stage. Audio that a three-second window
+ * never reached used to divide by zero here and call the job "very long"
+ * (VH-95's review); a pass over the whole kept part has no such window.
  */
-export function probeEstimate(measured: {
+export function jobTimeEstimate(measured: {
   readonly videoFrames: number
   readonly videoSeconds: number
   readonly frameRate: number
+  /** Seconds of source the job keeps. */
   readonly durationSeconds: number
-  readonly audio: { readonly seconds: number; readonly wallSeconds: number } | null
-}): { videoFramesPerSecond: number; audioRealtimeFactor: number | null; estimatedSeconds: number } {
-  const videoFramesPerSecond = measured.videoFrames / measured.videoSeconds
-  const totalFrames = measured.durationSeconds * measured.frameRate
-  const videoSeconds = totalFrames / videoFramesPerSecond
+  /** Seconds of closing the output may carry. */
+  readonly closingSeconds: number
+  /**
+   * Wall-clock seconds pre-flight's analysis pass took over the kept part, or
+   * `null` when the job carries no sound.
+   */
+  readonly analysisSeconds: number | null
+}): JobTimeEstimate {
+  const framesPerSecond = measured.videoFrames / measured.videoSeconds
+  const videoSeconds = (measured.durationSeconds * measured.frameRate) / framesPerSecond
+  const brandingSeconds = (measured.closingSeconds * measured.frameRate) / framesPerSecond
 
-  // Pass 1 analyses audio a second time, before pass 2 processes it, so the
-  // audio cost is counted twice.
-  const { audio } = measured
-  const audioRealtimeFactor =
-    audio && audio.wallSeconds > 0 && audio.seconds > 0 ? audio.seconds / audio.wallSeconds : null
-  const audioSeconds =
-    audioRealtimeFactor !== null ? (measured.durationSeconds / audioRealtimeFactor) * 2 : 0
+  const pass = measured.analysisSeconds ?? 0
+  const audioPlanningSeconds =
+    pass *
+    (1 +
+      AUDIO_STAGE_PASSES.chain * (1 + GAIN_SOLVE.maximumRefinementPasses) +
+      AUDIO_STAGE_PASSES.codecProbe)
+  const audioProcessingSeconds = pass * AUDIO_STAGE_PASSES.chain
+  // The check reads the finished file's audio, which is the kept part: every
+  // closing is silent, and VH-23 would bring the first branding with a bed.
+  const verificationSeconds = pass
 
   return {
-    videoFramesPerSecond,
-    audioRealtimeFactor,
-    estimatedSeconds: Math.round(videoSeconds + audioSeconds),
+    videoSeconds,
+    brandingSeconds,
+    audioPlanningSeconds,
+    audioProcessingSeconds,
+    verificationSeconds,
+    totalSeconds:
+      videoSeconds +
+      brandingSeconds +
+      audioPlanningSeconds +
+      audioProcessingSeconds +
+      verificationSeconds,
   }
 }
 
@@ -186,16 +184,21 @@ export function probeEstimate(measured: {
  *   file, or the kept range — for the extrapolation.
  * @param fromSeconds - Where to start measuring: the in-point of a trim, so the
  *   probe times material that will actually be encoded (VH-95). Zero otherwise.
- * @param formats - Input formats to accept, matching `inspect.ts`.
+ * @param closingSeconds - The most closing the output may carry; pre-flight
+ *   runs before the closing is chosen.
+ * @param analysisSeconds - What pre-flight's analysis pass over the kept part
+ *   took, or `null` when the job carries no sound.
  */
 export async function calibrationProbe(options: {
   readonly input: Input
   readonly shape: OutputShape
   readonly durationSeconds: number
   readonly fromSeconds?: number
+  readonly closingSeconds: number
+  readonly analysisSeconds: number | null
   readonly signal?: AbortSignal
 }): Promise<ProbeResult> {
-  const { input, shape, durationSeconds, signal } = options
+  const { input, shape, durationSeconds, closingSeconds, analysisSeconds, signal } = options
   const fromSeconds = options.fromSeconds ?? 0
 
   try {
@@ -208,27 +211,38 @@ export async function calibrationProbe(options: {
       return { ...UNMEASURED, framesEncoded: video.frames }
     }
 
-    const audio = await probeAudio(input, signal, fromSeconds)
-    const { videoFramesPerSecond, audioRealtimeFactor, estimatedSeconds } = probeEstimate({
+    const estimate = jobTimeEstimate({
       videoFrames: video.frames,
       videoSeconds: video.seconds,
       frameRate: shape.frameRate,
       durationSeconds,
-      audio,
+      closingSeconds,
+      analysisSeconds,
     })
+    const videoFramesPerSecond = video.frames / video.seconds
+    const audioRealtimeFactor =
+      analysisSeconds !== null && analysisSeconds > 0 ? durationSeconds / analysisSeconds : null
 
     const result: ProbeResult = {
       measured: true,
       framesEncoded: video.frames,
       videoFramesPerSecond,
       audioRealtimeFactor,
-      estimatedSeconds,
+      estimatedSeconds: Math.round(estimate.totalSeconds),
     }
+    const tenths = (seconds: number): number => Math.round(seconds * 10) / 10
     log.info('probe', 'calibration complete', {
       framesEncoded: result.framesEncoded,
       videoFramesPerSecond: Math.round(videoFramesPerSecond),
       audioRealtimeFactor: audioRealtimeFactor === null ? null : Math.round(audioRealtimeFactor),
       estimatedSeconds: result.estimatedSeconds,
+      // Stage by stage, so an estimate can be held against the job it
+      // described (VH-100).
+      videoSeconds: tenths(estimate.videoSeconds),
+      brandingSeconds: tenths(estimate.brandingSeconds),
+      audioPlanningSeconds: tenths(estimate.audioPlanningSeconds),
+      audioProcessingSeconds: tenths(estimate.audioProcessingSeconds),
+      verificationSeconds: tenths(estimate.verificationSeconds),
     })
     return result
   } catch (cause) {

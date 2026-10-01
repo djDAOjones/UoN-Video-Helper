@@ -142,7 +142,7 @@
 - `src/config/feedback.ts` — Where feedback goes and how much fits: the address, subject, mailto length cap, log lines kept, and the leave-warning pause.
 - `src/config/presets.test.ts` — Pins the preset rules, including that the smaller preset preserves resolution.
 - `src/config/presets.ts` — The two output presets and the encoder config they imply. Purpose-named, never technique-named.
-- `src/config/thresholds.ts` — Pre-flight bands and probe constants — the numbers D8 will replace with measurements.
+- `src/config/thresholds.ts` — Pre-flight bands and probe constants — the numbers D8 will replace with measurements — and each audio stage's cost in analysis passes.
 - `src/config/trim.ts` — Trimming's numbers: the shortest keep the meter can level (3 s), and how near an edge a cut counts as no cut.
 - `src/core/diagnostics.test.ts` — Proves the bundle's job context carries what the file is and never which file.
 - `src/core/diagnostics.ts` — Global error capture on both threads, plus the redacted copy-diagnostics bundle.
@@ -195,8 +195,8 @@
 - `src/media/pipeline.ts` — Decode to encode to mux, streaming to OPFS, with progress and cancellation.
 - `src/media/preflight.test.ts` — Triggers all four spec 7.3 outcomes deliberately — acceptance criterion 7.
 - `src/media/preflight.ts` — The pure verdict: given what was measured, proceed / warn / discourage / block.
-- `src/media/probe.test.ts` — The probe's estimate stays finite: audio its window never reached is unmeasured, not infinitely slow.
-- `src/media/probe.ts` — The 3-second calibration probe: real decode and encode on the real file and device.
+- `src/media/probe.test.ts` — The time estimate counts every stage, prices each from its own measurement, and stays finite.
+- `src/media/probe.ts` — The 3-second calibration probe — real decode and encode on the real file and device — and the job-time estimate, stage by stage.
 - `src/media/save.test.ts` — Pins the suggested filename and the guard that refuses the source as a destination.
 - `src/media/save.ts` — Streams the result to the user's chosen location, refuses the source, and hands back what to release.
 - `src/media/source-timeline.test.ts` — The shared-origin and gap arithmetic, including that rounding does not accumulate.

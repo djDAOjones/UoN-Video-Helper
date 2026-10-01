@@ -56,3 +56,8 @@
   ffmpeg alike (a corrupt AAC frame), measuring +28 LUFS. The solver still
   lands it at -16.02; check what the warnings say and what the output sounds
   like there. (from: VH-99)
+- The 3 s video probe is now the time estimate's main error: PHIL read 104 fps
+  on one run and 187 on another, and real encodes ran at 0.5–1.8× the probe's
+  figure (VH-100's table). VH-31 refused a longer probe; a warm-up before
+  timing, or a correction from the job's own early frames, are untried.
+  (from: VH-100)

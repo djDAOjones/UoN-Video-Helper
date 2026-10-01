@@ -32,14 +32,6 @@
      Active that is free to start: Band 3 waits on the maintainer, and
      Band 4's VH-97 is [sign-off] with "not built" as its default. -->
 
-- [ ] **VH-100 A time estimate that counts every stage** (2026-10-01)
-      Intent: the pre-flight estimate extrapolates the probe's decode and
-      encode, and leaves out the audio chain and the branding conform, so it
-      under-reports (from VH-5). VH-99 makes the analysis share a measured
-      figure rather than a guess.
-      Done when: the estimate includes the audio passes and the branding, a
-      test pins each stage's share, and the estimate and the measured job
-      time are recorded side by side on at least two real recordings.
 - [ ] **VH-101 Drop a video onto the page** (2026-10-01)
       Intent: spec §9.1 step 1 has always asked for "file picker or
       drag-and-drop", and only the picker was built. The 2026-10-01 doc-sync

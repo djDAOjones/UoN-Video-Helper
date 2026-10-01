@@ -27,6 +27,10 @@
 
 ### Band 5 — the overnight run
 
+- VH-100 — Shipped 2026-10-01. The pre-flight time estimate counts the
+  closing and every audio stage, priced from pre-flight's own timed analysis
+  pass; planning is now predicted within a second. The 3 s video probe's own
+  noise is the error left. See decision-log.
 - VH-99 — Shipped 2026-10-01. Audio planning takes about half the time, with
   bit-identical output: true peak and the limiter skip a span of frames at a
   time, the compressor skips its logarithm below the knee. An hour of audio
