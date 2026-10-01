@@ -241,6 +241,34 @@
       signed off by its reviewer; spec §9 is amended through a doc-delta;
       verified in Chrome at desktop and phone width.
 
+### Band 7 — Measured, not yet fixed
+
+<!-- Wish-list triage, 2026-10-01: two problems VH-99 and VH-100 measured and
+     parked. Agent work that touches no page, so neither waits on Band 6's
+     copy; ordered by what a user would notice first. -->
+
+- [ ] **VH-115 What CULT2011's corrupt burst does to the output** [spike]
+      (2026-10-01)
+      Intent: `samples/CULT2011.mp4` decodes a +57 dBFS burst at 82.4 s — a
+      corrupt AAC frame, in Chrome and ffmpeg alike — measuring +28 LUFS on
+      its own. The solver still lands the file at −16.02 LUFS (VH-99), but
+      nobody has read the warnings it raises or listened to the output there.
+      A bad frame in a real recording is a pilot-day event. Sits beside
+      VH-106, the other real recording whose sound does not land as planned.
+      Done when: the warnings for this file and the output around 82.4 s are
+      checked; a misleading warning or an audible defect each has its own
+      follow-up, or the reason neither needs one is recorded.
+- [ ] **VH-116 A video estimate that holds still** (2026-10-01)
+      Intent: the 3 s video probe is now the time estimate's main error —
+      PHIL read 104 fps on one run and 187 on another, and real encodes ran at
+      0.5–1.8× the probe's figure (VH-100's table). VH-31 refused a longer
+      probe; a warm-up before timing, or a correction from the job's own early
+      frames, are untried. VH-13's published limits read through this
+      estimate, and VH-109's rounding hides the swing without narrowing it.
+      Done when: both remedies are measured against VH-100's recordings
+      without lengthening pre-flight, and the chosen one narrows the spread,
+      or the reason neither does is recorded.
+
 ### Standing — maintainer-owned, never band-gated
 
 <!-- Human work, not agent work. Listed apart from the bands precisely so it
@@ -288,6 +316,9 @@
       every closing 404'ing under a relative base — fixed, see decision-log.
       Still open: the cache strategy, and whether Pages stays up once Xerte is
       live.
+      Triage 2026-10-01: the branding clips are fetched per job with no cache
+      today, so they are most of what offline-after-first-load has to hold;
+      the worker is 116 kB gzipped and needs no splitting for it.
       Done when: the move to internal hosting is planned and the cache strategy
       for offline-after-first-load is in place.
 
@@ -355,7 +386,9 @@
 - [ ] **VH-27 EBU Tech 3341 cases 7 and 8** — the authentic-programme segments,
       which the EBU distributes as audio and cannot be synthesised. Would need
       the files checked in as gitignored fixtures. Cases 3-5 already cover the
-      same gating behaviour.
+      same gating behaviour. The same files would settle cases 20-23, which
+      pass on a reading of "continuous in phase at both sides of the single
+      period" that Table 1 does not define (triage 2026-10-01).
 - [ ] **VH-82 `inspectFile` runs three times per job** (2026-08-28)
       Measured out 2026-08-28, not done. The cost was the 64 MB slicing, and
       VH-81 removed it: an inspect is now 7-18 ms on 18-28 MB files and
@@ -370,6 +403,34 @@
       walker for `tx3g` / `wvtt` / `stpp` samples, since Mediabunny cannot
       read subtitle tracks. Revisit only if embedded tracks turn out to be
       common in practice; spec §8.2 says they will not be.
+- [ ] **VH-117 The 4K branding path's cost** (2026-10-01)
+      Intent: every closing-tail frame is redrawn through a canvas to pad it
+      in brand colour, and the onset is blended on the CPU. Fine at 1080p;
+      the 2160p masters have landed, and VH-M2 measures only to 1080p.
+      Revisit when a 4K source reaches the pilot, or branding shows in a
+      profile — measure before proposing a change.
+- [ ] **VH-118 `BEST_SOURCE_BLEND` has nothing measured behind it**
+      (2026-10-01)
+      Intent: the one number in VH-47's bitrate rule that was set, not
+      measured (0.5, `src/config/presets.ts`). Settling it is a video
+      experiment — encode the probe sample at a spread of blends and score
+      each — and was parked on VH-83 by mistake.
+      Revisit when "Best quality" sizes draw a complaint, or a scoring tool is
+      to hand.
+- [ ] **VH-119 Skip true peak in the B and B′ planning passes**
+      (2026-10-01)
+      Intent: they read only integrated loudness, and the detector is 9% of
+      planning (measured 2026-10-01, VH-99). Means reshaping `traverse` in
+      `audio-plan.ts`; warnings, gain and output must not move on the real
+      corpus.
+      Revisit when planning time on long recordings draws a complaint.
+- [ ] **VH-120 A gain-solve step that anticipates the limiter**
+      (2026-10-01)
+      Intent: five of six real recordings pay all three refinement passes, at
+      17–21 s an hour each (VH-99). A step that anticipates the limiter's
+      take-back could save one; it moves the solver's convergence, so it is a
+      design item, not a tweak.
+      Revisit after VH-106, which may reshape the solver first.
 
 <!-- Ticket grammar (CANONICAL COPY — prompts and workflows point here,
      they do not restate it): quick items stay one line. Non-trivial or

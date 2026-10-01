@@ -11,6 +11,39 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — Doc-sync and wish-list triage: four deltas, twelve ideas
+
+**Decision:** apply all four open doc-deltas, signed off by the maintainer,
+none deferred; sweep the ledger's ticked lines; drain the wish-list — five
+ideas cut or merged into the items that own them, four to the Icebox
+(VH-117–VH-120), two promoted into a new Band 7 (VH-115, VH-116), one turned
+into a doc-delta.
+
+**Rationale:**
+
+- **All four deltas were the docs going stale.** D2 and D3 move to Answered —
+  the masters settled 1.00 s + 4.00 s, and a silent closing leaves no bed to
+  crossfade or duck. Spec §4.4's picture fades were cut by VH-25; §7.1 now
+  says the probe times only the video and the sound is priced from the timed
+  analysis pass (VH-100). Knock-ons: §7.2, §1's purpose line, rationale §5,
+  and four code comments that still called D2 and D3 open.
+- **The warning that prompted this was wrong twice.** It counted 27 deltas, 23
+  of them ticked by the morning's sync — swept now, so the count cannot
+  mislead again. It read `main` as 103 commits behind from a stale local ref
+  while `origin/main` was level and deployed; `DEV-INFRASTRUCTURE.md` now
+  says to ask of `origin/main`.
+- **Cuts rest on arithmetic, not taste:** the 100 Hz short-term curve is about
+  3 MB an hour; the worker is 116 kB gzipped; progress every 30 frames is six
+  updates a second at the measured 6.3× real time — VH-109 found the opposite
+  problem, a live region that chatters. Branding caching and EBU cases 20–23
+  merge into VH-14 and VH-27, which own them.
+- Codex (gpt-6-sol) verified each delta and each wish-list premise
+  independently and disagreed on one item, the progress cadence; the
+  arithmetic settled it.
+
+**Link:** commit `988b824` (docs); `doc-deltas.md` (4 applied, 27 ticked
+swept, 1 opened beside VH-104's); backlog VH-14, VH-27, VH-115–VH-120.
+
 ## 2026-10-01 — VH-104: the page fails in time, not in length
 
 **Decision:** the UX review is `reviews/2026-10-01/`: 25 ranked findings
