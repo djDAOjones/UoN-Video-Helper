@@ -11,6 +11,49 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — VH-114: plain words, once — and a gate that reads them
+
+**Decision:** the last copy pass before translation, and a test that keeps
+it: `test/readability.test.ts` reads every string the page can show — the
+markup, `src/ui/*.ts`, `src/main.ts`, `src/config/`, the worker's and the
+demuxer's error paths — and holds prose to a Flesch–Kincaid grade of 10 (one
+above the lower-secondary band, since the formula runs high on one-sentence
+strings), requires every abbreviation it keeps to have its meaning beside it
+in the same file, bans units and codec words from the main path, and pins
+the sentences the spec names. Units and "re-encoded" are gone from the sound
+notes; levelling is the one name; "fps" is "frames a second", "kHz" carries
+its samples a second, Mono and Stereo their channel counts, "Video codec" is
+"Video format"; the formats are named by their file endings. Claims depend
+on the job: "(branded)" only with a closing, else "(levelled)"; "about the
+same size" never after a trim and never claiming what else is applied; the
+warn heading counts its things. The status line shows "Device check
+complete." and speaks the verdict. Both save routes end with what next; the
+preview sentence, the caption consequence and the feedback dialog's wording
+follow spec §9.1, §8.3 and §9.2.
+
+**Rationale:** U-23 to U-25, A-10, A-13, A-14, A-19, A-20. A readability
+check that lives in the gate is what stops the next sentence drifting; a
+limit of 10 rather than 9 because two honest two-clause sentences sat at
+10.2 and 10.5 and shortening them would have cost meaning, while the two at
+11 and 12 were better split.
+
+**Exceptions (doc-delta to §9.3):** kB/MB/GB/TB; the product name UoN,
+whose logo beside it reads University of Nottingham; the codec names the
+properties disclosure shows as facts.
+
+**Alternatives:** expanding MB in place ("megabytes") — adds nothing a
+device's own screens do not already assume; expanding codec values — a fact
+behind a closed disclosure is not an instruction.
+
+**Verified:** `check` green with the new test (259 UI tests); headless in
+Chrome: the status line shows only "Device check complete." and speaks the
+verdict, the Trim step's preview sentence, plain property words, a job with
+no closing suggests "(levelled)", and Saved says what next.
+
+**Link:** VH-114; `test/readability.test.ts`, `src/ui/warning-text.ts`,
+`src/ui/source-panel.ts`, `src/ui/preflight-panel.ts`, `src/ui/format.ts`,
+`src/media/save.ts`, `index.html`.
+
 ## 2026-10-01 — VH-108: the Create step says only what is still true
 
 **Decision:** a verdict is withdrawn, with its sound notes, the moment the

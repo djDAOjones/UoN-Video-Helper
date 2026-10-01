@@ -17,21 +17,24 @@ import type { PreflightOutcome, PreflightReasonCode, PreflightSummary } from '..
 import { formatDuration, formatFileSize } from './format'
 
 /**
- * What the block's remedy may assume about where the user is.
+ * What the verdict's sentences may assume about the job and where the user is.
  *
  * `chromeOnComputer` is Chrome — or Edge, which is the same engine and the
  * default on a managed University laptop — on a desktop system: the browser
- * the generic remedy would otherwise send them to.
+ * the generic remedy would otherwise send them to. `trimmed` is whether a
+ * part was kept, so a claim about the file's size is made only when it is
+ * true (U-24).
  */
 export interface BlockContext {
   readonly chromeOnComputer: boolean
+  readonly trimmed?: boolean
 }
 
 /** Reads {@link BlockContext} from the user agent string. Pure, so it is tested. */
-export function blockContextFor(userAgent: string): BlockContext {
+export function blockContextFor(userAgent: string, trimmed = false): BlockContext {
   const chromium = /Chrome\/\d+/.test(userAgent) && !/OPR\//.test(userAgent)
   const handheld = /Android|iPhone|iPad|Mobile/.test(userAgent)
-  return { chromeOnComputer: chromium && !handheld }
+  return { chromeOnComputer: chromium && !handheld, trimmed }
 }
 
 const ELSEWHERE: BlockContext = { chromeOnComputer: false }
@@ -43,10 +46,17 @@ const OUTCOME_HEADING: Record<PreflightOutcome, string> = {
   block: 'This cannot run here',
 }
 
+/** The heading, counted: "one thing to know" over three things was untrue (U-24). */
+function outcomeHeading(outcome: PreflightOutcome, things: number): string {
+  if (outcome !== 'warn' || things <= 1) return OUTCOME_HEADING[outcome]
+  const words = ['two', 'three', 'four', 'five', 'six']
+  return `Ready, with ${words[things - 2] ?? String(things)} things to know`
+}
+
 /** The recommendation, where the browser is the cause and the user is not already in it. */
 const TRY_CHROME = 'Chrome on a computer is the browser this tool is built for — try it there.'
 /** Why Chrome itself would lack a feature it normally has. */
-const CHROME_LACKS = 'This copy of Chrome may be out of date, or a setting on this computer may have switched the feature off: update Chrome, or ask whoever manages the computer.'
+const CHROME_LACKS = 'This copy of Chrome may be out of date, or a setting on this computer may have turned the feature off. Update Chrome, or ask whoever manages the computer.'
 
 function reasonText(code: PreflightReasonCode, summary: PreflightSummary, context: BlockContext): string {
   const estimate = summary.probe.estimatedSeconds
@@ -72,8 +82,8 @@ function reasonText(code: PreflightReasonCode, summary: PreflightSummary, contex
       // file, not the browser: the formats Chrome opens are the ones this
       // tool can use.
       return here
-        ? 'This browser cannot read the picture or sound inside this file. It was probably saved in a format made for editing software — export it again as an MP4 and choose that file instead.'
-        : `This browser cannot read the picture or sound inside this file. ${TRY_CHROME} If it will not open there either, the file was probably saved in a format made for editing software — export it again as an MP4.`
+        ? 'This browser cannot read the picture or sound inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead.'
+        : `This browser cannot read the picture or sound inside this file. ${TRY_CHROME} If it will not open there either, the file was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4.`
     case 'no-opfs':
       return here
         ? 'This browser will not give the tool the working space it needs to build your video. If you are browsing privately, an ordinary window usually works; otherwise a setting on this computer may be blocking site storage — ask whoever manages it.'
@@ -173,11 +183,13 @@ export function verdictText(summary: PreflightSummary, context: BlockContext = E
     // will not make the file smaller — silently returning the same size is
     // the version of this that wastes their time. No bitrates: spec 9.2 keeps
     // those out of the interface, and the fact that matters here is about
-    // size, not encoding.
-    if (bitrateWasCappedToSource(shape)) {
+    // size, not encoding. Not after a trim, where "about the same size" is
+    // untrue, and no claim about what else is applied — that depends on
+    // choices this verdict does not see (U-24).
+    if (bitrateWasCappedToSource(shape) && !context.trimmed) {
       lines.push(
-        'Your video is already compressed as far as this setting would take it, so it will come ' +
-          'out about the same size. The branding and sound levelling are still applied.',
+        'Your video is already compressed as far as this setting would take it, so the new file ' +
+          'will be about the same size.',
       )
     } else if (summary.presetId === 'smaller' && summary.contentClass === 'screen') {
       // Spec 6.2 spends less on slides than on camera, and a classifier
@@ -193,7 +205,7 @@ export function verdictText(summary: PreflightSummary, context: BlockContext = E
     }
   }
 
-  return { heading: OUTCOME_HEADING[verdict.outcome], lines }
+  return { heading: outcomeHeading(verdict.outcome, verdict.reasons.length), lines }
 }
 
 /** Replaces `container` with the rendered verdict. */
@@ -226,14 +238,14 @@ export function renderPreflight(
 
 /** What the status line says when a device check lands. */
 export interface PreflightAnnouncement {
-  /** Shown and spoken: the outcome, in the verdict's own heading. */
+  /** Shown and spoken: that the check has landed. */
   readonly shown: string
   /**
-   * Spoken only: the rest of the verdict. The status line sits directly under
-   * the verdict (VH-88), so showing these sentences again would put them on
-   * screen twice — but the verdict itself is not a live region, and a
-   * screen-reader user who hears only "Ready, with one thing to know" has
-   * been told there is something and not what.
+   * Spoken only: the verdict itself, heading and all. The status line sits
+   * directly under the verdict (VH-88), so showing it again would put it on
+   * screen twice (U-25) — but the verdict is not a live region, and a
+   * screen-reader user who hears only "Device check complete" has been told
+   * there is a verdict and not what it is.
    */
   readonly spokenOnly: string
 }
@@ -241,19 +253,19 @@ export interface PreflightAnnouncement {
 /**
  * The status line for a finished device check.
  *
- * Everything the verdict says reaches the live region; only the outcome is
- * repeated visibly.
+ * Everything the verdict says reaches the live region; only what the box
+ * does not show is shown.
  */
 export function preflightAnnouncement(
   summary: PreflightSummary,
   context: BlockContext = ELSEWHERE,
 ): PreflightAnnouncement {
-  const { lines } = verdictText(summary, context)
+  const { heading, lines } = verdictText(summary, context)
   return {
     shown:
       summary.verdict.outcome === 'block'
         ? 'This video cannot be processed in this browser.'
-        : `Device check complete. ${OUTCOME_HEADING[summary.verdict.outcome]}.`,
-    spokenOnly: lines.join(' '),
+        : 'Device check complete.',
+    spokenOnly: [`${heading}.`, ...lines].join(' '),
   }
 }

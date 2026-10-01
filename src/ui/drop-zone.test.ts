@@ -62,7 +62,7 @@ describe('dropProblem', () => {
   it('refuses a file that is not a video, and names what is wanted', () => {
     const problem = dropProblem([{ name: 'slides.pdf', type: 'application/pdf' }], accept, null)
     expect(problem).toMatch(/^That is not a video file\./)
-    expect(problem).toContain('MP4')
+    expect(problem).toContain('.mp4')
   })
 
   it('refuses a drop that carried no file', () => {

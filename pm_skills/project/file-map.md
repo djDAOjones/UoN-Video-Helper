@@ -15,7 +15,7 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 226 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 227 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 23 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
@@ -24,7 +24,7 @@
 - `reviews` — 26 file(s)
 - `scripts` — 9 file(s)
 - `src` — 140 file(s)
-- `test` — 8 file(s)
+- `test` — 9 file(s)
 <!-- /file-map-index -->
 
 ## (root)
@@ -276,6 +276,7 @@
 - `test/ebu3341/tech3341.test.ts` — The compliance gate: Table 1 cases 1-23 against the meter, inside `npm run check`.
 - `test/helpers/signals.ts` — Synthesised tones, silence and seeded stepped noise shared by the meter tests and the EBU harness.
 - `test/package-xerte.test.ts` — The Xerte zip's name comes from the one build id the bundle carries, and the hosting README says what a server must do.
+- `test/readability.test.ts` — The gate's plain-language check: every string the page can show held to a lower-secondary reading grade, every kept abbreviation to an in-place meaning, units and codec words off the main path (spec §9.2, VH-114).
 - `test/screen-text.test.ts` — Holds the static page to what it must agree with: the privacy promise once, preset and closing options as the config has them, "caption" never "subtitle", status lines outside any disclosure, steps numbered without a gap.
 - `test/spike-verdict.test.ts` — The verdict line's contract, a verdict-shaped file name that cannot fail a run, and every spike page ending on the line.
 - `test/stylesheet.test.ts` — Stylesheet invariants no component test can see: `hidden` outranks every author `display` rule; nothing is sticky; no colour is named outside a token.

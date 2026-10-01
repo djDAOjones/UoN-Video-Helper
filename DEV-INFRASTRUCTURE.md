@@ -289,7 +289,7 @@ Runs, in order:
 | --- | --- |
 | `typecheck` | Type errors, broken imports |
 | `lint` | Unused/broken imports, dead code, floating promises |
-| `test` | Unit suite — **including the EBU Tech 3341 harness** |
+| `test` | Unit suite — **including the EBU Tech 3341 harness**, and the readability check over every string the page can show (`test/readability.test.ts`, spec §9.2) |
 | `check:build` | Anything that only breaks in a production bundle. Builds the site and the Xerte package to a temp directory, never `dist/`, and fails if the package contains a folder |
 | `docs:lint` + `docs:links` | Broken Markdown and dead cross-references in `docs/` and project memory |
 | `check:placeholders` | Stray `CUSTOMISE` / `[Project Name]` markers (the init Step 10 lint, folded in) |

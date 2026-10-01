@@ -152,7 +152,7 @@ export function feedbackDetails(
     const facts = [
       seconds !== undefined && `${Math.round(seconds)} s`,
       width !== undefined && height !== undefined && `${width}x${height}`,
-      rate !== undefined && `${Math.round(rate * 100) / 100} fps`,
+      rate !== undefined && `${Math.round(rate * 100) / 100} frames a second`,
       video['isVariableFrameRate'] === true && 'variable frame rate',
       text(video['codec']),
       text(source?.['container']),

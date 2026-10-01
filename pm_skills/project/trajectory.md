@@ -27,6 +27,11 @@
 
 ### Band 6 — review, then translate
 
+- VH-114 — Shipped 2026-10-01. Plain words, once: units and codec words off
+  the main path, one name for levelling, claims that depend on the job, the
+  status line showing only what the box does not, what next after both save
+  routes, and a readability check in the gate over every string the page can
+  show. See decision-log.
 - VH-108 — Shipped 2026-10-01. The Create step says only what is still
   true: a superseded verdict and its sound notes are withdrawn, a block is
   said at step 1 with steps 2 to 5 withdrawn, every block's remedy fits its

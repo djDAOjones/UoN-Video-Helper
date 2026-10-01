@@ -44,7 +44,7 @@ export const PRESETS: Readonly<Record<PresetId, Preset>> = {
     id: 'best',
     label: 'Larger / better',
     description:
-      'For EchoVideo or YouTube etc. These re-encode your video when you upload it, so it is worth sending them the best copy.',
+      'For EchoVideo or YouTube etc. These make their own copy of your video when you upload it, so it is worth sending them the best one.',
     // Spec 6.1: resolution and frame rate unchanged.
     maxHeight: null,
     maxFrameRate: null,

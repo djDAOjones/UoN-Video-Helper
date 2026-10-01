@@ -21,9 +21,6 @@ export interface WarningText {
   readonly detail: string
 }
 
-const round = (value: number, places = 1): string =>
-  Number.isFinite(value) ? value.toFixed(places) : '—'
-
 export function warningText(warning: AudioWarning): WarningText {
   const detail = warning.detail
   switch (warning.code) {
@@ -31,26 +28,26 @@ export function warningText(warning: AudioWarning): WarningText {
       return {
         heading: 'This video has no sound',
         detail:
-          'Branding will still be added and the video re-encoded, but there is no audio to even out. If you expected sound, check the recording before publishing.',
+          'There is no sound to level, so the rest of the job runs without it. If you expected sound, check the recording before publishing.',
       }
 
     case 'clipping':
       return {
         heading: 'The sound may be distorted in places',
         detail:
-          'The recording reaches its maximum level often enough that some of it may be clipped, which usually means the microphone input was set too high. Levels will still be evened out, but distortion already in the recording cannot be removed.',
+          'The recording often reaches its maximum level, so some of it may be clipped. That usually means the microphone was set too high. Levelling still runs, but distortion already in the recording cannot be removed.',
       }
 
     case 'very-quiet':
       return {
         heading: 'This recording is very quiet',
-        detail: `It measures about ${round(detail['integratedLufs'] ?? Number.NaN)} LUFS, well below a comfortable listening level. It will be brought up — but turning up quiet speech turns up whatever else was in the room too.`,
+        detail: 'It is well below a comfortable listening level. Levelling will bring it up — but turning up quiet speech turns up whatever else was in the room too.',
       }
 
     case 'highly-variable':
       return {
         heading: 'The volume varies a lot',
-        detail: `The loudest and quietest parts differ by about ${round(detail['loudnessRangeLu'] ?? Number.NaN)} LU. Long-term changes will be evened out gradually, slowly enough not to be audible, but sudden differences between sentences will remain.`,
+        detail: 'The loudest and quietest parts are far apart. Levelling corrects slow drifts gradually, too slowly to hear, but sudden differences between sentences will remain.',
       }
 
     case 'noisy':
@@ -69,7 +66,7 @@ export function warningText(warning: AudioWarning): WarningText {
     case 'target-missed':
       return {
         heading: 'The finished sound is not quite at the usual level',
-        detail: `It came out about ${round(detail['missedBy'] ?? Number.NaN)} LU away from the target. The video is fine to use; it may just sound slightly quieter or louder than other videos levelled with this tool.`,
+        detail: 'The video is fine to use; it may just sound slightly quieter or louder than other videos levelled with this tool.',
       }
     case 'metadata-lost':
       return {

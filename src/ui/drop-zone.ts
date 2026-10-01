@@ -68,7 +68,7 @@ export function dropProblem(
   if (files.length === 0) return 'Nothing was dropped that could be read. Drop a video file.'
   if (files.length > 1) return `That was ${files.length} files. Drop one video at a time.`
   if (!acceptsFile(accept, files[0]!)) {
-    return 'That is not a video file. Drop a video, such as an MP4 or MOV, or choose one above.'
+    return 'That is not a video file. Drop a video — a file whose name ends .mp4 or .mov, say — or choose one above.'
   }
   return null
 }

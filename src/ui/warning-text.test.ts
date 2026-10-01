@@ -53,9 +53,10 @@ describe('every warning has words', () => {
   })
 
   it('avoids implementation jargon', () => {
-    // Spec 9.2: user language, not implementation terms. LUFS and LU survive
-    // because they appear on the meters people are told to check against.
-    const banned = /codec|bitrate|dBTP|dBFS|demux|mux|WebCodecs|OPFS|percentile|K-weight/i
+    // Spec 9.2: user language, not implementation terms. LUFS and LU used to
+    // survive, for the meters people are told to check against; they went
+    // with VH-114 — the sentences around them already said what mattered.
+    const banned = /codec|bitrate|dBTP|dBFS|LUFS|\bLU\b|re-encod|demux|mux|WebCodecs|OPFS|percentile|K-weight/i
     for (const code of ALL) {
       const { heading, detail } = sample(code)
       expect(`${heading} ${detail}`, code).not.toMatch(banned)

@@ -59,36 +59,14 @@
      rank-1 result problems; then what the page says, does and announces over
      time; then controls, the phone path and the words; then VH-105
      translates the settled copy, so nothing is translated twice.
-     Maintainer 2026-10-01, after VH-108 shipped: VH-114 next, then VH-115
-     (Band 7), then VH-109 and the rest in order (VH-106 to VH-108 shipped the
-     same day): the spec gap review
+     Maintainer 2026-10-01, after VH-108 shipped: VH-114 (shipped), then VH-115
+     (Band 7), then VH-109 and the rest in order (VH-106 to VH-108 and VH-114
+     shipped the same day): the spec gap review
      (`reviews/2026-10-01/spec-ux-accessibility-gaps-2026-10-01.md`) added a
      clause to each item's "Done when", the maintainer signed off every spec
      correction and the spec now carries them (doc-sync 2026-10-01), so each
      item builds to the spec as written. Band 4 closed with VH-97's sign-off
      as not built (Icebox). -->
-
-- [ ] **VH-114 Plain words, once** (2026-10-01)
-      Intent: U-23, U-24, U-25 — the last copy pass before VH-105 translates
-      it. "LU", "LUFS" and "re-encoded" in novice copy; four names for
-      levelling; "(branded).mp4" whatever was chosen; "about the same size"
-      after a trim and "branding still applied" under None; "Ready, with one
-      thing to know" over several things; a status line that repeats the
-      verdict box; nothing after "Saved.".
-      Done when: no unit or codec word on the main path; one name for
-      levelling; every claim depends on the job; the status line shows only
-      what the box does not, still announcing it; one sentence of what next
-      after Saved; `test/screen-text.test.ts` holds any name it pins.
-      Spec gap review 2026-10-01 (A-04, A-10, A-13, A-14, A-19, A-20): the
-      what-next sentence exists for both save routes and tells a write from a
-      download hand-off; a readability check over every string the page can
-      show — markup, `src/ui/*.ts`, `src/main.ts`, `src/config/`, the worker's
-      errors — runs in the gate, with simpler supporting text where a fixed
-      term fails it, and each kept term and abbreviation (HDR, fps, MB, GB;
-      the format names one by one) has an in-place meaning; the feedback
-      dialog promises only what the maintainer will honour and says "picture
-      size", not "size"; the caption warning says the destination must supply
-      captions; the Trim step says the preview plays the original.
 
 - [ ] **VH-110 Failures say what to do next** (2026-10-01)
       Intent: U-06, U-18. A failed job says "Something went wrong…", says the

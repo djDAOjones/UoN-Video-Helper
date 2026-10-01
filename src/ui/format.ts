@@ -59,11 +59,13 @@ export function formatResolution(width: number, height: number): string {
   return `${Math.round(width)} × ${Math.round(height)}`
 }
 
-/** e.g. `25 fps`, `29.97 fps`. Trailing zeros are noise. */
+/** e.g. `25 frames a second`, `29.97 frames a second`. Trailing zeros are noise. */
 export function formatFrameRate(rate: number): string {
   if (!Number.isFinite(rate) || rate <= 0) return 'unknown'
   const rounded = Math.round(rate * 100) / 100
-  return `${rounded} fps`
+  // Said in words rather than as "fps" (spec 9.2, A-10): plainer than an
+  // abbreviation with a meaning beside it.
+  return `${rounded} frames a second`
 }
 
 /**
@@ -95,13 +97,13 @@ export function formatCodec(codec: string | null): string {
   return CODEC_NAMES[codec] ?? codec.toUpperCase()
 }
 
-/** e.g. `Stereo`, `Mono`, `5.1 surround`, `4 channels`. */
+/** e.g. `Stereo (two channels)`, `Mono (one channel)`, `5.1 surround`, `4 channels`. */
 export function formatChannels(count: number): string {
   switch (count) {
     case 1:
-      return 'Mono'
+      return 'Mono (one channel)'
     case 2:
-      return 'Stereo'
+      return 'Stereo (two channels)'
     case 6:
       return '5.1 surround'
     case 8:

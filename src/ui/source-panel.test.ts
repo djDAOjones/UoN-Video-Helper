@@ -121,7 +121,7 @@ describe('what the panel refuses to guess', () => {
   it('says a caption track cannot come across', () => {
     const source = report({ tracks: scan({ subtitleTracks: 1 }) })
     expect(lossesSaid(source)).toContain('1 caption track')
-    expect(lossesSaid(source)).toContain('cannot be carried')
+    expect(lossesSaid(source)).toContain('will have no caption track')
   })
 
   it('does not send the user to a caption file field that no longer exists', () => {
@@ -157,29 +157,29 @@ describe('video properties (VH-87)', () => {
   it('lists the rows in the agreed order', () => {
     expect(terms(report())).toEqual([
       'Duration',
-      'Video codec',
+      'Video format',
       'File size',
       'Resolution',
       'Frame rate',
-      'Audio codec',
-      'Audio channels',
-      'Audio sample rate',
+      'Sound format',
+      'Sound channels',
+      'Sound sample rate',
       'Captions',
-      'Container',
+      'File type',
     ])
   })
 
   it('gives each audio fact its own row', () => {
     const source = report()
-    expect(rowFor(source, 'Audio codec')?.detail).toBe('AAC')
-    expect(rowFor(source, 'Audio channels')?.detail).toBe('Stereo')
-    expect(rowFor(source, 'Audio sample rate')?.detail).toBe('44.1 kHz')
+    expect(rowFor(source, 'Sound format')?.detail).toBe('AAC')
+    expect(rowFor(source, 'Sound channels')?.detail).toBe('Stereo (two channels)')
+    expect(rowFor(source, 'Sound sample rate')?.detail).toBe('44.1 kHz — 44,100 samples a second')
   })
 
   it('states the picture facts separately', () => {
     const source = report()
     expect(rowFor(source, 'Duration')?.detail).toBe('2 minutes 10 seconds')
-    expect(rowFor(source, 'Video codec')?.detail).toBe('H.264')
+    expect(rowFor(source, 'Video format')?.detail).toBe('H.264')
     expect(rowFor(source, 'Resolution')?.detail).toBe('852 × 480')
   })
 
@@ -187,16 +187,16 @@ describe('video properties (VH-87)', () => {
     const source = report({ audio: null, audioTrackCount: 0 })
     expect(terms(source)).toEqual([
       'Duration',
-      'Video codec',
+      'Video format',
       'File size',
       'Resolution',
       'Frame rate',
-      'Audio',
+      'Sound',
       'Captions',
-      'Container',
+      'File type',
     ])
-    expect(rowFor(source, 'Audio')?.detail).toBe('No audio track found')
-    expect(rowFor(source, 'Audio')?.note).toContain('Levelling needs sound')
+    expect(rowFor(source, 'Sound')?.detail).toBe('No sound track found')
+    expect(rowFor(source, 'Sound')?.note).toContain('Levelling needs sound')
   })
 
   it('keeps the rotation note with the resolution it explains', () => {
@@ -211,9 +211,9 @@ describe('video properties (VH-87)', () => {
       video: { ...base.video, canDecode: false },
       audio: { ...base.audio!, canDecode: false },
     })
-    expect(rowFor(unreadable, 'Video codec')?.note).toContain('cannot read this video format')
-    expect(rowFor(unreadable, 'Audio codec')?.note).toContain('cannot read this audio format')
-    expect(rowFor(base, 'Video codec')?.note).toBeUndefined()
+    expect(rowFor(unreadable, 'Video format')?.note).toContain('cannot read this video format')
+    expect(rowFor(unreadable, 'Sound format')?.note).toContain('cannot read this audio format')
+    expect(rowFor(base, 'Video format')?.note).toBeUndefined()
   })
 })
 
@@ -244,7 +244,7 @@ describe('losses against facts (VH-87)', () => {
       .join(' ')
     expect(rowsSaid).not.toMatch(/carried/i)
     expect(lossesSaid(source)).toMatch(/will not be carried over/)
-    expect(lossesSaid(source)).toMatch(/cannot be carried into the new file/)
+    expect(lossesSaid(source)).toMatch(/will not be carried over/)
   })
 
   it('treats "could not be checked" as a loss, because it may be one', () => {

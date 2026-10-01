@@ -102,7 +102,8 @@
         <h2 id="trim-heading"><span class="step-number">2.</span> Trim</h2>
         <p class="step-intro">
           Optional. Cut unwanted material from the start or the end. Left alone, the whole video
-          is kept.
+          is kept. The preview plays your original as it is now: the sound is levelled and the
+          closing added when the video is made.
         </p>
         <video class="trim-preview" id="trim-preview" controls preload="metadata" playsinline></video>
         <p class="helper" id="trim-preview-note" hidden>
@@ -222,12 +223,12 @@
               <div aria-live="polite">
                 <div class="toggletip" id="onset-help" hidden>
                   <p>
-                    <strong>Over existing</strong> — the closing animation plays over the last
-                    second of your video, covering it as it builds.
+                    <strong>Over existing</strong> — the closing plays over the last second of
+                    your video. It covers that second as it builds.
                   </p>
                   <p>
                     <strong>Over generated freeze frame</strong> — your last frame is held for one
-                    extra second and the animation plays over that, so nothing in your video is
+                    extra second. The closing plays over that, so nothing in your video is
                     covered.
                   </p>
                 </div>
@@ -364,8 +365,7 @@
         <h2 id="feedback-heading">Send feedback</h2>
         <p class="dialog-intro">
           Your message goes to <span id="feedback-address"></span> from your own
-          email app. You will see the email before it is sent, and a reply will
-          come to you.
+          email app. You will see the email before it is sent.
         </p>
         <div class="field">
           <label class="label" for="feedback-message">Your message</label>
@@ -384,8 +384,8 @@
           <summary class="disclosure-summary">What will be sent with it</summary>
           <p class="helper">
             Details that help find a problem: the app's version, your browser,
-            how far you got, and your video's length, size and format. Never
-            the video, its name, or anything in it.
+            how far you got, and your video's length, picture size and format.
+            These details never include the video, its name, or anything in it.
           </p>
           <pre class="feedback-details" id="feedback-details"></pre>
         </details>

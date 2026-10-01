@@ -42,9 +42,9 @@ describe('formatFileSize', () => {
 
 describe('formatFrameRate', () => {
   it('keeps NTSC rates exact and integer rates clean', () => {
-    expect(formatFrameRate(25)).toBe('25 fps')
-    expect(formatFrameRate(29.97)).toBe('29.97 fps')
-    expect(formatFrameRate(30.000001)).toBe('30 fps')
+    expect(formatFrameRate(25)).toBe('25 frames a second')
+    expect(formatFrameRate(29.97)).toBe('29.97 frames a second')
+    expect(formatFrameRate(30.000001)).toBe('30 frames a second')
   })
 })
 
@@ -64,8 +64,8 @@ describe('formatCodec', () => {
 describe('formatResolution and formatChannels', () => {
   it('formats the way a spec sheet would', () => {
     expect(formatResolution(1920, 1080)).toBe('1920 × 1080')
-    expect(formatChannels(1)).toBe('Mono')
-    expect(formatChannels(2)).toBe('Stereo')
+    expect(formatChannels(1)).toBe('Mono (one channel)')
+    expect(formatChannels(2)).toBe('Stereo (two channels)')
     expect(formatChannels(6)).toBe('5.1 surround')
     expect(formatChannels(3)).toBe('3 channels')
   })

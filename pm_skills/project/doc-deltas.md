@@ -84,3 +84,4 @@
       directly, by the user); other dropped tracks may hold alternatives;
       captions drawn into the picture remain, trimmed and overlaid (source:
       A-14)
+- [ ] 2026-10-01 spec §9.3 — exceptions recorded one by one for 3.1.4: units of file size (kB, MB, GB, TB) as every device's own screens show them; the product name UoN, whose logo beside it reads University of Nottingham; and the codec names the Video properties disclosure shows as read-only facts (H.264, H.265, VP8, VP9, AV1, ProRes, AAC, Opus, MP3, Vorbis, FLAC, Dolby Digital), each with the four fields; the gate's `test/readability.test.ts` mirrors the list (source: VH-114)

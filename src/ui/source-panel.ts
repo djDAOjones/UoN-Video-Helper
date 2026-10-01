@@ -65,7 +65,7 @@ export function buildLosses(report: SourceReport): Loss[] {
     losses.push({
       title: `This file has ${found.join(' and ')}`,
       detail:
-        'The new file keeps one picture and one sound track — the ones listed under Video properties. The others will not be carried over. If you need them, keep the original alongside.',
+        'The new file keeps one picture and one sound track — the ones listed under Video properties. The others will not be carried over, and one of them may hold an alternative, such as another language or an audio description. If you need them, keep the original alongside.',
     })
   }
 
@@ -84,9 +84,11 @@ export function buildLosses(report: SourceReport): Loss[] {
       losses.push({
         title: `Found ${found.join(' and ')}`,
         // It used to offer a caption file field as the way out; that field is
-        // gone (VH-86), so the advice is the one thing still true.
+        // gone (VH-86). Keeping the original does not make the new file
+        // accessible to its viewers, so the warning says what follows (spec
+        // 8.3 step 3, A-14): the place it is published must supply captions.
         detail:
-          'These cannot be carried into the new file. If you need them, keep the original alongside.',
+          'The new file will have no caption track, so wherever you publish it must supply captions. EchoVideo makes its own after upload — check them. A file sent directly needs captions added by you. Captions drawn into the picture stay. If you need the originals, keep this file alongside.',
       })
     }
   }
@@ -140,7 +142,7 @@ export function buildRows(report: SourceReport): Row[] {
   const rows: Row[] = [
     { term: 'Duration', detail: formatDuration(report.durationSeconds) },
     {
-      term: 'Video codec',
+      term: 'Video format',
       detail: formatCodec(video.codec),
       // The verdict below says what to do about it, in view (VH-60). This is
       // the fact behind that verdict, for whoever opens the list.
@@ -164,20 +166,24 @@ export function buildRows(report: SourceReport): Row[] {
   if (audio) {
     rows.push(
       {
-        term: 'Audio codec',
+        term: 'Sound format',
         detail: formatCodec(audio.codec),
         ...(audio.canDecode ? {} : { note: 'This browser cannot read this audio format.' }),
       },
-      { term: 'Audio channels', detail: formatChannels(audio.channelCount) },
-      { term: 'Audio sample rate', detail: `${Math.round(audio.sampleRate / 100) / 10} kHz` },
+      { term: 'Sound channels', detail: formatChannels(audio.channelCount) },
+      {
+        term: 'Sound sample rate',
+        // The figure, with its meaning beside it (spec 9.2).
+        detail: `${Math.round(audio.sampleRate / 100) / 10} kHz — ${audio.sampleRate.toLocaleString('en-GB')} samples a second`,
+      },
     )
   } else {
     // One row, not three: a codec, a channel count and a sample rate of
     // nothing are three ways of saying the same absence.
     rows.push({
-      term: 'Audio',
-      detail: 'No audio track found',
-      note: 'Levelling needs sound. Branding and re-encoding will still work.',
+      term: 'Sound',
+      detail: 'No sound track found',
+      note: 'Levelling needs sound. The rest of the job still runs.',
     })
   }
 
@@ -191,7 +197,7 @@ export function buildRows(report: SourceReport): Row[] {
         : 'None found in this file',
   })
 
-  rows.push({ term: 'Container', detail: report.container })
+  rows.push({ term: 'File type', detail: report.container })
   return rows
 }
 

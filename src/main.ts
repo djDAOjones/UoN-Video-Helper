@@ -449,16 +449,16 @@ onUncaughtError(showError)
 
 // --- Capability checks -----------------------------------------------------
 
-renderCheck('secure', 'Secure context (needed for storage access)', 'pending', 'checking')
-renderCheck('webcodecs', 'WebCodecs video encoding', 'pending', 'checking')
-renderCheck('h264', 'Video encoder (H.264)', 'pending', 'checking')
-renderCheck('aac', 'Sound encoder (AAC)', 'pending', 'checking')
+renderCheck('secure', 'Secure connection (needed for storage access)', 'pending', 'checking')
+renderCheck('webcodecs', 'Video processing in the browser (WebCodecs)', 'pending', 'checking')
+renderCheck('h264', 'Video format the tool makes (H.264)', 'pending', 'checking')
+renderCheck('aac', 'Sound format the tool makes (AAC)', 'pending', 'checking')
 renderCheck('opfs', 'Private working storage', 'pending', 'checking')
 renderCheck('worker', 'Background processing', 'pending', 'checking')
 
 renderCheck(
   'secure',
-  'Secure context (needed for storage access)',
+  'Secure connection (needed for storage access)',
   window.isSecureContext ? 'pass' : 'fail',
   window.isSecureContext ? 'available' : 'not available',
 )
@@ -467,7 +467,7 @@ const hasWebCodecs =
   typeof globalThis.VideoEncoder !== 'undefined' && typeof globalThis.VideoDecoder !== 'undefined'
 renderCheck(
   'webcodecs',
-  'WebCodecs video encoding',
+  'Video processing in the browser (WebCodecs)',
   hasWebCodecs ? 'pass' : 'fail',
   hasWebCodecs ? 'supported' : 'not supported',
 )
@@ -492,8 +492,8 @@ renderCheck(
  */
 async function checkBootEncodeSupport(): Promise<{ h264: boolean; aac: boolean }> {
   if (!hasWebCodecs) {
-    renderCheck('h264', 'Video encoder (H.264)', 'fail', 'not supported')
-    renderCheck('aac', 'Sound encoder (AAC)', 'fail', 'not supported')
+    renderCheck('h264', 'Video format the tool makes (H.264)', 'fail', 'not supported')
+    renderCheck('aac', 'Sound format the tool makes (AAC)', 'fail', 'not supported')
     return { h264: false, aac: false }
   }
   const best = PRESETS.best
@@ -516,13 +516,13 @@ async function checkBootEncodeSupport(): Promise<{ h264: boolean; aac: boolean }
   const aac = stereo && mono
   renderCheck(
     'h264',
-    'Video encoder (H.264)',
+    'Video format the tool makes (H.264)',
     video.supported ? 'pass' : 'fail',
     video.supported ? 'supported' : 'not supported',
   )
   renderCheck(
     'aac',
-    'Sound encoder (AAC)',
+    'Sound format the tool makes (AAC)',
     aac ? 'pass' : 'warn',
     aac ? 'supported' : 'not supported — a video with sound cannot be made here',
   )
@@ -851,7 +851,7 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
         videoFramesPerSecond: Math.round(reply.summary.probe.videoFramesPerSecond),
         estimatedSeconds: reply.summary.probe.estimatedSeconds,
       })
-      const context = blockContextFor(navigator.userAgent)
+      const context = blockContextFor(navigator.userAgent, keptRange !== null)
       const announcement = preflightAnnouncement(reply.summary, context)
       setDiagnosticsContext({
         stage: reply.summary.verdict.outcome === 'block' ? 'blocked' : 'ready',
@@ -1765,7 +1765,7 @@ function renderResult(kept: RetainedResult): void {
     let leaseHeld = true
     void (async () => {
       try {
-        const result = await saveFile(file, suggestedFileName(source.name), {
+        const result = await saveFile(file, suggestedFileName(source.name, { closing: record.closing.type !== 'none' }), {
           identity: { name: source.name, size: source.size, lastModified: source.lastModified },
         })
         if (result.outcome === 'cancelled') {
@@ -1792,10 +1792,15 @@ function renderResult(kept: RetainedResult): void {
               worker.postMessage({ kind: 'lease', id: nextRequestId++, jobId, held: false })
             },
           }
-          setStatus('Saving to your downloads. The video stays here until you start another one.')
+          // A hand-off, not a completed write (spec 9.1 step 5): the browser
+          // may still be fetching it. What next is said for this route too.
+          setStatus(
+            'Saving to your downloads — the browser may still be finishing it. Once it is there, upload it where it is going, or choose another video in step 1. The video stays here until you start another one.',
+          )
           return
         }
-        setStatus('Saved.')
+        // A completed write, and what next (U-25, spec 9.1 step 5).
+        setStatus('Saved. Check it where you saved it, then upload it where it is going — or choose another video in step 1.')
         // Only once it is safely out: the File reads from OPFS, so releasing
         // the workspace first would hand back something unreadable.
         //

@@ -113,6 +113,29 @@ describe('proceed (VH-89)', () => {
   })
 })
 
+describe('the heading counts what there is to know (U-24)', () => {
+  it('says "one thing" for one and counts the rest', () => {
+    expect(verdictText(summary('warn', [['storage-unknown', 'warn']])).heading).toBe(
+      'Ready, with one thing to know',
+    )
+    expect(
+      verdictText(summary('warn', [['storage-unknown', 'warn'], ['long-job', 'warn']])).heading,
+    ).toBe('Ready, with two things to know')
+  })
+
+  it('claims "about the same size" only for an untrimmed job, and nothing about what else is applied', () => {
+    const capped = summary('proceed', [], {
+      shape: { ...shape, videoBitrateBps: 1_000_000, requestedVideoBitrateBps: 3_000_000, bitrateBasis: 'capped-to-source' },
+    })
+    const whole = verdictText(capped).lines.join(' ')
+    expect(whole).toContain('about the same size')
+    expect(whole).not.toMatch(/branding|levelling/i)
+    expect(verdictText(capped, { chromeOnComputer: true, trimmed: true }).lines.join(' ')).not.toContain(
+      'about the same size',
+    )
+  })
+})
+
 describe('warn and discourage keep every sentence (VH-89)', () => {
   it('states a time for a warn that used to show none', () => {
     // An unknown-storage warn showed its reason and no estimate at all.
@@ -214,7 +237,7 @@ describe('block (VH-89)', () => {
       })
       expect(lines[0]).not.toMatch(/Chrome on a computer/)
       // ...and still says what to do.
-      expect(lines[0]).toMatch(/update Chrome|ask whoever manages|export it again|ordinary window/)
+      expect(lines[0]).toMatch(/update Chrome|ask whoever manages|export it again|ordinary window/i)
     },
   )
 
@@ -222,7 +245,7 @@ describe('block (VH-89)', () => {
     const { lines } = verdictText(summary('block', [['no-source-decode', 'block']], { probe: unmeasured }), {
       chromeOnComputer: true,
     })
-    expect(lines[0]).toContain('export it again as an MP4')
+    expect(lines[0]).toContain('Export it again as an MP4')
   })
 
   it('reads where the user is from the user agent', () => {
@@ -346,9 +369,10 @@ describe('a block says only why it is blocked (VH-89 review)', () => {
 
 describe('the status line for a finished check', () => {
   it.each([
-    ['proceed', 'Device check complete. Ready to go.'],
-    ['warn', 'Device check complete. Ready, with one thing to know.'],
-    ['discourage', 'Device check complete. This will work, but it will be slow.'],
+    // Only what the box does not show (U-25): the box says the outcome.
+    ['proceed', 'Device check complete.'],
+    ['warn', 'Device check complete.'],
+    ['discourage', 'Device check complete.'],
     ['block', 'This video cannot be processed in this browser.'],
   ] as const)('shows the outcome for %s', (outcome, expected) => {
     expect(preflightAnnouncement(summary(outcome)).shown).toBe(expected)
@@ -359,8 +383,8 @@ describe('the status line for a finished check', () => {
     // but it is the live region, and the verdict is not. A screen-reader user
     // must hear the estimate, not just that there is one.
     const { shown, spokenOnly } = preflightAnnouncement(summary('proceed'))
-    expect(shown).not.toMatch(/37 seconds|28\.5 MB/)
-    expect(spokenOnly).toBe('This should take about 37 seconds. Estimated size up to 28.5 MB.')
+    expect(shown).not.toMatch(/37 seconds|28\.5 MB|Ready/)
+    expect(spokenOnly).toBe('Ready to go. This should take about 37 seconds. Estimated size up to 28.5 MB.')
   })
 
   it('says what the "one thing to know" is', () => {
@@ -380,6 +404,7 @@ describe('the status line for a finished check', () => {
 
   it('speaks exactly what the verdict shows, so the two cannot drift', () => {
     const warned = summary('warn', [['storage-unknown', 'warn']])
-    expect(preflightAnnouncement(warned).spokenOnly).toBe(verdictText(warned).lines.join(' '))
+    const { heading, lines } = verdictText(warned)
+    expect(preflightAnnouncement(warned).spokenOnly).toBe([`${heading}.`, ...lines].join(' '))
   })
 })

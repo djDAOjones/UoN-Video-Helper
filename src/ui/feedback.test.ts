@@ -85,7 +85,7 @@ describe('what a report says', () => {
     expect(lines).toContain('Stage: processing')
     expect(lines).toContain('Choices: output best, closing fade freeze white')
     expect(lines).toContain('Device check: warn (long-job), picture screen')
-    expect(lines).toContain('Video: 3612 s, 1920x1080, 29.97 fps, avc, MP4')
+    expect(lines).toContain('Video: 3612 s, 1920x1080, 29.97 frames a second, avc, MP4')
     expect(lines).toContain('Audio: aac, 2 ch, 48000 Hz')
   })
 

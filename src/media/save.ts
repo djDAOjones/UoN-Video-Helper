@@ -111,7 +111,7 @@ export async function saveFile(
     try {
       const options: SaveFilePickerOptions = {
         suggestedName,
-        types: [{ description: 'MP4 video', accept: { 'video/mp4': ['.mp4'] } }],
+        types: [{ description: 'MP4 video (.mp4)', accept: { 'video/mp4': ['.mp4'] } }],
       }
       const handle = await showSaveFilePicker(options)
 
@@ -158,10 +158,11 @@ export async function saveFile(
  *
  * Keeps the user's own name so they can recognise the result, and marks it so
  * it cannot be confused with the original — which this tool never modifies,
- * but which sits in the same folder.
+ * but which sits in the same folder. The mark says what the job did: a video
+ * made with no closing is not "(branded)" (U-24).
  */
-export function suggestedFileName(sourceName: string): string {
+export function suggestedFileName(sourceName: string, job: { readonly closing: boolean } = { closing: true }): string {
   const withoutExtension = sourceName.replace(/\.[^./\\]+$/, '')
   const trimmed = withoutExtension.trim() || 'video'
-  return `${trimmed} (branded).mp4`
+  return `${trimmed} (${job.closing ? 'branded' : 'levelled'}).mp4`
 }
