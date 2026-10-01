@@ -11,6 +11,29 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — VH-100 review: the codec probe is a bounded cost
+
+**Decision:** the estimate prices the codec probe at 2.5 analysis passes per
+second it covers, and it covers at most `CODEC_PROBE`'s 48 × 5 s; the
+re-measure a lowered ceiling forces is priced apart, as one more chain pass
+over the whole kept part, counted always like the refinements. Planning is
+now 1 + 2 × 5 + 2.5 × (covered fraction) passes — 13.5 for a short
+recording, 11.2 for an hour — where it was a flat 12.
+
+**Rationale:** Codex found the probe charged as three passes over the whole
+recording though it never encodes more than four minutes, so a long job's
+estimate grew with work the job does not do. Reproduced first: a test that an
+hour costs only the full-length passes beyond the budget failed, 114.4 s
+against 104.9. The 3.5 measured on PHIL fits the probe (2.45) plus that
+re-measure; AMCS3059 and CULT2011 measured 2.4 and 2.6.
+
+**Effect on VH-100's table**, recomputed from the same timed passes: planning
+AMCS3059 5.3 s (real 3.9), CULT2011 11.0 (10.0), PHIL 16.5 (15.7) — high by
+up to the re-measure, which AMCS3059 logged no ceiling move to need; an hour
+now costs about a pass less.
+
+**Link:** VH-100; `src/media/probe.ts`, `src/config/thresholds.ts`.
+
 ## 2026-10-01 — VH-100: the estimate counts every stage, and the video probe is the error left
 
 **Decision:** the pre-flight time estimate is five stages (`jobTimeEstimate`).

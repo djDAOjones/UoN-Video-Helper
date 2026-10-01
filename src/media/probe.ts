@@ -23,7 +23,7 @@ import {
   type InputVideoTrack,
 } from 'mediabunny'
 
-import { GAIN_SOLVE } from '../config/audio'
+import { CODEC_PROBE, GAIN_SOLVE } from '../config/audio'
 import { log } from '../core/logger'
 import {
   AUDIO_STAGE_PASSES,
@@ -108,7 +108,7 @@ export interface JobTimeEstimate {
   readonly videoSeconds: number
   /** The closing's frames, at the same rate. */
   readonly brandingSeconds: number
-  /** "Analysing audio": passes A and B, the refinements, and the codec probe. */
+  /** "Analysing audio": passes A and B, the refinements, the re-measure, and the codec probe. */
   readonly audioPlanningSeconds: number
   /** Pass C, which runs on the encode's own thread. */
   readonly audioProcessingSeconds: number
@@ -124,7 +124,9 @@ export interface JobTimeEstimate {
  * because its frames are decoded, conformed and encoded like any other; and
  * every audio stage as a multiple of the analysis pass pre-flight timed
  * ({@link AUDIO_STAGE_PASSES}). The refinements are counted at their most,
- * {@link GAIN_SOLVE}'s limit, which five of six real recordings reached.
+ * {@link GAIN_SOLVE}'s limit, which five of six real recordings reached, and
+ * so is the re-measure a lowered ceiling forces. The codec probe is priced by
+ * what it covers, which is bounded.
  *
  * A job with no sound counts no audio stage. Audio that a three-second window
  * never reached used to divide by zero here and call the job "very long"
@@ -149,11 +151,20 @@ export function jobTimeEstimate(measured: {
   const brandingSeconds = (measured.closingSeconds * measured.frameRate) / framesPerSecond
 
   const pass = measured.analysisSeconds ?? 0
+  const probedFraction =
+    measured.durationSeconds > 0
+      ? Math.min(
+          1,
+          (CODEC_PROBE.windowSeconds * CODEC_PROBE.maximumWindows) / measured.durationSeconds,
+        )
+      : 0
   const audioPlanningSeconds =
     pass *
     (1 +
-      AUDIO_STAGE_PASSES.chain * (1 + GAIN_SOLVE.maximumRefinementPasses) +
-      AUDIO_STAGE_PASSES.codecProbe)
+      // B, every refinement, and the re-measure — conditional on the codec, so
+      // counted, like the refinements, at the most a job can run.
+      AUDIO_STAGE_PASSES.chain * (2 + GAIN_SOLVE.maximumRefinementPasses) +
+      AUDIO_STAGE_PASSES.codecProbe * probedFraction)
   const audioProcessingSeconds = pass * AUDIO_STAGE_PASSES.chain
   // The check reads the finished file's audio, which is the kept part: every
   // closing is silent, and VH-23 would bring the first branding with a bed.

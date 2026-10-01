@@ -8,7 +8,7 @@
 
 import { describe, expect, it } from 'vitest'
 
-import { GAIN_SOLVE } from '../config/audio'
+import { CODEC_PROBE, GAIN_SOLVE } from '../config/audio'
 import { AUDIO_STAGE_PASSES } from '../config/thresholds'
 import { jobTimeEstimate } from './probe'
 
@@ -31,10 +31,11 @@ describe('jobTimeEstimate', () => {
 
   it('prices every audio stage in analysis passes, the refinements at their limit', () => {
     const estimate = jobTimeEstimate({ ...base, analysisSeconds: 2 })
-    // Passes A and B, every refinement the solver may spend, and the probe.
+    // Passes A and B, every refinement the solver may spend, the re-measure,
+    // and the probe — which covers all 60 s, being under its budget.
     const planningPasses =
       1 +
-      AUDIO_STAGE_PASSES.chain * (1 + GAIN_SOLVE.maximumRefinementPasses) +
+      AUDIO_STAGE_PASSES.chain * (2 + GAIN_SOLVE.maximumRefinementPasses) +
       AUDIO_STAGE_PASSES.codecProbe
     expect(estimate.audioPlanningSeconds).toBeCloseTo(2 * planningPasses, 12)
     // Pass C is one more trip through the chain.
@@ -43,6 +44,29 @@ describe('jobTimeEstimate', () => {
     expect(estimate.verificationSeconds).toBe(2)
     // Six or seven traversals at least: never the two the estimate once counted.
     expect(estimate.audioPlanningSeconds / 2).toBeGreaterThanOrEqual(6)
+  })
+
+  it('prices the codec probe by what it covers, which stops growing at its budget', () => {
+    // The probe encodes at most CODEC_PROBE's windows, however long the
+    // recording. Charged as passes over the whole kept part, an hour-long
+    // lecture paid for work the job never does (Codex review).
+    const budget = CODEC_PROBE.windowSeconds * CODEC_PROBE.maximumWindows
+    const rate = 11 / 3600 // An analysis pass at 11 s an hour.
+    const planning = (seconds: number): number =>
+      jobTimeEstimate({ ...base, durationSeconds: seconds, analysisSeconds: seconds * rate })
+        .audioPlanningSeconds
+    const perPass = (seconds: number): number => planning(seconds) / (seconds * rate)
+
+    // Past the budget, more recording costs only the passes over all of it:
+    // A, then B, every refinement and the re-measure through the chain.
+    const fullLength = 1 + AUDIO_STAGE_PASSES.chain * (2 + GAIN_SOLVE.maximumRefinementPasses)
+    expect(planning(3600) - planning(2 * budget)).toBeCloseTo(
+      (3600 - 2 * budget) * rate * fullLength,
+      9,
+    )
+    // So an hour pays less per pass than a short recording the probe covers whole.
+    expect(perPass(3600)).toBeLessThan(perPass(budget))
+    expect(perPass(budget / 2)).toBeCloseTo(perPass(budget), 9)
   })
 
   it('is the sum of its stages', () => {

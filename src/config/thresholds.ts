@@ -85,10 +85,11 @@ export const MINIMUM_CREDIBLE_PROBE_FRAMES = 10
  *
  * Pre-flight runs the analysis pass over the whole kept part for the spec 5.4
  * warnings, and times it: that one figure, measured on this file and this
- * device, prices every audio stage of the job (VH-100). A job makes six or
- * seven traversals of the audio — planning's passes A, B and up to three
- * refinements, pass C during the encode, the decoded-output check — and the
- * estimate used to count two at the probe's three-second rate.
+ * device, prices every audio stage of the job (VH-100). A job makes up to
+ * eight traversals of the audio — planning's passes A and B, up to three
+ * refinements and the re-measure a lowered ceiling forces, pass C during the
+ * encode, the decoded-output check — and the estimate used to count two at
+ * the probe's three-second rate.
  *
  * Measured 2026-10-01 in headless Chrome on the development MacBook, against
  * that pass, on three real recordings of 130, 335 and 374 s. Taken near the
@@ -99,10 +100,12 @@ export const AUDIO_STAGE_PASSES = {
   /** One pass through the whole chain, with or without the meter behind it: 1.6-2.1 measured. */
   chain: 2,
   /**
-   * The codec probe's encode and decode of up to four minutes, and the
-   * re-measure a lowered ceiling forces: 2.0-3.5 measured.
+   * The codec probe's encode and decode, per second of audio it covers: 2.4-2.6
+   * measured. It covers at most `CODEC_PROBE`'s windows, four minutes, so on
+   * a long recording it is a fixed cost rather than one that grows with it
+   * (Codex review).
    */
-  codecProbe: 3,
+  codecProbe: 2.5,
 } as const
 
 /**
