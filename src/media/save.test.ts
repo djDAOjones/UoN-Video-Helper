@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { isSourceDestination, suggestedFileName } from './save'
+import { isSourceDestination, saveFile, suggestedFileName } from './save'
 
 describe('suggestedFileName', () => {
   it('keeps the name the user recognises and marks it as the new file', () => {
@@ -70,5 +70,43 @@ describe('isSourceDestination', () => {
     // Same lecture, re-recorded: same name, different everything else.
     const destination = { name: source.name, size: 9_000_000, lastModified: 1_700_000_000_000 }
     expect(isSourceDestination(destination, source)).toBe(false)
+  })
+})
+
+describe('a streaming save can be stopped (VH-110)', () => {
+  it('aborts the writable and reports cancelled, leaving the result to try again', async () => {
+    const aborted: unknown[] = []
+    let wrote = 0
+    const writable = new WritableStream<Uint8Array>({
+      write: async (chunk) => {
+        wrote += chunk.length
+        // Slow enough that the stop lands mid-stream.
+        await new Promise((resolve) => setTimeout(resolve, 20))
+      },
+      abort: (reason) => {
+        aborted.push(reason)
+      },
+    })
+    const handle = {
+      getFile: async () => null,
+      createWritable: async () => writable,
+      isSameEntry: async () => false,
+      name: 'out.mp4',
+    }
+    const previous = (globalThis as { showSaveFilePicker?: unknown }).showSaveFilePicker
+    ;(globalThis as { showSaveFilePicker?: unknown }).showSaveFilePicker = async () => handle
+    try {
+      const file = new File([new Uint8Array(200_000)], 'big.mp4', { type: 'video/mp4' })
+      const controller = new AbortController()
+      const saving = saveFile(file, 'big (branded).mp4', undefined, controller.signal)
+      await new Promise((resolve) => setTimeout(resolve, 30))
+      controller.abort()
+      const result = await saving
+      expect(result.outcome).toBe('cancelled')
+      expect(aborted).toHaveLength(1)
+      expect(wrote).toBeLessThan(200_000)
+    } finally {
+      ;(globalThis as { showSaveFilePicker?: unknown }).showSaveFilePicker = previous
+    }
   })
 })

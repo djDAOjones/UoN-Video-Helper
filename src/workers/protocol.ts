@@ -11,6 +11,7 @@ import type { CapturedError } from '../core/diagnostics'
 import type { EgressReport } from '../core/egress'
 import type { LogRecord } from '../core/logger'
 import type { BrandingChoice, BrandingMode } from '../config/branding'
+import type { FailureCode } from './failure'
 import type { ContentClass, PresetId } from '../config/presets'
 import type { SourceReport } from '../media/inspect'
 import type { KeptRange } from '../media/kept-range'
@@ -144,7 +145,14 @@ export type WorkerResponse =
   | { readonly kind: 'egressed'; readonly id: number; readonly report: EgressReport }
   | { readonly kind: 'discarded'; readonly id: number }
   /** A request that failed for a reason the user should read, not a crash. */
-  | { readonly kind: 'failed'; readonly id: number; readonly message: string }
+  | {
+      readonly kind: 'failed'
+      readonly id: number
+      /** What kind of failure, for the page's sentence and next step (VH-110). */
+      readonly code: FailureCode
+      /** The worker's own sentence where it has one; otherwise empty, or a dev-only reason. */
+      readonly message: string
+    }
 
 /**
  * Worker -> main thread, unsolicited. An uncaught throw inside the worker is

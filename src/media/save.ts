@@ -106,6 +106,13 @@ export async function saveFile(
   file: File,
   suggestedName: string,
   source?: { readonly identity: FileIdentity; readonly handle?: FileSystemFileHandle | null },
+  /**
+   * Stops a streaming write (VH-110, U-18): the writable is aborted, which
+   * discards what the picker route had written, and the outcome is
+   * `cancelled` — the result stays to try again. A download handed to the
+   * browser cannot be stopped from here.
+   */
+  signal?: AbortSignal,
 ): Promise<SaveResult> {
   if (pickerAvailable()) {
     try {
@@ -125,14 +132,14 @@ export async function saveFile(
 
       const writable = await handle.createWritable()
       // Streamed, not buffered: the point of the whole architecture.
-      await file.stream().pipeTo(writable)
+      await file.stream().pipeTo(writable, signal ? { signal } : {})
       log.info('save', 'saved through the file picker', { bytes: file.size })
       return { outcome: 'saved', release: NOTHING_TO_RELEASE }
     } catch (cause) {
       // AbortError is the user closing the dialogue. Anything else falls
       // through to the download route rather than failing outright.
       if (cause instanceof DOMException && cause.name === 'AbortError') {
-        log.debug('save', 'save cancelled by the user')
+        log.debug('save', signal?.aborted ? 'save stopped by the user' : 'save cancelled by the user')
         return { outcome: 'cancelled', release: NOTHING_TO_RELEASE }
       }
       log.warn('save', 'file picker failed; falling back to a download', {

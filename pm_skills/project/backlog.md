@@ -60,7 +60,7 @@
      time; then controls, the phone path and the words; then VH-105
      translates the settled copy, so nothing is translated twice.
      Maintainer 2026-10-01, after VH-108 shipped: VH-114 (shipped), then VH-115
-     (Band 7, closed as a spike → VH-122), then VH-109 (shipped) and the rest in order (VH-106 to VH-108 and VH-114
+     (Band 7, closed as a spike → VH-122), then VH-109 (shipped), VH-110 (in progress, paused) and the rest in order (VH-106 to VH-108 and VH-114
      shipped the same day): the spec gap review
      (`reviews/2026-10-01/spec-ux-accessibility-gaps-2026-10-01.md`) added a
      clause to each item's "Done when", the maintainer signed off every spec
@@ -82,6 +82,37 @@
       Spec gap review 2026-10-01 (A-11, A-12): the trim re-check can be
       cancelled like the first check; a block says what fits its cause when
       the user is already in Chrome or cannot change browser.
+      In progress 2026-10-01, paused mid-task (the tree holds it, NOT green —
+      the WIP commit after VH-109 on the branch): A-12 is done (VH-108).
+      Written and unit-tested: `src/workers/failure.ts` (a `FailureCode` and
+      `classifyFailure`), `src/ui/failure-text.ts` (one what/next sentence
+      pair per code, the start-up sentence for Choose, the plain sentence over
+      a captured error), the `failed` message carries `code`, the worker names
+      output-loudness / output-peak / output-unreadable / out-of-space /
+      encoder-refused, the pipeline refuses BEFORE the encode when the plan's
+      `predictedOutputLufs` misses the ±0.5 contract (`unlevellable`), and
+      `saveFile` takes an `AbortSignal` (`#stop-actions` row is in
+      `index.html`). Still to do: wire `main.ts` — render `failureText` at the
+      three failed sites and the watchdog catch, the errors panel as a plain
+      sentence over a `<details>`, `startupFailureText` at Choose with the
+      file input disabled, a Stop button for the device check (`beginSelection`
+      cancels it) and for a picker save (abort the controller, status "Save
+      stopped…"); the save-abort unit test fails as written because the
+      stubbed `showSaveFilePicker` route reports `saved` — check whether
+      `pipeTo` sees the signal in Node, or stub differently; then the headless
+      walk and the close.
+
+- [ ] **VH-123 Two review leftovers from the Band 6 run** (2026-10-01)
+      Intent: Codex sol on VH-108's follow-up: the storage block's "keep less
+      of the video, or choose Smaller / reduced" is also said when another
+      block hides those steps — make it conditional on the setup steps staying.
+      On VH-114's follow-up: `suggestedFileName` marks a silent, closing-less
+      job "(converted)" even if an opening were applied — moot while openings
+      are withdrawn (VH-23), but pass the applied branding rather than
+      `closing` alone when VH-23 returns. Also rerun codex sol on 8c57e57
+      (VH-109); its review had not landed when the session paused.
+      Done when: both wordings depend on what is actually on screen and in the
+      file, and the VH-109 review is read.
 
 - [ ] **VH-111 Focus and announcements follow the page** (2026-10-01)
       Intent: U-09, U-10. Focus falls to the page body at Create, Cancel,

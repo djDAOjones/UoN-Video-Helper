@@ -66,6 +66,12 @@ export interface AudioPlan {
    * unless the encode was measured to overshoot by more than it allows for.
    */
   readonly limiterCeilingDbtp: number
+  /**
+   * What the solver last measured the delivered loudness would be, codec
+   * cost included, or `null` when no limited pass ran. A prediction outside
+   * the contract is known before a frame is encoded (VH-110).
+   */
+  readonly predictedOutputLufs: number | null
 }
 
 /** What one traversal produced. */
@@ -380,6 +386,7 @@ export async function planAudio(
     channelCount,
     codec: cost,
     limiterCeilingDbtp,
+    predictedOutputLufs: solution.measuredLufs,
   }
 }
 

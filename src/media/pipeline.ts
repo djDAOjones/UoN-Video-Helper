@@ -34,6 +34,8 @@ import {
   type BrandingMode,
 } from '../config/branding'
 import type { OutputShape, Preset } from '../config/presets'
+import { INTEGRATED_TOLERANCE_LU, TARGET_INTEGRATED_LUFS } from '../config/audio'
+import { JobFailureError } from '../workers/failure'
 import { createContentAudioProcessor, planAudio } from './audio-plan'
 import {
   BrandingRenderer,
@@ -332,6 +334,23 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       keptRange,
     )
     throwIfAborted(signal)
+    // Known now, said now. A plan the solver could not bring inside the
+    // contract would be refused by the output check after the whole encode
+    // (U-01); the same refusal before a frame is encoded costs the user
+    // seconds rather than minutes (VH-110).
+    if (
+      audioPlan?.predictedOutputLufs !== null &&
+      audioPlan?.predictedOutputLufs !== undefined &&
+      Math.abs(audioPlan.predictedOutputLufs - TARGET_INTEGRATED_LUFS) > INTEGRATED_TOLERANCE_LU
+    ) {
+      log.warn('audio', 'plan misses the target; refusing before the encode', {
+        predictedOutputLufs: Math.round(audioPlan.predictedOutputLufs * 100) / 100,
+      })
+      throw new JobFailureError(
+        'unlevellable',
+        `Planned loudness ${audioPlan.predictedOutputLufs.toFixed(2)} LUFS is outside the contract`,
+      )
+    }
   }
 
   // Branding is fetched before anything is written, so a missing asset is

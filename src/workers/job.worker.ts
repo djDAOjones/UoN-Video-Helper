@@ -34,6 +34,7 @@ import {
 import { OpfsWorkspace, sweepOrphanedJobs } from '../media/opfs'
 import { requireReadableOutputVideo } from '../media/output-integrity'
 import { verifyOutputAudio } from '../media/output-verification'
+import { JobFailureError, classifyFailure } from './failure'
 import { CancelledError, runPipeline, throwIfAborted } from '../media/pipeline'
 import { preflightVerdict, type PreflightSummary } from '../media/preflight'
 import { calibrationProbe } from '../media/probe'
@@ -254,7 +255,12 @@ async function handleProcess(
     // criterion 2 contract and it only ever looked at audio, so a finished
     // file whose video track decoded to nothing still announced "Your video is
     // ready" (VH-73). One frame settles it.
-    await requireReadableOutputVideo(check, signal)
+    try {
+      await requireReadableOutputVideo(check, signal)
+    } catch (cause) {
+      if (cause instanceof CancelledError || signal.aborted) throw cause
+      throw new JobFailureError('output-unreadable', 'The finished video could not be read back', { cause })
+    }
 
     const checkTrack = await check.getPrimaryAudioTrack()
     // What the pipeline put in the file, not what the source had: a trim can
@@ -272,7 +278,10 @@ async function handleProcess(
           integratedLufs: verification.integratedLufs,
           truePeakDbtp: verification.truePeakDbtp,
         })
-        throw new Error(`Output audio failed verification: ${verification.code}`)
+        throw new JobFailureError(
+          verification.code === 'true-peak-exceeded' ? 'output-peak' : 'output-loudness',
+          `Output audio failed verification: ${verification.code}`,
+        )
       }
       log.info('worker', 'output verified', {
         integratedLufs: Math.round(measured!.integratedLufs * 100) / 100,
@@ -313,22 +322,25 @@ async function handleProcess(
       return
     }
     const reason = cause instanceof Error ? cause.message : String(cause)
-    log.warn('worker', 'processing failed', { reason })
+    // Named here, where the cause is known; the page turns the name into a
+    // sentence and a next step (VH-110, `ui/failure-text.ts`).
+    const code = classifyFailure(cause)
+    log.warn('worker', 'processing failed', { code, reason })
     post({
       kind: 'failed',
       id,
+      code,
       message:
         // A file that cannot be read names itself rather than reaching the
         // user as "something went wrong" (VH-37), and so does a trim that
-        // cannot be honoured (VH-95).
+        // cannot be honoured (VH-95). Every other sentence is the page's; in
+        // development the underlying reason rides along, because this is
+        // the one place the real cause is known.
         cause instanceof UnreadableFileError || cause instanceof KeptRangeError
           ? cause.message
-          : // The user-facing sentence never changes. In development the
-            // underlying reason is appended, because "something went wrong"
-            // tells a maintainer nothing and this is the one place the real
-            // cause is known.
-            'Something went wrong while creating the video. Your original file has not been changed.' +
-            (import.meta.env.DEV ? ` [dev: ${reason}]` : ''),
+          : import.meta.env.DEV
+            ? `[dev: ${reason}]`
+            : '',
     })
   }
 }
@@ -364,11 +376,11 @@ async function handleInspect(id: number, file: Blob, signal: AbortSignal): Promi
     const message =
       cause instanceof UnreadableFileError
         ? cause.message
-        : 'Something went wrong reading this file. It may be corrupted, or in a format this tool cannot read.'
+        : 'Something went wrong reading this file. It may be damaged, or in a format this tool cannot read.'
     log.warn('worker', 'inspection failed', {
       reason: cause instanceof Error ? cause.message : String(cause),
     })
-    post({ kind: 'failed', id, message })
+    post({ kind: 'failed', id, code: 'unreadable-source', message })
   }
 }
 
@@ -559,13 +571,15 @@ async function handlePreflight(
       post({ kind: 'cancelled', id })
       return
     }
+    const code = cause instanceof KeptRangeError ? 'bad-trim' : cause instanceof UnreadableFileError ? 'unreadable-source' : 'check-failed'
     const message =
       cause instanceof UnreadableFileError || cause instanceof KeptRangeError
         ? cause.message
         : 'Something went wrong checking this file against your device.'
     log.warn('worker', 'preflight failed', {
+      code,
       reason: cause instanceof Error ? cause.message : String(cause),
     })
-    post({ kind: 'failed', id, message })
+    post({ kind: 'failed', id, code, message })
   }
 }
