@@ -2195,7 +2195,9 @@ function renderResult(kept: RetainedResult): HTMLElement {
           // A hand-off, not a completed write (spec 9.1 step 5): the browser
           // may still be fetching it. Where it lands, and what next, are said
           // for this route too (VH-113).
-          setStatus(downloadStatusText(downloadDestinationFor(navigator.userAgent)))
+          setStatus(
+            downloadStatusText(downloadDestinationFor(navigator.userAgent, navigator.maxTouchPoints)),
+          )
           return
         }
         // A completed write, and what next (U-25, spec 9.1 step 5).

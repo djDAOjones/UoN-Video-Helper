@@ -12,10 +12,18 @@ describe('where a download lands (VH-113, spec 9.1 step 5)', () => {
     expect(text).toContain('may still be finishing')
   })
 
+  it('knows an iPad that calls itself a Macintosh by its touch screen (Codex review)', () => {
+    const ipadDesktopMode =
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Safari/605.1.15'
+    expect(downloadDestinationFor(ipadDesktopMode, 5)).toBe('ios')
+    // A real Mac has no touch points, and stays a computer.
+    expect(downloadDestinationFor(ipadDesktopMode, 0)).toBe('other')
+  })
+
   it('says the downloads folder everywhere else, and never claims a completed write', () => {
     const chrome =
       'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36'
-    expect(downloadDestinationFor(chrome)).toBe('other')
+    expect(downloadDestinationFor(chrome, 0)).toBe('other')
     const text = downloadStatusText('other')
     expect(text).toContain('downloads folder')
     expect(text).not.toMatch(/^Saved\./)
