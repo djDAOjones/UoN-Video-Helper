@@ -11,6 +11,45 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — VH-106: the limiter had the gain, not the codec
+
+**Decision:** the step 5 gain solve sizes each correction by the chain's
+measured response — LU gained per dB between the last two limited passes —
+bounded to 6 dB a step and falling back to the bare shortfall below a response
+of 0.05 LU/dB; the pass cap rises from three to six. No DSP file changed, so
+the EBU harness ran as part of `check` and nothing more.
+
+**Rationale:** U-01 attributed the Teams miss to the codec probe. Measured
+headless (`/spike-real.html`), the probe read −0.045 LU and the ceiling did
+not move; the planner record said `converged: false` at 8.29 dB after three
+bare corrections with the last limited pass at −16.93. A gain sweep gave
+−18.12 / −17.38 / −16.76 / −16.38 / −16.04 LUFS at 4 / 6 / 8 / 10 / 12 dB:
+the limiter is holding −3 dBTP on nearly every syllable of a 16 kHz mono
+recording with a 19 dB peak-to-loudness ratio, so each decibel buys 0.2–0.4 LU
+and the fixed-point needed about five passes, not three. Codex astra's
+independent pass ranked the same cause first and reproduced it in Node before
+any encode (−16.67 at the returned gain). A secant through two points below
+the target on a concave curve undershoots, so the solver keeps its
+converges-from-below property. Landing this file costs about 8 LU of limiting;
+that is what spec §5.2 as written asks for, and whether it sounds acceptable
+is a listening check for the maintainer (wish-list).
+
+**Alternatives:** a Newton step with no bound asks for tens of decibels on a
+flat curve; stopping below a response floor refuses the Teams recording
+outright; moving the compressor after the gain or widening the macro clamp
+is a spec change.
+
+**Verified:** `check` green; the Teams recording headless on both outputs —
+larger −16.275 LUFS / −2.93 dBTP, smaller −16.286 / −2.80, each converged in
+five passes at +11.9 dB (was −16.857, refused). The delivered file sits
+0.28 LU above the chain's −16.0, so the probe's −0.045 LU under-reads this
+16 kHz source's round trip slightly; inside tolerance, and noted for VH-115's
+neighbourhood rather than chased here.
+
+**Link:** VH-106; `src/audio/gain-solve.ts`, `src/config/audio.ts` →
+`GAIN_SOLVE`, `src/audio/chain.test.ts`, `scripts/run-in-engines.mjs`
+(`--timeout`).
+
 ## 2026-10-01 — Doc-sync: thirteen deltas applied, and the review's sign-offs
 
 **Decision:** the maintainer signed off everything the spec gap review left

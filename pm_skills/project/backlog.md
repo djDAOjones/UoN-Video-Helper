@@ -59,28 +59,13 @@
      rank-1 result problems; then what the page says, does and announces over
      time; then controls, the phone path and the words; then VH-105
      translates the settled copy, so nothing is translated twice.
-     Ready to pick up from VH-106, in order (2026-10-01): the spec gap review
+     Ready to pick up from VH-107, in order (2026-10-01; VH-106 shipped the same day): the spec gap review
      (`reviews/2026-10-01/spec-ux-accessibility-gaps-2026-10-01.md`) added a
      clause to each item's "Done when", the maintainer signed off every spec
      correction and the spec now carries them (doc-sync 2026-10-01), so each
      item builds to the spec as written. Band 4 closed with VH-97's sign-off
      as not built (Icebox). -->
 
-- [ ] **VH-106 The Teams recording misses −16 LUFS** (2026-10-01)
-      Intent: U-01, rank 1. The 29-minute Teams recording in `samples/` — the
-      one VH-M2 timed, and the persona's input — fails output verification
-      after the whole encode: delivered −16.857 LUFS against −16 ±0.5, true
-      peak −2.92 dBTP (passes). Source −21.27 LUFS and −1.90 dBTP, loudness
-      range about 21.9 LU, one silent stretch of 8 min 58 s. Reproduce with
-      `/spike-real.html?file=/samples/<the recording>`: `1 FAILURE(S)` in
-      234 s. The verification is right to refuse; the gain solve's aim does
-      not survive to the file on this recording — the gap VH-83's codec probe
-      exists to close.
-      Scope: the protected DSP files may be involved; if so the EBU Tech 3341
-      harness runs in the same task.
-      Done when: this recording lands within tolerance on both outputs and is
-      pinned as a real-material regression case; the recordings that pass
-      today still pass.
 - [ ] **VH-107 The finished video belongs to its own choices** (2026-10-01)
       Intent: U-02 and U-03 (rank 1), U-14 and U-15. The discard question
       outlives the choice it asked about — pressed with the trim in error, it

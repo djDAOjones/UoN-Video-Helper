@@ -541,8 +541,25 @@ its verdict line and then a line of exactly `done` — and the script knows
 almost nothing beyond that: it navigates, waits for the sentinel, prints the
 text. `--base` points at a
 different origin (the dev server moves off 5173 when something else holds it);
-`--engines chrome,firefox` narrows the set. A missing browser is skipped, not
-an error.
+`--engines chrome,firefox` narrows the set; `--timeout 600` waits longer than
+the two-minute default for a page that runs a real recording end to end. A
+missing browser is skipped, not an error.
+
+**Real-material regression case (VH-106).** The 29-minute Teams recording in
+`samples/` — 16 kHz mono, −21.3 LUFS, −1.9 dBTP, loudness range 22 LU — is
+the one corpus file whose limiter takes most of the gain, and it is checked
+on both outputs whenever the gain solve, the chain or the codec probe
+changes:
+
+```bash
+node scripts/run-in-engines.mjs "/spike-real.html?file=/samples/Meeting%20with%20Joe%20Bell%20(staff)-20260825_131504-Meeting%20Recording.mp4" --engines chrome --timeout 600
+node scripts/run-in-engines.mjs "/spike-real.html?file=/samples/Meeting%20with%20Joe%20Bell%20(staff)-20260825_131504-Meeting%20Recording.mp4&preset=smaller" --engines chrome --timeout 600
+```
+
+Each prints the delivered loudness and true peak with its own `PASS` /
+`FAIL`, and the page's verdict line decides the exit code. Hydrate the file
+first (`cat` it once): a dataless OneDrive placeholder hangs the fetch. The
+mechanism itself is pinned in Node by `src/audio/chain.test.ts` (VH-106).
 
 The one thing it reads is a page's verdict on itself. Reaching `done` means a
 page ran, not that it passed, so every spike page ends on one line just

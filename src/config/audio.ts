@@ -82,26 +82,48 @@ export const COMPRESSOR = {
  * alone never sees. VH-50: a real lecture came out 0.75 LU low while every
  * synthetic fixture passed, because none of them made the limiter work.
  *
- * So the gain is refined against the chain that actually runs. Correcting by
- * the measured error converges quickly — raising the gain by a tenth of a
- * decibel provokes only a small fraction of that in extra limiting — so the
- * loop is bounded rather than run to convergence.
+ * So the gain is refined against the chain that actually runs, and each
+ * correction is sized by how much loudness the last decibel actually bought
+ * (`audio/gain-solve.ts`). On a lecture the limiter barely touches that is
+ * nearly a LU per dB and the bare shortfall is the right step; where the
+ * limiter has most of the gain it is not. The 29-minute Teams recording
+ * (VH-106) is the measured case: loudness against gain, limited, ran
+ * −18.12 / −17.38 / −16.76 / −16.38 / −16.04 LUFS at 4 / 6 / 8 / 10 / 12 dB,
+ * so the target sits near 12 dB while three bare corrections reached 8.3 dB
+ * and stopped at −16.9. The limiter removes about 8 LU there to hold the
+ * ceiling; that is what landing this material on target costs under spec 5.2
+ * as written.
  */
 export const GAIN_SOLVE = {
   /** Close enough to stop. Well inside the +/-0.5 LU release contract. */
   toleranceLu: 0.1,
   /**
    * Extra traversals of the whole chain the refinement may cost. Each measured
-   * 17-21 s for an hour of audio, decode included (headless Chrome on the
-   * development MacBook, 2026-10-01, VH-99), and the loop stops as soon as it
-   * is inside tolerance — but most real sources pay all three, because each
-   * correction provokes a little more limiting. Of six real recordings only
-   * `AMCS2007` was inside after two; `AMCS3059` — the hottest source in the
-   * corpus, and the one the limiter works hardest on — was still 0.18 LU out.
-   * The decoded-output check is the backstop if a pathological source needs
-   * more than three.
+   * 17-21 s for an hour of 48 kHz stereo audio, decode included (headless
+   * Chrome on the development MacBook, 2026-10-01, VH-99), and the loop stops
+   * as soon as it is inside tolerance. The four corpus lectures were inside
+   * after two or three bare corrections; the Teams recording needs five
+   * response-sized ones, and each of its passes is 3.5 s at 16 kHz mono. Six
+   * bounds a pathological source at twice what the corpus pays; the
+   * decoded-output check is the backstop past that.
    */
-  maximumRefinementPasses: 3,
+  maximumRefinementPasses: 6,
+  /**
+   * Below this measured response — LU of loudness per dB of gain between two
+   * limited passes — the secant is not used to size the step: the curve is
+   * flat or falling, as it is at low gain on material with a dense transient
+   * every quarter second, and dividing by it would ask for tens of decibels.
+   * The bare shortfall is the step instead. The Teams recording's responses
+   * were 0.37, 0.25 and 0.18 on the way to target.
+   */
+  minimumResponseLuPerDb: 0.05,
+  /**
+   * The most one pass may change the gain, in dB. A response-sized step on a
+   * flat curve, or a bare shortfall on a falling one, is bounded here so a
+   * single pass never commits the chain to a gain nothing has measured near.
+   * The Teams recording's response-sized steps were 3.7, 1.7 and 0.6 dB.
+   */
+  maximumStepDb: 6,
 } as const
 
 /**

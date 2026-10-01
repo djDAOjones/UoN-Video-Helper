@@ -6,26 +6,26 @@
 
 import { describe, expect, it } from 'vitest'
 
-import { LIMITER, TARGET_INTEGRATED_LUFS, TRUE_PEAK_CEILING_DBTP } from '../config/audio'
+import { GAIN_SOLVE, LIMITER, TARGET_INTEGRATED_LUFS, TRUE_PEAK_CEILING_DBTP } from '../config/audio'
 import { feedInChunks, speechLike, tone, withTransients } from '../../test/helpers/signals'
 import { AudioAnalyser } from './analyse'
 import { AudioChain } from './chain'
-import { solveChainGainDb } from './gain-solve'
+import { gainStepDb, solveChainGainDb } from './gain-solve'
 import { buildGainEnvelope } from './macrolevel'
 
 const SAMPLE_RATE = 48000
 
-function analyse(channels: readonly Float32Array[]) {
-  const analyser = new AudioAnalyser({ sampleRate: SAMPLE_RATE, channelCount: channels.length })
+function analyse(channels: readonly Float32Array[], sampleRate = SAMPLE_RATE) {
+  const analyser = new AudioAnalyser({ sampleRate, channelCount: channels.length })
   feedInChunks(channels, 4096, analyser)
   return analyser.finish()
 }
 
 function runChain(source: readonly Float32Array[], gainDb: number | null, envelope = buildGainEnvelope({
   integratedLufs: -20, loudnessRangeLu: 0, shortTermLufs: [], stepSeconds: 0.01,
-})) {
+}), sampleRate = SAMPLE_RATE) {
   const chain = new AudioChain({
-    sampleRate: SAMPLE_RATE,
+    sampleRate,
     channelCount: source.length,
     envelope,
     gainDb,
@@ -133,6 +133,47 @@ describe('acceptance criterion 2 on real-shaped material (VH-50)', () => {
     expect(result.truePeakDbtp).toBeLessThanOrEqual(TRUE_PEAK_CEILING_DBTP + 0.01)
   })
 
+  /**
+   * VH-106. A 29-minute Teams recording — 16 kHz mono, −21.3 LUFS with peaks
+   * at −1.9 dBTP and a transient on nearly every syllable — answered the last
+   * +0.9 dB of gain with 0.03 LU: the limiter had most of the gain, three bare
+   * corrections stopped at −16.9 LUFS, and the job was refused after the whole
+   * encode. Dense transients at the recording's own sample rate reproduce the
+   * shape: the bare-shortfall solver landed this fixture at −16.63.
+   */
+  it('lands on target where the limiter takes most of the gain (VH-106)', async () => {
+    const rate = 16000
+    const source = withTransients(
+      speechLike({
+        sampleRate: rate, seconds: 60, channelCount: 1,
+        startPeakDbfs: -20, pauseSeconds: 1.5, pauseEverySeconds: 12,
+      }),
+      { sampleRate: rate, peakDbfs: -1, everySeconds: 0.25 },
+    )
+    const analysis = analyse(source, rate)
+    const envelope = buildGainEnvelope({
+      integratedLufs: analysis.integratedLufs,
+      loudnessRangeLu: analysis.loudnessRangeLu,
+      shortTermLufs: analysis.shortTermLufs,
+      stepSeconds: analysis.stepSeconds,
+    })
+    const measure = (gainDb: number | null): Promise<number> =>
+      Promise.resolve(analyse(runChain(source, gainDb, envelope, rate), rate).integratedLufs)
+    const solution = await solveChainGainDb(measure)
+    const result = analyse(runChain(source, solution.gainDb, envelope, rate), rate)
+
+    // The fixture must be the hard case: the first limited pass lands far
+    // short, and the response to gain there is well under a LU per dB.
+    expect(TARGET_INTEGRATED_LUFS - solution.unlimitedLufs).toBeGreaterThan(4)
+    const firstPass = await measure(TARGET_INTEGRATED_LUFS - solution.unlimitedLufs)
+    expect(TARGET_INTEGRATED_LUFS - firstPass).toBeGreaterThan(1)
+
+    expect(solution.converged).toBe(true)
+    expect(result.integratedLufs).toBeGreaterThan(TARGET_INTEGRATED_LUFS - 0.5)
+    expect(result.integratedLufs).toBeLessThan(TARGET_INTEGRATED_LUFS + 0.5)
+    expect(result.truePeakDbtp).toBeLessThanOrEqual(TRUE_PEAK_CEILING_DBTP + 0.01)
+  })
+
   it('reaches the target by correcting a measurement, not by predicting one', () => {
     // The proof that the loop is load-bearing rather than decorative: a chain
     // whose limiter costs 1.2 LU is solved to target, and the first estimate —
@@ -147,6 +188,19 @@ describe('acceptance criterion 2 on real-shaped material (VH-50)', () => {
       expect(solution.measuredLufs).toBeCloseTo(TARGET_INTEGRATED_LUFS, 6)
       expect(solution.refinementPasses).toBe(2)
     })
+  })
+
+  it('sizes each correction by the measured response, bounded (VH-106)', () => {
+    // No response known yet: the bare shortfall, as before.
+    expect(gainStepDb(1.2, null)).toBeCloseTo(1.2, 9)
+    // A usable response divides it: 0.9 LU short at 0.3 LU per dB is 3 dB.
+    expect(gainStepDb(0.9, 0.3)).toBeCloseTo(3, 9)
+    // Below the floor the response is not trusted; the shortfall is the step.
+    expect(gainStepDb(0.9, 0.01)).toBeCloseTo(0.9, 9)
+    expect(gainStepDb(0.9, -0.4)).toBeCloseTo(0.9, 9)
+    // And every step is bounded, whichever rule produced it.
+    expect(gainStepDb(1.5, 0.06)).toBe(GAIN_SOLVE.maximumStepDb)
+    expect(gainStepDb(-9, null)).toBe(-GAIN_SOLVE.maximumStepDb)
   })
 
   it('gives silence no gain at all', async () => {

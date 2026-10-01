@@ -70,8 +70,12 @@ const ENGINES = {
 }
 
 /** How long to wait for a page to reach its `done` sentinel. A 4K alpha decode
- *  is seconds, not milliseconds, and a cold browser start adds its own. */
-const PAGE_TIMEOUT_MS = 120_000
+ *  is seconds, not milliseconds, and a cold browser start adds its own. The
+ *  default suits the synthetic spikes; `--timeout <seconds>` raises it for a
+ *  real recording run end to end, which the 29-minute Teams case takes about
+ *  two minutes over (VH-106). */
+const DEFAULT_PAGE_TIMEOUT_MS = 120_000
+let PAGE_TIMEOUT_MS = DEFAULT_PAGE_TIMEOUT_MS
 const POLL_MS = 500
 /** How long a freshly spawned browser gets to open its automation port. Generous
  *  on purpose: a cold Chrome under load has taken well over 20 s here, and a
@@ -335,6 +339,14 @@ const page = positional[0] ?? '/spike-alpha.html'
 const base = options.base ?? 'http://localhost:5173'
 const wanted = (options.engines ?? 'chrome,firefox,safari').split(',').map((name) => name.trim())
 const url = new URL(page, base).href
+if (options.timeout !== undefined) {
+  const seconds = Number(options.timeout)
+  if (!Number.isFinite(seconds) || seconds <= 0) {
+    console.error(`run-in-engines: --timeout wants a positive number of seconds, got ${options.timeout}`)
+    process.exit(2)
+  }
+  PAGE_TIMEOUT_MS = seconds * 1000
+}
 
 if (typeof WebSocket === 'undefined') {
   console.error('run-in-engines: needs a Node with a global WebSocket (Node 22+).')

@@ -13,9 +13,18 @@
  * 0.45 LU and rose past 2 LU on quiet sources (VH-50). The contract is
  * +/-0.5 LU, so that is a release failure hiding behind a green harness.
  *
- * The fix is a fixed-point iteration: measure what the real chain leaves, add
- * the shortfall, repeat. It converges from below and never overshoots, because
- * adding gain costs only the small extra limiting that gain provokes.
+ * The fix is an iteration: measure what the real chain leaves, correct,
+ * repeat. The correction is sized by the chain's measured RESPONSE to gain —
+ * how many LU the last decibel bought — once two limited passes have shown
+ * it. Adding the bare shortfall, which is the response a chain without a
+ * limiter has, is right on a lecture the limiter barely touches and hopeless
+ * where the limiter has most of the gain: a 29-minute Teams recording (16 kHz
+ * mono, −21.3 LUFS, −1.9 dBTP, loudness range 22 LU) answered the last
+ * +0.9 dB with 0.03 LU, three bare corrections stopped at −16.9, and the job
+ * was refused after the whole encode (VH-106). Loudness against gain is
+ * concave there, so a secant through two points below the target overstates
+ * the slope ahead and the step undershoots: it still converges from below and
+ * never overshoots, only faster.
  *
  * Deliberately expressed over an injected measurement function rather than
  * over audio. The pipeline's measurement is a full decode traversal and the
@@ -49,6 +58,27 @@ export interface GainSolution {
 }
 
 /**
+ * The next correction, from the shortfall and what the chain was last seen to
+ * answer a decibel with.
+ *
+ * Pure, so the rule can be tested without a chain. The response is used only
+ * when it is usable: below {@link GAIN_SOLVE.minimumResponseLuPerDb} the
+ * secant is noise or the curve is falling, and the bare shortfall is the
+ * conservative step. Either way the step is bounded, because a response near
+ * the floor would otherwise ask for tens of decibels at once.
+ *
+ * @param errorLu - Target minus the last measurement; positive means too quiet.
+ * @param responseLuPerDb - LU gained per dB between the last two limited
+ *   passes, or `null` before there are two.
+ * @returns The change to make to the gain, in dB.
+ */
+export function gainStepDb(errorLu: number, responseLuPerDb: number | null): number {
+  const usable = responseLuPerDb !== null && responseLuPerDb >= GAIN_SOLVE.minimumResponseLuPerDb
+  const wanted = usable ? errorLu / responseLuPerDb : errorLu
+  return Math.max(-GAIN_SOLVE.maximumStepDb, Math.min(GAIN_SOLVE.maximumStepDb, wanted))
+}
+
+/**
  * Solves the step 5 gain against the chain that will actually run.
  *
  * @param measure - Runs one traversal of the audio through the chain and
@@ -76,6 +106,8 @@ export async function solveChainGainDb(
   let gainDb = TARGET_INTEGRATED_LUFS - unlimitedLufs
   let measuredLufs: number | null = null
   let refinementPasses = 0
+  /** The previous limited pass, for the response between it and this one. */
+  let previous: { readonly gainDb: number; readonly measuredLufs: number } | null = null
 
   for (let pass = 0; pass < GAIN_SOLVE.maximumRefinementPasses; pass++) {
     const measured = await measure(gainDb)
@@ -90,7 +122,13 @@ export async function solveChainGainDb(
     if (Math.abs(errorLu) <= GAIN_SOLVE.toleranceLu) {
       return { gainDb, unlimitedLufs, measuredLufs, refinementPasses, converged: true }
     }
-    gainDb += errorLu
+
+    const responseLuPerDb =
+      previous && gainDb !== previous.gainDb
+        ? (measured - previous.measuredLufs) / (gainDb - previous.gainDb)
+        : null
+    previous = { gainDb, measuredLufs: measured }
+    gainDb += gainStepDb(errorLu, responseLuPerDb)
   }
 
   return { gainDb, unlimitedLufs, measuredLufs, refinementPasses, converged: false }

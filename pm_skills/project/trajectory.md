@@ -27,6 +27,11 @@
 
 ### Band 6 — review, then translate
 
+- VH-106 — Shipped 2026-10-01. The Teams recording lands on −16 on both
+  outputs: the gain solve sizes each correction by the chain's measured
+  response to gain, so a limiter that holds most of the gain is reached in
+  five passes instead of stopping 0.9 LU short after three. Pinned in Node
+  (`chain.test.ts`) and as a documented headless run. See decision-log.
 - VH-104 — Shipped 2026-10-01. The whole page walked as a first-time member
   of staff would, at desktop and phone width, with Codex astra reading the
   source: 25 ranked findings in `reviews/2026-10-01/`, filed as VH-106 to
