@@ -11,6 +11,38 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — VH-107: the finished video belongs to its own choices
+
+**Decision:** a job's record — file, part kept, output, closing as chosen — is
+read once at Create and fixed into the result (`ui/result-summary.ts`); the
+result shows it, says when the closing is not the one chosen (the pipeline
+now reports the mode the file carries), says it is kept only until saved or
+the tab closes, and is headed "Previous video" once another file is chosen.
+The discard question carries the same record and is retired by any change to
+the selection — trim, preset, closing — with the result put back; Discard
+passes Create's gate and a started job always shows its row. After "Saved."
+the scratch clean-up is logged on failure, never announced as a failed save.
+
+**Rationale:** U-02 and U-03 were this review's rank-1 definition — one
+press destroyed the only copy and started a job the screen did not describe,
+or the wrong lecture was saved — and A-05 showed a file name alone does not
+tell two outputs of one recording apart. The record is captured where the
+job is, so it cannot be relabelled by the controls for the next one.
+
+**Alternatives:** a modal for the question (rejected since VH-56's inline
+answer); naming the result by file only (A-05).
+
+**Verified:** 25 checks headless in Chrome over CDP — Cancel on a running
+job, the question retired by a trim error, a preset and a closing change,
+"Keep it", the previous-video heading, picker cancel, picker failure's
+download fallback and its retry, the download route and starting again
+during it, picker success with a failed clean-up ten seconds later — plus
+the fallback-closing sentence with the animation file blocked; seven Node
+tests on the wording.
+
+**Link:** VH-107; `src/ui/result-summary.ts`, `src/main.ts`,
+`src/media/pipeline.ts` (`closingMode`), `src/workers/protocol.ts`.
+
 ## 2026-10-01 — VH-106: the limiter had the gain, not the codec
 
 **Decision:** the step 5 gain solve sizes each correction by the chain's

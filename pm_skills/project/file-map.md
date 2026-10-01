@@ -15,7 +15,7 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 224 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 226 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 23 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
@@ -23,7 +23,7 @@
 - `public` — 13 file(s)
 - `reviews` — 26 file(s)
 - `scripts` — 9 file(s)
-- `src` — 138 file(s)
+- `src` — 140 file(s)
 - `test` — 8 file(s)
 <!-- /file-map-index -->
 
@@ -95,8 +95,8 @@
 - `reviews/2026-08-26/uon-video-helper-review-critique-2026-08-26.md` — Independent critique, reproductions, disagreements and corrected priority order.
 - `reviews/2026-08-26/uon-video-helper-updated-review-critique-2026-08-26.md` — Source-verified finding verdicts, omitted findings, provenance corrections and release gates.
 - `reviews/2026-10-01/README.md` — Index, baseline and provenance for the VH-104 UX review bundle.
-- `reviews/2026-10-01/codex-astra-source-review-2026-10-01.md` — Codex astra's source half of VH-104, kept as written: F01–F16, a copy audit, a VH-97 view.
 - `reviews/2026-10-01/codex-astra-critique-2026-10-01.md` — Codex astra's adversarial check of the merged spec gap review: 35 corrections, kept as written.
+- `reviews/2026-10-01/codex-astra-source-review-2026-10-01.md` — Codex astra's source half of VH-104, kept as written: F01–F16, a copy audit, a VH-97 view.
 - `reviews/2026-10-01/codex-astra-spec-gap-review-2026-10-01.md` — Codex astra's independent half of the spec gap review, kept as written: S-01–S-13, T-01–T-12, all 86 WCAG 2.2 criteria.
 - `reviews/2026-10-01/evidence/u01-teams-failed.png` — U-01 evidence: the Create step after the Teams job failed verification.
 - `reviews/2026-10-01/evidence/u02-discard-with-invalid-trim.png` — U-02 evidence: the discard question still offered with the trim in error.
@@ -251,6 +251,8 @@
 - `src/ui/format.ts` — Technical facts as plain language — durations, sizes, codecs, channel layouts.
 - `src/ui/preflight-panel.test.ts` — A `proceed` is three lines; no other outcome loses a sentence, says the time twice, or invites a blocked job to continue.
 - `src/ui/preflight-panel.ts` — The verdict in words (`verdictText`, pure) and its rendering, naming a browser that works when the answer is no.
+- `src/ui/result-summary.test.ts` — The record's wording: whole and trimmed, each output, each closing, and the sentence for a closing that is not the one chosen.
+- `src/ui/result-summary.ts` — The finished video's own record in one line — file, part kept, output, closing as chosen — and the sentence for a closing the file does not carry as asked (VH-107).
 - `src/ui/source-panel.test.ts` — Pins which losses are named before processing — extra tracks, captions, what is not guessed — and that none lives only in the closed Video properties rows.
 - `src/ui/source-panel.ts` — Renders a SourceReport in two parts: losses, always in view, and the facts, in a "Video properties" disclosure that starts closed.
 - `src/ui/system-check.test.ts` — A failed check is in the summary's words and opens the panel, without waiting for the slow check.

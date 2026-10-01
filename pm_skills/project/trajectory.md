@@ -27,6 +27,11 @@
 
 ### Band 6 — review, then translate
 
+- VH-107 — Shipped 2026-10-01. The finished video carries its own record
+  and keeps it: the discard question is retired by any change to the
+  selection, Discard passes Create's gate, a fade that fell back to a cut
+  says so, the previous video is named as such, and "Saved." stands. See
+  decision-log.
 - VH-106 — Shipped 2026-10-01. The Teams recording lands on −16 on both
   outputs: the gain solve sizes each correction by the chain's measured
   response to gain, so a limiter that holds most of the gain is reached in

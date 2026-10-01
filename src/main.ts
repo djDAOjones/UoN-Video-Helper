@@ -74,6 +74,12 @@ import {
 } from './ui/feedback'
 import { formatFileSize } from './ui/format'
 import { preflightAnnouncement, renderPreflight } from './ui/preflight-panel'
+import {
+  closingOutcomeText,
+  jobSummaryText,
+  type ClosingOutcome,
+  type JobRecord,
+} from './ui/result-summary'
 import { renderWarnings } from './ui/warning-text'
 import { renderSourceError, renderSourceReport, summarise } from './ui/source-panel'
 import { browserNote, summariseChecks, type CheckState } from './ui/system-check'
@@ -272,7 +278,12 @@ function syncClosingControls(): void {
   closingResult.textContent = closingResultText(controls)
 }
 
-brandingChoice.addEventListener('change', syncClosingControls)
+brandingChoice.addEventListener('change', () => {
+  syncClosingControls()
+  // Not a new verdict — the closing is not pre-flight's business — but the
+  // question beneath, if one is showing, was asked about another selection.
+  withdrawDiscardQuestion()
+})
 syncClosingControls()
 
 /**
@@ -721,8 +732,7 @@ fileInput.addEventListener('change', () => {
   // just replaced (VH-79). Re-rendering restores the result the question
   // interrupted, which is also the only route back to saving it.
   if (unsavedResult) {
-    const kept = unsavedResult
-    renderResult(kept.file, kept.jobId, kept.source, kept.applied, kept.requested)
+    renderResult(unsavedResult)
   } else {
     processResult.replaceChildren()
   }
@@ -881,6 +891,7 @@ presetChoice.addEventListener('change', () => {
   jobFile = null
   jobContentClass = 'unknown'
   jobKeptRange = null
+  withdrawDiscardQuestion()
   void runPreflight(file, current)
 })
 
@@ -1031,6 +1042,7 @@ function commitTrim(): void {
   jobContentClass = 'unknown'
   jobKeptRange = null
   cancelTrimRecheck()
+  withdrawDiscardQuestion()
   if ('problem' in currentTrim()) {
     setStatus('Put the start and end times right in step 2 to continue.')
     return
@@ -1199,13 +1211,34 @@ interface RetainedResult {
    * the scratch this is holding open.
    */
   readonly delivered: boolean
-  readonly applied: { opening: boolean; closing: boolean }
-  readonly requested: { opening: boolean; closing: boolean }
+  /** What the job was, read once when it started (VH-107). */
+  readonly record: JobRecord
+  /** What the finished file carries, which is not always what was asked for. */
+  readonly outcome: ClosingOutcome
   /** Frees whatever the last save attempt still held — see `save.ts`. */
   readonly release: () => void
 }
 
 let unsavedResult: RetainedResult | null = null
+
+/**
+ * Whether the "starting again will discard it" question is on screen.
+ *
+ * The question is about one selection. Pressed after the trim, preset or
+ * closing had changed, it threw away the unsaved video and started a job
+ * nothing on screen described — with no Cancel, because the trim error had
+ * hidden the row Cancel lives in (U-02). Any change to the selection now
+ * retires it and restores the result it interrupted.
+ */
+let discardAsked = false
+
+/** Puts back the result the discard question interrupted, if it is showing. */
+function withdrawDiscardQuestion(): void {
+  if (!discardAsked) return
+  discardAsked = false
+  if (unsavedResult) renderResult(unsavedResult)
+  else processResult.replaceChildren()
+}
 
 /**
  * True while a save is streaming out of OPFS.
@@ -1355,7 +1388,7 @@ startButton.addEventListener('click', () => {
   // result may be the only copy of an hour's work (VH-56). Ask once; the
   // answer starts the job.
   if (unsavedResult) {
-    confirmDiscardThenStart(file)
+    confirmDiscardThenStart()
     return
   }
   beginJob(file)
@@ -1369,20 +1402,33 @@ startButton.addEventListener('click', () => {
  * `UI-STANDARDS.md` reserves for something irreversible the user did not
  * initiate. VH-32 owns how this looks.
  */
-function confirmDiscardThenStart(file: File): void {
+function confirmDiscardThenStart(): void {
+  const asked = unsavedResult
+  if (!asked) return
   processResult.replaceChildren()
+  discardAsked = true
 
   const question = document.createElement('p')
   question.className = 'verdict-detail'
-  question.textContent = unsavedResult?.delivered
+  question.textContent = asked.delivered
     ? 'Your download may still be finishing. Starting again will discard the video you just made.'
     : 'You have not saved the video you just made. Starting again will discard it.'
+
+  // The same record the result shows, so the question names what would go.
+  const summary = document.createElement('p')
+  summary.className = 'verdict-detail'
+  summary.textContent = jobSummaryText(asked.record)
 
   const discard = document.createElement('button')
   discard.type = 'button'
   discard.className = 'button'
   discard.textContent = 'Discard it and start again'
   discard.addEventListener('click', () => {
+    // The same gate as Create: a file the verdict stands for, and nothing in
+    // flight. The question is retired by every change that drops the gate,
+    // so this is belt and braces (U-02).
+    const file = jobFile
+    if (!file || jobInFlight || saveInFlight) return
     releaseUnsavedResult()
     beginJob(file)
   })
@@ -1392,14 +1438,13 @@ function confirmDiscardThenStart(file: File): void {
   keep.className = 'button button--secondary'
   keep.textContent = 'Keep it'
   keep.addEventListener('click', () => {
-    const kept = unsavedResult
-    if (kept) renderResult(kept.file, kept.jobId, kept.source, kept.applied, kept.requested)
+    if (unsavedResult) renderResult(unsavedResult)
   })
 
   const actions = document.createElement('div')
   actions.className = 'actions'
   actions.append(discard, keep)
-  processResult.append(question, actions)
+  processResult.append(question, summary, actions)
   setStatus('Your video is not saved yet.')
   discard.focus()
 }
@@ -1413,6 +1458,9 @@ function releaseUnsavedResult(): void {
 
 function beginJob(file: File): void {
   processResult.replaceChildren()
+  discardAsked = false
+  // A running job always shows its row — Cancel lives in it (U-02).
+  processActions.hidden = false
   // Decoding the preview competes with the encode for the same hardware.
   trimPreview.pause()
 
@@ -1420,6 +1468,14 @@ function beginJob(file: File): void {
   const closing = chosenClosing()
   const branding = brandingChoiceFor(closing)
   const keptRange = jobKeptRange
+  /** What this job is, fixed now: the result and the discard question carry it (A-05). */
+  const record: JobRecord = {
+    sourceName: file.name,
+    keptRange,
+    durationSeconds: trimDuration,
+    presetId: chosenPreset(),
+    closing,
+  }
 
   const { id, promise } = requestWithId(
     {
@@ -1458,7 +1514,15 @@ function beginJob(file: File): void {
   void promise
     .then((reply) => {
       if (reply.kind === 'processed') {
-        renderResult(reply.file, reply.jobId, file, reply.brandingApplied, reply.brandingRequested)
+        renderResult({
+          file: reply.file,
+          jobId: reply.jobId,
+          source: file,
+          delivered: false,
+          record,
+          outcome: { applied: reply.brandingApplied.closing, mode: reply.closingModeApplied },
+          release: () => {},
+        })
         renderWarnings(audioWarnings, reply.outputWarnings, {
           heading: 'Worth knowing about the finished video',
         })
@@ -1554,36 +1618,57 @@ function showProcessControls(
   processActions.hidden = false
 }
 
-function renderResult(
-  file: File,
-  jobId: string,
-  source: File,
-  applied: { opening: boolean; closing: boolean },
-  requested: { opening: boolean; closing: boolean },
-): void {
+/**
+ * Shows a finished video: what it is, what it was made from, and Save.
+ *
+ * @param kept - The result to show. A fresh record when the job has just
+ *   finished; the retained one when it is put back after "Keep it" or while
+ *   the next file is being read.
+ */
+function renderResult(kept: RetainedResult): void {
   processResult.replaceChildren()
+  discardAsked = false
+  const { file, jobId, source, record, outcome } = kept
 
-  const summary = document.createElement('p')
-  summary.className = 'verdict-detail'
+  const heading = document.createElement('p')
+  heading.className = 'verdict-detail'
   // Not "Your video is ready": the status line says that, directly above, and
   // this block also stands on its own later — after "Keep it", or while the
   // next file is being read — where "ready" would be news about the wrong
-  // thing (VH-88).
-  summary.textContent = `Finished video — ${formatFileSize(file.size)}.`
+  // thing (VH-88). Once another file has been chosen it is the PREVIOUS
+  // video, and says so: a result sitting unnamed under the next file's
+  // verdict was the wrong lecture saved and published (U-03).
+  const previous = fileInput.files?.[0] !== source
+  heading.textContent = `${previous ? 'Previous video' : 'Finished video'} — ${formatFileSize(file.size)}.`
+  processResult.append(heading)
+
+  // The job's own record, fixed when it ended (A-05): two outputs of one
+  // recording can differ in trim, output and closing, and the file's name
+  // alone does not tell them apart.
+  const summary = document.createElement('p')
+  summary.className = 'verdict-detail'
+  summary.textContent = jobSummaryText(record)
   processResult.append(summary)
 
   // VH-22: branding that was asked for but could not be loaded is skipped
-  // rather than failing the job, so the result has to say so. A video missing
-  // its branding, delivered silently, is the failure this prevents.
-  const missing: string[] = []
-  if (requested.opening && !applied.opening) missing.push('opening')
-  if (requested.closing && !applied.closing) missing.push('closing')
-  if (missing.length > 0) {
+  // rather than failing the job, so the result has to say so — and so does a
+  // fade or slide that fell back to a cut (U-14). A video whose closing is
+  // not the one described, delivered silently, is the failure this prevents.
+  const differs = closingOutcomeText(record.closing, outcome)
+  if (differs !== null) {
     const notice = document.createElement('p')
     notice.className = 'verdict-detail'
-    notice.textContent = `The ${missing.join(' and ')} sequence could not be loaded, so it is not in this video. Everything else was applied as asked.`
+    notice.textContent = differs
     processResult.append(notice)
   }
+
+  // Spec 7.5: not kept past the tab, and the page says so beside the result.
+  // The leave warning catches a reload; it cannot catch a crash or a
+  // discarded tab, which is why the sentence is here. Gone once it is saved.
+  const lifetime = document.createElement('p')
+  lifetime.className = 'verdict-detail'
+  lifetime.textContent = 'It is kept here only until you save it or close this tab.'
+  processResult.append(lifetime)
 
   // Retained until the user has it somewhere. Everything that would destroy it
   // now has to go through `unsavedResult` first (VH-56).
@@ -1591,10 +1676,7 @@ function renderResult(
   // Preserved when this is a re-render of the same job — "Keep it" comes back
   // through here, and a fresh record would drop the download's object URL and
   // the worker lease that record is holding.
-  unsavedResult =
-    unsavedResult?.jobId === jobId
-      ? unsavedResult
-      : { file, jobId, source, applied, requested, delivered: false, release: () => {} }
+  unsavedResult = unsavedResult?.jobId === jobId ? unsavedResult : kept
   updateLeaveWarning()
 
   const save = document.createElement('button')
@@ -1639,11 +1721,7 @@ function renderResult(
           // handler. They are released together when the result is.
           leaseHeld = false
           unsavedResult = {
-            file,
-            jobId,
-            source,
-            applied,
-            requested,
+            ...kept,
             delivered: true,
             release: () => {
               result.release()
@@ -1668,7 +1746,17 @@ function renderResult(
         // control stops offering it rather than failing when taken up.
         saved = true
         save.textContent = 'Saved'
-        await request({ kind: 'discard', jobId }, 10_000)
+        lifetime.remove()
+        // Clean-up is not delivery. The file is out; a scratch that cannot be
+        // removed is logged, never announced as a failed save under a button
+        // that already reads "Saved" (U-15).
+        try {
+          await request({ kind: 'discard', jobId }, 10_000)
+        } catch (cause) {
+          log.warn('ui', 'scratch clean-up failed after a save', {
+            reason: cause instanceof Error ? cause.message : String(cause),
+          })
+        }
       } catch (cause) {
         setStatus('The video could not be saved. It is still here to try again.')
         log.error('ui', 'save failed', {

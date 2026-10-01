@@ -10,7 +10,7 @@
 import type { CapturedError } from '../core/diagnostics'
 import type { EgressReport } from '../core/egress'
 import type { LogRecord } from '../core/logger'
-import type { BrandingChoice } from '../config/branding'
+import type { BrandingChoice, BrandingMode } from '../config/branding'
 import type { ContentClass, PresetId } from '../config/presets'
 import type { SourceReport } from '../media/inspect'
 import type { KeptRange } from '../media/kept-range'
@@ -132,6 +132,8 @@ export type WorkerResponse =
       /** What was actually applied — a branding asset may have failed to load. */
       readonly brandingApplied: { readonly opening: boolean; readonly closing: boolean }
       readonly brandingRequested: { readonly opening: boolean; readonly closing: boolean }
+      /** The closing mode the file carries — a fade can fall back to a cut (VH-107). */
+      readonly closingModeApplied: BrandingMode | null
       /** Measured from the finished file — spec 5.4's post-processing row. */
       readonly outputWarnings: readonly AudioWarning[]
     }

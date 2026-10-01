@@ -59,32 +59,12 @@
      rank-1 result problems; then what the page says, does and announces over
      time; then controls, the phone path and the words; then VH-105
      translates the settled copy, so nothing is translated twice.
-     Ready to pick up from VH-107, in order (2026-10-01; VH-106 shipped the same day): the spec gap review
+     Ready to pick up from VH-108, in order (2026-10-01; VH-106 and VH-107 shipped the same day): the spec gap review
      (`reviews/2026-10-01/spec-ux-accessibility-gaps-2026-10-01.md`) added a
      clause to each item's "Done when", the maintainer signed off every spec
      correction and the spec now carries them (doc-sync 2026-10-01), so each
      item builds to the spec as written. Band 4 closed with VH-97's sign-off
      as not built (Icebox). -->
-
-- [ ] **VH-107 The finished video belongs to its own choices** (2026-10-01)
-      Intent: U-02 and U-03 (rank 1), U-14 and U-15. The discard question
-      outlives the choice it asked about — pressed with the trim in error, it
-      threw away the unsaved video and started an untrimmed job with no Cancel
-      on screen. A previous file's unsaved video sits under the next file,
-      unnamed. A Fade or Slide that fell back to a cut reports success. A
-      clean-up failure after a good save is announced as a failed save.
-      Done when: any change to the selection retires the discard question and
-      restores the result; Discard passes the same gate as Create, and every
-      running job shows Cancel; a kept result names its file as the previous
-      video; the result says when the closing is not the one chosen; "Saved."
-      is never followed by "could not be saved" for the same file. Tested where
-      the logic is pure, checked in Chrome otherwise.
-      Spec gap review 2026-10-01 (A-03, A-04, A-05): the kept result and the
-      discard question carry a one-line summary of their job — file, part
-      kept, output, closing as requested and applied — fixed when the job
-      ends; the result says it is not kept if the tab closes; picker success,
-      cancel and failure, the fallback's retry, and starting again during an
-      unconfirmed download are each exercised.
 
 - [ ] **VH-108 The Create step says only what is still true** (2026-10-01)
       Intent: U-04, U-05, U-17. "Ready to go", and the sound notes under it,

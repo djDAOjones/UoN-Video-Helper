@@ -77,6 +77,13 @@ export interface PipelineResult {
    */
   readonly brandingApplied: { readonly opening: boolean; readonly closing: boolean }
   /**
+   * The closing mode the file actually carries, or `null` with no closing in
+   * it. A fade or slide whose build could not be loaded falls back to a hard
+   * cut rather than failing the job, and the result has to be able to say so
+   * (VH-107, U-14) — the requested mode is the caller's to compare against.
+   */
+  readonly closingMode: BrandingMode | null
+  /**
    * Warnings about what PRODUCING the file cost, as opposed to what the source
    * was. Empty on almost every job.
    */
@@ -736,6 +743,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     return {
       file,
       brandingApplied: { opening: opening !== null, closing: closing !== null },
+      closingMode: closing ? mode : null,
       outputWarnings,
       contentOffsetSeconds: contentOffset,
       audioIncluded: audioSource !== null,

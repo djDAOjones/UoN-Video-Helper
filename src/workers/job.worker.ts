@@ -294,6 +294,7 @@ async function handleProcess(
       file: result.file,
       brandingApplied: result.brandingApplied,
       brandingRequested: options.branding,
+      closingModeApplied: result.closingMode,
       outputWarnings,
     })
   } catch (cause) {
