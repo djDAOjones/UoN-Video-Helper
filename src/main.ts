@@ -194,6 +194,20 @@ const trimResult = required<HTMLParagraphElement>('#trim-result')
 const trimClear = required<HTMLButtonElement>('#trim-clear')
 
 /**
+ * One line under each step whose controls a running job or save has locked,
+ * saying so (VH-112, U-21): a control that cannot change anything says why,
+ * in visible text (VH-90's rule).
+ */
+const lockNotes = ['#step-choose', '#step-trim', '#step-closing', '#step-preset'].map((selector) => {
+  const step = required<HTMLElement>(selector)
+  const note = document.createElement('p')
+  note.className = 'lock-note'
+  note.hidden = true
+  step.querySelector('h2')?.after(note)
+  return note
+})
+
+/**
  * Which selection the screen is currently describing.
  *
  * Every asynchronous answer — inspection, pre-flight — is about the file and
@@ -849,6 +863,7 @@ fileInput.addEventListener('change', () => {
   // Whatever the Create step last said was about the previous file's job.
   setStatus('')
   offerStop(null)
+  syncCreateEmphasis()
   document.title = outcomeTitle('none')
   sourceReport.replaceChildren()
   sourceBlock.replaceChildren()
@@ -1681,6 +1696,15 @@ function setSaveInFlight(saving: boolean): void {
 /** Applies whichever of the two locks is active. */
 function applyControlLock(): void {
   const locked = jobInFlight || saveInFlight
+  const lockText = jobInFlight
+    ? 'Locked while your video is being made.'
+    : saveInFlight
+      ? 'Locked while your video is being saved.'
+      : ''
+  for (const note of lockNotes) {
+    note.textContent = lockText
+    note.hidden = lockText === ''
+  }
   // Shut until the start-up check settles, and for good if it blocked.
   fileInput.disabled = locked || startup !== 'ready'
   presetChoice.disabled = locked
@@ -1785,9 +1809,25 @@ function releaseUnsavedResult(): void {
   unsavedResult?.release()
   unsavedResult = null
   updateLeaveWarning()
+  syncCreateEmphasis()
+}
+
+/** The source of a saved result still on screen, so Create stays stepped down beside it. */
+let savedResultFor: File | null = null
+
+/**
+ * One primary action per state (VH-112, U-13; Carbon). While a finished video
+ * is on screen — unsaved, or saved and still the chosen file's — Save or what
+ * follows it is the next step, and Create, which starts again, steps down.
+ */
+function syncCreateEmphasis(): void {
+  const resultShown =
+    unsavedResult !== null || (savedResultFor !== null && savedResultFor === fileInput.files?.[0])
+  startButton.classList.toggle('button--secondary', resultShown)
 }
 
 function beginJob(file: File): void {
+  savedResultFor = null
   // Create, or the question's Discard, is about to go: Cancel takes focus.
   const fromCreate = focusHeldBy([startButton, processResult])
   processResult.replaceChildren()
@@ -2160,6 +2200,8 @@ function renderResult(kept: RetainedResult): HTMLElement {
         // deadlock the request timeout would break ten seconds later.
         unsavedResult = null
         updateLeaveWarning()
+        savedResultFor = source
+        syncCreateEmphasis()
         leaseHeld = false
         worker.postMessage({ kind: 'lease', id: nextRequestId++, jobId, held: false })
         // Saving again would read a workspace that no longer exists, so the
@@ -2204,6 +2246,7 @@ function renderResult(kept: RetainedResult): HTMLElement {
   actions.className = 'actions'
   actions.append(save)
   processResult.append(actions)
+  syncCreateEmphasis()
   return heading
 }
 

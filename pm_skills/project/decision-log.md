@@ -11,6 +11,38 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — VH-112: controls look like what they are
+
+**Decision:** a `forced-colors` block opts the trim track, kept part,
+handles, colour segments and swatches out of the theme's replacement and
+paints them in system colours (`CanvasText`, `Highlight`, `ButtonText`,
+`GrayText`); rings take `Highlight`. Swatches are wide chips on a 2 px
+`--uon-blue-60` mat — the one palette tint at 3:1 or more against blue,
+white and Portland Stone — so neither reads as a checkbox and both keep
+their colour in every state. Disabled selects, text inputs and segments
+lose their fill and take a dashed edge (a deliberate step from Carbon,
+whose unfilled disabled field vanished on our panels); the text stays the
+pinned AAA pair. Create steps down to secondary while a finished video is
+on screen. Steps 1–4 say "Locked while your video is being made/saved."
+A `--measure` token (70ch) bounds `p`, `li`, `dd`. UI-STANDARDS gains
+1.4.8's five measures, the forced-colours rule, 2.4.13, the hand-on rule
+and one primary per state. The estimate rounding and the milestone
+fractions moved to config with VH-123.
+
+**Verified:** headless Chrome — screenshots of the colour choice and slider
+in light, dark and emulated forced colours, chosen and disabled; every
+rendered ring 2 px solid at 13:1 or better in each context; lock notes
+during a job and gone after; Create secondary beside Save; the widest
+paragraph 623 px (70ch).
+
+**Open:** a blue chip on a blue ground (the chosen Blue segment, or Blue
+unchosen in dark) shows as a framed blue rather than an obvious fill —
+better than the empty box, not yet excellent; VH-124's design pass owns it.
+A real Windows contrast theme is VH-M4's.
+
+**Link:** VH-112; `src/styles/app.css`, `src/styles/tokens.carbon.css`,
+`src/main.ts`, `UI-STANDARDS.md`.
+
 ## 2026-10-01 — VH-111: focus follows the transition, and the live regions say what the panels show
 
 **Decision:** `focusHeldBy(controls)` is taken BEFORE a transition and moves

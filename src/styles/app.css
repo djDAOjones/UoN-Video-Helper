@@ -30,6 +30,14 @@ body {
   line-height: 1.5;
 }
 
+/* Running text stops at the measure, whatever the panel's width (VH-112,
+   WCAG 1.4.8). Controls and their rows are not text and keep the width. */
+p,
+li,
+dd {
+  max-width: var(--measure);
+}
+
 /* The brand's heading face. Lora where its file is present, Georgia until. */
 h1,
 h2 {
@@ -780,17 +788,22 @@ details[open] > .disclosure-summary::before {
   width: 100%;
   min-height: var(--target-min);
   padding: var(--spacing-03) var(--spacing-04);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-strong);
   background: var(--layer-00);
   color: var(--text-primary);
   font: inherit;
   font-size: var(--type-body-compact);
 }
 
-/* Disabled by losing the field's fill, not by fading the text: the pair is
-   pinned at AAA in test/contrast.test.ts, like the disabled button's. */
-.select:disabled {
-  background: var(--layer-02);
+/* Disabled by losing the field's fill and its edge, not by fading the text
+   (VH-112, U-12): a filled field reads as live, so the live one keeps the
+   fill. The text is --text-secondary on the panel's --layer-01, a pair
+   pinned at AAA in test/contrast.test.ts. The dashed edge keeps the field's
+   shape visible without making it look pressable. */
+.select:disabled,
+.text-input:disabled {
+  background: transparent;
+  border: 1px dashed var(--border-subtle);
   color: var(--text-secondary);
   opacity: 1;
   cursor: not-allowed;
@@ -896,20 +909,36 @@ details[open] > .disclosure-summary::before {
   cursor: not-allowed;
 }
 
+/* Disabled like the fields: no fill, a dashed edge, the AAA text pair. The
+   chosen one keeps its weight, so which was chosen is still said. */
 .segmented:disabled .segment-face,
 .segmented:disabled .segment input:checked + .segment-face {
   border-color: var(--border-subtle);
-  background: var(--layer-02);
+  border-style: dashed;
+  background: transparent;
   color: var(--text-secondary);
 }
 
-/* What the closing card looks like, in the brand's own colours. Bordered in
-   the text colour so the white one shows on white and the blue one on blue. */
+
+/* Where controls are locked while a video is made or saved (VH-112, U-21). */
+.lock-note {
+  margin: 0 0 var(--spacing-05);
+  font-size: var(--type-body-compact);
+  color: var(--text-secondary);
+}
+
+/* What the closing card looks like, in the brand's own colours: a chip
+   wider than it is tall, so it reads as a sample and never as a checkbox
+   (VH-112, U-12). It keeps its colour in every state and on every ground.
+   The mat is the one palette tint at 3:1 or more against Nottingham Blue,
+   white and Portland Stone alike, so either chip stays a filled sample on
+   either segment, in either theme — the blue chip on the chosen blue
+   segment read as an empty box with a ring in the text colour. */
 .swatch {
   flex: none;
-  width: var(--spacing-05);
-  height: var(--spacing-05);
-  border: 1px solid currentColor;
+  width: var(--spacing-07);
+  height: var(--spacing-04);
+  border: 2px solid var(--uon-blue-60);
 }
 
 .swatch--blue {
@@ -1089,11 +1118,6 @@ details[open] > .disclosure-summary::before {
   border: 2px solid var(--support-error);
 }
 
-.text-input:disabled {
-  color: var(--text-secondary);
-  cursor: not-allowed;
-}
-
 .control-with-help .text-input {
   flex: 1;
 }
@@ -1220,3 +1244,82 @@ details[open] > .disclosure-summary::before {
   overflow: auto;
 }
 
+
+/*
+ * Forced colours — Windows contrast themes (VH-112, U-11). The browser
+ * replaces every author colour with the theme's, which erased everything
+ * drawn by a background: the trim track, the kept part and both handles, and
+ * the chosen colour segment's fill. Those few are opted out of the
+ * replacement and painted in the theme's own system colours, so they follow
+ * whatever theme the user chose. The swatches keep their real colours: they
+ * are samples of the closing card, not decoration.
+ */
+@media (forced-colors: active) {
+  .range-slider,
+  .segment-face,
+  .swatch {
+    forced-color-adjust: none;
+  }
+
+  .range-track::before {
+    background: CanvasText;
+  }
+
+  .range-fill {
+    background: Highlight;
+  }
+
+  .range-input::-webkit-slider-thumb {
+    background: radial-gradient(
+      circle,
+      Highlight 0 calc(var(--spacing-04) - 1px),
+      Canvas var(--spacing-04) calc(var(--spacing-04) + var(--spacing-01)),
+      transparent calc(var(--spacing-04) + var(--spacing-01) + 1px)
+    );
+  }
+
+  .range-input::-moz-range-thumb {
+    background: radial-gradient(circle, Highlight 0 calc(var(--spacing-04) - 1px), transparent var(--spacing-04));
+  }
+
+  .range-input:disabled::-webkit-slider-thumb {
+    background: radial-gradient(circle, GrayText 0 calc(var(--spacing-04) - 1px), transparent var(--spacing-04));
+  }
+
+  .range-input:focus-visible::-webkit-slider-thumb,
+  .range-input:focus-visible::-moz-range-thumb {
+    outline-color: CanvasText;
+  }
+
+  .segment-face {
+    border-color: ButtonText;
+    background: ButtonFace;
+    color: ButtonText;
+  }
+
+  .segment input:checked + .segment-face {
+    border-color: Highlight;
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  .segmented:disabled .segment-face,
+  .segmented:disabled .segment input:checked + .segment-face {
+    border-color: GrayText;
+    background: Canvas;
+    color: GrayText;
+  }
+
+  .swatch {
+    border-color: CanvasText;
+  }
+
+  .segment input:focus-visible + .segment-face {
+    outline-color: CanvasText;
+  }
+
+  /* Every other ring takes the theme's own focus colour. */
+  :focus-visible {
+    outline-color: Highlight;
+  }
+}

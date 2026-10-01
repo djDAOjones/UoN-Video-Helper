@@ -91,27 +91,10 @@
       surfaces — close those with its evidence where it gets there first.
       VH-105 waits on it.
 
-- [ ] **VH-112 Controls look like what they are** (2026-10-01)
-      Intent: U-11, U-12, U-13, U-21. Forced colours erase the trim slider and
-      the colour choice — no `forced-colors` rule exists. The colour swatches
-      read as checkboxes, and the chosen blue one vanishes into its own fill.
-      A disabled select looks livelier than an enabled one. "Create the video"
-      and "Save the video" are both primary once a video exists. Locked steps
-      do not say why.
-      Done when: a `forced-colors` block draws the track, handles and checked
-      segment in system colours, and `UI-STANDARDS.md` says forced colours are
-      checked; swatches show their colour in every state and nothing reads as
-      a checkbox; disabled fields read as disabled with the AAA pair kept
-      (`test/contrast.test.ts`); one primary action per state; locked steps
-      say so.
-      Spec gap review 2026-10-01 (A-08, A-09): a measure token bounds every
-      run of body text at about 70 characters and `UI-STANDARDS.md` →
-      Perceivable carries 1.4.8's five measures; `UI-STANDARDS.md` → Operable
-      states 2.4.13, and the rendered focus indicator of every control —
-      buttons, segments, thumbs, dialog — is checked for area and changed-
-      pixel contrast in each colour context, forced colours included.
-
 - [ ] **VH-113 The phone path** (2026-10-01)
+      Next up 2026-10-01: VH-110, VH-123, VH-111 and VH-112 shipped in the
+      session before; this one was not started (the maintainer paused the
+      run). VH-105 skipped at the maintainer's word.
       Intent: U-16, U-19, U-20. On an iPhone or iPad the mobile warning can
       be skipped: without `userAgentData` the worker falls back to
       `matchMedia`, which a worker does not have, and calls it a desktop. The

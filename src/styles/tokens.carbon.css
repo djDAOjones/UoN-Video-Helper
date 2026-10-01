@@ -46,6 +46,10 @@
   --type-heading-03: 1.25rem;
   --type-heading-04: 1.75rem;
 
+  /* WCAG 1.4.8 (AAA): no more than 80 characters a line. 70ch leaves room
+     for a wide glyph run; CJK's 40-glyph limit is VH-105's to set. */
+  --measure: 70ch;
+
   /* The AAA pointer-target floor. Never shrink a control below this. */
   --target-min: 44px;
 

@@ -199,12 +199,35 @@ implementation notes.
 - Link text must make sense on its own — no "click here."
 - Use headings and landmarks for substantial content. Provide text
   alternatives for meaningful non-text content.
+- Visual presentation (WCAG 1.4.8), all five: the user's own foreground
+  and background colours are not overridden; running text stops at the
+  `--measure` token (70 characters; 40 glyphs for CJK); no justified text;
+  line spacing 1.5, with paragraph spacing left to survive the user's own
+  text-spacing overrides; text enlarges to 200% without horizontal scroll.
+- Forced colours (Windows contrast themes) are checked. Anything drawn by a
+  background — a track, a fill, a chosen segment — vanishes under them, so
+  it opts out with `forced-color-adjust: none` and paints itself in system
+  colours (`CanvasText`, `Highlight`, `ButtonText`, `GrayText`), never in a
+  token; the `forced-colors` block in `app.css` is where that lives.
 
 ### Operable
 
 - All functionality must be keyboard operable without traps.
 - Focus order must be logical. Focus indicators must be visible and
   not obscured by sticky headers or overlays.
+- Focus appearance (WCAG 2.4.13): every indicator is at least a 2 CSS px
+  solid perimeter of the control, and its pixels change by at least 3:1
+  between focused and unfocused — checked on the rendered control, in the
+  light and dark themes, on a blue band and in forced colours, not only as
+  a token pair.
+- When a transition removes the control that has focus, focus is handed to
+  the control that continues the task; it is never moved from where a user
+  has gone to read (VH-111).
+- One primary button per state. While a finished result is on screen,
+  starting again steps down to secondary.
+- Disabled reads as disabled at a glance: a field or segment loses its fill
+  and takes a dashed edge; the text keeps the pinned AAA pair. A step whose
+  controls are locked says so in one line.
 - Pointer targets: **≥ 44 × 44 CSS px** unless a WCAG exception
   applies.
 - Do not require path-based gestures or fine motor precision when a
