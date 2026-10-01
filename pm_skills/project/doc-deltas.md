@@ -116,3 +116,7 @@
       probe; the closing's frames are added at the same rate, and every audio
       stage is priced from pre-flight's own timed analysis pass over the kept
       part (source: VH-100)
+- [ ] 2026-10-01 SPEC §6.5 — calls colour handling untested and phone HDR
+      unsafe; VH-26 (2026-08-27) measured Chrome tone-mapping the HLG and
+      Dolby Vision samples to SDR within two levels (source: VH-104, which set
+      the HDR clip's "Ready to go" aside on that evidence)

@@ -85,30 +85,133 @@
       would fold, 2026-09-30.
       Open: whether it is wanted at all. Default: not built. Trim shipped
       2026-10-01, so the page is five panels now; decide after using it.
+      VH-104's evidence (2026-10-01, the review's "VH-97" section): keep the
+      default. Length is not where the page fails; time is — verdicts,
+      questions and focus outliving their moment. Revisit after VH-107,
+      VH-108 and VH-111 and a pilot session (VH-M4).
       Done when: signed off; then focus lands on the next control at every
       transition, each is announced, every folded stage can be reopened, and
       nothing folds while it shows an error.
 
 ### Band 6 — Review, then translate
 
-<!-- Maintainer request, 2026-10-01. Agent work. Starts once Band 5 has
-     landed — VH-101 changes the Choose step, and a review of the page before
-     it would review a page about to change. Ordered: the review settles the
-     copy, then VH-105 translates it, so nothing is translated twice. -->
+<!-- Maintainer request, 2026-10-01. Agent work. VH-104's review shipped the
+     same day and its findings are VH-106 to VH-114 — cite the U-number in
+     `reviews/2026-10-01/uon-video-helper-ux-review-2026-10-01.md` rather than
+     restating the evidence here. Ordered: the defect first; then the two
+     rank-1 result problems; then what the page says, does and announces over
+     time; then controls, the phone path and the words; then VH-105
+     translates the settled copy, so nothing is translated twice. -->
 
-- [ ] **VH-104 A UX review of the whole page** (2026-10-01)
-      Intent: the page was built item by item — the interface pass, Trim, the
-      drop zone — and nobody has walked it end to end as a novice would. Take
-      it as one flow: a first-time staff user with a real recording, Choose to
-      Save, in Chrome at desktop and phone width, judged against Carbon's
-      productive patterns, `UI-STANDARDS.md`, WCAG 2.2 AAA and spec §9.2
-      (plain language, named stages, errors that say what to do next). Its
-      findings are also the evidence VH-97's open question waits on.
-      Done when: a findings report sits in `reviews/<date>/` beside the
-      2026-08-26 review, each finding ranked and showing what it saw; every
-      finding is a backlog item or set aside with a reason; and what only a
-      person can judge — a session with pilot staff — is named for the
-      maintainer, not claimed.
+- [ ] **VH-106 The Teams recording misses −16 LUFS** (2026-10-01)
+      Intent: U-01, rank 1. The 29-minute Teams recording in `samples/` — the
+      one VH-M2 timed, and the persona's input — fails output verification
+      after the whole encode: delivered −16.857 LUFS against −16 ±0.5, true
+      peak −2.92 dBTP (passes). Source −21.27 LUFS and −1.90 dBTP, loudness
+      range about 21.9 LU, one silent stretch of 8 min 58 s. Reproduce with
+      `/spike-real.html?file=/samples/<the recording>`: `1 FAILURE(S)` in
+      234 s. The verification is right to refuse; the gain solve's aim does
+      not survive to the file on this recording — the gap VH-83's codec probe
+      exists to close.
+      Scope: the protected DSP files may be involved; if so the EBU Tech 3341
+      harness runs in the same task.
+      Done when: this recording lands within tolerance on both outputs and is
+      pinned as a real-material regression case; the recordings that pass
+      today still pass.
+- [ ] **VH-107 The finished video belongs to its own choices** (2026-10-01)
+      Intent: U-02 and U-03 (rank 1), U-14 and U-15. The discard question
+      outlives the choice it asked about — pressed with the trim in error, it
+      threw away the unsaved video and started an untrimmed job with no Cancel
+      on screen. A previous file's unsaved video sits under the next file,
+      unnamed. A Fade or Slide that fell back to a cut reports success. A
+      clean-up failure after a good save is announced as a failed save.
+      Done when: any change to the selection retires the discard question and
+      restores the result; Discard passes the same gate as Create, and every
+      running job shows Cancel; a kept result names its file as the previous
+      video; the result says when the closing is not the one chosen; "Saved."
+      is never followed by "could not be saved" for the same file. Tested where
+      the logic is pure, checked in Chrome otherwise.
+- [ ] **VH-108 The Create step says only what is still true** (2026-10-01)
+      Intent: U-04, U-05, U-17. "Ready to go", and the sound notes under it,
+      stay when the trim is in error (and Create is hidden), after a changed
+      preset, after the job, and after a failure. A file pre-flight blocks is
+      "read" at step 1, offered steps 2–4, refused only at step 5 — telling a
+      user in desktop Chrome to use Chrome — under a note that "None of these
+      stop you continuing". A bad time in one trim field silently reverts when
+      the other is edited, and Create comes back.
+      Done when: a superseded verdict, and its sound notes, are withdrawn or
+      marked until the re-check lands; after a job the step leads with the
+      outcome; a block is said at step 1, and steps 2–4 do not invite work on
+      a file that cannot be made; the decode block's remedy fits the browser
+      in use; no "nothing stops you" line under a block; each trim field keeps
+      its own pending text and error.
+- [ ] **VH-110 Failures say what to do next** (2026-10-01)
+      Intent: U-06, U-18. A failed job says "Something went wrong…", says the
+      original is unchanged twice, then "You can choose a different one". A
+      start-up failure points novices at "WebCodecs video encoding". Errors
+      captured shows a stack trace. Cancel reaches only a running job, not a
+      long device check or a streaming save.
+      Done when: each known failure has its own sentence and a next step that
+      fits it — what happened, that the original is safe (once), what to do
+      (spec §9.2); a stack sits behind a disclosure under a plain sentence; a
+      start-up failure is said at Choose; a long check or save can be
+      cancelled and cleans up.
+- [ ] **VH-109 Progress that neither freezes nor chatters** (2026-10-01)
+      Intent: U-07, U-08, U-22. "Analysing audio — 0%" for the whole analysis;
+      "Finishing the file — 100%" before the checks that can still fail
+      (U-01); every percent written to the polite live region (WCAG 2.2.4,
+      AAA); estimates to the second that differ by a quarter between loads of
+      one file; a tab title that says nothing through a long job.
+      Done when: a stage with no measured progress shows no percentage; the
+      final check is a named stage and 100% means ready; the live region
+      announces stages and a few milestones; estimates are rounded; the tab
+      title carries the stage and "ready". Spec §9.2's stage names go through
+      a doc-delta if they change.
+- [ ] **VH-111 Focus and announcements follow the page** (2026-10-01)
+      Intent: U-09, U-10. Focus falls to the page body at Create, Cancel,
+      finish and "Keep it" — after Cancel the next Tab skips Create. Caption
+      loss, the sound notes, a closing that could not load and a failure's
+      advice are on screen only; the live line says "Video read. …" or "The
+      video could not be created.".
+      Done when: focus moves to Cancel on start, back to Create on cancel, and
+      to the result on finish or "Keep it"; the read announcement counts what
+      will not be carried over and a failure's carries its next step; checked
+      with the keyboard and with VoiceOver.
+- [ ] **VH-112 Controls look like what they are** (2026-10-01)
+      Intent: U-11, U-12, U-13, U-21. Forced colours erase the trim slider and
+      the colour choice — no `forced-colors` rule exists. The colour swatches
+      read as checkboxes, and the chosen blue one vanishes into its own fill.
+      A disabled select looks livelier than an enabled one. "Create the video"
+      and "Save the video" are both primary once a video exists. Locked steps
+      do not say why.
+      Done when: a `forced-colors` block draws the track, handles and checked
+      segment in system colours, and `UI-STANDARDS.md` says forced colours are
+      checked; swatches show their colour in every state and nothing reads as
+      a checkbox; disabled fields read as disabled with the AAA pair kept
+      (`test/contrast.test.ts`); one primary action per state; locked steps
+      say so.
+- [ ] **VH-113 The phone path** (2026-10-01)
+      Intent: U-16, U-19, U-20. On an iPhone or iPad the mobile warning can
+      be skipped: without `userAgentData` the worker falls back to
+      `matchMedia`, which a worker does not have, and calls it a desktop. The
+      mobile verdict's heading promises "This will work" over a body saying it
+      may stop part-way; the drop hint shows on touch; the time fields'
+      decimal keyboard has no colon, while the helper asks for "1:05.5".
+      Done when: the device class is decided on the main thread and passed
+      in; the mobile verdict leads with the risk of stopping part-way; the drop
+      hint hides on a coarse pointer; the time helper fits the keyboard; seen
+      on a real Android phone and an iPhone (the maintainer's devices).
+- [ ] **VH-114 Plain words, once** (2026-10-01)
+      Intent: U-23, U-24, U-25 — the last copy pass before VH-105 translates
+      it. "LU", "LUFS" and "re-encoded" in novice copy; four names for
+      levelling; "(branded).mp4" whatever was chosen; "about the same size"
+      after a trim and "branding still applied" under None; "Ready, with one
+      thing to know" over several things; a status line that repeats the
+      verdict box; nothing after "Saved.".
+      Done when: no unit or codec word on the main path; one name for
+      levelling; every claim depends on the job; the status line shows only
+      what the box does not, still announcing it; one sentence of what next
+      after Saved; `test/screen-text.test.ts` holds any name it pins.
 - [ ] **VH-105 The page in Chinese and Bahasa Malaysia** (2026-10-01)
       [sign-off]
       Intent: staff at the Ningbo and Malaysia campuses use the same tool.
@@ -117,7 +220,8 @@
       tabbed views. Every string the page can show — labels, stage names,
       live-region announcements, warnings, errors, the browser block — comes
       from one table per language, with no new dependency; the browser's own
-      `Intl` formats numbers, sizes and durations. Waits on VH-104.
+      `Intl` formats numbers, sizes and durations. Waits on VH-107 to VH-114:
+      each changes words the page shows.
       Scope: the page only. The closing card is approved University media and
       stays as issued (a language variant is D12's governance question); logs
       and the diagnostics bundle stay English, for the maintainer.
@@ -154,6 +258,17 @@
       "best quality" — 34.2 s, or **6.3x real time**. The 29.25-minute Teams
       recording covers the 20-minute case; 60 minutes needs material as well as
       a device.
+
+- [ ] **VH-M4 Watch staff use it** [maintainer] (2026-10-01)
+      Intent: what VH-104 could not judge, listed in the review's "What only a
+      person can judge": a pilot session — three to five staff, their own
+      recordings, unaided, Choose to Save, thinking aloud — plus screen
+      readers, real phones, speech input, Windows high contrast and a managed
+      University laptop. The pilot session answers VH-97, and whether "Cut" /
+      "None" and "Larger / better" / "Smaller / reduced" mean to staff what
+      they mean.
+      Done when: at least three staff have been watched end to end, and what
+      they stumbled on is filed as backlog items.
 
 - [ ] **VH-14 Deployment** [maintainer] (2026-08-24)
       Maintainer 2026-08-27: the intended home is a UoN-hosted web app in the

@@ -11,6 +11,44 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — VH-104: the page fails in time, not in length
+
+**Decision:** the UX review is `reviews/2026-10-01/`: 25 ranked findings
+(U-01 to U-25; 3 at rank 1, 15 at 2, 7 at 3), each filed as VH-106 to VH-114
+or set aside with a reason, and the checks only a person can make filed as
+VH-M4. Claude walked the running page; Codex astra (`gpt-6-astra`), the
+maintainer's choice of partner, read every state from source independently,
+then checked the merged report against source before commit — twelve
+corrections, all verified, all applied. VH-97 keeps its default.
+
+**Rationale:** the findings share a cause. The page is right about the moment
+it was drawn and wrong afterwards: a verdict outlives its trim, the discard
+question outlives its choice, a finished video outlives its file, and focus
+is dropped when its control goes. Folding (VH-97) would hide those
+contradictions and add transitions the page does not yet hand focus across,
+so it waits on VH-107, VH-108, VH-111 and VH-M4. U-01 is ranked first though
+it is not a UX defect: the persona's own input — the 29-minute Teams
+recording — delivers −16.857 LUFS, and the verification that refuses it is
+right, so VH-106 is a pipeline item.
+
+**Ranks against Codex's:** F03 and F04 down to 2 — each needs a failure the
+Chrome walk could not produce, and a cut is still branding. F11 and F13 went
+to 3 in the draft and back to 2 on Codex's check: a large save to a slow
+folder has no way out, and the trim revert re-enables Create. Codex's F01 grew
+when reproduced: the job Discard started ran with no Cancel on screen.
+
+**Method worth keeping:** `DOM.setFileInputFiles` for choosing, real
+`Input.dispatchDragEvent` drops, a `showSaveFilePicker` stub into OPFS; an
+unsaved result's leave warning blocks `Page.navigate` until the dialog is
+handled; `/spike-real.html` ends on `done`, after its verdict line. Committed
+screenshots are cropped free of recording frames and file names.
+
+**Gates assumed:** "execute VH-104" was taken as the go-ahead — scope as the
+item states it; option, two reviewers merged and cross-checked, as named.
+
+**Link:** VH-104, VH-97, VH-106 to VH-114, VH-M4;
+`reviews/2026-10-01/uon-video-helper-ux-review-2026-10-01.md`.
+
 ## 2026-10-01 — VH-103: the Xerte upload is one command
 
 **Decision:** `npm run package:xerte` (`scripts/package-xerte.mjs`) runs

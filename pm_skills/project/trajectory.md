@@ -25,6 +25,14 @@
 
 ## Archived: the review's close and Band 1a — see archive/trajectory/trajectory-0004-review-close-and-band-1a.md
 
+### Band 6 — review, then translate
+
+- VH-104 — Shipped 2026-10-01. The whole page walked as a first-time member
+  of staff would, at desktop and phone width, with Codex astra reading the
+  source: 25 ranked findings in `reviews/2026-10-01/`, filed as VH-106 to
+  VH-114 or set aside, the person-only checks as VH-M4; VH-97 keeps its
+  default. See decision-log.
+
 ### Band 5 — the overnight run
 
 - VH-103 — Shipped 2026-10-01. `npm run package:xerte` makes the Xerte zip
