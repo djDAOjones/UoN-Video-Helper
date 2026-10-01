@@ -27,6 +27,10 @@
 
 ### Band 5 — the overnight run
 
+- VH-103 — Shipped 2026-10-01. `npm run package:xerte` makes the Xerte zip
+  — the flat build and its hosting README, named for the build id the bundle
+  carries — and refuses a dirty tree. Band 5 closed with it. See
+  decision-log.
 - VH-102 — Shipped 2026-10-01. Every spike page ends on one `ALL PASS` /
   `N FAILURE(S)` line and the cross-engine runner reads only that, so no file
   name can fail a run that passed. See decision-log.

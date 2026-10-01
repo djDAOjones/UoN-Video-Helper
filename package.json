@@ -13,6 +13,7 @@
     "prebuild": "npm run check:placeholders",
     "build": "tsc --noEmit && vite build",
     "build:xerte": "npm run check:placeholders && tsc --noEmit && vite build --mode xerte",
+    "package:xerte": "node scripts/package-xerte.mjs",
     "preview": "vite preview",
     "test": "node -e \"console.log('test context: an unusually long DSP timeout may be machine contention; rerun on a settled machine before changing the timeout or assertion')\" && vitest run",
     "test:watch": "vitest",

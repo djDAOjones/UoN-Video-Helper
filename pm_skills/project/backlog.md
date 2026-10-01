@@ -24,22 +24,6 @@
      Both sets were re-verified against source before banding, and where a
      review's own remedy was shown unsafe the item says so. -->
 
-### Band 5 — The overnight run
-
-<!-- Promoted from the wish-list by the maintainer on 2026-10-01, for the
-     gateless run that starts at 02:02, and to be taken in this order. Agent
-     work, unblocked. Listed first because it is the only agent work in
-     Active that is free to start: Band 3 waits on the maintainer, and
-     Band 4's VH-97 is [sign-off] with "not built" as its default. -->
-
-- [ ] **VH-103 Script the rest of the Xerte package** (2026-10-01)
-      Intent: `npm run build:xerte` makes the flat build, but
-      `README-HOSTING.txt` and the zip named for its build id are still made
-      by hand. The recipe is in `DEV-INFRASTRUCTURE.md` → "Xerte package".
-      Done when: one command produces the zip, named for the build id,
-      holding the flat build and `README-HOSTING.txt`; `check:build` still
-      never writes `dist/`; no new dependency without asking.
-
 ### Band 3 — Blocked on the maintainer
 
 <!-- Agent work that cannot start until something arrives from outside the

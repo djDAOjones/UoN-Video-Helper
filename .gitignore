@@ -5,6 +5,8 @@ node_modules/
 dist/
 build/
 .cache/
+# The Xerte zip, made by `npm run package:xerte` (VH-103)
+release/
 
 # Editor / OS
 .DS_Store

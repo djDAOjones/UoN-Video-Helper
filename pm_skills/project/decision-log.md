@@ -11,6 +11,37 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — VH-103: the Xerte upload is one command
+
+**Decision:** `npm run package:xerte` (`scripts/package-xerte.mjs`) runs
+`build:xerte`, writes `README-HOSTING.txt` beside the build — never into
+`dist/` — and zips both as `release/uon-video-helper-<build id>-site.zip`.
+The build id is read back out of the bundle, and a build carrying none, or
+two, is refused rather than named. A dirty tree is refused, with the stray
+paths listed. The zip is the system `zip`, as `build-branding.mjs` uses
+ffmpeg: no dependency. The README follows Route Plotter's: how to host, HTTPS,
+no headers, Chrome, the update rule (keep the old scripts a while), MIME
+types, and every file with its size.
+
+**Rationale:** the README and the zip were made by hand from the recipe, which
+is how a zip comes to be named for one build and hold another. Reading the
+name from the bundle rules that out; computing it beside the build would not,
+across midnight.
+
+**Verified:** from a worktree at a `git stash create` commit, so the branch
+was untouched — a scratch clone hung on OneDrive's dataless objects. A stray
+file: refused, exit 1. Clean: 21 files, no folder, named
+`…v0.1.0+20261001.3c51827-site.zip`. Unzipped into an unknown nested folder
+and served: the page shows that build id, a closing asset loads relative to
+it, no errors. `check:build` unchanged. The README's size column and MIME list
+were tidied after that run; text only, and tested.
+
+**Gates assumed (auto-jazz):** scope — the command, its docs and tests;
+option — the system `zip` over a hand-written zip writer.
+
+**Link:** VH-103, VH-14; `scripts/package-xerte.mjs`,
+`DEV-INFRASTRUCTURE.md` → "Xerte package".
+
 ## 2026-10-01 — VH-102: one verdict line per spike page
 
 **Decision:** every spike page ends on one line just before `done` — `ALL
