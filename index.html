@@ -61,14 +61,21 @@
            jump. Trim is the one a new file resets, to the whole video. -->
       <section class="panel step" id="step-choose" aria-labelledby="choose-heading">
         <h2 id="choose-heading"><span class="step-number">1.</span> Choose a video</h2>
-        <div class="field">
+        <!-- VH-101. Carbon's file-uploader drop zone around the picker, which
+             stays the primary and keyboard route: a dropped video is handed to
+             it and read exactly as a chosen one is. The refusal line is always
+             present, so a refusal is announced; it is empty otherwise. -->
+        <div class="field drop-zone" id="drop-zone">
           <label class="label" for="file-input">Video file</label>
           <input
             class="file-input"
             type="file"
             id="file-input"
             accept="video/*,.mp4,.mov,.m4v,.mkv,.webm"
+            aria-describedby="drop-error"
           />
+          <p class="helper" id="drop-hint">Or drop a video file here.</p>
+          <p class="field-error drop-error" id="drop-error" role="alert"></p>
         </div>
         <!-- What is happening to the FILE: reading, read, could not be read.
              A live region of its own, because it belongs beside the input it

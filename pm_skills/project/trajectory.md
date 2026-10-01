@@ -27,6 +27,9 @@
 
 ### Band 5 — the overnight run
 
+- VH-101 — Shipped 2026-10-01. A video can be dropped on the Choose step and
+  is read exactly as a chosen one; anything else is refused in words, and a
+  file dropped elsewhere never navigates the page away. See decision-log.
 - VH-100 — Shipped 2026-10-01. The pre-flight time estimate counts the
   closing and every audio stage, priced from pre-flight's own timed analysis
   pass; planning is now predicted within a second. The 3 s video probe's own

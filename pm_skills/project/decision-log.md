@@ -11,6 +11,46 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — VH-101: drop a video on the Choose step
+
+**Decision:** the Choose step's field sits in Carbon's file-uploader drop zone
+— a dashed container that turns solid with the focus outline while a file is
+held over it, its hint changing from "Or drop a video file here." to "Let go
+to read this video." A dropped video is handed to the file input and
+announced with the input's own `change`, so it is read by the same code as a
+chosen one, and every later reader of `input.files` sees it. The picker stays
+the primary and only keyboard route. A drop of several files, of something
+the input's own `accept` list refuses, or while a video is being made or
+saved is refused in words in an always-present alert beside the input. A file
+dropped anywhere else on the page does nothing — the browser would otherwise
+open it and navigate the job away.
+
+**Rationale:** spec §9.1 step 1 has always said "file picker or drag-and-drop".
+Feeding the picker rather than a parallel path is what makes "read exactly as
+a chosen one" true by construction: the reset of Trim and the verdict, the
+unsaved-result guard and the preset change all key off the input. The accept
+rule is read from the input, so the two routes cannot drift apart.
+
+**Design review:** Carbon file uploader, drag-and-drop variant, around the
+native input rather than replacing it. Heuristics most at risk: error
+prevention and system status, so every refusal says what to do. Colours are
+roles the contrast suite already measures (`--border-strong`, `--focus`,
+`--support-error`); the held state is never colour alone; nothing inside
+moves (outline, not border); no motion; target sizes unchanged.
+
+**Verified:** headless Chrome 154, real file drags through CDP: held state
+(screenshots light and dark), a lecture dropped and read with its verdict,
+one `change` per drop whether on the input or the hint, a text file and two
+files refused, drops on the heading, preview and footer inert, during a job
+the zone refuses and the job runs on, cancel still works, the next drag
+clears the refusal, the picker reached by Tab, no request off the dev server.
+
+**Gates assumed (auto-jazz):** scope — the Choose step only, no page-wide
+target; option — feed the input, not a second read path.
+
+**Link:** VH-101; `src/ui/drop-zone.ts`, `index.html`, `src/main.ts`,
+`src/styles/app.css`.
+
 ## 2026-10-01 — VH-100 second review: the probe covers the sound, not the picture
 
 **Decision:** the estimate is given both halves of the timed pass — its wall

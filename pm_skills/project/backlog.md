@@ -32,17 +32,6 @@
      Active that is free to start: Band 3 waits on the maintainer, and
      Band 4's VH-97 is [sign-off] with "not built" as its default. -->
 
-- [ ] **VH-101 Drop a video onto the page** (2026-10-01)
-      Intent: spec §9.1 step 1 has always asked for "file picker or
-      drag-and-drop", and only the picker was built. The 2026-10-01 doc-sync
-      kept it in the spec.
-      Done when: a video dropped on the Choose step is read exactly as a
-      chosen one is (same path, same reset of Trim and the verdict); the file
-      input stays the primary, keyboard route; the target follows Carbon's
-      file-uploader drop zone, with AAA contrast and a visible drag-over
-      state; a non-video or several files are refused in words; a file
-      dropped anywhere else never navigates the page away, above all during
-      a job; nothing is uploaded; verified in Chrome.
 - [ ] **VH-102 One verdict line per spike page** (2026-10-01)
       Intent: `run-in-engines.mjs` reads verdict words in prose, which a
       contrived source file name can fool into a false failure (VH-26

@@ -423,6 +423,30 @@ a {
   color: var(--text-secondary);
 }
 
+/* --- Drop zone (Carbon file uploader, drag and drop) --- */
+
+/* The Choose step's field inside Carbon's dashed drop container. The picker in
+   it stays the primary, keyboard route (VH-101). */
+.drop-zone {
+  padding: var(--spacing-05);
+  border: 1px dashed var(--border-strong);
+}
+
+/* A file held over it: solid, with the focus outline Carbon gives a drop
+   container — and the words beneath change, so the state is never colour
+   alone. An outline, not a thicker border, so nothing inside moves. */
+.drop-zone.is-drag-over {
+  border-style: solid;
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+
+/* Present whether or not it has anything to say, so a refusal is announced;
+   it takes no room while it is empty. */
+.drop-error:empty {
+  margin: 0;
+}
+
 /* --- Source report --- */
 
 .facts {

@@ -55,6 +55,7 @@ import {
   colourDisabledReason,
   onsetDisabledReason,
 } from './ui/closing-choice'
+import { installDropZone } from './ui/drop-zone'
 import {
   describeBrowser,
   feedbackDetails,
@@ -111,6 +112,9 @@ const errorsPanel = required<HTMLElement>('#errors-panel')
 const errorsContainer = required<HTMLDivElement>('#errors')
 const devActions = required<HTMLDivElement>('#dev-actions')
 const fileInput = required<HTMLInputElement>('#file-input')
+const dropZone = required<HTMLDivElement>('#drop-zone')
+const dropHint = required<HTMLParagraphElement>('#drop-hint')
+const dropError = required<HTMLParagraphElement>('#drop-error')
 const sourceReport = required<HTMLDivElement>('#source-report')
 const preflightReport = required<HTMLDivElement>('#preflight-report')
 const audioWarnings = required<HTMLDivElement>('#audio-warnings')
@@ -600,6 +604,17 @@ void checkWorker()
  * is chosen by then — so a change made before that has nothing to do.
  */
 let inspectedFile: File | null = null
+
+// A dropped video arrives as a `change` on the picker, so everything below
+// reads it exactly as a chosen one (VH-101). Busy is read at the drop: the
+// lock below is what keeps the picker from starting a second video too.
+installDropZone({
+  zone: dropZone,
+  input: fileInput,
+  hint: dropHint,
+  message: dropError,
+  busy: () => (jobInFlight ? 'making' : saveInFlight ? 'saving' : null),
+})
 
 fileInput.addEventListener('change', () => {
   const file = fileInput.files?.[0]
