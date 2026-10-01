@@ -80,6 +80,11 @@ export function isSourceDestination(
   )
 }
 
+/** Chromium's `FileSystemHandle.remove()`, ahead of the DOM types. */
+interface RemovableHandle {
+  readonly remove?: () => Promise<void>
+}
+
 /** Reads what is already at a picked destination, or `null` if nothing is. */
 async function existingAt(handle: FileSystemFileHandle): Promise<File | null> {
   try {
@@ -115,16 +120,22 @@ export async function saveFile(
   signal?: AbortSignal,
 ): Promise<SaveResult> {
   if (pickerAvailable()) {
+    let handle: FileSystemFileHandle | null = null
+    let createdHere = false
     try {
       const options: SaveFilePickerOptions = {
         suggestedName,
         types: [{ description: 'MP4 video (.mp4)', accept: { 'video/mp4': ['.mp4'] } }],
       }
-      const handle = await showSaveFilePicker(options)
+      handle = await showSaveFilePicker(options)
+      const existing = await existingAt(handle)
+      // Nothing of the user's was at the destination: the picker made an
+      // empty file there, which a stopped save must not leave behind.
+      createdHere = existing === null || existing.size === 0
 
       if (source) {
         const sameEntry = source.handle ? await handle.isSameEntry(source.handle) : false
-        if (sameEntry || isSourceDestination(await existingAt(handle), source.identity)) {
+        if (sameEntry || isSourceDestination(existing, source.identity)) {
           log.warn('save', 'refused to write over the source file', {})
           return { outcome: 'refused-source', release: NOTHING_TO_RELEASE }
         }
@@ -136,10 +147,27 @@ export async function saveFile(
       log.info('save', 'saved through the file picker', { bytes: file.size })
       return { outcome: 'saved', release: NOTHING_TO_RELEASE }
     } catch (cause) {
+      if (signal?.aborted) {
+        // Aborting the writable discards its swap file, so a file the user
+        // chose to replace is untouched. One the picker created is removed;
+        // `remove()` is Chromium's, and where it is missing the empty file
+        // stays — logged, never a reason to fail the stop.
+        if (handle && createdHere) {
+          try {
+            await (handle as RemovableHandle).remove?.()
+          } catch (removal) {
+            log.warn('save', 'could not remove the empty file a stopped save left', {
+              reason: removal instanceof Error ? removal.message : String(removal),
+            })
+          }
+        }
+        log.info('save', 'save stopped by the user', {})
+        return { outcome: 'cancelled', release: NOTHING_TO_RELEASE }
+      }
       // AbortError is the user closing the dialogue. Anything else falls
       // through to the download route rather than failing outright.
       if (cause instanceof DOMException && cause.name === 'AbortError') {
-        log.debug('save', signal?.aborted ? 'save stopped by the user' : 'save cancelled by the user')
+        log.debug('save', 'save cancelled by the user')
         return { outcome: 'cancelled', release: NOTHING_TO_RELEASE }
       }
       log.warn('save', 'file picker failed; falling back to a download', {

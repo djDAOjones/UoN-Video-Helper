@@ -13,6 +13,7 @@
 
 import { PRESETS } from '../config/presets'
 import type { FailureCode } from '../workers/failure'
+import { CHROME_LACKS, TRY_CHROME } from './preflight-panel'
 
 export interface FailureText {
   /** What happened. */
@@ -37,7 +38,7 @@ export function failureText(code: FailureCode, message?: string): FailureText {
     case 'unreadable-source':
       return {
         what: message ?? 'This file could not be read as a video.',
-        next: 'Choose a different file, or export this one again as an MP4 — a file whose name ends .mp4.',
+        next: 'Choose a different file, or save this one again from the app that made it, as a file whose name ends .mp4.',
       }
     case 'bad-trim':
       return {
@@ -77,7 +78,7 @@ export function failureText(code: FailureCode, message?: string): FailureText {
     case 'check-failed':
       return {
         what: message ?? 'The device check did not finish.',
-        next: 'Choose the file again to check it once more. If it fails again, report it with the Send feedback button.',
+        next: 'Press Check again to run it once more. If it fails again, report it with the Send feedback button.',
       }
     case 'timed-out':
       return {
@@ -115,9 +116,9 @@ export function startupFailureText(
   flags: StartupFlags,
   context: { readonly chromeOnComputer: boolean },
 ): string | null {
-  const tryChrome = context.chromeOnComputer
-    ? 'This copy of Chrome may be out of date, or a setting on this computer may have turned the feature off. Update Chrome, or ask whoever manages the computer.'
-    : 'Chrome on a computer is the browser this tool is built for — try it there.'
+  // The block panel's own sentences, so a start-up block and a file's block
+  // name the remedy the same way (A-12).
+  const tryChrome = context.chromeOnComputer ? CHROME_LACKS : TRY_CHROME
   if (!flags.secureContext) {
     return 'This page needs a secure connection before it can work with your video. Open it at an address that starts https://.'
   }

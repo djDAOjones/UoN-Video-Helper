@@ -353,7 +353,14 @@
 
       <section class="panel" aria-labelledby="errors-heading" id="errors-panel" hidden>
         <h2 id="errors-heading">Errors captured</h2>
-        <div class="errors" id="errors"></div>
+        <!-- A plain sentence first, the stack behind a disclosure (VH-110,
+             U-06): a novice reads what it means and what to do, and the
+             details are one click away for whoever is helping. -->
+        <p id="errors-intro"></p>
+        <details class="disclosure">
+          <summary class="disclosure-summary">Technical details</summary>
+          <div class="errors" id="errors"></div>
+        </details>
         <!-- Where feedback is most useful, so it is offered again here (VH-93). -->
         <div class="actions">
           <button type="button" class="button button--secondary" id="feedback-report">

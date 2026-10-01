@@ -34,7 +34,7 @@ import {
 import { OpfsWorkspace, sweepOrphanedJobs } from '../media/opfs'
 import { requireReadableOutputVideo } from '../media/output-integrity'
 import { verifyOutputAudio } from '../media/output-verification'
-import { JobFailureError, classifyFailure } from './failure'
+import { JobFailureError, classifyFailure, type FailureCode } from './failure'
 import { CancelledError, runPipeline, throwIfAborted } from '../media/pipeline'
 import { preflightVerdict, type PreflightSummary } from '../media/preflight'
 import { calibrationProbe } from '../media/probe'
@@ -571,11 +571,20 @@ async function handlePreflight(
       post({ kind: 'cancelled', id })
       return
     }
-    const code = cause instanceof KeptRangeError ? 'bad-trim' : cause instanceof UnreadableFileError ? 'unreadable-source' : 'check-failed'
+    const code: FailureCode =
+      cause instanceof KeptRangeError
+        ? 'bad-trim'
+        : cause instanceof UnreadableFileError
+          ? 'unreadable-source'
+          : 'check-failed'
+    // As for a job: the page has the sentence, and only development hears
+    // the underlying reason (VH-110).
     const message =
       cause instanceof UnreadableFileError || cause instanceof KeptRangeError
         ? cause.message
-        : 'Something went wrong checking this file against your device.'
+        : import.meta.env.DEV
+          ? `[dev: ${cause instanceof Error ? cause.message : String(cause)}]`
+          : ''
     log.warn('worker', 'preflight failed', {
       code,
       reason: cause instanceof Error ? cause.message : String(cause),

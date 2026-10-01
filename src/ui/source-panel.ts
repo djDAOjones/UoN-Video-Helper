@@ -11,6 +11,7 @@
  */
 
 import type { SourceReport } from '../media/inspect'
+import { ORIGINAL_UNCHANGED, type FailureText } from './failure-text'
 import {
   formatChannels,
   formatCodec,
@@ -295,16 +296,20 @@ export function renderSourceReport(container: HTMLElement, report: SourceReport)
   container.append(disclosure)
 }
 
-/** Replaces `container`'s contents with a readable failure. */
-export function renderSourceError(container: HTMLElement, message: string): void {
+/**
+ * Replaces `container`'s contents with a readable failure: what happened,
+ * then that the original is safe and what to do next — once each (VH-110,
+ * spec 9.2). The sentences are `ui/failure-text.ts`'s, so the next step fits
+ * the cause rather than always being "choose a different one".
+ */
+export function renderSourceError(container: HTMLElement, text: FailureText): void {
   container.replaceChildren()
   const paragraph = document.createElement('p')
   paragraph.className = 'fact-error'
-  paragraph.textContent = message
+  paragraph.textContent = text.what
   const reassurance = document.createElement('span')
   reassurance.className = 'fact-note'
-  reassurance.textContent =
-    'Your original file has not been changed. You can choose a different one.'
+  reassurance.textContent = `${ORIGINAL_UNCHANGED} ${text.next}`
   paragraph.append(reassurance)
   container.append(paragraph)
 }

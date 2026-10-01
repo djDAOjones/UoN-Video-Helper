@@ -27,6 +27,11 @@
 
 ### Band 6 — review, then translate
 
+- VH-110 — Shipped 2026-10-01. Each failure says what happened, that the
+  original is safe once, and a next step that fits; an unlevellable plan is
+  refused before the encode; a start-up block is said at Choose; captured
+  errors sit behind a disclosure; the device check and a save can be
+  stopped. See decision-log.
 - VH-109 — Shipped 2026-10-01. Progress neither freezes nor chatters: no
   percentage where none is measured, a named final check with 100% only at
   ready, stages and milestones announced rather than every percent with an

@@ -15,7 +15,7 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 229 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 233 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 23 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
@@ -23,7 +23,7 @@
 - `public` — 13 file(s)
 - `reviews` — 26 file(s)
 - `scripts` — 9 file(s)
-- `src` — 142 file(s)
+- `src` — 146 file(s)
 - `test` — 9 file(s)
 <!-- /file-map-index -->
 
@@ -245,6 +245,8 @@
 - `src/ui/closing-choice.ts` — The closing controls in words: the result line for the current selection, and why onset or colour is disabled.
 - `src/ui/drop-zone.test.ts` — Which drops are taken, what a refused one is told, and that the picker stays the route a drop feeds.
 - `src/ui/drop-zone.ts` — Drag and drop on the Choose step: hands one video to the picker, refuses the rest in words, and keeps a stray drop from navigating away.
+- `src/ui/failure-text.test.ts` — every failure code says what, the reassurance once, and a fitting next step; no code words
+- `src/ui/failure-text.ts` — a failure code as what happened + what next, the start-up block at Choose, the captured-error sentence (VH-110)
 - `src/ui/feedback.test.ts` — The feedback profile carries only named facts and never the file's name in any case; the mailto fits and never cuts the message.
 - `src/ui/feedback.ts` — The feedback email: an allow-list of facts from the redacted bundle, the file's name scrubbed, and a length-capped mailto link.
 - `src/ui/format.test.ts` — Pins the wording, so phrasing is tested rather than reviewed by opinion.
@@ -266,6 +268,8 @@
 - `src/vite-env.d.ts` — Ambient types: the injected build globals and the File System Access API surface.
 - `src/workers/cancellation.test.ts` — Pins the one rule: a request is cancellable from before its first await.
 - `src/workers/cancellation.ts` — The worker's cancellation registry, kept apart from the worker so it can be tested in Node.
+- `src/workers/failure.test.ts` — the worker names failures from their errors, and calls the rest unknown
+- `src/workers/failure.ts` — `FailureCode`, `JobFailureError`, `classifyFailure`; no DOM, the worker imports it (VH-110)
 - `src/workers/job.worker.ts` — The job worker. Owns the pipeline when it lands; today proves the boundary and its error path.
 - `src/workers/protocol.ts` — The typed message contract across the worker boundary.
 - `src/workers/retained.test.ts` — Pins that a failed disposal is retryable and never fails the next job.

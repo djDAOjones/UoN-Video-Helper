@@ -60,47 +60,13 @@
      time; then controls, the phone path and the words; then VH-105
      translates the settled copy, so nothing is translated twice.
      Maintainer 2026-10-01, after VH-108 shipped: VH-114 (shipped), then VH-115
-     (Band 7, closed as a spike → VH-122), then VH-109 (shipped), VH-110 (in progress, paused) and the rest in order (VH-106 to VH-108 and VH-114
+     (Band 7, closed as a spike → VH-122), then VH-109 and VH-110 (shipped) and the rest in order (VH-106 to VH-108 and VH-114
      shipped the same day): the spec gap review
      (`reviews/2026-10-01/spec-ux-accessibility-gaps-2026-10-01.md`) added a
      clause to each item's "Done when", the maintainer signed off every spec
      correction and the spec now carries them (doc-sync 2026-10-01), so each
      item builds to the spec as written. Band 4 closed with VH-97's sign-off
      as not built (Icebox). -->
-
-- [ ] **VH-110 Failures say what to do next** (2026-10-01)
-      Intent: U-06, U-18. A failed job says "Something went wrong…", says the
-      original is unchanged twice, then "You can choose a different one". A
-      start-up failure points novices at "WebCodecs video encoding". Errors
-      captured shows a stack trace. Cancel reaches only a running job, not a
-      long device check or a streaming save.
-      Done when: each known failure has its own sentence and a next step that
-      fits it — what happened, that the original is safe (once), what to do
-      (spec §9.2); a stack sits behind a disclosure under a plain sentence; a
-      start-up failure is said at Choose; a long check or save can be
-      cancelled and cleans up.
-      Spec gap review 2026-10-01 (A-11, A-12): the trim re-check can be
-      cancelled like the first check; a block says what fits its cause when
-      the user is already in Chrome or cannot change browser.
-      In progress 2026-10-01, paused mid-task (the tree holds it, NOT green —
-      the WIP commit after VH-109 on the branch): A-12 is done (VH-108).
-      Written and unit-tested: `src/workers/failure.ts` (a `FailureCode` and
-      `classifyFailure`), `src/ui/failure-text.ts` (one what/next sentence
-      pair per code, the start-up sentence for Choose, the plain sentence over
-      a captured error), the `failed` message carries `code`, the worker names
-      output-loudness / output-peak / output-unreadable / out-of-space /
-      encoder-refused, the pipeline refuses BEFORE the encode when the plan's
-      `predictedOutputLufs` misses the ±0.5 contract (`unlevellable`), and
-      `saveFile` takes an `AbortSignal` (`#stop-actions` row is in
-      `index.html`). Still to do: wire `main.ts` — render `failureText` at the
-      three failed sites and the watchdog catch, the errors panel as a plain
-      sentence over a `<details>`, `startupFailureText` at Choose with the
-      file input disabled, a Stop button for the device check (`beginSelection`
-      cancels it) and for a picker save (abort the controller, status "Save
-      stopped…"); the save-abort unit test fails as written because the
-      stubbed `showSaveFilePicker` route reports `saved` — check whether
-      `pipeTo` sees the signal in Node, or stub differently; then the headless
-      walk and the close.
 
 - [ ] **VH-123 Two review leftovers from the Band 6 run** (2026-10-01)
       Intent: Codex sol on VH-108's follow-up: the storage block's "keep less

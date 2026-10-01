@@ -15,8 +15,12 @@
  * words beside the input.
  */
 
-/** What a drop is refused for while the page cannot start a new video. */
-export type DropBusy = 'making' | 'saving' | null
+/**
+ * What a drop is refused for while the page cannot start a new video.
+ * `unavailable` is a browser the start-up check blocked, whose picker is
+ * disabled too (VH-110).
+ */
+export type DropBusy = 'making' | 'saving' | 'unavailable' | null
 
 /** The parts of a dropped file the decision reads. */
 export interface DroppedFile {
@@ -63,7 +67,10 @@ export function dropProblem(
     return 'A video is being made. Cancel it, or wait for it to finish, before choosing another.'
   }
   if (busy === 'saving') {
-    return 'A video is being saved. Wait for the save to finish before choosing another.'
+    return 'A video is being saved. Stop the save, or wait for it to finish, before choosing another.'
+  }
+  if (busy === 'unavailable') {
+    return 'This browser cannot run the tool, so no video can be read here. The sentence above says what to do.'
   }
   if (files.length === 0) return 'Nothing was dropped that could be read. Drop a video file.'
   if (files.length > 1) return `That was ${files.length} files. Drop one video at a time.`

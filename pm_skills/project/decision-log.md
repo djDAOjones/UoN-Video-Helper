@@ -11,6 +11,41 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — VH-110: failures that say what to do next, and stops for the check and the save
+
+**Decision:** the worker names each failure (`workers/failure.ts`: a
+`FailureCode` on every `failed` reply, from `JobFailureError` or the error's
+own name) and the page turns the name into what happened, the reassurance
+once, and a next step that fits (`ui/failure-text.ts`) — a recording that
+cannot be levelled is not told to choose another file, a full device is told
+to free space or take the smaller output. A plan whose predicted delivered
+loudness misses ±0.5 LU is refused before the encode (`unlevellable`), since
+the output check would refuse it minutes later. A start-up block is said at
+Choose in words, with the block panel's own Chrome sentences, and the picker
+and the drop are shut. Captured errors show one plain sentence over a closed
+"Technical details" disclosure. Beside the status line: "Stop the check"
+(reaching the trim re-check's pause too, A-11), then "Check again" — nothing
+else re-runs a check for the same file and trim — and "Stop saving", which
+aborts the picker's writable and removes the empty file the picker made,
+never one the user chose to replace.
+
+**Rationale:** U-06, U-18, A-11, spec §9.2. The development reason rides
+after the next step in development only.
+
+**Limit:** the early refusal reads the solver's last measurement; on a
+non-finite measurement the solver breaks with the previous pass's figure.
+Pathological material, and the output check still speaks for it.
+
+**Verified:** headless Chrome over CDP — an unreadable file, a stopped and
+re-run check on CULT3033, a trim re-check stopped in its pause, a job on
+AMCS3059 then a save stopped mid-stream (writable aborted at 2 MB, empty file
+removed, focus back on Save), a thrown error, and a load without WebCodecs
+(picker disabled, the Chrome sentence) — plus Node tests for every failure
+code, the classifier and both stop cases of `saveFile`.
+
+**Link:** VH-110; `src/workers/failure.ts`, `src/ui/failure-text.ts`,
+`src/main.ts`, `src/media/save.ts`, `src/media/pipeline.ts`, `index.html`.
+
 ## 2026-10-01 — VH-109: progress that neither freezes nor chatters
 
 **Decision:** `ui/progress.ts` decides what a progress report shows, says and

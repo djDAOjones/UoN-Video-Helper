@@ -54,9 +54,9 @@ function outcomeHeading(outcome: PreflightOutcome, things: number): string {
 }
 
 /** The recommendation, where the browser is the cause and the user is not already in it. */
-const TRY_CHROME = 'Chrome on a computer is the browser this tool is built for — try it there.'
+export const TRY_CHROME = 'Chrome on a computer is the browser this tool is built for — try it there.'
 /** Why Chrome itself would lack a feature it normally has. */
-const CHROME_LACKS = 'This copy of Chrome may be out of date, or a setting on this computer may have turned the feature off. Update Chrome, or ask whoever manages the computer.'
+export const CHROME_LACKS = 'This copy of Chrome may be out of date, or a setting on this computer may have turned the feature off. Update Chrome, or ask whoever manages the computer.'
 
 function reasonText(code: PreflightReasonCode, summary: PreflightSummary, context: BlockContext): string {
   const estimate = summary.probe.estimatedSeconds

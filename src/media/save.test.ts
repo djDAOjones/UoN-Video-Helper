@@ -74,8 +74,14 @@ describe('isSourceDestination', () => {
 })
 
 describe('a streaming save can be stopped (VH-110)', () => {
-  it('aborts the writable and reports cancelled, leaving the result to try again', async () => {
-    const aborted: unknown[] = []
+  /** Saves a slow ten-chunk stream to a stubbed picker and stops it part-way. */
+  async function stopMidSave(existingBytes: number): Promise<{
+    outcome: string
+    aborted: number
+    wrote: number
+    removed: number
+  }> {
+    let aborted = 0
     let wrote = 0
     const writable = new WritableStream<Uint8Array>({
       write: async (chunk) => {
@@ -83,30 +89,61 @@ describe('a streaming save can be stopped (VH-110)', () => {
         // Slow enough that the stop lands mid-stream.
         await new Promise((resolve) => setTimeout(resolve, 20))
       },
-      abort: (reason) => {
-        aborted.push(reason)
+      abort: () => {
+        aborted++
       },
     })
+    let removed = 0
     const handle = {
-      getFile: async () => null,
-      createWritable: async () => writable,
-      isSameEntry: async () => false,
+      getFile: () => Promise.resolve(new File([new Uint8Array(existingBytes)], 'out.mp4')),
+      createWritable: () => Promise.resolve(writable),
+      isSameEntry: () => Promise.resolve(false),
+      remove: () => {
+        removed++
+        return Promise.resolve()
+      },
       name: 'out.mp4',
     }
     const previous = (globalThis as { showSaveFilePicker?: unknown }).showSaveFilePicker
-    ;(globalThis as { showSaveFilePicker?: unknown }).showSaveFilePicker = async () => handle
+    ;(globalThis as { showSaveFilePicker?: unknown }).showSaveFilePicker = () => Promise.resolve(handle)
     try {
-      const file = new File([new Uint8Array(200_000)], 'big.mp4', { type: 'video/mp4' })
+      // Ten chunks rather than a real File: Node hands a File's bytes to the
+      // pipe in one chunk, which leaves nothing to stop mid-stream.
+      let pulled = 0
+      const file = {
+        size: 200_000,
+        stream: () =>
+          new ReadableStream<Uint8Array>({
+            pull: (stream) => {
+              if (pulled++ < 10) stream.enqueue(new Uint8Array(20_000))
+              else stream.close()
+            },
+          }),
+      } as unknown as File
       const controller = new AbortController()
       const saving = saveFile(file, 'big (branded).mp4', undefined, controller.signal)
       await new Promise((resolve) => setTimeout(resolve, 30))
       controller.abort()
       const result = await saving
-      expect(result.outcome).toBe('cancelled')
-      expect(aborted).toHaveLength(1)
-      expect(wrote).toBeLessThan(200_000)
+      return { outcome: result.outcome, aborted, wrote, removed }
     } finally {
       ;(globalThis as { showSaveFilePicker?: unknown }).showSaveFilePicker = previous
     }
+  }
+
+  it('aborts the writable and reports cancelled, leaving the result to try again', async () => {
+    const stopped = await stopMidSave(0)
+    expect(stopped.outcome).toBe('cancelled')
+    expect(stopped.aborted).toBe(1)
+    expect(stopped.wrote).toBeLessThan(200_000)
+    // Cancel leaves nothing behind: the empty file the picker made is gone.
+    expect(stopped.removed).toBe(1)
+  })
+
+  it('never removes a file the user chose to replace', async () => {
+    // The abort discards the swap file, so their file is as it was.
+    const stopped = await stopMidSave(1_000)
+    expect(stopped.outcome).toBe('cancelled')
+    expect(stopped.removed).toBe(0)
   })
 })

@@ -78,10 +78,16 @@ describe('dropProblem', () => {
     }
   })
 
-  it('refuses any drop while a video is being saved, without offering a cancel it has not got', () => {
+  it('refuses any drop while a video is being saved, and names the stop the save has', () => {
     const problem = dropProblem([mp4], accept, 'saving')
     expect(problem).toContain('being saved')
     expect(problem).not.toContain('Cancel')
+    expect(problem).toContain('Stop the save')
+  })
+
+  it('refuses any drop in a browser the start-up check blocked (VH-110)', () => {
+    const problem = dropProblem([mp4], accept, 'unavailable')
+    expect(problem).toContain('cannot run the tool')
   })
 })
 
