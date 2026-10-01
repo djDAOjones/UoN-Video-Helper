@@ -159,10 +159,15 @@ export async function saveFile(
  * Keeps the user's own name so they can recognise the result, and marks it so
  * it cannot be confused with the original — which this tool never modifies,
  * but which sits in the same folder. The mark says what the job did: a video
- * made with no closing is not "(branded)" (U-24).
+ * made with no closing is not "(branded)" (U-24), and a silent one made with
+ * no closing was not levelled either (Codex review of VH-114).
  */
-export function suggestedFileName(sourceName: string, job: { readonly closing: boolean } = { closing: true }): string {
+export function suggestedFileName(
+  sourceName: string,
+  job: { readonly closing: boolean; readonly sound: boolean } = { closing: true, sound: true },
+): string {
   const withoutExtension = sourceName.replace(/\.[^./\\]+$/, '')
   const trimmed = withoutExtension.trim() || 'video'
-  return `${trimmed} (${job.closing ? 'branded' : 'levelled'}).mp4`
+  const mark = job.closing ? 'branded' : job.sound ? 'levelled' : 'converted'
+  return `${trimmed} (${mark}).mp4`
 }

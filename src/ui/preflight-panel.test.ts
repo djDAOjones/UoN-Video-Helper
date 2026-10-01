@@ -130,8 +130,17 @@ describe('the heading counts what there is to know (U-24)', () => {
     const whole = verdictText(capped).lines.join(' ')
     expect(whole).toContain('about the same size')
     expect(whole).not.toMatch(/branding|levelling/i)
-    expect(verdictText(capped, { chromeOnComputer: true, trimmed: true }).lines.join(' ')).not.toContain(
-      'about the same size',
+    const trimmedSaid = verdictText(capped, { chromeOnComputer: true, trimmed: true }).lines.join(' ')
+    expect(trimmedSaid).not.toContain('about the same size')
+    // ...and a trimmed, capped screen recording is not told the slides made
+    // it smaller: the cap set the size (Codex review of VH-114).
+    const cappedScreen = summary('proceed', [], {
+      presetId: 'smaller',
+      contentClass: 'screen',
+      shape: { ...shape, bitrateBasis: 'capped-to-source' },
+    })
+    expect(verdictText(cappedScreen, { chromeOnComputer: true, trimmed: true }).lines.join(' ')).not.toMatch(
+      /smaller still/,
     )
   })
 })

@@ -187,11 +187,16 @@ export function verdictText(summary: PreflightSummary, context: BlockContext = E
     // size, not encoding. Not after a trim, where "about the same size" is
     // untrue, and no claim about what else is applied — that depends on
     // choices this verdict does not see (U-24).
-    if (bitrateWasCappedToSource(shape) && !context.trimmed) {
-      lines.push(
-        'Your video is already compressed as far as this setting would take it, so the new file ' +
-          'will be about the same size.',
-      )
+    if (bitrateWasCappedToSource(shape)) {
+      // Nothing is said after a trim — "about the same size" is then untrue
+      // — and nothing about the slides either: the cap set the size, not the
+      // classification (Codex review of VH-114).
+      if (!context.trimmed) {
+        lines.push(
+          'Your video is already compressed as far as this setting would take it, so the new file ' +
+            'will be about the same size.',
+        )
+      }
     } else if (summary.presetId === 'smaller' && summary.contentClass === 'screen') {
       // Spec 6.2 spends less on slides than on camera, and a classifier
       // decides which this is. Said out loud, with the way out, because the

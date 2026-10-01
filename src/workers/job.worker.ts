@@ -295,6 +295,7 @@ async function handleProcess(
       brandingApplied: result.brandingApplied,
       brandingRequested: options.branding,
       closingModeApplied: result.closingMode,
+      audioIncluded: result.audioIncluded,
       outputWarnings,
     })
   } catch (cause) {

@@ -129,6 +129,11 @@ describe('what the panel refuses to guess', () => {
     // promising a way out that is not on the screen.
     const source = report({ tracks: scan({ subtitleTracks: 2, chapterTracks: 1 }) })
     expect(lossesSaid(source)).toContain('2 caption tracks and 1 chapter track')
+    expect(lossesSaid(source)).toContain('The chapters will not be in the new file.')
+    // A chapter track found alone was told only about captions (Codex review).
+    const chaptersOnly = lossesSaid(report({ tracks: scan({ subtitleTracks: 0, chapterTracks: 1 }) }))
+    expect(chaptersOnly).toContain('The chapters will not be in the new file.')
+    expect(chaptersOnly).not.toMatch(/caption track/)
     expect(lossesSaid(source)).not.toMatch(/below|add a/i)
   })
 })

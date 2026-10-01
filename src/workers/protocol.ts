@@ -134,6 +134,8 @@ export type WorkerResponse =
       readonly brandingRequested: { readonly opening: boolean; readonly closing: boolean }
       /** The closing mode the file carries — a fade can fall back to a cut (VH-107). */
       readonly closingModeApplied: BrandingMode | null
+      /** Whether the file carries sound: a silent source, or a kept part with none, has none to level. */
+      readonly audioIncluded: boolean
       /** Measured from the finished file — spec 5.4's post-processing row. */
       readonly outputWarnings: readonly AudioWarning[]
     }

@@ -8,6 +8,13 @@ describe('suggestedFileName', () => {
     expect(suggestedFileName('seminar.mov')).toBe('seminar (branded).mp4')
   })
 
+  it('marks the file with what the job did (U-24, Codex review of VH-114)', () => {
+    expect(suggestedFileName('talk.mp4', { closing: true, sound: true })).toBe('talk (branded).mp4')
+    expect(suggestedFileName('talk.mp4', { closing: false, sound: true })).toBe('talk (levelled).mp4')
+    // Silent, and no closing: nothing was levelled and nothing was branded.
+    expect(suggestedFileName('talk.mp4', { closing: false, sound: false })).toBe('talk (converted).mp4')
+  })
+
   it('always ends up as .mp4, whatever went in', () => {
     for (const name of ['a.mkv', 'b.webm', 'c.MP4', 'd']) {
       expect(suggestedFileName(name).endsWith('.mp4')).toBe(true)

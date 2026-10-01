@@ -54,15 +54,21 @@ export function visibleStrings(path: string, source: string): string[] {
       .map((line) => line.replace(/\s+/g, ' ').trim())
       .filter((line) => line.length > 0)
   }
-  const withoutComments = source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '')
+  // Block comments start on their own line here, and matching `/*` anywhere
+  // ate from a `video/*` accept string to the next doc block, hiding the drop
+  // zone's refusals from the check (Codex review of VH-114).
+  const withoutComments = source.replace(/^\s*\/\*[\s\S]*?\*\//gm, '').replace(/^\s*\/\/.*$/gm, '')
   const strings: string[] = []
   for (const match of withoutComments.matchAll(/'((?:[^'\\]|\\.)*)'|"((?:[^"\\]|\\.)*)"|`((?:[^`\\]|\\.)*)`/g)) {
     const raw = match[1] ?? match[2] ?? match[3] ?? ''
     // A placeholder stands in for whatever is interpolated.
     const text = raw.replace(/\$\{[^}]*\}/g, '9').replace(/\\n/g, ' ').trim()
     if (text.length === 0) continue
-    // Code, not copy: selectors, paths, keys, log scopes.
-    if (/[{}<>;=#]|\.(?:ts|mjs|css|html|png|mp4|webm)\b|^[a-z][a-z0-9-]*(?:[:.][a-z0-9-]+)*$|^[A-Za-z]+\/|https?:/.test(text)) continue
+    // Code, not copy: selectors, keys, log scopes, and a path or file name
+    // on its own — never a sentence that happens to mention a file ending
+    // (Codex review of VH-114).
+    if (/[{}<>;=#]|^[a-z][a-z0-9-]*(?:[:.][a-z0-9-]+)*$|^[A-Za-z]+\/|https?:/.test(text)) continue
+    if (!/\s/.test(text) && /^[./]|\.[a-z0-9]+$/.test(text)) continue
     strings.push(text)
   }
   return strings
@@ -121,6 +127,14 @@ describe('plain language, measured (spec 9.2, VH-114)', () => {
 
   it('reads every file it is told to', () => {
     for (const { path, strings } of corpus) expect(strings.length, path).toBeGreaterThan(0)
+  })
+
+  it('reads a sentence that mentions a file ending, and skips a bare path', () => {
+    // The drop zone's refusal names ".mp4"; it is copy, and the check must
+    // see it (Codex review of VH-114).
+    const dropZone = corpus.find(({ path }) => path === 'src/ui/drop-zone.ts')
+    expect(dropZone?.strings.some((text) => text.includes('ends .mp4'))).toBe(true)
+    expect(visibleStrings('x.ts', "const a = './styles/app.css'; const b = 'video/mp4'")).toEqual([])
   })
 
   it('keeps prose at a lower-secondary reading level', () => {

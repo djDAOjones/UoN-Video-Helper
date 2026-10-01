@@ -1596,7 +1596,11 @@ function beginJob(file: File): void {
           source: file,
           delivered: false,
           record,
-          outcome: { applied: reply.brandingApplied.closing, mode: reply.closingModeApplied },
+          outcome: {
+            applied: reply.brandingApplied.closing,
+            mode: reply.closingModeApplied,
+            sound: reply.audioIncluded,
+          },
           release: () => {},
         })
         renderWarnings(audioWarnings, reply.outputWarnings, {
@@ -1778,7 +1782,13 @@ function renderResult(kept: RetainedResult): void {
     let leaseHeld = true
     void (async () => {
       try {
-        const result = await saveFile(file, suggestedFileName(source.name, { closing: record.closing.type !== 'none' }), {
+        const result = await saveFile(
+          file,
+          suggestedFileName(source.name, {
+            closing: record.closing.type !== 'none',
+            sound: outcome.sound ?? true,
+          }),
+          {
           identity: { name: source.name, size: source.size, lastModified: source.lastModified },
         })
         if (result.outcome === 'cancelled') {

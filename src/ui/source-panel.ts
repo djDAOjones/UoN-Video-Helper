@@ -81,15 +81,24 @@ export function buildLosses(report: SourceReport): Loss[] {
   } else {
     const found = embeddedTextTracks(tracks)
     if (found.length > 0) {
-      losses.push({
-        title: `Found ${found.join(' and ')}`,
-        // It used to offer a caption file field as the way out; that field is
-        // gone (VH-86). Keeping the original does not make the new file
-        // accessible to its viewers, so the warning says what follows (spec
-        // 8.3 step 3, A-14): the place it is published must supply captions.
-        detail:
-          'The new file will have no caption track, so wherever you publish it must supply captions. EchoVideo makes its own after upload — check them. A file sent directly needs captions added by you. Captions drawn into the picture stay. If you need the originals, keep this file alongside.',
-      })
+      // It used to offer a caption file field as the way out; that field is
+      // gone (VH-86). Keeping the original does not make the new file
+      // accessible to its viewers, so the warning says what follows (spec
+      // 8.3 step 3, A-14): the place it is published must supply captions.
+      // Each kind of track found is named with its own consequence — a
+      // chapter track found alone was told only about captions (Codex review
+      // of VH-114).
+      const consequences: string[] = []
+      if (tracks.subtitleTracks > 0) {
+        consequences.push(
+          'The new file will have no caption track, so wherever you publish it must supply captions. EchoVideo makes its own after upload — check them. A file sent directly needs captions added by you. Captions drawn into the picture stay.',
+        )
+      }
+      if (tracks.chapterTracks > 0) {
+        consequences.push('The chapters will not be in the new file.')
+      }
+      consequences.push('If you need the originals, keep this file alongside.')
+      losses.push({ title: `Found ${found.join(' and ')}`, detail: consequences.join(' ') })
     }
   }
 

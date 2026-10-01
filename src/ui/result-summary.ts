@@ -33,6 +33,8 @@ export interface ClosingOutcome {
   readonly applied: boolean
   /** The mode the file has, or `null` with no closing in it. */
   readonly mode: BrandingMode | null
+  /** Whether the file carries sound — a silent job levelled nothing. */
+  readonly sound?: boolean
 }
 
 /** "the whole video (4 minutes 12 seconds)" or "2 minutes of 4 minutes 12 seconds, from 0:30.0 to 2:30.0". */
