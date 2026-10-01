@@ -60,7 +60,7 @@
      time; then controls, the phone path and the words; then VH-105
      translates the settled copy, so nothing is translated twice.
      Maintainer 2026-10-01, after VH-108 shipped: VH-114 (shipped), then VH-115
-     (Band 7, closed as a spike → VH-122), then VH-109 and the rest in order (VH-106 to VH-108 and VH-114
+     (Band 7, closed as a spike → VH-122), then VH-109 (shipped) and the rest in order (VH-106 to VH-108 and VH-114
      shipped the same day): the spec gap review
      (`reviews/2026-10-01/spec-ux-accessibility-gaps-2026-10-01.md`) added a
      clause to each item's "Done when", the maintainer signed off every spec
@@ -82,29 +82,6 @@
       Spec gap review 2026-10-01 (A-11, A-12): the trim re-check can be
       cancelled like the first check; a block says what fits its cause when
       the user is already in Chrome or cannot change browser.
-
-- [ ] **VH-109 Progress that neither freezes nor chatters** (2026-10-01)
-      Intent: U-07, U-08, U-22. "Analysing audio — 0%" for the whole analysis;
-      "Finishing the file — 100%" before the checks that can still fail
-      (U-01); every percent written to the polite live region (WCAG 2.2.4,
-      AAA); estimates to the second that differ by a quarter between loads of
-      one file; a tab title that says nothing through a long job.
-      Done when: a stage with no measured progress shows no percentage; the
-      final check is a named stage and 100% means ready; the live region
-      announces stages and a few milestones; estimates are rounded; the tab
-      title carries the stage and "ready". Spec §9.2's stage names go through
-      a doc-delta if they change.
-      Spec gap review 2026-10-01 (A-03, A-06): the job says once, at start, to
-      keep this tab visible and the computer awake, and that closing the tab
-      ends it; `#trim-result` and `#closing-result` stop being live regions
-      and are read on demand through `aria-describedby`, with validation still
-      announced; the status line announces stage changes and the outcome. WCAG
-      2.2.4 (AAA) in full, the maintainer's choice 2026-10-01 "if viable": a
-      way to postpone routine progress announcements while the progress bar
-      stays inspectable — one plain control beside the status line, default
-      on, remembered per browser; if it cannot be made plain enough for a
-      novice, the stage-only reading is recorded under spec §9.3 as the
-      exception, with the reason.
 
 - [ ] **VH-111 Focus and announcements follow the page** (2026-10-01)
       Intent: U-09, U-10. Focus falls to the page body at Create, Cancel,

@@ -343,7 +343,7 @@ describe('the trim step (VH-96)', () => {
   })
 
   it('ties the format and any error to both time fields', () => {
-    expect(trim.match(/aria-describedby="trim-format trim-error"/g)).toHaveLength(2)
+    expect(trim.match(/aria-describedby="trim-format trim-error trim-result"/g)).toHaveLength(2)
   })
 
   it('plays nothing by itself', () => {

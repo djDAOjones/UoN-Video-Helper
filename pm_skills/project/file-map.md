@@ -15,7 +15,7 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 227 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 229 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 23 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
@@ -23,7 +23,7 @@
 - `public` — 13 file(s)
 - `reviews` — 26 file(s)
 - `scripts` — 9 file(s)
-- `src` — 140 file(s)
+- `src` — 142 file(s)
 - `test` — 9 file(s)
 <!-- /file-map-index -->
 
@@ -251,6 +251,8 @@
 - `src/ui/format.ts` — Technical facts as plain language — durations, sizes, codecs, channel layouts.
 - `src/ui/preflight-panel.test.ts` — A `proceed` is three lines; no other outcome loses a sentence, says the time twice, or invites a blocked job to continue.
 - `src/ui/preflight-panel.ts` — The verdict in words (`verdictText`, pure) and its rendering, naming a browser that works when the answer is no.
+- `src/ui/progress.test.ts` — The milestones, the indeterminate stages, the titles and the remembered announce-progress setting.
+- `src/ui/progress.ts` — What a progress report shows, announces and titles: stage words, measured and unmeasured stages, milestones, the job-start notice and the announce-progress setting (VH-109).
 - `src/ui/result-summary.test.ts` — The record's wording: whole and trimmed, each output, each closing, and the sentence for a closing that is not the one chosen.
 - `src/ui/result-summary.ts` — The finished video's own record in one line — file, part kept, output, closing as chosen — and the sentence for a closing the file does not carry as asked (VH-107).
 - `src/ui/source-panel.test.ts` — Pins which losses are named before processing — extra tracks, captions, what is not guessed — and that none lives only in the closed Video properties rows.

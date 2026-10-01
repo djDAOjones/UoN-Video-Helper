@@ -27,6 +27,12 @@
 
 ### Band 6 — review, then translate
 
+- VH-109 — Shipped 2026-10-01. Progress neither freezes nor chatters: no
+  percentage where none is measured, a named final check with 100% only at
+  ready, stages and milestones announced rather than every percent with an
+  announce-progress control remembered per browser, rounded estimates, the
+  stage in the tab title, the keep-alive notice at every start. See
+  decision-log.
 - VH-115 — Spike closed 2026-10-01. CULT2011's corrupt bursts wreck the
   measurement (+28 LUFS, LRA 40), make pre-flight accuse the microphone,
   and leave a blast and a two-second dip in the output; the target still

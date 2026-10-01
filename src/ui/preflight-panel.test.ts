@@ -79,13 +79,13 @@ describe('proceed (VH-89)', () => {
   it('is three lines and nothing else', () => {
     expect(verdictText(summary('proceed'))).toEqual({
       heading: 'Ready to go',
-      lines: ['This should take about 37 seconds.', 'Estimated size up to 28.5 MB.'],
+      lines: ['This should take about 40 seconds.', 'Estimated size up to 28.5 MB.'],
     })
   })
 
   it('does not say "about less than a second" for a very short clip', () => {
     const quick = summary('proceed', [], { probe: { ...summary('proceed').probe, estimatedSeconds: 0.3 } })
-    expect(verdictText(quick).lines[0]).toBe('This should take less than a second.')
+    expect(verdictText(quick).lines[0]).toBe('This should take a few seconds.')
   })
 
   it('says "up to", because the figure is an upper bound and not a prediction', () => {
@@ -152,7 +152,7 @@ describe('warn and discourage keep every sentence (VH-89)', () => {
     expect(heading).toBe('Ready, with one thing to know')
     expect(lines).toHaveLength(3)
     expect(lines[0]).toContain('will not say how much free space')
-    expect(lines[1]).toBe('This should take about 37 seconds.')
+    expect(lines[1]).toBe('This should take about 40 seconds.')
     expect(lines[2]).toBe('Estimated size up to 28.5 MB.')
   })
 
@@ -187,7 +187,7 @@ describe('warn and discourage keep every sentence (VH-89)', () => {
     expect(lines).toHaveLength(4)
     expect(lines[0]).toContain('Phones and tablets')
     expect(lines[1]).toContain('free space')
-    expect(lines[2]).toBe('This should take about 37 seconds.')
+    expect(lines[2]).toBe('This should take about 40 seconds.')
   })
 })
 
@@ -394,8 +394,8 @@ describe('the status line for a finished check', () => {
     // but it is the live region, and the verdict is not. A screen-reader user
     // must hear the estimate, not just that there is one.
     const { shown, spokenOnly } = preflightAnnouncement(summary('proceed'))
-    expect(shown).not.toMatch(/37 seconds|28\.5 MB|Ready/)
-    expect(spokenOnly).toBe('Ready to go. This should take about 37 seconds. Estimated size up to 28.5 MB.')
+    expect(shown).not.toMatch(/40 seconds|28\.5 MB|Ready/)
+    expect(spokenOnly).toBe('Ready to go. This should take about 40 seconds. Estimated size up to 28.5 MB.')
   })
 
   it('says what the "one thing to know" is', () => {

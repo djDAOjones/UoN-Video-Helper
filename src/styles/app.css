@@ -550,6 +550,60 @@ a {
   background: var(--interactive);
 }
 
+/* A stage with no measured progress (VH-109): Carbon's indeterminate bar, a
+   band that travels the track. Reduced motion collapses the animation above,
+   leaving a still band — which still reads as "working", not as 0%. */
+.progress:indeterminate {
+  background: linear-gradient(
+    90deg,
+    var(--border-divider) 0%,
+    var(--border-divider) 40%,
+    var(--interactive) 50%,
+    var(--border-divider) 60%,
+    var(--border-divider) 100%
+  );
+  background-size: 250% 100%;
+  animation: progress-indeterminate 1.8s linear infinite;
+}
+
+.progress:indeterminate::-webkit-progress-bar {
+  background: transparent;
+}
+
+.progress:indeterminate::-moz-progress-bar {
+  background: transparent;
+}
+
+@keyframes progress-indeterminate {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+.progress-text {
+  margin-top: var(--spacing-03);
+}
+
+/* Carbon checkbox: a native control, labelled, at the target floor. */
+.checkbox {
+  display: flex;
+  gap: var(--spacing-04);
+  align-items: center;
+  min-height: var(--target-min);
+  font-size: var(--type-body-compact);
+  cursor: pointer;
+}
+
+.checkbox input {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0;
+  accent-color: var(--interactive);
+}
+
 .result-link {
   display: inline-block;
   margin-top: var(--spacing-04);

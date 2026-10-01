@@ -11,6 +11,43 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — VH-109: progress that neither freezes nor chatters
+
+**Decision:** `ui/progress.ts` decides what a progress report shows, says and
+titles. Only the encode is measured; every other stage shows its name and an
+indeterminate bar. The live region hears a stage change and three milestones
+of the encode, never a percent; the percentage sits beside the bar in a line
+that is not live. The output check is its own stage, "Checking the file",
+and 100% is written only when the file has passed it. Estimates are rounded
+to what the probe can claim. The tab title carries the stage, then "Ready",
+"Not made" or "Cancelled". Every job says once at its start to keep the tab
+visible and the computer awake, and that closing the tab ends it; before
+Create the page says the finished video is kept only until saved or the tab
+closes. WCAG 2.2.4 in full: one checkbox beside the status line, "Announce
+progress", default on, remembered in `localStorage` and nothing else; the
+outcome is announced whatever it says. `#trim-result` and `#closing-result`
+are no longer live and are read on demand through `aria-describedby`;
+validation stays announced.
+
+**Rationale:** U-07, U-08, U-22, A-03, A-06. The control was judged plain
+enough: one sentence of helper text, no jargon beyond "screen reader", and
+no decision a sighted novice has to make — so §9.3's stage-only exception
+is not taken.
+
+**Alternatives:** toggling `aria-live` on the status line during a job
+(unreliable across readers); a modal notice at start (focus stolen for a
+sentence).
+
+**Verified:** 19 headless checks in Chrome over CDP on AMCS3059 — the status
+line changed 10 times against 278 progress updates, the start notice, five
+stages, three milestones and the outcome; the bar had no value during
+analysis; no "100%" before "Ready"; the title followed the stage; the notice
+and the control appeared with the job and the setting survived a reload —
+plus 17 Node tests.
+
+**Link:** VH-109; `src/ui/progress.ts`, `src/main.ts`, `index.html`,
+`src/workers/job.worker.ts` (the stage), `src/ui/format.ts`.
+
 ## 2026-10-01 — VH-115 spike: a corrupt frame wrecks the measurement, not the target
 
 **Question:** what does CULT2011's +57 dBFS burst at 82.4 s do to the

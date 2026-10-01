@@ -75,6 +75,15 @@ import {
 import { formatFileSize } from './ui/format'
 import { blockContextFor, preflightAnnouncement, renderPreflight } from './ui/preflight-panel'
 import {
+  JOB_START_NOTICE,
+  NO_PROGRESS,
+  outcomeTitle,
+  progressView,
+  readAnnounceProgress,
+  writeAnnounceProgress,
+  type ProgressMemo,
+} from './ui/progress'
+import {
   closingOutcomeText,
   jobSummaryText,
   type ClosingOutcome,
@@ -92,6 +101,7 @@ import {
   trimRangeFor,
   trimSummary,
 } from './ui/trim'
+import type { PipelineStage } from './media/pipeline'
 import type { WorkerOutbound, WorkerRequest } from './workers/protocol'
 
 const isDev = import.meta.env.DEV
@@ -138,6 +148,11 @@ const audioWarnings = required<HTMLDivElement>('#audio-warnings')
 const processActions = required<HTMLDivElement>('#process-actions')
 const processProgress = required<HTMLProgressElement>('#process-progress')
 const processProgressLabel = required<HTMLParagraphElement>('#process-progress-label')
+const processProgressText = required<HTMLParagraphElement>('#process-progress-text')
+const jobNotice = required<HTMLParagraphElement>('#job-notice')
+const createNote = required<HTMLParagraphElement>('#create-note')
+const announceField = required<HTMLDivElement>('#announce-field')
+const announceProgressBox = required<HTMLInputElement>('#announce-progress')
 const processResult = required<HTMLDivElement>('#process-result')
 const presetChoice = required<HTMLFieldSetElement>('#preset-choice')
 const brandingChoice = required<HTMLFieldSetElement>('#branding-choice')
@@ -623,7 +638,9 @@ worker.addEventListener('message', (event: MessageEvent<WorkerOutbound>) => {
     // Progress never resolves the job's request — it reports on one in flight,
     // which is exactly what the watchdog needs to hear.
     keepAlive.get(message.id)?.()
-    onStage(message.stage, message.fraction)
+    // A report from a job that has already ended — cancelled, failed — must
+    // not put a stage back over the outcome.
+    if (jobInFlight) onStage(message.stage, message.fraction)
     return
   }
   pending.get(message.id)?.(message)
@@ -728,6 +745,7 @@ fileInput.addEventListener('change', () => {
   setSourceStatus('Reading the video…')
   // Whatever the Create step last said was about the previous file's job.
   setStatus('')
+  document.title = outcomeTitle('none')
   sourceReport.replaceChildren()
   sourceBlock.replaceChildren()
   preflightReport.replaceChildren()
@@ -735,6 +753,7 @@ fileInput.addEventListener('change', () => {
   // Hidden, not replaced: the Start and Cancel buttons live for the whole
   // session now, and emptying this container would throw them away (VH-36).
   processActions.hidden = true
+  createNote.hidden = true
   jobFile = null
   jobContentClass = 'unknown'
   jobKeptRange = null
@@ -934,6 +953,7 @@ presetChoice.addEventListener('change', () => {
   const current = beginSelection()
   cancelTrimRecheck()
   processActions.hidden = true
+  createNote.hidden = true
   jobFile = null
   jobContentClass = 'unknown'
   jobKeptRange = null
@@ -1103,6 +1123,7 @@ function commitTrim(): void {
   if (!file || file !== inspectedFile) return
   const current = beginSelection()
   processActions.hidden = true
+  createNote.hidden = true
   jobFile = null
   jobContentClass = 'unknown'
   jobKeptRange = null
@@ -1210,22 +1231,43 @@ trimPreview.addEventListener('error', () => {
 // A minimal trigger so the pipeline is reachable and demonstrable. The real
 // workflow — preset choice, branding toggles, named stages, save — is VH-10.
 
-const STAGE_WORDS: Record<string, string> = {
-  preparing: 'Getting ready',
-  analysing: 'Analysing audio',
-  encoding: 'Encoding video',
-  finishing: 'Finishing the file',
-}
+/** What the last progress report said, so the next announces only what is new. */
+let progressMemo: ProgressMemo = NO_PROGRESS
 
-function onStage(stage: string, fraction: number): void {
-  const percent = Math.round(fraction * 100)
-  setStatus(`${STAGE_WORDS[stage] ?? stage} — ${percent}%`)
-  processProgress.value = fraction
+/**
+ * The user's choice on routine progress announcements (WCAG 2.2.4). Read
+ * once; the checkbox beside the status line writes it back.
+ */
+const localStore = ((): Storage | null => {
+  try {
+    return window.localStorage
+  } catch {
+    return null
+  }
+})()
+announceProgressBox.checked = readAnnounceProgress(localStore)
+announceProgressBox.addEventListener('change', () => {
+  writeAnnounceProgress(localStore, announceProgressBox.checked)
+})
+
+function onStage(stage: PipelineStage, fraction: number): void {
+  const view = progressView(stage, fraction, progressMemo, announceProgressBox.checked)
+  progressMemo = view.memo
+  // The stage and the percentage beside the bar, every report; the live
+  // region only at a stage change or a milestone (U-08).
+  processProgressText.textContent = view.shown
+  processProgressText.hidden = false
+  if (view.announce) setStatus(view.announce)
+  // No value at all for a stage whose progress is not measured: the bar is
+  // indeterminate rather than stuck at 0% (U-07).
+  if (view.indeterminate) processProgress.removeAttribute('value')
+  else processProgress.value = fraction
   // The bar's accessible name tracks the stage, so it announces "Encoding
   // video, 63%" rather than "63%" of nothing in particular (VH-64).
-  processProgressLabel.textContent = STAGE_WORDS[stage] ?? stage
+  processProgressLabel.textContent = view.shown
   processProgressLabel.hidden = false
   processProgress.hidden = false
+  document.title = view.title
 }
 
 /**
@@ -1397,6 +1439,10 @@ function setJobInFlight(running: boolean): void {
   jobInFlight = running
   cancelButton.hidden = !running
   cancelButton.disabled = false
+  // Spec 7.5: visible for the whole job, said once at its start (`beginJob`).
+  jobNotice.textContent = running ? JOB_START_NOTICE : ''
+  jobNotice.hidden = !running
+  announceField.hidden = !running
   applyControlLock()
   applyKeepAwake()
   updateLeaveWarning()
@@ -1566,7 +1612,11 @@ function beginJob(file: File): void {
     { idleMs: WORKER_SILENCE_LIMIT_MS },
   )
   jobCancelId = id
+  progressMemo = NO_PROGRESS
   setJobInFlight(true)
+  // Said once, at the start, whatever the estimate (spec 7.5, A-03); the
+  // stages follow in the same live region.
+  setStatus(`Creating your video. ${JOB_START_NOTICE}`)
   // The choices the job was started with.
   setDiagnosticsContext({
     stage: 'processing',
@@ -1606,22 +1656,30 @@ function beginJob(file: File): void {
         renderWarnings(audioWarnings, reply.outputWarnings, {
           heading: 'Worth knowing about the finished video',
         })
+        // 100% is said here and nowhere earlier: the file has passed its
+        // checks (U-07).
+        processProgress.value = 1
+        processProgressText.textContent = 'Ready'
         setStatus('Your video is ready.')
+        document.title = outcomeTitle('ready')
         setDiagnosticsContext({ stage: 'finished' })
       } else if (reply.kind === 'cancelled') {
         // Nothing was written anywhere the user can see, and the source is
         // untouched — say so rather than leaving them wondering.
         setStatus('Cancelled. Nothing was saved, and your original file is unchanged.')
+        document.title = outcomeTitle('cancelled')
         setDiagnosticsContext({ stage: 'idle' })
       } else if (reply.kind === 'failed') {
         renderSourceError(processResult, reply.message)
         setStatus('The video could not be created.')
+        document.title = outcomeTitle('failed')
         setDiagnosticsContext({ stage: 'failed' })
       }
     })
     .catch(async (cause: unknown) => {
       withdrawVerdict()
       renderSourceError(processResult, 'The job did not finish.')
+      document.title = outcomeTitle('failed')
       setDiagnosticsContext({ stage: 'failed' })
       log.error('ui', 'process request failed', {
         reason: cause instanceof Error ? cause.message : String(cause),
@@ -1638,6 +1696,7 @@ function beginJob(file: File): void {
       setJobInFlight(false)
       processProgress.hidden = true
       processProgressLabel.hidden = true
+      processProgressText.hidden = true
     })
 }
 
@@ -1697,6 +1756,7 @@ function showProcessControls(
   acknowledgeButton.hidden = !needsAcknowledgement
   startButton.hidden = needsAcknowledgement
   processActions.hidden = false
+  createNote.hidden = false
 }
 
 /**

@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import {
   formatChannels,
   formatCodec,
+  formatApproximateDuration,
   formatDuration,
   formatFileSize,
   formatFrameRate,
@@ -24,6 +25,20 @@ describe('formatDuration', () => {
   it('says unknown rather than NaN', () => {
     expect(formatDuration(Number.NaN)).toBe('unknown')
     expect(formatDuration(-5)).toBe('unknown')
+  })
+})
+
+describe('formatApproximateDuration (VH-109)', () => {
+  it('rounds an estimate to what it can claim', () => {
+    expect(formatApproximateDuration(3)).toBe('a few seconds')
+    expect(formatApproximateDuration(24)).toBe('20 seconds')
+    expect(formatApproximateDuration(37)).toBe('40 seconds')
+    expect(formatApproximateDuration(320)).toBe('5 minutes')
+    expect(formatApproximateDuration(402)).toBe('7 minutes')
+    expect(formatApproximateDuration(45 * 60)).toBe('45 minutes')
+    expect(formatApproximateDuration(47 * 60)).toBe('45 minutes')
+    expect(formatApproximateDuration(3 * 60 * 60 + 100)).toBe('3 hours')
+    expect(formatApproximateDuration(Number.NaN)).toBe('unknown')
   })
 })
 

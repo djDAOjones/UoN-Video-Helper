@@ -60,7 +60,7 @@ import { deriveSourceTimeline } from './source-timeline'
 import { carryTrackMetadata } from './track-metadata'
 
 /** Named stages, per spec section 9.2 — not one opaque bar. */
-export type PipelineStage = 'preparing' | 'analysing' | 'encoding' | 'finishing'
+export type PipelineStage = 'preparing' | 'analysing' | 'encoding' | 'finishing' | 'checking'
 
 export interface PipelineProgress {
   readonly stage: PipelineStage

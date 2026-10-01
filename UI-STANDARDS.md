@@ -119,7 +119,12 @@ Nielsen's heuristics are **hard rules**, not aspirations.
 - Every async action must show status: loading, progress, success,
   or error. The UI must never appear frozen.
 - Important status changes must be announced programmatically, not
-  only shown visually.
+  only shown visually. A live region is for what the user did not cause
+  or cannot see — a stage change, an outcome, validation — never a
+  control's own result on the keystroke that produced it, which is read
+  on demand through `aria-describedby`. Routine progress is announced at
+  stage changes and a few milestones, never every percent, and the user
+  can switch those announcements off (WCAG 2.2.4; VH-109).
 - Auto-save, export, import, and recovery states must be visible.
 
 ### Empty and no-data states

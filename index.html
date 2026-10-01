@@ -116,8 +116,8 @@
           </div>
           <div class="range-track" id="trim-track">
             <div class="range-fill" aria-hidden="true"></div>
-            <input class="range-input" type="range" id="trim-start-range" min="0" max="0" step="any" value="0" />
-            <input class="range-input" type="range" id="trim-end-range" min="0" max="0" step="any" value="0" />
+            <input class="range-input" type="range" id="trim-start-range" min="0" max="0" step="any" value="0" aria-describedby="trim-result" />
+            <input class="range-input" type="range" id="trim-end-range" min="0" max="0" step="any" value="0" aria-describedby="trim-result" />
           </div>
         </div>
         <div class="control-grid">
@@ -131,7 +131,7 @@
                 inputmode="decimal"
                 autocomplete="off"
                 spellcheck="false"
-                aria-describedby="trim-format trim-error"
+                aria-describedby="trim-format trim-error trim-result"
               />
               <button class="button button--secondary" type="button" id="trim-set-start">
                 Set start here
@@ -148,7 +148,7 @@
                 inputmode="decimal"
                 autocomplete="off"
                 spellcheck="false"
-                aria-describedby="trim-format trim-error"
+                aria-describedby="trim-format trim-error trim-result"
               />
               <button class="button button--secondary" type="button" id="trim-set-end">
                 Set end here
@@ -160,7 +160,10 @@
         <div aria-live="polite">
           <p class="field-error" id="trim-error" hidden></p>
         </div>
-        <p class="trim-result" id="trim-result" aria-live="polite"></p>
+        <!-- Not a live region: a handle's own result is read on demand through
+             `aria-describedby`, and its `aria-valuetext` already carries the
+             time on the keystroke (A-06). Validation above stays announced. -->
+        <p class="trim-result" id="trim-result"></p>
         <div class="actions">
           <button class="button button--secondary" type="button" id="trim-clear" disabled>
             Use the whole video
@@ -187,7 +190,7 @@
           <div class="control-grid">
             <div class="field">
               <label class="label" for="closing-type">Animation type</label>
-              <select class="select" id="closing-type">
+              <select class="select" id="closing-type" aria-describedby="closing-result">
                 <option value="cut" selected>Cut</option>
                 <option value="fade">Fade</option>
                 <option value="slide">Slide</option>
@@ -200,7 +203,7 @@
                 <select
                   class="select"
                   id="closing-onset"
-                  aria-describedby="closing-onset-reason"
+                  aria-describedby="closing-onset-reason closing-result"
                   disabled
                 >
                   <option value="existing" selected>Over existing</option>
@@ -234,7 +237,7 @@
                 </div>
               </div>
             </div>
-            <fieldset class="field segmented" id="closing-colour" aria-describedby="closing-colour-reason">
+            <fieldset class="field segmented" id="closing-colour" aria-describedby="closing-colour-reason closing-result">
               <legend class="label">Colour</legend>
               <!-- Native radios under a segmented skin: the arrow keys and
                    the checked state come with them. Carbon's content switcher
@@ -256,7 +259,9 @@
               <p class="helper" id="closing-colour-reason" hidden></p>
             </fieldset>
           </div>
-          <p class="closing-result" id="closing-result" aria-live="polite"></p>
+          <!-- Likewise read on demand from the three controls, not announced on
+               every arrow through a select (A-06). -->
+          <p class="closing-result" id="closing-result"></p>
         </fieldset>
       </section>
 
@@ -293,6 +298,11 @@
         <div class="step-lead" id="preflight-report"></div>
         <div id="audio-warnings"></div>
         <div class="actions" id="process-actions" hidden></div>
+        <!-- Spec 7.5: the finished video is not kept past the tab, said before
+             Create (VH-109) as well as beside the result (VH-107). -->
+        <p class="helper" id="create-note" hidden>
+          The finished video is kept here until you save it or close this tab.
+        </p>
         <!-- What is happening to the JOB: the device check, each stage,
              "Your video is ready.", "Saved." It lived in the System check
              panel, 450 px below the button it reports on — and that panel now
@@ -300,6 +310,22 @@
              (VH-88). Never `hidden` itself, never inside a disclosure; the
              step it sits in is revealed before anything is written to it. -->
         <p class="status" id="status" role="status" aria-live="polite"></p>
+        <!-- WCAG 2.2.4 (AAA): routine progress announcements can be postponed
+             by the user. One plain control, default on, remembered in this
+             browser (VH-109). The outcome is announced whatever it says. -->
+        <div class="field" id="announce-field" hidden>
+          <label class="checkbox" for="announce-progress">
+            <input type="checkbox" id="announce-progress" checked aria-describedby="announce-help" />
+            <span>Announce progress</span>
+          </label>
+          <p class="helper" id="announce-help">
+            Says each stage out loud for a screen reader as the video is made. The result is always
+            announced.
+          </p>
+        </div>
+        <!-- Spec 7.5, said once at the start of every job. Visible while the
+             job runs; announced with the first status line (VH-109). -->
+        <p class="helper" id="job-notice" hidden></p>
         <!-- Named and described. A bare <progress> announces a percentage and
              nothing else, so a screen-reader user heard "63%" with no way to
              know 63% of what — and the stage is the half that carries the
@@ -315,6 +341,10 @@
           aria-labelledby="process-progress-label"
           hidden
         ></progress>
+        <!-- The stage and, where it is measured, the percentage. Visible and
+             NOT live: every percent announced was WCAG 2.2.4's complaint
+             (U-08); the status line above announces stages and milestones. -->
+        <p class="helper progress-text" id="process-progress-text" hidden></p>
         <div id="process-result"></div>
       </section>
 

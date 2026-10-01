@@ -240,8 +240,10 @@ async function handleProcess(
     // Anything the pipeline already knows it cost the user rides along.
     const outputWarnings: AudioWarning[] = [...result.outputWarnings]
     // Another window the encode loop's progress does not cover: this walks
-    // the whole finished file (VH-51).
-    post({ kind: 'stage', id, stage: 'finishing', fraction: 1 })
+    // the whole finished file (VH-51). A stage of its own, because "Finishing
+    // the file — 100%" used to precede checks that can still refuse the file
+    // (U-07): 100% is the main thread's to say, once the file is ready.
+    post({ kind: 'stage', id, stage: 'checking', fraction: 0 })
     // Cancel used to stop being heard the moment the pipeline returned, and
     // this walks the whole finished file again — long enough on an hour-long
     // lecture for the user to press Cancel and be told the video was ready.

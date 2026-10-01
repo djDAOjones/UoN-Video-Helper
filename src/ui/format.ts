@@ -35,6 +35,20 @@ export function formatDuration(seconds: number): string {
 }
 
 /**
+ * An estimate, rounded to what it can honestly claim (U-22): "about 5
+ * minutes", never "5 minutes 20 seconds" from a probe that differs by a
+ * quarter between two loads of one file. Under a minute to the nearest ten
+ * seconds; under ten minutes to the minute; then to five minutes.
+ */
+export function formatApproximateDuration(seconds: number): string {
+  if (!Number.isFinite(seconds) || seconds < 0) return 'unknown'
+  if (seconds < 5) return 'a few seconds'
+  if (seconds < 60) return formatDuration(Math.max(10, Math.round(seconds / 10) * 10))
+  if (seconds < 600) return formatDuration(Math.round(seconds / 60) * 60)
+  return formatDuration(Math.round(seconds / 300) * 300)
+}
+
+/**
  * e.g. `1.2 GB`, `340 MB`.
  *
  * Decimal units, because that is what every operating system and every upload

@@ -14,7 +14,7 @@
 
 import { PRESETS, bitrateWasCappedToSource } from '../config/presets'
 import type { PreflightOutcome, PreflightReasonCode, PreflightSummary } from '../media/preflight'
-import { formatDuration, formatFileSize } from './format'
+import { formatApproximateDuration, formatFileSize } from './format'
 
 /**
  * What the verdict's sentences may assume about the job and where the user is.
@@ -98,9 +98,9 @@ function reasonText(code: PreflightReasonCode, summary: PreflightSummary, contex
     case 'storage-unknown':
       return 'This browser will not say how much free space there is. If it runs out part-way, the job stops and nothing is saved — your original file is not affected.'
     case 'very-long-job':
-      return `This will take about ${estimate === null ? 'a long time' : formatDuration(estimate)}. You can carry on, but a desktop computer would be considerably faster.`
+      return `This will take about ${estimate === null ? 'a long time' : formatApproximateDuration(estimate)}. You can carry on, but a desktop computer would be considerably faster.`
     case 'long-job':
-      return `This will take about ${estimate === null ? 'a while' : formatDuration(estimate)}. Keep this tab open while it runs — closing it stops the job.`
+      return `This will take about ${estimate === null ? 'a while' : formatApproximateDuration(estimate)}. Keep this tab open while it runs — closing it stops the job.`
     case 'mobile-device':
       return 'Phones and tablets are much slower at this than a computer, and are more likely to stop part-way. Use a computer if you can.'
     case 'estimate-unavailable':
@@ -165,11 +165,11 @@ export function verdictText(summary: PreflightSummary, context: BlockContext = E
       REASONS_STATING_THE_TIME.includes(reason.code),
     )
     if (!timeAlreadySaid && probe.estimatedSeconds !== null) {
-      const time = formatDuration(probe.estimatedSeconds)
-      // "About less than a second" is what a very short clip used to be told.
-      lines.push(
-        time.startsWith('less than') ? `This should take ${time}.` : `This should take about ${time}.`,
-      )
+      // Rounded (U-22): the probe differs by a quarter between loads of one
+      // file, so "5 minutes 20 seconds" claimed a precision it did not have.
+      const time = formatApproximateDuration(probe.estimatedSeconds)
+      // "About a few seconds" is what a very short clip would otherwise be told.
+      lines.push(time === 'a few seconds' ? `This should take ${time}.` : `This should take about ${time}.`)
     }
 
     // "Up to", not a bare figure. It is an upper bound by construction — it
