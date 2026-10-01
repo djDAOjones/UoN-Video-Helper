@@ -11,6 +11,20 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — VH-100 second review: the probe covers the sound, not the picture
+
+**Decision:** the estimate is given both halves of the timed pass — its wall
+time and the seconds of audio it covered (the report's `durationSeconds`) —
+and the codec probe's coverage is a fraction of the audio. The audio real-time
+factor is computed from the same pair.
+
+**Rationale:** Codex found the budget divided by the kept picture, so an hour
+of video with two minutes of sound was charged a fifteenth of a probe that
+encodes all of it. Reproduced first: the same sound under an hour of picture
+priced planning at 4.47 s, and under two minutes at 5.4.
+
+**Link:** VH-100; `src/media/probe.ts`, `src/workers/job.worker.ts`.
+
 ## 2026-10-01 — VH-100 review: the codec probe is a bounded cost
 
 **Decision:** the estimate prices the codec probe at 2.5 analysis passes per

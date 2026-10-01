@@ -141,22 +141,24 @@ export function jobTimeEstimate(measured: {
   /** Seconds of closing the output may carry. */
   readonly closingSeconds: number
   /**
-   * Wall-clock seconds pre-flight's analysis pass took over the kept part, or
-   * `null` when the job carries no sound.
+   * Pre-flight's analysis pass over the kept part: the wall-clock seconds it
+   * took, and the seconds of audio it covered — which can be fewer than the
+   * picture's. `null` when the job carries no sound.
    */
-  readonly analysisSeconds: number | null
+  readonly analysis: { readonly wallSeconds: number; readonly audioSeconds: number } | null
 }): JobTimeEstimate {
   const framesPerSecond = measured.videoFrames / measured.videoSeconds
   const videoSeconds = (measured.durationSeconds * measured.frameRate) / framesPerSecond
   const brandingSeconds = (measured.closingSeconds * measured.frameRate) / framesPerSecond
 
-  const pass = measured.analysisSeconds ?? 0
+  const pass = measured.analysis?.wallSeconds ?? 0
+  // Of the AUDIO the pass covered, which is what the probe encodes. Divided by
+  // the picture instead, an hour of video with two minutes of sound was
+  // charged a fifteenth of a probe that covers all of it (Codex review).
+  const audioSeconds = measured.analysis?.audioSeconds ?? 0
   const probedFraction =
-    measured.durationSeconds > 0
-      ? Math.min(
-          1,
-          (CODEC_PROBE.windowSeconds * CODEC_PROBE.maximumWindows) / measured.durationSeconds,
-        )
+    audioSeconds > 0
+      ? Math.min(1, (CODEC_PROBE.windowSeconds * CODEC_PROBE.maximumWindows) / audioSeconds)
       : 0
   const audioPlanningSeconds =
     pass *
@@ -197,8 +199,8 @@ export function jobTimeEstimate(measured: {
  *   probe times material that will actually be encoded (VH-95). Zero otherwise.
  * @param closingSeconds - The most closing the output may carry; pre-flight
  *   runs before the closing is chosen.
- * @param analysisSeconds - What pre-flight's analysis pass over the kept part
- *   took, or `null` when the job carries no sound.
+ * @param analysis - What pre-flight's analysis pass over the kept part took,
+ *   and how much audio it covered; `null` when the job carries no sound.
  */
 export async function calibrationProbe(options: {
   readonly input: Input
@@ -206,10 +208,10 @@ export async function calibrationProbe(options: {
   readonly durationSeconds: number
   readonly fromSeconds?: number
   readonly closingSeconds: number
-  readonly analysisSeconds: number | null
+  readonly analysis: { readonly wallSeconds: number; readonly audioSeconds: number } | null
   readonly signal?: AbortSignal
 }): Promise<ProbeResult> {
-  const { input, shape, durationSeconds, closingSeconds, analysisSeconds, signal } = options
+  const { input, shape, durationSeconds, closingSeconds, analysis, signal } = options
   const fromSeconds = options.fromSeconds ?? 0
 
   try {
@@ -228,11 +230,13 @@ export async function calibrationProbe(options: {
       frameRate: shape.frameRate,
       durationSeconds,
       closingSeconds,
-      analysisSeconds,
+      analysis,
     })
     const videoFramesPerSecond = video.frames / video.seconds
     const audioRealtimeFactor =
-      analysisSeconds !== null && analysisSeconds > 0 ? durationSeconds / analysisSeconds : null
+      analysis !== null && analysis.wallSeconds > 0
+        ? analysis.audioSeconds / analysis.wallSeconds
+        : null
 
     const result: ProbeResult = {
       measured: true,

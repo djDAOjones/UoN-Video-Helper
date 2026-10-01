@@ -21,16 +21,19 @@ const base = {
   closingSeconds: 5,
 }
 
+/** An analysis pass of `wallSeconds` over all 60 s of the kept part's sound. */
+const pass = (wallSeconds: number) => ({ analysis: { wallSeconds, audioSeconds: 60 } })
+
 describe('jobTimeEstimate', () => {
   it('prices the video and the closing at the rate the probe measured', () => {
-    const estimate = jobTimeEstimate({ ...base, analysisSeconds: 2 })
+    const estimate = jobTimeEstimate({ ...base, ...pass(2) })
     expect(estimate.videoSeconds).toBe(5)
     // The closing's 125 frames go through the same decode, conform and encode.
     expect(estimate.brandingSeconds).toBeCloseTo(125 / 300, 12)
   })
 
   it('prices every audio stage in analysis passes, the refinements at their limit', () => {
-    const estimate = jobTimeEstimate({ ...base, analysisSeconds: 2 })
+    const estimate = jobTimeEstimate({ ...base, ...pass(2) })
     // Passes A and B, every refinement the solver may spend, the re-measure,
     // and the probe — which covers all 60 s, being under its budget.
     const planningPasses =
@@ -53,8 +56,11 @@ describe('jobTimeEstimate', () => {
     const budget = CODEC_PROBE.windowSeconds * CODEC_PROBE.maximumWindows
     const rate = 11 / 3600 // An analysis pass at 11 s an hour.
     const planning = (seconds: number): number =>
-      jobTimeEstimate({ ...base, durationSeconds: seconds, analysisSeconds: seconds * rate })
-        .audioPlanningSeconds
+      jobTimeEstimate({
+        ...base,
+        durationSeconds: seconds,
+        analysis: { wallSeconds: seconds * rate, audioSeconds: seconds },
+      }).audioPlanningSeconds
     const perPass = (seconds: number): number => planning(seconds) / (seconds * rate)
 
     // Past the budget, more recording costs only the passes over all of it:
@@ -69,8 +75,18 @@ describe('jobTimeEstimate', () => {
     expect(perPass(budget / 2)).toBeCloseTo(perPass(budget), 9)
   })
 
+  it('prices the codec probe by the sound it covers, not the picture', () => {
+    // An hour of video with two minutes of sound: the probe encodes all two
+    // minutes. Measured against the picture, it was charged a fifteenth of
+    // that (Codex review).
+    const sound = { analysis: { wallSeconds: 0.4, audioSeconds: 120 } }
+    const hour = jobTimeEstimate({ ...base, durationSeconds: 3600, ...sound })
+    const short = jobTimeEstimate({ ...base, durationSeconds: 120, ...sound })
+    expect(hour.audioPlanningSeconds).toBeCloseTo(short.audioPlanningSeconds, 12)
+  })
+
   it('is the sum of its stages', () => {
-    const estimate = jobTimeEstimate({ ...base, analysisSeconds: 2 })
+    const estimate = jobTimeEstimate({ ...base, ...pass(2) })
     expect(estimate.totalSeconds).toBeCloseTo(
       estimate.videoSeconds +
         estimate.brandingSeconds +
@@ -82,8 +98,8 @@ describe('jobTimeEstimate', () => {
   })
 
   it('scales the audio stages with the measured pass and leaves the video alone', () => {
-    const slow = jobTimeEstimate({ ...base, analysisSeconds: 4 })
-    const fast = jobTimeEstimate({ ...base, analysisSeconds: 2 })
+    const slow = jobTimeEstimate({ ...base, ...pass(4) })
+    const fast = jobTimeEstimate({ ...base, ...pass(2) })
     expect(slow.videoSeconds).toBe(fast.videoSeconds)
     expect(slow.brandingSeconds).toBe(fast.brandingSeconds)
     expect(slow.audioPlanningSeconds).toBeCloseTo(2 * fast.audioPlanningSeconds, 12)
@@ -94,7 +110,7 @@ describe('jobTimeEstimate', () => {
   it('counts no audio stage for a job with no sound', () => {
     // A silent source, or a kept part with no sound in it (VH-95): there is no
     // pass to time, and nothing to plan, process or check.
-    const estimate = jobTimeEstimate({ ...base, analysisSeconds: null })
+    const estimate = jobTimeEstimate({ ...base, analysis: null })
     expect(estimate.audioPlanningSeconds).toBe(0)
     expect(estimate.audioProcessingSeconds).toBe(0)
     expect(estimate.verificationSeconds).toBe(0)
@@ -105,7 +121,7 @@ describe('jobTimeEstimate', () => {
     // Found on VH-95's review: audio the probe window never reached divided by
     // zero and called the job "very long". The pass is timed over the whole
     // kept part now, but a reading of zero must still mean "cheap".
-    const estimate = jobTimeEstimate({ ...base, analysisSeconds: 0 })
+    const estimate = jobTimeEstimate({ ...base, ...pass(0) })
     expect(Number.isFinite(estimate.totalSeconds)).toBe(true)
     expect(estimate.totalSeconds).toBeCloseTo(5 + 125 / 300, 12)
   })
