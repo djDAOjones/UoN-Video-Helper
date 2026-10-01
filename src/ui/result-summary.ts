@@ -11,7 +11,7 @@
  * Pure, so every combination's sentence is tested in Node.
  */
 
-import type { BrandingMode, ClosingControls } from '../config/branding'
+import { brandingChoiceFor, type BrandingMode, type ClosingControls } from '../config/branding'
 import { PRESETS, type PresetId } from '../config/presets'
 import type { KeptRange } from '../media/kept-range'
 import { formatDuration } from './format'
@@ -58,23 +58,35 @@ export function closingChoiceText(controls: ClosingControls): string {
  * The sentence for a closing that is not the one chosen, or `null` when the
  * file has what was asked for.
  *
- * A fade or slide whose animation could not be loaded falls back to a cut
- * rather than failing the job (VH-12), and that used to be reported as
- * success with the fade still described above it (U-14).
+ * Compared mode against mode — what the controls map to against what the
+ * file carries — so every fallback is covered, not one. A fade or slide whose
+ * animation could not be loaded becomes a cut (VH-12), and used to be
+ * reported as success with the fade still described above it (U-14); a
+ * source shorter than the animation has it over a held last frame instead
+ * of over the picture (`closingTimeline`, Codex review of VH-107).
  */
 export function closingOutcomeText(controls: ClosingControls, outcome: ClosingOutcome): string | null {
   if (controls.type === 'none') return null
   if (!outcome.applied) {
     return 'The closing could not be loaded, so it is not in this video. Everything else was applied as asked.'
   }
-  const wantedAnimation = controls.type === 'fade' || controls.type === 'slide'
-  if (wantedAnimation && outcome.mode === 'hard-cut') {
+  const wanted = brandingChoiceFor(controls).mode as BrandingMode
+  if (outcome.mode === null || outcome.mode === wanted) return null
+  const label = controls.type === 'slide' ? 'Slide' : 'Fade'
+  const verb = controls.type === 'slide' ? 'slides' : 'fades'
+  if (outcome.mode === 'hard-cut') {
     return (
-      `You chose ${controls.type === 'slide' ? 'Slide' : 'Fade'}, but the animation could not be loaded, ` +
+      `You chose ${label}, but the animation could not be loaded, ` +
       `so this video cuts to the ${controls.colour} closing card instead.`
     )
   }
-  return null
+  if (outcome.mode === 'over-freeze') {
+    return (
+      `Your video is shorter than the ${label.toLowerCase()} animation, so the ${controls.colour} closing ` +
+      `${verb} in over a held last frame rather than over the picture.`
+    )
+  }
+  return `The ${controls.colour} closing ${verb} in over the picture, not over a held last frame as chosen.`
 }
 
 /** The one-line record: "Made from NAME: PART, OUTPUT, CLOSING." */

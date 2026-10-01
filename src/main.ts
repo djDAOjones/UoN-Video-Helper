@@ -1470,10 +1470,13 @@ function confirmDiscardThenStart(): void {
     ? 'Your download may still be finishing. Starting again will discard the video you just made.'
     : 'You have not saved the video you just made. Starting again will discard it.'
 
-  // The same record the result shows, so the question names what would go.
+  // The same record the result shows, so the question names what would go —
+  // outcome included: a fade that became a cut is a cut here too (Codex
+  // review of VH-107).
   const summary = document.createElement('p')
   summary.className = 'verdict-detail'
-  summary.textContent = jobSummaryText(asked.record)
+  const differs = closingOutcomeText(asked.record.closing, asked.outcome)
+  summary.textContent = differs === null ? jobSummaryText(asked.record) : `${jobSummaryText(asked.record)} ${differs}`
 
   const discard = document.createElement('button')
   discard.type = 'button'

@@ -66,6 +66,18 @@ describe('closingOutcomeText', () => {
     )
   })
 
+  it('says when a short source put the closing over a held frame instead (Codex review)', () => {
+    expect(closingOutcomeText(fade, { applied: true, mode: 'over-freeze' })).toBe(
+      'Your video is shorter than the fade animation, so the blue closing fades in over a held last frame rather than over the picture.',
+    )
+    // The other way round cannot happen today, but a mode that differs is never silent.
+    expect(closingOutcomeText({ ...fade, onset: 'freeze' }, { applied: true, mode: 'over-picture' })).toContain(
+      'not over a held last frame as chosen',
+    )
+    // A cut is a cut, whatever the onset control held.
+    expect(closingOutcomeText({ type: 'cut', onset: 'freeze', colour: 'white' }, { applied: true, mode: 'hard-cut' })).toBeNull()
+  })
+
   it('says when the closing is missing altogether (VH-22)', () => {
     expect(closingOutcomeText(fade, { applied: false, mode: null })).toContain('not in this video')
   })
