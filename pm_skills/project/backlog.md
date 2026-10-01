@@ -32,7 +32,7 @@
      Active that is free to start: Band 3 waits on the maintainer, and
      Band 4's VH-97 is [sign-off] with "not built" as its default. -->
 
-- [ ] **VH-99 Make the audio analysis as fast as the docs say** (2026-10-01)
+- [ ] **VH-99 Make the audio analysis as fast as the docs say** [detail](tickets/VH-99.md) (2026-10-01)
       Intent: measured 2026-09-30 on this MacBook, one traversal of a 620 s
       programme takes 9.2 s and a job makes five — about four and a half
       minutes of "Analysing audio" for an hour-long lecture, where
