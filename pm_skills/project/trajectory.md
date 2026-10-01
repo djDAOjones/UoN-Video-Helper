@@ -27,6 +27,10 @@
 
 ### Band 6 — review, then translate
 
+- VH-111 — Shipped 2026-10-01. Focus hands on when a control it was on
+  goes, and never from a reader; the live regions say the losses, sound
+  notes, output warnings, a changed closing and each failure's next step.
+  See decision-log.
 - VH-123 — Shipped 2026-10-01. The storage block's remedy and the file
   name say only what is on screen and in the file; codex sol's findings on
   VH-109 and VH-110 fixed. See decision-log.

@@ -240,6 +240,8 @@
 - `src/styles/app.css` — App shell styles: Carbon productive shapes at AAA, in the University's colours. Names roles only — no colour value.
 - `src/styles/tokens.brand.css` — UoN brand tokens: the palette and its tints, the font stacks, the logo's size, and the colour roles assigned from them for light, dark and a blue band.
 - `src/styles/tokens.carbon.css` — Carbon structural tokens: spacing, type scale, motion, the 44 px floor, and status colour.
+- `src/ui/announce.test.ts` — losses, warnings and joins are said, and nothing when there is nothing
+- `src/ui/announce.ts` — the spoken-only tail of each live-region message: losses, sound notes, output warnings (VH-111)
 - `src/ui/brand-assets.ts` — Looks the logo and heading font up by name at build time and installs whichever exists; the page is complete without either.
 - `src/ui/closing-choice.test.ts` — Every closing selection's sentence states the seconds the job really adds; "None" is unmistakable; a disabled control says why.
 - `src/ui/closing-choice.ts` — The closing controls in words: the result line for the current selection, and why onset or colour is disabled.

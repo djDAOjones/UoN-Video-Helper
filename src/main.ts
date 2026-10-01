@@ -97,11 +97,13 @@ import {
 import { renderWarnings } from './ui/warning-text'
 import {
   CAPTURED_ERROR_SENTENCE,
+  failureSentence,
   failureText,
   startupFailureText,
   type FailureText,
 } from './ui/failure-text'
-import { renderSourceError, renderSourceReport, summarise } from './ui/source-panel'
+import { buildLosses, renderSourceError, renderSourceReport, summarise } from './ui/source-panel'
+import { lossesSpoken, spoken, warningsSpoken } from './ui/announce'
 import { browserNote, summariseChecks, type CheckState } from './ui/system-check'
 import { installBrandAssets } from './ui/brand-assets'
 import {
@@ -418,9 +420,48 @@ function setStatus(message: string, spokenOnly = ''): void {
   }
 }
 
-/** Says what is happening to the FILE, beside the input that chose it. */
-function setSourceStatus(message: string): void {
+/**
+ * Says what is happening to the FILE, beside the input that chose it, with
+ * the same spoken-only tail as {@link setStatus}: what the panel below shows
+ * — the losses — is said by the live region too (VH-111).
+ */
+function setSourceStatus(message: string, spokenOnly = ''): void {
   sourceStatusLine.textContent = message
+  if (spokenOnly) {
+    const said = document.createElement('span')
+    said.className = 'visually-hidden'
+    said.textContent = ` ${spokenOnly}`
+    sourceStatusLine.append(said)
+  }
+}
+
+/**
+ * Notes, BEFORE a transition, whether focus is on a control it will take
+ * away; the returned hand-on then moves focus to `target` only if it was
+ * (VH-111, A-07). Focus is never moved from where a user has gone to read,
+ * nor out of the feedback dialogue — and "on the page body" is not taken as
+ * displaced, because it is also where focus sits while someone reads.
+ */
+function focusHeldBy(
+  controls: readonly HTMLElement[],
+  heldEarlier = false,
+): (target: HTMLElement) => void {
+  const active = document.activeElement
+  const held =
+    heldEarlier ||
+    (active instanceof HTMLElement &&
+      controls.some((control) => control === active || control.contains(active)))
+  return (target) => {
+    if (!held || feedbackDialog.open) return
+    // Still lost: on the page body, or on one of the controls. Anywhere else
+    // means the user moved it themselves in the meantime, and it stays.
+    const now = document.activeElement
+    const stillLost =
+      now === null ||
+      now === document.body ||
+      controls.some((control) => control === now || control.contains(now))
+    if (stillLost) target.focus()
+  }
 }
 
 /**
@@ -849,7 +890,9 @@ fileInput.addEventListener('change', () => {
       if (!current()) return
       if (reply.kind === 'inspected') {
         renderSourceReport(sourceReport, reply.report)
-        setSourceStatus(summarise(reply.report))
+        // The losses panel is on screen beside this; the live region says it
+        // too, caption consequence included (U-10, A-14).
+        setSourceStatus(summarise(reply.report), lossesSpoken(buildLosses(reply.report)))
         inspectedFile = file
         resetTrim(file, reply.report.durationSeconds)
         revealLaterSteps()
@@ -860,8 +903,9 @@ fileInput.addEventListener('change', () => {
         return
       }
       if (reply.kind === 'failed') {
-        renderSourceError(sourceReport, failureFor(reply))
-        setSourceStatus('That file could not be read.')
+        const failure = failureFor(reply)
+        renderSourceError(sourceReport, failure)
+        setSourceStatus('That file could not be read.', failureSentence(failure))
         clearTrim(TRIM_NOTHING_TO_TRIM)
         setDiagnosticsContext({ stage: 'failed' })
         return
@@ -923,6 +967,7 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
     // A verdict about a file or preset the user has since changed must not
     // reach the screen — and above all must not reveal Start (review R-05).
     if (!current()) return
+    const fromStop = focusHeldBy([stopCheckButton])
     // Settled: whatever replaces the stop is said below. Only a check that
     // did not finish offers itself again.
     offerStop(reply.kind === 'failed' && reply.code === 'check-failed' ? 'check-again' : null)
@@ -968,6 +1013,8 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
         const recoverable = setupStepsResolve(reply.summary.verdict)
         revealLaterSteps({ setup: recoverable, create: recoverable || unsavedResult !== null })
         setSourceStatus(`${announcement.shown} ${announcement.spokenOnly}`)
+        // Stop the check has gone; the block is said beside the file.
+        fromStop(fileInput)
         return
       }
       sourceBlock.replaceChildren()
@@ -976,7 +1023,13 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
       renderWarnings(audioWarnings, reply.summary.audioWarnings, {
         heading: 'Worth knowing about the sound',
       })
-      setStatus(announcement.shown, announcement.spokenOnly)
+      setStatus(
+        announcement.shown,
+        spoken(
+          announcement.spokenOnly,
+          warningsSpoken('Worth knowing about the sound', reply.summary.audioWarnings),
+        ),
+      )
       {
         showProcessControls(
           file,
@@ -985,13 +1038,17 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
           reply.summary.verdict.outcome === 'discourage',
         )
       }
+      // Stop the check has gone; what it was holding up takes focus.
+      fromStop(acknowledgeButton.hidden ? startButton : acknowledgeButton)
       return
     }
     if (reply.kind === 'failed') {
-      renderSourceError(preflightReport, failureFor(reply))
+      const failure = failureFor(reply)
+      renderSourceError(preflightReport, failure)
       // The status line sits beside this now (VH-88), and left alone it went
       // on saying "Checking this video against your device…" under an error.
-      setStatus('The device check did not finish.')
+      setStatus('The device check did not finish.', failureSentence(failure))
+      fromStop(checkAgainButton.hidden ? fileInput : checkAgainButton)
       return
     }
     // Abandoned for a newer check — see the inspect path (VH-57).
@@ -999,9 +1056,11 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
     throw new Error(`Unexpected reply to preflight: ${reply.kind}`)
   } catch (cause) {
     if (!current()) return
+    const fromStop = focusHeldBy([stopCheckButton])
     offerStop('check-again')
     renderSourceError(preflightReport, failureText('check-failed'))
-    setStatus('The device check did not finish.')
+    setStatus('The device check did not finish.', failureSentence(failureText('check-failed')))
+    fromStop(checkAgainButton)
     log.error('ui', 'preflight request failed', {
       reason: cause instanceof Error ? cause.message : String(cause),
     })
@@ -1701,7 +1760,9 @@ function confirmDiscardThenStart(): void {
   keep.className = 'button button--secondary'
   keep.textContent = 'Keep it'
   keep.addEventListener('click', () => {
-    if (unsavedResult) renderResult(unsavedResult)
+    // Keep it removes itself; the result it restores takes focus.
+    const fromKeep = focusHeldBy([keep])
+    if (unsavedResult) fromKeep(renderResult(unsavedResult))
   })
 
   const actions = document.createElement('div')
@@ -1712,6 +1773,13 @@ function confirmDiscardThenStart(): void {
   discard.focus()
 }
 
+/** The failure just rendered under Create, made focusable so focus can land on it. */
+function failureBlock(): HTMLElement | null {
+  const block = processResult.querySelector<HTMLElement>('.fact-error')
+  if (block) block.tabIndex = -1
+  return block
+}
+
 /** Forgets the retained result, freeing whatever the save route still held. */
 function releaseUnsavedResult(): void {
   unsavedResult?.release()
@@ -1720,6 +1788,8 @@ function releaseUnsavedResult(): void {
 }
 
 function beginJob(file: File): void {
+  // Create, or the question's Discard, is about to go: Cancel takes focus.
+  const fromCreate = focusHeldBy([startButton, processResult])
   processResult.replaceChildren()
   discardAsked = false
   // A running job always shows its row — Cancel lives in it (U-02).
@@ -1758,7 +1828,9 @@ function beginJob(file: File): void {
   )
   jobCancelId = id
   progressMemo = NO_PROGRESS
+  cancelPressedWithFocus = false
   setJobInFlight(true)
+  fromCreate(cancelButton)
   // Said once, at the start, whatever the estimate (spec 7.5, A-03); the
   // stages follow in the same live region.
   setStatus(`Creating your video. ${JOB_START_NOTICE}`)
@@ -1778,14 +1850,18 @@ function beginJob(file: File): void {
     },
   })
 
+  /** Where focus goes when the job ends, if it was on Cancel when it did. */
+  let handTo: HTMLElement | null = null
+  let fromCancel = focusHeldBy([])
   void promise
     .then((reply) => {
+      fromCancel = focusHeldBy([cancelButton], cancelPressedWithFocus)
       // Whatever the job's outcome, the verdict that priced it has been spent:
       // the step leads with the outcome, not with "Ready to go" above it
       // (U-04). The output warnings below take the sound notes' place.
       withdrawVerdict()
       if (reply.kind === 'processed') {
-        renderResult({
+        handTo = renderResult({
           file: reply.file,
           jobId: reply.jobId,
           source: file,
@@ -1806,31 +1882,47 @@ function beginJob(file: File): void {
         // checks (U-07).
         processProgress.value = 1
         processProgressText.textContent = 'Ready'
-        setStatus('Your video is ready.')
+        // What the result and its warnings show is said too (U-10): a closing
+        // that did not land as chosen, and each output warning.
+        setStatus(
+          'Your video is ready.',
+          spoken(
+            closingOutcomeText(record.closing, {
+              applied: reply.brandingApplied.closing,
+              mode: reply.closingModeApplied,
+            }),
+            warningsSpoken('Worth knowing about the finished video', reply.outputWarnings),
+          ),
+        )
         document.title = outcomeTitle('ready')
         setDiagnosticsContext({ stage: 'finished' })
       } else if (reply.kind === 'cancelled') {
         // Nothing was written anywhere the user can see, and the source is
         // untouched — say so rather than leaving them wondering.
         setStatus('Cancelled. Nothing was saved, and your original file is unchanged.')
+        handTo = startButton
         document.title = outcomeTitle('cancelled')
         setDiagnosticsContext({ stage: 'idle' })
       } else if (reply.kind === 'failed') {
-        renderSourceError(processResult, failureFor(reply))
-        setStatus('The video could not be created.')
+        const failure = failureFor(reply)
+        renderSourceError(processResult, failure)
+        // The failure's next step is announced, not only shown (U-10).
+        setStatus('The video could not be created.', failureSentence(failure))
+        handTo = failureBlock()
         document.title = outcomeTitle('failed')
         setDiagnosticsContext({ stage: 'failed' })
       }
     })
     .catch(async (cause: unknown) => {
+      fromCancel = focusHeldBy([cancelButton], cancelPressedWithFocus)
       withdrawVerdict()
       // The watchdog is the only thing that rejects this promise; anything
       // else reaching here threw while the outcome was being shown, and is
       // not the job going quiet.
-      renderSourceError(
-        processResult,
-        failureText(cause instanceof WorkerSilenceError ? 'timed-out' : 'unknown'),
-      )
+      const failure = failureText(cause instanceof WorkerSilenceError ? 'timed-out' : 'unknown')
+      renderSourceError(processResult, failure)
+      setStatus('The video could not be created.', failureSentence(failure))
+      handTo = failureBlock()
       document.title = outcomeTitle('failed')
       setDiagnosticsContext({ stage: 'failed' })
       log.error('ui', 'process request failed', {
@@ -1846,6 +1938,7 @@ function beginJob(file: File): void {
     .finally(() => {
       jobCancelId = null
       setJobInFlight(false)
+      if (handTo) fromCancel(handTo)
       processProgress.hidden = true
       processProgressLabel.hidden = true
       processProgressText.hidden = true
@@ -1878,8 +1971,16 @@ function settled(id: number): Promise<void> {
 // Bound once, here, rather than inside the Start handler — where it added
 // another listener on every Start click, so the second job posted two cancels
 // (VH-36).
+/**
+ * Whether Cancel had focus when pressed. Disabling it can drop focus to the
+ * page body before the job answers, so the job's end could not tell
+ * (VH-111). Reset when a job starts.
+ */
+let cancelPressedWithFocus = false
+
 cancelButton.addEventListener('click', () => {
   if (jobCancelId === null) return
+  cancelPressedWithFocus = document.activeElement === cancelButton
   cancelButton.disabled = true
   setStatus('Cancelling…')
   worker.postMessage({ kind: 'cancel', id: nextRequestId++, cancelId: jobCancelId })
@@ -1918,7 +2019,7 @@ function showProcessControls(
  *   finished; the retained one when it is put back after "Keep it" or while
  *   the next file is being read.
  */
-function renderResult(kept: RetainedResult): void {
+function renderResult(kept: RetainedResult): HTMLElement {
   processResult.replaceChildren()
   discardAsked = false
   const { file, jobId, source, record, outcome } = kept
@@ -1933,6 +2034,9 @@ function renderResult(kept: RetainedResult): void {
   // verdict was the wrong lecture saved and published (U-03).
   const previous = fileInput.files?.[0] !== source
   heading.textContent = `${previous ? 'Previous video' : 'Finished video'} — ${formatFileSize(file.size)}.`
+  // Where focus lands when the job finishes, "Keep it" restores this, or
+  // Save is spent (VH-111): the first line of what there now is.
+  heading.tabIndex = -1
   processResult.append(heading)
 
   // The job's own record, fixed when it ended (A-05): two outputs of one
@@ -1980,6 +2084,8 @@ function renderResult(kept: RetainedResult): void {
   let saved = false
   save.addEventListener('click', () => {
     if (saved) return
+    // Noted before Save disables itself, which can drop focus to the body.
+    const fromSave = focusHeldBy([save])
     save.disabled = true
     // Not just this button: a save streams out of the job's OPFS scratch, and
     // starting another job disposes exactly that scratch.
@@ -2086,6 +2192,9 @@ function renderResult(kept: RetainedResult): void {
         setSaveInFlight(false)
         // Stop saving has gone from under focus; Save is how to go on.
         if (stop.signal.aborted && !saved) save.focus()
+        // A spent Save hands on to the result's first line; one that can be
+        // pressed again keeps focus (VH-111).
+        else fromSave(saved ? heading : save)
       }
     })()
   })
@@ -2095,6 +2204,7 @@ function renderResult(kept: RetainedResult): void {
   actions.className = 'actions'
   actions.append(save)
   processResult.append(actions)
+  return heading
 }
 
 // --- Feedback (VH-93) ------------------------------------------------------

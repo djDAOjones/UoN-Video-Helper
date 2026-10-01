@@ -91,23 +91,6 @@
       surfaces — close those with its evidence where it gets there first.
       VH-105 waits on it.
 
-- [ ] **VH-111 Focus and announcements follow the page** (2026-10-01)
-      Intent: U-09, U-10. Focus falls to the page body at Create, Cancel,
-      finish and "Keep it" — after Cancel the next Tab skips Create. Caption
-      loss, the sound notes, a closing that could not load and a failure's
-      advice are on screen only; the live line says "Video read. …" or "The
-      video could not be created.".
-      Done when: focus moves to Cancel on start, back to Create on cancel, and
-      to the result on finish or "Keep it"; the read announcement counts what
-      will not be carried over and a failure's carries its next step; checked
-      with the keyboard and with VoiceOver.
-      Spec gap review 2026-10-01 (A-07, A-14): on finish, focus moves only
-      when the transition displaced it, never from where a user is reading or
-      out of the modal; every self-removing control — Create, Cancel, Keep it,
-      Discard, Use the whole video, Save — has a named hand-on; pre-flight
-      sound notes, output warnings, a missing or substituted closing, the
-      caption consequence and each save outcome are announced.
-
 - [ ] **VH-112 Controls look like what they are** (2026-10-01)
       Intent: U-11, U-12, U-13, U-21. Forced colours erase the trim slider and
       the colour choice — no `forced-colors` rule exists. The colour swatches

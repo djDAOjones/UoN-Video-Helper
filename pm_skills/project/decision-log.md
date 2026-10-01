@@ -11,6 +11,37 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — VH-111: focus follows the transition, and the live regions say what the panels show
+
+**Decision:** `focusHeldBy(controls)` is taken BEFORE a transition and moves
+focus afterwards only if it was on a control the transition took away and
+is still lost — on the page body or that control. "On the body" is never
+evidence on its own: it is also where focus sits while someone reads, so
+an async finish never pulls focus from a reader, nor out of the feedback
+dialogue. Cancel disables itself on click, so whether it had focus is noted
+at the click. Hand-ons: Create or Discard → Cancel; Cancel → Create; finish
+→ the result's first line; failure → the failure; Keep it → the result;
+a spent Save → the result; Stop the check → Check again, and a finished
+check → Create, the acknowledgement, or the file input on a block; Use the
+whole video → the start handle (already). Announcements, through each
+live region's spoken-only tail (`ui/announce.ts`): the read counts what
+is not carried over and says each loss with its consequence, captions
+included; the device check names each sound note; the finish names a
+closing that did not land as chosen and each output warning; every failure
+says its sentence and next step; each save outcome was already said.
+
+**Rationale:** U-09, U-10, A-07, A-14. Titles only for warnings: the title
+says the thing, the panel holds the detail.
+
+**Not done here:** VoiceOver and NVDA by a person — VH-M4's walk.
+
+**Verified:** headless Chrome on AMCS3059 — focus Create → Cancel → Create →
+result line → Discard → result line (Keep it) → result line (Save); a
+mov_text caption fixture's read announcement and CULT2011's sound notes,
+spoken; plus Node tests for `announce.ts`.
+
+**Link:** VH-111; `src/main.ts`, `src/ui/announce.ts`.
+
 ## 2026-10-01 — VH-123: review leftovers, and codex sol on VH-109 and VH-110
 
 **Decision:** the storage block names "keep less of the video, or choose
