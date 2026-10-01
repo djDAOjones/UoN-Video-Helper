@@ -18,10 +18,10 @@ describe('lossesSpoken', () => {
       { title: 'Found 1 caption track', detail: 'The new file will have no caption track.' },
       { title: 'This file has 1 more sound track', detail: 'The others will not be carried over.' },
     ])
-    expect(said).toMatch(/^Two things are not carried into the new file\./)
+    expect(said).toMatch(/^Two things to know about what goes into the new file\./)
     expect(said).toContain('Found 1 caption track. The new file will have no caption track.')
     expect(said).toContain('1 more sound track')
-    expect(lossesSpoken([{ title: 'A', detail: 'B.' }])).toMatch(/^One thing is not/)
+    expect(lossesSpoken([{ title: 'A', detail: 'B.' }])).toMatch(/^One thing to know/)
   })
 })
 

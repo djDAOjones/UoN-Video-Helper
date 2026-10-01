@@ -28,9 +28,10 @@ function countThings(count: number): string {
  */
 export function lossesSpoken(losses: readonly Loss[]): string {
   if (losses.length === 0) return ''
-  const verb = losses.length === 1 ? 'is' : 'are'
+  // Counted, not asserted: one of them can be a file that could not be
+  // checked, which is not a loss anyone knows of (Codex review).
   return [
-    `${countThings(losses.length)} ${verb} not carried into the new file.`,
+    `${countThings(losses.length)} to know about what goes into the new file.`,
     ...losses.map((loss) => `${loss.title}. ${loss.detail}`),
   ].join(' ')
 }
