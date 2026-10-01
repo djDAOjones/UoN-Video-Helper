@@ -59,31 +59,36 @@
      rank-1 result problems; then what the page says, does and announces over
      time; then controls, the phone path and the words; then VH-105
      translates the settled copy, so nothing is translated twice.
-     Ready to pick up from VH-108, in order (2026-10-01; VH-106 and VH-107 shipped the same day): the spec gap review
+     Maintainer 2026-10-01, after VH-108 shipped: VH-114 next, then VH-115
+     (Band 7), then VH-109 and the rest in order (VH-106 to VH-108 shipped the
+     same day): the spec gap review
      (`reviews/2026-10-01/spec-ux-accessibility-gaps-2026-10-01.md`) added a
      clause to each item's "Done when", the maintainer signed off every spec
      correction and the spec now carries them (doc-sync 2026-10-01), so each
      item builds to the spec as written. Band 4 closed with VH-97's sign-off
      as not built (Icebox). -->
 
-- [ ] **VH-108 The Create step says only what is still true** (2026-10-01)
-      Intent: U-04, U-05, U-17. "Ready to go", and the sound notes under it,
-      stay when the trim is in error (and Create is hidden), after a changed
-      preset, after the job, and after a failure. A file pre-flight blocks is
-      "read" at step 1, offered steps 2–4, refused only at step 5 — telling a
-      user in desktop Chrome to use Chrome — under a note that "None of these
-      stop you continuing". A bad time in one trim field silently reverts when
-      the other is edited, and Create comes back.
-      Done when: a superseded verdict, and its sound notes, are withdrawn or
-      marked until the re-check lands; after a job the step leads with the
-      outcome; a block is said at step 1, and steps 2–4 do not invite work on
-      a file that cannot be made; the decode block's remedy fits the browser
-      in use; no "nothing stops you" line under a block; each trim field keeps
-      its own pending text and error.
-      Spec gap review 2026-10-01 (A-11, A-12): a trim re-check is timed on the
-      Teams recording first, and while it runs the step shows that it is re-
-      checking; every block's remedy fits its cause, not only the decode
-      block's, and none sends a user to the browser they are in.
+- [ ] **VH-114 Plain words, once** (2026-10-01)
+      Intent: U-23, U-24, U-25 — the last copy pass before VH-105 translates
+      it. "LU", "LUFS" and "re-encoded" in novice copy; four names for
+      levelling; "(branded).mp4" whatever was chosen; "about the same size"
+      after a trim and "branding still applied" under None; "Ready, with one
+      thing to know" over several things; a status line that repeats the
+      verdict box; nothing after "Saved.".
+      Done when: no unit or codec word on the main path; one name for
+      levelling; every claim depends on the job; the status line shows only
+      what the box does not, still announcing it; one sentence of what next
+      after Saved; `test/screen-text.test.ts` holds any name it pins.
+      Spec gap review 2026-10-01 (A-04, A-10, A-13, A-14, A-19, A-20): the
+      what-next sentence exists for both save routes and tells a write from a
+      download hand-off; a readability check over every string the page can
+      show — markup, `src/ui/*.ts`, `src/main.ts`, `src/config/`, the worker's
+      errors — runs in the gate, with simpler supporting text where a fixed
+      term fails it, and each kept term and abbreviation (HDR, fps, MB, GB;
+      the format names one by one) has an in-place meaning; the feedback
+      dialog promises only what the maintainer will honour and says "picture
+      size", not "size"; the caption warning says the destination must supply
+      captions; the Trim step says the preview plays the original.
 
 - [ ] **VH-110 Failures say what to do next** (2026-10-01)
       Intent: U-06, U-18. A failed job says "Something went wrong…", says the
@@ -175,28 +180,6 @@
       names where the file lands (Files → Downloads on an iPhone), checked on
       the devices; backgrounding, a released wake lock and returning to the
       tab are seen through on both.
-
-- [ ] **VH-114 Plain words, once** (2026-10-01)
-      Intent: U-23, U-24, U-25 — the last copy pass before VH-105 translates
-      it. "LU", "LUFS" and "re-encoded" in novice copy; four names for
-      levelling; "(branded).mp4" whatever was chosen; "about the same size"
-      after a trim and "branding still applied" under None; "Ready, with one
-      thing to know" over several things; a status line that repeats the
-      verdict box; nothing after "Saved.".
-      Done when: no unit or codec word on the main path; one name for
-      levelling; every claim depends on the job; the status line shows only
-      what the box does not, still announcing it; one sentence of what next
-      after Saved; `test/screen-text.test.ts` holds any name it pins.
-      Spec gap review 2026-10-01 (A-04, A-10, A-13, A-14, A-19, A-20): the
-      what-next sentence exists for both save routes and tells a write from a
-      download hand-off; a readability check over every string the page can
-      show — markup, `src/ui/*.ts`, `src/main.ts`, `src/config/`, the worker's
-      errors — runs in the gate, with simpler supporting text where a fixed
-      term fails it, and each kept term and abbreviation (HDR, fps, MB, GB;
-      the format names one by one) has an in-place meaning; the feedback
-      dialog promises only what the maintainer will honour and says "picture
-      size", not "size"; the caption warning says the destination must supply
-      captions; the Trim step says the preview plays the original.
 
 - [ ] **VH-105 The page in Chinese and Bahasa Malaysia** (2026-10-01)
       Intent: staff at the Ningbo and Malaysia campuses use the same tool.

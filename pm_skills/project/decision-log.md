@@ -11,6 +11,39 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — VH-108: the Create step says only what is still true
+
+**Decision:** a verdict is withdrawn, with its sound notes, the moment the
+selection it priced moves — a trim change, a trim error, a preset change —
+and once the job it priced has run, so the step leads with the re-check, the
+error or the outcome. A block is said at step 1 beside the file, in the
+source status, with steps 2 to 5 withdrawn and no sound notes. Every
+browser-caused block gives the recovery that fits: Chrome on a computer is
+recommended, never promised, and someone already in Chrome or Edge on a
+computer is told to re-export the file, update Chrome or ask whoever manages
+the machine — never sent to the browser they are in (`blockContextFor`, from
+the user agent; Edge counts as Chrome, being the same engine and the managed
+laptop's default). Each trim field keeps its own text and its own error.
+
+**Rationale:** U-04's two contradicting messages a few lines apart, U-05's
+ProRes master trimmed and dressed before being refused 1,200 px down, U-17's
+silent rewrite of a bad start time that re-enabled Create. A-11's timing:
+the trim re-check on the 29-minute Teams recording takes 2.8 s headless,
+debounce included, so a visible re-checking state is enough and no bound on
+repetition is needed yet.
+
+**Alternatives:** greying the stale verdict rather than removing it (two
+truths on screen is what U-04 is); delaying steps 2 to 5 until the verdict
+lands (five seconds of nothing after every read, against §9.1).
+
+**Verified:** 24 headless checks in Chrome over CDP — a ProRes file blocked
+at step 1 with the re-export remedy and steps withdrawn, a readable file
+after it restoring them, the verdict withdrawn on a preset change, a trim
+error, and after a job, and the per-field trim errors — plus 117 Node tests
+on the wording and the user-agent reading.
+
+**Link:** VH-108; `src/ui/preflight-panel.ts`, `src/main.ts`, `index.html`.
+
 ## 2026-10-01 — VH-107: the finished video belongs to its own choices
 
 **Decision:** a job's record — file, part kept, output, closing as chosen — is

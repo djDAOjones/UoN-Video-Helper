@@ -27,6 +27,11 @@
 
 ### Band 6 — review, then translate
 
+- VH-108 — Shipped 2026-10-01. The Create step says only what is still
+  true: a superseded verdict and its sound notes are withdrawn, a block is
+  said at step 1 with steps 2 to 5 withdrawn, every block's remedy fits its
+  cause and the browser in use, and each trim field keeps its own error.
+  See decision-log.
 - VH-107 — Shipped 2026-10-01. The finished video carries its own record
   and keeps it: the discard question is retired by any change to the
   selection, Discard passes Create's gate, a fade that fell back to a cut

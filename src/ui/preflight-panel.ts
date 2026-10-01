@@ -3,16 +3,38 @@
  *
  * Spec section 9.2: every message says what happened, whether the original
  * file is affected (it never is), and what to do next. A block in particular
- * must name a browser that will work — an app that says "unsupported" and
- * stops has told the user nothing they can act on. The browser it names is
- * Chrome alone, because Chrome is the one the app is built and checked in, and
- * the page says so (VH-98). Naming another would send the user to a second
- * unchecked browser.
+ * must give the recovery that fits its cause (spec 7.3) — an app that says
+ * "unsupported" and stops has told the user nothing they can act on. Where
+ * the browser is the cause it recommends Chrome on a computer, the one the
+ * app is built and checked in (VH-98): a recommendation, not a guarantee.
+ * And it says something else to someone who is already there — a ProRes
+ * master in desktop Chrome was told to use Chrome on a computer (U-05,
+ * A-12), which is the browser they were in.
  */
 
 import { PRESETS, bitrateWasCappedToSource } from '../config/presets'
 import type { PreflightOutcome, PreflightReasonCode, PreflightSummary } from '../media/preflight'
 import { formatDuration, formatFileSize } from './format'
+
+/**
+ * What the block's remedy may assume about where the user is.
+ *
+ * `chromeOnComputer` is Chrome — or Edge, which is the same engine and the
+ * default on a managed University laptop — on a desktop system: the browser
+ * the generic remedy would otherwise send them to.
+ */
+export interface BlockContext {
+  readonly chromeOnComputer: boolean
+}
+
+/** Reads {@link BlockContext} from the user agent string. Pure, so it is tested. */
+export function blockContextFor(userAgent: string): BlockContext {
+  const chromium = /Chrome\/\d+/.test(userAgent) && !/OPR\//.test(userAgent)
+  const handheld = /Android|iPhone|iPad|Mobile/.test(userAgent)
+  return { chromeOnComputer: chromium && !handheld }
+}
+
+const ELSEWHERE: BlockContext = { chromeOnComputer: false }
 
 const OUTCOME_HEADING: Record<PreflightOutcome, string> = {
   proceed: 'Ready to go',
@@ -21,24 +43,41 @@ const OUTCOME_HEADING: Record<PreflightOutcome, string> = {
   block: 'This cannot run here',
 }
 
-function reasonText(code: PreflightReasonCode, summary: PreflightSummary): string {
+/** The recommendation, where the browser is the cause and the user is not already in it. */
+const TRY_CHROME = 'Chrome on a computer is the browser this tool is built for — try it there.'
+/** Why Chrome itself would lack a feature it normally has. */
+const CHROME_LACKS = 'This copy of Chrome may be out of date, or a setting on this computer may have switched the feature off: update Chrome, or ask whoever manages the computer.'
+
+function reasonText(code: PreflightReasonCode, summary: PreflightSummary, context: BlockContext): string {
   const estimate = summary.probe.estimatedSeconds
+  const here = context.chromeOnComputer
   switch (code) {
     case 'no-webcodecs':
-      return 'This browser cannot process video. Chrome on a computer will work.'
+      return here
+        ? `This browser cannot process video. ${CHROME_LACKS}`
+        : `This browser cannot process video. ${TRY_CHROME}`
     case 'no-aac-encode':
-      // Names the browser that will work, as every block here must. Firefox
-      // encodes the picture fine and refuses the sound, which is why the
-      // message is about sound rather than about video (VH-49).
-      return 'This browser cannot add sound to a video file. Chrome on a computer will work. Firefox can play video but cannot create the audio this needs.'
+      // Firefox encodes the picture fine and refuses the sound, which is why
+      // the message is about sound rather than about video (VH-49).
+      return here
+        ? `This browser cannot add sound to a video file. ${CHROME_LACKS}`
+        : `This browser cannot add sound to a video file. ${TRY_CHROME} Firefox can play video but cannot create the sound this needs.`
     case 'no-h264-encode':
-      return 'This browser cannot create the video format this tool needs. Chrome on a computer will work.'
+      return here
+        ? `This browser cannot create the video format this tool needs. ${CHROME_LACKS}`
+        : `This browser cannot create the video format this tool needs. ${TRY_CHROME}`
     case 'no-source-decode':
       // The source panel promises that full guidance arrives here, so it has
-      // to actually arrive (VH-60).
-      return 'This browser cannot read the picture or sound inside this file. Chrome on a computer will open more formats. If it still will not open, the file may have been saved in an unusual format — re-exporting it as an MP4 usually fixes it.'
+      // to actually arrive (VH-60). In Chrome on a computer the remedy is the
+      // file, not the browser: the formats Chrome opens are the ones this
+      // tool can use.
+      return here
+        ? 'This browser cannot read the picture or sound inside this file. It was probably saved in a format made for editing software — export it again as an MP4 and choose that file instead.'
+        : `This browser cannot read the picture or sound inside this file. ${TRY_CHROME} If it will not open there either, the file was probably saved in a format made for editing software — export it again as an MP4.`
     case 'no-opfs':
-      return 'This browser will not give the tool the working space it needs to build your video. Chrome on a computer will work. If you are browsing privately, an ordinary window usually works.'
+      return here
+        ? 'This browser will not give the tool the working space it needs to build your video. If you are browsing privately, an ordinary window usually works; otherwise a setting on this computer may be blocking site storage — ask whoever manages it.'
+        : `This browser will not give the tool the working space it needs to build your video. ${TRY_CHROME} If you are browsing privately, an ordinary window usually works.`
     case 'insecure-context':
       // The one block the user can fix by changing the address, so it says so
       // first and names nothing else.
@@ -95,7 +134,7 @@ export interface VerdictText {
  * Exported for tests. Rendering needs a DOM and the suite runs in Node, but
  * every decision about what is said is made here.
  */
-export function verdictText(summary: PreflightSummary): VerdictText {
+export function verdictText(summary: PreflightSummary, context: BlockContext = ELSEWHERE): VerdictText {
   const { verdict, shape, probe } = summary
   const blocked = verdict.outcome === 'block'
   const lines: string[] = []
@@ -107,7 +146,7 @@ export function verdictText(summary: PreflightSummary): VerdictText {
     // run), and a long job with too little storage arrived saying "you can
     // carry on" beside a Start button that is not there.
     if (blocked && reason.outcome !== 'block') continue
-    lines.push(reasonText(reason.code, summary))
+    lines.push(reasonText(reason.code, summary, context))
   }
 
   if (!blocked) {
@@ -158,10 +197,14 @@ export function verdictText(summary: PreflightSummary): VerdictText {
 }
 
 /** Replaces `container` with the rendered verdict. */
-export function renderPreflight(container: HTMLElement, summary: PreflightSummary): void {
+export function renderPreflight(
+  container: HTMLElement,
+  summary: PreflightSummary,
+  context: BlockContext = ELSEWHERE,
+): void {
   container.replaceChildren()
 
-  const text = verdictText(summary)
+  const text = verdictText(summary, context)
   const section = document.createElement('div')
   section.className = 'verdict'
   section.dataset['outcome'] = summary.verdict.outcome
@@ -201,8 +244,11 @@ export interface PreflightAnnouncement {
  * Everything the verdict says reaches the live region; only the outcome is
  * repeated visibly.
  */
-export function preflightAnnouncement(summary: PreflightSummary): PreflightAnnouncement {
-  const { lines } = verdictText(summary)
+export function preflightAnnouncement(
+  summary: PreflightSummary,
+  context: BlockContext = ELSEWHERE,
+): PreflightAnnouncement {
+  const { lines } = verdictText(summary, context)
   return {
     shown:
       summary.verdict.outcome === 'block'

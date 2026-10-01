@@ -15,7 +15,7 @@ import type {
   PreflightReasonCode,
   PreflightSummary,
 } from '../media/preflight'
-import { preflightAnnouncement, verdictText } from './preflight-panel'
+import { blockContextFor, preflightAnnouncement, verdictText } from './preflight-panel'
 
 const shape: OutputShape = {
   width: 1920,
@@ -184,15 +184,19 @@ describe('block (VH-89)', () => {
     expect(lines.join(' ')).not.toMatch(/still continue/)
   })
 
-  it('names a browser that will work', () => {
+  it('recommends a browser, as a recommendation rather than a guarantee', () => {
     // Spec 9.2: a block that says "unsupported" and stops has told the user
-    // nothing they can act on.
+    // nothing they can act on. Spec 7.3 (A-12): Chrome on a computer is
+    // recommended, not promised.
     const { lines } = verdictText(summary('block', [['no-aac-encode', 'block']], { probe: unmeasured }))
-    expect(lines[0]).toMatch(/Chrome on a computer will work/)
+    expect(lines[0]).toMatch(/Chrome on a computer is the browser this tool is built for/)
+    expect(lines[0]).not.toMatch(/will work/)
   })
 
-  it.each(['no-webcodecs', 'no-aac-encode', 'no-h264-encode', 'no-source-decode', 'no-opfs'] as const)(
-    'names only Chrome when %s blocks, as the page promises nothing else',
+  const browserBlocks = ['no-webcodecs', 'no-aac-encode', 'no-h264-encode', 'no-source-decode', 'no-opfs'] as const
+
+  it.each(browserBlocks)(
+    'names only Chrome when %s blocks elsewhere, as the page promises nothing else',
     (code) => {
       // VH-98: the page says it is built for Chrome and other browsers may not
       // work. A block that sent the user to Edge or Safari would contradict it.
@@ -201,6 +205,43 @@ describe('block (VH-89)', () => {
       expect(lines[0]).not.toMatch(/Edge|Safari/)
     },
   )
+
+  it.each(browserBlocks)(
+    'never sends someone already in Chrome on a computer to Chrome when %s blocks (U-05, A-12)',
+    (code) => {
+      const { lines } = verdictText(summary('block', [[code, 'block']], { probe: unmeasured }), {
+        chromeOnComputer: true,
+      })
+      expect(lines[0]).not.toMatch(/Chrome on a computer/)
+      // ...and still says what to do.
+      expect(lines[0]).toMatch(/update Chrome|ask whoever manages|export it again|ordinary window/)
+    },
+  )
+
+  it('tells a decode block in Chrome to re-export the file, not to change browser', () => {
+    const { lines } = verdictText(summary('block', [['no-source-decode', 'block']], { probe: unmeasured }), {
+      chromeOnComputer: true,
+    })
+    expect(lines[0]).toContain('export it again as an MP4')
+  })
+
+  it('reads where the user is from the user agent', () => {
+    const chromeMac =
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
+    const edgeWindows =
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 Edg/130.0.0.0'
+    const chromeAndroid =
+      'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36'
+    const firefoxMac = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:131.0) Gecko/20100101 Firefox/131.0'
+    const safariMac =
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15'
+    expect(blockContextFor(chromeMac).chromeOnComputer).toBe(true)
+    // Edge is the same engine, and the default on a managed University laptop.
+    expect(blockContextFor(edgeWindows).chromeOnComputer).toBe(true)
+    expect(blockContextFor(chromeAndroid).chromeOnComputer).toBe(false)
+    expect(blockContextFor(firefoxMac).chromeOnComputer).toBe(false)
+    expect(blockContextFor(safariMac).chromeOnComputer).toBe(false)
+  })
 
   it('still quotes the space a job needs when storage is the block', () => {
     const { lines } = verdictText(summary('block', [['insufficient-storage', 'block']]))

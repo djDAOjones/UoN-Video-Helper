@@ -73,7 +73,7 @@ import {
   feedbackText,
 } from './ui/feedback'
 import { formatFileSize } from './ui/format'
-import { preflightAnnouncement, renderPreflight } from './ui/preflight-panel'
+import { blockContextFor, preflightAnnouncement, renderPreflight } from './ui/preflight-panel'
 import {
   closingOutcomeText,
   jobSummaryText,
@@ -132,6 +132,7 @@ const dropZone = required<HTMLDivElement>('#drop-zone')
 const dropHint = required<HTMLParagraphElement>('#drop-hint')
 const dropError = required<HTMLParagraphElement>('#drop-error')
 const sourceReport = required<HTMLDivElement>('#source-report')
+const sourceBlock = required<HTMLDivElement>('#source-block')
 const preflightReport = required<HTMLDivElement>('#preflight-report')
 const audioWarnings = required<HTMLDivElement>('#audio-warnings')
 const processActions = required<HTMLDivElement>('#process-actions')
@@ -394,16 +395,32 @@ function setSourceStatus(message: string): void {
 }
 
 /**
- * Puts steps 2 to 5 on the page. Once, for the session.
+ * Puts steps 2 to 5 on the page, or takes them off it.
  *
  * They hold nothing a new file invalidates that is not reset for it — the
  * trim goes back to the whole video, two choices keep their safe defaults,
  * and the Create step's verdict and Start are cleared and re-earned per file
- * — so hiding them again for each new file only made the page jump. It moves
- * no focus: the user is still on the file input they just used.
+ * — so hiding them again for each new file only made the page jump. They
+ * are withdrawn for one thing: a file the device check has blocked, which
+ * steps 2 to 4 must not invite work on (U-05). It moves no focus: the user
+ * is still on the file input they just used.
  */
-function revealLaterSteps(): void {
-  for (const step of laterSteps) step.hidden = false
+function revealLaterSteps(shown = true): void {
+  for (const step of laterSteps) step.hidden = !shown
+}
+
+/**
+ * Takes a verdict off the screen that no longer describes the selection.
+ *
+ * "Ready to go", and the sound notes under it, stayed up while the trim was
+ * in error, after the preset changed, after the job and after a failure
+ * (U-04). A verdict is about one file, one trim and one preset; when any of
+ * those moves, or the job it priced has run, it is withdrawn here and the
+ * step leads with what is true now — the re-check, or the outcome.
+ */
+function withdrawVerdict(): void {
+  preflightReport.replaceChildren()
+  audioWarnings.replaceChildren()
 }
 
 // --- Error surfacing -------------------------------------------------------
@@ -708,6 +725,7 @@ fileInput.addEventListener('change', () => {
   // Whatever the Create step last said was about the previous file's job.
   setStatus('')
   sourceReport.replaceChildren()
+  sourceBlock.replaceChildren()
   preflightReport.replaceChildren()
   audioWarnings.replaceChildren()
   // Hidden, not replaced: the Start and Cancel buttons live for the whole
@@ -833,17 +851,32 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
         videoFramesPerSecond: Math.round(reply.summary.probe.videoFramesPerSecond),
         estimatedSeconds: reply.summary.probe.estimatedSeconds,
       })
-      renderPreflight(preflightReport, reply.summary)
-      renderWarnings(audioWarnings, reply.summary.audioWarnings, {
-        heading: 'Worth knowing about the sound',
-      })
-      const announcement = preflightAnnouncement(reply.summary)
-      setStatus(announcement.shown, announcement.spokenOnly)
+      const context = blockContextFor(navigator.userAgent)
+      const announcement = preflightAnnouncement(reply.summary, context)
       setDiagnosticsContext({
         stage: reply.summary.verdict.outcome === 'block' ? 'blocked' : 'ready',
         capability: reply.summary,
       })
-      if (reply.summary.verdict.outcome !== 'block') {
+      if (reply.summary.verdict.outcome === 'block') {
+        // Said at step 1, beside the file, and steps 2 to 5 withdrawn: a
+        // file that cannot be made must not be offered a trim and a closing
+        // first (U-05). No sound notes either — "none of these stop you
+        // continuing" under a block was the contradiction U-05 found.
+        renderPreflight(sourceBlock, reply.summary, context)
+        withdrawVerdict()
+        setStatus('')
+        revealLaterSteps(false)
+        setSourceStatus(`${announcement.shown} ${announcement.spokenOnly}`)
+        return
+      }
+      sourceBlock.replaceChildren()
+      revealLaterSteps()
+      renderPreflight(preflightReport, reply.summary, context)
+      renderWarnings(audioWarnings, reply.summary.audioWarnings, {
+        heading: 'Worth knowing about the sound',
+      })
+      setStatus(announcement.shown, announcement.spokenOnly)
+      {
         showProcessControls(
           file,
           reply.summary.contentClass,
@@ -892,6 +925,8 @@ presetChoice.addEventListener('change', () => {
   jobContentClass = 'unknown'
   jobKeptRange = null
   withdrawDiscardQuestion()
+  // The verdict priced the other preset (U-04).
+  withdrawVerdict()
   void runPreflight(file, current)
 })
 
@@ -904,8 +939,15 @@ let trimDuration = 0
 /** The trim as the user has set it, in source seconds; checked, not trusted. */
 let trimStart = 0
 let trimEnd = 0
-/** A time field whose text could not be read, with what to say about it. */
-let trimFieldProblem: { readonly field: HTMLInputElement; readonly message: string } | null = null
+/**
+ * Each time field whose text could not be read, with what to say about it.
+ *
+ * One per field, not one for the step: a bad start time used to be forgotten
+ * — and the field silently rewritten to 0:00.0 — the moment a valid end time
+ * was typed, which re-enabled Create on a start the user never chose (U-17).
+ * A field keeps its own text and its own error until that field is put right.
+ */
+const trimFieldProblems = new Map<HTMLInputElement, string>()
 /** The preview's object URL, revoked when the file changes. */
 let previewUrl: string | null = null
 let trimRecheck: ReturnType<typeof setTimeout> | null = null
@@ -926,7 +968,11 @@ function cancelTrimRecheck(): void {
 /** The range to send, `null` for the whole video, or why the trim cannot be used. */
 function currentTrim(): { readonly range: KeptRange | null } | { readonly problem: string } {
   if (trimNotice !== null) return { range: null }
-  if (trimFieldProblem) return { problem: trimFieldProblem.message }
+  // The start's problem first, in reading order.
+  for (const field of [trimStartField, trimEndField]) {
+    const problem = trimFieldProblems.get(field)
+    if (problem !== undefined) return { problem }
+  }
   return trimRangeFor(trimStart, trimEnd, trimDuration)
 }
 
@@ -950,7 +996,7 @@ function clearTrim(notice: string): void {
   trimDuration = 0
   trimStart = 0
   trimEnd = 0
-  trimFieldProblem = null
+  trimFieldProblems.clear()
   for (const range of [trimStartRange, trimEndRange]) range.max = '0'
   applyControlLock()
 }
@@ -970,7 +1016,7 @@ function resetTrim(file: File, durationSeconds: number): void {
   trimDuration = durationSeconds
   trimStart = 0
   trimEnd = durationSeconds
-  trimFieldProblem = null
+  trimFieldProblems.clear()
   for (const range of [trimStartRange, trimEndRange]) {
     range.min = '0'
     range.max = String(durationSeconds)
@@ -1003,15 +1049,21 @@ function renderTrim(): void {
   trimStartRange.classList.toggle('range-input--on-top', fraction(trimStart) > 0.5)
 
   // A field the user is correcting keeps what they typed.
-  if (trimFieldProblem?.field !== trimStartField) trimStartField.value = formatTrimTime(trimStart)
-  if (trimFieldProblem?.field !== trimEndField) trimEndField.value = formatTrimTime(trimEnd)
+  if (!trimFieldProblems.has(trimStartField)) trimStartField.value = formatTrimTime(trimStart)
+  if (!trimFieldProblems.has(trimEndField)) trimEndField.value = formatTrimTime(trimEnd)
 
   const trim = currentTrim()
   const problem = 'problem' in trim ? trim.problem : null
-  trimError.textContent = problem ?? ''
+  // Every field's own problem is said, so a second bad time is not hidden
+  // behind the first; a range problem belongs to both fields.
+  const fieldProblems = [trimStartField, trimEndField]
+    .map((field) => trimFieldProblems.get(field))
+    .filter((text): text is string => text !== undefined)
+  trimError.textContent = fieldProblems.length > 0 ? fieldProblems.join(' ') : (problem ?? '')
   trimError.hidden = problem === null
   for (const field of [trimStartField, trimEndField]) {
-    const invalid = problem !== null && (trimFieldProblem === null || trimFieldProblem.field === field)
+    const invalid =
+      problem !== null && (trimFieldProblems.size === 0 || trimFieldProblems.has(field))
     if (invalid) field.setAttribute('aria-invalid', 'true')
     else field.removeAttribute('aria-invalid')
   }
@@ -1043,6 +1095,9 @@ function commitTrim(): void {
   jobKeptRange = null
   cancelTrimRecheck()
   withdrawDiscardQuestion()
+  // The verdict priced the previous trim (U-04); the step now leads with the
+  // re-check, or with the trim error that stops it.
+  withdrawVerdict()
   if ('problem' in currentTrim()) {
     setStatus('Put the start and end times right in step 2 to continue.')
     return
@@ -1062,7 +1117,8 @@ function commitTrim(): void {
  * time: those are refused beside the field instead.
  */
 function onRangeInput(which: 'start' | 'end', value: number): void {
-  trimFieldProblem = null
+  // A handle moved for this end replaces whatever its field held.
+  trimFieldProblems.delete(which === 'start' ? trimStartField : trimEndField)
   if (which === 'start') trimStart = Math.max(0, Math.min(value, trimEnd - KEPT_MIN_SECONDS))
   else trimEnd = Math.min(trimDuration, Math.max(value, trimStart + KEPT_MIN_SECONDS))
   renderTrim()
@@ -1097,9 +1153,9 @@ for (const [field, which] of [
   field.addEventListener('change', () => {
     const value = trimFieldValue(field.value, which, trimDuration)
     if ('problem' in value) {
-      trimFieldProblem = { field, message: value.problem }
+      trimFieldProblems.set(field, value.problem)
     } else {
-      trimFieldProblem = null
+      trimFieldProblems.delete(field)
       if (which === 'start') trimStart = value.seconds
       else trimEnd = value.seconds
     }
@@ -1108,19 +1164,19 @@ for (const [field, which] of [
 }
 
 trimSetStart.addEventListener('click', () => {
-  trimFieldProblem = null
+  trimFieldProblems.delete(trimStartField)
   trimStart = trimPreview.currentTime
   commitTrim()
 })
 
 trimSetEnd.addEventListener('click', () => {
-  trimFieldProblem = null
+  trimFieldProblems.delete(trimEndField)
   trimEnd = trimPreview.currentTime
   commitTrim()
 })
 
 trimClear.addEventListener('click', () => {
-  trimFieldProblem = null
+  trimFieldProblems.clear()
   trimStart = 0
   trimEnd = trimDuration
   commitTrim()
@@ -1513,6 +1569,10 @@ function beginJob(file: File): void {
 
   void promise
     .then((reply) => {
+      // Whatever the job's outcome, the verdict that priced it has been spent:
+      // the step leads with the outcome, not with "Ready to go" above it
+      // (U-04). The output warnings below take the sound notes' place.
+      withdrawVerdict()
       if (reply.kind === 'processed') {
         renderResult({
           file: reply.file,
@@ -1540,6 +1600,7 @@ function beginJob(file: File): void {
       }
     })
     .catch(async (cause: unknown) => {
+      withdrawVerdict()
       renderSourceError(processResult, 'The job did not finish.')
       setDiagnosticsContext({ stage: 'failed' })
       log.error('ui', 'process request failed', {
