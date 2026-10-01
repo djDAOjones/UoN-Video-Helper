@@ -62,8 +62,12 @@ for (const file of walk(ROOT)) {
     if (inFence) return
 
     const line = stripCode(raw)
-    for (const re of PLACEHOLDERS) {
-      if (re.test(line)) failures.push(`${rel}:${index + 1}  ${raw.trim().slice(0, 100)}`)
+    // The v3 migration census and inventory quote the rulebooks' own marker
+    // names verbatim; they skip the placeholder pass only, never the key scan.
+    if (!rel.startsWith(join('project', 'migration'))) {
+      for (const re of PLACEHOLDERS) {
+        if (re.test(line)) failures.push(`${rel}:${index + 1}  ${raw.trim().slice(0, 100)}`)
+      }
     }
     for (const { name, re } of KEY_SHAPES) {
       if (re.test(raw)) notices.push(`${rel}:${index + 1}  possible ${name}`)

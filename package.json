@@ -26,7 +26,7 @@
     "check:placeholders": "node scripts/check-placeholders.mjs",
     "check:build": "node scripts/check-build.mjs",
     "check:memory": "node pm_skills/scaffold/check-memory.mjs",
-    "check": "npm run check:placeholders && npm run typecheck && npm run lint && npm run test && npm run check:build && npm run docs:lint && npm run docs:links && npm run check:memory"
+    "check": "npm run check:placeholders && npm run typecheck && npm run lint && npm run test && npm run check:build && npm run docs:lint && npm run docs:links && npm run check:memory && node tools/check.mjs"
   },
   "dependencies": {
     "mediabunny": "^1.55.2"
