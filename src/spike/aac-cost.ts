@@ -31,9 +31,12 @@ import { WindowRouter, planProbeWindows } from '../media/codec-probe'
 import { audioEncodingConfigFor } from '../media/encoding'
 import { openInput } from '../media/inspect'
 import { AudioGapFiller } from '../media/source-timeline'
+import { verdictLine } from '../../scripts/verdict.mjs'
 
 const log = document.getElementById('log') as HTMLPreElement
 const lines: string[] = []
+/** FAIL and ERROR lines, for the closing verdict (VH-102). */
+let failures = 0
 function say(text: string): void {
   lines.push(text)
   log.textContent = lines.join('\n')
@@ -273,6 +276,9 @@ try {
     }
   }
 } catch (error) {
+  failures++
   say(`ERROR — ${error instanceof Error ? (error.stack ?? error.message) : String(error)}`)
 }
+// The one line `scripts/run-in-engines.mjs` reads (VH-102).
+say(`\n${verdictLine(failures)}`)
 say('\ndone')

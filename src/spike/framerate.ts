@@ -14,9 +14,12 @@
  */
 
 import { inspectFile } from '../media/inspect'
+import { verdictLine } from '../../scripts/verdict.mjs'
 
 const log = document.getElementById('log') as HTMLPreElement
 const lines: string[] = []
+/** FAIL and ERROR lines, for the closing verdict (VH-102). */
+let failures = 0
 function say(text: string): void {
   lines.push(text)
   log.textContent = lines.join('\n')
@@ -45,6 +48,7 @@ try {
 
   const source = report.video.conform.sourceFrameRate
   const plausible = source > 1 && source < 121
+  if (!plausible) failures++
   say(
     plausible
       ? `PASS — measured a plausible rate (${source.toFixed(3)}), not a declared timebase`
@@ -54,6 +58,9 @@ try {
   say(`duration:        ${report.durationSeconds.toFixed(3)}s`)
   say(`frameDeltaRatio: ${(report.video.conform.frameDeltaRatio * 100).toFixed(2)}%`)
 } catch (error) {
+  failures++
   say(`ERROR — ${error instanceof Error ? error.message : String(error)}`)
 }
+// The one line `scripts/run-in-engines.mjs` reads (VH-102).
+say(`\n${verdictLine(failures)}`)
 say('\ndone')

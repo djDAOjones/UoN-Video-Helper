@@ -12,6 +12,7 @@
 import { OUTPUT_SAMPLE_RATE, PRESETS } from '../config/presets'
 import { canEncodeAudio } from '../media/capability'
 import { preflightVerdict } from '../media/preflight'
+import { verdictLine } from '../../scripts/verdict.mjs'
 
 const log = document.getElementById('log') as HTMLPreElement
 const lines: string[] = []
@@ -64,5 +65,6 @@ say('\n=== a silent source, which asks nothing of the audio encoder')
 const silent = preflightVerdict({ ...base, canEncodeAac: true })
 check(silent.outcome === 'proceed', 'a silent source proceeds whatever the engine does with AAC')
 
-say(`\n${failures === 0 ? 'ALL PASS' : `${failures} FAILURE(S)`}`)
+// The one line `scripts/run-in-engines.mjs` reads (VH-102).
+say(`\n${verdictLine(failures)}`)
 say('\ndone')

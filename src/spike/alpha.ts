@@ -20,13 +20,22 @@ import { BrandingCompositor } from '../media/composite'
 import { fitRectangle } from '../media/conform'
 import { outputShapeFor, PRESETS } from '../config/presets'
 import { resolveBrandingBase } from '../config/branding'
+import { verdictLine } from '../../scripts/verdict.mjs'
 
 const log = document.getElementById('log') as HTMLPreElement
 const lines: string[] = []
+/** FAIL and ERROR lines, for the closing verdict (VH-102). */
+let failures = 0
 
 function say(text: string): void {
   lines.push(text)
   log.textContent = lines.join('\n')
+}
+
+/** Says a failure, and counts it. */
+function fail(text: string): void {
+  failures++
+  say(text)
 }
 
 async function probe(label: string, url: string): Promise<void> {
@@ -47,7 +56,7 @@ async function probe(label: string, url: string): Promise<void> {
     const sink = new CanvasSink(track, { alpha: true, width: 160, height: 90, fit: 'contain' })
     const result = await sink.getCanvas(0.4)
     if (!result) {
-      say('  FAIL — no canvas returned at t=0.4s')
+      fail('  FAIL — no canvas returned at t=0.4s')
       return
     }
 
@@ -59,7 +68,7 @@ async function probe(label: string, url: string): Promise<void> {
       | OffscreenCanvasRenderingContext2D
       | null
     if (!ctx) {
-      say('  FAIL — no 2d context')
+      fail('  FAIL — no 2d context')
       return
     }
 
@@ -74,12 +83,14 @@ async function probe(label: string, url: string): Promise<void> {
     say(`  decoded alpha range: ${min}–${max}`)
     const wantsAlpha = url.includes('onset')
     if (wantsAlpha) {
-      say(min < 250 ? '  PASS — transparency survived the decode' : '  FAIL — came back fully opaque')
+      if (min < 250) say('  PASS — transparency survived the decode')
+      else fail('  FAIL — came back fully opaque')
     } else {
-      say(min === 255 ? '  PASS — opaque as expected' : `  FAIL — unexpected transparency (${min})`)
+      if (min === 255) say('  PASS — opaque as expected')
+      else fail(`  FAIL — unexpected transparency (${min})`)
     }
   } catch (error) {
-    say(`  ERROR — ${error instanceof Error ? error.message : String(error)}`)
+    fail(`  ERROR — ${error instanceof Error ? error.message : String(error)}`)
   }
 }
 
@@ -105,20 +116,14 @@ const onset = await loadClosingOnset(shape, {
   style: 'slide',
   colour: 'white',
 })
-say(
-  onset
-    ? `  loadClosingOnset  -> ${onset.durationSeconds.toFixed(3)}s  PASS`
-    : '  loadClosingOnset  -> null  FAIL — WebM not accepted?',
-)
+if (onset) say(`  loadClosingOnset  -> ${onset.durationSeconds.toFixed(3)}s  PASS`)
+else fail('  loadClosingOnset  -> null  FAIL — WebM not accepted?')
 const tail = await loadBrandingClip('closing', shape, {
   brandingBaseUrl: resolveBrandingBase(document.baseURI),
   colour: 'white',
 })
-say(
-  tail
-    ? `  loadBrandingClip  -> ${tail.durationSeconds.toFixed(3)}s  PASS`
-    : '  loadBrandingClip  -> null  FAIL',
-)
+if (tail) say(`  loadBrandingClip  -> ${tail.durationSeconds.toFixed(3)}s  PASS`)
+else fail('  loadBrandingClip  -> null  FAIL')
 
 // Decisive check for VH-22: does canvas `drawImage` treat our onset's colour
 // as PREMULTIPLIED (which it is) or as straight?
@@ -161,7 +166,7 @@ try {
   say('  (engines disagree — Chrome/Safari 202, Firefox 255 — so we never')
   say('   rely on drawImage for this; composite.ts does the blend itself)')
 } catch (error) {
-  say(`  ERROR — ${error instanceof Error ? error.message : String(error)}`)
+  fail(`  ERROR — ${error instanceof Error ? error.message : String(error)}`)
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -215,13 +220,13 @@ async function measureReadback(colour: 'white' | 'blue'): Promise<void> {
   })
   const track = clip ? await clip.input.getPrimaryVideoTrack() : null
   if (!track) {
-    say('  FAIL — onset did not load')
+    fail('  FAIL — onset did not load')
     return
   }
 
   const brand = await new VideoSampleSink(track).getSample(ONSET_SECONDS)
   if (!brand) {
-    say(`  FAIL — no sample at ${ONSET_SECONDS}s`)
+    fail(`  FAIL — no sample at ${ONSET_SECONDS}s`)
     return
   }
 
@@ -234,7 +239,7 @@ async function measureReadback(colour: 'white' | 'blue'): Promise<void> {
     const overlay = new OffscreenCanvas(shape.width, shape.height)
     const overlayContext = overlay.getContext('2d', { willReadFrequently: true })
     if (!overlayContext) {
-      say('  FAIL — no 2d context')
+      fail('  FAIL — no 2d context')
       return
     }
     overlayContext.clearRect(0, 0, shape.width, shape.height)
@@ -249,7 +254,7 @@ async function measureReadback(colour: 'white' | 'blue'): Promise<void> {
     const picture = new OffscreenCanvas(shape.width, shape.height)
     const pictureContext = picture.getContext('2d', { alpha: false })
     if (!pictureContext) {
-      say('  FAIL — no 2d context for the picture')
+      fail('  FAIL — no 2d context for the picture')
       return
     }
     pictureContext.fillStyle = '#000000'
@@ -261,7 +266,7 @@ async function measureReadback(colour: 'white' | 'blue'): Promise<void> {
     const result = new OffscreenCanvas(shape.width, shape.height)
     const resultContext = result.getContext('2d', { willReadFrequently: true })
     if (!resultContext) {
-      say('  FAIL — no 2d context for the result')
+      fail('  FAIL — no 2d context for the result')
       return
     }
     composed.draw(resultContext, 0, 0, shape.width, shape.height)
@@ -330,8 +335,10 @@ for (const colour of ['white', 'blue'] as const) {
   try {
     await measureReadback(colour)
   } catch (error) {
-    say(`  ERROR — ${error instanceof Error ? error.message : String(error)}`)
+    fail(`  ERROR — ${error instanceof Error ? error.message : String(error)}`)
   }
 }
 
+// The one line `scripts/run-in-engines.mjs` reads (VH-102).
+say(`\n${verdictLine(failures)}`)
 say('\ndone')

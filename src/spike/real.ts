@@ -17,9 +17,12 @@ import { measureLoudness } from '../acceptance/measure'
 import { inspectFile, openInput } from '../media/inspect'
 import { OpfsWorkspace } from '../media/opfs'
 import { runPipeline } from '../media/pipeline'
+import { verdictLine } from '../../scripts/verdict.mjs'
 
 const log = document.getElementById('log') as HTMLPreElement
 const lines: string[] = []
+/** FAIL and ERROR lines, for the closing verdict (VH-102). */
+let failures = 0
 function say(text: string): void {
   lines.push(text)
   log.textContent = lines.join('\n')
@@ -97,6 +100,8 @@ try {
   if (after) {
     const onTarget = Math.abs(after.integratedLufs - TARGET_INTEGRATED_LUFS) <= 0.5
     const peakOk = after.truePeakDbtp <= TRUE_PEAK_CEILING_DBTP
+    if (!onTarget) failures++
+    if (!peakOk) failures++
     say(
       `      loudness ${after.integratedLufs.toFixed(3)} LUFS ` +
         `(target ${TARGET_INTEGRATED_LUFS} ±0.5) ${onTarget ? 'PASS' : 'FAIL'}`,
@@ -114,8 +119,11 @@ try {
       `(${(report.durationSeconds / tookSeconds).toFixed(1)}x real time)`,
   )
 } catch (error) {
+  failures++
   say(`ERROR — ${error instanceof Error ? error.message : String(error)}`)
 } finally {
   await workspace?.dispose()
 }
+// The one line `scripts/run-in-engines.mjs` reads (VH-102).
+say(`\n${verdictLine(failures)}`)
 say('\ndone')

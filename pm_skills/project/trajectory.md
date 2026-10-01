@@ -27,6 +27,9 @@
 
 ### Band 5 — the overnight run
 
+- VH-102 — Shipped 2026-10-01. Every spike page ends on one `ALL PASS` /
+  `N FAILURE(S)` line and the cross-engine runner reads only that, so no file
+  name can fail a run that passed. See decision-log.
 - VH-101 — Shipped 2026-10-01. A video can be dropped on the Choose step and
   is read exactly as a chosen one; anything else is refused in words, and a
   file dropped elsewhere never navigates the page away. See decision-log.

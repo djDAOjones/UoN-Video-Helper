@@ -32,16 +32,6 @@
      Active that is free to start: Band 3 waits on the maintainer, and
      Band 4's VH-97 is [sign-off] with "not built" as its default. -->
 
-- [ ] **VH-102 One verdict line per spike page** (2026-10-01)
-      Intent: `run-in-engines.mjs` reads verdict words in prose, which a
-      contrived source file name can fool into a false failure (VH-26
-      review). Give every spike page one machine-readable closing line —
-      `ALL PASS` or `N FAILURE(S)`, errors counted — and have the runner read
-      only that.
-      Done when: all eleven spike pages emit the line; the runner exits 1 on
-      a failure line and on a page that ends without one; a source named
-      "lecture FAIL — retake.mp4" passes; `DEV-INFRASTRUCTURE.md` →
-      "Cross-engine verification" says what the line is.
 - [ ] **VH-103 Script the rest of the Xerte package** (2026-10-01)
       Intent: `npm run build:xerte` makes the flat build, but
       `README-HOSTING.txt` and the zip named for its build id are still made

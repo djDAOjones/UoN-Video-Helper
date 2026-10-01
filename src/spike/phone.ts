@@ -16,6 +16,7 @@ import type { PreflightSummary } from '../media/preflight'
 import { verdictText } from '../ui/preflight-panel'
 import { buildLosses, buildRows } from '../ui/source-panel'
 import type { WorkerOutbound, WorkerRequest } from '../workers/protocol'
+import { verdictLine } from '../../scripts/verdict.mjs'
 
 const log = document.getElementById('log') as HTMLPreElement
 const lines: string[] = []
@@ -120,11 +121,12 @@ try {
       )
     }
   }
-  // The closing line `scripts/run-in-engines.mjs` reads: it fails the run.
-  say(`\n${failures === 0 ? 'ALL PASS' : `${failures} FAILURE(S)`}`)
 } catch (error) {
+  failures++
   say(`ERROR — ${error instanceof Error ? error.message : String(error)}`)
 } finally {
   worker.terminate()
 }
+// The one line `scripts/run-in-engines.mjs` reads (VH-102).
+say(`\n${verdictLine(failures)}`)
 say('\ndone')

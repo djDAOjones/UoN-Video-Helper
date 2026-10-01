@@ -499,6 +499,7 @@ it names.
 | `build-branding.mjs` | `scripts/` | Transcodes the After Effects closing masters into the WebM onsets and MP4 tails the app ships. Maintainer-run; needs `ffmpeg`. Its output is committed. |
 | `check-placeholders.mjs` | `scripts/` | Tier 0 of the quality gate: stray template markers fail, key-shaped strings are reported. |
 | `run-in-engines.mjs` | `scripts/` | Runs a spike page in Chrome, Firefox and Safari and prints all three side by side. See "Cross-engine verification" below. |
+| `verdict.mjs` | `scripts/` | The verdict line a spike page ends on, and how the runner reads it. Shared by both; `verdict.d.mts` types it for the pages. |
 | `gen-placeholder-branding.mjs` | `scripts/` | Generates stand-in branding masters for all four §4.2 variants, so real After Effects renders drop in unchanged (VH-12). |
 | `check-links.mjs` | root | Scaffolded internal Markdown link checker. |
 | `gen-fixtures.mjs` | `scripts/` | **Not written yet — arrives with VH-16.** Will generate synthesised test media: slide-like frames with fine text, a variable-level speech bed, a VFR clip. |
@@ -515,21 +516,24 @@ npm run dev                                        # in one terminal
 node scripts/run-in-engines.mjs /spike-alpha.html  # in another
 ```
 
-Every spike page carries the same contract — a `<pre id="log">` ending with a
-line of exactly `done` — and the script knows almost nothing beyond that: it
-navigates, waits for the sentinel, prints the text. `--base` points at a
+Every spike page carries the same contract — a `<pre id="log">` ending with
+its verdict line and then a line of exactly `done` — and the script knows
+almost nothing beyond that: it navigates, waits for the sentinel, prints the
+text. `--base` points at a
 different origin (the dev server moves off 5173 when something else holds it);
 `--engines chrome,firefox` narrows the set. A missing browser is skipped, not
 an error.
 
 The one thing it reads is a page's verdict on itself. Reaching `done` means a
-page ran, not that it passed, so a verdict of `FAIL`, `FAILED` or `ERROR`,
-or a closing `N FAILURE(S)`, makes the run exit 1 — otherwise the command
-could not be cited as verification, because it could not fail. A verdict is
-the word first on its line, or ending a row, or before an em dash; the same
-word inside a file name is not one. A page that means an engine difference as
-a finding, not a failure, words it otherwise. It is prose-reading and can be
-fooled by a contrived file name into a false FAILURE — never a false pass.
+page ran, not that it passed, so every spike page ends on one line just
+before `done`: `ALL PASS`, or `N FAILURE(S)` with the page's errors counted
+among its failures (`scripts/verdict.mjs`, which the pages and the runner
+share). `N FAILURE(S)` makes the run exit 1, and so does a page that reaches
+`done` without the line — otherwise the command could not be cited as
+verification, because it could not fail. Only that line is read: nothing in
+the prose above it, a file name included, can pass or fail a run (VH-102).
+A page that means an engine difference as a finding, not a failure, does not
+count it.
 
 Each engine speaks a different protocol and there is no choice about it:
 Chrome over CDP, Firefox over WebDriver BiDi (it dropped CDP), Safari over

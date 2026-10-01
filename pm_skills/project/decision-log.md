@@ -11,6 +11,36 @@
      never paste an entry's prose into those files. -->
 <!-- Append-only: when archiving, move entries verbatim. Never rewrite. -->
 
+## 2026-10-01 — VH-102: one verdict line per spike page
+
+**Decision:** every spike page ends on one line just before `done` — `ALL
+PASS`, or `N FAILURE(S)` with its errors counted — made by `verdictLine` in
+`scripts/verdict.mjs`, and `run-in-engines.mjs` reads that line and nothing
+else (`readVerdict`). `N FAILURE(S)` exits 1, and so does a page that reaches
+`done` without the line. Each page counts exactly what the old prose reading
+counted, its `FAIL`, `FAILED` and `ERROR` lines; `codecs` counts nothing,
+because REFUSED and THREW are an engine's answers. `phone` now counts an
+error and prints the line whatever happened; before, its catch skipped it.
+
+**Rationale:** the VH-26 review's fourth Codex pass showed a source named
+"lecture FAIL — retake.mp4" failing a run that passed, and closing it for
+good meant a structured line, not a better pattern. The format lives in one
+plain-JS module so the runner needs no build step; a `.d.mts` lets the
+TypeScript pages and the test import the same function.
+
+**Verified:** Chrome, live: HEAD's runner on spike-real with that file name
+exits 1 though the page says ALL PASS; the new one exits 0; a missing file
+gives `1 FAILURE(S)` and exits 1; spike-preflight-audio exits 0. Tests pin the
+line, the reading — a verdict-shaped name, ALL PASS anywhere but last, no
+line, no `done` — and that all eleven pages end on the line, which fails if
+one drops it.
+
+**Gates assumed (auto-jazz):** scope — the eleven pages, the runner, its
+section of `DEV-INFRASTRUCTURE.md`; option — a shared module over a pattern.
+
+**Link:** VH-102, VH-26; `scripts/verdict.mjs`, `scripts/run-in-engines.mjs`,
+`src/spike/*.ts`, `DEV-INFRASTRUCTURE.md` → "Cross-engine verification".
+
 ## 2026-10-01 — VH-101: drop a video on the Choose step
 
 **Decision:** the Choose step's field sits in Carbon's file-uploader drop zone

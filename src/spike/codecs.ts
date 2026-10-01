@@ -12,6 +12,7 @@
  */
 
 import { PRESETS, outputShapeFor, videoEncoderConfigFor, OUTPUT_SAMPLE_RATE } from '../config/presets'
+import { verdictLine } from '../../scripts/verdict.mjs'
 
 const log = document.getElementById('log') as HTMLPreElement
 const lines: string[] = []
@@ -97,4 +98,8 @@ try {
   say(`  opus  THREW — ${error instanceof Error ? error.message : String(error)}`)
 }
 
+// The one line `scripts/run-in-engines.mjs` reads (VH-102). Nothing here can
+// fail: REFUSED and THREW are an engine's answers, which differ by design, and
+// a page that did not finish never reaches this line.
+say(`\n${verdictLine(0)}`)
 say('\ndone')

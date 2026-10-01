@@ -15,9 +15,12 @@ import { buildFixture } from '../acceptance/fixtures'
 import { inspectFile, openInput } from '../media/inspect'
 import { OpfsWorkspace } from '../media/opfs'
 import { runPipeline } from '../media/pipeline'
+import { verdictLine } from '../../scripts/verdict.mjs'
 
 const log = document.getElementById('log') as HTMLPreElement
 const lines: string[] = []
+/** FAIL and ERROR lines, for the closing verdict (VH-102). */
+let failures = 0
 function say(text: string): void {
   lines.push(text)
   log.textContent = lines.join('\n')
@@ -75,6 +78,7 @@ async function run(
         ? Math.abs(delta - expected) < 0.15
         : Math.abs(produced.durationSeconds - variant.expectedOutputSeconds) < 0.15
     const wanted = variant.expectedOutputSeconds ?? report.durationSeconds + expected
+    if (!ok) failures++
     say(
       `  ${name.padEnd(13)} source ${report.durationSeconds.toFixed(2)}s ` +
         `(picture ${report.video.durationSeconds.toFixed(2)}s) ` +
@@ -83,6 +87,7 @@ async function run(
         (ok ? 'PASS' : 'FAIL'),
     )
   } catch (error) {
+    failures++
     say(`  ${name.padEnd(13)} ERROR — ${error instanceof Error ? error.message : String(error)}`)
   } finally {
     await workspace?.dispose()
@@ -117,4 +122,6 @@ await run('over-picture', CLOSING_TAIL_SECONDS + 1, {
   expectedOutputSeconds: 0.5 + 1 + CLOSING_TAIL_SECONDS,
 })
 
+// The one line `scripts/run-in-engines.mjs` reads (VH-102).
+say(`\n${verdictLine(failures)}`)
 say('\ndone')

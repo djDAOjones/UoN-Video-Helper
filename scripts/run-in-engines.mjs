@@ -15,21 +15,14 @@
  *
  * One thing it does read: a page's own verdict on itself. A page that reaches
  * `done` has RUN, which is not the same as having passed, and a command that
- * exits 0 either way cannot be cited as verification. So a VERDICT of
- * `FAIL`, `FAILED` or `ERROR` fails the run, and so does a closing
- * `N FAILURE(S)`. A verdict is the word where the spike pages put one: first
- * on its line, however indented; or at the end of a row, or before an em dash,
- * after a space. The word anywhere else — in a file name, say — is not one, so
- * a source called `FAIL-test.mp4` does not fail a run that passed. A page that
- * wants an engine difference read as a finding rather than a failure words it
- * some other way.
- *
- * It is still reading prose, and prose can be contrived to fool it: a source
- * NAMED "lecture FAIL — retake.mp4" would read as a verdict. That error is a
- * false failure — loud, and a rename away from gone — never a false pass,
- * which is the direction that matters. A structured verdict line on every
- * spike page would close it; that is a change to eleven pages, parked on the
- * wish-list rather than made here.
+ * exits 0 either way cannot be cited as verification. So every spike page
+ * ends on one line, `ALL PASS` or `N FAILURE(S)`, just before `done`
+ * (`verdict.mjs`), and that line is all this reads: `N FAILURE(S)` fails the
+ * run, and so does a page that ends without the line. The prose above it is
+ * for a person, and nothing in it — a source named
+ * "lecture FAIL — retake.mp4", say — can pass or fail a run (VH-102). A page
+ * that wants an engine difference read as a finding rather than a failure
+ * simply does not count it.
  *
  * Each engine needs a different protocol, and the differences are not
  * negotiable:
@@ -58,6 +51,8 @@ import { spawn } from 'node:child_process'
 import { existsSync, mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
+
+import { readVerdict } from './verdict.mjs'
 
 /** Where each engine lives, and how it is started. macOS paths. */
 const ENGINES = {
@@ -367,20 +362,11 @@ const enginesRequired = options.engines !== undefined
 let completed = 0
 let skipped = 0
 let failed = 0
-/** Engines where the page ran to `done` and said, itself, that it had failed. */
+/**
+ * Engines where the page ran to `done` and then said, itself, that it had
+ * failed — or said nothing either way, which is not a pass.
+ */
 let reported = 0
-
-/** Whether a finished page's own text says it failed. See the header. */
-function pageReportsFailure(text) {
-  return (
-    // First on its line: `  FAIL — …`, `ERROR — …`, `  FAILED rather than …`.
-    /^\s*(FAIL|FAILED|ERROR)\b/m.test(text) ||
-    // Closing a row, or introducing a reason: `… (ceiling -2) FAIL`,
-    // `  over-picture  ERROR — …`.
-    / (FAIL|FAILED|ERROR)( —|$)/m.test(text) ||
-    /^[1-9]\d* FAILURE\(S\)$/m.test(text)
-  )
-}
 
 for (const name of wanted) {
   const engine = ENGINES[name]
@@ -397,8 +383,14 @@ for (const name of wanted) {
     console.log(text.trim() || '  (the page reported nothing)')
     if (finished) {
       completed++
-      if (pageReportsFailure(text)) {
+      const verdict = readVerdict(text)
+      if (verdict.kind === 'fail') {
         console.log('\n  REPORTED A FAILURE — the page ran to the end and says it did not pass')
+        reported++
+      } else if (verdict.kind === 'missing') {
+        console.log(
+          '\n  NO VERDICT — the page ran to the end without its ALL PASS or N FAILURE(S) line',
+        )
         reported++
       }
     } else {

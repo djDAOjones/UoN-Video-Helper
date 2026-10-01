@@ -16,6 +16,7 @@
  */
 
 import { OpfsWorkspace, ROOT_DIRECTORY, sweepOrphanedJobs } from '../media/opfs'
+import { verdictLine } from '../../scripts/verdict.mjs'
 
 const log = document.getElementById('log') as HTMLPreElement
 const lines: string[] = []
@@ -110,5 +111,6 @@ say('\n=== a disposed job no longer holds its claim')
   )
 }
 
-say(`\n${failures === 0 ? 'ALL PASS' : `${failures} FAILURE(S)`}`)
+// The one line `scripts/run-in-engines.mjs` reads (VH-102).
+say(`\n${verdictLine(failures)}`)
 say('\ndone')

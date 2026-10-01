@@ -24,6 +24,7 @@ import { canEncodeAudio } from '../media/capability'
 import { inspectFile, openInput } from '../media/inspect'
 import { OpfsWorkspace } from '../media/opfs'
 import { runPipeline } from '../media/pipeline'
+import { verdictLine } from '../../scripts/verdict.mjs'
 
 const log = document.getElementById('log') as HTMLPreElement
 const lines: string[] = []
@@ -209,5 +210,6 @@ for (const testCase of CASES) {
   }
 }
 
-say(`\n${failures === 0 ? 'ALL PASS' : `${failures} FAILURE(S)`}`)
+// The one line `scripts/run-in-engines.mjs` reads (VH-102).
+say(`\n${verdictLine(failures)}`)
 say('\ndone')

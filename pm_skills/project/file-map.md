@@ -15,16 +15,16 @@
      pm_skills/memory-policy.md. -->
 
 <!-- file-map-index -->
-<!-- 199 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
+<!-- 202 file(s) across 9 section(s); regenerate with pm_skills/scaffold/gen-file-map.mjs -->
 - `(root)` — 23 file(s)
 - `.claude` — 1 file(s)
 - `.github` — 1 file(s)
 - `docs` — 5 file(s)
 - `public` — 13 file(s)
 - `reviews` — 7 file(s)
-- `scripts` — 5 file(s)
+- `scripts` — 7 file(s)
 - `src` — 138 file(s)
-- `test` — 6 file(s)
+- `test` — 7 file(s)
 <!-- /file-map-index -->
 
 ## (root)
@@ -101,7 +101,9 @@
 - `scripts/check-build.mjs` — Builds both production bundles, the site and the flat Xerte package, to a temp directory without writing dist/; fails if the package has a folder.
 - `scripts/check-placeholders.mjs` — Tier 0 of the gate: fails on stray template markers, reports key-shaped strings.
 - `scripts/gen-placeholder-branding.mjs` — Generates the placeholder masters with a local ffmpeg. Authoring tool only.
-- `scripts/run-in-engines.mjs` — Runs a spike page in Chrome, Firefox and Safari and prints all three. Maintainer tool; never part of `check`.
+- `scripts/run-in-engines.mjs` — Runs a spike page in Chrome, Firefox and Safari and prints all three; fails on the page's verdict line, or its absence. Maintainer tool; never part of `check`.
+- `scripts/verdict.d.mts` — Types for `verdict.mjs`, so the TypeScript spike pages and tests can import it.
+- `scripts/verdict.mjs` — The `ALL PASS` / `N FAILURE(S)` line every spike page ends on, and the runner's reading of it — that line and nothing else.
 
 ## src
 
@@ -251,4 +253,5 @@
 - `test/ebu3341/tech3341.test.ts` — The compliance gate: Table 1 cases 1-23 against the meter, inside `npm run check`.
 - `test/helpers/signals.ts` — Synthesised tones, silence and seeded stepped noise shared by the meter tests and the EBU harness.
 - `test/screen-text.test.ts` — Holds the static page to what it must agree with: the privacy promise once, preset and closing options as the config has them, "caption" never "subtitle", status lines outside any disclosure, steps numbered without a gap.
+- `test/spike-verdict.test.ts` — The verdict line's contract, a verdict-shaped file name that cannot fail a run, and every spike page ending on the line.
 - `test/stylesheet.test.ts` — Stylesheet invariants no component test can see: `hidden` outranks every author `display` rule; nothing is sticky; no colour is named outside a token.

@@ -13,9 +13,12 @@
 
 import { measureContentClass } from '../media/content-class'
 import { inspectFile, openInput } from '../media/inspect'
+import { verdictLine } from '../../scripts/verdict.mjs'
 
 const log = document.getElementById('log') as HTMLPreElement
 const lines: string[] = []
+/** FAIL and ERROR lines, for the closing verdict (VH-102). */
+let failures = 0
 function say(text: string): void {
   lines.push(text)
   log.textContent = lines.join('\n')
@@ -55,7 +58,10 @@ for (const path of paths) {
         (measurement && !measurement.complete ? '  [incomplete]' : ''),
     )
   } catch (error) {
+    failures++
     say(`ERROR     ${error instanceof Error ? error.message : String(error)}  ${name}`)
   }
 }
+// The one line `scripts/run-in-engines.mjs` reads (VH-102).
+say(`\n${verdictLine(failures)}`)
 say('\ndone')
