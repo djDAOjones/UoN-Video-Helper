@@ -5,36 +5,41 @@
  * audience is a lecturer who wants to know whether their video is going to be
  * fine, not what `avc1.640028` means.
  *
- * Pure functions, so the wording is testable rather than a matter of opinion
- * discovered at review time.
+ * Numbers are written by the browser's own `Intl` for the page's current
+ * language (VH-105), with the precision policy kept explicit here so a change
+ * of language never changes what a figure claims. Pure, so the wording is
+ * testable rather than a matter of opinion discovered at review time.
  */
 
 import { ESTIMATE_ROUNDING } from '../config/thresholds'
+import { locale, t } from '../i18n'
+import { durationFormatter, durationParts, unitFormatter, type DurationParts } from '../i18n/intl'
 
-/** e.g. `1 hour 23 minutes`, `4 minutes 12 seconds`, `38 seconds`. */
-export function formatDuration(seconds: number): string {
-  if (!Number.isFinite(seconds) || seconds < 0) return 'unknown'
-  const whole = Math.round(seconds)
-  if (whole < 1) return 'less than a second'
+/** One duration formatter per language, built on first use. */
+const durationFormatters = new Map<string, (parts: DurationParts) => string>()
 
-  const hours = Math.floor(whole / 3600)
-  const minutes = Math.floor((whole % 3600) / 60)
-  const remainder = whole % 60
-
-  const plural = (value: number, unit: string) => `${value} ${unit}${value === 1 ? '' : 's'}`
-
-  if (hours > 0) {
-    return minutes > 0
-      ? `${plural(hours, 'hour')} ${plural(minutes, 'minute')}`
-      : plural(hours, 'hour')
+function formatParts(parts: DurationParts): string {
+  const tag = locale()
+  let formatter = durationFormatters.get(tag)
+  if (!formatter) {
+    formatter = durationFormatter(tag, t().durationStyle)
+    durationFormatters.set(tag, formatter)
   }
-  if (minutes > 0) {
-    return remainder > 0
-      ? `${plural(minutes, 'minute')} ${plural(remainder, 'second')}`
-      : plural(minutes, 'minute')
-  }
-  return plural(remainder, 'second')
+  return formatter(parts)
 }
+
+/** e.g. `1 hour, 23 minutes`, `4 minutes, 12 seconds`, `38 seconds`. */
+export function formatDuration(seconds: number): string {
+  if (!Number.isFinite(seconds) || seconds < 0) return t().format.unknown
+  if (Math.round(seconds) < 1) return t().format.lessThanASecond
+  return formatParts(durationParts(seconds))
+}
+
+/** An estimate, as a kind rather than words, so nothing branches on a translated string. */
+export type ApproximateDuration =
+  | { readonly kind: 'unknown' }
+  | { readonly kind: 'few-seconds' }
+  | { readonly kind: 'about'; readonly seconds: number }
 
 /**
  * An estimate, rounded to what it can honestly claim (U-22): "about 5
@@ -42,48 +47,57 @@ export function formatDuration(seconds: number): string {
  * quarter between two loads of one file. The bands are
  * {@link ESTIMATE_ROUNDING}'s; a rounding never reaches zero.
  */
-export function formatApproximateDuration(seconds: number): string {
-  if (!Number.isFinite(seconds) || seconds < 0) return 'unknown'
-  if (seconds < ESTIMATE_ROUNDING.fewSecondsBelow) return 'a few seconds'
+export function approximateDuration(seconds: number): ApproximateDuration {
+  if (!Number.isFinite(seconds) || seconds < 0) return { kind: 'unknown' }
+  if (seconds < ESTIMATE_ROUNDING.fewSecondsBelow) return { kind: 'few-seconds' }
   const band =
     ESTIMATE_ROUNDING.bands.find((candidate) => seconds < candidate.belowSeconds) ??
     ESTIMATE_ROUNDING.bands[ESTIMATE_ROUNDING.bands.length - 1]!
   const step = band.stepSeconds
-  return formatDuration(Math.max(step, Math.round(seconds / step) * step))
+  return { kind: 'about', seconds: Math.max(step, Math.round(seconds / step) * step) }
 }
+
+/** {@link approximateDuration} in words: "a few seconds", "5 minutes". */
+export function formatApproximateDuration(seconds: number): string {
+  const estimate = approximateDuration(seconds)
+  if (estimate.kind === 'unknown') return t().format.unknown
+  if (estimate.kind === 'few-seconds') return t().format.fewSeconds
+  return formatDuration(estimate.seconds)
+}
+
+const SIZE_UNITS = ['kilobyte', 'megabyte', 'gigabyte', 'terabyte'] as const
 
 /**
  * e.g. `1.2 GB`, `340 MB`.
  *
  * Decimal units, because that is what every operating system and every upload
  * dialogue the user has ever seen reports. Being technically correct with MiB
- * here would just make the number disagree with Finder.
+ * here would just make the number disagree with Finder. One decimal below a
+ * hundred of a unit, none above, whole bytes under a thousand.
  */
 export function formatFileSize(bytes: number): string {
-  if (!Number.isFinite(bytes) || bytes < 0) return 'unknown'
-  if (bytes < 1000) return `${Math.round(bytes)} bytes`
-  const units = ['kB', 'MB', 'GB', 'TB']
+  if (!Number.isFinite(bytes) || bytes < 0) return t().format.unknown
+  if (bytes < 1000) return t().format.bytes({ count: Math.round(bytes) })
   let value = bytes / 1000
   let unit = 0
-  while (value >= 1000 && unit < units.length - 1) {
+  while (value >= 1000 && unit < SIZE_UNITS.length - 1) {
     value /= 1000
     unit++
   }
-  return `${value >= 100 ? Math.round(value) : Number(value.toFixed(1))} ${units[unit]}`
+  return unitFormatter(locale(), SIZE_UNITS[unit]!, { maximumFractionDigits: value >= 100 ? 0 : 1 })(value)
 }
 
-/** e.g. `1920 × 1080`. Uses a real multiplication sign, not a letter x. */
+/** e.g. `1920 × 1080`. A real multiplication sign, not a letter x; no digit grouping. */
 export function formatResolution(width: number, height: number): string {
-  return `${Math.round(width)} × ${Math.round(height)}`
+  return t().format.resolution({ width: Math.round(width), height: Math.round(height) })
 }
 
 /** e.g. `25 frames a second`, `29.97 frames a second`. Trailing zeros are noise. */
 export function formatFrameRate(rate: number): string {
-  if (!Number.isFinite(rate) || rate <= 0) return 'unknown'
-  const rounded = Math.round(rate * 100) / 100
+  if (!Number.isFinite(rate) || rate <= 0) return t().format.unknown
   // Said in words rather than as "fps" (spec 9.2, A-10): plainer than an
   // abbreviation with a meaning beside it.
-  return `${rounded} frames a second`
+  return t().format.frameRate({ rate: Math.round(rate * 100) / 100 })
 }
 
 /**
@@ -92,7 +106,8 @@ export function formatFrameRate(rate: number): string {
  * Mediabunny's codec strings are short slugs (`avc`, `aac`). Anything not in
  * this map falls through to the slug uppercased, which is still better than
  * showing nothing — and a codec we do not recognise is one we probably cannot
- * handle anyway, which the decode check will say separately.
+ * handle anyway, which the decode check will say separately. Proper names,
+ * the same in every language.
  */
 const CODEC_NAMES: Readonly<Record<string, string>> = {
   avc: 'H.264',
@@ -111,22 +126,23 @@ const CODEC_NAMES: Readonly<Record<string, string>> = {
 }
 
 export function formatCodec(codec: string | null): string {
-  if (!codec) return 'unknown'
+  if (!codec) return t().format.unknown
   return CODEC_NAMES[codec] ?? codec.toUpperCase()
 }
 
 /** e.g. `Stereo (two channels)`, `Mono (one channel)`, `5.1 surround`, `4 channels`. */
 export function formatChannels(count: number): string {
+  const { channels } = t().format
   switch (count) {
     case 1:
-      return 'Mono (one channel)'
+      return channels.mono
     case 2:
-      return 'Stereo (two channels)'
+      return channels.stereo
     case 6:
-      return '5.1 surround'
+      return channels.surround51
     case 8:
-      return '7.1 surround'
+      return channels.surround71
     default:
-      return `${count} channels`
+      return channels.other({ count })
   }
 }

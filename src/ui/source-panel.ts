@@ -10,8 +10,10 @@
  * In code they stay `subtitle`, which is the ISOBMFF and WebVTT term.
  */
 
+import { locale, t } from '../i18n'
+import { listFormatter } from '../i18n/intl'
 import type { SourceReport } from '../media/inspect'
-import { ORIGINAL_UNCHANGED, type FailureText } from './failure-text'
+import type { FailureText } from './failure-text'
 import { notification } from './notification'
 import {
   formatChannels,
@@ -50,6 +52,7 @@ export interface Loss {
  */
 export function buildLosses(report: SourceReport): Loss[] {
   const losses: Loss[] = []
+  const { source } = t()
 
   // The output carries one video and one audio track, so anything beyond that
   // is content the user loses (review R-09). Finding out afterwards is too
@@ -58,16 +61,11 @@ export function buildLosses(report: SourceReport): Loss[] {
   const extraAudio = Math.max(0, report.audioTrackCount - 1)
   if (extraVideo > 0 || extraAudio > 0) {
     const found: string[] = []
-    if (extraVideo > 0) {
-      found.push(extraVideo === 1 ? '1 more video track' : `${extraVideo} more video tracks`)
-    }
-    if (extraAudio > 0) {
-      found.push(extraAudio === 1 ? '1 more sound track' : `${extraAudio} more sound tracks`)
-    }
+    if (extraVideo > 0) found.push(source.moreVideoTracks({ count: extraVideo }))
+    if (extraAudio > 0) found.push(source.moreSoundTracks({ count: extraAudio }))
     losses.push({
-      title: `This file has ${found.join(' and ')}`,
-      detail:
-        'The new file keeps one picture and one sound track — the ones listed under Video properties. The others will not be carried over, and one of them may hold an alternative, such as another language or an audio description. If you need them, keep the original alongside.',
+      title: source.losses.extraTracksTitle({ found }),
+      detail: source.losses.extraTracksDetail,
     })
   }
 
@@ -75,11 +73,7 @@ export function buildLosses(report: SourceReport): Loss[] {
   if (!tracks.scanned) {
     // Only for containers the handler scan cannot read. Saying "no captions"
     // about a file we never checked would be worse than admitting we did not.
-    losses.push({
-      title: 'Caption and chapter tracks could not be checked',
-      detail:
-        'This kind of file cannot be checked for them. If yours has them, they will not be carried over.',
-    })
+    losses.push({ title: source.losses.uncheckedTitle, detail: source.losses.uncheckedDetail })
   } else {
     const found = embeddedTextTracks(tracks)
     if (found.length > 0) {
@@ -91,16 +85,10 @@ export function buildLosses(report: SourceReport): Loss[] {
       // chapter track found alone was told only about captions (Codex review
       // of VH-114).
       const consequences: string[] = []
-      if (tracks.subtitleTracks > 0) {
-        consequences.push(
-          'The new file will have no caption track, so wherever you publish it must supply captions. EchoVideo makes its own after upload — check them. A file sent directly needs captions added by you. Captions drawn into the picture stay.',
-        )
-      }
-      if (tracks.chapterTracks > 0) {
-        consequences.push('The chapters will not be in the new file.')
-      }
-      consequences.push('If you need the originals, keep this file alongside.')
-      losses.push({ title: `Found ${found.join(' and ')}`, detail: consequences.join(' ') })
+      if (tracks.subtitleTracks > 0) consequences.push(source.losses.captionsConsequence)
+      if (tracks.chapterTracks > 0) consequences.push(source.losses.chaptersConsequence)
+      consequences.push(source.losses.keepOriginals)
+      losses.push({ title: source.captionsFound({ found }), detail: consequences.join(' ') })
     }
   }
 
@@ -110,14 +98,8 @@ export function buildLosses(report: SourceReport): Loss[] {
 /** e.g. `['1 caption track', '2 chapter tracks']`; empty when there are none. */
 function embeddedTextTracks(tracks: SourceReport['tracks']): string[] {
   const found: string[] = []
-  if (tracks.subtitleTracks > 0) {
-    found.push(
-      tracks.subtitleTracks === 1 ? '1 caption track' : `${tracks.subtitleTracks} caption tracks`,
-    )
-  }
-  if (tracks.chapterTracks > 0) {
-    found.push(tracks.chapterTracks === 1 ? '1 chapter track' : `${tracks.chapterTracks} chapter tracks`)
-  }
+  if (tracks.subtitleTracks > 0) found.push(t().source.captionTracks({ count: tracks.subtitleTracks }))
+  if (tracks.chapterTracks > 0) found.push(t().source.chapterTracks({ count: tracks.chapterTracks }))
   return found
 }
 
@@ -131,44 +113,37 @@ function embeddedTextTracks(tracks: SourceReport['tracks']): string[] {
  */
 export function buildRows(report: SourceReport): Row[] {
   const { video, audio, tracks } = report
+  const { source } = t()
 
   const rateDetail = video.isVariableFrameRate
-    ? `${formatFrameRate(video.frameRate.bestGuess)} on average, but it varies`
+    ? source.variesOnAverage({ rate: formatFrameRate(video.frameRate.bestGuess) })
     : formatFrameRate(video.frameRate.bestGuess)
 
   const rateNotes: string[] = []
-  if (video.isVariableFrameRate) {
-    rateNotes.push(
-      'Recordings from Teams, Zoom and screen capture often vary. The output will use a steady frame rate, which keeps sound and picture in step.',
-    )
-  }
+  if (video.isVariableFrameRate) rateNotes.push(source.variesNote)
   // Only worth raising when conforming would meaningfully change the frame
   // count — an NTSC source shifts by a tenth of a percent and nobody cares.
   if (Math.abs(video.conform.frameDeltaRatio) > 0.1) {
-    rateNotes.push(
-      `The output will run at ${formatFrameRate(video.conform.frameRate)}, so some frames will be repeated.`,
-    )
+    rateNotes.push(source.outputRate({ rate: formatFrameRate(video.conform.frameRate) }))
   }
 
   const rows: Row[] = [
-    { term: 'Duration', detail: formatDuration(report.durationSeconds) },
+    { term: source.rows.duration, detail: formatDuration(report.durationSeconds) },
     {
-      term: 'Video format',
+      term: source.rows.videoFormat,
       detail: formatCodec(video.codec),
       // The verdict below says what to do about it, in view (VH-60). This is
       // the fact behind that verdict, for whoever opens the list.
-      ...(video.canDecode ? {} : { note: 'This browser cannot read this video format.' }),
+      ...(video.canDecode ? {} : { note: source.cannotDecodeVideo }),
     },
-    { term: 'File size', detail: formatFileSize(report.fileSizeBytes) },
+    { term: source.rows.fileSize, detail: formatFileSize(report.fileSizeBytes) },
     {
-      term: 'Resolution',
+      term: source.rows.resolution,
       detail: formatResolution(video.displayWidth, video.displayHeight),
-      ...(video.rotation !== 0
-        ? { note: `Rotated ${video.rotation}°. The output will be upright.` }
-        : {}),
+      ...(video.rotation !== 0 ? { note: source.rotated({ degrees: video.rotation }) } : {}),
     },
     {
-      term: 'Frame rate',
+      term: source.rows.frameRate,
       detail: rateDetail,
       ...(rateNotes.length > 0 ? { note: rateNotes.join(' ') } : {}),
     },
@@ -177,50 +152,52 @@ export function buildRows(report: SourceReport): Row[] {
   if (audio) {
     rows.push(
       {
-        term: 'Sound format',
+        term: source.rows.soundFormat,
         detail: formatCodec(audio.codec),
-        ...(audio.canDecode ? {} : { note: 'This browser cannot read this audio format.' }),
+        ...(audio.canDecode ? {} : { note: source.cannotDecodeAudio }),
       },
-      { term: 'Sound channels', detail: formatChannels(audio.channelCount) },
+      { term: source.rows.soundChannels, detail: formatChannels(audio.channelCount) },
       {
-        term: 'Sound sample rate',
+        term: source.rows.sampleRate,
         // The figure, with its meaning beside it (spec 9.2).
-        detail: `${Math.round(audio.sampleRate / 100) / 10} kHz — ${audio.sampleRate.toLocaleString('en-GB')} samples a second`,
+        detail: source.sampleRate({
+          kilohertz: Math.round(audio.sampleRate / 100) / 10,
+          hertz: audio.sampleRate,
+        }),
       },
     )
   } else {
     // One row, not three: a codec, a channel count and a sample rate of
     // nothing are three ways of saying the same absence.
-    rows.push({
-      term: 'Sound',
-      detail: 'No sound track found',
-      note: 'Levelling needs sound. The rest of the job still runs.',
-    })
+    rows.push({ term: source.rows.sound, detail: source.noSoundTrack, note: source.noSoundNote })
   }
 
   const found = tracks.scanned ? embeddedTextTracks(tracks) : []
   rows.push({
-    term: 'Captions',
+    term: source.rows.captions,
     detail: !tracks.scanned
-      ? 'Could not be checked in this kind of file'
+      ? source.captionsUnchecked
       : found.length > 0
-        ? `Found ${found.join(' and ')}`
-        : 'None found in this file',
+        ? source.captionsFound({ found })
+        : source.captionsNone,
   })
 
-  rows.push({ term: 'File type', detail: report.container })
+  rows.push({ term: source.rows.fileType, detail: report.container })
   return rows
 }
 
 /** A one-line summary suitable for announcing into a live region. */
 export function summarise(report: SourceReport): string {
+  const { source } = t()
   const parts = [
     formatDuration(report.durationSeconds),
     formatResolution(report.video.displayWidth, report.video.displayHeight),
   ]
-  if (report.video.isVariableFrameRate) parts.push('variable frame rate')
-  parts.push(report.audio ? formatChannels(report.audio.channelCount).toLowerCase() : 'no sound')
-  return `Video read. ${parts.join(', ')}.`
+  if (report.video.isVariableFrameRate) parts.push(source.variableFrameRate)
+  parts.push(
+    report.audio ? formatChannels(report.audio.channelCount).toLocaleLowerCase(locale()) : source.noSound,
+  )
+  return source.readSummary({ parts })
 }
 
 /**
@@ -228,25 +205,29 @@ export function summarise(report: SourceReport): string {
  *
  * Losses first and always in view; then the facts, in a native disclosure
  * that starts closed (VH-87). Rebuilt on every call, so a new file always
- * starts with it closed rather than inheriting the last file's state.
+ * starts with it closed rather than inheriting the last file's state — a
+ * repaint for a change of language passes `open` to keep it as it was.
  */
-export function renderSourceReport(container: HTMLElement, report: SourceReport): void {
+export function renderSourceReport(
+  container: HTMLElement,
+  report: SourceReport,
+  options: { readonly open?: boolean } = {},
+): void {
   container.replaceChildren()
 
   const losses = buildLosses(report)
   if (losses.length > 0) {
     // The same component the sound warnings use: one visual language for
     // "worth knowing before you start", whichever part of the file it is about.
-    container.append(
-      notification({ kind: 'warning', title: 'Not carried into the new file', items: losses }),
-    )
+    container.append(notification({ kind: 'warning', title: t().source.lossesTitle, items: losses }))
   }
 
   const disclosure = document.createElement('details')
   disclosure.className = 'disclosure'
+  disclosure.open = options.open ?? false
   const summary = document.createElement('summary')
   summary.className = 'disclosure-summary'
-  summary.textContent = 'Video properties'
+  summary.textContent = t().source.properties
   disclosure.append(summary)
 
   const list = document.createElement('dl')
@@ -286,8 +267,11 @@ export function renderSourceError(container: HTMLElement, text: FailureText): HT
   const failure = notification({
     kind: 'error',
     title: text.what,
-    lines: [`${ORIGINAL_UNCHANGED} ${text.next}`],
+    lines: [`${t().failure.originalUnchanged} ${text.next}`],
   })
   container.append(failure)
   return failure
 }
+
+/** A noun list as the language joins it, for the callers that need one outside a table. */
+export const joinNouns = (items: readonly string[]): string => listFormatter(locale())(items)

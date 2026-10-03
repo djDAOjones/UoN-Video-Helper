@@ -12,7 +12,8 @@
  */
 
 import { brandingChoiceFor, type BrandingMode, type ClosingControls } from '../config/branding'
-import { PRESETS, type PresetId } from '../config/presets'
+import type { PresetId } from '../config/presets'
+import { t } from '../i18n'
 import type { KeptRange } from '../media/kept-range'
 import { formatDuration } from './format'
 import { formatTrimTime } from './trim'
@@ -39,23 +40,27 @@ export interface ClosingOutcome {
   readonly opening?: boolean
 }
 
-/** "the whole video (4 minutes 12 seconds)" or "2 minutes of 4 minutes 12 seconds, from 0:30.0 to 2:30.0". */
+/** "the whole video (4 minutes, 12 seconds)" or "2 minutes of 4 minutes, 12 seconds, from 0:30.0 to 2:30.0". */
 export function keptPartText(range: KeptRange | null, durationSeconds: number): string {
-  if (!range) return `the whole video (${formatDuration(durationSeconds)})`
-  return (
-    `${formatDuration(range.endSeconds - range.startSeconds)} of ${formatDuration(durationSeconds)}, ` +
-    `from ${formatTrimTime(range.startSeconds)} to ${formatTrimTime(range.endSeconds)}`
-  )
+  const duration = formatDuration(durationSeconds)
+  if (!range) return t().result.keptWhole({ duration })
+  return t().result.keptPart({
+    kept: formatDuration(range.endSeconds - range.startSeconds),
+    duration,
+    from: formatTrimTime(range.startSeconds),
+    to: formatTrimTime(range.endSeconds),
+  })
 }
 
 /** The closing as the three controls describe it, in the result line's register. */
 export function closingChoiceText(controls: ClosingControls): string {
-  if (controls.type === 'none') return 'no University closing'
-  if (controls.type === 'cut') return `a cut to the ${controls.colour} closing card`
-  const verb = controls.type === 'slide' ? 'sliding' : 'fading'
+  const { result } = t()
+  if (controls.type === 'none') return result.closingNone
+  if (controls.type === 'cut') return result.closingCut({ colour: controls.colour })
+  const { colour, type } = controls
   return controls.onset === 'freeze'
-    ? `the ${controls.colour} closing ${verb} in over a held last frame`
-    : `the ${controls.colour} closing ${verb} in over the picture`
+    ? result.closingOverFreeze({ colour, type })
+    : result.closingOverPicture({ colour, type })
 }
 
 /**
@@ -70,33 +75,24 @@ export function closingChoiceText(controls: ClosingControls): string {
  * of over the picture (`closingTimeline`, Codex review of VH-107).
  */
 export function closingOutcomeText(controls: ClosingControls, outcome: ClosingOutcome): string | null {
+  const { result } = t()
   if (controls.type === 'none') return null
-  if (!outcome.applied) {
-    return 'The closing could not be loaded, so it is not in this video. Everything else was applied as asked.'
-  }
+  if (!outcome.applied) return result.notLoaded
   const wanted = brandingChoiceFor(controls).mode as BrandingMode
   if (outcome.mode === null || outcome.mode === wanted) return null
-  const label = controls.type === 'slide' ? 'Slide' : 'Fade'
-  const verb = controls.type === 'slide' ? 'slides' : 'fades'
-  if (outcome.mode === 'hard-cut') {
-    return (
-      `You chose ${label}, but the animation could not be loaded, ` +
-      `so this video cuts to the ${controls.colour} closing card instead.`
-    )
-  }
-  if (outcome.mode === 'over-freeze') {
-    return (
-      `Your video is shorter than the ${label.toLowerCase()} animation, so the ${controls.colour} closing ` +
-      `${verb} in over a held last frame rather than over the picture.`
-    )
-  }
-  return `The ${controls.colour} closing ${verb} in over the picture, not over a held last frame as chosen.`
+  const { colour } = controls
+  const type = controls.type === 'slide' ? 'slide' : 'fade'
+  if (outcome.mode === 'hard-cut') return result.fellBackToCut({ colour, type })
+  if (outcome.mode === 'over-freeze') return result.fellBackToFreeze({ colour, type })
+  return result.fellBackToPicture({ colour, type })
 }
 
 /** The one-line record: "Made from NAME: PART, OUTPUT, CLOSING." */
 export function jobSummaryText(record: JobRecord): string {
-  return (
-    `Made from ${record.sourceName}: ${keptPartText(record.keptRange, record.durationSeconds)}, ` +
-    `${PRESETS[record.presetId].label}, ${closingChoiceText(record.closing)}.`
-  )
+  return t().result.summary({
+    name: record.sourceName,
+    part: keptPartText(record.keptRange, record.durationSeconds),
+    output: t().preset.labels[record.presetId],
+    closing: closingChoiceText(record.closing),
+  })
 }

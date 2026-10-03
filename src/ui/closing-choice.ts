@@ -18,40 +18,32 @@ import {
   type ClosingControls,
   type ClosingType,
 } from '../config/branding'
+import { t } from '../i18n'
 
 /** The option text of "Animation type", which the disabled reasons quote. */
-export const CLOSING_TYPE_LABELS: Readonly<Record<ClosingType, string>> = {
-  cut: 'Cut',
-  fade: 'Fade',
-  slide: 'Slide',
-  none: 'None',
+export function closingTypeLabel(type: ClosingType): string {
+  return t().closing.types[type]
 }
-
-const plural = (seconds: number) => `${seconds} second${seconds === 1 ? '' : 's'}`
 
 /**
  * One sentence for the current selection: what the viewer sees at the end,
  * and what it costs in seconds.
  */
 export function closingResultText(controls: ClosingControls): string {
-  if (controls.type === 'none') return 'No University closing will be added.'
+  const { result } = t().closing
+  if (controls.type === 'none') return result.none
 
   // The mode, and so the seconds, come from the same mapping the job uses —
   // the sentence cannot promise a different file from the one that is made.
   const mode = brandingChoiceFor(controls).mode as BrandingMode
-  const adds = `Adds ${plural(closingAddedSeconds(mode))}.`
-  const closing = `the ${controls.colour} closing`
+  const adds = result.adds({ seconds: closingAddedSeconds(mode) })
+  const { colour } = controls
 
-  if (controls.type === 'cut') return `Your video cuts to ${closing} card. ${adds}`
-
-  const verb = controls.type === 'slide' ? 'slides' : 'fades'
+  if (controls.type === 'cut') return result.cut({ colour, adds })
+  const type = controls.type
   return controls.onset === 'freeze'
-    ? `Your last frame is held while ${closing} ${verb} in, so nothing is covered. ${adds}`
-    : `${capitalise(closing)} ${verb} in over your last second of video, covering it as it builds. ${adds}`
-}
-
-function capitalise(text: string): string {
-  return text.charAt(0).toUpperCase() + text.slice(1)
+    ? result.overFreeze({ colour, type, adds })
+    : result.overPicture({ colour, type, adds })
 }
 
 /**
@@ -61,10 +53,10 @@ function capitalise(text: string): string {
  * reason is visible text beside it.
  */
 export function onsetDisabledReason(type: ClosingType): string | null {
-  return closingTypeUsesOnset(type) ? null : `Not used with ${CLOSING_TYPE_LABELS[type]}.`
+  return closingTypeUsesOnset(type) ? null : t().closing.notUsedWith({ type: closingTypeLabel(type) })
 }
 
 /** Why the colour cannot be changed, or `null` when it can. */
 export function colourDisabledReason(type: ClosingType): string | null {
-  return type === 'none' ? `Not used with ${CLOSING_TYPE_LABELS[type]}.` : null
+  return type === 'none' ? t().closing.notUsedWith({ type: closingTypeLabel(type) }) : null
 }

@@ -12,9 +12,10 @@
  * A-12), which is the browser they were in.
  */
 
-import { PRESETS, bitrateWasCappedToSource } from '../config/presets'
+import { bitrateWasCappedToSource } from '../config/presets'
+import { t } from '../i18n'
 import type { PreflightOutcome, PreflightReasonCode, PreflightSummary } from '../media/preflight'
-import { formatApproximateDuration, formatFileSize } from './format'
+import { approximateDuration, formatDuration, formatFileSize } from './format'
 import { notification, type NotificationKind } from './notification'
 
 /**
@@ -53,89 +54,79 @@ export function blockContextFor(userAgent: string, trimmed = false): BlockContex
 
 const ELSEWHERE: BlockContext = { chromeOnComputer: false }
 
-const OUTCOME_HEADING: Record<PreflightOutcome, string> = {
-  proceed: 'Ready to go',
-  warn: 'Ready, with one thing to know',
-  discourage: 'This will work, but it will be slow',
-  block: 'This cannot run here',
-}
-
-/**
- * A phone or tablet's heading leads with the risk, not with "this will work":
- * the browser there can end the job part-way to free memory, which the body
- * said under a heading that promised the opposite (VH-113, U-19).
- */
-const MOBILE_HEADING = 'This may not finish on a phone or tablet'
-
 /** The heading, counted: "one thing to know" over three things was untrue (U-24). */
 function outcomeHeading(verdict: PreflightSummary['verdict']): string {
   const { outcome, reasons } = verdict
+  const { headings } = t().preflight
+  // A phone or tablet's heading leads with the risk, not with "this will
+  // work": the browser there can end the job part-way to free memory, which
+  // the body said under a heading that promised the opposite (VH-113, U-19).
   if (outcome === 'discourage' && reasons.some((reason) => reason.code === 'mobile-device')) {
-    return MOBILE_HEADING
+    return headings.mobile
   }
-  if (outcome !== 'warn' || reasons.length <= 1) return OUTCOME_HEADING[outcome]
-  const words = ['two', 'three', 'four', 'five', 'six']
-  return `Ready, with ${words[reasons.length - 2] ?? String(reasons.length)} things to know`
+  if (outcome === 'warn' && reasons.length > 1) return headings.warnSeveral({ count: reasons.length })
+  return headings[outcome]
 }
 
-/** The recommendation, where the browser is the cause and the user is not already in it. */
-export const TRY_CHROME = 'Chrome on a computer is the browser this tool is built for — try it there.'
-/** Why Chrome itself would lack a feature it normally has. */
-export const CHROME_LACKS = 'This copy of Chrome may be out of date, or a setting on this computer may have turned the feature off. Update Chrome, or ask whoever manages the computer.'
+/** The remedy where the browser is the cause: try Chrome, or — already in Chrome — why it lacks the feature. */
+export function remedyFor(context: { readonly chromeOnComputer: boolean }): string {
+  return context.chromeOnComputer ? t().preflight.chromeLacks : t().preflight.tryChrome
+}
 
 function reasonText(code: PreflightReasonCode, summary: PreflightSummary, context: BlockContext): string {
   const estimate = summary.probe.estimatedSeconds
   const here = context.chromeOnComputer
+  const remedy = remedyFor(context)
+  const { reasons } = t().preflight
   switch (code) {
     case 'no-webcodecs':
-      return here
-        ? `This browser cannot process video. ${CHROME_LACKS}`
-        : `This browser cannot process video. ${TRY_CHROME}`
+      return reasons.noWebCodecs({ remedy })
     case 'no-aac-encode':
       // Firefox encodes the picture fine and refuses the sound, which is why
       // the message is about sound rather than about video (VH-49).
-      return here
-        ? `This browser cannot add sound to a video file. ${CHROME_LACKS}`
-        : `This browser cannot add sound to a video file. ${TRY_CHROME} Firefox can play video but cannot create the sound this needs.`
+      return here ? reasons.noAacEncodeHere({ remedy }) : reasons.noAacEncodeElsewhere({ remedy })
     case 'no-h264-encode':
-      return here
-        ? `This browser cannot create the video format this tool needs. ${CHROME_LACKS}`
-        : `This browser cannot create the video format this tool needs. ${TRY_CHROME}`
+      return reasons.noH264Encode({ remedy })
     case 'no-source-decode':
       // The source panel promises that full guidance arrives here, so it has
       // to actually arrive (VH-60). In Chrome on a computer the remedy is the
       // file, not the browser: the formats Chrome opens are the ones this
       // tool can use.
-      return here
-        ? 'This browser cannot read the picture or sound inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead.'
-        : `This browser cannot read the picture or sound inside this file. ${TRY_CHROME} If it will not open there either, the file was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4.`
+      return here ? reasons.noSourceDecodeHere : reasons.noSourceDecodeElsewhere({ remedy })
     case 'no-opfs':
-      return here
-        ? 'This browser will not give the tool the working space it needs to build your video. If you are browsing privately, an ordinary window usually works; otherwise a setting on this computer may be blocking site storage — ask whoever manages it.'
-        : `This browser will not give the tool the working space it needs to build your video. ${TRY_CHROME} If you are browsing privately, an ordinary window usually works.`
+      return here ? reasons.noOpfsHere : reasons.noOpfsElsewhere({ remedy })
     case 'insecure-context':
       // The one block the user can fix by changing the address, so it says so
       // first and names nothing else.
-      return 'This page needs a secure connection before it can work with your video. Open it at an https:// address, or at localhost if you are running it yourself.'
-    case 'insufficient-storage':
+      return reasons.insecureContext
+    case 'insufficient-storage': {
       // The one block the setup steps can resolve, so it says how — unless
       // another block has taken those steps off the page (VH-123).
-      return `There is not enough free space on this device. This job needs about ${formatFileSize(summary.verdict.requiredStorageBytes)} of working space. ${
-        setupStepsResolve(summary.verdict)
-          ? `Free some space and try again, keep less of the video, or choose ${PRESETS.smaller.label}.`
-          : 'Free some space and try again.'
-      }`
+      const size = formatFileSize(summary.verdict.requiredStorageBytes)
+      return setupStepsResolve(summary.verdict)
+        ? reasons.insufficientStorageResolvable({ size, smaller: t().preset.labels.smaller })
+        : reasons.insufficientStorage({ size })
+    }
     case 'storage-unknown':
-      return 'This browser will not say how much free space there is. If it runs out part-way, the job stops and nothing is saved — your original file is not affected.'
+      return reasons.storageUnknown
     case 'very-long-job':
-      return `This will take about ${estimate === null ? 'a long time' : formatApproximateDuration(estimate)}. You can carry on, but a desktop computer would be considerably faster.`
+      return estimate === null
+        ? reasons.veryLongJobUnknown
+        : reasons.veryLongJob({ time: estimateWords(estimate) })
     case 'long-job':
-      return `This will take about ${estimate === null ? 'a while' : formatApproximateDuration(estimate)}. Keep this tab open while it runs — closing it stops the job.`
+      return estimate === null ? reasons.longJobUnknown : reasons.longJob({ time: estimateWords(estimate) })
     case 'mobile-device':
-      return 'Phones and tablets are much slower at this than a computer, and the browser there may end the job part-way to free memory. Use a computer if you can.'
+      return reasons.mobileDevice
     case 'estimate-unavailable':
-      return 'We could not work out how long this will take on this device. You can still continue.'
+      return reasons.estimateUnavailable
   }
+}
+
+/** An estimate for inside "about …": the rounded duration, or the few-seconds words. */
+function estimateWords(seconds: number): string {
+  const estimate = approximateDuration(seconds)
+  if (estimate.kind === 'about') return formatDuration(estimate.seconds)
+  return estimate.kind === 'few-seconds' ? t().format.fewSeconds : t().format.unknown
 }
 
 /**
@@ -177,6 +168,7 @@ export interface VerdictText {
  */
 export function verdictText(summary: PreflightSummary, context: BlockContext = ELSEWHERE): VerdictText {
   const { verdict, shape, probe } = summary
+  const { preflight } = t()
   const blocked = verdict.outcome === 'block'
   const lines: string[] = []
 
@@ -197,9 +189,14 @@ export function verdictText(summary: PreflightSummary, context: BlockContext = E
     if (!timeAlreadySaid && probe.estimatedSeconds !== null) {
       // Rounded (U-22): the probe differs by a quarter between loads of one
       // file, so "5 minutes 20 seconds" claimed a precision it did not have.
-      const time = formatApproximateDuration(probe.estimatedSeconds)
-      // "About a few seconds" is what a very short clip would otherwise be told.
-      lines.push(time === 'a few seconds' ? `This should take ${time}.` : `This should take about ${time}.`)
+      // A very short clip is told "a few seconds", never "about a few
+      // seconds" — decided by the estimate's kind, not by its words.
+      const estimate = approximateDuration(probe.estimatedSeconds)
+      lines.push(
+        estimate.kind === 'about'
+          ? preflight.shouldTake({ time: formatDuration(estimate.seconds) })
+          : preflight.shouldTakeFewSeconds,
+      )
     }
 
     // "Up to", not a bare figure. It is an upper bound by construction — it
@@ -207,7 +204,7 @@ export function verdictText(summary: PreflightSummary, context: BlockContext = E
     // closing is appended — and a bare number reads as a prediction, which is
     // what made a 27.7 MB label for a 7.5 MB file look like a defect rather
     // than a margin (VH-31). VH-89 shortened the words and kept the meaning.
-    lines.push(`Estimated size up to ${formatFileSize(summary.projectedOutputBytes)}.`)
+    lines.push(preflight.sizeUpTo({ size: formatFileSize(summary.projectedOutputBytes) }))
 
     // Spec 6.2's never-exceed-source cap, said out loud (VH-41). Someone who
     // picked the smaller output to fit a storage limit has to know when it
@@ -221,12 +218,7 @@ export function verdictText(summary: PreflightSummary, context: BlockContext = E
       // Nothing is said after a trim — "about the same size" is then untrue
       // — and nothing about the slides either: the cap set the size, not the
       // classification (Codex review of VH-114).
-      if (!context.trimmed) {
-        lines.push(
-          'Your video is already compressed as far as this setting would take it, so the new file ' +
-            'will be about the same size.',
-        )
-      }
+      if (!context.trimmed) lines.push(preflight.sameSize)
     } else if (summary.presetId === 'smaller' && summary.contentClass === 'screen') {
       // Spec 6.2 spends less on slides than on camera, and a classifier
       // decides which this is. Said out loud, with the way out, because the
@@ -234,10 +226,7 @@ export function verdictText(summary: PreflightSummary, context: BlockContext = E
       // quality, and the person looking at the video is the one who can tell
       // (VH-19). Not when the cap above already decided the size: the class
       // changed nothing then, and claiming it did would be untrue.
-      lines.push(
-        'This looks like slides or a screen recording, so the file is made smaller still. ' +
-          `If it is mostly camera footage, choose ${PRESETS.best.label} instead.`,
-      )
+      lines.push(preflight.slides({ best: t().preset.labels.best }))
     }
   }
 
@@ -295,8 +284,5 @@ export function preflightAnnouncement(
   context: BlockContext = ELSEWHERE,
 ): PreflightAnnouncement {
   const { heading, lines } = verdictText(summary, context)
-  return {
-    shown: '',
-    spokenOnly: ['Device check complete.', `${heading}.`, ...lines].join(' '),
-  }
+  return { shown: '', spokenOnly: t().status.verdictSpoken({ heading, lines }) }
 }

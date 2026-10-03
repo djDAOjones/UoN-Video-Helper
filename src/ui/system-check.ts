@@ -7,6 +7,8 @@
  * Pure, so the wording and the open-on-failure rule are tested in Node.
  */
 
+import { t } from '../i18n'
+
 export type CheckState = 'pass' | 'fail' | 'warn' | 'pending'
 
 export interface ChecksSummary {
@@ -39,18 +41,15 @@ export interface ChecksSummary {
  * @param states - One per check row, in any order. Empty reads as pending.
  */
 export function summariseChecks(states: readonly CheckState[]): ChecksSummary {
+  const { results } = t().systemCheck
   const problems = states.filter((state) => state === 'fail').length
   const warnings = states.filter((state) => state === 'warn').length
-  if (problems > 0) {
-    return { result: problems === 1 ? '1 problem' : `${problems} problems`, problems, warnings }
-  }
-  if (warnings > 0) {
-    return { result: warnings === 1 ? '1 warning' : `${warnings} warnings`, problems, warnings }
-  }
+  if (problems > 0) return { result: results.problems({ count: problems }), problems, warnings }
+  if (warnings > 0) return { result: results.warnings({ count: warnings }), problems, warnings }
   if (states.length === 0 || states.includes('pending')) {
-    return { result: 'checking', problems, warnings }
+    return { result: results.checking, problems, warnings }
   }
-  return { result: 'all passed', problems, warnings }
+  return { result: results.allPassed, problems, warnings }
 }
 
 /**
@@ -67,12 +66,8 @@ export function summariseChecks(states: readonly CheckState[]): ChecksSummary {
  * @param states - One per check row, in any order. Empty reads as pending.
  */
 export function browserNote(states: readonly CheckState[]): string {
-  const lead = 'This app is designed and built for Chrome'
-  if (states.length === 0 || states.includes('pending')) {
-    return `${lead}, other browsers may not work.`
-  }
-  if (states.includes('fail') || states.includes('warn')) {
-    return `${lead}, and this browser has not passed all of its checks. The system check at the foot of the page says what is missing.`
-  }
-  return `${lead}, and this browser has passed the checks for it.`
+  const { browserNote: note } = t()
+  if (states.length === 0 || states.includes('pending')) return note.pending
+  if (states.includes('fail') || states.includes('warn')) return note.notPassed
+  return note.passed
 }

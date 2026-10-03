@@ -2,18 +2,19 @@
  * What a failure says: what happened, that the original is safe, and what to
  * do next — spec 9.2, once each (VH-110, U-06).
  *
- * The worker names the failure (`workers/failure.ts`); this turns the name
- * into words. The reassurance is one sentence, said here and nowhere else in
- * the message, and the next step fits the cause: a recording that cannot be
- * levelled is not fixed by choosing a different file, and a device that ran
- * out of room is not fixed by trying again.
+ * The worker names the failure (`workers/failure.ts`) and, for an unreadable
+ * file or a refused trim, why; this turns the name into words in the page's
+ * language (VH-105). The reassurance is one sentence, said here and nowhere
+ * else in the message, and the next step fits the cause: a recording that
+ * cannot be levelled is not fixed by choosing a different file, and a device
+ * that ran out of room is not fixed by trying again.
  *
  * Pure, so every sentence is tested in Node and read by the gate.
  */
 
-import { PRESETS } from '../config/presets'
-import type { FailureCode } from '../workers/failure'
-import { CHROME_LACKS, TRY_CHROME } from './preflight-panel'
+import { t } from '../i18n'
+import type { FailureCode, FailureReason } from '../workers/failure'
+import { keptRangeProblemText } from './trim'
 
 export interface FailureText {
   /** What happened. */
@@ -22,80 +23,71 @@ export interface FailureText {
   readonly next: string
 }
 
-/** Said once in every failure, between what happened and what to do. */
-export const ORIGINAL_UNCHANGED = 'Your original file has not been changed.'
-
-const REPORT_IT = 'If it happens again, report it with the Send feedback button — the details it adds will help.'
+/** What an unreadable file's reason says happened. */
+function unreadableWhat(reason: FailureReason | undefined): string {
+  const { unreadable } = t().failure
+  switch (reason) {
+    case 'not-a-video':
+      return unreadable.notAVideo
+    case 'sound-only':
+      return unreadable.soundOnly
+    case 'no-tracks':
+      return unreadable.noTracks
+    case 'read-error':
+      return unreadable.readError
+    case 'took-too-long':
+      return unreadable.tookTooLong
+    default:
+      return unreadable.what
+  }
+}
 
 /**
  * The sentences for a failure.
  *
- * @param message - The worker's own sentence for the failures that carry one:
- *   an unreadable source or a trim that cannot be honoured.
+ * @param reason - Why, for the failures that carry one: an unreadable source
+ *   or a trim that cannot be honoured.
  */
-export function failureText(code: FailureCode, message?: string): FailureText {
+export function failureText(code: FailureCode, reason?: FailureReason): FailureText {
+  const { failure } = t()
   switch (code) {
     case 'unreadable-source':
-      return {
-        what: message ?? 'This file could not be read as a video.',
-        next: 'Choose a different file, or save this one again from the app that made it, as a file whose name ends .mp4.',
-      }
+      return { what: unreadableWhat(reason), next: failure.unreadable.next }
     case 'bad-trim':
       return {
-        what: message ?? 'The start and end times could not be used.',
-        next: 'Put the start and end times right in step 2 and try again.',
+        what:
+          reason === 'not-a-time' ||
+          reason === 'start-after-end' ||
+          reason === 'end-before-start' ||
+          reason === 'too-short'
+            ? keptRangeProblemText(reason)
+            : failure.badTrim.what,
+        next: failure.badTrim.next,
       }
     case 'unlevellable':
-      return {
-        what: 'The sound of this recording cannot be brought to the usual level, so the video was not made.',
-        next: 'Report it with the Send feedback button — the details it adds will help.',
-      }
+      return failure.unlevellable
     case 'output-loudness':
-      return {
-        what: 'The finished sound did not come out at the usual level, so the video was not kept.',
-        next: `Try again. ${REPORT_IT}`,
-      }
+      return { what: failure.outputLoudness.what, next: failure.tryAgain }
     case 'output-peak':
-      return {
-        what: 'The finished sound came out louder at its peaks than allowed, so the video was not kept.',
-        next: `Try again. ${REPORT_IT}`,
-      }
+      return { what: failure.outputPeak.what, next: failure.tryAgain }
     case 'output-unreadable':
-      return {
-        what: 'The finished video could not be read back, so it was not kept.',
-        next: `Try again. ${REPORT_IT}`,
-      }
+      return { what: failure.outputUnreadable.what, next: failure.tryAgain }
     case 'out-of-space':
-      return {
-        what: 'This device ran out of working space part-way through.',
-        next: `Free some space, or choose ${PRESETS.smaller.label}, and try again.`,
-      }
+      return { what: failure.outOfSpace.what, next: failure.outOfSpace.next({ smaller: t().preset.labels.smaller }) }
     case 'encoder-refused':
-      return {
-        what: 'This browser stopped encoding the video part-way through.',
-        next: `Try the other output under File size / quality. ${REPORT_IT}`,
-      }
+      return failure.encoderRefused
     case 'check-failed':
-      return {
-        what: message ?? 'The device check did not finish.',
-        next: 'Press Check again to run it once more. If it fails again, report it with the Send feedback button.',
-      }
+      return failure.checkFailed
     case 'timed-out':
-      return {
-        what: 'The job stopped reporting progress, so it was stopped.',
-        next: `Try again. ${REPORT_IT}`,
-      }
+      return { what: failure.timedOut.what, next: failure.tryAgain }
     case 'unknown':
-      return {
-        what: message ?? 'Something went wrong while creating the video.',
-        next: `Try again. ${REPORT_IT}`,
-      }
+      return { what: failure.unknown.what, next: failure.tryAgain }
   }
 }
 
 /** The failure as one paragraph: what, the reassurance, what next. */
 export function failureSentence(text: FailureText): string {
-  return `${text.what} ${ORIGINAL_UNCHANGED} ${text.next}`
+  return t().failure.sentence(text)
 }
 
 /** What the browser's support check found missing, as the load-time check reports it. */
@@ -118,23 +110,12 @@ export function startupFailureText(
 ): string | null {
   // The block panel's own sentences, so a start-up block and a file's block
   // name the remedy the same way (A-12).
-  const tryChrome = context.chromeOnComputer ? CHROME_LACKS : TRY_CHROME
-  if (!flags.secureContext) {
-    return 'This page needs a secure connection before it can work with your video. Open it at an address that starts https://.'
-  }
-  if (!flags.webCodecs) return `This browser cannot process video, so the tool cannot run here. ${tryChrome}`
-  if (!flags.h264) {
-    return `This browser cannot create the video format this tool needs, so the tool cannot run here. ${tryChrome}`
-  }
-  if (!flags.workingStore) {
-    return `This browser gives the tool no working space to build a video in. If you are browsing privately, an ordinary window usually works. ${tryChrome}`
-  }
-  if (!flags.workerStarted) {
-    return 'The part of the tool that does the work did not start. Reload the page. If it happens again, report it with the Send feedback button.'
-  }
+  const { preflight, failure } = t()
+  const remedy = context.chromeOnComputer ? preflight.chromeLacks : preflight.tryChrome
+  if (!flags.secureContext) return failure.startup.insecure
+  if (!flags.webCodecs) return failure.startup.noWebCodecs({ remedy })
+  if (!flags.h264) return failure.startup.noH264({ remedy })
+  if (!flags.workingStore) return failure.startup.noWorkingStore({ remedy })
+  if (!flags.workerStarted) return failure.startup.workerNotStarted
   return null
 }
-
-/** The plain sentence over a captured error's technical details (U-06). */
-export const CAPTURED_ERROR_SENTENCE =
-  'Something in the tool went wrong. A video being made may not finish; your original file is not affected. Report it with the Send feedback button, which adds these details.'

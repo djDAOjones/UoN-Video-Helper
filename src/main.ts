@@ -80,7 +80,6 @@ import {
   setupStepsResolve,
 } from './ui/preflight-panel'
 import {
-  JOB_START_NOTICE,
   NO_PROGRESS,
   outcomeTitle,
   progressView,
@@ -97,13 +96,9 @@ import {
 import { body, notification } from './ui/notification'
 import { downloadDestinationFor, downloadStatusText } from './ui/save-text'
 import { renderWarnings } from './ui/warning-text'
-import {
-  CAPTURED_ERROR_SENTENCE,
-  failureSentence,
-  failureText,
-  startupFailureText,
-  type FailureText,
-} from './ui/failure-text'
+import { failureSentence, failureText, startupFailureText, type FailureText } from './ui/failure-text'
+import { t } from './i18n'
+import { applyStaticText } from './i18n/bind'
 import { buildLosses, renderSourceError, renderSourceReport, summarise } from './ui/source-panel'
 import type { SourceReport } from './media/inspect'
 import { lossesSpoken, spoken, warningsSpoken } from './ui/announce'
@@ -114,12 +109,14 @@ import {
   trimFieldValue,
   trimHandleText,
   trimKeyTarget,
+  trimProblemText,
   trimRangeFor,
   trimSummary,
+  type TrimProblem,
 } from './ui/trim'
 import type { PipelineStage } from './media/pipeline'
 import type { WorkerOutbound, WorkerRequest } from './workers/protocol'
-import type { FailureCode } from './workers/failure'
+import type { FailureCode, FailureReason } from './workers/failure'
 
 const isDev = import.meta.env.DEV
 
@@ -140,6 +137,38 @@ function required<T extends Element>(selector: string): T {
 // header does not change shape after the rest of the page has settled.
 log.info('boot', 'brand assets', installBrandAssets(required<HTMLElement>('#brand-header')))
 
+// The static words, from the table (VH-105). English is what the markup
+// already says, so this is a no-op until another language is chosen.
+applyStaticText(document)
+
+/**
+ * A message, or the way to compose one in the page's current language, so a
+ * line can be said again after a change of language (VH-105). Every string
+ * that outlives the call that set it is stored as the thunk, never as words.
+ */
+type Text = string | (() => string)
+const textOf = (text: Text): string => (typeof text === 'string' ? text : text())
+
+/**
+ * How to paint each dynamic region again in the current language, keyed by
+ * the container it fills. A region is registered when something is put on it
+ * and forgotten when it is cleared, so a repaint for a change of language
+ * says exactly what is on screen and nothing that has gone.
+ */
+const regions = new Map<HTMLElement, () => void>()
+
+/** Paints `container` now and remembers how, for a repaint. */
+function show(container: HTMLElement, paint: () => void): void {
+  regions.set(container, paint)
+  paint()
+}
+
+/** Empties `container` and forgets how it was painted. */
+function clear(container: HTMLElement): void {
+  regions.delete(container)
+  container.replaceChildren()
+}
+
 const checksList = required<HTMLUListElement>('#checks')
 const systemCheck = required<HTMLDetailsElement>('#system-check')
 const systemCheckSummary = required<HTMLElement>('#system-check-summary')
@@ -153,7 +182,10 @@ const laterSteps = ['#step-trim', '#step-closing', '#step-preset', '#step-create
 const versionLine = required<HTMLParagraphElement>('#version-line')
 const errorsPanel = required<HTMLElement>('#errors-panel')
 const errorsContainer = required<HTMLDivElement>('#errors')
-required<HTMLParagraphElement>('#errors-intro').textContent = CAPTURED_ERROR_SENTENCE
+const errorsIntro = required<HTMLParagraphElement>('#errors-intro')
+show(errorsIntro, () => {
+  errorsIntro.textContent = t().failure.captured
+})
 const stopActions = required<HTMLDivElement>('#stop-actions')
 const devActions = required<HTMLDivElement>('#dev-actions')
 const fileInput = required<HTMLInputElement>('#file-input')
@@ -372,10 +404,22 @@ versionLine.textContent = isDev ? `${APP_VERSION} · ${BUILD_ID} · development`
 
 // --- System check rendering ------------------------------------------------
 
-/** Word marks, because status must never be carried by colour alone. */
-const MARKS: Record<CheckState, string> = { pass: 'OK', fail: 'No', warn: '!', pending: '…' }
+/** The rows of the System check, named so each label is the table's. */
+type CheckId = keyof ReturnType<typeof t>['systemCheck']['rows']
 
-function renderCheck(id: string, label: string, state: CheckState, value: string): void {
+/** What each row says, kept so a change of language can say it again. */
+const checkRows = new Map<CheckId, { readonly state: CheckState; readonly value: Text }>()
+
+function renderCheck(id: CheckId, state: CheckState, value: Text): void {
+  checkRows.set(id, { state, value })
+  paintCheck(id)
+  updateSystemCheckSummary()
+}
+
+/** Writes one row as it stands, in the current language. The word marks carry the state, never colour alone. */
+function paintCheck(id: CheckId): void {
+  const entry = checkRows.get(id)
+  if (!entry) return
   let row = document.querySelector<HTMLLIElement>(`#check-${id}`)
   if (!row) {
     row = document.createElement('li')
@@ -385,12 +429,11 @@ function renderCheck(id: string, label: string, state: CheckState, value: string
       '<span class="mark" aria-hidden="true"></span><span></span><span class="value"></span>'
     checksList.append(row)
   }
-  row.dataset['state'] = state
+  row.dataset['state'] = entry.state
   const [mark, name, result] = row.children
-  if (mark) mark.textContent = MARKS[state]
-  if (name) name.textContent = label
-  if (result) result.textContent = value
-  updateSystemCheckSummary()
+  if (mark) mark.textContent = t().systemCheck.marks[entry.state]
+  if (name) name.textContent = t().systemCheck.rows[id]
+  if (result) result.textContent = textOf(entry.value)
 }
 
 /** Failures already shown, so the panel opens for a new one and not again. */
@@ -410,7 +453,7 @@ function updateSystemCheckSummary(): void {
     (row) => row.dataset['state'] as CheckState,
   )
   const { result, problems } = summariseChecks(states)
-  systemCheckSummary.textContent = `System check — ${result}`
+  systemCheckSummary.textContent = t().systemCheck.summary({ result })
   // The intro's browser sentence reports the same result, in the one place a
   // user reads before choosing anything. Not a live region: it settles within
   // the first second, long before a screen reader reaches it.
@@ -426,16 +469,8 @@ function updateSystemCheckSummary(): void {
  * anything about the FILE goes through {@link setSourceStatus} instead: a live
  * region inside a hidden section is neither seen nor announced.
  */
-function setStatus(message: string, spokenOnly = ''): void {
-  statusLine.textContent = message
-  // For a message whose detail is already on screen beside it: the live region
-  // still has to say it, and must not print it a second time.
-  if (spokenOnly) {
-    const spoken = document.createElement('span')
-    spoken.className = 'visually-hidden'
-    spoken.textContent = ` ${spokenOnly}`
-    statusLine.append(spoken)
-  }
+function setStatus(message: Text, spokenOnly: Text = ''): void {
+  show(statusLine, () => paintStatus(statusLine, message, spokenOnly))
 }
 
 /**
@@ -443,13 +478,21 @@ function setStatus(message: string, spokenOnly = ''): void {
  * the same spoken-only tail as {@link setStatus}: what the panel below shows
  * — the losses — is said by the live region too (VH-111).
  */
-function setSourceStatus(message: string, spokenOnly = ''): void {
-  sourceStatusLine.textContent = message
-  if (spokenOnly) {
-    const said = document.createElement('span')
-    said.className = 'visually-hidden'
-    said.textContent = ` ${spokenOnly}`
-    sourceStatusLine.append(said)
+function setSourceStatus(message: Text, spokenOnly: Text = ''): void {
+  show(sourceStatusLine, () => paintStatus(sourceStatusLine, message, spokenOnly))
+}
+
+/** Writes a status line: the shown words, then the spoken-only tail. */
+function paintStatus(line: HTMLParagraphElement, message: Text, spokenOnly: Text): void {
+  line.textContent = textOf(message)
+  // For a message whose detail is already on screen beside it: the live region
+  // still has to say it, and must not print it a second time.
+  const said = textOf(spokenOnly)
+  if (said) {
+    const spoken = document.createElement('span')
+    spoken.className = 'visually-hidden'
+    spoken.textContent = ` ${said}`
+    line.append(spoken)
   }
 }
 
@@ -511,8 +554,8 @@ function revealLaterSteps(
  * step leads with what is true now — the re-check, or the outcome.
  */
 function withdrawVerdict(): void {
-  preflightReport.replaceChildren()
-  audioWarnings.replaceChildren()
+  clear(preflightReport)
+  clear(audioWarnings)
 }
 
 /**
@@ -549,36 +592,30 @@ onUncaughtError(showError)
 // --- Capability checks -----------------------------------------------------
 
 // Each value a line a person reads as a line, so it starts with a capital (VH-124).
-renderCheck('secure', 'Secure connection (needed for storage access)', 'pending', 'Checking')
-renderCheck('webcodecs', 'Video processing in the browser (WebCodecs)', 'pending', 'Checking')
-renderCheck('h264', 'Video format the tool makes (H.264)', 'pending', 'Checking')
-renderCheck('aac', 'Sound format the tool makes (AAC)', 'pending', 'Checking')
-renderCheck('opfs', 'Private working storage', 'pending', 'Checking')
-renderCheck('worker', 'Background processing', 'pending', 'Checking')
+const checkValue = (key: keyof ReturnType<typeof t>['systemCheck']['values']) => (): string => {
+  const value = t().systemCheck.values[key]
+  return typeof value === 'string' ? value : ''
+}
+for (const id of ['secure', 'webcodecs', 'h264', 'aac', 'opfs', 'worker'] as const) {
+  renderCheck(id, 'pending', checkValue('checking'))
+}
 
 renderCheck(
   'secure',
-  'Secure connection (needed for storage access)',
   window.isSecureContext ? 'pass' : 'fail',
-  window.isSecureContext ? 'Available' : 'Not available',
+  checkValue(window.isSecureContext ? 'available' : 'notAvailable'),
 )
 
 const hasWebCodecs =
   typeof globalThis.VideoEncoder !== 'undefined' && typeof globalThis.VideoDecoder !== 'undefined'
 renderCheck(
   'webcodecs',
-  'Video processing in the browser (WebCodecs)',
   hasWebCodecs ? 'pass' : 'fail',
-  hasWebCodecs ? 'Supported' : 'Not supported',
+  checkValue(hasWebCodecs ? 'supported' : 'notSupported'),
 )
 
 const hasOpfs = typeof navigator.storage?.getDirectory === 'function'
-renderCheck(
-  'opfs',
-  'Private working storage',
-  hasOpfs ? 'pass' : 'fail',
-  hasOpfs ? 'Available' : 'Not available',
-)
+renderCheck('opfs', hasOpfs ? 'pass' : 'fail', checkValue(hasOpfs ? 'available' : 'notAvailable'))
 
 /**
  * Asks the browser, before any file is chosen, whether it can make the output
@@ -592,8 +629,8 @@ renderCheck(
  */
 async function checkBootEncodeSupport(): Promise<{ h264: boolean; aac: boolean }> {
   if (!hasWebCodecs) {
-    renderCheck('h264', 'Video format the tool makes (H.264)', 'fail', 'Not supported')
-    renderCheck('aac', 'Sound format the tool makes (AAC)', 'fail', 'Not supported')
+    renderCheck('h264', 'fail', checkValue('notSupported'))
+    renderCheck('aac', 'fail', checkValue('notSupported'))
     return { h264: false, aac: false }
   }
   const best = PRESETS.best
@@ -616,16 +653,10 @@ async function checkBootEncodeSupport(): Promise<{ h264: boolean; aac: boolean }
   const aac = stereo && mono
   renderCheck(
     'h264',
-    'Video format the tool makes (H.264)',
     video.supported ? 'pass' : 'fail',
-    video.supported ? 'Supported' : 'Not supported',
+    checkValue(video.supported ? 'supported' : 'notSupported'),
   )
-  renderCheck(
-    'aac',
-    'Sound format the tool makes (AAC)',
-    aac ? 'pass' : 'warn',
-    aac ? 'Supported' : 'Not supported — a video with sound cannot be made here',
-  )
+  renderCheck('aac', aac ? 'pass' : 'warn', checkValue(aac ? 'supported' : 'aacNotSupported'))
   return { h264: video.supported, aac }
 }
 
@@ -764,7 +795,7 @@ worker.addEventListener('error', (event) => {
     origin: 'error',
     thread: 'worker',
   })
-  renderCheck('worker', 'Background processing', 'fail', 'Failed to start')
+  renderCheck('worker', 'fail', checkValue('failedToStart'))
 })
 
 async function checkWorker(): Promise<void> {
@@ -773,7 +804,7 @@ async function checkWorker(): Promise<void> {
   if (reply.kind !== 'pong') throw new Error(`Unexpected reply to ping: ${reply.kind}`)
   const roundTripMs = Math.round(performance.now() - startedAt)
   workerReady = true
-  renderCheck('worker', 'Background processing', 'pass', `Ready in ${roundTripMs} ms`)
+  renderCheck('worker', 'pass', () => t().systemCheck.values.readyIn({ ms: roundTripMs }))
   log.info('boot', 'worker round-trip complete', { roundTripMs, workerBootMs: reply.workerBootMs })
 }
 
@@ -807,14 +838,29 @@ function settleStartup(workerStarted: boolean, h264: boolean): void {
   startup = blocked === null ? 'ready' : 'blocked'
   applyControlLock()
   // No resting line: the heading and the one filled button already say
-  // what to do (VH-124). A block is said here, under the control it shuts.
-  setSourceStatus(blocked ?? '')
+  // what to do (VH-124). A block is said here, under the control it shuts —
+  // composed again, from the same flags, after a change of language.
+  setSourceStatus(
+    blocked === null
+      ? ''
+      : () =>
+          startupFailureText(
+            {
+              secureContext: window.isSecureContext,
+              webCodecs: hasWebCodecs,
+              h264,
+              workingStore: hasOpfs,
+              workerStarted,
+            },
+            blockContextFor(navigator.userAgent),
+          ) ?? '',
+  )
 }
 
 void Promise.all([checkWorker(), bootEncodeSupport])
   .then(([, encode]) => settleStartup(true, encode.h264))
   .catch(async (cause: unknown) => {
-    renderCheck('worker', 'Background processing', 'fail', 'No response')
+    renderCheck('worker', 'fail', checkValue('noResponse'))
     // The encode check answers on its own, whatever became of the worker.
     settleStartup(false, (await bootEncodeSupport.catch(() => ({ h264: false }))).h264)
     recordUncaught({
@@ -874,16 +920,15 @@ fileInput.addEventListener('change', () => {
   fileInput.classList.add('file-input--chosen')
   // A bundle taken now must not describe the file before this one.
   resetDiagnosticsContext('inspecting')
-  setSourceStatus('Reading the video…')
+  setSourceStatus(() => t().choose.reading)
   // Whatever the Create step last said was about the previous file's job.
   setStatus('')
   offerStop(null)
   syncCreateEmphasis()
-  document.title = outcomeTitle('none')
-  sourceReport.replaceChildren()
-  sourceBlock.replaceChildren()
-  preflightReport.replaceChildren()
-  audioWarnings.replaceChildren()
+  setTitle('none')
+  clear(sourceReport)
+  clear(sourceBlock)
+  withdrawVerdict()
   // Hidden, not replaced: the Start and Cancel buttons live for the whole
   // session now, and emptying this container would throw them away (VH-36).
   processActions.hidden = true
@@ -896,7 +941,7 @@ fileInput.addEventListener('change', () => {
   // The trim described the previous video. Nothing of it is kept, and a
   // re-check still waiting to run for it must not (Codex review).
   cancelTrimRecheck()
-  clearTrim('Reading the video…')
+  clearTrim('reading')
   // Kept when there is something to lose: the result panel describes a video
   // that already exists, and the source panel describes what was just chosen.
   // Clearing it here removed the only route to a finished file (VH-56).
@@ -910,7 +955,7 @@ fileInput.addEventListener('change', () => {
   if (unsavedResult) {
     renderResult(unsavedResult)
   } else {
-    processResult.replaceChildren()
+    clear(processResult)
   }
 
   void (async () => {
@@ -920,10 +965,19 @@ fileInput.addEventListener('change', () => {
       // longer shows must not reach the screen, whatever order it arrived in.
       if (!current()) return
       if (reply.kind === 'inspected') {
-        renderSourceReport(sourceReport, reply.report)
+        const { report } = reply
+        // Painted again for a change of language with its disclosure as the
+        // user left it, open or shut (VH-105).
+        show(sourceReport, () => {
+          const open = sourceReport.querySelector('details')?.open ?? false
+          renderSourceReport(sourceReport, report, { open })
+        })
         // The losses panel is on screen beside this; the live region says it
         // too, caption consequence included (U-10, A-14).
-        setSourceStatus(summarise(reply.report), lossesSpoken(buildLosses(reply.report)))
+        setSourceStatus(
+          () => summarise(report),
+          () => lossesSpoken(buildLosses(report)),
+        )
         inspectedFile = file
         inspectedReport = reply.report
         resetTrim(file, reply.report.durationSeconds)
@@ -936,10 +990,10 @@ fileInput.addEventListener('change', () => {
       }
       if (reply.kind === 'failed') {
         const failure = failureFor(reply)
-        renderSourceError(sourceReport, failure)
+        showFailure(sourceReport, failure)
         // The failure box beside this says it; the line only speaks it (VH-124).
-        setSourceStatus('', failureSentence(failure))
-        clearTrim(TRIM_NOTHING_TO_TRIM)
+        setSourceStatus('', () => failureSentence(failureWords(failure)))
+        clearTrim('unreadable')
         setDiagnosticsContext({ stage: 'failed' })
         return
       }
@@ -950,13 +1004,10 @@ fileInput.addEventListener('change', () => {
       throw new Error(`Unexpected reply to inspect: ${reply.kind}`)
     } catch (cause) {
       if (!current()) return
-      const failure = failureText(
-        'unreadable-source',
-        'Reading this file took longer than expected, or the tool ran into a problem.',
-      )
-      renderSourceError(sourceReport, failure)
-      setSourceStatus('', failureSentence(failure))
-      clearTrim(TRIM_NOTHING_TO_TRIM)
+      const failure: Failure = { code: 'unreadable-source', reason: 'took-too-long' }
+      showFailure(sourceReport, failure)
+      setSourceStatus('', () => failureSentence(failureWords(failure)))
+      clearTrim('unreadable')
       log.error('ui', 'inspection request failed', {
         reason: cause instanceof Error ? cause.message : String(cause),
       })
@@ -982,14 +1033,14 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
   const trim = currentTrim()
   if ('problem' in trim) {
     offerStop(null)
-    setStatus('Put the start and end times right in step 2 to continue.')
+    setStatus(() => t().trim.correctToContinue)
     return
   }
   const keptRange = trim.range
   // A failed check's box, or a stale verdict, must not sit above "Checking…"
   // (VH-124, pre-work defect 3).
   withdrawVerdict()
-  setStatus('Checking this video against your device…')
+  setStatus(() => t().status.checking)
   offerStop('check')
   setDiagnosticsContext({ stage: 'preflighting' })
 
@@ -1025,17 +1076,17 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
         estimatedSeconds: reply.summary.probe.estimatedSeconds,
       })
       const context = blockContextFor(navigator.userAgent, keptRange !== null)
-      const announcement = preflightAnnouncement(reply.summary, context)
+      const { summary } = reply
       setDiagnosticsContext({
-        stage: reply.summary.verdict.outcome === 'block' ? 'blocked' : 'ready',
-        capability: reply.summary,
+        stage: summary.verdict.outcome === 'block' ? 'blocked' : 'ready',
+        capability: summary,
       })
-      if (reply.summary.verdict.outcome === 'block') {
+      if (summary.verdict.outcome === 'block') {
         // Said at step 1, beside the file, and steps 2 to 5 withdrawn: a
         // file that cannot be made must not be offered a trim and a closing
         // first (U-05). No sound notes either — "none of these stop you
         // continuing" under a block was the contradiction U-05 found.
-        renderPreflight(sourceBlock, reply.summary, context)
+        show(sourceBlock, () => renderPreflight(sourceBlock, summary, context))
         withdrawVerdict()
         setStatus('')
         // Two exceptions to withdrawing the steps (Codex review of VH-108).
@@ -1044,18 +1095,16 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
         // the re-check they trigger lands here again. And step 5 holds the
         // previous video's Save while one is unsaved: hiding it hid the only
         // way to that file.
-        const recoverable = setupStepsResolve(reply.summary.verdict)
+        const recoverable = setupStepsResolve(summary.verdict)
         revealLaterSteps({ setup: recoverable, create: recoverable || unsavedResult !== null })
         // The block panel says it; the line only speaks it (pre-work defect 1).
-        setSourceStatus('', announcement.spokenOnly)
+        setSourceStatus('', () => preflightAnnouncement(summary, context).spokenOnly)
         if (recoverable) {
           // Too little storage: the way out is above, and step 5 says so
           // rather than standing empty, with a Check again for the "free
           // some space" route that changes nothing on the page (Codex
           // critique).
-          setStatus(
-            `Keep less of the video, choose ${PRESETS.smaller.label}, or free some space, then press Check again.`,
-          )
+          setStatus(() => t().status.storageWayOut({ smaller: t().preset.labels.smaller }))
           offerStop('check-again')
         }
         // Stop the check has gone; the block is said beside the file.
@@ -1066,40 +1115,35 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
       // line goes back to the read summary it carried before the block, and
       // says so once (pre-work defect 2).
       if (sourceBlock.childElementCount > 0 && inspectedReport) {
-        setSourceStatus(summarise(inspectedReport))
+        const restored = inspectedReport
+        setSourceStatus(() => summarise(restored))
       }
-      sourceBlock.replaceChildren()
+      clear(sourceBlock)
       revealLaterSteps()
-      renderPreflight(preflightReport, reply.summary, context)
-      renderWarnings(audioWarnings, reply.summary.audioWarnings, {
-        heading: 'Worth knowing about the sound',
-      })
-      setStatus(
-        announcement.shown,
-        spoken(
-          announcement.spokenOnly,
-          warningsSpoken('Worth knowing about the sound', reply.summary.audioWarnings),
-        ),
+      show(preflightReport, () => renderPreflight(preflightReport, summary, context))
+      show(audioWarnings, () =>
+        renderWarnings(audioWarnings, summary.audioWarnings, { heading: t().warnings.soundHeading }),
       )
-      {
-        showProcessControls(
-          file,
-          reply.summary.contentClass,
-          keptRange,
-          reply.summary.verdict.outcome === 'discourage',
-        )
-      }
+      setStatus(
+        () => preflightAnnouncement(summary, context).shown,
+        () =>
+          spoken(
+            preflightAnnouncement(summary, context).spokenOnly,
+            warningsSpoken(t().warnings.soundHeading, summary.audioWarnings),
+          ),
+      )
+      showProcessControls(file, summary.contentClass, keptRange, summary.verdict.outcome === 'discourage')
       // Stop the check has gone; what it was holding up takes focus.
       fromStop(acknowledgeButton.hidden ? startButton : acknowledgeButton)
       return
     }
     if (reply.kind === 'failed') {
       const failure = failureFor(reply)
-      renderSourceError(preflightReport, failure)
+      showFailure(preflightReport, failure)
       // The status line sits beside this now (VH-88), and left alone it went
       // on saying "Checking this video against your device…" under an error.
       // The box says what; the line speaks it (VH-124).
-      setStatus('', failureSentence(failure))
+      setStatus('', () => failureSentence(failureWords(failure)))
       fromStop(checkAgainButton.hidden ? fileInput : checkAgainButton)
       return
     }
@@ -1110,8 +1154,9 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
     if (!current()) return
     const fromStop = focusHeldBy([stopCheckButton])
     offerStop('check-again')
-    renderSourceError(preflightReport, failureText('check-failed'))
-    setStatus('', failureSentence(failureText('check-failed')))
+    const failure: Failure = { code: 'check-failed' }
+    showFailure(preflightReport, failure)
+    setStatus('', () => failureSentence(failureWords(failure)))
     fromStop(checkAgainButton)
     log.error('ui', 'preflight request failed', {
       reason: cause instanceof Error ? cause.message : String(cause),
@@ -1158,17 +1203,16 @@ let trimEnd = 0
  * was typed, which re-enabled Create on a start the user never chose (U-17).
  * A field keeps its own text and its own error until that field is put right.
  */
-const trimFieldProblems = new Map<HTMLInputElement, string>()
+const trimFieldProblems = new Map<HTMLInputElement, TrimProblem>()
 /** The preview's object URL, revoked when the file changes. */
 let previewUrl: string | null = null
 let trimRecheck: ReturnType<typeof setTimeout> | null = null
 /**
- * What the step says when it has no video to trim — while one is read, or
- * when it could not be — in place of times that belong to another video.
- * `null` once a video is ready.
+ * Why the step has no video to trim — one is being read, or it could not be
+ * — said in place of times that belong to another video, in whatever
+ * language the page is in when it is painted. `null` once a video is ready.
  */
-let trimNotice: string | null = null
-const TRIM_NOTHING_TO_TRIM = 'There is no video to trim: that file could not be read.'
+let trimNotice: 'reading' | 'unreadable' | null = null
 
 /** Stops a device check that is waiting to run for a trim that no longer applies. */
 function cancelTrimRecheck(): void {
@@ -1177,7 +1221,7 @@ function cancelTrimRecheck(): void {
 }
 
 /** The range to send, `null` for the whole video, or why the trim cannot be used. */
-function currentTrim(): { readonly range: KeptRange | null } | { readonly problem: string } {
+function currentTrim(): { readonly range: KeptRange | null } | { readonly problem: TrimProblem } {
   if (trimNotice !== null) return { range: null }
   // The start's problem first, in reading order.
   for (const field of [trimStartField, trimEndField]) {
@@ -1200,7 +1244,7 @@ function clearTrimPreview(): void {
  * No video to trim: nothing from the last one shown, every control down, and
  * the step says why — reading, or unreadable.
  */
-function clearTrim(notice: string): void {
+function clearTrim(notice: 'reading' | 'unreadable'): void {
   clearTrimPreview()
   trimPreviewNote.hidden = true
   trimNotice = notice
@@ -1243,7 +1287,7 @@ function renderTrim(): void {
     trimEndField.value = ''
     for (const field of [trimStartField, trimEndField]) field.removeAttribute('aria-invalid')
     for (const line of [trimStartError, trimEndError]) line.hidden = true
-    trimResult.textContent = trimNotice
+    trimResult.textContent = trimNotice === 'reading' ? t().trim.reading : t().trim.unreadable
     trimClear.disabled = true
     trimTrack.style.setProperty('--start-fraction', '0')
     trimTrack.style.setProperty('--end-fraction', '0')
@@ -1259,12 +1303,19 @@ function renderTrim(): void {
   trimTrack.style.setProperty('--end-fraction', String(fraction(trimEnd)))
   trimStartRange.classList.toggle('range-input--on-top', fraction(trimStart) > 0.5)
 
-  // A field the user is correcting keeps what they typed.
-  if (!trimFieldProblems.has(trimStartField)) trimStartField.value = formatTrimTime(trimStart)
-  if (!trimFieldProblems.has(trimEndField)) trimEndField.value = formatTrimTime(trimEnd)
+  // A field the user is correcting keeps what they typed, and so does one
+  // they are typing in now (a repaint must not reach under a draft).
+  for (const [field, seconds] of [
+    [trimStartField, trimStart],
+    [trimEndField, trimEnd],
+  ] as const) {
+    if (!trimFieldProblems.has(field) && document.activeElement !== field) {
+      field.value = formatTrimTime(seconds)
+    }
+  }
 
   const trim = currentTrim()
-  const problem = 'problem' in trim ? trim.problem : null
+  const problem = 'problem' in trim ? trimProblemText(trim.problem) : null
   // Each field's own problem beside it, so a second bad time is not hidden
   // behind the first; a problem with the range as a whole — the end before
   // the start, too little kept — marks both fields and is said under End
@@ -1274,7 +1325,13 @@ function renderTrim(): void {
     [trimStartField, trimStartError],
     [trimEndField, trimEndError],
   ] as const) {
-    const own = trimFieldProblems.get(field) ?? (field === trimEndField ? rangeProblem : null)
+    const fieldProblem = trimFieldProblems.get(field)
+    const own =
+      fieldProblem !== undefined
+        ? trimProblemText(fieldProblem)
+        : field === trimEndField
+          ? rangeProblem
+          : null
     line.textContent = own ?? ''
     line.hidden = own === null
     // A problem with the range is shown once, under End, and described to
@@ -1296,9 +1353,7 @@ function renderTrim(): void {
     problem !== null
       ? ''
       : trimSummary('range' in trim ? trim.range : null, trimDuration) +
-        (trimDuration < KEPT_MIN_SECONDS
-          ? ` It is shorter than ${KEPT_MIN_SECONDS} seconds, so it cannot be trimmed.`
-          : '')
+        (trimDuration < KEPT_MIN_SECONDS ? ` ${t().trim.tooShort({ seconds: KEPT_MIN_SECONDS })}` : '')
   trimClear.disabled =
     jobInFlight || saveInFlight || (problem === null && 'range' in trim && trim.range === null)
 }
@@ -1326,10 +1381,10 @@ function commitTrim(): void {
   withdrawVerdict()
   if ('problem' in currentTrim()) {
     offerStop(null)
-    setStatus('Put the start and end times right in step 2 to continue.')
+    setStatus(() => t().trim.correctToContinue)
     return
   }
-  setStatus('Checking this video against your device…')
+  setStatus(() => t().status.checking)
   // Stoppable from now, not from when the pause ends (A-11).
   offerStop('check')
   trimRecheck = setTimeout(() => {
@@ -1445,7 +1500,11 @@ announceProgressBox.addEventListener('change', () => {
   writeAnnounceProgress(localStore, announceProgressBox.checked)
 })
 
+/** The last progress report, so a change of language can write the stage line again without announcing it. */
+let lastProgress: { readonly stage: PipelineStage; readonly fraction: number } | null = null
+
 function onStage(stage: PipelineStage, fraction: number): void {
+  lastProgress = { stage, fraction }
   const view = progressView(stage, fraction, progressMemo, announceProgressBox.checked)
   progressMemo = view.memo
   // The stage and the percentage beside the bar, every report; the live
@@ -1464,7 +1523,19 @@ function onStage(stage: PipelineStage, fraction: number): void {
   processProgressLabel.textContent = view.shown
   processProgressLabel.hidden = false
   processProgress.hidden = false
-  document.title = view.title
+  setTitle('stage')
+}
+
+/** What the tab title is about, so it can be written again in another language. */
+let titleOf: 'none' | 'ready' | 'failed' | 'cancelled' | 'stage' = 'none'
+
+/** Writes the tab title: the job's outcome, or the running stage. */
+function setTitle(of: typeof titleOf): void {
+  titleOf = of
+  document.title =
+    of === 'stage' && lastProgress
+      ? progressView(lastProgress.stage, lastProgress.fraction, progressMemo, false).title
+      : outcomeTitle(of === 'stage' ? 'none' : of)
 }
 
 /**
@@ -1545,7 +1616,7 @@ function withdrawDiscardQuestion(): void {
   if (!discardAsked) return
   discardAsked = false
   if (unsavedResult) renderResult(unsavedResult)
-  else processResult.replaceChildren()
+  else clear(processResult)
   syncCreateNote()
 }
 
@@ -1565,12 +1636,10 @@ let saveInFlight = false
 const startButton = document.createElement('button')
 startButton.type = 'button'
 startButton.className = 'button'
-startButton.textContent = 'Create the video'
 
 const cancelButton = document.createElement('button')
 cancelButton.type = 'button'
 cancelButton.className = 'button button--secondary'
-cancelButton.textContent = 'Cancel'
 cancelButton.hidden = true
 
 /**
@@ -1585,7 +1654,6 @@ cancelButton.hidden = true
 const acknowledgeButton = document.createElement('button')
 acknowledgeButton.type = 'button'
 acknowledgeButton.className = 'button button--secondary'
-acknowledgeButton.textContent = 'Continue anyway'
 acknowledgeButton.hidden = true
 acknowledgeButton.addEventListener('click', () => {
   acknowledgeButton.hidden = true
@@ -1602,18 +1670,32 @@ processActions.append(acknowledgeButton, startButton, cancelButton)
  * line that says it is happening. A stopped check is offered again, because
  * nothing else re-runs it for the same file and trim.
  */
-function stopButton(label: string): HTMLButtonElement {
+function stopButton(): HTMLButtonElement {
   const button = document.createElement('button')
   button.type = 'button'
   button.className = 'button button--secondary'
-  button.textContent = label
   button.hidden = true
   return button
 }
-const stopCheckButton = stopButton('Stop the check')
-const checkAgainButton = stopButton('Check again')
-const stopSaveButton = stopButton('Stop saving')
+const stopCheckButton = stopButton()
+const checkAgainButton = stopButton()
+const stopSaveButton = stopButton()
 stopActions.append(stopCheckButton, checkAgainButton, stopSaveButton)
+
+/**
+ * The labels of the buttons built once and kept for the session, written in
+ * the current language — at boot, and again on a change of language.
+ */
+function labelButtons(): void {
+  const { create } = t()
+  startButton.textContent = create.create
+  cancelButton.textContent = create.cancel
+  acknowledgeButton.textContent = create.continueAnyway
+  stopCheckButton.textContent = create.stopCheck
+  checkAgainButton.textContent = create.checkAgain
+  stopSaveButton.textContent = create.stopSaving
+}
+labelButtons()
 
 /**
  * What the row offers for the device check. Kept apart from the save's stop:
@@ -1647,7 +1729,7 @@ stopCheckButton.addEventListener('click', () => {
   cancelTrimRecheck()
   setDiagnosticsContext({ stage: 'inspected' })
   // Check again is beside it, and explains itself (VH-124).
-  setStatus('Check stopped.')
+  setStatus(() => t().status.checkStopped)
   offerStop('check-again')
   // The control under focus has just gone; its replacement takes it.
   checkAgainButton.focus()
@@ -1670,7 +1752,7 @@ stopSaveButton.addEventListener('click', () => {
   if (!saveStop) return
   stopSavePressedWithFocus = document.activeElement === stopSaveButton
   stopSaveButton.disabled = true
-  setStatus('Stopping the save…')
+  setStatus(() => t().status.stoppingSave)
   saveStop.abort()
 })
 
@@ -1722,7 +1804,7 @@ function setJobInFlight(running: boolean): void {
   startButton.hidden = running || !acknowledgeButton.hidden
   syncCreateNote()
   // Spec 7.5: visible for the whole job, said once at its start (`beginJob`).
-  jobNotice.textContent = running ? JOB_START_NOTICE : ''
+  jobNotice.textContent = running ? t().progress.jobNotice : ''
   jobNotice.hidden = !running
   announceField.hidden = !running
   applyControlLock()
@@ -1760,11 +1842,7 @@ function setSaveInFlight(saving: boolean): void {
 /** Applies whichever of the two locks is active. */
 function applyControlLock(): void {
   const locked = jobInFlight || saveInFlight
-  const lockText = jobInFlight
-    ? 'Locked while your video is being made.'
-    : saveInFlight
-      ? 'Locked while your video is being saved.'
-      : ''
+  const lockText = jobInFlight ? t().create.lockedMaking : saveInFlight ? t().create.lockedSaving : ''
   for (const note of lockNotes) {
     note.textContent = lockText
     note.hidden = lockText === ''
@@ -1812,25 +1890,23 @@ startButton.addEventListener('click', () => {
 function confirmDiscardThenStart(): void {
   const asked = unsavedResult
   if (!asked) return
-  processResult.replaceChildren()
   discardAsked = true
   syncCreateNote()
 
-  const question = asked.delivered
-    ? 'Your download may still be finishing. Starting again will discard the video you just made.'
-    : 'You have not saved the video you just made. Starting again will discard it.'
+  const question = (): string => (asked.delivered ? t().discard.delivered : t().discard.unsaved)
 
   // The same record the result shows, so the question names what would go —
   // outcome included: a fade that became a cut is a cut here too (Codex
   // review of VH-107).
-  const differs = closingOutcomeText(asked.record.closing, asked.outcome)
-  const summary = differs === null ? jobSummaryText(asked.record) : `${jobSummaryText(asked.record)} ${differs}`
+  const summary = (): string => {
+    const differs = closingOutcomeText(asked.record.closing, asked.outcome)
+    return differs === null ? jobSummaryText(asked.record) : `${jobSummaryText(asked.record)} ${differs}`
+  }
 
-  const panel = notification({
-    kind: 'warning',
-    title: 'This video is not saved yet',
-    lines: [question, summary],
-  })
+  // Built once; painted in the current language now and on a change of
+  // language, with focus kept where it is (VH-105).
+  const panel = notification({ kind: 'warning', title: '', lines: ['', ''] })
+  const [title, questionLine, summaryLine] = panel.querySelectorAll('p')
 
   // Carbon's danger button: the one destructive action on the page looks
   // like one, and does not take focus by default — the question does, so
@@ -1838,7 +1914,6 @@ function confirmDiscardThenStart(): void {
   const discard = document.createElement('button')
   discard.type = 'button'
   discard.className = 'button button--danger'
-  discard.textContent = 'Discard it and start again'
   discard.addEventListener('click', () => {
     // The same gate as Create: a file the verdict stands for, and nothing in
     // flight. The question is retired by every change that drops the gate,
@@ -1852,7 +1927,6 @@ function confirmDiscardThenStart(): void {
   const keep = document.createElement('button')
   keep.type = 'button'
   keep.className = 'button button--secondary'
-  keep.textContent = 'Keep it'
   keep.addEventListener('click', () => {
     // Keep it removes itself; the result it restores takes focus.
     const fromKeep = focusHeldBy([keep])
@@ -1864,17 +1938,17 @@ function confirmDiscardThenStart(): void {
   actions.append(discard, keep)
   panel.append(actions)
   panel.tabIndex = -1
-  processResult.append(panel)
+  show(processResult, () => {
+    if (title) title.textContent = t().discard.title
+    if (questionLine) questionLine.textContent = question()
+    if (summaryLine) summaryLine.textContent = summary()
+    discard.textContent = t().create.discard
+    keep.textContent = t().create.keep
+    if (!panel.isConnected) processResult.replaceChildren(panel)
+  })
   // The panel says it; the live region only speaks it.
-  setStatus('', `This video is not saved yet. ${question}`)
+  setStatus('', () => t().discard.spoken({ question: question() }))
   panel.focus()
-}
-
-/** The failure just rendered under Create, made focusable so focus can land on it. */
-function failureBlock(): HTMLElement | null {
-  const block = processResult.querySelector<HTMLElement>('.notification')
-  if (block) block.tabIndex = -1
-  return block
 }
 
 /** Forgets the retained result, freeing whatever the save route still held. */
@@ -1913,7 +1987,7 @@ function beginJob(file: File): void {
   savedResultFor = null
   // Create, or the question's Discard, is about to go: Cancel takes focus.
   const fromCreate = focusHeldBy([startButton, processResult])
-  processResult.replaceChildren()
+  clear(processResult)
   discardAsked = false
   // A running job always shows its row — Cancel lives in it (U-02).
   processActions.hidden = false
@@ -1961,7 +2035,7 @@ function beginJob(file: File): void {
   // Said once, at the start, whatever the estimate (spec 7.5, A-03); the
   // stages follow in the same live region. Spoken only: the notice is on
   // screen beneath the bar for the whole job.
-  setStatus('', `Creating your video. ${JOB_START_NOTICE}`)
+  setStatus('', () => t().status.creating({ notice: t().progress.jobNotice }))
   // The choices the job was started with.
   setDiagnosticsContext({
     stage: 'processing',
@@ -1989,58 +2063,57 @@ function beginJob(file: File): void {
       // (U-04). The output warnings below take the sound notes' place.
       withdrawVerdict()
       if (reply.kind === 'processed') {
+        const outcome: ClosingOutcome = {
+          applied: reply.brandingApplied.closing,
+          mode: reply.closingModeApplied,
+          sound: reply.audioIncluded,
+          opening: reply.brandingApplied.opening,
+        }
         handTo = renderResult({
           file: reply.file,
           jobId: reply.jobId,
           source: file,
           delivered: false,
           record,
-          outcome: {
-            applied: reply.brandingApplied.closing,
-            mode: reply.closingModeApplied,
-            sound: reply.audioIncluded,
-            opening: reply.brandingApplied.opening,
-          },
+          outcome,
           release: () => {},
         })
-        renderWarnings(audioWarnings, reply.outputWarnings, {
-          heading: 'Worth knowing about the finished video',
-        })
+        const { outputWarnings } = reply
+        show(audioWarnings, () =>
+          renderWarnings(audioWarnings, outputWarnings, { heading: t().warnings.finishedHeading }),
+        )
         // 100% is said here and nowhere earlier: the file has passed its
         // checks (U-07).
         processProgress.value = 1
-        processProgressText.textContent = 'Ready'
+        processProgressText.textContent = t().progress.ready
+        lastProgress = null
         // What the result and its warnings show is said too (U-10): a closing
         // that did not land as chosen, and each output warning.
         // The result box says it; the line speaks it (VH-124).
-        setStatus(
-          '',
+        setStatus('', () =>
           spoken(
-            'Your video is ready.',
-            closingOutcomeText(record.closing, {
-              applied: reply.brandingApplied.closing,
-              mode: reply.closingModeApplied,
-            }),
-            warningsSpoken('Worth knowing about the finished video', reply.outputWarnings),
+            t().status.ready,
+            closingOutcomeText(record.closing, outcome),
+            warningsSpoken(t().warnings.finishedHeading, outputWarnings),
           ),
         )
-        document.title = outcomeTitle('ready')
+        setTitle('ready')
         setDiagnosticsContext({ stage: 'finished' })
       } else if (reply.kind === 'cancelled') {
         // Nothing was written anywhere the user can see, and the source is
         // untouched — say so rather than leaving them wondering.
-        setStatus('Cancelled. Nothing was saved, and your original file is unchanged.')
+        setStatus(() => t().status.cancelled)
         handTo = startButton
-        document.title = outcomeTitle('cancelled')
+        setTitle('cancelled')
         setDiagnosticsContext({ stage: 'idle' })
       } else if (reply.kind === 'failed') {
         const failure = failureFor(reply)
-        renderSourceError(processResult, failure)
+        handTo = showFailure(processResult, failure)
         // The failure's next step is announced, not only shown (U-10); the
         // box says what, and the line speaks it (VH-124).
-        setStatus('', `The video could not be created. ${failureSentence(failure)}`)
-        handTo = failureBlock()
-        document.title = outcomeTitle('failed')
+        setStatus('', () => t().status.couldNotCreate({ sentence: failureSentence(failureWords(failure)) }))
+        handTo.tabIndex = -1
+        setTitle('failed')
         setDiagnosticsContext({ stage: 'failed' })
       }
     })
@@ -2050,11 +2123,11 @@ function beginJob(file: File): void {
       // The watchdog is the only thing that rejects this promise; anything
       // else reaching here threw while the outcome was being shown, and is
       // not the job going quiet.
-      const failure = failureText(cause instanceof WorkerSilenceError ? 'timed-out' : 'unknown')
-      renderSourceError(processResult, failure)
-      setStatus('', `The video could not be created. ${failureSentence(failure)}`)
-      handTo = failureBlock()
-      document.title = outcomeTitle('failed')
+      const failure: Failure = { code: cause instanceof WorkerSilenceError ? 'timed-out' : 'unknown' }
+      handTo = showFailure(processResult, failure)
+      handTo.tabIndex = -1
+      setStatus('', () => t().status.couldNotCreate({ sentence: failureSentence(failureWords(failure)) }))
+      setTitle('failed')
       setDiagnosticsContext({ stage: 'failed' })
       log.error('ui', 'process request failed', {
         reason: cause instanceof Error ? cause.message : String(cause),
@@ -2084,6 +2157,7 @@ function hideProgress(): void {
   processProgress.hidden = true
   processProgressLabel.hidden = true
   processProgressText.hidden = true
+  lastProgress = null
 }
 
 /**
@@ -2126,7 +2200,7 @@ cancelButton.addEventListener('click', () => {
   cancelPressedWithFocus = document.activeElement === cancelButton
   cancelRequested = true
   cancelButton.disabled = true
-  setStatus('Cancelling…')
+  setStatus(() => t().status.cancelling)
   worker.postMessage({ kind: 'cancel', id: nextRequestId++, cancelId: jobCancelId })
 })
 
@@ -2164,41 +2238,60 @@ function showProcessControls(
  *   the next file is being read.
  */
 function renderResult(kept: RetainedResult): HTMLElement {
-  processResult.replaceChildren()
   discardAsked = false
   const { file, jobId, source, record, outcome } = kept
 
-  // Not "Your video is ready": the status line says that, directly above, and
-  // this block also stands on its own later — after "Keep it", or while the
-  // next file is being read — where "ready" would be news about the wrong
-  // thing (VH-88). Once another file has been chosen it is the PREVIOUS
-  // video, and says so: a result sitting unnamed under the next file's
-  // verdict was the wrong lecture saved and published (U-03).
-  const previous = fileInput.files?.[0] !== source
   // VH-22: branding that was asked for but could not be loaded is skipped
   // rather than failing the job, so the result has to say so — and so does a
   // fade or slide that fell back to a cut (U-14). A video whose closing is
   // not the one described, delivered silently, is the failure this prevents.
-  const differs = closingOutcomeText(record.closing, outcome)
   // One success notification (VH-124): the title, the job's own record —
   // fixed when it ended (A-05), since two outputs of one recording can differ
   // in trim, output and closing — a closing that did not land as chosen, the
-  // lifetime, and Save as its action.
-  const heading = notification({
-    kind: 'success',
-    title: `${previous ? 'Previous video' : 'Finished video'} — ${formatFileSize(file.size)}`,
-    lines: [jobSummaryText(record), ...(differs === null ? [] : [differs])],
-  })
+  // lifetime, and Save as its action. Built once here, and its words written
+  // by `paint` below: now, and again on a change of language, without the
+  // Save closure or its state being rebuilt (VH-105).
+  const heading = notification({ kind: 'success', title: '', lines: ['', ''] })
+  const [title, recordLine, differsLine] = heading.querySelectorAll('p')
   // Where focus lands when the job finishes, "Keep it" restores this, or
   // Save is spent (VH-111): what there now is.
   heading.tabIndex = -1
-  processResult.append(heading)
 
   // Spec 7.5: not kept past the tab, and the page says so beside the result.
   // The leave warning catches a reload; it cannot catch a crash or a
   // discarded tab, which is why the sentence is here. Gone once it is saved.
-  const lifetime = body('It is kept here only until you save it or close this tab.')
+  const lifetime = body('')
   heading.append(lifetime)
+  /** Which lifetime sentence stands: until saved, or — after a download — until the next video. */
+  let lifetimeOf: 'unsaved' | 'delivered' = 'unsaved'
+
+  const save = document.createElement('button')
+  save.type = 'button'
+  save.className = 'button'
+  /** Set once the file is out and the scratch has gone; the control is then spent. */
+  let saved = false
+
+  const paint = (): void => {
+    // Not "Your video is ready": the status line says that, directly above,
+    // and this block also stands on its own later — after "Keep it", or
+    // while the next file is being read — where "ready" would be news about
+    // the wrong thing (VH-88). Once another file has been chosen it is the
+    // PREVIOUS video, and says so: a result sitting unnamed under the next
+    // file's verdict was the wrong lecture saved and published (U-03).
+    const previous = fileInput.files?.[0] !== source
+    const size = formatFileSize(file.size)
+    if (title) title.textContent = previous ? t().result.previous({ size }) : t().result.finished({ size })
+    if (recordLine) recordLine.textContent = jobSummaryText(record)
+    const differs = closingOutcomeText(record.closing, outcome)
+    if (differsLine) {
+      differsLine.textContent = differs ?? ''
+      differsLine.hidden = differs === null
+    }
+    lifetime.textContent = lifetimeOf === 'unsaved' ? t().result.lifetime : t().result.lifetimeDelivered
+    save.textContent = saved ? t().create.saved : t().create.save
+    if (!heading.isConnected) processResult.replaceChildren(heading)
+  }
+  show(processResult, paint)
 
   // Retained until the user has it somewhere. Everything that would destroy it
   // now has to go through `unsavedResult` first (VH-56).
@@ -2209,12 +2302,6 @@ function renderResult(kept: RetainedResult): HTMLElement {
   unsavedResult = unsavedResult?.jobId === jobId ? unsavedResult : kept
   updateLeaveWarning()
 
-  const save = document.createElement('button')
-  save.type = 'button'
-  save.className = 'button'
-  save.textContent = 'Save the video'
-  /** Set once the file is out and the scratch has gone; the control is then spent. */
-  let saved = false
   save.addEventListener('click', () => {
     if (saved) return
     // Noted before Save disables itself, which can drop focus to the body.
@@ -2225,7 +2312,7 @@ function renderResult(kept: RetainedResult): HTMLElement {
     setSaveInFlight(true)
     // A multi-gigabyte save streams for a while and used to say nothing at
     // all, which is the same silence VH-38 established means "wedged".
-    setStatus('Saving…')
+    setStatus(() => t().status.saving)
     // Declared to the worker as well as locked in the UI: the UI lock is a
     // convention, and a convention is what VH-36 turned out to be.
     worker.postMessage({ kind: 'lease', id: nextRequestId++, jobId, held: true })
@@ -2262,17 +2349,12 @@ function renderResult(kept: RetainedResult): HTMLElement {
           // "Nothing was kept there" would overclaim: an empty file the
           // picker made is removed where the browser allows, and may not be
           // (Codex critique). What is certain is said.
-          setStatus(
-            stop.signal.aborted
-              ? 'Save stopped. The video is still here when you want it.'
-              : 'Not saved. The video is still here when you want it.',
-          )
+          const stopped = stop.signal.aborted
+          setStatus(() => (stopped ? t().status.saveStopped : t().status.notSaved))
           return
         }
         if (result.outcome === 'refused-source') {
-          setStatus(
-            'That is the file you started with. Choose a different name or folder — this tool never changes your original.',
-          )
+          setStatus(() => t().status.refusedSource)
           return
         }
         if (result.outcome === 'downloaded') {
@@ -2293,14 +2375,15 @@ function renderResult(kept: RetainedResult): HTMLElement {
           // may still be fetching it. Where it lands, and what next, are said
           // for this route too (VH-113) — and the result's own lifetime line
           // agrees with it (Codex critique).
-          setStatus(
+          setStatus(() =>
             downloadStatusText(downloadDestinationFor(navigator.userAgent, navigator.maxTouchPoints)),
           )
-          lifetime.textContent = 'It stays here until you start another video or close this tab.'
+          lifetimeOf = 'delivered'
+          paint()
           return
         }
         // A completed write, and what next (U-25, spec 9.1 step 5).
-        setStatus('Saved. Check it where you saved it, then upload it where it is going — or choose another video in step 1.')
+        setStatus(() => t().status.saved)
         // Only once it is safely out: the File reads from OPFS, so releasing
         // the workspace first would hand back something unreadable.
         //
@@ -2316,8 +2399,8 @@ function renderResult(kept: RetainedResult): HTMLElement {
         // Saving again would read a workspace that no longer exists, so the
         // control stops offering it rather than failing when taken up.
         saved = true
-        save.textContent = 'Saved'
         lifetime.remove()
+        paint()
         // The save is over when the file is out, not when the scratch is
         // gone: Stop saving and the locks go now, before the clean-up below,
         // which could otherwise be "stopped" after "Saved." (pre-work
@@ -2337,7 +2420,7 @@ function renderResult(kept: RetainedResult): HTMLElement {
         }
       } catch (cause) {
         fromGone = focusHeldBy([save, stopSaveButton], stopSavePressedWithFocus)
-        setStatus('The video could not be saved. It is still here to try again.')
+        setStatus(() => t().status.saveFailed)
         log.error('ui', 'save failed', {
           reason: cause instanceof Error ? cause.message : String(cause),
         })
@@ -2375,7 +2458,17 @@ const feedbackMessage = required<HTMLTextAreaElement>('#feedback-message')
 const feedbackMessageError = required<HTMLElement>('#feedback-message-error')
 const feedbackDetailsBlock = required<HTMLElement>('#feedback-details')
 const feedbackStatus = required<HTMLElement>('#feedback-status')
-required<HTMLElement>('#feedback-address').textContent = FEEDBACK_ADDRESS
+const feedbackIntro = required<HTMLElement>('#feedback-intro')
+show(feedbackIntro, () => {
+  feedbackIntro.textContent = t().feedback.intro({ address: FEEDBACK_ADDRESS })
+})
+
+/** What the dialog's status line says, as a thunk, so a change of language says it again. */
+function setFeedbackStatus(message: Text): void {
+  show(feedbackStatus, () => {
+    feedbackStatus.textContent = textOf(message)
+  })
+}
 
 /** Every file chosen in this tab, so a report cannot carry any of their names. */
 const chosenFileNames = new Set<string>()
@@ -2415,7 +2508,7 @@ function gatherFeedbackDetails(): void {
 }
 
 function openFeedback(): void {
-  feedbackStatus.textContent = ''
+  setFeedbackStatus('')
   showFeedbackError(false)
   feedbackDialog.showModal()
   // The main thread's lines at once, so the dialog is never empty and Send
@@ -2479,9 +2572,7 @@ feedbackForm.addEventListener('submit', (event) => {
   if (url === null) {
     // A mail client that cuts a long link cuts the message with it, so none
     // is opened (Codex review). The copy route carries every word.
-    feedbackStatus.textContent =
-      `Your message is too long to hand to your email app in one go. Choose "Copy message ` +
-      `and details" and paste them into an email to ${FEEDBACK_ADDRESS}.`
+    setFeedbackStatus(() => t().feedback.tooLong({ address: FEEDBACK_ADDRESS }))
     return
   }
   openMailto(url)
@@ -2489,10 +2580,9 @@ feedbackForm.addEventListener('submit', (event) => {
   log.info('feedback', 'asked the email app to open', { trimmed })
   // "Should have": the page cannot know whether it did, or whether the email
   // was then sent.
-  feedbackStatus.textContent =
-    `Your email app should have opened with your message ready to send. If it did not, ` +
-    `choose "Copy message and details" and paste them into an email to ${FEEDBACK_ADDRESS}.` +
-    (trimmed ? ' Some details did not fit in the email; the copy has them all.' : '')
+  setFeedbackStatus(() =>
+    spoken(t().feedback.opened({ address: FEEDBACK_ADDRESS }), trimmed ? t().feedback.someOmitted : null),
+  )
 })
 
 required<HTMLButtonElement>('#feedback-copy').addEventListener('click', () => {
@@ -2501,13 +2591,12 @@ required<HTMLButtonElement>('#feedback-copy').addEventListener('click', () => {
   void (async () => {
     try {
       await navigator.clipboard.writeText(feedbackText(message, feedbackLines))
-      feedbackStatus.textContent = `Copied. Paste it into an email to ${FEEDBACK_ADDRESS}.`
+      setFeedbackStatus(() => t().feedback.copied({ address: FEEDBACK_ADDRESS }))
     } catch (cause) {
       log.warn('feedback', 'could not copy', {
         reason: cause instanceof Error ? cause.message : String(cause),
       })
-      feedbackStatus.textContent =
-        'Could not copy. Open "What will be sent with it", select the details, and copy them with your message.'
+      setFeedbackStatus(() => t().feedback.couldNotCopy)
     }
   })()
 })

@@ -23,9 +23,19 @@ export interface KeptRange {
   readonly endSeconds: number
 }
 
-/** A range the user cannot have meant, said in words they can act on. */
+/** Why a range was refused. The page translates the reason; the message stays English for the logs (VH-105). */
+export type KeptRangeReason = 'not-a-time' | 'start-after-end' | 'end-before-start' | 'too-short'
+
+/** A range the user cannot have meant, named so the page can say why in words they can act on. */
 export class KeptRangeError extends Error {
   override readonly name = 'KeptRangeError'
+
+  constructor(
+    readonly reason: KeptRangeReason,
+    message: string,
+  ) {
+    super(message)
+  }
 }
 
 /**
@@ -50,7 +60,7 @@ export function normaliseKeptRange(
   if (!requested) return null
   const { startSeconds, endSeconds } = requested
   if (!Number.isFinite(startSeconds) || !Number.isFinite(endSeconds)) {
-    throw new KeptRangeError('The start or end of the video is not a time.')
+    throw new KeptRangeError('not-a-time', 'The start or end of the video is not a time.')
   }
   const start = startSeconds <= KEPT_EDGE_TOLERANCE_SECONDS ? 0 : startSeconds
   const end =
@@ -60,13 +70,13 @@ export function normaliseKeptRange(
   // (Codex review).
   if (start === 0 && end === durationSeconds) return null
   if (start >= durationSeconds) {
-    throw new KeptRangeError('The start is after the end of the video.')
+    throw new KeptRangeError('start-after-end', 'The start is after the end of the video.')
   }
   if (end <= start) {
-    throw new KeptRangeError('The end must come after the start.')
+    throw new KeptRangeError('end-before-start', 'The end must come after the start.')
   }
   if (end - start < KEPT_MIN_SECONDS) {
-    throw new KeptRangeError(`Keep at least ${KEPT_MIN_SECONDS} seconds of the video.`)
+    throw new KeptRangeError('too-short', `Keep at least ${KEPT_MIN_SECONDS} seconds of the video.`)
   }
   return { startSeconds: start, endSeconds: end }
 }

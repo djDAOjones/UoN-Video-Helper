@@ -13,14 +13,9 @@
  */
 
 import type { AudioWarning } from '../audio/warnings'
+import { t } from '../i18n'
 import type { Loss } from './source-panel'
 import { warningText } from './warning-text'
-
-/** "One thing" / "Two things": counted in words, as the verdict heading is. */
-function countThings(count: number): string {
-  const words = ['One thing', 'Two things', 'Three things', 'Four things']
-  return words[count - 1] ?? `${count} things`
-}
 
 /**
  * The losses a read file will suffer, said with their consequences — the
@@ -30,9 +25,10 @@ export function lossesSpoken(losses: readonly Loss[]): string {
   if (losses.length === 0) return ''
   // Counted, not asserted: one of them can be a file that could not be
   // checked, which is not a loss anyone knows of (Codex review).
+  const { announce } = t()
   return [
-    `${countThings(losses.length)} to know about what goes into the new file.`,
-    ...losses.map((loss) => `${loss.title}. ${loss.detail}`),
+    announce.lossesCount({ count: losses.length }),
+    ...losses.map((loss) => announce.lossSaid(loss)),
   ].join(' ')
 }
 
@@ -43,7 +39,7 @@ export function lossesSpoken(losses: readonly Loss[]): string {
  */
 export function warningsSpoken(heading: string, warnings: readonly AudioWarning[]): string {
   if (warnings.length === 0) return ''
-  return `${heading}: ${warnings.map((warning) => warningText(warning).heading).join('; ')}.`
+  return t().warnings.spoken({ heading, titles: warnings.map((warning) => warningText(warning).heading) })
 }
 
 /** Joins the parts of a spoken announcement that have something to say. */

@@ -4,18 +4,28 @@
  *
  * Validation is the worker's own `normaliseKeptRange`, called here too, so
  * the page cannot accept a range the job would refuse or refuse one it would
- * take. Pure, so the wording and the arithmetic are tested in Node.
+ * take. A problem is a descriptor, not a sentence, so the page can keep it
+ * across a change of language and say it again in the new one (VH-105).
+ * Pure, so the wording and the arithmetic are tested in Node.
  */
 
-import { TRIM_KEY_STEP_SECONDS, TRIM_PAGE_STEP_SECONDS } from '../config/trim'
-import { KeptRangeError, normaliseKeptRange, type KeptRange } from '../media/kept-range'
+import { KEPT_MIN_SECONDS, TRIM_KEY_STEP_SECONDS, TRIM_PAGE_STEP_SECONDS } from '../config/trim'
+import { t } from '../i18n'
+import {
+  KeptRangeError,
+  normaliseKeptRange,
+  type KeptRange,
+  type KeptRangeReason,
+} from '../media/kept-range'
 import { formatDuration } from './format'
 
 /**
  * A time as the fields show it: `m:ss.s`, or `h:mm:ss.s` past an hour.
  *
- * Tenths, because that is as fine as anyone types; the handles and "Set start
- * here" keep the exact value, and the field only rounds what it displays.
+ * Latin digits, a colon and a decimal point in every language: the parser's
+ * contract, and what the helper's examples show. Tenths, because that is as
+ * fine as anyone types; the handles and "Set start here" keep the exact
+ * value, and the field only rounds what it displays.
  */
 export function formatTrimTime(seconds: number): string {
   const tenths = Math.max(0, Math.round(seconds * 10))
@@ -43,6 +53,42 @@ export function parseTrimTime(text: string): number | null {
   return parts.reduce((total, part) => total * 60 + Number(part), 0)
 }
 
+/** Why a trim cannot be used: which field, and what is wrong with it or with the range. */
+export type TrimProblem =
+  | { readonly kind: 'not-a-time'; readonly which: 'start' | 'end' }
+  | { readonly kind: 'after-end'; readonly which: 'start' | 'end'; readonly durationSeconds: number }
+  | { readonly kind: 'range'; readonly reason: KeptRangeReason }
+
+/** The problem in words, for beside the field. */
+export function trimProblemText(problem: TrimProblem): string {
+  const { problem: words } = t().trim
+  switch (problem.kind) {
+    case 'not-a-time':
+      // Both forms, because a phone's decimal keyboard has no colon (VH-113,
+      // U-20): seconds alone is what it can type, and the parser takes it.
+      return words.notATime({ which: problem.which })
+    case 'after-end':
+      return words.afterEnd({ which: problem.which, end: formatTrimTime(problem.durationSeconds) })
+    case 'range':
+      return keptRangeProblemText(problem.reason)
+  }
+}
+
+/** A refused range in words, by the reason `normaliseKeptRange` gave. */
+export function keptRangeProblemText(reason: KeptRangeReason): string {
+  const { problem } = t().trim
+  switch (reason) {
+    case 'not-a-time':
+      return problem.notTimes
+    case 'start-after-end':
+      return problem.startAfterEnd
+    case 'end-before-start':
+      return problem.endBeforeStart
+    case 'too-short':
+      return problem.keepAtLeast({ seconds: KEPT_MIN_SECONDS })
+  }
+}
+
 /**
  * A typed time for one end, or why it cannot be used.
  *
@@ -56,13 +102,9 @@ export function trimFieldValue(
   text: string,
   which: 'start' | 'end',
   durationSeconds: number,
-): { readonly seconds: number } | { readonly problem: string } {
+): { readonly seconds: number } | { readonly problem: TrimProblem } {
   const seconds = parseTrimTime(text)
-  if (seconds === null) {
-    // Both forms, because a phone's decimal keyboard has no colon (VH-113,
-    // U-20): seconds alone is what it can type, and the parser takes it.
-    return { problem: `Write the ${which} time as minutes and seconds, like 1:05.5, or as seconds, like 65.5.` }
-  }
+  if (seconds === null) return { problem: { kind: 'not-a-time', which } }
   if (seconds <= durationSeconds) return { seconds }
   // The one exception: the end exactly as the fields show it, rounded to a
   // tenth, which can read later than the video really runs — a 130.46 s
@@ -70,9 +112,7 @@ export function trimFieldValue(
   // any other time past it is refused (Codex review).
   const shownEnd = parseTrimTime(formatTrimTime(durationSeconds))
   if (shownEnd !== null && Math.abs(seconds - shownEnd) < 1e-9) return { seconds: durationSeconds }
-  return {
-    problem: `The ${which} time is after the end of the video, which is ${formatTrimTime(durationSeconds)} long.`,
-  }
+  return { problem: { kind: 'after-end', which, durationSeconds } }
 }
 
 /**
@@ -84,25 +124,26 @@ export function trimRangeFor(
   startSeconds: number,
   endSeconds: number,
   durationSeconds: number,
-): { readonly range: KeptRange | null } | { readonly problem: string } {
+): { readonly range: KeptRange | null } | { readonly problem: TrimProblem } {
   try {
     return { range: normaliseKeptRange({ startSeconds, endSeconds }, durationSeconds) }
   } catch (cause) {
-    if (cause instanceof KeptRangeError) return { problem: cause.message }
+    if (cause instanceof KeptRangeError) return { problem: { kind: 'range', reason: cause.reason } }
     throw cause
   }
 }
 
 /** What is kept, in words, for the line under the controls. */
 export function trimSummary(range: KeptRange | null, durationSeconds: number): string {
-  if (!range) return `Keeping the whole video, ${formatDuration(durationSeconds)}.`
-  return `Keeping ${formatDuration(range.endSeconds - range.startSeconds)} of ${formatDuration(durationSeconds)}.`
+  const duration = formatDuration(durationSeconds)
+  if (!range) return t().trim.keepingWhole({ duration })
+  return t().trim.keeping({ kept: formatDuration(range.endSeconds - range.startSeconds), duration })
 }
 
 /** What a handle says to assistive technology: its place in words, not a bare number. */
 export function trimHandleText(seconds: number, durationSeconds: number): string {
-  if (seconds <= 0) return 'the beginning'
-  if (seconds >= durationSeconds) return 'the end'
+  if (seconds <= 0) return t().trim.handleBeginning
+  if (seconds >= durationSeconds) return t().trim.handleEnd
   return formatDuration(seconds)
 }
 

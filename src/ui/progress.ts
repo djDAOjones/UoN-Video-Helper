@@ -19,34 +19,22 @@
  */
 
 import { PROGRESS_MILESTONE_FRACTIONS } from '../config/thresholds'
+import { locale, t } from '../i18n'
+import { percentFormatter } from '../i18n/intl'
 import type { PipelineStage } from '../media/pipeline'
 
 /** Spec 9.2: named stages, not one opaque bar. */
-export const STAGE_WORDS: Readonly<Record<PipelineStage, string>> = {
-  preparing: 'Getting ready',
-  analysing: 'Analysing audio',
-  encoding: 'Encoding video',
-  finishing: 'Finishing the file',
-  checking: 'Checking the file',
+export function stageWord(stage: PipelineStage): string {
+  return t().progress.stages[stage]
 }
 
 /** The stages whose fraction is a measurement rather than a placeholder. */
 const MEASURED: ReadonlySet<PipelineStage> = new Set<PipelineStage>(['encoding'])
 
-/** The words for each of {@link PROGRESS_MILESTONE_FRACTIONS}, in its order. */
-const MILESTONE_WORDS = ['a quarter done', 'half done', 'three quarters done'] as const
-
-/** Fractions at which a measured stage is worth a word, and the word. */
-const MILESTONES: ReadonlyArray<readonly [number, string]> = PROGRESS_MILESTONE_FRACTIONS.map(
-  (fraction, index) => [fraction, MILESTONE_WORDS[index]!] as const,
-)
-
-export const APP_TITLE = 'UoN Video Helper'
-
 /** What the last report left behind, so the next knows what is new. */
 export interface ProgressMemo {
   readonly stage: PipelineStage | null
-  /** Index into {@link MILESTONES} of the last milestone announced, or -1. */
+  /** Index into {@link PROGRESS_MILESTONE_FRACTIONS} of the last milestone announced, or -1. */
   readonly milestone: number
 }
 
@@ -76,19 +64,24 @@ export function progressView(
   memo: ProgressMemo,
   announceProgress: boolean,
 ): ProgressView {
-  const word = STAGE_WORDS[stage]
+  const { progress } = t()
+  const word = stageWord(stage)
   const measured = MEASURED.has(stage)
-  const percent = Math.max(0, Math.min(100, Math.round(fraction * 100)))
-  const shown = measured ? `${word} — ${percent}%` : word
+  const clamped = Math.max(0, Math.min(1, fraction))
+  const shown = measured
+    ? progress.stagePercent({ stage: word, percent: percentFormatter(locale())(clamped) })
+    : word
 
   const stageChanged = memo.stage !== stage
   let milestone = stageChanged ? -1 : memo.milestone
   let announce: string | null = stageChanged ? word : null
   if (measured) {
     // The highest milestone passed, said once. A jump over two says the later.
-    for (let index = MILESTONES.length - 1; index > milestone; index--) {
-      if (fraction >= MILESTONES[index]![0]) {
-        if (!stageChanged) announce = `${word} — ${MILESTONES[index]![1]}`
+    for (let index = PROGRESS_MILESTONE_FRACTIONS.length - 1; index > milestone; index--) {
+      if (fraction >= PROGRESS_MILESTONE_FRACTIONS[index]!) {
+        if (!stageChanged) {
+          announce = progress.stageMilestone({ stage: word, milestone: progress.milestones[index]! })
+        }
         milestone = index
         break
       }
@@ -99,32 +92,26 @@ export function progressView(
     shown,
     announce: announceProgress ? announce : null,
     indeterminate: !measured,
-    title: `${word} — ${APP_TITLE}`,
+    title: progress.title.stage({ stage: word, app: t().app.title }),
     memo: { stage, milestone },
   }
 }
 
 /** The tab title once the job has ended, or with no job. */
 export function outcomeTitle(outcome: 'ready' | 'failed' | 'cancelled' | 'none'): string {
+  const app = t().app.title
+  const { title } = t().progress
   switch (outcome) {
     case 'ready':
-      return `Ready — ${APP_TITLE}`
+      return title.ready({ app })
     case 'failed':
-      return `Not made — ${APP_TITLE}`
+      return title.failed({ app })
     case 'cancelled':
-      return `Cancelled — ${APP_TITLE}`
+      return title.cancelled({ app })
     case 'none':
-      return APP_TITLE
+      return app
   }
 }
-
-/**
- * Spec 7.5, said once at the start of every job: what keeps it alive, and
- * what ends it. Not tied to the estimate — a five-minute job dies with its
- * tab as surely as a fifty-minute one (A-03).
- */
-export const JOB_START_NOTICE =
-  'Keep this tab visible and your computer awake while the video is made. Closing the tab ends the job.'
 
 /** Where the announce-progress setting is remembered. Nothing about it leaves the device. */
 export const ANNOUNCE_PROGRESS_KEY = 'uon-video-helper:announce-progress'
