@@ -26,7 +26,7 @@
 
 ### Environment
 
-- Run the environment preflight at session start (warn-only), blocking before any memory-file surgery; the owner's OneDrive checkout dehydrates `node_modules` and `.git` (`rm -rf node_modules && npm ci`; resume sync before git work); pause syncing or exclude `.git` when a synced location is unavoidable; work in a clone outside it [guess].
+- Run the environment preflight at session start (warn-only), blocking before any memory-file surgery. The working copy is the owner's OneDrive checkout, pinned Always Keep on This Device, `core.fileMode` false: before git work nothing outside `node_modules` may be cloud-only (`find . -path ./node_modules -prune -o -flags +dataless -print`); a dehydrated `node_modules` is rebuilt with `rm -rf node_modules && npm ci`.
 - Local `main` is stale by design; what is published is `origin/main`.
 - Run `npm run check` on a settled machine, never beside `run-in-engines.mjs`; a slow DSP failure reports the machine.
 - The owner, a vibe coder, owns structure and design: do the work; explain only when asked.
