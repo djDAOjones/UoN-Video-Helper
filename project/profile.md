@@ -43,7 +43,7 @@
 
 ## Conventions
 
-- Prose: en-GB [guess]; commits `ID: summary` with a `Verify:` line
+- Prose: en-GB; commits `ID: summary` with a `Verify:` line
 - Naming: IDs `VH-n`; files kebab-case.ts; units in identifiers
 - `docs/01-specification.md` is authoritative; a correction is proposed, never made
 

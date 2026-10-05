@@ -3,9 +3,13 @@
 <!-- Shipped work, one line per item, under a phase heading, newest
      phase first: - ID — outcome (YYYY-MM-DD) — see decisions. Rule 1
      reads the latest item lines within the 300-word budget, never
-     fewer than the last four shipped. The lines below are the last
+     fewer than the last four shipped. The Band 6 lines are the last
      items the canon record shipped before the migration, in v3's form;
      their why is in the frozen canon decision log (history.md). -->
+
+## V3 adoption
+
+- V3-CONFIRM — the owner confirmed every intake guess: the signatures, Network, Handoff and session hooks, gh outside the sandbox, the OneDrive checkout as the working copy with a sync guard after Codex's check, and en-GB prose (2026-10-05) — see decisions
 
 ## Band 6 — review, then translate
 

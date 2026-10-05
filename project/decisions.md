@@ -17,6 +17,16 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-05 — V3-CONFIRM — Prose is en-GB, and V3-CONFIRM closes
+
+**Decision:** the profile's Prose line is en-GB, confirmed, and loses its `[guess]`; it was the last intake guess, so V3-CONFIRM, the owner's confirmation of the intake's guesses, closes and its wish line is retired as paid — because the owner said so in chat on 2026-10-05 ("yes, en-GB — record it and close V3-CONFIRM").
+
+**Rationale:** the 2026-10-02 entry left `[guess]` on two lines, "Prose: en-GB" and the clone-outside-OneDrive line; the two working-copy entries of 2026-10-05 settled the second. No `[guess]` now remains in the profile, rules or brief; only the profile's and the rules file's header comments still describe the mark. V3-CONFIRM's commits: 70a1796 (2026-10-02), 051fd48 (2026-10-03), dbba144 and 0f72350 (2026-10-05), and this one. Its one open follow-up, the Always section's length, stays a wish line for the owner. The profile's signature (the owner's, 2026-10-02) stands as signed; this entry is the decision the profile requires for a change above it. Session end: this session passed the profile's Session line (200k tokens) before 0f72350, whose close should have been its last and carried a Session-end line but did not; the owner then directed this close, which carries the line. Before it, the session recorded the owner's instructions the record lacked: VH-105's saved work (an item note) and the `/hooks` confirmation the 2026-10-02 entry asked for (a wish line).
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-05 — V3-CONFIRM — The OneDrive working copy, corrected after Codex's check
 
 **Decision:** the owner's OneDrive checkout, pinned with Always Keep on This Device and with `core.fileMode` false, stays the working copy; the pin stops cloud-only files but not sync reverting a tracked file or leaving a conflict copy, so a change no session made is reported, never committed, and the checks and recovery live in DEV-INFRASTRUCTURE.md — because Codex's read-only check of dbba144 found the earlier entry's guard incomplete, and the owner chose "detect and report" on 2026-10-05.
