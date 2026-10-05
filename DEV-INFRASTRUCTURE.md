@@ -139,8 +139,7 @@ rm -rf node_modules && npm ci
 ```
 
 That rewrites every dependency locally and takes a few seconds. It is a
-recovery, not a fix: see the `[maintainer]` backlog item on excluding this
-folder from sync.
+recovery, not a fix: the fix is the pin below.
 
 `.git` dehydrates too, and `npm ci` cannot help there. While OneDrive is
 running, reads merely wait; with sync **paused** they cannot complete at all,
@@ -148,6 +147,22 @@ and git fails with `fatal: mmap failed: Operation timed out` — `git add`,
 `git show` and even `git status` once the index needs a tree. Resume OneDrive
 (or mark the folder "Always keep on this device") before any git work.
 Measured 2026-09-21: 2,047 of 2,369 files under `.git` were cloud-only.
+
+The working copy is this OneDrive checkout, pinned with "Always keep on this
+device" and `core.fileMode` false (decisions, 2026-10-05). Before git work,
+from the repository root on macOS, check that nothing outside `node_modules`
+is cloud-only. Empty output with a zero exit status means none; pause sync
+only after the check passes:
+
+```bash
+find . -path ./node_modules -prune -o -flags +dataless -print
+```
+
+The pin stops dehydration, not sync itself: OneDrive can still revert a
+tracked file mid-session or leave a conflict copy (a duplicate with the
+computer's name added). A change no session made is reported to the owner,
+never staged or committed — a session stages only its own item's lines
+(AGENTS.md rule 3).
 
 ### Generated output — safe to delete
 
