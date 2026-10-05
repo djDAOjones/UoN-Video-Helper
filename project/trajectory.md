@@ -9,6 +9,7 @@
 
 ## V3 adoption
 
+- V3-HARNESS — Codex runs outside the sandbox like gh, both session hooks confirmed running on this Mac, npm audit's dev-only findings captured (2026-10-05) — see decisions
 - V3-CONFIRM — the owner confirmed every intake guess: the signatures, Network, Handoff and session hooks, gh outside the sandbox, the OneDrive checkout as the working copy with a sync guard after Codex's check, and en-GB prose (2026-10-05) — see decisions
 
 ## Band 6 — review, then translate

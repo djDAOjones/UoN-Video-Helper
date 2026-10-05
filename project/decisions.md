@@ -17,6 +17,16 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-05 — V3-HARNESS — Codex runs outside the sandbox, like gh
+
+**Decision:** both `.claude` settings files list `"codex *"` in `sandbox.excludedCommands` beside `"gh *"`, so a Claude Code session can run Codex (`~/.local/bin/codex`) for the Handoff's read-only review — because the owner ruled it in chat on 2026-10-05 ("Codex runs outside the sandbox like gh").
+
+**Rationale:** `~/.local/bin/codex` links into `~/.codex/packages/`, which the sandbox denies reading, so a sandboxed call fails before Codex starts ("operation not permitted", this session, 2026-10-05); its API host is not on the Network line's allowlist either. Excluded, Codex runs with the owner's own credentials through the normal permission flow, each call asking unless the owner pre-approves it; the allowlist, the `~/.codex` denies for every other command and the `Read(~/.codex/**)` permission deny stand. `tools/harness.mjs` does not generate `excludedCommands`: both lines are hand-kept, as `"gh *"` has been since 051fd48, and a regeneration must carry them. The exclusion takes effect in a session started after this commit. In the same session, both session hooks were confirmed on this Mac in the desktop app: the session's state file, `~/.local/state/pm-next/session/claude-1e7b4ba3f76ba3d8-d00a931f456d8601.json`, changed after each tool call (08:05:42 to 08:05:49, `seen` 82 to 94), which is PostToolUse, and carries an `epoch`, which only a SessionStart startup, clear or fork writes; the `/hooks` wish line from V3-CONFIRM is retired as paid. npm audit's dev-only findings are captured as a wish line; dependencies change only by decision.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-05 — V3-CONFIRM — Prose is en-GB, and V3-CONFIRM closes
 
 **Decision:** the profile's Prose line is en-GB, confirmed, and loses its `[guess]`; it was the last intake guess, so V3-CONFIRM, the owner's confirmation of the intake's guesses, closes and its wish line is retired as paid — because the owner said so in chat on 2026-10-05 ("yes, en-GB — record it and close V3-CONFIRM").

@@ -50,7 +50,8 @@
     "autoAllowBashIfSandboxed": true,
     "allowUnsandboxedCommands": false,
     "excludedCommands": [
-      "gh *"
+      "gh *",
+      "codex *"
     ],
     "filesystem": {
       "denyRead": [
