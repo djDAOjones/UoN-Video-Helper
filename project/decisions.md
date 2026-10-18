@@ -17,6 +17,16 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-18 — VH-105 — The translated tables are generated from the filled sheet
+
+**Decision:** the zh-Hans and ms-MY tables are written from one filled sheet by `scripts/strings-table.mjs`, never by hand, and a test holds each table to that sheet; the owner's Google Translate pass is kept verbatim as `reviews/2026-10-18/VH-105-strings-returned.csv`, and the agent's 224 repairs are applied in `VH-105-strings-filled.csv`, each with what it was, in a "changed by the agent" column; both languages stay development-only — because a reviewer's corrections come back the same way, by key, and a hand-edited table would drift from the sheet the reviewers see.
+
+**Rationale:** the returned workbook (`UoN Video Helper Translate v01.xlsx`, read with Python's `zipfile`) held 746 `GOOGLETRANSLATE` formulas with their values cached: every cell filled, keys and English unchanged. 55 cells broke a placeholder — the name translated (`{事实}`, `{tambah}`) or the placeholder dropped (`{count} problems` → 问题数量). A review agent read every row and repaired, besides those, 120 wrong senses that would mislead (the Chinese said the tool uploads the video, "no closing" read "the University will not close", a processing stage was a theatre stage, the Malay said an unsaved video was already saved), 23 rows that quote another row's label, 12 count forms, 12 punctuation faults and 2 cells left in English; style was not polished, and its doubts are in the item. Each table's `meta` is set in `SHEET_LANGUAGES`: Chinese joins facts with ，, items with ； and sentences with no gap; Malay as English. Standards applied: house conventions (no new dependency — Prettier, already a dev dependency, formats the output; named test categories — a round trip, a blank row refused, a missing column, the committed tables against the committed sheet).
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-18 — VH-105 — The language tables are data, keyed for the translator's sheet
 
 **Decision:** every language table is data — whole messages with `{name}` placeholders, each word the English chooses inside a sentence its own key, a count a `one`/`other` or numbered group — compiled once per language by `src/i18n/compile.ts` into the `t()` API, typed from English's literals; the English table's 373 keys are settled, and `scripts/strings-sheet.mjs` writes the translator's sheet from them — because the owner's machine-translation route needs a sheet that maps back to the tables row for row, and a table of functions could neither be exported nor generated from one.

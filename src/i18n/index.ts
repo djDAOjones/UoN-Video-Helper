@@ -12,6 +12,8 @@
 import { DEFAULT_LANGUAGE, type LanguageTag } from '../config/languages'
 import { compile, type Compiled, type Shape } from './compile'
 import { enGB } from './en-GB'
+import { msMY } from './ms-MY'
+import { zhHans } from './zh-Hans'
 
 /** The shape every table must have: English's keys, each message a string with English's placeholders. */
 export type Messages = Shape<typeof enGB>
@@ -22,10 +24,13 @@ export type PageText = Compiled<typeof enGB>
 /**
  * Every table the app has, by tag. A language with no table here falls back
  * to English rather than failing: a missing table is a build-time fact the
- * completeness test reports, never a blank page.
+ * completeness test reports, never a blank page. Having a table is not being
+ * offered: `LANGUAGES_OFFERED` turns a language on.
  */
 export const LANGUAGE_TABLES: Readonly<Partial<Record<LanguageTag, Messages>>> = {
   'en-GB': enGB,
+  'zh-Hans': zhHans,
+  'ms-MY': msMY,
 }
 
 const compiled = new Map<LanguageTag, PageText>()

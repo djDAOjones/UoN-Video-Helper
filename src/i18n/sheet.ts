@@ -9,8 +9,10 @@
  * and the CSV round trip are tested in Node.
  */
 
+import type { LanguageTag } from '../config/languages'
 import { isCountGroup, placeholdersOf } from './compile'
 import { enGB } from './en-GB'
+import type { Messages } from './index'
 
 /** One message: its key and its English. */
 export interface Message {
@@ -25,7 +27,8 @@ export function messagesOf(table: object, prefix = ''): Message[] {
     if (prefix === '' && key === 'meta') continue
     const path = prefix ? `${prefix}.${key}` : key
     if (typeof value === 'string') messages.push({ key: path, english: value })
-    else if (value !== null && typeof value === 'object') messages.push(...messagesOf(value as object, path))
+    else if (value !== null && typeof value === 'object')
+      messages.push(...messagesOf(value as object, path))
   }
   return messages
 }
@@ -43,7 +46,10 @@ function nodeAt(table: object, path: readonly string[]): unknown {
 /** Where each group of messages shows; the longest matching prefix wins. */
 const WHERE: ReadonlyArray<readonly [string, string]> = [
   ['app.title', 'The page heading, and the title in the browser tab'],
-  ['app.description', 'Not shown on the page: its description for search engines and link previews'],
+  [
+    'app.description',
+    'Not shown on the page: its description for search engines and link previews',
+  ],
   ['app.skipLink', 'A link at the very top, seen when moving through the page with the Tab key'],
   ['language.label', 'The language switcher at the top of the page (read out by screen readers)'],
   ['language.switched', 'Not shown: read out by screen readers when the language changes'],
@@ -108,8 +114,9 @@ const PLACEHOLDERS: Readonly<Record<string, string>> = {
   to: 'a time, like 2:30.0',
   time: 'a length of time in words',
   size: 'a file size, like "120 MB"',
-  name: 'a name: a language\'s own name, or the user\'s file name',
-  facts: 'a list of facts about the video, like "4 minutes 12 seconds, 1920 × 1080, stereo (two channels)"',
+  name: "a name: a language's own name, or the user's file name",
+  facts:
+    'a list of facts about the video, like "4 minutes 12 seconds, 1920 × 1080, stereo (two channels)"',
   found: 'a list, like "2 caption tracks and 1 chapter track"',
   remedy: 'another sentence from this sheet, saying what to do',
   smaller: 'the name of the smaller output, from preset.labels.smaller',
@@ -130,7 +137,7 @@ const PLACEHOLDERS: Readonly<Record<string, string>> = {
   title: 'a heading from this sheet',
   detail: 'a sentence from this sheet',
   address: 'an email address',
-  stem: 'the user\'s own file name, without its ending',
+  stem: "the user's own file name, without its ending",
   mark: 'a word from save.marks',
   where: 'save.downloadIos or save.downloadOther',
   result: 'a count from systemCheck.results',
@@ -145,7 +152,8 @@ function variantNote(path: readonly string[]): string[] {
     const numbered = Object.keys(parent).filter((key) => /^\d+$/.test(key))
     if (last === 'one') notes.push('Used when the count is 1.')
     else if (/^\d+$/.test(last)) notes.push(`Used when the count is ${last}, said in words.`)
-    else if (numbered.length > 0) notes.push(`Used for any count above ${numbered[numbered.length - 1]}, in digits.`)
+    else if (numbered.length > 0)
+      notes.push(`Used for any count above ${numbered[numbered.length - 1]}, in digits.`)
     else notes.push('Used for any count other than 1. Fill it even if your language has one form.')
   }
   for (const part of path) {
@@ -156,7 +164,8 @@ function variantNote(path: readonly string[]): string[] {
   if (path[0] === 'closing' && path[1] === 'result' && (last === 'fade' || last === 'slide')) {
     notes.push(`Used when the closing ${last === 'fade' ? 'fades' : 'slides'} in.`)
   }
-  if (path.includes('problem') && (last === 'start' || last === 'end')) notes.push(`About the ${last} time.`)
+  if (path.includes('problem') && (last === 'start' || last === 'end'))
+    notes.push(`About the ${last} time.`)
   return notes
 }
 
@@ -171,19 +180,24 @@ const NOTES: Readonly<Record<string, string>> = {
   'trim.handleBeginning': 'Completes "Start, at the beginning" for screen readers.',
   'trim.handleEnd': 'Completes "End, at the end" for screen readers.',
   'closing.helpExistingText': 'Follows "Over existing" on the same line, so it starts with a dash.',
-  'closing.helpFreezeText': 'Follows "Over generated freeze frame" on the same line, so it starts with a dash.',
-  'closing.notUsedWith.cut': 'Names the animation type "Cut"; use the same word as closing.types.cut.',
-  'closing.notUsedWith.none': 'Names the animation type "None"; use the same word as closing.types.none.',
+  'closing.helpFreezeText':
+    'Follows "Over generated freeze frame" on the same line, so it starts with a dash.',
+  'closing.notUsedWith.cut':
+    'Names the animation type "Cut"; use the same word as closing.types.cut.',
+  'closing.notUsedWith.none':
+    'Names the animation type "None"; use the same word as closing.types.none.',
   'preset.labels.best': 'The name of the larger output. Other rows quote it.',
   'preset.labels.smaller': 'The name of the smaller output. Other rows quote it.',
   'systemCheck.marks.pass': 'A one-word mark beside a check that passed.',
   'systemCheck.marks.fail': 'A one-word mark beside a check that failed.',
-  'systemCheck.marks.warn': 'A mark, not a word: keep it as it is unless your language uses another.',
+  'systemCheck.marks.warn':
+    'A mark, not a word: keep it as it is unless your language uses another.',
   'systemCheck.marks.pending': 'A mark, not a word: keep it as it is.',
   'save.stem': 'Used as the file name when the original has none.',
-  'save.marks.branded': 'Goes in brackets in the saved file\'s name, like "Lecture 3 (branded).mp4".',
-  'save.marks.levelled': 'Goes in brackets in the saved file\'s name.',
-  'save.marks.converted': 'Goes in brackets in the saved file\'s name.',
+  'save.marks.branded':
+    'Goes in brackets in the saved file\'s name, like "Lecture 3 (branded).mp4".',
+  'save.marks.levelled': "Goes in brackets in the saved file's name.",
+  'save.marks.converted': "Goes in brackets in the saved file's name.",
   'save.fileName': 'Keep the brackets and .mp4.',
   'progress.milestones.0': 'Follows a stage name, like "Encoding video — a quarter done".',
   'progress.milestones.1': 'Follows a stage name, like "Encoding video — half done".',
@@ -204,7 +218,11 @@ export function whereShown(key: string): string {
   let best: readonly [string, string] | undefined
   for (const entry of WHERE) {
     const [prefix] = entry
-    if ((key === prefix || key.startsWith(`${prefix}.`)) && (!best || prefix.length > best[0].length)) best = entry
+    if (
+      (key === prefix || key.startsWith(`${prefix}.`)) &&
+      (!best || prefix.length > best[0].length)
+    )
+      best = entry
   }
   return best?.[1] ?? ''
 }
@@ -217,7 +235,9 @@ export function sheetRows(): SheetRow[] {
     if (names.length > 0) {
       notes.push(
         `Keep ${names.map((name) => `{${name}}`).join(', ')} as written: ` +
-          names.map((name) => `{${name}} is ${PLACEHOLDERS[name] ?? 'filled in by the app'}`).join('; ') +
+          names
+            .map((name) => `{${name}} is ${PLACEHOLDERS[name] ?? 'filled in by the app'}`)
+            .join('; ') +
           '.',
       )
     }
@@ -225,11 +245,41 @@ export function sheetRows(): SheetRow[] {
   })
 }
 
-/** The languages the sheet carries a column for, by column heading. */
+/**
+ * The languages the sheet carries a column for, by column heading, each with
+ * the `meta` its table is written with — set here, never translated: Chinese
+ * joins facts and sentences with full-width marks and no gap; Malay as English.
+ */
 export const SHEET_LANGUAGES = [
-  { tag: 'zh-Hans', heading: 'Chinese (Simplified)', googleCode: 'zh-CN' },
-  { tag: 'ms-MY', heading: 'Bahasa Malaysia', googleCode: 'ms' },
-] as const
+  {
+    tag: 'zh-Hans',
+    heading: 'Chinese (Simplified)',
+    googleCode: 'zh-CN',
+    meta: {
+      locale: 'zh-Hans',
+      durationList: 'narrow',
+      separators: { list: '，', series: '；', sentences: '' },
+    },
+  },
+  {
+    tag: 'ms-MY',
+    heading: 'Bahasa Malaysia',
+    googleCode: 'ms',
+    meta: {
+      locale: 'ms-MY',
+      durationList: 'narrow',
+      separators: { list: ', ', series: '; ', sentences: ' ' },
+    },
+  },
+] as const satisfies readonly {
+  readonly tag: LanguageTag
+  readonly heading: string
+  readonly googleCode: string
+  readonly meta: Messages['meta']
+}[]
+
+/** The filled sheet the zh-Hans and ms-MY tables are generated from (`scripts/strings-table.mjs`). */
+export const FILLED_SHEET = 'reviews/2026-10-18/VH-105-strings-filled.csv'
 
 /** The sheet's column headings, in order. */
 export const SHEET_HEADINGS = [
@@ -257,7 +307,13 @@ export function toCsv(rows: readonly (readonly string[])[]): string {
 export function sheetCells(): string[][] {
   return [
     [...SHEET_HEADINGS],
-    ...sheetRows().map((row) => [row.key, row.where, row.english, row.notes, ...SHEET_LANGUAGES.map(() => '')]),
+    ...sheetRows().map((row) => [
+      row.key,
+      row.where,
+      row.english,
+      row.notes,
+      ...SHEET_LANGUAGES.map(() => ''),
+    ]),
   ]
 }
 
@@ -296,4 +352,52 @@ export function parseCsv(text: string): string[][] {
     rows.push(row)
   }
   return rows
+}
+
+/** A filled sheet's translations in one language column, by key. Throws when the sheet has no such column. */
+export function translationsFrom(
+  cells: readonly (readonly string[])[],
+  heading: string,
+): Map<string, string> {
+  const [headings = [], ...rows] = cells
+  const keyColumn = headings.indexOf('key')
+  const column = headings.indexOf(heading)
+  if (keyColumn < 0 || column < 0) throw new Error(`The sheet has no "key" or "${heading}" column.`)
+  return new Map(
+    rows.filter((row) => row[keyColumn]).map((row) => [row[keyColumn]!, row[column] ?? '']),
+  )
+}
+
+/** English's structure, `meta` left out, with each message replaced by its translation, collecting the keys left blank. */
+function translate(
+  node: object,
+  prefix: string,
+  translations: ReadonlyMap<string, string>,
+  missing: string[],
+): unknown {
+  const entries = Object.entries(node)
+    .filter(([key]) => prefix !== '' || key !== 'meta')
+    .map(([key, value]): [string, unknown] => {
+      const path = prefix ? `${prefix}.${key}` : key
+      if (typeof value !== 'string')
+        return [key, translate(value as object, path, translations, missing)]
+      const text = translations.get(path) ?? ''
+      if (text.trim() === '') missing.push(path)
+      return [key, text]
+    })
+  return Array.isArray(node) ? entries.map(([, value]) => value) : Object.fromEntries(entries)
+}
+
+/**
+ * A language table from a filled sheet's translations: English's keys, in
+ * English's order, with the language's own `meta`. A key the sheet leaves
+ * blank or lacks comes back in `missing`, so the caller refuses a partial table.
+ */
+export function tableFrom(
+  translations: ReadonlyMap<string, string>,
+  meta: Messages['meta'],
+): { readonly table: Messages; readonly missing: readonly string[] } {
+  const missing: string[] = []
+  const table = { meta, ...(translate(enGB, '', translations, missing) as object) } as Messages
+  return { table, missing }
 }

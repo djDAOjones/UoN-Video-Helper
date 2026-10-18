@@ -2,7 +2,7 @@
  * VH-105: every table has every message English has and keeps its
  * placeholders; the compiled API fills them in the table's own locale; the
  * page's static bindings all name a message; and the translator's sheet maps
- * onto the table row for row.
+ * onto the table row for row, and back.
  */
 
 import { readFileSync } from 'node:fs'
@@ -13,7 +13,18 @@ import { attributeBindings, messageAt } from './bind'
 import { compile, isCountGroup, placeholdersOf } from './compile'
 import { enGB } from './en-GB'
 import { LANGUAGE_TABLES, t } from './index'
-import { messagesOf, parseCsv, sheetCells, sheetRows, SHEET_HEADINGS, toCsv } from './sheet'
+import {
+  FILLED_SHEET,
+  messagesOf,
+  parseCsv,
+  sheetCells,
+  sheetRows,
+  SHEET_HEADINGS,
+  SHEET_LANGUAGES,
+  tableFrom,
+  toCsv,
+  translationsFrom,
+} from './sheet'
 
 const english = messagesOf(enGB)
 const translated = Object.entries(LANGUAGE_TABLES).filter(([tag]) => tag !== 'en-GB')
@@ -33,9 +44,12 @@ describe('every table', () => {
     }
   })
 
-  it.each(translated)('%s fills every message, with no English left untranslated by mistake', (_tag, table) => {
-    for (const { key, english: text } of messagesOf(table)) expect(text.trim(), key).not.toBe('')
-  })
+  it.each(translated)(
+    '%s fills every message, with no English left untranslated by mistake',
+    (_tag, table) => {
+      for (const { key, english: text } of messagesOf(table)) expect(text.trim(), key).not.toBe('')
+    },
+  )
 
   it('names the outputs as the config does, so a diagnostics line and the screen agree', () => {
     expect(enGB.preset.labels.best).toBe(PRESETS.best.label)
@@ -49,7 +63,9 @@ describe('the compiled table', () => {
   })
 
   it('writes a number in the locale’s own digits', () => {
-    expect(t().source.sampleRate({ kilohertz: 48, hertz: 48000 })).toBe('48 kHz — 48,000 samples a second')
+    expect(t().source.sampleRate({ kilohertz: 48, hertz: 48000 })).toBe(
+      '48 kHz — 48,000 samples a second',
+    )
   })
 
   it('joins a list of nouns as the language does', () => {
@@ -62,13 +78,19 @@ describe('the compiled table', () => {
     expect(t().source.captionTracks({ count: 1 })).toBe('1 caption track')
     expect(t().source.captionTracks({ count: 2 })).toBe('2 caption tracks')
     // Chinese has one form for every count, so its `other` is always the one.
-    expect(compile<typeof enGB>(enGB, 'zh-Hans').source.captionTracks({ count: 1 })).toBe('1 caption tracks')
+    expect(compile<typeof enGB>(enGB, 'zh-Hans').source.captionTracks({ count: 1 })).toBe(
+      '1 caption tracks',
+    )
   })
 
   it('says a count in words where the table has one, and in digits beyond', () => {
-    expect(t().preflight.headings.warnSeveral({ count: 3 })).toBe('Ready, with three things to know')
+    expect(t().preflight.headings.warnSeveral({ count: 3 })).toBe(
+      'Ready, with three things to know',
+    )
     expect(t().preflight.headings.warnSeveral({ count: 7 })).toBe('Ready, with 7 things to know')
-    expect(t().announce.lossesCount({ count: 1 })).toBe('One thing to know about what goes into the new file.')
+    expect(t().announce.lossesCount({ count: 1 })).toBe(
+      'One thing to know about what goes into the new file.',
+    )
   })
 
   it('shows a missing parameter as written, never as "undefined"', () => {
@@ -117,7 +139,8 @@ describe('the translator’s sheet', () => {
 
   it('names every placeholder in the row’s notes', () => {
     for (const row of sheetRows()) {
-      for (const name of placeholdersOf(row.english)) expect(row.notes, row.key).toContain(`{${name}}`)
+      for (const name of placeholdersOf(row.english))
+        expect(row.notes, row.key).toContain(`{${name}}`)
     }
   })
 
@@ -136,8 +159,73 @@ describe('the translator’s sheet', () => {
   })
 
   it('comes back from CSV exactly as it went out, quotes, commas and Chinese included', () => {
-    const cells = [...sheetCells(), ['k', 'w', 'He said "no", then left.\r\nNext line', 'n', '中文，带逗号', 'Bahasa']]
+    const cells = [
+      ...sheetCells(),
+      ['k', 'w', 'He said "no", then left.\r\nNext line', 'n', '中文，带逗号', 'Bahasa'],
+    ]
     expect(parseCsv(toCsv(cells))).toEqual(cells)
     expect(parseCsv(toCsv(cells))[0]).toEqual([...SHEET_HEADINGS])
   })
+})
+
+describe('a filled sheet', () => {
+  const [chinese, malay] = SHEET_LANGUAGES
+  /** The sheet as sent, with the Chinese column filled by `fill` and the Malay left empty. */
+  const filled = (fill: (english: string) => string): string[][] =>
+    sheetCells().map((row, index) => (index === 0 ? row : [...row.slice(0, 4), fill(row[2]!), '']))
+
+  it('becomes a table with English’s keys in English’s order, and the language’s own meta', () => {
+    const { table, missing } = tableFrom(
+      translationsFrom(
+        filled((text) => text),
+        chinese.heading,
+      ),
+      enGB.meta,
+    )
+    expect(missing).toEqual([])
+    expect(table).toEqual(enGB)
+    expect(messagesOf(table)).toEqual(english)
+    expect(
+      tableFrom(
+        translationsFrom(
+          filled((text) => text),
+          chinese.heading,
+        ),
+        chinese.meta,
+      ).table.meta,
+    ).toEqual(chinese.meta)
+  })
+
+  it('names every row it leaves blank, so no partial table is written', () => {
+    const cells = filled((text) => text)
+    cells[1]![4] = '  '
+    expect(tableFrom(translationsFrom(cells, chinese.heading), chinese.meta).missing).toEqual([
+      english[0]!.key,
+    ])
+    expect(tableFrom(translationsFrom(cells, malay.heading), malay.meta).missing).toHaveLength(
+      english.length,
+    )
+  })
+
+  it('refuses a sheet without the language’s column', () => {
+    expect(() =>
+      translationsFrom(
+        [
+          ['key', 'English'],
+          ['app.title', 'UoN Video Helper'],
+        ],
+        chinese.heading,
+      ),
+    ).toThrow(chinese.heading)
+  })
+
+  it.each(SHEET_LANGUAGES.map((language) => [language.tag, language] as const))(
+    'the %s table is the filled sheet, regenerated',
+    (tag, { heading, meta }) => {
+      const cells = parseCsv(
+        readFileSync(new URL(`../../${FILLED_SHEET}`, import.meta.url), 'utf8'),
+      )
+      expect(LANGUAGE_TABLES[tag]).toEqual(tableFrom(translationsFrom(cells, heading), meta).table)
+    },
+  )
 })

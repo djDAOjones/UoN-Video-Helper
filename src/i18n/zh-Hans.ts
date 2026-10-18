@@ -1,0 +1,628 @@
+/**
+ * Every string the page can show (VH-105), from the "Chinese (Simplified)"
+ * column of the filled translator's sheet:
+ *
+ *   reviews/2026-10-18/VH-105-strings-filled.csv
+ *
+ * Written by `scripts/strings-table.mjs`: change the sheet and regenerate,
+ * never this file. Machine translation, with the agent's repairs listed in
+ * the sheet's last column, until a native-speaking reviewer signs it off.
+ */
+
+import type { Messages } from './index'
+
+export const zhHans: Messages = {
+  meta: {
+    locale: 'zh-Hans',
+    durationList: 'narrow',
+    separators: {
+      list: '，',
+      series: '；',
+      sentences: '',
+    },
+  },
+  app: {
+    title: 'UoN 视频助手',
+    description:
+      '在视频中添加经诺丁汉大学批准的品牌标识和一致的音频电平，即可获得优化后的文件，而无需将其上传到任何地方。',
+    skipLink: '跳至内容',
+  },
+  language: {
+    label: '页面语言',
+    switched: '页面语言：{name}。',
+  },
+  lede: {
+    intro: '此工具对您的视频执行以下操作：',
+    promises: ['添加已批准的品牌标识。', '确保音量稳定。', '输出优化后的文件类型和大小。'],
+    privacy: '您的视频在您的设备上进行处理，不会上传，原始文件也不会改变。',
+  },
+  browserNote: {
+    pending: '此应用专为 Chrome 浏览器设计和构建，其他浏览器可能无法正常运行。',
+    notPassed:
+      '此应用专为 Chrome 浏览器设计和构建，但该浏览器尚未通过所有检查。页面底部的系统检查信息显示了缺失的功能。',
+    passed: '此应用专为 Chrome 浏览器设计和构建，并且该浏览器已通过相关检查。',
+  },
+  steps: {
+    choose: '选择一个视频',
+    trim: '修剪',
+    closing: '结尾品牌标识',
+    preset: '文件大小/质量',
+    create: '创造',
+  },
+  choose: {
+    dropHint: '或者把它拖放到这里。',
+    dropHeld: '松开即可读取此视频。',
+    reading: '正在读取视频……',
+    drop: {
+      making: '正在制作视频。请取消当前视频，或等待制作完成后再选择其他视频。',
+      saving: '视频正在保存。请停止保存或等待保存完成后再选择其他视频。',
+      starting: '工具仍在准备中。请稍后再次拖放视频。',
+      unavailable: '此浏览器无法运行该工具，因此无法在此处读取视频。以下消息说明了解决方法。',
+      nothing: '没有拖放任何可读取的内容。请拖放一个视频文件。',
+      several: '那总共有{count}个文件。一次拖放一个视频。',
+      notVideo:
+        '那不是视频文件。请拖放一个视频文件——例如文件名以 .mp4 或 .mov 结尾的文件——或者在上方选择一个。',
+    },
+  },
+  source: {
+    readSummary: '视频已读取。{facts}。',
+    variableFrameRate: '可变帧率',
+    noSound: '无声',
+    properties: '视频属性',
+    lossesTitle: '未导入新文件',
+    rows: {
+      duration: '时长',
+      videoFormat: '视频格式',
+      fileSize: '文件大小',
+      resolution: '分辨率',
+      frameRate: '帧率',
+      soundFormat: '音频格式',
+      soundChannels: '声音通道',
+      sampleRate: '声音采样率',
+      sound: '声音',
+      captions: '字幕',
+      fileType: '文件类型',
+    },
+    cannotDecodeVideo: '此浏览器无法读取此视频格式。',
+    cannotDecodeAudio: '此浏览器无法读取此音频格式。',
+    rotated: '旋转了{degrees}°。输出结果将保持竖直状态。',
+    variesOnAverage: '平均 {rate}，但会有波动',
+    variesNote:
+      'Teams、Zoom 和屏幕录制的录像帧率通常会波动。输出文件将采用稳定的帧速率，以确保声音和画面同步。',
+    outputRate: '输出将以 {rate} 速率运行，因此某些帧将会重复。',
+    sampleRate: '{kilohertz} kHz — 每秒 {hertz} 次采样',
+    noSoundTrack: '未找到音轨',
+    noSoundNote: '音量调整需要声音。其他工作照常进行。',
+    captionsUnchecked: '无法在此类文件中进行检查',
+    captionsFound: '已找到 {found}',
+    captionsNone: '此文件中未找到任何内容',
+    captionTracks: {
+      one: '{count} 条字幕轨道',
+      other: '{count} 条字幕轨道',
+    },
+    chapterTracks: {
+      one: '{count} 条章节轨道',
+      other: '{count} 条章节轨道',
+    },
+    moreVideoTracks: {
+      one: '另外 {count} 条视频轨道',
+      other: '另外 {count} 条视频轨道',
+    },
+    moreSoundTracks: {
+      one: '另外 {count} 条音轨',
+      other: '另外 {count} 条音轨',
+    },
+    losses: {
+      extraTracksTitle: '此文件包含{found}',
+      extraTracksDetail:
+        '新文件将保留一个画面和一个音轨——即视频属性中列出的那些。其他画面和音轨将不会被保留，其中一个可能包含备选方案，例如其他语言或音频描述。如果您需要这些备选方案，请将原始文件保留在旁边。',
+      uncheckedTitle: '无法检查字幕和章节轨道',
+      uncheckedDetail: '此类文件无法进行此类检查。如果您的文件中包含这些轨道，则不会将其迁移过来。',
+      captionsConsequence:
+        '新文件将不包含字幕轨道，因此无论您将其发布到何处，都必须自行添加字幕。EchoVideo 会在上传后自动生成字幕——请检查字幕。直接发送的文件需要您自行添加字幕。绘制在画面中的字幕将保留。',
+      chaptersConsequence: '新文件中将不会包含章节内容。',
+      keepOriginals: '如果需要原件，请将此文件保存在旁边。',
+    },
+  },
+  trim: {
+    intro:
+      '可选。您可以剪掉开头或结尾不需要的内容。如果不进行任何操作，则会保留整个视频。预览会播放您当前的原始视频：视频制作过程中会调整音量并添加结尾。',
+    noPreview: '此文件没有预览功能。您仍然可以设置时间。',
+    start: '开始',
+    end: '结尾',
+    startTime: '开始时间',
+    endTime: '结束时间',
+    setStart: '将开始设在此处',
+    setEnd: '将结束设在此处',
+    format: '分钟和秒，例如 1:05.5，或者秒，例如 65.5。',
+    useWhole: '使用完整视频',
+    reading: '正在读取视频……',
+    unreadable: '没有视频可供剪辑：无法读取该文件。',
+    tooShort: '它比 {seconds} 秒短，因此不能进行裁剪。',
+    keepingWhole: '保留整个视频，{duration}。',
+    keeping: '保留 {duration} 中的 {kept}。',
+    handleBeginning: '开始',
+    handleEnd: '结束',
+    problem: {
+      notATime: {
+        start: '开始时间以分钟和秒的形式写出，例如 1:05.5，或者以秒的形式写出，例如 65.5。',
+        end: '将结束时间写成分钟和秒，例如 1:05.5，或者只写秒，例如 65.5。',
+      },
+      afterEnd: {
+        start: '开始时间在视频结束后，视频时长为 {length}。',
+        end: '结束时间在视频结束后，视频时长为 {length}。',
+      },
+      notTimes: '视频的开始或结束时间并不代表时间。',
+      startAfterEnd: '开头在视频结尾之后。',
+      endBeforeStart: '结束必须在开始之后。',
+      keepAtLeast: '至少保留 {seconds} 秒的视频。',
+    },
+    correctToContinue: '在步骤 2 中正确输入开始时间和结束时间，即可继续。',
+  },
+  closing: {
+    legend: '结尾品牌标识',
+    typeLabel: '动画类型',
+    types: {
+      cut: '切',
+      fade: '淡入',
+      slide: '滑动',
+      none: '无',
+    },
+    onsetLabel: '动画起始方式',
+    onsets: {
+      existing: '覆盖现有画面',
+      freeze: '覆盖生成的定格画面',
+    },
+    helpLabel: '关于动画起始方式',
+    helpExistingTerm: '覆盖现有画面',
+    helpExistingText: '— 结尾画面会在视频的最后一秒上播放，并在逐渐出现的过程中覆盖这一秒。',
+    helpFreezeTerm: '覆盖生成的定格画面',
+    helpFreezeText:
+      '— 最后一帧画面会额外停留一秒钟。结尾画面会覆盖这一秒，所以视频中的所有内容都不会被遮挡。',
+    colourLabel: '颜色',
+    colours: {
+      blue: '蓝色的',
+      white: '白色的',
+    },
+    notUsedWith: {
+      cut: '不与“切”一起使用。',
+      none: '不与“无”一起使用。',
+    },
+    result: {
+      none: '不会添加大学结尾画面。',
+      adds: {
+        one: '增加 {count} 秒。',
+        other: '增加 {count} 秒。',
+      },
+      cut: {
+        blue: '视频切换到蓝色结束卡。{adds}',
+        white: '视频切换到白色结束卡。{adds}',
+      },
+      overFreeze: {
+        blue: {
+          fade: '在蓝色结尾淡入时，最后一帧画面会保持静止，所以不会遮挡任何内容。{adds}',
+          slide: '在蓝色结尾画面滑入时，最后一帧画面会被保留，所以不会遮挡任何内容。{adds}',
+        },
+        white: {
+          fade: '最后一帧画面会在白色结尾淡入时保持静止，所以不会遮挡任何内容。{adds}',
+          slide: '最后一帧画面保持静止，同时白色结尾画面滑入，因此不会遮挡任何内容。{adds}',
+        },
+      },
+      overPicture: {
+        blue: {
+          fade: '蓝色的结尾画面在视频最后一秒逐渐淡入，最终覆盖住视频内容。{adds}',
+          slide: '蓝色的结尾画面在视频最后一秒滑入并覆盖住画面。{adds}',
+        },
+        white: {
+          fade: '白色结尾画面逐渐淡入，覆盖了视频的最后一秒。{adds}',
+          slide: '白色结尾画面在视频最后一秒滑入并覆盖住画面。{adds}',
+        },
+      },
+    },
+  },
+  preset: {
+    legend: '文件大小/质量',
+    labels: {
+      best: '更大/更好',
+      smaller: '更小/减少',
+    },
+    details: {
+      best: '例如 EchoVideo 或 YouTube 等。',
+      smaller: '用于短信或电子邮件等。',
+    },
+  },
+  create: {
+    note: '制作完成的视频会一直保存在这里，直到您保存或关闭此标签页。',
+    announceProgress: '播报进度',
+    announceHelp: '视频制作过程中，会为屏幕阅读器大声朗读每个阶段。最终结果总会播报。',
+    progressLabel: '制作你的视频',
+    create: '制作视频',
+    cancel: '取消',
+    continueAnyway: '继续',
+    stopCheck: '停止检查',
+    checkAgain: '再次检查',
+    stopSaving: '停止保存',
+    save: '保存视频',
+    saved: '已保存',
+    discard: '扔掉它，重新开始。',
+    keep: '留着它',
+    lockedMaking: '视频制作期间已锁定。',
+    lockedSaving: '视频保存期间已锁定。',
+  },
+  status: {
+    checking: '正在将此视频与您的设备进行比对……',
+    checkStopped: '检查已停止。',
+    stoppingSave: '正在停止保存……',
+    cancelling: '正在取消…',
+    cancelled: '已取消。未保存任何内容，您的原始文件保持不变。',
+    saving: '正在保存…',
+    saveStopped: '保存已停止。视频仍然在这里，您可以随时观看。',
+    notSaved: '未保存。视频仍然在这里，您可以随时观看。',
+    refusedSource: '这就是你最初使用的文件。选择不同的名称或文件夹——此工具绝不会更改你的原始文件。',
+    saved: '已保存。请到保存位置检查视频，然后上传到目标位置——或者在步骤 1 中选择另一个视频。',
+    saveFailed: '视频保存失败。您可以再次尝试保存。',
+    storageWayOut: '减少视频长度，选择“{smaller}”，或者释放一些空间，然后按“再次检查”。',
+    creating: '正在创建视频。{notice}',
+    ready: '您的视频已准备就绪。',
+    couldNotCreate: '视频无法创建。{sentence}',
+    verdictSpoken: '设备检查完成。{heading}。',
+  },
+  discard: {
+    title: '此视频尚未保存。',
+    delivered: '您的下载可能仍在进行中。重新开始将会丢弃您刚刚制作的视频。',
+    unsaved: '您尚未保存刚刚制作的视频。重新开始将会丢弃该视频。',
+    spoken: '此视频尚未保存。{question}',
+  },
+  result: {
+    finished: '完成的视频 — {size}',
+    previous: '上一个视频 — {size}',
+    lifetime: '它只会保留在这里，直到您保存或关闭此标签页。',
+    lifetimeDelivered: '它会一直显示在这里，直到你开始制作另一个视频或关闭此标签页。',
+    keptWhole: '完整视频（{duration}）',
+    keptPart: '保留了 {duration} 中的 {kept}，从 {from} 到 {to}',
+    closingNone: '无大学结尾画面',
+    closingCut: {
+      blue: '镜头切换到蓝色结束卡',
+      white: '切到白色结束卡',
+    },
+    closingOverFreeze: {
+      blue: {
+        fade: '蓝色的结尾逐渐淡入，覆盖了最后一帧画面',
+        slide: '蓝色的结尾画面滑入到最后一帧画面上方',
+      },
+      white: {
+        fade: '白色画面逐渐淡入，覆盖了最后一帧',
+        slide: '白色结尾画面滑入到最后一帧上方',
+      },
+    },
+    closingOverPicture: {
+      blue: {
+        fade: '蓝色的结尾画面逐渐淡入，覆盖画面',
+        slide: '蓝色的结尾画面滑入画面上方',
+      },
+      white: {
+        fade: '白色结尾画面逐渐淡入画面',
+        slide: '白色结尾画面滑入画面上方',
+      },
+    },
+    summary: '由 {name} 构成：{part}、{output}、{closing}。',
+    notLoaded: '由于结尾部分无法加载，因此未包含在视频中。其他所有步骤均已按要求完成。',
+    fellBackToCut: {
+      blue: {
+        fade: '您选择了“淡入”，但动画无法加载，因此视频将切换到蓝色结束卡片。',
+        slide: '您选择了“滑动”，但动画无法加载，因此视频将切换到蓝色结束卡片。',
+      },
+      white: {
+        fade: '您选择了“淡入”，但动画无法加载，因此视频将切换到白色结束卡片。',
+        slide: '您选择了“滑动”，但动画无法加载，因此视频将切换到白色结束卡片。',
+      },
+    },
+    fellBackToFreeze: {
+      blue: {
+        fade: '您的视频时长短于淡入淡出动画。蓝色结尾效果是在保留的最后一帧上淡入，而不是在画面上淡入。',
+        slide: '您的视频比滑动动画短。蓝色的结尾动画不是覆盖在图片上，而是覆盖在最后一帧画面上。',
+      },
+      white: {
+        fade: '您的视频时长短于淡入淡出动画。白色结尾淡入淡出效果是在最后一帧画面上叠加，而不是在原画面上叠加。',
+        slide: '您的视频比滑动动画短。白色的结尾动画不是覆盖在图片上，而是覆盖在最后一帧画面上。',
+      },
+    },
+    fellBackToPicture: {
+      blue: {
+        fade: '蓝色的结尾部分会淡入画面，而不是像选择的那样淡入最后一帧画面。',
+        slide: '蓝色的结尾部分会滑入画面上方，而不是像选择的那样滑入保留的最后一帧上方。',
+      },
+      white: {
+        fade: '白色结尾部分会淡入画面，而不是像选择的那样淡入最后一帧画面。',
+        slide: '白色结尾部分会滑入画面上方，而不是像选择的那样滑入保留的最后一帧上方。',
+      },
+    },
+  },
+  progress: {
+    stages: {
+      preparing: '准备中',
+      analysing: '分析音频',
+      encoding: '视频编码',
+      finishing: '完成文件',
+      checking: '检查文件',
+    },
+    milestones: ['完成四分之一', '完成一半', '已完成四分之三'],
+    stagePercent: '{stage} — {percent}',
+    stageMilestone: '{stage} — {milestone}',
+    ready: '准备好',
+    title: {
+      stage: '{stage} — {app}',
+      ready: '准备就绪 — {app}',
+      failed: '未制作 — {app}',
+      cancelled: '已取消 — {app}',
+    },
+    jobNotice: '视频制作过程中，请保持此标签页可见且电脑处于唤醒状态。关闭标签页即结束任务。',
+  },
+  preflight: {
+    headings: {
+      proceed: '准备就绪',
+      warn: '准备好了，只需知道一件事',
+      warnSeveral: {
+        '2': '准备好了，有两件事需要了解',
+        '3': '准备好了，以下三件事你需要知道',
+        '4': '准备好了，以下四件事你需要知道',
+        '5': '准备好了，以下五件事你需要知道',
+        '6': '准备好了，以下六件事你需要知道',
+        other: '准备好了，有{count}件你需要知道的事情',
+      },
+      discourage: '这样做可行，但速度会很慢',
+      mobile: '这可能无法在手机或平板电脑上完成',
+      block: '无法在此处运行',
+    },
+    tryChrome: '本工具专为电脑上的 Chrome 浏览器而设计——请在 Chrome 浏览器上尝试使用。',
+    chromeLacks:
+      '此Chrome浏览器版本可能已过期，或者此计算机上的某个设置可能已关闭此功能。请更新Chrome浏览器，或咨询计算机管理员。',
+    reasons: {
+      noWebCodecs: '此浏览器无法处理视频。{remedy}',
+      noAacEncodeHere: '此浏览器无法为视频文件添加声音。{remedy}',
+      noAacEncodeElsewhere:
+        '此浏览器无法为视频文件添加声音。{remedy} Firefox 可以播放视频，但无法创建所需的声音。',
+      noH264Encode: '此浏览器无法创建此工具所需的视频格式。{remedy}',
+      noSourceDecodeHere:
+        '此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。',
+      noSourceDecodeElsewhere:
+        '此浏览器无法读取此文件中的图片或音频。{remedy} 如果也无法打开，则该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式——文件名以 .mp4 结尾的文件。',
+      noOpfsHere:
+        '此浏览器无法为该工具提供构建视频所需的空间。如果您使用隐私浏览模式，通常使用普通窗口即可；否则，可能是此计算机上的某个设置阻止了网站存储——请咨询管理员。',
+      noOpfsElsewhere:
+        '此浏览器无法为工具提供构建视频所需的空间。{remedy} 如果您使用隐私浏览模式，通常使用普通窗口即可。',
+      insecureContext:
+        '此页面需要安全连接才能处理您的视频。请使用 https:// 地址打开，如果您自行运行，则请使用 localhost。',
+      insufficientStorageResolvable:
+        '此设备上的可用空间不足。此作业需要大约 {size} 的工作空间。请释放一些空间后重试，或保留更少的视频内容，或选择 {smaller}。',
+      insufficientStorage:
+        '此设备上的可用空间不足。此作业需要大约 {size} 的工作空间。请释放一些空间后重试。',
+      storageUnknown:
+        '此浏览器不会显示剩余空间。如果空间不足，任务将停止，且不会保存任何内容——您的原始文件不受影响。',
+      veryLongJob: '这大约需要{time}。您可以继续操作，但使用台式电脑会快得多。',
+      veryLongJobUnknown: '这将花费很长时间。你可以继续操作，但使用台式电脑会快得多。',
+      longJob: '这大约需要{time}时间。运行期间请保持此标签页打开——关闭它会停止任务。',
+      longJobUnknown: '这需要一些时间。运行期间请保持此标签页打开——关闭它会停止任务。',
+      mobileDevice:
+        '手机和平板电脑处理这类任务的速度远比电脑慢，而且浏览器可能会为了释放内存而中途终止任务。如果可以，请使用电脑。',
+      estimateUnavailable: '我们无法确定这台设备需要多长时间才能完成。您可以继续操作。',
+    },
+    shouldTake: '这大约需要{time}。',
+    shouldTakeFewSeconds: '这应该只需要几秒钟。',
+    sizeUpTo: '预计大小最大可达{size}。',
+    sameSize: '您的视频已经按照此设置进行了最大程度的压缩，因此新文件的大小将大致相同。',
+    slides:
+      '这看起来像是幻灯片或屏幕录像，所以文件大小会进一步缩小。如果主要是摄像机拍摄的视频，请选择{best}。',
+  },
+  warnings: {
+    soundHeading: '值得了解的声音特性',
+    finishedHeading: '关于最终视频值得了解的事项',
+    reassurance: '这些都不会阻止您继续操作。您的原始文件也不会因此而改变。',
+    spoken: '{heading}：{titles}。',
+    noAudio: {
+      heading: '这段视频没有声音',
+      detail:
+        '由于没有需要调节音量的声音，所以后续工作将在没有声音的情况下进行。如果您需要声音，请在发布前检查录音。',
+    },
+    clipping: {
+      heading: '声音某些地方可能会失真',
+      detail:
+        '录音通常会达到最大音量，因此部分音频可能会出现削波失真。这通常意味着麦克风的音量设置过高。虽然电平调整仍在进行，但录音中已存在的失真无法消除。',
+    },
+    veryQuiet: {
+      heading: '这段录音声音很小',
+      detail:
+        '音量远低于舒适的聆听水平。调节音量可以提高音量，但调高轻声细语的音量也会把房间里其他的声音也调高。',
+    },
+    highlyVariable: {
+      heading: '音量变化很大',
+      detail:
+        '音量最大和最小的部分相距甚远。音量校正会逐渐修正缓慢的偏差，速度慢到人耳无法察觉，但句子之间突然出现的差异仍然存在。',
+    },
+    noisy: {
+      heading: '可能存在背景噪音',
+      detail:
+        '即使最安静的时刻也难免会有一些声音——风扇声、空调声，或是嘈杂的房间声。这个工具并不能消除噪音，而且提高语音音量也会使背景噪音增大。',
+    },
+    extendedSilence: {
+      heading: '有一段漫长的寂静时期',
+      detail:
+        '在一段连续的录音中，大约有{duration}的近乎静音的时间。如果这是有意为之，则没有问题。如果不是，建议在发布前检查一下录音。',
+    },
+    targetMissed: {
+      heading: '最终的音量还没有完全达到通常的水平',
+      detail: '视频播放没问题；只是听起来可能比用这个工具调音的其他视频略微安静或响亮一些。',
+    },
+    metadataLost: {
+      heading: '无法复制文件的标题和日期',
+      detail:
+        '图片和声音不受影响。如果您的原文件包含标题、作者或日期，新文件中将不会包含这些信息——您仍然可以在上传文件时自行添加。',
+    },
+  },
+  announce: {
+    lossesCount: {
+      '1': '关于新文件的内容，需要了解一点。',
+      '2': '关于新文件的内容，有两件事需要了解。',
+      '3': '关于新文件的内容，你需要了解三件事。',
+      '4': '关于新文件的内容，你需要了解以下四点。',
+      other: '关于新文件的内容，你需要了解的{count}件事。',
+    },
+    lossSaid: '{title}。{detail}',
+  },
+  failure: {
+    originalUnchanged: '您的原始文件未被更改。',
+    unreadable: {
+      what: '此文件无法作为视频读取。',
+      notAVideo:
+        '此文件无法作为视频文件读取。它必须是视频文件——文件名以 .mp4、.mov、.mkv 或 .webm 结尾——并且可能已损坏。',
+      soundOnly:
+        '此文件包含声音但没有视频。此工具用于在视频中添加品牌标识，因此需要包含画面的文件。',
+      noTracks: '此文件中未找到视频或音频。文件可能不完整，或者保存方式不正确。',
+      readError: '读取此文件时出错。文件可能已损坏，或者格式与此工具不兼容。',
+      tookTooLong: '读取此文件耗时比预期长，或者该工具遇到了问题。',
+      next: '请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。',
+    },
+    badTrim: {
+      what: '开始时间和结束时间无法使用。',
+      next: '在步骤 2 中正确设置开始时间和结束时间，然后重试。',
+    },
+    unlevellable: {
+      what: '由于这段录音的声音无法达到正常水平，所以没有制作视频。',
+      next: '请使用“发送反馈”按钮进行报告——它附带的详细信息将有所帮助。',
+    },
+    outputLoudness: {
+      what: '最终的声音没有达到正常水平，所以视频没有保留。',
+    },
+    outputPeak: {
+      what: '最终的声音在峰值处音量过大，因此视频没有保留。',
+    },
+    outputUnreadable: {
+      what: '由于制作完成的视频无法重新读取，因此没有保存。',
+    },
+    outOfSpace: {
+      what: '该设备运行到一半时工作空间不足了。',
+      next: '腾出一些空间，或者选择{smaller}，然后重试。',
+    },
+    encoderRefused: {
+      what: '这个浏览器在视频编码过程中停止了。',
+      next: '请尝试“文件大小/质量”下的其他输出选项。如果问题再次出现，请点击“发送反馈”按钮进行报告——该按钮附带的详细信息将有助于我们解决问题。',
+    },
+    checkFailed: {
+      what: '设备检查未完成。',
+      next: '点击“再次检查”重新运行一次。如果仍然失败，请点击“发送反馈”按钮报告问题。',
+    },
+    timedOut: {
+      what: '由于该任务停止报告进度，因此被停止了。',
+    },
+    unknown: {
+      what: '视频制作过程中出现错误。',
+    },
+    tryAgain:
+      '请再试一次。如果问题再次出现，请点击“发送反馈”按钮进行报告——该按钮附带的详细信息将有助于我们解决问题。',
+    startup: {
+      insecure: '此页面需要建立安全连接才能处理您的视频。请通过以 https:// 开头的地址打开它。',
+      noWebCodecs: '此浏览器无法处理视频，因此该工具无法在此运行。{remedy}',
+      noH264: '此浏览器无法创建此工具所需的视频格式，因此该工具无法在此处运行。{remedy}',
+      noWorkingStore:
+        '此浏览器没有为该工具提供足够的空间来构建视频。如果您使用隐私浏览模式，通常可以使用普通窗口。{remedy}',
+      workerNotStarted:
+        '执行操作的工具部分未启动。请重新加载页面。如果问题再次出现，请点击“发送反馈”按钮进行报告。',
+    },
+    captured:
+      '工具出现故障。正在制作的视频可能无法完成；您的原始文件不受影响。请点击“发送反馈”按钮报告此问题，该按钮会附上这些详细信息。',
+  },
+  systemCheck: {
+    summary: '系统检查 — {result}',
+    results: {
+      problems: {
+        one: '{count} 个问题',
+        other: '{count} 个问题',
+      },
+      warnings: {
+        one: '{count} 个警告',
+        other: '{count} 个警告',
+      },
+      checking: '检查中',
+      allPassed: '全部通过',
+    },
+    marks: {
+      pass: '好的',
+      fail: '不',
+      warn: '!',
+      pending: '…',
+    },
+    rows: {
+      secure: '安全连接（存储访问所需）',
+      webcodecs: '浏览器中的视频处理（WebCodecs）',
+      h264: '该工具生成的视频格式为（H.264）',
+      aac: '该工具生成的声音格式（AAC）',
+      opfs: '私人工作存储',
+      worker: '后台处理',
+    },
+    values: {
+      checking: '检查中',
+      available: '可用的',
+      notAvailable: '无法使用',
+      supported: '支持',
+      notSupported: '不支持',
+      aacNotSupported: '不支持——此处无法制作带声音的视频。',
+      failedToStart: '启动失败',
+      readyIn: '准备时间：{time}',
+      noResponse: '没有回应',
+    },
+  },
+  errors: {
+    heading: '捕获的错误',
+    technicalDetails: '技术细节',
+    report: '报告此问题',
+  },
+  feedback: {
+    open: '发送反馈',
+    heading: '发送反馈',
+    intro: '您的邮件将通过您自己的电子邮件应用程序发送到 {address}。您将在邮件发送前看到它。',
+    messageLabel: '您的留言',
+    writeFirst: '请先写好信息。',
+    whatSent: '将随邮件发送的内容',
+    whatSentDetail:
+      '有助于查找问题的详细信息包括：应用程序版本、您使用的浏览器、您进行到了哪一步以及视频时长、图像尺寸和格式。这些信息绝不包含视频本身、视频名称或视频中的任何内容。',
+    openEmail: '打开电子邮件应用程序',
+    copy: '复制消息和详细信息',
+    close: '关闭',
+    tooLong:
+      '您的邮件内容过长，无法一次性复制到电子邮件应用中。请选择“复制消息和详细信息”，然后将其粘贴到发送至{address}的电子邮件中。',
+    opened:
+      '您的电子邮件应用程序应该已经打开，邮件内容也已准备就绪，可以发送了。如果没有，请选择“复制消息和详细信息”，然后将其粘贴到发送至{address}的电子邮件中。',
+    someOmitted: '邮件中无法包含所有细节；副本中包含了所有内容。',
+    copied: '已复制。请将其粘贴到发送至{address}的电子邮件中。',
+    couldNotCopy: '无法复制。请打开“将随邮件发送的内容”，选择详细信息，然后将其复制到您的邮件中。',
+    onlyInCopy: '邮件内容太长，只保存在“复制消息和详细信息”中：',
+  },
+  save: {
+    pickerDescription: 'MP4 视频 (.mp4)',
+    stem: '视频',
+    marks: {
+      branded: '品牌',
+      levelled: '音量已调整',
+      converted: '转换',
+    },
+    fileName: '{stem} ({mark}).mp4',
+    downloadIos: '保存到“文件”应用的“下载”文件夹中',
+    downloadOther: '保存到您的下载文件夹',
+    download:
+      '{where} — 浏览器可能仍在处理视频。完成后，将其上传到目标位置，或在步骤 1 中选择另一个视频。视频会一直保留在此处，直到您开始制作另一个视频。',
+  },
+  format: {
+    unknown: '未知',
+    lessThanASecond: '不到一秒',
+    fewSeconds: '几秒钟',
+    frameRate: '每秒 {rate} 帧',
+    resolution: '{width} × {height}',
+    channels: {
+      mono: '单声道（一个声道）',
+      stereo: '立体声（双声道）',
+      surround51: '5.1环绕声',
+      surround71: '7.1环绕声',
+      several: '{count} 个声道',
+    },
+  },
+}

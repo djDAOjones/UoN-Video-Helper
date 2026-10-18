@@ -22,7 +22,7 @@
 
 - [!] VH-124 — The page, made excellent — since 2026-10-01 — blocked: the owner's sign-off
 - [!] VH-113 — The phone path — since 2026-10-01 — blocked: the owner's own work — a canon [maintainer] item
-- [!] VH-105 — The page in Chinese and Bahasa Malaysia — since 2026-10-01 — blocked: the owner's filled translation sheet (reviews/2026-10-18/VH-105-strings.csv); the language switcher is built meanwhile
+- [!] VH-105 — The page in Chinese and Bahasa Malaysia — since 2026-10-01 — blocked: the owner's call on going live as machine translation, and each campus reviewer's check of reviews/2026-10-18/VH-105-strings-filled.csv; the language switcher (stage 2) is built meanwhile
 
 ### Band 7 — measured, not yet fixed
 

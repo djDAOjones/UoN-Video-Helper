@@ -1,0 +1,13 @@
+How to check this sheet
+
+This is every piece of text the UoN Video Helper page can show or read out, in Simplified Chinese and Bahasa Malaysia. It was translated by machine (Google Translate), and then an AI corrected the translations that broke or misled. Please check your language's column as a native speaker would read it on the page.
+
+Correct a translation by overwriting its cell in your language's column: "Chinese (Simplified)" (E) or "Bahasa Malaysia" (F). Leave the cell as it is if it reads well.
+Do not change the key (column A). It is how each translation finds its place on the page.
+Keep every {placeholder} exactly as written, braces and all, for example {count} or {size}. The page puts a number or a name there. You may move a placeholder within the sentence to suit your language.
+Columns B and D say where the text shows and what to watch for. Column G says what the AI changed and what the machine translation was.
+Some messages have a row for each choice, for example blue and white, fade and slide, or one and other. Check every row, even where your language uses the same words.
+
+Worth a close look: the word for the closing branding card (the University's end card), the word for a closing that "fades in", and the one-word marks beside each line of the System check.
+
+Send the sheet back as .csv or .xlsx, with a line saying whether your language is ready to offer to colleagues.
