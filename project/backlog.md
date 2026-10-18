@@ -22,7 +22,7 @@
 
 - [!] VH-124 — The page, made excellent — since 2026-10-01 — blocked: the owner's sign-off
 - [!] VH-113 — The phone path — since 2026-10-01 — blocked: the owner's own work — a canon [maintainer] item
-- [ ] VH-105 — The page in Chinese and Bahasa Malaysia — since 2026-10-01 — blocked: VH-124, which settles the copy it translates
+- [!] VH-105 — The page in Chinese and Bahasa Malaysia — since 2026-10-01 — blocked: the owner asked for it on 2026-10-18; their word is needed on translating the current copy now or signing off VH-124 first, which settles that copy
 
 ### Band 7 — measured, not yet fixed
 
