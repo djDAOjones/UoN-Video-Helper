@@ -28,9 +28,9 @@
 - [ ] VH-122 — Decode damage is silenced and said — since 2026-10-01
 - [ ] VH-116 — A video estimate that holds still — since 2026-10-01
 
-### Band 8 — a title card and an Internal only closing
+### Band 8 — a title card and an Internal use only closing
 
-- [ ] VH-126 — The Internal only closing — since 2026-10-18
+- [ ] VH-126 — The Internal use only closing — since 2026-10-18
 - [ ] VH-127 — The title card: General — since 2026-10-18
 - [ ] VH-128 — The title card: Submission — since 2026-10-18
 

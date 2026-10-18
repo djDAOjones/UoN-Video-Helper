@@ -93,12 +93,13 @@ package is uploaded by hand.
   appended and chosen by three controls — type, onset, colour — or none;
   conformed to the source's resolution and frame rate, padded in
   Nottingham Blue, and silent (spec §4).
-- **Title card and Internal only** (PLAN-1) — an optional silent card
-  before the video, General (a heading and a subhead) or Submission
-  (module, assignment, convenor or tutor, student ID numbers, running
-  time, the card's date); and an "Internal only" closing, a plain card
-  with no logo, beside the official closings and none. Both are drawn
-  by the app, not shipped as assets.
+- **Title card and Internal use only** (PLAN-1) — an optional silent
+  card before the video, General (a heading and a subhead) or Submission
+  (module, assignment, convenor or tutor, up to eight student ID
+  numbers, running time, the card's date), its labels in the page's
+  language and no text under 28 pt at PowerPoint sizes, drawn by the
+  app; and an "Internal use only" closing, the official closing with
+  those words added, pre-built from the masters like the others.
 - **Loudness normalisation** — BS.1770-4 measurement, then a bespoke
   chain: high-pass, conditional macro-levelling (only when LRA > 9 LU,
   slew-limited to 1 dB/s), gentle compression, a single linear gain that
@@ -157,8 +158,8 @@ creating, editing
 or transcribing captions; batch processing; exposed WebM output (the muxer
 supports it, the UI does not); pumping detection on pre-existing audio
 processing; noise reduction or de-reverberation; custom or per-department
-branding variants (the Internal only closing carries no University
-branding and is not one, PLAN-1).
+branding variants (the Internal use only closing is the owner's own
+variant of the official closing, PLAN-1; D12 stays open for the rest).
 
 Cut: the stream-copy fast path for the larger output (D10, answered no on
 2026-08-27) — re-encoding is slower and predictable.
