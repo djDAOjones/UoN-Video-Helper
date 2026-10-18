@@ -55,9 +55,11 @@
 
   /* WCAG 1.4.8 (AAA): no more than 80 characters a line, and the ticket's
      ~70. In Arial a `ch` is the width of a zero, about 1.28 average
-     characters, so 70ch held 88–91 and 55ch holds about 70 (VH-124). CJK's
-     40-glyph limit is VH-105's to set. */
+     characters, so 70ch held 88–91 and 55ch holds about 70 (VH-124). CJK
+     glyphs are a square one em wide, and 1.4.8's limit for them is 40, so
+     the Chinese measure is 40em (VH-105). */
   --measure: 55ch;
+  --measure-cjk: 40em;
 
   /* Layout: the content column, and the widths the form rows wrap at. */
   --layout-width: 60rem;

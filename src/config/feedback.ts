@@ -17,6 +17,20 @@ export const FEEDBACK_ADDRESS = 'joe.bell@nottingham.ac.uk'
 export const FEEDBACK_SUBJECT = 'UoN Video Helper feedback'
 
 /**
+ * Where better wording for a machine-translated page goes (VH-105): the
+ * owner's own address, chosen on 2026-10-18 with the decision to put the
+ * Chinese and Malay pages live. The note on a translated page links to it.
+ */
+export const TRANSLATION_FEEDBACK_ADDRESS = 'joe.bell@nottingham.ac.uk'
+
+/**
+ * That email's subject, before the language's own name: the product and the
+ * language, and nothing about the video, the file or the device (the rules'
+ * no-egress line). No body is prefilled.
+ */
+export const TRANSLATION_FEEDBACK_SUBJECT = 'UoN Video Helper translation'
+
+/**
  * The longest `mailto:` link built, in characters. Some mail clients cut a
  * link's body at about 2,000; the details are trimmed from the end to fit, and
  * the user's own words never are.

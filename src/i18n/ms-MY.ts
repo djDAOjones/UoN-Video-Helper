@@ -30,6 +30,11 @@ export const msMY: Messages = {
   language: {
     label: 'Bahasa halaman',
     switched: 'Bahasa halaman: {name}.',
+    machine: {
+      title: 'Terjemahan mesin',
+      text: 'Halaman ini diterjemahkan daripada bahasa Inggeris oleh komputer, jadi beberapa perkataan mungkin tidak tepat.',
+      link: 'Cadangkan perkataan yang lebih baik melalui e-mel ke {address}',
+    },
   },
   lede: {
     intro: 'Alat ini melakukan perkara berikut pada video anda:',

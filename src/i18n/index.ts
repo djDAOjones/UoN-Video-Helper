@@ -54,9 +54,13 @@ export function t(): PageText {
   return current
 }
 
-/** The current language's tag, for `lang` attributes. */
+/**
+ * The language the page is shown in, for `lang` attributes and for naming
+ * it: the table's, not the tag chosen. A tag with no table shows English,
+ * and says so, so a page never claims Chinese over English words.
+ */
 export function language(): LanguageTag {
-  return currentTag
+  return LANGUAGE_TABLES[currentTag] ? currentTag : DEFAULT_LANGUAGE
 }
 
 /** The current language's `Intl` locale: the table's own, so a formatter and its words agree. */

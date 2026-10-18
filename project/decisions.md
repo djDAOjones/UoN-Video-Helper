@@ -17,6 +17,26 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-18 — VH-105 — The language switcher repaints in place, and a translated page says so
+
+**Decision:** the page's language is chosen in segmented native radios at the top of `main`, each option in its own language with its own `lang`, read from this browser's preference before the first paint and repainted in place by one listener, so nothing on the page is lost; Chinese and Malay carry a "Machine translation" note with an email link to `TRANSLATION_FEEDBACK_ADDRESS` whose subject names only the product and the language — because the owner's go-live decision of 2026-10-18 needs the switch built and the machine translation marked.
+
+**Rationale:** built to the item's 2026-10-18 plan, with four changes: the switcher is built in `src/ui/language-switcher.ts` and inserted before the heading, because `test/screen-text.test.ts` holds `<main>`'s first child to be the `h1` in the static markup; the `<title>` is set at boot rather than bound; `MACHINE_TRANSLATED` in `src/config/languages.ts` lists the languages that show the note, so a language comes off it once its colleague has checked it; spoken stage announcements are composed again from the same report, so they too follow the language. Every other live region is set to `aria-live="off"` for two animation frames while `language.switched` is said, and focus stays on the radio. `--font-cjk` names the system's Chinese faces and `--measure-cjk` stops Chinese at 40 glyphs. The note's link lifts the leave warning as the feedback email does. The three new keys' Chinese and Malay are drafted by the agent in the filled sheet. Checked in Chrome at 1280 px and 375 px with a sample loaded: the trim and a typed-invalid time with its error, the closing choices, a running job, an unsaved result and its discard question, a feedback draft and a drop refusal all survived each switch; `html[lang]`, the title and `aria-valuetext` followed; a remembered language painted first on reload. Standards applied: Carbon (component first: the content switcher as the page's segmented radios, as the closing colour), WCAG 2.2 (3.1.2 language of parts, 1.4.8's 40-glyph CJK measure, 2.5.5 targets, 4.1.3 status messages), Nielsen 1 and 4, house conventions (the address in `src/config/`; named test categories — happy path, junk, a throwing store, a round trip, no table, one language offered).
+
+**Supersedes:** none
+
+**Deferred:** none
+
+## 2026-10-18 — VH-105 — Chinese and Malay go live as machine translation, checked on the live page
+
+**Decision:** zh-Hans and ms-MY are offered in production as soon as the switcher is built, each marked on the page as machine translation with an email link for better wording, and a native-speaking colleague at each campus checks the live page instead of signing off the sheet first; the item's criterion "each language is signed off by its reviewer" becomes "each language is marked as machine translation and open to its campus colleague's check on the live page" — because the owner chose it in chat on 2026-10-18 ("go live, colleague check live app").
+
+**Rationale:** the earlier route held both languages in development until a reviewer signed off `VH-105-strings-filled.csv`, because every push to `main` publishes the pilot. The owner weighed a page in machine Chinese and Malay against no page at all for those colleagues and chose to publish, with the mark saying so, so the check happens where the words are read. `LANGUAGES_OFFERED` in `src/config/languages.ts` lists all three languages in development and production alike. Corrections still come back by key through the filled sheet and `scripts/strings-table.mjs`; the repairing agent's doubts stay in the item file for the colleagues. The translation feedback goes to the owner's own address, kept in `src/config/`. Only the superseded entry's clause "both languages stay development-only" is replaced; its sheet-and-generator route stands.
+
+**Supersedes:** 2026-10-18 — VH-105 — The translated tables are generated from the filled sheet
+
+**Deferred:** none
+
 ## 2026-10-18 — VH-105 — The translated tables are generated from the filled sheet
 
 **Decision:** the zh-Hans and ms-MY tables are written from one filled sheet by `scripts/strings-table.mjs`, never by hand, and a test holds each table to that sheet; the owner's Google Translate pass is kept verbatim as `reviews/2026-10-18/VH-105-strings-returned.csv`, and the agent's 224 repairs are applied in `VH-105-strings-filled.csv`, each with what it was, in a "changed by the agent" column; both languages stay development-only — because a reviewer's corrections come back the same way, by key, and a hand-edited table would drift from the sheet the reviewers see.

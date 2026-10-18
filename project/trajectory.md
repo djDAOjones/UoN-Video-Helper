@@ -9,6 +9,7 @@
 
 ## Owner requests
 
+- VH-105 — the page in Simplified Chinese and Bahasa Malaysia, live as machine translation: a switcher at the top of the page repaints every string and `lang` in place, keeps the video, the trim, every choice, a running job, a result and a feedback draft, and is remembered in this browser; a note on each translated page invites better wording by email (2026-10-18) — see decisions
 - VH-125 — the trim preview follows the handle: a drag, a key or a typed time shows that point, paused, and a drag comes to rest on its last time (2026-10-18) — see decisions
 
 ## V3 adoption

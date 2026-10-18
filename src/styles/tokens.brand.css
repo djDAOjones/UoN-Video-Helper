@@ -81,6 +81,18 @@
   --font-heading: 'Lora', Georgia, 'Times New Roman', serif;
   --font-body: Arial, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
+  /*
+   * Simplified Chinese (VH-105). Neither brand face carries CJK glyphs, so
+   * Chinese fell back to whatever the system picked. This names the
+   * Simplified Chinese face each system ships — macOS and iOS, Windows,
+   * Android and Linux — and is used only behind the brand faces, under
+   * `:lang(zh)` below, so Latin in a Chinese passage keeps the brand's face.
+   * Nothing is fetched: these are the device's own fonts.
+   */
+  --font-cjk:
+    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', 'Source Han Sans SC',
+    sans-serif;
+
   /* ---- Logo ---------------------------------------------------------- */
 
   /*
@@ -115,6 +127,17 @@
   --border-strong: var(--uon-blue-80);
   /* A rule between rows, and a progress track. Decorative: no 3:1 claim. */
   --border-divider: var(--uon-blue-20);
+}
+
+/*
+ * Chinese text keeps the brand faces first, for its Latin, with the CJK face
+ * behind them for its characters (VH-105). On a Chinese page this holds from
+ * the root down; on any other, `app.css` applies it where a passage switches
+ * into Chinese, such as the 简体中文 option of the language switcher.
+ */
+:lang(zh) {
+  --font-body: Arial, var(--font-cjk);
+  --font-heading: 'Lora', Georgia, var(--font-cjk);
 }
 
 /*

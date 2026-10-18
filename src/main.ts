@@ -97,9 +97,12 @@ import { body, notification } from './ui/notification'
 import { downloadDestinationFor, downloadStatusText } from './ui/save-text'
 import { renderWarnings } from './ui/warning-text'
 import { failureSentence, failureText, startupFailureText, type FailureText } from './ui/failure-text'
-import { locale, onLanguageChange, sentenceGap, t } from './i18n'
+import { language, locale, onLanguageChange, sentenceGap, setLanguage, t } from './i18n'
 import { unitFormatter } from './i18n/intl'
 import { applyStaticText } from './i18n/bind'
+import { readLanguagePreference, writeLanguagePreference } from './i18n/preference'
+import { DEFAULT_LANGUAGE, LANGUAGE_NAMES, LANGUAGES_OFFERED } from './config/languages'
+import { buildLanguageSwitcher, languageOptions } from './ui/language-switcher'
 import { buildLosses, renderSourceError, renderSourceReport, summarise } from './ui/source-panel'
 import type { SourceReport } from './media/inspect'
 import { lossesSpoken, spoken, warningsSpoken } from './ui/announce'
@@ -138,6 +141,24 @@ function required<T extends Element>(selector: string): T {
 // The logo and the heading font, where their files exist. First, so the
 // header does not change shape after the rest of the page has settled.
 log.info('boot', 'brand assets', installBrandAssets(required<HTMLElement>('#brand-header')))
+
+/**
+ * This browser's own store, or `null` where it refuses — a private window,
+ * blocked site data. Read for the language before the first paint, and for
+ * the progress announcement setting below; nothing in it leaves the device.
+ */
+const localStore = ((): Storage | null => {
+  try {
+    return window.localStorage
+  } catch {
+    return null
+  }
+})()
+
+// The remembered language, before anything is painted, so the first paint is
+// already in it (VH-105). A language no longer offered falls back to English.
+setLanguage(readLanguagePreference(localStore, LANGUAGES_OFFERED) ?? DEFAULT_LANGUAGE)
+document.documentElement.lang = language()
 
 // The static words, from the table (VH-105). English is what the markup
 // already says, so this is a no-op until another language is chosen.
@@ -602,6 +623,9 @@ const shownFailures = new Map<HTMLElement, { readonly failure: Failure; readonly
 
 /** Shows a failure in `container` and returns its box, which a job's end may hand focus to. */
 function showFailure(container: HTMLElement, failure: Failure): HTMLElement {
+  // The failure replaces whatever was painted here, so a change of language
+  // must never paint that back over it (VH-105).
+  regions.delete(container)
   const box = renderSourceError(container, failureWords(failure))
   shownFailures.set(container, { failure, box })
   return box
@@ -950,7 +974,7 @@ let inspectedReport: SourceReport | null = null
 // A dropped video arrives as a `change` on the picker, so everything below
 // reads it exactly as a chosen one (VH-101). Busy is read at the drop: the
 // lock below is what keeps the picker from starting a second video too.
-installDropZone({
+const repaintDropRefusal = installDropZone({
   zone: dropZone,
   input: fileInput,
   hint: dropHint,
@@ -1558,17 +1582,8 @@ trimPreview.addEventListener('error', () => {
 /** What the last progress report said, so the next announces only what is new. */
 let progressMemo: ProgressMemo = NO_PROGRESS
 
-/**
- * The user's choice on routine progress announcements (WCAG 2.2.4). Read
- * once; the checkbox beside the status line writes it back.
- */
-const localStore = ((): Storage | null => {
-  try {
-    return window.localStorage
-  } catch {
-    return null
-  }
-})()
+// The user's choice on routine progress announcements (WCAG 2.2.4). Read
+// once; the checkbox beside the status line writes it back.
 announceProgressBox.checked = readAnnounceProgress(localStore)
 announceProgressBox.addEventListener('change', () => {
   writeAnnounceProgress(localStore, announceProgressBox.checked)
@@ -1579,7 +1594,8 @@ let lastProgress: { readonly stage: PipelineStage; readonly fraction: number } |
 
 function onStage(stage: PipelineStage, fraction: number): void {
   lastProgress = { stage, fraction }
-  const view = progressView(stage, fraction, progressMemo, announceProgressBox.checked)
+  const before = progressMemo
+  const view = progressView(stage, fraction, before, announceProgressBox.checked)
   progressMemo = view.memo
   // The stage and the percentage beside the bar, every report; the live
   // region only at a stage change or a milestone (U-08).
@@ -1587,7 +1603,10 @@ function onStage(stage: PipelineStage, fraction: number): void {
   processProgressText.hidden = false
   // Spoken, not shown: the line beside the bar is the one visible account
   // (VH-124), and "Cancelling…" is never written over (pre-work defect 7).
-  if (view.announce && !cancelRequested) setStatus('', view.announce)
+  // Composed again from the same report after a change of language (VH-105).
+  if (view.announce && !cancelRequested) {
+    setStatus('', () => progressView(stage, fraction, before, true).announce ?? '')
+  }
   // No value at all for a stage whose progress is not measured: the bar is
   // indeterminate rather than stuck at 0% (U-07).
   if (view.indeterminate) processProgress.removeAttribute('value')
@@ -1612,8 +1631,10 @@ function setTitle(of: typeof titleOf): void {
       : outcomeTitle(of === 'stage' ? 'none' : of)
 }
 
-// The title says the same thing again when the language changes (VH-105).
+// The title says the same thing again when the language changes (VH-105),
+// and is written now, in case the remembered language is not the markup's.
 onLanguageChange(() => setTitle(titleOf))
+setTitle(titleOf)
 
 /**
  * The one fact the screen is arranged around: is a job running right now?
@@ -2683,6 +2704,100 @@ required<HTMLButtonElement>('#feedback-close').addEventListener('click', () => {
 })
 required<HTMLButtonElement>('#feedback-open').addEventListener('click', openFeedback)
 required<HTMLButtonElement>('#feedback-report').addEventListener('click', openFeedback)
+
+// --- Language (VH-105) -----------------------------------------------------
+// Chosen at the top of the page, remembered in this browser only, and changed
+// in place: the video, the trim, every choice, a running job, an unsaved
+// result and a feedback draft stay exactly where they were.
+
+const languageSwitcher = buildLanguageSwitcher(languageOptions(LANGUAGES_OFFERED, language()))
+// In `main`, above the heading, and not in the header band, which holds the
+// logo alone and keeps its brand colours under forced colours.
+required<HTMLHeadingElement>('.page-title').before(
+  languageSwitcher.fieldset,
+  languageSwitcher.notice,
+)
+
+/** Puts back the live regions a switch quietened, while that is still to happen. */
+let restoreLiveRegions: (() => void) | null = null
+
+/**
+ * Quietens every live region but the switch's own until the repaint is over,
+ * so the page saying itself again is not read out as news — a live region is
+ * never a control's own result (spec 9.3) — and the one thing said is the
+ * switch. Put back two frames later: Chrome works out live-region events in
+ * the frame's lifecycle update, after `requestAnimationFrame`, so one frame
+ * is not enough. A second switch inside those frames puts them back first,
+ * so it never takes "off" for what a region was.
+ */
+function quietLiveRegions(): void {
+  restoreLiveRegions?.()
+  const quietened = [
+    ...document.querySelectorAll<HTMLElement>('[aria-live], [role="status"], [role="alert"]'),
+  ]
+    .filter((region) => region !== languageSwitcher.status)
+    .map((region) => [region, region.getAttribute('aria-live')] as const)
+  for (const [region] of quietened) region.setAttribute('aria-live', 'off')
+  const restore = (): void => {
+    if (restoreLiveRegions !== restore) return
+    restoreLiveRegions = null
+    for (const [region, live] of quietened) {
+      if (live === null) region.removeAttribute('aria-live')
+      else region.setAttribute('aria-live', live)
+    }
+  }
+  restoreLiveRegions = restore
+  requestAnimationFrame(() => requestAnimationFrame(restore))
+}
+
+// Never locked by a job or a save: switching keeps both. Focus stays on the
+// radio, which is never replaced.
+languageSwitcher.fieldset.addEventListener('change', (event) => {
+  const chosen = LANGUAGES_OFFERED.find((tag) => tag === (event.target as HTMLInputElement).value)
+  if (!chosen) return
+  writeLanguagePreference(localStore, chosen)
+  quietLiveRegions()
+  setLanguage(chosen)
+  // Said in the new language, naming the language the page now shows.
+  languageSwitcher.status.textContent = t().language.switched({ name: LANGUAGE_NAMES[language()] })
+})
+
+// A followed `mailto:` link raises "Leave site?" over a running job, so the
+// note's link goes the way the feedback dialog's email does.
+languageSwitcher.link.addEventListener('click', (event) => {
+  event.preventDefault()
+  openMailto(languageSwitcher.link.href)
+})
+
+/**
+ * Says the whole page again in the language just chosen, in place. After the
+ * failures and the tab title, whose listeners come first. The static words
+ * go first, because the progress bar's name and the browser sentence are
+ * bound and carry live words over their defaults, written again below.
+ */
+onLanguageChange(() => {
+  document.documentElement.lang = language()
+  applyStaticText(document)
+  for (const paint of [...regions.values()]) paint()
+  for (const id of checkRows.keys()) paintCheck(id)
+  updateSystemCheckSummary()
+  syncClosingControls()
+  labelButtons()
+  // The lock notes, and the trim: its handles' times, its result line, and
+  // a field's typed text and its problem, which stay as the user left them.
+  applyControlLock()
+  // The stage line and the bar's name from the last report, leaving what the
+  // next report will announce untouched.
+  if (lastProgress) {
+    const { shown } = progressView(lastProgress.stage, lastProgress.fraction, progressMemo, false)
+    processProgressText.textContent = shown
+    processProgressLabel.textContent = shown
+  }
+  if (jobInFlight) jobNotice.textContent = t().progress.jobNotice
+  renderFeedbackDisclosure()
+  repaintDropRefusal()
+  languageSwitcher.paint()
+})
 
 // --- Dev-only affordances --------------------------------------------------
 // Hidden in production per UI-STANDARDS.md -> "Diagnostics affordance".

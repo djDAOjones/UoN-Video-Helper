@@ -30,6 +30,11 @@ export const zhHans: Messages = {
   language: {
     label: '页面语言',
     switched: '页面语言：{name}。',
+    machine: {
+      title: '机器翻译',
+      text: '本页面由机器从英文翻译而来，部分措辞可能有误。',
+      link: '发送电子邮件至 {address}，提出更好的措辞',
+    },
   },
   lede: {
     intro: '此工具对您的视频执行以下操作：',

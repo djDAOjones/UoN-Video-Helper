@@ -91,6 +91,8 @@ function carriesFiles(event: DragEvent): boolean {
  *
  * @param busy - Read at the moment of the drop, so a job or a save started
  *   since the drag began is respected.
+ * @returns The way to say a refusal still showing again, in the page's
+ *   current language (VH-105); it says nothing when none is showing.
  */
 export function installDropZone(options: {
   readonly zone: HTMLElement
@@ -100,8 +102,20 @@ export function installDropZone(options: {
   /** An always-present live region for the refusal; empty when there is none. */
   readonly message: HTMLElement
   readonly busy: () => DropBusy
-}): void {
+}): () => void {
   const { zone, input, hint, message, busy } = options
+
+  /**
+   * The refused drop, kept as what it was rather than as words, so a change
+   * of language can say the refusal again (VH-105). Only the name and type
+   * of each file, which is all the decision reads; `null` while none shows.
+   */
+  let refused: { readonly files: readonly DroppedFile[]; readonly busy: DropBusy } | null = null
+  const sayRefusal = (): void => {
+    message.textContent = refused
+      ? (dropProblem(refused.files, input.accept, refused.busy) ?? '')
+      : ''
+  }
 
   // Counted, not flagged: `dragleave` fires for every child the pointer
   // crosses, and the zone is only left when the count returns to zero.
@@ -117,7 +131,8 @@ export function installDropZone(options: {
     if (!carriesFiles(event)) return
     depth++
     // A new drag starts fresh: the last refusal described the last drop.
-    message.textContent = ''
+    refused = null
+    sayRefusal()
     if (busy() === null) setHeld(true)
   })
   zone.addEventListener('dragleave', (event) => {
@@ -139,8 +154,13 @@ export function installDropZone(options: {
     setHeld(false)
 
     const files = Array.from(event.dataTransfer.files)
-    const problem = dropProblem(files, input.accept, busy())
-    message.textContent = problem ?? ''
+    const busyNow = busy()
+    const problem = dropProblem(files, input.accept, busyNow)
+    refused =
+      problem === null
+        ? null
+        : { files: files.map(({ name, type }) => ({ name, type })), busy: busyNow }
+    sayRefusal()
     if (problem !== null) return
 
     const chosen = new DataTransfer()
@@ -150,7 +170,9 @@ export function installDropZone(options: {
   })
   // A video chosen through the picker answers any refusal still showing.
   input.addEventListener('change', () => {
-    if (input.files?.length) message.textContent = ''
+    if (!input.files?.length) return
+    refused = null
+    sayRefusal()
   })
 
   window.addEventListener('dragover', (event) => {
@@ -164,4 +186,5 @@ export function installDropZone(options: {
     depth = 0
     setHeld(false)
   })
+  return sayRefusal
 }

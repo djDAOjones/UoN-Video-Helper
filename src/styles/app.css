@@ -38,6 +38,15 @@ dd {
   max-width: var(--measure);
 }
 
+/* Chinese stops at 40 glyphs, 1.4.8's limit for CJK (VH-105). A passage kept
+   in English inside a Chinese page is not `:lang(zh)`, and keeps the measure
+   above. */
+p:lang(zh),
+li:lang(zh),
+dd:lang(zh) {
+  max-width: var(--measure-cjk);
+}
+
 /* One blank line between paragraphs of running text (1.4.8's paragraph
    spacing, VH-124). The lede and a notification's body are where paragraphs
    follow each other; a helper or status line under a control keeps its own
@@ -53,6 +62,13 @@ dd {
 h1,
 h2 {
   font-family: var(--font-heading);
+}
+
+/* Where a passage switches into Chinese, its face is worked out again from
+   the Chinese tokens (VH-105): a font family is inherited as the parent's
+   resolved list, which on an English page has no CJK face in it. */
+[lang]:lang(zh) {
+  font-family: var(--font-body);
 }
 
 /* `--interactive` is the text colour now, so colour no longer tells a link
@@ -998,6 +1014,46 @@ details[open] > .disclosure-summary::before {
 }
 
 
+/*
+ * The page's language (VH-105): the same skin, at the top of `main`. Each
+ * segment is as wide as its own words rather than an equal share, so
+ * "Bahasa Malaysia" fits at phone width; where even that does not fit, the
+ * segments wrap, so each keeps all four edges and overlaps its neighbour's
+ * by one hairline rather than dropping its left edge.
+ */
+.language-switcher {
+  margin-bottom: var(--spacing-06);
+}
+
+.language-switcher .segments {
+  flex-wrap: wrap;
+}
+
+.language-switcher .segment {
+  flex: none;
+}
+
+.language-switcher .segment + .segment {
+  margin-left: calc(-1 * var(--border-width));
+}
+
+.language-switcher .segment + .segment .segment-face {
+  border-left: var(--border-width) solid var(--interactive);
+}
+
+/* The machine-translation note sits between the switcher and the heading. */
+.notification.language-notice {
+  margin: 0 0 var(--spacing-06);
+}
+
+/* A link on a line of its own has no sentence round it to take the inline
+   exception, so it is a 44 px target like any control (WCAG 2.5.5). */
+.notification-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target-min);
+}
+
 /* Where controls are locked while a video is made or saved (VH-112, U-21). */
 .lock-note {
   margin: 0 0 var(--spacing-05);
@@ -1406,6 +1462,15 @@ details[open] > .disclosure-summary::before {
     border-color: GrayText;
     background: Canvas;
     color: GrayText;
+  }
+
+  /* The language segments' own left edges, in the theme's colours too. */
+  .language-switcher .segment + .segment .segment-face {
+    border-left-color: ButtonText;
+  }
+
+  .language-switcher .segment + .segment input:checked + .segment-face {
+    border-left-color: Highlight;
   }
 
   .swatch {

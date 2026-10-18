@@ -59,10 +59,21 @@ export const enGB = {
   },
 
   language: {
-    /** The switcher's accessible name. */
+    /** The switcher's visible label, which is also its accessible name. */
     label: 'Page language',
     /** Said once, in the new language, when the page changes language. */
     switched: 'Page language: {name}.',
+    /**
+     * The note beside the switcher on a page a computer translated (decisions,
+     * 2026-10-18: go live, marked as machine translation). Never shown in
+     * English; here so every table has it, and so the sheet has the source.
+     */
+    machine: {
+      title: 'Machine translation',
+      text: 'A computer translated this page from English, so some words may be wrong.',
+      /** A link that opens an email to the address it names. */
+      link: 'Email better wording to {address}',
+    },
   },
 
   lede: {

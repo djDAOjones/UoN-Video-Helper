@@ -2,12 +2,11 @@
  * The languages the page is offered in (VH-105).
  *
  * English is the default and the fallback; Simplified Chinese is read at the
- * Ningbo and Malaysia campuses, Bahasa Malaysia at the second. Each table is
- * drafted twice and judged by a native-speaking reviewer the maintainer
- * sources, so a language is OFFERED only once its reviewer has signed it off:
- * every push deploys, and a page in machine-sounding Chinese is worse than a
- * page in English. Until then the two translations are on in development and
- * off in production, which is this one line.
+ * Ningbo and Malaysia campuses, Bahasa Malaysia at the second. Both
+ * translations are machine translations, repaired by an agent: the owner
+ * chose on 2026-10-18 to offer them live, marked on the page as machine
+ * translation, and to have a native-speaking colleague at each campus check
+ * the live page rather than sign off a sheet first (decisions, 2026-10-18).
  */
 
 /** BCP 47 tags, as `document.documentElement.lang` and `Intl` take them. */
@@ -29,13 +28,18 @@ export const LANGUAGE_NAMES: Readonly<Record<LanguageTag, string>> = {
 }
 
 /**
- * The languages the switcher offers. The maintainer turns a language on in
- * production here, after its reviewer's sign-off; development sees all three
- * so the switch can be built and checked.
+ * The languages the switcher offers, in its order, in development and
+ * production alike. Turning a language off is removing it here; a browser
+ * that remembered it falls back to English (`readLanguagePreference`).
  */
-export const LANGUAGES_OFFERED: readonly LanguageTag[] = import.meta.env.DEV
-  ? ['en-GB', 'zh-Hans', 'ms-MY']
-  : ['en-GB']
+export const LANGUAGES_OFFERED: readonly LanguageTag[] = ['en-GB', 'zh-Hans', 'ms-MY']
+
+/**
+ * The languages whose tables a computer translated, each marked so on the
+ * page with an email link for better wording (decisions, 2026-10-18). A
+ * language comes off this list when its campus colleague has checked it.
+ */
+export const MACHINE_TRANSLATED: readonly LanguageTag[] = ['zh-Hans', 'ms-MY']
 
 /** Where the chosen language is remembered, in this browser only. Nothing about it leaves the device. */
 export const LANGUAGE_PREFERENCE_KEY = 'uon-video-helper:language'

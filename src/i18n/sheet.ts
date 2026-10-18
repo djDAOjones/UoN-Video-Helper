@@ -51,8 +51,12 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
     'Not shown on the page: its description for search engines and link previews',
   ],
   ['app.skipLink', 'A link at the very top, seen when moving through the page with the Tab key'],
-  ['language.label', 'The language switcher at the top of the page (read out by screen readers)'],
+  ['language.label', 'The label over the language switcher at the top of the page'],
   ['language.switched', 'Not shown: read out by screen readers when the language changes'],
+  [
+    'language.machine',
+    'Under the language switcher, only when the page is in Chinese or Malay: the note that a computer translated it',
+  ],
   ['lede', 'Under the page heading: what the tool does'],
   ['browserNote', 'Under the page heading: the note about the browser'],
   ['steps', 'The heading of each of the five steps'],
@@ -172,7 +176,10 @@ function variantNote(path: readonly string[]): string[] {
 /** Notes for single keys, where the key and its English need more. */
 const NOTES: Readonly<Record<string, string>> = {
   'app.title': 'The product name. UoN stands for University of Nottingham.',
-  'language.label': 'The name of the language switcher, for screen readers.',
+  'language.label': 'The label over the language switcher, also read out by screen readers.',
+  'language.machine.title': 'The heading of the note, so no full stop.',
+  'language.machine.link':
+    'The words of a link that opens an email to the maintainer, with your language in its subject.',
   'lede.intro': 'Introduces the three lines that follow.',
   'trim.format': 'Keep the example times 1:05.5 and 65.5 as they are.',
   'trim.problem.notATime.start': 'Keep the example times 1:05.5 and 65.5 as they are.',
