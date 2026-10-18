@@ -1,0 +1,15 @@
+How to fill this sheet
+
+There is one row for every piece of text the UoN Video Helper page can show or read out.
+Translate only the English column (C), into the "Chinese (Simplified)" column (E) and the "Bahasa Malaysia" column (F).
+Do not change the key (column A). It is how each translation finds its place on the page.
+Keep every {placeholder} exactly as written, braces and all, for example {count} or {size}. The page puts a number or a name there. You may move a placeholder within the sentence to suit your language.
+Some messages have a row for each choice, for example blue and white, fade and slide, or one and other. Translate every row, even where your language uses the same words.
+Columns B and D say where the text shows and what to watch for. They do not need translating.
+
+Machine translation
+In Google Sheets, put =GOOGLETRANSLATE(C2,"en","zh-CN") in E2 and =GOOGLETRANSLATE(C2,"en","ms") in F2, then fill each formula down its column. Before sending the sheet back, copy columns E and F and use Paste special, Values only, so the translations stay as text.
+ChatGPT can take the .csv file whole: ask it to fill the last two columns, keeping the key column and every {placeholder} unchanged, and to return the file as .csv.
+
+Sending it back
+Send the filled sheet back as .csv (easiest), or as .xlsx. A native speaker at each campus will check the translations later.

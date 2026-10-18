@@ -14,10 +14,17 @@ import {
   parseTrimTime,
   trimHandleText,
   trimKeyTarget,
+  trimProblemText,
   trimRangeFor,
   trimFieldValue,
   trimSummary,
+  type TrimProblem,
 } from './trim'
+
+/** A result with its problem in words, as the page shows it beside the field. */
+function said(result: object): object {
+  return 'problem' in result ? { problem: trimProblemText(result.problem as TrimProblem) } : result
+}
 
 describe('times in the fields', () => {
   it.each([
@@ -64,11 +71,11 @@ describe('times in the fields', () => {
 
 describe('a typed time for one end', () => {
   it('is the time when it is one, inside the video', () => {
-    expect(trimFieldValue('1:40', 'end', 130)).toEqual({ seconds: 100 })
+    expect(said(trimFieldValue('1:40', 'end', 130))).toEqual({ seconds: 100 })
   })
 
   it('refuses what is not a time', () => {
-    expect(trimFieldValue('abc', 'start', 130)).toEqual({
+    expect(said(trimFieldValue('abc', 'start', 130))).toEqual({
       problem: 'Write the start time as minutes and seconds, like 1:05.5, or as seconds, like 65.5.',
     })
   })
@@ -77,13 +84,13 @@ describe('a typed time for one end', () => {
     // Codex review: a 130.46 s video's end reads "2:10.5", and typing that
     // back was refused as past the end.
     expect(formatTrimTime(130.46)).toBe('2:10.5')
-    expect(trimFieldValue('2:10.5', 'end', 130.46)).toEqual({ seconds: 130.46 })
+    expect(said(trimFieldValue('2:10.5', 'end', 130.46))).toEqual({ seconds: 130.46 })
   })
 
   it('refuses a time past the end that is not the end as shown', () => {
     // Codex review: a rounding allowance let "2:10.44" through on a 130.4 s
     // video, and moved it to the end.
-    expect(trimFieldValue('2:10.44', 'end', 130.4)).toEqual({
+    expect(said(trimFieldValue('2:10.44', 'end', 130.4))).toEqual({
       problem: 'The end time is after the end of the video, which is 2:10.4 long.',
     })
   })
@@ -91,7 +98,7 @@ describe('a typed time for one end', () => {
   it('refuses a time past the end of the video rather than quietly moving it', () => {
     // Codex review of VH-96: "3:00" on a 2:10 video became the file's end,
     // and the page said the whole video was kept beside a field saying 3:00.
-    expect(trimFieldValue('3:00', 'end', 130.4)).toEqual({
+    expect(said(trimFieldValue('3:00', 'end', 130.4))).toEqual({
       problem: 'The end time is after the end of the video, which is 2:10.4 long.',
     })
   })
@@ -99,16 +106,16 @@ describe('a typed time for one end', () => {
 
 describe('whether a range can be used', () => {
   it('is the whole video when nothing is cut, so no range is sent', () => {
-    expect(trimRangeFor(0, 130, 130)).toEqual({ range: null })
+    expect(said(trimRangeFor(0, 130, 130))).toEqual({ range: null })
   })
 
   it('is a range when an end is cut', () => {
-    expect(trimRangeFor(12.3, 130, 130)).toEqual({ range: { startSeconds: 12.3, endSeconds: 130 } })
+    expect(said(trimRangeFor(12.3, 130, 130))).toEqual({ range: { startSeconds: 12.3, endSeconds: 130 } })
   })
 
   it('says why, in the worker’s own words, when it cannot be used', () => {
-    expect(trimRangeFor(50, 40, 130)).toEqual({ problem: 'The end must come after the start.' })
-    expect(trimRangeFor(50, 50 + KEPT_MIN_SECONDS - 1, 130)).toEqual({
+    expect(said(trimRangeFor(50, 40, 130))).toEqual({ problem: 'The end must come after the start.' })
+    expect(said(trimRangeFor(50, 50 + KEPT_MIN_SECONDS - 1, 130))).toEqual({
       problem: `Keep at least ${KEPT_MIN_SECONDS} seconds of the video.`,
     })
   })

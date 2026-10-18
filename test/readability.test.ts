@@ -17,6 +17,8 @@
 import { readdirSync, readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 
+import { enGB } from '../src/i18n/en-GB'
+
 /** One grade above the top of lower-secondary; see the module comment. */
 const READING_GRADE_LIMIT = 10
 /** Strings this long are prose; shorter ones are labels, where the formula is noise. */
@@ -25,8 +27,11 @@ const PROSE_WORDS = 8
 const root = new URL('../', import.meta.url)
 const read = (path: string): string => readFileSync(new URL(path, root), 'utf8')
 
+/** Where the copy lives since VH-105: the page's no-script English and the table every other string comes from. */
+const COPY_HOMES = ['index.html', 'src/i18n/en-GB.ts']
+
 const FILES = [
-  'index.html',
+  ...COPY_HOMES,
   'src/main.ts',
   'src/config/presets.ts',
   'src/config/branding.ts',
@@ -62,7 +67,11 @@ export function visibleStrings(path: string, source: string): string[] {
   for (const match of withoutComments.matchAll(/'((?:[^'\\]|\\.)*)'|"((?:[^"\\]|\\.)*)"|`((?:[^`\\]|\\.)*)`/g)) {
     const raw = match[1] ?? match[2] ?? match[3] ?? ''
     // A placeholder stands in for whatever is interpolated.
-    const text = raw.replace(/\$\{[^}]*\}/g, '9').replace(/\\n/g, ' ').trim()
+    const text = raw
+      .replace(/\$\{[^}]*\}/g, '9')
+      .replace(/\{[A-Za-z][A-Za-z0-9]*\}/g, '9')
+      .replace(/\\n/g, ' ')
+      .trim()
     if (text.length === 0) continue
     // Code, not copy: selectors, keys, log scopes, and a path or file name
     // on its own — never a sentence that happens to mention a file ending
@@ -125,23 +134,31 @@ const ABBREVIATION = /\b(?:[A-Z][A-Za-z]?[A-Z0-9][A-Za-z0-9.]*|fps|kHz|kB|MB|GB|
 describe('plain language, measured (spec 9.2, VH-114)', () => {
   const corpus = FILES.map((path) => ({ path, strings: visibleStrings(path, read(path)) }))
 
-  it('reads every file it is told to', () => {
-    for (const { path, strings } of corpus) expect(strings.length, path).toBeGreaterThan(0)
+  it('reads the copy where it lives', () => {
+    // A module that composes its sentences from the table holds no copy of
+    // its own any more (VH-105); the table and the page must never read empty.
+    for (const { path, strings } of corpus.filter(({ path }) => COPY_HOMES.includes(path))) {
+      expect(strings.length, path).toBeGreaterThan(50)
+    }
   })
 
   it('reads a sentence that mentions a file ending, and skips a bare path', () => {
     // The drop zone's refusal names ".mp4"; it is copy, and the check must
     // see it (Codex review of VH-114).
-    const dropZone = corpus.find(({ path }) => path === 'src/ui/drop-zone.ts')
-    expect(dropZone?.strings.some((text) => text.includes('ends .mp4'))).toBe(true)
+    const table = corpus.find(({ path }) => path === 'src/i18n/en-GB.ts')
+    expect(table?.strings.some((text) => text.includes('ends .mp4 or .mov'))).toBe(true)
     expect(visibleStrings('x.ts', "const a = './styles/app.css'; const b = 'video/mp4'")).toEqual([])
   })
 
   it('keeps prose at a lower-secondary reading level', () => {
+    // The meta description sits in the page's <head>, which no page shows and
+    // the markup reading above skips; in the table it is one string among
+    // the rest (VH-105).
+    const notShown = new Set<string>([enGB.app.description])
     const over: string[] = []
     for (const { path, strings } of corpus) {
       for (const text of strings) {
-        if (text.split(/\s+/).length < PROSE_WORDS) continue
+        if (text.split(/\s+/).length < PROSE_WORDS || notShown.has(text)) continue
         const grade = readingGrade(text)
         if (grade !== null && grade > READING_GRADE_LIMIT) over.push(`${path} (${grade.toFixed(1)}): ${text}`)
       }

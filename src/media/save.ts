@@ -18,6 +18,7 @@
 
 import { PICKER_CREATED_WITHIN_MS } from '../config/thresholds'
 import { log } from '../core/logger'
+import { t } from '../i18n'
 
 export type SaveOutcome = 'saved' | 'downloaded' | 'cancelled' | 'refused-source'
 
@@ -126,7 +127,7 @@ export async function saveFile(
     try {
       const options: SaveFilePickerOptions = {
         suggestedName,
-        types: [{ description: 'MP4 video (.mp4)', accept: { 'video/mp4': ['.mp4'] } }],
+        types: [{ description: t().save.pickerDescription, accept: { 'video/mp4': ['.mp4'] } }],
       }
       handle = await showSaveFilePicker(options)
       // Taken as the picker returns, not after the read: the read may be slow
@@ -213,8 +214,11 @@ export function suggestedFileName(
   sourceName: string,
   job: { readonly branded: boolean; readonly sound: boolean } = { branded: true, sound: true },
 ): string {
+  const { save } = t()
   const withoutExtension = sourceName.replace(/\.[^./\\]+$/, '')
-  const trimmed = withoutExtension.trim() || 'video'
-  const mark = job.branded ? 'branded' : job.sound ? 'levelled' : 'converted'
-  return `${trimmed} (${mark}).mp4`
+  // The user's own stem, kept exactly; the mark is the page's language's,
+  // decided when Save is pressed (VH-105).
+  const stem = withoutExtension.trim() || save.stem
+  const mark = job.branded ? save.marks.branded : job.sound ? save.marks.levelled : save.marks.converted
+  return save.fileName({ stem, mark })
 }

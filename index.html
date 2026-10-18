@@ -6,11 +6,16 @@
     <title>UoN Video Helper</title>
     <meta
       name="description"
+      data-i18n-attr="content:app.description"
       content="Add approved University of Nottingham branding and consistent audio levels to a video, and get an optimised file back, without uploading it anywhere."
     />
   </head>
   <body>
-    <a class="skip-link" href="#main">Skip to main content</a>
+    <!-- The English here is the no-script fallback. Every leaf the language
+         table owns is marked `data-i18n` (its text) or `data-i18n-attr` (an
+         attribute), and `src/i18n/bind.ts` writes the current language's
+         words into it in place (VH-105). -->
+    <a class="skip-link" href="#main" data-i18n="app.skipLink">Skip to main content</a>
 
     <!-- A Nottingham Blue band holding the white logo top-left, as the header
          of nottingham.ac.uk does, and deliberately not sticky: a band that
@@ -27,7 +32,7 @@
            pushed right by the logo in the band above (maintainer, 2026-09-30).
            On the University's own pages the title belongs to the content,
            not to the header. -->
-      <h1 class="page-title">UoN Video Helper</h1>
+      <h1 class="page-title" data-i18n="app.title">UoN Video Helper</h1>
 
       <!-- The privacy sentence is said once, here, above the file input, and it
            stays on screen through a job (spec 9.2). It used to be said again
@@ -36,17 +41,17 @@
            work everywhere": it is built and tested for Chrome, and says so
            rather than letting another browser fail part-way (2026-09-30). -->
       <div class="lede">
-        <p>This tool does the following to your video:</p>
+        <p data-i18n="lede.intro">This tool does the following to your video:</p>
         <ul>
-          <li>Adds approved branding.</li>
-          <li>Ensures consistent audio levels.</li>
-          <li>Outputs an optimised file type and size.</li>
+          <li data-i18n="lede.promises.0">Adds approved branding.</li>
+          <li data-i18n="lede.promises.1">Ensures consistent audio levels.</li>
+          <li data-i18n="lede.promises.2">Outputs an optimised file type and size.</li>
         </ul>
-        <p>
+        <p data-i18n="lede.privacy">
           Your video is processed on your device, it is never uploaded, and the original file does
           not change.
         </p>
-        <p id="browser-note">This app is designed and built for Chrome, other browsers may not work.</p>
+        <p id="browser-note" data-i18n="browserNote.pending">This app is designed and built for Chrome, other browsers may not work.</p>
       </div>
 
       <!-- VH-91, 2026-09-30. The steps are separate, numbered panels rather
@@ -60,7 +65,7 @@
            the session: hiding them again for every new file made the page
            jump. Trim is the one a new file resets, to the whole video. -->
       <section class="panel step" id="step-choose" aria-labelledby="choose-heading">
-        <h2 id="choose-heading"><span class="step-number">1.</span> Choose a video</h2>
+        <h2 id="choose-heading"><span class="step-number">1.</span> <span data-i18n="steps.choose">Choose a video</span></h2>
         <!-- VH-101. Carbon's file-uploader drop zone around the picker, which
              stays the primary and keyboard route: a dropped video is handed to
              it and read exactly as a chosen one is. The refusal line is always
@@ -77,7 +82,7 @@
             aria-labelledby="choose-heading"
             aria-describedby="drop-error"
           />
-          <p class="helper drop-hint" id="drop-hint">Or drop it here.</p>
+          <p class="helper drop-hint" id="drop-hint" data-i18n="choose.dropHint">Or drop it here.</p>
           <p class="field-error drop-error" id="drop-error" role="alert"></p>
         </div>
         <!-- What is happening to the FILE: reading, read, could not be read.
@@ -102,20 +107,20 @@
            the browser's own player on a local object URL, which makes no
            request; nothing plays until the user presses play. -->
       <section class="panel step" id="step-trim" aria-labelledby="trim-heading" hidden>
-        <h2 id="trim-heading"><span class="step-number">2.</span> Trim</h2>
-        <p class="step-intro">
+        <h2 id="trim-heading"><span class="step-number">2.</span> <span data-i18n="steps.trim">Trim</span></h2>
+        <p class="step-intro" data-i18n="trim.intro">
           Optional. Cut unwanted material from the start or the end. Left alone, the whole video
           is kept. The preview plays your original as it is now: the sound is levelled and the
           closing added when the video is made.
         </p>
         <video class="trim-preview" id="trim-preview" controls preload="metadata" playsinline></video>
-        <p class="helper" id="trim-preview-note" hidden>
+        <p class="helper" id="trim-preview-note" data-i18n="trim.noPreview" hidden>
           A preview is not available for this file. You can still set the times.
         </p>
         <div class="range-slider">
           <div class="range-labels">
-            <label class="label" for="trim-start-range">Start</label>
-            <label class="label" for="trim-end-range">End</label>
+            <label class="label" for="trim-start-range" data-i18n="trim.start">Start</label>
+            <label class="label" for="trim-end-range" data-i18n="trim.end">End</label>
           </div>
           <div class="range-track" id="trim-track">
             <div class="range-fill" aria-hidden="true"></div>
@@ -125,7 +130,7 @@
         </div>
         <div class="control-grid">
           <div class="field">
-            <label class="label" for="trim-start">Start time</label>
+            <label class="label" for="trim-start" data-i18n="trim.startTime">Start time</label>
             <div class="control-with-help">
               <input
                 class="text-input"
@@ -136,7 +141,7 @@
                 spellcheck="false"
                 aria-describedby="trim-format trim-start-error trim-result"
               />
-              <button class="button button--secondary" type="button" id="trim-set-start">
+              <button class="button button--secondary" type="button" id="trim-set-start" data-i18n="trim.setStart">
                 Set start here
               </button>
             </div>
@@ -147,7 +152,7 @@
             </div>
           </div>
           <div class="field">
-            <label class="label" for="trim-end">End time</label>
+            <label class="label" for="trim-end" data-i18n="trim.endTime">End time</label>
             <div class="control-with-help">
               <input
                 class="text-input"
@@ -158,7 +163,7 @@
                 spellcheck="false"
                 aria-describedby="trim-format trim-end-error trim-result"
               />
-              <button class="button button--secondary" type="button" id="trim-set-end">
+              <button class="button button--secondary" type="button" id="trim-set-end" data-i18n="trim.setEnd">
                 Set end here
               </button>
             </div>
@@ -169,9 +174,9 @@
         </div>
         <!-- Both forms: a phone's decimal keyboard has no colon, and seconds
              alone is what it can type (VH-113). The parser takes both. -->
-        <p class="helper" id="trim-format">Minutes and seconds, like 1:05.5, or seconds, like 65.5.</p>
+        <p class="helper" id="trim-format" data-i18n="trim.format">Minutes and seconds, like 1:05.5, or seconds, like 65.5.</p>
         <div class="actions">
-          <button class="button button--secondary" type="button" id="trim-clear" disabled>
+          <button class="button button--secondary" type="button" id="trim-clear" data-i18n="trim.useWhole" disabled>
             Use the whole video
           </button>
         </div>
@@ -183,11 +188,11 @@
       </section>
 
       <section class="panel step" id="step-closing" aria-labelledby="closing-heading" hidden>
-        <h2 id="closing-heading"><span class="step-number">3.</span> Closing branding</h2>
+        <h2 id="closing-heading"><span class="step-number">3.</span> <span data-i18n="steps.closing">Closing branding</span></h2>
         <fieldset class="choice" id="branding-choice">
           <!-- The heading above is what is seen; the legend names the group
                for assistive technology without saying it twice on screen. -->
-          <legend class="visually-hidden">Closing branding</legend>
+          <legend class="visually-hidden" data-i18n="closing.legend">Closing branding</legend>
           <!-- VH-90, 2026-09-30. Three controls, always present, in the order
                they are decided: type, onset, colour. They replace VH-46b's
                four-way radio at the maintainer's word — it had rejected a
@@ -200,16 +205,16 @@
                "Animation type" reading as "no animation". That is Cut. -->
           <div class="control-grid">
             <div class="field">
-              <label class="label" for="closing-type">Animation type</label>
+              <label class="label" for="closing-type" data-i18n="closing.typeLabel">Animation type</label>
               <select class="select" id="closing-type" aria-describedby="closing-result">
-                <option value="cut" selected>Cut</option>
-                <option value="fade">Fade</option>
-                <option value="slide">Slide</option>
-                <option value="none">None</option>
+                <option value="cut" data-i18n="closing.types.cut" selected>Cut</option>
+                <option value="fade" data-i18n="closing.types.fade">Fade</option>
+                <option value="slide" data-i18n="closing.types.slide">Slide</option>
+                <option value="none" data-i18n="closing.types.none">None</option>
               </select>
             </div>
             <div class="field field--wide">
-              <label class="label" for="closing-onset">Animation onset</label>
+              <label class="label" for="closing-onset" data-i18n="closing.onsetLabel">Animation onset</label>
               <div class="control-with-help">
                 <select
                   class="select"
@@ -217,8 +222,8 @@
                   aria-describedby="closing-onset-reason closing-result"
                   disabled
                 >
-                  <option value="existing" selected>Over existing</option>
-                  <option value="freeze">Over generated freeze frame</option>
+                  <option value="existing" data-i18n="closing.onsets.existing" selected>Over existing</option>
+                  <option value="freeze" data-i18n="closing.onsets.freeze">Over generated freeze frame</option>
                 </select>
                 <!-- A toggletip, not a tooltip: a button that discloses text,
                      by click, Enter or Space, never by hover alone. -->
@@ -227,6 +232,7 @@
                   type="button"
                   id="onset-help-button"
                   aria-label="About animation onset"
+                  data-i18n-attr="aria-label:closing.helpLabel"
                   aria-expanded="false"
                   aria-controls="onset-help"
                 >
@@ -235,21 +241,24 @@
               </div>
               <p class="helper" id="closing-onset-reason">Not used with Cut.</p>
               <div aria-live="polite">
+                <!-- Each sentence is one translatable unit around its bold
+                     term: the term first in every language offered, the rest
+                     of the sentence after it (VH-105). -->
                 <div class="toggletip" id="onset-help" hidden>
                   <p>
-                    <strong>Over existing</strong> — the closing plays over the last second of
-                    your video. It covers that second as it builds.
+                    <strong data-i18n="closing.helpExistingTerm">Over existing</strong> <span data-i18n="closing.helpExistingText">— the closing plays over the last second of
+                    your video. It covers that second as it builds.</span>
                   </p>
                   <p>
-                    <strong>Over generated freeze frame</strong> — your last frame is held for one
+                    <strong data-i18n="closing.helpFreezeTerm">Over generated freeze frame</strong> <span data-i18n="closing.helpFreezeText">— your last frame is held for one
                     extra second. The closing plays over that, so nothing in your video is
-                    covered.
+                    covered.</span>
                   </p>
                 </div>
               </div>
             </div>
             <fieldset class="field segmented" id="closing-colour" aria-describedby="closing-colour-reason closing-result">
-              <legend class="label">Colour</legend>
+              <legend class="label" data-i18n="closing.colourLabel">Colour</legend>
               <!-- Native radios under a segmented skin: the arrow keys and
                    the checked state come with them. Carbon's content switcher
                    is a tablist, which is the wrong role for a form value. -->
@@ -257,13 +266,13 @@
                 <label class="segment">
                   <input type="radio" name="closing-colour" value="blue" checked />
                   <span class="segment-face">
-                    <span class="swatch swatch--blue" aria-hidden="true"></span>Blue
+                    <span class="swatch swatch--blue" aria-hidden="true"></span><span data-i18n="closing.colours.blue">Blue</span>
                   </span>
                 </label>
                 <label class="segment">
                   <input type="radio" name="closing-colour" value="white" />
                   <span class="segment-face">
-                    <span class="swatch swatch--white" aria-hidden="true"></span>White
+                    <span class="swatch swatch--white" aria-hidden="true"></span><span data-i18n="closing.colours.white">White</span>
                   </span>
                 </label>
               </div>
@@ -277,9 +286,9 @@
       </section>
 
       <section class="panel step" id="step-preset" aria-labelledby="preset-heading" hidden>
-        <h2 id="preset-heading"><span class="step-number">4.</span> File size / quality</h2>
+        <h2 id="preset-heading"><span class="step-number">4.</span> <span data-i18n="steps.preset">File size / quality</span></h2>
         <fieldset class="choice" id="preset-choice">
-          <legend class="visually-hidden">File size / quality</legend>
+          <legend class="visually-hidden" data-i18n="preset.legend">File size / quality</legend>
           <!-- Each name answers the heading in its own order — size, then
                quality — and the line beneath says where that file is going.
                The names are `PRESETS[id].label`; `test/screen-text.test.ts`
@@ -287,15 +296,15 @@
           <label class="radio radio--described">
             <input type="radio" name="preset" value="best" checked />
             <span class="radio-label">
-              <span>Larger / better</span>
-              <span class="radio-detail">For EchoVideo or YouTube etc.</span>
+              <span data-i18n="preset.labels.best">Larger / better</span>
+              <span class="radio-detail" data-i18n="preset.details.best">For EchoVideo or YouTube etc.</span>
             </span>
           </label>
           <label class="radio radio--described">
             <input type="radio" name="preset" value="smaller" />
             <span class="radio-label">
-              <span>Smaller / reduced</span>
-              <span class="radio-detail">For messaging or email etc.</span>
+              <span data-i18n="preset.labels.smaller">Smaller / reduced</span>
+              <span class="radio-detail" data-i18n="preset.details.smaller">For messaging or email etc.</span>
             </span>
           </label>
         </fieldset>
@@ -305,7 +314,7 @@
            knowing about the sound, the button, the status line, the progress
            bar, and the result with its Save. -->
       <section class="panel step" id="step-create" aria-labelledby="create-heading" hidden>
-        <h2 id="create-heading"><span class="step-number">5.</span> Create</h2>
+        <h2 id="create-heading"><span class="step-number">5.</span> <span data-i18n="steps.create">Create</span></h2>
         <!-- In reading order for each moment (VH-124): the verdict and the
              notes, then what is happening now — the status, its stop, the
              bar — then the outcome, then the action that follows it. While a
@@ -329,7 +338,7 @@
              know 63% of what — and the stage is the half that carries the
              meaning (VH-64). The name is for assistive technology only: the
              line beneath shows the stage and the percentage. -->
-        <p class="visually-hidden" id="process-progress-label" hidden>Creating your video</p>
+        <p class="visually-hidden" id="process-progress-label" data-i18n="create.progressLabel" hidden>Creating your video</p>
         <progress
           class="progress"
           id="process-progress"
@@ -352,9 +361,9 @@
         <div class="field" id="announce-field" hidden>
           <label class="checkbox" for="announce-progress">
             <input type="checkbox" id="announce-progress" checked aria-describedby="announce-help" />
-            <span>Announce progress</span>
+            <span data-i18n="create.announceProgress">Announce progress</span>
           </label>
-          <p class="helper" id="announce-help">
+          <p class="helper" id="announce-help" data-i18n="create.announceHelp">
             Says each stage out loud for a screen reader as the video is made. The result is always
             announced.
           </p>
@@ -365,24 +374,25 @@
         <div class="actions" id="process-actions" hidden></div>
         <!-- Spec 7.5: the finished video is not kept past the tab, said before
              Create (VH-109) — until a result's own line says it (VH-107). -->
-        <p class="helper" id="create-note" hidden>
+        <p class="helper" id="create-note" data-i18n="create.note" hidden>
           The finished video is kept here until you save it or close this tab.
         </p>
       </section>
 
       <section class="panel" aria-labelledby="errors-heading" id="errors-panel" hidden>
-        <h2 id="errors-heading">Errors captured</h2>
+        <h2 id="errors-heading" data-i18n="errors.heading">Errors captured</h2>
         <!-- A plain sentence first, the stack behind a disclosure (VH-110,
              U-06): a novice reads what it means and what to do, and the
-             details are one click away for whoever is helping. -->
+             details are one click away for whoever is helping. The details
+             are diagnostics and stay English, marked as such (VH-105). -->
         <p id="errors-intro"></p>
         <details class="disclosure">
-          <summary class="disclosure-summary">Technical details</summary>
-          <div class="errors" id="errors"></div>
+          <summary class="disclosure-summary" data-i18n="errors.technicalDetails">Technical details</summary>
+          <div class="errors" id="errors" lang="en-GB"></div>
         </details>
         <!-- Where feedback is most useful, so it is offered again here (VH-93). -->
         <div class="actions">
-          <button type="button" class="button button--secondary" id="feedback-report">
+          <button type="button" class="button button--secondary" id="feedback-report" data-i18n="errors.report">
             Report this problem
           </button>
         </div>
@@ -408,7 +418,7 @@
         <!-- On a surface that is always there, and usable during a job: a hung
              job is the thing most worth reporting (VH-93). -->
         <p class="feedback-entry">
-          <button type="button" class="button button--secondary" id="feedback-open">
+          <button type="button" class="button button--secondary" id="feedback-open" data-i18n="feedback.open">
             Send feedback
           </button>
         </p>
@@ -421,13 +431,16 @@
          dialog never says "Sent" — it cannot know (VH-93). -->
     <dialog class="dialog" id="feedback-dialog" aria-labelledby="feedback-heading">
       <form id="feedback-form" novalidate>
-        <h2 id="feedback-heading">Send feedback</h2>
-        <p class="dialog-intro">
-          Your message goes to <span id="feedback-address"></span> from your own
-          email app. You will see the email before it is sent.
+        <h2 id="feedback-heading" data-i18n="feedback.heading">Send feedback</h2>
+        <!-- One sentence with the address inside it, written whole by
+             `main.ts` so each language can place the address where its
+             grammar puts it (VH-105). -->
+        <p class="dialog-intro" id="feedback-intro">
+          Your message goes to the maintainer from your own email app. You will see the email
+          before it is sent.
         </p>
         <div class="field">
-          <label class="label" for="feedback-message">Your message</label>
+          <label class="label" for="feedback-message" data-i18n="feedback.messageLabel">Your message</label>
           <textarea
             class="textarea"
             id="feedback-message"
@@ -435,25 +448,27 @@
             autofocus
             aria-describedby="feedback-message-error"
           ></textarea>
-          <p class="field-error" id="feedback-message-error" hidden>
+          <p class="field-error" id="feedback-message-error" data-i18n="feedback.writeFirst" hidden>
             Write a message first.
           </p>
         </div>
         <details class="disclosure">
-          <summary class="disclosure-summary">What will be sent with it</summary>
-          <p class="helper">
+          <summary class="disclosure-summary" data-i18n="feedback.whatSent">What will be sent with it</summary>
+          <p class="helper" data-i18n="feedback.whatSentDetail">
             Details that help find a problem: the app's version, your browser,
             how far you got, and your video's length, picture size and format.
             These details never include the video, its name, or anything in it.
           </p>
-          <pre class="feedback-details" id="feedback-details"></pre>
+          <!-- The details themselves are English diagnostics for the
+               maintainer, and say so to assistive technology (VH-105). -->
+          <pre class="feedback-details" id="feedback-details" lang="en-GB"></pre>
         </details>
         <div class="actions">
-          <button type="submit" class="button">Open email app</button>
-          <button type="button" class="button button--secondary" id="feedback-copy">
+          <button type="submit" class="button" data-i18n="feedback.openEmail">Open email app</button>
+          <button type="button" class="button button--secondary" id="feedback-copy" data-i18n="feedback.copy">
             Copy message and details
           </button>
-          <button type="button" class="button button--secondary" id="feedback-close">Close</button>
+          <button type="button" class="button button--secondary" id="feedback-close" data-i18n="feedback.close">Close</button>
         </div>
         <p class="status" id="feedback-status" role="status" aria-live="polite"></p>
       </form>

@@ -17,9 +17,17 @@ import {
   CLOSING_TYPES,
 } from '../src/config/branding'
 import { PRESETS, type PresetId } from '../src/config/presets'
-import { CLOSING_TYPE_LABELS, onsetDisabledReason } from '../src/ui/closing-choice'
+import { closingTypeLabel, onsetDisabledReason } from '../src/ui/closing-choice'
 
-const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8')
+/**
+ * The page's English, with the table bindings (VH-105) taken out: a
+ * `data-i18n` attribute names where a string comes from, not what it says,
+ * and the words between the tags are still the no-script English.
+ */
+const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8').replace(
+  /\s+data-i18n(?:-attr)?="[^"]*"/g,
+  '',
+)
 
 /** The markup with comments gone, so prose about a rule cannot satisfy a test for it. */
 const markup = html.replace(/<!--[\s\S]*?-->/g, '')
@@ -172,7 +180,7 @@ describe('the closing controls (VH-90)', () => {
     const shown = options('closing-type')
     expect(shown.map(([value]) => value)).toEqual([...CLOSING_TYPES])
     for (const [value, text] of shown) {
-      expect(text).toBe(CLOSING_TYPE_LABELS[value as keyof typeof CLOSING_TYPE_LABELS])
+      expect(text).toBe(closingTypeLabel(value as (typeof CLOSING_TYPES)[number]))
     }
   })
 
@@ -231,7 +239,7 @@ describe('steps that read as steps (VH-91)', () => {
   /** Each step panel, in document order: its id, its number, its heading text, whether it starts hidden. */
   const steps = [
     ...markup.matchAll(
-      /<section class="panel step" id="([^"]+)" aria-labelledby="([^"]+)"(\s+hidden)?>\s*<h2 id="([^"]+)"><span class="step-number">(\d+)\.<\/span>\s*([^<]+)<\/h2>/g,
+      /<section class="panel step" id="([^"]+)" aria-labelledby="([^"]+)"(\s+hidden)?>\s*<h2 id="([^"]+)"><span class="step-number">(\d+)\.<\/span>\s*(?:<span>)?([^<]+)(?:<\/span>)?<\/h2>/g,
     ),
   ].map((match) => ({
     id: match[1]!,

@@ -15,8 +15,8 @@ describe('classifyFailure', () => {
   })
 
   it('reads the errors that already name themselves', () => {
-    expect(classifyFailure(new UnreadableFileError('no'))).toBe('unreadable-source')
-    expect(classifyFailure(new KeptRangeError('no'))).toBe('bad-trim')
+    expect(classifyFailure(new UnreadableFileError('not-a-video', 'no'))).toBe('unreadable-source')
+    expect(classifyFailure(new KeptRangeError('too-short', 'no'))).toBe('bad-trim')
   })
 
   it('reads the browser\'s own names for a full store and a refused encode', () => {

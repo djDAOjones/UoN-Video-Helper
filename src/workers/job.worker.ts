@@ -39,7 +39,7 @@ import {
 import { OpfsWorkspace, sweepOrphanedJobs } from '../media/opfs'
 import { requireReadableOutputVideo } from '../media/output-integrity'
 import { verifyOutputAudio } from '../media/output-verification'
-import { JobFailureError, classifyFailure, type FailureCode } from './failure'
+import { JobFailureError, classifyFailure, failureReasonFor, type FailureCode } from './failure'
 import { CancelledError, runPipeline, throwIfAborted } from '../media/pipeline'
 import { preflightVerdict, type PreflightSummary } from '../media/preflight'
 import { calibrationProbe } from '../media/probe'
@@ -331,10 +331,12 @@ async function handleProcess(
     // sentence and a next step (VH-110, `ui/failure-text.ts`).
     const code = classifyFailure(cause)
     log.warn('worker', 'processing failed', { code, reason })
+    const why = failureReasonFor(cause)
     post({
       kind: 'failed',
       id,
       code,
+      ...(why ? { reason: why } : {}),
       message:
         // A file that cannot be read names itself rather than reaching the
         // user as "something went wrong" (VH-37), and so does a trim that
@@ -385,7 +387,13 @@ async function handleInspect(id: number, file: Blob, signal: AbortSignal): Promi
     log.warn('worker', 'inspection failed', {
       reason: cause instanceof Error ? cause.message : String(cause),
     })
-    post({ kind: 'failed', id, code: 'unreadable-source', message })
+    post({
+      kind: 'failed',
+      id,
+      code: 'unreadable-source',
+      reason: failureReasonFor(cause) ?? 'read-error',
+      message,
+    })
   }
 }
 
@@ -595,6 +603,7 @@ async function handlePreflight(
       code,
       reason: cause instanceof Error ? cause.message : String(cause),
     })
-    post({ kind: 'failed', id, code, message })
+    const why = failureReasonFor(cause)
+    post({ kind: 'failed', id, code, ...(why ? { reason: why } : {}), message })
   }
 }

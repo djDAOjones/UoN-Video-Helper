@@ -9,6 +9,8 @@
  * wording is tested in Node and read by the gate.
  */
 
+import { t } from '../i18n'
+
 /** Where a download lands, as far as the user agent tells. */
 export type DownloadDestination = 'ios' | 'other'
 
@@ -26,12 +28,6 @@ export function downloadDestinationFor(userAgent: string, maxTouchPoints = 0): D
 
 /** The status line for a download handed to the browser. */
 export function downloadStatusText(destination: DownloadDestination): string {
-  const where =
-    destination === 'ios'
-      ? 'Saving to the Files app, under Downloads'
-      : 'Saving to your downloads folder'
-  return (
-    `${where} — the browser may still be finishing it. Once it is there, upload it where it is ` +
-    'going, or choose another video in step 1. The video stays here until you start another one.'
-  )
+  const { save } = t()
+  return save.download({ where: destination === 'ios' ? save.downloadIos : save.downloadOther })
 }

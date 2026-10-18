@@ -9,6 +9,9 @@
  * sentence and a next step. No DOM here: the worker imports it.
  */
 
+import { UnreadableFileError, type UnreadableReason } from '../media/inspect'
+import { KeptRangeError, type KeptRangeReason } from '../media/kept-range'
+
 /** The failures the page has a sentence for. */
 export type FailureCode =
   /** The source could not be read; the message says why (inspect.ts). */
@@ -32,6 +35,19 @@ export type FailureCode =
   /** The job stopped reporting and was stopped (the main thread's watchdog). */
   | 'timed-out'
   | 'unknown'
+
+/**
+ * Why an unreadable source or a refused trim failed, as a name the page can
+ * translate (VH-105). The worker's English sentence crosses the boundary too,
+ * for the logs; the page says the reason in its own language.
+ */
+export type FailureReason = UnreadableReason | KeptRangeReason | 'read-error' | 'took-too-long'
+
+/** The reason a caught failure carries, where it carries one. */
+export function failureReasonFor(cause: unknown): FailureReason | undefined {
+  if (cause instanceof UnreadableFileError || cause instanceof KeptRangeError) return cause.reason
+  return undefined
+}
 
 /** A failure the worker names at the point it knows the cause. */
 export class JobFailureError extends Error {

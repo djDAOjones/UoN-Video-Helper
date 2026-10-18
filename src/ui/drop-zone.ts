@@ -15,6 +15,8 @@
  * words beside the input.
  */
 
+import { t } from '../i18n'
+
 /**
  * What a drop is refused for while the page cannot start a new video.
  * `starting` is the start-up check still running, and `unavailable` a
@@ -63,28 +65,16 @@ export function dropProblem(
   accept: string,
   busy: DropBusy,
 ): string | null {
-  if (busy === 'making') {
-    return 'A video is being made. Cancel it, or wait for it to finish, before choosing another.'
-  }
-  if (busy === 'saving') {
-    return 'A video is being saved. Stop the save, or wait for it to finish, before choosing another.'
-  }
-  if (busy === 'starting') {
-    return 'The tool is still getting ready. Drop the video again in a moment.'
-  }
-  if (busy === 'unavailable') {
-    return 'This browser cannot run the tool, so no video can be read here. The message below says what to do.'
-  }
-  if (files.length === 0) return 'Nothing was dropped that could be read. Drop a video file.'
-  if (files.length > 1) return `That was ${files.length} files. Drop one video at a time.`
-  if (!acceptsFile(accept, files[0]!)) {
-    return 'That is not a video file. Drop a video — a file whose name ends .mp4 or .mov, say — or choose one above.'
-  }
+  const { drop } = t().choose
+  if (busy === 'making') return drop.making
+  if (busy === 'saving') return drop.saving
+  if (busy === 'starting') return drop.starting
+  if (busy === 'unavailable') return drop.unavailable
+  if (files.length === 0) return drop.nothing
+  if (files.length > 1) return drop.several({ count: files.length })
+  if (!acceptsFile(accept, files[0]!)) return drop.notVideo
   return null
 }
-
-/** The hint's words while a file is held over the zone. The page owns the resting words. */
-const HELD_HINT = 'Let go to read this video.'
 
 /** Whether a drag is carrying files rather than text or a link. */
 function carriesFiles(event: DragEvent): boolean {
@@ -105,21 +95,22 @@ function carriesFiles(event: DragEvent): boolean {
 export function installDropZone(options: {
   readonly zone: HTMLElement
   readonly input: HTMLInputElement
-  /** The line beneath the input that invites the drop, holding its resting words. */
+  /** The line beneath the input that invites the drop. Its resting words are the table's, read each time. */
   readonly hint: HTMLElement
   /** An always-present live region for the refusal; empty when there is none. */
   readonly message: HTMLElement
   readonly busy: () => DropBusy
 }): void {
   const { zone, input, hint, message, busy } = options
-  const restingHint = hint.textContent ?? ''
 
   // Counted, not flagged: `dragleave` fires for every child the pointer
   // crosses, and the zone is only left when the count returns to zero.
   let depth = 0
   const setHeld = (held: boolean): void => {
     zone.classList.toggle('is-drag-over', held)
-    hint.textContent = held ? HELD_HINT : restingHint
+    // Read from the table each time, never cached: a hint cached at install
+    // would put English back after a change of language (VH-105).
+    hint.textContent = held ? t().choose.dropHeld : t().choose.dropHint
   }
 
   zone.addEventListener('dragenter', (event) => {

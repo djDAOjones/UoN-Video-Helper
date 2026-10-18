@@ -68,7 +68,7 @@ describe('closingOutcomeText', () => {
 
   it('says when a short source put the closing over a held frame instead (Codex review)', () => {
     expect(closingOutcomeText(fade, { applied: true, mode: 'over-freeze' })).toBe(
-      'Your video is shorter than the fade animation, so the blue closing fades in over a held last frame rather than over the picture.',
+      'Your video is shorter than the fade animation. The blue closing fades in over a held last frame instead of over the picture.',
     )
     // The other way round cannot happen today, but a mode that differs is never silent.
     expect(closingOutcomeText({ ...fade, onset: 'freeze' }, { applied: true, mode: 'over-picture' })).toContain(

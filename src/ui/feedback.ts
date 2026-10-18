@@ -22,6 +22,7 @@ import {
   FEEDBACK_LOG_LINE_MAX_CHARACTERS,
   FEEDBACK_RECENT_LOG_LINES,
 } from '../config/feedback'
+import { t } from '../i18n'
 
 type Loose = Record<string, unknown> | undefined
 
@@ -234,16 +235,13 @@ export function feedbackMailto(options: {
 /**
  * What the dialog shows as sent: the lines the link carries, then any it could
  * not, marked as travelling only in the copy. The user reviews what the email
- * will actually contain, not a longer list than it has.
+ * will actually contain, not a longer list than it has. The details are
+ * English diagnostics; the one line of guidance among them is the page's
+ * (VH-105).
  */
 export function feedbackDisclosure(details: readonly string[], keptDetails: number): string {
   const sent = details.slice(0, keptDetails)
   const left = details.slice(keptDetails)
   if (left.length === 0) return sent.join('\n')
-  return [
-    ...sent,
-    ...(sent.length > 0 ? [''] : []),
-    'Too long for the email, so only in "Copy message and details":',
-    ...left,
-  ].join('\n')
+  return [...sent, ...(sent.length > 0 ? [''] : []), t().feedback.onlyInCopy, ...left].join('\n')
 }

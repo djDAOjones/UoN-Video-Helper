@@ -11,7 +11,7 @@ import type { CapturedError } from '../core/diagnostics'
 import type { EgressReport } from '../core/egress'
 import type { LogRecord } from '../core/logger'
 import type { BrandingChoice, BrandingMode } from '../config/branding'
-import type { FailureCode } from './failure'
+import type { FailureCode, FailureReason } from './failure'
 import type { ContentClass, PresetId } from '../config/presets'
 import type { SourceReport } from '../media/inspect'
 import type { KeptRange } from '../media/kept-range'
@@ -157,8 +157,10 @@ export type WorkerResponse =
       readonly id: number
       /** What kind of failure, for the page's sentence and next step (VH-110). */
       readonly code: FailureCode
-      /** The worker's own sentence where it has one; otherwise empty, or a dev-only reason. */
+      /** The worker's own sentence where it has one; otherwise empty, or a dev-only reason. English, for the logs. */
       readonly message: string
+      /** Why, as a name the page translates (VH-105): an unreadable source's or a refused trim's. */
+      readonly reason?: FailureReason
     }
 
 /**

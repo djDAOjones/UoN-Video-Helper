@@ -148,11 +148,15 @@ export function openInput(file: Blob): Input {
   return new Input({ formats: ACCEPTED_FORMATS, source: new BlobSource(file) })
 }
 
+/** Why a file could not be read. The page translates the reason; the message stays English for the logs (VH-105). */
+export type UnreadableReason = 'not-a-video' | 'sound-only' | 'no-tracks'
+
 /** Raised when a file cannot be read at all, as opposed to being readable but unusable. */
 export class UnreadableFileError extends Error {
   override readonly name = 'UnreadableFileError'
 
   constructor(
+    readonly reason: UnreadableReason,
     message: string,
     override readonly cause?: unknown,
   ) {
@@ -201,6 +205,7 @@ export async function inspectFile(
     container = format.name
   } catch (cause) {
     throw new UnreadableFileError(
+      'not-a-video',
       'This file could not be read as a video. It needs to be a video file — one whose name ends .mp4, .mov, .mkv or .webm — and it may be damaged.',
       cause,
     )
@@ -231,11 +236,15 @@ export async function inspectFile(
     // audio-only one: the container parses, and there is simply nothing in it.
     // Reporting that as a successful read of a zero-length video would be a
     // lie the rest of the pipeline then acts on.
-    throw new UnreadableFileError(
-      audioTrack
-        ? 'This file has sound but no video. This tool adds branding to a video, so it needs a file with a picture.'
-        : 'No video or sound was found in this file. It may be incomplete, or it may have been saved incorrectly.',
-    )
+    throw audioTrack
+      ? new UnreadableFileError(
+          'sound-only',
+          'This file has sound but no video. This tool adds branding to a video, so it needs a file with a picture.',
+        )
+      : new UnreadableFileError(
+          'no-tracks',
+          'No video or sound was found in this file. It may be incomplete, or it may have been saved incorrectly.',
+        )
   }
 
   const video: VideoStreamReport = await (async () => {

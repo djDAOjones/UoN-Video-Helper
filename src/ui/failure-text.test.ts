@@ -6,7 +6,8 @@
 import { describe, expect, it } from 'vitest'
 
 import type { FailureCode } from '../workers/failure'
-import { ORIGINAL_UNCHANGED, failureSentence, failureText, startupFailureText } from './failure-text'
+import { t } from '../i18n'
+import { failureSentence, failureText, startupFailureText } from './failure-text'
 
 const CODES: readonly FailureCode[] = [
   'unreadable-source',
@@ -29,7 +30,7 @@ describe('failureText', () => {
     expect(text.next.length).toBeGreaterThan(10)
     const sentence = failureSentence(text)
     expect(sentence.match(/original file/g)).toHaveLength(1)
-    expect(sentence).toContain(ORIGINAL_UNCHANGED)
+    expect(sentence).toContain(t().failure.originalUnchanged)
     expect(sentence).not.toMatch(/Something went wrong.*Something went wrong/)
   })
 
@@ -41,13 +42,12 @@ describe('failureText', () => {
     expect(failureText('bad-trim').next).toContain('step 2')
   })
 
-  it('keeps the worker\'s own sentence for the failures that carry one', () => {
-    expect(failureText('unreadable-source', 'This file has sound but no video.').what).toBe(
-      'This file has sound but no video.',
-    )
-    expect(failureText('bad-trim', 'The end must come after the start.').what).toBe(
-      'The end must come after the start.',
-    )
+  it('says the reason the worker named, for the failures that carry one (VH-105: a name, not its English)', () => {
+    expect(failureText('unreadable-source', 'sound-only').what).toBe(t().failure.unreadable.soundOnly)
+    expect(failureText('unreadable-source', 'took-too-long').what).toBe(t().failure.unreadable.tookTooLong)
+    expect(failureText('unreadable-source').what).toBe(t().failure.unreadable.what)
+    expect(failureText('bad-trim', 'end-before-start').what).toBe('The end must come after the start.')
+    expect(failureText('bad-trim').what).toBe(t().failure.badTrim.what)
   })
 
   it('never names a code word or a unit', () => {

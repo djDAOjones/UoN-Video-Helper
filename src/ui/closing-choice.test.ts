@@ -7,6 +7,8 @@
 
 import { describe, expect, it } from 'vitest'
 
+import { t } from '../i18n'
+
 import {
   CLOSING_COLOURS,
   CLOSING_ONSETS,
@@ -16,7 +18,6 @@ import {
   type ClosingControls,
 } from '../config/branding'
 import {
-  CLOSING_TYPE_LABELS,
   closingResultText,
   colourDisabledReason,
   onsetDisabledReason,
@@ -102,6 +103,6 @@ describe('why a control is disabled (VH-90)', () => {
   })
 
   it('has a label for every type, so a reason can always name it', () => {
-    expect(Object.keys(CLOSING_TYPE_LABELS).sort()).toEqual([...CLOSING_TYPES].sort())
+    expect(Object.keys(t().closing.types).sort()).toEqual([...CLOSING_TYPES].sort())
   })
 })

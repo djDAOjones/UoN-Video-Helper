@@ -1,0 +1,143 @@
+/**
+ * VH-105: every table has every message English has and keeps its
+ * placeholders; the compiled API fills them in the table's own locale; the
+ * page's static bindings all name a message; and the translator's sheet maps
+ * onto the table row for row.
+ */
+
+import { readFileSync } from 'node:fs'
+import { describe, expect, it } from 'vitest'
+
+import { PRESETS } from '../config/presets'
+import { attributeBindings, messageAt } from './bind'
+import { compile, isCountGroup, placeholdersOf } from './compile'
+import { enGB } from './en-GB'
+import { LANGUAGE_TABLES, t } from './index'
+import { messagesOf, parseCsv, sheetCells, sheetRows, SHEET_HEADINGS, toCsv } from './sheet'
+
+const english = messagesOf(enGB)
+const translated = Object.entries(LANGUAGE_TABLES).filter(([tag]) => tag !== 'en-GB')
+
+/** The same placeholders, as a sorted list, so order may change but names may not. */
+const names = (template: string): string[] => placeholdersOf(template).sort()
+
+describe('every table', () => {
+  it.each(translated)('%s has every key English has, and no other', (_tag, table) => {
+    expect(messagesOf(table).map(({ key }) => key)).toEqual(english.map(({ key }) => key))
+  })
+
+  it.each(translated)('%s keeps every placeholder English has, by name', (_tag, table) => {
+    const own = new Map(messagesOf(table).map(({ key, english: text }) => [key, text]))
+    for (const { key, english: text } of english) {
+      expect(names(own.get(key) ?? ''), key).toEqual(names(text))
+    }
+  })
+
+  it.each(translated)('%s fills every message, with no English left untranslated by mistake', (_tag, table) => {
+    for (const { key, english: text } of messagesOf(table)) expect(text.trim(), key).not.toBe('')
+  })
+
+  it('names the outputs as the config does, so a diagnostics line and the screen agree', () => {
+    expect(enGB.preset.labels.best).toBe(PRESETS.best.label)
+    expect(enGB.preset.labels.smaller).toBe(PRESETS.smaller.label)
+  })
+})
+
+describe('the compiled table', () => {
+  it('leaves a message without placeholders as a string', () => {
+    expect(t().trim.start).toBe('Start')
+  })
+
+  it('writes a number in the locale’s own digits', () => {
+    expect(t().source.sampleRate({ kilohertz: 48, hertz: 48000 })).toBe('48 kHz — 48,000 samples a second')
+  })
+
+  it('joins a list of nouns as the language does', () => {
+    const chinese = compile<typeof enGB>(enGB, 'zh-Hans')
+    expect(t().source.captionsFound({ found: ['a', 'b', 'c'] })).toBe('Found a, b and c')
+    expect(chinese.source.captionsFound({ found: ['a', 'b', 'c'] })).toBe('Found a、b和c')
+  })
+
+  it('chooses one or other by the locale’s plural rules', () => {
+    expect(t().source.captionTracks({ count: 1 })).toBe('1 caption track')
+    expect(t().source.captionTracks({ count: 2 })).toBe('2 caption tracks')
+    // Chinese has one form for every count, so its `other` is always the one.
+    expect(compile<typeof enGB>(enGB, 'zh-Hans').source.captionTracks({ count: 1 })).toBe('1 caption tracks')
+  })
+
+  it('says a count in words where the table has one, and in digits beyond', () => {
+    expect(t().preflight.headings.warnSeveral({ count: 3 })).toBe('Ready, with three things to know')
+    expect(t().preflight.headings.warnSeveral({ count: 7 })).toBe('Ready, with 7 things to know')
+    expect(t().announce.lossesCount({ count: 1 })).toBe('One thing to know about what goes into the new file.')
+  })
+
+  it('shows a missing parameter as written, never as "undefined"', () => {
+    const fill = t().trim.keeping as (params: Record<string, string>) => string
+    expect(fill({ kept: '1 minute' })).toBe('Keeping 1 minute of {duration}.')
+  })
+
+  it('treats only one-or-other and numbered groups as counts', () => {
+    expect(isCountGroup(enGB.source.captionTracks)).toBe(true)
+    expect(isCountGroup(enGB.announce.lossesCount)).toBe(true)
+    expect(isCountGroup(enGB.format.channels)).toBe(false)
+    expect(isCountGroup(enGB.closing.colours)).toBe(false)
+  })
+})
+
+describe('the page’s static words', () => {
+  const html = readFileSync(new URL('../../index.html', import.meta.url), 'utf8')
+  const keys = [
+    ...[...html.matchAll(/data-i18n="([^"]+)"/g)].map((match) => match[1]!),
+    ...[...html.matchAll(/data-i18n-attr="([^"]+)"/g)].flatMap((match) =>
+      attributeBindings(match[1]!).map(([, key]) => key),
+    ),
+  ]
+
+  it('binds every element to a message the table has', () => {
+    expect(keys.length).toBeGreaterThan(50)
+    for (const key of keys) expect(messageAt(t(), key), key).toBeTypeOf('string')
+  })
+
+  it('keeps the no-script English the same as the table’s', () => {
+    for (const match of html.matchAll(/data-i18n="([^"]+)"[^>]*>([^<]*)</g)) {
+      const shown = match[2]!.replace(/\s+/g, ' ').trim()
+      if (shown) expect(shown, match[1]).toBe(messageAt(t(), match[1]!))
+    }
+  })
+})
+
+describe('the translator’s sheet', () => {
+  it('has one row per English message, in the table’s order, keyed as the table is', () => {
+    expect(sheetRows().map(({ key, english: text }) => ({ key, english: text }))).toEqual(english)
+  })
+
+  it('says where every row shows', () => {
+    for (const row of sheetRows()) expect(row.where, row.key).not.toBe('')
+  })
+
+  it('names every placeholder in the row’s notes', () => {
+    for (const row of sheetRows()) {
+      for (const name of placeholdersOf(row.english)) expect(row.notes, row.key).toContain(`{${name}}`)
+    }
+  })
+
+  it('gives each choice its own row: colour, animation, end and count', () => {
+    const keys = new Set(sheetRows().map(({ key }) => key))
+    for (const key of [
+      'closing.result.overFreeze.white.slide',
+      'result.fellBackToCut.blue.fade',
+      'trim.problem.afterEnd.end',
+      'source.captionTracks.one',
+      'preflight.headings.warnSeveral.6',
+      'announce.lossesCount.other',
+    ]) {
+      expect(keys.has(key), key).toBe(true)
+    }
+  })
+
+  it('comes back from CSV exactly as it went out, quotes, commas and Chinese included', () => {
+    const cells = [...sheetCells(), ['k', 'w', 'He said "no", then left.\r\nNext line', 'n', '中文，带逗号', 'Bahasa']]
+    expect(parseCsv(toCsv(cells))).toEqual(cells)
+    expect(parseCsv(toCsv(cells))[0]).toEqual([...SHEET_HEADINGS])
+  })
+})
