@@ -7,6 +7,10 @@
      items the canon record shipped before the migration, in v3's form;
      their why is in the frozen canon decision log (history.md). -->
 
+## Owner requests
+
+- VH-125 — the trim preview follows the handle: a drag, a key or a typed time shows that point, paused, and a drag comes to rest on its last time (2026-10-18) — see decisions
+
 ## V3 adoption
 
 - V3-HARNESS — Codex runs outside the sandbox like gh, both session hooks confirmed running on this Mac, npm audit's dev-only findings captured (2026-10-05) — see decisions

@@ -117,6 +117,7 @@ import {
   trimRangeFor,
   trimSummary,
 } from './ui/trim'
+import { createPreviewSeeker } from './ui/preview-seek'
 import type { PipelineStage } from './media/pipeline'
 import type { WorkerOutbound, WorkerRequest } from './workers/protocol'
 import type { FailureCode } from './workers/failure'
@@ -1161,6 +1162,7 @@ let trimEnd = 0
 const trimFieldProblems = new Map<HTMLInputElement, string>()
 /** The preview's object URL, revoked when the file changes. */
 let previewUrl: string | null = null
+const previewSeeker = createPreviewSeeker(trimPreview)
 let trimRecheck: ReturnType<typeof setTimeout> | null = null
 /**
  * What the step says when it has no video to trim — while one is read, or
@@ -1169,6 +1171,15 @@ let trimRecheck: ReturnType<typeof setTimeout> | null = null
  */
 let trimNotice: string | null = null
 const TRIM_NOTHING_TO_TRIM = 'There is no video to trim: that file could not be read.'
+
+/**
+ * Shows a handle's time in the preview, so the cut is chosen by eye as well
+ * as by number (VH-125). Nothing to do when there is no preview to move.
+ */
+function showInPreview(seconds: number): void {
+  if (!previewUrl || trimPreview.error) return
+  previewSeeker.seekTo(seconds)
+}
 
 /** Stops a device check that is waiting to run for a trim that no longer applies. */
 function cancelTrimRecheck(): void {
@@ -1351,6 +1362,9 @@ function onRangeInput(which: 'start' | 'end', value: number): void {
   if (which === 'start') trimStart = Math.max(0, Math.min(value, trimEnd - KEPT_MIN_SECONDS))
   else trimEnd = Math.min(trimDuration, Math.max(value, trimStart + KEPT_MIN_SECONDS))
   renderTrim()
+  // Where the handle came to rest, not where the pointer is: past the other
+  // handle's limit the preview holds at the limit too.
+  showInPreview(which === 'start' ? trimStart : trimEnd)
 }
 
 trimStartRange.addEventListener('input', () => onRangeInput('start', trimStartRange.valueAsNumber))
@@ -1387,6 +1401,7 @@ for (const [field, which] of [
       trimFieldProblems.delete(field)
       if (which === 'start') trimStart = value.seconds
       else trimEnd = value.seconds
+      showInPreview(value.seconds)
     }
     commitTrim()
   })

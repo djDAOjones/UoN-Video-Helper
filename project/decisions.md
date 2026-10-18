@@ -17,6 +17,16 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-18 — VH-125 — The trim preview follows the handle
+
+**Decision:** moving a trim handle, by pointer or key, or typing a valid time shows that point in the preview, paused, and only the latest time waits for a running seek; the two "Set … here" buttons and "Use the whole video" leave the preview where it is — because the owner asked for it in chat on 2026-10-18 ("can the trim feature show the point of the video in the preview window when changing the handle position").
+
+**Rationale:** writing `currentTime` on every input event abandons the running seek, so on a long file with sparse keyframes a drag would show nothing until the pointer stopped; `src/ui/preview-seek.ts` holds the latest time until `seeked`, drops the ones in between, and forgets a waiting time on `emptied`, so the next file never shows the last file's time. The preview shows where the handle came to rest after the 3 s minimum keep clamps it, not where the pointer is. A playing preview pauses, because a handle being placed wants its own frame. Standards applied: Nielsen 1, visibility of system status (the frame at the cut is shown); WCAG 3.2.5, change on request (focus stays on the handle, nothing autoplays); spec §9.3's live-region rule (no announcement: a control's own result is read on demand, through the handle's `aria-valuetext`). No new words, so VH-105's tables gain nothing. The spec does not describe the behaviour; a wish line carries the §9.1 doc-delta.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-05 — V3-HARNESS — Codex runs outside the sandbox, like gh
 
 **Decision:** both `.claude` settings files list `"codex *"` in `sandbox.excludedCommands` beside `"gh *"`, so a Claude Code session can run Codex (`~/.local/bin/codex`) for the Handoff's read-only review — because the owner ruled it in chat on 2026-10-05 ("Codex runs outside the sandbox like gh").
