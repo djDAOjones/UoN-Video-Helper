@@ -28,6 +28,12 @@
 - [ ] VH-122 — Decode damage is silenced and said — since 2026-10-01
 - [ ] VH-116 — A video estimate that holds still — since 2026-10-01
 
+### Band 8 — a title card and an Internal only closing
+
+- [ ] VH-126 — The Internal only closing — since 2026-10-18
+- [ ] VH-127 — The title card: General — since 2026-10-18
+- [ ] VH-128 — The title card: Submission — since 2026-10-18
+
 ### Standing — maintainer-owned, never band-gated
 
 - [!] VH-M2 — Measure the device envelope — since 2026-08-24 — blocked: the owner's own work — a canon [maintainer] item
@@ -57,3 +63,4 @@
 - [ ] VH-118 — `BEST_SOURCE_BLEND` has nothing measured behind it — since 2026-10-01
 - [ ] VH-119 — Skip true peak in the B and B′ planning passes — since 2026-10-01
 - [ ] VH-120 — A gain-solve step that anticipates the limiter — since 2026-10-01
+- [ ] VH-129 — The student edition: no official closings, hosted apart — since 2026-10-18 — (from: PLAN-1, 2026-10-18)

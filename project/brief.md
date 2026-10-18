@@ -12,9 +12,10 @@
 
 A static, browser-only app that turns one recorded educational video
 into a branded, loudness-normalised, correctly encoded MP4 for
-University of Nottingham staff, in one pass, with no media leaving the
-device. A conveyor with one cut, not an editor: trim the ends, choose a
-closing, choose one of two purpose-named outputs, nothing else.
+University of Nottingham staff and students, in one pass, with no media
+leaving the device. A conveyor with one cut, not an editor: trim the
+ends, add a title card or not, choose a closing, choose one of two
+purpose-named outputs, nothing else.
 `docs/01-specification.md` is authoritative; `docs/02-technical-rationale.md`
 settles WebCodecs over ffmpeg.wasm, the one runtime dependency and the
 loudness targets, and none re-opens without new evidence. WCAG 2.2 AAA
@@ -70,6 +71,10 @@ The destination mix defines the two outputs: EchoVideo and YouTube
 re-encode on ingest, so files sent there favour quality; OneDrive and
 SharePoint files are downloaded as-is, so those favour size.
 
+Students too, since PLAN-1 (2026-10-18): one app for everyone, with the
+title card's Submission layout for a video handed in as coursework. A
+student edition without the official closings waits (VH-129).
+
 ## Platform and deployment
 
 Static files served over HTTPS. No server-side processing, no build
@@ -88,6 +93,12 @@ package is uploaded by hand.
   appended and chosen by three controls — type, onset, colour — or none;
   conformed to the source's resolution and frame rate, padded in
   Nottingham Blue, and silent (spec §4).
+- **Title card and Internal only** (PLAN-1) — an optional silent card
+  before the video, General (a heading and a subhead) or Submission
+  (module, assignment, convenor or tutor, student ID numbers, running
+  time, the card's date); and an "Internal only" closing, a plain card
+  with no logo, beside the official closings and none. Both are drawn
+  by the app, not shipped as assets.
 - **Loudness normalisation** — BS.1770-4 measurement, then a bespoke
   chain: high-pass, conditional macro-levelling (only when LRA > 9 LU,
   slew-limited to 1 dB/s), gentle compression, a single linear gain that
@@ -146,7 +157,8 @@ creating, editing
 or transcribing captions; batch processing; exposed WebM output (the muxer
 supports it, the UI does not); pumping detection on pre-existing audio
 processing; noise reduction or de-reverberation; custom or per-department
-branding variants.
+branding variants (the Internal only closing carries no University
+branding and is not one, PLAN-1).
 
 Cut: the stream-copy fast path for the larger output (D10, answered no on
 2026-08-27) — re-encoding is slower and predictable.
