@@ -649,6 +649,96 @@ export const enGB = {
     onlyInCopy: 'Too long for the email, so only in "Copy message and details":',
   },
 
+  /**
+   * The accessibility statement in the footer (VH-130), after the GOV.UK
+   * model statement, in this page's plain words. Self-certified by the owner
+   * on 2026-10-18 and translated in full, not kept in English. Dates arrive
+   * as placeholders, written by `Intl` from `config/accessibility.ts`; the
+   * address and the advice service are links the page puts in their slots.
+   */
+  statement: {
+    heading: 'Accessibility statement',
+    covers:
+      'This statement covers UoN Video Helper, the page you are on. Joe Bell runs it at the University of Nottingham.',
+    aim: 'We want as many people as possible to be able to use this tool. You should be able to:',
+    /** Each completes "You should be able to:". */
+    abilities: [
+      'use it with a keyboard alone',
+      'use it with a screen reader, which reads out each stage and result',
+      'zoom in to 200% without the text going off the screen',
+      "use your own colours, and your computer's high contrast mode",
+      "turn off movement on the page in your computer's settings",
+    ],
+    plain: 'The words are plain, and the text has strong contrast with its background.',
+    limits: {
+      heading: 'How accessible this tool is',
+      intro: 'We know some parts are not fully accessible:',
+      /** The recorded limitations: Chrome only, the machine translations, the Chinese font, the preview (spec 9.3), the kept short forms. */
+      items: [
+        'It is built for Google Chrome on a computer. In other browsers, it may not work.',
+        'The Chinese and Malay pages were translated by a computer. Colleagues who speak each language are checking them on the live page.',
+        "Chinese text uses your computer's own Chinese font, so it may look different from one computer to another.",
+        'The preview plays your own video. Its captions, and whether it flashes, depend on your recording.',
+        'Some short forms are not spelled out: file sizes, such as MB and GB, and video format names, such as H.264 and AAC.',
+      ],
+    },
+    contact: {
+      heading: 'Feedback and contact',
+      /** `{address}` is a link that opens an email to it. */
+      text: 'If you find a problem with this tool, or need its information in another way, email Joe Bell at {address}.',
+    },
+    enforcement: {
+      heading: 'Enforcement procedure',
+      /** `{service}` is `service` below, as a link to its website. */
+      text: 'The Equality and Human Rights Commission enforces the accessibility regulations. If you are not happy with how we answer your complaint, you can get in touch with the {service}.',
+      service: 'Equality Advisory and Support Service',
+    },
+    compliance: {
+      heading: 'Compliance status',
+      text: 'This tool is partially compliant with version 2.2 of the Web Content Accessibility Guidelines (WCAG), at level AA, the middle of their three levels. Only automated checks have been run so far, so we cannot yet say it fully meets them. We aim for level AAA, the highest.',
+    },
+    testing: {
+      heading: 'How we tested this tool',
+      wave: 'On {date}, we checked this page with WAVE, a web accessibility evaluation tool from WebAIM. It gave the page a score of 10 out of 10.',
+      automated:
+        'Each time the code changes, automated tests check the contrast of the text against its background, and the reading level of the words.',
+      manual:
+        'We have also checked it by hand in Chrome, at computer and phone widths, while building it.',
+    },
+    plans: {
+      heading: 'What we plan to test next',
+      intro: 'We have not yet chosen the next tests. We are thinking of:',
+      /** Each completes "We are thinking of:". The owner chooses among them. */
+      items: [
+        'using the tool with a keyboard alone',
+        'using it with the NVDA screen reader in Chrome on Windows, and with VoiceOver on a Mac',
+        'zooming in to 400%, and a screen 320 pixels wide',
+        'Windows contrast themes',
+        'a second automated tool, such as axe or Lighthouse',
+        'a session with disabled staff who use the tool',
+      ],
+    },
+    about: {
+      heading: 'About this statement',
+      dates:
+        'This statement was written on {date}. Joe Bell reviewed it. We will review it again by {reviewDate}.',
+    },
+  },
+
+  /**
+   * The two teams to write to, at the foot of the page (VH-130): a line that
+   * introduces them, then each team as a link that opens an email to it, its
+   * address from `config/feedback.ts`. Each link's words say where it goes
+   * on their own (WCAG 2.4.9), so neither leans on the line above.
+   */
+  footer: {
+    contact: {
+      intro: 'For help with this tool:',
+      creators: 'Email the creators team',
+      learningContent: 'Email the learning content team',
+    },
+  },
+
   save: {
     pickerDescription: 'MP4 video (.mp4)',
     /** The stem when the source's name has none. */

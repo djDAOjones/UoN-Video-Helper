@@ -16,7 +16,13 @@ import {
   CLOSING_ONSETS,
   CLOSING_TYPES,
 } from '../src/config/branding'
+import {
+  CREATORS_TEAM_ADDRESS,
+  FEEDBACK_ADDRESS,
+  LEARNING_CONTENT_TEAM_ADDRESS,
+} from '../src/config/feedback'
 import { PRESETS, type PresetId } from '../src/config/presets'
+import { enGB } from '../src/i18n/en-GB'
 import { closingTypeLabel, onsetDisabledReason } from '../src/ui/closing-choice'
 
 /**
@@ -164,6 +170,99 @@ describe('the System check panel (VH-88)', () => {
 
   it('starts closed', () => {
     expect(markup).not.toMatch(/<details[^>]*id="system-check"[^>]*\sopen/)
+  })
+})
+
+describe('the accessibility statement (VH-130)', () => {
+  const statement =
+    /<details[^>]*id="accessibility-statement"[\s\S]*?<\/details>/.exec(markup)?.[0] ?? ''
+  const footer = /<footer[\s\S]*?<\/footer>/.exec(markup)?.[0] ?? ''
+
+  it('keeps a level-two heading inside its summary, as the System check does', () => {
+    expect(statement).toMatch(
+      /^<details[^>]*>\s*<summary class="disclosure-summary">\s*<h2[^>]*>Accessibility statement<\/h2>/,
+    )
+  })
+
+  it('starts closed', () => {
+    expect(markup).not.toMatch(/<details[^>]*id="accessibility-statement"[^>]*\sopen/)
+  })
+
+  it('sits in the footer, beside the System check and above the feedback button', () => {
+    expect(footer).toContain(statement)
+    expect(footer.indexOf('id="accessibility-statement"')).toBeGreaterThan(
+      footer.indexOf('id="system-check"'),
+    )
+    expect(footer.indexOf('id="accessibility-statement"')).toBeLessThan(
+      footer.indexOf('id="feedback-open"'),
+    )
+  })
+
+  it('follows the model statement’s sections, each under a level-three heading', () => {
+    const subheadings = [...statement.matchAll(/<h3>([^<]+)<\/h3>/g)].map((match) => match[1])
+    expect(subheadings).toEqual([
+      'How accessible this tool is',
+      'Feedback and contact',
+      'Enforcement procedure',
+      'Compliance status',
+      'How we tested this tool',
+      'What we plan to test next',
+      'About this statement',
+    ])
+  })
+
+  it('writes its lists as lists, one item per line of the table', () => {
+    const lists = [...statement.matchAll(/<ul>([\s\S]*?)<\/ul>/g)].map(
+      (match) => match[1]!.match(/<li>/g)?.length ?? 0,
+    )
+    expect(lists).toEqual([
+      enGB.statement.abilities.length,
+      enGB.statement.limits.items.length,
+      enGB.statement.plans.items.length,
+    ])
+  })
+
+  it('leaves a place for each sentence the script paints with a link or a date', () => {
+    for (const id of ['statement-contact', 'statement-enforcement', 'statement-wave', 'statement-about']) {
+      expect(statement).toContain(`<p id="${id}"></p>`)
+    }
+  })
+})
+
+describe('the footer\'s team contacts (VH-130)', () => {
+  const footer = /<footer[\s\S]*?<\/footer>/.exec(markup)?.[0] ?? ''
+  const mainSource = readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8')
+  /** Any email address written out, as a literal would be. */
+  const anAddress = /[\w.%+-]+@[\w-]+(?:\.[\w-]+)+/
+
+  it('offers each team as a link on a line of its own, under the feedback button and above the version', () => {
+    for (const [id, words] of [
+      ['contact-creators', enGB.footer.contact.creators],
+      ['contact-learning-content', enGB.footer.contact.learningContent],
+    ] as const) {
+      expect(footer).toMatch(new RegExp(`<li>\\s*<a class="footer-contact-link" id="${id}">${words}</a>\\s*</li>`))
+      expect(footer.indexOf(`id="${id}"`)).toBeGreaterThan(footer.indexOf('id="feedback-open"'))
+      expect(footer.indexOf(`id="${id}"`)).toBeLessThan(footer.indexOf('id="version-line"'))
+    }
+  })
+
+  it('takes each address from config, never from the page or the script', () => {
+    // The script sets each `href` from config/feedback.ts; a literal address
+    // in either file would be a second copy to forget when a team's arrives.
+    expect(html).not.toMatch(anAddress)
+    expect(mainSource).not.toMatch(anAddress)
+    expect(mainSource).toContain("['#contact-creators', CREATORS_TEAM_ADDRESS]")
+    expect(mainSource).toContain("['#contact-learning-content', LEARNING_CONTENT_TEAM_ADDRESS]")
+  })
+
+  it("is the owner's address for both teams until the owner gives theirs (2026-10-18)", () => {
+    // The record's stopgap, not a rule: when a team's own address arrives,
+    // its line in config changes and this expectation goes with it.
+    expect(CREATORS_TEAM_ADDRESS).toBe(FEEDBACK_ADDRESS)
+    expect(LEARNING_CONTENT_TEAM_ADDRESS).toBe(FEEDBACK_ADDRESS)
+    for (const address of [CREATORS_TEAM_ADDRESS, LEARNING_CONTENT_TEAM_ADDRESS]) {
+      expect(address).toMatch(new RegExp(`^${anAddress.source}$`))
+    }
   })
 })
 

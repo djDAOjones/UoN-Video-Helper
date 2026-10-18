@@ -652,6 +652,77 @@ export const msMY: Messages = {
       'Tidak dapat menyalin. Buka "Apa yang akan dihantar bersamanya", pilih butirannya dan salin butiran tersebut bersama mesej anda.',
     onlyInCopy: 'Terlalu panjang untuk e-mel ini, jadi hanya dalam "Salin mesej dan butiran":',
   },
+  statement: {
+    heading: 'Kenyataan kebolehcapaian',
+    covers:
+      'Kenyataan ini meliputi Pembantu Video UoN, iaitu halaman yang sedang anda gunakan. Halaman ini dikendalikan oleh Joe Bell di Universiti Nottingham.',
+    aim: 'Kami mahu seramai mungkin orang dapat menggunakan alat ini. Anda sepatutnya dapat:',
+    abilities: [
+      'menggunakannya dengan papan kekunci sahaja',
+      'menggunakannya dengan pembaca skrin, yang membacakan setiap peringkat dan keputusan',
+      'membesarkan paparan hingga 200% tanpa teks terkeluar dari skrin',
+      'menggunakan warna pilihan anda sendiri, dan mod kontras tinggi komputer anda',
+      'mematikan pergerakan pada halaman melalui tetapan komputer anda',
+    ],
+    plain: 'Bahasanya mudah, dan teks mempunyai kontras yang tinggi dengan latar belakangnya.',
+    limits: {
+      heading: 'Tahap kebolehcapaian alat ini',
+      intro: 'Kami sedar bahawa sesetengah bahagian belum boleh diakses sepenuhnya:',
+      items: [
+        'Alat ini dibina untuk Google Chrome pada komputer. Dalam pelayar lain, ia mungkin tidak berfungsi.',
+        'Halaman bahasa Cina dan Bahasa Malaysia diterjemahkan oleh komputer. Rakan sekerja yang fasih dalam setiap bahasa sedang menyemaknya pada halaman yang telah dilancarkan.',
+        'Teks bahasa Cina menggunakan fon Cina pada komputer anda sendiri, jadi paparannya mungkin berbeza antara satu komputer dengan komputer yang lain.',
+        'Pratonton memainkan video anda sendiri. Kapsyennya, dan sama ada ia berkelip, bergantung pada rakaman anda.',
+        'Sesetengah singkatan tidak dieja penuh: unit saiz fail, seperti MB dan GB, dan nama format video, seperti H.264 dan AAC.',
+      ],
+    },
+    contact: {
+      heading: 'Maklum balas dan maklumat hubungan',
+      text: 'Jika anda menemui masalah dengan alat ini, atau memerlukan maklumatnya dalam bentuk lain, sila hantar e-mel kepada Joe Bell di {address}.',
+    },
+    enforcement: {
+      heading: 'Prosedur penguatkuasaan',
+      text: 'Suruhanjaya Kesaksamaan dan Hak Asasi Manusia (Equality and Human Rights Commission) menguatkuasakan peraturan kebolehcapaian. Jika anda tidak berpuas hati dengan cara kami menjawab aduan anda, anda boleh menghubungi {service}.',
+      service:
+        'Perkhidmatan Nasihat dan Sokongan Kesaksamaan (Equality Advisory and Support Service)',
+    },
+    compliance: {
+      heading: 'Status pematuhan',
+      text: 'Alat ini mematuhi sebahagian Garis Panduan Kebolehcapaian Kandungan Web (WCAG) versi 2.2 pada tahap AA, iaitu tahap pertengahan daripada tiga tahapnya. Setakat ini hanya semakan automatik telah dijalankan, jadi kami belum dapat menyatakan bahawa alat ini mematuhinya sepenuhnya. Kami menyasarkan tahap AAA, iaitu tahap tertinggi.',
+    },
+    testing: {
+      heading: 'Cara kami menguji alat ini',
+      wave: 'Pada {date}, kami menyemak halaman ini dengan WAVE, alat penilaian kebolehcapaian web daripada WebAIM. Halaman ini mendapat skor 10 daripada 10.',
+      automated:
+        'Setiap kali kod berubah, ujian automatik menyemak kontras teks dengan latar belakangnya, serta tahap kesukaran bacaan perkataannya.',
+      manual:
+        'Kami juga telah menyemaknya secara manual dalam Chrome, pada lebar skrin komputer dan telefon, semasa membinanya.',
+    },
+    plans: {
+      heading: 'Ujian yang dirancang seterusnya',
+      intro: 'Kami belum memilih ujian seterusnya. Kami sedang mempertimbangkan:',
+      items: [
+        'penggunaan alat ini dengan papan kekunci sahaja',
+        'penggunaannya dengan pembaca skrin NVDA dalam Chrome pada Windows, dan dengan VoiceOver pada Mac',
+        'pembesaran paparan hingga 400%, dan skrin selebar 320 piksel',
+        'tema kontras Windows',
+        'alat automatik kedua, seperti axe atau Lighthouse',
+        'sesi bersama kakitangan kurang upaya yang menggunakan alat ini',
+      ],
+    },
+    about: {
+      heading: 'Mengenai kenyataan ini',
+      dates:
+        'Kenyataan ini ditulis pada {date} dan disemak oleh Joe Bell. Kami akan mengkajinya semula selewat-lewatnya pada {reviewDate}.',
+    },
+  },
+  footer: {
+    contact: {
+      intro: 'Untuk bantuan dengan alat ini:',
+      creators: 'Hantar e-mel kepada pasukan pencipta',
+      learningContent: 'Hantar e-mel kepada pasukan kandungan pembelajaran',
+    },
+  },
   save: {
     pickerDescription: 'Video MP4 (.mp4)',
     stem: 'video',

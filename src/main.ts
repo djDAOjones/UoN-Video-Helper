@@ -34,11 +34,13 @@ import {
   type ClosingControls,
 } from './config/branding'
 import {
+  CREATORS_TEAM_ADDRESS,
   FEEDBACK_ADDRESS,
   FEEDBACK_LEAVE_WARNING_PAUSE_MS,
   FEEDBACK_MAILTO_MAX_CHARACTERS,
   FEEDBACK_SUBJECT,
   FEEDBACK_WORKER_LOG_WAIT_MS,
+  LEARNING_CONTENT_TEAM_ADDRESS,
 } from './config/feedback'
 import {
   BOOT_CHECK_SOURCE,
@@ -103,6 +105,11 @@ import { applyStaticText } from './i18n/bind'
 import { readLanguagePreference, writeLanguagePreference } from './i18n/preference'
 import { DEFAULT_LANGUAGE, LANGUAGE_NAMES, LANGUAGES_OFFERED } from './config/languages'
 import { buildLanguageSwitcher, languageOptions } from './ui/language-switcher'
+import {
+  fragmentOpensStatement,
+  STATEMENT_ID,
+  wireAccessibilityStatement,
+} from './ui/accessibility-statement'
 import { buildLosses, renderSourceError, renderSourceReport, summarise } from './ui/source-panel'
 import type { SourceReport } from './media/inspect'
 import { lossesSpoken, spoken, warningsSpoken } from './ui/announce'
@@ -2704,6 +2711,48 @@ required<HTMLButtonElement>('#feedback-close').addEventListener('click', () => {
 })
 required<HTMLButtonElement>('#feedback-open').addEventListener('click', openFeedback)
 required<HTMLButtonElement>('#feedback-report').addEventListener('click', openFeedback)
+
+// --- Accessibility statement (VH-130) ---------------------------------------
+// In the footer, closed until asked for. Its painted sentences are a region,
+// so a change of language writes them again with the rest; the panel stays
+// open or shut as the reader left it.
+
+const accessibilityStatement = wireAccessibilityStatement(
+  required<HTMLDetailsElement>(`#${STATEMENT_ID}`),
+)
+show(accessibilityStatement.details, accessibilityStatement.paint)
+
+// The address's link goes the way the feedback dialog's email does, so a
+// running job raises no "Leave site?" over it.
+accessibilityStatement.contactLink.addEventListener('click', (event) => {
+  event.preventDefault()
+  openMailto(accessibilityStatement.contactLink.href)
+})
+
+/** Opens the statement when the address asks for it: on arrival, and on a later change of fragment. */
+function openStatementForFragment(): void {
+  if (fragmentOpensStatement(window.location.hash)) accessibilityStatement.details.open = true
+}
+openStatementForFragment()
+window.addEventListener('hashchange', openStatementForFragment)
+
+// --- The footer's team contacts (VH-130) ------------------------------------
+// Their words are bound in the markup, so a change of language writes them
+// with the rest; their addresses come from config, never the page, and their
+// clicks go the way every email link goes, so a running job raises no
+// "Leave site?" over them.
+
+for (const [selector, address] of [
+  ['#contact-creators', CREATORS_TEAM_ADDRESS],
+  ['#contact-learning-content', LEARNING_CONTENT_TEAM_ADDRESS],
+] as const) {
+  const link = required<HTMLAnchorElement>(selector)
+  link.href = `mailto:${address}`
+  link.addEventListener('click', (event) => {
+    event.preventDefault()
+    openMailto(link.href)
+  })
+}
 
 // --- Language (VH-105) -----------------------------------------------------
 // Chosen at the top of the page, remembered in this browser only, and changed

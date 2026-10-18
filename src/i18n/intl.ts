@@ -117,6 +117,32 @@ export function unitFormatter(
   }
 }
 
+/**
+ * A calendar day, given as an ISO date (`2026-10-18`), written long as the
+ * language writes one: "18 October 2026", "2026年10月18日", "18 Oktober 2026"
+ * (VH-130). A day is not an instant, so it is read and written in UTC and
+ * never moves to the day before in a reader's time zone west of London. A
+ * missing formatter, or a value that is not a real ISO date — `2026-02-31`
+ * included, which `Date` would quietly roll on to 3 March — shows the value
+ * as given rather than a wrong day or "Invalid Date".
+ */
+export function dateFormatter(locale: string): (isoDate: string) => string {
+  let formatter: Intl.DateTimeFormat | null = null
+  try {
+    formatter = new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone: 'UTC' })
+  } catch {
+    // No date formatter for this locale: the ISO date stands, below.
+  }
+  return (isoDate) => {
+    const parts = /^(\d{4})-(\d{2})-(\d{2})$/.exec(isoDate)
+    if (!formatter || !parts) return isoDate
+    const [year, month, date] = [Number(parts[1]), Number(parts[2]), Number(parts[3])]
+    const day = new Date(Date.UTC(year, month - 1, date))
+    if (day.getUTCMonth() !== month - 1 || day.getUTCDate() !== date) return isoDate
+    return formatter.format(day)
+  }
+}
+
 /** A list of nouns joined as the language joins them: "A and B", "A、B和C". For genuine noun lists only, never sentences. */
 export function listFormatter(
   locale: string,

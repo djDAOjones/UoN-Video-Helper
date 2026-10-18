@@ -93,6 +93,45 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
   ['systemCheck', 'The System check at the foot of the page'],
   ['errors', 'The Errors captured panel, only shown when something in the tool goes wrong'],
   ['feedback', 'The Send feedback dialog'],
+  [
+    'statement',
+    'The Accessibility statement at the foot of the page, a panel that opens: its running text',
+  ],
+  [
+    'statement.heading',
+    'The Accessibility statement at the foot of the page: the heading of the panel',
+  ],
+  [
+    'statement.abilities',
+    'The Accessibility statement: a list item, completing "You should be able to:"',
+  ],
+  ['statement.limits.heading', 'The Accessibility statement: a subheading'],
+  [
+    'statement.limits.items',
+    'The Accessibility statement: a list item, under "How accessible this tool is"',
+  ],
+  ['statement.contact.heading', 'The Accessibility statement: a subheading'],
+  ['statement.enforcement.heading', 'The Accessibility statement: a subheading'],
+  ['statement.compliance.heading', 'The Accessibility statement: a subheading'],
+  ['statement.testing.heading', 'The Accessibility statement: a subheading'],
+  ['statement.plans.heading', 'The Accessibility statement: a subheading'],
+  [
+    'statement.plans.items',
+    'The Accessibility statement: a list item, completing "We are thinking of:"',
+  ],
+  ['statement.about.heading', 'The Accessibility statement: a subheading'],
+  [
+    'footer.contact.intro',
+    'The foot of the page, under the Send feedback button: the line over the two team links',
+  ],
+  [
+    'footer.contact.creators',
+    'The foot of the page, under the Send feedback button: a link that opens an email to the creators team',
+  ],
+  [
+    'footer.contact.learningContent',
+    'The foot of the page, under the Send feedback button: a link that opens an email to the learning content team',
+  ],
   ['save', 'Step 5: saving the finished video'],
   ['save.pickerDescription', 'The save dialog, naming the kind of file'],
   ['save.stem', 'The name suggested for the saved file'],
@@ -145,6 +184,10 @@ const PLACEHOLDERS: Readonly<Record<string, string>> = {
   mark: 'a word from save.marks',
   where: 'save.downloadIos or save.downloadOther',
   result: 'a count from systemCheck.results',
+  date: 'a date the app writes in your language, like "18 October 2026"',
+  reviewDate: 'the date of the next review, written by the app, like "18 November 2026"',
+  service:
+    "the advice service's name, from statement.enforcement.service, as a link to its website",
 }
 
 /** What a key's last parts say about when the message is used. */
@@ -171,6 +214,17 @@ function variantNote(path: readonly string[]): string[] {
   if (path.includes('problem') && (last === 'start' || last === 'end'))
     notes.push(`About the ${last} time.`)
   return notes
+}
+
+/** The note on each line of a list that completes the sentence above it (VH-130). */
+const COMPLETES_ABLE_TO =
+  'Completes "You should be able to:", so it starts in lower case, as the English does, and has no full stop.'
+const COMPLETES_THINKING_OF =
+  'Completes "We are thinking of:", so it starts in lower case, as the English does, and has no full stop.'
+
+/** The same note on every line of a list, keyed `prefix.0`, `prefix.1` and on. */
+function listNotes(prefix: string, items: readonly string[], note: string): Record<string, string> {
+  return Object.fromEntries(items.map((_, index) => [`${prefix}.${index}`, note]))
 }
 
 /** Notes for single keys, where the key and its English need more. */
@@ -210,6 +264,42 @@ const NOTES: Readonly<Record<string, string>> = {
   'progress.milestones.1': 'Follows a stage name, like "Encoding video — half done".',
   'progress.milestones.2': 'Follows a stage name, like "Encoding video — three quarters done".',
   'format.unknown': 'Shown alone in place of a fact the app could not read.',
+  'statement.heading':
+    'The heading of the panel, so no full stop. A formal statement, as on any official website.',
+  'statement.covers':
+    'UoN Video Helper is the product name: use the same name as app.title. Keep the name Joe Bell as it is. A formal statement: use a formal register throughout.',
+  'statement.aim': 'Introduces the five lines that follow, which complete its last sentence.',
+  ...listNotes('statement.abilities', enGB.statement.abilities, COMPLETES_ABLE_TO),
+  'statement.limits.intro': 'Introduces the five lines that follow.',
+  'statement.limits.items.0': 'Keep the name Google Chrome as it is.',
+  'statement.limits.items.1': '"Malay" is the language this page calls Bahasa Malaysia.',
+  'statement.limits.items.4':
+    'Keep MB, GB, H.264 and AAC as they are: these short forms are what the sentence is about.',
+  'statement.contact.text':
+    'Keep the name Joe Bell as it is. The email address is shown as a link.',
+  'statement.enforcement.text':
+    'The Equality and Human Rights Commission is an official UK body: give its English name with a translation in brackets, or name it as your language normally would.',
+  'statement.enforcement.service':
+    'The name of an official UK advice service, shown as a link to its website. Give its English name with a translation in brackets, or name it as your language normally would.',
+  'statement.compliance.text':
+    'Keep WCAG, AA and AAA as they are; 2.2 is a version number. Use the usual name in your language for the Web Content Accessibility Guidelines, if there is one.',
+  'statement.testing.wave':
+    'Keep the names WAVE and WebAIM as they are. The score is 10 out of 10.',
+  'statement.testing.manual': 'Keep the name Chrome as it is.',
+  'statement.plans.intro':
+    'Introduces the six lines that follow, which complete its last sentence.',
+  ...listNotes('statement.plans.items', enGB.statement.plans.items, COMPLETES_THINKING_OF),
+  'statement.plans.items.1': `${COMPLETES_THINKING_OF} Keep the names NVDA, Chrome, Windows, VoiceOver and Mac as they are.`,
+  'statement.plans.items.3':
+    'Completes "We are thinking of:", so it has no full stop. Keep the name Windows as it is.',
+  'statement.plans.items.4': `${COMPLETES_THINKING_OF} Keep axe and Lighthouse as they are: they are the names of tools.`,
+  'statement.about.dates': 'Keep the name Joe Bell as it is.',
+  'footer.contact.intro':
+    'Introduces the two links that follow, one under the other. Each link makes sense on its own.',
+  'footer.contact.creators':
+    'The words of a link on a line of its own, so they must say alone that it opens an email. "The creators team" is the name of a University team: translate it plainly, and use the same word for "team" as in footer.contact.learningContent.',
+  'footer.contact.learningContent':
+    'The words of a link on a line of its own, so they must say alone that it opens an email. "The learning content team" is the name of a University team: translate it plainly, and use the same word for "team" as in footer.contact.creators.',
 }
 
 /** A row of the translator's sheet. */

@@ -164,13 +164,41 @@ a {
   line-height: var(--line-height-heading);
 }
 
-.band--footer .system-check {
+.band--footer .system-check,
+.band--footer .statement {
   margin-bottom: var(--spacing-05);
 }
 
-/* The feedback button sits between the system check and the version line. */
+/* The feedback button sits between the two footer panels and the version
+   line. */
 .feedback-entry {
   margin: 0 0 var(--spacing-05);
+}
+
+/*
+ * The two teams to write to (VH-130), under the feedback button. Each link is
+ * on a line of its own, so it is a 44 px target like any control (2.5.5); the
+ * band's colour roles give it the same light-on-blue pair and white focus
+ * ring as every other link in here.
+ */
+.footer-contacts {
+  margin: 0 0 var(--spacing-05);
+}
+
+.footer-contacts-intro {
+  margin: 0;
+}
+
+.footer-contacts-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer-contact-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target-min);
 }
 
 .version {
@@ -817,22 +845,66 @@ details[open] > .disclosure-summary::before {
 /*
  * System check: a panel that is itself a disclosure (VH-88). The summary fills
  * the panel edge to edge, so the whole closed bar is the target rather than
- * the width of its words.
+ * the width of its words. The accessibility statement is the same panel
+ * (VH-130).
  */
-.system-check > .disclosure-summary {
+.system-check > .disclosure-summary,
+.statement > .disclosure-summary {
   margin: calc(-1 * var(--spacing-06));
   padding: var(--spacing-04) var(--spacing-06);
   font-weight: 600;
 }
 
-.system-check[open] > .disclosure-summary {
+.system-check[open] > .disclosure-summary,
+.statement[open] > .disclosure-summary {
   margin-bottom: var(--spacing-05);
 }
 
 /* A heading for navigation, not for size: it reads as the summary's text. */
-.system-check > .disclosure-summary h2 {
+.system-check > .disclosure-summary h2,
+.statement > .disclosure-summary h2 {
   margin: 0;
   font: inherit;
+}
+
+/*
+ * The statement's running text (VH-130): paragraphs at the measure, one blank
+ * line apart (1.4.8), each list tucked under the sentence that introduces it,
+ * and a subheading in the body face, as Carbon's productive headings are. A
+ * long address breaks rather than push the panel wider than a phone.
+ */
+.statement-body {
+  overflow-wrap: break-word;
+}
+
+.statement-body h3 {
+  margin: var(--spacing-07) 0 var(--spacing-03);
+  font-size: var(--type-heading-compact);
+  font-weight: 700;
+  line-height: var(--line-height-heading);
+}
+
+.statement-body p,
+.statement-body ul {
+  margin: 0;
+}
+
+.statement-body p + p,
+.statement-body ul + p {
+  margin-top: var(--paragraph-gap);
+}
+
+.statement-body p + ul {
+  margin-top: var(--spacing-03);
+}
+
+.statement-body ul {
+  padding-left: var(--spacing-06);
+  list-style: square;
+}
+
+.statement-body li + li {
+  margin-top: var(--spacing-03);
 }
 
 .disclosure-summary:focus-visible {

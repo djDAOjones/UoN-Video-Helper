@@ -403,7 +403,8 @@
       <div class="actions" id="dev-actions" lang="en-GB" hidden></div>
     </main>
 
-    <!-- The footer band: what the page is running on, and what it is. -->
+    <!-- The footer band: what the page is running on, how accessible it is,
+         and what it is. -->
     <footer class="band band--footer on-brand-blue">
       <div class="band-inner">
         <!-- Closed on a healthy device; `main.ts` opens it on any failure, and
@@ -417,6 +418,105 @@
           </summary>
           <ul class="checks" id="checks"></ul>
         </details>
+        <!-- VH-130. The accessibility statement, on this page rather than one
+             of its own (owner, 2026-10-18), after the GOV.UK model statement.
+             The same anatomy as the System check, and beside it, so the two
+             disclosures read as one group and the feedback button is not
+             wedged between look-alikes; it stays above the version line.
+             Closed until asked for; `main.ts` opens it when the address ends
+             #accessibility-statement, so a course page can link to it. The
+             four sentences with a date, the address or a link in them are
+             painted by `src/ui/accessibility-statement.ts`, in each language's
+             own order; the rest is bound to the table. -->
+        <details class="panel statement" id="accessibility-statement">
+          <summary class="disclosure-summary">
+            <h2 id="statement-heading" data-i18n="statement.heading">Accessibility statement</h2>
+          </summary>
+          <div class="statement-body">
+            <p data-i18n="statement.covers">
+              This statement covers UoN Video Helper, the page you are on. Joe Bell runs it at the
+              University of Nottingham.
+            </p>
+            <p data-i18n="statement.aim">
+              We want as many people as possible to be able to use this tool. You should be able to:
+            </p>
+            <ul>
+              <li data-i18n="statement.abilities.0">use it with a keyboard alone</li>
+              <li data-i18n="statement.abilities.1">use it with a screen reader, which reads out each stage and result</li>
+              <li data-i18n="statement.abilities.2">zoom in to 200% without the text going off the screen</li>
+              <li data-i18n="statement.abilities.3">use your own colours, and your computer's high contrast mode</li>
+              <li data-i18n="statement.abilities.4">turn off movement on the page in your computer's settings</li>
+            </ul>
+            <p data-i18n="statement.plain">
+              The words are plain, and the text has strong contrast with its background.
+            </p>
+
+            <h3 data-i18n="statement.limits.heading">How accessible this tool is</h3>
+            <p data-i18n="statement.limits.intro">We know some parts are not fully accessible:</p>
+            <ul>
+              <li data-i18n="statement.limits.items.0">
+                It is built for Google Chrome on a computer. In other browsers, it may not work.
+              </li>
+              <li data-i18n="statement.limits.items.1">
+                The Chinese and Malay pages were translated by a computer. Colleagues who speak each
+                language are checking them on the live page.
+              </li>
+              <li data-i18n="statement.limits.items.2">
+                Chinese text uses your computer's own Chinese font, so it may look different from one
+                computer to another.
+              </li>
+              <li data-i18n="statement.limits.items.3">
+                The preview plays your own video. Its captions, and whether it flashes, depend on your
+                recording.
+              </li>
+              <li data-i18n="statement.limits.items.4">
+                Some short forms are not spelled out: file sizes, such as MB and GB, and video format
+                names, such as H.264 and AAC.
+              </li>
+            </ul>
+
+            <h3 data-i18n="statement.contact.heading">Feedback and contact</h3>
+            <p id="statement-contact"></p>
+
+            <h3 data-i18n="statement.enforcement.heading">Enforcement procedure</h3>
+            <p id="statement-enforcement"></p>
+
+            <h3 data-i18n="statement.compliance.heading">Compliance status</h3>
+            <p data-i18n="statement.compliance.text">
+              This tool is partially compliant with version 2.2 of the Web Content Accessibility
+              Guidelines (WCAG), at level AA, the middle of their three levels. Only automated checks
+              have been run so far, so we cannot yet say it fully meets them. We aim for level AAA,
+              the highest.
+            </p>
+
+            <h3 data-i18n="statement.testing.heading">How we tested this tool</h3>
+            <p id="statement-wave"></p>
+            <p data-i18n="statement.testing.automated">
+              Each time the code changes, automated tests check the contrast of the text against its
+              background, and the reading level of the words.
+            </p>
+            <p data-i18n="statement.testing.manual">
+              We have also checked it by hand in Chrome, at computer and phone widths, while building
+              it.
+            </p>
+
+            <h3 data-i18n="statement.plans.heading">What we plan to test next</h3>
+            <p data-i18n="statement.plans.intro">We have not yet chosen the next tests. We are thinking of:</p>
+            <ul>
+              <li data-i18n="statement.plans.items.0">using the tool with a keyboard alone</li>
+              <li data-i18n="statement.plans.items.1">
+                using it with the NVDA screen reader in Chrome on Windows, and with VoiceOver on a Mac
+              </li>
+              <li data-i18n="statement.plans.items.2">zooming in to 400%, and a screen 320 pixels wide</li>
+              <li data-i18n="statement.plans.items.3">Windows contrast themes</li>
+              <li data-i18n="statement.plans.items.4">a second automated tool, such as axe or Lighthouse</li>
+              <li data-i18n="statement.plans.items.5">a session with disabled staff who use the tool</li>
+            </ul>
+
+            <h3 data-i18n="statement.about.heading">About this statement</h3>
+            <p id="statement-about"></p>
+          </div>
+        </details>
         <!-- On a surface that is always there, and usable during a job: a hung
              job is the thing most worth reporting (VH-93). -->
         <p class="feedback-entry">
@@ -424,6 +524,23 @@
             Send feedback
           </button>
         </p>
+        <!-- VH-130. The two teams to write to, each a link on a line of its
+             own: so its words say where it goes without the line above
+             (2.4.9), and it is a 44 px target, with no sentence round it to
+             take the inline exception. `main.ts` gives each its `mailto:`
+             from `config/feedback.ts`, and sends the click the way every
+             email link goes, so a running job raises no "Leave site?". -->
+        <div class="footer-contacts">
+          <p class="footer-contacts-intro" data-i18n="footer.contact.intro">For help with this tool:</p>
+          <ul class="footer-contacts-list">
+            <li>
+              <a class="footer-contact-link" id="contact-creators" data-i18n="footer.contact.creators">Email the creators team</a>
+            </li>
+            <li>
+              <a class="footer-contact-link" id="contact-learning-content" data-i18n="footer.contact.learningContent">Email the learning content team</a>
+            </li>
+          </ul>
+        </div>
         <p class="version" id="version-line">Loading…</p>
       </div>
     </footer>

@@ -13,6 +13,22 @@
  */
 export const FEEDBACK_ADDRESS = 'joe.bell@nottingham.ac.uk'
 
+/**
+ * Where the footer's "Email the creators team" link writes to (VH-130). The
+ * owner asked for the team's own address in the footer on 2026-10-18 but has
+ * not given it yet, so it is the owner's address until then; changing it is
+ * this one line.
+ */
+export const CREATORS_TEAM_ADDRESS = FEEDBACK_ADDRESS
+
+/**
+ * Where the footer's "Email the learning content team" link writes to
+ * (VH-130). The owner asked for the team's own address in the footer on
+ * 2026-10-18 but has not given it yet, so it is the owner's address until
+ * then; changing it is this one line.
+ */
+export const LEARNING_CONTENT_TEAM_ADDRESS = FEEDBACK_ADDRESS
+
 /** The email's subject. The build identity is appended, so a report names the code it is about. */
 export const FEEDBACK_SUBJECT = 'UoN Video Helper feedback'
 
