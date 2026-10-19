@@ -85,6 +85,7 @@ src/
     encoding.ts            the encoder configs Mediabunny is given
     encoder-delay.ts       measures the AAC encoder's own delay, and compensates
     branding.ts            variant selection, fetch, boundary fades, timeline
+    title-card.ts          the title card's fit and draw, its text measure injected (VH-127)
     composite.ts           the build over picture, for the overlay modes
     freeze.ts              picks the held final frame for `over-freeze`
     opfs.ts                job-scoped working store, Web Locks, orphan sweep

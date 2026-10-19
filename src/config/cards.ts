@@ -1,6 +1,6 @@
 /**
  * The cards' type scale (VH-126): the Internal use only closing's words, and
- * both title cards, General (VH-127) and Submission (VH-128).
+ * both title cards, the staff card (VH-127) and Submission (VH-128).
  *
  * Every size is in px per 1080 lines of the frame's SHORTER side, so a 4K
  * frame doubles it and a portrait frame keeps it. The floor is the owner's
@@ -14,6 +14,9 @@
 
 /** The owner's floor: 28 pt on a 540 pt slide, at 1080 lines. */
 export const CARD_TYPE_FLOOR_PX = 56
+
+/** The lines of the shorter side every card size is given against. */
+export const CARD_SCALE_LINES = 1080
 
 /** The two brand faces a card draws in (`tokens.brand.css`), and the device's CJK face behind them. */
 export type CardFace = 'heading' | 'body'
@@ -45,8 +48,8 @@ export interface CardTextRole {
  * fit at its floor is refused at its field, never clipped.
  */
 export const CARD_ROLES = {
-  /** General's heading: what the video is. */
-  generalHeading: {
+  /** The staff card's title: what the video is. */
+  staffTitle: {
     face: 'heading',
     weight: 'bold',
     maxPx: 104,
@@ -55,15 +58,41 @@ export const CARD_ROLES = {
     maxLines: 3,
     portraitMaxLines: 5,
   },
-  /** General's subhead, optional: who it is for, or when. */
-  generalSubhead: {
+  /**
+   * The staff card's three plain lines under the title, unlabelled (the owner,
+   * 2026-10-19): the department, the author or authors, and the date. Every
+   * field's most lines at the floor, with the gaps, fit the safe area's height
+   * in any landscape frame and a 9:16 one (706 of 880 px, 1260 of 1565), so
+   * there a card is refused only at a field it overfills; `title-card.test.ts`
+   * holds that sum. A squarer portrait frame can still overfill the card, and
+   * the renderer then names its longest field.
+   */
+  staffDepartment: {
     face: 'body',
     weight: 'normal',
     maxPx: 64,
     minPx: CARD_TYPE_FLOOR_PX,
     lineHeight: 1.5,
-    maxLines: 3,
-    portraitMaxLines: 5,
+    maxLines: 2,
+    portraitMaxLines: 4,
+  },
+  staffAuthors: {
+    face: 'body',
+    weight: 'normal',
+    maxPx: 64,
+    minPx: CARD_TYPE_FLOOR_PX,
+    lineHeight: 1.5,
+    maxLines: 2,
+    portraitMaxLines: 4,
+  },
+  staffDate: {
+    face: 'body',
+    weight: 'normal',
+    maxPx: 64,
+    minPx: CARD_TYPE_FLOOR_PX,
+    lineHeight: 1.5,
+    maxLines: 1,
+    portraitMaxLines: 2,
   },
   /** Submission's heading: the assignment title or number. */
   submissionHeading: {
@@ -95,25 +124,46 @@ export const CARD_ROLES = {
 
 export type CardRoleName = keyof typeof CARD_ROLES
 
-/** Space under a heading, and between General's two lines of text, as a multiple of the floor. */
+/** Space under a heading, as a multiple of the floor. */
 export const CARD_BLOCK_GAP_EM = 0.75
 
-/** Space between Submission's fields, as a multiple of the floor. */
+/** Space between Submission's fields, and between the staff card's plain lines, as a multiple of the floor. */
 export const CARD_FIELD_GAP_EM = 0.375
+
+/**
+ * How far a field's size falls at each try while the card is fitted, px per
+ * 1080 of the shorter side. We chose it: fine enough that a field lands within
+ * a hair of the largest size that fits, coarse enough that a fit takes a few
+ * dozen measures.
+ */
+export const CARD_SIZE_STEP_PX = 2
 
 /**
  * The most each typed field takes, in columns: a wide character, such as
  * Chinese, counts two, since it draws about twice as wide as a Latin letter.
  * Proposed from the measured runway; VH-127 and VH-128 adopt them, and the
- * renderer still refuses, at its field, anything that measures too long.
+ * renderer still refuses, at its field, anything that measures too long. The
+ * staff card's four are the ones `spike-cards.html` fits with all four at
+ * their limits at once (VH-127, 2026-10-19).
  */
 export const CARD_FIELD_COLUMNS = {
-  generalHeading: 100,
-  generalSubhead: 120,
+  staffTitle: 100,
+  staffDepartment: 80,
+  staffAuthors: 80,
+  staffDate: 40,
   assignment: 80,
   module: 60,
   convenor: 40,
 } as const
+
+/** The columns a wide character takes against those limits: it draws about twice as wide. */
+export const CARD_WIDE_COLUMNS = 2
+
+/**
+ * How long the staff title card holds before the video, in seconds: the
+ * owner's answer of 2026-10-19 (decisions, VH-127).
+ */
+export const TITLE_CARD_SECONDS = 5
 
 /** Space between a run-in label and its value, as a multiple of the size. */
 export const CARD_LABEL_GAP_EM = 0.5

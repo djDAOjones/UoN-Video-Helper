@@ -2,14 +2,16 @@
  * VH-126 spike: the cards' type scale, measured in this browser.
  *
  * Draws the Internal use only closing's words over the real closing frame,
- * and both title cards, at full size in three frame shapes and three
- * languages, with the longest realistic text, then reports each field's size,
- * its lines, the room left, and how many characters each field can take at the
- * floor. A card that refuses its worst case, words that leave the safe area,
- * or a size under the floor is a failure. Dev-only; not built.
+ * and both title cards, at full size in four frame shapes and three
+ * languages, with every typed field at its column limit, then reports each
+ * field's size, its lines, the room left, and how many columns each field can
+ * take with the others at their limits. A card that refuses its worst case,
+ * words that leave the safe area, a size under the floor, or a 4K card that
+ * breaks differently from its 1080 one is a failure. Dev-only; not built.
  *
- * The fitting here is the spike's own: VH-127 builds the renderer, and lifts
- * what this page proves.
+ * The cards are fitted and drawn by the renderer, `src/media/title-card.ts`
+ * (VH-127), with this page's canvas as its measure, so what this page proves
+ * is what the app draws.
  */
 
 import '../styles/tokens.brand.css'
@@ -19,16 +21,30 @@ import {
   CARD_BLOCK_GAP_EM,
   CARD_FIELD_COLUMNS,
   CARD_FIELD_GAP_EM,
-  CARD_LABEL_GAP_EM,
-  CARD_PAIR_GAP_EM,
   CARD_ROLES,
   CARD_SAFE_AREA,
   CARD_TYPE_FLOOR_PX,
   CLOSING_LOGO_FOOT_PER_1080,
   CLOSING_WORDS_GAP_EM,
   CLOSING_WORDS_ROLE,
-  type CardTextRole,
 } from '../config/cards'
+import {
+  cardFont,
+  columnsOf,
+  drawTitleCard,
+  fit,
+  LABEL_GAP,
+  PAIR_GAP,
+  safeArea,
+  STAFF_CARD,
+  STAFF_CARD_FIELDS,
+  staffCardBlocks,
+  type CardBlock,
+  type CardFit,
+  type CardFonts,
+  type FrameSize,
+  type StaffCardText,
+} from '../media/title-card'
 import { closingTailName, CLOSING_TAIL_SECONDS, type BrandingColour } from '../config/branding'
 import type { LanguageTag } from '../config/languages'
 import { closingWords } from '../i18n'
@@ -58,25 +74,31 @@ const CJK = token('--font-cjk')
 
 /* ---- Shapes and text --------------------------------------------------- */
 
-interface Shape {
+interface Shape extends FrameSize {
   readonly name: string
-  readonly width: number
-  readonly height: number
 }
 
 /** The common landscape, a laptop's screen recording, the narrowest landscape, and a phone's. */
 const SHAPES: readonly Shape[] = [
-  { name: '16:9', width: 1920, height: 1080 },
-  { name: '16:10', width: 1728, height: 1080 },
-  { name: '4:3', width: 1440, height: 1080 },
-  { name: '9:16', width: 1080, height: 1920 },
+  { name: '16:9', widthPx: 1920, heightPx: 1080 },
+  { name: '16:10', widthPx: 1728, heightPx: 1080 },
+  { name: '4:3', widthPx: 1440, heightPx: 1080 },
+  { name: '9:16', widthPx: 1080, heightPx: 1920 },
 ]
+
+/** The same shape at twice the lines, as a 4K output is. */
+const at4k = (shape: Shape): Shape => ({
+  name: `${shape.name} 4K`,
+  widthPx: shape.widthPx * 2,
+  heightPx: shape.heightPx * 2,
+})
 
 /** Provisional labels: VH-128 settles the English, the sheet route the rest. */
 interface Copy {
   readonly closingWords: string
-  readonly heading: string
-  readonly subhead: string
+  readonly title: string
+  readonly department: string
+  readonly authors: string
   readonly assignment: string
   readonly module: string
   readonly labels: {
@@ -92,8 +114,9 @@ interface Copy {
 const COPY: Readonly<Record<LanguageTag, Copy>> = {
   'en-GB': {
     closingWords: closingWords('en-GB'),
-    heading: 'Designing, Running and Reporting a Mixed-Methods Study for Your Dissertation',
-    subhead: 'Week 3 lecture for students on the Nottingham, Malaysia and China campuses',
+    title: 'Designing, Running and Reporting a Mixed-Methods Study for Your Dissertation',
+    department: 'School of Sociology and Social Policy, Faculty of Social Sciences',
+    authors: 'Professor Alexandra Montgomery-Fitzwilliam and Dr Samuel Okonkwo-Hartley',
     assignment: 'Assignment 2: Reflective Essay on Placement Learning and Professional Identity',
     module: 'LIBA2002 Migration and Identity in a Global Context',
     labels: {
@@ -107,8 +130,9 @@ const COPY: Readonly<Record<LanguageTag, Copy>> = {
   },
   'zh-Hans': {
     closingWords: closingWords('zh-Hans'),
-    heading: '为你的学位论文设计、开展和报告混合方法研究',
-    subhead: '第三周讲座，面向诺丁汉、马来西亚和中国校区的学生',
+    title: '为你的学位论文设计、开展和报告混合方法研究',
+    department: '社会科学学院社会学与社会政策系',
+    authors: '亚历山德拉·蒙哥马利-菲茨威廉教授和塞缪尔·奥孔科沃博士',
     assignment: '作业二：关于实习学习与职业身份认同的反思性论文',
     module: 'LIBA2002 全球背景下的移民与身份认同',
     labels: {
@@ -122,9 +146,10 @@ const COPY: Readonly<Record<LanguageTag, Copy>> = {
   },
   'ms-MY': {
     closingWords: closingWords('ms-MY'),
-    heading:
+    title:
       'Mereka Bentuk, Menjalankan dan Melaporkan Kajian Kaedah Campuran untuk Disertasi Anda',
-    subhead: 'Kuliah minggu ketiga untuk pelajar di kampus Nottingham, Malaysia dan China',
+    department: 'Sekolah Sosiologi dan Dasar Sosial, Fakulti Sains Sosial',
+    authors: 'Profesor Alexandra Montgomery-Fitzwilliam dan Dr Samuel Okonkwo-Hartley',
     assignment:
       'Tugasan 2: Esei Reflektif tentang Pembelajaran Penempatan dan Identiti Profesional',
     module: 'LIBA2002 Migration and Identity in a Global Context',
@@ -147,42 +172,10 @@ const RUNNING = '1:02:45'
 /** The longest month name in each language's long date. */
 const CARD_DATE = new Date(2026, 8, 30)
 
-/* ---- Measuring and wrapping ------------------------------------------- */
-
-type Weight = 'normal' | 'bold'
-
-interface Run {
-  readonly text: string
-  readonly weight: Weight
-}
-
-/** A label's gap before its value, breakable like a space. */
-const GAP: Run = { text: '\uE000', weight: 'normal' }
-/** The wider gap between two pairs on one line, breakable like a space. */
-const PAIR_GAP: Run = { text: '\uE001', weight: 'normal' }
-
-interface Placed {
-  readonly text: string
-  readonly weight: Weight
-  readonly x: number
-}
-
-interface Line {
-  readonly pieces: readonly Placed[]
-  readonly width: number
-}
-
-/** A space, a CJK character or punctuation mark, or a run of anything else. */
-const TOKEN =
-  /\s+|[\uE000\uE001]|[\u2E80-\u9FFF\u3000-\u303F\uF900-\uFAFF\uFF00-\uFFEF]|[^\s\uE000\uE001\u2E80-\u9FFF\u3000-\u303F\uF900-\uFAFF\uFF00-\uFFEF]+/gu
+/* ---- Measuring and drawing, through the renderer ---------------------- */
 
 const work = document.createElement('canvas').getContext('2d')!
 const widths = new Map<string, number>()
-
-function fontFor(role: CardTextRole, px: number, weight: Weight): string {
-  const family = role.face === 'heading' ? `Lora, Georgia, ${CJK}` : `Arial, ${CJK}`
-  return `${weight} ${px}px ${family}`
-}
 
 function measure(font: string, text: string): number {
   const key = `${font}|${text}`
@@ -195,154 +188,23 @@ function measure(font: string, text: string): number {
   return width
 }
 
-/** Greedy line fill; null when one unbreakable piece is wider than the line. */
-function wrap(role: CardTextRole, runs: readonly Run[], px: number, maxWidth: number): Line[] | null {
-  const out: Line[] = []
-  let pieces: Placed[] = []
-  let width = 0
-  let pending = 0
-  for (const run of runs) {
-    const font = fontFor(role, px, run.weight)
-    for (const text of run.text.match(TOKEN) ?? []) {
-      if (text === '\uE000' || text === '\uE001') {
-        const em = text === '\uE000' ? CARD_LABEL_GAP_EM : CARD_PAIR_GAP_EM
-        pending = Math.max(pending, em * px)
-        continue
-      }
-      if (/^\s+$/u.test(text)) {
-        pending = Math.max(pending, measure(font, text))
-        continue
-      }
-      const w = measure(font, text)
-      if (pieces.length > 0 && width + pending + w > maxWidth) {
-        out.push({ pieces, width })
-        pieces = []
-        width = 0
-        pending = 0
-      }
-      if (pieces.length === 0 && w > maxWidth) return null
-      const x = pieces.length === 0 ? 0 : width + pending
-      pieces.push({ text, weight: run.weight, x })
-      width = x + w
-      pending = 0
-    }
-  }
-  if (pieces.length > 0) out.push({ pieces, width })
-  return out
+const FONTS: CardFonts = {
+  families: { heading: `Lora, Georgia, ${CJK}`, body: `Arial, ${CJK}` },
+  measure,
 }
-
-/* ---- Fitting a card --------------------------------------------------- */
-
-interface Block {
-  readonly name: string
-  readonly role: CardTextRole
-  readonly runs: readonly Run[]
-  /** Space above it, as a multiple of the floor; unread for the first. */
-  readonly gapEm: number
-}
-
-interface Laid {
-  readonly block: Block
-  /** px per 1080 of the shorter side. */
-  readonly size: number
-  readonly lines: readonly Line[]
-}
-
-interface Fit {
-  readonly laid: readonly Laid[]
-  readonly height: number
-  readonly safe: { readonly x: number; readonly y: number; readonly width: number; readonly height: number }
-  readonly unit: number
-  readonly refused: string | null
-}
-
-const STEP_PX = 2
-
-function safeArea(shape: Shape): Fit['safe'] {
-  const x = shape.width * CARD_SAFE_AREA.side
-  const y = shape.height * CARD_SAFE_AREA.top
-  return {
-    x,
-    y,
-    width: shape.width - 2 * x,
-    height: shape.height * (1 - CARD_SAFE_AREA.top - CARD_SAFE_AREA.bottom),
-  }
-}
-
-/**
- * Each block at the largest size in its range that wraps into its lines,
- * shrinking the largest first until the card fits; refused at the block that
- * cannot fit at its floor, or at the card when nothing is left to shrink.
- */
-function fit(blocks: readonly Block[], shape: Shape): Fit {
-  const unit = Math.min(shape.width, shape.height) / 1080
-  const portrait = shape.height > shape.width
-  const safe = safeArea(shape)
-  const sizes = blocks.map((block) => block.role.maxPx)
-  for (;;) {
-    const laid: Laid[] = []
-    let refused: string | null = null
-    for (const [i, block] of blocks.entries()) {
-      const wrapped = wrap(block.role, block.runs, sizes[i]! * unit, safe.width)
-      const maxLines = portrait ? block.role.portraitMaxLines : block.role.maxLines
-      if (wrapped === null || wrapped.length > maxLines) {
-        if (sizes[i]! > block.role.minPx) {
-          sizes[i] = sizes[i]! - STEP_PX
-          refused = ''
-          break
-        }
-        refused = block.name
-        break
-      }
-      laid.push({ block, size: sizes[i]!, lines: wrapped })
-    }
-    if (refused === '') continue
-    if (refused !== null) return { laid, height: 0, safe, unit, refused }
-    const height = laid.reduce(
-      (sum, item, i) =>
-        sum +
-        item.lines.length * item.size * unit * item.block.role.lineHeight +
-        (i > 0 ? item.block.gapEm * CARD_TYPE_FLOOR_PX * unit : 0),
-      0,
-    )
-    if (height <= safe.height) return { laid, height, safe, unit, refused: null }
-    let largest = -1
-    for (const [i, block] of blocks.entries()) {
-      if (sizes[i]! > block.role.minPx && (largest < 0 || sizes[i]! > sizes[largest]!)) largest = i
-    }
-    if (largest < 0) return { laid, height, safe, unit, refused: 'the card' }
-    sizes[largest] = sizes[largest]! - STEP_PX
-  }
-}
-
-/* ---- Drawing ---------------------------------------------------------- */
 
 const full = document.createElement('canvas')
 const fullContext = full.getContext('2d')!
 
-/** Draws a fitted card full size, left-aligned, centred in the safe area's height. */
-function drawCard(result: Fit, shape: Shape, ground: string, ink: string): void {
-  full.width = shape.width
-  full.height = shape.height
-  fullContext.fillStyle = ground
-  fullContext.fillRect(0, 0, shape.width, shape.height)
-  fullContext.fillStyle = ink
-  fullContext.textBaseline = 'alphabetic'
-  let y = result.safe.y + (result.safe.height - result.height) / 2
-  for (const [i, item] of result.laid.entries()) {
-    if (i > 0) y += item.block.gapEm * CARD_TYPE_FLOOR_PX * result.unit
-    const px = item.size * result.unit
-    const pitch = px * item.block.role.lineHeight
-    for (const line of item.lines) {
-      for (const piece of line.pieces) {
-        fullContext.font = fontFor(item.block.role, px, piece.weight)
-        const metrics = fullContext.measureText(piece.text)
-        const box = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent
-        const baseline = y + (pitch - box) / 2 + metrics.fontBoundingBoxAscent
-        fullContext.fillText(piece.text, result.safe.x + piece.x, baseline)
-      }
-      y += pitch
-    }
+/** Draws a fitted card full size; a refused one is only its ground, since the renderer never draws it. */
+function drawCard(result: CardFit): void {
+  full.width = result.frame.widthPx
+  full.height = result.frame.heightPx
+  if (result.refused === null) {
+    drawTitleCard(fullContext, result, FONTS.families, { ground: BLUE, ink: WHITE })
+  } else {
+    fullContext.fillStyle = BLUE
+    fullContext.fillRect(0, 0, full.width, full.height)
   }
 }
 
@@ -375,40 +237,21 @@ function section(title: string): HTMLElement {
 
 /* ---- The cards -------------------------------------------------------- */
 
-function generalBlocks(copy: Copy, heading = copy.heading, subhead = copy.subhead): Block[] {
-  return [
-    {
-      name: 'heading',
-      role: CARD_ROLES.generalHeading,
-      runs: [{ text: heading, weight: 'bold' }],
-      gapEm: 0,
-    },
-    {
-      name: 'subhead',
-      role: CARD_ROLES.generalSubhead,
-      runs: [{ text: subhead, weight: 'normal' }],
-      gapEm: CARD_BLOCK_GAP_EM,
-    },
-  ]
-}
-
-function field(name: string, label: string, value: string, gapEm = CARD_FIELD_GAP_EM): Block {
+function field(name: string, label: string, value: string, gapEm = CARD_FIELD_GAP_EM): CardBlock {
   return {
     name,
     role: CARD_ROLES.submissionField,
-    runs: [{ text: label, weight: 'normal' }, GAP, { text: value, weight: 'bold' }],
+    runs: [{ text: label, weight: 'normal' }, LABEL_GAP, { text: value, weight: 'bold' }],
     gapEm,
   }
 }
-
-const WIDE = /[\u2E80-\u9FFF\u3000-\u303F\uF900-\uFAFF\uFF00-\uFFEF]/u
 
 /** The longest start of a text that keeps within a column count, a wide character counting two. */
 function cut(text: string, columns: number): string {
   let used = 0
   let out = ''
   for (const character of text) {
-    used += WIDE.test(character) ? 2 : 1
+    used += columnsOf(character)
     if (used > columns) break
     out += character
   }
@@ -421,7 +264,7 @@ function submissionBlocks(
   assignment = copy.assignment,
   module = copy.module,
   convenor = cut(CONVENOR, CARD_FIELD_COLUMNS.convenor),
-): Block[] {
+): CardBlock[] {
   const date = new Intl.DateTimeFormat(language, { dateStyle: 'long' }).format(CARD_DATE)
   const made =
     language === 'zh-Hans'
@@ -442,11 +285,11 @@ function submissionBlocks(
       role: CARD_ROLES.submissionField,
       runs: [
         { text: copy.labels.running, weight: 'normal' },
-        GAP,
+        LABEL_GAP,
         { text: RUNNING, weight: 'bold' },
         PAIR_GAP,
         { text: copy.labels.made, weight: 'normal' },
-        GAP,
+        LABEL_GAP,
         { text: made, weight: 'bold' },
       ],
       gapEm: CARD_FIELD_GAP_EM,
@@ -454,31 +297,32 @@ function submissionBlocks(
   ]
 }
 
-function describe(result: Fit): string {
-  if (result.refused === 'the card') {
-    const over = Math.round((result.height - result.safe.height) / result.unit)
-    return `refused at the card, ${over}px/1080 over at the floor`
+function describe(result: CardFit): string {
+  const refused = result.refused
+  if (refused?.at === 'card') {
+    return `refused at the card, ${Math.round(refused.overPx)}px/1080 over at the floor`
   }
-  if (result.refused !== null) return `refused at ${result.refused}`
+  if (refused?.at === 'field') return `refused at ${refused.field}`
+  if (refused?.at === 'empty') return 'refused as empty'
   const parts = result.laid.map(
-    (item) => `${item.block.name} ${item.size}px×${item.lines.length}`,
+    (item) => `${item.block.name} ${item.sizePx}px×${item.lines.length}`,
   )
-  const room = Math.round((result.safe.height - result.height) / result.unit)
+  const room = Math.round((result.safe.heightPx - result.heightPx) / result.scale)
   return `${parts.join(', ')}; ${room}px/1080 to spare`
 }
 
-function checkFloor(result: Fit, where: string): void {
+function checkFloor(result: CardFit, where: string): void {
   for (const item of result.laid) {
-    if (item.size < CARD_TYPE_FLOOR_PX) fail(`${where}: ${item.block.name} at ${item.size}px`)
+    if (item.sizePx < CARD_TYPE_FLOOR_PX) fail(`${where}: ${item.block.name} at ${item.sizePx}px`)
   }
 }
 
 /**
- * How many characters a field takes at most, with the rest of the card as
+ * How many columns a field takes at most, with the rest of the card as
  * given: the longest prefix of a long text that the card still fits.
  */
 function capacity(
-  blocksFor: (text: string) => Block[],
+  blocksFor: (text: string) => CardBlock[],
   long: string,
   shape: Shape,
 ): number {
@@ -487,20 +331,39 @@ function capacity(
   let high = characters.length
   while (low < high) {
     const mid = Math.ceil((low + high) / 2)
-    if (fit(blocksFor(characters.slice(0, mid).join('')), shape).refused === null) low = mid
+    if (fit(blocksFor(characters.slice(0, mid).join('')), shape, FONTS).refused === null) low = mid
     else high = mid - 1
   }
-  return low
+  return columnsOf(characters.slice(0, low).join(''))
 }
 
 const LONG: Readonly<Record<LanguageTag, string>> = {
-  'en-GB': `${COPY['en-GB'].heading}: ${COPY['en-GB'].subhead}, ${COPY['en-GB'].assignment}, ${COPY['en-GB'].heading}`,
-  'zh-Hans': `${COPY['zh-Hans'].heading}${COPY['zh-Hans'].subhead}${COPY['zh-Hans'].assignment}${COPY['zh-Hans'].heading}${COPY['zh-Hans'].subhead}`,
-  'ms-MY': `${COPY['ms-MY'].heading}: ${COPY['ms-MY'].subhead}, ${COPY['ms-MY'].assignment}, ${COPY['ms-MY'].heading}`,
+  'en-GB': `${COPY['en-GB'].title}: ${COPY['en-GB'].department}, ${COPY['en-GB'].assignment}, ${COPY['en-GB'].title}`,
+  'zh-Hans': `${COPY['zh-Hans'].title}${COPY['zh-Hans'].department}${COPY['zh-Hans'].assignment}${COPY['zh-Hans'].title}${COPY['zh-Hans'].department}`,
+  'ms-MY': `${COPY['ms-MY'].title}: ${COPY['ms-MY'].department}, ${COPY['ms-MY'].assignment}, ${COPY['ms-MY'].title}`,
+}
+
+/** The staff card with every field at its column limit, or the fields given as given and the rest at theirs. */
+function worstStaff(language: LanguageTag, given?: Partial<StaffCardText>): StaffCardText {
+  const atLimit = (name: keyof StaffCardText): string =>
+    given?.[name] ?? cut(LONG[language], STAFF_CARD[name].columns)
+  return {
+    title: atLimit('title'),
+    department: atLimit('department'),
+    authors: atLimit('authors'),
+    date: atLimit('date'),
+  }
+}
+
+/** The staff card as it is usually typed, with the longest month's long date. */
+function typicalStaff(language: LanguageTag): StaffCardText {
+  const copy = COPY[language]
+  const date = new Intl.DateTimeFormat(language, { dateStyle: 'long' }).format(CARD_DATE)
+  return { title: copy.title, department: copy.department, authors: copy.authors, date }
 }
 
 /** Submission with every typed field at its column limit. */
-function worstSubmission(language: LanguageTag): Block[] {
+function worstSubmission(language: LanguageTag): CardBlock[] {
   const long = LONG[language]
   return submissionBlocks(
     language,
@@ -532,36 +395,36 @@ async function closing(): Promise<void> {
   const safe = safeArea(shape)
   const portrait = SHAPES[3]!
   /** Spec §4.3: a portrait output letterboxes the 16:9 closing across its width. */
-  const portraitScale = portrait.width / shape.width
+  const portraitScale = portrait.widthPx / shape.widthPx
   say('Closing words, Arial Bold, px per 1080 lines of the 16:9 asset')
   for (const language of Object.keys(COPY) as LanguageTag[]) {
     const words = COPY[language].closingWords
     const px = CLOSING_WORDS_ROLE.maxPx
-    const font = fontFor(CLOSING_WORDS_ROLE, px, 'bold')
+    const font = cardFont(CLOSING_WORDS_ROLE, px, 'bold', FONTS.families)
     const width = measure(font, words)
     work.font = font
     const metrics = work.measureText(words)
     const capTop = CLOSING_LOGO_FOOT_PER_1080 + CLOSING_WORDS_GAP_EM * px
     const baseline = capTop + work.measureText('H').actualBoundingBoxAscent
     const foot = baseline + metrics.actualBoundingBoxDescent
-    const bottom = shape.height * (1 - CARD_SAFE_AREA.bottom)
+    const bottom = shape.heightPx * (1 - CARD_SAFE_AREA.bottom)
     const effective = px * portraitScale
     say(
-      `  ${language}: "${words}" ${Math.round(width)}px wide of ${Math.round(safe.width)}; ` +
+      `  ${language}: "${words}" ${Math.round(width)}px wide of ${Math.round(safe.widthPx)}; ` +
         `foot at ${Math.round(foot)} of ${Math.round(bottom)}; ${effective.toFixed(2)}px in 9:16`,
     )
-    if (width > safe.width) fail(`${language} closing words wider than the safe area`)
+    if (width > safe.widthPx) fail(`${language} closing words wider than the safe area`)
     if (foot > bottom) fail(`${language} closing words below the safe area`)
     if (effective < CARD_TYPE_FLOOR_PX) fail(`${language} closing words under the floor in 9:16`)
     for (const colour of ['blue', 'white'] as const) {
-      full.width = shape.width
-      full.height = shape.height
+      full.width = shape.widthPx
+      full.height = shape.heightPx
       fullContext.drawImage(frames[colour], 0, 0)
       fullContext.font = font
       fullContext.textAlign = 'center'
       fullContext.textBaseline = 'alphabetic'
       fullContext.fillStyle = colour === 'blue' ? WHITE : BLUE
-      fullContext.fillText(words, shape.width / 2, baseline)
+      fullContext.fillText(words, shape.widthPx / 2, baseline)
       fullContext.textAlign = 'start'
       show(row, `${language}, ${colour}, 16:9: ${px}px`)
     }
@@ -571,12 +434,12 @@ async function closing(): Promise<void> {
   asset.width = full.width
   asset.height = full.height
   asset.getContext('2d')!.drawImage(full, 0, 0)
-  full.width = portrait.width
-  full.height = portrait.height
+  full.width = portrait.widthPx
+  full.height = portrait.heightPx
   fullContext.fillStyle = BLUE
-  fullContext.fillRect(0, 0, portrait.width, portrait.height)
-  const scaledHeight = shape.height * portraitScale
-  fullContext.drawImage(asset, 0, (portrait.height - scaledHeight) / 2, portrait.width, scaledHeight)
+  fullContext.fillRect(0, 0, portrait.widthPx, portrait.heightPx)
+  const scaledHeight = shape.heightPx * portraitScale
+  fullContext.drawImage(asset, 0, (portrait.heightPx - scaledHeight) / 2, portrait.widthPx, scaledHeight)
   show(row, `ms-MY, white, 9:16 letterboxed: ${(CLOSING_WORDS_ROLE.maxPx * portraitScale).toFixed(2)}px`)
 }
 
@@ -606,21 +469,33 @@ async function run(): Promise<void> {
   contrast()
   await closing()
 
-  say('\nGeneral, each field at its column limit')
+  say('\nStaff card, all four fields at their column limits at once, and each at 4K')
   for (const language of Object.keys(COPY) as LanguageTag[]) {
-    const row = section(`General — ${language}, each field at its limit`)
-    const blocks = generalBlocks(
-      COPY[language],
-      cut(LONG[language], CARD_FIELD_COLUMNS.generalHeading),
-      cut(LONG[language], CARD_FIELD_COLUMNS.generalSubhead),
-    )
+    const row = section(`Staff card — ${language}, all four fields at their limits`)
+    const blocks = staffCardBlocks(worstStaff(language))
     for (const shape of SHAPES) {
-      const result = fit(blocks, shape)
-      const where = `general ${language} ${shape.name}`
+      const result = fit(blocks, shape, FONTS)
+      const where = `staff ${language} ${shape.name}`
       say(`  ${where}: ${describe(result)}`)
       if (result.refused !== null) fail(`${where} refused`)
       checkFloor(result, where)
-      drawCard(result, shape, BLUE, WHITE)
+      const big = fit(blocks, at4k(shape), FONTS)
+      if (describe(big) !== describe(result)) fail(`${where} 4K breaks differently: ${describe(big)}`)
+      drawCard(result)
+      show(row, `${shape.name}: ${describe(result)}`)
+    }
+  }
+
+  say('\nStaff card, as usually typed')
+  for (const language of Object.keys(COPY) as LanguageTag[]) {
+    const row = section(`Staff card — ${language}, as usually typed`)
+    for (const shape of [SHAPES[0]!, SHAPES[3]!]) {
+      const result = fit(staffCardBlocks(typicalStaff(language)), shape, FONTS)
+      const where = `staff typical ${language} ${shape.name}`
+      say(`  ${where}: ${describe(result)}`)
+      if (result.refused !== null) fail(`${where} refused`)
+      checkFloor(result, where)
+      drawCard(result)
       show(row, `${shape.name}: ${describe(result)}`)
     }
   }
@@ -630,22 +505,35 @@ async function run(): Promise<void> {
     const row = section(`Submission — ${language}, each field at its limit, eight IDs`)
     const blocks = worstSubmission(language)
     for (const shape of SHAPES) {
-      const result = fit(blocks, shape)
+      const result = fit(blocks, shape, FONTS)
       const where = `submission ${language} ${shape.name}`
       say(`  ${where}: ${describe(result)}`)
       if (result.refused !== null) fail(`${where} refused`)
       checkFloor(result, where)
-      drawCard(result, shape, BLUE, WHITE)
+      drawCard(result)
       show(row, `${shape.name}: ${describe(result)}`)
     }
   }
 
-  say('\nRunway: the most characters a field takes before it is refused, the rest at realistic length')
+  say('\nRunway: the most columns each staff field takes, the other three at their limits')
+  for (const language of Object.keys(COPY) as LanguageTag[]) {
+    for (const shape of SHAPES) {
+      const runway = STAFF_CARD_FIELDS.map((name) => {
+        const columns = capacity(
+          (text) => staffCardBlocks(worstStaff(language, { [name]: text })),
+          LONG[language],
+          shape,
+        )
+        return `${name} ${columns}/${STAFF_CARD[name].columns}`
+      })
+      say(`  ${language} ${shape.name}: ${runway.join(', ')}`)
+    }
+  }
+
+  say('\nRunway: Submission, the rest at realistic length')
   for (const language of Object.keys(COPY) as LanguageTag[]) {
     const copy = COPY[language]
     for (const shape of SHAPES) {
-      const heading = capacity((text) => generalBlocks(copy, text), LONG[language], shape)
-      const subhead = capacity((text) => generalBlocks(copy, copy.heading, text), LONG[language], shape)
       const assignment = capacity(
         (text) => submissionBlocks(language, copy, text),
         LONG[language],
@@ -656,18 +544,14 @@ async function run(): Promise<void> {
         LONG[language],
         shape,
       )
-      say(
-        `  ${language} ${shape.name}: General heading ${heading}, subhead ${subhead} (with the other at its longest); ` +
-          `Submission assignment ${assignment}, module ${module}`,
-      )
+      say(`  ${language} ${shape.name}: Submission assignment ${assignment}, module ${module}`)
     }
   }
 
   // 4K: the same card, twice the pixels, must break the same way.
   const shape = SHAPES[0]!
-  const at4k = { name: '16:9 4K', width: shape.width * 2, height: shape.height * 2 }
-  const one = fit(worstSubmission('ms-MY'), shape)
-  const two = fit(worstSubmission('ms-MY'), at4k)
+  const one = fit(worstSubmission('ms-MY'), shape, FONTS)
+  const two = fit(worstSubmission('ms-MY'), at4k(shape), FONTS)
   const same = describe(one) === describe(two)
   say(`\n4K: ms-MY Submission at 3840 × 2160 ${same ? 'breaks as at 1080' : `differs: ${describe(two)}`}`)
   if (!same) fail('4K layout differs from 1080')
