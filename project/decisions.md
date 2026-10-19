@@ -17,6 +17,16 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-19 — VH-128 — Submission's Chinese and Malay stand as the agent drafted them; VH-122 follows Band 8
+
+**Decision:** the agent's Chinese and Malay for `titleCard.forSubmission`, `titleCard.submission` and `titleCard.card` stand as drafted, machine translation like the rest of the translated pages; when Band 8 closes, VH-122 opens the next work — because the owner approved both in chat on 2026-10-19.
+
+**Rationale:** Slice (a) drafted twenty rows, each marked "drafted by the agent" in `reviews/2026-10-18/VH-105-strings-filled.csv`; the owner was shown every row beside its English and approved them as drafted. The marks stay in the sheet for a translator's review; a correction goes through the sheet and `scripts/strings-table.mjs`. VH-122 is the first open, unblocked line in Current, Band 6 waiting on the owner. In the same round the owner approved the spec text for §4.1 and §9.1, kept word for word in VH-128's notes until the close applies it.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-19 — VH-128 — Under Student submission, Step 3's box is ticked and locked, and Submission's fields show
 
 **Decision:** under Student submission, Step 3's "Add a title card" box is ticked and locked, with its reason in visible text, and Submission's four typed fields show in place of the staff card's; each side keeps its own fields for the way back, and neither is remembered beyond the page — because the acceptance makes the card always on under a submission, and VH-131 locks the closing's box ticked with its reason the same way.
