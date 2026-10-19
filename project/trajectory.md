@@ -9,6 +9,7 @@
 
 ## Band 8 — a title card and an Internal use only closing
 
+- VH-131 — Staff video or Student submission: a switch above the steps, opening on Staff video and remembered in this browser; a submission's closing, when it has one, is always Internal use only, its box ticked and locked with the reason, and a staff video's box comes back as it was; never locked, so a running job, a result and every choice survive a switch; checked in Chrome in all three languages at 1280 and 375 px; the spec says so (2026-10-19) — see decisions
 - VH-126 — the Internal use only closing: twelve tails with the words wiping in under the logo, per language and colour, and a Step 3 checkbox, locked under None, that swaps the tail and nothing else; checked in Chrome in every mode at 1080p and 4K; the spec says so (2026-10-19) — see decisions
 
 ## Owner requests

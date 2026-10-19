@@ -27,6 +27,10 @@ It solves three problems in one pass:
 
 - **Primary user:** UoN academic and professional-services staff, novice
   level, on a managed or personal laptop.
+- **Also students** (PLAN-1, VH-131): a student handing in a video as
+  coursework. A switch above the steps, "Staff video" or "Student
+  submission", says which; it opens on Staff video and is remembered in
+  this browser.
 - **Typical source material:** Teams/Zoom recordings, PowerPoint
   screen-recorded presentations, webcam talking-heads, screen captures.
   Predominantly 720p–1080p at 25–30 fps. Variable frame rate was expected;
@@ -88,7 +92,8 @@ onto its three boundary modes.
 closing with the words "Internal use only" building in under the logo, in the
 language of the video's text: the page's, unless another is chosen. It
 changes no timing: the same onset, the same 4 s card, the same seconds added.
-A student submission always has it.
+On a student submission it is always on: a submission may have no closing,
+but any closing it has carries the words.
 
 ### 4.2 Master assets, as delivered
 
@@ -523,10 +528,13 @@ through v1 — captions drawn into the picture do (§8.1).
 
 ### 9.1 Workflow
 
-The screen is five numbered steps (VH-91, VH-96). Step 1 is there from the
-start; steps 2–5 appear once a video has been read, and each holds a safe
-default, so a user who changes nothing keeps the whole video and gets a
-clean-cut blue closing and the larger file.
+The screen is five numbered steps (VH-91, VH-96). Above them, a switch
+chooses "Staff video" or "Student submission" (VH-131). It opens on Staff
+video, is remembered in this browser and is never locked, so switching keeps
+the video, the trim, every choice, a running job and a result. Step 1 is
+there from the start; steps 2–5 appear once a video has been read, and each
+holds a safe default, so a user who changes nothing keeps the whole video and
+gets a clean-cut blue closing and the larger file.
 
 1. **Choose a video** — file picker or drag-and-drop. The app reads the file
    and says what it found, including anything that cannot be carried into
