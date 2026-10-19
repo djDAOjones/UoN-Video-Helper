@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import {
   formatChannels,
+  formatClockTime,
   formatCodec,
   formatApproximateDuration,
   formatDuration,
@@ -9,6 +10,25 @@ import {
   formatFrameRate,
   formatResolution,
 } from './format'
+
+describe('formatClockTime (VH-128)', () => {
+  it('happy path: minutes and seconds, then hours past an hour', () => {
+    expect(formatClockTime(754)).toBe('12:34')
+    expect(formatClockTime(3765)).toBe('1:02:45')
+    expect(formatClockTime(36000)).toBe('10:00:00')
+  })
+
+  it('rounds to the nearest second, the way a trimmed range lands', () => {
+    expect(formatClockTime(54.07)).toBe('0:54')
+    expect(formatClockTime(59.5)).toBe('1:00')
+    expect(formatClockTime(3599.6)).toBe('1:00:00')
+  })
+
+  it('edge: nothing, or less, reads as no time at all', () => {
+    expect(formatClockTime(0)).toBe('0:00')
+    expect(formatClockTime(-3)).toBe('0:00')
+  })
+})
 
 describe('formatDuration', () => {
   it('reads naturally at every scale a lecture recording reaches', () => {

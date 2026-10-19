@@ -160,10 +160,24 @@ export const CARD_FIELD_COLUMNS = {
 export const CARD_WIDE_COLUMNS = 2
 
 /**
- * How long the staff title card holds before the video, in seconds: the
- * owner's answer of 2026-10-19 (decisions, VH-127).
+ * How long a title card holds before the video, in seconds, the staff card's
+ * and Submission's alike: the owner's answers of 2026-10-19 (decisions,
+ * VH-127 and VH-128).
  */
 export const TITLE_CARD_SECONDS = 5
+
+/**
+ * A student ID number on Submission: the University's student number, 8
+ * digits, Latin, once the page has folded full-width digits to them (the
+ * owner, 2026-10-19). No field asks for a name, so marking stays anonymous.
+ */
+export const STUDENT_ID_PATTERN = /^\d{8}$/u
+
+/** The Unicode form the ID numbers' box is read in: it folds full-width digits and commas, as a Chinese input method types them, to Latin ones. */
+export const STUDENT_ID_FOLD = 'NFKC'
+
+/** The most student ID numbers one Submission card takes (the owner, 2026-10-18). */
+export const STUDENT_IDS_MAX = 8
 
 /** Space between a run-in label and its value, as a multiple of the size. */
 export const CARD_LABEL_GAP_EM = 0.5

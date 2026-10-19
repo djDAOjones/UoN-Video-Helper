@@ -119,6 +119,8 @@ const MEANINGS: Readonly<Record<string, RegExp>> = {
   AAA: /level AAA, the highest/,
   NVDA: /NVDA screen reader/,
   WAVE: /WAVE, a web accessibility evaluation tool/,
+  // Submission's student ID numbers (VH-128), explained in the box's helper.
+  ID: /student ID \(identity\) number/,
 }
 
 /**

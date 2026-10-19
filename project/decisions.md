@@ -17,6 +17,26 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-19 — VH-128 — Under Student submission, Step 3's box is ticked and locked, and Submission's fields show
+
+**Decision:** under Student submission, Step 3's "Add a title card" box is ticked and locked, with its reason in visible text, and Submission's four typed fields show in place of the staff card's; each side keeps its own fields for the way back, and neither is remembered beyond the page — because the acceptance makes the card always on under a submission, and VH-131 locks the closing's box ticked with its reason the same way.
+
+**Rationale:** VH-127 locked the box off under a submission only until this item built its card. Ticked and locked says the card is coming and why, as the closing's Internal use only box does; a separate control for an always-on card would be a control with nothing to choose. The staff card's tick and fields are kept, as before.
+
+**Supersedes:** 2026-10-19 — VH-127 — Under Student submission, the staff card's box is locked off and its fields kept
+
+**Deferred:** none
+
+## 2026-10-19 — VH-128 — Submission: one box of 8-digit ID numbers, one module field, the measured labels, five seconds
+
+**Decision:** student ID numbers are typed in one box, separated by spaces, commas or new lines, each exactly 8 digits, one to eight of them; the module's code and title are one field; the card's English is VH-126's measured wording, the assignment as the unlabelled heading, then "Module", "Convenor or tutor", "Student ID numbers", and "Running time" with a clock time beside "Card made" with the date and "— not the submission date"; the card holds 5 s, as the staff card does — because the owner chose the recommended options in chat on 2026-10-19.
+
+**Rationale:** The University's student numbers are 8 digits; one box takes a pasted list and names a wrong number by itself. One module field is the layout `spike-cards.html` measured at 60 columns, so nothing is re-measured. The labels are the ones the measured fit used, so the worst case is already proved to fit 16:9, 16:10, 4:3 and 9:16 in all three languages. Five seconds keeps the pre-flight allowance and the pipeline's one card span; a marker pauses the card to read it, which is why the safe area's foot is deep.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-19 — VH-127 — The staff card's Chinese and Malay stand as the agent drafted them
 
 **Decision:** the agent's Chinese and Malay for `steps.titleCard`, the `titleCard` group, `failure.titleCardRefused`, `videoLanguage.helper`'s second sentence and `result.summaryWithCard` stand as drafted, machine translation like the rest of the translated pages — because the owner approved them in chat on 2026-10-19.

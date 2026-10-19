@@ -1,24 +1,35 @@
 /**
- * Step 3, the staff title card (VH-127): the limit held in columns, the date
- * filled and refilled, the box on each side of the switch, the empty refusal
- * at Create, and a request built only when there is a card to draw.
+ * Step 3, the title card: the staff card (VH-127), the limit held in columns,
+ * the date filled and refilled, the box on each side of the switch, the empty
+ * refusal at Create, and a request built only when there is a card to draw;
+ * and Submission (VH-128), its ID numbers checked, each field's problem, and
+ * its words resolved in the video's language.
  */
 
 import { describe, expect, it } from 'vitest'
 
-import { t } from '../i18n'
+import { STUDENT_IDS_MAX } from '../config/cards'
+import { t, textIn } from '../i18n'
 import { STAFF_CARD, columnsOf, type StaffCardText } from '../media/title-card'
 import {
   cardDate,
   cardStop,
+  checkStudentIds,
   cutToColumns,
   dateOnLanguageChange,
   dateOnTick,
   holdToColumns,
   isCardEmpty,
+  firstSubmissionProblem,
   refusalText,
+  studentIdTokens,
+  submissionCardRequest,
+  submissionCardText,
+  submissionProblems,
+  submissionProblemText,
   titleCardBoxState,
   titleCardRequest,
+  type SubmissionTyped,
   type TitleCardAssets,
 } from './title-card-step'
 
@@ -113,10 +124,10 @@ describe('the box on each side of the switch (gating)', () => {
     expect(titleCardBoxState('staff', false)).toEqual({ checked: false, disabled: false, reason: null })
   })
 
-  it('a student submission locks it off and says why, whatever the staff card held', () => {
+  it('a student submission ticks and locks it and says why, whatever the staff card held (VH-128)', () => {
     for (const held of [true, false]) {
       expect(titleCardBoxState('submission', held)).toEqual({
-        checked: false,
+        checked: true,
         disabled: true,
         reason: t().titleCard.forSubmission,
       })
@@ -152,7 +163,7 @@ describe('the refusal at Create', () => {
 
 describe('the request (VH-127)', () => {
   it('happy path: ticked with text, the four fields go as typed, with the font, the stack and the colours', () => {
-    expect(titleCardRequest(true, TYPED, ASSETS)).toEqual({ text: TYPED, ...ASSETS })
+    expect(titleCardRequest(true, TYPED, ASSETS)).toEqual({ layout: 'staff', text: TYPED, ...ASSETS })
   })
 
   it('gating: unticked, no card is sent, whatever was typed', () => {
@@ -170,5 +181,155 @@ describe('the request (VH-127)', () => {
 
   it('sends a missing heading font as null, so the worker falls back to Georgia', () => {
     expect(titleCardRequest(true, TYPED, { ...ASSETS, headingFontUrl: null })!.headingFontUrl).toBeNull()
+  })
+})
+
+/* ---- Submission (VH-128) ---------------------------------------------- */
+
+const ID = '20412345'
+const TYPED_SUBMISSION: SubmissionTyped = {
+  assignment: 'Assignment 2',
+  module: 'LIBA2002 Migration and Identity',
+  convenor: 'Dr Samuel Okonkwo',
+  ids: `${ID} 20412346`,
+}
+
+describe('the ID numbers, split and checked (VH-128)', () => {
+  it('happy path: spaces, commas, semicolons and new lines all separate', () => {
+    expect(studentIdTokens(' 20412345, 20412346;20412347\n20412348\t ')).toEqual([
+      '20412345',
+      '20412346',
+      '20412347',
+      '20412348',
+    ])
+    expect(checkStudentIds(`${ID}, 20412346`)).toEqual({ ok: true, ids: [ID, '20412346'] })
+  })
+
+  it('folds full-width digits and punctuation, as a Chinese input method types them', () => {
+    expect(studentIdTokens('２０４１２３４５，２０４１２３４６、20412347')).toEqual([ID, '20412346', '20412347'])
+  })
+
+  it('empty: nothing typed, or only separators, is no ID at all', () => {
+    expect(checkStudentIds('')).toEqual({ ok: false, problem: 'none' })
+    expect(checkStudentIds(' ,; \n')).toEqual({ ok: false, problem: 'none' })
+  })
+
+  it('error: a number of the wrong length or with a letter is named', () => {
+    expect(checkStudentIds(`${ID} 2041234`)).toEqual({ ok: false, problem: 'not-an-id', id: '2041234' })
+    expect(checkStudentIds('204123456')).toEqual({ ok: false, problem: 'not-an-id', id: '204123456' })
+    expect(checkStudentIds('2041234a')).toEqual({ ok: false, problem: 'not-an-id', id: '2041234a' })
+  })
+
+  it('error: a name is not an ID, so none is ever drawn', () => {
+    expect(checkStudentIds('Jane Smith')).toEqual({ ok: false, problem: 'not-an-id', id: 'Jane' })
+  })
+
+  it('error: a number typed twice is named', () => {
+    expect(checkStudentIds(`${ID} 20412346 ${ID}`)).toEqual({ ok: false, problem: 'twice', id: ID })
+  })
+
+  it('boundary: eight go, a ninth is too many', () => {
+    const ids = (n: number): string => Array.from({ length: n }, (_, i) => String(20412345 + i)).join(' ')
+    expect(checkStudentIds(ids(STUDENT_IDS_MAX)).ok).toBe(true)
+    expect(checkStudentIds(ids(STUDENT_IDS_MAX + 1))).toEqual({ ok: false, problem: 'too-many', count: 9 })
+  })
+
+  it('names a wrong number before counting, so the first thing said is the first to put right', () => {
+    const nine = `${Array.from({ length: 9 }, (_, i) => String(20412345 + i)).join(' ')} 123`
+    expect(checkStudentIds(nine)).toMatchObject({ problem: 'not-an-id', id: '123' })
+  })
+})
+
+describe("Submission's problems at Create (VH-128)", () => {
+  const BLANK: SubmissionTyped = { assignment: '', module: '', convenor: '', ids: '' }
+
+  it('happy path: four fields put right have no problem, and the card can go', () => {
+    const problems = submissionProblems(TYPED_SUBMISSION, null)
+    expect(problems).toEqual({})
+    expect(firstSubmissionProblem(problems)).toBeNull()
+  })
+
+  it('error: every field left empty, or only spaces, is missing, the first in page order to put right', () => {
+    const problems = submissionProblems({ ...BLANK, convenor: '   ' }, null)
+    expect(problems).toEqual({
+      assignment: { kind: 'missing' },
+      module: { kind: 'missing' },
+      convenor: { kind: 'missing' },
+      ids: { kind: 'missing' },
+    })
+    expect(firstSubmissionProblem(problems)).toBe('assignment')
+    expect(submissionProblemText('module', problems.module!)).toBe(t().titleCard.submission.missing.module)
+  })
+
+  it('error: a wrong ID number is said beside the box, quoting it', () => {
+    const problems = submissionProblems({ ...TYPED_SUBMISSION, ids: '2041234' }, null)
+    expect(firstSubmissionProblem(problems)).toBe('ids')
+    expect(submissionProblemText('ids', problems.ids!)).toBe(t().titleCard.submission.idNotAnId({ id: '2041234' }))
+  })
+
+  it('says too many with the count and the most', () => {
+    const text = submissionProblemText('ids', { kind: 'ids', check: { ok: false, problem: 'too-many', count: 9 } })
+    expect(text).toBe(t().titleCard.submission.idsTooMany({ count: 9, max: STUDENT_IDS_MAX }))
+    expect(text).toContain('9')
+  })
+
+  it("a refused fit is said at its field, and the app's own line at the assignment", () => {
+    expect(submissionProblems(TYPED_SUBMISSION, { at: 'field', field: 'convenor' })).toEqual({
+      convenor: { kind: 'refused', refusal: 'field' },
+    })
+    expect(submissionProblems(TYPED_SUBMISSION, { at: 'card', field: 'details', overPx: 4 })).toEqual({
+      assignment: { kind: 'refused', refusal: 'card' },
+    })
+  })
+
+  it("a field's own problem comes before a refusal of the fit", () => {
+    expect(submissionProblems({ ...TYPED_SUBMISSION, ids: 'x' }, { at: 'field', field: 'ids' })).toEqual({
+      ids: { kind: 'ids', check: { ok: false, problem: 'not-an-id', id: 'x' } },
+    })
+  })
+})
+
+describe("Submission's words, in the video's language (VH-128)", () => {
+  it("happy path: the labels, the running time and the date, from the video language's table", () => {
+    const text = submissionCardText(TYPED_SUBMISSION, [ID, '20412346'], 754.2, NOON, 'en-GB')
+    const card = textIn('en-GB').titleCard.card
+    expect(text).toEqual({
+      assignment: 'Assignment 2',
+      module: 'LIBA2002 Migration and Identity',
+      convenor: 'Dr Samuel Okonkwo',
+      ids: [ID, '20412346'],
+      runningTime: '12:34',
+      made: card.madeValue({ date: '19 October 2026' }),
+      labels: {
+        module: card.module,
+        convenor: card.convenor,
+        ids: card.ids({ count: 2 }),
+        running: card.running,
+        made: card.made,
+      },
+    })
+    expect(text.made).toContain('19 October 2026')
+  })
+
+  it('names one ID number in the singular', () => {
+    expect(submissionCardText(TYPED_SUBMISSION, [ID], 60, NOON, 'en-GB').labels.ids).toBe(
+      textIn('en-GB').titleCard.card.ids({ count: 1 }),
+    )
+    expect(textIn('en-GB').titleCard.card.ids({ count: 1 })).not.toBe(textIn('en-GB').titleCard.card.ids({ count: 2 }))
+  })
+
+  it("follows the video's language, whatever the page's, and leaves typed text as typed", () => {
+    for (const language of ['zh-Hans', 'ms-MY'] as const) {
+      const text = submissionCardText(TYPED_SUBMISSION, [ID], 60, NOON, language)
+      expect(text.labels.module).toBe(textIn(language).titleCard.card.module)
+      expect(text.made).toContain(cardDate(NOON, language))
+      expect(text.module).toBe(TYPED_SUBMISSION.module)
+    }
+    expect(textIn('zh-Hans').titleCard.card.module).not.toBe(textIn('en-GB').titleCard.card.module)
+  })
+
+  it('the request goes as Submission, with the font, the stack and the colours', () => {
+    const text = submissionCardText(TYPED_SUBMISSION, [ID], 60, NOON, 'en-GB')
+    expect(submissionCardRequest(text, ASSETS)).toEqual({ layout: 'submission', text, ...ASSETS })
   })
 })

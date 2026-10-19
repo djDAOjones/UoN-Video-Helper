@@ -14,7 +14,7 @@ import { TITLE_CARD_SECONDS } from '../config/cards'
 import { clearLogRecords, getLogRecords } from '../core/logger'
 import { JobFailureError, classifyFailure } from '../workers/failure'
 import { closingTimeline } from './branding'
-import type { CardFonts, FrameSize, StaffCardText } from './title-card'
+import type { CardFonts, FrameSize, StaffCardText, SubmissionCardText } from './title-card'
 import { brandingAllowanceSeconds, cardSilence, fitTitleCardForJob, titleCardSpan } from './title-card-frame'
 
 const NTSC = 30000 / 1001
@@ -149,14 +149,14 @@ describe("the card's text, kept out of the logs", () => {
       authors: 'Dr Wvkp',
       date: '19 October 2026',
     }
-    expect(fitTitleCardForJob(typed, HD, FONTS).refused).toBeNull()
+    expect(fitTitleCardForJob({ layout: 'staff', text: typed }, HD, FONTS).refused).toBeNull()
 
     const refused: unknown[] = []
     const tooWide: StaffCardText = { ...typed, title: `Zqxj${'W'.repeat(400)}` }
     const empty: StaffCardText = { title: ' ', department: '', authors: '', date: '' }
     for (const text of [tooWide, empty]) {
       try {
-        fitTitleCardForJob(text, HD, FONTS)
+        fitTitleCardForJob({ layout: 'staff', text }, HD, FONTS)
       } catch (cause) {
         refused.push(cause)
       }
@@ -170,5 +170,32 @@ describe("the card's text, kept out of the logs", () => {
       expect((cause as Error).message).not.toMatch(SECRET)
     }
     expect(JSON.stringify(getLogRecords())).not.toMatch(SECRET)
+  })
+
+  it("nor Submission's: the convenor's name and the ID numbers, on a fit or on a refusal (VH-128)", () => {
+    clearLogRecords()
+    const IDS = /20412345|20412346/u
+    const submission: SubmissionCardText = {
+      assignment: 'Zqxj Essay',
+      module: 'ZQXJ1001 Wvkp',
+      convenor: 'Dr Confidential',
+      ids: ['20412345', '20412346'],
+      runningTime: '12:34',
+      made: '19 October 2026 — not the submission date',
+      labels: { module: 'Module', convenor: 'Convenor or tutor', ids: 'Student ID numbers', running: 'Running time', made: 'Card made' },
+    }
+    expect(fitTitleCardForJob({ layout: 'submission', text: submission }, HD, FONTS).refused).toBeNull()
+
+    let refused: unknown = null
+    try {
+      fitTitleCardForJob({ layout: 'submission', text: { ...submission, convenor: `Zqxj${'W'.repeat(400)}` } }, HD, FONTS)
+    } catch (cause) {
+      refused = cause
+    }
+    expect(classifyFailure(refused)).toBe('title-card-refused')
+    expect((refused as Error).message).not.toMatch(SECRET)
+    expect((refused as Error).message).not.toMatch(IDS)
+    expect(JSON.stringify(getLogRecords())).not.toMatch(SECRET)
+    expect(JSON.stringify(getLogRecords())).not.toMatch(IDS)
   })
 })

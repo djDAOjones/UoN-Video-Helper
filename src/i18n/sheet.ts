@@ -75,6 +75,18 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
   ['trim.problem', 'Step 2: the error beside a start or end time that cannot be used'],
   ['titleCard', 'Step 3, Title card: the checkbox and the four fields for the card shown before the video'],
   ['titleCard.forSubmission', 'Step 3: beside the Add a title card checkbox, when it is locked'],
+  [
+    'titleCard.submission',
+    'Step 3, Title card, for a student submission: the four fields for the card shown before the video',
+  ],
+  ['titleCard.submission.missing', "Step 3: the error beside a student submission's field left empty, when Create is pressed"],
+  ['titleCard.submission.idNotAnId', 'Step 3: the error beside the student ID numbers, when Create is pressed'],
+  ['titleCard.submission.idTwice', 'Step 3: the error beside the student ID numbers, when Create is pressed'],
+  ['titleCard.submission.idsTooMany', 'Step 3: the error beside the student ID numbers, when Create is pressed'],
+  [
+    'titleCard.card',
+    "Not on the page: drawn on the finished video itself, on a student submission's title card, as a label before what the student typed",
+  ],
   ['titleCard.full', 'Step 3: beside a field when what was typed reached its limit'],
   ['titleCard.refused', 'Step 3: the error beside a field whose words do not fit on the card'],
   ['titleCard.empty', 'Step 3: the error beside the Add a title card checkbox, when Create is pressed'],
@@ -208,6 +220,9 @@ const PLACEHOLDERS: Readonly<Record<string, string>> = {
   service:
     "the advice service's name, from statement.enforcement.service, as a link to its website",
   words: 'the words drawn on the closing card, from closing.internalWords',
+  running: 'a length of time as a clock shows it, like 12:34',
+  id: 'what the student typed as a student ID number, like 20412345',
+  max: 'a number',
 }
 
 /** What a key's last parts say about when the message is used. */
@@ -285,7 +300,13 @@ const NOTES: Readonly<Record<string, string>> = {
   'titleCard.dateHelper':
     'Use the same words for "video language" as videoLanguage.label.',
   'titleCard.forSubmission':
-    'Why the checkbox titleCard.add cannot be ticked. Use the same words for "student submission" as videoKind.options.submission.',
+    'Why the checkbox titleCard.add is ticked and cannot be unticked. Use the same words for "student submission" as videoKind.options.submission.',
+  'titleCard.submission.idsHelper':
+    'A University student ID number is 8 digits. Use the same words for "student ID number" as titleCard.submission.ids.',
+  'titleCard.submission.filled':
+    'Use the same words for "running time" as titleCard.card.running, and for "the date the card was made" as titleCard.card.made.',
+  'titleCard.card.madeValue':
+    'Drawn after titleCard.card.made. It must say plainly that {date} is not the date the work was submitted.',
   'titleCard.empty':
     'Names the checkbox titleCard.add; use the same words.',
   'titleCard.correctToContinue':

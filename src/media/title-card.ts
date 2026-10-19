@@ -330,6 +330,104 @@ export function staffCardBlocks(text: StaffCardText): CardBlock<StaffCardField>[
   return blocks
 }
 
+/** Between two ID numbers: an em space, so they read apart and a line breaks only between them, as measured. */
+const ID_GAP = '\u2003'
+
+/** Submission's typed fields, in the order they are drawn (the owner, 2026-10-18 and 2026-10-19). */
+export const SUBMISSION_CARD_FIELDS = ['assignment', 'module', 'convenor', 'ids'] as const
+
+export type SubmissionCardField = (typeof SUBMISSION_CARD_FIELDS)[number]
+
+/** Submission's blocks: the four typed fields, then the line the app fills in. */
+export type SubmissionCardBlockName = SubmissionCardField | 'details'
+
+/** The three typed fields held to a column limit; the ID numbers are held by their own rule. */
+export type SubmissionTextField = Exclude<SubmissionCardField, 'ids'>
+
+/** Each held field's role and column limit, so the page, the worker and the spike read one table. */
+export const SUBMISSION_CARD: Readonly<
+  Record<SubmissionTextField, { readonly role: CardTextRole; readonly columns: number }>
+> = {
+  assignment: { role: CARD_ROLES.submissionHeading, columns: CARD_FIELD_COLUMNS.assignment },
+  module: { role: CARD_ROLES.submissionField, columns: CARD_FIELD_COLUMNS.module },
+  convenor: { role: CARD_ROLES.submissionField, columns: CARD_FIELD_COLUMNS.convenor },
+}
+
+/** The labels Submission draws, in the video's language, from its table. */
+export interface SubmissionCardLabels {
+  readonly module: string
+  readonly convenor: string
+  /** "Student ID number" or "Student ID numbers", chosen for the count. */
+  readonly ids: string
+  readonly running: string
+  readonly made: string
+}
+
+/**
+ * Submission as it is drawn, every word resolved on the page, so the worker
+ * reads no language table. The typed fields and the ID numbers are the
+ * user's own: never logged, never in a message.
+ */
+export interface SubmissionCardText {
+  readonly assignment: string
+  readonly module: string
+  readonly convenor: string
+  /** One to eight ID numbers, already checked. */
+  readonly ids: readonly string[]
+  /** The kept range's length, without the card or the closing, as a clock time: `12:34`. */
+  readonly runningTime: string
+  /** The date the card was made with its caveat: `19 October 2026 — not the submission date`. */
+  readonly made: string
+  readonly labels: SubmissionCardLabels
+}
+
+/**
+ * Submission's blocks, as `spike-cards.html` measured them (VH-126): the
+ * assignment as the heading, unlabelled; then module, convenor and the ID
+ * numbers, each a label run in before its value in bold; then the running
+ * time and the card's date sharing the last line. A typed field left empty
+ * takes no room, so a label is never drawn without its value; the page
+ * refuses an empty one before a job starts.
+ */
+export function submissionCardBlocks(text: SubmissionCardText): CardBlock<SubmissionCardBlockName>[] {
+  const blocks: CardBlock<SubmissionCardBlockName>[] = []
+  const assignment = text.assignment.trim()
+  if (assignment !== '') {
+    blocks.push({
+      name: 'assignment',
+      role: CARD_ROLES.submissionHeading,
+      runs: [{ text: assignment, weight: 'bold' }],
+      gapEm: 0,
+    })
+  }
+  const labelled = (name: SubmissionCardBlockName, runs: readonly CardRun[]): void => {
+    blocks.push({
+      name,
+      role: CARD_ROLES.submissionField,
+      runs,
+      gapEm: blocks.at(-1)?.name === 'assignment' ? CARD_BLOCK_GAP_EM : CARD_FIELD_GAP_EM,
+    })
+  }
+  const pair = (label: string, value: string): CardRun[] => [
+    { text: label, weight: 'normal' },
+    LABEL_GAP,
+    { text: value, weight: 'bold' },
+  ]
+  for (const [name, value] of [
+    ['module', text.module.trim()],
+    ['convenor', text.convenor.trim()],
+    ['ids', text.ids.join(ID_GAP)],
+  ] as const) {
+    if (value !== '') labelled(name, pair(text.labels[name], value))
+  }
+  labelled('details', [
+    ...pair(text.labels.running, text.runningTime),
+    PAIR_GAP,
+    ...pair(text.labels.made, text.made),
+  ])
+  return blocks
+}
+
 /** The columns a text takes against {@link CARD_FIELD_COLUMNS}: a wide character counts {@link CARD_WIDE_COLUMNS}. */
 export function columnsOf(text: string): number {
   let columns = 0

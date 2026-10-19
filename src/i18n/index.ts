@@ -77,6 +77,14 @@ export function closingWords(tag: LanguageTag): string {
   return (LANGUAGE_TABLES[tag] ?? enGB).closing.internalWords
 }
 
+/**
+ * The messages in `tag`'s language, whatever the page's is: the words a
+ * video's own text is drawn in (VH-132), such as Submission's labels (VH-128).
+ */
+export function textIn(tag: LanguageTag): PageText {
+  return textFor(tag)
+}
+
 /** The gap between two sentences joined into one passage, in the current language. */
 export function sentenceGap(): string {
   return current.meta.separators.sentences

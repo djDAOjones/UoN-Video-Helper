@@ -189,7 +189,7 @@ export const zhHans: Messages = {
     authors: '作者',
     date: '日期',
     dateHelper: '已填入以视频语言显示的今天日期。您可以更改或清除它。',
-    forSubmission: '不用于学生提交作品。',
+    forSubmission: '学生提交作品始终带有标题卡。',
     full: '此字段已满，其余内容未添加。',
     refused: {
       field: '内容太长，无法放入卡片。请缩短。',
@@ -197,6 +197,35 @@ export const zhHans: Messages = {
     },
     empty: '请至少填写四个字段中的一个，或取消勾选“添加标题卡”。',
     correctToContinue: '在步骤 3 中更正标题卡，即可继续。',
+    submission: {
+      assignment: '作业标题或编号',
+      module: '模块代码和名称',
+      convenor: '模块负责人或导师',
+      ids: '学号',
+      idsHelper:
+        '每个学号（学生身份编号）为 8 位数字。输入一到八个，用空格、逗号或换行分隔。请勿填写姓名。',
+      filled: '卡片上还会显示时长 {running} 和今天的日期，并注明这是卡片制作日期，而非提交日期。',
+      missing: {
+        assignment: '请输入作业标题或编号。',
+        module: '请输入模块代码和名称。',
+        convenor: '请输入模块负责人或导师的姓名。',
+        ids: '请至少输入一个学号。',
+      },
+      idNotAnId: '“{id}”不是学号。学号为 8 位数字。',
+      idTwice: '{id} 在列表中出现了两次。请删除一个。',
+      idsTooMany: '这里有 {count} 个学号。卡片最多可容纳 {max} 个。',
+    },
+    card: {
+      module: '模块',
+      convenor: '模块负责人或导师',
+      ids: {
+        one: '学号',
+        other: '学号',
+      },
+      running: '时长',
+      made: '卡片制作日期',
+      madeValue: '{date}（非提交日期）',
+    },
   },
   closing: {
     legend: '结尾品牌标识',

@@ -18,10 +18,7 @@ import '../styles/tokens.brand.css'
 import loraUrl from '../assets/lora-bold.woff2?url'
 
 import {
-  CARD_BLOCK_GAP_EM,
   CARD_FIELD_COLUMNS,
-  CARD_FIELD_GAP_EM,
-  CARD_ROLES,
   CARD_SAFE_AREA,
   CARD_TYPE_FLOOR_PX,
   CLOSING_LOGO_FOOT_PER_1080,
@@ -33,12 +30,11 @@ import {
   columnsOf,
   drawTitleCard,
   fit,
-  LABEL_GAP,
-  PAIR_GAP,
   safeArea,
   STAFF_CARD,
   STAFF_CARD_FIELDS,
   staffCardBlocks,
+  submissionCardBlocks,
   type CardBlock,
   type CardFit,
   type CardFonts,
@@ -48,6 +44,7 @@ import {
 import { closingTailName, CLOSING_TAIL_SECONDS, type BrandingColour } from '../config/branding'
 import type { LanguageTag } from '../config/languages'
 import { closingWords } from '../i18n'
+import { submissionCardText } from '../ui/title-card-step'
 import { verdictLine } from '../../scripts/verdict.mjs'
 
 const log = document.getElementById('log') as HTMLPreElement
@@ -93,7 +90,7 @@ const at4k = (shape: Shape): Shape => ({
   heightPx: shape.heightPx * 2,
 })
 
-/** Provisional labels: VH-128 settles the English, the sheet route the rest. */
+/** Typical typed copy per language; the labels Submission draws come from the tables (VH-128). */
 interface Copy {
   readonly closingWords: string
   readonly title: string
@@ -101,14 +98,6 @@ interface Copy {
   readonly authors: string
   readonly assignment: string
   readonly module: string
-  readonly labels: {
-    readonly module: string
-    readonly convenor: string
-    readonly ids: string
-    readonly running: string
-    readonly made: string
-    readonly notSubmission: string
-  }
 }
 
 const COPY: Readonly<Record<LanguageTag, Copy>> = {
@@ -119,14 +108,6 @@ const COPY: Readonly<Record<LanguageTag, Copy>> = {
     authors: 'Professor Alexandra Montgomery-Fitzwilliam and Dr Samuel Okonkwo-Hartley',
     assignment: 'Assignment 2: Reflective Essay on Placement Learning and Professional Identity',
     module: 'LIBA2002 Migration and Identity in a Global Context',
-    labels: {
-      module: 'Module',
-      convenor: 'Convenor or tutor',
-      ids: 'Student ID numbers',
-      running: 'Running time',
-      made: 'Card made',
-      notSubmission: 'not the submission date',
-    },
   },
   'zh-Hans': {
     closingWords: closingWords('zh-Hans'),
@@ -135,14 +116,6 @@ const COPY: Readonly<Record<LanguageTag, Copy>> = {
     authors: '亚历山德拉·蒙哥马利-菲茨威廉教授和塞缪尔·奥孔科沃博士',
     assignment: '作业二：关于实习学习与职业身份认同的反思性论文',
     module: 'LIBA2002 全球背景下的移民与身份认同',
-    labels: {
-      module: '模块',
-      convenor: '模块负责人或导师',
-      ids: '学号',
-      running: '时长',
-      made: '卡片制作日期',
-      notSubmission: '非提交日期',
-    },
   },
   'ms-MY': {
     closingWords: closingWords('ms-MY'),
@@ -153,22 +126,15 @@ const COPY: Readonly<Record<LanguageTag, Copy>> = {
     assignment:
       'Tugasan 2: Esei Reflektif tentang Pembelajaran Penempatan dan Identiti Profesional',
     module: 'LIBA2002 Migration and Identity in a Global Context',
-    labels: {
-      module: 'Modul',
-      convenor: 'Penyelaras atau tutor',
-      ids: 'Nombor ID pelajar',
-      running: 'Masa tayangan',
-      made: 'Kad dibuat',
-      notSubmission: 'bukan tarikh penyerahan',
-    },
   },
 }
 
 /** Typed, so in any script whatever the page's language: the longest are Latin. */
 const CONVENOR = 'Professor Alexandra Montgomery-Fitzwilliam'
-/** Eight IDs of eight digits, an em space apart so a line breaks only between them. */
-const IDS = Array.from({ length: 8 }, (_, i) => String(20412345 + i)).join(' ')
-const RUNNING = '1:02:45'
+/** Eight IDs of eight digits; the card sets them an em space apart. */
+const IDS = Array.from({ length: 8 }, (_, i) => String(20412345 + i))
+/** A running time past an hour, 1:02:45, so the shared last line is at its longest. */
+const RUNNING_SECONDS = 3765
 /** The longest month name in each language's long date. */
 const CARD_DATE = new Date(2026, 8, 30)
 
@@ -237,15 +203,6 @@ function section(title: string): HTMLElement {
 
 /* ---- The cards -------------------------------------------------------- */
 
-function field(name: string, label: string, value: string, gapEm = CARD_FIELD_GAP_EM): CardBlock {
-  return {
-    name,
-    role: CARD_ROLES.submissionField,
-    runs: [{ text: label, weight: 'normal' }, LABEL_GAP, { text: value, weight: 'bold' }],
-    gapEm,
-  }
-}
-
 /** The longest start of a text that keeps within a column count, a wide character counting two. */
 function cut(text: string, columns: number): string {
   let used = 0
@@ -258,6 +215,7 @@ function cut(text: string, columns: number): string {
   return out
 }
 
+/** Submission through the shipped blocks and the tables' labels, so what is measured is what the app draws (VH-128). */
 function submissionBlocks(
   language: LanguageTag,
   copy: Copy,
@@ -265,36 +223,8 @@ function submissionBlocks(
   module = copy.module,
   convenor = cut(CONVENOR, CARD_FIELD_COLUMNS.convenor),
 ): CardBlock[] {
-  const date = new Intl.DateTimeFormat(language, { dateStyle: 'long' }).format(CARD_DATE)
-  const made =
-    language === 'zh-Hans'
-      ? `${date}（${copy.labels.notSubmission}）`
-      : `${date} — ${copy.labels.notSubmission}`
-  return [
-    {
-      name: 'assignment',
-      role: CARD_ROLES.submissionHeading,
-      runs: [{ text: assignment, weight: 'bold' }],
-      gapEm: 0,
-    },
-    field('module', copy.labels.module, module, CARD_BLOCK_GAP_EM),
-    field('convenor', copy.labels.convenor, convenor),
-    field('ids', copy.labels.ids, IDS),
-    {
-      name: 'running and made',
-      role: CARD_ROLES.submissionField,
-      runs: [
-        { text: copy.labels.running, weight: 'normal' },
-        LABEL_GAP,
-        { text: RUNNING, weight: 'bold' },
-        PAIR_GAP,
-        { text: copy.labels.made, weight: 'normal' },
-        LABEL_GAP,
-        { text: made, weight: 'bold' },
-      ],
-      gapEm: CARD_FIELD_GAP_EM,
-    },
-  ]
+  const typed = { assignment, module, convenor, ids: IDS.join(' ') }
+  return submissionCardBlocks(submissionCardText(typed, IDS, RUNNING_SECONDS, CARD_DATE, language))
 }
 
 function describe(result: CardFit): string {

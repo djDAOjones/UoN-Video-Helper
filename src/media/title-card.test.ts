@@ -15,6 +15,7 @@ import {
   safeArea,
   STAFF_CARD_FIELDS,
   staffCardBlocks,
+  submissionCardBlocks,
   wrap,
   type CardBlock,
   type CardContext,
@@ -22,6 +23,7 @@ import {
   type CardFonts,
   type FrameSize,
   type StaffCardText,
+  type SubmissionCardText,
 } from './title-card'
 
 const WIDE = /[\u2E80-\u9FFF\u3000-\u303F\uF900-\uFAFF\uFF00-\uFFEF]/u
@@ -206,6 +208,83 @@ describe('fit, at 4K', () => {
       )
       expect(two.heightPx).toBeCloseTo(one.heightPx * 2, 6)
     }
+  })
+})
+
+/* ---- Submission (VH-128) ---------------------------------------------- */
+
+const SUBMISSION: SubmissionCardText = {
+  assignment: '  Assignment 2: Reflective Essay  ',
+  module: 'LIBA2002 Migration and Identity',
+  convenor: 'Dr Samuel Okonkwo',
+  ids: ['20412345', '20412346'],
+  runningTime: '12:34',
+  made: '19 October 2026 — not the submission date',
+  labels: { module: 'Module', convenor: 'Convenor or tutor', ids: 'Student ID numbers', running: 'Running time', made: 'Card made' },
+}
+const runTexts = (block: CardBlock): string[] => block.runs.map((run) => run.text)
+
+describe('Submission, its blocks (VH-128)', () => {
+  it('happy path: the assignment heads the card unlabelled, then three labelled fields and the line the app fills in', () => {
+    const blocks = submissionCardBlocks(SUBMISSION)
+    expect(blocks.map((block) => block.name)).toEqual(['assignment', 'module', 'convenor', 'ids', 'details'])
+    expect(blocks[0]).toMatchObject({ role: CARD_ROLES.submissionHeading, gapEm: 0 })
+    expect(runTexts(blocks[0]!)).toEqual(['Assignment 2: Reflective Essay'])
+    expect(blocks.slice(1).every((block) => block.role === CARD_ROLES.submissionField)).toBe(true)
+    expect(blocks.slice(1).map((block) => block.gapEm)).toEqual([
+      CARD_BLOCK_GAP_EM,
+      CARD_FIELD_GAP_EM,
+      CARD_FIELD_GAP_EM,
+      CARD_FIELD_GAP_EM,
+    ])
+  })
+
+  it('runs each label in before its value, the label regular and the value bold', () => {
+    const module = submissionCardBlocks(SUBMISSION)[1]!
+    expect(module.runs.map((run) => run.weight)).toEqual(['normal', 'normal', 'bold'])
+    expect(module.runs[0]!.text).toBe('Module')
+    expect(module.runs[2]!.text).toBe('LIBA2002 Migration and Identity')
+  })
+
+  it('sets the ID numbers an em space apart, so a line breaks only between them', () => {
+    const ids = submissionCardBlocks(SUBMISSION)[3]!
+    expect(ids.runs[2]!.text).toBe('20412345\u200320412346')
+  })
+
+  it('shares the last line between the running time and the date the card was made', () => {
+    const details = submissionCardBlocks(SUBMISSION).at(-1)!
+    expect(runTexts(details).filter((text) => !/^[\uE000\uE001]$/u.test(text))).toEqual([
+      'Running time',
+      '12:34',
+      'Card made',
+      '19 October 2026 — not the submission date',
+    ])
+  })
+
+  it('edge: a typed field left empty takes no room, so no label is drawn without its value', () => {
+    const blocks = submissionCardBlocks({ ...SUBMISSION, assignment: ' ', convenor: '', ids: [] })
+    expect(blocks.map((block) => block.name)).toEqual(['module', 'details'])
+    expect(blocks[0]!.gapEm).toBe(CARD_FIELD_GAP_EM)
+  })
+
+  it('fits eight IDs and long fields in every shape, and breaks at 4K as at 1080', () => {
+    const eight = {
+      ...SUBMISSION,
+      assignment: words(16),
+      module: words(12),
+      ids: Array.from({ length: 8 }, (_, i) => String(20412345 + i)),
+    }
+    for (const frame of FRAMES) expect(fit(submissionCardBlocks(eight), frame, FONTS).refused).toBeNull()
+    const one = fit(submissionCardBlocks(eight), HD, FONTS)
+    const two = fit(submissionCardBlocks(eight), UHD, FONTS)
+    expect(two.laid.map((item) => [item.sizePx, lineTexts(item.lines)])).toEqual(
+      one.laid.map((item) => [item.sizePx, lineTexts(item.lines)]),
+    )
+  })
+
+  it('error: a field too long for its lines at the floor is refused at that field', () => {
+    const result = fit(submissionCardBlocks({ ...SUBMISSION, convenor: words(80) }), HD, FONTS)
+    expect(result.refused).toEqual({ at: 'field', field: 'convenor' })
   })
 })
 

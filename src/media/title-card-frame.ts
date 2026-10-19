@@ -17,18 +17,18 @@ import { LONGEST_CLOSING_SECONDS } from '../config/branding'
 import { TITLE_CARD_SECONDS } from '../config/cards'
 import { log } from '../core/logger'
 import { JobFailureError } from '../workers/failure'
-import type { TitleCardRequest } from '../workers/protocol'
+import type { TitleCardRequest, TitleCardText } from '../workers/protocol'
 import {
   CARD_HEADING_FAMILY,
   cardFamilies,
   drawTitleCard,
   fit,
   staffCardBlocks,
+  submissionCardBlocks,
+  type CardBlock,
   type CardFit,
   type CardFonts,
   type FrameSize,
-  type StaffCardField,
-  type StaffCardText,
 } from './title-card'
 
 /** How long the card holds, in the output's whole frames. */
@@ -90,23 +90,24 @@ export function* cardSilence(
   }
 }
 
+/** A card's blocks, by its layout: the staff card's fields, or Submission's. */
+export function titleCardBlocks(card: TitleCardText): CardBlock[] {
+  return card.layout === 'staff' ? staffCardBlocks(card.text) : submissionCardBlocks(card.text)
+}
+
 /**
- * The worker's own fit of the staff card.
+ * The worker's own fit of the card, staff or Submission.
  *
  * @throws JobFailureError `title-card-refused` when the fit refuses. The
  *   message says only that: not the field, and never the text, because the
  *   worker logs it and the diagnostics may say no more than that a card was on.
  */
-export function fitTitleCardForJob(
-  text: StaffCardText,
-  frame: FrameSize,
-  fonts: CardFonts,
-): CardFit<StaffCardField> {
-  const card = fit(staffCardBlocks(text), frame, fonts)
-  if (card.refused !== null) {
+export function fitTitleCardForJob(card: TitleCardText, frame: FrameSize, fonts: CardFonts): CardFit {
+  const fitted = fit(titleCardBlocks(card), frame, fonts)
+  if (fitted.refused !== null) {
     throw new JobFailureError('title-card-refused', "The worker's own fit refused the title card")
   }
-  return card
+  return fitted
 }
 
 /**
@@ -147,7 +148,7 @@ export async function drawTitleCardFrame(
     context.font = font
     return context.measureText(text).width
   }
-  const card = fitTitleCardForJob(request.text, frame, { families, measure })
+  const card = fitTitleCardForJob(request, frame, { families, measure })
   drawTitleCard(context, card, families, request.colours)
   return canvas
 }

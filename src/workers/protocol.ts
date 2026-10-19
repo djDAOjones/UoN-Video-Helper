@@ -19,16 +19,27 @@ import type { DeviceClass } from '../media/capability'
 import type { PreflightSummary } from '../media/preflight'
 import type { AudioWarning } from '../audio/warnings'
 import type { PipelineStage } from '../media/pipeline'
-import type { CardColours, StaffCardText } from '../media/title-card'
+import type { CardColours, StaffCardText, SubmissionCardText } from '../media/title-card'
 
 /**
- * The staff title card a job opens with (VH-127): what was typed, and what the
- * worker needs to fit and draw it again with its own fonts, which it cannot
- * read from a document it does not have.
+ * The card's words, by layout: the staff card's four fields as typed
+ * (VH-127), or Submission's, every label, the running time and the date
+ * resolved on the page in the video's language (VH-128), so the worker reads
+ * no language table. The user's own words: never logged, never in a message.
  */
-export interface TitleCardRequest {
-  /** The four fields as typed. The user's own words: never logged, never in a message. */
-  readonly text: StaffCardText
+export type TitleCardText =
+  | { readonly layout: 'staff'; readonly text: StaffCardText }
+  | { readonly layout: 'submission'; readonly text: SubmissionCardText }
+
+/**
+ * The title card a job opens with: its words, and what the worker needs to
+ * fit and draw it again with its own fonts, which it cannot read from a
+ * document it does not have.
+ */
+export type TitleCardRequest = TitleCardText & TitleCardDrawing
+
+/** What the worker draws a card with, beside its words. */
+export interface TitleCardDrawing {
   /**
    * Lora Bold's URL, resolved against the page (`brand-assets.ts`), or `null`
    * when the build has no file; the card then falls back to Georgia, as the
@@ -109,7 +120,7 @@ export type WorkerRequest =
        */
       readonly keptRange?: KeptRange
       /**
-       * The staff title card before the video (VH-127); absent for none. Its
+       * The title card before the video (VH-127, VH-128); absent for none. Its
        * own field, never inside `branding`: the pipeline logs the branding
        * request and `processed` echoes it back, and the card's text must reach
        * neither the logger nor the diagnostics bundle.

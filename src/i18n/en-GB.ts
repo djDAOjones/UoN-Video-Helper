@@ -239,8 +239,8 @@ export const enGB = {
     authors: 'Authors',
     date: 'Date',
     dateHelper: 'Filled with today’s date in the video language. You can change it or clear it.',
-    /** Why the box is locked off, naming the side of the switch that locks it (VH-127). */
-    forSubmission: 'Not used for a student submission.',
+    /** Why the box is ticked and locked, naming the side of the switch that locks it (VH-128). */
+    forSubmission: 'A student submission always has a title card.',
     /** Beside a field whose typing reached its limit and was cut there. */
     full: 'This field is full, so the rest was not added.',
     /** Beside the field the card cannot fit, even at its smallest size. */
@@ -251,6 +251,38 @@ export const enGB = {
     /** Beside the box, when Create is pressed with the box ticked and every field empty. */
     empty: 'Fill in at least one of the four fields, or untick Add a title card.',
     correctToContinue: 'Put the title card right in step 3 to continue.',
+    /** Submission's four fields on the page (VH-128); the card draws its own labels, from `card`. */
+    submission: {
+      assignment: 'Assignment title or number',
+      module: 'Module code and title',
+      convenor: 'Module convenor or tutor',
+      ids: 'Student ID numbers',
+      idsHelper:
+        'Each student ID (identity) number is 8 digits. Type one to eight, with spaces, commas or new lines between them. Do not add names.',
+      /** Under the fields: what the app adds to the card itself, the running time as a clock time. */
+      filled:
+        'The card also shows the running time, {running}, and today’s date, marked as the date the card was made, not the submission date.',
+      /** Beside a field left empty, when Create is pressed. */
+      missing: {
+        assignment: 'Type the assignment’s title or number.',
+        module: 'Type the module’s code and title.',
+        convenor: 'Type the name of the module convenor or tutor.',
+        ids: 'Type at least one student ID number.',
+      },
+      /** Beside the ID numbers, when Create is pressed: what is wrong, quoting the number. */
+      idNotAnId: '“{id}” is not a student ID number. Each is 8 digits.',
+      idTwice: '{id} is in the list twice. Take one out.',
+      idsTooMany: 'That is {count} numbers. The card takes up to {max}.',
+    },
+    /** Drawn on Submission in the video's language, never shown on the page (VH-128). */
+    card: {
+      module: 'Module',
+      convenor: 'Convenor or tutor',
+      ids: { one: 'Student ID number', other: 'Student ID numbers' },
+      running: 'Running time',
+      made: 'Card made',
+      madeValue: '{date} — not the submission date',
+    },
   },
 
   closing: {

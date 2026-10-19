@@ -205,7 +205,7 @@ export const msMY: Messages = {
     date: 'Tarikh',
     dateHelper:
       'Diisi dengan tarikh hari ini dalam bahasa video. Anda boleh menukar atau mengosongkannya.',
-    forSubmission: 'Tidak digunakan untuk serahan pelajar.',
+    forSubmission: 'Serahan pelajar sentiasa mempunyai kad tajuk.',
     full: 'Medan ini sudah penuh, jadi selebihnya tidak ditambah.',
     refused: {
       field: 'Ini terlalu panjang untuk dimuatkan pada kad. Pendekkannya.',
@@ -213,6 +213,36 @@ export const msMY: Messages = {
     },
     empty: 'Isi sekurang-kurangnya satu daripada empat medan, atau nyahtanda Tambah kad tajuk.',
     correctToContinue: 'Betulkan kad tajuk dalam langkah 3 untuk meneruskan.',
+    submission: {
+      assignment: 'Tajuk atau nombor tugasan',
+      module: 'Kod dan tajuk modul',
+      convenor: 'Penyelaras modul atau tutor',
+      ids: 'Nombor ID pelajar',
+      idsHelper:
+        'Setiap nombor ID (identiti) pelajar ialah 8 digit. Taip satu hingga lapan, dipisahkan dengan ruang, koma atau baris baharu. Jangan tambah nama.',
+      filled:
+        'Kad ini juga menunjukkan masa tayangan, {running}, dan tarikh hari ini, ditandakan sebagai tarikh kad dibuat, bukan tarikh penyerahan.',
+      missing: {
+        assignment: 'Taip tajuk atau nombor tugasan.',
+        module: 'Taip kod dan tajuk modul.',
+        convenor: 'Taip nama penyelaras modul atau tutor.',
+        ids: 'Taip sekurang-kurangnya satu nombor ID pelajar.',
+      },
+      idNotAnId: '“{id}” bukan nombor ID pelajar. Setiap satu ialah 8 digit.',
+      idTwice: '{id} ada dua kali dalam senarai. Buang satu.',
+      idsTooMany: 'Itu {count} nombor. Kad ini boleh memuatkan sehingga {max}.',
+    },
+    card: {
+      module: 'Modul',
+      convenor: 'Penyelaras atau tutor',
+      ids: {
+        one: 'Nombor ID pelajar',
+        other: 'Nombor ID pelajar',
+      },
+      running: 'Masa tayangan',
+      made: 'Kad dibuat',
+      madeValue: '{date} — bukan tarikh penyerahan',
+    },
   },
   closing: {
     legend: 'Penjenamaan penutup',
