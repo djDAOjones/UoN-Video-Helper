@@ -17,6 +17,16 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-20 — VH-122 — The decode-damage words stand, the Chinese without a space after 在, and §5.4 gains its row first
+
+**Decision:** the warning's English stands as built; the agent's Chinese and Malay stand as drafted, machine translation like the rest, except that the Chinese detail's "在 {times}" is now "在{times}"; spec §5.4's table gains the decode-damage row word for word as drafted, as its first row — because the owner chose the recommended options in chat on 2026-10-20, after CULT2011 passed in Chrome.
+
+**Rationale:** Asked in slice (b)'s one round, after the Chrome check in VH-122's notes: for the English, "Keep as built" over a shorter detail without the levelling clause; for the translations, "Stand, Chinese space fixed" over standing exactly as drafted; for the row, "As drafted, first row" over last, since the warning comes first in pre-flight and the row says it is the one that reports what was done. The fix went through the sheet: both detail rows keep "drafted by the agent" and add the repair, and `scripts/strings-table.mjs` regenerated `src/i18n/zh-Hans.ts`. The reason put to the owner, that the Chinese page sets no space before a number, holds for the Step 6 lines beside the warning (需要1分钟, 可达189 MB) but not for every placeholder (另外 {count} 条音轨), so `warnings.decodeDamage.more` keeps its spaces, as its sibling rows do. Chrome's decode put the damage in the blocks ffmpeg's did, so the +6 dBFS threshold and the one-block neighbours stand as decided.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-20 — VH-122 — Decode damage: a block beyond +6 dBFS is silenced with one either side, and said first with its times
 
 **Decision:** a decoded block holding a sample beyond +6 dBFS (`DECODE_DAMAGE.aboveDbfs`), or one not a number, is silenced with one block either side, in every pass over the source and in the encode, but never in the finished file's check; the decode-damage warning comes first in pre-flight and lists each stretch's time — because the corpus's real decodes peak at +0.96 dBFS while CULT2011's damage reaches +36 and +57, and one corrupt frame spoils two blocks, the earlier far weaker.

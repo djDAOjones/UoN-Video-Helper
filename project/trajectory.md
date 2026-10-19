@@ -7,6 +7,10 @@
      items the canon record shipped before the migration, in v3's form;
      their why is in the frozen canon decision log (history.md). -->
 
+## Band 7 — measured, not yet fixed
+
+- VH-122 — decode damage: a block beyond +6 dBFS is silenced with one either side in every source pass and the encode, and said first with its times; CULT2011 in Chrome warns only of that, at 1:22 and 3:05, and its encode has no blast or dip; the spec says so (2026-10-20) — see decisions
+
 ## Band 8 — a title card and an Internal use only closing
 
 - RECALL — 8/8 (2026-10-19) — scores: 2,2,2,2 — local — see decisions

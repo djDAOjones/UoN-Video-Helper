@@ -312,6 +312,7 @@ All are advisory, phrased as possibilities, and never block processing.
 
 | Condition | Trigger |
 | --- | --- |
+| Decode damage | A sample beyond +6 dBFS, or not a number: none comes from a real recording. The decoded block holding it is silenced, with one either side, before the analysis pass and in the output, and the warning gives each time — the one row that says what was done rather than what may be wrong |
 | Clipping / distortion | ≥10 samples at ≥ −0.1 dBTP, or sustained true peak > 0 dBTP |
 | Very quiet | Integrated loudness < −35 LUFS |
 | Highly variable levels | LRA > 15 LU |
