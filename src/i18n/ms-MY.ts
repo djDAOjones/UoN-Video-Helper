@@ -203,6 +203,8 @@ export const msMY: Messages = {
       blue: 'Biru',
       white: 'Putih',
     },
+    internalLabel: 'Untuk kegunaan dalaman sahaja',
+    internalWords: 'Untuk kegunaan dalaman sahaja',
     notUsedWith: {
       cut: 'Tidak digunakan dengan Potong.',
       none: 'Tidak digunakan dengan Tiada.',
@@ -213,6 +215,7 @@ export const msMY: Messages = {
         one: 'Menambah {count} saat.',
         other: 'Menambah {count} saat.',
       },
+      internal: 'Kad itu memaparkan “{words}” di bawah logo.',
       cut: {
         blue: 'Video anda dipotong ke kad penutup biru. {adds}',
         white: 'Video anda dipotong ke kad penutup putih. {adds}',
@@ -309,6 +312,7 @@ export const msMY: Messages = {
     keptWhole: 'keseluruhan video ({duration})',
     keptPart: '{kept} daripada {duration}, dari {from} hingga {to}',
     closingNone: 'tiada penutup Universiti',
+    closingInternal: '{closing}, bertanda “{words}”',
     closingCut: {
       blue: 'potongan kepada kad penutup biru',
       white: 'potongan pada kad penutup putih',

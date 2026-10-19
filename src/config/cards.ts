@@ -172,3 +172,12 @@ export const CLOSING_WORDS_ROLE: CardTextRole = {
  */
 export const CLOSING_LOGO_FOOT_PER_1080 = 686
 export const CLOSING_WORDS_GAP_EM = 0.75
+
+/**
+ * How the words build in (VH-126): a wipe from left to right whose progress
+ * is the wordmark's own, measured from each master by
+ * `scripts/build-branding.mjs`, so the two arrive together and settle
+ * together. The wipe's edge is soft across this much of the words' size,
+ * as the wordmark's motion blur is.
+ */
+export const CLOSING_WORDS_WIPE_FEATHER_EM = 0.5

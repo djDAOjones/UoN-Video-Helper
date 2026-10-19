@@ -13,6 +13,7 @@ const whole: JobRecord = {
   durationSeconds: 252,
   presetId: 'best',
   closing: CLOSING_CONTROL_DEFAULTS,
+  wordsLanguage: 'en-GB',
 }
 
 describe('jobSummaryText', () => {
@@ -27,7 +28,7 @@ describe('jobSummaryText', () => {
       ...whole,
       keptRange: { startSeconds: 30, endSeconds: 150 },
       presetId: 'smaller',
-      closing: { type: 'fade', onset: 'freeze', colour: 'white' },
+      closing: { type: 'fade', onset: 'freeze', colour: 'white', internal: false },
     }
     expect(jobSummaryText(trimmed)).toBe(
       'Made from Lecture 3.mp4: 2 minutes of 4 minutes 12 seconds, from 0:30.0 to 2:30.0, Smaller / reduced, the white closing fading in over a held last frame.',
@@ -43,13 +44,35 @@ describe('jobSummaryText', () => {
   it('describes a slide over the picture', () => {
     expect(keptPartText(null, 61)).toBe('the whole video (1 minute 1 second)')
     expect(
-      jobSummaryText({ ...whole, closing: { type: 'slide', onset: 'existing', colour: 'blue' } }),
+      jobSummaryText({ ...whole, closing: { type: 'slide', onset: 'existing', colour: 'blue', internal: false } }),
     ).toContain('the blue closing sliding in over the picture.')
   })
 })
 
+describe('jobSummaryText with Internal use only (VH-126)', () => {
+  const marked = { ...CLOSING_CONTROL_DEFAULTS, internal: true }
+
+  it('says the card was marked, quoting the words', () => {
+    expect(jobSummaryText({ ...whole, closing: marked })).toBe(
+      'Made from Lecture 3.mp4: the whole video (4 minutes 12 seconds), Larger / better, a cut to the blue closing card, marked “Internal use only”.',
+    )
+  })
+
+  it('quotes the words in the video’s language, which need not be the page’s', () => {
+    expect(jobSummaryText({ ...whole, closing: marked, wordsLanguage: 'zh-Hans' })).toContain(
+      'marked “仅供内部使用”.',
+    )
+  })
+
+  it('marks nothing when there is no closing', () => {
+    expect(jobSummaryText({ ...whole, closing: { ...marked, type: 'none' } })).toContain(
+      'no University closing.',
+    )
+  })
+})
+
 describe('closingOutcomeText', () => {
-  const fade: ClosingControls = { type: 'fade', onset: 'existing', colour: 'blue' }
+  const fade: ClosingControls = { type: 'fade', onset: 'existing', colour: 'blue', internal: false }
 
   it('is silent when the file has what was chosen', () => {
     expect(closingOutcomeText(fade, { applied: true, mode: 'over-picture' })).toBeNull()
@@ -75,7 +98,7 @@ describe('closingOutcomeText', () => {
       'not over a held last frame as chosen',
     )
     // A cut is a cut, whatever the onset control held.
-    expect(closingOutcomeText({ type: 'cut', onset: 'freeze', colour: 'white' }, { applied: true, mode: 'hard-cut' })).toBeNull()
+    expect(closingOutcomeText({ type: 'cut', onset: 'freeze', colour: 'white', internal: false }, { applied: true, mode: 'hard-cut' })).toBeNull()
   })
 
   it('says when the closing is missing altogether (VH-22)', () => {

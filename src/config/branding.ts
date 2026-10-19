@@ -17,6 +17,8 @@
  * subtitle offset, the time estimate, and the UI copy as well as the timeline.
  */
 
+import type { LanguageTag } from './languages'
+
 export type BrandingSegment = 'opening' | 'closing'
 
 /* -------------------------------------------------------------------------
@@ -73,6 +75,12 @@ export interface BrandingChoice {
   readonly style?: BrandingStyle
   readonly colour?: BrandingColour
   readonly mode?: BrandingMode
+  /**
+   * Internal use only (VH-126): the closing's tail with the words drawn under
+   * the logo, in this language — the video's text language (VH-132). Absent
+   * for the official closing.
+   */
+  readonly internal?: LanguageTag
 }
 
 /* -------------------------------------------------------------------------
@@ -88,11 +96,13 @@ export type ClosingType = 'cut' | 'fade' | 'slide' | 'none'
 /** "Animation onset": what sits under the 1 s build, for the types that play it. */
 export type ClosingOnset = 'existing' | 'freeze'
 
-/** The state of the three closing controls, exactly as the screen holds it. */
+/** The state of the closing controls, exactly as the screen holds it. */
 export interface ClosingControls {
   readonly type: ClosingType
   readonly onset: ClosingOnset
   readonly colour: BrandingColour
+  /** "Internal use only" (VH-126): the same closing, with the words under the logo. */
+  readonly internal: boolean
 }
 
 export const CLOSING_TYPES: readonly ClosingType[] = ['cut', 'fade', 'slide', 'none']
@@ -111,6 +121,7 @@ export const CLOSING_CONTROL_DEFAULTS: ClosingControls = {
   type: 'cut',
   onset: 'existing',
   colour: CLOSING_DEFAULTS.colour,
+  internal: false,
 }
 
 /** Whether a type plays the 1 s build, and so makes the onset mean something. */
@@ -118,17 +129,24 @@ export function closingTypeUsesOnset(type: ClosingType): boolean {
   return type === 'fade' || type === 'slide'
 }
 
+/** Whether a type has a closing for "Internal use only" to mark. */
+export function closingTypeUsesInternal(type: ClosingType): boolean {
+  return type !== 'none'
+}
+
 /**
  * Reads the controls' raw values, falling back to the default for any that is
  * not one the config knows.
  *
  * The DOM is editable, and an unrecognised value would otherwise reach the
- * pipeline as a string that matches no branch.
+ * pipeline as a string that matches no branch. Internal use only is on only
+ * when the checkbox says exactly so.
  */
 export function readClosingControls(raw: {
   readonly type?: string | null | undefined
   readonly onset?: string | null | undefined
   readonly colour?: string | null | undefined
+  readonly internal?: boolean | null | undefined
 }): ClosingControls {
   const known = <T extends string>(allowed: readonly T[], value: unknown, fallback: T): T =>
     allowed.includes(value as T) ? (value as T) : fallback
@@ -136,11 +154,18 @@ export function readClosingControls(raw: {
     type: known(CLOSING_TYPES, raw.type, CLOSING_CONTROL_DEFAULTS.type),
     onset: known(CLOSING_ONSETS, raw.onset, CLOSING_CONTROL_DEFAULTS.onset),
     colour: known(CLOSING_COLOURS, raw.colour, CLOSING_CONTROL_DEFAULTS.colour),
+    internal: raw.internal === true,
   }
 }
 
+/** The mode the controls ask for: what sits under the build, and so the seconds added. */
+export function closingModeFor(controls: ClosingControls): BrandingMode {
+  if (!closingTypeUsesOnset(controls.type)) return CLOSING_DEFAULTS.mode
+  return controls.onset === 'freeze' ? 'over-freeze' : 'over-picture'
+}
+
 /**
- * The job the three controls ask for.
+ * The job the controls ask for.
  *
  * The pipeline did not change for VH-90: this is the whole of the difference
  * between the old four-way radio and the new controls, and every combination
@@ -153,23 +178,28 @@ export function readClosingControls(raw: {
  * | fade, slide | freeze | true | `over-freeze` |
  * | none | unread | false | unread |
  *
+ * Internal use only changes only which tail is fetched, never the mode or the
+ * seconds (VH-126): its words are in `wordsLanguage`, the video's text
+ * language, read once when the job starts.
+ *
  * A field the pipeline will not read still carries its default rather than
  * being left out, so a `BrandingChoice` is never half-specified.
  */
-export function brandingChoiceFor(controls: ClosingControls): BrandingChoice {
-  const usesOnset = closingTypeUsesOnset(controls.type)
-  return {
+export function brandingChoiceFor(
+  controls: ClosingControls,
+  wordsLanguage: LanguageTag,
+): BrandingChoice {
+  const choice: BrandingChoice = {
     // Always false: no approved opening asset exists (VH-23, iceboxed).
     opening: false,
     closing: controls.type !== 'none',
     style: controls.type === 'slide' ? 'slide' : CLOSING_DEFAULTS.style,
     colour: controls.type === 'none' ? CLOSING_DEFAULTS.colour : controls.colour,
-    mode: !usesOnset
-      ? CLOSING_DEFAULTS.mode
-      : controls.onset === 'freeze'
-        ? 'over-freeze'
-        : 'over-picture',
+    mode: closingModeFor(controls),
   }
+  return controls.internal && closingTypeUsesInternal(controls.type)
+    ? { ...choice, internal: wordsLanguage }
+    : choice
 }
 
 /** Seconds a closing adds to the output, which is mode-dependent. */
@@ -222,6 +252,27 @@ export function closingOnsetName(
 export function closingTailName(colour: BrandingColour, height: BrandingAssetHeight): string {
   return `closing-tail-${colour}-${height}p.mp4`
 }
+
+/**
+ * The Internal use only tail (VH-126): the official tail with the words built
+ * in under the logo, one per language, colour and height. The onsets are
+ * shared with the official closing, since the words arrive only with the
+ * logo, after the onset has ended.
+ */
+export function closingInternalTailName(
+  language: LanguageTag,
+  colour: BrandingColour,
+  height: BrandingAssetHeight,
+): string {
+  return `closing-tail-internal-${language.toLowerCase()}-${colour}-${height}p.mp4`
+}
+
+/**
+ * What `scripts/build-branding.mjs` records beside the internal tails: the
+ * words each language's tails were built with. A test holds it to the
+ * tables, so a corrected translation cannot ship with the old words drawn in.
+ */
+export const CLOSING_INTERNAL_WORDS_RECORD = 'closing-internal-words.json'
 
 /* -------------------------------------------------------------------------
  * Opening — deferred, placeholders only (VH-23)

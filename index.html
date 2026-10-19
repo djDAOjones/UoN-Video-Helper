@@ -279,6 +279,21 @@
               <p class="helper" id="closing-colour-reason" hidden></p>
             </fieldset>
           </div>
+          <!-- VH-126, 2026-10-19. The official closing with "Internal use
+               only" built in under the logo, in the video's text language;
+               the same seconds, so nothing else changes. VH-131 places it
+               under Staff video and holds it on for a Student submission. -->
+          <div class="field" id="closing-internal-field">
+            <label class="checkbox" for="closing-internal">
+              <input
+                type="checkbox"
+                id="closing-internal"
+                aria-describedby="closing-internal-reason closing-result"
+              />
+              <span data-i18n="closing.internalLabel">Internal use only</span>
+            </label>
+            <p class="helper" id="closing-internal-reason" hidden></p>
+          </div>
           <!-- Likewise read on demand from the three controls, not announced on
                every arrow through a select (A-06). -->
           <p class="closing-result" id="closing-result"></p>

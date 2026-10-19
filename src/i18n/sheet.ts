@@ -68,6 +68,10 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
   ['trim', 'Step 2, Trim'],
   ['trim.problem', 'Step 2: the error beside a start or end time that cannot be used'],
   ['closing', 'Step 3, Closing branding'],
+  [
+    'closing.internalWords',
+    'Not on the page: drawn on the finished video itself, on the closing card, under the University logo',
+  ],
   ['closing.result', 'Step 3: the line under the controls saying what the closing will do'],
   ['preset', 'Step 4, File size / quality'],
   ['create', 'Step 5, Create: buttons and labels'],
@@ -188,6 +192,7 @@ const PLACEHOLDERS: Readonly<Record<string, string>> = {
   reviewDate: 'the date of the next review, written by the app, like "18 November 2026"',
   service:
     "the advice service's name, from statement.enforcement.service, as a link to its website",
+  words: 'the words drawn on the closing card, from closing.internalWords',
 }
 
 /** What a key's last parts say about when the message is used. */
@@ -247,6 +252,12 @@ const NOTES: Readonly<Record<string, string>> = {
     'Names the animation type "Cut"; use the same word as closing.types.cut.',
   'closing.notUsedWith.none':
     'Names the animation type "None"; use the same word as closing.types.none.',
+  'closing.internalLabel':
+    'The label of a checkbox that adds the words of closing.internalWords to the closing card. Use the same words.',
+  'closing.internalWords':
+    'Drawn in bold under the logo at the end of the video, like a stamp on a document, so it must fit on one line: keep it about as short as the English. A change here means the closing videos are built again.',
+  'result.closingInternal':
+    'Adds to how the video closes, like "a cut to the blue closing card, marked “Internal use only”". Keep the quotation marks.',
   'preset.labels.best': 'The name of the larger output. Other rows quote it.',
   'preset.labels.smaller': 'The name of the smaller output. Other rows quote it.',
   'systemCheck.marks.pass': 'A one-word mark beside a check that passed.',

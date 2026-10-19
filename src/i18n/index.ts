@@ -68,6 +68,15 @@ export function locale(): string {
   return current.meta.locale
 }
 
+/**
+ * The words Internal use only draws on a video's closing card in `tag`'s
+ * language (VH-126), whatever the page's language is: the video's text has a
+ * language of its own (VH-132).
+ */
+export function closingWords(tag: LanguageTag): string {
+  return (LANGUAGE_TABLES[tag] ?? enGB).closing.internalWords
+}
+
 /** The gap between two sentences joined into one passage, in the current language. */
 export function sentenceGap(): string {
   return current.meta.separators.sentences

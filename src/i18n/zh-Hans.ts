@@ -189,6 +189,8 @@ export const zhHans: Messages = {
       blue: '蓝色的',
       white: '白色的',
     },
+    internalLabel: '仅供内部使用',
+    internalWords: '仅供内部使用',
     notUsedWith: {
       cut: '不与“切”一起使用。',
       none: '不与“无”一起使用。',
@@ -199,6 +201,7 @@ export const zhHans: Messages = {
         one: '增加 {count} 秒。',
         other: '增加 {count} 秒。',
       },
+      internal: '卡片会在标志下方显示“{words}”。',
       cut: {
         blue: '视频切换到蓝色结束卡。{adds}',
         white: '视频切换到白色结束卡。{adds}',
@@ -286,6 +289,7 @@ export const zhHans: Messages = {
     keptWhole: '完整视频（{duration}）',
     keptPart: '保留了 {duration} 中的 {kept}，从 {from} 到 {to}',
     closingNone: '无大学结尾画面',
+    closingInternal: '{closing}，并标注“{words}”',
     closingCut: {
       blue: '镜头切换到蓝色结束卡',
       white: '切到白色结束卡',

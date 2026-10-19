@@ -40,6 +40,7 @@ import {
   CLOSING_DEFAULTS,
   brandingAssetHeight,
   brandingAssetUrl,
+  closingInternalTailName,
   closingOnsetName,
   closingTailName,
   type BrandingColour,
@@ -48,6 +49,7 @@ import {
   type BrandingStyle,
 } from '../config/branding'
 import { BOUNDARY_FADE_MS } from '../config/audio'
+import type { LanguageTag } from '../config/languages'
 import { log } from '../core/logger'
 import type { OutputShape } from '../config/presets'
 import { toPlanar, toSample } from './audio-frames'
@@ -301,17 +303,25 @@ async function fetchClip(url: string, segment: BrandingSegment): Promise<Brandin
 export async function loadBrandingClip(
   segment: BrandingSegment,
   shape: OutputShape,
-  options: { readonly brandingBaseUrl: string; readonly colour?: BrandingColour },
+  options: {
+    readonly brandingBaseUrl: string
+    readonly colour?: BrandingColour
+    /** Internal use only's tail, its words in this language (VH-126). */
+    readonly internal?: LanguageTag
+  },
 ): Promise<BrandingClip | null> {
   if (segment === 'opening') {
     log.info('branding', 'opening requested but dormant', { reason: 'no approved asset (VH-23)' })
     return null
   }
-  const url = brandingAssetUrl(
-    closingTailName(options.colour ?? CLOSING_DEFAULTS.colour, brandingAssetHeight(shape.height)),
-    options.brandingBaseUrl,
-  )
-  return fetchClip(url, segment)
+  const colour = options.colour ?? CLOSING_DEFAULTS.colour
+  const height = brandingAssetHeight(shape.height)
+  // Never the official tail in its place: a video asked to say Internal use
+  // only that cannot is reported as having no closing, not quietly unmarked.
+  const name = options.internal
+    ? closingInternalTailName(options.internal, colour, height)
+    : closingTailName(colour, height)
+  return fetchClip(brandingAssetUrl(name, options.brandingBaseUrl), segment)
 }
 
 /**

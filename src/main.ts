@@ -64,6 +64,7 @@ import { saveFile, suggestedFileName } from './media/save'
 import {
   closingResultText,
   colourDisabledReason,
+  internalDisabledReason,
   onsetDisabledReason,
 } from './ui/closing-choice'
 import { installDropZone } from './ui/drop-zone'
@@ -242,6 +243,8 @@ const closingOnset = required<HTMLSelectElement>('#closing-onset')
 const closingOnsetReason = required<HTMLParagraphElement>('#closing-onset-reason')
 const closingColour = required<HTMLFieldSetElement>('#closing-colour')
 const closingColourReason = required<HTMLParagraphElement>('#closing-colour-reason')
+const closingInternal = required<HTMLInputElement>('#closing-internal')
+const closingInternalReason = required<HTMLParagraphElement>('#closing-internal-reason')
 const closingResult = required<HTMLParagraphElement>('#closing-result')
 const onsetHelpButton = required<HTMLButtonElement>('#onset-help-button')
 const onsetHelp = required<HTMLDivElement>('#onset-help')
@@ -362,6 +365,7 @@ function chosenClosing(): ClosingControls {
     onset: closingOnset.value,
     colour: closingColour.querySelector<HTMLInputElement>('input[name="closing-colour"]:checked')
       ?.value,
+    internal: closingInternal.checked,
   })
 }
 
@@ -386,6 +390,11 @@ function syncClosingControls(): void {
   closingColour.disabled = colourReason !== null
   closingColourReason.textContent = colourReason ?? ''
   closingColourReason.hidden = colourReason === null
+
+  const internalReason = internalDisabledReason(controls.type)
+  closingInternal.disabled = internalReason !== null
+  closingInternalReason.textContent = internalReason ?? ''
+  closingInternalReason.hidden = internalReason === null
 
   closingResult.textContent = closingResultText(controls)
 }
@@ -2101,7 +2110,9 @@ function beginJob(file: File): void {
 
   // Read once, so the job and the record of it cannot disagree.
   const closing = chosenClosing()
-  const branding = brandingChoiceFor(closing)
+  // The video's text language is the page's until VH-132 gives it a selector.
+  const wordsLanguage = language()
+  const branding = brandingChoiceFor(closing, wordsLanguage)
   const keptRange = jobKeptRange
   /** What this job is, fixed now: the result and the discard question carry it (A-05). */
   const record: JobRecord = {
@@ -2110,6 +2121,7 @@ function beginJob(file: File): void {
     durationSeconds: trimDuration,
     presetId: chosenPreset(),
     closing,
+    wordsLanguage,
   }
 
   const { id, promise } = requestWithId(
@@ -2152,6 +2164,7 @@ function beginJob(file: File): void {
       closingOnset: closingTypeUsesOnset(closing.type) ? closing.onset : null,
       closingColour: branding.closing ? closing.colour : null,
       closingMode: branding.closing ? (branding.mode ?? null) : null,
+      closingInternal: branding.internal ?? null,
       // Times only, never anything about what is in them.
       keptRange,
     },

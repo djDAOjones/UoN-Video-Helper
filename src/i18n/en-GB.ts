@@ -223,11 +223,21 @@ export const enGB = {
       '— your last frame is held for one extra second. The closing plays over that, so nothing in your video is covered.',
     colourLabel: 'Colour',
     colours: { blue: 'Blue', white: 'White' },
+    /** The checkbox: the same closing, with the words below drawn under the logo (VH-126). */
+    internalLabel: 'Internal use only',
+    /**
+     * Not shown on the page: the words drawn into the video's closing card,
+     * under the logo. `scripts/build-branding.mjs` builds the closing files
+     * from this, so a change here needs them rebuilt (a test says so).
+     */
+    internalWords: 'Internal use only',
     /** Why a control is locked, naming the animation type that locks it. */
     notUsedWith: { cut: 'Not used with Cut.', none: 'Not used with None.' },
     result: {
       none: 'No University closing will be added.',
       adds: { one: 'Adds {count} second.', other: 'Adds {count} seconds.' },
+      /** Follows the closing's sentence when Internal use only is on. */
+      internal: 'The card says “{words}” under the logo.',
       cut: {
         blue: 'Your video cuts to the blue closing card. {adds}',
         white: 'Your video cuts to the white closing card. {adds}',
@@ -321,6 +331,8 @@ export const enGB = {
     /** "2 minutes of 4 minutes, 12 seconds, from 0:30.0 to 2:30.0". */
     keptPart: '{kept} of {duration}, from {from} to {to}',
     closingNone: 'no University closing',
+    /** "a cut to the blue closing card, marked “Internal use only”". */
+    closingInternal: '{closing}, marked “{words}”',
     closingCut: { blue: 'a cut to the blue closing card', white: 'a cut to the white closing card' },
     closingOverFreeze: {
       blue: {

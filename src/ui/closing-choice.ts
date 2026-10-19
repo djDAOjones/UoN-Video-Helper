@@ -11,14 +11,14 @@
  */
 
 import {
-  brandingChoiceFor,
   closingAddedSeconds,
+  closingModeFor,
+  closingTypeUsesInternal,
   closingTypeUsesOnset,
-  type BrandingMode,
   type ClosingControls,
   type ClosingType,
 } from '../config/branding'
-import { t } from '../i18n'
+import { sentenceGap, t } from '../i18n'
 
 /** The option text of "Animation type", which the disabled reasons quote. */
 export function closingTypeLabel(type: ClosingType): string {
@@ -27,23 +27,30 @@ export function closingTypeLabel(type: ClosingType): string {
 
 /**
  * One sentence for the current selection: what the viewer sees at the end,
- * and what it costs in seconds.
+ * and what it costs in seconds — and a second, with Internal use only, that
+ * quotes the words the card will carry.
  */
 export function closingResultText(controls: ClosingControls): string {
-  const { result } = t().closing
+  const { closing } = t()
+  const { result } = closing
   if (controls.type === 'none') return result.none
 
   // The mode, and so the seconds, come from the same mapping the job uses —
   // the sentence cannot promise a different file from the one that is made.
-  const mode = brandingChoiceFor(controls).mode as BrandingMode
-  const adds = result.adds({ count: closingAddedSeconds(mode) })
+  const adds = result.adds({ count: closingAddedSeconds(closingModeFor(controls)) })
   const { colour } = controls
 
-  if (controls.type === 'cut') return result.cut[colour]({ adds })
   const type = controls.type
-  return controls.onset === 'freeze'
-    ? result.overFreeze[colour][type]({ adds })
-    : result.overPicture[colour][type]({ adds })
+  const sentence =
+    type === 'cut'
+      ? result.cut[colour]({ adds })
+      : controls.onset === 'freeze'
+        ? result.overFreeze[colour][type]({ adds })
+        : result.overPicture[colour][type]({ adds })
+  // The words are the page's language's until VH-132 lets the video's differ.
+  return controls.internal
+    ? `${sentence}${sentenceGap()}${result.internal({ words: closing.internalWords })}`
+    : sentence
 }
 
 /**
@@ -61,4 +68,9 @@ export function onsetDisabledReason(type: ClosingType): string | null {
 /** Why the colour cannot be changed, or `null` when it can. */
 export function colourDisabledReason(type: ClosingType): string | null {
   return type === 'none' ? t().closing.notUsedWith.none : null
+}
+
+/** Why "Internal use only" cannot be changed, or `null` when it can: there is no closing to mark. */
+export function internalDisabledReason(type: ClosingType): string | null {
+  return closingTypeUsesInternal(type) ? null : t().closing.notUsedWith.none
 }

@@ -11,9 +11,15 @@
  * Pure, so every combination's sentence is tested in Node.
  */
 
-import { brandingChoiceFor, type BrandingMode, type ClosingControls } from '../config/branding'
+import {
+  closingModeFor,
+  closingTypeUsesInternal,
+  type BrandingMode,
+  type ClosingControls,
+} from '../config/branding'
+import type { LanguageTag } from '../config/languages'
 import type { PresetId } from '../config/presets'
-import { t } from '../i18n'
+import { closingWords, t } from '../i18n'
 import type { KeptRange } from '../media/kept-range'
 import { formatDuration } from './format'
 import { formatTrimTime } from './trim'
@@ -26,6 +32,8 @@ export interface JobRecord {
   readonly durationSeconds: number
   readonly presetId: PresetId
   readonly closing: ClosingControls
+  /** The language of the video's own text, which Internal use only's words are drawn in (VH-132). */
+  readonly wordsLanguage: LanguageTag
 }
 
 /** What the finished file actually carries, which is not always what was asked for. */
@@ -52,13 +60,24 @@ export function keptPartText(range: KeptRange | null, durationSeconds: number): 
   })
 }
 
-/** The closing as the three controls describe it, in the result line's register. */
-export function closingChoiceText(controls: ClosingControls): string {
+/**
+ * The closing as the controls describe it, in the result line's register,
+ * with the words Internal use only drew in the video's language, which need
+ * not be the page's.
+ */
+export function closingChoiceText(controls: ClosingControls, wordsLanguage: LanguageTag): string {
   const { result } = t()
   if (controls.type === 'none') return result.closingNone
-  if (controls.type === 'cut') return result.closingCut[controls.colour]
   const { colour, type } = controls
-  return controls.onset === 'freeze' ? result.closingOverFreeze[colour][type] : result.closingOverPicture[colour][type]
+  const closing =
+    type === 'cut'
+      ? result.closingCut[colour]
+      : controls.onset === 'freeze'
+        ? result.closingOverFreeze[colour][type]
+        : result.closingOverPicture[colour][type]
+  return controls.internal && closingTypeUsesInternal(type)
+    ? result.closingInternal({ closing, words: closingWords(wordsLanguage) })
+    : closing
 }
 
 /**
@@ -76,7 +95,7 @@ export function closingOutcomeText(controls: ClosingControls, outcome: ClosingOu
   const { result } = t()
   if (controls.type === 'none') return null
   if (!outcome.applied) return result.notLoaded
-  const wanted = brandingChoiceFor(controls).mode as BrandingMode
+  const wanted = closingModeFor(controls)
   if (outcome.mode === null || outcome.mode === wanted) return null
   const { colour } = controls
   const type = controls.type === 'slide' ? 'slide' : 'fade'
@@ -91,6 +110,6 @@ export function jobSummaryText(record: JobRecord): string {
     name: record.sourceName,
     part: keptPartText(record.keptRange, record.durationSeconds),
     output: t().preset.labels[record.presetId],
-    closing: closingChoiceText(record.closing),
+    closing: closingChoiceText(record.closing, record.wordsLanguage),
   })
 }

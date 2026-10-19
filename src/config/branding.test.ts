@@ -15,6 +15,8 @@ import {
   brandingAssetUrl,
   brandingChoiceFor,
   closingAddedSeconds,
+  closingInternalTailName,
+  closingModeFor,
   closingOnsetName,
   closingTailName,
   modeNeedsOnset,
@@ -199,7 +201,7 @@ describe('the closing controls map onto the job (VH-90)', () => {
   it.each(CLOSING_COLOURS)('Cut is the clean cut, in %s', (colour) => {
     for (const onset of CLOSING_ONSETS) {
       // Onset is disabled under Cut; whatever it still holds is unread.
-      expect(brandingChoiceFor({ type: 'cut', onset, colour })).toEqual({
+      expect(brandingChoiceFor({ type: 'cut', onset, colour, internal: false }, 'en-GB')).toEqual({
         opening: false,
         closing: true,
         mode: 'hard-cut',
@@ -216,7 +218,7 @@ describe('the closing controls map onto the job (VH-90)', () => {
     ['slide', 'freeze', 'over-freeze'],
   ] as const)('%s over %s is %s, in both colours', (type, onset, mode) => {
     for (const colour of CLOSING_COLOURS) {
-      expect(brandingChoiceFor({ type, onset, colour })).toEqual({
+      expect(brandingChoiceFor({ type, onset, colour, internal: false }, 'en-GB')).toEqual({
         opening: false,
         closing: true,
         mode,
@@ -229,7 +231,7 @@ describe('the closing controls map onto the job (VH-90)', () => {
   it('None asks for no closing at all, whatever the other two hold', () => {
     for (const onset of CLOSING_ONSETS) {
       for (const colour of CLOSING_COLOURS) {
-        expect(brandingChoiceFor({ type: 'none', onset, colour }).closing).toBe(false)
+        expect(brandingChoiceFor({ type: 'none', onset, colour, internal: false }, 'en-GB').closing).toBe(false)
       }
     }
   })
@@ -238,7 +240,7 @@ describe('the closing controls map onto the job (VH-90)', () => {
     const jobs = new Set(
       CLOSING_TYPES.flatMap((type) =>
         CLOSING_ONSETS.flatMap((onset) =>
-          CLOSING_COLOURS.map((colour) => JSON.stringify(brandingChoiceFor({ type, onset, colour }))),
+          CLOSING_COLOURS.map((colour) => JSON.stringify(brandingChoiceFor({ type, onset, colour, internal: false }, 'en-GB'))),
         ),
       ),
     )
@@ -247,14 +249,14 @@ describe('the closing controls map onto the job (VH-90)', () => {
 
   it('never asks for an opening', () => {
     for (const type of CLOSING_TYPES) {
-      expect(brandingChoiceFor({ ...CLOSING_CONTROL_DEFAULTS, type }).opening).toBe(false)
+      expect(brandingChoiceFor({ ...CLOSING_CONTROL_DEFAULTS, type }, 'en-GB').opening).toBe(false)
     }
   })
 
   it('adds 4 seconds over the picture and 5 over a freeze', () => {
-    expect(closingAddedSeconds(brandingChoiceFor({ type: 'fade', onset: 'existing', colour: 'blue' }).mode!)).toBe(4)
-    expect(closingAddedSeconds(brandingChoiceFor({ type: 'slide', onset: 'freeze', colour: 'blue' }).mode!)).toBe(5)
-    expect(closingAddedSeconds(brandingChoiceFor({ type: 'cut', onset: 'freeze', colour: 'blue' }).mode!)).toBe(4)
+    expect(closingAddedSeconds(brandingChoiceFor({ type: 'fade', onset: 'existing', colour: 'blue', internal: false }, 'en-GB').mode!)).toBe(4)
+    expect(closingAddedSeconds(brandingChoiceFor({ type: 'slide', onset: 'freeze', colour: 'blue', internal: false }, 'en-GB').mode!)).toBe(5)
+    expect(closingAddedSeconds(brandingChoiceFor({ type: 'cut', onset: 'freeze', colour: 'blue', internal: false }, 'en-GB').mode!)).toBe(4)
   })
 
   it('only Fade and Slide use the onset', () => {
@@ -264,8 +266,8 @@ describe('the closing controls map onto the job (VH-90)', () => {
 
 describe('the closing controls at rest (VH-90)', () => {
   it('defaults to Cut, blue — the same job as before the controls changed', () => {
-    expect(CLOSING_CONTROL_DEFAULTS).toEqual({ type: 'cut', onset: 'existing', colour: 'blue' })
-    expect(brandingChoiceFor(CLOSING_CONTROL_DEFAULTS)).toEqual({
+    expect(CLOSING_CONTROL_DEFAULTS).toEqual({ type: 'cut', onset: 'existing', colour: 'blue', internal: false })
+    expect(brandingChoiceFor(CLOSING_CONTROL_DEFAULTS, 'en-GB')).toEqual({
       opening: false,
       closing: true,
       mode: CLOSING_DEFAULTS.mode,
@@ -275,10 +277,11 @@ describe('the closing controls at rest (VH-90)', () => {
   })
 
   it('reads recognised values as they are', () => {
-    expect(readClosingControls({ type: 'slide', onset: 'freeze', colour: 'white' })).toEqual({
+    expect(readClosingControls({ type: 'slide', onset: 'freeze', colour: 'white', internal: true })).toEqual({
       type: 'slide',
       onset: 'freeze',
       colour: 'white',
+      internal: true,
     })
   })
 
@@ -303,6 +306,58 @@ describe('the closing controls at rest (VH-90)', () => {
       type: 'fade',
       onset: 'existing',
       colour: 'white',
+      internal: false,
     })
   })
+})
+
+describe('Internal use only (VH-126)', () => {
+  const marked = (type: (typeof CLOSING_TYPES)[number]) => ({
+    type,
+    onset: 'existing' as const,
+    colour: 'white' as const,
+    internal: true,
+  })
+
+  it('asks for the internal tail in the words’ language, and changes nothing else', () => {
+    for (const type of ['cut', 'fade', 'slide'] as const) {
+      const plain = brandingChoiceFor({ ...marked(type), internal: false }, 'en-GB')
+      expect(brandingChoiceFor(marked(type), 'ms-MY')).toEqual({ ...plain, internal: 'ms-MY' })
+    }
+  })
+
+  it('adds the same seconds as the official closing, so no estimate moves', () => {
+    for (const type of CLOSING_TYPES) {
+      for (const onset of CLOSING_ONSETS) {
+        expect(closingModeFor({ type, onset, colour: 'blue', internal: true })).toBe(
+          closingModeFor({ type, onset, colour: 'blue', internal: false }),
+        )
+      }
+    }
+  })
+
+  it('asks for nothing under None, which has no closing to mark', () => {
+    expect(brandingChoiceFor(marked('none'), 'zh-Hans')).not.toHaveProperty('internal')
+    expect(brandingChoiceFor(marked('none'), 'zh-Hans').closing).toBe(false)
+  })
+
+  it('names one tail per language, colour and height, apart from the official ones', () => {
+    expect(closingInternalTailName('zh-Hans', 'blue', 2160)).toBe(
+      'closing-tail-internal-zh-hans-blue-2160p.mp4',
+    )
+    const names = (['en-GB', 'zh-Hans', 'ms-MY'] as const).flatMap((language) =>
+      (['blue', 'white'] as const).flatMap((colour) =>
+        ([1080, 2160] as const).map((height) => closingInternalTailName(language, colour, height)),
+      ),
+    )
+    expect(new Set(names).size).toBe(12)
+    expect(names).not.toContain(closingTailName('blue', 1080))
+  })
+
+  it.each([[{ internal: 'true' }], [{ internal: 1 }], [{ internal: null }], [{}]])(
+    'is on only when the checkbox says exactly so: %j',
+    (raw) => {
+      expect(readClosingControls(raw as { internal?: boolean }).internal).toBe(false)
+    },
+  )
 })

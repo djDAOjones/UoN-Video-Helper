@@ -359,7 +359,11 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     ? await loadBrandingClip('opening', shape, { brandingBaseUrl })
     : null
   const closing: BrandingClip | null = branding.closing
-    ? await loadBrandingClip('closing', shape, { brandingBaseUrl, ...colourOption(branding) })
+    ? await loadBrandingClip('closing', shape, {
+        brandingBaseUrl,
+        ...colourOption(branding),
+        ...(branding.internal ? { internal: branding.internal } : {}),
+      })
     : null
 
   // The build is only fetched for the modes that composite it. If it fails to

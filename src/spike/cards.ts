@@ -31,6 +31,7 @@ import {
 } from '../config/cards'
 import { closingTailName, CLOSING_TAIL_SECONDS, type BrandingColour } from '../config/branding'
 import type { LanguageTag } from '../config/languages'
+import { closingWords } from '../i18n'
 import { verdictLine } from '../../scripts/verdict.mjs'
 
 const log = document.getElementById('log') as HTMLPreElement
@@ -90,7 +91,7 @@ interface Copy {
 
 const COPY: Readonly<Record<LanguageTag, Copy>> = {
   'en-GB': {
-    closingWords: 'Internal use only',
+    closingWords: closingWords('en-GB'),
     heading: 'Designing, Running and Reporting a Mixed-Methods Study for Your Dissertation',
     subhead: 'Week 3 lecture for students on the Nottingham, Malaysia and China campuses',
     assignment: 'Assignment 2: Reflective Essay on Placement Learning and Professional Identity',
@@ -105,7 +106,7 @@ const COPY: Readonly<Record<LanguageTag, Copy>> = {
     },
   },
   'zh-Hans': {
-    closingWords: '仅限内部使用',
+    closingWords: closingWords('zh-Hans'),
     heading: '为你的学位论文设计、开展和报告混合方法研究',
     subhead: '第三周讲座，面向诺丁汉、马来西亚和中国校区的学生',
     assignment: '作业二：关于实习学习与职业身份认同的反思性论文',
@@ -120,7 +121,7 @@ const COPY: Readonly<Record<LanguageTag, Copy>> = {
     },
   },
   'ms-MY': {
-    closingWords: 'Kegunaan dalaman sahaja',
+    closingWords: closingWords('ms-MY'),
     heading:
       'Mereka Bentuk, Menjalankan dan Melaporkan Kajian Kaedah Campuran untuk Disertasi Anda',
     subhead: 'Kuliah minggu ketiga untuk pelajar di kampus Nottingham, Malaysia dan China',

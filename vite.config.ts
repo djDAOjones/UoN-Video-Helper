@@ -95,7 +95,11 @@ export default defineConfig(({ mode }) => {
   // (2026-09-21).
   const xerte = mode === 'xerte'
   return {
-    plugins: [excludeFromBuild(['branding/README.md']), ...(xerte ? [emitBrandingFlat()] : [])],
+    plugins: [
+      // The README, and the record of the words drawn into the internal tails (VH-126).
+      excludeFromBuild(['branding/README.md', 'branding/closing-internal-words.json']),
+      ...(xerte ? [emitBrandingFlat()] : []),
+    ],
     // A GitHub Pages project site serves from `/<repo>/`, not the root. The
     // deploy workflow sets BASE_PATH; local dev and the acceptance run leave it
     // unset and stay at `/`. Runtime asset URLs read `import.meta.env.BASE_URL`

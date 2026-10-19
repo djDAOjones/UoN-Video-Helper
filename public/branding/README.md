@@ -60,6 +60,46 @@ broken — but neither may be defaulted on until **VH-44** lands. Safari's two
 failures are one cause: it ignores `VideoFrameCopyToOptions.format` silently,
 which the white onset hides and the blue one exposes.
 
+## Internal use only (VH-126)
+
+The official tail again, with "Internal use only" building in under the logo,
+one per language the page offers, colour and height. Built by the same script;
+`--only internal` leaves the twelve files above byte for byte as they are,
+which a re-encode with another ffmpeg would not:
+
+```bash
+node scripts/build-branding.mjs --only internal
+```
+
+| Part | Files | Format | Why |
+| --- | --- | --- | --- |
+| `closing-tail-internal-{language}-{colour}-{height}p.mp4` | 12 | H.264 High, CRF 18 | As the official tail. The onsets are shared: the words arrive with the wordmark, after the onset has ended. |
+
+`{language}` is `en-gb`, `zh-hans` or `ms-my`. Twelve files, 2.26 MB.
+
+- **The words are the tables'**: each language's `closing.internalWords`, so a
+  translation is corrected through the sheet (`scripts/strings-table.mjs`),
+  never typed into the script. `closing-internal-words.json` records what each
+  language's tails were built with, and `test/closing-assets.test.ts` holds it
+  to the tables: a corrected translation fails the gate until its tails are
+  rebuilt (`--languages ms-MY` rebuilds one). The record is not published.
+- **Drawn by the Mac, not ffmpeg.** Homebrew's ffmpeg 9 has no `drawtext`, so
+  macOS's own text system draws the words, through JavaScript for Automation
+  (`osascript`), and ffmpeg overlays them on the 4K master before scaling.
+  Arial Bold, and PingFang SC Semibold for Chinese, the faces and the weight
+  Chrome draws the page in. A Mac is needed to rebuild these twelve.
+- **Placed as `spike-cards.html` measured**: 200 px on the 2160-line master
+  (100 per 1080), the cap top 0.75 em below the logo's foot (y 686 at 1080),
+  centred on the frame. Widths at 1080: 795 px (English), 600 (Chinese),
+  1,551 (Malay) of a 1,680 px safe width.
+- **The build**: a wipe from left to right whose progress is the wordmark's
+  own, measured from each master's frames (it moves from 1.72 s to 2.96 s of
+  the tail), its edge soft across half the words' size.
+- **Checked**: above the words, each tail matches the official one to 59 dB
+  PSNR, two CRF 18 encodes of one picture, so the ground and the logo are
+  untouched; the settled card and the build were looked at in both colours and
+  all three languages (2026-10-19).
+
 ## The opening placeholders (still in use)
 
 Only the `opening-*` files remain, and only because opening sequences are
