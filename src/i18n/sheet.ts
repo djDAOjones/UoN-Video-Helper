@@ -198,6 +198,8 @@ const PLACEHOLDERS: Readonly<Record<string, string>> = {
   notice: 'another sentence from this sheet (progress.jobNotice)',
   sentence: 'an error message from this sheet',
   heading: 'a heading from this sheet',
+  times:
+    'a list of times in the video, like "1:22 and 3:05", perhaps ending "2 other moments" (warnings.decodeDamage.more)',
   titles: 'warning headings from this sheet, one after another',
   question: 'the question from discard.delivered or discard.unsaved',
   adds: 'the sentence from closing.result.adds',

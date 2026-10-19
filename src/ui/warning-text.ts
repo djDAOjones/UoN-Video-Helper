@@ -14,8 +14,9 @@
  */
 
 import type { AudioWarning } from '../audio/warnings'
+import { DECODE_DAMAGE } from '../config/audio'
 import { t } from '../i18n'
-import { formatDuration } from './format'
+import { formatClockTime, formatDuration } from './format'
 import { notification } from './notification'
 
 export interface WarningText {
@@ -23,11 +24,34 @@ export interface WarningText {
   readonly detail: string
 }
 
+/**
+ * Decode damage's times, as the trim's fields show a time (VH-122): each
+ * floored, so seeking to it lands just before the damage rather than after,
+ * a time said once however many stretches share its second, and past
+ * {@link DECODE_DAMAGE}'s limit the rest counted instead of listed.
+ */
+export function damageTimes(atSeconds: readonly number[]): string[] {
+  const times = [...new Set(atSeconds.map((seconds) => formatClockTime(Math.floor(seconds))))]
+  const listed = times.slice(0, DECODE_DAMAGE.timesSaid)
+  const rest = times.length - listed.length
+  return rest > 0 ? [...listed, t().warnings.decodeDamage.more({ count: rest })] : listed
+}
+
 export function warningText(warning: AudioWarning): WarningText {
   const { warnings } = t()
   switch (warning.code) {
     case 'no-audio':
       return warnings.noAudio
+    case 'decode-damage': {
+      const count = warning.atSeconds?.length ?? 0
+      return {
+        heading: warnings.decodeDamage.heading({ count }),
+        detail: warnings.decodeDamage.detail({
+          count,
+          times: damageTimes(warning.atSeconds ?? []),
+        }),
+      }
+    }
     case 'clipping':
       return warnings.clipping
     case 'very-quiet':

@@ -21,7 +21,7 @@ import {
 } from '../config/presets'
 import { detectSourceWarnings, type AudioWarning } from '../audio/warnings'
 import type { BrandingChoice } from '../config/branding'
-import { analyseSourceAudio } from '../media/audio-plan'
+import { analyseOutputAudio, analyseSourceAudio } from '../media/audio-plan'
 import {
   canEncodeAudio,
   checkEncodeSupport,
@@ -282,7 +282,7 @@ async function handleProcess(
     // What the pipeline put in the file, not what the source had: a trim can
     // keep a part with no sound, and that file has none to verify (VH-95).
     if (result.audioIncluded) {
-      const measured = checkTrack ? await analyseSourceAudio(checkTrack, signal) : null
+      const measured = checkTrack ? await analyseOutputAudio(checkTrack, signal) : null
       // A cancelled traversal stops early and returns a partial measurement,
       // which would then fail the contract and be reported as a broken output
       // rather than as the cancellation it is.

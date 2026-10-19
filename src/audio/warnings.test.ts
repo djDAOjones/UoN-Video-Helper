@@ -47,6 +47,20 @@ describe('spec 5.4 source warnings', () => {
     expect(codes(null)).toEqual(['no-audio'])
   })
 
+  it('decode damage — said first, with every time it was silenced at (VH-122)', () => {
+    const warnings = detectSourceWarnings(
+      healthy({ damageSilencedAtSeconds: [82.41, 185.34], loudnessRangeLu: 18 }),
+    )
+    expect(warnings.map((w) => w.code)).toEqual(['decode-damage', 'highly-variable'])
+    expect(warnings[0]?.atSeconds).toEqual([82.41, 185.34])
+    expect(warnings[0]?.detail['moments']).toBe(2)
+  })
+
+  it('decode damage — nothing said when nothing was silenced, or nothing was gated', () => {
+    expect(codes(healthy({ damageSilencedAtSeconds: [] }))).not.toContain('decode-damage')
+    expect(codes(healthy())).not.toContain('decode-damage')
+  })
+
   it('clipping — ten or more samples at the threshold', () => {
     expect(codes(healthy({ clippedSampleCount: 9 }))).not.toContain('clipping')
     expect(codes(healthy({ clippedSampleCount: 10 }))).toContain('clipping')

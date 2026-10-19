@@ -79,8 +79,7 @@ function run(
   const starts: number[] = []
   const ends: number[] = []
   let totalFrames = 0
-  const record = (sample: AudioSample | null): void => {
-    if (!sample) return
+  const record = (sample: AudioSample): void => {
     starts.push(sample.timestamp)
     ends.push(sample.timestamp + sample.numberOfFrames / SAMPLE_RATE)
     totalFrames += sample.numberOfFrames
@@ -91,7 +90,7 @@ function run(
     input.close()
     for (const sample of output) record(sample)
   }
-  record(processor.flush())
+  for (const sample of processor.flush()) record(sample)
   return { starts, totalFrames, ends }
 }
 

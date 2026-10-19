@@ -543,6 +543,21 @@ export const msMY: Messages = {
       detail:
         'Tiada bunyi untuk diratakan, jadi kerja selebihnya berjalan tanpanya. Jika anda menjangkakan bunyi, semak rakaman sebelum menerbitkan.',
     },
+    decodeDamage: {
+      heading: {
+        one: 'Satu bahagian yang rosak telah disenyapkan',
+        other: 'Beberapa bahagian yang rosak telah disenyapkan',
+      },
+      detail: {
+        one: 'Pada {times}, fail ini mengandungi letusan hingar yang lebih kuat daripada mana-mana rakaman. Ia berpunca daripada kerosakan pada fail, bukan daripada rakaman anda. Pecahan saat itu akan disenyapkan, jadi tiada sesiapa yang mendengarnya dan perataan masih berfungsi seperti sepatutnya.',
+        other:
+          'Pada {times}, fail ini mengandungi letusan hingar yang lebih kuat daripada mana-mana rakaman. Ia berpunca daripada kerosakan pada fail, bukan daripada rakaman anda. Setiap pecahan saat itu akan disenyapkan, jadi tiada sesiapa yang mendengarnya dan perataan masih berfungsi seperti sepatutnya.',
+      },
+      more: {
+        one: '{count} bahagian lain',
+        other: '{count} bahagian lain',
+      },
+    },
     clipping: {
       heading: 'Bunyi mungkin terherot di beberapa tempat',
       detail:

@@ -257,6 +257,28 @@ export const WARNING_THRESHOLDS = {
 } as const
 
 /**
+ * Decode damage (VH-122, spec 5.4): sound a decoder cannot have made from a
+ * real recording, silenced before anything measures or levels it.
+ */
+export const DECODE_DAMAGE = {
+  /**
+   * A sample beyond this, in dBFS, is damage. Measured 2026-10-19 with every
+   * corpus file decoded unclipped: real recordings peak at +0.96 dBFS at most
+   * (a hot master's encode overshooting full scale), while CULT2011's two
+   * corrupt frames decode to +36 and +57 dBFS, and the weaker edge of a burst
+   * to about +13. Twice full scale sits some 5 dB clear of each; the figure
+   * itself is chosen.
+   */
+  aboveDbfs: 6,
+  /**
+   * The most times the warning lists before it counts the rest. Chosen: five
+   * fit a sentence, and a file damaged in more places than that wants
+   * checking whatever the times are.
+   */
+  timesSaid: 5,
+} as const
+
+/**
  * How far below the median the quiet passages must fall before the noise floor
  * is treated as measurable at all.
  *

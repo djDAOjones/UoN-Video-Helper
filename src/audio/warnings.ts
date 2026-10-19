@@ -15,6 +15,7 @@ import type { AudioAnalysis } from './analyse'
 
 export type AudioWarningCode =
   | 'no-audio'
+  | 'decode-damage'
   | 'clipping'
   | 'very-quiet'
   | 'highly-variable'
@@ -27,6 +28,8 @@ export interface AudioWarning {
   readonly code: AudioWarningCode
   /** Measured values, so the wording can be specific rather than vague. */
   readonly detail: Readonly<Record<string, number>>
+  /** The moments a warning is about, in source seconds, earliest first: decode damage's (VH-122). */
+  readonly atSeconds?: readonly number[]
 }
 
 /** Nth percentile of an ascending set, nearest-rank. */
@@ -68,6 +71,15 @@ export function detectSourceWarnings(analysis: AudioAnalysis | null): AudioWarni
 
   const warnings: AudioWarning[] = []
   const { clippedSampleCount, truePeakDbtp, integratedLufs, loudnessRangeLu } = analysis
+
+  // First, because it is what the tool did rather than what it measured, and
+  // because it is why none of the rows below hears the burst: before VH-122,
+  // one corrupt frame raised the clipping and highly-variable rows on a
+  // recording that had neither (VH-115).
+  const damage = analysis.damageSilencedAtSeconds ?? []
+  if (damage.length > 0) {
+    warnings.push({ code: 'decode-damage', detail: { moments: damage.length }, atSeconds: damage })
+  }
 
   // Either enough individual samples reached the ceiling, or the peak went
   // over full scale outright — the second needs no count to be a problem.

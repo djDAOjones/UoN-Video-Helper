@@ -569,6 +569,20 @@ export const enGB = {
       detail:
         'There is no sound to level, so the rest of the job runs without it. If you expected sound, check the recording before publishing.',
     },
+    /** Said when a damaged moment in the file's sound is made silent (VH-122). {times} is a list of times, like "1:22 and 3:05". */
+    decodeDamage: {
+      heading: {
+        one: 'A damaged moment has been silenced',
+        other: 'Damaged moments have been silenced',
+      },
+      detail: {
+        one: 'At {times}, the file holds a burst of noise louder than any recording can be. It comes from damage to the file, not from your recording. That fraction of a second will be silent instead, so no one hears it and the levelling still works as it should.',
+        other:
+          'At {times}, the file holds bursts of noise louder than any recording can be. They come from damage to the file, not from your recording. Each fraction of a second will be silent instead, so no one hears them and the levelling still works as it should.',
+      },
+      /** Ends the list of times when there are more than the warning lists. */
+      more: { one: '{count} other moment', other: '{count} other moments' },
+    },
     clipping: {
       heading: 'The sound may be distorted in places',
       detail:

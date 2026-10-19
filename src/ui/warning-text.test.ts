@@ -7,7 +7,8 @@
 import { describe, expect, it } from 'vitest'
 
 import type { AudioWarningCode } from '../audio/warnings'
-import { warningText } from './warning-text'
+import { DECODE_DAMAGE } from '../config/audio'
+import { damageTimes, warningText } from './warning-text'
 
 /**
  * Exhaustive by construction, not by hand. A `Record` keyed on the union makes
@@ -16,6 +17,7 @@ import { warningText } from './warning-text'
  */
 const ALL = Object.keys({
   'no-audio': true,
+  'decode-damage': true,
   clipping: true,
   'very-quiet': true,
   'highly-variable': true,
@@ -36,6 +38,7 @@ const sample = (code: AudioWarningCode) =>
       milliseconds: 44,
       peakDbfs: -26.4,
     },
+    atSeconds: [82.41, 185.34],
   })
 
 describe('every warning has words', () => {
@@ -82,5 +85,34 @@ describe('every warning has words', () => {
     for (const code of ['clipping', 'noisy'] as const) {
       expect(sample(code).heading, code).toMatch(/\bmay\b/)
     }
+  })
+})
+
+describe('decode damage, said with its times (VH-122)', () => {
+  const said = (atSeconds: number[]) =>
+    warningText({ code: 'decode-damage', detail: { moments: atSeconds.length }, atSeconds })
+
+  it('names one time, floored, so seeking to it lands before the damage', () => {
+    const { heading, detail } = said([82.9])
+    expect(heading).toBe('A damaged moment has been silenced')
+    expect(detail).toMatch(/^At 1:22, the file holds a burst of noise/)
+  })
+
+  it('lists several as the language lists them', () => {
+    const { heading, detail } = said([82.41, 185.34])
+    expect(heading).toBe('Damaged moments have been silenced')
+    expect(detail).toMatch(/^At 1:22 and 3:05, the file holds bursts of noise/)
+  })
+
+  it('says a time once, however many stretches share its second', () => {
+    expect(damageTimes([82.1, 82.7, 185.3])).toEqual(['1:22', '3:05'])
+  })
+
+  it('counts the rest past the most it lists', () => {
+    const atSeconds = Array.from({ length: DECODE_DAMAGE.timesSaid + 2 }, (_v, i) => 60 * (i + 1))
+    expect(damageTimes(atSeconds)).toHaveLength(DECODE_DAMAGE.timesSaid + 1)
+    expect(damageTimes(atSeconds).at(-1)).toBe('2 other moments')
+    expect(said(atSeconds).detail).toContain('5:00 and 2 other moments')
+    expect(damageTimes(atSeconds.slice(0, DECODE_DAMAGE.timesSaid))).not.toContain('other moments')
   })
 })

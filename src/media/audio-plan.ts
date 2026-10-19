@@ -37,6 +37,7 @@ import {
 
 import { AudioAnalyser, type AudioAnalysis } from '../audio/analyse'
 import { AudioChain } from '../audio/chain'
+import { DecodeDamageGate, type TimedBlock } from '../audio/decode-damage'
 import { solveChainGainDb } from '../audio/gain-solve'
 import { buildGainEnvelope, type GainEnvelope } from '../audio/macrolevel'
 import { GAP_SILENCE_BLOCK_SECONDS, LIMITER } from '../config/audio'
@@ -98,6 +99,10 @@ function keptSamples(sink: AudioSampleSink, range: KeptRange | null): AsyncGener
  * @param range - The kept range, or `null` for the whole track. Every pass
  *   passes the same one: loudness is measured on the part the viewer will see,
  *   and the envelope is applied to the stream it was measured on (VH-95).
+ * @param silenceDamage - Run the decoded blocks through a
+ *   {@link DecodeDamageGate} before anything else (VH-122): true for every pass
+ *   over the source, so each hears the silence pass C will encode; false for
+ *   the finished file, whose damage the check must see.
  * @param tap - Given every block exactly as it goes to the analyser, in order.
  *   Awaited, so a consumer that encodes can apply backpressure.
  */
@@ -108,11 +113,13 @@ async function traverse(
   chain: AudioChain | null,
   signal: AbortSignal | undefined,
   range: KeptRange | null,
+  silenceDamage: boolean,
   onSample?: () => void,
   tap?: (block: Float32Array[]) => Promise<void>,
 ): Promise<Traversal> {
   const analyser = new AudioAnalyser({ sampleRate, channelCount })
   const sink = new AudioSampleSink(track)
+  const gate = silenceDamage ? new DecodeDamageGate() : null
   // Every pass fills gaps identically, or the short-term curve this pass
   // produces would be indexed differently from the envelope pass C applies
   // (VH-74) — including a hole that spans a trim's in-point.
@@ -129,6 +136,25 @@ async function traverse(
     if (tap) await tap(block)
   }
 
+  /** One decoded block, trimmed to the range, after the silence for any hole before it. */
+  const feed = async (decoded: TimedBlock): Promise<void> => {
+    const kept = clipAudioBlock(decoded.planar, decoded.timestampSeconds, sampleRate, range)
+    if (!kept) return
+    const missing = gaps.framesMissingBefore(kept.timestampSeconds)
+    for (const silence of gaps.silence(missing, sampleRate * GAP_SILENCE_BLOCK_SECONDS)) {
+      // A long hole is thousands of blocks between two source samples, so
+      // each one proves the job alive and hears a cancel (Codex review).
+      if (signal?.aborted) return
+      await emit(chain ? chain.process(silence) : silence)
+      onSample?.()
+    }
+    // Out of the whole pass, not just the hole: the loop below stops on the
+    // same signal, so nothing after the cancel is fed (Codex review).
+    if (signal?.aborted) return
+    gaps.accept(kept.planar[0]?.length ?? 0)
+    await emit(chain ? chain.process(kept.planar) : kept.planar)
+  }
+
   for await (const sample of keptSamples(sink, range)) {
     // Closed before breaking. The loop is handed a decoded sample and only
     // then checks the signal, so an aborted traversal used to drop that one on
@@ -140,39 +166,42 @@ async function traverse(
       sample.close()
       break
     }
+    let decoded: TimedBlock
     try {
-      const kept = clipAudioBlock(toPlanar(sample, channelCount), sample.timestamp, sampleRate, range)
-      if (kept) {
-        const missing = gaps.framesMissingBefore(kept.timestampSeconds)
-        for (const silence of gaps.silence(missing, sampleRate * GAP_SILENCE_BLOCK_SECONDS)) {
-          // A long hole is thousands of blocks between two source samples, so
-          // each one proves the job alive and hears a cancel (Codex review).
-          if (signal?.aborted) break
-          await emit(chain ? chain.process(silence) : silence)
-          onSample?.()
-        }
-        // Out of the whole pass, not just the hole: the sample is closed by
-        // the `finally` below, and nothing after the cancel is fed (Codex
-        // review).
-        if (signal?.aborted) break
-        gaps.accept(kept.planar[0]?.length ?? 0)
-        await emit(chain ? chain.process(kept.planar) : kept.planar)
-      }
+      decoded = { planar: toPlanar(sample, channelCount), timestampSeconds: sample.timestamp }
     } finally {
       sample.close()
     }
+    // The gate gives back the block before this one, so the last comes out
+    // of its flush below.
+    const released = gate ? gate.push(decoded) : decoded
+    if (released) await feed(released)
+    if (signal?.aborted) break
     // The analysis pass used to say nothing at all from start to finish, and it
     // scales with the file. That was invisible until VH-38 made silence the
     // signal a job is wedged (VH-51).
     onSample?.()
   }
+  const last = gate?.flush()
+  if (last && !signal?.aborted) await feed(last)
   if (chain) await emit(chain.flush())
   if (gaps.insertedFrames > 0) {
     log.info('audio', 'source audio has gaps; filled with silence', {
       insertedSeconds: Math.round((gaps.insertedFrames / sampleRate) * 1000) / 1000,
     })
   }
-  return { analysis: analyser.finish(), frames }
+  const analysis = analyser.finish()
+  if (!gate) return { analysis, frames }
+  // A stretch that starts in the block holding the in-point is said at the
+  // in-point: the warning names times inside the part that will be seen.
+  const from = range?.startSeconds ?? 0
+  return {
+    analysis: {
+      ...analysis,
+      damageSilencedAtSeconds: gate.silencedAtSeconds.map((seconds) => Math.max(from, seconds)),
+    },
+    frames,
+  }
 }
 
 /**
@@ -194,12 +223,32 @@ export async function analyseSourceAudio(
     track.getSampleRate(),
     track.getNumberOfChannels(),
   ])
-  const traversal = await traverse(track, sampleRate, channelCount, null, signal, range)
+  const traversal = await traverse(track, sampleRate, channelCount, null, signal, range, true)
   // A kept range can hold no sound — the track starts after the out-point,
   // or the cut sits inside a hole. That is a silent source, and says so,
   // rather than an analysis of nothing (Codex review). Untrimmed, unchanged.
   if (range && traversal.frames === 0) return null
   return traversal.analysis
+}
+
+/**
+ * The finished file's audio, measured as it decodes, for the output check
+ * (spec 13 criterion 2).
+ *
+ * Never through the decode-damage gate (VH-122): the file was made from audio
+ * the limiter held under the ceiling, so a sample beyond full scale here is a
+ * broken output, and silencing it would pass the file the check exists to
+ * refuse.
+ */
+export async function analyseOutputAudio(
+  track: InputAudioTrack,
+  signal?: AbortSignal,
+): Promise<AudioAnalysis> {
+  const [sampleRate, channelCount] = await Promise.all([
+    track.getSampleRate(),
+    track.getNumberOfChannels(),
+  ])
+  return (await traverse(track, sampleRate, channelCount, null, signal, null, false)).analysis
 }
 
 /**
@@ -231,7 +280,16 @@ export async function planAudio(
   ])
 
   const startedAt = performance.now()
-  const source = await traverse(track, sampleRate, channelCount, null, signal, range, onSample)
+  const source = await traverse(
+    track,
+    sampleRate,
+    channelCount,
+    null,
+    signal,
+    range,
+    true,
+    onSample,
+  )
   // Nothing to level: the kept range holds no sound. The job is a silent one
   // and the caller adds no audio track (Codex review). Untrimmed, unchanged.
   if (range && source.frames === 0) {
@@ -298,6 +356,7 @@ export async function planAudio(
         }),
         signal,
         range,
+        true,
         onSample,
         tap,
       )
@@ -353,6 +412,9 @@ export async function planAudio(
     sourceIntegratedLufs: round(analysis.integratedLufs),
     loudnessRangeLu: Math.round(analysis.loudnessRangeLu * 10) / 10,
     macroLevelling: envelope.gainDb.length > 0,
+    // How many stretches of decode damage every pass heard as silence: a
+    // count, never the times (VH-122).
+    damageSilenced: analysis.damageSilencedAtSeconds?.length ?? 0,
     afterChainLufs: round(solution.unlimitedLufs),
     // What the chain that actually runs produced at the solved gain. The
     // difference between this and `afterChainLufs` is the limiter's bite, and
@@ -409,6 +471,11 @@ export async function planAudio(
  * count keeps meaning source time (VH-74). Where the audio STARTS is carried
  * separately, in `startOffsetSeconds` — padding a late start would move its
  * end as well.
+ *
+ * Decode damage is silenced first, by the same gate every planning pass ran
+ * (VH-122), so the encode carries the silence the gain was solved over. The
+ * gate holds one block back, so each call returns the block before its own,
+ * and the last comes out of `flush`.
  */
 export function createContentAudioProcessor(
   plan: AudioPlan,
@@ -440,6 +507,7 @@ export function createContentAudioProcessor(
 ): ContentAudioProcessor {
   const { sampleRate, channelCount, envelope, gainDb, limiterCeilingDbtp } = plan
   const chain = new AudioChain({ sampleRate, channelCount, envelope, gainDb, limiterCeilingDbtp })
+  const gate = new DecodeDamageGate()
   const gaps = new AudioGapFiller(sampleRate, channelCount, options.keptAudioAnchorSeconds)
   let emittedFrames = 0
 
@@ -464,32 +532,47 @@ export function createContentAudioProcessor(
     return output
   }
 
+  /** One decoded block's processed audio: silence for any hole before it, then the block. */
+  const processed = (decoded: TimedBlock): Iterable<AudioSample> => {
+    const kept = clipAudioBlock(
+      decoded.planar,
+      decoded.timestampSeconds,
+      sampleRate,
+      options.keptRange,
+    )
+    if (!kept) return []
+    const missing = gaps.framesMissingBefore(kept.timestampSeconds)
+    gaps.accept(kept.planar[0]?.length ?? 0)
+    // Silence for the hole this block sits after, then the block itself,
+    // through the chain as one continuous stream. Made a block at a time as
+    // the caller takes them, so a long hole never sits in memory whole.
+    return (function* (): Generator<AudioSample> {
+      for (const silence of gaps.silence(missing, sampleRate * GAP_SILENCE_BLOCK_SECONDS)) {
+        const block = emit(chain.process(silence))
+        if (block) yield block
+      }
+      const block = emit(chain.process(kept.planar))
+      if (block) yield block
+    })()
+  }
+
   return {
     process: (sample: AudioSample) => {
       // Read out of the sample now: the caller closes it as soon as this
       // returns, before the blocks below are made.
-      const kept = clipAudioBlock(
-        toPlanar(sample, channelCount),
-        sample.timestamp,
-        sampleRate,
-        options.keptRange,
-      )
-      if (!kept) return []
-      const missing = gaps.framesMissingBefore(kept.timestampSeconds)
-      gaps.accept(kept.planar[0]?.length ?? 0)
-      // Silence for the hole this sample sits after, then the sample itself,
-      // through the chain as one continuous stream. Made a block at a time as
-      // the caller takes them, so a long hole never sits in memory whole.
-      return (function* (): Generator<AudioSample> {
-        for (const silence of gaps.silence(missing, sampleRate * GAP_SILENCE_BLOCK_SECONDS)) {
-          const block = emit(chain.process(silence))
-          if (block) yield block
-        }
-        const block = emit(chain.process(kept.planar))
-        if (block) yield block
-      })()
+      const released = gate.push({
+        planar: toPlanar(sample, channelCount),
+        timestampSeconds: sample.timestamp,
+      })
+      return released ? processed(released) : []
     },
-    flush: () => emit(chain.flush()),
+    flush: () =>
+      (function* (): Generator<AudioSample> {
+        const last = gate.flush()
+        if (last) yield* processed(last)
+        const tail = emit(chain.flush())
+        if (tail) yield tail
+      })(),
   }
 }
 
@@ -505,16 +588,16 @@ export function createContentAudioProcessor(
  */
 export interface ContentAudioProcessor {
   /**
-   * The processed audio for one source sample: silence for any hole before
+   * The processed audio for the source sample before this one — the
+   * decode-damage gate holds one back (VH-122): silence for any hole before
    * it, then the sample. Made lazily, so take every block before the next
    * call — the chain is one stream and they come out in its order.
    */
   process(sample: AudioSample): Iterable<AudioSample>
   /**
-   * The limiter's remaining look-ahead, timestamped to follow the last block.
-   * Call once, after the last sample.
-   *
-   * @returns `null` when there is no tail — no limiter, or nothing buffered.
+   * The last source sample, processed, then the limiter's remaining
+   * look-ahead, timestamped to follow it. Call once, after the last sample,
+   * and take every block; made lazily, as `process`'s are.
    */
-  flush(): AudioSample | null
+  flush(): Iterable<AudioSample>
 }

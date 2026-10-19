@@ -25,7 +25,7 @@
 
 ### Band 7 — measured, not yet fixed
 
-- [ ] VH-122 — Decode damage is silenced and said — since 2026-10-01
+- [~] VH-122 — Decode damage is silenced and said — since 2026-10-01
 - [ ] VH-116 — A video estimate that holds still — since 2026-10-01
 
 ### Phase 1 — Band 8, a title card and an Internal use only closing — CLOSED 2026-10-19

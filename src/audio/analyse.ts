@@ -22,6 +22,13 @@ export interface AudioAnalysis extends LoudnessReport {
   readonly clippedSampleCount: number
   readonly sampleRate: number
   readonly channelCount: number
+  /**
+   * Where decode damage was silenced before this was measured, in source
+   * seconds, earliest first (VH-122, `decode-damage.ts`). Absent where
+   * nothing was gated: the finished file's check, the codec probe, the
+   * acceptance run.
+   */
+  readonly damageSilencedAtSeconds?: readonly number[]
 }
 
 export class AudioAnalyser {

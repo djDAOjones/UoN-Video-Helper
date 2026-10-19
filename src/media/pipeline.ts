@@ -743,6 +743,19 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       keptRange,
       keptAudioAnchorSeconds: keptAudioAnchorSeconds(keptRange, firstAudioSeconds),
     })
+    // More than one block only where a hole is filled, which can be long;
+    // so cancel is heard between them — checked BEFORE the next block is
+    // made, because a block made and then abandoned is a sample nobody
+    // closes (Codex review).
+    const emitEach = async (processed: Iterable<AudioSample>): Promise<void> => {
+      const blocks = processed[Symbol.iterator]()
+      for (;;) {
+        throwIfAborted(laneSignal)
+        const next = blocks.next()
+        if (next.done) break
+        await emit(next.value)
+      }
+    }
     const sink = new AudioSampleSink(audioTrack)
     const samples = keptRange
       ? sink.samples(keptRange.startSeconds, keptRange.endSeconds)
@@ -755,24 +768,14 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       } finally {
         sample.close()
       }
-      // More than one block only where a hole is filled, which can be long;
-      // so cancel is heard between them — checked BEFORE the next block is
-      // made, because a block made and then abandoned is a sample nobody
-      // closes (Codex review).
-      const blocks = processed[Symbol.iterator]()
-      for (;;) {
-        throwIfAborted(laneSignal)
-        const next = blocks.next()
-        if (next.done) break
-        await emit(next.value)
-      }
+      await emitEach(processed)
     }
 
     // The limiter holds a look-ahead window, so the stream simply stopping lost
     // that much from the end of every job (VH-20). The analysis pass already
     // flushed, so loudness was measured over audio the output did not contain.
-    const tail = processContent.flush()
-    if (tail) await emit(tail)
+    // The decode-damage gate's last block comes out here too (VH-122).
+    await emitEach(processContent.flush())
 
     if (closing) {
       await feedBrandingAudio(closing, emit, closingOffset, { fadeIn: true, fadeOut: false }, laneSignal)
