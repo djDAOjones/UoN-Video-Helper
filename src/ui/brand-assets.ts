@@ -33,6 +33,17 @@ function firstUrl(found: Record<string, string>): string | null {
 }
 
 /**
+ * Lora Bold's URL, resolved against the page, for the title card the worker
+ * draws (VH-127): a worker resolves a relative URL against its own script,
+ * not the page. `null` when the build has no file; the card then draws in
+ * Georgia, as the headings do.
+ */
+export function headingFontUrl(baseUri: string): string | null {
+  const url = firstUrl(loraUrls)
+  return url === null ? null : new URL(url, baseUri).href
+}
+
+/**
  * Puts the logo in the header and registers the heading font, where each
  * exists.
  *

@@ -80,8 +80,10 @@ export function failureText(code: FailureCode, reason?: FailureReason): FailureT
       return failure.checkFailed
     case 'timed-out':
       return { what: failure.timedOut.what, next: failure.tryAgain }
-    // Said as unknown until VH-127's Step 3 gives the refusal its own sentence.
+    // The page fits the card before a job starts, so the worker refusing it
+    // means its fonts measured wider than the page's (VH-127).
     case 'title-card-refused':
+      return failure.titleCardRefused
     case 'unknown':
       return { what: failure.unknown.what, next: failure.tryAgain }
   }

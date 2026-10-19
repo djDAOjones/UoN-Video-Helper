@@ -60,11 +60,12 @@ export const zhHans: Messages = {
   },
   videoLanguage: {
     label: '视频语言',
-    helper: '应用添加到视频中的文字使用此语言。',
+    helper: '应用添加到视频中的文字使用此语言。您输入的内容将按原样保留。',
   },
   steps: {
     choose: '选择一个视频',
     trim: '修剪',
+    titleCard: '标题卡',
     closing: '结尾品牌标识',
     preset: '文件大小/质量',
     create: '创造',
@@ -178,6 +179,24 @@ export const zhHans: Messages = {
       keepAtLeast: '至少保留 {seconds} 秒的视频。',
     },
     correctToContinue: '在步骤 2 中正确输入开始时间和结束时间，即可继续。',
+  },
+  titleCard: {
+    legend: '标题卡',
+    intro: '在视频开始前显示 {seconds} 秒的卡片，蓝底白字。',
+    add: '添加标题卡',
+    title: '标题',
+    department: '院系',
+    authors: '作者',
+    date: '日期',
+    dateHelper: '已填入以视频语言显示的今天日期。您可以更改或清除它。',
+    forSubmission: '不用于学生提交作品。',
+    full: '此字段已满，其余内容未添加。',
+    refused: {
+      field: '内容太长，无法放入卡片。请缩短。',
+      card: '这些字段合起来太长，无法放入卡片。请缩短此字段或其他字段。',
+    },
+    empty: '请至少填写四个字段中的一个，或取消勾选“添加标题卡”。',
+    correctToContinue: '在步骤 3 中更正标题卡，即可继续。',
   },
   closing: {
     legend: '结尾品牌标识',
@@ -538,6 +557,10 @@ export const zhHans: Messages = {
     },
     timedOut: {
       what: '由于该任务停止报告进度，因此被停止了。',
+    },
+    titleCardRefused: {
+      what: '标题卡的文字无法放入视频，因此视频未制作。',
+      next: '在步骤 3 中缩短标题卡的字段，然后重试。',
     },
     unknown: {
       what: '视频制作过程中出现错误。',

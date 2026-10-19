@@ -65,7 +65,7 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
     'Above Step 1: the line under the switch, saying what the choice means for the closing',
   ],
   ['videoLanguage', 'Above Step 1: the choice of language for the words drawn into the video'],
-  ['steps', 'The heading of each of the five steps'],
+  ['steps', 'The heading of each of the six steps'],
   ['choose', 'Step 1, Choose a video'],
   ['choose.drop', 'Step 1: the message when something is dropped on the drop area'],
   ['source', 'Step 1: what the video is, once it has been read'],
@@ -73,28 +73,37 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
   ['source.losses', 'Step 1: the box listing what will not be carried into the new file'],
   ['trim', 'Step 2, Trim'],
   ['trim.problem', 'Step 2: the error beside a start or end time that cannot be used'],
-  ['closing', 'Step 3, Closing branding'],
+  ['titleCard', 'Step 3, Title card: the checkbox and the four fields for the card shown before the video'],
+  ['titleCard.forSubmission', 'Step 3: beside the Add a title card checkbox, when it is locked'],
+  ['titleCard.full', 'Step 3: beside a field when what was typed reached its limit'],
+  ['titleCard.refused', 'Step 3: the error beside a field whose words do not fit on the card'],
+  ['titleCard.empty', 'Step 3: the error beside the Add a title card checkbox, when Create is pressed'],
+  [
+    'titleCard.correctToContinue',
+    'Step 6: the status line under the buttons, when the title card stops the video being made',
+  ],
+  ['closing', 'Step 4, Closing branding'],
   [
     'closing.internalWords',
     'Not on the page: drawn on the finished video itself, on the closing card, under the University logo',
   ],
-  ['closing.result', 'Step 3: the line under the controls saying what the closing will do'],
-  ['preset', 'Step 4, File size / quality'],
-  ['create', 'Step 5, Create: buttons and labels'],
-  ['status', 'Step 5: the status line under the buttons, also read out by screen readers'],
+  ['closing.result', 'Step 4: the line under the controls saying what the closing will do'],
+  ['preset', 'Step 5, File size / quality'],
+  ['create', 'Step 6, Create: buttons and labels'],
+  ['status', 'Step 6: the status line under the buttons, also read out by screen readers'],
   ['status.verdictSpoken', 'Not shown: read out by screen readers when the device check finishes'],
-  ['discard', 'Step 5: the question asked before an unsaved video is discarded'],
+  ['discard', 'Step 6: the question asked before an unsaved video is discarded'],
   ['discard.spoken', 'Not shown: read out by screen readers with the question'],
-  ['result', 'Step 5: the finished video and its one-line summary'],
-  ['result.closing', 'Step 5: the end of the summary "Made from …", saying how the video closes'],
-  ['result.fellBackTo', 'Step 5: under the finished video, when its closing is not the one chosen'],
-  ['progress', 'Step 5: the progress bar while the video is made'],
+  ['result', 'Step 6: the finished video and its one-line summary'],
+  ['result.closing', 'Step 6: the end of the summary "Made from …", saying how the video closes'],
+  ['result.fellBackTo', 'Step 6: under the finished video, when its closing is not the one chosen'],
+  ['progress', 'Step 6: the progress bar while the video is made'],
   ['progress.title', 'The title in the browser tab while the video is made'],
-  ['progress.jobNotice', 'Step 5: said when the video starts being made'],
-  ['preflight', 'Step 5: the device check, which says whether this computer can make the video'],
-  ['preflight.headings', 'Step 5: the heading of the device check'],
-  ['preflight.reasons', 'Step 5: one reason in the device check'],
-  ['warnings', 'Step 5: warnings about the sound or the finished video'],
+  ['progress.jobNotice', 'Step 6: said when the video starts being made'],
+  ['preflight', 'Step 6: the device check, which says whether this computer can make the video'],
+  ['preflight.headings', 'Step 6: the heading of the device check'],
+  ['preflight.reasons', 'Step 6: one reason in the device check'],
+  ['warnings', 'Step 6: warnings about the sound or the finished video'],
   ['warnings.spoken', 'Not shown: read out by screen readers'],
   ['announce', 'Not shown: read out by screen readers'],
   ['failure', 'An error box, in the step it affects'],
@@ -142,7 +151,7 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
     'footer.contact.learningContent',
     'The foot of the page, under the Send feedback button: a link that opens an email to the learning content team',
   ],
-  ['save', 'Step 5: saving the finished video'],
+  ['save', 'Step 6: saving the finished video'],
   ['save.pickerDescription', 'The save dialog, naming the kind of file'],
   ['save.stem', 'The name suggested for the saved file'],
   ['save.marks', 'The name suggested for the saved file'],
@@ -263,6 +272,26 @@ const NOTES: Readonly<Record<string, string>> = {
     'The label over the choice, also read out by screen readers. Use the same word for "video" as videoKind.label and for "language" as language.label.',
   'videoLanguage.helper':
     'The words the app draws into the video, such as closing.internalWords, follow this choice; the page itself does not.',
+  'titleCard.add':
+    'The label of a checkbox that adds the card before the video. titleCard.empty quotes it: use the same words there.',
+  'titleCard.title':
+    'The label over a field the user types the video’s title in. The card shows only what is typed, never this label.',
+  'titleCard.department':
+    'The label over a field the user types a department or school in. The card shows only what is typed, never this label.',
+  'titleCard.authors':
+    'The label over a field the user types one or more names in. The card shows only what is typed, never this label.',
+  'titleCard.date':
+    'The label over a field that is filled with today’s date. The card shows only what is in it, never this label.',
+  'titleCard.dateHelper':
+    'Use the same words for "video language" as videoLanguage.label.',
+  'titleCard.forSubmission':
+    'Why the checkbox titleCard.add cannot be ticked. Use the same words for "student submission" as videoKind.options.submission.',
+  'titleCard.empty':
+    'Names the checkbox titleCard.add; use the same words.',
+  'titleCard.correctToContinue':
+    'Said under the Create button. Use the same words for "title card" as steps.titleCard.',
+  'failure.titleCardRefused.next':
+    'Use the same words for "title card" as steps.titleCard.',
   'closing.internalForSubmission':
     'Why the "Internal use only" checkbox cannot be unticked. Use the same words for "student submission" as videoKind.options.submission.',
   'closing.internalLabel':

@@ -64,10 +64,22 @@ import {
   WORKER_SILENCE_LIMIT_MS,
 } from './config/thresholds'
 import { KEPT_MIN_SECONDS, TRIM_RECHECK_DELAY_MS } from './config/trim'
+import { TITLE_CARD_SECONDS } from './config/cards'
 import { createWatchdog } from './core/watchdog'
 import { canEncodeAudio, checkEncodeSupport, detectDeviceClass } from './media/capability'
 import type { KeptRange } from './media/kept-range'
 import { saveFile, suggestedFileName } from './media/save'
+import {
+  STAFF_CARD,
+  STAFF_CARD_FIELDS,
+  cardFamilies,
+  fit,
+  staffCardBlocks,
+  type CardRefusal,
+  type FrameSize,
+  type StaffCardField,
+  type StaffCardText,
+} from './media/title-card'
 import {
   closingResultText,
   colourDisabledReason,
@@ -151,7 +163,17 @@ import { buildLosses, renderSourceError, renderSourceReport, summarise } from '.
 import type { SourceReport } from './media/inspect'
 import { lossesSpoken, spoken, warningsSpoken } from './ui/announce'
 import { browserNote, summariseChecks, type CheckState } from './ui/system-check'
-import { installBrandAssets } from './ui/brand-assets'
+import { headingFontUrl, installBrandAssets } from './ui/brand-assets'
+import {
+  cardDate,
+  cardStop,
+  dateOnLanguageChange,
+  dateOnTick,
+  holdToColumns,
+  refusalText,
+  titleCardBoxState,
+  titleCardRequest,
+} from './ui/title-card-step'
 import {
   formatTrimTime,
   trimFieldValue,
@@ -242,8 +264,8 @@ const systemCheckSummary = required<HTMLElement>('#system-check-summary')
 const browserNoteLine = required<HTMLParagraphElement>('#browser-note')
 const statusLine = required<HTMLParagraphElement>('#status')
 const sourceStatusLine = required<HTMLParagraphElement>('#source-status')
-/** Steps 2 to 4, which are not on the page until a video has been read. */
-const laterSteps = ['#step-trim', '#step-closing', '#step-preset', '#step-create'].map((selector) =>
+/** Steps 2 to 6, which are not on the page until a video has been read. */
+const laterSteps = ['#step-trim', '#step-title', '#step-closing', '#step-preset', '#step-create'].map((selector) =>
   required<HTMLElement>(selector),
 )
 const versionLine = required<HTMLParagraphElement>('#version-line')
@@ -300,13 +322,29 @@ const trimStartError = required<HTMLParagraphElement>('#trim-start-error')
 const trimEndError = required<HTMLParagraphElement>('#trim-end-error')
 const trimResult = required<HTMLParagraphElement>('#trim-result')
 const trimClear = required<HTMLButtonElement>('#trim-clear')
+const titleCardChoice = required<HTMLFieldSetElement>('#title-card-choice')
+const titleCardIntro = required<HTMLParagraphElement>('#title-card-intro')
+const titleCardOn = required<HTMLInputElement>('#title-card-on')
+const titleCardReason = required<HTMLParagraphElement>('#title-card-reason')
+const titleCardEmptyError = required<HTMLParagraphElement>('#title-card-empty-error')
+const titleCardFields = required<HTMLDivElement>('#title-card-fields')
+/** Each of the card's fields and the error line beside it, in the card's order (VH-127). */
+const titleCardInputs = Object.fromEntries(
+  STAFF_CARD_FIELDS.map((field) => [
+    field,
+    {
+      input: required<HTMLInputElement>(`#title-card-${field}`),
+      error: required<HTMLParagraphElement>(`#title-card-${field}-error`),
+    },
+  ]),
+) as Record<StaffCardField, { readonly input: HTMLInputElement; readonly error: HTMLParagraphElement }>
 
 /**
  * One line under each step whose controls a running job or save has locked,
  * saying so (VH-112, U-21): a control that cannot change anything says why,
  * in visible text (VH-90's rule).
  */
-const lockNotes = ['#step-choose', '#step-trim', '#step-closing', '#step-preset'].map((selector) => {
+const lockNotes = ['#step-choose', '#step-trim', '#step-title', '#step-closing', '#step-preset'].map((selector) => {
   const step = required<HTMLElement>(selector)
   const note = document.createElement('p')
   note.className = 'lock-note'
@@ -428,6 +466,18 @@ function paintQuoting(element: HTMLElement, text: string, wordsLanguage: Languag
 let staffInternal = CLOSING_CONTROL_DEFAULTS.internal
 
 /**
+ * Whether the staff video's "Add a title card" box is ticked, kept while a
+ * student submission locks it off, and put back on the way back (VH-127).
+ */
+let staffTitleCard = false
+/** The date the page last filled, so a change of video language refills only a date still as filled. */
+let filledCardDate: string | null = null
+/** The fields whose last typing was cut at their limit; each says so beside it until typed in again. */
+const cardFieldsFull = new Set<StaffCardField>()
+/** Create was refused for a ticked card with nothing on it: said beside the box until that changes. */
+let cardEmptyRefused = false
+
+/**
  * What the three closing controls currently hold, as the job reads them.
  *
  * Read through `readClosingControls`, which trusts a value only if it is one
@@ -515,6 +565,7 @@ videoKindChoice.addEventListener('change', () => {
   writeVideoKindPreference(localStore, kind)
   paintVideoKindResult()
   syncClosingControls()
+  syncTitleCard()
   // The estimates do not move: the switch adds no seconds until a card does
   // (VH-127, VH-128), and pre-flight already prices the longest closing.
   // The question beneath, if one is showing, was asked about another job.
@@ -554,6 +605,8 @@ videoLanguageChoice.addEventListener('change', (event) => {
   writeVideoLanguagePreference(localStore, picked)
   paintVideoKindResult()
   syncClosingControls()
+  fillCardDate(dateOnLanguageChange)
+  syncTitleCard()
   // The question beneath, if one is showing, was asked about other words.
   withdrawDiscardQuestion()
 })
@@ -729,8 +782,8 @@ function focusHeldBy(
 function revealLaterSteps(
   shown: { readonly setup: boolean; readonly create: boolean } = { setup: true, create: true },
 ): void {
-  const [trim, closing, preset, create] = laterSteps
-  for (const step of [trim, closing, preset]) step!.hidden = !shown.setup
+  const [trim, title, closing, preset, create] = laterSteps
+  for (const step of [trim, title, closing, preset]) step!.hidden = !shown.setup
   create!.hidden = !shown.create
 }
 
@@ -1233,6 +1286,8 @@ fileInput.addEventListener('change', () => {
         inspectedReport = reply.report
         resetTrim(file, reply.report.durationSeconds)
         revealLaterSteps()
+        // The card is fitted at this video's output size.
+        paintTitleCardErrors()
         setDiagnosticsContext({ stage: 'inspected', source: reply.report })
         // Structure first, then the measurement — the probe really does decode
         // and encode three seconds, so it must not hold up what we already know.
@@ -1416,6 +1471,8 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
 }
 
 presetChoice.addEventListener('change', () => {
+  // The output's size moves with the preset, and the card is fitted at it.
+  paintTitleCardErrors()
   const file = fileInput.files?.[0]
   // Nothing to re-check until this file has been read: see `inspectedFile`.
   if (!file || file !== inspectedFile) return
@@ -2116,6 +2173,7 @@ function applyControlLock(): void {
   fileInput.disabled = locked || startup !== 'ready'
   presetChoice.disabled = locked
   brandingChoice.disabled = locked
+  titleCardChoice.disabled = locked
   startButton.disabled = locked
   // The trim is part of what the job was started for. A video too short to
   // trim has nothing to move, and says so in the line beneath.
@@ -2130,9 +2188,175 @@ function applyControlLock(): void {
   renderTrim()
 }
 
+// --- Step 3, the title card (VH-127) ---------------------------------------
+// A staff video's optional card before the video. The box shows the four
+// fields only while ticked, and unticking keeps what was typed; a student
+// submission locks it off and keeps the staff card for the way back. Each
+// field is held to its limit in the card's columns and fitted here, at the
+// output's size, with the worker's families, so the worker's own refusal is
+// the rare case of fonts measuring differently. What is typed is never
+// logged.
+
+/** A brand token's value, resolved on the page as `brandBackground` is. */
+function brandToken(name: string): string {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim()
+}
+
+/** The four fields as typed. */
+function typedCard(): StaffCardText {
+  return {
+    title: titleCardInputs.title.input.value,
+    department: titleCardInputs.department.input.value,
+    authors: titleCardInputs.authors.input.value,
+    date: titleCardInputs.date.input.value,
+  }
+}
+
+/** True while a staff video's box is ticked: the one state in which a card is made. */
+function titleCardIsOn(): boolean {
+  return chosenVideoKind() === 'staff' && titleCardOn.checked
+}
+
+/** A document canvas, measuring as the worker's `OffscreenCanvas` will. */
+let cardMeasureContext: CanvasRenderingContext2D | null = null
+function cardMeasure(font: string, text: string): number {
+  cardMeasureContext ??= document.createElement('canvas').getContext('2d')
+  if (!cardMeasureContext) return 0
+  cardMeasureContext.font = font
+  return cardMeasureContext.measureText(text).width
+}
+
+/** The frame the worker draws the card at: the output's size for this video and preset. */
+function cardFrame(): FrameSize | null {
+  const video = inspectedReport?.video
+  if (!video) return null
+  const shape = outputShapeFor(PRESETS[chosenPreset()], {
+    width: video.displayWidth,
+    height: video.displayHeight,
+    frameRate: video.conform.frameRate,
+  })
+  return { widthPx: shape.width, heightPx: shape.height }
+}
+
+/** The page's fit of the card as typed; `null` while it is off, or before a video is read. */
+function cardRefusal(): CardRefusal<StaffCardField> | null {
+  const frame = cardFrame()
+  if (!titleCardIsOn() || frame === null) return null
+  const blocks = staffCardBlocks(typedCard())
+  if (blocks.length === 0) return null
+  return fit(blocks, frame, { families: cardFamilies(brandToken('--font-cjk')), measure: cardMeasure }).refused
+}
+
+/** Writes a line only when its words change, so a live region is not read again on every key. */
+function paintLine(line: HTMLElement, text: string | null): void {
+  if (line.textContent !== (text ?? '')) line.textContent = text ?? ''
+  line.hidden = text === null
+}
+
+/**
+ * Each field's line, a refusal of the fit before a note that typing was cut,
+ * and the box's line for an empty card at Create. A refusal at Create that
+ * has been put right takes its status line with it.
+ */
+function paintTitleCardErrors(): void {
+  const text = typedCard()
+  const stop = cardStop(titleCardIsOn(), text, cardRefusal())
+  for (const field of STAFF_CARD_FIELDS) {
+    const { input, error } = titleCardInputs[field]
+    const refusal = stop?.at === 'field' && stop.field === field ? stop.refusal : null
+    paintLine(error, refusal !== null ? refusalText(refusal) : cardFieldsFull.has(field) ? t().titleCard.full : null)
+    if (refusal !== null) input.setAttribute('aria-invalid', 'true')
+    else input.removeAttribute('aria-invalid')
+  }
+  if (stop?.at !== 'empty') cardEmptyRefused = false
+  paintLine(titleCardEmptyError, cardEmptyRefused ? t().titleCard.empty : null)
+  if (stop === null && statusLine.textContent === t().titleCard.correctToContinue) setStatus('')
+}
+
+/** The box on this side of the switch, its reason when locked, and the fields while it is ticked. */
+function syncTitleCard(): void {
+  const box = titleCardBoxState(chosenVideoKind(), staffTitleCard)
+  titleCardOn.checked = box.checked
+  titleCardOn.disabled = box.disabled
+  paintLine(titleCardReason, box.reason)
+  titleCardFields.hidden = !box.checked
+  paintTitleCardErrors()
+}
+
+/** Fills the date by `rule` with today's date in the video's language, noting what was filled. */
+function fillCardDate(rule: (current: string, filled: string | null, today: string) => string): void {
+  const field = titleCardInputs.date.input
+  const today = cardDate(new Date(), chosenVideoLanguage())
+  const next = rule(field.value, filledCardDate, today)
+  if (next === today) filledCardDate = today
+  field.value = next
+}
+
+/**
+ * Refuses Create for a card that cannot be made: nothing on it, said beside
+ * the box, or a field it cannot fit, said beside that field. Either way the
+ * status line says where, and focus goes to the field to put right.
+ */
+function refuseTitleCard(): boolean {
+  const stop = cardStop(titleCardIsOn(), typedCard(), cardRefusal())
+  if (stop === null) return false
+  cardEmptyRefused = stop.at === 'empty'
+  paintTitleCardErrors()
+  setStatus(() => t().titleCard.correctToContinue)
+  titleCardInputs[stop.at === 'empty' ? 'title' : stop.field].input.focus()
+  return true
+}
+
+show(titleCardIntro, () => {
+  titleCardIntro.textContent = t().titleCard.intro({ seconds: TITLE_CARD_SECONDS })
+})
+
+// Only a staff video's box is the user's to change. Ticking fills the date.
+titleCardOn.addEventListener('change', () => {
+  if (chosenVideoKind() !== 'staff') return
+  staffTitleCard = titleCardOn.checked
+  if (staffTitleCard) fillCardDate(dateOnTick)
+  syncTitleCard()
+  // The question beneath, if one is showing, was asked about another job.
+  withdrawDiscardQuestion()
+})
+
+/** Holds a field to its limit in columns, as `maxlength` would in characters, and says when it cut. */
+function holdCardField(input: HTMLInputElement): void {
+  const field = STAFF_CARD_FIELDS.find((name) => titleCardInputs[name].input === input)
+  if (!field) return
+  const held = holdToColumns(input.value, input.selectionEnd ?? input.value.length, STAFF_CARD[field].columns)
+  if (held.cut) {
+    input.value = held.value
+    input.setSelectionRange(held.caret, held.caret)
+    cardFieldsFull.add(field)
+  } else {
+    cardFieldsFull.delete(field)
+  }
+  paintTitleCardErrors()
+  withdrawDiscardQuestion()
+}
+
+// Not while an input method is composing: cutting there would break the
+// character being built. Its end is held instead.
+titleCardFields.addEventListener('input', (event) => {
+  if (event.isComposing || !(event.target instanceof HTMLInputElement)) return
+  holdCardField(event.target)
+})
+titleCardFields.addEventListener('compositionend', (event) => {
+  if (event.target instanceof HTMLInputElement) holdCardField(event.target)
+})
+
+// Lora arriving changes how wide the title draws, so the fit is tried again.
+if ('fonts' in document) document.fonts.addEventListener('loadingdone', () => paintTitleCardErrors())
+
+syncTitleCard()
+
 startButton.addEventListener('click', () => {
   const file = jobFile
   if (!file || jobInFlight || saveInFlight) return
+  // Before the discard question: a card that cannot be made stops here.
+  if (refuseTitleCard()) return
 
   // Starting again disposes the previous result's scratch, and the previous
   // result may be the only copy of an hour's work (VH-56). Ask once; the
@@ -2264,6 +2488,13 @@ function beginJob(file: File): void {
   // The video's text language: the pick under the switch, or the page's (VH-132).
   const wordsLanguage = chosenVideoLanguage()
   const branding = brandingChoiceFor(closing, wordsLanguage)
+  // The staff card, or nothing: its words go to the worker and nowhere else,
+  // never the log, the diagnostics, the record or the file's name (VH-127).
+  const titleCard = titleCardRequest(titleCardIsOn(), typedCard(), {
+    headingFontUrl: headingFontUrl(document.baseURI),
+    cjkFontStack: brandToken('--font-cjk'),
+    colours: { ground: brandToken('--uon-brand-blue'), ink: brandToken('--uon-white') },
+  })
   const keptRange = jobKeptRange
   /** What this job is, fixed now: the result and the discard question carry it (A-05). */
   const record: JobRecord = {
@@ -2285,6 +2516,7 @@ function beginJob(file: File): void {
       brandingBaseUrl: resolveBrandingBase(document.baseURI),
       contentClass: jobContentClass,
       ...(keptRange ? { keptRange } : {}),
+      ...(titleCard ? { titleCard } : {}),
     },
     // Silence, not duration. A job reports a stage every thirty frames, so a
     // minute without a word means something is genuinely wrong — while an
@@ -2997,6 +3229,9 @@ onLanguageChange(() => {
   // Before the closing's line is said again: it quotes the video's words.
   showVideoLanguage()
   syncClosingControls()
+  // The date follows the video's words while it says what was filled.
+  fillCardDate(dateOnLanguageChange)
+  syncTitleCard()
   labelButtons()
   // The lock notes, and the trim: its handles' times, its result line, and
   // a field's typed text and its problem, which stay as the user left them.

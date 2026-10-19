@@ -94,7 +94,7 @@ export const enGB = {
     passed: 'This app is designed and built for Chrome, and this browser has passed the checks for it.',
   },
 
-  /** The switch above the five steps (VH-131). */
+  /** The switch above the six steps (VH-131). */
   videoKind: {
     /** Its visible label, which is also its accessible name. */
     label: 'Video type',
@@ -111,12 +111,13 @@ export const enGB = {
     /** Its visible label, which is also its accessible name. */
     label: 'Video language',
     /** The line under it: what the choice changes, and so what it does not. */
-    helper: 'Words the app adds to your video are in this language.',
+    helper: 'Words the app adds to your video are in this language. What you type is kept as typed.',
   },
 
   steps: {
     choose: 'Choose a video',
     trim: 'Trim',
+    titleCard: 'Title card',
     closing: 'Closing branding',
     preset: 'File size / quality',
     create: 'Create',
@@ -226,6 +227,30 @@ export const enGB = {
       keepAtLeast: 'Keep at least {seconds} seconds of the video.',
     },
     correctToContinue: 'Put the start and end times right in step 2 to continue.',
+  },
+
+  /** Step 3, the staff video's title card before the video (VH-127). The card itself has no labels. */
+  titleCard: {
+    legend: 'Title card',
+    intro: 'A card shown for {seconds} seconds before your video starts, in white text on blue.',
+    add: 'Add a title card',
+    title: 'Title',
+    department: 'Department',
+    authors: 'Authors',
+    date: 'Date',
+    dateHelper: 'Filled with today’s date in the video language. You can change it or clear it.',
+    /** Why the box is locked off, naming the side of the switch that locks it (VH-127). */
+    forSubmission: 'Not used for a student submission.',
+    /** Beside a field whose typing reached its limit and was cut there. */
+    full: 'This field is full, so the rest was not added.',
+    /** Beside the field the card cannot fit, even at its smallest size. */
+    refused: {
+      field: 'This is too long to fit on the card. Shorten it.',
+      card: 'Together, the fields are too long to fit on the card. Shorten this one or another.',
+    },
+    /** Beside the box, when Create is pressed with the box ticked and every field empty. */
+    empty: 'Fill in at least one of the four fields, or untick Add a title card.',
+    correctToContinue: 'Put the title card right in step 3 to continue.',
   },
 
   closing: {
@@ -603,6 +628,10 @@ export const enGB = {
       next: 'Press Check again to run it once more. If it fails again, report it with the Send feedback button.',
     },
     timedOut: { what: 'The job stopped reporting progress, so it was stopped.' },
+    titleCardRefused: {
+      what: 'The title card’s words did not fit on the video, so it was not made.',
+      next: 'Shorten the title card’s fields in step 3 and try again.',
+    },
     unknown: { what: 'Something went wrong while creating the video.' },
     /** The next step for the failures whose remedy is to try again. */
     tryAgain:

@@ -67,11 +67,13 @@ export const msMY: Messages = {
   },
   videoLanguage: {
     label: 'Bahasa video',
-    helper: 'Perkataan yang ditambah oleh aplikasi pada video anda adalah dalam bahasa ini.',
+    helper:
+      'Perkataan yang ditambah oleh aplikasi pada video anda adalah dalam bahasa ini. Apa yang anda taip dikekalkan seperti yang ditaip.',
   },
   steps: {
     choose: 'Pilih video',
     trim: 'Potong',
+    titleCard: 'Kad tajuk',
     closing: 'Penjenamaan penutup',
     preset: 'Saiz/kualiti fail',
     create: 'Cipta',
@@ -191,6 +193,26 @@ export const msMY: Messages = {
     },
     correctToContinue:
       'Letakkan masa mula dan tamat dengan betul dalam langkah 2 untuk meneruskan.',
+  },
+  titleCard: {
+    legend: 'Kad tajuk',
+    intro:
+      'Kad yang dipaparkan selama {seconds} saat sebelum video anda bermula, dalam teks putih di atas biru.',
+    add: 'Tambah kad tajuk',
+    title: 'Tajuk',
+    department: 'Jabatan',
+    authors: 'Pengarang',
+    date: 'Tarikh',
+    dateHelper:
+      'Diisi dengan tarikh hari ini dalam bahasa video. Anda boleh menukar atau mengosongkannya.',
+    forSubmission: 'Tidak digunakan untuk serahan pelajar.',
+    full: 'Medan ini sudah penuh, jadi selebihnya tidak ditambah.',
+    refused: {
+      field: 'Ini terlalu panjang untuk dimuatkan pada kad. Pendekkannya.',
+      card: 'Bersama-sama, medan ini terlalu panjang untuk dimuatkan pada kad. Pendekkan medan ini atau medan lain.',
+    },
+    empty: 'Isi sekurang-kurangnya satu daripada empat medan, atau nyahtanda Tambah kad tajuk.',
+    correctToContinue: 'Betulkan kad tajuk dalam langkah 3 untuk meneruskan.',
   },
   closing: {
     legend: 'Penjenamaan penutup',
@@ -583,6 +605,10 @@ export const msMY: Messages = {
     },
     timedOut: {
       what: 'Kerja itu berhenti melaporkan kemajuan, jadi ia dihentikan.',
+    },
+    titleCardRefused: {
+      what: 'Perkataan kad tajuk tidak muat pada video, jadi video tidak dibuat.',
+      next: 'Pendekkan medan kad tajuk dalam langkah 3 dan cuba lagi.',
     },
     unknown: {
       what: 'Ada masalah yang berlaku semasa membuat video.',

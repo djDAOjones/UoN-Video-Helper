@@ -20,6 +20,7 @@ const CODES: readonly FailureCode[] = [
   'encoder-refused',
   'check-failed',
   'timed-out',
+  'title-card-refused',
   'unknown',
 ]
 
@@ -40,6 +41,9 @@ describe('failureText', () => {
     expect(failureText('encoder-refused').next).toContain('other output')
     expect(failureText('unreadable-source').next).toContain('Choose a different file')
     expect(failureText('bad-trim').next).toContain('step 2')
+    // The card's words are the cause, so the way on is shortening them (VH-127).
+    expect(failureText('title-card-refused').next).toContain('step 3')
+    expect(failureText('title-card-refused').what).not.toBe(failureText('unknown').what)
   })
 
   it('says the reason the worker named, for the failures that carry one (VH-105: a name, not its English)', () => {

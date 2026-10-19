@@ -403,12 +403,14 @@ describe('steps that read as steps (VH-91)', () => {
     title: match[6]!.trim(),
   }))
 
-  it('has the five steps, in order', () => {
+  it('has the six steps, in order', () => {
     // Trim second (VH-96): see the video and choose its ends before deciding
-    // how it closes and how big it is.
+    // how it closes and how big it is. The title card third, in the video's
+    // own order (VH-127): it plays before the video, the closing after.
     expect(steps.map((step) => step.title)).toEqual([
       'Choose a video',
       'Trim',
+      'Title card',
       'Closing branding',
       'File size / quality',
       'Create',
@@ -427,7 +429,7 @@ describe('steps that read as steps (VH-91)', () => {
   })
 
   it('shows only the first step until a video has been read', () => {
-    expect(steps.map((step) => step.hidden)).toEqual([false, true, true, true, true])
+    expect(steps.map((step) => step.hidden)).toEqual([false, true, true, true, true, true])
   })
 
   it('never reorders focus away from the visual order', () => {

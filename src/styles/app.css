@@ -1347,6 +1347,12 @@ details[open] > .disclosure-summary::before {
   border: var(--border-width-emphasis) solid var(--support-error);
 }
 
+/* The title card's fields hold a line of text each, so they stop at the
+   running text's measure rather than stretch across a wide panel (VH-127). */
+#title-card-fields .text-input {
+  max-width: var(--measure);
+}
+
 .control-with-help .text-input {
   flex: 1;
 }
