@@ -30,7 +30,7 @@
 
 ### Band 8 — a title card and an Internal use only closing
 
-- [ ] VH-127 — The title card: Staff video — since 2026-10-18
+- [~] VH-127 — The title card: Staff video — since 2026-10-18
 - [ ] VH-128 — The title card: Student submission — since 2026-10-18
 
 ### Standing — maintainer-owned, never band-gated
