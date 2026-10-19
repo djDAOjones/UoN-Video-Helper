@@ -7,6 +7,10 @@
      items the canon record shipped before the migration, in v3's form;
      their why is in the frozen canon decision log (history.md). -->
 
+## Band 8 — a title card and an Internal use only closing
+
+- VH-126 — the Internal use only closing: twelve tails with the words wiping in under the logo, per language and colour, and a Step 3 checkbox, locked under None, that swaps the tail and nothing else; checked in Chrome in every mode at 1080p and 4K; the spec says so (2026-10-19) — see decisions
+
 ## Owner requests
 
 - VH-130 — an accessibility statement on the page, in the GOV.UK model's shape and translated in full, partially compliant with WCAG 2.2 AA after the WAVE check; the footer emails the creators team and the learning content team, at the owner's address until theirs are given (2026-10-18) — see decisions

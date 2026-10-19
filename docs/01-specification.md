@@ -84,6 +84,12 @@ The closing sequence is **appended**. Whether there is one, and how it meets
 the picture, is the user's choice: three controls on screen, which §4.3 maps
 onto its three boundary modes.
 
+**Internal use only.** A checkbox under the closing controls gives the same
+closing with the words "Internal use only" building in under the logo, in the
+language of the video's text: the page's, unless another is chosen. It
+changes no timing: the same onset, the same 4 s card, the same seconds added.
+A student submission always has it.
+
 ### 4.2 Master assets, as delivered
 
 The four-variant matrix this section originally specified **does not exist**.
@@ -103,8 +109,9 @@ A build step converts the masters into what the browser actually fetches:
 | --- | --- | --- | --- |
 | Onset, 0.00–1.00 s | VP9 + alpha, WebM | 8 (style × colour × 1080p/2160p) | Alpha is needed only where the build composites |
 | Tail, 1.00–5.00 s | H.264, MP4 | 4 (colour × 1080p/2160p) | Fade and Slide are byte-identical after the build, within a colour |
+| Internal tail, 1.00–5.00 s | H.264, MP4 | 12 (language × colour × 1080p/2160p) | The tail with the words wiping in with the wordmark; the onsets are shared |
 
-Twelve files, 0.74 MB in total. The tails are H.264 deliberately: the default
+Twenty-four files, 3.0 MB in total. The tails are H.264 deliberately: the default
 boundary mode uses the tail alone, so branding still works in a browser that
 cannot decode transparency.
 
@@ -687,7 +694,7 @@ who is already there or cannot change browser.
 - WebM output (implemented in the muxer layer, not exposed)
 - Pumping detection on pre-existing audio processing
 - Noise reduction or de-reverberation
-- Custom or per-department branding variants
+- Custom or per-department branding variants, except the owner's Internal use only closing (§4.1)
 
 ## 13. Acceptance criteria
 
