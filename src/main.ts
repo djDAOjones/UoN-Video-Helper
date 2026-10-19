@@ -29,10 +29,17 @@ import { APP_VERSION, BUILD_ID } from './core/version'
 import {
   brandingChoiceFor,
   closingTypeUsesOnset,
+  CLOSING_CONTROL_DEFAULTS,
   readClosingControls,
   resolveBrandingBase,
   type ClosingControls,
 } from './config/branding'
+import {
+  closingControlsFor,
+  DEFAULT_VIDEO_KIND,
+  readVideoKind,
+  type VideoKind,
+} from './config/video-kind'
 import {
   CREATORS_TEAM_ADDRESS,
   FEEDBACK_ADDRESS,
@@ -64,9 +71,14 @@ import { saveFile, suggestedFileName } from './media/save'
 import {
   closingResultText,
   colourDisabledReason,
-  internalDisabledReason,
+  internalCheckboxState,
   onsetDisabledReason,
 } from './ui/closing-choice'
+import {
+  readVideoKindPreference,
+  videoKindResultText,
+  writeVideoKindPreference,
+} from './ui/video-kind'
 import { installDropZone } from './ui/drop-zone'
 import {
   describeBrowser,
@@ -236,6 +248,8 @@ const createNote = required<HTMLParagraphElement>('#create-note')
 const announceField = required<HTMLDivElement>('#announce-field')
 const announceProgressBox = required<HTMLInputElement>('#announce-progress')
 const processResult = required<HTMLDivElement>('#process-result')
+const videoKindChoice = required<HTMLFieldSetElement>('#video-kind')
+const videoKindResult = required<HTMLParagraphElement>('#video-kind-result')
 const presetChoice = required<HTMLFieldSetElement>('#preset-choice')
 const brandingChoice = required<HTMLFieldSetElement>('#branding-choice')
 const closingType = required<HTMLSelectElement>('#closing-type')
@@ -352,21 +366,38 @@ function chosenPreset(): PresetId {
   return checked?.value === 'smaller' ? 'smaller' : 'best'
 }
 
+/** Which side of the switch at the top is chosen (VH-131); anything unknown reads as the default. */
+function chosenVideoKind(): VideoKind {
+  return readVideoKind(
+    videoKindChoice.querySelector<HTMLInputElement>('input[name="video-kind"]:checked')?.value,
+  )
+}
+
 /**
- * What the three closing controls currently hold.
+ * What the staff video's "Internal use only" box holds, kept while a student
+ * submission locks the box on, and put back on the way back to Staff video.
+ */
+let staffInternal = CLOSING_CONTROL_DEFAULTS.internal
+
+/**
+ * What the three closing controls currently hold, as the job reads them.
  *
  * Read through `readClosingControls`, which trusts a value only if it is one
  * the config knows: the DOM is editable, and an unrecognised value would
- * otherwise reach the pipeline as a string that matches no branch.
+ * otherwise reach the pipeline as a string that matches no branch. A student
+ * submission's closing is Internal use only whatever the box says (VH-131).
  */
 function chosenClosing(): ClosingControls {
-  return readClosingControls({
-    type: closingType.value,
-    onset: closingOnset.value,
-    colour: closingColour.querySelector<HTMLInputElement>('input[name="closing-colour"]:checked')
-      ?.value,
-    internal: closingInternal.checked,
-  })
+  return closingControlsFor(
+    chosenVideoKind(),
+    readClosingControls({
+      type: closingType.value,
+      onset: closingOnset.value,
+      colour: closingColour.querySelector<HTMLInputElement>('input[name="closing-colour"]:checked')
+        ?.value,
+      internal: closingInternal.checked,
+    }),
+  )
 }
 
 /**
@@ -379,6 +410,13 @@ function chosenClosing(): ClosingControls {
  * beneath states the result of the whole selection.
  */
 function syncClosingControls(): void {
+  // The box first, from the side of the switch: the rest reads it.
+  const internalBox = internalCheckboxState(chosenVideoKind(), chosenClosing().type, staffInternal)
+  closingInternal.checked = internalBox.checked
+  closingInternal.disabled = internalBox.disabled
+  closingInternalReason.textContent = internalBox.reason ?? ''
+  closingInternalReason.hidden = internalBox.reason === null
+
   const controls = chosenClosing()
 
   const onsetReason = onsetDisabledReason(controls.type)
@@ -391,21 +429,45 @@ function syncClosingControls(): void {
   closingColourReason.textContent = colourReason ?? ''
   closingColourReason.hidden = colourReason === null
 
-  const internalReason = internalDisabledReason(controls.type)
-  closingInternal.disabled = internalReason !== null
-  closingInternalReason.textContent = internalReason ?? ''
-  closingInternalReason.hidden = internalReason === null
-
   closingResult.textContent = closingResultText(controls)
 }
 
 brandingChoice.addEventListener('change', () => {
+  // Only a staff video's box is the user's to change.
+  if (chosenVideoKind() === 'staff') staffInternal = closingInternal.checked
   syncClosingControls()
   // Not a new verdict — the closing is not pre-flight's business — but the
   // question beneath, if one is showing, was asked about another selection.
   withdrawDiscardQuestion()
 })
+
+// --- Staff video or Student submission (VH-131) ----------------------------
+// The remembered side, before the closing controls are first in step, so the
+// first paint already shows it. A side no longer known falls back to Staff.
+
+const rememberedKind = readVideoKindPreference(localStore) ?? DEFAULT_VIDEO_KIND
+for (const radio of videoKindChoice.querySelectorAll<HTMLInputElement>('input[name="video-kind"]')) {
+  radio.checked = radio.value === rememberedKind
+}
+show(videoKindResult, () => {
+  videoKindResult.textContent = videoKindResultText(chosenVideoKind())
+})
 syncClosingControls()
+
+// Never locked by a job or a save, like the language: switching keeps the
+// video, the trim, every typed value, a running job and a result. A running
+// job keeps the closing it was started with; the next one reads the switch.
+// Focus stays on the radio, which is never replaced.
+videoKindChoice.addEventListener('change', () => {
+  const kind = chosenVideoKind()
+  writeVideoKindPreference(localStore, kind)
+  videoKindResult.textContent = videoKindResultText(kind)
+  syncClosingControls()
+  // The estimates do not move: the switch adds no seconds until a card does
+  // (VH-127, VH-128), and pre-flight already prices the longest closing.
+  // The question beneath, if one is showing, was asked about another job.
+  withdrawDiscardQuestion()
+})
 
 /**
  * The "?" beside "Animation onset": a toggletip.

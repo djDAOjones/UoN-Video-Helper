@@ -1098,25 +1098,34 @@ details[open] > .disclosure-summary::before {
  * segment is as wide as its own words rather than an equal share, so
  * "Bahasa Malaysia" fits at phone width; where even that does not fit, the
  * segments wrap, so each keeps all four edges and overlaps its neighbour's
- * by one hairline rather than dropping its left edge.
+ * by one hairline rather than dropping its left edge. Staff video or Student
+ * submission (VH-131), above the steps, is sized the same way.
  */
 .language-switcher {
   margin-bottom: var(--spacing-06);
 }
 
-.language-switcher .segments {
+.video-kind {
+  margin-bottom: var(--spacing-07);
+}
+
+.language-switcher .segments,
+.video-kind .segments {
   flex-wrap: wrap;
 }
 
-.language-switcher .segment {
+.language-switcher .segment,
+.video-kind .segment {
   flex: none;
 }
 
-.language-switcher .segment + .segment {
+.language-switcher .segment + .segment,
+.video-kind .segment + .segment {
   margin-left: calc(-1 * var(--border-width));
 }
 
-.language-switcher .segment + .segment .segment-face {
+.language-switcher .segment + .segment .segment-face,
+.video-kind .segment + .segment .segment-face {
   border-left: var(--border-width) solid var(--interactive);
 }
 
@@ -1543,12 +1552,14 @@ details[open] > .disclosure-summary::before {
     color: GrayText;
   }
 
-  /* The language segments' own left edges, in the theme's colours too. */
-  .language-switcher .segment + .segment .segment-face {
+  /* The language and video-type segments' own left edges, in the theme's colours too. */
+  .language-switcher .segment + .segment .segment-face,
+  .video-kind .segment + .segment .segment-face {
     border-left-color: ButtonText;
   }
 
-  .language-switcher .segment + .segment input:checked + .segment-face {
+  .language-switcher .segment + .segment input:checked + .segment-face,
+  .video-kind .segment + .segment input:checked + .segment-face {
     border-left-color: Highlight;
   }
 

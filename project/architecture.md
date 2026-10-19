@@ -60,6 +60,7 @@ src/
     audio.ts               loudness targets + every chain constant (§5.1, §5.2)
     branding.ts            durations (D2), closing defaults, controls -> job mapping (§4.2)
     thresholds.ts          pre-flight bands (§7.3), probe length, worker limits
+    video-kind.ts          Staff video or Student submission, and a submission's closing rule (VH-131)
   core/
     logger.ts              structured logger + bounded ring buffer
     diagnostics.ts         global error/unhandledrejection capture, redacted bundle
@@ -112,6 +113,7 @@ src/
     warning-text.ts        one sentence per warning code
     system-check.ts        the System check summary line, pure
     closing-choice.ts      the closing controls' result line and disabled reasons
+    video-kind.ts          the switch's remembered side and the line beneath it
     brand-assets.ts        installs the logo and heading font where their files exist
     format.ts             durations, sizes, rates
   acceptance/              the §13 harness. Dev-only; not built.

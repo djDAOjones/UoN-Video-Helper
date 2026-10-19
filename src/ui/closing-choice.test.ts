@@ -20,6 +20,7 @@ import {
 import {
   closingResultText,
   colourDisabledReason,
+  internalCheckboxState,
   internalDisabledReason,
   onsetDisabledReason,
 } from './closing-choice'
@@ -131,5 +132,50 @@ describe('Internal use only in the result line (VH-126)', () => {
     for (const type of ['cut', 'fade', 'slide'] as const) {
       expect(internalDisabledReason(type)).toBeNull()
     }
+  })
+})
+
+describe('the Internal use only box on each side of the switch (VH-131)', () => {
+  it('holds a staff video’s own choice, locked only under None', () => {
+    for (const type of ['cut', 'fade', 'slide'] as const) {
+      for (const staffChecked of [false, true]) {
+        expect(internalCheckboxState('staff', type, staffChecked)).toEqual({
+          checked: staffChecked,
+          disabled: false,
+          reason: null,
+        })
+      }
+    }
+    expect(internalCheckboxState('staff', 'none', true)).toEqual({
+      checked: true,
+      disabled: true,
+      reason: 'Not used with None.',
+    })
+  })
+
+  it('is ticked and locked on a submission, whatever the staff choice, and says why', () => {
+    for (const type of ['cut', 'fade', 'slide'] as const) {
+      for (const staffChecked of [false, true]) {
+        expect(internalCheckboxState('submission', type, staffChecked)).toEqual({
+          checked: true,
+          disabled: true,
+          reason: 'Always on for a student submission.',
+        })
+      }
+    }
+  })
+
+  it('gives None’s reason on a submission under None, which has no closing to mark', () => {
+    expect(internalCheckboxState('submission', 'none', false)).toEqual({
+      checked: true,
+      disabled: true,
+      reason: 'Not used with None.',
+    })
+  })
+
+  it('names the side in the switch’s own words', () => {
+    expect(t().closing.internalForSubmission.toLowerCase()).toContain(
+      t().videoKind.options.submission.toLowerCase(),
+    )
   })
 })

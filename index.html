@@ -54,6 +54,28 @@
         <p id="browser-note" data-i18n="browserNote.pending">This app is designed and built for Chrome, other browsers may not work.</p>
       </div>
 
+      <!-- VH-131, 2026-10-19. Staff video or Student submission, above the
+           steps it shapes, chosen first and remembered in this browser.
+           Native radios under the segmented skin, as the colour and the
+           language are, and never locked by a job or a save: switching keeps
+           the video, the trim, every choice, a running job and a result. The
+           line beneath says what the side means and is read on demand, not
+           announced; what it changes is Step 3's "Internal use only". -->
+      <fieldset class="segmented video-kind" id="video-kind" aria-describedby="video-kind-result">
+        <legend class="label" data-i18n="videoKind.label">Video type</legend>
+        <div class="segments">
+          <label class="segment">
+            <input type="radio" name="video-kind" value="staff" checked />
+            <span class="segment-face" data-i18n="videoKind.options.staff">Staff video</span>
+          </label>
+          <label class="segment">
+            <input type="radio" name="video-kind" value="submission" />
+            <span class="segment-face" data-i18n="videoKind.options.submission">Student submission</span>
+          </label>
+        </div>
+        <p class="helper" id="video-kind-result"></p>
+      </fieldset>
+
       <!-- VH-91, 2026-09-30. The steps are separate, numbered panels rather
            than fieldsets stacked under one heading. They stay open: each of
            steps 2 and 3 holds a safe default, so there is no moment at which
@@ -281,8 +303,9 @@
           </div>
           <!-- VH-126, 2026-10-19. The official closing with "Internal use
                only" built in under the logo, in the video's text language;
-               the same seconds, so nothing else changes. VH-131 places it
-               under Staff video and holds it on for a Student submission. -->
+               the same seconds, so nothing else changes. VH-131: a toggle
+               for a Staff video; ticked and locked, with its reason, for a
+               Student submission. -->
           <div class="field" id="closing-internal-field">
             <label class="checkbox" for="closing-internal">
               <input

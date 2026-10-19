@@ -47,6 +47,17 @@ export const zhHans: Messages = {
       '此应用专为 Chrome 浏览器设计和构建，但该浏览器尚未通过所有检查。页面底部的系统检查信息显示了缺失的功能。',
     passed: '此应用专为 Chrome 浏览器设计和构建，并且该浏览器已通过相关检查。',
   },
+  videoKind: {
+    label: '视频类型',
+    options: {
+      staff: '教职员工视频',
+      submission: '学生提交作品',
+    },
+    result: {
+      staff: '由您选择结尾画面，以及是否显示“{words}”。',
+      submission: '如果视频有结尾画面，结尾画面会显示“{words}”。',
+    },
+  },
   steps: {
     choose: '选择一个视频',
     trim: '修剪',
@@ -195,6 +206,7 @@ export const zhHans: Messages = {
       cut: '不与“切”一起使用。',
       none: '不与“无”一起使用。',
     },
+    internalForSubmission: '学生提交作品始终启用。',
     result: {
       none: '不会添加大学结尾画面。',
       adds: {

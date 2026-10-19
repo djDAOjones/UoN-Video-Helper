@@ -54,6 +54,17 @@ export const msMY: Messages = {
     passed:
       'Aplikasi ini direka bentuk dan dibina untuk Chrome dan pelayar ini telah lulus pemeriksaan untuknya.',
   },
+  videoKind: {
+    label: 'Jenis video',
+    options: {
+      staff: 'Video staf',
+      submission: 'Serahan pelajar',
+    },
+    result: {
+      staff: 'Anda memilih penutup, dan sama ada ia memaparkan “{words}”.',
+      submission: 'Jika video mempunyai penutup, penutup itu memaparkan “{words}”.',
+    },
+  },
   steps: {
     choose: 'Pilih video',
     trim: 'Potong',
@@ -209,6 +220,7 @@ export const msMY: Messages = {
       cut: 'Tidak digunakan dengan Potong.',
       none: 'Tidak digunakan dengan Tiada.',
     },
+    internalForSubmission: 'Sentiasa dihidupkan untuk serahan pelajar.',
     result: {
       none: 'Tiada penutup Universiti akan ditambah.',
       adds: {

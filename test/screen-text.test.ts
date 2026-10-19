@@ -22,6 +22,7 @@ import {
   LEARNING_CONTENT_TEAM_ADDRESS,
 } from '../src/config/feedback'
 import { PRESETS, type PresetId } from '../src/config/presets'
+import { DEFAULT_VIDEO_KIND, VIDEO_KINDS } from '../src/config/video-kind'
 import { enGB } from '../src/i18n/en-GB'
 import { closingTypeLabel, onsetDisabledReason } from '../src/ui/closing-choice'
 
@@ -330,6 +331,39 @@ describe('the closing controls (VH-90)', () => {
       /<fieldset[^>]*id="branding-choice"[\s\S]*?<\/fieldset>\s*<\/section>/.exec(markup)?.[0] ?? ''
     for (const id of ['closing-type', 'closing-onset', 'closing-colour', 'onset-help-button']) {
       expect(fieldset).toContain(`id="${id}"`)
+    }
+  })
+})
+
+describe('Staff video or Student submission (VH-131)', () => {
+  const fieldset = /<fieldset[^>]*id="video-kind"[\s\S]*?<\/fieldset>/.exec(markup)?.[0] ?? ''
+
+  it('offers both sides as native radios, in the config’s order and words', () => {
+    const values = [...fieldset.matchAll(/type="radio" name="video-kind" value="([^"]+)"/g)].map(
+      (match) => match[1],
+    )
+    expect(values).toEqual([...VIDEO_KINDS])
+    expect(fieldset).toContain(enGB.videoKind.options.staff)
+    expect(fieldset).toContain(enGB.videoKind.options.submission)
+  })
+
+  it('starts on the default side, before any script runs', () => {
+    expect(fieldset).toMatch(new RegExp(`name="video-kind" value="${DEFAULT_VIDEO_KIND}" checked`))
+    expect(fieldset.match(/\schecked/g)).toHaveLength(1)
+  })
+
+  it('has a visible label, and ties the line beneath to the group', () => {
+    expect(fieldset).toMatch(/<legend class="label">Video type<\/legend>/)
+    expect(fieldset).toContain('aria-describedby="video-kind-result"')
+    expect(fieldset).toContain('id="video-kind-result"')
+  })
+
+  it('sits above Step 1, outside every fieldset the job lock disables', () => {
+    expect(markup.indexOf('id="video-kind"')).toBeLessThan(markup.indexOf('id="step-choose"'))
+    expect(markup.indexOf('id="video-kind"')).toBeGreaterThan(markup.indexOf('class="lede"'))
+    for (const id of ['branding-choice', 'preset-choice']) {
+      const locked = new RegExp(`<fieldset[^>]*id="${id}"[\\s\\S]*?<\\/fieldset>`).exec(markup)?.[0] ?? ''
+      expect(locked).not.toContain('name="video-kind"')
     }
   })
 })

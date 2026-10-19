@@ -59,6 +59,11 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
   ],
   ['lede', 'Under the page heading: what the tool does'],
   ['browserNote', 'Under the page heading: the note about the browser'],
+  ['videoKind', 'Above Step 1: the switch between a staff video and a student submission'],
+  [
+    'videoKind.result',
+    'Above Step 1: the line under the switch, saying what the choice means for the closing',
+  ],
   ['steps', 'The heading of each of the five steps'],
   ['choose', 'Step 1, Choose a video'],
   ['choose.drop', 'Step 1: the message when something is dropped on the drop area'],
@@ -252,6 +257,9 @@ const NOTES: Readonly<Record<string, string>> = {
     'Names the animation type "Cut"; use the same word as closing.types.cut.',
   'closing.notUsedWith.none':
     'Names the animation type "None"; use the same word as closing.types.none.',
+  'videoKind.label': 'The label over the switch, also read out by screen readers.',
+  'closing.internalForSubmission':
+    'Why the "Internal use only" checkbox cannot be unticked. Use the same words for "student submission" as videoKind.options.submission.',
   'closing.internalLabel':
     'The label of a checkbox that adds the words of closing.internalWords to the closing card. Use the same words.',
   'closing.internalWords':

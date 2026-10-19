@@ -18,6 +18,7 @@ import {
   type ClosingControls,
   type ClosingType,
 } from '../config/branding'
+import type { VideoKind } from '../config/video-kind'
 import { sentenceGap, t } from '../i18n'
 
 /** The option text of "Animation type", which the disabled reasons quote. */
@@ -73,4 +74,31 @@ export function colourDisabledReason(type: ClosingType): string | null {
 /** Why "Internal use only" cannot be changed, or `null` when it can: there is no closing to mark. */
 export function internalDisabledReason(type: ClosingType): string | null {
   return closingTypeUsesInternal(type) ? null : t().closing.notUsedWith.none
+}
+
+/** What the "Internal use only" checkbox shows: ticked or not, locked or not, and why. */
+export interface InternalCheckboxState {
+  readonly checked: boolean
+  readonly disabled: boolean
+  /** Visible beside the box whenever it is locked, because a disabled control cannot explain itself. */
+  readonly reason: string | null
+}
+
+/**
+ * The checkbox on each side of the switch (VH-131). A staff video's box holds
+ * what the user last chose for a staff video, locked only under None. A
+ * student submission's is ticked and locked, because any closing it has is
+ * Internal use only; under None the reason is None's, as on a staff video,
+ * since there is then no closing to mark.
+ */
+export function internalCheckboxState(
+  kind: VideoKind,
+  type: ClosingType,
+  staffChecked: boolean,
+): InternalCheckboxState {
+  const noClosing = internalDisabledReason(type)
+  if (kind === 'submission') {
+    return { checked: true, disabled: true, reason: noClosing ?? t().closing.internalForSubmission }
+  }
+  return { checked: staffChecked, disabled: noClosing !== null, reason: noClosing }
 }

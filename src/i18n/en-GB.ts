@@ -94,6 +94,18 @@ export const enGB = {
     passed: 'This app is designed and built for Chrome, and this browser has passed the checks for it.',
   },
 
+  /** The switch above the five steps (VH-131). */
+  videoKind: {
+    /** Its visible label, which is also its accessible name. */
+    label: 'Video type',
+    options: { staff: 'Staff video', submission: 'Student submission' },
+    /** The line under the switch: what the side chosen means for the closing. */
+    result: {
+      staff: 'You choose the closing, and whether it says “{words}”.',
+      submission: 'If the video has a closing, it says “{words}”.',
+    },
+  },
+
   steps: {
     choose: 'Choose a video',
     trim: 'Trim',
@@ -233,6 +245,8 @@ export const enGB = {
     internalWords: 'Internal use only',
     /** Why a control is locked, naming the animation type that locks it. */
     notUsedWith: { cut: 'Not used with Cut.', none: 'Not used with None.' },
+    /** Why "Internal use only" is locked on, naming the side of the switch that locks it (VH-131). */
+    internalForSubmission: 'Always on for a student submission.',
     result: {
       none: 'No University closing will be added.',
       adds: { one: 'Adds {count} second.', other: 'Adds {count} seconds.' },
