@@ -55,6 +55,33 @@ export function translationFeedbackMailto(tag: LanguageTag): string {
   return `mailto:${TRANSLATION_FEEDBACK_ADDRESS}?subject=${encodeURIComponent(subject)}`
 }
 
+/**
+ * One segment per language, as native radios named `name` under the
+ * segmented skin, each labelled with its language's own name and carrying its
+ * own `lang`. The page's switcher and the video's language (VH-132) are built
+ * from the same segments, so they read and behave alike.
+ */
+export function languageSegments(name: string, options: readonly LanguageOption[]): HTMLDivElement {
+  const segments = document.createElement('div')
+  segments.className = 'segments'
+  for (const option of options) {
+    const label = document.createElement('label')
+    label.className = 'segment'
+    label.lang = option.tag
+    const input = document.createElement('input')
+    input.type = 'radio'
+    input.name = name
+    input.value = option.tag
+    input.checked = option.checked
+    const face = document.createElement('span')
+    face.className = 'segment-face'
+    face.textContent = option.name
+    label.append(input, face)
+    segments.append(label)
+  }
+  return segments
+}
+
 /** The switcher's parts the page listens to, and how to write its words again. */
 export interface LanguageSwitcher {
   /** The label, one segment per language, and the line a switch is said in. */
@@ -84,23 +111,7 @@ export function buildLanguageSwitcher(options: readonly LanguageOption[]): Langu
   const legend = document.createElement('legend')
   legend.className = 'label'
 
-  const segments = document.createElement('div')
-  segments.className = 'segments'
-  for (const option of options) {
-    const label = document.createElement('label')
-    label.className = 'segment'
-    label.lang = option.tag
-    const input = document.createElement('input')
-    input.type = 'radio'
-    input.name = 'language'
-    input.value = option.tag
-    input.checked = option.checked
-    const face = document.createElement('span')
-    face.className = 'segment-face'
-    face.textContent = option.name
-    label.append(input, face)
-    segments.append(label)
-  }
+  const segments = languageSegments('language', options)
 
   const status = document.createElement('p')
   status.className = 'visually-hidden'

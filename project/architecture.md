@@ -114,6 +114,7 @@ src/
     system-check.ts        the System check summary line, pure
     closing-choice.ts      the closing controls' result line and disabled reasons
     video-kind.ts          the switch's remembered side and the line beneath it
+    video-language.ts      the video's text language: the page's until picked, remembered, its words marked with `lang` (VH-132)
     brand-assets.ts        installs the logo and heading font where their files exist
     format.ts             durations, sizes, rates
   acceptance/              the §13 harness. Dev-only; not built.

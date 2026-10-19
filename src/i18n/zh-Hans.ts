@@ -58,6 +58,10 @@ export const zhHans: Messages = {
       submission: '如果视频有结尾画面，结尾画面会显示“{words}”。',
     },
   },
+  videoLanguage: {
+    label: '视频语言',
+    helper: '应用添加到视频中的文字使用此语言。',
+  },
   steps: {
     choose: '选择一个视频',
     trim: '修剪',

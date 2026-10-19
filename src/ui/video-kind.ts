@@ -13,7 +13,8 @@ import {
   VIDEO_KINDS,
   type VideoKind,
 } from '../config/video-kind'
-import { t } from '../i18n'
+import type { LanguageTag } from '../config/languages'
+import { closingWords, language, t } from '../i18n'
 
 /** The remembered side, or `null` when nothing valid is remembered or the store cannot be read. */
 export function readVideoKindPreference(storage: Pick<Storage, 'getItem'> | null): VideoKind | null {
@@ -39,11 +40,13 @@ export function writeVideoKindPreference(
 
 /**
  * The line under the switch: what the side chosen means for the closing,
- * quoting the words the card would carry. Read on demand, never announced:
- * it is the switch's own result. The words are the page's language's until
- * VH-132 lets the video's differ.
+ * quoting the words the card would carry, in the video's text language
+ * (VH-132), the page's unless another is given. Read on demand, never
+ * announced: it is the switch's own result.
  */
-export function videoKindResultText(kind: VideoKind): string {
-  const { videoKind, closing } = t()
-  return videoKind.result[kind]({ words: closing.internalWords })
+export function videoKindResultText(
+  kind: VideoKind,
+  wordsLanguage: LanguageTag = language(),
+): string {
+  return t().videoKind.result[kind]({ words: closingWords(wordsLanguage) })
 }

@@ -1099,33 +1099,39 @@ details[open] > .disclosure-summary::before {
  * "Bahasa Malaysia" fits at phone width; where even that does not fit, the
  * segments wrap, so each keeps all four edges and overlaps its neighbour's
  * by one hairline rather than dropping its left edge. Staff video or Student
- * submission (VH-131), above the steps, is sized the same way.
+ * submission (VH-131), above the steps, is sized the same way, and so is the
+ * video's language under it (VH-132).
  */
 .language-switcher {
   margin-bottom: var(--spacing-06);
 }
 
-.video-kind {
+.video-kind,
+.video-language {
   margin-bottom: var(--spacing-07);
 }
 
 .language-switcher .segments,
-.video-kind .segments {
+.video-kind .segments,
+.video-language .segments {
   flex-wrap: wrap;
 }
 
 .language-switcher .segment,
-.video-kind .segment {
+.video-kind .segment,
+.video-language .segment {
   flex: none;
 }
 
 .language-switcher .segment + .segment,
-.video-kind .segment + .segment {
+.video-kind .segment + .segment,
+.video-language .segment + .segment {
   margin-left: calc(-1 * var(--border-width));
 }
 
 .language-switcher .segment + .segment .segment-face,
-.video-kind .segment + .segment .segment-face {
+.video-kind .segment + .segment .segment-face,
+.video-language .segment + .segment .segment-face {
   border-left: var(--border-width) solid var(--interactive);
 }
 
@@ -1552,14 +1558,16 @@ details[open] > .disclosure-summary::before {
     color: GrayText;
   }
 
-  /* The language and video-type segments' own left edges, in the theme's colours too. */
+  /* The language, video-type and video-language segments' own left edges, in the theme's colours too. */
   .language-switcher .segment + .segment .segment-face,
-  .video-kind .segment + .segment .segment-face {
+  .video-kind .segment + .segment .segment-face,
+  .video-language .segment + .segment .segment-face {
     border-left-color: ButtonText;
   }
 
   .language-switcher .segment + .segment input:checked + .segment-face,
-  .video-kind .segment + .segment input:checked + .segment-face {
+  .video-kind .segment + .segment input:checked + .segment-face,
+  .video-language .segment + .segment input:checked + .segment-face {
     border-left-color: Highlight;
   }
 

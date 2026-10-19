@@ -368,6 +368,26 @@ describe('Staff video or Student submission (VH-131)', () => {
   })
 })
 
+describe('the video’s language (VH-132)', () => {
+  const fieldset = /<fieldset[^>]*id="video-language"[\s\S]*?<\/fieldset>/.exec(markup)?.[0] ?? ''
+
+  it('has a visible label, and ties the line beneath to the group', () => {
+    expect(fieldset).toMatch(/<legend class="label">Video language<\/legend>/)
+    expect(fieldset).toContain('aria-describedby="video-language-helper"')
+    expect(fieldset).toContain('id="video-language-helper"')
+    expect(fieldset).toContain(enGB.videoLanguage.helper)
+  })
+
+  it('sits under the switch and above Step 1, outside every fieldset the job lock disables', () => {
+    expect(markup.indexOf('id="video-language"')).toBeGreaterThan(markup.indexOf('id="video-kind"'))
+    expect(markup.indexOf('id="video-language"')).toBeLessThan(markup.indexOf('id="step-choose"'))
+    for (const id of ['branding-choice', 'preset-choice']) {
+      const locked = new RegExp(`<fieldset[^>]*id="${id}"[\\s\\S]*?<\\/fieldset>`).exec(markup)?.[0] ?? ''
+      expect(locked).not.toContain('id="video-language"')
+    }
+  })
+})
+
 describe('steps that read as steps (VH-91)', () => {
   /** Each step panel, in document order: its id, its number, its heading text, whether it starts hidden. */
   const steps = [

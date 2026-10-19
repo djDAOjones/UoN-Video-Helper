@@ -64,6 +64,7 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
     'videoKind.result',
     'Above Step 1: the line under the switch, saying what the choice means for the closing',
   ],
+  ['videoLanguage', 'Above Step 1: the choice of language for the words drawn into the video'],
   ['steps', 'The heading of each of the five steps'],
   ['choose', 'Step 1, Choose a video'],
   ['choose.drop', 'Step 1: the message when something is dropped on the drop area'],
@@ -258,6 +259,10 @@ const NOTES: Readonly<Record<string, string>> = {
   'closing.notUsedWith.none':
     'Names the animation type "None"; use the same word as closing.types.none.',
   'videoKind.label': 'The label over the switch, also read out by screen readers.',
+  'videoLanguage.label':
+    'The label over the choice, also read out by screen readers. Use the same word for "video" as videoKind.label and for "language" as language.label.',
+  'videoLanguage.helper':
+    'The words the app draws into the video, such as closing.internalWords, follow this choice; the page itself does not.',
   'closing.internalForSubmission':
     'Why the "Internal use only" checkbox cannot be unticked. Use the same words for "student submission" as videoKind.options.submission.',
   'closing.internalLabel':

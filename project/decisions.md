@@ -17,6 +17,16 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-19 — VH-132 — Video language sits under Video type, follows the page until chosen, and is remembered
+
+**Decision:** the video's text language is chosen in "Video language", native radios in the segmented skin directly under the Video type switch, each option its language's own name with its own `lang`; it shows the page's language until someone picks one, then keeps that pick when the page's language changes and remembers it in this browser, as the page's language and the switch are; it is never locked, and a job reads it once, at its start — because the owner answered VH-132's open questions in chat on 2026-10-19.
+
+**Rationale:** The owner's answers, 2026-10-19, to three questions asked as VH-132 started: where it sits, "Under Video type"; what it is called, "Video language"; whether a pick is remembered, "Yes, remembered". Under Video type because both say what the video is, and the selector serves the title card before the video and the closing after it, so no one step owns it. A pick of the page's own language is still a pick, kept when the page changes. Remembered with VH-105's guarded read and write; a store that refuses, or a remembered language no longer offered, leaves it following the page.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-19 — VH-131 — The switch opens on Staff video and is remembered; a submission may have no closing
 
 **Decision:** the switch at the top opens on Staff video and is remembered in this browser, as the page's language is; a student submission may choose None, and whenever it has a closing, that closing is Internal use only; a staff video's graphic options are the basic card (VH-127), the closing's controls and the Internal use only toggle, and nothing more — because the owner answered VH-131's open questions in chat on 2026-10-19.

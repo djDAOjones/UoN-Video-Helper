@@ -3,7 +3,8 @@
  * origin, and nowhere else — the same guarded read and write the progress
  * announcement setting uses (`ui/progress.ts`), because a private window or
  * a full store refuses, and the page works without it. Pure, so the storage
- * failing is tested in Node.
+ * failing is tested in Node. The video's text language (VH-132) is kept the
+ * same way, under its own key.
  */
 
 import { LANGUAGE_PREFERENCE_KEY, type LanguageTag } from '../config/languages'
@@ -17,9 +18,10 @@ import { LANGUAGE_PREFERENCE_KEY, type LanguageTag } from '../config/languages'
 export function readLanguagePreference(
   storage: Pick<Storage, 'getItem'> | null,
   offered: readonly LanguageTag[],
+  key: string = LANGUAGE_PREFERENCE_KEY,
 ): LanguageTag | null {
   try {
-    const stored = storage?.getItem(LANGUAGE_PREFERENCE_KEY)
+    const stored = storage?.getItem(key)
     return offered.find((tag) => tag === stored) ?? null
   } catch {
     return null
@@ -30,9 +32,10 @@ export function readLanguagePreference(
 export function writeLanguagePreference(
   storage: Pick<Storage, 'setItem'> | null,
   tag: LanguageTag,
+  key: string = LANGUAGE_PREFERENCE_KEY,
 ): void {
   try {
-    storage?.setItem(LANGUAGE_PREFERENCE_KEY, tag)
+    storage?.setItem(key, tag)
   } catch {
     // Private windows and full stores refuse; the choice lives on in this tab.
   }

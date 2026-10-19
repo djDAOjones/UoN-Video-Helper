@@ -43,3 +43,9 @@ export const MACHINE_TRANSLATED: readonly LanguageTag[] = ['zh-Hans', 'ms-MY']
 
 /** Where the chosen language is remembered, in this browser only. Nothing about it leaves the device. */
 export const LANGUAGE_PREFERENCE_KEY = 'uon-video-helper:language'
+
+/**
+ * Where the video's text language is remembered (VH-132), in this browser
+ * only, and only once someone picks one: until then it follows the page's.
+ */
+export const VIDEO_LANGUAGE_PREFERENCE_KEY = 'uon-video-helper:video-language'

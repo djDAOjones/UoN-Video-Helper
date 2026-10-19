@@ -106,6 +106,14 @@ export const enGB = {
     },
   },
 
+  /** The choice under the switch: the language of the words drawn into the video (VH-132). */
+  videoLanguage: {
+    /** Its visible label, which is also its accessible name. */
+    label: 'Video language',
+    /** The line under it: what the choice changes, and so what it does not. */
+    helper: 'Words the app adds to your video are in this language.',
+  },
+
   steps: {
     choose: 'Choose a video',
     trim: 'Trim',

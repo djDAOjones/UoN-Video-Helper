@@ -18,8 +18,9 @@ import {
   type ClosingControls,
   type ClosingType,
 } from '../config/branding'
+import type { LanguageTag } from '../config/languages'
 import type { VideoKind } from '../config/video-kind'
-import { sentenceGap, t } from '../i18n'
+import { closingWords, language, sentenceGap, t } from '../i18n'
 
 /** The option text of "Animation type", which the disabled reasons quote. */
 export function closingTypeLabel(type: ClosingType): string {
@@ -29,9 +30,13 @@ export function closingTypeLabel(type: ClosingType): string {
 /**
  * One sentence for the current selection: what the viewer sees at the end,
  * and what it costs in seconds — and a second, with Internal use only, that
- * quotes the words the card will carry.
+ * quotes the words the card will carry, in the video's text language
+ * (VH-132), the page's unless another is given.
  */
-export function closingResultText(controls: ClosingControls): string {
+export function closingResultText(
+  controls: ClosingControls,
+  wordsLanguage: LanguageTag = language(),
+): string {
   const { closing } = t()
   const { result } = closing
   if (controls.type === 'none') return result.none
@@ -48,9 +53,8 @@ export function closingResultText(controls: ClosingControls): string {
       : controls.onset === 'freeze'
         ? result.overFreeze[colour][type]({ adds })
         : result.overPicture[colour][type]({ adds })
-  // The words are the page's language's until VH-132 lets the video's differ.
   return controls.internal
-    ? `${sentence}${sentenceGap()}${result.internal({ words: closing.internalWords })}`
+    ? `${sentence}${sentenceGap()}${result.internal({ words: closingWords(wordsLanguage) })}`
     : sentence
 }
 

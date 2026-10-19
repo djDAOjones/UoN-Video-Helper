@@ -79,6 +79,13 @@ import {
   videoKindResultText,
   writeVideoKindPreference,
 } from './ui/video-kind'
+import {
+  paintParts,
+  quotedWordsParts,
+  readVideoLanguagePreference,
+  videoLanguageFor,
+  writeVideoLanguagePreference,
+} from './ui/video-language'
 import { installDropZone } from './ui/drop-zone'
 import {
   describeBrowser,
@@ -112,12 +119,29 @@ import { body, notification } from './ui/notification'
 import { downloadDestinationFor, downloadStatusText } from './ui/save-text'
 import { renderWarnings } from './ui/warning-text'
 import { failureSentence, failureText, startupFailureText, type FailureText } from './ui/failure-text'
-import { language, locale, onLanguageChange, sentenceGap, setLanguage, t } from './i18n'
+import {
+  closingWords,
+  language,
+  locale,
+  onLanguageChange,
+  sentenceGap,
+  setLanguage,
+  t,
+} from './i18n'
 import { unitFormatter } from './i18n/intl'
 import { applyStaticText } from './i18n/bind'
 import { readLanguagePreference, writeLanguagePreference } from './i18n/preference'
-import { DEFAULT_LANGUAGE, LANGUAGE_NAMES, LANGUAGES_OFFERED } from './config/languages'
-import { buildLanguageSwitcher, languageOptions } from './ui/language-switcher'
+import {
+  DEFAULT_LANGUAGE,
+  LANGUAGE_NAMES,
+  LANGUAGES_OFFERED,
+  type LanguageTag,
+} from './config/languages'
+import {
+  buildLanguageSwitcher,
+  languageOptions,
+  languageSegments,
+} from './ui/language-switcher'
 import {
   fragmentOpensStatement,
   STATEMENT_ID,
@@ -250,6 +274,7 @@ const announceProgressBox = required<HTMLInputElement>('#announce-progress')
 const processResult = required<HTMLDivElement>('#process-result')
 const videoKindChoice = required<HTMLFieldSetElement>('#video-kind')
 const videoKindResult = required<HTMLParagraphElement>('#video-kind-result')
+const videoLanguageChoice = required<HTMLFieldSetElement>('#video-language')
 const presetChoice = required<HTMLFieldSetElement>('#preset-choice')
 const brandingChoice = required<HTMLFieldSetElement>('#branding-choice')
 const closingType = required<HTMLSelectElement>('#closing-type')
@@ -374,6 +399,29 @@ function chosenVideoKind(): VideoKind {
 }
 
 /**
+ * The video's text language as picked under the switch (VH-132), or `null`
+ * while nobody has picked one and it follows the page's. Read before the
+ * closing controls are first in step, so their first paint quotes it.
+ */
+let pickedVideoLanguage: LanguageTag | null = readVideoLanguagePreference(
+  localStore,
+  LANGUAGES_OFFERED,
+)
+
+/** The language of the words drawn into the video: the pick, or the page's until there is one. */
+function chosenVideoLanguage(): LanguageTag {
+  return videoLanguageFor(pickedVideoLanguage, language())
+}
+
+/**
+ * Writes `text` into `element` with the video's words in it marked in their
+ * own language when that is not the page's (WCAG 3.1.2).
+ */
+function paintQuoting(element: HTMLElement, text: string, wordsLanguage: LanguageTag): void {
+  paintParts(element, quotedWordsParts(text, closingWords(wordsLanguage), wordsLanguage, language()))
+}
+
+/**
  * What the staff video's "Internal use only" box holds, kept while a student
  * submission locks the box on, and put back on the way back to Staff video.
  */
@@ -429,7 +477,8 @@ function syncClosingControls(): void {
   closingColourReason.textContent = colourReason ?? ''
   closingColourReason.hidden = colourReason === null
 
-  closingResult.textContent = closingResultText(controls)
+  const wordsLanguage = chosenVideoLanguage()
+  paintQuoting(closingResult, closingResultText(controls, wordsLanguage), wordsLanguage)
 }
 
 brandingChoice.addEventListener('change', () => {
@@ -449,9 +498,12 @@ const rememberedKind = readVideoKindPreference(localStore) ?? DEFAULT_VIDEO_KIND
 for (const radio of videoKindChoice.querySelectorAll<HTMLInputElement>('input[name="video-kind"]')) {
   radio.checked = radio.value === rememberedKind
 }
-show(videoKindResult, () => {
-  videoKindResult.textContent = videoKindResultText(chosenVideoKind())
-})
+/** The line under the switch, quoting the closing's words in the video's language. */
+function paintVideoKindResult(): void {
+  const wordsLanguage = chosenVideoLanguage()
+  paintQuoting(videoKindResult, videoKindResultText(chosenVideoKind(), wordsLanguage), wordsLanguage)
+}
+show(videoKindResult, paintVideoKindResult)
 syncClosingControls()
 
 // Never locked by a job or a save, like the language: switching keeps the
@@ -461,11 +513,48 @@ syncClosingControls()
 videoKindChoice.addEventListener('change', () => {
   const kind = chosenVideoKind()
   writeVideoKindPreference(localStore, kind)
-  videoKindResult.textContent = videoKindResultText(kind)
+  paintVideoKindResult()
   syncClosingControls()
   // The estimates do not move: the switch adds no seconds until a card does
   // (VH-127, VH-128), and pre-flight already prices the longest closing.
   // The question beneath, if one is showing, was asked about another job.
+  withdrawDiscardQuestion()
+})
+
+// --- The video's text language (VH-132) ------------------------------------
+// Under the switch, one segment per language offered, built as the page's
+// switcher's are. It shows the page's language until someone picks one; a
+// pick is kept when the page's language changes and is remembered in this
+// browser. Never locked, like the switch: a running job keeps the words it
+// started with, and the next job reads the pick. A choice of one is no
+// choice, so a page offering one language hides it.
+
+const videoLanguageOptions = languageOptions(LANGUAGES_OFFERED, chosenVideoLanguage())
+videoLanguageChoice.hidden = videoLanguageOptions.length === 0
+required<HTMLLegendElement>('#video-language > legend').after(
+  languageSegments('video-language', videoLanguageOptions),
+)
+
+/** Checks the segment for the video's language, which moves with the page's until someone picks. */
+function showVideoLanguage(): void {
+  const shown = chosenVideoLanguage()
+  for (const radio of videoLanguageChoice.querySelectorAll<HTMLInputElement>(
+    'input[name="video-language"]',
+  )) {
+    radio.checked = radio.value === shown
+  }
+}
+
+// Focus stays on the radio, which is never replaced. Nothing is announced:
+// the lines that quote the words are read on demand.
+videoLanguageChoice.addEventListener('change', (event) => {
+  const picked = LANGUAGES_OFFERED.find((tag) => tag === (event.target as HTMLInputElement).value)
+  if (!picked) return
+  pickedVideoLanguage = picked
+  writeVideoLanguagePreference(localStore, picked)
+  paintVideoKindResult()
+  syncClosingControls()
+  // The question beneath, if one is showing, was asked about other words.
   withdrawDiscardQuestion()
 })
 
@@ -2117,7 +2206,7 @@ function confirmDiscardThenStart(): void {
   show(processResult, () => {
     if (title) title.textContent = t().discard.title
     if (questionLine) questionLine.textContent = question()
-    if (summaryLine) summaryLine.textContent = summary()
+    if (summaryLine) paintQuoting(summaryLine, summary(), asked.record.wordsLanguage)
     discard.textContent = t().create.discard
     keep.textContent = t().create.keep
     if (!panel.isConnected) processResult.replaceChildren(panel)
@@ -2172,8 +2261,8 @@ function beginJob(file: File): void {
 
   // Read once, so the job and the record of it cannot disagree.
   const closing = chosenClosing()
-  // The video's text language is the page's until VH-132 gives it a selector.
-  const wordsLanguage = language()
+  // The video's text language: the pick under the switch, or the page's (VH-132).
+  const wordsLanguage = chosenVideoLanguage()
   const branding = brandingChoiceFor(closing, wordsLanguage)
   const keptRange = jobKeptRange
   /** What this job is, fixed now: the result and the discard question carry it (A-05). */
@@ -2461,7 +2550,7 @@ function renderResult(kept: RetainedResult): HTMLElement {
     const previous = fileInput.files?.[0] !== source
     const size = formatFileSize(file.size)
     if (title) title.textContent = previous ? t().result.previous({ size }) : t().result.finished({ size })
-    if (recordLine) recordLine.textContent = jobSummaryText(record)
+    if (recordLine) paintQuoting(recordLine, jobSummaryText(record), record.wordsLanguage)
     const differs = closingOutcomeText(record.closing, outcome)
     if (differsLine) {
       differsLine.textContent = differs ?? ''
@@ -2905,6 +2994,8 @@ onLanguageChange(() => {
   for (const paint of [...regions.values()]) paint()
   for (const id of checkRows.keys()) paintCheck(id)
   updateSystemCheckSummary()
+  // Before the closing's line is said again: it quotes the video's words.
+  showVideoLanguage()
   syncClosingControls()
   labelButtons()
   // The lock notes, and the trim: its handles' times, its result line, and

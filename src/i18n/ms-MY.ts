@@ -65,6 +65,10 @@ export const msMY: Messages = {
       submission: 'Jika video mempunyai penutup, penutup itu memaparkan “{words}”.',
     },
   },
+  videoLanguage: {
+    label: 'Bahasa video',
+    helper: 'Perkataan yang ditambah oleh aplikasi pada video anda adalah dalam bahasa ini.',
+  },
   steps: {
     choose: 'Pilih video',
     trim: 'Potong',

@@ -76,6 +76,21 @@
         <p class="helper" id="video-kind-result"></p>
       </fieldset>
 
+      <!-- VH-132, 2026-10-19. The language of the words the app draws into
+           the video — Internal use only, and the title cards' labels — under
+           the switch, because both say what the video is and no one step
+           owns it. Its segments are the page language's, built from the same
+           list (`languageSegments`), each name in its own language with its
+           own `lang`. It shows the page's language until someone picks one,
+           then keeps the pick and remembers it in this browser; never
+           locked. The line beneath is read on demand, not announced. -->
+      <fieldset class="segmented video-language" id="video-language" aria-describedby="video-language-helper">
+        <legend class="label" data-i18n="videoLanguage.label">Video language</legend>
+        <p class="helper" id="video-language-helper" data-i18n="videoLanguage.helper">
+          Words the app adds to your video are in this language.
+        </p>
+      </fieldset>
+
       <!-- VH-91, 2026-09-30. The steps are separate, numbered panels rather
            than fieldsets stacked under one heading. They stay open: each of
            steps 2 and 3 holds a safe default, so there is no moment at which
