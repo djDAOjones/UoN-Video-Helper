@@ -114,7 +114,22 @@ loudness, measured on the source alone (§5), are unchanged, and the 100 ms
 audio fade (§4.4) applies at the join. The size and time estimates always
 count it, so the box moves neither. Its words go into the picture only, never
 the log, the diagnostics, the file's name or its metadata. A student
-submission has none until it has its own (VH-128).
+submission has its own, below.
+
+**Submission.** A student submission always opens with its own title card
+(VH-128). It is drawn, held, joined, fitted and refused as the staff card is,
+and its words likewise reach the picture only; but it is labelled, each label
+in the video's language: the assignment's title or number as the heading in
+Lora, unlabelled; then "Module", "Convenor or tutor" and "Student ID numbers",
+each before its value in bold; then "Running time" and "Card made" sharing the
+last line. The first four are typed and required: the assignment, the module's
+code and title as one field, and the convenor or tutor, held to 80, 60 and 40
+columns; then one to eight student ID numbers of 8 digits each, never a name.
+The running time is computed, never typed: the part kept after trimming,
+without the card or the closing, as a clock time. The date is the device's on
+the day the card is made, in the video's language, followed by "— not the
+submission date". Eight ID numbers and the longest label in each language fit
+at the 56 px floor or above.
 
 ### 4.2 Master assets, as delivered
 
@@ -556,10 +571,10 @@ the video, the trim, every choice, a running job and a result. Under it,
 "Video language" chooses the language of the words the app adds to the video
 (VH-132). It shows the page's language until someone picks one, then keeps the
 pick when the page's changes; it too is remembered and never locked, and a job
-reads it at its start. Step 1 is there from the start; steps 2–6 appear once
-a video has been read, and each holds a safe default, so a user who changes
-nothing keeps the whole video, with no title card, a clean-cut blue closing
-and the larger file.
+reads it at its start. Step 1 is there from the start; steps 2–6 appear once a
+video has been read, and each holds a safe default, so a staff video left
+alone keeps the whole video, with no title card, a clean-cut blue closing and
+the larger file.
 
 1. **Choose a video** — file picker or drag-and-drop. The app reads the file
    and says what it found, including anything that cannot be carried into
@@ -570,16 +585,23 @@ and the larger file.
    alone, the whole video is kept, and "Use the whole video" puts it back.
    The part kept must be at least 3 s. The preview plays the original — the
    sound not yet levelled, the closing not yet added — and the step says so.
-3. **Title card** (optional) — an "Add a title card" box, off at first,
-   shows Title, Department, Authors and Date while ticked (§4.1). Ticking
-   fills the date with today's date in the video's language; a change of
-   video language refills it while it still says what was filled, and a
-   typed date is kept. Each field stops at its limit and says so; unticking
-   keeps what was typed. Create refuses a ticked card with nothing on it, or
-   one that will not fit, before anything starts: the reason beside the box
-   or the field, a line in step 6, and focus there. Under Student submission
-   the box is unticked and locked, saying why, and the tick and fields come
-   back with Staff video.
+3. **Title card** (optional for a staff video) — an "Add a title card" box,
+   off at first, shows Title, Department, Authors and Date while ticked
+   (§4.1). Ticking fills the date with today's date in the video's language; a
+   change of video language refills it while it still says what was filled,
+   and a typed date is kept. Each field stops at its limit and says so;
+   unticking keeps what was typed. Create refuses a ticked card with nothing
+   on it, or one that will not fit, before anything starts: the reason beside
+   the box or the field, a line in step 6, and focus there. Under Student
+   submission the box is ticked and locked, saying why, and Submission's
+   fields show in place of the staff card's: assignment title or number,
+   module code and title, module convenor or tutor, and one box of student ID
+   numbers separated by spaces, commas or new lines, with a line beneath
+   giving the running time as trimmed. Each side keeps its own fields for the
+   way back, and neither is remembered beyond the page. Create refuses a field
+   left empty, an ID number not of 8 digits, one typed twice, or more than
+   eight, each said beside its field as the staff card's are; a field too long
+   to fit is said as it is typed.
 4. **Closing branding** — animation type, onset and colour (§4.3).
 5. **File size / quality** — "Larger / better" or "Smaller / reduced"
    (§6).
