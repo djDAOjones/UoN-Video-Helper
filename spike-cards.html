@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Card type scale — UoN Video Helper</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 24px;
+        background: #f3f4f5;
+        color: #10263b;
+      }
+      section {
+        margin-block: 32px;
+      }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        align-items: flex-start;
+      }
+      figure {
+        margin: 0;
+      }
+      figcaption {
+        font-size: 14px;
+        margin-block-start: 4px;
+        max-inline-size: 480px;
+      }
+      canvas {
+        display: block;
+        outline: 1px solid #9fa8b1;
+      }
+      pre {
+        white-space: pre-wrap;
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Card type scale</h1>
+    <p>
+      VH-126: every card drawn at full size in this browser, with the longest text in each language,
+      so the type scale is measured rather than assumed. Nothing may draw under 56 px per 1080 lines
+      of the frame's shorter side (28 pt at PowerPoint sizes). Labels are provisional: VH-128 settles
+      their English, and the sheet route translates it.
+    </p>
+    <div id="cards"></div>
+    <pre id="log">running…</pre>
+    <script type="module" src="/src/spike/cards.ts"></script>
+  </body>
+</html>
