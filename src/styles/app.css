@@ -1348,8 +1348,11 @@ details[open] > .disclosure-summary::before {
 }
 
 /* The title card's fields hold a line of text each, so they stop at the
-   running text's measure rather than stretch across a wide panel (VH-127). */
-#title-card-fields .text-input {
+   running text's measure rather than stretch across a wide panel (VH-127);
+   Submission's, and its box of ID numbers, the same (VH-128). */
+#title-card-fields .text-input,
+#submission-card-fields .text-input,
+#submission-card-fields .textarea {
   max-width: var(--measure);
 }
 

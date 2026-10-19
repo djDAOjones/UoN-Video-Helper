@@ -85,7 +85,7 @@ src/
     encoding.ts            the encoder configs Mediabunny is given
     encoder-delay.ts       measures the AAC encoder's own delay, and compensates
     branding.ts            variant selection, fetch, boundary fades, timeline
-    title-card.ts          the title card's fit and draw, its text measure injected (VH-127)
+    title-card.ts          both title cards' fit and draw, staff and Submission, its text measure injected (VH-127, VH-128)
     title-card-frame.ts    the card in the job: the worker's own fit, its frames, its silence
     composite.ts           the build over picture, for the overlay modes
     freeze.ts              picks the held final frame for `over-freeze`
@@ -117,7 +117,7 @@ src/
     closing-choice.ts      the closing controls' result line and disabled reasons
     video-kind.ts          the switch's remembered side and the line beneath it
     video-language.ts      the video's text language: the page's until picked, remembered, its words marked with `lang` (VH-132)
-    title-card-step.ts     Step 3's card: limits in columns, the date filled, the box per side, the request (VH-127)
+    title-card-step.ts     Step 3's cards: limits in columns, the date filled, the box per side, Submission's checks, the request (VH-127, VH-128)
     brand-assets.ts        installs the logo and heading font where their files exist
     format.ts             durations, sizes, rates
   acceptance/              the §13 harness. Dev-only; not built.

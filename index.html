@@ -234,8 +234,9 @@
                logo and no labels: the labels here are the page's, and only
                what is typed is drawn. The box shows the four fields only
                while it is ticked, and unticking keeps what was typed. A
-               student submission locks it off, with its reason, and keeps
-               the staff card for the way back. Each field's limit is held
+               student submission ticks and locks it, with its reason, shows
+               Submission's fields and keeps the staff card for the way back
+               (VH-128). Each field's limit is held
                in the card's columns by `title-card-step.ts`, not by
                `maxlength`; its error sits beside it, announced, as Trim's. -->
           <!-- Painted from the table with TITLE_CARD_SECONDS; this is the no-script English. -->
@@ -291,6 +292,82 @@
                 <p class="field-error" id="title-card-date-error" hidden></p>
               </div>
             </div>
+          </div>
+          <!-- VH-128, 2026-10-19. Submission, shown in place of the staff
+               card's fields under a student submission, which ticks and
+               locks the box: four required fields, the ID numbers one box
+               of them. The card draws its own labels in the video's
+               language; these are the page's. A field's problem sits beside
+               it, announced: a fit at once, a missing or wrong field once
+               Create has been pressed. The line beneath says what the app
+               adds, its running time following the trim. -->
+          <div id="submission-card-fields" hidden>
+            <div class="field">
+              <label class="label" for="submission-card-assignment" data-i18n="titleCard.submission.assignment">
+                Assignment title or number
+              </label>
+              <input
+                class="text-input"
+                type="text"
+                id="submission-card-assignment"
+                autocomplete="off"
+                aria-describedby="submission-card-assignment-error"
+              />
+              <div aria-live="polite">
+                <p class="field-error" id="submission-card-assignment-error" hidden></p>
+              </div>
+            </div>
+            <div class="field">
+              <label class="label" for="submission-card-module" data-i18n="titleCard.submission.module">
+                Module code and title
+              </label>
+              <input
+                class="text-input"
+                type="text"
+                id="submission-card-module"
+                autocomplete="off"
+                aria-describedby="submission-card-module-error"
+              />
+              <div aria-live="polite">
+                <p class="field-error" id="submission-card-module-error" hidden></p>
+              </div>
+            </div>
+            <div class="field">
+              <label class="label" for="submission-card-convenor" data-i18n="titleCard.submission.convenor">
+                Module convenor or tutor
+              </label>
+              <input
+                class="text-input"
+                type="text"
+                id="submission-card-convenor"
+                autocomplete="off"
+                aria-describedby="submission-card-convenor-error"
+              />
+              <div aria-live="polite">
+                <p class="field-error" id="submission-card-convenor-error" hidden></p>
+              </div>
+            </div>
+            <div class="field">
+              <label class="label" for="submission-card-ids" data-i18n="titleCard.submission.ids">Student ID numbers</label>
+              <textarea
+                class="textarea"
+                id="submission-card-ids"
+                rows="3"
+                autocomplete="off"
+                spellcheck="false"
+                inputmode="numeric"
+                aria-describedby="submission-card-ids-helper submission-card-ids-error"
+              ></textarea>
+              <p class="helper" id="submission-card-ids-helper" data-i18n="titleCard.submission.idsHelper">
+                Each student ID (identity) number is 8 digits. Type one to eight, with spaces, commas or new
+                lines between them. Do not add names.
+              </p>
+              <div aria-live="polite">
+                <p class="field-error" id="submission-card-ids-error" hidden></p>
+              </div>
+            </div>
+            <!-- Painted from the table with the kept range's length; empty until a video is read. -->
+            <p class="helper" id="submission-card-filled"></p>
           </div>
         </fieldset>
       </section>

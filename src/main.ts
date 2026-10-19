@@ -64,21 +64,27 @@ import {
   WORKER_SILENCE_LIMIT_MS,
 } from './config/thresholds'
 import { KEPT_MIN_SECONDS, TRIM_RECHECK_DELAY_MS } from './config/trim'
-import { TITLE_CARD_SECONDS } from './config/cards'
+import { STUDENT_IDS_MAX, TITLE_CARD_SECONDS } from './config/cards'
 import { createWatchdog } from './core/watchdog'
 import { canEncodeAudio, checkEncodeSupport, detectDeviceClass } from './media/capability'
-import type { KeptRange } from './media/kept-range'
+import { keptDurationSeconds, type KeptRange } from './media/kept-range'
 import { saveFile, suggestedFileName } from './media/save'
 import {
   STAFF_CARD,
   STAFF_CARD_FIELDS,
+  SUBMISSION_CARD,
+  SUBMISSION_CARD_FIELDS,
   cardFamilies,
   fit,
   staffCardBlocks,
+  submissionCardBlocks,
+  type CardBlock,
   type CardRefusal,
   type FrameSize,
   type StaffCardField,
   type StaffCardText,
+  type SubmissionCardField,
+  type SubmissionTextField,
 } from './media/title-card'
 import {
   closingResultText,
@@ -106,7 +112,7 @@ import {
   feedbackMailto,
   feedbackText,
 } from './ui/feedback'
-import { formatFileSize } from './ui/format'
+import { formatClockTime, formatFileSize } from './ui/format'
 import {
   blockContextFor,
   preflightAnnouncement,
@@ -169,10 +175,20 @@ import {
   cardStop,
   dateOnLanguageChange,
   dateOnTick,
+  checkStudentIds,
+  firstSubmissionProblem,
   holdToColumns,
   refusalText,
+  studentIdTokens,
+  submissionCardRequest,
+  submissionCardText,
+  submissionProblemText,
+  submissionProblems,
   titleCardBoxState,
   titleCardRequest,
+  type SubmissionProblem,
+  type SubmissionTyped,
+  type TitleCardAssets,
 } from './ui/title-card-step'
 import {
   formatTrimTime,
@@ -338,6 +354,21 @@ const titleCardInputs = Object.fromEntries(
     },
   ]),
 ) as Record<StaffCardField, { readonly input: HTMLInputElement; readonly error: HTMLParagraphElement }>
+const submissionCardFields = required<HTMLDivElement>('#submission-card-fields')
+const submissionCardFilled = required<HTMLParagraphElement>('#submission-card-filled')
+/** Submission's four fields and the error line beside each, in the card's order (VH-128); the ID numbers' is a box. */
+const submissionInputs = Object.fromEntries(
+  SUBMISSION_CARD_FIELDS.map((field) => [
+    field,
+    {
+      input: required<HTMLInputElement | HTMLTextAreaElement>(`#submission-card-${field}`),
+      error: required<HTMLParagraphElement>(`#submission-card-${field}-error`),
+    },
+  ]),
+) as Record<
+  SubmissionCardField,
+  { readonly input: HTMLInputElement | HTMLTextAreaElement; readonly error: HTMLParagraphElement }
+>
 
 /**
  * One line under each step whose controls a running job or save has locked,
@@ -476,6 +507,17 @@ let filledCardDate: string | null = null
 const cardFieldsFull = new Set<StaffCardField>()
 /** Create was refused for a ticked card with nothing on it: said beside the box until that changes. */
 let cardEmptyRefused = false
+/** Submission's fields whose last typing was cut at their limit (VH-128). */
+const submissionFieldsFull = new Set<SubmissionTextField>()
+/**
+ * Create was refused for Submission: each field's missing or wrong value is
+ * said beside it, live, until every one is put right. Before then only a
+ * field the card cannot fit is said, so nobody is told off for a field they
+ * have not reached.
+ */
+let submissionRefused = false
+/** The running time the line under Submission last said, so a trim drag refits only when it moves. */
+let paintedRunningTime: string | null = null
 
 /**
  * What the three closing controls currently hold, as the job reads them.
@@ -1674,6 +1716,8 @@ function renderTrim(): void {
         (trimDuration < KEPT_MIN_SECONDS ? ` ${t().trim.tooShort({ seconds: KEPT_MIN_SECONDS })}` : '')
   trimClear.disabled =
     jobInFlight || saveInFlight || (problem === null && 'range' in trim && trim.range === null)
+  // Submission's running time is the kept range, so it follows the handles (VH-128).
+  paintSubmissionFilled()
 }
 
 /**
@@ -2188,14 +2232,14 @@ function applyControlLock(): void {
   renderTrim()
 }
 
-// --- Step 3, the title card (VH-127) ---------------------------------------
+// --- Step 3, the title card (VH-127, VH-128) --------------------------------
 // A staff video's optional card before the video. The box shows the four
 // fields only while ticked, and unticking keeps what was typed; a student
-// submission locks it off and keeps the staff card for the way back. Each
-// field is held to its limit in the card's columns and fitted here, at the
-// output's size, with the worker's families, so the worker's own refusal is
-// the rare case of fonts measuring differently. What is typed is never
-// logged.
+// submission ticks and locks it, shows Submission's four fields in their
+// place, and keeps the staff card for the way back. Each field is held to
+// its limit in the card's columns and fitted here, at the output's size,
+// with the worker's families, so the worker's own refusal is the rare case
+// of fonts measuring differently. What is typed is never logged.
 
 /** A brand token's value, resolved on the page as `brandBackground` is. */
 function brandToken(name: string): string {
@@ -2212,9 +2256,43 @@ function typedCard(): StaffCardText {
   }
 }
 
-/** True while a staff video's box is ticked: the one state in which a card is made. */
+/** True while a staff video's box is ticked: the one state in which a staff card is made. */
 function titleCardIsOn(): boolean {
   return chosenVideoKind() === 'staff' && titleCardOn.checked
+}
+
+/** Submission's four fields as typed (VH-128). */
+function typedSubmission(): SubmissionTyped {
+  return {
+    assignment: submissionInputs.assignment.input.value,
+    module: submissionInputs.module.input.value,
+    convenor: submissionInputs.convenor.input.value,
+    ids: submissionInputs.ids.input.value,
+  }
+}
+
+/** True under a student submission, which always has its card (VH-128). */
+function submissionIsOn(): boolean {
+  return chosenVideoKind() === 'submission'
+}
+
+/**
+ * The trim as it stands, in seconds: the kept range, or the handles' span
+ * while a typed time is being put right. The card's running time is this
+ * (the owner: "discounting trimmed material").
+ */
+function keptSecondsNow(): number {
+  const trim = currentTrim()
+  return 'range' in trim ? keptDurationSeconds(trim.range, trimDuration) : trimEnd - trimStart
+}
+
+/** What the worker reads to draw either card beside its words. */
+function cardAssets(): TitleCardAssets {
+  return {
+    headingFontUrl: headingFontUrl(document.baseURI),
+    cjkFontStack: brandToken('--font-cjk'),
+    colours: { ground: brandToken('--uon-brand-blue'), ink: brandToken('--uon-white') },
+  }
 }
 
 /** A document canvas, measuring as the worker's `OffscreenCanvas` will. */
@@ -2238,13 +2316,30 @@ function cardFrame(): FrameSize | null {
   return { widthPx: shape.width, heightPx: shape.height }
 }
 
-/** The page's fit of the card as typed; `null` while it is off, or before a video is read. */
-function cardRefusal(): CardRefusal<StaffCardField> | null {
+/** The page's fit of a card's blocks at the output's size; `null` when it fits, or before a video is read. */
+function fitOnPage<Name extends string>(blocks: CardBlock<Name>[]): CardRefusal<Name> | null {
   const frame = cardFrame()
-  if (!titleCardIsOn() || frame === null) return null
-  const blocks = staffCardBlocks(typedCard())
-  if (blocks.length === 0) return null
+  if (frame === null || blocks.length === 0) return null
   return fit(blocks, frame, { families: cardFamilies(brandToken('--font-cjk')), measure: cardMeasure }).refused
+}
+
+/** The page's fit of the staff card as typed; `null` while it is off. */
+function cardRefusal(): CardRefusal<StaffCardField> | null {
+  return titleCardIsOn() ? fitOnPage(staffCardBlocks(typedCard())) : null
+}
+
+/**
+ * Submission's problems as it stands: the fit tried in the video's language
+ * with today's date, the running time as trimmed and the ID numbers as split
+ * so far, at most as many as the card takes, so too many is said as that
+ * and not as a card too full. Empty while the switch is on Staff video.
+ */
+function currentSubmissionProblems(): Partial<Record<SubmissionCardField, SubmissionProblem>> {
+  if (!submissionIsOn()) return {}
+  const typed = typedSubmission()
+  const ids = studentIdTokens(typed.ids).slice(0, STUDENT_IDS_MAX)
+  const text = submissionCardText(typed, ids, keptSecondsNow(), new Date(), chosenVideoLanguage())
+  return submissionProblems(typed, fitOnPage(submissionCardBlocks(text)))
 }
 
 /** Writes a line only when its words change, so a live region is not read again on every key. */
@@ -2253,10 +2348,17 @@ function paintLine(line: HTMLElement, text: string | null): void {
   line.hidden = text === null
 }
 
+/** Marks a field invalid while its line says a problem, so the border is a second signal, never the only one. */
+function markInvalid(input: HTMLElement, invalid: boolean): void {
+  if (invalid) input.setAttribute('aria-invalid', 'true')
+  else input.removeAttribute('aria-invalid')
+}
+
 /**
  * Each field's line, a refusal of the fit before a note that typing was cut,
- * and the box's line for an empty card at Create. A refusal at Create that
- * has been put right takes its status line with it.
+ * and the box's line for an empty card at Create; under a submission,
+ * Submission's lines. A refusal at Create that has been put right takes its
+ * status line with it.
  */
 function paintTitleCardErrors(): void {
   const text = typedCard()
@@ -2265,21 +2367,52 @@ function paintTitleCardErrors(): void {
     const { input, error } = titleCardInputs[field]
     const refusal = stop?.at === 'field' && stop.field === field ? stop.refusal : null
     paintLine(error, refusal !== null ? refusalText(refusal) : cardFieldsFull.has(field) ? t().titleCard.full : null)
-    if (refusal !== null) input.setAttribute('aria-invalid', 'true')
-    else input.removeAttribute('aria-invalid')
+    markInvalid(input, refusal !== null)
   }
   if (stop?.at !== 'empty') cardEmptyRefused = false
   paintLine(titleCardEmptyError, cardEmptyRefused ? t().titleCard.empty : null)
-  if (stop === null && statusLine.textContent === t().titleCard.correctToContinue) setStatus('')
+
+  const problems = currentSubmissionProblems()
+  if (firstSubmissionProblem(problems) === null) submissionRefused = false
+  for (const field of SUBMISSION_CARD_FIELDS) {
+    const { input, error } = submissionInputs[field]
+    const problem = problems[field]
+    const shown = problem !== undefined && (submissionRefused || problem.kind === 'refused') ? problem : null
+    const full = field !== 'ids' && submissionFieldsFull.has(field)
+    paintLine(error, shown !== null ? submissionProblemText(field, shown) : full ? t().titleCard.full : null)
+    markInvalid(input, shown !== null)
+  }
+
+  if (stop === null && !submissionRefused && statusLine.textContent === t().titleCard.correctToContinue) {
+    setStatus('')
+  }
 }
 
-/** The box on this side of the switch, its reason when locked, and the fields while it is ticked. */
+/**
+ * The line under Submission: what the app adds to the card, with the running
+ * time as trimmed. Painted on a trim change only when the time it says
+ * moves, and then the card is fitted again, since that line is on it.
+ */
+function paintSubmissionFilled(): void {
+  const running = formatClockTime(keptSecondsNow())
+  const changed = running !== paintedRunningTime
+  paintedRunningTime = running
+  submissionCardFilled.textContent = t().titleCard.submission.filled({ running })
+  if (changed) paintTitleCardErrors()
+}
+
+/**
+ * The box on this side of the switch, its reason when locked, and the side's
+ * fields: the staff card's while its box is ticked, Submission's always.
+ */
 function syncTitleCard(): void {
-  const box = titleCardBoxState(chosenVideoKind(), staffTitleCard)
+  const kind = chosenVideoKind()
+  const box = titleCardBoxState(kind, staffTitleCard)
   titleCardOn.checked = box.checked
   titleCardOn.disabled = box.disabled
   paintLine(titleCardReason, box.reason)
-  titleCardFields.hidden = !box.checked
+  titleCardFields.hidden = kind !== 'staff' || !box.checked
+  submissionCardFields.hidden = kind !== 'submission'
   paintTitleCardErrors()
 }
 
@@ -2294,10 +2427,21 @@ function fillCardDate(rule: (current: string, filled: string | null, today: stri
 
 /**
  * Refuses Create for a card that cannot be made: nothing on it, said beside
- * the box, or a field it cannot fit, said beside that field. Either way the
- * status line says where, and focus goes to the field to put right.
+ * the box, or a field it cannot fit, said beside that field; under a
+ * submission, every field missing, wrong or too long, each said beside it.
+ * Either way the status line says where, and focus goes to the first field
+ * to put right.
  */
 function refuseTitleCard(): boolean {
+  if (submissionIsOn()) {
+    const first = firstSubmissionProblem(currentSubmissionProblems())
+    if (first === null) return false
+    submissionRefused = true
+    paintTitleCardErrors()
+    setStatus(() => t().titleCard.correctToContinue)
+    submissionInputs[first].input.focus()
+    return true
+  }
   const stop = cardStop(titleCardIsOn(), typedCard(), cardRefusal())
   if (stop === null) return false
   cardEmptyRefused = stop.at === 'empty'
@@ -2310,6 +2454,7 @@ function refuseTitleCard(): boolean {
 show(titleCardIntro, () => {
   titleCardIntro.textContent = t().titleCard.intro({ seconds: TITLE_CARD_SECONDS })
 })
+show(submissionCardFilled, paintSubmissionFilled)
 
 // Only a staff video's box is the user's to change. Ticking fills the date.
 titleCardOn.addEventListener('change', () => {
@@ -2321,31 +2466,53 @@ titleCardOn.addEventListener('change', () => {
   withdrawDiscardQuestion()
 })
 
-/** Holds a field to its limit in columns, as `maxlength` would in characters, and says when it cut. */
-function holdCardField(input: HTMLInputElement): void {
-  const field = STAFF_CARD_FIELDS.find((name) => titleCardInputs[name].input === input)
-  if (!field) return
-  const held = holdToColumns(input.value, input.selectionEnd ?? input.value.length, STAFF_CARD[field].columns)
+/**
+ * Holds `input` to `columns`, as `maxlength` would in characters, and notes
+ * in `full` when it cut, so its line says so.
+ */
+function holdToLimit<Field>(input: HTMLInputElement, columns: number, field: Field, full: Set<Field>): void {
+  const held = holdToColumns(input.value, input.selectionEnd ?? input.value.length, columns)
   if (held.cut) {
     input.value = held.value
     input.setSelectionRange(held.caret, held.caret)
-    cardFieldsFull.add(field)
+    full.add(field)
   } else {
-    cardFieldsFull.delete(field)
+    full.delete(field)
+  }
+}
+
+/** Holds whichever card field was typed in to its limit, then fits the card again. The ID numbers' box has its own rule. */
+function holdCardField(input: HTMLInputElement | HTMLTextAreaElement): void {
+  const staff = STAFF_CARD_FIELDS.find((name) => titleCardInputs[name].input === input)
+  const submission = (['assignment', 'module', 'convenor'] as const).find(
+    (name) => submissionInputs[name].input === input,
+  )
+  if (input instanceof HTMLInputElement && staff) {
+    holdToLimit(input, STAFF_CARD[staff].columns, staff, cardFieldsFull)
+  } else if (input instanceof HTMLInputElement && submission) {
+    holdToLimit(input, SUBMISSION_CARD[submission].columns, submission, submissionFieldsFull)
   }
   paintTitleCardErrors()
   withdrawDiscardQuestion()
 }
 
+/** The card field an event came from, if it came from one. */
+function cardFieldOf(target: EventTarget | null): HTMLInputElement | HTMLTextAreaElement | null {
+  return target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement ? target : null
+}
+
 // Not while an input method is composing: cutting there would break the
 // character being built. Its end is held instead.
-titleCardFields.addEventListener('input', (event) => {
-  if (event.isComposing || !(event.target instanceof HTMLInputElement)) return
-  holdCardField(event.target)
-})
-titleCardFields.addEventListener('compositionend', (event) => {
-  if (event.target instanceof HTMLInputElement) holdCardField(event.target)
-})
+for (const fields of [titleCardFields, submissionCardFields]) {
+  fields.addEventListener('input', (event) => {
+    const field = cardFieldOf(event.target)
+    if (!event.isComposing && field) holdCardField(field)
+  })
+  fields.addEventListener('compositionend', (event) => {
+    const field = cardFieldOf(event.target)
+    if (field) holdCardField(field)
+  })
+}
 
 // Lora arriving changes how wide the title draws, so the fit is tried again.
 if ('fonts' in document) document.fonts.addEventListener('loadingdone', () => paintTitleCardErrors())
@@ -2409,6 +2576,7 @@ function confirmDiscardThenStart(): void {
     // so this is belt and braces (U-02).
     const file = jobFile
     if (!file || jobInFlight || saveInFlight) return
+    if (refuseTitleCard()) return
     releaseUnsavedResult()
     beginJob(file)
   })
@@ -2488,14 +2656,24 @@ function beginJob(file: File): void {
   // The video's text language: the pick under the switch, or the page's (VH-132).
   const wordsLanguage = chosenVideoLanguage()
   const branding = brandingChoiceFor(closing, wordsLanguage)
-  // The staff card, or nothing: its words go to the worker and nowhere else,
-  // never the log, the diagnostics, the record or the file's name (VH-127).
-  const titleCard = titleCardRequest(titleCardIsOn(), typedCard(), {
-    headingFontUrl: headingFontUrl(document.baseURI),
-    cjkFontStack: brandToken('--font-cjk'),
-    colours: { ground: brandToken('--uon-brand-blue'), ink: brandToken('--uon-white') },
-  })
   const keptRange = jobKeptRange
+  // Submission, the staff card, or nothing: its words go to the worker and
+  // nowhere else, never the log, the diagnostics, the record or the file's
+  // name (VH-127, VH-128). Submission's running time is the range this job
+  // keeps, and its date is now, when the card is made.
+  const submissionIds = checkStudentIds(typedSubmission().ids)
+  const titleCard = submissionIsOn()
+    ? submissionCardRequest(
+        submissionCardText(
+          typedSubmission(),
+          submissionIds.ok ? submissionIds.ids : [],
+          keptDurationSeconds(keptRange, trimDuration),
+          new Date(),
+          wordsLanguage,
+        ),
+        cardAssets(),
+      )
+    : titleCardRequest(titleCardIsOn(), typedCard(), cardAssets())
   /** What this job is, fixed now: the result and the discard question carry it (A-05). */
   const record: JobRecord = {
     sourceName: file.name,
