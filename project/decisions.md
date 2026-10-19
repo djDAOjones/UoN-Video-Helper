@@ -17,6 +17,16 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-19 — VH-131 — The switch opens on Staff video and is remembered; a submission may have no closing
+
+**Decision:** the switch at the top opens on Staff video and is remembered in this browser, as the page's language is; a student submission may choose None, and whenever it has a closing, that closing is Internal use only; a staff video's graphic options are the basic card (VH-127), the closing's controls and the Internal use only toggle, and nothing more — because the owner answered VH-131's open questions in chat on 2026-10-19.
+
+**Rationale:** The owner's answers, 2026-10-19, to four questions asked as VH-131 started: which side is chosen before anyone touches it, "Staff video"; whether None is offered on a submission, "Yes, None is allowed"; whether a staff video holds other graphic options, "No, just those"; whether the choice is remembered between visits, "Yes, remembered". The second changes PLAN-1's "a submission always has … the Internal use only closing" to "a submission's closing, when it has one, is Internal use only"; the item's criterion naming Cut, Fade, Slide, the onset and the colour stands, with None offered beside them. Spec §4.1's "A student submission always has it." no longer says exactly this; VH-131's spec draft corrects it, for the owner's approval. The fourth follows VH-105's guarded read and write: this browser only, and a store that refuses leaves the default.
+
+**Supersedes:** 2026-10-19 — PLAN-1 — Staff video or Student submission, and the video's text in any of the three languages
+
+**Deferred:** none
+
 ## 2026-10-19 — VH-126 — Internal use only: twelve tails drawn by the Mac, its words from the tables, and a checkbox
 
 **Decision:** Internal use only is twelve pre-built tails and a checkbox: `scripts/build-branding.mjs --only internal` draws each table's `closing.internalWords` with macOS's own text system and wipes it in under the logo at the wordmark's measured pace, and the checkbox, off by default and locked under None, swaps the tail and nothing else — because Homebrew's ffmpeg has no `drawtext`, and a translation corrected through the sheet must reach the pixels.
