@@ -14,6 +14,7 @@ const whole: JobRecord = {
   presetId: 'best',
   closing: CLOSING_CONTROL_DEFAULTS,
   wordsLanguage: 'en-GB',
+  titleCard: false,
 }
 
 describe('jobSummaryText', () => {
@@ -68,6 +69,18 @@ describe('jobSummaryText with Internal use only (VH-126)', () => {
     expect(jobSummaryText({ ...whole, closing: { ...marked, type: 'none' } })).toContain(
       'no University closing.',
     )
+  })
+})
+
+describe('jobSummaryText with a title card (VH-127)', () => {
+  it('says the card opens the video, before the part kept, and quotes none of its words', () => {
+    expect(jobSummaryText({ ...whole, titleCard: true })).toBe(
+      'Made from Lecture 3.mp4: a 5-second title card, then the whole video (4 minutes 12 seconds), Larger / better, a cut to the blue closing card.',
+    )
+  })
+
+  it('says nothing of a card when there is none', () => {
+    expect(jobSummaryText(whole)).not.toContain('title card')
   })
 })
 

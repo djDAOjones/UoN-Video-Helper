@@ -17,6 +17,7 @@ import {
   type BrandingMode,
   type ClosingControls,
 } from '../config/branding'
+import { TITLE_CARD_SECONDS } from '../config/cards'
 import type { LanguageTag } from '../config/languages'
 import type { PresetId } from '../config/presets'
 import { closingWords, t } from '../i18n'
@@ -34,6 +35,8 @@ export interface JobRecord {
   readonly closing: ClosingControls
   /** The language of the video's own text, which Internal use only's words are drawn in (VH-132). */
   readonly wordsLanguage: LanguageTag
+  /** Whether a title card opens the video; never its words (VH-127). */
+  readonly titleCard: boolean
 }
 
 /** What the finished file actually carries, which is not always what was asked for. */
@@ -104,12 +107,18 @@ export function closingOutcomeText(controls: ClosingControls, outcome: ClosingOu
   return result.fellBackToPicture[colour][type]
 }
 
-/** The one-line record: "Made from NAME: PART, OUTPUT, CLOSING." */
+/**
+ * The one-line record: "Made from NAME: PART, OUTPUT, CLOSING.", with "a
+ * 5-second title card, then" before PART when the card is on (VH-127).
+ */
 export function jobSummaryText(record: JobRecord): string {
-  return t().result.summary({
+  const parts = {
     name: record.sourceName,
     part: keptPartText(record.keptRange, record.durationSeconds),
     output: t().preset.labels[record.presetId],
     closing: closingChoiceText(record.closing, record.wordsLanguage),
-  })
+  }
+  return record.titleCard
+    ? t().result.summaryWithCard({ ...parts, seconds: TITLE_CARD_SECONDS })
+    : t().result.summary(parts)
 }

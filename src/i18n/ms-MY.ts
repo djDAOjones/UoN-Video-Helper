@@ -376,6 +376,8 @@ export const msMY: Messages = {
       },
     },
     summary: 'Dibuat daripada {name}: {part}, {output}, {closing}.',
+    summaryWithCard:
+      'Dibuat daripada {name}: kad tajuk {seconds} saat, kemudian {part}, {output}, {closing}.',
     notLoaded:
       'Penutupan tidak dapat dimuatkan, jadi ia tiada dalam video ini. Semua yang lain telah digunakan seperti yang diminta.',
     fellBackToCut: {

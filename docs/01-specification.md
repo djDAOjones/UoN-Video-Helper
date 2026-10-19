@@ -96,6 +96,26 @@ video's language (§9.1). It changes no timing: the same onset, the same 4 s
 card, the same seconds added. On a student submission it is always on: a
 submission may have no closing, but any closing it has carries the words.
 
+**Title card.** A staff video can open with a title card (§9.1, step 3):
+white text on Nottingham Blue, no logo and no labels, held for 5 s in whole
+frames and joined to the video by a hard cut. It is not the opening sequence
+above, which stays withdrawn. Its four fields (title, department, author(s),
+date) are each optional and held to a limit in columns, a wide character
+counting as two: 100, 80, 80 and 40. The worker draws it at the output's size
+and frame rate, over silence on the source's channels: the title large in
+Lora, the others as plain lines, nothing under 56 px per 1080 lines of the
+shorter side (28 pt at PowerPoint sizes). Each field wraps into its own lines
+at the largest size that fits them and shrinks only when it would need more,
+the largest field first, down to that floor; what still will not fit is
+refused at its field, saying what to do, never clipped. Chinese draws as
+Latin does, whatever the video's language. The card adds its seconds and
+moves the closing by them, and nothing else: the trim, the closing and the
+loudness, measured on the source alone (§5), are unchanged, and the 100 ms
+audio fade (§4.4) applies at the join. The size and time estimates always
+count it, so the box moves neither. Its words go into the picture only, never
+the log, the diagnostics, the file's name or its metadata. A student
+submission has none until it has its own (VH-128).
+
 ### 4.2 Master assets, as delivered
 
 The four-variant matrix this section originally specified **does not exist**.
@@ -460,7 +480,7 @@ from assumption.**
 - Register a `beforeunload` warning while a job is running, while a save
   streams, and while a finished video is unsaved.
 - A finished, unsaved video is not kept past the tab, and the page says so
-  before Create and beside the result (§9.1 step 5). The leave warning
+  before Create and beside the result (§9.1 step 6). The leave warning
   catches a reload; it cannot catch a crash, a discarded tab or a forced
   restart, which is why the sentence is there.
 - Run all processing in a Web Worker so the UI stays responsive
@@ -529,17 +549,17 @@ through v1 — captions drawn into the picture do (§8.1).
 
 ### 9.1 Workflow
 
-The screen is five numbered steps (VH-91, VH-96). Above them, a switch
+The screen is six numbered steps (VH-91, VH-96, VH-127). Above them, a switch
 chooses "Staff video" or "Student submission" (VH-131). It opens on Staff
 video, is remembered in this browser and is never locked, so switching keeps
 the video, the trim, every choice, a running job and a result. Under it,
 "Video language" chooses the language of the words the app adds to the video
 (VH-132). It shows the page's language until someone picks one, then keeps the
 pick when the page's changes; it too is remembered and never locked, and a job
-reads it at its start. Step 1 is there from the start; steps 2–5 appear once
+reads it at its start. Step 1 is there from the start; steps 2–6 appear once
 a video has been read, and each holds a safe default, so a user who changes
-nothing keeps the whole video and gets a clean-cut blue closing and the larger
-file.
+nothing keeps the whole video, with no title card, a clean-cut blue closing
+and the larger file.
 
 1. **Choose a video** — file picker or drag-and-drop. The app reads the file
    and says what it found, including anything that cannot be carried into
@@ -550,16 +570,27 @@ file.
    alone, the whole video is kept, and "Use the whole video" puts it back.
    The part kept must be at least 3 s. The preview plays the original — the
    sound not yet levelled, the closing not yet added — and the step says so.
-3. **Closing branding** — animation type, onset and colour (§4.3).
-4. **File size / quality** — "Larger / better" or "Smaller / reduced"
+3. **Title card** (optional) — an "Add a title card" box, off at first,
+   shows Title, Department, Authors and Date while ticked (§4.1). Ticking
+   fills the date with today's date in the video's language; a change of
+   video language refills it while it still says what was filled, and a
+   typed date is kept. Each field stops at its limit and says so; unticking
+   keeps what was typed. Create refuses a ticked card with nothing on it, or
+   one that will not fit, before anything starts: the reason beside the box
+   or the field, a line in step 6, and focus there. Under Student submission
+   the box is unticked and locked, saying why, and the tick and fields come
+   back with Staff video.
+4. **Closing branding** — animation type, onset and colour (§4.3).
+5. **File size / quality** — "Larger / better" or "Smaller / reduced"
    (§6).
-5. **Create** — the device check's verdict for this video, the part kept
+6. **Create** — the device check's verdict for this video, the part kept
    and the file size chosen, calibration probe included (§7); any
    audio-quality warnings (§5.4); then "Create the video", with named
    progress and a cancel button, and "Save the video" when it is done.
 
-   The finished video carries a one-line summary of its job — file, part
-   kept, output, closing as requested and as applied — fixed when the job
+   The finished video carries a one-line summary of its job — file, the
+   title card when there is one (never its words), part kept, output,
+   closing as requested and as applied — fixed when the job
    ends and never relabelled by the controls for the next one; the question
    asked before it is discarded carries the same summary. It is not kept
    past the tab, and the page says so before Create and beside the result;

@@ -350,6 +350,7 @@ export const zhHans: Messages = {
       },
     },
     summary: '由 {name} 构成：{part}、{output}、{closing}。',
+    summaryWithCard: '由 {name} 构成：{seconds} 秒的标题卡，随后是{part}、{output}、{closing}。',
     notLoaded: '由于结尾部分无法加载，因此未包含在视频中。其他所有步骤均已按要求完成。',
     fellBackToCut: {
       blue: {

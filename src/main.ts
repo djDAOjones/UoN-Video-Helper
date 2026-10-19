@@ -2504,6 +2504,7 @@ function beginJob(file: File): void {
     presetId: chosenPreset(),
     closing,
     wordsLanguage,
+    titleCard: titleCard !== null,
   }
 
   const { id, promise } = requestWithId(

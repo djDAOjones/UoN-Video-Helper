@@ -17,6 +17,36 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-19 — VH-127 — The staff card's Chinese and Malay stand as the agent drafted them
+
+**Decision:** the agent's Chinese and Malay for `steps.titleCard`, the `titleCard` group, `failure.titleCardRefused`, `videoLanguage.helper`'s second sentence and `result.summaryWithCard` stand as drafted, machine translation like the rest of the translated pages — because the owner approved them in chat on 2026-10-19.
+
+**Rationale:** Slice (c) drafted eighteen rows and slice (d) one more, each marked "drafted by the agent" in `reviews/2026-10-18/VH-105-strings-filled.csv`. The owner was shown every row beside its English and approved the eighteen as drafted, then the record line's. The marks stay in the sheet, so a translator's review can still find them; a correction goes through the sheet and `scripts/strings-table.mjs`.
+
+**Supersedes:** none
+
+**Deferred:** none
+
+## 2026-10-19 — VH-127 — A card field wraps into its lines first, then shrinks to the floor
+
+**Decision:** each card field takes the largest size at which it wraps into its role's lines, shrinks only when it would need more lines than its role allows, and the largest field shrinks first until the card fits, never under the 56 px floor; the acceptance's "shrinks to the floor, then wraps" is read so — because the owner chose the fit as built in chat on 2026-10-19.
+
+**Rationale:** Slice (a) built VH-126's measured fit (`fit` in `src/media/title-card.ts`) and left the order open. Read literally, the criterion would hold a long title on one small line; the fit keeps a 50-character title large on two. The owner chose "keep it large, wrap first" over a change to `fit` and a re-run of `spike-cards.html`. A field still too many lines at its floor is refused at that field; every field at its floor and the card still too tall is refused at the field with the most lines (`at: 'card'`).
+
+**Supersedes:** none
+
+**Deferred:** none
+
+## 2026-10-19 — VH-127 — The result's one-line record says when a title card opens the video
+
+**Decision:** with the card on, the result's record reads "Made from NAME: a 5-second title card, then PART, OUTPUT, CLOSING.", never quoting the card's words; the discard question's own sentences are unchanged, and the record it repeats gains the card as the result's does — because the owner chose the recommended option in chat on 2026-10-19.
+
+**Rationale:** Asked in slice (d) whether the result summary and the discard question should mention the card, the owner chose "the summary only" over neither or both. The discard question says no choice in its own words; it repeats the result's record (VH-107, A-05), so the card reaches it through that one line. `JobRecord.titleCard` is a boolean fixed when the job starts; `result.summaryWithCard` went through VH-105's sheet route.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-19 — VH-127 — Under Student submission, the staff card's box is locked off and its fields kept
 
 **Decision:** under Student submission, Step 3's "Add a title card" box is unticked and locked, with its reason in visible text, and no card is sent; the staff card's tick and typed fields are kept and come back when the switch returns to Staff video, until VH-128 builds the submission card — because the owner chose the recommended option in chat on 2026-10-19.

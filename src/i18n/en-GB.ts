@@ -400,6 +400,8 @@ export const enGB = {
     },
     /** The one-line record: "Made from NAME: PART, OUTPUT, CLOSING." The name is the user's own. */
     summary: 'Made from {name}: {part}, {output}, {closing}.',
+    /** The same record with the title card on (VH-127); it never quotes the card's words. */
+    summaryWithCard: 'Made from {name}: a {seconds}-second title card, then {part}, {output}, {closing}.',
     notLoaded:
       'The closing could not be loaded, so it is not in this video. Everything else was applied as asked.',
     fellBackToCut: {
