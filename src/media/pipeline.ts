@@ -17,6 +17,7 @@ import {
   EncodedPacketSink,
   Mp4OutputFormat,
   Output,
+  VideoSample,
   VideoSampleSink,
   VideoSampleSource,
   type AudioSample,
@@ -37,6 +38,7 @@ import type { OutputShape, Preset } from '../config/presets'
 import { INTEGRATED_TOLERANCE_LU, TARGET_INTEGRATED_LUFS } from '../config/audio'
 import { JobFailureError } from '../workers/failure'
 import { createContentAudioProcessor, planAudio } from './audio-plan'
+import { toSample } from './audio-frames'
 import {
   BrandingRenderer,
   closingTimeline,
@@ -59,6 +61,7 @@ import {
 } from './kept-range'
 import type { OpfsWorkspace } from './opfs'
 import { deriveSourceTimeline } from './source-timeline'
+import { cardSilence, titleCardSpan } from './title-card-frame'
 import { carryTrackMetadata } from './track-metadata'
 
 /** Named stages, per spec section 9.2 — not one opaque bar. */
@@ -203,6 +206,12 @@ export interface PipelineOptions {
    * path that ran before trimming existed.
    */
   readonly keptRange?: KeptRange | null
+  /**
+   * The staff title card (VH-127), drawn once at the output's size by the
+   * worker (`drawTitleCardFrame`); absent or `null` for none. It joins before
+   * the trimmed source by a hard cut, held for `titleCardSpan`'s whole frames.
+   */
+  readonly titleCard?: OffscreenCanvas | null
   readonly signal?: AbortSignal
   readonly onProgress?: (progress: PipelineProgress) => void
 }
@@ -386,7 +395,13 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     })
   }
 
-  const openingSeconds = opening?.durationSeconds ?? 0
+  // The title card follows any opening clip, in whole frames at the output's
+  // rate, so the content after it starts on the frame grid (VH-127). Together
+  // they are the opening the timeline moves everything after by.
+  const titleCard = options.titleCard ?? null
+  const cardSpan = titleCard ? titleCardSpan(shape.frameRate) : null
+  const openingClipSeconds = opening?.durationSeconds ?? 0
+  const openingSeconds = openingClipSeconds + (cardSpan?.durationSeconds ?? 0)
   const closingSeconds = closing?.durationSeconds ?? 0
   // Whether the closing master carries a bed of its own decides whether source
   // audio may run underneath it. The real masters carry none.
@@ -537,6 +552,24 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       await feedBrandingVideo(opening, videoSource, videoDelaySeconds, renderer, laneSignal)
     }
 
+    if (titleCard && cardSpan) {
+      // One drawn picture, held: each frame a fresh sample of the same canvas,
+      // closed once added. Timed by index, so no step accumulates.
+      for (let index = 0; index < cardSpan.frames; index++) {
+        throwIfAborted(laneSignal)
+        const frame = new VideoSample(titleCard, {
+          timestamp: videoDelaySeconds + openingClipSeconds + index / shape.frameRate,
+          duration: 1 / shape.frameRate,
+        })
+        try {
+          await videoSource.add(frame)
+        } finally {
+          frame.close()
+        }
+        framesFed++
+      }
+    }
+
     const sink = new VideoSampleSink(videoTrack)
 
     const buildTrack = build ? await build.input.getPrimaryVideoTrack() : null
@@ -680,6 +713,21 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       await feedBrandingAudio(opening, emit, 0, { fadeIn: false, fadeOut: true }, laneSignal)
     }
 
+    if (titleCard) {
+      // Silence under the card at the plan's rate and channels; the encoder's
+      // transform resamples it with the rest. Checked before each sample is
+      // made, so a cancel never leaves one unclosed.
+      for (const block of cardSilence(
+        openingClipSeconds,
+        contentOffset,
+        audioPlan.sampleRate,
+        audioPlan.channelCount,
+      )) {
+        throwIfAborted(laneSignal)
+        await emit(toSample(block.channels, audioPlan.sampleRate, block.timestampSeconds))
+      }
+    }
+
     const processContent = createContentAudioProcessor(audioPlan, {
       offsetSeconds: contentOffset,
       startOffsetSeconds: sourceTimeline.audioOffsetSeconds,
@@ -687,8 +735,8 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       // than where the picture did.
       durationSeconds: audioEndsAt,
       // A cut mid-sound clicks, so a trimmed edge fades whatever adjoins it —
-      // branding or the end of the file (VH-95).
-      fadeIn: opening !== null || (keptRange !== null && keptRange.startSeconds > 0),
+      // branding, the title card (D3, VH-127) or the end of the file (VH-95).
+      fadeIn: opening !== null || titleCard !== null || (keptRange !== null && keptRange.startSeconds > 0),
       fadeOut:
         closing !== null ||
         (keptRange !== null && keptRange.endSeconds < (audioDurationSeconds ?? 0)),
@@ -759,6 +807,8 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
         : null,
       brandingRequested: `${branding.opening}/${branding.closing}`,
       brandingApplied: `${opening !== null}/${closing !== null}`,
+      // Whether a card was on, and nothing of what it says (VH-127).
+      titleCard: titleCard !== null,
     })
     const outputWarnings: AudioWarning[] = []
     if (!metadataCarried) outputWarnings.push({ code: 'metadata-lost', detail: {} })

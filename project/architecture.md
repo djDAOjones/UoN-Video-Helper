@@ -86,6 +86,7 @@ src/
     encoder-delay.ts       measures the AAC encoder's own delay, and compensates
     branding.ts            variant selection, fetch, boundary fades, timeline
     title-card.ts          the title card's fit and draw, its text measure injected (VH-127)
+    title-card-frame.ts    the card in the job: the worker's own fit, its frames, its silence
     composite.ts           the build over picture, for the overlay modes
     freeze.ts              picks the held final frame for `over-freeze`
     opfs.ts                job-scoped working store, Web Locks, orphan sweep

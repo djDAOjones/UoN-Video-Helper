@@ -20,7 +20,7 @@ import {
   type PresetId,
 } from '../config/presets'
 import { detectSourceWarnings, type AudioWarning } from '../audio/warnings'
-import { LONGEST_CLOSING_SECONDS, type BrandingChoice } from '../config/branding'
+import type { BrandingChoice } from '../config/branding'
 import { analyseSourceAudio } from '../media/audio-plan'
 import {
   canEncodeAudio,
@@ -43,9 +43,10 @@ import { JobFailureError, classifyFailure, failureReasonFor, type FailureCode } 
 import { CancelledError, runPipeline, throwIfAborted } from '../media/pipeline'
 import { preflightVerdict, type PreflightSummary } from '../media/preflight'
 import { calibrationProbe } from '../media/probe'
+import { brandingAllowanceSeconds, drawTitleCardFrame } from '../media/title-card-frame'
 import { CancellationRegistry } from './cancellation'
 import { RetainedResults } from './retained'
-import type { WorkerOutbound, WorkerRequest } from './protocol'
+import type { TitleCardRequest, WorkerOutbound, WorkerRequest } from './protocol'
 
 const bootAt = performance.now()
 
@@ -176,6 +177,7 @@ async function handleProcess(
     readonly brandingBaseUrl: string
     readonly contentClass: ContentClass
     readonly keptRange?: KeptRange
+    readonly titleCard?: TitleCardRequest
   },
   signal: AbortSignal,
 ): Promise<void> {
@@ -225,6 +227,14 @@ async function handleProcess(
       bitrateBasis: shape.bitrateBasis,
     })
 
+    // Fitted again with the worker's own fonts and drawn once, before anything
+    // is written, so a card this fit refuses fails the job while nothing needs
+    // undoing (VH-127).
+    const titleCard = options.titleCard
+      ? await drawTitleCardFrame(options.titleCard, { widthPx: shape.width, heightPx: shape.height })
+      : null
+    throwIfAborted(signal)
+
     workspace = await OpfsWorkspace.open(jobId)
     const result = await runPipeline({
       input: openInput(file),
@@ -237,6 +247,7 @@ async function handleProcess(
       backgroundColour: options.backgroundColour,
       brandingBaseUrl: options.brandingBaseUrl,
       keptRange,
+      titleCard,
       signal,
       onProgress: ({ stage, fraction }) => post({ kind: 'stage', id, stage, fraction }),
     })
@@ -471,10 +482,12 @@ async function handlePreflight(
     // multiply by the source alone — omitting the tail outright, about 3% on a
     // 130 s lecture, and part of why four real "Smaller file" jobs produced a
     // file bigger than the number the user had decided on. The mode is not
-    // known here, so an upper bound assumes the longest (VH-31).
+    // known here, so an upper bound assumes the longest (VH-31); nor is the
+    // title card, so it is always counted and its box moves no estimate (VH-127).
+    const brandingSeconds = brandingAllowanceSeconds(shape.frameRate)
     const projected = projectedOutputBytes(
       shape,
-      keptSeconds + LONGEST_CLOSING_SECONDS,
+      keptSeconds + brandingSeconds,
       report.audio !== null,
     )
 
@@ -548,9 +561,9 @@ async function handlePreflight(
             shape,
             durationSeconds: keptSeconds,
             fromSeconds: keptRange?.startSeconds ?? 0,
-            // The most a closing adds, as for the size: the closing is chosen
-            // after pre-flight (VH-31).
-            closingSeconds: LONGEST_CLOSING_SECONDS,
+            // The most a closing and the title card add, as for the size: both
+            // are chosen after pre-flight (VH-31, VH-127).
+            closingSeconds: brandingSeconds,
             analysis: analysisPass,
             signal,
           })

@@ -34,6 +34,8 @@ export type FailureCode =
   | 'check-failed'
   /** The job stopped reporting and was stopped (the main thread's watchdog). */
   | 'timed-out'
+  /** The worker's own fit refused a title card the page had fitted (VH-127). */
+  | 'title-card-refused'
   | 'unknown'
 
 /**

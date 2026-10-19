@@ -337,6 +337,26 @@ export function columnsOf(text: string): number {
   return columns
 }
 
+/* ---- Faces ------------------------------------------------------------ */
+
+/** The family Lora Bold is loaded under, on the page (`brand-assets.ts`) and in the worker. */
+export const CARD_HEADING_FAMILY = 'Lora'
+
+/**
+ * Each face's family list on a card: the brand face, its fallback, then the
+ * device's CJK fonts, as `tokens.brand.css` stacks them under `:lang(zh)`.
+ * The CJK fonts are there in every language, because a title typed in Chinese
+ * must draw in an English video too. The stack is `--font-cjk`, read on the
+ * page and passed to the worker, which has no document; so the page and the
+ * worker fit with the same families.
+ */
+export function cardFamilies(cjkFontStack: string): CardFonts['families'] {
+  return {
+    heading: `${CARD_HEADING_FAMILY}, Georgia, ${cjkFontStack}`,
+    body: `Arial, ${cjkFontStack}`,
+  }
+}
+
 /* ---- Drawing ---------------------------------------------------------- */
 
 /** The 2D drawing a card needs, which a document canvas and an `OffscreenCanvas` both give. */

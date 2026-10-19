@@ -19,6 +19,27 @@ import type { DeviceClass } from '../media/capability'
 import type { PreflightSummary } from '../media/preflight'
 import type { AudioWarning } from '../audio/warnings'
 import type { PipelineStage } from '../media/pipeline'
+import type { CardColours, StaffCardText } from '../media/title-card'
+
+/**
+ * The staff title card a job opens with (VH-127): what was typed, and what the
+ * worker needs to fit and draw it again with its own fonts, which it cannot
+ * read from a document it does not have.
+ */
+export interface TitleCardRequest {
+  /** The four fields as typed. The user's own words: never logged, never in a message. */
+  readonly text: StaffCardText
+  /**
+   * Lora Bold's URL, resolved against the page (`brand-assets.ts`), or `null`
+   * when the build has no file; the card then falls back to Georgia, as the
+   * page's headings do.
+   */
+  readonly headingFontUrl: string | null
+  /** The `--font-cjk` stack, read on the page, so a typed non-Latin script draws. */
+  readonly cjkFontStack: string
+  /** Nottingham Blue and white, resolved from the brand tokens, as `backgroundColour` is. */
+  readonly colours: CardColours
+}
 
 /** Main thread -> worker. */
 export type WorkerRequest =
@@ -87,6 +108,13 @@ export type WorkerRequest =
        * the worker against the file; absent keeps the whole file.
        */
       readonly keptRange?: KeptRange
+      /**
+       * The staff title card before the video (VH-127); absent for none. Its
+       * own field, never inside `branding`: the pipeline logs the branding
+       * request and `processed` echoes it back, and the card's text must reach
+       * neither the logger nor the diagnostics bundle.
+       */
+      readonly titleCard?: TitleCardRequest
     }
   /** Stop the job started by `cancelId`. Answered by that job, not by this request. */
   | { readonly kind: 'cancel'; readonly id: number; readonly cancelId: number }
