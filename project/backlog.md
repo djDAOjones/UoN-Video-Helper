@@ -30,9 +30,11 @@
 
 ### Band 8 — a title card and an Internal use only closing
 
-- [!] VH-126 — The Internal use only closing — since 2026-10-18 — blocked: the owner's sign-off on the measured type scale, two open questions in its notes, and ffmpeg for the asset build
-- [ ] VH-127 — The title card: General — since 2026-10-18
-- [ ] VH-128 — The title card: Submission — since 2026-10-18
+- [ ] VH-126 — The Internal use only closing — since 2026-10-18
+- [ ] VH-131 — Staff video or Student submission: the switch at the top — since 2026-10-19
+- [ ] VH-132 — The video's text in any of the three languages — since 2026-10-19
+- [ ] VH-127 — The title card: Staff video — since 2026-10-18
+- [ ] VH-128 — The title card: Student submission — since 2026-10-18
 
 ### Standing — maintainer-owned, never band-gated
 

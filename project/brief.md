@@ -13,8 +13,8 @@
 A static, browser-only app that turns one recorded educational video
 into a branded, loudness-normalised, correctly encoded MP4 for
 University of Nottingham staff and students, in one pass, with no media
-leaving the device. A conveyor with one cut, not an editor: trim the
-ends, add a title card or not, choose a closing, choose one of two
+leaving the device. A conveyor with one cut, not an editor: say whether it is a staff video
+or a student submission, trim the ends, add a title card or not, choose a closing, choose one of two
 purpose-named outputs, nothing else.
 `docs/01-specification.md` is authoritative; `docs/02-technical-rationale.md`
 settles WebCodecs over ffmpeg.wasm, the one runtime dependency and the

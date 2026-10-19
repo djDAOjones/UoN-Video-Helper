@@ -17,6 +17,18 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-19 — PLAN-1 — Staff video or Student submission, and the video's text in any of the three languages
+
+**Decision:** a switch at the top chooses Staff video or Student submission: a submission always has the Submission card and the Internal use only closing; a staff video has an optional basic card and Internal use only as a toggle; the video's text follows the page's language unless a selector picks another — because the owner said so on 2026-10-19.
+
+**Items:** VH-126, VH-127, VH-128, VH-131, VH-132
+
+**Rationale:** The owner's words, 2026-10-19, answering VH-126's notes: the type scale "looks great"; "maybe a switch at the top between 'Student submission' and 'Staff video' where student submission has the card + details and the all the logo animation options but always with Internal Only; the staff options have a basic card with title, department, author(s), and date (all optional), and the internal use text is a toggle along with other graphic options"; on the closing's language, "follow language is great as default, but offer a selector on all language versions to change the video text to any of the three"; and that ffmpeg is installed, though at this close Homebrew's install still waited at its confirmation prompt, so the next session checks. Consequences: General becomes the staff card, its heading and subhead replaced by four optional fields (VH-127, re-scoped by the owner); the Submission card is always on for a submission (VH-128); the closing gains an internal tail per language and colour at both heights, twelve, the onsets untouched (VH-126); the switch is new, VH-131; the selector is new, VH-132, and sets the cards' labels and the closing's words, never what is typed. This also replaces the first PLAN-1 entry's General-or-Submission toggle. Order: VH-126, whose assets need only ffmpeg and the two translations; VH-131, which it is chosen under; VH-132; VH-127; VH-128. Open, for the owner when each item starts: in each item's notes. The brief's Direction says so.
+
+**Supersedes:** 2026-10-19 — VH-126 — Internal use only: an option in blue or white, its words building in with the logo
+
+**Deferred:** none
+
 ## 2026-10-19 — VH-126 — The cards' type scale, measured: list-style fields, a shared last line, limits in columns
 
 **Decision:** the cards' type scale is `src/config/cards.ts`, measured in Chrome by `spike-cards.html`: a floor of 56 px per 1080 lines of the shorter side, Submission's fields run in as list items at 1.25, its running time and card date sharing a line, and typed fields capped in columns — because then every card fits 16:9, 16:10, 4:3 and 9:16 in all three languages at every limit.
