@@ -734,6 +734,13 @@ a {
   accent-color: var(--interactive);
 }
 
+/* A disabled checkbox still reads, but must not look available, as the
+   radios' groups do (VH-126): Internal use only under None. */
+.checkbox:has(input:disabled) {
+  color: var(--text-secondary);
+  cursor: not-allowed;
+}
+
 .result-link {
   display: inline-block;
   margin-top: var(--spacing-04);

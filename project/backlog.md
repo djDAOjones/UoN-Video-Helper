@@ -30,7 +30,7 @@
 
 ### Band 8 — a title card and an Internal use only closing
 
-- [!] VH-126 — The Internal use only closing — since 2026-10-18 — blocked: the owner's approval of the spec text drafted in its notes; its Chrome check is the next session's
+- [!] VH-126 — The Internal use only closing — since 2026-10-18 — blocked: the owner's approval of the spec text drafted in its notes
 - [ ] VH-131 — Staff video or Student submission: the switch at the top — since 2026-10-19
 - [ ] VH-132 — The video's text in any of the three languages — since 2026-10-19
 - [ ] VH-127 — The title card: Staff video — since 2026-10-18
