@@ -17,6 +17,26 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-20 — VH-133 — The returned workbook's changes are Google's re-run, not corrections; nothing is merged
+
+**Decision:** none of the 21 cells that differ in `UoN Video Helper Translate v01 (1).xlsx` is merged, and VH-133 closes with the sheet and tables unchanged — because every one is still an unedited `GOOGLETRANSLATE` formula on unchanged English, so they are machine output from a later recalculation, not a person's corrections.
+
+**Rationale:** The workbook's XML, read in Node: all 746 language cells are Google Sheets' export of `GOOGLETRANSLATE(C<row>,"en",<lang>)` with a cached value; each of the 21 points at its own row, and those rows' English matches the returned sheet. A person's edit in Sheets replaces the formula with text, and none did. The drift shows Google's marks: `{app}` renamed `{aplikasi}`, and "put down your phone" kept in `choose.dropHeld`. In the 14 cells the agent had repaired, the new output still gets the meaning wrong where the repair fixed it; in the other 7 it is no more right than the reviewed text. The 2026-10-18 rule stands: a reviewer's corrections come back by key through the filled sheet. Recommended by the agent and applied on the owner's standing word ("happy for your recommendations on all matters, proceed"). Item file: VH-133.
+
+**Supersedes:** none
+
+**Deferred:** none
+
+## 2026-10-20 — PLAN-2 — The owner's standing word: the agent's recommendations answer Phase 2's open questions, and the phase runs
+
+**Decision:** Phase 2 runs item by item to its close, and on every open question in its items, the six spec edits included, the agent's recommendation stands as the owner's answer, recorded in the item's decision and shown at its close — because the owner said "happy for your recommendations on all matters, proceed" in chat on 2026-10-20.
+
+**Rationale:** The owner gave this after PLAN-2 was recorded, while VH-133's questions (the 14 cells both changed, `choose.dropHeld`) and VH-136's (where the time left shows, its rounding, what it counts, how often it is heard) were open. VH-134's criterion that the six drafts be shown before anything is written to the spec is met by showing the applied diff at its close, which the owner can reverse; the rules file still has the owner approve every spec edit, and this is that approval, given in advance for this phase only. The session that recorded this ended at VH-133's close, past the profile's 200k Session line; the next session resumes at VH-134.
+
+**Supersedes:** none
+
+**Deferred:** VH-134
+
 ## 2026-10-20 — PLAN-2 — Phase 2: the owner's corrections, the spec caught up, three page defects, a time left
 
 **Decision:** the wish list is triaged: Phase 2 is VH-133 (the owner's translation corrections), VH-134 (six spec edits drafted for approval), VH-135 (three page defects and the Xerte link) and VH-136 (a time left during the job), in that order; the statement's review is VH-137, the owner's, due 2026-11-18; two lines already paid are retired; fifteen stay wishes — because the owner applied the agent's triage in chat on 2026-10-20 and added the time left.

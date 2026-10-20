@@ -7,6 +7,10 @@
      items the canon record shipped before the migration, in v3's form;
      their why is in the frozen canon decision log (history.md). -->
 
+## Phase 2 — the owner's corrections, the spec caught up, three page defects, a time left
+
+- VH-133 — the returned workbook's 21 changed cells are Google Translate's own re-run, every one still an unedited formula on unchanged English, not a person's wording; nothing merged, the reviewed tables stand (2026-10-20) — see decisions
+
 ## Band 7 — measured, not yet fixed
 
 - RECALL — 8/8 (2026-10-20) — scores: 2,2,2,2 — local — see decisions
