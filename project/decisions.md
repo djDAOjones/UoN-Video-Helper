@@ -17,6 +17,16 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-20 — VH-116 — The §7.1 sentence stands as worded; the wishes stay wishes, and the next item waits on the owner
+
+**Decision:** spec §7.1's sentence on the probe's warm-up stands as worded and is applied; every wish stays on the wish list, none promoted; nothing new is added unless it is really needed, so the next item stays "none" until the owner names one — because the owner said so in chat on 2026-10-20.
+
+**Rationale:** The owner approved "measures throughput — timed from after the first sixth of those frames, so the encoder's start-up, which a job pays once, is not extrapolated (VH-116) — and extrapolates" in chat on 2026-10-20; its wish line is retired, and the spec's routed-budget wish line now quotes 7,386 words. Asked what comes next, the owner chose to keep the wishes on the wish list for now and is inclined to add nothing new unless it is really needed. The agent advised watching three to five staff use the pilot first (VH-M4), and testing one Smaller output on SharePoint (VH-17); both are the owner's own work and already open in the backlog.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-20 — VH-116 — Band 7 closes with VH-116; no unblocked item follows, so the next work is the owner's
 
 **Decision:** Band 7 closed on 2026-10-20 with both its items shipped, its backlog heading now "Band 7 — measured, not yet fixed — CLOSED 2026-10-20"; no open, unblocked line remains in Current or Next, so the next item is the owner's to name — because Band 3's VH-17, Band 6's VH-124 and VH-113 and every Standing line wait on the owner, and Next's VH-13 waits on VH-M2.

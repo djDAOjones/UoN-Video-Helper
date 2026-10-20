@@ -443,7 +443,9 @@ permissive on a slow one. Instead:
 
 Before processing, the app decodes and re-encodes **3 seconds of the actual
 source file's video** — of the part kept, when it is trimmed — on the actual
-device, measures throughput, and extrapolates the kept video and the
+device, measures throughput — timed from after the first sixth of those
+frames, so the encoder's start-up, which a job pays once, is not
+extrapolated (VH-116) — and extrapolates the kept video and the
 closing's frames from it. The sound is priced from pre-flight's own analysis
 pass over the kept part, which is timed rather than sampled: audio planning,
 processing and the output check are each a multiple of that pass (VH-100).
