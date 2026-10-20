@@ -23,9 +23,7 @@
 - [!] VH-124 — The page, made excellent — since 2026-10-01 — blocked: the owner's sign-off
 - [!] VH-113 — The phone path — since 2026-10-01 — blocked: the owner's own work — a canon [maintainer] item
 
-### Band 7 — measured, not yet fixed
-
-- [~] VH-116 — A video estimate that holds still — since 2026-10-01
+### Band 7 — measured, not yet fixed — CLOSED 2026-10-20
 
 ### Phase 1 — Band 8, a title card and an Internal use only closing — CLOSED 2026-10-19
 

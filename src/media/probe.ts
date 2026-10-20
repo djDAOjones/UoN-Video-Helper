@@ -28,6 +28,7 @@ import { log } from '../core/logger'
 import {
   AUDIO_STAGE_PASSES,
   CALIBRATION_PROBE_SECONDS,
+  CALIBRATION_PROBE_WARM_UP_FRACTION,
   MINIMUM_CREDIBLE_PROBE_FRAMES,
 } from '../config/thresholds'
 import type { OutputShape } from '../config/presets'
@@ -110,6 +111,23 @@ export async function probeVideo(
   }
 
   return { frames, seconds: (performance.now() - startedAt) / 1000, acceptedAtSeconds }
+}
+
+/**
+ * The probe's frames and seconds as the estimate counts them: from after its
+ * first {@link CALIBRATION_PROBE_WARM_UP_FRACTION} of frames, so the encoder's
+ * start-up, which a job pays once, is not extrapolated over all of it
+ * (VH-116). Every frame is still encoded in the same window; only the clock
+ * starts later. A probe of fewer than six frames is timed whole.
+ */
+export function warmedUpTiming(probe: {
+  readonly frames: number
+  readonly seconds: number
+  readonly acceptedAtSeconds: readonly number[]
+}): { frames: number; seconds: number } {
+  const skipped = Math.floor(probe.frames * CALIBRATION_PROBE_WARM_UP_FRACTION)
+  const clockFromSeconds = skipped > 0 ? (probe.acceptedAtSeconds[skipped - 1] ?? 0) : 0
+  return { frames: probe.frames - skipped, seconds: probe.seconds - clockFromSeconds }
 }
 
 /** The time a job will take, stage by stage. */
@@ -229,20 +247,21 @@ export async function calibrationProbe(options: {
     if (!videoTrack) return UNMEASURED
 
     const video = await probeVideo(videoTrack, shape, signal, fromSeconds)
-    if (video.frames < MINIMUM_CREDIBLE_PROBE_FRAMES || video.seconds <= 0) {
+    const timed = warmedUpTiming(video)
+    if (video.frames < MINIMUM_CREDIBLE_PROBE_FRAMES || timed.seconds <= 0) {
       log.warn('probe', 'too few frames to trust the measurement', { frames: video.frames })
       return { ...UNMEASURED, framesEncoded: video.frames }
     }
 
     const estimate = jobTimeEstimate({
-      videoFrames: video.frames,
-      videoSeconds: video.seconds,
+      videoFrames: timed.frames,
+      videoSeconds: timed.seconds,
       frameRate: shape.frameRate,
       durationSeconds,
       closingSeconds,
       analysis,
     })
-    const videoFramesPerSecond = video.frames / video.seconds
+    const videoFramesPerSecond = timed.frames / timed.seconds
     const audioRealtimeFactor =
       analysis !== null && analysis.wallSeconds > 0
         ? analysis.audioSeconds / analysis.wallSeconds

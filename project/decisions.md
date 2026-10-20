@@ -17,6 +17,26 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-20 — VH-116 — Band 7 closes with VH-116; no unblocked item follows, so the next work is the owner's
+
+**Decision:** Band 7 closed on 2026-10-20 with both its items shipped, its backlog heading now "Band 7 — measured, not yet fixed — CLOSED 2026-10-20"; no open, unblocked line remains in Current or Next, so the next item is the owner's to name — because Band 3's VH-17, Band 6's VH-124 and VH-113 and every Standing line wait on the owner, and Next's VH-13 waits on VH-M2.
+
+**Rationale:** Reconciled against the canon Band 7 list (pm_skills/project/backlog.md: VH-122, VH-116): each has its line under Band 7 in project/trajectory.md, and neither is open in project/backlog.md. The heading keeps the band's name without "Phase N", since no PLAN lists Band 7's items. Recall, local (this session, from the record alone, not a fresh session): 1, project/trajectory.md, newest first: VH-116 and VH-122 under Band 7, then VH-128 and VH-127 under Band 8 — 2; 2, "2026-10-20 — VH-122 — Decode damage: a block beyond +6 dBFS is silenced…", because real decodes peak at +0.96 dBFS while CULT2011's damage reaches +36 and +57 — 2; 3, deferred: project/wish-list.md's lines from VH-116 (the §7.1 doc-delta, a time left during the job, the stale structure.md) and from VH-122 (the screen-reader and listening check), and the backlog's Icebox — 2; 4, no next open item: Current and Next hold only lines blocked on the owner, as this entry records — 2.
+
+**Supersedes:** none
+
+**Deferred:** none
+
+## 2026-10-20 — VH-116 — The probe's clock starts after a sixth of its frames; a time left during the job is wished, not built
+
+**Decision:** the calibration probe still encodes its 3 s window, but times only the frames after its first sixth (`CALIBRATION_PROBE_WARM_UP_FRACTION`), so pre-flight takes no longer; the job's own rate, the closer remedy, is not built, because the page shows no time during a job, and a time-left display is a wish line — because the owner chose the recommended option in chat on 2026-10-20.
+
+**Rationale:** Over slice (a)'s 10 runs, real time over predicted was 0.51–0.70 for the probe as shipped (high/low 1.37) and 0.69–0.86 skipping a sixth (1.25), 0.67–0.82 a third (1.22), 0.64–0.77 half (1.20): a sixth has the median nearest 1 (0.82) and the smallest worst case (an estimate 1.45× the real time, against 1.49× and 1.56×), and it clears the smoke run's stall at frame 5. The job's own rate after 10 s was 0.96–1.00. The estimate still runs long by about a fifth, so §7.3's bands now warn later than before but still early. `warmedUpTiming` is pure and tested by category in `probe.test.ts`; the spike page's "probe" row stays the probe before this change. The §7.1 sentence is a doc-delta for the owner.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-20 — VH-116 — Slice (a) counts the 10 runs with the pane shown; Philosophy on Smaller is unmeasured
 
 **Decision:** slice (a)'s record is the 10 of 18 runs made while the in-app browser's pane was shown. The 8 that overlapped a hidden stretch are left out, so Philosophy on Smaller has no measured run — because a hidden pane runs as a background page and those runs were up to 15% slower, and the owner chose on 2026-10-20 to record the 10 rather than re-run while other sessions held the load near 30.

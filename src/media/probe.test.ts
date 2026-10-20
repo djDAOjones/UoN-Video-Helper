@@ -9,8 +9,8 @@
 import { describe, expect, it } from 'vitest'
 
 import { CODEC_PROBE, GAIN_SOLVE } from '../config/audio'
-import { AUDIO_STAGE_PASSES } from '../config/thresholds'
-import { jobTimeEstimate } from './probe'
+import { AUDIO_STAGE_PASSES, CALIBRATION_PROBE_WARM_UP_FRACTION } from '../config/thresholds'
+import { jobTimeEstimate, warmedUpTiming } from './probe'
 
 // 300 frames a second measured; 60 s kept at 25 fps is 1,500 frames.
 const base = {
@@ -124,5 +124,52 @@ describe('jobTimeEstimate', () => {
     const estimate = jobTimeEstimate({ ...base, ...pass(0) })
     expect(Number.isFinite(estimate.totalSeconds)).toBe(true)
     expect(estimate.totalSeconds).toBeCloseTo(5 + 125 / 300, 12)
+  })
+})
+
+/** A probe's acceptance times: `count` frames, each `stepSeconds` after the last, from `firstSeconds`. */
+const steady = (count: number, firstSeconds: number, stepSeconds: number): number[] =>
+  Array.from({ length: count }, (_, index) => firstSeconds + index * stepSeconds)
+
+describe('warmedUpTiming', () => {
+  it('starts the clock after the encoder’s start-up stall (regression: VH-116’s smoke run)', () => {
+    // As the smoke run saw it: four frames by 0.10 s, the fifth at 0.63 s,
+    // then 3 ms each, in a window of 0.98 s. Timed from the start, that
+    // stall made the probe read 93 fps against the job's 453.
+    const acceptedAtSeconds = [...steady(4, 0.1, 0), ...steady(87, 0.63, 0.003)]
+    const timed = warmedUpTiming({ frames: 91, seconds: 0.98, acceptedAtSeconds })
+    // A sixth of 91 is 15 frames skipped; the clock starts when the 15th was
+    // accepted, at 0.66 s, well after the stall.
+    expect(timed.frames).toBe(76)
+    expect(timed.seconds).toBeCloseTo(0.98 - 0.66, 12)
+    expect(timed.frames / timed.seconds).toBeGreaterThan((2 * 91) / 0.98)
+  })
+
+  it('skips the same share of a 25 fps and a 30 fps window', () => {
+    const skipped = (frames: number): number =>
+      frames - warmedUpTiming({ frames, seconds: 1, acceptedAtSeconds: steady(frames, 0.01, 0.005) }).frames
+    expect(skipped(91)).toBe(Math.floor(91 * CALIBRATION_PROBE_WARM_UP_FRACTION))
+    expect(skipped(91)).toBe(15)
+    expect(skipped(75)).toBe(12)
+  })
+
+  it('times a steady encode at its own rate, the window unchanged', () => {
+    // No stall: the warm-up neither speeds nor slows a rate that holds still,
+    // and every frame was still encoded inside the same window.
+    const acceptedAtSeconds = steady(90, 0.004, 0.004)
+    const timed = warmedUpTiming({ frames: 90, seconds: 0.36, acceptedAtSeconds })
+    expect(timed.frames / timed.seconds).toBeCloseTo(250, 6)
+  })
+
+  it('times a probe of fewer than six frames whole', () => {
+    const timed = warmedUpTiming({ frames: 5, seconds: 0.5, acceptedAtSeconds: steady(5, 0.1, 0.1) })
+    expect(timed).toEqual({ frames: 5, seconds: 0.5 })
+  })
+
+  it('returns nothing to time for an empty probe, without throwing', () => {
+    expect(warmedUpTiming({ frames: 0, seconds: 0.2, acceptedAtSeconds: [] })).toEqual({
+      frames: 0,
+      seconds: 0.2,
+    })
   })
 })

@@ -9,6 +9,8 @@
 
 ## Band 7 — measured, not yet fixed
 
+- RECALL — 8/8 (2026-10-20) — scores: 2,2,2,2 — local — see decisions
+- VH-116 — the video probe's clock starts after a sixth of its frames, in the same 3 s window: over ten encodes it predicted 0.69–0.86 of the real time, against 0.51–0.70 before and VH-100's 0.48–1.81 (2026-10-20) — see decisions
 - VH-122 — decode damage: a block beyond +6 dBFS is silenced with one either side in every source pass and the encode, and said first with its times; CULT2011 in Chrome warns only of that, at 1:22 and 3:05, and its encode has no blast or dip; the spec says so (2026-10-20) — see decisions
 
 ## Band 8 — a title card and an Internal use only closing

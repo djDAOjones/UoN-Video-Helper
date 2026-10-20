@@ -65,6 +65,19 @@ export const WORKER_ACKNOWLEDGEMENT_LIMIT_MS = 10_000
 /** Spec 7.1: seconds of the user's actual file to decode and re-encode when calibrating. */
 export const CALIBRATION_PROBE_SECONDS = 3
 
+/**
+ * The share of the probe's frames encoded before its clock starts (VH-116).
+ *
+ * The window opens on the encoder's start-up — the wait for its first frame,
+ * which a job pays once and the probe charged to every second it
+ * extrapolated. Timed from after a sixth of its frames, inside the same
+ * window so pre-flight takes no longer, the probe predicted 0.69–0.86 of
+ * what ten real encodes took (median 0.82), against 0.51–0.70 timed from the
+ * start: the nearest of the three warm-ups measured to 1, and the smallest
+ * worst case.
+ */
+export const CALIBRATION_PROBE_WARM_UP_FRACTION = 1 / 6
+
 /** Spec 7.3 bands, in seconds of estimated processing time. */
 export const ESTIMATE_BANDS = {
   /** Below this: proceed, showing the estimate. */
