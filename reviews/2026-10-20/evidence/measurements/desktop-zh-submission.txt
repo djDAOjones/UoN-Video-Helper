@@ -1,0 +1,363 @@
+## zh-sub-01-empty  [desktop/light] 1280x1633 title="UoN 视频助手" lang=zh-Hans
+  live: 91ms div: ""
+        603ms div: "覆盖现有画面 — 结尾画面会在视频的最后一秒上播放，并在逐渐出现的过程中覆盖这一秒。 覆盖生成的定格画面 — 最后一帧画面会额外停留一秒钟。结尾画面会覆盖这一秒，所以视频中的所有内容都不会被遮挡。"
+        604ms div: ""
+        604ms #language-status(hidden): "页面语言：简体中文。"
+  focus: input[radio video-kind=submission] "学生提交作品" vis=false outline=none 3px rgb(0, 0, 0) inView=true
+  contrast: 34 runs, 0 under target
+  targets: 16, under 44: 0
+  lines: 6 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  tab walk: 7 stops; not focus-visible/obscured/out of view: 0
+    order: input[radio video-language=zh-Hans] "简体中文" > input#file-input[file] "1 选择一个视频" > summary "系统检查 — 全部通过" > summary "无障碍声明" > button#feedback-open[button] "发送反馈" > a#contact-creators "发送电子邮件至创作者团队" > a#contact-learning-content "发送电子邮件至学习内容团队"
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-02-ready-dark  [desktop/dark] 1280x4345 title="UoN 视频助手" lang=zh-Hans
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 15 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-02-ready-forced  [desktop/forced] 1280x4345 title="UoN 视频助手" lang=zh-Hans
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 15 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-02-ready-reflow320  [reflow320/light] 320x4813 title="UoN 视频助手" lang=zh-Hans
+  focus: video#trim-preview.trim-preview "" vis=false outline=none 3px rgb(16, 38, 59) inView=false
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 15 blocks, widest 34 chars (p#status.status "设备检查完成。准备就绪。这大约需要20秒钟。预计大小最大可达25.5 MB。"), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-02-ready-textspacing  [desktop/light] 1280x4945 title="UoN 视频助手" lang=zh-Hans
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 15 blocks, widest 46 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-02-ready-zoom200  [zoom200/light] 640x4243 title="UoN 视频助手" lang=zh-Hans
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 15 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-02-ready  [desktop/light] 1280x4345 title="UoN 视频助手" lang=zh-Hans
+  live: 2240ms #source-status: "正在读取视频……"
+        2260ms #source-status: "视频已读取。1分钟，1280 × 720，立体声（双声道）。"
+        2260ms #status: "正在将此视频与您的设备进行比对……"
+        2990ms #status: "设备检查完成。准备就绪。这大约需要20秒钟。预计大小最大可达25.5 MB。"
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 15 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  tab walk: 12 stops; not focus-visible/obscured/out of view: 4: video#trim-preview.trim-preview "" vis=false obscured= inView=true | video#trim-preview.trim-preview "" vis=false obscured= inView=true | video#trim-preview.trim-preview "" vis=false obscured= inView=true | video#trim-preview.trim-preview "" vis=false obscured= inView=true
+    order: a "跳至内容" > input[radio language=zh-Hans] "简体中文" > a "发送电子邮件至 joe > input[radio video-kind=submission] "学生提交作品" > input[radio video-language=zh-Hans] "简体中文" > input#file-input[file] "1 选择一个视频" > summary "视频属性" > video#trim-preview "" > video#trim-preview "" > video#trim-preview "" > video#trim-preview "" > video#trim-preview ""
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-03-card-on  [desktop/light] 1280x4345 title="UoN 视频助手" lang=zh-Hans
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 15 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-04-card-refused  [desktop/light] 1280x4461 title="UoN 视频助手" lang=zh-Hans
+  live: 6597ms div: "请输入作业标题或编号。"
+        6597ms div: "请输入模块代码和名称。"
+        6597ms div: "请输入模块负责人或导师的姓名。"
+        6597ms div: "请至少输入一个学号。"
+        6597ms #status: "在步骤 3 中更正标题卡，即可继续。"
+  focus: input#submission-card-assignment.text-input[text] "作业标题或编号" vis=true outline=solid 2px rgb(16, 38, 59) inView=true
+  contrast: 89 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 14 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-05-card-filled-dark  [desktop/dark] 1280x4345 title="UoN 视频助手" lang=zh-Hans
+  focus: select#closing-type.select[select-one] "动画类型" vis=true outline=solid 2px rgb(255, 255, 255) inView=true
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 14 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-05-card-filled-forced  [desktop/forced] 1280x4345 title="UoN 视频助手" lang=zh-Hans
+  focus: select#closing-type.select[select-one] "动画类型" vis=true outline=solid 2px rgba(26, 235, 255, 0.8) inView=true
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 14 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-05-card-filled-reflow320  [reflow320/light] 320x4813 title="UoN 视频助手" lang=zh-Hans
+  focus: select#closing-type.select[select-one] "动画类型" vis=true outline=solid 2px rgb(16, 38, 59) inView=false
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 14 blocks, widest 34 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-05-card-filled-textspacing  [desktop/light] 1280x4945 title="UoN 视频助手" lang=zh-Hans
+  focus: select#closing-type.select[select-one] "动画类型" vis=true outline=solid 2px rgb(16, 38, 59) inView=false
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 14 blocks, widest 46 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-05-card-filled-zoom200  [zoom200/light] 640x4243 title="UoN 视频助手" lang=zh-Hans
+  focus: select#closing-type.select[select-one] "动画类型" vis=true outline=solid 2px rgb(16, 38, 59) inView=false
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 14 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-05-card-filled  [desktop/light] 1280x4345 title="UoN 视频助手" lang=zh-Hans
+  live: 7535ms div: ""
+        8203ms #status: ""
+  focus: select#closing-type.select[select-one] "动画类型" vis=true outline=solid 2px rgb(16, 38, 59) inView=true
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 14 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-06-closing  [desktop/light] 1280x4353 title="UoN 视频助手" lang=zh-Hans
+  focus: select#closing-type.select[select-one] "动画类型" vis=true outline=solid 2px rgb(16, 38, 59) inView=true
+  contrast: 83 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 14 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-07-video-language-changed  [desktop/light] 1280x4353 title="UoN 视频助手" lang=zh-Hans
+  focus: input[radio video-language=en-GB] "English" vis=false outline=none 3px rgb(0, 0, 0) inView=true
+  contrast: 85 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 14 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-08-running-dark  [desktop/dark] 1280x4549 title="视频编码 — UoN 视频助手" lang=zh-Hans
+  focus: video#trim-preview.trim-preview "" vis=false outline=none 3px rgb(255, 255, 255) inView=false
+  contrast: 88 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 15 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-08-running-forced  [desktop/forced] 1280x4549 title="视频编码 — UoN 视频助手" lang=zh-Hans
+  focus: video#trim-preview.trim-preview "" vis=false outline=none 3px rgb(255, 255, 255) inView=false
+  contrast: 88 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 15 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-08-running-reflow320  [reflow320/light] 320x5064 title="视频编码 — UoN 视频助手" lang=zh-Hans
+  live: 16200ms #status: "视频编码 — 完成四分之一"
+  focus: video#trim-preview.trim-preview "" vis=false outline=none 3px rgb(16, 38, 59) inView=false
+  contrast: 88 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 15 blocks, widest 34 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-08-running-textspacing  [desktop/light] 1280x5198 title="视频编码 — UoN 视频助手" lang=zh-Hans
+  focus: video#trim-preview.trim-preview "" vis=false outline=none 3px rgb(16, 38, 59) inView=false
+  contrast: 88 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 15 blocks, widest 46 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-08-running-zoom200  [zoom200/light] 640x4431 title="视频编码 — UoN 视频助手" lang=zh-Hans
+  live: 17176ms #status: "视频编码 — 完成一半"
+  focus: video#trim-preview.trim-preview "" vis=false outline=none 3px rgb(16, 38, 59) inView=false
+  contrast: 88 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 15 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-08-running  [desktop/light] 1280x4549 title="视频编码 — UoN 视频助手" lang=zh-Hans
+  live: 12664ms #status: "正在创建视频。视频制作过程中，请保持此标签页可见且电脑处于唤醒状态。关闭标签页即结束任务。"
+        12678ms #status: "准备中"
+        12678ms #status: "分析音频"
+        15519ms #status: "视频编码"
+  focus: button.button.button--secondary[button] "取消" vis=false outline=none 3px rgb(16, 38, 59) inView=true
+  contrast: 88 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 15 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  tab walk: 16 stops; not focus-visible/obscured/out of view: 4: video#trim-preview.trim-preview "" vis=false obscured= inView=true | video#trim-preview.trim-preview "" vis=false obscured= inView=true | video#trim-preview.trim-preview "" vis=false obscured= inView=true | video#trim-preview.trim-preview "" vis=false obscured= inView=true
+    order: summary "系统检查 — 全部通过" > summary "无障碍声明" > button#feedback-open[button] "发送反馈" > a#contact-creators "发送电子邮件至创作者团队" > a#contact-learning-content "发送电子邮件至学习内容团队" > a "跳至内容" > input[radio language=zh-Hans] "简体中文" > a "发送电子邮件至 joe > input[radio video-kind=submission] "学生提交作品" > input[radio video-language=zh-Hans] "简体中文" > summary "视频属性" > video#trim-preview "" > video#trim-preview "" > video#trim-preview "" > video#trim-preview "" > video#trim-preview ""
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-09-finished-dark  [desktop/dark] 1280x4417 title="准备就绪 — UoN 视频助手" lang=zh-Hans
+  contrast: 83 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 14 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-09-finished-forced  [desktop/forced] 1280x4417 title="准备就绪 — UoN 视频助手" lang=zh-Hans
+  contrast: 83 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 14 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-09-finished-reflow320  [reflow320/light] 320x4932 title="准备就绪 — UoN 视频助手" lang=zh-Hans
+  contrast: 83 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 14 blocks, widest 34 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-09-finished-textspacing  [desktop/light] 1280x4949 title="准备就绪 — UoN 视频助手" lang=zh-Hans
+  contrast: 83 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 14 blocks, widest 46 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-09-finished-zoom200  [zoom200/light] 640x4299 title="准备就绪 — UoN 视频助手" lang=zh-Hans
+  contrast: 83 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 14 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-09-finished  [desktop/light] 1280x4417 title="准备就绪 — UoN 视频助手" lang=zh-Hans
+  live: 20574ms #status: "完成文件"
+        20614ms #status: "检查文件"
+        21133ms #status: "您的视频已准备就绪。"
+  contrast: 83 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 14 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  tab walk: 23 stops; not focus-visible/obscured/out of view: 3: video#trim-preview.trim-preview "" vis=false obscured= inView=false | input#trim-start-range.range-input[range] "开始" vis=true obscured=div.range-fill "" inView=true | input#trim-end-range.range-input[range] "结尾" vis=true obscured=div.range-fill "" inView=true
+    order: video#trim-preview "" > input#trim-start-range[range] "开始" > input#trim-end-range[range] "结尾" > input#trim-start[text] "开始时间" > button#trim-set-start[button] "将开始设在此处" > input#trim-end[text] "结束时间" > button#trim-set-end[button] "将结束设在此处" > input#submission-card-assignment[text] "作业标题 > input#submission-card-module[text] "模块代码和名称" > input#submission-card-convenor[text] "模块负责人或 > textarea#submission-card-ids[textarea] "学号" > select#closing-type[select-one] "动画类型" > select#closing-onset[select-one] "动画起始方式" > button#onset-help-button[button] "关于动画起始方式" > input[radio closing-colour=blue] "蓝色的" > input[radio preset=best] "更大/更好 例如 EchoVideo > button[button] "保存视频" > button[button] "制作视频" > summary "系统检查 — 全部通过" > summary "无障碍声明" > button#feedback-open[button] "发送反馈" > a#contact-creators "发送电子邮件至创作者团队" > a#contact-learning-content "发送电子邮件至学习内容团队"
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-10-discard-question  [desktop/light] 1280x4417 title="准备就绪 — UoN 视频助手" lang=zh-Hans
+  live: 25196ms #status: "此视频尚未保存。您尚未保存刚刚制作的视频。重新开始将会丢弃该视频。"
+  focus: section.notification "此视频尚未保存。" vis=false outline=none 3px rgb(16, 38, 59) inView=true
+  contrast: 84 runs, 0 under target
+  targets: 41, under 44: 0
+  lines: 16 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  tab walk: 20 stops; not focus-visible/obscured/out of view: 4: video#trim-preview.trim-preview "" vis=false obscured= inView=true | video#trim-preview.trim-preview "" vis=false obscured= inView=true | video#trim-preview.trim-preview "" vis=false obscured= inView=true | video#trim-preview.trim-preview "" vis=false obscured= inView=true
+    order: button[button] "扔掉它，重新开始。" > button[button] "留着它" > button[button] "制作视频" > summary "系统检查 — 全部通过" > summary "无障碍声明" > button#feedback-open[button] "发送反馈" > a#contact-creators "发送电子邮件至创作者团队" > a#contact-learning-content "发送电子邮件至学习内容团队" > a "跳至内容" > input[radio language=zh-Hans] "简体中文" > a "发送电子邮件至 joe > input[radio video-kind=submission] "学生提交作品" > input[radio video-language=zh-Hans] "简体中文" > input#file-input[file] "1 选择一个视频" > summary "视频属性" > video#trim-preview "" > video#trim-preview "" > video#trim-preview "" > video#trim-preview "" > video#trim-preview ""
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-11-saved-dark  [desktop/dark] 1280x4434 title="准备就绪 — UoN 视频助手" lang=zh-Hans
+  saves: lecture-60s (品牌).mp4
+  contrast: 83 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 15 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-11-saved-forced  [desktop/forced] 1280x4434 title="准备就绪 — UoN 视频助手" lang=zh-Hans
+  saves: lecture-60s (品牌).mp4
+  contrast: 83 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 15 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-11-saved-reflow320  [reflow320/light] 320x4949 title="准备就绪 — UoN 视频助手" lang=zh-Hans
+  saves: lecture-60s (品牌).mp4
+  contrast: 83 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 15 blocks, widest 34 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-11-saved-textspacing  [desktop/light] 1280x4954 title="准备就绪 — UoN 视频助手" lang=zh-Hans
+  saves: lecture-60s (品牌).mp4
+  contrast: 83 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 15 blocks, widest 46 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-11-saved-zoom200  [zoom200/light] 640x4316 title="准备就绪 — UoN 视频助手" lang=zh-Hans
+  saves: lecture-60s (品牌).mp4
+  contrast: 83 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 15 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-11-saved  [desktop/light] 1280x4434 title="准备就绪 — UoN 视频助手" lang=zh-Hans
+  live: 26846ms #status: ""
+        27282ms #save-status: "正在保存…"
+        27332ms #save-status: "已保存。请到保存位置检查视频，然后上传到目标位置——或者在步骤 1 中选择另一个视频。"
+  focus: section.notification "完成的视频 — 21.5 MB" vis=false outline=none 3px rgb(16, 38, 59) inView=true
+  saves: lecture-60s (品牌).mp4
+  contrast: 83 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 15 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  tab walk: 6 stops; not focus-visible/obscured/out of view: 0
+    order: button[button] "制作视频" > summary "系统检查 — 全部通过" > summary "无障碍声明" > button#feedback-open[button] "发送反馈" > a#contact-creators "发送电子邮件至创作者团队" > a#contact-learning-content "发送电子邮件至学习内容团队"
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-12-statement-open-dark  [desktop/dark] 1280x6043 title="准备就绪 — UoN 视频助手" lang=zh-Hans
+  saves: lecture-60s (品牌).mp4
+  contrast: 123 runs, 0 under target
+  targets: 42, under 44: 0
+  lines: 32 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明 | H3 本工具的无障碍程度 | H3 反馈与联系方式 | H3 执行程序 | H3 合规状态 | H3 我们如何测试本工具 | H3 接下来的测试计划 | H3 关于本声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-12-statement-open-forced  [desktop/forced] 1280x6043 title="准备就绪 — UoN 视频助手" lang=zh-Hans
+  saves: lecture-60s (品牌).mp4
+  contrast: 123 runs, 0 under target
+  targets: 42, under 44: 0
+  lines: 32 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明 | H3 本工具的无障碍程度 | H3 反馈与联系方式 | H3 执行程序 | H3 合规状态 | H3 我们如何测试本工具 | H3 接下来的测试计划 | H3 关于本声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-12-statement-open-reflow320  [reflow320/light] 320x7806 title="准备就绪 — UoN 视频助手" lang=zh-Hans
+  focus: video#trim-preview.trim-preview "" vis=false outline=none 3px rgb(16, 38, 59) inView=false
+  saves: lecture-60s (品牌).mp4
+  contrast: 123 runs, 0 under target
+  targets: 42, under 44: 0
+  lines: 32 blocks, widest 34 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明 | H3 本工具的无障碍程度 | H3 反馈与联系方式 | H3 执行程序 | H3 合规状态 | H3 我们如何测试本工具 | H3 接下来的测试计划 | H3 关于本声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-12-statement-open-textspacing  [desktop/light] 1280x6839 title="准备就绪 — UoN 视频助手" lang=zh-Hans
+  saves: lecture-60s (品牌).mp4
+  contrast: 123 runs, 0 under target
+  targets: 42, under 44: 0
+  lines: 32 blocks, widest 46 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明 | H3 本工具的无障碍程度 | H3 反馈与联系方式 | H3 执行程序 | H3 合规状态 | H3 我们如何测试本工具 | H3 接下来的测试计划 | H3 关于本声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-12-statement-open-zoom200  [zoom200/light] 640x6021 title="准备就绪 — UoN 视频助手" lang=zh-Hans
+  saves: lecture-60s (品牌).mp4
+  contrast: 123 runs, 0 under target
+  targets: 42, under 44: 0
+  lines: 32 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明 | H3 本工具的无障碍程度 | H3 反馈与联系方式 | H3 执行程序 | H3 合规状态 | H3 我们如何测试本工具 | H3 接下来的测试计划 | H3 关于本声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-12-statement-open  [desktop/light] 1280x6043 title="准备就绪 — UoN 视频助手" lang=zh-Hans
+  focus: summary.disclosure-summary "无障碍声明" vis=false outline=none 3px rgb(250, 246, 239) inView=true
+  saves: lecture-60s (品牌).mp4
+  contrast: 123 runs, 0 under target
+  targets: 42, under 44: 0
+  lines: 32 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  tab walk: 17 stops; not focus-visible/obscured/out of view: 4: video#trim-preview.trim-preview "" vis=false obscured= inView=true | video#trim-preview.trim-preview "" vis=false obscured= inView=true | video#trim-preview.trim-preview "" vis=false obscured= inView=true | video#trim-preview.trim-preview "" vis=false obscured= inView=true
+    order: a "joe > a "平等咨询与支持服务（Equality Advisory and Support S > button#feedback-open[button] "发送反馈" > a#contact-creators "发送电子邮件至创作者团队" > a#contact-learning-content "发送电子邮件至学习内容团队" > a "跳至内容" > input[radio language=zh-Hans] "简体中文" > a "发送电子邮件至 joe > input[radio video-kind=submission] "学生提交作品" > input[radio video-language=zh-Hans] "简体中文" > input#file-input[file] "1 选择一个视频" > summary "视频属性" > video#trim-preview "" > video#trim-preview "" > video#trim-preview "" > video#trim-preview "" > video#trim-preview ""
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明 | H3 本工具的无障碍程度 | H3 反馈与联系方式 | H3 执行程序 | H3 合规状态 | H3 我们如何测试本工具 | H3 接下来的测试计划 | H3 关于本声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-13-feedback  [desktop/light] 1280x4434 title="准备就绪 — UoN 视频助手" lang=zh-Hans
+  focus: textarea#feedback-message.textarea[textarea] "您的留言" vis=true outline=solid 2px rgb(16, 38, 59) inView=true
+  saves: lecture-60s (品牌).mp4
+  contrast: 90 runs, 0 under target
+  targets: 45, under 44: 0
+  lines: 16 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261020.d38ee79), over the limit: 0
+  tab walk: 4 stops; not focus-visible/obscured/out of view: 0
+    order: summary "将随邮件发送的内容" > button[submit] "打开电子邮件应用程序" > button#feedback-copy[button] "复制消息和详细信息" > button#feedback-close[button] "关闭"
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明 | H2 发送反馈
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-14-blocked-file  [desktop/light] 1280x1811 title="UoN 视频助手" lang=zh-Hans
+  live: 35826ms #source-status: "正在读取视频……"
+        35826ms #save-status: ""
+        35832ms #source-status: "视频已读取。3秒钟，1920 × 1080，无声。"
+        35832ms #status: "正在将此视频与您的设备进行比对……"
+        35859ms #status: ""
+        35859ms #source-status: "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。"
+  focus: button#feedback-open.button.button--secondary[button] "发送反馈" vis=true outline=solid 2px rgb(255, 255, 255) inView=false
+  saves: lecture-60s (品牌).mp4
+  contrast: 37 runs, 0 under target
+  targets: 17, under 44: 0
+  lines: 8 blocks, widest 83 chars (p#source-status.status "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音), over the limit: 1: p#source-status.status "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音 83ch/1160px
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}
+## zh-sub-15-captioned  [desktop/light] 1280x4539 title="UoN 视频助手" lang=zh-Hans
+  live: 36630ms #source-status: "正在读取视频……"
+        36636ms #source-status: "视频已读取。12秒钟，1280 × 720，单声道（一个声道）。 关于新文件的内容，需要了解一点。已找到 1 条字幕轨道。新文件将不包含字幕轨道，因此无论您将其发布到何处，都必须自行添加字幕。EchoVideo 会在上传"
+        36637ms #status: "正在将此视频与您的设备进行比对……"
+        36940ms #status: "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达8 MB。"
+  focus: button#feedback-open.button.button--secondary[button] "发送反馈" vis=true outline=solid 2px rgb(255, 255, 255) inView=false
+  saves: lecture-60s (品牌).mp4
+  contrast: 86 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 17 blocks, widest 133 chars (p#source-status.status "视频已读取。12秒钟，1280 × 720，单声道（一个声道）。), over the limit: 1: p#source-status.status "视频已读取。12秒钟，1280 × 720，单声道（一个声道）。 133ch/1865px
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 2. 修剪 | H2 3. 标题卡 | H2 4. 结尾品牌标识 | H2 5. 文件大小/质量 | H2 6. 创造 | H2 系统检查 — 全部通过 | H2 无障碍声明
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":70,"langChanges":[{"t":604,"lang":"zh-Hans"}]}

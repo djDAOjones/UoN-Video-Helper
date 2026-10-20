@@ -1,0 +1,3 @@
+# Measurements
+
+One digest per walk, made by `walker/digest.mjs` from the JSON the walker wrote beside each capture: page size, title and language, horizontal overflow, the live-region changes since the previous capture with their times, the focused element, every text run under its contrast target, every target under 44 px, every running-text block over its measure, and each Tab walk's stops. `focus-rings.json` holds the 54 ring measurements. `walker/` is the walker itself (Node, CDP over WebSocket), its fixtures script and the digest, so the walk can be run again: `node walk.mjs <scenario>` against a Chrome started with `--remote-debugging-port=9222` and the dev server on port 5173.

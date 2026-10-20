@@ -1,0 +1,30 @@
+## 01-read  [desktop/light] 1280x3722 title="UoN Video Helper" lang=en-GB
+  live: 88ms div: ""
+        598ms #source-status: "Reading the video…"
+        614ms #source-status: "Video read. 30 seconds, 1280 × 720, stereo (two channels)."
+        614ms #status: "Checking this video against your device…"
+        1040ms #status: "Device check complete. Ready to go. This should take about 10 seconds. Estimated size up to 14.5 MB."
+  contrast: 73 runs, 0 under target
+  targets: 34, under 44: 0
+  lines: 23 blocks, widest 98 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 98ch/645px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 02-finished  [desktop/light] 1280x3786 title="Ready — UoN Video Helper" lang=en-GB
+  live: 1657ms #status: "Creating your video. Keep this tab visible and your computer awake while the video is made. Closing the tab en"
+        1671ms #status: "Getting ready"
+        1671ms #status: "Analysing audio"
+        2690ms #status: "Encoding video"
+        3207ms #status: "Encoding video — a quarter done"
+        3701ms #status: "Encoding video — half done"
+        4679ms #status: "Finishing the file"
+        4724ms #status: "Checking the file"
+        4895ms #status: "Your video is ready."
+  focus: section.notification "Finished video — 7.8 MB" vis=false outline=none 3px rgb(16, 38, 59) inView=true
+  contrast: 73 runs, 0 under target
+  targets: 35, under 44: 0
+  lines: 21 blocks, widest 65 chars (p "Your video is processed on your device, it is never u), over the limit: 0
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 03-downloaded  [desktop/light] 1280x3861 title="Ready — UoN Video Helper" lang=en-GB
+  live: 5589ms #save-status: "Saving…"
+        5590ms #save-status: "Saving to your downloads folder — the browser may still be finishing it. Once it is there, upload it where it "
+  focus: button.button[button] "Save the video" vis=false outline=none 3px rgb(255, 255, 255) inView=true
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement

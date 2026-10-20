@@ -9,7 +9,7 @@ the live page and are adopted or corrected there. Only this heading was added.
 
 ---
 
-# UoN Video Helper — the page audited again
+## UoN Video Helper — the page audited again
 
 Read-only source audit of `d38ee79`, 20 October 2026.
 
@@ -148,7 +148,7 @@ Here, **holds** means the earlier remedy or accepted disposition still holds in 
 ### U-01 to U-25
 
 | ID | Judgement | Evidence |
-|---|---|---|
+| --- | --- | --- |
 | U-01 — Late failure of the Teams recording | holds | An unlevellable predicted plan is refused before encoding. The final output check remains. This does not establish the sound quality of the Teams output by ear. `src/media/pipeline.ts:346`, `src/workers/job.worker.ts:284`, `project/wish-list.md:20`. |
 | U-02 — Discard action outlives its question | holds | Changes withdraw the question; starting checks the current file/busy/card state. Its spoken words are withdrawn too. `src/main.ts:2024`, `src/main.ts:2569`, `src/main.ts:2593`, `project/trajectory.md:14`. |
 | U-03 — Previous Save appears to belong to the next file | holds | Previous versus Finished is derived from the source identity, and the record retains its source name. New-choice identity is separately regressed under A-05/C-01. `src/main.ts:3012`, `src/ui/result-summary.ts:114`. |
@@ -178,7 +178,7 @@ Here, **holds** means the earlier remedy or accepted disposition still holds in 
 ### A-01 to A-20
 
 | ID | Judgement | Evidence |
-|---|---|---|
+| --- | --- | --- |
 | A-01 — Weak accessibility target | holds | Every applicable AAA criterion is required; exceptions are limitations, not passes. `docs/01-specification.md:677`. |
 | A-02 — No accessibility acceptance criterion | holds | §13 now names the complete state/language/assistive-technology walk. Its execution is still outstanding. `docs/01-specification.md:831`, `docs/01-specification.md:855`. |
 | A-03 — Session lifetime and staying awake | holds | Pre-create, running and retained-result notices accompany leave protection for jobs, saves and unsaved results. `index.html:593`, `src/main.ts:2189`, `src/main.ts:2991`. |
@@ -203,7 +203,7 @@ Here, **holds** means the earlier remedy or accepted disposition still holds in 
 ### VH-124 states 01–29
 
 | State | Judgement | Evidence |
-|---|---|---|
+| --- | --- | --- |
 | 01 Empty | partly | One primary chooser and no resting-status echo remain. Startup pending still disables it without a local pending explanation; the lede’s lead-in is still parked. `index.html:105`, `src/main.ts:1203`, `project/wish-list.md:22`. |
 | 02 Drag held | holds | Held/refused states are explicit and the drop remains a picker alternative. `src/ui/drop-zone.ts:98`. |
 | 03 Drop refused | holds | Local alert and actionable refusal remain. `index.html:124`, `src/ui/drop-zone.ts:63`. |
@@ -241,7 +241,7 @@ These are distinct presentations and transitions, rather than every possible com
 The whole-page frame now places Page language, its conditional machine-translation notice, the title/introduction, Video type and Video language before Choose. That order is shared at desktop and phone widths. The switchers wrap and reserve their bold width; the source cannot establish whether a first-time phone user finds Choose promptly. Sources: `src/main.ts:3388`, `index.html:35`, `index.html:65`, `index.html:88`, `src/styles/app.css:1129`, `src/styles/app.css:1163`.
 
 | On screen | Meant to do | Competes | Repeats | Change |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | **01 Empty.** Introduction, selectors, primary native chooser, desktop drop hint. `index.html:35`, `index.html:105`, `src/styles/app.css:623`. | Choose a recording. | Three selectors precede the first file action; translated pages add a notice. | The parked introductory lead-in. | Keep the chooser hierarchy; assess first-action findability with staff. |
 | **02 Drag held.** Drop zone changes state and invites release. `src/ui/drop-zone.ts:98`. | Drop the file. | Nothing new. | None material. | Keep. |
 | **03 Drop refused.** Local alert for wrong count/type or unavailable action. `index.html:124`, `src/ui/drop-zone.ts:63`. | Correct the drop or use the picker. | Existing file/result may remain. | Necessary recovery context. | Keep the existing selection intact. |
@@ -323,7 +323,7 @@ This table judges the built page’s source, not merely whether a requirement ex
 These judgements do not turn incomplete browser/assistive-technology coverage into a conformance claim. The required acceptance scope is `docs/01-specification.md:831`.
 
 | Criterion | Level | Judgement and evidence |
-|---|---|---|
+| --- | --- | --- |
 | **1.1.1 Non-text Content** | A | **met-with-evidence** — logo has a text alternative; swatches have text labels; decorative marks do not carry the sole meaning. `src/ui/brand-assets.ts:55`, `index.html:445`. |
 | **1.2.1 Audio-only and Video-only, prerecorded** | A | **gap — conditional media** — a silent-video preview may require an alternative which the app does not provide. `index.html:154`, `docs/01-specification.md:715`. |
 | **1.2.2 Captions, prerecorded** | A | **gap — conditional media** — the selected preview is not assured captions; warning about export loss is not a preview alternative. `index.html:154`, `src/ui/source-panel.ts:73`. |
@@ -418,7 +418,7 @@ SC 4.1.1 Parsing is not an additional WCAG 2.2 criterion; it is therefore not an
 The existing exception structure is substantially better than on 1 October. It should remain a record of limitations, with criterion, reason, impact, mitigation and owner decision—not a means of marking a failed criterion as met. `docs/01-specification.md:677`.
 
 | Record | Required treatment |
-|---|---|
+| --- | --- |
 | **User-selected preview media** | Retain the conditional limitations for 1.2.1, 1.2.2, 1.2.3, 1.2.5–1.2.8, 2.3.1 and 2.3.2. Make the list precise: live captions, 1.2.4, are not applicable to this input. Keep the distinction between partial-conformance discussion and flash non-interference. `docs/01-specification.md:715`, `index.html:154`. |
 | **File-size units, UoN and named codecs** | Keep the three recorded 3.1.4 exceptions with their existing reasons, impacts, mitigations and decisions. A closed disclosure is not itself an exemption. `docs/01-specification.md:723`, `docs/01-specification.md:728`, `docs/01-specification.md:732`. |
 | **Current A/AA source defects** | If C-03, C-05 or the missing status announcements remain, record the affected criteria—3.3.2 A, 3.1.2 AA and 4.1.3 AA—and the concrete user impact and planned remedy. This report does not supply an owner acceptance decision. `index.html:304`, `src/ui/feedback.ts:242`, `src/main.ts:1872`, `src/main.ts:952`. |
@@ -431,7 +431,7 @@ The existing exception structure is substantially better than on 1 October. It s
 The statement’s **“partially compliant with WCAG 2.2 AA”** remains a cautious description, but its explanation is inadequate. Incomplete testing alone does not identify which requirements fail, and several listed limitations concern compatibility or AAA rather than a demonstrated AA failure. This audit identifies concrete A/AA problems and conditional media limitations that should underpin the statement’s account. It does not establish full AA conformance. Sources: `src/i18n/en-GB.ts:812`, `docs/01-specification.md:677`, `index.html:304`, `src/ui/feedback.ts:242`.
 
 | Statement claim | Check against this audit |
-|---|---|
+| --- | --- |
 | **Built for Chrome on a computer; other browsers may not work** | Supported as the product’s compatibility boundary. It is not, by itself, a failed WCAG criterion. The capability messaging is conditional rather than a universal Chrome guarantee. `project/profile.md:24`, `src/i18n/en-GB.ts:90`, `src/i18n/en-GB.ts:794`. |
 | **Chinese and Malay are machine translations being checked by colleagues** | Machine status is supported by configuration and the publication decision. The record still carries native review as outstanding; the returned workbook did not constitute human corrections. The present-tense checking claim should match actual reviewer activity. `src/config/languages.ts:42`, `project/decisions.md:60`, `project/wish-list.md:29`, `src/i18n/en-GB.ts:795`. |
 | **Chinese uses the computer’s own font and may differ** | Supported by the fallback stack. Font variation is a risk to test, not automatically non-compliance. Card fit and page fit need checking with the deployed fonts. `src/styles/tokens.brand.css:92`, `src/styles/tokens.brand.css:138`, `src/main.ts:2347`, `src/i18n/en-GB.ts:796`. |

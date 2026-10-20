@@ -11,13 +11,13 @@ or download is needed to read or act on it.
 
 | File | Role |
 | --- | --- |
-| `uon-video-helper-audit-2026-10-20.md` | The audit: the verdict, how it was done, 16 ranked findings (V-01 to V-16) each with what was seen, the standard, a direction and its evidence; what held up; what was set aside and why; what only a person can judge; the disposition into Phase 3. **Start here.** |
+| `uon-video-helper-audit-2026-10-20.md` | The audit: the verdict, how it was done, 17 ranked findings (V-01 to V-17) each with what was seen, the standard, a direction and its evidence; what held up; what was set aside and why; what only a person can judge; the disposition into Phase 3. **Start here.** |
 | `regression-2026-10-20.md` | Every 1 October finding (U-01 to U-25, A-01 to A-20) and every VH-124 state (01 to 29) marked holds, regressed, partly or superseded, with the evidence. |
-| `states-2026-10-20.md` | The page state by state, VH-124's five columns, 56 states: the 29 of 1 October and the new surfaces. |
+| `states-2026-10-20.md` | The page state by state, VH-124's five columns, 64 states: the 29 of 1 October, the new surfaces, and the recovery states read in source. |
 | `wcag-2026-10-20.md` | All 86 WCAG 2.2 criteria judged against the live page; what spec §9.3 should record; the accessibility statement's claims checked. |
 | `codex-astra-audit-2026-10-20.md` | The source half, by Codex astra, blind from the same brief and kept as written: eight findings (C-01 to C-08), its own regression and state tables, its 86-criteria table and statement check. The audit maps each to a V-number. |
-| `codex-astra-critique-2026-10-20.md` | Codex astra's adversarial check of this bundle before commit, kept as written; what was applied is in the decision. |
-| `evidence/` | Screenshots named by finding (`v01-…`) and, for what held up, by state (`held-…`). Every frame is an ffmpeg fixture; no real recording's frame or name appears. |
+| `codex-astra-critique-2026-10-20.md` | Codex astra's adversarial check of this bundle before commit, in three parts, kept as written; what was applied and what was refused is in the decision log ("VH-138"). |
+| `evidence/` | Screenshots named by finding (`v01-…`), by what was set aside (`aside-…`) and, for what held up, by state (`held-…`). Every frame is an ffmpeg fixture; no real recording's frame or name appears. `evidence/measurements/` holds one digest per walk (sizes, overflow, live-region changes, contrast, targets, line lengths, Tab walks), the 54 focus-ring measurements, and the walker itself so the walk can be run again. |
 
 ## Baseline
 
@@ -30,19 +30,23 @@ on.
 ## Provenance
 
 Headless Chrome 155 driven over the DevTools protocol by a walker rebuilt
-for this audit (the 1 October tooling was not kept), against this worktree's
-Vite dev server, with the dev-only buttons hidden as production hides them.
-Files were chosen through the real file input and dropped as a real drag;
-keys and touches were real events; the system's save dialog was stood in
-for by a `showSaveFilePicker` stub writing into OPFS, and removed for the
-phone so the download route ran. Views: 1280 × 900; 390 × 844 with a mobile
-user agent, touch and a coarse pointer; 320 px; 640 px at a device scale of
-2 for 200% zoom; WCAG 1.4.12 text spacing injected; light, dark and emulated
-forced colours. Walked in English, Simplified Chinese and Bahasa Malaysia,
-on both sides of the switch, with a title card off and on, with every
-closing to a finished file. The session's sandbox could neither start Chrome
-nor bind a port, so Chrome, the walker and Codex ran in the owner's Terminal
-panel; nothing else left the sandbox.
+for this audit (the 1 October tooling was not kept; this one is, under
+`evidence/measurements/walker/`), against this worktree's Vite dev server,
+with the dev-only buttons hidden as production hides them. Files were chosen
+through the real file input and dropped as a real drag; keys and touches
+were real events; the system's save dialog was stood in for by a
+`showSaveFilePicker` stub writing into OPFS, and removed for the phone so
+the download route ran; the two closing selects were set by value with a
+change event, since arrow keys did not move them headless. Views: 1280 × 900;
+390 × 844 with a mobile user agent, touch and a coarse pointer; 320 px; 640 px
+at a device scale of 2 as a stand-in for 200% zoom (not the browser's own);
+WCAG 1.4.12 text spacing injected; light, dark and emulated forced colours.
+Walked in English, Simplified Chinese and Bahasa Malaysia, on both sides of
+the switch, with a title card off and on, with every closing to a finished
+file. The session's sandbox could neither start Chrome nor bind a port, so
+Chrome and the walker ran in the owner's Terminal panel; nothing else left
+the sandbox. A live-region change in the digests is a programmatic
+announcement, not what a screen reader says.
 
 The saved file behind V-01, probed with ffprobe after the walk: video
 34.000 s, 850 frames at 25 fps; audio 20.928 s. The fixture it was made
@@ -51,5 +55,5 @@ audio.
 
 Codex astra ran as `codex exec -m gpt-6-astra -s read-only` from this
 worktree, blind, with the brief the audit's "How it was done" describes;
-then again on the finished bundle, briefed to argue with every finding, rank
-and table against the standard.
+then again on the finished bundle, in three calls of one part each, briefed
+to argue with every finding, rank and table against the standard.

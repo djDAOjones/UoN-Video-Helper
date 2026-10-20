@@ -1,0 +1,36 @@
+## previous-video-unsaved  [desktop/light] 1280x4782 title="UoN Video Helper" lang=en-GB
+  live: 206ms div: ""
+        2353ms #source-status: "Reading the video…"
+        2371ms #source-status: "Video read. 1 minute, 1280 × 720, stereo (two channels)."
+        2371ms #status: "Checking this video against your device…"
+        3299ms #status: "Device check complete. Ready to go. This should take about 20 seconds. Estimated size up to 25.5 MB."
+        6649ms div: "Over existing — the closing plays over the last second of your video. It covers that second as it builds. Over"
+        7083ms div: ""
+        7883ms div: "Type the assignment’s title or number."
+        7883ms div: "Type the module’s code and title."
+        7883ms div: "Type the name of the module convenor or tutor."
+        7883ms div: "Type at least one student ID number."
+        7883ms #status: "Put the title card right in step 3 to continue."
+        8689ms div: ""
+        9339ms #status: ""
+        9836ms #status: "Creating your video. Keep this tab visible and your computer awake while the video is made. Closing the tab en"
+        9848ms #status: "Getting ready"
+        9858ms #status: "Analysing audio"
+        13044ms #status: "Encoding video"
+        13942ms #status: "Encoding video — a quarter done"
+        15059ms #status: "Encoding video — half done"
+        16286ms #status: "Encoding video — three quarters done"
+        17843ms #status: "Finishing the file"
+        17886ms #status: "Checking the file"
+        18467ms #status: "Your video is ready."
+        19081ms #source-status: "Reading the video…"
+        19081ms #status: ""
+        19091ms #source-status: "Video read. 12 seconds, 1280 × 720, mono (one channel). One thing to know about what goes into the new file. F"
+        19091ms #status: "Checking this video against your device…"
+        19533ms #status: "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 8 MB."
+  contrast: 87 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 32 blocks, widest 334 chars (p#source-status.status "Video read. 12 seconds, 1280 × 7), over the limit: 2: p#source-status.status "Video read. 12 seconds, 1280 × 7 334ch/2191px | p#status.status "Device check complete. Ready to go. Thi 92ch/604px
+  tab walk: 7 stops; not focus-visible/obscured/out of view: 0
+    order: button[button] "Save the video" > button[button] "Create the video" > summary "System check — all passed" > summary "Accessibility statement" > button#feedback-open[button] "Send feedback" > a#contact-creators "Email the creators team" > a#contact-learning-content "Email the learni
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
