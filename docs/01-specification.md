@@ -565,6 +565,14 @@ through v1 — captions drawn into the picture do (§8.1).
 
 ## 9. User experience
 
+The page is in English, Simplified Chinese or Bahasa Malaysia (VH-105),
+chosen at its top, each named in its own language; the choice is remembered
+in this browser only and repaints the page in place, losing nothing, a running
+job included. Each language has its own list and sentence punctuation, Chinese
+the device's own Simplified Chinese face, and a translated page says it is
+machine translation and invites better wording by email. Logs and the
+diagnostics bundle stay English.
+
 ### 9.1 Workflow
 
 The screen is six numbered steps (VH-91, VH-96, VH-127). Above them, a switch
@@ -584,9 +592,11 @@ the larger file.
    the new file (§8.3).
 2. **Trim** (optional) — a preview in the browser's own player, a start and
    an end handle on one track, "Start time" and "End time" fields, and
-   "Set start here" / "Set end here" to take the preview's position. Left
-   alone, the whole video is kept, and "Use the whole video" puts it back.
-   The part kept must be at least 3 s. The preview plays the original — the
+   "Set start here" / "Set end here" to take the preview's position; moving
+   a handle, by pointer or key, or typing a valid time shows that point in
+   the preview, paused, a drag resting on its last time (VH-125). Left alone,
+   the whole video is kept, and "Use the whole video" puts it back. The part
+   kept must be at least 3 s. The preview plays the original — the
    sound not yet levelled, the closing not yet added — and the step says so.
 3. **Title card** (optional for a staff video) — an "Add a title card" box,
    off at first, shows Title, Department, Authors and Date while ticked
@@ -638,8 +648,11 @@ the larger file.
   3.1.5), checked in the quality gate over every string the page can show.
   Every term of art the page keeps and every abbreviation it uses has an
   in-place meaning, bar the exceptions §9.3 names one by one; where a fixed
-  label fails the level, simpler supporting text sits beside it. Named stages ("Analysing audio", "Adding branding",
-  "Encoding video") rather than a single opaque bar.
+  label fails the level, simpler supporting text sits beside it.
+- Five named stages, not one opaque bar (VH-109): "Getting ready",
+  "Analysing audio", "Encoding video", "Finishing the file" and "Checking the
+  file". Branding joins inside the encode; the bar is full only when the video
+  is ready.
 - Every error states what happened, whether the original file is affected
   (it never is), and what to do next — and sits where it belongs: an input
   error beside the control it concerns, and tied to it; a job or device
@@ -670,8 +683,10 @@ walk where only a person can:
 - Full keyboard operation with no exception; no drag-only route.
 - Text enlargement to 200% without horizontal scrolling and, separately,
   reflow at 320 CSS px; text spacing overrides survive; running text no
-  wider than 80 characters (40 glyphs for CJK); line spacing 1.5 and
-  paragraph spacing 1.5× that; no justification; the user's own foreground
+  wider than 80 characters (40 glyphs for CJK); line spacing 1.5 and a blank
+  line between paragraphs (`--paragraph-gap`, 2.5× the font size top to top,
+  VH-124's reading of 1.4.8), as tokens, never `!important`, so the user's
+  spacing wins; no justification; the user's own foreground
   and background colours not overridden; reduced motion honoured.
 - A lower-secondary reading level, and a meaning for every kept term (§9.2).
 - Page and part language declared, and changed when the page is (VH-105).
@@ -700,8 +715,24 @@ Exceptions recorded:
   and the controls are the user agent's; any media the app itself supplied
   would need alternatives of its own. *Decision:* accepted, maintainer,
   2026-10-01.
-- **Format identifiers** (3.1.4): none accepted yet. Each left unexpanded
-  after being considered is added here by name, with the same four fields.
+- **Units of file size** (3.1.4): kB, MB, GB, TB. *Reason:* every device's
+  own screens show sizes so. *Impact:* a reader new to them sees a size
+  without its unit's name. *Mitigation:* each output is named for its purpose
+  (§6); where a size asks for action, freeing space, the device's storage
+  screens use the same units. *Decision:* accepted, maintainer, 2026-10-20.
+- **UoN**, the product's name (3.1.4). *Reason:* it is the tool's name.
+  *Impact:* a reader may not know the letters. *Mitigation:* the University
+  of Nottingham logo, whose text alternative says those words, sits above it.
+  *Decision:* accepted, maintainer, 2026-10-20.
+- **Codec names** (3.1.4): H.264, H.265, VP8, VP9, AV1, ProRes, AAC, Opus,
+  MP3, Vorbis, FLAC. *Reason:* they are read-only facts about the file in the
+  Video properties disclosure, and none is plainer spelt out. *Impact:* a
+  reader may meet a name they do not know. *Mitigation:* the disclosure
+  starts closed, nothing rests on it, and the main path names formats by file
+  ending. *Decision:* accepted, maintainer, 2026-10-20.
+
+`test/readability.test.ts` holds this list; any other abbreviation needs its
+meaning beside it.
 
 ### 9.4 Mobile
 

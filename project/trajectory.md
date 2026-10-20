@@ -9,6 +9,7 @@
 
 ## Phase 2 — the owner's corrections, the spec caught up, three page defects, a time left
 
+- VH-134 — the spec says what ships in six places: the page's three languages (§9), the preview following a trim handle or typed time (§9.1), the five named stages (§9.2), the paragraph gap's mechanism and figure, and kB–TB, UoN and eleven codec names as 3.1.4 exceptions with their four fields, matching the readability gate (§9.3); 7,692 of its 7,800 words (2026-10-20) — see decisions
 - VH-133 — the returned workbook's 21 changed cells are Google Translate's own re-run, every one still an unedited formula on unchanged English, not a person's wording; nothing merged, the reviewed tables stand (2026-10-20) — see decisions
 
 ## Band 7 — measured, not yet fixed
