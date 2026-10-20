@@ -29,6 +29,10 @@
 
 ### Phase 2 — the owner's corrections, the spec caught up, three page defects, a time left — CLOSED 2026-10-20
 
+### Audit v2 — the page against the 2026-10-01 standard
+
+- [~] VH-138 — The page audited again, to the 2026-10-01 standard — since 2026-10-20
+
 ### Standing — maintainer-owned, never band-gated
 
 - [!] VH-137 — The accessibility statement's review, due 2026-11-18 — since 2026-10-20 — blocked: the owner's review, the further tests chosen and the two teams' addresses — (from: VH-130, 2026-10-18)
