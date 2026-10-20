@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Estimate spread — UoN Video Helper</title>
+  </head>
+  <body>
+    <h1>Estimate spread (VH-116)</h1>
+    <p>
+      Runs real recordings through pre-flight's video probe and then the job, and holds the
+      probe, a warmed-up probe and the job's own early rate against the real encode. Add
+      <code>?files=/samples/a.mp4|/samples/b.mp4</code>, <code>&amp;presets=best,smaller</code>
+      and <code>&amp;reps=3</code>.
+    </p>
+    <pre id="log">running…</pre>
+    <script type="module" src="/src/spike/estimate.ts"></script>
+  </body>
+</html>

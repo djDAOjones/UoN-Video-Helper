@@ -73,8 +73,8 @@ describe('the spike pages', () => {
     /^spike-.*\.html$/.test(name),
   )
 
-  it('are the twelve the runner is pointed at', () => {
-    expect(pages).toHaveLength(12)
+  it('are the thirteen the runner is pointed at', () => {
+    expect(pages).toHaveLength(13)
   })
 
   for (const page of pages) {

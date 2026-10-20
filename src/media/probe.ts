@@ -59,13 +59,21 @@ const UNMEASURED: ProbeResult = {
  * config the real job uses — into a `NullTarget`, which discards the bytes.
  * Measuring a cheaper path than the job will actually run is the one way a
  * calibration probe can be worse than no probe at all.
+ *
+ * Exported, with the time each frame was accepted, for `spike/estimate.ts`,
+ * which measures how the rate settles inside the window (VH-116).
  */
-async function probeVideo(
+export async function probeVideo(
   track: InputVideoTrack,
   shape: OutputShape,
   signal: AbortSignal | undefined,
   fromSeconds: number,
-): Promise<{ frames: number; seconds: number }> {
+): Promise<{
+  frames: number
+  seconds: number
+  /** When each frame was accepted, in seconds from the probe's start. */
+  acceptedAtSeconds: readonly number[]
+}> {
   const output = new Output({
     format: new Mp4OutputFormat({ fastStart: false }),
     target: new NullTarget(),
@@ -75,6 +83,7 @@ async function probeVideo(
 
   const sink = new VideoSampleSink(track)
   let frames = 0
+  const acceptedAtSeconds: number[] = []
   const startedAt = performance.now()
 
   try {
@@ -91,6 +100,7 @@ async function probeVideo(
         sample.close()
       }
       frames++
+      acceptedAtSeconds.push((performance.now() - startedAt) / 1000)
     }
     source.close()
     await output.finalize()
@@ -99,7 +109,7 @@ async function probeVideo(
     throw cause
   }
 
-  return { frames, seconds: (performance.now() - startedAt) / 1000 }
+  return { frames, seconds: (performance.now() - startedAt) / 1000, acceptedAtSeconds }
 }
 
 /** The time a job will take, stage by stage. */
