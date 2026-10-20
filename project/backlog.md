@@ -27,8 +27,16 @@
 
 ### Phase 1 — Band 8, a title card and an Internal use only closing — CLOSED 2026-10-19
 
+### Phase 2 — the owner's corrections, the spec caught up, three page defects, a time left
+
+- [ ] VH-133 — The owner's translation corrections, merged — since 2026-10-20 — (from: VH-105, 2026-10-19)
+- [ ] VH-134 — The spec caught up: six edits drafted for approval — since 2026-10-20
+- [ ] VH-135 — Three page defects and the Xerte link — since 2026-10-20
+- [ ] VH-136 — A time left during the job — since 2026-10-20 — (from: VH-116, 2026-10-20)
+
 ### Standing — maintainer-owned, never band-gated
 
+- [!] VH-137 — The accessibility statement's review, due 2026-11-18 — since 2026-10-20 — blocked: the owner's review, the further tests chosen and the two teams' addresses — (from: VH-130, 2026-10-18)
 - [!] VH-M2 — Measure the device envelope — since 2026-08-24 — blocked: the owner's own work — a canon [maintainer] item
 - [!] VH-M4 — Watch staff use it — since 2026-10-01 — blocked: the owner's own work — a canon [maintainer] item
 - [!] VH-14 — Deployment — since 2026-08-24 — blocked: the owner's own work — a canon [maintainer] item

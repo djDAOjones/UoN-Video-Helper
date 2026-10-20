@@ -17,6 +17,28 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-20 — PLAN-2 — Phase 2: the owner's corrections, the spec caught up, three page defects, a time left
+
+**Decision:** the wish list is triaged: Phase 2 is VH-133 (the owner's translation corrections), VH-134 (six spec edits drafted for approval), VH-135 (three page defects and the Xerte link) and VH-136 (a time left during the job), in that order; the statement's review is VH-137, the owner's, due 2026-11-18; two lines already paid are retired; fifteen stay wishes — because the owner applied the agent's triage in chat on 2026-10-20 and added the time left.
+
+**Items:** VH-133, VH-134, VH-135, VH-136
+
+**Rationale:** The owner asked what to cut, keep as a wish or add now, then said "yes, apply it with your recommendations" and "but add Time left during a job for now". Promoted, each line quoted verbatim in its item file's Notes: the returned translation sheet (VH-133); the six spec sign-off debts for §9, §9.1 step 2, §9.2 and §9.3 (VH-134); the stale discard question in `#status`, the shared status line, the bold segment's width and the Equality Advisory link in Xerte (VH-135); the time left (VH-136); the statement's review, its further tests and the two teams' addresses (VH-137). Retired as paid: "the planner can tell before the encode", since VH-110 refuses a plan whose predicted loudness misses the contract before a frame is encoded (`src/media/pipeline.ts`); and the Band 8 spec line, every part of which was applied on 2026-10-19 before Phase 1 closed. Kept as wishes: the trim step that scales (typing a time already reaches any point by keyboard, VH-125); the Teams listen and the heavy-limiting note (listen first); VH-124's four polish lines (for VH-124's sign-off); the person checks for VH-127, VH-128, VH-122, the switcher and the campus colleagues; the `pm_skills/` retirement, npm audit's dev-only findings and the stale `project/structure.md`. Order: VH-133 first, since the live pages show wording the owner has corrected and later items add keys to the same sheet; the spec next, since it is authoritative and wrong in six places; then the defects; VH-136 last, the only item with open questions on its design. VH-137 sits under Standing so Phase 2 can close before its date. This supersedes the earlier entry's "every wish stays on the wish list" and "the next item stays none"; its §7.1 sentence stands. No new dependency. Open, for the owner when each item starts: in its Notes.
+
+**Supersedes:** 2026-10-20 — VH-116 — The §7.1 sentence stands as worded; the wishes stay wishes, and the next item waits on the owner
+
+**Deferred:** VH-137
+
+## 2026-10-20 — PLAN-2 — The spec's budget rises to 7,800; the Always section drops two lines the profile holds; the Xerte link opens a new tab
+
+**Decision:** rules.md's routed budget for the spec rises from 6,400 to 7,800 words; the Always section drops its standards line and its push line, both already in the profile, to come under its 400-word guideline; the statement's Equality Advisory link opens in a new tab and says so in its words (VH-135) — because the owner applied the agent's recommendations in chat on 2026-10-20.
+
+**Rationale:** The spec is 7,386 words, grown by approved edits for features the owner asked for (Band 8, VH-122, VH-116); 7,800 leaves room for VH-134's six edits and VH-136's, where a trim would cost the owner a review of cuts to the authoritative document. The Always section was 433 words and is now 398. "No control for power users; Carbon productive in our own code; WCAG 2.2 AAA, exceptions recorded." is the profile's Standards adopted: Carbon in our own code, never the packages; AAA, every exception recorded; Nielsen, no control for power users. "Push and network follow the profile's Push and Network lines; a blocked push is reported as pending." is the profile's Push and Network lines and the close verb's step 7. No obligation is lost, and the census rows that named the cut line, C53, C54, C163 and C181, now name the profile as the destination; their first three cells are unchanged. The Equality Advisory and Support Service's site may refuse to load inside a Xerte frame, so the same-frame link can fail outright; a new tab, said in the link's text, is WCAG technique G201 and keeps the reader's place in the tool.
+
+**Supersedes:** none
+
+**Deferred:** VH-135
+
 ## 2026-10-20 — VH-116 — The §7.1 sentence stands as worded; the wishes stay wishes, and the next item waits on the owner
 
 **Decision:** spec §7.1's sentence on the probe's warm-up stands as worded and is applied; every wish stays on the wish list, none promoted; nothing new is added unless it is really needed, so the next item stays "none" until the owner names one — because the owner said so in chat on 2026-10-20.
