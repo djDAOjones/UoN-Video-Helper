@@ -76,6 +76,8 @@ export function languageSegments(name: string, options: readonly LanguageOption[
     const face = document.createElement('span')
     face.className = 'segment-face'
     face.textContent = option.name
+    // The words its bold width is reserved from, so choosing it moves no neighbour (VH-135).
+    face.dataset['text'] = option.name
     label.append(input, face)
     segments.append(label)
   }

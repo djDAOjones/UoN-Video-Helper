@@ -777,7 +777,7 @@ export const msMY: Messages = {
       heading: 'Prosedur penguatkuasaan',
       text: 'Suruhanjaya Kesaksamaan dan Hak Asasi Manusia (Equality and Human Rights Commission) menguatkuasakan peraturan kebolehcapaian. Jika anda tidak berpuas hati dengan cara kami menjawab aduan anda, anda boleh menghubungi {service}.',
       service:
-        'Perkhidmatan Nasihat dan Sokongan Kesaksamaan (Equality Advisory and Support Service)',
+        'Perkhidmatan Nasihat dan Sokongan Kesaksamaan (Equality Advisory and Support Service, dibuka dalam tab baharu)',
     },
     compliance: {
       heading: 'Status pematuhan',

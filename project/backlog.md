@@ -29,7 +29,6 @@
 
 ### Phase 2 — the owner's corrections, the spec caught up, three page defects, a time left
 
-- [ ] VH-135 — Three page defects and the Xerte link — since 2026-10-20
 - [ ] VH-136 — A time left during the job — since 2026-10-20 — (from: VH-116, 2026-10-20)
 
 ### Standing — maintainer-owned, never band-gated

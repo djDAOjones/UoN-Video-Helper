@@ -5,6 +5,7 @@
  * Chrome; what is pinned here is every decision it is built from.
  */
 
+import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 
 import { TRANSLATION_FEEDBACK_ADDRESS, TRANSLATION_FEEDBACK_SUBJECT } from '../config/feedback'
@@ -75,5 +76,16 @@ describe('translationFeedbackMailto', () => {
     expect(url).toContain('%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87')
     expect(url).toContain('%20')
     expect(url).toMatch(/^[\x21-\x2a\x2c-\x7e]+$/)
+  })
+})
+
+describe('languageSegments (VH-135)', () => {
+  it('gives each face its own name to reserve its bold width from', () => {
+    // Built in the DOM, which Node has not got; the stylesheet's reserve reads
+    // `data-text`, so the face must carry the words it shows.
+    const source = readFileSync(new URL('./language-switcher.ts', import.meta.url), 'utf8')
+    expect(source).toMatch(
+      /face\.textContent = option\.name\s*\n(?:\s*\/\/[^\n]*\n)*\s*face\.dataset\['text'\] = option\.name/,
+    )
   })
 })

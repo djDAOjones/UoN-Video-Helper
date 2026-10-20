@@ -310,6 +310,8 @@ const createNote = required<HTMLParagraphElement>('#create-note')
 const announceField = required<HTMLDivElement>('#announce-field')
 const announceProgressBox = required<HTMLInputElement>('#announce-progress')
 const processResult = required<HTMLDivElement>('#process-result')
+const saveStatusLine = required<HTMLParagraphElement>('#save-status')
+const saveActions = required<HTMLDivElement>('#save-actions')
 const videoKindChoice = required<HTMLFieldSetElement>('#video-kind')
 const videoKindResult = required<HTMLParagraphElement>('#video-kind-result')
 const videoLanguageChoice = required<HTMLFieldSetElement>('#video-language')
@@ -755,7 +757,37 @@ function updateSystemCheckSummary(): void {
  * region inside a hidden section is neither seen nor announced.
  */
 function setStatus(message: Text, spokenOnly: Text = ''): void {
+  statusAsksDiscard = false
   show(statusLine, () => paintStatus(statusLine, message, spokenOnly))
+}
+
+/**
+ * Whether the status line still speaks the discard question. Its words are
+ * spoken-only, so nothing on screen shows them linger: a screen-reader user
+ * browsing the page could still find a question that had gone (VH-135).
+ */
+let statusAsksDiscard = false
+
+/** Takes the discard question's words off the status line, if nothing has replaced them. */
+function unsayDiscardQuestion(): void {
+  if (statusAsksDiscard) setStatus('')
+}
+
+/**
+ * Says what is happening to the SAVE, on its own line under the result.
+ *
+ * A previous video can be saving while the next file is checked, and the two
+ * shared the job's line, so a verdict landing mid-save replaced "Saving…" and
+ * "Saved." then replaced the verdict (VH-135). Each now has a line of its own.
+ */
+function setSaveStatus(message: Text): void {
+  show(saveStatusLine, () => paintStatus(saveStatusLine, message, ''))
+}
+
+/** Takes the result off the page, and the save's line with it: its words were about that video. */
+function clearResult(): void {
+  clear(processResult)
+  clear(saveStatusLine)
 }
 
 /**
@@ -1301,7 +1333,7 @@ fileInput.addEventListener('change', () => {
   if (unsavedResult) {
     renderResult(unsavedResult)
   } else {
-    clear(processResult)
+    clearResult()
   }
 
   void (async () => {
@@ -1981,8 +2013,9 @@ let discardAsked = false
 function withdrawDiscardQuestion(): void {
   if (!discardAsked) return
   discardAsked = false
+  unsayDiscardQuestion()
   if (unsavedResult) renderResult(unsavedResult)
-  else clear(processResult)
+  else clearResult()
   syncCreateNote()
 }
 
@@ -2046,7 +2079,9 @@ function stopButton(): HTMLButtonElement {
 const stopCheckButton = stopButton()
 const checkAgainButton = stopButton()
 const stopSaveButton = stopButton()
-stopActions.append(stopCheckButton, checkAgainButton, stopSaveButton)
+stopActions.append(stopCheckButton, checkAgainButton)
+// Under the save's own line, not the check's (VH-135).
+saveActions.append(stopSaveButton)
 
 /**
  * The labels of the buttons built once and kept for the session, written in
@@ -2064,9 +2099,10 @@ function labelButtons(): void {
 labelButtons()
 
 /**
- * What the row offers for the device check. Kept apart from the save's stop:
- * a previous video can be saving while the next file is checked, and the
- * check finishing must not take the save's way out with it (Codex review).
+ * What the row offers for the device check. Kept apart from the save's stop,
+ * in a row of its own: a previous video can be saving while the next file is
+ * checked, and the check finishing must not take the save's way out with it
+ * (Codex review).
  */
 function offerStop(offer: 'check' | 'check-again' | null): void {
   stopCheckButton.hidden = offer !== 'check'
@@ -2074,16 +2110,16 @@ function offerStop(offer: 'check' | 'check-again' | null): void {
   syncStopRow()
 }
 
-/** Whether the row offers Stop saving. */
+/** Whether the save's row offers Stop saving; the row is on the page only while it does. */
 function offerSaveStop(offered: boolean): void {
   stopSaveButton.hidden = !offered
   stopSaveButton.disabled = false
-  syncStopRow()
+  saveActions.hidden = !offered
 }
 
 /** The row is on the page while any of its controls is. */
 function syncStopRow(): void {
-  stopActions.hidden = [stopCheckButton, checkAgainButton, stopSaveButton].every(
+  stopActions.hidden = [stopCheckButton, checkAgainButton].every(
     (button) => button.hidden,
   )
 }
@@ -2118,7 +2154,7 @@ stopSaveButton.addEventListener('click', () => {
   if (!saveStop) return
   stopSavePressedWithFocus = document.activeElement === stopSaveButton
   stopSaveButton.disabled = true
-  setStatus(() => t().status.stoppingSave)
+  setSaveStatus(() => t().status.stoppingSave)
   saveStop.abort()
 })
 
@@ -2587,6 +2623,7 @@ function confirmDiscardThenStart(): void {
   keep.addEventListener('click', () => {
     // Keep it removes itself; the result it restores takes focus.
     const fromKeep = focusHeldBy([keep])
+    unsayDiscardQuestion()
     if (unsavedResult) fromKeep(renderResult(unsavedResult))
   })
 
@@ -2603,8 +2640,9 @@ function confirmDiscardThenStart(): void {
     keep.textContent = t().create.keep
     if (!panel.isConnected) processResult.replaceChildren(panel)
   })
-  // The panel says it; the live region only speaks it.
+  // The panel says it; the live region only speaks it, until the question goes.
   setStatus('', () => t().discard.spoken({ question: question() }))
+  statusAsksDiscard = true
   panel.focus()
 }
 
@@ -2644,7 +2682,7 @@ function beginJob(file: File): void {
   savedResultFor = null
   // Create, or the question's Discard, is about to go: Cancel takes focus.
   const fromCreate = focusHeldBy([startButton, processResult])
-  clear(processResult)
+  clearResult()
   discardAsked = false
   // A running job always shows its row — Cancel lives in it (U-02).
   processActions.hidden = false
@@ -2992,7 +3030,7 @@ function renderResult(kept: RetainedResult): HTMLElement {
     setSaveInFlight(true)
     // A multi-gigabyte save streams for a while and used to say nothing at
     // all, which is the same silence VH-38 established means "wedged".
-    setStatus(() => t().status.saving)
+    setSaveStatus(() => t().status.saving)
     // Declared to the worker as well as locked in the UI: the UI lock is a
     // convention, and a convention is what VH-36 turned out to be.
     worker.postMessage({ kind: 'lease', id: nextRequestId++, jobId, held: true })
@@ -3030,11 +3068,11 @@ function renderResult(kept: RetainedResult): HTMLElement {
           // picker made is removed where the browser allows, and may not be
           // (Codex critique). What is certain is said.
           const stopped = stop.signal.aborted
-          setStatus(() => (stopped ? t().status.saveStopped : t().status.notSaved))
+          setSaveStatus(() => (stopped ? t().status.saveStopped : t().status.notSaved))
           return
         }
         if (result.outcome === 'refused-source') {
-          setStatus(() => t().status.refusedSource)
+          setSaveStatus(() => t().status.refusedSource)
           return
         }
         if (result.outcome === 'downloaded') {
@@ -3055,7 +3093,7 @@ function renderResult(kept: RetainedResult): HTMLElement {
           // may still be fetching it. Where it lands, and what next, are said
           // for this route too (VH-113) — and the result's own lifetime line
           // agrees with it (Codex critique).
-          setStatus(() =>
+          setSaveStatus(() =>
             downloadStatusText(downloadDestinationFor(navigator.userAgent, navigator.maxTouchPoints)),
           )
           lifetimeOf = 'delivered'
@@ -3063,7 +3101,7 @@ function renderResult(kept: RetainedResult): HTMLElement {
           return
         }
         // A completed write, and what next (U-25, spec 9.1 step 5).
-        setStatus(() => t().status.saved)
+        setSaveStatus(() => t().status.saved)
         // Only once it is safely out: the File reads from OPFS, so releasing
         // the workspace first would hand back something unreadable.
         //
@@ -3100,7 +3138,7 @@ function renderResult(kept: RetainedResult): HTMLElement {
         }
       } catch (cause) {
         fromGone = focusHeldBy([save, stopSaveButton], stopSavePressedWithFocus)
-        setStatus(() => t().status.saveFailed)
+        setSaveStatus(() => t().status.saveFailed)
         log.error('ui', 'save failed', {
           reason: cause instanceof Error ? cause.message : String(cause),
         })

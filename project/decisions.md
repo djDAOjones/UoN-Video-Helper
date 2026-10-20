@@ -17,6 +17,16 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-20 — VH-135 — The save says itself on a line of its own; the switchers reserve their bold width; the advice link opens a new tab
+
+**Decision:** a save writes only to its own line under the result, with Stop saving beneath it, and the line goes with the result; the discard question's spoken words leave the status line when the question goes; the three content-sized switchers reserve each face's bold width; the advice service's link opens in a new tab and says so in all three languages, the Chinese and Malay as the agent drafted them — because these meet the item's criteria, and PLAN-2's standing word makes the agent's choices the owner's, shown at this close for reversal.
+
+**Rationale:** The save line is `#save-status`, a live region never `hidden`, collapsed while empty so a page with no result gains no blank line; it arrives with Stop saving, which moved from the check's row so each status sits over its own stop. `clearResult()` empties it with the result: a new job, or a new file when nothing is unsaved. The discard words are cleared only while the line still holds them (`statusAsksDiscard`), so a title-card refusal written while the question stood survives a withdrawal. The reserve is a `::after` of the face's own `data-text`, bold, no height, hidden, with `content: … / ''` so it is never read; the video type's `data-text` is bound by `data-i18n-attr`, so it follows a language change. The link takes `target="_blank"` and `rel="noopener noreferrer"`; its words add "(new tab)" in English, because "(opens in a new tab)" graded 10.7 against the readability gate's 10, and Chrome's own phrases "在新标签页中打开" and "tab baharu", through the filled sheet and `scripts/strings-table.mjs`. No spec section governs these details, so the spec is unchanged. Checked in Chrome (Claude's in-app browser) at 1280 and 375 px: no segment's left edge or width moved on any choice in any page language, against 5.67 px with the reserve switched off, and the face's accessible text is its words once; the switch and Keep it each left `#status` empty after the question; with AMCS3059's unsaved result, MLAC 3139 chosen and Save pressed during its check, the verdict landed on `#status` and "Saving…" then "Saved." on `#save-status`, neither overwritten, 7,222,021 bytes written through a slowed stand-in picker, since removed; the link's words in each language, the only link with a target. Applied: WCAG technique G201 and 4.1.3, Nielsen 1 and 4, Carbon's segmented skin kept, the house rule of a regression test per fixed bug — each mutation of a fix fails its test.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-20 — VH-134 — The spec caught up: the six edits applied as drafted, with three 3.1.4 exceptions
 
 **Decision:** the six edits stand in `docs/01-specification.md` as the agent drafted them: the page's three languages (§9), a handle or typed time moving the preview (§9.1 step 2), the five stages (§9.2), the paragraph gap's mechanism and figure, and kB–TB, UoN and eleven codec names as 3.1.4 exceptions with their four fields (§9.3) — because PLAN-2's standing word makes the drafts the owner's approval, shown at this close for reversal.

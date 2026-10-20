@@ -802,7 +802,7 @@ export const enGB = {
       heading: 'Enforcement procedure',
       /** `{service}` is `service` below, as a link to its website. */
       text: 'The Equality and Human Rights Commission enforces the accessibility regulations. If you are not happy with how we answer your complaint, you can get in touch with the {service}.',
-      service: 'Equality Advisory and Support Service',
+      service: 'Equality Advisory and Support Service (new tab)',
     },
     compliance: {
       heading: 'Compliance status',

@@ -113,3 +113,31 @@ describe('tokens, not literals (VH-124)', () => {
     expect(tokens).toMatch(/--paragraph-gap:\s*var\(--spacing-05\);/)
   })
 })
+
+describe('the content-sized switchers (VH-135)', () => {
+  /** A rule's declarations, by its exact selector list. */
+  const block = (selectors: string): string =>
+    new RegExp(`${selectors.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/,\s*/g, ',\\s*')}\\s*\\{([^}]*)\\}`).exec(rules)?.[1] ?? ''
+  const switchers = ['.language-switcher', '.video-kind', '.video-language']
+  const chosen = block('.segment input:checked + .segment-face')
+
+  it('reserve each face\u2019s bold width, so a choice moves no neighbour', () => {
+    // A segment as wide as its words widened as its face turned bold, and
+    // pushed the one beside it on every choice.
+    const reserve = block(switchers.map((name) => `${name} .segment-face::after`).join(', '))
+    expect(reserve).toMatch(/content:\s*attr\(data-text\)\s*\/\s*''/)
+    expect(reserve).toMatch(/height:\s*0;/)
+    expect(reserve).toMatch(/overflow:\s*hidden;/)
+    expect(reserve).toMatch(/visibility:\s*hidden;/)
+    // The reserved words are exactly as heavy as the chosen face's.
+    const weight = /font-weight:\s*(\d+)/.exec(chosen)?.[1]
+    expect(weight).toBeDefined()
+    expect(reserve).toContain(`font-weight: ${weight};`)
+  })
+
+  it('stack the reserve under the words, with no gap to add height', () => {
+    const face = block(switchers.map((name) => `${name} .segment-face`).join(', '))
+    expect(face).toMatch(/flex-direction:\s*column;/)
+    expect(face).toMatch(/gap:\s*0;/)
+  })
+})

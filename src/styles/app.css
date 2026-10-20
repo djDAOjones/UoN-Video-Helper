@@ -270,6 +270,14 @@ a {
   margin-top: var(--spacing-04);
 }
 
+/* The save's line (VH-135) is on the page in every state, so an empty one
+   takes no room: it arrives together with Stop saving, which moves the row
+   beneath it anyway. */
+.step > .status--save:empty {
+  margin-top: 0;
+  min-height: 0;
+}
+
 /* Status list — every row states its outcome in words, never colour alone */
 .checks {
   list-style: none;
@@ -1133,6 +1141,28 @@ details[open] > .disclosure-summary::before {
 .video-kind .segment + .segment .segment-face,
 .video-language .segment + .segment .segment-face {
   border-left: var(--border-width) solid var(--interactive);
+}
+
+/* A segment as wide as its words widens as its face turns bold, and moved its
+   neighbour on every choice (VH-135). Each face reserves its bold width: its
+   own words again, bold, in a line of no height that is never seen or read. */
+.language-switcher .segment-face,
+.video-kind .segment-face,
+.video-language .segment-face {
+  flex-direction: column;
+  gap: 0;
+}
+
+.language-switcher .segment-face::after,
+.video-kind .segment-face::after,
+.video-language .segment-face::after {
+  content: attr(data-text) / '';
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  font-weight: 600;
+  pointer-events: none;
+  user-select: none;
 }
 
 /* The machine-translation note sits between the switcher and the heading. */

@@ -113,10 +113,13 @@ export function wireAccessibilityStatement(details: HTMLDetailsElement): Accessi
   const contactLink = document.createElement('a')
   contactLink.href = `mailto:${ACCESSIBILITY_CONTACT_ADDRESS}`
   contactLink.textContent = ACCESSIBILITY_CONTACT_ADDRESS
-  // An ordinary link, in this tab: a running job's "Leave site?" warning
-  // still stands between a click and the job.
+  // In a new tab, and its words say so (WCAG technique G201): inside a Xerte
+  // frame that site may refuse to load, and a new tab leaves a running job
+  // where it is (VH-135). No referrer: nothing about this page goes with it.
   const serviceLink = document.createElement('a')
   serviceLink.href = EQUALITY_ADVISORY_SERVICE_URL
+  serviceLink.target = '_blank'
+  serviceLink.rel = 'noopener noreferrer'
 
   const waveDay = dayElement(WAVE_CHECK_DATE)
   const preparedDay = dayElement(STATEMENT_PREPARED_DATE)

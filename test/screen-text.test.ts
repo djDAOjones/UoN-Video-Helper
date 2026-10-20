@@ -159,6 +159,62 @@ describe('the status line (VH-88)', () => {
   })
 })
 
+describe('the save\'s own line (VH-135)', () => {
+  const mainSource = readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8')
+  /** Every message a save writes, as the script names it. */
+  const saveMessages = ['saving', 'stoppingSave', 'saveStopped', 'notSaved', 'refusedSource', 'saved', 'saveFailed']
+
+  it('is a live region of its own, never hidden in the markup', () => {
+    expect(markup).toMatch(/<p class="status status--save" id="save-status" role="status" aria-live="polite">/)
+    expect(markup).not.toMatch(/id="save-status"[^>]*\shidden/)
+  })
+
+  it('writes every save message there, and none on the job\'s line', () => {
+    // A previous video can be saving while the next file is checked: on one
+    // line, the verdict replaced "Saving…" and "Saved." replaced the verdict.
+    for (const message of saveMessages) {
+      expect(mainSource).toMatch(new RegExp(`setSaveStatus\\(\\(\\) =>[^;]*t\\(\\)\\.status\\.${message}\\b`))
+      expect(mainSource).not.toMatch(new RegExp(`\\bsetStatus\\([^;]*t\\(\\)\\.status\\.${message}\\b`))
+    }
+    expect(mainSource).toMatch(/setSaveStatus\(\(\) =>\s*downloadStatusText\(/)
+    expect(mainSource).not.toMatch(/\bsetStatus\([^;]*downloadStatusText\(/)
+  })
+
+  it('keeps Stop saving under the save\'s line, not in the check\'s row', () => {
+    expect(mainSource).toContain('saveActions.append(stopSaveButton)')
+    expect(mainSource).toContain('stopActions.append(stopCheckButton, checkAgainButton)\n')
+  })
+
+  it('goes with the result it describes', () => {
+    // Its words are about one video; a new job or a new file clearing the
+    // result takes them too, and nothing else empties the result.
+    expect(mainSource).not.toMatch(/\bclear\(processResult\)(?![\s\S]{0,40}clear\(saveStatusLine\))/)
+    expect(/function clearResult\(\): void \{\s*clear\(processResult\)\s*clear\(saveStatusLine\)/.test(mainSource)).toBe(true)
+  })
+})
+
+describe('the discard question\'s spoken words (VH-135)', () => {
+  const mainSource = readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8')
+  /** The body of one top-level function in the script. */
+  const body = (name: string): string => new RegExp(`function ${name}\\([^)]*\\): void \\{([\\s\\S]*?)\\n\\}`).exec(mainSource)?.[1] ?? ''
+
+  it('are marked as the status line\'s when the question is asked', () => {
+    expect(mainSource).toMatch(/setStatus\('', \(\) => t\(\)\.discard\.spoken\([^\n]*\n\s*statusAsksDiscard = true/)
+  })
+
+  it('are forgotten by anything else the line says', () => {
+    expect(body('setStatus')).toMatch(/^\s*statusAsksDiscard = false/)
+  })
+
+  it('go when the question does: withdrawn by a change, or answered Keep it', () => {
+    // Spoken-only words linger unseen: a screen-reader user browsing the page
+    // could still find "Starting again will discard it." after it had gone.
+    expect(body('unsayDiscardQuestion')).toMatch(/if \(statusAsksDiscard\) setStatus\(''\)/)
+    expect(body('withdrawDiscardQuestion')).toContain('unsayDiscardQuestion()')
+    expect(mainSource).toMatch(/const fromKeep = focusHeldBy\(\[keep\]\)\s*unsayDiscardQuestion\(\)/)
+  })
+})
+
 describe('the System check panel (VH-88)', () => {
   it('keeps a level-two heading, inside its summary', () => {
     // A <details> has no heading of its own. Without one the panel drops out
@@ -347,6 +403,18 @@ describe('Staff video or Student submission (VH-131)', () => {
     expect(fieldset).toContain(enGB.videoKind.options.submission)
   })
 
+  it('gives each face its own words to reserve its bold width from, in every language (VH-135)', () => {
+    // The stylesheet reserves the chosen weight from `data-text`; bound to the
+    // same message as the face, it follows a change of language.
+    const raw = readFileSync(new URL('../index.html', import.meta.url), 'utf8')
+    const faces = [...raw.matchAll(/<span class="segment-face" data-i18n="(videoKind\.options\.\w+)"([^>]*)>([^<]+)<\/span>/g)]
+    expect(faces).toHaveLength(VIDEO_KINDS.length)
+    for (const [, key, attributes, words] of faces) {
+      expect(attributes).toContain(`data-text="${words}"`)
+      expect(attributes).toContain(`data-i18n-attr="data-text:${key}"`)
+    }
+  })
+
   it('starts on the default side, before any script runs', () => {
     expect(fieldset).toMatch(new RegExp(`name="video-kind" value="${DEFAULT_VIDEO_KIND}" checked`))
     expect(fieldset.match(/\schecked/g)).toHaveLength(1)
@@ -442,7 +510,17 @@ describe('steps that read as steps (VH-91)', () => {
     const create = /<section class="panel step" id="step-create"[\s\S]*?<\/section>/.exec(markup)?.[0] ?? ''
     // The verdict and notes; what is happening now, with its stop and bar;
     // the outcome; then the action that follows it (VH-124).
-    const order = ['preflight-report', 'audio-warnings', 'status', 'stop-actions', 'process-progress', 'process-result', 'process-actions']
+    const order = [
+      'preflight-report',
+      'audio-warnings',
+      'status',
+      'stop-actions',
+      'process-progress',
+      'process-result',
+      'save-status',
+      'save-actions',
+      'process-actions',
+    ]
     const positions = order.map((id) => create.indexOf(`id="${id}"`))
     expect(positions.every((position) => position >= 0)).toBe(true)
     expect(positions).toEqual([...positions].sort((a, b) => a - b))

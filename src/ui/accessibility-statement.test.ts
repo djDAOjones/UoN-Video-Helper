@@ -124,3 +124,32 @@ describe('where the statement sends a reader', () => {
     expect(new URL(EQUALITY_ADVISORY_SERVICE_URL).protocol).toBe('https:')
   })
 })
+
+describe('the advice service’s link (VH-135)', () => {
+  const source = readFileSync(new URL('./accessibility-statement.ts', import.meta.url), 'utf8')
+  /** How each language says a link opens in a new tab. */
+  const NEW_TAB: Record<keyof typeof LANGUAGE_TABLES, string> = {
+    'en-GB': '(new tab)',
+    'zh-Hans': '在新标签页中打开',
+    'ms-MY': 'dibuka dalam tab baharu',
+  }
+
+  it('opens in a new tab, sending no referrer', () => {
+    // Inside a Xerte frame the service's site may refuse to load.
+    expect(source).toMatch(/serviceLink\.target = '_blank'/)
+    expect(source).toMatch(/serviceLink\.rel = 'noopener noreferrer'/)
+  })
+
+  it('says so in its own words, in every language (WCAG technique G201)', () => {
+    for (const [tag, table] of Object.entries(LANGUAGE_TABLES)) {
+      expect(table.statement.enforcement.service, tag).toContain(
+        NEW_TAB[tag as keyof typeof NEW_TAB],
+      )
+    }
+  })
+
+  it('is the only link that changes: the contact address stays in this tab', () => {
+    expect(source).not.toMatch(/contactLink\.(target|rel)\b/)
+    expect(source.match(/\.target = /g)).toHaveLength(1)
+  })
+})

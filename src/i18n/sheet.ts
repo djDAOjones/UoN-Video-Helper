@@ -356,7 +356,7 @@ const NOTES: Readonly<Record<string, string>> = {
   'statement.enforcement.text':
     'The Equality and Human Rights Commission is an official UK body: give its English name with a translation in brackets, or name it as your language normally would.',
   'statement.enforcement.service':
-    'The name of an official UK advice service, shown as a link to its website. Give its English name with a translation in brackets, or name it as your language normally would.',
+    'The name of an official UK advice service, shown as a link that opens its website in a new tab: keep saying so in the link. Give its English name with a translation in brackets, or name it as your language normally would.',
   'statement.compliance.text':
     'Keep WCAG, AA and AAA as they are; 2.2 is a version number. Use the usual name in your language for the Web Content Accessibility Guidelines, if there is one.',
   'statement.testing.wave':

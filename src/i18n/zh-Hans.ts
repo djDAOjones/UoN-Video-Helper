@@ -721,7 +721,7 @@ export const zhHans: Messages = {
     enforcement: {
       heading: '执行程序',
       text: '平等与人权委员会（Equality and Human Rights Commission）负责执行无障碍法规。如果您对我们就投诉作出的答复不满意，可以联系{service}。',
-      service: '平等咨询与支持服务（Equality Advisory and Support Service）',
+      service: '平等咨询与支持服务（Equality Advisory and Support Service，在新标签页中打开）',
     },
     compliance: {
       heading: '合规状态',
