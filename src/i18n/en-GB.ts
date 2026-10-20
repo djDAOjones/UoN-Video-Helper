@@ -484,6 +484,11 @@ export const enGB = {
     milestones: ['a quarter done', 'half done', 'three quarters done'],
     stagePercent: '{stage} — {percent}',
     stageMilestone: '{stage} — {milestone}',
+    /** The encode's time left, under the stage line once the job's own rate is known (VH-136). */
+    timeLeft: 'About {time} left',
+    fewSecondsLeft: 'A few seconds left',
+    /** Said, not shown: a milestone, then the time left. */
+    withTimeLeft: '{progress}. {left}',
     ready: 'Ready',
     title: {
       stage: '{stage} — {app}',

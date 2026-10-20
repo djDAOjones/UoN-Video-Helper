@@ -112,6 +112,7 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
   ['progress', 'Step 6: the progress bar while the video is made'],
   ['progress.title', 'The title in the browser tab while the video is made'],
   ['progress.jobNotice', 'Step 6: said when the video starts being made'],
+  ['progress.withTimeLeft', 'Not shown: read out by screen readers while the video is made'],
   ['preflight', 'Step 6: the device check, which says whether this computer can make the video'],
   ['preflight.headings', 'Step 6: the heading of the device check'],
   ['preflight.reasons', 'Step 6: one reason in the device check'],
@@ -206,6 +207,8 @@ const PLACEHOLDERS: Readonly<Record<string, string>> = {
   stage: 'a stage name from progress.stages',
   percent: 'a percentage, like 14%',
   milestone: 'a phrase from progress.milestones',
+  progress: 'a stage name and a milestone, from progress.stageMilestone, like "Encoding video — half done"',
+  left: 'the time left, from progress.timeLeft or progress.fewSecondsLeft',
   app: 'the product name, from app.title',
   part: 'what part of the video was kept, from result.keptWhole or result.keptPart',
   output: 'the output chosen, from preset.labels',
@@ -339,6 +342,11 @@ const NOTES: Readonly<Record<string, string>> = {
   'progress.milestones.0': 'Follows a stage name, like "Encoding video — a quarter done".',
   'progress.milestones.1': 'Follows a stage name, like "Encoding video — half done".',
   'progress.milestones.2': 'Follows a stage name, like "Encoding video — three quarters done".',
+  'progress.timeLeft':
+    'How long the video still needs, on a line of its own under "Encoding video — 45%": "About 2 minutes left".',
+  'progress.fewSecondsLeft': 'In place of progress.timeLeft when under five seconds are left.',
+  'progress.withTimeLeft':
+    'Read out by screen readers, not shown: a milestone, then the time left, as two sentences, like "Encoding video — half done. About 2 minutes left".',
   'format.unknown': 'Shown alone in place of a fact the app could not read.',
   'statement.heading':
     'The heading of the panel, so no full stop. A formal statement, as on any official website.',

@@ -27,9 +27,7 @@
 
 ### Phase 1 — Band 8, a title card and an Internal use only closing — CLOSED 2026-10-19
 
-### Phase 2 — the owner's corrections, the spec caught up, three page defects, a time left
-
-- [ ] VH-136 — A time left during the job — since 2026-10-20 — (from: VH-116, 2026-10-20)
+### Phase 2 — the owner's corrections, the spec caught up, three page defects, a time left — CLOSED 2026-10-20
 
 ### Standing — maintainer-owned, never band-gated
 

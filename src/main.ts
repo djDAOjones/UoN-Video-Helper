@@ -305,6 +305,7 @@ const processActions = required<HTMLDivElement>('#process-actions')
 const processProgress = required<HTMLProgressElement>('#process-progress')
 const processProgressLabel = required<HTMLParagraphElement>('#process-progress-label')
 const processProgressText = required<HTMLParagraphElement>('#process-progress-text')
+const processTimeLeft = required<HTMLParagraphElement>('#process-time-left')
 const jobNotice = required<HTMLParagraphElement>('#job-notice')
 const createNote = required<HTMLParagraphElement>('#create-note')
 const announceField = required<HTMLDivElement>('#announce-field')
@@ -1889,23 +1890,33 @@ announceProgressBox.addEventListener('change', () => {
   writeAnnounceProgress(localStore, announceProgressBox.checked)
 })
 
-/** The last progress report, so a change of language can write the stage line again without announcing it. */
-let lastProgress: { readonly stage: PipelineStage; readonly fraction: number } | null = null
+/**
+ * The last progress report, and when it arrived, so a change of language can
+ * write the stage line again, its time left included, without announcing it.
+ */
+let lastProgress: { readonly stage: PipelineStage; readonly fraction: number; readonly atMs: number } | null =
+  null
 
 function onStage(stage: PipelineStage, fraction: number): void {
-  lastProgress = { stage, fraction }
+  // On arrival: the time left is timed from the encode's own reports (VH-136).
+  const atMs = performance.now()
+  lastProgress = { stage, fraction, atMs }
   const before = progressMemo
-  const view = progressView(stage, fraction, before, announceProgressBox.checked)
+  const view = progressView(stage, fraction, before, announceProgressBox.checked, atMs)
   progressMemo = view.memo
   // The stage and the percentage beside the bar, every report; the live
   // region only at a stage change or a milestone (U-08).
   processProgressText.textContent = view.shown
   processProgressText.hidden = false
+  // Its own line, held open while the job runs, empty until the encode's
+  // rate is known (VH-136).
+  processTimeLeft.textContent = view.timeLeft ?? ''
+  processTimeLeft.hidden = false
   // Spoken, not shown: the line beside the bar is the one visible account
   // (VH-124), and "Cancelling…" is never written over (pre-work defect 7).
   // Composed again from the same report after a change of language (VH-105).
   if (view.announce && !cancelRequested) {
-    setStatus('', () => progressView(stage, fraction, before, true).announce ?? '')
+    setStatus('', () => progressView(stage, fraction, before, true, atMs).announce ?? '')
   }
   // No value at all for a stage whose progress is not measured: the bar is
   // indeterminate rather than stuck at 0% (U-07).
@@ -1927,7 +1938,7 @@ function setTitle(of: typeof titleOf): void {
   titleOf = of
   document.title =
     of === 'stage' && lastProgress
-      ? progressView(lastProgress.stage, lastProgress.fraction, progressMemo, false).title
+      ? progressView(lastProgress.stage, lastProgress.fraction, progressMemo, false, lastProgress.atMs).title
       : outcomeTitle(of === 'stage' ? 'none' : of)
 }
 
@@ -2870,11 +2881,13 @@ function beginJob(file: File): void {
     })
 }
 
-/** Takes the bar, its label and the stage line off the page. */
+/** Takes the bar, its label, the stage line and the time left off the page. */
 function hideProgress(): void {
   processProgress.hidden = true
   processProgressLabel.hidden = true
   processProgressText.hidden = true
+  processTimeLeft.hidden = true
+  processTimeLeft.textContent = ''
   lastProgress = null
 }
 
@@ -3456,9 +3469,16 @@ onLanguageChange(() => {
   // The stage line and the bar's name from the last report, leaving what the
   // next report will announce untouched.
   if (lastProgress) {
-    const { shown } = progressView(lastProgress.stage, lastProgress.fraction, progressMemo, false)
+    const { shown, timeLeft } = progressView(
+      lastProgress.stage,
+      lastProgress.fraction,
+      progressMemo,
+      false,
+      lastProgress.atMs,
+    )
     processProgressText.textContent = shown
     processProgressLabel.textContent = shown
+    processTimeLeft.textContent = timeLeft ?? ''
   }
   if (jobInFlight) jobNotice.textContent = t().progress.jobNotice
   renderFeedbackDisclosure()

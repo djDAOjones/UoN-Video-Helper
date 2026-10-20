@@ -17,6 +17,26 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-20 — PLAN-2 — Phase 2 closes with VH-136; no unblocked item follows, so the next is the owner's
+
+**Decision:** Phase 2 closed on 2026-10-20 with every PLAN-2 item shipped, its backlog heading now "Phase 2 — … — CLOSED 2026-10-20"; no open, unblocked line remains in Current or Next, so the owner names the next item, and PLAN-2's standing word, given for this phase only, ends with it — because VH-17, VH-124, VH-113 and every Standing line wait on the owner, and Next's VH-13 waits on VH-M2.
+
+**Rationale:** Reconciled against PLAN-2's Items (VH-133, VH-134, VH-135, VH-136): each has its line under Phase 2 in project/trajectory.md, and none is open in project/backlog.md; PLAN-2's deferral, VH-137, sits under Standing, due 2026-11-18. Recall, local (this session, from the record alone, not a fresh session): 1, project/trajectory.md under Phase 2, newest first: VH-136, VH-135, VH-134, VH-133 — 2; 2, "2026-10-20 — VH-133 — The returned workbook's changes are Google's re-run, not corrections; nothing is merged", because every changed cell is still an unedited GOOGLETRANSLATE formula on unchanged English — 2; 3, deferred: VH-137 under Standing in project/backlog.md, project/wish-list.md's open lines, this phase's among them (VH-135's and VH-136's person checks), and the backlog's Icebox — 2; 4, no next open item: Current and Next hold only lines blocked on the owner, as this entry records — 2.
+
+**Supersedes:** none
+
+**Deferred:** none
+
+## 2026-10-20 — VH-136 — The time left: a line of its own under the stage after 10 s of encoding, from the job's own rate, heard only at the milestones
+
+**Decision:** ten seconds into the encode (`TIME_LEFT_AFTER_ENCODING_SECONDS`), a line under the stage line shows the time left from the encode's own rate, rounded as pre-flight's estimate is ("About 2 minutes left", "A few seconds left"); it counts the encode, the closing included, not the seconds of finishing and checking; a screen reader hears it only with the three milestones, as a second sentence; it stays out of the tab title; the Chinese and Malay and the §9.2 sentence stand as the agent drafted them — because PLAN-2's standing word makes the agent's answers the owner's, shown at this close for reversal.
+
+**Rationale:** The rate is VH-116's arithmetic, clocked from the encode's first report: the seconds since, over the share of frames encoded since, times the share to go. Over three samples in Chrome (Claude's in-app browser, page visible), real over predicted was 0.91–1.04 at 10 s and 0.91–1.08 until the last five seconds; finishing and checking took 1.1–1.3 s, so the stage line names them rather than the figure carrying pre-flight's error. Its own line, because on the stage line Chrome wrapped the Malay at 375 px and the English at an hour, and the notice and checkbox below jumped; `.progress-time-left` holds one line from the first report, and nothing moved at 320, 375 or 1280 px in any language. Not the tab title: the job notice asks for this tab to stay visible, and the title would change on every report. Rounded as pre-flight's, so "about" means one thing on the page. Heard at the milestones only, behind the 2.2.4 checkbox, at most three times an encode. VH-136's notes hold the runs; the spec is 7,757 of 7,800 words. Applied: WCAG 2.2.4 and 4.1.3, Nielsen 1, 4 and 8, Carbon helper text, UI-STANDARDS.md's layout stability, numbers in `src/config/`, tests by category.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-20 — VH-135 — The save says itself on a line of its own; the switchers reserve their bold width; the advice link opens a new tab
 
 **Decision:** a save writes only to its own line under the result, with Stop saving beneath it, and the line goes with the result; the discard question's spoken words leave the status line when the question goes; the three content-sized switchers reserve each face's bold width; the advice service's link opens in a new tab and says so in all three languages, the Chinese and Malay as the agent drafted them — because these meet the item's criteria, and PLAN-2's standing word makes the agent's choices the owner's, shown at this close for reversal.

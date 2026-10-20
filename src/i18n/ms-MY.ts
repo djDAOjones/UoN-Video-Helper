@@ -458,6 +458,9 @@ export const msMY: Messages = {
     milestones: ['suku selesai', 'separuh siap', 'tiga suku selesai'],
     stagePercent: '{stage} — {percent}',
     stageMilestone: '{stage} — {milestone}',
+    timeLeft: 'Kira-kira {time} lagi',
+    fewSecondsLeft: 'Beberapa saat lagi',
+    withTimeLeft: '{progress}. {left}',
     ready: 'Sedia',
     title: {
       stage: '{stage} — {app}',

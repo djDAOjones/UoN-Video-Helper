@@ -198,6 +198,15 @@ export const ESTIMATE_ROUNDING = {
 export const PROGRESS_MILESTONE_FRACTIONS = [0.25, 0.5, 0.75] as const
 
 /**
+ * How long the encode runs, from its first progress report, before the page
+ * shows the time left (VH-136). The job's own rate, read this far in,
+ * predicted the rest of the encode within 4% on every one of VH-116's runs
+ * long enough to reach it (0.96–1.00 of the real time); read after 5 s it
+ * ranged 0.91–1.04. Before this, nothing new shows.
+ */
+export const TIME_LEFT_AFTER_ENCODING_SECONDS = 10
+
+/**
  * How recently an empty file at a save destination must have been written to
  * count as the one the save picker made (VH-110). The picker creates it as
  * the user confirms, and the save reads it straight after, so seconds is

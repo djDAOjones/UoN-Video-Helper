@@ -652,7 +652,12 @@ the larger file.
 - Five named stages, not one opaque bar (VH-109): "Getting ready",
   "Analysing audio", "Encoding video", "Finishing the file" and "Checking the
   file". Branding joins inside the encode; the bar is full only when the video
-  is ready.
+  is ready. Ten seconds into the encode, a line under the stage gives the time
+  left from the job's own rate (VH-136), rounded like the estimate before it:
+  "About 2 minutes left". It counts the encode, the closing included;
+  finishing and checking add a few seconds. It is spoken only with the
+  encode's milestones, a quarter, half and three quarters done, which §9.3
+  lets the user postpone.
 - Every error states what happened, whether the original file is affected
   (it never is), and what to do next — and sits where it belongs: an input
   error beside the control it concerns, and tied to it; a job or device

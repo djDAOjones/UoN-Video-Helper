@@ -423,6 +423,9 @@ export const zhHans: Messages = {
     milestones: ['完成四分之一', '完成一半', '已完成四分之三'],
     stagePercent: '{stage} — {percent}',
     stageMilestone: '{stage} — {milestone}',
+    timeLeft: '大约还剩{time}',
+    fewSecondsLeft: '还剩几秒钟',
+    withTimeLeft: '{progress}。{left}',
     ready: '准备好',
     title: {
       stage: '{stage} — {app}',

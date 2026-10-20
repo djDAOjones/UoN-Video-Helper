@@ -554,6 +554,11 @@
              was WCAG 2.2.4's complaint (U-08); the status line announces
              stages and milestones out loud. -->
         <p class="helper progress-text" id="process-progress-text" hidden></p>
+        <!-- The encode's time left once its own rate is known (VH-136): a
+             line of its own, held open from the first report, so nothing
+             below moves when it arrives or as its words change. NOT live:
+             the milestones say it. -->
+        <p class="helper progress-time-left" id="process-time-left" hidden></p>
         <!-- Spec 7.5, said once at the start of every job. Visible while the
              job runs; announced with the first status line (VH-109). -->
         <p class="helper" id="job-notice" hidden></p>

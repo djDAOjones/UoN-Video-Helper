@@ -725,6 +725,13 @@ a {
   margin-top: var(--spacing-03);
 }
 
+/* The time left, under the stage line: one line's height is held from the
+   job's first report, so its arrival moves nothing (VH-136). */
+.progress-time-left {
+  margin-top: 0;
+  min-height: calc(var(--type-body-compact) * var(--line-height-body));
+}
+
 /* Carbon checkbox: a native control, labelled, at the target floor. */
 .checkbox {
   display: flex;
