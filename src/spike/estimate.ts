@@ -39,8 +39,11 @@ const presets = (query.get('presets') ?? 'best,smaller')
   .filter((id): id is PresetId => id === 'best' || id === 'smaller')
 const reps = Math.max(1, Number(query.get('reps') ?? 1))
 
-/** The probe's frames the warm-up variants skip, as a fraction of its window. */
-const WARM_UP_FRACTIONS = [1 / 6, 1 / 3, 1 / 2] as const
+/**
+ * The probe's frames the warm-up variants skip, as a fraction of its window,
+ * keyed by that fraction so a 25 fps and a 30 fps recording share a row.
+ */
+const WARM_UP_FRACTIONS = { '1/6': 1 / 6, '1/3': 1 / 3, '1/2': 1 / 2 } as const
 /** Seconds into the encode at which the job's own rate is read. */
 const CORRECTION_AFTER_SECONDS = [5, 10, 20] as const
 /** And the share of its frames, read the same way. */
@@ -71,11 +74,11 @@ function judge(run: EstimateRunResult): Row['ratios'] & { realFps: number; probe
   const realFps = spanFrames / realSeconds
 
   const ratios: Record<string, number> = { probe: realFps === 0 ? 0 : probeFps / realFps }
-  for (const fraction of WARM_UP_FRACTIONS) {
+  for (const [name, fraction] of Object.entries(WARM_UP_FRACTIONS)) {
     const skipped = Math.floor(probe.frames * fraction)
     const clockFrom = probe.acceptedAtSeconds[skipped - 1] ?? 0
     const warmFps = (probe.frames - skipped) / (probe.seconds - clockFrom)
-    ratios[`warm ${skipped}f`] = warmFps / realFps
+    ratios[`warm ${name}`] = warmFps / realFps
   }
   // Predicted seconds for the rest of the encode, read at a checkpoint, as
   // the real time over that prediction (so >1 means it took longer).
@@ -95,6 +98,22 @@ function judge(run: EstimateRunResult): Row['ratios'] & { realFps: number; probe
   // predicted is their fps over the real fps.
   return { ...ratios, realFps, probeFps }
 }
+
+/**
+ * Whether the page was hidden at any point between two `performance.now()`
+ * readings: a hidden pane runs as a background page and its timings are off.
+ */
+function hiddenDuring(fromMs: number, toMs: number): boolean {
+  // The timeline's first entry, at 0, is the state the page loaded in.
+  let state = 'visible'
+  for (const change of performance.getEntriesByType('visibility-state')) {
+    if (change.startTime > toMs) break
+    if (change.startTime <= fromMs) state = change.name
+    else if (change.name === 'hidden') return true
+  }
+  return state === 'hidden'
+}
+let hiddenRuns = 0
 
 const worker = new Worker(new URL('./estimate.worker.ts', import.meta.url), { type: 'module' })
 let status = ''
@@ -140,11 +159,14 @@ for (let rep = 1; rep <= reps; rep++) {
           blob = await response.blob()
           blobs.set(path, blob)
         }
+        const startedMs = performance.now()
         const run = await runOne(blob, presetId, runId)
+        const hidden = hiddenDuring(startedMs, performance.now())
+        if (hidden) hiddenRuns++
         const judged = judge(run)
         const { realFps, probeFps, ...ratios } = judged
         const { estimate, probe } = run.preflight
-        const warm = ratios[`warm ${Math.floor(probe.frames / 3)}f`] ?? Number.NaN
+        const warm = ratios['warm 1/3'] ?? Number.NaN
         // The product's total with the probe's video and branding stages
         // re-priced at the warm-up's rate (a third skipped).
         const warmScale = (ratios.probe ?? Number.NaN) / warm
@@ -159,7 +181,8 @@ for (let rep = 1; rep <= reps; rep++) {
           `${label}: ${run.width}x${run.height}@${run.frameRate} ${run.contentClass} · ` +
             `probe ${probe.frames}f in ${fixed(probe.seconds)}s, first at ${fixed(probe.acceptedAtSeconds[0] ?? 0)}s · ` +
             `${fixed(probeFps, 0)} fps probed, ${fixed(realFps, 0)} real · ` +
-            `total est ${fixed(estimate.totalSeconds, 1)}s, warm ${fixed(warmEstimated, 1)}s, real ${fixed(run.job.totalSeconds, 1)}s`,
+            `total est ${fixed(estimate.totalSeconds, 1)}s, warm ${fixed(warmEstimated, 1)}s, real ${fixed(run.job.totalSeconds, 1)}s` +
+            (hidden ? ' · PANE HIDDEN, timings off' : ''),
         )
         say(
           `  real/predicted: ${Object.entries(ratios)
@@ -217,6 +240,7 @@ if (rows.length > 0) {
   }
   say(`  total, as shipped: ${totalRatios((row) => row.totals.real / row.totals.estimated)}`)
   say(`  total, warm-up:    ${totalRatios((row) => row.totals.real / row.totals.warmEstimated)}`)
+  say(`  runs with the page hidden: ${hiddenRuns} of ${rows.length}`)
 }
 
 say(`\n${verdictLine(failures)}`)

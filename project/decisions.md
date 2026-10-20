@@ -17,6 +17,16 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-20 — VH-116 — Slice (a) counts the 10 runs with the pane shown; Philosophy on Smaller is unmeasured
+
+**Decision:** slice (a)'s record is the 10 of 18 runs made while the in-app browser's pane was shown. The 8 that overlapped a hidden stretch are left out, so Philosophy on Smaller has no measured run — because a hidden pane runs as a background page and those runs were up to 15% slower, and the owner chose on 2026-10-20 to record the 10 rather than re-run while other sessions held the load near 30.
+
+**Rationale:** The page's `visibility-state` timeline put the hidden stretches at 177–204, 414–570 and 607–684 s, and summing each run's own times put runs 6 and 12–18 in them. Over the 10, the probe reads 0.51–0.70 real over predicted, the warm-ups 0.64–0.86, and the job's own rate after 10 s 0.96–1.00; VH-116's notes hold the table. Slice (b) chooses from these. The page now flags a hidden run itself, so a later run needs no reconstruction.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-20 — VH-122 — The decode-damage words stand, the Chinese without a space after 在, and §5.4 gains its row first
 
 **Decision:** the warning's English stands as built; the agent's Chinese and Malay stand as drafted, machine translation like the rest, except that the Chinese detail's "在 {times}" is now "在{times}"; spec §5.4's table gains the decode-damage row word for word as drafted, as its first row — because the owner chose the recommended options in chat on 2026-10-20, after CULT2011 passed in Chrome.
