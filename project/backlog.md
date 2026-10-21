@@ -32,8 +32,6 @@
 
 ### Phase 4 — what the design pass found: two page defects, the token boundary, the cards
 
-- [ ] VH-146 — The Submission card keeps its date and its note whole — since 2026-10-21 — (from: VH-143, 2026-10-21)
-
 ### Standing — maintainer-owned, never band-gated
 
 - [!] VH-137 — The accessibility statement's review, due 2026-11-18 — since 2026-10-20 — blocked: the owner's review and the further tests chosen — (from: VH-130, 2026-10-18)

@@ -1,0 +1,128 @@
+[
+  {
+    "tag": "en-GB",
+    "width": 1280,
+    "mode": "light",
+    "submissionFits": true,
+    "noHorizontalScroll": true
+  },
+  {
+    "tag": "en-GB",
+    "width": 1280,
+    "mode": "dark",
+    "submissionFits": true,
+    "noHorizontalScroll": true
+  },
+  {
+    "tag": "en-GB",
+    "width": 1280,
+    "mode": "forced",
+    "submissionFits": true,
+    "noHorizontalScroll": true
+  },
+  {
+    "tag": "en-GB",
+    "width": 375,
+    "mode": "light",
+    "submissionFits": true,
+    "noHorizontalScroll": true
+  },
+  {
+    "tag": "en-GB",
+    "width": 375,
+    "mode": "dark",
+    "submissionFits": true,
+    "noHorizontalScroll": true
+  },
+  {
+    "tag": "en-GB",
+    "width": 375,
+    "mode": "forced",
+    "submissionFits": true,
+    "noHorizontalScroll": true
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 1280,
+    "mode": "light",
+    "submissionFits": true,
+    "noHorizontalScroll": true
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 1280,
+    "mode": "dark",
+    "submissionFits": true,
+    "noHorizontalScroll": true
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 1280,
+    "mode": "forced",
+    "submissionFits": true,
+    "noHorizontalScroll": true
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 375,
+    "mode": "light",
+    "submissionFits": true,
+    "noHorizontalScroll": true
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 375,
+    "mode": "dark",
+    "submissionFits": true,
+    "noHorizontalScroll": true
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 375,
+    "mode": "forced",
+    "submissionFits": true,
+    "noHorizontalScroll": true
+  },
+  {
+    "tag": "ms-MY",
+    "width": 1280,
+    "mode": "light",
+    "submissionFits": true,
+    "noHorizontalScroll": true
+  },
+  {
+    "tag": "ms-MY",
+    "width": 1280,
+    "mode": "dark",
+    "submissionFits": true,
+    "noHorizontalScroll": true
+  },
+  {
+    "tag": "ms-MY",
+    "width": 1280,
+    "mode": "forced",
+    "submissionFits": true,
+    "noHorizontalScroll": true
+  },
+  {
+    "tag": "ms-MY",
+    "width": 375,
+    "mode": "light",
+    "submissionFits": true,
+    "noHorizontalScroll": true
+  },
+  {
+    "tag": "ms-MY",
+    "width": 375,
+    "mode": "dark",
+    "submissionFits": true,
+    "noHorizontalScroll": true
+  },
+  {
+    "tag": "ms-MY",
+    "width": 375,
+    "mode": "forced",
+    "submissionFits": true,
+    "noHorizontalScroll": true
+  }
+]

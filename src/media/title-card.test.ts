@@ -7,6 +7,10 @@
 
 import { describe, expect, it } from 'vitest'
 
+import { LANGUAGE_TABLES } from '../i18n'
+import { compile } from '../i18n/compile'
+import type { enGB } from '../i18n/en-GB'
+
 import { CARD_BLOCK_GAP_EM, CARD_FIELD_GAP_EM, CARD_ROLES, CARD_SIZE_STEP_PX, CARD_TYPE_FLOOR_PX } from '../config/cards'
 import {
   columnsOf,
@@ -257,7 +261,9 @@ describe('Submission, its blocks (VH-128)', () => {
       'Running time',
       '12:34',
       'Card made',
-      '19 October 2026 — not the submission date',
+      '19 October 2026',
+      ' ',
+      '— not the submission date',
     ])
   })
 
@@ -368,5 +374,32 @@ describe('drawTitleCard', () => {
     const { context, calls } = recorder()
     drawTitleCard(context, fit(card({ title: 'Welcome' }), UHD, FONTS), FONTS.families, { ground: 'G', ink: 'I' })
     expect(calls[1]!.font).toBe(`bold ${2 * CARD_ROLES.staffTitle.maxPx}px Heading`)
+  })
+})
+
+
+describe('Submission’s generated date and caveat (VH-146)', () => {
+  it.each(Object.entries(LANGUAGE_TABLES))('%s keeps each complete at a line break', (tag, table) => {
+    const words = compile<typeof enGB>(table, tag).titleCard.card
+    const date = tag === 'zh-Hans' ? '2026年10月19日' : tag === 'ms-MY' ? '19 Oktober 2026' : '19 October 2026'
+    const value = words.madeValue({ date })
+    const details = submissionCardBlocks({ ...SUBMISSION, made: value }).at(-1)!
+    const runs = details.runs.slice(6)
+    expect(runs.map((run) => run.text).join('')).toBe(value)
+    const note = value.slice(date.length).trim()
+    const maxWidth = Math.max(fakeMeasure('bold 20px Body', date), fakeMeasure('bold 20px Body', note))
+    const lines = wrap(details.role, runs, 20, maxWidth, FONTS)!
+    expect(lines).not.toBeNull()
+    expect(lineTexts(lines)).toEqual([date, note])
+    // An indivisible phrase refuses an impossibly narrow line instead of clipping.
+    expect(wrap(details.role, runs, 20, maxWidth - 1, FONTS)).toBeNull()
+  })
+
+  it('leaves a typed staff date free to break at ordinary spaces', () => {
+    const date = '19 October 2026'
+    const block = staffCardBlocks({ ...NONE, date })[0]!
+    const lines = wrap(block.role, block.runs, 20, 80, FONTS)!
+    expect(lines.length).toBeGreaterThan(1)
+    expect(lineTexts(lines).join('')).toBe(date.replaceAll(' ', ''))
   })
 })

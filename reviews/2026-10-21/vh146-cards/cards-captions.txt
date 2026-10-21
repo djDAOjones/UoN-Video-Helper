@@ -1,0 +1,37 @@
+card-01: en-GB, blue, 16:9: 100px
+card-02: en-GB, white, 16:9: 100px
+card-03: zh-Hans, blue, 16:9: 100px
+card-04: zh-Hans, white, 16:9: 100px
+card-05: ms-MY, blue, 16:9: 100px
+card-06: ms-MY, white, 16:9: 100px
+card-07: ms-MY, white, 9:16 letterboxed: 56.25px
+card-08: 16:9: title 86px×3, department 64px×2, authors 64px×2, date 64px×1; 7px/1080 to spare
+card-09: 16:10: title 86px×3, department 64px×2, authors 64px×2, date 64px×1; 7px/1080 to spare
+card-10: 4:3: title 72px×3, department 60px×2, authors 60px×2, date 64px×1; 81px/1080 to spare
+card-11: 9:16: title 88px×5, department 64px×3, authors 64px×3, date 64px×2; 185px/1080 to spare
+card-12: 16:9: title 86px×3, department 64px×2, authors 64px×2, date 64px×1; 7px/1080 to spare
+card-13: 16:10: title 86px×3, department 64px×2, authors 64px×2, date 64px×1; 7px/1080 to spare
+card-14: 4:3: title 74px×3, department 62px×2, authors 62px×2, date 62px×1; 65px/1080 to spare
+card-15: 9:16: title 94px×5, department 64px×3, authors 64px×3, date 64px×2; 149px/1080 to spare
+card-16: 16:9: title 86px×3, department 64px×2, authors 64px×2, date 64px×1; 7px/1080 to spare
+card-17: 16:10: title 82px×3, department 64px×2, authors 64px×2, date 64px×1; 21px/1080 to spare
+card-18: 4:3: title 68px×3, department 60px×2, authors 60px×2, date 62px×1; 98px/1080 to spare
+card-19: 9:16: title 72px×5, department 64px×3, authors 64px×3, date 64px×2; 281px/1080 to spare
+card-20: 16:9: title 86px×3, department 64px×2, authors 64px×2, date 64px×1; 7px/1080 to spare
+card-21: 9:16: title 100px×5, department 64px×3, authors 64px×3, date 64px×1; 209px/1080 to spare
+card-22: 16:9: title 104px×2, department 64px×1, authors 64px×1, date 64px×1; 259px/1080 to spare
+card-23: 9:16: title 104px×3, department 64px×2, authors 64px×2, date 64px×1; 626px/1080 to spare
+card-24: 16:9: title 104px×3, department 64px×1, authors 64px×2, date 64px×1; 38px/1080 to spare
+card-25: 9:16: title 92px×5, department 64px×2, authors 64px×3, date 64px×1; 353px/1080 to spare
+card-26: 16:9: assignment 76px×2, module 56px×2, convenor 56px×1, ids 56px×2, details 56px×2; 103px/1080 to spare
+card-27: 16:10: assignment 68px×2, module 56px×2, convenor 56px×2, ids 56px×2, details 56px×2; 52px/1080 to spare
+card-28: 4:3: assignment 56px×2, module 56px×2, convenor 56px×2, ids 56px×3, details 56px×2; 11px/1080 to spare
+card-29: 9:16: assignment 78px×4, module 56px×3, convenor 56px×2, ids 56px×4, details 56px×3; 245px/1080 to spare
+card-30: 16:9: assignment 80px×2, module 56px×2, convenor 56px×1, ids 56px×2, details 56px×1; 163px/1080 to spare
+card-31: 16:10: assignment 74px×2, module 56px×2, convenor 56px×2, ids 56px×2, details 56px×2; 38px/1080 to spare
+card-32: 4:3: assignment 60px×2, module 56px×2, convenor 56px×2, ids 56px×3, details 56px×2; 1px/1080 to spare
+card-33: 9:16: assignment 80px×4, module 56px×3, convenor 56px×2, ids 56px×3, details 56px×2; 376px/1080 to spare
+card-34: 16:9: assignment 78px×2, module 56px×2, convenor 56px×2, ids 56px×2, details 56px×2; 28px/1080 to spare
+card-35: 16:10: assignment 70px×2, module 56px×2, convenor 56px×2, ids 56px×2, details 56px×2; 47px/1080 to spare
+card-36: 4:3: assignment 58px×2, module 56px×2, convenor 56px×2, ids 56px×3, details 56px×2; 6px/1080 to spare
+card-37: 9:16: assignment 80px×4, module 56px×3, convenor 56px×2, ids 56px×4, details 56px×3; 236px/1080 to spare

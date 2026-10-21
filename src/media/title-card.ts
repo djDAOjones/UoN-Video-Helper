@@ -46,6 +46,8 @@ export type CardWeight = CardTextRole['weight']
 export interface CardRun {
   readonly text: string
   readonly weight: CardWeight
+  /** Generated phrases may wrap as a whole, never inside themselves (VH-146). */
+  readonly unbreakable?: boolean
 }
 
 /** A run-in label's gap before its value (VH-128): breakable like a space, {@link CARD_LABEL_GAP_EM} wide. */
@@ -184,7 +186,7 @@ export function wrap(
   let pendingPx = 0
   for (const run of runs) {
     const font = cardFont(role, sizePx, run.weight, fonts.families)
-    for (const text of pieces(run.text)) {
+    for (const text of run.unbreakable ? [run.text] : pieces(run.text)) {
       if (text === LABEL_GAP.text || text === PAIR_GAP.text) {
         const em = text === LABEL_GAP.text ? CARD_LABEL_GAP_EM : CARD_PAIR_GAP_EM
         pendingPx = Math.max(pendingPx, em * sizePx)
@@ -382,6 +384,23 @@ export interface SubmissionCardText {
 }
 
 /**
+ * The three generated date templates put their caveat after an em dash or an
+ * opening full-width bracket. Keep the date and that complete caveat atomic;
+ * retain the template’s space between them. A future unrecognised template
+ * stays whole rather than acquiring an unsafe break. Typed dates do not use
+ * this path. The language-table regression pins these three templates.
+ */
+function submissionDateRuns(value: string): CardRun[] {
+  const parts = /^(.*?)(\s*)(—.*|（.*)$/u.exec(value)
+  if (!parts) return [{ text: value, weight: 'bold', unbreakable: true }]
+  return [
+    { text: parts[1]!, weight: 'bold', unbreakable: true },
+    { text: parts[2]!, weight: 'bold' },
+    { text: parts[3]!, weight: 'bold', unbreakable: true },
+  ]
+}
+
+/**
  * Submission's blocks, as `spike-cards.html` measured them (VH-126): the
  * assignment as the heading, unlabelled; then module, convenor and the ID
  * numbers, each a label run in before its value in bold; then the running
@@ -423,7 +442,9 @@ export function submissionCardBlocks(text: SubmissionCardText): CardBlock<Submis
   labelled('details', [
     ...pair(text.labels.running, text.runningTime),
     PAIR_GAP,
-    ...pair(text.labels.made, text.made),
+    { text: text.labels.made, weight: 'normal' },
+    LABEL_GAP,
+    ...submissionDateRuns(text.made),
   ])
   return blocks
 }

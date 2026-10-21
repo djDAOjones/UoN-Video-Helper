@@ -17,6 +17,16 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-21 — VH-146 — Generated dates and caveats stay whole
+
+**Decision:** Submission’s generated date and its complete caveat each wrap as one piece, while staff-typed dates keep ordinary breaks. The existing three templates and card words stay unchanged — the narrow renderer change requested by V-30, taken gateless.
+
+**Rationale:** CardRun can mark an indivisible phrase; Submission splits only its generated em-dash/full-width-bracket templates into date, original spacing and caveat. An unrecognised future template stays whole. Regression tests use all three actual language tables, prove separate whole date/note lines and refusal below their width, and retain staff-date wrapping. The walker’s cards scenario reports ALL PASS: 37 clips kept in reviews/2026-10-21/vh146-cards, every logged size at least 56 px per 1080 (28 pt at PowerPoint size), with 4K equivalence. The worst 4:3 Chinese card has 1 px/1080 spare, as logged; no floor or limit changed. Chrome’s 18 language/width/theme combinations also accept the Submission form. Standards: Carbon productive typography; Nielsen 2 and 4; WCAG 1.4.4/1.4.10 and the project’s card type floor; house conventions, renderer regression and browser spike. Existing VH-127/VH-128 wishes cover full-size human viewing and screen readers. Known sample and frozen-canon warnings keep their existing follow-ups.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-21 — VH-145 — Browser defaults meet the token system
 
 **Decision:** status spacing, legend padding, radio margins, select line height, fieldset shrinkage, dialog gutters and error-intro spacing are explicit; type roles name regular, semibold and bold, diagnostics name their monospace face, and identical rules are grouped. Taken gateless as the specified token-boundary repair, preserving existing type weights and colours.
@@ -460,17 +470,5 @@
 **Rationale:** ffmpeg 9.0.2 from Homebrew has no `drawtext`. Headless Chrome could not bind its singleton socket in the agent's sandbox, and Swift's compiler did not match its SDK, so AppKit draws the words through JavaScript for Automation (`osascript`), present on every Mac, no dependency: Arial Bold with PingFang SC Semibold behind it (the weight Chrome picks for bold), 200 px on the 2160-line master, the cap top at 1522; at 1080 the widths are 795, 600 and 1,551 px of 1,680, the first two the spike's to the pixel. The wipe follows the wordmark's right edge, measured per frame from each master (1.72 to 2.96 s of the tail) and counted from the middle of the gap after the crest, because the crest overshoots its edge by two pixels while it builds; its edge is soft over 0.5 em (`CLOSING_WORDS_WIPE_FEATHER_EM`). Above the words each tail matches the official one to 59 dB PSNR. The owner chose 仅供内部使用 and Untuk kegunaan dalaman sahaja on 2026-10-19 ("Standard stamp"); the other three new keys' Chinese and Malay are the agent's drafts in the filled sheet. `closing-internal-words.json` records the words drawn, `test/closing-assets.test.ts` holds it to the tables, and Vite leaves it out of the build. A job reads the page's language once, at its start, as the words' language until VH-132; an internal tail that fails to load is reported as no closing, never replaced by the unmarked one. The script's ffprobe reads JSON now: ffprobe 9 lists a stream again under its stream group, which ran the CSV together. Standards applied: Carbon (the page's native checkbox, its reason in visible text as the colour's), WCAG 2.2 (1.4.6, white and Nottingham Blue 15.4:1 by calculation; 2.5.5, the target floor; 3.3.2, a label that says what it does), Nielsen 1 (the result line and the summary say the card is marked), house conventions (the feather in `src/config/`, the words in the tables; named test categories — the mapping, the names, the shipped files against the tables, junk read as off).
 
 **Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-19 — PLAN-1 — Staff video or Student submission, and the video's text in any of the three languages
-
-**Decision:** a switch at the top chooses Staff video or Student submission: a submission always has the Submission card and the Internal use only closing; a staff video has an optional basic card and Internal use only as a toggle; the video's text follows the page's language unless a selector picks another — because the owner said so on 2026-10-19.
-
-**Items:** VH-126, VH-127, VH-128, VH-131, VH-132
-
-**Rationale:** The owner's words, 2026-10-19, answering VH-126's notes: the type scale "looks great"; "maybe a switch at the top between 'Student submission' and 'Staff video' where student submission has the card + details and the all the logo animation options but always with Internal Only; the staff options have a basic card with title, department, author(s), and date (all optional), and the internal use text is a toggle along with other graphic options"; on the closing's language, "follow language is great as default, but offer a selector on all language versions to change the video text to any of the three"; and that ffmpeg is installed, though at this close Homebrew's install still waited at its confirmation prompt, so the next session checks. Consequences: General becomes the staff card, its heading and subhead replaced by four optional fields (VH-127, re-scoped by the owner); the Submission card is always on for a submission (VH-128); the closing gains an internal tail per language and colour at both heights, twelve, the onsets untouched (VH-126); the switch is new, VH-131; the selector is new, VH-132, and sets the cards' labels and the closing's words, never what is typed. This also replaces the first PLAN-1 entry's General-or-Submission toggle. Order: VH-126, whose assets need only ffmpeg and the two translations; VH-131, which it is chosen under; VH-132; VH-127; VH-128. Open, for the owner when each item starts: in each item's notes. The brief's Direction says so.
-
-**Supersedes:** 2026-10-19 — VH-126 — Internal use only: an option in blue or white, its words building in with the logo
 
 **Deferred:** none

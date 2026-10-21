@@ -1,0 +1,75 @@
+Contrast: white and Nottingham Blue 15.41:1 (both grounds; 7:1 needed)
+Closing words, Arial Bold, px per 1080 lines of the 16:9 asset
+  en-GB: "Internal use only" 795px wide of 1680; foot at 854 of 961; 56.25px in 9:16
+  zh-Hans: "仅供内部使用" 600px wide of 1680; foot at 844 of 961; 56.25px in 9:16
+  ms-MY: "Untuk kegunaan dalaman sahaja" 1550px wide of 1680; foot at 854 of 961; 56.25px in 9:16
+
+Staff card, all four fields at their column limits at once, and each at 4K
+  staff en-GB 16:9: title 86px×3, department 64px×2, authors 64px×2, date 64px×1; 7px/1080 to spare
+  staff en-GB 16:10: title 86px×3, department 64px×2, authors 64px×2, date 64px×1; 7px/1080 to spare
+  staff en-GB 4:3: title 72px×3, department 60px×2, authors 60px×2, date 64px×1; 81px/1080 to spare
+  staff en-GB 9:16: title 88px×5, department 64px×3, authors 64px×3, date 64px×2; 185px/1080 to spare
+  staff zh-Hans 16:9: title 86px×3, department 64px×2, authors 64px×2, date 64px×1; 7px/1080 to spare
+  staff zh-Hans 16:10: title 86px×3, department 64px×2, authors 64px×2, date 64px×1; 7px/1080 to spare
+  staff zh-Hans 4:3: title 74px×3, department 62px×2, authors 62px×2, date 62px×1; 65px/1080 to spare
+  staff zh-Hans 9:16: title 94px×5, department 64px×3, authors 64px×3, date 64px×2; 149px/1080 to spare
+  staff ms-MY 16:9: title 86px×3, department 64px×2, authors 64px×2, date 64px×1; 7px/1080 to spare
+  staff ms-MY 16:10: title 82px×3, department 64px×2, authors 64px×2, date 64px×1; 21px/1080 to spare
+  staff ms-MY 4:3: title 68px×3, department 60px×2, authors 60px×2, date 62px×1; 98px/1080 to spare
+  staff ms-MY 9:16: title 72px×5, department 64px×3, authors 64px×3, date 64px×2; 281px/1080 to spare
+
+Staff card, as usually typed
+  staff typical en-GB 16:9: title 86px×3, department 64px×2, authors 64px×2, date 64px×1; 7px/1080 to spare
+  staff typical en-GB 9:16: title 100px×5, department 64px×3, authors 64px×3, date 64px×1; 209px/1080 to spare
+  staff typical zh-Hans 16:9: title 104px×2, department 64px×1, authors 64px×1, date 64px×1; 259px/1080 to spare
+  staff typical zh-Hans 9:16: title 104px×3, department 64px×2, authors 64px×2, date 64px×1; 626px/1080 to spare
+  staff typical ms-MY 16:9: title 104px×3, department 64px×1, authors 64px×2, date 64px×1; 38px/1080 to spare
+  staff typical ms-MY 9:16: title 92px×5, department 64px×2, authors 64px×3, date 64px×1; 353px/1080 to spare
+
+Submission, each typed field at its column limit, eight IDs
+  submission en-GB 16:9: assignment 76px×2, module 56px×2, convenor 56px×1, ids 56px×2, details 56px×2; 103px/1080 to spare
+  submission en-GB 16:10: assignment 68px×2, module 56px×2, convenor 56px×2, ids 56px×2, details 56px×2; 52px/1080 to spare
+  submission en-GB 4:3: assignment 56px×2, module 56px×2, convenor 56px×2, ids 56px×3, details 56px×2; 11px/1080 to spare
+  submission en-GB 9:16: assignment 78px×4, module 56px×3, convenor 56px×2, ids 56px×4, details 56px×3; 245px/1080 to spare
+  submission zh-Hans 16:9: assignment 80px×2, module 56px×2, convenor 56px×1, ids 56px×2, details 56px×1; 163px/1080 to spare
+  submission zh-Hans 16:10: assignment 74px×2, module 56px×2, convenor 56px×2, ids 56px×2, details 56px×2; 38px/1080 to spare
+  submission zh-Hans 4:3: assignment 60px×2, module 56px×2, convenor 56px×2, ids 56px×3, details 56px×2; 1px/1080 to spare
+  submission zh-Hans 9:16: assignment 80px×4, module 56px×3, convenor 56px×2, ids 56px×3, details 56px×2; 376px/1080 to spare
+  submission ms-MY 16:9: assignment 78px×2, module 56px×2, convenor 56px×2, ids 56px×2, details 56px×2; 28px/1080 to spare
+  submission ms-MY 16:10: assignment 70px×2, module 56px×2, convenor 56px×2, ids 56px×2, details 56px×2; 47px/1080 to spare
+  submission ms-MY 4:3: assignment 58px×2, module 56px×2, convenor 56px×2, ids 56px×3, details 56px×2; 6px/1080 to spare
+  submission ms-MY 9:16: assignment 80px×4, module 56px×3, convenor 56px×2, ids 56px×4, details 56px×3; 236px/1080 to spare
+
+Runway: the most columns each staff field takes, the other three at their limits
+  en-GB 16:9: title 181/100, department 132/80, authors 132/80, date 64/40
+  en-GB 16:10: title 160/100, department 117/80, authors 117/80, date 56/40
+  en-GB 4:3: title 126/100, department 83/80, authors 83/80, date 46/40
+  en-GB 9:16: title 170/100, department 141/80, authors 141/80, date 71/40
+  zh-Hans 16:9: title 180/100, department 120/80, authors 120/80, date 60/40
+  zh-Hans 16:10: title 162/100, department 108/80, authors 108/80, date 54/40
+  zh-Hans 4:3: title 132/100, department 88/80, authors 88/80, date 44/40
+  zh-Hans 9:16: title 160/100, department 128/80, authors 128/80, date 64/40
+  ms-MY 16:9: title 180/100, department 119/80, authors 119/80, date 59/40
+  ms-MY 16:10: title 153/100, department 105/80, authors 105/80, date 54/40
+  ms-MY 4:3: title 128/100, department 88/80, authors 88/80, date 46/40
+  ms-MY 9:16: title 159/100, department 123/80, authors 123/80, date 63/40
+
+Runway: Submission, the rest at realistic length
+  en-GB 16:9: Submission assignment 123, module 172
+  en-GB 16:10: Submission assignment 105, module 145
+  en-GB 4:3: Submission assignment 79, module 80
+  en-GB 9:16: Submission assignment 135, module 151
+  zh-Hans 16:9: Submission assignment 120, module 174
+  zh-Hans 16:10: Submission assignment 108, module 156
+  zh-Hans 4:3: Submission assignment 88, module 84
+  zh-Hans 9:16: Submission assignment 128, module 156
+  ms-MY 16:9: Submission assignment 115, module 169
+  ms-MY 16:10: Submission assignment 101, module 151
+  ms-MY 4:3: Submission assignment 85, module 73
+  ms-MY 9:16: Submission assignment 123, module 139
+
+4K: ms-MY Submission at 3840 × 2160 breaks as at 1080
+
+ALL PASS
+
+done
