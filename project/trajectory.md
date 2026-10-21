@@ -68,6 +68,7 @@
 - VH-125 — the trim preview follows the handle: a drag, a key or a typed time shows that point, paused, and a drag comes to rest on its last time (2026-10-18) — see decisions
 - VH-105 — the page in Simplified Chinese and Bahasa Malaysia, live as machine translation: a switcher at the top of the page repaints every string and `lang` in place, keeps the video, the trim, every choice, a running job, a result and a feedback draft, and is remembered in this browser; a note on each translated page invites better wording by email (2026-10-18) — see decisions
 - VH-130 — an accessibility statement on the page, in the GOV.UK model's shape and translated in full, partially compliant with WCAG 2.2 AA after the WAVE check; the footer emails the creators team and the learning content team, at the owner's address until theirs are given (2026-10-18) — see decisions
+- VH-147 — Claude Code sessions run without a project sandbox, as Vinyl Sorting's do: `.claude/settings.json` keeps only the session hooks and auto-memory off, so headless Chrome, Vite, the walker, Codex and gh are no longer sent to the Terminal panel or asked about for want of a sandbox rule (2026-10-21) — see decisions
 
 ## V3 adoption
 

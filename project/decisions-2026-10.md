@@ -222,3 +222,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-19 — VH-127 — The staff card: its own step, a checkbox, five seconds, text only, no labels, today's date
+
+**Decision:** the staff title card is Step 3, "Title card", between Trim and Closing branding; an "Add a title card" checkbox, off at first, shows its four fields and keeps what was typed when turned off; turned on, the date fills with today's date in the video's language and can be changed or cleared; the card holds 5 s, white text on Nottingham Blue with no logo and no labels, the title large and the other three as plain lines; on with every field empty is refused at Create — because the owner answered VH-127's open questions in chat on 2026-10-19.
+
+**Rationale:** The owner's answers, 2026-10-19, to six questions asked as VH-127 started, each the recommended option: how long, "5 seconds"; the logo, "No logo", text only, white on Nottingham Blue like the closing, so the measured layout keeps all its room; where, "Own step after Trim", so the steps follow the video's own order and the later steps renumber; on or off, "A checkbox, off at first", refused at Create when on and empty; the date, "Today, editable", filled only when the card is turned on; labels, "No labels", so the card has no words of its own to translate. A date still as filled follows a change of video language; one edited is kept as typed (VH-132).
+
+**Supersedes:** none
+
+**Deferred:** none

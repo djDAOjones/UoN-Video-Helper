@@ -138,6 +138,16 @@
 
 **Deferred:** VH-148, VH-141, VH-142, VH-144, VH-145, VH-146
 
+## 2026-10-21 — VH-147 — Claude Code sessions run without a project sandbox, as Vinyl Sorting's do; `.claude/settings.json` keeps only the session hooks
+
+**Decision:** `.claude/settings.json` holds only the two session hooks and `autoMemoryEnabled: false`; the project sandbox, its network allowlist, the permission denies and `excludedCommands` are removed, so Claude Code sessions run under the owner's user-level settings as Vinyl Sorting's do — because the sandbox sent headless Chrome, Vite and the walker to the owner's Terminal panel and made every Codex and gh call ask, stalling the audits and overnight runs, and the owner chose Vinyl Sorting's configuration, keeping the hooks, over loosening the sandbox (chat, 2026-10-21).
+
+**Rationale:** The sessions' own words, 2026-10-19 to 2026-10-21 (VH-126, VH-133, VH-138, overnight runs 02–04): the sandbox "cannot start Chrome (singleton socket dir denied), cannot bind ports, and refused curl to localhost". Codex and gh, excluded from the sandbox by V3-HARNESS, went through the permission check, which `autoAllowBashIfSandboxed` does not cover. Item checks through VH-136 never hit this, because `preview_start` and the in-app browser run outside the Bash sandbox; the scripted headless-Chrome walker did. A narrower change (local binding, `127.0.0.1` on the Network line, a scoped Unix-socket path, read-only allow rules for Codex and gh) was drafted, scored and set aside. Vinyl Sorting has no `.claude/settings.json`, only an uncommitted `settings.local.json` of allow rules and a committed `launch.json`; this project now matches it but for the hooks, which stay because rule 1's re-read after a compaction and the context watcher depend on them. What is lost: the read and write denies on the secret folders, the token environment-variable denies, the network allowlist (the profile's Network line is now an instruction to Claude Code sessions, not enforced), and the `curl`, `wget`, `brew`, `npx -y`, `pip install`, `git clone`, WebFetch, WebSearch and cloud-tool denies. How many prompts remain depends on the owner's user-level settings and each session's permission mode, neither of which is in this repository. `tools/harness.mjs` regenerates this file with `--hooks-only` from now on; a full regeneration would restore the sandbox, and needs a decision first. `.claude/settings.intake.json` and Codex's own settings are unchanged. Takes effect in a session started after the commit. Landed on `main` on 2026-10-22, after V31-UPGRADE, by `tools/harness.mjs --hooks-only`, which also carries v3.1's start-notice hook (`tools/handover.mjs`).
+
+**Supersedes:** 2026-10-05 — V3-HARNESS — Codex runs outside the sandbox, like gh
+
+**Deferred:** none
+
 ## 2026-10-21 — VH-140 — The record names the card and a video language not the page's; a line says a switch is for the next video; Step 3 says its rule first
 
 **Decision:** the record and the discard question say "a 5-second staff title card" or "a 5-second submission card" and add "Video language: …" when it is not the page's; while a video is made or shown, a line under the switches says a change is for the next video, and the progress names the job's own type and language; Step 3 states its side's rule, with `aria-required` on Submission's fields; the ID's length and count come from config — taken gateless as the smallest change meeting the criteria (Nielsen 1 and 6, WCAG 3.3.2), the Chinese and Malay as the agent drafted them.
@@ -463,13 +473,3 @@
 **Supersedes:** none
 
 **Deferred:** VH-128
-
-## 2026-10-19 — VH-127 — The staff card: its own step, a checkbox, five seconds, text only, no labels, today's date
-
-**Decision:** the staff title card is Step 3, "Title card", between Trim and Closing branding; an "Add a title card" checkbox, off at first, shows its four fields and keeps what was typed when turned off; turned on, the date fills with today's date in the video's language and can be changed or cleared; the card holds 5 s, white text on Nottingham Blue with no logo and no labels, the title large and the other three as plain lines; on with every field empty is refused at Create — because the owner answered VH-127's open questions in chat on 2026-10-19.
-
-**Rationale:** The owner's answers, 2026-10-19, to six questions asked as VH-127 started, each the recommended option: how long, "5 seconds"; the logo, "No logo", text only, white on Nottingham Blue like the closing, so the measured layout keeps all its room; where, "Own step after Trim", so the steps follow the video's own order and the later steps renumber; on or off, "A checkbox, off at first", refused at Create when on and empty; the date, "Today, editable", filled only when the card is turned on; labels, "No labels", so the card has no words of its own to translate. A date still as filled follows a change of video language; one edited is kept as typed (VH-132).
-
-**Supersedes:** none
-
-**Deferred:** none
