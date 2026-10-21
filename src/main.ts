@@ -129,7 +129,9 @@ import {
 } from './ui/progress'
 import {
   closingOutcomeText,
+  endedEarlyText,
   jobSummaryText,
+  recordPassage,
   type ClosingOutcome,
   type JobRecord,
 } from './ui/result-summary'
@@ -2600,11 +2602,9 @@ function confirmDiscardThenStart(): void {
 
   // The same record the result shows, so the question names what would go —
   // outcome included: a fade that became a cut is a cut here too (Codex
-  // review of VH-107).
-  const summary = (): string => {
-    const differs = closingOutcomeText(asked.record.closing, asked.outcome)
-    return differs === null ? jobSummaryText(asked.record) : `${jobSummaryText(asked.record)} ${differs}`
-  }
+  // review of VH-107), and a file that ended early gives the length made
+  // and says so (VH-139).
+  const summary = (): string => recordPassage(asked.record, asked.outcome)
 
   // Built once; painted in the current language now and on a change of
   // language, with focus kept where it is (VH-105).
@@ -2797,6 +2797,7 @@ function beginJob(file: File): void {
           mode: reply.closingModeApplied,
           sound: reply.audioIncluded,
           opening: reply.brandingApplied.opening,
+          endedEarly: reply.endedEarly,
         }
         handTo = renderResult({
           file: reply.file,
@@ -2822,6 +2823,7 @@ function beginJob(file: File): void {
         setStatus('', () =>
           spoken(
             t().status.ready,
+            endedEarlyText(outcome.endedEarly, outcome.mode !== null),
             closingOutcomeText(record.closing, outcome),
             warningsSpoken(t().warnings.finishedHeading, outputWarnings),
           ),
@@ -2982,8 +2984,8 @@ function renderResult(kept: RetainedResult): HTMLElement {
   // lifetime, and Save as its action. Built once here, and its words written
   // by `paint` below: now, and again on a change of language, without the
   // Save closure or its state being rebuilt (VH-105).
-  const heading = notification({ kind: 'success', title: '', lines: ['', ''] })
-  const [title, recordLine, differsLine] = heading.querySelectorAll('p')
+  const heading = notification({ kind: 'success', title: '', lines: ['', '', ''] })
+  const [title, recordLine, endedLine, differsLine] = heading.querySelectorAll('p')
   // Where focus lands when the job finishes, "Keep it" restores this, or
   // Save is spent (VH-111): what there now is.
   heading.tabIndex = -1
@@ -3012,7 +3014,16 @@ function renderResult(kept: RetainedResult): HTMLElement {
     const previous = fileInput.files?.[0] !== source
     const size = formatFileSize(file.size)
     if (title) title.textContent = previous ? t().result.previous({ size }) : t().result.finished({ size })
-    if (recordLine) paintQuoting(recordLine, jobSummaryText(record), record.wordsLanguage)
+    // The length made, never the length the file promised, and why beside
+    // it (VH-139): a file cut short is said here as well as before Create.
+    if (recordLine) {
+      paintQuoting(recordLine, jobSummaryText(record, outcome.endedEarly?.made ?? null), record.wordsLanguage)
+    }
+    const ended = endedEarlyText(outcome.endedEarly, outcome.mode !== null)
+    if (endedLine) {
+      endedLine.textContent = ended ?? ''
+      endedLine.hidden = ended === null
+    }
     const differs = closingOutcomeText(record.closing, outcome)
     if (differsLine) {
       differsLine.textContent = differs ?? ''

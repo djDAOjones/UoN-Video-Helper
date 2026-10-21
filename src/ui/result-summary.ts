@@ -20,10 +20,12 @@ import {
 import { TITLE_CARD_SECONDS } from '../config/cards'
 import type { LanguageTag } from '../config/languages'
 import type { PresetId } from '../config/presets'
-import { closingWords, t } from '../i18n'
+import { closingWords, sentenceGap, t } from '../i18n'
+import type { EndedEarly } from '../media/ends-early'
 import type { KeptRange } from '../media/kept-range'
 import { formatDuration } from './format'
 import { formatTrimTime } from './trim'
+import { shortfallTimes } from './warning-text'
 
 /** What a job was started with, read once so the record cannot drift from the job. */
 export interface JobRecord {
@@ -49,6 +51,8 @@ export interface ClosingOutcome {
   readonly sound?: boolean
   /** Whether an opening landed; none can while openings are withdrawn (VH-23). */
   readonly opening?: boolean
+  /** What the encode found short of the file's index, or `null` for a whole file (VH-139). */
+  readonly endedEarly?: EndedEarly | null
 }
 
 /** "the whole video (4 minutes, 12 seconds)" or "2 minutes of 4 minutes, 12 seconds, from 0:30.0 to 2:30.0". */
@@ -108,17 +112,70 @@ export function closingOutcomeText(controls: ClosingControls, outcome: ClosingOu
 }
 
 /**
+ * What stands beside the record when the file stopped before its index said
+ * (VH-139), or `null` for a whole file: where each track stopped, that a
+ * closing follows a held last picture, and the way out. Each track is said
+ * against its own declared end; both share one sentence, and one time when
+ * they stop within the same second.
+ *
+ * @param closingInFile - Whether the file carries a closing, which is what
+ *   holds the last picture from where the picture stopped.
+ */
+export function endedEarlyText(ended: EndedEarly | null | undefined, closingInFile: boolean): string | null {
+  if (!ended) return null
+  const { endedEarly } = t().result
+  const { picture, sound } = ended
+  let facts: string
+  if (picture && sound) {
+    const end = Math.max(picture.endSeconds, sound.endSeconds)
+    const seen = shortfallTimes({ ...picture, endSeconds: end })
+    const heard = shortfallTimes({ ...sound, endSeconds: end })
+    facts =
+      seen.stops === heard.stops
+        ? endedEarly.together(seen)
+        : endedEarly.both({ picture: seen.stops, sound: heard.stops, end: seen.end })
+  } else if (picture) {
+    facts = endedEarly.picture(shortfallTimes(picture))
+  } else if (sound) {
+    facts = endedEarly.sound(shortfallTimes(sound))
+  } else {
+    return null
+  }
+  const held = picture && closingInFile ? endedEarly.held : null
+  return [facts, held, endedEarly.next].filter((part): part is string => part !== null).join(sentenceGap())
+}
+
+/**
  * The one-line record: "Made from NAME: PART, OUTPUT, CLOSING.", with "a
  * 5-second title card, then" before PART when the card is on (VH-127).
+ *
+ * @param made - The part of the source the file actually carries, when the
+ *   source stopped short of the part kept (VH-139): the record then gives the
+ *   length made, never the length the file promised.
  */
-export function jobSummaryText(record: JobRecord): string {
+export function jobSummaryText(record: JobRecord, made: KeptRange | null = null): string {
   const parts = {
     name: record.sourceName,
-    part: keptPartText(record.keptRange, record.durationSeconds),
+    part: keptPartText(made ?? record.keptRange, record.durationSeconds),
     output: t().preset.labels[record.presetId],
     closing: closingChoiceText(record.closing, record.wordsLanguage),
   }
   return record.titleCard
     ? t().result.summaryWithCard({ ...parts, seconds: TITLE_CARD_SECONDS })
     : t().result.summary(parts)
+}
+
+/**
+ * The record and what stands beside it, as one passage: the discard question
+ * names what would be lost in a paragraph (VH-107), so the length made and
+ * why go with it, as the result shows them (VH-139).
+ */
+export function recordPassage(record: JobRecord, outcome: ClosingOutcome): string {
+  return [
+    jobSummaryText(record, outcome.endedEarly?.made ?? null),
+    endedEarlyText(outcome.endedEarly, outcome.mode !== null),
+    closingOutcomeText(record.closing, outcome),
+  ]
+    .filter((part): part is string => part !== null)
+    .join(sentenceGap())
 }

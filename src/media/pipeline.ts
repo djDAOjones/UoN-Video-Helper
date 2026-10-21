@@ -53,6 +53,7 @@ import { fitRectangle } from './conform'
 import { findFreezeFrame } from './freeze'
 import { audioEncodingConfigFor, videoEncodingConfigFor } from './encoding'
 import { measureEncoderDelay } from './encoder-delay'
+import { declaredExtent, endedEarly, type EndedEarly } from './ends-early'
 import {
   keptAudioAnchorSeconds,
   snapKeptRangeToFrames,
@@ -110,6 +111,13 @@ export interface PipelineResult {
    * then verify as audio (VH-95, Codex review).
    */
   readonly audioIncluded: boolean
+  /**
+   * What the decode found short of the file's index — a file cut off part-way,
+   * whose index promises frames and sound its data does not hold (VH-139) —
+   * or `null` for a whole file. Measured on the encode's own lanes, so it
+   * describes the file just made.
+   */
+  readonly endedEarly: EndedEarly | null
 }
 
 /**
@@ -520,6 +528,10 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
   const timelineSeconds = timeline.timelineSeconds
   const expectedFrames = Math.max(1, Math.round(timelineSeconds * shape.frameRate))
   let framesFed = 0
+  // Where each lane's own decoded content ended, in source seconds, so a file
+  // whose data stops before its index is told apart from a whole one (VH-139).
+  let pictureEndSeconds: number | null = null
+  let soundEndSeconds: number | null = null
 
   const renderer = new BrandingRenderer(shape, options.backgroundColour)
 
@@ -607,6 +619,8 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       try {
         // Read before `setTimestamp`, which mutates the sample in place.
         const original = sample.timestamp
+        const shownUntil = Math.min(keptEnd, original + sample.duration)
+        if (pictureEndSeconds === null || shownUntil > pictureEndSeconds) pictureEndSeconds = shownUntil
         // The SHARED origin, not this lane's first frame (VH-74). Falling back
         // to the lane's own only when the shared one is somehow later, so the
         // guard below never has anything to clamp. Not with a trim: there the
@@ -762,6 +776,8 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       : sink.samples()
     for await (const sample of samples) {
       throwIfAborted(laneSignal)
+      const heardUntil = Math.min(keptEnd, sample.timestamp + sample.duration)
+      if (soundEndSeconds === null || heardUntil > soundEndSeconds) soundEndSeconds = heardUntil
       let processed: Iterable<AudioSample>
       try {
         processed = processContent.process(sample)
@@ -794,6 +810,24 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
 
     const file = await outputFile.finish()
     onProgress?.({ stage: 'finishing', fraction: 1 })
+    // Each lane against the last packet its own index declares in the part
+    // kept, never against the other: a sound track that legitimately stops
+    // early is the file as it is. The index answers without a byte of media
+    // being read.
+    const endedShort = endedEarly(
+      { decodedEndSeconds: pictureEndSeconds, ...(await declaredExtent(videoTrack, keptRange)) },
+      audioTrack ? { decodedEndSeconds: soundEndSeconds, ...(await declaredExtent(audioTrack, keptRange)) } : null,
+      keptRange?.startSeconds ?? 0,
+    )
+    if (endedShort) {
+      log.warn('pipeline', 'the source stops before its index says', {
+        pictureStopsAtSeconds: endedShort.picture ? Math.round(endedShort.picture.stopsAtSeconds * 1000) / 1000 : null,
+        soundStopsAtSeconds: endedShort.sound ? Math.round(endedShort.sound.stopsAtSeconds * 1000) / 1000 : null,
+        madeSeconds: endedShort.made
+          ? Math.round((endedShort.made.endSeconds - endedShort.made.startSeconds) * 1000) / 1000
+          : null,
+      })
+    }
     log.info('pipeline', 'encode complete', {
       preset: preset.id,
       framesFed,
@@ -823,6 +857,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       outputWarnings,
       contentOffsetSeconds: contentOffset,
       audioIncluded: audioSource !== null,
+      endedEarly: endedShort,
     }
   } catch (cause) {
     // Abandon the output so no writer is left holding a file the caller is

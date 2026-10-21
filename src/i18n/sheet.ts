@@ -109,6 +109,10 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
   ['result', 'Step 6: the finished video and its one-line summary'],
   ['result.closing', 'Step 6: the end of the summary "Made from …", saying how the video closes'],
   ['result.fellBackTo', 'Step 6: under the finished video, when its closing is not the one chosen'],
+  [
+    'result.endedEarly',
+    'Step 6: under the finished video, and in the question before it is discarded, when the file chosen stops part-way',
+  ],
   ['progress', 'Step 6: the progress bar while the video is made'],
   ['progress.title', 'The title in the browser tab while the video is made'],
   ['progress.jobNotice', 'Step 6: said when the video starts being made'],
@@ -226,6 +230,10 @@ const PLACEHOLDERS: Readonly<Record<string, string>> = {
     "the advice service's name, from statement.enforcement.service, as a link to its website",
   words: 'the words drawn on the closing card, from closing.internalWords',
   running: 'a length of time as a clock shows it, like 12:34',
+  stops: 'a time in the video, like 0:20',
+  end: 'a time in the video, like 0:30',
+  picture: 'a time in the video, like 0:20',
+  sound: 'a time in the video, like 0:20',
   id: 'what the student typed as a student ID number, like 20412345',
   max: 'a number',
 }
@@ -347,6 +355,14 @@ const NOTES: Readonly<Record<string, string>> = {
   'progress.fewSecondsLeft': 'In place of progress.timeLeft when under five seconds are left.',
   'progress.withTimeLeft':
     'Read out by screen readers, not shown: a milestone, then the time left, as two sentences, like "Encoding video — half done. About 2 minutes left".',
+  'warnings.endsEarly.heading':
+    'Said when the file stops part-way, as an interrupted copy or a crashed recorder leaves it. Warning headings are read one after another inside warnings.spoken, so no full stop.',
+  'warnings.endsEarly.detail':
+    '"of {end}" means the sound should run until {end}. A fact, not a guess: only the cause ("probably cut off") is uncertain.',
+  'result.endedEarly.together': 'In place of result.endedEarly.both when the picture and the sound stop in the same second.',
+  'result.endedEarly.held':
+    'Follows one of the sentences above when the picture stopped and the video has a closing: until the closing, the last picture stays on screen.',
+  'result.endedEarly.next': 'Ends the passage. Use the same words for "create the video" as create.create.',
   'format.unknown': 'Shown alone in place of a fact the app could not read.',
   'statement.heading':
     'The heading of the panel, so no full stop. A formal statement, as on any official website.',

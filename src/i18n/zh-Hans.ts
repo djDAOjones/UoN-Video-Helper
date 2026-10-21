@@ -381,6 +381,14 @@ export const zhHans: Messages = {
     summary: '由 {name} 构成：{part}、{output}、{closing}。',
     summaryWithCard: '由 {name} 构成：{seconds} 秒的标题卡，随后是{part}、{output}、{closing}。',
     notLoaded: '由于结尾部分无法加载，因此未包含在视频中。其他所有步骤均已按要求完成。',
+    endedEarly: {
+      picture: '您选择的文件提前结束：画面在{stops}处停止，而全长应为{end}。',
+      sound: '您选择的文件提前结束：声音在{stops}处停止，而全长应为{end}。',
+      together: '您选择的文件提前结束：画面和声音在{stops}处停止，而全长应为{end}。',
+      both: '您选择的文件提前结束：画面在{picture}处停止，声音在{sound}处停止，而全长应为{end}。',
+      held: '从那里到结尾，视频会一直停留在最后一帧画面。',
+      next: '如果您有完整的副本，请用它重新制作视频。',
+    },
     fellBackToCut: {
       blue: {
         fade: '您选择了“淡入”，但动画无法加载，因此视频将切换到蓝色结束卡片。',
@@ -496,6 +504,11 @@ export const zhHans: Messages = {
     finishedHeading: '关于最终视频值得了解的事项',
     reassurance: '这些都不会阻止您继续操作。您的原始文件也不会因此而改变。',
     spoken: '{heading}：{titles}。',
+    endsEarly: {
+      heading: '文件提前结束',
+      detail:
+        '声音在{stops}处停止，而全长应为{end}。文件可能在复制或录制时被中断。{stops}之后，新视频将没有声音。如果您有完整的副本，请改为选择该副本。',
+    },
     noAudio: {
       heading: '这段视频没有声音',
       detail:

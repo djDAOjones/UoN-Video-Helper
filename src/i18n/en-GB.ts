@@ -436,6 +436,20 @@ export const enGB = {
     summaryWithCard: 'Made from {name}: a {seconds}-second title card, then {part}, {output}, {closing}.',
     notLoaded:
       'The closing could not be loaded, so it is not in this video. Everything else was applied as asked.',
+    /**
+     * Beside the record when the file stopped before its index said (VH-139).
+     * {stops}, {picture}, {sound} and {end} are times, like "0:20".
+     */
+    endedEarly: {
+      picture: 'The file you chose ends early: its picture stops at {stops} of {end}.',
+      sound: 'The file you chose ends early: its sound stops at {stops} of {end}.',
+      /** Both stop within the same second. */
+      together: 'The file you chose ends early: its picture and sound stop at {stops} of {end}.',
+      both: 'The file you chose ends early: its picture stops at {picture} and its sound at {sound}, of {end}.',
+      /** Follows when the picture stopped and a closing follows it. */
+      held: 'From there until the closing, the video holds its last picture.',
+      next: 'If you have a complete copy, create the video again from that one.',
+    },
     fellBackToCut: {
       blue: {
         fade: 'You chose Fade, but the animation could not be loaded, so this video cuts to the blue closing card instead.',
@@ -569,6 +583,12 @@ export const enGB = {
     reassurance: 'None of these stop you continuing. Your original file is not changed either way.',
     /** The spoken form: the heading, then each warning's title, joined by `meta.separators.series`. */
     spoken: '{heading}: {titles}.',
+    /** Said when the file's sound stops before its index says it should (VH-139). {stops} and {end} are times, like "0:20". */
+    endsEarly: {
+      heading: 'The file ends early',
+      detail:
+        'Its sound stops at {stops} of {end}. The file was probably cut off while it was copied or recorded. After {stops}, the new video will be silent. If you have a complete copy, choose that one instead.',
+    },
     noAudio: {
       heading: 'This video has no sound',
       detail:

@@ -16,6 +16,7 @@
 import type { AudioWarning } from '../audio/warnings'
 import { DECODE_DAMAGE } from '../config/audio'
 import { t } from '../i18n'
+import type { Shortfall } from '../media/ends-early'
 import { formatClockTime, formatDuration } from './format'
 import { notification } from './notification'
 
@@ -37,9 +38,32 @@ export function damageTimes(atSeconds: readonly number[]): string[] {
   return rest > 0 ? [...listed, t().warnings.decodeDamage.more({ count: rest })] : listed
 }
 
+/**
+ * Where a track stops and where it should have reached, as the trim's fields
+ * show a time (VH-139): the stop floored, as decode damage's times are, so
+ * seeking to it lands while there is still something to see or hear; the end
+ * to the nearest second, as the read file's length is said.
+ */
+export function shortfallTimes(short: Shortfall): { readonly stops: string; readonly end: string } {
+  return {
+    stops: formatClockTime(Math.floor(short.stopsAtSeconds)),
+    end: formatClockTime(short.endSeconds),
+  }
+}
+
 export function warningText(warning: AudioWarning): WarningText {
   const { warnings } = t()
   switch (warning.code) {
+    case 'ends-early':
+      return {
+        heading: warnings.endsEarly.heading,
+        detail: warnings.endsEarly.detail(
+          shortfallTimes({
+            stopsAtSeconds: warning.detail['stopsAtSeconds'] ?? 0,
+            endSeconds: warning.detail['endSeconds'] ?? 0,
+          }),
+        ),
+      }
     case 'no-audio':
       return warnings.noAudio
     case 'decode-damage': {

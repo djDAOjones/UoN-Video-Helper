@@ -59,11 +59,31 @@
 
 **Deferred:** none
 
+## 2026-10-21 — VH-139 — A file that ends early: each track held to its own last declared packet, said before Create and beside the record
+
+**Decision:** a track whose decode stops more than 1 s (`ENDS_EARLY_MARGIN_SECONDS`) short of its own last declared packet in the part kept — that packet's start when its bytes are in the file, its declared end when they are not — has ended early: pre-flight's analysis pass says so of the sound before Create, the encode says so of both tracks beside the record, and the record gives the length made; the Chinese and Malay are the agent's drafts, for the owner's approval — because V-01's file was made and recorded as whole with nothing said, the silent loss the rules call the worst outcome.
+
+**Rationale:** Held to its own track, so a sound that legitimately starts late, stops early or differs from the picture raises nothing; to the last packet's start when its bytes arrived, because an MP4 gives the packet before a hole the hole's length (the PCM test file's `[0.5, 1.5]` before a 1 s hole); to its declared end when they did not, so a cut that took only a long final frame is still a cut; and the packet is found just inside the exclusive out-point, so one starting at it is not kept — the last two from Codex astra's review, each with a failing test, re-checked in Chrome. Only passes that decode the whole kept part can know the tail: pre-flight's analysis pass for the sound (`decodedEndSeconds`), the encode's lanes for both; the 3-second probe and the output check are unchanged. The note gives clock times as decode damage and the trim's fields do ("Its sound stops at 0:20 of 0:30"), not the criterion's "20 s of 30", so the page has one time format; the record reuses `result.keptPart` for the length made ("21 seconds of 30 seconds, from 0:00.0 to 0:21.0"), and the line beside it adds that the last picture is held until a closing when one follows. The discard question joins the record and its lines with the table's sentence gap. Checked in Chrome with the audit's fixture, trimmed and not, with and without a closing, the whole and silent controls, and the made file read back at 21.0 s of picture; Matroska and WebM cut short declare only what is readable, so the check cannot see them (wish line). Standards applied (rule 8): Nielsen 1, 4 and 9; WCAG 4.1.3, the note and line announced with the verdict and the ready status; UI-STANDARDS System status; Carbon's inline notification, reused; house rules: numbers in `src/config/`, fail loudly on data loss, units in identifiers, tests by category, no new dependency. Item file: VH-139, with the drafts and Codex astra's findings.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-21 — VH-143 — The owner's overnight instruction: a design pass, then Phases 3 and 4, gateless
 
 **Decision:** the overnight run is authorised and gateless: VH-143, the design pass, then Phase 3 (PLAN-3, approved) with VH-139 merged from its own session, then Phase 4 (PLAN-4, its sign-off pre-approved), then the morning report; wherever the record or a verb would stop for the owner, the session takes the conservative choice, records it as taken gateless, and carries on — because the owner said so in chat on 2026-10-21.
 
 **Rationale:** The owner's words, quoted: "provide a prompt that will conduct a whole design pass, then implement the implementation phases, I will approve use of fable with extra effort. it needs to be gateless as I am going to bed, and I hope it can be ready in the morning"; earlier the same night: "approve PLAN-3 and start VH-139". The prompt they produced is kept verbatim as `reviews/2026-10-20/overnight-prompt-2026-10-21.md` and is the run's instruction. Conservative means the smallest change that meets the standard, existing components, tokens and words before new ones, and nothing the owner has reserved: the three switchers above step 1 and folding (VH-97), the sign-offs of VH-124 and VH-113, VH-137 and V-09, the date-only title card, and anything the brief's Direction does not cover — each becomes a `[!]` or wish line with a recommendation. Hard limits: no new runtime dependency; `docs/*.md` never edited; the EBU harness re-run if a protected audio file changes; no test deleted, skipped or weakened; nothing written to `samples/`; nothing destructive; never a push or merge to `main`, which publishes the pilot. New Chinese and Malay strings are drafted as machine translation, as the VH-122, VH-127 and VH-128 decisions did, and listed in the morning report for approval. The work is on branch `claude/overnight-design-and-phases` in the worktree `.claude/worktrees/overnight`, from VH-138's close (5f23af6); each session that passes the profile's Session line closes with a hand-off note in `reviews/2026-10-20/` and a Session-end line, and starts the next session itself. After 07:00 UK time no new item starts.
+
+**Supersedes:** none
+
+**Deferred:** none
+
+## 2026-10-21 — PLAN-3 — The owner signs off Phase 3, and VH-139 starts
+
+**Decision:** PLAN-3 stands as recorded and VH-139 runs now; VH-140 starts only on the owner's next word — because the owner said "approve PLAN-3 and start VH-139" in chat on 2026-10-21.
+
+**Rationale:** The words reached this session through the VH-138 session that planned the phase, which started VH-139 in its own worktree from VH-138's close (5f23af6, branch `claude/nifty-jepsen-850e8e`, not yet merged to `main`) and set that the session stops after VH-139. The sign-off covers the plan's order and items as PLAN-3's entry lists them; it is not a standing word like PLAN-2's, so open questions in later items still go to the owner.
 
 **Supersedes:** none
 
@@ -454,26 +474,6 @@
 **Decision:** every language table is data — whole messages with `{name}` placeholders, each word the English chooses inside a sentence its own key, a count a `one`/`other` or numbered group — compiled once per language by `src/i18n/compile.ts` into the `t()` API, typed from English's literals; the English table's 373 keys are settled, and `scripts/strings-sheet.mjs` writes the translator's sheet from them — because the owner's machine-translation route needs a sheet that maps back to the tables row for row, and a table of functions could neither be exported nor generated from one.
 
 **Rationale:** the saved draft (fa98b05) held each message as a function that chose "blue"/"white", "fades"/"slides" and "start"/"end" inside an English sentence, which no other language can reuse. A shown failure is now kept as its code, the worker's reason and any dev-only detail (`showFailure`, `failureWords` in `src/main.ts`), so a language switch says it again; the worker's English stays for the logs. Durations are written by `Intl.NumberFormat` units joined by a unit `Intl.ListFormat` in each table's `meta.durationList`, not `Intl.DurationFormat`, whose long style adds commas English never had ("4 minutes 12 seconds") and which not every engine has. Separators between facts, items and sentences live in each table's `meta`, set per table and never translated. The readability gate now reads the table, the copy's home: the four "shorter than the animation" fallbacks measured grade 10.5 once their words were real rather than `${…}`, so each became two sentences — the only English changed, for VH-124's review — and the meta description, never shown, is exempt as the `<head>` already was. Tests changed where behaviour did: trim problems are structured and read through `trimProblemText`, failure reasons are names, and the page-text tests read past `data-i18n` bindings; `tables.test.ts` adds the completeness and placeholder tests, which run once a second table exists. The `.xlsx` is a stored zip written by hand, so no dependency. Standards applied: house conventions (no library; named test categories — happy path, boundary counts, a CSV round trip), Nielsen 4 (one whole message per meaning), spec 9.2's reading level, kept by the gate.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-18 — VH-105 — Translate the current copy now, by machine first
-
-**Decision:** VH-105 translates the page's current English now, without waiting for VH-124's sign-off, and the first translation is automated: the agent exports every string as one sheet, the owner fills it with Google Translate and ChatGPT Astra, and the agent builds the zh-Hans and ms-MY tables from what comes back; a native-speaking reviewer from each campus checks it later — because the owner started the resuming session as their go-ahead and set the route in chat on 2026-10-18, answering the question the item's 2026-10-18 note left open.
-
-**Rationale:** the item note of 2026-10-18 asked whether to translate the current copy now or sign off VH-124 first, and recommended that the agent draft both languages; the owner chose now, and chose to do the machine pass themselves. The sheet's keys are the English table's keys, settled before the export, so English that VH-124 later changes is re-translated row by row by key, not re-matched. Machine translation of plain language reads as machine translation (the item's Risks), so the criterion "each language is signed off by its reviewer" stands; whether the two languages go live before that review, marked as machine translation, is asked once the tables are in and recorded then. Until then `src/config/languages.ts` offers them in development only.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-18 — VH-125 — The trim preview follows the handle
-
-**Decision:** moving a trim handle, by pointer or key, or typing a valid time shows that point in the preview, paused, and only the latest time waits for a running seek; the two "Set … here" buttons and "Use the whole video" leave the preview where it is — because the owner asked for it in chat on 2026-10-18 ("can the trim feature show the point of the video in the preview window when changing the handle position").
-
-**Rationale:** writing `currentTime` on every input event abandons the running seek, so on a long file with sparse keyframes a drag would show nothing until the pointer stopped; `src/ui/preview-seek.ts` holds the latest time until `seeked`, drops the ones in between, and forgets a waiting time on `emptied`, so the next file never shows the last file's time. The preview shows where the handle came to rest after the 3 s minimum keep clamps it, not where the pointer is. A playing preview pauses, because a handle being placed wants its own frame. Standards applied: Nielsen 1, visibility of system status (the frame at the cut is shown); WCAG 3.2.5, change on request (focus stays on the handle, nothing autoplays); spec §9.3's live-region rule (no announcement: a control's own result is read on demand, through the handle's `aria-valuetext`). No new words, so VH-105's tables gain nothing. The spec does not describe the behaviour; a wish line carries the §9.1 doc-delta.
 
 **Supersedes:** none
 

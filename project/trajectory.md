@@ -7,9 +7,13 @@
      items the canon record shipped before the migration, in v3's form;
      their why is in the frozen canon decision log (history.md). -->
 
+## Phase 3 — what the second audit found
+
+- VH-139 — a file that ends early is said: each track held to the last packet its own index declares; before Create "The file ends early — Its sound stops at 0:20 of 0:30", after the job the length made, "21 seconds of 30 seconds", with where each track stopped beside it; checked in Chrome with the audit's fixture, trimmed and not (2026-10-21) — see decisions
+
 ## Design pass — the page as a design against the 2026-10-01 standard
 
-- VH-143 — the page judged as a design against the 1 October standard, walked again in headless Chrome in three languages, both switch positions, every closing and seven views, with a token sweep, word counts, a string sweep and the cards drawn at four shapes, Codex astra blind and then critical: 13 findings, none at rank 1; five join Phase 3's items, five are Phase 4 (PLAN-4), three are the owner's; nothing built (2026-10-21) — see decisions
+- VH-143 — the page judged as a design against the 1 October standard in headless Chrome — three languages, both switch positions, every closing, seven views; token, word and string sweeps; the cards at four shapes; Codex astra blind, then critical: 13 findings, none at rank 1; five join Phase 3, five are Phase 4 (PLAN-4), three are the owner's; nothing built (2026-10-21) — see decisions
 
 ## Audit v2 — the page against the 2026-10-01 standard
 
