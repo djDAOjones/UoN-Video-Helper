@@ -17,6 +17,16 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-21 — VH-145 — Browser defaults meet the token system
+
+**Decision:** status spacing, legend padding, radio margins, select line height, fieldset shrinkage, dialog gutters and error-intro spacing are explicit; type roles name regular, semibold and bold, diagnostics name their monospace face, and identical rules are grouped. Taken gateless as the specified token-boundary repair, preserving existing type weights and colours.
+
+**Rationale:** The 700 heading role from VH-148 is reused; body 400 and emphasis 600 complete the roles. The monospace token keeps the existing platform face. Selects compute to 21 px line height, so no native exception is needed. The dialog overrides the browser’s max-width, fixing its 19 px phone gutter to 16 px. The status reserves one compact line (21 px), with zero bottom margin and the empty save reset preserved. Chrome captured 72 states across three languages, four widths and three themes, compared with a 24-state pre-change baseline and the design-pass evidence. Its spacing sweep leaves only structural automatic centring margins; no off-scale padding or gap remains. Tests retain the switcher’s equal reserved weight and reject literals or missing resets. Standards: Carbon productive spacing and type roles; WCAG 1.4.8, 1.4.10 and 2.5.5; Nielsen 4 and 8; house conventions, two token systems and category tests. Real zoom and Windows themes remain on existing audit wishes; known checker warnings keep their existing follow-ups.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-21 — VH-144 — One None reason and readable trim times
 
 **Decision:** None shares one explanation beneath its three locked closing controls, each linked to it; Cut keeps its onset explanation. The two trim rows wrap their buttons before their time fields fall below the existing 12 rem minimum — the smallest change satisfying the two design findings, taken gateless.
@@ -462,15 +472,5 @@
 **Rationale:** The owner's words, 2026-10-19, answering VH-126's notes: the type scale "looks great"; "maybe a switch at the top between 'Student submission' and 'Staff video' where student submission has the card + details and the all the logo animation options but always with Internal Only; the staff options have a basic card with title, department, author(s), and date (all optional), and the internal use text is a toggle along with other graphic options"; on the closing's language, "follow language is great as default, but offer a selector on all language versions to change the video text to any of the three"; and that ffmpeg is installed, though at this close Homebrew's install still waited at its confirmation prompt, so the next session checks. Consequences: General becomes the staff card, its heading and subhead replaced by four optional fields (VH-127, re-scoped by the owner); the Submission card is always on for a submission (VH-128); the closing gains an internal tail per language and colour at both heights, twelve, the onsets untouched (VH-126); the switch is new, VH-131; the selector is new, VH-132, and sets the cards' labels and the closing's words, never what is typed. This also replaces the first PLAN-1 entry's General-or-Submission toggle. Order: VH-126, whose assets need only ffmpeg and the two translations; VH-131, which it is chosen under; VH-132; VH-127; VH-128. Open, for the owner when each item starts: in each item's notes. The brief's Direction says so.
 
 **Supersedes:** 2026-10-19 — VH-126 — Internal use only: an option in blue or white, its words building in with the logo
-
-**Deferred:** none
-
-## 2026-10-19 — VH-126 — The cards' type scale, measured: list-style fields, a shared last line, limits in columns
-
-**Decision:** the cards' type scale is `src/config/cards.ts`, measured in Chrome by `spike-cards.html`: a floor of 56 px per 1080 lines of the shorter side, Submission's fields run in as list items at 1.25, its running time and card date sharing a line, and typed fields capped in columns — because then every card fits 16:9, 16:10, 4:3 and 9:16 in all three languages at every limit.
-
-**Rationale:** Measured in Chrome on 2026-10-19. Sizes: General's heading Lora Bold 104 to 56 in three lines (five in portrait), its subhead Arial 64 to 56 at 1.5; Submission's heading Lora Bold 80 to 56 in two (four), its fields a run-in label and value at 56, 0.375 em apart; a wide character counts two columns; the closing's words Arial Bold at 100 per 1080 of the asset, which a letterboxed portrait output shows at 56. The first run, fields at WCAG 1.4.8's 1.5 with 0.75 em between them, overflowed 16:9 in Malay and refused every 4:3 case. 1.4.8 binds blocks of text, more than one sentence; a field is not one, so it sets at 1.25 and the gap groups it, while General's subhead, which can be a sentence, keeps 1.5. Sharing the last field saved the row that 16:10 (10 px over) and 4:3 (80 px over) needed. Limits in columns: General 100 and 120, assignment 80, module 60, convenor 40, proposed for VH-127 and VH-128 to adopt; the renderer still refuses at its field what measures too long. Tightest fit: 4:3 Chinese, 1 px to spare with the heading at 60; the most room, 16:9 Chinese, 163. A 4K frame breaks exactly as 1080 does. The closing's words measure 795 px (English), 600 (Chinese) and 1,256 (Malay) of a 1,680 px safe width, their foot at 854 above the 961 line, centred under the settled logo; white and Nottingham Blue 15.41:1 by calculation. The labels are provisional until VH-128 settles their English; Chinese line breaking that keeps punctuation off a line's start is VH-127's renderer's.
-
-**Supersedes:** none
 
 **Deferred:** none

@@ -26,6 +26,7 @@ body {
   background: var(--layer-00);
   color: var(--text-primary);
   font-family: var(--font-body);
+  font-weight: var(--type-weight-body);
   font-size: var(--type-body);
   line-height: var(--line-height-body);
 }
@@ -160,7 +161,7 @@ a {
 .page-title {
   margin: 0 0 var(--spacing-05);
   font-size: var(--type-heading-04);
-  font-weight: 700;
+  font-weight: var(--type-weight-heading);
   line-height: var(--line-height-heading);
 }
 
@@ -195,7 +196,8 @@ a {
   list-style: none;
 }
 
-.footer-contact-link {
+.footer-contact-link,
+.notification-link {
   display: inline-flex;
   align-items: center;
   min-height: var(--target-min);
@@ -242,7 +244,7 @@ a {
 .panel h2 {
   margin: 0 0 var(--spacing-05);
   font-size: var(--type-heading-03);
-  font-weight: 700;
+  font-weight: var(--type-weight-heading);
 }
 
 /*
@@ -302,7 +304,7 @@ a {
 }
 
 .check .mark {
-  font-weight: 700;
+  font-weight: var(--type-weight-heading);
   font-size: var(--type-body-compact);
 }
 
@@ -398,10 +400,10 @@ a {
 
 /* One line's height is reserved, so a status arriving moves nothing. */
 .status {
-  margin-top: var(--spacing-05);
+  margin: var(--spacing-05) 0 0;
   font-size: var(--type-body-compact);
   color: var(--text-secondary);
-  min-height: calc(var(--type-body) * var(--line-height-body));
+  min-height: calc(var(--type-body-compact) * var(--line-height-body));
 }
 
 .errors:empty {
@@ -442,7 +444,7 @@ a {
 
 .notification-title {
   margin: 0;
-  font-weight: 600;
+  font-weight: var(--type-weight-emphasis);
 }
 
 .notification-body {
@@ -462,7 +464,7 @@ a {
 
 .notification-item-title {
   margin: 0;
-  font-weight: 600;
+  font-weight: var(--type-weight-emphasis);
   font-size: var(--type-body-compact);
 }
 
@@ -757,17 +759,10 @@ a {
   cursor: not-allowed;
 }
 
-.result-link {
-  display: inline-block;
-  margin-top: var(--spacing-04);
-  min-height: var(--target-min);
-  padding: var(--spacing-04) 0;
-  color: var(--interactive);
-}
-
 /* --- Choice group --- */
 
 .choice {
+  min-width: 0;
   margin: var(--spacing-06) 0 0;
   padding: 0;
   border: 0;
@@ -787,6 +782,7 @@ a {
 }
 
 .radio input {
+  margin: 0;
   width: var(--control-size);
   height: var(--control-size);
   accent-color: var(--interactive);
@@ -876,7 +872,7 @@ details[open] > .disclosure-summary::before {
   margin: calc(-1 * var(--spacing-06));
   padding: var(--spacing-04) var(--spacing-06);
   font-size: var(--type-heading-compact);
-  font-weight: 600;
+  font-weight: var(--type-weight-emphasis);
 }
 
 .system-check[open] > .disclosure-summary,
@@ -904,7 +900,7 @@ details[open] > .disclosure-summary::before {
 .statement-body h3 {
   margin: var(--spacing-07) 0 var(--spacing-03);
   font-size: var(--type-heading-compact);
-  font-weight: 700;
+  font-weight: var(--type-weight-heading);
   line-height: var(--line-height-heading);
 }
 
@@ -1002,6 +998,7 @@ details[open] > .disclosure-summary::before {
   background: var(--layer-00);
   color: var(--text-primary);
   font: inherit;
+  line-height: var(--line-height-body);
   font-size: var(--type-body-compact);
   padding-right: var(--spacing-08);
 }
@@ -1036,7 +1033,7 @@ details[open] > .disclosure-summary::before {
   flex: none;
   width: var(--target-min);
   padding-inline: 0;
-  font-weight: 600;
+  font-weight: var(--type-weight-emphasis);
 }
 
 .toggletip {
@@ -1065,6 +1062,10 @@ details[open] > .disclosure-summary::before {
   padding: 0;
   border: 0;
   min-width: 0;
+}
+
+.segmented > legend {
+  padding: 0;
 }
 
 .segments {
@@ -1107,7 +1108,7 @@ details[open] > .disclosure-summary::before {
 .segment input:checked + .segment-face {
   background: var(--interactive);
   color: var(--text-on-interactive);
-  font-weight: 600;
+  font-weight: var(--type-weight-emphasis);
 }
 
 .segment input:focus-visible + .segment-face {
@@ -1202,7 +1203,7 @@ details[open] > .disclosure-summary::before {
   height: 0;
   overflow: hidden;
   visibility: hidden;
-  font-weight: 600;
+  font-weight: var(--type-weight-emphasis);
   pointer-events: none;
   user-select: none;
 }
@@ -1210,14 +1211,6 @@ details[open] > .disclosure-summary::before {
 /* The machine-translation note sits between the switcher and the heading. */
 .notification.language-notice {
   margin: 0 0 var(--spacing-06);
-}
-
-/* A link on a line of its own has no sentence round it to take the inline
-   exception, so it is a 44 px target like any control (WCAG 2.5.5). */
-.notification-link {
-  display: inline-flex;
-  align-items: center;
-  min-height: var(--target-min);
 }
 
 /* Where controls are locked while a video is made or saved (VH-112, U-21). */
@@ -1251,7 +1244,8 @@ details[open] > .disclosure-summary::before {
 }
 
 /* The result of the current selection, in words. */
-.closing-result {
+.closing-result,
+.trim-result {
   margin: var(--spacing-05) 0 0;
   font-size: var(--type-body-compact);
 }
@@ -1443,11 +1437,6 @@ details[open] > .disclosure-summary::before {
   flex: none;
 }
 
-.trim-result {
-  margin: var(--spacing-05) 0 0;
-  font-size: var(--type-body-compact);
-}
-
 /* --- Acceptance page (development only) --- */
 
 .log {
@@ -1468,6 +1457,7 @@ details[open] > .disclosure-summary::before {
  * dimming is the brand blue, so it is a token rather than a colour of its own.
  */
 .dialog {
+  max-width: calc(100vw - 2 * var(--spacing-05));
   width: min(var(--dialog-width), calc(100vw - 2 * var(--spacing-05)));
   max-height: calc(100vh - 2 * var(--spacing-05));
   padding: var(--spacing-07);
@@ -1672,4 +1662,11 @@ details[open] > .disclosure-summary::before {
   :focus-visible {
     outline-color: Highlight;
   }
+}
+
+/* Diagnostics use the named brand-side technical face, never a browser default. */
+.notification pre,
+.feedback-details,
+.log {
+  font-family: var(--font-mono);
 }

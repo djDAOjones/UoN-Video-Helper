@@ -130,7 +130,7 @@ describe('the content-sized switchers (VH-135)', () => {
     expect(reserve).toMatch(/overflow:\s*hidden;/)
     expect(reserve).toMatch(/visibility:\s*hidden;/)
     // The reserved words are exactly as heavy as the chosen face's.
-    const weight = /font-weight:\s*(\d+)/.exec(chosen)?.[1]
+    const weight = /font-weight:\s*(var\(--type-weight-[\w-]+\))/.exec(chosen)?.[1]
     expect(weight).toBeDefined()
     expect(reserve).toContain(`font-weight: ${weight};`)
   })
@@ -148,5 +148,31 @@ describe('trim time rows (VH-144)', () => {
     expect(rules).toMatch(/\.trim-time-row\s*\{[^}]*flex-wrap:\s*wrap/)
     expect(rules).toMatch(/\.trim-time-row \.text-input\s*\{[^}]*flex:\s*1 0 var\(--field-min-width\);[^}]*min-width:\s*var\(--field-min-width\)/)
     expect(rules).not.toMatch(/\.control-with-help\s*\{[^}]*flex-wrap/)
+  })
+})
+
+
+describe('explicit browser defaults and type roles (VH-145)', () => {
+  const block = (selector: string): string => rules.split('\n' + selector + ' {')[1]?.split('}')[0] ?? ''
+  it('uses named font weights and the diagnostics face', () => {
+    expect(rules).not.toMatch(/font-weight:\s*(?:\d+|normal|bold|bolder|lighter)/)
+    expect(rules).toContain('font-family: var(--font-mono)')
+  })
+  it('pins the defaults that shape the controls and status lines', () => {
+    expect(block('.status')).toContain('margin: var(--spacing-05) 0 0')
+    expect(block('.status')).toContain('var(--type-body-compact) * var(--line-height-body)')
+    expect(block('.step > .status--save:empty')).toContain('min-height: 0')
+    expect(block('.segmented > legend')).toContain('padding: 0')
+    expect(block('.radio input')).toContain('margin: 0')
+    expect(block('.radio--described input')).toContain('margin-top: var(--spacing-01)')
+    expect(block('.select')).toContain('line-height: var(--line-height-body)')
+    expect(block('.choice')).toContain('min-width: 0')
+    expect(block('.dialog')).toContain('max-width: calc(100vw - 2 * var(--spacing-05))')
+    expect(readFileSync(new URL('../index.html', import.meta.url), 'utf8')).toContain('class="step-intro" id="errors-intro"')
+  })
+  it('groups the identical rules and removes the unused result link', () => {
+    expect(rules).not.toContain('.result-link')
+    expect(rules).toContain('.footer-contact-link,\n.notification-link {')
+    expect(rules).toContain('.closing-result,\n.trim-result {')
   })
 })

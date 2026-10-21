@@ -170,3 +170,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-19 — VH-126 — The cards' type scale, measured: list-style fields, a shared last line, limits in columns
+
+**Decision:** the cards' type scale is `src/config/cards.ts`, measured in Chrome by `spike-cards.html`: a floor of 56 px per 1080 lines of the shorter side, Submission's fields run in as list items at 1.25, its running time and card date sharing a line, and typed fields capped in columns — because then every card fits 16:9, 16:10, 4:3 and 9:16 in all three languages at every limit.
+
+**Rationale:** Measured in Chrome on 2026-10-19. Sizes: General's heading Lora Bold 104 to 56 in three lines (five in portrait), its subhead Arial 64 to 56 at 1.5; Submission's heading Lora Bold 80 to 56 in two (four), its fields a run-in label and value at 56, 0.375 em apart; a wide character counts two columns; the closing's words Arial Bold at 100 per 1080 of the asset, which a letterboxed portrait output shows at 56. The first run, fields at WCAG 1.4.8's 1.5 with 0.75 em between them, overflowed 16:9 in Malay and refused every 4:3 case. 1.4.8 binds blocks of text, more than one sentence; a field is not one, so it sets at 1.25 and the gap groups it, while General's subhead, which can be a sentence, keeps 1.5. Sharing the last field saved the row that 16:10 (10 px over) and 4:3 (80 px over) needed. Limits in columns: General 100 and 120, assignment 80, module 60, convenor 40, proposed for VH-127 and VH-128 to adopt; the renderer still refuses at its field what measures too long. Tightest fit: 4:3 Chinese, 1 px to spare with the heading at 60; the most room, 16:9 Chinese, 163. A 4K frame breaks exactly as 1080 does. The closing's words measure 795 px (English), 600 (Chinese) and 1,256 (Malay) of a 1,680 px safe width, their foot at 854 above the 961 line, centred under the settled logo; white and Nottingham Blue 15.41:1 by calculation. The labels are provisional until VH-128 settles their English; Chinese line breaking that keeps punctuation off a line's start is VH-127's renderer's.
+
+**Supersedes:** none
+
+**Deferred:** none

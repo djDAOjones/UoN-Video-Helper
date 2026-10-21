@@ -32,7 +32,6 @@
 
 ### Phase 4 — what the design pass found: two page defects, the token boundary, the cards
 
-- [ ] VH-145 — The page's shape from the tokens: the browser's defaults set, the weights named, the twin rules folded — since 2026-10-21 — (from: VH-143, 2026-10-21)
 - [ ] VH-146 — The Submission card keeps its date and its note whole — since 2026-10-21 — (from: VH-143, 2026-10-21)
 
 ### Standing — maintainer-owned, never band-gated
