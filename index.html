@@ -87,8 +87,9 @@
            locked. The line beneath is read on demand, not announced. -->
       <fieldset class="segmented video-language" id="video-language" aria-describedby="video-language-helper video-next">
         <legend class="label" data-i18n="videoLanguage.label">Video language</legend>
-        <p class="helper" id="video-language-helper" data-i18n="videoLanguage.helper">
-          Words the app adds to your video are in this language. What you type is kept as typed.
+        <p class="helper" id="video-language-helper">
+          <span class="helper-line" data-i18n="videoLanguage.helper">Words the app adds to your video are in this language.</span>
+          <span class="helper-line" data-i18n="videoLanguage.typed">What you type is kept as typed.</span>
         </p>
         <!-- VH-140, 2026-10-21. Under both switches, and tied to both: only
              while a video is being made or a finished one is on screen,
@@ -156,7 +157,7 @@
         <p class="step-intro" data-i18n="trim.intro">
           Optional. Cut unwanted material from the start or the end. Left alone, the whole video
           is kept. The preview plays your original as it is now: the sound is levelled and the
-          closing added when the video is made.
+          closing graphics added when the video is made.
         </p>
         <video class="trim-preview" id="trim-preview" controls preload="metadata" playsinline></video>
         <p class="helper" id="trim-preview-note" data-i18n="trim.noPreview" hidden>
@@ -297,8 +298,9 @@
                 spellcheck="false"
                 aria-describedby="title-card-date-helper title-card-date-error"
               />
-              <p class="helper" id="title-card-date-helper" data-i18n="titleCard.dateHelper">
-                Filled with today’s date in the video language. You can change it or clear it.
+              <p class="helper" id="title-card-date-helper">
+                <span class="helper-line" data-i18n="titleCard.dateHelper">Filled with today’s date in the video language.</span>
+                <span class="helper-line" data-i18n="titleCard.dateHelperNext">You can change it or clear it.</span>
               </p>
               <div aria-live="polite">
                 <p class="field-error" id="title-card-date-error" hidden></p>
@@ -408,17 +410,17 @@
           <div class="control-grid">
             <div class="field">
               <label class="label" for="closing-type" data-i18n="closing.typeLabel">Animation type</label>
-              <select class="select" id="closing-type" aria-describedby="closing-result">
+              <span class="select-wrap"><select class="select" id="closing-type" aria-describedby="closing-result">
                 <option value="cut" data-i18n="closing.types.cut" selected>Cut</option>
                 <option value="fade" data-i18n="closing.types.fade">Fade</option>
                 <option value="slide" data-i18n="closing.types.slide">Slide</option>
                 <option value="none" data-i18n="closing.types.none">None</option>
-              </select>
+              </select></span>
             </div>
             <div class="field field--wide">
               <label class="label" for="closing-onset" data-i18n="closing.onsetLabel">Animation onset</label>
               <div class="control-with-help">
-                <select
+                <span class="select-wrap"><select
                   class="select"
                   id="closing-onset"
                   aria-describedby="closing-onset-reason closing-result"
@@ -426,7 +428,7 @@
                 >
                   <option value="existing" data-i18n="closing.onsets.existing" selected>Over existing</option>
                   <option value="freeze" data-i18n="closing.onsets.freeze">Over generated freeze frame</option>
-                </select>
+                </select></span>
                 <!-- A toggletip, not a tooltip: a button that discloses text,
                      by click, Enter or Space, never by hover alone. -->
                 <button
@@ -448,12 +450,12 @@
                      of the sentence after it (VH-105). -->
                 <div class="toggletip" id="onset-help" hidden>
                   <p>
-                    <strong data-i18n="closing.helpExistingTerm">Over existing</strong> <span data-i18n="closing.helpExistingText">— the closing plays over the last second of
-                    your video. It covers that second as it builds.</span>
+                    <strong data-i18n="closing.helpExistingTerm">Over existing</strong> <span data-i18n="closing.helpExistingText">— the closing graphics play over the last second of
+                    your video. They cover that second as they build.</span>
                   </p>
                   <p>
                     <strong data-i18n="closing.helpFreezeTerm">Over generated freeze frame</strong> <span data-i18n="closing.helpFreezeText">— your last frame is held for one
-                    extra second. The closing plays over that, so nothing in your video is
+                    extra second. The closing graphics play over that, so nothing in your video is
                     covered.</span>
                   </p>
                 </div>
@@ -522,7 +524,7 @@
             <input type="radio" name="preset" value="smaller" />
             <span class="radio-label">
               <span data-i18n="preset.labels.smaller">Smaller / reduced</span>
-              <span class="radio-detail" data-i18n="preset.details.smaller">For messaging or email etc.</span>
+              <span class="radio-detail" data-i18n="preset.details.smaller">For Moodle assignment uploads, messaging, or email etc.</span>
             </span>
           </label>
         </fieldset>
@@ -670,8 +672,7 @@
           </summary>
           <div class="statement-body">
             <p data-i18n="statement.covers">
-              This statement covers UoN Video Helper, the page you are on. Joe Bell runs it at the
-              University of Nottingham.
+              This statement covers UoN Video Helper, the page you are on.
             </p>
             <p data-i18n="statement.aim">
               We want as many people as possible to be able to use this tool. You should be able to:
@@ -770,7 +771,7 @@
           <p class="footer-contacts-intro" data-i18n="footer.contact.intro">For help with this tool:</p>
           <ul class="footer-contacts-list">
             <li>
-              <a class="footer-contact-link" id="contact-creators" data-i18n="footer.contact.creators">Email the creators team</a>
+              <a class="footer-contact-link" id="contact-creators" data-i18n="footer.contact.creators">Creators team on Teams (opens in a new tab)</a>
             </li>
             <li>
               <a class="footer-contact-link" id="contact-learning-content" data-i18n="footer.contact.learningContent">Email the learning content team</a>

@@ -51,6 +51,9 @@ export function visibleStrings(path: string, source: string): string[] {
       .replace(/<!--[\s\S]*?-->/g, '')
       .replace(/<head>[\s\S]*?<\/head>/, '')
       .replace(/<script[\s\S]*?<\/script>/g, '')
+      // These spans are block text in app.css: a radio label and its helper
+      // are separate passages, both still measured (VH-148).
+      .replace(/<span[^>]*class="(?:radio-detail|helper-line)"[^>]*>/g, '\u0000')
       // Inline elements join their surroundings; block ones end a passage.
       // Source line breaks inside a passage are only wrapping.
       .replace(/<\/?(?:span|strong|em|b|i|code|a|abbr)\b[^>]*>/g, '')
@@ -157,6 +160,12 @@ describe('plain language, measured (spec 9.2, VH-114)', () => {
     const table = corpus.find(({ path }) => path === 'src/i18n/en-GB.ts')
     expect(table?.strings.some((text) => text.includes('ends .mp4 or .mov'))).toBe(true)
     expect(visibleStrings('x.ts', "const a = './styles/app.css'; const b = 'video/mp4'")).toEqual([])
+  })
+
+  it('measures a block radio helper separately from its label (VH-148)', () => {
+    expect(visibleStrings('x.html', '<span>Smaller / reduced</span><span class="radio-detail">For Moodle assignment uploads, messaging, or email etc.</span>')).toEqual([
+      'Smaller / reduced', 'For Moodle assignment uploads, messaging, or email etc.',
+    ])
   })
 
   it('keeps prose at a lower-secondary reading level', () => {

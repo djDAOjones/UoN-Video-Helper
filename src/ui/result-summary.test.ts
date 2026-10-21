@@ -47,13 +47,13 @@ describe('jobSummaryText', () => {
       closing: { type: 'fade', onset: 'freeze', colour: 'white', internal: false },
     }
     expect(jobSummaryText(trimmed)).toBe(
-      'Made from Lecture 3.mp4: 2 minutes of 4 minutes 12 seconds, from 0:30.0 to 2:30.0, Smaller / reduced, the white closing fading in over a held last frame.',
+      'Made from Lecture 3.mp4: 2 minutes of 4 minutes 12 seconds, from 0:30.0 to 2:30.0, Smaller / reduced, the white closing graphics fading in over a held last frame.',
     )
   })
 
   it('says when no closing was chosen', () => {
     expect(jobSummaryText({ ...whole, closing: { ...whole.closing, type: 'none' } })).toContain(
-      'no University closing.',
+      'no University closing graphics.',
     )
   })
 
@@ -61,7 +61,7 @@ describe('jobSummaryText', () => {
     expect(keptPartText(null, 61)).toBe('the whole video (1 minute 1 second)')
     expect(
       jobSummaryText({ ...whole, closing: { type: 'slide', onset: 'existing', colour: 'blue', internal: false } }),
-    ).toContain('the blue closing sliding in over the picture.')
+    ).toContain('the blue closing graphics sliding in over the picture.')
   })
 })
 
@@ -82,7 +82,7 @@ describe('jobSummaryText with Internal use only (VH-126)', () => {
 
   it('marks nothing when there is no closing', () => {
     expect(jobSummaryText({ ...whole, closing: { ...marked, type: 'none' } })).toContain(
-      'no University closing.',
+      'no University closing graphics.',
     )
   })
 })
@@ -224,7 +224,7 @@ describe('closingOutcomeText', () => {
 
   it('says when a short source put the closing over a held frame instead (Codex review)', () => {
     expect(closingOutcomeText(fade, { applied: true, mode: 'over-freeze' })).toBe(
-      'Your video is shorter than the fade animation. The blue closing fades in over a held last frame instead of over the picture.',
+      'Your video is shorter than the fade animation. The blue closing graphics fade in over a held last frame instead of over the picture.',
     )
     // The other way round cannot happen today, but a mode that differs is never silent.
     expect(closingOutcomeText({ ...fade, onset: 'freeze' }, { applied: true, mode: 'over-picture' })).toContain(
@@ -273,7 +273,7 @@ describe('a file that ends early, in the record (VH-139)', () => {
 
   it('says where both stop, once when it is the same second, and that the closing follows a held picture', () => {
     expect(endedEarlyText(audited, true)).toBe(
-      'The file you chose ends early: its picture and sound stop at 0:20 of 0:30. From there until the closing, the video holds its last picture. If you have a complete copy, create the video again from that one.',
+      'The file you chose ends early: its picture and sound stop at 0:20 of 0:30. From there until the closing graphics, the video holds its last picture. If you have a complete copy, create the video again from that one.',
     )
   })
 
@@ -308,7 +308,7 @@ describe('a file that ends early, in the record (VH-139)', () => {
   it('is said in Chinese and Malay, every time filled', () => {
     setLanguage('zh-Hans')
     expect(endedEarlyText(audited, true)).toBe(
-      '您选择的文件提前结束：画面和声音在0:20处停止，而全长应为0:30。从那里到结尾，视频会一直停留在最后一帧画面。如果您有完整的副本，请用它重新制作视频。',
+      '您选择的文件提前结束：画面和声音在0:20处停止，而全长应为0:30。从那里到结尾图形，视频会一直停留在最后一帧画面。如果您有完整的副本，请用它重新制作视频。',
     )
     setLanguage('ms-MY')
     expect(endedEarlyText(audited, false)).toBe(

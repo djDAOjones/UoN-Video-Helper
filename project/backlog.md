@@ -20,8 +20,6 @@
 
 ### Band 6 — review, then translate
 
-- [!] VH-124 — The page, made excellent — since 2026-10-01 — blocked: the owner's sign-off
-- [~] VH-148 — The owner's sign-off changes: words, the switch headings, the read line, the trim's cut parts, the select's chevron, the footer's help — since 2026-10-21 — (from: VH-124, 2026-10-21)
 - [!] VH-113 — The phone path — since 2026-10-01 — blocked: the owner's own work — a canon [maintainer] item
 
 ### Band 7 — measured, not yet fixed — CLOSED 2026-10-20
@@ -43,7 +41,7 @@
 
 ### Standing — maintainer-owned, never band-gated
 
-- [!] VH-137 — The accessibility statement's review, due 2026-11-18 — since 2026-10-20 — blocked: the owner's review, the further tests chosen and the two teams' addresses — (from: VH-130, 2026-10-18)
+- [!] VH-137 — The accessibility statement's review, due 2026-11-18 — since 2026-10-20 — blocked: the owner's review and the further tests chosen — (from: VH-130, 2026-10-18)
 - [!] VH-M2 — Measure the device envelope — since 2026-08-24 — blocked: the owner's own work — a canon [maintainer] item
 - [!] VH-M4 — Watch staff use it — since 2026-10-01 — blocked: the owner's own work — a canon [maintainer] item
 - [!] VH-14 — Deployment — since 2026-08-24 — blocked: the owner's own work — a canon [maintainer] item

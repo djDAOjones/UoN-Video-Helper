@@ -72,10 +72,10 @@ describe('remembering the side', () => {
 describe('the line under the switch', () => {
   it('says what each side means for the closing, in English', () => {
     expect(videoKindResultText('staff')).toBe(
-      'You choose the closing, and whether it says “Internal use only”.',
+      'You choose the closing graphics, and whether they say “Internal use only”.',
     )
     expect(videoKindResultText('submission')).toBe(
-      'If the video has a closing, it says “Internal use only”.',
+      'If the video has closing graphics, they say “Internal use only”.',
     )
   })
 

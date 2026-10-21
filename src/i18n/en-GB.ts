@@ -91,7 +91,7 @@ export const enGB = {
     pending: 'This app is designed and built for Chrome, other browsers may not work.',
     notPassed:
       'This app is designed and built for Chrome, and this browser has not passed all of its checks. The system check at the foot of the page says what is missing.',
-    passed: 'This app is designed and built for Chrome, and this browser has passed the checks for it.',
+    passed: 'This app is designed and built for Chrome, and this browser has passed the checks for it to run.',
   },
 
   /** The switch above the six steps (VH-131). */
@@ -101,8 +101,8 @@ export const enGB = {
     options: { staff: 'Staff video', submission: 'Student submission' },
     /** The line under the switch: what the side chosen means for the closing. */
     result: {
-      staff: 'You choose the closing, and whether it says “{words}”.',
-      submission: 'If the video has a closing, it says “{words}”.',
+      staff: 'You choose the closing graphics, and whether they say “{words}”.',
+      submission: 'If the video has closing graphics, they say “{words}”.',
     },
   },
 
@@ -111,7 +111,8 @@ export const enGB = {
     /** Its visible label, which is also its accessible name. */
     label: 'Video language',
     /** The line under it: what the choice changes, and so what it does not. */
-    helper: 'Words the app adds to your video are in this language. What you type is kept as typed.',
+    helper: 'Words the app adds to your video are in this language.',
+    typed: 'What you type is kept as typed.',
     /**
      * Under both switches while a video is being made or a finished one is on
      * screen (VH-140): neither is locked, and a change is not for that video.
@@ -146,10 +147,10 @@ export const enGB = {
   },
 
   source: {
-    /** "Video read." then the facts, joined by `meta.separators.list`. */
-    readSummary: 'Video read. {facts}.',
+    /** The read outcome; no sound is added separately, emphasised on screen (VH-148). */
+    readSummary: 'Video read.',
     variableFrameRate: 'variable frame rate',
-    noSound: 'no sound',
+    noSound: 'No sound.',
     properties: 'Video properties',
     lossesTitle: 'Not carried into the new file',
     rows: {
@@ -199,7 +200,7 @@ export const enGB = {
 
   trim: {
     intro:
-      'Optional. Cut unwanted material from the start or the end. Left alone, the whole video is kept. The preview plays your original as it is now: the sound is levelled and the closing added when the video is made.',
+      'Optional. Cut unwanted material from the start or the end. Left alone, the whole video is kept. The preview plays your original as it is now: the sound is levelled and the closing graphics added when the video is made.',
     noPreview: 'A preview is not available for this file. You can still set the times.',
     start: 'Start',
     end: 'End',
@@ -243,11 +244,13 @@ export const enGB = {
     department: 'Department',
     authors: 'Authors',
     date: 'Date',
-    dateHelper: 'Filled with today’s date in the video language. You can change it or clear it.',
+    dateHelper: 'Filled with today’s date in the video language.',
+    dateHelperNext: 'You can change it or clear it.',
     /** Why the box is ticked and locked, naming the side of the switch that locks it (VH-128). */
     forSubmission: 'A student submission always has a title card.',
     /** Under the box while the staff card's fields show: what a card needs, before Create says it (VH-140). */
-    fieldsRule: 'Any one field is enough to make a card. The date is filled in for you.',
+    fieldsRule: 'Any one field is enough to make a card.',
+    fieldsRuleNext: 'The date is filled in for you.',
     /** Beside a field whose typing reached its limit and was cut there. */
     full: 'This field is full, so the rest was not added.',
     /** Beside the field the card cannot fit, even at its smallest size. */
@@ -268,7 +271,8 @@ export const enGB = {
       ids: 'Student ID numbers',
       /** {digits} and {max} come from `config/cards.ts`, so the words and the check cannot part (VH-140, V-29). */
       idsHelper:
-        'Each student ID (identity) number is {digits} digits. Type up to {max}, with spaces, commas or new lines between them. Do not add names.',
+        'Each student ID (identity) number is {digits} digits.',
+    idsHelperNext: 'Type up to {max}, with spaces, commas or new lines between them. Do not add names.',
       /** Under the fields: what the app adds to the card itself, the running time as a clock time. */
       filled:
         'The card also shows the running time, {running}, and today’s date, marked as the date the card was made, not the submission date.',
@@ -304,10 +308,10 @@ export const enGB = {
     helpLabel: 'About animation onset',
     helpExistingTerm: 'Over existing',
     helpExistingText:
-      '— the closing plays over the last second of your video. It covers that second as it builds.',
+      '— the closing graphics play over the last second of your video. They cover that second as they build.',
     helpFreezeTerm: 'Over generated freeze frame',
     helpFreezeText:
-      '— your last frame is held for one extra second. The closing plays over that, so nothing in your video is covered.',
+      '— your last frame is held for one extra second. The closing graphics play over that, so nothing in your video is covered.',
     colourLabel: 'Colour',
     colours: { blue: 'Blue', white: 'White' },
     /** The checkbox: the same closing, with the words below drawn under the logo (VH-126). */
@@ -323,7 +327,7 @@ export const enGB = {
     /** Why "Internal use only" is locked on, naming the side of the switch that locks it (VH-131). */
     internalForSubmission: 'Always on for a student submission.',
     result: {
-      none: 'No University closing will be added.',
+      none: 'No University closing graphics will be added.',
       adds: { one: 'Adds {count} second.', other: 'Adds {count} seconds.' },
       /** Follows the closing's sentence when Internal use only is on. */
       internal: 'The card says “{words}” under the logo.',
@@ -333,22 +337,22 @@ export const enGB = {
       },
       overFreeze: {
         blue: {
-          fade: 'Your last frame is held while the blue closing fades in, so nothing is covered. {adds}',
-          slide: 'Your last frame is held while the blue closing slides in, so nothing is covered. {adds}',
+          fade: 'Your last frame is held while the blue closing graphics fade in, so nothing is covered. {adds}',
+          slide: 'Your last frame is held while the blue closing graphics slide in, so nothing is covered. {adds}',
         },
         white: {
-          fade: 'Your last frame is held while the white closing fades in, so nothing is covered. {adds}',
-          slide: 'Your last frame is held while the white closing slides in, so nothing is covered. {adds}',
+          fade: 'Your last frame is held while the white closing graphics fade in, so nothing is covered. {adds}',
+          slide: 'Your last frame is held while the white closing graphics slide in, so nothing is covered. {adds}',
         },
       },
       overPicture: {
         blue: {
-          fade: 'The blue closing fades in over your last second of video, covering it as it builds. {adds}',
-          slide: 'The blue closing slides in over your last second of video, covering it as it builds. {adds}',
+          fade: 'The blue closing graphics fade in over your last second of video, covering it as they build. {adds}',
+          slide: 'The blue closing graphics slide in over your last second of video, covering it as they build. {adds}',
         },
         white: {
-          fade: 'The white closing fades in over your last second of video, covering it as it builds. {adds}',
-          slide: 'The white closing slides in over your last second of video, covering it as it builds. {adds}',
+          fade: 'The white closing graphics fade in over your last second of video, covering it as they build. {adds}',
+          slide: 'The white closing graphics slide in over your last second of video, covering it as they build. {adds}',
         },
       },
     },
@@ -358,7 +362,7 @@ export const enGB = {
     legend: 'File size / quality',
     /** The English names are the config's (`PRESETS[id].label`), so a diagnostics line and the screen agree; `tables.test.ts` holds them equal. */
     labels: { best: 'Larger / better', smaller: 'Smaller / reduced' },
-    details: { best: 'For EchoVideo or YouTube etc.', smaller: 'For messaging or email etc.' },
+    details: { best: 'For EchoVideo or YouTube etc.', smaller: 'For Moodle assignment uploads, messaging, or email etc.' },
   },
 
   create: {
@@ -419,25 +423,25 @@ export const enGB = {
     keptWhole: 'the whole video ({duration})',
     /** "2 minutes of 4 minutes, 12 seconds, from 0:30.0 to 2:30.0". */
     keptPart: '{kept} of {duration}, from {from} to {to}',
-    closingNone: 'no University closing',
+    closingNone: 'no University closing graphics',
     /** "a cut to the blue closing card, marked “Internal use only”". */
     closingInternal: '{closing}, marked “{words}”',
     closingCut: { blue: 'a cut to the blue closing card', white: 'a cut to the white closing card' },
     closingOverFreeze: {
       blue: {
-        fade: 'the blue closing fading in over a held last frame',
-        slide: 'the blue closing sliding in over a held last frame',
+        fade: 'the blue closing graphics fading in over a held last frame',
+        slide: 'the blue closing graphics sliding in over a held last frame',
       },
       white: {
-        fade: 'the white closing fading in over a held last frame',
-        slide: 'the white closing sliding in over a held last frame',
+        fade: 'the white closing graphics fading in over a held last frame',
+        slide: 'the white closing graphics sliding in over a held last frame',
       },
     },
     closingOverPicture: {
-      blue: { fade: 'the blue closing fading in over the picture', slide: 'the blue closing sliding in over the picture' },
+      blue: { fade: 'the blue closing graphics fading in over the picture', slide: 'the blue closing graphics sliding in over the picture' },
       white: {
-        fade: 'the white closing fading in over the picture',
-        slide: 'the white closing sliding in over the picture',
+        fade: 'the white closing graphics fading in over the picture',
+        slide: 'the white closing graphics sliding in over the picture',
       },
     },
     /** The one-line record: "Made from NAME: PART, OUTPUT, CLOSING." The name is the user's own. */
@@ -456,7 +460,7 @@ export const enGB = {
      */
     videoLanguage: 'Video language: {language}.',
     notLoaded:
-      'The closing could not be loaded, so it is not in this video. Everything else was applied as asked.',
+      'The closing graphics could not be loaded, so they are not in this video. Everything else was applied as asked.',
     /**
      * Beside the record when the file stopped before its index said (VH-139).
      * {stops}, {picture}, {sound} and {end} are times, like "0:20".
@@ -468,7 +472,7 @@ export const enGB = {
       together: 'The file you chose ends early: its picture and sound stop at {stops} of {end}.',
       both: 'The file you chose ends early: its picture stops at {picture} and its sound at {sound}, of {end}.',
       /** Follows when the picture stopped and a closing follows it. */
-      held: 'From there until the closing, the video holds its last picture.',
+      held: 'From there until the closing graphics, the video holds its last picture.',
       next: 'If you have a complete copy, create the video again from that one.',
     },
     fellBackToCut: {
@@ -485,24 +489,24 @@ export const enGB = {
     },
     fellBackToFreeze: {
       blue: {
-        fade: 'Your video is shorter than the fade animation. The blue closing fades in over a held last frame instead of over the picture.',
+        fade: 'Your video is shorter than the fade animation. The blue closing graphics fade in over a held last frame instead of over the picture.',
         slide:
-          'Your video is shorter than the slide animation. The blue closing slides in over a held last frame instead of over the picture.',
+          'Your video is shorter than the slide animation. The blue closing graphics slide in over a held last frame instead of over the picture.',
       },
       white: {
-        fade: 'Your video is shorter than the fade animation. The white closing fades in over a held last frame instead of over the picture.',
+        fade: 'Your video is shorter than the fade animation. The white closing graphics fade in over a held last frame instead of over the picture.',
         slide:
-          'Your video is shorter than the slide animation. The white closing slides in over a held last frame instead of over the picture.',
+          'Your video is shorter than the slide animation. The white closing graphics slide in over a held last frame instead of over the picture.',
       },
     },
     fellBackToPicture: {
       blue: {
-        fade: 'The blue closing fades in over the picture, not over a held last frame as chosen.',
-        slide: 'The blue closing slides in over the picture, not over a held last frame as chosen.',
+        fade: 'The blue closing graphics fade in over the picture, not over a held last frame as chosen.',
+        slide: 'The blue closing graphics slide in over the picture, not over a held last frame as chosen.',
       },
       white: {
-        fade: 'The white closing fades in over the picture, not over a held last frame as chosen.',
-        slide: 'The white closing slides in over the picture, not over a held last frame as chosen.',
+        fade: 'The white closing graphics fade in over the picture, not over a held last frame as chosen.',
+        slide: 'The white closing graphics slide in over the picture, not over a held last frame as chosen.',
       },
     },
   },
@@ -821,7 +825,7 @@ export const enGB = {
   statement: {
     heading: 'Accessibility statement',
     covers:
-      'This statement covers UoN Video Helper, the page you are on. Joe Bell runs it at the University of Nottingham.',
+      'This statement covers UoN Video Helper, the page you are on.',
     aim: 'We want as many people as possible to be able to use this tool. You should be able to:',
     /** Each completes "You should be able to:". */
     abilities: [
@@ -888,15 +892,15 @@ export const enGB = {
   },
 
   /**
-   * The two teams to write to, at the foot of the page (VH-130): a line that
-   * introduces them, then each team as a link that opens an email to it, its
-   * address from `config/feedback.ts`. Each link's words say where it goes
+   * The two help routes at the foot of the page (VH-148): the Creators team
+   * on Teams in a new tab, and the learning content team by email, both
+   * from `config/feedback.ts`. Each link's words say where it goes
    * on their own (WCAG 2.4.9), so neither leans on the line above.
    */
   footer: {
     contact: {
       intro: 'For help with this tool:',
-      creators: 'Email the creators team',
+      creators: 'Creators team on Teams (opens in a new tab)',
       learningContent: 'Email the learning content team',
     },
   },

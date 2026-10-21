@@ -7,7 +7,7 @@
 import { describe, expect, it } from 'vitest'
 
 import type { SourceReport } from '../media/inspect'
-import { buildLosses, buildRows } from './source-panel'
+import { buildLosses, buildRows, summarise } from './source-panel'
 
 /** The ISOBMFF handler scan; separate from Mediabunny's own track counts. */
 function scan(overrides: Partial<SourceReport['tracks']> = {}): SourceReport['tracks'] {
@@ -269,5 +269,18 @@ describe('losses against facts (VH-87)', () => {
       'This file has 1 more video track',
       'Found 2 caption tracks',
     ])
+  })
+})
+
+
+describe('read outcome (VH-148)', () => {
+  it('happy path: reports only the read when sound exists', () => {
+    expect(summarise(report())).toBe('Video read.')
+  })
+  it('regression: no sound remains in the spoken summary and the facts remain in properties', () => {
+    const silent = report({ audio: null, audioTrackCount: 0 })
+    expect(summarise(silent)).toBe('Video read. No sound.')
+    expect(rowFor(silent, 'Duration')?.detail).toBe('2 minutes 10 seconds')
+    expect(rowFor(silent, 'Resolution')?.detail).toBe('852 × 480')
   })
 })

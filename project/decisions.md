@@ -17,6 +17,26 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-21 — VH-148 — The owner’s sign-off changes, including the footer
+
+**Decision:** the owner’s thirteen handoff clauses ship: clearer group headings, closing graphics named throughout, separate helper facts, a short read outcome with bold no-sound, hatched cut regions, inset select arrows, Moodle in Smaller’s helper, the shorter statement, Teams and the team email, dashed disabled buttons and 16 px footer headings — because these are the owner’s conditions for VH-124’s sign-off.
+
+**Rationale:** The native selects keep their menus and keyboard behaviour inside an arrow wrapper; `--type-weight-heading` belongs to Carbon’s type roles. The trim uses existing brand surface/divider colours against the kept interactive fill, with contrast pinned at 3:1; forced colours use a solid CanvasText kept section because Highlight is translucent in Chrome. Helper facts are separate spans, preserving language-of-parts markup. The read live region keeps both sentences, with No sound in `strong`; properties keep their figures. Footer labels have no stop, the explicit VH-124 label exception. Feedback and accessibility contacts retain the owner’s address. All changed keys are listed in VH-148’s notes; translations are agent drafts through the sheet. Conservative implementation choices taken gateless under the handoff. Standards: Carbon productive type, native select and tokens; Nielsen 1, 2, 4 and 8; WCAG 1.3.1, 1.4.11, 2.4.9, 2.5.5 and 4.1.3; house conventions, named config destinations and regression tests. Chrome’s 18 combinations passed; human screen-reader and Windows-theme checks remain on the wish line. The existing missing-sample checker warning is covered by VH-139’s corpus wish line. VH-137’s footer-address debt is paid. Retired the wish line “The owner's walk-through of VH-124 judges three readings from the design pass”: all three accepted recommendations ship here.
+
+**Supersedes:** none
+
+**Deferred:** none
+
+## 2026-10-21 — VH-124 — The owner’s walk-through is closed by VH-148
+
+**Decision:** VH-124 closes with VH-148 — the owner signed off the page subject to the changes now implemented, with the three design-pass recommendations accepted.
+
+**Rationale:** The owner’s words are in VH-148’s notes and its handoff; the original state audit remains in reviews/2026-10-01/vh-124. No further signature is inferred. The wider human acceptance walks stay with VH-M4 and the existing wish lines.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-21 — VH-148 — Codex builds while Claude usage is paused: VH-148, then Phase 3 and Phase 4, each closed by the contract
 
 **Decision:** Codex (`codex exec`, gpt-6-astra) is the writer in `.claude/worktrees/overnight` for VH-148 and then the run's approved items, VH-141, VH-142, Phase 3's close, VH-144, VH-145 and VH-146, each built, checked, closed and pushed by the contract, one at a time; Claude Code writes nothing there meanwhile; the writing review (`reviews/2026-10-21/writing-review-2026-10-21.md`) waits for the owner and is not built — because the owner said in chat on 2026-10-21 "we need to pause claude model usage due to nearly running out for the week. you can continue to blitz chatgpt as lots of usage left".
@@ -454,36 +474,6 @@
 **Decision:** a self-certified accessibility statement, in the GOV.UK model's structure and the page's plain words, translated in full into Chinese and Malay, sits in the footer as a disclosure that `#accessibility-statement` opens, and says the tool is partially compliant with WCAG 2.2 AA because only automated checks are done; the footer's "Email the creators team" and "Email the learning content team" both go to the owner's address until the teams' own are given — because the owner asked for both on 2026-10-18 and said to go on the information the record has.
 
 **Rationale:** the owner's answers on 2026-10-18: self-certified, no University template; the contact and reviewer is the owner's address; review in one month; "all on one page is ok"; the whole statement translated; the WAVE check (10/10) run that day; "Joe Bell runs it at the University of Nottingham" is right; the teams' addresses were not given. Numbered VH-130 because the pushed Band 8 plan (PLAN-1) holds VH-126 to VH-129. The statement sits after the System check, so the two disclosures read as one group, with Send feedback beside the version line; its dates live in `src/config/accessibility.ts`, formatted per language by `Intl` in UTC, and its address re-uses `FEEDBACK_ADDRESS`, as do both team addresses in `src/config/feedback.ts`; every link's click goes through `openMailto`. The limitations it names are the record's: Chrome only, the machine translations, the computer's own Chinese font, and spec §9.3's two recorded exceptions (the preview's content, and short forms left unexpanded) — `UI-STANDARDS.md` records none to the AAA target, only status colour taken off the brand palette to keep 7:1. Forty new keys are drafted by the agent in the filled sheet; one English sentence was reworded for the readability gate, which gained meanings for WCAG, AA, AAA, NVDA and WAVE, its designed route for a new short form. Checked in Chrome at 1280 px and 375 px in the three languages; forced colours, the light theme and a screen reader were not. Standards applied: Carbon (the disclosure as the System check's panel), WCAG 2.2 (2.4.9 link purpose, 2.4.10 headings, 2.5.5 targets, 1.4.8 the measure), Nielsen 10 (help findable, short), house conventions (addresses and dates in `src/config/`; named test categories).
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-18 — VH-105 — The language switcher repaints in place, and a translated page says so
-
-**Decision:** the page's language is chosen in segmented native radios at the top of `main`, each option in its own language with its own `lang`, read from this browser's preference before the first paint and repainted in place by one listener, so nothing on the page is lost; Chinese and Malay carry a "Machine translation" note with an email link to `TRANSLATION_FEEDBACK_ADDRESS` whose subject names only the product and the language — because the owner's go-live decision of 2026-10-18 needs the switch built and the machine translation marked.
-
-**Rationale:** built to the item's 2026-10-18 plan, with four changes: the switcher is built in `src/ui/language-switcher.ts` and inserted before the heading, because `test/screen-text.test.ts` holds `<main>`'s first child to be the `h1` in the static markup; the `<title>` is set at boot rather than bound; `MACHINE_TRANSLATED` in `src/config/languages.ts` lists the languages that show the note, so a language comes off it once its colleague has checked it; spoken stage announcements are composed again from the same report, so they too follow the language. Every other live region is set to `aria-live="off"` for two animation frames while `language.switched` is said, and focus stays on the radio. `--font-cjk` names the system's Chinese faces and `--measure-cjk` stops Chinese at 40 glyphs. The note's link lifts the leave warning as the feedback email does. The three new keys' Chinese and Malay are drafted by the agent in the filled sheet. Checked in Chrome at 1280 px and 375 px with a sample loaded: the trim and a typed-invalid time with its error, the closing choices, a running job, an unsaved result and its discard question, a feedback draft and a drop refusal all survived each switch; `html[lang]`, the title and `aria-valuetext` followed; a remembered language painted first on reload. Standards applied: Carbon (component first: the content switcher as the page's segmented radios, as the closing colour), WCAG 2.2 (3.1.2 language of parts, 1.4.8's 40-glyph CJK measure, 2.5.5 targets, 4.1.3 status messages), Nielsen 1 and 4, house conventions (the address in `src/config/`; named test categories — happy path, junk, a throwing store, a round trip, no table, one language offered).
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-18 — VH-105 — Chinese and Malay go live as machine translation, checked on the live page
-
-**Decision:** zh-Hans and ms-MY are offered in production as soon as the switcher is built, each marked on the page as machine translation with an email link for better wording, and a native-speaking colleague at each campus checks the live page instead of signing off the sheet first; the item's criterion "each language is signed off by its reviewer" becomes "each language is marked as machine translation and open to its campus colleague's check on the live page" — because the owner chose it in chat on 2026-10-18 ("go live, colleague check live app").
-
-**Rationale:** the earlier route held both languages in development until a reviewer signed off `VH-105-strings-filled.csv`, because every push to `main` publishes the pilot. The owner weighed a page in machine Chinese and Malay against no page at all for those colleagues and chose to publish, with the mark saying so, so the check happens where the words are read. `LANGUAGES_OFFERED` in `src/config/languages.ts` lists all three languages in development and production alike. Corrections still come back by key through the filled sheet and `scripts/strings-table.mjs`; the repairing agent's doubts stay in the item file for the colleagues. The translation feedback goes to the owner's own address, kept in `src/config/`. Only the superseded entry's clause "both languages stay development-only" is replaced; its sheet-and-generator route stands.
-
-**Supersedes:** 2026-10-18 — VH-105 — The translated tables are generated from the filled sheet
-
-**Deferred:** none
-
-## 2026-10-18 — VH-105 — The translated tables are generated from the filled sheet
-
-**Decision:** the zh-Hans and ms-MY tables are written from one filled sheet by `scripts/strings-table.mjs`, never by hand, and a test holds each table to that sheet; the owner's Google Translate pass is kept verbatim as `reviews/2026-10-18/VH-105-strings-returned.csv`, and the agent's 224 repairs are applied in `VH-105-strings-filled.csv`, each with what it was, in a "changed by the agent" column; both languages stay development-only — because a reviewer's corrections come back the same way, by key, and a hand-edited table would drift from the sheet the reviewers see.
-
-**Rationale:** the returned workbook (`UoN Video Helper Translate v01.xlsx`, read with Python's `zipfile`) held 746 `GOOGLETRANSLATE` formulas with their values cached: every cell filled, keys and English unchanged. 55 cells broke a placeholder — the name translated (`{事实}`, `{tambah}`) or the placeholder dropped (`{count} problems` → 问题数量). A review agent read every row and repaired, besides those, 120 wrong senses that would mislead (the Chinese said the tool uploads the video, "no closing" read "the University will not close", a processing stage was a theatre stage, the Malay said an unsaved video was already saved), 23 rows that quote another row's label, 12 count forms, 12 punctuation faults and 2 cells left in English; style was not polished, and its doubts are in the item. Each table's `meta` is set in `SHEET_LANGUAGES`: Chinese joins facts with ，, items with ； and sentences with no gap; Malay as English. Standards applied: house conventions (no new dependency — Prettier, already a dev dependency, formats the output; named test categories — a round trip, a blank row refused, a missing column, the committed tables against the committed sheet).
 
 **Supersedes:** none
 

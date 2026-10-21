@@ -7,6 +7,11 @@
      items the canon record shipped before the migration, in v3's form;
      their why is in the frozen canon decision log (history.md). -->
 
+## Owner’s sign-off
+
+- VH-148 — the owner’s words, switch headings, helpers, read outcome, hatched cut regions, select arrows and footer help ship in all three languages; Chrome checked at two widths in light, dark and forced colours (2026-10-21) — see decisions
+- VH-124 — the owner’s walk-through and accepted design recommendations are complete through VH-148; the original state audit stands (2026-10-21) — see decisions
+
 ## Phase 3 — what the second audit found
 
 - VH-140 — the record names the card and a video language not the page's; while a video is made or shown, a line says a switch is for the next one, and the progress names the job's choices; Step 3 says its rule first; checked in Chrome, three languages, two widths (2026-10-21) — see decisions

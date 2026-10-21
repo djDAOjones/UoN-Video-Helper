@@ -387,6 +387,7 @@ a {
   background: var(--layer-02);
   color: var(--text-secondary);
   border-color: var(--border-subtle);
+  border-style: dashed;
   cursor: not-allowed;
 }
 
@@ -874,6 +875,7 @@ details[open] > .disclosure-summary::before {
 .statement > .disclosure-summary {
   margin: calc(-1 * var(--spacing-06));
   padding: var(--spacing-04) var(--spacing-06);
+  font-size: var(--type-heading-compact);
   font-weight: 600;
 }
 
@@ -970,8 +972,28 @@ details[open] > .disclosure-summary::before {
   flex: 1.6 1 var(--field-wide-min-width);
 }
 
-/* Carbon's Select is a native <select>; so is this. */
+/* The native select retains its keyboard and menu behaviour; its arrow has a token-sized inset (VH-148). */
+.select-wrap {
+  display: block;
+  position: relative;
+  width: 100%;
+}
+
+.select-wrap::after {
+  content: '';
+  position: absolute;
+  right: var(--spacing-05);
+  top: 50%;
+  width: var(--spacing-03);
+  height: var(--spacing-03);
+  border-right: var(--border-width-emphasis) solid currentColor;
+  border-bottom: var(--border-width-emphasis) solid currentColor;
+  transform: translateY(-75%) rotate(45deg);
+  pointer-events: none;
+}
+
 .select {
+  appearance: none;
   display: block;
   width: 100%;
   min-height: var(--target-min);
@@ -981,6 +1003,7 @@ details[open] > .disclosure-summary::before {
   color: var(--text-primary);
   font: inherit;
   font-size: var(--type-body-compact);
+  padding-right: var(--spacing-08);
 }
 
 /* Disabled by losing the field's fill and its edge, not by fading the text
@@ -1002,7 +1025,7 @@ details[open] > .disclosure-summary::before {
   gap: var(--spacing-03);
 }
 
-.control-with-help .select {
+.control-with-help .select-wrap {
   flex: 1;
   min-width: 0;
 }
@@ -1117,6 +1140,17 @@ details[open] > .disclosure-summary::before {
  * submission (VH-131), above the steps, is sized the same way, and so is the
  * video's language under it (VH-132).
  */
+.language-switcher > legend,
+.video-kind > legend,
+.video-language > legend {
+  font-size: var(--type-heading-compact);
+  font-weight: var(--type-weight-heading);
+}
+
+.helper-line {
+  display: block;
+}
+
 .language-switcher {
   margin-bottom: var(--spacing-06);
 }
@@ -1270,7 +1304,7 @@ details[open] > .disclosure-summary::before {
   content: '';
   position: absolute;
   top: 50%;
-  height: var(--spacing-02);
+  height: var(--spacing-03);
   transform: translateY(-50%);
 }
 
@@ -1278,7 +1312,8 @@ details[open] > .disclosure-summary::before {
 .range-track::before {
   left: calc(var(--target-min) / 2);
   right: calc(var(--target-min) / 2);
-  background: var(--border-strong);
+  background: repeating-linear-gradient(135deg, var(--layer-01) 0 var(--spacing-02), var(--border-divider) var(--spacing-02) var(--spacing-03));
+  border: var(--border-width) solid var(--border-strong);
 }
 
 .range-fill {
@@ -1525,7 +1560,8 @@ details[open] > .disclosure-summary::before {
   }
 
   .range-track::before {
-    background: CanvasText;
+    background: repeating-linear-gradient(135deg, Canvas 0 var(--spacing-02), CanvasText var(--spacing-02) var(--spacing-03));
+    border-color: CanvasText;
   }
 
   /* The progress bar is painted by backgrounds too, and vanished with them
@@ -1560,7 +1596,7 @@ details[open] > .disclosure-summary::before {
   }
 
   .range-fill {
-    background: Highlight;
+    background: CanvasText;
   }
 
   .range-input::-webkit-slider-thumb {

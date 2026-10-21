@@ -37,9 +37,14 @@ export function closingResultText(
   controls: ClosingControls,
   wordsLanguage: LanguageTag = language(),
 ): string {
+  return closingResultLines(controls, wordsLanguage).join(sentenceGap())
+}
+
+/** Independent facts for the on-screen helper, with the internal-use sentence on its own line (VH-148). */
+export function closingResultLines(controls: ClosingControls, wordsLanguage: LanguageTag = language()): string[] {
   const { closing } = t()
   const { result } = closing
-  if (controls.type === 'none') return result.none
+  if (controls.type === 'none') return [result.none]
 
   // The mode, and so the seconds, come from the same mapping the job uses —
   // the sentence cannot promise a different file from the one that is made.
@@ -54,8 +59,8 @@ export function closingResultText(
         ? result.overFreeze[colour][type]({ adds })
         : result.overPicture[colour][type]({ adds })
   return controls.internal
-    ? `${sentence}${sentenceGap()}${result.internal({ words: closingWords(wordsLanguage) })}`
-    : sentence
+    ? [sentence, result.internal({ words: closingWords(wordsLanguage) })]
+    : [sentence]
 }
 
 /**

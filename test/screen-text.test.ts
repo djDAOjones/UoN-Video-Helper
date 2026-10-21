@@ -17,7 +17,7 @@ import {
   CLOSING_TYPES,
 } from '../src/config/branding'
 import {
-  CREATORS_TEAM_ADDRESS,
+  CREATORS_TEAM_URL,
   FEEDBACK_ADDRESS,
   LEARNING_CONTENT_TEAM_ADDRESS,
 } from '../src/config/feedback'
@@ -297,7 +297,7 @@ describe('the footer\'s team contacts (VH-130)', () => {
       ['contact-creators', enGB.footer.contact.creators],
       ['contact-learning-content', enGB.footer.contact.learningContent],
     ] as const) {
-      expect(footer).toMatch(new RegExp(`<li>\\s*<a class="footer-contact-link" id="${id}">${words}</a>\\s*</li>`))
+      expect(footer).toMatch(new RegExp(`<li>\\s*<a class="footer-contact-link" id="${id}">${words.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}</a>\\s*</li>`))
       expect(footer.indexOf(`id="${id}"`)).toBeGreaterThan(footer.indexOf('id="feedback-open"'))
       expect(footer.indexOf(`id="${id}"`)).toBeLessThan(footer.indexOf('id="version-line"'))
     }
@@ -308,18 +308,19 @@ describe('the footer\'s team contacts (VH-130)', () => {
     // in either file would be a second copy to forget when a team's arrives.
     expect(html).not.toMatch(anAddress)
     expect(mainSource).not.toMatch(anAddress)
-    expect(mainSource).toContain("['#contact-creators', CREATORS_TEAM_ADDRESS]")
-    expect(mainSource).toContain("['#contact-learning-content', LEARNING_CONTENT_TEAM_ADDRESS]")
+    expect(mainSource).toContain('creatorsLink.href = CREATORS_TEAM_URL')
+    expect(mainSource).toContain('learningContentLink.href = `mailto:${LEARNING_CONTENT_TEAM_ADDRESS}`')
   })
 
-  it("is the owner's address for both teams until the owner gives theirs (2026-10-18)", () => {
-    // The record's stopgap, not a rule: when a team's own address arrives,
-    // its line in config changes and this expectation goes with it.
-    expect(CREATORS_TEAM_ADDRESS).toBe(FEEDBACK_ADDRESS)
-    expect(LEARNING_CONTENT_TEAM_ADDRESS).toBe(FEEDBACK_ADDRESS)
-    for (const address of [CREATORS_TEAM_ADDRESS, LEARNING_CONTENT_TEAM_ADDRESS]) {
-      expect(address).toMatch(new RegExp(`^${anAddress.source}$`))
-    }
+  it('uses the owner’s two supplied destinations, leaving feedback at the owner’s address (VH-148)', () => {
+    expect(new URL(CREATORS_TEAM_URL).hostname).toBe('teams.microsoft.com')
+    expect(LEARNING_CONTENT_TEAM_ADDRESS).toBe('UI-Learning-Content@nottingham.ac.uk')
+    expect(FEEDBACK_ADDRESS).toBe('joe.bell@nottingham.ac.uk')
+    expect(mainSource).toContain("creatorsLink.target = '_blank'")
+    expect(mainSource).toContain("creatorsLink.rel = 'noopener noreferrer'")
+    // VH-124’s full-stop rule excludes these two links: a link is a label like a button.
+    expect(enGB.footer.contact.creators).not.toMatch(/\.$/)
+    expect(enGB.footer.contact.learningContent).not.toMatch(/\.$/)
   })
 })
 

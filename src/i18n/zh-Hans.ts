@@ -45,7 +45,7 @@ export const zhHans: Messages = {
     pending: '此应用专为 Chrome 浏览器设计和构建，其他浏览器可能无法正常运行。',
     notPassed:
       '此应用专为 Chrome 浏览器设计和构建，但该浏览器尚未通过所有检查。页面底部的系统检查信息显示了缺失的功能。',
-    passed: '此应用专为 Chrome 浏览器设计和构建，并且该浏览器已通过相关检查。',
+    passed: '本应用专为 Chrome 设计和构建，此浏览器已通过运行本应用所需的检查。',
   },
   videoKind: {
     label: '视频类型',
@@ -54,13 +54,14 @@ export const zhHans: Messages = {
       submission: '学生提交作品',
     },
     result: {
-      staff: '由您选择结尾画面，以及是否显示“{words}”。',
-      submission: '如果视频有结尾画面，结尾画面会显示“{words}”。',
+      staff: '由您选择结尾图形，以及是否显示“{words}”。',
+      submission: '如果视频有结尾图形，图形会显示“{words}”。',
     },
   },
   videoLanguage: {
     label: '视频语言',
-    helper: '应用添加到视频中的文字使用此语言。您输入的内容将按原样保留。',
+    helper: '应用添加到视频中的文字使用此语言。',
+    typed: '您输入的内容将按原样保留。',
     nextVideo: '对视频类型或视频语言的更改将用于您制作的下一个视频。',
   },
   steps: {
@@ -87,9 +88,9 @@ export const zhHans: Messages = {
     },
   },
   source: {
-    readSummary: '视频已读取。{facts}。',
+    readSummary: '视频已读取。',
     variableFrameRate: '可变帧率',
-    noSound: '无声',
+    noSound: '没有声音。',
     properties: '视频属性',
     lossesTitle: '未导入新文件',
     rows: {
@@ -148,7 +149,7 @@ export const zhHans: Messages = {
   },
   trim: {
     intro:
-      '可选。您可以剪掉开头或结尾不需要的内容。如果不进行任何操作，则会保留整个视频。预览会播放您当前的原始视频：视频制作过程中会调整音量并添加结尾。',
+      '可选。您可以剪掉开头或结尾图形不需要的内容。如果不进行任何操作，则会保留整个视频。预览会播放您当前的原始视频：视频制作过程中会调整音量并添加结尾图形。',
     noPreview: '此文件没有预览功能。您仍然可以设置时间。',
     start: '开始',
     end: '结尾',
@@ -189,9 +190,11 @@ export const zhHans: Messages = {
     department: '院系',
     authors: '作者',
     date: '日期',
-    dateHelper: '已填入以视频语言显示的今天日期。您可以更改或清除它。',
+    dateHelper: '已填入以视频语言显示的今天日期。',
+    dateHelperNext: '您可以更改或清除它。',
     forSubmission: '学生提交作品始终带有标题卡。',
-    fieldsRule: '填写任意一个字段即可制作卡片。日期已为您填好。',
+    fieldsRule: '填写任意一个字段即可制作卡片。',
+    fieldsRuleNext: '日期已为您填好。',
     full: '此字段已满，其余内容未添加。',
     refused: {
       field: '内容太长，无法放入卡片。请缩短。',
@@ -205,8 +208,8 @@ export const zhHans: Messages = {
       module: '模块代码和名称',
       convenor: '模块负责人或导师',
       ids: '学号',
-      idsHelper:
-        '每个学号（学生身份编号）为 {digits} 位数字。最多输入 {max} 个，用空格、逗号或换行分隔。请勿填写姓名。',
+      idsHelper: '每个学号（学生身份编号）为 {digits} 位数字。',
+      idsHelperNext: '最多输入 {max} 个，用空格、逗号或换行分隔。请勿填写姓名。',
       filled: '卡片上还会显示时长 {running} 和今天的日期，并注明这是卡片制作日期，而非提交日期。',
       missing: {
         assignment: '请输入作业标题或编号。',
@@ -246,10 +249,10 @@ export const zhHans: Messages = {
     },
     helpLabel: '关于动画起始方式',
     helpExistingTerm: '覆盖现有画面',
-    helpExistingText: '— 结尾画面会在视频的最后一秒上播放，并在逐渐出现的过程中覆盖这一秒。',
+    helpExistingText: '— 结尾图形会在视频的最后一秒上播放，并在逐渐出现的过程中覆盖这一秒。',
     helpFreezeTerm: '覆盖生成的定格画面',
     helpFreezeText:
-      '— 最后一帧画面会额外停留一秒钟。结尾画面会覆盖这一秒，所以视频中的所有内容都不会被遮挡。',
+      '— 最后一帧画面会额外停留一秒钟。结尾图形会覆盖这一秒，所以视频中的所有内容都不会被遮挡。',
     colourLabel: '颜色',
     colours: {
       blue: '蓝色的',
@@ -263,7 +266,7 @@ export const zhHans: Messages = {
     },
     internalForSubmission: '学生提交作品始终启用。',
     result: {
-      none: '不会添加大学结尾画面。',
+      none: '不会添加大学结尾图形。',
       adds: {
         one: '增加 {count} 秒。',
         other: '增加 {count} 秒。',
@@ -275,22 +278,22 @@ export const zhHans: Messages = {
       },
       overFreeze: {
         blue: {
-          fade: '在蓝色结尾淡入时，最后一帧画面会保持静止，所以不会遮挡任何内容。{adds}',
-          slide: '在蓝色结尾画面滑入时，最后一帧画面会被保留，所以不会遮挡任何内容。{adds}',
+          fade: '在蓝色结尾图形淡入时，最后一帧画面会保持静止，所以不会遮挡任何内容。{adds}',
+          slide: '在蓝色结尾图形滑入时，最后一帧画面会被保留，所以不会遮挡任何内容。{adds}',
         },
         white: {
-          fade: '最后一帧画面会在白色结尾淡入时保持静止，所以不会遮挡任何内容。{adds}',
-          slide: '最后一帧画面保持静止，同时白色结尾画面滑入，因此不会遮挡任何内容。{adds}',
+          fade: '最后一帧画面会在白色结尾图形淡入时保持静止，所以不会遮挡任何内容。{adds}',
+          slide: '最后一帧画面保持静止，同时白色结尾图形滑入，因此不会遮挡任何内容。{adds}',
         },
       },
       overPicture: {
         blue: {
-          fade: '蓝色的结尾画面在视频最后一秒逐渐淡入，最终覆盖住视频内容。{adds}',
-          slide: '蓝色的结尾画面在视频最后一秒滑入并覆盖住画面。{adds}',
+          fade: '蓝色的结尾图形在视频最后一秒逐渐淡入，最终覆盖住视频内容。{adds}',
+          slide: '蓝色的结尾图形在视频最后一秒滑入并覆盖住画面。{adds}',
         },
         white: {
-          fade: '白色结尾画面逐渐淡入，覆盖了视频的最后一秒。{adds}',
-          slide: '白色结尾画面在视频最后一秒滑入并覆盖住画面。{adds}',
+          fade: '白色结尾图形逐渐淡入，覆盖了视频的最后一秒。{adds}',
+          slide: '白色结尾图形在视频最后一秒滑入并覆盖住画面。{adds}',
         },
       },
     },
@@ -303,7 +306,7 @@ export const zhHans: Messages = {
     },
     details: {
       best: '例如 EchoVideo 或 YouTube 等。',
-      smaller: '用于短信或电子邮件等。',
+      smaller: '用于上传 Moodle 作业、即时消息或电子邮件等。',
     },
   },
   create: {
@@ -355,7 +358,7 @@ export const zhHans: Messages = {
     lifetimeDelivered: '它会一直显示在这里，直到你开始制作另一个视频或关闭此标签页。',
     keptWhole: '完整视频（{duration}）',
     keptPart: '保留了 {duration} 中的 {kept}，从 {from} 到 {to}',
-    closingNone: '无大学结尾画面',
+    closingNone: '无大学结尾图形',
     closingInternal: '{closing}，并标注“{words}”',
     closingCut: {
       blue: '镜头切换到蓝色结束卡',
@@ -363,22 +366,22 @@ export const zhHans: Messages = {
     },
     closingOverFreeze: {
       blue: {
-        fade: '蓝色的结尾逐渐淡入，覆盖了最后一帧画面',
-        slide: '蓝色的结尾画面滑入到最后一帧画面上方',
+        fade: '蓝色的结尾图形逐渐淡入，覆盖了最后一帧画面',
+        slide: '蓝色的结尾图形滑入到最后一帧画面上方',
       },
       white: {
-        fade: '白色画面逐渐淡入，覆盖了最后一帧',
-        slide: '白色结尾画面滑入到最后一帧上方',
+        fade: '白色结尾图形逐渐淡入，覆盖了最后一帧',
+        slide: '白色结尾图形滑入到最后一帧上方',
       },
     },
     closingOverPicture: {
       blue: {
-        fade: '蓝色的结尾画面逐渐淡入，覆盖画面',
-        slide: '蓝色的结尾画面滑入画面上方',
+        fade: '蓝色的结尾图形逐渐淡入，覆盖画面',
+        slide: '蓝色的结尾图形滑入画面上方',
       },
       white: {
-        fade: '白色结尾画面逐渐淡入画面',
-        slide: '白色结尾画面滑入画面上方',
+        fade: '白色结尾图形逐渐淡入画面',
+        slide: '白色结尾图形滑入画面上方',
       },
     },
     summary: '由 {name} 构成：{part}、{output}、{closing}。',
@@ -388,13 +391,13 @@ export const zhHans: Messages = {
         '由 {name} 构成：{seconds} 秒的学生提交作品卡，随后是{part}、{output}、{closing}。',
     },
     videoLanguage: '视频语言：{language}。',
-    notLoaded: '由于结尾部分无法加载，因此未包含在视频中。其他所有步骤均已按要求完成。',
+    notLoaded: '由于结尾图形无法加载，因此未包含在视频中。其他所有步骤均已按要求完成。',
     endedEarly: {
       picture: '您选择的文件提前结束：画面在{stops}处停止，而全长应为{end}。',
       sound: '您选择的文件提前结束：声音在{stops}处停止，而全长应为{end}。',
       together: '您选择的文件提前结束：画面和声音在{stops}处停止，而全长应为{end}。',
       both: '您选择的文件提前结束：画面在{picture}处停止，声音在{sound}处停止，而全长应为{end}。',
-      held: '从那里到结尾，视频会一直停留在最后一帧画面。',
+      held: '从那里到结尾图形，视频会一直停留在最后一帧画面。',
       next: '如果您有完整的副本，请用它重新制作视频。',
     },
     fellBackToCut: {
@@ -409,22 +412,22 @@ export const zhHans: Messages = {
     },
     fellBackToFreeze: {
       blue: {
-        fade: '您的视频时长短于淡入淡出动画。蓝色结尾效果是在保留的最后一帧上淡入，而不是在画面上淡入。',
-        slide: '您的视频比滑动动画短。蓝色的结尾动画不是覆盖在图片上，而是覆盖在最后一帧画面上。',
+        fade: '您的视频时长短于淡入淡出动画。蓝色结尾图形是在保留的最后一帧上淡入，而不是在画面上淡入。',
+        slide: '您的视频比滑动动画短。蓝色的结尾图形不是覆盖在图片上，而是覆盖在最后一帧画面上。',
       },
       white: {
-        fade: '您的视频时长短于淡入淡出动画。白色结尾淡入淡出效果是在最后一帧画面上叠加，而不是在原画面上叠加。',
-        slide: '您的视频比滑动动画短。白色的结尾动画不是覆盖在图片上，而是覆盖在最后一帧画面上。',
+        fade: '您的视频时长短于淡入淡出动画。白色结尾图形淡入淡出效果是在最后一帧画面上叠加，而不是在原画面上叠加。',
+        slide: '您的视频比滑动动画短。白色的结尾图形不是覆盖在图片上，而是覆盖在最后一帧画面上。',
       },
     },
     fellBackToPicture: {
       blue: {
-        fade: '蓝色的结尾部分会淡入画面，而不是像选择的那样淡入最后一帧画面。',
-        slide: '蓝色的结尾部分会滑入画面上方，而不是像选择的那样滑入保留的最后一帧上方。',
+        fade: '蓝色的结尾图形会淡入画面，而不是像选择的那样淡入最后一帧画面。',
+        slide: '蓝色的结尾图形会滑入画面上方，而不是像选择的那样滑入保留的最后一帧上方。',
       },
       white: {
-        fade: '白色结尾部分会淡入画面，而不是像选择的那样淡入最后一帧画面。',
-        slide: '白色结尾部分会滑入画面上方，而不是像选择的那样滑入保留的最后一帧上方。',
+        fade: '白色结尾图形会淡入画面，而不是像选择的那样淡入最后一帧画面。',
+        slide: '白色结尾图形会滑入画面上方，而不是像选择的那样滑入保留的最后一帧上方。',
       },
     },
   },
@@ -717,8 +720,7 @@ export const zhHans: Messages = {
   },
   statement: {
     heading: '无障碍声明',
-    covers:
-      '本声明适用于 UoN 视频助手，即您当前所在的页面。本页面由诺丁汉大学的 Joe Bell 负责运营。',
+    covers: '本声明适用于您当前所在的 UoN 视频助手页面。',
     aim: '我们希望尽可能多的人都能使用本工具。您应当能够：',
     abilities: [
       '仅使用键盘操作本工具',
@@ -778,7 +780,7 @@ export const zhHans: Messages = {
   footer: {
     contact: {
       intro: '如需有关本工具的帮助：',
-      creators: '发送电子邮件至创作者团队',
+      creators: 'Teams 上的创作团队（在新标签页中打开）',
       learningContent: '发送电子邮件至学习内容团队',
     },
   },

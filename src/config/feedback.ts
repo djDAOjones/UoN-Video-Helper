@@ -13,21 +13,11 @@
  */
 export const FEEDBACK_ADDRESS = 'joe.bell@nottingham.ac.uk'
 
-/**
- * Where the footer's "Email the creators team" link writes to (VH-130). The
- * owner asked for the team's own address in the footer on 2026-10-18 but has
- * not given it yet, so it is the owner's address until then; changing it is
- * this one line.
- */
-export const CREATORS_TEAM_ADDRESS = FEEDBACK_ADDRESS
+/** The owner's Creators team on Teams; a help link, opened in a new tab (VH-148). */
+export const CREATORS_TEAM_URL = 'https://teams.microsoft.com/l/team/19%3A14c7a4d2bf43456fa0c3c52c851fb097%40thread.tacv2/conversations?groupId=bd942b5f-5389-410c-abf2-9ba087360738&tenantId=67bda7ee-fd80-41ef-ac91-358418290a1e'
 
-/**
- * Where the footer's "Email the learning content team" link writes to
- * (VH-130). The owner asked for the team's own address in the footer on
- * 2026-10-18 but has not given it yet, so it is the owner's address until
- * then; changing it is this one line.
- */
-export const LEARNING_CONTENT_TEAM_ADDRESS = FEEDBACK_ADDRESS
+/** The learning content team's own address, supplied by the owner (VH-148). */
+export const LEARNING_CONTENT_TEAM_ADDRESS = 'UI-Learning-Content@nottingham.ac.uk'
 
 /** The email's subject. The build identity is appended, so a report names the code it is about. */
 export const FEEDBACK_SUBJECT = 'UoN Video Helper feedback'

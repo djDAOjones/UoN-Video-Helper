@@ -16,7 +16,7 @@
 import { STUDENT_IDS_MAX, STUDENT_ID_DIGITS, STUDENT_ID_FOLD, STUDENT_ID_PATTERN } from '../config/cards'
 import type { LanguageTag } from '../config/languages'
 import type { VideoKind } from '../config/video-kind'
-import { t, textIn } from '../i18n'
+import { sentenceGap, t, textIn } from '../i18n'
 import {
   STAFF_CARD_FIELDS,
   SUBMISSION_CARD_FIELDS,
@@ -121,7 +121,7 @@ export function titleCardBoxState(kind: VideoKind, staffChecked: boolean): Title
  */
 export function titleCardRuleText(kind: VideoKind, staffChecked: boolean): string | null {
   if (kind === 'submission') return t().titleCard.submission.fieldsRule
-  return staffChecked ? t().titleCard.fieldsRule : null
+  return staffChecked ? [t().titleCard.fieldsRule, t().titleCard.fieldsRuleNext].join(sentenceGap()) : null
 }
 
 /** True when no field holds anything but spaces, which is a card with nothing on it. */
@@ -206,7 +206,15 @@ export function studentIdTokens(typed: string): string[] {
  * design pass V-29).
  */
 export function studentIdsHelperText(): string {
-  return t().titleCard.submission.idsHelper({ digits: STUDENT_ID_DIGITS, max: STUDENT_IDS_MAX })
+  return studentIdsHelperLines().join(sentenceGap())
+}
+
+/** ID format and entry instructions are separate facts on screen (VH-148). */
+export function studentIdsHelperLines(): string[] {
+  return [
+    t().titleCard.submission.idsHelper({ digits: STUDENT_ID_DIGITS }),
+    t().titleCard.submission.idsHelperNext({ max: STUDENT_IDS_MAX }),
+  ]
 }
 
 /** What the ID numbers' box holds: one to {@link STUDENT_IDS_MAX} good numbers, or the first thing wrong. */

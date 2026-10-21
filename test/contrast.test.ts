@@ -122,7 +122,8 @@ const BORDER_PAIRS: ReadonlyArray<readonly [string, string]> = [
   ['--focus', '--layer-00'],
   ['--focus', '--layer-01'],
   ['--focus', '--layer-02'],
-  // The progress bar's filled part against its track.
+  // The progress fill and trim's kept part against the cut pattern's two colours (VH-148).
+  ['--interactive', '--layer-01'],
   ['--interactive', '--border-divider'],
 ]
 

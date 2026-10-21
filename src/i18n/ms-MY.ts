@@ -52,7 +52,7 @@ export const msMY: Messages = {
     notPassed:
       'Aplikasi ini direka bentuk dan dibina untuk Chrome, dan pelayar ini belum lulus semua pemeriksaannya. Pemeriksaan sistem di kaki halaman menyatakan apa yang hilang.',
     passed:
-      'Aplikasi ini direka bentuk dan dibina untuk Chrome dan pelayar ini telah lulus pemeriksaan untuknya.',
+      'Aplikasi ini direka dan dibina untuk Chrome, dan pelayar ini telah lulus semakan yang diperlukan untuk menjalankannya.',
   },
   videoKind: {
     label: 'Jenis video',
@@ -61,14 +61,14 @@ export const msMY: Messages = {
       submission: 'Serahan pelajar',
     },
     result: {
-      staff: 'Anda memilih penutup, dan sama ada ia memaparkan “{words}”.',
-      submission: 'Jika video mempunyai penutup, penutup itu memaparkan “{words}”.',
+      staff: 'Anda memilih grafik penutup, dan sama ada grafik itu memaparkan “{words}”.',
+      submission: 'Jika video mempunyai grafik penutup, grafik itu memaparkan “{words}”.',
     },
   },
   videoLanguage: {
     label: 'Bahasa video',
-    helper:
-      'Perkataan yang ditambah oleh aplikasi pada video anda adalah dalam bahasa ini. Apa yang anda taip dikekalkan seperti yang ditaip.',
+    helper: 'Perkataan yang ditambah oleh aplikasi pada video anda adalah dalam bahasa ini.',
+    typed: 'Apa yang anda taip dikekalkan seperti yang ditaip.',
     nextVideo:
       'Perubahan pada jenis video atau bahasa video digunakan untuk video seterusnya yang anda buat.',
   },
@@ -99,9 +99,9 @@ export const msMY: Messages = {
     },
   },
   source: {
-    readSummary: 'Video dibaca. {facts}.',
+    readSummary: 'Video dibaca.',
     variableFrameRate: 'kadar bingkai boleh ubah',
-    noSound: 'tiada bunyi',
+    noSound: 'Tiada bunyi.',
     properties: 'Ciri-ciri video',
     lossesTitle: 'Tidak dibawa ke dalam fail baharu',
     rows: {
@@ -161,7 +161,7 @@ export const msMY: Messages = {
   },
   trim: {
     intro:
-      'Pilihan. Potong bahan yang tidak diingini dari awal atau akhir. Dibiarkan sahaja, keseluruhan video akan disimpan. Pratonton memainkan video asal anda seperti sekarang: bunyi diratakan dan penutup ditambah apabila video dibuat.',
+      'Pilihan. Potong bahan yang tidak diingini dari awal atau akhir. Dibiarkan sahaja, keseluruhan video akan disimpan. Pratonton memainkan video asal anda seperti sekarang: bunyi diratakan dan grafik penutup ditambah apabila video dibuat.',
     noPreview: 'Pratonton tidak tersedia untuk fail ini. Anda masih boleh menetapkan masa.',
     start: 'Mula',
     end: 'Tamat',
@@ -205,10 +205,11 @@ export const msMY: Messages = {
     department: 'Jabatan',
     authors: 'Pengarang',
     date: 'Tarikh',
-    dateHelper:
-      'Diisi dengan tarikh hari ini dalam bahasa video. Anda boleh menukar atau mengosongkannya.',
+    dateHelper: 'Diisi dengan tarikh hari ini dalam bahasa video.',
+    dateHelperNext: 'Anda boleh menukar atau mengosongkannya.',
     forSubmission: 'Serahan pelajar sentiasa mempunyai kad tajuk.',
-    fieldsRule: 'Satu medan sudah cukup untuk membuat kad. Tarikh diisi untuk anda.',
+    fieldsRule: 'Satu medan sudah cukup untuk membuat kad.',
+    fieldsRuleNext: 'Tarikh diisi untuk anda.',
     full: 'Medan ini sudah penuh, jadi selebihnya tidak ditambah.',
     refused: {
       field: 'Ini terlalu panjang untuk dimuatkan pada kad. Pendekkannya.',
@@ -222,8 +223,9 @@ export const msMY: Messages = {
       module: 'Kod dan tajuk modul',
       convenor: 'Penyelaras modul atau tutor',
       ids: 'Nombor ID pelajar',
-      idsHelper:
-        'Setiap nombor ID (identiti) pelajar ialah {digits} digit. Taip sehingga {max}, dipisahkan dengan ruang, koma atau baris baharu. Jangan tambah nama.',
+      idsHelper: 'Setiap nombor ID (identiti) pelajar ialah {digits} digit.',
+      idsHelperNext:
+        'Taip sehingga {max}, dipisahkan dengan ruang, koma atau baris baharu. Jangan tambah nama.',
       filled:
         'Kad ini juga menunjukkan masa tayangan, {running}, dan tarikh hari ini, ditandakan sebagai tarikh kad dibuat, bukan tarikh penyerahan.',
       missing: {
@@ -265,10 +267,10 @@ export const msMY: Messages = {
     helpLabel: 'Perihal permulaan animasi',
     helpExistingTerm: 'Di atas yang sedia ada',
     helpExistingText:
-      '— bahagian penutup dimainkan pada saat terakhir video anda. Ia menutupi saat itu semasa ia terbentuk.',
+      '— grafik penutup dimainkan pada saat terakhir video anda. Ia menutupi saat itu semasa ia terbentuk.',
     helpFreezeTerm: 'Di atas bingkai pembekuan yang dijana',
     helpFreezeText:
-      '— bingkai terakhir anda ditahan selama satu saat tambahan. Penutup dimainkan di atasnya, jadi tiada apa-apa dalam video anda diliputi.',
+      '— bingkai terakhir anda ditahan selama satu saat tambahan. grafik penutup dimainkan di atasnya, jadi tiada apa-apa dalam video anda diliputi.',
     colourLabel: 'Warna',
     colours: {
       blue: 'Biru',
@@ -282,7 +284,7 @@ export const msMY: Messages = {
     },
     internalForSubmission: 'Sentiasa dihidupkan untuk serahan pelajar.',
     result: {
-      none: 'Tiada penutup Universiti akan ditambah.',
+      none: 'Tiada grafik penutup Universiti akan ditambah.',
       adds: {
         one: 'Menambah {count} saat.',
         other: 'Menambah {count} saat.',
@@ -294,26 +296,26 @@ export const msMY: Messages = {
       },
       overFreeze: {
         blue: {
-          fade: 'Bingkai terakhir anda ditahan sementara penutupan biru pudar masuk, jadi tiada apa yang ditutup. {adds}',
+          fade: 'Bingkai terakhir anda ditahan sementara grafik penutup biru pudar masuk, jadi tiada apa yang ditutup. {adds}',
           slide:
-            'Bingkai terakhir anda dipegang semasa penutup biru meluncur masuk, jadi tiada apa yang ditutup. {adds}',
+            'Bingkai terakhir anda dipegang semasa grafik penutup biru meluncur masuk, jadi tiada apa yang ditutup. {adds}',
         },
         white: {
-          fade: 'Bingkai terakhir anda dipegang sementara penutup putih pudar masuk, jadi tiada apa yang ditutupi. {adds}',
+          fade: 'Bingkai terakhir anda dipegang sementara grafik penutup putih pudar masuk, jadi tiada apa yang ditutupi. {adds}',
           slide:
-            'Bingkai terakhir anda dipegang semasa penutup putih meluncur masuk, jadi tiada apa yang ditutup. {adds}',
+            'Bingkai terakhir anda dipegang semasa grafik penutup putih meluncur masuk, jadi tiada apa yang ditutup. {adds}',
         },
       },
       overPicture: {
         blue: {
-          fade: 'Penutup biru pudar masuk pada saat terakhir video anda, menutupinya semasa ia terbentuk. {adds}',
+          fade: 'Grafik penutup biru pudar masuk pada saat terakhir video anda, menutupinya semasa ia terbentuk. {adds}',
           slide:
-            'Penutup biru meluncur masuk pada saat terakhir video anda, menutupinya semasa ia terbentuk. {adds}',
+            'Grafik penutup biru meluncur masuk pada saat terakhir video anda, menutupinya semasa ia terbentuk. {adds}',
         },
         white: {
-          fade: 'Penutupan putih pudar masuk pada saat terakhir video anda, menutupinya semasa ia terbentuk. {adds}',
+          fade: 'Grafik penutup putih pudar masuk pada saat terakhir video anda, menutupinya semasa ia terbentuk. {adds}',
           slide:
-            'Penutup putih meluncur masuk pada saat terakhir video anda, menutupinya semasa ia terbentuk. {adds}',
+            'Grafik penutup putih meluncur masuk pada saat terakhir video anda, menutupinya semasa ia terbentuk. {adds}',
         },
       },
     },
@@ -326,7 +328,7 @@ export const msMY: Messages = {
     },
     details: {
       best: 'Untuk EchoVideo atau YouTube dll.',
-      smaller: 'Untuk pesanan atau emel dan sebagainya.',
+      smaller: 'Untuk muat naik tugasan Moodle, pemesejan atau e-mel dan sebagainya.',
     },
   },
   create: {
@@ -383,7 +385,7 @@ export const msMY: Messages = {
     lifetimeDelivered: 'Ia kekal di sini sehingga anda memulakan video lain atau menutup tab ini.',
     keptWhole: 'keseluruhan video ({duration})',
     keptPart: '{kept} daripada {duration}, dari {from} hingga {to}',
-    closingNone: 'tiada penutup Universiti',
+    closingNone: 'tiada grafik penutup Universiti',
     closingInternal: '{closing}, bertanda “{words}”',
     closingCut: {
       blue: 'potongan kepada kad penutup biru',
@@ -391,22 +393,22 @@ export const msMY: Messages = {
     },
     closingOverFreeze: {
       blue: {
-        fade: 'penutupan biru pudar masuk di atas bingkai terakhir yang ditahan',
-        slide: 'penutupan biru meluncur masuk ke atas bingkai terakhir yang dipegang',
+        fade: 'grafik penutup biru pudar masuk di atas bingkai terakhir yang ditahan',
+        slide: 'grafik penutup biru meluncur masuk ke atas bingkai terakhir yang dipegang',
       },
       white: {
-        fade: 'penutupan putih yang pudar masuk di atas bingkai terakhir yang dipegang',
-        slide: 'penutup putih meluncur masuk ke atas bingkai terakhir yang dipegang',
+        fade: 'grafik penutup putih yang pudar masuk di atas bingkai terakhir yang dipegang',
+        slide: 'grafik penutup putih meluncur masuk ke atas bingkai terakhir yang dipegang',
       },
     },
     closingOverPicture: {
       blue: {
-        fade: 'penutup biru pudar masuk di atas gambar',
-        slide: 'penutup biru meluncur masuk ke atas gambar',
+        fade: 'grafik penutup biru pudar masuk di atas gambar',
+        slide: 'grafik penutup biru meluncur masuk ke atas gambar',
       },
       white: {
-        fade: 'penutup putih pudar masuk di atas gambar',
-        slide: 'penutup putih meluncur masuk ke atas gambar',
+        fade: 'grafik penutup putih pudar masuk di atas gambar',
+        slide: 'grafik penutup putih meluncur masuk ke atas gambar',
       },
     },
     summary: 'Dibuat daripada {name}: {part}, {output}, {closing}.',
@@ -418,7 +420,7 @@ export const msMY: Messages = {
     },
     videoLanguage: 'Bahasa video: {language}.',
     notLoaded:
-      'Penutupan tidak dapat dimuatkan, jadi ia tiada dalam video ini. Semua yang lain telah digunakan seperti yang diminta.',
+      'Grafik penutup tidak dapat dimuatkan, jadi ia tiada dalam video ini. Semua yang lain telah digunakan seperti yang diminta.',
     endedEarly: {
       picture:
         'Fail yang anda pilih berakhir lebih awal: gambarnya berhenti pada {stops} daripada {end}.',
@@ -427,7 +429,7 @@ export const msMY: Messages = {
       together:
         'Fail yang anda pilih berakhir lebih awal: gambar dan bunyinya berhenti pada {stops} daripada {end}.',
       both: 'Fail yang anda pilih berakhir lebih awal: gambarnya berhenti pada {picture} dan bunyinya pada {sound}, daripada {end}.',
-      held: 'Dari situ hingga penutupan, video menahan bingkai terakhirnya.',
+      held: 'Dari situ hingga grafik penutup, video menahan bingkai terakhirnya.',
       next: 'Jika anda mempunyai salinan yang lengkap, cipta video itu semula daripada salinan tersebut.',
     },
     fellBackToCut: {
@@ -444,26 +446,26 @@ export const msMY: Messages = {
     },
     fellBackToFreeze: {
       blue: {
-        fade: 'Video anda lebih pendek daripada animasi pudar. Penutupan biru pudar masuk di atas bingkai terakhir yang ditahan dan bukannya di atas gambar.',
+        fade: 'Video anda lebih pendek daripada animasi pudar. grafik penutup biru pudar masuk di atas bingkai terakhir yang ditahan dan bukannya di atas gambar.',
         slide:
-          'Video anda lebih pendek daripada animasi luncur. Penutup biru meluncur masuk ke atas bingkai terakhir yang ditahan dan bukannya ke atas gambar.',
+          'Video anda lebih pendek daripada animasi luncur. grafik penutup biru meluncur masuk ke atas bingkai terakhir yang ditahan dan bukannya ke atas gambar.',
       },
       white: {
-        fade: 'Video anda lebih pendek daripada animasi pudar. Penutupan putih pudar masuk di atas bingkai terakhir yang ditahan dan bukannya di atas gambar.',
+        fade: 'Video anda lebih pendek daripada animasi pudar. grafik penutup putih pudar masuk di atas bingkai terakhir yang ditahan dan bukannya di atas gambar.',
         slide:
-          'Video anda lebih pendek daripada animasi luncur. Penutupan putih meluncur masuk ke atas bingkai terakhir yang ditahan dan bukannya ke atas gambar.',
+          'Video anda lebih pendek daripada animasi luncur. grafik penutup putih meluncur masuk ke atas bingkai terakhir yang ditahan dan bukannya ke atas gambar.',
       },
     },
     fellBackToPicture: {
       blue: {
-        fade: 'Penutupan biru pudar masuk di atas gambar, bukan di atas bingkai terakhir yang ditahan seperti yang dipilih.',
+        fade: 'Grafik penutup biru pudar masuk di atas gambar, bukan di atas bingkai terakhir yang ditahan seperti yang dipilih.',
         slide:
-          'Penutup biru meluncur masuk ke atas gambar, bukan ke atas bingkai terakhir yang ditahan seperti yang dipilih.',
+          'Grafik penutup biru meluncur masuk ke atas gambar, bukan ke atas bingkai terakhir yang ditahan seperti yang dipilih.',
       },
       white: {
-        fade: 'Penutupan putih pudar masuk di atas gambar, bukan di atas bingkai terakhir yang dipegang seperti yang dipilih.',
+        fade: 'Grafik penutup putih pudar masuk di atas gambar, bukan di atas bingkai terakhir yang dipegang seperti yang dipilih.',
         slide:
-          'Penutup putih meluncur masuk ke atas gambar, bukan ke atas bingkai terakhir yang dipegang seperti yang dipilih.',
+          'Grafik penutup putih meluncur masuk ke atas gambar, bukan ke atas bingkai terakhir yang dipegang seperti yang dipilih.',
       },
     },
   },
@@ -776,8 +778,7 @@ export const msMY: Messages = {
   },
   statement: {
     heading: 'Kenyataan kebolehcapaian',
-    covers:
-      'Kenyataan ini meliputi Pembantu Video UoN, iaitu halaman yang sedang anda gunakan. Halaman ini dikendalikan oleh Joe Bell di Universiti Nottingham.',
+    covers: 'Pernyataan ini meliputi Pembantu Video UoN, halaman yang sedang anda lihat.',
     aim: 'Kami mahu seramai mungkin orang dapat menggunakan alat ini. Anda sepatutnya dapat:',
     abilities: [
       'menggunakannya dengan papan kekunci sahaja',
@@ -841,7 +842,7 @@ export const msMY: Messages = {
   footer: {
     contact: {
       intro: 'Untuk bantuan dengan alat ini:',
-      creators: 'Hantar e-mel kepada pasukan pencipta',
+      creators: 'Pasukan pencipta di Teams (dibuka dalam tab baharu)',
       learningContent: 'Hantar e-mel kepada pasukan kandungan pembelajaran',
     },
   },

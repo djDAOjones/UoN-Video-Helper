@@ -41,7 +41,7 @@ import {
   type VideoKind,
 } from './config/video-kind'
 import {
-  CREATORS_TEAM_ADDRESS,
+  CREATORS_TEAM_URL,
   FEEDBACK_ADDRESS,
   FEEDBACK_LEAVE_WARNING_PAUSE_MS,
   FEEDBACK_MAILTO_MAX_CHARACTERS,
@@ -87,7 +87,7 @@ import {
   type SubmissionTextField,
 } from './media/title-card'
 import {
-  closingResultText,
+  closingResultLines,
   colourDisabledReason,
   internalCheckboxState,
   onsetDisabledReason,
@@ -168,7 +168,7 @@ import {
   STATEMENT_ID,
   wireAccessibilityStatement,
 } from './ui/accessibility-statement'
-import { buildLosses, renderSourceError, renderSourceReport, summarise } from './ui/source-panel'
+import { buildLosses, renderSourceError, renderSourceReport } from './ui/source-panel'
 import type { SourceReport } from './media/inspect'
 import { lossesSpoken, spoken, warningsSpoken } from './ui/announce'
 import { browserNote, summariseChecks, type CheckState } from './ui/system-check'
@@ -182,7 +182,7 @@ import {
   firstSubmissionProblem,
   holdToColumns,
   refusalText,
-  studentIdsHelperText,
+  studentIdsHelperLines,
   studentIdTokens,
   submissionCardRequest,
   submissionCardText,
@@ -592,7 +592,7 @@ function syncClosingControls(): void {
   closingColourReason.hidden = colourReason === null
 
   const wordsLanguage = chosenVideoLanguage()
-  paintQuoting(closingResult, closingResultText(controls, wordsLanguage), wordsLanguage)
+  paintHelperLines(closingResult, closingResultLines(controls, wordsLanguage), wordsLanguage)
 }
 
 brandingChoice.addEventListener('change', () => {
@@ -822,6 +822,30 @@ function clearResult(): void {
  */
 function setSourceStatus(message: Text, spokenOnly: Text = ''): void {
   show(sourceStatusLine, () => paintStatus(sourceStatusLine, message, spokenOnly))
+}
+
+/** Each independent helper fact gets its own line, retaining language-of-parts markup. */
+function paintHelperLines(container: HTMLElement, lines: readonly string[], wordsLanguage?: LanguageTag): void {
+  container.replaceChildren()
+  for (const text of lines) {
+    const line = document.createElement('span')
+    line.className = 'helper-line'
+    if (wordsLanguage) paintQuoting(line, text, wordsLanguage)
+    else line.textContent = text
+    container.append(line)
+  }
+}
+
+/** The read outcome keeps no-sound visible and spoken, bold without duplicating the live text (VH-148). */
+function setSourceReadStatus(report: SourceReport, spokenOnly: Text = ''): void {
+  show(sourceStatusLine, () => {
+    paintStatus(sourceStatusLine, () => t().source.readSummary, spokenOnly)
+    if (!report.audio) {
+      const emphasis = document.createElement('strong')
+      emphasis.textContent = t().source.noSound
+      sourceStatusLine.firstChild?.after(document.createTextNode(sentenceGap()), emphasis)
+    }
+  })
 }
 
 /** Writes a status line: the shown words, then the spoken-only tail. */
@@ -1377,8 +1401,8 @@ fileInput.addEventListener('change', () => {
         })
         // The losses panel is on screen beside this; the live region says it
         // too, caption consequence included (U-10, A-14).
-        setSourceStatus(
-          () => summarise(report),
+        setSourceReadStatus(
+          report,
           () => lossesSpoken(buildLosses(report)),
         )
         inspectedFile = file
@@ -1521,7 +1545,7 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
       // says so once (pre-work defect 2).
       if (sourceBlock.childElementCount > 0 && inspectedReport) {
         const restored = inspectedReport
-        setSourceStatus(() => summarise(restored))
+        setSourceReadStatus(restored)
       }
       clear(sourceBlock)
       revealLaterSteps()
@@ -2500,6 +2524,9 @@ function syncTitleCard(): void {
   titleCardOn.disabled = box.disabled
   paintLine(titleCardReason, box.reason)
   paintLine(titleCardRule, titleCardRuleText(kind, box.checked))
+  if (kind === 'staff' && box.checked) {
+    paintHelperLines(titleCardRule, [t().titleCard.fieldsRule, t().titleCard.fieldsRuleNext])
+  }
   titleCardFields.hidden = kind !== 'staff' || !box.checked
   submissionCardFields.hidden = kind !== 'submission'
   paintTitleCardErrors()
@@ -2545,7 +2572,7 @@ show(titleCardIntro, () => {
 })
 show(submissionCardFilled, paintSubmissionFilled)
 show(submissionIdsHelper, () => {
-  submissionIdsHelper.textContent = studentIdsHelperText()
+  paintHelperLines(submissionIdsHelper, studentIdsHelperLines())
 })
 
 // Only a staff video's box is the user's to change. Ticking fills the date.
@@ -3428,22 +3455,17 @@ openStatementForFragment()
 window.addEventListener('hashchange', openStatementForFragment)
 
 // --- The footer's team contacts (VH-130) ------------------------------------
-// Their words are bound in the markup, so a change of language writes them
-// with the rest; their addresses come from config, never the page, and their
-// clicks go the way every email link goes, so a running job raises no
-// "Leave site?" over them.
-
-for (const [selector, address] of [
-  ['#contact-creators', CREATORS_TEAM_ADDRESS],
-  ['#contact-learning-content', LEARNING_CONTENT_TEAM_ADDRESS],
-] as const) {
-  const link = required<HTMLAnchorElement>(selector)
-  link.href = `mailto:${address}`
-  link.addEventListener('click', (event) => {
-    event.preventDefault()
-    openMailto(link.href)
-  })
-}
+// Labels repaint with the page; destinations remain the owner's named config.
+const creatorsLink = required<HTMLAnchorElement>('#contact-creators')
+creatorsLink.href = CREATORS_TEAM_URL
+creatorsLink.target = '_blank'
+creatorsLink.rel = 'noopener noreferrer'
+const learningContentLink = required<HTMLAnchorElement>('#contact-learning-content')
+learningContentLink.href = `mailto:${LEARNING_CONTENT_TEAM_ADDRESS}`
+learningContentLink.addEventListener('click', (event) => {
+  event.preventDefault()
+  openMailto(learningContentLink.href)
+})
 
 // --- Language (VH-105) -----------------------------------------------------
 // Chosen at the top of the page, remembered in this browser only, and changed

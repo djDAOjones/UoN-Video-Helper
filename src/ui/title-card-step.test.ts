@@ -277,7 +277,7 @@ describe('the ID numbers’ rules come from config, in the words too (VH-140, de
         setLanguage(tag)
         const text = studentIdsHelperText()
         expect(text, tag).toBe(
-          t().titleCard.submission.idsHelper({ digits: STUDENT_ID_DIGITS, max: STUDENT_IDS_MAX }),
+          [t().titleCard.submission.idsHelper({ digits: STUDENT_ID_DIGITS }), t().titleCard.submission.idsHelperNext({ max: STUDENT_IDS_MAX })].join(t().meta.separators.sentences),
         )
         expect(text, tag).toContain(String(STUDENT_ID_DIGITS))
         expect(text, tag).toContain(String(STUDENT_IDS_MAX))
@@ -297,12 +297,12 @@ describe('the ID numbers’ rules come from config, in the words too (VH-140, de
 
   it('regression: no table writes the length or the most as a figure of its own', () => {
     for (const [tag, table] of Object.entries(LANGUAGE_TABLES)) {
-      const { idsHelper, idNotAnId, idsTooMany } = table.titleCard.submission
-      for (const words of [idsHelper, idNotAnId, idsTooMany]) {
+      const { idsHelper, idsHelperNext, idNotAnId, idsTooMany } = table.titleCard.submission
+      for (const words of [idsHelper, idsHelperNext, idNotAnId, idsTooMany]) {
         expect(words.replace(/\{[A-Za-z]+\}/g, ''), `${tag}: ${words}`).not.toMatch(/\d|八|lapan|eight/i)
       }
       expect(idsHelper, tag).toContain('{digits}')
-      expect(idsHelper, tag).toContain('{max}')
+      expect(idsHelperNext, tag).toContain('{max}')
       expect(idNotAnId, tag).toContain('{digits}')
     }
   })

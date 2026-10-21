@@ -189,15 +189,7 @@ export function buildRows(report: SourceReport): Row[] {
 /** A one-line summary suitable for announcing into a live region. */
 export function summarise(report: SourceReport): string {
   const { source } = t()
-  const parts = [
-    formatDuration(report.durationSeconds),
-    formatResolution(report.video.displayWidth, report.video.displayHeight),
-  ]
-  if (report.video.isVariableFrameRate) parts.push(source.variableFrameRate)
-  parts.push(
-    report.audio ? formatChannels(report.audio.channelCount).toLocaleLowerCase(locale()) : source.noSound,
-  )
-  return source.readSummary({ facts: parts.join(t().meta.separators.list) })
+  return report.audio ? source.readSummary : `${source.readSummary}${sentenceGap()}${source.noSound}`
 }
 
 /**

@@ -35,13 +35,13 @@ describe('the result line (VH-90)', () => {
       'Your video cuts to the blue closing card. Adds 4 seconds.',
     )
     expect(closingResultText({ type: 'fade', onset: 'existing', colour: 'blue', internal: false })).toBe(
-      'The blue closing fades in over your last second of video, covering it as it builds. Adds 4 seconds.',
+      'The blue closing graphics fade in over your last second of video, covering it as they build. Adds 4 seconds.',
     )
     expect(closingResultText({ type: 'slide', onset: 'freeze', colour: 'white', internal: false })).toBe(
-      'Your last frame is held while the white closing slides in, so nothing is covered. Adds 5 seconds.',
+      'Your last frame is held while the white closing graphics slide in, so nothing is covered. Adds 5 seconds.',
     )
     expect(closingResultText({ type: 'none', onset: 'existing', colour: 'blue', internal: false })).toBe(
-      'No University closing will be added.',
+      'No University closing graphics will be added.',
     )
   })
 
@@ -123,7 +123,7 @@ describe('Internal use only in the result line (VH-126)', () => {
 
   it('says nothing of the words under None, which has no card', () => {
     expect(closingResultText({ type: 'none', onset: 'existing', colour: 'blue', internal: true })).toBe(
-      'No University closing will be added.',
+      'No University closing graphics will be added.',
     )
   })
 

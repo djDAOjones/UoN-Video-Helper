@@ -98,7 +98,7 @@ describe('the browser sentence (2026-10-01)', () => {
 
   it('does not turn away a browser that has passed every check', () => {
     expect(browserNote(['pass', 'pass', 'pass', 'pass', 'pass', 'pass'])).toBe(
-      `${lead}, and this browser has passed the checks for it.`,
+      `${lead}, and this browser has passed the checks for it to run.`,
     )
   })
 
