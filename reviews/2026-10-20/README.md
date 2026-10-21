@@ -17,7 +17,11 @@ or download is needed to read or act on it.
 | `wcag-2026-10-20.md` | All 86 WCAG 2.2 criteria judged against the live page; what spec §9.3 should record; the accessibility statement's claims checked. |
 | `codex-astra-audit-2026-10-20.md` | The source half, by Codex astra, blind from the same brief and kept as written: eight findings (C-01 to C-08), its own regression and state tables, its 86-criteria table and statement check. The audit maps each to a V-number. |
 | `codex-astra-critique-2026-10-20.md` | Codex astra's adversarial check of this bundle before commit, in three parts, kept as written; what was applied and what was refused is in the decision log ("VH-138"). |
-| `evidence/` | Screenshots named by finding (`v01-…`), by what was set aside (`aside-…`) and, for what held up, by state (`held-…`). Every frame is an ffmpeg fixture; no real recording's frame or name appears. `evidence/measurements/` holds one digest per walk (sizes, overflow, live-region changes, contrast, targets, line lengths, Tab walks), the 54 focus-ring measurements, and the walker itself so the walk can be run again. |
+| `design-pass-2026-10-21.md` | The design pass of 21 October (VH-143): the page judged as a design against the 1 October standard — formatting, UI and visual design — with 13 findings (V-18 to V-30) in the audit's format, what held up, what was set aside, what is reserved for the owner, and the disposition into Phase 3's items and Phase 4. Its findings join the audit's Disposition table. |
+| `codex-astra-design-brief-2026-10-21.md`, `codex-astra-design-review-2026-10-21.md` | Codex astra's blind design review (D-01 to D-05) and the brief it was given, kept as written; the design pass maps each to a V-number. |
+| `codex-astra-design-critique-2026-10-21.md` | Codex astra's adversarial check of the design pass's draft before commit, kept as written; what was applied is in the decision log ("VH-143"). |
+| `overnight-prompt-2026-10-21.md`, `overnight-handoff-2026-10-21-0*.md` | The owner's overnight instruction verbatim and the sessions' hand-off notes; the morning report joins them when the run ends. |
+| `evidence/` | Screenshots named by finding (`v01-…`), by what was set aside (`aside-…`) and, for what held up, by state (`held-…`). Every frame is an ffmpeg fixture; no real recording's frame or name appears. `evidence/measurements/` holds one digest per walk (sizes, overflow, live-region changes, contrast, targets, line lengths, Tab walks), the 54 focus-ring measurements, and the walker itself so the walk can be run again. The design pass adds `v18-…` to `v30-…`, `before-after-…` (1 October beside 21 October), the `*-2026-10-21.txt` digests of its walk, and the token sweep, word counts and string sweep of 21 October. |
 
 ## Baseline
 
@@ -57,3 +61,15 @@ Codex astra ran as `codex exec -m gpt-6-astra -s read-only` from this
 worktree, blind, with the brief the audit's "How it was done" describes;
 then again on the finished bundle, in three calls of one part each, briefed
 to argue with every finding, rank and table against the standard.
+
+## The design pass, 21 October
+
+The same walker, rebuilt with a computed-style sweep on every capture and a
+`cards` scenario over `spike-cards.html`, walked the page again on
+21 October against the overnight worktree (`claude/overnight-design-and-phases`,
+from VH-138's close at `5f23af6`), port 5174, ffmpeg fixtures only: thirteen
+scenarios in one run, finished 08:44 BST. Codex astra reviewed blind from
+the brief beside its review, then critiqued the draft. Four Claude
+subagents read the measurements, the cards, the captures and the source;
+every finding was checked against a capture or a source line before it was
+kept.

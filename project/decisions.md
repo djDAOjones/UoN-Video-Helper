@@ -17,6 +17,48 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-21 — VH-143 — The owner's word at 09:04 BST: "resume" — the run goes on past 07:00
+
+**Decision:** the overnight run goes on past the 07:00 line: VH-139 merged, Phase 3, Phase 4, then the morning report, each item closed with Codex astra's review — because the owner said "resume" in chat at 09:04 BST, told the run would otherwise stop at the report.
+
+**Rationale:** At about 08:40 BST the owner was told, in their own session, that past 07:00 the run would finish VH-143, write the morning report and stop, and that they should say so if they wanted Phase 3 built today; they switched that session to Claude Opus 5.5 and replied "resume". That session relayed the word verbatim to the third session, whose own chat had the owner's "Resume" on switching it to Claude Opus 5.5 after the Fable usage limit. The overnight prompt's rule gives the owner's word precedence over the 07:00 line when they speak. The profile's Session line is unchanged: a session past it ends at its next close and hands off.
+
+**Supersedes:** none
+
+**Deferred:** VH-139, VH-140, VH-141, VH-142, VH-144, VH-145, VH-146
+
+## 2026-10-21 — PLAN-4 — Phase 4: what the design pass found
+
+**Decision:** Phase 4 is VH-144 (two page defects), VH-145 (the token boundary) and VH-146 (the Submission card's date), in that order, after Phase 3, each with a file; signed off gateless — because the owner's overnight instruction pre-approved PLAN-4, and no Phase 3 item's lines hold these findings.
+
+**Rationale:** The findings answered: V-20 and V-23 by VH-144; V-19 and V-25 (narrowed) by VH-145; V-30 (narrowed) by VH-146. VH-144 goes first: two rank-2 defects every user who reaches them sees, each the smallest change. VH-145 second: a stylesheet-wide change, made once Phase 3's page fixes have landed so no rule is changed twice. VH-146 last: a renderer change that needs `spike-cards.html` re-run. Deferred as wish lines (rule 5): V-18, the frame above step 1; V-24, the statement's lists, to VH-137; V-28's two maintainer's sentences; V-27's form questions for the colleagues; and three readings for the VH-124 walk-through: V-26's footer headings, a disabled button's edge, the stop on a list of links. Nothing in Phase 4 is new design, adds a runtime dependency or edits `docs/`. Taken gateless on the owner's instruction of 2026-10-21 (the VH-143 entry below), the conservative reading being the smallest change that meets each standard with the tokens, components and words the page already has.
+
+**Supersedes:** none
+
+**Items:** VH-144, VH-145, VH-146
+
+**Deferred:** none
+
+## 2026-10-21 — VH-143 — The design pass: 13 findings, none at rank 1; five join Phase 3, six become Phase 4, two go to the owner
+
+**Decision:** the design pass stands as `reviews/2026-10-20/design-pass-2026-10-21.md`, V-18 to V-30; V-21 and V-22 join VH-141, V-27 and V-28 VH-142, V-29 VH-140, by dated notes; five become Phase 4; V-18, V-24 and V-26 are the owner's wish lines — taken gateless, because no line should change twice and the owner reserved those three.
+
+**Rationale:** The walk ran all thirteen scenarios in one run (08:31–08:44 BST, after the Mac's sleep from 01:53 stopped the first): seven views, three languages, both switch positions, a card off and on, every closing, 37 cards drawn at four shapes. A token sweep, word counts, a string sweep and nine before-and-after pairs measured it; four Claude subagents read them, the cards, the captures and the source; Codex astra reviewed blind (D-01 to D-05, all verified, mapped to V-19, V-20, V-21, V-22, V-24 and V-27), then critiqued the draft: applied in full but for its ranks — V-27, V-28 and V-29 stay at 3, as the audit's V-16 and V-17 rank naming and form slips that mislead no one; V-25 and V-30 were narrowed, V-26 moved to the owner, and V-27's placeholder spacing left to the colleague. V-23, Malay's 26 px time fields at 320 px, was in the 20 October walk's own digest and missing from its audit. Set aside with reasons: the toggletip's rail (an existing wish line), the switchers' wrap at 320 px (VH-105's choice), the native file input's truncated name, disabled buttons' fill (VH-112's, a wish line for the walk-through), one lock note per locked step, focus on a mouse-started job, the status lines' over-limit rows (a measuring artefact), the cards' worst-case sizes VH-127 decided, "etc." (spec §6), and the failed-state pair (its fixture finished). VH-139's branch (closed at b3b7c2b) is merged at Phase 3's start, as the owner's 09:04 word (the entry above) has it.
+
+**Supersedes:** none
+
+**Deferred:** VH-140, VH-141, VH-142, VH-144, VH-145, VH-146
+
+## 2026-10-21 — VH-143 — The owner's word at 01:46 BST: resume, permission for everything, Codex as project partner
+
+**Decision:** the run continues on the owner's word of 01:46 BST: "resume! you have permission for everything. use the model you think most appropriate and use codex as project partner" — the session picks its model and Codex astra reviews every item — because the owner said so in chat, and the record lacked it.
+
+**Rationale:** Relayed by the run's first session to the second after the second had closed, in its addendum in the sessions' shared folder, and recorded at this, the next close, as the close verb's step 4 asks. Nothing in the overnight instruction changes. The third session began on Claude Fable 5.1; when the Fable usage limit stopped its subagents at about 08:50 BST, the owner said "Resume" and the session went on, and closed, on Claude Opus 5.5.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-21 — VH-143 — The owner's overnight instruction: a design pass, then Phases 3 and 4, gateless
 
 **Decision:** the overnight run is authorised and gateless: VH-143, the design pass, then Phase 3 (PLAN-3, approved) with VH-139 merged from its own session, then Phase 4 (PLAN-4, its sign-off pre-approved), then the morning report; wherever the record or a verb would stop for the owner, the session takes the conservative choice, records it as taken gateless, and carries on — because the owner said so in chat on 2026-10-21.
@@ -432,46 +474,6 @@
 **Decision:** moving a trim handle, by pointer or key, or typing a valid time shows that point in the preview, paused, and only the latest time waits for a running seek; the two "Set … here" buttons and "Use the whole video" leave the preview where it is — because the owner asked for it in chat on 2026-10-18 ("can the trim feature show the point of the video in the preview window when changing the handle position").
 
 **Rationale:** writing `currentTime` on every input event abandons the running seek, so on a long file with sparse keyframes a drag would show nothing until the pointer stopped; `src/ui/preview-seek.ts` holds the latest time until `seeked`, drops the ones in between, and forgets a waiting time on `emptied`, so the next file never shows the last file's time. The preview shows where the handle came to rest after the 3 s minimum keep clamps it, not where the pointer is. A playing preview pauses, because a handle being placed wants its own frame. Standards applied: Nielsen 1, visibility of system status (the frame at the cut is shown); WCAG 3.2.5, change on request (focus stays on the handle, nothing autoplays); spec §9.3's live-region rule (no announcement: a control's own result is read on demand, through the handle's `aria-valuetext`). No new words, so VH-105's tables gain nothing. The spec does not describe the behaviour; a wish line carries the §9.1 doc-delta.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-05 — V3-HARNESS — Codex runs outside the sandbox, like gh
-
-**Decision:** both `.claude` settings files list `"codex *"` in `sandbox.excludedCommands` beside `"gh *"`, so a Claude Code session can run Codex (`~/.local/bin/codex`) for the Handoff's read-only review — because the owner ruled it in chat on 2026-10-05 ("Codex runs outside the sandbox like gh").
-
-**Rationale:** `~/.local/bin/codex` links into `~/.codex/packages/`, which the sandbox denies reading, so a sandboxed call fails before Codex starts ("operation not permitted", this session, 2026-10-05); its API host is not on the Network line's allowlist either. Excluded, Codex runs with the owner's own credentials through the normal permission flow, each call asking unless the owner pre-approves it; the allowlist, the `~/.codex` denies for every other command and the `Read(~/.codex/**)` permission deny stand. `tools/harness.mjs` does not generate `excludedCommands`: both lines are hand-kept, as `"gh *"` has been since 051fd48, and a regeneration must carry them. The exclusion takes effect in a session started after this commit. In the same session, both session hooks were confirmed on this Mac in the desktop app: the session's state file, `~/.local/state/pm-next/session/claude-1e7b4ba3f76ba3d8-d00a931f456d8601.json`, changed after each tool call (08:05:42 to 08:05:49, `seen` 82 to 94), which is PostToolUse, and carries an `epoch`, which only a SessionStart startup, clear or fork writes; the `/hooks` wish line from V3-CONFIRM is retired as paid. npm audit's dev-only findings are captured as a wish line; dependencies change only by decision.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-05 — V3-CONFIRM — Prose is en-GB, and V3-CONFIRM closes
-
-**Decision:** the profile's Prose line is en-GB, confirmed, and loses its `[guess]`; it was the last intake guess, so V3-CONFIRM, the owner's confirmation of the intake's guesses, closes and its wish line is retired as paid — because the owner said so in chat on 2026-10-05 ("yes, en-GB — record it and close V3-CONFIRM").
-
-**Rationale:** the 2026-10-02 entry left `[guess]` on two lines, "Prose: en-GB" and the clone-outside-OneDrive line; the two working-copy entries of 2026-10-05 settled the second. No `[guess]` now remains in the profile, rules or brief; only the profile's and the rules file's header comments still describe the mark. V3-CONFIRM's commits: 70a1796 (2026-10-02), 051fd48 (2026-10-03), dbba144 and 0f72350 (2026-10-05), and this one. Its one open follow-up, the Always section's length, stays a wish line for the owner. The profile's signature (the owner's, 2026-10-02) stands as signed; this entry is the decision the profile requires for a change above it. Session end: this session passed the profile's Session line (200k tokens) before 0f72350, whose close should have been its last and carried a Session-end line but did not; the owner then directed this close, which carries the line. Before it, the session recorded the owner's instructions the record lacked: VH-105's saved work (an item note) and the `/hooks` confirmation the 2026-10-02 entry asked for (a wish line).
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-05 — V3-CONFIRM — The OneDrive working copy, corrected after Codex's check
-
-**Decision:** the owner's OneDrive checkout, pinned with Always Keep on This Device and with `core.fileMode` false, stays the working copy; the pin stops cloud-only files but not sync reverting a tracked file or leaving a conflict copy, so a change no session made is reported, never committed, and the checks and recovery live in DEV-INFRASTRUCTURE.md — because Codex's read-only check of dbba144 found the earlier entry's guard incomplete, and the owner chose "detect and report" on 2026-10-05.
-
-**Rationale:** Codex (gpt-6-astra, read-only, briefed from the record per verbs/close.md step 6) checked dbba144 and returned BLOCKING: one blocking finding, four should-fix. Blocking: the earlier entry said the pin meets the canon hazard, but the canon guard (canon `AGENTS.md` line 265 at 029ae1e; census row C60) names reverted tracked files and conflict copies as well as dehydration, and the edit dropped its protection ("pause syncing during sessions or exclude `.git`"). Fixed by the guard above, the owner's choice of three offered (detect and report; pause sync in sessions; accept the risk); its mechanism is rule 3, a session stages only its own item's lines. The owner also said they will turn OneDrive syncing off for twelve hours from 2026-10-05; just before, this session's scan found no cloud-only file in the owner's three OneDrive checkouts (this one and Route Plotter's two), so git should keep working while sync is off — evidence at that moment, not a guarantee. Should-fix, each fixed or answered: (1) Supersedes — this entry supersedes the earlier one; the INTAKE entry's Environment line and the `[guess]` the 2026-10-02 entry left on it were proposals awaiting the owner, not decisions, and naming INTAKE would mark the whole migration superseded, so they are named here; (2) a V3-CONFIRM trajectory line — not added: rule 6 applies on finishing, and V3-CONFIRM stays open while the profile's "Prose: en-GB" keeps its `[guess]`, now a wish line (rule 5); (3) the Always warning — the Environment line is shorter, its detail moved to DEV-INFRASTRUCTURE.md, Always is back to its 433 words before dbba144, and the excess over the 400-word guideline is a wish line; (4) dbba144's Verify line says Codex was not installed on this Mac — wrong: codex-cli 0.155.1 was installed at `~/.local/bin` at 00:11 that day, off the shell's PATH (this session read the link's creation time and `codex --version`), and the session had checked only PATH, so no Codex check ran before that push. This commit carries the check; `~/.local/bin` is now on the owner's PATH (`~/.zshenv`). A second, confirmation round on this change accepted those fixes and answers and asked for four more, made here: the installation fact's source, the wish line for V3-CONFIRM's open `[guess]`, the cloud-only check's exit status, and this scan's attribution; its one blocking finding was the review copy's missing `Verify:` line.
-
-**Supersedes:** 2026-10-05 — V3-CONFIRM — The OneDrive checkout is the working copy
-
-**Deferred:** none
-
-## 2026-10-05 — V3-CONFIRM — The OneDrive checkout is the working copy
-
-**Decision:** the owner's OneDrive checkout, pinned with Always Keep on This Device and with `core.fileMode` false, is the working copy; the rules file's Environment line says so and loses "work in a clone outside it [guess]" and the advice to pause syncing — because the owner confirmed it in chat on 2026-10-05, as Route Plotter recorded in route-plotter#81.
-
-**Rationale:** the owner's answer, in the first session on a new Mac, to the line the 2026-10-02 entry left as `[guess]`. Before asking, that session found the checkout sound, read-only: branch `codex/repository-review-remediation` at 051fd48, level with `origin/main`; a clean tree, with `core.fileMode` false because OneDrive restores files with changed permissions; nothing outside `node_modules` cloud-only (`find . -path ./node_modules -prune -o -flags +dataless -print` printed nothing); `samples/` holding its 33 files. Then `rm -rf node_modules && npm ci` and `npm run check` green on Node 24.21.0 from Homebrew. The pin keeps `.git` and the source hydrated, so the canon hazard — OneDrive dehydrating `.git` — is met by the pin and the dataless check rather than by a second clone; `node_modules` can still dehydrate and is rebuilt. This reverses the canon hostile-filesystem guard as the migration carried it (census row C60: cloud-synced paths unsupported). The route-plotter#81 precedent is cited on the owner's word, not fetched (rule 2).
 
 **Supersedes:** none
 

@@ -577,6 +577,15 @@ already recorded.
 | V-08, V-16, V-17 | 2, 3, 3 | VH-142 |
 | V-09 | 2 | VH-137 (the owner's review, with a wish line) |
 | The date-only card | — | a wish line for the owner |
+| V-18 | 2 | the owner's (the page's structure): a wish line, from the design pass |
+| V-19, V-25 | 2, 3 | VH-145, Phase 4 |
+| V-26 | 3 | the owner's: a wish line for the VH-124 walk-through |
+| V-20, V-23 | 2 | VH-144, Phase 4 |
+| V-21, V-22 | 2 | VH-141, by a dated note |
+| V-24 | 2 | VH-137 (the owner's review, with a wish line) |
+| V-27, V-28 | 3 | VH-142, by a dated note; the maintainer's words and two form questions as wish lines |
+| V-29 | 3 | VH-140, by a dated note |
+| V-30 | 3 | VH-146, Phase 4 |
 
 Codex astra's eight, by number: C-01 → V-02, C-02 → V-05, C-03 → V-06,
 C-04 → V-03, C-05 → V-07, C-06 → V-08, C-07 → V-09, C-08 → V-16; its
@@ -584,3 +593,8 @@ regression rows A-04, U-04, states 11, 15, 28, 30 and its 4.1.3 row → V-04,
 V-13, V-14, V-15 and V-10; its critique → V-11 and V-12. Its "partly" on
 U-07 is withdrawn by its own second reading (the encode is capped at 0.98
 and the bar fills at ready).
+
+V-18 to V-30 are the design pass of 21 October (VH-143), in
+`design-pass-2026-10-21.md` beside this audit, with the same format and
+ranks; Codex astra's design review maps D-01 → V-19, D-02 → V-20 and V-21,
+D-03 → V-24, D-04 → V-22, D-05 → V-27.

@@ -1,0 +1,11 @@
+## fragment-statement  [desktop/light] 1280x3242 title="UoN 视频助手" lang=zh-Hans
+  contrast: 74 runs, 0 under target
+  targets: 18, under 44: 0
+  lines: 23 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261021.1459f13), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 系统检查 — 全部通过 | H2 无障碍声明 | H3 本工具的无障碍程度 | H3 反馈与联系方式 | H3 执行程序 | H3 合规状态 | H3 我们如何测试本工具 | H3 接下来的测试计划 | H3 关于本声明
+## reloaded-zh-submission  [desktop/light] 1280x1633 title="UoN 视频助手" lang=zh-Hans
+  live: 47ms div: ""
+  contrast: 34 runs, 0 under target
+  targets: 16, under 44: 0
+  lines: 6 blocks, widest 47 chars (p#version-line.version "v0.1.0 · v0.1.0+20261021.1459f13), over the limit: 0
+  headings: H1 UoN 视频助手 | H2 1. 选择一个视频 | H2 系统检查 — 全部通过 | H2 无障碍声明

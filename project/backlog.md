@@ -29,16 +29,18 @@
 
 ### Phase 2 — the owner's corrections, the spec caught up, three page defects, a time left — CLOSED 2026-10-20
 
-### Design pass
-
-- [~] VH-143 — The design pass: formatting, UI and visual design against the 2026-10-01 standard — since 2026-10-21
-
 ### Phase 3 — what the second audit found: a file that ends early, the record and the switches, nine small defects, the words
 
 - [ ] VH-139 — A file that ends early is said before Create and in the record — since 2026-10-21 — (from: VH-138, 2026-10-21)
 - [ ] VH-140 — The record names the card and the words' language; the switches say which job they change; Step 3 says its rules first — since 2026-10-21 — (from: VH-138, 2026-10-21)
 - [ ] VH-141 — Nine small page defects: a locked box that looks live, a lifetime that reverts, two silent reveals, lost warnings, a dropped place, a stale block, stale progress, a wordless wait — since 2026-10-21 — (from: VH-138, 2026-10-21)
 - [ ] VH-142 — The words: the Chinese save messages and step 6, the damage note's tense, the errors panel's button — since 2026-10-21 — (from: VH-138, 2026-10-21)
+
+### Phase 4 — what the design pass found: two page defects, the token boundary, the cards
+
+- [ ] VH-144 — The closing's reason said once under None; the Malay time fields keep their width at 320 px — since 2026-10-21 — (from: VH-143, 2026-10-21)
+- [ ] VH-145 — The page's shape from the tokens: the browser's defaults set, the weights named, the twin rules folded — since 2026-10-21 — (from: VH-143, 2026-10-21)
+- [ ] VH-146 — The Submission card keeps its date and its note whole — since 2026-10-21 — (from: VH-143, 2026-10-21)
 
 ### Standing — maintainer-owned, never band-gated
 

@@ -26,3 +26,43 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-05 — V3-CONFIRM — Prose is en-GB, and V3-CONFIRM closes
+
+**Decision:** the profile's Prose line is en-GB, confirmed, and loses its `[guess]`; it was the last intake guess, so V3-CONFIRM, the owner's confirmation of the intake's guesses, closes and its wish line is retired as paid — because the owner said so in chat on 2026-10-05 ("yes, en-GB — record it and close V3-CONFIRM").
+
+**Rationale:** the 2026-10-02 entry left `[guess]` on two lines, "Prose: en-GB" and the clone-outside-OneDrive line; the two working-copy entries of 2026-10-05 settled the second. No `[guess]` now remains in the profile, rules or brief; only the profile's and the rules file's header comments still describe the mark. V3-CONFIRM's commits: 70a1796 (2026-10-02), 051fd48 (2026-10-03), dbba144 and 0f72350 (2026-10-05), and this one. Its one open follow-up, the Always section's length, stays a wish line for the owner. The profile's signature (the owner's, 2026-10-02) stands as signed; this entry is the decision the profile requires for a change above it. Session end: this session passed the profile's Session line (200k tokens) before 0f72350, whose close should have been its last and carried a Session-end line but did not; the owner then directed this close, which carries the line. Before it, the session recorded the owner's instructions the record lacked: VH-105's saved work (an item note) and the `/hooks` confirmation the 2026-10-02 entry asked for (a wish line).
+
+**Supersedes:** none
+
+**Deferred:** none
+
+## 2026-10-05 — V3-CONFIRM — The OneDrive working copy, corrected after Codex's check
+
+**Decision:** the owner's OneDrive checkout, pinned with Always Keep on This Device and with `core.fileMode` false, stays the working copy; the pin stops cloud-only files but not sync reverting a tracked file or leaving a conflict copy, so a change no session made is reported, never committed, and the checks and recovery live in DEV-INFRASTRUCTURE.md — because Codex's read-only check of dbba144 found the earlier entry's guard incomplete, and the owner chose "detect and report" on 2026-10-05.
+
+**Rationale:** Codex (gpt-6-astra, read-only, briefed from the record per verbs/close.md step 6) checked dbba144 and returned BLOCKING: one blocking finding, four should-fix. Blocking: the earlier entry said the pin meets the canon hazard, but the canon guard (canon `AGENTS.md` line 265 at 029ae1e; census row C60) names reverted tracked files and conflict copies as well as dehydration, and the edit dropped its protection ("pause syncing during sessions or exclude `.git`"). Fixed by the guard above, the owner's choice of three offered (detect and report; pause sync in sessions; accept the risk); its mechanism is rule 3, a session stages only its own item's lines. The owner also said they will turn OneDrive syncing off for twelve hours from 2026-10-05; just before, this session's scan found no cloud-only file in the owner's three OneDrive checkouts (this one and Route Plotter's two), so git should keep working while sync is off — evidence at that moment, not a guarantee. Should-fix, each fixed or answered: (1) Supersedes — this entry supersedes the earlier one; the INTAKE entry's Environment line and the `[guess]` the 2026-10-02 entry left on it were proposals awaiting the owner, not decisions, and naming INTAKE would mark the whole migration superseded, so they are named here; (2) a V3-CONFIRM trajectory line — not added: rule 6 applies on finishing, and V3-CONFIRM stays open while the profile's "Prose: en-GB" keeps its `[guess]`, now a wish line (rule 5); (3) the Always warning — the Environment line is shorter, its detail moved to DEV-INFRASTRUCTURE.md, Always is back to its 433 words before dbba144, and the excess over the 400-word guideline is a wish line; (4) dbba144's Verify line says Codex was not installed on this Mac — wrong: codex-cli 0.155.1 was installed at `~/.local/bin` at 00:11 that day, off the shell's PATH (this session read the link's creation time and `codex --version`), and the session had checked only PATH, so no Codex check ran before that push. This commit carries the check; `~/.local/bin` is now on the owner's PATH (`~/.zshenv`). A second, confirmation round on this change accepted those fixes and answers and asked for four more, made here: the installation fact's source, the wish line for V3-CONFIRM's open `[guess]`, the cloud-only check's exit status, and this scan's attribution; its one blocking finding was the review copy's missing `Verify:` line.
+
+**Supersedes:** 2026-10-05 — V3-CONFIRM — The OneDrive checkout is the working copy
+
+**Deferred:** none
+
+## 2026-10-05 — V3-CONFIRM — The OneDrive checkout is the working copy
+
+**Decision:** the owner's OneDrive checkout, pinned with Always Keep on This Device and with `core.fileMode` false, is the working copy; the rules file's Environment line says so and loses "work in a clone outside it [guess]" and the advice to pause syncing — because the owner confirmed it in chat on 2026-10-05, as Route Plotter recorded in route-plotter#81.
+
+**Rationale:** the owner's answer, in the first session on a new Mac, to the line the 2026-10-02 entry left as `[guess]`. Before asking, that session found the checkout sound, read-only: branch `codex/repository-review-remediation` at 051fd48, level with `origin/main`; a clean tree, with `core.fileMode` false because OneDrive restores files with changed permissions; nothing outside `node_modules` cloud-only (`find . -path ./node_modules -prune -o -flags +dataless -print` printed nothing); `samples/` holding its 33 files. Then `rm -rf node_modules && npm ci` and `npm run check` green on Node 24.21.0 from Homebrew. The pin keeps `.git` and the source hydrated, so the canon hazard — OneDrive dehydrating `.git` — is met by the pin and the dataless check rather than by a second clone; `node_modules` can still dehydrate and is rebuilt. This reverses the canon hostile-filesystem guard as the migration carried it (census row C60: cloud-synced paths unsupported). The route-plotter#81 precedent is cited on the owner's word, not fetched (rule 2).
+
+**Supersedes:** none
+
+**Deferred:** none
+
+## 2026-10-05 — V3-HARNESS — Codex runs outside the sandbox, like gh
+
+**Decision:** both `.claude` settings files list `"codex *"` in `sandbox.excludedCommands` beside `"gh *"`, so a Claude Code session can run Codex (`~/.local/bin/codex`) for the Handoff's read-only review — because the owner ruled it in chat on 2026-10-05 ("Codex runs outside the sandbox like gh").
+
+**Rationale:** `~/.local/bin/codex` links into `~/.codex/packages/`, which the sandbox denies reading, so a sandboxed call fails before Codex starts ("operation not permitted", this session, 2026-10-05); its API host is not on the Network line's allowlist either. Excluded, Codex runs with the owner's own credentials through the normal permission flow, each call asking unless the owner pre-approves it; the allowlist, the `~/.codex` denies for every other command and the `Read(~/.codex/**)` permission deny stand. `tools/harness.mjs` does not generate `excludedCommands`: both lines are hand-kept, as `"gh *"` has been since 051fd48, and a regeneration must carry them. The exclusion takes effect in a session started after this commit. In the same session, both session hooks were confirmed on this Mac in the desktop app: the session's state file, `~/.local/state/pm-next/session/claude-1e7b4ba3f76ba3d8-d00a931f456d8601.json`, changed after each tool call (08:05:42 to 08:05:49, `seen` 82 to 94), which is PostToolUse, and carries an `epoch`, which only a SessionStart startup, clear or fork writes; the `/hooks` wish line from V3-CONFIRM is retired as paid. npm audit's dev-only findings are captured as a wish line; dependencies change only by decision.
+
+**Supersedes:** none
+
+**Deferred:** none

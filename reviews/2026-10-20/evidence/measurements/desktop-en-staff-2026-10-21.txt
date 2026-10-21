@@ -1,0 +1,608 @@
+## 01-empty-dark  [desktop/dark] 1280x1531 title="UoN Video Helper" lang=en-GB
+  focus: a.skip-link "Skip to main content" vis=true outline=solid 2px rgb(255, 255, 255) inView=true
+  contrast: 31 runs, 0 under target
+  targets: 15, under 44: 0
+  lines: 11 blocks, widest 65 chars (p "Your video is processed on your device, it is never u), over the limit: 0
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 System check — all passed | H2 Accessibility statement
+## 01-empty-forced  [desktop/forced] 1280x1531 title="UoN Video Helper" lang=en-GB
+  focus: a.skip-link "Skip to main content" vis=true outline=solid 2px rgba(26, 235, 255, 0.8) inView=true
+  contrast: 31 runs, 0 under target
+  targets: 15, under 44: 0
+  lines: 11 blocks, widest 65 chars (p "Your video is processed on your device, it is never u), over the limit: 0
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 System check — all passed | H2 Accessibility statement
+## 01-empty-reflow320  [reflow320/light] 320x1822 title="UoN Video Helper" lang=en-GB
+  contrast: 31 runs, 0 under target
+  targets: 15, under 44: 0
+  lines: 11 blocks, widest 41 chars (p#video-kind-result.helper "You choose the closing, and ), over the limit: 0
+  tab walk: 10 stops; not focus-visible/obscured/out of view: 0
+    order: a "Skip to main content" > input[radio language=en-GB] "English" > input[radio video-kind=staff] "Staff video" > input[radio video-language=en-GB] "English" > input#file-input[file] "1 Choose a video" > summary "System check — all passed" > summary "Accessibility statement" > button#feedback-open[button] "Send feedback" > a#contact-creators "Email the creators team" > a#contact-learning-content "Email the learni
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 System check — all passed | H2 Accessibility statement
+## 01-empty-textspacing  [desktop/light] 1280x1765 title="UoN Video Helper" lang=en-GB
+  focus: a.skip-link "Skip to main content" vis=true outline=solid 2px rgb(16, 38, 59) inView=true
+  contrast: 31 runs, 0 under target
+  targets: 15, under 44: 0
+  lines: 11 blocks, widest 49 chars (p#browser-note "This app is designed and built for Chrom), over the limit: 0
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 System check — all passed | H2 Accessibility statement
+## 01-empty-zoom200  [zoom200/light] 640x1531 title="UoN Video Helper" lang=en-GB
+  focus: a.skip-link "Skip to main content" vis=true outline=solid 2px rgb(16, 38, 59) inView=true
+  contrast: 31 runs, 0 under target
+  targets: 15, under 44: 0
+  lines: 11 blocks, widest 65 chars (p "Your video is processed on your device, it is never u), over the limit: 0
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 System check — all passed | H2 Accessibility statement
+## 01-empty  [desktop/light] 1280x1531 title="UoN Video Helper" lang=en-GB
+  live: 204ms div: ""
+  contrast: 31 runs, 0 under target
+  targets: 15, under 44: 0
+  lines: 11 blocks, widest 65 chars (p "Your video is processed on your device, it is never u), over the limit: 0
+  tab walk: 10 stops; not focus-visible/obscured/out of view: 0
+    order: a "Skip to main content" > input[radio language=en-GB] "English" > input[radio video-kind=staff] "Staff video" > input[radio video-language=en-GB] "English" > input#file-input[file] "1 Choose a video" > summary "System check — all passed" > summary "Accessibility statement" > button#feedback-open[button] "Send feedback" > a#contact-creators "Email the creators team" > a#contact-learning-content "Email the learni
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 System check — all passed | H2 Accessibility statement
+## 02-drag-held  [desktop/light] 1280x1531 title="UoN Video Helper" lang=en-GB
+  focus: a.skip-link "Skip to main content" vis=true outline=solid 2px rgb(16, 38, 59) inView=false
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 System check — all passed | H2 Accessibility statement
+## 03-drop-refused  [desktop/light] 1280x1718 title="UoN Video Helper" lang=en-GB
+  live: 4275ms #source-status: "Reading the video…"
+        4279ms #source-status: "This file could not be read as a video. It needs to be a video file — one whose name ends .mp4, .mov, .mkv or "
+  focus: a.skip-link "Skip to main content" vis=true outline=solid 2px rgb(16, 38, 59) inView=false
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 System check — all passed | H2 Accessibility statement
+## 04-feedback  [desktop/light] 1280x1718 title="UoN Video Helper" lang=en-GB
+  focus: textarea#feedback-message.textarea[textarea] "Your message" vis=true outline=solid 2px rgb(16, 38, 59) inView=true
+  contrast: 40 runs, 0 under target
+  targets: 20, under 44: 0
+  lines: 16 blocks, widest 275 chars (p#source-status.status "This file could not be read as a), over the limit: 1: p#source-status.status "This file could not be read as a 275ch/1803px
+  tab walk: 4 stops; not focus-visible/obscured/out of view: 0
+    order: summary "What will be sent with it" > button[submit] "Open email app" > button#feedback-copy[button] "Copy message a > button#feedback-close[button] "Close"
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 System check — all passed | H2 Accessibility statement | H2 Send feedback
+## 05-reading  [desktop/light] 1280x3571 title="UoN Video Helper" lang=en-GB
+  live: 6422ms #source-status: "Reading the video…"
+        6447ms #source-status: "Video read. 6 minutes, 1920 × 1080, stereo (two channels)."
+        6447ms #status: "Checking this video against your device…"
+  focus: button#feedback-open.button.button--secondary[button] "Send feedback" vis=true outline=solid 2px rgb(255, 255, 255) inView=false
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 06-checking  [desktop/light] 1280x3571 title="UoN Video Helper" lang=en-GB
+  focus: button#feedback-open.button.button--secondary[button] "Send feedback" vis=true outline=solid 2px rgb(255, 255, 255) inView=false
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 07-ready-dark  [desktop/dark] 1280x3722 title="UoN Video Helper" lang=en-GB
+  contrast: 73 runs, 0 under target
+  targets: 34, under 44: 0
+  lines: 23 blocks, widest 96 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 96ch/630px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 07-ready-forced  [desktop/forced] 1280x3722 title="UoN Video Helper" lang=en-GB
+  contrast: 73 runs, 0 under target
+  targets: 34, under 44: 0
+  lines: 23 blocks, widest 96 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 96ch/630px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 07-ready-reflow320  [reflow320/light] 320x4208 title="UoN Video Helper" lang=en-GB
+  focus: a#contact-creators.footer-contact-link "Email the creators team" vis=true outline=solid 2px rgb(255, 255, 255) inView=false
+  contrast: 73 runs, 0 under target
+  targets: 34, under 44: 0
+  lines: 23 blocks, widest 96 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 96ch/630px
+  tab walk: 1 stops; not focus-visible/obscured/out of view: 0
+    order: a#contact-learning-content "Email the learni
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 07-ready-textspacing  [desktop/light] 1280x4299 title="UoN Video Helper" lang=en-GB
+  contrast: 73 runs, 0 under target
+  targets: 34, under 44: 0
+  lines: 23 blocks, widest 96 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 96ch/833px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 07-ready-zoom200  [zoom200/light] 640x3596 title="UoN Video Helper" lang=en-GB
+  contrast: 73 runs, 0 under target
+  targets: 34, under 44: 0
+  lines: 23 blocks, widest 96 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 96ch/630px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 07-ready  [desktop/light] 1280x3722 title="UoN Video Helper" lang=en-GB
+  live: 9719ms #status: "Device check complete. Ready to go. This should take about 2 minutes. Estimated size up to 276 MB."
+  focus: button#feedback-open.button.button--secondary[button] "Send feedback" vis=true outline=solid 2px rgb(255, 255, 255) inView=false
+  contrast: 73 runs, 0 under target
+  targets: 34, under 44: 0
+  lines: 23 blocks, widest 96 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 96ch/630px
+  tab walk: 25 stops; not focus-visible/obscured/out of view: 2: input#trim-start-range.range-input[range] "Start" vis=true obscured=div.range-fill "" inView=true | input#trim-end-range.range-input[range] "End" vis=true obscured=div.range-fill "" inView=true
+    order: a#contact-creators "Email the creators team" > a#contact-learning-content "Email the learni > a "Skip to main content" > input[radio language=en-GB] "English" > input[radio video-kind=staff] "Staff video" > input[radio video-language=en-GB] "English" > input#file-input[file] "1 Choose a video" > summary "Video properties" > video (native controls, 7 inner stops) > input#trim-start-range[range] "Start" > input#trim-end-range[range] "End" > input#trim-start[text] "Start time" > button#trim-set-start[button] "Set start her > input#trim-end[text] "End time" > button#trim-set-end[button] "Set end here" > input#title-card-on[checkbox] "Add a title c > select#closing-type[select-one] "Animation t > button#onset-help-button[button] "About anim > input[radio closing-colour=blue] "Blue" > input#closing-internal[checkbox] "Internal u > input[radio preset=best] "Larger / better Fo > button[button] "Create the video" > summary "System check — all passed" > summary "Accessibility statement" > button#feedback-open[button] "Send feedback"
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 08-help-open  [desktop/light] 1280x3888 title="UoN Video Helper" lang=en-GB
+  live: 14021ms div: "Over existing — the closing plays over the last second of your video. It covers that second as it builds. Over"
+  focus: button#onset-help-button.button.button--secondary.help-button[button] "About animation onset" vis=false outline=none 3px rgb(16, 38, 59) inView=true
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 09-trim-invalid  [desktop/light] 1280x3532 title="UoN Video Helper" lang=en-GB
+  live: 14794ms div: "Write the start time as minutes and seconds, like 1:05.5, or as seconds, like 65.5."
+        14794ms div: ""
+        14794ms #status: "Put the start and end times right in step 2 to continue."
+  focus: button#trim-set-start.button.button--secondary[button] "Set start here" vis=true outline=solid 2px rgb(16, 38, 59) inView=true
+  contrast: 69 runs, 0 under target
+  targets: 33, under 44: 0
+  lines: 20 blocks, widest 65 chars (p "Your video is processed on your device, it is never u), over the limit: 0
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 10-check-after-trim  [desktop/light] 1280x3571 title="UoN Video Helper" lang=en-GB
+  live: 15359ms div: "Write the start time as minutes and seconds, like 1:05.5, or as seconds, like 65.5."
+        15595ms div: ""
+        15595ms #status: "Checking this video against your device…"
+  focus: button#trim-set-start.button.button--secondary[button] "Set start here" vis=true outline=solid 2px rgb(16, 38, 59) inView=true
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 11-ready-trimmed  [desktop/light] 1280x3722 title="UoN Video Helper" lang=en-GB
+  live: 19371ms #status: "Device check complete. Ready to go. This should take about 2 minutes. Estimated size up to 272 MB."
+  focus: button#trim-set-start.button.button--secondary[button] "Set start here" vis=true outline=solid 2px rgb(16, 38, 59) inView=true
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 12-trim-dragged  [desktop/light] 1280x3571 title="UoN Video Helper" lang=en-GB
+  live: 19842ms #status: "Checking this video against your device…"
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 13-check-stopped  [desktop/light] 1280x3571 title="UoN Video Helper" lang=en-GB
+  live: 23691ms #status: "Device check complete. Ready to go. This should take about 2 minutes. Estimated size up to 270 MB."
+        24242ms #status: "Checking this video against your device…"
+        24421ms #status: "Check stopped."
+  focus: button.button.button--secondary[button] "Check again" vis=false outline=none 3px rgb(16, 38, 59) inView=true
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 14-title-card-on-dark  [desktop/dark] 1280x4128 title="UoN Video Helper" lang=en-GB
+  focus: input#title-card-title.text-input[text] "Title" vis=true outline=solid 2px rgb(255, 255, 255) inView=true
+  contrast: 78 runs, 0 under target
+  targets: 38, under 44: 0
+  lines: 24 blocks, widest 96 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 96ch/630px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 14-title-card-on-forced  [desktop/forced] 1280x4128 title="UoN Video Helper" lang=en-GB
+  focus: input#title-card-title.text-input[text] "Title" vis=true outline=solid 2px rgba(26, 235, 255, 0.8) inView=true
+  contrast: 78 runs, 0 under target
+  targets: 38, under 44: 0
+  lines: 24 blocks, widest 96 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 96ch/630px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 14-title-card-on-reflow320  [reflow320/light] 320x4635 title="UoN Video Helper" lang=en-GB
+  focus: input#title-card-title.text-input[text] "Title" vis=true outline=solid 2px rgb(16, 38, 59) inView=false
+  contrast: 78 runs, 0 under target
+  targets: 38, under 44: 0
+  lines: 24 blocks, widest 96 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 96ch/630px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 14-title-card-on-textspacing  [desktop/light] 1280x4717 title="UoN Video Helper" lang=en-GB
+  focus: input#title-card-title.text-input[text] "Title" vis=true outline=solid 2px rgb(16, 38, 59) inView=true
+  contrast: 78 runs, 0 under target
+  targets: 38, under 44: 0
+  lines: 24 blocks, widest 96 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 96ch/833px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 14-title-card-on-zoom200  [zoom200/light] 640x4002 title="UoN Video Helper" lang=en-GB
+  focus: input#title-card-title.text-input[text] "Title" vis=true outline=solid 2px rgb(16, 38, 59) inView=true
+  contrast: 78 runs, 0 under target
+  targets: 38, under 44: 0
+  lines: 24 blocks, widest 96 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 96ch/630px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 14-title-card-on  [desktop/light] 1280x4128 title="UoN Video Helper" lang=en-GB
+  live: 25087ms #status: "Checking this video against your device…"
+        26221ms #status: "Device check complete. Ready to go. This should take about 20 seconds. Estimated size up to 68.6 MB."
+        26737ms #status: "Checking this video against your device…"
+        30438ms #status: "Device check complete. Ready to go. This should take about 2 minutes. Estimated size up to 276 MB."
+  focus: input#title-card-on[checkbox] "Add a title card" vis=false outline=none 3px rgb(0, 0, 0) inView=true
+  contrast: 78 runs, 0 under target
+  targets: 38, under 44: 0
+  lines: 24 blocks, widest 96 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 96ch/630px
+  tab walk: 29 stops; not focus-visible/obscured/out of view: 2: input#trim-start-range.range-input[range] "Start" vis=true obscured=div.range-fill "" inView=true | input#trim-end-range.range-input[range] "End" vis=true obscured=div.range-fill "" inView=true
+    order: input#title-card-title[text] "Title" > input#title-card-department[text] "Departmen > input#title-card-authors[text] "Authors" > input#title-card-date[text] "Date" > select#closing-type[select-one] "Animation t > button#onset-help-button[button] "About anim > input[radio closing-colour=blue] "Blue" > input#closing-internal[checkbox] "Internal u > input[radio preset=best] "Larger / better Fo > button[button] "Create the video" > summary "System check — all passed" > summary "Accessibility statement" > button#feedback-open[button] "Send feedback" > a#contact-creators "Email the creators team" > a#contact-learning-content "Email the learni > a "Skip to main content" > input[radio language=en-GB] "English" > input[radio video-kind=staff] "Staff video" > input[radio video-language=en-GB] "English" > input#file-input[file] "1 Choose a video" > summary "Video properties" > video (native controls, 7 inner stops) > input#trim-start-range[range] "Start" > input#trim-end-range[range] "End" > input#trim-start[text] "Start time" > button#trim-set-start[button] "Set start her > input#trim-end[text] "End time" > button#trim-set-end[button] "Set end here" > input#title-card-on[checkbox] "Add a title c
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 15-title-card-refused  [desktop/light] 1280x4366 title="Analysing audio — UoN Video Helper" lang=en-GB
+  live: 35323ms #status: "Creating your video. Keep this tab visible and your computer awake while the video is made. Closing the tab en"
+        35336ms #status: "Getting ready"
+        35341ms #status: "Analysing audio"
+  focus: button.button.button--secondary[button] "Cancel" vis=false outline=none 3px rgb(16, 38, 59) inView=true
+  contrast: 83 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 27 blocks, widest 65 chars (p "Your video is processed on your device, it is never u), over the limit: 0
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 16-title-card-filled  [desktop/light] 1280x4366 title="Analysing audio — UoN Video Helper" lang=en-GB
+  focus: input#announce-progress[checkbox] "Announce progress" vis=true outline=solid 2px rgb(16, 38, 59) inView=true
+  contrast: 83 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 27 blocks, widest 65 chars (p "Your video is processed on your device, it is never u), over the limit: 0
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 17-closing-fade  [desktop/light] 1280x4358 title="Analysing audio — UoN Video Helper" lang=en-GB
+  focus: input#announce-progress[checkbox] "Announce progress" vis=true outline=solid 2px rgb(16, 38, 59) inView=true
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 18-closing-none  [desktop/light] 1280x4395 title="Analysing audio — UoN Video Helper" lang=en-GB
+  focus: input#announce-progress[checkbox] "Announce progress" vis=true outline=solid 2px rgb(16, 38, 59) inView=true
+  contrast: 85 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 27 blocks, widest 65 chars (p "Your video is processed on your device, it is never u), over the limit: 0
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 19-closing-internal  [desktop/light] 1280x4366 title="Analysing audio — UoN Video Helper" lang=en-GB
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 20-closing-white  [desktop/light] 1280x4366 title="Analysing audio — UoN Video Helper" lang=en-GB
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 21-preset-smaller  [desktop/light] 1280x4366 title="Analysing audio — UoN Video Helper" lang=en-GB
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 22-running-start  [desktop/light] 1280x4366 title="Analysing audio — UoN Video Helper" lang=en-GB
+  contrast: 83 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 27 blocks, widest 65 chars (p "Your video is processed on your device, it is never u), over the limit: 0
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 23-running-dark  [desktop/dark] 1280x4366 title="Encoding video — UoN Video Helper" lang=en-GB
+  contrast: 83 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 27 blocks, widest 65 chars (p "Your video is processed on your device, it is never u), over the limit: 0
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 23-running-forced  [desktop/forced] 1280x4366 title="Encoding video — UoN Video Helper" lang=en-GB
+  contrast: 83 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 27 blocks, widest 65 chars (p "Your video is processed on your device, it is never u), over the limit: 0
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 23-running-reflow320  [reflow320/light] 320x4999 title="Encoding video — UoN Video Helper" lang=en-GB
+  contrast: 83 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 27 blocks, widest 41 chars (p#video-kind-result.helper "You choose the closing, and ), over the limit: 0
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 23-running-textspacing  [desktop/light] 1280x5011 title="Encoding video — UoN Video Helper" lang=en-GB
+  contrast: 83 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 27 blocks, widest 49 chars (p#browser-note "This app is designed and built for Chrom), over the limit: 0
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 23-running-zoom200  [zoom200/light] 640x4240 title="Encoding video — UoN Video Helper" lang=en-GB
+  contrast: 83 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 27 blocks, widest 65 chars (p "Your video is processed on your device, it is never u), over the limit: 0
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 23-running  [desktop/light] 1280x4366 title="Encoding video — UoN Video Helper" lang=en-GB
+  live: 49016ms #status: "Encoding video"
+  contrast: 83 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 27 blocks, widest 65 chars (p "Your video is processed on your device, it is never u), over the limit: 0
+  tab walk: 13 stops; not focus-visible/obscured/out of view: 0
+    order: a "Skip to main content" > input[radio language=en-GB] "English" > input[radio video-kind=staff] "Staff video" > input[radio video-language=en-GB] "English" > summary "Video properties" > video (native controls, 7 inner stops) > input#announce-progress[checkbox] "Announce  > button[button] "Cancel" > summary "System check — all passed" > summary "Accessibility statement" > button#feedback-open[button] "Send feedback" > a#contact-creators "Email the creators team" > a#contact-learning-content "Email the learni
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 24-time-left  [desktop/light] 1280x4366 title="Encoding video — UoN Video Helper" lang=en-GB
+  live: 55680ms #status: "Encoding video — a quarter done"
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 25-cancelling  [desktop/light] 1280x3992 title="Cancelled — UoN Video Helper" lang=en-GB
+  live: 59269ms #status: "Cancelling…"
+        59285ms #status: "Cancelled. Nothing was saved, and your original file is unchanged."
+  focus: button.button[button] "Create the video" vis=false outline=none 3px rgb(255, 255, 255) inView=true
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 26-cancelled  [desktop/light] 1280x3992 title="Cancelled — UoN Video Helper" lang=en-GB
+  focus: button.button[button] "Create the video" vis=false outline=none 3px rgb(255, 255, 255) inView=true
+  tab walk: 29 stops; not focus-visible/obscured/out of view: 2: input#trim-start-range.range-input[range] "Start" vis=true obscured=div.range-fill "" inView=true | input#trim-end-range.range-input[range] "End" vis=true obscured=div.range-fill "" inView=true
+    order: summary "System check — all passed" > summary "Accessibility statement" > button#feedback-open[button] "Send feedback" > a#contact-creators "Email the creators team" > a#contact-learning-content "Email the learni > a "Skip to main content" > input[radio language=en-GB] "English" > input[radio video-kind=staff] "Staff video" > input[radio video-language=en-GB] "English" > input#file-input[file] "1 Choose a video" > summary "Video properties" > video (native controls, 7 inner stops) > input#trim-start-range[range] "Start" > input#trim-end-range[range] "End" > input#trim-start[text] "Start time" > button#trim-set-start[button] "Set start her > input#trim-end[text] "End time" > button#trim-set-end[button] "Set end here" > input#title-card-on[checkbox] "Add a title c > input#title-card-title[text] "Title" > input#title-card-department[text] "Departmen > input#title-card-authors[text] "Authors" > input#title-card-date[text] "Date" > select#closing-type[select-one] "Animation t > button#onset-help-button[button] "About anim > input[radio closing-colour=blue] "Blue" > input#closing-internal[checkbox] "Internal u > input[radio preset=best] "Larger / better Fo > button[button] "Create the video"
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 27-finished-dark  [desktop/dark] 1280x4192 title="Ready — UoN Video Helper" lang=en-GB
+  contrast: 78 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 22 blocks, widest 65 chars (p "Your video is processed on your device, it is never u), over the limit: 0
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 27-finished-forced  [desktop/forced] 1280x4192 title="Ready — UoN Video Helper" lang=en-GB
+  contrast: 78 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 22 blocks, widest 65 chars (p "Your video is processed on your device, it is never u), over the limit: 0
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 27-finished-reflow320  [reflow320/light] 320x4765 title="Ready — UoN Video Helper" lang=en-GB
+  contrast: 78 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 22 blocks, widest 41 chars (p#video-kind-result.helper "You choose the closing, and ), over the limit: 0
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 27-finished-textspacing  [desktop/light] 1280x4762 title="Ready — UoN Video Helper" lang=en-GB
+  contrast: 78 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 22 blocks, widest 49 chars (p#browser-note "This app is designed and built for Chrom), over the limit: 0
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 27-finished-zoom200  [zoom200/light] 640x4066 title="Ready — UoN Video Helper" lang=en-GB
+  contrast: 78 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 22 blocks, widest 65 chars (p "Your video is processed on your device, it is never u), over the limit: 0
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 27-finished  [desktop/light] 1280x4192 title="Ready — UoN Video Helper" lang=en-GB
+  live: 61803ms #status: "Creating your video. Keep this tab visible and your computer awake while the video is made. Closing the tab en"
+        61819ms #status: "Getting ready"
+        61819ms #status: "Analysing audio"
+        75322ms #status: "Encoding video"
+        82124ms #status: "Encoding video — a quarter done"
+        89141ms #status: "Encoding video — half done. About 10 seconds left"
+        96165ms #status: "Encoding video — three quarters done. About 10 seconds left"
+        103141ms #status: "Finishing the file"
+        103209ms #status: "Checking the file"
+        106125ms #status: "Your video is ready."
+  focus: section.notification "Finished video — 262 MB" vis=false outline=none 3px rgb(16, 38, 59) inView=true
+  contrast: 78 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 22 blocks, widest 65 chars (p "Your video is processed on your device, it is never u), over the limit: 0
+  tab walk: 7 stops; not focus-visible/obscured/out of view: 0
+    order: button[button] "Save the video" > button[button] "Create the video" > summary "System check — all passed" > summary "Accessibility statement" > button#feedback-open[button] "Send feedback" > a#contact-creators "Email the creators team" > a#contact-learning-content "Email the learni
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 28-discard-question-dark  [desktop/dark] 1280x4213 title="Ready — UoN Video Helper" lang=en-GB
+  focus: button.button.button--danger[button] "Discard it and start again" vis=true outline=solid 2px rgb(255, 255, 255) inView=true
+  contrast: 79 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 24 blocks, widest 96 chars (p#status.status "This video is not saved yet. You have n), over the limit: 1: p#status.status "This video is not saved yet. You have n 96ch/628px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 28-discard-question-forced  [desktop/forced] 1280x4213 title="Ready — UoN Video Helper" lang=en-GB
+  focus: button.button.button--danger[button] "Discard it and start again" vis=true outline=solid 2px rgb(255, 255, 255) inView=true
+  contrast: 79 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 24 blocks, widest 96 chars (p#status.status "This video is not saved yet. You have n), over the limit: 1: p#status.status "This video is not saved yet. You have n 96ch/628px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 28-discard-question-reflow320  [reflow320/light] 320x4858 title="Ready — UoN Video Helper" lang=en-GB
+  focus: button.button.button--danger[button] "Discard it and start again" vis=true outline=solid 2px rgb(16, 38, 59) inView=false
+  contrast: 79 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 24 blocks, widest 96 chars (p#status.status "This video is not saved yet. You have n), over the limit: 1: p#status.status "This video is not saved yet. You have n 96ch/628px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 28-discard-question-textspacing  [desktop/light] 1280x4762 title="Ready — UoN Video Helper" lang=en-GB
+  focus: button.button.button--danger[button] "Discard it and start again" vis=true outline=solid 2px rgb(16, 38, 59) inView=false
+  contrast: 79 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 24 blocks, widest 98 chars (p#status.status "This video is not saved yet. You have n), over the limit: 1: p#status.status "This video is not saved yet. You have n 98ch/845px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 28-discard-question-zoom200  [zoom200/light] 640x4087 title="Ready — UoN Video Helper" lang=en-GB
+  focus: button.button.button--danger[button] "Discard it and start again" vis=true outline=solid 2px rgb(16, 38, 59) inView=true
+  contrast: 79 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 24 blocks, widest 96 chars (p#status.status "This video is not saved yet. You have n), over the limit: 1: p#status.status "This video is not saved yet. You have n 96ch/628px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 28-discard-question  [desktop/light] 1280x4213 title="Ready — UoN Video Helper" lang=en-GB
+  live: 109517ms #status: "This video is not saved yet. You have not saved the video you just made. Starting again will discard it."
+  focus: section.notification "This video is not saved yet" vis=false outline=none 3px rgb(16, 38, 59) inView=true
+  contrast: 79 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 24 blocks, widest 96 chars (p#status.status "This video is not saved yet. You have n), over the limit: 1: p#status.status "This video is not saved yet. You have n 96ch/628px
+  tab walk: 31 stops; not focus-visible/obscured/out of view: 2: input#trim-start-range.range-input[range] "Start" vis=true obscured=div.range-fill "" inView=true | input#trim-end-range.range-input[range] "End" vis=true obscured=div.range-fill "" inView=true
+    order: button[button] "Discard it and start again" > button[button] "Keep it" > button[button] "Create the video" > summary "System check — all passed" > summary "Accessibility statement" > button#feedback-open[button] "Send feedback" > a#contact-creators "Email the creators team" > a#contact-learning-content "Email the learni > a "Skip to main content" > input[radio language=en-GB] "English" > input[radio video-kind=staff] "Staff video" > input[radio video-language=en-GB] "English" > input#file-input[file] "1 Choose a video" > summary "Video properties" > video (native controls, 7 inner stops) > input#trim-start-range[range] "Start" > input#trim-end-range[range] "End" > input#trim-start[text] "Start time" > button#trim-set-start[button] "Set start her > input#trim-end[text] "End time" > button#trim-set-end[button] "Set end here" > input#title-card-on[checkbox] "Add a title c > input#title-card-title[text] "Title" > input#title-card-department[text] "Departmen > input#title-card-authors[text] "Authors" > input#title-card-date[text] "Date" > select#closing-type[select-one] "Animation t > button#onset-help-button[button] "About anim > input[radio closing-colour=blue] "Blue" > input#closing-internal[checkbox] "Internal u > input[radio preset=best] "Larger / better Fo
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 29-kept  [desktop/light] 1280x4192 title="Ready — UoN Video Helper" lang=en-GB
+  live: 114101ms #status: ""
+  focus: section.notification "Finished video — 262 MB" vis=false outline=none 3px rgb(16, 38, 59) inView=true
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 30-saving  [desktop/light] 1280x4481 title="Ready — UoN Video Helper" lang=en-GB
+  live: 114802ms #save-status: "Saving…"
+  focus: button.button.button--secondary[button] "Stop saving" vis=false outline=none 3px rgb(16, 38, 59) inView=true
+  saves: lecture-360s (branded).mp4
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 31-saved-dark  [desktop/dark] 1280x4209 title="Ready — UoN Video Helper" lang=en-GB
+  saves: lecture-360s (branded).mp4
+  contrast: 78 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 22 blocks, widest 65 chars (p "Your video is processed on your device, it is never u), over the limit: 0
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 31-saved-forced  [desktop/forced] 1280x4209 title="Ready — UoN Video Helper" lang=en-GB
+  saves: lecture-360s (branded).mp4
+  contrast: 78 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 22 blocks, widest 65 chars (p "Your video is processed on your device, it is never u), over the limit: 0
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 31-saved-reflow320  [reflow320/light] 320x4782 title="Ready — UoN Video Helper" lang=en-GB
+  saves: lecture-360s (branded).mp4
+  contrast: 78 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 22 blocks, widest 41 chars (p#video-kind-result.helper "You choose the closing, and ), over the limit: 0
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 31-saved-textspacing  [desktop/light] 1280x4767 title="Ready — UoN Video Helper" lang=en-GB
+  saves: lecture-360s (branded).mp4
+  contrast: 78 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 22 blocks, widest 49 chars (p#browser-note "This app is designed and built for Chrom), over the limit: 0
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 31-saved-zoom200  [zoom200/light] 640x4083 title="Ready — UoN Video Helper" lang=en-GB
+  saves: lecture-360s (branded).mp4
+  contrast: 78 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 22 blocks, widest 65 chars (p "Your video is processed on your device, it is never u), over the limit: 0
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 31-saved  [desktop/light] 1280x4209 title="Ready — UoN Video Helper" lang=en-GB
+  live: 115361ms #save-status: "Saved. Check it where you saved it, then upload it where it is going — or choose another video in step 1."
+  focus: section.notification "Finished video — 262 MB" vis=false outline=none 3px rgb(16, 38, 59) inView=true
+  saves: lecture-360s (branded).mp4
+  contrast: 78 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 22 blocks, widest 65 chars (p "Your video is processed on your device, it is never u), over the limit: 0
+  tab walk: 6 stops; not focus-visible/obscured/out of view: 0
+    order: button[button] "Create the video" > summary "System check — all passed" > summary "Accessibility statement" > button#feedback-open[button] "Send feedback" > a#contact-creators "Email the creators team" > a#contact-learning-content "Email the learni
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 32-previous-video  [desktop/light] 1280x4128 title="UoN Video Helper" lang=en-GB
+  live: 118689ms #source-status: "Reading the video…"
+        118689ms #save-status: ""
+        118698ms #source-status: "Video read. 1 minute, 1280 × 720, stereo (two channels)."
+        118698ms #status: "Checking this video against your device…"
+        119469ms #status: "Device check complete. Ready to go. This should take about 20 seconds. Estimated size up to 25.5 MB."
+  saves: lecture-360s (branded).mp4
+  contrast: 78 runs, 0 under target
+  targets: 38, under 44: 0
+  lines: 24 blocks, widest 98 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 98ch/645px
+  tab walk: 29 stops; not focus-visible/obscured/out of view: 2: input#trim-start-range.range-input[range] "Start" vis=true obscured=div.range-fill "" inView=true | input#trim-end-range.range-input[range] "End" vis=true obscured=div.range-fill "" inView=true
+    order: a "Skip to main content" > input[radio language=en-GB] "English" > input[radio video-kind=staff] "Staff video" > input[radio video-language=en-GB] "English" > input#file-input[file] "1 Choose a video" > summary "Video properties" > video (native controls, 7 inner stops) > input#trim-start-range[range] "Start" > input#trim-end-range[range] "End" > input#trim-start[text] "Start time" > button#trim-set-start[button] "Set start her > input#trim-end[text] "End time" > button#trim-set-end[button] "Set end here" > input#title-card-on[checkbox] "Add a title c > input#title-card-title[text] "Title" > input#title-card-department[text] "Departmen > input#title-card-authors[text] "Authors" > input#title-card-date[text] "Date" > select#closing-type[select-one] "Animation t > button#onset-help-button[button] "About anim > input[radio closing-colour=blue] "Blue" > input#closing-internal[checkbox] "Internal u > input[radio preset=best] "Larger / better Fo > button[button] "Create the video" > summary "System check — all passed" > summary "Accessibility statement" > button#feedback-open[button] "Send feedback" > a#contact-creators "Email the creators team" > a#contact-learning-content "Email the learni
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 33-statement-open-dark  [desktop/dark] 1280x5977 title="UoN Video Helper" lang=en-GB
+  saves: lecture-360s (branded).mp4
+  contrast: 118 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 53 blocks, widest 98 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 98ch/645px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement | H3 How accessible this tool is | H3 Feedback and contact | H3 Enforcement procedure | H3 Compliance status | H3 How we tested this tool | H3 What we plan to test next | H3 About this statement
+## 33-statement-open-forced  [desktop/forced] 1280x5977 title="UoN Video Helper" lang=en-GB
+  saves: lecture-360s (branded).mp4
+  contrast: 118 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 53 blocks, widest 98 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 98ch/645px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement | H3 How accessible this tool is | H3 Feedback and contact | H3 Enforcement procedure | H3 Compliance status | H3 How we tested this tool | H3 What we plan to test next | H3 About this statement
+## 33-statement-open-reflow320  [reflow320/light] 320x7780 title="UoN Video Helper" lang=en-GB
+  saves: lecture-360s (branded).mp4
+  contrast: 118 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 53 blocks, widest 98 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 98ch/645px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement | H3 How accessible this tool is | H3 Feedback and contact | H3 Enforcement procedure | H3 Compliance status | H3 How we tested this tool | H3 What we plan to test next | H3 About this statement
+## 33-statement-open-textspacing  [desktop/light] 1280x7082 title="UoN Video Helper" lang=en-GB
+  saves: lecture-360s (branded).mp4
+  contrast: 118 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 53 blocks, widest 99 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 99ch/851px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement | H3 How accessible this tool is | H3 Feedback and contact | H3 Enforcement procedure | H3 Compliance status | H3 How we tested this tool | H3 What we plan to test next | H3 About this statement
+## 33-statement-open-zoom200  [zoom200/light] 640x5851 title="UoN Video Helper" lang=en-GB
+  saves: lecture-360s (branded).mp4
+  contrast: 118 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 53 blocks, widest 98 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 98ch/645px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement | H3 How accessible this tool is | H3 Feedback and contact | H3 Enforcement procedure | H3 Compliance status | H3 How we tested this tool | H3 What we plan to test next | H3 About this statement
+## 33-statement-open  [desktop/light] 1280x5977 title="UoN Video Helper" lang=en-GB
+  focus: summary.disclosure-summary "Accessibility statement" vis=false outline=none 3px rgb(250, 246, 239) inView=true
+  saves: lecture-360s (branded).mp4
+  contrast: 118 runs, 0 under target
+  targets: 40, under 44: 0
+  lines: 53 blocks, widest 98 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 98ch/645px
+  tab walk: 5 stops; not focus-visible/obscured/out of view: 0
+    order: a "joe > a "Equality Advisory and Support Service (ne > button#feedback-open[button] "Send feedback" > a#contact-creators "Email the creators team" > a#contact-learning-content "Email the learni
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement | H3 How accessible this tool is | H3 Feedback and contact | H3 Enforcement procedure | H3 Compliance status | H3 How we tested this tool | H3 What we plan to test next | H3 About this statement
+## 34-system-check-open  [desktop/light] 1280x4434 title="UoN Video Helper" lang=en-GB
+  focus: summary.disclosure-summary "System check — all passed" vis=false outline=none 3px rgb(250, 246, 239) inView=true
+  saves: lecture-360s (branded).mp4
+  contrast: 96 runs, 0 under target
+  targets: 38, under 44: 0
+  lines: 30 blocks, widest 98 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 98ch/645px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 35-blocked-file-dark  [desktop/dark] 1280x1751 title="UoN Video Helper" lang=en-GB
+  focus: summary.disclosure-summary "Accessibility statement" vis=true outline=solid 2px rgb(255, 255, 255) inView=true
+  saves: lecture-360s (branded).mp4
+  contrast: 34 runs, 0 under target
+  targets: 16, under 44: 0
+  lines: 13 blocks, widest 244 chars (p#source-status.status "Device check complete. This cann), over the limit: 1: p#source-status.status "Device check complete. This cann 244ch/1603px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 System check — all passed | H2 Accessibility statement
+## 35-blocked-file-forced  [desktop/forced] 1280x1751 title="UoN Video Helper" lang=en-GB
+  focus: summary.disclosure-summary "Accessibility statement" vis=true outline=solid 2px rgba(26, 235, 255, 0.8) inView=true
+  saves: lecture-360s (branded).mp4
+  contrast: 34 runs, 0 under target
+  targets: 16, under 44: 0
+  lines: 13 blocks, widest 244 chars (p#source-status.status "Device check complete. This cann), over the limit: 1: p#source-status.status "Device check complete. This cann 244ch/1603px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 System check — all passed | H2 Accessibility statement
+## 35-blocked-file-reflow320  [reflow320/light] 320x2126 title="UoN Video Helper" lang=en-GB
+  focus: summary.disclosure-summary "Accessibility statement" vis=true outline=solid 2px rgb(255, 255, 255) inView=false
+  saves: lecture-360s (branded).mp4
+  contrast: 34 runs, 0 under target
+  targets: 16, under 44: 0
+  lines: 13 blocks, widest 244 chars (p#source-status.status "Device check complete. This cann), over the limit: 1: p#source-status.status "Device check complete. This cann 244ch/1603px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 System check — all passed | H2 Accessibility statement
+## 35-blocked-file-textspacing  [desktop/light] 1280x2056 title="UoN Video Helper" lang=en-GB
+  focus: summary.disclosure-summary "Accessibility statement" vis=true outline=solid 2px rgb(255, 255, 255) inView=true
+  saves: lecture-360s (branded).mp4
+  contrast: 34 runs, 0 under target
+  targets: 16, under 44: 0
+  lines: 13 blocks, widest 248 chars (p#source-status.status "Device check complete. This cann), over the limit: 1: p#source-status.status "Device check complete. This cann 248ch/2140px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 System check — all passed | H2 Accessibility statement
+## 35-blocked-file-zoom200  [zoom200/light] 640x1751 title="UoN Video Helper" lang=en-GB
+  focus: summary.disclosure-summary "Accessibility statement" vis=true outline=solid 2px rgb(255, 255, 255) inView=false
+  saves: lecture-360s (branded).mp4
+  contrast: 34 runs, 0 under target
+  targets: 16, under 44: 0
+  lines: 13 blocks, widest 244 chars (p#source-status.status "Device check complete. This cann), over the limit: 1: p#source-status.status "Device check complete. This cann 244ch/1603px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 System check — all passed | H2 Accessibility statement
+## 35-blocked-file  [desktop/light] 1280x1751 title="UoN Video Helper" lang=en-GB
+  live: 126059ms #source-status: "Reading the video…"
+        126059ms #status: ""
+        126063ms #source-status: "Video read. 3 seconds, 1920 × 1080, no sound."
+        126063ms #status: "Checking this video against your device…"
+        126091ms #status: ""
+        126091ms #source-status: "Device check complete. This cannot run here. This browser cannot read the picture or sound inside this file. I"
+  focus: summary.disclosure-summary "System check — all passed" vis=false outline=none 3px rgb(250, 246, 239) inView=true
+  saves: lecture-360s (branded).mp4
+  contrast: 34 runs, 0 under target
+  targets: 16, under 44: 0
+  lines: 13 blocks, widest 244 chars (p#source-status.status "Device check complete. This cann), over the limit: 1: p#source-status.status "Device check complete. This cann 244ch/1603px
+  tab walk: 11 stops; not focus-visible/obscured/out of view: 0
+    order: summary "Accessibility statement" > button#feedback-open[button] "Send feedback" > a#contact-creators "Email the creators team" > a#contact-learning-content "Email the learni > a "Skip to main content" > input[radio language=en-GB] "English" > input[radio video-kind=staff] "Staff video" > input[radio video-language=en-GB] "English" > input#file-input[file] "1 Choose a video" > summary "Video properties" > summary "System check — all passed"
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 System check — all passed | H2 Accessibility statement
+## 36-unreadable  [desktop/light] 1280x1718 title="UoN Video Helper" lang=en-GB
+  live: 129280ms #source-status: "Reading the video…"
+        129283ms #source-status: "This file could not be read as a video. It needs to be a video file — one whose name ends .mp4, .mov, .mkv or "
+  focus: summary.disclosure-summary "Accessibility statement" vis=true outline=solid 2px rgb(255, 255, 255) inView=true
+  saves: lecture-360s (branded).mp4
+  contrast: 33 runs, 0 under target
+  targets: 15, under 44: 0
+  lines: 14 blocks, widest 275 chars (p#source-status.status "This file could not be read as a), over the limit: 1: p#source-status.status "This file could not be read as a 275ch/1803px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 System check — all passed | H2 Accessibility statement
+## 37-too-short  [desktop/light] 1280x4149 title="UoN Video Helper" lang=en-GB
+  live: 130074ms #source-status: "Reading the video…"
+        130080ms #source-status: "Video read. 2 seconds, 1280 × 720, mono (one channel)."
+        130080ms #status: "Checking this video against your device…"
+        130335ms #status: "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 4.3 MB."
+  focus: summary.disclosure-summary "Accessibility statement" vis=true outline=solid 2px rgb(255, 255, 255) inView=false
+  saves: lecture-360s (branded).mp4
+  contrast: 78 runs, 0 under target
+  targets: 38, under 44: 0
+  lines: 24 blocks, widest 94 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 94ch/616px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 38-silent  [desktop/light] 1280x4343 title="UoN Video Helper" lang=en-GB
+  live: 130951ms #source-status: "Reading the video…"
+        130951ms #status: ""
+        130955ms #source-status: "Video read. 10 seconds, 1280 × 720, no sound."
+        130955ms #status: "Checking this video against your device…"
+        131267ms #status: "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 6.8 MB. Worth knowing"
+  focus: summary.disclosure-summary "Accessibility statement" vis=true outline=solid 2px rgb(255, 255, 255) inView=false
+  saves: lecture-360s (branded).mp4
+  contrast: 82 runs, 0 under target
+  targets: 38, under 44: 0
+  lines: 28 blocks, widest 149 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 149ch/980px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 39-captioned  [desktop/light] 1280x4356 title="UoN Video Helper" lang=en-GB
+  live: 131843ms #source-status: "Reading the video…"
+        131843ms #status: ""
+        131848ms #source-status: "Video read. 12 seconds, 1280 × 720, mono (one channel). One thing to know about what goes into the new file. F"
+        131848ms #status: "Checking this video against your device…"
+        132202ms #status: "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 8 MB."
+  focus: summary.disclosure-summary "Accessibility statement" vis=true outline=solid 2px rgb(255, 255, 255) inView=false
+  saves: lecture-360s (branded).mp4
+  contrast: 81 runs, 0 under target
+  targets: 38, under 44: 0
+  lines: 27 blocks, widest 334 chars (p#source-status.status "Video read. 12 seconds, 1280 × 7), over the limit: 2: p#source-status.status "Video read. 12 seconds, 1280 × 7 334ch/2191px | p#status.status "Device check complete. Ready to go. Thi 92ch/604px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 40-quiet  [desktop/light] 1280x4364 title="UoN Video Helper" lang=en-GB
+  live: 132715ms #source-status: "Reading the video…"
+        132715ms #status: ""
+        132720ms #source-status: "Video read. 30 seconds, 1280 × 720, mono (one channel)."
+        132720ms #status: "Checking this video against your device…"
+        133163ms #status: "Device check complete. Ready to go. This should take about 10 seconds. Estimated size up to 14.5 MB. Worth kno"
+  focus: summary.disclosure-summary "Accessibility statement" vis=true outline=solid 2px rgb(255, 255, 255) inView=false
+  saves: lecture-360s (branded).mp4
+  contrast: 82 runs, 0 under target
+  targets: 38, under 44: 0
+  lines: 29 blocks, widest 156 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 156ch/1024px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 41-loud  [desktop/light] 1280x4128 title="UoN Video Helper" lang=en-GB
+  live: 133808ms #source-status: "Reading the video…"
+        133808ms #status: ""
+        133812ms #source-status: "Video read. 30 seconds, 1280 × 720, mono (one channel)."
+        133812ms #status: "Checking this video against your device…"
+        134264ms #status: "Device check complete. Ready to go. This should take about 10 seconds. Estimated size up to 14.5 MB."
+  focus: summary.disclosure-summary "Accessibility statement" vis=true outline=solid 2px rgb(255, 255, 255) inView=false
+  saves: lecture-360s (branded).mp4
+  contrast: 78 runs, 0 under target
+  targets: 38, under 44: 0
+  lines: 24 blocks, widest 98 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 98ch/645px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 42-four-by-three  [desktop/light] 1280x4183 title="UoN Video Helper" lang=en-GB
+  live: 134900ms #source-status: "Reading the video…"
+        134900ms #status: ""
+        134904ms #source-status: "Video read. 20 seconds, 640 × 480, mono (one channel)."
+        134904ms #status: "Checking this video against your device…"
+        135293ms #status: "Device check complete. Ready to go. This should take about 10 seconds. Estimated size up to 4.1 MB."
+  focus: summary.disclosure-summary "Accessibility statement" vis=true outline=solid 2px rgb(255, 255, 255) inView=false
+  saves: lecture-360s (branded).mp4
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 43-truncated-read  [desktop/light] 1280x4128 title="UoN Video Helper" lang=en-GB
+  live: 135780ms #source-status: "Reading the video…"
+        135780ms #status: ""
+        135784ms #source-status: "Video read. 30 seconds, 1280 × 720, stereo (two channels)."
+        135784ms #status: "Checking this video against your device…"
+        136261ms #status: "Device check complete. Ready to go. This should take about 10 seconds. Estimated size up to 14.5 MB."
+  focus: summary.disclosure-summary "Accessibility statement" vis=true outline=solid 2px rgb(255, 255, 255) inView=false
+  saves: lecture-360s (branded).mp4
+  contrast: 78 runs, 0 under target
+  targets: 38, under 44: 0
+  lines: 24 blocks, widest 98 chars (p#status.status "Device check complete. Ready to go. Thi), over the limit: 1: p#status.status "Device check complete. Ready to go. Thi 98ch/645px
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 44-failed-timeout  [desktop/light] 1280x4192 title="Ready — UoN Video Helper" lang=en-GB
+  live: 136868ms #status: "Creating your video. Keep this tab visible and your computer awake while the video is made. Closing the tab en"
+        136883ms #status: "Getting ready"
+        136883ms #status: "Analysing audio"
+        138243ms #status: "Encoding video"
+        138551ms #status: "Encoding video — a quarter done"
+        139198ms #status: "Encoding video — half done"
+        140377ms #status: "Finishing the file"
+        140436ms #status: "Checking the file"
+        140627ms #status: "Your video is ready."
+  focus: section.notification "Finished video — 8.2 MB" vis=false outline=none 3px rgb(16, 38, 59) inView=true
+  saves: lecture-360s (branded).mp4
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 System check — all passed | H2 Accessibility statement
+## 45-errors-captured  [desktop/light] 1280x4512 title="Ready — UoN Video Helper" lang=en-GB
+  focus: section.notification "Finished video — 8.2 MB" vis=false outline=none 3px rgb(16, 38, 59) inView=true
+  page errors: Deliberate audit error
+  saves: lecture-360s (branded).mp4
+  contrast: 82 runs, 0 under target
+  targets: 41, under 44: 0
+  lines: 23 blocks, widest 65 chars (p "Your video is processed on your device, it is never u), over the limit: 0
+  tab walk: 9 stops; not focus-visible/obscured/out of view: 0
+    order: button[button] "Save the video" > button[button] "Create the video" > summary "Technical details" > button#feedback-report[button] "Report this  > summary "System check — all passed" > summary "Accessibility statement" > button#feedback-open[button] "Send feedback" > a#contact-creators "Email the creators team" > a#contact-learning-content "Email the learni
+  headings: H1 UoN Video Helper | H2 1. Choose a video | H2 2. Trim | H2 3. Title card | H2 4. Closing branding | H2 5. File size / quality | H2 6. Create | H2 Errors captured | H2 System check — all passed | H2 Accessibility statement

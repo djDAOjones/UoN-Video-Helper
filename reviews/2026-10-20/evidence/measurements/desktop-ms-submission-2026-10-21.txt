@@ -1,0 +1,141 @@
+## ms-sub-01-empty  [desktop/light] 1280x1744 title="Pembantu Video UoN" lang=ms-MY
+  live: 95ms div: ""
+        607ms div: "Di atas yang sedia ada — bahagian penutup dimainkan pada saat terakhir video anda. Ia menutupi saat itu semasa"
+        607ms div: ""
+        607ms #language-status(hidden): "Bahasa halaman: Bahasa Malaysia."
+  focus: input[radio video-kind=submission] "Serahan pelajar" vis=false outline=none 3px rgb(0, 0, 0) inView=true
+  contrast: 34 runs, 0 under target
+  targets: 16, under 44: 0
+  lines: 17 blocks, widest 65 chars (p.notification-body "Halaman ini diterjemahkan daripada ), over the limit: 0
+  tab walk: 7 stops; not focus-visible/obscured/out of view: 0
+    order: input[radio video-language=ms-MY] "Bahasa Ma > input#file-input[file] "1 Pilih video" > summary "Pemeriksaan sistem — semua lulus" > summary "Kenyataan kebolehcapaian" > button#feedback-open[button] "Hantar maklum  > a#contact-creators "Hantar e-mel kepada pasu > a#contact-learning-content "Hantar e-mel kep
+  headings: H1 Pembantu Video UoN | H2 1. Pilih video | H2 Pemeriksaan sistem — semua lulus | H2 Kenyataan kebolehcapaian
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":76,"langChanges":[{"t":607,"lang":"ms-MY"}]}
+## ms-sub-02-ready-dark  [desktop/dark] 1280x4612 title="Pembantu Video UoN" lang=ms-MY
+  focus: a.skip-link "Langkau ke kandungan utama" vis=true outline=solid 2px rgb(255, 255, 255) inView=true
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 37 blocks, widest 128 chars (p#status.status "Pemeriksaan peranti selesai. Sedia untu), over the limit: 1: p#status.status "Pemeriksaan peranti selesai. Sedia untu 128ch/838px
+  headings: H1 Pembantu Video UoN | H2 1. Pilih video | H2 2. Potong | H2 3. Kad tajuk | H2 4. Penjenamaan penutup | H2 5. Saiz/kualiti fail | H2 6. Cipta | H2 Pemeriksaan sistem — semua lulus | H2 Kenyataan kebolehcapaian
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":76,"langChanges":[{"t":607,"lang":"ms-MY"}]}
+## ms-sub-02-ready-forced  [desktop/forced] 1280x4612 title="Pembantu Video UoN" lang=ms-MY
+  focus: a.skip-link "Langkau ke kandungan utama" vis=true outline=solid 2px rgba(26, 235, 255, 0.8) inView=true
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 37 blocks, widest 128 chars (p#status.status "Pemeriksaan peranti selesai. Sedia untu), over the limit: 1: p#status.status "Pemeriksaan peranti selesai. Sedia untu 128ch/838px
+  headings: H1 Pembantu Video UoN | H2 1. Pilih video | H2 2. Potong | H2 3. Kad tajuk | H2 4. Penjenamaan penutup | H2 5. Saiz/kualiti fail | H2 6. Cipta | H2 Pemeriksaan sistem — semua lulus | H2 Kenyataan kebolehcapaian
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":76,"langChanges":[{"t":607,"lang":"ms-MY"}]}
+## ms-sub-02-ready-reflow320  [reflow320/light] 320x5525 title="Pembantu Video UoN" lang=ms-MY
+  focus: a.skip-link "Langkau ke kandungan utama" vis=true outline=solid 2px rgb(16, 38, 59) inView=true
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 2: input#trim-start.text-input[text] "Masa mula" 26x44 | input#trim-end.text-input[text] "Masa tamat" 26x44
+  lines: 37 blocks, widest 128 chars (p#status.status "Pemeriksaan peranti selesai. Sedia untu), over the limit: 1: p#status.status "Pemeriksaan peranti selesai. Sedia untu 128ch/838px
+  headings: H1 Pembantu Video UoN | H2 1. Pilih video | H2 2. Potong | H2 3. Kad tajuk | H2 4. Penjenamaan penutup | H2 5. Saiz/kualiti fail | H2 6. Cipta | H2 Pemeriksaan sistem — semua lulus | H2 Kenyataan kebolehcapaian
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":76,"langChanges":[{"t":607,"lang":"ms-MY"}]}
+## ms-sub-02-ready-textspacing  [desktop/light] 1280x5318 title="Pembantu Video UoN" lang=ms-MY
+  focus: a.skip-link "Langkau ke kandungan utama" vis=true outline=solid 2px rgb(16, 38, 59) inView=true
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 37 blocks, widest 127 chars (p#status.status "Pemeriksaan peranti selesai. Sedia untu), over the limit: 1: p#status.status "Pemeriksaan peranti selesai. Sedia untu 127ch/1095px
+  headings: H1 Pembantu Video UoN | H2 1. Pilih video | H2 2. Potong | H2 3. Kad tajuk | H2 4. Penjenamaan penutup | H2 5. Saiz/kualiti fail | H2 6. Cipta | H2 Pemeriksaan sistem — semua lulus | H2 Kenyataan kebolehcapaian
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":76,"langChanges":[{"t":607,"lang":"ms-MY"}]}
+## ms-sub-02-ready-zoom200  [zoom200/light] 640x4486 title="Pembantu Video UoN" lang=ms-MY
+  focus: a.skip-link "Langkau ke kandungan utama" vis=true outline=solid 2px rgb(16, 38, 59) inView=true
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 1: input#trim-start.text-input[text] "Masa mula" 34x44
+  lines: 37 blocks, widest 128 chars (p#status.status "Pemeriksaan peranti selesai. Sedia untu), over the limit: 1: p#status.status "Pemeriksaan peranti selesai. Sedia untu 128ch/838px
+  headings: H1 Pembantu Video UoN | H2 1. Pilih video | H2 2. Potong | H2 3. Kad tajuk | H2 4. Penjenamaan penutup | H2 5. Saiz/kualiti fail | H2 6. Cipta | H2 Pemeriksaan sistem — semua lulus | H2 Kenyataan kebolehcapaian
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":76,"langChanges":[{"t":607,"lang":"ms-MY"}]}
+## ms-sub-02-ready  [desktop/light] 1280x4612 title="Pembantu Video UoN" lang=ms-MY
+  live: 2263ms #source-status: "Membaca video itu…"
+        2284ms #source-status: "Video dibaca. 1 minit, 1280 × 720, stereo (dua saluran)."
+        2284ms #status: "Menyemak video ini pada peranti anda…"
+        3072ms #status: "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa kira-kira 20 saat. Anggaran sa"
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 37 blocks, widest 128 chars (p#status.status "Pemeriksaan peranti selesai. Sedia untu), over the limit: 1: p#status.status "Pemeriksaan peranti selesai. Sedia untu 128ch/838px
+  tab walk: 28 stops; not focus-visible/obscured/out of view: 2: input#trim-start-range.range-input[range] "Mula" vis=true obscured=div.range-fill "" inView=true | input#trim-end-range.range-input[range] "Tamat" vis=true obscured=div.range-fill "" inView=true
+    order: a "Langkau ke kandungan utama" > input[radio language=ms-MY] "Bahasa Malaysia > a "Cadangkan perkataan yang lebih baik melal > input[radio video-kind=submission] "Serahan  > input[radio video-language=ms-MY] "Bahasa Ma > input#file-input[file] "1 Pilih video" > summary "Ciri-ciri video" > video (native controls, 7 inner stops) > input#trim-start-range[range] "Mula" > input#trim-end-range[range] "Tamat" > input#trim-start[text] "Masa mula" > button#trim-set-start[button] "Tetapkan perm > input#trim-end[text] "Masa tamat" > button#trim-set-end[button] "Tetapkan hujung > input#submission-card-assignment[text] "Taju > input#submission-card-module[text] "Kod dan  > input#submission-card-convenor[text] "Penyel > textarea#submission-card-ids[textarea] "Nomb > select#closing-type[select-one] "Jenis anima > button#onset-help-button[button] "Perihal pe > input[radio closing-colour=blue] "Biru" > input[radio preset=best] "Lebih besar / lebi > button[button] "Cipta video itu" > summary "Pemeriksaan sistem — semua lulus" > summary "Kenyataan kebolehcapaian" > button#feedback-open[button] "Hantar maklum  > a#contact-creators "Hantar e-mel kepada pasu > a#contact-learning-content "Hantar e-mel kep
+  headings: H1 Pembantu Video UoN | H2 1. Pilih video | H2 2. Potong | H2 3. Kad tajuk | H2 4. Penjenamaan penutup | H2 5. Saiz/kualiti fail | H2 6. Cipta | H2 Pemeriksaan sistem — semua lulus | H2 Kenyataan kebolehcapaian
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":76,"langChanges":[{"t":607,"lang":"ms-MY"}]}
+## ms-sub-03-card-on  [desktop/light] 1280x4612 title="Pembantu Video UoN" lang=ms-MY
+  focus: a.skip-link "Langkau ke kandungan utama" vis=true outline=solid 2px rgb(16, 38, 59) inView=true
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 37 blocks, widest 128 chars (p#status.status "Pemeriksaan peranti selesai. Sedia untu), over the limit: 1: p#status.status "Pemeriksaan peranti selesai. Sedia untu 128ch/838px
+  headings: H1 Pembantu Video UoN | H2 1. Pilih video | H2 2. Potong | H2 3. Kad tajuk | H2 4. Penjenamaan penutup | H2 5. Saiz/kualiti fail | H2 6. Cipta | H2 Pemeriksaan sistem — semua lulus | H2 Kenyataan kebolehcapaian
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":76,"langChanges":[{"t":607,"lang":"ms-MY"}]}
+## ms-sub-04-card-refused  [desktop/light] 1280x4728 title="Pembantu Video UoN" lang=ms-MY
+  live: 7843ms div: "Taip tajuk atau nombor tugasan."
+        7843ms div: "Taip kod dan tajuk modul."
+        7843ms div: "Taip nama penyelaras modul atau tutor."
+        7843ms div: "Taip sekurang-kurangnya satu nombor ID pelajar."
+        7843ms #status: "Betulkan kad tajuk dalam langkah 3 untuk meneruskan."
+  focus: input#submission-card-assignment.text-input[text] "Tajuk atau nombor tugasan" vis=true outline=solid 2px rgb(16, 38, 59) inView=true
+  contrast: 89 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 41 blocks, widest 65 chars (p.notification-body "Halaman ini diterjemahkan daripada ), over the limit: 0
+  headings: H1 Pembantu Video UoN | H2 1. Pilih video | H2 2. Potong | H2 3. Kad tajuk | H2 4. Penjenamaan penutup | H2 5. Saiz/kualiti fail | H2 6. Cipta | H2 Pemeriksaan sistem — semua lulus | H2 Kenyataan kebolehcapaian
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":76,"langChanges":[{"t":607,"lang":"ms-MY"}]}
+## ms-sub-05-card-filled-dark  [desktop/dark] 1280x4612 title="Pembantu Video UoN" lang=ms-MY
+  focus: select#closing-type.select[select-one] "Jenis animasi" vis=true outline=solid 2px rgb(255, 255, 255) inView=true
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 36 blocks, widest 65 chars (p.notification-body "Halaman ini diterjemahkan daripada ), over the limit: 0
+  headings: H1 Pembantu Video UoN | H2 1. Pilih video | H2 2. Potong | H2 3. Kad tajuk | H2 4. Penjenamaan penutup | H2 5. Saiz/kualiti fail | H2 6. Cipta | H2 Pemeriksaan sistem — semua lulus | H2 Kenyataan kebolehcapaian
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":76,"langChanges":[{"t":607,"lang":"ms-MY"}]}
+## ms-sub-05-card-filled-forced  [desktop/forced] 1280x4612 title="Pembantu Video UoN" lang=ms-MY
+  focus: select#closing-type.select[select-one] "Jenis animasi" vis=true outline=solid 2px rgba(26, 235, 255, 0.8) inView=true
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 36 blocks, widest 65 chars (p.notification-body "Halaman ini diterjemahkan daripada ), over the limit: 0
+  headings: H1 Pembantu Video UoN | H2 1. Pilih video | H2 2. Potong | H2 3. Kad tajuk | H2 4. Penjenamaan penutup | H2 5. Saiz/kualiti fail | H2 6. Cipta | H2 Pemeriksaan sistem — semua lulus | H2 Kenyataan kebolehcapaian
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":76,"langChanges":[{"t":607,"lang":"ms-MY"}]}
+## ms-sub-05-card-filled-reflow320  [reflow320/light] 320x5525 title="Pembantu Video UoN" lang=ms-MY
+  focus: select#closing-type.select[select-one] "Jenis animasi" vis=true outline=solid 2px rgb(16, 38, 59) inView=false
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 2: input#trim-start.text-input[text] "Masa mula" 26x44 | input#trim-end.text-input[text] "Masa tamat" 26x44
+  lines: 36 blocks, widest 41 chars (p#video-kind-result.helper "Jika video mempunyai penutup), over the limit: 0
+  headings: H1 Pembantu Video UoN | H2 1. Pilih video | H2 2. Potong | H2 3. Kad tajuk | H2 4. Penjenamaan penutup | H2 5. Saiz/kualiti fail | H2 6. Cipta | H2 Pemeriksaan sistem — semua lulus | H2 Kenyataan kebolehcapaian
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":76,"langChanges":[{"t":607,"lang":"ms-MY"}]}
+## ms-sub-05-card-filled-textspacing  [desktop/light] 1280x5318 title="Pembantu Video UoN" lang=ms-MY
+  focus: select#closing-type.select[select-one] "Jenis animasi" vis=true outline=solid 2px rgb(16, 38, 59) inView=false
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 36 blocks, widest 50 chars (p.notification-body "Cadangkan perkataan yang lebih baik), over the limit: 0
+  headings: H1 Pembantu Video UoN | H2 1. Pilih video | H2 2. Potong | H2 3. Kad tajuk | H2 4. Penjenamaan penutup | H2 5. Saiz/kualiti fail | H2 6. Cipta | H2 Pemeriksaan sistem — semua lulus | H2 Kenyataan kebolehcapaian
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":76,"langChanges":[{"t":607,"lang":"ms-MY"}]}
+## ms-sub-05-card-filled-zoom200  [zoom200/light] 640x4486 title="Pembantu Video UoN" lang=ms-MY
+  focus: select#closing-type.select[select-one] "Jenis animasi" vis=true outline=solid 2px rgb(16, 38, 59) inView=false
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 1: input#trim-start.text-input[text] "Masa mula" 34x44
+  lines: 36 blocks, widest 65 chars (p.notification-body "Halaman ini diterjemahkan daripada ), over the limit: 0
+  headings: H1 Pembantu Video UoN | H2 1. Pilih video | H2 2. Potong | H2 3. Kad tajuk | H2 4. Penjenamaan penutup | H2 5. Saiz/kualiti fail | H2 6. Cipta | H2 Pemeriksaan sistem — semua lulus | H2 Kenyataan kebolehcapaian
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":76,"langChanges":[{"t":607,"lang":"ms-MY"}]}
+## ms-sub-05-card-filled  [desktop/light] 1280x4612 title="Pembantu Video UoN" lang=ms-MY
+  live: 8624ms div: "Taip tajuk atau nombor tugasan."
+        8624ms div: "Taip kod dan tajuk modul."
+        8624ms div: "Taip nama penyelaras modul atau tutor."
+        8624ms div: "Taip sekurang-kurangnya satu nombor ID pelajar."
+        8786ms div: ""
+        9478ms #status: ""
+  focus: select#closing-type.select[select-one] "Jenis animasi" vis=true outline=solid 2px rgb(16, 38, 59) inView=true
+  contrast: 84 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 36 blocks, widest 65 chars (p.notification-body "Halaman ini diterjemahkan daripada ), over the limit: 0
+  headings: H1 Pembantu Video UoN | H2 1. Pilih video | H2 2. Potong | H2 3. Kad tajuk | H2 4. Penjenamaan penutup | H2 5. Saiz/kualiti fail | H2 6. Cipta | H2 Pemeriksaan sistem — semua lulus | H2 Kenyataan kebolehcapaian
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":76,"langChanges":[{"t":607,"lang":"ms-MY"}]}
+## ms-sub-06-closing  [desktop/light] 1280x4604 title="Pembantu Video UoN" lang=ms-MY
+  focus: select#closing-type.select[select-one] "Jenis animasi" vis=true outline=solid 2px rgb(16, 38, 59) inView=true
+  contrast: 83 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 35 blocks, widest 65 chars (p.notification-body "Halaman ini diterjemahkan daripada ), over the limit: 0
+  headings: H1 Pembantu Video UoN | H2 1. Pilih video | H2 2. Potong | H2 3. Kad tajuk | H2 4. Penjenamaan penutup | H2 5. Saiz/kualiti fail | H2 6. Cipta | H2 Pemeriksaan sistem — semua lulus | H2 Kenyataan kebolehcapaian
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":76,"langChanges":[{"t":607,"lang":"ms-MY"}]}
+## ms-sub-07-video-language-changed  [desktop/light] 1280x4604 title="Pembantu Video UoN" lang=ms-MY
+  focus: input[radio video-language=en-GB] "English" vis=false outline=none 3px rgb(0, 0, 0) inView=true
+  contrast: 85 runs, 0 under target
+  targets: 39, under 44: 0
+  lines: 35 blocks, widest 65 chars (p.notification-body "Halaman ini diterjemahkan daripada ), over the limit: 0
+  headings: H1 Pembantu Video UoN | H2 1. Pilih video | H2 2. Potong | H2 3. Kad tajuk | H2 4. Penjenamaan penutup | H2 5. Saiz/kualiti fail | H2 6. Cipta | H2 Pemeriksaan sistem — semua lulus | H2 Kenyataan kebolehcapaian
+  boot: {"langAtDCL":"en-GB","h1AtDCL":"UoN Video Helper","tDCL":76,"langChanges":[{"t":607,"lang":"ms-MY"}]}

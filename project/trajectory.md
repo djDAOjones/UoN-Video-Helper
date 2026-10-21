@@ -7,6 +7,10 @@
      items the canon record shipped before the migration, in v3's form;
      their why is in the frozen canon decision log (history.md). -->
 
+## Design pass — the page as a design against the 2026-10-01 standard
+
+- VH-143 — the page judged as a design against the 1 October standard, walked again in headless Chrome in three languages, both switch positions, every closing and seven views, with a token sweep, word counts, a string sweep and the cards drawn at four shapes, Codex astra blind and then critical: 13 findings, none at rank 1; five join Phase 3's items, five are Phase 4 (PLAN-4), three are the owner's; nothing built (2026-10-21) — see decisions
+
 ## Audit v2 — the page against the 2026-10-01 standard
 
 - VH-138 — the page audited again to the 1 October standard, live in headless Chrome in three languages, both switch positions, every closing and seven views, Codex astra blind and then adversarial: 17 findings, 2 at rank 1 (a cut-short file made and recorded as whole; a record blind to the new cards); 20 of 25 UX findings hold; all 86 WCAG criteria judged live; Phase 3 planned as PLAN-3, nothing built (2026-10-21) — see decisions
