@@ -7,19 +7,20 @@
  * recorded as "the whole video (30 seconds)" while what it made carried 21 s
  * of sound under a held frame — silent loss, the worst outcome the rules name.
  *
- * Each track is measured against its OWN declared end within the part kept,
- * never against the other track or the file's overall length: a sound track
- * that legitimately starts late, stops early or has a hole is what the file
- * says, and the pipeline already carries it as it is (VH-42, VH-74). Only the
- * passes that decode the whole kept part can say where a track really stops —
- * pre-flight's analysis pass for the sound, the encode for the picture. The
- * 3-second probe never sees the tail, and the output check measures loudness,
- * not length.
+ * Each track is measured against the last packet its OWN index declares in
+ * the part kept, never against the other track or the file's overall length:
+ * a sound track that legitimately starts late, stops early or has a hole is
+ * what the file says, and the pipeline already carries it as it is (VH-42,
+ * VH-74). Only the passes that decode the whole kept part can say where a
+ * track really stops — pre-flight's analysis pass for the sound, the encode
+ * for the picture. The 3-second probe never sees the tail, and the output
+ * check measures loudness, not length.
  */
 
 import { EncodedPacketSink, type InputTrack } from 'mediabunny'
 
 import { ENDS_EARLY_MARGIN_SECONDS } from '../config/thresholds'
+import { KEPT_EDGE_TOLERANCE_SECONDS } from '../config/trim'
 import type { KeptRange } from './kept-range'
 
 /** What a file's index says of one track in the part kept, in source seconds ({@link declaredExtent}). */
@@ -27,12 +28,24 @@ export interface DeclaredExtent {
   /** Where the track's content ends: the end a note names. `null` when it declares nothing there. */
   readonly declaredEndSeconds: number | null
   /**
-   * Where its last packet in the part kept starts: content certainly reaches
-   * this far. What a decode is held to, rather than the end, because an MP4
-   * gives the packet before a hole the hole's length as well as its own — the
-   * start never moves. `null` when the track declares nothing there.
+   * Where its last packet in the part kept starts, or `null` when the track
+   * declares nothing there. Content certainly reaches this far: an MP4 gives
+   * the packet before a hole the hole's length as well as its own, so its
+   * declared end can overstate the content, and its start never does.
    */
   readonly lastPacketSeconds: number | null
+  /**
+   * Whether that packet's bytes are in the file. A file cut short declares
+   * packets it does not hold, and Mediabunny answers a read of one with
+   * nothing; a whole file's last packet always reads.
+   */
+  readonly lastPacketArrived: boolean
+}
+
+const NOTHING_DECLARED: DeclaredExtent = {
+  declaredEndSeconds: null,
+  lastPacketSeconds: null,
+  lastPacketArrived: false,
 }
 
 /** Where one track's content ends, decoded and declared, in source seconds. */
@@ -62,36 +75,48 @@ export interface EndedEarly {
 }
 
 /**
- * What the file's index says of a track within the part kept.
+ * What the file's index says of a track within the part kept, and whether the
+ * last packet it declares there is in the file.
  *
- * Index only: nothing is read or decoded, so a file cut short answers with
- * what it promised. Read through the packet showing at the out-point — the
- * file's last, with no trim — so a track that ended before the cut, or has a
- * hole across it, declares where its own content stops rather than where the
- * cut is.
+ * Nothing is decoded: the index answers for what the file promised, and one
+ * packet's bytes for whether it kept the promise. Read through the last packet
+ * the part kept holds — the file's last, with no trim — so a track that ended
+ * before the cut, or has a hole across it, declares where its own content
+ * stops rather than where the cut is. The out-point is exclusive, as the
+ * sinks' ranged reads are, so a packet starting at it is not kept: it is
+ * looked up just inside, by the tolerance a cut is already given
+ * ({@link KEPT_EDGE_TOLERANCE_SECONDS}, under any packet's length) (Codex
+ * review).
  *
- * @returns Nulls when the track has nothing at or before the out-point — a
- *   track that starts after the part kept.
+ * @returns Nothing declared when the track has no packet reaching into the
+ *   part kept — one that starts at or after the out-point, or ended before
+ *   the in-point.
  */
 export async function declaredExtent(
   track: InputTrack,
   range: KeptRange | null,
 ): Promise<DeclaredExtent> {
   const durationSeconds = await track.computeDuration()
-  const outSeconds = range ? range.endSeconds : durationSeconds
-  const packet = await new EncodedPacketSink(track).getPacket(outSeconds, { metadataOnly: true })
-  if (!packet) return { declaredEndSeconds: null, lastPacketSeconds: null }
+  const sink = new EncodedPacketSink(track)
+  const lookupSeconds = range ? range.endSeconds - KEPT_EDGE_TOLERANCE_SECONDS : durationSeconds
+  const last = await sink.getPacket(lookupSeconds, { metadataOnly: true })
+  if (!last || (range && last.timestamp + last.duration <= range.startSeconds))
+    return NOTHING_DECLARED
   return {
     declaredEndSeconds: range
-      ? Math.min(range.endSeconds, packet.timestamp + packet.duration)
+      ? Math.min(range.endSeconds, last.timestamp + last.duration)
       : durationSeconds,
-    lastPacketSeconds: packet.timestamp,
+    lastPacketSeconds: last.timestamp,
+    lastPacketArrived: (await sink.getPacket(last.timestamp)) !== null,
   }
 }
 
 /**
- * Whether a track's decode stopped short of its last declared packet by more
- * than the margin.
+ * Whether a track's decode stopped short of where its content certainly
+ * reaches by more than the margin: the last declared packet's start when its
+ * bytes are in the file, and its declared end when they are not — so a cut
+ * that took only a long final frame, the frame before ending where it starts,
+ * is still a cut (Codex review).
  *
  * @param fromSeconds - Where the part kept starts: the stop given for a track
  *   that decoded nothing there.
@@ -106,8 +131,9 @@ export function shortfall(
 ): Shortfall | null {
   const { declaredEndSeconds: endSeconds, lastPacketSeconds } = extent
   if (endSeconds === null || lastPacketSeconds === null) return null
+  const reachesSeconds = extent.lastPacketArrived ? lastPacketSeconds : endSeconds
   const stopsAtSeconds = extent.decodedEndSeconds ?? fromSeconds
-  return lastPacketSeconds - stopsAtSeconds > marginSeconds ? { stopsAtSeconds, endSeconds } : null
+  return reachesSeconds - stopsAtSeconds > marginSeconds ? { stopsAtSeconds, endSeconds } : null
 }
 
 /**

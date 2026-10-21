@@ -7,6 +7,10 @@
      items the canon record shipped before the migration, in v3's form;
      their why is in the frozen canon decision log (history.md). -->
 
+## Phase 3 — what the second audit found
+
+- VH-139 — a file that ends early is said: each track held to the last packet its own index declares; before Create "The file ends early — Its sound stops at 0:20 of 0:30", after the job the length made, "21 seconds of 30 seconds", with where each track stopped beside it; checked in Chrome with the audit's fixture, trimmed and not (2026-10-21) — see decisions
+
 ## Audit v2 — the page against the 2026-10-01 standard
 
 - VH-138 — the page audited again to the 1 October standard, live in headless Chrome in three languages, both switch positions, every closing and seven views, Codex astra blind and then adversarial: 17 findings, 2 at rank 1 (a cut-short file made and recorded as whole; a record blind to the new cards); 20 of 25 UX findings hold; all 86 WCAG criteria judged live; Phase 3 planned as PLAN-3, nothing built (2026-10-21) — see decisions

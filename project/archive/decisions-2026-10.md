@@ -16,3 +16,23 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-05 — V3-CONFIRM — The OneDrive checkout is the working copy
+
+**Decision:** the owner's OneDrive checkout, pinned with Always Keep on This Device and with `core.fileMode` false, is the working copy; the rules file's Environment line says so and loses "work in a clone outside it [guess]" and the advice to pause syncing — because the owner confirmed it in chat on 2026-10-05, as Route Plotter recorded in route-plotter#81.
+
+**Rationale:** the owner's answer, in the first session on a new Mac, to the line the 2026-10-02 entry left as `[guess]`. Before asking, that session found the checkout sound, read-only: branch `codex/repository-review-remediation` at 051fd48, level with `origin/main`; a clean tree, with `core.fileMode` false because OneDrive restores files with changed permissions; nothing outside `node_modules` cloud-only (`find . -path ./node_modules -prune -o -flags +dataless -print` printed nothing); `samples/` holding its 33 files. Then `rm -rf node_modules && npm ci` and `npm run check` green on Node 24.21.0 from Homebrew. The pin keeps `.git` and the source hydrated, so the canon hazard — OneDrive dehydrating `.git` — is met by the pin and the dataless check rather than by a second clone; `node_modules` can still dehydrate and is rebuilt. This reverses the canon hostile-filesystem guard as the migration carried it (census row C60: cloud-synced paths unsupported). The route-plotter#81 precedent is cited on the owner's word, not fetched (rule 2).
+
+**Supersedes:** none
+
+**Deferred:** none
+
+## 2026-10-02 — V3-CONFIRM — The owner signs the ledger, confirms Network and Handoff, installs the session hooks
+
+**Decision:** the profile, brief and rules carry the owner's reviewed signature of 2026-10-02 in place of the delegated lines; the Network line (listed hosts github.com, registry.npmjs.org) and the Handoff split (Claude Code plans and executes; Codex reviews read-only) are confirmed and lose their `[guess]`; `.claude/settings.json` and `.claude/settings.intake.json` are committed from `tools/harness.mjs`, with the two session hooks — because the owner answered the three open intake questions on 2026-10-02 ("sign both now", the recommended Network and Handoff, "install Claude Code side in both").
+
+**Rationale:** the owner's answers, given in chat on 2026-10-02 after the merge. Two edits to the generated settings, reviewed on his behalf and recorded here: the home directory is written as `~/` rather than an absolute path, since this repository is public; and the denies on `gh`, `git fetch` and `git pull` are removed, since github.com is a listed host and the project's own deployment notes use `gh` for rollback and run checks. The Codex profile is not installed: the lab found the generated profile fails to start a session on Codex 0.155.1, so that side waits for a verified generator. The hooks run only where the client runs them; the desktop app applied no generated setting in the lab's exposed week, so the first attended session should confirm with `/hooks` that the two SessionStart and PostToolUse hooks are loaded. `[guess]` stays on "Prose: en-GB" and on the clone-outside-OneDrive line, which the owner has not addressed.
+
+**Supersedes:** none
+
+**Deferred:** none

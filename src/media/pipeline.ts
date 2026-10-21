@@ -810,9 +810,10 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
 
     const file = await outputFile.finish()
     onProgress?.({ stage: 'finishing', fraction: 1 })
-    // Each lane against its own declared end in the part kept, never against
-    // the other: a sound track that legitimately stops early is the file as
-    // it is. The index answers without a byte of media being read.
+    // Each lane against the last packet its own index declares in the part
+    // kept, never against the other: a sound track that legitimately stops
+    // early is the file as it is. The index answers without a byte of media
+    // being read.
     const endedShort = endedEarly(
       { decodedEndSeconds: pictureEndSeconds, ...(await declaredExtent(videoTrack, keptRange)) },
       audioTrack ? { decodedEndSeconds: soundEndSeconds, ...(await declaredExtent(audioTrack, keptRange)) } : null,

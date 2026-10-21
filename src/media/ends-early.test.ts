@@ -20,12 +20,14 @@ const whole = (endSeconds: number) => ({
   decodedEndSeconds: endSeconds,
   declaredEndSeconds: endSeconds,
   lastPacketSeconds: endSeconds - 0.04,
+  lastPacketArrived: true,
 })
-/** A track declared to `endSeconds` whose decode stopped at `decodedEndSeconds`. */
+/** A track declared to `endSeconds` whose data, and so its decode, stopped at `decodedEndSeconds`. */
 const cut = (decodedEndSeconds: number | null, endSeconds: number) => ({
   decodedEndSeconds,
   declaredEndSeconds: endSeconds,
   lastPacketSeconds: endSeconds - 0.04,
+  lastPacketArrived: false,
 })
 
 describe('a track against its own declared end', () => {
@@ -42,7 +44,15 @@ describe('a track against its own declared end', () => {
 
   it('holds the decode to its last packet’s start, with the margin and no more', () => {
     const at = (decodedEndSeconds: number) =>
-      shortfall({ decodedEndSeconds, declaredEndSeconds: 30, lastPacketSeconds: 29.96 }, 0)
+      shortfall(
+        {
+          decodedEndSeconds,
+          declaredEndSeconds: 30,
+          lastPacketSeconds: 29.96,
+          lastPacketArrived: true,
+        },
+        0,
+      )
     expect(at(29.96 - ENDS_EARLY_MARGIN_SECONDS)).toBeNull()
     expect(at(29.96 - ENDS_EARLY_MARGIN_SECONDS - 0.01)).not.toBeNull()
   })
@@ -51,8 +61,28 @@ describe('a track against its own declared end', () => {
     // An MP4 gives the packet before a hole the hole's length: its declared
     // end is the out-point, while its sound stops a second and a half before.
     expect(
-      shortfall({ decodedEndSeconds: 1, declaredEndSeconds: 2.5, lastPacketSeconds: 0.5 }, 0),
+      shortfall(
+        {
+          decodedEndSeconds: 1,
+          declaredEndSeconds: 2.5,
+          lastPacketSeconds: 0.5,
+          lastPacketArrived: true,
+        },
+        0,
+      ),
     ).toBeNull()
+  })
+
+  it('finds a cut that took only a long final frame, the frame before ending where it starts (Codex review)', () => {
+    // Slides at one frame in five seconds, cut before the last frame's bytes:
+    // the decode reaches the last packet's start and no further.
+    const slides = { declaredEndSeconds: 30, lastPacketSeconds: 25 }
+    expect(shortfall({ ...slides, decodedEndSeconds: 25, lastPacketArrived: false }, 0)).toEqual({
+      stopsAtSeconds: 25,
+      endSeconds: 30,
+    })
+    // The same file whole: the last frame is there and shown to its end.
+    expect(shortfall({ ...slides, decodedEndSeconds: 30, lastPacketArrived: true }, 0)).toBeNull()
   })
 
   it('gives the start of the part kept for a track that decoded nothing there', () => {
@@ -64,7 +94,15 @@ describe('a track against its own declared end', () => {
 
   it('says nothing of a track that declares nothing in the part kept', () => {
     expect(
-      shortfall({ decodedEndSeconds: null, declaredEndSeconds: null, lastPacketSeconds: null }, 0),
+      shortfall(
+        {
+          decodedEndSeconds: null,
+          declaredEndSeconds: null,
+          lastPacketSeconds: null,
+          lastPacketArrived: false,
+        },
+        0,
+      ),
     ).toBeNull()
   })
 })
@@ -112,7 +150,11 @@ describe('the index, read from a real file', () => {
   it('declares a cut-short file’s whole length, while its data stops part-way', async () => {
     const bytes = await pcmMp4({ spans: [[0, 3]] })
     const whole = await declaredExtent(await soundTrackOf(bytes), null)
-    expect(await declaredExtent(await soundTrackOf(cutShort(bytes, 0.7)), null)).toEqual(whole)
+    expect(await declaredExtent(await soundTrackOf(cutShort(bytes, 0.7)), null)).toEqual({
+      ...whole,
+      lastPacketArrived: false,
+    })
+    expect(whole.lastPacketArrived).toBe(true)
     expect(whole.declaredEndSeconds).toBeCloseTo(3, 6)
     expect(whole.lastPacketSeconds).toBeGreaterThan(2)
     expect(whole.lastPacketSeconds).toBeLessThan(3)
@@ -147,7 +189,15 @@ describe('the index, read from a real file', () => {
     expect(await declaredExtent(track, { startSeconds: 0, endSeconds: 1.5 })).toEqual({
       declaredEndSeconds: null,
       lastPacketSeconds: null,
+      lastPacketArrived: false,
     })
+  })
+
+  it('declares nothing for a track that starts at the out-point, which is not kept (Codex review)', async () => {
+    const track = await soundTrackOf(await pcmMp4({ spans: [[1.5, 3]] }))
+    expect(
+      (await declaredExtent(track, { startSeconds: 0, endSeconds: 1.5 })).lastPacketSeconds,
+    ).toBeNull()
   })
 })
 
@@ -169,6 +219,13 @@ describe('the analysis pass, over a real file', () => {
       ENDS_EARLY_MARGIN_SECONDS / 4,
     )
   }
+
+  it('raises nothing for a whole file whose sound starts at the out-point (Codex review)', async () => {
+    const bytes = await pcmMp4({ spans: [[1.5, 3]] })
+    const range = { startSeconds: 0, endSeconds: 1.5 }
+    expect(await analyseSourceAudio(await soundTrackOf(bytes), undefined, range)).toBeNull()
+    expect(await soundShort(bytes, range)).toBeNull()
+  })
 
   it('decodes a whole file to its end, and finds nothing short', async () => {
     const bytes = await pcmMp4({ spans: [[0, 3]] })
