@@ -17,6 +17,16 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-21 — VH-143 — The owner's overnight instruction: a design pass, then Phases 3 and 4, gateless
+
+**Decision:** the overnight run is authorised and gateless: VH-143, the design pass, then Phase 3 (PLAN-3, approved) with VH-139 merged from its own session, then Phase 4 (PLAN-4, its sign-off pre-approved), then the morning report; wherever the record or a verb would stop for the owner, the session takes the conservative choice, records it as taken gateless, and carries on — because the owner said so in chat on 2026-10-21.
+
+**Rationale:** The owner's words, quoted: "provide a prompt that will conduct a whole design pass, then implement the implementation phases, I will approve use of fable with extra effort. it needs to be gateless as I am going to bed, and I hope it can be ready in the morning"; earlier the same night: "approve PLAN-3 and start VH-139". The prompt they produced is kept verbatim as `reviews/2026-10-20/overnight-prompt-2026-10-21.md` and is the run's instruction. Conservative means the smallest change that meets the standard, existing components, tokens and words before new ones, and nothing the owner has reserved: the three switchers above step 1 and folding (VH-97), the sign-offs of VH-124 and VH-113, VH-137 and V-09, the date-only title card, and anything the brief's Direction does not cover — each becomes a `[!]` or wish line with a recommendation. Hard limits: no new runtime dependency; `docs/*.md` never edited; the EBU harness re-run if a protected audio file changes; no test deleted, skipped or weakened; nothing written to `samples/`; nothing destructive; never a push or merge to `main`, which publishes the pilot. New Chinese and Malay strings are drafted as machine translation, as the VH-122, VH-127 and VH-128 decisions did, and listed in the morning report for approval. The work is on branch `claude/overnight-design-and-phases` in the worktree `.claude/worktrees/overnight`, from VH-138's close (5f23af6); each session that passes the profile's Session line closes with a hand-off note in `reviews/2026-10-20/` and a Session-end line, and starts the next session itself. After 07:00 UK time no new item starts.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-21 — PLAN-3 — Phase 3: what the second audit found
 
 **Decision:** Phase 3 is VH-139 (a file that ends early), VH-140 (the record, the switches, Step 3's rules), VH-141 (nine small page defects) and VH-142 (the words), in that order, each with a file carrying its findings' clauses, run only on the owner's sign-off — because the 20 October audit found two rank-1 and thirteen rank-2 shortfalls against the 1 October standard, all the page's to fix but the date-only card, which is the owner's question.
@@ -467,12 +477,3 @@
 
 **Deferred:** none
 
-## 2026-10-02 — V3-CONFIRM — The owner signs the ledger, confirms Network and Handoff, installs the session hooks
-
-**Decision:** the profile, brief and rules carry the owner's reviewed signature of 2026-10-02 in place of the delegated lines; the Network line (listed hosts github.com, registry.npmjs.org) and the Handoff split (Claude Code plans and executes; Codex reviews read-only) are confirmed and lose their `[guess]`; `.claude/settings.json` and `.claude/settings.intake.json` are committed from `tools/harness.mjs`, with the two session hooks — because the owner answered the three open intake questions on 2026-10-02 ("sign both now", the recommended Network and Handoff, "install Claude Code side in both").
-
-**Rationale:** the owner's answers, given in chat on 2026-10-02 after the merge. Two edits to the generated settings, reviewed on his behalf and recorded here: the home directory is written as `~/` rather than an absolute path, since this repository is public; and the denies on `gh`, `git fetch` and `git pull` are removed, since github.com is a listed host and the project's own deployment notes use `gh` for rollback and run checks. The Codex profile is not installed: the lab found the generated profile fails to start a session on Codex 0.155.1, so that side waits for a verified generator. The hooks run only where the client runs them; the desktop app applied no generated setting in the lab's exposed week, so the first attended session should confirm with `/hooks` that the two SessionStart and PostToolUse hooks are loaded. `[guess]` stays on "Prose: en-GB" and on the clone-outside-OneDrive line, which the owner has not addressed.
-
-**Supersedes:** none
-
-**Deferred:** none

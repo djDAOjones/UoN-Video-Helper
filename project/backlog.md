@@ -29,6 +29,10 @@
 
 ### Phase 2 — the owner's corrections, the spec caught up, three page defects, a time left — CLOSED 2026-10-20
 
+### Design pass
+
+- [~] VH-143 — The design pass: formatting, UI and visual design against the 2026-10-01 standard — since 2026-10-21
+
 ### Phase 3 — what the second audit found: a file that ends early, the record and the switches, nine small defects, the words
 
 - [ ] VH-139 — A file that ends early is said before Create and in the record — since 2026-10-21 — (from: VH-138, 2026-10-21)
