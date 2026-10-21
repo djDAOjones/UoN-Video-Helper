@@ -11,9 +11,11 @@
  */
 
 import { MINIMUM_GAP_DEPTH_LU, WARNING_THRESHOLDS } from '../config/audio'
+import type { Shortfall } from '../media/ends-early'
 import type { AudioAnalysis } from './analyse'
 
 export type AudioWarningCode =
+  | 'ends-early'
   | 'no-audio'
   | 'decode-damage'
   | 'clipping'
@@ -64,12 +66,25 @@ function longestRunBelow(
  * Warnings derived from the source, before anything is processed.
  *
  * @param analysis - The pass-A measurement, or `null` when the file has no
- *   audio track at all.
+ *   audio track at all, or none in the part kept.
+ * @param soundShort - Where the sound stops short of what the file's index
+ *   declares (VH-139, `media/ends-early.ts`), or `null` when it does not.
  */
-export function detectSourceWarnings(analysis: AudioAnalysis | null): AudioWarning[] {
-  if (!analysis) return [{ code: 'no-audio', detail: {} }]
+export function detectSourceWarnings(
+  analysis: AudioAnalysis | null,
+  soundShort: Shortfall | null = null,
+): AudioWarning[] {
+  // First of all: the file itself is incomplete, and every row below measures
+  // only what arrived. The detail is in source seconds, as decode damage's
+  // times are, so the note names the times the trim's fields show.
+  const endsEarly: AudioWarning[] = soundShort
+    ? [{ code: 'ends-early', detail: { stopsAtSeconds: soundShort.stopsAtSeconds, endSeconds: soundShort.endSeconds } }]
+    : []
+  // A kept part whose sound the file declares and never delivers is cut
+  // short, not silent: saying "no sound" there would name the wrong cause.
+  if (!analysis) return endsEarly.length > 0 ? endsEarly : [{ code: 'no-audio', detail: {} }]
 
-  const warnings: AudioWarning[] = []
+  const warnings: AudioWarning[] = [...endsEarly]
   const { clippedSampleCount, truePeakDbtp, integratedLufs, loudnessRangeLu } = analysis
 
   // First, because it is what the tool did rather than what it measured, and

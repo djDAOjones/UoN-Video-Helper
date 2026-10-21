@@ -29,6 +29,7 @@ import {
   type DeviceClass,
 } from '../media/capability'
 import { measureContentClass } from '../media/content-class'
+import { declaredExtent, shortfall } from '../media/ends-early'
 import { UnreadableFileError, inspectFile, openInput } from '../media/inspect'
 import {
   KeptRangeError,
@@ -324,6 +325,7 @@ async function handleProcess(
       closingModeApplied: result.closingMode,
       audioIncluded: result.audioIncluded,
       outputWarnings,
+      endedEarly: result.endedEarly,
     })
   } catch (cause) {
     // runPipeline disposes its own workspace on failure; this covers a failure
@@ -520,7 +522,19 @@ async function handlePreflight(
           audioSeconds: analysis.durationSeconds,
         }
       }
-      audioWarnings = detectSourceWarnings(analysis)
+      // The one pass that decodes the whole kept sound is the one that can
+      // say the file stops before its index does (VH-139); the probe's three
+      // seconds never reach the tail.
+      const soundShort = audioTrack
+        ? shortfall(
+            {
+              decodedEndSeconds: analysis?.decodedEndSeconds ?? null,
+              ...(await declaredExtent(audioTrack, keptRange)),
+            },
+            keptRange?.startSeconds ?? 0,
+          )
+        : null
+      audioWarnings = detectSourceWarnings(analysis, soundShort)
       // A trim can keep a part with no sound; the job is then a silent one
       // (VH-95), and asks nothing of the audio encoder.
       if (analysis === null) keptHasSound = false

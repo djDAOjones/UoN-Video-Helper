@@ -87,6 +87,18 @@ export const ESTIMATE_BANDS = {
 } as const
 
 /**
+ * How far short of what a file's index declares a track's decoded content may
+ * stop before the page says the file ends early (VH-139), in seconds.
+ *
+ * We chose it. A whole file's decode always reaches past the start of the
+ * last packet its index declares, which is what it is held to, so the margin
+ * is for what the note can say: it gives whole seconds, and a shortfall under
+ * one could not be told from the end. The file the audit found stops 9 s
+ * short.
+ */
+export const ENDS_EARLY_MARGIN_SECONDS = 1
+
+/**
  * A probe short enough to be cheap is also short enough to be noisy — encoder
  * startup, shader compilation and thermal state all land in the first second.
  * Throughput below this is treated as unmeasured rather than believed.

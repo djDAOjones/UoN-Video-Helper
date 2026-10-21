@@ -16,6 +16,7 @@ import type { ContentClass, PresetId } from '../config/presets'
 import type { SourceReport } from '../media/inspect'
 import type { KeptRange } from '../media/kept-range'
 import type { DeviceClass } from '../media/capability'
+import type { EndedEarly } from '../media/ends-early'
 import type { PreflightSummary } from '../media/preflight'
 import type { AudioWarning } from '../audio/warnings'
 import type { PipelineStage } from '../media/pipeline'
@@ -185,6 +186,8 @@ export type WorkerResponse =
       readonly audioIncluded: boolean
       /** Measured from the finished file — spec 5.4's post-processing row. */
       readonly outputWarnings: readonly AudioWarning[]
+      /** What the encode found short of the file's index, or `null` for a whole file (VH-139). */
+      readonly endedEarly: EndedEarly | null
     }
   | { readonly kind: 'cancelled'; readonly id: number }
   /** What the worker's own egress watch recorded. Empty until it is stopped. */

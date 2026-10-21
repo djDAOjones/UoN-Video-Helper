@@ -129,6 +129,8 @@ async function traverse(
     keptAudioAnchorSeconds(range, range ? await track.getFirstTimestamp() : null),
   )
   let frames = 0
+  /** The end of the last decoded block kept, in source seconds (VH-139). */
+  let decodedEndSeconds: number | null = null
 
   const emit = async (block: Float32Array[]): Promise<void> => {
     frames += block[0]?.length ?? 0
@@ -151,7 +153,11 @@ async function traverse(
     // Out of the whole pass, not just the hole: the loop below stops on the
     // same signal, so nothing after the cancel is fed (Codex review).
     if (signal?.aborted) return
-    gaps.accept(kept.planar[0]?.length ?? 0)
+    const keptFrames = kept.planar[0]?.length ?? 0
+    gaps.accept(keptFrames)
+    const keptEndSeconds = kept.timestampSeconds + keptFrames / sampleRate
+    if (decodedEndSeconds === null || keptEndSeconds > decodedEndSeconds)
+      decodedEndSeconds = keptEndSeconds
     await emit(chain ? chain.process(kept.planar) : kept.planar)
   }
 
@@ -199,6 +205,7 @@ async function traverse(
     analysis: {
       ...analysis,
       damageSilencedAtSeconds: gate.silencedAtSeconds.map((seconds) => Math.max(from, seconds)),
+      decodedEndSeconds,
     },
     frames,
   }

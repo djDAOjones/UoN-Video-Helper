@@ -410,6 +410,17 @@ export const msMY: Messages = {
       'Dibuat daripada {name}: kad tajuk {seconds} saat, kemudian {part}, {output}, {closing}.',
     notLoaded:
       'Penutupan tidak dapat dimuatkan, jadi ia tiada dalam video ini. Semua yang lain telah digunakan seperti yang diminta.',
+    endedEarly: {
+      picture:
+        'Fail yang anda pilih berakhir lebih awal: gambarnya berhenti pada {stops} daripada {end}.',
+      sound:
+        'Fail yang anda pilih berakhir lebih awal: bunyinya berhenti pada {stops} daripada {end}.',
+      together:
+        'Fail yang anda pilih berakhir lebih awal: gambar dan bunyinya berhenti pada {stops} daripada {end}.',
+      both: 'Fail yang anda pilih berakhir lebih awal: gambarnya berhenti pada {picture} dan bunyinya pada {sound}, daripada {end}.',
+      held: 'Dari situ hingga penutupan, video menahan bingkai terakhirnya.',
+      next: 'Jika anda mempunyai salinan yang lengkap, cipta video itu semula daripada salinan tersebut.',
+    },
     fellBackToCut: {
       blue: {
         fade: 'Anda memilih Pudar, tetapi animasi tidak dapat dimuatkan, jadi video ini dipotong ke kad penutup biru.',
@@ -541,6 +552,11 @@ export const msMY: Messages = {
     reassurance:
       'Tiada satu pun daripada ini yang menghalang anda daripada meneruskan. Fail asal anda tidak diubah dalam apa jua cara.',
     spoken: '{heading}: {titles}.',
+    endsEarly: {
+      heading: 'Fail ini berakhir lebih awal',
+      detail:
+        'Bunyinya berhenti pada {stops} daripada {end}. Fail ini mungkin terputus semasa disalin atau dirakam. Selepas {stops}, video baharu akan senyap. Jika anda mempunyai salinan yang lengkap, pilih salinan itu sebaliknya.',
+    },
     noAudio: {
       heading: 'Video ini tiada bunyi',
       detail:

@@ -8,7 +8,7 @@ import { describe, expect, it } from 'vitest'
 
 import type { AudioWarningCode } from '../audio/warnings'
 import { DECODE_DAMAGE } from '../config/audio'
-import { damageTimes, warningText } from './warning-text'
+import { damageTimes, shortfallTimes, warningText } from './warning-text'
 
 /**
  * Exhaustive by construction, not by hand. A `Record` keyed on the union makes
@@ -16,6 +16,7 @@ import { damageTimes, warningText } from './warning-text'
  * it — which is how a warning would otherwise ship untested.
  */
 const ALL = Object.keys({
+  'ends-early': true,
   'no-audio': true,
   'decode-damage': true,
   clipping: true,
@@ -37,6 +38,8 @@ const sample = (code: AudioWarningCode) =>
       missedBy: 2.5,
       milliseconds: 44,
       peakDbfs: -26.4,
+      stopsAtSeconds: 20.84,
+      endSeconds: 30,
     },
     atSeconds: [82.41, 185.34],
   })
@@ -114,5 +117,26 @@ describe('decode damage, said with its times (VH-122)', () => {
     expect(damageTimes(atSeconds).at(-1)).toBe('2 other moments')
     expect(said(atSeconds).detail).toContain('5:00 and 2 other moments')
     expect(damageTimes(atSeconds.slice(0, DECODE_DAMAGE.timesSaid))).not.toContain('other moments')
+  })
+})
+
+describe('a file that ends early, said with where its sound stops (VH-139)', () => {
+  const said = (stopsAtSeconds: number, endSeconds: number) =>
+    warningText({ code: 'ends-early', detail: { stopsAtSeconds, endSeconds } })
+
+  it('names the stop, floored, and the end the file declares', () => {
+    const { heading, detail } = said(20.84, 30)
+    expect(heading).toBe('The file ends early')
+    expect(detail).toMatch(/^Its sound stops at 0:20 of 0:30\. /)
+    expect(detail).toContain('After 0:20, the new video will be silent.')
+  })
+
+  it('gives times as the trim’s fields do, past a minute and an hour', () => {
+    expect(said(2465.7, 3480).detail).toMatch(/^Its sound stops at 41:05 of 58:00\. /)
+    expect(said(3725.2, 4000).detail).toMatch(/^Its sound stops at 1:02:05 of 1:06:40\. /)
+  })
+
+  it('times a stop and an end the same way wherever they are said', () => {
+    expect(shortfallTimes({ stopsAtSeconds: 20.99, endSeconds: 29.6 })).toEqual({ stops: '0:20', end: '0:30' })
   })
 })

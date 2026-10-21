@@ -47,6 +47,28 @@ describe('spec 5.4 source warnings', () => {
     expect(codes(null)).toEqual(['no-audio'])
   })
 
+  it('a file that ends early — said first, with where its sound stops and should have reached (VH-139)', () => {
+    const short = { stopsAtSeconds: 20.84, endSeconds: 30 }
+    const warnings = detectSourceWarnings(
+      healthy({ clippedSampleCount: WARNING_THRESHOLDS.clippingSampleCount }),
+      short,
+    )
+    expect(warnings.map((w) => w.code)).toEqual(['ends-early', 'clipping'])
+    expect(warnings[0]?.detail).toEqual({ stopsAtSeconds: 20.84, endSeconds: 30 })
+  })
+
+  it('a file that ends early — nothing said of a whole one', () => {
+    expect(detectSourceWarnings(healthy(), null)).toEqual([])
+  })
+
+  it('a kept part whose declared sound never arrived is cut short, not silent', () => {
+    // The trim keeps a part past where the file stops: pass A decodes nothing
+    // there, and "no sound" would name the wrong cause.
+    expect(
+      detectSourceWarnings(null, { stopsAtSeconds: 25, endSeconds: 30 }).map((w) => w.code),
+    ).toEqual(['ends-early'])
+  })
+
   it('decode damage — said first, with every time it was silenced at (VH-122)', () => {
     const warnings = detectSourceWarnings(
       healthy({ damageSilencedAtSeconds: [82.41, 185.34], loudnessRangeLu: 18 }),

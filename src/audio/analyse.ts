@@ -29,6 +29,13 @@ export interface AudioAnalysis extends LoudnessReport {
    * acceptance run.
    */
   readonly damageSilencedAtSeconds?: readonly number[]
+  /**
+   * Where the last sound decoded in the part measured ends, in source seconds,
+   * or `null` when none decoded — what a file cut short is told apart by
+   * (VH-139, `media/ends-early.ts`). Set by the same passes as the field above;
+   * gap-filled silence is not decoded sound and never moves it.
+   */
+  readonly decodedEndSeconds?: number | null
 }
 
 export class AudioAnalyser {
