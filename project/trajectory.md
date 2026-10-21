@@ -9,6 +9,8 @@
 
 ## Phase 4 — what the design pass found
 
+- RECALL — 8/8 (2026-10-21) — scores: 2,2,2,2 — local — see decisions
+
 - VH-146 — Submission’s generated date and its caveat each stay whole on a line, while staff dates still wrap; all 37 card-spike frames pass at the existing floor, with clips and sizes kept (2026-10-21) — see decisions
 
 - VH-145 — status and control spacing now come from tokens, phone dialogs keep 16 px gutters, type weights and diagnostics’ face have names, and duplicate rules are grouped; 72 Chrome states preserve the intended layout (2026-10-21) — see decisions

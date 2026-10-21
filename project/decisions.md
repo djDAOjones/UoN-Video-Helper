@@ -17,6 +17,16 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-21 — PLAN-4 — Phase 4 and the authorised Codex run close
+
+**Decision:** Phase 4 closes with VH-144, VH-145 and VH-146 shipped, reconciled against its Items list. The authorised run and its report are complete. No next phase is approved: VH-13 in Next remains blocked by VH-M2, so further implementation order needs owner direction.
+
+**Rationale:** VH-144 pays V-20/V-23, VH-145 V-19/V-25, and VH-146 V-30 without changing the card floor or words. Local recall before editing scored 8/8 (2,2,2,2): latest implementation closes VH-146/VH-145/VH-144/VH-142 are anchored by their close headings and Phase 4/3 trajectory; VH-144’s shared reason and field width provide the phase decision and why; wish-list/backlog locate human, spec and maintainer deferrals; the handoff’s six-step run and backlog’s blocked Next establish the absence of an approved next phase. This is local, not a fresh-session handoff. The report and changed translation-key list are in reviews/2026-10-21; the reserved writing review is explicitly captured as a wish line. Milestone audit again finds zero runtime and 14 development findings (10 high, 1 moderate, 3 low), covered by the existing V3-HARNESS audit wish. No dependencies changed. House conventions: milestone audit, complete ledger and retained verification evidence. Known missing-sample and frozen-canon warnings remain covered by their existing wishes. Taken gateless under the handoff; no second-model review or human acceptance is claimed.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-21 — VH-146 — Generated dates and caveats stay whole
 
 **Decision:** Submission’s generated date and its complete caveat each wrap as one piece, while staff-typed dates keep ordinary breaks. The existing three templates and card words stay unchanged — the narrow renderer change requested by V-30, taken gateless.
@@ -460,15 +470,5 @@
 **Rationale:** The owner's answers, 2026-10-19, to four questions asked as VH-131 started: which side is chosen before anyone touches it, "Staff video"; whether None is offered on a submission, "Yes, None is allowed"; whether a staff video holds other graphic options, "No, just those"; whether the choice is remembered between visits, "Yes, remembered". The second changes PLAN-1's "a submission always has … the Internal use only closing" to "a submission's closing, when it has one, is Internal use only"; the item's criterion naming Cut, Fade, Slide, the onset and the colour stands, with None offered beside them. Spec §4.1's "A student submission always has it." no longer says exactly this; VH-131's spec draft corrects it, for the owner's approval. The fourth follows VH-105's guarded read and write: this browser only, and a store that refuses leaves the default.
 
 **Supersedes:** 2026-10-19 — PLAN-1 — Staff video or Student submission, and the video's text in any of the three languages
-
-**Deferred:** none
-
-## 2026-10-19 — VH-126 — Internal use only: twelve tails drawn by the Mac, its words from the tables, and a checkbox
-
-**Decision:** Internal use only is twelve pre-built tails and a checkbox: `scripts/build-branding.mjs --only internal` draws each table's `closing.internalWords` with macOS's own text system and wipes it in under the logo at the wordmark's measured pace, and the checkbox, off by default and locked under None, swaps the tail and nothing else — because Homebrew's ffmpeg has no `drawtext`, and a translation corrected through the sheet must reach the pixels.
-
-**Rationale:** ffmpeg 9.0.2 from Homebrew has no `drawtext`. Headless Chrome could not bind its singleton socket in the agent's sandbox, and Swift's compiler did not match its SDK, so AppKit draws the words through JavaScript for Automation (`osascript`), present on every Mac, no dependency: Arial Bold with PingFang SC Semibold behind it (the weight Chrome picks for bold), 200 px on the 2160-line master, the cap top at 1522; at 1080 the widths are 795, 600 and 1,551 px of 1,680, the first two the spike's to the pixel. The wipe follows the wordmark's right edge, measured per frame from each master (1.72 to 2.96 s of the tail) and counted from the middle of the gap after the crest, because the crest overshoots its edge by two pixels while it builds; its edge is soft over 0.5 em (`CLOSING_WORDS_WIPE_FEATHER_EM`). Above the words each tail matches the official one to 59 dB PSNR. The owner chose 仅供内部使用 and Untuk kegunaan dalaman sahaja on 2026-10-19 ("Standard stamp"); the other three new keys' Chinese and Malay are the agent's drafts in the filled sheet. `closing-internal-words.json` records the words drawn, `test/closing-assets.test.ts` holds it to the tables, and Vite leaves it out of the build. A job reads the page's language once, at its start, as the words' language until VH-132; an internal tail that fails to load is reported as no closing, never replaced by the unmarked one. The script's ffprobe reads JSON now: ffprobe 9 lists a stream again under its stream group, which ran the CSV together. Standards applied: Carbon (the page's native checkbox, its reason in visible text as the colour's), WCAG 2.2 (1.4.6, white and Nottingham Blue 15.4:1 by calculation; 2.5.5, the target floor; 3.3.2, a label that says what it does), Nielsen 1 (the result line and the summary say the card is marked), house conventions (the feather in `src/config/`, the words in the tables; named test categories — the mapping, the names, the shipped files against the tables, junk read as off).
-
-**Supersedes:** none
 
 **Deferred:** none
