@@ -14,6 +14,8 @@
 
 ## Phase 3 — what the second audit found
 
+- VH-142 — Chinese save refusals offer saving again, Step 6 names one action, damage notes name future silence and original-recording times, and error guidance names its button; the approved form and terminology corrections ship in all three languages (2026-10-21) — see decisions
+
 - VH-141 — result warnings and download lifetime persist; saves, errors, locks and focus agree with the current state; stale progress stops, startup speaks, and a Show progress control hides automatic visual updates (2026-10-21) — see decisions
 
 - VH-140 — the record names the card and a video language not the page's; while a video is made or shown, a line says a switch is for the next one, and the progress names the job's choices; Step 3 says its rule first; checked in Chrome, three languages, two widths (2026-10-21) — see decisions

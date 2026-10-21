@@ -30,8 +30,6 @@
 
 ### Phase 3 — what the second audit found: a file that ends early, the record and the switches, nine small defects, the words
 
-- [ ] VH-142 — The words: the Chinese save messages and step 6, the damage note's tense, the errors panel's button — since 2026-10-21 — (from: VH-138, 2026-10-21)
-
 ### Phase 4 — what the design pass found: two page defects, the token boundary, the cards
 
 - [ ] VH-144 — The closing's reason said once under None; the Malay time fields keep their width at 320 px — since 2026-10-21 — (from: VH-143, 2026-10-21)

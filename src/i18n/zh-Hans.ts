@@ -60,7 +60,7 @@ export const zhHans: Messages = {
   },
   videoLanguage: {
     label: '视频语言',
-    helper: '应用添加到视频中的文字使用此语言。',
+    helper: '工具添加到视频中的文字使用此语言。',
     typed: '您输入的内容将按原样保留。',
     nextVideo: '对视频类型或视频语言的更改将用于您制作的下一个视频。',
   },
@@ -70,10 +70,10 @@ export const zhHans: Messages = {
     titleCard: '标题卡',
     closing: '结尾品牌标识',
     preset: '文件大小/质量',
-    create: '创造',
+    create: '制作',
   },
   choose: {
-    starting: '正在检查此浏览器能否运行本工具…',
+    starting: '正在检查此浏览器能否运行本工具……',
     dropHint: '或者把它拖放到这里。',
     dropHeld: '松开即可读取此视频。',
     reading: '正在读取视频……',
@@ -326,7 +326,7 @@ export const zhHans: Messages = {
     stopSaving: '停止保存',
     save: '保存视频',
     saved: '已保存',
-    discard: '扔掉它，重新开始。',
+    discard: '扔掉它，重新开始',
     keep: '留着它',
     lockedMaking: '视频制作期间已锁定。',
     lockedSaving: '视频保存期间已锁定。',
@@ -338,11 +338,11 @@ export const zhHans: Messages = {
     checking: '正在将此视频与您的设备进行比对……',
     checkStopped: '检查已停止。',
     stoppingSave: '正在停止保存……',
-    cancelling: '正在取消…',
+    cancelling: '正在取消……',
     cancelled: '已取消。未保存任何内容，您的原始文件保持不变。',
-    saving: '正在保存…',
-    saveStopped: '保存已停止。视频仍然在这里，您可以随时观看。',
-    notSaved: '未保存。视频仍然在这里，您可以随时观看。',
+    saving: '正在保存……',
+    saveStopped: '保存已停止。视频仍然在这里，您可以再次尝试保存。',
+    notSaved: '未保存。视频仍然在这里，您可以再次尝试保存。',
     refusedSource: '这就是你最初使用的文件。选择不同的名称或文件夹——此工具绝不会更改你的原始文件。',
     saved: '已保存。请到保存位置检查视频，然后上传到目标位置——或者在步骤 1 中选择另一个视频。',
     saveFailed: '视频保存失败。您可以再次尝试保存。',
@@ -353,7 +353,7 @@ export const zhHans: Messages = {
     verdictSpoken: '设备检查完成。{heading}。',
   },
   discard: {
-    title: '此视频尚未保存。',
+    title: '此视频尚未保存',
     delivered: '您的下载可能仍在进行中。重新开始将会丢弃您刚刚制作的视频。',
     unsaved: '您尚未保存刚刚制作的视频。重新开始将会丢弃该视频。',
     spoken: '此视频尚未保存。{question}',
@@ -480,7 +480,7 @@ export const zhHans: Messages = {
     },
     tryChrome: '本工具专为电脑上的 Chrome 浏览器而设计——请在 Chrome 浏览器上尝试使用。',
     chromeLacks:
-      '此Chrome浏览器版本可能已过期，或者此计算机上的某个设置可能已关闭此功能。请更新Chrome浏览器，或咨询计算机管理员。',
+      '此Chrome 浏览器版本可能已过期，或者此计算机上的某个设置可能已关闭此功能。请更新Chrome 浏览器，或咨询计算机管理员。',
     reasons: {
       noWebCodecs: '此浏览器无法处理视频。{remedy}',
       noAacEncodeHere: '此浏览器无法为视频文件添加声音。{remedy}',
@@ -492,9 +492,9 @@ export const zhHans: Messages = {
       noSourceDecodeElsewhere:
         '此浏览器无法读取此文件中的图片或音频。{remedy} 如果也无法打开，则该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式——文件名以 .mp4 结尾的文件。',
       noOpfsHere:
-        '此浏览器无法为该工具提供构建视频所需的空间。如果您使用隐私浏览模式，通常使用普通窗口即可；否则，可能是此计算机上的某个设置阻止了网站存储——请咨询管理员。',
+        '此浏览器无法为该工具提供制作视频所需的空间。如果您使用隐私浏览模式，通常使用普通窗口即可；否则，可能是此计算机上的某个设置阻止了网站存储——请咨询管理员。',
       noOpfsElsewhere:
-        '此浏览器无法为工具提供构建视频所需的空间。{remedy} 如果您使用隐私浏览模式，通常使用普通窗口即可。',
+        '此浏览器无法为工具提供制作视频所需的空间。{remedy} 如果您使用隐私浏览模式，通常使用普通窗口即可。',
       insecureContext:
         '此页面需要安全连接才能处理您的视频。请使用 https:// 地址打开，如果您自行运行，则请使用 localhost。',
       insufficientStorageResolvable:
@@ -535,13 +535,13 @@ export const zhHans: Messages = {
     },
     decodeDamage: {
       heading: {
-        one: '一处损坏的片段已被静音',
-        other: '多处损坏的片段已被静音',
+        one: '一处损坏的片段将被静音',
+        other: '多处损坏的片段将被静音',
       },
       detail: {
-        one: '在{times}，文件中有一段噪声，响度超出任何录音可能达到的水平。它来自文件本身的损坏，而不是您的录音。这不到一秒的片段将改为静音，因此没有人会听到它，电平调整也仍能正常进行。',
+        one: '在原始录音的{times}处，文件中有一段噪声，响度超出任何录音可能达到的水平。它来自文件本身的损坏，而不是您的录音。这不到一秒的片段将改为静音，因此没有人会听到它，电平调整也仍能正常进行。',
         other:
-          '在{times}，文件中有几段噪声，响度超出任何录音可能达到的水平。它们来自文件本身的损坏，而不是您的录音。每段不到一秒的片段都将改为静音，因此没有人会听到它们，电平调整也仍能正常进行。',
+          '在原始录音的{times}处，文件中有几段噪声，响度超出任何录音可能达到的水平。它们来自文件本身的损坏，而不是您的录音。每段不到一秒的片段都将改为静音，因此没有人会听到它们，电平调整也仍能正常进行。',
       },
       more: {
         one: '另外 {count} 处',
@@ -652,12 +652,12 @@ export const zhHans: Messages = {
       noWebCodecs: '此浏览器无法处理视频，因此该工具无法在此运行。{remedy}',
       noH264: '此浏览器无法创建此工具所需的视频格式，因此该工具无法在此处运行。{remedy}',
       noWorkingStore:
-        '此浏览器没有为该工具提供足够的空间来构建视频。如果您使用隐私浏览模式，通常可以使用普通窗口。{remedy}',
+        '此浏览器没有为该工具提供足够的空间来制作视频。如果您使用隐私浏览模式，通常可以使用普通窗口。{remedy}',
       workerNotStarted:
         '执行操作的工具部分未启动。请重新加载页面。如果问题再次出现，请点击“发送反馈”按钮进行报告。',
     },
     captured:
-      '工具出现故障。正在制作的视频可能无法完成；您的原始文件不受影响。请点击“发送反馈”按钮报告此问题，该按钮会附上这些详细信息。',
+      '工具出现故障。正在制作的视频可能无法完成；您的原始文件不受影响。请点击“报告此问题”按钮报告此问题，该按钮会附上这些详细信息。',
   },
   systemCheck: {
     summary: '系统检查 — {result}',
@@ -677,7 +677,7 @@ export const zhHans: Messages = {
       pass: '好的',
       fail: '不',
       warn: '!',
-      pending: '…',
+      pending: '……',
     },
     rows: {
       secure: '安全连接（存储访问所需）',
@@ -693,7 +693,7 @@ export const zhHans: Messages = {
       notAvailable: '无法使用',
       supported: '支持',
       notSupported: '不支持',
-      aacNotSupported: '不支持——此处无法制作带声音的视频。',
+      aacNotSupported: '不支持——此处无法制作带声音的视频',
       failedToStart: '启动失败',
       readyIn: '准备时间：{time}',
       noResponse: '没有回应',
@@ -713,7 +713,7 @@ export const zhHans: Messages = {
     writeFirst: '请先写好信息。',
     whatSent: '将随邮件发送的内容',
     whatSentDetail:
-      '有助于查找问题的详细信息包括：应用程序版本、您使用的浏览器、您进行到了哪一步以及视频时长、图像尺寸和格式。这些信息绝不包含视频本身、视频名称或视频中的任何内容。',
+      '有助于查找问题的详细信息包括：工具版本、您使用的浏览器、您进行到了哪一步以及视频时长、图像尺寸和格式。这些信息绝不包含视频本身、视频名称或视频中的任何内容。',
     openEmail: '打开电子邮件应用程序',
     copy: '复制消息和详细信息',
     close: '关闭',
@@ -793,7 +793,7 @@ export const zhHans: Messages = {
     },
   },
   save: {
-    pickerDescription: 'MP4 视频 (.mp4)',
+    pickerDescription: 'MP4 视频 （.mp4）',
     stem: '视频',
     marks: {
       branded: '品牌',

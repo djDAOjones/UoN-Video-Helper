@@ -136,3 +136,15 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-18 — PLAN-1 — Band 8: a title card and an Internal only closing, in one app for staff and students
+
+**Decision:** Band 8 adds an optional title card before the video, General or Submission, and an "Internal only" closing, a plain card with no logo, beside the official closings and none; both go in the one app, which staff and students now share, and the brief's Direction says so — because the owner asked for it in chat on 2026-10-14 and settled its open questions on 2026-10-18.
+
+**Items:** VH-126, VH-127, VH-128
+
+**Rationale:** The owner's answers on 2026-10-18: the label reads "Internal only", on the closing card only; cards only, no mark on every frame; students may choose no branding; the Submission fields are module title and code, assignment title or number, module convenor or tutor, student ID numbers (added for anonymous marking: no names), the running time ("not including anything added by the app, but discounting trimmed material") and the date of the card ("clarify: not submission date"); on hosting, "just one instance for now. we might separate later", which the owner, offered two readings, confirmed as one app for everyone now. Accepted consequences: a card is removed by trimming in any editor, so the Internal only card is designed to resist reuse rather than removal (opaque, logo-free, carrying that video's date, so it cannot be lifted as a generic stamp); and the official closings stay in the public repository and on the GitHub Pages pilot, so nothing yet stops a student using them; the student edition, VH-129 in the Icebox, is where that is answered, together with hosting (VH-14). The Internal only card carries no University branding, so it is not the per-department variant D12 asks governance for, and D12 stays open. The title card is generated text, not an opening graphic: VH-23 stays iceboxed, but the timeline's dormant opening slot is where the card joins. Review findings the band answers: the spec's §2 (staff only), §4.1 (closing only) and §12 (no branding variants) no longer describe the product; a wish line carries that sign-off debt, and each item drafts its sections for the owner's approval. Order: the Internal only closing first, because it proves the card renderer in the closing slot the pipeline already has; the General card second, which opens the opening slot; the Submission card last, on both. Open points for the owner sit in each item's notes, asked when that item starts.
+
+**Supersedes:** none
+
+**Deferred:** VH-129

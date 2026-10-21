@@ -111,7 +111,7 @@ export const enGB = {
     /** Its visible label, which is also its accessible name. */
     label: 'Video language',
     /** The line under it: what the choice changes, and so what it does not. */
-    helper: 'Words the app adds to your video are in this language.',
+    helper: "Words the tool adds to your video are in this language.",
     typed: 'What you type is kept as typed.',
     /**
      * Under both switches while a video is being made or a finished one is on
@@ -584,9 +584,9 @@ export const enGB = {
       noSourceDecodeElsewhere:
         'This browser cannot read the picture or sound inside this file. {remedy} If it will not open there either, the file was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4.',
       noOpfsHere:
-        'This browser will not give the tool the working space it needs to build your video. If you are browsing privately, an ordinary window usually works; otherwise a setting on this computer may be blocking site storage — ask whoever manages it.',
+        "This browser will not give the tool the working space it needs to create your video. If you are browsing privately, an ordinary window usually works; otherwise a setting on this computer may be blocking site storage — ask whoever manages it.",
       noOpfsElsewhere:
-        'This browser will not give the tool the working space it needs to build your video. {remedy} If you are browsing privately, an ordinary window usually works.',
+        "This browser will not give the tool the working space it needs to create your video. {remedy} If you are browsing privately, an ordinary window usually works.",
       insecureContext:
         'This page needs a secure connection before it can work with your video. Open it at an https:// address, or at localhost if you are running it yourself.',
       insufficientStorageResolvable:
@@ -635,13 +635,13 @@ export const enGB = {
     /** Said when a damaged moment in the file's sound is made silent (VH-122). {times} is a list of times, like "1:22 and 3:05". */
     decodeDamage: {
       heading: {
-        one: 'A damaged moment has been silenced',
-        other: 'Damaged moments have been silenced',
+        one: "A damaged moment will be silenced",
+        other: "Damaged moments will be silenced",
       },
       detail: {
-        one: 'At {times}, the file holds a burst of noise louder than any recording can be. It comes from damage to the file, not from your recording. That fraction of a second will be silent instead, so no one hears it and the levelling still works as it should.',
+        one: "At {times} in the original recording, the file holds a burst of noise louder than any recording can be. It comes from damage to the file, not from your recording. That fraction of a second will be silent instead, so no one hears it and the levelling still works as it should.",
         other:
-          'At {times}, the file holds bursts of noise louder than any recording can be. They come from damage to the file, not from your recording. Each fraction of a second will be silent instead, so no one hears them and the levelling still works as it should.',
+          "At {times} in the original recording, the file holds bursts of noise louder than any recording can be. They come from damage to the file, not from your recording. Each fraction of a second will be silent instead, so no one hears them and the levelling still works as it should.",
       },
       /** Ends the list of times when there are more than the warning lists. */
       more: { one: '{count} other moment', other: '{count} other moments' },
@@ -753,12 +753,12 @@ export const enGB = {
       noWebCodecs: 'This browser cannot process video, so the tool cannot run here. {remedy}',
       noH264: 'This browser cannot create the video format this tool needs, so the tool cannot run here. {remedy}',
       noWorkingStore:
-        'This browser gives the tool no working space to build a video in. If you are browsing privately, an ordinary window usually works. {remedy}',
+        "This browser gives the tool no working space to create a video in. If you are browsing privately, an ordinary window usually works. {remedy}",
       workerNotStarted:
         'The part of the tool that does the work did not start. Reload the page. If it happens again, report it with the Send feedback button.',
     },
     captured:
-      'Something in the tool went wrong. A video being made may not finish; your original file is not affected. Report it with the Send feedback button, which adds these details.',
+      "Something in the tool went wrong. A video being made may not finish; your original file is not affected. Report it with the Report this problem button, which adds these details.",
   },
 
   systemCheck: {
@@ -809,20 +809,20 @@ export const enGB = {
     writeFirst: 'Write a message first.',
     whatSent: 'What will be sent with it',
     whatSentDetail:
-      "Details that help find a problem: the app's version, your browser, how far you got, and your video's length, picture size and format. These details never include the video, its name, or anything in it.",
+      "Details that help find a problem: the tool’s version, your browser, how far you got, and your video’s length, picture size and format. These details never include the video, its name, or anything in it.",
     openEmail: 'Open email app',
     copy: 'Copy message and details',
     close: 'Close',
     tooLong:
-      'Your message is too long to hand to your email app in one go. Choose "Copy message and details" and paste them into an email to {address}.',
+      "Your message is too long to hand to your email app in one go. Choose “Copy message and details” and paste them into an email to {address}.",
     opened:
-      'Your email app should have opened with your message ready to send. If it did not, choose "Copy message and details" and paste them into an email to {address}.',
+      "Your email app should have opened with your message ready to send. If it did not, choose “Copy message and details” and paste them into an email to {address}.",
     someOmitted: 'Some details did not fit in the email; the copy has them all.',
     copied: 'Copied. Paste it into an email to {address}.',
     couldNotCopy:
-      'Could not copy. Open "What will be sent with it", select the details, and copy them with your message.',
+      "Could not copy. Open “What will be sent with it”, select the details, and copy them with your message.",
     /** Over the details the email cannot carry, in the disclosure; the details themselves stay English. */
-    onlyInCopy: 'Too long for the email, so only in "Copy message and details":',
+    onlyInCopy: "Too long for the email, so only in “Copy message and details”:",
   },
 
   /**

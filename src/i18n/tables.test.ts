@@ -229,3 +229,29 @@ describe('a filled sheet', () => {
     },
   )
 })
+
+// VH-142: form and naming are shared even while translations await colleagues.
+describe('consistent page words (VH-142)', () => {
+  it.each(Object.entries(LANGUAGE_TABLES))('%s uses typographic quotation marks', (_tag, table) => {
+    for (const { key, english: text } of messagesOf(table)) {
+      expect(text, key).not.toContain('"')
+    }
+  })
+
+  it.each(Object.entries(LANGUAGE_TABLES))('%s names the button under its captured error', (_tag, table) => {
+    expect(table.failure.captured).toContain(table.errors.report)
+  })
+
+  it('Chinese pending states use one ellipsis, and save refusals still offer saving', () => {
+    const zh = LANGUAGE_TABLES['zh-Hans']!
+    for (const { key, english: text } of messagesOf(zh)) {
+      for (const mark of text.matchAll(/…+/g)) expect(mark[0], key).toBe('……')
+    }
+    expect(zh.status.saveStopped).toContain('再次尝试保存')
+    expect(zh.status.notSaved).toContain('再次尝试保存')
+    expect(zh.create.create).toContain(zh.steps.create)
+    for (const text of [zh.create.discard, zh.discard.title, zh.systemCheck.values.aacNotSupported]) {
+      expect(text).not.toMatch(/。$/)
+    }
+  })
+})

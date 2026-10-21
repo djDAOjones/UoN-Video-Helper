@@ -67,7 +67,7 @@ export const msMY: Messages = {
   },
   videoLanguage: {
     label: 'Bahasa video',
-    helper: 'Perkataan yang ditambah oleh aplikasi pada video anda adalah dalam bahasa ini.',
+    helper: 'Perkataan yang ditambah oleh alat pada video anda adalah dalam bahasa ini.',
     typed: 'Apa yang anda taip dikekalkan seperti yang ditaip.',
     nextVideo:
       'Perubahan pada jenis video atau bahasa video digunakan untuk video seterusnya yang anda buat.',
@@ -534,9 +534,9 @@ export const msMY: Messages = {
       noSourceDecodeElsewhere:
         'Pelayar ini tidak dapat membaca gambar atau bunyi di dalam fail ini. {remedy} Jika ia juga tidak dapat dibuka di sana, fail itu mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya semula sebagai MP4 — fail yang namanya berakhir dengan .mp4.',
       noOpfsHere:
-        'Pelayar ini tidak akan memberikan alat ini ruang kerja yang diperlukan untuk membina video anda. Jika anda melayari secara peribadi, tetingkap biasa biasanya berfungsi; jika tidak, tetapan pada komputer ini mungkin menyekat storan tapak — tanya sesiapa yang mengurusnya.',
+        'Pelayar ini tidak akan memberikan alat ini ruang kerja yang diperlukan untuk mencipta video anda. Jika anda melayari secara peribadi, tetingkap biasa biasanya berfungsi; jika tidak, tetapan pada komputer ini mungkin menyekat storan tapak — tanya sesiapa yang mengurusnya.',
       noOpfsElsewhere:
-        'Pelayar ini tidak akan memberikan alat ini ruang kerja yang diperlukan untuk membina video anda. {remedy} Jika anda melayari secara peribadi, tetingkap biasa biasanya berfungsi.',
+        'Pelayar ini tidak akan memberikan alat ini ruang kerja yang diperlukan untuk mencipta video anda. {remedy} Jika anda melayari secara peribadi, tetingkap biasa biasanya berfungsi.',
       insecureContext:
         'Halaman ini memerlukan sambungan yang selamat sebelum ia boleh berfungsi dengan video anda. Bukanya di alamat https:// atau di localhost jika anda menjalankannya sendiri.',
       insufficientStorageResolvable:
@@ -584,13 +584,13 @@ export const msMY: Messages = {
     },
     decodeDamage: {
       heading: {
-        one: 'Satu bahagian yang rosak telah disenyapkan',
-        other: 'Beberapa bahagian yang rosak telah disenyapkan',
+        one: 'Satu bahagian yang rosak akan disenyapkan',
+        other: 'Beberapa bahagian yang rosak akan disenyapkan',
       },
       detail: {
-        one: 'Pada {times}, fail ini mengandungi letusan hingar yang lebih kuat daripada mana-mana rakaman. Ia berpunca daripada kerosakan pada fail, bukan daripada rakaman anda. Pecahan saat itu akan disenyapkan, jadi tiada sesiapa yang mendengarnya dan perataan masih berfungsi seperti sepatutnya.',
+        one: 'Pada {times} dalam rakaman asal, fail ini mengandungi letusan hingar yang lebih kuat daripada mana-mana rakaman. Ia berpunca daripada kerosakan pada fail, bukan daripada rakaman anda. Pecahan saat itu akan disenyapkan, jadi tiada sesiapa yang mendengarnya dan perataan masih berfungsi seperti sepatutnya.',
         other:
-          'Pada {times}, fail ini mengandungi letusan hingar yang lebih kuat daripada mana-mana rakaman. Ia berpunca daripada kerosakan pada fail, bukan daripada rakaman anda. Setiap pecahan saat itu akan disenyapkan, jadi tiada sesiapa yang mendengarnya dan perataan masih berfungsi seperti sepatutnya.',
+          'Pada {times} dalam rakaman asal, fail ini mengandungi letusan hingar yang lebih kuat daripada mana-mana rakaman. Ia berpunca daripada kerosakan pada fail, bukan daripada rakaman anda. Setiap pecahan saat itu akan disenyapkan, jadi tiada sesiapa yang mendengarnya dan perataan masih berfungsi seperti sepatutnya.',
       },
       more: {
         one: '{count} bahagian lain',
@@ -709,12 +709,12 @@ export const msMY: Messages = {
       noH264:
         'Pelayar ini tidak dapat mencipta format video yang diperlukan oleh alat ini, jadi alat ini tidak dapat dijalankan di sini. {remedy}',
       noWorkingStore:
-        'Pelayar ini tidak memberikan ruang kerja kepada alat ini untuk membina video. Jika anda melayari secara peribadi, tetingkap biasa biasanya berfungsi. {remedy}',
+        'Pelayar ini tidak memberikan ruang kerja kepada alat ini untuk mencipta video. Jika anda melayari secara peribadi, tetingkap biasa biasanya berfungsi. {remedy}',
       workerNotStarted:
         'Bahagian alat yang melakukan kerja tidak bermula. Muat semula halaman. Jika ia berlaku lagi, laporkannya dengan butang Hantar maklum balas.',
     },
     captured:
-      'Sesuatu yang tidak kena telah berlaku dalam alat ini. Video yang sedang dibuat mungkin tidak siap; fail asal anda tidak terjejas. Laporkannya dengan butang Hantar maklum balas, yang akan menambah butiran ini.',
+      'Sesuatu yang tidak kena telah berlaku dalam alat ini. Video yang sedang dibuat mungkin tidak siap; fail asal anda tidak terjejas. Laporkannya dengan butang Laporkan masalah ini, yang akan menambah butiran ini.',
   },
   systemCheck: {
     summary: 'Pemeriksaan sistem — {result}',
@@ -772,19 +772,19 @@ export const msMY: Messages = {
     writeFirst: 'Tulis mesej dulu.',
     whatSent: 'Apa yang akan dihantar bersamanya',
     whatSentDetail:
-      'Butiran yang membantu mencari masalah: versi aplikasi, pelayar anda, sejauh mana anda telah berjaya, dan panjang video anda, saiz dan format gambar. Butiran ini tidak pernah merangkumi video, namanya atau apa-apa sahaja di dalamnya.',
+      'Butiran yang membantu mencari masalah: versi alat, pelayar anda, sejauh mana anda telah berjaya, dan panjang video anda, saiz dan format gambar. Butiran ini tidak pernah merangkumi video, namanya atau apa-apa sahaja di dalamnya.',
     openEmail: 'Buka aplikasi e-mel',
     copy: 'Salin mesej dan butiran',
     close: 'Tutup',
     tooLong:
-      'Mesej anda terlalu panjang untuk dihantar ke aplikasi e-mel anda sekaligus. Pilih "Salin mesej dan butiran" dan tampalkannya ke dalam e-mel ke {address}.',
+      'Mesej anda terlalu panjang untuk dihantar ke aplikasi e-mel anda sekaligus. Pilih “Salin mesej dan butiran” dan tampalkannya ke dalam e-mel ke {address}.',
     opened:
-      'Aplikasi e-mel anda sepatutnya telah dibuka dengan mesej anda sedia untuk dihantar. Jika tidak, pilih "Salin mesej dan butiran" dan tampalkannya ke dalam e-mel ke {address}.',
+      'Aplikasi e-mel anda sepatutnya telah dibuka dengan mesej anda sedia untuk dihantar. Jika tidak, pilih “Salin mesej dan butiran” dan tampalkannya ke dalam e-mel ke {address}.',
     someOmitted: 'Beberapa butiran tidak muat dalam e-mel; salinannya mengandungi semuanya.',
     copied: 'Disalin. Tampalkannya ke dalam e-mel ke {address}.',
     couldNotCopy:
-      'Tidak dapat menyalin. Buka "Apa yang akan dihantar bersamanya", pilih butirannya dan salin butiran tersebut bersama mesej anda.',
-    onlyInCopy: 'Terlalu panjang untuk e-mel ini, jadi hanya dalam "Salin mesej dan butiran":',
+      'Tidak dapat menyalin. Buka “Apa yang akan dihantar bersamanya”, pilih butirannya dan salin butiran tersebut bersama mesej anda.',
+    onlyInCopy: 'Terlalu panjang untuk e-mel ini, jadi hanya dalam “Salin mesej dan butiran”:',
   },
   statement: {
     heading: 'Kenyataan kebolehcapaian',

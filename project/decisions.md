@@ -17,6 +17,16 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-21 — VH-142 — Save, damage and feedback wording agree with the page
+
+**Decision:** the Chinese save refusals offer saving again, Step 6 uses 制作 throughout, decode-damage wording is future tense with original-recording times, and captured errors name Report this problem. The approved quotation, ellipsis, bracket and terminology corrections ship through the sheet — taken gateless within the item’s form-only scope.
+
+**Rationale:** No writing-review proposal or reserved statement, lede or browser wording is applied. The tool/job terminology uses the existing page vocabulary; Chinese and Malay changes are agent drafts. Regression tests hold the damage tense and time reference, button names, table quotation marks, Chinese ellipses and save meaning. Chrome checks the warning, captured-error guidance, cancelled save and feedback copy in all 18 required combinations. Standards: Nielsen 1, 2 and 4 (state, user language and consistency); Carbon content and error guidance; WCAG 3.1.5 and 3.3.2; house conventions, sheet-generated translations and category tests. The protected spec’s damage row has a proposed correction in the wish-list. The existing campus review, real-corpus and frozen-canon wishes cover human wording review and known checker warnings.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-21 — VH-141 — State changes retain their meaning and hand focus on
 
 **Decision:** the nine state defects and V-21/V-22 close: result lifetime and warnings survive redraws; translated guidance has its own language; errors and preview failures announce; save focus moves before cleanup; stale blocks and progress withdraw; startup and unreadable replacement say their state. A separate Show progress checkbox hides automatic visual updates, retaining the existing announcement switch — the conservative, gateless reading of WCAG 2.2.2.
@@ -466,15 +476,3 @@
 **Supersedes:** 2026-10-18 — PLAN-1 — Band 8: a title card and an Internal only closing, in one app for staff and students
 
 **Deferred:** none
-
-## 2026-10-18 — PLAN-1 — Band 8: a title card and an Internal only closing, in one app for staff and students
-
-**Decision:** Band 8 adds an optional title card before the video, General or Submission, and an "Internal only" closing, a plain card with no logo, beside the official closings and none; both go in the one app, which staff and students now share, and the brief's Direction says so — because the owner asked for it in chat on 2026-10-14 and settled its open questions on 2026-10-18.
-
-**Items:** VH-126, VH-127, VH-128
-
-**Rationale:** The owner's answers on 2026-10-18: the label reads "Internal only", on the closing card only; cards only, no mark on every frame; students may choose no branding; the Submission fields are module title and code, assignment title or number, module convenor or tutor, student ID numbers (added for anonymous marking: no names), the running time ("not including anything added by the app, but discounting trimmed material") and the date of the card ("clarify: not submission date"); on hosting, "just one instance for now. we might separate later", which the owner, offered two readings, confirmed as one app for everyone now. Accepted consequences: a card is removed by trimming in any editor, so the Internal only card is designed to resist reuse rather than removal (opaque, logo-free, carrying that video's date, so it cannot be lifted as a generic stamp); and the official closings stay in the public repository and on the GitHub Pages pilot, so nothing yet stops a student using them; the student edition, VH-129 in the Icebox, is where that is answered, together with hosting (VH-14). The Internal only card carries no University branding, so it is not the per-department variant D12 asks governance for, and D12 stays open. The title card is generated text, not an opening graphic: VH-23 stays iceboxed, but the timeline's dormant opening slot is where the card joins. Review findings the band answers: the spec's §2 (staff only), §4.1 (closing only) and §12 (no branding variants) no longer describe the product; a wish line carries that sign-off debt, and each item drafts its sections for the owner's approval. Order: the Internal only closing first, because it proves the card renderer in the closing slot the pipeline already has; the General card second, which opens the opening slot; the Submission card last, on both. Open points for the owner sit in each item's notes, asked when that item starts.
-
-**Supersedes:** none
-
-**Deferred:** VH-129
