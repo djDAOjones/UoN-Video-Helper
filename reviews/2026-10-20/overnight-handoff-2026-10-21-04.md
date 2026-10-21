@@ -58,7 +58,7 @@ the owner's 09:04 BST word ("resume"), recorded in `project/decisions.md`.
   (no blank line before an appended entry; a trailing blank line in the
   decisions file). The fix is in the commit `0912544`'s method: strip the
   decisions file's trailing newlines and add a blank line before each
-  `## ` that follows a `**Deferred:**` line in the archive, then run
+  heading that follows a `**Deferred:**` line in the archive, then run
   `npm run docs:lint`.
 
 ## For the morning report
