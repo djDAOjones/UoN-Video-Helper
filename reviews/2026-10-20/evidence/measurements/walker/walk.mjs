@@ -109,6 +109,9 @@ const PAGE_INIT = String.raw`
     return { el: desc(el), focusVisible: vis, outline: cs.outlineStyle + ' ' + cs.outlineWidth + ' ' + cs.outlineColor, offset: cs.outlineOffset, boxShadow: cs.boxShadow === 'none' ? '' : cs.boxShadow.slice(0, 60), w: Math.round(r.width), h: Math.round(r.height), inView, obscured, disabled: !!el.disabled }; };
   A.rect = (sel) => { const el = typeof sel === 'string' ? document.querySelector(sel) : sel; if (!el) return null; el.scrollIntoView({ block: 'center', inline: 'nearest' }); const r = el.getBoundingClientRect(); return { x: Math.round((r.left + r.width / 2) * 10) / 10, y: Math.round((r.top + r.height / 2) * 10) / 10, w: r.width, h: r.height, left: r.left, top: r.top }; };
   A.ax = () => Array.from(document.querySelectorAll(INTERACTIVE + ', [role], h1, h2, h3, fieldset, legend, [aria-live], dialog')).filter(visible).map((el) => ({ el: desc(el).slice(0, 90), role: el.getAttribute('role') || el.tagName.toLowerCase(), lang: (el.closest('[lang]') || {}).getAttribute ? el.closest('[lang]').getAttribute('lang') : null, expanded: el.getAttribute('aria-expanded'), describedby: el.getAttribute('aria-describedby'), invalid: el.getAttribute('aria-invalid'), disabled: el.disabled || el.getAttribute('aria-disabled') || null, checked: el.checked, required: el.required || null }));
+  // The design pass (VH-143): every visible element's computed lengths, type and colours, pseudo-elements included, for the token sweep (tokens.mjs).
+  const STYLE_PROPS = ['marginTop', 'marginRight', 'marginBottom', 'marginLeft', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'rowGap', 'columnGap', 'fontSize', 'lineHeight', 'fontWeight', 'fontFamily', 'letterSpacing', 'textAlign', 'textTransform', 'borderTopWidth', 'borderRightWidth', 'borderBottomWidth', 'borderLeftWidth', 'borderTopStyle', 'borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomLeftRadius', 'borderBottomRightRadius', 'color', 'backgroundColor', 'borderTopColor', 'borderBottomColor', 'outlineWidth', 'outlineOffset', 'outlineColor', 'outlineStyle', 'minHeight', 'minWidth', 'maxWidth', 'display', 'opacity'];
+  A.styles = () => { const out = []; for (const el of document.querySelectorAll('body *')) { if (!visible(el)) continue; const r = el.getBoundingClientRect(); const cs = getComputedStyle(el); const langEl = el.closest('[lang]'); const row = { el: desc(el).slice(0, 90), tag: el.tagName.toLowerCase(), cls: typeof el.className === 'string' ? el.className.trim() : '', lang: langEl ? langEl.getAttribute('lang') : '', band: !!el.closest('.on-brand-blue'), w: Math.round(r.width), h: Math.round(r.height) }; for (const p of STYLE_PROPS) row[p] = cs[p]; for (const pe of ['::before', '::after']) { const ps = getComputedStyle(el, pe); if (ps.content && ps.content !== 'none' && ps.content !== 'normal') { const q = { width: ps.width, height: ps.height, content: ps.content.slice(0, 20) }; for (const p of STYLE_PROPS) q[p] = ps[p]; row[pe] = q; } } out.push(row); } return out; };
   A.headings = () => Array.from(document.querySelectorAll('h1,h2,h3,h4')).filter(visible).map((h) => h.tagName + ' ' + (h.innerText || '').trim().slice(0, 60));
 })();
 `
@@ -472,6 +475,7 @@ class Walk {
       info.ax = await this.evaluate('window.__audit.ax()')
     }
     if (walk) info.tabWalk = await this.tabWalk()
+    writeFileSync(join(this.dir, name + '-styles.json'), JSON.stringify(await this.evaluate('window.__audit.styles()')))
     writeFileSync(join(this.dir, name + '.json'), JSON.stringify(info, null, 1))
     this.log(`captured ${name} (${m.w}x${m.h}, ${info.overflow.hscroll ? 'HSCROLL' : 'no hscroll'})`)
     return info
@@ -1158,6 +1162,26 @@ lateScenarios['truncated-download'] = async (w) => {
   await w.waitSaved()
   await w.capture('03-downloaded')
   await sleep(3000)
+}
+
+// The frames the app draws (VH-143): VH-126's spike page fits and draws both title cards and the
+// closing's words at four shapes in three languages with the real renderer, and reports each
+// field's size against its floor. Needs spike-cards.html at the dev server's root.
+scenarios['cards'] = async (w) => {
+  await w.goto('spike-cards.html')
+  await w.waitFor(`(() => { const l = document.getElementById('log'); return !!l && /4K: ms-MY Submission/.test(l.textContent); })()`, { label: 'cards drawn', timeout: 240000 })
+  await sleep(800)
+  writeFileSync(join(w.dir, 'cards-log.txt'), await w.evaluate(`document.getElementById('log').textContent`))
+  await w.screenshot('cards-page')
+  const n = await w.evaluate(`(() => { const cs = Array.from(document.querySelectorAll('#cards canvas, #cards img')); cs.forEach((c, i) => { c.id = 'audit-card-' + i; }); return cs.map((c) => { const f = c.closest('figure'); const cap = f && f.querySelector('figcaption'); return (cap ? cap.textContent : (c.getAttribute('aria-label') || c.title || c.alt || '')).replace(/\\s+/g, ' ').trim().slice(0, 120); }); })()`)
+  w.log('cards drawn: ' + n.length)
+  const captions = []
+  for (let i = 0; i < n.length; i++) {
+    const name = 'card-' + String(i + 1).padStart(2, '0')
+    await w.clip(name, '#audit-card-' + i, { pad: 0 })
+    captions.push(name + ': ' + n[i])
+  }
+  writeFileSync(join(w.dir, 'cards-captions.txt'), captions.join('\n') + '\n')
 }
 
 Object.assign(scenarios, lateScenarios)

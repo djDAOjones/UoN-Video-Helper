@@ -7,8 +7,9 @@ V="-f lavfi -i testsrc2=size=1280x720:rate=25"
 A="-f lavfi -i sine=frequency=440:sample_rate=48000"
 ENC="-c:v libx264 -preset veryfast -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart"
 
-# A slide-lecture stand-in at about -16.7 LUFS: a tone at -13 dBFS, stereo.
+# A slide-lecture stand-in at about -16.7 LUFS: a tone at -13 dBFS, stereo. The 6-minute 1080p one is the desktop walk's main file.
 ffmpeg -v error -y ${=V} ${=A} -t 130 -af "volume=-13dB,aformat=channel_layouts=stereo" ${=ENC} "$OUT/lecture-130s.mp4"
+ffmpeg -v error -y -f lavfi -i testsrc2=size=1920x1080:rate=25 ${=A} -t 360 -af "volume=-13dB,aformat=channel_layouts=stereo" ${=ENC} "$OUT/lecture-360s.mp4"
 ffmpeg -v error -y ${=V} ${=A} -t 60 -af "volume=-13dB,aformat=channel_layouts=stereo" ${=ENC} "$OUT/lecture-60s.mp4"
 ffmpeg -v error -y ${=V} ${=A} -t 30 -af "volume=-13dB,aformat=channel_layouts=stereo" ${=ENC} "$OUT/lecture-30s.mp4"
 
