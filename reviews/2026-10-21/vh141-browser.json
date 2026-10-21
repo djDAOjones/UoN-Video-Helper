@@ -1,0 +1,381 @@
+{
+  "method": "Headless Chrome, real WebCodecs and OPFS; synthetic local fixtures; controlled worker reply delays, watchdog clock and save-route failures. No human screen-reader claim.",
+  "matrix": [
+    {
+      "tag": "en-GB",
+      "width": 1280,
+      "mode": "light",
+      "disabledTextarea": {
+        "border": "dashed",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(64, 81, 98)"
+      },
+      "previewFocus": true,
+      "announcedError": true,
+      "feedbackLanguage": true,
+      "unreadableWithdrawn": true,
+      "startup": "Checking whether this browser can run the tool…"
+    },
+    {
+      "tag": "en-GB",
+      "width": 1280,
+      "mode": "dark",
+      "disabledTextarea": {
+        "border": "dashed",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(207, 212, 216)"
+      },
+      "previewFocus": true,
+      "announcedError": true,
+      "feedbackLanguage": true,
+      "unreadableWithdrawn": true,
+      "startup": "Checking whether this browser can run the tool…"
+    },
+    {
+      "tag": "en-GB",
+      "width": 1280,
+      "mode": "forced",
+      "disabledTextarea": {
+        "border": "dashed",
+        "background": "rgba(255, 255, 255, 0)",
+        "color": "rgb(96, 0, 0)"
+      },
+      "previewFocus": true,
+      "announcedError": true,
+      "feedbackLanguage": true,
+      "unreadableWithdrawn": true,
+      "startup": "Checking whether this browser can run the tool…"
+    },
+    {
+      "tag": "en-GB",
+      "width": 375,
+      "mode": "light",
+      "disabledTextarea": {
+        "border": "dashed",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(64, 81, 98)"
+      },
+      "previewFocus": true,
+      "announcedError": true,
+      "feedbackLanguage": true,
+      "unreadableWithdrawn": true,
+      "startup": "Checking whether this browser can run the tool…"
+    },
+    {
+      "tag": "en-GB",
+      "width": 375,
+      "mode": "dark",
+      "disabledTextarea": {
+        "border": "dashed",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(207, 212, 216)"
+      },
+      "previewFocus": true,
+      "announcedError": true,
+      "feedbackLanguage": true,
+      "unreadableWithdrawn": true,
+      "startup": "Checking whether this browser can run the tool…"
+    },
+    {
+      "tag": "en-GB",
+      "width": 375,
+      "mode": "forced",
+      "disabledTextarea": {
+        "border": "dashed",
+        "background": "rgba(255, 255, 255, 0)",
+        "color": "rgb(96, 0, 0)"
+      },
+      "previewFocus": true,
+      "announcedError": true,
+      "feedbackLanguage": true,
+      "unreadableWithdrawn": true,
+      "startup": "Checking whether this browser can run the tool…"
+    },
+    {
+      "tag": "zh-Hans",
+      "width": 1280,
+      "mode": "light",
+      "disabledTextarea": {
+        "border": "dashed",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(64, 81, 98)"
+      },
+      "previewFocus": true,
+      "announcedError": true,
+      "feedbackLanguage": true,
+      "unreadableWithdrawn": true,
+      "startup": "正在检查此浏览器能否运行本工具…"
+    },
+    {
+      "tag": "zh-Hans",
+      "width": 1280,
+      "mode": "dark",
+      "disabledTextarea": {
+        "border": "dashed",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(207, 212, 216)"
+      },
+      "previewFocus": true,
+      "announcedError": true,
+      "feedbackLanguage": true,
+      "unreadableWithdrawn": true,
+      "startup": "正在检查此浏览器能否运行本工具…"
+    },
+    {
+      "tag": "zh-Hans",
+      "width": 1280,
+      "mode": "forced",
+      "disabledTextarea": {
+        "border": "dashed",
+        "background": "rgba(255, 255, 255, 0)",
+        "color": "rgb(96, 0, 0)"
+      },
+      "previewFocus": true,
+      "announcedError": true,
+      "feedbackLanguage": true,
+      "unreadableWithdrawn": true,
+      "startup": "正在检查此浏览器能否运行本工具…"
+    },
+    {
+      "tag": "zh-Hans",
+      "width": 375,
+      "mode": "light",
+      "disabledTextarea": {
+        "border": "dashed",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(64, 81, 98)"
+      },
+      "previewFocus": true,
+      "announcedError": true,
+      "feedbackLanguage": true,
+      "unreadableWithdrawn": true,
+      "startup": "正在检查此浏览器能否运行本工具…"
+    },
+    {
+      "tag": "zh-Hans",
+      "width": 375,
+      "mode": "dark",
+      "disabledTextarea": {
+        "border": "dashed",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(207, 212, 216)"
+      },
+      "previewFocus": true,
+      "announcedError": true,
+      "feedbackLanguage": true,
+      "unreadableWithdrawn": true,
+      "startup": "正在检查此浏览器能否运行本工具…"
+    },
+    {
+      "tag": "zh-Hans",
+      "width": 375,
+      "mode": "forced",
+      "disabledTextarea": {
+        "border": "dashed",
+        "background": "rgba(255, 255, 255, 0)",
+        "color": "rgb(96, 0, 0)"
+      },
+      "previewFocus": true,
+      "announcedError": true,
+      "feedbackLanguage": true,
+      "unreadableWithdrawn": true,
+      "startup": "正在检查此浏览器能否运行本工具…"
+    },
+    {
+      "tag": "ms-MY",
+      "width": 1280,
+      "mode": "light",
+      "disabledTextarea": {
+        "border": "dashed",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(64, 81, 98)"
+      },
+      "previewFocus": true,
+      "announcedError": true,
+      "feedbackLanguage": true,
+      "unreadableWithdrawn": true,
+      "startup": "Menyemak sama ada pelayar ini boleh menjalankan alat ini…"
+    },
+    {
+      "tag": "ms-MY",
+      "width": 1280,
+      "mode": "dark",
+      "disabledTextarea": {
+        "border": "dashed",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(207, 212, 216)"
+      },
+      "previewFocus": true,
+      "announcedError": true,
+      "feedbackLanguage": true,
+      "unreadableWithdrawn": true,
+      "startup": "Menyemak sama ada pelayar ini boleh menjalankan alat ini…"
+    },
+    {
+      "tag": "ms-MY",
+      "width": 1280,
+      "mode": "forced",
+      "disabledTextarea": {
+        "border": "dashed",
+        "background": "rgba(255, 255, 255, 0)",
+        "color": "rgb(96, 0, 0)"
+      },
+      "previewFocus": true,
+      "announcedError": true,
+      "feedbackLanguage": true,
+      "unreadableWithdrawn": true,
+      "startup": "Menyemak sama ada pelayar ini boleh menjalankan alat ini…"
+    },
+    {
+      "tag": "ms-MY",
+      "width": 375,
+      "mode": "light",
+      "disabledTextarea": {
+        "border": "dashed",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(64, 81, 98)"
+      },
+      "previewFocus": true,
+      "announcedError": true,
+      "feedbackLanguage": true,
+      "unreadableWithdrawn": true,
+      "startup": "Menyemak sama ada pelayar ini boleh menjalankan alat ini…"
+    },
+    {
+      "tag": "ms-MY",
+      "width": 375,
+      "mode": "dark",
+      "disabledTextarea": {
+        "border": "dashed",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(207, 212, 216)"
+      },
+      "previewFocus": true,
+      "announcedError": true,
+      "feedbackLanguage": true,
+      "unreadableWithdrawn": true,
+      "startup": "Menyemak sama ada pelayar ini boleh menjalankan alat ini…"
+    },
+    {
+      "tag": "ms-MY",
+      "width": 375,
+      "mode": "forced",
+      "disabledTextarea": {
+        "border": "dashed",
+        "background": "rgba(255, 255, 255, 0)",
+        "color": "rgb(96, 0, 0)"
+      },
+      "previewFocus": true,
+      "announcedError": true,
+      "feedbackLanguage": true,
+      "unreadableWithdrawn": true,
+      "startup": "Menyemak sama ada pelayar ini boleh menjalankan alat ini…"
+    }
+  ],
+  "transitions": [
+    {
+      "tag": "en-GB",
+      "width": 1280,
+      "transitions": "download retained, warnings retained, failed-save retry, focus before cleanup, storage retry/stop, hide progress, late stage after cancel"
+    },
+    {
+      "tag": "en-GB",
+      "width": 375,
+      "transitions": "download retained, warnings retained, failed-save retry, focus before cleanup, storage retry/stop, hide progress, late stage after cancel"
+    },
+    {
+      "tag": "zh-Hans",
+      "width": 1280,
+      "transitions": "download retained, warnings retained, failed-save retry, focus before cleanup, storage retry/stop, hide progress, late stage after cancel"
+    },
+    {
+      "tag": "zh-Hans",
+      "width": 375,
+      "transitions": "download retained, warnings retained, failed-save retry, focus before cleanup, storage retry/stop, hide progress, late stage after cancel"
+    },
+    {
+      "tag": "ms-MY",
+      "width": 1280,
+      "transitions": "download retained, warnings retained, failed-save retry, focus before cleanup, storage retry/stop, hide progress, late stage after cancel"
+    },
+    {
+      "tag": "ms-MY",
+      "width": 375,
+      "transitions": "download retained, warnings retained, failed-save retry, focus before cleanup, storage retry/stop, hide progress, late stage after cancel"
+    }
+  ],
+  "failures": [
+    {
+      "tag": "en-GB",
+      "mode": "light",
+      "stopping": "The job is stopping. Please wait before trying again.",
+      "lateStageIgnored": true,
+      "locksUntilSettled": true,
+      "storageFailureWithdrawn": true
+    },
+    {
+      "tag": "en-GB",
+      "mode": "dark",
+      "stopping": "The job is stopping. Please wait before trying again.",
+      "lateStageIgnored": true,
+      "locksUntilSettled": true,
+      "storageFailureWithdrawn": true
+    },
+    {
+      "tag": "en-GB",
+      "mode": "forced",
+      "stopping": "The job is stopping. Please wait before trying again.",
+      "lateStageIgnored": true,
+      "locksUntilSettled": true,
+      "storageFailureWithdrawn": true
+    },
+    {
+      "tag": "zh-Hans",
+      "mode": "light",
+      "stopping": "任务正在停止。请稍候再试。",
+      "lateStageIgnored": true,
+      "locksUntilSettled": true,
+      "storageFailureWithdrawn": true
+    },
+    {
+      "tag": "zh-Hans",
+      "mode": "dark",
+      "stopping": "任务正在停止。请稍候再试。",
+      "lateStageIgnored": true,
+      "locksUntilSettled": true,
+      "storageFailureWithdrawn": true
+    },
+    {
+      "tag": "zh-Hans",
+      "mode": "forced",
+      "stopping": "任务正在停止。请稍候再试。",
+      "lateStageIgnored": true,
+      "locksUntilSettled": true,
+      "storageFailureWithdrawn": true
+    },
+    {
+      "tag": "ms-MY",
+      "mode": "light",
+      "stopping": "Kerja sedang dihentikan. Sila tunggu sebelum mencuba lagi.",
+      "lateStageIgnored": true,
+      "locksUntilSettled": true,
+      "storageFailureWithdrawn": true
+    },
+    {
+      "tag": "ms-MY",
+      "mode": "dark",
+      "stopping": "Kerja sedang dihentikan. Sila tunggu sebelum mencuba lagi.",
+      "lateStageIgnored": true,
+      "locksUntilSettled": true,
+      "storageFailureWithdrawn": true
+    },
+    {
+      "tag": "ms-MY",
+      "mode": "forced",
+      "stopping": "Kerja sedang dihentikan. Sila tunggu sebelum mencuba lagi.",
+      "lateStageIgnored": true,
+      "locksUntilSettled": true,
+      "storageFailureWithdrawn": true
+    }
+  ]
+}

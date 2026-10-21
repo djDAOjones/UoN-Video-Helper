@@ -17,6 +17,16 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-21 — VH-141 — State changes retain their meaning and hand focus on
+
+**Decision:** the nine state defects and V-21/V-22 close: result lifetime and warnings survive redraws; translated guidance has its own language; errors and preview failures announce; save focus moves before cleanup; stale blocks and progress withdraw; startup and unreadable replacement say their state. A separate Show progress checkbox hides automatic visual updates, retaining the existing announcement switch — the conservative, gateless reading of WCAG 2.2.2.
+
+**Rationale:** Result warnings belong to the retained file. The failed-save box uses the existing message’s two sentences, with one spoken copy, and clears on retry. Cancel and watchdog failure suppress late stages while keeping terminal replies and safety locks. The watchdog’s stopping message replaces keep-awake advice. New strings pass through the sheet as agent drafts. Chrome checks real codecs and OPFS with controlled reply delays and save failures, plus the 18 language/width/colour combinations; Notes distinguish browser evidence from human listening. Standards: Carbon disabled-field and error-notification patterns; Nielsen 1, 5 and 9; WCAG 2.2.2, 2.4.3, 3.1.2 and 4.1.3; house conventions, regression tests and tokens. The spec proposal and human checks are wish lines. Existing sample and frozen-canon warnings stay covered by VH-139’s corpus and INTAKE’s retirement wishes. The owner’s explicit whole-run instruction takes precedence over the close verb’s compaction stop; subsequent items continue in this sole-writer worktree under the recorded handoff.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-21 — VH-148 — The owner’s sign-off changes, including the footer
 
 **Decision:** the owner’s thirteen handoff clauses ship: clearer group headings, closing graphics named throughout, separate helper facts, a short read outcome with bold no-sound, hatched cut regions, inset select arrows, Moodle in Smaller’s helper, the shorter statement, Teams and the team email, dashed disabled buttons and 16 px footer headings — because these are the owner’s conditions for VH-124’s sign-off.
@@ -468,13 +478,3 @@
 **Supersedes:** none
 
 **Deferred:** VH-129
-
-## 2026-10-18 — VH-130 — An accessibility statement on the page, translated, and two team contacts in the footer
-
-**Decision:** a self-certified accessibility statement, in the GOV.UK model's structure and the page's plain words, translated in full into Chinese and Malay, sits in the footer as a disclosure that `#accessibility-statement` opens, and says the tool is partially compliant with WCAG 2.2 AA because only automated checks are done; the footer's "Email the creators team" and "Email the learning content team" both go to the owner's address until the teams' own are given — because the owner asked for both on 2026-10-18 and said to go on the information the record has.
-
-**Rationale:** the owner's answers on 2026-10-18: self-certified, no University template; the contact and reviewer is the owner's address; review in one month; "all on one page is ok"; the whole statement translated; the WAVE check (10/10) run that day; "Joe Bell runs it at the University of Nottingham" is right; the teams' addresses were not given. Numbered VH-130 because the pushed Band 8 plan (PLAN-1) holds VH-126 to VH-129. The statement sits after the System check, so the two disclosures read as one group, with Send feedback beside the version line; its dates live in `src/config/accessibility.ts`, formatted per language by `Intl` in UTC, and its address re-uses `FEEDBACK_ADDRESS`, as do both team addresses in `src/config/feedback.ts`; every link's click goes through `openMailto`. The limitations it names are the record's: Chrome only, the machine translations, the computer's own Chinese font, and spec §9.3's two recorded exceptions (the preview's content, and short forms left unexpanded) — `UI-STANDARDS.md` records none to the AAA target, only status colour taken off the brand palette to keep 7:1. Forty new keys are drafted by the agent in the filled sheet; one English sentence was reworded for the readability gate, which gained meanings for WCAG, AA, AAA, NVDA and WAVE, its designed route for a new short form. Checked in Chrome at 1280 px and 375 px in the three languages; forced colours, the light theme and a screen reader were not. Standards applied: Carbon (the disclosure as the System check's panel), WCAG 2.2 (2.4.9 link purpose, 2.4.10 headings, 2.5.5 targets, 1.4.8 the measure), Nielsen 10 (help findable, short), house conventions (addresses and dates in `src/config/`; named test categories).
-
-**Supersedes:** none
-
-**Deferred:** none

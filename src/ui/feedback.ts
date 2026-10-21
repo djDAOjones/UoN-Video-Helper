@@ -18,11 +18,8 @@
 
 import type { DiagnosticsBundle } from '../core/diagnostics'
 import { REDACTED } from '../core/redact'
-import {
-  FEEDBACK_LOG_LINE_MAX_CHARACTERS,
-  FEEDBACK_RECENT_LOG_LINES,
-} from '../config/feedback'
-import { t } from '../i18n'
+import { FEEDBACK_LOG_LINE_MAX_CHARACTERS, FEEDBACK_RECENT_LOG_LINES } from '../config/feedback'
+import { language, t } from '../i18n'
 
 type Loose = Record<string, unknown> | undefined
 
@@ -240,8 +237,22 @@ export function feedbackMailto(options: {
  * (VH-105).
  */
 export function feedbackDisclosure(details: readonly string[], keptDetails: number): string {
-  const sent = details.slice(0, keptDetails)
-  const left = details.slice(keptDetails)
-  if (left.length === 0) return sent.join('\n')
-  return [...sent, ...(sent.length > 0 ? [''] : []), t().feedback.onlyInCopy, ...left].join('\n')
+  return feedbackDisclosureParts(details, keptDetails)
+    .map((part) => part.text)
+    .join('')
+}
+
+/** Language-tagged passages keep the translated guidance out of the English diagnostics (VH-141). */
+export function feedbackDisclosureParts(
+  details: readonly string[],
+  keptDetails: number,
+): readonly { readonly text: string; readonly lang: string }[] {
+  const sent = details.slice(0, keptDetails).join('\n')
+  const left = details.slice(keptDetails).join('\n')
+  if (!left) return [{ text: sent, lang: 'en-GB' }]
+  return [
+    { text: sent ? `${sent}\n\n` : '', lang: 'en-GB' },
+    { text: `${t().feedback.onlyInCopy}\n`, lang: language() },
+    { text: left, lang: 'en-GB' },
+  ]
 }

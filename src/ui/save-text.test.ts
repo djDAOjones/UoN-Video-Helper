@@ -28,5 +28,7 @@ describe('where a download lands (VH-113, spec 9.1 step 5)', () => {
     expect(text).toContain('downloads folder')
     expect(text).not.toMatch(/^Saved\./)
     expect(text).toContain('choose another video in step 1')
+    // VH-141: lifetime is said once, in the retained result’s own line.
+    expect(text).not.toContain('stays here')
   })
 })

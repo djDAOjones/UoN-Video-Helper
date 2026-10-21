@@ -16,11 +16,13 @@ import {
   setDiagnosticsContext,
 } from '../core/diagnostics'
 import { clearLogRecords, log } from '../core/logger'
+import { setLanguage } from '../i18n'
 import { REDACTED } from '../core/redact'
 import {
   describeBrowser,
   feedbackDetails,
   feedbackDisclosure,
+  feedbackDisclosureParts,
   feedbackMailto,
   feedbackText,
 } from './feedback'
@@ -215,5 +217,30 @@ describe('the browser, in a few words', () => {
     ['', 'an unrecognised browser on an unrecognised system'],
   ])('%s', (userAgent, expected) => {
     expect(describeBrowser(userAgent)).toBe(expected)
+  })
+})
+
+describe('feedback language of parts (VH-141)', () => {
+  it('regression: only the omitted-details guidance takes the page language', () => {
+    try {
+      for (const lang of ['en-GB', 'zh-Hans', 'ms-MY'] as const) {
+        setLanguage(lang)
+        const parts = feedbackDisclosureParts(['Version: test', 'Recent log:'], 1)
+        expect(parts.map((p) => p.lang)).toEqual(['en-GB', lang, 'en-GB'])
+        expect(parts[0]?.text).toBe('Version: test\n\n')
+        expect(parts[2]?.text).toBe('Recent log:')
+        expect(parts.map((p) => p.text).join('')).toBe(
+          feedbackDisclosure(['Version: test', 'Recent log:'], 1),
+        )
+      }
+    } finally {
+      setLanguage('en-GB')
+    }
+  })
+  it('empty and all-included cases have no guidance passage', () => {
+    expect(feedbackDisclosureParts([], 0)).toEqual([{ text: '', lang: 'en-GB' }])
+    expect(feedbackDisclosureParts(['Version: test'], 1)).toEqual([
+      { text: 'Version: test', lang: 'en-GB' },
+    ])
   })
 })

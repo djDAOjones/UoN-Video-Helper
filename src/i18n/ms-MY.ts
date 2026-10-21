@@ -81,6 +81,7 @@ export const msMY: Messages = {
     create: 'Cipta',
   },
   choose: {
+    starting: 'Menyemak sama ada pelayar ini boleh menjalankan alat ini…',
     dropHint: 'Atau letakkannya di sini.',
     dropHeld: 'Lepaskan untuk membaca video ini.',
     reading: 'Membaca video itu…',
@@ -332,6 +333,10 @@ export const msMY: Messages = {
     },
   },
   create: {
+    lockedStopping: 'Dikunci semasa kerja dihentikan.',
+    showProgressHelp:
+      'Nyahtanda untuk menyembunyikan bar, peringkat dan baki masa yang berubah. Video terus dibuat.',
+    showProgress: 'Tunjukkan kemajuan',
     note: 'Video yang telah siap kekal di sini sehingga anda menyimpannya atau menutup tab ini.',
     announceProgress: 'Umumkan kemajuan',
     announceHelp:
@@ -351,6 +356,9 @@ export const msMY: Messages = {
     lockedSaving: 'Dikunci semasa video anda disimpan.',
   },
   status: {
+    saveFailedNext: 'Ia masih di sini untuk dicuba lagi.',
+    saveFailedWhat: 'Video itu tidak dapat disimpan.',
+    stoppingAfterFailure: 'Kerja sedang dihentikan. Sila tunggu sebelum mencuba lagi.',
     checking: 'Menyemak video ini pada peranti anda…',
     checkStopped: 'Semakan dihentikan.',
     stoppingSave: 'Menghentikan penyimpanan…',
@@ -749,6 +757,8 @@ export const msMY: Messages = {
     },
   },
   errors: {
+    revealed:
+      'Masalah ditemui. Gunakan Laporkan masalah ini dalam Ralat ditangkap untuk menghantar butiran.',
     heading: 'Ralat ditangkap',
     technicalDetails: 'Butiran teknikal',
     report: 'Laporkan masalah ini',
@@ -858,7 +868,7 @@ export const msMY: Messages = {
     downloadIos: 'Menyimpan ke aplikasi Fail, di bawah Muat Turun',
     downloadOther: 'Menyimpan ke folder muat turun anda',
     download:
-      '{where} — pelayar mungkin masih sedang menyelesaikannya. Sebaik sahaja ia berada di sana, muat naik ke tempat yang dituju atau pilih video lain dalam langkah 1. Video tersebut kekal di sini sehingga anda memulakan video lain.',
+      '{where} — pelayar mungkin masih sedang menyelesaikannya. Sebaik sahaja ia berada di sana, muat naik ke tempat yang dituju atau pilih video lain dalam langkah 1.',
   },
   format: {
     unknown: 'tidak diketahui',

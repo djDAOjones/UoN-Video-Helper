@@ -1012,7 +1012,8 @@ details[open] > .disclosure-summary::before {
    pinned at AAA in test/contrast.test.ts. The dashed edge keeps the field's
    shape visible without making it look pressable. */
 .select:disabled,
-.text-input:disabled {
+.text-input:disabled,
+.textarea:disabled {
   background: transparent;
   border: var(--border-width) dashed var(--border-subtle);
   color: var(--text-secondary);

@@ -126,3 +126,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-18 — VH-130 — An accessibility statement on the page, translated, and two team contacts in the footer
+
+**Decision:** a self-certified accessibility statement, in the GOV.UK model's structure and the page's plain words, translated in full into Chinese and Malay, sits in the footer as a disclosure that `#accessibility-statement` opens, and says the tool is partially compliant with WCAG 2.2 AA because only automated checks are done; the footer's "Email the creators team" and "Email the learning content team" both go to the owner's address until the teams' own are given — because the owner asked for both on 2026-10-18 and said to go on the information the record has.
+
+**Rationale:** the owner's answers on 2026-10-18: self-certified, no University template; the contact and reviewer is the owner's address; review in one month; "all on one page is ok"; the whole statement translated; the WAVE check (10/10) run that day; "Joe Bell runs it at the University of Nottingham" is right; the teams' addresses were not given. Numbered VH-130 because the pushed Band 8 plan (PLAN-1) holds VH-126 to VH-129. The statement sits after the System check, so the two disclosures read as one group, with Send feedback beside the version line; its dates live in `src/config/accessibility.ts`, formatted per language by `Intl` in UTC, and its address re-uses `FEEDBACK_ADDRESS`, as do both team addresses in `src/config/feedback.ts`; every link's click goes through `openMailto`. The limitations it names are the record's: Chrome only, the machine translations, the computer's own Chinese font, and spec §9.3's two recorded exceptions (the preview's content, and short forms left unexpanded) — `UI-STANDARDS.md` records none to the AAA target, only status colour taken off the brand palette to keep 7:1. Forty new keys are drafted by the agent in the filled sheet; one English sentence was reworded for the readability gate, which gained meanings for WCAG, AA, AAA, NVDA and WAVE, its designed route for a new short form. Checked in Chrome at 1280 px and 375 px in the three languages; forced colours, the light theme and a screen reader were not. Standards applied: Carbon (the disclosure as the System check's panel), WCAG 2.2 (2.4.9 link purpose, 2.4.10 headings, 2.5.5 targets, 1.4.8 the measure), Nielsen 10 (help findable, short), house conventions (addresses and dates in `src/config/`; named test categories).
+
+**Supersedes:** none
+
+**Deferred:** none

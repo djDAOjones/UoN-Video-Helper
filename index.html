@@ -589,6 +589,11 @@
              by the user. One plain control, default on, remembered in this
              browser (VH-109). The outcome is announced whatever it says. -->
         <div class="field" id="announce-field" hidden>
+          <label class="checkbox" for="show-progress">
+            <input type="checkbox" id="show-progress" checked aria-describedby="show-progress-help" />
+            <span data-i18n="create.showProgress">Show progress</span>
+          </label>
+          <p class="helper" id="show-progress-help" data-i18n="create.showProgressHelp">Untick to hide the changing bar, stage and time left. The video keeps being made.</p>
           <label class="checkbox" for="announce-progress">
             <input type="checkbox" id="announce-progress" checked aria-describedby="announce-help" />
             <span data-i18n="create.announceProgress">Announce progress</span>
@@ -607,6 +612,7 @@
              and one line shared overwrote the other's words (VH-135). Never
              `hidden`, like the line above, but no taller than its words: it
              arrives with its stop, which follows it. -->
+        <div id="save-error"></div>
         <p class="status status--save" id="save-status" role="status" aria-live="polite"></p>
         <div class="actions" id="save-actions" hidden></div>
         <div class="actions" id="process-actions" hidden></div>

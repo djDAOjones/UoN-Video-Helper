@@ -73,6 +73,7 @@ export const zhHans: Messages = {
     create: '创造',
   },
   choose: {
+    starting: '正在检查此浏览器能否运行本工具…',
     dropHint: '或者把它拖放到这里。',
     dropHeld: '松开即可读取此视频。',
     reading: '正在读取视频……',
@@ -310,6 +311,9 @@ export const zhHans: Messages = {
     },
   },
   create: {
+    lockedStopping: '任务停止过程中已锁定。',
+    showProgressHelp: '取消勾选可隐藏不断更新的进度条、阶段和剩余时间。视频仍会继续制作。',
+    showProgress: '显示进度',
     note: '制作完成的视频会一直保存在这里，直到您保存或关闭此标签页。',
     announceProgress: '播报进度',
     announceHelp: '视频制作过程中，会为屏幕阅读器大声朗读每个阶段。最终结果总会播报。',
@@ -328,6 +332,9 @@ export const zhHans: Messages = {
     lockedSaving: '视频保存期间已锁定。',
   },
   status: {
+    saveFailedNext: '您可以再次尝试保存。',
+    saveFailedWhat: '视频保存失败。',
+    stoppingAfterFailure: '任务正在停止。请稍候再试。',
     checking: '正在将此视频与您的设备进行比对……',
     checkStopped: '检查已停止。',
     stoppingSave: '正在停止保存……',
@@ -693,6 +700,7 @@ export const zhHans: Messages = {
     },
   },
   errors: {
+    revealed: '发现问题。请使用“捕获的错误”中的“报告此问题”发送详细信息。',
     heading: '捕获的错误',
     technicalDetails: '技术细节',
     report: '报告此问题',
@@ -796,7 +804,7 @@ export const zhHans: Messages = {
     downloadIos: '保存到“文件”应用的“下载”文件夹中',
     downloadOther: '保存到您的下载文件夹',
     download:
-      '{where} — 浏览器可能仍在处理视频。完成后，将其上传到目标位置，或在步骤 1 中选择另一个视频。视频会一直保留在此处，直到您开始制作另一个视频。',
+      '{where} — 浏览器可能仍在处理视频。完成后，将其上传到目标位置，或在步骤 1 中选择另一个视频。',
   },
   format: {
     unknown: '未知',

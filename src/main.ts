@@ -108,7 +108,7 @@ import { installDropZone } from './ui/drop-zone'
 import {
   describeBrowser,
   feedbackDetails,
-  feedbackDisclosure,
+  feedbackDisclosureParts,
   feedbackMailto,
   feedbackText,
 } from './ui/feedback'
@@ -138,6 +138,7 @@ import {
 } from './ui/result-summary'
 import { body, notification } from './ui/notification'
 import { downloadDestinationFor, downloadStatusText } from './ui/save-text'
+import type { AudioWarning } from './audio/warnings'
 import { renderWarnings } from './ui/warning-text'
 import { failureSentence, failureText, startupFailureText, type FailureText } from './ui/failure-text'
 import {
@@ -314,6 +315,8 @@ const processTimeLeft = required<HTMLParagraphElement>('#process-time-left')
 const processJobLine = required<HTMLParagraphElement>('#process-job')
 const jobNotice = required<HTMLParagraphElement>('#job-notice')
 const createNote = required<HTMLParagraphElement>('#create-note')
+const showProgressBox = required<HTMLInputElement>('#show-progress')
+const saveError = required<HTMLDivElement>('#save-error')
 const announceField = required<HTMLDivElement>('#announce-field')
 const announceProgressBox = required<HTMLInputElement>('#announce-progress')
 const processResult = required<HTMLDivElement>('#process-result')
@@ -803,14 +806,16 @@ function unsayDiscardQuestion(): void {
  * shared the job's line, so a verdict landing mid-save replaced "Saving…" and
  * "Saved." then replaced the verdict (VH-135). Each now has a line of its own.
  */
-function setSaveStatus(message: Text): void {
-  show(saveStatusLine, () => paintStatus(saveStatusLine, message, ''))
+function setSaveStatus(message: Text, spokenOnly: Text = ''): void {
+  clear(saveError)
+  show(saveStatusLine, () => paintStatus(saveStatusLine, message, spokenOnly))
 }
 
 /** Takes the result off the page, and the save's line with it: its words were about that video. */
 function clearResult(): void {
   clear(processResult)
   clear(saveStatusLine)
+  clear(saveError)
   resultStanding = false
   paintVideoNext()
 }
@@ -922,6 +927,11 @@ function revealLaterSteps(
 function withdrawVerdict(): void {
   clear(preflightReport)
   clear(audioWarnings)
+  if (sourceBlock.childElementCount > 0) {
+    clear(sourceBlock)
+    if (inspectedReport) setSourceReadStatus(inspectedReport)
+    else setSourceStatus('')
+  }
 }
 
 /**
@@ -999,6 +1009,7 @@ onLanguageChange(repaintFailures)
 
 function showError(error: CapturedError): void {
   errorsPanel.hidden = false
+  setSourceStatus('', () => t().errors.revealed)
   const item = notification({
     kind: 'error',
     title: `${error.origin} on the ${error.thread} thread`,
@@ -1250,6 +1261,7 @@ async function checkWorker(): Promise<void> {
  */
 let startup: 'pending' | 'ready' | 'blocked' = 'pending'
 fileInput.disabled = true
+setSourceStatus(() => t().choose.starting)
 
 function settleStartup(workerStarted: boolean, h264: boolean): void {
   const blocked = startupFailureText(
@@ -1515,8 +1527,8 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
         // file that cannot be made must not be offered a trim and a closing
         // first (U-05). No sound notes either — "none of these stop you
         // continuing" under a block was the contradiction U-05 found.
-        show(sourceBlock, () => renderPreflight(sourceBlock, summary, context))
         withdrawVerdict()
+        show(sourceBlock, () => renderPreflight(sourceBlock, summary, context))
         setStatus('')
         // Two exceptions to withdrawing the steps (Codex review of VH-108).
         // Too little storage is a block the setup steps can resolve — a
@@ -1695,6 +1707,10 @@ function clearTrim(notice: 'reading' | 'unreadable'): void {
   trimFieldProblems.clear()
   for (const range of [trimStartRange, trimEndRange]) range.max = '0'
   applyControlLock()
+  if (notice === 'unreadable') {
+    revealLaterSteps({ setup: false, create: resultStanding })
+    fileInput.classList.remove('file-input--chosen')
+  }
 }
 
 /**
@@ -1919,8 +1935,11 @@ trimClear.addEventListener('click', () => {
 // the job can process may not preview; the times still work without it.
 trimPreview.addEventListener('error', () => {
   if (!previewUrl) return
+  const fromPreview = focusHeldBy([trimSetStart, trimSetEnd])
   trimPreviewNote.hidden = false
+  setSourceStatus('', () => t().trim.noPreview)
   applyControlLock()
+  fromPreview(trimStartField)
 })
 
 // --- Processing ---
@@ -1942,10 +1961,14 @@ announceProgressBox.addEventListener('change', () => {
  * The last progress report, and when it arrived, so a change of language can
  * write the stage line again, its time left included, without announcing it.
  */
-let lastProgress: { readonly stage: PipelineStage; readonly fraction: number; readonly atMs: number } | null =
-  null
+let lastProgress: {
+  readonly stage: PipelineStage
+  readonly fraction: number
+  readonly atMs: number
+} | null = null
 
 function onStage(stage: PipelineStage, fraction: number): void {
+  if (cancelRequested || jobEnding) return
   // On arrival: the time left is timed from the encode's own reports (VH-136).
   const atMs = performance.now()
   lastProgress = { stage, fraction, atMs }
@@ -1975,8 +1998,20 @@ function onStage(stage: PipelineStage, fraction: number): void {
   processProgressLabel.textContent = view.shown
   processProgressLabel.hidden = false
   processProgress.hidden = false
-  setTitle('stage')
+  setTitle(showProgressBox.checked ? 'stage' : 'none')
+  syncProgressVisibility()
 }
+
+/** Hide automatic visual updates without stopping the job or silencing its outcome (WCAG 2.2.2). */
+function syncProgressVisibility(): void {
+  const hidden = !showProgressBox.checked || !jobInFlight || cancelRequested || jobEnding
+  for (const line of [processProgress, processProgressLabel, processProgressText, processTimeLeft])
+    line.hidden = hidden
+}
+showProgressBox.addEventListener('change', () => {
+  syncProgressVisibility()
+  setTitle(showProgressBox.checked && lastProgress ? 'stage' : 'none')
+})
 
 /** What the tab title is about, so it can be written again in another language. */
 let titleOf: 'none' | 'ready' | 'failed' | 'cancelled' | 'stage' = 'none'
@@ -2003,6 +2038,8 @@ setTitle(titleOf)
  * than re-deciding it.
  */
 let jobInFlight = false
+/** Once a terminal failure is shown, the worker may still need to release its scratch. */
+let jobEnding = false
 
 /** The file the Start button will act on. Set by {@link showProcessControls}. */
 let jobFile: File | null = null
@@ -2047,6 +2084,8 @@ interface RetainedResult {
    * the scratch this is holding open.
    */
   readonly delivered: boolean
+  /** Output warnings belong to this file, never to the next selection’s pre-flight. */
+  readonly warnings: readonly AudioWarning[]
   /** What the job was, read once when it started (VH-107). */
   readonly record: JobRecord
   /** What the finished file carries, which is not always what was asked for. */
@@ -2320,7 +2359,13 @@ function setSaveInFlight(saving: boolean): void {
 /** Applies whichever of the two locks is active. */
 function applyControlLock(): void {
   const locked = jobInFlight || saveInFlight
-  const lockText = jobInFlight ? t().create.lockedMaking : saveInFlight ? t().create.lockedSaving : ''
+  const lockText = jobInFlight
+    ? jobEnding || cancelRequested
+      ? t().create.lockedStopping
+      : t().create.lockedMaking
+    : saveInFlight
+      ? t().create.lockedSaving
+      : ''
   for (const note of lockNotes) {
     note.textContent = lockText
     note.hidden = lockText === ''
@@ -2827,6 +2872,7 @@ function beginJob(file: File): void {
   progressMemo = NO_PROGRESS
   cancelPressedWithFocus = false
   cancelRequested = false
+  jobEnding = false
   // The verdict priced this job; while it runs, the bar and Cancel lead
   // (VH-124). The outcome takes its place when the job ends.
   withdrawVerdict()
@@ -2880,14 +2926,12 @@ function beginJob(file: File): void {
           jobId: reply.jobId,
           source: file,
           delivered: false,
+          warnings: reply.outputWarnings,
           record,
           outcome,
           release: () => {},
         })
         const { outputWarnings } = reply
-        show(audioWarnings, () =>
-          renderWarnings(audioWarnings, outputWarnings, { heading: t().warnings.finishedHeading }),
-        )
         // 100% is said here and nowhere earlier: the file has passed its
         // checks (U-07).
         processProgress.value = 1
@@ -2926,6 +2970,10 @@ function beginJob(file: File): void {
     })
     .catch(async (cause: unknown) => {
       fromCancel = focusHeldBy([cancelButton], cancelPressedWithFocus)
+      jobEnding = true
+      applyControlLock()
+      jobNotice.textContent = t().status.stoppingAfterFailure
+      announceField.hidden = true
       withdrawVerdict()
       // The watchdog is the only thing that rejects this promise; anything
       // else reaching here threw while the outcome was being shown, and is
@@ -2933,7 +2981,12 @@ function beginJob(file: File): void {
       const failure: Failure = { code: cause instanceof WorkerSilenceError ? 'timed-out' : 'unknown' }
       handTo = showFailure(processResult, failure)
       handTo.tabIndex = -1
-      setStatus('', () => t().status.couldNotCreate({ sentence: failureSentence(failureWords(failure)) }))
+      setStatus('', () =>
+        spoken(
+          t().status.couldNotCreate({ sentence: failureSentence(failureWords(failure)) }),
+          t().status.stoppingAfterFailure,
+        ),
+      )
       setTitle('failed')
       setDiagnosticsContext({ stage: 'failed' })
       log.error('ui', 'process request failed', {
@@ -3012,6 +3065,11 @@ cancelButton.addEventListener('click', () => {
   cancelRequested = true
   cancelButton.disabled = true
   setStatus(() => t().status.cancelling)
+  hideProgress()
+  setTitle('none')
+  jobNotice.hidden = true
+  announceField.hidden = true
+  applyControlLock()
   worker.postMessage({ kind: 'cancel', id: nextRequestId++, cancelId: jobCancelId })
 })
 
@@ -3076,8 +3134,10 @@ function renderResult(kept: RetainedResult): HTMLElement {
   // discarded tab, which is why the sentence is here. Gone once it is saved.
   const lifetime = body('')
   heading.append(lifetime)
+  const resultWarnings = document.createElement('div')
+  heading.append(resultWarnings)
   /** Which lifetime sentence stands: until saved, or — after a download — until the next video. */
-  let lifetimeOf: 'unsaved' | 'delivered' = 'unsaved'
+  let lifetimeOf: 'unsaved' | 'delivered' = kept.delivered ? 'delivered' : 'unsaved'
 
   const save = document.createElement('button')
   save.type = 'button'
@@ -3110,7 +3170,9 @@ function renderResult(kept: RetainedResult): HTMLElement {
       differsLine.textContent = differs ?? ''
       differsLine.hidden = differs === null
     }
-    lifetime.textContent = lifetimeOf === 'unsaved' ? t().result.lifetime : t().result.lifetimeDelivered
+    lifetime.textContent =
+      lifetimeOf === 'unsaved' ? t().result.lifetime : t().result.lifetimeDelivered
+    renderWarnings(resultWarnings, kept.warnings, { heading: t().warnings.finishedHeading })
     save.textContent = saved ? t().create.saved : t().create.save
     if (!heading.isConnected) processResult.replaceChildren(heading)
   }
@@ -3231,6 +3293,7 @@ function renderResult(kept: RetainedResult): HTMLElement {
         saveStop = null
         offerSaveStop(false)
         setSaveInFlight(false)
+        fromGone(heading)
         // Clean-up is not delivery. The file is out; a scratch that cannot be
         // removed is logged, never announced as a failed save under a button
         // that already reads "Saved" (U-15).
@@ -3243,7 +3306,16 @@ function renderResult(kept: RetainedResult): HTMLElement {
         }
       } catch (cause) {
         fromGone = focusHeldBy([save, stopSaveButton], stopSavePressedWithFocus)
-        setSaveStatus(() => t().status.saveFailed)
+        setSaveStatus('', () => t().status.saveFailed)
+        show(saveError, () => {
+          saveError.replaceChildren(
+            notification({
+              kind: 'error',
+              title: t().status.saveFailedWhat,
+              lines: [t().status.saveFailedNext],
+            }),
+          )
+        })
         log.error('ui', 'save failed', {
           reason: cause instanceof Error ? cause.message : String(cause),
         })
@@ -3319,7 +3391,14 @@ function feedbackEmail(): ReturnType<typeof feedbackMailto> {
  * what is sent (Codex review).
  */
 function renderFeedbackDisclosure(): void {
-  feedbackDetailsBlock.textContent = feedbackDisclosure(feedbackLines, feedbackEmail().keptDetails)
+  feedbackDetailsBlock.replaceChildren(
+    ...feedbackDisclosureParts(feedbackLines, feedbackEmail().keptDetails).map((part) => {
+      const span = document.createElement('span')
+      span.lang = part.lang
+      span.textContent = part.text
+      return span
+    }),
+  )
 }
 
 function gatherFeedbackDetails(): void {
@@ -3555,7 +3634,7 @@ onLanguageChange(() => {
   applyControlLock()
   // The stage line and the bar's name from the last report, leaving what the
   // next report will announce untouched.
-  if (lastProgress) {
+  if (lastProgress && !cancelRequested && !jobEnding) {
     const { shown, timeLeft } = progressView(
       lastProgress.stage,
       lastProgress.fraction,
@@ -3567,7 +3646,8 @@ onLanguageChange(() => {
     processProgressLabel.textContent = shown
     processTimeLeft.textContent = timeLeft ?? ''
   }
-  if (jobInFlight) jobNotice.textContent = t().progress.jobNotice
+  if (jobInFlight)
+    jobNotice.textContent = jobEnding ? t().status.stoppingAfterFailure : t().progress.jobNotice
   renderFeedbackDisclosure()
   repaintDropRefusal()
   languageSwitcher.paint()

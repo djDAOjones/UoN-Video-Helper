@@ -162,7 +162,14 @@ describe('the status line (VH-88)', () => {
 describe('the save\'s own line (VH-135)', () => {
   const mainSource = readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8')
   /** Every message a save writes, as the script names it. */
-  const saveMessages = ['saving', 'stoppingSave', 'saveStopped', 'notSaved', 'refusedSource', 'saved', 'saveFailed']
+  const saveMessages = [
+    'saving',
+    'stoppingSave',
+    'saveStopped',
+    'notSaved',
+    'refusedSource',
+    'saved',
+  ]
 
   it('is a live region of its own, never hidden in the markup', () => {
     expect(markup).toMatch(/<p class="status status--save" id="save-status" role="status" aria-live="polite">/)
@@ -176,6 +183,7 @@ describe('the save\'s own line (VH-135)', () => {
       expect(mainSource).toMatch(new RegExp(`setSaveStatus\\(\\(\\) =>[^;]*t\\(\\)\\.status\\.${message}\\b`))
       expect(mainSource).not.toMatch(new RegExp(`\\bsetStatus\\([^;]*t\\(\\)\\.status\\.${message}\\b`))
     }
+    expect(mainSource).toContain("setSaveStatus('', () => t().status.saveFailed)")
     expect(mainSource).toMatch(/setSaveStatus\(\(\) =>\s*downloadStatusText\(/)
     expect(mainSource).not.toMatch(/\bsetStatus\([^;]*downloadStatusText\(/)
   })

@@ -30,7 +30,6 @@
 
 ### Phase 3 — what the second audit found: a file that ends early, the record and the switches, nine small defects, the words
 
-- [ ] VH-141 — Nine small page defects: a locked box that looks live, a lifetime that reverts, two silent reveals, lost warnings, a dropped place, a stale block, stale progress, a wordless wait — since 2026-10-21 — (from: VH-138, 2026-10-21)
 - [ ] VH-142 — The words: the Chinese save messages and step 6, the damage note's tense, the errors panel's button — since 2026-10-21 — (from: VH-138, 2026-10-21)
 
 ### Phase 4 — what the design pass found: two page defects, the token boundary, the cards

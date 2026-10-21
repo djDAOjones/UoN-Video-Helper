@@ -130,6 +130,7 @@ export const enGB = {
   },
 
   choose: {
+    starting: 'Checking whether this browser can run the tool…',
     dropHint: 'Or drop it here.',
     dropHeld: 'Let go to read this video.',
     reading: 'Reading the video…',
@@ -366,6 +367,10 @@ export const enGB = {
   },
 
   create: {
+    lockedStopping: 'Locked while the job stops.',
+    showProgressHelp:
+      'Untick to hide the changing bar, stage and time left. The video keeps being made.',
+    showProgress: 'Show progress',
     note: 'The finished video is kept here until you save it or close this tab.',
     announceProgress: 'Announce progress',
     announceHelp:
@@ -386,6 +391,9 @@ export const enGB = {
   },
 
   status: {
+    saveFailedNext: 'It is still here to try again.',
+    saveFailedWhat: 'The video could not be saved.',
+    stoppingAfterFailure: 'The job is stopping. Please wait before trying again.',
     checking: 'Checking this video against your device…',
     checkStopped: 'Check stopped.',
     stoppingSave: 'Stopping the save…',
@@ -786,6 +794,8 @@ export const enGB = {
   },
 
   errors: {
+    revealed:
+      'A problem was found. Use Report this problem in Errors captured to send the details.',
     heading: 'Errors captured',
     technicalDetails: 'Technical details',
     report: 'Report this problem',
@@ -915,7 +925,7 @@ export const enGB = {
     downloadIos: 'Saving to the Files app, under Downloads',
     downloadOther: 'Saving to your downloads folder',
     download:
-      '{where} — the browser may still be finishing it. Once it is there, upload it where it is going, or choose another video in step 1. The video stays here until you start another one.',
+      '{where} — the browser may still be finishing it. Once it is there, upload it where it is going, or choose another video in step 1.',
   },
 
   format: {
