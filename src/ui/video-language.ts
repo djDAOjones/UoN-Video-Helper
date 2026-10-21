@@ -65,6 +65,32 @@ export function quotedWordsParts(
   return parts.filter((part) => part.text !== '')
 }
 
+/**
+ * {@link quotedWordsParts} for several runs in the video's language: the
+ * closing's words, and the language's own name, which the record and the
+ * line under the progress bar give (VH-140). Each run is marked at its last
+ * match in what is still unmarked, so a file name holding either is left
+ * alone, as before.
+ */
+export function wordsLanguageParts(
+  text: string,
+  runs: readonly string[],
+  wordsLanguage: LanguageTag,
+  page: LanguageTag,
+): TextPart[] {
+  let parts: TextPart[] = [{ text, lang: null }]
+  for (const run of runs) {
+    const at = parts.findLastIndex((part) => part.lang === null && run !== '' && part.text.includes(run))
+    if (at < 0) continue
+    parts = [
+      ...parts.slice(0, at),
+      ...quotedWordsParts(parts[at]!.text, run, wordsLanguage, page),
+      ...parts.slice(at + 1),
+    ]
+  }
+  return parts
+}
+
 /** Writes `parts` into `element` in place of what it held: a run in its own language as a `lang` span. */
 export function paintParts(element: HTMLElement, parts: readonly TextPart[]): void {
   element.replaceChildren(

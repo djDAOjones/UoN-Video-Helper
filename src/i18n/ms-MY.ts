@@ -69,6 +69,8 @@ export const msMY: Messages = {
     label: 'Bahasa video',
     helper:
       'Perkataan yang ditambah oleh aplikasi pada video anda adalah dalam bahasa ini. Apa yang anda taip dikekalkan seperti yang ditaip.',
+    nextVideo:
+      'Perubahan pada jenis video atau bahasa video digunakan untuk video seterusnya yang anda buat.',
   },
   steps: {
     choose: 'Pilih video',
@@ -206,6 +208,7 @@ export const msMY: Messages = {
     dateHelper:
       'Diisi dengan tarikh hari ini dalam bahasa video. Anda boleh menukar atau mengosongkannya.',
     forSubmission: 'Serahan pelajar sentiasa mempunyai kad tajuk.',
+    fieldsRule: 'Satu medan sudah cukup untuk membuat kad. Tarikh diisi untuk anda.',
     full: 'Medan ini sudah penuh, jadi selebihnya tidak ditambah.',
     refused: {
       field: 'Ini terlalu panjang untuk dimuatkan pada kad. Pendekkannya.',
@@ -214,12 +217,13 @@ export const msMY: Messages = {
     empty: 'Isi sekurang-kurangnya satu daripada empat medan, atau nyahtanda Tambah kad tajuk.',
     correctToContinue: 'Betulkan kad tajuk dalam langkah 3 untuk meneruskan.',
     submission: {
+      fieldsRule: 'Keempat-empat medan diperlukan.',
       assignment: 'Tajuk atau nombor tugasan',
       module: 'Kod dan tajuk modul',
       convenor: 'Penyelaras modul atau tutor',
       ids: 'Nombor ID pelajar',
       idsHelper:
-        'Setiap nombor ID (identiti) pelajar ialah 8 digit. Taip satu hingga lapan, dipisahkan dengan ruang, koma atau baris baharu. Jangan tambah nama.',
+        'Setiap nombor ID (identiti) pelajar ialah {digits} digit. Taip sehingga {max}, dipisahkan dengan ruang, koma atau baris baharu. Jangan tambah nama.',
       filled:
         'Kad ini juga menunjukkan masa tayangan, {running}, dan tarikh hari ini, ditandakan sebagai tarikh kad dibuat, bukan tarikh penyerahan.',
       missing: {
@@ -228,7 +232,7 @@ export const msMY: Messages = {
         convenor: 'Taip nama penyelaras modul atau tutor.',
         ids: 'Taip sekurang-kurangnya satu nombor ID pelajar.',
       },
-      idNotAnId: '“{id}” bukan nombor ID pelajar. Setiap satu ialah 8 digit.',
+      idNotAnId: '“{id}” bukan nombor ID pelajar. Setiap satu ialah {digits} digit.',
       idTwice: '{id} ada dua kali dalam senarai. Buang satu.',
       idsTooMany: 'Itu {count} nombor. Kad ini boleh memuatkan sehingga {max}.',
     },
@@ -406,8 +410,13 @@ export const msMY: Messages = {
       },
     },
     summary: 'Dibuat daripada {name}: {part}, {output}, {closing}.',
-    summaryWithCard:
-      'Dibuat daripada {name}: kad tajuk {seconds} saat, kemudian {part}, {output}, {closing}.',
+    summaryWithCard: {
+      staff:
+        'Dibuat daripada {name}: kad tajuk staf {seconds} saat, kemudian {part}, {output}, {closing}.',
+      submission:
+        'Dibuat daripada {name}: kad serahan {seconds} saat, kemudian {part}, {output}, {closing}.',
+    },
+    videoLanguage: 'Bahasa video: {language}.',
     notLoaded:
       'Penutupan tidak dapat dimuatkan, jadi ia tiada dalam video ini. Semua yang lain telah digunakan seperti yang diminta.',
     endedEarly: {
@@ -472,6 +481,7 @@ export const msMY: Messages = {
     timeLeft: 'Kira-kira {time} lagi',
     fewSecondsLeft: 'Beberapa saat lagi',
     withTimeLeft: '{progress}. {left}',
+    job: 'Video ini: {kind}. Bahasa video: {language}.',
     ready: 'Sedia',
     title: {
       stage: '{stage} — {app}',

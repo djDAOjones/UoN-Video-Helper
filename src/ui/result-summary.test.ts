@@ -1,11 +1,15 @@
 /**
- * VH-107 / spec gap review A-05: the finished video's record, in words.
+ * VH-107 / spec gap review A-05: the finished video's record, in words; and
+ * VH-140 (audit V-02, V-05): which card opens it, the language of its words
+ * when not the page's, and the running job's own type and language.
  */
 
 import { afterEach, describe, expect, it } from 'vitest'
 
 import { CLOSING_CONTROL_DEFAULTS, type ClosingControls } from '../config/branding'
-import { setLanguage } from '../i18n'
+import { TITLE_CARD_SECONDS } from '../config/cards'
+import { LANGUAGE_NAMES, LANGUAGES_OFFERED } from '../config/languages'
+import { closingWords, setLanguage } from '../i18n'
 import type { EndedEarly } from '../media/ends-early'
 import {
   closingOutcomeText,
@@ -13,6 +17,7 @@ import {
   jobSummaryText,
   keptPartText,
   recordPassage,
+  runningJobText,
   type JobRecord,
 } from './result-summary'
 
@@ -23,6 +28,7 @@ const whole: JobRecord = {
   presetId: 'best',
   closing: CLOSING_CONTROL_DEFAULTS,
   wordsLanguage: 'en-GB',
+  videoKind: 'staff',
   titleCard: false,
 }
 
@@ -83,13 +89,118 @@ describe('jobSummaryText with Internal use only (VH-126)', () => {
 
 describe('jobSummaryText with a title card (VH-127)', () => {
   it('says the card opens the video, before the part kept, and quotes none of its words', () => {
+    // VH-140 names which card: this one is a staff video's.
     expect(jobSummaryText({ ...whole, titleCard: true })).toBe(
-      'Made from Lecture 3.mp4: a 5-second title card, then the whole video (4 minutes 12 seconds), Larger / better, a cut to the blue closing card.',
+      'Made from Lecture 3.mp4: a 5-second staff title card, then the whole video (4 minutes 12 seconds), Larger / better, a cut to the blue closing card.',
     )
   })
 
   it('says nothing of a card when there is none', () => {
     expect(jobSummaryText(whole)).not.toContain('title card')
+  })
+})
+
+describe('the record names the card and the words’ language (VH-140, audit V-02)', () => {
+  afterEach(() => setLanguage('en-GB'))
+
+  const marked = { ...CLOSING_CONTROL_DEFAULTS, internal: true }
+  const submission: JobRecord = { ...whole, videoKind: 'submission', titleCard: true, closing: marked }
+
+  it('happy path: a submission’s card is named as one', () => {
+    expect(jobSummaryText(submission)).toBe(
+      'Made from Lecture 3.mp4: a 5-second submission card, then the whole video (4 minutes 12 seconds), Larger / better, a cut to the blue closing card, marked “Internal use only”.',
+    )
+  })
+
+  it('regression: a staff card and a submission’s card of one recording read differently', () => {
+    const staff = jobSummaryText({ ...submission, videoKind: 'staff' })
+    expect(staff).toContain('a 5-second staff title card')
+    expect(staff).not.toBe(jobSummaryText(submission))
+  })
+
+  it('takes the card’s length from config, never a figure of its own', () => {
+    for (const videoKind of ['staff', 'submission'] as const) {
+      expect(jobSummaryText({ ...whole, videoKind, titleCard: true })).toContain(`a ${TITLE_CARD_SECONDS}-second `)
+    }
+  })
+
+  it('names the words’ language when it is not the page’s, as the choice names it', () => {
+    expect(jobSummaryText({ ...submission, wordsLanguage: 'zh-Hans' })).toBe(
+      'Made from Lecture 3.mp4: a 5-second submission card, then the whole video (4 minutes 12 seconds), Larger / better, a cut to the blue closing card, marked “仅供内部使用”. Video language: 简体中文.',
+    )
+    // A video with no card and no words is named too: the choice is the job's.
+    expect(jobSummaryText({ ...whole, wordsLanguage: 'ms-MY' })).toMatch(/ Video language: Bahasa Malaysia\.$/)
+  })
+
+  it('regression: two video languages with no closing words read differently', () => {
+    const none = { ...submission, closing: { ...marked, type: 'none' as const } }
+    expect(jobSummaryText({ ...none, wordsLanguage: 'zh-Hans' })).not.toBe(jobSummaryText(none))
+  })
+
+  it('says nothing of the language when it is the page’s, in every language', () => {
+    for (const tag of LANGUAGES_OFFERED) {
+      setLanguage(tag)
+      const text = jobSummaryText({ ...submission, wordsLanguage: tag })
+      expect(text, tag).not.toContain(LANGUAGE_NAMES[tag])
+    }
+  })
+
+  it('follows a change of the page’s language: the same record names it, or stops', () => {
+    const english = { ...submission, wordsLanguage: 'en-GB' as const }
+    setLanguage('zh-Hans')
+    const chinese = jobSummaryText(english)
+    expect(chinese.startsWith(`由 Lecture 3.mp4 构成：${TITLE_CARD_SECONDS} 秒的学生提交作品卡，随后是`)).toBe(true)
+    // Joined as Chinese joins sentences, with no gap.
+    expect(chinese.endsWith('“Internal use only”。视频语言：English。')).toBe(true)
+    setLanguage('en-GB')
+    expect(jobSummaryText(english)).not.toContain('Video language')
+  })
+
+  it('names the card and the language in Malay too', () => {
+    setLanguage('ms-MY')
+    const text = jobSummaryText({ ...submission, wordsLanguage: 'zh-Hans' })
+    expect(text).toMatch(/^Dibuat daripada Lecture 3\.mp4: kad serahan 5 saat, kemudian /)
+    expect(text).toMatch(/ Bahasa video: 简体中文\.$/)
+  })
+
+  it('never carries the card’s words: the record has none to carry', () => {
+    expect(Object.keys(submission).sort()).toEqual(
+      ['closing', 'durationSeconds', 'keptRange', 'presetId', 'sourceName', 'titleCard', 'videoKind', 'wordsLanguage'].sort(),
+    )
+  })
+
+  it('carries the card and the language into the question before the video is discarded', () => {
+    const passage = recordPassage({ ...submission, wordsLanguage: 'zh-Hans' }, { applied: true, mode: 'hard-cut' })
+    expect(passage).toContain('a 5-second submission card')
+    expect(passage).toMatch(/Video language: 简体中文\.$/)
+  })
+})
+
+describe('the running job’s own type and language, with its progress (VH-140, audit V-05)', () => {
+  afterEach(() => setLanguage('en-GB'))
+
+  it('names the type and the language the job started with', () => {
+    expect(runningJobText(whole)).toBe('This video: Staff video. Video language: English.')
+    expect(runningJobText({ ...whole, videoKind: 'submission', wordsLanguage: 'zh-Hans' })).toBe(
+      'This video: Student submission. Video language: 简体中文.',
+    )
+  })
+
+  it('names them in the page’s words, the language by its own name, in every language', () => {
+    for (const page of LANGUAGES_OFFERED) {
+      setLanguage(page)
+      for (const tag of LANGUAGES_OFFERED) {
+        const text = runningJobText({ ...whole, videoKind: 'submission', wordsLanguage: tag })
+        expect(text, `${page} ${tag}`).toContain(LANGUAGE_NAMES[tag])
+        expect(text, `${page} ${tag}`).not.toContain('{')
+        // The type, never the closing's words.
+        expect(text, `${page} ${tag}`).not.toContain(closingWords(tag))
+      }
+    }
+    setLanguage('zh-Hans')
+    expect(runningJobText(whole)).toBe('此视频：教职员工视频。视频语言：English。')
+    setLanguage('ms-MY')
+    expect(runningJobText(whole)).toBe('Video ini: Video staf. Bahasa video: English.')
   })
 })
 

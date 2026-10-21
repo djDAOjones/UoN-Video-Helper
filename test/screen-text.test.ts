@@ -422,7 +422,8 @@ describe('Staff video or Student submission (VH-131)', () => {
 
   it('has a visible label, and ties the line beneath to the group', () => {
     expect(fieldset).toMatch(/<legend class="label">Video type<\/legend>/)
-    expect(fieldset).toContain('aria-describedby="video-kind-result"')
+    // The next-video line is the group's too (VH-140), after its own.
+    expect(fieldset).toContain('aria-describedby="video-kind-result video-next"')
     expect(fieldset).toContain('id="video-kind-result"')
   })
 
@@ -441,7 +442,8 @@ describe('the video’s language (VH-132)', () => {
 
   it('has a visible label, and ties the line beneath to the group', () => {
     expect(fieldset).toMatch(/<legend class="label">Video language<\/legend>/)
-    expect(fieldset).toContain('aria-describedby="video-language-helper"')
+    // The next-video line is the group's too (VH-140), after its own.
+    expect(fieldset).toContain('aria-describedby="video-language-helper video-next"')
     expect(fieldset).toContain('id="video-language-helper"')
     expect(fieldset).toContain(enGB.videoLanguage.helper)
   })
@@ -453,6 +455,50 @@ describe('the video’s language (VH-132)', () => {
       const locked = new RegExp(`<fieldset[^>]*id="${id}"[\\s\\S]*?<\\/fieldset>`).exec(markup)?.[0] ?? ''
       expect(locked).not.toContain('id="video-language"')
     }
+  })
+})
+
+describe('which video a change is for (VH-140)', () => {
+  const language = /<fieldset[^>]*id="video-language"[\s\S]*?<\/fieldset>/.exec(markup)?.[0] ?? ''
+
+  it('has one line under both switches, hidden and empty until a job runs or a result stands', () => {
+    expect(language).toMatch(/<p class="helper" id="video-next" hidden><\/p>/)
+    expect(markup.match(/id="video-next"/g)).toHaveLength(1)
+  })
+
+  it('names the running job beside its progress, not in a live region', () => {
+    const line = /<p[^>]*id="process-job"[^>]*>/.exec(markup)?.[0] ?? ''
+    expect(line).toContain('hidden')
+    expect(line).not.toContain('aria-live')
+    expect(markup.indexOf('id="process-job"')).toBeGreaterThan(markup.indexOf('id="process-progress"'))
+    expect(markup.indexOf('id="process-job"')).toBeLessThan(markup.indexOf('id="process-result"'))
+  })
+})
+
+describe('Step 3 says its rules before Create (VH-140)', () => {
+  const step = /<section[^>]*id="step-title"[\s\S]*?<\/section>/.exec(markup)?.[0] ?? ''
+  const submission = /<div id="submission-card-fields"[\s\S]*?<p class="helper" id="submission-card-filled">/.exec(step)?.[0] ?? ''
+  const staff = /<div id="title-card-fields"[\s\S]*?<div id="submission-card-fields"/.exec(step)?.[0] ?? ''
+
+  it('has a line under the box for the side’s rule, tied to the box, empty until painted', () => {
+    expect(step).toMatch(/<p class="helper" id="title-card-rule" hidden><\/p>/)
+    expect(step).toContain('aria-describedby="title-card-reason title-card-rule title-card-empty-error"')
+    expect(step.indexOf('id="title-card-rule"')).toBeLessThan(step.indexOf('id="title-card-fields"'))
+  })
+
+  it('marks every one of Submission’s four fields required, and none of the staff card’s', () => {
+    for (const field of ['assignment', 'module', 'convenor', 'ids']) {
+      const control = new RegExp(`<(?:input|textarea)[^>]*id="submission-card-${field}"[^>]*>`).exec(submission)?.[0] ?? ''
+      expect(control, field).toContain('aria-required="true"')
+    }
+    expect(submission.match(/aria-required="true"/g)).toHaveLength(4)
+    expect(staff).not.toBe('')
+    expect(staff).not.toContain('aria-required')
+  })
+
+  it('keeps every per-field error line as it was, beside its field', () => {
+    for (const id of ['title', 'department', 'authors', 'date']) expect(step).toContain(`id="title-card-${id}-error"`)
+    for (const id of ['assignment', 'module', 'convenor', 'ids']) expect(step).toContain(`id="submission-card-${id}-error"`)
   })
 })
 

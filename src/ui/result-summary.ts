@@ -5,8 +5,11 @@
  * result named by its file alone was still the wrong version saved by someone
  * making several in a row (VH-107, spec gap review A-05). So the result — and
  * the question asked before it is discarded — carries what the job was: file,
- * part kept, output, closing as chosen and as applied. Fixed when the job
- * ends; never relabelled by the controls for the next one.
+ * part kept, output, closing as chosen and as applied — and which title card
+ * opens it and, when it is not the page's, the language of its words, since
+ * a staff card and a submission's, or two video languages, read the same
+ * otherwise (VH-140, audit V-02). Fixed when the job ends; never relabelled
+ * by the controls for the next one.
  *
  * Pure, so every combination's sentence is tested in Node.
  */
@@ -18,9 +21,10 @@ import {
   type ClosingControls,
 } from '../config/branding'
 import { TITLE_CARD_SECONDS } from '../config/cards'
-import type { LanguageTag } from '../config/languages'
+import { LANGUAGE_NAMES, type LanguageTag } from '../config/languages'
 import type { PresetId } from '../config/presets'
-import { closingWords, sentenceGap, t } from '../i18n'
+import type { VideoKind } from '../config/video-kind'
+import { closingWords, language, sentenceGap, t } from '../i18n'
 import type { EndedEarly } from '../media/ends-early'
 import type { KeptRange } from '../media/kept-range'
 import { formatDuration } from './format'
@@ -37,7 +41,12 @@ export interface JobRecord {
   readonly closing: ClosingControls
   /** The language of the video's own text, which Internal use only's words are drawn in (VH-132). */
   readonly wordsLanguage: LanguageTag
-  /** Whether a title card opens the video; never its words (VH-127). */
+  /** Staff video or Student submission, as the switch stood when the job started (VH-131, VH-140). */
+  readonly videoKind: VideoKind
+  /**
+   * Whether a title card opens the video; never its words (VH-127). Its kind
+   * is the video's: the staff card, or a submission's (VH-128).
+   */
   readonly titleCard: boolean
 }
 
@@ -147,7 +156,10 @@ export function endedEarlyText(ended: EndedEarly | null | undefined, closingInFi
 
 /**
  * The one-line record: "Made from NAME: PART, OUTPUT, CLOSING.", with "a
- * 5-second title card, then" before PART when the card is on (VH-127).
+ * 5-second staff title card, then" or "a 5-second submission card, then"
+ * before PART when a card is on (VH-127, VH-140); then, when the video's
+ * words are in another language than the page's, "Video language: NAME.",
+ * named as the choice names it (VH-140). Never the card's words.
  *
  * @param made - The part of the source the file actually carries, when the
  *   source stopped short of the part kept (VH-139): the record then gives the
@@ -160,9 +172,27 @@ export function jobSummaryText(record: JobRecord, made: KeptRange | null = null)
     output: t().preset.labels[record.presetId],
     closing: closingChoiceText(record.closing, record.wordsLanguage),
   }
-  return record.titleCard
-    ? t().result.summaryWithCard({ ...parts, seconds: TITLE_CARD_SECONDS })
+  const summary = record.titleCard
+    ? t().result.summaryWithCard[record.videoKind]({ ...parts, seconds: TITLE_CARD_SECONDS })
     : t().result.summary(parts)
+  // Read when painted, so a change of the page's language names it, or stops.
+  if (record.wordsLanguage === language()) return summary
+  return [summary, t().result.videoLanguage({ language: LANGUAGE_NAMES[record.wordsLanguage] })].join(
+    sentenceGap(),
+  )
+}
+
+/**
+ * The line under the progress bar: the video being made, as it was started
+ * — its type and its video language, named as the switches name them — since
+ * neither switch is locked and either may say otherwise by now (VH-140,
+ * audit V-05).
+ */
+export function runningJobText(record: JobRecord): string {
+  return t().progress.job({
+    kind: t().videoKind.options[record.videoKind],
+    language: LANGUAGE_NAMES[record.wordsLanguage],
+  })
 }
 
 /**

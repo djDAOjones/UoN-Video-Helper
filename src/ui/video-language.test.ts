@@ -8,6 +8,7 @@
 import { afterEach, describe, expect, it } from 'vitest'
 
 import {
+  LANGUAGE_NAMES,
   LANGUAGE_PREFERENCE_KEY,
   LANGUAGES_OFFERED,
   VIDEO_LANGUAGE_PREFERENCE_KEY,
@@ -20,6 +21,7 @@ import {
   quotedWordsParts,
   readVideoLanguagePreference,
   videoLanguageFor,
+  wordsLanguageParts,
   writeVideoLanguagePreference,
 } from './video-language'
 
@@ -145,6 +147,43 @@ describe('the words quoted in their own language', () => {
     expect(quotedWordsParts('仅供内部使用', '仅供内部使用', 'zh-Hans', 'ms-MY')).toEqual([
       { text: '仅供内部使用', lang: 'zh-Hans' },
     ])
+  })
+})
+
+describe('the words and the language’s own name, marked together (VH-140)', () => {
+  const words = closingWords('zh-Hans')
+  const name = LANGUAGE_NAMES['zh-Hans']
+  const runs = [words, name]
+
+  it('marks both runs in the video’s language when it is not the page’s', () => {
+    const text = `Made from a.mp4: a cut, marked “${words}”. Video language: ${name}.`
+    const parts = wordsLanguageParts(text, runs, 'zh-Hans', 'en-GB')
+    expect(parts.map((part) => part.text).join('')).toBe(text)
+    expect(parts.filter((part) => part.lang !== null)).toEqual([
+      { text: words, lang: 'zh-Hans' },
+      { text: name, lang: 'zh-Hans' },
+    ])
+  })
+
+  it('marks nothing when the words are the page’s', () => {
+    const text = `Video language: ${name}.`
+    expect(wordsLanguageParts(text, runs, 'zh-Hans', 'zh-Hans')).toEqual([{ text, lang: null }])
+  })
+
+  it('marks the last match of each, so a file name holding either is left alone', () => {
+    const english = LANGUAGE_NAMES['en-GB']
+    const text = `由 ${english} lecture.mp4 构成：整个视频。视频语言：${english}。`
+    const parts = wordsLanguageParts(text, [closingWords('en-GB'), english], 'en-GB', 'zh-Hans')
+    expect(parts).toEqual([
+      { text: `由 ${english} lecture.mp4 构成：整个视频。视频语言：`, lang: null },
+      { text: english, lang: 'en-GB' },
+      { text: '。', lang: null },
+    ])
+  })
+
+  it('empty: a run that is empty or absent leaves the text whole', () => {
+    const text = 'This video: Staff video.'
+    expect(wordsLanguageParts(text, ['', name], 'zh-Hans', 'en-GB')).toEqual([{ text, lang: null }])
   })
 })
 

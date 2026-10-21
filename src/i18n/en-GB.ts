@@ -112,6 +112,11 @@ export const enGB = {
     label: 'Video language',
     /** The line under it: what the choice changes, and so what it does not. */
     helper: 'Words the app adds to your video are in this language. What you type is kept as typed.',
+    /**
+     * Under both switches while a video is being made or a finished one is on
+     * screen (VH-140): neither is locked, and a change is not for that video.
+     */
+    nextVideo: 'Changes to the video type or video language apply to the next video you make.',
   },
 
   steps: {
@@ -241,6 +246,8 @@ export const enGB = {
     dateHelper: 'Filled with today’s date in the video language. You can change it or clear it.',
     /** Why the box is ticked and locked, naming the side of the switch that locks it (VH-128). */
     forSubmission: 'A student submission always has a title card.',
+    /** Under the box while the staff card's fields show: what a card needs, before Create says it (VH-140). */
+    fieldsRule: 'Any one field is enough to make a card. The date is filled in for you.',
     /** Beside a field whose typing reached its limit and was cut there. */
     full: 'This field is full, so the rest was not added.',
     /** Beside the field the card cannot fit, even at its smallest size. */
@@ -253,12 +260,15 @@ export const enGB = {
     correctToContinue: 'Put the title card right in step 3 to continue.',
     /** Submission's four fields on the page (VH-128); the card draws its own labels, from `card`. */
     submission: {
+      /** Under the box, before the four fields: every one is needed, before Create says so (VH-140). */
+      fieldsRule: 'All four fields are needed.',
       assignment: 'Assignment title or number',
       module: 'Module code and title',
       convenor: 'Module convenor or tutor',
       ids: 'Student ID numbers',
+      /** {digits} and {max} come from `config/cards.ts`, so the words and the check cannot part (VH-140, V-29). */
       idsHelper:
-        'Each student ID (identity) number is 8 digits. Type one to eight, with spaces, commas or new lines between them. Do not add names.',
+        'Each student ID (identity) number is {digits} digits. Type up to {max}, with spaces, commas or new lines between them. Do not add names.',
       /** Under the fields: what the app adds to the card itself, the running time as a clock time. */
       filled:
         'The card also shows the running time, {running}, and today’s date, marked as the date the card was made, not the submission date.',
@@ -270,7 +280,7 @@ export const enGB = {
         ids: 'Type at least one student ID number.',
       },
       /** Beside the ID numbers, when Create is pressed: what is wrong, quoting the number. */
-      idNotAnId: '“{id}” is not a student ID number. Each is 8 digits.',
+      idNotAnId: '“{id}” is not a student ID number. Each is {digits} digits.',
       idTwice: '{id} is in the list twice. Take one out.',
       idsTooMany: 'That is {count} numbers. The card takes up to {max}.',
     },
@@ -432,8 +442,19 @@ export const enGB = {
     },
     /** The one-line record: "Made from NAME: PART, OUTPUT, CLOSING." The name is the user's own. */
     summary: 'Made from {name}: {part}, {output}, {closing}.',
-    /** The same record with the title card on (VH-127); it never quotes the card's words. */
-    summaryWithCard: 'Made from {name}: a {seconds}-second title card, then {part}, {output}, {closing}.',
+    /**
+     * The same record with a title card (VH-127), naming which: the staff
+     * card or a student submission's (VH-140). It never quotes the card's words.
+     */
+    summaryWithCard: {
+      staff: 'Made from {name}: a {seconds}-second staff title card, then {part}, {output}, {closing}.',
+      submission: 'Made from {name}: a {seconds}-second submission card, then {part}, {output}, {closing}.',
+    },
+    /**
+     * Follows the record when the video's own words are in another language
+     * than the page's (VH-140), naming it as the Video language choice does.
+     */
+    videoLanguage: 'Video language: {language}.',
     notLoaded:
       'The closing could not be loaded, so it is not in this video. Everything else was applied as asked.',
     /**
@@ -503,6 +524,11 @@ export const enGB = {
     fewSecondsLeft: 'A few seconds left',
     /** Said, not shown: a milestone, then the time left. */
     withTimeLeft: '{progress}. {left}',
+    /**
+     * Under the bar: the video being made, as it was started (VH-140), since
+     * the switches above may say otherwise by now.
+     */
+    job: 'This video: {kind}. Video language: {language}.',
     ready: 'Ready',
     title: {
       stage: '{stage} — {app}',

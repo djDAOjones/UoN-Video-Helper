@@ -167,11 +167,20 @@ export const CARD_WIDE_COLUMNS = 2
 export const TITLE_CARD_SECONDS = 5
 
 /**
- * A student ID number on Submission: the University's student number, 8
- * digits, Latin, once the page has folded full-width digits to them (the
- * owner, 2026-10-19). No field asks for a name, so marking stays anonymous.
+ * How many digits a University student ID number has (the owner,
+ * 2026-10-19). Defined once: the check below and the words that state the
+ * rule (`titleCard.submission.idsHelper`, `idNotAnId`) both take it, so they
+ * cannot part (VH-140, design pass V-29).
  */
-export const STUDENT_ID_PATTERN = /^\d{8}$/u
+export const STUDENT_ID_DIGITS = 8
+
+/**
+ * A student ID number on Submission: the University's student number,
+ * {@link STUDENT_ID_DIGITS} digits, Latin, once the page has folded
+ * full-width digits to them (the owner, 2026-10-19). No field asks for a
+ * name, so marking stays anonymous.
+ */
+export const STUDENT_ID_PATTERN = new RegExp(`^\\d{${STUDENT_ID_DIGITS}}$`, 'u')
 
 /** The Unicode form the ID numbers' box is read in: it folds full-width digits and commas, as a Chinese input method types them, to Latin ones. */
 export const STUDENT_ID_FOLD = 'NFKC'

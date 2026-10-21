@@ -86,3 +86,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-18 — VH-105 — The language tables are data, keyed for the translator's sheet
+
+**Decision:** every language table is data — whole messages with `{name}` placeholders, each word the English chooses inside a sentence its own key, a count a `one`/`other` or numbered group — compiled once per language by `src/i18n/compile.ts` into the `t()` API, typed from English's literals; the English table's 373 keys are settled, and `scripts/strings-sheet.mjs` writes the translator's sheet from them — because the owner's machine-translation route needs a sheet that maps back to the tables row for row, and a table of functions could neither be exported nor generated from one.
+
+**Rationale:** the saved draft (fa98b05) held each message as a function that chose "blue"/"white", "fades"/"slides" and "start"/"end" inside an English sentence, which no other language can reuse. A shown failure is now kept as its code, the worker's reason and any dev-only detail (`showFailure`, `failureWords` in `src/main.ts`), so a language switch says it again; the worker's English stays for the logs. Durations are written by `Intl.NumberFormat` units joined by a unit `Intl.ListFormat` in each table's `meta.durationList`, not `Intl.DurationFormat`, whose long style adds commas English never had ("4 minutes 12 seconds") and which not every engine has. Separators between facts, items and sentences live in each table's `meta`, set per table and never translated. The readability gate now reads the table, the copy's home: the four "shorter than the animation" fallbacks measured grade 10.5 once their words were real rather than `${…}`, so each became two sentences — the only English changed, for VH-124's review — and the meta description, never shown, is exempt as the `<head>` already was. Tests changed where behaviour did: trim problems are structured and read through `trimProblemText`, failure reasons are names, and the page-text tests read past `data-i18n` bindings; `tables.test.ts` adds the completeness and placeholder tests, which run once a second table exists. The `.xlsx` is a stored zip written by hand, so no dependency. Standards applied: house conventions (no library; named test categories — happy path, boundary counts, a CSV round trip), Nielsen 4 (one whole message per meaning), spec 9.2's reading level, kept by the gate.
+
+**Supersedes:** none
+
+**Deferred:** none

@@ -13,7 +13,7 @@
  * the user's own: nothing here logs it.
  */
 
-import { STUDENT_IDS_MAX, STUDENT_ID_FOLD, STUDENT_ID_PATTERN } from '../config/cards'
+import { STUDENT_IDS_MAX, STUDENT_ID_DIGITS, STUDENT_ID_FOLD, STUDENT_ID_PATTERN } from '../config/cards'
 import type { LanguageTag } from '../config/languages'
 import type { VideoKind } from '../config/video-kind'
 import { t, textIn } from '../i18n'
@@ -112,6 +112,18 @@ export function titleCardBoxState(kind: VideoKind, staffChecked: boolean): Title
   return { checked: staffChecked, disabled: false, reason: null }
 }
 
+/**
+ * The line under the box saying what this side's card needs before Create
+ * refuses it (VH-140, audit V-06; WCAG 3.3.2): under a student submission,
+ * that all four fields are needed; under a staff video, while its fields
+ * show, that any one makes a card and the date is filled in. `null` while
+ * the staff box is unticked, when no field shows to need anything.
+ */
+export function titleCardRuleText(kind: VideoKind, staffChecked: boolean): string | null {
+  if (kind === 'submission') return t().titleCard.submission.fieldsRule
+  return staffChecked ? t().titleCard.fieldsRule : null
+}
+
 /** True when no field holds anything but spaces, which is a card with nothing on it. */
 export function isCardEmpty(text: StaffCardText): boolean {
   return STAFF_CARD_FIELDS.every((field) => text[field].trim() === '')
@@ -188,7 +200,16 @@ export function studentIdTokens(typed: string): string[] {
     .filter((token) => token !== '')
 }
 
-/** What the ID numbers' box holds: one to eight good numbers, or the first thing wrong. */
+/**
+ * The line under the ID numbers' box, its length and its most taken from the
+ * config the check uses, so the words and the check cannot part (VH-140,
+ * design pass V-29).
+ */
+export function studentIdsHelperText(): string {
+  return t().titleCard.submission.idsHelper({ digits: STUDENT_ID_DIGITS, max: STUDENT_IDS_MAX })
+}
+
+/** What the ID numbers' box holds: one to {@link STUDENT_IDS_MAX} good numbers, or the first thing wrong. */
 export type StudentIdsCheck =
   | { readonly ok: true; readonly ids: readonly string[] }
   | { readonly ok: false; readonly problem: 'none' }
@@ -257,7 +278,9 @@ export function submissionProblemText(field: SubmissionCardField, problem: Submi
       const check = problem.check
       if (check.problem === 'none') return words.missing.ids
       if (check.problem === 'too-many') return words.idsTooMany({ count: check.count, max: STUDENT_IDS_MAX })
-      return check.problem === 'twice' ? words.idTwice({ id: check.id }) : words.idNotAnId({ id: check.id })
+      return check.problem === 'twice'
+        ? words.idTwice({ id: check.id })
+        : words.idNotAnId({ id: check.id, digits: STUDENT_ID_DIGITS })
     }
   }
 }

@@ -9,6 +9,7 @@
 
 ## Phase 3 — what the second audit found
 
+- VH-140 — the record names the card and a video language not the page's; while a video is made or shown, a line says a switch is for the next one, and the progress names the job's choices; Step 3 says its rule first; checked in Chrome, three languages, two widths (2026-10-21) — see decisions
 - VH-139 — a file that ends early is said: each track held to the last packet its own index declares; before Create "The file ends early — Its sound stops at 0:20 of 0:30", after the job the length made, "21 seconds of 30 seconds", with where each track stopped beside it; checked in Chrome with the audit's fixture, trimmed and not (2026-10-21) — see decisions
 
 ## Design pass — the page as a design against the 2026-10-01 standard

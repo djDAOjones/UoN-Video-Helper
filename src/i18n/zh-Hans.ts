@@ -61,6 +61,7 @@ export const zhHans: Messages = {
   videoLanguage: {
     label: '视频语言',
     helper: '应用添加到视频中的文字使用此语言。您输入的内容将按原样保留。',
+    nextVideo: '对视频类型或视频语言的更改将用于您制作的下一个视频。',
   },
   steps: {
     choose: '选择一个视频',
@@ -190,6 +191,7 @@ export const zhHans: Messages = {
     date: '日期',
     dateHelper: '已填入以视频语言显示的今天日期。您可以更改或清除它。',
     forSubmission: '学生提交作品始终带有标题卡。',
+    fieldsRule: '填写任意一个字段即可制作卡片。日期已为您填好。',
     full: '此字段已满，其余内容未添加。',
     refused: {
       field: '内容太长，无法放入卡片。请缩短。',
@@ -198,12 +200,13 @@ export const zhHans: Messages = {
     empty: '请至少填写四个字段中的一个，或取消勾选“添加标题卡”。',
     correctToContinue: '在步骤 3 中更正标题卡，即可继续。',
     submission: {
+      fieldsRule: '四个字段都必须填写。',
       assignment: '作业标题或编号',
       module: '模块代码和名称',
       convenor: '模块负责人或导师',
       ids: '学号',
       idsHelper:
-        '每个学号（学生身份编号）为 8 位数字。输入一到八个，用空格、逗号或换行分隔。请勿填写姓名。',
+        '每个学号（学生身份编号）为 {digits} 位数字。最多输入 {max} 个，用空格、逗号或换行分隔。请勿填写姓名。',
       filled: '卡片上还会显示时长 {running} 和今天的日期，并注明这是卡片制作日期，而非提交日期。',
       missing: {
         assignment: '请输入作业标题或编号。',
@@ -211,7 +214,7 @@ export const zhHans: Messages = {
         convenor: '请输入模块负责人或导师的姓名。',
         ids: '请至少输入一个学号。',
       },
-      idNotAnId: '“{id}”不是学号。学号为 8 位数字。',
+      idNotAnId: '“{id}”不是学号。学号为 {digits} 位数字。',
       idTwice: '{id} 在列表中出现了两次。请删除一个。',
       idsTooMany: '这里有 {count} 个学号。卡片最多可容纳 {max} 个。',
     },
@@ -379,7 +382,12 @@ export const zhHans: Messages = {
       },
     },
     summary: '由 {name} 构成：{part}、{output}、{closing}。',
-    summaryWithCard: '由 {name} 构成：{seconds} 秒的标题卡，随后是{part}、{output}、{closing}。',
+    summaryWithCard: {
+      staff: '由 {name} 构成：{seconds} 秒的教职员工标题卡，随后是{part}、{output}、{closing}。',
+      submission:
+        '由 {name} 构成：{seconds} 秒的学生提交作品卡，随后是{part}、{output}、{closing}。',
+    },
+    videoLanguage: '视频语言：{language}。',
     notLoaded: '由于结尾部分无法加载，因此未包含在视频中。其他所有步骤均已按要求完成。',
     endedEarly: {
       picture: '您选择的文件提前结束：画面在{stops}处停止，而全长应为{end}。',
@@ -434,6 +442,7 @@ export const zhHans: Messages = {
     timeLeft: '大约还剩{time}',
     fewSecondsLeft: '还剩几秒钟',
     withTimeLeft: '{progress}。{left}',
+    job: '此视频：{kind}。视频语言：{language}。',
     ready: '准备好',
     title: {
       stage: '{stage} — {app}',

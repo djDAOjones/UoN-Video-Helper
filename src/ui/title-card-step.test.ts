@@ -3,13 +3,15 @@
  * the date filled and refilled, the box on each side of the switch, the empty
  * refusal at Create, and a request built only when there is a card to draw;
  * and Submission (VH-128), its ID numbers checked, each field's problem, and
- * its words resolved in the video's language.
+ * its words resolved in the video's language; each side's rule said before
+ * Create, and the ID numbers' rules taken from config in the words too (VH-140).
  */
 
 import { describe, expect, it } from 'vitest'
 
-import { STUDENT_IDS_MAX } from '../config/cards'
-import { t, textIn } from '../i18n'
+import { STUDENT_IDS_MAX, STUDENT_ID_DIGITS, STUDENT_ID_PATTERN } from '../config/cards'
+import { LANGUAGES_OFFERED } from '../config/languages'
+import { LANGUAGE_TABLES, setLanguage, t, textIn } from '../i18n'
 import { STAFF_CARD, columnsOf, type StaffCardText } from '../media/title-card'
 import {
   cardDate,
@@ -22,6 +24,7 @@ import {
   isCardEmpty,
   firstSubmissionProblem,
   refusalText,
+  studentIdsHelperText,
   studentIdTokens,
   submissionCardRequest,
   submissionCardText,
@@ -29,6 +32,7 @@ import {
   submissionProblemText,
   titleCardBoxState,
   titleCardRequest,
+  titleCardRuleText,
   type SubmissionTyped,
   type TitleCardAssets,
 } from './title-card-step'
@@ -132,6 +136,25 @@ describe('the box on each side of the switch (gating)', () => {
         reason: t().titleCard.forSubmission,
       })
     }
+  })
+})
+
+describe('the rule said before Create (VH-140, audit V-06)', () => {
+  it('a student submission says all four fields are needed, whatever the staff card held', () => {
+    for (const held of [true, false]) {
+      expect(titleCardRuleText('submission', held)).toBe(t().titleCard.submission.fieldsRule)
+    }
+    expect(t().titleCard.submission.fieldsRule).toBe('All four fields are needed.')
+  })
+
+  it('a staff video, its box ticked, says any one field makes a card and the date is filled in', () => {
+    expect(titleCardRuleText('staff', true)).toBe(
+      'Any one field is enough to make a card. The date is filled in for you.',
+    )
+  })
+
+  it('gating: a staff video with its box unticked says nothing, since no field shows', () => {
+    expect(titleCardRuleText('staff', false)).toBeNull()
   })
 })
 
@@ -240,6 +263,51 @@ describe('the ID numbers, split and checked (VH-128)', () => {
   })
 })
 
+describe('the ID numbers’ rules come from config, in the words too (VH-140, design pass V-29)', () => {
+  it('the check holds an ID to exactly the configured length', () => {
+    const digits = (n: number): string => '2'.repeat(n)
+    expect(STUDENT_ID_PATTERN.test(digits(STUDENT_ID_DIGITS))).toBe(true)
+    expect(STUDENT_ID_PATTERN.test(digits(STUDENT_ID_DIGITS - 1))).toBe(false)
+    expect(STUDENT_ID_PATTERN.test(digits(STUDENT_ID_DIGITS + 1))).toBe(false)
+  })
+
+  it('the helper says the configured length and most, in every language', () => {
+    try {
+      for (const tag of LANGUAGES_OFFERED) {
+        setLanguage(tag)
+        const text = studentIdsHelperText()
+        expect(text, tag).toBe(
+          t().titleCard.submission.idsHelper({ digits: STUDENT_ID_DIGITS, max: STUDENT_IDS_MAX }),
+        )
+        expect(text, tag).toContain(String(STUDENT_ID_DIGITS))
+        expect(text, tag).toContain(String(STUDENT_IDS_MAX))
+      }
+    } finally {
+      setLanguage('en-GB')
+    }
+    expect(studentIdsHelperText()).toBe(
+      'Each student ID (identity) number is 8 digits. Type up to 8, with spaces, commas or new lines between them. Do not add names.',
+    )
+  })
+
+  it('a wrong number is said with the configured length', () => {
+    const text = submissionProblemText('ids', { kind: 'ids', check: { ok: false, problem: 'not-an-id', id: '123' } })
+    expect(text).toBe(`“123” is not a student ID number. Each is ${STUDENT_ID_DIGITS} digits.`)
+  })
+
+  it('regression: no table writes the length or the most as a figure of its own', () => {
+    for (const [tag, table] of Object.entries(LANGUAGE_TABLES)) {
+      const { idsHelper, idNotAnId, idsTooMany } = table.titleCard.submission
+      for (const words of [idsHelper, idNotAnId, idsTooMany]) {
+        expect(words.replace(/\{[A-Za-z]+\}/g, ''), `${tag}: ${words}`).not.toMatch(/\d|八|lapan|eight/i)
+      }
+      expect(idsHelper, tag).toContain('{digits}')
+      expect(idsHelper, tag).toContain('{max}')
+      expect(idNotAnId, tag).toContain('{digits}')
+    }
+  })
+})
+
 describe("Submission's problems at Create (VH-128)", () => {
   const BLANK: SubmissionTyped = { assignment: '', module: '', convenor: '', ids: '' }
 
@@ -264,7 +332,9 @@ describe("Submission's problems at Create (VH-128)", () => {
   it('error: a wrong ID number is said beside the box, quoting it', () => {
     const problems = submissionProblems({ ...TYPED_SUBMISSION, ids: '2041234' }, null)
     expect(firstSubmissionProblem(problems)).toBe('ids')
-    expect(submissionProblemText('ids', problems.ids!)).toBe(t().titleCard.submission.idNotAnId({ id: '2041234' }))
+    expect(submissionProblemText('ids', problems.ids!)).toBe(
+      t().titleCard.submission.idNotAnId({ id: '2041234', digits: STUDENT_ID_DIGITS }),
+    )
   })
 
   it('says too many with the count and the most', () => {

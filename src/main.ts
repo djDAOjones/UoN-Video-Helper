@@ -99,9 +99,9 @@ import {
 } from './ui/video-kind'
 import {
   paintParts,
-  quotedWordsParts,
   readVideoLanguagePreference,
   videoLanguageFor,
+  wordsLanguageParts,
   writeVideoLanguagePreference,
 } from './ui/video-language'
 import { installDropZone } from './ui/drop-zone'
@@ -132,6 +132,7 @@ import {
   endedEarlyText,
   jobSummaryText,
   recordPassage,
+  runningJobText,
   type ClosingOutcome,
   type JobRecord,
 } from './ui/result-summary'
@@ -181,6 +182,7 @@ import {
   firstSubmissionProblem,
   holdToColumns,
   refusalText,
+  studentIdsHelperText,
   studentIdTokens,
   submissionCardRequest,
   submissionCardText,
@@ -188,6 +190,7 @@ import {
   submissionProblems,
   titleCardBoxState,
   titleCardRequest,
+  titleCardRuleText,
   type SubmissionProblem,
   type SubmissionTyped,
   type TitleCardAssets,
@@ -308,6 +311,7 @@ const processProgress = required<HTMLProgressElement>('#process-progress')
 const processProgressLabel = required<HTMLParagraphElement>('#process-progress-label')
 const processProgressText = required<HTMLParagraphElement>('#process-progress-text')
 const processTimeLeft = required<HTMLParagraphElement>('#process-time-left')
+const processJobLine = required<HTMLParagraphElement>('#process-job')
 const jobNotice = required<HTMLParagraphElement>('#job-notice')
 const createNote = required<HTMLParagraphElement>('#create-note')
 const announceField = required<HTMLDivElement>('#announce-field')
@@ -318,6 +322,7 @@ const saveActions = required<HTMLDivElement>('#save-actions')
 const videoKindChoice = required<HTMLFieldSetElement>('#video-kind')
 const videoKindResult = required<HTMLParagraphElement>('#video-kind-result')
 const videoLanguageChoice = required<HTMLFieldSetElement>('#video-language')
+const videoNextLine = required<HTMLParagraphElement>('#video-next')
 const presetChoice = required<HTMLFieldSetElement>('#preset-choice')
 const brandingChoice = required<HTMLFieldSetElement>('#branding-choice')
 const closingType = required<HTMLSelectElement>('#closing-type')
@@ -347,6 +352,7 @@ const titleCardChoice = required<HTMLFieldSetElement>('#title-card-choice')
 const titleCardIntro = required<HTMLParagraphElement>('#title-card-intro')
 const titleCardOn = required<HTMLInputElement>('#title-card-on')
 const titleCardReason = required<HTMLParagraphElement>('#title-card-reason')
+const titleCardRule = required<HTMLParagraphElement>('#title-card-rule')
 const titleCardEmptyError = required<HTMLParagraphElement>('#title-card-empty-error')
 const titleCardFields = required<HTMLDivElement>('#title-card-fields')
 /** Each of the card's fields and the error line beside it, in the card's order (VH-127). */
@@ -361,6 +367,7 @@ const titleCardInputs = Object.fromEntries(
 ) as Record<StaffCardField, { readonly input: HTMLInputElement; readonly error: HTMLParagraphElement }>
 const submissionCardFields = required<HTMLDivElement>('#submission-card-fields')
 const submissionCardFilled = required<HTMLParagraphElement>('#submission-card-filled')
+const submissionIdsHelper = required<HTMLParagraphElement>('#submission-card-ids-helper')
 /** Submission's four fields and the error line beside each, in the card's order (VH-128); the ID numbers' is a box. */
 const submissionInputs = Object.fromEntries(
   SUBMISSION_CARD_FIELDS.map((field) => [
@@ -489,10 +496,20 @@ function chosenVideoLanguage(): LanguageTag {
 
 /**
  * Writes `text` into `element` with the video's words in it marked in their
- * own language when that is not the page's (WCAG 3.1.2).
+ * own language when that is not the page's (WCAG 3.1.2): the closing's
+ * words, and the language's own name where the record or the progress names
+ * it (VH-140).
  */
 function paintQuoting(element: HTMLElement, text: string, wordsLanguage: LanguageTag): void {
-  paintParts(element, quotedWordsParts(text, closingWords(wordsLanguage), wordsLanguage, language()))
+  paintParts(
+    element,
+    wordsLanguageParts(
+      text,
+      [closingWords(wordsLanguage), LANGUAGE_NAMES[wordsLanguage]],
+      wordsLanguage,
+      language(),
+    ),
+  )
 }
 
 /**
@@ -629,6 +646,9 @@ videoKindChoice.addEventListener('change', () => {
 
 const videoLanguageOptions = languageOptions(LANGUAGES_OFFERED, chosenVideoLanguage())
 videoLanguageChoice.hidden = videoLanguageOptions.length === 0
+// The line saying a change is for the next video belongs under both
+// switches; with no language choice to show, it goes under the switch.
+if (videoLanguageChoice.hidden) videoKindChoice.append(videoNextLine)
 required<HTMLLegendElement>('#video-language > legend').after(
   languageSegments('video-language', videoLanguageOptions),
 )
@@ -791,6 +811,8 @@ function setSaveStatus(message: Text): void {
 function clearResult(): void {
   clear(processResult)
   clear(saveStatusLine)
+  resultStanding = false
+  paintVideoNext()
 }
 
 /**
@@ -2012,6 +2034,22 @@ interface RetainedResult {
 let unsavedResult: RetainedResult | null = null
 
 /**
+ * Whether a finished video's result is on the page — or the question before
+ * it is discarded, which carries its record — saved or not (VH-140).
+ */
+let resultStanding = false
+
+/**
+ * The line under the two switches: while a job runs or a result stands, a
+ * change to either is for the next video, since neither is locked and the
+ * job and its record keep what they started with (VH-140, audit V-05).
+ */
+function paintVideoNext(): void {
+  paintLine(videoNextLine, jobInFlight || resultStanding ? t().videoLanguage.nextVideo : null)
+}
+show(videoNextLine, paintVideoNext)
+
+/**
  * Whether the "starting again will discard it" question is on screen.
  *
  * The question is about one selection. Pressed after the trim, preset or
@@ -2222,6 +2260,7 @@ function setJobInFlight(running: boolean): void {
   jobNotice.textContent = running ? t().progress.jobNotice : ''
   jobNotice.hidden = !running
   announceField.hidden = !running
+  paintVideoNext()
   applyControlLock()
   applyKeepAwake()
   updateLeaveWarning()
@@ -2460,6 +2499,7 @@ function syncTitleCard(): void {
   titleCardOn.checked = box.checked
   titleCardOn.disabled = box.disabled
   paintLine(titleCardReason, box.reason)
+  paintLine(titleCardRule, titleCardRuleText(kind, box.checked))
   titleCardFields.hidden = kind !== 'staff' || !box.checked
   submissionCardFields.hidden = kind !== 'submission'
   paintTitleCardErrors()
@@ -2504,6 +2544,9 @@ show(titleCardIntro, () => {
   titleCardIntro.textContent = t().titleCard.intro({ seconds: TITLE_CARD_SECONDS })
 })
 show(submissionCardFilled, paintSubmissionFilled)
+show(submissionIdsHelper, () => {
+  submissionIdsHelper.textContent = studentIdsHelperText()
+})
 
 // Only a staff video's box is the user's to change. Ticking fills the date.
 titleCardOn.addEventListener('change', () => {
@@ -2701,6 +2744,7 @@ function beginJob(file: File): void {
   trimPreview.pause()
 
   // Read once, so the job and the record of it cannot disagree.
+  const videoKind = chosenVideoKind()
   const closing = chosenClosing()
   // The video's text language: the pick under the switch, or the page's (VH-132).
   const wordsLanguage = chosenVideoLanguage()
@@ -2711,7 +2755,7 @@ function beginJob(file: File): void {
   // name (VH-127, VH-128). Submission's running time is the range this job
   // keeps, and its date is now, when the card is made.
   const submissionIds = checkStudentIds(typedSubmission().ids)
-  const titleCard = submissionIsOn()
+  const titleCard = videoKind === 'submission'
     ? submissionCardRequest(
         submissionCardText(
           typedSubmission(),
@@ -2731,6 +2775,7 @@ function beginJob(file: File): void {
     presetId: chosenPreset(),
     closing,
     wordsLanguage,
+    videoKind,
     titleCard: titleCard !== null,
   }
 
@@ -2759,6 +2804,10 @@ function beginJob(file: File): void {
   // (VH-124). The outcome takes its place when the job ends.
   withdrawVerdict()
   setJobInFlight(true)
+  // The job's own type and video language with its progress, from its
+  // record: the switches above stay live and may say otherwise (VH-140).
+  show(processJobLine, () => paintQuoting(processJobLine, runningJobText(record), record.wordsLanguage))
+  processJobLine.hidden = false
   fromCreate(cancelButton)
   // Said once, at the start, whatever the estimate (spec 7.5, A-03); the
   // stages follow in the same live region. Spoken only: the notice is on
@@ -2883,13 +2932,15 @@ function beginJob(file: File): void {
     })
 }
 
-/** Takes the bar, its label, the stage line and the time left off the page. */
+/** Takes the bar, its label, the stage line, the time left and the job's own line off the page. */
 function hideProgress(): void {
   processProgress.hidden = true
   processProgressLabel.hidden = true
   processProgressText.hidden = true
   processTimeLeft.hidden = true
   processTimeLeft.textContent = ''
+  clear(processJobLine)
+  processJobLine.hidden = true
   lastProgress = null
 }
 
@@ -2973,6 +3024,9 @@ function showProcessControls(
 function renderResult(kept: RetainedResult): HTMLElement {
   discardAsked = false
   const { file, jobId, source, record, outcome } = kept
+  // The switches' line: a change now is for the next video (VH-140).
+  resultStanding = true
+  paintVideoNext()
 
   // VH-22: branding that was asked for but could not be loaded is skipped
   // rather than failing the job, so the result has to say so — and so does a

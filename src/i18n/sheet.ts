@@ -65,6 +65,10 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
     'Above Step 1: the line under the switch, saying what the choice means for the closing',
   ],
   ['videoLanguage', 'Above Step 1: the choice of language for the words drawn into the video'],
+  [
+    'videoLanguage.nextVideo',
+    'Above Step 1: under the video type and the video language, only while a video is being made or a finished one is on screen',
+  ],
   ['steps', 'The heading of each of the six steps'],
   ['choose', 'Step 1, Choose a video'],
   ['choose.drop', 'Step 1: the message when something is dropped on the drop area'],
@@ -76,8 +80,16 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
   ['titleCard', 'Step 3, Title card: the checkbox and the four fields for the card shown before the video'],
   ['titleCard.forSubmission', 'Step 3: beside the Add a title card checkbox, when it is locked'],
   [
+    'titleCard.fieldsRule',
+    'Step 3: under the Add a title card checkbox, for a staff video, while the four fields show',
+  ],
+  [
     'titleCard.submission',
     'Step 3, Title card, for a student submission: the four fields for the card shown before the video',
+  ],
+  [
+    'titleCard.submission.fieldsRule',
+    'Step 3: under the Add a title card checkbox, for a student submission, above its four fields',
   ],
   ['titleCard.submission.missing', "Step 3: the error beside a student submission's field left empty, when Create is pressed"],
   ['titleCard.submission.idNotAnId', 'Step 3: the error beside the student ID numbers, when Create is pressed'],
@@ -107,6 +119,14 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
   ['discard', 'Step 6: the question asked before an unsaved video is discarded'],
   ['discard.spoken', 'Not shown: read out by screen readers with the question'],
   ['result', 'Step 6: the finished video and its one-line summary'],
+  [
+    'result.summaryWithCard',
+    'Step 6: the finished video and its one-line summary, when the video has a title card',
+  ],
+  [
+    'result.videoLanguage',
+    "Step 6: after the finished video's one-line summary, and in the question before it is discarded, when the video's words are in another language than the page",
+  ],
   ['result.closing', 'Step 6: the end of the summary "Made from …", saying how the video closes'],
   ['result.fellBackTo', 'Step 6: under the finished video, when its closing is not the one chosen'],
   [
@@ -117,6 +137,7 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
   ['progress.title', 'The title in the browser tab while the video is made'],
   ['progress.jobNotice', 'Step 6: said when the video starts being made'],
   ['progress.withTimeLeft', 'Not shown: read out by screen readers while the video is made'],
+  ['progress.job', 'Step 6: under the progress bar while the video is made'],
   ['preflight', 'Step 6: the device check, which says whether this computer can make the video'],
   ['preflight.headings', 'Step 6: the heading of the device check'],
   ['preflight.reasons', 'Step 6: one reason in the device check'],
@@ -236,6 +257,9 @@ const PLACEHOLDERS: Readonly<Record<string, string>> = {
   sound: 'a time in the video, like 0:20',
   id: 'what the student typed as a student ID number, like 20412345',
   max: 'a number',
+  digits: 'how many digits a student ID number has, a number',
+  kind: 'the video type, from videoKind.options',
+  language: "a language's name in its own language, as the Video language choice shows it, like English or 简体中文",
 }
 
 /** What a key's last parts say about when the message is used. */
@@ -300,6 +324,8 @@ const NOTES: Readonly<Record<string, string>> = {
     'The label over the choice, also read out by screen readers. Use the same word for "video" as videoKind.label and for "language" as language.label.',
   'videoLanguage.helper':
     'The words the app draws into the video, such as closing.internalWords, follow this choice; the page itself does not.',
+  'videoLanguage.nextVideo':
+    'Neither choice is locked while a video is made, and a change does not alter that video. Use the same words as videoKind.label and videoLanguage.label.',
   'titleCard.add':
     'The label of a checkbox that adds the card before the video. titleCard.empty quotes it: use the same words there.',
   'titleCard.title':
@@ -314,8 +340,14 @@ const NOTES: Readonly<Record<string, string>> = {
     'Use the same words for "video language" as videoLanguage.label.',
   'titleCard.forSubmission':
     'Why the checkbox titleCard.add is ticked and cannot be unticked. Use the same words for "student submission" as videoKind.options.submission.',
+  'titleCard.fieldsRule':
+    'For a staff video: a card needs at least one of the four fields, and the app fills the date when the box is ticked.',
+  'titleCard.submission.fieldsRule':
+    'For a student submission: every one of the four fields must be filled in before the video is made.',
   'titleCard.submission.idsHelper':
-    'A University student ID number is 8 digits. Use the same words for "student ID number" as titleCard.submission.ids.',
+    'Use the same words for "student ID number" as titleCard.submission.ids. {max} is the most numbers one card takes.',
+  'titleCard.submission.idNotAnId':
+    'Use the same words for "student ID number" as titleCard.submission.ids.',
   'titleCard.submission.filled':
     'Use the same words for "running time" as titleCard.card.running, and for "the date the card was made" as titleCard.card.made.',
   'titleCard.card.madeValue':
@@ -359,6 +391,14 @@ const NOTES: Readonly<Record<string, string>> = {
     'Said when the file stops part-way, as an interrupted copy or a crashed recorder leaves it. Warning headings are read one after another inside warnings.spoken, so no full stop.',
   'warnings.endsEarly.detail':
     '"of {end}" means the sound should run until {end}. A fact, not a guess: only the cause ("probably cut off") is uncertain.',
+  'result.summaryWithCard.staff':
+    'The card a staff video opens with. Use the same words for "staff" as videoKind.options.staff and for "title card" as steps.titleCard.',
+  'result.summaryWithCard.submission':
+    'The card a student submission opens with. Use the same words for "submission" as videoKind.options.submission.',
+  'result.videoLanguage':
+    'Follows the summary when the words the app drew into the video are in another language than the page. Use the same words as videoLanguage.label.',
+  'progress.job':
+    'Names the video being made as it was started, since the choices above the steps may have changed since. Use the same words as videoLanguage.label.',
   'result.endedEarly.together': 'In place of result.endedEarly.both when the picture and the sound stop in the same second.',
   'result.endedEarly.held':
     'Follows one of the sentences above when the picture stopped and the video has a closing: until the closing, the last picture stays on screen.',
