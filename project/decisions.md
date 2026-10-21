@@ -17,6 +17,16 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-21 — PLAN-3 — Phase 3 reconciled and closed
+
+**Decision:** Phase 3 closes with all four planned items shipped: VH-139, VH-140, VH-141 and VH-142. Phase 4 starts with VH-144 because the repeated closing reason and narrow time fields are direct, small user-facing defects; the authorised run continues.
+
+**Rationale:** Reconciled against “Phase 3: what the second audit found”, Items VH-139–142: early-ending files, truthful records and switches, the nine state defects plus V-21/V-22, and the wording corrections all have close entries and trajectory lines. The reserved accessibility statement, date-only card, spec proposals, human checks and unscanned-container warning remain on their existing wish/backlog lines. Local recall before editing scored 8/8 (2,2,2,2): latest closes VH-142, VH-141, VH-148, VH-124 are anchored by their newest close headings in decisions and the Phase 3/Owner’s sign-off trajectory; VH-141’s Show progress decision answers why; wish-list and backlog locate deferrals; PLAN-4’s “Phase 4: what the design pass found” and backlog locate VH-144 and its order. This is local evidence, not a fresh-session handoff. Milestone audit: 14 development findings (10 high, 1 moderate, 3 low), zero runtime findings; the existing V3-HARNESS audit wish covers them, with no dependency change. House conventions: milestone audit and complete ledger. Known checker warnings remain linked as at VH-142’s close. Taken gateless under the whole-run handoff.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-21 — VH-142 — Save, damage and feedback wording agree with the page
 
 **Decision:** the Chinese save refusals offer saving again, Step 6 uses 制作 throughout, decode-damage wording is future tense with original-recording times, and captured errors name Report this problem. The approved quotation, ellipsis, bracket and terminology corrections ship through the sheet — taken gateless within the item’s form-only scope.
@@ -462,17 +472,5 @@
 **Rationale:** The owner's words, 2026-10-19: asked how it is chosen, "it's options, blue or white"; asked when the words appear, "With the logo build". The question described the words arriving with the 1 s onset, at the cost of eight more transparent files; measuring the masters afterwards showed that description wrong. The onsets carry only the colour field (Fade a uniform alpha ramp, Slide the field moving in); the logo builds in the tail, the crest from 0.25 to 0.75 s and the wordmark wiping in from 1.5 to 3.0 s, settled for the last second, in a box at x 528 to 1404, y 358 to 686 at 1080. The owner's answer is kept, at lower cost: no new alpha decode, and VH-44's premultiplication finding is not engaged. Whether the option is a switch beside Cut, Fade and Slide or a type of its own changes the controls and not the assets, and is asked with the type scale.
 
 **Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-18 — PLAN-1 — Internal use only is the official closing with words added; no card text under 28 pt
-
-**Decision:** the Internal use only closing is the official closing, Nottingham Blue and branded, with "Internal use only" added, pre-built as new source media from the masters rather than drawn at run time; the title cards' labels follow the page's language, a Submission card takes up to eight student ID numbers, and no card text is under 28 pt at PowerPoint sizes, in a layout the agent sets for plenty of room — because the owner said so in chat on 2026-10-18.
-
-**Items:** VH-126, VH-127, VH-128
-
-**Rationale:** The owner's words, 2026-10-18: "internal card still the blue. it can be branded, just clearly with 'Internal use only'"; "it can be the same, just with extra text - perhaps make a new precreated source media"; "you should figure out font sizes and layout that allow a lot of runway but is highly readable from an accessibility perspective - not less than 28pt at powerpoint sizes"; "labels should follow page language. up to 8 student ID numbers." This replaces the first PLAN-1 entry's plain, logo-free "Internal only" card, and its D12 reasoning with it: this variant is the owner's own call, and D12 stays open for per-department variants. The phase and its items stand. The card renderer moves from VH-126 to VH-127, the first item that still draws a card; the type scale and layouts for all three cards are VH-126's first criterion, because its words are the first text to set. The floor in pixels: a 16:9 PowerPoint slide is 540 pt tall, so 28 pt is 28/540 of the frame, 56 px at 1080 lines and 112 px at 2160, taken on the frame's shorter side so a portrait video keeps it. `scripts/build-branding.mjs` builds the masters and needs ffmpeg, which is not on this Mac's PATH (2026-10-18). Standards: WCAG 2.2 1.4.6, contrast (enhanced): white on Nottingham Blue (#10263B) is about 15.4:1 by calculation, not yet measured; 1.4.8's line spacing and length are the layout work's to apply. Session end: this session passed the profile's Session line (200k) before this close, so the typography the owner asked for is the next session's, from VH-126's notes.
-
-**Supersedes:** 2026-10-18 — PLAN-1 — Band 8: a title card and an Internal only closing, in one app for staff and students
 
 **Deferred:** none

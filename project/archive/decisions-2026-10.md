@@ -148,3 +148,15 @@
 **Supersedes:** none
 
 **Deferred:** VH-129
+
+## 2026-10-18 — PLAN-1 — Internal use only is the official closing with words added; no card text under 28 pt
+
+**Decision:** the Internal use only closing is the official closing, Nottingham Blue and branded, with "Internal use only" added, pre-built as new source media from the masters rather than drawn at run time; the title cards' labels follow the page's language, a Submission card takes up to eight student ID numbers, and no card text is under 28 pt at PowerPoint sizes, in a layout the agent sets for plenty of room — because the owner said so in chat on 2026-10-18.
+
+**Items:** VH-126, VH-127, VH-128
+
+**Rationale:** The owner's words, 2026-10-18: "internal card still the blue. it can be branded, just clearly with 'Internal use only'"; "it can be the same, just with extra text - perhaps make a new precreated source media"; "you should figure out font sizes and layout that allow a lot of runway but is highly readable from an accessibility perspective - not less than 28pt at powerpoint sizes"; "labels should follow page language. up to 8 student ID numbers." This replaces the first PLAN-1 entry's plain, logo-free "Internal only" card, and its D12 reasoning with it: this variant is the owner's own call, and D12 stays open for per-department variants. The phase and its items stand. The card renderer moves from VH-126 to VH-127, the first item that still draws a card; the type scale and layouts for all three cards are VH-126's first criterion, because its words are the first text to set. The floor in pixels: a 16:9 PowerPoint slide is 540 pt tall, so 28 pt is 28/540 of the frame, 56 px at 1080 lines and 112 px at 2160, taken on the frame's shorter side so a portrait video keeps it. `scripts/build-branding.mjs` builds the masters and needs ffmpeg, which is not on this Mac's PATH (2026-10-18). Standards: WCAG 2.2 1.4.6, contrast (enhanced): white on Nottingham Blue (#10263B) is about 15.4:1 by calculation, not yet measured; 1.4.8's line spacing and length are the layout work's to apply. Session end: this session passed the profile's Session line (200k) before this close, so the typography the owner asked for is the next session's, from VH-126's notes.
+
+**Supersedes:** 2026-10-18 — PLAN-1 — Band 8: a title card and an Internal only closing, in one app for staff and students
+
+**Deferred:** none

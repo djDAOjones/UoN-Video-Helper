@@ -28,7 +28,7 @@
 
 ### Phase 2 — the owner's corrections, the spec caught up, three page defects, a time left — CLOSED 2026-10-20
 
-### Phase 3 — what the second audit found: a file that ends early, the record and the switches, nine small defects, the words
+### Phase 3 — what the second audit found: a file that ends early, the record and the switches, nine small defects, the words — CLOSED 2026-10-21
 
 ### Phase 4 — what the design pass found: two page defects, the token boundary, the cards
 
