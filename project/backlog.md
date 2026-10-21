@@ -21,6 +21,7 @@
 ### Band 6 — review, then translate
 
 - [!] VH-124 — The page, made excellent — since 2026-10-01 — blocked: the owner's sign-off
+- [~] VH-148 — The owner's sign-off changes: words, the switch headings, the read line, the trim's cut parts, the select's chevron, the footer's help — since 2026-10-21 — (from: VH-124, 2026-10-21)
 - [!] VH-113 — The phone path — since 2026-10-01 — blocked: the owner's own work — a canon [maintainer] item
 
 ### Band 7 — measured, not yet fixed — CLOSED 2026-10-20

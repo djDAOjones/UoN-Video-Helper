@@ -17,6 +17,16 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-21 — VH-148 — Codex builds while Claude usage is paused: VH-148, then Phase 3 and Phase 4, each closed by the contract
+
+**Decision:** Codex (`codex exec`, gpt-6-astra) is the writer in `.claude/worktrees/overnight` for VH-148 and then the run's approved items, VH-141, VH-142, Phase 3's close, VH-144, VH-145 and VH-146, each built, checked, closed and pushed by the contract, one at a time; Claude Code writes nothing there meanwhile; the writing review (`reviews/2026-10-21/writing-review-2026-10-21.md`) waits for the owner and is not built — because the owner said in chat on 2026-10-21 "we need to pause claude model usage due to nearly running out for the week. you can continue to blitz chatgpt as lots of usage left".
+
+**Rationale:** The profile's Handoff line has Claude Code execute and Codex review read-only; the owner's word sets that aside for this run only, as the 01:46 word made Codex the project partner. One writer per checkout holds, because the Claude build agent was stopped before it changed a file. A Codex item has no second model's check, so its commit omits the `Checked:` line rather than claiming one. The brief is `reviews/2026-10-21/codex-handoff-2026-10-21.md`. VH-124 closes inside VH-148, on the owner's sign-off in chat on 2026-10-21, quoted in VH-148's notes.
+
+**Supersedes:** none
+
+**Deferred:** VH-148, VH-141, VH-142, VH-144, VH-145, VH-146
+
 ## 2026-10-21 — VH-140 — The record names the card and a video language not the page's; a line says a switch is for the next video; Step 3 says its rule first
 
 **Decision:** the record and the discard question say "a 5-second staff title card" or "a 5-second submission card" and add "Video language: …" when it is not the page's; while a video is made or shown, a line under the switches says a change is for the next video, and the progress names the job's own type and language; Step 3 states its side's rule, with `aria-required` on Submission's fields; the ID's length and count come from config — taken gateless as the smallest change meeting the criteria (Nielsen 1 and 6, WCAG 3.3.2), the Chinese and Malay as the agent drafted them.
