@@ -23,6 +23,7 @@ import {
   internalCheckboxState,
   internalDisabledReason,
   onsetDisabledReason,
+  visibleClosingReasons,
 } from './closing-choice'
 
 const every: ClosingControls[] = CLOSING_TYPES.flatMap((type) =>
@@ -177,5 +178,20 @@ describe('the Internal use only box on each side of the switch (VH-131)', () => 
     expect(t().closing.internalForSubmission.toLowerCase()).toContain(
       t().videoKind.options.submission.toLowerCase(),
     )
+  })
+})
+
+
+describe('one visible reason for None (VH-144)', () => {
+  it('shares None across the three locks, on both sides of the switch', () => {
+    for (const kind of ['staff', 'submission'] as const) {
+      const internal = internalCheckboxState(kind, 'none', false)
+      expect(visibleClosingReasons('none', internal.reason)).toEqual({ shared: 'Not used with None.', onset: null, internal: null })
+    }
+  })
+  it('keeps Cut’s onset reason and Submission’s separate internal rule', () => {
+    const internal = internalCheckboxState('submission', 'cut', false)
+    expect(visibleClosingReasons('cut', internal.reason)).toEqual({ shared: null, onset: 'Not used with Cut.', internal: internal.reason })
+    expect(internal.reason).not.toBeNull()
   })
 })

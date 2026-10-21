@@ -17,6 +17,16 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-21 — VH-144 — One None reason and readable trim times
+
+**Decision:** None shares one explanation beneath its three locked closing controls, each linked to it; Cut keeps its onset explanation. The two trim rows wrap their buttons before their time fields fall below the existing 12 rem minimum — the smallest change satisfying the two design findings, taken gateless.
+
+**Rationale:** Existing strings and disable rules remain authoritative; visibleClosingReasons groups only their presentation. The closing result is unchanged. The trim-only class leaves onset’s help row alone and introduces no token. Chrome passed three languages, 1280/375/320/640 px, light/dark/forced colours, both video kinds and enabled/disabled field presentations: no horizontal scroll, fields at least 192 px, field/button targets at least 44 px. Notes record evidence and the limits of emulation. Standards: Carbon helper-text grouping and spacing tokens; Nielsen 4 and 8; WCAG 1.3.1 and 2.5.5; house conventions, category regression tests. Real zoom, assistive technology and Windows themes remain on existing VH-138/VH-148 wish lines; known sample and frozen-canon warnings retain their existing follow-ups.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-21 — PLAN-3 — Phase 3 reconciled and closed
 
 **Decision:** Phase 3 closes with all four planned items shipped: VH-139, VH-140, VH-141 and VH-142. Phase 4 starts with VH-144 because the repeated closing reason and narrow time fields are direct, small user-facing defects; the authorised run continues.
@@ -460,16 +470,6 @@
 **Decision:** the cards' type scale is `src/config/cards.ts`, measured in Chrome by `spike-cards.html`: a floor of 56 px per 1080 lines of the shorter side, Submission's fields run in as list items at 1.25, its running time and card date sharing a line, and typed fields capped in columns — because then every card fits 16:9, 16:10, 4:3 and 9:16 in all three languages at every limit.
 
 **Rationale:** Measured in Chrome on 2026-10-19. Sizes: General's heading Lora Bold 104 to 56 in three lines (five in portrait), its subhead Arial 64 to 56 at 1.5; Submission's heading Lora Bold 80 to 56 in two (four), its fields a run-in label and value at 56, 0.375 em apart; a wide character counts two columns; the closing's words Arial Bold at 100 per 1080 of the asset, which a letterboxed portrait output shows at 56. The first run, fields at WCAG 1.4.8's 1.5 with 0.75 em between them, overflowed 16:9 in Malay and refused every 4:3 case. 1.4.8 binds blocks of text, more than one sentence; a field is not one, so it sets at 1.25 and the gap groups it, while General's subhead, which can be a sentence, keeps 1.5. Sharing the last field saved the row that 16:10 (10 px over) and 4:3 (80 px over) needed. Limits in columns: General 100 and 120, assignment 80, module 60, convenor 40, proposed for VH-127 and VH-128 to adopt; the renderer still refuses at its field what measures too long. Tightest fit: 4:3 Chinese, 1 px to spare with the heading at 60; the most room, 16:9 Chinese, 163. A 4K frame breaks exactly as 1080 does. The closing's words measure 795 px (English), 600 (Chinese) and 1,256 (Malay) of a 1,680 px safe width, their foot at 854 above the 961 line, centred under the settled logo; white and Nottingham Blue 15.41:1 by calculation. The labels are provisional until VH-128 settles their English; Chinese line breaking that keeps punctuation off a line's start is VH-127's renderer's.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-19 — VH-126 — Internal use only: an option in blue or white, its words building in with the logo
-
-**Decision:** Internal use only is offered in blue and white, its words building in with the logo inside the opaque 4 s card, so only the four card files change — because the owner answered on 2026-10-19, and the masters build the logo in the card, not the onset.
-
-**Rationale:** The owner's words, 2026-10-19: asked how it is chosen, "it's options, blue or white"; asked when the words appear, "With the logo build". The question described the words arriving with the 1 s onset, at the cost of eight more transparent files; measuring the masters afterwards showed that description wrong. The onsets carry only the colour field (Fade a uniform alpha ramp, Slide the field moving in); the logo builds in the tail, the crest from 0.25 to 0.75 s and the wordmark wiping in from 1.5 to 3.0 s, settled for the last second, in a box at x 528 to 1404, y 358 to 686 at 1080. The owner's answer is kept, at lower cost: no new alpha decode, and VH-44's premultiplication finding is not engaged. Whether the option is a switch beside Cut, Fade and Slide or a type of its own changes the controls and not the assets, and is asked with the type scale.
 
 **Supersedes:** none
 

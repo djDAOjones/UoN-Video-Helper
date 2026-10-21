@@ -111,3 +111,13 @@ export function internalCheckboxState(
   }
   return { checked: staffChecked, disabled: noClosing !== null, reason: noClosing }
 }
+
+/** Visible reasons: None is shared once; other locks retain their own explanation (VH-144). */
+export function visibleClosingReasons(type: ClosingType, internalReason: string | null): {
+  readonly shared: string | null
+  readonly onset: string | null
+  readonly internal: string | null
+} {
+  const shared = colourDisabledReason(type)
+  return { shared, onset: shared ? null : onsetDisabledReason(type), internal: shared ? null : internalReason }
+}

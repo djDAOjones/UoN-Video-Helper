@@ -91,6 +91,7 @@ import {
   colourDisabledReason,
   internalCheckboxState,
   onsetDisabledReason,
+  visibleClosingReasons,
 } from './ui/closing-choice'
 import {
   readVideoKindPreference,
@@ -332,7 +333,7 @@ const closingType = required<HTMLSelectElement>('#closing-type')
 const closingOnset = required<HTMLSelectElement>('#closing-onset')
 const closingOnsetReason = required<HTMLParagraphElement>('#closing-onset-reason')
 const closingColour = required<HTMLFieldSetElement>('#closing-colour')
-const closingColourReason = required<HTMLParagraphElement>('#closing-colour-reason')
+const closingNoneReason = required<HTMLParagraphElement>('#closing-none-reason')
 const closingInternal = required<HTMLInputElement>('#closing-internal')
 const closingInternalReason = required<HTMLParagraphElement>('#closing-internal-reason')
 const closingResult = required<HTMLParagraphElement>('#closing-result')
@@ -579,20 +580,23 @@ function syncClosingControls(): void {
   const internalBox = internalCheckboxState(chosenVideoKind(), chosenClosing().type, staffInternal)
   closingInternal.checked = internalBox.checked
   closingInternal.disabled = internalBox.disabled
-  closingInternalReason.textContent = internalBox.reason ?? ''
-  closingInternalReason.hidden = internalBox.reason === null
 
   const controls = chosenClosing()
 
   const onsetReason = onsetDisabledReason(controls.type)
   closingOnset.disabled = onsetReason !== null
-  closingOnsetReason.textContent = onsetReason ?? ''
-  closingOnsetReason.hidden = onsetReason === null
 
   const colourReason = colourDisabledReason(controls.type)
   closingColour.disabled = colourReason !== null
-  closingColourReason.textContent = colourReason ?? ''
-  closingColourReason.hidden = colourReason === null
+  const reasons = visibleClosingReasons(controls.type, internalBox.reason)
+  for (const [element, reason] of [
+    [closingNoneReason, reasons.shared],
+    [closingOnsetReason, reasons.onset],
+    [closingInternalReason, reasons.internal],
+  ] as const) {
+    element.textContent = reason ?? ''
+    element.hidden = reason === null
+  }
 
   const wordsLanguage = chosenVideoLanguage()
   paintHelperLines(closingResult, closingResultLines(controls, wordsLanguage), wordsLanguage)

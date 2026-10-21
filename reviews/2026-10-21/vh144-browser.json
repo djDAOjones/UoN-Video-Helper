@@ -1,0 +1,3890 @@
+[
+  {
+    "tag": "en-GB",
+    "width": 1280,
+    "mode": "light",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 276.953125,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 280.828125,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 1280,
+    "mode": "light",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 276.953125,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 280.828125,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 1280,
+    "mode": "light",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 276.953125,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 280.828125,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 1280,
+    "mode": "light",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 276.953125,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 280.828125,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 1280,
+    "mode": "dark",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 276.953125,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 280.828125,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 1280,
+    "mode": "dark",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 276.953125,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 280.828125,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 1280,
+    "mode": "dark",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 276.953125,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 280.828125,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 1280,
+    "mode": "dark",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 276.953125,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 280.828125,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 1280,
+    "mode": "forced",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 276.953125,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 280.828125,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 1280,
+    "mode": "forced",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 276.953125,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 280.828125,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 1280,
+    "mode": "forced",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 276.953125,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 280.828125,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 1280,
+    "mode": "forced",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 276.953125,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 280.828125,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 375,
+    "mode": "light",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 375,
+    "mode": "light",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 375,
+    "mode": "light",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 375,
+    "mode": "light",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 375,
+    "mode": "dark",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 375,
+    "mode": "dark",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 375,
+    "mode": "dark",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 375,
+    "mode": "dark",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 375,
+    "mode": "forced",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 375,
+    "mode": "forced",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 375,
+    "mode": "forced",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 375,
+    "mode": "forced",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 320,
+    "mode": "light",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 320,
+    "mode": "light",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 320,
+    "mode": "light",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 320,
+    "mode": "light",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 320,
+    "mode": "dark",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 320,
+    "mode": "dark",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 320,
+    "mode": "dark",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 320,
+    "mode": "dark",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 320,
+    "mode": "forced",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 320,
+    "mode": "forced",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 320,
+    "mode": "forced",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 320,
+    "mode": "forced",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 640,
+    "mode": "light",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 640,
+    "mode": "light",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 640,
+    "mode": "light",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 640,
+    "mode": "light",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 640,
+    "mode": "dark",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 640,
+    "mode": "dark",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 640,
+    "mode": "dark",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 640,
+    "mode": "dark",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 640,
+    "mode": "forced",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 640,
+    "mode": "forced",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 640,
+    "mode": "forced",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "en-GB",
+    "width": 640,
+    "mode": "forced",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 134.046875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 130.171875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "No University closing graphics will be added."
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 1280,
+    "mode": "light",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 263,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 263,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 1280,
+    "mode": "light",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 263,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 263,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 1280,
+    "mode": "light",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 263,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 263,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 1280,
+    "mode": "light",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 263,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 263,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 1280,
+    "mode": "dark",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 263,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 263,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 1280,
+    "mode": "dark",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 263,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 263,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 1280,
+    "mode": "dark",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 263,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 263,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 1280,
+    "mode": "dark",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 263,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 263,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 1280,
+    "mode": "forced",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 263,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 263,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 1280,
+    "mode": "forced",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 263,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 263,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 1280,
+    "mode": "forced",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 263,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 263,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 1280,
+    "mode": "forced",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 263,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 263,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 375,
+    "mode": "light",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 375,
+    "mode": "light",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 375,
+    "mode": "light",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 375,
+    "mode": "light",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 375,
+    "mode": "dark",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 375,
+    "mode": "dark",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 375,
+    "mode": "dark",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 375,
+    "mode": "dark",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 375,
+    "mode": "forced",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 375,
+    "mode": "forced",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 375,
+    "mode": "forced",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 375,
+    "mode": "forced",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 320,
+    "mode": "light",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 320,
+    "mode": "light",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 320,
+    "mode": "light",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 320,
+    "mode": "light",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 320,
+    "mode": "dark",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 320,
+    "mode": "dark",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 320,
+    "mode": "dark",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 320,
+    "mode": "dark",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 320,
+    "mode": "forced",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 320,
+    "mode": "forced",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 320,
+    "mode": "forced",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 320,
+    "mode": "forced",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 640,
+    "mode": "light",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 640,
+    "mode": "light",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 640,
+    "mode": "light",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 640,
+    "mode": "light",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 640,
+    "mode": "dark",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 640,
+    "mode": "dark",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 640,
+    "mode": "dark",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 640,
+    "mode": "dark",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 640,
+    "mode": "forced",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 640,
+    "mode": "forced",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 640,
+    "mode": "forced",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "zh-Hans",
+    "width": 640,
+    "mode": "forced",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 148,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "不会添加大学结尾图形。"
+  },
+  {
+    "tag": "ms-MY",
+    "width": 1280,
+    "mode": "light",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 194.453125,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 218.5625,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 1280,
+    "mode": "light",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 194.453125,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 218.5625,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 1280,
+    "mode": "light",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 194.453125,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 218.5625,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 1280,
+    "mode": "light",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 194.453125,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 218.5625,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 1280,
+    "mode": "dark",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 194.453125,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 218.5625,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 1280,
+    "mode": "dark",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 194.453125,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 218.5625,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 1280,
+    "mode": "dark",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 194.453125,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 218.5625,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 1280,
+    "mode": "dark",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 194.453125,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 218.5625,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 1280,
+    "mode": "forced",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 194.453125,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 218.5625,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 1280,
+    "mode": "forced",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 194.453125,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 218.5625,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 1280,
+    "mode": "forced",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 194.453125,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 218.5625,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 1280,
+    "mode": "forced",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 194.453125,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      },
+      {
+        "width": 218.5625,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": false,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 375,
+    "mode": "light",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 375,
+    "mode": "light",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 375,
+    "mode": "light",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 375,
+    "mode": "light",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 375,
+    "mode": "dark",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 375,
+    "mode": "dark",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 375,
+    "mode": "dark",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 375,
+    "mode": "dark",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 375,
+    "mode": "forced",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 375,
+    "mode": "forced",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 375,
+    "mode": "forced",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 375,
+    "mode": "forced",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 277,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 320,
+    "mode": "light",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 320,
+    "mode": "light",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 320,
+    "mode": "light",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 320,
+    "mode": "light",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 320,
+    "mode": "dark",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 320,
+    "mode": "dark",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 320,
+    "mode": "dark",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 320,
+    "mode": "dark",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 320,
+    "mode": "forced",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 320,
+    "mode": "forced",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 320,
+    "mode": "forced",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 320,
+    "mode": "forced",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 222,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 640,
+    "mode": "light",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 640,
+    "mode": "light",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 640,
+    "mode": "light",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 640,
+    "mode": "light",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 640,
+    "mode": "dark",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 640,
+    "mode": "dark",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 640,
+    "mode": "dark",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 640,
+    "mode": "dark",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 640,
+    "mode": "forced",
+    "kind": "staff",
+    "locked": false,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 640,
+    "mode": "forced",
+    "kind": "staff",
+    "locked": true,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 640,
+    "mode": "forced",
+    "kind": "submission",
+    "locked": false,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  },
+  {
+    "tag": "ms-MY",
+    "width": 640,
+    "mode": "forced",
+    "kind": "submission",
+    "locked": true,
+    "rows": [
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 216.546875,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      },
+      {
+        "width": 259,
+        "height": 44,
+        "buttonWidth": 192.4375,
+        "buttonHeight": 44,
+        "wrapped": true,
+        "min": 192
+      }
+    ],
+    "noneReasonOnce": true,
+    "noneResult": "Tiada grafik penutup Universiti akan ditambah."
+  }
+]

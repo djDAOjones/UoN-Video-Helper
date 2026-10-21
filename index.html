@@ -177,7 +177,7 @@
         <div class="control-grid">
           <div class="field">
             <label class="label" for="trim-start" data-i18n="trim.startTime">Start time</label>
-            <div class="control-with-help">
+            <div class="control-with-help trim-time-row">
               <input
                 class="text-input"
                 type="text"
@@ -199,7 +199,7 @@
           </div>
           <div class="field">
             <label class="label" for="trim-end" data-i18n="trim.endTime">End time</label>
-            <div class="control-with-help">
+            <div class="control-with-help trim-time-row">
               <input
                 class="text-input"
                 type="text"
@@ -423,7 +423,7 @@
                 <span class="select-wrap"><select
                   class="select"
                   id="closing-onset"
-                  aria-describedby="closing-onset-reason closing-result"
+                  aria-describedby="closing-none-reason closing-onset-reason closing-result"
                   disabled
                 >
                   <option value="existing" data-i18n="closing.onsets.existing" selected>Over existing</option>
@@ -461,7 +461,7 @@
                 </div>
               </div>
             </div>
-            <fieldset class="field segmented" id="closing-colour" aria-describedby="closing-colour-reason closing-result">
+            <fieldset class="field segmented" id="closing-colour" aria-describedby="closing-none-reason closing-result">
               <legend class="label" data-i18n="closing.colourLabel">Colour</legend>
               <!-- Native radios under a segmented skin: the arrow keys and
                    the checked state come with them. Carbon's content switcher
@@ -480,7 +480,6 @@
                   </span>
                 </label>
               </div>
-              <p class="helper" id="closing-colour-reason" hidden></p>
             </fieldset>
           </div>
           <!-- VH-126, 2026-10-19. The official closing with "Internal use
@@ -493,7 +492,7 @@
               <input
                 type="checkbox"
                 id="closing-internal"
-                aria-describedby="closing-internal-reason closing-result"
+                aria-describedby="closing-none-reason closing-internal-reason closing-result"
               />
               <span data-i18n="closing.internalLabel">Internal use only</span>
             </label>
@@ -501,6 +500,7 @@
           </div>
           <!-- Likewise read on demand from the three controls, not announced on
                every arrow through a select (A-06). -->
+          <p class="helper" id="closing-none-reason" hidden></p>
           <p class="closing-result" id="closing-result"></p>
         </fieldset>
       </section>

@@ -1429,8 +1429,14 @@ details[open] > .disclosure-summary::before {
   max-width: var(--measure);
 }
 
-.control-with-help .text-input {
-  flex: 1;
+/* Time fields keep their reading width; their Set here buttons wrap below. */
+.trim-time-row {
+  flex-wrap: wrap;
+}
+
+.trim-time-row .text-input {
+  flex: 1 0 var(--field-min-width);
+  min-width: var(--field-min-width);
 }
 
 .control-with-help .button {

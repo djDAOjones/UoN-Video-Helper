@@ -160,3 +160,13 @@
 **Supersedes:** 2026-10-18 — PLAN-1 — Band 8: a title card and an Internal only closing, in one app for staff and students
 
 **Deferred:** none
+
+## 2026-10-19 — VH-126 — Internal use only: an option in blue or white, its words building in with the logo
+
+**Decision:** Internal use only is offered in blue and white, its words building in with the logo inside the opaque 4 s card, so only the four card files change — because the owner answered on 2026-10-19, and the masters build the logo in the card, not the onset.
+
+**Rationale:** The owner's words, 2026-10-19: asked how it is chosen, "it's options, blue or white"; asked when the words appear, "With the logo build". The question described the words arriving with the 1 s onset, at the cost of eight more transparent files; measuring the masters afterwards showed that description wrong. The onsets carry only the colour field (Fade a uniform alpha ramp, Slide the field moving in); the logo builds in the tail, the crest from 0.25 to 0.75 s and the wordmark wiping in from 1.5 to 3.0 s, settled for the last second, in a box at x 528 to 1404, y 358 to 686 at 1080. The owner's answer is kept, at lower cost: no new alpha decode, and VH-44's premultiplication finding is not engaged. Whether the option is a switch beside Cut, Fade and Slide or a type of its own changes the controls and not the assets, and is asked with the type scale.
+
+**Supersedes:** none
+
+**Deferred:** none

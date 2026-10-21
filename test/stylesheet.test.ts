@@ -141,3 +141,12 @@ describe('the content-sized switchers (VH-135)', () => {
     expect(face).toMatch(/gap:\s*0;/)
   })
 })
+
+
+describe('trim time rows (VH-144)', () => {
+  it('wraps only those rows and keeps the field’s minimum reading width', () => {
+    expect(rules).toMatch(/\.trim-time-row\s*\{[^}]*flex-wrap:\s*wrap/)
+    expect(rules).toMatch(/\.trim-time-row \.text-input\s*\{[^}]*flex:\s*1 0 var\(--field-min-width\);[^}]*min-width:\s*var\(--field-min-width\)/)
+    expect(rules).not.toMatch(/\.control-with-help\s*\{[^}]*flex-wrap/)
+  })
+})

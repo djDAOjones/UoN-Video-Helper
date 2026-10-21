@@ -7,6 +7,10 @@
      items the canon record shipped before the migration, in v3's form;
      their why is in the frozen canon decision log (history.md). -->
 
+## Phase 4 — what the design pass found
+
+- VH-144 — None explains its three locked controls once, and trim-time fields keep their 12 rem reading width as their buttons wrap below; checked in all three languages, both video kinds and three colour modes down to 320 px (2026-10-21) — see decisions
+
 ## Owner’s sign-off
 
 - VH-148 — the owner’s words, switch headings, helpers, read outcome, hatched cut regions, select arrows and footer help ship in all three languages; Chrome checked at two widths in light, dark and forced colours (2026-10-21) — see decisions
