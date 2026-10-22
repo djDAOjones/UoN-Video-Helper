@@ -18,6 +18,28 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-22 — PLAN-6 — The design pass's fixes: five Phase 6 items ahead of the cut, each waiting on the owner's approval
+
+**Decision:** VH-163's rank 2 findings become five Phase 6 items after VH-163 and before VH-162, in this order: VH-165 (long words wrap; the thumbs' forced-colour ring), VH-166 (one type set), VH-167 (one reading measure), VH-169 (a pressed state), VH-168 (the file chooser, on the owner's ruling); none is built until the owner approves, because PLAN-6 of this date asked for the plan first.
+
+**Rationale:** VH-165 first: a measured 1.4.10 failure and a dropped forced-colours rule, two small CSS repairs. VH-166 before VH-167: the measure is counted on the type roles it will carry. VH-169 after them, as it may add a colour role. VH-168 last: under the no-new-element rule the pass recommends the native chooser with the limitation recorded; a label is the owner's exception to make. The rank 3 findings are proposals inside VH-166: V-36's phone inset and V-37's footer gap, each a wish line if not taken. Questions in the owner's ask: the plan, the footer's two headings, the measure's value (28rem proposed), the file chooser, and V-36 and V-37.
+
+**Supersedes:** none
+
+**Items:** VH-165, VH-166, VH-167, VH-169, VH-168
+
+**Deferred:** none
+
+## 2026-10-22 — VH-163 — The design pass: 9 findings, V-31 shipped, six at rank 2 planned, two rank 3 proposals to the owner
+
+**Decision:** the design pass stands as `reviews/2026-10-22/design-pass/design-pass-2026-10-22.md`, V-31 to V-39, with Codex astra's blind review and critique kept as written: V-31 shipped as VH-164; V-32 to V-35, V-38 and V-39 at rank 2 become PLAN-6's five design-fix items; V-36 and V-37 at rank 3 go to the owner; VH-163 stays open until the owner approves the plan, because the item requires that approval before any fix is built.
+
+**Rationale:** The walker measured 33 captures in three languages at 1280 and 375 px, light, dark and forced colours: nine text tuples and seven Chinese twins, prose at 489 px beside helpers at 428 (640 and 560 in Chinese), every gap on the scale. Live checks confirmed V-34 (a long file name scrolls the page sideways at 320 px), V-35 (the chooser's English words in a Chinese or Malay page) and V-39 (pressed looks hovered). Codex's critique was applied but for raising V-37's footer gap to rank 2: a gap in a band of its own misleads no one. It corrected the pass's scope claims, its Carbon references (two are expressive), the panel heading to 20/28, 28rem to a candidate, V-34's cause (no long-name fixture), and V-35's recommendation to the native chooser under the owner's rule. Standards: Nielsen 1, 2, 4 and 9; WCAG 1.4.8, 1.4.10, 1.4.12, 2.4.13; Carbon productive type and button states.
+
+**Supersedes:** none
+
+**Deferred:** VH-165, VH-166, VH-167, VH-168, VH-169
+
 ## 2026-10-22 — VH-164 — The feedback form link takes its own ID, so Open email app opens the email again
 
 **Decision:** VH-160's footer link becomes `#feedback-form-link`, leaving `#feedback-form` to the dialog's form, and a test holds every ID in the page to one use, because with two `#feedback-form`s the form's lookup found the link, Open email app submitted the form natively and the page reloaded, losing the draft, a chosen video and every choice; the owner chose to fix it at once, ahead of VH-163's plan.
@@ -550,26 +572,6 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Decision:** Phase 2 closed on 2026-10-20 with every PLAN-2 item shipped, its backlog heading now "Phase 2 — … — CLOSED 2026-10-20"; no open, unblocked line remains in Current or Next, so the owner names the next item, and PLAN-2's standing word, given for this phase only, ends with it — because VH-17, VH-124, VH-113 and every Standing line wait on the owner, and Next's VH-13 waits on VH-M2.
 
 **Rationale:** Reconciled against PLAN-2's Items (VH-133, VH-134, VH-135, VH-136): each has its line under Phase 2 in project/trajectory.md, and none is open in project/backlog.md; PLAN-2's deferral, VH-137, sits under Standing, due 2026-11-18. Recall, local (this session, from the record alone, not a fresh session): 1, project/trajectory.md under Phase 2, newest first: VH-136, VH-135, VH-134, VH-133 — 2; 2, "2026-10-20 — VH-133 — The returned workbook's changes are Google's re-run, not corrections; nothing is merged", because every changed cell is still an unedited GOOGLETRANSLATE formula on unchanged English — 2; 3, deferred: VH-137 under Standing in project/backlog.md, project/wish-list.md's open lines, this phase's among them (VH-135's and VH-136's person checks), and the backlog's Icebox — 2; 4, no next open item: Current and Next hold only lines blocked on the owner, as this entry records — 2.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-20 — VH-136 — The time left: a line of its own under the stage after 10 s of encoding, from the job's own rate, heard only at the milestones
-
-**Decision:** ten seconds into the encode (`TIME_LEFT_AFTER_ENCODING_SECONDS`), a line under the stage line shows the time left from the encode's own rate, rounded as pre-flight's estimate is ("About 2 minutes left", "A few seconds left"); it counts the encode, the closing included, not the seconds of finishing and checking; a screen reader hears it only with the three milestones, as a second sentence; it stays out of the tab title; the Chinese and Malay and the §9.2 sentence stand as the agent drafted them — because PLAN-2's standing word makes the agent's answers the owner's, shown at this close for reversal.
-
-**Rationale:** The rate is VH-116's arithmetic, clocked from the encode's first report: the seconds since, over the share of frames encoded since, times the share to go. Over three samples in Chrome (Claude's in-app browser, page visible), real over predicted was 0.91–1.04 at 10 s and 0.91–1.08 until the last five seconds; finishing and checking took 1.1–1.3 s, so the stage line names them rather than the figure carrying pre-flight's error. Its own line, because on the stage line Chrome wrapped the Malay at 375 px and the English at an hour, and the notice and checkbox below jumped; `.progress-time-left` holds one line from the first report, and nothing moved at 320, 375 or 1280 px in any language. Not the tab title: the job notice asks for this tab to stay visible, and the title would change on every report. Rounded as pre-flight's, so "about" means one thing on the page. Heard at the milestones only, behind the 2.2.4 checkbox, at most three times an encode. VH-136's notes hold the runs; the spec is 7,757 of 7,800 words. Applied: WCAG 2.2.4 and 4.1.3, Nielsen 1, 4 and 8, Carbon helper text, UI-STANDARDS.md's layout stability, numbers in `src/config/`, tests by category.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-20 — VH-135 — The save says itself on a line of its own; the switchers reserve their bold width; the advice link opens a new tab
-
-**Decision:** a save writes only to its own line under the result, with Stop saving beneath it, and the line goes with the result; the discard question's spoken words leave the status line when the question goes; the three content-sized switchers reserve each face's bold width; the advice service's link opens in a new tab and says so in all three languages, the Chinese and Malay as the agent drafted them — because these meet the item's criteria, and PLAN-2's standing word makes the agent's choices the owner's, shown at this close for reversal.
-
-**Rationale:** The save line is `#save-status`, a live region never `hidden`, collapsed while empty so a page with no result gains no blank line; it arrives with Stop saving, which moved from the check's row so each status sits over its own stop. `clearResult()` empties it with the result: a new job, or a new file when nothing is unsaved. The discard words are cleared only while the line still holds them (`statusAsksDiscard`), so a title-card refusal written while the question stood survives a withdrawal. The reserve is a `::after` of the face's own `data-text`, bold, no height, hidden, with `content: … / ''` so it is never read; the video type's `data-text` is bound by `data-i18n-attr`, so it follows a language change. The link takes `target="_blank"` and `rel="noopener noreferrer"`; its words add "(new tab)" in English, because "(opens in a new tab)" graded 10.7 against the readability gate's 10, and Chrome's own phrases "在新标签页中打开" and "tab baharu", through the filled sheet and `scripts/strings-table.mjs`. No spec section governs these details, so the spec is unchanged. Checked in Chrome (Claude's in-app browser) at 1280 and 375 px: no segment's left edge or width moved on any choice in any page language, against 5.67 px with the reserve switched off, and the face's accessible text is its words once; the switch and Keep it each left `#status` empty after the question; with AMCS3059's unsaved result, MLAC 3139 chosen and Save pressed during its check, the verdict landed on `#status` and "Saving…" then "Saved." on `#save-status`, neither overwritten, 7,222,021 bytes written through a slowed stand-in picker, since removed; the link's words in each language, the only link with a target. Applied: WCAG technique G201 and 4.1.3, Nielsen 1 and 4, Carbon's segmented skin kept, the house rule of a regression test per fixed bug — each mutation of a fix fails its test.
 
 **Supersedes:** none
 

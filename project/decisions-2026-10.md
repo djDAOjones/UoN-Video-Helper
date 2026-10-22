@@ -424,3 +424,23 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-20 — VH-136 — The time left: a line of its own under the stage after 10 s of encoding, from the job's own rate, heard only at the milestones
+
+**Decision:** ten seconds into the encode (`TIME_LEFT_AFTER_ENCODING_SECONDS`), a line under the stage line shows the time left from the encode's own rate, rounded as pre-flight's estimate is ("About 2 minutes left", "A few seconds left"); it counts the encode, the closing included, not the seconds of finishing and checking; a screen reader hears it only with the three milestones, as a second sentence; it stays out of the tab title; the Chinese and Malay and the §9.2 sentence stand as the agent drafted them — because PLAN-2's standing word makes the agent's answers the owner's, shown at this close for reversal.
+
+**Rationale:** The rate is VH-116's arithmetic, clocked from the encode's first report: the seconds since, over the share of frames encoded since, times the share to go. Over three samples in Chrome (Claude's in-app browser, page visible), real over predicted was 0.91–1.04 at 10 s and 0.91–1.08 until the last five seconds; finishing and checking took 1.1–1.3 s, so the stage line names them rather than the figure carrying pre-flight's error. Its own line, because on the stage line Chrome wrapped the Malay at 375 px and the English at an hour, and the notice and checkbox below jumped; `.progress-time-left` holds one line from the first report, and nothing moved at 320, 375 or 1280 px in any language. Not the tab title: the job notice asks for this tab to stay visible, and the title would change on every report. Rounded as pre-flight's, so "about" means one thing on the page. Heard at the milestones only, behind the 2.2.4 checkbox, at most three times an encode. VH-136's notes hold the runs; the spec is 7,757 of 7,800 words. Applied: WCAG 2.2.4 and 4.1.3, Nielsen 1, 4 and 8, Carbon helper text, UI-STANDARDS.md's layout stability, numbers in `src/config/`, tests by category.
+
+**Supersedes:** none
+
+**Deferred:** none
+
+## 2026-10-20 — VH-135 — The save says itself on a line of its own; the switchers reserve their bold width; the advice link opens a new tab
+
+**Decision:** a save writes only to its own line under the result, with Stop saving beneath it, and the line goes with the result; the discard question's spoken words leave the status line when the question goes; the three content-sized switchers reserve each face's bold width; the advice service's link opens in a new tab and says so in all three languages, the Chinese and Malay as the agent drafted them — because these meet the item's criteria, and PLAN-2's standing word makes the agent's choices the owner's, shown at this close for reversal.
+
+**Rationale:** The save line is `#save-status`, a live region never `hidden`, collapsed while empty so a page with no result gains no blank line; it arrives with Stop saving, which moved from the check's row so each status sits over its own stop. `clearResult()` empties it with the result: a new job, or a new file when nothing is unsaved. The discard words are cleared only while the line still holds them (`statusAsksDiscard`), so a title-card refusal written while the question stood survives a withdrawal. The reserve is a `::after` of the face's own `data-text`, bold, no height, hidden, with `content: … / ''` so it is never read; the video type's `data-text` is bound by `data-i18n-attr`, so it follows a language change. The link takes `target="_blank"` and `rel="noopener noreferrer"`; its words add "(new tab)" in English, because "(opens in a new tab)" graded 10.7 against the readability gate's 10, and Chrome's own phrases "在新标签页中打开" and "tab baharu", through the filled sheet and `scripts/strings-table.mjs`. No spec section governs these details, so the spec is unchanged. Checked in Chrome (Claude's in-app browser) at 1280 and 375 px: no segment's left edge or width moved on any choice in any page language, against 5.67 px with the reserve switched off, and the face's accessible text is its words once; the switch and Keep it each left `#status` empty after the question; with AMCS3059's unsaved result, MLAC 3139 chosen and Save pressed during its check, the verdict landed on `#status` and "Saving…" then "Saved." on `#save-status`, neither overwritten, 7,222,021 bytes written through a slowed stand-in picker, since removed; the link's words in each language, the only link with a target. Applied: WCAG technique G201 and 4.1.3, Nielsen 1 and 4, Carbon's segmented skin kept, the house rule of a regression test per fixed bug — each mutation of a fix fails its test.
+
+**Supersedes:** none
+
+**Deferred:** none
