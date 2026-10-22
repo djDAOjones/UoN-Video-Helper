@@ -272,3 +272,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-19 — VH-128 — Submission: one box of 8-digit ID numbers, one module field, the measured labels, five seconds
+
+**Decision:** student ID numbers are typed in one box, separated by spaces, commas or new lines, each exactly 8 digits, one to eight of them; the module's code and title are one field; the card's English is VH-126's measured wording, the assignment as the unlabelled heading, then "Module", "Convenor or tutor", "Student ID numbers", and "Running time" with a clock time beside "Card made" with the date and "— not the submission date"; the card holds 5 s, as the staff card does — because the owner chose the recommended options in chat on 2026-10-19.
+
+**Rationale:** The University's student numbers are 8 digits; one box takes a pasted list and names a wrong number by itself. One module field is the layout `spike-cards.html` measured at 60 columns, so nothing is re-measured. The labels are the ones the measured fit used, so the worst case is already proved to fit 16:9, 16:10, 4:3 and 9:16 in all three languages. Five seconds keeps the pre-flight allowance and the pipeline's one card span; a marker pauses the card to read it, which is why the safe area's foot is deep.
+
+**Supersedes:** none
+
+**Deferred:** none

@@ -146,7 +146,8 @@ describe('the content-sized switchers (VH-135)', () => {
 describe('trim time rows (VH-144)', () => {
   it('wraps only those rows and keeps the field’s minimum reading width', () => {
     expect(rules).toMatch(/\.trim-time-row\s*\{[^}]*flex-wrap:\s*wrap/)
-    expect(rules).toMatch(/\.trim-time-row \.text-input\s*\{[^}]*flex:\s*1 0 var\(--field-min-width\);[^}]*min-width:\s*var\(--field-min-width\)/)
+    // The floor gives way to a row narrower than itself (VH-151, R2-11).
+    expect(rules).toMatch(/\.trim-time-row \.text-input\s*\{[^}]*flex:\s*1 0 min\(var\(--field-min-width\), 100%\);[^}]*min-width:\s*min\(var\(--field-min-width\), 100%\)/)
     expect(rules).not.toMatch(/\.control-with-help\s*\{[^}]*flex-wrap/)
   })
 })
@@ -184,5 +185,59 @@ describe('disabled fields (VH-141, pinned by VH-150)', () => {
     const group = /\.select:disabled,\s*\.text-input:disabled,\s*\.textarea:disabled\s*\{([^}]*)\}/.exec(rules)?.[1] ?? ''
     expect(group).toContain('background: transparent')
     expect(group).toMatch(/border:\s*var\(--border-width\) dashed var\(--border-subtle\)/)
+  })
+})
+
+describe('disabled controls look disabled (VH-151)', () => {
+  /** A rule's declarations, by its exact selector, wherever it sits. */
+  const block = (source: string, selector: string): string =>
+    new RegExp(`(?:^|[}\\s])${selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\{([^}]*)\\}`).exec(source)?.[1] ?? ''
+  const forced = /@media \(forced-colors: active\)\s*\{([\s\S]*?)\n\}/.exec(rules)?.[1] ?? ''
+
+  it('draw a locked select\u2019s arrow in the disabled text colour, and GrayText in forced colours', () => {
+    // The arrow took the wrapper's colour and stayed live beside a dashed,
+    // secondary-text select (R2-6).
+    expect(block(rules, '.select-wrap:has(.select:disabled)::after')).toContain('color: var(--text-secondary)')
+    expect(block(forced, '.select-wrap:has(.select:disabled)::after')).toContain('border-color: GrayText')
+  })
+
+  it('give the browser-drawn Choose file button the dashed edge every disabled button has', () => {
+    const button = block(rules, '.file-input:disabled::file-selector-button,\n.file-input:disabled:hover::file-selector-button')
+    expect(button).toContain('border-style: dashed')
+    expect(block(rules, '.button:disabled,\n.button--secondary:disabled')).toContain('border-style: dashed')
+  })
+
+  it('keep a locked field\u2019s dashed edge when it is also marked invalid', () => {
+    // The invalid rule came later at equal specificity and drew a solid edge.
+    expect(rules).not.toMatch(/\.(?:text-input|textarea)\[aria-invalid='true'\]\s*\{/)
+    expect(rules).toContain(".text-input[aria-invalid='true']:not(:disabled) {")
+    expect(rules).toContain(".textarea[aria-invalid='true']:not(:disabled) {")
+  })
+})
+
+describe('type weights (VH-145, pinned by VH-151)', () => {
+  const tokens = readFileSync(new URL('../src/styles/tokens.carbon.css', import.meta.url), 'utf8')
+
+  it('hold the three weights and the status mark\u2019s own role', () => {
+    expect(tokens).toMatch(/--type-weight-body:\s*400;/)
+    expect(tokens).toMatch(/--type-weight-emphasis:\s*600;/)
+    expect(tokens).toMatch(/--type-weight-heading:\s*700;/)
+    expect(tokens).toMatch(/--type-weight-mark:\s*700;/)
+    // A status glyph is not a heading (VH-151).
+    expect(rules).toMatch(/\.check \.mark\s*\{[^}]*font-weight:\s*var\(--type-weight-mark\)/)
+  })
+
+  it('set the body\u2019s weight from the body role', () => {
+    expect(rules).toMatch(/(?:^|\})\s*body\s*\{[^}]*font-weight:\s*var\(--type-weight-body\)/)
+  })
+
+  it('refuse a literal weight inside a font shorthand', () => {
+    const shorthands = [...rules.matchAll(/(?:^|[;{\s])font:\s*([^;]+);/g)].map((match) => match[1]!.trim())
+    expect(shorthands.length).toBeGreaterThan(0)
+    for (const value of shorthands) expect(value, `font: ${value}`).not.toMatch(/\b(?:[1-9]00|normal|bold|bolder|lighter)\b/)
+  })
+
+  it('keep the reason a link on its own line is a 44 px target', () => {
+    expect(css).toMatch(/44 px target like any control \(WCAG 2\.5\.5\)\. \*\/\s*\.footer-contact-link,\s*\.notification-link \{/)
   })
 })

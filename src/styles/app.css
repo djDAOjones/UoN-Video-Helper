@@ -196,6 +196,8 @@ a {
   list-style: none;
 }
 
+/* A link on a line of its own has no sentence round it to take the inline
+   exception, so it is a 44 px target like any control (WCAG 2.5.5). */
 .footer-contact-link,
 .notification-link {
   display: inline-flex;
@@ -304,7 +306,7 @@ a {
 }
 
 .check .mark {
-  font-weight: var(--type-weight-heading);
+  font-weight: var(--type-weight-mark);
   font-size: var(--type-body-compact);
 }
 
@@ -575,6 +577,7 @@ a {
 .file-input:disabled::file-selector-button,
 .file-input:disabled:hover::file-selector-button {
   border-color: var(--border-subtle);
+  border-style: dashed;
   background: var(--layer-02);
   color: var(--text-secondary);
   cursor: not-allowed;
@@ -986,6 +989,12 @@ details[open] > .disclosure-summary::before {
   border-bottom: var(--border-width-emphasis) solid currentColor;
   transform: translateY(-75%) rotate(45deg);
   pointer-events: none;
+}
+
+/* The arrow is drawn here, not by the browser, so it follows the select's
+   disabled text itself: a locked select's arrow looked live (VH-151). */
+.select-wrap:has(.select:disabled)::after {
+  color: var(--text-secondary);
 }
 
 .select {
@@ -1410,7 +1419,7 @@ details[open] > .disclosure-summary::before {
   font-variant-numeric: tabular-nums;
 }
 
-.text-input[aria-invalid='true'] {
+.text-input[aria-invalid='true']:not(:disabled) {
   border: var(--border-width-emphasis) solid var(--support-error);
 }
 
@@ -1423,14 +1432,16 @@ details[open] > .disclosure-summary::before {
   max-width: var(--measure);
 }
 
-/* Time fields keep their reading width; their Set here buttons wrap below. */
+/* Time fields keep their reading width; their Set here buttons wrap below.
+   The width gives way only to a row narrower than itself, so a narrow frame
+   or a large default font never scrolls sideways (WCAG 1.4.10, VH-151). */
 .trim-time-row {
   flex-wrap: wrap;
 }
 
 .trim-time-row .text-input {
-  flex: 1 0 var(--field-min-width);
-  min-width: var(--field-min-width);
+  flex: 1 0 min(var(--field-min-width), 100%);
+  min-width: min(var(--field-min-width), 100%);
 }
 
 .control-with-help .button {
@@ -1493,8 +1504,8 @@ details[open] > .disclosure-summary::before {
 }
 
 /* The error is said in words beside the field, with the border as a second
-   signal, never the only one. */
-.textarea[aria-invalid='true'] {
+   signal, never the only one. A locked field keeps its dashed edge (VH-151). */
+.textarea[aria-invalid='true']:not(:disabled) {
   border: var(--border-width-emphasis) solid var(--support-error);
 }
 
@@ -1628,6 +1639,10 @@ details[open] > .disclosure-summary::before {
     border-color: Highlight;
     background: Highlight;
     color: HighlightText;
+  }
+
+  .select-wrap:has(.select:disabled)::after {
+    border-color: GrayText;
   }
 
   .segmented:disabled .segment-face,

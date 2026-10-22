@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-22 — VH-151 — Disabled controls look disabled; the status mark gets its own weight role
+
+**Decision:** a system check's pass or fail mark takes `--type-weight-mark` (700), a role of its own, because it is a status glyph, not a heading. The fix that keeps a locked, invalid textarea's dashed edge, `:not(:disabled)` on the invalid rule, also applies to the text field, which had the same defect.
+
+**Rationale:** R2-6, R2-11 and the rank-3 page and VH-145 findings of `reviews/2026-10-22/claude-review-of-codex-run.md`, as VH-151's criteria name them. `:not(:disabled)` on the invalid rule was chosen over another selector in the disabled group, which kept that group and its VH-150 pin unchanged. Before the fix, the old trim rule held the field at 192 px in a 182 px row at 280 px. It overflowed its row but stayed short of the page edge, so a narrower frame would have scrolled, as the review's arithmetic said. Headless Chrome was driven over CDP, with forced colours emulated, an 18 px default font set and the sample `AMCS3059` read; the measurements are in `reviews/2026-10-22/vh151-browser.json`. VH-150.3's states needed a finished or failed job, and this walk reached none of them, so that line stands. Standards: UI-STANDARDS, disabled reads as disabled and forced colours; WCAG 1.4.10 and 2.5.5; Carbon, tokens, not literals; house conventions, regression tests by category and minimal change. No colour changes except the arrow's, no string and no dependency changed. Not checked by a second model.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-22 — VH-150 — The job's state: Show progress withdrawn, a fresh bar, the stop withdrawn, one primary, and pins
 
 **Decision:** Show progress leaves the page on the owner's word, so the moving progress relies on spec §9.3's reading of WCAG 2.2.2 that it is essential (VH-150.1, for the owner); once the worker settles after a watchdog failure, the job's line says the failure alone, heard once more, which tells a screen-reader user the stop is over; step 1's line stays empty while a withdrawn block is re-checked and gets "Video read." back once, from whatever settles next.
@@ -545,15 +555,5 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Rationale:** VH-127 locked the box off under a submission only until this item built its card. Ticked and locked says the card is coming and why, as the closing's Internal use only box does; a separate control for an always-on card would be a control with nothing to choose. The staff card's tick and fields are kept, as before.
 
 **Supersedes:** 2026-10-19 — VH-127 — Under Student submission, the staff card's box is locked off and its fields kept
-
-**Deferred:** none
-
-## 2026-10-19 — VH-128 — Submission: one box of 8-digit ID numbers, one module field, the measured labels, five seconds
-
-**Decision:** student ID numbers are typed in one box, separated by spaces, commas or new lines, each exactly 8 digits, one to eight of them; the module's code and title are one field; the card's English is VH-126's measured wording, the assignment as the unlabelled heading, then "Module", "Convenor or tutor", "Student ID numbers", and "Running time" with a clock time beside "Card made" with the date and "— not the submission date"; the card holds 5 s, as the staff card does — because the owner chose the recommended options in chat on 2026-10-19.
-
-**Rationale:** The University's student numbers are 8 digits; one box takes a pasted list and names a wrong number by itself. One module field is the layout `spike-cards.html` measured at 60 columns, so nothing is re-measured. The labels are the ones the measured fit used, so the worst case is already proved to fit 16:9, 16:10, 4:3 and 9:16 in all three languages. Five seconds keeps the pre-flight allowance and the pipeline's one card span; a marker pauses the card to read it, which is why the safe area's foot is deep.
-
-**Supersedes:** none
 
 **Deferred:** none

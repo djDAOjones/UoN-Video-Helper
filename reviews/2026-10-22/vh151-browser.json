@@ -1,0 +1,415 @@
+{
+ "arrow": [
+  {
+   "mode": "light",
+   "disabled": true,
+   "arrow": "rgb(64, 81, 98)",
+   "selectText": "rgb(64, 81, 98)",
+   "selectBorder": "dashed rgb(112, 125, 137)",
+   "rect": {
+    "x": 0,
+    "y": 0,
+    "width": 0,
+    "height": 0
+   },
+   "shot": "vh151-arrow-375-light.png"
+  },
+  {
+   "mode": "dark",
+   "disabled": true,
+   "arrow": "rgb(207, 212, 216)",
+   "selectText": "rgb(207, 212, 216)",
+   "selectBorder": "dashed rgb(159, 168, 177)",
+   "rect": {
+    "x": 0,
+    "y": 0,
+    "width": 0,
+    "height": 0
+   },
+   "shot": "vh151-arrow-375-dark.png"
+  },
+  {
+   "mode": "forced",
+   "disabled": true,
+   "arrow": "rgb(96, 0, 0)",
+   "selectText": "rgb(96, 0, 0)",
+   "selectBorder": "dashed rgb(96, 0, 0)",
+   "rect": {
+    "x": 0,
+    "y": 0,
+    "width": 0,
+    "height": 0
+   },
+   "shot": "vh151-arrow-375-forced.png"
+  }
+ ],
+ "fileButton": [
+  {
+   "mode": "light",
+   "live": {
+    "style": "solid",
+    "color": "rgba(0, 0, 0, 0)",
+    "bg": "rgb(16, 38, 59)"
+   },
+   "disabled": {
+    "style": "dashed",
+    "color": "rgb(112, 125, 137)",
+    "bg": "rgb(253, 251, 249)",
+    "text": "rgb(64, 81, 98)",
+    "height": null
+   }
+  },
+  {
+   "mode": "dark",
+   "live": {
+    "style": "solid",
+    "color": "rgba(0, 0, 0, 0)",
+    "bg": "rgb(250, 246, 239)"
+   },
+   "disabled": {
+    "style": "dashed",
+    "color": "rgb(159, 168, 177)",
+    "bg": "rgb(40, 60, 79)",
+    "text": "rgb(207, 212, 216)",
+    "height": null
+   }
+  },
+  {
+   "mode": "forced",
+   "live": {
+    "style": "solid",
+    "color": "rgba(5, 0, 73, 0.8)",
+    "bg": "rgba(5, 0, 73, 0.8)"
+   },
+   "disabled": {
+    "style": "dashed",
+    "color": "rgb(96, 0, 0)",
+    "bg": "rgb(255, 255, 255)",
+    "text": "rgb(96, 0, 0)",
+    "height": null
+   }
+  }
+ ],
+ "invalid": [
+  {
+   "mode": "light",
+   "invalid": {
+    "style": "solid",
+    "width": "2px"
+   },
+   "invalidAndDisabled": {
+    "style": "dashed",
+    "width": "1px",
+    "bg": "rgba(0, 0, 0, 0)"
+   }
+  },
+  {
+   "mode": "dark",
+   "invalid": {
+    "style": "solid",
+    "width": "2px"
+   },
+   "invalidAndDisabled": {
+    "style": "dashed",
+    "width": "1px",
+    "bg": "rgba(0, 0, 0, 0)"
+   }
+  },
+  {
+   "mode": "forced",
+   "invalid": {
+    "style": "solid",
+    "width": "2px"
+   },
+   "invalidAndDisabled": {
+    "style": "dashed",
+    "width": "1px",
+    "bg": "rgba(255, 255, 255, 0)"
+   }
+  }
+ ],
+ "reflow": [
+  {
+   "width": 280,
+   "font": 16,
+   "lang": "en-GB",
+   "kind": "staff",
+   "scrollWidth": 280,
+   "clientWidth": 280,
+   "trimFieldWidths": [
+    182,
+    182
+   ],
+   "overflow": []
+  },
+  {
+   "width": 280,
+   "font": 16,
+   "lang": "en-GB",
+   "kind": "submission",
+   "scrollWidth": 280,
+   "clientWidth": 280,
+   "trimFieldWidths": [
+    182,
+    182
+   ],
+   "overflow": []
+  },
+  {
+   "width": 280,
+   "font": 16,
+   "lang": "zh-Hans",
+   "kind": "staff",
+   "scrollWidth": 280,
+   "clientWidth": 280,
+   "trimFieldWidths": [
+    182,
+    182
+   ],
+   "overflow": []
+  },
+  {
+   "width": 280,
+   "font": 16,
+   "lang": "zh-Hans",
+   "kind": "submission",
+   "scrollWidth": 280,
+   "clientWidth": 280,
+   "trimFieldWidths": [
+    182,
+    182
+   ],
+   "overflow": []
+  },
+  {
+   "width": 280,
+   "font": 16,
+   "lang": "ms-MY",
+   "kind": "staff",
+   "scrollWidth": 280,
+   "clientWidth": 280,
+   "trimFieldWidths": [
+    182,
+    182
+   ],
+   "overflow": []
+  },
+  {
+   "width": 280,
+   "font": 16,
+   "lang": "ms-MY",
+   "kind": "submission",
+   "scrollWidth": 280,
+   "clientWidth": 280,
+   "trimFieldWidths": [
+    182,
+    182
+   ],
+   "overflow": []
+  },
+  {
+   "width": 320,
+   "font": 18,
+   "lang": "en-GB",
+   "kind": "staff",
+   "scrollWidth": 320,
+   "clientWidth": 320,
+   "trimFieldWidths": [
+    210,
+    210
+   ],
+   "overflow": []
+  },
+  {
+   "width": 320,
+   "font": 18,
+   "lang": "en-GB",
+   "kind": "submission",
+   "scrollWidth": 320,
+   "clientWidth": 320,
+   "trimFieldWidths": [
+    210,
+    210
+   ],
+   "overflow": []
+  },
+  {
+   "width": 320,
+   "font": 18,
+   "lang": "zh-Hans",
+   "kind": "staff",
+   "scrollWidth": 320,
+   "clientWidth": 320,
+   "trimFieldWidths": [
+    210,
+    210
+   ],
+   "overflow": []
+  },
+  {
+   "width": 320,
+   "font": 18,
+   "lang": "zh-Hans",
+   "kind": "submission",
+   "scrollWidth": 320,
+   "clientWidth": 320,
+   "trimFieldWidths": [
+    210,
+    210
+   ],
+   "overflow": []
+  },
+  {
+   "width": 320,
+   "font": 18,
+   "lang": "ms-MY",
+   "kind": "staff",
+   "scrollWidth": 320,
+   "clientWidth": 320,
+   "trimFieldWidths": [
+    210,
+    210
+   ],
+   "overflow": []
+  },
+  {
+   "width": 320,
+   "font": 18,
+   "lang": "ms-MY",
+   "kind": "submission",
+   "scrollWidth": 320,
+   "clientWidth": 320,
+   "trimFieldWidths": [
+    210,
+    210
+   ],
+   "overflow": []
+  },
+  {
+   "width": 320,
+   "font": 16,
+   "lang": "en-GB",
+   "kind": "staff",
+   "scrollWidth": 320,
+   "clientWidth": 320,
+   "trimFieldWidths": [
+    222,
+    222
+   ],
+   "overflow": []
+  },
+  {
+   "width": 320,
+   "font": 16,
+   "lang": "en-GB",
+   "kind": "submission",
+   "scrollWidth": 320,
+   "clientWidth": 320,
+   "trimFieldWidths": [
+    222,
+    222
+   ],
+   "overflow": []
+  },
+  {
+   "width": 320,
+   "font": 16,
+   "lang": "zh-Hans",
+   "kind": "staff",
+   "scrollWidth": 320,
+   "clientWidth": 320,
+   "trimFieldWidths": [
+    222,
+    222
+   ],
+   "overflow": []
+  },
+  {
+   "width": 320,
+   "font": 16,
+   "lang": "zh-Hans",
+   "kind": "submission",
+   "scrollWidth": 320,
+   "clientWidth": 320,
+   "trimFieldWidths": [
+    222,
+    222
+   ],
+   "overflow": []
+  },
+  {
+   "width": 320,
+   "font": 16,
+   "lang": "ms-MY",
+   "kind": "staff",
+   "scrollWidth": 320,
+   "clientWidth": 320,
+   "trimFieldWidths": [
+    222,
+    222
+   ],
+   "overflow": []
+  },
+  {
+   "width": 320,
+   "font": 16,
+   "lang": "ms-MY",
+   "kind": "submission",
+   "scrollWidth": 320,
+   "clientWidth": 320,
+   "trimFieldWidths": [
+    222,
+    222
+   ],
+   "overflow": []
+  }
+ ],
+ "targets": [
+  {
+   "width": 1280,
+   "mode": "light",
+   "under44": []
+  },
+  {
+   "width": 1280,
+   "mode": "dark",
+   "under44": []
+  },
+  {
+   "width": 1280,
+   "mode": "forced",
+   "under44": []
+  },
+  {
+   "width": 375,
+   "mode": "light",
+   "under44": []
+  },
+  {
+   "width": 375,
+   "mode": "dark",
+   "under44": []
+  },
+  {
+   "width": 375,
+   "mode": "forced",
+   "under44": []
+  },
+  {
+   "width": 320,
+   "mode": "light",
+   "under44": []
+  },
+  {
+   "width": 320,
+   "mode": "dark",
+   "under44": []
+  },
+  {
+   "width": 320,
+   "mode": "forced",
+   "under44": []
+  }
+ ],
+ "note": "VH-151, headless Chrome via CDP against the dev server, 2026-10-22. Forced colours by Emulation.setEmulatedMedia; 18 px default font by Page.setFontSizes. Before the fix, the old trim rule held the field at 192 px in a 182 px row at 280 px (field right 241, row right 231) and at 216 px in 210 px at 320 px with 18 px: it overflowed its row, short of the page edge. Disabled Choose file and the locked, invalid textarea were set by script for inspection, not reached through a job."
+}
