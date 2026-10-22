@@ -14,6 +14,7 @@
 - VH-164 — Open email app opens the email again: the feedback form link takes `#feedback-form-link`, the dialog keeps `#feedback-form`, every ID in the page used once, by test; checked in Chrome at 1280 px, an empty message refused in place (2026-10-22) — see decisions
 - VH-163 — the design pass: V-31 to V-39 with Codex astra's blind review and critique, V-31 shipped as VH-164, five fix items approved by the owner with the footer at Lora 20, a 28rem measure to confirm and the native file chooser kept (2026-10-22) — see decisions
 - VH-165 — a file name or student ID with no space breaks inside its column, so a 100-letter name no longer widens the page to 1,425 px at 320 px; the trim handles' forced-colour ring takes CanvasText; checked in three languages, three colour modes, with and without text spacing (2026-10-22) — see decisions
+- VH-166 — one type set: eight roles, each one rule; every `h2` Lora 20/28, the footer's two included; one section heading for legends, notification titles and the statement's subheadings; the phone logo on the column's 24 px; the footer's panels 24 px apart; 16 styles to 13; checked in three languages at 1280 and 375 px, dark and forced colours (2026-10-22) — see decisions
 
 ## Phase 5 — what the review of the Codex run found
 

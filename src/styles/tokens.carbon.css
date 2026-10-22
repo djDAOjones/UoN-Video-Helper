@@ -46,10 +46,11 @@
   --type-heading-03: 1.25rem;
   --type-heading-04: 1.75rem;
 
-  /* Productive group heading, stronger than selected segments (VH-148). */
+  /* The page title and every panel heading (VH-166). */
   --type-weight-heading: 700;
 
-  /* Running text, and the emphasis a chosen segment or a label carries. */
+  /* Running text, and the emphasis a chosen segment or a section heading
+     carries (VH-166). */
   --type-weight-body: 400;
   --type-weight-emphasis: 600;
 
@@ -62,6 +63,8 @@
      to top, the 1.4.8 Understanding document's figure (VH-124). */
   --line-height-body: 1.5;
   --line-height-heading: 1.25;
+  /* Carbon heading-03's 28 px line at 20 px: the panel heading (VH-166). */
+  --line-height-heading-03: 1.4;
   --paragraph-gap: var(--spacing-05);
 
   /* WCAG 1.4.8 (AAA): no more than 80 characters a line, and the ticket's

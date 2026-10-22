@@ -1,19 +1,14 @@
 # UI Standards
 
-This file contains the full UI, usability, and accessibility rules for
-the project. `AGENTS.md` references this file. Read it before any task
-that touches UI, controls, layout, text, states, accessibility, or
-user-facing behaviour.
+The project's UI, usability and accessibility rules, read before any task
+that touches UI, text, states or accessibility.
 
 ---
 
 ## Design system
 
-IBM Carbon Design System is the **reference standard** for this
-project. Carbon is not installed as a package dependency. All UI
-components are implemented in the project's own code to match Carbon's
-productive design language: component anatomy, interaction behaviour,
-spacing, sizing, and visual conventions.
+IBM Carbon is the **reference standard**, matched in the project's own
+code and never installed as a package.
 
 ### Carbon-first UI discipline
 
@@ -53,6 +48,16 @@ context inside a Nottingham Blue band — and the last two are identical by
 test. A rule written inside a band names roles like any other and comes out
 light on blue, focus ring included.
 
+### Type roles
+
+Eight, each one rule in `app.css` (VH-166): local adaptations of the Carbon
+style named, in the brand's faces, tracking `normal`. Page title 28/35/700
+(`heading-04`); panel heading, every `h2`, 20/28/700 (`heading-03`); section
+heading 16/24/600; body and editable text 16/24/400; supporting 14/21/400
+(`body-compact-01`); compact emphasis 14/21/600 (`heading-compact-01`);
+status mark 14/21/700; code, mono 14/21/400 (`code-01`). A link takes its
+text's role.
+
 ### The brand background (D1)
 
 D1 was answered on 2026-08-27: the colour that pads non-16:9 sources around
@@ -81,7 +86,8 @@ interface:
   adopted.
 - **The logo is a trademark.** It is never redrawn, recoloured or cropped; it
   is drawn as nottingham.ac.uk draws it — 62 px high, top-left against the
-  window edge, 12 px clear above and below, 20 px in; its `alt` is
+  window edge, 12 px clear above and below, 20 px in (below the 60rem layout
+  width, the column's 24 px: VH-166); its `alt` is
   "University of Nottingham". See `src/assets/README.md`.
 
 ### Contrast

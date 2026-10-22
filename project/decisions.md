@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-22 — VH-166 — One type set: eight roles, each one rule; the footer's headings at Lora 20; the band's phone inset and the footer's gap
+
+**Decision:** the page's text takes eight roles, each one rule in `app.css` after the components and before forced colours, naming every selector that wears it, and no component rule sets its own size, weight or line height; every `h2`, the footer's two included, is the panel heading, Lora 20/28/700 on a new `--line-height-heading-03: 1.4`; the switchers' legends, notification titles and the statement's `h3` are one section heading, 16/24/600; below the 60rem layout width the header band takes the column's 24 px inset (the desktop logo stays 20 px from the window); the footer's panels take `.panel`'s 24 px; because the owner approved V-32, V-36 and V-37 in VH-163's closing decision.
+
+**Rationale:** Roles: page title 28/35/700 (`heading-04`), panel heading 20/28/700 (`heading-03`), section heading 16/24/600 (like `heading-compact-02`), body and editable text 16/24/400 (like `body-02`), supporting 14/21/400 (`body-compact-01`), compact emphasis 14/21/600 (`heading-compact-01`; a chosen segment, a notification item's title, Help, `strong` in compact text), status mark 14/21/700 (VH-151), code mono 14/21/400 (`code-01`); local adaptations in the brand's faces, tracking `normal`. The footer's `h2`s lose `font: inherit` and the summary its 16/600; the file chooser's button keeps `font: inherit` and stays out of the lists (V-38). The legends fall from 700 to 600, which Arial draws as one Bold, and stay larger than their 14 px segments, as VH-148 asked. The design walk before and after on the same build, 33 captures each: type changed only where planned; each step 2 px shorter, each footer bar 4 px taller (52 px), the footer 24 px taller; at 375 px the logo and the page language 4 px right; at 375 px the English System check and the Malay statement headings wrap to two lines; no sideways scroll. The inventory falls from 16 styles to 13, one per heading kind (`reviews/2026-10-22/design-pass/evidence/measurements/vh166-type-roles-2026-10-22.md`). With 1.4.12 spacing in Chrome at 1280 px no heading clips. Only VH-148's 16 px footer headings clause is superseded. UI-STANDARDS names the roles and the band's phone inset, the brand rule's exception, at 2,396 of 2,400 words. Standards: carbon productive type and the spacing scale; nielsen 4; wcag-2.2-aaa 1.4.6 (no colour changed), 1.4.10, 1.4.12, 2.5.5 (the bars stay one target).
+
+**Supersedes:** 2026-10-21 — VH-148 — The owner’s sign-off changes, including the footer
+
+**Deferred:** none
+
 ## 2026-10-22 — VH-165 — Running text breaks a word longer than its line; the thumbs' forced-colour ring is one rule per engine
 
 **Decision:** `overflow-wrap: anywhere` joins the shared running-text rule (`p, li, dd`), so a file name or student ID with no space breaks where it must and every other word still breaks only at a space; the forced-colours focus-ring rule for the trim handles is split into one rule per engine, because Chrome dropped the joint rule whole and the ring never took `CanvasText`.
@@ -562,17 +572,5 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Rationale:** The words reached this session through the VH-138 session that planned the phase, which started VH-139 in its own worktree from VH-138's close (5f23af6, branch `claude/nifty-jepsen-850e8e`, not yet merged to `main`) and set that the session stops after VH-139. The sign-off covers the plan's order and items as PLAN-3's entry lists them; it is not a standing word like PLAN-2's, so open questions in later items still go to the owner.
 
 **Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-21 — PLAN-3 — Phase 3: what the second audit found
-
-**Decision:** Phase 3 is VH-139 (a file that ends early), VH-140 (the record, the switches, Step 3's rules), VH-141 (nine small page defects) and VH-142 (the words), in that order, each with a file carrying its findings' clauses, run only on the owner's sign-off — because the 20 October audit found two rank-1 and thirteen rank-2 shortfalls against the 1 October standard, all the page's to fix but the date-only card, which is the owner's question.
-
-**Rationale:** the findings answered: V-01 by VH-139; V-02, V-05, V-06 by VH-140; V-03, V-04, V-07, V-10, V-11, V-12, V-13, V-14, V-15 by VH-141; V-08, V-16, V-17 by VH-142. Deferred as wish lines (rule 5): V-09, the statement's contradictions, to the owner's VH-137; the date-only card as the owner's question; the spec's §7.2, §5.4 and §9.3 corrections, which the owner approves; the person's checks the audit could not make; A-14's unscanned-container wording. VH-139 goes first because it is the one rank-1 finding the page can fix without a design decision (V-02's fix is a wording change but shares VH-140 with the switches' line). Direction: Phase 3 brings the page back to the 1 October standard on its new surfaces; nothing in it is new design, and VH-124 and VH-113 stay the owner's to sign off. The plan is written so another harness could run it from the record: each item's file names its clauses, sources and evidence.
-
-**Supersedes:** none
-
-**Items:** VH-139, VH-140, VH-141, VH-142
 
 **Deferred:** none

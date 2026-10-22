@@ -464,3 +464,15 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-21 — PLAN-3 — Phase 3: what the second audit found
+
+**Decision:** Phase 3 is VH-139 (a file that ends early), VH-140 (the record, the switches, Step 3's rules), VH-141 (nine small page defects) and VH-142 (the words), in that order, each with a file carrying its findings' clauses, run only on the owner's sign-off — because the 20 October audit found two rank-1 and thirteen rank-2 shortfalls against the 1 October standard, all the page's to fix but the date-only card, which is the owner's question.
+
+**Rationale:** the findings answered: V-01 by VH-139; V-02, V-05, V-06 by VH-140; V-03, V-04, V-07, V-10, V-11, V-12, V-13, V-14, V-15 by VH-141; V-08, V-16, V-17 by VH-142. Deferred as wish lines (rule 5): V-09, the statement's contradictions, to the owner's VH-137; the date-only card as the owner's question; the spec's §7.2, §5.4 and §9.3 corrections, which the owner approves; the person's checks the audit could not make; A-14's unscanned-container wording. VH-139 goes first because it is the one rank-1 finding the page can fix without a design decision (V-02's fix is a wording change but shares VH-140 with the switches' line). Direction: Phase 3 brings the page back to the 1 October standard on its new surfaces; nothing in it is new design, and VH-124 and VH-113 stay the owner's to sign off. The plan is written so another harness could run it from the record: each item's file names its clauses, sources and evidence.
+
+**Supersedes:** none
+
+**Items:** VH-139, VH-140, VH-141, VH-142
+
+**Deferred:** none

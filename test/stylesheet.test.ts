@@ -14,6 +14,15 @@ const css = readFileSync(new URL('../src/styles/app.css', import.meta.url), 'utf
 /** Comments out, so a rule described in prose cannot satisfy a test for it. */
 const rules = css.replace(/\/\*[\s\S]*?\*\//g, '')
 
+/** The declarations of the type role a selector wears: the one rule whose list names it and sets a size (VH-166). */
+const roleOf = (selector: string): string => {
+  const found = [...rules.matchAll(/(?:^|(?<=\}))\s*([^{}@]+?)\s*\{([^}]*)\}/g)].filter(
+    (match) => match[1]!.split(',').some((name) => name.trim() === selector) && /font-size:/.test(match[2]!),
+  )
+  expect(found, `type roles naming ${selector}`).toHaveLength(1)
+  return found[0]![2]!
+}
+
 describe('the hidden attribute (VH-94)', () => {
   it('outranks every author display rule', () => {
     // Without `!important` the attribute loses to any class that sets
@@ -107,7 +116,7 @@ describe('tokens, not literals (VH-124)', () => {
   it('takes every line height from a token', () => {
     const literal = [...declarations.matchAll(/line-height:\s*([^;]+);/g)]
       .map((match) => match[1]!.trim())
-      .filter((value) => !/^var\(--line-height-[a-z]+\)$/.test(value) && value !== 'inherit')
+      .filter((value) => !/^var\(--line-height-[a-z0-9-]+\)$/.test(value) && value !== 'inherit')
     expect(literal, 'line heights in app.css').toEqual([])
   })
 
@@ -133,7 +142,7 @@ describe('the content-sized switchers (VH-135)', () => {
   const block = (selectors: string): string =>
     new RegExp(`${selectors.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/,\s*/g, ',\\s*')}\\s*\\{([^}]*)\\}`).exec(rules)?.[1] ?? ''
   const switchers = ['.language-switcher', '.video-kind', '.video-language']
-  const chosen = block('.segment input:checked + .segment-face')
+  const chosen = roleOf('.segment input:checked + .segment-face')
 
   it('reserve each face\u2019s bold width, so a choice moves no neighbour', () => {
     // A segment as wide as its words widened as its face turned bold, and
@@ -180,7 +189,7 @@ describe('explicit browser defaults and type roles (VH-145)', () => {
     expect(block('.segmented > legend')).toContain('padding: 0')
     expect(block('.radio input')).toContain('margin: 0')
     expect(block('.radio--described input')).toContain('margin-top: var(--spacing-01)')
-    expect(block('.select')).toContain('line-height: var(--line-height-body)')
+    expect(roleOf('.select')).toContain('line-height: var(--line-height-body)')
     expect(block('.choice')).toContain('min-width: 0')
     expect(block('.dialog')).toContain('max-width: calc(100vw - 2 * var(--spacing-05))')
     expect(readFileSync(new URL('../index.html', import.meta.url), 'utf8')).toContain('class="step-intro" id="errors-intro"')
@@ -242,7 +251,7 @@ describe('type weights (VH-145, pinned by VH-151)', () => {
   })
 
   it('set the body\u2019s weight from the body role', () => {
-    expect(rules).toMatch(/(?:^|\})\s*body\s*\{[^}]*font-weight:\s*var\(--type-weight-body\)/)
+    expect(roleOf('body')).toContain('font-weight: var(--type-weight-body)')
   })
 
   it('refuse a literal weight inside a font shorthand', () => {
@@ -272,5 +281,50 @@ describe('long words and the trim handles under forced colours (VH-165)', () => 
     expect(forced).not.toMatch(/::-webkit-slider-thumb,\s*\.range-input[^{]*::-moz-range-thumb\s*\{/)
     expect(forced).toMatch(/\.range-input:focus-visible::-webkit-slider-thumb\s*\{\s*outline-color:\s*CanvasText;\s*\}/)
     expect(forced).toMatch(/\.range-input:focus-visible::-moz-range-thumb\s*\{\s*outline-color:\s*CanvasText;\s*\}/)
+  })
+})
+
+describe('one type set (VH-166)', () => {
+  const tokens = readFileSync(new URL('../src/styles/tokens.carbon.css', import.meta.url), 'utf8')
+  const roles: Record<string, [string, string, string, string[]]> = {
+    'page title': ['heading-04', 'heading', 'heading', ['.page-title']],
+    'panel heading': ['heading-03', 'heading', 'heading-03', ['.panel h2', '.dialog h2']],
+    'section heading': ['heading-compact', 'emphasis', 'body', ['.notification-title', '.statement-body h3', '.language-switcher > legend', '.video-kind > legend', '.video-language > legend']],
+    body: ['body', 'body', 'body', ['body', '.text-input', '.textarea']],
+    supporting: ['body-compact', 'body', 'body', ['.button', '.label', '.helper', '.select', '.file-input', '.notification-body', '.field-error', '.segment-face', '.disclosure-summary']],
+    'compact emphasis': ['body-compact', 'emphasis', 'body', ['.segment input:checked + .segment-face', '.notification-item-title', '.help-button', '.toggletip strong', '.status strong']],
+    'status mark': ['body-compact', 'mark', 'body', ['.check .mark']],
+    code: ['body-compact', 'body', 'body', ['.notification pre', '.feedback-details', '.log']],
+  }
+
+  it('gives each of the eight roles one size, weight and line height, in one rule', () => {
+    for (const [role, [size, weight, line, selectors]] of Object.entries(roles)) {
+      const first = roleOf(selectors[0]!)
+      expect(first, role).toContain(`font-size: var(--type-${size});`)
+      expect(first, role).toContain(`font-weight: var(--type-weight-${weight});`)
+      expect(first, role).toContain(`line-height: var(--line-height-${line});`)
+      for (const selector of selectors) expect(roleOf(selector), `${selector} wears ${role}`).toBe(first)
+    }
+    const sized = [...rules.matchAll(/font-size:/g)].length
+    expect(sized, 'only the eight roles set a size').toBe(8)
+  })
+
+  it('sets the panel heading on Carbon heading-03\u2019s 28 px line', () => {
+    expect(tokens).toMatch(/--line-height-heading-03:\s*1\.4;/)
+    expect(tokens).toMatch(/--type-heading-03:\s*1\.25rem;/)
+  })
+
+  it('draws the footer\u2019s two headings as panel headings, not as the summary\u2019s text', () => {
+    expect(rules).not.toMatch(/\.disclosure-summary h2\s*\{[^}]*font:/)
+    expect(rules).not.toMatch(/\.statement > \.disclosure-summary\s*\{[^}]*font-/)
+  })
+
+  it('spaces the footer\u2019s panels as the steps are (V-37)', () => {
+    expect(rules).not.toMatch(/\.band--footer \.(?:system-check|statement)\b[^{]*\{[^}]*margin-bottom/)
+  })
+
+  it('gives the header band the column\u2019s inset below the layout width (V-36)', () => {
+    expect(tokens).toMatch(/--layout-width:\s*60rem;/)
+    expect(rules).toMatch(/@media \(max-width: 60rem\)\s*\{\s*\.band--header \.band-inner\s*\{\s*padding-inline:\s*var\(--spacing-06\);/)
   })
 })
