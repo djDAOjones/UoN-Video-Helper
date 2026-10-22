@@ -83,7 +83,7 @@ describe('the system check summary (VH-88)', () => {
 })
 
 describe('the browser sentence (2026-10-01)', () => {
-  const lead = 'This app is designed and built for Chrome'
+  const lead = 'This tool is designed and built for Chrome'
 
   it('keeps the maintainer\'s line in every state', () => {
     for (const states of [[], ['pending'], ['pass'], ['fail'], ['warn']] as const) {

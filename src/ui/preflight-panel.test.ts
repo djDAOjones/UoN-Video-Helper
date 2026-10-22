@@ -227,7 +227,7 @@ describe('block (VH-89)', () => {
     const { heading, lines } = verdictText(blocked)
     expect(heading).toBe('This cannot run here')
     expect(lines).toHaveLength(1)
-    expect(lines[0]).toContain('cannot read the picture or sound')
+    expect(lines[0]).toContain('cannot read the picture or audio')
     expect(lines.join(' ')).not.toMatch(/still continue/)
   })
 
@@ -438,7 +438,7 @@ describe('the status line for a finished check', () => {
     const { spokenOnly } = preflightAnnouncement(
       summary('block', [['no-aac-encode', 'block']], { probe: unmeasured }),
     )
-    expect(spokenOnly).toMatch(/cannot add sound.*Chrome on a computer/)
+    expect(spokenOnly).toMatch(/cannot add audio.*Chrome on a computer/)
   })
 
   it('speaks exactly what the verdict shows, so the two cannot drift', () => {

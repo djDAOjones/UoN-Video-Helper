@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-22 — VH-155 — "Audio" for the file's audio in all three languages; "sound" only for a noise or a verb; "This tool" opens the browser sentence
+
+**Decision:** 36 rows say "audio" (音频, "audio") where they said "sound" (声音, "bunyi") for the file's audio, and the three browser sentences open "This tool" (此工具, "Alat ini"); "sound" stays for a noise in the room, for "silent" and as a verb; string keys such as `noSound` and `soundHeading` keep their names, so only words change; VH-156 writes any proposal that names the audio with "audio".
+
+**Rationale:** The owner's "audio and tool" (VH-143.3, PLAN-5, 2026-10-22), against UI-STANDARDS' one word per concept. Kept as "sound": `warnings.noisy.detail` and `warnings.veryQuiet.detail` (noises in the room), `warnings.targetMissed.detail` (the verb), Chinese 没有声音 for "silent" and 这段录音声音很小 for "very quiet". Chinese 音轨 already meant an audio track and stays; 声音通道 becomes 音频声道. The filled sheet is CRLF, not LF as VH-153's hand-over said; it is written back CRLF, and the sheet's Step 6 group heading follows. Spec §10 still quotes "This app", a correction for the owner (VH-155.1). Chrome, three languages: the browser sentence, the trim intro and Video properties' audio rows with the sample `AMCS3059`; the rows only a job, a warning or a failure reaches, VH-155.2. Standards: UI-STANDARDS, the same word for the same concept; Nielsen 2 and 4; house conventions, strings through the sheet, minimal change. No dependency changed. Not checked by a second model.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-22 — VH-154 — Page language moves into the header band, on the right; on the band's blue its focus ring stays white under forced colours
 
 **Decision:** the page's language switcher is appended to the header band, right of the logo, with its label beside the segments from 34rem up and above them below that; the machine-translation note stays in `main` above the heading; under forced colours the band keeps its brand colours, so the switcher's focus ring there is the band's `--focus` white, not a system colour — the one token in the forced-colours block, because a system colour on a blue the theme does not repaint can fall below 3:1.
@@ -543,16 +553,6 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Decision:** the warning's English stands as built; the agent's Chinese and Malay stand as drafted, machine translation like the rest, except that the Chinese detail's "在 {times}" is now "在{times}"; spec §5.4's table gains the decode-damage row word for word as drafted, as its first row — because the owner chose the recommended options in chat on 2026-10-20, after CULT2011 passed in Chrome.
 
 **Rationale:** Asked in slice (b)'s one round, after the Chrome check in VH-122's notes: for the English, "Keep as built" over a shorter detail without the levelling clause; for the translations, "Stand, Chinese space fixed" over standing exactly as drafted; for the row, "As drafted, first row" over last, since the warning comes first in pre-flight and the row says it is the one that reports what was done. The fix went through the sheet: both detail rows keep "drafted by the agent" and add the repair, and `scripts/strings-table.mjs` regenerated `src/i18n/zh-Hans.ts`. The reason put to the owner, that the Chinese page sets no space before a number, holds for the Step 6 lines beside the warning (需要1分钟, 可达189 MB) but not for every placeholder (另外 {count} 条音轨), so `warnings.decodeDamage.more` keeps its spaces, as its sibling rows do. Chrome's decode put the damage in the blocks ffmpeg's did, so the +6 dBFS threshold and the one-block neighbours stand as decided.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-20 — VH-122 — Decode damage: a block beyond +6 dBFS is silenced with one either side, and said first with its times
-
-**Decision:** a decoded block holding a sample beyond +6 dBFS (`DECODE_DAMAGE.aboveDbfs`), or one not a number, is silenced with one block either side, in every pass over the source and in the encode, but never in the finished file's check; the decode-damage warning comes first in pre-flight and lists each stretch's time — because the corpus's real decodes peak at +0.96 dBFS while CULT2011's damage reaches +36 and +57, and one corrupt frame spoils two blocks, the earlier far weaker.
-
-**Rationale:** Measured on 2026-10-20 with ffmpeg's AAC decoder, every corpus file decoded unclipped: no real recording passes +3 dBFS, LIBA2002 peaks at +0.96 (830 samples over full scale, a hot master's encode); CULT2011's first stretch rises from −24 to +13 dBFS across one 1,024-frame block, then reaches +57 across the next, its second +36. A transform codec overlap-adds a frame into two output blocks, so the gate holds one block back and silences the neighbours too: about 23 ms of good sound either side at 44.1 kHz, against leaving a weak edge audible. The gate runs before the trim in source time, so the planning passes and pass C silence the same blocks, and the gain is solved over what is encoded. The finished file is measured ungated (`analyseOutputAudio`): a sample beyond full scale there is a broken output the check must refuse. Times are floored for the words, so seeking to one lands before the damage; at most five are listed, then counted. Chrome's own decode is VH-122 slice (b)'s check.
 
 **Supersedes:** none
 

@@ -312,3 +312,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-20 — VH-122 — Decode damage: a block beyond +6 dBFS is silenced with one either side, and said first with its times
+
+**Decision:** a decoded block holding a sample beyond +6 dBFS (`DECODE_DAMAGE.aboveDbfs`), or one not a number, is silenced with one block either side, in every pass over the source and in the encode, but never in the finished file's check; the decode-damage warning comes first in pre-flight and lists each stretch's time — because the corpus's real decodes peak at +0.96 dBFS while CULT2011's damage reaches +36 and +57, and one corrupt frame spoils two blocks, the earlier far weaker.
+
+**Rationale:** Measured on 2026-10-20 with ffmpeg's AAC decoder, every corpus file decoded unclipped: no real recording passes +3 dBFS, LIBA2002 peaks at +0.96 (830 samples over full scale, a hot master's encode); CULT2011's first stretch rises from −24 to +13 dBFS across one 1,024-frame block, then reaches +57 across the next, its second +36. A transform codec overlap-adds a frame into two output blocks, so the gate holds one block back and silences the neighbours too: about 23 ms of good sound either side at 44.1 kHz, against leaving a weak edge audible. The gate runs before the trim in source time, so the planning passes and pass C silence the same blocks, and the gain is solved over what is encoded. The finished file is measured ungated (`analyseOutputAudio`): a sample beyond full scale there is a broken output the check must refuse. Times are floored for the words, so seeking to one lands before the damage; at most five are listed, then counted. Chrome's own decode is VH-122 slice (b)'s check.
+
+**Supersedes:** none
+
+**Deferred:** none

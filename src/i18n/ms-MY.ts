@@ -48,11 +48,11 @@ export const msMY: Messages = {
   },
   browserNote: {
     pending:
-      'Aplikasi ini direka bentuk dan dibina untuk Chrome, jadi pelayar lain mungkin tidak berfungsi.',
+      'Alat ini direka bentuk dan dibina untuk Chrome, jadi pelayar lain mungkin tidak berfungsi.',
     notPassed:
-      'Aplikasi ini direka bentuk dan dibina untuk Chrome, dan pelayar ini belum lulus semua pemeriksaan yang diperlukan untuk menjalankannya. Pemeriksaan sistem di kaki halaman menyatakan apa yang hilang.',
+      'Alat ini direka bentuk dan dibina untuk Chrome, dan pelayar ini belum lulus semua pemeriksaan yang diperlukan untuk menjalankannya. Pemeriksaan sistem di kaki halaman menyatakan apa yang hilang.',
     passed:
-      'Aplikasi ini direka bentuk dan dibina untuk Chrome, dan pelayar ini telah lulus pemeriksaan yang diperlukan untuk menjalankannya.',
+      'Alat ini direka bentuk dan dibina untuk Chrome, dan pelayar ini telah lulus pemeriksaan yang diperlukan untuk menjalankannya.',
   },
   videoKind: {
     label: 'Jenis video',
@@ -101,7 +101,7 @@ export const msMY: Messages = {
   },
   source: {
     readSummary: 'Video dibaca.',
-    noSound: 'Tiada bunyi.',
+    noSound: 'Tiada audio.',
     properties: 'Ciri-ciri video',
     lossesTitle: 'Tidak dibawa ke dalam fail baharu',
     rows: {
@@ -110,10 +110,10 @@ export const msMY: Messages = {
       fileSize: 'Saiz fail',
       resolution: 'Resolusi',
       frameRate: 'Kadar bingkai',
-      soundFormat: 'Format bunyi',
-      soundChannels: 'Saluran bunyi',
-      sampleRate: 'Kadar sampel bunyi',
-      sound: 'Bunyi',
+      soundFormat: 'Format audio',
+      soundChannels: 'Saluran audio',
+      sampleRate: 'Kadar sampel audio',
+      sound: 'Audio',
       captions: 'Kapsyen',
       fileType: 'Jenis fail',
     },
@@ -122,11 +122,11 @@ export const msMY: Messages = {
     rotated: 'Diputar {degrees}°. Output akan tegak.',
     variesOnAverage: '{rate} secara purata, tetapi ia berbeza-beza',
     variesNote:
-      'Rakaman daripada Teams, Zoom dan tangkapan skrin selalunya berbeza-beza. Output akan menggunakan kadar bingkai yang stabil, yang memastikan bunyi dan gambar kekal segerak.',
+      'Rakaman daripada Teams, Zoom dan tangkapan skrin selalunya berbeza-beza. Output akan menggunakan kadar bingkai yang stabil, yang memastikan audio dan gambar kekal segerak.',
     outputRate: 'Output akan berjalan pada {rate}, jadi beberapa bingkai akan diulang.',
     sampleRate: '{kilohertz} kHz — {hertz} mengambil sampel sesaat',
-    noSoundTrack: 'Tiada trek bunyi ditemui',
-    noSoundNote: 'Perataan memerlukan bunyi. Kerja selebihnya masih berjalan.',
+    noSoundTrack: 'Tiada trek audio ditemui',
+    noSoundNote: 'Perataan memerlukan audio. Kerja selebihnya masih berjalan.',
     captionsUnchecked: 'Tidak dapat disemak dalam fail jenis ini',
     captionsFound: 'Dijumpai {found}',
     captionsNone: 'Tiada yang ditemui dalam fail ini',
@@ -143,13 +143,13 @@ export const msMY: Messages = {
       other: '{count} lagi trek video',
     },
     moreSoundTracks: {
-      one: '{count} lagi trek bunyi',
-      other: '{count} lagi trek bunyi',
+      one: '{count} lagi trek audio',
+      other: '{count} lagi trek audio',
     },
     losses: {
       extraTracksTitle: 'Fail ini mempunyai {found}',
       extraTracksDetail:
-        'Fail baharu menyimpan satu gambar dan satu trek bunyi — yang disenaraikan di bawah Ciri-ciri video. Trek lain tidak akan dibawa, dan salah satunya mungkin menyimpan alternatif, seperti bahasa lain atau perihalan audio. Jika anda memerlukannya, simpan fail asal bersama.',
+        'Fail baharu menyimpan satu gambar dan satu trek audio — yang disenaraikan di bawah Ciri-ciri video. Trek lain tidak akan dibawa, dan salah satunya mungkin menyimpan alternatif, seperti bahasa lain atau perihalan audio. Jika anda memerlukannya, simpan fail asal bersama.',
       uncheckedTitle: 'Trek kapsyen dan bab tidak dapat disemak',
       uncheckedDetail:
         'Fail jenis ini tidak boleh disemak untuknya. Jika fail anda mempunyainya, ia tidak akan dibawa ke mana-mana.',
@@ -161,7 +161,7 @@ export const msMY: Messages = {
   },
   trim: {
     intro:
-      'Pilihan. Potong bahan yang tidak diingini dari awal atau akhir. Dibiarkan sahaja, keseluruhan video akan disimpan. Pratonton memainkan video asal anda seperti sekarang, kerana bunyi diratakan dan grafik penutup ditambah apabila video dibuat.',
+      'Pilihan. Potong bahan yang tidak diingini dari awal atau akhir. Dibiarkan sahaja, keseluruhan video akan disimpan. Pratonton memainkan video asal anda seperti sekarang, kerana audio diratakan dan grafik penutup ditambah apabila video dibuat.',
     noPreview: 'Pratonton tidak tersedia untuk fail ini. Anda masih boleh menetapkan masa.',
     start: 'Mula',
     end: 'Tamat',
@@ -428,10 +428,10 @@ export const msMY: Messages = {
       picture:
         'Fail yang anda pilih berakhir lebih awal: gambarnya berhenti pada {stops} daripada {end}.',
       sound:
-        'Fail yang anda pilih berakhir lebih awal: bunyinya berhenti pada {stops} daripada {end}.',
+        'Fail yang anda pilih berakhir lebih awal: audionya berhenti pada {stops} daripada {end}.',
       together:
-        'Fail yang anda pilih berakhir lebih awal: gambar dan bunyinya berhenti pada {stops} daripada {end}.',
-      both: 'Fail yang anda pilih berakhir lebih awal: gambarnya berhenti pada {picture} dan bunyinya pada {sound}, daripada {end}.',
+        'Fail yang anda pilih berakhir lebih awal: gambar dan audionya berhenti pada {stops} daripada {end}.',
+      both: 'Fail yang anda pilih berakhir lebih awal: gambarnya berhenti pada {picture} dan audionya pada {sound}, daripada {end}.',
       held: 'Dari situ hingga grafik penutup, video menahan bingkai terakhirnya.',
       next: 'Jika anda mempunyai salinan yang lengkap, cipta video itu semula daripada salinan tersebut.',
     },
@@ -519,15 +519,15 @@ export const msMY: Messages = {
       'Salinan Chrome ini mungkin sudah lapuk atau tetapan pada komputer ini mungkin telah mematikan ciri ini. Kemas kini Chrome atau tanya sesiapa yang mengurus komputer tersebut.',
     reasons: {
       noWebCodecs: 'Pelayar ini tidak dapat memproses video. {remedy}',
-      noAacEncodeHere: 'Pelayar ini tidak boleh menambah bunyi pada fail video. {remedy}',
+      noAacEncodeHere: 'Pelayar ini tidak boleh menambah audio pada fail video. {remedy}',
       noAacEncodeElsewhere:
-        'Pelayar ini tidak boleh menambah bunyi pada fail video. {remedy} Firefox boleh memainkan video tetapi tidak boleh mencipta bunyi yang diperlukan.',
+        'Pelayar ini tidak boleh menambah audio pada fail video. {remedy} Firefox boleh memainkan video tetapi tidak boleh mencipta audio yang diperlukan.',
       noH264Encode:
         'Pelayar ini tidak dapat mencipta format video yang diperlukan oleh alat ini. {remedy}',
       noSourceDecodeHere:
-        'Pelayar ini tidak dapat membaca gambar atau bunyi di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut.',
+        'Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut.',
       noSourceDecodeElsewhere:
-        'Pelayar ini tidak dapat membaca gambar atau bunyi di dalam fail ini. {remedy} Jika ia juga tidak dapat dibuka di sana, fail itu mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya semula sebagai MP4 — fail yang namanya berakhir dengan .mp4.',
+        'Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. {remedy} Jika ia juga tidak dapat dibuka di sana, fail itu mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya semula sebagai MP4 — fail yang namanya berakhir dengan .mp4.',
       noOpfsHere:
         'Pelayar ini tidak akan memberikan alat ini ruang kerja yang diperlukan untuk mencipta video anda. Jika anda melayari secara peribadi, tetingkap biasa biasanya berfungsi; jika tidak, tetapan pada komputer ini mungkin menyekat storan tapak — tanya sesiapa yang mengurusnya.',
       noOpfsElsewhere:
@@ -562,7 +562,7 @@ export const msMY: Messages = {
       'Ini kelihatan seperti slaid atau rakaman skrin, jadi fail tersebut dibuat lebih kecil. Jika kebanyakannya rakaman kamera, pilih {best} sebagai gantinya.',
   },
   warnings: {
-    soundHeading: 'Perlu diketahui tentang bunyinya',
+    soundHeading: 'Perlu diketahui tentang audionya',
     finishedHeading: 'Perlu diketahui tentang video yang telah siap',
     reassurance:
       'Tiada satu pun daripada ini yang menghalang anda daripada meneruskan. Fail asal anda tidak diubah dalam apa jua cara.',
@@ -570,12 +570,12 @@ export const msMY: Messages = {
     endsEarly: {
       heading: 'Fail ini berakhir lebih awal',
       detail:
-        'Bunyinya berhenti pada {stops} daripada {end}. Fail ini mungkin terputus semasa disalin atau dirakam. Selepas {stops}, video baharu akan senyap. Jika anda mempunyai salinan yang lengkap, pilih salinan itu sebaliknya.',
+        'Audionya berhenti pada {stops} daripada {end}. Fail ini mungkin terputus semasa disalin atau dirakam. Selepas {stops}, video baharu akan senyap. Jika anda mempunyai salinan yang lengkap, pilih salinan itu sebaliknya.',
     },
     noAudio: {
-      heading: 'Video ini tiada bunyi',
+      heading: 'Video ini tiada audio',
       detail:
-        'Tiada bunyi untuk diratakan, jadi kerja selebihnya berjalan tanpanya. Jika anda menjangkakan bunyi, semak rakaman sebelum menerbitkan.',
+        'Tiada audio untuk diratakan, jadi kerja selebihnya berjalan tanpanya. Jika anda menjangkakan audio, semak rakaman sebelum menerbitkan.',
     },
     decodeDamage: {
       heading: {
@@ -593,7 +593,7 @@ export const msMY: Messages = {
       },
     },
     clipping: {
-      heading: 'Bunyi mungkin terherot di beberapa tempat',
+      heading: 'Audio mungkin terherot di beberapa tempat',
       detail:
         'Rakaman sering mencapai tahap maksimumnya, jadi sebahagian daripadanya mungkin terpotong. Ini biasanya bermakna mikrofon ditetapkan terlalu tinggi. Perataan masih berjalan, tetapi herotan yang sedia ada dalam rakaman tidak dapat dialih keluar.',
     },
@@ -618,14 +618,14 @@ export const msMY: Messages = {
         'Lebih kurang {duration} hampir senyap dalam satu tempoh berterusan. Jika itu disengajakan, tiada apa yang salah. Jika tidak, adalah wajar untuk menyemak rakaman sebelum anda menerbitkannya.',
     },
     targetMissed: {
-      heading: 'Bunyi yang telah siap tidak berada pada tahap biasa',
+      heading: 'Audio yang telah siap tidak berada pada tahap biasa',
       detail:
         'Video ini bagus untuk digunakan; cuma ia mungkin kedengaran sedikit lebih senyap atau lebih kuat daripada video lain yang diratakan dengan alat ini.',
     },
     metadataLost: {
       heading: 'Tajuk dan tarikh fail tidak dapat disalin',
       detail:
-        'Gambar dan bunyi tidak terjejas. Jika fail asal anda mempunyai tajuk, pengarang atau tarikh, fail baharu tidak akan mempunyainya — anda masih boleh menambahkannya di mana sahaja anda memuat naiknya.',
+        'Gambar dan audio tidak terjejas. Jika fail asal anda mempunyai tajuk, pengarang atau tarikh, fail baharu tidak akan mempunyainya — anda masih boleh menambahkannya di mana sahaja anda memuat naiknya.',
     },
   },
   announce: {
@@ -646,9 +646,9 @@ export const msMY: Messages = {
       notAVideo:
         'Fail ini tidak dapat dibaca sebagai video. Ia perlu fail video — yang namanya berakhir dengan .mp4, .mov, .mkv atau .webm — dan ia mungkin rosak.',
       soundOnly:
-        'Fail ini mempunyai bunyi tetapi tiada video. Alat ini menambah penjenamaan pada video, jadi ia memerlukan fail dengan gambar.',
+        'Fail ini mempunyai audio tetapi tiada video. Alat ini menambah penjenamaan pada video, jadi ia memerlukan fail dengan gambar.',
       noTracks:
-        'Tiada video atau bunyi ditemui dalam fail ini. Ia mungkin tidak lengkap atau mungkin telah disimpan secara salah.',
+        'Tiada video atau audio ditemui dalam fail ini. Ia mungkin tidak lengkap atau mungkin telah disimpan secara salah.',
       readError:
         'Sesuatu tidak kena semasa membaca fail ini. Ia mungkin rosak atau dalam format yang tidak dapat dibaca oleh alat ini.',
       tookTooLong:
@@ -660,14 +660,14 @@ export const msMY: Messages = {
       next: 'Letakkan masa mula dan tamat dengan betul dalam langkah 2 dan cuba lagi.',
     },
     unlevellable: {
-      what: 'Bunyi rakaman ini tidak dapat dibawa ke tahap biasa, jadi video itu tidak dibuat.',
+      what: 'Audio rakaman ini tidak dapat dibawa ke tahap biasa, jadi video itu tidak dibuat.',
       next: 'Laporkannya dengan butang Hantar maklum balas — butiran yang ditambahkannya akan membantu.',
     },
     outputLoudness: {
-      what: 'Bunyi yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan.',
+      what: 'Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan.',
     },
     outputPeak: {
-      what: 'Bunyi yang telah siap kedengaran lebih kuat pada kemuncaknya daripada yang dibenarkan, jadi video itu tidak disimpan.',
+      what: 'Audio yang telah siap kedengaran lebih kuat pada kemuncaknya daripada yang dibenarkan, jadi video itu tidak disimpan.',
     },
     outputUnreadable: {
       what: 'Video yang telah siap tidak dapat dibaca semula, jadi ia tidak disimpan.',
@@ -735,7 +735,7 @@ export const msMY: Messages = {
       secure: 'Sambungan selamat (diperlukan untuk akses storan)',
       webcodecs: 'Pemprosesan video dalam pelayar (WebCodecs)',
       h264: 'Format video yang dibuat oleh alat ini (H.264)',
-      aac: 'Format bunyi yang dihasilkan oleh alat (AAC)',
+      aac: 'Format audio yang dihasilkan oleh alat (AAC)',
       opfs: 'Storan kerja persendirian',
       worker: 'Pemprosesan latar belakang',
     },
@@ -745,7 +745,7 @@ export const msMY: Messages = {
       notAvailable: 'Tidak tersedia',
       supported: 'Disokong',
       notSupported: 'Tidak disokong',
-      aacNotSupported: 'Tidak disokong — video dengan bunyi tidak boleh dibuat di sini',
+      aacNotSupported: 'Tidak disokong — video dengan audio tidak boleh dibuat di sini',
       failedToStart: 'Gagal bermula',
       readyIn: 'Bersedia dalam {time}',
       noResponse: 'Tiada respons',

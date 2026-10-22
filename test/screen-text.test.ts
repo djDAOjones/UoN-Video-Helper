@@ -85,9 +85,9 @@ describe('what the tool does, and where it works (2026-09-30)', () => {
     // once the load-time check lands (`browserNote`), so this is what a
     // browser reads before that — and what one without scripts reads at all.
     expect(visibleText).toContain(
-      'This app is designed and built for Chrome, so other browsers may not work.',
+      'This tool is designed and built for Chrome, so other browsers may not work.',
     )
-    expect(markup).toMatch(/<p id="browser-note">This app is designed and built for Chrome/)
+    expect(markup).toMatch(/<p id="browser-note">This tool is designed and built for Chrome/)
     expect(markup.indexOf('designed and built for Chrome')).toBeLessThan(
       markup.indexOf('id="file-input"'),
     )

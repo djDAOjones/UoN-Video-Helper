@@ -87,22 +87,22 @@ describe('extra tracks (VH-59)', () => {
     expect(extraTracksLoss(report())).toBeUndefined()
   })
 
-  it('names a second sound track before the job starts', () => {
+  it('names a second audio track before the job starts', () => {
     // The OBS case: programme audio plus a commentary mic. Only one survives.
     const loss = extraTracksLoss(report({ audioTrackCount: 2, reportedTrackCount: 3 }))
-    expect(loss?.title).toContain('1 more sound track')
+    expect(loss?.title).toContain('1 more audio track')
     expect(loss?.detail).toContain('will not be carried over')
   })
 
-  it('counts plurals rather than saying "1 more sound tracks"', () => {
+  it('counts plurals rather than saying "1 more audio tracks"', () => {
     const loss = extraTracksLoss(report({ audioTrackCount: 4 }))
-    expect(loss?.title).toContain('3 more sound tracks')
+    expect(loss?.title).toContain('3 more audio tracks')
   })
 
   it('names extra picture tracks too, and both together', () => {
     const loss = extraTracksLoss(report({ videoTrackCount: 2, audioTrackCount: 3 }))
     expect(loss?.title).toContain('1 more video track')
-    expect(loss?.title).toContain('2 more sound tracks')
+    expect(loss?.title).toContain('2 more audio tracks')
   })
 
   it('never reports a negative count for a file with no audio', () => {
@@ -166,9 +166,9 @@ describe('video properties (VH-87)', () => {
       'File size',
       'Resolution',
       'Frame rate',
-      'Sound format',
-      'Sound channels',
-      'Sound sample rate',
+      'Audio format',
+      'Audio channels',
+      'Audio sample rate',
       'Captions',
       'File type',
     ])
@@ -176,9 +176,9 @@ describe('video properties (VH-87)', () => {
 
   it('gives each audio fact its own row', () => {
     const source = report()
-    expect(rowFor(source, 'Sound format')?.detail).toBe('AAC')
-    expect(rowFor(source, 'Sound channels')?.detail).toBe('Stereo (two channels)')
-    expect(rowFor(source, 'Sound sample rate')?.detail).toBe('44.1 kHz — 44,100 samples a second')
+    expect(rowFor(source, 'Audio format')?.detail).toBe('AAC')
+    expect(rowFor(source, 'Audio channels')?.detail).toBe('Stereo (two channels)')
+    expect(rowFor(source, 'Audio sample rate')?.detail).toBe('44.1 kHz — 44,100 samples a second')
   })
 
   it('states the picture facts separately', () => {
@@ -196,12 +196,12 @@ describe('video properties (VH-87)', () => {
       'File size',
       'Resolution',
       'Frame rate',
-      'Sound',
+      'Audio',
       'Captions',
       'File type',
     ])
-    expect(rowFor(source, 'Sound')?.detail).toBe('No sound track found')
-    expect(rowFor(source, 'Sound')?.note).toContain('Levelling needs sound')
+    expect(rowFor(source, 'Audio')?.detail).toBe('No audio track found')
+    expect(rowFor(source, 'Audio')?.note).toContain('Levelling needs audio')
   })
 
   it('keeps the rotation note with the resolution it explains', () => {
@@ -217,7 +217,7 @@ describe('video properties (VH-87)', () => {
       audio: { ...base.audio!, canDecode: false },
     })
     expect(rowFor(unreadable, 'Video format')?.note).toContain('cannot read this video format')
-    expect(rowFor(unreadable, 'Sound format')?.note).toContain('cannot read this audio format')
+    expect(rowFor(unreadable, 'Audio format')?.note).toContain('cannot read this audio format')
     expect(rowFor(base, 'Video format')?.note).toBeUndefined()
   })
 })
@@ -274,12 +274,12 @@ describe('losses against facts (VH-87)', () => {
 
 
 describe('read outcome (VH-148, the words the page draws since VH-152)', () => {
-  it('happy path: reports only the read when sound exists', () => {
+  it('happy path: reports only the read when audio exists', () => {
     expect(readLine(report())).toEqual({ read: 'Video read.', noSound: null })
   })
-  it('regression: no sound remains on the read line and the facts remain in properties', () => {
+  it('regression: no audio remains on the read line and the facts remain in properties', () => {
     const silent = report({ audio: null, audioTrackCount: 0 })
-    expect(readLine(silent)).toEqual({ read: 'Video read.', noSound: 'No sound.' })
+    expect(readLine(silent)).toEqual({ read: 'Video read.', noSound: 'No audio.' })
     expect(rowFor(silent, 'Duration')?.detail).toBe('2 minutes 10 seconds')
     expect(rowFor(silent, 'Resolution')?.detail).toBe('852 × 480')
   })

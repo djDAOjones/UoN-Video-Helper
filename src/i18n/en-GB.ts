@@ -88,11 +88,11 @@ export const enGB = {
   },
 
   browserNote: {
-    pending: 'This app is designed and built for Chrome, so other browsers may not work.',
+    pending: 'This tool is designed and built for Chrome, so other browsers may not work.',
     notPassed:
-      'This app is designed and built for Chrome, and this browser has not passed all the checks for it to run. The system check at the foot of the page says what is missing.',
+      'This tool is designed and built for Chrome, and this browser has not passed all the checks for it to run. The system check at the foot of the page says what is missing.',
     passed:
-      'This app is designed and built for Chrome, and this browser has passed the checks for it to run.',
+      'This tool is designed and built for Chrome, and this browser has passed the checks for it to run.',
   },
 
   /** The switch above the six steps (VH-131). */
@@ -153,7 +153,7 @@ export const enGB = {
   source: {
     /** The read outcome; no sound is added separately, emphasised on screen (VH-148). */
     readSummary: 'Video read.',
-    noSound: 'No sound.',
+    noSound: 'No audio.',
     properties: 'Video properties',
     lossesTitle: 'Not carried into the new file',
     rows: {
@@ -162,10 +162,10 @@ export const enGB = {
       fileSize: 'File size',
       resolution: 'Resolution',
       frameRate: 'Frame rate',
-      soundFormat: 'Sound format',
-      soundChannels: 'Sound channels',
-      sampleRate: 'Sound sample rate',
-      sound: 'Sound',
+      soundFormat: 'Audio format',
+      soundChannels: 'Audio channels',
+      sampleRate: 'Audio sample rate',
+      sound: 'Audio',
       captions: 'Captions',
       fileType: 'File type',
     },
@@ -174,23 +174,23 @@ export const enGB = {
     rotated: 'Rotated {degrees}°. The output will be upright.',
     variesOnAverage: '{rate} on average, but it varies',
     variesNote:
-      'Recordings from Teams, Zoom and screen capture often vary. The output will use a steady frame rate, which keeps sound and picture in step.',
+      'Recordings from Teams, Zoom and screen capture often vary. The output will use a steady frame rate, which keeps audio and picture in step.',
     outputRate: 'The output will run at {rate}, so some frames will be repeated.',
     /** The figure, with its meaning beside it (spec 9.2). */
     sampleRate: '{kilohertz} kHz — {hertz} samples a second',
-    noSoundTrack: 'No sound track found',
-    noSoundNote: 'Levelling needs sound. The rest of the job still runs.',
+    noSoundTrack: 'No audio track found',
+    noSoundNote: 'Levelling needs audio. The rest of the job still runs.',
     captionsUnchecked: 'Could not be checked in this kind of file',
     captionsFound: 'Found {found}',
     captionsNone: 'None found in this file',
     captionTracks: { one: '{count} caption track', other: '{count} caption tracks' },
     chapterTracks: { one: '{count} chapter track', other: '{count} chapter tracks' },
     moreVideoTracks: { one: '{count} more video track', other: '{count} more video tracks' },
-    moreSoundTracks: { one: '{count} more sound track', other: '{count} more sound tracks' },
+    moreSoundTracks: { one: '{count} more audio track', other: '{count} more audio tracks' },
     losses: {
       extraTracksTitle: 'This file has {found}',
       extraTracksDetail:
-        'The new file keeps one picture and one sound track — the ones listed under Video properties. The others will not be carried over, and one of them may hold an alternative, such as another language or an audio description. If you need them, keep the original alongside.',
+        'The new file keeps one picture and one audio track — the ones listed under Video properties. The others will not be carried over, and one of them may hold an alternative, such as another language or an audio description. If you need them, keep the original alongside.',
       uncheckedTitle: 'Caption and chapter tracks could not be checked',
       uncheckedDetail:
         'This kind of file cannot be checked for them. If yours has them, they will not be carried over.',
@@ -203,7 +203,7 @@ export const enGB = {
 
   trim: {
     intro:
-      'Optional. Cut unwanted material from the start or the end. Left alone, the whole video is kept. The preview plays your original as it is now, because the sound is levelled and the closing graphics are added when the video is made.',
+      'Optional. Cut unwanted material from the start or the end. Left alone, the whole video is kept. The preview plays your original as it is now, because the audio is levelled and the closing graphics are added when the video is made.',
     noPreview: 'A preview is not available for this file. You can still set the times.',
     start: 'Start',
     end: 'End',
@@ -491,10 +491,10 @@ export const enGB = {
      */
     endedEarly: {
       picture: 'The file you chose ends early: its picture stops at {stops} of {end}.',
-      sound: 'The file you chose ends early: its sound stops at {stops} of {end}.',
+      sound: 'The file you chose ends early: its audio stops at {stops} of {end}.',
       /** Both stop within the same second. */
-      together: 'The file you chose ends early: its picture and sound stop at {stops} of {end}.',
-      both: 'The file you chose ends early: its picture stops at {picture} and its sound at {sound}, of {end}.',
+      together: 'The file you chose ends early: its picture and audio stop at {stops} of {end}.',
+      both: 'The file you chose ends early: its picture stops at {picture} and its audio at {sound}, of {end}.',
       /** Follows when the picture stopped and a closing follows it. */
       held: 'From there until the closing graphics, the video holds its last picture.',
       next: 'If you have a complete copy, create the video again from that one.',
@@ -593,14 +593,14 @@ export const enGB = {
       'This copy of Chrome may be out of date, or a setting on this computer may have turned the feature off. Update Chrome, or ask whoever manages the computer.',
     reasons: {
       noWebCodecs: 'This browser cannot process video. {remedy}',
-      noAacEncodeHere: 'This browser cannot add sound to a video file. {remedy}',
+      noAacEncodeHere: 'This browser cannot add audio to a video file. {remedy}',
       noAacEncodeElsewhere:
-        'This browser cannot add sound to a video file. {remedy} Firefox can play video but cannot create the sound this needs.',
+        'This browser cannot add audio to a video file. {remedy} Firefox can play video but cannot create the audio this needs.',
       noH264Encode: 'This browser cannot create the video format this tool needs. {remedy}',
       noSourceDecodeHere:
-        'This browser cannot read the picture or sound inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead.',
+        'This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead.',
       noSourceDecodeElsewhere:
-        'This browser cannot read the picture or sound inside this file. {remedy} If it will not open there either, the file was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4.',
+        'This browser cannot read the picture or audio inside this file. {remedy} If it will not open there either, the file was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4.',
       noOpfsHere:
         'This browser will not give the tool the working space it needs to create your video. If you are browsing privately, an ordinary window usually works; otherwise a setting on this computer may be blocking site storage — ask whoever manages it.',
       noOpfsElsewhere:
@@ -636,7 +636,7 @@ export const enGB = {
   },
 
   warnings: {
-    soundHeading: 'Worth knowing about the sound',
+    soundHeading: 'Worth knowing about the audio',
     finishedHeading: 'Worth knowing about the finished video',
     reassurance: 'None of these stop you continuing. Your original file is not changed either way.',
     /** The spoken form: the heading, then each warning's title, joined by `meta.separators.series`. */
@@ -645,12 +645,12 @@ export const enGB = {
     endsEarly: {
       heading: 'The file ends early',
       detail:
-        'Its sound stops at {stops} of {end}. The file was probably cut off while it was copied or recorded. After {stops}, the new video will be silent. If you have a complete copy, choose that one instead.',
+        'Its audio stops at {stops} of {end}. The file was probably cut off while it was copied or recorded. After {stops}, the new video will be silent. If you have a complete copy, choose that one instead.',
     },
     noAudio: {
-      heading: 'This video has no sound',
+      heading: 'This video has no audio',
       detail:
-        'There is no sound to level, so the rest of the job runs without it. If you expected sound, check the recording before publishing.',
+        'There is no audio to level, so the rest of the job runs without it. If you expected audio, check the recording before publishing.',
     },
     /** Said when a damaged moment in the file's sound is made silent (VH-122). {times} is a list of times, like "1:22 and 3:05". */
     decodeDamage: {
@@ -667,7 +667,7 @@ export const enGB = {
       more: { one: '{count} other moment', other: '{count} other moments' },
     },
     clipping: {
-      heading: 'The sound may be distorted in places',
+      heading: 'The audio may be distorted in places',
       detail:
         'The recording often reaches its maximum level, so some of it may be clipped. That usually means the microphone was set too high. Levelling still runs, but distortion already in the recording cannot be removed.',
     },
@@ -692,14 +692,14 @@ export const enGB = {
         'About {duration} of near-silence in one continuous run. If that is deliberate, nothing is wrong. If not, it is worth checking the recording before you publish it.',
     },
     targetMissed: {
-      heading: 'The finished sound is not quite at the usual level',
+      heading: 'The finished audio is not quite at the usual level',
       detail:
         'The video is fine to use; it may just sound slightly quieter or louder than other videos levelled with this tool.',
     },
     metadataLost: {
       heading: 'The file’s title and date could not be copied across',
       detail:
-        'The picture and sound are unaffected. If your original carried a title, author or date, the new file will not have them — you can still add them wherever you upload it.',
+        'The picture and audio are unaffected. If your original carried a title, author or date, the new file will not have them — you can still add them wherever you upload it.',
     },
   },
 
@@ -723,9 +723,9 @@ export const enGB = {
       notAVideo:
         'This file could not be read as a video. It needs to be a video file — one whose name ends .mp4, .mov, .mkv or .webm — and it may be damaged.',
       soundOnly:
-        'This file has sound but no video. This tool adds branding to a video, so it needs a file with a picture.',
+        'This file has audio but no video. This tool adds branding to a video, so it needs a file with a picture.',
       noTracks:
-        'No video or sound was found in this file. It may be incomplete, or it may have been saved incorrectly.',
+        'No video or audio was found in this file. It may be incomplete, or it may have been saved incorrectly.',
       readError:
         'Something went wrong reading this file. It may be damaged, or in a format this tool cannot read.',
       tookTooLong: 'Reading this file took longer than expected, or the tool ran into a problem.',
@@ -736,14 +736,14 @@ export const enGB = {
       next: 'Put the start and end times right in step 2 and try again.',
     },
     unlevellable: {
-      what: 'The sound of this recording cannot be brought to the usual level, so the video was not made.',
+      what: 'The audio of this recording cannot be brought to the usual level, so the video was not made.',
       next: 'Report it with the Send feedback button — the details it adds will help.',
     },
     outputLoudness: {
-      what: 'The finished sound did not come out at the usual level, so the video was not kept.',
+      what: 'The finished audio did not come out at the usual level, so the video was not kept.',
     },
     outputPeak: {
-      what: 'The finished sound came out louder at its peaks than allowed, so the video was not kept.',
+      what: 'The finished audio came out louder at its peaks than allowed, so the video was not kept.',
     },
     outputUnreadable: { what: 'The finished video could not be read back, so it was not kept.' },
     outOfSpace: {
@@ -796,7 +796,7 @@ export const enGB = {
       secure: 'Secure connection (needed for storage access)',
       webcodecs: 'Video processing in the browser (WebCodecs)',
       h264: 'Video format the tool makes (H.264)',
-      aac: 'Sound format the tool makes (AAC)',
+      aac: 'Audio format the tool makes (AAC)',
       opfs: 'Private working storage',
       worker: 'Background processing',
     },
@@ -806,7 +806,7 @@ export const enGB = {
       notAvailable: 'Not available',
       supported: 'Supported',
       notSupported: 'Not supported',
-      aacNotSupported: 'Not supported — a video with sound cannot be made here',
+      aacNotSupported: 'Not supported — a video with audio cannot be made here',
       failedToStart: 'Failed to start',
       /** `{time}` is a number of milliseconds, written by `Intl`. */
       readyIn: 'Ready in {time}',

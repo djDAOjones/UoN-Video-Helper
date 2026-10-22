@@ -154,7 +154,7 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
   ['preflight', 'Step 6: the device check, which says whether this computer can make the video'],
   ['preflight.headings', 'Step 6: the heading of the device check'],
   ['preflight.reasons', 'Step 6: one reason in the device check'],
-  ['warnings', 'Step 6: warnings about the sound or the finished video'],
+  ['warnings', 'Step 6: warnings about the audio or the finished video'],
   ['warnings.spoken', 'Not shown: read out by screen readers'],
   ['announce', 'Not shown: read out by screen readers'],
   ['failure', 'An error box, in the step it affects'],
@@ -405,7 +405,7 @@ const NOTES: Readonly<Record<string, string>> = {
   'warnings.endsEarly.heading':
     'Said when the file stops part-way, as an interrupted copy or a crashed recorder leaves it. Warning headings are read one after another inside warnings.spoken, so no full stop.',
   'warnings.endsEarly.detail':
-    '"of {end}" means the sound should run until {end}. A fact, not a guess: only the cause ("probably cut off") is uncertain.',
+    '"of {end}" means the audio should run until {end}. A fact, not a guess: only the cause ("probably cut off") is uncertain.',
   'result.summaryWithCard.staff':
     'The card a staff video opens with. Use the same words for "staff" as videoKind.options.staff and for "title card" as steps.titleCard.',
   'result.summaryWithCard.submission':
@@ -414,7 +414,7 @@ const NOTES: Readonly<Record<string, string>> = {
     'Follows the summary when the words the app drew into the video are in another language than the page. Use the same words as videoLanguage.label.',
   'progress.job':
     'Names the video being made as it was started, since the choices above the steps may have changed since. Use the same words as videoLanguage.label.',
-  'result.endedEarly.together': 'In place of result.endedEarly.both when the picture and the sound stop in the same second.',
+  'result.endedEarly.together': 'In place of result.endedEarly.both when the picture and the audio stop in the same second.',
   'result.endedEarly.held':
     'Follows one of the sentences above when the picture stopped and the video has closing graphics: until they start, the last picture stays on screen.',
   'result.endedEarly.next': 'Ends the passage. Use the same words for "create the video" as create.create.',

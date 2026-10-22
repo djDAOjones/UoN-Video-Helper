@@ -127,13 +127,13 @@ describe('a file that ends early, said with where its sound stops (VH-139)', () 
   it('names the stop, floored, and the end the file declares', () => {
     const { heading, detail } = said(20.84, 30)
     expect(heading).toBe('The file ends early')
-    expect(detail).toMatch(/^Its sound stops at 0:20 of 0:30\. /)
+    expect(detail).toMatch(/^Its audio stops at 0:20 of 0:30\. /)
     expect(detail).toContain('After 0:20, the new video will be silent.')
   })
 
   it('gives times as the trim’s fields do, past a minute and an hour', () => {
-    expect(said(2465.7, 3480).detail).toMatch(/^Its sound stops at 41:05 of 58:00\. /)
-    expect(said(3725.2, 4000).detail).toMatch(/^Its sound stops at 1:02:05 of 1:06:40\. /)
+    expect(said(2465.7, 3480).detail).toMatch(/^Its audio stops at 41:05 of 58:00\. /)
+    expect(said(3725.2, 4000).detail).toMatch(/^Its audio stops at 1:02:05 of 1:06:40\. /)
   })
 
   it('times a stop and an end the same way wherever they are said', () => {

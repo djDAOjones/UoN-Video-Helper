@@ -42,10 +42,10 @@ export const zhHans: Messages = {
     privacy: '您的视频在您的设备上进行处理，不会上传，原始文件也不会改变。',
   },
   browserNote: {
-    pending: '此应用专为 Chrome 浏览器设计和构建，因此其他浏览器可能无法正常运行。',
+    pending: '此工具专为 Chrome 浏览器设计和构建，因此其他浏览器可能无法正常运行。',
     notPassed:
-      '此应用专为 Chrome 浏览器设计和构建，但此浏览器尚未通过运行此应用所需的全部检查。页面底部的系统检查信息显示了缺失的功能。',
-    passed: '此应用专为 Chrome 浏览器设计和构建，且此浏览器已通过运行此应用所需的检查。',
+      '此工具专为 Chrome 浏览器设计和构建，但此浏览器尚未通过运行此工具所需的全部检查。页面底部的系统检查信息显示了缺失的功能。',
+    passed: '此工具专为 Chrome 浏览器设计和构建，且此浏览器已通过运行此工具所需的检查。',
   },
   videoKind: {
     label: '视频类型',
@@ -90,7 +90,7 @@ export const zhHans: Messages = {
   },
   source: {
     readSummary: '视频已读取。',
-    noSound: '没有声音。',
+    noSound: '没有音频。',
     properties: '视频属性',
     lossesTitle: '未导入新文件',
     rows: {
@@ -100,9 +100,9 @@ export const zhHans: Messages = {
       resolution: '分辨率',
       frameRate: '帧率',
       soundFormat: '音频格式',
-      soundChannels: '声音通道',
-      sampleRate: '声音采样率',
-      sound: '声音',
+      soundChannels: '音频声道',
+      sampleRate: '音频采样率',
+      sound: '音频',
       captions: '字幕',
       fileType: '文件类型',
     },
@@ -111,11 +111,11 @@ export const zhHans: Messages = {
     rotated: '旋转了{degrees}°。输出结果将保持竖直状态。',
     variesOnAverage: '平均 {rate}，但会有波动',
     variesNote:
-      'Teams、Zoom 和屏幕录制的录像帧率通常会波动。输出文件将采用稳定的帧速率，以确保声音和画面同步。',
+      'Teams、Zoom 和屏幕录制的录像帧率通常会波动。输出文件将采用稳定的帧速率，以确保音频和画面同步。',
     outputRate: '输出将以 {rate} 速率运行，因此某些帧将会重复。',
     sampleRate: '{kilohertz} kHz — 每秒 {hertz} 次采样',
     noSoundTrack: '未找到音轨',
-    noSoundNote: '音量调整需要声音。其他工作照常进行。',
+    noSoundNote: '音量调整需要音频。其他工作照常进行。',
     captionsUnchecked: '无法在此类文件中进行检查',
     captionsFound: '已找到 {found}',
     captionsNone: '此文件中未找到任何内容',
@@ -397,9 +397,9 @@ export const zhHans: Messages = {
     notLoaded: '由于结尾图形无法加载，因此未包含在视频中。其他所有步骤均已按要求完成。',
     endedEarly: {
       picture: '您选择的文件提前结束：画面在{stops}处停止，而全长应为{end}。',
-      sound: '您选择的文件提前结束：声音在{stops}处停止，而全长应为{end}。',
-      together: '您选择的文件提前结束：画面和声音在{stops}处停止，而全长应为{end}。',
-      both: '您选择的文件提前结束：画面在{picture}处停止，声音在{sound}处停止，而全长应为{end}。',
+      sound: '您选择的文件提前结束：音频在{stops}处停止，而全长应为{end}。',
+      together: '您选择的文件提前结束：画面和音频在{stops}处停止，而全长应为{end}。',
+      both: '您选择的文件提前结束：画面在{picture}处停止，音频在{sound}处停止，而全长应为{end}。',
       held: '从那里到结尾图形，视频会一直停留在最后一帧画面。',
       next: '如果您有完整的副本，请用它重新制作视频。',
     },
@@ -479,9 +479,9 @@ export const zhHans: Messages = {
       '此 Chrome 浏览器版本可能已过期，或者此计算机上的某个设置可能已关闭此功能。请更新 Chrome 浏览器，或咨询计算机管理员。',
     reasons: {
       noWebCodecs: '此浏览器无法处理视频。{remedy}',
-      noAacEncodeHere: '此浏览器无法为视频文件添加声音。{remedy}',
+      noAacEncodeHere: '此浏览器无法为视频文件添加音频。{remedy}',
       noAacEncodeElsewhere:
-        '此浏览器无法为视频文件添加声音。{remedy} Firefox 可以播放视频，但无法创建所需的声音。',
+        '此浏览器无法为视频文件添加音频。{remedy} Firefox 可以播放视频，但无法创建所需的音频。',
       noH264Encode: '此浏览器无法创建此工具所需的视频格式。{remedy}',
       noSourceDecodeHere:
         '此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。',
@@ -515,19 +515,19 @@ export const zhHans: Messages = {
       '这看起来像是幻灯片或屏幕录像，所以文件大小会进一步缩小。如果主要是摄像机拍摄的视频，请选择{best}。',
   },
   warnings: {
-    soundHeading: '值得了解的声音特性',
+    soundHeading: '值得了解的音频特性',
     finishedHeading: '关于最终视频值得了解的事项',
     reassurance: '这些都不会阻止您继续操作。您的原始文件也不会因此而改变。',
     spoken: '{heading}：{titles}。',
     endsEarly: {
       heading: '文件提前结束',
       detail:
-        '声音在{stops}处停止，而全长应为{end}。文件可能在复制或录制时被中断。{stops}之后，新视频将没有声音。如果您有完整的副本，请改为选择该副本。',
+        '音频在{stops}处停止，而全长应为{end}。文件可能在复制或录制时被中断。{stops}之后，新视频将没有声音。如果您有完整的副本，请改为选择该副本。',
     },
     noAudio: {
-      heading: '这段视频没有声音',
+      heading: '这段视频没有音频',
       detail:
-        '由于没有需要调节音量的声音，所以后续工作将在没有声音的情况下进行。如果您需要声音，请在发布前检查录音。',
+        '由于没有需要调节音量的音频，所以后续工作将在没有音频的情况下进行。如果您需要音频，请在发布前检查录音。',
     },
     decodeDamage: {
       heading: {
@@ -545,7 +545,7 @@ export const zhHans: Messages = {
       },
     },
     clipping: {
-      heading: '声音某些地方可能会失真',
+      heading: '音频某些地方可能会失真',
       detail:
         '录音通常会达到最大音量，因此部分音频可能会出现削波失真。这通常意味着麦克风的音量设置过高。虽然电平调整仍在进行，但录音中已存在的失真无法消除。',
     },
@@ -576,7 +576,7 @@ export const zhHans: Messages = {
     metadataLost: {
       heading: '无法复制文件的标题和日期',
       detail:
-        '图片和声音不受影响。如果您的原文件包含标题、作者或日期，新文件中将不会包含这些信息——您仍然可以在上传文件时自行添加。',
+        '图片和音频不受影响。如果您的原文件包含标题、作者或日期，新文件中将不会包含这些信息——您仍然可以在上传文件时自行添加。',
     },
   },
   announce: {
@@ -596,7 +596,7 @@ export const zhHans: Messages = {
       notAVideo:
         '此文件无法作为视频文件读取。它必须是视频文件——文件名以 .mp4、.mov、.mkv 或 .webm 结尾——并且可能已损坏。',
       soundOnly:
-        '此文件包含声音但没有视频。此工具用于在视频中添加品牌标识，因此需要包含画面的文件。',
+        '此文件包含音频但没有视频。此工具用于在视频中添加品牌标识，因此需要包含画面的文件。',
       noTracks: '此文件中未找到视频或音频。文件可能不完整，或者保存方式不正确。',
       readError: '读取此文件时出错。文件可能已损坏，或者格式与此工具不兼容。',
       tookTooLong: '读取此文件耗时比预期长，或者该工具遇到了问题。',
@@ -607,14 +607,14 @@ export const zhHans: Messages = {
       next: '在步骤 2 中正确设置开始时间和结束时间，然后重试。',
     },
     unlevellable: {
-      what: '由于这段录音的声音无法达到正常水平，所以没有制作视频。',
+      what: '由于这段录音的音频无法达到正常水平，所以没有制作视频。',
       next: '请使用“发送反馈”按钮进行报告——它附带的详细信息将有所帮助。',
     },
     outputLoudness: {
-      what: '最终的声音没有达到正常水平，所以视频没有保留。',
+      what: '最终的音频没有达到正常水平，所以视频没有保留。',
     },
     outputPeak: {
-      what: '最终的声音在峰值处音量过大，因此视频没有保留。',
+      what: '最终的音频在峰值处音量过大，因此视频没有保留。',
     },
     outputUnreadable: {
       what: '由于制作完成的视频无法重新读取，因此没有保存。',
@@ -679,7 +679,7 @@ export const zhHans: Messages = {
       secure: '安全连接（存储访问所需）',
       webcodecs: '浏览器中的视频处理（WebCodecs）',
       h264: '该工具生成的视频格式为（H.264）',
-      aac: '该工具生成的声音格式（AAC）',
+      aac: '该工具生成的音频格式（AAC）',
       opfs: '私人工作存储',
       worker: '后台处理',
     },
@@ -689,7 +689,7 @@ export const zhHans: Messages = {
       notAvailable: '无法使用',
       supported: '支持',
       notSupported: '不支持',
-      aacNotSupported: '不支持——此处无法制作带声音的视频',
+      aacNotSupported: '不支持——此处无法制作带音频的视频',
       failedToStart: '启动失败',
       readyIn: '准备时间：{time}',
       noResponse: '没有回应',
