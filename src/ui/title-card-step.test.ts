@@ -24,7 +24,7 @@ import {
   isCardEmpty,
   firstSubmissionProblem,
   refusalText,
-  studentIdsHelperText,
+  studentIdsHelperLines,
   studentIdTokens,
   submissionCardRequest,
   submissionCardText,
@@ -275,19 +275,22 @@ describe('the ID numbers’ rules come from config, in the words too (VH-140, de
     try {
       for (const tag of LANGUAGES_OFFERED) {
         setLanguage(tag)
-        const text = studentIdsHelperText()
-        expect(text, tag).toBe(
-          [t().titleCard.submission.idsHelper({ digits: STUDENT_ID_DIGITS }), t().titleCard.submission.idsHelperNext({ max: STUDENT_IDS_MAX })].join(t().meta.separators.sentences),
-        )
+        const lines = studentIdsHelperLines()
+        expect(lines, tag).toEqual([
+          t().titleCard.submission.idsHelper({ digits: STUDENT_ID_DIGITS }),
+          t().titleCard.submission.idsHelperNext({ max: STUDENT_IDS_MAX }),
+        ])
+        const text = lines.join(t().meta.separators.sentences)
         expect(text, tag).toContain(String(STUDENT_ID_DIGITS))
         expect(text, tag).toContain(String(STUDENT_IDS_MAX))
       }
     } finally {
       setLanguage('en-GB')
     }
-    expect(studentIdsHelperText()).toBe(
-      'Each student ID (identity) number is 8 digits. Type up to 8, with spaces, commas or new lines between them. Do not add names.',
-    )
+    expect(studentIdsHelperLines()).toEqual([
+      'Each student ID (identity) number is 8 digits.',
+      'Type up to 8, with spaces, commas or new lines between them. Do not add names.',
+    ])
   })
 
   it('a wrong number is said with the configured length', () => {

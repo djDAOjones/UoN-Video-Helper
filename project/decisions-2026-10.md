@@ -282,3 +282,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-19 — VH-128 — Under Student submission, Step 3's box is ticked and locked, and Submission's fields show
+
+**Decision:** under Student submission, Step 3's "Add a title card" box is ticked and locked, with its reason in visible text, and Submission's four typed fields show in place of the staff card's; each side keeps its own fields for the way back, and neither is remembered beyond the page — because the acceptance makes the card always on under a submission, and VH-131 locks the closing's box ticked with its reason the same way.
+
+**Rationale:** VH-127 locked the box off under a submission only until this item built its card. Ticked and locked says the card is coming and why, as the closing's Internal use only box does; a separate control for an always-on card would be a control with nothing to choose. The staff card's tick and fields are kept, as before.
+
+**Supersedes:** 2026-10-19 — VH-127 — Under Student submission, the staff card's box is locked off and its fields kept
+
+**Deferred:** none

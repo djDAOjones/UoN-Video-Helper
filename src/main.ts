@@ -170,7 +170,7 @@ import {
   STATEMENT_ID,
   wireAccessibilityStatement,
 } from './ui/accessibility-statement'
-import { buildLosses, renderSourceError, renderSourceReport } from './ui/source-panel'
+import { buildLosses, readLine, renderSourceError, renderSourceReport } from './ui/source-panel'
 import type { SourceReport } from './media/inspect'
 import { lossesSpoken, spoken, warningsSpoken } from './ui/announce'
 import { browserNote, summariseChecks, type CheckState } from './ui/system-check'
@@ -863,10 +863,11 @@ function paintHelperLines(container: HTMLElement, lines: readonly string[], word
 /** The read outcome keeps no-sound visible and spoken, bold without duplicating the live text (VH-148). */
 function setSourceReadStatus(report: SourceReport, spokenOnly: Text = ''): void {
   show(sourceStatusLine, () => {
-    paintStatus(sourceStatusLine, () => t().source.readSummary, spokenOnly)
-    if (!report.audio) {
+    const { read, noSound } = readLine(report)
+    paintStatus(sourceStatusLine, read, spokenOnly)
+    if (noSound) {
       const emphasis = document.createElement('strong')
-      emphasis.textContent = t().source.noSound
+      emphasis.textContent = noSound
       sourceStatusLine.firstChild?.after(document.createTextNode(sentenceGap()), emphasis)
     }
   })

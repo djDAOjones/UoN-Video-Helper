@@ -201,15 +201,11 @@ export function studentIdTokens(typed: string): string[] {
 }
 
 /**
- * The line under the ID numbers' box, its length and its most taken from the
- * config the check uses, so the words and the check cannot part (VH-140,
- * design pass V-29).
+ * The lines under the ID numbers' box, the format and the entry instructions
+ * as separate facts on screen (VH-148), their length and their most taken
+ * from the config the check uses, so the words and the check cannot part
+ * (VH-140, design pass V-29).
  */
-export function studentIdsHelperText(): string {
-  return studentIdsHelperLines().join(sentenceGap())
-}
-
-/** ID format and entry instructions are separate facts on screen (VH-148). */
 export function studentIdsHelperLines(): string[] {
   return [
     t().titleCard.submission.idsHelper({ digits: STUDENT_ID_DIGITS }),

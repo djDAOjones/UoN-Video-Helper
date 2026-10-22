@@ -12,6 +12,7 @@
 
 - VH-150 — the job's state: Show progress withdrawn and Announce progress kept, a fresh bar per job, "The job is stopping" withdrawn once the worker settles, Save the one primary beside an unreadable file, a result's warnings beside it, Set end to its own field, VH-141's states pinned; checked in Chrome at 1280 px in English, the rest a wish line (2026-10-22) — see decisions
 - VH-151 — disabled controls look disabled: a locked select's arrow, the disabled Choose file button and a locked, invalid field take the disabled look; the trim fields give way below 12 rem, so 280 px and an 18 px font never scroll sideways; the weights pinned, the status mark a role of its own; checked in headless Chrome in three languages, three modes, down to 280 px (2026-10-22) — see decisions
+- VH-152 — the tests guard what the page draws: the Chinese date refused on its own, an unmatched date template wraps as ordinary text, the read line, closing line and ID helper tested through what the page calls, three dead functions retired, None's reason keyed to None and pinned in the markup; no change a user can see; `spike-cards.html` all pass (2026-10-22) — see decisions
 
 ## The Codex run reviewed
 

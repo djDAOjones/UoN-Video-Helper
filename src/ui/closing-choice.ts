@@ -20,7 +20,7 @@ import {
 } from '../config/branding'
 import type { LanguageTag } from '../config/languages'
 import type { VideoKind } from '../config/video-kind'
-import { closingWords, language, sentenceGap, t } from '../i18n'
+import { closingWords, language, t } from '../i18n'
 
 /** The option text of "Animation type", which the disabled reasons quote. */
 export function closingTypeLabel(type: ClosingType): string {
@@ -28,19 +28,12 @@ export function closingTypeLabel(type: ClosingType): string {
 }
 
 /**
- * One sentence for the current selection: what the viewer sees at the end,
- * and what it costs in seconds — and a second, with Internal use only, that
- * quotes the words the card will carry, in the video's text language
- * (VH-132), the page's unless another is given.
+ * The current selection's result, one line each as the page draws them
+ * (VH-148): what the viewer sees at the end and what it costs in seconds,
+ * and, with Internal use only, a line that quotes the words the card will
+ * carry, in the video's text language (VH-132), the page's unless another is
+ * given.
  */
-export function closingResultText(
-  controls: ClosingControls,
-  wordsLanguage: LanguageTag = language(),
-): string {
-  return closingResultLines(controls, wordsLanguage).join(sentenceGap())
-}
-
-/** Independent facts for the on-screen helper, with the internal-use sentence on its own line (VH-148). */
 export function closingResultLines(controls: ClosingControls, wordsLanguage: LanguageTag = language()): string[] {
   const { closing } = t()
   const { result } = closing
@@ -112,12 +105,17 @@ export function internalCheckboxState(
   return { checked: staffChecked, disabled: noClosing !== null, reason: noClosing }
 }
 
-/** Visible reasons: None is shared once; other locks retain their own explanation (VH-144). */
+/**
+ * Visible reasons: None is shared once; other locks retain their own
+ * explanation (VH-144). Keyed to None itself, not to the colour's rule, so a
+ * colour lock added for another type cannot hide the others' reasons
+ * (VH-152).
+ */
 export function visibleClosingReasons(type: ClosingType, internalReason: string | null): {
   readonly shared: string | null
   readonly onset: string | null
   readonly internal: string | null
 } {
-  const shared = colourDisabledReason(type)
-  return { shared, onset: shared ? null : onsetDisabledReason(type), internal: shared ? null : internalReason }
+  if (type === 'none') return { shared: t().closing.notUsedWith.none, onset: null, internal: null }
+  return { shared: null, onset: onsetDisabledReason(type), internal: internalReason }
 }

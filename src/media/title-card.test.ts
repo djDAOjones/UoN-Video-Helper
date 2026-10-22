@@ -393,6 +393,26 @@ describe('Submission’s generated date and caveat (VH-146)', () => {
     expect(lineTexts(lines)).toEqual([date, note])
     // An indivisible phrase refuses an impossibly narrow line instead of clipping.
     expect(wrap(details.role, runs, 20, maxWidth - 1, FONTS)).toBeNull()
+    // Each piece on its own, one pixel short of itself, so the refusal cannot
+    // come from the wider one alone: in Chinese the note is wider, and a
+    // breakable date passed the line above (VH-152, R2-12).
+    const [dateRun, , noteRun] = runs
+    expect(dateRun!.text).toBe(date)
+    expect(noteRun!.text).toBe(note)
+    expect(wrap(details.role, [dateRun!], 20, fakeMeasure('bold 20px Body', date) - 1, FONTS)).toBeNull()
+    expect(wrap(details.role, [noteRun!], 20, fakeMeasure('bold 20px Body', note) - 1, FONTS)).toBeNull()
+  })
+
+  it('wraps a template it cannot split as ordinary text, never one unbreakable piece', () => {
+    // A future template with no em dash or full-width bracket (VH-152).
+    const made = 'Card made on 19 October 2026 and not the submission date'
+    const details = submissionCardBlocks({ ...SUBMISSION, made }).at(-1)!
+    const runs = details.runs.slice(6)
+    expect(runs.map((run) => run.text).join('')).toBe(made)
+    expect(runs.every((run) => !run.unbreakable)).toBe(true)
+    const lines = wrap(details.role, runs, 20, fakeMeasure('bold 20px Body', 'submission'), FONTS)
+    expect(lines).not.toBeNull()
+    expect(lines!.length).toBeGreaterThan(1)
   })
 
   it('leaves a typed staff date free to break at ordinary spaces', () => {

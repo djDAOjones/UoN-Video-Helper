@@ -186,10 +186,13 @@ export function buildRows(report: SourceReport): Row[] {
   return rows
 }
 
-/** A one-line summary suitable for announcing into a live region. */
-export function summarise(report: SourceReport): string {
+/**
+ * Step 1's read line, as the page draws it: "Video read.", then "No sound."
+ * in bold when the file has none, so the loss is seen and said (VH-148).
+ */
+export function readLine(report: SourceReport): { readonly read: string; readonly noSound: string | null } {
   const { source } = t()
-  return report.audio ? source.readSummary : `${source.readSummary}${sentenceGap()}${source.noSound}`
+  return { read: source.readSummary, noSound: report.audio ? null : source.noSound }
 }
 
 /**

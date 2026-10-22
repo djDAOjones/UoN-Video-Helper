@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-22 — VH-152 — Three test-only functions retired; the read line's words come from `readLine()`
+
+**Decision:** `summarise()`, `closingResultText()` and `studentIdsHelperText()` are retired, and their assertions now test `readLine()`, `closingResultLines()` and `studentIdsHelperLines()`, which the page calls. A Submission date template the renderer cannot split wraps as ordinary text, because one unbreakable piece would be refused with an error that no edit clears.
+
+**Rationale:** R2-12 and R2-13, and the rank-3 VH-146 and VH-144 findings, in `reviews/2026-10-22/claude-review-of-codex-run.md`. `readLine()` returns the read sentence and "No sound." apart, because the page draws the second in bold. The test that joins the closing lines joins them as the retired function did, so every sentence assertion stands unchanged. The mutation was reproduced before the fix: it failed for English and Malay only. `spike-cards.html` was re-run because `title-card.ts` changed: ALL PASS. Standards: house conventions, regression tests by category, no hollow tests, minimal change; UI-STANDARDS, a disabled control explains itself; WCAG 1.3.1. No change a user can see, and no string or dependency changed. Not checked by a second model.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-22 — VH-151 — Disabled controls look disabled; the status mark gets its own weight role
 
 **Decision:** a system check's pass or fail mark takes `--type-weight-mark` (700), a role of its own, because it is a status glyph, not a heading. The fix that keeps a locked, invalid textarea's dashed edge, `:not(:disabled)` on the invalid rule, also applies to the text field, which had the same defect.
@@ -545,15 +555,5 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Rationale:** Slice (a) drafted twenty rows, each marked "drafted by the agent" in `reviews/2026-10-18/VH-105-strings-filled.csv`; the owner was shown every row beside its English and approved them as drafted. The marks stay in the sheet for a translator's review; a correction goes through the sheet and `scripts/strings-table.mjs`. VH-122 is the first open, unblocked line in Current, Band 6 waiting on the owner. In the same round the owner approved the spec text for §4.1 and §9.1, kept word for word in VH-128's notes until the close applies it.
 
 **Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-19 — VH-128 — Under Student submission, Step 3's box is ticked and locked, and Submission's fields show
-
-**Decision:** under Student submission, Step 3's "Add a title card" box is ticked and locked, with its reason in visible text, and Submission's four typed fields show in place of the staff card's; each side keeps its own fields for the way back, and neither is remembered beyond the page — because the acceptance makes the card always on under a submission, and VH-131 locks the closing's box ticked with its reason the same way.
-
-**Rationale:** VH-127 locked the box off under a submission only until this item built its card. Ticked and locked says the card is coming and why, as the closing's Internal use only box does; a separate control for an always-on card would be a control with nothing to choose. The staff card's tick and fields are kept, as before.
-
-**Supersedes:** 2026-10-19 — VH-127 — Under Student submission, the staff card's box is locked off and its fields kept
 
 **Deferred:** none

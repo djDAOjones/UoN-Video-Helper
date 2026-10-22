@@ -776,3 +776,14 @@ describe('the trim step (VH-96)', () => {
   })
 })
 
+
+describe('None’s shared reason (VH-144, pinned by VH-152)', () => {
+  it('describes each of the three controls None locks', () => {
+    // A control that loses the id loses the reason a screen reader hears.
+    for (const id of ['closing-onset', 'closing-colour', 'closing-internal']) {
+      const tag = new RegExp(`<[a-z]+\\b[^>]*\\bid="${id}"[^>]*>`).exec(markup)?.[0] ?? ''
+      expect(tag, id).toMatch(/aria-describedby="[^"]*\bclosing-none-reason\b/)
+    }
+    expect(markup).toMatch(/<p class="helper" id="closing-none-reason" hidden><\/p>/)
+  })
+})

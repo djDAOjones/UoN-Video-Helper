@@ -7,7 +7,7 @@
 
 import { describe, expect, it } from 'vitest'
 
-import { t } from '../i18n'
+import { sentenceGap, t } from '../i18n'
 
 import {
   CLOSING_COLOURS,
@@ -18,7 +18,7 @@ import {
   type ClosingControls,
 } from '../config/branding'
 import {
-  closingResultText,
+  closingResultLines,
   colourDisabledReason,
   internalCheckboxState,
   internalDisabledReason,
@@ -26,28 +26,31 @@ import {
   visibleClosingReasons,
 } from './closing-choice'
 
+/** The result's lines as one string, so a sentence is asserted whole (VH-152: the page draws the lines). */
+const shown = (controls: ClosingControls): string => closingResultLines(controls).join(sentenceGap())
+
 const every: ClosingControls[] = CLOSING_TYPES.flatMap((type) =>
   CLOSING_ONSETS.flatMap((onset) => CLOSING_COLOURS.map((colour) => ({ type, onset, colour, internal: false }))),
 )
 
 describe('the result line (VH-90)', () => {
   it('says the four sentences the ticket drafted', () => {
-    expect(closingResultText({ type: 'cut', onset: 'existing', colour: 'blue', internal: false })).toBe(
+    expect(shown({ type: 'cut', onset: 'existing', colour: 'blue', internal: false })).toBe(
       'Your video cuts to the blue closing card. Adds 4 seconds.',
     )
-    expect(closingResultText({ type: 'fade', onset: 'existing', colour: 'blue', internal: false })).toBe(
+    expect(shown({ type: 'fade', onset: 'existing', colour: 'blue', internal: false })).toBe(
       'The blue closing graphics fade in over your last second of video, covering it as they build. Adds 4 seconds.',
     )
-    expect(closingResultText({ type: 'slide', onset: 'freeze', colour: 'white', internal: false })).toBe(
+    expect(shown({ type: 'slide', onset: 'freeze', colour: 'white', internal: false })).toBe(
       'Your last frame is held while the white closing graphics slide in, so nothing is covered. Adds 5 seconds.',
     )
-    expect(closingResultText({ type: 'none', onset: 'existing', colour: 'blue', internal: false })).toBe(
+    expect(shown({ type: 'none', onset: 'existing', colour: 'blue', internal: false })).toBe(
       'No University closing graphics will be added.',
     )
   })
 
   it.each(every)('states the seconds the job will really add: $type / $onset / $colour', (controls) => {
-    const text = closingResultText(controls)
+    const text = shown(controls)
     const choice = brandingChoiceFor(controls, 'en-GB')
     if (!choice.closing) {
       expect(text).not.toMatch(/Adds/)
@@ -58,18 +61,18 @@ describe('the result line (VH-90)', () => {
 
   it('makes "None" unmistakable, because under "Animation type" it reads as no animation', () => {
     // Cut is the closing with no animation. None removes the closing.
-    const none = closingResultText({ type: 'none', onset: 'freeze', colour: 'white', internal: false })
+    const none = shown({ type: 'none', onset: 'freeze', colour: 'white', internal: false })
     expect(none).toMatch(/No University closing/)
-    expect(closingResultText({ type: 'cut', onset: 'freeze', colour: 'white', internal: false })).toMatch(
+    expect(shown({ type: 'cut', onset: 'freeze', colour: 'white', internal: false })).toMatch(
       /cuts to the white closing card/,
     )
   })
 
   it('says what happens to the last second, as the old options did', () => {
-    expect(closingResultText({ type: 'slide', onset: 'existing', colour: 'blue', internal: false })).toMatch(
+    expect(shown({ type: 'slide', onset: 'existing', colour: 'blue', internal: false })).toMatch(
       /over your last second of video, covering it/,
     )
-    expect(closingResultText({ type: 'fade', onset: 'freeze', colour: 'blue', internal: false })).toMatch(
+    expect(shown({ type: 'fade', onset: 'freeze', colour: 'blue', internal: false })).toMatch(
       /last frame is held.*nothing is covered/,
     )
   })
@@ -77,15 +80,15 @@ describe('the result line (VH-90)', () => {
   it('names the colour for every selection that has a closing', () => {
     for (const controls of every) {
       if (controls.type === 'none') continue
-      expect(closingResultText(controls)).toContain(`${controls.colour} closing`)
+      expect(shown(controls)).toContain(`${controls.colour} closing`)
     }
   })
 
   it('ignores an onset the type does not use', () => {
     // Onset is disabled under Cut, and its stale value must not leak into the
     // sentence.
-    expect(closingResultText({ type: 'cut', onset: 'freeze', colour: 'blue', internal: false })).toBe(
-      closingResultText({ type: 'cut', onset: 'existing', colour: 'blue', internal: false }),
+    expect(shown({ type: 'cut', onset: 'freeze', colour: 'blue', internal: false })).toBe(
+      shown({ type: 'cut', onset: 'existing', colour: 'blue', internal: false }),
     )
   })
 })
@@ -112,18 +115,18 @@ describe('why a control is disabled (VH-90)', () => {
 
 describe('Internal use only in the result line (VH-126)', () => {
   it('says the words the card will carry, after the closing’s own sentence', () => {
-    expect(closingResultText({ type: 'cut', onset: 'existing', colour: 'blue', internal: true })).toBe(
+    expect(shown({ type: 'cut', onset: 'existing', colour: 'blue', internal: true })).toBe(
       'Your video cuts to the blue closing card. Adds 4 seconds. The card says “Internal use only” under the logo.',
     )
   })
 
   it.each(every)('never changes the seconds: $type / $onset / $colour', (controls) => {
-    const marked = closingResultText({ ...controls, internal: true })
-    expect(marked.startsWith(closingResultText(controls))).toBe(true)
+    const marked = shown({ ...controls, internal: true })
+    expect(marked.startsWith(shown(controls))).toBe(true)
   })
 
   it('says nothing of the words under None, which has no card', () => {
-    expect(closingResultText({ type: 'none', onset: 'existing', colour: 'blue', internal: true })).toBe(
+    expect(shown({ type: 'none', onset: 'existing', colour: 'blue', internal: true })).toBe(
       'No University closing graphics will be added.',
     )
   })
@@ -187,6 +190,13 @@ describe('one visible reason for None (VH-144)', () => {
     for (const kind of ['staff', 'submission'] as const) {
       const internal = internalCheckboxState(kind, 'none', false)
       expect(visibleClosingReasons('none', internal.reason)).toEqual({ shared: 'Not used with None.', onset: null, internal: null })
+    }
+  })
+  it('shows the shared reason for None alone, every other type keeping its own', () => {
+    // Keyed to None, not to the colour's rule (VH-152).
+    for (const type of CLOSING_TYPES) {
+      const { shared } = visibleClosingReasons(type, null)
+      expect(shared === null, type).toBe(type !== 'none')
     }
   })
   it('keeps Cut’s onset reason and Submission’s separate internal rule', () => {

@@ -15,7 +15,7 @@ import {
   type LanguageTag,
 } from '../config/languages'
 import { closingWords, setLanguage } from '../i18n'
-import { closingResultText } from './closing-choice'
+import { closingResultLines } from './closing-choice'
 import { videoKindResultText } from './video-kind'
 import {
   quotedWordsParts,
@@ -189,13 +189,15 @@ describe('the words and the language’s own name, marked together (VH-140)', ()
 
 describe('the lines that quote the words, in every page and video language', () => {
   const marked = { type: 'cut', onset: 'existing', colour: 'blue', internal: true } as const
+  /** The closing result's lines as the page draws them, one per line (VH-152). */
+  const shown = (controls: typeof marked, video?: LanguageTag): string => closingResultLines(controls, video).join('\n')
 
   it('quote the video’s words, in the page’s sentence', () => {
     for (const page of LANGUAGES_OFFERED) {
       setLanguage(page)
       for (const video of LANGUAGES_OFFERED) {
         const words = closingWords(video)
-        expect(closingResultText(marked, video), `${page} ${video}`).toContain(`${words}`)
+        expect(shown(marked, video), `${page} ${video}`).toContain(`${words}`)
         for (const kind of ['staff', 'submission'] as const) {
           expect(videoKindResultText(kind, video), `${page} ${video} ${kind}`).toContain(words)
         }
@@ -211,7 +213,7 @@ describe('the lines that quote the words, in every page and video language', () 
           closingWords(tag),
         )
         for (const other of others) {
-          expect(closingResultText(marked, video), `${page} ${video}`).not.toContain(other)
+          expect(shown(marked, video), `${page} ${video}`).not.toContain(other)
           expect(videoKindResultText('staff', video), `${page} ${video}`).not.toContain(other)
         }
       }
@@ -220,7 +222,7 @@ describe('the lines that quote the words, in every page and video language', () 
 
   it('follow the page’s language when no video language is given', () => {
     setLanguage('ms-MY')
-    expect(closingResultText(marked)).toContain(closingWords('ms-MY'))
+    expect(shown(marked)).toContain(closingWords('ms-MY'))
     expect(videoKindResultText('submission')).toContain(closingWords('ms-MY'))
   })
 })

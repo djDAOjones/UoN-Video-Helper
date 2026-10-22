@@ -387,12 +387,13 @@ export interface SubmissionCardText {
  * The three generated date templates put their caveat after an em dash or an
  * opening full-width bracket. Keep the date and that complete caveat atomic;
  * retain the template’s space between them. A future unrecognised template
- * stays whole rather than acquiring an unsafe break. Typed dates do not use
- * this path. The language-table regression pins these three templates.
+ * wraps as ordinary text: one unbreakable piece would be refused against the
+ * assignment field with an error no edit clears (VH-152). Typed dates do not
+ * use this path. The language-table regression pins these three templates.
  */
 function submissionDateRuns(value: string): CardRun[] {
   const parts = /^(.*?)(\s*)(—.*|（.*)$/u.exec(value)
-  if (!parts) return [{ text: value, weight: 'bold', unbreakable: true }]
+  if (!parts) return [{ text: value, weight: 'bold' }]
   return [
     { text: parts[1]!, weight: 'bold', unbreakable: true },
     { text: parts[2]!, weight: 'bold' },
