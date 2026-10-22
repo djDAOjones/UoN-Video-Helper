@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-22 — VH-168 — The file chooser stays native: its words follow the browser's language, its name the page's
+
+**Decision:** Choose file keeps the browser's own file input, so its button and "No file chosen" stay in the browser's language on a Chinese or Malay page, while its accessible name, the step heading, follows the page's; no page change, because translating those words needs a new element, which the owner's simplicity rule rules out.
+
+**Rationale:** The owner's words, in VH-163's closing decision: "Keep the browser's own file chooser and record the limitation." Chrome draws both phrases inside the native input and CSS cannot change them. Checked in Chrome 155 with the browser in English: in all three page languages the input's accessible name is the step heading ("1. Choose a video", "1. 选择一个视频", "1. Pilih video") and its value "No file chosen", the browser's words. Neither record claims otherwise: spec §9 says the page repaints in the chosen language and §9.2 checks every string the page can show, which the browser's own words are not; the accessibility statement's five limitations do not mention the chooser and claim nothing about it. So no correction is proposed to either. Evidence: `reviews/2026-10-22/design-pass/evidence/v35-1280-zh-file-input.png`, `…/v35-1280-ms-file-input.png`. Standards: wcag-2.2-aaa 3.1.2 (the page's parts carry their language; the input's words are the browser's); nielsen 4 (one Choose file, as every page has it); carbon one primary per state.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-22 — VH-169 — A pressed state for each button kind: a fill of its own, never hover's; forced colours inverted
 
 **Decision:** each button kind held down takes its own fill from three new roles, `--interactive-active`, `--layer-active` and `--button-danger-active`, never when disabled; forced colours invert the pair; segments need none; because held down, every button drew its hover fill (V-39).
@@ -560,16 +570,6 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Decision:** the run continues on the owner's word of 01:46 BST: "resume! you have permission for everything. use the model you think most appropriate and use codex as project partner" — the session picks its model and Codex astra reviews every item — because the owner said so in chat, and the record lacked it.
 
 **Rationale:** Relayed by the run's first session to the second after the second had closed, in its addendum in the sessions' shared folder, and recorded at this, the next close, as the close verb's step 4 asks. Nothing in the overnight instruction changes. The third session began on Claude Fable 5.1; when the Fable usage limit stopped its subagents at about 08:50 BST, the owner said "Resume" and the session went on, and closed, on Claude Opus 5.5.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-21 — VH-139 — A file that ends early: each track held to its own last declared packet, said before Create and beside the record
-
-**Decision:** a track whose decode stops more than 1 s (`ENDS_EARLY_MARGIN_SECONDS`) short of its own last declared packet in the part kept — that packet's start when its bytes are in the file, its declared end when they are not — has ended early: pre-flight's analysis pass says so of the sound before Create, the encode says so of both tracks beside the record, and the record gives the length made; the Chinese and Malay are the agent's drafts, for the owner's approval — because V-01's file was made and recorded as whole with nothing said, the silent loss the rules call the worst outcome.
-
-**Rationale:** Held to its own track, so a sound that legitimately starts late, stops early or differs from the picture raises nothing; to the last packet's start when its bytes arrived, because an MP4 gives the packet before a hole the hole's length (the PCM test file's `[0.5, 1.5]` before a 1 s hole); to its declared end when they did not, so a cut that took only a long final frame is still a cut; and the packet is found just inside the exclusive out-point, so one starting at it is not kept — the last two from Codex astra's review, each with a failing test, re-checked in Chrome. Only passes that decode the whole kept part can know the tail: pre-flight's analysis pass for the sound (`decodedEndSeconds`), the encode's lanes for both; the 3-second probe and the output check are unchanged. The note gives clock times as decode damage and the trim's fields do ("Its sound stops at 0:20 of 0:30"), not the criterion's "20 s of 30", so the page has one time format; the record reuses `result.keptPart` for the length made ("21 seconds of 30 seconds, from 0:00.0 to 0:21.0"), and the line beside it adds that the last picture is held until a closing when one follows. The discard question joins the record and its lines with the table's sentence gap. Checked in Chrome with the audit's fixture, trimmed and not, with and without a closing, the whole and silent controls, and the made file read back at 21.0 s of picture; Matroska and WebM cut short declare only what is readable, so the check cannot see them (wish line). Standards applied (rule 8): Nielsen 1, 4 and 9; WCAG 4.1.3, the note and line announced with the verdict and the ready status; UI-STANDARDS System status; Carbon's inline notification, reused; house rules: numbers in `src/config/`, fail loudly on data loss, units in identifiers, tests by category, no new dependency. Item file: VH-139, with the drafts and Codex astra's findings.
 
 **Supersedes:** none
 

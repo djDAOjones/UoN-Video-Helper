@@ -17,6 +17,7 @@
 - VH-166 — one type set: eight roles, each one rule; every `h2` Lora 20/28, the footer's two included; one section heading for legends, notification titles and the statement's subheadings; the phone logo on the column's 24 px; the footer's panels 24 px apart; 16 styles to 13; checked in three languages at 1280 and 375 px, dark and forced colours (2026-10-22) — see decisions
 - VH-167 — one reading measure: running text of every size and language stops at 28rem, 448 px, where it stopped at four widths; the Chinese measure retired; the fact note and choice detail capped; the toggletip's paragraphs a blank line apart; counted in Chrome in three languages at 1280 and 375 px, at most 78 characters and 32 CJK glyphs a line (2026-10-22) — see decisions
 - VH-169 — each button kind held down takes a fill of its own, never hover's: the primary darker, a secondary's fill deeper, Discard red-90, forced colours inverted; a disabled button ignores the press; 81 real presses in Chrome, three languages, light, dark and forced colours (2026-10-22) — see decisions
+- VH-168 — the file chooser stays the browser's own: its button and "No file chosen" in the browser's language, its accessible name the page's, recorded as a limitation; the spec and statement claim nothing else; no page change; the design fixes complete (2026-10-22) — see decisions
 
 ## Phase 5 — what the review of the Codex run found
 
