@@ -790,6 +790,7 @@ export const zhHans: Messages = {
     },
   },
   footer: {
+    feedbackForm: '填写反馈表（在新标签页中打开）',
     contact: {
       intro: '如需有关本工具的帮助：',
       creators: 'Teams 上的创作团队（在新标签页中打开）',

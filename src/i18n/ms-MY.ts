@@ -851,6 +851,7 @@ export const msMY: Messages = {
     },
   },
   footer: {
+    feedbackForm: 'Isi borang maklum balas (dibuka dalam tab baharu)',
     contact: {
       intro: 'Untuk bantuan dengan alat ini:',
       creators: 'Pasukan pencipta di Teams (dibuka dalam tab baharu)',

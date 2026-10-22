@@ -43,6 +43,7 @@ import {
 import {
   CREATORS_TEAM_URL,
   FEEDBACK_ADDRESS,
+  FEEDBACK_FORM_URL,
   FEEDBACK_LEAVE_WARNING_PAUSE_MS,
   FEEDBACK_MAILTO_MAX_CHARACTERS,
   FEEDBACK_SUBJECT,
@@ -3585,6 +3586,13 @@ function openStatementForFragment(): void {
 }
 openStatementForFragment()
 window.addEventListener('hashchange', openStatementForFragment)
+
+// --- The footer's feedback form (VH-160) -----------------------------------
+// The address alone, in a new tab: nothing from the page goes with it.
+const feedbackFormLink = required<HTMLAnchorElement>('#feedback-form')
+feedbackFormLink.href = FEEDBACK_FORM_URL
+feedbackFormLink.target = '_blank'
+feedbackFormLink.rel = 'noopener noreferrer'
 
 // --- The footer's team contacts (VH-130) ------------------------------------
 // Labels repaint with the page; destinations remain the owner's named config.

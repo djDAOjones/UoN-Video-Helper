@@ -770,6 +770,14 @@
             Send feedback
           </button>
         </p>
+        <!-- VH-160. The feedback form, for what people think of the tool: a
+             link on its own line under the button, not a second control, and
+             a 44 px target like the team links below. `main.ts` gives it its
+             address from `config/feedback.ts`, plain, and a new tab, so a
+             running job raises no "Leave site?". -->
+        <p class="feedback-form-entry">
+          <a class="footer-contact-link" id="feedback-form" data-i18n="footer.feedbackForm">Fill in the feedback form (new tab)</a>
+        </p>
         <!-- VH-130. The two teams to write to, each a link on a line of its
              own: so its words say where it goes without the line above
              (2.4.9), and it is a 44 px target, with no sentence round it to

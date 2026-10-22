@@ -191,6 +191,10 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
   ],
   ['statement.about.heading', 'The Accessibility statement: a subheading'],
   [
+    'footer.feedbackForm',
+    'The foot of the page, directly under the Send feedback button: a link that opens the feedback form, in a new tab',
+  ],
+  [
     'footer.contact.intro',
     'The foot of the page, under the Send feedback button: the line over the two team links',
   ],
@@ -453,6 +457,8 @@ const NOTES: Readonly<Record<string, string>> = {
     'Completes "We are thinking of:", so it has no full stop. Keep the name Windows as it is.',
   'statement.plans.items.4': `${COMPLETES_THINKING_OF} Keep axe and Lighthouse as they are: they are the names of tools.`,
   'statement.about.dates': 'Keep the name Joe Bell as it is.',
+  'footer.feedbackForm':
+    'The words of a link on a line of its own, so they must say alone where it goes and that it opens in a new tab: use the same words for "new tab" as footer.contact.creators. "Feedback" is the same word as in the Send feedback button. The form asks what people think of the tool.',
   'footer.contact.intro':
     'Introduces the two links that follow, one under the other. Each link makes sense on its own.',
   'footer.contact.creators':

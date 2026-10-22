@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-22 — VH-160 — The feedback form is one link under Send feedback, its plain address from config, in a new tab
+
+**Decision:** a link on its own line directly under Send feedback, above the help links, says "Fill in the feedback form (new tab)" (填写反馈表（在新标签页中打开）, "Isi borang maklum balas (dibuka dalam tab baharu)") and opens `FEEDBACK_FORM_URL` in `src/config/feedback.ts` in a new tab with no referrer, because the owner asked for the form near the page's foot and wants the page simple; Send feedback and the help links are unchanged.
+
+**Rationale:** The link takes `.footer-contact-link`, so it is a 44 px target with the band's link colours and needs no new token; its paragraph takes the button's existing `--spacing-05` margin. The address is set once in `main.ts`, plain: a test pins it whole and holds it to no query and no fragment, so nothing from the page, the file or the build can travel with it (rules, no media egress). A new tab is not leaving the page, so Chrome fires no `beforeunload` and a running job raises no "Leave site?"; the click was checked in the browser pane with a counting listener (0). Checked in Chrome at 1280, 375 and 320 px in English, Chinese and Malay, light and dark: 44 px, 48 px where the Malay wraps at 375 and 320, no sideways scroll; forced colours checked in headless Chrome at 1280 px in all three, where the link takes the same LinkText as the team links. The Chinese and Malay are the agent's drafts, marked in the sheet for the campus colleagues (VH-105.2). Spec §9.2 and §11 still name the email as the one feedback route; the correction is drafted as VH-160.1 for the owner. Standards: WCAG 2.5.5 and 2.4.9 (wcag-2.2-aaa digest); Nielsen's minimalist design (nielsen digest).
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-22 — PLAN-5 — Phase 5 closes with its ten items shipped; Phase 6 starts with VH-160, the feedback form link
 
 **Decision:** Phase 5 closes with VH-150 to VH-159 shipped, reconciled against PLAN-5's two entries of 2026-10-22. Phase 6's first item is VH-160, the feedback form link, because it is first in PLAN-6's order and is the only Phase 6 item with nothing blocking it: VH-137 waits on the owner's review, VH-162 cuts a release that includes both, and VH-14 is the owner's upload.
@@ -564,13 +574,3 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Supersedes:** 2026-10-20 — VH-116 — The §7.1 sentence stands as worded; the wishes stay wishes, and the next item waits on the owner
 
 **Deferred:** VH-137
-
-## 2026-10-20 — PLAN-2 — The spec's budget rises to 7,800; the Always section drops two lines the profile holds; the Xerte link opens a new tab
-
-**Decision:** rules.md's routed budget for the spec rises from 6,400 to 7,800 words; the Always section drops its standards line and its push line, both already in the profile, to come under its 400-word guideline; the statement's Equality Advisory link opens in a new tab and says so in its words (VH-135) — because the owner applied the agent's recommendations in chat on 2026-10-20.
-
-**Rationale:** The spec is 7,386 words, grown by approved edits for features the owner asked for (Band 8, VH-122, VH-116); 7,800 leaves room for VH-134's six edits and VH-136's, where a trim would cost the owner a review of cuts to the authoritative document. The Always section was 433 words and is now 398. "No control for power users; Carbon productive in our own code; WCAG 2.2 AAA, exceptions recorded." is the profile's Standards adopted: Carbon in our own code, never the packages; AAA, every exception recorded; Nielsen, no control for power users. "Push and network follow the profile's Push and Network lines; a blocked push is reported as pending." is the profile's Push and Network lines and the close verb's step 7. No obligation is lost, and the census rows that named the cut line, C53, C54, C163 and C181, now name the profile as the destination; their first three cells are unchanged. The Equality Advisory and Support Service's site may refuse to load inside a Xerte frame, so the same-frame link can fail outright; a new tab, said in the link's text, is WCAG technique G201 and keeps the reader's place in the tool.
-
-**Supersedes:** none
-
-**Deferred:** VH-135

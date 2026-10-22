@@ -372,3 +372,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-20 — PLAN-2 — The spec's budget rises to 7,800; the Always section drops two lines the profile holds; the Xerte link opens a new tab
+
+**Decision:** rules.md's routed budget for the spec rises from 6,400 to 7,800 words; the Always section drops its standards line and its push line, both already in the profile, to come under its 400-word guideline; the statement's Equality Advisory link opens in a new tab and says so in its words (VH-135) — because the owner applied the agent's recommendations in chat on 2026-10-20.
+
+**Rationale:** The spec is 7,386 words, grown by approved edits for features the owner asked for (Band 8, VH-122, VH-116); 7,800 leaves room for VH-134's six edits and VH-136's, where a trim would cost the owner a review of cuts to the authoritative document. The Always section was 433 words and is now 398. "No control for power users; Carbon productive in our own code; WCAG 2.2 AAA, exceptions recorded." is the profile's Standards adopted: Carbon in our own code, never the packages; AAA, every exception recorded; Nielsen, no control for power users. "Push and network follow the profile's Push and Network lines; a blocked push is reported as pending." is the profile's Push and Network lines and the close verb's step 7. No obligation is lost, and the census rows that named the cut line, C53, C54, C163 and C181, now name the profile as the destination; their first three cells are unchanged. The Equality Advisory and Support Service's site may refuse to load inside a Xerte frame, so the same-frame link can fail outright; a new tab, said in the link's text, is WCAG technique G201 and keeps the reader's place in the tool.
+
+**Supersedes:** none
+
+**Deferred:** VH-135

@@ -184,6 +184,11 @@ a {
   margin: 0 0 var(--spacing-05);
 }
 
+/* The feedback form's link, on its own line under the button (VH-160). */
+.feedback-form-entry {
+  margin: 0 0 var(--spacing-05);
+}
+
 /*
  * The two teams to write to (VH-130), under the feedback button. Each link is
  * on a line of its own, so it is a 44 px target like any control (2.5.5); the

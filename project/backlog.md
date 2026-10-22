@@ -30,7 +30,6 @@ The public release, 0.2.0, on Xerte (PLAN-6).
 
 ### Phase 6 — the public release: the feedback form, the statement, the cut, Xerte
 
-- [ ] VH-160 — A link to the feedback form on its own line under Send feedback, in all three languages, "(new tab)"; it replaces nothing — since 2026-10-22 — (from: PLAN-6, 2026-10-22)
 - [!] VH-137 — The accessibility statement's review, due 2026-11-18, with its contradictions and its two lists corrected — since 2026-10-20 — (from: VH-130, 2026-10-18) — blocked: the owner's review and the further tests chosen
 - [ ] VH-162 — The release cut: product version 0.2.0, the Xerte package built from that commit, the brief's and profile's hosting lines proposed — since 2026-10-22 — (from: PLAN-6, 2026-10-22)
 - [!] VH-14 — Deployment: the release on Xerte, the public home, and GitHub Pages kept as the unadvertised preview — since 2026-08-24 — blocked: the owner's own work, the Xerte upload — a canon [maintainer] item

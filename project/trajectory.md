@@ -8,6 +8,10 @@
      items the canon record shipped before the migration, in v3's form;
      their why is in the frozen canon decision log (history.md). -->
 
+## Phase 6 — the public release: the feedback form, the statement, the cut, Xerte
+
+- VH-160 — a link to the feedback form on its own line under Send feedback, "(new tab)" in all three languages, its plain address from config, no "Leave site?"; checked in Chrome at 1280, 375 and 320 px, light, dark and forced colours (2026-10-22) — see decisions
+
 ## Phase 5 — what the review of the Codex run found
 
 - VH-150 — the job's state: Show progress withdrawn and Announce progress kept, a fresh bar per job, "The job is stopping" withdrawn once the worker settles, Save the one primary beside an unreadable file, a result's warnings beside it, Set end to its own field, VH-141's states pinned; checked in Chrome at 1280 px in English, the rest a wish line (2026-10-22) — see decisions

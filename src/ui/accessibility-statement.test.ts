@@ -155,6 +155,13 @@ describe('the advice service’s link (VH-135)', () => {
     }
   })
 
+  // VH-160: so does the feedback form's link.
+  it('the footer’s feedback form link says so in the same words, in every language', () => {
+    for (const [tag, table] of Object.entries(LANGUAGE_TABLES)) {
+      expect(table.footer.feedbackForm, tag).toContain(NEW_TAB[tag as keyof typeof NEW_TAB])
+    }
+  })
+
   it('is the only link that changes: the contact address stays in this tab', () => {
     expect(source).not.toMatch(/contactLink\.(target|rel)\b/)
     expect(source.match(/\.target = /g)).toHaveLength(1)

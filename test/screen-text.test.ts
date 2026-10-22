@@ -19,6 +19,7 @@ import {
 import {
   CREATORS_TEAM_URL,
   FEEDBACK_ADDRESS,
+  FEEDBACK_FORM_URL,
   LEARNING_CONTENT_TEAM_ADDRESS,
 } from '../src/config/feedback'
 import { PRESETS, type PresetId } from '../src/config/presets'
@@ -799,5 +800,35 @@ describe('None’s shared reason (VH-144, pinned by VH-152)', () => {
       expect(tag, id).toMatch(/aria-describedby="[^"]*\bclosing-none-reason\b/)
     }
     expect(markup).toMatch(/<p class="helper" id="closing-none-reason" hidden><\/p>/)
+  })
+})
+
+describe('the footer\'s feedback form (VH-160)', () => {
+  const footer = /<footer[\s\S]*?<\/footer>/.exec(markup)?.[0] ?? ''
+  const mainSource = readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8')
+
+  it('is one link on its own line, directly under Send feedback and above the team links', () => {
+    expect(footer).toMatch(
+      /<\/button>\s*<\/p>\s*<p class="feedback-form-entry">\s*<a class="footer-contact-link" id="feedback-form">Fill in the feedback form \(new tab\)<\/a>\s*<\/p>\s*<div class="footer-contacts">/,
+    )
+    expect(enGB.footer.feedbackForm).toBe('Fill in the feedback form (new tab)')
+    expect(enGB.footer.feedbackForm).not.toMatch(/\.$/)
+  })
+
+  it('goes to the owner’s form, plain: no query, no fragment, nothing from the page', () => {
+    // The rules' no-egress line: the address alone, never a filename, a
+    // media characteristic or the build ID added to it.
+    expect(FEEDBACK_FORM_URL).toBe('https://forms.cloud.microsoft/e/Meg347QQvs')
+    expect(new URL(FEEDBACK_FORM_URL).search).toBe('')
+    expect(new URL(FEEDBACK_FORM_URL).hash).toBe('')
+    expect(html).not.toContain('forms.cloud.microsoft')
+    expect(mainSource).not.toContain('forms.cloud.microsoft')
+    expect(mainSource).toContain('feedbackFormLink.href = FEEDBACK_FORM_URL\n')
+    expect(mainSource.match(/feedbackFormLink\.href/g)).toHaveLength(1)
+  })
+
+  it('opens in a new tab, sending no referrer, so a running job raises no "Leave site?"', () => {
+    expect(mainSource).toContain("feedbackFormLink.target = '_blank'")
+    expect(mainSource).toContain("feedbackFormLink.rel = 'noopener noreferrer'")
   })
 })

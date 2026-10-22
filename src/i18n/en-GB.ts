@@ -929,12 +929,14 @@ export const enGB = {
   },
 
   /**
-   * The two help routes at the foot of the page (VH-148): the Creators team
-   * on Teams in a new tab, and the learning content team by email, both
+   * The foot of the page. The feedback form, in a new tab, under Send
+   * feedback (VH-160); then the two help routes (VH-148): the Creators team
+   * on Teams in a new tab, and the learning content team by email, all
    * from `config/feedback.ts`. Each link's words say where it goes
-   * on their own (WCAG 2.4.9), so neither leans on the line above.
+   * on their own (WCAG 2.4.9), so none leans on the line above.
    */
   footer: {
+    feedbackForm: 'Fill in the feedback form (new tab)',
     contact: {
       intro: 'For help with this tool:',
       creators: 'Creators team on Teams (new tab)',
