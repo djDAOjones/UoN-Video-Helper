@@ -232,3 +232,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-19 — VH-127 — Under Student submission, the staff card's box is locked off and its fields kept
+
+**Decision:** under Student submission, Step 3's "Add a title card" box is unticked and locked, with its reason in visible text, and no card is sent; the staff card's tick and typed fields are kept and come back when the switch returns to Staff video, until VH-128 builds the submission card — because the owner chose the recommended option in chat on 2026-10-19.
+
+**Rationale:** Asked as slice (c) started, "what Step 3 shows under Student submission before VH-128 builds its card", the owner chose "Locked off, kept" over hiding the step or offering the staff card to students. A locked control says why in visible text (VH-90's rule), and the fields are kept as `staffInternal` keeps the closing's Internal use only box, so a switch to and fro loses nothing typed.
+
+**Supersedes:** none
+
+**Deferred:** VH-128

@@ -18,6 +18,62 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-22 — PLAN-5 — Phase 5: what the review of the Codex run found
+
+**Decision:** Phase 5 is four items, in this order, each with a file: VH-150 (the job's state), VH-151 (disabled controls and the trim field), VH-152 (tests that guard what the page draws) and VH-153 (the words). Together they answer the review of Codex's 21 October run. Show progress is withdrawn, and Save stays the only primary button beside an unsaved result. The owner made both calls in chat on 2026-10-22 and approved the plan, with Phase 5 first.
+
+**Rationale:** The review is `reviews/2026-10-22/claude-review-of-codex-run.md`; R2-n is finding n under its Rank 2.
+
+The owner's answers in chat on 2026-10-22:
+
+- on Show progress: "Withdraw it";
+- on the two primary buttons: "No, Save stays the one primary";
+- on the next phase: "Phase 5 first";
+- on the draft: "Approve and write it".
+
+Another session later relayed a request to remove Announce progress too. Asked here, the owner answered "No, keep Announce progress", so it stays, with its remembered choice.
+
+Show progress is withdrawn under the Nielsen digest's rule 7, power features that do not burden beginners. The page then relies on WCAG 2.2.2's reading that a job's progress is essential, and VH-150 drafts that reading for spec §9.3 as a wish line for the owner. Save stays the only primary under UI-STANDARDS' rule of one primary button per state.
+
+All 13 rank-2 findings go to Phase 5:
+
+- R2-1 to R2-5 to VH-150;
+- R2-6 and R2-11 to VH-151;
+- R2-12 and R2-13 to VH-152;
+- R2-7 to R2-10 to VH-153.
+
+Of the 30 rank-3 findings:
+
+- **21 fold into the item whose files they touch**, each named in that item's criteria.
+- **Two become wish lines:**
+  - PLAN-5.1: the Chinese `failure.captured` repeats 报告此问题. It follows the writing review's verdict on the English row, so the row changes once.
+  - PLAN-5.2: the decode-damage detail's two "recordings", which are the owner's wording.
+- **Seven are disposed of here:**
+  - VH-145's Decision line says colours were kept, but the errors intro moved to secondary text through `.step-intro`. That was asked for and is AAA. It is recorded here because entries are never edited.
+  - The worst Chinese 4:3 card's 1 px of headroom is dropped. An over-wide piece is refused at its field and never clipped, and VH-128.1 already asks a person to make the card on a real display.
+  - The readability parser now splits `radio-detail` and `helper-line` spans into passages. This is dropped as defensible, because they are laid out as separate lines. It is a measurement change, recorded here for the owner.
+  - The blank lines between Phase 3's and Phase 4's trajectory items were paid off by V31-UPGRADE's reorder.
+  - "Taken gateless" given as a Decision line's why is dropped. Entries are never edited, and this phase is not gateless.
+  - PLAN-4 named no next phase. This entry answers that.
+  - VH-124's 1,588-word item file is dropped. A shipped item's file stays as it is, and the warning comes from check:memory, which INTAKE.8 proposes retiring.
+
+The order:
+
+1. VH-150 first. A user sees its defects, and it carries the owner's two calls.
+2. VH-151 second. Its defects can be seen too, and all of them are in the stylesheet.
+3. VH-152 third. It changes only tests and nothing a user sees.
+4. VH-153 last. VH-150 removes strings and may add some, whose notes VH-153 then matches once. PLAN-4.1, the writing review, rewords `trim.intro`, `browserNote.pending`, `browserNote.notPassed` and `failure.captured`, and the owner may judge those rows first.
+
+This supersedes VH-141's entry in part. Its Show progress checkbox is withdrawn, and V-15's restored chooser emphasis does not apply while an unsaved result stands. VH-141.1 and VH-141.2 stay until VH-150 replaces them with what ships.
+
+VH-149.1 is promoted into the four items. None of the writing review's 24 proposals is applied. Nothing in Phase 5 adds a runtime dependency or edits `docs/`. The owner starts VH-150.
+
+**Supersedes:** 2026-10-21 — VH-141 — State changes retain their meaning and hand focus on
+
+**Items:** VH-150, VH-151, VH-152, VH-153
+
+**Deferred:** none
+
 ## 2026-10-22 — V31-UPGRADE — The project runs pm-next v3.1: tools, verbs and the start-notice hook replaced as a set, the record kept
 
 **Decision:** the project runs pm-next v3.1 (PM-Skills lab b5c6f4b) from the commit carrying this entry — its twelve tools and four verbs, the item schema's Now section, the start notice as a third session hook — and, each in a commit of its own after it, the wish lines take permanent IDs, each trajectory phase goes oldest first, and the WCAG 2.2 AAA digest takes v3's repair; because the owner's relayed word of 2026-10-21 approved v3.1 and asked for the upgrade, after this project's day-21 reading was sealed.
@@ -463,13 +519,3 @@
 **Supersedes:** none
 
 **Deferred:** none
-
-## 2026-10-19 — VH-127 — Under Student submission, the staff card's box is locked off and its fields kept
-
-**Decision:** under Student submission, Step 3's "Add a title card" box is unticked and locked, with its reason in visible text, and no card is sent; the staff card's tick and typed fields are kept and come back when the switch returns to Staff video, until VH-128 builds the submission card — because the owner chose the recommended option in chat on 2026-10-19.
-
-**Rationale:** Asked as slice (c) started, "what Step 3 shows under Student submission before VH-128 builds its card", the owner chose "Locked off, kept" over hiding the step or offering the staff card to students. A locked control says why in visible text (VH-90's rule), and the fields are kept as `staffInternal` keeps the closing's Internal use only box, so a switch to and fro loses nothing typed.
-
-**Supersedes:** none
-
-**Deferred:** VH-128
