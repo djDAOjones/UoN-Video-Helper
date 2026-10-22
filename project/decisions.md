@@ -18,6 +18,18 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-22 — PLAN-7 — A second design, UX and accessibility pass, with Codex astra as partner at every stage, gates the cut
+
+**Decision:** Phase 7, a second whole-page pass judged as four journeys and every scenario, in three languages, three widths, enlargement, dark and forced colours and by keyboard alone, runs as eight stage items, VH-170 to VH-177, before VH-162; Codex astra checks the plan, reviews blind, checks the method, critiques the report and the fix plan, checks every fix before commit and checks the fixes together; because the owner asked for it, with Codex as a full partner.
+
+**Rationale:** The owner's words: "lets design and run another full design / ux / accessibility pass. thorough planning and ticketed before execution". Told that in VH-163 Codex reviewed blind and critiqued the report but checked none of VH-164 to VH-169, the owner wanted Codex as a full partner. The plan is `reviews/2026-10-22/design-pass-2/plan-2026-10-22.md`. Codex critiqued the draft at `6a207b3` ("Revise before approval", twelve points, all must) and all twelve are applied, P-04 qualified: the instruments are qualified before the matrix, the evidence stage split in two, the blind review run on a frozen snapshot, the six fixes verified to a contract, VoiceOver with Safari kept as spec §13 names it. A disagreement of fact is settled by evidence or recorded unresolved; one of judgement goes to the owner, and only that remedy waits. The owner's rule holds: consolidate, no new control, checkbox or element, the progress bar kept. Person checks for Disability Support Services keep their status; the pass claims neither §13 criterion 10 nor full conformance. VH-162 carries "blocked: Phase 7"; VH-137 and VH-14 are unaffected. Fix items join the Items line in VH-175's entry. The owner approved in chat on 2026-10-22, answering three questions: "Approve", "Before the cut" and "Keep as planned".
+
+**Supersedes:** none
+
+**Items:** VH-170, VH-171, VH-172, VH-173, VH-174, VH-175, VH-176, VH-177
+
+**Deferred:** VH-171, VH-172, VH-173, VH-174, VH-175, VH-176, VH-177
+
 ## 2026-10-22 — VH-168 — The file chooser stays native: its words follow the browser's language, its name the page's
 
 **Decision:** Choose file keeps the browser's own file input, so its button and "No file chosen" stay in the browser's language on a Chinese or Malay page, while its accessible name, the step heading, follows the page's; no page change, because translating those words needs a new element, which the owner's simplicity rule rules out.
@@ -564,13 +576,3 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Supersedes:** none
 
 **Deferred:** VH-140, VH-141, VH-142, VH-144, VH-145, VH-146
-
-## 2026-10-21 — VH-143 — The owner's word at 01:46 BST: resume, permission for everything, Codex as project partner
-
-**Decision:** the run continues on the owner's word of 01:46 BST: "resume! you have permission for everything. use the model you think most appropriate and use codex as project partner" — the session picks its model and Codex astra reviews every item — because the owner said so in chat, and the record lacked it.
-
-**Rationale:** Relayed by the run's first session to the second after the second had closed, in its addendum in the sessions' shared folder, and recorded at this, the next close, as the close verb's step 4 asks. Nothing in the overnight instruction changes. The third session began on Claude Fable 5.1; when the Fable usage limit stopped its subagents at about 08:50 BST, the owner said "Resume" and the session went on, and closed, on Claude Opus 5.5.
-
-**Supersedes:** none
-
-**Deferred:** none

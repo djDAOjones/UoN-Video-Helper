@@ -31,8 +31,18 @@ The public release, 0.2.0, on Xerte (PLAN-6).
 ### Phase 6 — the public release: the feedback form, the statement, the cut, Xerte
 
 - [!] VH-137 — The accessibility statement's review, due 2026-11-18, with its contradictions and its two lists corrected — since 2026-10-20 — (from: VH-130, 2026-10-18) — blocked: the owner's review and the further tests chosen
-- [ ] VH-162 — The release cut: product version 0.2.0, the Xerte package built from that commit, the brief's and profile's hosting lines proposed — since 2026-10-22 — (from: PLAN-6, 2026-10-22)
+- [ ] VH-162 — The release cut: product version 0.2.0, the Xerte package built from that commit, the brief's and profile's hosting lines proposed — since 2026-10-22 — (from: PLAN-6, 2026-10-22) — blocked: Phase 7, the second design pass (PLAN-7)
 - [!] VH-14 — Deployment: the release on Xerte, the public home, and GitHub Pages kept as the unadvertised preview — since 2026-08-24 — blocked: the owner's own work, the Xerte upload — a canon [maintainer] item
+
+### Phase 7 — a second design, UX and accessibility pass, with Codex astra as partner, before the cut
+
+- [ ] VH-171 — The instruments qualified; Codex astra's blind review and method check — since 2026-10-22 — (from: PLAN-7, 2026-10-22)
+- [ ] VH-172 — The evidence run; the six fixes verified — since 2026-10-22 — (from: PLAN-7, 2026-10-22)
+- [ ] VH-173 — The review judged: journeys, visual, UX, WCAG 2.2 AAA; the person checklist — since 2026-10-22 — (from: PLAN-7, 2026-10-22)
+- [ ] VH-174 — The report, with Codex astra's critique — since 2026-10-22 — (from: PLAN-7, 2026-10-22)
+- [ ] VH-175 — The fix plan, with Codex astra's critique and the owner's approval — since 2026-10-22 — (from: PLAN-7, 2026-10-22)
+- [ ] VH-176 — Integrated verification: each fix checked by Codex astra, the after-run, the integrated check — since 2026-10-22 — (from: PLAN-7, 2026-10-22)
+- [ ] VH-177 — The close: Phase 7 reconciled, the cut's Phase 7 block lifted — since 2026-10-22 — (from: PLAN-7, 2026-10-22)
 
 ### Standing — the owner's, never phase-gated
 

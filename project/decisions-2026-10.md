@@ -506,3 +506,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-21 — VH-143 — The owner's word at 01:46 BST: resume, permission for everything, Codex as project partner
+
+**Decision:** the run continues on the owner's word of 01:46 BST: "resume! you have permission for everything. use the model you think most appropriate and use codex as project partner" — the session picks its model and Codex astra reviews every item — because the owner said so in chat, and the record lacked it.
+
+**Rationale:** Relayed by the run's first session to the second after the second had closed, in its addendum in the sessions' shared folder, and recorded at this, the next close, as the close verb's step 4 asks. Nothing in the overnight instruction changes. The third session began on Claude Fable 5.1; when the Fable usage limit stopped its subagents at about 08:50 BST, the owner said "Resume" and the session went on, and closed, on Claude Opus 5.5.
+
+**Supersedes:** none
+
+**Deferred:** none

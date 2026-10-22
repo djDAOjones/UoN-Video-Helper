@@ -8,6 +8,10 @@
      items the canon record shipped before the migration, in v3's form;
      their why is in the frozen canon decision log (history.md). -->
 
+## Phase 7 — a second design, UX and accessibility pass, with Codex astra as partner, before the cut
+
+- VH-170 — the second pass planned and ticketed: four journeys, scenarios, qualified instruments, four lenses, seven Codex astra touchpoints, eight stages; Codex's twelve points applied (2026-10-22) — see decisions
+
 ## Phase 6 — the public release: the feedback form, the statement, the cut, Xerte
 
 - VH-160 — a link to the feedback form on its own line under Send feedback, "(new tab)" in all three languages, its plain address from config, no "Leave site?"; checked in Chrome at 1280, 375 and 320 px, light, dark and forced colours (2026-10-22) — see decisions
