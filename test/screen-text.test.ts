@@ -398,6 +398,7 @@ describe('the accessibility statement (VH-130)', () => {
       enGB.statement.abilities.length,
       enGB.statement.limits.items.length,
       enGB.statement.plans.items.length,
+      enGB.statement.plans.optionalItems.length,
     ])
   })
 

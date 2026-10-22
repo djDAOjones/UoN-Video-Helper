@@ -394,3 +394,13 @@
 **Supersedes:** 2026-10-20 — VH-116 — The §7.1 sentence stands as worded; the wishes stay wishes, and the next item waits on the owner
 
 **Deferred:** VH-137
+
+## 2026-10-20 — PLAN-2 — The owner's standing word: the agent's recommendations answer Phase 2's open questions, and the phase runs
+
+**Decision:** Phase 2 runs item by item to its close, and on every open question in its items, the six spec edits included, the agent's recommendation stands as the owner's answer, recorded in the item's decision and shown at its close — because the owner said "happy for your recommendations on all matters, proceed" in chat on 2026-10-20.
+
+**Rationale:** The owner gave this after PLAN-2 was recorded, while VH-133's questions (the 14 cells both changed, `choose.dropHeld`) and VH-136's (where the time left shows, its rounding, what it counts, how often it is heard) were open. VH-134's criterion that the six drafts be shown before anything is written to the spec is met by showing the applied diff at its close, which the owner can reverse; the rules file still has the owner approve every spec edit, and this is that approval, given in advance for this phase only. The session that recorded this ended at VH-133's close, past the profile's 200k Session line; the next session resumes at VH-134.
+
+**Supersedes:** none
+
+**Deferred:** VH-134

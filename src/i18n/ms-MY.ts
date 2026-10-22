@@ -792,11 +792,11 @@ export const msMY: Messages = {
     covers: 'Kenyataan ini meliputi Pembantu Video UoN, iaitu halaman yang sedang anda gunakan.',
     aim: 'Kami mahu seramai mungkin orang dapat menggunakan alat ini. Anda sepatutnya dapat:',
     abilities: [
-      'menggunakannya dengan papan kekunci sahaja',
-      'menggunakannya dengan pembaca skrin, yang membacakan setiap peringkat dan keputusan',
-      'membesarkan paparan hingga 200% tanpa teks terkeluar dari skrin',
-      'menggunakan warna pilihan anda sendiri, dan mod kontras tinggi komputer anda',
-      'mematikan pergerakan pada halaman melalui tetapan komputer anda',
+      'Menggunakannya dengan papan kekunci sahaja.',
+      'Menggunakannya dengan pembaca skrin, yang membacakan setiap peringkat dan keputusan.',
+      'Membesarkan paparan hingga 200% tanpa teks terkeluar dari skrin.',
+      'Menggunakan warna pilihan anda sendiri, dan mod kontras tinggi komputer anda.',
+      'Mematikan pergerakan pada halaman melalui tetapan komputer anda.',
     ],
     plain: 'Bahasanya mudah, dan teks mempunyai kontras yang tinggi dengan latar belakangnya.',
     limits: {
@@ -804,10 +804,10 @@ export const msMY: Messages = {
       intro: 'Kami sedar bahawa sesetengah bahagian belum boleh diakses sepenuhnya:',
       items: [
         'Alat ini dibina untuk Google Chrome pada komputer. Dalam pelayar lain, ia mungkin tidak berfungsi.',
-        'Halaman bahasa Cina dan Bahasa Malaysia diterjemahkan oleh komputer. Rakan sekerja yang fasih dalam setiap bahasa sedang menyemaknya pada halaman yang telah dilancarkan.',
+        'Halaman bahasa Cina dan Bahasa Malaysia diterjemahkan oleh komputer. Kami sedang meminta rakan sekerja yang fasih dalam setiap bahasa untuk menyemaknya, jadi sesetengah perkataan mungkin salah sehingga semakan itu selesai.',
         'Teks bahasa Cina menggunakan fon Cina pada komputer anda sendiri, jadi paparannya mungkin berbeza antara satu komputer dengan komputer yang lain.',
-        'Pratonton memainkan video anda sendiri. Kapsyennya, dan sama ada ia berkelip, bergantung pada rakaman anda.',
-        'Sesetengah singkatan tidak dieja penuh: unit saiz fail, seperti MB dan GB, dan nama format video, seperti H.264 dan AAC.',
+        'Pratonton memainkan video anda sendiri seadanya. Kapsyennya, perihalan audio dan alternatif lain, serta sama ada ia berkelip, bergantung pada rakaman anda.',
+        'Sesetengah singkatan tidak dieja penuh. UoN ialah singkatan bagi University of Nottingham. Singkatan lain ialah unit saiz fail, seperti MB dan GB, dan nama format video, seperti H.264 dan AAC.',
       ],
     },
     contact: {
@@ -822,26 +822,30 @@ export const msMY: Messages = {
     },
     compliance: {
       heading: 'Status pematuhan',
-      text: 'Alat ini mematuhi sebahagian Garis Panduan Kebolehcapaian Kandungan Web (WCAG) versi 2.2 pada tahap AA, iaitu tahap pertengahan daripada tiga tahapnya. Setakat ini hanya semakan automatik, dan semakan manual kami sendiri semasa membinanya, telah dijalankan, jadi kami belum dapat menyatakan bahawa alat ini mematuhinya sepenuhnya. Kami menyasarkan tahap AAA, iaitu tahap tertinggi.',
+      text: 'Alat ini mematuhi sebahagian Garis Panduan Kebolehcapaian Kandungan Web (WCAG) versi 2.2 pada tahap AA, iaitu tahap pertengahan daripada tiga tahapnya. Ini disebabkan oleh perkara yang disenaraikan di bawah “Tahap kebolehcapaian alat ini”, dan kerana belum ada sesiapa yang mengujinya dengan pembaca skrin atau teknologi bantuan lain. Kami menyasarkan tahap AAA, iaitu tahap tertinggi.',
     },
     testing: {
       heading: 'Cara kami menguji alat ini',
       wave: 'Pada {date}, kami menyemak halaman ini dengan WAVE, alat penilaian kebolehcapaian web daripada WebAIM. Halaman ini mendapat skor 10 daripada 10.',
       automated:
-        'Setiap kali kod berubah, ujian automatik menyemak kontras teks dengan latar belakangnya, serta tahap kesukaran bacaan perkataannya.',
+        'Setiap kali kod berubah, ujian automatik menyemak kontras teks dengan latar belakangnya, serta tahap kesukaran bacaan perkataan bahasa Inggeris.',
       manual:
-        'Kami juga telah menyemaknya secara manual dalam Chrome, pada lebar skrin komputer dan telefon, semasa membinanya.',
+        'Kami juga telah menyemaknya secara manual dalam Chrome, dalam ketiga-tiga bahasa, pada lebar skrin komputer dan telefon, semasa membinanya.',
     },
     plans: {
       heading: 'Ujian yang dirancang seterusnya',
-      intro: 'Kami belum memilih ujian seterusnya. Kami sedang mempertimbangkan:',
+      intro:
+        'Kami belum menjalankan ujian ini. Kami memerlukannya sebelum dapat menyatakan bahawa alat ini mematuhi garis panduan itu sepenuhnya:',
       items: [
-        'penggunaan alat ini dengan papan kekunci sahaja',
-        'penggunaannya dengan pembaca skrin NVDA dalam Chrome pada Windows, dan dengan VoiceOver pada Mac',
-        'pembesaran paparan hingga 400%, dan penggunaan skrin selebar 320 piksel',
-        'tema kontras Windows',
-        'alat automatik kedua, seperti axe atau Lighthouse',
-        'sesi bersama kakitangan kurang upaya yang menggunakan alat ini',
+        'Penggunaan alat ini dengan papan kekunci sahaja.',
+        'Penggunaannya dengan pembaca skrin NVDA dalam Chrome pada Windows, dan dengan VoiceOver pada Mac.',
+        'Pembesaran paparan hingga 400%, dan penggunaan skrin selebar 320 piksel.',
+        'Penggunaan tema kontras Windows.',
+      ],
+      optionalIntro: 'Kami juga sedang mempertimbangkan:',
+      optionalItems: [
+        'Alat automatik kedua, seperti axe atau Lighthouse.',
+        'Sesi bersama kakitangan kurang upaya yang menggunakan alat ini.',
       ],
     },
     about: {

@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-22 — VH-137 — The statement's contradictions and its two lists corrected ahead of the owner's review
+
+**Decision:** VH-137's agent part ships before the owner's review, on the owner's relayed "approve all, proceed": the statement's seven V-09 contradictions are corrected and its eleven list items take a capital and their language's stop, with curly apostrophes, in all three languages; the next tests split into the four spec §13 needs and two optional ones, so `statement.plans` gains `optionalIntro` and `optionalItems`; the dates, the chosen tests and the review stay the owner's, so the item stays open.
+
+**Rationale:** The owner's word, relayed from the orchestrator chat on 2026-10-22: "approve all, proceed", answering whether to apply VH-137's agent part now. Each V-09 point and its words: "only automated checks" is gone, and "partially compliant" is tied to the parts listed under "How accessible this tool is" and to no one having yet tested it with a screen reader or other assistive technology (V-06, V-07 and V-10, which the audit named, are fixed by VH-140, VH-141 and VH-149); the reading level is "of the English words"; the hand checks say "in all three languages"; the preview's limitation names audio description and other alternatives; "UoN stands for University of Nottingham" joins the short forms; the colleagues "we are asking" replaces "are checking", with "some words may be wrong until they do"; the four tests §13 criterion 10 needs are "We need them before we can say the tool fully meets the guidelines", and axe or Lighthouse and the staff session sit under "We are also thinking of:". The V-24 recommendation is applied as worded. The short-forms line was split into three sentences because one read at grade 12. The Chinese and Malay are the agent's drafts, marked in the sheet. Checked in Chrome at 375 px in all three languages: the five, four and two items, no straight apostrophe, no empty line, no sideways scroll. Standards: WCAG 2.2 AAA digest, 3.1.5 reading level; Nielsen's error prevention, in a statement that no longer contradicts itself.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-22 — VH-159 — Spec §5.4 gains the cut-short row for VH-158's warning, as the owner approved it
 
 **Decision:** VH-159.1's draft row is applied to spec §5.4 as worded, after File ends early, because the owner approved it: the spec is 8,074 words, inside its 8,100 budget, so the budget stands.
@@ -562,13 +572,3 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Supersedes:** none
 
 **Deferred:** none
-
-## 2026-10-20 — PLAN-2 — The owner's standing word: the agent's recommendations answer Phase 2's open questions, and the phase runs
-
-**Decision:** Phase 2 runs item by item to its close, and on every open question in its items, the six spec edits included, the agent's recommendation stands as the owner's answer, recorded in the item's decision and shown at its close — because the owner said "happy for your recommendations on all matters, proceed" in chat on 2026-10-20.
-
-**Rationale:** The owner gave this after PLAN-2 was recorded, while VH-133's questions (the 14 cells both changed, `choose.dropHeld`) and VH-136's (where the time left shows, its rounding, what it counts, how often it is heard) were open. VH-134's criterion that the six drafts be shown before anything is written to the spec is met by showing the applied diff at its close, which the owner can reverse; the rules file still has the owner approve every spec edit, and this is that approval, given in advance for this phase only. The session that recorded this ended at VH-133's close, past the profile's 200k Session line; the next session resumes at VH-134.
-
-**Supersedes:** none
-
-**Deferred:** VH-134

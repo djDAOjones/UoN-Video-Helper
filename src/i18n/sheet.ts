@@ -187,7 +187,11 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
   ['statement.plans.heading', 'The Accessibility statement: a subheading'],
   [
     'statement.plans.items',
-    'The Accessibility statement: a list item, completing "We are thinking of:"',
+    'The Accessibility statement: a list item, under "What we plan to test next", the tests still needed',
+  ],
+  [
+    'statement.plans.optionalItems',
+    'The Accessibility statement: a list item, under "We are also thinking of:"',
   ],
   ['statement.about.heading', 'The Accessibility statement: a subheading'],
   [
@@ -307,9 +311,11 @@ function variantNote(path: readonly string[]): string[] {
 
 /** The note on each line of a list that completes the sentence above it (VH-130). */
 const COMPLETES_ABLE_TO =
-  'Completes "You should be able to:", so it starts in lower case, as the English does, and has no full stop.'
+  'Follows "You should be able to:". It starts with a capital, where your language has one, and ends with your language’s full stop, as the English does (VH-137).'
+const NEXT_TEST =
+  'A test still needed, under "What we plan to test next". It starts with a capital, where your language has one, and ends with your language’s full stop, as the English does (VH-137).'
 const COMPLETES_THINKING_OF =
-  'Completes "We are thinking of:", so it starts in lower case, as the English does, and has no full stop.'
+  'Follows "We are also thinking of:". It starts with a capital, where your language has one, and ends with your language’s full stop, as the English does (VH-137).'
 
 /** The same note on every line of a list, keyed `prefix.0`, `prefix.1` and on. */
 function listNotes(prefix: string, items: readonly string[], note: string): Record<string, string> {
@@ -437,7 +443,7 @@ const NOTES: Readonly<Record<string, string>> = {
   'statement.limits.items.0': 'Keep the name Google Chrome as it is.',
   'statement.limits.items.1': '"Malay" is the language this page calls Bahasa Malaysia.',
   'statement.limits.items.4':
-    'Keep MB, GB, H.264 and AAC as they are: these short forms are what the sentence is about.',
+    'Keep UoN, MB, GB, H.264 and AAC as they are: these short forms are what the sentence is about. Keep University of Nottingham as app.title’s note gives it.',
   'statement.contact.text':
     'Keep the name Joe Bell as it is. The email address is shown as a link.',
   'statement.enforcement.text':
@@ -450,12 +456,13 @@ const NOTES: Readonly<Record<string, string>> = {
     'Keep the names WAVE and WebAIM as they are. The score is 10 out of 10.',
   'statement.testing.manual': 'Keep the name Chrome as it is.',
   'statement.plans.intro':
-    'Introduces the six lines that follow, which complete its last sentence.',
-  ...listNotes('statement.plans.items', enGB.statement.plans.items, COMPLETES_THINKING_OF),
-  'statement.plans.items.1': `${COMPLETES_THINKING_OF} Keep the names NVDA, Chrome, Windows, VoiceOver and Mac as they are.`,
-  'statement.plans.items.3':
-    'Completes "We are thinking of:", so it has no full stop. Keep the name Windows as it is.',
-  'statement.plans.items.4': `${COMPLETES_THINKING_OF} Keep axe and Lighthouse as they are: they are the names of tools.`,
+    'Introduces the four lines that follow: the tests needed before the tool can be said to meet the guidelines in full.',
+  ...listNotes('statement.plans.items', enGB.statement.plans.items, NEXT_TEST),
+  'statement.plans.items.1': `${NEXT_TEST} Keep the names NVDA, Chrome, Windows, VoiceOver and Mac as they are.`,
+  'statement.plans.items.3': `${NEXT_TEST} Keep the name Windows as it is.`,
+  'statement.plans.optionalIntro': 'Introduces the two lines that follow: tests that are not required.',
+  ...listNotes('statement.plans.optionalItems', enGB.statement.plans.optionalItems, COMPLETES_THINKING_OF),
+  'statement.plans.optionalItems.0': `${COMPLETES_THINKING_OF} Keep axe and Lighthouse as they are: they are the names of tools.`,
   'statement.about.dates': 'Keep the name Joe Bell as it is.',
   'footer.feedbackForm':
     'The words of a link on a line of its own, so they must say alone where it goes and that it opens in a new tab: use the same words for "new tab" as footer.contact.creators. "Feedback" is the same word as in the Send feedback button. The form asks what people think of the tool.',

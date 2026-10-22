@@ -866,11 +866,11 @@ export const enGB = {
     aim: 'We want as many people as possible to be able to use this tool. You should be able to:',
     /** Each completes "You should be able to:". */
     abilities: [
-      'use it with a keyboard alone',
-      'use it with a screen reader, which reads out each stage and result',
-      'zoom in to 200% without the text going off the screen',
-      "use your own colours, and your computer's high contrast mode",
-      "turn off movement on the page in your computer's settings",
+      'Use it with a keyboard alone.',
+      'Use it with a screen reader, which reads out each stage and result.',
+      'Zoom in to 200% without the text going off the screen.',
+      'Use your own colours, and your computer’s high contrast mode.',
+      'Turn off movement on the page in your computer’s settings.',
     ],
     plain: 'The words are plain, and the text has strong contrast with its background.',
     limits: {
@@ -879,10 +879,10 @@ export const enGB = {
       /** The recorded limitations: Chrome only, the machine translations, the Chinese font, the preview (spec 9.3), the kept short forms. */
       items: [
         'It is built for Google Chrome on a computer. In other browsers, it may not work.',
-        'The Chinese and Malay pages were translated by a computer. Colleagues who speak each language are checking them on the live page.',
-        "Chinese text uses your computer's own Chinese font, so it may look different from one computer to another.",
-        'The preview plays your own video. Its captions, and whether it flashes, depend on your recording.',
-        'Some short forms are not spelled out: file sizes, such as MB and GB, and video format names, such as H.264 and AAC.',
+        'The Chinese and Malay pages were translated by a computer. We are asking colleagues who speak each language to check them, so some words may be wrong until they do.',
+        'Chinese text uses your computer’s own Chinese font, so it may look different from one computer to another.',
+        'The preview plays your own video as it is. Its captions, audio description and other alternatives, and whether it flashes, depend on your recording.',
+        'Some short forms are not spelled out. UoN stands for University of Nottingham. The others are file sizes, such as MB and GB, and video format names, such as H.264 and AAC.',
       ],
     },
     contact: {
@@ -898,27 +898,32 @@ export const enGB = {
     },
     compliance: {
       heading: 'Compliance status',
-      text: 'This tool is partially compliant with version 2.2 of the Web Content Accessibility Guidelines (WCAG), at level AA, the middle of their three levels. Only automated checks, and our own checks by hand while building it, have been run so far, so we cannot yet say it fully meets them. We aim for level AAA, the highest.',
+      text: 'This tool is partially compliant with version 2.2 of the Web Content Accessibility Guidelines (WCAG), at level AA, the middle of their three levels. This is because of the parts listed under “How accessible this tool is”, and because no one has yet tested it with a screen reader or other assistive technology. We aim for level AAA, the highest.',
     },
     testing: {
       heading: 'How we tested this tool',
       wave: 'On {date}, we checked this page with WAVE, a web accessibility evaluation tool from WebAIM. It gave the page a score of 10 out of 10.',
       automated:
-        'Each time the code changes, automated tests check the contrast of the text against its background, and the reading level of the words.',
+        'Each time the code changes, automated tests check the contrast of the text against its background, and the reading level of the English words.',
       manual:
-        'We have also checked it by hand in Chrome, at computer and phone widths, while building it.',
+        'We have also checked it by hand in Chrome, in all three languages, at computer and phone widths, while building it.',
     },
     plans: {
       heading: 'What we plan to test next',
-      intro: 'We have not yet chosen the next tests. We are thinking of:',
-      /** Each completes "We are thinking of:". The owner chooses among them. */
+      intro:
+        'We have not yet run these tests. We need them before we can say the tool fully meets the guidelines:',
+      /** The tests spec §13 requires before full conformance is claimed (VH-137, V-09). */
       items: [
-        'using the tool with a keyboard alone',
-        'using it with the NVDA screen reader in Chrome on Windows, and with VoiceOver on a Mac',
-        'zooming in to 400%, and using a screen 320 pixels wide',
-        'Windows contrast themes',
-        'a second automated tool, such as axe or Lighthouse',
-        'a session with disabled staff who use the tool',
+        'Using the tool with a keyboard alone.',
+        'Using it with the NVDA screen reader in Chrome on Windows, and with VoiceOver on a Mac.',
+        'Zooming in to 400%, and using a screen 320 pixels wide.',
+        'Using Windows contrast themes.',
+      ],
+      optionalIntro: 'We are also thinking of:',
+      /** The optional tests; the owner chooses among them (VH-137). */
+      optionalItems: [
+        'A second automated tool, such as axe or Lighthouse.',
+        'A session with disabled staff who use the tool.',
       ],
     },
     about: {
