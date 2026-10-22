@@ -18,6 +18,43 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-22 — PLAN-6 — The public release: 0.2.0 on Xerte, Phase 5 then Phase 6, the feedback form beside what exists
+
+**Decision:** the backlog's Current milestone is now the public release, 0.2.0, a release before v1. It is Phase 5 as approved, then Phase 6: VH-160 (the feedback form link), VH-137 (the statement's review), VH-162 (the release cut) and VH-14 (Xerte live). Xerte is the public home, GitHub Pages stays as the unadvertised preview, and the form replaces nothing. These are the owner's answers in chat on 2026-10-22. Person checks, translations, the device envelope and the limits follow the release and do not hold it.
+
+**Rationale:** The owner's answers in chat on 2026-10-22, to four questions:
+
+- Home: "Xerte; Pages stays as preview" — Xerte is the advertised address, and Pages keeps publishing from `main` with no infrastructure change. This answers VH-14's open question, whether Pages stays up once Xerte is live.
+- Version: "Before v1, 0.2.0" — the release ships once Phase 5, the form link and the statement review ship. Spec §13 is not claimed: criterion 10's walk (the Disability Support Services colleagues) and criterion 1's EchoVideo upload (VH-70) follow. The machine-translation note and "partially compliant" stay true.
+- Form: "Replaces nothing" — Send feedback stays for problem reports, because its email carries the build and recent log lines. The Creators team and learning content team links stay for help. The form is one footer link under Send feedback, not a control, because the owner wants the page simple.
+- Handover: "I think it has finished but I'm not sure" — the chat that claimed the 09:06 UTC end, "VH-150 #1 · 10:06", had been idle since 09:11 UTC, with no commit and a clean tree at `c441dbb`, so this session wrote.
+
+How every open line was sorted:
+
+- **In the release:**
+  - Phase 5, VH-150 to VH-159, unchanged in order, with VH-141.1's approval inside VH-150.
+  - VH-160, new.
+  - VH-137, because a public statement must not contradict itself. Its review absorbs VH-138.2 and VH-143.2.
+  - VH-162, new.
+  - VH-14, its offline-cache clause split off to VH-161.
+- **After the release (Next):** VH-13 (blocked on VH-M2), VH-161, VH-17 and VH-113, the last two the owner's.
+- **Icebox:** unchanged.
+- **Owner-only, not gating the release:**
+  - VH-M2, VH-M4, VH-70 and INTAKE.2;
+  - the person checks, VH-105.1, VH-122.1, VH-127.1, VH-128.1, VH-135.1, VH-136.1, VH-138.4, VH-139.2, VH-139.3, VH-141.2 and VH-148.2, which go to the Disability Support Services colleagues;
+  - the translations, VH-105.2 and VH-143.4, which go to the campus colleagues.
+- **Kept on the wish list for after the release:**
+  - INTAKE.1 and INTAKE.3 to INTAKE.7, VH-138.5, VH-139.5 and VH-139.6;
+  - the infrastructure the owner deferred: INTAKE.8, V3-HARNESS.1, V31-UPGRADE.1, VH-116.1 and VH-147.1.
+
+Spec §9.2 and §11 name the email as the one feedback route. VH-160 drafts that correction as a wish line, because `docs/` is the owner's. The empty Band 3 and Band 6 headings are gone, with VH-17 and VH-113 now in Next.
+
+**Supersedes:** none
+
+**Items:** VH-160, VH-137, VH-162, VH-14
+
+**Deferred:** VH-161, VH-13, VH-17, VH-113
+
 ## 2026-10-22 — PLAN-5 — The owner's answers of 22 October: six more Phase 5 items, the spec rows approved, the infrastructure deferred
 
 **Decision:** Phase 5 gains six items after VH-153, each from an owner answer in chat on 2026-10-22: VH-154 (Page language into the header band), VH-155 ("audio", not "sound", and "This tool"), VH-156 (the writing review's 24 proposals), VH-157 (a title card with nothing typed), VH-158 (a cut-short Matroska or WebM file said) and VH-159 (the approved spec rows applied); the internal infrastructure waits until the app settles; VH-14's Xerte upload is the owner's, today.
@@ -516,16 +553,6 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Decision:** the agent's Chinese and Malay for `steps.titleCard`, the `titleCard` group, `failure.titleCardRefused`, `videoLanguage.helper`'s second sentence and `result.summaryWithCard` stand as drafted, machine translation like the rest of the translated pages — because the owner approved them in chat on 2026-10-19.
 
 **Rationale:** Slice (c) drafted eighteen rows and slice (d) one more, each marked "drafted by the agent" in `reviews/2026-10-18/VH-105-strings-filled.csv`. The owner was shown every row beside its English and approved the eighteen as drafted, then the record line's. The marks stay in the sheet, so a translator's review can still find them; a correction goes through the sheet and `scripts/strings-table.mjs`.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-19 — VH-127 — A card field wraps into its lines first, then shrinks to the floor
-
-**Decision:** each card field takes the largest size at which it wraps into its role's lines, shrinks only when it would need more lines than its role allows, and the largest field shrinks first until the card fits, never under the 56 px floor; the acceptance's "shrinks to the floor, then wraps" is read so — because the owner chose the fit as built in chat on 2026-10-19.
-
-**Rationale:** Slice (a) built VH-126's measured fit (`fit` in `src/media/title-card.ts`) and left the order open. Read literally, the criterion would hold a long title on one small line; the fit keeps a 50-character title large on two. The owner chose "keep it large, wrap first" over a change to `fit` and a re-run of `spike-cards.html`. A field still too many lines at its floor is refused at that field; every field at its floor and the card still too tall is refused at the field with the most lines (`at: 'card'`).
 
 **Supersedes:** none
 

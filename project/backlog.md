@@ -14,13 +14,7 @@
 
 ## Current
 
-### Band 3 — blocked on the maintainer
-
-- [!] VH-17 — Evaluate `fastStart: 'reserve'` for the smaller preset — since 2026-10-01 — blocked: the owner's SharePoint upload test (canon Band 3 — blocked on the maintainer)
-
-### Band 6 — review, then translate
-
-- [!] VH-113 — The phone path — since 2026-10-01 — blocked: the owner's own work — a canon [maintainer] item
+The public release, 0.2.0, on Xerte (PLAN-6).
 
 ### Band 7 — measured, not yet fixed — CLOSED 2026-10-20
 
@@ -45,16 +39,26 @@
 - [ ] VH-158 — A cut-short Matroska or WebM file is said: "The video file is shorter than expected", if a reliable signal exists — since 2026-10-22 — (from: VH-139, 2026-10-22)
 - [ ] VH-159 — The spec says what Phase 5 ships: the approved rows of VH-139, VH-140, VH-142, VH-148 and VH-138 applied — since 2026-10-22 — (from: PLAN-5, 2026-10-22)
 
-### Standing — maintainer-owned, never band-gated
+### Phase 6 — the public release: the feedback form, the statement, the cut, Xerte
 
-- [!] VH-137 — The accessibility statement's review, due 2026-11-18 — since 2026-10-20 — blocked: the owner's review and the further tests chosen — (from: VH-130, 2026-10-18)
+- [ ] VH-160 — A link to the feedback form on its own line under Send feedback, in all three languages, "(new tab)"; it replaces nothing — since 2026-10-22 — (from: PLAN-6, 2026-10-22)
+- [!] VH-137 — The accessibility statement's review, due 2026-11-18, with its contradictions and its two lists corrected — since 2026-10-20 — (from: VH-130, 2026-10-18) — blocked: the owner's review and the further tests chosen
+- [ ] VH-162 — The release cut: product version 0.2.0, the Xerte package built from that commit, the brief's and profile's hosting lines proposed — since 2026-10-22 — (from: PLAN-6, 2026-10-22)
+- [!] VH-14 — Deployment: the release on Xerte, the public home, and GitHub Pages kept as the unadvertised preview — since 2026-08-24 — blocked: the owner's own work, the Xerte upload — a canon [maintainer] item
+
+### Standing — the owner's, never phase-gated
+
 - [!] VH-M2 — Measure the device envelope — since 2026-08-24 — blocked: the owner's own work — a canon [maintainer] item
 - [!] VH-M4 — Watch staff use it — since 2026-10-01 — blocked: the owner's own work — a canon [maintainer] item
-- [!] VH-14 — Deployment — since 2026-08-24 — blocked: the owner's own work, the Xerte upload on 2026-10-22 — a canon [maintainer] item
 
 ## Next
 
+After the release.
+
 - [ ] VH-13 — Published limits copy — since 2026-08-24 — blocked: VH-M2 (the measured envelope) and VH-31's estimate
+- [ ] VH-161 — Offline after first load: the cache strategy spec §11 asks for, split from VH-14 — since 2026-10-22 — (from: PLAN-6, 2026-10-22)
+- [!] VH-17 — Evaluate `fastStart: 'reserve'` for the smaller preset — since 2026-10-01 — blocked: the owner's SharePoint upload test
+- [!] VH-113 — The phone path — since 2026-10-01 — blocked: the owner's walk on a real Android phone and an iPhone — a canon [maintainer] item
 
 ## Icebox
 

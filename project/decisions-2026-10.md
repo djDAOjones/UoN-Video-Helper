@@ -252,3 +252,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-19 — VH-127 — A card field wraps into its lines first, then shrinks to the floor
+
+**Decision:** each card field takes the largest size at which it wraps into its role's lines, shrinks only when it would need more lines than its role allows, and the largest field shrinks first until the card fits, never under the 56 px floor; the acceptance's "shrinks to the floor, then wraps" is read so — because the owner chose the fit as built in chat on 2026-10-19.
+
+**Rationale:** Slice (a) built VH-126's measured fit (`fit` in `src/media/title-card.ts`) and left the order open. Read literally, the criterion would hold a long title on one small line; the fit keeps a 50-character title large on two. The owner chose "keep it large, wrap first" over a change to `fit` and a re-run of `spike-cards.html`. A field still too many lines at its floor is refused at that field; every field at its floor and the card still too tall is refused at the field with the most lines (`at: 'card'`).
+
+**Supersedes:** none
+
+**Deferred:** none
