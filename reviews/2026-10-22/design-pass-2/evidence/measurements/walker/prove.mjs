@@ -11,7 +11,7 @@ import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { connectBrowser } from './cdp.mjs'
 import { Walk } from './walk.mjs'
-import { QUAL_INIT, axTree, focusArea, keysRoute, closeAnalysis } from './qualify.mjs'
+import { QUAL_INIT, IN_DIALOG, IN_DIALOG_OR_OUT, axTree, focusArea, fileButtonInk, keysRoute, closeAnalysis } from './qualify.mjs'
 import { Run } from './runner.mjs'
 
 const DIR = process.env.PROVE_DIR
@@ -19,6 +19,9 @@ if (!DIR) throw new Error('set PROVE_DIR to a scratch directory')
 mkdirSync(DIR, { recursive: true })
 
 const page = (body, style = '') => `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>fixture</title><style>body{font:16px/1.5 sans-serif;background:#fff;color:#161616;margin:24px}${style}</style></head><body><main>${body}</main></body></html>`
+const FILE_CSS = '#f{display:block;width:100%;min-height:44px;padding:0;border:0;font:inherit}#f:focus{outline:none}#f::file-selector-button{min-height:44px;padding:8px 24px;border:1px solid transparent;background:#0043ce;color:#fff;font:inherit}'
+const RANGE_HTML = '<div style="position:relative;height:44px;width:600px;background:#fff"><input id="r" type="range" min="0" max="60" value="30" aria-label="Start"></div>'
+const RANGE_CSS = '#r{position:absolute;inset:0;width:100%;height:100%;margin:0;background:transparent;appearance:none;pointer-events:none}#r:focus{outline:none}#r::-webkit-slider-runnable-track{height:100%;background:transparent}#r::-webkit-slider-thumb{width:44px;height:44px;border:0;border-radius:50%;background:radial-gradient(circle,#0043ce 0 14px,transparent 15px);appearance:none;pointer-events:auto}'
 const FIXTURES = {
   'overflow-bad': page('<p>Text</p><div style="width:2000px;height:20px;background:#ddd">a row wider than the page</div>'),
   'overflow-good': page('<p>Text</p><div style="max-width:100%;height:20px;background:#ddd">a row inside the page</div>'),
@@ -36,6 +39,20 @@ const FIXTURES = {
   'focus-scrolled-good': page('<div style="height:2400px"></div><button id="b">Continue</button><div style="height:600px"></div>', 'button{font:inherit;padding:12px 16px;border:1px solid #161616;background:#fff}button:focus{outline:none}button:focus-visible{outline:2px solid #0f62fe;outline-offset:2px}'),
   'lines-bad': page('<p style="max-width:none">' + 'This sentence is long enough that one rendered line of it runs well past eighty characters on a wide page. '.repeat(3) + '</p><p lang="zh-Hans" style="max-width:none">' + '这是一个很长的中文句子，用来检查每行的字数是否超过四十个汉字的限制。'.repeat(4) + '</p>'),
   'lines-good': page('<p style="max-width:28rem">' + 'This sentence is long enough that one rendered line of it runs well past eighty characters on a wide page. '.repeat(3) + '</p><p lang="zh-Hans" style="max-width:28rem">' + '这是一个很长的中文句子，用来检查每行的字数是否超过四十个汉字的限制。'.repeat(4) + '</p><p class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;white-space:nowrap">' + 'Hidden status text that must not count. '.repeat(6) + '</p>'),
+  // VH-171's instrument questions, each proved: a ring on the file chooser's
+  // button and on a range thumb measured against the sub-component, the
+  // button's text read by pixels, a thumb's target, and the dialog route.
+  'file-focus-bad': page('<input id="f" type="file">', FILE_CSS + '#f:focus-visible::file-selector-button{outline:1px dotted #8d8d8d;outline-offset:0}'),
+  'file-focus-good': page('<input id="f" type="file">', FILE_CSS + '#f{padding:4px}#f:focus-visible::file-selector-button{outline:2px solid #0f62fe;outline-offset:2px}'),
+  'file-ink-bad': page('<input id="f" type="file">', FILE_CSS.replace('background:#0043ce;color:#fff', 'background:#e0e0e0;color:#8d8d8d')),
+  'file-ink-good': page('<input id="f" type="file">', FILE_CSS),
+  'thumb-focus-bad': page(RANGE_HTML, RANGE_CSS + 'input:focus-visible::-webkit-slider-thumb{outline:1px dotted #c6c6c6;outline-offset:-1px}'),
+  'thumb-focus-good': page(RANGE_HTML, RANGE_CSS + 'input:focus-visible::-webkit-slider-thumb{outline:3px solid #0f62fe;outline-offset:-3px}'),
+  'thumb-target-bad': page(RANGE_HTML, RANGE_CSS.replace(/width:44px;height:44px/, 'width:20px;height:20px')),
+  'thumb-target-good': page(RANGE_HTML, RANGE_CSS.replace('border-radius:50%', 'border-radius:0')),
+  'thumb-target-disc': page(RANGE_HTML, RANGE_CSS),
+  'dialog-keys-bad': page('<button id="behind">Behind</button><dialog id="d" aria-label="Feedback"><textarea id="feedback-message"></textarea><button id="feedback-close">Close</button></dialog><script>document.getElementById("d").show()</script>'),
+  'dialog-keys-good': page('<button id="behind">Behind</button><dialog id="d" aria-label="Feedback"><textarea id="feedback-message"></textarea><button id="feedback-close">Close</button></dialog><script>document.getElementById("d").showModal()</script>'),
   'keys-bad': page('<button id="a">First</button><div id="go" onclick="1">Go</div>'),
   'keys-good': page('<button id="a">First</button><button id="go">Go</button>'),
 }
@@ -66,6 +83,12 @@ for (const v of ['bad', 'good']) {
   await on('target-' + v, async (w) => { const t = await w.evaluate('window.__qual.targets()'); const b = t.find((x) => x.el.startsWith('button')); expect('target area', 'target-' + v, b.outcome, want, b) })
   await on('placeholder-' + v, async (w) => { const c = await w.evaluate('window.__qual.contrastExtra()'); const p = c.find((x) => x.what === 'placeholder'); expect('contrast beyond text', 'placeholder-' + v, p.outcome, want, p) })
   await on('modal-' + v, async (w) => { const a = await axTree(w); expect('accessibility tree: modal background', 'modal-' + v, a.outcome, want, a.problems) })
+  await on('file-focus-' + v, async (w) => { const f = await focusArea(w, '#f', { ref: 'file-button' }); expect('rendered focus, file button', 'file-focus-' + v, f.outcome, want, { areaAt3to1: f.areaAt3to1, perimeter2px: f.perimeter2px, paintedPx: f.paintedPx, controlPx: f.controlPx }) })
+  await on('file-ink-' + v, async (w) => { const c = await fileButtonInk(w, '#f'); expect('file button text by pixels', 'file-ink-' + v, c.outcome, want, { ratio: c.ratio, fill: c.fill, ink: c.ink, buttonPx: c.buttonPx }) })
+  await on('thumb-focus-' + v, async (w) => { const f = await focusArea(w, '#r', { ref: 'thumb' }); expect('rendered focus, range thumb', 'thumb-focus-' + v, f.outcome, want, { areaAt3to1: f.areaAt3to1, readings: f.readings, paintedPx: f.paintedPx, why: f.why }) })
+  await on('thumb-target-' + v, async (w) => { const t = await w.evaluate('window.__qual.targets()'); const b = t.find((x) => x.thumb); expect('target area, range thumb', 'thumb-target-' + v, b.outcome, want, b) })
+  if (v === 'good') await on('thumb-target-disc', async (w) => { const t = await w.evaluate('window.__qual.targets()'); const b = t.find((x) => x.thumb); expect('target area, a 44 px disc', 'thumb-target-disc', b.outcome, 'cannot-determine', b) })
+  await on('dialog-keys-' + v, async (w) => { await w.evaluate('document.getElementById("feedback-message").focus()'); const k = await keysRoute(w, [...Array.from({ length: 4 }, () => ({ key: 'Tab', state: IN_DIALOG_OR_OUT, noFocusRing: true })), { key: 'Tab', until: 'feedback-', repeat: 4, state: IN_DIALOG, noFocusRing: true }]); expect('keys-only route, modal dialog', 'dialog-keys-' + v, k.outcome, want, k.steps.map((s) => s.to)) })
   await on('keys-' + v, async (w) => { const k = await keysRoute(w, [{ key: 'Tab', expect: '#a' }, { key: 'Tab', expect: '#go' }]); expect('keys-only route', 'keys-' + v, k.outcome, want, k.steps.map((s) => s.to)) })
 }
 await closeAnalysis()

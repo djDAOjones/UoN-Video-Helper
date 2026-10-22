@@ -11,7 +11,7 @@ import { join, dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { connectBrowser } from './cdp.mjs'
 import { Walk, F, sleep } from './walk.mjs'
-import { QUAL_INIT, assertReached, axTree, focusArea, keysRoute, closeAnalysis, setViewport, setMode, withholdFonts } from './qualify.mjs'
+import { QUAL_INIT, IN_DIALOG, IN_DIALOG_OR_OUT, assertReached, axTree, focusArea, fileButtonInk, keysRoute, closeAnalysis, setViewport, setMode, withholdFonts } from './qualify.mjs'
 import { Run, writeManifest } from './runner.mjs'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
@@ -32,13 +32,13 @@ export const SCENARIOS = {
     name: 'Empty',
     state: `!window.__qual.observed().fileChosen && !document.querySelector('dialog[open]')`,
     setup: async (w, lang) => fresh(w, lang),
-    focus: ['#file-input', '#video-kind input:checked', '#feedback-open', '#language-switcher input:checked'],
+    focus: [{ sel: '#file-input', ref: 'file-button' }, '#video-kind input:checked', '#feedback-open', '#language-switcher input:checked'],
   },
   'S-15': {
     name: 'Ready',
     state: `window.__qual.observed().fileChosen && !document.querySelector('#process-progress:not([hidden])') && !!document.querySelector('#process-actions button:not([hidden])')`,
     setup: async (w, lang) => { await fresh(w, lang); await w.setFiles(F('lecture-60s.mp4')); await w.waitSettled() },
-    focus: ['#process-actions button:nth-child(2)', '#trim-start', '#trim-start-range', '#trim-end-range', '#preset-choice input:checked', '#closing-type'],
+    focus: ['#process-actions button:nth-child(2)', '#trim-start', { sel: '#trim-start-range', ref: 'thumb' }, { sel: '#trim-end-range', ref: 'thumb' }, '#preset-choice input:checked', '#closing-type'],
   },
   'S-76': {
     name: 'Feedback dialog, empty',
@@ -49,6 +49,10 @@ export const SCENARIOS = {
 }
 
 // Keyboard routes: keys only after setup. A route is a record of its own.
+// A native modal dialog in Chrome lets Tab past its last control leave the
+// page for the browser's own controls (focus reads body), then come back to
+// the dialog's first; it never reaches the page behind it (VH-171, settled:
+// the route says where focus may go rather than failing on it).
 export const ROUTES = {
   'K-dialog': {
     name: 'The dialog entered and left by keys, focus returned',
@@ -56,8 +60,10 @@ export const ROUTES = {
     steps: [
       { key: 'Tab', until: 'feedback-open', repeat: 80, note: 'Tab forward to Send feedback' },
       { key: 'Enter', state: `(() => { const d = document.querySelector('dialog[open]'); return !!d && d.contains(document.activeElement); })()`, note: 'Enter opens the dialog; focus moves inside' },
-      ...Array.from({ length: 6 }, (_, i) => ({ key: 'Tab', state: `(() => { const d = document.querySelector('dialog[open]'); return !!d && d.contains(document.activeElement); })()`, note: 'Tab ' + (i + 1) + ' stays inside the dialog' })),
-      ...Array.from({ length: 6 }, (_, i) => ({ key: 'Tab', shift: true, state: `(() => { const d = document.querySelector('dialog[open]'); return !!d && d.contains(document.activeElement); })()`, note: 'Shift+Tab ' + (i + 1) + ' stays inside' })),
+      ...Array.from({ length: 6 }, (_, i) => ({ key: 'Tab', state: IN_DIALOG_OR_OUT, note: 'Tab ' + (i + 1) + ' stays inside the dialog or leaves for the browser\'s own controls' })),
+      { key: 'Tab', until: 'feedback-(?!open)', repeat: 8, state: IN_DIALOG, note: 'Tab comes back into the dialog, never to the page behind it' },
+      ...Array.from({ length: 6 }, (_, i) => ({ key: 'Tab', shift: true, state: IN_DIALOG_OR_OUT, note: 'Shift+Tab ' + (i + 1) + ' stays inside or leaves for the browser' })),
+      { key: 'Tab', until: 'feedback-(?!open)', repeat: 8, state: IN_DIALOG, note: 'and Tab comes back into the dialog' },
       { key: 'Escape', expect: 'feedback-open', state: `!document.querySelector('dialog[open]')`, note: 'Escape closes; focus returns to Send feedback' },
       { key: 'Tab', shift: true, expect: '.', note: 'Shift+Tab moves back from it' },
     ],
@@ -67,6 +73,15 @@ export const ROUTES = {
 export const PLANS = {
   pilot: () => [
     ...['S-03', 'S-15', 'S-76'].flatMap((id) => ['light', 'dark', 'forced-light'].map((mode) => ({ id, lang: 'en-GB', view: 'w1280', mode }))),
+    { id: 'K-dialog', lang: 'en-GB', view: 'w1280', mode: 'light' },
+  ],
+  // The pilot widened (VH-171's second chat): every mode at 1280, every view
+  // and enlargement record, the dialog enlarged, and a second language.
+  pilot2: () => [
+    ...['S-03', 'S-15', 'S-76'].flatMap((id) => ['light', 'dark', 'forced-light', 'forced-dark', 'spacing', 'reduced-motion', 'fallback', 'font32'].map((mode) => ({ id, lang: 'en-GB', view: 'w1280', mode }))),
+    ...['S-03', 'S-15'].flatMap((id) => ['w375', 'w320', 'landscape', 'short', 'zoom200proxy', 'zoom400proxy'].map((view) => ({ id, lang: 'en-GB', view, mode: 'light' }))),
+    ...['w320', 'zoom200proxy', 'zoom400proxy'].map((view) => ({ id: 'S-76', lang: 'en-GB', view, mode: 'light' })),
+    ...['S-03', 'S-15', 'S-76'].map((id) => ({ id, lang: 'zh-Hans', view: 'w1280', mode: 'light' })),
     { id: 'K-dialog', lang: 'en-GB', view: 'w1280', mode: 'light' },
   ],
 }
@@ -84,12 +99,16 @@ async function instruments(w, sc, rec, run) {
   out.ax = await axTree(w)
   out.targets = aggregate((await w.evaluate('window.__qual.targets()')).map((t) => ({ ...t, outcome: t.disabled && t.outcome === 'fail' ? 'pass' : t.outcome })), { exempt: (t) => t.inline || t.outcome === 'inert' })
   out.contrastText = aggregate((await w.evaluate('window.__audit.contrast()')).map((c) => ({ ...c, outcome: c.ratio >= c.need ? 'pass' : 'fail' })))
-  out.contrastExtra = aggregate(await w.evaluate('window.__qual.contrastExtra()'))
+  // The file button's text is read by pixels; the computed reading is kept beside it, not counted (VH-171: it read 1:1 under forced colours).
+  const extra = (await w.evaluate('window.__qual.contrastExtra()')).map((c) => (c.what === 'file button text' ? { ...c, outcome: 'superseded' } : c))
+  if (await w.evaluate(`!!document.querySelector('#file-input') && !!document.querySelector('#file-input').getBoundingClientRect().width`)) extra.push(await fileButtonInk(w))
+  out.contrastExtra = aggregate(extra, { exempt: (c) => c.outcome === 'superseded' })
   out.measure = aggregate(await w.evaluate('window.__qual.lines()'))
   if (rec.mode === 'reduced-motion') { const m = await w.evaluate('window.__qual.motion()'); out.motion = { outcome: m.length ? 'fail' : 'pass', items: m } }
   const focus = []
-  for (const sel of sc.focus ?? []) {
-    const f = await focusArea(w, sel)
+  for (const spec of sc.focus ?? []) {
+    const { sel, ref } = typeof spec === 'string' ? { sel: spec } : spec
+    const f = await focusArea(w, sel, { ref })
     const shot = `${rec.id}__${rec.view}__${rec.mode}__focus-${focus.length}`
     if (f.on) { writeFileSync(join(run.dir, shot + '-on.png'), f.on); writeFileSync(join(run.dir, shot + '-off.png'), f.off) }
     delete f.on; delete f.off

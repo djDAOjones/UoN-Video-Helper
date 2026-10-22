@@ -1,0 +1,266 @@
+{
+ "run": "2026-10-22T21-45-48-836Z-6c1737",
+ "source": {
+  "commit": "fc5002348ab4095700aebaf9a55f4d833b1cc0c3",
+  "dirty": false
+ },
+ "instruments": {
+  "revision": "8a76908895152fb3",
+  "files": [
+   {
+    "file": "cdp.mjs",
+    "sha256": "c56942d83d339cbd"
+   },
+   {
+    "file": "design-walk.mjs",
+    "sha256": "50c2b05bda2e7e61"
+   },
+   {
+    "file": "digest.mjs",
+    "sha256": "b58bfc4e16da02cd"
+   },
+   {
+    "file": "fixtures.sh",
+    "sha256": "6245baa743648ba5"
+   },
+   {
+    "file": "inventory.mjs",
+    "sha256": "c2c16ea752c5e01e"
+   },
+   {
+    "file": "matrix.mjs",
+    "sha256": "12de5dd1959e7baf"
+   },
+   {
+    "file": "prove.mjs",
+    "sha256": "936f85d301e54e9f"
+   },
+   {
+    "file": "qualify.mjs",
+    "sha256": "f62a5e63dcc8d62b"
+   },
+   {
+    "file": "runner.mjs",
+    "sha256": "cccd55a11f8b1279"
+   },
+   {
+    "file": "tokens.mjs",
+    "sha256": "59bff4a79c7984ff"
+   },
+   {
+    "file": "walk.mjs",
+    "sha256": "119a8ff6e7d2410f"
+   },
+   {
+    "file": "wcag-checks.mjs",
+    "sha256": "2496aa09cfcbadda"
+   }
+  ]
+ },
+ "browser": "Chrome/155.0.8059.85",
+ "os": "darwin 25.6.0 arm64",
+ "views": [
+  {
+   "view": "w1280",
+   "actual": {
+    "w": 1280,
+    "h": 900,
+    "dpr": 1
+   },
+   "rootFontPx": 16
+  },
+  {
+   "view": "landscape",
+   "actual": {
+    "w": 812,
+    "h": 375,
+    "dpr": 3
+   },
+   "rootFontPx": 16
+  },
+  {
+   "view": "short",
+   "actual": {
+    "w": 1280,
+    "h": 480,
+    "dpr": 1
+   },
+   "rootFontPx": 16
+  },
+  {
+   "view": "w1280"
+  },
+  {
+   "view": "w1280",
+   "actual": {
+    "w": 1280,
+    "h": 900,
+    "dpr": 1
+   },
+   "rootFontPx": 32
+  },
+  {
+   "view": "w320",
+   "actual": {
+    "w": 320,
+    "h": 568,
+    "dpr": 1
+   },
+   "rootFontPx": 16
+  },
+  {
+   "view": "w375",
+   "actual": {
+    "w": 375,
+    "h": 812,
+    "dpr": 3
+   },
+   "rootFontPx": 16
+  },
+  {
+   "view": "zoom200proxy",
+   "actual": {
+    "w": 640,
+    "h": 450,
+    "dpr": 2
+   },
+   "rootFontPx": 16
+  },
+  {
+   "view": "zoom400proxy",
+   "actual": {
+    "w": 320,
+    "h": 225,
+    "dpr": 4
+   },
+   "rootFontPx": 16
+  }
+ ],
+ "scaling": "Emulation.setDeviceMetricsOverride per view; Page.setFontSizes for the default font; Chrome page zoom not settable over the protocol (proxy views only)",
+ "fixtures": [
+  {
+   "file": "lecture-60s.mp4",
+   "bytes": 20222028,
+   "sha256": "ce10e0ce0579c4b6"
+  }
+ ],
+ "coverage": {
+  "expected": 43,
+  "observed": 43,
+  "whole": false,
+  "problems": [
+   {
+    "kind": "failed",
+    "key": "S-03__en-GB__w1280__fallback",
+    "why": "setup: timeout waiting for boot"
+   },
+   {
+    "kind": "failed",
+    "key": "S-15__en-GB__w1280__fallback",
+    "why": "setup: timeout waiting for boot"
+   },
+   {
+    "kind": "failed",
+    "key": "S-76__en-GB__w1280__fallback",
+    "why": "setup: timeout waiting for boot"
+   }
+  ]
+ },
+ "tally": {
+  "keys": {
+   "pass": 1,
+   "fail": 0,
+   "cannot-determine": 0,
+   "items": {
+    "pass": 0,
+    "fail": 0,
+    "cannot-determine": 0
+   }
+  },
+  "overflow": {
+   "pass": 39,
+   "fail": 0,
+   "cannot-determine": 0,
+   "items": {
+    "pass": 0,
+    "fail": 0,
+    "cannot-determine": 0
+   }
+  },
+  "ax": {
+   "pass": 39,
+   "fail": 0,
+   "cannot-determine": 0,
+   "items": {
+    "pass": 0,
+    "fail": 0,
+    "cannot-determine": 0
+   }
+  },
+  "targets": {
+   "pass": 24,
+   "fail": 0,
+   "cannot-determine": 15,
+   "items": {
+    "pass": 714,
+    "fail": 0,
+    "cannot-determine": 29
+   }
+  },
+  "contrastText": {
+   "pass": 39,
+   "fail": 0,
+   "cannot-determine": 0,
+   "items": {
+    "pass": 1957,
+    "fail": 0,
+    "cannot-determine": 0
+   }
+  },
+  "contrastExtra": {
+   "pass": 28,
+   "fail": 7,
+   "cannot-determine": 4,
+   "items": {
+    "pass": 169,
+    "fail": 7,
+    "cannot-determine": 4
+   }
+  },
+  "measure": {
+   "pass": 39,
+   "fail": 0,
+   "cannot-determine": 0,
+   "items": {
+    "pass": 1745,
+    "fail": 0,
+    "cannot-determine": 0
+   }
+  },
+  "focus": {
+   "pass": 13,
+   "fail": 15,
+   "cannot-determine": 11,
+   "items": {
+    "pass": 134,
+    "fail": 17,
+    "cannot-determine": 22
+   }
+  },
+  "motion": {
+   "pass": 3,
+   "fail": 0,
+   "cannot-determine": 0,
+   "items": {
+    "pass": 0,
+    "fail": 0,
+    "cannot-determine": 0
+   }
+  }
+ },
+ "unresolved": [
+  "Chrome page zoom at 200% and 400% itself (proxy views stand in; on the person list)",
+  "what a screen reader says (exposure only)",
+  "native select popups and the video player's inner controls by keys"
+ ]
+}

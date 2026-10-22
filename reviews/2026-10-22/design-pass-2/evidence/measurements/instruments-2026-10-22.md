@@ -1,4 +1,4 @@
-# The instruments qualified and the pilot — VH-171, 22 October 2026 (checkpoint)
+# The instruments qualified and the pilot — VH-171, 22 October 2026 (second checkpoint)
 
 The walker is copied from HEAD (`eae49ea`; its files last changed in
 `01cc8d8`) into `walker/`; the old bundle is untouched. Added:
@@ -72,21 +72,86 @@ Not passing, per record (first items):
 - S-15__en-GB__w1280__light — focus fail: #trim-start-range 246 px² of 3624; #trim-end-range 246 px² of 3624
 - S-76__en-GB__w1280__forced-light — contrastExtra fail: input#file-input.file-input[file] "1. Choose a video" 1/7
 
-## Open before VH-172 (instrument questions, not findings)
+## The four instrument questions, settled (second chat)
 
-- Rendered focus takes the whole control's box as the 2 px perimeter's
-  reference. For the file input (828 px wide, its button a pseudo-element)
-  and the range inputs (the ring is on the thumb) the reference must be
-  the button or thumb; until then those three are not findings.
-- K-dialog: Tab past the dialog's last control leaves the document
-  (focus reads `body`), as a native modal dialog does in Chrome; the
-  route must say where focus may go, not fail on it.
-- The file button's text under emulated forced colours reads 1:1 from
-  computed style; a pixel check must settle it before it is reported.
-- Range thumbs' target area: cannot-determine by hit test; to be measured
-  from the thumb's size or by pointer.
-- Not yet run: the other languages, 375 / 320 / landscape / short views,
-  the forced-dark palette, the enlargement records (320 px reflow, the
-  200% and 400% proxy views, the 32 px default font), text spacing,
-  reduced motion, fallback faces; the scenario draft's faults F1–F8 and
-  fixtures N1–N3.
+Each settlement has its own failing fixture and passing twin;
+`prove-2026-10-22.json` now holds 35 of 35 proved (the first chat's 24,
+plus 11).
+
+- **The reference a ring is measured against.** Where the ring is drawn
+  on a pseudo-element, the 2 px perimeter is the sub-component's, never
+  the whole input's. Its painted box is found by drawing the clip with
+  and without it. The file chooser's button paints 130 × 44 in the
+  fixture. A range thumb is read two ways: its 44 px box, and its
+  painted disc (30 px in the app). When the ring passes one reading and
+  fails the other, the outcome is "cannot determine" with both kept; that
+  reading is VH-173's. The perimeter is now the band's exact area: a box
+  is 4(w + h) − 16 and a disc is 4π(r − 1). The pilot's 4(w + h)
+  overstated it by 16.
+- **The dialog route.** A native modal dialog in Chrome lets Tab past
+  its last control leave for the browser's own controls (focus reads
+  `body`), then come back to its first. The route now allows "inside the
+  dialog, or out to the browser" and fails only when focus reaches the
+  page behind it. It is proved on a non-modal `show()` dialog (fails)
+  and a `showModal()` one (passes).
+- **The file button's text by pixels.** Its painted box is found as
+  above. The commonest colour in it is the fill; the pixel furthest
+  from that in luminance is the ink. This reading counts. The computed
+  reading is kept beside it as "superseded", not counted. Proved: 2.51:1
+  fails and 7.79:1 passes.
+- **The thumbs' target area.** A probe settled it. The input is
+  `pointer-events: none` and its thumb is `auto`, so a hit test over the
+  thumb reaches the input: 22 hits at 2 px along each axis. Targets are
+  now hit-tested over the thumb's box. Chrome hit-tests the disc, not
+  the square: a 44 px disc gives a 44 × 44 hit box with 1,600 px² hit,
+  and no 44 px square fits inside it. That case is "cannot determine",
+  with both readings, for VH-173. Proved three ways: a 20 px thumb
+  fails, a 44 px square passes, and a 44 px disc reads "cannot
+  determine".
+
+## Seen in the pilot, for VH-173 (findings, not instrument faults)
+
+- The file chooser's focus ring is clipped by the input's own box. In
+  the app and in a fixture built like it, the ring on
+  `::file-selector-button` (2 px, offset 2 px) shows only as a 2 px
+  sliver on the button's right edge: 88 px² changed at 3:1 against the
+  680 px² band of a 130 × 44 button. The button fills the input's
+  44 px height, so the ring above, below and to its left falls outside
+  the box Chrome clips it to. A twin with 4 px of room inside the input
+  passes (744 px²). This bears on 2.4.7 and 2.4.13 and on Codex's D-03;
+  VH-173 ranks it. The plan's rank-1 rule applies if it ranks 1.
+
+## Pilot 2
+
+`pilot2-digest-2026-10-22.md` gives every record. `pilot2-manifest-2026-10-22.json`
+holds 43 declared and 43 observed. The run is not whole: the three
+fallback records failed. Once the "lang" assertion and the dialog route
+were settled, K-dialog passes. Two findings are confirmed for VH-173:
+
+- The file chooser's ring reads 88 px² against its button's 640 px² in
+  every view, mode, language and proxy (152 of 1,240 at the 32 px
+  font).
+- Under forced-light, the language switcher's ring reads 480 of 498 px².
+  VH-173 judges this near miss.
+
+The thumbs stand at 246–256 px² against 264 for the box reading and 157
+for the painted one, so "cannot determine" holds everywhere except
+forced-dark and dark, which pass.
+
+## Open before VH-172 (instrument faults the second pilot caught)
+
+- **Fallback faces:** blocking every font file stops the app's boot
+  ("timeout waiting for boot"). The block must withhold only the brand
+  faces, or boot must not wait on them; find which.
+- **The file button's ink behind the modal dialog:** with S-76 open, the
+  pixel reading measures the dimmed button (3.66:1). It must be exempt
+  as inert, as targets are, and "paints nothing" must not count when the
+  control is off-screen at narrow and proxy views.
+- **Thumbs at the 32 px default font:** 0 px² against 264, with a painted
+  disc of 264 px². `thumbBox` takes the input's height as the thumb's size
+  and its centre from that, so at a larger root the clip misses the
+  thumb. Take the size from the thumb's rule (`--target-min`) or by hit
+  test.
+- **Still to write:** the scenario corrections in
+  `scenario-check-2026-10-22.md`, the faults F1–F8 and the fixtures
+  N1–N3; then Codex astra's method check.

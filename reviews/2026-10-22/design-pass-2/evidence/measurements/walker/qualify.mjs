@@ -54,21 +54,28 @@ export const QUAL_INIT = String.raw`
     };
   };
 
+  // A range thumb's box: the input is pointer-events none and its thumb auto,
+  // so a hit test over the thumb reaches the input (VH-171, settled by probe:
+  // 22 hits at 2 px across each axis). Its centre follows the value; its size
+  // is the input's height, the thumb's rule (--target-min).
+  Q.thumbBox = (el) => { if (typeof el === 'string') el = document.querySelector(el); const r = el.getBoundingClientRect(); const s = r.height; const v = (Number(el.value) - Number(el.min || 0)) / ((Number(el.max || 100) - Number(el.min || 0)) || 1); return { x: r.left + v * (r.width - s), y: r.top, w: s, h: s }; };
+
   // 2.5.5: the actual clickable area, found by hit-testing on a 2 px grid over
   // the element and its labels (wrapped labels' line boxes included); passes
-  // when a 44 x 44 square of hits fits inside it.
-  const CTRL = 'button, a[href], input:not([type="hidden"]), select, textarea, summary, [tabindex]:not([tabindex="-1"]), video, [role="slider"], [role="button"]';
+  // when a 44 x 44 square of hits fits inside it. A range input is tested over
+  // its thumb's box with a 4 px margin, never over the track.
+  const CTRL ='button, a[href], input:not([type="hidden"]), select, textarea, summary, [tabindex]:not([tabindex="-1"]), video, [role="slider"], [role="button"]';
   Q.targets = (min = 44, step = 2) => {
     const out = [];
     for (const el of document.querySelectorAll(CTRL)) {
       if (!visible(el)) continue;
       const modal = document.querySelector('dialog[open]:modal');
       if ((modal && !modal.contains(el)) || el.closest('[inert]')) { out.push({ el: desc(el).slice(0, 80), outcome: 'inert', why: 'behind a modal dialog or inert' }); continue; }
-      if (el.type === 'range') { out.push({ el: desc(el).slice(0, 80), outcome: 'cannot-determine', why: 'the thumb is a pseudo-element; a hit test reaches only the input box', box: [Math.round(el.getBoundingClientRect().width), Math.round(el.getBoundingClientRect().height)] }); continue; }
-      const own = el.closest('label');
-      const parts = [el, ...(el.labels ? Array.from(el.labels) : [])].filter(Boolean);
+      const thumb = el.type === 'range';
+      const own = thumb ? null : el.closest('label');
+      const parts = thumb ? [el] : [el, ...(el.labels ? Array.from(el.labels) : [])].filter(Boolean);
       el.scrollIntoView({ block: 'center', inline: 'nearest' });
-      const rects = parts.flatMap((p) => Array.from(p.getClientRects()));
+      const rects = thumb ? (() => { const t = Q.thumbBox(el); return [{ left: t.x - 4, top: t.y - 4, right: t.x + t.w + 4, bottom: t.y + t.h + 4 }]; })() : parts.flatMap((p) => Array.from(p.getClientRects()));
       if (!rects.length) continue;
       const L = Math.floor(Math.min(...rects.map((r) => r.left))), T = Math.floor(Math.min(...rects.map((r) => r.top)));
       const R = Math.ceil(Math.max(...rects.map((r) => r.right))), B = Math.ceil(Math.max(...rects.map((r) => r.bottom)));
@@ -86,7 +93,9 @@ export const QUAL_INIT = String.raw`
       const n = Math.ceil(min / step); const run = new Uint16Array(cols); let fits = false;
       for (let j = 0; j < rows && !fits; j++) { let streak = 0; for (let i = 0; i < cols; i++) { run[i] = hit[j * cols + i] ? run[i] + 1 : 0; streak = run[i] >= n ? streak + 1 : 0; if (streak >= n) { fits = true; break; } } }
       let hw = 0, hh = 0; { let l = cols, r = -1, t = rows, b = -1; for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) if (hit[j * cols + i]) { l = Math.min(l, i); r = Math.max(r, i); t = Math.min(t, j); b = Math.max(b, j); } if (r >= 0) { hw = (r - l + 1) * step; hh = (b - t + 1) * step; } }
-      out.push({ el: desc(el).slice(0, 80), outcome: hits === 0 ? 'cannot-determine' : fits ? 'pass' : 'fail', why: hits === 0 ? 'nothing hit: covered or not hit-testable' : undefined, hitW: hw, hitH: hh, hitArea: hits * step * step, inline, disabled: !!el.disabled });
+      // A disc 44 px across has a 44 x 44 bounding box but no 44 px square inside it: two readings, kept for VH-173.
+      const disc = thumb && !fits && hw >= min && hh >= min;
+      out.push({ el: desc(el).slice(0, 80), outcome: hits === 0 || disc ? 'cannot-determine' : fits ? 'pass' : 'fail', why: hits === 0 ? 'nothing hit: covered or not hit-testable' : disc ? 'a disc: its hit box is ' + hw + ' x ' + hh + ', no 44 px square fits inside; the reading is VH-173\'s' : undefined, hitW: hw, hitH: hh, hitArea: hits * step * step, inline, disabled: !!el.disabled, thumb: thumb || undefined });
     }
     window.scrollTo(0, 0);
     return out;
@@ -256,6 +265,11 @@ export async function key(w, name, { shift = false } = {}) {
   await sleep(60)
 }
 
+// Where focus may be while a native modal dialog is open: inside it, or out
+// to the browser's own controls (body), never on the page behind it.
+export const IN_DIALOG = `(() => { const d = document.querySelector('dialog[open]'); return !!d && d.contains(document.activeElement); })()`
+export const IN_DIALOG_OR_OUT = `(() => { const d = document.querySelector('dialog[open]'); const a = document.activeElement; return !!d && (d.contains(a) || a === document.body || a === null); })()`
+
 /**
  * steps: [{ key, shift?, repeat?, expect?: RegExp source the focused element's
  * description must match, state?: a page expression, native?: true when the
@@ -312,8 +326,60 @@ export async function focusByKeyboard(w, sel) {
   await sleep(120)
 }
 
-export async function focusArea(w, sel, { margin = 12, focus } = {}) {
-  const box = await w.evaluate(`(() => { const el = document.querySelector(${JSON.stringify(sel)}); if (!el) return null; el.scrollIntoView({ block: 'center', inline: 'nearest' }); const r = el.getBoundingClientRect(); return { x: r.left, y: r.top, sx: scrollX, sy: scrollY, w: r.width, h: r.height, vw: innerWidth, vh: innerHeight, dpr: devicePixelRatio }; })()`)
+// The reference a ring is measured against (VH-171's instrument questions).
+// Where the ring is drawn on a sub-component the browser paints as a
+// pseudo-element, the perimeter is the sub-component's, never the whole
+// input's: the file chooser's button, found by drawing the clip with and
+// without it; a range thumb, read two ways, its 44 px box and its painted
+// disc, and "cannot determine" when the two readings disagree.
+const REFS = {
+  'file-button': { hide: (sel) => `${sel}::file-selector-button { visibility: hidden !important; }` },
+  thumb: { hide: (sel) => `${sel}::-webkit-slider-thumb { background: none !important; }` },
+}
+
+async function analyse(w, fn, ...b64s) {
+  const a = await analysisPage(w.browser)
+  return a.evaluate(`(async () => {
+    const load = async (b64) => { const img = new Image(); img.src = 'data:image/png;base64,' + b64; await img.decode(); const c = new OffscreenCanvas(img.width, img.height); const x = c.getContext('2d'); x.drawImage(img, 0, 0); return x.getImageData(0, 0, img.width, img.height); };
+    const L = (r, g, b) => { const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }; return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b); };
+    const K = (la, lb) => (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+    const imgs = await Promise.all(${JSON.stringify(b64s)}.map(load));
+    return (${fn})(imgs, L, K);
+  })()`)
+}
+
+// The changed pixels between two shots: count at 3:1, any change, and the box of any change.
+const DIFF = `(([A, B], L, K) => {
+  if (A.width !== B.width || A.height !== B.height) return { error: 'size differs' };
+  let changed3 = 0, changedAny = 0, best = 1, l = A.width, r = -1, t = A.height, b = -1;
+  for (let i = 0; i < A.data.length; i += 4) {
+    const k = K(L(A.data[i], A.data[i + 1], A.data[i + 2]), L(B.data[i], B.data[i + 1], B.data[i + 2]));
+    if (k > 1.02) { changedAny++; const p = i / 4, x = p % A.width, y = (p - x) / A.width; l = Math.min(l, x); r = Math.max(r, x); t = Math.min(t, y); b = Math.max(b, y); }
+    if (k >= 3) changed3++; if (k > best) best = k;
+  }
+  return { w: A.width, h: A.height, changed3, changedAny, best: Math.round(best * 100) / 100, box: r < 0 ? null : { x: l, y: t, w: r - l + 1, h: b - t + 1 } };
+})`
+
+// Text contrast by pixels inside a box: the commonest colour is the fill, the
+// pixel furthest from it in luminance the ink (glyph cores reach the ink's
+// colour at the body size); used where computed style cannot be trusted.
+const INK = (box) => `(([A], L, K) => {
+  const bx = ${JSON.stringify(box)}; const count = new Map(); let fill = null, n = 0;
+  for (let y = bx.y; y < bx.y + bx.h; y++) for (let x = bx.x; x < bx.x + bx.w; x++) { const i = (y * A.width + x) * 4; const k = A.data[i] + ',' + A.data[i + 1] + ',' + A.data[i + 2]; const c = (count.get(k) || 0) + 1; count.set(k, c); if (c > n) { n = c; fill = k; } }
+  const [fr, fg, fb] = fill.split(',').map(Number); const lf = L(fr, fg, fb); let ink = fill, best = 1;
+  for (const k of count.keys()) { const [r, g, b] = k.split(',').map(Number); const q = K(lf, L(r, g, b)); if (q > best) { best = q; ink = k; } }
+  return { fill: 'rgb(' + fill + ')', ink: 'rgb(' + ink + ')', ratio: Math.round(best * 100) / 100, fillShare: Math.round((n / (bx.w * bx.h)) * 100) / 100 };
+})`
+
+async function withStyle(w, css, fn) {
+  const id = '__qual-hide'
+  await w.evaluate(`(() => { const s = document.createElement('style'); s.id = ${JSON.stringify(id)}; s.textContent = ${JSON.stringify(css)}; document.head.append(s); })()`)
+  await sleep(120)
+  try { return await fn() } finally { await w.evaluate(`document.getElementById(${JSON.stringify(id)})?.remove()`); await sleep(120) }
+}
+
+export async function focusArea(w, sel, { margin = 12, focus, ref } = {}) {
+  const box = await w.evaluate(`(() => { const el = document.querySelector(${JSON.stringify(sel)}); if (!el) return null; el.scrollIntoView({ block: 'center', inline: 'nearest' }); const r = ${ref === 'thumb' ? 'window.__qual.thumbBox(el)' : '(() => { const b = el.getBoundingClientRect(); return { x: b.left, y: b.top, w: b.width, h: b.height }; })()'}; return { ...r, sx: scrollX, sy: scrollY, vw: innerWidth, vh: innerHeight, dpr: devicePixelRatio }; })()`)
   if (!box) return { sel, outcome: 'cannot-determine', why: 'no element' }
   if (box.w === 0 || box.h === 0) return { sel, outcome: 'cannot-determine', why: 'not rendered' }
   // The clip is in document coordinates: the viewport rectangle plus the scroll (VH-171's pilot caught the clip landing above a scrolled control).
@@ -322,32 +388,52 @@ export async function focusArea(w, sel, { margin = 12, focus } = {}) {
   await w.evaluate(`(() => { const a = document.activeElement; if (a && a !== document.body) a.blur(); })()`)
   await sleep(150)
   const off = await shot(w, clip)
+  // The sub-component's painted box: the clip drawn without it, against the clip with it.
+  let painted = null
+  if (ref) {
+    const without = await withStyle(w, REFS[ref].hide(sel), () => shot(w, clip))
+    const d = await analyse(w, DIFF, off, without)
+    if (!d.error && d.box) painted = { w: Math.round(d.box.w / box.dpr), h: Math.round(d.box.h / box.dpr), box: d.box }
+    if (!painted) return { sel, outcome: 'cannot-determine', why: 'the sub-component paints nothing to measure', ref }
+  }
   if (focus) await focus(); else await focusByKeyboard(w, sel)
   const state = await w.evaluate(`(() => { const el = document.querySelector(${JSON.stringify(sel)}); const a = document.activeElement; return { focused: !!a && (a === el || el.contains(a)), visible: !!a && a.matches(':focus-visible') }; })()`)
   await sleep(150)
   const on = await shot(w, clip)
   if (!state.focused) return { sel, outcome: 'cannot-determine', why: 'focus did not land on the control' }
-  const a = await analysisPage(w.browser)
-  const r = await a.evaluate(`(async () => {
-    const load = async (b64) => { const img = new Image(); img.src = 'data:image/png;base64,' + b64; await img.decode(); const c = new OffscreenCanvas(img.width, img.height); const x = c.getContext('2d'); x.drawImage(img, 0, 0); return x.getImageData(0, 0, img.width, img.height); };
-    const A = await load(${JSON.stringify(off)}), B = await load(${JSON.stringify(on)});
-    if (A.width !== B.width || A.height !== B.height) return { error: 'size differs' };
-    const L = (r, g, b) => { const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }; return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b); };
-    let changed3 = 0, changedAny = 0, best = 1;
-    for (let i = 0; i < A.data.length; i += 4) {
-      const la = L(A.data[i], A.data[i + 1], A.data[i + 2]), lb = L(B.data[i], B.data[i + 1], B.data[i + 2]);
-      const k = (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
-      if (k > 1.02) changedAny++; if (k >= 3) changed3++; if (k > best) best = k;
-    }
-    return { w: A.width, h: A.height, changed3, changedAny, best: Math.round(best * 100) / 100 };
-  })()`)
+  const r = await analyse(w, DIFF, off, on)
   if (r.error) return { sel, outcome: 'cannot-determine', why: r.error }
   const px = box.dpr * box.dpr
   const area3 = Math.round(r.changed3 / px)
-  const perimeter = Math.round(4 * (box.w + box.h))
   const clipped = clip.width < box.w + 2 * margin || clip.height < box.h + 2 * margin
-  const outcome = area3 >= perimeter ? 'pass' : clipped ? 'cannot-determine' : 'fail'
-  return { sel, outcome, focusVisible: state.visible, controlPx: [Math.round(box.w), Math.round(box.h)], areaAt3to1: area3, perimeter2px: perimeter, changedAny: Math.round(r.changedAny / px), bestRatio: r.best, why: outcome === 'cannot-determine' ? 'the clip is cut by the viewport' : undefined, off: Buffer.from(off, 'base64'), on: Buffer.from(on, 'base64') }
+  // A 2 px perimeter's area, exactly: wh − (w − 4)(h − 4) = 4(w + h) − 16 for a box,
+  // π(r² − (r − 2)²) = 4π(r − 1) for a disc (the pilot's 4(w + h) overstated it by 16).
+  let perimeter, readings
+  if (ref === 'thumb') {
+    readings = { box: Math.round(4 * Math.PI * (box.w / 2 - 1)), painted: Math.round(4 * Math.PI * (Math.max(painted.w, painted.h) / 2 - 1)) }
+    perimeter = readings.box
+  } else if (ref === 'file-button') perimeter = Math.round(4 * (painted.w + painted.h) - 16)
+  else perimeter = Math.round(4 * (box.w + box.h) - 16)
+  let outcome = area3 >= perimeter ? 'pass' : clipped ? 'cannot-determine' : 'fail'
+  let why = outcome === 'cannot-determine' ? 'the clip is cut by the viewport' : undefined
+  if (readings && outcome === 'fail' && area3 >= readings.painted) { outcome = 'cannot-determine'; why = 'passes against the painted disc, fails against the 44 px box: the reading is VH-173\'s' }
+  return { sel, outcome, why, ref, focusVisible: state.visible, controlPx: [Math.round(box.w), Math.round(box.h)], paintedPx: painted ? [painted.w, painted.h] : undefined, areaAt3to1: area3, perimeter2px: perimeter, readings, changedAny: Math.round(r.changedAny / px), bestRatio: r.best, off: Buffer.from(off, 'base64'), on: Buffer.from(on, 'base64') }
+}
+
+/** The file chooser's button text by pixels (VH-171): computed style read 1:1 under forced colours. */
+export async function fileButtonInk(w, sel = '#file-input', { margin = 4 } = {}) {
+  const box = await w.evaluate(`(() => { const el = document.querySelector(${JSON.stringify(sel)}); if (!el || !el.getBoundingClientRect().width) return null; el.scrollIntoView({ block: 'center' }); const b = el.getBoundingClientRect(); return { x: b.left, y: b.top, w: b.width, h: b.height, sx: scrollX, sy: scrollY, dpr: devicePixelRatio }; })()`)
+  if (!box) return { el: sel, what: 'file button text (pixels)', outcome: 'cannot-determine', why: 'not rendered' }
+  const clip = { x: Math.max(0, box.x - margin) + box.sx, y: Math.max(0, box.y - margin) + box.sy, width: box.w + 2 * margin, height: box.h + 2 * margin }
+  await w.evaluate(`(() => { const a = document.activeElement; if (a && a !== document.body) a.blur(); })()`)
+  await sleep(120)
+  const off = await shot(w, clip)
+  const without = await withStyle(w, REFS['file-button'].hide(sel), () => shot(w, clip))
+  const d = await analyse(w, DIFF, off, without)
+  if (d.error || !d.box) return { el: sel, what: 'file button text (pixels)', outcome: 'cannot-determine', why: 'the button paints nothing to measure' }
+  const ink = await analyse(w, INK(d.box), off)
+  const disabled = await w.evaluate(`!!document.querySelector(${JSON.stringify(sel)}).disabled`)
+  return { el: sel, what: 'file button text (pixels)', ...ink, need: 7, buttonPx: [Math.round(d.box.w / box.dpr), Math.round(d.box.h / box.dpr)], disabled, outcome: disabled ? 'pass' : ink.ratio >= 7 ? 'pass' : 'fail' }
 }
 
 // ---------------------------------------------------------------------------

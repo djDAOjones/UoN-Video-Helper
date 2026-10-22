@@ -18,7 +18,7 @@
   "proved": true,
   "detail": {
    "areaAt3to1": 152,
-   "perimeter2px": 592,
+   "perimeter2px": 576,
    "bestRatio": 3.32
   }
  },
@@ -30,7 +30,7 @@
   "proved": true,
   "detail": {
    "areaAt3to1": 152,
-   "perimeter2px": 592,
+   "perimeter2px": 576,
    "bestRatio": 3.32
   }
  },
@@ -127,6 +127,90 @@
   ]
  },
  {
+  "instrument": "rendered focus, file button",
+  "fixture": "file-focus-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "areaAt3to1": 22,
+   "perimeter2px": 680,
+   "paintedPx": [
+    130,
+    44
+   ],
+   "controlPx": [
+    1232,
+    44
+   ]
+  }
+ },
+ {
+  "instrument": "file button text by pixels",
+  "fixture": "file-ink-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "ratio": 2.51,
+   "fill": "rgb(224,224,224)",
+   "ink": "rgb(141,141,141)",
+   "buttonPx": [
+    130,
+    44
+   ]
+  }
+ },
+ {
+  "instrument": "rendered focus, range thumb",
+  "fixture": "thumb-focus-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "areaAt3to1": 0,
+   "readings": {
+    "box": 264,
+    "painted": 176
+   },
+   "paintedPx": [
+    30,
+    30
+   ]
+  }
+ },
+ {
+  "instrument": "target area, range thumb",
+  "fixture": "thumb-target-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "el": "input#r[range] \"Start\"",
+   "outcome": "fail",
+   "hitW": 20,
+   "hitH": 20,
+   "hitArea": 352,
+   "inline": false,
+   "disabled": false,
+   "thumb": true
+  }
+ },
+ {
+  "instrument": "keys-only route, modal dialog",
+  "fixture": "dialog-keys-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   "button#feedback-close[submit] \"Close\"",
+   "body",
+   "button#behind[submit] \"Behind\"",
+   "textarea#feedback-message[textarea] \"\"",
+   "button#feedback-close[submit] \"Close\""
+  ]
+ },
+ {
   "instrument": "keys-only route",
   "fixture": "keys-bad",
   "outcome": "fail",
@@ -156,7 +240,7 @@
   "proved": true,
   "detail": {
    "areaAt3to1": 640,
-   "perimeter2px": 592,
+   "perimeter2px": 576,
    "bestRatio": 5
   }
  },
@@ -168,7 +252,7 @@
   "proved": true,
   "detail": {
    "areaAt3to1": 640,
-   "perimeter2px": 592,
+   "perimeter2px": 576,
    "bestRatio": 5
   }
  },
@@ -245,6 +329,108 @@
   "wanted": "pass",
   "proved": true,
   "detail": []
+ },
+ {
+  "instrument": "rendered focus, file button",
+  "fixture": "file-focus-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "areaAt3to1": 744,
+   "perimeter2px": 680,
+   "paintedPx": [
+    130,
+    44
+   ],
+   "controlPx": [
+    1240,
+    52
+   ]
+  }
+ },
+ {
+  "instrument": "file button text by pixels",
+  "fixture": "file-ink-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "ratio": 7.79,
+   "fill": "rgb(0,67,206)",
+   "ink": "rgb(255,255,255)",
+   "buttonPx": [
+    130,
+    44
+   ]
+  }
+ },
+ {
+  "instrument": "rendered focus, range thumb",
+  "fixture": "thumb-focus-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "areaAt3to1": 340,
+   "readings": {
+    "box": 264,
+    "painted": 176
+   },
+   "paintedPx": [
+    30,
+    30
+   ]
+  }
+ },
+ {
+  "instrument": "target area, range thumb",
+  "fixture": "thumb-target-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "el": "input#r[range] \"Start\"",
+   "outcome": "pass",
+   "hitW": 44,
+   "hitH": 44,
+   "hitArea": 1936,
+   "inline": false,
+   "disabled": false,
+   "thumb": true
+  }
+ },
+ {
+  "instrument": "target area, a 44 px disc",
+  "fixture": "thumb-target-disc",
+  "outcome": "cannot-determine",
+  "wanted": "cannot-determine",
+  "proved": true,
+  "detail": {
+   "el": "input#r[range] \"Start\"",
+   "outcome": "cannot-determine",
+   "why": "a disc: its hit box is 44 x 44, no 44 px square fits inside; the reading is VH-173's",
+   "hitW": 44,
+   "hitH": 44,
+   "hitArea": 1600,
+   "inline": false,
+   "disabled": false,
+   "thumb": true
+  }
+ },
+ {
+  "instrument": "keys-only route, modal dialog",
+  "fixture": "dialog-keys-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": [
+   "button#feedback-close[submit] \"Close\"",
+   "body",
+   "textarea#feedback-message[textarea] \"\"",
+   "button#feedback-close[submit] \"Close\"",
+   "textarea#feedback-message[textarea] \"\""
+  ]
  },
  {
   "instrument": "keys-only route",
