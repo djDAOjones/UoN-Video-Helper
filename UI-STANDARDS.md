@@ -240,17 +240,18 @@ implementation notes.
   not obscured by sticky headers or overlays.
 - Focus appearance (WCAG 2.4.13): every indicator is at least a 2 CSS px
   solid perimeter of the control, and its pixels change by at least 3:1
-  between focused and unfocused — checked on the rendered control, in the
-  light and dark themes, on a blue band and in forced colours, not only as
-  a token pair.
-- When a transition removes the control that has focus, focus is handed to
-  the control that continues the task; it is never moved from where a user
-  has gone to read (VH-111).
+  between focused and unfocused — checked on the rendered control, in light,
+  dark, a blue band and forced colours, not only as a token pair.
+- When a transition removes the control that has focus, focus passes to the
+  control that continues the task; it never leaves where a user has gone
+  to read (VH-111).
 - One primary button per state. While a finished result is on screen,
   starting again steps down to secondary.
 - Disabled reads as disabled at a glance: a field or segment loses its fill
   and takes a dashed edge; the text keeps the pinned AAA pair. A step whose
   controls are locked says so in one line.
+- Held down, each button kind takes its own fill at 7:1, not hover's;
+  forced colours invert it (VH-169).
 - Pointer targets: **≥ 44 × 44 CSS px** unless a WCAG exception
   applies.
 - Do not require path-based gestures or fine motor precision when a

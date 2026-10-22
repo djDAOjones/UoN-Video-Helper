@@ -43,10 +43,11 @@
 
   /*
    * Tints of Nottingham Blue, toward white. 80, 60, 20 and 5 are the brand's
-   * published steps. 95, 90 and 40 are the same arithmetic at steps the brand
-   * does not list: the dark theme needs two raised surfaces that are still
-   * dark enough for the 20% tint to read on at 7:1, and the brand's next step
-   * down, 80%, is not (5.5:1).
+   * published steps. 95, 90, 40 and 10 are the same arithmetic at steps the
+   * brand does not list: the dark theme needs two raised surfaces that are
+   * still dark enough for the 20% tint to read on at 7:1, and the brand's next
+   * step down, 80%, is not (5.5:1); 10% is the dark primary's pressed fill,
+   * between Portland Stone at rest and the 20% tint hovered (VH-169).
    */
   --uon-blue-95: #1c3145;
   --uon-blue-90: #283c4f;
@@ -54,6 +55,7 @@
   --uon-blue-60: #707d89;
   --uon-blue-40: #9fa8b1;
   --uon-blue-20: #cfd4d8;
+  --uon-blue-10: #e7e9eb;
   --uon-blue-5: #f3f4f5;
 
   /*
@@ -122,6 +124,11 @@
   --interactive-hover: var(--uon-blue-80);
   --focus: var(--uon-brand-blue);
 
+  /* Pressed (VH-169): a step past hover that still holds 7:1 with the text.
+     The primary darkens past rest; a secondary's fill deepens past hover's. */
+  --interactive-active: var(--uon-blue-90);
+  --layer-active: var(--uon-blue-20);
+
   /* 3:1 against their surface, per WCAG 1.4.11. 60% fails as text (4.2:1)
      and is never used for it. */
   --border-subtle: var(--uon-blue-60);
@@ -164,6 +171,8 @@
     --interactive: var(--uon-portland-stone);
     --interactive-hover: var(--uon-blue-20);
     --focus: var(--uon-white);
+    --interactive-active: var(--uon-blue-10);
+    --layer-active: var(--uon-blue-80);
 
     --border-subtle: var(--uon-blue-40);
     --border-strong: var(--uon-blue-20);
@@ -174,6 +183,7 @@
     --support-warning: #fddc69; /* yellow-20 */
     --button-danger: var(--support-error);
     --button-danger-hover: #ffb3b8; /* red-30 */
+    --button-danger-active: #fff1f1; /* red-10 */
     --text-on-danger: var(--uon-brand-blue);
   }
 }
@@ -190,6 +200,8 @@
   --interactive: var(--uon-portland-stone);
   --interactive-hover: var(--uon-blue-20);
   --focus: var(--uon-white);
+  --interactive-active: var(--uon-blue-10);
+  --layer-active: var(--uon-blue-80);
 
   --border-subtle: var(--uon-blue-40);
   --border-strong: var(--uon-blue-20);
@@ -200,5 +212,6 @@
   --support-warning: #fddc69; /* yellow-20 */
   --button-danger: var(--support-error);
   --button-danger-hover: #ffb3b8; /* red-30 */
+  --button-danger-active: #fff1f1; /* red-10 */
   --text-on-danger: var(--uon-brand-blue);
 }

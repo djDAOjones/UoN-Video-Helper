@@ -486,3 +486,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-21 — VH-143 — The owner's overnight instruction: a design pass, then Phases 3 and 4, gateless
+
+**Decision:** the overnight run is authorised and gateless: VH-143, the design pass, then Phase 3 (PLAN-3, approved) with VH-139 merged from its own session, then Phase 4 (PLAN-4, its sign-off pre-approved), then the morning report; wherever the record or a verb would stop for the owner, the session takes the conservative choice, records it as taken gateless, and carries on — because the owner said so in chat on 2026-10-21.
+
+**Rationale:** The owner's words, quoted: "provide a prompt that will conduct a whole design pass, then implement the implementation phases, I will approve use of fable with extra effort. it needs to be gateless as I am going to bed, and I hope it can be ready in the morning"; earlier the same night: "approve PLAN-3 and start VH-139". The prompt they produced is kept verbatim as `reviews/2026-10-20/overnight-prompt-2026-10-21.md` and is the run's instruction. Conservative means the smallest change that meets the standard, existing components, tokens and words before new ones, and nothing the owner has reserved: the three switchers above step 1 and folding (VH-97), the sign-offs of VH-124 and VH-113, VH-137 and V-09, the date-only title card, and anything the brief's Direction does not cover — each becomes a `[!]` or wish line with a recommendation. Hard limits: no new runtime dependency; `docs/*.md` never edited; the EBU harness re-run if a protected audio file changes; no test deleted, skipped or weakened; nothing written to `samples/`; nothing destructive; never a push or merge to `main`, which publishes the pilot. New Chinese and Malay strings are drafted as machine translation, as the VH-122, VH-127 and VH-128 decisions did, and listed in the morning report for approval. The work is on branch `claude/overnight-design-and-phases` in the worktree `.claude/worktrees/overnight`, from VH-138's close (5f23af6); each session that passes the profile's Session line closes with a hand-off note in `reviews/2026-10-20/` and a Session-end line, and starts the next session itself. After 07:00 UK time no new item starts.
+
+**Supersedes:** none
+
+**Deferred:** none

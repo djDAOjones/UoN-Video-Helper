@@ -112,6 +112,10 @@ const TEXT_PAIRS: ReadonlyArray<readonly [string, string]> = [
   // The danger button (VH-124): white on red-80 at rest, on red-70 hovered.
   ['--text-on-danger', '--button-danger'],
   ['--text-on-danger', '--button-danger-hover'],
+  // Each button kind held down (VH-169): the primary, a secondary and the danger button.
+  ['--text-on-interactive', '--interactive-active'],
+  ['--interactive', '--layer-active'],
+  ['--text-on-danger', '--button-danger-active'],
 ]
 
 const BORDER_PAIRS: ReadonlyArray<readonly [string, string]> = [

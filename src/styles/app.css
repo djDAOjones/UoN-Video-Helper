@@ -358,6 +358,12 @@ a {
   background: var(--interactive-hover);
 }
 
+/* Pressed is its own step past hover, as Carbon's active state is (V-39,
+   VH-169); a disabled button never takes it. */
+.button:active:not(:disabled) {
+  background: var(--interactive-active);
+}
+
 .button--secondary {
   background: transparent;
   color: var(--interactive);
@@ -366,6 +372,10 @@ a {
 
 .button--secondary:hover {
   background: var(--layer-02);
+}
+
+.button--secondary:active:not(:disabled) {
+  background: var(--layer-active);
 }
 
 /* Carbon's danger button, for the one destructive action (Discard). */
@@ -378,6 +388,11 @@ a {
 .button--danger:hover {
   background: var(--button-danger-hover);
   border-color: var(--button-danger-hover);
+}
+
+.button--danger:active:not(:disabled) {
+  background: var(--button-danger-active);
+  border-color: var(--button-danger-active);
 }
 
 /*
@@ -550,6 +565,10 @@ a {
   background: var(--interactive-hover);
 }
 
+.file-input:not(:disabled):active::file-selector-button {
+  background: var(--interactive-active);
+}
+
 /* Once a file has been chosen, choosing another is one step among five and
    the button steps down to secondary; Create and Save lead (VH-124). */
 .file-input--chosen::file-selector-button {
@@ -560,6 +579,10 @@ a {
 
 .file-input--chosen:hover::file-selector-button {
   background: var(--layer-02);
+}
+
+.file-input--chosen:not(:disabled):active::file-selector-button {
+  background: var(--layer-active);
 }
 
 /* The browser draws this one, so it needs saying separately — a disabled file
@@ -1651,6 +1674,25 @@ body,
 
   .button:not(.button--secondary):not(:disabled):focus-visible {
     outline-color: CanvasText;
+  }
+
+  /* Pressed inverts the button's two system colours, since hover cannot
+     change them (VH-169): a primary turns HighlightText with Highlight
+     words; a secondary, otherwise left to the theme, takes ButtonText with
+     ButtonFace words for the moment it is held. */
+  .button:not(.button--secondary):not(:disabled):active,
+  .file-input:not(:disabled):not(.file-input--chosen):active::file-selector-button {
+    border-color: Highlight;
+    background: HighlightText;
+    color: Highlight;
+  }
+
+  .button--secondary:not(:disabled):active,
+  .file-input--chosen:not(:disabled):active::file-selector-button {
+    forced-color-adjust: none;
+    border-color: ButtonText;
+    background: ButtonText;
+    color: ButtonFace;
   }
 
   .range-track::before {

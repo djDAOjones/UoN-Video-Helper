@@ -110,9 +110,11 @@
 
   /* Carbon's danger button, for the one destructive action on the page
      (Discard, VH-124): the error ramp's far end, which clears 7:1 for white
-     text — red-80 at rest, red-70 on hover. The dark-surface values sit
+     text — red-80 at rest, red-70 on hover, red-90 pressed, as Carbon's
+     danger press darkens past rest (VH-169). The dark-surface values sit
      beside the dark status steps in `tokens.brand.css`. */
   --button-danger: var(--support-error);
   --button-danger-hover: #a2191f; /* red-70 */
+  --button-danger-active: #520408; /* red-90 */
   --text-on-danger: #ffffff;
 }

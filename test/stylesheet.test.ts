@@ -351,3 +351,33 @@ describe('one reading measure (VH-167)', () => {
     expect(rules).toMatch(/\.toggletip p \+ p\s*\{\s*margin-top:\s*var\(--paragraph-gap\);\s*\}/)
   })
 })
+
+describe('a pressed state for each button kind (VH-169)', () => {
+  const forced = /@media \(forced-colors: active\)\s*\{([\s\S]*?)\n\}/.exec(rules)?.[1] ?? ''
+  const fill = (source: string, selector: string): string =>
+    new RegExp(`(?:^|\\})\\s*${selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\{([^}]*)\\}`).exec(source)?.[1] ?? ''
+
+  it('gives the primary, the secondary, the danger button and both Choose file looks a fill of their own when held', () => {
+    // Held down, each drew its hover fill (V-39).
+    expect(fill(rules, '.button:active:not(:disabled)')).toContain('background: var(--interactive-active)')
+    expect(fill(rules, '.button--secondary:active:not(:disabled)')).toContain('background: var(--layer-active)')
+    expect(fill(rules, '.button--danger:active:not(:disabled)')).toContain('background: var(--button-danger-active)')
+    expect(fill(rules, '.file-input:not(:disabled):active::file-selector-button')).toContain('background: var(--interactive-active)')
+    expect(fill(rules, '.file-input--chosen:not(:disabled):active::file-selector-button')).toContain('background: var(--layer-active)')
+  })
+
+  it('never presses a disabled button', () => {
+    for (const match of rules.matchAll(/([^{}]*:active[^{}]*)\{/g)) {
+      for (const selector of match[1]!.split(',')) expect(selector, selector.trim()).toContain(':not(:disabled)')
+    }
+  })
+
+  it('inverts the system colours under forced colours, since hover cannot change them', () => {
+    expect(
+      fill(forced, '.button:not(.button--secondary):not(:disabled):active,\n  .file-input:not(:disabled):not(.file-input--chosen):active::file-selector-button'),
+    ).toMatch(/background: HighlightText;\s*color: Highlight;/)
+    expect(
+      fill(forced, '.button--secondary:not(:disabled):active,\n  .file-input--chosen:not(:disabled):active::file-selector-button'),
+    ).toMatch(/forced-color-adjust: none;[\s\S]*background: ButtonText;\s*color: ButtonFace;/)
+  })
+})
