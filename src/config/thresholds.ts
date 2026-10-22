@@ -99,6 +99,23 @@ export const ESTIMATE_BANDS = {
 export const ENDS_EARLY_MARGIN_SECONDS = 1
 
 /**
+ * What a Matroska or WebM file's bytes are read for, to tell one cut short
+ * (VH-158), in bytes.
+ *
+ * We chose them. The head holds the EBML header and the Segment's own header,
+ * a few dozen bytes in every file measured. The tail is read from a first
+ * window, doubled until it holds the start of the last cluster, up to the
+ * last: ffmpeg closes a cluster at 5 MB or 5 s, and a Chrome recording's are
+ * smaller, so 32 MiB holds the last cluster of any lecture recording while
+ * never holding the file.
+ */
+export const MATROSKA_CUT_READ = {
+  headBytes: 1024,
+  firstTailBytes: 4 * 1024 * 1024,
+  lastTailBytes: 32 * 1024 * 1024,
+} as const
+
+/**
  * A probe short enough to be cheap is also short enough to be noisy — encoder
  * startup, shader compilation and thermal state all land in the first second.
  * Throughput below this is treated as unmeasured rather than believed.

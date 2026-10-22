@@ -54,6 +54,8 @@ export function shortfallTimes(short: Shortfall): { readonly stops: string; read
 export function warningText(warning: AudioWarning): WarningText {
   const { warnings } = t()
   switch (warning.code) {
+    case 'cut-short':
+      return warnings.cutShort
     case 'ends-early':
       return {
         heading: warnings.endsEarly.heading,

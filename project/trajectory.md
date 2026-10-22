@@ -18,6 +18,7 @@
 - VH-155 — "audio", not "sound", for the file's audio in all three languages, and "This tool" in the browser sentence; checked in Chrome in three languages (2026-10-22) — see decisions
 - VH-156 — the writing review's proposals applied: no broken "about", no misplaced "it", captions said plainly, no colon or dash pivots, no phrasal verbs, the serial comma; the decode-damage detail says "video", never "recording"; Chinese and Malay redrafted where the meaning changed; checked in Chrome in three languages (2026-10-22) — see decisions
 - VH-157 — a staff title card with only the date stops Create as an empty one does: the line beside the box, the status line, focus and the invalid mark on Title; the rule line says it first; Submission unchanged; checked in Chrome in three languages, both video kinds (2026-10-22) — see decisions
+- VH-158 — a cut-short MKV or WebM file is said first among the warnings, "The video file is shorter than expected", from a Segment or last element past its end; silent on 22 whole or index-only files, 33 of 38 cuts said, the five left between two elements of unknown size; checked in Chrome (2026-10-22) — see decisions
 
 ## The Codex run reviewed
 

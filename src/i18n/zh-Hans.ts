@@ -527,6 +527,11 @@ export const zhHans: Messages = {
       detail:
         '音频在{stops}处停止，而全长应为{end}。文件可能在复制或录制时被中断。{stops}之后，新视频将没有声音。如果您有完整的副本，请改为选择该副本。',
     },
+    cutShort: {
+      heading: '视频文件比预期短',
+      detail:
+        '文件可能在复制或录制时被中断。请在使用前检查新视频。如果您有完整的副本，请改为选择该副本。',
+    },
     noAudio: {
       heading: '这段视频没有音频',
       detail:

@@ -28,7 +28,6 @@ The public release, 0.2.0, on Xerte (PLAN-6).
 
 ### Phase 5 — what the review of the Codex run found: the job's state, disabled controls, the tests, the words
 
-- [ ] VH-158 — A cut-short Matroska or WebM file is said: "The video file is shorter than expected", if a reliable signal exists — since 2026-10-22 — (from: VH-139, 2026-10-22)
 - [ ] VH-159 — The spec says what Phase 5 ships: the approved rows of VH-139, VH-140, VH-142, VH-148 and VH-138 applied — since 2026-10-22 — (from: PLAN-5, 2026-10-22)
 
 ### Phase 6 — the public release: the feedback form, the statement, the cut, Xerte

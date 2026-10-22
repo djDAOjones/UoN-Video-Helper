@@ -572,6 +572,11 @@ export const msMY: Messages = {
       detail:
         'Audionya berhenti pada {stops} daripada {end}. Fail ini mungkin terputus semasa disalin atau dirakam. Selepas {stops}, video baharu akan senyap. Jika anda mempunyai salinan yang lengkap, pilih salinan itu sebaliknya.',
     },
+    cutShort: {
+      heading: 'Fail video lebih pendek daripada yang dijangka',
+      detail:
+        'Fail ini mungkin terputus semasa disalin atau dirakam. Semak video baharu sebelum anda menggunakannya. Jika anda mempunyai salinan lengkap, pilih salinan itu.',
+    },
     noAudio: {
       heading: 'Video ini tiada audio',
       detail:

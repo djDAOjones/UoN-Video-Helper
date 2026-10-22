@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-22 — VH-158 — A cut-short Matroska or WebM file is said from its own bytes: a Segment or a last element past the file's end
+
+**Decision:** a Matroska or WebM file is said to be cut short, as the first warning before processing ("The video file is shorter than expected", "…Check the new video before you use it…"), when its last element runs past the file's end, or when its declared Segment size does and its Duration is absent or missed by more than `ENDS_EARLY_MARGIN_SECONDS`; the check reads 1 KB at the start and a tail window of 4 MiB doubling to 32 MiB, never the whole file, in `src/media/matroska-cut.ts`, with no new dependency; a file of unknown sizes and no Duration cut exactly between two elements cannot be told and is not said.
+
+**Rationale:** The owner's VH-139.4 answer (PLAN-5, 2026-10-22) asked for this if a reliable signal exists. Research (`reviews/2026-10-22/vh158-matroska-cut-research.md`): Mediabunny builds a Matroska file's packet list only from what it can read and drops a partial last cluster without a word, so VH-139's index check never fires for one; its Segment size and Cues are private, and only Duration is public. On 60 files (ffmpeg MKV and WebM with Cues at either end, pipe and live output, two crashed recordings, two real Chrome 152 MediaRecorder files, the repo's eight closing WebMs, and 41 cut copies), the shipped module raised nothing on all 19 whole files or the 3 that lost only their trailing Cues, and said 33 of 38 cuts: every cut through an element, every cluster-boundary cut of a known-size file. The five missed are cuts exactly between two elements of unknown-size files: four with no Duration, where no signal exists, and one ffmpeg pipe file with Duration, left unsaid because Duration alone could falsely flag a whole file a tool trimmed without rewriting it. A cluster's start is found by its ID followed by a Timestamp, so a compressed frame's four bytes cannot pose as one. The warning names no times, since such a file declares none, and says to check the new video. Tests: 13 in `matroska-cut.test.ts` on Matroska built in memory (`test/helpers/pcm-mkv.ts`), two in `warnings.test.ts`. Two strings added, with Chinese and Malay drafted by the agent and marked in the sheet; reading grade 4.4. Standards (rule 8): the rules' "silent data loss is the worst outcome" and "streaming, not buffering"; Nielsen 1 and 9; WCAG 3.3.1 as the warnings list already says it; house conventions, regression tests by category and numbers in `src/config/`. No dependency changed. Not checked by a second model.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-22 — VH-157 — A title card with only the date stops Create as an empty one does; Title is marked and told why
 
 **Decision:** `isCardEmpty` no longer counts the date, because it fills itself, so a ticked staff card with no title, department or authors stops Create with the existing empty-card refusal: the line beside the box says "Type a title, department, or authors, or untick Add a title card.", the status line says "Correct the title card in step 3 to continue.", and focus moves to Title, which is now marked invalid and names that line in its description; the rule line says first "Type a title, department, or authors to make a card."; no control is added.
@@ -543,16 +553,6 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Decision:** Band 7 closed on 2026-10-20 with both its items shipped, its backlog heading now "Band 7 — measured, not yet fixed — CLOSED 2026-10-20"; no open, unblocked line remains in Current or Next, so the next item is the owner's to name — because Band 3's VH-17, Band 6's VH-124 and VH-113 and every Standing line wait on the owner, and Next's VH-13 waits on VH-M2.
 
 **Rationale:** Reconciled against the canon Band 7 list (pm_skills/project/backlog.md: VH-122, VH-116): each has its line under Band 7 in project/trajectory.md, and neither is open in project/backlog.md. The heading keeps the band's name without "Phase N", since no PLAN lists Band 7's items. Recall, local (this session, from the record alone, not a fresh session): 1, project/trajectory.md, newest first: VH-116 and VH-122 under Band 7, then VH-128 and VH-127 under Band 8 — 2; 2, "2026-10-20 — VH-122 — Decode damage: a block beyond +6 dBFS is silenced…", because real decodes peak at +0.96 dBFS while CULT2011's damage reaches +36 and +57 — 2; 3, deferred: project/wish-list.md's lines from VH-116 (the §7.1 doc-delta, a time left during the job, the stale structure.md) and from VH-122 (the screen-reader and listening check), and the backlog's Icebox — 2; 4, no next open item: Current and Next hold only lines blocked on the owner, as this entry records — 2.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-20 — VH-116 — The probe's clock starts after a sixth of its frames; a time left during the job is wished, not built
-
-**Decision:** the calibration probe still encodes its 3 s window, but times only the frames after its first sixth (`CALIBRATION_PROBE_WARM_UP_FRACTION`), so pre-flight takes no longer; the job's own rate, the closer remedy, is not built, because the page shows no time during a job, and a time-left display is a wish line — because the owner chose the recommended option in chat on 2026-10-20.
-
-**Rationale:** Over slice (a)'s 10 runs, real time over predicted was 0.51–0.70 for the probe as shipped (high/low 1.37) and 0.69–0.86 skipping a sixth (1.25), 0.67–0.82 a third (1.22), 0.64–0.77 half (1.20): a sixth has the median nearest 1 (0.82) and the smallest worst case (an estimate 1.45× the real time, against 1.49× and 1.56×), and it clears the smoke run's stall at frame 5. The job's own rate after 10 s was 0.96–1.00. The estimate still runs long by about a fifth, so §7.3's bands now warn later than before but still early. `warmedUpTiming` is pure and tested by category in `probe.test.ts`; the spike page's "probe" row stays the probe before this change. The §7.1 sentence is a doc-delta for the owner.
 
 **Supersedes:** none
 

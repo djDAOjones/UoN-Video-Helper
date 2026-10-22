@@ -31,6 +31,7 @@ import {
 import { measureContentClass } from '../media/content-class'
 import { declaredExtent, shortfall } from '../media/ends-early'
 import { UnreadableFileError, inspectFile, openInput } from '../media/inspect'
+import { matroskaCutShort } from '../media/matroska-cut'
 import {
   KeptRangeError,
   keptDurationSeconds,
@@ -507,6 +508,10 @@ async function handlePreflight(
     // disclosure. Nothing is lost by skipping: the job is blocked, and the
     // block says why and what to do.
     let audioWarnings: readonly AudioWarning[] = []
+    // A Matroska or WebM file has no index to say it ends early, as an MP4's
+    // does above: its own bytes are read for a size or a block past its end
+    // (VH-158). A few bytes at each end, never the file.
+    const fileCutShort = await matroskaCutShort(file, report.container, openInput(file))
     /** Whether the job will carry sound: the source has some, in the part kept. */
     let keptHasSound = report.audio !== null
     /** The pass, timed: the unit the estimate prices every audio stage in (VH-100). */
@@ -534,7 +539,7 @@ async function handlePreflight(
             keptRange?.startSeconds ?? 0,
           )
         : null
-      audioWarnings = detectSourceWarnings(analysis, soundShort)
+      audioWarnings = detectSourceWarnings(analysis, soundShort, fileCutShort)
       // A trim can keep a part with no sound; the job is then a silent one
       // (VH-95), and asks nothing of the audio encoder.
       if (analysis === null) keptHasSound = false

@@ -406,6 +406,10 @@ const NOTES: Readonly<Record<string, string>> = {
     'Said when the file stops part-way, as an interrupted copy or a crashed recorder leaves it. Warning headings are read one after another inside warnings.spoken, so no full stop.',
   'warnings.endsEarly.detail':
     '"of {end}" means the audio should run until {end}. A fact, not a guess: only the cause ("probably cut off") is uncertain.',
+  'warnings.cutShort.heading':
+    'Said when an MKV or WebM file stops part-way and its own bytes show it, as an interrupted copy leaves it. Warning headings are read one after another inside warnings.spoken, so no full stop.',
+  'warnings.cutShort.detail':
+    'Said in place of warnings.endsEarly.detail for an MKV or WebM file, which gives no time the audio should reach. "The new video" is the one this tool makes.',
   'result.summaryWithCard.staff':
     'The card a staff video opens with. Use the same words for "staff" as videoKind.options.staff and for "title card" as steps.titleCard.',
   'result.summaryWithCard.submission':

@@ -69,6 +69,20 @@ describe('spec 5.4 source warnings', () => {
     ).toEqual(['ends-early'])
   })
 
+  it('a Matroska file cut short — said first of all, with no times, since it has no index to name them by (VH-158)', () => {
+    const warnings = detectSourceWarnings(
+      healthy({ clippedSampleCount: WARNING_THRESHOLDS.clippingSampleCount }),
+      null,
+      true,
+    )
+    expect(warnings.map((w) => w.code)).toEqual(['cut-short', 'clipping'])
+    expect(warnings[0]?.detail).toEqual({})
+  })
+
+  it('a Matroska file cut short with no audio says both, the cut first', () => {
+    expect(detectSourceWarnings(null, null, true).map((w) => w.code)).toEqual(['cut-short', 'no-audio'])
+  })
+
   it('decode damage — said first, with every time it was silenced at (VH-122)', () => {
     const warnings = detectSourceWarnings(
       healthy({ damageSilencedAtSeconds: [82.41, 185.34], loudnessRangeLu: 18 }),

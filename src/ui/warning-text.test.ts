@@ -16,6 +16,7 @@ import { damageTimes, shortfallTimes, warningText } from './warning-text'
  * it — which is how a warning would otherwise ship untested.
  */
 const ALL = Object.keys({
+  'cut-short': true,
   'ends-early': true,
   'no-audio': true,
   'decode-damage': true,

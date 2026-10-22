@@ -647,6 +647,11 @@ export const enGB = {
       detail:
         'Its audio stops at {stops} of {end}. The file was probably cut off while it was copied or recorded. After {stops}, the new video will be silent. If you have a complete copy, choose that one instead.',
     },
+    cutShort: {
+      heading: 'The video file is shorter than expected',
+      detail:
+        'The file was probably cut off while it was copied or recorded. Check the new video before you use it. If you have a complete copy, choose that one instead.',
+    },
     noAudio: {
       heading: 'This video has no audio',
       detail:

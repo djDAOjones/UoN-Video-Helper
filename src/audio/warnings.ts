@@ -15,6 +15,7 @@ import type { Shortfall } from '../media/ends-early'
 import type { AudioAnalysis } from './analyse'
 
 export type AudioWarningCode =
+  | 'cut-short'
   | 'ends-early'
   | 'no-audio'
   | 'decode-damage'
@@ -69,22 +70,27 @@ function longestRunBelow(
  *   audio track at all, or none in the part kept.
  * @param soundShort - Where the sound stops short of what the file's index
  *   declares (VH-139, `media/ends-early.ts`), or `null` when it does not.
+ * @param fileCutShort - Whether a Matroska or WebM file's own bytes show it
+ *   cut short (VH-158, `media/matroska-cut.ts`), which has no index to name
+ *   the times by.
  */
 export function detectSourceWarnings(
   analysis: AudioAnalysis | null,
   soundShort: Shortfall | null = null,
+  fileCutShort = false,
 ): AudioWarning[] {
   // First of all: the file itself is incomplete, and every row below measures
   // only what arrived. The detail is in source seconds, as decode damage's
   // times are, so the note names the times the trim's fields show.
+  const cutShort: AudioWarning[] = fileCutShort ? [{ code: 'cut-short', detail: {} }] : []
   const endsEarly: AudioWarning[] = soundShort
     ? [{ code: 'ends-early', detail: { stopsAtSeconds: soundShort.stopsAtSeconds, endSeconds: soundShort.endSeconds } }]
     : []
   // A kept part whose sound the file declares and never delivers is cut
   // short, not silent: saying "no sound" there would name the wrong cause.
-  if (!analysis) return endsEarly.length > 0 ? endsEarly : [{ code: 'no-audio', detail: {} }]
+  if (!analysis) return [...cutShort, ...(endsEarly.length > 0 ? endsEarly : [{ code: 'no-audio' as const, detail: {} }])]
 
-  const warnings: AudioWarning[] = [...endsEarly]
+  const warnings: AudioWarning[] = [...cutShort, ...endsEarly]
   const { clippedSampleCount, truePeakDbtp, integratedLufs, loudnessRangeLu } = analysis
 
   // First, because it is what the tool did rather than what it measured, and

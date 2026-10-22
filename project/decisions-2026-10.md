@@ -342,3 +342,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-20 — VH-116 — The probe's clock starts after a sixth of its frames; a time left during the job is wished, not built
+
+**Decision:** the calibration probe still encodes its 3 s window, but times only the frames after its first sixth (`CALIBRATION_PROBE_WARM_UP_FRACTION`), so pre-flight takes no longer; the job's own rate, the closer remedy, is not built, because the page shows no time during a job, and a time-left display is a wish line — because the owner chose the recommended option in chat on 2026-10-20.
+
+**Rationale:** Over slice (a)'s 10 runs, real time over predicted was 0.51–0.70 for the probe as shipped (high/low 1.37) and 0.69–0.86 skipping a sixth (1.25), 0.67–0.82 a third (1.22), 0.64–0.77 half (1.20): a sixth has the median nearest 1 (0.82) and the smallest worst case (an estimate 1.45× the real time, against 1.49× and 1.56×), and it clears the smoke run's stall at frame 5. The job's own rate after 10 s was 0.96–1.00. The estimate still runs long by about a fifth, so §7.3's bands now warn later than before but still early. `warmedUpTiming` is pure and tested by category in `probe.test.ts`; the spike page's "probe" row stays the probe before this change. The §7.1 sentence is a doc-delta for the owner.
+
+**Supersedes:** none
+
+**Deferred:** none
