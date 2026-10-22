@@ -42,7 +42,7 @@
 | build, dev server, scripts, deploy, versioning, diagnostics | DEV-INFRASTRUCTURE.md | 4,600 | |
 | code change | project/architecture.md | 3,100 | |
 | code change | project/digests/house-conventions.md | 1,700 | |
-| a change the specification governs | docs/01-specification.md | 7,800 | the owner approves every edit to docs/ |
+| a change the specification governs | docs/01-specification.md | 8,100 | the owner approves every edit to docs/ |
 | re-opening a settled choice | docs/02-technical-rationale.md | 2,600 | the owner |
 
 ## Signed

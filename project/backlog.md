@@ -28,8 +28,6 @@ The public release, 0.2.0, on Xerte (PLAN-6).
 
 ### Phase 5 — what the review of the Codex run found: the job's state, disabled controls, the tests, the words
 
-- [ ] VH-159 — The spec says what Phase 5 ships: the approved rows of VH-139, VH-140, VH-142, VH-148 and VH-138 applied — since 2026-10-22 — (from: PLAN-5, 2026-10-22)
-
 ### Phase 6 — the public release: the feedback form, the statement, the cut, Xerte
 
 - [ ] VH-160 — A link to the feedback form on its own line under Send feedback, in all three languages, "(new tab)"; it replaces nothing — since 2026-10-22 — (from: PLAN-6, 2026-10-22)

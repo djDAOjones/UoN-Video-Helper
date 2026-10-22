@@ -18,6 +18,26 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-22 — VH-159 — The spec says what Phase 5 ships: eight approved rows applied, its budget raised to 8,100 words
+
+**Decision:** the eight approved spec rows are applied to §5.4, §6.2, §7.2, §9.1, §9.2, §9.3 and §10, each in the page's shipped words, and rules.md's routed budget for the spec rises from 7,800 to 8,100 words, because the rows bring it to 8,031 and the owner allowed up to 8,500.
+
+**Rationale:** The owner's words in chat on 2026-10-22: "Approve VH-150.1, VH-155.1 and VH-157.1 as worded, and raise the spec budget to what the approved rows need, up to 8,500 words. Start VH-159." The earlier approvals are PLAN-5's "yes to all" (VH-139.1, VH-140.1, VH-142.1, VH-148.1, VH-138.3). Rows applied:
+
+- §5.4: VH-142.1's damage-row ending; VH-139.1's "File ends early" row.
+- §6.2: VH-148.1's heading and the helper's words.
+- §7.2: VH-139.1's check.
+- §9.1: VH-140.1's line under the switches, Step 3's rule and the record naming the card and a video language; VH-148.1's read outcome; VH-157.1's "no title, department or authors".
+- §9.2: VH-140.1's line naming the job's type and language beside the progress.
+- §9.3: VH-150.1's 2.2.2 reading, replacing VH-141.1; VH-138.3's evidence limitations.
+- §10: VH-155.1's "This tool" and VH-148.1's "the checks for it to run".
+
+Each sentence was read against the shipped code: `ends-early.ts` and `ENDS_EARLY_MARGIN_SECONDS`, `runningJobText`, `summaryWithCard`, `nextVideo`, both `fieldsRule` strings, `browserNote`, `readSummary`, `decodeDamage`, and the absence of any Show progress control. Four words follow later shipped wording, not the draft: "sound" is "audio" in VH-139.1's rows and "No sound." is "No audio." (VH-155), "original recording" is "original video" (VH-156), and §10 quotes the three browser sentences as VH-153 left them ("so other browsers", "all the checks"). VH-138.3's defects while they stand (3.3.2, 3.1.2, 4.1.3, two 2.4.3 hand-offs) are not listed, because VH-140 and VH-141 fixed them; what only a person can confirm is in the new evidence paragraph. VH-158's cut-short warning has no §5.4 row and none was approved, so VH-159.1 drafts one. 274 words added; 8,100 leaves 69. No code changed. Applied: the rules file's protected-paths line (`docs/*.md` changes only by owner-approved wording) and wcag-2.2-aaa's Exceptions recorded: 2.2.2 is read as essential, not excepted, so the digest gains no exception.
+
+**Supersedes:** 2026-10-20 — PLAN-2 — The spec's budget rises to 7,800; the Always section drops two lines the profile holds; the Xerte link opens a new tab
+
+**Deferred:** none
+
 ## 2026-10-22 — VH-158 — A cut-short Matroska or WebM file is said from its own bytes: a Segment or a last element past the file's end
 
 **Decision:** a Matroska or WebM file is said to be cut short, as the first warning before processing ("The video file is shorter than expected", "…Check the new video before you use it…"), when its last element runs past the file's end, or when its declared Segment size does and its Duration is absent or missed by more than `ENDS_EARLY_MARGIN_SECONDS`; the check reads 1 KB at the start and a tail window of 4 MiB doubling to 32 MiB, never the whole file, in `src/media/matroska-cut.ts`, with no new dependency; a file of unknown sizes and no Duration cut exactly between two elements cannot be told and is not said.
@@ -543,16 +563,6 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Decision:** spec §7.1's sentence on the probe's warm-up stands as worded and is applied; every wish stays on the wish list, none promoted; nothing new is added unless it is really needed, so the next item stays "none" until the owner names one — because the owner said so in chat on 2026-10-20.
 
 **Rationale:** The owner approved "measures throughput — timed from after the first sixth of those frames, so the encoder's start-up, which a job pays once, is not extrapolated (VH-116) — and extrapolates" in chat on 2026-10-20; its wish line is retired, and the spec's routed-budget wish line now quotes 7,386 words. Asked what comes next, the owner chose to keep the wishes on the wish list for now and is inclined to add nothing new unless it is really needed. The agent advised watching three to five staff use the pilot first (VH-M4), and testing one Smaller output on SharePoint (VH-17); both are the owner's own work and already open in the backlog.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-20 — VH-116 — Band 7 closes with VH-116; no unblocked item follows, so the next work is the owner's
-
-**Decision:** Band 7 closed on 2026-10-20 with both its items shipped, its backlog heading now "Band 7 — measured, not yet fixed — CLOSED 2026-10-20"; no open, unblocked line remains in Current or Next, so the next item is the owner's to name — because Band 3's VH-17, Band 6's VH-124 and VH-113 and every Standing line wait on the owner, and Next's VH-13 waits on VH-M2.
-
-**Rationale:** Reconciled against the canon Band 7 list (pm_skills/project/backlog.md: VH-122, VH-116): each has its line under Band 7 in project/trajectory.md, and neither is open in project/backlog.md. The heading keeps the band's name without "Phase N", since no PLAN lists Band 7's items. Recall, local (this session, from the record alone, not a fresh session): 1, project/trajectory.md, newest first: VH-116 and VH-122 under Band 7, then VH-128 and VH-127 under Band 8 — 2; 2, "2026-10-20 — VH-122 — Decode damage: a block beyond +6 dBFS is silenced…", because real decodes peak at +0.96 dBFS while CULT2011's damage reaches +36 and +57 — 2; 3, deferred: project/wish-list.md's lines from VH-116 (the §7.1 doc-delta, a time left during the job, the stale structure.md) and from VH-122 (the screen-reader and listening check), and the backlog's Icebox — 2; 4, no next open item: Current and Next hold only lines blocked on the owner, as this entry records — 2.
 
 **Supersedes:** none
 

@@ -312,7 +312,8 @@ All are advisory, phrased as possibilities, and never block processing.
 
 | Condition | Trigger |
 | --- | --- |
-| Decode damage | A sample beyond +6 dBFS, or not a number: none comes from a real recording. The decoded block holding it is silenced, with one either side, before the analysis pass and in the output, and the warning gives each time — the one row that says what was done rather than what may be wrong |
+| Decode damage | A sample beyond +6 dBFS, or not a number: none comes from a real recording. The analysis silences the decoded block and one either side; the pre-flight warning says those moments will be silent in the output and gives their times in the original video |
+| File ends early | A track's decoded content stops more than 1 s (`ENDS_EARLY_MARGIN_SECONDS`) before the last packet its own index declares in the part kept: the audio, from the analysis pass, said before processing with where it stops; both tracks, from the encode, said beside the record, which gives the length made |
 | Clipping / distortion | ≥10 samples at ≥ −0.1 dBTP, or sustained true peak > 0 dBTP |
 | Very quiet | Integrated loudness < −35 LUFS |
 | Highly variable levels | LRA > 15 LU |
@@ -359,11 +360,12 @@ source. Nor is it raised above the anchor for a pristine master. Tried at
 re-encodes on ingest anyway. So the figure can only fall. The floor keeps it
 above what "Smaller / reduced" asks of slides.
 
-### 6.2 "Smaller / reduced" — for messaging or email
+### 6.2 "Smaller / reduced" — for Moodle assignment uploads, messaging or email
 
 For files that are sent and downloaded as they are, which students may
-download directly: messaging and email ("For messaging or email etc." on
-screen), OneDrive and SharePoint.
+download directly: Moodle assignment uploads, messaging and email ("For
+Moodle assignment uploads, messaging, or email etc." on screen), OneDrive and
+SharePoint.
 
 | Setting | Value |
 | --- | --- |
@@ -469,6 +471,8 @@ records the requirement and not the figure.
 - Device class (phone/tablet detection)
 - Measured video throughput from the calibration probe, and a timed analysis
   pass over the kept audio
+- The analysis pass's decoded end against the audio's declared end in the
+  part kept (VH-139)
 
 ### 7.3 Thresholds
 
@@ -576,20 +580,22 @@ diagnostics bundle stay English.
 ### 9.1 Workflow
 
 The screen is six numbered steps (VH-91, VH-96, VH-127). Above them, a switch
-chooses "Staff video" or "Student submission" (VH-131). It opens on Staff
-video, is remembered in this browser and is never locked, so switching keeps
-the video, the trim, every choice, a running job and a result. Under it,
-"Video language" chooses the language of the words the app adds to the video
-(VH-132). It shows the page's language until someone picks one, then keeps the
-pick when the page's changes; it too is remembered and never locked, and a job
-reads it at its start. Step 1 is there from the start; steps 2–6 appear once a
-video has been read, and each holds a safe default, so a staff video left
-alone keeps the whole video, with no title card, a clean-cut blue closing and
-the larger file.
+chooses "Staff video" or "Student submission" (VH-131). It opens on Staff video,
+is remembered in this browser and is never locked, so switching keeps the video,
+the trim, every choice, a running job and a result. Under it, "Video language"
+chooses the language of the words the app adds to the video (VH-132). It shows
+the page's language until someone picks one, then keeps the pick when the page's
+changes; it too is remembered and never locked, and a job reads it at its start.
+While a video is made or shown, a line under the switches says a change is for
+the next video (VH-140). Step 1 is there from the start; steps 2–6 appear once a
+video has been read, and each holds a safe default, so a staff video left alone
+keeps the whole video, with no title card, a clean-cut blue closing and the
+larger file.
 
 1. **Choose a video** — file picker or drag-and-drop. The app reads the file
-   and says what it found, including anything that cannot be carried into
-   the new file (§8.3).
+   and says "Video read.", adding a bold "No audio." only when there is no
+   audio track, with duration and resolution in Video properties, and
+   anything that cannot be carried into the new file (§8.3).
 2. **Trim** (optional) — a preview in the browser's own player, a start and
    an end handle on one track, "Start time" and "End time" fields, and
    "Set start here" / "Set end here" to take the preview's position; moving
@@ -598,23 +604,24 @@ the larger file.
    the whole video is kept, and "Use the whole video" puts it back. The part
    kept must be at least 3 s. The preview plays the original — the
    sound not yet levelled, the closing not yet added — and the step says so.
-3. **Title card** (optional for a staff video) — an "Add a title card" box,
-   off at first, shows Title, Department, Authors and Date while ticked
-   (§4.1). Ticking fills the date with today's date in the video's language; a
-   change of video language refills it while it still says what was filled,
-   and a typed date is kept. Each field stops at its limit and says so;
-   unticking keeps what was typed. Create refuses a ticked card with nothing
-   on it, or one that will not fit, before anything starts: the reason beside
-   the box or the field, a line in step 6, and focus there. Under Student
-   submission the box is ticked and locked, saying why, and Submission's
-   fields show in place of the staff card's: assignment title or number,
-   module code and title, module convenor or tutor, and one box of student ID
-   numbers separated by spaces, commas or new lines, with a line beneath
-   giving the running time as trimmed. Each side keeps its own fields for the
-   way back, and neither is remembered beyond the page. Create refuses a field
-   left empty, an ID number not of 8 digits, one typed twice, or more than
-   eight, each said beside its field as the staff card's are; a field too long
-   to fit is said as it is typed.
+3. **Title card** (optional for a staff video) — an "Add a title card" box, off
+   at first, shows Title, Department, Authors and Date while ticked (§4.1).
+   Ticking fills the date with today's date in the video's language; a change of
+   video language refills it while it still says what was filled, and a typed
+   date is kept. Each field stops at its limit and says so; unticking keeps what
+   was typed. Under the box, each side says its rule before Create does
+   (VH-140). Create refuses a ticked card with no title, department or authors,
+   or one that will not fit, before anything starts: the reason beside the box
+   or the field, a line in step 6, and focus there. Under Student submission the
+   box is ticked and locked, saying why, and Submission's fields show in place
+   of the staff card's: assignment title or number, module code and title,
+   module convenor or tutor, and one box of student ID numbers separated by
+   spaces, commas or new lines, with a line beneath giving the running time as
+   trimmed. Each side keeps its own fields for the way back, and neither is
+   remembered beyond the page. Create refuses a field left empty, an ID number
+   not of 8 digits, one typed twice, or more than eight, each said beside its
+   field as the staff card's are; a field too long to fit is said as it is
+   typed.
 4. **Closing branding** — animation type, onset and colour (§4.3).
 5. **File size / quality** — "Larger / better" or "Smaller / reduced"
    (§6).
@@ -623,16 +630,17 @@ the larger file.
    audio-quality warnings (§5.4); then "Create the video", with named
    progress and a cancel button, and "Save the video" when it is done.
 
-   The finished video carries a one-line summary of its job — file, the
-   title card when there is one (never its words), part kept, output,
-   closing as requested and as applied — fixed when the job
-   ends and never relabelled by the controls for the next one; the question
-   asked before it is discarded carries the same summary. It is not kept
-   past the tab, and the page says so before Create and beside the result;
-   it is kept until it is saved or discarded, and choosing another file
-   resets the trim to the whole video, says so, and leaves the result
-   alone. Starting again with it unsaved asks first — and a download handed
-   to the browser is not yet a save for that purpose.
+   The finished video carries a one-line summary of its job — file, the title
+   card when there is one ("a 5-second staff title card", "a 5-second submission
+   card", never its words), part kept, output, closing as requested and as
+   applied, then a video language not the page's — fixed when the job ends and
+   never relabelled by the controls for the next one; the question asked before
+   it is discarded carries the same summary. It is not kept past the tab, and
+   the page says so before Create and beside the result; it is kept until it is
+   saved or discarded, and choosing another file resets the trim to the whole
+   video, says so, and leaves the result alone. Starting again with it unsaved
+   asks first — and a download handed to the browser is not yet a save for that
+   purpose.
 
    After a save the page says only what it knows: the chosen location, or
    the browser's downloads (Files → Downloads on an iPhone) — a completed
@@ -649,15 +657,16 @@ the larger file.
   Every term of art the page keeps and every abbreviation it uses has an
   in-place meaning, bar the exceptions §9.3 names one by one; where a fixed
   label fails the level, simpler supporting text sits beside it.
-- Five named stages, not one opaque bar (VH-109): "Getting ready",
-  "Analysing audio", "Encoding video", "Finishing the file" and "Checking the
-  file". Branding joins inside the encode; the bar is full only when the video
-  is ready. Ten seconds into the encode, a line under the stage gives the time
-  left from the job's own rate (VH-136), rounded like the estimate before it:
-  "About 2 minutes left". It counts the encode, the closing included;
-  finishing and checking add a few seconds. It is spoken only with the
-  encode's milestones, a quarter, half and three quarters done, which §9.3
-  lets the user postpone.
+- Five named stages, not one opaque bar (VH-109): "Getting ready", "Analysing
+  audio", "Encoding video", "Finishing the file" and "Checking the file".
+  Branding joins inside the encode; the bar is full only when the video is
+  ready. Beside the progress, a line names the job's own video type and video
+  language (VH-140). Ten seconds into the encode, a line under the stage gives
+  the time left from the job's own rate (VH-136), rounded like the estimate
+  before it: "About 2 minutes left". It counts the encode, the closing included;
+  finishing and checking add a few seconds. It is spoken only with the encode's
+  milestones, a quarter, half and three quarters done, which §9.3 lets the user
+  postpone.
 - Every error states what happened, whether the original file is affected
   (it never is), and what to do next — and sits where it belongs: an input
   error beside the control it concerns, and tied to it; a job or device
@@ -710,6 +719,19 @@ Exemptions WCAG itself grants, noted so they are not mistaken for
 exceptions: the native `<video>` controls are the user agent's (2.5.5); the
 logo is a logotype (1.4.9).
 
+Moving content (2.2.2), read as essential (VH-150): the moving bar, stage,
+time left and tab title report a job the user started and is waiting for, so
+they are essential to it and have no hide control. Announce progress controls
+the spoken milestones; outcomes are always announced.
+
+Evidence only a person can supply, recorded as limitations, not failures
+(VH-138): the browser's own 200% enlargement (1.4.4, 1.4.8); the Chinese
+40-glyph measure (1.4.8); the selects by keyboard (2.1.1); the slider thumbs'
+inset focus ring (2.4.13); the translated terms and reading level (3.1.3,
+3.1.5); real screen readers (2.4.3, 4.1.3); Windows contrast themes (1.4.11,
+2.4.13); real phones (1.3.4, 2.5.6); and speech input, completed or deferred
+in writing (§13).
+
 Exceptions recorded:
 
 - **The preview's content** (1.2.1–1.2.8, 2.3.1–2.3.2). *Reason:* it is the
@@ -749,11 +771,11 @@ Responsive and fully readable on phones and tablets. Processing is
 **The app is designed and built for Chrome, and says so** before anything is
 chosen — and says what the load-time support check found, so a browser that
 has passed is not turned away (VH-98, 2026-09-30; revised 2026-10-01,
-VH-121). One sentence in three forms: "This app is designed and built for
-Chrome, other browsers may not work" until the checks land; "…and this
-browser has passed the checks for it" when every check passes; "…and this
-browser has not passed all of its checks. The system check at the foot of
-the page says what is missing" otherwise. The load-time check asks for a
+VH-121). One sentence in three forms: "This tool is designed and built for
+Chrome, so other browsers may not work" until the checks land; "…and this
+browser has passed the checks for it to run" when every check passes; "…and
+this browser has not passed all the checks for it to run. The system check at
+the foot of the page says what is missing" otherwise. The load-time check asks for a
 secure context, WebCodecs, the H.264 encoder at a 1080p25 "Larger / better"
 configuration, the AAC encoder in stereo and mono, the presence of the
 private storage API (whether it can be written, and how much, is pre-flight's

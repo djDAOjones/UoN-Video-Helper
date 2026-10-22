@@ -352,3 +352,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-20 — VH-116 — Band 7 closes with VH-116; no unblocked item follows, so the next work is the owner's
+
+**Decision:** Band 7 closed on 2026-10-20 with both its items shipped, its backlog heading now "Band 7 — measured, not yet fixed — CLOSED 2026-10-20"; no open, unblocked line remains in Current or Next, so the next item is the owner's to name — because Band 3's VH-17, Band 6's VH-124 and VH-113 and every Standing line wait on the owner, and Next's VH-13 waits on VH-M2.
+
+**Rationale:** Reconciled against the canon Band 7 list (pm_skills/project/backlog.md: VH-122, VH-116): each has its line under Band 7 in project/trajectory.md, and neither is open in project/backlog.md. The heading keeps the band's name without "Phase N", since no PLAN lists Band 7's items. Recall, local (this session, from the record alone, not a fresh session): 1, project/trajectory.md, newest first: VH-116 and VH-122 under Band 7, then VH-128 and VH-127 under Band 8 — 2; 2, "2026-10-20 — VH-122 — Decode damage: a block beyond +6 dBFS is silenced…", because real decodes peak at +0.96 dBFS while CULT2011's damage reaches +36 and +57 — 2; 3, deferred: project/wish-list.md's lines from VH-116 (the §7.1 doc-delta, a time left during the job, the stale structure.md) and from VH-122 (the screen-reader and listening check), and the backlog's Icebox — 2; 4, no next open item: Current and Next hold only lines blocked on the owner, as this entry records — 2.
+
+**Supersedes:** none
+
+**Deferred:** none
