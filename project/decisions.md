@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-22 — VH-157 — A title card with only the date stops Create as an empty one does; Title is marked and told why
+
+**Decision:** `isCardEmpty` no longer counts the date, because it fills itself, so a ticked staff card with no title, department or authors stops Create with the existing empty-card refusal: the line beside the box says "Type a title, department, or authors, or untick Add a title card.", the status line says "Correct the title card in step 3 to continue.", and focus moves to Title, which is now marked invalid and names that line in its description; the rule line says first "Type a title, department, or authors to make a card."; no control is added.
+
+**Rationale:** The owner's VH-138.1 answer (PLAN-5, 2026-10-22) asked for a warning and the accessible course, with focus to the field; in chat on 2026-10-22 they chose "Stop Create" over a warning that lets the card through on a second press, which would be a hidden mode the person must remember. Student submission already refuses this way (each empty field said beside it, the same status line, focus to the first), so both kinds now agree; Submission is unchanged. A date typed by hand, such as "Spring term", is still only a date. Chrome at 1280 px: date-only Create refused with the line, the status, focus and `aria-invalid` on Title; typing in Department clears all three; Chinese and Malay lines read; Submission's four lines and focus to Assignment unchanged. Two strings changed, with Chinese and Malay drafted by the agent and marked in the sheet; reading grades 6.8 and 4.8. Spec §9.1 step 3's "nothing on it" now means no title, department or authors: VH-157.1 for the owner. Standards (rule 8): WCAG 3.3.1, 3.3.3 and 3.3.6 from the AAA digest; Nielsen 5 and 9; UI-STANDARDS, validation near the relevant control; house conventions, regression tests by category. No dependency changed. Not checked by a second model.
+
+**Supersedes:** 2026-10-21 — VH-140 — The record names the card and a video language not the page's; a line says a switch is for the next video; Step 3 says its rule first
+
+**Deferred:** none
+
 ## 2026-10-22 — VH-156 — The writing review's proposals applied; the decode-damage detail says "video" and "undamaged audio", never "recording"
 
 **Decision:** the 20 proposals VH-153 had not applied are applied to `en-GB.ts` and `index.html` as the review worded them, with "audio" where they name it; the decode-damage detail says "the original video", "not from your video" and "louder than undamaged audio can be"; Chinese and Malay rows whose meaning changed are redrafted as the agent's drafts, and rows where only an English idiom or comma changed keep their translation; the enforcement sentence says "you can contact the {service} for help", because "contact" alone put it over the reading-grade limit.
@@ -543,16 +553,6 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Decision:** the calibration probe still encodes its 3 s window, but times only the frames after its first sixth (`CALIBRATION_PROBE_WARM_UP_FRACTION`), so pre-flight takes no longer; the job's own rate, the closer remedy, is not built, because the page shows no time during a job, and a time-left display is a wish line — because the owner chose the recommended option in chat on 2026-10-20.
 
 **Rationale:** Over slice (a)'s 10 runs, real time over predicted was 0.51–0.70 for the probe as shipped (high/low 1.37) and 0.69–0.86 skipping a sixth (1.25), 0.67–0.82 a third (1.22), 0.64–0.77 half (1.20): a sixth has the median nearest 1 (0.82) and the smallest worst case (an estimate 1.45× the real time, against 1.49× and 1.56×), and it clears the smoke run's stall at frame 5. The job's own rate after 10 s was 0.96–1.00. The estimate still runs long by about a fifth, so §7.3's bands now warn later than before but still early. `warmedUpTiming` is pure and tested by category in `probe.test.ts`; the spike page's "probe" row stays the probe before this change. The §7.1 sentence is a doc-delta for the owner.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-20 — VH-116 — Slice (a) counts the 10 runs with the pane shown; Philosophy on Smaller is unmeasured
-
-**Decision:** slice (a)'s record is the 10 of 18 runs made while the in-app browser's pane was shown. The 8 that overlapped a hidden stretch are left out, so Philosophy on Smaller has no measured run — because a hidden pane runs as a background page and those runs were up to 15% slower, and the owner chose on 2026-10-20 to record the 10 rather than re-run while other sessions held the load near 30.
-
-**Rationale:** The page's `visibility-state` timeline put the hidden stretches at 177–204, 414–570 and 607–684 s, and summing each run's own times put runs 6 and 12–18 in them. Over the 10, the probe reads 0.51–0.70 real over predicted, the warm-ups 0.64–0.86, and the job's own rate after 10 s 0.96–1.00; VH-116's notes hold the table. Slice (b) chooses from these. The page now flags a hidden run itself, so a later run needs no reconstruction.
 
 **Supersedes:** none
 

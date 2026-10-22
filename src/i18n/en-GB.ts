@@ -253,7 +253,7 @@ export const enGB = {
     /** Why the box is ticked and locked, naming the side of the switch that locks it (VH-128). */
     forSubmission: 'A student submission always has a title card.',
     /** Under the box while the staff card's fields show: what a card needs, before Create says it (VH-140). */
-    fieldsRule: 'Any one field is enough to make a card.',
+    fieldsRule: 'Type a title, department, or authors to make a card.',
     fieldsRuleNext: 'The date is filled in for you.',
     /** Beside a field whose typing reached its limit and was cut there. */
     full: 'This field is full, so the rest was not added.',
@@ -263,7 +263,7 @@ export const enGB = {
       card: 'Together, the fields are too long to fit on the card. Shorten this one or another.',
     },
     /** Beside the box, when Create is pressed with the box ticked and every field empty. */
-    empty: 'Fill in at least one of the four fields, or untick Add a title card.',
+    empty: 'Type a title, department, or authors, or untick Add a title card.',
     correctToContinue: 'Correct the title card in step 3 to continue.',
     /** Submission's four fields on the page (VH-128); the card draws its own labels, from `card`. */
     submission: {

@@ -17,6 +17,7 @@
 - VH-154 — Page language moves into the header band, right of the logo; the video switchers stay under the lede; Choose file rises into the first screen at 1280 × 900; phones wrap it under the logo; checked in Chrome and forced colours (2026-10-22) — see decisions
 - VH-155 — "audio", not "sound", for the file's audio in all three languages, and "This tool" in the browser sentence; checked in Chrome in three languages (2026-10-22) — see decisions
 - VH-156 — the writing review's proposals applied: no broken "about", no misplaced "it", captions said plainly, no colon or dash pivots, no phrasal verbs, the serial comma; the decode-damage detail says "video", never "recording"; Chinese and Malay redrafted where the meaning changed; checked in Chrome in three languages (2026-10-22) — see decisions
+- VH-157 — a staff title card with only the date stops Create as an empty one does: the line beside the box, the status line, focus and the invalid mark on Title; the rule line says it first; Submission unchanged; checked in Chrome in three languages, both video kinds (2026-10-22) — see decisions
 
 ## The Codex run reviewed
 

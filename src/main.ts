@@ -2553,13 +2553,14 @@ function markInvalid(input: HTMLElement, invalid: boolean): void {
 function paintTitleCardErrors(): void {
   const text = typedCard()
   const stop = cardStop(titleCardIsOn(), text, cardRefusal())
+  if (stop?.at !== 'empty') cardEmptyRefused = false
   for (const field of STAFF_CARD_FIELDS) {
     const { input, error } = titleCardInputs[field]
     const refusal = stop?.at === 'field' && stop.field === field ? stop.refusal : null
     paintLine(error, refusal !== null ? refusalText(refusal) : cardFieldsFull.has(field) ? t().titleCard.full : null)
-    markInvalid(input, refusal !== null)
+    // An empty card's refusal marks Title, where focus goes; its line is in Title's description (VH-157).
+    markInvalid(input, refusal !== null || (field === 'title' && cardEmptyRefused))
   }
-  if (stop?.at !== 'empty') cardEmptyRefused = false
   paintLine(titleCardEmptyError, cardEmptyRefused ? t().titleCard.empty : null)
 
   const problems = currentSubmissionProblems()

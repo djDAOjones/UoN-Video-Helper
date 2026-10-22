@@ -194,14 +194,14 @@ export const zhHans: Messages = {
     dateHelper: '已填入以视频语言显示的今天日期。',
     dateHelperNext: '您可以更改或清除它。',
     forSubmission: '学生提交作品始终带有标题卡。',
-    fieldsRule: '填写任意一个字段即可制作卡片。',
+    fieldsRule: '请填写标题、院系或作者，即可制作卡片。',
     fieldsRuleNext: '日期已为您填好。',
     full: '此字段已满，其余内容未添加。',
     refused: {
       field: '内容太长，无法放入卡片。请缩短。',
       card: '这些字段合起来太长，无法放入卡片。请缩短此字段或其他字段。',
     },
-    empty: '请至少填写四个字段中的一个，或取消勾选“添加标题卡”。',
+    empty: '请填写标题、院系或作者，或取消勾选“添加标题卡”。',
     correctToContinue: '在步骤 3 中更正标题卡，即可继续。',
     submission: {
       fieldsRule: '四个字段都必须填写。',

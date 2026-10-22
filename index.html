@@ -259,7 +259,8 @@
             <p class="helper" id="title-card-reason" hidden></p>
             <!-- VH-140, 2026-10-21. What this side's card needs, said before
                  Create refuses it (WCAG 3.3.2): all four of Submission's
-                 fields; any one of the staff card's, with its date filled.
+                 fields; a title, department or authors on the staff card,
+                 with its date filled (VH-157).
                  Painted by `title-card-step.ts`; empty while hidden. -->
             <p class="helper" id="title-card-rule" hidden></p>
             <div aria-live="polite">
@@ -269,7 +270,7 @@
           <div id="title-card-fields" hidden>
             <div class="field">
               <label class="label" for="title-card-title" data-i18n="titleCard.title">Title</label>
-              <input class="text-input" type="text" id="title-card-title" autocomplete="off" aria-describedby="title-card-title-error" />
+              <input class="text-input" type="text" id="title-card-title" autocomplete="off" aria-describedby="title-card-empty-error title-card-title-error" />
               <div aria-live="polite">
                 <p class="field-error" id="title-card-title-error" hidden></p>
               </div>

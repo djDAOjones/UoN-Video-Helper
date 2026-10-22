@@ -116,7 +116,8 @@ export function titleCardBoxState(kind: VideoKind, staffChecked: boolean): Title
  * The line under the box saying what this side's card needs before Create
  * refuses it (VH-140, audit V-06; WCAG 3.3.2): under a student submission,
  * that all four fields are needed; under a staff video, while its fields
- * show, that any one makes a card and the date is filled in. `null` while
+ * show, that a title, department or authors makes a card and the date is
+ * filled in (VH-157). `null` while
  * the staff box is unticked, when no field shows to need anything.
  */
 export function titleCardRuleText(kind: VideoKind, staffChecked: boolean): string | null {
@@ -124,9 +125,12 @@ export function titleCardRuleText(kind: VideoKind, staffChecked: boolean): strin
   return staffChecked ? [t().titleCard.fieldsRule, t().titleCard.fieldsRuleNext].join(sentenceGap()) : null
 }
 
-/** True when no field holds anything but spaces, which is a card with nothing on it. */
+/**
+ * True when no field but the date holds anything but spaces: the date fills
+ * itself, so a card with only the date is one nobody typed on (VH-157).
+ */
 export function isCardEmpty(text: StaffCardText): boolean {
-  return STAFF_CARD_FIELDS.every((field) => text[field].trim() === '')
+  return STAFF_CARD_FIELDS.every((field) => field === 'date' || text[field].trim() === '')
 }
 
 /** Why the card stops Create: nothing typed, said beside the box, or a field that will not fit. */

@@ -207,14 +207,14 @@ export const msMY: Messages = {
     dateHelper: 'Diisi dengan tarikh hari ini dalam bahasa video.',
     dateHelperNext: 'Anda boleh menukar atau mengosongkannya.',
     forSubmission: 'Serahan pelajar sentiasa mempunyai kad tajuk.',
-    fieldsRule: 'Satu medan sudah cukup untuk membuat kad.',
+    fieldsRule: 'Taip tajuk, jabatan atau pengarang untuk membuat kad.',
     fieldsRuleNext: 'Tarikh diisi untuk anda.',
     full: 'Medan ini sudah penuh, jadi selebihnya tidak ditambah.',
     refused: {
       field: 'Ini terlalu panjang untuk dimuatkan pada kad. Pendekkannya.',
       card: 'Bersama-sama, medan ini terlalu panjang untuk dimuatkan pada kad. Pendekkan medan ini atau medan lain.',
     },
-    empty: 'Isi sekurang-kurangnya satu daripada empat medan, atau nyahtanda Tambah kad tajuk.',
+    empty: 'Taip tajuk, jabatan atau pengarang, atau nyahtanda Tambah kad tajuk.',
     correctToContinue: 'Betulkan kad tajuk dalam langkah 3 untuk meneruskan.',
     submission: {
       fieldsRule: 'Keempat-empat medan diperlukan.',

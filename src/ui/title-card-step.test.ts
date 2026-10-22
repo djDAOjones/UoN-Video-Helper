@@ -147,9 +147,9 @@ describe('the rule said before Create (VH-140, audit V-06)', () => {
     expect(t().titleCard.submission.fieldsRule).toBe('All four fields are needed.')
   })
 
-  it('a staff video, its box ticked, says any one field makes a card and the date is filled in', () => {
+  it('a staff video, its box ticked, says a title, department or authors makes a card and the date is filled in', () => {
     expect(titleCardRuleText('staff', true)).toBe(
-      'Any one field is enough to make a card. The date is filled in for you.',
+      'Type a title, department, or authors to make a card. The date is filled in for you.',
     )
   })
 
@@ -163,6 +163,11 @@ describe('the refusal at Create', () => {
     expect(cardStop(true, EMPTY, null)).toEqual({ at: 'empty' })
     expect(cardStop(true, { ...EMPTY, title: '   ' }, null)).toEqual({ at: 'empty' })
     expect(isCardEmpty({ ...EMPTY, date: ' \t' })).toBe(true)
+  })
+
+  it('error: ticked with only the date, filled or typed, is refused as empty (VH-157)', () => {
+    expect(cardStop(true, { ...EMPTY, date: '22 October 2026' }, null)).toEqual({ at: 'empty' })
+    expect(titleCardRequest(true, { ...EMPTY, date: 'Spring term' }, ASSETS)).toBeNull()
   })
 
   it('gating: unticked, nothing is refused, however empty', () => {
