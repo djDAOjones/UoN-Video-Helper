@@ -1,0 +1,174 @@
+{
+ "run": "2026-10-22T21-30-27-132Z-20fe06",
+ "source": {
+  "commit": "eae49ead3463d2f0e007a3cb23316f8bbcad52f5",
+  "dirty": false
+ },
+ "instruments": {
+  "revision": "f1a4818487c209e8",
+  "files": [
+   {
+    "file": "cdp.mjs",
+    "sha256": "c56942d83d339cbd"
+   },
+   {
+    "file": "design-walk.mjs",
+    "sha256": "50c2b05bda2e7e61"
+   },
+   {
+    "file": "digest.mjs",
+    "sha256": "b58bfc4e16da02cd"
+   },
+   {
+    "file": "fixtures.sh",
+    "sha256": "6245baa743648ba5"
+   },
+   {
+    "file": "inventory.mjs",
+    "sha256": "c2c16ea752c5e01e"
+   },
+   {
+    "file": "matrix.mjs",
+    "sha256": "4361a932eabf8663"
+   },
+   {
+    "file": "prove.mjs",
+    "sha256": "9c29f936267388f2"
+   },
+   {
+    "file": "qualify.mjs",
+    "sha256": "2f2603f38cf5b198"
+   },
+   {
+    "file": "runner.mjs",
+    "sha256": "cccd55a11f8b1279"
+   },
+   {
+    "file": "tokens.mjs",
+    "sha256": "59bff4a79c7984ff"
+   },
+   {
+    "file": "walk.mjs",
+    "sha256": "119a8ff6e7d2410f"
+   },
+   {
+    "file": "wcag-checks.mjs",
+    "sha256": "2496aa09cfcbadda"
+   }
+  ]
+ },
+ "browser": "Chrome/155.0.8059.85",
+ "os": "darwin 25.6.0 arm64",
+ "views": [
+  {
+   "view": "w1280",
+   "actual": {
+    "w": 1280,
+    "h": 900,
+    "dpr": 1
+   },
+   "rootFontPx": 16
+  }
+ ],
+ "scaling": "Emulation.setDeviceMetricsOverride per view; Page.setFontSizes for the default font; Chrome page zoom not settable over the protocol (proxy views only)",
+ "fixtures": [
+  {
+   "file": "lecture-60s.mp4",
+   "bytes": 20222028,
+   "sha256": "ce10e0ce0579c4b6"
+  }
+ ],
+ "coverage": {
+  "expected": 10,
+  "observed": 10,
+  "whole": true,
+  "problems": []
+ },
+ "tally": {
+  "keys": {
+   "pass": 0,
+   "fail": 1,
+   "cannot-determine": 0,
+   "items": {
+    "pass": 0,
+    "fail": 0,
+    "cannot-determine": 0
+   }
+  },
+  "overflow": {
+   "pass": 9,
+   "fail": 0,
+   "cannot-determine": 0,
+   "items": {
+    "pass": 0,
+    "fail": 0,
+    "cannot-determine": 0
+   }
+  },
+  "ax": {
+   "pass": 9,
+   "fail": 0,
+   "cannot-determine": 0,
+   "items": {
+    "pass": 0,
+    "fail": 0,
+    "cannot-determine": 0
+   }
+  },
+  "targets": {
+   "pass": 6,
+   "fail": 0,
+   "cannot-determine": 3,
+   "items": {
+    "pass": 156,
+    "fail": 0,
+    "cannot-determine": 6
+   }
+  },
+  "contrastText": {
+   "pass": 9,
+   "fail": 0,
+   "cannot-determine": 0,
+   "items": {
+    "pass": 444,
+    "fail": 0,
+    "cannot-determine": 0
+   }
+  },
+  "contrastExtra": {
+   "pass": 7,
+   "fail": 2,
+   "cannot-determine": 0,
+   "items": {
+    "pass": 39,
+    "fail": 2,
+    "cannot-determine": 0
+   }
+  },
+  "measure": {
+   "pass": 9,
+   "fail": 0,
+   "cannot-determine": 0,
+   "items": {
+    "pass": 396,
+    "fail": 0,
+    "cannot-determine": 0
+   }
+  },
+  "focus": {
+   "pass": 3,
+   "fail": 6,
+   "cannot-determine": 0,
+   "items": {
+    "pass": 29,
+    "fail": 10,
+    "cannot-determine": 0
+   }
+  }
+ },
+ "unresolved": [
+  "Chrome page zoom at 200% and 400% itself (proxy views stand in; on the person list)",
+  "what a screen reader says (exposure only)",
+  "native select popups and the video player's inner controls by keys"
+ ]
+}

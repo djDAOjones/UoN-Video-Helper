@@ -1,0 +1,302 @@
+[
+ {
+  "instrument": "overflow",
+  "fixture": "overflow-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "scrollWidth": 2024,
+   "clientWidth": 1280
+  }
+ },
+ {
+  "instrument": "rendered focus",
+  "fixture": "focus-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "areaAt3to1": 152,
+   "perimeter2px": 592,
+   "bestRatio": 3.32
+  }
+ },
+ {
+  "instrument": "rendered focus, scrolled",
+  "fixture": "focus-scrolled-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "areaAt3to1": 152,
+   "perimeter2px": 592,
+   "bestRatio": 3.32
+  }
+ },
+ {
+  "instrument": "rendered lines",
+  "fixture": "lines-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "lang": "en",
+    "worst": {
+     "latin": 142,
+     "cjk": 0,
+     "widthPx": 1215,
+     "outcome": "fail"
+    }
+   },
+   {
+    "lang": "zh-Hans",
+    "worst": {
+     "latin": 0,
+     "cjk": 77,
+     "widthPx": 1232,
+     "outcome": "fail"
+    }
+   }
+  ]
+ },
+ {
+  "instrument": "accessibility tree: names",
+  "fixture": "name-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "no accessible name",
+    "role": "button",
+    "dom": 11
+   },
+   {
+    "kind": "no accessible name",
+    "role": "textbox",
+    "dom": 14
+   }
+  ]
+ },
+ {
+  "instrument": "target area",
+  "fixture": "target-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "el": "button#b[submit] \"x\"",
+   "outcome": "fail",
+   "hitW": 20,
+   "hitH": 20,
+   "hitArea": 400,
+   "inline": false,
+   "disabled": false
+  }
+ },
+ {
+  "instrument": "contrast beyond text",
+  "fixture": "placeholder-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "el": "input#t[text] \"Title\"",
+   "what": "placeholder",
+   "fg": "rgb(198, 198, 198)",
+   "ratio": 1.71,
+   "need": 7,
+   "outcome": "fail"
+  }
+ },
+ {
+  "instrument": "accessibility tree: modal background",
+  "fixture": "modal-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "exposed behind the modal dialog",
+    "role": "button",
+    "name": "Open",
+    "dom": 11
+   }
+  ]
+ },
+ {
+  "instrument": "keys-only route",
+  "fixture": "keys-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   "button#a[submit] \"First\"",
+   "body"
+  ]
+ },
+ {
+  "instrument": "overflow",
+  "fixture": "overflow-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "scrollWidth": 1280,
+   "clientWidth": 1280
+  }
+ },
+ {
+  "instrument": "rendered focus",
+  "fixture": "focus-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "areaAt3to1": 640,
+   "perimeter2px": 592,
+   "bestRatio": 5
+  }
+ },
+ {
+  "instrument": "rendered focus, scrolled",
+  "fixture": "focus-scrolled-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "areaAt3to1": 640,
+   "perimeter2px": 592,
+   "bestRatio": 5
+  }
+ },
+ {
+  "instrument": "rendered lines",
+  "fixture": "lines-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": [
+   {
+    "lang": "en",
+    "worst": {
+     "latin": 51,
+     "cjk": 0,
+     "widthPx": 434,
+     "outcome": "pass"
+    }
+   },
+   {
+    "lang": "zh-Hans",
+    "worst": {
+     "latin": 0,
+     "cjk": 28,
+     "widthPx": 448,
+     "outcome": "pass"
+    }
+   }
+  ]
+ },
+ {
+  "instrument": "accessibility tree: names",
+  "fixture": "name-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": []
+ },
+ {
+  "instrument": "target area",
+  "fixture": "target-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "el": "button#b[submit] \"Go\"",
+   "outcome": "pass",
+   "hitW": 48,
+   "hitH": 48,
+   "hitArea": 2304,
+   "inline": false,
+   "disabled": false
+  }
+ },
+ {
+  "instrument": "contrast beyond text",
+  "fixture": "placeholder-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "el": "input#t[text] \"Title\"",
+   "what": "placeholder",
+   "fg": "rgb(82, 82, 82)",
+   "ratio": 7.81,
+   "need": 7,
+   "outcome": "pass"
+  }
+ },
+ {
+  "instrument": "accessibility tree: modal background",
+  "fixture": "modal-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": []
+ },
+ {
+  "instrument": "keys-only route",
+  "fixture": "keys-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": [
+   "button#a[submit] \"First\"",
+   "button#go[submit] \"Go\""
+  ]
+ },
+ {
+  "instrument": "runner",
+  "fixture": "duplicate",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true
+ },
+ {
+  "instrument": "runner",
+  "fixture": "stale",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true
+ },
+ {
+  "instrument": "runner",
+  "fixture": "missing",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true
+ },
+ {
+  "instrument": "runner",
+  "fixture": "undeclared",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true
+ },
+ {
+  "instrument": "runner",
+  "fixture": "failed",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true
+ },
+ {
+  "instrument": "runner",
+  "fixture": "whole",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true
+ }
+]
