@@ -42,10 +42,10 @@ export const zhHans: Messages = {
     privacy: '您的视频在您的设备上进行处理，不会上传，原始文件也不会改变。',
   },
   browserNote: {
-    pending: '此应用专为 Chrome 浏览器设计和构建，其他浏览器可能无法正常运行。',
+    pending: '此应用专为 Chrome 浏览器设计和构建，因此其他浏览器可能无法正常运行。',
     notPassed:
-      '此应用专为 Chrome 浏览器设计和构建，但该浏览器尚未通过所有检查。页面底部的系统检查信息显示了缺失的功能。',
-    passed: '本应用专为 Chrome 设计和构建，此浏览器已通过运行本应用所需的检查。',
+      '此应用专为 Chrome 浏览器设计和构建，但此浏览器尚未通过运行此应用所需的全部检查。页面底部的系统检查信息显示了缺失的功能。',
+    passed: '此应用专为 Chrome 浏览器设计和构建，且此浏览器已通过运行此应用所需的检查。',
   },
   videoKind: {
     label: '视频类型',
@@ -90,7 +90,6 @@ export const zhHans: Messages = {
   },
   source: {
     readSummary: '视频已读取。',
-    variableFrameRate: '可变帧率',
     noSound: '没有声音。',
     properties: '视频属性',
     lossesTitle: '未导入新文件',
@@ -150,7 +149,7 @@ export const zhHans: Messages = {
   },
   trim: {
     intro:
-      '可选。您可以剪掉开头或结尾不需要的内容。如果不进行任何操作，则会保留整个视频。预览会播放您当前的原始视频：视频制作过程中会调整音量并添加结尾图形。',
+      '可选。您可以剪掉开头或结尾不需要的内容。如果不进行任何操作，则会保留整个视频。预览会按原样播放您的原始视频，因为调整音量和添加结尾图形都是在制作视频时进行的。',
     noPreview: '此文件没有预览功能。您仍然可以设置时间。',
     start: '开始',
     end: '结尾',
@@ -307,7 +306,7 @@ export const zhHans: Messages = {
     },
     details: {
       best: '例如 EchoVideo 或 YouTube 等。',
-      smaller: '用于上传 Moodle 作业、即时消息或电子邮件等。',
+      smaller: '适用于上传到 Moodle 作业、通过即时消息或电子邮件发送等。',
     },
   },
   create: {
@@ -339,15 +338,14 @@ export const zhHans: Messages = {
     cancelling: '正在取消……',
     cancelled: '已取消。未保存任何内容，您的原始文件保持不变。',
     saving: '正在保存……',
-    saveStopped: '保存已停止。视频仍然在这里，您可以再次尝试保存。',
-    notSaved: '未保存。视频仍然在这里，您可以再次尝试保存。',
+    saveStopped: '保存已停止。视频仍在这里，您随时可以保存。',
+    notSaved: '未保存。视频仍在这里，您随时可以保存。',
     refusedSource: '这就是你最初使用的文件。选择不同的名称或文件夹——此工具绝不会更改你的原始文件。',
     saved: '已保存。请到保存位置检查视频，然后上传到目标位置——或者在步骤 1 中选择另一个视频。',
-    saveFailed: '视频保存失败。您可以再次尝试保存。',
     storageWayOut: '减少视频长度，选择“{smaller}”，或者释放一些空间，然后按“再次检查”。',
-    creating: '正在创建视频。{notice}',
+    creating: '正在制作视频。{notice}',
     ready: '您的视频已准备就绪。',
-    couldNotCreate: '视频无法创建。{sentence}',
+    couldNotCreate: '视频无法制作。{sentence}',
     verdictSpoken: '设备检查完成。{heading}。',
   },
   discard: {
@@ -478,7 +476,7 @@ export const zhHans: Messages = {
     },
     tryChrome: '本工具专为电脑上的 Chrome 浏览器而设计——请在 Chrome 浏览器上尝试使用。',
     chromeLacks:
-      '此Chrome 浏览器版本可能已过期，或者此计算机上的某个设置可能已关闭此功能。请更新Chrome 浏览器，或咨询计算机管理员。',
+      '此 Chrome 浏览器版本可能已过期，或者此计算机上的某个设置可能已关闭此功能。请更新 Chrome 浏览器，或咨询计算机管理员。',
     reasons: {
       noWebCodecs: '此浏览器无法处理视频。{remedy}',
       noAacEncodeHere: '此浏览器无法为视频文件添加声音。{remedy}',
@@ -655,7 +653,7 @@ export const zhHans: Messages = {
         '执行操作的工具部分未启动。请重新加载页面。如果问题再次出现，请点击“发送反馈”按钮进行报告。',
     },
     captured:
-      '工具出现故障。正在制作的视频可能无法完成；您的原始文件不受影响。请点击“报告此问题”按钮报告此问题，该按钮会附上这些详细信息。',
+      '工具出现故障。正在制作的视频可能无法完成；您的原始文件不受影响。请使用“报告此问题”按钮报告，该按钮会附上这些详细信息。',
   },
   systemCheck: {
     summary: '系统检查 — {result}',
@@ -791,7 +789,7 @@ export const zhHans: Messages = {
     },
   },
   save: {
-    pickerDescription: 'MP4 视频 （.mp4）',
+    pickerDescription: 'MP4 视频（.mp4）',
     stem: '视频',
     marks: {
       branded: '品牌',

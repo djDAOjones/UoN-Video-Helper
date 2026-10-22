@@ -92,8 +92,8 @@ describe('the browser sentence (2026-10-01)', () => {
   })
 
   it('says other browsers may not work until the checks are in', () => {
-    expect(browserNote([])).toBe(`${lead}, other browsers may not work.`)
-    expect(browserNote(['pass', 'pending'])).toBe(`${lead}, other browsers may not work.`)
+    expect(browserNote([])).toBe(`${lead}, so other browsers may not work.`)
+    expect(browserNote(['pass', 'pending'])).toBe(`${lead}, so other browsers may not work.`)
   })
 
   it('does not turn away a browser that has passed every check', () => {
@@ -103,7 +103,7 @@ describe('the browser sentence (2026-10-01)', () => {
   })
 
   it('says a failed or a warned check has not been passed, and where to look', () => {
-    const expected = `${lead}, and this browser has not passed all of its checks. The system check at the foot of the page says what is missing.`
+    const expected = `${lead}, and this browser has not passed all the checks for it to run. The system check at the foot of the page says what is missing.`
     expect(browserNote(['pass', 'fail', 'pass'])).toBe(expected)
     // The AAC refusal is a warning, not a failure, because a silent video
     // still runs — but it is not a pass for the sentence's purpose.

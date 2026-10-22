@@ -3358,7 +3358,7 @@ function renderResult(kept: RetainedResult): HTMLElement {
         }
       } catch (cause) {
         fromGone = focusHeldBy([save, stopSaveButton], stopSavePressedWithFocus)
-        setSaveStatus('', () => t().status.saveFailed)
+        setSaveStatus('', () => `${t().status.saveFailedWhat}${sentenceGap()}${t().status.saveFailedNext}`)
         show(saveError, () => {
           saveError.replaceChildren(
             notification({

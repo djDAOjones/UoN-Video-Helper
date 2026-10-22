@@ -292,3 +292,13 @@
 **Supersedes:** 2026-10-19 — VH-127 — Under Student submission, the staff card's box is locked off and its fields kept
 
 **Deferred:** none
+
+## 2026-10-19 — VH-128 — Submission's Chinese and Malay stand as the agent drafted them; VH-122 follows Band 8
+
+**Decision:** the agent's Chinese and Malay for `titleCard.forSubmission`, `titleCard.submission` and `titleCard.card` stand as drafted, machine translation like the rest of the translated pages; when Band 8 closes, VH-122 opens the next work — because the owner approved both in chat on 2026-10-19.
+
+**Rationale:** Slice (a) drafted twenty rows, each marked "drafted by the agent" in `reviews/2026-10-18/VH-105-strings-filled.csv`; the owner was shown every row beside its English and approved them as drafted. The marks stay in the sheet for a translator's review; a correction goes through the sheet and `scripts/strings-table.mjs`. VH-122 is the first open, unblocked line in Current, Band 6 waiting on the owner. In the same round the owner approved the spec text for §4.1 and §9.1, kept word for word in VH-128's notes until the close applies it.
+
+**Supersedes:** none
+
+**Deferred:** none

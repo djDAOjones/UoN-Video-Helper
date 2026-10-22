@@ -13,7 +13,7 @@
  */
 export const FEEDBACK_ADDRESS = 'joe.bell@nottingham.ac.uk'
 
-/** The owner's Creators team on Teams; a help link, opened in a new tab (VH-148). */
+/** The learning content team's own Creators team on Teams; a help link, opened in a new tab (VH-148). */
 export const CREATORS_TEAM_URL = 'https://teams.microsoft.com/l/team/19%3A14c7a4d2bf43456fa0c3c52c851fb097%40thread.tacv2/conversations?groupId=bd942b5f-5389-410c-abf2-9ba087360738&tenantId=67bda7ee-fd80-41ef-ac91-358418290a1e'
 
 /** The learning content team's own address, supplied by the owner (VH-148). */

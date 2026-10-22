@@ -66,6 +66,10 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
   ],
   ['videoLanguage', 'Above Step 1: the choice of language for the words drawn into the video'],
   [
+    'videoLanguage.typed',
+    'Above Step 1: under the video language choice, on the line after videoLanguage.helper',
+  ],
+  [
     'videoLanguage.nextVideo',
     'Above Step 1: under the video type and the video language, only while a video is being made or a finished one is on screen',
   ],
@@ -78,6 +82,15 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
   ['trim', 'Step 2, Trim'],
   ['trim.problem', 'Step 2: the error beside a start or end time that cannot be used'],
   ['titleCard', 'Step 3, Title card: the checkbox and the four fields for the card shown before the video'],
+  ['titleCard.dateHelperNext', 'Step 3: under the Date field, on the line after titleCard.dateHelper'],
+  [
+    'titleCard.fieldsRuleNext',
+    'Step 3: under the Add a title card checkbox, for a staff video, after titleCard.fieldsRule',
+  ],
+  [
+    'titleCard.submission.idsHelperNext',
+    'Step 3: under the student ID numbers field, on the line after titleCard.submission.idsHelper',
+  ],
   ['titleCard.forSubmission', 'Step 3: beside the Add a title card checkbox, when it is locked'],
   [
     'titleCard.fieldsRule',
@@ -183,7 +196,7 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
   ],
   [
     'footer.contact.creators',
-    'The foot of the page, under the Send feedback button: a link that opens an email to the creators team',
+    'The foot of the page, under the Send feedback button: a link that opens the creators team on Microsoft Teams, in a new tab',
   ],
   [
     'footer.contact.learningContent',
@@ -256,7 +269,7 @@ const PLACEHOLDERS: Readonly<Record<string, string>> = {
   picture: 'a time in the video, like 0:20',
   sound: 'a time in the video, like 0:20',
   id: 'what the student typed as a student ID number, like 20412345',
-  max: 'a number',
+  max: 'the most student ID numbers one card holds, a number',
   digits: 'how many digits a student ID number has, a number',
   kind: 'the video type, from videoKind.options',
   language: "a language's name in its own language, as the Video language choice shows it, like English or 简体中文",
@@ -276,12 +289,12 @@ function variantNote(path: readonly string[]): string[] {
     else notes.push('Used for any count other than 1. Fill it even if your language has one form.')
   }
   for (const part of path) {
-    if (part === 'blue' || part === 'white') notes.push(`Used when the closing colour is ${part}.`)
-    if (part === 'fade' && path[0] !== 'closing') notes.push('Used when the closing fades in.')
-    if (part === 'slide' && path[0] !== 'closing') notes.push('Used when the closing slides in.')
+    if (part === 'blue' || part === 'white') notes.push(`Used when the closing graphics are ${part}.`)
+    if (part === 'fade' && path[0] !== 'closing') notes.push('Used when the closing graphics fade in.')
+    if (part === 'slide' && path[0] !== 'closing') notes.push('Used when the closing graphics slide in.')
   }
   if (path[0] === 'closing' && path[1] === 'result' && (last === 'fade' || last === 'slide')) {
-    notes.push(`Used when the closing ${last === 'fade' ? 'fades' : 'slides'} in.`)
+    notes.push(`Used when the closing graphics ${last} in.`)
   }
   if (path.includes('problem') && (last === 'start' || last === 'end'))
     notes.push(`About the ${last} time.`)
@@ -345,7 +358,9 @@ const NOTES: Readonly<Record<string, string>> = {
   'titleCard.submission.fieldsRule':
     'For a student submission: every one of the four fields must be filled in before the video is made.',
   'titleCard.submission.idsHelper':
-    'Use the same words for "student ID number" as titleCard.submission.ids. {max} is the most numbers one card takes.',
+    'Use the same words for "student ID number" as titleCard.submission.ids.',
+  'titleCard.submission.idsHelperNext':
+    'Follows titleCard.submission.idsHelper, on a line of its own: how to type the student ID numbers.',
   'titleCard.submission.idNotAnId':
     'Use the same words for "student ID number" as titleCard.submission.ids.',
   'titleCard.submission.filled':
@@ -401,13 +416,13 @@ const NOTES: Readonly<Record<string, string>> = {
     'Names the video being made as it was started, since the choices above the steps may have changed since. Use the same words as videoLanguage.label.',
   'result.endedEarly.together': 'In place of result.endedEarly.both when the picture and the sound stop in the same second.',
   'result.endedEarly.held':
-    'Follows one of the sentences above when the picture stopped and the video has a closing: until the closing, the last picture stays on screen.',
+    'Follows one of the sentences above when the picture stopped and the video has closing graphics: until they start, the last picture stays on screen.',
   'result.endedEarly.next': 'Ends the passage. Use the same words for "create the video" as create.create.',
   'format.unknown': 'Shown alone in place of a fact the app could not read.',
   'statement.heading':
     'The heading of the panel, so no full stop. A formal statement, as on any official website.',
   'statement.covers':
-    'UoN Video Helper is the product name: use the same name as app.title. Keep the name Joe Bell as it is. A formal statement: use a formal register throughout.',
+    'UoN Video Helper is the product name: use the same name as app.title. A formal statement: use a formal register throughout.',
   'statement.aim': 'Introduces the five lines that follow, which complete its last sentence.',
   ...listNotes('statement.abilities', enGB.statement.abilities, COMPLETES_ABLE_TO),
   'statement.limits.intro': 'Introduces the five lines that follow.',
@@ -437,7 +452,7 @@ const NOTES: Readonly<Record<string, string>> = {
   'footer.contact.intro':
     'Introduces the two links that follow, one under the other. Each link makes sense on its own.',
   'footer.contact.creators':
-    'The words of a link on a line of its own, so they must say alone that it opens an email. "The creators team" is the name of a University team: translate it plainly, and use the same word for "team" as in footer.contact.learningContent.',
+    'The words of a link on a line of its own, so they must say alone where it goes and that it opens in a new tab: use the same words for "new tab" as statement.enforcement.service. Keep the name Teams as it is. "Creators team" is the name of a University team: translate it plainly, and use the same word for "team" as in footer.contact.learningContent.',
   'footer.contact.learningContent':
     'The words of a link on a line of its own, so they must say alone that it opens an email. "The learning content team" is the name of a University team: translate it plainly, and use the same word for "team" as in footer.contact.creators.',
 }

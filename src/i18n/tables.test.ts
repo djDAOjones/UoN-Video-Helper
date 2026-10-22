@@ -247,8 +247,8 @@ describe('consistent page words (VH-142)', () => {
     for (const { key, english: text } of messagesOf(zh)) {
       for (const mark of text.matchAll(/…+/g)) expect(mark[0], key).toBe('……')
     }
-    expect(zh.status.saveStopped).toContain('再次尝试保存')
-    expect(zh.status.notSaved).toContain('再次尝试保存')
+    expect(zh.status.saveStopped).toContain('随时可以保存')
+    expect(zh.status.notSaved).toContain('随时可以保存')
     expect(zh.create.create).toContain(zh.steps.create)
     for (const text of [zh.create.discard, zh.discard.title, zh.systemCheck.values.aacNotSupported]) {
       expect(text).not.toMatch(/。$/)
@@ -279,5 +279,39 @@ describe('the closing graphics, word for word (VH-149)', () => {
     )
     // One word for the statement: its heading's.
     expect(ms.statement.covers.split(' ')[0]).toBe(ms.statement.heading.split(' ')[0])
+  })
+})
+
+// VH-153: the words the review of Codex's 21 October run found disagreeing.
+describe('the words after VH-148 (VH-153)', () => {
+  it.each(Object.entries(LANGUAGE_TABLES))('%s opens all three browser sentences alike', (_tag, table) => {
+    const { pending, notPassed, passed } = table.browserNote
+    const shared = [...pending].findIndex((char, index) => char !== notPassed[index])
+    expect(shared).toBeGreaterThan(10)
+    expect(passed.startsWith(pending.slice(0, shared))).toBe(true)
+  })
+
+  it('Chinese and Malay say step 6 with its button’s verb', () => {
+    const zh = LANGUAGE_TABLES['zh-Hans']!
+    expect(zh.status.creating).toContain(zh.steps.create)
+    expect(zh.status.couldNotCreate).toContain(zh.steps.create)
+    expect(LANGUAGE_TABLES['ms-MY']!.status.couldNotCreate).toContain('dicipta')
+  })
+
+  it('Chinese names the Report this problem button once', () => {
+    const zh = LANGUAGE_TABLES['zh-Hans']!
+    expect(zh.failure.captured.split(zh.errors.report)).toHaveLength(2)
+  })
+
+  it('Chinese spaces a Latin word on both sides, and never before a full-width bracket', () => {
+    const zh = LANGUAGE_TABLES['zh-Hans']!
+    expect(zh.preflight.chromeLacks).toContain('此 Chrome 浏览器')
+    expect(zh.preflight.chromeLacks).toContain('更新 Chrome 浏览器')
+    expect(zh.save.pickerDescription).toBe('MP4 视频（.mp4）')
+  })
+
+  it('a failed save has one row per sentence', () => {
+    expect('saveFailed' in enGB.status).toBe(false)
+    expect('variableFrameRate' in enGB.source).toBe(false)
   })
 })

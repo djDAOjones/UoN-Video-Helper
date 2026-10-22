@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-22 — VH-153 — The words after VH-148 agree; the four shared rows take the approved words once, here
+
+**Decision:** `trim.intro`, `browserNote.pending`, `browserNote.notPassed` and `failure.captured` take the writing review's approved words in this item, with VH-153's fixes and PLAN-5.1's Chinese, so VH-156 applies the other proposals and leaves these four as they stand; a failed save is said from `saveFailedWhat` and `saveFailedNext`, and `saveFailed` and `source.variableFrameRate` are retired.
+
+**Rationale:** VH-153's Now, and the owner's "approved" for all 24 proposals (PLAN-5, 2026-10-22). R2-7 keeps "are added", which the review's text dropped. R2-8: Chinese 此应用专为 Chrome 浏览器设计和构建 and Malay "direka bentuk … pemeriksaan" open all three sentences, pinned for every table. R2-9: only the English said "(opens in a new tab)"; the Chinese and Malay already used their statement link's phrase, now pinned beside it. R2-10: `sheet.ts` gains where-lines for the four continuation rows and a note for `idsHelperNext`; `{max}` is explained once; its variant notes say "closing graphics"; the Creators team row says it opens Teams in a new tab; `statement.covers` loses the Joe Bell note VH-148's cut left behind. The filled sheet's English and notes columns are synced from `sheet.ts` (54 rows), its `where` column only for the rows changed, as it holds older step numbers; the repeated note was the save rows' doubled VH-141 mark, and `trim.intro`'s broken mark is re-quoted. Chinese stopped saves say 您随时可以保存, still an offer. Chrome, three languages: the passed browser sentence, the trim intro, the footer link, the smaller output's line; the rest VH-153.1. Standards: UI-STANDARDS, the same words for the same concepts and link text that stands alone; Nielsen 4; WCAG 2.4.9; house conventions, strings through the sheet, regression tests by category, minimal change. No dependency changed. Not checked by a second model.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-22 — VH-152 — Three test-only functions retired; the read line's words come from `readLine()`
 
 **Decision:** `summarise()`, `closingResultText()` and `studentIdsHelperText()` are retired, and their assertions now test `readLine()`, `closingResultLines()` and `studentIdsHelperLines()`, which the page calls. A Submission date template the renderer cannot split wraps as ordinary text, because one unbreakable piece would be refused with an error that no edit clears.
@@ -543,16 +553,6 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Decision:** Band 8 closed on 2026-10-19 with every PLAN-1 item shipped, its backlog heading now "Phase 1 — Band 8, … — CLOSED 2026-10-19" so the checker holds it to PLAN-1's Items; the next item is VH-122 in Band 7 — because it is the first open, unblocked line in Current while Band 6 waits on the owner, as the owner chose on 2026-10-19.
 
 **Rationale:** Reconciled against PLAN-1's Items (VH-126, VH-127, VH-128, VH-131, VH-132): each has its line under Band 8 in project/trajectory.md, and none is open in project/backlog.md; PLAN-1's own deferral, VH-129, waits in the backlog's Icebox. The heading takes "Phase 1" because the closed-phase grammar ties a phase to its PLAN by number, and keeps "Band 8" so the band's name still reads. The owner chose VH-122 in chat on 2026-10-19, recorded in "2026-10-19 — VH-128 — Submission's Chinese and Malay stand as the agent drafted them; VH-122 follows Band 8". Recall, local (this session, from the record alone, not a fresh session): 1, project/trajectory.md under Band 8, newest first: VH-128, VH-127, VH-132, VH-131 — 2; 2, "2026-10-19 — PLAN-1 — Staff video or Student submission, and the video's text in any of the three languages", because the owner said so on 2026-10-19 — 2; 3, deferred: VH-129 in project/backlog.md's Icebox (from PLAN-1, 2026-10-18), and project/wish-list.md's open lines, among them Band 8's from PLAN-1, VH-126, VH-131, VH-127 and VH-128 — 2; 4, VH-122, Band 7 — measured, not yet fixed, in project/backlog.md, named by this entry — 2.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-19 — VH-128 — Submission's Chinese and Malay stand as the agent drafted them; VH-122 follows Band 8
-
-**Decision:** the agent's Chinese and Malay for `titleCard.forSubmission`, `titleCard.submission` and `titleCard.card` stand as drafted, machine translation like the rest of the translated pages; when Band 8 closes, VH-122 opens the next work — because the owner approved both in chat on 2026-10-19.
-
-**Rationale:** Slice (a) drafted twenty rows, each marked "drafted by the agent" in `reviews/2026-10-18/VH-105-strings-filled.csv`; the owner was shown every row beside its English and approved them as drafted. The marks stay in the sheet for a translator's review; a correction goes through the sheet and `scripts/strings-table.mjs`. VH-122 is the first open, unblocked line in Current, Band 6 waiting on the owner. In the same round the owner approved the spec text for §4.1 and §9.1, kept word for word in VH-128's notes until the close applies it.
 
 **Supersedes:** none
 

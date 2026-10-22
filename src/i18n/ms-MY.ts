@@ -48,11 +48,11 @@ export const msMY: Messages = {
   },
   browserNote: {
     pending:
-      'Aplikasi ini direka bentuk dan dibina untuk Chrome, pelayar lain mungkin tidak berfungsi.',
+      'Aplikasi ini direka bentuk dan dibina untuk Chrome, jadi pelayar lain mungkin tidak berfungsi.',
     notPassed:
-      'Aplikasi ini direka bentuk dan dibina untuk Chrome, dan pelayar ini belum lulus semua pemeriksaannya. Pemeriksaan sistem di kaki halaman menyatakan apa yang hilang.',
+      'Aplikasi ini direka bentuk dan dibina untuk Chrome, dan pelayar ini belum lulus semua pemeriksaan yang diperlukan untuk menjalankannya. Pemeriksaan sistem di kaki halaman menyatakan apa yang hilang.',
     passed:
-      'Aplikasi ini direka dan dibina untuk Chrome, dan pelayar ini telah lulus semakan yang diperlukan untuk menjalankannya.',
+      'Aplikasi ini direka bentuk dan dibina untuk Chrome, dan pelayar ini telah lulus pemeriksaan yang diperlukan untuk menjalankannya.',
   },
   videoKind: {
     label: 'Jenis video',
@@ -101,7 +101,6 @@ export const msMY: Messages = {
   },
   source: {
     readSummary: 'Video dibaca.',
-    variableFrameRate: 'kadar bingkai boleh ubah',
     noSound: 'Tiada bunyi.',
     properties: 'Ciri-ciri video',
     lossesTitle: 'Tidak dibawa ke dalam fail baharu',
@@ -162,7 +161,7 @@ export const msMY: Messages = {
   },
   trim: {
     intro:
-      'Pilihan. Potong bahan yang tidak diingini dari awal atau akhir. Dibiarkan sahaja, keseluruhan video akan disimpan. Pratonton memainkan video asal anda seperti sekarang: bunyi diratakan dan grafik penutup ditambah apabila video dibuat.',
+      'Pilihan. Potong bahan yang tidak diingini dari awal atau akhir. Dibiarkan sahaja, keseluruhan video akan disimpan. Pratonton memainkan video asal anda seperti sekarang, kerana bunyi diratakan dan grafik penutup ditambah apabila video dibuat.',
     noPreview: 'Pratonton tidak tersedia untuk fail ini. Anda masih boleh menetapkan masa.',
     start: 'Mula',
     end: 'Tamat',
@@ -368,12 +367,11 @@ export const msMY: Messages = {
       'Itulah fail yang anda gunakan untuk bermula. Pilih nama atau folder yang berbeza — alat ini tidak akan mengubah fail asal anda.',
     saved:
       'Disimpan. Semaknya di tempat anda menyimpannya, kemudian muat naik ke tempat yang dituju — atau pilih video lain dalam langkah 1.',
-    saveFailed: 'Video itu tidak dapat disimpan. Ia masih di sini untuk dicuba lagi.',
     storageWayOut:
       'Kurangkan video, pilih {smaller} atau kosongkan sedikit ruang, kemudian tekan Semak semula.',
     creating: 'Mencipta video anda. {notice}',
     ready: 'Video anda sudah siap.',
-    couldNotCreate: 'Video itu tidak dapat dihasilkan. {sentence}',
+    couldNotCreate: 'Video itu tidak dapat dicipta. {sentence}',
     verdictSpoken: 'Pemeriksaan peranti selesai. {heading}.',
   },
   discard: {
@@ -711,7 +709,7 @@ export const msMY: Messages = {
         'Bahagian alat yang melakukan kerja tidak bermula. Muat semula halaman. Jika ia berlaku lagi, laporkannya dengan butang Hantar maklum balas.',
     },
     captured:
-      'Sesuatu yang tidak kena telah berlaku dalam alat ini. Video yang sedang dibuat mungkin tidak siap; fail asal anda tidak terjejas. Laporkannya dengan butang Laporkan masalah ini, yang akan menambah butiran ini.',
+      'Sesuatu yang tidak kena telah berlaku dalam alat ini. Video yang sedang dibuat mungkin tidak siap; fail asal anda tidak terjejas. Laporkan masalah itu dengan butang Laporkan masalah ini, yang akan menambah butiran ini.',
   },
   systemCheck: {
     summary: 'Pemeriksaan sistem — {result}',

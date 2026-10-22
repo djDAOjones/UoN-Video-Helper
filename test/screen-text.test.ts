@@ -85,7 +85,7 @@ describe('what the tool does, and where it works (2026-09-30)', () => {
     // once the load-time check lands (`browserNote`), so this is what a
     // browser reads before that — and what one without scripts reads at all.
     expect(visibleText).toContain(
-      'This app is designed and built for Chrome, other browsers may not work.',
+      'This app is designed and built for Chrome, so other browsers may not work.',
     )
     expect(markup).toMatch(/<p id="browser-note">This app is designed and built for Chrome/)
     expect(markup.indexOf('designed and built for Chrome')).toBeLessThan(
@@ -208,10 +208,13 @@ describe('the save\'s own line (VH-135)', () => {
       expect(mainSource).toMatch(new RegExp(`setSaveStatus\\(\\(\\) =>[^;]*t\\(\\)\\.status\\.${message}\\b`))
       expect(mainSource).not.toMatch(new RegExp(`\\bsetStatus\\([^;]*t\\(\\)\\.status\\.${message}\\b`))
     }
-    expect(mainSource).toContain("setSaveStatus('', () => t().status.saveFailed)")
+    // VH-153: a failed save is said from its own two rows, one per sentence.
+    expect(mainSource).toContain(
+      "setSaveStatus('', () => `${t().status.saveFailedWhat}${sentenceGap()}${t().status.saveFailedNext}`)",
+    )
     // VH-141 took saveFailed out of the list above and with it this half
     // (VH-149): spoken on the save's line, never on the job's.
-    expect(mainSource).not.toMatch(/\bsetStatus\([^;]*t\(\)\.status\.saveFailed\b/)
+    expect(mainSource).not.toMatch(/\bsetStatus\([^;]*t\(\)\.status\.saveFailed/)
     expect(mainSource).toMatch(/setSaveStatus\(\(\) =>\s*downloadStatusText\(/)
     expect(mainSource).not.toMatch(/\bsetStatus\([^;]*downloadStatusText\(/)
   })
@@ -431,7 +434,10 @@ describe('the footer\'s team contacts (VH-130)', () => {
   })
 
   it('uses the owner’s two supplied destinations, leaving feedback at the owner’s address (VH-148)', () => {
-    expect(new URL(CREATORS_TEAM_URL).hostname).toBe('teams.microsoft.com')
+    // The whole address the hand-off gave, not only its host (VH-153).
+    expect(CREATORS_TEAM_URL).toBe(
+      'https://teams.microsoft.com/l/team/19%3A14c7a4d2bf43456fa0c3c52c851fb097%40thread.tacv2/conversations?groupId=bd942b5f-5389-410c-abf2-9ba087360738&tenantId=67bda7ee-fd80-41ef-ac91-358418290a1e',
+    )
     expect(LEARNING_CONTENT_TEAM_ADDRESS).toBe('UI-Learning-Content@nottingham.ac.uk')
     expect(FEEDBACK_ADDRESS).toBe('joe.bell@nottingham.ac.uk')
     expect(mainSource).toContain("creatorsLink.target = '_blank'")

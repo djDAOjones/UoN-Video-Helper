@@ -88,10 +88,11 @@ export const enGB = {
   },
 
   browserNote: {
-    pending: 'This app is designed and built for Chrome, other browsers may not work.',
+    pending: 'This app is designed and built for Chrome, so other browsers may not work.',
     notPassed:
-      'This app is designed and built for Chrome, and this browser has not passed all of its checks. The system check at the foot of the page says what is missing.',
-    passed: 'This app is designed and built for Chrome, and this browser has passed the checks for it to run.',
+      'This app is designed and built for Chrome, and this browser has not passed all the checks for it to run. The system check at the foot of the page says what is missing.',
+    passed:
+      'This app is designed and built for Chrome, and this browser has passed the checks for it to run.',
   },
 
   /** The switch above the six steps (VH-131). */
@@ -111,7 +112,7 @@ export const enGB = {
     /** Its visible label, which is also its accessible name. */
     label: 'Video language',
     /** The line under it: what the choice changes, and so what it does not. */
-    helper: "Words the tool adds to your video are in this language.",
+    helper: 'Words the tool adds to your video are in this language.',
     typed: 'What you type is kept as typed.',
     /**
      * Under both switches while a video is being made or a finished one is on
@@ -135,8 +136,10 @@ export const enGB = {
     dropHeld: 'Let go to read this video.',
     reading: 'Reading the video…',
     drop: {
-      making: 'A video is being made. Cancel it, or wait for it to finish, before choosing another.',
-      saving: 'A video is being saved. Stop the save, or wait for it to finish, before choosing another.',
+      making:
+        'A video is being made. Cancel it, or wait for it to finish, before choosing another.',
+      saving:
+        'A video is being saved. Stop the save, or wait for it to finish, before choosing another.',
       starting: 'The tool is still getting ready. Drop the video again in a moment.',
       unavailable:
         'This browser cannot run the tool, so no video can be read here. The message below says what to do.',
@@ -150,7 +153,6 @@ export const enGB = {
   source: {
     /** The read outcome; no sound is added separately, emphasised on screen (VH-148). */
     readSummary: 'Video read.',
-    variableFrameRate: 'variable frame rate',
     noSound: 'No sound.',
     properties: 'Video properties',
     lossesTitle: 'Not carried into the new file',
@@ -201,7 +203,7 @@ export const enGB = {
 
   trim: {
     intro:
-      'Optional. Cut unwanted material from the start or the end. Left alone, the whole video is kept. The preview plays your original as it is now: the sound is levelled and the closing graphics added when the video is made.',
+      'Optional. Cut unwanted material from the start or the end. Left alone, the whole video is kept. The preview plays your original as it is now, because the sound is levelled and the closing graphics are added when the video is made.',
     noPreview: 'A preview is not available for this file. You can still set the times.',
     start: 'Start',
     end: 'End',
@@ -221,7 +223,8 @@ export const enGB = {
     handleEnd: 'the end',
     problem: {
       notATime: {
-        start: 'Write the start time as minutes and seconds, like 1:05.5, or as seconds, like 65.5.',
+        start:
+          'Write the start time as minutes and seconds, like 1:05.5, or as seconds, like 65.5.',
         end: 'Write the end time as minutes and seconds, like 1:05.5, or as seconds, like 65.5.',
       },
       afterEnd: {
@@ -271,9 +274,9 @@ export const enGB = {
       convenor: 'Module convenor or tutor',
       ids: 'Student ID numbers',
       /** {digits} and {max} come from `config/cards.ts`, so the words and the check cannot part (VH-140, V-29). */
-      idsHelper:
-        'Each student ID (identity) number is {digits} digits.',
-    idsHelperNext: 'Type up to {max}, with spaces, commas or new lines between them. Do not add names.',
+      idsHelper: 'Each student ID (identity) number is {digits} digits.',
+      idsHelperNext:
+        'Type up to {max}, with spaces, commas or new lines between them. Do not add names.',
       /** Under the fields: what the app adds to the card itself, the running time as a clock time. */
       filled:
         'The card also shows the running time, {running}, and today’s date, marked as the date the card was made, not the submission date.',
@@ -339,21 +342,25 @@ export const enGB = {
       overFreeze: {
         blue: {
           fade: 'Your last frame is held while the blue closing graphics fade in, so nothing is covered. {adds}',
-          slide: 'Your last frame is held while the blue closing graphics slide in, so nothing is covered. {adds}',
+          slide:
+            'Your last frame is held while the blue closing graphics slide in, so nothing is covered. {adds}',
         },
         white: {
           fade: 'Your last frame is held while the white closing graphics fade in, so nothing is covered. {adds}',
-          slide: 'Your last frame is held while the white closing graphics slide in, so nothing is covered. {adds}',
+          slide:
+            'Your last frame is held while the white closing graphics slide in, so nothing is covered. {adds}',
         },
       },
       overPicture: {
         blue: {
           fade: 'The blue closing graphics fade in over your last second of video, covering it as they build. {adds}',
-          slide: 'The blue closing graphics slide in over your last second of video, covering it as they build. {adds}',
+          slide:
+            'The blue closing graphics slide in over your last second of video, covering it as they build. {adds}',
         },
         white: {
           fade: 'The white closing graphics fade in over your last second of video, covering it as they build. {adds}',
-          slide: 'The white closing graphics slide in over your last second of video, covering it as they build. {adds}',
+          slide:
+            'The white closing graphics slide in over your last second of video, covering it as they build. {adds}',
         },
       },
     },
@@ -363,7 +370,10 @@ export const enGB = {
     legend: 'File size / quality',
     /** The English names are the config's (`PRESETS[id].label`), so a diagnostics line and the screen agree; `tables.test.ts` holds them equal. */
     labels: { best: 'Larger / better', smaller: 'Smaller / reduced' },
-    details: { best: 'For EchoVideo or YouTube etc.', smaller: 'For Moodle assignment uploads, messaging, or email etc.' },
+    details: {
+      best: 'For EchoVideo or YouTube etc.',
+      smaller: 'For Moodle assignment uploads, messaging, or email etc.',
+    },
   },
 
   create: {
@@ -401,9 +411,10 @@ export const enGB = {
     notSaved: 'Not saved. The video is still here when you want it.',
     refusedSource:
       'That is the file you started with. Choose a different name or folder — this tool never changes your original.',
-    saved: 'Saved. Check it where you saved it, then upload it where it is going — or choose another video in step 1.',
-    saveFailed: 'The video could not be saved. It is still here to try again.',
-    storageWayOut: 'Keep less of the video, choose {smaller}, or free some space, then press Check again.',
+    saved:
+      'Saved. Check it where you saved it, then upload it where it is going — or choose another video in step 1.',
+    storageWayOut:
+      'Keep less of the video, choose {smaller}, or free some space, then press Check again.',
     creating: 'Creating your video. {notice}',
     ready: 'Your video is ready.',
     couldNotCreate: 'The video could not be created. {sentence}',
@@ -431,7 +442,10 @@ export const enGB = {
     closingNone: 'no University closing graphics',
     /** "a cut to the blue closing card, marked “Internal use only”". */
     closingInternal: '{closing}, marked “{words}”',
-    closingCut: { blue: 'a cut to the blue closing card', white: 'a cut to the white closing card' },
+    closingCut: {
+      blue: 'a cut to the blue closing card',
+      white: 'a cut to the white closing card',
+    },
     closingOverFreeze: {
       blue: {
         fade: 'the blue closing graphics fading in over a held last frame',
@@ -443,7 +457,10 @@ export const enGB = {
       },
     },
     closingOverPicture: {
-      blue: { fade: 'the blue closing graphics fading in over the picture', slide: 'the blue closing graphics sliding in over the picture' },
+      blue: {
+        fade: 'the blue closing graphics fading in over the picture',
+        slide: 'the blue closing graphics sliding in over the picture',
+      },
       white: {
         fade: 'the white closing graphics fading in over the picture',
         slide: 'the white closing graphics sliding in over the picture',
@@ -456,8 +473,10 @@ export const enGB = {
      * card or a student submission's (VH-140). It never quotes the card's words.
      */
     summaryWithCard: {
-      staff: 'Made from {name}: a {seconds}-second staff title card, then {part}, {output}, {closing}.',
-      submission: 'Made from {name}: a {seconds}-second submission card, then {part}, {output}, {closing}.',
+      staff:
+        'Made from {name}: a {seconds}-second staff title card, then {part}, {output}, {closing}.',
+      submission:
+        'Made from {name}: a {seconds}-second submission card, then {part}, {output}, {closing}.',
     },
     /**
      * Follows the record when the video's own words are in another language
@@ -507,11 +526,13 @@ export const enGB = {
     fellBackToPicture: {
       blue: {
         fade: 'The blue closing graphics fade in over the picture, not over a held last frame as chosen.',
-        slide: 'The blue closing graphics slide in over the picture, not over a held last frame as chosen.',
+        slide:
+          'The blue closing graphics slide in over the picture, not over a held last frame as chosen.',
       },
       white: {
         fade: 'The white closing graphics fade in over the picture, not over a held last frame as chosen.',
-        slide: 'The white closing graphics slide in over the picture, not over a held last frame as chosen.',
+        slide:
+          'The white closing graphics slide in over the picture, not over a held last frame as chosen.',
       },
     },
   },
@@ -581,9 +602,9 @@ export const enGB = {
       noSourceDecodeElsewhere:
         'This browser cannot read the picture or sound inside this file. {remedy} If it will not open there either, the file was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4.',
       noOpfsHere:
-        "This browser will not give the tool the working space it needs to create your video. If you are browsing privately, an ordinary window usually works; otherwise a setting on this computer may be blocking site storage — ask whoever manages it.",
+        'This browser will not give the tool the working space it needs to create your video. If you are browsing privately, an ordinary window usually works; otherwise a setting on this computer may be blocking site storage — ask whoever manages it.',
       noOpfsElsewhere:
-        "This browser will not give the tool the working space it needs to create your video. {remedy} If you are browsing privately, an ordinary window usually works.",
+        'This browser will not give the tool the working space it needs to create your video. {remedy} If you are browsing privately, an ordinary window usually works.',
       insecureContext:
         'This page needs a secure connection before it can work with your video. Open it at an https:// address, or at localhost if you are running it yourself.',
       insufficientStorageResolvable:
@@ -596,8 +617,10 @@ export const enGB = {
         'This will take about {time}. You can carry on, but a desktop computer would be considerably faster.',
       veryLongJobUnknown:
         'This will take about a long time. You can carry on, but a desktop computer would be considerably faster.',
-      longJob: 'This will take about {time}. Keep this tab open while it runs — closing it stops the job.',
-      longJobUnknown: 'This will take about a while. Keep this tab open while it runs — closing it stops the job.',
+      longJob:
+        'This will take about {time}. Keep this tab open while it runs — closing it stops the job.',
+      longJobUnknown:
+        'This will take about a while. Keep this tab open while it runs — closing it stops the job.',
       mobileDevice:
         'Phones and tablets are much slower at this than a computer, and the browser there may end the job part-way to free memory. Use a computer if you can.',
       estimateUnavailable:
@@ -632,13 +655,13 @@ export const enGB = {
     /** Said when a damaged moment in the file's sound is made silent (VH-122). {times} is a list of times, like "1:22 and 3:05". */
     decodeDamage: {
       heading: {
-        one: "A damaged moment will be silenced",
-        other: "Damaged moments will be silenced",
+        one: 'A damaged moment will be silenced',
+        other: 'Damaged moments will be silenced',
       },
       detail: {
-        one: "At {times} in the original recording, the file holds a burst of noise louder than any recording can be. It comes from damage to the file, not from your recording. That fraction of a second will be silent instead, so no one hears it and the levelling still works as it should.",
+        one: 'At {times} in the original recording, the file holds a burst of noise louder than any recording can be. It comes from damage to the file, not from your recording. That fraction of a second will be silent instead, so no one hears it and the levelling still works as it should.',
         other:
-          "At {times} in the original recording, the file holds bursts of noise louder than any recording can be. They come from damage to the file, not from your recording. Each fraction of a second will be silent instead, so no one hears them and the levelling still works as it should.",
+          'At {times} in the original recording, the file holds bursts of noise louder than any recording can be. They come from damage to the file, not from your recording. Each fraction of a second will be silent instead, so no one hears them and the levelling still works as it should.',
       },
       /** Ends the list of times when there are more than the warning lists. */
       more: { one: '{count} other moment', other: '{count} other moments' },
@@ -748,14 +771,15 @@ export const enGB = {
       insecure:
         'This page needs a secure connection before it can work with your video. Open it at an address that starts https://.',
       noWebCodecs: 'This browser cannot process video, so the tool cannot run here. {remedy}',
-      noH264: 'This browser cannot create the video format this tool needs, so the tool cannot run here. {remedy}',
+      noH264:
+        'This browser cannot create the video format this tool needs, so the tool cannot run here. {remedy}',
       noWorkingStore:
-        "This browser gives the tool no working space to create a video in. If you are browsing privately, an ordinary window usually works. {remedy}",
+        'This browser gives the tool no working space to create a video in. If you are browsing privately, an ordinary window usually works. {remedy}',
       workerNotStarted:
         'The part of the tool that does the work did not start. Reload the page. If it happens again, report it with the Send feedback button.',
     },
     captured:
-      "Something in the tool went wrong. A video being made may not finish; your original file is not affected. Report it with the Report this problem button, which adds these details.",
+      'Something in the tool went wrong. A video being made may not finish; your original file is not affected. Report the problem with the Report this problem button, which adds these details.',
   },
 
   systemCheck: {
@@ -801,25 +825,26 @@ export const enGB = {
   feedback: {
     open: 'Send feedback',
     heading: 'Send feedback',
-    intro: 'Your message goes to {address} from your own email app. You will see the email before it is sent.',
+    intro:
+      'Your message goes to {address} from your own email app. You will see the email before it is sent.',
     messageLabel: 'Your message',
     writeFirst: 'Write a message first.',
     whatSent: 'What will be sent with it',
     whatSentDetail:
-      "Details that help find a problem: the tool’s version, your browser, how far you got, and your video’s length, picture size and format. These details never include the video, its name, or anything in it.",
+      'Details that help find a problem: the tool’s version, your browser, how far you got, and your video’s length, picture size and format. These details never include the video, its name, or anything in it.',
     openEmail: 'Open email app',
     copy: 'Copy message and details',
     close: 'Close',
     tooLong:
-      "Your message is too long to hand to your email app in one go. Choose “Copy message and details” and paste them into an email to {address}.",
+      'Your message is too long to hand to your email app in one go. Choose “Copy message and details” and paste them into an email to {address}.',
     opened:
-      "Your email app should have opened with your message ready to send. If it did not, choose “Copy message and details” and paste them into an email to {address}.",
+      'Your email app should have opened with your message ready to send. If it did not, choose “Copy message and details” and paste them into an email to {address}.',
     someOmitted: 'Some details did not fit in the email; the copy has them all.',
     copied: 'Copied. Paste it into an email to {address}.',
     couldNotCopy:
-      "Could not copy. Open “What will be sent with it”, select the details, and copy them with your message.",
+      'Could not copy. Open “What will be sent with it”, select the details, and copy them with your message.',
     /** Over the details the email cannot carry, in the disclosure; the details themselves stay English. */
-    onlyInCopy: "Too long for the email, so only in “Copy message and details”:",
+    onlyInCopy: 'Too long for the email, so only in “Copy message and details”:',
   },
 
   /**
@@ -831,8 +856,7 @@ export const enGB = {
    */
   statement: {
     heading: 'Accessibility statement',
-    covers:
-      'This statement covers UoN Video Helper, the page you are on.',
+    covers: 'This statement covers UoN Video Helper, the page you are on.',
     aim: 'We want as many people as possible to be able to use this tool. You should be able to:',
     /** Each completes "You should be able to:". */
     abilities: [
@@ -907,7 +931,7 @@ export const enGB = {
   footer: {
     contact: {
       intro: 'For help with this tool:',
-      creators: 'Creators team on Teams (opens in a new tab)',
+      creators: 'Creators team on Teams (new tab)',
       learningContent: 'Email the learning content team',
     },
   },
