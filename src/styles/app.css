@@ -32,11 +32,15 @@ body {
 }
 
 /* Running text stops at the measure, whatever the panel's width (VH-112,
-   WCAG 1.4.8). Controls and their rows are not text and keep the width. */
+   WCAG 1.4.8). Controls and their rows are not text and keep the width.
+   A word longer than its line, a file name or an ID the user typed, breaks
+   where it must rather than push the page sideways on a phone (VH-165, 1.4.10);
+   every other word still breaks only at a space. */
 p,
 li,
 dd {
   max-width: var(--measure);
+  overflow-wrap: anywhere;
 }
 
 /* Chinese stops at 40 glyphs, 1.4.8's limit for CJK (VH-105). A passage kept
@@ -1650,7 +1654,12 @@ details[open] > .disclosure-summary::before {
     background: radial-gradient(circle, GrayText 0 calc(var(--spacing-04) - var(--border-width)), transparent var(--spacing-04));
   }
 
-  .range-input:focus-visible::-webkit-slider-thumb,
+  /* One rule per engine: a selector list naming the other engine's
+     pseudo-element is dropped whole (VH-165). */
+  .range-input:focus-visible::-webkit-slider-thumb {
+    outline-color: CanvasText;
+  }
+
   .range-input:focus-visible::-moz-range-thumb {
     outline-color: CanvasText;
   }

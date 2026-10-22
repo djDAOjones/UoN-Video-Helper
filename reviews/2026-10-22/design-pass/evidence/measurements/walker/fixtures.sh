@@ -40,4 +40,8 @@ printf 'This is not a video.\n' > "$OUT/notvideo.mp4"
 SIZE=$(stat -f %z "$OUT/lecture-30s.mp4")
 head -c $(( SIZE * 7 / 10 )) "$OUT/lecture-30s.mp4" > "$OUT/truncated-30s.mp4"
 
+# Long names with nowhere to break (VH-165, V-34): 100 W's, and an ordinary name joined by underscores.
+cp "$OUT/lecture-30s.mp4" "$OUT/$(printf 'W%.0s' {1..100}).mp4"
+cp "$OUT/lecture-30s.mp4" "$OUT/Lecture_Week_3_Introduction_to_Biochemistry_v2.mp4"
+
 ls -la "$OUT"

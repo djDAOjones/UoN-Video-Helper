@@ -255,3 +255,22 @@ describe('type weights (VH-145, pinned by VH-151)', () => {
     expect(css).toMatch(/44 px target like any control \(WCAG 2\.5\.5\)\. \*\/\s*\.footer-contact-link,\s*\.notification-link \{/)
   })
 })
+
+describe('long words and the trim handles under forced colours (VH-165)', () => {
+  const forced = /@media \(forced-colors: active\)\s*\{([\s\S]*?)\n\}/.exec(rules)?.[1] ?? ''
+
+  it('lets a word longer than its line break in running text, and nowhere else', () => {
+    // A file name or a student ID with no space ran past a phone's width (V-34).
+    expect(rules).toMatch(/(?:^|\})\s*p,\s*li,\s*dd\s*\{[^}]*max-width:\s*var\(--measure\);[^}]*overflow-wrap:\s*anywhere;/)
+    // Every character stays: no break between any two letters, no clipping.
+    expect(rules).not.toMatch(/word-break:\s*break-all/)
+    expect(rules).not.toMatch(/\.(?:notification-body|field-error|status)\s*\{[^}]*text-overflow/)
+  })
+
+  it('gives each engine its own focus-ring rule, so Chrome keeps its own', () => {
+    // A list naming the other engine's pseudo-element is dropped whole (V-38).
+    expect(forced).not.toMatch(/::-webkit-slider-thumb,\s*\.range-input[^{]*::-moz-range-thumb\s*\{/)
+    expect(forced).toMatch(/\.range-input:focus-visible::-webkit-slider-thumb\s*\{\s*outline-color:\s*CanvasText;\s*\}/)
+    expect(forced).toMatch(/\.range-input:focus-visible::-moz-range-thumb\s*\{\s*outline-color:\s*CanvasText;\s*\}/)
+  })
+})

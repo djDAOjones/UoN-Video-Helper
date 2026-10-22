@@ -6,6 +6,7 @@
 // Usage (headless Chrome already on :9222, Vite on :5173):
 //   FIX=<scratch>/fixtures OUT_ROOT=<scratch>/out EVIDENCE=<bundle>/evidence \
 //     node design-walk.mjs [run ...]      runs: en-1280 zh-1280 ms-1280 en-375 zh-375 ms-375 en-extras
+//                                        en-long-320 zh-long-320 ms-long-320 (VH-165)
 import { mkdirSync, writeFileSync, copyFileSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { connectBrowser } from './cdp.mjs'
@@ -187,6 +188,86 @@ async function extras(w) {
   await shoot(w, { ...base, n: 9, state: 'statement-open' })
 }
 
+// VH-165 (V-34): long names and a long student ID at 320 px. Each state is
+// measured in light, dark and forced colours, with and without 1.4.12's
+// spacing: the document's width, and every text range that runs past its own
+// block or the window, which catches spill a clipped box hides from the width.
+const LONG_W = 'W'.repeat(100) + '.mp4'
+const LONG_UNDERSCORES = 'Lecture_Week_3_Introduction_to_Biochemistry_v2.mp4'
+const LONG_ID = '9'.repeat(100)
+const SPILL = String.raw`(() => {
+  const de = document.documentElement, vw = de.clientWidth, out = [];
+  const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  for (let n; (n = tw.nextNode()); ) {
+    const el = n.parentElement;
+    if (!n.textContent.trim() || !el || el.closest('#dev-actions, .visually-hidden, [hidden], select, script, style')) continue;
+    let block = el; while (block.parentElement && getComputedStyle(block).display.startsWith('inline')) block = block.parentElement;
+    // A box that scrolls its own content (a stack trace) is allowed to.
+    let scrolls = false; for (let p = el; p && p !== document.body; p = p.parentElement) if (/auto|scroll/.test(getComputedStyle(p).overflowX)) scrolls = true;
+    if (scrolls) continue;
+    const r = document.createRange(); r.selectNodeContents(n);
+    let right = -Infinity; for (const q of r.getClientRects()) if (q.width > 0) right = Math.max(right, q.right);
+    if (right === -Infinity) continue;
+    const b = block.getBoundingClientRect(), cs = getComputedStyle(block);
+    const limit = Math.min(vw, b.right - parseFloat(cs.borderRightWidth) - parseFloat(cs.paddingRight));
+    if (right > limit + 1) out.push({ el: block.tagName.toLowerCase() + (block.id ? '#' + block.id : '') + (block.className ? '.' + String(block.className).split(' ')[0] : ''), right: Math.round(right), limit: Math.round(limit), text: n.textContent.trim().slice(0, 40) });
+  }
+  return { vw, scrollWidth: de.scrollWidth, hscroll: de.scrollWidth > vw, spill: out.length, offenders: out.slice(0, 5) };
+})()`
+const longResults = []
+
+// clip: the region kept as evidence beside the 22 October v34- captures.
+async function measureLong(w, lang, state, { clip } = {}) {
+  for (const theme of ['light', 'dark', 'forced']) {
+    for (const spaced of [false, true]) {
+      await w.setTheme(theme)
+      await w.spacing(spaced)
+      const m = await w.evaluate(SPILL)
+      longResults.push({ lang, state, theme, spaced, ...m })
+      w.log(`${state} ${theme}${spaced ? ' spaced' : ''}: width ${m.scrollWidth}/${m.vw}${m.hscroll ? ' HSCROLL' : ''}, spill ${m.spill}${m.spill ? ' ' + JSON.stringify(m.offenders) : ''}`)
+    }
+  }
+  await w.spacing(false)
+  await w.setTheme('light')
+  if (clip) {
+    const name = `v34-320-${LANG_SHORT[lang]}-${state}-${PREFIX}`
+    await w.clip(name, clip.from, { to: clip.to })
+    copyFileSync(join(w.dir, name + '.png'), join(EVIDENCE, name + '.png'))
+    captured++
+  }
+}
+
+async function longRun(w, lang) {
+  await w.setView('reflow320')
+  await w.goto()
+  await setLanguage(w, lang)
+  await setStaff(w)
+  const shot = lang === 'en-GB'
+  await w.setFiles(F(LONG_W))
+  await w.waitSettled()
+  await measureLong(w, lang, 'ready-longname')
+  await startJob(w)
+  await w.waitFinished()
+  await measureLong(w, lang, 'finished-longname', shot ? { clip: { from: '#process-result' } } : {})
+  // Create again with the result unsaved: the discard question, not answered.
+  await w.click(w.createButton())
+  await sleep(500)
+  await measureLong(w, lang, 'discard-longname')
+  // Another file chosen: the unsaved result stays as the previous video.
+  await w.setFiles(F(LONG_UNDERSCORES))
+  await w.waitSettled()
+  await measureLong(w, lang, 'previous-longname')
+  await startJob(w)
+  await w.waitFinished()
+  await measureLong(w, lang, 'finished-underscores')
+  await w.chooseKind('submission')
+  await w.type('#submission-card-ids', LONG_ID)
+  await w.press('Tab')
+  await w.click(w.createButton())
+  await sleep(500)
+  await measureLong(w, lang, 'id-error', shot ? { clip: { from: '#submission-card-ids', to: '#submission-card-ids-error' } } : {})
+}
+
 const RUNS = {
   'en-1280': (w) => mainRun(w, 'en-GB', 1280, { themes: true }),
   'zh-1280': (w) => mainRun(w, 'zh-Hans', 1280),
@@ -195,6 +276,9 @@ const RUNS = {
   'zh-375': (w) => mainRun(w, 'zh-Hans', 375),
   'ms-375': (w) => mainRun(w, 'ms-MY', 375),
   'en-extras': extras,
+  'en-long-320': (w) => longRun(w, 'en-GB'),
+  'zh-long-320': (w) => longRun(w, 'zh-Hans'),
+  'ms-long-320': (w) => longRun(w, 'ms-MY'),
 }
 
 const names = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(RUNS)
@@ -214,6 +298,11 @@ for (const name of names) {
   } finally {
     await w.close()
   }
+}
+if (longResults.length) {
+  writeFileSync(join(OUT_ROOT, 'long-320.json'), JSON.stringify(longResults, null, 1))
+  const bad = longResults.filter((r) => r.hscroll || r.spill)
+  console.log(`long names: ${longResults.length} measurements, ${bad.length} with sideways scroll or spill`)
 }
 console.log('captures: ' + captured)
 browser.close()
