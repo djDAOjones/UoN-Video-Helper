@@ -18,6 +18,18 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-22 — PLAN-6 — VH-163, a design pass, joins Phase 6 before the cut; its fixes are planned as items ahead of VH-162
+
+**Decision:** VH-163, a design pass for one type scale, one reading measure and one grid, judged for design, UX and WCAG 2.2 AAA in all three languages, sits in Phase 6 before VH-162; it reviews, with Codex's blind review and critique, then plans its rank 1 and 2 fixes as Phase 6 items ahead of the cut for the owner to approve, adding no control; because the owner asked for it and chose this in chat.
+
+**Rationale:** The owner asked in chat on 2026-10-22: "I want to do another design pass. I am seeing an [un]necessary variety of font styling, text section width, etc. can you create a work item / ticket that will thoroughly review to make it excellent from a design an UX perspective (and accessibility of course)." Asked three questions, the owner answered: "Before the cut (Recommended)", "Yes, blind then critique (Recommended)" and "Review, then a fix phase (Recommended)". A first look at the empty page in Chrome found nine text styles in two faces, three left edges besides the column's, running text at 489 px beside helpers at 428 px (55ch follows the font size), the Chinese column 151 px wider, and the header band's 20 px inset beside the main column's 24 px at 375 px; the evidence is in VH-163's notes. VH-143 found the tokens held; this pass judges how they combine, so V-18 to V-30 are not re-found. The owner's rule that the page stays simple holds: consolidation only, the progress bar kept. VH-162 now starts once VH-137, VH-163 and its fix items ship; whether it also waits for the statement review on 18 November is still the owner's.
+
+**Supersedes:** none
+
+**Items:** VH-163
+
+**Deferred:** none
+
 ## 2026-10-22 — VH-137 — The statement's contradictions and its two lists corrected ahead of the owner's review
 
 **Decision:** VH-137's agent part ships before the owner's review, on the owner's relayed "approve all, proceed": the statement's seven V-09 contradictions are corrected and its eleven list items take a capital and their language's stop, with curly apostrophes, in all three languages; the next tests split into the four spec §13 needs and two optional ones, so `statement.plans` gains `optionalIntro` and `optionalItems`; the dates, the chosen tests and the review stay the owner's, so the item stays open.
@@ -558,16 +570,6 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Decision:** the six edits stand in `docs/01-specification.md` as the agent drafted them: the page's three languages (§9), a handle or typed time moving the preview (§9.1 step 2), the five stages (§9.2), the paragraph gap's mechanism and figure, and kB–TB, UoN and eleven codec names as 3.1.4 exceptions with their four fields (§9.3) — because PLAN-2's standing word makes the drafts the owner's approval, shown at this close for reversal.
 
 **Rationale:** Each sentence says what the shipped code does, read in the source: `LANGUAGES_OFFERED` and `MACHINE_TRANSLATED` in `src/config/languages.ts`, each table's `meta.separators`, `--font-cjk`; `src/ui/preview-seek.ts` and VH-125's decision; `PipelineStage` in `src/media/pipeline.ts`, the encode capped at 0.98 and the bar set full only at ready in `src/main.ts`; `--paragraph-gap` at 1rem on a 1.5 line height, 2.5× top to top, with no `!important` on spacing. The 3.1.4 list is `EXCEPTED` in `test/readability.test.ts` less "OK", which the test calls an ordinary word; "Dolby Digital", in the doc-delta line but not the test, is a name in words, which 3.1.4 does not reach. The reasons are VH-114's (canon decision log, 2026-10-01): sizes as every device shows them, the name under its logo, codec names as read-only facts behind a closed disclosure; each is dated today, when the spec takes it in. "2.5× top to top" is credited as VH-124's reading of 1.4.8, since Codex's VH-124 critique notes it is not a universal calculation. The machine-translation note, not in the doc-delta line, is in §9 because VH-105 shipped it. 306 words added; the spec is 7,692 of 7,800, leaving 108 for VH-136. No code changed.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-20 — VH-133 — The returned workbook's changes are Google's re-run, not corrections; nothing is merged
-
-**Decision:** none of the 21 cells that differ in `UoN Video Helper Translate v01 (1).xlsx` is merged, and VH-133 closes with the sheet and tables unchanged — because every one is still an unedited `GOOGLETRANSLATE` formula on unchanged English, so they are machine output from a later recalculation, not a person's corrections.
-
-**Rationale:** The workbook's XML, read in Node: all 746 language cells are Google Sheets' export of `GOOGLETRANSLATE(C<row>,"en",<lang>)` with a cached value; each of the 21 points at its own row, and those rows' English matches the returned sheet. A person's edit in Sheets replaces the formula with text, and none did. The drift shows Google's marks: `{app}` renamed `{aplikasi}`, and "put down your phone" kept in `choose.dropHeld`. In the 14 cells the agent had repaired, the new output still gets the meaning wrong where the repair fixed it; in the other 7 it is no more right than the reviewed text. The 2026-10-18 rule stands: a reviewer's corrections come back by key through the filled sheet. Recommended by the agent and applied on the owner's standing word ("happy for your recommendations on all matters, proceed"). Item file: VH-133.
 
 **Supersedes:** none
 

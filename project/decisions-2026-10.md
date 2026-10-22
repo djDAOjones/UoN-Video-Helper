@@ -404,3 +404,13 @@
 **Supersedes:** none
 
 **Deferred:** VH-134
+
+## 2026-10-20 — VH-133 — The returned workbook's changes are Google's re-run, not corrections; nothing is merged
+
+**Decision:** none of the 21 cells that differ in `UoN Video Helper Translate v01 (1).xlsx` is merged, and VH-133 closes with the sheet and tables unchanged — because every one is still an unedited `GOOGLETRANSLATE` formula on unchanged English, so they are machine output from a later recalculation, not a person's corrections.
+
+**Rationale:** The workbook's XML, read in Node: all 746 language cells are Google Sheets' export of `GOOGLETRANSLATE(C<row>,"en",<lang>)` with a cached value; each of the 21 points at its own row, and those rows' English matches the returned sheet. A person's edit in Sheets replaces the formula with text, and none did. The drift shows Google's marks: `{app}` renamed `{aplikasi}`, and "put down your phone" kept in `choose.dropHeld`. In the 14 cells the agent had repaired, the new output still gets the meaning wrong where the repair fixed it; in the other 7 it is no more right than the reviewed text. The 2026-10-18 rule stands: a reviewer's corrections come back by key through the filled sheet. Recommended by the agent and applied on the owner's standing word ("happy for your recommendations on all matters, proceed"). Item file: VH-133.
+
+**Supersedes:** none
+
+**Deferred:** none
