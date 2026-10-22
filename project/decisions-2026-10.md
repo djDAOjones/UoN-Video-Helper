@@ -444,3 +444,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-20 — PLAN-2 — Phase 2 closes with VH-136; no unblocked item follows, so the next is the owner's
+
+**Decision:** Phase 2 closed on 2026-10-20 with every PLAN-2 item shipped, its backlog heading now "Phase 2 — … — CLOSED 2026-10-20"; no open, unblocked line remains in Current or Next, so the owner names the next item, and PLAN-2's standing word, given for this phase only, ends with it — because VH-17, VH-124, VH-113 and every Standing line wait on the owner, and Next's VH-13 waits on VH-M2.
+
+**Rationale:** Reconciled against PLAN-2's Items (VH-133, VH-134, VH-135, VH-136): each has its line under Phase 2 in project/trajectory.md, and none is open in project/backlog.md; PLAN-2's deferral, VH-137, sits under Standing, due 2026-11-18. Recall, local (this session, from the record alone, not a fresh session): 1, project/trajectory.md under Phase 2, newest first: VH-136, VH-135, VH-134, VH-133 — 2; 2, "2026-10-20 — VH-133 — The returned workbook's changes are Google's re-run, not corrections; nothing is merged", because every changed cell is still an unedited GOOGLETRANSLATE formula on unchanged English — 2; 3, deferred: VH-137 under Standing in project/backlog.md, project/wish-list.md's open lines, this phase's among them (VH-135's and VH-136's person checks), and the backlog's Icebox — 2; 4, no next open item: Current and Next hold only lines blocked on the owner, as this entry records — 2.
+
+**Supersedes:** none
+
+**Deferred:** none

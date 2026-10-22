@@ -12,6 +12,7 @@
 
 - VH-160 — a link to the feedback form on its own line under Send feedback, "(new tab)" in all three languages, its plain address from config, no "Leave site?"; checked in Chrome at 1280, 375 and 320 px, light, dark and forced colours (2026-10-22) — see decisions
 - VH-164 — Open email app opens the email again: the feedback form link takes `#feedback-form-link`, the dialog keeps `#feedback-form`, every ID in the page used once, by test; checked in Chrome at 1280 px, an empty message refused in place (2026-10-22) — see decisions
+- VH-163 — the design pass: V-31 to V-39 with Codex astra's blind review and critique, V-31 shipped as VH-164, five fix items approved by the owner with the footer at Lora 20, a 28rem measure to confirm and the native file chooser kept (2026-10-22) — see decisions
 
 ## Phase 5 — what the review of the Codex run found
 

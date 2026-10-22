@@ -31,12 +31,11 @@ The public release, 0.2.0, on Xerte (PLAN-6).
 ### Phase 6 — the public release: the feedback form, the statement, the cut, Xerte
 
 - [!] VH-137 — The accessibility statement's review, due 2026-11-18, with its contradictions and its two lists corrected — since 2026-10-20 — (from: VH-130, 2026-10-18) — blocked: the owner's review and the further tests chosen
-- [!] VH-163 — The design pass: one type scale, one reading measure, one grid, judged for design, UX and accessibility; its rank 1 and 2 fixes planned as items ahead of the cut — since 2026-10-22 — (from: PLAN-6, 2026-10-22) — blocked: the owner's approval of the fix plan
-- [!] VH-165 — Long words wrap; the trim handles' forced-colour ring — since 2026-10-22 — (from: VH-163, 2026-10-22) — blocked: the owner's approval
-- [!] VH-166 — One type set: eight roles, one look per heading level — since 2026-10-22 — (from: VH-163, 2026-10-22) — blocked: the owner's approval and the footer's headings
-- [!] VH-167 — One reading measure in rem for every size and language — since 2026-10-22 — (from: VH-163, 2026-10-22) — blocked: the owner's approval of the value
-- [!] VH-169 — A pressed state for each button kind — since 2026-10-22 — (from: VH-163, 2026-10-22) — blocked: the owner's approval
-- [!] VH-168 — The file chooser's words in a translated page — since 2026-10-22 — (from: VH-163, 2026-10-22) — blocked: the owner's ruling, native or a label
+- [ ] VH-165 — Long words wrap; the trim handles' forced-colour ring — since 2026-10-22 — (from: VH-163, 2026-10-22)
+- [ ] VH-166 — One type set: eight roles, one look per heading level, the footer's headings at Lora 20, V-36's phone inset and V-37's footer gap — since 2026-10-22 — (from: VH-163, 2026-10-22)
+- [ ] VH-167 — One reading measure in rem for every size and language, from 28rem, confirmed by line count — since 2026-10-22 — (from: VH-163, 2026-10-22)
+- [ ] VH-169 — A pressed state for each button kind — since 2026-10-22 — (from: VH-163, 2026-10-22)
+- [ ] VH-168 — The file chooser stays native: the browser-language limitation recorded, no page change — since 2026-10-22 — (from: VH-163, 2026-10-22)
 - [ ] VH-162 — The release cut: product version 0.2.0, the Xerte package built from that commit, the brief's and profile's hosting lines proposed — since 2026-10-22 — (from: PLAN-6, 2026-10-22)
 - [!] VH-14 — Deployment: the release on Xerte, the public home, and GitHub Pages kept as the unadvertised preview — since 2026-08-24 — blocked: the owner's own work, the Xerte upload — a canon [maintainer] item
 
