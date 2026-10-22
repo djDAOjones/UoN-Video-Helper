@@ -15,7 +15,20 @@
      **Supersedes:** YYYY-MM-DD — ID — title, or "none".
      Optional **Deferred:** comma-separated target IDs, or "none".
      Budget 45 live entries: when the validator warns, tools/archive.mjs
-     moves the oldest entries verbatim to project/archive/. -->
+     moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
+     beside this file, listed in project/archive-index.md. -->
+
+## 2026-10-22 — V31-UPGRADE — The project runs pm-next v3.1: tools, verbs and the start-notice hook replaced as a set, the record kept
+
+**Decision:** the project runs pm-next v3.1 (PM-Skills lab b5c6f4b) from the commit carrying this entry — its twelve tools and four verbs, the item schema's Now section, the start notice as a third session hook — and, each in a commit of its own after it, the wish lines take permanent IDs, each trajectory phase goes oldest first, and the WCAG 2.2 AAA digest takes v3's repair; because the owner's relayed word of 2026-10-21 approved v3.1 and asked for the upgrade, after this project's day-21 reading was sealed.
+
+**Rationale:** The lab's V31-FIELD-1, by v3.1's upgrade route (lab/next-v31/CHANGELOG.md, "Existing installations — v3 to v3.1", and the lab's V31-DEPLOY procedure). The archived decisions and their index moved beside decisions.md, project/archive/decisions-2026-10.md to project/decisions-2026-10.md and project/archive/INDEX.md to project/archive-index.md, in a commit of its own (36736be), and v3.1's migrate tool was committed alone (8ff2f0f), both before the snapshot. The snapshot at 8ff2f0f, against the pinned build 155f145: 905 tracked files; 25 open and 38 shipped lines, 65 decision entries, 40 wish lines, 51 item files, 5 digests, 2 archive files. Its inventory, project/migration/upgrade-v3.1.json, sits beside the canon migration's inventory and census, kept byte for byte. `node tools/migrate.mjs --verify --upgrade v3.1` before the commit: migrate: 0 failure(s), 2 warning(s) — that no commit was named yet, and that .claude/settings.json changed, the hook merge this route calls for, on the owner's word below. project/items/_schema.md was v3's unedited copy and takes v3.1's (V31-NOW). `node tools/harness.mjs --hooks-only --harness claude` merged the start notice (tools/handover.mjs on SessionStart startup and clear) into .claude/settings.json as a third group, every other setting kept, the note's dashes re-serialised as characters; .claude/settings.intake.json, for intake only, is unchanged. The Session line stays at 200k. The comments in wish-list.md, decisions.md and trajectory.md now state v3.1's wish-line form, the archive's place and the order within a phase; structure.md's tools and verbs rows name v3.1's set. The profile, rules file and brief are unchanged and keep the owner's signatures; the profile's Gate line, "the v3 checker", still names the v3 family's checker, and a wording correction is proposed to the owner in the pull request. Between this commit and the stamp, v3.1's checker fails each of the 40 unstamped wish lines, as V31-WISH-IDS's note foresees. This entry supersedes the intake's in its build clause only, "pm-next v3's (PM-Skills-lab commit 155f145)"; the rest of it stands. Authority: the owner's words of 2026-10-21 in the lab's orchestrator chat, relayed and not seen by him in this chat: "I approve all the 3.1 aspects and want AI to proceed through to the upgrade as much as possible, proceeding on the basi of recommendations." (01:05 BST) and "you have permission for everything including model changes, proceed" (about 01:10). The pull request is his to merge; it was rebuilt on main b07f1b2, after the overnight runs' and VH-149's 23 commits, on his word of 2026-10-22, relayed: "Rebuild both pull requests now anyway, accepting that they may conflict again before I merge." Local edits, each disposed:
+
+- Migration edit: tools/migrate.mjs — re-applied — v3.1's copy, committed alone before the snapshot
+
+**Supersedes:** 2026-10-01 — INTAKE — UoN Video Helper adopts pm-next v3 from canon 4.9.2
+
+**Deferred:** none
 
 ## 2026-10-22 — VH-149 — The Codex run reviewed: five rank-1 defects fixed, the rest to the owner
 

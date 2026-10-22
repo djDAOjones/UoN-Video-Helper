@@ -31,8 +31,8 @@
 | `test/` | 9 | the Vitest suite and its helpers |
 | `test/ebu3341/` | 2 | the EBU Tech 3341 acceptance harness — protected, never weakened |
 | `test/helpers/` | 1 | shared signal generators |
-| `tools/` | 10 | pm-next v3 tools (check, read, find, view, harness, session, structure, archive, migrate) |
-| `verbs/` | 4 | pm-next v3 verbs (plan, close, recall, intake) |
+| `tools/` | 12 | pm-next v3.1 tools (check, read, find, view, harness, session, structure, archive, migrate, handover, run) |
+| `verbs/` | 4 | pm-next v3.1 verbs (plan, close, recall, intake) |
 
 ## Entry points
 
