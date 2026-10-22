@@ -6,12 +6,12 @@
 // failed record.
 //
 //   PROVE_DIR=<scratch>/prove OUT_ROOT=<scratch>/out node prove.mjs   (headless Chrome on :9222)
-import { mkdirSync, writeFileSync } from 'node:fs'
-import { join } from 'node:path'
-import { pathToFileURL } from 'node:url'
+import { copyFileSync, mkdirSync, writeFileSync } from 'node:fs'
+import { dirname, join, resolve } from 'node:path'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 import { connectBrowser } from './cdp.mjs'
 import { Walk } from './walk.mjs'
-import { QUAL_INIT, IN_DIALOG, IN_DIALOG_OR_OUT, axTree, focusArea, fileButtonInk, keysRoute, closeAnalysis } from './qualify.mjs'
+import { QUAL_INIT, IN_DIALOG, IN_DIALOG_OR_OUT, axTree, focusArea, fileButtonInk, keysRoute, closeAnalysis, withholdFonts } from './qualify.mjs'
 import { Run } from './runner.mjs'
 
 const DIR = process.env.PROVE_DIR
@@ -55,17 +55,27 @@ const FIXTURES = {
   'dialog-keys-good': page('<button id="behind">Behind</button><dialog id="d" aria-label="Feedback"><textarea id="feedback-message"></textarea><button id="feedback-close">Close</button></dialog><script>document.getElementById("d").showModal()</script>'),
   'keys-bad': page('<button id="a">First</button><div id="go" onclick="1">Go</div>'),
   'keys-good': page('<button id="a">First</button><button id="go">Go</button>'),
+  // Pilot 2's three instrument faults, each proved: a thumb found at a taller
+  // input (the 32 px font), the file button exempt behind a modal dialog, and
+  // the brand faces withheld by type while a script named like a font loads.
+  'thumb-target-tall-bad': page(RANGE_HTML.replace('height:44px', 'height:88px'), RANGE_CSS.replace(/width:44px;height:44px/, 'width:20px;height:20px')),
+  'thumb-target-tall-good': page(RANGE_HTML.replace('height:44px', 'height:88px'), RANGE_CSS.replace('border-radius:50%', 'border-radius:0')),
+  'file-ink-inert': page('<input id="f" type="file"><dialog id="d" aria-label="Feedback"><button>Close</button></dialog><script>document.getElementById("d").showModal()</script>', FILE_CSS),
+  'fonts': page('<p style="font:40px F, monospace">Text</p><script src="face.woff2.js"></script>', '@font-face{font-family:F;src:url(face.woff2) format("woff2")}'),
 }
 for (const [name, html] of Object.entries(FIXTURES)) writeFileSync(join(DIR, name + '.html'), html)
+copyFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../../../../../../src/assets/lora-bold.woff2'), join(DIR, 'face.woff2'))
+writeFileSync(join(DIR, 'face.woff2.js'), 'window.booted = true')
 
 const browser = await connectBrowser()
 const results = []
 const expect = (instrument, fixture, outcome, wanted, detail) => results.push({ instrument, fixture, outcome, wanted, proved: outcome === wanted, detail })
 
-async function on(name, fn) {
+async function on(name, fn, before = async () => undefined) {
   const w = new Walk(browser, 'prove-' + name)
   await w.open()
   await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source: QUAL_INIT })
+  await before(w)
   const loaded = w.page.once('Page.loadEventFired')
   await w.page.send('Page.navigate', { url: pathToFileURL(join(DIR, name + '.html')).href })
   await loaded
@@ -91,6 +101,13 @@ for (const v of ['bad', 'good']) {
   await on('dialog-keys-' + v, async (w) => { await w.evaluate('document.getElementById("feedback-message").focus()'); const k = await keysRoute(w, [...Array.from({ length: 4 }, () => ({ key: 'Tab', state: IN_DIALOG_OR_OUT, noFocusRing: true })), { key: 'Tab', until: 'feedback-', repeat: 4, state: IN_DIALOG, noFocusRing: true }]); expect('keys-only route, modal dialog', 'dialog-keys-' + v, k.outcome, want, k.steps.map((s) => s.to)) })
   await on('keys-' + v, async (w) => { const k = await keysRoute(w, [{ key: 'Tab', expect: '#a' }, { key: 'Tab', expect: '#go' }]); expect('keys-only route', 'keys-' + v, k.outcome, want, k.steps.map((s) => s.to)) })
 }
+for (const v of ['bad', 'good']) {
+  const want = v === 'bad' ? 'fail' : 'pass'
+  await on('thumb-target-tall-' + v, async (w) => { const t = await w.evaluate('window.__qual.targets()'); const b = t.find((x) => x.thumb); expect('target area, range thumb, tall input', 'thumb-target-tall-' + v, b.outcome, want, b) })
+  // Fails when a face loaded (not withheld) or the font-named script did not run.
+  await on('fonts', async (w) => { const f = await w.evaluate('document.fonts.ready.then(() => ({ booted: !!window.booted, faces: [...document.fonts].map((x) => x.status) }))'); expect('fallback faces withheld', 'fonts-' + (v === 'bad' ? 'not-withheld' : 'withheld'), f.booted && f.faces.length && f.faces.every((s) => s === 'error') ? 'pass' : 'fail', want, { ...f, failed: w.fontsFailed }) }, (w) => withholdFonts(w, v === 'good'))
+}
+await on('file-ink-inert', async (w) => { const c = await fileButtonInk(w, '#f'); expect('file button text by pixels, behind a modal', 'file-ink-inert', c.outcome, 'inert', c) })
 await closeAnalysis()
 browser.close()
 

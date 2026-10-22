@@ -1,11 +1,11 @@
 {
- "run": "2026-10-22T21-45-48-836Z-6c1737",
+ "run": "2026-10-22T22-24-51-789Z-7a267c",
  "source": {
-  "commit": "fc5002348ab4095700aebaf9a55f4d833b1cc0c3",
+  "commit": "0170a5e18dd2ddc911dec2595d69c23fbb468689",
   "dirty": false
  },
  "instruments": {
-  "revision": "8a76908895152fb3",
+  "revision": "e663b8bce597f22d",
   "files": [
    {
     "file": "cdp.mjs",
@@ -20,8 +20,12 @@
     "sha256": "b58bfc4e16da02cd"
    },
    {
+    "file": "faults.mjs",
+    "sha256": "d011c90f09fb9b8a"
+   },
+   {
     "file": "fixtures.sh",
-    "sha256": "6245baa743648ba5"
+    "sha256": "c027be48fdec30a4"
    },
    {
     "file": "inventory.mjs",
@@ -29,15 +33,15 @@
    },
    {
     "file": "matrix.mjs",
-    "sha256": "12de5dd1959e7baf"
+    "sha256": "290d3b2d93a0707d"
    },
    {
     "file": "prove.mjs",
-    "sha256": "936f85d301e54e9f"
+    "sha256": "c501bbf46fd0555c"
    },
    {
     "file": "qualify.mjs",
-    "sha256": "f62a5e63dcc8d62b"
+    "sha256": "7effdca8758d3cf6"
    },
    {
     "file": "runner.mjs",
@@ -86,9 +90,6 @@
     "dpr": 1
    },
    "rootFontPx": 16
-  },
-  {
-   "view": "w1280"
   },
   {
    "view": "w1280",
@@ -147,24 +148,8 @@
  "coverage": {
   "expected": 43,
   "observed": 43,
-  "whole": false,
-  "problems": [
-   {
-    "kind": "failed",
-    "key": "S-03__en-GB__w1280__fallback",
-    "why": "setup: timeout waiting for boot"
-   },
-   {
-    "kind": "failed",
-    "key": "S-15__en-GB__w1280__fallback",
-    "why": "setup: timeout waiting for boot"
-   },
-   {
-    "kind": "failed",
-    "key": "S-76__en-GB__w1280__fallback",
-    "why": "setup: timeout waiting for boot"
-   }
-  ]
+  "whole": true,
+  "problems": []
  },
  "tally": {
   "keys": {
@@ -178,7 +163,7 @@
    }
   },
   "overflow": {
-   "pass": 39,
+   "pass": 42,
    "fail": 0,
    "cannot-determine": 0,
    "items": {
@@ -188,7 +173,7 @@
    }
   },
   "ax": {
-   "pass": 39,
+   "pass": 42,
    "fail": 0,
    "cannot-determine": 0,
    "items": {
@@ -198,53 +183,53 @@
    }
   },
   "targets": {
-   "pass": 24,
+   "pass": 26,
    "fail": 0,
-   "cannot-determine": 15,
+   "cannot-determine": 16,
    "items": {
-    "pass": 714,
+    "pass": 766,
     "fail": 0,
-    "cannot-determine": 29
+    "cannot-determine": 31
    }
   },
   "contrastText": {
-   "pass": 39,
+   "pass": 42,
    "fail": 0,
    "cannot-determine": 0,
    "items": {
-    "pass": 1957,
+    "pass": 2105,
     "fail": 0,
     "cannot-determine": 0
    }
   },
   "contrastExtra": {
-   "pass": 28,
-   "fail": 7,
-   "cannot-determine": 4,
-   "items": {
-    "pass": 169,
-    "fail": 7,
-    "cannot-determine": 4
-   }
-  },
-  "measure": {
-   "pass": 39,
+   "pass": 42,
    "fail": 0,
    "cannot-determine": 0,
    "items": {
-    "pass": 1745,
+    "pass": 181,
+    "fail": 0,
+    "cannot-determine": 0
+   }
+  },
+  "measure": {
+   "pass": 42,
+   "fail": 0,
+   "cannot-determine": 0,
+   "items": {
+    "pass": 1877,
     "fail": 0,
     "cannot-determine": 0
    }
   },
   "focus": {
-   "pass": 13,
-   "fail": 15,
-   "cannot-determine": 11,
+   "pass": 14,
+   "fail": 16,
+   "cannot-determine": 12,
    "items": {
-    "pass": 134,
-    "fail": 17,
-    "cannot-determine": 22
+    "pass": 144,
+    "fail": 18,
+    "cannot-determine": 24
    }
   },
   "motion": {

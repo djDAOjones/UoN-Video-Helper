@@ -1,4 +1,4 @@
-# The instruments qualified and the pilot — VH-171, 22 October 2026 (second checkpoint)
+# The instruments qualified and the pilot — VH-171, 22 October 2026 (third checkpoint)
 
 The walker is copied from HEAD (`eae49ea`; its files last changed in
 `01cc8d8`) into `walker/`; the old bundle is untouched. Added:
@@ -138,20 +138,71 @@ The thumbs stand at 246–256 px² against 264 for the box reading and 157
 for the painted one, so "cannot determine" holds everywhere except
 forced-dark and dark, which pass.
 
-## Open before VH-172 (instrument faults the second pilot caught)
+## Pilot 2's three instrument faults, fixed (third chat)
 
-- **Fallback faces:** blocking every font file stops the app's boot
-  ("timeout waiting for boot"). The block must withhold only the brand
-  faces, or boot must not wait on them; find which.
-- **The file button's ink behind the modal dialog:** with S-76 open, the
-  pixel reading measures the dimmed button (3.66:1). It must be exempt
-  as inert, as targets are, and "paints nothing" must not count when the
-  control is off-screen at narrow and proxy views.
-- **Thumbs at the 32 px default font:** 0 px² against 264, with a painted
-  disc of 264 px². `thumbBox` takes the input's height as the thumb's size
-  and its centre from that, so at a larger root the clip misses the
-  thumb. Take the size from the thumb's rule (`--target-min`) or by hit
-  test.
-- **Still to write:** the scenario corrections in
-  `scenario-check-2026-10-22.md`, the faults F1–F8 and the fixtures
-  N1–N3; then Codex astra's method check.
+Each fix has a failing fixture and a passing twin; `prove-2026-10-22.json`
+holds 40 of 40 proved (the second chat's 35, plus 5).
+
+- **Fallback faces.** Vite serves a font's `?url` import as a module
+  script whose URL ends in `.woff2`, so blocking `*.woff2` by URL failed
+  the module graph and the boot never finished. Fonts are now failed by
+  resource type (`Fetch`, `resourceType: 'Font'`), never by URL. Proved: a
+  page whose face fails and whose script named `face.woff2.js` still runs
+  passes; the same page with the face allowed fails. In the app, only
+  `lora-bold.woff2` is failed, Lora reads `error`, and the boot completes.
+- **The file button behind the modal.** With the feedback dialog open, the
+  button is inert and dimmed by the backdrop; the pixel reading is now
+  "inert" and exempt, as targets are. The "paints nothing" readings at
+  320 px, the 32 px font and both proxies were the same case: the dialog
+  covers the button. Proved on a file input behind a `showModal()` dialog.
+- **Thumbs at the 32 px font.** The thumb's box is found by hit test, at
+  1 px around where its value puts it, never from the input's height,
+  which grows with the default font. Proved: in an 88 px tall input, a
+  20 px thumb fails and a 44 px square passes.
+
+Fonts, the closings and the worker share one request router
+(`faults.mjs`, `route`), because `Fetch.enable` replaces its patterns on
+every call.
+
+## The faults and fixtures the scenarios need (third chat)
+
+`walker/faults.mjs` holds F1–F9, each a switch around the app, never a
+change to it; `node faults.mjs check` applies each to the app and asserts
+the state it is for (`faults-check-2026-10-22.json`). F4 gains **e** (no
+picker and `URL.createObjectURL` throws: the only way `saveFile` throws,
+for S-69); F4d gives S-70's download hand-off, not a failure. F6 is two
+variants: **a**, the onset only (a cut); **b**, every closing (not
+loaded). **F9** rewrites the worker's entry module so its storage
+estimate rejects (S-73). **F3** is a worker prelude too: the estimate
+reports a set quota (S-31), because `Storage.overrideQuotaForOrigin`
+changes nothing in the isolated browser context each walk opens (probed:
+10.7 GB before and after). S-56, running out part-way, needs a write that
+fails, not yet written. A first check caught F4e's throw failing the
+preview's own object URL, as the subagent that applied the scenario check
+predicted; the chosen file is now spared. `walker/fixtures.sh` gains N1 (a cut-short MKV),
+N2 (two long 1080p stills, their lengths set by `LONG_WARN_S` and
+`LONG_SLOW_S`), N3 (float PCM with a burst at about +8.5 dBFS at 0:12)
+and N4 (a 0.8 s clip, under the closing's 1 s onset).
+
+## Pilot 2, re-run whole
+
+`pilot2-digest-2026-10-22.md` and `pilot2-manifest-2026-10-22.json` are
+the re-run on the final instruments: 43 declared, 43 observed, whole.
+Seen for VH-173 (findings, not instrument faults):
+
+- The file chooser's ring reads 88 px² against its button's 640 in every
+  view, mode and language, the fallback included (152 of 1,240 at the
+  32 px font).
+- Under forced-light, the language switcher's ring reads 480 of 498 px².
+- **At the 32 px default font, the trim thumbs' ring is lost.** The
+  thumb's fill is drawn by rem-based stops (`--spacing-04`, 0.75rem), so
+  at 32 px its dark disc fills the whole 44 px thumb; the 2 px ring, drawn
+  inside it in `--focus`, sits on that fill at 2.17:1. 0 px² changed at
+  3:1, 102 px² changed at all (`S-15__w1280__font32__focus-2`). The clip
+  holds the thumb: its box is 44 × 44 and its painted disc 43 × 44.
+- The thumbs elsewhere stand at 246–256 px² against 264 for the box and
+  157 for the painted disc: "cannot determine", VH-173's reading.
+
+## Still open before VH-172
+
+- Codex astra's method check.

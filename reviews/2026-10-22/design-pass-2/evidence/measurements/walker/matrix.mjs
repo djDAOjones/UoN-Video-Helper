@@ -2,7 +2,8 @@
 // (clicks and set values allowed), asserts the language, mode and state it
 // reached, then runs every instrument and writes one record per scenario,
 // language, view and mode. Keyboard routes are records of their own, keys
-// only. VH-171 runs the pilot; VH-172 extends SCENARIOS and PLANS.
+// only. A setup may set the declared faults (faults.mjs); each record names
+// them. VH-171 runs the pilot; VH-172 extends SCENARIOS and PLANS.
 //
 //   FIX=<scratch>/fixtures OUT_ROOT=<scratch>/out RUN_ROOT=<scratch>/runs \
 //     node matrix.mjs pilot          (headless Chrome on :9222, Vite on :5173)
@@ -102,7 +103,7 @@ async function instruments(w, sc, rec, run) {
   // The file button's text is read by pixels; the computed reading is kept beside it, not counted (VH-171: it read 1:1 under forced colours).
   const extra = (await w.evaluate('window.__qual.contrastExtra()')).map((c) => (c.what === 'file button text' ? { ...c, outcome: 'superseded' } : c))
   if (await w.evaluate(`!!document.querySelector('#file-input') && !!document.querySelector('#file-input').getBoundingClientRect().width`)) extra.push(await fileButtonInk(w))
-  out.contrastExtra = aggregate(extra, { exempt: (c) => c.outcome === 'superseded' })
+  out.contrastExtra = aggregate(extra, { exempt: (c) => c.outcome === 'superseded' || c.outcome === 'inert' })
   out.measure = aggregate(await w.evaluate('window.__qual.lines()'))
   if (rec.mode === 'reduced-motion') { const m = await w.evaluate('window.__qual.motion()'); out.motion = { outcome: m.length ? 'fail' : 'pass', items: m } }
   const focus = []
@@ -150,14 +151,14 @@ async function main() {
             await setMode(w, rec.mode)
             const k = await keysRoute(w, route.steps)
             const reached = await assertReached(w, { lang, mode: rec.mode, width: w.qualView ? undefined : undefined })
-            run.record(rec, { status: reached.outcome === 'pass' ? 'ok' : 'failed', reached, instruments: { keys: k } })
+            run.record(rec, { status: reached.outcome === 'pass' ? 'ok' : 'failed', reached, faults: w.faults ?? [], instruments: { keys: k } })
           } else {
             await setMode(w, rec.mode)
             const reached = await assertReached(w, { lang, mode: rec.mode, state: sc.state })
             if (reached.outcome !== 'pass') { run.record(rec, { status: 'failed', reached }); continue }
             const ins = await instruments(w, sc, rec, run)
             await w.screenshot(`${rec.id}__${rec.lang}__${rec.view}__${rec.mode}`)
-            run.record(rec, { status: 'ok', reached, instruments: ins })
+            run.record(rec, { status: 'ok', reached, faults: w.faults ?? [], instruments: ins })
           }
           console.log('recorded ' + Object.values(rec).join(' '))
         } catch (e) {

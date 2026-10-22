@@ -170,7 +170,7 @@
   "detail": {
    "areaAt3to1": 0,
    "readings": {
-    "box": 264,
+    "box": 270,
     "painted": 176
    },
    "paintedPx": [
@@ -374,7 +374,7 @@
   "detail": {
    "areaAt3to1": 340,
    "readings": {
-    "box": 264,
+    "box": 270,
     "painted": 176
    },
    "paintedPx": [
@@ -442,6 +442,83 @@
    "button#a[submit] \"First\"",
    "button#go[submit] \"Go\""
   ]
+ },
+ {
+  "instrument": "target area, range thumb, tall input",
+  "fixture": "thumb-target-tall-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "el": "input#r[range] \"Start\"",
+   "outcome": "fail",
+   "hitW": 20,
+   "hitH": 20,
+   "hitArea": 352,
+   "inline": false,
+   "disabled": false,
+   "thumb": true
+  }
+ },
+ {
+  "instrument": "fallback faces withheld",
+  "fixture": "fonts-not-withheld",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "booted": true,
+   "faces": [
+    "loaded"
+   ],
+   "failed": []
+  }
+ },
+ {
+  "instrument": "target area, range thumb, tall input",
+  "fixture": "thumb-target-tall-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "el": "input#r[range] \"Start\"",
+   "outcome": "pass",
+   "hitW": 44,
+   "hitH": 44,
+   "hitArea": 1936,
+   "inline": false,
+   "disabled": false,
+   "thumb": true
+  }
+ },
+ {
+  "instrument": "fallback faces withheld",
+  "fixture": "fonts-withheld",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "booted": true,
+   "faces": [
+    "error"
+   ],
+   "failed": [
+    "face.woff2"
+   ]
+  }
+ },
+ {
+  "instrument": "file button text by pixels, behind a modal",
+  "fixture": "file-ink-inert",
+  "outcome": "inert",
+  "wanted": "inert",
+  "proved": true,
+  "detail": {
+   "el": "#f",
+   "what": "file button text (pixels)",
+   "outcome": "inert",
+   "why": "behind a modal dialog or inert"
+  }
  },
  {
   "instrument": "runner",

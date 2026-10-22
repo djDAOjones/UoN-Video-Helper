@@ -3,6 +3,7 @@
 // instrument passes by saying nothing. Built on Chrome's own protocol only:
 // the Accessibility domain, Input key events, screenshots compared pixel by
 // pixel in a blank analysis tab, Emulation and Page.setFontSizes.
+import { route, unroute } from './faults.mjs'
 import { Buffer } from 'node:buffer'
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -56,9 +57,24 @@ export const QUAL_INIT = String.raw`
 
   // A range thumb's box: the input is pointer-events none and its thumb auto,
   // so a hit test over the thumb reaches the input (VH-171, settled by probe:
-  // 22 hits at 2 px across each axis). Its centre follows the value; its size
-  // is the input's height, the thumb's rule (--target-min).
-  Q.thumbBox = (el) => { if (typeof el === 'string') el = document.querySelector(el); const r = el.getBoundingClientRect(); const s = r.height; const v = (Number(el.value) - Number(el.min || 0)) / ((Number(el.max || 100) - Number(el.min || 0)) || 1); return { x: r.left + v * (r.width - s), y: r.top, w: s, h: s }; };
+  // 22 hits at 2 px across each axis). Its box is where a hit test reaches
+  // the input, scanned at 1 px around where the value puts it, never the
+  // input's height, which grows with the default font (VH-171, pilot 2: 0 px²
+  // at the 32 px font); centred on the value at its rule's size if nothing
+  // is hit (off screen).
+  Q.thumbBox = (el) => {
+    if (typeof el === 'string') el = document.querySelector(el);
+    const r = el.getBoundingClientRect();
+    const s = parseFloat(getComputedStyle(el).getPropertyValue('--target-min')) || r.height;
+    const v = (Number(el.value) - Number(el.min || 0)) / ((Number(el.max || 100) - Number(el.min || 0)) || 1);
+    const x0 = r.left + v * (r.width - s);
+    let l = Infinity, t = Infinity, rt = -Infinity, b = -Infinity;
+    for (let x = Math.max(Math.floor(r.left), Math.floor(x0 - s)); x <= Math.min(r.right, x0 + 2 * s); x += 1)
+      for (let y = Math.floor(r.top); y <= r.bottom; y += 1)
+        if (document.elementsFromPoint(x + 0.5, y + 0.5).includes(el)) { l = Math.min(l, x); t = Math.min(t, y); rt = Math.max(rt, x + 1); b = Math.max(b, y + 1); }
+    if (l === Infinity) return { x: x0, y: r.top + (r.height - s) / 2, w: s, h: s, found: 'centred on the value' };
+    return { x: l, y: t, w: rt - l, h: b - t, found: 'hit test' };
+  };
 
   // 2.5.5: the actual clickable area, found by hit-testing on a 2 px grid over
   // the element and its labels (wrapped labels' line boxes included); passes
@@ -424,6 +440,9 @@ export async function focusArea(w, sel, { margin = 12, focus, ref } = {}) {
 export async function fileButtonInk(w, sel = '#file-input', { margin = 4 } = {}) {
   const box = await w.evaluate(`(() => { const el = document.querySelector(${JSON.stringify(sel)}); if (!el || !el.getBoundingClientRect().width) return null; el.scrollIntoView({ block: 'center' }); const b = el.getBoundingClientRect(); return { x: b.left, y: b.top, w: b.width, h: b.height, sx: scrollX, sy: scrollY, dpr: devicePixelRatio }; })()`)
   if (!box) return { el: sel, what: 'file button text (pixels)', outcome: 'cannot-determine', why: 'not rendered' }
+  // Behind an open modal dialog the button is inert and dimmed by the
+  // backdrop; it is exempt there, as targets are (VH-171, pilot 2).
+  if (await w.evaluate(`(() => { const el = document.querySelector(${JSON.stringify(sel)}); const modal = [...document.querySelectorAll('dialog[open]')].find((d) => d.matches(':modal')); return (!!modal && !modal.contains(el)) || !!el.closest('[inert]'); })()`)) return { el: sel, what: 'file button text (pixels)', outcome: 'inert', why: 'behind a modal dialog or inert' }
   const clip = { x: Math.max(0, box.x - margin) + box.sx, y: Math.max(0, box.y - margin) + box.sy, width: box.w + 2 * margin, height: box.h + 2 * margin }
   await w.evaluate(`(() => { const a = document.activeElement; if (a && a !== document.body) a.blur(); })()`)
   await sleep(120)
@@ -481,9 +500,17 @@ export async function setMode(w, mode) {
   await sleep(200)
 }
 
-/** The brand faces withheld: font files blocked before load; reload after. */
+/** The brand faces withheld: font requests failed before load; reload after.
+ *  By resource type, never by URL: Vite serves a font's `?url` import as a
+ *  module script whose URL ends in the font's name, and blocking that stopped
+ *  the app's boot (VH-171, pilot 2). Only requests Chrome loads as a font fail. */
 export async function withholdFonts(w, on) {
   await w.page.send('Network.enable')
-  await w.page.send('Network.setBlockedURLs', { urls: on ? ['*.woff2', '*.woff', '*.ttf', '*.otf'] : [] })
   await w.page.send('Network.setCacheDisabled', { cacheDisabled: on })
+  w.fontsFailed = w.fontsFailed ?? []
+  if (!on) return unroute(w, 'fonts')
+  await route(w, 'fonts', {
+    urlPattern: '*', resourceType: 'Font', requestStage: 'Request', match: () => true,
+    handle: async (p) => { w.fontsFailed.push(p.request.url.replace(/^.*\//, '')); await w.page.send('Fetch.failRequest', { requestId: p.requestId, errorReason: 'BlockedByClient' }) },
+  })
 }
