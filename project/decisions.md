@@ -18,6 +18,23 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-22 — PLAN-5 — Phase 5 closes with its ten items shipped; Phase 6 starts with VH-160, the feedback form link
+
+**Decision:** Phase 5 closes with VH-150 to VH-159 shipped, reconciled against PLAN-5's two entries of 2026-10-22. Phase 6's first item is VH-160, the feedback form link, because it is first in PLAN-6's order and is the only Phase 6 item with nothing blocking it: VH-137 waits on the owner's review, VH-162 cuts a release that includes both, and VH-14 is the owner's upload.
+
+**Rationale:** PLAN-5 named VH-150 to VH-153, then the owner's answers added VH-154 to VH-159. Each of the ten has a trajectory line under Phase 5, none has a backlog line, and the eight item files say shipped (VH-158 and VH-159 have none). What a person or the owner still has to do is on the wish list, not hidden in the phase: VH-150.2, VH-150.3, VH-153.1, VH-155.2, VH-156.1 and VH-158.1 are checks, and VH-159.1 is the draft §5.4 row for VH-158's warning. Local recall, from the record alone, before editing, scored 8/8 (2,2,2,2):
+
+1. VH-156, VH-157, VH-158 and VH-159, from trajectory.md's Phase 5 lines and their decision headings.
+2. VH-157: the date no longer counts towards a filled card, because it fills itself.
+3. The wish list's open lines (person checks, translations, VH-159.1, the infrastructure the owner deferred), and backlog Next (VH-13, VH-161, VH-17, VH-113), per PLAN-6's Deferred line.
+4. VH-160, in Phase 6.
+
+This check ran in the session that wrote the record, not in a fresh one, so it does not prove a handoff. VH-160 also drafts the correction for spec §9.2 and §11, which name email as the one feedback route, as a wish line for the owner (PLAN-6).
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-22 — VH-159 — The spec says what Phase 5 ships: eight approved rows applied, its budget raised to 8,100 words
 
 **Decision:** the eight approved spec rows are applied to §5.4, §6.2, §7.2, §9.1, §9.2, §9.3 and §10, each in the page's shipped words, and rules.md's routed budget for the spec rises from 7,800 to 8,100 words, because the rows bring it to 8,031 and the owner allowed up to 8,500.
@@ -557,13 +574,3 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Supersedes:** none
 
 **Deferred:** VH-135
-
-## 2026-10-20 — VH-116 — The §7.1 sentence stands as worded; the wishes stay wishes, and the next item waits on the owner
-
-**Decision:** spec §7.1's sentence on the probe's warm-up stands as worded and is applied; every wish stays on the wish list, none promoted; nothing new is added unless it is really needed, so the next item stays "none" until the owner names one — because the owner said so in chat on 2026-10-20.
-
-**Rationale:** The owner approved "measures throughput — timed from after the first sixth of those frames, so the encoder's start-up, which a job pays once, is not extrapolated (VH-116) — and extrapolates" in chat on 2026-10-20; its wish line is retired, and the spec's routed-budget wish line now quotes 7,386 words. Asked what comes next, the owner chose to keep the wishes on the wish list for now and is inclined to add nothing new unless it is really needed. The agent advised watching three to five staff use the pilot first (VH-M4), and testing one Smaller output on SharePoint (VH-17); both are the owner's own work and already open in the backlog.
-
-**Supersedes:** none
-
-**Deferred:** none

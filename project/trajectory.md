@@ -20,6 +20,7 @@
 - VH-157 — a staff title card with only the date stops Create as an empty one does: the line beside the box, the status line, focus and the invalid mark on Title; the rule line says it first; Submission unchanged; checked in Chrome in three languages, both video kinds (2026-10-22) — see decisions
 - VH-158 — a cut-short MKV or WebM file is said first among the warnings, "The video file is shorter than expected", from a Segment or last element past its end; silent on 22 whole or index-only files, 33 of 38 cuts said, the five left between two elements of unknown size; checked in Chrome (2026-10-22) — see decisions
 - VH-159 — the spec says what Phase 5 ships: eight approved rows applied in §5.4, §6.2, §7.2, §9.1–9.3 and §10, in the page's shipped words; the 2.2.2 reading and the evidence only a person can supply in §9.3; the spec's budget 8,100, at 8,031 words (2026-10-22) — see decisions
+- RECALL — 8/8 (2026-10-22) — scores: 2,2,2,2 — local — see decisions
 
 ## The Codex run reviewed
 

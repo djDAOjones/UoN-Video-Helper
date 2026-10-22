@@ -26,7 +26,7 @@ The public release, 0.2.0, on Xerte (PLAN-6).
 
 ### Phase 4 — what the design pass found: two page defects, the token boundary, the cards — CLOSED 2026-10-21
 
-### Phase 5 — what the review of the Codex run found: the job's state, disabled controls, the tests, the words
+### Phase 5 — what the review of the Codex run found: the job's state, disabled controls, the tests, the words — CLOSED 2026-10-22
 
 ### Phase 6 — the public release: the feedback form, the statement, the cut, Xerte
 
