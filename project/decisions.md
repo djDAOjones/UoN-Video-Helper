@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-22 — VH-159 — Spec §5.4 gains the cut-short row for VH-158's warning, as the owner approved it
+
+**Decision:** VH-159.1's draft row is applied to spec §5.4 as worded, after File ends early, because the owner approved it: the spec is 8,074 words, inside its 8,100 budget, so the budget stands.
+
+**Rationale:** The owner's word, relayed from the orchestrator chat on 2026-10-22: "approve all, proceed", answering VH-159.1 among the open questions; the relay quoted the row and asked for it to be applied within the 8,100-word budget. The row's words match the page: the warning is said first among the warnings, "The video file is shorter than expected" (VH-158), and the margin is `ENDS_EARLY_MARGIN_SECONDS`. VH-159.1 is retired, paid.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-22 — VH-160 — The feedback form is one link under Send feedback, its plain address from config, in a new tab
 
 **Decision:** a link on its own line directly under Send feedback, above the help links, says "Fill in the feedback form (new tab)" (填写反馈表（在新标签页中打开）, "Isi borang maklum balas (dibuka dalam tab baharu)") and opens `FEEDBACK_FORM_URL` in `src/config/feedback.ts` in a new tab with no referrer, because the owner asked for the form near the page's foot and wants the page simple; Send feedback and the help links are unchanged.
@@ -562,15 +572,3 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Supersedes:** none
 
 **Deferred:** VH-134
-
-## 2026-10-20 — PLAN-2 — Phase 2: the owner's corrections, the spec caught up, three page defects, a time left
-
-**Decision:** the wish list is triaged: Phase 2 is VH-133 (the owner's translation corrections), VH-134 (six spec edits drafted for approval), VH-135 (three page defects and the Xerte link) and VH-136 (a time left during the job), in that order; the statement's review is VH-137, the owner's, due 2026-11-18; two lines already paid are retired; fifteen stay wishes — because the owner applied the agent's triage in chat on 2026-10-20 and added the time left.
-
-**Items:** VH-133, VH-134, VH-135, VH-136
-
-**Rationale:** The owner asked what to cut, keep as a wish or add now, then said "yes, apply it with your recommendations" and "but add Time left during a job for now". Promoted, each line quoted verbatim in its item file's Notes: the returned translation sheet (VH-133); the six spec sign-off debts for §9, §9.1 step 2, §9.2 and §9.3 (VH-134); the stale discard question in `#status`, the shared status line, the bold segment's width and the Equality Advisory link in Xerte (VH-135); the time left (VH-136); the statement's review, its further tests and the two teams' addresses (VH-137). Retired as paid: "the planner can tell before the encode", since VH-110 refuses a plan whose predicted loudness misses the contract before a frame is encoded (`src/media/pipeline.ts`); and the Band 8 spec line, every part of which was applied on 2026-10-19 before Phase 1 closed. Kept as wishes: the trim step that scales (typing a time already reaches any point by keyboard, VH-125); the Teams listen and the heavy-limiting note (listen first); VH-124's four polish lines (for VH-124's sign-off); the person checks for VH-127, VH-128, VH-122, the switcher and the campus colleagues; the `pm_skills/` retirement, npm audit's dev-only findings and the stale `project/structure.md`. Order: VH-133 first, since the live pages show wording the owner has corrected and later items add keys to the same sheet; the spec next, since it is authoritative and wrong in six places; then the defects; VH-136 last, the only item with open questions on its design. VH-137 sits under Standing so Phase 2 can close before its date. This supersedes the earlier entry's "every wish stays on the wish list" and "the next item stays none"; its §7.1 sentence stands. No new dependency. Open, for the owner when each item starts: in its Notes.
-
-**Supersedes:** 2026-10-20 — VH-116 — The §7.1 sentence stands as worded; the wishes stay wishes, and the next item waits on the owner
-
-**Deferred:** VH-137

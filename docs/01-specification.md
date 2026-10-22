@@ -314,6 +314,7 @@ All are advisory, phrased as possibilities, and never block processing.
 | --- | --- |
 | Decode damage | A sample beyond +6 dBFS, or not a number: none comes from a real recording. The analysis silences the decoded block and one either side; the pre-flight warning says those moments will be silent in the output and gives their times in the original video |
 | File ends early | A track's decoded content stops more than 1 s (`ENDS_EARLY_MARGIN_SECONDS`) before the last packet its own index declares in the part kept: the audio, from the analysis pass, said before processing with where it stops; both tracks, from the encode, said beside the record, which gives the length made |
+| Cut short (Matroska, WebM) | The file's last element runs past its end, or its declared Segment does with Duration absent or missed by more than 1 s (`ENDS_EARLY_MARGIN_SECONDS`): said first among the warnings, 'The video file is shorter than expected' |
 | Clipping / distortion | ≥10 samples at ≥ −0.1 dBTP, or sustained true peak > 0 dBTP |
 | Very quiet | Integrated loudness < −35 LUFS |
 | Highly variable levels | LRA > 15 LU |
