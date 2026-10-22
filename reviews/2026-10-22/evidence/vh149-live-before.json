@@ -1,0 +1,80 @@
+{
+  "silent-1280": {
+    "read": {
+      "source": "Video read. <strong>No sound.</strong>",
+      "errorsShown": false,
+      "errorCount": 0,
+      "lang": "en-GB"
+    },
+    "firstError": {
+      "source": "<span class=\"visually-hidden\"> A problem was found. Use Report this problem in Errors captured to send the details.</span>",
+      "errorsShown": true,
+      "errorCount": 1,
+      "lang": "en-GB"
+    },
+    "secondError": {
+      "source": "<span class=\"visually-hidden\"> A problem was found. Use Report this problem in Errors captured to send the details.</span>",
+      "errorsShown": true,
+      "errorCount": 2,
+      "lang": "en-GB"
+    },
+    "previewRefused": {
+      "source": "<span class=\"visually-hidden\"> A preview is not available for this file. You can still set the times.</span>",
+      "errorsShown": true,
+      "errorCount": 2,
+      "lang": "en-GB"
+    },
+    "previewNote": true,
+    "afterLanguage": {
+      "source": "<span class=\"visually-hidden\"> Pratonton tidak tersedia untuk fail ini. Anda masih boleh menetapkan masa.</span>",
+      "errorsShown": true,
+      "errorCount": 2,
+      "lang": "ms-MY"
+    }
+  },
+  "blocked-1280": {
+    "source": "<span class=\"visually-hidden\"> A problem was found. Use Report this problem in Errors captured to send the details.</span>",
+    "errorsShown": true,
+    "errorCount": 1,
+    "lang": "en-GB"
+  },
+  "silent-375": {
+    "read": {
+      "source": "Video read. <strong>No sound.</strong>",
+      "errorsShown": false,
+      "errorCount": 0,
+      "lang": "en-GB"
+    },
+    "firstError": {
+      "source": "<span class=\"visually-hidden\"> A problem was found. Use Report this problem in Errors captured to send the details.</span>",
+      "errorsShown": true,
+      "errorCount": 1,
+      "lang": "en-GB"
+    },
+    "secondError": {
+      "source": "<span class=\"visually-hidden\"> A problem was found. Use Report this problem in Errors captured to send the details.</span>",
+      "errorsShown": true,
+      "errorCount": 2,
+      "lang": "en-GB"
+    },
+    "previewRefused": {
+      "source": "<span class=\"visually-hidden\"> A preview is not available for this file. You can still set the times.</span>",
+      "errorsShown": true,
+      "errorCount": 2,
+      "lang": "en-GB"
+    },
+    "previewNote": true,
+    "afterLanguage": {
+      "source": "<span class=\"visually-hidden\"> Pratonton tidak tersedia untuk fail ini. Anda masih boleh menetapkan masa.</span>",
+      "errorsShown": true,
+      "errorCount": 2,
+      "lang": "ms-MY"
+    }
+  },
+  "blocked-375": {
+    "source": "<span class=\"visually-hidden\"> A problem was found. Use Report this problem in Errors captured to send the details.</span>",
+    "errorsShown": true,
+    "errorCount": 1,
+    "lang": "en-GB"
+  }
+}

@@ -7,6 +7,10 @@
      items the canon record shipped before the migration, in v3's form;
      their why is in the frozen canon decision log (history.md). -->
 
+## The Codex run reviewed
+
+- VH-149 — the second-model check of Codex's 21 October run: a blocked start-up's reason and "Video read. No sound." stay on step 1's line beside a new announcer; a save pin restored; Chinese and Malay sentences read again; other findings to the owner (2026-10-22) — see decisions
+
 ## Phase 4 — what the design pass found
 
 - RECALL — 8/8 (2026-10-21) — scores: 2,2,2,2 — local — see decisions

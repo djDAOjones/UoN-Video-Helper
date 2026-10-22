@@ -1,0 +1,658 @@
+{
+  "375-light": {
+    "lockedSelect": {
+      "disabled": true,
+      "selectColor": "rgb(64, 81, 98)",
+      "selectBorder": "dashed rgb(112, 125, 137)",
+      "chevron": "rgb(16, 38, 59)",
+      "describedby": "closing-none-reason closing-onset-reason closing-result"
+    },
+    "before": [
+      {
+        "id": "trim-set-start",
+        "text": "Set start here",
+        "disabled": false,
+        "cls": "button button--secondary",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgb(16, 38, 59)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(16, 38, 59)",
+        "h": 44
+      },
+      {
+        "id": "trim-set-end",
+        "text": "Set end here",
+        "disabled": false,
+        "cls": "button button--secondary",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgb(16, 38, 59)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(16, 38, 59)",
+        "h": 44
+      },
+      {
+        "id": "trim-clear",
+        "text": "Use the whole video",
+        "disabled": true,
+        "cls": "button button--secondary",
+        "style": "dashed",
+        "width": "1px",
+        "border": "rgb(112, 125, 137)",
+        "bg": "rgb(253, 251, 249)",
+        "color": "rgb(64, 81, 98)",
+        "h": 44
+      },
+      {
+        "id": "onset-help-button",
+        "text": "?",
+        "disabled": false,
+        "cls": "button button--secondary help-button",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgb(16, 38, 59)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(16, 38, 59)",
+        "h": 44
+      },
+      {
+        "id": "",
+        "text": "Create the video",
+        "disabled": false,
+        "cls": "button",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgba(0, 0, 0, 0)",
+        "bg": "rgb(16, 38, 59)",
+        "color": "rgb(255, 255, 255)",
+        "h": 44
+      },
+      {
+        "id": "feedback-open",
+        "text": "Send feedback",
+        "disabled": false,
+        "cls": "button button--secondary",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgb(250, 246, 239)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(250, 246, 239)",
+        "h": 44
+      }
+    ],
+    "started": true,
+    "during": [
+      {
+        "id": "trim-set-start",
+        "text": "Set start here",
+        "disabled": true,
+        "cls": "button button--secondary",
+        "style": "dashed",
+        "width": "1px",
+        "border": "rgb(112, 125, 137)",
+        "bg": "rgb(253, 251, 249)",
+        "color": "rgb(64, 81, 98)",
+        "h": 44
+      },
+      {
+        "id": "trim-set-end",
+        "text": "Set end here",
+        "disabled": true,
+        "cls": "button button--secondary",
+        "style": "dashed",
+        "width": "1px",
+        "border": "rgb(112, 125, 137)",
+        "bg": "rgb(253, 251, 249)",
+        "color": "rgb(64, 81, 98)",
+        "h": 44
+      },
+      {
+        "id": "trim-clear",
+        "text": "Use the whole video",
+        "disabled": true,
+        "cls": "button button--secondary",
+        "style": "dashed",
+        "width": "1px",
+        "border": "rgb(112, 125, 137)",
+        "bg": "rgb(253, 251, 249)",
+        "color": "rgb(64, 81, 98)",
+        "h": 44
+      },
+      {
+        "id": "onset-help-button",
+        "text": "?",
+        "disabled": false,
+        "cls": "button button--secondary help-button",
+        "style": "dashed",
+        "width": "1px",
+        "border": "rgb(112, 125, 137)",
+        "bg": "rgb(253, 251, 249)",
+        "color": "rgb(64, 81, 98)",
+        "h": 44
+      },
+      {
+        "id": "",
+        "text": "Cancel",
+        "disabled": false,
+        "cls": "button button--secondary",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgb(16, 38, 59)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(16, 38, 59)",
+        "h": 44
+      },
+      {
+        "id": "feedback-open",
+        "text": "Send feedback",
+        "disabled": false,
+        "cls": "button button--secondary",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgb(250, 246, 239)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(250, 246, 239)",
+        "h": 44
+      }
+    ],
+    "duringFile": {
+      "disabled": true,
+      "style": "solid",
+      "border": "rgb(112, 125, 137)",
+      "bg": "rgb(253, 251, 249)"
+    }
+  },
+  "375-dark": {
+    "lockedSelect": {
+      "disabled": true,
+      "selectColor": "rgb(207, 212, 216)",
+      "selectBorder": "dashed rgb(159, 168, 177)",
+      "chevron": "rgb(255, 255, 255)",
+      "describedby": "closing-none-reason closing-onset-reason closing-result"
+    },
+    "before": [
+      {
+        "id": "trim-set-start",
+        "text": "Set start here",
+        "disabled": false,
+        "cls": "button button--secondary",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgb(250, 246, 239)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(250, 246, 239)",
+        "h": 44
+      },
+      {
+        "id": "trim-set-end",
+        "text": "Set end here",
+        "disabled": false,
+        "cls": "button button--secondary",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgb(250, 246, 239)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(250, 246, 239)",
+        "h": 44
+      },
+      {
+        "id": "trim-clear",
+        "text": "Use the whole video",
+        "disabled": true,
+        "cls": "button button--secondary",
+        "style": "dashed",
+        "width": "1px",
+        "border": "rgb(159, 168, 177)",
+        "bg": "rgb(40, 60, 79)",
+        "color": "rgb(207, 212, 216)",
+        "h": 44
+      },
+      {
+        "id": "onset-help-button",
+        "text": "?",
+        "disabled": false,
+        "cls": "button button--secondary help-button",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgb(250, 246, 239)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(250, 246, 239)",
+        "h": 44
+      },
+      {
+        "id": "",
+        "text": "Create the video",
+        "disabled": false,
+        "cls": "button",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgba(0, 0, 0, 0)",
+        "bg": "rgb(250, 246, 239)",
+        "color": "rgb(16, 38, 59)",
+        "h": 44
+      },
+      {
+        "id": "feedback-open",
+        "text": "Send feedback",
+        "disabled": false,
+        "cls": "button button--secondary",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgb(250, 246, 239)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(250, 246, 239)",
+        "h": 44
+      }
+    ],
+    "started": true,
+    "during": [
+      {
+        "id": "trim-set-start",
+        "text": "Set start here",
+        "disabled": true,
+        "cls": "button button--secondary",
+        "style": "dashed",
+        "width": "1px",
+        "border": "rgb(159, 168, 177)",
+        "bg": "rgb(40, 60, 79)",
+        "color": "rgb(207, 212, 216)",
+        "h": 44
+      },
+      {
+        "id": "trim-set-end",
+        "text": "Set end here",
+        "disabled": true,
+        "cls": "button button--secondary",
+        "style": "dashed",
+        "width": "1px",
+        "border": "rgb(159, 168, 177)",
+        "bg": "rgb(40, 60, 79)",
+        "color": "rgb(207, 212, 216)",
+        "h": 44
+      },
+      {
+        "id": "trim-clear",
+        "text": "Use the whole video",
+        "disabled": true,
+        "cls": "button button--secondary",
+        "style": "dashed",
+        "width": "1px",
+        "border": "rgb(159, 168, 177)",
+        "bg": "rgb(40, 60, 79)",
+        "color": "rgb(207, 212, 216)",
+        "h": 44
+      },
+      {
+        "id": "onset-help-button",
+        "text": "?",
+        "disabled": false,
+        "cls": "button button--secondary help-button",
+        "style": "dashed",
+        "width": "1px",
+        "border": "rgb(159, 168, 177)",
+        "bg": "rgb(40, 60, 79)",
+        "color": "rgb(207, 212, 216)",
+        "h": 44
+      },
+      {
+        "id": "",
+        "text": "Cancel",
+        "disabled": false,
+        "cls": "button button--secondary",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgb(250, 246, 239)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(250, 246, 239)",
+        "h": 44
+      },
+      {
+        "id": "feedback-open",
+        "text": "Send feedback",
+        "disabled": false,
+        "cls": "button button--secondary",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgb(250, 246, 239)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(250, 246, 239)",
+        "h": 44
+      }
+    ],
+    "duringFile": {
+      "disabled": true,
+      "style": "solid",
+      "border": "rgb(159, 168, 177)",
+      "bg": "rgb(40, 60, 79)"
+    }
+  },
+  "375-forced": {
+    "lockedSelect": {
+      "disabled": true,
+      "selectColor": "rgb(96, 0, 0)",
+      "selectBorder": "dashed rgb(96, 0, 0)",
+      "chevron": "rgb(0, 0, 0)",
+      "describedby": "closing-none-reason closing-onset-reason closing-result"
+    },
+    "before": [
+      {
+        "id": "trim-set-start",
+        "text": "Set start here",
+        "disabled": false,
+        "cls": "button button--secondary",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgb(0, 0, 0)",
+        "bg": "rgba(255, 255, 255, 0)",
+        "color": "rgb(0, 0, 0)",
+        "h": 44
+      },
+      {
+        "id": "trim-set-end",
+        "text": "Set end here",
+        "disabled": false,
+        "cls": "button button--secondary",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgb(0, 0, 0)",
+        "bg": "rgba(255, 255, 255, 0)",
+        "color": "rgb(0, 0, 0)",
+        "h": 44
+      },
+      {
+        "id": "trim-clear",
+        "text": "Use the whole video",
+        "disabled": true,
+        "cls": "button button--secondary",
+        "style": "dashed",
+        "width": "1px",
+        "border": "rgb(96, 0, 0)",
+        "bg": "rgb(255, 255, 255)",
+        "color": "rgb(96, 0, 0)",
+        "h": 44
+      },
+      {
+        "id": "onset-help-button",
+        "text": "?",
+        "disabled": false,
+        "cls": "button button--secondary help-button",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgb(0, 0, 0)",
+        "bg": "rgba(255, 255, 255, 0)",
+        "color": "rgb(0, 0, 0)",
+        "h": 44
+      },
+      {
+        "id": "",
+        "text": "Create the video",
+        "disabled": false,
+        "cls": "button",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgba(5, 0, 73, 0.8)",
+        "bg": "rgba(5, 0, 73, 0.8)",
+        "color": "rgb(255, 255, 255)",
+        "h": 44
+      },
+      {
+        "id": "feedback-open",
+        "text": "Send feedback",
+        "disabled": false,
+        "cls": "button button--secondary",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgb(0, 0, 0)",
+        "bg": "rgba(255, 255, 255, 0)",
+        "color": "rgb(0, 0, 0)",
+        "h": 44
+      }
+    ],
+    "started": true,
+    "during": [
+      {
+        "id": "trim-set-start",
+        "text": "Set start here",
+        "disabled": true,
+        "cls": "button button--secondary",
+        "style": "dashed",
+        "width": "1px",
+        "border": "rgb(96, 0, 0)",
+        "bg": "rgb(255, 255, 255)",
+        "color": "rgb(96, 0, 0)",
+        "h": 44
+      },
+      {
+        "id": "trim-set-end",
+        "text": "Set end here",
+        "disabled": true,
+        "cls": "button button--secondary",
+        "style": "dashed",
+        "width": "1px",
+        "border": "rgb(96, 0, 0)",
+        "bg": "rgb(255, 255, 255)",
+        "color": "rgb(96, 0, 0)",
+        "h": 44
+      },
+      {
+        "id": "trim-clear",
+        "text": "Use the whole video",
+        "disabled": true,
+        "cls": "button button--secondary",
+        "style": "dashed",
+        "width": "1px",
+        "border": "rgb(96, 0, 0)",
+        "bg": "rgb(255, 255, 255)",
+        "color": "rgb(96, 0, 0)",
+        "h": 44
+      },
+      {
+        "id": "onset-help-button",
+        "text": "?",
+        "disabled": false,
+        "cls": "button button--secondary help-button",
+        "style": "dashed",
+        "width": "1px",
+        "border": "rgb(96, 0, 0)",
+        "bg": "rgb(255, 255, 255)",
+        "color": "rgb(96, 0, 0)",
+        "h": 44
+      },
+      {
+        "id": "",
+        "text": "Cancel",
+        "disabled": false,
+        "cls": "button button--secondary",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgb(0, 0, 0)",
+        "bg": "rgba(255, 255, 255, 0)",
+        "color": "rgb(0, 0, 0)",
+        "h": 44
+      },
+      {
+        "id": "feedback-open",
+        "text": "Send feedback",
+        "disabled": false,
+        "cls": "button button--secondary",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgb(0, 0, 0)",
+        "bg": "rgba(255, 255, 255, 0)",
+        "color": "rgb(0, 0, 0)",
+        "h": 44
+      }
+    ],
+    "duringFile": {
+      "disabled": true,
+      "style": "solid",
+      "border": "rgb(96, 0, 0)",
+      "bg": "rgb(255, 255, 255)"
+    }
+  },
+  "1280-light": {
+    "lockedSelect": {
+      "disabled": true,
+      "selectColor": "rgb(64, 81, 98)",
+      "selectBorder": "dashed rgb(112, 125, 137)",
+      "chevron": "rgb(16, 38, 59)",
+      "describedby": "closing-none-reason closing-onset-reason closing-result"
+    },
+    "before": [
+      {
+        "id": "trim-set-start",
+        "text": "Set start here",
+        "disabled": false,
+        "cls": "button button--secondary",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgb(16, 38, 59)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(16, 38, 59)",
+        "h": 44
+      },
+      {
+        "id": "trim-set-end",
+        "text": "Set end here",
+        "disabled": false,
+        "cls": "button button--secondary",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgb(16, 38, 59)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(16, 38, 59)",
+        "h": 44
+      },
+      {
+        "id": "trim-clear",
+        "text": "Use the whole video",
+        "disabled": true,
+        "cls": "button button--secondary",
+        "style": "dashed",
+        "width": "1px",
+        "border": "rgb(112, 125, 137)",
+        "bg": "rgb(253, 251, 249)",
+        "color": "rgb(64, 81, 98)",
+        "h": 44
+      },
+      {
+        "id": "onset-help-button",
+        "text": "?",
+        "disabled": false,
+        "cls": "button button--secondary help-button",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgb(16, 38, 59)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(16, 38, 59)",
+        "h": 44
+      },
+      {
+        "id": "",
+        "text": "Create the video",
+        "disabled": false,
+        "cls": "button",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgba(0, 0, 0, 0)",
+        "bg": "rgb(16, 38, 59)",
+        "color": "rgb(255, 255, 255)",
+        "h": 44
+      },
+      {
+        "id": "feedback-open",
+        "text": "Send feedback",
+        "disabled": false,
+        "cls": "button button--secondary",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgb(250, 246, 239)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(250, 246, 239)",
+        "h": 44
+      }
+    ],
+    "started": true,
+    "during": [
+      {
+        "id": "trim-set-start",
+        "text": "Set start here",
+        "disabled": true,
+        "cls": "button button--secondary",
+        "style": "dashed",
+        "width": "1px",
+        "border": "rgb(112, 125, 137)",
+        "bg": "rgb(253, 251, 249)",
+        "color": "rgb(64, 81, 98)",
+        "h": 44
+      },
+      {
+        "id": "trim-set-end",
+        "text": "Set end here",
+        "disabled": true,
+        "cls": "button button--secondary",
+        "style": "dashed",
+        "width": "1px",
+        "border": "rgb(112, 125, 137)",
+        "bg": "rgb(253, 251, 249)",
+        "color": "rgb(64, 81, 98)",
+        "h": 44
+      },
+      {
+        "id": "trim-clear",
+        "text": "Use the whole video",
+        "disabled": true,
+        "cls": "button button--secondary",
+        "style": "dashed",
+        "width": "1px",
+        "border": "rgb(112, 125, 137)",
+        "bg": "rgb(253, 251, 249)",
+        "color": "rgb(64, 81, 98)",
+        "h": 44
+      },
+      {
+        "id": "onset-help-button",
+        "text": "?",
+        "disabled": false,
+        "cls": "button button--secondary help-button",
+        "style": "dashed",
+        "width": "1px",
+        "border": "rgb(112, 125, 137)",
+        "bg": "rgb(253, 251, 249)",
+        "color": "rgb(64, 81, 98)",
+        "h": 44
+      },
+      {
+        "id": "",
+        "text": "Cancel",
+        "disabled": false,
+        "cls": "button button--secondary",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgb(16, 38, 59)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(16, 38, 59)",
+        "h": 44
+      },
+      {
+        "id": "feedback-open",
+        "text": "Send feedback",
+        "disabled": false,
+        "cls": "button button--secondary",
+        "style": "solid",
+        "width": "1px",
+        "border": "rgb(250, 246, 239)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(250, 246, 239)",
+        "h": 44
+      }
+    ],
+    "duringFile": {
+      "disabled": true,
+      "style": "solid",
+      "border": "rgb(112, 125, 137)",
+      "bg": "rgb(253, 251, 249)"
+    }
+  }
+}

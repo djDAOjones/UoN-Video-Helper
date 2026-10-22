@@ -271,7 +271,7 @@ export const msMY: Messages = {
       '— grafik penutup dimainkan pada saat terakhir video anda. Ia menutupi saat itu semasa ia terbentuk.',
     helpFreezeTerm: 'Di atas bingkai pembekuan yang dijana',
     helpFreezeText:
-      '— bingkai terakhir anda ditahan selama satu saat tambahan. grafik penutup dimainkan di atasnya, jadi tiada apa-apa dalam video anda diliputi.',
+      '— bingkai terakhir anda ditahan selama satu saat tambahan. Grafik penutup dimainkan di atasnya, jadi tiada apa-apa dalam video anda diliputi.',
     colourLabel: 'Warna',
     colours: {
       blue: 'Biru',
@@ -454,14 +454,14 @@ export const msMY: Messages = {
     },
     fellBackToFreeze: {
       blue: {
-        fade: 'Video anda lebih pendek daripada animasi pudar. grafik penutup biru pudar masuk di atas bingkai terakhir yang ditahan dan bukannya di atas gambar.',
+        fade: 'Video anda lebih pendek daripada animasi pudar. Grafik penutup biru pudar masuk di atas bingkai terakhir yang ditahan dan bukannya di atas gambar.',
         slide:
-          'Video anda lebih pendek daripada animasi luncur. grafik penutup biru meluncur masuk ke atas bingkai terakhir yang ditahan dan bukannya ke atas gambar.',
+          'Video anda lebih pendek daripada animasi luncur. Grafik penutup biru meluncur masuk ke atas bingkai terakhir yang ditahan dan bukannya ke atas gambar.',
       },
       white: {
-        fade: 'Video anda lebih pendek daripada animasi pudar. grafik penutup putih pudar masuk di atas bingkai terakhir yang ditahan dan bukannya di atas gambar.',
+        fade: 'Video anda lebih pendek daripada animasi pudar. Grafik penutup putih pudar masuk di atas bingkai terakhir yang ditahan dan bukannya di atas gambar.',
         slide:
-          'Video anda lebih pendek daripada animasi luncur. grafik penutup putih meluncur masuk ke atas bingkai terakhir yang ditahan dan bukannya ke atas gambar.',
+          'Video anda lebih pendek daripada animasi luncur. Grafik penutup putih meluncur masuk ke atas bingkai terakhir yang ditahan dan bukannya ke atas gambar.',
       },
     },
     fellBackToPicture: {
@@ -788,7 +788,7 @@ export const msMY: Messages = {
   },
   statement: {
     heading: 'Kenyataan kebolehcapaian',
-    covers: 'Pernyataan ini meliputi Pembantu Video UoN, halaman yang sedang anda lihat.',
+    covers: 'Kenyataan ini meliputi Pembantu Video UoN, iaitu halaman yang sedang anda gunakan.',
     aim: 'Kami mahu seramai mungkin orang dapat menggunakan alat ini. Anda sepatutnya dapat:',
     abilities: [
       'menggunakannya dengan papan kekunci sahaja',

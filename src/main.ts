@@ -295,6 +295,22 @@ const versionLine = required<HTMLParagraphElement>('#version-line')
 const errorsPanel = required<HTMLElement>('#errors-panel')
 const errorsContainer = required<HTMLDivElement>('#errors')
 const errorsIntro = required<HTMLParagraphElement>('#errors-intro')
+const pageAnnouncer = required<HTMLParagraphElement>('#page-announcer')
+
+/**
+ * Says one sentence to a screen reader without taking another line's words
+ * (VH-149). VH-141 spoke Errors captured and a refused preview through step
+ * 1's line, and the sentence replaced what that line held: a start-up
+ * block's reason, or "Video read." and its bold "No sound.". A fresh text
+ * node each time, so the same sentence twice is said twice; emptied on a
+ * change of language, so none lingers in the old one.
+ */
+function announce(message: () => string): void {
+  pageAnnouncer.replaceChildren(document.createTextNode(message()))
+}
+
+onLanguageChange(() => pageAnnouncer.replaceChildren())
+
 show(errorsIntro, () => {
   errorsIntro.textContent = t().failure.captured
 })
@@ -1012,8 +1028,9 @@ onLanguageChange(repaintFailures)
 // --- Error surfacing -------------------------------------------------------
 
 function showError(error: CapturedError): void {
+  // Said as the panel appears, not again for each error under it (VH-149).
+  if (errorsPanel.hidden) announce(() => t().errors.revealed)
   errorsPanel.hidden = false
-  setSourceStatus('', () => t().errors.revealed)
   const item = notification({
     kind: 'error',
     title: `${error.origin} on the ${error.thread} thread`,
@@ -1941,7 +1958,7 @@ trimPreview.addEventListener('error', () => {
   if (!previewUrl) return
   const fromPreview = focusHeldBy([trimSetStart, trimSetEnd])
   trimPreviewNote.hidden = false
-  setSourceStatus('', () => t().trim.noPreview)
+  announce(() => t().trim.noPreview)
   applyControlLock()
   fromPreview(trimStartField)
 })

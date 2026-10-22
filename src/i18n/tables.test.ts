@@ -255,3 +255,29 @@ describe('consistent page words (VH-142)', () => {
     }
   })
 })
+
+// VH-149: VH-148's "closing graphics", put in word for word, broke sentences
+// in the translations; each check is one way it did.
+describe('the closing graphics, word for word (VH-149)', () => {
+  it.each(Object.entries(LANGUAGE_TABLES))('%s starts every sentence after a stop with a capital', (_tag, table) => {
+    for (const { key, english: text } of messagesOf(table)) {
+      expect(text, key).not.toMatch(/[.!?] +\p{Ll}/u)
+    }
+  })
+
+  it('Chinese trims the start or the end of the video, never its closing graphics', () => {
+    const zh = LANGUAGE_TABLES['zh-Hans']!
+    expect(zh.trim.intro).toContain('剪掉开头或结尾不需要的内容')
+    expect(zh.trim.intro).not.toContain('结尾图形不需要')
+  })
+
+  it("keeps the statement's first sentence as it was, less the one VH-148 dropped", () => {
+    expect(LANGUAGE_TABLES['zh-Hans']!.statement.covers).toBe('本声明适用于 UoN 视频助手，即您当前所在的页面。')
+    const ms = LANGUAGE_TABLES['ms-MY']!
+    expect(ms.statement.covers).toBe(
+      'Kenyataan ini meliputi Pembantu Video UoN, iaitu halaman yang sedang anda gunakan.',
+    )
+    // One word for the statement: its heading's.
+    expect(ms.statement.covers.split(' ')[0]).toBe(ms.statement.heading.split(' ')[0])
+  })
+})

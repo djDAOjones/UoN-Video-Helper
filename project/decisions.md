@@ -17,6 +17,14 @@
      Budget 45 live entries: when the validator warns, tools/archive.mjs
      moves the oldest entries verbatim to project/archive/. -->
 
+## 2026-10-22 — VH-149 — The Codex run reviewed: five rank-1 defects fixed, the rest to the owner
+
+**Decision:** a visually hidden polite region, `#page-announcer`, now says Errors captured and a refused preview. Step 1's line keeps its own words, because writing them there wiped a blocked start-up's reason and the bold "No sound.". The weakened save pin, the broken Chinese and Malay sentences and the rewritten statement sentence are put back. The review's rank-2 and rank-3 findings wait for the owner.
+
+**Rationale:** The review is `reviews/2026-10-22/claude-review-of-codex-run.md`: five rank-1, 13 rank-2 and about 25 rank-3 findings across the eight commits, gate green at `25a4a8f`, and the live pilot checked at 1280 and 375 px in three colour modes. A new region rather than appending to step 1's line: the line is painted by several writers, and V-10 asked for a region on the page in every state. Errors captured is said as the panel appears, as V-10's words have it, not for each error under it. The region is emptied on a change of language rather than repainted, so it neither lingers in the old language nor speaks again. The statement sentences are restored as they stood before VH-148, which is what its criterion asked. Standards: UI-STANDARDS, System status; Nielsen 1, 4 and 9; WCAG 4.1.3; house conventions, regression tests by category, strings through the sheet, minimal change. A person's screen-reader check stays on VH-141's existing wish line. Not checked by a second model.
+
+**Supersedes:** none
+
 ## 2026-10-21 — PLAN-4 — Phase 4 and the authorised Codex run close
 
 **Decision:** Phase 4 closes with VH-144, VH-145 and VH-146 shipped, reconciled against its Items list. The authorised run and its report are complete. No next phase is approved: VH-13 in Next remains blocked by VH-M2, so further implementation order needs owner direction.
@@ -460,15 +468,5 @@
 **Rationale:** The owner's answers, 2026-10-19, to three questions asked as VH-132 started: where it sits, "Under Video type"; what it is called, "Video language"; whether a pick is remembered, "Yes, remembered". Under Video type because both say what the video is, and the selector serves the title card before the video and the closing after it, so no one step owns it. A pick of the page's own language is still a pick, kept when the page changes. Remembered with VH-105's guarded read and write; a store that refuses, or a remembered language no longer offered, leaves it following the page.
 
 **Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-19 — VH-131 — The switch opens on Staff video and is remembered; a submission may have no closing
-
-**Decision:** the switch at the top opens on Staff video and is remembered in this browser, as the page's language is; a student submission may choose None, and whenever it has a closing, that closing is Internal use only; a staff video's graphic options are the basic card (VH-127), the closing's controls and the Internal use only toggle, and nothing more — because the owner answered VH-131's open questions in chat on 2026-10-19.
-
-**Rationale:** The owner's answers, 2026-10-19, to four questions asked as VH-131 started: which side is chosen before anyone touches it, "Staff video"; whether None is offered on a submission, "Yes, None is allowed"; whether a staff video holds other graphic options, "No, just those"; whether the choice is remembered between visits, "Yes, remembered". The second changes PLAN-1's "a submission always has … the Internal use only closing" to "a submission's closing, when it has one, is Internal use only"; the item's criterion naming Cut, Fade, Slide, the onset and the colour stands, with None offered beside them. Spec §4.1's "A student submission always has it." no longer says exactly this; VH-131's spec draft corrects it, for the owner's approval. The fourth follows VH-105's guarded read and write: this browser only, and a store that refuses leaves the default.
-
-**Supersedes:** 2026-10-19 — PLAN-1 — Staff video or Student submission, and the video's text in any of the three languages
 
 **Deferred:** none

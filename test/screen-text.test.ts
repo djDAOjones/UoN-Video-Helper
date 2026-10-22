@@ -159,6 +159,31 @@ describe('the status line (VH-88)', () => {
   })
 })
 
+describe('a sentence for a screen reader alone (VH-149)', () => {
+  const mainSource = readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8')
+  const showError = /function showError\([^)]*\): void \{([\s\S]*?)\n\}/.exec(mainSource)?.[1] ?? ''
+  const previewError = /trimPreview\.addEventListener\('error', \(\) => \{([\s\S]*?)\n\}\)/.exec(mainSource)?.[1] ?? ''
+
+  it('is a polite live region on the page in every state, outside every step and the errors panel', () => {
+    expect(markup).toContain('<p class="visually-hidden" id="page-announcer" role="status" aria-live="polite"></p>')
+    const announcer = markup.indexOf('id="page-announcer"')
+    expect(announcer).toBeGreaterThan(markup.lastIndexOf('</section>', markup.indexOf('id="errors-panel"')))
+    expect(announcer).toBeLessThan(markup.indexOf('id="errors-panel"'))
+  })
+
+  it("says Errors captured once, as it appears, and leaves step 1's line its words", () => {
+    // The worker that never answers: settleStartup writes the block's reason
+    // to step 1's line, then its error reaches showError, which emptied it.
+    expect(showError).toContain('if (errorsPanel.hidden) announce(() => t().errors.revealed)')
+    expect(showError).not.toMatch(/setSourceStatus|setSourceReadStatus|sourceStatusLine/)
+  })
+
+  it('says a refused preview without emptying "Video read." and its "No sound."', () => {
+    expect(previewError).toContain('announce(() => t().trim.noPreview)')
+    expect(previewError).not.toMatch(/setSourceStatus|setSourceReadStatus|sourceStatusLine/)
+  })
+})
+
 describe('the save\'s own line (VH-135)', () => {
   const mainSource = readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8')
   /** Every message a save writes, as the script names it. */
@@ -184,6 +209,9 @@ describe('the save\'s own line (VH-135)', () => {
       expect(mainSource).not.toMatch(new RegExp(`\\bsetStatus\\([^;]*t\\(\\)\\.status\\.${message}\\b`))
     }
     expect(mainSource).toContain("setSaveStatus('', () => t().status.saveFailed)")
+    // VH-141 took saveFailed out of the list above and with it this half
+    // (VH-149): spoken on the save's line, never on the job's.
+    expect(mainSource).not.toMatch(/\bsetStatus\([^;]*t\(\)\.status\.saveFailed\b/)
     expect(mainSource).toMatch(/setSaveStatus\(\(\) =>\s*downloadStatusText\(/)
     expect(mainSource).not.toMatch(/\bsetStatus\([^;]*downloadStatusText\(/)
   })

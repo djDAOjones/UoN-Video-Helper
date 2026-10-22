@@ -1,0 +1,92 @@
+{
+  "silent-1280": {
+    "read": {
+      "source": "Video read. <strong>No sound.</strong>",
+      "announcer": "",
+      "errorsShown": false,
+      "errorCount": 0,
+      "lang": "en-GB"
+    },
+    "firstError": {
+      "source": "Video read. <strong>No sound.</strong>",
+      "announcer": "A problem was found. Use Report this problem in Errors captured to send the details.",
+      "errorsShown": true,
+      "errorCount": 1,
+      "lang": "en-GB"
+    },
+    "secondError": {
+      "source": "Video read. <strong>No sound.</strong>",
+      "announcer": "A problem was found. Use Report this problem in Errors captured to send the details.",
+      "errorsShown": true,
+      "errorCount": 2,
+      "lang": "en-GB"
+    },
+    "previewRefused": {
+      "source": "Video read. <strong>No sound.</strong>",
+      "announcer": "A preview is not available for this file. You can still set the times.",
+      "errorsShown": true,
+      "errorCount": 2,
+      "lang": "en-GB"
+    },
+    "previewNote": true,
+    "afterLanguage": {
+      "source": "Video dibaca. <strong>Tiada bunyi.</strong>",
+      "announcer": "",
+      "errorsShown": true,
+      "errorCount": 2,
+      "lang": "ms-MY"
+    }
+  },
+  "blocked-1280": {
+    "source": "The part of the tool that does the work did not start. Reload the page. If it happens again, report it with the Send feedback button.",
+    "announcer": "A problem was found. Use Report this problem in Errors captured to send the details.",
+    "errorsShown": true,
+    "errorCount": 1,
+    "lang": "en-GB"
+  },
+  "silent-375": {
+    "read": {
+      "source": "Video read. <strong>No sound.</strong>",
+      "announcer": "",
+      "errorsShown": false,
+      "errorCount": 0,
+      "lang": "en-GB"
+    },
+    "firstError": {
+      "source": "Video read. <strong>No sound.</strong>",
+      "announcer": "A problem was found. Use Report this problem in Errors captured to send the details.",
+      "errorsShown": true,
+      "errorCount": 1,
+      "lang": "en-GB"
+    },
+    "secondError": {
+      "source": "Video read. <strong>No sound.</strong>",
+      "announcer": "A problem was found. Use Report this problem in Errors captured to send the details.",
+      "errorsShown": true,
+      "errorCount": 2,
+      "lang": "en-GB"
+    },
+    "previewRefused": {
+      "source": "Video read. <strong>No sound.</strong>",
+      "announcer": "A preview is not available for this file. You can still set the times.",
+      "errorsShown": true,
+      "errorCount": 2,
+      "lang": "en-GB"
+    },
+    "previewNote": true,
+    "afterLanguage": {
+      "source": "Video dibaca. <strong>Tiada bunyi.</strong>",
+      "announcer": "",
+      "errorsShown": true,
+      "errorCount": 2,
+      "lang": "ms-MY"
+    }
+  },
+  "blocked-375": {
+    "source": "The part of the tool that does the work did not start. Reload the page. If it happens again, report it with the Send feedback button.",
+    "announcer": "A problem was found. Use Report this problem in Errors captured to send the details.",
+    "errorsShown": true,
+    "errorCount": 1,
+    "lang": "en-GB"
+  }
+}

@@ -1,0 +1,1868 @@
+{
+  "1280-light": {
+    "before": {
+      "lang": "en-GB",
+      "scrollW": 1280,
+      "clientW": 1280,
+      "legends": [
+        {
+          "sel": ".language-switcher > legend",
+          "text": "Page language",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "sel": ".video-kind > legend",
+          "text": "Video type",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "sel": ".video-language > legend",
+          "text": "Video language",
+          "font-size": "16px",
+          "font-weight": "700"
+        }
+      ],
+      "segment": {
+        "font-size": "14px",
+        "font-weight": "600"
+      },
+      "helper": {
+        "font-size": "14px",
+        "font-weight": "400"
+      },
+      "links": [
+        {
+          "sel": "#contact-creators",
+          "text": "Creators team on Teams (opens in a new tab)",
+          "href": "https://teams.microsoft.com/l/team/19%3A14c7a4d2bf43456fa0c3c52c851fb097%40thread.tacv2/conversations?groupId=bd942b5f-5389-410c-abf2-9ba087360738&tenantId=67bda7ee-fd80-41ef-ac91-358418290a1e",
+          "target": "_blank",
+          "rel": "noopener noreferrer"
+        },
+        {
+          "sel": "#contact-learning-content",
+          "text": "Email the learning content team",
+          "href": "mailto:UI-Learning-Content@nottingham.ac.uk",
+          "target": "",
+          "rel": ""
+        }
+      ],
+      "disabled": [],
+      "enabledSecondary": [
+        {
+          "id": "feedback-open",
+          "border-top-style": "solid",
+          "border-top-width": "1px"
+        }
+      ],
+      "fileSelectorButton": {
+        "border-top-style": "solid",
+        "border-top-color": "rgba(0, 0, 0, 0)",
+        "border-top-width": "1px"
+      },
+      "trackBefore": {
+        "background-image": "repeating-linear-gradient(135deg, rgb(250, 246, 239) 0px, rgb(250, 246, 239) 4px, rgb(207, 212, 216) 4px, rgb(207, 212, 216) 8px)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-top-color": "rgb(64, 81, 98)",
+        "border-top-width": "1px",
+        "height": "8px"
+      },
+      "fill": {
+        "background-color": "rgb(16, 38, 59)",
+        "background-image": "none",
+        "left": "calc(0% + 22px)",
+        "right": "calc(100% - 22px)",
+        "height": "8px"
+      },
+      "chevron": {
+        "border-right-color": "rgb(16, 38, 59)",
+        "right": "16px",
+        "width": "8px",
+        "height": "8px"
+      },
+      "selectHeight": 0,
+      "selectPaddingRight": "40px",
+      "footerHeadings": [
+        {
+          "text": "System check — all passed",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "System check — all passed",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "Accessibility statement",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "Accessibility statement",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "How accessible this tool is",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Feedback and contact",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Enforcement procedure",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Compliance status",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "How we tested this tool",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "What we plan to test next",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "About this statement",
+          "font-size": "16px",
+          "font-weight": "700"
+        }
+      ],
+      "browserNote": "This app is designed and built for Chrome, and this browser has passed the checks for it to run."
+    },
+    "withSound": {
+      "html": "Video read.",
+      "text": "Video read."
+    },
+    "afterTrim": {
+      "lang": "en-GB",
+      "scrollW": 1280,
+      "clientW": 1280,
+      "legends": [
+        {
+          "sel": ".language-switcher > legend",
+          "text": "Page language",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "sel": ".video-kind > legend",
+          "text": "Video type",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "sel": ".video-language > legend",
+          "text": "Video language",
+          "font-size": "16px",
+          "font-weight": "700"
+        }
+      ],
+      "segment": {
+        "font-size": "14px",
+        "font-weight": "600"
+      },
+      "helper": {
+        "font-size": "14px",
+        "font-weight": "400"
+      },
+      "links": [
+        {
+          "sel": "#contact-creators",
+          "text": "Creators team on Teams (opens in a new tab)",
+          "href": "https://teams.microsoft.com/l/team/19%3A14c7a4d2bf43456fa0c3c52c851fb097%40thread.tacv2/conversations?groupId=bd942b5f-5389-410c-abf2-9ba087360738&tenantId=67bda7ee-fd80-41ef-ac91-358418290a1e",
+          "target": "_blank",
+          "rel": "noopener noreferrer"
+        },
+        {
+          "sel": "#contact-learning-content",
+          "text": "Email the learning content team",
+          "href": "mailto:UI-Learning-Content@nottingham.ac.uk",
+          "target": "",
+          "rel": ""
+        }
+      ],
+      "disabled": [],
+      "enabledSecondary": [
+        {
+          "id": "trim-set-start",
+          "border-top-style": "solid",
+          "border-top-width": "1px"
+        }
+      ],
+      "fileSelectorButton": {
+        "border-top-style": "solid",
+        "border-top-color": "rgb(16, 38, 59)",
+        "border-top-width": "1px"
+      },
+      "trackBefore": {
+        "background-image": "repeating-linear-gradient(135deg, rgb(250, 246, 239) 0px, rgb(250, 246, 239) 4px, rgb(207, 212, 216) 4px, rgb(207, 212, 216) 8px)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-top-color": "rgb(64, 81, 98)",
+        "border-top-width": "1px",
+        "height": "8px"
+      },
+      "fill": {
+        "background-color": "rgb(16, 38, 59)",
+        "background-image": "none",
+        "left": "185.594px",
+        "right": "185.594px",
+        "height": "8px"
+      },
+      "chevron": {
+        "border-right-color": "rgb(16, 38, 59)",
+        "right": "16px",
+        "width": "8px",
+        "height": "8px"
+      },
+      "selectHeight": 44,
+      "selectPaddingRight": "40px",
+      "footerHeadings": [
+        {
+          "text": "System check — all passed",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "System check — all passed",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "Accessibility statement",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "Accessibility statement",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "How accessible this tool is",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Feedback and contact",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Enforcement procedure",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Compliance status",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "How we tested this tool",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "What we plan to test next",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "About this statement",
+          "font-size": "16px",
+          "font-weight": "700"
+        }
+      ],
+      "browserNote": "This app is designed and built for Chrome, and this browser has passed the checks for it to run."
+    },
+    "trimFill": {
+      "fillLeft": 185.59375,
+      "fillWidth": 490.8125,
+      "trackWidth": 862
+    },
+    "silent": {
+      "html": "Video read. <strong>No sound.</strong>",
+      "text": "Video read. No sound.",
+      "strongWeight": "700"
+    },
+    "disabledAfterSilent": [
+      {
+        "id": "trim-clear",
+        "text": "Use the whole video",
+        "border-top-style": "dashed",
+        "border-top-color": "rgb(112, 125, 137)",
+        "border-top-width": "1px",
+        "background-color": "rgb(253, 251, 249)",
+        "color": "rgb(64, 81, 98)"
+      }
+    ]
+  },
+  "1280-dark": {
+    "before": {
+      "lang": "en-GB",
+      "scrollW": 1280,
+      "clientW": 1280,
+      "legends": [
+        {
+          "sel": ".language-switcher > legend",
+          "text": "Page language",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "sel": ".video-kind > legend",
+          "text": "Video type",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "sel": ".video-language > legend",
+          "text": "Video language",
+          "font-size": "16px",
+          "font-weight": "700"
+        }
+      ],
+      "segment": {
+        "font-size": "14px",
+        "font-weight": "600"
+      },
+      "helper": {
+        "font-size": "14px",
+        "font-weight": "400"
+      },
+      "links": [
+        {
+          "sel": "#contact-creators",
+          "text": "Creators team on Teams (opens in a new tab)",
+          "href": "https://teams.microsoft.com/l/team/19%3A14c7a4d2bf43456fa0c3c52c851fb097%40thread.tacv2/conversations?groupId=bd942b5f-5389-410c-abf2-9ba087360738&tenantId=67bda7ee-fd80-41ef-ac91-358418290a1e",
+          "target": "_blank",
+          "rel": "noopener noreferrer"
+        },
+        {
+          "sel": "#contact-learning-content",
+          "text": "Email the learning content team",
+          "href": "mailto:UI-Learning-Content@nottingham.ac.uk",
+          "target": "",
+          "rel": ""
+        }
+      ],
+      "disabled": [],
+      "enabledSecondary": [
+        {
+          "id": "feedback-open",
+          "border-top-style": "solid",
+          "border-top-width": "1px"
+        }
+      ],
+      "fileSelectorButton": {
+        "border-top-style": "solid",
+        "border-top-color": "rgba(0, 0, 0, 0)",
+        "border-top-width": "1px"
+      },
+      "trackBefore": {
+        "background-image": "repeating-linear-gradient(135deg, rgb(28, 49, 69) 0px, rgb(28, 49, 69) 4px, rgb(64, 81, 98) 4px, rgb(64, 81, 98) 8px)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-top-color": "rgb(207, 212, 216)",
+        "border-top-width": "1px",
+        "height": "8px"
+      },
+      "fill": {
+        "background-color": "rgb(250, 246, 239)",
+        "background-image": "none",
+        "left": "calc(0% + 22px)",
+        "right": "calc(100% - 22px)",
+        "height": "8px"
+      },
+      "chevron": {
+        "border-right-color": "rgb(255, 255, 255)",
+        "right": "16px",
+        "width": "8px",
+        "height": "8px"
+      },
+      "selectHeight": 0,
+      "selectPaddingRight": "40px",
+      "footerHeadings": [
+        {
+          "text": "System check — all passed",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "System check — all passed",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "Accessibility statement",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "Accessibility statement",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "How accessible this tool is",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Feedback and contact",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Enforcement procedure",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Compliance status",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "How we tested this tool",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "What we plan to test next",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "About this statement",
+          "font-size": "16px",
+          "font-weight": "700"
+        }
+      ],
+      "browserNote": "This app is designed and built for Chrome, and this browser has passed the checks for it to run."
+    },
+    "withSound": {
+      "html": "Video read.",
+      "text": "Video read."
+    },
+    "afterTrim": {
+      "lang": "en-GB",
+      "scrollW": 1280,
+      "clientW": 1280,
+      "legends": [
+        {
+          "sel": ".language-switcher > legend",
+          "text": "Page language",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "sel": ".video-kind > legend",
+          "text": "Video type",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "sel": ".video-language > legend",
+          "text": "Video language",
+          "font-size": "16px",
+          "font-weight": "700"
+        }
+      ],
+      "segment": {
+        "font-size": "14px",
+        "font-weight": "600"
+      },
+      "helper": {
+        "font-size": "14px",
+        "font-weight": "400"
+      },
+      "links": [
+        {
+          "sel": "#contact-creators",
+          "text": "Creators team on Teams (opens in a new tab)",
+          "href": "https://teams.microsoft.com/l/team/19%3A14c7a4d2bf43456fa0c3c52c851fb097%40thread.tacv2/conversations?groupId=bd942b5f-5389-410c-abf2-9ba087360738&tenantId=67bda7ee-fd80-41ef-ac91-358418290a1e",
+          "target": "_blank",
+          "rel": "noopener noreferrer"
+        },
+        {
+          "sel": "#contact-learning-content",
+          "text": "Email the learning content team",
+          "href": "mailto:UI-Learning-Content@nottingham.ac.uk",
+          "target": "",
+          "rel": ""
+        }
+      ],
+      "disabled": [],
+      "enabledSecondary": [
+        {
+          "id": "trim-set-start",
+          "border-top-style": "solid",
+          "border-top-width": "1px"
+        }
+      ],
+      "fileSelectorButton": {
+        "border-top-style": "solid",
+        "border-top-color": "rgb(250, 246, 239)",
+        "border-top-width": "1px"
+      },
+      "trackBefore": {
+        "background-image": "repeating-linear-gradient(135deg, rgb(28, 49, 69) 0px, rgb(28, 49, 69) 4px, rgb(64, 81, 98) 4px, rgb(64, 81, 98) 8px)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-top-color": "rgb(207, 212, 216)",
+        "border-top-width": "1px",
+        "height": "8px"
+      },
+      "fill": {
+        "background-color": "rgb(250, 246, 239)",
+        "background-image": "none",
+        "left": "185.594px",
+        "right": "185.594px",
+        "height": "8px"
+      },
+      "chevron": {
+        "border-right-color": "rgb(255, 255, 255)",
+        "right": "16px",
+        "width": "8px",
+        "height": "8px"
+      },
+      "selectHeight": 44,
+      "selectPaddingRight": "40px",
+      "footerHeadings": [
+        {
+          "text": "System check — all passed",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "System check — all passed",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "Accessibility statement",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "Accessibility statement",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "How accessible this tool is",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Feedback and contact",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Enforcement procedure",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Compliance status",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "How we tested this tool",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "What we plan to test next",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "About this statement",
+          "font-size": "16px",
+          "font-weight": "700"
+        }
+      ],
+      "browserNote": "This app is designed and built for Chrome, and this browser has passed the checks for it to run."
+    },
+    "trimFill": {
+      "fillLeft": 185.59375,
+      "fillWidth": 490.8125,
+      "trackWidth": 862
+    },
+    "silent": {
+      "html": "Video read. <strong>No sound.</strong>",
+      "text": "Video read. No sound.",
+      "strongWeight": "700"
+    },
+    "disabledAfterSilent": [
+      {
+        "id": "trim-clear",
+        "text": "Use the whole video",
+        "border-top-style": "dashed",
+        "border-top-color": "rgb(159, 168, 177)",
+        "border-top-width": "1px",
+        "background-color": "rgb(40, 60, 79)",
+        "color": "rgb(207, 212, 216)"
+      }
+    ]
+  },
+  "1280-forced": {
+    "before": {
+      "lang": "en-GB",
+      "scrollW": 1280,
+      "clientW": 1280,
+      "legends": [
+        {
+          "sel": ".language-switcher > legend",
+          "text": "Page language",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "sel": ".video-kind > legend",
+          "text": "Video type",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "sel": ".video-language > legend",
+          "text": "Video language",
+          "font-size": "16px",
+          "font-weight": "700"
+        }
+      ],
+      "segment": {
+        "font-size": "14px",
+        "font-weight": "600"
+      },
+      "helper": {
+        "font-size": "14px",
+        "font-weight": "400"
+      },
+      "links": [
+        {
+          "sel": "#contact-creators",
+          "text": "Creators team on Teams (opens in a new tab)",
+          "href": "https://teams.microsoft.com/l/team/19%3A14c7a4d2bf43456fa0c3c52c851fb097%40thread.tacv2/conversations?groupId=bd942b5f-5389-410c-abf2-9ba087360738&tenantId=67bda7ee-fd80-41ef-ac91-358418290a1e",
+          "target": "_blank",
+          "rel": "noopener noreferrer"
+        },
+        {
+          "sel": "#contact-learning-content",
+          "text": "Email the learning content team",
+          "href": "mailto:UI-Learning-Content@nottingham.ac.uk",
+          "target": "",
+          "rel": ""
+        }
+      ],
+      "disabled": [],
+      "enabledSecondary": [
+        {
+          "id": "feedback-open",
+          "border-top-style": "solid",
+          "border-top-width": "1px"
+        }
+      ],
+      "fileSelectorButton": {
+        "border-top-style": "solid",
+        "border-top-color": "rgba(5, 0, 73, 0.8)",
+        "border-top-width": "1px"
+      },
+      "trackBefore": {
+        "background-image": "repeating-linear-gradient(135deg, rgb(255, 255, 255) 0px, rgb(255, 255, 255) 4px, rgb(0, 0, 0) 4px, rgb(0, 0, 0) 8px)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-top-color": "rgb(0, 0, 0)",
+        "border-top-width": "1px",
+        "height": "8px"
+      },
+      "fill": {
+        "background-color": "rgb(0, 0, 0)",
+        "background-image": "none",
+        "left": "calc(0% + 22px)",
+        "right": "calc(100% - 22px)",
+        "height": "8px"
+      },
+      "chevron": {
+        "border-right-color": "rgb(0, 0, 0)",
+        "right": "16px",
+        "width": "8px",
+        "height": "8px"
+      },
+      "selectHeight": 0,
+      "selectPaddingRight": "40px",
+      "footerHeadings": [
+        {
+          "text": "System check — all passed",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "System check — all passed",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "Accessibility statement",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "Accessibility statement",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "How accessible this tool is",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Feedback and contact",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Enforcement procedure",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Compliance status",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "How we tested this tool",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "What we plan to test next",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "About this statement",
+          "font-size": "16px",
+          "font-weight": "700"
+        }
+      ],
+      "browserNote": "This app is designed and built for Chrome, and this browser has passed the checks for it to run."
+    },
+    "withSound": {
+      "html": "Video read.",
+      "text": "Video read."
+    },
+    "afterTrim": {
+      "lang": "en-GB",
+      "scrollW": 1280,
+      "clientW": 1280,
+      "legends": [
+        {
+          "sel": ".language-switcher > legend",
+          "text": "Page language",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "sel": ".video-kind > legend",
+          "text": "Video type",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "sel": ".video-language > legend",
+          "text": "Video language",
+          "font-size": "16px",
+          "font-weight": "700"
+        }
+      ],
+      "segment": {
+        "font-size": "14px",
+        "font-weight": "600"
+      },
+      "helper": {
+        "font-size": "14px",
+        "font-weight": "400"
+      },
+      "links": [
+        {
+          "sel": "#contact-creators",
+          "text": "Creators team on Teams (opens in a new tab)",
+          "href": "https://teams.microsoft.com/l/team/19%3A14c7a4d2bf43456fa0c3c52c851fb097%40thread.tacv2/conversations?groupId=bd942b5f-5389-410c-abf2-9ba087360738&tenantId=67bda7ee-fd80-41ef-ac91-358418290a1e",
+          "target": "_blank",
+          "rel": "noopener noreferrer"
+        },
+        {
+          "sel": "#contact-learning-content",
+          "text": "Email the learning content team",
+          "href": "mailto:UI-Learning-Content@nottingham.ac.uk",
+          "target": "",
+          "rel": ""
+        }
+      ],
+      "disabled": [],
+      "enabledSecondary": [
+        {
+          "id": "trim-set-start",
+          "border-top-style": "solid",
+          "border-top-width": "1px"
+        }
+      ],
+      "fileSelectorButton": {
+        "border-top-style": "solid",
+        "border-top-color": "rgb(0, 0, 0)",
+        "border-top-width": "1px"
+      },
+      "trackBefore": {
+        "background-image": "repeating-linear-gradient(135deg, rgb(255, 255, 255) 0px, rgb(255, 255, 255) 4px, rgb(0, 0, 0) 4px, rgb(0, 0, 0) 8px)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-top-color": "rgb(0, 0, 0)",
+        "border-top-width": "1px",
+        "height": "8px"
+      },
+      "fill": {
+        "background-color": "rgb(0, 0, 0)",
+        "background-image": "none",
+        "left": "185.594px",
+        "right": "185.594px",
+        "height": "8px"
+      },
+      "chevron": {
+        "border-right-color": "rgb(0, 0, 0)",
+        "right": "16px",
+        "width": "8px",
+        "height": "8px"
+      },
+      "selectHeight": 44,
+      "selectPaddingRight": "40px",
+      "footerHeadings": [
+        {
+          "text": "System check — all passed",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "System check — all passed",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "Accessibility statement",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "Accessibility statement",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "How accessible this tool is",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Feedback and contact",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Enforcement procedure",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Compliance status",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "How we tested this tool",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "What we plan to test next",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "About this statement",
+          "font-size": "16px",
+          "font-weight": "700"
+        }
+      ],
+      "browserNote": "This app is designed and built for Chrome, and this browser has passed the checks for it to run."
+    },
+    "trimFill": {
+      "fillLeft": 185.59375,
+      "fillWidth": 490.8125,
+      "trackWidth": 862
+    },
+    "silent": {
+      "html": "Video read. <strong>No sound.</strong>",
+      "text": "Video read. No sound.",
+      "strongWeight": "700"
+    },
+    "disabledAfterSilent": [
+      {
+        "id": "trim-clear",
+        "text": "Use the whole video",
+        "border-top-style": "dashed",
+        "border-top-color": "rgb(96, 0, 0)",
+        "border-top-width": "1px",
+        "background-color": "rgb(255, 255, 255)",
+        "color": "rgb(96, 0, 0)"
+      }
+    ]
+  },
+  "375-light": {
+    "before": {
+      "lang": "en-GB",
+      "scrollW": 375,
+      "clientW": 375,
+      "legends": [
+        {
+          "sel": ".language-switcher > legend",
+          "text": "Page language",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "sel": ".video-kind > legend",
+          "text": "Video type",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "sel": ".video-language > legend",
+          "text": "Video language",
+          "font-size": "16px",
+          "font-weight": "700"
+        }
+      ],
+      "segment": {
+        "font-size": "14px",
+        "font-weight": "600"
+      },
+      "helper": {
+        "font-size": "14px",
+        "font-weight": "400"
+      },
+      "links": [
+        {
+          "sel": "#contact-creators",
+          "text": "Creators team on Teams (opens in a new tab)",
+          "href": "https://teams.microsoft.com/l/team/19%3A14c7a4d2bf43456fa0c3c52c851fb097%40thread.tacv2/conversations?groupId=bd942b5f-5389-410c-abf2-9ba087360738&tenantId=67bda7ee-fd80-41ef-ac91-358418290a1e",
+          "target": "_blank",
+          "rel": "noopener noreferrer"
+        },
+        {
+          "sel": "#contact-learning-content",
+          "text": "Email the learning content team",
+          "href": "mailto:UI-Learning-Content@nottingham.ac.uk",
+          "target": "",
+          "rel": ""
+        }
+      ],
+      "disabled": [],
+      "enabledSecondary": [
+        {
+          "id": "feedback-open",
+          "border-top-style": "solid",
+          "border-top-width": "1px"
+        }
+      ],
+      "fileSelectorButton": {
+        "border-top-style": "solid",
+        "border-top-color": "rgba(0, 0, 0, 0)",
+        "border-top-width": "1px"
+      },
+      "trackBefore": {
+        "background-image": "repeating-linear-gradient(135deg, rgb(250, 246, 239) 0px, rgb(250, 246, 239) 4px, rgb(207, 212, 216) 4px, rgb(207, 212, 216) 8px)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-top-color": "rgb(64, 81, 98)",
+        "border-top-width": "1px",
+        "height": "8px"
+      },
+      "fill": {
+        "background-color": "rgb(16, 38, 59)",
+        "background-image": "none",
+        "left": "calc(0% + 22px)",
+        "right": "calc(100% - 22px)",
+        "height": "8px"
+      },
+      "chevron": {
+        "border-right-color": "rgb(16, 38, 59)",
+        "right": "16px",
+        "width": "8px",
+        "height": "8px"
+      },
+      "selectHeight": 0,
+      "selectPaddingRight": "40px",
+      "footerHeadings": [
+        {
+          "text": "System check — all passed",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "System check — all passed",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "Accessibility statement",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "Accessibility statement",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "How accessible this tool is",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Feedback and contact",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Enforcement procedure",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Compliance status",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "How we tested this tool",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "What we plan to test next",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "About this statement",
+          "font-size": "16px",
+          "font-weight": "700"
+        }
+      ],
+      "browserNote": "This app is designed and built for Chrome, and this browser has passed the checks for it to run."
+    },
+    "withSound": {
+      "html": "Video read.",
+      "text": "Video read."
+    },
+    "afterTrim": {
+      "lang": "en-GB",
+      "scrollW": 375,
+      "clientW": 375,
+      "legends": [
+        {
+          "sel": ".language-switcher > legend",
+          "text": "Page language",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "sel": ".video-kind > legend",
+          "text": "Video type",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "sel": ".video-language > legend",
+          "text": "Video language",
+          "font-size": "16px",
+          "font-weight": "700"
+        }
+      ],
+      "segment": {
+        "font-size": "14px",
+        "font-weight": "600"
+      },
+      "helper": {
+        "font-size": "14px",
+        "font-weight": "400"
+      },
+      "links": [
+        {
+          "sel": "#contact-creators",
+          "text": "Creators team on Teams (opens in a new tab)",
+          "href": "https://teams.microsoft.com/l/team/19%3A14c7a4d2bf43456fa0c3c52c851fb097%40thread.tacv2/conversations?groupId=bd942b5f-5389-410c-abf2-9ba087360738&tenantId=67bda7ee-fd80-41ef-ac91-358418290a1e",
+          "target": "_blank",
+          "rel": "noopener noreferrer"
+        },
+        {
+          "sel": "#contact-learning-content",
+          "text": "Email the learning content team",
+          "href": "mailto:UI-Learning-Content@nottingham.ac.uk",
+          "target": "",
+          "rel": ""
+        }
+      ],
+      "disabled": [],
+      "enabledSecondary": [
+        {
+          "id": "trim-set-start",
+          "border-top-style": "solid",
+          "border-top-width": "1px"
+        }
+      ],
+      "fileSelectorButton": {
+        "border-top-style": "solid",
+        "border-top-color": "rgb(16, 38, 59)",
+        "border-top-width": "1px"
+      },
+      "trackBefore": {
+        "background-image": "repeating-linear-gradient(135deg, rgb(250, 246, 239) 0px, rgb(250, 246, 239) 4px, rgb(207, 212, 216) 4px, rgb(207, 212, 216) 8px)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-top-color": "rgb(64, 81, 98)",
+        "border-top-width": "1px",
+        "height": "8px"
+      },
+      "fill": {
+        "background-color": "rgb(16, 38, 59)",
+        "background-image": "none",
+        "left": "68.5938px",
+        "right": "68.5938px",
+        "height": "8px"
+      },
+      "chevron": {
+        "border-right-color": "rgb(16, 38, 59)",
+        "right": "16px",
+        "width": "8px",
+        "height": "8px"
+      },
+      "selectHeight": 44,
+      "selectPaddingRight": "40px",
+      "footerHeadings": [
+        {
+          "text": "System check — all passed",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "System check — all passed",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "Accessibility statement",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "Accessibility statement",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "How accessible this tool is",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Feedback and contact",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Enforcement procedure",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Compliance status",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "How we tested this tool",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "What we plan to test next",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "About this statement",
+          "font-size": "16px",
+          "font-weight": "700"
+        }
+      ],
+      "browserNote": "This app is designed and built for Chrome, and this browser has passed the checks for it to run."
+    },
+    "trimFill": {
+      "fillLeft": 68.59375,
+      "fillWidth": 139.8125,
+      "trackWidth": 277
+    },
+    "silent": {
+      "html": "Video read. <strong>No sound.</strong>",
+      "text": "Video read. No sound.",
+      "strongWeight": "700"
+    },
+    "disabledAfterSilent": [
+      {
+        "id": "trim-clear",
+        "text": "Use the whole video",
+        "border-top-style": "dashed",
+        "border-top-color": "rgb(112, 125, 137)",
+        "border-top-width": "1px",
+        "background-color": "rgb(253, 251, 249)",
+        "color": "rgb(64, 81, 98)"
+      }
+    ]
+  },
+  "375-dark": {
+    "before": {
+      "lang": "en-GB",
+      "scrollW": 375,
+      "clientW": 375,
+      "legends": [
+        {
+          "sel": ".language-switcher > legend",
+          "text": "Page language",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "sel": ".video-kind > legend",
+          "text": "Video type",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "sel": ".video-language > legend",
+          "text": "Video language",
+          "font-size": "16px",
+          "font-weight": "700"
+        }
+      ],
+      "segment": {
+        "font-size": "14px",
+        "font-weight": "600"
+      },
+      "helper": {
+        "font-size": "14px",
+        "font-weight": "400"
+      },
+      "links": [
+        {
+          "sel": "#contact-creators",
+          "text": "Creators team on Teams (opens in a new tab)",
+          "href": "https://teams.microsoft.com/l/team/19%3A14c7a4d2bf43456fa0c3c52c851fb097%40thread.tacv2/conversations?groupId=bd942b5f-5389-410c-abf2-9ba087360738&tenantId=67bda7ee-fd80-41ef-ac91-358418290a1e",
+          "target": "_blank",
+          "rel": "noopener noreferrer"
+        },
+        {
+          "sel": "#contact-learning-content",
+          "text": "Email the learning content team",
+          "href": "mailto:UI-Learning-Content@nottingham.ac.uk",
+          "target": "",
+          "rel": ""
+        }
+      ],
+      "disabled": [],
+      "enabledSecondary": [
+        {
+          "id": "feedback-open",
+          "border-top-style": "solid",
+          "border-top-width": "1px"
+        }
+      ],
+      "fileSelectorButton": {
+        "border-top-style": "solid",
+        "border-top-color": "rgba(0, 0, 0, 0)",
+        "border-top-width": "1px"
+      },
+      "trackBefore": {
+        "background-image": "repeating-linear-gradient(135deg, rgb(28, 49, 69) 0px, rgb(28, 49, 69) 4px, rgb(64, 81, 98) 4px, rgb(64, 81, 98) 8px)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-top-color": "rgb(207, 212, 216)",
+        "border-top-width": "1px",
+        "height": "8px"
+      },
+      "fill": {
+        "background-color": "rgb(250, 246, 239)",
+        "background-image": "none",
+        "left": "calc(0% + 22px)",
+        "right": "calc(100% - 22px)",
+        "height": "8px"
+      },
+      "chevron": {
+        "border-right-color": "rgb(255, 255, 255)",
+        "right": "16px",
+        "width": "8px",
+        "height": "8px"
+      },
+      "selectHeight": 0,
+      "selectPaddingRight": "40px",
+      "footerHeadings": [
+        {
+          "text": "System check — all passed",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "System check — all passed",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "Accessibility statement",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "Accessibility statement",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "How accessible this tool is",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Feedback and contact",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Enforcement procedure",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Compliance status",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "How we tested this tool",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "What we plan to test next",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "About this statement",
+          "font-size": "16px",
+          "font-weight": "700"
+        }
+      ],
+      "browserNote": "This app is designed and built for Chrome, and this browser has passed the checks for it to run."
+    },
+    "withSound": {
+      "html": "Video read.",
+      "text": "Video read."
+    },
+    "afterTrim": {
+      "lang": "en-GB",
+      "scrollW": 375,
+      "clientW": 375,
+      "legends": [
+        {
+          "sel": ".language-switcher > legend",
+          "text": "Page language",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "sel": ".video-kind > legend",
+          "text": "Video type",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "sel": ".video-language > legend",
+          "text": "Video language",
+          "font-size": "16px",
+          "font-weight": "700"
+        }
+      ],
+      "segment": {
+        "font-size": "14px",
+        "font-weight": "600"
+      },
+      "helper": {
+        "font-size": "14px",
+        "font-weight": "400"
+      },
+      "links": [
+        {
+          "sel": "#contact-creators",
+          "text": "Creators team on Teams (opens in a new tab)",
+          "href": "https://teams.microsoft.com/l/team/19%3A14c7a4d2bf43456fa0c3c52c851fb097%40thread.tacv2/conversations?groupId=bd942b5f-5389-410c-abf2-9ba087360738&tenantId=67bda7ee-fd80-41ef-ac91-358418290a1e",
+          "target": "_blank",
+          "rel": "noopener noreferrer"
+        },
+        {
+          "sel": "#contact-learning-content",
+          "text": "Email the learning content team",
+          "href": "mailto:UI-Learning-Content@nottingham.ac.uk",
+          "target": "",
+          "rel": ""
+        }
+      ],
+      "disabled": [],
+      "enabledSecondary": [
+        {
+          "id": "trim-set-start",
+          "border-top-style": "solid",
+          "border-top-width": "1px"
+        }
+      ],
+      "fileSelectorButton": {
+        "border-top-style": "solid",
+        "border-top-color": "rgb(250, 246, 239)",
+        "border-top-width": "1px"
+      },
+      "trackBefore": {
+        "background-image": "repeating-linear-gradient(135deg, rgb(28, 49, 69) 0px, rgb(28, 49, 69) 4px, rgb(64, 81, 98) 4px, rgb(64, 81, 98) 8px)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-top-color": "rgb(207, 212, 216)",
+        "border-top-width": "1px",
+        "height": "8px"
+      },
+      "fill": {
+        "background-color": "rgb(250, 246, 239)",
+        "background-image": "none",
+        "left": "68.5938px",
+        "right": "68.5938px",
+        "height": "8px"
+      },
+      "chevron": {
+        "border-right-color": "rgb(255, 255, 255)",
+        "right": "16px",
+        "width": "8px",
+        "height": "8px"
+      },
+      "selectHeight": 44,
+      "selectPaddingRight": "40px",
+      "footerHeadings": [
+        {
+          "text": "System check — all passed",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "System check — all passed",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "Accessibility statement",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "Accessibility statement",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "How accessible this tool is",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Feedback and contact",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Enforcement procedure",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Compliance status",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "How we tested this tool",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "What we plan to test next",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "About this statement",
+          "font-size": "16px",
+          "font-weight": "700"
+        }
+      ],
+      "browserNote": "This app is designed and built for Chrome, and this browser has passed the checks for it to run."
+    },
+    "trimFill": {
+      "fillLeft": 68.59375,
+      "fillWidth": 139.8125,
+      "trackWidth": 277
+    },
+    "silent": {
+      "html": "Video read. <strong>No sound.</strong>",
+      "text": "Video read. No sound.",
+      "strongWeight": "700"
+    },
+    "disabledAfterSilent": [
+      {
+        "id": "trim-clear",
+        "text": "Use the whole video",
+        "border-top-style": "dashed",
+        "border-top-color": "rgb(159, 168, 177)",
+        "border-top-width": "1px",
+        "background-color": "rgb(40, 60, 79)",
+        "color": "rgb(207, 212, 216)"
+      }
+    ]
+  },
+  "375-forced": {
+    "before": {
+      "lang": "en-GB",
+      "scrollW": 375,
+      "clientW": 375,
+      "legends": [
+        {
+          "sel": ".language-switcher > legend",
+          "text": "Page language",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "sel": ".video-kind > legend",
+          "text": "Video type",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "sel": ".video-language > legend",
+          "text": "Video language",
+          "font-size": "16px",
+          "font-weight": "700"
+        }
+      ],
+      "segment": {
+        "font-size": "14px",
+        "font-weight": "600"
+      },
+      "helper": {
+        "font-size": "14px",
+        "font-weight": "400"
+      },
+      "links": [
+        {
+          "sel": "#contact-creators",
+          "text": "Creators team on Teams (opens in a new tab)",
+          "href": "https://teams.microsoft.com/l/team/19%3A14c7a4d2bf43456fa0c3c52c851fb097%40thread.tacv2/conversations?groupId=bd942b5f-5389-410c-abf2-9ba087360738&tenantId=67bda7ee-fd80-41ef-ac91-358418290a1e",
+          "target": "_blank",
+          "rel": "noopener noreferrer"
+        },
+        {
+          "sel": "#contact-learning-content",
+          "text": "Email the learning content team",
+          "href": "mailto:UI-Learning-Content@nottingham.ac.uk",
+          "target": "",
+          "rel": ""
+        }
+      ],
+      "disabled": [],
+      "enabledSecondary": [
+        {
+          "id": "feedback-open",
+          "border-top-style": "solid",
+          "border-top-width": "1px"
+        }
+      ],
+      "fileSelectorButton": {
+        "border-top-style": "solid",
+        "border-top-color": "rgba(5, 0, 73, 0.8)",
+        "border-top-width": "1px"
+      },
+      "trackBefore": {
+        "background-image": "repeating-linear-gradient(135deg, rgb(255, 255, 255) 0px, rgb(255, 255, 255) 4px, rgb(0, 0, 0) 4px, rgb(0, 0, 0) 8px)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-top-color": "rgb(0, 0, 0)",
+        "border-top-width": "1px",
+        "height": "8px"
+      },
+      "fill": {
+        "background-color": "rgb(0, 0, 0)",
+        "background-image": "none",
+        "left": "calc(0% + 22px)",
+        "right": "calc(100% - 22px)",
+        "height": "8px"
+      },
+      "chevron": {
+        "border-right-color": "rgb(0, 0, 0)",
+        "right": "16px",
+        "width": "8px",
+        "height": "8px"
+      },
+      "selectHeight": 0,
+      "selectPaddingRight": "40px",
+      "footerHeadings": [
+        {
+          "text": "System check — all passed",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "System check — all passed",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "Accessibility statement",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "Accessibility statement",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "How accessible this tool is",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Feedback and contact",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Enforcement procedure",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Compliance status",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "How we tested this tool",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "What we plan to test next",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "About this statement",
+          "font-size": "16px",
+          "font-weight": "700"
+        }
+      ],
+      "browserNote": "This app is designed and built for Chrome, and this browser has passed the checks for it to run."
+    },
+    "withSound": {
+      "html": "Video read.",
+      "text": "Video read."
+    },
+    "afterTrim": {
+      "lang": "en-GB",
+      "scrollW": 375,
+      "clientW": 375,
+      "legends": [
+        {
+          "sel": ".language-switcher > legend",
+          "text": "Page language",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "sel": ".video-kind > legend",
+          "text": "Video type",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "sel": ".video-language > legend",
+          "text": "Video language",
+          "font-size": "16px",
+          "font-weight": "700"
+        }
+      ],
+      "segment": {
+        "font-size": "14px",
+        "font-weight": "600"
+      },
+      "helper": {
+        "font-size": "14px",
+        "font-weight": "400"
+      },
+      "links": [
+        {
+          "sel": "#contact-creators",
+          "text": "Creators team on Teams (opens in a new tab)",
+          "href": "https://teams.microsoft.com/l/team/19%3A14c7a4d2bf43456fa0c3c52c851fb097%40thread.tacv2/conversations?groupId=bd942b5f-5389-410c-abf2-9ba087360738&tenantId=67bda7ee-fd80-41ef-ac91-358418290a1e",
+          "target": "_blank",
+          "rel": "noopener noreferrer"
+        },
+        {
+          "sel": "#contact-learning-content",
+          "text": "Email the learning content team",
+          "href": "mailto:UI-Learning-Content@nottingham.ac.uk",
+          "target": "",
+          "rel": ""
+        }
+      ],
+      "disabled": [],
+      "enabledSecondary": [
+        {
+          "id": "trim-set-start",
+          "border-top-style": "solid",
+          "border-top-width": "1px"
+        }
+      ],
+      "fileSelectorButton": {
+        "border-top-style": "solid",
+        "border-top-color": "rgb(0, 0, 0)",
+        "border-top-width": "1px"
+      },
+      "trackBefore": {
+        "background-image": "repeating-linear-gradient(135deg, rgb(255, 255, 255) 0px, rgb(255, 255, 255) 4px, rgb(0, 0, 0) 4px, rgb(0, 0, 0) 8px)",
+        "background-color": "rgba(0, 0, 0, 0)",
+        "border-top-color": "rgb(0, 0, 0)",
+        "border-top-width": "1px",
+        "height": "8px"
+      },
+      "fill": {
+        "background-color": "rgb(0, 0, 0)",
+        "background-image": "none",
+        "left": "68.5938px",
+        "right": "68.5938px",
+        "height": "8px"
+      },
+      "chevron": {
+        "border-right-color": "rgb(0, 0, 0)",
+        "right": "16px",
+        "width": "8px",
+        "height": "8px"
+      },
+      "selectHeight": 44,
+      "selectPaddingRight": "40px",
+      "footerHeadings": [
+        {
+          "text": "System check — all passed",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "System check — all passed",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "Accessibility statement",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "Accessibility statement",
+          "font-size": "16px",
+          "font-weight": "600"
+        },
+        {
+          "text": "How accessible this tool is",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Feedback and contact",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Enforcement procedure",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "Compliance status",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "How we tested this tool",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "What we plan to test next",
+          "font-size": "16px",
+          "font-weight": "700"
+        },
+        {
+          "text": "About this statement",
+          "font-size": "16px",
+          "font-weight": "700"
+        }
+      ],
+      "browserNote": "This app is designed and built for Chrome, and this browser has passed the checks for it to run."
+    },
+    "trimFill": {
+      "fillLeft": 68.59375,
+      "fillWidth": 139.8125,
+      "trackWidth": 277
+    },
+    "silent": {
+      "html": "Video read. <strong>No sound.</strong>",
+      "text": "Video read. No sound.",
+      "strongWeight": "700"
+    },
+    "disabledAfterSilent": [
+      {
+        "id": "trim-clear",
+        "text": "Use the whole video",
+        "border-top-style": "dashed",
+        "border-top-color": "rgb(96, 0, 0)",
+        "border-top-width": "1px",
+        "background-color": "rgb(255, 255, 255)",
+        "color": "rgb(96, 0, 0)"
+      }
+    ]
+  }
+}
