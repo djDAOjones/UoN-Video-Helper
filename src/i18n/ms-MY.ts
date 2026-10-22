@@ -96,7 +96,7 @@ export const msMY: Messages = {
       nothing: 'Tiada apa-apa yang dilepaskan yang boleh dibaca. Lepaskan fail video.',
       several: 'Itu adalah {count} fail. Lepaskan satu video pada satu masa.',
       notVideo:
-        'Itu bukan fail video. Lepaskan video — fail yang namanya berakhir dengan .mp4 atau .mov, contohnya — atau pilih satu di atas.',
+        'Itu bukan fail video. Lepaskan fail video, seperti fail yang namanya berakhir dengan .mp4 atau .mov, atau pilih satu di atas.',
     },
   },
   source: {
@@ -149,14 +149,14 @@ export const msMY: Messages = {
     losses: {
       extraTracksTitle: 'Fail ini mempunyai {found}',
       extraTracksDetail:
-        'Fail baharu menyimpan satu gambar dan satu trek audio — yang disenaraikan di bawah Ciri-ciri video. Trek lain tidak akan dibawa, dan salah satunya mungkin menyimpan alternatif, seperti bahasa lain atau perihalan audio. Jika anda memerlukannya, simpan fail asal bersama.',
+        'Fail baharu menyimpan satu gambar dan satu trek audio — yang disenaraikan di bawah Ciri-ciri video. Trek lain tidak akan dibawa, dan salah satunya mungkin menyimpan alternatif, seperti bahasa lain atau perihalan audio. Jika anda memerlukannya, simpan fail asal bersama fail baharu.',
       uncheckedTitle: 'Trek kapsyen dan bab tidak dapat disemak',
       uncheckedDetail:
-        'Fail jenis ini tidak boleh disemak untuknya. Jika fail anda mempunyainya, ia tidak akan dibawa ke mana-mana.',
+        'Fail jenis ini tidak boleh disemak untuk trek kapsyen atau bab. Jika fail anda mempunyainya, ia tidak akan dibawa.',
       captionsConsequence:
-        'Fail baharu tidak akan mempunyai trek kapsyen, jadi di mana sahaja anda menerbitkannya, ia mesti memberikan kapsyen. EchoVideo membuatnya sendiri selepas muat naik — semaknya. Fail yang dihantar terus memerlukan kapsyen yang ditambahkan oleh anda. Kapsyen yang dilukis ke dalam gambar kekal.',
+        'Fail baharu tidak akan mempunyai trek kapsyen, jadi kapsyen mesti datang dari tempat anda menerbitkannya. EchoVideo membuat kapsyennya sendiri selepas muat naik, jadi semaklah kapsyen itu. Jika anda menghantar fail secara terus, tambahkan kapsyen sendiri. Kapsyen yang dilukis ke dalam gambar kekal.',
       chaptersConsequence: 'Bab-bab tersebut tidak akan berada dalam fail baharu.',
-      keepOriginals: 'Jika anda memerlukan fail asal, simpan fail ini bersama-sama.',
+      keepOriginals: 'Jika anda memerlukan trek asal, simpan fail ini bersama fail baharu.',
     },
   },
   trim: {
@@ -172,7 +172,7 @@ export const msMY: Messages = {
     format: 'Minit dan saat, seperti 1:05.5, atau saat, seperti 65.5.',
     useWhole: 'Gunakan keseluruhan video',
     reading: 'Membaca video itu…',
-    unreadable: 'Tiada video untuk dipotong: fail itu tidak dapat dibaca.',
+    unreadable: 'Tiada video untuk dipotong, kerana fail itu tidak dapat dibaca.',
     tooShort: 'Ia lebih pendek daripada {seconds} saat, jadi ia tidak boleh dipangkas.',
     keepingWhole: 'Menyimpan keseluruhan video, {duration}.',
     keeping: 'Menyimpan {kept} daripada {duration}.',
@@ -188,13 +188,12 @@ export const msMY: Messages = {
         start: 'Masa mula adalah selepas tamat video, yang mana panjangnya {length}.',
         end: 'Waktu tamat adalah selepas tamatnya video, yang sepanjang {length}.',
       },
-      notTimes: 'Permulaan atau pengakhiran video bukanlah masa.',
+      notTimes: 'Masa mula atau tamat tidak dapat dibaca sebagai masa.',
       startAfterEnd: 'Permulaannya adalah selepas tamatnya video.',
       endBeforeStart: 'Pengakhiran mesti datang selepas permulaan.',
       keepAtLeast: 'Simpan sekurang-kurangnya {seconds} saat video tersebut.',
     },
-    correctToContinue:
-      'Letakkan masa mula dan tamat dengan betul dalam langkah 2 untuk meneruskan.',
+    correctToContinue: 'Betulkan masa mula dan tamat dalam langkah 2 untuk meneruskan.',
   },
   titleCard: {
     legend: 'Kad tajuk',
@@ -333,7 +332,7 @@ export const msMY: Messages = {
   },
   create: {
     lockedStopping: 'Dikunci semasa kerja dihentikan.',
-    note: 'Video yang telah siap kekal di sini sehingga anda menyimpannya atau menutup tab ini.',
+    note: 'Video yang telah siap kekal di sini sehingga anda memulakan video lain atau menutup tab ini. Simpan sebelum itu.',
     announceProgress: 'Umumkan kemajuan',
     announceHelp:
       'Menyebutkan setiap peringkat dengan kuat untuk pembaca skrin semasa video dibuat. Keputusan sentiasa diumumkan.',
@@ -364,9 +363,9 @@ export const msMY: Messages = {
     saveStopped: 'Penyimpanan dihentikan. Video masih ada di sini apabila anda mahukannya.',
     notSaved: 'Tidak disimpan. Video itu masih ada di sini apabila anda mahukannya.',
     refusedSource:
-      'Itulah fail yang anda gunakan untuk bermula. Pilih nama atau folder yang berbeza — alat ini tidak akan mengubah fail asal anda.',
+      'Itulah fail yang anda gunakan untuk bermula. Pilih nama atau folder yang berbeza, kerana alat ini tidak akan mengubah fail asal anda.',
     saved:
-      'Disimpan. Semaknya di tempat anda menyimpannya, kemudian muat naik ke tempat yang dituju — atau pilih video lain dalam langkah 1.',
+      'Disimpan. Buka fail yang disimpan untuk menyemaknya, kemudian muat naik ke tempat anda akan menggunakannya, atau pilih video lain dalam langkah 1.',
     storageWayOut:
       'Kurangkan video, pilih {smaller} atau kosongkan sedikit ruang, kemudian tekan Semak semula.',
     creating: 'Mencipta video anda. {notice}',
@@ -384,7 +383,8 @@ export const msMY: Messages = {
   result: {
     finished: 'Video siap — {size}',
     previous: 'Video sebelumnya — {size}',
-    lifetime: 'Ia kekal di sini hanya sehingga anda menyimpannya atau menutup tab ini.',
+    lifetime:
+      'Ia belum disimpan. Ia kekal di sini sehingga anda memulakan video lain atau menutup tab ini.',
     lifetimeDelivered: 'Ia kekal di sini sehingga anda memulakan video lain atau menutup tab ini.',
     keptWhole: 'keseluruhan video ({duration})',
     keptPart: '{kept} daripada {duration}, dari {from} hingga {to}',
@@ -426,12 +426,12 @@ export const msMY: Messages = {
       'Grafik penutup tidak dapat dimuatkan, jadi ia tiada dalam video ini. Semua yang lain telah digunakan seperti yang diminta.',
     endedEarly: {
       picture:
-        'Fail yang anda pilih berakhir lebih awal: gambarnya berhenti pada {stops} daripada {end}.',
+        'Fail yang anda pilih berakhir lebih awal. Gambarnya berhenti pada {stops} daripada {end}.',
       sound:
-        'Fail yang anda pilih berakhir lebih awal: audionya berhenti pada {stops} daripada {end}.',
+        'Fail yang anda pilih berakhir lebih awal. Audionya berhenti pada {stops} daripada {end}.',
       together:
-        'Fail yang anda pilih berakhir lebih awal: gambar dan audionya berhenti pada {stops} daripada {end}.',
-      both: 'Fail yang anda pilih berakhir lebih awal: gambarnya berhenti pada {picture} dan audionya pada {sound}, daripada {end}.',
+        'Fail yang anda pilih berakhir lebih awal. Gambar dan audionya berhenti pada {stops} daripada {end}.',
+      both: 'Fail yang anda pilih berakhir lebih awal. Gambarnya berhenti pada {picture} dan audionya pada {sound}, daripada {end}.',
       held: 'Dari situ hingga grafik penutup, video menahan bingkai terakhirnya.',
       next: 'Jika anda mempunyai salinan yang lengkap, cipta video itu semula daripada salinan tersebut.',
     },
@@ -539,15 +539,15 @@ export const msMY: Messages = {
       insufficientStorage:
         'Ruang kosong pada peranti ini tidak mencukupi. Kerja ini memerlukan kira-kira {size} ruang kerja. Kosongkan sedikit ruang dan cuba lagi.',
       storageUnknown:
-        'Pelayar ini tidak akan menyatakan berapa banyak ruang kosong yang ada. Jika ia kehabisan ruang separuh jalan, kerja akan berhenti dan tiada apa yang disimpan — fail asal anda tidak terjejas.',
+        'Pelayar ini tidak akan menyatakan berapa banyak ruang kosong yang ada. Jika ia kehabisan ruang separuh jalan, kerja akan berhenti dan tiada apa yang disimpan. Fail asal anda tidak terjejas.',
       veryLongJob:
         'Ini akan mengambil masa kira-kira {time}. Anda boleh teruskan, tetapi komputer desktop akan jauh lebih pantas.',
       veryLongJobUnknown:
         'Ini akan mengambil masa yang agak lama. Anda boleh teruskan, tetapi komputer desktop akan jauh lebih pantas.',
       longJob:
-        'Ini akan mengambil masa kira-kira {time}. Pastikan tab ini terbuka semasa ia berjalan — menutupnya akan menghentikan kerja.',
+        'Ini akan mengambil masa kira-kira {time}. Pastikan tab ini terbuka semasa kerja berjalan, kerana menutup tab akan menghentikan kerja.',
       longJobUnknown:
-        'Ini akan mengambil masa yang agak lama. Pastikan tab ini terbuka semasa ia berjalan — menutupnya akan menghentikan kerja.',
+        'Ini akan mengambil masa yang agak lama. Pastikan tab ini terbuka semasa kerja berjalan, kerana menutup tab akan menghentikan kerja.',
       mobileDevice:
         'Telefon dan tablet jauh lebih perlahan dalam hal ini berbanding komputer, dan pelayar di sana mungkin menamatkan kerja separuh jalan untuk mengosongkan memori. Gunakan komputer jika boleh.',
       estimateUnavailable:
@@ -583,9 +583,9 @@ export const msMY: Messages = {
         other: 'Beberapa bahagian yang rosak akan disenyapkan',
       },
       detail: {
-        one: 'Pada {times} dalam rakaman asal, fail ini mengandungi letusan hingar yang lebih kuat daripada mana-mana rakaman. Ia berpunca daripada kerosakan pada fail, bukan daripada rakaman anda. Pecahan saat itu akan disenyapkan, jadi tiada sesiapa yang mendengarnya dan perataan masih berfungsi seperti sepatutnya.',
+        one: 'Pada {times} dalam video asal, fail ini mengandungi letusan hingar yang lebih kuat daripada yang mungkin bagi audio yang tidak rosak. Ia berpunca daripada kerosakan pada fail, bukan daripada video anda. Pecahan saat itu akan disenyapkan, jadi tiada sesiapa yang mendengarnya dan perataan masih berfungsi seperti sepatutnya.',
         other:
-          'Pada {times} dalam rakaman asal, fail ini mengandungi letusan hingar yang lebih kuat daripada mana-mana rakaman. Ia berpunca daripada kerosakan pada fail, bukan daripada rakaman anda. Setiap pecahan saat itu akan disenyapkan, jadi tiada sesiapa yang mendengarnya dan perataan masih berfungsi seperti sepatutnya.',
+          'Pada {times} dalam video asal, fail ini mengandungi letusan hingar yang lebih kuat daripada yang mungkin bagi audio yang tidak rosak. Ia berpunca daripada kerosakan pada fail, bukan daripada video anda. Setiap pecahan saat itu akan disenyapkan, jadi tiada sesiapa yang mendengarnya dan perataan masih berfungsi seperti sepatutnya.',
       },
       more: {
         one: '{count} bahagian lain',
@@ -600,7 +600,7 @@ export const msMY: Messages = {
     veryQuiet: {
       heading: 'Rakaman ini sangat senyap',
       detail:
-        'Ia jauh di bawah tahap pendengaran yang selesa. Meratakan akan meningkatkannya — tetapi meningkatkan pertuturan yang perlahan juga akan meningkatkan apa sahaja yang ada di dalam bilik.',
+        'Ia jauh di bawah tahap pendengaran yang selesa. Perataan akan menaikkan tahapnya, tetapi menaikkan pertuturan yang perlahan juga menaikkan apa-apa bunyi lain yang dirakam di dalam bilik.',
     },
     highlyVariable: {
       heading: 'Kelantangannya banyak berbeza',
@@ -623,9 +623,9 @@ export const msMY: Messages = {
         'Video ini bagus untuk digunakan; cuma ia mungkin kedengaran sedikit lebih senyap atau lebih kuat daripada video lain yang diratakan dengan alat ini.',
     },
     metadataLost: {
-      heading: 'Tajuk dan tarikh fail tidak dapat disalin',
+      heading: 'Tajuk, pengarang dan tarikh fail tidak dapat disalin',
       detail:
-        'Gambar dan audio tidak terjejas. Jika fail asal anda mempunyai tajuk, pengarang atau tarikh, fail baharu tidak akan mempunyainya — anda masih boleh menambahkannya di mana sahaja anda memuat naiknya.',
+        'Gambar dan audio tidak terjejas. Jika fail asal anda mempunyai tajuk, pengarang atau tarikh, fail baharu tidak akan mempunyainya. Anda masih boleh menambahkannya di mana sahaja anda memuat naiknya.',
     },
   },
   announce: {
@@ -644,7 +644,7 @@ export const msMY: Messages = {
     unreadable: {
       what: 'Fail ini tidak dapat dibaca sebagai video.',
       notAVideo:
-        'Fail ini tidak dapat dibaca sebagai video. Ia perlu fail video — yang namanya berakhir dengan .mp4, .mov, .mkv atau .webm — dan ia mungkin rosak.',
+        'Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan fail video, atau ia mungkin rosak. Nama fail video biasanya berakhir dengan .mp4, .mov, .mkv atau .webm.',
       soundOnly:
         'Fail ini mempunyai audio tetapi tiada video. Alat ini menambah penjenamaan pada video, jadi ia memerlukan fail dengan gambar.',
       noTracks:
@@ -657,11 +657,11 @@ export const msMY: Messages = {
     },
     badTrim: {
       what: 'Waktu mula dan tamat tidak dapat digunakan.',
-      next: 'Letakkan masa mula dan tamat dengan betul dalam langkah 2 dan cuba lagi.',
+      next: 'Betulkan masa mula dan tamat dalam langkah 2 dan cuba lagi.',
     },
     unlevellable: {
       what: 'Audio rakaman ini tidak dapat dibawa ke tahap biasa, jadi video itu tidak dibuat.',
-      next: 'Laporkannya dengan butang Hantar maklum balas — butiran yang ditambahkannya akan membantu.',
+      next: 'Laporkan masalah itu dengan butang Hantar maklum balas, yang menambah butiran yang akan membantu.',
     },
     outputLoudness: {
       what: 'Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan.',
@@ -678,11 +678,11 @@ export const msMY: Messages = {
     },
     encoderRefused: {
       what: 'Pelayar ini berhenti mengekod video di pertengahan jalan.',
-      next: 'Cuba output lain di bawah Saiz/kualiti fail. Jika ia berlaku lagi, laporkannya dengan butang Hantar maklum balas — butiran yang ditambahkan akan membantu.',
+      next: 'Cuba pilihan lain di bawah Saiz/kualiti fail. Jika masalah itu berlaku lagi, laporkannya dengan butang Hantar maklum balas, yang menambah butiran yang akan membantu.',
     },
     checkFailed: {
       what: 'Pemeriksaan peranti tidak selesai.',
-      next: 'Tekan Semak semula untuk menjalankannya sekali lagi. Jika gagal lagi, laporkannya dengan butang Hantar maklum balas.',
+      next: 'Tekan Semak semula untuk menjalankan semakan sekali lagi. Jika semakan gagal lagi, laporkan masalah itu dengan butang Hantar maklum balas.',
     },
     timedOut: {
       what: 'Kerja itu berhenti melaporkan kemajuan, jadi ia dihentikan.',
@@ -695,7 +695,7 @@ export const msMY: Messages = {
       what: 'Ada masalah yang berlaku semasa membuat video.',
     },
     tryAgain:
-      'Cuba lagi. Jika ia berlaku lagi, laporkannya dengan butang Hantar maklum balas — butiran yang ditambahkan akan membantu.',
+      'Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Hantar maklum balas, yang menambah butiran yang akan membantu.',
     startup: {
       insecure:
         'Halaman ini memerlukan sambungan yang selamat sebelum ia boleh berfungsi dengan video anda. Bukanya di alamat yang bermula dengan https://.',
@@ -706,7 +706,7 @@ export const msMY: Messages = {
       noWorkingStore:
         'Pelayar ini tidak memberikan ruang kerja kepada alat ini untuk mencipta video. Jika anda melayari secara peribadi, tetingkap biasa biasanya berfungsi. {remedy}',
       workerNotStarted:
-        'Bahagian alat yang melakukan kerja tidak bermula. Muat semula halaman. Jika ia berlaku lagi, laporkannya dengan butang Hantar maklum balas.',
+        'Bahagian alat yang melakukan kerja tidak bermula. Muat semula halaman. Jika masalah itu berlaku lagi, laporkannya dengan butang Hantar maklum balas.',
     },
     captured:
       'Sesuatu yang tidak kena telah berlaku dalam alat ini. Video yang sedang dibuat mungkin tidak siap; fail asal anda tidak terjejas. Laporkan masalah itu dengan butang Laporkan masalah ini, yang akan menambah butiran ini.',
@@ -772,10 +772,11 @@ export const msMY: Messages = {
     copy: 'Salin mesej dan butiran',
     close: 'Tutup',
     tooLong:
-      'Mesej anda terlalu panjang untuk dihantar ke aplikasi e-mel anda sekaligus. Pilih “Salin mesej dan butiran” dan tampalkannya ke dalam e-mel ke {address}.',
+      'Mesej anda terlalu panjang untuk dihantar ke aplikasi e-mel anda. Pilih “Salin mesej dan butiran” dan tampalkannya ke dalam e-mel ke {address}.',
     opened:
       'Aplikasi e-mel anda sepatutnya telah dibuka dengan mesej anda sedia untuk dihantar. Jika tidak, pilih “Salin mesej dan butiran” dan tampalkannya ke dalam e-mel ke {address}.',
-    someOmitted: 'Beberapa butiran tidak muat dalam e-mel; salinannya mengandungi semuanya.',
+    someOmitted:
+      'Beberapa butiran tidak muat dalam e-mel; “Salin mesej dan butiran” mengandungi semuanya.',
     copied: 'Disalin. Tampalkannya ke dalam e-mel ke {address}.',
     couldNotCopy:
       'Tidak dapat menyalin. Buka “Apa yang akan dihantar bersamanya”, pilih butirannya dan salin butiran tersebut bersama mesej anda.',
@@ -810,13 +811,13 @@ export const msMY: Messages = {
     },
     enforcement: {
       heading: 'Prosedur penguatkuasaan',
-      text: 'Suruhanjaya Kesaksamaan dan Hak Asasi Manusia (Equality and Human Rights Commission) menguatkuasakan peraturan kebolehcapaian. Jika anda tidak berpuas hati dengan cara kami menjawab aduan anda, anda boleh menghubungi {service}.',
+      text: 'Suruhanjaya Kesaksamaan dan Hak Asasi Manusia (Equality and Human Rights Commission) menguatkuasakan peraturan kebolehcapaian. Jika anda tidak berpuas hati dengan cara kami menjawab aduan anda, anda boleh menghubungi {service} untuk mendapatkan bantuan.',
       service:
         'Perkhidmatan Nasihat dan Sokongan Kesaksamaan (Equality Advisory and Support Service, dibuka dalam tab baharu)',
     },
     compliance: {
       heading: 'Status pematuhan',
-      text: 'Alat ini mematuhi sebahagian Garis Panduan Kebolehcapaian Kandungan Web (WCAG) versi 2.2 pada tahap AA, iaitu tahap pertengahan daripada tiga tahapnya. Setakat ini hanya semakan automatik telah dijalankan, jadi kami belum dapat menyatakan bahawa alat ini mematuhinya sepenuhnya. Kami menyasarkan tahap AAA, iaitu tahap tertinggi.',
+      text: 'Alat ini mematuhi sebahagian Garis Panduan Kebolehcapaian Kandungan Web (WCAG) versi 2.2 pada tahap AA, iaitu tahap pertengahan daripada tiga tahapnya. Setakat ini hanya semakan automatik, dan semakan manual kami sendiri semasa membinanya, telah dijalankan, jadi kami belum dapat menyatakan bahawa alat ini mematuhinya sepenuhnya. Kami menyasarkan tahap AAA, iaitu tahap tertinggi.',
     },
     testing: {
       heading: 'Cara kami menguji alat ini',
@@ -832,7 +833,7 @@ export const msMY: Messages = {
       items: [
         'penggunaan alat ini dengan papan kekunci sahaja',
         'penggunaannya dengan pembaca skrin NVDA dalam Chrome pada Windows, dan dengan VoiceOver pada Mac',
-        'pembesaran paparan hingga 400%, dan skrin selebar 320 piksel',
+        'pembesaran paparan hingga 400%, dan penggunaan skrin selebar 320 piksel',
         'tema kontras Windows',
         'alat automatik kedua, seperti axe atau Lighthouse',
         'sesi bersama kakitangan kurang upaya yang menggunakan alat ini',
@@ -863,7 +864,7 @@ export const msMY: Messages = {
     downloadIos: 'Menyimpan ke aplikasi Fail, di bawah Muat Turun',
     downloadOther: 'Menyimpan ke folder muat turun anda',
     download:
-      '{where} — pelayar mungkin masih sedang menyelesaikannya. Sebaik sahaja ia berada di sana, muat naik ke tempat yang dituju atau pilih video lain dalam langkah 1.',
+      '{where} — pelayar mungkin masih sedang menyelesaikannya. Sebaik sahaja ia berada di sana, muat naik ke tempat anda akan menggunakannya, atau pilih video lain dalam langkah 1.',
   },
   format: {
     unknown: 'tidak diketahui',

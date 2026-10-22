@@ -220,7 +220,7 @@ describe('sentences the spec names (VH-114)', () => {
     expect(page).not.toMatch(/reply will come/)
   })
   it('says "picture size", and scopes the never-sent promise to the details (A-20)', () => {
-    expect(page).toMatch(/picture size and format/)
+    expect(page).toMatch(/picture size, and format/)
     expect(page).toMatch(/These details never include the video/)
   })
 })

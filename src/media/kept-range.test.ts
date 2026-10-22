@@ -52,8 +52,8 @@ describe('normaliseKeptRange', () => {
   })
 
   it.each([
-    [{ startSeconds: Number.NaN, endSeconds: 10 }, /not a time/],
-    [{ startSeconds: 0, endSeconds: Number.POSITIVE_INFINITY }, /not a time/],
+    [{ startSeconds: Number.NaN, endSeconds: 10 }, /could not be read as a time/],
+    [{ startSeconds: 0, endSeconds: Number.POSITIVE_INFINITY }, /could not be read as a time/],
     [{ startSeconds: 130, endSeconds: 140 }, /after the end of the video/],
     [{ startSeconds: 50, endSeconds: 40 }, /end must come after the start/],
     [{ startSeconds: 50, endSeconds: 50 }, /end must come after the start/],

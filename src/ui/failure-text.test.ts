@@ -38,7 +38,7 @@ describe('failureText', () => {
   it('fits the next step to the cause', () => {
     expect(failureText('unlevellable').next).not.toMatch(/different file|try again/i)
     expect(failureText('out-of-space').next).toContain('Free some space')
-    expect(failureText('encoder-refused').next).toContain('other output')
+    expect(failureText('encoder-refused').next).toContain('other option')
     expect(failureText('unreadable-source').next).toContain('Choose a different file')
     expect(failureText('bad-trim').next).toContain('step 2')
     // The card's words are the cause, so the way on is shortening them (VH-127).

@@ -177,7 +177,7 @@ describe('warn and discourage keep every sentence (VH-89)', () => {
       summary('warn', [['estimate-unavailable', 'warn']], { probe: unmeasured }),
     )
     expect(lines).toEqual([
-      'We could not work out how long this will take on this device. You can still continue.',
+      'We could not estimate how long this will take on this device. You can still continue.',
       'Estimated size up to 28.5 MB.',
     ])
   })

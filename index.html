@@ -378,7 +378,7 @@
               ></textarea>
               <!-- Painted from the table with STUDENT_ID_DIGITS and STUDENT_IDS_MAX (VH-140); this is the no-script English. -->
               <p class="helper" id="submission-card-ids-helper">
-                Each student ID (identity) number is 8 digits. Type up to 8, with spaces, commas or new lines
+                Each student ID (identity) number is 8 digits. Type up to 8, with spaces, commas, or new lines
                 between them. Do not add names.
               </p>
               <div aria-live="polite">
@@ -614,7 +614,7 @@
         <!-- Spec 7.5: the finished video is not kept past the tab, said before
              Create (VH-109) — until a result's own line says it (VH-107). -->
         <p class="helper" id="create-note" data-i18n="create.note" hidden>
-          The finished video is kept here until you save it or close this tab.
+          The finished video stays here until you start another video or close this tab. Save it before then.
         </p>
       </section>
 
@@ -729,9 +729,9 @@
             <h3 data-i18n="statement.compliance.heading">Compliance status</h3>
             <p data-i18n="statement.compliance.text">
               This tool is partially compliant with version 2.2 of the Web Content Accessibility
-              Guidelines (WCAG), at level AA, the middle of their three levels. Only automated checks
-              have been run so far, so we cannot yet say it fully meets them. We aim for level AAA,
-              the highest.
+              Guidelines (WCAG), at level AA, the middle of their three levels. Only automated checks,
+              and our own checks by hand while building it, have been run so far, so we cannot yet
+              say it fully meets them. We aim for level AAA, the highest.
             </p>
 
             <h3 data-i18n="statement.testing.heading">How we tested this tool</h3>
@@ -752,7 +752,7 @@
               <li data-i18n="statement.plans.items.1">
                 using it with the NVDA screen reader in Chrome on Windows, and with VoiceOver on a Mac
               </li>
-              <li data-i18n="statement.plans.items.2">zooming in to 400%, and a screen 320 pixels wide</li>
+              <li data-i18n="statement.plans.items.2">zooming in to 400%, and using a screen 320 pixels wide</li>
               <li data-i18n="statement.plans.items.3">Windows contrast themes</li>
               <li data-i18n="statement.plans.items.4">a second automated tool, such as axe or Lighthouse</li>
               <li data-i18n="statement.plans.items.5">a session with disabled staff who use the tool</li>
@@ -818,7 +818,7 @@
         </div>
         <details class="disclosure">
           <summary class="disclosure-summary" data-i18n="feedback.whatSent">What will be sent with it</summary>
-          <p class="helper" data-i18n="feedback.whatSentDetail">Details that help find a problem: the tool’s version, your browser, how far you got, and your video’s length, picture size and format. These details never include the video, its name, or anything in it.</p>
+          <p class="helper" data-i18n="feedback.whatSentDetail">Details that help find a problem: the tool’s version, your browser, how far you got, and your video’s length, picture size, and format. These details never include the video, its name, or anything in it.</p>
           <!-- The details themselves are English diagnostics for the
                maintainer, and say so to assistive technology (VH-105). -->
           <pre class="feedback-details" id="feedback-details" lang="en-GB"></pre>

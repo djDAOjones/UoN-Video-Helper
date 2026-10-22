@@ -206,7 +206,7 @@ export async function inspectFile(
   } catch (cause) {
     throw new UnreadableFileError(
       'not-a-video',
-      'This file could not be read as a video. It needs to be a video file — one whose name ends .mp4, .mov, .mkv or .webm — and it may be damaged.',
+      'This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm.',
       cause,
     )
   }

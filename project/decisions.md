@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-22 — VH-156 — The writing review's proposals applied; the decode-damage detail says "video" and "undamaged audio", never "recording"
+
+**Decision:** the 20 proposals VH-153 had not applied are applied to `en-GB.ts` and `index.html` as the review worded them, with "audio" where they name it; the decode-damage detail says "the original video", "not from your video" and "louder than undamaged audio can be"; Chinese and Malay rows whose meaning changed are redrafted as the agent's drafts, and rows where only an English idiom or comma changed keep their translation; the enforcement sentence says "you can contact the {service} for help", because "contact" alone put it over the reading-grade limit.
+
+**Rationale:** The owner's "approved" (PLAN-4.1) and PLAN-5.2's words (PLAN-5, 2026-10-22). VH-153 had applied `trim.intro`, `browserNote.pending`, `browserNote.notPassed` and `failure.captured`, so those four stand. 47 rows changed: 30 with Chinese and Malay drafts, `statement.plans.items.2` with Malay alone. The review's section 4 predicted the gate on "contact": 10.4 against a limit of 10; "for help" brings it to 9.8 and is true of the advisory service. The Chinese ends-early lines drop their colon for a full stop, as the English does. `inspect.ts` and `kept-range.ts` carry English copies of two errors in their thrown messages; they now say the same words. Seven test files pinned the old words; each now pins the new, and "picture size, and format" changed with its string. The spec quotes none of the changed words (§8.3's "destination must supply captions" and §7's "spaces, commas or new lines" are its own prose). VH-122's entry is superseded for its English detail's words only. Chrome, three languages: the rows a loaded file reaches; the rest VH-156.1. Standards: UI-STANDARDS, the same words for the same concepts and errors that say what next; Nielsen 9; WCAG 3.1.5; house conventions, strings through the sheet, regression tests by category, minimal change. No dependency changed. Not checked by a second model.
+
+**Supersedes:** 2026-10-20 — VH-122 — The decode-damage words stand, the Chinese without a space after 在, and §5.4 gains its row first
+
+**Deferred:** none
+
 ## 2026-10-22 — VH-155 — "Audio" for the file's audio in all three languages; "sound" only for a noise or a verb; "This tool" opens the browser sentence
 
 **Decision:** 36 rows say "audio" (音频, "audio") where they said "sound" (声音, "bunyi") for the file's audio, and the three browser sentences open "This tool" (此工具, "Alat ini"); "sound" stays for a noise in the room, for "silent" and as a verb; string keys such as `noSound` and `soundHeading` keep their names, so only words change; VH-156 writes any proposal that names the audio with "audio".
@@ -543,16 +553,6 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Decision:** slice (a)'s record is the 10 of 18 runs made while the in-app browser's pane was shown. The 8 that overlapped a hidden stretch are left out, so Philosophy on Smaller has no measured run — because a hidden pane runs as a background page and those runs were up to 15% slower, and the owner chose on 2026-10-20 to record the 10 rather than re-run while other sessions held the load near 30.
 
 **Rationale:** The page's `visibility-state` timeline put the hidden stretches at 177–204, 414–570 and 607–684 s, and summing each run's own times put runs 6 and 12–18 in them. Over the 10, the probe reads 0.51–0.70 real over predicted, the warm-ups 0.64–0.86, and the job's own rate after 10 s 0.96–1.00; VH-116's notes hold the table. Slice (b) chooses from these. The page now flags a hidden run itself, so a later run needs no reconstruction.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-20 — VH-122 — The decode-damage words stand, the Chinese without a space after 在, and §5.4 gains its row first
-
-**Decision:** the warning's English stands as built; the agent's Chinese and Malay stand as drafted, machine translation like the rest, except that the Chinese detail's "在 {times}" is now "在{times}"; spec §5.4's table gains the decode-damage row word for word as drafted, as its first row — because the owner chose the recommended options in chat on 2026-10-20, after CULT2011 passed in Chrome.
-
-**Rationale:** Asked in slice (b)'s one round, after the Chrome check in VH-122's notes: for the English, "Keep as built" over a shorter detail without the levelling clause; for the translations, "Stand, Chinese space fixed" over standing exactly as drafted; for the row, "As drafted, first row" over last, since the warning comes first in pre-flight and the row says it is the one that reports what was done. The fix went through the sheet: both detail rows keep "drafted by the agent" and add the repair, and `scripts/strings-table.mjs` regenerated `src/i18n/zh-Hans.ts`. The reason put to the owner, that the Chinese page sets no space before a number, holds for the Step 6 lines beside the warning (需要1分钟, 可达189 MB) but not for every placeholder (另外 {count} 条音轨), so `warnings.decodeDamage.more` keeps its spaces, as its sibling rows do. Chrome's decode put the damage in the blocks ffmpeg's did, so the +6 dBFS threshold and the one-block neighbours stand as decided.
 
 **Supersedes:** none
 

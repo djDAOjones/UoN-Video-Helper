@@ -289,7 +289,7 @@ describe('the ID numbers’ rules come from config, in the words too (VH-140, de
     }
     expect(studentIdsHelperLines()).toEqual([
       'Each student ID (identity) number is 8 digits.',
-      'Type up to 8, with spaces, commas or new lines between them. Do not add names.',
+      'Type up to 8, with spaces, commas, or new lines between them. Do not add names.',
     ])
   })
 

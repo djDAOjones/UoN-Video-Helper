@@ -146,7 +146,7 @@ export const enGB = {
       nothing: 'Nothing was dropped that could be read. Drop a video file.',
       several: 'That was {count} files. Drop one video at a time.',
       notVideo:
-        'That is not a video file. Drop a video — a file whose name ends .mp4 or .mov, say — or choose one above.',
+        'That is not a video file. Drop a video file, such as one whose name ends .mp4 or .mov, or choose one above.',
     },
   },
 
@@ -174,7 +174,7 @@ export const enGB = {
     rotated: 'Rotated {degrees}°. The output will be upright.',
     variesOnAverage: '{rate} on average, but it varies',
     variesNote:
-      'Recordings from Teams, Zoom and screen capture often vary. The output will use a steady frame rate, which keeps audio and picture in step.',
+      'Recordings from Teams, Zoom, and screen capture often vary. The output will use a steady frame rate, which keeps audio and picture in step.',
     outputRate: 'The output will run at {rate}, so some frames will be repeated.',
     /** The figure, with its meaning beside it (spec 9.2). */
     sampleRate: '{kilohertz} kHz — {hertz} samples a second',
@@ -190,14 +190,14 @@ export const enGB = {
     losses: {
       extraTracksTitle: 'This file has {found}',
       extraTracksDetail:
-        'The new file keeps one picture and one audio track — the ones listed under Video properties. The others will not be carried over, and one of them may hold an alternative, such as another language or an audio description. If you need them, keep the original alongside.',
+        'The new file keeps one picture and one audio track — the ones listed under Video properties. The others will not be carried over, and one of them may hold an alternative, such as another language or an audio description. If you need them, keep the original file alongside the new one.',
       uncheckedTitle: 'Caption and chapter tracks could not be checked',
       uncheckedDetail:
-        'This kind of file cannot be checked for them. If yours has them, they will not be carried over.',
+        'This kind of file cannot be checked for caption or chapter tracks. If your file has them, they will not be carried over.',
       captionsConsequence:
-        'The new file will have no caption track, so wherever you publish it must supply captions. EchoVideo makes its own after upload — check them. A file sent directly needs captions added by you. Captions drawn into the picture stay.',
+        'The new file will have no caption track, so captions must come from wherever you publish it. EchoVideo makes its own captions after upload, so check them. If you send the file directly, add captions yourself. Captions drawn into the picture stay.',
       chaptersConsequence: 'The chapters will not be in the new file.',
-      keepOriginals: 'If you need the originals, keep this file alongside.',
+      keepOriginals: 'If you need the original tracks, keep this file alongside the new one.',
     },
   },
 
@@ -215,7 +215,7 @@ export const enGB = {
     format: 'Minutes and seconds, like 1:05.5, or seconds, like 65.5.',
     useWhole: 'Use the whole video',
     reading: 'Reading the video…',
-    unreadable: 'There is no video to trim: that file could not be read.',
+    unreadable: 'There is no video to trim, because that file could not be read.',
     tooShort: 'It is shorter than {seconds} seconds, so it cannot be trimmed.',
     keepingWhole: 'Keeping the whole video, {duration}.',
     keeping: 'Keeping {kept} of {duration}.',
@@ -231,12 +231,12 @@ export const enGB = {
         start: 'The start time is after the end of the video, which is {length} long.',
         end: 'The end time is after the end of the video, which is {length} long.',
       },
-      notTimes: 'The start or end of the video is not a time.',
+      notTimes: 'The start or end time could not be read as a time.',
       startAfterEnd: 'The start is after the end of the video.',
       endBeforeStart: 'The end must come after the start.',
       keepAtLeast: 'Keep at least {seconds} seconds of the video.',
     },
-    correctToContinue: 'Put the start and end times right in step 2 to continue.',
+    correctToContinue: 'Correct the start and end times in step 2 to continue.',
   },
 
   /** Step 3, the staff video's title card before the video (VH-127). The card itself has no labels. */
@@ -264,7 +264,7 @@ export const enGB = {
     },
     /** Beside the box, when Create is pressed with the box ticked and every field empty. */
     empty: 'Fill in at least one of the four fields, or untick Add a title card.',
-    correctToContinue: 'Put the title card right in step 3 to continue.',
+    correctToContinue: 'Correct the title card in step 3 to continue.',
     /** Submission's four fields on the page (VH-128); the card draws its own labels, from `card`. */
     submission: {
       /** Under the box, before the four fields: every one is needed, before Create says so (VH-140). */
@@ -276,7 +276,7 @@ export const enGB = {
       /** {digits} and {max} come from `config/cards.ts`, so the words and the check cannot part (VH-140, V-29). */
       idsHelper: 'Each student ID (identity) number is {digits} digits.',
       idsHelperNext:
-        'Type up to {max}, with spaces, commas or new lines between them. Do not add names.',
+        'Type up to {max}, with spaces, commas, or new lines between them. Do not add names.',
       /** Under the fields: what the app adds to the card itself, the running time as a clock time. */
       filled:
         'The card also shows the running time, {running}, and today’s date, marked as the date the card was made, not the submission date.',
@@ -289,8 +289,8 @@ export const enGB = {
       },
       /** Beside the ID numbers, when Create is pressed: what is wrong, quoting the number. */
       idNotAnId: '“{id}” is not a student ID number. Each is {digits} digits.',
-      idTwice: '{id} is in the list twice. Take one out.',
-      idsTooMany: 'That is {count} numbers. The card takes up to {max}.',
+      idTwice: '{id} is in the list twice. Remove one.',
+      idsTooMany: 'That is {count} numbers. The card holds up to {max}.',
     },
     /** Drawn on Submission in the video's language, never shown on the page (VH-128). */
     card: {
@@ -378,7 +378,7 @@ export const enGB = {
 
   create: {
     lockedStopping: 'Locked while the job stops.',
-    note: 'The finished video is kept here until you save it or close this tab.',
+    note: 'The finished video stays here until you start another video or close this tab. Save it before then.',
     announceProgress: 'Announce progress',
     announceHelp:
       'Says each stage out loud for a screen reader as the video is made. The result is always announced.',
@@ -410,9 +410,9 @@ export const enGB = {
     saveStopped: 'Save stopped. The video is still here when you want it.',
     notSaved: 'Not saved. The video is still here when you want it.',
     refusedSource:
-      'That is the file you started with. Choose a different name or folder — this tool never changes your original.',
+      'That is the file you started with. Choose a different name or folder, because this tool never changes your original.',
     saved:
-      'Saved. Check it where you saved it, then upload it where it is going — or choose another video in step 1.',
+      'Saved. Open the saved file to check it, then upload it to where you will use it, or choose another video in step 1.',
     storageWayOut:
       'Keep less of the video, choose {smaller}, or free some space, then press Check again.',
     creating: 'Creating your video. {notice}',
@@ -433,7 +433,7 @@ export const enGB = {
   result: {
     finished: 'Finished video — {size}',
     previous: 'Previous video — {size}',
-    lifetime: 'It is kept here only until you save it or close this tab.',
+    lifetime: 'It is not saved yet. It stays here until you start another video or close this tab.',
     lifetimeDelivered: 'It stays here until you start another video or close this tab.',
     /** "the whole video (4 minutes, 12 seconds)". */
     keptWhole: 'the whole video ({duration})',
@@ -490,11 +490,11 @@ export const enGB = {
      * {stops}, {picture}, {sound} and {end} are times, like "0:20".
      */
     endedEarly: {
-      picture: 'The file you chose ends early: its picture stops at {stops} of {end}.',
-      sound: 'The file you chose ends early: its audio stops at {stops} of {end}.',
+      picture: 'The file you chose ends early. Its picture stops at {stops} of {end}.',
+      sound: 'The file you chose ends early. Its audio stops at {stops} of {end}.',
       /** Both stop within the same second. */
-      together: 'The file you chose ends early: its picture and audio stop at {stops} of {end}.',
-      both: 'The file you chose ends early: its picture stops at {picture} and its audio at {sound}, of {end}.',
+      together: 'The file you chose ends early. Its picture and audio stop at {stops} of {end}.',
+      both: 'The file you chose ends early. Its picture stops at {picture} and its audio at {sound}, of {end}.',
       /** Follows when the picture stopped and a closing follows it. */
       held: 'From there until the closing graphics, the video holds its last picture.',
       next: 'If you have a complete copy, create the video again from that one.',
@@ -612,19 +612,19 @@ export const enGB = {
       insufficientStorage:
         'There is not enough free space on this device. This job needs about {size} of working space. Free some space and try again.',
       storageUnknown:
-        'This browser will not say how much free space there is. If it runs out part-way, the job stops and nothing is saved — your original file is not affected.',
+        'This browser will not say how much free space there is. If it runs out part-way, the job stops and nothing is saved. Your original file is not affected.',
       veryLongJob:
-        'This will take about {time}. You can carry on, but a desktop computer would be considerably faster.',
+        'This will take about {time}. You can continue, but a desktop computer would be considerably faster.',
       veryLongJobUnknown:
-        'This will take about a long time. You can carry on, but a desktop computer would be considerably faster.',
+        'This will take a long time. You can continue, but a desktop computer would be considerably faster.',
       longJob:
-        'This will take about {time}. Keep this tab open while it runs — closing it stops the job.',
+        'This will take about {time}. Keep this tab open while the job runs, because closing the tab stops the job.',
       longJobUnknown:
-        'This will take about a while. Keep this tab open while it runs — closing it stops the job.',
+        'This will take a while. Keep this tab open while the job runs, because closing the tab stops the job.',
       mobileDevice:
         'Phones and tablets are much slower at this than a computer, and the browser there may end the job part-way to free memory. Use a computer if you can.',
       estimateUnavailable:
-        'We could not work out how long this will take on this device. You can still continue.',
+        'We could not estimate how long this will take on this device. You can still continue.',
     },
     shouldTake: 'This should take about {time}.',
     shouldTakeFewSeconds: 'This should take a few seconds.',
@@ -659,9 +659,9 @@ export const enGB = {
         other: 'Damaged moments will be silenced',
       },
       detail: {
-        one: 'At {times} in the original recording, the file holds a burst of noise louder than any recording can be. It comes from damage to the file, not from your recording. That fraction of a second will be silent instead, so no one hears it and the levelling still works as it should.',
+        one: 'At {times} in the original video, the file holds a burst of noise louder than undamaged audio can be. It comes from damage to the file, not from your video. That fraction of a second will be silent instead, so no one hears it and the levelling still works as it should.',
         other:
-          'At {times} in the original recording, the file holds bursts of noise louder than any recording can be. They come from damage to the file, not from your recording. Each fraction of a second will be silent instead, so no one hears them and the levelling still works as it should.',
+          'At {times} in the original video, the file holds bursts of noise louder than undamaged audio can be. They come from damage to the file, not from your video. Each fraction of a second will be silent instead, so no one hears them and the levelling still works as it should.',
       },
       /** Ends the list of times when there are more than the warning lists. */
       more: { one: '{count} other moment', other: '{count} other moments' },
@@ -674,7 +674,7 @@ export const enGB = {
     veryQuiet: {
       heading: 'This recording is very quiet',
       detail:
-        'It is well below a comfortable listening level. Levelling will bring it up — but turning up quiet speech turns up whatever else was in the room too.',
+        'It is well below a comfortable listening level. Levelling will raise its level, but raising quiet speech also raises any other sound recorded in the room.',
     },
     highlyVariable: {
       heading: 'The volume varies a lot',
@@ -697,9 +697,9 @@ export const enGB = {
         'The video is fine to use; it may just sound slightly quieter or louder than other videos levelled with this tool.',
     },
     metadataLost: {
-      heading: 'The file’s title and date could not be copied across',
+      heading: 'The file’s title, author, and date could not be copied across',
       detail:
-        'The picture and audio are unaffected. If your original carried a title, author or date, the new file will not have them — you can still add them wherever you upload it.',
+        'The picture and audio are unaffected. If your original carried a title, author, or date, the new file will not have them. You can still add them wherever you upload it.',
     },
   },
 
@@ -721,23 +721,23 @@ export const enGB = {
     unreadable: {
       what: 'This file could not be read as a video.',
       notAVideo:
-        'This file could not be read as a video. It needs to be a video file — one whose name ends .mp4, .mov, .mkv or .webm — and it may be damaged.',
+        'This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm.',
       soundOnly:
         'This file has audio but no video. This tool adds branding to a video, so it needs a file with a picture.',
       noTracks:
         'No video or audio was found in this file. It may be incomplete, or it may have been saved incorrectly.',
       readError:
         'Something went wrong reading this file. It may be damaged, or in a format this tool cannot read.',
-      tookTooLong: 'Reading this file took longer than expected, or the tool ran into a problem.',
+      tookTooLong: 'Reading this file took longer than expected, or the tool had a problem.',
       next: 'Choose a different file, or save this one again from the app that made it, as a file whose name ends .mp4.',
     },
     badTrim: {
       what: 'The start and end times could not be used.',
-      next: 'Put the start and end times right in step 2 and try again.',
+      next: 'Correct the start and end times in step 2 and try again.',
     },
     unlevellable: {
       what: 'The audio of this recording cannot be brought to the usual level, so the video was not made.',
-      next: 'Report it with the Send feedback button — the details it adds will help.',
+      next: 'Report the problem with the Send feedback button, which adds details that will help.',
     },
     outputLoudness: {
       what: 'The finished audio did not come out at the usual level, so the video was not kept.',
@@ -752,11 +752,11 @@ export const enGB = {
     },
     encoderRefused: {
       what: 'This browser stopped encoding the video part-way through.',
-      next: 'Try the other output under File size / quality. If it happens again, report it with the Send feedback button — the details it adds will help.',
+      next: 'Try the other option under File size / quality. If the problem happens again, report it with the Send feedback button, which adds details that will help.',
     },
     checkFailed: {
       what: 'The device check did not finish.',
-      next: 'Press Check again to run it once more. If it fails again, report it with the Send feedback button.',
+      next: 'Press Check again to run the check once more. If the check fails again, report the problem with the Send feedback button.',
     },
     timedOut: { what: 'The job stopped reporting progress, so it was stopped.' },
     titleCardRefused: {
@@ -766,7 +766,7 @@ export const enGB = {
     unknown: { what: 'Something went wrong while creating the video.' },
     /** The next step for the failures whose remedy is to try again. */
     tryAgain:
-      'Try again. If it happens again, report it with the Send feedback button — the details it adds will help.',
+      'Try again. If the problem happens again, report it with the Send feedback button, which adds details that will help.',
     startup: {
       insecure:
         'This page needs a secure connection before it can work with your video. Open it at an address that starts https://.',
@@ -776,7 +776,7 @@ export const enGB = {
       noWorkingStore:
         'This browser gives the tool no working space to create a video in. If you are browsing privately, an ordinary window usually works. {remedy}',
       workerNotStarted:
-        'The part of the tool that does the work did not start. Reload the page. If it happens again, report it with the Send feedback button.',
+        'The part of the tool that does the work did not start. Reload the page. If the problem happens again, report it with the Send feedback button.',
     },
     captured:
       'Something in the tool went wrong. A video being made may not finish; your original file is not affected. Report the problem with the Report this problem button, which adds these details.',
@@ -831,15 +831,16 @@ export const enGB = {
     writeFirst: 'Write a message first.',
     whatSent: 'What will be sent with it',
     whatSentDetail:
-      'Details that help find a problem: the tool’s version, your browser, how far you got, and your video’s length, picture size and format. These details never include the video, its name, or anything in it.',
+      'Details that help find a problem: the tool’s version, your browser, how far you got, and your video’s length, picture size, and format. These details never include the video, its name, or anything in it.',
     openEmail: 'Open email app',
     copy: 'Copy message and details',
     close: 'Close',
     tooLong:
-      'Your message is too long to hand to your email app in one go. Choose “Copy message and details” and paste them into an email to {address}.',
+      'Your message is too long to hand to your email app. Choose “Copy message and details” and paste them into an email to {address}.',
     opened:
       'Your email app should have opened with your message ready to send. If it did not, choose “Copy message and details” and paste them into an email to {address}.',
-    someOmitted: 'Some details did not fit in the email; the copy has them all.',
+    someOmitted:
+      'Some details did not fit in the email; “Copy message and details” includes them all.',
     copied: 'Copied. Paste it into an email to {address}.',
     couldNotCopy:
       'Could not copy. Open “What will be sent with it”, select the details, and copy them with your message.',
@@ -887,12 +888,12 @@ export const enGB = {
     enforcement: {
       heading: 'Enforcement procedure',
       /** `{service}` is `service` below, as a link to its website. */
-      text: 'The Equality and Human Rights Commission enforces the accessibility regulations. If you are not happy with how we answer your complaint, you can get in touch with the {service}.',
+      text: 'The Equality and Human Rights Commission enforces the accessibility regulations. If you are not happy with how we answer your complaint, you can contact the {service} for help.',
       service: 'Equality Advisory and Support Service (new tab)',
     },
     compliance: {
       heading: 'Compliance status',
-      text: 'This tool is partially compliant with version 2.2 of the Web Content Accessibility Guidelines (WCAG), at level AA, the middle of their three levels. Only automated checks have been run so far, so we cannot yet say it fully meets them. We aim for level AAA, the highest.',
+      text: 'This tool is partially compliant with version 2.2 of the Web Content Accessibility Guidelines (WCAG), at level AA, the middle of their three levels. Only automated checks, and our own checks by hand while building it, have been run so far, so we cannot yet say it fully meets them. We aim for level AAA, the highest.',
     },
     testing: {
       heading: 'How we tested this tool',
@@ -909,7 +910,7 @@ export const enGB = {
       items: [
         'using the tool with a keyboard alone',
         'using it with the NVDA screen reader in Chrome on Windows, and with VoiceOver on a Mac',
-        'zooming in to 400%, and a screen 320 pixels wide',
+        'zooming in to 400%, and using a screen 320 pixels wide',
         'Windows contrast themes',
         'a second automated tool, such as axe or Lighthouse',
         'a session with disabled staff who use the tool',
@@ -946,7 +947,7 @@ export const enGB = {
     downloadIos: 'Saving to the Files app, under Downloads',
     downloadOther: 'Saving to your downloads folder',
     download:
-      '{where} — the browser may still be finishing it. Once it is there, upload it where it is going, or choose another video in step 1.',
+      '{where} — the browser may still be finishing it. Once it is there, upload it to where you will use it, or choose another video in step 1.',
   },
 
   format: {

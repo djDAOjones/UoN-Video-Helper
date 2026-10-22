@@ -273,7 +273,7 @@ describe('a file that ends early, in the record (VH-139)', () => {
 
   it('says where both stop, once when it is the same second, and that the closing follows a held picture', () => {
     expect(endedEarlyText(audited, true)).toBe(
-      'The file you chose ends early: its picture and audio stop at 0:20 of 0:30. From there until the closing graphics, the video holds its last picture. If you have a complete copy, create the video again from that one.',
+      'The file you chose ends early. Its picture and audio stop at 0:20 of 0:30. From there until the closing graphics, the video holds its last picture. If you have a complete copy, create the video again from that one.',
     )
   })
 
@@ -284,17 +284,17 @@ describe('a file that ends early, in the record (VH-139)', () => {
   it('names each stop when they differ', () => {
     const apart: EndedEarly = { ...audited, sound: { stopsAtSeconds: 12.5, endSeconds: 30 } }
     expect(endedEarlyText(apart, false)).toMatch(
-      /^The file you chose ends early: its picture stops at 0:20 and its audio at 0:12, of 0:30\. /,
+      /^The file you chose ends early\. Its picture stops at 0:20 and its audio at 0:12, of 0:30\. /,
     )
   })
 
   it('names the one track that stopped', () => {
     const sound: EndedEarly = { picture: null, sound: { stopsAtSeconds: 20.84, endSeconds: 30 }, made: null }
     expect(endedEarlyText(sound, true)).toBe(
-      'The file you chose ends early: its audio stops at 0:20 of 0:30. If you have a complete copy, create the video again from that one.',
+      'The file you chose ends early. Its audio stops at 0:20 of 0:30. If you have a complete copy, create the video again from that one.',
     )
     const picture: EndedEarly = { picture: { stopsAtSeconds: 20.92, endSeconds: 30 }, sound: null, made: null }
-    expect(endedEarlyText(picture, true)).toMatch(/^The file you chose ends early: its picture stops at 0:20 of 0:30\. From there/)
+    expect(endedEarlyText(picture, true)).toMatch(/^The file you chose ends early\. Its picture stops at 0:20 of 0:30\. From there/)
   })
 
   it('carries the length made and why into the question before the video is discarded', () => {
@@ -308,11 +308,11 @@ describe('a file that ends early, in the record (VH-139)', () => {
   it('is said in Chinese and Malay, every time filled', () => {
     setLanguage('zh-Hans')
     expect(endedEarlyText(audited, true)).toBe(
-      '您选择的文件提前结束：画面和音频在0:20处停止，而全长应为0:30。从那里到结尾图形，视频会一直停留在最后一帧画面。如果您有完整的副本，请用它重新制作视频。',
+      '您选择的文件提前结束。画面和音频在0:20处停止，而全长应为0:30。从那里到结尾图形，视频会一直停留在最后一帧画面。如果您有完整的副本，请用它重新制作视频。',
     )
     setLanguage('ms-MY')
     expect(endedEarlyText(audited, false)).toBe(
-      'Fail yang anda pilih berakhir lebih awal: gambar dan audionya berhenti pada 0:20 daripada 0:30. Jika anda mempunyai salinan yang lengkap, cipta video itu semula daripada salinan tersebut.',
+      'Fail yang anda pilih berakhir lebih awal. Gambar dan audionya berhenti pada 0:20 daripada 0:30. Jika anda mempunyai salinan yang lengkap, cipta video itu semula daripada salinan tersebut.',
     )
   })
 })

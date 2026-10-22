@@ -60,7 +60,7 @@ export function normaliseKeptRange(
   if (!requested) return null
   const { startSeconds, endSeconds } = requested
   if (!Number.isFinite(startSeconds) || !Number.isFinite(endSeconds)) {
-    throw new KeptRangeError('not-a-time', 'The start or end of the video is not a time.')
+    throw new KeptRangeError('not-a-time', 'The start or end time could not be read as a time.')
   }
   const start = startSeconds <= KEPT_EDGE_TOLERANCE_SECONDS ? 0 : startSeconds
   const end =

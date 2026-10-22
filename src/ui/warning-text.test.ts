@@ -98,13 +98,13 @@ describe('decode damage, said with its times (VH-122)', () => {
   it('names one time, floored, so seeking to it lands before the damage', () => {
     const { heading, detail } = said([82.9])
     expect(heading).toBe('A damaged moment will be silenced')
-    expect(detail).toMatch(/^At 1:22 in the original recording, the file holds a burst of noise/)
+    expect(detail).toMatch(/^At 1:22 in the original video, the file holds a burst of noise/)
   })
 
   it('lists several as the language lists them', () => {
     const { heading, detail } = said([82.41, 185.34])
     expect(heading).toBe('Damaged moments will be silenced')
-    expect(detail).toMatch(/^At 1:22 and 3:05 in the original recording, the file holds bursts of noise/)
+    expect(detail).toMatch(/^At 1:22 and 3:05 in the original video, the file holds bursts of noise/)
   })
 
   it('says a time once, however many stretches share its second', () => {
