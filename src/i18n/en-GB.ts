@@ -368,9 +368,6 @@ export const enGB = {
 
   create: {
     lockedStopping: 'Locked while the job stops.',
-    showProgressHelp:
-      'Untick to hide the changing bar, stage and time left. The video keeps being made.',
-    showProgress: 'Show progress',
     note: 'The finished video is kept here until you save it or close this tab.',
     announceProgress: 'Announce progress',
     announceHelp:

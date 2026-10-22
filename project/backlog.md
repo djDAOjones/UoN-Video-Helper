@@ -28,7 +28,6 @@ The public release, 0.2.0, on Xerte (PLAN-6).
 
 ### Phase 5 — what the review of the Codex run found: the job's state, disabled controls, the tests, the words
 
-- [ ] VH-150 — The job's state after VH-141: the stop withdrawn, a fresh bar, one primary button, Show progress withdrawn, and pins — since 2026-10-22 — (from: VH-149, 2026-10-22)
 - [ ] VH-151 — Disabled controls look disabled, and the trim field never forces a sideways scroll — since 2026-10-22 — (from: VH-149, 2026-10-22)
 - [ ] VH-152 — Tests that guard what the page draws: the Chinese date, the read line, None's reason — since 2026-10-22 — (from: VH-149, 2026-10-22)
 - [ ] VH-153 — The words after VH-148: the trim intro's verb, the browser sentence, "(new tab)", the sheet's notes — since 2026-10-22 — (from: VH-149, 2026-10-22)

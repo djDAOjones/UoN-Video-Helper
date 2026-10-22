@@ -8,6 +8,10 @@
      items the canon record shipped before the migration, in v3's form;
      their why is in the frozen canon decision log (history.md). -->
 
+## Phase 5 — what the review of the Codex run found
+
+- VH-150 — the job's state: Show progress withdrawn and Announce progress kept, a fresh bar per job, "The job is stopping" withdrawn once the worker settles, Save the one primary beside an unreadable file, a result's warnings beside it, Set end to its own field, VH-141's states pinned; checked in Chrome at 1280 px in English, the rest a wish line (2026-10-22) — see decisions
+
 ## The Codex run reviewed
 
 - VH-149 — the second-model check of Codex's 21 October run: a blocked start-up's reason and "Video read. No sound." stay on step 1's line beside a new announcer; a save pin restored; Chinese and Malay sentences read again; other findings to the owner (2026-10-22) — see decisions

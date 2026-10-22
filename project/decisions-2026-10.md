@@ -262,3 +262,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-19 — VH-127 — The staff card's Chinese and Malay stand as the agent drafted them
+
+**Decision:** the agent's Chinese and Malay for `steps.titleCard`, the `titleCard` group, `failure.titleCardRefused`, `videoLanguage.helper`'s second sentence and `result.summaryWithCard` stand as drafted, machine translation like the rest of the translated pages — because the owner approved them in chat on 2026-10-19.
+
+**Rationale:** Slice (c) drafted eighteen rows and slice (d) one more, each marked "drafted by the agent" in `reviews/2026-10-18/VH-105-strings-filled.csv`. The owner was shown every row beside its English and approved the eighteen as drafted, then the record line's. The marks stay in the sheet, so a translator's review can still find them; a correction goes through the sheet and `scripts/strings-table.mjs`.
+
+**Supersedes:** none
+
+**Deferred:** none

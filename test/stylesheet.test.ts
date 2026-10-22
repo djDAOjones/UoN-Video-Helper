@@ -176,3 +176,13 @@ describe('explicit browser defaults and type roles (VH-145)', () => {
     expect(rules).toContain('.closing-result,\n.trim-result {')
   })
 })
+
+describe('disabled fields (VH-141, pinned by VH-150)', () => {
+  it('draw a locked description field like a locked select or text field: no fill, a dashed edge', () => {
+    // VH-141 added the textarea to the group; a field that keeps its fill
+    // reads as live while the job runs (VH-112, U-12).
+    const group = /\.select:disabled,\s*\.text-input:disabled,\s*\.textarea:disabled\s*\{([^}]*)\}/.exec(rules)?.[1] ?? ''
+    expect(group).toContain('background: transparent')
+    expect(group).toMatch(/border:\s*var\(--border-width\) dashed var\(--border-subtle\)/)
+  })
+})

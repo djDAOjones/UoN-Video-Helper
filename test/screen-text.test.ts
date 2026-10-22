@@ -229,6 +229,88 @@ describe('the save\'s own line (VH-135)', () => {
   })
 })
 
+describe('the job\'s state (VH-150)', () => {
+  const mainSource = readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8')
+  /** The body of one top-level function in the script, whatever it returns. */
+  const body = (name: string): string =>
+    new RegExp(`function ${name}\\([^)]*\\): [^{]+\\{([\\s\\S]*?)\\n\\}`).exec(mainSource)?.[1] ?? ''
+
+  it('offers no Show progress control: the owner withdrew it, and Announce progress stays, remembered', () => {
+    expect(markup).not.toMatch(/show-progress|Show progress/)
+    expect(mainSource).not.toMatch(/showProgress|show-progress|syncProgressVisibility/)
+    expect(Object.keys(enGB.create)).not.toContain('showProgress')
+    expect(Object.keys(enGB.create)).not.toContain('showProgressHelp')
+    expect(markup).toMatch(/<input type="checkbox" id="announce-progress" checked/)
+    expect(mainSource).toContain('announceProgressBox.checked = readAnnounceProgress(localStore)')
+    expect(mainSource).toContain('writeAnnounceProgress(localStore, announceProgressBox.checked)')
+  })
+
+  it('moves nothing once Cancel is pressed or a failure shows: the report is dropped first', () => {
+    // VH-141's V-14, WCAG 2.2.2: a report in flight must not restart the bar.
+    expect(body('onStage')).toMatch(/^(\s*\/\/[^\n]*)*\s*if \(cancelRequested \|\| jobEnding\) return\n/)
+    expect(body('onStage')).not.toContain('!cancelRequested')
+    expect(body('onStage')).toContain("setTitle('stage')")
+  })
+
+  it('starts every job on an empty bar, never the last job\'s figure', () => {
+    expect(body('beginJob')).toMatch(/progressMemo = NO_PROGRESS\s*resetProgress\(\)/)
+    const reset = body('resetProgress')
+    expect(reset).toContain('processProgress.value = 0')
+    expect(reset).toContain("processProgressText.textContent = ''")
+    expect(reset).toContain("processTimeLeft.textContent = ''")
+    expect(reset).toContain('lastProgress = null')
+  })
+
+  it('regression: withdraws "The job is stopping" once the worker has settled', () => {
+    const settledThen = /await settled\(id\)([\s\S]*?)\n {4}\}\)/.exec(mainSource)?.[1] ?? ''
+    expect(settledThen).toMatch(/setStatus\('', \(\) => t\(\)\.status\.couldNotCreate\(/)
+    expect(settledThen).not.toContain('stoppingAfterFailure')
+  })
+
+  it('keeps Save the one primary button when an unreadable file is chosen beside a result', () => {
+    expect(body('clearTrim')).toContain("if (!resultStanding) fileInput.classList.remove('file-input--chosen')")
+    expect(mainSource.match(/classList\.remove\('file-input--chosen'\)/g)).toHaveLength(1)
+  })
+
+  it('keeps a result\'s lifetime and warnings across a redraw', () => {
+    const result = body('renderResult')
+    // A downloaded result put back says "until the next video", not "until you save it".
+    expect(result).toContain("let lifetimeOf: 'unsaved' | 'delivered' = kept.delivered ? 'delivered' : 'unsaved'")
+    // Painted from the retained result, so "Keep it" and a language change keep them.
+    expect(result).toMatch(/const paint = \(\): void => \{[\s\S]*renderWarnings\(resultWarnings, kept\.warnings,/)
+  })
+
+  it('regression: puts a result\'s warnings beside its notification, not inside it, and without "None of these stop you continuing"', () => {
+    const result = body('renderResult')
+    expect(result).not.toContain('heading.append(resultWarnings)')
+    expect(result).toContain('processResult.replaceChildren(heading, resultWarnings)')
+    expect(result).toContain('{ heading: t().warnings.finishedHeading, reassure: false }')
+  })
+
+  it('clears a failed save\'s notification with any later save message', () => {
+    expect(body('setSaveStatus')).toMatch(/^\s*clear\(saveError\)/)
+  })
+
+  it('regression: says a block that holds after a re-check without "Video read." first', () => {
+    // Its parameter list holds a `() => boolean`, which `body` cannot step over.
+    const preflight = /async function runPreflight\([\s\S]*?\n\}\n/.exec(mainSource)?.[0] ?? ''
+    expect(body('withdrawVerdict')).not.toContain('setSourceReadStatus')
+    expect(body('withdrawVerdict')).toContain('readLineOwed = true')
+    expect(preflight).not.toContain('sourceBlock.childElementCount')
+    // The block takes step 1's line, and the debt with it.
+    expect(preflight).toMatch(/withdrawVerdict\(\)\s*readLineOwed = false\s*show\(sourceBlock/)
+    // Anything else that settles the check pays it back, once.
+    expect(body('payReadLine')).toMatch(/if \(readLineOwed && inspectedReport\) setSourceReadStatus\(inspectedReport\)\s*readLineOwed = false/)
+    expect(preflight.match(/payReadLine\(\)/g)).toHaveLength(4)
+  })
+
+  it('regression: hands focus from each Set button to its own time field', () => {
+    const previewError = /trimPreview\.addEventListener\('error', \(\) => \{([\s\S]*?)\n\}\)/.exec(mainSource)?.[1] ?? ''
+    expect(previewError).toContain('document.activeElement === trimSetEnd ? trimEndField : trimStartField')
+    expect(previewError).toContain('fromPreview(field)')
+  })
+})
+
 describe('the discard question\'s spoken words (VH-135)', () => {
   const mainSource = readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8')
   /** The body of one top-level function in the script. */

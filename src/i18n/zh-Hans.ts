@@ -312,8 +312,6 @@ export const zhHans: Messages = {
   },
   create: {
     lockedStopping: '任务停止过程中已锁定。',
-    showProgressHelp: '取消勾选可隐藏不断更新的进度条、阶段和剩余时间。视频仍会继续制作。',
-    showProgress: '显示进度',
     note: '制作完成的视频会一直保存在这里，直到您保存或关闭此标签页。',
     announceProgress: '播报进度',
     announceHelp: '视频制作过程中，会为屏幕阅读器大声朗读每个阶段。最终结果总会播报。',

@@ -334,9 +334,6 @@ export const msMY: Messages = {
   },
   create: {
     lockedStopping: 'Dikunci semasa kerja dihentikan.',
-    showProgressHelp:
-      'Nyahtanda untuk menyembunyikan bar, peringkat dan baki masa yang berubah. Video terus dibuat.',
-    showProgress: 'Tunjukkan kemajuan',
     note: 'Video yang telah siap kekal di sini sehingga anda menyimpannya atau menutup tab ini.',
     announceProgress: 'Umumkan kemajuan',
     announceHelp:

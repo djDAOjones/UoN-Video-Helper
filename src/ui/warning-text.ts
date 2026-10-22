@@ -98,11 +98,17 @@ export function warningText(warning: AudioWarning): WarningText {
   }
 }
 
-/** Renders warnings into `container`. Nothing is rendered when there are none. */
+/**
+ * Renders warnings into `container`. Nothing is rendered when there are none.
+ *
+ * @param options.reassure - Whether to end on "None of these stop you
+ *   continuing". True before Create; false under a finished video, where
+ *   there is nothing left to continue (VH-150).
+ */
 export function renderWarnings(
   container: HTMLElement,
   warnings: readonly AudioWarning[],
-  options: { readonly heading: string },
+  options: { readonly heading: string; readonly reassure?: boolean },
 ): void {
   container.replaceChildren()
   if (warnings.length === 0) return
@@ -116,7 +122,7 @@ export function renderWarnings(
       }),
       // Advisory, always. Spec 5.4: none of these blocks anything, and
       // saying so is what stops a warning reading like a refusal.
-      tail: [t().warnings.reassurance],
+      ...(options.reassure === false ? {} : { tail: [t().warnings.reassurance] }),
     }),
   )
 }

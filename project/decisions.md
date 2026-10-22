@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-22 — VH-150 — The job's state: Show progress withdrawn, a fresh bar, the stop withdrawn, one primary, and pins
+
+**Decision:** Show progress leaves the page on the owner's word, so the moving progress relies on spec §9.3's reading of WCAG 2.2.2 that it is essential (VH-150.1, for the owner); once the worker settles after a watchdog failure, the job's line says the failure alone, heard once more, which tells a screen-reader user the stop is over; step 1's line stays empty while a withdrawn block is re-checked and gets "Video read." back once, from whatever settles next.
+
+**Rationale:** The owner's words in chat on 2026-10-22, recorded in PLAN-5: "Withdraw it" and "No, Save stays the one primary"; the start relayed by the orchestrator session: "yes, please proceed". R2-1: emptying the line was the other choice, but nothing then said Create was back; the failure's own sentence ends on its next step, so no new string. R2-2: `resetProgress` at the start of every job. R2-3: `clearTrim('unreadable')` restores the chooser's emphasis only when no result stands. R2-4: markup, the three tables, the filled sheet's two rows and `main.ts` lose it; the title goes back to `setTitle('stage')`; V-14 is held by `onStage`'s guard and `hideProgress` on Cancel and failure. R2-5: pins in `test/screen-text.test.ts` ("the job's state (VH-150)") and `test/stylesheet.test.ts`. Rank 3: a result's warnings are a sibling notification without `warnings.reassurance` (`renderWarnings`' new `reassure` option); the dead restore in `runPreflight` became `payReadLine`, called by a clear verdict, a trim to correct, a failed or stopped check, and cancelled by a block that holds; the redundant `!cancelRequested` went; the preview's error hands focus to the field of the Set button that held it. Gate green: 79 files, 1,427 passed, the one existing EBU skip. Chrome, 1280 px, English, a recorded WebM: a second job opened at value 0 with no words; an unreadable file beside an unsaved result left Save the only primary; a finished result's two children are siblings, none nested; Set end here's focus went to the end field. Not reached: a watchdog failure, a storage block, warnings on a result, 375 px, Chinese and Malay (VH-150.3). Retired: VH-141.1 — retired — Show progress is withdrawn; VH-150.1 drafts the reading that replaces it. VH-141.2 — retired — "try Show progress" is gone; VH-150.2 replaces it. Standards: UI-STANDARDS, one primary button per state and System status; Nielsen 7, power features that do not burden beginners, and 1; WCAG 2.2.2, 2.4.3 and 4.1.3; house conventions, regression tests by category, strings through the sheet, minimal change. No new token, string or dependency. Not checked by a second model.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-22 — PLAN-6 — The public release: 0.2.0 on Xerte, Phase 5 then Phase 6, the feedback form beside what exists
 
 **Decision:** the backlog's Current milestone is now the public release, 0.2.0, a release before v1. It is Phase 5 as approved, then Phase 6: VH-160 (the feedback form link), VH-137 (the statement's review), VH-162 (the release cut) and VH-14 (Xerte live). Xerte is the public home, GitHub Pages stays as the unadvertised preview, and the form replaces nothing. These are the owner's answers in chat on 2026-10-22. Person checks, translations, the device envelope and the limits follow the release and do not hold it.
@@ -543,16 +553,6 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Decision:** student ID numbers are typed in one box, separated by spaces, commas or new lines, each exactly 8 digits, one to eight of them; the module's code and title are one field; the card's English is VH-126's measured wording, the assignment as the unlabelled heading, then "Module", "Convenor or tutor", "Student ID numbers", and "Running time" with a clock time beside "Card made" with the date and "— not the submission date"; the card holds 5 s, as the staff card does — because the owner chose the recommended options in chat on 2026-10-19.
 
 **Rationale:** The University's student numbers are 8 digits; one box takes a pasted list and names a wrong number by itself. One module field is the layout `spike-cards.html` measured at 60 columns, so nothing is re-measured. The labels are the ones the measured fit used, so the worst case is already proved to fit 16:9, 16:10, 4:3 and 9:16 in all three languages. Five seconds keeps the pre-flight allowance and the pipeline's one card span; a marker pauses the card to read it, which is why the safe area's foot is deep.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-19 — VH-127 — The staff card's Chinese and Malay stand as the agent drafted them
-
-**Decision:** the agent's Chinese and Malay for `steps.titleCard`, the `titleCard` group, `failure.titleCardRefused`, `videoLanguage.helper`'s second sentence and `result.summaryWithCard` stand as drafted, machine translation like the rest of the translated pages — because the owner approved them in chat on 2026-10-19.
-
-**Rationale:** Slice (c) drafted eighteen rows and slice (d) one more, each marked "drafted by the agent" in `reviews/2026-10-18/VH-105-strings-filled.csv`. The owner was shown every row beside its English and approved the eighteen as drafted, then the record line's. The marks stay in the sheet, so a translator's review can still find them; a correction goes through the sheet and `scripts/strings-table.mjs`.
 
 **Supersedes:** none
 

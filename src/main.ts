@@ -332,7 +332,6 @@ const processTimeLeft = required<HTMLParagraphElement>('#process-time-left')
 const processJobLine = required<HTMLParagraphElement>('#process-job')
 const jobNotice = required<HTMLParagraphElement>('#job-notice')
 const createNote = required<HTMLParagraphElement>('#create-note')
-const showProgressBox = required<HTMLInputElement>('#show-progress')
 const saveError = required<HTMLDivElement>('#save-error')
 const announceField = required<HTMLDivElement>('#announce-field')
 const announceProgressBox = required<HTMLInputElement>('#announce-progress')
@@ -949,8 +948,11 @@ function withdrawVerdict(): void {
   clear(audioWarnings)
   if (sourceBlock.childElementCount > 0) {
     clear(sourceBlock)
-    if (inspectedReport) setSourceReadStatus(inspectedReport)
-    else setSourceStatus('')
+    // Emptied, not restored: a re-check follows, and "Video read." said now
+    // was heard again before a block that still held (VH-150). Whatever
+    // settles next pays it back, once: see `payReadLine`.
+    setSourceStatus('')
+    readLineOwed = true
   }
 }
 
@@ -1346,6 +1348,18 @@ void Promise.all([checkWorker(), bootEncodeSupport])
 let inspectedFile: File | null = null
 /** Its report, so step 1's line can be restored once a block clears (VH-124). */
 let inspectedReport: SourceReport | null = null
+/** Whether a withdrawn block has left step 1's line empty, owed its read summary (VH-150). */
+let readLineOwed = false
+
+/**
+ * Puts step 1's read summary back once a withdrawn block is not coming back:
+ * a clear verdict, a trim to correct first, a stopped or failed check. A
+ * block that holds takes the line itself, and the debt with it.
+ */
+function payReadLine(): void {
+  if (readLineOwed && inspectedReport) setSourceReadStatus(inspectedReport)
+  readLineOwed = false
+}
 
 // A dropped video arrives as a `change` on the picker, so everything below
 // reads it exactly as a chosen one (VH-101). Busy is read at the drop: the
@@ -1388,6 +1402,7 @@ fileInput.addEventListener('change', () => {
   setTitle('none')
   clear(sourceReport)
   clear(sourceBlock)
+  readLineOwed = false
   withdrawVerdict()
   // Hidden, not replaced: the Start and Cancel buttons live for the whole
   // session now, and emptying this container would throw them away (VH-36).
@@ -1495,6 +1510,7 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
   const trim = currentTrim()
   if ('problem' in trim) {
     offerStop(null)
+    payReadLine()
     setStatus(() => t().trim.correctToContinue)
     return
   }
@@ -1549,6 +1565,7 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
         // first (U-05). No sound notes either — "none of these stop you
         // continuing" under a block was the contradiction U-05 found.
         withdrawVerdict()
+        readLineOwed = false
         show(sourceBlock, () => renderPreflight(sourceBlock, summary, context))
         setStatus('')
         // Two exceptions to withdrawing the steps (Codex review of VH-108).
@@ -1576,11 +1593,7 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
       // A storage block the trim or the preset has just cleared: step 1's
       // line goes back to the read summary it carried before the block, and
       // says so once (pre-work defect 2).
-      if (sourceBlock.childElementCount > 0 && inspectedReport) {
-        const restored = inspectedReport
-        setSourceReadStatus(restored)
-      }
-      clear(sourceBlock)
+      payReadLine()
       revealLaterSteps()
       show(preflightReport, () => renderPreflight(preflightReport, summary, context))
       show(audioWarnings, () =>
@@ -1601,6 +1614,7 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
     }
     if (reply.kind === 'failed') {
       const failure = failureFor(reply)
+      payReadLine()
       showFailure(preflightReport, failure)
       // The status line sits beside this now (VH-88), and left alone it went
       // on saying "Checking this video against your device…" under an error.
@@ -1616,6 +1630,7 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
     if (!current()) return
     const fromStop = focusHeldBy([stopCheckButton])
     offerStop('check-again')
+    payReadLine()
     const failure: Failure = { code: 'check-failed' }
     showFailure(preflightReport, failure)
     setStatus('', () => failureSentence(failureWords(failure)))
@@ -1730,7 +1745,9 @@ function clearTrim(notice: 'reading' | 'unreadable'): void {
   applyControlLock()
   if (notice === 'unreadable') {
     revealLaterSteps({ setup: false, create: resultStanding })
-    fileInput.classList.remove('file-input--chosen')
+    // The chooser leads again only when no result stands: beside one, its
+    // Save stays the one primary button (VH-150, the owner's word).
+    if (!resultStanding) fileInput.classList.remove('file-input--chosen')
   }
 }
 
@@ -1956,11 +1973,13 @@ trimClear.addEventListener('click', () => {
 // the job can process may not preview; the times still work without it.
 trimPreview.addEventListener('error', () => {
   if (!previewUrl) return
+  // Each Set button hands focus to its own time field (VH-150).
+  const field = document.activeElement === trimSetEnd ? trimEndField : trimStartField
   const fromPreview = focusHeldBy([trimSetStart, trimSetEnd])
   trimPreviewNote.hidden = false
   announce(() => t().trim.noPreview)
   applyControlLock()
-  fromPreview(trimStartField)
+  fromPreview(field)
 })
 
 // --- Processing ---
@@ -1989,6 +2008,9 @@ let lastProgress: {
 } | null = null
 
 function onStage(stage: PipelineStage, fraction: number): void {
+  // Once Cancel is pressed or a failure is shown, the bar, stage, time left
+  // and tab title stop moving: a report still in flight must not restart them
+  // (VH-141's V-14, WCAG 2.2.2).
   if (cancelRequested || jobEnding) return
   // On arrival: the time left is timed from the encode's own reports (VH-136).
   const atMs = performance.now()
@@ -2007,7 +2029,7 @@ function onStage(stage: PipelineStage, fraction: number): void {
   // Spoken, not shown: the line beside the bar is the one visible account
   // (VH-124), and "Cancelling…" is never written over (pre-work defect 7).
   // Composed again from the same report after a change of language (VH-105).
-  if (view.announce && !cancelRequested) {
+  if (view.announce) {
     setStatus('', () => progressView(stage, fraction, before, true, atMs).announce ?? '')
   }
   // No value at all for a stage whose progress is not measured: the bar is
@@ -2019,20 +2041,8 @@ function onStage(stage: PipelineStage, fraction: number): void {
   processProgressLabel.textContent = view.shown
   processProgressLabel.hidden = false
   processProgress.hidden = false
-  setTitle(showProgressBox.checked ? 'stage' : 'none')
-  syncProgressVisibility()
+  setTitle('stage')
 }
-
-/** Hide automatic visual updates without stopping the job or silencing its outcome (WCAG 2.2.2). */
-function syncProgressVisibility(): void {
-  const hidden = !showProgressBox.checked || !jobInFlight || cancelRequested || jobEnding
-  for (const line of [processProgress, processProgressLabel, processProgressText, processTimeLeft])
-    line.hidden = hidden
-}
-showProgressBox.addEventListener('change', () => {
-  syncProgressVisibility()
-  setTitle(showProgressBox.checked && lastProgress ? 'stage' : 'none')
-})
 
 /** What the tab title is about, so it can be written again in another language. */
 let titleOf: 'none' | 'ready' | 'failed' | 'cancelled' | 'stage' = 'none'
@@ -2264,6 +2274,7 @@ stopCheckButton.addEventListener('click', () => {
   // including a re-check still waiting out the trim's pause (A-11).
   beginSelection()
   cancelTrimRecheck()
+  payReadLine()
   setDiagnosticsContext({ stage: 'inspected' })
   // Check again is beside it, and explains itself (VH-124).
   setStatus(() => t().status.checkStopped)
@@ -2891,6 +2902,7 @@ function beginJob(file: File): void {
   )
   jobCancelId = id
   progressMemo = NO_PROGRESS
+  resetProgress()
   cancelPressedWithFocus = false
   cancelRequested = false
   jobEnding = false
@@ -3023,6 +3035,10 @@ function beginJob(file: File): void {
       hideProgress()
       cancelButton.disabled = true
       await settled(id)
+      // The stop is over: the line keeps the failure and drops "The job is
+      // stopping", which would otherwise stand as the page's last word and be
+      // said again by a change of language (VH-150).
+      setStatus('', () => t().status.couldNotCreate({ sentence: failureSentence(failureWords(failure)) }))
     })
     .finally(() => {
       jobCancelId = null
@@ -3031,6 +3047,19 @@ function beginJob(file: File): void {
       if (handTo) fromCancel(handTo)
       hideProgress()
     })
+}
+
+/**
+ * Empties the bar and its words for a new job, so no job shows another's
+ * percentage or stage — the last job's 100% "Ready", or a failure's last
+ * figure (VH-150).
+ */
+function resetProgress(): void {
+  processProgress.value = 0
+  processProgressText.textContent = ''
+  processProgressLabel.textContent = t().create.progressLabel
+  processTimeLeft.textContent = ''
+  lastProgress = null
 }
 
 /** Takes the bar, its label, the stage line, the time left and the job's own line off the page. */
@@ -3155,8 +3184,9 @@ function renderResult(kept: RetainedResult): HTMLElement {
   // discarded tab, which is why the sentence is here. Gone once it is saved.
   const lifetime = body('')
   heading.append(lifetime)
+  // The output's warnings beside the result's notification, never inside it:
+  // one notification nested in another drew two rails (VH-150).
   const resultWarnings = document.createElement('div')
-  heading.append(resultWarnings)
   /** Which lifetime sentence stands: until saved, or — after a download — until the next video. */
   let lifetimeOf: 'unsaved' | 'delivered' = kept.delivered ? 'delivered' : 'unsaved'
 
@@ -3193,9 +3223,9 @@ function renderResult(kept: RetainedResult): HTMLElement {
     }
     lifetime.textContent =
       lifetimeOf === 'unsaved' ? t().result.lifetime : t().result.lifetimeDelivered
-    renderWarnings(resultWarnings, kept.warnings, { heading: t().warnings.finishedHeading })
+    renderWarnings(resultWarnings, kept.warnings, { heading: t().warnings.finishedHeading, reassure: false })
     save.textContent = saved ? t().create.saved : t().create.save
-    if (!heading.isConnected) processResult.replaceChildren(heading)
+    if (!heading.isConnected) processResult.replaceChildren(heading, resultWarnings)
   }
   show(processResult, paint)
 
