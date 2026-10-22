@@ -1,8 +1,9 @@
 /**
  * The page's language, chosen on the page (VH-105).
  *
- * A content switcher at the top of `main`, above the heading — signed off
- * 2026-10-01 — drawn as the closing colour is: native radios under the
+ * A content switcher in the header band, on the right of the logo (VH-154;
+ * above the heading until then, signed off 2026-10-01) — drawn as the closing
+ * colour is: native radios under the
  * segmented skin, because Carbon's content switcher is a tablist, and the
  * language is a value, not a set of panels. Each option is written in its own
  * language and script and carries its own `lang`, so a reader who cannot read

@@ -302,3 +302,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-19 — PLAN-1 — Band 8 closes with VH-128; VH-122 opens the next work
+
+**Decision:** Band 8 closed on 2026-10-19 with every PLAN-1 item shipped, its backlog heading now "Phase 1 — Band 8, … — CLOSED 2026-10-19" so the checker holds it to PLAN-1's Items; the next item is VH-122 in Band 7 — because it is the first open, unblocked line in Current while Band 6 waits on the owner, as the owner chose on 2026-10-19.
+
+**Rationale:** Reconciled against PLAN-1's Items (VH-126, VH-127, VH-128, VH-131, VH-132): each has its line under Band 8 in project/trajectory.md, and none is open in project/backlog.md; PLAN-1's own deferral, VH-129, waits in the backlog's Icebox. The heading takes "Phase 1" because the closed-phase grammar ties a phase to its PLAN by number, and keeps "Band 8" so the band's name still reads. The owner chose VH-122 in chat on 2026-10-19, recorded in "2026-10-19 — VH-128 — Submission's Chinese and Malay stand as the agent drafted them; VH-122 follows Band 8". Recall, local (this session, from the record alone, not a fresh session): 1, project/trajectory.md under Band 8, newest first: VH-128, VH-127, VH-132, VH-131 — 2; 2, "2026-10-19 — PLAN-1 — Staff video or Student submission, and the video's text in any of the three languages", because the owner said so on 2026-10-19 — 2; 3, deferred: VH-129 in project/backlog.md's Icebox (from PLAN-1, 2026-10-18), and project/wish-list.md's open lines, among them Band 8's from PLAN-1, VH-126, VH-131, VH-127 and VH-128 — 2; 4, VH-122, Band 7 — measured, not yet fixed, in project/backlog.md, named by this entry — 2.
+
+**Supersedes:** none
+
+**Deferred:** none

@@ -45,6 +45,20 @@ describe('the brand bands (VH-92)', () => {
     expect(band).toMatch(/padding:\s*var\(--uon-logo-clear\)\s+var\(--uon-logo-inset\)/)
   })
 
+  it('put the page language on the right of the logo, and wrap it under the logo where both do not fit (VH-154)', () => {
+    // Page language moved up from above the heading, where it pushed step 1
+    // below the first screen (V-18).
+    const band = /\.band--header \.band-inner\s*\{([^}]*)\}/.exec(rules)?.[1] ?? ''
+    expect(band).toMatch(/display:\s*flex;/)
+    expect(band).toMatch(/flex-wrap:\s*wrap;/)
+    expect(band).toMatch(/justify-content:\s*space-between;/)
+    // Beside the segments, one target high, only where there is room; on a
+    // phone the label goes back above them.
+    const beside = /@media \(min-width: 34rem\)\s*\{\s*\.language-switcher > legend\s*\{([^}]*)\}/.exec(rules)?.[1] ?? ''
+    expect(beside).toMatch(/float:\s*left;/)
+    expect(beside).toMatch(/min-height:\s*var\(--target-min\);/)
+  })
+
   it('put the logo against the window edge, not in the centred column', () => {
     // "Top left, as per website": the header band is full width even though
     // the content beneath it is centred.

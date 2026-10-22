@@ -140,12 +140,20 @@ a {
 }
 
 /*
- * The header band holds the logo alone, top-left against the window's edge as
- * on nottingham.ac.uk — not indented to the content column, which is centred.
- * Its height is the logo plus the clear space above and below, so the band
- * keeps its shape even before the image has loaded.
+ * The header band holds the logo top-left against the window's edge as on
+ * nottingham.ac.uk — not indented to the content column, which is centred —
+ * and the page's language on the right, where that site carries its utility
+ * links (VH-154). Where both do not fit on one line, the language wraps under
+ * the logo, still in the band. Its height is the logo plus the clear space
+ * above and below, so the band keeps its shape even before the image has
+ * loaded, and the language, shorter than the logo, does not grow it.
  */
 .band--header .band-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-05);
   max-width: none;
   min-height: calc(var(--uon-logo-height) + 2 * var(--uon-logo-clear));
   padding: var(--uon-logo-clear) var(--uon-logo-inset);
@@ -1162,8 +1170,20 @@ details[open] > .disclosure-summary::before {
   display: block;
 }
 
-.language-switcher {
-  margin-bottom: var(--spacing-06);
+/* In the band, the label sits on the segments' line, left of them, so the
+   switcher is one target high and the band does not grow (VH-154). Floated,
+   a legend is laid out in the fieldset's content like any box, with the
+   segments beside it. On a phone the label goes back above them, as every
+   other switcher's is, so the segments keep the whole width and do not
+   break into rows beside it. */
+@media (min-width: 34rem) {
+  .language-switcher > legend {
+    float: left;
+    display: flex;
+    align-items: center;
+    min-height: var(--target-min);
+    margin: 0 var(--spacing-04) 0 0;
+  }
 }
 
 .video-kind,
@@ -1217,7 +1237,7 @@ details[open] > .disclosure-summary::before {
   user-select: none;
 }
 
-/* The machine-translation note sits between the switcher and the heading. */
+/* The machine-translation note sits above the heading. */
 .notification.language-notice {
   margin: 0 0 var(--spacing-06);
 }
@@ -1544,10 +1564,11 @@ details[open] > .disclosure-summary::before {
     forced-color-adjust: none;
   }
 
-  /* The header band holds the logo alone, drawn as the University draws it
-     — white on Nottingham Blue — and a theme that paints the band Canvas
+  /* The header band holds the logo, drawn as the University draws it —
+     white on Nottingham Blue — and a theme that paints the band Canvas
      paints the logo away with it (VH-124). The band keeps its two colours;
-     nothing in it is read or operated. */
+     the language's label stays white on the blue, and its segments take the
+     theme's colours below, as every segment does (VH-154). */
   .band--header {
     forced-color-adjust: none;
   }
@@ -1671,6 +1692,12 @@ details[open] > .disclosure-summary::before {
 
   .segment input:focus-visible + .segment-face {
     outline-color: CanvasText;
+  }
+
+  /* On the band's blue, which the theme does not repaint, the ring is the
+     band's own white, as it is outside forced colours. */
+  .band--header .segment input:focus-visible + .segment-face {
+    outline-color: var(--focus);
   }
 
   /* Every other ring takes the theme's own focus colour. */

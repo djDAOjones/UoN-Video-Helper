@@ -14,6 +14,7 @@
 - VH-151 — disabled controls look disabled: a locked select's arrow, the disabled Choose file button and a locked, invalid field take the disabled look; the trim fields give way below 12 rem, so 280 px and an 18 px font never scroll sideways; the weights pinned, the status mark a role of its own; checked in headless Chrome in three languages, three modes, down to 280 px (2026-10-22) — see decisions
 - VH-152 — the tests guard what the page draws: the Chinese date refused on its own, an unmatched date template wraps as ordinary text, the read line, closing line and ID helper tested through what the page calls, three dead functions retired, None's reason keyed to None and pinned in the markup; no change a user can see; `spike-cards.html` all pass (2026-10-22) — see decisions
 - VH-153 — the words after VH-148 agree: the trim intro says "are added" with the writing review's "because", the three browser sentences share their opening in each language, the footer says "(new tab)", the sheet's notes match their cells, Chinese step 6 and spacing follow the button, a stopped save offers saving without reading as a failure, two dead rows retired; the four shared rows took the approved words once; checked in Chrome in three languages (2026-10-22) — see decisions
+- VH-154 — Page language moves into the header band, right of the logo; the video switchers stay under the lede; Choose file rises into the first screen at 1280 × 900; phones wrap it under the logo; checked in Chrome and forced colours (2026-10-22) — see decisions
 
 ## The Codex run reviewed
 

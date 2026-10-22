@@ -3599,17 +3599,17 @@ learningContentLink.addEventListener('click', (event) => {
 })
 
 // --- Language (VH-105) -----------------------------------------------------
-// Chosen at the top of the page, remembered in this browser only, and changed
+// Chosen in the header band, remembered in this browser only, and changed
 // in place: the video, the trim, every choice, a running job, an unsaved
 // result and a feedback draft stay exactly where they were.
 
 const languageSwitcher = buildLanguageSwitcher(languageOptions(LANGUAGES_OFFERED, language()))
-// In `main`, above the heading, and not in the header band, which holds the
-// logo alone and keeps its brand colours under forced colours.
-required<HTMLHeadingElement>('.page-title').before(
-  languageSwitcher.fieldset,
-  languageSwitcher.notice,
-)
+// In the header band, on the right of the logo, where the University's own
+// site carries its utility links: it is about the page, not the video, and
+// above the heading it pushed step 1 below the first screen (VH-154, V-18).
+// The note stays in `main`, above the heading, where the page's words begin.
+required<HTMLElement>('#brand-header').append(languageSwitcher.fieldset)
+required<HTMLHeadingElement>('.page-title').before(languageSwitcher.notice)
 
 /** Puts back the live regions a switch quietened, while that is still to happen. */
 let restoreLiveRegions: (() => void) | null = null

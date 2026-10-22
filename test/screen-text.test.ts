@@ -725,11 +725,19 @@ describe('the page frame (VH-92)', () => {
   })
 
   it('heads the page with its name, once, in the content rather than the band', () => {
-    // The band holds the logo alone; the title lines up with the text beneath
-    // it (maintainer, 2026-09-30).
+    // The band holds the logo and the page language; the title lines up with
+    // the text beneath it (maintainer, 2026-09-30).
     expect(markup.match(/<h1[\s>]/g)).toHaveLength(1)
     expect(header).not.toContain('<h1')
     expect(markup).toMatch(/<main[^>]*>\s*<h1 class="page-title">UoN Video Helper<\/h1>/)
+  })
+
+  it('puts the page language in the header band and its note above the heading (VH-154)', () => {
+    const mainSource = readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8')
+    expect(mainSource).toContain("required<HTMLElement>('#brand-header').append(languageSwitcher.fieldset)")
+    expect(mainSource).toContain("required<HTMLHeadingElement>('.page-title').before(languageSwitcher.notice)")
+    // The skip link still comes before the band, so it passes over the switcher.
+    expect(markup.indexOf('class="skip-link"')).toBeLessThan(markup.indexOf('<header'))
   })
 
   it('puts System check and the version in the footer', () => {

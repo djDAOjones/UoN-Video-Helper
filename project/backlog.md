@@ -28,7 +28,6 @@ The public release, 0.2.0, on Xerte (PLAN-6).
 
 ### Phase 5 — what the review of the Codex run found: the job's state, disabled controls, the tests, the words
 
-- [ ] VH-154 — Page language moves into the header band on the right; the two video switchers stay under the lede — since 2026-10-22 — (from: VH-143, 2026-10-22)
 - [ ] VH-155 — One word for the sound: "audio" throughout, and "This tool" in the browser sentence — since 2026-10-22 — (from: VH-143, 2026-10-22)
 - [ ] VH-156 — The writing review's 24 proposals applied, with the Chinese `failure.captured` and "video", not "recording", in the decode-damage detail — since 2026-10-22 — (from: PLAN-4, 2026-10-22)
 - [ ] VH-157 — A title card with nothing typed is not made silently: the page says so and moves focus to the card's first field — since 2026-10-22 — (from: VH-138, 2026-10-22)
