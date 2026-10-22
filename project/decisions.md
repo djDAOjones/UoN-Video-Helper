@@ -18,6 +18,27 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-22 — PLAN-5 — The owner's answers of 22 October: six more Phase 5 items, the spec rows approved, the infrastructure deferred
+
+**Decision:** Phase 5 gains six items after VH-153, each from an owner answer in chat on 2026-10-22: VH-154 (Page language into the header band), VH-155 ("audio", not "sound", and "This tool"), VH-156 (the writing review's 24 proposals), VH-157 (a title card with nothing typed), VH-158 (a cut-short Matroska or WebM file said) and VH-159 (the approved spec rows applied); the internal infrastructure waits until the app settles; VH-14's Xerte upload is the owner's, today.
+
+**Rationale:** The owner's words, answering the orchestrator chat's list of open questions:
+
+- VH-143.1, the frame above step 1: "agreed" — the recommendation stands: Page language moves into the header band on the right, the two video switchers stay under the lede. Promoted to VH-154.
+- VH-143.3, "audio" or "sound", "This app" or "This tool": "audio and tool" — the page says "audio" for the one concept, where it now says "sound" (the writing review §4 notes the owner's rule favours "audio" as a word shared across languages), and the browser sentence says "This tool". Promoted to VH-155.
+- PLAN-4.1, the writing review's 24 proposals: "approved". Promoted to VH-156, with PLAN-5.1 (the Chinese `failure.captured`) in the same change; VH-153 still changes its four shared rows once, as its Now says.
+- VH-138.1, a title card with only the date: "perhaps a warning and any other recommended good UX and accessible friendly course of action (focus attention or control to that parameter?)" — a date-only card is not made silently; the agent recommends the accessible pattern at VH-157's start, with focus moved to the card's first field. Promoted to VH-157.
+- VH-139.4, a cut-short Matroska or WebM file: "yes, something along the lines of 'the video file is shorter than expected, please check it before using'". Mediabunny's index declares only what it can read, so VH-158 first establishes a reliable signal; if none exists, it reports back rather than guessing. Promoted to VH-158.
+- PLAN-5.2, the two "recordings": "use 'video' for the person's own thing, as the rest of the app already does ('Your video is ready', 'Creating your video'), and describe the technical limit without the word 'recording' at all." Folded into VH-156.
+- The spec approvals: "yes to all" — VH-139.1, VH-140.1, VH-142.1, VH-148.1 and VH-138.3, applied by VH-159 last in the phase so the spec says what Phase 5 ships. The spec stands at 7,757 of 7,800 words, so VH-159 may need a budget decision; VH-141.1 waits for VH-150's replacement draft.
+- Housekeeping, V31-UPGRADE.1, INTAKE.8 and V3-HARNESS.1: "defer all internal infrastructure such as 3.1 upgrade. we will look at this once the app is settled." The three lines, and VH-147.1, stay on the wish list.
+- Announce progress: "done" — PLAN-5's entry above stands: Announce progress stays.
+- VH-14: "this is happening today, via Xerte". The person checks (NVDA, VoiceOver, Windows contrast themes, the Teams link, `samples/`) go to colleagues in Disability Support Services, and the translations to campus colleagues, both on the owner's asking; their wish lines stay open until a result comes back.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-22 — PLAN-5 — Phase 5: what the review of the Codex run found
 
 **Decision:** Phase 5 is four items, in this order, each with a file: VH-150 (the job's state), VH-151 (disabled controls and the trim field), VH-152 (tests that guard what the page draws) and VH-153 (the words). Together they answer the review of Codex's 21 October run. Show progress is withdrawn, and Save stays the only primary button beside an unsaved result. The owner made both calls in chat on 2026-10-22 and approved the plan, with Phase 5 first.
@@ -505,16 +526,6 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Decision:** each card field takes the largest size at which it wraps into its role's lines, shrinks only when it would need more lines than its role allows, and the largest field shrinks first until the card fits, never under the 56 px floor; the acceptance's "shrinks to the floor, then wraps" is read so — because the owner chose the fit as built in chat on 2026-10-19.
 
 **Rationale:** Slice (a) built VH-126's measured fit (`fit` in `src/media/title-card.ts`) and left the order open. Read literally, the criterion would hold a long title on one small line; the fit keeps a 50-character title large on two. The owner chose "keep it large, wrap first" over a change to `fit` and a re-run of `spike-cards.html`. A field still too many lines at its floor is refused at that field; every field at its floor and the card still too tall is refused at the field with the most lines (`at: 'card'`).
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-19 — VH-127 — The result's one-line record says when a title card opens the video
-
-**Decision:** with the card on, the result's record reads "Made from NAME: a 5-second title card, then PART, OUTPUT, CLOSING.", never quoting the card's words; the discard question's own sentences are unchanged, and the record it repeats gains the card as the result's does — because the owner chose the recommended option in chat on 2026-10-19.
-
-**Rationale:** Asked in slice (d) whether the result summary and the discard question should mention the card, the owner chose "the summary only" over neither or both. The discard question says no choice in its own words; it repeats the result's record (VH-107, A-05), so the card reaches it through that one line. `JobRecord.titleCard` is a boolean fixed when the job starts; `result.summaryWithCard` went through VH-105's sheet route.
 
 **Supersedes:** none
 

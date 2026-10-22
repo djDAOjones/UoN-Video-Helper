@@ -242,3 +242,13 @@
 **Supersedes:** none
 
 **Deferred:** VH-128
+
+## 2026-10-19 — VH-127 — The result's one-line record says when a title card opens the video
+
+**Decision:** with the card on, the result's record reads "Made from NAME: a 5-second title card, then PART, OUTPUT, CLOSING.", never quoting the card's words; the discard question's own sentences are unchanged, and the record it repeats gains the card as the result's does — because the owner chose the recommended option in chat on 2026-10-19.
+
+**Rationale:** Asked in slice (d) whether the result summary and the discard question should mention the card, the owner chose "the summary only" over neither or both. The discard question says no choice in its own words; it repeats the result's record (VH-107, A-05), so the card reaches it through that one line. `JobRecord.titleCard` is a boolean fixed when the job starts; `result.summaryWithCard` went through VH-105's sheet route.
+
+**Supersedes:** none
+
+**Deferred:** none

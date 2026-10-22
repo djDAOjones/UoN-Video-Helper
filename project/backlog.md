@@ -38,13 +38,19 @@
 - [ ] VH-151 — Disabled controls look disabled, and the trim field never forces a sideways scroll — since 2026-10-22 — (from: VH-149, 2026-10-22)
 - [ ] VH-152 — Tests that guard what the page draws: the Chinese date, the read line, None's reason — since 2026-10-22 — (from: VH-149, 2026-10-22)
 - [ ] VH-153 — The words after VH-148: the trim intro's verb, the browser sentence, "(new tab)", the sheet's notes — since 2026-10-22 — (from: VH-149, 2026-10-22)
+- [ ] VH-154 — Page language moves into the header band on the right; the two video switchers stay under the lede — since 2026-10-22 — (from: VH-143, 2026-10-22)
+- [ ] VH-155 — One word for the sound: "audio" throughout, and "This tool" in the browser sentence — since 2026-10-22 — (from: VH-143, 2026-10-22)
+- [ ] VH-156 — The writing review's 24 proposals applied, with the Chinese `failure.captured` and "video", not "recording", in the decode-damage detail — since 2026-10-22 — (from: PLAN-4, 2026-10-22)
+- [ ] VH-157 — A title card with nothing typed is not made silently: the page says so and moves focus to the card's first field — since 2026-10-22 — (from: VH-138, 2026-10-22)
+- [ ] VH-158 — A cut-short Matroska or WebM file is said: "The video file is shorter than expected", if a reliable signal exists — since 2026-10-22 — (from: VH-139, 2026-10-22)
+- [ ] VH-159 — The spec says what Phase 5 ships: the approved rows of VH-139, VH-140, VH-142, VH-148 and VH-138 applied — since 2026-10-22 — (from: PLAN-5, 2026-10-22)
 
 ### Standing — maintainer-owned, never band-gated
 
 - [!] VH-137 — The accessibility statement's review, due 2026-11-18 — since 2026-10-20 — blocked: the owner's review and the further tests chosen — (from: VH-130, 2026-10-18)
 - [!] VH-M2 — Measure the device envelope — since 2026-08-24 — blocked: the owner's own work — a canon [maintainer] item
 - [!] VH-M4 — Watch staff use it — since 2026-10-01 — blocked: the owner's own work — a canon [maintainer] item
-- [!] VH-14 — Deployment — since 2026-08-24 — blocked: the owner's own work — a canon [maintainer] item
+- [!] VH-14 — Deployment — since 2026-08-24 — blocked: the owner's own work, the Xerte upload on 2026-10-22 — a canon [maintainer] item
 
 ## Next
 
