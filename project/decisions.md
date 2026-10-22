@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-22 — VH-167 — One reading measure, 28rem, for every size and language; counted, no line over 1.4.8's limits
+
+**Decision:** `--measure` is `28rem` (448 px), one width for running text of every size and language, the owner's starting value kept because the counted lines read well in all three languages; `--measure-cjk` and its `:lang(zh)` rule are retired; the measure caps `.fact-note` and `.radio-detail` as it caps the text fields; the toggletip's paragraphs take `--paragraph-gap`; because `55ch` and `40em` resolved against each element's own font and stopped one column's text at four widths (V-33).
+
+**Rationale:** Counted in Chrome 155 at 1280 px, empty, ready and finished, with the longest fact note probed: English 63 characters at 16 px and 78 at 14 px (before 70 and 79), Malay 63 and 70 (69 and 72), Chinese 29 glyphs at 16 px (40) and, at 14 px, 32 in full-width equivalents (43.5): the one line at 41 counted one for one holds a file name. Before, two Chinese lines passed 40: the uncapped fact note (48) and that notification (47). At 375 px the column is narrower than the measure and nothing changes. Body, helper, notification and fact-note text all stop at 448 px in every language, where they stopped at 489, 428, 640 and 560. At 320 px and at 200 % no sideways scroll, and walk.mjs's 1.4.12 sheet clips nothing. English helper text at 78 is the nearest to 80; a longer English notification line is the thing to watch. Evidence: `reviews/2026-10-22/design-pass/evidence/measurements/vh167-measure-2026-10-22.md`. VH-105's Chinese measure is withdrawn; its Chinese faces stay. Standards: wcag-2.2-aaa 1.4.8 (80 characters, 40 CJK glyphs, a blank line between paragraphs), 1.4.10, 1.4.12; carbon tokens, not literals; nielsen 4.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-22 — VH-166 — One type set: eight roles, each one rule; the footer's headings at Lora 20; the band's phone inset and the footer's gap
 
 **Decision:** the page's text takes eight roles, each one rule in `app.css` after the components and before forced colours, naming every selector that wears it, and no component rule sets its own size, weight or line height; every `h2`, the footer's two included, is the panel heading, Lora 20/28/700 on a new `--line-height-heading-03: 1.4`; the switchers' legends, notification titles and the statement's `h3` are one section heading, 16/24/600; below the 60rem layout width the header band takes the column's 24 px inset (the desktop logo stays 20 px from the window); the footer's panels take `.panel`'s 24 px; because the owner approved V-32, V-36 and V-37 in VH-163's closing decision.
@@ -560,16 +570,6 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Decision:** the overnight run is authorised and gateless: VH-143, the design pass, then Phase 3 (PLAN-3, approved) with VH-139 merged from its own session, then Phase 4 (PLAN-4, its sign-off pre-approved), then the morning report; wherever the record or a verb would stop for the owner, the session takes the conservative choice, records it as taken gateless, and carries on — because the owner said so in chat on 2026-10-21.
 
 **Rationale:** The owner's words, quoted: "provide a prompt that will conduct a whole design pass, then implement the implementation phases, I will approve use of fable with extra effort. it needs to be gateless as I am going to bed, and I hope it can be ready in the morning"; earlier the same night: "approve PLAN-3 and start VH-139". The prompt they produced is kept verbatim as `reviews/2026-10-20/overnight-prompt-2026-10-21.md` and is the run's instruction. Conservative means the smallest change that meets the standard, existing components, tokens and words before new ones, and nothing the owner has reserved: the three switchers above step 1 and folding (VH-97), the sign-offs of VH-124 and VH-113, VH-137 and V-09, the date-only title card, and anything the brief's Direction does not cover — each becomes a `[!]` or wish line with a recommendation. Hard limits: no new runtime dependency; `docs/*.md` never edited; the EBU harness re-run if a protected audio file changes; no test deleted, skipped or weakened; nothing written to `samples/`; nothing destructive; never a push or merge to `main`, which publishes the pilot. New Chinese and Malay strings are drafted as machine translation, as the VH-122, VH-127 and VH-128 decisions did, and listed in the morning report for approval. The work is on branch `claude/overnight-design-and-phases` in the worktree `.claude/worktrees/overnight`, from VH-138's close (5f23af6); each session that passes the profile's Session line closes with a hand-off note in `reviews/2026-10-20/` and a Session-end line, and starts the next session itself. After 07:00 UK time no new item starts.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-21 — PLAN-3 — The owner signs off Phase 3, and VH-139 starts
-
-**Decision:** PLAN-3 stands as recorded and VH-139 runs now; VH-140 starts only on the owner's next word — because the owner said "approve PLAN-3 and start VH-139" in chat on 2026-10-21.
-
-**Rationale:** The words reached this session through the VH-138 session that planned the phase, which started VH-139 in its own worktree from VH-138's close (5f23af6, branch `claude/nifty-jepsen-850e8e`, not yet merged to `main`) and set that the session stops after VH-139. The sign-off covers the plan's order and items as PLAN-3's entry lists them; it is not a standing word like PLAN-2's, so open questions in later items still go to the owner.
 
 **Supersedes:** none
 

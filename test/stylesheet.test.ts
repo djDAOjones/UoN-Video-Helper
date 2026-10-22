@@ -131,7 +131,7 @@ describe('tokens, not literals (VH-124)', () => {
     // values: the measure, the line heights and the paragraph gap are
     // where the brief's typography lands.
     const tokens = readFileSync(new URL('../src/styles/tokens.carbon.css', import.meta.url), 'utf8')
-    expect(tokens).toMatch(/--measure:\s*55ch;/)
+    expect(tokens).toMatch(/--measure:\s*28rem;/)
     expect(tokens).toMatch(/--line-height-body:\s*1\.5;/)
     expect(tokens).toMatch(/--paragraph-gap:\s*var\(--spacing-05\);/)
   })
@@ -326,5 +326,28 @@ describe('one type set (VH-166)', () => {
   it('gives the header band the column\u2019s inset below the layout width (V-36)', () => {
     expect(tokens).toMatch(/--layout-width:\s*60rem;/)
     expect(rules).toMatch(/@media \(max-width: 60rem\)\s*\{\s*\.band--header \.band-inner\s*\{\s*padding-inline:\s*var\(--spacing-06\);/)
+  })
+})
+
+describe('one reading measure (VH-167)', () => {
+  const tokens = readFileSync(new URL('../src/styles/tokens.carbon.css', import.meta.url), 'utf8')
+
+  it('is one rem width, so no size or language resolves it to a width of its own', () => {
+    // 55ch and 40em held four widths in one column (V-33); a rem does not follow the element's font.
+    expect(tokens).toMatch(/--measure:\s*\d+(?:\.\d+)?rem;/)
+    expect(tokens).not.toMatch(/--measure-cjk/)
+    expect(rules).not.toMatch(/max-width:\s*var\(--measure-cjk\)/)
+    expect(rules).not.toMatch(/:lang\(zh\)[^{]*\{[^}]*max-width/)
+  })
+
+  it('stops the prose inside a row and the fields where running text stops', () => {
+    expect(rules).toMatch(/(?:^|\})\s*\.fact-note,\s*\.radio-detail\s*\{\s*max-width:\s*var\(--measure\);\s*\}/)
+    expect(rules).toMatch(/#title-card-fields \.text-input,\s*#submission-card-fields \.text-input,\s*#submission-card-fields \.textarea\s*\{\s*max-width:\s*var\(--measure\);/)
+    // A cap, never a width: on a phone each yields to its container.
+    expect(rules).not.toMatch(/(?:min-width|[^-]width):\s*var\(--measure\)/)
+  })
+
+  it('puts one blank line between the toggletip\u2019s paragraphs, as between any two', () => {
+    expect(rules).toMatch(/\.toggletip p \+ p\s*\{\s*margin-top:\s*var\(--paragraph-gap\);\s*\}/)
   })
 })

@@ -67,13 +67,12 @@
   --line-height-heading-03: 1.4;
   --paragraph-gap: var(--spacing-05);
 
-  /* WCAG 1.4.8 (AAA): no more than 80 characters a line, and the ticket's
-     ~70. In Arial a `ch` is the width of a zero, about 1.28 average
-     characters, so 70ch held 88–91 and 55ch holds about 70 (VH-124). CJK
-     glyphs are a square one em wide, and 1.4.8's limit for them is 40, so
-     the Chinese measure is 40em (VH-105). */
-  --measure: 55ch;
-  --measure-cjk: 40em;
+  /* WCAG 1.4.8 (AAA): no more than 80 characters a line, or 40 CJK glyphs.
+     One width in rem, so text of every size and language stops at one place
+     (VH-167): `ch` and `em` resolved against each element's own font, and
+     the column held four widths. Counted in Chrome at 1280 px: at most 63
+     characters a line at 16 px and 78 at 14 px, 32 CJK glyphs at 14 px. */
+  --measure: 28rem;
 
   /* Layout: the content column, and the widths the form rows wrap at. */
   --layout-width: 60rem;

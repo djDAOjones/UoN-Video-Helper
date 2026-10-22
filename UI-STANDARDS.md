@@ -207,8 +207,8 @@ implementation notes.
   alternatives for meaningful non-text content.
 - Visual presentation (WCAG 1.4.8), all five: the user's own foreground
   and background colours are not overridden; running text stops at the
-  `--measure` token (`55ch`, about 70 characters in Arial — a `ch` is the
-  width of a zero, so `70ch` held 90; 40 glyphs for CJK); no justified
+  `--measure` token (`28rem`, one width for every size and language, under
+  80 characters and 40 CJK glyphs, counted); no justified
   text; line spacing from `--line-height-body` (1.5) and one blank line
   between paragraphs from `--paragraph-gap` (spec §9.3's paragraph
   spacing), both tokens so the user's own text-spacing overrides win; text

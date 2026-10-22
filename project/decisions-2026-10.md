@@ -476,3 +476,13 @@
 **Items:** VH-139, VH-140, VH-141, VH-142
 
 **Deferred:** none
+
+## 2026-10-21 — PLAN-3 — The owner signs off Phase 3, and VH-139 starts
+
+**Decision:** PLAN-3 stands as recorded and VH-139 runs now; VH-140 starts only on the owner's next word — because the owner said "approve PLAN-3 and start VH-139" in chat on 2026-10-21.
+
+**Rationale:** The words reached this session through the VH-138 session that planned the phase, which started VH-139 in its own worktree from VH-138's close (5f23af6, branch `claude/nifty-jepsen-850e8e`, not yet merged to `main`) and set that the session stops after VH-139. The sign-off covers the plan's order and items as PLAN-3's entry lists them; it is not a standing word like PLAN-2's, so open questions in later items still go to the owner.
+
+**Supersedes:** none
+
+**Deferred:** none

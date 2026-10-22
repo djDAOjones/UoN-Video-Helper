@@ -31,7 +31,6 @@ The public release, 0.2.0, on Xerte (PLAN-6).
 ### Phase 6 — the public release: the feedback form, the statement, the cut, Xerte
 
 - [!] VH-137 — The accessibility statement's review, due 2026-11-18, with its contradictions and its two lists corrected — since 2026-10-20 — (from: VH-130, 2026-10-18) — blocked: the owner's review and the further tests chosen
-- [ ] VH-167 — One reading measure in rem for every size and language, from 28rem, confirmed by line count — since 2026-10-22 — (from: VH-163, 2026-10-22)
 - [ ] VH-169 — A pressed state for each button kind — since 2026-10-22 — (from: VH-163, 2026-10-22)
 - [ ] VH-168 — The file chooser stays native: the browser-language limitation recorded, no page change — since 2026-10-22 — (from: VH-163, 2026-10-22)
 - [ ] VH-162 — The release cut: product version 0.2.0, the Xerte package built from that commit, the brief's and profile's hosting lines proposed — since 2026-10-22 — (from: PLAN-6, 2026-10-22)

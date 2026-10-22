@@ -40,13 +40,11 @@ dd {
   overflow-wrap: anywhere;
 }
 
-/* Chinese stops at 40 glyphs, 1.4.8's limit for CJK (VH-105). A passage kept
-   in English inside a Chinese page is not `:lang(zh)`, and keeps the measure
-   above. */
-p:lang(zh),
-li:lang(zh),
-dd:lang(zh) {
-  max-width: var(--measure-cjk);
+/* The prose inside a row stops where the row's own text does (VH-167): a
+   video fact's note, and a choice's detail under its label. */
+.fact-note,
+.radio-detail {
+  max-width: var(--measure);
 }
 
 /* One blank line between paragraphs of running text (1.4.8's paragraph
@@ -1040,7 +1038,7 @@ details[open] > .disclosure-summary::before {
 }
 
 .toggletip p + p {
-  margin-top: var(--spacing-03);
+  margin-top: var(--paragraph-gap);
 }
 
 /*
