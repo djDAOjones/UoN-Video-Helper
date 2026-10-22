@@ -414,3 +414,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-20 — VH-134 — The spec caught up: the six edits applied as drafted, with three 3.1.4 exceptions
+
+**Decision:** the six edits stand in `docs/01-specification.md` as the agent drafted them: the page's three languages (§9), a handle or typed time moving the preview (§9.1 step 2), the five stages (§9.2), the paragraph gap's mechanism and figure, and kB–TB, UoN and eleven codec names as 3.1.4 exceptions with their four fields (§9.3) — because PLAN-2's standing word makes the drafts the owner's approval, shown at this close for reversal.
+
+**Rationale:** Each sentence says what the shipped code does, read in the source: `LANGUAGES_OFFERED` and `MACHINE_TRANSLATED` in `src/config/languages.ts`, each table's `meta.separators`, `--font-cjk`; `src/ui/preview-seek.ts` and VH-125's decision; `PipelineStage` in `src/media/pipeline.ts`, the encode capped at 0.98 and the bar set full only at ready in `src/main.ts`; `--paragraph-gap` at 1rem on a 1.5 line height, 2.5× top to top, with no `!important` on spacing. The 3.1.4 list is `EXCEPTED` in `test/readability.test.ts` less "OK", which the test calls an ordinary word; "Dolby Digital", in the doc-delta line but not the test, is a name in words, which 3.1.4 does not reach. The reasons are VH-114's (canon decision log, 2026-10-01): sizes as every device shows them, the name under its logo, codec names as read-only facts behind a closed disclosure; each is dated today, when the spec takes it in. "2.5× top to top" is credited as VH-124's reading of 1.4.8, since Codex's VH-124 critique notes it is not a universal calculation. The machine-translation note, not in the doc-delta line, is in §9 because VH-105 shipped it. 306 words added; the spec is 7,692 of 7,800, leaving 108 for VH-136. No code changed.
+
+**Supersedes:** none
+
+**Deferred:** none

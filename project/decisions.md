@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-22 — VH-164 — The feedback form link takes its own ID, so Open email app opens the email again
+
+**Decision:** VH-160's footer link becomes `#feedback-form-link`, leaving `#feedback-form` to the dialog's form, and a test holds every ID in the page to one use, because with two `#feedback-form`s the form's lookup found the link, Open email app submitted the form natively and the page reloaded, losing the draft, a chosen video and every choice; the owner chose to fix it at once, ahead of VH-163's plan.
+
+**Rationale:** Codex astra's blind review for VH-163 found it in source (`required<HTMLFormElement>('#feedback-form')` took the first match, the link VH-160 put above the dialog), and it was reproduced in Chrome on `5e3de2b`: an empty Open email app went to `/?` with the dialog gone. After the fix, the same click keeps the page, shows "Write a message first." and moves focus to the message; the link still opens the form's plain address in a new tab with no referrer. VH-160's test pinned the link's markup with the duplicate ID, so it now pins `feedback-form-link`. The email app itself was not opened from the browser pane. Live on the pilot from `f95599b` until this push. Standards: Nielsen 3 and 5 (nielsen digest); UI-STANDARDS → Error prevention and recovery.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-22 — PLAN-6 — VH-163, a design pass, joins Phase 6 before the cut; its fixes are planned as items ahead of VH-162
 
 **Decision:** VH-163, a design pass for one type scale, one reading measure and one grid, judged for design, UX and WCAG 2.2 AAA in all three languages, sits in Phase 6 before VH-162; it reviews, with Codex's blind review and critique, then plans its rank 1 and 2 fixes as Phase 6 items ahead of the cut for the owner to approve, adding no control; because the owner asked for it and chose this in chat.
@@ -560,16 +570,6 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Decision:** a save writes only to its own line under the result, with Stop saving beneath it, and the line goes with the result; the discard question's spoken words leave the status line when the question goes; the three content-sized switchers reserve each face's bold width; the advice service's link opens in a new tab and says so in all three languages, the Chinese and Malay as the agent drafted them — because these meet the item's criteria, and PLAN-2's standing word makes the agent's choices the owner's, shown at this close for reversal.
 
 **Rationale:** The save line is `#save-status`, a live region never `hidden`, collapsed while empty so a page with no result gains no blank line; it arrives with Stop saving, which moved from the check's row so each status sits over its own stop. `clearResult()` empties it with the result: a new job, or a new file when nothing is unsaved. The discard words are cleared only while the line still holds them (`statusAsksDiscard`), so a title-card refusal written while the question stood survives a withdrawal. The reserve is a `::after` of the face's own `data-text`, bold, no height, hidden, with `content: … / ''` so it is never read; the video type's `data-text` is bound by `data-i18n-attr`, so it follows a language change. The link takes `target="_blank"` and `rel="noopener noreferrer"`; its words add "(new tab)" in English, because "(opens in a new tab)" graded 10.7 against the readability gate's 10, and Chrome's own phrases "在新标签页中打开" and "tab baharu", through the filled sheet and `scripts/strings-table.mjs`. No spec section governs these details, so the spec is unchanged. Checked in Chrome (Claude's in-app browser) at 1280 and 375 px: no segment's left edge or width moved on any choice in any page language, against 5.67 px with the reserve switched off, and the face's accessible text is its words once; the switch and Keep it each left `#status` empty after the question; with AMCS3059's unsaved result, MLAC 3139 chosen and Save pressed during its check, the verdict landed on `#status` and "Saving…" then "Saved." on `#save-status`, neither overwritten, 7,222,021 bytes written through a slowed stand-in picker, since removed; the link's words in each language, the only link with a target. Applied: WCAG technique G201 and 4.1.3, Nielsen 1 and 4, Carbon's segmented skin kept, the house rule of a regression test per fixed bug — each mutation of a fix fails its test.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-20 — VH-134 — The spec caught up: the six edits applied as drafted, with three 3.1.4 exceptions
-
-**Decision:** the six edits stand in `docs/01-specification.md` as the agent drafted them: the page's three languages (§9), a handle or typed time moving the preview (§9.1 step 2), the five stages (§9.2), the paragraph gap's mechanism and figure, and kB–TB, UoN and eleven codec names as 3.1.4 exceptions with their four fields (§9.3) — because PLAN-2's standing word makes the drafts the owner's approval, shown at this close for reversal.
-
-**Rationale:** Each sentence says what the shipped code does, read in the source: `LANGUAGES_OFFERED` and `MACHINE_TRANSLATED` in `src/config/languages.ts`, each table's `meta.separators`, `--font-cjk`; `src/ui/preview-seek.ts` and VH-125's decision; `PipelineStage` in `src/media/pipeline.ts`, the encode capped at 0.98 and the bar set full only at ready in `src/main.ts`; `--paragraph-gap` at 1rem on a 1.5 line height, 2.5× top to top, with no `!important` on spacing. The 3.1.4 list is `EXCEPTED` in `test/readability.test.ts` less "OK", which the test calls an ordinary word; "Dolby Digital", in the doc-delta line but not the test, is a name in words, which 3.1.4 does not reach. The reasons are VH-114's (canon decision log, 2026-10-01): sizes as every device shows them, the name under its logo, codec names as read-only facts behind a closed disclosure; each is dated today, when the spec takes it in. "2.5× top to top" is credited as VH-124's reading of 1.4.8, since Codex's VH-124 critique notes it is not a universal calculation. The machine-translation note, not in the doc-delta line, is in §9 because VH-105 shipped it. 306 words added; the spec is 7,692 of 7,800, leaving 108 for VH-136. No code changed.
 
 **Supersedes:** none
 

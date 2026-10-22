@@ -3589,7 +3589,7 @@ window.addEventListener('hashchange', openStatementForFragment)
 
 // --- The footer's feedback form (VH-160) -----------------------------------
 // The address alone, in a new tab: nothing from the page goes with it.
-const feedbackFormLink = required<HTMLAnchorElement>('#feedback-form')
+const feedbackFormLink = required<HTMLAnchorElement>('#feedback-form-link')
 feedbackFormLink.href = FEEDBACK_FORM_URL
 feedbackFormLink.target = '_blank'
 feedbackFormLink.rel = 'noopener noreferrer'

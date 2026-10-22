@@ -810,7 +810,7 @@ describe('the footer\'s feedback form (VH-160)', () => {
 
   it('is one link on its own line, directly under Send feedback and above the team links', () => {
     expect(footer).toMatch(
-      /<\/button>\s*<\/p>\s*<p class="feedback-form-entry">\s*<a class="footer-contact-link" id="feedback-form">Fill in the feedback form \(new tab\)<\/a>\s*<\/p>\s*<div class="footer-contacts">/,
+      /<\/button>\s*<\/p>\s*<p class="feedback-form-entry">\s*<a class="footer-contact-link" id="feedback-form-link">Fill in the feedback form \(new tab\)<\/a>\s*<\/p>\s*<div class="footer-contacts">/,
     )
     expect(enGB.footer.feedbackForm).toBe('Fill in the feedback form (new tab)')
     expect(enGB.footer.feedbackForm).not.toMatch(/\.$/)
@@ -831,5 +831,16 @@ describe('the footer\'s feedback form (VH-160)', () => {
   it('opens in a new tab, sending no referrer, so a running job raises no "Leave site?"', () => {
     expect(mainSource).toContain("feedbackFormLink.target = '_blank'")
     expect(mainSource).toContain("feedbackFormLink.rel = 'noopener noreferrer'")
+  })
+
+  // VH-164. The link once took the dialog form's ID, so `#feedback-form`
+  // found the link, Open email app submitted the form natively, and the page
+  // reloaded with the draft, the video and every choice gone.
+  it('leaves #feedback-form to the dialog\'s form: every ID in the page is used once', () => {
+    const ids = [...markup.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1])
+    expect(ids.filter((id, i) => ids.indexOf(id) !== i)).toEqual([])
+    expect(markup).toMatch(/<form id="feedback-form" novalidate>/)
+    expect(mainSource).toContain("required<HTMLFormElement>('#feedback-form')")
+    expect(mainSource).toContain("required<HTMLAnchorElement>('#feedback-form-link')")
   })
 })
