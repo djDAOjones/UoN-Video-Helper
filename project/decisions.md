@@ -18,6 +18,18 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-23 — PLAN-7 — The fix plan: VH-178 to VH-180 for seven findings; the owner's ask decided on the standing instruction
+
+**Decision:** Three fix items join Phase 7 before VH-176. VH-178 fixes the focus successor (V-46). VH-179 draws the three rings whole and brings the feedback field to the measure (V-40, V-41, V-42, V-33). VH-180 fixes the frame-rate note (V-47). The owner's choices are decided on the owner's standing instruction, and none adds a control.
+
+**Rationale:** The owner's words of 2026-10-23: "work through to the end of VH-177, archive and spawn as you go, proceed with your recommendations, universal permission is granted". Decided under them, with both positions in `reviews/2026-10-22/design-pass-2/fix-plan-2026-10-23.md`. The fix plan is approved. Mixed Chinese and Latin lines take the weighted reading (a glyph counts as two against 80), so 1.4.8 is met by G204; Codex had counted raw against 40. V-47 is rank 2, since nothing is lost (Codex said 1), and gets one neutral sentence. V-43 extends VH-168's limitation to 2.5.3 with no page change, and its wording goes to VH-137 (VH-175.2). V-18 is accepted, since no element may move; a native reader's wording is VH-175.1. V-45 is not decided here: both of its names are the owner's own (VH-148), so it is VH-175.3. V-44 is VH-174.1. Codex's verdict, as given: "Approve after the musts below" (`codex-astra-fixplan-critique-2026-10-23.md`); F-01 to F-05 applied, none refused. Order: VH-178 first, the one level A failure and the one behaviour change; VH-179 next, the CSS that can move layout; VH-180 last, the strings, measured on the final CSS. Standards: wcag-2.2-aaa, carbon, nielsen digests.
+
+**Supersedes:** none
+
+**Items:** VH-178, VH-179, VH-180
+
+**Deferred:** VH-178, VH-179, VH-180, VH-176
+
 ## 2026-10-23 — VH-174 — The report merged: D-01 and D-04 become V-46 and V-47, D-02 and D-03 merge; Codex's seven points applied but one
 
 **Decision:** `design-pass-2-2026-10-23.md` merges Codex's blind review and VH-173's judging into ten findings at rank 2 or 3. It applies R-01 to R-06, applies R-07 for V-45 and refuses it for V-44. Two judgement calls go to VH-175's ask: the mixed-script line count and V-47's rank. Each point was settled by live evidence or source.
@@ -564,13 +576,3 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Supersedes:** none
 
 **Deferred:** VH-148, VH-141, VH-142, VH-144, VH-145, VH-146
-
-## 2026-10-21 — VH-147 — Claude Code sessions run without a project sandbox, as Vinyl Sorting's do; `.claude/settings.json` keeps only the session hooks
-
-**Decision:** `.claude/settings.json` holds only the two session hooks and `autoMemoryEnabled: false`; the project sandbox, its network allowlist, the permission denies and `excludedCommands` are removed, so Claude Code sessions run under the owner's user-level settings as Vinyl Sorting's do — because the sandbox sent headless Chrome, Vite and the walker to the owner's Terminal panel and made every Codex and gh call ask, stalling the audits and overnight runs, and the owner chose Vinyl Sorting's configuration, keeping the hooks, over loosening the sandbox (chat, 2026-10-21).
-
-**Rationale:** The sessions' own words, 2026-10-19 to 2026-10-21 (VH-126, VH-133, VH-138, overnight runs 02–04): the sandbox "cannot start Chrome (singleton socket dir denied), cannot bind ports, and refused curl to localhost". Codex and gh, excluded from the sandbox by V3-HARNESS, went through the permission check, which `autoAllowBashIfSandboxed` does not cover. Item checks through VH-136 never hit this, because `preview_start` and the in-app browser run outside the Bash sandbox; the scripted headless-Chrome walker did. A narrower change (local binding, `127.0.0.1` on the Network line, a scoped Unix-socket path, read-only allow rules for Codex and gh) was drafted, scored and set aside. Vinyl Sorting has no `.claude/settings.json`, only an uncommitted `settings.local.json` of allow rules and a committed `launch.json`; this project now matches it but for the hooks, which stay because rule 1's re-read after a compaction and the context watcher depend on them. What is lost: the read and write denies on the secret folders, the token environment-variable denies, the network allowlist (the profile's Network line is now an instruction to Claude Code sessions, not enforced), and the `curl`, `wget`, `brew`, `npx -y`, `pip install`, `git clone`, WebFetch, WebSearch and cloud-tool denies. How many prompts remain depends on the owner's user-level settings and each session's permission mode, neither of which is in this repository. `tools/harness.mjs` regenerates this file with `--hooks-only` from now on; a full regeneration would restore the sandbox, and needs a decision first. `.claude/settings.intake.json` and Codex's own settings are unchanged. Takes effect in a session started after the commit. Landed on `main` on 2026-10-22, after V31-UPGRADE, by `tools/harness.mjs --hooks-only`, which also carries v3.1's start-notice hook (`tools/handover.mjs`).
-
-**Supersedes:** 2026-10-05 — V3-HARNESS — Codex runs outside the sandbox, like gh
-
-**Deferred:** none

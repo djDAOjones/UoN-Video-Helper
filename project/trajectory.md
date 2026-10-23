@@ -15,6 +15,7 @@
 - VH-172 — the evidence run: a prioritised matrix of 699 records whole in place of the full 1,454, the 821 unrun cells listed with reasons; eleven instrument digests; the six fixes verified, four holding, VH-165 and VH-166 partial, none regressed (2026-10-23) — see decisions
 - VH-173 — the review judged: four journeys, Carbon, Nielsen and 86 WCAG criteria; eight draft findings (V-18 and V-33 incomplete, V-40 to V-45), none rank 1, none adding a control; the person checklist (2026-10-23) — see decisions
 - VH-174 — the report merged: D-01 to D-04 verified live or in source, V-46 and V-47 new, ten findings at rank 2 or 3; Codex astra's critique applied but one point, two judgements for the owner (2026-10-23) — see decisions
+- VH-175 — the fix plan: VH-178 to VH-180 for seven findings, the owner's ask decided on the standing instruction, V-45 kept for the owner since its words are the owner's own; Codex astra's five points applied (2026-10-23) — see decisions
 
 ## Phase 6 — the public release: the feedback form, the statement, the cut, Xerte
 

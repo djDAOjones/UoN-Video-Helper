@@ -558,3 +558,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-21 — VH-147 — Claude Code sessions run without a project sandbox, as Vinyl Sorting's do; `.claude/settings.json` keeps only the session hooks
+
+**Decision:** `.claude/settings.json` holds only the two session hooks and `autoMemoryEnabled: false`; the project sandbox, its network allowlist, the permission denies and `excludedCommands` are removed, so Claude Code sessions run under the owner's user-level settings as Vinyl Sorting's do — because the sandbox sent headless Chrome, Vite and the walker to the owner's Terminal panel and made every Codex and gh call ask, stalling the audits and overnight runs, and the owner chose Vinyl Sorting's configuration, keeping the hooks, over loosening the sandbox (chat, 2026-10-21).
+
+**Rationale:** The sessions' own words, 2026-10-19 to 2026-10-21 (VH-126, VH-133, VH-138, overnight runs 02–04): the sandbox "cannot start Chrome (singleton socket dir denied), cannot bind ports, and refused curl to localhost". Codex and gh, excluded from the sandbox by V3-HARNESS, went through the permission check, which `autoAllowBashIfSandboxed` does not cover. Item checks through VH-136 never hit this, because `preview_start` and the in-app browser run outside the Bash sandbox; the scripted headless-Chrome walker did. A narrower change (local binding, `127.0.0.1` on the Network line, a scoped Unix-socket path, read-only allow rules for Codex and gh) was drafted, scored and set aside. Vinyl Sorting has no `.claude/settings.json`, only an uncommitted `settings.local.json` of allow rules and a committed `launch.json`; this project now matches it but for the hooks, which stay because rule 1's re-read after a compaction and the context watcher depend on them. What is lost: the read and write denies on the secret folders, the token environment-variable denies, the network allowlist (the profile's Network line is now an instruction to Claude Code sessions, not enforced), and the `curl`, `wget`, `brew`, `npx -y`, `pip install`, `git clone`, WebFetch, WebSearch and cloud-tool denies. How many prompts remain depends on the owner's user-level settings and each session's permission mode, neither of which is in this repository. `tools/harness.mjs` regenerates this file with `--hooks-only` from now on; a full regeneration would restore the sandbox, and needs a decision first. `.claude/settings.intake.json` and Codex's own settings are unchanged. Takes effect in a session started after the commit. Landed on `main` on 2026-10-22, after V31-UPGRADE, by `tools/harness.mjs --hooks-only`, which also carries v3.1's start-notice hook (`tools/handover.mjs`).
+
+**Supersedes:** 2026-10-05 — V3-HARNESS — Codex runs outside the sandbox, like gh
+
+**Deferred:** none

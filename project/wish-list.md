@@ -58,3 +58,6 @@
 - VH-172.1 — Run the 821 matrix cells `PLANS.priority` left unrun (listed by class in `matrix-2026-10-23.md`), and re-measure the 245 file-button text readings left "cannot determine" by the setup-hover fault — (from: VH-172, 2026-10-23)
 - VH-173.1 — A walked state or fixture that draws the code role and a fact note, so VH-166's and VH-167's last contract clauses are measured rather than unverified — (from: VH-173, 2026-10-23)
 - VH-174.1 — V-44: under forced colours a filled or danger button shows no hover change; a border-only hover inside the system palette, if the owner wants one (no adopted rule asks for it) — (from: VH-174, 2026-10-23)
+- VH-175.1 — V-18: the first action sits below the first screen in Chinese and Malay at 1280 px and in all three languages at 320 px; a native reader's shorter wording above step 1, measured, within the simplicity rule — (from: VH-175, 2026-10-23)
+- VH-175.2 — For VH-137's review: the statement names the file chooser's visible "Choose File" missing from its accessible name (2.5.3) beside VH-168's language limitation — (from: VH-175, 2026-10-23)
+- VH-175.3 — V-45, for the owner: step 4's legend says "Closing branding" and its lines say "closing graphics" (both the owner's words, VH-148); one name, or both kept — (from: VH-175, 2026-10-23)

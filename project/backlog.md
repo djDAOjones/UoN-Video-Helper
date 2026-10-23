@@ -36,7 +36,9 @@ The public release, 0.2.0, on Xerte (PLAN-6).
 
 ### Phase 7 — a second design, UX and accessibility pass, with Codex astra as partner, before the cut
 
-- [~] VH-175 — The fix plan, with Codex astra's critique and the owner's approval — since 2026-10-22 — (from: PLAN-7, 2026-10-22)
+- [~] VH-178 — Focus passes on when finished work takes its control away (V-46) — since 2026-10-23 — (from: VH-175, 2026-10-23)
+- [ ] VH-179 — Three focus rings drawn whole, the feedback message to the measure (V-40, V-41, V-42, V-33) — since 2026-10-23 — (from: VH-175, 2026-10-23)
+- [ ] VH-180 — A true frame-rate note (V-47) — since 2026-10-23 — (from: VH-175, 2026-10-23)
 - [ ] VH-176 — Integrated verification: each fix checked by Codex astra, the after-run, the integrated check — since 2026-10-22 — (from: PLAN-7, 2026-10-22)
 - [ ] VH-177 — The close: Phase 7 reconciled, the cut's Phase 7 block lifted — since 2026-10-22 — (from: PLAN-7, 2026-10-22)
 

@@ -697,13 +697,13 @@ rank 3, where the draft had 8 at rank 2 and 2 at rank 3.
 
 | Finding | Rank | Disposition |
 | --- | --- | --- |
-| V-46 | 2 | To plan in VH-175 |
-| V-40 | 2 | To plan in VH-175 |
-| V-41 | 2 | To plan in VH-175 |
-| V-42 | 2 | To plan in VH-175 |
-| V-43 | 2 | To plan in VH-175, on the owner's ruling: the name tested, or VH-168's limitation extended |
-| V-47 | 2 | To plan in VH-175; its rank the owner's (Codex 1, Claude 2) |
-| V-45 | 2 | To plan in VH-175, on the owner's ruling on the step's name and the specification |
-| V-18 | 2 | To plan in VH-175, on the owner's ruling: what remains accepted or which measured change is allowed |
-| V-33 | 2 | To plan in VH-175 |
-| V-44 | 3 | Wish line, unless the owner takes it into VH-175 |
+| V-46 | 2 | VH-178 |
+| V-40 | 2 | VH-179 |
+| V-41 | 2 | VH-179 |
+| V-42 | 2 | VH-179 |
+| V-43 | 2 | VH-168's limitation extended to 2.5.3, on the owner's standing instruction; wording to VH-137 (VH-175.2) |
+| V-47 | 2 | VH-180, ranked 2 on the owner's standing instruction |
+| V-45 | 2 | For the owner: the two names are the owner's own (VH-148); wish line VH-175.3 |
+| V-18 | 2 | Accepted on the owner's standing instruction; a shorter native wording is wish line VH-175.1 |
+| V-33 | 2 | VH-179 |
+| V-44 | 3 | Wish line VH-174.1 |
