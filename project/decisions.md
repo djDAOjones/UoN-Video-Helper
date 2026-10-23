@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-23 — VH-173 — The review judged: eight draft findings, none rank 1, none adding a control; WCAG 18 gaps typed
+
+**Decision:** VH-173 judges the pass in `judged-2026-10-23.md` and `wcag-2026-10-23.md`: V-18 and V-33 incomplete, V-40 to V-43 at rank 2, and V-44 and V-45 at rank 3; it adds no control; because the matrix and source settle each one.
+
+**Rationale:** Findings: V-18, the first action below the first screen in Chinese and Malay at 1280 px and in all three at 320 px; V-33, the feedback field's lines of 524–541 px; V-40, the file button's ring clipped, 110 records; V-41, the thumbs' ring lost at a 32 px font; V-42, the switcher's ring under forced-light; V-43, "Choose File" not in the input's name (it reopens part of VH-168, so it is for the owner); V-44, no hover under forced colours; V-45, "Closing branding" against "closing graphics". WCAG: 40 met, 11 met-in-source, 17 n-a, 18 gaps (4 defects: 1.4.11, 2.4.3 with D-01, 2.4.13, 2.5.3; 10 accepted limitations; 4 missing evidence: 2.1.1, 2.1.3, 3.1.3, 3.1.5). 1.4.8 is met on a stated reading, a CJK glyph counted as two against 80; counting one against 40 fails 86 records, and VH-174 tests the reading. D-01's first case was confirmed live. D-01 to D-04 merge in VH-174. Nielsen: seven hold; 4, 8 and 9 hold with exceptions. Person checklist: `person-checklist-2026-10-23.md`. Unrun cells and missing fixtures: VH-172.1, VH-173.1. Standards: wcag-2.2-aaa, nielsen, carbon digests. No product code changed.
+
+**Supersedes:** none
+
+**Deferred:** VH-174
+
 ## 2026-10-23 — VH-172 — The evidence run: a prioritised matrix, 699 records whole, in place of the full 1,454; the six fixes hold or hold in part, none regressed
 
 **Decision:** VH-172 runs a prioritised matrix in resumable parts instead of the plan's full matrix: every scenario once in its base cell, the language, width, mode and enlargement variants only where a check depends on them, and the six-fix cells in full. The 821 cells left unrun are listed by class with their reasons, and `PLANS.matrix` stays declared for a later run. Because the full run is about 11.6 hours on a laptop that moves between places and would be broken repeatedly, the orchestrator recommended this reduction, and the owner's standing instruction lets it proceed.
@@ -564,13 +574,3 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Supersedes:** none
 
 **Deferred:** none
-
-## 2026-10-21 — VH-143 — The owner's word at 09:04 BST: "resume" — the run goes on past 07:00
-
-**Decision:** the overnight run goes on past the 07:00 line: VH-139 merged, Phase 3, Phase 4, then the morning report, each item closed with Codex astra's review — because the owner said "resume" in chat at 09:04 BST, told the run would otherwise stop at the report.
-
-**Rationale:** At about 08:40 BST the owner was told, in their own session, that past 07:00 the run would finish VH-143, write the morning report and stop, and that they should say so if they wanted Phase 3 built today; they switched that session to Claude Opus 5.5 and replied "resume". That session relayed the word verbatim to the third session, whose own chat had the owner's "Resume" on switching it to Claude Opus 5.5 after the Fable usage limit. The overnight prompt's rule gives the owner's word precedence over the 07:00 line when they speak. The profile's Session line is unchanged: a session past it ends at its next close and hands off.
-
-**Supersedes:** none
-
-**Deferred:** VH-139, VH-140, VH-141, VH-142, VH-144, VH-145, VH-146

@@ -13,6 +13,7 @@
 - VH-170 — the second pass planned and ticketed: four journeys, scenarios, qualified instruments, four lenses, seven Codex astra touchpoints, eight stages; Codex's twelve points applied (2026-10-22) — see decisions
 - VH-171 — the instruments qualified: Codex astra's blind review saved (D-01 to D-04), its method check's eight musts applied, 91 scenarios with setups, faults F1–F13 and fixtures N1–N5, proofs 77 of 77, the smoke plan 119 of 119 whole (2026-10-23) — see decisions
 - VH-172 — the evidence run: a prioritised matrix of 699 records whole in place of the full 1,454, the 821 unrun cells listed with reasons; eleven instrument digests; the six fixes verified, four holding, VH-165 and VH-166 partial, none regressed (2026-10-23) — see decisions
+- VH-173 — the review judged: four journeys, Carbon, Nielsen and 86 WCAG criteria; eight draft findings (V-18 and V-33 incomplete, V-40 to V-45), none rank 1, none adding a control; the person checklist (2026-10-23) — see decisions
 
 ## Phase 6 — the public release: the feedback form, the statement, the cut, Xerte
 

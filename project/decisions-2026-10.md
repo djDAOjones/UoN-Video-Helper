@@ -538,3 +538,13 @@
 **Items:** VH-144, VH-145, VH-146
 
 **Deferred:** none
+
+## 2026-10-21 — VH-143 — The owner's word at 09:04 BST: "resume" — the run goes on past 07:00
+
+**Decision:** the overnight run goes on past the 07:00 line: VH-139 merged, Phase 3, Phase 4, then the morning report, each item closed with Codex astra's review — because the owner said "resume" in chat at 09:04 BST, told the run would otherwise stop at the report.
+
+**Rationale:** At about 08:40 BST the owner was told, in their own session, that past 07:00 the run would finish VH-143, write the morning report and stop, and that they should say so if they wanted Phase 3 built today; they switched that session to Claude Opus 5.5 and replied "resume". That session relayed the word verbatim to the third session, whose own chat had the owner's "Resume" on switching it to Claude Opus 5.5 after the Fable usage limit. The overnight prompt's rule gives the owner's word precedence over the 07:00 line when they speak. The profile's Session line is unchanged: a session past it ends at its next close and hands off.
+
+**Supersedes:** none
+
+**Deferred:** VH-139, VH-140, VH-141, VH-142, VH-144, VH-145, VH-146
