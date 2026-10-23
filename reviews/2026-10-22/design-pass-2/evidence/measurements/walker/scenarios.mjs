@@ -4,7 +4,7 @@
 // list), the keyboard routes J1-J4 and K-dialog, the plans, and the gaps.
 // matrix.mjs imports SCENARIOS, ROUTES, PLANS, MX_INIT and GAPS from here.
 import { F, sleep } from './walk.mjs'
-import { IN_DIALOG, IN_DIALOG_OR_OUT, focusByKeyboard } from './qualify.mjs'
+import { IN_DIALOG, IN_DIALOG_OR_OUT, focusByKeyboard, key } from './qualify.mjs'
 import { applyFault, releaseFault, gotoNoWait } from './faults.mjs'
 
 // ---------------------------------------------------------------------------
@@ -1408,3 +1408,264 @@ export const GAPS = [
   ]),
   'S-84 (page language at narrow width) is S-03 at 320 px: the light matrix covers it',
 ]
+
+// ---------------------------------------------------------------------------
+// VH-178: the transitions that take the focused control away (V-46, WCAG
+// 2.4.3), and the variants Codex astra's critique of the fix plan asked for
+// (F-03), kept for VH-176's after-run. Each `run` reaches the moment by
+// setup, places focus by keys, lets the transition happen and reads focus
+// at once, before any instrument moves it. `ran` says the transition ran as
+// declared (focus held up to it, the check still running, the save still
+// running, the dialog open), and `asserts` names each condition the record
+// must meet to pass (Codex astra's check, VH-178); `successor` is where
+// focus must then be, or 'moved' for where the reader went. `inView` is read
+// at the same moment: the focused control inside the window and not covered
+// (2.4.11, 2.4.12), before any instrument scrolls. transitions.mjs walks them.
+const ACK = '#process-actions > button:nth-child(1)'
+const FAILURE = '#process-result > .notification[data-kind="error"]'
+const ANNOUNCE = '#announce-progress'
+/** Tab (Shift+Tab with `shift`) until a page expression holds: the keys a person presses. */
+async function tabUntil(w, expr, { shift = false, max = 80 } = {}) {
+  for (let n = 0; n <= max; n++) {
+    if (await mx(w, expr)) return n
+    if (n < max) await key(w, 'Tab', { shift })
+  }
+  throw new Error('focus never reached by keys: ' + expr.slice(0, 120))
+}
+const focusMark = (w) => w.evaluate('window.__audit.focus.length')
+/**
+ * Focus now, every element focus entered since `mark`, whether it is on
+ * `successor` (or inside it), and `inView`: its box in the window, and how many
+ * of five points inside it (the centre and four corners, 2 px in) another
+ * element covers, read where it stands, nothing scrolled.
+ */
+const readFocus = (w, mark, successor) => w.evaluate(`(() => {
+  const a = document.activeElement; const s = ${successor ? `document.querySelector(${JSON.stringify(successor)})` : 'null'};
+  let view = null;
+  if (a && a !== document.body) {
+    const r = a.getBoundingClientRect(); const inside = r.top >= 0 && r.left >= 0 && r.bottom <= innerHeight && r.right <= innerWidth;
+    const pts = [[r.left + r.width / 2, r.top + r.height / 2], [r.left + 2, r.top + 2], [r.right - 2, r.top + 2], [r.left + 2, r.bottom - 2], [r.right - 2, r.bottom - 2]].filter(([x, y]) => x >= 0 && y >= 0 && x < innerWidth && y < innerHeight);
+    const covered = pts.filter(([x, y]) => { const e = document.elementFromPoint(x, y); return !!e && e !== a && !a.contains(e) && !e.contains(a); }).length;
+    view = { top: Math.round(r.top), bottom: Math.round(r.bottom), inWindow: inside, sampled: pts.length, covered };
+  }
+  return { el: !a || a === document.body ? 'body' : window.__audit.desc(a).slice(0, 90), visible: !!a && a !== document.body && a.matches(':focus-visible'),
+    landed: !!s && !!a && (a === s || s.contains(a)), moves: window.__audit.focus.slice(${mark}).map((f) => f.el.slice(0, 60)), inView: view };
+})()`)
+const on = (placed, id) => typeof placed === 'string' && placed.includes(id)
+const seen = (w, ...ids) => ids.every((id) => (w.faultsSeen ?? []).some((f) => f.startsWith(id + ':')))
+/** Create (Continue anyway first, under a discouraging verdict), by keys; Cancel takes focus. */
+async function createByKeys(w) {
+  if (await mx(w, 'M.ack()')) { await tabUntil(w, FOCUS_ON(ACK)); await key(w, 'Enter'); await sleep(200) }
+  await tabUntil(w, FOCUS_ON(CREATE))
+  await key(w, 'Enter')
+  await w.waitRunning()
+}
+/** A job under way with focus moved by keys from Cancel to Announce progress. */
+async function announceHeld(w, lang, file) {
+  await ready(w, lang, file)
+  await createByKeys(w)
+  await tabUntil(w, FOCUS_ON(ANNOUNCE), { shift: true, max: 6 })
+  return (await readFocus(w, 0, null)).el
+}
+/** A finished video, then Save by keys: Stop saving takes focus. */
+async function savingByKeys(w, lang) {
+  await applyFault(w, 'F4b', { ms: 3000 })
+  await finished(w, lang)
+  await tabUntil(w, FOCUS_ON(SAVE), { max: 10 })
+  await key(w, 'Enter')
+  await until(w, 'M.saving()', 'saving', 10000)
+  return mx(w, FOCUS_ON(STOP_SAVE_SEL))
+}
+/** A file chosen through the native chooser (VH-168) with focus on it, by keys; then focus to Start time while the check runs. */
+async function setupFieldWhileChecking(w, file) {
+  await tabUntil(w, FOCUS_ON('#file-input'), { max: 40 })
+  await w.setFiles(F(file))
+  await until(w, 'M.checking() && !M.el("#step-trim").hidden', 'checking with the setup steps shown', 60000)
+  await tabUntil(w, FOCUS_ON('#trim-start'), { max: 12 })
+  return { checkingAtFocus: await mx(w, 'M.checking()'), placedOn: (await readFocus(w, 0, null)).el }
+}
+
+export const TRANSITIONS = {
+  'T-46.1': {
+    name: 'A job made with focus on Announce progress (V-46, main.ts:2947)',
+    fixtures: ['lecture-30s.mp4'], successor: RESULT,
+    run: async (w, lang) => {
+      const placedOn = await announceHeld(w, lang, 'lecture-30s.mp4')
+      const mark = await focusMark(w)
+      await until(w, 'M.finished() && !M.vis("#announce-field")', 'job made', 300000)
+      return { ...(await readFocus(w, mark, RESULT)), ran: { placedOn } }
+    },
+    asserts: (r) => ({ heldOnAnnounce: on(r.placedOn, '#announce-progress') }),
+  },
+  'T-46.2': {
+    name: 'A check blocks with focus in Start time (V-46, main.ts:1580, :1592)',
+    // F14 holds the check's answer 8 s: unheld it blocks about 20 ms after it starts, before any key could reach Start time.
+    faults: ['F14'], fixtures: ['prores-1080p.mov'], successor: '#file-input', ring: FILE,
+    run: async (w, lang) => {
+      await applyFault(w, 'F14')
+      await fresh(w, lang)
+      const placed = await setupFieldWhileChecking(w, 'prores-1080p.mov')
+      const mark = await focusMark(w)
+      await until(w, 'M.kindIn("#source-block") === "error"', 'blocked', 120000)
+      return { ...(await readFocus(w, mark, '#file-input')), ran: { ...placed, stepsWithdrawn: await mx(w, 'M.el("#step-trim").hidden'), held: seen(w, 'F14') } }
+    },
+    asserts: (r) => ({ inStartTime: on(r.placedOn, '#trim-start'), checkingAtFocus: r.checkingAtFocus, stepsWithdrawn: r.stepsWithdrawn, f14: r.held }),
+  },
+  'T-46.3': {
+    name: '(a) S-65 slowed: a check settles during a save, focus on Stop the check (V-46, main.ts:1614)',
+    // The next file is the hour-long still, whose check takes about 27 s; the 60 s video's save at 3 s a chunk outlasts it.
+    faults: ['F4b'], fixtures: ['lecture-60s.mp4', 'still-3600s.mp4'], successor: STOP_SAVE_SEL,
+    run: async (w, lang) => {
+      await applyFault(w, 'F4b', { ms: 3000 })
+      await finished(w, lang, 'lecture-60s.mp4')
+      await tabUntil(w, FOCUS_ON('#file-input'), { shift: true, max: 120 })
+      await w.setFiles(F('still-3600s.mp4'))
+      await until(w, 'M.checking()', 'checking', 60000)
+      await tabUntil(w, FOCUS_ON(SAVE), { max: 80 })
+      await key(w, 'Enter')
+      await until(w, 'M.saving()', 'saving', 10000)
+      await tabUntil(w, FOCUS_ON(STOP_CHECK_SEL), { shift: true, max: 20 })
+      const at = await mx(w, `({ checking: M.checking(), saving: M.saving(), onStopCheck: ${FOCUS_ON(STOP_CHECK_SEL)} })`)
+      const placedOn = (await readFocus(w, 0, null)).el
+      const mark = await focusMark(w)
+      await w.waitFor(`(() => { const M = window.__mx; return !M.checking(); })()`, { label: 'check settled', timeout: 300000, interval: 50 })
+      const savingAtSettle = await mx(w, 'M.saving()')
+      return { ...(await readFocus(w, mark, STOP_SAVE_SEL)), ran: { placedOn, onStopCheck: at.onStopCheck, checkingAtFocus: at.checking, savingAtFocus: at.saving, savingAtSettle, verdict: await mx(w, 'M.verdict() || M.kindIn("#source-block")') } }
+    },
+    asserts: (r) => ({ onStopCheck: r.onStopCheck, checkingAtFocus: r.checkingAtFocus, savingAtFocus: r.savingAtFocus, savingAtSettle: r.savingAtSettle, ready: r.verdict === 'success' }),
+  },
+  // (b) Announce progress through the other endings.
+  'T-46b-cancelled': {
+    name: 'A job cancelled with focus on Announce progress (main.ts:2947)',
+    // Cancel by its own click(), which moves no focus, as a mouse click in Safari does; keys cannot press it without focusing it.
+    fixtures: ['lecture-360s.mp4'], successor: CREATE,
+    run: async (w, lang) => {
+      const placedOn = await announceHeld(w, lang, 'lecture-360s.mp4')
+      const mark = await focusMark(w)
+      await w.evaluate(`document.querySelector(${JSON.stringify(CANCEL)}).click()`)
+      await until(w, 'M.idle() && M.create()', 'cancelled', 60000)
+      return { ...(await readFocus(w, mark, CREATE)), ran: { placedOn, cancelled: await mx(w, 'M.has("status.cancelled", "#status")') } }
+    },
+    asserts: (r) => ({ heldOnAnnounce: on(r.placedOn, '#announce-progress'), cancelled: r.cancelled }),
+  },
+  'T-46b-failed': {
+    name: 'A job failed by its reply with focus on Announce progress (main.ts:2947, F12)',
+    faults: ['F12'], fixtures: ['lecture-360s.mp4'], successor: FAILURE,
+    run: async (w, lang) => {
+      await applyFault(w, 'F12', { bytes: 12 * 1024 * 1024 })
+      const placedOn = await announceHeld(w, lang, 'lecture-360s.mp4')
+      const runningAtFocus = await mx(w, 'M.running()')
+      const mark = await focusMark(w)
+      await until(w, 'M.res() === "failure" && M.idle()', 'failed', 300000)
+      return { ...(await readFocus(w, mark, FAILURE)), ran: { placedOn, runningAtFocus, f12: seen(w, 'F12') } }
+    },
+    asserts: (r) => ({ heldOnAnnounce: on(r.placedOn, '#announce-progress'), runningAtFocus: r.runningAtFocus, f12: r.f12 }),
+  },
+  'T-46b-watchdog': {
+    name: 'A job failed by the watchdog with focus on Announce progress (main.ts:3008-3050, F11)',
+    faults: ['F11'], fixtures: ['lecture-360s.mp4'], successor: FAILURE,
+    run: async (w, lang) => {
+      await applyFault(w, 'F11')
+      const placedOn = await announceHeld(w, lang, 'lecture-360s.mp4')
+      const mark = await focusMark(w)
+      await until(w, 'M.res() === "failure"', 'watchdog', 200000)
+      const lockedAtFailure = await mx(w, 'M.el("#file-input").disabled')
+      await until(w, '!M.el("#file-input").disabled', 'the stop settled', 30000)
+      return { ...(await readFocus(w, mark, FAILURE)), ran: { placedOn, lockedAtFailure } }
+    },
+    asserts: (r) => ({ heldOnAnnounce: on(r.placedOn, '#announce-progress'), lockedAtFailure: r.lockedAtFailure }),
+  },
+  // (c) A reader moving focus between the capture and the hand-off.
+  'T-46c-watchdog': {
+    name: 'The watchdog branch: the reader moves while the job stops (main.ts:3008-3050, F11)',
+    faults: ['F11'], fixtures: ['lecture-360s.mp4'], successor: 'moved',
+    run: async (w, lang) => {
+      await applyFault(w, 'F11')
+      await announceHeld(w, lang, 'lecture-360s.mp4')
+      await until(w, 'M.res() === "failure"', 'watchdog', 200000)
+      await key(w, 'Tab', { shift: true })
+      const movedTo = await readFocus(w, 0, null)
+      const lockedAtMove = await mx(w, 'M.el("#file-input").disabled')
+      const mark = await focusMark(w)
+      await until(w, '!M.el("#file-input").disabled', 'the stop settled', 30000)
+      const after = await readFocus(w, mark, null)
+      return { ...after, landed: movedTo.el !== 'body' && after.el === movedTo.el, ran: { lockedAtMove, movedTo: movedTo.el } }
+    },
+    asserts: (r) => ({ movedWhileLocked: r.lockedAtMove }),
+  },
+  'T-46c-save': {
+    name: 'A save stopped by keys: the reader moves before it settles (main.ts:3271-3374, F4b at 3 s)',
+    faults: ['F4b'], fixtures: ['lecture-30s.mp4'], successor: 'moved',
+    run: async (w, lang) => {
+      const onStopSaving = await savingByKeys(w, lang)
+      await key(w, 'Enter')
+      await key(w, 'Tab', { shift: true })
+      const movedTo = await readFocus(w, 0, null)
+      const savingAtMove = await mx(w, 'M.saving()')
+      const mark = await focusMark(w)
+      await until(w, 'M.has("status.saveStopped", "#save-status") && !M.saving()', 'save stopped', 60000)
+      const after = await readFocus(w, mark, null)
+      return { ...after, landed: movedTo.el !== 'body' && after.el === movedTo.el, ran: { onStopSaving, savingAtMove, movedTo: movedTo.el } }
+    },
+    asserts: (r) => ({ stopSavingPressedWithFocus: r.onStopSaving, movedWhileSaving: r.savingAtMove }),
+  },
+  // (d) The feedback dialogue open at the transition.
+  'T-46d-watchdog': {
+    name: 'The watchdog branch with the feedback dialogue opened while the job stops (F11)',
+    faults: ['F11'], fixtures: ['lecture-360s.mp4'], successor: 'dialog[open]',
+    run: async (w, lang) => {
+      await applyFault(w, 'F11')
+      await announceHeld(w, lang, 'lecture-360s.mp4')
+      await until(w, 'M.res() === "failure"', 'watchdog', 200000)
+      await w.click('#feedback-open')
+      await until(w, '!!document.querySelector("dialog[open]")', 'dialog open', 5000)
+      const lockedAtOpen = await mx(w, 'M.el("#file-input").disabled')
+      const mark = await focusMark(w)
+      await until(w, '!M.el("#file-input").disabled', 'the stop settled', 30000)
+      return { ...(await readFocus(w, mark, 'dialog[open]')), ran: { lockedAtOpen } }
+    },
+    asserts: (r) => ({ openedWhileLocked: r.lockedAtOpen }),
+  },
+  'T-46d-save': {
+    name: 'A save stopped by keys with the feedback dialogue opened before it settles (F4b at 3 s)',
+    faults: ['F4b'], fixtures: ['lecture-30s.mp4'], successor: 'dialog[open]',
+    run: async (w, lang) => {
+      const onStopSaving = await savingByKeys(w, lang)
+      await key(w, 'Enter')
+      await w.click('#feedback-open')
+      const savingAtOpen = await mx(w, 'M.saving() && !!document.querySelector("dialog[open]")')
+      const mark = await focusMark(w)
+      await until(w, 'M.has("status.saveStopped", "#save-status") && !M.saving()', 'save stopped', 60000)
+      return { ...(await readFocus(w, mark, 'dialog[open]')), ran: { onStopSaving, savingAtOpen } }
+    },
+    asserts: (r) => ({ stopSavingPressedWithFocus: r.onStopSaving, openedWhileSaving: r.savingAtOpen }),
+  },
+  // (e) Verdicts that withdraw nothing: focus in a setup field stays there.
+  'T-46e-ready': {
+    name: 'A ready verdict with focus in Start time (main.ts:1535, :1614)',
+    faults: ['F14'], fixtures: ['lecture-60s.mp4'], successor: '#trim-start',
+    run: async (w, lang) => {
+      await applyFault(w, 'F14')
+      await fresh(w, lang)
+      const placed = await setupFieldWhileChecking(w, 'lecture-60s.mp4')
+      const mark = await focusMark(w)
+      await until(w, '!!M.verdict() && !M.checking()', 'a verdict', 120000)
+      return { ...(await readFocus(w, mark, '#trim-start')), ran: { ...placed, verdict: await mx(w, 'M.verdict()'), f14: seen(w, 'F14') } }
+    },
+    asserts: (r) => ({ inStartTime: on(r.placedOn, '#trim-start'), checkingAtFocus: r.checkingAtFocus, ready: r.verdict === 'success', f14: r.f14 }),
+  },
+  'T-46e-storage': {
+    name: 'A recoverable storage block with focus in Start time (main.ts:1579, setupStepsResolve; F3)',
+    faults: ['F3', 'F14'], fixtures: ['lecture-360s.mp4'], successor: '#trim-start',
+    run: async (w, lang) => {
+      await applyFault(w, 'F3', { bytes: 5 * 1024 * 1024 })
+      await applyFault(w, 'F14')
+      await fresh(w, lang)
+      const placed = await setupFieldWhileChecking(w, 'lecture-360s.mp4')
+      const mark = await focusMark(w)
+      await until(w, 'M.kindIn("#source-block") === "error" && M.checkAgain()', 'storage block', 120000)
+      return { ...(await readFocus(w, mark, '#trim-start')), ran: { ...placed, stepsKept: await mx(w, '!M.el("#step-trim").hidden'), f3AndF14: seen(w, 'F3', 'F14') } }
+    },
+    asserts: (r) => ({ inStartTime: on(r.placedOn, '#trim-start'), checkingAtFocus: r.checkingAtFocus, stepsKept: r.stepsKept, f3AndF14: r.f3AndF14 }),
+  },
+}

@@ -39,18 +39,28 @@ const fail = (w, p) => w.page.send('Fetch.failRequest', { requestId: p.requestId
 
 // The worker's entry module, rewritten with a prelude: what runs in the
 // worker (the storage estimate, VH-171's S-73) a page init script cannot reach.
+// VH-178: one route for every prelude, joined in the order set, so two faults
+// on the worker (F3 with F14) compose; the first route to match took the
+// response alone before (Codex astra's check of VH-178).
 const WORKER = '*job.worker.ts*'
 async function workerPrelude(w, id, code) {
-  await route(w, id, {
+  w.preludes = w.preludes ?? new Map()
+  w.preludes.set(id, code)
+  await route(w, 'worker-prelude', {
     urlPattern: WORKER, requestStage: 'Response',
     match: (p) => /job\.worker\.ts\?worker_file/.test(p.request.url),
     handle: async (p) => {
       const { body, base64Encoded } = await w.page.send('Fetch.getResponseBody', { requestId: p.requestId })
       const src = base64Encoded ? Buffer.from(body, 'base64').toString('utf8') : body
-      w.faultsSeen.push(id + ': worker rewritten')
-      await w.page.send('Fetch.fulfillRequest', { requestId: p.requestId, responseCode: 200, responseHeaders: p.responseHeaders, body: Buffer.from(code + '\n' + src).toString('base64') })
+      for (const seen of w.preludes.keys()) w.faultsSeen.push(seen + ': worker rewritten')
+      await w.page.send('Fetch.fulfillRequest', { requestId: p.requestId, responseCode: 200, responseHeaders: p.responseHeaders, body: Buffer.from([...w.preludes.values(), src].join('\n')).toString('base64') })
     },
   })
+}
+/** Drops one prelude; the route goes with the last. */
+async function dropPrelude(w, id) {
+  w.preludes?.delete(id)
+  if (!w.preludes?.size) await unroute(w, 'worker-prelude')
 }
 
 const init = (w, source) => w.page.send('Page.addScriptToEvaluateOnNewDocument', { source })
@@ -82,7 +92,7 @@ export const FAULTS = {
     // opts.bytes: the quota the estimate reports, with nothing used.
     before: (w, { bytes = 50 * 1024 * 1024 } = {}) => workerPrelude(w, 'F3', `navigator.storage.estimate = async () => ({ quota: ${Number(bytes)}, usage: 0 });`),
     // VH-172: released for a route's later loads (the worker module is no longer rewritten).
-    release: (w) => unroute(w, 'F3'),
+    release: (w) => dropPrelude(w, 'F3'),
   },
   F4a: {
     name: 'the save picker cancelled',
@@ -91,11 +101,12 @@ export const FAULTS = {
   },
   F4b: {
     name: 'a slow writable',
-    for: 'S-61, S-65, S-66 (saving, and stopping it): the check asserts Saving with Stop saving offered, then Save stopped',
-    before: (w) => init(w, `(() => { const real = window.showSaveFilePicker; window.showSaveFilePicker = async (o) => { const h = await real(o);
+    for: 'S-61, S-65, S-66 (saving, and stopping it): the check asserts Saving with Stop saving offered, then Save stopped; VH-178 slows it to 3 s a chunk so a check settles while it still runs',
+    // opts.ms: the wait before each chunk is written (VH-178's variant: 3000).
+    before: (w, { ms = 400 } = {}) => init(w, `(() => { const real = window.showSaveFilePicker; window.showSaveFilePicker = async (o) => { const h = await real(o);
       return { kind: 'file', name: h.name, getFile: () => h.getFile(), isSameEntry: (x) => h.isSameEntry(x), remove: () => h.remove(),
         createWritable: async () => { const out = await h.createWritable();
-          return new WritableStream({ async write(c) { await new Promise((r) => setTimeout(r, 400)); await out.write(c); }, close: () => out.close(), abort: (r) => out.abort(r) }); } }; }; })();`),
+          return new WritableStream({ async write(c) { await new Promise((r) => setTimeout(r, ${Number(ms)})); await out.write(c); }, close: () => out.close(), abort: (r) => out.abort(r) }); } }; }; })();`),
   },
   F4c: {
     name: "the picker's file is the source",
@@ -172,14 +183,21 @@ export const FAULTS = {
     before: (w, { bytes = 256 * 1024 } = {}) => workerPrelude(w, 'F12', `(() => { const real = FileSystemSyncAccessHandle.prototype.write; let written = 0, failed = false;
       FileSystemSyncAccessHandle.prototype.write = function (data, o) { if (!failed) { written += data.byteLength; if (written > ${Number(bytes)}) { failed = true; throw new DOMException('fault F12', 'QuotaExceededError'); } } return real.call(this, data, o); }; })();`),
     // VH-172: released for a route's later loads.
-    release: (w) => unroute(w, 'F12'),
+    release: (w) => dropPrelude(w, 'F12'),
   },
   F13: {
     name: "the job worker's clock runs fast",
     for: "S-25 (very long job, discouraged): the worker's performance.now runs at opts.rate (default 2) times real time, so the pre-flight's timed passes (job.worker.ts analysisPass; src/media/probe.ts jobTimeEstimate) read as on a device that much slower, and the 10,800 s still's 45-minute estimate passes 60 (src/config/thresholds.ts ESTIMATE_BANDS). CDP Emulation.setCPUThrottlingRate was tried first (VH-172, 23 October): on the worker's own session it is refused ('only supported for pages'), and on the page's it leaves the worker's estimate at 45 minutes",
     // opts.rate: how many times faster than real time the worker's clock runs.
     before: (w, { rate = 2 } = {}) => workerPrelude(w, 'F13', `(() => { const real = performance.now.bind(performance); const t0 = real(); performance.now = () => t0 + (real() - t0) * ${Number(rate)}; })();`),
-    release: (w) => unroute(w, 'F13'),
+    release: (w) => dropPrelude(w, 'F13'),
+  },
+  F14: {
+    name: "the pre-flight's answer held",
+    for: "VH-178's transitions by keys: prores-1080p.mov blocks about 20 ms after its check starts and a short file is ready in about a second, too soon for a person's keys to reach Start time (probed 23 October). The worker holds its `preflighted` reply opts.ms (default 8,000), well inside the page's 180 s deadline (SELECTION_DEADLINE_MS.preflight); the verdict is unchanged",
+    // opts.ms: how long the reply is held.
+    before: (w, { ms = 8000 } = {}) => workerPrelude(w, 'F14', `(() => { const real = self.postMessage.bind(self); self.postMessage = (m, ...rest) => { if (m && m.kind === 'preflighted') { setTimeout(() => real(m, ...rest), ${Number(ms)}); return; } return real(m, ...rest); }; })();`),
+    release: (w) => dropPrelude(w, 'F14'),
   },
 }
 

@@ -16,6 +16,7 @@
 - VH-173 — the review judged: four journeys, Carbon, Nielsen and 86 WCAG criteria; eight draft findings (V-18 and V-33 incomplete, V-40 to V-45), none rank 1, none adding a control; the person checklist (2026-10-23) — see decisions
 - VH-174 — the report merged: D-01 to D-04 verified live or in source, V-46 and V-47 new, ten findings at rank 2 or 3; Codex astra's critique applied but one point, two judgements for the owner (2026-10-23) — see decisions
 - VH-175 — the fix plan: VH-178 to VH-180 for seven findings, the owner's ask decided on the standing instruction, V-45 kept for the owner since its words are the owner's own; Codex astra's five points applied (2026-10-23) — see decisions
+- VH-178 — focus passes on when finished work takes its control away: a job's end, a blocking check, a check settling mid-save; 36 cells reached by keys in three languages and four colour modes, routes 238 of 242; Codex astra's four musts applied (2026-10-23) — see decisions
 
 ## Phase 6 — the public release: the feedback form, the statement, the cut, Xerte
 

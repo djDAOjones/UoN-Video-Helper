@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-23 — VH-178 — Focus passes on when finished work takes its control away: every control named, a successor that can take focus
+
+**Decision:** Each `focusHeldBy` caller names every control its transition removes: Announce progress with Cancel, and the withdrawn steps in the blocking branch only. The hand-on focuses the first successor that can take focus, Stop saving during a save. The rule moves to `src/ui/focus-hand-on.ts`; no element is added (V-46).
+
+**Rationale:** Before, at 392077f, all three cases left focus on the body. After, they reach the result, the file input and Stop saving in 36 cells, three languages by four colour modes, placed by keys. Each cell asserts its declared conditions and finds the successor in the window and uncovered. The variants were walked: every ending, a reader moving, the dialogue open, and the ready and storage verdicts that keep focus. The routes pass 238 of 242 as before, with S-72a and S-72b held. Thirteen unit tests pin the rule. The file input's ring still fails (V-40, VH-179). Codex astra's check said "Commit after the musts below"; all four musts were applied and its re-check said "Commit". Evidence: `vh178-focus-2026-10-23.md`. Decided on the owner's standing instruction, "work through to the end of VH-177, archive and spawn as you go, proceed with your recommendations, universal permission is granted": (a) a walker fault, F14, holds the check's answer for 8 s so keys can reach Start time, since `prores-1080p.mov` blocks about 20 ms after its check starts; (b) the fallback is each caller's ordered choice, not one rule in the helper; (c) Cancel's click counts focus on Announce progress as held; (d) the module has no line in `project/architecture.md`, whose `ui/` map lists only some modules.
+
+**Supersedes:** none
+
+**Deferred:** VH-179, VH-176
+
 ## 2026-10-23 — PLAN-7 — The owner decides the four wish lines: one name for step 4, a forced-colour hover, V-18 accepted, the statement edited once
 
 **Decision:** VH-175.3 becomes VH-181: step 4 is "Closing graphics" everywhere, spec §6 to match. VH-174.1 joins VH-179 as a border-only hover in a system colour. VH-175.1 retires with V-18 accepted, and a native reader's wording waits as VH-175.4. VH-175.2 waits for VH-137. The owner decided each.
@@ -564,16 +574,6 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Decision:** the owner’s thirteen handoff clauses ship: clearer group headings, closing graphics named throughout, separate helper facts, a short read outcome with bold no-sound, hatched cut regions, inset select arrows, Moodle in Smaller’s helper, the shorter statement, Teams and the team email, dashed disabled buttons and 16 px footer headings — because these are the owner’s conditions for VH-124’s sign-off.
 
 **Rationale:** The native selects keep their menus and keyboard behaviour inside an arrow wrapper; `--type-weight-heading` belongs to Carbon’s type roles. The trim uses existing brand surface/divider colours against the kept interactive fill, with contrast pinned at 3:1; forced colours use a solid CanvasText kept section because Highlight is translucent in Chrome. Helper facts are separate spans, preserving language-of-parts markup. The read live region keeps both sentences, with No sound in `strong`; properties keep their figures. Footer labels have no stop, the explicit VH-124 label exception. Feedback and accessibility contacts retain the owner’s address. All changed keys are listed in VH-148’s notes; translations are agent drafts through the sheet. Conservative implementation choices taken gateless under the handoff. Standards: Carbon productive type, native select and tokens; Nielsen 1, 2, 4 and 8; WCAG 1.3.1, 1.4.11, 2.4.9, 2.5.5 and 4.1.3; house conventions, named config destinations and regression tests. Chrome’s 18 combinations passed; human screen-reader and Windows-theme checks remain on the wish line. The existing missing-sample checker warning is covered by VH-139’s corpus wish line. VH-137’s footer-address debt is paid. Retired the wish line “The owner's walk-through of VH-124 judges three readings from the design pass”: all three accepted recommendations ship here.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-21 — VH-124 — The owner’s walk-through is closed by VH-148
-
-**Decision:** VH-124 closes with VH-148 — the owner signed off the page subject to the changes now implemented, with the three design-pass recommendations accepted.
-
-**Rationale:** The owner’s words are in VH-148’s notes and its handoff; the original state audit remains in reviews/2026-10-01/vh-124. No further signature is inferred. The wider human acceptance walks stay with VH-M4 and the existing wish lines.
 
 **Supersedes:** none
 

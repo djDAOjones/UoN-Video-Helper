@@ -578,3 +578,13 @@
 **Supersedes:** none
 
 **Deferred:** VH-148, VH-141, VH-142, VH-144, VH-145, VH-146
+
+## 2026-10-21 — VH-124 — The owner’s walk-through is closed by VH-148
+
+**Decision:** VH-124 closes with VH-148 — the owner signed off the page subject to the changes now implemented, with the three design-pass recommendations accepted.
+
+**Rationale:** The owner’s words are in VH-148’s notes and its handoff; the original state audit remains in reviews/2026-10-01/vh-124. No further signature is inferred. The wider human acceptance walks stay with VH-M4 and the existing wish lines.
+
+**Supersedes:** none
+
+**Deferred:** none

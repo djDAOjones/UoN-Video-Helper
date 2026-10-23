@@ -174,6 +174,7 @@ import {
 import { buildLosses, readLine, renderSourceError, renderSourceReport } from './ui/source-panel'
 import type { SourceReport } from './media/inspect'
 import { lossesSpoken, spoken, warningsSpoken } from './ui/announce'
+import { focusHeldBy as handOnFocus, type HandOn } from './ui/focus-hand-on'
 import { browserNote, summariseChecks, type CheckState } from './ui/system-check'
 import { headingFontUrl, installBrandAssets } from './ui/brand-assets'
 import {
@@ -890,31 +891,13 @@ function paintStatus(line: HTMLParagraphElement, message: Text, spokenOnly: Text
 
 /**
  * Notes, BEFORE a transition, whether focus is on a control it will take
- * away; the returned hand-on then moves focus to `target` only if it was
- * (VH-111, A-07). Focus is never moved from where a user has gone to read,
- * nor out of the feedback dialogue — and "on the page body" is not taken as
- * displaced, because it is also where focus sits while someone reads.
+ * away; the returned hand-on then moves focus to the first of its
+ * successors that can take it, only if it was (VH-111, A-07, VH-178).
+ * `ui/focus-hand-on.ts` holds the rule: never from a reader, never out of
+ * the feedback dialogue.
  */
-function focusHeldBy(
-  controls: readonly HTMLElement[],
-  heldEarlier = false,
-): (target: HTMLElement) => void {
-  const active = document.activeElement
-  const held =
-    heldEarlier ||
-    (active instanceof HTMLElement &&
-      controls.some((control) => control === active || control.contains(active)))
-  return (target) => {
-    if (!held || feedbackDialog.open) return
-    // Still lost: on the page body, or on one of the controls. Anywhere else
-    // means the user moved it themselves in the meantime, and it stays.
-    const now = document.activeElement
-    const stillLost =
-      now === null ||
-      now === document.body ||
-      controls.some((control) => control === now || control.contains(now))
-    if (stillLost) target.focus()
-  }
+function focusHeldBy(controls: readonly HTMLElement[], heldEarlier = false): HandOn {
+  return handOnFocus(controls, { heldEarlier, page: document, dialog: feedbackDialog })
 }
 
 /**
@@ -934,6 +917,18 @@ function revealLaterSteps(
   const [trim, title, closing, preset, create] = laterSteps
   for (const step of [trim, title, closing, preset]) step!.hidden = !shown.setup
   create!.hidden = !shown.create
+}
+
+/** The steps `revealLaterSteps(shown)` takes off the page, noted before it does (VH-178). */
+function stepsWithdrawnBy(shown: {
+  readonly setup: boolean
+  readonly create: boolean
+}): HTMLElement[] {
+  const [trim, title, closing, preset, create] = laterSteps
+  return [
+    ...(shown.setup ? [] : [trim!, title!, closing!, preset!]),
+    ...(shown.create ? [] : [create!]),
+  ]
 }
 
 /**
@@ -1577,7 +1572,12 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
         // previous video's Save while one is unsaved: hiding it hid the only
         // way to that file.
         const recoverable = setupStepsResolve(summary.verdict)
-        revealLaterSteps({ setup: recoverable, create: recoverable || unsavedResult !== null })
+        const shown = { setup: recoverable, create: recoverable || unsavedResult !== null }
+        // The steps withdrawn take their controls with them, and the check
+        // runs with them on the page: focus in one goes where Stop the
+        // check's goes (V-46). A block they resolve withdraws none.
+        const fromBlock = focusHeldBy([stopCheckButton, ...stepsWithdrawnBy(shown)], fromStop.held)
+        revealLaterSteps(shown)
         // The block panel says it; the line only speaks it (pre-work defect 1).
         setSourceStatus('', () => preflightAnnouncement(summary, context).spokenOnly)
         if (recoverable) {
@@ -1588,8 +1588,9 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
           setStatus(() => t().status.storageWayOut({ smaller: t().preset.labels.smaller }))
           offerStop('check-again')
         }
-        // Stop the check has gone; the block is said beside the file.
-        fromStop(fileInput)
+        // Stop the check has gone; the block is said beside the file. A save
+        // shuts the chooser, and Stop saving continues the task (V-46).
+        fromBlock(fileInput, stopSaveButton)
         return
       }
       // A storage block the trim or the preset has just cleared: step 1's
@@ -1610,8 +1611,9 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
           ),
       )
       showProcessControls(file, summary.contentClass, keptRange, summary.verdict.outcome === 'discourage')
-      // Stop the check has gone; what it was holding up takes focus.
-      fromStop(acknowledgeButton.hidden ? startButton : acknowledgeButton)
+      // Stop the check has gone; what it was holding up takes focus, or,
+      // while a save shuts Create, Stop saving (V-46).
+      fromStop(acknowledgeButton.hidden ? startButton : acknowledgeButton, stopSaveButton)
       return
     }
     if (reply.kind === 'failed') {
@@ -1622,7 +1624,7 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
       // on saying "Checking this video against your device…" under an error.
       // The box says what; the line speaks it (VH-124).
       setStatus('', () => failureSentence(failureWords(failure)))
-      fromStop(checkAgainButton.hidden ? fileInput : checkAgainButton)
+      fromStop(checkAgainButton.hidden ? fileInput : checkAgainButton, stopSaveButton)
       return
     }
     // Abandoned for a newer check — see the inspect path (VH-57).
@@ -2944,7 +2946,8 @@ function beginJob(file: File): void {
   let fromCancel = focusHeldBy([])
   void promise
     .then((reply) => {
-      fromCancel = focusHeldBy([cancelButton], cancelPressedWithFocus)
+      // Announce progress goes with Cancel (V-46).
+      fromCancel = focusHeldBy([cancelButton, announceField], cancelPressedWithFocus)
       // Whatever the job's outcome, the verdict that priced it has been spent:
       // the step leads with the outcome, not with "Ready to go" above it
       // (U-04). The output warnings below take the sound notes' place.
@@ -3005,7 +3008,7 @@ function beginJob(file: File): void {
       }
     })
     .catch(async (cause: unknown) => {
-      fromCancel = focusHeldBy([cancelButton], cancelPressedWithFocus)
+      fromCancel = focusHeldBy([cancelButton, announceField], cancelPressedWithFocus)
       jobEnding = true
       applyControlLock()
       jobNotice.textContent = t().status.stoppingAfterFailure
@@ -3104,9 +3107,10 @@ function settled(id: number): Promise<void> {
 // another listener on every Start click, so the second job posted two cancels
 // (VH-36).
 /**
- * Whether Cancel had focus when pressed. Disabling it can drop focus to the
- * page body before the job answers, so the job's end could not tell
- * (VH-111). Reset when a job starts.
+ * Whether Cancel, or Announce progress beside it, had focus when Cancel was
+ * pressed. Disabling the one and hiding the other can drop focus to the page
+ * body before the job answers, so the job's end could not tell (VH-111,
+ * VH-178). Reset when a job starts.
  */
 let cancelPressedWithFocus = false
 /** True from Cancel until the job answers, so no stage report overwrites "Cancelling…" (VH-124). */
@@ -3114,7 +3118,7 @@ let cancelRequested = false
 
 cancelButton.addEventListener('click', () => {
   if (jobCancelId === null) return
-  cancelPressedWithFocus = document.activeElement === cancelButton
+  cancelPressedWithFocus = focusHeldBy([cancelButton, announceField]).held
   cancelRequested = true
   cancelButton.disabled = true
   setStatus(() => t().status.cancelling)

@@ -36,7 +36,6 @@ The public release, 0.2.0, on Xerte (PLAN-6).
 
 ### Phase 7 — a second design, UX and accessibility pass, with Codex astra as partner, before the cut
 
-- [~] VH-178 — Focus passes on when finished work takes its control away (V-46) — since 2026-10-23 — (from: VH-175, 2026-10-23)
 - [ ] VH-179 — Three focus rings drawn whole, the feedback message to the measure, a forced-colour hover (V-40, V-41, V-42, V-33, V-44) — since 2026-10-23 — (from: VH-175, 2026-10-23)
 - [ ] VH-180 — A true frame-rate note (V-47) — since 2026-10-23 — (from: VH-175, 2026-10-23)
 - [ ] VH-181 — One name for step 4: “Closing graphics” in three languages, spec §6 to match (V-45) — since 2026-10-23 — (from: VH-175, 2026-10-23)

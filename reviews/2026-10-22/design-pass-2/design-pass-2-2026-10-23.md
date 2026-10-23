@@ -697,7 +697,7 @@ rank 3, where the draft had 8 at rank 2 and 2 at rank 3.
 
 | Finding | Rank | Disposition |
 | --- | --- | --- |
-| V-46 | 2 | VH-178 |
+| V-46 | 2 | VH-178: fixed; each case's successor reached in three languages and four colour modes, verified in [`vh178-focus-2026-10-23.md`](evidence/measurements/vh178-focus-2026-10-23.md) |
 | V-40 | 2 | VH-179 |
 | V-41 | 2 | VH-179 |
 | V-42 | 2 | VH-179 |
