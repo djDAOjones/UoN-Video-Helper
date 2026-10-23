@@ -29,8 +29,7 @@ kept apart from the keyboard route:
 - **F2:** an init script that removes `VideoEncoder`.
 - **F3:** the worker's storage estimate reports a set quota, by F9's route
   (`Storage.overrideQuotaForOrigin` changes nothing in a walk's own browser
-  context, probed). S-56 and S-57 need a working-space write that fails
-  part-way; not yet written.
+  context, probed). S-56 and S-57 take F12.
 - **F4:** variants of the existing `showSaveFilePicker` stub (`walk.mjs:63`):
   - a; it throws `AbortError`.
   - b; its writable is slow.
@@ -58,12 +57,19 @@ kept apart from the keyboard route:
   the fault put before its code.
 - **F10:** the pre-flight throws, by F9's route. A worker prelude makes one
   call the check needs throw an unclassified error, which the worker reports
-  as `check-failed` (`src/workers/job.worker.ts:620–625`). The pilot names
-  the call.
+  as `check-failed` (`src/workers/job.worker.ts:620–625`). The call is the
+  worker's `navigator.hardwareConcurrency`, read once by
+  `inspectCapabilities` (`src/media/capability.ts:190`); the calls before it
+  catch their own errors.
 - **F11:** the job's messages dropped once it runs, by F9's route. The page's
   watchdog stops the job after 120 s of silence (`WORKER_SILENCE_LIMIT_MS`,
   `src/config/thresholds.ts:37`). The locks then hold until the worker
-  answers, or 10 s (`main.ts:3088`).
+  answers, or 10 s (`main.ts:3088`). The worker's first `stage` message
+  passes, so the job is seen running.
+- **F12:** a working-space write fails part-way, by F9's route. The worker's
+  `FileSystemSyncAccessHandle.write` throws `QuotaExceededError` once the job
+  has written 256 KiB, which the worker classifies as `out-of-space`
+  (`src/workers/failure.ts:88`); once only, so S-57's retry runs.
 
 It also needs four new fixtures:
 
@@ -119,7 +125,7 @@ standing beside an unreadable file (S-30).
 | S-16 | 57 | — | Video properties open; losses | Choose `captioned-12s`; open Video properties | The rows show; the losses box sits above them | Stays on the summary | "This file has 1 caption track …" / the count said with the read line | — | Inspect; understand the loss | — | — | walked (en-staff 39 + open) |
 | S-17 | 09 | J1 | Onset help open | S-15; press About animation onset | The toggletip opens in flow; Escape or a click outside closes it (`main.ts:712`) | Stays on the button | Two terms / `aria-expanded` | — | Read, return | Expands the page | — | walked (en-staff 08) |
 | S-18 | 17 | — | Sound notes: quiet | Choose `quiet-30s` | The verdict, then the notes | As S-15 | "Worth knowing about the audio — This recording is very quiet …" / said after the verdict | — | Create | — | — | walked (en-staff 40) |
-| S-19 | 17 | — | Sound notes: loud | Choose `loud-30s` | As S-18 | As S-15 | "The audio may be distorted in places" / said | — | Create | — | — | walked (en-staff 41) |
+| S-19 | 17 | — | Sound notes: loud | Choose `clipped-30s` (N5; `loud-30s` does not clip, M-07) | As S-18 | As S-15 | "The audio may be distorted in places" / said | — | Create | — | — | walked (en-staff 41) |
 | S-20 | 27 | — | No audio | Choose `silent-10s` | Read line, then note | As S-15 | "Video read." **"No audio."**; "This video has no audio — …" / said | — | Create | — | — | walked (en-staff 38) |
 | S-21 | 26 | — | Too short | Choose `short-2s` | Trim locked | As S-15 | "It is shorter than 3 seconds, so it cannot be trimmed." / none | — | Continue | — | — | walked (en-staff 37) |
 | S-22 | 61 | J3 | File ends early (MP4) | Choose `truncated-30s` | Warning before Create; the record says what was made (VH-139) | As S-15 | "The file ends early — Its audio stops at 0:20 of 0:30 …" / said | — | Find a complete copy, or continue | — | — | walked (en-staff 43); "the page sees no problem" retired, VH-139 |
@@ -156,8 +162,8 @@ standing beside an unreadable file (S-30).
 | S-53 | 18 | J1 | Finished | S-48 to the end | Result with record, lifetime and Save filled; Create outlined | The result, if on Cancel (`main.ts:2947`); else unmoved | "Finished video — 286 MB"; "Made from …" / "Your video is ready." + notes; title "Ready — …" | Choices | Save | — | — | walked (en-staff 27) |
 | S-54 | 49 | — | Finished, each closing | `closings` | The record names the closing as applied | As S-53 | e.g. "a cut to the blue closing card, marked 'Internal use only'" / said | — | Save | — | — | walked (closings *-finished) |
 | S-55 | 50 | — | Closing changed: fell back | N4 with Fade (fell back to freeze); any file with Fade and F6a (fell back to cut) or F6b (not loaded) | A line beside the result | As S-53 | "Your video is shorter than the fade animation …"; "You chose Fade, but the animation could not be loaded, so this video cuts to …"; or "The closing graphics could not be loaded …" / said | — | Understand the file before saving | Fixed: now inside the kept result (V-11) | — | walked (new step), N4, F6a, F6b |
-| S-56 | 29 | J3 | Failed | S-15; lower the quota after the verdict (F3); Create | Failure box; out of space comes back as a `failed` reply, so the locks clear at once (`main.ts:2996`, 3046–3052). The locks-held path is S-90 | The failure box, if on Cancel (`main.ts:2998`, handed on at 3050) | "This device ran out of working space part-way through. Free some space, or choose Smaller …" / "The video could not be created. …"; title "Not made — …" | Choices | Follow the cause | Stale furniture (V-14, now withdrawn) | — | walked, F3 (the pilot confirms the job runs out; else a worker fault); was source-only |
-| S-57 | + | J3 | Retry after a failure | S-56; restore the quota; Create | New job; fresh bar (VH-150) | Cancel, if held on Create | As S-48 | Choices | Retry | — | — | walked, F3 |
+| S-56 | 29 | J3 | Failed | S-15; F12; Create | Failure box; out of space comes back as a `failed` reply, so the locks clear at once (`main.ts:2996`, 3046–3052). The locks-held path is S-90 | The failure box, if on Cancel (`main.ts:2998`, handed on at 3050) | "This device ran out of working space part-way through. Free some space, or choose Smaller …" / "The video could not be created. …"; title "Not made — …" | Choices | Follow the cause | Stale furniture (V-14, now withdrawn) | — | walked, F12; was source-only |
+| S-57 | + | J3 | Retry after a failure | S-56; Create again (F12 fails once) | New job; fresh bar (VH-150) | Cancel, if held on Create | As S-48 | Choices | Retry | — | — | walked, F12 |
 | S-58 | 19 | J1 | Discard question | S-53 unsaved; Create | The question replaces the result | The question panel (`main.ts:2807`) | "This video is not saved yet — You have not saved …"; record; Discard (danger), Keep it / said once | Result | Decide | — | — | walked (en-staff 28) |
 | S-59 | 19 | J2 | Keep it | S-58; Keep it | Result redrawn | The result heading, if held on Keep (`main.ts:2786`) | Result as S-53 / the question unsaid | Result | Save | — | — | walked (en-staff 29) |
 | S-60 | + | J4 | Discard confirmed | S-58; Discard it and start again | Result released; new job | Cancel | As S-48 | Choices | Wait | — | — | walked (closings) |
@@ -243,13 +249,17 @@ Found by the source check, beyond the plan: the device check failed (S-89,
 
 Not in this pass: the other drop refusals (several files, while saving, during
 startup or blocked; `main.ts:1369–1381`), a card field that does not fit
-(`refused.field/card`), the submission ID errors (design-walk `id-error`), and
-the re-check after a preset change (`en-staff 21`).
+(`refused.field/card`) and the re-check after a preset change (`en-staff 21`).
+The submission ID errors (design-walk `id-error`) are in, as the six-fix
+contract requires, after Codex astra's method check (M-06), as are the two
+long-name fixtures in the finished, previous-result and discard states, with
+and without text spacing; their scenario IDs are in the walker's
+`scenarios.mjs`.
 
 ## The finite list for the other modes
 
 These run in dark, forced colours light and dark, enlargement, text spacing,
-fallback faces, and landscape or short height:
+reduced motion, fallback faces, and landscape or short height:
 
 | The plan's state | Scenario |
 | --- | --- |
@@ -268,8 +278,7 @@ fallback faces, and landscape or short height:
 "Ready with warnings" is read as the warn verdict, whose heading is "Ready,
 with … things to know" (`en-GB.ts:577`). S-18 is "Ready to go" with sound
 notes. S-73 gives the same verdict by F9 if N2 is not sized in time. "A
-failure" is S-56, which rests on the F3 pilot; S-29 (unreadable) is certain,
-so it stands in if the job does not run out.
+failure" is S-56, by F12, proved in `faults-check-2026-10-23.json`.
 
 ## Keyboard route per journey
 

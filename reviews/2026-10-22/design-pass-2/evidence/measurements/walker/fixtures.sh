@@ -53,10 +53,12 @@ rm "$OUT/lecture-30s.mkv"
 
 # N2, long low-cost 1080p stills (S-24, S-25): one frame held, so the file is
 # small and quick to make, while the job still encodes every frame. Their
-# lengths are sized in the pilot to estimate 20-60 minutes and over 60
-# (src/config/thresholds.ts ESTIMATE_BANDS); LONG_WARN_S and LONG_SLOW_S set them.
+# lengths are sized to estimate 20-60 minutes and over 60 (src/config/
+# thresholds.ts ESTIMATE_BANDS): probed on 23 October on this Mac, 3,600 s
+# estimated 15 minutes, 10,800 s 40 and 21,600 s the slow band (VH-171,
+# instruments-2026-10-22.md); LONG_WARN_S and LONG_SLOW_S override them.
 ffmpeg -v error -y -f lavfi -i testsrc2=size=1920x1080:rate=1 -frames:v 1 "$OUT/still-1080p.png"
-for D in ${LONG_WARN_S:-3600} ${LONG_SLOW_S:-10800}; do
+for D in ${LONG_WARN_S:-10800} ${LONG_SLOW_S:-21600}; do
   ffmpeg -v error -y -loop 1 -framerate 25 -i "$OUT/still-1080p.png" -f lavfi -i "sine=frequency=440:sample_rate=48000" -t $D -af "volume=-13dB,aformat=channel_layouts=stereo" -c:v libx264 -preset ultrafast -tune stillimage -crf 40 -pix_fmt yuv420p -c:a aac -b:a 64k -movflags +faststart "$OUT/still-${D}s.mp4"
 done
 rm "$OUT/still-1080p.png"

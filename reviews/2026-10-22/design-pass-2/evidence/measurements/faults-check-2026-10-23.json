@@ -1,0 +1,179 @@
+[
+ {
+  "fault": "F1",
+  "outcome": "pass",
+  "pending": {
+   "outcome": "pass",
+   "matched": "checking",
+   "saw": "System check — checking",
+   "chooserLocked": true
+  },
+  "blocked": {
+   "outcome": "pass",
+   "matched": "The part of the tool that does the work did not start",
+   "saw": " | | The part of the tool that does the work did not start. Reload the page. If the problem happens again, report it with the Send feedback button. | Skip to main content Page la",
+   "chooserLocked": true
+  },
+  "seen": [
+   "F1: worker held"
+  ],
+  "seconds": 5
+ },
+ {
+  "fault": "F2",
+  "outcome": "pass",
+  "matched": "has not passed",
+  "saw": "e does not change. This tool is designed and built for Chrome, and this browser has not passed all the checks for it to run. The system check at the foot of the page says what is missing. Video type Staff video Stu",
+  "seen": [],
+  "seconds": 0
+ },
+ {
+  "fault": "F3",
+  "outcome": "pass",
+  "matched": "not enough free space",
+  "saw": " a video Or drop it here. Device check complete. This cannot run here. There is not enough free space on this device. This job needs about 690 MB of working space. Free some space and try again, keep less of the video, or",
+  "seen": [
+   "F3: worker rewritten"
+  ],
+  "seconds": 4
+ },
+ {
+  "fault": "F9",
+  "outcome": "pass",
+  "matched": "will not say how much free space",
+  "saw": ", messaging, or email etc. 6. Create Ready, with one thing to know This browser will not say how much free space there is. If it runs out part-way, the job stops and nothing is saved. Your original file is not affected. This should ",
+  "seen": [
+   "F9: worker rewritten"
+  ],
+  "seconds": 2
+ },
+ {
+  "fault": "F7",
+  "outcome": "pass",
+  "matched": "preview is not available",
+  "saw": " audio is levelled and the closing graphics are added when the video is made. A preview is not available for this file. You can still set the times. Start End Start time Set start here End time Set end here Minutes and secon",
+  "seen": [],
+  "seconds": 2
+ },
+ {
+  "fault": "F8",
+  "outcome": "pass",
+  "matched": "Report this problem",
+  "saw": "e is kept as typed. 1. Choose a video Or drop it here. A problem was found. Use Report this problem in Errors captured to send the details. Errors captured Something in the tool went wrong. A video being made may not fi",
+  "seen": [],
+  "seconds": 1
+ },
+ {
+  "fault": "F5",
+  "outcome": "pass",
+  "saw": [
+   " sent with it Open email app Copy message and details Close Copied. Paste it into an email to joe.bell@nottingham.ac.uk.",
+   "and details Close Could not copy. Open “What will be sent with it”, select the details, and copy them with your message."
+  ],
+  "seen": [],
+  "seconds": 3
+ },
+ {
+  "fault": "F10",
+  "outcome": "pass",
+  "matched": "device check did not finish",
+  "saw": "/ reduced For Moodle assignment uploads, messaging, or email etc. 6. Create The device check did not finish. Your original file has not been changed. Press Check again to run the check once more. If the check fails again, repor",
+  "checkAgain": true,
+  "seen": [
+   "F10: worker rewritten"
+  ],
+  "seconds": 1
+ },
+ {
+  "fault": "F12",
+  "outcome": "pass",
+  "matched": "ran out of working space part-way",
+  "saw": " messaging, or email etc. 6. Create The video could not be created. This device ran out of working space part-way through. Your original file has not been changed. Free some space, or choose Smaller / reduced, and try again. [dev: fa",
+  "retried": true,
+  "seen": [
+   "F12: worker rewritten"
+  ],
+  "seconds": 9
+ },
+ {
+  "fault": "F11",
+  "outcome": "pass",
+  "matched": "job is stopping",
+  "saw": "report it with the Send feedback button, which adds details that will help. The job is stopping. Please wait before trying again. The job is stopping. Please wait before trying again. The job stopped reporting progr",
+  "locked": true,
+  "lifted": true,
+  "seen": [
+   "F11: worker rewritten"
+  ],
+  "seconds": 135
+ },
+ {
+  "fault": "F4a",
+  "outcome": "pass",
+  "matched": "Not saved",
+  "saw": " | Not saved. The video is still here when you want it. | Skip to main content Page language English 简体中文 Bahasa Malaysia UoN Video ",
+  "seen": [],
+  "seconds": 8
+ },
+ {
+  "fault": "F4c",
+  "outcome": "pass",
+  "matched": "file you started with",
+  "saw": " | That is the file you started with. Choose a different name or folder, because this tool never changes your original. | Skip to main content Page language",
+  "seen": [],
+  "seconds": 8
+ },
+ {
+  "fault": "F4d",
+  "outcome": "pass",
+  "matched": "downloads folder",
+  "saw": " | Saving to your downloads folder — the browser may still be finishing it. Once it is there, upload it to where you will use it, or choose another video ",
+  "seen": [],
+  "seconds": 8
+ },
+ {
+  "fault": "F4e",
+  "outcome": "pass",
+  "matched": "could not be saved",
+  "saw": " | The video could not be saved. It is still here to try again. | Skip to main content Page language English 简体中文 Bahasa Malaysia UoN Video Helper This",
+  "seen": [],
+  "seconds": 8
+ },
+ {
+  "fault": "F4b",
+  "outcome": "pass",
+  "slow": {
+   "outcome": "pass",
+   "matched": "Saving",
+   "saw": " | Saving… | Skip to main content Page language English 简体中文 Bahasa Malaysia UoN Video Helper This tool does the following to you",
+   "stopOffered": true
+  },
+  "stopped": {
+   "outcome": "pass",
+   "matched": "Save stopped. The video is still here",
+   "saw": " | Save stopped. The video is still here when you want it. | Skip to main content Page language English 简体中文 Bahasa Malaysia UoN Video Helper This tool does the"
+  },
+  "seen": [],
+  "seconds": 7
+ },
+ {
+  "fault": "F6a",
+  "outcome": "pass",
+  "matched": "animation could not be loaded, so this video cuts",
+  "saw": "messaging, or email etc. 6. Create Your video is ready. You chose Fade, but the animation could not be loaded, so this video cuts to the blue closing card instead. Finished video — 10.9 MB Made from lecture-30s.mp4: the whole video (30 seconds), Lar",
+  "seen": [
+   "F6a: closing-onset-fade-blue-1080p.webm"
+  ],
+  "seconds": 6
+ },
+ {
+  "fault": "F6b",
+  "outcome": "pass",
+  "matched": "closing graphics could not be loaded",
+  "saw": "assignment uploads, messaging, or email etc. 6. Create Your video is ready. The closing graphics could not be loaded, so they are not in this video. Everything else was applied as asked. Finished video — 10.5 MB Made from lecture-30s.mp",
+  "seen": [
+   "F6b: closing-tail-blue-1080p.mp4"
+  ],
+  "seconds": 6
+ }
+]

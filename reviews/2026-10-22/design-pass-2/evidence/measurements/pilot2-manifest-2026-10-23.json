@@ -1,0 +1,471 @@
+{
+ "run": "2026-10-23T08-41-27-215Z-432dfe",
+ "source": {
+  "commit": "687e2eb408e95ec27afae72191c56939ee205a78",
+  "dirty": false
+ },
+ "instruments": {
+  "revision": "027e2a546dabb4a4",
+  "files": [
+   {
+    "file": "cdp.mjs",
+    "sha256": "c56942d83d339cbd"
+   },
+   {
+    "file": "design-walk.mjs",
+    "sha256": "50c2b05bda2e7e61"
+   },
+   {
+    "file": "digest.mjs",
+    "sha256": "b58bfc4e16da02cd"
+   },
+   {
+    "file": "faults.mjs",
+    "sha256": "c0e55f88252902c1"
+   },
+   {
+    "file": "fixtures.sh",
+    "sha256": "0dc4b279e3d3c383"
+   },
+   {
+    "file": "inventory.mjs",
+    "sha256": "c2c16ea752c5e01e"
+   },
+   {
+    "file": "matrix.mjs",
+    "sha256": "5dd971ecb9ad6e16"
+   },
+   {
+    "file": "prove.mjs",
+    "sha256": "249148bc70c7bd49"
+   },
+   {
+    "file": "qualify.mjs",
+    "sha256": "51de3892c7366963"
+   },
+   {
+    "file": "runner.mjs",
+    "sha256": "1cf9bffa08c835c0"
+   },
+   {
+    "file": "tokens.mjs",
+    "sha256": "59bff4a79c7984ff"
+   },
+   {
+    "file": "walk.mjs",
+    "sha256": "119a8ff6e7d2410f"
+   },
+   {
+    "file": "wcag-checks.mjs",
+    "sha256": "2496aa09cfcbadda"
+   }
+  ]
+ },
+ "browser": "Chrome/155.0.8059.85",
+ "os": "darwin 25.6.0 arm64",
+ "views": [
+  {
+   "view": "w1280",
+   "actual": {
+    "w": 1280,
+    "h": 900,
+    "dpr": 1
+   },
+   "rootFontPx": 16
+  },
+  {
+   "view": "landscape",
+   "actual": {
+    "w": 812,
+    "h": 375,
+    "dpr": 3
+   },
+   "rootFontPx": 16
+  },
+  {
+   "view": "short",
+   "actual": {
+    "w": 1280,
+    "h": 480,
+    "dpr": 1
+   },
+   "rootFontPx": 16
+  },
+  {
+   "view": "w1280",
+   "actual": {
+    "w": 1280,
+    "h": 900,
+    "dpr": 1
+   },
+   "rootFontPx": 32
+  },
+  {
+   "view": "w320",
+   "actual": {
+    "w": 320,
+    "h": 568,
+    "dpr": 1
+   },
+   "rootFontPx": 16
+  },
+  {
+   "view": "w375",
+   "actual": {
+    "w": 375,
+    "h": 812,
+    "dpr": 3
+   },
+   "rootFontPx": 16
+  },
+  {
+   "view": "zoom200proxy",
+   "actual": {
+    "w": 640,
+    "h": 450,
+    "dpr": 2
+   },
+   "rootFontPx": 16
+  },
+  {
+   "view": "zoom400proxy",
+   "actual": {
+    "w": 320,
+    "h": 225,
+    "dpr": 4
+   },
+   "rootFontPx": 16
+  }
+ ],
+ "scaling": "Emulation.setDeviceMetricsOverride per view; Page.setFontSizes for the default font; Chrome page zoom not settable over the protocol (proxy views only)",
+ "enlargement": {
+  "reflow": {
+   "what": "a CSS viewport 320 px wide (and the 375 px phone)",
+   "views": [
+    "w320",
+    "w375"
+   ],
+   "records": 5
+  },
+  "proxy": {
+   "what": "the CSS viewport and device pixel ratio Chrome's 200% and 400% page zoom give a 1280 x 900 window",
+   "views": [
+    "zoom200proxy",
+    "zoom400proxy"
+   ],
+   "records": 6,
+   "realZoom": "unresolved: Chrome page zoom cannot be set over the protocol; on the person list"
+  },
+  "defaultFont32": {
+   "what": "the browser's default-font preference at 32 px (Page.setFontSizes)",
+   "mode": "font32",
+   "records": 3
+  },
+  "syntheticTextOnly": {
+   "status": "not run",
+   "what": "text-only enlargement by an injected style: not implemented, so unqualified"
+  }
+ },
+ "fixtures": [
+  {
+   "file": "lecture-60s.mp4",
+   "bytes": 20222028,
+   "sha256": "ce10e0ce0579c4b6"
+  }
+ ],
+ "faults": [],
+ "coverage": {
+  "expected": 43,
+  "observed": 43,
+  "whole": true,
+  "problems": [],
+  "expectedKeys": [
+   "K-dialog__en-GB__w1280__light",
+   "S-03__en-GB__landscape__light",
+   "S-03__en-GB__short__light",
+   "S-03__en-GB__w1280__dark",
+   "S-03__en-GB__w1280__fallback",
+   "S-03__en-GB__w1280__font32",
+   "S-03__en-GB__w1280__forced-dark",
+   "S-03__en-GB__w1280__forced-light",
+   "S-03__en-GB__w1280__light",
+   "S-03__en-GB__w1280__reduced-motion",
+   "S-03__en-GB__w1280__spacing",
+   "S-03__en-GB__w320__light",
+   "S-03__en-GB__w375__light",
+   "S-03__en-GB__zoom200proxy__light",
+   "S-03__en-GB__zoom400proxy__light",
+   "S-03__zh-Hans__w1280__light",
+   "S-15__en-GB__landscape__light",
+   "S-15__en-GB__short__light",
+   "S-15__en-GB__w1280__dark",
+   "S-15__en-GB__w1280__fallback",
+   "S-15__en-GB__w1280__font32",
+   "S-15__en-GB__w1280__forced-dark",
+   "S-15__en-GB__w1280__forced-light",
+   "S-15__en-GB__w1280__light",
+   "S-15__en-GB__w1280__reduced-motion",
+   "S-15__en-GB__w1280__spacing",
+   "S-15__en-GB__w320__light",
+   "S-15__en-GB__w375__light",
+   "S-15__en-GB__zoom200proxy__light",
+   "S-15__en-GB__zoom400proxy__light",
+   "S-15__zh-Hans__w1280__light",
+   "S-76__en-GB__w1280__dark",
+   "S-76__en-GB__w1280__fallback",
+   "S-76__en-GB__w1280__font32",
+   "S-76__en-GB__w1280__forced-dark",
+   "S-76__en-GB__w1280__forced-light",
+   "S-76__en-GB__w1280__light",
+   "S-76__en-GB__w1280__reduced-motion",
+   "S-76__en-GB__w1280__spacing",
+   "S-76__en-GB__w320__light",
+   "S-76__en-GB__zoom200proxy__light",
+   "S-76__en-GB__zoom400proxy__light",
+   "S-76__zh-Hans__w1280__light"
+  ],
+  "observedKeys": [
+   "K-dialog__en-GB__w1280__light",
+   "S-03__en-GB__landscape__light",
+   "S-03__en-GB__short__light",
+   "S-03__en-GB__w1280__dark",
+   "S-03__en-GB__w1280__fallback",
+   "S-03__en-GB__w1280__font32",
+   "S-03__en-GB__w1280__forced-dark",
+   "S-03__en-GB__w1280__forced-light",
+   "S-03__en-GB__w1280__light",
+   "S-03__en-GB__w1280__reduced-motion",
+   "S-03__en-GB__w1280__spacing",
+   "S-03__en-GB__w320__light",
+   "S-03__en-GB__w375__light",
+   "S-03__en-GB__zoom200proxy__light",
+   "S-03__en-GB__zoom400proxy__light",
+   "S-03__zh-Hans__w1280__light",
+   "S-15__en-GB__landscape__light",
+   "S-15__en-GB__short__light",
+   "S-15__en-GB__w1280__dark",
+   "S-15__en-GB__w1280__fallback",
+   "S-15__en-GB__w1280__font32",
+   "S-15__en-GB__w1280__forced-dark",
+   "S-15__en-GB__w1280__forced-light",
+   "S-15__en-GB__w1280__light",
+   "S-15__en-GB__w1280__reduced-motion",
+   "S-15__en-GB__w1280__spacing",
+   "S-15__en-GB__w320__light",
+   "S-15__en-GB__w375__light",
+   "S-15__en-GB__zoom200proxy__light",
+   "S-15__en-GB__zoom400proxy__light",
+   "S-15__zh-Hans__w1280__light",
+   "S-76__en-GB__w1280__dark",
+   "S-76__en-GB__w1280__fallback",
+   "S-76__en-GB__w1280__font32",
+   "S-76__en-GB__w1280__forced-dark",
+   "S-76__en-GB__w1280__forced-light",
+   "S-76__en-GB__w1280__light",
+   "S-76__en-GB__w1280__reduced-motion",
+   "S-76__en-GB__w1280__spacing",
+   "S-76__en-GB__w320__light",
+   "S-76__en-GB__zoom200proxy__light",
+   "S-76__en-GB__zoom400proxy__light",
+   "S-76__zh-Hans__w1280__light"
+  ]
+ },
+ "measurements": {
+  "failing": {
+   "keys": 0,
+   "overflow": 0,
+   "ax": 0,
+   "targets": 0,
+   "contrastText": 0,
+   "contrastExtra": 0,
+   "measure": 0,
+   "focus": 16,
+   "motion": 0
+  },
+  "tally": {
+   "keys": {
+    "pass": 1,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 0,
+    "items": {
+     "pass": 18
+    }
+   },
+   "overflow": {
+    "pass": 42,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 0,
+    "items": {}
+   },
+   "ax": {
+    "pass": 42,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 0,
+    "items": {}
+   },
+   "targets": {
+    "pass": 26,
+    "fail": 0,
+    "cannot-determine": 16,
+    "not-applicable": 0,
+    "items": {
+     "exempt": 223,
+     "pass": 766,
+     "cannot-determine": 31
+    }
+   },
+   "contrastText": {
+    "pass": 42,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 0,
+    "items": {
+     "exempt": 451,
+     "pass": 1654
+    }
+   },
+   "contrastExtra": {
+    "pass": 27,
+    "fail": 0,
+    "cannot-determine": 15,
+    "not-applicable": 0,
+    "items": {
+     "exempt": 77,
+     "pass": 180,
+     "cannot-determine": 31
+    }
+   },
+   "measure": {
+    "pass": 39,
+    "fail": 0,
+    "cannot-determine": 3,
+    "not-applicable": 0,
+    "items": {
+     "pass": 1904,
+     "cannot-determine": 3
+    }
+   },
+   "focus": {
+    "pass": 14,
+    "fail": 16,
+    "cannot-determine": 12,
+    "not-applicable": 0,
+    "items": {
+     "fail": 18,
+     "pass": 144,
+     "cannot-determine": 24
+    }
+   },
+   "motion": {
+    "pass": 3,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 0,
+    "items": {
+     "exempt": 29,
+     "pass": 3
+    }
+   }
+  }
+ },
+ "artifacts": {
+  "count": 500,
+  "bytes": 18015359,
+  "listSha256": "2351897f4991221b",
+  "list": "artifacts.json (each capture: path, bytes, sha256)"
+ },
+ "unresolved": {
+  "fromMeasurements": [
+   {
+    "instrument": "targets",
+    "kind": "interpretation",
+    "why": "a disc: its hit box is n x n, no n px square fits inside; the reading is VH-n's",
+    "records": [
+     "S-15__en-GB__landscape__light",
+     "S-15__en-GB__short__light",
+     "S-15__en-GB__w1280__dark",
+     "S-15__en-GB__w1280__fallback",
+     "S-15__en-GB__w1280__font32",
+     "S-15__en-GB__w1280__forced-dark"
+    ],
+    "rows": 30,
+    "recordCount": 15
+   },
+   {
+    "instrument": "contrastExtra",
+    "kind": "measurement",
+    "why": "painted pseudo-elements: non-text contrast needs a pixel reading (person check)",
+    "records": [
+     "S-15__en-GB__landscape__light",
+     "S-15__en-GB__short__light",
+     "S-15__en-GB__w1280__dark",
+     "S-15__en-GB__w1280__fallback",
+     "S-15__en-GB__w1280__font32",
+     "S-15__en-GB__w1280__forced-dark"
+    ],
+    "rows": 30,
+    "recordCount": 15
+   },
+   {
+    "instrument": "focus",
+    "kind": "interpretation",
+    "why": "passes against the painted disc, fails against the n px circular reference: the reading is VH-n's",
+    "records": [
+     "S-15__en-GB__landscape__light",
+     "S-15__en-GB__short__light",
+     "S-15__en-GB__w1280__fallback",
+     "S-15__en-GB__w1280__forced-light",
+     "S-15__en-GB__w1280__light",
+     "S-15__en-GB__w1280__reduced-motion"
+    ],
+    "rows": 24,
+    "recordCount": 12
+   },
+   {
+    "instrument": "measure",
+    "kind": "interpretation",
+    "why": "mixed scripts: each character against n and CJK n plus Latin n disagree; the reading is VH-n's",
+    "records": [
+     "S-03__zh-Hans__w1280__light",
+     "S-15__zh-Hans__w1280__light",
+     "S-76__zh-Hans__w1280__light"
+    ],
+    "rows": 3,
+    "recordCount": 3
+   },
+   {
+    "instrument": "contrastExtra",
+    "kind": "measurement",
+    "why": "changed pixels lie outside the button's content box: not glyphs alone",
+    "records": [
+     "S-15__en-GB__landscape__light"
+    ],
+    "rows": 1,
+    "recordCount": 1
+   },
+   {
+    "instrument": "targets",
+    "kind": "measurement",
+    "why": "larger than the viewport or clipped",
+    "records": [
+     "S-76__en-GB__zoom400proxy__light"
+    ],
+    "rows": 1,
+    "recordCount": 1
+   }
+  ],
+  "manual": [
+   "Chrome page zoom at 200% and 400% itself (proxy views stand in; on the person list)",
+   "what a screen reader says (exposure only: the AX tree and the DOM change log are persisted per record)",
+   "native select popups and the video player's inner controls by keys",
+   "transient states: asserted before and after the instruments, not captured mid-transition",
+   "a dialog's entry, use and exit at enlargement: overflow and clipping are measured there; the keys route runs at 1280 only",
+   "a range thumb and track: non-text contrast by pixels (cannot determine in contrastExtra)",
+   "synthetic text-only enlargement: not run",
+   "off-page elements (the skip link before focus): target and contrast read when shown, by the person"
+  ]
+ }
+}

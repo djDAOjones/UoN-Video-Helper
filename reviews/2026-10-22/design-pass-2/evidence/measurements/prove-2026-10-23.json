@@ -1,0 +1,1255 @@
+[
+ {
+  "instrument": "overflow",
+  "fixture": "overflow-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "scrollWidth": 2024,
+   "clientWidth": 1280
+  }
+ },
+ {
+  "instrument": "rendered focus",
+  "fixture": "focus-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "areaAt3to1": 152,
+   "perimeter2px": 576,
+   "bestRatio": 3.32
+  }
+ },
+ {
+  "instrument": "rendered focus, scrolled",
+  "fixture": "focus-scrolled-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "areaAt3to1": 152,
+   "perimeter2px": 576,
+   "bestRatio": 3.32
+  }
+ },
+ {
+  "instrument": "rendered lines",
+  "fixture": "lines-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "lang": "en",
+    "worst": {
+     "text": "This sentence is long enough that one rendered line of it runs well past eighty characters on a wide page. This sentence",
+     "latin": 174,
+     "cjk": 0,
+     "chars": 174,
+     "widthPx": 1215
+    }
+   },
+   {
+    "lang": "zh-Hans",
+    "worst": {
+     "text": "这是一个很长的中文句子，用来检查每行的字数是否超过四十个汉字的限制。这是一个很长的中文句子，用来检查每行的字数是否超过四十个汉字的限制。这是一个很长的中文",
+     "latin": 0,
+     "cjk": 77,
+     "chars": 77,
+     "widthPx": 1232
+    }
+   }
+  ]
+ },
+ {
+  "instrument": "accessibility tree: names",
+  "fixture": "name-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "no accessible name",
+    "role": "button",
+    "dom": 11
+   },
+   {
+    "kind": "no accessible name",
+    "role": "textbox",
+    "dom": 14
+   }
+  ]
+ },
+ {
+  "instrument": "target area",
+  "fixture": "target-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "el": "button#b[submit] \"x\"",
+   "outcome": "fail",
+   "hitW": 20,
+   "hitH": 20,
+   "hitArea": 400,
+   "disabled": false
+  }
+ },
+ {
+  "instrument": "contrast beyond text",
+  "fixture": "placeholder-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "el": "input#t[text] \"Title\"",
+   "what": "placeholder",
+   "fg": "rgb(198, 198, 198)",
+   "ratio": 1.7081,
+   "need": 7,
+   "outcome": "fail"
+  }
+ },
+ {
+  "instrument": "accessibility tree: modal background",
+  "fixture": "modal-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "exposed behind the modal dialog",
+    "role": "button",
+    "name": "Open",
+    "dom": 11
+   },
+   {
+    "kind": "exposed behind the modal dialog",
+    "role": "StaticText",
+    "name": "Open",
+    "dom": 14
+   },
+   {
+    "kind": "exposed behind the modal dialog",
+    "role": "InlineTextBox",
+    "name": "Open"
+   }
+  ]
+ },
+ {
+  "instrument": "rendered focus, file button",
+  "fixture": "file-focus-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "areaAt3to1": 22,
+   "perimeter2px": 680,
+   "paintedPx": [
+    130,
+    44
+   ],
+   "controlPx": [
+    1232,
+    44
+   ]
+  }
+ },
+ {
+  "instrument": "file button text by pixels",
+  "fixture": "file-ink-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "ratio": 2.5143,
+   "fill": "rgb(224,224,224)",
+   "ink": "rgb(141,141,141)",
+   "buttonPx": [
+    130,
+    44
+   ]
+  }
+ },
+ {
+  "instrument": "rendered focus, range thumb",
+  "fixture": "thumb-focus-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "areaAt3to1": 0,
+   "readings": {
+    "box": 270,
+    "painted": 176
+   },
+   "paintedPx": [
+    30,
+    30
+   ]
+  }
+ },
+ {
+  "instrument": "target area, range thumb",
+  "fixture": "thumb-target-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "el": "input#r[range] \"Start\"",
+   "outcome": "fail",
+   "hitW": 20,
+   "hitH": 20,
+   "hitArea": 352,
+   "disabled": false,
+   "thumb": true
+  }
+ },
+ {
+  "instrument": "keys-only route, modal dialog",
+  "fixture": "dialog-keys-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   "button#feedback-close[submit] \"Close\"",
+   "body",
+   "button#behind[submit] \"Behind\"",
+   "textarea#feedback-message[textarea] \"\"",
+   "button#feedback-close[submit] \"Close\""
+  ]
+ },
+ {
+  "instrument": "keys-only route",
+  "fixture": "keys-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   "button#a[submit] \"First\"",
+   "body"
+  ]
+ },
+ {
+  "instrument": "overflow",
+  "fixture": "overflow-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "scrollWidth": 1280,
+   "clientWidth": 1280
+  }
+ },
+ {
+  "instrument": "rendered focus",
+  "fixture": "focus-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "areaAt3to1": 640,
+   "perimeter2px": 576,
+   "bestRatio": 5
+  }
+ },
+ {
+  "instrument": "rendered focus, scrolled",
+  "fixture": "focus-scrolled-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "areaAt3to1": 640,
+   "perimeter2px": 576,
+   "bestRatio": 5
+  }
+ },
+ {
+  "instrument": "rendered lines",
+  "fixture": "lines-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": [
+   {
+    "lang": "en",
+    "worst": {
+     "text": "This sentence is long enough that one rendered line of it runs",
+     "latin": 62,
+     "cjk": 0,
+     "chars": 62,
+     "widthPx": 434
+    }
+   },
+   {
+    "lang": "zh-Hans",
+    "worst": {
+     "text": "这是一个很长的中文句子，用来检查每行的字数是否超过四十个",
+     "latin": 0,
+     "cjk": 28,
+     "chars": 28,
+     "widthPx": 448
+    }
+   }
+  ]
+ },
+ {
+  "instrument": "accessibility tree: names",
+  "fixture": "name-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": []
+ },
+ {
+  "instrument": "target area",
+  "fixture": "target-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "el": "button#b[submit] \"Go\"",
+   "outcome": "pass",
+   "hitW": 48,
+   "hitH": 48,
+   "hitArea": 2304,
+   "disabled": false
+  }
+ },
+ {
+  "instrument": "contrast beyond text",
+  "fixture": "placeholder-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "el": "input#t[text] \"Title\"",
+   "what": "placeholder",
+   "fg": "rgb(82, 82, 82)",
+   "ratio": 7.8139,
+   "need": 7,
+   "outcome": "pass"
+  }
+ },
+ {
+  "instrument": "accessibility tree: modal background",
+  "fixture": "modal-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": []
+ },
+ {
+  "instrument": "rendered focus, file button",
+  "fixture": "file-focus-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "areaAt3to1": 744,
+   "perimeter2px": 680,
+   "paintedPx": [
+    130,
+    44
+   ],
+   "controlPx": [
+    1240,
+    52
+   ]
+  }
+ },
+ {
+  "instrument": "file button text by pixels",
+  "fixture": "file-ink-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "ratio": 7.7948,
+   "fill": "rgb(0,67,206)",
+   "ink": "rgb(255,255,255)",
+   "buttonPx": [
+    130,
+    44
+   ]
+  }
+ },
+ {
+  "instrument": "rendered focus, range thumb",
+  "fixture": "thumb-focus-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "areaAt3to1": 340,
+   "readings": {
+    "box": 270,
+    "painted": 176
+   },
+   "paintedPx": [
+    30,
+    30
+   ]
+  }
+ },
+ {
+  "instrument": "target area, range thumb",
+  "fixture": "thumb-target-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "el": "input#r[range] \"Start\"",
+   "outcome": "pass",
+   "hitW": 44,
+   "hitH": 44,
+   "hitArea": 1936,
+   "disabled": false,
+   "thumb": true
+  }
+ },
+ {
+  "instrument": "target area, a 44 px disc",
+  "fixture": "thumb-target-disc",
+  "outcome": "cannot-determine",
+  "wanted": "cannot-determine",
+  "proved": true,
+  "detail": {
+   "el": "input#r[range] \"Start\"",
+   "outcome": "cannot-determine",
+   "why": "a disc: its hit box is 44 x 44, no 44 px square fits inside; the reading is VH-173's",
+   "unresolved": "interpretation",
+   "hitW": 44,
+   "hitH": 44,
+   "hitArea": 1600,
+   "disabled": false,
+   "thumb": true
+  }
+ },
+ {
+  "instrument": "keys-only route, modal dialog",
+  "fixture": "dialog-keys-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": [
+   "button#feedback-close[submit] \"Close\"",
+   "body",
+   "textarea#feedback-message[textarea] \"\"",
+   "button#feedback-close[submit] \"Close\"",
+   "textarea#feedback-message[textarea] \"\""
+  ]
+ },
+ {
+  "instrument": "keys-only route",
+  "fixture": "keys-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": [
+   "button#a[submit] \"First\"",
+   "button#go[submit] \"Go\""
+  ]
+ },
+ {
+  "instrument": "target area, range thumb, tall input",
+  "fixture": "thumb-target-tall-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "el": "input#r[range] \"Start\"",
+   "outcome": "fail",
+   "hitW": 20,
+   "hitH": 20,
+   "hitArea": 352,
+   "disabled": false,
+   "thumb": true
+  }
+ },
+ {
+  "instrument": "fallback faces withheld",
+  "fixture": "fonts-not-withheld",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "booted": true,
+   "faces": [
+    "loaded"
+   ],
+   "failed": []
+  }
+ },
+ {
+  "instrument": "target area, range thumb, tall input",
+  "fixture": "thumb-target-tall-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "el": "input#r[range] \"Start\"",
+   "outcome": "pass",
+   "hitW": 44,
+   "hitH": 44,
+   "hitArea": 1936,
+   "disabled": false,
+   "thumb": true
+  }
+ },
+ {
+  "instrument": "fallback faces withheld",
+  "fixture": "fonts-withheld",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "booted": true,
+   "faces": [
+    "error"
+   ],
+   "failed": [
+    "face.woff2"
+   ]
+  }
+ },
+ {
+  "instrument": "file button text by pixels, behind a modal",
+  "fixture": "file-ink-inert",
+  "outcome": "inert",
+  "wanted": "inert",
+  "proved": true,
+  "detail": {
+   "el": "#f",
+   "what": "file button text (pixels)",
+   "outcome": "inert",
+   "why": "behind a modal dialog or inert"
+  }
+ },
+ {
+  "instrument": "file button text by glyph pixels, contrasting border",
+  "fixture": "file-ink-border-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "ratio": 2.0734,
+   "fill": "rgb(255,255,255)",
+   "ink": "rgb(180,180,180)",
+   "glyphPx": 575
+  }
+ },
+ {
+  "instrument": "text contrast (computed, unrounded, large text)",
+  "fixture": "contrast-text-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "text": "Nearly seven to one, which rounds up",
+    "ratio": 6.998,
+    "need": 7,
+    "outcome": "fail"
+   },
+   {
+    "text": "Grey at 23 px, under the large size.",
+    "ratio": 4.5422,
+    "need": 7,
+    "outcome": "fail"
+   }
+  ]
+ },
+ {
+  "instrument": "graphic contrast, every shape",
+  "fixture": "svg-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "what": "graphic fill (rect)",
+    "ratio": 18.0962
+   },
+   {
+    "what": "graphic fill (circle)",
+    "ratio": 1.5424
+   }
+  ]
+ },
+ {
+  "instrument": "rendered lines, spaces counted",
+  "fixture": "lines-latin-81",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "text",
+    "house": false,
+    "worst": {
+     "text": "a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a",
+     "latin": 81,
+     "cjk": 0,
+     "chars": 81,
+     "widthPx": 543
+    }
+   }
+  ]
+ },
+ {
+  "instrument": "rendered lines, mixed scripts",
+  "fixture": "lines-mixed-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "text",
+    "house": false,
+    "worst": {
+     "text": "汉汉汉汉汉汉汉汉汉汉汉汉汉汉汉汉汉汉汉汉汉汉汉汉汉汉汉汉汉汉a b c d e f g h i j k",
+     "latin": 21,
+     "cjk": 30,
+     "chars": 51,
+     "widthPx": 620
+    }
+   }
+  ]
+ },
+ {
+  "instrument": "rendered lines, a textarea's value",
+  "fixture": "textarea-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "text",
+    "house": true,
+    "worst": {
+     "text": "Message",
+     "latin": 7,
+     "cjk": 0,
+     "chars": 7,
+     "widthPx": 65
+    }
+   },
+   {
+    "kind": "value",
+    "house": false,
+    "worst": {
+     "text": "This sentence is long enough that one rendered line of it runs well past eighty characters on a wide page. This sentence",
+     "latin": 128,
+     "cjk": 0,
+     "chars": 128,
+     "widthPx": 899
+    }
+   }
+  ]
+ },
+ {
+  "instrument": "overflow: text clipped inside the page",
+  "fixture": "clip-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "hscroll": false,
+   "clipped": [
+    {
+     "text": "This text runs onto several lines in a box held on",
+     "by": "div \"This text runs onto several lines in a box held one line high, so",
+     "overflow": "hidden/hidden",
+     "lostPx": 69,
+     "outcome": "fail",
+     "why": "cut by an ancestor that clips"
+    }
+   ],
+   "spills": []
+  }
+ },
+ {
+  "instrument": "motion under reduced motion, triggered",
+  "fixture": "motion-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "el": "div#box.go \"\"",
+    "kind": "animation",
+    "name": "slide",
+    "props": [
+     "transform"
+    ],
+    "durationMs": 2000,
+    "class": "spatial",
+    "seen": "running",
+    "outcome": "fail",
+    "why": "spatial movement ran under reduced motion"
+   }
+  ]
+ },
+ {
+  "instrument": "pressed appearance, key held",
+  "fixture": "pressed-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "active": true,
+   "changedAny": 0,
+   "changedAt3to1": 0
+  }
+ },
+ {
+  "instrument": "keys-only route, text entry and a disappearing control",
+  "fixture": "keys-async-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "key": "Tab",
+    "to": "input#t[text] \"Title\"",
+    "value": "",
+    "status": "",
+    "outcome": "pass"
+   },
+   {
+    "key": "type \"Week 3\"",
+    "to": "input#t[text] \"Title\"",
+    "value": "Week 3",
+    "status": "",
+    "outcome": "pass"
+   },
+   {
+    "key": "Tab",
+    "to": "button#go[submit] \"Save\"",
+    "value": "",
+    "status": "",
+    "outcome": "pass"
+   },
+   {
+    "key": "Enter",
+    "to": "body",
+    "status": "Saved Week 3",
+    "outcome": "fail"
+   }
+  ]
+ },
+ {
+  "instrument": "live-region exposure: DOM log and AX text",
+  "fixture": "live-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "logged": false,
+   "exposed": false,
+   "live": [],
+   "entries": []
+  }
+ },
+ {
+  "instrument": "rendered focus, file button: only the clipping room differs",
+  "fixture": "file-focus-clipped",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "areaAt3to1": 88,
+   "perimeter2px": 680,
+   "paintedPx": [
+    130,
+    44
+   ]
+  }
+ },
+ {
+  "instrument": "file button text by glyph pixels, contrasting border",
+  "fixture": "file-ink-border-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "ratio": 18.0962,
+   "fill": "rgb(255,255,255)",
+   "ink": "rgb(22,22,22)",
+   "glyphPx": 587
+  }
+ },
+ {
+  "instrument": "text contrast (computed, unrounded, large text)",
+  "fixture": "contrast-text-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": [
+   {
+    "text": "Dark text, well over seven to one.",
+    "ratio": 18.0962,
+    "need": 7,
+    "outcome": "pass"
+   },
+   {
+    "text": "Grey at 24 px: large, 4.5 to 1.",
+    "ratio": 4.5422,
+    "need": 4.5,
+    "outcome": "pass"
+   }
+  ]
+ },
+ {
+  "instrument": "graphic contrast, every shape",
+  "fixture": "svg-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": [
+   {
+    "what": "graphic fill (rect)",
+    "ratio": 18.0962
+   }
+  ]
+ },
+ {
+  "instrument": "rendered lines, spaces counted",
+  "fixture": "lines-latin-79",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "text",
+    "house": false,
+    "worst": {
+     "text": "a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a",
+     "latin": 79,
+     "cjk": 0,
+     "chars": 79,
+     "widthPx": 529
+    }
+   }
+  ]
+ },
+ {
+  "instrument": "rendered lines, mixed scripts",
+  "fixture": "lines-mixed-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "text",
+    "house": false,
+    "worst": {
+     "text": "汉汉汉汉汉汉汉汉汉汉汉汉汉汉汉汉汉汉汉汉abc de fghi jk lmnop",
+     "latin": 20,
+     "cjk": 20,
+     "chars": 40,
+     "widthPx": 473
+    }
+   }
+  ]
+ },
+ {
+  "instrument": "rendered lines, a textarea's value",
+  "fixture": "textarea-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "text",
+    "house": true,
+    "worst": {
+     "text": "Message",
+     "latin": 7,
+     "cjk": 0,
+     "chars": 7,
+     "widthPx": 65
+    }
+   },
+   {
+    "kind": "value",
+    "house": true,
+    "worst": {
+     "text": "This sentence is long enough that one rendered line of it runs",
+     "latin": 62,
+     "cjk": 0,
+     "chars": 62,
+     "widthPx": 434
+    }
+   }
+  ]
+ },
+ {
+  "instrument": "overflow: text clipped inside the page",
+  "fixture": "clip-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "hscroll": false,
+   "clipped": [],
+   "spills": []
+  }
+ },
+ {
+  "instrument": "motion under reduced motion, triggered",
+  "fixture": "motion-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": []
+ },
+ {
+  "instrument": "pressed appearance, key held",
+  "fixture": "pressed-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "active": true,
+   "changedAny": 3263,
+   "changedAt3to1": 3183
+  }
+ },
+ {
+  "instrument": "keys-only route, text entry and a disappearing control",
+  "fixture": "keys-async-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": [
+   {
+    "key": "Tab",
+    "to": "input#t[text] \"Title\"",
+    "value": "",
+    "status": "",
+    "outcome": "pass"
+   },
+   {
+    "key": "type \"Week 3\"",
+    "to": "input#t[text] \"Title\"",
+    "value": "Week 3",
+    "status": "",
+    "outcome": "pass"
+   },
+   {
+    "key": "Tab",
+    "to": "button#go[submit] \"Save\"",
+    "value": "",
+    "status": "",
+    "outcome": "pass"
+   },
+   {
+    "key": "Enter",
+    "to": "h2#done \"Done\"",
+    "status": "Saved Week 3",
+    "outcome": "pass"
+   }
+  ]
+ },
+ {
+  "instrument": "live-region exposure: DOM log and AX text",
+  "fixture": "live-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "logged": true,
+   "exposed": true,
+   "live": [
+    {
+     "role": "status",
+     "live": "polite",
+     "name": "",
+     "text": "Upload ready"
+    }
+   ],
+   "entries": [
+    {
+     "t": 156,
+     "kind": "live-text",
+     "region": "#st",
+     "hidden": false,
+     "text": "Upload ready"
+    }
+   ]
+  }
+ },
+ {
+  "instrument": "rendered focus, file button: only the clipping room differs",
+  "fixture": "file-focus-room",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "areaAt3to1": 744,
+   "perimeter2px": 680,
+   "paintedPx": [
+    130,
+    44
+   ]
+  }
+ },
+ {
+  "instrument": "overflow: text spilling from a set height",
+  "fixture": "spill-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "hscroll": false,
+   "spills": [
+    {
+     "text": "This text spills out of a box held one line high a",
+     "by": "div \"This text spills out of a box held one line high and overlaps wha",
+     "outcome": "fail",
+     "why": "text spills out of a box held at a set height"
+    }
+   ]
+  }
+ },
+ {
+  "instrument": "text contrast: a gradient and ancestor opacity",
+  "fixture": "contrast-text-unknown",
+  "outcome": "cannot-determine",
+  "wanted": "cannot-determine",
+  "proved": true,
+  "detail": [
+   {
+    "text": "Text on a gradient.",
+    "why": "background image on p"
+   },
+   {
+    "text": "Text under an ancestor at 60% opacit",
+    "why": "opacity 0.6 on div"
+   }
+  ]
+ },
+ {
+  "instrument": "range paint: cannot determine without pixels",
+  "fixture": "range-paint",
+  "outcome": "cannot-determine",
+  "wanted": "cannot-determine",
+  "proved": true,
+  "detail": {
+   "el": "input#r[range] \"Start\"",
+   "what": "range thumb and track",
+   "outcome": "cannot-determine",
+   "why": "painted pseudo-elements: non-text contrast needs a pixel reading (person check)"
+  }
+ },
+ {
+  "instrument": "motion: colour only, not counted",
+  "fixture": "motion-colour",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": [
+   {
+    "el": "div#box.go \"\"",
+    "kind": "transition",
+    "name": "background-color",
+    "props": [
+     "background-color"
+    ],
+    "durationMs": 1000,
+    "class": "non-spatial",
+    "seen": "running",
+    "outcome": "not-counted",
+    "why": "colour or opacity only: not motion"
+   }
+  ]
+ },
+ {
+  "instrument": "motion: essential, classified",
+  "fixture": "motion-essential",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": [
+   {
+    "el": "div#box \"\"",
+    "kind": "transition",
+    "name": "width",
+    "props": [
+     "width"
+    ],
+    "durationMs": 1000,
+    "class": "essential",
+    "seen": "running",
+    "outcome": "essential",
+    "why": "essential: it shows progress (2.3.3 exception)"
+   }
+  ]
+ },
+ {
+  "instrument": "runner",
+  "fixture": "duplicate",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true
+ },
+ {
+  "instrument": "runner",
+  "fixture": "stale",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true
+ },
+ {
+  "instrument": "runner",
+  "fixture": "missing",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true
+ },
+ {
+  "instrument": "runner",
+  "fixture": "undeclared",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true
+ },
+ {
+  "instrument": "runner",
+  "fixture": "failed",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true
+ },
+ {
+  "instrument": "runner",
+  "fixture": "empty measurement",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "empty-pass",
+    "key": "EMPTY__en-GB__w1280__light",
+    "instrument": "focus"
+   }
+  ]
+ },
+ {
+  "instrument": "runner",
+  "fixture": "wrong view",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "wrong-view",
+    "key": "VIEW__en-GB__w1280__light",
+    "expected": {
+     "w": 1280,
+     "h": 900,
+     "dpr": 1
+    },
+    "got": {
+     "w": 1024,
+     "h": 900,
+     "dpr": 1
+    }
+   }
+  ]
+ },
+ {
+  "instrument": "runner",
+  "fixture": "missing instrument",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "missing-instrument",
+    "key": "INSTR__en-GB__w1280__light",
+    "instrument": "focus"
+   }
+  ]
+ },
+ {
+  "instrument": "runner",
+  "fixture": "expired state",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "state-expired",
+    "key": "EXPIRED__en-GB__w1280__light",
+    "why": "state predicate false"
+   }
+  ]
+ },
+ {
+  "instrument": "runner",
+  "fixture": "missing variant",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "missing",
+    "key": "S-80~denied__en-GB__w1280__light"
+   }
+  ]
+ },
+ {
+  "instrument": "aggregate",
+  "fixture": "empty list",
+  "outcome": "cannot-determine",
+  "wanted": "cannot-determine",
+  "proved": true
+ },
+ {
+  "instrument": "aggregate",
+  "fixture": "every row exempt",
+  "outcome": "not-applicable",
+  "wanted": "not-applicable",
+  "proved": true,
+  "detail": {
+   "outcome": "not-applicable",
+   "why": "every row exempt: behind a modal dialog; disabled",
+   "rows": 2,
+   "counted": 0,
+   "exempt": 2,
+   "items": [
+    {
+     "outcome": "inert",
+     "why": "behind a modal dialog",
+     "exempt": "behind a modal dialog"
+    },
+    {
+     "outcome": "pass",
+     "disabled": true,
+     "exempt": "disabled"
+    }
+   ]
+  }
+ },
+ {
+  "instrument": "runner",
+  "fixture": "capture overwritten",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true
+ },
+ {
+  "instrument": "runner",
+  "fixture": "whole",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": []
+ }
+]

@@ -168,7 +168,7 @@ every call.
 
 `walker/faults.mjs` holds F1–F9, each a switch around the app, never a
 change to it; `node faults.mjs check` applies each to the app and asserts
-the state it is for (`faults-check-2026-10-22.json`). F4 gains **e** (no
+the state it is for (now `faults-check-2026-10-23.json`). F4 gains **e** (no
 picker and `URL.createObjectURL` throws: the only way `saveFile` throws,
 for S-69); F4d gives S-70's download hand-off, not a failure. F6 is two
 variants: **a**, the onset only (a cut); **b**, every closing (not
@@ -176,8 +176,7 @@ loaded). **F9** rewrites the worker's entry module so its storage
 estimate rejects (S-73). **F3** is a worker prelude too: the estimate
 reports a set quota (S-31), because `Storage.overrideQuotaForOrigin`
 changes nothing in the isolated browser context each walk opens (probed:
-10.7 GB before and after). S-56, running out part-way, needs a write that
-fails, not yet written. A first check caught F4e's throw failing the
+10.7 GB before and after). S-56, running out part-way, is F12 (below). A first check caught F4e's throw failing the
 preview's own object URL, as the subagent that applied the scenario check
 predicted; the chosen file is now spared. `walker/fixtures.sh` gains N1 (a cut-short MKV),
 N2 (two long 1080p stills, their lengths set by `LONG_WARN_S` and
@@ -203,6 +202,135 @@ Seen for VH-173 (findings, not instrument faults):
 - The thumbs elsewhere stand at 246–256 px² against 264 for the box and
   157 for the painted disc: "cannot determine", VH-173's reading.
 
+## F10 to F12, and N2 sized (fourth chat, 23 October)
+
+`walker/faults.mjs` gains three worker preludes, by F9's route:
+
+- **F10**, for S-89: the worker's `navigator.hardwareConcurrency` throws.
+  `inspectCapabilities` reads it once inside the pre-flight's `try`
+  (`src/media/capability.ts:190`); the calls before it catch their own
+  errors, so it is the first that reaches `check-failed`.
+- **F11**, for S-90: the worker's first `stage` message passes, then every
+  message is dropped, the cancel's answer included; the watchdog stops
+  the job after 120 s and the locks hold 10 s more.
+- **F12**, for S-56 and S-57: the worker's
+  `FileSystemSyncAccessHandle.write` throws `QuotaExceededError` once a job
+  has written 256 KiB, once only, so the retry runs. F3 stays the
+  storage block (S-31); S-56 no longer rests on it.
+
+`node faults.mjs check` asserts each state: F10 says "The device check
+did not finish" with Check again shown; F11 says "The job stopped
+reporting progress" and "The job is stopping", the chooser locked, and
+the locks lift; F12 says "ran out of working space part-way" and the
+retry finishes. 17 of 17 faults reach their state
+(`faults-check-2026-10-23.json`, which replaces the 22 October file).
+
+N2 was sized by a probe (choose the still, read the pre-flight's
+sentence) on this Mac: 3,600 s estimated about 15 minutes, "Ready to
+go"; 10,800 s about 40 minutes, "Ready, with one thing to know … Keep
+this tab open"; 21,600 s is chosen for the slow band by that rate (about 0.22 of the length, so about 80 minutes) and probed before VH-172 runs. `fixtures.sh` now makes 10,800 s and 21,600 s by
+default. The estimate is timed on the device, so a slower machine moves
+both; the matrix asserts the verdict it reached, never the length.
+
+## Codex astra's method check, applied (23 October)
+
+The check is `codex-astra-method-check-2026-10-23.md`. M-06 (the scenarios)
+and M-07's S-19 fixture and N2 probe are applied apart. The files of
+22 October named above (`prove-`, `pilot2-manifest-`, `pilot2-digest-`) are
+replaced by those of 23 October.
+
+- **M-01, applied.** `aggregate` (now in `runner.mjs`) never passes an empty
+  list ("cannot determine") or one with nothing counted ("not applicable");
+  exempt rows (inert, off-page, inactive, superseded, disabled, inline)
+  stay with their reason. The inline exception is justified: a link
+  displayed inline that shares its line with text outside it. That retired
+  the old heuristic's silent exemption of the off-page skip link. Each
+  declared record names its required instruments and view. The runner fails
+  a record missing one, an instrument passing on nothing, a wrong width,
+  height or scale, a broken identity, or a state that no longer holds once
+  the instruments have run (re-asserted after them). Completeness
+  (`coverage`) is kept apart from measurements (`measurements`). Proved: an
+  empty measurement, a wrong view, a missing instrument, an expired state
+  and a missing variant (`S-80~denied`). Record keys take an optional
+  variant.
+- **M-02, applied; one limit.** The file button's text is read from glyph
+  pixels only: the pixels that change when its text alone turns transparent,
+  with every other paint pinned (forced colours included). They must lie
+  inside the content box from its computed border and padding, or the
+  reading is "cannot determine". Proved on a black-bordered white button
+  with grey text (2.07:1 fails) and its dark-text twin. Ratios are compared
+  unrounded (6.998 fails 7). The large-text threshold applies to all
+  readers. A new `contrastText` returns "cannot determine" for unparsed
+  colour, background images and opacity, filter or blend on an ancestor.
+  Under forced colours it reads `color`, because Chrome's computed
+  `-webkit-text-fill-color` keeps the unforced author colour (probed). Range
+  paint is "cannot determine" (limit: a person reads thumb and track
+  contrast). The SVG loop reads every shape's fill and stroke. Limit: the
+  pilot's S-15 landscape reading was "cannot determine" because pixels
+  beside the button repainted between shots.
+- **M-03, applied.** Every rendered line is kept with its text. Rendered
+  spaces count; leading and trailing spaces at a wrap do not; inline runs
+  join on vertical overlap. Input values, placeholders and textareas are
+  laid out in a copy of the field. Each block's widest line is read against
+  28rem. Proved: 81 and 79 characters, mixed scripts each way, and a
+  textarea each way.
+- **M-04, applied in part.** The overflow verdict fails on text cut by a
+  clipping ancestor, text spilling from a box held at a set height, and
+  offenders carrying text or a control. Proved: a clipped box and a spilling
+  box, neither widening the page, and the clipped box's twin. The manifest
+  names four categories: reflow, proxy (real zoom unresolved), the 32 px
+  default font, and synthetic text-only "not run". Limit: operating a dialog
+  at enlargement (entry, use, exit) is not run by keys; it is on the
+  manifest's manual list.
+- **M-05, applied.** Each record persists its full AX rows and a
+  timestamped DOM log (live-region text and attributes, ARIA and state
+  attributes, nodes), labelled exposure, not speech. Live regions carry
+  their text. Modal leakage covers all exposed content. Each keys step keeps
+  the focused element's identity, value and status text before and after;
+  routes can type. `holdKey` and `pressedAppearance` read a held key. Motion
+  is watched by `getAnimations()` while the focus measurements drive the
+  page. Spatial movement fails; colour or opacity change, and changes of
+  10 ms or less, are not counted; the progress bar is essential. Proved: a
+  triggered slide (fails) and its reduced-motion twin, colour only,
+  essential, pressed each way, an asynchronous keys route each way, and
+  live exposure each way.
+- **M-07 (F1, F4b, fault evidence, file focus), applied.** F1 asserts
+  pending with the chooser locked, then, held past 5 s, "The part of the
+  tool that does the work did not start", still locked. F4b requires
+  Saving with Stop saving offered, presses it, and asserts "Save stopped".
+  Every fault result keeps the matched text in a window around the match.
+  A file-focus pair with an identical 2 px ring differs only in 4 px of
+  room: 88 px² of 680 fails, 744 passes.
+- **M-08, applied.** Every capture and persisted reading is written under
+  `captures/` in the unique run directory. It is named with the full record
+  key and subject, and an existing file throws (proved). Walk logs sit
+  under the run id. The manifest lists expected and observed keys, every
+  fixture a setup chose (hashed), and the artifact list's hash
+  (`artifacts.json` holds each file's hash). Its unresolved entries are
+  derived from the measurements, each marked a missing measurement or an
+  interpretation for VH-173, beside the manual limits.
+
+Totals: `prove-2026-10-23.json` holds 77 of 77 proved (the third chat's 40,
+plus 37). `faults-check-2026-10-23.json`: 17 of 17 faults reach their state.
+Pilot 2, re-run (`pilot2-2026-10-23T08-41-27-215Z-432dfe`,
+`pilot2-manifest-2026-10-23.json`, `pilot2-digest-2026-10-23.md`): 43 declared,
+43 observed, whole, with 500 captures.
+
+Seen for VH-173 (observations, not instrument faults):
+
+- The file ring is unchanged at 88 of 640 px².
+- The language switcher reads 480 of 498 under forced-light.
+- The thumbs read 0 px² at the 32 px font.
+- The disc readings remain open.
+- The file button's glyph text reads 14.3–15.4:1, 11.3:1 under
+  forced-light and 9.1:1 under forced-dark.
+- With spaces counted, no line exceeds 80. One Chinese notification line,
+  `发送电子邮件至 joe.bell@nottingham.ac.uk…`, holds 41 mixed characters:
+  "cannot determine" in all three Chinese records.
+- No text is clipped or spilled in any view.
+- Under reduced motion, only instant outline transitions run.
+- The feedback textarea outgrows the 400% proxy viewport.
+
 ## Still open before VH-172
 
-- Codex astra's method check.
+- M-06 (the scenarios) and M-07's S-19 fixture and N2 probe, applied apart.

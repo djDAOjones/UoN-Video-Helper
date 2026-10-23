@@ -7,13 +7,12 @@
 //
 //   FIX=<scratch>/fixtures OUT_ROOT=<scratch>/out RUN_ROOT=<scratch>/runs \
 //     node matrix.mjs pilot          (headless Chrome on :9222, Vite on :5173)
-import { writeFileSync } from 'node:fs'
-import { join, dirname, resolve } from 'node:path'
+import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { connectBrowser } from './cdp.mjs'
 import { Walk, F, sleep } from './walk.mjs'
-import { QUAL_INIT, IN_DIALOG, IN_DIALOG_OR_OUT, assertReached, axTree, focusArea, fileButtonInk, keysRoute, closeAnalysis, setViewport, setMode, withholdFonts } from './qualify.mjs'
-import { Run, writeManifest } from './runner.mjs'
+import { QUAL_INIT, IN_DIALOG, IN_DIALOG_OR_OUT, VIEWS, assertReached, axTree, focusArea, fileButtonInk, keysRoute, closeAnalysis, setViewport, setMode, withholdFonts, pageShot } from './qualify.mjs'
+import { Run, writeManifest, writeDigest, aggregate, recordKey } from './runner.mjs'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const APP_ROOT = resolve(HERE, '../../../../../..')
@@ -87,80 +86,124 @@ export const PLANS = {
   ],
 }
 
+
 // ---------------------------------------------------------------------------
-const aggregate = (items, { exempt = () => false } = {}) => {
-  const counted = items.filter((i) => !exempt(i))
-  return { outcome: counted.some((i) => i.outcome === 'fail') ? 'fail' : counted.some((i) => i.outcome === 'cannot-determine') ? 'cannot-determine' : 'pass', items: counted, exempt: items.length - counted.length }
+// What each record must carry (Codex astra's method check, M-01): a route
+// its keys; a scenario every instrument, motion too under reduced motion;
+// and the view it must reach, width, height and scale. The runner fails a
+// record without them. Whatever SCENARIOS, ROUTES and PLANS hold, these
+// apply; a declared record may name its own `requires` and `viewport`.
+const SCENARIO_INSTRUMENTS = ['overflow', 'ax', 'targets', 'contrastText', 'contrastExtra', 'measure', 'focus']
+export const requiredFor = (r) => (ROUTES[r.id] ? ['keys'] : [...SCENARIO_INSTRUMENTS, ...(r.mode === 'reduced-motion' ? ['motion'] : [])])
+const viewportFor = (view) => { const v = VIEWS[view]; return v ? { w: v.width, h: v.height, dpr: v.deviceScaleFactor } : undefined }
+// A record's variant (a subcase of a compound scenario) merges over its scenario.
+const scenarioFor = (r) => { const sc = SCENARIOS[r.id]; return sc && r.variant && sc.variants?.[r.variant] ? { ...sc, ...sc.variants[r.variant] } : sc }
+const slug = (s) => String(s).replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40)
+
+// The DOM change log since the last record on this page, persisted; the AX
+// tree too where the instruments did not (M-05: exposure, not speech).
+async function persistExposure(w, run, key, { ax = false } = {}) {
+  let m = await w.evaluate(`window.__qual.mutations(${w.mutFrom ?? 0})`)
+  if (m.to < (w.mutFrom ?? 0)) m = await w.evaluate('window.__qual.mutations(0)') // the page was reloaded
+  w.mutFrom = m.to
+  const out = { label: 'exposure, not speech', mutations: { ...run.artifact(`${key}__mutations.json`, JSON.stringify(m)), entries: m.entries.length } }
+  if (ax) { const a = await axTree(w); out.ax = { ...run.artifact(`${key}__ax.json`, JSON.stringify(a.nodes)), live: a.live } }
+  return out
 }
 
 async function instruments(w, sc, rec, run) {
+  const key = recordKey(rec)
   const out = {}
-  const o = await w.evaluate('window.__audit.overflow()')
-  out.overflow = { outcome: o.hscroll ? 'fail' : 'pass', scrollWidth: o.scrollWidth, clientWidth: o.clientWidth, offenders: o.offenders.slice(0, 8) }
-  out.ax = await axTree(w)
-  out.targets = aggregate((await w.evaluate('window.__qual.targets()')).map((t) => ({ ...t, outcome: t.disabled && t.outcome === 'fail' ? 'pass' : t.outcome })), { exempt: (t) => t.inline || t.outcome === 'inert' })
-  out.contrastText = aggregate((await w.evaluate('window.__audit.contrast()')).map((c) => ({ ...c, outcome: c.ratio >= c.need ? 'pass' : 'fail' })))
-  // The file button's text is read by pixels; the computed reading is kept beside it, not counted (VH-171: it read 1:1 under forced colours).
-  const extra = (await w.evaluate('window.__qual.contrastExtra()')).map((c) => (c.what === 'file button text' ? { ...c, outcome: 'superseded' } : c))
+  // Document width, offenders, text clipped by an ancestor and text spilling from a set height (M-04).
+  out.overflow = await w.evaluate('window.__qual.overflow()')
+  const ax = await axTree(w)
+  const nodes = run.artifact(`${key}__ax.json`, JSON.stringify(ax.nodes))
+  delete ax.nodes
+  out.ax = { ...ax, nodes }
+  // Exempt rows stay with their reason (M-01): inert, the justified inline exception, a disabled control.
+  out.targets = aggregate(await w.evaluate('window.__qual.targets()'), { exempt: (t) => t.inline || (t.disabled && t.outcome !== 'pass' ? 'disabled: not operable while disabled; kept for VH-173' : false) })
+  out.contrastText = aggregate(await w.evaluate('window.__qual.contrastText()'))
+  // The file button's text is read by its glyph pixels; the computed reading is kept beside it, superseded (VH-171: it read 1:1 under forced colours).
+  const extra = (await w.evaluate('window.__qual.contrastExtra()')).map((c) => (c.what === 'file button text' ? { ...c, outcome: 'superseded', why: 'computed reading, superseded by the glyph-pixel reading' } : c))
   if (await w.evaluate(`!!document.querySelector('#file-input') && !!document.querySelector('#file-input').getBoundingClientRect().width`)) extra.push(await fileButtonInk(w))
-  out.contrastExtra = aggregate(extra, { exempt: (c) => c.outcome === 'superseded' || c.outcome === 'inert' })
+  out.contrastExtra = aggregate(extra)
   out.measure = aggregate(await w.evaluate('window.__qual.lines()'))
-  if (rec.mode === 'reduced-motion') { const m = await w.evaluate('window.__qual.motion()'); out.motion = { outcome: m.length ? 'fail' : 'pass', items: m } }
+  // Motion is watched while the focus measurements drive the page (M-05).
+  const watching = rec.mode === 'reduced-motion'
+  const t0 = Date.now()
+  if (watching) await w.evaluate('window.__qual.motionStart()')
   const focus = []
   for (const spec of sc.focus ?? []) {
     const { sel, ref } = typeof spec === 'string' ? { sel: spec } : spec
     const f = await focusArea(w, sel, { ref })
-    const shot = `${rec.id}__${rec.view}__${rec.mode}__focus-${focus.length}`
-    if (f.on) { writeFileSync(join(run.dir, shot + '-on.png'), f.on); writeFileSync(join(run.dir, shot + '-off.png'), f.off) }
+    const name = `${key}__focus-${focus.length}-${slug(sel)}`
+    const clips = f.on ? [run.artifact(name + '-off.png', f.off), run.artifact(name + '-on.png', f.on)] : undefined
     delete f.on; delete f.off
-    focus.push({ ...f, clip: f.outcome === 'cannot-determine' && !f.controlPx ? undefined : shot })
+    focus.push({ ...f, clips })
   }
   await w.evaluate(`(() => { const a = document.activeElement; if (a && a !== document.body) a.blur(); window.scrollTo(0, 0); })()`)
-  out.focus = aggregate(focus)
+  out.focus = aggregate(focus, sc.focus === undefined ? { why: 'the scenario declares no focus targets' } : { empty: 'not-applicable', why: 'the scenario declares an empty focus list' })
+  if (watching) {
+    await sleep(400)
+    const rows = await w.evaluate('window.__qual.motionStop()')
+    const watchedMs = Date.now() - t0
+    rows.push({ el: 'the page', what: 'watch', watchedMs, outcome: rows.some((r) => r.outcome === 'fail') ? 'fail' : 'pass', why: `document.getAnimations() sampled every 40 ms for ${watchedMs} ms while the focus measurements ran` })
+    out.motion = aggregate(rows)
+  }
   return out
 }
 
-async function openWalk(browser, name) {
+async function openWalk(browser, name, run) {
   const w = new Walk(browser, name)
   await w.open()
   await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source: QUAL_INIT })
+  // Every fixture a setup chooses is hashed in the manifest (M-08).
+  if (run) for (const m of ['setFiles', 'drag']) { const real = w[m].bind(w); w[m] = async (file, ...rest) => { run.useFixture(file); return real(file, ...rest) } }
   return w
 }
 
 async function main() {
   const planName = process.argv[2] ?? 'pilot'
-  const declared = PLANS[planName]()
+  if (!PLANS[planName]) throw new Error('no plan ' + planName)
+  const declared = PLANS[planName]().map((r) => ({ ...r, requires: r.requires ?? requiredFor(r), viewport: r.viewport ?? viewportFor(r.view) }))
   const run = Run.create(RUN_ROOT, planName, declared)
   const browser = await connectBrowser()
   console.log(`run ${run.runId}: ${declared.length} records declared, ${browser.version.Browser}`)
-  // Group by scenario, language, view and fonts: one setup, then each mode.
+  // Group by scenario, variant, language, view and fonts: one setup, then each mode.
   const groups = new Map()
-  for (const r of declared) { const k = [r.id, r.lang, r.view, r.mode === 'fallback'].join('|'); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(r) }
+  for (const r of declared) { const k = [r.id, r.variant ?? '', r.lang, r.view, r.mode === 'fallback'].join('|'); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(r) }
   for (const recs of groups.values()) {
-    const { id, lang, view } = recs[0]
+    const { id, lang, view, variant } = recs[0]
     const route = ROUTES[id]
-    const sc = SCENARIOS[id]
-    const w = await openWalk(browser, `${run.name}-${id}-${lang}-${view}`)
+    const sc = scenarioFor(recs[0])
+    // The walk's own log lives under the run's unique id, never a shared folder (M-08).
+    const w = await openWalk(browser, `${run.name}-${run.runId}/${slug([id, variant, lang, view, recs[0].mode === 'fallback' ? 'fallback' : ''].filter(Boolean).join('-'))}`, run)
     try {
+      if (!route && !sc) throw new Error('no scenario or route ' + id)
       await setViewport(w, view)
       await withholdFonts(w, recs[0].mode === 'fallback')
       await (route ?? sc).setup(w, lang)
       for (const rec of recs) {
+        const key = recordKey(rec)
         try {
+          await setMode(w, rec.mode)
           if (route) {
-            await setMode(w, rec.mode)
             const k = await keysRoute(w, route.steps)
-            const reached = await assertReached(w, { lang, mode: rec.mode, width: w.qualView ? undefined : undefined })
-            run.record(rec, { status: reached.outcome === 'pass' ? 'ok' : 'failed', reached, faults: w.faults ?? [], instruments: { keys: k } })
+            const reached = await assertReached(w, { lang, mode: rec.mode, viewport: rec.viewport })
+            const exposure = await persistExposure(w, run, key, { ax: true })
+            run.record(rec, { status: reached.outcome === 'pass' ? 'ok' : 'failed', reached, faults: w.faults ?? [], instruments: { keys: k }, exposure })
           } else {
-            await setMode(w, rec.mode)
-            const reached = await assertReached(w, { lang, mode: rec.mode, state: sc.state })
+            const reached = await assertReached(w, { lang, mode: rec.mode, state: sc.state, viewport: rec.viewport })
             if (reached.outcome !== 'pass') { run.record(rec, { status: 'failed', reached }); continue }
             const ins = await instruments(w, sc, rec, run)
-            await w.screenshot(`${rec.id}__${rec.lang}__${rec.view}__${rec.mode}`)
-            run.record(rec, { status: 'ok', reached, faults: w.faults ?? [], instruments: ins })
+            // The state asserted again after the instruments: a record whose state expired fails (M-01).
+            const reachedAfter = await assertReached(w, { lang, mode: rec.mode, state: sc.state, viewport: rec.viewport })
+            const page = run.artifact(`${key}__page.png`, await pageShot(w))
+            const exposure = await persistExposure(w, run, key)
+            const expired = reachedAfter.outcome !== 'pass'
+            run.record(rec, { status: expired ? 'failed' : 'ok', stateExpired: expired || undefined, reached, reachedAfter, faults: w.faults ?? [], instruments: ins, page, exposure })
           }
-          console.log('recorded ' + Object.values(rec).join(' '))
+          console.log('recorded ' + key)
         } catch (e) {
           run.record(rec, { status: 'failed', error: String(e.stack ?? e).slice(0, 400) })
         }
@@ -172,16 +215,32 @@ async function main() {
     }
   }
   await closeAnalysis()
-  const fixtures = [F('lecture-60s.mp4')]
+  const keysOf = (pred) => declared.filter(pred).map(recordKey)
   const m = writeManifest(run, {
     appRoot: APP_ROOT,
     browserVersion: browser.version.Browser,
-    fixtures,
     scaling: 'Emulation.setDeviceMetricsOverride per view; Page.setFontSizes for the default font; Chrome page zoom not settable over the protocol (proxy views only)',
-    unresolved: ['Chrome page zoom at 200% and 400% itself (proxy views stand in; on the person list)', 'what a screen reader says (exposure only)', 'native select popups and the video player\'s inner controls by keys'],
+    // Four enlargement categories, kept apart (M-04).
+    enlargement: {
+      reflow: { what: 'a CSS viewport 320 px wide (and the 375 px phone)', views: ['w320', 'w375'], records: keysOf((r) => ['w320', 'w375'].includes(r.view)).length },
+      proxy: { what: "the CSS viewport and device pixel ratio Chrome's 200% and 400% page zoom give a 1280 x 900 window", views: ['zoom200proxy', 'zoom400proxy'], records: keysOf((r) => /zoom\d+proxy/.test(r.view)).length, realZoom: 'unresolved: Chrome page zoom cannot be set over the protocol; on the person list' },
+      defaultFont32: { what: "the browser's default-font preference at 32 px (Page.setFontSizes)", mode: 'font32', records: keysOf((r) => r.mode === 'font32').length },
+      syntheticTextOnly: { status: 'not run', what: 'text-only enlargement by an injected style: not implemented, so unqualified' },
+    },
+    unresolved: [
+      "Chrome page zoom at 200% and 400% itself (proxy views stand in; on the person list)",
+      'what a screen reader says (exposure only: the AX tree and the DOM change log are persisted per record)',
+      "native select popups and the video player's inner controls by keys",
+      'transient states: asserted before and after the instruments, not captured mid-transition',
+      "a dialog's entry, use and exit at enlargement: overflow and clipping are measured there; the keys route runs at 1280 only",
+      'a range thumb and track: non-text contrast by pixels (cannot determine in contrastExtra)',
+      'synthetic text-only enlargement: not run',
+      'off-page elements (the skip link before focus): target and contrast read when shown, by the person',
+    ],
   })
+  writeDigest(run, { title: `${planName} — record by record`, intro: `Run \`${run.name}-${run.runId}\`. ${m.coverage.expected} declared, ${m.coverage.observed} observed, ${m.coverage.whole ? 'whole' : 'not whole'}. c-d is "cannot determine"; n/a "not applicable".` })
   browser.close()
-  console.log(JSON.stringify(m.coverage, null, 1))
+  console.log(JSON.stringify({ expected: m.coverage.expected, observed: m.coverage.observed, whole: m.coverage.whole, problems: m.coverage.problems, failing: m.measurements.failing }, null, 1))
   console.log('run dir: ' + run.dir)
   process.exit(m.coverage.whole ? 0 : 1)
 }
