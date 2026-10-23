@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-23 — VH-174 — The report merged: D-01 and D-04 become V-46 and V-47, D-02 and D-03 merge; Codex's seven points applied but one
+
+**Decision:** `design-pass-2-2026-10-23.md` merges Codex's blind review and VH-173's judging into ten findings at rank 2 or 3. It applies R-01 to R-06, applies R-07 for V-45 and refuses it for V-44. Two judgement calls go to VH-175's ask: the mixed-script line count and V-47's rank. Each point was settled by live evidence or source.
+
+**Rationale:** Codex's verdict, as given: "Commit after the musts below" (`codex-astra-report-critique-2026-10-23.md`, from `codex-astra-report-brief-2026-10-23.md`). D-01 became V-46, with all three cases confirmed live (focus falls to the body). D-02 merged into V-33. D-03 merged into V-40. D-04 became V-47, confirmed live with a 120 fps file and under the Smaller preset. R-01: 1.4.8 is met by mechanism (G204), and the 86 mixed lines stay unresolved against the house rule. R-02: VH-169 is partial. R-06: V-18's remedy is the owner's. R-07 is refused for V-44 because no adopted rule asks for an authored hover inside a forced palette (wish line VH-174.1). V-45 was raised to rank 2. Standards: wcag-2.2-aaa, nielsen, carbon digests. No product code changed.
+
+**Supersedes:** none
+
+**Deferred:** VH-175
+
 ## 2026-10-23 — VH-173 — The review judged: eight draft findings, none rank 1, none adding a control; WCAG 18 gaps typed
 
 **Decision:** VH-173 judges the pass in `judged-2026-10-23.md` and `wcag-2026-10-23.md`: V-18 and V-33 incomplete, V-40 to V-43 at rank 2, and V-44 and V-45 at rank 3; it adds no control; because the matrix and source settle each one.
@@ -562,15 +572,5 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Rationale:** The sessions' own words, 2026-10-19 to 2026-10-21 (VH-126, VH-133, VH-138, overnight runs 02–04): the sandbox "cannot start Chrome (singleton socket dir denied), cannot bind ports, and refused curl to localhost". Codex and gh, excluded from the sandbox by V3-HARNESS, went through the permission check, which `autoAllowBashIfSandboxed` does not cover. Item checks through VH-136 never hit this, because `preview_start` and the in-app browser run outside the Bash sandbox; the scripted headless-Chrome walker did. A narrower change (local binding, `127.0.0.1` on the Network line, a scoped Unix-socket path, read-only allow rules for Codex and gh) was drafted, scored and set aside. Vinyl Sorting has no `.claude/settings.json`, only an uncommitted `settings.local.json` of allow rules and a committed `launch.json`; this project now matches it but for the hooks, which stay because rule 1's re-read after a compaction and the context watcher depend on them. What is lost: the read and write denies on the secret folders, the token environment-variable denies, the network allowlist (the profile's Network line is now an instruction to Claude Code sessions, not enforced), and the `curl`, `wget`, `brew`, `npx -y`, `pip install`, `git clone`, WebFetch, WebSearch and cloud-tool denies. How many prompts remain depends on the owner's user-level settings and each session's permission mode, neither of which is in this repository. `tools/harness.mjs` regenerates this file with `--hooks-only` from now on; a full regeneration would restore the sandbox, and needs a decision first. `.claude/settings.intake.json` and Codex's own settings are unchanged. Takes effect in a session started after the commit. Landed on `main` on 2026-10-22, after V31-UPGRADE, by `tools/harness.mjs --hooks-only`, which also carries v3.1's start-notice hook (`tools/handover.mjs`).
 
 **Supersedes:** 2026-10-05 — V3-HARNESS — Codex runs outside the sandbox, like gh
-
-**Deferred:** none
-
-## 2026-10-21 — VH-140 — The record names the card and a video language not the page's; a line says a switch is for the next video; Step 3 says its rule first
-
-**Decision:** the record and the discard question say "a 5-second staff title card" or "a 5-second submission card" and add "Video language: …" when it is not the page's; while a video is made or shown, a line under the switches says a change is for the next video, and the progress names the job's own type and language; Step 3 states its side's rule, with `aria-required` on Submission's fields; the ID's length and count come from config — taken gateless as the smallest change meeting the criteria (Nielsen 1 and 6, WCAG 3.3.2), the Chinese and Malay as the agent drafted them.
-
-**Rationale:** Judgement calls, each the conservative reading: the record names the video language as the setting whenever it differs from the page's, even with no app-drawn words, so it never claims words a video may lack; the job's line under the progress always names both choices and hides with the progress, the record then carrying them; the staff rule shows only while its box is ticked, one line `#title-card-rule` under the box serving both sides; the next-video line `#video-next` sits last in the Video language group and is described by both groups, moving under Video type when the language choice is hidden; "Type one to eight" became "Type up to {max}", a figure from config not being a word; `STUDENT_ID_DIGITS` in `src/config/cards.ts` builds `STUDENT_ID_PATTERN`. Nine strings changed or added in all three tables through the sheet, the Chinese and Malay marked as the agent's drafts. Checked in headless Chrome 155 with the walker's `vh140` scenarios, at 1280 × 900 and 390 × 844 with mobile emulation, in all three languages, staff and submission, each through a running job to its result: 42 states, every line where the criteria put it, `aria-required` on all four fields, no horizontal scroll. Built by a Claude Opus 5.5 subagent, reviewed and checked by the session. UI-STANDARDS rules applied: Recognition over recall, System status, Content and form; the carbon digest's helper-text pattern, tokens only.
-
-**Supersedes:** none
 
 **Deferred:** none

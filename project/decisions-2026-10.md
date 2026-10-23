@@ -548,3 +548,13 @@
 **Supersedes:** none
 
 **Deferred:** VH-139, VH-140, VH-141, VH-142, VH-144, VH-145, VH-146
+
+## 2026-10-21 — VH-140 — The record names the card and a video language not the page's; a line says a switch is for the next video; Step 3 says its rule first
+
+**Decision:** the record and the discard question say "a 5-second staff title card" or "a 5-second submission card" and add "Video language: …" when it is not the page's; while a video is made or shown, a line under the switches says a change is for the next video, and the progress names the job's own type and language; Step 3 states its side's rule, with `aria-required` on Submission's fields; the ID's length and count come from config — taken gateless as the smallest change meeting the criteria (Nielsen 1 and 6, WCAG 3.3.2), the Chinese and Malay as the agent drafted them.
+
+**Rationale:** Judgement calls, each the conservative reading: the record names the video language as the setting whenever it differs from the page's, even with no app-drawn words, so it never claims words a video may lack; the job's line under the progress always names both choices and hides with the progress, the record then carrying them; the staff rule shows only while its box is ticked, one line `#title-card-rule` under the box serving both sides; the next-video line `#video-next` sits last in the Video language group and is described by both groups, moving under Video type when the language choice is hidden; "Type one to eight" became "Type up to {max}", a figure from config not being a word; `STUDENT_ID_DIGITS` in `src/config/cards.ts` builds `STUDENT_ID_PATTERN`. Nine strings changed or added in all three tables through the sheet, the Chinese and Malay marked as the agent's drafts. Checked in headless Chrome 155 with the walker's `vh140` scenarios, at 1280 × 900 and 390 × 844 with mobile emulation, in all three languages, staff and submission, each through a running job to its result: 42 states, every line where the criteria put it, `aria-required` on all four fields, no horizontal scroll. Built by a Claude Opus 5.5 subagent, reviewed and checked by the session. UI-STANDARDS rules applied: Recognition over recall, System status, Content and form; the carbon digest's helper-text pattern, tokens only.
+
+**Supersedes:** none
+
+**Deferred:** none
