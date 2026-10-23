@@ -1391,6 +1391,30 @@ const parts = () => {
 }
 for (let i = 0; i < PARTS; i++) PLANS[`priority-${i + 1}`] = () => parts()[i]
 
+// VH-179: the three rings, the feedback message's measure and the
+// forced-colour hover (V-40, V-41, V-42, V-33, V-44). Every priority record
+// of the nine scenarios that show the file button (the 110 its ring failed
+// in, digest-focus), then the touched records in three languages and four
+// colour modes: the empty page (the chooser, the band's ring), Ready (the
+// handles, the chosen chooser, Create) with the 32 px font, the discard
+// question (danger), and the feedback dialog's two long drafts with the
+// 32 px font, the fallback faces and 320 px. Presses, rest and hover read
+// on the primary, the danger button and both chooser looks in every mode.
+const V40 = ['S-03', 'S-09', 'S-10', 'S-28', 'S-29', 'S-30', 'S-63', 'S-63-W', 'S-63-LW']
+const COLOUR_MODES = ['light', 'dark', 'forced-light', 'forced-dark']
+PLANS.vh179 = () => {
+  const out = new Map()
+  const add = (r) => { if (!okLang(r.id, r.lang) || !okView(r.id, r.view)) return; const k = [r.id, r.lang, r.view, r.mode].join('|'); if (!out.has(k)) out.set(k, r) }
+  for (const r of PLANS.priority()) if (V40.includes(r.id)) add({ id: r.id, lang: r.lang, view: r.view, mode: r.mode })
+  for (const lang of LANGS) {
+    for (const mode of [...COLOUR_MODES, 'font32']) for (const id of ['S-03', 'S-15']) add(rec(id, lang, 'w1280', mode))
+    for (const mode of COLOUR_MODES) add(rec('S-58', lang, 'w1280', mode))
+    for (const id of ['S-79a', 'S-79b']) { for (const mode of [...COLOUR_MODES, 'font32', 'fallback']) add(rec(id, lang, 'w1280', mode)); add(rec(id, lang, 'w320', 'light')) }
+  }
+  const press = { 'S-03': ['#file-input'], 'S-15': [CREATE, '#file-input'], 'S-58': ['#process-result .button--danger'] }
+  return [...out.values()].map((r) => (press[r.id] && r.view === 'w1280' && COLOUR_MODES.includes(r.mode) ? { ...r, pressed: press[r.id] } : r))
+}
+
 
 // The predicates read the page through window.__mx (MX_INIT), as `M`.
 const wrap = (expr) => `(() => { const M = window.__mx; return (${expr}); })()`

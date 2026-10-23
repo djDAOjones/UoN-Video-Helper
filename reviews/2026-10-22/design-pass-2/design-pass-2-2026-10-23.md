@@ -698,12 +698,12 @@ rank 3, where the draft had 8 at rank 2 and 2 at rank 3.
 | Finding | Rank | Disposition |
 | --- | --- | --- |
 | V-46 | 2 | VH-178: fixed; each case's successor reached in three languages and four colour modes, verified in [`vh178-focus-2026-10-23.md`](evidence/measurements/vh178-focus-2026-10-23.md) |
-| V-40 | 2 | VH-179 |
-| V-41 | 2 | VH-179 |
-| V-42 | 2 | VH-179 |
+| V-40 | 2 | VH-179: fixed; the ring drawn whole in room inside the input, CanvasText under forced colours, the button unmoved, verified in [`vh179-rings-2026-10-23.md`](evidence/measurements/vh179-rings-2026-10-23.md) |
+| V-41 | 2 | VH-179: fixed; the disc sized in px tokens, both rings pass at the 32 px font, verified in [`vh179-rings-2026-10-23.md`](evidence/measurements/vh179-rings-2026-10-23.md) |
+| V-42 | 2 | VH-179: fixed; the band's ring inside the focused face in HighlightText under forced colours, verified in [`vh179-rings-2026-10-23.md`](evidence/measurements/vh179-rings-2026-10-23.md) |
 | V-43 | 2 | VH-168's limitation extended to 2.5.3, on the owner's standing instruction; wording to VH-137 (VH-175.2) |
 | V-47 | 2 | VH-180, ranked 2 on the owner's standing instruction |
 | V-45 | 2 | For the owner: the two names are the owner's own (VH-148); wish line VH-175.3 |
 | V-18 | 2 | Accepted on the owner's standing instruction; a shorter native wording is wish line VH-175.1 |
-| V-33 | 2 | VH-179 |
-| V-44 | 3 | Wish line VH-174.1 |
+| V-33 | 2 | VH-179: fixed; the feedback message capped at the measure, verified in [`vh179-rings-2026-10-23.md`](evidence/measurements/vh179-rings-2026-10-23.md); the mixed-line count recorded in UI-STANDARDS |
+| V-44 | 3 | VH-179, on the owner's ruling (VH-174.1): a border-only hover in HighlightText under forced colours, verified in [`vh179-rings-2026-10-23.md`](evidence/measurements/vh179-rings-2026-10-23.md) |

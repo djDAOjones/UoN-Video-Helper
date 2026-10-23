@@ -535,12 +535,16 @@ a {
 
 /* The native picker, un-boxed (VH-124): its button is the empty page's one
    filled, primary action, and the chosen file's name sits beside it on the
-   panel. The dashed drop zone round it is the only frame. */
+   panel. The dashed drop zone round it is the only frame. Chrome clips the
+   button's ring to the input's own box, so the box keeps the ring's room
+   round the button, and the margin gives it back: the button stays where it
+   was and the step no taller (V-40). */
 .file-input {
   display: block;
-  width: 100%;
+  width: calc(100% + 2 * var(--focus-room));
   min-height: var(--target-min);
-  padding: 0;
+  margin: calc(-1 * var(--focus-room));
+  padding: var(--focus-room);
   border: 0;
   background: transparent;
   color: var(--text-primary);
@@ -1355,9 +1359,9 @@ details[open] > .disclosure-summary::before {
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    var(--interactive) 0 calc(var(--spacing-04) - var(--border-width)),
-    var(--layer-01) var(--spacing-04) calc(var(--spacing-04) + var(--spacing-01)),
-    transparent calc(var(--spacing-04) + var(--spacing-01) + var(--border-width))
+    var(--interactive) 0 calc(var(--thumb-disc) - var(--border-width)),
+    var(--layer-01) var(--thumb-disc) calc(var(--thumb-disc) + var(--thumb-halo)),
+    transparent calc(var(--thumb-disc) + var(--thumb-halo) + var(--border-width))
   );
   appearance: none;
   pointer-events: auto;
@@ -1371,8 +1375,8 @@ details[open] > .disclosure-summary::before {
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    var(--interactive) 0 calc(var(--spacing-04) - var(--border-width)),
-    transparent var(--spacing-04)
+    var(--interactive) 0 calc(var(--thumb-disc) - var(--border-width)),
+    transparent var(--thumb-disc)
   );
   pointer-events: auto;
   cursor: pointer;
@@ -1406,8 +1410,8 @@ details[open] > .disclosure-summary::before {
   cursor: not-allowed;
   background: radial-gradient(
     circle,
-    var(--text-secondary) 0 calc(var(--spacing-04) - var(--border-width)),
-    transparent var(--spacing-04)
+    var(--text-secondary) 0 calc(var(--thumb-disc) - var(--border-width)),
+    transparent var(--thumb-disc)
   );
 }
 
@@ -1431,10 +1435,12 @@ details[open] > .disclosure-summary::before {
 
 /* The title card's fields hold a line of text each, so they stop at the
    running text's measure rather than stretch across a wide panel (VH-127);
-   Submission's, and its box of ID numbers, the same (VH-128). */
+   Submission's, its box of ID numbers and the feedback message the same
+   (VH-128, V-33). A cap, so a narrower dialog still narrows them. */
 #title-card-fields .text-input,
 #submission-card-fields .text-input,
-#submission-card-fields .textarea {
+#submission-card-fields .textarea,
+#feedback-message {
   max-width: var(--measure);
 }
 
@@ -1676,10 +1682,24 @@ body,
     outline-color: CanvasText;
   }
 
-  /* Pressed inverts the button's two system colours, since hover cannot
-     change them (VH-169): a primary turns HighlightText with Highlight
-     words; a secondary, otherwise left to the theme, takes ButtonText with
-     ButtonFace words for the moment it is held. */
+  /* The chooser's ring, either look, held or not: the opted-out button kept
+     the brand token (V-40). */
+  .file-input:focus-visible::file-selector-button {
+    outline-color: CanvasText;
+  }
+
+  /* Hover changes the border alone, to the face's own text colour, which
+     every theme sets apart from Highlight; the fill stays, and the press
+     below wins (V-44). */
+  .button:not(.button--secondary):not(:disabled):hover,
+  .file-input:not(:disabled):not(.file-input--chosen):hover::file-selector-button {
+    border-color: HighlightText;
+  }
+
+  /* Pressed inverts the button's two system colours (VH-169): a primary
+     turns HighlightText with Highlight words; a secondary, otherwise left to
+     the theme, takes ButtonText with ButtonFace words for the moment it is
+     held. */
   .button:not(.button--secondary):not(:disabled):active,
   .file-input:not(:disabled):not(.file-input--chosen):active::file-selector-button {
     border-color: Highlight;
@@ -1738,18 +1758,18 @@ body,
   .range-input::-webkit-slider-thumb {
     background: radial-gradient(
       circle,
-      Highlight 0 calc(var(--spacing-04) - var(--border-width)),
-      Canvas var(--spacing-04) calc(var(--spacing-04) + var(--spacing-01)),
-      transparent calc(var(--spacing-04) + var(--spacing-01) + var(--border-width))
+      Highlight 0 calc(var(--thumb-disc) - var(--border-width)),
+      Canvas var(--thumb-disc) calc(var(--thumb-disc) + var(--thumb-halo)),
+      transparent calc(var(--thumb-disc) + var(--thumb-halo) + var(--border-width))
     );
   }
 
   .range-input::-moz-range-thumb {
-    background: radial-gradient(circle, Highlight 0 calc(var(--spacing-04) - var(--border-width)), transparent var(--spacing-04));
+    background: radial-gradient(circle, Highlight 0 calc(var(--thumb-disc) - var(--border-width)), transparent var(--thumb-disc));
   }
 
   .range-input:disabled::-webkit-slider-thumb {
-    background: radial-gradient(circle, GrayText 0 calc(var(--spacing-04) - var(--border-width)), transparent var(--spacing-04));
+    background: radial-gradient(circle, GrayText 0 calc(var(--thumb-disc) - var(--border-width)), transparent var(--thumb-disc));
   }
 
   /* One rule per engine: a selector list naming the other engine's
@@ -1806,10 +1826,18 @@ body,
     outline-color: CanvasText;
   }
 
-  /* On the band's blue, which the theme does not repaint, the ring is the
-     band's own white, as it is outside forced colours. */
+  /* On the band's blue, which the theme does not repaint, the ring is drawn
+     inside the focused face, clear of its neighbours, in the face's own text
+     colour: inside its border, and a pixel wider than elsewhere so its area
+     still makes 2.4.13's perimeter (V-42). */
   .band--header .segment input:focus-visible + .segment-face {
-    outline-color: var(--focus);
+    outline-color: ButtonText;
+    outline-width: calc(var(--focus-width) + var(--border-width));
+    outline-offset: calc(-1 * (var(--focus-width) + 2 * var(--border-width)));
+  }
+
+  .band--header .segment input:checked:focus-visible + .segment-face {
+    outline-color: HighlightText;
   }
 
   /* Every other ring takes the theme's own focus colour. */

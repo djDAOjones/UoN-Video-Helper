@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-23 — VH-179 — Three focus rings drawn whole, the feedback message to the measure, a forced-colour hover
+
+**Decision:** The chooser keeps its ring's room inside its own box, given back by margin, with a CanvasText ring under forced colours. The handles' disc takes px tokens. The band's ring sits 3 px inside the face in a system colour. The feedback message is capped at the measure. Forced-colour hover changes only the border, to HighlightText (V-40–V-42, V-33, V-44).
+
+**Rationale:** Before, at 7f3ea6e, the chooser's ring failed in 115 records (88/640). After, it passes at 704/640, focused and held, in three languages and four colour modes, and the button is unmoved in V-18's six readings. At the 32 px font the handles read 0 before and 230 after, against the painted disc's 157. The band failed in forced-light (416–724) and now passes at 714–1,080. The message's widest line went from 524–541 to 409–420, within 448. Hover against rest went from 0 to 296–532 px² at 3:1. The VH-178 hand-off passes in 12 cells. Codex astra said "Commit"; its one geometry may was applied, and the re-check said "Commit". Evidence: `vh179-rings-2026-10-23.md`. Decided on the owner's standing instruction, "work through to the end of VH-177, archive and spawn as you go, proceed with your recommendations, universal permission is granted": (a) the band's ring is 3 px, not 2, because a 2 px ring inside the border falls short of 2.4.13's area; (b) the hover border is HighlightText, because CanvasText and ButtonText read 1.2–1.4:1 on Highlight; (c) the chosen chooser's hover, which already changes, is left alone; (d) UI-STANDARDS gains the forced-colour ring and hover rule, its words traded in the Carbon-first bullets. A real Windows theme, a real 32 px setting and Firefox's thumb go to VH-177's person checklist.
+
+**Supersedes:** none
+
+**Deferred:** VH-177
+
 ## 2026-10-23 — VH-178 — Focus passes on when finished work takes its control away: every control named, a successor that can take focus
 
 **Decision:** Each `focusHeldBy` caller names every control its transition removes: Announce progress with Cancel, and the withdrawn steps in the blocking branch only. The hand-on focuses the first successor that can take focus, Stop saving during a save. The rule moves to `src/ui/focus-hand-on.ts`; no element is added (V-46).
@@ -564,16 +574,6 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Decision:** the nine state defects and V-21/V-22 close: result lifetime and warnings survive redraws; translated guidance has its own language; errors and preview failures announce; save focus moves before cleanup; stale blocks and progress withdraw; startup and unreadable replacement say their state. A separate Show progress checkbox hides automatic visual updates, retaining the existing announcement switch — the conservative, gateless reading of WCAG 2.2.2.
 
 **Rationale:** Result warnings belong to the retained file. The failed-save box uses the existing message’s two sentences, with one spoken copy, and clears on retry. Cancel and watchdog failure suppress late stages while keeping terminal replies and safety locks. The watchdog’s stopping message replaces keep-awake advice. New strings pass through the sheet as agent drafts. Chrome checks real codecs and OPFS with controlled reply delays and save failures, plus the 18 language/width/colour combinations; Notes distinguish browser evidence from human listening. Standards: Carbon disabled-field and error-notification patterns; Nielsen 1, 5 and 9; WCAG 2.2.2, 2.4.3, 3.1.2 and 4.1.3; house conventions, regression tests and tokens. The spec proposal and human checks are wish lines. Existing sample and frozen-canon warnings stay covered by VH-139’s corpus and INTAKE’s retirement wishes. The owner’s explicit whole-run instruction takes precedence over the close verb’s compaction stop; subsequent items continue in this sole-writer worktree under the recorded handoff.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-21 — VH-148 — The owner’s sign-off changes, including the footer
-
-**Decision:** the owner’s thirteen handoff clauses ship: clearer group headings, closing graphics named throughout, separate helper facts, a short read outcome with bold no-sound, hatched cut regions, inset select arrows, Moodle in Smaller’s helper, the shorter statement, Teams and the team email, dashed disabled buttons and 16 px footer headings — because these are the owner’s conditions for VH-124’s sign-off.
-
-**Rationale:** The native selects keep their menus and keyboard behaviour inside an arrow wrapper; `--type-weight-heading` belongs to Carbon’s type roles. The trim uses existing brand surface/divider colours against the kept interactive fill, with contrast pinned at 3:1; forced colours use a solid CanvasText kept section because Highlight is translucent in Chrome. Helper facts are separate spans, preserving language-of-parts markup. The read live region keeps both sentences, with No sound in `strong`; properties keep their figures. Footer labels have no stop, the explicit VH-124 label exception. Feedback and accessibility contacts retain the owner’s address. All changed keys are listed in VH-148’s notes; translations are agent drafts through the sheet. Conservative implementation choices taken gateless under the handoff. Standards: Carbon productive type, native select and tokens; Nielsen 1, 2, 4 and 8; WCAG 1.3.1, 1.4.11, 2.4.9, 2.5.5 and 4.1.3; house conventions, named config destinations and regression tests. Chrome’s 18 combinations passed; human screen-reader and Windows-theme checks remain on the wish line. The existing missing-sample checker warning is covered by VH-139’s corpus wish line. VH-137’s footer-address debt is paid. Retired the wish line “The owner's walk-through of VH-124 judges three readings from the design pass”: all three accepted recommendations ship here.
 
 **Supersedes:** none
 

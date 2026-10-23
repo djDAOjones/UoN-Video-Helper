@@ -822,6 +822,8 @@ export async function pressedVsHover(w, sel, { margin = 6 } = {}) {
     }
     const m = await diff(hover, down)
     if (m.error) return { ...base, outcome: 'cannot-determine', why: m.error }
+    // VH-179 (V-44): hover against rest, read beside the verdict and never counted in it.
+    base.restVsHover = await diff(rest, hover)
     let outcome = !downPaint.active ? 'cannot-determine' : m.changedAny > 0 ? 'pass' : 'fail'
     let why = !downPaint.active ? 'the mouse press did not take (:active false)' : m.changedAny > 0 ? undefined : 'pressed looks as hovered'
     // The keyboard press: Space held on the focused control.

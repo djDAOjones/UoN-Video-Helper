@@ -17,6 +17,7 @@
 - VH-174 — the report merged: D-01 to D-04 verified live or in source, V-46 and V-47 new, ten findings at rank 2 or 3; Codex astra's critique applied but one point, two judgements for the owner (2026-10-23) — see decisions
 - VH-175 — the fix plan: VH-178 to VH-180 for seven findings, the owner's ask decided on the standing instruction, V-45 kept for the owner since its words are the owner's own; Codex astra's five points applied (2026-10-23) — see decisions
 - VH-178 — focus passes on when finished work takes its control away: a job's end, a blocking check, a check settling mid-save; 36 cells reached by keys in three languages and four colour modes, routes 238 of 242; Codex astra's four musts applied (2026-10-23) — see decisions
+- VH-179 — three rings drawn whole (the chooser 704/640 in 115 records, the handles at 32 px, the band inside its face), the feedback message to the measure, a border-only forced-colour hover; V-18 unmoved; Codex astra "Commit" (2026-10-23) — see decisions
 
 ## Phase 6 — the public release: the feedback form, the statement, the cut, Xerte
 

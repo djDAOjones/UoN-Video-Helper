@@ -13,15 +13,15 @@ code and never installed as a package.
 ### Carbon-first UI discipline
 
 - Prefer Carbon components, patterns, tokens, spacing, and interaction
-  conventions wherever a suitable Carbon solution exists. Do not invent
-  a custom control if Carbon already provides an appropriate one.
+  conventions wherever a suitable Carbon solution exists; never invent a
+  custom control where Carbon provides one.
 - Use Carbon's **productive** UI style for the working interface, not
   expressive or marketing styling.
 - Use semantic design tokens for colour, spacing, typography, layer,
   border, and state. Do not hard-code ad hoc UI values unless there is
   no suitable tokenised equivalent.
-- Keep layouts modular, consistent, and task-focused. Reuse an existing
-  Carbon pattern before creating a new one.
+- Keep layouts modular, consistent, and task-focused, reusing a Carbon
+  pattern before creating one.
 - Where Carbon defaults meet AA but not this project's stricter AAA
   target, adapt them. Carbon is the baseline, not the ceiling.
 
@@ -205,14 +205,14 @@ implementation notes.
 - Link text must make sense on its own — no "click here."
 - Use headings and landmarks for substantial content. Provide text
   alternatives for meaningful non-text content.
-- Visual presentation (WCAG 1.4.8), all five: the user's own foreground
-  and background colours are not overridden; running text stops at the
-  `--measure` token (`28rem`, one width for every size and language, under
-  80 characters and 40 CJK glyphs, counted); no justified
-  text; line spacing from `--line-height-body` (1.5) and one blank line
-  between paragraphs from `--paragraph-gap` (spec §9.3's paragraph
-  spacing), both tokens so the user's own text-spacing overrides win; text
-  enlarges to 200% without horizontal scroll.
+- Visual presentation (WCAG 1.4.8), all five: the user's own colours are
+  not overridden; running text stops at the `--measure` token (`28rem`, one
+  width for every size and language, under 80 characters with a CJK glyph
+  counted as two, mixed lines too; 1.4.8 is met apart, by G204's reflow);
+  no justified text; line spacing from `--line-height-body` (1.5)
+  and one blank line between paragraphs from `--paragraph-gap` (spec §9.3),
+  tokens so the user's text-spacing overrides win; text enlarges to 200%
+  without horizontal scroll.
 - Every length, colour and line height in `app.css` is a token from the two
   token files; `test/stylesheet.test.ts` fails on a literal, and names the
   structural exemptions (zero, percentages and viewport fills, the
@@ -229,9 +229,9 @@ implementation notes.
   (`setStatus('', spokenOnly)`); visible status is for what no panel shows.
 - Forced colours (Windows contrast themes) are checked. Anything drawn by a
   background — a track, a fill, a chosen segment — vanishes under them, so
-  it opts out with `forced-color-adjust: none` and paints itself in system
-  colours (`CanvasText`, `Highlight`, `ButtonText`, `GrayText`), never in a
-  token; the `forced-colors` block in `app.css` is where that lives.
+  it opts out with `forced-color-adjust: none` and paints itself, its ring
+  included, in system colours, never a token; hover changes a filled
+  button's border alone (V-44). All in `app.css`'s `forced-colors` block.
 
 ### Operable
 

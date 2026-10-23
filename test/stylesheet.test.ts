@@ -342,7 +342,8 @@ describe('one reading measure (VH-167)', () => {
 
   it('stops the prose inside a row and the fields where running text stops', () => {
     expect(rules).toMatch(/(?:^|\})\s*\.fact-note,\s*\.radio-detail\s*\{\s*max-width:\s*var\(--measure\);\s*\}/)
-    expect(rules).toMatch(/#title-card-fields \.text-input,\s*#submission-card-fields \.text-input,\s*#submission-card-fields \.textarea\s*\{\s*max-width:\s*var\(--measure\);/)
+    // The feedback message too (V-33, VH-179).
+    expect(rules).toMatch(/#title-card-fields \.text-input,\s*#submission-card-fields \.text-input,\s*#submission-card-fields \.textarea,\s*#feedback-message\s*\{\s*max-width:\s*var\(--measure\);/)
     // A cap, never a width: on a phone each yields to its container.
     expect(rules).not.toMatch(/(?:min-width|[^-]width):\s*var\(--measure\)/)
   })
@@ -372,12 +373,66 @@ describe('a pressed state for each button kind (VH-169)', () => {
     }
   })
 
-  it('inverts the system colours under forced colours, since hover cannot change them', () => {
+  it('inverts the system colours under forced colours, where hover changes only the border', () => {
     expect(
       fill(forced, '.button:not(.button--secondary):not(:disabled):active,\n  .file-input:not(:disabled):not(.file-input--chosen):active::file-selector-button'),
     ).toMatch(/background: HighlightText;\s*color: Highlight;/)
     expect(
       fill(forced, '.button--secondary:not(:disabled):active,\n  .file-input--chosen:not(:disabled):active::file-selector-button'),
     ).toMatch(/forced-color-adjust: none;[\s\S]*background: ButtonText;\s*color: ButtonFace;/)
+  })
+})
+
+describe('three rings drawn whole, and a forced-colour hover (VH-179)', () => {
+  const tokens = readFileSync(new URL('../src/styles/tokens.carbon.css', import.meta.url), 'utf8')
+  const forced = /@media \(forced-colors: active\)\s*\{([\s\S]*?)\n\}/.exec(rules)?.[1] ?? ''
+  const block = (source: string, selector: string): string =>
+    new RegExp(`(?:^|\\})\\s*${selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\{([^}]*)\\}`).exec(source)?.[1] ?? ''
+
+  it('gives the chooser\u2019s button the ring\u2019s room inside its own box, and gives it back by margin', () => {
+    // Chrome clips the button's ring to the input's box: a sliver showed (V-40).
+    expect(tokens).toMatch(/--focus-room:\s*calc\(var\(--focus-width\) \+ var\(--focus-offset\)\);/)
+    const input = block(rules, '.file-input')
+    expect(input).toMatch(/padding:\s*var\(--focus-room\);/)
+    // So the button does not move and the step is no taller.
+    expect(input).toMatch(/margin:\s*calc\(-1 \* var\(--focus-room\)\);/)
+    expect(input).toMatch(/width:\s*calc\(100% \+ 2 \* var\(--focus-room\)\);/)
+  })
+
+  it('draws the chooser\u2019s ring in a system colour under forced colours, never the brand token', () => {
+    // The unchosen button opts out and kept --focus; the chosen one kept it while held (V-40).
+    expect(block(forced, '.file-input:focus-visible::file-selector-button')).toMatch(/^\s*outline-color:\s*CanvasText;\s*$/)
+  })
+
+  it('sizes the handles\u2019 disc from px tokens beside the target floor, so a larger font cannot grow it under the ring', () => {
+    // At a 32 px default font the rem stops filled the thumb (V-41).
+    expect(tokens).toMatch(/--target-min:\s*44px;[\s\S]*--thumb-disc:\s*\d+px;\s*--thumb-halo:\s*\d+px;/)
+    const thumbs = [...rules.matchAll(/([^{}]*::-(?:webkit-slider|moz-range)-thumb)\s*\{([^}]*)\}/g)].filter((m) => /radial-gradient/.test(m[2]!))
+    // The WebKit, Firefox and disabled thumbs, and the same three under forced colours.
+    expect(thumbs).toHaveLength(6)
+    for (const [, selector, body] of thumbs) {
+      expect(body, selector!.trim()).toContain('var(--thumb-disc)')
+      expect(body, selector!.trim()).not.toMatch(/--spacing-/)
+    }
+  })
+
+  it('draws the band\u2019s ring inside the focused face under forced colours, in the face\u2019s own text colour', () => {
+    // White outside it was lost against a white neighbour (V-42); white on the dark palette's cyan fails too.
+    const ring = block(forced, '.band--header .segment input:focus-visible + .segment-face')
+    expect(ring).toMatch(/outline-color:\s*ButtonText;/)
+    // Inside the face's border, and a border's width wider than the ring elsewhere, so its area still makes the perimeter.
+    expect(ring).toMatch(/outline-width:\s*calc\(var\(--focus-width\) \+ var\(--border-width\)\);/)
+    expect(ring).toMatch(/outline-offset:\s*calc\(-1 \* \(var\(--focus-width\) \+ 2 \* var\(--border-width\)\)\);/)
+    expect(block(forced, '.band--header .segment input:checked:focus-visible + .segment-face')).toMatch(/outline-color:\s*HighlightText;/)
+    expect(forced).not.toMatch(/outline-color:\s*var\(--focus\)/)
+  })
+
+  it('changes only the border of a filled button on hover under forced colours, and the press still wins', () => {
+    // Hovered and at rest looked the same (V-44, the owner's VH-174.1).
+    const hover = '.button:not(.button--secondary):not(:disabled):hover,\n  .file-input:not(:disabled):not(.file-input--chosen):hover::file-selector-button'
+    expect(block(forced, hover)).toMatch(/^\s*border-color:\s*HighlightText;\s*$/)
+    const press = '.button:not(.button--secondary):not(:disabled):active,'
+    expect(forced.indexOf(hover)).toBeGreaterThan(-1)
+    expect(forced.indexOf(hover)).toBeLessThan(forced.indexOf(press))
   })
 })

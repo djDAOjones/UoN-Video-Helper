@@ -67,7 +67,8 @@
   --line-height-heading-03: 1.4;
   --paragraph-gap: var(--spacing-05);
 
-  /* WCAG 1.4.8 (AAA): no more than 80 characters a line, or 40 CJK glyphs.
+  /* WCAG 1.4.8 (AAA): no more than 80 characters a line, or 40 CJK glyphs;
+     the house counts a CJK glyph as two against 80, mixed lines too.
      One width in rem, so text of every size and language stops at one place
      (VH-167): `ch` and `em` resolved against each element's own font, and
      the column held four widths. Counted in Chrome at 1280 px: at most 63
@@ -95,6 +96,9 @@
   --rail-width: 4px;
   --focus-width: 2px;
   --focus-offset: 2px;
+  /* The ring and its gap: the room a ring needs inside a box that clips it,
+     as the file input clips its button's (V-40). */
+  --focus-room: calc(var(--focus-width) + var(--focus-offset));
 
   /* Native checkbox and radio glyphs, and the status mark column. */
   --control-size: 1.25rem;
@@ -102,6 +106,12 @@
 
   /* The AAA pointer-target floor. Never shrink a control below this. */
   --target-min: 44px;
+
+  /* A trim handle's dark disc and the light band round it, in px like the
+     44 px thumb they sit in: in rem, a 32 px default font grew the disc under
+     the focus ring, which then had nothing to contrast with (V-41). */
+  --thumb-disc: 12px;
+  --thumb-halo: 2px;
 
   /* Motion (Carbon productive, `fast-02`), and the indeterminate bar's
      sweep. Reduced to nothing by the `prefers-reduced-motion` rule. */

@@ -588,3 +588,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-21 — VH-148 — The owner’s sign-off changes, including the footer
+
+**Decision:** the owner’s thirteen handoff clauses ship: clearer group headings, closing graphics named throughout, separate helper facts, a short read outcome with bold no-sound, hatched cut regions, inset select arrows, Moodle in Smaller’s helper, the shorter statement, Teams and the team email, dashed disabled buttons and 16 px footer headings — because these are the owner’s conditions for VH-124’s sign-off.
+
+**Rationale:** The native selects keep their menus and keyboard behaviour inside an arrow wrapper; `--type-weight-heading` belongs to Carbon’s type roles. The trim uses existing brand surface/divider colours against the kept interactive fill, with contrast pinned at 3:1; forced colours use a solid CanvasText kept section because Highlight is translucent in Chrome. Helper facts are separate spans, preserving language-of-parts markup. The read live region keeps both sentences, with No sound in `strong`; properties keep their figures. Footer labels have no stop, the explicit VH-124 label exception. Feedback and accessibility contacts retain the owner’s address. All changed keys are listed in VH-148’s notes; translations are agent drafts through the sheet. Conservative implementation choices taken gateless under the handoff. Standards: Carbon productive type, native select and tokens; Nielsen 1, 2, 4 and 8; WCAG 1.3.1, 1.4.11, 2.4.9, 2.5.5 and 4.1.3; house conventions, named config destinations and regression tests. Chrome’s 18 combinations passed; human screen-reader and Windows-theme checks remain on the wish line. The existing missing-sample checker warning is covered by VH-139’s corpus wish line. VH-137’s footer-address debt is paid. Retired the wish line “The owner's walk-through of VH-124 judges three readings from the design pass”: all three accepted recommendations ship here.
+
+**Supersedes:** none
+
+**Deferred:** none
