@@ -740,6 +740,10 @@ export async function fileButtonInk(w, sel = '#file-input', { margin = 4 } = {})
   // backdrop; it is exempt there, as targets are (VH-171, pilot 2).
   if (await w.evaluate(`(() => { const el = document.querySelector(${JSON.stringify(sel)}); const modal = [...document.querySelectorAll('dialog[open]')].find((d) => d.matches(':modal')); return (!!modal && !modal.contains(el)) || !!el.closest('[inert]'); })()`)) return { el: sel, what: 'file button text (pixels)', outcome: 'inert', why: 'behind a modal dialog or inert' }
   const what = 'file button text (pixels)'
+  // VH-172: the mouse moved off first. A setup's last click can leave the button painted hovered while
+  // the style changes below repaint it unhovered, so every pixel of it changed ("outside the content box").
+  await w.page.send('Input.dispatchMouseEvent', { type: 'mouseMoved', x: 0, y: 0 })
+  await sleep(150)
   const clip = { x: Math.max(0, box.x - margin) + box.sx, y: Math.max(0, box.y - margin) + box.sy, width: box.w + 2 * margin, height: box.h + 2 * margin }
   // The button's own paint, pinned to its computed values (forced colours'
   // system colours included), so that only the text changes below.
@@ -779,6 +783,124 @@ export async function pressedAppearance(w, sel, { keyName = 'Space', margin = 8 
   if (r.error) return { sel, outcome: 'cannot-determine', why: r.error }
   const px = box.dpr * box.dpr
   return { sel, key: keyName, active: held.active, changedAny: Math.round(r.changedAny / px), changedAt3to1: Math.round(r.changed3 / px), bestRatio: r.best, outcome: r.changedAny > 0 ? 'pass' : 'fail', why: r.changedAny > 0 ? undefined : 'nothing changes while the key is held', up: Buffer.from(up, 'base64'), down: Buffer.from(held.down, 'base64') }
+}
+
+/**
+ * VH-172: pressed against hover, by mouse, and a keyboard press with focus
+ * visible (VH-169's contract). A capturing listener on the window swallows
+ * the click a release would make, so measuring a press never acts; the
+ * mouse is released away from the control. Enabled: the pressed pixels must
+ * differ from the hovered ones while `:active` holds, and a held Space must
+ * change the control with `:focus-visible` and a drawn outline kept.
+ * Disabled: a press must leave the rest pixels unchanged (disabled wins).
+ */
+export async function pressedVsHover(w, sel, { margin = 6 } = {}) {
+  const S = JSON.stringify(sel)
+  const box = await w.evaluate(`(() => { const el = document.querySelector(${S}); if (!el) return null; el.scrollIntoView({ block: 'center' }); const b = el.getBoundingClientRect(); return { x: b.left, y: b.top, w: b.width, h: b.height, sx: scrollX, sy: scrollY, dpr: devicePixelRatio, disabled: !!el.disabled, file: el.type === 'file' }; })()`)
+  if (!box || !box.w) return { sel, outcome: 'cannot-determine', why: 'not rendered' }
+  const clip = { x: Math.max(0, box.x - margin) + box.sx, y: Math.max(0, box.y - margin) + box.sy, width: box.w + 2 * margin, height: box.h + 2 * margin }
+  const paint = `(() => { const el = document.querySelector(${S}); const c = getComputedStyle(el, ${box.file ? "'::file-selector-button'" : 'null'}); return { bg: c.backgroundColor, fg: c.color, border: c.borderTopColor, active: el.matches(':active'), hover: el.matches(':hover'), focusVisible: el.matches(':focus-visible'), outline: c.outlineStyle + ' ' + c.outlineWidth }; })()`
+  const mouse = (type, x, y, extra = {}) => w.page.send('Input.dispatchMouseEvent', { type, x, y, button: type === 'mouseMoved' ? 'none' : 'left', clickCount: type === 'mouseMoved' ? 0 : 1, ...extra })
+  const cx = box.x + box.w / 2, cy = box.y + box.h / 2, away = { x: 2, y: 2 }
+  const px = box.dpr * box.dpr
+  const diff = async (a, b) => { const r = await analyse(w, DIFF, a, b); return r.error ? { error: r.error } : { changedAny: Math.round(r.changedAny / px), changedAt3to1: Math.round(r.changed3 / px), best: r.best } }
+  await w.evaluate(`(() => { const stop = (e) => { e.preventDefault(); e.stopImmediatePropagation(); }; window.__pressStop = stop; for (const t of ['click', 'auxclick', 'dblclick']) window.addEventListener(t, stop, true); const a = document.activeElement; if (a && a !== document.body) a.blur(); })()`)
+  try {
+    await mouse('mouseMoved', away.x, away.y); await sleep(150)
+    const rest = await shot(w, clip); const restPaint = await w.evaluate(paint)
+    await mouse('mouseMoved', cx, cy); await sleep(150)
+    const hover = await shot(w, clip); const hoverPaint = await w.evaluate(paint)
+    await mouse('mousePressed', cx, cy); await sleep(150)
+    const down = await shot(w, clip); const downPaint = await w.evaluate(paint)
+    await w.page.send('Input.dispatchMouseEvent', { type: 'mouseMoved', x: away.x, y: away.y, button: 'left', buttons: 1 })
+    await mouse('mouseReleased', away.x, away.y); await sleep(120)
+    const base = { sel, disabled: box.disabled, rest: restPaint, hover: hoverPaint, down: downPaint, shots: { rest: Buffer.from(rest, 'base64'), hover: Buffer.from(hover, 'base64'), down: Buffer.from(down, 'base64') } }
+    if (box.disabled) {
+      const d = await diff(rest, down)
+      if (d.error) return { ...base, outcome: 'cannot-determine', why: d.error }
+      return { ...base, what: 'disabled held by mouse', restVsDown: d, outcome: d.changedAny === 0 ? 'pass' : 'fail', why: d.changedAny === 0 ? 'disabled wins: the press leaves the rest look' : 'a disabled control changes when held' }
+    }
+    const m = await diff(hover, down)
+    if (m.error) return { ...base, outcome: 'cannot-determine', why: m.error }
+    let outcome = !downPaint.active ? 'cannot-determine' : m.changedAny > 0 ? 'pass' : 'fail'
+    let why = !downPaint.active ? 'the mouse press did not take (:active false)' : m.changedAny > 0 ? undefined : 'pressed looks as hovered'
+    // The keyboard press: Space held on the focused control.
+    await focusByKeyboard(w, sel); await sleep(150)
+    const kUp = await shot(w, clip)
+    const held = await holdKey(w, 'Space', async () => ({ shot: await shot(w, clip), paint: await w.evaluate(paint) }))
+    const k = await diff(kUp, held.shot)
+    const ring = held.paint.focusVisible && !/^none /.test(held.paint.outline)
+    const kOutcome = k.error || !held.paint.active ? 'cannot-determine' : k.changedAny > 0 && ring ? 'pass' : 'fail'
+    if (kOutcome === 'fail' && outcome !== 'fail') { outcome = 'fail'; why = k.changedAny > 0 ? 'the focus ring is not drawn while Space is held' : 'nothing changes while Space is held' }
+    else if (kOutcome === 'cannot-determine' && outcome === 'pass') { outcome = 'cannot-determine'; why = k.error ?? 'the key press did not take (:active false)' }
+    return { ...base, what: 'pressed against hover, and Space held with focus', hoverVsDown: m, keyboard: { upVsHeld: k, held: held.paint, ringDrawn: ring, outcome: kOutcome }, outcome, why, shots: { ...base.shots, keyUp: Buffer.from(kUp, 'base64'), keyHeld: Buffer.from(held.shot, 'base64') } }
+  } finally {
+    await w.evaluate(`(() => { const stop = window.__pressStop; for (const t of ['click', 'auxclick', 'dblclick']) window.removeEventListener(t, stop, true); delete window.__pressStop; const a = document.activeElement; if (a && a !== document.body) a.blur(); })()`)
+    await mouse('mouseMoved', away.x, away.y)
+  }
+}
+
+/**
+ * VH-172: every drawn text element on one of the eight type roles (VH-166),
+ * by computed family, size and weight in rem and line height as a ratio; the
+ * line height is not compared under 1.4.12's spacing, which sets it. One row
+ * per look, its role or none, with samples; the face Chrome rendered for the
+ * first sample (CSS.getPlatformFontsForNode), so fallback faces are seen.
+ * The file chooser's button text is a pseudo-element: not read here.
+ */
+export const TYPE_ROLES = [
+  { role: 'page title', fam: 'Lora', size: 1.75, lh: 1.25, w: 700 },
+  { role: 'panel heading', fam: 'Lora', size: 1.25, lh: 1.4, w: 700 },
+  { role: 'section heading', fam: 'Arial', size: 1, lh: 1.5, w: 600 },
+  { role: 'body', fam: 'Arial', size: 1, lh: 1.5, w: 400 },
+  { role: 'supporting', fam: 'Arial', size: 0.875, lh: 1.5, w: 400 },
+  { role: 'compact emphasis', fam: 'Arial', size: 0.875, lh: 1.5, w: 600 },
+  { role: 'status mark', fam: 'Arial', size: 0.875, lh: 1.5, w: 700 },
+  { role: 'code', fam: 'monospace', size: 0.875, lh: 1.5, w: 400 },
+]
+const TYPE_READ = (spacing) => `(() => {
+  const ROLES = ${JSON.stringify(TYPE_ROLES)}; const spacing = ${!!spacing};
+  const root = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+  const vis = (el) => (window.__audit ? window.__audit.visible(el) : el.getClientRects().length > 0);
+  const desc = (el) => el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') + (typeof el.className === 'string' && el.className.trim() ? '.' + el.className.trim().split(/\\s+/).slice(0, 2).join('.') : '');
+  const els = new Set();
+  const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  for (let n = tw.nextNode(); n; n = tw.nextNode()) { const el = n.parentElement; if (el && n.textContent.trim() && !el.closest('script,style,noscript,template,option,svg') && vis(el)) els.add(el); }
+  for (const el of document.querySelectorAll('input[type=text],input[type=number],input[type=date],input:not([type]),textarea,select')) if (vis(el) && (el.value || el.placeholder)) els.add(el);
+  const looks = new Map(); window.__typeSamples = [];
+  for (const el of els) {
+    const c = getComputedStyle(el);
+    const fam = c.fontFamily.split(',')[0].trim().replace(/["']/g, '');
+    const size = Math.round(parseFloat(c.fontSize) / root * 1000) / 1000;
+    const lh = c.lineHeight === 'normal' ? null : Math.round(parseFloat(c.lineHeight) / parseFloat(c.fontSize) * 100) / 100;
+    const w = parseInt(c.fontWeight, 10);
+    const key = [fam, size + 'rem', spacing ? 'lh(spacing)' : lh, w].join(' / ');
+    let L = looks.get(key);
+    if (!L) {
+      const role = ROLES.find((r) => r.fam === fam && Math.abs(r.size - size) < 0.01 && r.w === w && (spacing || (lh !== null && Math.abs(r.lh - lh) < 0.02)));
+      L = { look: key, role: role ? role.role : null, n: 0, samples: [], px: Math.round(parseFloat(c.fontSize) * 10) / 10, sample: window.__typeSamples.length };
+      window.__typeSamples.push(el); looks.set(key, L);
+    }
+    L.n++; if (L.samples.length < 4) L.samples.push(desc(el) + ' "' + (el.value || el.textContent || el.placeholder || '').trim().replace(/\\s+/g, ' ').slice(0, 24) + '"');
+  }
+  return { root, looks: [...looks.values()] };
+})()`
+export async function typeRoles(w, { spacing = false } = {}) {
+  const t = await w.evaluate(TYPE_READ(spacing))
+  await w.page.send('CSS.enable').catch(() => {})
+  await w.page.send('DOM.getDocument', { depth: 0 })
+  for (const L of t.looks) {
+    try {
+      const { result } = await w.page.send('Runtime.evaluate', { expression: `window.__typeSamples[${L.sample}]` })
+      const { nodeId } = await w.page.send('DOM.requestNode', { objectId: result.objectId })
+      const f = await w.page.send('CSS.getPlatformFontsForNode', { nodeId })
+      L.rendered = f.fonts.map((x) => `${x.familyName}${x.isCustomFont ? ' (web)' : ''} ×${x.glyphCount}`).join(', ')
+    } catch (e) { L.rendered = 'unread: ' + String(e.message ?? e).slice(0, 60) }
+    delete L.sample
+  }
+  await w.evaluate('delete window.__typeSamples')
+  await w.page.send('CSS.disable').catch(() => {})
+  return t.looks.map((L) => ({ ...L, el: L.samples[0], outcome: L.role ? 'pass' : 'fail', why: L.role ? undefined : 'on none of the eight roles' }))
 }
 
 /** A whole-page capture, as walk.mjs's screenshot, returned rather than written (M-08: the run writes it). */

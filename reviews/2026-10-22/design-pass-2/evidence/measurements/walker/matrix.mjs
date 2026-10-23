@@ -8,14 +8,18 @@
 //   FIX=<scratch>/fixtures OUT_ROOT=<scratch>/out RUN_ROOT=<scratch>/runs \
 //     node matrix.mjs pilot          (headless Chrome on :9222, Vite on :5173)
 //   VH-172: the scenarios, routes and plans live in scenarios.mjs; plans
-//   `smoke` and `matrix`; ids after the plan name keep only those records.
+//   `smoke`, `matrix`, `priority` and its parts `priority-1` to `-4`; ids
+//   after the plan name keep only those records.
+//     node matrix.mjs --resume <run dir>   resumes a run in place: records
+//   already ok are kept and skipped, failed ones moved to superseded/ and
+//   measured again, so an interrupted part never restarts.
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { connectBrowser } from './cdp.mjs'
 import { Walk, sleep } from './walk.mjs'
-import { QUAL_INIT, VIEWS, assertReached, axTree, focusArea, fileButtonInk, keysRoute, closeAnalysis, setViewport, setMode, withholdFonts, pageShot } from './qualify.mjs'
+import { QUAL_INIT, VIEWS, assertReached, axTree, focusArea, fileButtonInk, keysRoute, closeAnalysis, setViewport, setMode, withholdFonts, pageShot, pressedVsHover, typeRoles } from './qualify.mjs'
 import { Run, writeManifest, writeDigest, aggregate, recordKey } from './runner.mjs'
-import { SCENARIOS, ROUTES, PLANS, MX_INIT, GAPS } from './scenarios.mjs'
+import { SCENARIOS, ROUTES, PLANS, MX_INIT, GAPS, READINGS } from './scenarios.mjs'
 export { SCENARIOS, ROUTES, PLANS }
 
 const HERE = dirname(fileURLToPath(import.meta.url))
@@ -29,8 +33,9 @@ if (!RUN_ROOT) throw new Error('set RUN_ROOT to a scratch directory')
 // and the view it must reach, width, height and scale. The runner fails a
 // record without them. Whatever SCENARIOS, ROUTES and PLANS hold, these
 // apply; a declared record may name its own `requires` and `viewport`.
-const SCENARIO_INSTRUMENTS = ['overflow', 'ax', 'targets', 'contrastText', 'contrastExtra', 'measure', 'focus']
-export const requiredFor = (r) => (ROUTES[r.id] ? ['keys'] : [...SCENARIO_INSTRUMENTS, ...(r.mode === 'reduced-motion' ? ['motion'] : [])])
+// VH-172 adds `type` (the eight roles, VH-166) to every scenario, and `pressed` (VH-169) where a record names controls to press.
+const SCENARIO_INSTRUMENTS = ['overflow', 'ax', 'targets', 'contrastText', 'contrastExtra', 'measure', 'type', 'focus']
+export const requiredFor = (r) => (ROUTES[r.id] ? ['keys'] : [...SCENARIO_INSTRUMENTS, ...(r.mode === 'reduced-motion' ? ['motion'] : []), ...(r.pressed ? ['pressed'] : [])])
 const viewportFor = (view) => { const v = VIEWS[view]; return v ? { w: v.width, h: v.height, dpr: v.deviceScaleFactor } : undefined }
 // A record's variant (a subcase of a compound scenario) merges over its scenario.
 const scenarioFor = (r) => { const sc = SCENARIOS[r.id]; return sc && r.variant && sc.variants?.[r.variant] ? { ...sc, ...sc.variants[r.variant] } : sc }
@@ -64,6 +69,7 @@ async function instruments(w, sc, rec, run) {
   if (await w.evaluate(`!!document.querySelector('#file-input') && !!document.querySelector('#file-input').getBoundingClientRect().width`)) extra.push(await fileButtonInk(w))
   out.contrastExtra = aggregate(extra)
   out.measure = aggregate(await w.evaluate('window.__qual.lines()'))
+  out.type = aggregate(await typeRoles(w, { spacing: rec.mode === 'spacing' }))
   // Motion is watched while the focus measurements drive the page (M-05).
   const watching = rec.mode === 'reduced-motion'
   const t0 = Date.now()
@@ -86,6 +92,19 @@ async function instruments(w, sc, rec, run) {
     rows.push({ el: 'the page', what: 'watch', watchedMs, outcome: rows.some((r) => r.outcome === 'fail') ? 'fail' : 'pass', why: `document.getAnimations() sampled every 40 ms for ${watchedMs} ms while the focus measurements ran` })
     out.motion = aggregate(rows)
   }
+  // VH-169: each named control pressed by mouse against its hover, and by a held Space with focus; the shots kept.
+  if (rec.pressed) {
+    const rows = []
+    for (const sel of rec.pressed) {
+      const p = await pressedVsHover(w, sel)
+      const name = `${key}__pressed-${rows.length}-${slug(sel)}`
+      const shots = p.shots ? Object.fromEntries(Object.entries(p.shots).map(([k, b]) => [k, run.artifact(`${name}-${k}.png`, b).path])) : undefined
+      delete p.shots
+      rows.push({ ...p, shots })
+    }
+    await w.evaluate(`(() => { const a = document.activeElement; if (a && a !== document.body) a.blur(); window.scrollTo(0, 0); })()`)
+    out.pressed = aggregate(rows)
+  }
   return out
 }
 
@@ -100,17 +119,26 @@ async function openWalk(browser, name, run) {
 }
 
 async function main() {
-  const planName = process.argv[2] ?? 'pilot'
-  if (!PLANS[planName]) throw new Error('no plan ' + planName)
-  const only = process.argv.slice(3)
-  const declared = PLANS[planName]().filter((r) => !only.length || only.includes(r.id)).map((r) => ({ ...r, requires: r.requires ?? requiredFor(r), viewport: r.viewport ?? viewportFor(r.view) }))
-  const run = Run.create(RUN_ROOT, planName + (only.length ? '-part' : ''), declared)
+  const resuming = process.argv[2] === '--resume'
+  let run, declared, planName, skip = new Set()
+  if (resuming) {
+    run = new Run(process.argv[3])
+    declared = run.declared
+    planName = run.name
+    skip = run.resume()
+  } else {
+    planName = process.argv[2] ?? 'pilot'
+    if (!PLANS[planName]) throw new Error('no plan ' + planName)
+    const only = process.argv.slice(3)
+    declared = PLANS[planName]().filter((r) => !only.length || only.includes(r.id)).map((r) => ({ ...r, requires: r.requires ?? requiredFor(r), viewport: r.viewport ?? viewportFor(r.view) }))
+    run = Run.create(RUN_ROOT, planName + (only.length ? '-part' : ''), declared)
+  }
   const started = Date.now()
   const browser = await connectBrowser()
-  console.log(`run ${run.runId}: ${declared.length} records declared, ${browser.version.Browser}`)
+  console.log(`run ${run.runId}: ${declared.length} records declared${resuming ? `, ${skip.size} kept from before (attempt ${run.attempt})` : ''}, ${browser.version.Browser}`)
   // Group by scenario, variant, language, view and fonts: one setup, then each mode.
   const groups = new Map()
-  for (const r of declared) { const k = [r.id, r.variant ?? '', r.lang, r.view, r.mode === 'fallback'].join('|'); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(r) }
+  for (const r of declared.filter((d) => !skip.has(recordKey(d)))) { const k = [r.id, r.variant ?? '', r.lang, r.view, r.mode === 'fallback'].join('|'); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(r) }
   for (const recs of groups.values()) {
     const { id, lang, view, variant } = recs[0]
     const route = ROUTES[id]
@@ -126,6 +154,7 @@ async function main() {
         const key = recordKey(rec)
         try {
           await setMode(w, rec.mode)
+          if (sc?.afterMode) await sc.afterMode(w)
           if (route) {
             const k = await keysRoute(w, route.steps)
             const reached = await assertReached(w, { lang, mode: rec.mode, viewport: rec.viewport })
@@ -138,11 +167,12 @@ async function main() {
             // The state asserted again after the instruments: a record whose state expired fails (M-01);
             // a scenario may name what must still hold (VH-172's `hold`, default its state).
             const reachedAfter = await assertReached(w, { lang, mode: rec.mode, state: sc.hold ?? sc.state, viewport: rec.viewport })
+            const readings = await w.evaluate(READINGS).catch((e) => ({ error: String(e.message ?? e).slice(0, 120) }))
             const page = run.artifact(`${key}__page.png`, await pageShot(w))
             const exposure = await persistExposure(w, run, key)
             const expired = reachedAfter.outcome !== 'pass'
             if (expired) console.log('state lost ' + key)
-            run.record(rec, { status: expired ? 'failed' : 'ok', stateExpired: expired || undefined, reached, reachedAfter, faults: w.faults ?? [], instruments: ins, page, exposure })
+            run.record(rec, { status: expired ? 'failed' : 'ok', stateExpired: expired || undefined, reached, reachedAfter, faults: w.faults ?? [], instruments: ins, readings, page, exposure })
           }
           console.log('recorded ' + key)
         } catch (e) {

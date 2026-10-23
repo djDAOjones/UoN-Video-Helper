@@ -36,8 +36,7 @@ The public release, 0.2.0, on Xerte (PLAN-6).
 
 ### Phase 7 — a second design, UX and accessibility pass, with Codex astra as partner, before the cut
 
-- [~] VH-172 — The evidence run; the six fixes verified — since 2026-10-22 — (from: PLAN-7, 2026-10-22)
-- [ ] VH-173 — The review judged: journeys, visual, UX, WCAG 2.2 AAA; the person checklist — since 2026-10-22 — (from: PLAN-7, 2026-10-22)
+- [~] VH-173 — The review judged: journeys, visual, UX, WCAG 2.2 AAA; the person checklist — since 2026-10-22 — (from: PLAN-7, 2026-10-22)
 - [ ] VH-174 — The report, with Codex astra's critique — since 2026-10-22 — (from: PLAN-7, 2026-10-22)
 - [ ] VH-175 — The fix plan, with Codex astra's critique and the owner's approval — since 2026-10-22 — (from: PLAN-7, 2026-10-22)
 - [ ] VH-176 — Integrated verification: each fix checked by Codex astra, the after-run, the integrated check — since 2026-10-22 — (from: PLAN-7, 2026-10-22)

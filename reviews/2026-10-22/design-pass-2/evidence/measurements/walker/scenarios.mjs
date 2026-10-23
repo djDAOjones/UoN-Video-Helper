@@ -46,7 +46,8 @@ export const MX_INIT = String.raw`
   M.verdict = () => M.kindIn('#preflight-report');
   M.heading = (path) => M.is(path, '#preflight-report .notification-title');
   // The page's own device class (src/media/capability.ts:72): on a phone every verdict is the mobile one.
-  M.phone = () => (navigator.userAgentData && typeof navigator.userAgentData.mobile === 'boolean' && navigator.userAgentData.mobile) || (matchMedia('(pointer: coarse)').matches && navigator.maxTouchPoints > 1);
+  // As the page decides: userAgentData.mobile where it is a boolean, false included (VH-172: a false fell through to the touch fallback), else a coarse pointer with touch.
+  M.phone = () => { const d = navigator.userAgentData; return d && typeof d.mobile === 'boolean' ? d.mobile : matchMedia('(pointer: coarse)').matches && navigator.maxTouchPoints > 1; };
   M.proceed = () => (M.phone() ? M.heading('preflight.headings.mobile') : M.verdict() === 'success' && M.heading('preflight.headings.proceed'));
   M.checking = () => M.vis('#stop-actions') && M.shown(document.querySelector('#stop-actions > button:nth-child(1)'));
   M.checkAgain = () => M.vis('#stop-actions') && M.shown(document.querySelector('#stop-actions > button:nth-child(2)'));
@@ -56,8 +57,39 @@ export const MX_INIT = String.raw`
   M.focused = (sel) => { const el = M.el(sel); return !!el && document.activeElement === el; };
   M.fields = (ids) => ids.map((id) => document.getElementById(id));
   M.SUB = ['submission-card-assignment', 'submission-card-module', 'submission-card-convenor', 'submission-card-ids'];
+  // VH-172 (VH-164's contract): a mailto: link the page follows is logged as prepared (recipient, subject and body present, length), then followed as before.
+  M.mailto = [];
+  const click0 = HTMLAnchorElement.prototype.click;
+  HTMLAnchorElement.prototype.click = function () { if (/^mailto:/i.test(this.href)) { const u = this.href, q = u.indexOf('?'); M.mailto.push({ t: Math.round(performance.now()), chars: u.length, to: decodeURIComponent(u.slice(7, q > 0 ? q : undefined)), subject: /[?&]subject=/.test(u), body: /[?&]body=/.test(u) }); } return click0.call(this); };
 })();
 `
+
+// VH-172: readings beside the instruments, for the six-fix contract: not
+// verdicts. Segment widths with which is chosen (VH-166's reserved width),
+// the header band's inset against the column (V-36), the footer's panels,
+// gap and headings (V-37, wrapped headings), the toggletip's paragraph gap
+// (VH-167), the feedback hand-off and the form link (VH-164), and what a
+// person had chosen and typed (VH-164: kept).
+export const READINGS = String.raw`(() => {
+  const M = window.__mx; const q = (s) => document.querySelector(s);
+  const box = (el) => { if (!el) return null; const r = el.getBoundingClientRect(); return r.width || r.height ? { x: Math.round(r.left * 10) / 10, y: Math.round((r.top + scrollY) * 10) / 10, w: Math.round(r.width * 10) / 10, h: Math.round(r.height * 10) / 10 } : null; };
+  const font = (el) => { const c = getComputedStyle(el); return c.fontFamily.split(',')[0].replace(/["']/g, '') + ' ' + c.fontSize + '/' + c.lineHeight + ' ' + c.fontWeight; };
+  const segments = [...document.querySelectorAll('fieldset.segmented')].filter((f) => box(f)).map((f) => ({ id: f.id, segments: [...f.querySelectorAll('.segment')].map((s) => ({ text: s.textContent.trim().slice(0, 24), chosen: !!s.querySelector('input:checked'), w: box(s) && box(s).w, face: box(s.querySelector('.segment-face')) && box(s.querySelector('.segment-face')).w, weight: s.querySelector('.segment-face') && getComputedStyle(s.querySelector('.segment-face')).fontWeight })) }));
+  const logo = q('#brand-header') && q('#brand-header').firstElementChild;
+  const panels = [...document.querySelectorAll('.band--footer .system-check, .band--footer .statement')].map(box);
+  const heads = ['#system-check-summary', '#statement-heading'].map((s) => { const el = q(s); const b = box(el); if (!b) return { sel: s, shown: false }; const lh = parseFloat(getComputedStyle(el).lineHeight); return { sel: s, h: b.h, lines: lh ? Math.round(b.h / lh) : null, font: font(el) }; });
+  const tip = q('#onset-help'); const ps = tip && M.vis(tip) ? [...tip.querySelectorAll('p')].filter((p) => M.vis(p)) : [];
+  const fb = q('#feedback-message');
+  return {
+    viewport: innerWidth,
+    segments,
+    inset: { logoLeft: box(logo) && box(logo).x, columnLeft: box(q('#main .panel')) && box(q('#main .panel')).x },
+    footer: { panels, gap: panels.length === 2 && panels[0] && panels[1] ? Math.round((panels[1].y - (panels[0].y + panels[0].h)) * 10) / 10 : null, headings: heads },
+    toggletip: ps.length ? { paragraphs: ps.length, gaps: ps.slice(1).map((p, i) => Math.round((box(p).y - (box(ps[i]).y + box(ps[i]).h)) * 10) / 10), marginTop: ps.slice(1).map((p) => getComputedStyle(p).marginTop) } : null,
+    handoff: { mailto: M.mailto || [], formLink: q('#feedback-form-link') ? { href: !!q('#feedback-form-link').getAttribute('href'), target: q('#feedback-form-link').target, rel: q('#feedback-form-link').rel, idsUnique: document.querySelectorAll('#feedback-form-link').length === 1 && document.querySelectorAll('#feedback-form').length === 1 } : null },
+    kept: { chosen: M.chosen(), kind: M.checked('video-kind'), videoLanguage: M.checked('video-language'), fields: M.SUB.map((id) => (q('#' + id) ? q('#' + id).value.length : null)), draft: fb ? fb.value.length : null, dialogOpen: !!q('dialog[open]') },
+  };
+})()`
 
 // ---------------------------------------------------------------------------
 // Scenarios: setup, the state predicate the record must reach, and the
@@ -876,6 +908,19 @@ export const SCENARIOS = {
     focus: ['#feedback-message', SUBMIT],
     fixtures: [],
   },
+  'S-78k': {
+    name: 'Feedback handed off beside a chosen video and a filled card; closed and opened again',
+    // VH-172 (VH-164's contract): the chosen video, the choices and the draft kept. The state asks only
+    // that the dialog is open again over a chosen video; what was kept is read (READINGS.kept), not assumed.
+    state: `!!document.querySelector('dialog#feedback-dialog[open]') && M.chosen() && !!M.verdict()`,
+    setup: async (w, lang) => {
+      await ready(w, lang); await w.chooseKind('submission'); await submissionFill(w)
+      await w.click('#feedback-open'); await sleep(300); await w.type('#feedback-message', 'The page worked well for me.'); await w.click(SUBMIT); await sleep(500)
+      await w.click('#feedback-close'); await sleep(300); await w.click('#feedback-open'); await sleep(300)
+    },
+    focus: ['#feedback-message', SUBMIT],
+    fixtures: ['lecture-60s.mp4'],
+  },
   'S-79a': {
     name: 'Feedback oversized: no mailto',
     state: `!!document.querySelector('dialog#feedback-dialog[open]') && M.has('feedback.tooLong', '#feedback-status')`,
@@ -926,6 +971,8 @@ export const SCENARIOS = {
     state: `!M.chosen() && !document.querySelector('dialog[open]') && Math.ceil(scrollY + innerHeight) >= document.documentElement.scrollHeight - 2`,
     hold: `!M.chosen() && !document.querySelector('dialog[open]')`,
     setup: async (w, lang) => { await fresh(w, lang); await w.evaluate('window.scrollTo(0, document.documentElement.scrollHeight)'); await sleep(300) },
+    // VH-172: a mode that changes the page's height (the 32 px font) moves the foot; scrolled again after each mode.
+    afterMode: async (w) => { await w.evaluate('window.scrollTo(0, document.documentElement.scrollHeight)'); await sleep(300) },
     focus: ['#feedback-open', '#feedback-form-link', '#contact-creators', '#contact-learning-content'],
     fixtures: [],
   },
@@ -1253,6 +1300,96 @@ PLANS.smoke = () => [
   ...scenarioIds().map((id) => ({ id, lang: okLang(id, 'en-GB') ? 'en-GB' : SCENARIOS[id].langs[0], view: okView(id, 'w1280') ? 'w1280' : SCENARIOS[id].views[0], mode: 'light' })),
   ...[...J, 'K-dialog'].map((id) => ({ id, lang: 'en-GB', view: 'w1280', mode: 'light' })),
 ]
+
+// ---------------------------------------------------------------------------
+// VH-172's reduction (evidence/measurements/matrix-2026-10-23.md): the
+// priority plan, about three hours, in parts that resume. PLANS.matrix stays
+// declared for a later run to fill what this leaves.
+// Scenarios whose text is long or varies with the language: warnings,
+// failures, the dialog, the statement and system check, the title and ID
+// fields, results, the toggletip, choice details and the footer.
+const TEXT = ['S-05', 'S-10', 'S-15', 'S-17', 'S-18', 'S-19', 'S-20', 'S-22', 'S-23', 'S-27', 'S-28', 'S-29', 'S-30', 'S-31', 'S-37a', 'S-38', 'S-45a', 'S-47b', 'S-54a', 'S-55a', 'S-55c', 'S-62', 'S-64', 'S-69', 'S-73', 'S-75', 'S-77', 'S-78', 'S-78k', 'S-79a', 'S-79b', 'S-80a', 'S-80b', 'S-82', 'S-83', 'S-89', 'S-91']
+const BASE = ['en-GB', 'w1280']
+const ALL_CELLS = LANGS.flatMap((lang) => LIGHT_VIEWS.map((view) => [lang, view])).filter(([l, v]) => l !== BASE[0] || v !== BASE[1])
+// The phone view is left to the finite list and a few (PHONE): 320 px is the stricter reflow.
+const TEXT_CELLS = ALL_CELLS.filter(([, v]) => v !== 'w375')
+const PHONE = ['S-15', 'S-82', 'S-83']
+// About two minutes a setup each (a long still's estimate, an encode under way): fewer cells.
+const HEAVY = ['S-24', 'S-48']
+const HEAVY_CELLS = [['zh-Hans', 'w1280'], ['ms-MY', 'w320'], ['en-GB', 'w320']]
+const HEAVY_VIEWS = ['zoom400proxy']
+// VH-169: the controls pressed, by scenario, at 1280 px; the modes and languages they are pressed in.
+const PRESSED = {
+  'S-03': ['#file-input', '#feedback-open'],
+  'S-15': [CREATE, '#file-input', '#trim-set-start', '#trim-clear'],
+  'S-53': [SAVE, CREATE],
+  'S-58': ['#process-result .button--danger', '#process-result .button--secondary'],
+  'S-62': [SAVE],
+  'S-76': [SUBMIT, '#feedback-copy'],
+}
+const PRESSED_MODES = ['light', 'dark', 'forced-light', 'forced-dark']
+const PRESSED_LANGS = { 'S-15': LANGS, 'S-58': LANGS }
+// VH-166 and VH-167: type, measure and the footer with fallback faces and the 32 px default font.
+const TYPE_SET = ['S-07', 'S-15', 'S-17', 'S-39', 'S-47b', 'S-82', 'S-83']
+const rec = (id, lang, view, mode) => ({ id, lang, view, mode })
+PLANS.priority = () => {
+  const out = new Map()
+  const add = (r) => { if (SCENARIOS[r.id] && (!okLang(r.id, r.lang) || !okView(r.id, r.view))) return; const k = [r.id, r.lang, r.view, r.mode].join('|'); if (!out.has(k)) out.set(k, r) }
+  // Every scenario once in its base cell, as smoke.
+  for (const r of PLANS.smoke()) add(r)
+  // Language and width for layout- and text-dependent scenarios, light.
+  for (const id of FINITE) for (const [lang, view] of HEAVY.includes(id) ? HEAVY_CELLS : ALL_CELLS) add(rec(id, lang, view, 'light'))
+  for (const id of TEXT) for (const [lang, view] of TEXT_CELLS) add(rec(id, lang, view, 'light'))
+  for (const id of PHONE) add(rec(id, 'en-GB', 'w375', 'light'))
+  // The finite list: every mode at 1280 in English; colour and focus in Chinese for five; the reflow views in English.
+  for (const id of FINITE) for (const mode of FINITE_MODES) add(rec(id, 'en-GB', 'w1280', mode))
+  for (const id of ['S-03', 'S-53', 'S-56', 'S-76', 'S-81']) for (const mode of ['dark', 'forced-light', 'forced-dark']) add(rec(id, 'zh-Hans', 'w1280', mode))
+  for (const id of FINITE) for (const view of HEAVY.includes(id) ? HEAVY_VIEWS : FINITE_VIEWS) add(rec(id, 'en-GB', view, 'light'))
+  // The six-fix cells. VH-165: the long names and the long ID in every language and light view, with and without spacing; colour at 320.
+  for (const id of [...LONG_NAMES, 'S-ID1']) {
+    for (const lang of LANGS) for (const view of LIGHT_VIEWS) for (const mode of ['light', 'spacing']) add(rec(id, lang, view, mode))
+    for (const mode of ['dark', 'forced-light', 'forced-dark']) add(rec(id, 'en-GB', 'w320', mode))
+  }
+  // VH-165's thumb rings and VH-169's presses in both forced palettes and dark.
+  for (const [id, langs] of Object.entries({ ...Object.fromEntries(Object.keys(PRESSED).map((id) => [id, ['en-GB']])), ...PRESSED_LANGS }))
+    for (const lang of langs) for (const mode of lang === 'en-GB' ? PRESSED_MODES : ['light']) add(rec(id, lang, 'w1280', mode))
+  // VH-166 and VH-167: fallback faces and the 32 px font in English and Chinese; the toggletip at 200 %; the footer wrapping at 375 px.
+  for (const id of TYPE_SET) for (const lang of ['en-GB', 'zh-Hans']) for (const mode of ['fallback', 'font32']) add(rec(id, lang, 'w1280', mode))
+  for (const lang of ['en-GB', 'zh-Hans']) add(rec('S-17', lang, 'zoom200proxy', 'light'))
+  for (const lang of ['zh-Hans', 'ms-MY']) { add(rec('S-83', lang, 'w375', 'light')); add(rec('S-07', lang, 'w1280', 'light')); add(rec('S-07', lang, 'w320', 'light')) }
+  // The keyboard routes: J1-J4 and the dialog in English at 1280; J1 in Chinese and Malay, and at 320.
+  for (const id of [...J, 'K-dialog']) add(rec(id, 'en-GB', 'w1280', 'light'))
+  for (const lang of ['zh-Hans', 'ms-MY']) add(rec('J1', lang, 'w1280', 'light'))
+  add(rec('J1', 'en-GB', 'w320', 'light'))
+  return [...out.values()].map((r) => (PRESSED[r.id] && r.view === 'w1280' && PRESSED_MODES.includes(r.mode) && (PRESSED_LANGS[r.id] ?? ['en-GB']).includes(r.lang) && (r.lang === 'en-GB' || r.mode === 'light') ? { ...r, pressed: PRESSED[r.id] } : r))
+}
+// The cost of a plan from smoke's timings (seconds): a setup per scenario,
+// language, view and fonts; each further mode on it the instruments alone.
+const SLOW = { 'S-11': 142, 'S-24': 115, 'S-25a': 140, 'S-25b': 138, 'S-43': 150, 'S-48': 150, 'S-49': 150, 'S-50': 129, 'S-57': 220, 'S-85': 133, 'S-90a': 130, 'S-90b': 141, 'S-52': 25, 'S-60': 68, 'S-61': 53, 'S-65': 55, 'S-66': 62, 'S-72a': 53, J1: 58, J2: 12, J3: 21, J4: 64 }
+const groupKey = (r) => [r.id, r.variant ?? '', r.lang, r.view, r.mode === 'fallback'].join('|')
+export function estimate(records) {
+  const groups = new Map()
+  for (const r of records) { const k = groupKey(r); groups.set(k, [...(groups.get(k) ?? []), r]) }
+  let s = 0
+  for (const recs of groups.values()) {
+    const r = recs[0]; const dpr = ['w375', 'landscape', 'zoom200proxy', 'zoom400proxy'].includes(r.view) ? 1.4 : 1
+    s += (SLOW[r.id] ?? 12) * dpr + (recs.length - 1) * 6 * dpr + recs.reduce((n, x) => n + (x.pressed?.length ?? 0) * 3, 0)
+  }
+  return Math.round(s)
+}
+// Four parts, each a whole set of scenarios, near equal by the estimate.
+const PARTS = 4
+const parts = () => {
+  const all = PLANS.priority()
+  const ids = [...new Set(all.map((r) => r.id))]
+  const cost = Object.fromEntries(ids.map((id) => [id, estimate(all.filter((r) => r.id === id))]))
+  const total = Object.values(cost).reduce((a, b) => a + b, 0)
+  const out = Array.from({ length: PARTS }, () => [])
+  let p = 0, acc = 0
+  for (const id of ids) { if (acc >= (total / PARTS) * (p + 1) && p < PARTS - 1) p++; out[p].push(id); acc += cost[id] }
+  return out.map((set) => all.filter((r) => set.includes(r.id)))
+}
+for (let i = 0; i < PARTS; i++) PLANS[`priority-${i + 1}`] = () => parts()[i]
 
 
 // The predicates read the page through window.__mx (MX_INIT), as `M`.

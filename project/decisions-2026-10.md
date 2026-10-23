@@ -526,3 +526,15 @@
 **Supersedes:** none
 
 **Deferred:** VH-140, VH-141, VH-142, VH-144, VH-145, VH-146
+
+## 2026-10-21 — PLAN-4 — Phase 4: what the design pass found
+
+**Decision:** Phase 4 is VH-144 (two page defects), VH-145 (the token boundary) and VH-146 (the Submission card's date), in that order, after Phase 3, each with a file; signed off gateless — because the owner's overnight instruction pre-approved PLAN-4, and no Phase 3 item's lines hold these findings.
+
+**Rationale:** The findings answered: V-20 and V-23 by VH-144; V-19 and V-25 (narrowed) by VH-145; V-30 (narrowed) by VH-146. VH-144 goes first: two rank-2 defects every user who reaches them sees, each the smallest change. VH-145 second: a stylesheet-wide change, made once Phase 3's page fixes have landed so no rule is changed twice. VH-146 last: a renderer change that needs `spike-cards.html` re-run. Deferred as wish lines (rule 5): V-18, the frame above step 1; V-24, the statement's lists, to VH-137; V-28's two maintainer's sentences; V-27's form questions for the colleagues; and three readings for the VH-124 walk-through: V-26's footer headings, a disabled button's edge, the stop on a list of links. Nothing in Phase 4 is new design, adds a runtime dependency or edits `docs/`. Taken gateless on the owner's instruction of 2026-10-21 (the VH-143 entry below), the conservative reading being the smallest change that meets each standard with the tokens, components and words the page already has.
+
+**Supersedes:** none
+
+**Items:** VH-144, VH-145, VH-146
+
+**Deferred:** none

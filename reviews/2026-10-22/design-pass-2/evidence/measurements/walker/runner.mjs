@@ -13,7 +13,7 @@
 //
 //   node runner.mjs --verify <run dir>     exits 1 when the run is not whole
 import { createHash, randomBytes } from 'node:crypto'
-import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync, appendFileSync, statSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync, appendFileSync, statSync, renameSync } from 'node:fs'
 import { join, dirname, basename } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { execFileSync } from 'node:child_process'
@@ -73,9 +73,32 @@ export class Run {
     writeFileSync(file, JSON.stringify({ runId: this.runId, key: recordKey(r), ...r, ...data }, (k, v) => (v && v.type === 'Buffer' ? undefined : v), 1))
     return file
   }
-  /** A capture or a persisted reading, under captures/, named by the caller with the full record key; never overwritten. */
+  /**
+   * VH-172: the run resumed in place. A declared record already written and
+   * ok is kept and skipped; one written but not ok is moved to superseded/
+   * (kept, never counted) and measured again. Returns the keys to skip.
+   */
+  resume() {
+    const meta = JSON.parse(readFileSync(join(this.dir, 'run.json'), 'utf8'))
+    meta.resumes = [...(meta.resumes ?? []), new Date().toISOString()]
+    writeFileSync(join(this.dir, 'run.json'), JSON.stringify(meta, null, 1))
+    this.attempt = meta.resumes.length + 1
+    const keep = new Set()
+    for (const d of this.declared) {
+      const k = recordKey(d), f = join(this.dir, k + '.json')
+      if (!existsSync(f)) continue
+      let rec = null
+      try { rec = JSON.parse(readFileSync(f, 'utf8')) } catch { /* unreadable: measured again */ }
+      if (rec && rec.status === 'ok' && !rec.stateExpired && rec.runId === this.runId) { keep.add(k); continue }
+      mkdirSync(join(this.dir, 'superseded'), { recursive: true })
+      renameSync(f, join(this.dir, 'superseded', `${k}~a${this.attempt - 1}.json`))
+    }
+    return keep
+  }
+  /** A capture or a persisted reading, under captures/, named by the caller with the full record key; never overwritten (a resumed attempt's own name takes ~a<n>). */
   artifact(name, data) {
     if (/[\\/]|^\./.test(name)) throw new Error('artifact name must be a plain file name: ' + name)
+    if (this.attempt && existsSync(join(this.dir, 'captures', name))) name = name.replace(/(\.[a-z]+)$/, `~a${this.attempt}$1`)
     const file = join(this.dir, 'captures', name)
     const buf = Buffer.isBuffer(data) ? data : Buffer.from(typeof data === 'string' ? data : JSON.stringify(data))
     writeFileSync(file, buf, { flag: 'wx' }) // throws EEXIST rather than overwrite
@@ -193,7 +216,7 @@ export function writeManifest(run, { appRoot, browserVersion, fixtures = [], sca
 export function writeDigest(run, { title = run.name, intro = '' } = {}) {
   const recs = run.records().sort((a, b) => a.key.localeCompare(b.key))
   const names = [...new Set(recs.flatMap((r) => Object.keys(r.instruments ?? {})))]
-  const order = ['overflow', 'ax', 'targets', 'contrastText', 'contrastExtra', 'measure', 'focus', 'motion', 'keys']
+  const order = ['overflow', 'ax', 'targets', 'contrastText', 'contrastExtra', 'measure', 'type', 'focus', 'pressed', 'motion', 'keys']
   names.sort((a, b) => (order.indexOf(a) + 99 * (order.indexOf(a) < 0)) - (order.indexOf(b) + 99 * (order.indexOf(b) < 0)))
   const short = { 'cannot-determine': 'c-d', 'not-applicable': 'n/a' }
   const L = ['<!-- markdownlint-disable -->', `# ${title}`, '', intro, '', `| Record | ${names.join(' | ')} |`, `| --- |${names.map(() => ' --- |').join('')}`]

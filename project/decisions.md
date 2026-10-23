@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-23 — VH-172 — The evidence run: a prioritised matrix, 699 records whole, in place of the full 1,454; the six fixes hold or hold in part, none regressed
+
+**Decision:** VH-172 runs a prioritised matrix in resumable parts instead of the plan's full matrix: every scenario once in its base cell, the language, width, mode and enlargement variants only where a check depends on them, and the six-fix cells in full. The 821 cells left unrun are listed by class with their reasons, and `PLANS.matrix` stays declared for a later run. Because the full run is about 11.6 hours on a laptop that moves between places and would be broken repeatedly, the orchestrator recommended this reduction, and the owner's standing instruction lets it proceed.
+
+**Rationale:** The owner's instruction of 2026-10-23: "work through to the end of VH-177, archive and spawn as you go, proceed with your recommendations, universal permission is granted". Codex's method check set no must on the matrix's size (M-01 to M-08 concern the instruments), so no disagreement with Codex arises. `PLANS.priority` ran 699 of 699 records whole in 2 h 20 min: 633 matrix cells and 66 six-fix cells, with none failed, missing, stale or out of view (`reviews/2026-10-22/design-pass-2/evidence/measurements/matrix-2026-10-23.md`, `matrix-manifest-2026-10-23.json`, eleven `digest-*-2026-10-23.md`). Three instrument faults were fixed and their records re-measured: the phone signal, a setup hover spoiling the file button's glyph reading, and the footer's scroll at the 32 px font. The 245 file-button text readings from parts 1–3 left "cannot determine" are a named gap; the 32 re-measured all pass. Two instruments were added, `pressed` and `type`, each proved 8 of 8. The six-fix table is in `six-fix-verification-2026-10-23.md`. VH-164 holds. VH-165 is partial: the forced-light thumb ring is to judge. VH-166 is partial: no walked state draws the code role. VH-167 holds; no state draws a fact note. VH-168 holds. VH-169 holds, 64 of 64 presses. Nothing is judged a finding here; VH-173 judges. No product code changed.
+
+**Supersedes:** none
+
+**Deferred:** VH-173
+
 ## 2026-10-23 — VH-171 — The instruments qualified: Codex astra's eight musts applied, VH-172's setups merged, S-25 reached by a worker clock
 
 **Decision:** VH-171 ships with all eight of Codex astra's method-check musts, M-01 to M-08, applied and none refused, VH-172's scenario setups merged into the walker, N5 added, and S-25's slow verdict reached by a new fault, F13, the worker's clock at twice real time, because CPU throttling cannot reach the worker and the 21,600 s still never settled; the instruments are fit for the matrix.
@@ -564,15 +574,3 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Supersedes:** none
 
 **Deferred:** VH-139, VH-140, VH-141, VH-142, VH-144, VH-145, VH-146
-
-## 2026-10-21 — PLAN-4 — Phase 4: what the design pass found
-
-**Decision:** Phase 4 is VH-144 (two page defects), VH-145 (the token boundary) and VH-146 (the Submission card's date), in that order, after Phase 3, each with a file; signed off gateless — because the owner's overnight instruction pre-approved PLAN-4, and no Phase 3 item's lines hold these findings.
-
-**Rationale:** The findings answered: V-20 and V-23 by VH-144; V-19 and V-25 (narrowed) by VH-145; V-30 (narrowed) by VH-146. VH-144 goes first: two rank-2 defects every user who reaches them sees, each the smallest change. VH-145 second: a stylesheet-wide change, made once Phase 3's page fixes have landed so no rule is changed twice. VH-146 last: a renderer change that needs `spike-cards.html` re-run. Deferred as wish lines (rule 5): V-18, the frame above step 1; V-24, the statement's lists, to VH-137; V-28's two maintainer's sentences; V-27's form questions for the colleagues; and three readings for the VH-124 walk-through: V-26's footer headings, a disabled button's edge, the stop on a list of links. Nothing in Phase 4 is new design, adds a runtime dependency or edits `docs/`. Taken gateless on the owner's instruction of 2026-10-21 (the VH-143 entry below), the conservative reading being the smallest change that meets each standard with the tokens, components and words the page already has.
-
-**Supersedes:** none
-
-**Items:** VH-144, VH-145, VH-146
-
-**Deferred:** none
