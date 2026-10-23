@@ -1,4 +1,4 @@
-// PLAN-7 (VH-171): the declared faults F1–F12 the scenarios need, each a
+// PLAN-7 (VH-171): the declared faults F1–F13 the scenarios need, each a
 // switch set before the page loads (or, for F5, F7 and F8, in place), kept
 // apart from the keyboard route. A fault changes the browser around the app,
 // never the app's source. `node faults.mjs check` applies each one to the
@@ -72,13 +72,17 @@ export const FAULTS = {
   F2: {
     name: 'VideoEncoder removed from the page',
     for: 'S-02 (startup blocked)',
-    before: (w) => init(w, 'delete globalThis.VideoEncoder;'),
+    before: async (w) => { w.scriptF2 = (await init(w, 'delete globalThis.VideoEncoder;')).identifier },
+    // VH-172: released for a route's later loads; the next navigation has VideoEncoder again.
+    release: async (w) => { if (w.scriptF2) await w.page.send('Page.removeScriptToEvaluateOnNewDocument', { identifier: w.scriptF2 }); w.scriptF2 = null },
   },
   F3: {
     name: "the worker's storage estimate reports a set quota",
     for: 'S-31 (storage block). Storage.overrideQuotaForOrigin does nothing in the isolated browser context each walk opens (VH-171, probed), so the estimate is rewritten instead; S-56 (out of space part-way) is F12',
     // opts.bytes: the quota the estimate reports, with nothing used.
     before: (w, { bytes = 50 * 1024 * 1024 } = {}) => workerPrelude(w, 'F3', `navigator.storage.estimate = async () => ({ quota: ${Number(bytes)}, usage: 0 });`),
+    // VH-172: released for a route's later loads (the worker module is no longer rewritten).
+    release: (w) => unroute(w, 'F3'),
   },
   F4a: {
     name: 'the save picker cancelled',
@@ -108,7 +112,14 @@ export const FAULTS = {
   F4e: {
     name: 'no picker, and URL.createObjectURL throws',
     for: 'S-69 (save failed): the only way saveFile throws; the chosen file is spared, so the preview still loads',
-    before: (w) => init(w, `window.showSaveFilePicker = undefined; (() => { const real = URL.createObjectURL; URL.createObjectURL = (b) => { if (b instanceof Blob && b.type.startsWith('video/') && b !== (document.querySelector('#file-input').files || [])[0]) throw new DOMException('fault F4e', 'NotReadableError'); return real(b); }; })();`),
+    before: async (w) => { w.scriptF4e = (await init(w, `window.showSaveFilePicker = undefined; (() => { const real = URL.createObjectURL; window.__f4eRealCreateObjectURL = real; URL.createObjectURL = (b) => { if (b instanceof Blob && b.type.startsWith('video/') && b !== (document.querySelector('#file-input').files || [])[0]) throw new DOMException('fault F4e', 'NotReadableError'); return real(b); }; })();`)).identifier },
+    // VH-172: released in place (J3's save after S-69): the real URL.createObjectURL and the
+    // walk's own picker stub (walk.mjs PAGE_INIT) put back, and the script dropped for later loads.
+    release: async (w) => {
+      if (w.scriptF4e) await w.page.send('Page.removeScriptToEvaluateOnNewDocument', { identifier: w.scriptF4e })
+      w.scriptF4e = null
+      await w.evaluate(`(() => { if (window.__f4eRealCreateObjectURL) URL.createObjectURL = window.__f4eRealCreateObjectURL; window.showSaveFilePicker = async (options) => { const name = options && options.suggestedName ? options.suggestedName : 'video.mp4'; if (window.__audit) window.__audit.saves.push({ name }); const root = await navigator.storage.getDirectory(); const dir = await root.getDirectoryHandle('audit-saves', { create: true }); return dir.getFileHandle(name, { create: true }); }; })()`)
+    },
   },
   F5: {
     name: 'clipboard permission granted or denied',
@@ -160,6 +171,15 @@ export const FAULTS = {
     // opts.bytes: what is written before the write fails.
     before: (w, { bytes = 256 * 1024 } = {}) => workerPrelude(w, 'F12', `(() => { const real = FileSystemSyncAccessHandle.prototype.write; let written = 0, failed = false;
       FileSystemSyncAccessHandle.prototype.write = function (data, o) { if (!failed) { written += data.byteLength; if (written > ${Number(bytes)}) { failed = true; throw new DOMException('fault F12', 'QuotaExceededError'); } } return real.call(this, data, o); }; })();`),
+    // VH-172: released for a route's later loads.
+    release: (w) => unroute(w, 'F12'),
+  },
+  F13: {
+    name: "the job worker's clock runs fast",
+    for: "S-25 (very long job, discouraged): the worker's performance.now runs at opts.rate (default 2) times real time, so the pre-flight's timed passes (job.worker.ts analysisPass; src/media/probe.ts jobTimeEstimate) read as on a device that much slower, and the 10,800 s still's 45-minute estimate passes 60 (src/config/thresholds.ts ESTIMATE_BANDS). CDP Emulation.setCPUThrottlingRate was tried first (VH-172, 23 October): on the worker's own session it is refused ('only supported for pages'), and on the page's it leaves the worker's estimate at 45 minutes",
+    // opts.rate: how many times faster than real time the worker's clock runs.
+    before: (w, { rate = 2 } = {}) => workerPrelude(w, 'F13', `(() => { const real = performance.now.bind(performance); const t0 = real(); performance.now = () => t0 + (real() - t0) * ${Number(rate)}; })();`),
+    release: (w) => unroute(w, 'F13'),
   },
 }
 
@@ -172,6 +192,14 @@ export async function applyFault(w, id, opts) {
   w.faults = [...(w.faults ?? []), id]
   if (f.before) await f.before(w, opts)
   if (f.now) await f.now(w, opts)
+}
+
+/** Undo a fault where it can be undone (VH-172): a route's later loads run without it. */
+export async function releaseFault(w, id) {
+  const f = FAULTS[id]
+  if (!f?.release) throw new Error('fault ' + id + ' has no release')
+  await f.release(w)
+  w.faultsReleased = [...(w.faultsReleased ?? []), id]
 }
 
 /** Navigate without waiting for boot (F1 holds it). */
@@ -231,6 +259,7 @@ async function check() {
   await one('F5', async (w) => { await w.goto(); await applyFault(w, 'F5', { setting: 'granted' }); await w.click('#feedback-open'); await sleep(300); await w.type('#feedback-message', 'A test message.'); await w.click('#feedback-copy'); await sleep(500); const granted = await text(w, '#feedback-dialog'); await FAULTS.F5.now(w, { setting: 'denied' }); await w.click('#feedback-copy'); await sleep(500); const denied = await text(w, '#feedback-dialog'); const ok = /Copied/.test(granted) && /Could not copy/.test(denied); return { outcome: ok ? 'pass' : 'fail', saw: [granted, denied].map((s) => s.replace(/\s+/g, ' ').slice(-120)) } })
   await one('F10', async (w) => { await applyFault(w, 'F10'); await w.goto(); await w.setFiles(F('lecture-30s.mp4')); await w.waitFor(`/device check did not finish/i.test(document.body.innerText)`, { label: 'check failed', timeout: 60000 }).catch(() => undefined); const s = await body(w); const r = has(s, /device check did not finish/i); r.checkAgain = await w.evaluate(`[...document.querySelectorAll('button')].some((b) => !b.hidden && /Check again/.test(b.textContent))`); if (!r.checkAgain) r.outcome = 'fail'; return r })
   await one('F12', async (w) => { await applyFault(w, 'F12'); await finishedOr(w, 'failed'); const failed = has(await body(w), /ran out of working space part-way/); await w.click(w.createButton()); await w.waitFinished(); const retried = await w.evaluate(`!!document.querySelector(${JSON.stringify(w.saveButton())})`); return { ...failed, outcome: failed.outcome === 'pass' && retried ? 'pass' : 'fail', retried } })
+  await one('F13', async (w) => { await applyFault(w, 'F13'); await w.goto(); await w.setFiles(F('still-10800s.mp4')); await w.waitFor(`/will work, but it will be slow/.test(document.body.innerText)`, { label: 'slow band', timeout: 240000 }).catch(() => undefined); const r = has(await body(w), /This will work, but it will be slow/); r.continueAnyway = await w.evaluate(`[...document.querySelectorAll('#process-actions button')].some((b) => !b.hidden && /Continue anyway/.test(b.textContent))`); if (!r.continueAnyway) r.outcome = 'fail'; return r })
   await one('F11', async (w) => { await applyFault(w, 'F11'); await w.goto(); await w.setFiles(F('lecture-360s.mp4')); await w.waitSettled(); await w.click(w.createButton()); await w.waitFor(`/stopped reporting progress/.test(document.body.innerText)`, { label: 'watchdog', timeout: 200000 }); const held = await body(w); const locked = await w.evaluate(`document.querySelector('#file-input').disabled`); await w.waitFor(`!/job is stopping/.test(document.body.innerText)`, { label: 'locks lift', timeout: 30000 }); const lifted = !(await w.evaluate(`document.querySelector('#file-input').disabled`)); const r = has(held, /job is stopping/); return { ...r, outcome: r.outcome === 'pass' && locked && lifted ? 'pass' : 'fail', locked, lifted } })
   for (const [id, re] of [['F4a', /Not saved/], ['F4c', /file you started with/], ['F4d', /downloads folder/i], ['F4e', /could not be saved/]]) {
     await one(id, async (w) => { await applyFault(w, id); await finished(w); await w.click(w.saveButton()); await sleep(2500); return has(await w.evaluate(status) + ' | ' + await body(w), re) })

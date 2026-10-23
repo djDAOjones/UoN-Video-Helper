@@ -11,6 +11,7 @@
 ## Phase 7 — a second design, UX and accessibility pass, with Codex astra as partner, before the cut
 
 - VH-170 — the second pass planned and ticketed: four journeys, scenarios, qualified instruments, four lenses, seven Codex astra touchpoints, eight stages; Codex's twelve points applied (2026-10-22) — see decisions
+- VH-171 — the instruments qualified: Codex astra's blind review saved (D-01 to D-04), its method check's eight musts applied, 91 scenarios with setups, faults F1–F13 and fixtures N1–N5, proofs 77 of 77, the smoke plan 119 of 119 whole (2026-10-23) — see decisions
 
 ## Phase 6 — the public release: the feedback form, the statement, the cut, Xerte
 

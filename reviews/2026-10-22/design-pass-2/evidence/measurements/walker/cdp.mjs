@@ -9,6 +9,15 @@ export async function connectBrowser(port = 9222) {
   let nextId = 0
   const pending = new Map()
   const listeners = new Map()
+  // A closed socket fails every pending call, so a walk errors rather than the
+  // process draining its event loop and exiting 0 mid-run (VH-172's smoke).
+  let closed = null
+  ws.onclose = (e) => {
+    closed = `websocket closed (code ${e.code}${e.reason ? ', ' + e.reason : ''})`
+    console.error('cdp: ' + closed)
+    for (const p of pending.values()) p.reject(new Error(`${p.method}: ${closed}`))
+    pending.clear()
+  }
   ws.onmessage = (event) => {
     const m = JSON.parse(event.data)
     if (m.id) {
@@ -24,6 +33,7 @@ export async function connectBrowser(port = 9222) {
   }
   const send = (method, params = {}, sessionId) =>
     new Promise((resolve, reject) => {
+      if (closed) return reject(new Error(`${method}: ${closed}`))
       const id = ++nextId
       pending.set(id, { resolve, reject, method })
       ws.send(JSON.stringify(sessionId ? { id, method, params, sessionId } : { id, method, params }))

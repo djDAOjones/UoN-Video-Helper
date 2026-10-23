@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-23 — VH-171 — The instruments qualified: Codex astra's eight musts applied, VH-172's setups merged, S-25 reached by a worker clock
+
+**Decision:** VH-171 ships with all eight of Codex astra's method-check musts, M-01 to M-08, applied and none refused, VH-172's scenario setups merged into the walker, N5 added, and S-25's slow verdict reached by a new fault, F13, the worker's clock at twice real time, because CPU throttling cannot reach the worker and the 21,600 s still never settled; the instruments are fit for the matrix.
+
+**Rationale:** Codex's verdict, as given: "Fit after the musts below" (`reviews/2026-10-22/design-pass-2/codex-astra-method-check-2026-10-23.md`). Each must's application is in `instruments-2026-10-22.md` under "Codex astra's method check, applied (23 October)"; proofs 77 of 77, faults 17 of 17 and F13, pilot 2 43 of 43 whole, smoke 119 of 119 whole across a run and a part run (`smoke-2026-10-23.json`). F13 is an instrument, not a product change; it was accepted on the owner's standing instruction of 2026-10-23: "work through to the end of VH-177, archive and spawn as you go, proceed with your recommendations, universal permission is granted". Limits kept for a person: range thumb and track contrast; the dialog used by keys at enlargement; Chrome's own page zoom. Candidate findings for VH-173 are listed in the instruments file, none judged here. No product code changed.
+
+**Supersedes:** none
+
+**Deferred:** VH-172
+
 ## 2026-10-22 — PLAN-7 — A second design, UX and accessibility pass, with Codex astra as partner at every stage, gates the cut
 
 **Decision:** Phase 7, a second whole-page pass judged as four journeys and every scenario, in three languages, three widths, enlargement, dark and forced colours and by keyboard alone, runs as eight stage items, VH-170 to VH-177, before VH-162; Codex astra checks the plan, reviews blind, checks the method, critiques the report and the fix plan, checks every fix before commit and checks the fixes together; because the owner asked for it, with Codex as a full partner.
@@ -566,13 +576,3 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Items:** VH-144, VH-145, VH-146
 
 **Deferred:** none
-
-## 2026-10-21 — VH-143 — The design pass: 13 findings, none at rank 1; five join Phase 3, six become Phase 4, two go to the owner
-
-**Decision:** the design pass stands as `reviews/2026-10-20/design-pass-2026-10-21.md`, V-18 to V-30; V-21 and V-22 join VH-141, V-27 and V-28 VH-142, V-29 VH-140, by dated notes; five become Phase 4; V-18, V-24 and V-26 are the owner's wish lines — taken gateless, because no line should change twice and the owner reserved those three.
-
-**Rationale:** The walk ran all thirteen scenarios in one run (08:31–08:44 BST, after the Mac's sleep from 01:53 stopped the first): seven views, three languages, both switch positions, a card off and on, every closing, 37 cards drawn at four shapes. A token sweep, word counts, a string sweep and nine before-and-after pairs measured it; four Claude subagents read them, the cards, the captures and the source; Codex astra reviewed blind (D-01 to D-05, all verified, mapped to V-19, V-20, V-21, V-22, V-24 and V-27), then critiqued the draft: applied in full but for its ranks — V-27, V-28 and V-29 stay at 3, as the audit's V-16 and V-17 rank naming and form slips that mislead no one; V-25 and V-30 were narrowed, V-26 moved to the owner, and V-27's placeholder spacing left to the colleague. V-23, Malay's 26 px time fields at 320 px, was in the 20 October walk's own digest and missing from its audit. Set aside with reasons: the toggletip's rail (an existing wish line), the switchers' wrap at 320 px (VH-105's choice), the native file input's truncated name, disabled buttons' fill (VH-112's, a wish line for the walk-through), one lock note per locked step, focus on a mouse-started job, the status lines' over-limit rows (a measuring artefact), the cards' worst-case sizes VH-127 decided, "etc." (spec §6), and the failed-state pair (its fixture finished). VH-139's branch (closed at b3b7c2b) is merged at Phase 3's start, as the owner's 09:04 word (the entry above) has it.
-
-**Supersedes:** none
-
-**Deferred:** VH-140, VH-141, VH-142, VH-144, VH-145, VH-146

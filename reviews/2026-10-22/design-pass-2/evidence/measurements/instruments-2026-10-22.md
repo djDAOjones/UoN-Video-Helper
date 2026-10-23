@@ -331,6 +331,31 @@ Seen for VH-173 (observations, not instrument faults):
 - Under reduced motion, only instant outline transitions run.
 - The feedback textarea outgrows the 400% proxy viewport.
 
-## Still open before VH-172
+## VH-172's setups merged, and the smoke plan (23 October)
 
-- M-06 (the scenarios) and M-07's S-19 fixture and N2 probe, applied apart.
+- **Merged.** VH-172's scenario setups (`walker/scenarios.mjs`, with M-06's
+  variants) are merged into this walker; `matrix.mjs` imports SCENARIOS,
+  ROUTES and PLANS from it. Every M-0x fix above is kept; route steps gain
+  `setup`, `text`, `untilState` and `waitFor`, and faults that can be undone
+  gain a `release`.
+- **N5**, `clipped-30s.mp4` (S-19): a 440 Hz sine at 1.6, hard-clipped at full
+  scale, stereo, 30 s, +0.7 dBTP.
+- **N2 and S-25.** The 21,600 s still never settled (whole-audio pre-flight),
+  and CDP CPU throttling does not reach the job's worker ("only supported for
+  pages"); throttling the page left the estimate at 45 minutes. A new fault,
+  **F13**, runs the worker's clock at twice real time: with the 10,800 s still
+  the page says "This will work, but it will be slow", about 1 h 25 min, and
+  Continue anyway, settling in about 80 s; F13 passes its fault check.
+  `fixtures.sh` builds the 3,600 s and 10,800 s stills; `LONG_SLOW_S` is
+  optional. S-24's estimate is load-sensitive: 45 minutes idle, 65 under load.
+- **Smoke**, `smoke-2026-10-23.json`: 119 of 119 records, whole across a full
+  run and a part run of its six failures. Those six were instrument faults,
+  fixed: the phone view's device signal (S-26), S-31's setup waiting for a
+  state the storage block never reaches, the encode wait under load (S-43,
+  S-48, S-49), S-74's error behind a closed disclosure, S-79b's message too
+  long for the email link, and `cdp.mjs` failing calls on a closed socket
+  instead of exiting silently.
+- **Seen for VH-173**: the file button's focus area fails in every state
+  that shows it (nine records); the range thumbs' target and focus readings;
+  focus not reaching `#trim-clear` (S-21) or the result's Save (S-62); a
+  mixed-script line's length (S-05); J1's native select by keys.

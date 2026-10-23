@@ -542,6 +542,8 @@ export async function typeKeys(w, text) {
 export const IN_DIALOG = `(() => { const d = document.querySelector('dialog[open]'); return !!d && d.contains(document.activeElement); })()`
 export const IN_DIALOG_OR_OUT = `(() => { const d = document.querySelector('dialog[open]'); const a = document.activeElement; return !!d && (d.contains(a) || a === document.body || a === null); })()`
 
+const truthy = (w, expr) => w.evaluate(`(() => { try { return !!(${expr}); } catch (e) { return false; } })()`)
+
 /**
  * steps: [{ key, shift?, repeat?, expect?: RegExp source the focused element's
  * description must match, state?: a page expression, native?: true when the
@@ -551,6 +553,14 @@ export const IN_DIALOG_OR_OUT = `(() => { const d = document.querySelector('dial
  * a key, value?: RegExp source the focused element's value must match }]
  * Each step keeps the focused element's identity and value, and every status
  * region's text, before and after it (M-05).
+ *
+ * VH-172 adds, each optional: `untilState` — press until a page expression
+ * holds (a control whose name is the page's language, found by structure);
+ * `text` — characters typed as key events (the same as `type`); `waitFor` —
+ * a page expression awaited before the step is judged (a check, a job, a
+ * save), `timeout` its bound; and `setup` — a documented non-key action
+ * inside the route (the native file chooser is the browser's own, VH-168; a
+ * fault), logged as setup, never counted as a key.
  */
 export async function keysRoute(w, steps, { settle } = {}) {
   const log = []
@@ -559,25 +569,36 @@ export async function keysRoute(w, steps, { settle } = {}) {
     const before = await w.evaluate('window.__qual.observed().active')
     const beforeEvidence = await w.evaluate('({ focused: window.__qual.focused(), status: window.__qual.statusText() })')
     let presses = 0
-    if (s.type !== undefined) { await typeKeys(w, s.type); presses = s.type.length }
-    else if (s.until) {
-      const re = new RegExp(s.until)
-      for (; presses < (s.repeat ?? 40); ) { await key(w, s.key ?? 'Tab', { shift: s.shift }); presses++; if (re.test(await w.evaluate('window.__qual.observed().active'))) break }
-    } else for (let i = 0; i < (s.repeat ?? 1); i++) { await key(w, s.key, { shift: s.shift }); presses++ }
+    let waited = null
+    const typed = s.type ?? s.text
+    if (s.setup) {
+      await s.setup(w)
+    } else if (typed !== undefined) {
+      await typeKeys(w, typed); presses = [...typed].length
+    } else if (s.until || s.untilState) {
+      const re = s.until ? new RegExp(s.until) : null
+      for (; presses < (s.repeat ?? 40); ) { await key(w, s.key ?? 'Tab', { shift: s.shift }); presses++; if (re ? re.test(await w.evaluate('window.__qual.observed().active')) : await truthy(w, s.untilState)) break }
+    } else if (s.key) for (let i = 0; i < (s.repeat ?? 1); i++) { await key(w, s.key, { shift: s.shift }); presses++ }
     if (settle && s.settle) await settle()
     if (s.wait) await sleep(s.wait)
+    if (s.waitFor) {
+      const t0 = Date.now()
+      try { await w.waitFor(`(() => { try { return !!(${s.waitFor}); } catch (e) { return false; } })()`, { timeout: s.timeout ?? 120000, label: s.note }); waited = Date.now() - t0 } catch { waited = 'timed out after ' + (Date.now() - t0) + ' ms' }
+    }
     const after = await w.evaluate('window.__qual.observed()')
     const visibleFocus = await w.evaluate(`(() => { const el = document.activeElement; return !!el && el !== document.body && el.matches(':focus-visible'); })()`)
     let outcome = 'pass'
     const want = s.until ?? s.expect
-    if (want && !new RegExp(want).test(after.active)) outcome = s.native ? 'cannot-determine' : 'fail'
-    if (outcome === 'pass' && s.state) { const ok = await w.evaluate(`(() => { try { return !!(${s.state}); } catch (e) { return false; } })()`); if (!ok) outcome = s.native ? 'cannot-determine' : 'fail' }
+    if (typeof waited === 'string') outcome = s.native ? 'cannot-determine' : 'fail'
+    if (outcome === 'pass' && want && !new RegExp(want).test(after.active)) outcome = s.native ? 'cannot-determine' : 'fail'
+    if (outcome === 'pass' && s.untilState && !(await truthy(w, s.untilState))) outcome = s.native ? 'cannot-determine' : 'fail'
+    if (outcome === 'pass' && s.state && !(await truthy(w, s.state))) outcome = s.native ? 'cannot-determine' : 'fail'
     const afterEvidence = await w.evaluate('({ focused: window.__qual.focused(), status: window.__qual.statusText() })')
     if (outcome === 'pass' && s.value !== undefined && !new RegExp(s.value).test(afterEvidence.focused.value ?? '')) outcome = 'fail'
-    if (outcome === 'pass' && after.active !== 'body' && !visibleFocus && !s.noFocusRing) outcome = 'fail'
+    if (outcome === 'pass' && !s.setup && after.active !== 'body' && !visibleFocus && !s.noFocusRing) outcome = 'fail'
     if (outcome === 'fail') failed = true
     if (outcome === 'cannot-determine') unknown = true
-    log.push({ key: s.type !== undefined ? 'type ' + JSON.stringify(s.type) : (s.shift ? 'Shift+' : '') + (s.key ?? 'Tab'), presses, from: before, to: after.active, focusVisible: visibleFocus, expect: want ?? null, value: s.value, outcome, note: s.note, before: beforeEvidence, after: afterEvidence })
+    log.push({ key: s.setup ? 'setup' : typed !== undefined ? 'type ' + JSON.stringify(typed) : !s.key && !s.until && !s.untilState ? 'wait' : (s.shift ? 'Shift+' : '') + (s.key ?? 'Tab'), presses, from: before, to: after.active, focusVisible: visibleFocus, expect: want ?? s.untilState ?? null, value: s.value, waited: waited ?? undefined, outcome, note: s.note, before: beforeEvidence, after: afterEvidence })
   }
   return { outcome: failed ? 'fail' : unknown ? 'cannot-determine' : 'pass', steps: log }
 }

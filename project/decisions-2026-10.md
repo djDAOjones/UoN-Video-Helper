@@ -516,3 +516,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-21 — VH-143 — The design pass: 13 findings, none at rank 1; five join Phase 3, six become Phase 4, two go to the owner
+
+**Decision:** the design pass stands as `reviews/2026-10-20/design-pass-2026-10-21.md`, V-18 to V-30; V-21 and V-22 join VH-141, V-27 and V-28 VH-142, V-29 VH-140, by dated notes; five become Phase 4; V-18, V-24 and V-26 are the owner's wish lines — taken gateless, because no line should change twice and the owner reserved those three.
+
+**Rationale:** The walk ran all thirteen scenarios in one run (08:31–08:44 BST, after the Mac's sleep from 01:53 stopped the first): seven views, three languages, both switch positions, a card off and on, every closing, 37 cards drawn at four shapes. A token sweep, word counts, a string sweep and nine before-and-after pairs measured it; four Claude subagents read them, the cards, the captures and the source; Codex astra reviewed blind (D-01 to D-05, all verified, mapped to V-19, V-20, V-21, V-22, V-24 and V-27), then critiqued the draft: applied in full but for its ranks — V-27, V-28 and V-29 stay at 3, as the audit's V-16 and V-17 rank naming and form slips that mislead no one; V-25 and V-30 were narrowed, V-26 moved to the owner, and V-27's placeholder spacing left to the colleague. V-23, Malay's 26 px time fields at 320 px, was in the 20 October walk's own digest and missing from its audit. Set aside with reasons: the toggletip's rail (an existing wish line), the switchers' wrap at 320 px (VH-105's choice), the native file input's truncated name, disabled buttons' fill (VH-112's, a wish line for the walk-through), one lock note per locked step, focus on a mouse-started job, the status lines' over-limit rows (a measuring artefact), the cards' worst-case sizes VH-127 decided, "etc." (spec §6), and the failed-state pair (its fixture finished). VH-139's branch (closed at b3b7c2b) is merged at Phase 3's start, as the owner's 09:04 word (the entry above) has it.
+
+**Supersedes:** none
+
+**Deferred:** VH-140, VH-141, VH-142, VH-144, VH-145, VH-146

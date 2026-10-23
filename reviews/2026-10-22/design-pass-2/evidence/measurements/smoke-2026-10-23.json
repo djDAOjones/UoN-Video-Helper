@@ -1,0 +1,202 @@
+{
+ "item": "VH-171 (instrument hand-over; VH-172 scenarios merged)",
+ "date": "2026-10-23",
+ "plan": "smoke: each of the 114 scenarios once (en-GB, w1280, light, except S-05 zh-Hans and S-26a/b w375) and the routes J1-J4 and K-dialog",
+ "runs": {
+  "full": {
+   "runId": "2026-10-23T10-54-34-489Z-911ab2",
+   "expected": 119,
+   "observed": 119,
+   "whole": false,
+   "failedRecords": [
+    "S-24__en-GB__w1280__light",
+    "S-43__en-GB__w1280__light",
+    "S-48__en-GB__w1280__light",
+    "S-49__en-GB__w1280__light",
+    "S-74__en-GB__w1280__light",
+    "S-79b__en-GB__w1280__light"
+   ],
+   "manifest": "smoke-2026-10-23T10-54-34-489Z-911ab2/manifest.json",
+   "digest": "smoke-2026-10-23T10-54-34-489Z-911ab2/digest.md"
+  },
+  "part": {
+   "runId": "2026-10-23T11-48-30-050Z-33df4b",
+   "records": [
+    "S-24__en-GB__w1280__light",
+    "S-43__en-GB__w1280__light",
+    "S-48__en-GB__w1280__light",
+    "S-49__en-GB__w1280__light",
+    "S-74__en-GB__w1280__light",
+    "S-79b__en-GB__w1280__light"
+   ],
+   "whole": true,
+   "manifest": "smoke-part-2026-10-23T11-48-30-050Z-33df4b/manifest.json",
+   "why": "the six failed records re-run after instrument fixes (S-43/48/49 encoding wait bound; S-74 predicate; S-79b message length) or on a quieter machine (S-24)"
+  }
+ },
+ "combined": {
+  "records": 119,
+  "status": {
+   "ok": 119
+  },
+  "recordOutcomesByInstrument": {
+   "keys": {
+    "cannot-determine": 1,
+    "pass": 4
+   },
+   "overflow": {
+    "pass": 114
+   },
+   "ax": {
+    "pass": 114
+   },
+   "targets": {
+    "pass": 39,
+    "cannot-determine": 75
+   },
+   "contrastText": {
+    "pass": 114
+   },
+   "contrastExtra": {
+    "pass": 24,
+    "cannot-determine": 90
+   },
+   "measure": {
+    "pass": 113,
+    "cannot-determine": 1
+   },
+   "focus": {
+    "pass": 102,
+    "fail": 9,
+    "cannot-determine": 3
+   }
+  }
+ },
+ "instrumentFaultsFixed": [
+  "S-26a/b: the w375 view left navigator.userAgentData.mobile false, so the page stayed a computer; asPhone() sets the phone UA metadata (run 1)",
+  "S-31: ready() waits for no stop-row button, but the storage block offers Check again there; setup waits for the block itself (run 1)",
+  "cdp.mjs: a closed CDP socket left calls pending and node exited 0 mid-run (run 1 stopped at S-ID2); pending calls now fail",
+  "S-43, S-48, S-49: the 2-minute encoding wait timed out on a loaded machine; bounded at 5 minutes in scenarios.mjs",
+  "S-74: the captured error sits behind the errors panel closed disclosure; read present, not visible",
+  "S-79b: 50 repeats passed FEEDBACK_MAILTO_MAX_CHARACTERS (tooLong); 30 fit with details trimmed"
+ ],
+ "instrumentFragility": [
+  "S-24 (warn band, 20-60 min): the 10,800 s still estimates about 45 min idle and 65 min on a loaded machine (run 2 failed, part run passed)"
+ ],
+ "S-25": {
+  "route": "F13: the job worker clock at 2x real time; still-10800s.mp4",
+  "cdpThrottling": "Emulation.setCPUThrottlingRate refused on the worker session (only supported for pages); on the page session the estimate stayed 45 min",
+  "observed": "This will work, but it will be slow; about 1 hour 25 minutes; Continue anyway offered; settled in 79-83 s",
+  "faultCheck": "F13 pass"
+ },
+ "pageFindingCandidates": [
+  {
+   "record": "S-03__en-GB__w1280__light",
+   "instrument": "focus",
+   "what": "#file-input",
+   "outcome": "fail",
+   "why": ""
+  },
+  {
+   "record": "S-09__en-GB__w1280__light",
+   "instrument": "focus",
+   "what": "#file-input",
+   "outcome": "fail",
+   "why": ""
+  },
+  {
+   "record": "S-10__en-GB__w1280__light",
+   "instrument": "focus",
+   "what": "#file-input",
+   "outcome": "fail",
+   "why": ""
+  },
+  {
+   "record": "S-28__en-GB__w1280__light",
+   "instrument": "focus",
+   "what": "#file-input",
+   "outcome": "fail",
+   "why": ""
+  },
+  {
+   "record": "S-29__en-GB__w1280__light",
+   "instrument": "focus",
+   "what": "#file-input",
+   "outcome": "fail",
+   "why": ""
+  },
+  {
+   "record": "S-30__en-GB__w1280__light",
+   "instrument": "focus",
+   "what": "#file-input",
+   "outcome": "fail",
+   "why": ""
+  },
+  {
+   "record": "S-63-LW__en-GB__w1280__light",
+   "instrument": "focus",
+   "what": "#file-input",
+   "outcome": "fail",
+   "why": ""
+  },
+  {
+   "record": "S-63-W__en-GB__w1280__light",
+   "instrument": "focus",
+   "what": "#file-input",
+   "outcome": "fail",
+   "why": ""
+  },
+  {
+   "record": "S-63__en-GB__w1280__light",
+   "instrument": "focus",
+   "what": "#file-input",
+   "outcome": "fail",
+   "why": ""
+  }
+ ],
+ "cannotDetermineNotable": [
+  {
+   "record": "J1__en-GB__w1280__light",
+   "instrument": "keys",
+   "what": "ArrowDown",
+   "outcome": "cannot-determine",
+   "why": "S-47: ArrowDown on Animation type (native select)"
+  },
+  {
+   "record": "S-05__zh-Hans__w1280__light",
+   "instrument": "measure",
+   "what": "p.notification-body \"发送电子邮件至 joe.bell@nottingham.ac.uk，提出更好的",
+   "outcome": "cannot-determine",
+   "why": "mixed scripts: each character against 40 and CJK 40 plus Latin 80 disagree; the reading is VH-173's"
+  },
+  {
+   "record": "S-15__en-GB__w1280__light",
+   "instrument": "focus",
+   "what": "#trim-start-range",
+   "outcome": "cannot-determine",
+   "why": "passes against the painted disc, fails against the 44 px circular reference: the reading is VH-173's"
+  },
+  {
+   "record": "S-15__en-GB__w1280__light",
+   "instrument": "focus",
+   "what": "#trim-end-range",
+   "outcome": "cannot-determine",
+   "why": "passes against the painted disc, fails against the 44 px circular reference: the reading is VH-173's"
+  },
+  {
+   "record": "S-21__en-GB__w1280__light",
+   "instrument": "focus",
+   "what": "#trim-clear",
+   "outcome": "cannot-determine",
+   "why": "focus did not land on the control"
+  },
+  {
+   "record": "S-62__en-GB__w1280__light",
+   "instrument": "focus",
+   "what": "#process-result > .notification[data-kind=\"success\"] .actions > button.button",
+   "outcome": "cannot-determine",
+   "why": "focus did not land on the control"
+  }
+ ],
+ "cannotDetermineBulk": "targets and contrastExtra: the range thumbs (a disc in a 44 px box; painted pseudo-elements) in most records with step 3 shown, VH-173 readings"
+}
