@@ -123,7 +123,8 @@ export const msMY: Messages = {
     variesOnAverage: '{rate} secara purata, tetapi ia berbeza-beza',
     variesNote:
       'Rakaman daripada Teams, Zoom dan tangkapan skrin selalunya berbeza-beza. Output akan menggunakan kadar bingkai yang stabil, yang memastikan audio dan gambar kekal segerak.',
-    outputRate: 'Output akan berjalan pada {rate}, jadi beberapa bingkai akan diulang.',
+    outputRate:
+      'Untuk mencapai kadar bingkai standard, beberapa bingkai akan diulang atau ditinggalkan.',
     sampleRate: '{kilohertz} kHz — {hertz} mengambil sampel sesaat',
     noSoundTrack: 'Tiada trek audio ditemui',
     noSoundNote: 'Perataan memerlukan audio. Kerja selebihnya masih berjalan.',

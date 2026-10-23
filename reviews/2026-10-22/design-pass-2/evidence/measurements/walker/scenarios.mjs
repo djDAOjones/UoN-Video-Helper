@@ -307,6 +307,23 @@ export const SCENARIOS = {
     focus: ['#source-report summary'],
     fixtures: ['captioned-12s.mp4'],
   },
+  // VH-180 (V-47): Video properties open on a source the frame-rate note is
+  // raised for; 45 fps conforms up to 50, 120 fps down to 60. Kept out of the
+  // pass's own plans (`fixOnly`), walked by PLANS.vh180.
+  'S-16-45': {
+    name: 'Video properties open; the frame-rate note, a 45 fps source',
+    state: `!!M.el('#source-report details[open]') && M.has('source.outputRate', '#source-report')`,
+    setup: async (w, lang) => { await ready(w, lang, 'hfr-45fps-10s.mp4'); await w.click('#source-report summary'); await sleep(300) },
+    focus: ['#source-report summary'],
+    fixtures: ['hfr-45fps-10s.mp4'], fixOnly: true,
+  },
+  'S-16-120': {
+    name: 'Video properties open; the frame-rate note, a 120 fps source',
+    state: `!!M.el('#source-report details[open]') && M.has('source.outputRate', '#source-report')`,
+    setup: async (w, lang) => { await ready(w, lang, 'hfr-120fps-10s.mp4'); await w.click('#source-report summary'); await sleep(300) },
+    focus: ['#source-report summary'],
+    fixtures: ['hfr-120fps-10s.mp4'], fixOnly: true,
+  },
   'S-17': {
     name: 'Onset help open',
     state: `M.vis('#onset-help') && M.el('#onset-help-button').getAttribute('aria-expanded') === 'true'`,
@@ -1283,7 +1300,7 @@ const LONG_NAMES = ['S-53-W', 'S-53-LW', 'S-58-W', 'S-58-LW', 'S-63-W', 'S-63-LW
 const J = ['J1', 'J2', 'J3', 'J4']
 const okLang = (id, lang) => !SCENARIOS[id].langs || SCENARIOS[id].langs.includes(lang)
 const okView = (id, view) => !SCENARIOS[id].views || SCENARIOS[id].views.includes(view)
-const scenarioIds = () => Object.keys(SCENARIOS)
+const scenarioIds = () => Object.keys(SCENARIOS).filter((id) => !SCENARIOS[id].fixOnly)
 
 PLANS.matrix = () => [
   ...scenarioIds().flatMap((id) => LANGS.filter((lang) => okLang(id, lang)).flatMap((lang) => LIGHT_VIEWS.filter((view) => okView(id, view)).map((view) => ({ id, lang, view, mode: 'light' })))),
@@ -1414,6 +1431,13 @@ PLANS.vh179 = () => {
   const press = { 'S-03': ['#file-input'], 'S-15': [CREATE, '#file-input'], 'S-58': ['#process-result .button--danger'] }
   return [...out.values()].map((r) => (press[r.id] && r.view === 'w1280' && COLOUR_MODES.includes(r.mode) ? { ...r, pressed: press[r.id] } : r))
 }
+
+// VH-180: the frame-rate note (V-47). The two sources it is raised for, and
+// the records the item names beside them: the empty page, the video type,
+// Ready, Video properties, the closings and the finished result; three
+// languages, the four colour modes at 1280 and light at 320 px.
+const V47 = ['S-03', 'S-07', 'S-15', 'S-16', 'S-16-45', 'S-16-120', 'S-47a', 'S-47b', 'S-47c', 'S-53']
+PLANS.vh180 = () => V47.flatMap((id) => LANGS.flatMap((lang) => [...COLOUR_MODES.map((mode) => rec(id, lang, 'w1280', mode)), rec(id, lang, 'w320', 'light')])).filter((r) => okLang(r.id, r.lang) && okView(r.id, r.view))
 
 
 // The predicates read the page through window.__mx (MX_INIT), as `M`.

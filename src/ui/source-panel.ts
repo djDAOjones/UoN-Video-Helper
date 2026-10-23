@@ -123,9 +123,8 @@ export function buildRows(report: SourceReport): Row[] {
   if (video.isVariableFrameRate) rateNotes.push(source.variesNote)
   // Only worth raising when conforming would meaningfully change the frame
   // count — an NTSC source shifts by a tenth of a percent and nobody cares.
-  if (Math.abs(video.conform.frameDeltaRatio) > 0.1) {
-    rateNotes.push(source.outputRate({ rate: formatFrameRate(video.conform.frameRate) }))
-  }
+  // Up or down alike, and the preset may cap the rate again, so it names none.
+  if (Math.abs(video.conform.frameDeltaRatio) > 0.1) rateNotes.push(source.outputRate)
 
   const rows: Row[] = [
     { term: source.rows.duration, detail: formatDuration(report.durationSeconds) },

@@ -18,6 +18,7 @@
 - VH-175 — the fix plan: VH-178 to VH-180 for seven findings, the owner's ask decided on the standing instruction, V-45 kept for the owner since its words are the owner's own; Codex astra's five points applied (2026-10-23) — see decisions
 - VH-178 — focus passes on when finished work takes its control away: a job's end, a blocking check, a check settling mid-save; 36 cells reached by keys in three languages and four colour modes, routes 238 of 242; Codex astra's four musts applied (2026-10-23) — see decisions
 - VH-179 — three rings drawn whole (the chooser 704/640 in 115 records, the handles at 32 px, the band inside its face), the feedback message to the measure, a border-only forced-colour hover; V-18 unmoved; Codex astra "Commit" (2026-10-23) — see decisions
+- VH-180 — a true frame-rate note: one neutral sentence naming no rate, true conformed up or down under both presets, in three languages; the call reads a string; 150 records unchanged, V-18 unmoved; Codex astra "Commit" (2026-10-24) — see decisions
 
 ## Phase 6 — the public release: the feedback form, the statement, the cut, Xerte
 

@@ -702,7 +702,7 @@ rank 3, where the draft had 8 at rank 2 and 2 at rank 3.
 | V-41 | 2 | VH-179: fixed; the disc sized in px tokens, both rings pass at the 32 px font, verified in [`vh179-rings-2026-10-23.md`](evidence/measurements/vh179-rings-2026-10-23.md) |
 | V-42 | 2 | VH-179: fixed; the band's ring inside the focused face in HighlightText under forced colours, verified in [`vh179-rings-2026-10-23.md`](evidence/measurements/vh179-rings-2026-10-23.md) |
 | V-43 | 2 | VH-168's limitation extended to 2.5.3, on the owner's standing instruction; wording to VH-137 (VH-175.2) |
-| V-47 | 2 | VH-180, ranked 2 on the owner's standing instruction |
+| V-47 | 2 | VH-180: fixed; one neutral sentence that names no rate, true conformed up and down under both presets, in three languages, verified in [`vh180-words-2026-10-23.md`](evidence/measurements/vh180-words-2026-10-23.md); ranked 2 on the owner's standing instruction |
 | V-45 | 2 | For the owner: the two names are the owner's own (VH-148); wish line VH-175.3 |
 | V-18 | 2 | Accepted on the owner's standing instruction; a shorter native wording is wish line VH-175.1 |
 | V-33 | 2 | VH-179: fixed; the feedback message capped at the measure, verified in [`vh179-rings-2026-10-23.md`](evidence/measurements/vh179-rings-2026-10-23.md); the mixed-line count recorded in UI-STANDARDS |

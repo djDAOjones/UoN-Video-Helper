@@ -598,3 +598,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-21 — VH-141 — State changes retain their meaning and hand focus on
+
+**Decision:** the nine state defects and V-21/V-22 close: result lifetime and warnings survive redraws; translated guidance has its own language; errors and preview failures announce; save focus moves before cleanup; stale blocks and progress withdraw; startup and unreadable replacement say their state. A separate Show progress checkbox hides automatic visual updates, retaining the existing announcement switch — the conservative, gateless reading of WCAG 2.2.2.
+
+**Rationale:** Result warnings belong to the retained file. The failed-save box uses the existing message’s two sentences, with one spoken copy, and clears on retry. Cancel and watchdog failure suppress late stages while keeping terminal replies and safety locks. The watchdog’s stopping message replaces keep-awake advice. New strings pass through the sheet as agent drafts. Chrome checks real codecs and OPFS with controlled reply delays and save failures, plus the 18 language/width/colour combinations; Notes distinguish browser evidence from human listening. Standards: Carbon disabled-field and error-notification patterns; Nielsen 1, 5 and 9; WCAG 2.2.2, 2.4.3, 3.1.2 and 4.1.3; house conventions, regression tests and tokens. The spec proposal and human checks are wish lines. Existing sample and frozen-canon warnings stay covered by VH-139’s corpus and INTAKE’s retirement wishes. The owner’s explicit whole-run instruction takes precedence over the close verb’s compaction stop; subsequent items continue in this sole-writer worktree under the recorded handoff.
+
+**Supersedes:** none
+
+**Deferred:** none

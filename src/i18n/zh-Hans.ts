@@ -112,7 +112,7 @@ export const zhHans: Messages = {
     variesOnAverage: '平均 {rate}，但会有波动',
     variesNote:
       'Teams、Zoom 和屏幕录制的录像帧率通常会波动。输出文件将采用稳定的帧速率，以确保音频和画面同步。',
-    outputRate: '输出将以 {rate} 速率运行，因此某些帧将会重复。',
+    outputRate: '为采用标准帧速率，某些帧将会重复或被舍弃。',
     sampleRate: '{kilohertz} kHz — 每秒 {hertz} 次采样',
     noSoundTrack: '未找到音轨',
     noSoundNote: '音量调整需要音频。其他工作照常进行。',

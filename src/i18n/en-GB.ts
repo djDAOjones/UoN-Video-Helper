@@ -175,7 +175,8 @@ export const enGB = {
     variesOnAverage: '{rate} on average, but it varies',
     variesNote:
       'Recordings from Teams, Zoom, and screen capture often vary. The output will use a steady frame rate, which keeps audio and picture in step.',
-    outputRate: 'The output will run at {rate}, so some frames will be repeated.',
+    /** True whether frames are added or dropped, and under either preset: no rate (V-47). */
+    outputRate: 'To reach a standard frame rate, some frames will be repeated or left out.',
     /** The figure, with its meaning beside it (spec 9.2). */
     sampleRate: '{kilohertz} kHz — {hertz} samples a second',
     noSoundTrack: 'No audio track found',

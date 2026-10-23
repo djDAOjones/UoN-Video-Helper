@@ -83,4 +83,10 @@ ffmpeg -v error -y ${=V} ${=A} -t 0.8 -af "volume=-13dB" ${=ENC} "$OUT/short-0.8
 # ten decoded samples reach -0.1 dBTP (src/config/audio.ts clippingDbtp).
 ffmpeg -v error -y ${=V} -f lavfi -i "aevalsrc=max(-1\,min(1\,1.6*sin(2*PI*440*t))):s=48000:c=stereo" -t 30 ${=ENC} "$OUT/clipped-30s.mp4"
 
+# VH-180 (V-47, as VH-174 made them for D-04): sources the frame-rate note is
+# raised for, 10 s at 640 x 360. 45 fps conforms up to 50, 120 fps down to 60.
+for R in 45 120; do
+  ffmpeg -v error -y -f lavfi -i testsrc2=size=640x360:rate=$R ${=A} -t 10 -af "volume=-13dB" ${=ENC} "$OUT/hfr-${R}fps-10s.mp4"
+done
+
 ls -la "$OUT"

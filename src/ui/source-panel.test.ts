@@ -222,6 +222,66 @@ describe('video properties (VH-87)', () => {
   })
 })
 
+describe('the frame-rate note (VH-180, V-47)', () => {
+  const NOTE = 'To reach a standard frame rate, some frames will be repeated or left out.'
+  /** A constant-rate source at `rate`, conformed to `to`, as `conformCost` would report it. */
+  const conformed = (rate: number, to: number) => {
+    const base = report()
+    return report({
+      video: {
+        ...base.video,
+        frameRate: { ...base.video.frameRate, bestGuess: rate, average: rate, isConstant: true },
+        conform: { frameRate: to, sourceFrameRate: rate, frameDeltaRatio: (to - rate) / rate },
+      },
+    })
+  }
+  const note = (source: SourceReport) => rowFor(source, 'Frame rate')?.note
+
+  it('happy path: a source conformed up gives the neutral sentence', () => {
+    const up = conformed(45, 50)
+    expect(up.video.conform.frameDeltaRatio).toBeGreaterThan(0.1)
+    expect(note(up)).toBe(NOTE)
+  })
+
+  it('regression: a source conformed down gives the same sentence, never "repeated" alone', () => {
+    const down = conformed(120, 60)
+    expect(down.video.conform.frameDeltaRatio).toBeLessThan(-0.1)
+    expect(note(down)).toBe(NOTE)
+  })
+
+  it('names no rate, since the preset may cap the output again', () => {
+    expect(note(conformed(120, 60))).not.toMatch(/\d/)
+  })
+
+  it('boundary: a change of 10% or less raises no note, and just over it does', () => {
+    const changed = (frameDeltaRatio: number) => {
+      const base = report()
+      return note(
+        report({
+          video: {
+            ...base.video,
+            conform: { frameRate: 30, sourceFrameRate: 30 / (1 + frameDeltaRatio), frameDeltaRatio },
+          },
+        }),
+      )
+    }
+    expect(changed(0.1)).toBeUndefined()
+    expect(changed(-0.1)).toBeUndefined()
+    expect(changed(-0.01)).toBeUndefined()
+    expect(changed(0.1001)).toBe(NOTE)
+    expect(changed(-0.1001)).toBe(NOTE)
+  })
+
+  it('follows the variable-rate note once, each saying its own thing', () => {
+    const base = conformed(45, 50)
+    const varying = report({ video: { ...base.video, isVariableFrameRate: true } })
+    expect(note(varying)).toBe(
+      'Recordings from Teams, Zoom, and screen capture often vary. The output will use a steady frame rate, which keeps audio and picture in step. ' +
+        NOTE,
+    )
+  })
+})
+
 describe('losses against facts (VH-87)', () => {
   // The facts sit in a disclosure that starts closed. Anything the new file
   // will not carry therefore has to be a LOSS, which is always in view — a

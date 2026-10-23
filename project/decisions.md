@@ -18,6 +18,19 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-24 — VH-180 — A true frame-rate note: one neutral sentence that names no rate
+
+**Decision:** `source.outputRate` becomes one sentence in each language, naming no rate and true whether frames are repeated or dropped: "To reach a standard frame rate, some frames will be repeated or left out." The call site reads it as a string. The threshold, the presets and the renderer stay as they were (V-47).
+
+**Rationale:** Before, at 4e5be61, a 120 fps source read "The output will run at 60 frames a second, so some frames will be repeated". It read that under Larger and under Smaller's 30 fps cap. After, the 45 fps and 120 fps sources read the neutral sentence under both presets in three languages. The 150 walker records are whole, and no outcome changed. The note stays within 448 px at 1280 and 320, at contrast 7.58–21. V-18's six readings are unmoved. Five new tests pass: up, down, no digit, the 10% boundary, and beside `variesNote`. Codex astra said "Commit after the musts below". Its must (name the digest rules) and its boundary-test may were applied, and the re-check said "Commit". Evidence: `vh180-words-2026-10-23.md`. Decided on the owner's standing instruction, "work through to the end of VH-177, archive and spawn as you go, proceed with your recommendations, universal permission is granted":
+(a) the English opening departs from the item's draft, which would repeat `variesNote`'s "The output will use a steady frame rate";
+(b) the Chinese and Malay take `variesNote`'s term for frame rate (帧速率, kadar bingkai), as the agent's drafts, marked in the sheet;
+(c) the two fixture scenarios are `fixOnly`, so VH-176's plans keep VH-172's counts.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-23 — VH-179 — Three focus rings drawn whole, the feedback message to the measure, a forced-colour hover
 
 **Decision:** The chooser keeps its ring's room inside its own box, given back by margin, with a CanvasText ring under forced colours. The handles' disc takes px tokens. The band's ring sits 3 px inside the face in a system colour. The feedback message is capped at the measure. Forced-colour hover changes only the border, to HighlightText (V-40–V-42, V-33, V-44).
@@ -564,16 +577,6 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Decision:** the Chinese save refusals offer saving again, Step 6 uses 制作 throughout, decode-damage wording is future tense with original-recording times, and captured errors name Report this problem. The approved quotation, ellipsis, bracket and terminology corrections ship through the sheet — taken gateless within the item’s form-only scope.
 
 **Rationale:** No writing-review proposal or reserved statement, lede or browser wording is applied. The tool/job terminology uses the existing page vocabulary; Chinese and Malay changes are agent drafts. Regression tests hold the damage tense and time reference, button names, table quotation marks, Chinese ellipses and save meaning. Chrome checks the warning, captured-error guidance, cancelled save and feedback copy in all 18 required combinations. Standards: Nielsen 1, 2 and 4 (state, user language and consistency); Carbon content and error guidance; WCAG 3.1.5 and 3.3.2; house conventions, sheet-generated translations and category tests. The protected spec’s damage row has a proposed correction in the wish-list. The existing campus review, real-corpus and frozen-canon wishes cover human wording review and known checker warnings.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-21 — VH-141 — State changes retain their meaning and hand focus on
-
-**Decision:** the nine state defects and V-21/V-22 close: result lifetime and warnings survive redraws; translated guidance has its own language; errors and preview failures announce; save focus moves before cleanup; stale blocks and progress withdraw; startup and unreadable replacement say their state. A separate Show progress checkbox hides automatic visual updates, retaining the existing announcement switch — the conservative, gateless reading of WCAG 2.2.2.
-
-**Rationale:** Result warnings belong to the retained file. The failed-save box uses the existing message’s two sentences, with one spoken copy, and clears on retry. Cancel and watchdog failure suppress late stages while keeping terminal replies and safety locks. The watchdog’s stopping message replaces keep-awake advice. New strings pass through the sheet as agent drafts. Chrome checks real codecs and OPFS with controlled reply delays and save failures, plus the 18 language/width/colour combinations; Notes distinguish browser evidence from human listening. Standards: Carbon disabled-field and error-notification patterns; Nielsen 1, 5 and 9; WCAG 2.2.2, 2.4.3, 3.1.2 and 4.1.3; house conventions, regression tests and tokens. The spec proposal and human checks are wish lines. Existing sample and frozen-canon warnings stay covered by VH-139’s corpus and INTAKE’s retirement wishes. The owner’s explicit whole-run instruction takes precedence over the close verb’s compaction stop; subsequent items continue in this sole-writer worktree under the recorded handoff.
 
 **Supersedes:** none
 
