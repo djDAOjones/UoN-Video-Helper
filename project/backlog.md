@@ -40,16 +40,16 @@ The public release, 0.2.0, on Xerte (PLAN-6).
 - [ ] VH-183 — The keyboard trim's Page step scales with the video: max(10 s, 1%) — since 2026-10-24
 - [ ] VH-184 — The onset toggletip closes on Tab; its rail stops looking like a warning's — since 2026-10-24
 - [ ] VH-185 — A kept sound shorter than the meter's block is caught before Create, as no sound — since 2026-10-24
-- [!] VH-186 — Small words: System check labels, standalone values, the unscanned caption warning — since 2026-10-24 — blocked: the wording sheet's approval
-- [!] VH-187 — The top of the page: plain promises, the browser note only when a check fails — since 2026-10-24 — blocked: the wording sheet's approval
-- [!] VH-188 — Preset names that say what each output is for — since 2026-10-24 — blocked: round 2's Q5 and the sheet's approval
-- [!] VH-189 — Step 4's labels in the result line's plain words — since 2026-10-24 — blocked: the wording sheet's approval
-- [!] VH-190 — "Create the video again" while a finished video is on screen — since 2026-10-24 — blocked: the wording sheet's approval
-- [!] VH-182 — The footer's contact routes grouped by need; Send feedback renamed Report a problem — since 2026-10-24 — blocked: round 2's Q7 and the sheet's approval
-- [!] VH-191 — Video language moves into step 3, apart from Page language — since 2026-10-24 — blocked: the wording sheet's approval
-- [!] VH-192 — Watch the finished video in its card before saving — since 2026-10-24 — blocked: the wording sheet's approval
-- [!] VH-193 — A note before Create when levelling needs heavy limiting — since 2026-10-24 — blocked: round 2's Q6 and the sheet's approval
-- [!] VH-194 — The spec's and UI-STANDARDS' Phase 7 corrections applied — since 2026-10-24 — blocked: the wording sheet's approval
+- [ ] VH-186 — Small words: System check labels, standalone values, the unscanned caption warning — since 2026-10-24
+- [ ] VH-187 — The top of the page: plain promises, the browser note only when a check fails — since 2026-10-24
+- [ ] VH-188 — Preset names that say what each output is for — since 2026-10-24
+- [ ] VH-189 — Step 4's labels in the result line's plain words — since 2026-10-24
+- [ ] VH-190 — "Create the video again" while a finished video is on screen — since 2026-10-24
+- [ ] VH-182 — The footer's contact routes grouped by need; Send feedback renamed Report a problem — since 2026-10-24
+- [ ] VH-191 — Video language moves into step 3, apart from Page language — since 2026-10-24
+- [ ] VH-192 — Watch the finished video in its card before saving — since 2026-10-24
+- [ ] VH-193 — A warning after the job when levelling needed heavy limiting — since 2026-10-24
+- [ ] VH-194 — The spec's and UI-STANDARDS' Phase 7 corrections applied — since 2026-10-24
 - [ ] VH-195 — Phase 8 closes — since 2026-10-24
 
 ### Standing — the owner's, never phase-gated

@@ -668,3 +668,11 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-22 — VH-149 — The Codex run reviewed: five rank-1 defects fixed, the rest to the owner
+
+**Decision:** a visually hidden polite region, `#page-announcer`, now says Errors captured and a refused preview. Step 1's line keeps its own words, because writing them there wiped a blocked start-up's reason and the bold "No sound.". The weakened save pin, the broken Chinese and Malay sentences and the rewritten statement sentence are put back. The review's rank-2 and rank-3 findings wait for the owner.
+
+**Rationale:** The review is `reviews/2026-10-22/claude-review-of-codex-run.md`: five rank-1, 13 rank-2 and about 25 rank-3 findings across the eight commits, gate green at `25a4a8f`, and the live pilot checked at 1280 and 375 px in three colour modes. A new region rather than appending to step 1's line: the line is painted by several writers, and V-10 asked for a region on the page in every state. Errors captured is said as the panel appears, as V-10's words have it, not for each error under it. The region is emptied on a change of language rather than repainted, so it neither lingers in the old language nor speaks again. The statement sentences are restored as they stood before VH-148, which is what its criterion asked. Standards: UI-STANDARDS, System status; Nielsen 1, 4 and 9; WCAG 4.1.3; house conventions, regression tests by category, strings through the sheet, minimal change. A person's screen-reader check stays on VH-141's existing wish line. Not checked by a second model.
+
+**Supersedes:** none
