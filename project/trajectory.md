@@ -20,6 +20,7 @@
 - VH-179 — three rings drawn whole (the chooser 704/640 in 115 records, the handles at 32 px, the band inside its face), the feedback message to the measure, a border-only forced-colour hover; V-18 unmoved; Codex astra "Commit" (2026-10-23) — see decisions
 - VH-180 — a true frame-rate note: one neutral sentence naming no rate, true conformed up or down under both presets, in three languages; the call reads a string; 150 records unchanged, V-18 unmoved; Codex astra "Commit" (2026-10-24) — see decisions
 - VH-181 — one name for step 4: "Closing graphics", 结尾图形 and "Grafik penutup", the noun its lines use, spec §6 to match; 351 records unchanged, V-18 unmoved; Codex astra "Commit after the musts below", the must recorded (2026-10-24) — see decisions
+- VH-176 — the second pass verified whole: the stage rule held by VH-178 to VH-181; the after-run, 699 priority records and 162 fix records, no regression, every change explained; Codex astra "Close" (2026-10-24) — see decisions
 
 ## Phase 6 — the public release: the feedback form, the statement, the cut, Xerte
 

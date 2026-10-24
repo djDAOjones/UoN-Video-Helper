@@ -18,6 +18,19 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-24 — VH-176 — The second pass verified whole: the stage rule held, the after-run with no regression, Codex astra's integrated check
+
+**Decision:** VH-176 closes on `after-run-2026-10-24.md`. It walked `PLANS.priority` again, in place of the full matrix, plus the 162 other records of the fix plans. It found no regression and explained every change. Each of VH-178 to VH-181 kept the stage rule. Codex astra's two record musts were applied. The 641 unrun matrix cells stay with wish line VH-172.1.
+
+**Rationale:** On `ec26c49`, the same 699 keys as VH-172 were walked whole in 2 h 58 min. 118 outcomes changed, none for the worse, and focus fails went from 112 to 0. Each of the 1,724 changed rows traces to one of V-40, V-41, V-42, V-33, V-44 and V-45, to VH-172's own instrument fault, or to run-to-run variation. The six earlier fixes hold, the 48 VH-178 transitions pass, and V-18 is unmoved. The gate is green at 1,523 tests. Codex astra said "Close after the musts below". The musts were the unrun count, 821 to 641, and VH-181's criterion traced to its decision. The re-check said "Close". Decided on the owner's standing instruction, "work through to the end of VH-177, archive and spawn as you go, proceed with your recommendations, universal permission is granted":
+(a) the priority plan again, so before and after are the same 699 records in under three hours;
+(b) the fix plans' extra records walked as one run, with VH-181's `vh181-rest` not repeated on unchanged code;
+(c) the musts applied in VH-181's Notes and VH-172.1, where Codex named them, with V-18's stale Disposition link corrected.
+
+**Supersedes:** none
+
+**Deferred:** VH-177
+
 ## 2026-10-24 — VH-181 — One name for step 4: “Closing graphics” in three languages, spec §6 to match
 
 **Decision:** Step 4's heading and legend become "Closing graphics", 结尾图形 and "Grafik penutup", the noun the step's own lines use. `index.html`, `sheet.ts`, the README and spec §6 follow. "Closing card" and "branding" keep their own meanings. The other 82 scenarios that draw step 4 are walked in light at 320 px only (V-45).
@@ -571,16 +584,6 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Decision:** None shares one explanation beneath its three locked closing controls, each linked to it; Cut keeps its onset explanation. The two trim rows wrap their buttons before their time fields fall below the existing 12 rem minimum — the smallest change satisfying the two design findings, taken gateless.
 
 **Rationale:** Existing strings and disable rules remain authoritative; visibleClosingReasons groups only their presentation. The closing result is unchanged. The trim-only class leaves onset’s help row alone and introduces no token. Chrome passed three languages, 1280/375/320/640 px, light/dark/forced colours, both video kinds and enabled/disabled field presentations: no horizontal scroll, fields at least 192 px, field/button targets at least 44 px. Notes record evidence and the limits of emulation. Standards: Carbon helper-text grouping and spacing tokens; Nielsen 4 and 8; WCAG 1.3.1 and 2.5.5; house conventions, category regression tests. Real zoom, assistive technology and Windows themes remain on existing VH-138/VH-148 wish lines; known sample and frozen-canon warnings retain their existing follow-ups.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-21 — PLAN-3 — Phase 3 reconciled and closed
-
-**Decision:** Phase 3 closes with all four planned items shipped: VH-139, VH-140, VH-141 and VH-142. Phase 4 starts with VH-144 because the repeated closing reason and narrow time fields are direct, small user-facing defects; the authorised run continues.
-
-**Rationale:** Reconciled against “Phase 3: what the second audit found”, Items VH-139–142: early-ending files, truthful records and switches, the nine state defects plus V-21/V-22, and the wording corrections all have close entries and trajectory lines. The reserved accessibility statement, date-only card, spec proposals, human checks and unscanned-container warning remain on their existing wish/backlog lines. Local recall before editing scored 8/8 (2,2,2,2): latest closes VH-142, VH-141, VH-148, VH-124 are anchored by their newest close headings in decisions and the Phase 3/Owner’s sign-off trajectory; VH-141’s Show progress decision answers why; wish-list and backlog locate deferrals; PLAN-4’s “Phase 4: what the design pass found” and backlog locate VH-144 and its order. This is local evidence, not a fresh-session handoff. Milestone audit: 14 development findings (10 high, 1 moderate, 3 low), zero runtime findings; the existing V3-HARNESS audit wish covers them, with no dependency change. House conventions: milestone audit and complete ledger. Known checker warnings remain linked as at VH-142’s close. Taken gateless under the whole-run handoff.
 
 **Supersedes:** none
 

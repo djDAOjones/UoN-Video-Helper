@@ -618,3 +618,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-21 — PLAN-3 — Phase 3 reconciled and closed
+
+**Decision:** Phase 3 closes with all four planned items shipped: VH-139, VH-140, VH-141 and VH-142. Phase 4 starts with VH-144 because the repeated closing reason and narrow time fields are direct, small user-facing defects; the authorised run continues.
+
+**Rationale:** Reconciled against “Phase 3: what the second audit found”, Items VH-139–142: early-ending files, truthful records and switches, the nine state defects plus V-21/V-22, and the wording corrections all have close entries and trajectory lines. The reserved accessibility statement, date-only card, spec proposals, human checks and unscanned-container warning remain on their existing wish/backlog lines. Local recall before editing scored 8/8 (2,2,2,2): latest closes VH-142, VH-141, VH-148, VH-124 are anchored by their newest close headings in decisions and the Phase 3/Owner’s sign-off trajectory; VH-141’s Show progress decision answers why; wish-list and backlog locate deferrals; PLAN-4’s “Phase 4: what the design pass found” and backlog locate VH-144 and its order. This is local evidence, not a fresh-session handoff. Milestone audit: 14 development findings (10 high, 1 moderate, 3 low), zero runtime findings; the existing V3-HARNESS audit wish covers them, with no dependency change. House conventions: milestone audit and complete ledger. Known checker warnings remain linked as at VH-142’s close. Taken gateless under the whole-run handoff.
+
+**Supersedes:** none
+
+**Deferred:** none
