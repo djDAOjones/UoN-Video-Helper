@@ -28,10 +28,25 @@ function formatParts(parts: DurationParts): string {
   return formatter(parts)
 }
 
+/**
+ * Where a value stands. Alone, as a Video properties row's whole value, the
+ * words for a fact not read start with a capital, as every other value does;
+ * inside a sentence they do not (VH-186). A trim handle's spoken place keeps
+ * the in-sentence form, lower-case beside "the beginning" and "the end".
+ */
+export type Placement = 'alone' | 'in-sentence'
+
+/** "unknown", or "Unknown" alone. */
+function unknownWords(placement: Placement): string {
+  return placement === 'alone' ? t().format.alone.unknown : t().format.unknown
+}
+
 /** e.g. `1 hour, 23 minutes`, `4 minutes, 12 seconds`, `38 seconds`. */
-export function formatDuration(seconds: number): string {
-  if (!Number.isFinite(seconds) || seconds < 0) return t().format.unknown
-  if (Math.round(seconds) < 1) return t().format.lessThanASecond
+export function formatDuration(seconds: number, placement: Placement = 'in-sentence'): string {
+  if (!Number.isFinite(seconds) || seconds < 0) return unknownWords(placement)
+  if (Math.round(seconds) < 1) {
+    return placement === 'alone' ? t().format.alone.lessThanASecond : t().format.lessThanASecond
+  }
   return formatParts(durationParts(seconds))
 }
 
@@ -88,8 +103,8 @@ const SIZE_UNITS = ['kilobyte', 'megabyte', 'gigabyte', 'terabyte'] as const
  * here would just make the number disagree with Finder. One decimal below a
  * hundred of a unit, none above, whole bytes under a thousand.
  */
-export function formatFileSize(bytes: number): string {
-  if (!Number.isFinite(bytes) || bytes < 0) return t().format.unknown
+export function formatFileSize(bytes: number, placement: Placement = 'in-sentence'): string {
+  if (!Number.isFinite(bytes) || bytes < 0) return unknownWords(placement)
   if (bytes < 1000) return unitFormatter(locale(), 'byte', { unitDisplay: 'long', maximumFractionDigits: 0 })(Math.round(bytes))
   let value = bytes / 1000
   let unit = 0
@@ -106,8 +121,8 @@ export function formatResolution(width: number, height: number): string {
 }
 
 /** e.g. `25 frames a second`, `29.97 frames a second`. Trailing zeros are noise. */
-export function formatFrameRate(rate: number): string {
-  if (!Number.isFinite(rate) || rate <= 0) return t().format.unknown
+export function formatFrameRate(rate: number, placement: Placement = 'in-sentence'): string {
+  if (!Number.isFinite(rate) || rate <= 0) return unknownWords(placement)
   // Said in words rather than as "fps" (spec 9.2, A-10): plainer than an
   // abbreviation with a meaning beside it.
   return t().format.frameRate({ rate: Math.round(rate * 100) / 100 })
@@ -138,8 +153,8 @@ const CODEC_NAMES: Readonly<Record<string, string>> = {
   eac3: 'Dolby Digital Plus',
 }
 
-export function formatCodec(codec: string | null): string {
-  if (!codec) return t().format.unknown
+export function formatCodec(codec: string | null, placement: Placement = 'in-sentence'): string {
+  if (!codec) return unknownWords(placement)
   return CODEC_NAMES[codec] ?? codec.toUpperCase()
 }
 

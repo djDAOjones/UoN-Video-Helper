@@ -37,7 +37,6 @@ The public release, 0.2.0, on Xerte (PLAN-6).
 
 ### Phase 8 — the owner's UX pass: the backlog and wish list, thirteen pieces
 
-- [ ] VH-186 — Small words: System check labels, standalone values, the unscanned caption warning — since 2026-10-24
 - [ ] VH-187 — The top of the page: plain promises, the browser note only when a check fails — since 2026-10-24
 - [ ] VH-188 — Preset names that say what each output is for — since 2026-10-24
 - [ ] VH-189 — Step 4's labels in the result line's plain words — since 2026-10-24

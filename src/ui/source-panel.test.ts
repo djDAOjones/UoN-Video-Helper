@@ -320,6 +320,25 @@ describe('losses against facts (VH-87)', () => {
     expect(losses[0]?.detail).toContain('will not be carried over')
   })
 
+  it('goes on, unchecked, with the scanned warning\'s caption passage (VH-186)', () => {
+    const unchecked = buildLosses(report({ tracks: scan({ scanned: false }) }))[0]?.detail
+    const found = buildLosses(report({ tracks: scan({ subtitleTracks: 1 }) }))[0]?.detail
+    const passage = 'The new file will have no caption track, so captions must come from wherever you publish it.'
+    expect(unchecked).toMatch(/will not be carried over\. The new file will have no caption track/)
+    expect(unchecked).toContain(passage)
+    expect(found).toContain(passage)
+  })
+
+  it('says a fact it could not read alone with a capital (VH-186)', () => {
+    const rows = buildRows(
+      report({ durationSeconds: Number.NaN, fileSizeBytes: Number.NaN, video: { ...report().video, codec: null } }),
+    )
+    const said = Object.fromEntries(rows.map((row) => [row.term, row.detail]))
+    expect(said['Duration']).toBe('Unknown')
+    expect(said['File size']).toBe('Unknown')
+    expect(said['Video format']).toBe('Unknown')
+  })
+
   it('reports every loss at once, in a stable order', () => {
     const source = report({
       videoTrackCount: 2,

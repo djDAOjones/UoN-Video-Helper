@@ -684,10 +684,10 @@ export const zhHans: Messages = {
       pending: '……',
     },
     rows: {
-      secure: '安全连接（存储访问所需）',
-      webcodecs: '浏览器中的视频处理（WebCodecs）',
-      h264: '该工具生成的视频格式为（H.264）',
-      aac: '该工具生成的音频格式（AAC）',
+      secure: '安全连接',
+      webcodecs: '视频处理（WebCodecs）',
+      h264: '输出视频格式（H.264）',
+      aac: '输出音频格式（AAC）',
       opfs: '私人工作存储',
       worker: '后台处理',
     },
@@ -823,6 +823,10 @@ export const zhHans: Messages = {
     unknown: '未知',
     lessThanASecond: '不到一秒',
     fewSeconds: '几秒钟',
+    alone: {
+      unknown: '未知',
+      lessThanASecond: '不到一秒',
+    },
     frameRate: '每秒 {rate} 帧',
     resolution: '{width} × {height}',
     channels: {

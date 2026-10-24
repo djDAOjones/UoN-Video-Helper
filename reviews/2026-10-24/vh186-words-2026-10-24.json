@@ -1,0 +1,2594 @@
+[
+ {
+  "key": "checks__en-GB__w1280__light",
+  "lang": "en-GB",
+  "view": "w1280",
+  "mode": "light",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "Secure connection",
+    "expected": "Secure connection",
+    "lines": 1,
+    "linesBefore": 1,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "Video processing (WebCodecs)",
+    "expected": "Video processing (WebCodecs)",
+    "lines": 1,
+    "linesBefore": 1,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "Output video format (H.264)",
+    "expected": "Output video format (H.264)",
+    "lines": 1,
+    "linesBefore": 1,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "Output audio format (AAC)",
+    "expected": "Output audio format (AAC)",
+    "lines": 1,
+    "linesBefore": 1,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "Private working storage",
+    "expected": "Private working storage",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "Background processing",
+    "expected": "Background processing",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__en-GB__w1280__light",
+  "lang": "en-GB",
+  "view": "w1280",
+  "mode": "light",
+  "duration": "Less than a second",
+  "expected": "Less than a second",
+  "inSentence": "less than a second",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__en-GB__w1280__dark",
+  "lang": "en-GB",
+  "view": "w1280",
+  "mode": "dark",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "Secure connection",
+    "expected": "Secure connection",
+    "lines": 1,
+    "linesBefore": 1,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "Video processing (WebCodecs)",
+    "expected": "Video processing (WebCodecs)",
+    "lines": 1,
+    "linesBefore": 1,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "Output video format (H.264)",
+    "expected": "Output video format (H.264)",
+    "lines": 1,
+    "linesBefore": 1,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "Output audio format (AAC)",
+    "expected": "Output audio format (AAC)",
+    "lines": 1,
+    "linesBefore": 1,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "Private working storage",
+    "expected": "Private working storage",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "Background processing",
+    "expected": "Background processing",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__en-GB__w1280__dark",
+  "lang": "en-GB",
+  "view": "w1280",
+  "mode": "dark",
+  "duration": "Less than a second",
+  "expected": "Less than a second",
+  "inSentence": "less than a second",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__en-GB__w1280__forced-light",
+  "lang": "en-GB",
+  "view": "w1280",
+  "mode": "forced-light",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "Secure connection",
+    "expected": "Secure connection",
+    "lines": 1,
+    "linesBefore": 1,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "Video processing (WebCodecs)",
+    "expected": "Video processing (WebCodecs)",
+    "lines": 1,
+    "linesBefore": 1,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "Output video format (H.264)",
+    "expected": "Output video format (H.264)",
+    "lines": 1,
+    "linesBefore": 1,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "Output audio format (AAC)",
+    "expected": "Output audio format (AAC)",
+    "lines": 1,
+    "linesBefore": 1,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "Private working storage",
+    "expected": "Private working storage",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "Background processing",
+    "expected": "Background processing",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__en-GB__w1280__forced-light",
+  "lang": "en-GB",
+  "view": "w1280",
+  "mode": "forced-light",
+  "duration": "Less than a second",
+  "expected": "Less than a second",
+  "inSentence": "less than a second",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__en-GB__w1280__forced-dark",
+  "lang": "en-GB",
+  "view": "w1280",
+  "mode": "forced-dark",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "Secure connection",
+    "expected": "Secure connection",
+    "lines": 1,
+    "linesBefore": 1,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "Video processing (WebCodecs)",
+    "expected": "Video processing (WebCodecs)",
+    "lines": 1,
+    "linesBefore": 1,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "Output video format (H.264)",
+    "expected": "Output video format (H.264)",
+    "lines": 1,
+    "linesBefore": 1,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "Output audio format (AAC)",
+    "expected": "Output audio format (AAC)",
+    "lines": 1,
+    "linesBefore": 1,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "Private working storage",
+    "expected": "Private working storage",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "Background processing",
+    "expected": "Background processing",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__en-GB__w1280__forced-dark",
+  "lang": "en-GB",
+  "view": "w1280",
+  "mode": "forced-dark",
+  "duration": "Less than a second",
+  "expected": "Less than a second",
+  "inSentence": "less than a second",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__en-GB__w375__light",
+  "lang": "en-GB",
+  "view": "w375",
+  "mode": "light",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "Secure connection",
+    "expected": "Secure connection",
+    "lines": 1,
+    "linesBefore": 3,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "Video processing (WebCodecs)",
+    "expected": "Video processing (WebCodecs)",
+    "lines": 2,
+    "linesBefore": 3,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "Output video format (H.264)",
+    "expected": "Output video format (H.264)",
+    "lines": 2,
+    "linesBefore": 2,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "Output audio format (AAC)",
+    "expected": "Output audio format (AAC)",
+    "lines": 2,
+    "linesBefore": 2,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "Private working storage",
+    "expected": "Private working storage",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "Background processing",
+    "expected": "Background processing",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__en-GB__w375__light",
+  "lang": "en-GB",
+  "view": "w375",
+  "mode": "light",
+  "duration": "Less than a second",
+  "expected": "Less than a second",
+  "inSentence": "less than a second",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__en-GB__w375__dark",
+  "lang": "en-GB",
+  "view": "w375",
+  "mode": "dark",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "Secure connection",
+    "expected": "Secure connection",
+    "lines": 1,
+    "linesBefore": 3,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "Video processing (WebCodecs)",
+    "expected": "Video processing (WebCodecs)",
+    "lines": 2,
+    "linesBefore": 3,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "Output video format (H.264)",
+    "expected": "Output video format (H.264)",
+    "lines": 2,
+    "linesBefore": 2,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "Output audio format (AAC)",
+    "expected": "Output audio format (AAC)",
+    "lines": 2,
+    "linesBefore": 2,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "Private working storage",
+    "expected": "Private working storage",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "Background processing",
+    "expected": "Background processing",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__en-GB__w375__dark",
+  "lang": "en-GB",
+  "view": "w375",
+  "mode": "dark",
+  "duration": "Less than a second",
+  "expected": "Less than a second",
+  "inSentence": "less than a second",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__en-GB__w375__forced-light",
+  "lang": "en-GB",
+  "view": "w375",
+  "mode": "forced-light",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "Secure connection",
+    "expected": "Secure connection",
+    "lines": 1,
+    "linesBefore": 3,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "Video processing (WebCodecs)",
+    "expected": "Video processing (WebCodecs)",
+    "lines": 2,
+    "linesBefore": 3,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "Output video format (H.264)",
+    "expected": "Output video format (H.264)",
+    "lines": 2,
+    "linesBefore": 2,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "Output audio format (AAC)",
+    "expected": "Output audio format (AAC)",
+    "lines": 2,
+    "linesBefore": 2,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "Private working storage",
+    "expected": "Private working storage",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "Background processing",
+    "expected": "Background processing",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__en-GB__w375__forced-light",
+  "lang": "en-GB",
+  "view": "w375",
+  "mode": "forced-light",
+  "duration": "Less than a second",
+  "expected": "Less than a second",
+  "inSentence": "less than a second",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__en-GB__w375__forced-dark",
+  "lang": "en-GB",
+  "view": "w375",
+  "mode": "forced-dark",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "Secure connection",
+    "expected": "Secure connection",
+    "lines": 1,
+    "linesBefore": 3,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "Video processing (WebCodecs)",
+    "expected": "Video processing (WebCodecs)",
+    "lines": 2,
+    "linesBefore": 3,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "Output video format (H.264)",
+    "expected": "Output video format (H.264)",
+    "lines": 2,
+    "linesBefore": 2,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "Output audio format (AAC)",
+    "expected": "Output audio format (AAC)",
+    "lines": 2,
+    "linesBefore": 2,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "Private working storage",
+    "expected": "Private working storage",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "Background processing",
+    "expected": "Background processing",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__en-GB__w375__forced-dark",
+  "lang": "en-GB",
+  "view": "w375",
+  "mode": "forced-dark",
+  "duration": "Less than a second",
+  "expected": "Less than a second",
+  "inSentence": "less than a second",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__en-GB__w320__light",
+  "lang": "en-GB",
+  "view": "w320",
+  "mode": "light",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "Secure connection",
+    "expected": "Secure connection",
+    "lines": 2,
+    "linesBefore": 4,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "Video processing (WebCodecs)",
+    "expected": "Video processing (WebCodecs)",
+    "lines": 3,
+    "linesBefore": 4,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "Output video format (H.264)",
+    "expected": "Output video format (H.264)",
+    "lines": 2,
+    "linesBefore": 3,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "Output audio format (AAC)",
+    "expected": "Output audio format (AAC)",
+    "lines": 2,
+    "linesBefore": 3,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "Private working storage",
+    "expected": "Private working storage",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "Background processing",
+    "expected": "Background processing",
+    "lines": 4,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__en-GB__w320__light",
+  "lang": "en-GB",
+  "view": "w320",
+  "mode": "light",
+  "duration": "Less than a second",
+  "expected": "Less than a second",
+  "inSentence": "less than a second",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__en-GB__w320__dark",
+  "lang": "en-GB",
+  "view": "w320",
+  "mode": "dark",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "Secure connection",
+    "expected": "Secure connection",
+    "lines": 2,
+    "linesBefore": 4,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "Video processing (WebCodecs)",
+    "expected": "Video processing (WebCodecs)",
+    "lines": 3,
+    "linesBefore": 4,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "Output video format (H.264)",
+    "expected": "Output video format (H.264)",
+    "lines": 2,
+    "linesBefore": 3,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "Output audio format (AAC)",
+    "expected": "Output audio format (AAC)",
+    "lines": 2,
+    "linesBefore": 3,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "Private working storage",
+    "expected": "Private working storage",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "Background processing",
+    "expected": "Background processing",
+    "lines": 4,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__en-GB__w320__dark",
+  "lang": "en-GB",
+  "view": "w320",
+  "mode": "dark",
+  "duration": "Less than a second",
+  "expected": "Less than a second",
+  "inSentence": "less than a second",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__en-GB__w320__forced-light",
+  "lang": "en-GB",
+  "view": "w320",
+  "mode": "forced-light",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "Secure connection",
+    "expected": "Secure connection",
+    "lines": 2,
+    "linesBefore": 4,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "Video processing (WebCodecs)",
+    "expected": "Video processing (WebCodecs)",
+    "lines": 3,
+    "linesBefore": 4,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "Output video format (H.264)",
+    "expected": "Output video format (H.264)",
+    "lines": 2,
+    "linesBefore": 3,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "Output audio format (AAC)",
+    "expected": "Output audio format (AAC)",
+    "lines": 2,
+    "linesBefore": 3,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "Private working storage",
+    "expected": "Private working storage",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "Background processing",
+    "expected": "Background processing",
+    "lines": 4,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__en-GB__w320__forced-light",
+  "lang": "en-GB",
+  "view": "w320",
+  "mode": "forced-light",
+  "duration": "Less than a second",
+  "expected": "Less than a second",
+  "inSentence": "less than a second",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__en-GB__w320__forced-dark",
+  "lang": "en-GB",
+  "view": "w320",
+  "mode": "forced-dark",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "Secure connection",
+    "expected": "Secure connection",
+    "lines": 2,
+    "linesBefore": 4,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "Video processing (WebCodecs)",
+    "expected": "Video processing (WebCodecs)",
+    "lines": 3,
+    "linesBefore": 4,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "Output video format (H.264)",
+    "expected": "Output video format (H.264)",
+    "lines": 2,
+    "linesBefore": 3,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "Output audio format (AAC)",
+    "expected": "Output audio format (AAC)",
+    "lines": 2,
+    "linesBefore": 3,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "Private working storage",
+    "expected": "Private working storage",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "Background processing",
+    "expected": "Background processing",
+    "lines": 4,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__en-GB__w320__forced-dark",
+  "lang": "en-GB",
+  "view": "w320",
+  "mode": "forced-dark",
+  "duration": "Less than a second",
+  "expected": "Less than a second",
+  "inSentence": "less than a second",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__zh-Hans__w1280__light",
+  "lang": "zh-Hans",
+  "view": "w1280",
+  "mode": "light",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "安全连接",
+    "expected": "安全连接",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "视频处理（WebCodecs）",
+    "expected": "视频处理（WebCodecs）",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "输出视频格式（H.264）",
+    "expected": "输出视频格式（H.264）",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "输出音频格式（AAC）",
+    "expected": "输出音频格式（AAC）",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "私人工作存储",
+    "expected": "私人工作存储",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "后台处理",
+    "expected": "后台处理",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__zh-Hans__w1280__light",
+  "lang": "zh-Hans",
+  "view": "w1280",
+  "mode": "light",
+  "duration": "不到一秒",
+  "expected": "不到一秒",
+  "inSentence": "不到一秒",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__zh-Hans__w1280__dark",
+  "lang": "zh-Hans",
+  "view": "w1280",
+  "mode": "dark",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "安全连接",
+    "expected": "安全连接",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "视频处理（WebCodecs）",
+    "expected": "视频处理（WebCodecs）",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "输出视频格式（H.264）",
+    "expected": "输出视频格式（H.264）",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "输出音频格式（AAC）",
+    "expected": "输出音频格式（AAC）",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "私人工作存储",
+    "expected": "私人工作存储",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "后台处理",
+    "expected": "后台处理",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__zh-Hans__w1280__dark",
+  "lang": "zh-Hans",
+  "view": "w1280",
+  "mode": "dark",
+  "duration": "不到一秒",
+  "expected": "不到一秒",
+  "inSentence": "不到一秒",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__zh-Hans__w1280__forced-light",
+  "lang": "zh-Hans",
+  "view": "w1280",
+  "mode": "forced-light",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "安全连接",
+    "expected": "安全连接",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "视频处理（WebCodecs）",
+    "expected": "视频处理（WebCodecs）",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "输出视频格式（H.264）",
+    "expected": "输出视频格式（H.264）",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "输出音频格式（AAC）",
+    "expected": "输出音频格式（AAC）",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "私人工作存储",
+    "expected": "私人工作存储",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "后台处理",
+    "expected": "后台处理",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__zh-Hans__w1280__forced-light",
+  "lang": "zh-Hans",
+  "view": "w1280",
+  "mode": "forced-light",
+  "duration": "不到一秒",
+  "expected": "不到一秒",
+  "inSentence": "不到一秒",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__zh-Hans__w1280__forced-dark",
+  "lang": "zh-Hans",
+  "view": "w1280",
+  "mode": "forced-dark",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "安全连接",
+    "expected": "安全连接",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "视频处理（WebCodecs）",
+    "expected": "视频处理（WebCodecs）",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "输出视频格式（H.264）",
+    "expected": "输出视频格式（H.264）",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "输出音频格式（AAC）",
+    "expected": "输出音频格式（AAC）",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "私人工作存储",
+    "expected": "私人工作存储",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "后台处理",
+    "expected": "后台处理",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__zh-Hans__w1280__forced-dark",
+  "lang": "zh-Hans",
+  "view": "w1280",
+  "mode": "forced-dark",
+  "duration": "不到一秒",
+  "expected": "不到一秒",
+  "inSentence": "不到一秒",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__zh-Hans__w375__light",
+  "lang": "zh-Hans",
+  "view": "w375",
+  "mode": "light",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "安全连接",
+    "expected": "安全连接",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "视频处理（WebCodecs）",
+    "expected": "视频处理（WebCodecs）",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "输出视频格式（H.264）",
+    "expected": "输出视频格式（H.264）",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "输出音频格式（AAC）",
+    "expected": "输出音频格式（AAC）",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "私人工作存储",
+    "expected": "私人工作存储",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "后台处理",
+    "expected": "后台处理",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__zh-Hans__w375__light",
+  "lang": "zh-Hans",
+  "view": "w375",
+  "mode": "light",
+  "duration": "不到一秒",
+  "expected": "不到一秒",
+  "inSentence": "不到一秒",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__zh-Hans__w375__dark",
+  "lang": "zh-Hans",
+  "view": "w375",
+  "mode": "dark",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "安全连接",
+    "expected": "安全连接",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "视频处理（WebCodecs）",
+    "expected": "视频处理（WebCodecs）",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "输出视频格式（H.264）",
+    "expected": "输出视频格式（H.264）",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "输出音频格式（AAC）",
+    "expected": "输出音频格式（AAC）",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "私人工作存储",
+    "expected": "私人工作存储",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "后台处理",
+    "expected": "后台处理",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__zh-Hans__w375__dark",
+  "lang": "zh-Hans",
+  "view": "w375",
+  "mode": "dark",
+  "duration": "不到一秒",
+  "expected": "不到一秒",
+  "inSentence": "不到一秒",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__zh-Hans__w375__forced-light",
+  "lang": "zh-Hans",
+  "view": "w375",
+  "mode": "forced-light",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "安全连接",
+    "expected": "安全连接",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "视频处理（WebCodecs）",
+    "expected": "视频处理（WebCodecs）",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "输出视频格式（H.264）",
+    "expected": "输出视频格式（H.264）",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "输出音频格式（AAC）",
+    "expected": "输出音频格式（AAC）",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "私人工作存储",
+    "expected": "私人工作存储",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "后台处理",
+    "expected": "后台处理",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__zh-Hans__w375__forced-light",
+  "lang": "zh-Hans",
+  "view": "w375",
+  "mode": "forced-light",
+  "duration": "不到一秒",
+  "expected": "不到一秒",
+  "inSentence": "不到一秒",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__zh-Hans__w375__forced-dark",
+  "lang": "zh-Hans",
+  "view": "w375",
+  "mode": "forced-dark",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "安全连接",
+    "expected": "安全连接",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "视频处理（WebCodecs）",
+    "expected": "视频处理（WebCodecs）",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "输出视频格式（H.264）",
+    "expected": "输出视频格式（H.264）",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "输出音频格式（AAC）",
+    "expected": "输出音频格式（AAC）",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "私人工作存储",
+    "expected": "私人工作存储",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "后台处理",
+    "expected": "后台处理",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__zh-Hans__w375__forced-dark",
+  "lang": "zh-Hans",
+  "view": "w375",
+  "mode": "forced-dark",
+  "duration": "不到一秒",
+  "expected": "不到一秒",
+  "inSentence": "不到一秒",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__zh-Hans__w320__light",
+  "lang": "zh-Hans",
+  "view": "w320",
+  "mode": "light",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "安全连接",
+    "expected": "安全连接",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "视频处理（WebCodecs）",
+    "expected": "视频处理（WebCodecs）",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "输出视频格式（H.264）",
+    "expected": "输出视频格式（H.264）",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "输出音频格式（AAC）",
+    "expected": "输出音频格式（AAC）",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "私人工作存储",
+    "expected": "私人工作存储",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "后台处理",
+    "expected": "后台处理",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__zh-Hans__w320__light",
+  "lang": "zh-Hans",
+  "view": "w320",
+  "mode": "light",
+  "duration": "不到一秒",
+  "expected": "不到一秒",
+  "inSentence": "不到一秒",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__zh-Hans__w320__dark",
+  "lang": "zh-Hans",
+  "view": "w320",
+  "mode": "dark",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "安全连接",
+    "expected": "安全连接",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "视频处理（WebCodecs）",
+    "expected": "视频处理（WebCodecs）",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "输出视频格式（H.264）",
+    "expected": "输出视频格式（H.264）",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "输出音频格式（AAC）",
+    "expected": "输出音频格式（AAC）",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "私人工作存储",
+    "expected": "私人工作存储",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "后台处理",
+    "expected": "后台处理",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__zh-Hans__w320__dark",
+  "lang": "zh-Hans",
+  "view": "w320",
+  "mode": "dark",
+  "duration": "不到一秒",
+  "expected": "不到一秒",
+  "inSentence": "不到一秒",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__zh-Hans__w320__forced-light",
+  "lang": "zh-Hans",
+  "view": "w320",
+  "mode": "forced-light",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "安全连接",
+    "expected": "安全连接",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "视频处理（WebCodecs）",
+    "expected": "视频处理（WebCodecs）",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "输出视频格式（H.264）",
+    "expected": "输出视频格式（H.264）",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "输出音频格式（AAC）",
+    "expected": "输出音频格式（AAC）",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "私人工作存储",
+    "expected": "私人工作存储",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "后台处理",
+    "expected": "后台处理",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__zh-Hans__w320__forced-light",
+  "lang": "zh-Hans",
+  "view": "w320",
+  "mode": "forced-light",
+  "duration": "不到一秒",
+  "expected": "不到一秒",
+  "inSentence": "不到一秒",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__zh-Hans__w320__forced-dark",
+  "lang": "zh-Hans",
+  "view": "w320",
+  "mode": "forced-dark",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "安全连接",
+    "expected": "安全连接",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "视频处理（WebCodecs）",
+    "expected": "视频处理（WebCodecs）",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "输出视频格式（H.264）",
+    "expected": "输出视频格式（H.264）",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "输出音频格式（AAC）",
+    "expected": "输出音频格式（AAC）",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "私人工作存储",
+    "expected": "私人工作存储",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "后台处理",
+    "expected": "后台处理",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__zh-Hans__w320__forced-dark",
+  "lang": "zh-Hans",
+  "view": "w320",
+  "mode": "forced-dark",
+  "duration": "不到一秒",
+  "expected": "不到一秒",
+  "inSentence": "不到一秒",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__ms-MY__w1280__light",
+  "lang": "ms-MY",
+  "view": "w1280",
+  "mode": "light",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "Sambungan selamat",
+    "expected": "Sambungan selamat",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "Pemprosesan video (WebCodecs)",
+    "expected": "Pemprosesan video (WebCodecs)",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "Format video keluaran (H.264)",
+    "expected": "Format video keluaran (H.264)",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "Format audio keluaran (AAC)",
+    "expected": "Format audio keluaran (AAC)",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "Storan kerja persendirian",
+    "expected": "Storan kerja persendirian",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "Pemprosesan latar belakang",
+    "expected": "Pemprosesan latar belakang",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__ms-MY__w1280__light",
+  "lang": "ms-MY",
+  "view": "w1280",
+  "mode": "light",
+  "duration": "Kurang daripada satu saat",
+  "expected": "Kurang daripada satu saat",
+  "inSentence": "kurang daripada satu saat",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__ms-MY__w1280__dark",
+  "lang": "ms-MY",
+  "view": "w1280",
+  "mode": "dark",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "Sambungan selamat",
+    "expected": "Sambungan selamat",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "Pemprosesan video (WebCodecs)",
+    "expected": "Pemprosesan video (WebCodecs)",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "Format video keluaran (H.264)",
+    "expected": "Format video keluaran (H.264)",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "Format audio keluaran (AAC)",
+    "expected": "Format audio keluaran (AAC)",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "Storan kerja persendirian",
+    "expected": "Storan kerja persendirian",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "Pemprosesan latar belakang",
+    "expected": "Pemprosesan latar belakang",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__ms-MY__w1280__dark",
+  "lang": "ms-MY",
+  "view": "w1280",
+  "mode": "dark",
+  "duration": "Kurang daripada satu saat",
+  "expected": "Kurang daripada satu saat",
+  "inSentence": "kurang daripada satu saat",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__ms-MY__w1280__forced-light",
+  "lang": "ms-MY",
+  "view": "w1280",
+  "mode": "forced-light",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "Sambungan selamat",
+    "expected": "Sambungan selamat",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "Pemprosesan video (WebCodecs)",
+    "expected": "Pemprosesan video (WebCodecs)",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "Format video keluaran (H.264)",
+    "expected": "Format video keluaran (H.264)",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "Format audio keluaran (AAC)",
+    "expected": "Format audio keluaran (AAC)",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "Storan kerja persendirian",
+    "expected": "Storan kerja persendirian",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "Pemprosesan latar belakang",
+    "expected": "Pemprosesan latar belakang",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__ms-MY__w1280__forced-light",
+  "lang": "ms-MY",
+  "view": "w1280",
+  "mode": "forced-light",
+  "duration": "Kurang daripada satu saat",
+  "expected": "Kurang daripada satu saat",
+  "inSentence": "kurang daripada satu saat",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__ms-MY__w1280__forced-dark",
+  "lang": "ms-MY",
+  "view": "w1280",
+  "mode": "forced-dark",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "Sambungan selamat",
+    "expected": "Sambungan selamat",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "Pemprosesan video (WebCodecs)",
+    "expected": "Pemprosesan video (WebCodecs)",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "Format video keluaran (H.264)",
+    "expected": "Format video keluaran (H.264)",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "Format audio keluaran (AAC)",
+    "expected": "Format audio keluaran (AAC)",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "Storan kerja persendirian",
+    "expected": "Storan kerja persendirian",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "Pemprosesan latar belakang",
+    "expected": "Pemprosesan latar belakang",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__ms-MY__w1280__forced-dark",
+  "lang": "ms-MY",
+  "view": "w1280",
+  "mode": "forced-dark",
+  "duration": "Kurang daripada satu saat",
+  "expected": "Kurang daripada satu saat",
+  "inSentence": "kurang daripada satu saat",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__ms-MY__w375__light",
+  "lang": "ms-MY",
+  "view": "w375",
+  "mode": "light",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "Sambungan selamat",
+    "expected": "Sambungan selamat",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "Pemprosesan video (WebCodecs)",
+    "expected": "Pemprosesan video (WebCodecs)",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "Format video keluaran (H.264)",
+    "expected": "Format video keluaran (H.264)",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "Format audio keluaran (AAC)",
+    "expected": "Format audio keluaran (AAC)",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "Storan kerja persendirian",
+    "expected": "Storan kerja persendirian",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "Pemprosesan latar belakang",
+    "expected": "Pemprosesan latar belakang",
+    "lines": 3,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__ms-MY__w375__light",
+  "lang": "ms-MY",
+  "view": "w375",
+  "mode": "light",
+  "duration": "Kurang daripada satu saat",
+  "expected": "Kurang daripada satu saat",
+  "inSentence": "kurang daripada satu saat",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__ms-MY__w375__dark",
+  "lang": "ms-MY",
+  "view": "w375",
+  "mode": "dark",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "Sambungan selamat",
+    "expected": "Sambungan selamat",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "Pemprosesan video (WebCodecs)",
+    "expected": "Pemprosesan video (WebCodecs)",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "Format video keluaran (H.264)",
+    "expected": "Format video keluaran (H.264)",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "Format audio keluaran (AAC)",
+    "expected": "Format audio keluaran (AAC)",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "Storan kerja persendirian",
+    "expected": "Storan kerja persendirian",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "Pemprosesan latar belakang",
+    "expected": "Pemprosesan latar belakang",
+    "lines": 3,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__ms-MY__w375__dark",
+  "lang": "ms-MY",
+  "view": "w375",
+  "mode": "dark",
+  "duration": "Kurang daripada satu saat",
+  "expected": "Kurang daripada satu saat",
+  "inSentence": "kurang daripada satu saat",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__ms-MY__w375__forced-light",
+  "lang": "ms-MY",
+  "view": "w375",
+  "mode": "forced-light",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "Sambungan selamat",
+    "expected": "Sambungan selamat",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "Pemprosesan video (WebCodecs)",
+    "expected": "Pemprosesan video (WebCodecs)",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "Format video keluaran (H.264)",
+    "expected": "Format video keluaran (H.264)",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "Format audio keluaran (AAC)",
+    "expected": "Format audio keluaran (AAC)",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "Storan kerja persendirian",
+    "expected": "Storan kerja persendirian",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "Pemprosesan latar belakang",
+    "expected": "Pemprosesan latar belakang",
+    "lines": 3,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__ms-MY__w375__forced-light",
+  "lang": "ms-MY",
+  "view": "w375",
+  "mode": "forced-light",
+  "duration": "Kurang daripada satu saat",
+  "expected": "Kurang daripada satu saat",
+  "inSentence": "kurang daripada satu saat",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__ms-MY__w375__forced-dark",
+  "lang": "ms-MY",
+  "view": "w375",
+  "mode": "forced-dark",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "Sambungan selamat",
+    "expected": "Sambungan selamat",
+    "lines": 1,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "Pemprosesan video (WebCodecs)",
+    "expected": "Pemprosesan video (WebCodecs)",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "Format video keluaran (H.264)",
+    "expected": "Format video keluaran (H.264)",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "Format audio keluaran (AAC)",
+    "expected": "Format audio keluaran (AAC)",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "Storan kerja persendirian",
+    "expected": "Storan kerja persendirian",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "Pemprosesan latar belakang",
+    "expected": "Pemprosesan latar belakang",
+    "lines": 3,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__ms-MY__w375__forced-dark",
+  "lang": "ms-MY",
+  "view": "w375",
+  "mode": "forced-dark",
+  "duration": "Kurang daripada satu saat",
+  "expected": "Kurang daripada satu saat",
+  "inSentence": "kurang daripada satu saat",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__ms-MY__w320__light",
+  "lang": "ms-MY",
+  "view": "w320",
+  "mode": "light",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "Sambungan selamat",
+    "expected": "Sambungan selamat",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "Pemprosesan video (WebCodecs)",
+    "expected": "Pemprosesan video (WebCodecs)",
+    "lines": 3,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "Format video keluaran (H.264)",
+    "expected": "Format video keluaran (H.264)",
+    "lines": 3,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "Format audio keluaran (AAC)",
+    "expected": "Format audio keluaran (AAC)",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "Storan kerja persendirian",
+    "expected": "Storan kerja persendirian",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "Pemprosesan latar belakang",
+    "expected": "Pemprosesan latar belakang",
+    "lines": 10,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__ms-MY__w320__light",
+  "lang": "ms-MY",
+  "view": "w320",
+  "mode": "light",
+  "duration": "Kurang daripada satu saat",
+  "expected": "Kurang daripada satu saat",
+  "inSentence": "kurang daripada satu saat",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__ms-MY__w320__dark",
+  "lang": "ms-MY",
+  "view": "w320",
+  "mode": "dark",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "Sambungan selamat",
+    "expected": "Sambungan selamat",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "Pemprosesan video (WebCodecs)",
+    "expected": "Pemprosesan video (WebCodecs)",
+    "lines": 3,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "Format video keluaran (H.264)",
+    "expected": "Format video keluaran (H.264)",
+    "lines": 3,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "Format audio keluaran (AAC)",
+    "expected": "Format audio keluaran (AAC)",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "Storan kerja persendirian",
+    "expected": "Storan kerja persendirian",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "Pemprosesan latar belakang",
+    "expected": "Pemprosesan latar belakang",
+    "lines": 6,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__ms-MY__w320__dark",
+  "lang": "ms-MY",
+  "view": "w320",
+  "mode": "dark",
+  "duration": "Kurang daripada satu saat",
+  "expected": "Kurang daripada satu saat",
+  "inSentence": "kurang daripada satu saat",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__ms-MY__w320__forced-light",
+  "lang": "ms-MY",
+  "view": "w320",
+  "mode": "forced-light",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "Sambungan selamat",
+    "expected": "Sambungan selamat",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "Pemprosesan video (WebCodecs)",
+    "expected": "Pemprosesan video (WebCodecs)",
+    "lines": 3,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "Format video keluaran (H.264)",
+    "expected": "Format video keluaran (H.264)",
+    "lines": 3,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "Format audio keluaran (AAC)",
+    "expected": "Format audio keluaran (AAC)",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "Storan kerja persendirian",
+    "expected": "Storan kerja persendirian",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "Pemprosesan latar belakang",
+    "expected": "Pemprosesan latar belakang",
+    "lines": 6,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__ms-MY__w320__forced-light",
+  "lang": "ms-MY",
+  "view": "w320",
+  "mode": "forced-light",
+  "duration": "Kurang daripada satu saat",
+  "expected": "Kurang daripada satu saat",
+  "inSentence": "kurang daripada satu saat",
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "checks__ms-MY__w320__forced-dark",
+  "lang": "ms-MY",
+  "view": "w320",
+  "mode": "forced-dark",
+  "rows": [
+   {
+    "id": "secure",
+    "label": "Sambungan selamat",
+    "expected": "Sambungan selamat",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "webcodecs",
+    "label": "Pemprosesan video (WebCodecs)",
+    "expected": "Pemprosesan video (WebCodecs)",
+    "lines": 3,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "h264",
+    "label": "Format video keluaran (H.264)",
+    "expected": "Format video keluaran (H.264)",
+    "lines": 3,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "aac",
+    "label": "Format audio keluaran (AAC)",
+    "expected": "Format audio keluaran (AAC)",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "opfs",
+    "label": "Storan kerja persendirian",
+    "expected": "Storan kerja persendirian",
+    "lines": 2,
+    "linesBefore": null,
+    "state": "pass"
+   },
+   {
+    "id": "worker",
+    "label": "Pemprosesan latar belakang",
+    "expected": "Pemprosesan latar belakang",
+    "lines": 6,
+    "linesBefore": null,
+    "state": "pass"
+   }
+  ],
+  "uncheckedTitle": true,
+  "unchecked": true,
+  "passageFollows": true,
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "props__ms-MY__w320__forced-dark",
+  "lang": "ms-MY",
+  "view": "w320",
+  "mode": "forced-dark",
+  "duration": "Kurang daripada satu saat",
+  "expected": "Kurang daripada satu saat",
+  "inSentence": "kurang daripada satu saat",
+  "overflowX": false,
+  "ok": true
+ }
+]

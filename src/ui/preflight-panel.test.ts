@@ -172,6 +172,20 @@ describe('warn and discourage keep every sentence (VH-89)', () => {
     expect(lines.at(-1)).toBe('Estimated size up to 28.5 MB.')
   })
 
+  it.each([
+    ['long-job', 'warn', 'This will take a while.'],
+    ['very-long-job', 'discourage', 'This will take a long time.'],
+  ] as const)('says %s without a time, never "about unknown", when the estimate is not a number (VH-186)', (code, outcome, opening) => {
+    const { lines } = verdictText(
+      summary(outcome, [[code, outcome]], {
+        probe: { ...summary('proceed').probe, estimatedSeconds: Number.POSITIVE_INFINITY },
+      }),
+    )
+    const said = lines.join(' ')
+    expect(said).not.toMatch(/unknown/i)
+    expect(said).toContain(opening)
+  })
+
   it('does not invent a time when none could be measured', () => {
     const { lines } = verdictText(
       summary('warn', [['estimate-unavailable', 'warn']], { probe: unmeasured }),

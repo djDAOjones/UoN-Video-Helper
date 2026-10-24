@@ -433,7 +433,11 @@ const NOTES: Readonly<Record<string, string>> = {
   'result.endedEarly.held':
     'Follows one of the sentences above when the picture stopped and the video has closing graphics: until they start, the last picture stays on screen.',
   'result.endedEarly.next': 'Ends the passage. Use the same words for "create the video" as create.create.',
-  'format.unknown': 'Shown alone in place of a fact the app could not read.',
+  'format.unknown': 'Inside a sentence, in place of a fact the app could not read.',
+  'format.alone.unknown':
+    'Shown alone, as a whole value, in place of a fact the app could not read. The same words as format.unknown, with a capital where the language has one.',
+  'format.alone.lessThanASecond':
+    'Shown alone, as a whole value. The same words as format.lessThanASecond, with a capital where the language has one.',
   'statement.heading':
     'The heading of the panel, so no full stop. A formal statement, as on any official website.',
   'statement.covers':

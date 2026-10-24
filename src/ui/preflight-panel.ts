@@ -109,12 +109,14 @@ function reasonText(code: PreflightReasonCode, summary: PreflightSummary, contex
     }
     case 'storage-unknown':
       return reasons.storageUnknown
-    case 'very-long-job':
-      return estimate === null
-        ? reasons.veryLongJobUnknown
-        : reasons.veryLongJob({ time: estimateWords(estimate) })
-    case 'long-job':
-      return estimate === null ? reasons.longJobUnknown : reasons.longJob({ time: estimateWords(estimate) })
+    case 'very-long-job': {
+      const time = estimateWords(estimate)
+      return time === null ? reasons.veryLongJobUnknown : reasons.veryLongJob({ time })
+    }
+    case 'long-job': {
+      const time = estimateWords(estimate)
+      return time === null ? reasons.longJobUnknown : reasons.longJob({ time })
+    }
     case 'mobile-device':
       return reasons.mobileDevice
     case 'estimate-unavailable':
@@ -122,11 +124,16 @@ function reasonText(code: PreflightReasonCode, summary: PreflightSummary, contex
   }
 }
 
-/** An estimate for inside "about …": the rounded duration, or the few-seconds words. */
-function estimateWords(seconds: number): string {
+/**
+ * An estimate for inside "about …": the rounded duration, or the few-seconds
+ * words; `null` for none, so the sentence without a time is said, never
+ * "about unknown" (VH-186).
+ */
+function estimateWords(seconds: number | null): string | null {
+  if (seconds === null) return null
   const estimate = approximateDuration(seconds)
   if (estimate.kind === 'about') return formatDuration(estimate.seconds)
-  return estimate.kind === 'few-seconds' ? t().format.fewSeconds : t().format.unknown
+  return estimate.kind === 'few-seconds' ? t().format.fewSeconds : null
 }
 
 /**

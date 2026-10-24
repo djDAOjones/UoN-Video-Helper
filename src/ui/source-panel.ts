@@ -73,7 +73,12 @@ export function buildLosses(report: SourceReport): Loss[] {
   if (!tracks.scanned) {
     // Only for containers the handler scan cannot read. Saying "no captions"
     // about a file we never checked would be worse than admitting we did not.
-    losses.push({ title: source.losses.uncheckedTitle, detail: source.losses.uncheckedDetail })
+    // Any caption track is lost as surely as a scanned one, so the same
+    // passage follows (VH-186, A-14).
+    losses.push({
+      title: source.losses.uncheckedTitle,
+      detail: [source.losses.uncheckedDetail, source.losses.captionsConsequence].join(sentenceGap()),
+    })
   } else {
     const found = embeddedTextTracks(tracks)
     if (found.length > 0) {
@@ -117,7 +122,7 @@ export function buildRows(report: SourceReport): Row[] {
 
   const rateDetail = video.isVariableFrameRate
     ? source.variesOnAverage({ rate: formatFrameRate(video.frameRate.bestGuess) })
-    : formatFrameRate(video.frameRate.bestGuess)
+    : formatFrameRate(video.frameRate.bestGuess, 'alone')
 
   const rateNotes: string[] = []
   if (video.isVariableFrameRate) rateNotes.push(source.variesNote)
@@ -127,15 +132,15 @@ export function buildRows(report: SourceReport): Row[] {
   if (Math.abs(video.conform.frameDeltaRatio) > 0.1) rateNotes.push(source.outputRate)
 
   const rows: Row[] = [
-    { term: source.rows.duration, detail: formatDuration(report.durationSeconds) },
+    { term: source.rows.duration, detail: formatDuration(report.durationSeconds, 'alone') },
     {
       term: source.rows.videoFormat,
-      detail: formatCodec(video.codec),
+      detail: formatCodec(video.codec, 'alone'),
       // The verdict below says what to do about it, in view (VH-60). This is
       // the fact behind that verdict, for whoever opens the list.
       ...(video.canDecode ? {} : { note: source.cannotDecodeVideo }),
     },
-    { term: source.rows.fileSize, detail: formatFileSize(report.fileSizeBytes) },
+    { term: source.rows.fileSize, detail: formatFileSize(report.fileSizeBytes, 'alone') },
     {
       term: source.rows.resolution,
       detail: formatResolution(video.displayWidth, video.displayHeight),
@@ -152,7 +157,7 @@ export function buildRows(report: SourceReport): Row[] {
     rows.push(
       {
         term: source.rows.soundFormat,
-        detail: formatCodec(audio.codec),
+        detail: formatCodec(audio.codec, 'alone'),
         ...(audio.canDecode ? {} : { note: source.cannotDecodeAudio }),
       },
       { term: source.rows.soundChannels, detail: formatChannels(audio.channelCount) },

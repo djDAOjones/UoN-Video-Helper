@@ -799,10 +799,10 @@ export const enGB = {
     /** Word marks, because status must never be carried by colour alone. */
     marks: { pass: 'OK', fail: 'No', warn: '!', pending: '…' },
     rows: {
-      secure: 'Secure connection (needed for storage access)',
-      webcodecs: 'Video processing in the browser (WebCodecs)',
-      h264: 'Video format the tool makes (H.264)',
-      aac: 'Audio format the tool makes (AAC)',
+      secure: 'Secure connection',
+      webcodecs: 'Video processing (WebCodecs)',
+      h264: 'Output video format (H.264)',
+      aac: 'Output audio format (AAC)',
       opfs: 'Private working storage',
       worker: 'Background processing',
     },
@@ -970,6 +970,11 @@ export const enGB = {
     unknown: 'unknown',
     lessThanASecond: 'less than a second',
     fewSeconds: 'a few seconds',
+    /** The same words as a Video properties row's whole value, not inside a sentence (VH-186). */
+    alone: {
+      unknown: 'Unknown',
+      lessThanASecond: 'Less than a second',
+    },
     frameRate: '{rate} frames a second',
     /** Width and height arrive as plain digits, never grouped. */
     resolution: '{width} × {height}',

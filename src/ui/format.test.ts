@@ -46,6 +46,17 @@ describe('formatDuration', () => {
     expect(formatDuration(Number.NaN)).toBe('unknown')
     expect(formatDuration(-5)).toBe('unknown')
   })
+
+  it('starts with a capital alone, as every other value does, and not in a sentence (VH-186)', () => {
+    expect(formatDuration(Number.NaN, 'alone')).toBe('Unknown')
+    expect(formatDuration(0.4, 'alone')).toBe('Less than a second')
+    expect(formatDuration(0.4, 'in-sentence')).toBe('less than a second')
+    expect(formatDuration(90, 'alone')).toBe(formatDuration(90))
+    expect(formatFileSize(Number.NaN, 'alone')).toBe('Unknown')
+    expect(formatFrameRate(0, 'alone')).toBe('Unknown')
+    expect(formatCodec(null, 'alone')).toBe('Unknown')
+    expect(formatCodec('avc', 'alone')).toBe('H.264')
+  })
 })
 
 describe('formatApproximateDuration (VH-109)', () => {

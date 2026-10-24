@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-24 — VH-186 — The System check's labels shortened, a fact not read said with a capital alone, the unchecked caption warning completed
+
+**Decision:** The four System check labels take the sheet's B1 words; Video properties says a fact it could not read as "Unknown" or "Less than a second", from new keys `format.alone.*`, and every sentence keeps the lower-case form; the unchecked caption warning goes on with the scanned one's caption passage. A trim handle's spoken place stays lower-case beside "the beginning" and "the end".
+
+**Rationale:** The sheet's B1 to B3, approved by the owner. The four format helpers take an optional `Placement` (default in a sentence), and only `buildRows` passes `'alone'`; every call site is listed in `reviews/2026-10-24/vh186-words-2026-10-24.md`. The build's check of `estimateWords` found a non-finite estimate would say "about unknown", so it now says the existing sentence without a time. The Chinese and Malay are the agent's drafts, marked in the filled sheet. At 320 px the English labels take 2, 3, 2 and 2 lines, from 4, 4, 3 and 3. 72 Chrome cases pass. Codex astra: "Commit after the musts below"; its musts, `formatApproximateDuration` in the call-site list and this close, are done, and two comments that named the handles were corrected. The worker row's break inside its words at 320 px is a layout defect, left as VH-186.1.
+
+**Supersedes:** none
+
+**Deferred:** VH-187
+
 ## 2026-10-24 — VH-185 — A kept sound shorter than the meter's 400 ms block is no sound: a silent job, said before Create
 
 **Decision:** A trimmed part whose decoded sound is shorter than `BLOCK_SECONDS` (now exported from `src/audio/loudness.ts`) is a silent keep: pre-flight shows the existing "This video has no audio" and the job runs with no audio track, so the output check no longer refuses it after the encode. Untrimmed files are out of scope, unchanged, as wish line VH-185.1.
@@ -529,40 +539,3 @@ Each sentence was read against the shipped code: `ends-early.ts` and `ENDS_EARLY
 **Supersedes:** none
 
 **Deferred:** none
-
-## 2026-10-22 — PLAN-6 — The public release: 0.2.0 on Xerte, Phase 5 then Phase 6, the feedback form beside what exists
-
-**Decision:** the backlog's Current milestone is now the public release, 0.2.0, a release before v1. It is Phase 5 as approved, then Phase 6: VH-160 (the feedback form link), VH-137 (the statement's review), VH-162 (the release cut) and VH-14 (Xerte live). Xerte is the public home, GitHub Pages stays as the unadvertised preview, and the form replaces nothing. These are the owner's answers in chat on 2026-10-22. Person checks, translations, the device envelope and the limits follow the release and do not hold it.
-
-**Rationale:** The owner's answers in chat on 2026-10-22, to four questions:
-
-- Home: "Xerte; Pages stays as preview" — Xerte is the advertised address, and Pages keeps publishing from `main` with no infrastructure change. This answers VH-14's open question, whether Pages stays up once Xerte is live.
-- Version: "Before v1, 0.2.0" — the release ships once Phase 5, the form link and the statement review ship. Spec §13 is not claimed: criterion 10's walk (the Disability Support Services colleagues) and criterion 1's EchoVideo upload (VH-70) follow. The machine-translation note and "partially compliant" stay true.
-- Form: "Replaces nothing" — Send feedback stays for problem reports, because its email carries the build and recent log lines. The Creators team and learning content team links stay for help. The form is one footer link under Send feedback, not a control, because the owner wants the page simple.
-- Handover: "I think it has finished but I'm not sure" — the chat that claimed the 09:06 UTC end, "VH-150 #1 · 10:06", had been idle since 09:11 UTC, with no commit and a clean tree at `c441dbb`, so this session wrote.
-
-How every open line was sorted:
-
-- **In the release:**
-  - Phase 5, VH-150 to VH-159, unchanged in order, with VH-141.1's approval inside VH-150.
-  - VH-160, new.
-  - VH-137, because a public statement must not contradict itself. Its review absorbs VH-138.2 and VH-143.2.
-  - VH-162, new.
-  - VH-14, its offline-cache clause split off to VH-161.
-- **After the release (Next):** VH-13 (blocked on VH-M2), VH-161, VH-17 and VH-113, the last two the owner's.
-- **Icebox:** unchanged.
-- **Owner-only, not gating the release:**
-  - VH-M2, VH-M4, VH-70 and INTAKE.2;
-  - the person checks, VH-105.1, VH-122.1, VH-127.1, VH-128.1, VH-135.1, VH-136.1, VH-138.4, VH-139.2, VH-139.3, VH-141.2 and VH-148.2, which go to the Disability Support Services colleagues;
-  - the translations, VH-105.2 and VH-143.4, which go to the campus colleagues.
-- **Kept on the wish list for after the release:**
-  - INTAKE.1 and INTAKE.3 to INTAKE.7, VH-138.5, VH-139.5 and VH-139.6;
-  - the infrastructure the owner deferred: INTAKE.8, V3-HARNESS.1, V31-UPGRADE.1, VH-116.1 and VH-147.1.
-
-Spec §9.2 and §11 name the email as the one feedback route. VH-160 drafts that correction as a wish line, because `docs/` is the owner's. The empty Band 3 and Band 6 headings are gone, with VH-17 and VH-113 now in Next.
-
-**Supersedes:** none
-
-**Items:** VH-160, VH-137, VH-162, VH-14
-
-**Deferred:** VH-161, VH-13, VH-17, VH-113

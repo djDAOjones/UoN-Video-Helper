@@ -738,10 +738,10 @@ export const msMY: Messages = {
       pending: '…',
     },
     rows: {
-      secure: 'Sambungan selamat (diperlukan untuk akses storan)',
-      webcodecs: 'Pemprosesan video dalam pelayar (WebCodecs)',
-      h264: 'Format video yang dibuat oleh alat ini (H.264)',
-      aac: 'Format audio yang dihasilkan oleh alat (AAC)',
+      secure: 'Sambungan selamat',
+      webcodecs: 'Pemprosesan video (WebCodecs)',
+      h264: 'Format video keluaran (H.264)',
+      aac: 'Format audio keluaran (AAC)',
       opfs: 'Storan kerja persendirian',
       worker: 'Pemprosesan latar belakang',
     },
@@ -883,6 +883,10 @@ export const msMY: Messages = {
     unknown: 'tidak diketahui',
     lessThanASecond: 'kurang daripada satu saat',
     fewSeconds: 'beberapa saat',
+    alone: {
+      unknown: 'Tidak diketahui',
+      lessThanASecond: 'Kurang daripada satu saat',
+    },
     frameRate: '{rate} bingkai sesaat',
     resolution: '{width} × {height}',
     channels: {
