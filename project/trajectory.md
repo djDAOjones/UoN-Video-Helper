@@ -21,6 +21,9 @@
 - VH-180 — a true frame-rate note: one neutral sentence naming no rate, true conformed up or down under both presets, in three languages; the call reads a string; 150 records unchanged, V-18 unmoved; Codex astra "Commit" (2026-10-24) — see decisions
 - VH-181 — one name for step 4: "Closing graphics", 结尾图形 and "Grafik penutup", the noun its lines use, spec §6 to match; 351 records unchanged, V-18 unmoved; Codex astra "Commit after the musts below", the must recorded (2026-10-24) — see decisions
 - VH-176 — the second pass verified whole: the stage rule held by VH-178 to VH-181; the after-run, 699 priority records and 162 fix records, no regression, every change explained; Codex astra "Close" (2026-10-24) — see decisions
+- VH-177 — Phase 7 closed: the eleven items before it reconciled against PLAN-7, the Disposition table final, six notes for VH-137's review, the person checklist with what each check settles, five wish lines, none retired; VH-162's Phase 7 block lifted (2026-10-24) — see decisions
+- RECALL — 7/8 (2026-10-24) — scores: 2,2,2,1 — local — see decisions
+- RECALL — 8/8 (2026-10-24) — scores: 2,2,2,2 — local — see decisions
 
 ## Phase 6 — the public release: the feedback form, the statement, the cut, Xerte
 

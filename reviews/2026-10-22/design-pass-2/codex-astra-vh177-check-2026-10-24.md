@@ -1,0 +1,20 @@
+<!-- markdownlint-disable -->
+<!-- Codex astra (codex exec -m gpt-6-astra -s read-only), check of VH-177 (the Phase 7 close), 2026-10-24, at main 5a5b3df with the working-tree diff; brief: codex-astra-vh177-brief-2026-10-24.md. The reply, verbatim, each `](` written `]\(` so docs:links passes. -->
+
+Two record corrections are needed.
+
+1. **must — Correct recall’s temporal baseline.** Before these edits, VH-177 remained open in Phase 7; HEAD had shipped VH-176. VH-162 was the prospective successor after closure, still subject to the owner’s call. Answer 4 conflates those positions, so the stated pre-edit **8/8** needs correction or explicit qualification. Preserve the original attempt and record any recheck separately, as the verb requires. Answers 1–3 are supported; the `local` label is correct. [Recall answers]\(</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/project/decisions.md:25>)
+
+2. **must — Narrow task H’s claimed outcome.** Reviewing step 4, the frame-rate sentence, two closing-card terms and the introduction cannot establish that an entire language can leave `MACHINE_TRANSLATED`. VH-105.2 requires checking that language on the live page and applying corrections through the sheet. Say H supplies corrections towards VH-105.2; removal of the language-wide limitation requires the broader review. [Checklist row H]\(</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-22/design-pass-2/person-checklist-2026-10-23.md:130>)
+
+3. **may — Make reconciliation’s count precise.** All **eleven predecessors** have commits, trajectory entries, closed/shipped Nows and no backlog lines; VH-170 is accounted for by `eae49ea`. VH-177 is this pending close, making **twelve PLAN-7 items overall**. Distinguish those counts in the heading, rationale and trajectory rather than claiming all twelve already have commits. No item was silently dropped. [Close decision]\(</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/project/decisions.md:21>)
+
+4. **may — Retain the dispositions and record treatment.** All ten findings have a final disposition with evidence or an accepted limitation and follow-up. UI-STANDARDS contains the changed rules; its larger-font gap is captured by VH-177.5. VH-177.1–.4 draft the specification changes without touching `docs/`; VH-137 gains Notes only. Retiring none of VH-150.2, VH-150.3 and VH-153.1 is justified: person evidence and identified matrix cells remain outstanding. The manifest contains **641 unique unrun keys**.
+
+5. **may — Tighten the remaining checklist mappings.** The explicit refusal to claim criterion 10 or full conformance is sound. Describe A and C as contributing the combinations and states actually exercised: A permits either screen reader, while C’s listed tasks do not cover every state or all feedback failures. State explicitly that VH-M4’s observed staff sessions and the wider GUI judgement remain outstanding. [Owner mapping]\(</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-22/design-pass-2/person-checklist-2026-10-23.md:115>)
+
+6. **may — Keep the Phase 6 handoff.** Phase 7 is CLOSED and Phase 6 remains open. VH-162’s `[!]` reflects its existing Now and preserves the owner’s timing decision; it is not a re-scope. Naming it as the next agent item, conditional on that decision, has a recorded reason.
+
+7. **may — Shape and validation are sound.** The Decision line supplies the closure basis; Deferred contains valid target IDs. Trajectory entries have the required form and position. VH-144’s archive move is verbatim. I ran `node tools/check.mjs`: **0 failures, 0 warnings**; documentation lint, link checking and `git diff --check` also pass. I did not rerun the full gate, whose build stage requires temporary writes forbidden by this sandbox; the writer must run it on the final candidate.
+
+Close after the musts below

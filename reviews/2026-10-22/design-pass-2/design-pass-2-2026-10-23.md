@@ -695,15 +695,17 @@ rank 3, where the draft had 8 at rank 2 and 2 at rank 3.
 
 ## Disposition
 
+Final at Phase 7's close (VH-177, 24 October): every finding has its item and evidence, or a wish line and a reason.
+
 | Finding | Rank | Disposition |
 | --- | --- | --- |
-| V-46 | 2 | VH-178: fixed; each case's successor reached in three languages and four colour modes, verified in [`vh178-focus-2026-10-23.md`](evidence/measurements/vh178-focus-2026-10-23.md) |
-| V-40 | 2 | VH-179: fixed; the ring drawn whole in room inside the input, CanvasText under forced colours, the button unmoved, verified in [`vh179-rings-2026-10-23.md`](evidence/measurements/vh179-rings-2026-10-23.md) |
-| V-41 | 2 | VH-179: fixed; the disc sized in px tokens, both rings pass at the 32 px font, verified in [`vh179-rings-2026-10-23.md`](evidence/measurements/vh179-rings-2026-10-23.md) |
-| V-42 | 2 | VH-179: fixed; the band's ring inside the focused face in HighlightText under forced colours, verified in [`vh179-rings-2026-10-23.md`](evidence/measurements/vh179-rings-2026-10-23.md) |
-| V-43 | 2 | VH-168's limitation extended to 2.5.3, on the owner's standing instruction; wording to VH-137 (VH-175.2) |
-| V-47 | 2 | VH-180: fixed; one neutral sentence that names no rate, true conformed up and down under both presets, in three languages, verified in [`vh180-words-2026-10-23.md`](evidence/measurements/vh180-words-2026-10-23.md); ranked 2 on the owner's standing instruction |
-| V-45 | 2 | VH-181, on the owner's ruling (VH-175.3): fixed; "Closing graphics" as the step's one name, the noun its lines use in three languages, spec §6 to match, verified in [`vh181-name-2026-10-23.md`](evidence/measurements/vh181-name-2026-10-23.md) |
-| V-18 | 2 | Accepted on the owner's standing instruction; a shorter native wording is wish line VH-175.4 (VH-175.1 retired, PLAN-7, 2026-10-23); unmoved through VH-179 to VH-181 and in VH-176's after-run |
-| V-33 | 2 | VH-179: fixed; the feedback message capped at the measure, verified in [`vh179-rings-2026-10-23.md`](evidence/measurements/vh179-rings-2026-10-23.md); the mixed-line count recorded in UI-STANDARDS |
-| V-44 | 3 | VH-179, on the owner's ruling (VH-174.1): a border-only hover in HighlightText under forced colours, verified in [`vh179-rings-2026-10-23.md`](evidence/measurements/vh179-rings-2026-10-23.md) |
+| V-46 | 2 | VH-178: fixed; each case's successor reached in three languages and four colour modes, verified in [`vh178-focus-2026-10-23.md`](evidence/measurements/vh178-focus-2026-10-23.md); held in VH-176's [after-run](evidence/measurements/after-run-2026-10-24.md); the spec's focus line is wish line VH-177.3 |
+| V-40 | 2 | VH-179: fixed; the ring drawn whole in room inside the input, CanvasText under forced colours, the button unmoved, verified in [`vh179-rings-2026-10-23.md`](evidence/measurements/vh179-rings-2026-10-23.md); held in VH-176's [after-run](evidence/measurements/after-run-2026-10-24.md) |
+| V-41 | 2 | VH-179: fixed; the disc sized in px tokens, both rings pass at the 32 px font, verified in [`vh179-rings-2026-10-23.md`](evidence/measurements/vh179-rings-2026-10-23.md); held in VH-176's [after-run](evidence/measurements/after-run-2026-10-24.md); the spec's person-only line for the thumbs is wish line VH-177.4 |
+| V-42 | 2 | VH-179: fixed; the band's ring inside the focused face in HighlightText under forced colours, verified in [`vh179-rings-2026-10-23.md`](evidence/measurements/vh179-rings-2026-10-23.md); held in VH-176's [after-run](evidence/measurements/after-run-2026-10-24.md) |
+| V-43 | 2 | VH-168's limitation extended to 2.5.3, on the owner's standing instruction (PLAN-7, 2026-10-23); the statement's wording waits for VH-137's review as wish line VH-175.2, drafted in VH-137's Notes, and the spec's exception is wish line VH-177.1 |
+| V-47 | 2 | VH-180: fixed; one neutral sentence that names no rate, true conformed up and down under both presets, in three languages, verified in [`vh180-words-2026-10-23.md`](evidence/measurements/vh180-words-2026-10-23.md); ranked 2 on the owner's standing instruction; held in VH-176's [after-run](evidence/measurements/after-run-2026-10-24.md) |
+| V-45 | 2 | VH-181, on the owner's ruling (VH-175.3): fixed; "Closing graphics" as the step's one name, the noun its lines use in three languages, spec §6 to match, verified in [`vh181-name-2026-10-23.md`](evidence/measurements/vh181-name-2026-10-23.md); held in VH-176's [after-run](evidence/measurements/after-run-2026-10-24.md) |
+| V-18 | 2 | Accepted on the owner's standing instruction; a shorter native wording is wish line VH-175.4 (VH-175.1 retired, PLAN-7, 2026-10-23); unmoved through VH-179 to VH-181 and in VH-176's [after-run](evidence/measurements/after-run-2026-10-24.md) |
+| V-33 | 2 | VH-179: fixed; the feedback message capped at the measure, verified in [`vh179-rings-2026-10-23.md`](evidence/measurements/vh179-rings-2026-10-23.md); the mixed-line count recorded in UI-STANDARDS; held in VH-176's [after-run](evidence/measurements/after-run-2026-10-24.md); the spec's CJK count is wish line VH-177.2 |
+| V-44 | 3 | VH-179, on the owner's ruling (VH-174.1): a border-only hover in HighlightText under forced colours, verified in [`vh179-rings-2026-10-23.md`](evidence/measurements/vh179-rings-2026-10-23.md); held in VH-176's [after-run](evidence/measurements/after-run-2026-10-24.md) |
