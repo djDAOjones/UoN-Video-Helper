@@ -1053,10 +1053,12 @@ details[open] > .disclosure-summary::before {
   padding-inline: 0;
 }
 
+/* Help, not a notification: a hairline box in the neutral edge, never the
+   status rail, so it never reads as a warning (VH-184). */
 .toggletip {
   margin: var(--spacing-03) 0 0;
   padding: var(--spacing-04) var(--spacing-05);
-  border-left: var(--rail-width) solid var(--border-strong);
+  border: var(--border-width) solid var(--border-subtle);
   background: var(--layer-02);
 }
 

@@ -209,6 +209,7 @@ import {
   trimSummary,
   type TrimProblem,
 } from './ui/trim'
+import { escapeFocusesButton, focusClosesTip } from './ui/toggletip'
 import { createPreviewSeeker } from './ui/preview-seek'
 import type { PipelineStage } from './media/pipeline'
 import type { WorkerOutbound, WorkerRequest } from './workers/protocol'
@@ -706,9 +707,10 @@ videoLanguageChoice.addEventListener('change', (event) => {
  * The "?" beside "Animation onset": a toggletip.
  *
  * A button that discloses text, so it works by click, Enter and Space and
- * never by hover alone. Focus stays on the button; Escape or a click anywhere
- * else closes it. The text sits in the page flow rather than floating, so it
- * can never cover the control it explains or the focus ring beside it.
+ * never by hover alone. Focus stays on the button; Escape, focus moving on or
+ * a click anywhere else closes it (`ui/toggletip.ts`). The text sits in the
+ * page flow rather than floating, so it can never cover the control it
+ * explains or the focus ring beside it.
  */
 function setOnsetHelp(open: boolean): void {
   onsetHelp.hidden = !open
@@ -720,7 +722,15 @@ onsetHelpButton.addEventListener('click', () =>
 )
 
 document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape' && !onsetHelp.hidden) setOnsetHelp(false)
+  if (event.key !== 'Escape' || onsetHelp.hidden) return
+  const back = escapeFocusesButton(document.activeElement, document.body, onsetHelpButton, onsetHelp)
+  setOnsetHelp(false)
+  if (back) onsetHelpButton.focus()
+})
+
+// Focus moving on closes it, so Tab never leaves it over what comes next (VH-184).
+document.addEventListener('focusin', (event) => {
+  if (!onsetHelp.hidden && focusClosesTip(event.target, onsetHelpButton, onsetHelp)) setOnsetHelp(false)
 })
 
 document.addEventListener('click', (event) => {

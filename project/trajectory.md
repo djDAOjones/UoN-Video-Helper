@@ -11,6 +11,7 @@
 ## Phase 8 — the owner's UX pass: the backlog and wish list, thirteen pieces
 
 - VH-183 — the trim's Page step is max(10 s, 1% of the video), from config; arrows, Home, End and the spoken value unchanged; 72 Chrome cases in three languages, three widths and four colour modes as expected; Codex astra "Commit after the musts below", the must the close (2026-10-24) — see decisions
+- VH-184 — the onset toggletip closes when focus moves on, Escape returns focus to its "?", and it is edged in 1 px `--border-subtle`, not the notification's rail; a before on the base, 36 Chrome cases after; Codex astra "Commit after the musts below", the must the close (2026-10-24) — see decisions
 
 ## Phase 7 — a second design, UX and accessibility pass, with Codex astra as partner, before the cut
 

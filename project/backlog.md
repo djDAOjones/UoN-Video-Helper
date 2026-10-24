@@ -37,7 +37,6 @@ The public release, 0.2.0, on Xerte (PLAN-6).
 
 ### Phase 8 — the owner's UX pass: the backlog and wish list, thirteen pieces
 
-- [ ] VH-184 — The onset toggletip closes on Tab; its rail stops looking like a warning's — since 2026-10-24
 - [ ] VH-185 — A kept sound shorter than the meter's block is caught before Create, as no sound — since 2026-10-24
 - [ ] VH-186 — Small words: System check labels, standalone values, the unscanned caption warning — since 2026-10-24
 - [ ] VH-187 — The top of the page: plain promises, the browser note only when a check fails — since 2026-10-24
