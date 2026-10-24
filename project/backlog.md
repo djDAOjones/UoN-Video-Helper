@@ -46,6 +46,7 @@ After the release.
 
 - [ ] VH-13 — Published limits copy — since 2026-08-24 — blocked: VH-M2 (the measured envelope) and VH-31's estimate
 - [ ] VH-161 — Offline after first load: the cache strategy spec §11 asks for, split from VH-14 — since 2026-10-22 — (from: PLAN-6, 2026-10-22)
+- [!] VH-182 — The footer's contact routes grouped by need: help, a problem, an opinion; Send feedback renamed Report a problem — since 2026-10-24 — blocked: the owner's two answers, students and the Teams link, and where problem reports go
 - [!] VH-17 — Evaluate `fastStart: 'reserve'` for the smaller preset — since 2026-10-01 — blocked: the owner's SharePoint upload test
 - [!] VH-113 — The phone path — since 2026-10-01 — blocked: the owner's walk on a real Android phone and an iPhone — a canon [maintainer] item
 
