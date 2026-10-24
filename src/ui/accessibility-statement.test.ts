@@ -15,6 +15,7 @@ import {
   EQUALITY_ADVISORY_SERVICE_URL,
   STATEMENT_NEXT_REVIEW_DATE,
   STATEMENT_PREPARED_DATE,
+  STATEMENT_UPDATED_DATE,
   WAVE_CHECK_DATE,
 } from '../config/accessibility'
 import { FEEDBACK_ADDRESS } from '../config/feedback'
@@ -74,7 +75,7 @@ describe('messageParts', () => {
         [words.contact.text, ['address']],
         [words.enforcement.text, ['service']],
         [words.testing.wave, ['date']],
-        [words.about.dates, ['date', 'reviewDate']],
+        [words.about.dates, ['date', 'updatedDate', 'reviewDate']],
       ] as const
       for (const [message, names] of sentences) {
         const slots = messageParts(
@@ -107,11 +108,17 @@ describe('the statement’s dates (VH-130)', () => {
     expect(dateFormatter('not a locale')(WAVE_CHECK_DATE)).toBe(WAVE_CHECK_DATE)
   })
 
-  it('holds real dates, with the next review after the statement was written', () => {
-    for (const date of [STATEMENT_PREPARED_DATE, STATEMENT_NEXT_REVIEW_DATE, WAVE_CHECK_DATE]) {
+  it('holds real dates, updated after it was written and reviewed after that', () => {
+    for (const date of [
+      STATEMENT_PREPARED_DATE,
+      STATEMENT_UPDATED_DATE,
+      STATEMENT_NEXT_REVIEW_DATE,
+      WAVE_CHECK_DATE,
+    ]) {
       expect(dateFormatter('en-GB')(date), date).not.toBe(date)
     }
-    expect(STATEMENT_NEXT_REVIEW_DATE > STATEMENT_PREPARED_DATE).toBe(true)
+    expect(STATEMENT_UPDATED_DATE >= STATEMENT_PREPARED_DATE).toBe(true)
+    expect(STATEMENT_NEXT_REVIEW_DATE > STATEMENT_UPDATED_DATE).toBe(true)
   })
 })
 

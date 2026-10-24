@@ -13,6 +13,13 @@ import { FEEDBACK_ADDRESS } from './feedback'
 /** When the statement was written and reviewed by the owner: 2026-10-18, the day it was asked for and answered. */
 export const STATEMENT_PREPARED_DATE = '2026-10-18'
 
+/**
+ * When it was last updated: 2026-10-24, the day of the 0.2.0 cut (VH-162),
+ * for which the owner asked it be brought up to date — "update accessibility
+ * statement as appropiate. another review in november".
+ */
+export const STATEMENT_UPDATED_DATE = '2026-10-24'
+
 /** When it is reviewed again: one month on, as the owner asked on 2026-10-18. */
 export const STATEMENT_NEXT_REVIEW_DATE = '2026-11-18'
 

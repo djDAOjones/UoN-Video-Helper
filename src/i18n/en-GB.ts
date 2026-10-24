@@ -877,13 +877,14 @@ export const enGB = {
     limits: {
       heading: 'How accessible this tool is',
       intro: 'We know some parts are not fully accessible:',
-      /** The recorded limitations: Chrome only, the machine translations, the Chinese font, the preview (spec 9.3), the kept short forms. */
+      /** The recorded limitations: Chrome only, the machine translations, the Chinese font, the preview (spec 9.3), the kept short forms, the browser's own file chooser (VH-168, V-43). */
       items: [
         'It is built for Google Chrome on a computer. In other browsers, it may not work.',
         'The Chinese and Malay pages were translated by a computer. We are asking colleagues who speak each language to check them, so some words may be wrong until they do.',
         'Chinese text uses your computer’s own Chinese font, so it may look different from one computer to another.',
         'The preview plays your own video as it is. Its captions, audio description and other alternatives, and whether it flashes, depend on your recording.',
         'Some short forms are not spelled out. UoN stands for University of Nottingham. The others are file sizes, such as MB and GB, and video format names, such as H.264 and AAC.',
+        'The Choose File button belongs to your browser. On the Chinese and Malay pages, its words are in your browser’s language. To use it by voice, say the step’s name, “Choose a video”.',
       ],
     },
     contact: {
@@ -908,6 +909,8 @@ export const enGB = {
         'Each time the code changes, automated tests check the contrast of the text against its background, and the reading level of the English words.',
       manual:
         'We have also checked it by hand in Chrome, in all three languages, at computer and phone widths, while building it.',
+      /** The second design pass's automated walk (VH-172, VH-176): its main states, not every cell, and not a person's test. */
+      walk: 'In October 2026, an automated check in Chrome went through the page’s main states in all three languages, at computer and phone widths, in light and dark colours, in Chrome’s imitation of high contrast mode, and with larger text. This was not a test by a person.',
     },
     plans: {
       heading: 'What we plan to test next',
@@ -930,7 +933,7 @@ export const enGB = {
     about: {
       heading: 'About this statement',
       dates:
-        'This statement was written on {date}. Joe Bell reviewed it. We will review it again by {reviewDate}.',
+        'This statement was written on {date} and updated on {updatedDate}. Joe Bell reviewed it. We will review it again by {reviewDate}.',
     },
   },
 

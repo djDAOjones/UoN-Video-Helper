@@ -809,6 +809,7 @@ export const msMY: Messages = {
         'Teks bahasa Cina menggunakan fon Cina pada komputer anda sendiri, jadi paparannya mungkin berbeza antara satu komputer dengan komputer yang lain.',
         'Pratonton memainkan video anda sendiri seadanya. Kapsyennya, perihalan audio dan alternatif lain, serta sama ada ia berkelip, bergantung pada rakaman anda.',
         'Sesetengah singkatan tidak dieja penuh. UoN ialah singkatan bagi University of Nottingham. Singkatan lain ialah unit saiz fail, seperti MB dan GB, dan nama format video, seperti H.264 dan AAC.',
+        'Butang Pilih Fail ialah milik pelayar anda. Pada halaman bahasa Cina dan Bahasa Malaysia, perkataannya dalam bahasa pelayar anda. Untuk menggunakannya dengan suara, sebut nama langkah itu, “Pilih video”.',
       ],
     },
     contact: {
@@ -832,6 +833,7 @@ export const msMY: Messages = {
         'Setiap kali kod berubah, ujian automatik menyemak kontras teks dengan latar belakangnya, serta tahap kesukaran bacaan perkataan bahasa Inggeris.',
       manual:
         'Kami juga telah menyemaknya secara manual dalam Chrome, dalam ketiga-tiga bahasa, pada lebar skrin komputer dan telefon, semasa membinanya.',
+      walk: 'Pada Oktober 2026, satu semakan automatik dalam Chrome meliputi keadaan utama halaman dalam ketiga-tiga bahasa, pada lebar skrin komputer dan telefon, dalam warna cerah dan gelap, dalam mod kontras tinggi tiruan Chrome, dan dengan teks yang lebih besar. Ini bukan ujian oleh seseorang.',
     },
     plans: {
       heading: 'Ujian yang dirancang seterusnya',
@@ -852,7 +854,7 @@ export const msMY: Messages = {
     about: {
       heading: 'Mengenai kenyataan ini',
       dates:
-        'Kenyataan ini ditulis pada {date} dan disemak oleh Joe Bell. Kami akan mengkajinya semula selewat-lewatnya pada {reviewDate}.',
+        'Kenyataan ini ditulis pada {date} dan dikemas kini pada {updatedDate}. Joe Bell telah menyemaknya. Kami akan mengkajinya semula selewat-lewatnya pada {reviewDate}.',
     },
   },
   footer: {

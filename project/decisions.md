@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-24 — VH-137 — The statement brought up to date for 0.2.0: the file chooser's limitation, October's automated check, an updated date; the November review stays
+
+**Decision:** The statement gains, in all three languages, a sixth limitation (the browser's Choose File button), a line under How we tested for October's automated check of "the page's main states", and "updated on" 24 October. "Partially compliant", the tests not yet run and the 18 November review stand, so VH-137 stays open for that review.
+
+**Rationale:** The owner, in a separate chat on 2026-10-24: "lets release 0.2.0 and update accessibility statement as appropiate. another review in november", and on the drafted wording, "all reccomendations approved"; relayed by the orchestrator with "cut now. here is some optional direction, your call if pushback:". The words are the approved drafts B1 to B3 with one change, the orchestrator's on that leave: the draft's "went through every part of the page" became "went through the page's main states", because VH-172 ran a prioritised matrix (699 records whole, 821 cells unrun) and VH-172.1 keeps 641 cells never re-read, so "every part" overstated what was checked. B1 pays wish line VH-175.2 (V-43, 2.5.3), which retires. `STATEMENT_UPDATED_DATE` is a new date in `src/config/accessibility.ts`, written by `Intl` like the others; `STATEMENT_PREPARED_DATE` and `STATEMENT_NEXT_REVIEW_DATE` are unchanged. The Chinese and Malay are the agent's drafts, through the filled sheet and `scripts/strings-table.mjs`; the machine-translation limitation covers them. No control or element is added beyond a list item and a paragraph in the statement.
+
+**Supersedes:** none
+
+**Deferred:** VH-137
+
 ## 2026-10-24 — VH-177 — Phase 7 closes: eleven items shipped against PLAN-7 and the close itself; VH-162's Phase 7 block lifted, and VH-162 is next on the owner's call
 
 **Decision:** Phase 7 closes: VH-170 to VH-176 and VH-178 to VH-181 have shipped, none moved, and VH-177 ships with this close. The Disposition table is final, VH-137 has six notes for the owner's review, and the person checklist says what each check settles. VH-162's Phase 7 block is lifted, and VH-162 is the next item. It waits on the owner's call: does 0.2.0 wait for VH-137's review on 18 November?
@@ -583,16 +593,6 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Decision:** Submission’s generated date and its complete caveat each wrap as one piece, while staff-typed dates keep ordinary breaks. The existing three templates and card words stay unchanged — the narrow renderer change requested by V-30, taken gateless.
 
 **Rationale:** CardRun can mark an indivisible phrase; Submission splits only its generated em-dash/full-width-bracket templates into date, original spacing and caveat. An unrecognised future template stays whole. Regression tests use all three actual language tables, prove separate whole date/note lines and refusal below their width, and retain staff-date wrapping. The walker’s cards scenario reports ALL PASS: 37 clips kept in reviews/2026-10-21/vh146-cards, every logged size at least 56 px per 1080 (28 pt at PowerPoint size), with 4K equivalence. The worst 4:3 Chinese card has 1 px/1080 spare, as logged; no floor or limit changed. Chrome’s 18 language/width/theme combinations also accept the Submission form. Standards: Carbon productive typography; Nielsen 2 and 4; WCAG 1.4.4/1.4.10 and the project’s card type floor; house conventions, renderer regression and browser spike. Existing VH-127/VH-128 wishes cover full-size human viewing and screen readers. Known sample and frozen-canon warnings keep their existing follow-ups.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-21 — VH-145 — Browser defaults meet the token system
-
-**Decision:** status spacing, legend padding, radio margins, select line height, fieldset shrinkage, dialog gutters and error-intro spacing are explicit; type roles name regular, semibold and bold, diagnostics name their monospace face, and identical rules are grouped. Taken gateless as the specified token-boundary repair, preserving existing type weights and colours.
-
-**Rationale:** The 700 heading role from VH-148 is reused; body 400 and emphasis 600 complete the roles. The monospace token keeps the existing platform face. Selects compute to 21 px line height, so no native exception is needed. The dialog overrides the browser’s max-width, fixing its 19 px phone gutter to 16 px. The status reserves one compact line (21 px), with zero bottom margin and the empty save reset preserved. Chrome captured 72 states across three languages, four widths and three themes, compared with a 24-state pre-change baseline and the design-pass evidence. Its spacing sweep leaves only structural automatic centring margins; no off-scale padding or gap remains. Tests retain the switcher’s equal reserved weight and reject literals or missing resets. Standards: Carbon productive spacing and type roles; WCAG 1.4.8, 1.4.10 and 2.5.5; Nielsen 4 and 8; house conventions, two token systems and category tests. Real zoom and Windows themes remain on existing audit wishes; known checker warnings keep their existing follow-ups.
 
 **Supersedes:** none
 

@@ -638,3 +638,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-21 — VH-145 — Browser defaults meet the token system
+
+**Decision:** status spacing, legend padding, radio margins, select line height, fieldset shrinkage, dialog gutters and error-intro spacing are explicit; type roles name regular, semibold and bold, diagnostics name their monospace face, and identical rules are grouped. Taken gateless as the specified token-boundary repair, preserving existing type weights and colours.
+
+**Rationale:** The 700 heading role from VH-148 is reused; body 400 and emphasis 600 complete the roles. The monospace token keeps the existing platform face. Selects compute to 21 px line height, so no native exception is needed. The dialog overrides the browser’s max-width, fixing its 19 px phone gutter to 16 px. The status reserves one compact line (21 px), with zero bottom margin and the empty save reset preserved. Chrome captured 72 states across three languages, four widths and three themes, compared with a 24-state pre-change baseline and the design-pass evidence. Its spacing sweep leaves only structural automatic centring margins; no off-scale padding or gap remains. Tests retain the switcher’s equal reserved weight and reject literals or missing resets. Standards: Carbon productive spacing and type roles; WCAG 1.4.8, 1.4.10 and 2.5.5; Nielsen 4 and 8; house conventions, two token systems and category tests. Real zoom and Windows themes remain on existing audit wishes; known checker warnings keep their existing follow-ups.
+
+**Supersedes:** none
+
+**Deferred:** none

@@ -267,6 +267,7 @@ const PLACEHOLDERS: Readonly<Record<string, string>> = {
   where: 'save.downloadIos or save.downloadOther',
   result: 'a count from systemCheck.results',
   date: 'a date the app writes in your language, like "18 October 2026"',
+  updatedDate: 'the date the statement was last updated, written by the app, like "24 October 2026"',
   reviewDate: 'the date of the next review, written by the app, like "18 November 2026"',
   service:
     "the advice service's name, from statement.enforcement.service, as a link to its website",
@@ -439,9 +440,11 @@ const NOTES: Readonly<Record<string, string>> = {
     'UoN Video Helper is the product name: use the same name as app.title. A formal statement: use a formal register throughout.',
   'statement.aim': 'Introduces the five lines that follow, which complete its last sentence.',
   ...listNotes('statement.abilities', enGB.statement.abilities, COMPLETES_ABLE_TO),
-  'statement.limits.intro': 'Introduces the five lines that follow.',
+  'statement.limits.intro': 'Introduces the six lines that follow.',
   'statement.limits.items.0': 'Keep the name Google Chrome as it is.',
   'statement.limits.items.1': '"Malay" is the language this page calls Bahasa Malaysia.',
+  'statement.limits.items.5':
+    'Choose File is the button the browser draws: give it the words your language’s Chrome shows on it. Quote steps.choose in the same words.',
   'statement.limits.items.4':
     'Keep UoN, MB, GB, H.264 and AAC as they are: these short forms are what the sentence is about. Keep University of Nottingham as app.title’s note gives it.',
   'statement.contact.text':
@@ -455,6 +458,7 @@ const NOTES: Readonly<Record<string, string>> = {
   'statement.testing.wave':
     'Keep the names WAVE and WebAIM as they are. The score is 10 out of 10.',
   'statement.testing.manual': 'Keep the name Chrome as it is.',
+  'statement.testing.walk': 'Keep the name Chrome as it is.',
   'statement.plans.intro':
     'Introduces the four lines that follow: the tests needed before the tool can be said to meet the guidelines in full.',
   ...listNotes('statement.plans.items', enGB.statement.plans.items, NEXT_TEST),

@@ -19,6 +19,7 @@ import {
   EQUALITY_ADVISORY_SERVICE_URL,
   STATEMENT_NEXT_REVIEW_DATE,
   STATEMENT_PREPARED_DATE,
+  STATEMENT_UPDATED_DATE,
   WAVE_CHECK_DATE,
 } from '../config/accessibility'
 import { locale, t } from '../i18n'
@@ -123,6 +124,7 @@ export function wireAccessibilityStatement(details: HTMLDetailsElement): Accessi
 
   const waveDay = dayElement(WAVE_CHECK_DATE)
   const preparedDay = dayElement(STATEMENT_PREPARED_DATE)
+  const updatedDay = dayElement(STATEMENT_UPDATED_DATE)
   const reviewDay = dayElement(STATEMENT_NEXT_REVIEW_DATE)
 
   const paint = (): void => {
@@ -131,11 +133,16 @@ export function wireAccessibilityStatement(details: HTMLDetailsElement): Accessi
     serviceLink.textContent = words.enforcement.service
     waveDay.textContent = writeDate(WAVE_CHECK_DATE)
     preparedDay.textContent = writeDate(STATEMENT_PREPARED_DATE)
+    updatedDay.textContent = writeDate(STATEMENT_UPDATED_DATE)
     reviewDay.textContent = writeDate(STATEMENT_NEXT_REVIEW_DATE)
     paintMessage(contact, words.contact.text, { address: contactLink })
     paintMessage(enforcement, words.enforcement.text, { service: serviceLink })
     paintMessage(wave, words.testing.wave, { date: waveDay })
-    paintMessage(about, words.about.dates, { date: preparedDay, reviewDate: reviewDay })
+    paintMessage(about, words.about.dates, {
+      date: preparedDay,
+      updatedDate: updatedDay,
+      reviewDate: reviewDay,
+    })
   }
 
   return { details, contactLink, paint }
