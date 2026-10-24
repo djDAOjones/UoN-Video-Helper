@@ -20,8 +20,8 @@ purpose-named outputs, nothing else.
 settles WebCodecs over ffmpeg.wasm, the one runtime dependency and the
 loudness targets, and none re-opens without new evidence. WCAG 2.2 AAA
 and Carbon productive design in our own code; the EBU Tech 3341 meter
-validation is an acceptance criterion. Live as an unadvertised pilot on
-GitHub Pages; the intended home is a UoN Xerte upload.
+validation is an acceptance criterion. Public on a UoN Xerte upload;
+GitHub Pages stays as the unadvertised preview from `main`.
 
 ## The specification set
 
@@ -83,9 +83,10 @@ reason WebCodecs was chosen over ffmpeg.wasm — see rationale §1.3). Must
 work offline after first load, except for branding assets, which are
 cached.
 
-Hosting is answered in principle (D5): a UoN-hosted web app. Who provisions
-it is open (VH-14); meanwhile the pilot runs on GitHub Pages and a flat Xerte
-package is uploaded by hand.
+Hosting is answered (D5, PLAN-6): the public home is a flat Xerte package on
+`xerte.nottingham.ac.uk`, which the owner uploads by hand from each release
+(`npm run package:xerte`). GitHub Pages stays up as the unadvertised preview,
+and every push to `main` updates it.
 
 ## Core features (v1)
 
@@ -174,7 +175,7 @@ answered and sit under its Answered section. What remains is small:
 | --- | --- | --- |
 | D2 | Branding durations | Settled by the masters — a 1.00 s onset and a 4.00 s tail — and parameterised, never hard-coded |
 | D3 | Boundary audio treatment | A 100 ms fade each side; the branding is silent |
-| D5 | Hosting | A UoN-hosted web app; who provisions it is open (VH-14) |
+| D5 | Hosting | Answered: Xerte is the public home, GitHub Pages the unadvertised preview (PLAN-6) |
 | D8 | Published limits | Wait on the measured device envelope (VH-M2) |
 
 The real closing masters shipped with VH-12: four styles, built into twelve

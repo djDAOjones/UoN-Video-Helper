@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-24 — VH-162 — The cut: 0.2.0 does not wait for VH-137's November review; Xerte is the public home, GitHub Pages the preview
+
+**Decision:** 0.2.0 is cut now, tagged `v0.2.0`, and its Xerte zip built from the tagged commit for the owner to upload (VH-14). The statement was brought up to date first (VH-137, `d926bd3`) and its 18 November review stays. The brief, the profile and D5 now say Xerte is the public home and GitHub Pages the unadvertised preview from `main`.
+
+**Rationale:** This answers the question VH-177's entry left with the owner. The owner, in a separate chat on 2026-10-24: "lets release 0.2.0 and update accessibility statement as appropiate. another review in november", and on the drafts, "all reccomendations approved"; relayed by the orchestrator with "cut now. here is some optional direction, your call if pushback:". The brief and profile are owner-signed, so their words are the owner's approved drafts A1 to A5, applied verbatim; D5 gains "Answered 2026-10-22 (PLAN-6)", the owner's call in PLAN-6. `package.json` and the lockfile's root take 0.2.0 through `npm version`, which touched nothing else; no dependency changed. 0.2.0 is a release before v1: spec §13 criterion 10 is a person's walk and criterion 1's EchoVideo upload is unconfirmed, and nothing on the page claims v1 or full conformance. DEV-INFRASTRUCTURE.md's Deployment and Xerte sections still call Xerte the intended home and D5 open; that is wish line VH-162.1, outside the approved wording. It supersedes PLAN-6 only in its timing condition, that the release ships once the statement review ships: the review now follows 0.2.0 (Codex astra's must).
+
+**Supersedes:** 2026-10-22 — PLAN-6 — The public release: 0.2.0 on Xerte, Phase 5 then Phase 6, the feedback form beside what exists
+
+**Deferred:** VH-14, VH-137
+
 ## 2026-10-24 — VH-137 — The statement brought up to date for 0.2.0: the file chooser's limitation, October's automated check, an updated date; the November review stays
 
 **Decision:** The statement gains, in all three languages, a sixth limitation (the browser's Choose File button), a line under How we tested for October's automated check of "the page's main states", and "updated on" 24 October. "Partially compliant", the tests not yet run and the 18 November review stand, so VH-137 stays open for that review.
@@ -583,16 +593,6 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Decision:** Phase 4 closes with VH-144, VH-145 and VH-146 shipped, reconciled against its Items list. The authorised run and its report are complete. No next phase is approved: VH-13 in Next remains blocked by VH-M2, so further implementation order needs owner direction.
 
 **Rationale:** VH-144 pays V-20/V-23, VH-145 V-19/V-25, and VH-146 V-30 without changing the card floor or words. Local recall before editing scored 8/8 (2,2,2,2): latest implementation closes VH-146/VH-145/VH-144/VH-142 are anchored by their close headings and Phase 4/3 trajectory; VH-144’s shared reason and field width provide the phase decision and why; wish-list/backlog locate human, spec and maintainer deferrals; the handoff’s six-step run and backlog’s blocked Next establish the absence of an approved next phase. This is local, not a fresh-session handoff. The report and changed translation-key list are in reviews/2026-10-21; the reserved writing review is explicitly captured as a wish line. Milestone audit again finds zero runtime and 14 development findings (10 high, 1 moderate, 3 low), covered by the existing V3-HARNESS audit wish. No dependencies changed. House conventions: milestone audit, complete ledger and retained verification evidence. Known missing-sample and frozen-canon warnings remain covered by their existing wishes. Taken gateless under the handoff; no second-model review or human acceptance is claimed.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-21 — VH-146 — Generated dates and caveats stay whole
-
-**Decision:** Submission’s generated date and its complete caveat each wrap as one piece, while staff-typed dates keep ordinary breaks. The existing three templates and card words stay unchanged — the narrow renderer change requested by V-30, taken gateless.
-
-**Rationale:** CardRun can mark an indivisible phrase; Submission splits only its generated em-dash/full-width-bracket templates into date, original spacing and caveat. An unrecognised future template stays whole. Regression tests use all three actual language tables, prove separate whole date/note lines and refusal below their width, and retain staff-date wrapping. The walker’s cards scenario reports ALL PASS: 37 clips kept in reviews/2026-10-21/vh146-cards, every logged size at least 56 px per 1080 (28 pt at PowerPoint size), with 4K equivalence. The worst 4:3 Chinese card has 1 px/1080 spare, as logged; no floor or limit changed. Chrome’s 18 language/width/theme combinations also accept the Submission form. Standards: Carbon productive typography; Nielsen 2 and 4; WCAG 1.4.4/1.4.10 and the project’s card type floor; house conventions, renderer regression and browser spike. Existing VH-127/VH-128 wishes cover full-size human viewing and screen readers. Known sample and frozen-canon warnings keep their existing follow-ups.
 
 **Supersedes:** none
 

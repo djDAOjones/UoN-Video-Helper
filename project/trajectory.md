@@ -35,6 +35,7 @@
 - VH-167 — one reading measure: running text of every size and language stops at 28rem, 448 px, where it stopped at four widths; the Chinese measure retired; the fact note and choice detail capped; the toggletip's paragraphs a blank line apart; counted in Chrome in three languages at 1280 and 375 px, at most 78 characters and 32 CJK glyphs a line (2026-10-22) — see decisions
 - VH-169 — each button kind held down takes a fill of its own, never hover's: the primary darker, a secondary's fill deeper, Discard red-90, forced colours inverted; a disabled button ignores the press; 81 real presses in Chrome, three languages, light, dark and forced colours (2026-10-22) — see decisions
 - VH-168 — the file chooser stays the browser's own: its button and "No file chosen" in the browser's language, its accessible name the page's, recorded as a limitation; the spec and statement claim nothing else; no page change; the design fixes complete (2026-10-22) — see decisions
+- VH-162 — 0.2.0 cut on the owner's call, not waiting for VH-137's November review: the statement updated first (VH-137), the version 0.2.0, tag `v0.2.0`, the Xerte zip built from it; the brief, profile and D5 name Xerte the public home and Pages the preview (2026-10-24) — see decisions
 
 ## Phase 5 — what the review of the Codex run found
 

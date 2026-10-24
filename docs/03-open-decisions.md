@@ -20,6 +20,10 @@ strategy.
 `xerte.nottingham.ac.uk` — a University server and URL, not public GitHub
 Pages. What remains open is who provisions it (VH-14).
 
+**Answered 2026-10-22 (PLAN-6):** Xerte is the public home, uploaded by the
+owner as a flat package from each release; GitHub Pages stays as the
+unadvertised preview from `main`.
+
 **Owner:** Joe, with UoN IT / web team.
 
 ### D8. Published limits

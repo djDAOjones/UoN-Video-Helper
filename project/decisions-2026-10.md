@@ -648,3 +648,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-21 — VH-146 — Generated dates and caveats stay whole
+
+**Decision:** Submission’s generated date and its complete caveat each wrap as one piece, while staff-typed dates keep ordinary breaks. The existing three templates and card words stay unchanged — the narrow renderer change requested by V-30, taken gateless.
+
+**Rationale:** CardRun can mark an indivisible phrase; Submission splits only its generated em-dash/full-width-bracket templates into date, original spacing and caveat. An unrecognised future template stays whole. Regression tests use all three actual language tables, prove separate whole date/note lines and refusal below their width, and retain staff-date wrapping. The walker’s cards scenario reports ALL PASS: 37 clips kept in reviews/2026-10-21/vh146-cards, every logged size at least 56 px per 1080 (28 pt at PowerPoint size), with 4K equivalence. The worst 4:3 Chinese card has 1 px/1080 spare, as logged; no floor or limit changed. Chrome’s 18 language/width/theme combinations also accept the Submission form. Standards: Carbon productive typography; Nielsen 2 and 4; WCAG 1.4.4/1.4.10 and the project’s card type floor; house conventions, renderer regression and browser spike. Existing VH-127/VH-128 wishes cover full-size human viewing and screen readers. Known sample and frozen-canon warnings keep their existing follow-ups.
+
+**Supersedes:** none
+
+**Deferred:** none
