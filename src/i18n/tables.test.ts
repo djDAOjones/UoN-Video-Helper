@@ -315,3 +315,25 @@ describe('the words after VH-148 (VH-153)', () => {
     expect('variableFrameRate' in enGB.source).toBe(false)
   })
 })
+
+// VH-181: step 4 has one name in each language, the noun its own lines use
+// (V-45); the owner's ruling of 23 October.
+describe('step 4, one name (VH-181)', () => {
+  const OLD_NAMES = ['Closing branding', '结尾品牌标识', 'Penjenamaan penutup']
+
+  it.each(Object.entries(LANGUAGE_TABLES))('%s names the step and its group alike', (_tag, table) => {
+    expect(table.closing.legend).toBe(table.steps.closing)
+  })
+
+  it.each(Object.entries(LANGUAGE_TABLES))('%s uses the step’s name in its own lines', (_tag, table) => {
+    const name = table.steps.closing.toLowerCase()
+    expect(table.closing.helpExistingText.toLowerCase()).toContain(name)
+    expect(table.closing.helpFreezeText.toLowerCase()).toContain(name)
+  })
+
+  it.each(Object.entries(LANGUAGE_TABLES))('%s keeps no old name for it', (_tag, table) => {
+    for (const { key, english: text } of messagesOf(table)) {
+      for (const old of OLD_NAMES) expect(text, key).not.toContain(old)
+    }
+  })
+})

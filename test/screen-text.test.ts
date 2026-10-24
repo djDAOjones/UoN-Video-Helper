@@ -652,7 +652,7 @@ describe('steps that read as steps (VH-91)', () => {
       'Choose a video',
       'Trim',
       'Title card',
-      'Closing branding',
+      'Closing graphics',
       'File size / quality',
       'Create',
     ])

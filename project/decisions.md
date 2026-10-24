@@ -18,6 +18,20 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-24 — VH-181 — One name for step 4: “Closing graphics” in three languages, spec §6 to match
+
+**Decision:** Step 4's heading and legend become "Closing graphics", 结尾图形 and "Grafik penutup", the noun the step's own lines use. `index.html`, `sheet.ts`, the README and spec §6 follow. "Closing card" and "branding" keep their own meanings. The other 82 scenarios that draw step 4 are walked in light at 320 px only (V-45).
+
+**Rationale:** The owner ruled on 23 October: "use “Closing graphics” everywhere, with the specification’s §6 line changed to match." Afterwards the old names occur 0 times on the page in three languages, and each table says the noun 35 times. The Malay heading at 320 px goes from two lines to one. Across 351 records, no instrument's outcome changed: 105 in four modes, plus 246 for Codex's must. V-18's six readings are unmoved. The spec stays at 8,074 words. Nine new parity cases pass. Codex astra twice said "Commit after the musts below". Its coverage must was applied; its re-check called the reduction sound and asked that it be recorded here. Evidence: `vh181-name-2026-10-23.md`. Decided on the owner's standing instruction, "work through to the end of VH-177, archive and spawn as you go, proceed with your recommendations, universal permission is granted":
+(a) the coverage reduction above, because the change is strings only and the seven scenarios walked in every cell read the same in each;
+(b) the Chinese and Malay names are the agent's drafts;
+(c) the README reads "opening branding and closing graphics", since the title card is not closing graphics and opening graphics is VH-23;
+(d) the filled sheet's "where it shows" column stays as the translator was sent it. The closing card's two Chinese forms go to a native reader, as wish line VH-181.1.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-24 — VH-180 — A true frame-rate note: one neutral sentence that names no rate
 
 **Decision:** `source.outputRate` becomes one sentence in each language, naming no rate and true whether frames are repeated or dropped: "To reach a standard frame rate, some frames will be repeated or left out." The call site reads it as a string. The threshold, the presets and the renderer stay as they were (V-47).
@@ -567,16 +581,6 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Decision:** Phase 3 closes with all four planned items shipped: VH-139, VH-140, VH-141 and VH-142. Phase 4 starts with VH-144 because the repeated closing reason and narrow time fields are direct, small user-facing defects; the authorised run continues.
 
 **Rationale:** Reconciled against “Phase 3: what the second audit found”, Items VH-139–142: early-ending files, truthful records and switches, the nine state defects plus V-21/V-22, and the wording corrections all have close entries and trajectory lines. The reserved accessibility statement, date-only card, spec proposals, human checks and unscanned-container warning remain on their existing wish/backlog lines. Local recall before editing scored 8/8 (2,2,2,2): latest closes VH-142, VH-141, VH-148, VH-124 are anchored by their newest close headings in decisions and the Phase 3/Owner’s sign-off trajectory; VH-141’s Show progress decision answers why; wish-list and backlog locate deferrals; PLAN-4’s “Phase 4: what the design pass found” and backlog locate VH-144 and its order. This is local evidence, not a fresh-session handoff. Milestone audit: 14 development findings (10 high, 1 moderate, 3 low), zero runtime findings; the existing V3-HARNESS audit wish covers them, with no dependency change. House conventions: milestone audit and complete ledger. Known checker warnings remain linked as at VH-142’s close. Taken gateless under the whole-run handoff.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-21 — VH-142 — Save, damage and feedback wording agree with the page
-
-**Decision:** the Chinese save refusals offer saving again, Step 6 uses 制作 throughout, decode-damage wording is future tense with original-recording times, and captured errors name Report this problem. The approved quotation, ellipsis, bracket and terminology corrections ship through the sheet — taken gateless within the item’s form-only scope.
-
-**Rationale:** No writing-review proposal or reserved statement, lede or browser wording is applied. The tool/job terminology uses the existing page vocabulary; Chinese and Malay changes are agent drafts. Regression tests hold the damage tense and time reference, button names, table quotation marks, Chinese ellipses and save meaning. Chrome checks the warning, captured-error guidance, cancelled save and feedback copy in all 18 required combinations. Standards: Nielsen 1, 2 and 4 (state, user language and consistency); Carbon content and error guidance; WCAG 3.1.5 and 3.3.2; house conventions, sheet-generated translations and category tests. The protected spec’s damage row has a proposed correction in the wish-list. The existing campus review, real-corpus and frozen-canon wishes cover human wording review and known checker warnings.
 
 **Supersedes:** none
 

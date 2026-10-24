@@ -36,7 +36,6 @@ The public release, 0.2.0, on Xerte (PLAN-6).
 
 ### Phase 7 — a second design, UX and accessibility pass, with Codex astra as partner, before the cut
 
-- [ ] VH-181 — One name for step 4: “Closing graphics” in three languages, spec §6 to match (V-45) — since 2026-10-23 — (from: VH-175, 2026-10-23)
 - [ ] VH-176 — Integrated verification: each fix checked by Codex astra, the after-run, the integrated check — since 2026-10-22 — (from: PLAN-7, 2026-10-22)
 - [ ] VH-177 — The close: Phase 7 reconciled, the cut's Phase 7 block lifted — since 2026-10-22 — (from: PLAN-7, 2026-10-22)
 

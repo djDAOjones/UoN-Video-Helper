@@ -125,7 +125,7 @@ export const enGB = {
     choose: 'Choose a video',
     trim: 'Trim',
     titleCard: 'Title card',
-    closing: 'Closing branding',
+    closing: 'Closing graphics',
     preset: 'File size / quality',
     create: 'Create',
   },
@@ -305,7 +305,7 @@ export const enGB = {
   },
 
   closing: {
-    legend: 'Closing branding',
+    legend: 'Closing graphics',
     typeLabel: 'Animation type',
     types: { cut: 'Cut', fade: 'Fade', slide: 'Slide', none: 'None' },
     onsetLabel: 'Animation onset',

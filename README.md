@@ -1,9 +1,9 @@
 # UoN Video Helper
 
 A browser-based tool that helps University of Nottingham staff prepare
-educational video for publication: approved opening and closing branding,
-consistent audio levels, and a correctly encoded MP4 — with no software to
-install and **no media leaving the user's device**.
+educational video for publication: approved opening branding and closing
+graphics, consistent audio levels, and a correctly encoded MP4 — with no
+software to install and **no media leaving the user's device**.
 
 ## Status
 

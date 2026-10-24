@@ -119,7 +119,7 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
     'titleCard.correctToContinue',
     'Step 6: the status line under the buttons, when the title card stops the video being made',
   ],
-  ['closing', 'Step 4, Closing branding'],
+  ['closing', 'Step 4, Closing graphics'],
   [
     'closing.internalWords',
     'Not on the page: drawn on the finished video itself, on the closing card, under the University logo',

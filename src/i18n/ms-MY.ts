@@ -76,7 +76,7 @@ export const msMY: Messages = {
     choose: 'Pilih video',
     trim: 'Potong',
     titleCard: 'Kad tajuk',
-    closing: 'Penjenamaan penutup',
+    closing: 'Grafik penutup',
     preset: 'Saiz/kualiti fail',
     create: 'Cipta',
   },
@@ -251,7 +251,7 @@ export const msMY: Messages = {
     },
   },
   closing: {
-    legend: 'Penjenamaan penutup',
+    legend: 'Grafik penutup',
     typeLabel: 'Jenis animasi',
     types: {
       cut: 'Potong',

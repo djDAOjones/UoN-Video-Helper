@@ -623,7 +623,7 @@ larger file.
    not of 8 digits, one typed twice, or more than eight, each said beside its
    field as the staff card's are; a field too long to fit is said as it is
    typed.
-4. **Closing branding** — animation type, onset and colour (§4.3).
+4. **Closing graphics** — animation type, onset and colour (§4.3).
 5. **File size / quality** — "Larger / better" or "Smaller / reduced"
    (§6).
 6. **Create** — the device check's verdict for this video, the part kept

@@ -703,7 +703,7 @@ rank 3, where the draft had 8 at rank 2 and 2 at rank 3.
 | V-42 | 2 | VH-179: fixed; the band's ring inside the focused face in HighlightText under forced colours, verified in [`vh179-rings-2026-10-23.md`](evidence/measurements/vh179-rings-2026-10-23.md) |
 | V-43 | 2 | VH-168's limitation extended to 2.5.3, on the owner's standing instruction; wording to VH-137 (VH-175.2) |
 | V-47 | 2 | VH-180: fixed; one neutral sentence that names no rate, true conformed up and down under both presets, in three languages, verified in [`vh180-words-2026-10-23.md`](evidence/measurements/vh180-words-2026-10-23.md); ranked 2 on the owner's standing instruction |
-| V-45 | 2 | For the owner: the two names are the owner's own (VH-148); wish line VH-175.3 |
+| V-45 | 2 | VH-181, on the owner's ruling (VH-175.3): fixed; "Closing graphics" as the step's one name, the noun its lines use in three languages, spec §6 to match, verified in [`vh181-name-2026-10-23.md`](evidence/measurements/vh181-name-2026-10-23.md) |
 | V-18 | 2 | Accepted on the owner's standing instruction; a shorter native wording is wish line VH-175.1 |
 | V-33 | 2 | VH-179: fixed; the feedback message capped at the measure, verified in [`vh179-rings-2026-10-23.md`](evidence/measurements/vh179-rings-2026-10-23.md); the mixed-line count recorded in UI-STANDARDS |
 | V-44 | 3 | VH-179, on the owner's ruling (VH-174.1): a border-only hover in HighlightText under forced colours, verified in [`vh179-rings-2026-10-23.md`](evidence/measurements/vh179-rings-2026-10-23.md) |

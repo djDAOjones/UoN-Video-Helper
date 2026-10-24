@@ -59,3 +59,4 @@
 - VH-173.1 — A walked state or fixture that draws the code role and a fact note, so VH-166's and VH-167's last contract clauses are measured rather than unverified — (from: VH-173, 2026-10-23)
 - VH-175.2 — For VH-137's review: the statement names the file chooser's visible "Choose File" missing from its accessible name (2.5.3) beside VH-168's language limitation; the owner chose to edit the statement only once, in that review (PLAN-7, 2026-10-23) — (from: VH-175, 2026-10-23)
 - VH-175.4 — V-18, accepted by the owner: a native Chinese and a native Malay reader's shorter wording above step 1, so the first action rises into the first screen at 1280 px; measured, no control added; campus colleagues are being asked — (from: VH-175, 2026-10-23)
+- VH-181.1 — The Chinese closing card has two forms, 结束卡 and 结束卡片, and takes 结束 where step 4's graphics take 结尾; a native reader to choose one, with VH-175.4 — (from: VH-181, 2026-10-24)

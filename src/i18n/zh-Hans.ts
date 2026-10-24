@@ -68,7 +68,7 @@ export const zhHans: Messages = {
     choose: '选择一个视频',
     trim: '修剪',
     titleCard: '标题卡',
-    closing: '结尾品牌标识',
+    closing: '结尾图形',
     preset: '文件大小/质量',
     create: '制作',
   },
@@ -235,7 +235,7 @@ export const zhHans: Messages = {
     },
   },
   closing: {
-    legend: '结尾品牌标识',
+    legend: '结尾图形',
     typeLabel: '动画类型',
     types: {
       cut: '切',

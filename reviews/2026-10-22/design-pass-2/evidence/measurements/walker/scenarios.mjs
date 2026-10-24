@@ -107,7 +107,7 @@ const OTHER_VIDEO_LANGUAGE = `(document.documentElement.lang === 'ms-MY' ? 'en-G
 const mx = (w, expr) => w.evaluate(`(() => { const M = window.__mx; return ${expr}; })()`)
 const until = (w, expr, label, timeout = 120000) => w.waitFor(`(() => { const M = window.__mx; try { return !!(${expr}); } catch (e) { return false; } })()`, { label, timeout })
 
-async function ready(w, lang, file = 'lecture-60s.mp4', { timeout = 300000 } = {}) {
+export async function ready(w, lang, file = 'lecture-60s.mp4', { timeout = 300000 } = {}) {
   await fresh(w, lang)
   await w.setFiles(F(file))
   await w.waitSettled({ timeout })
@@ -1438,6 +1438,18 @@ PLANS.vh179 = () => {
 // languages, the four colour modes at 1280 and light at 320 px.
 const V47 = ['S-03', 'S-07', 'S-15', 'S-16', 'S-16-45', 'S-16-120', 'S-47a', 'S-47b', 'S-47c', 'S-53']
 PLANS.vh180 = () => V47.flatMap((id) => LANGS.flatMap((lang) => [...COLOUR_MODES.map((mode) => rec(id, lang, 'w1280', mode)), rec(id, lang, 'w320', 'light')])).filter((r) => okLang(r.id, r.lang) && okView(r.id, r.view))
+
+// VH-181: step 4's one name (V-45). The records that draw step 4's heading
+// and legend: Ready, the onset help open, each closing (None, Cut, Fade,
+// Slide) and the finished result; three languages, the four colour modes
+// at 1280 and light at 320 px. No new scenario.
+const V45 = ['S-15', 'S-17', 'S-46', 'S-47a', 'S-47b', 'S-47c', 'S-53']
+PLANS.vh181 = () => V45.flatMap((id) => LANGS.flatMap((lang) => [...COLOUR_MODES.map((mode) => rec(id, lang, 'w1280', mode)), rec(id, lang, 'w320', 'light')])).filter((r) => okLang(r.id, r.lang) && okView(r.id, r.view))
+// Codex astra's must (VH-181): every other scenario that draws step 4, the
+// 82 whose VH-172 priority records hold the heading, once in each language,
+// light, at 320 px (or the scenario's own view where it has one).
+const V45_REST = ['S-04', 'S-08', 'S-11', 'S-14', 'S-16', 'S-18', 'S-19', 'S-20', 'S-21', 'S-22', 'S-23', 'S-24', 'S-25a', 'S-25b', 'S-26a', 'S-26b', 'S-27', 'S-31', 'S-32', 'S-33', 'S-35', 'S-36', 'S-37a', 'S-37b', 'S-38', 'S-39', 'S-40', 'S-41', 'S-42', 'S-43', 'S-44', 'S-45a', 'S-45b', 'S-48', 'S-49', 'S-50', 'S-52', 'S-53-LW', 'S-53-W', 'S-54a', 'S-54b', 'S-54c', 'S-54d', 'S-55a', 'S-55b', 'S-55c', 'S-56', 'S-57', 'S-58', 'S-58-LW', 'S-58-W', 'S-59', 'S-60', 'S-61', 'S-62', 'S-63', 'S-63-LW', 'S-63-W', 'S-64', 'S-65', 'S-66', 'S-67', 'S-68', 'S-69', 'S-70a', 'S-70b', 'S-70c', 'S-71', 'S-72a', 'S-72b', 'S-73', 'S-78k', 'S-85', 'S-87', 'S-88', 'S-89', 'S-90a', 'S-90b', 'S-91', 'S-ID1', 'S-ID2', 'S-ID3']
+PLANS['vh181-rest'] = () => V45_REST.flatMap((id) => LANGS.map((lang) => rec(id, lang, SCENARIOS[id].views?.[0] ?? 'w320', 'light'))).filter((r) => okLang(r.id, r.lang) && okView(r.id, r.view))
 
 
 // The predicates read the page through window.__mx (MX_INIT), as `M`.
