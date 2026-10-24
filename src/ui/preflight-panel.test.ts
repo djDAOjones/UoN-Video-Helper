@@ -345,7 +345,7 @@ describe('the picture type is said when it changes the file (VH-19)', () => {
     const { lines } = verdictText(smallerScreen())
     expect(lines).toHaveLength(3)
     expect(lines[2]).toContain('slides or a screen recording')
-    expect(lines[2]).toContain('Larger / better')
+    expect(lines[2]).toContain('choose high quality instead')
   })
 
   it.each(['camera', 'unknown'] as const)('says nothing for %s, which is the ordinary setting', (contentClass) => {

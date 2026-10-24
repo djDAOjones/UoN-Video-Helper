@@ -163,8 +163,8 @@ describe('plain language, measured (spec 9.2, VH-114)', () => {
   })
 
   it('measures a block radio helper separately from its label (VH-148)', () => {
-    expect(visibleStrings('x.html', '<span>Smaller / reduced</span><span class="radio-detail">For Moodle assignment uploads, messaging, or email etc.</span>')).toEqual([
-      'Smaller / reduced', 'For Moodle assignment uploads, messaging, or email etc.',
+    expect(visibleStrings('x.html', '<span>Smaller file, for assignments and sharing</span><span class="radio-detail">For Moodle assignment uploads, email, and messages.</span>')).toEqual([
+      'Smaller file, for assignments and sharing', 'For Moodle assignment uploads, email, and messages.',
     ])
   })
 

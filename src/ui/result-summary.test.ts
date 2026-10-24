@@ -35,7 +35,7 @@ const whole: JobRecord = {
 describe('jobSummaryText', () => {
   it('names the file, the whole video, the output and the closing', () => {
     expect(jobSummaryText(whole)).toBe(
-      'Made from Lecture 3.mp4: the whole video (4 minutes 12 seconds), Larger / better, a cut to the blue closing card.',
+      'Made from Lecture 3.mp4: the whole video (4 minutes 12 seconds), high quality, a cut to the blue closing card.',
     )
   })
 
@@ -47,7 +47,7 @@ describe('jobSummaryText', () => {
       closing: { type: 'fade', onset: 'freeze', colour: 'white', internal: false },
     }
     expect(jobSummaryText(trimmed)).toBe(
-      'Made from Lecture 3.mp4: 2 minutes of 4 minutes 12 seconds, from 0:30.0 to 2:30.0, Smaller / reduced, the white closing graphics fading in over a held last frame.',
+      'Made from Lecture 3.mp4: 2 minutes of 4 minutes 12 seconds, from 0:30.0 to 2:30.0, a smaller file, the white closing graphics fading in over a held last frame.',
     )
   })
 
@@ -70,7 +70,7 @@ describe('jobSummaryText with Internal use only (VH-126)', () => {
 
   it('says the card was marked, quoting the words', () => {
     expect(jobSummaryText({ ...whole, closing: marked })).toBe(
-      'Made from Lecture 3.mp4: the whole video (4 minutes 12 seconds), Larger / better, a cut to the blue closing card, marked “Internal use only”.',
+      'Made from Lecture 3.mp4: the whole video (4 minutes 12 seconds), high quality, a cut to the blue closing card, marked “Internal use only”.',
     )
   })
 
@@ -91,7 +91,7 @@ describe('jobSummaryText with a title card (VH-127)', () => {
   it('says the card opens the video, before the part kept, and quotes none of its words', () => {
     // VH-140 names which card: this one is a staff video's.
     expect(jobSummaryText({ ...whole, titleCard: true })).toBe(
-      'Made from Lecture 3.mp4: a 5-second staff title card, then the whole video (4 minutes 12 seconds), Larger / better, a cut to the blue closing card.',
+      'Made from Lecture 3.mp4: a 5-second staff title card, then the whole video (4 minutes 12 seconds), high quality, a cut to the blue closing card.',
     )
   })
 
@@ -108,7 +108,7 @@ describe('the record names the card and the words’ language (VH-140, audit V-0
 
   it('happy path: a submission’s card is named as one', () => {
     expect(jobSummaryText(submission)).toBe(
-      'Made from Lecture 3.mp4: a 5-second submission card, then the whole video (4 minutes 12 seconds), Larger / better, a cut to the blue closing card, marked “Internal use only”.',
+      'Made from Lecture 3.mp4: a 5-second submission card, then the whole video (4 minutes 12 seconds), high quality, a cut to the blue closing card, marked “Internal use only”.',
     )
   })
 
@@ -126,7 +126,7 @@ describe('the record names the card and the words’ language (VH-140, audit V-0
 
   it('names the words’ language when it is not the page’s, as the choice names it', () => {
     expect(jobSummaryText({ ...submission, wordsLanguage: 'zh-Hans' })).toBe(
-      'Made from Lecture 3.mp4: a 5-second submission card, then the whole video (4 minutes 12 seconds), Larger / better, a cut to the blue closing card, marked “仅供内部使用”. Video language: 简体中文.',
+      'Made from Lecture 3.mp4: a 5-second submission card, then the whole video (4 minutes 12 seconds), high quality, a cut to the blue closing card, marked “仅供内部使用”. Video language: 简体中文.',
     )
     // A video with no card and no words is named too: the choice is the job's.
     expect(jobSummaryText({ ...whole, wordsLanguage: 'ms-MY' })).toMatch(/ Video language: Bahasa Malaysia\.$/)
@@ -253,7 +253,7 @@ describe('a file that ends early, in the record (VH-139)', () => {
   it('gives the length made, never the length the file promised', () => {
     const text = jobSummaryText(thirty, audited.made)
     expect(text).toBe(
-      'Made from truncated-30s.mp4: 21 seconds of 30 seconds, from 0:00.0 to 0:20.9, Larger / better, a cut to the blue closing card.',
+      'Made from truncated-30s.mp4: 21 seconds of 30 seconds, from 0:00.0 to 0:20.9, high quality, a cut to the blue closing card.',
     )
     expect(text).not.toContain('the whole video')
   })

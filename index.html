@@ -511,22 +511,22 @@
         <h2 id="preset-heading"><span class="step-number">5.</span> <span data-i18n="steps.preset">File size / quality</span></h2>
         <fieldset class="choice" id="preset-choice">
           <legend class="visually-hidden" data-i18n="preset.legend">File size / quality</legend>
-          <!-- Each name answers the heading in its own order — size, then
-               quality — and the line beneath says where that file is going.
+          <!-- Each name says what the file is, by quality or by size, then
+               what it is for, and the line beneath names where it is going.
                The names are `PRESETS[id].label`; `test/screen-text.test.ts`
                holds the two together (VH-85). -->
           <label class="radio radio--described">
             <input type="radio" name="preset" value="best" checked />
             <span class="radio-label">
-              <span data-i18n="preset.labels.best">Larger / better</span>
-              <span class="radio-detail" data-i18n="preset.details.best">For EchoVideo or YouTube etc.</span>
+              <span data-i18n="preset.labels.best">High quality, for publishing</span>
+              <span class="radio-detail" data-i18n="preset.details.best">For EchoVideo, YouTube, and similar sites.</span>
             </span>
           </label>
           <label class="radio radio--described">
             <input type="radio" name="preset" value="smaller" />
             <span class="radio-label">
-              <span data-i18n="preset.labels.smaller">Smaller / reduced</span>
-              <span class="radio-detail" data-i18n="preset.details.smaller">For Moodle assignment uploads, messaging, or email etc.</span>
+              <span data-i18n="preset.labels.smaller">Smaller file, for assignments and sharing</span>
+              <span class="radio-detail" data-i18n="preset.details.smaller">For Moodle assignment uploads, email, and messages.</span>
             </span>
           </label>
         </fieldset>

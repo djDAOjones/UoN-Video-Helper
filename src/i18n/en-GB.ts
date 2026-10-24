@@ -367,11 +367,15 @@ export const enGB = {
   preset: {
     legend: 'File size / quality',
     /** The English names are the config's (`PRESETS[id].label`), so a diagnostics line and the screen agree; `tables.test.ts` holds them equal. */
-    labels: { best: 'Larger / better', smaller: 'Smaller / reduced' },
+    labels: { best: 'High quality, for publishing', smaller: 'Smaller file, for assignments and sharing' },
     details: {
-      best: 'For EchoVideo or YouTube etc.',
-      smaller: 'For Moodle assignment uploads, messaging, or email etc.',
+      best: 'For EchoVideo, YouTube, and similar sites.',
+      smaller: 'For Moodle assignment uploads, email, and messages.',
     },
+    /** The record's {output}, without the purpose: a name with its own comma blurred the record's list (VH-188). */
+    inRecord: { best: 'high quality', smaller: 'a smaller file' },
+    /** A sentence's {best} or {smaller}: "choose the smaller file" (VH-188). */
+    inSentence: { best: 'high quality', smaller: 'the smaller file' },
   },
 
   create: {

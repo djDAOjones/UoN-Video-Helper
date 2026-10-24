@@ -812,3 +812,13 @@ Spec §9.2 and §11 name the email as the one feedback route. VH-160 drafts that
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-22 — VH-151 — Disabled controls look disabled; the status mark gets its own weight role
+
+**Decision:** a system check's pass or fail mark takes `--type-weight-mark` (700), a role of its own, because it is a status glyph, not a heading. The fix that keeps a locked, invalid textarea's dashed edge, `:not(:disabled)` on the invalid rule, also applies to the text field, which had the same defect.
+
+**Rationale:** R2-6, R2-11 and the rank-3 page and VH-145 findings of `reviews/2026-10-22/claude-review-of-codex-run.md`, as VH-151's criteria name them. `:not(:disabled)` on the invalid rule was chosen over another selector in the disabled group, which kept that group and its VH-150 pin unchanged. Before the fix, the old trim rule held the field at 192 px in a 182 px row at 280 px. It overflowed its row but stayed short of the page edge, so a narrower frame would have scrolled, as the review's arithmetic said. Headless Chrome was driven over CDP, with forced colours emulated, an 18 px default font set and the sample `AMCS3059` read; the measurements are in `reviews/2026-10-22/vh151-browser.json`. VH-150.3's states needed a finished or failed job, and this walk reached none of them, so that line stands. Standards: UI-STANDARDS, disabled reads as disabled and forced colours; WCAG 1.4.10 and 2.5.5; Carbon, tokens, not literals; house conventions, regression tests by category and minimal change. No colour changes except the arrow's, no string and no dependency changed. Not checked by a second model.
+
+**Supersedes:** none
+
+**Deferred:** none

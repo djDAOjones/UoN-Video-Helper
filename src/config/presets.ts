@@ -1,10 +1,10 @@
 /**
  * The two output presets, spec sections 6.1 and 6.2.
  *
- * Presented to the user by outcome, never by technique — "Larger / better" and
- * "Smaller / reduced" under the question "File size / quality", not bitrates
- * (VH-85; the spec's headings still say "Best quality" and "Smaller file", and
- * the code keeps those as the ids `best` and `smaller`). Spec section 9.2: no
+ * Presented to the user by what each output is and what it is for — "High
+ * quality, for publishing" and "Smaller file, for assignments and sharing"
+ * under the question "File size / quality", not bitrates (VH-85, VH-188; the
+ * code's ids are `best` and `smaller`). Spec section 9.2: no
  * codec, bitrate or loudness setting is exposed, not even in an advanced
  * panel, because every exposed control is a decision a novice is forced to
  * make.
@@ -42,9 +42,9 @@ export interface Preset {
 export const PRESETS: Readonly<Record<PresetId, Preset>> = {
   best: {
     id: 'best',
-    label: 'Larger / better',
+    label: 'High quality, for publishing',
     description:
-      'For EchoVideo or YouTube etc. These make their own copy of your video when you upload it, so it is worth sending them the best one.',
+      'For EchoVideo, YouTube, and similar sites. These make their own copy of your video when you upload it, so it is worth sending them the best one.',
     // Spec 6.1: resolution and frame rate unchanged.
     maxHeight: null,
     maxFrameRate: null,
@@ -53,9 +53,9 @@ export const PRESETS: Readonly<Record<PresetId, Preset>> = {
   },
   smaller: {
     id: 'smaller',
-    label: 'Smaller / reduced',
+    label: 'Smaller file, for assignments and sharing',
     description:
-      'For messaging or email etc. These are sent and downloaded as they are, so a smaller file is kinder.',
+      'For Moodle assignment uploads, email, and messages. These are sent and downloaded as they are, so a smaller file is kinder.',
     // Spec 6.2: resolution PRESERVED up to 1080p, reduced only above it.
     // Slide legibility depends far more on resolution than on bitrate, so the
     // saving is taken from bitrate instead. See rationale section 4.1.
@@ -392,7 +392,7 @@ export function avcLevelFor(width: number, height: number, frameRate: number): s
  * Before any file is chosen the page asks the browser whether it can encode
  * the output every job needs: H.264 at the shape most recordings arrive in,
  * and AAC at the larger output's bitrates in stereo and mono. 1080p25 is the
- * corpus's commonest shape, and the "Larger / better" preset's figure for it
+ * corpus's commonest shape, and the "High quality" preset's figure for it
  * is the configuration a browser is likeliest to refuse. The per-file check
  * at pre-flight still asks about the exact shape of the chosen video; this one
  * decides only what the page may say about the browser before that.

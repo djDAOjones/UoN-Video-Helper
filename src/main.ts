@@ -1598,7 +1598,7 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
           // rather than standing empty, with a Check again for the "free
           // some space" route that changes nothing on the page (Codex
           // critique).
-          setStatus(() => t().status.storageWayOut({ smaller: t().preset.labels.smaller }))
+          setStatus(() => t().status.storageWayOut({ smaller: t().preset.inSentence.smaller }))
           offerStop('check-again')
         }
         // Stop the check has gone; the block is said beside the file. A save

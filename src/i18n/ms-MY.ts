@@ -318,12 +318,20 @@ export const msMY: Messages = {
   preset: {
     legend: 'Saiz/kualiti fail',
     labels: {
-      best: 'Lebih besar / lebih baik',
-      smaller: 'Lebih kecil / dikurangkan',
+      best: 'Kualiti tinggi, untuk penerbitan',
+      smaller: 'Fail lebih kecil, untuk tugasan dan perkongsian',
     },
     details: {
-      best: 'Untuk EchoVideo atau YouTube dll.',
-      smaller: 'Untuk muat naik tugasan Moodle, pemesejan atau e-mel dan sebagainya.',
+      best: 'Untuk EchoVideo, YouTube dan laman yang serupa.',
+      smaller: 'Untuk muat naik tugasan Moodle, e-mel dan mesej.',
+    },
+    inRecord: {
+      best: 'kualiti tinggi',
+      smaller: 'fail yang lebih kecil',
+    },
+    inSentence: {
+      best: 'kualiti tinggi',
+      smaller: 'fail yang lebih kecil',
     },
   },
   create: {

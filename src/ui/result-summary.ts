@@ -169,7 +169,7 @@ export function jobSummaryText(record: JobRecord, made: KeptRange | null = null)
   const parts = {
     name: record.sourceName,
     part: keptPartText(made ?? record.keptRange, record.durationSeconds),
-    output: t().preset.labels[record.presetId],
+    output: t().preset.inRecord[record.presetId],
     closing: closingChoiceText(record.closing, record.wordsLanguage),
   }
   const summary = record.titleCard

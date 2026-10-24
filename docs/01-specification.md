@@ -330,14 +330,15 @@ decisions.
 ## 6. Video outputs
 
 Presented to the user by purpose, not by technique, under the question
-"File size / quality" (VH-85). The headings below are the names on screen;
-the code's ids, and older references in these documents, call them "best
-quality" (`best`) and "smaller file" (`smaller`).
+"File size / quality" (VH-85). The headings below are the names on screen,
+called here by their first two words; the code's ids are `best` and
+`smaller`.
 
-### 6.1 "Larger / better" — for EchoVideo or YouTube
+### 6.1 "High quality, for publishing"
 
-For destinations that re-encode on ingest ("For EchoVideo or YouTube etc." on
-screen). Preserves source resolution, aspect ratio, and frame rate.
+For destinations that re-encode on ingest ("For EchoVideo, YouTube, and
+similar sites." on screen). Preserves source resolution, aspect ratio, and
+frame rate.
 
 | Setting | Value |
 | --- | --- |
@@ -359,13 +360,13 @@ at the source: re-encoding at exactly the source bitrate is worse than the
 source. Nor is it raised above the anchor for a pristine master. Tried at
 0.18, that added up to 933 MB per file for +0.60 VMAF, and the destination
 re-encodes on ingest anyway. So the figure can only fall. The floor keeps it
-above what "Smaller / reduced" asks of slides.
+above what "Smaller file" asks of slides.
 
-### 6.2 "Smaller / reduced" — for Moodle assignment uploads, messaging or email
+### 6.2 "Smaller file, for assignments and sharing"
 
 For files that are sent and downloaded as they are, which students may
 download directly: Moodle assignment uploads, messaging and email ("For
-Moodle assignment uploads, messaging, or email etc." on screen), OneDrive and
+Moodle assignment uploads, email, and messages." on screen), OneDrive and
 SharePoint.
 
 | Setting | Value |
@@ -388,7 +389,7 @@ needs them, not floors. A Teams recording carries 1.006 Mbps of video at
 larger than what went in. The requested bitrate is capped at the source's
 measured video bitrate. Both outputs consult the source, for opposite
 reasons: this one is *capped* at it, because it promises a smaller file;
-"Larger / better" is *anchored* to it with headroom (§6.1), because its
+"High quality" is *anchored* to it with headroom (§6.1), because its
 destination re-encodes.
 
 ### 6.3 Frame-rate handling
@@ -624,7 +625,7 @@ larger file.
    field as the staff card's are; a field too long to fit is said as it is
    typed.
 4. **Closing graphics** — animation type, onset and colour (§4.3).
-5. **File size / quality** — "Larger / better" or "Smaller / reduced"
+5. **File size / quality** — "High quality" or "Smaller file"
    (§6).
 6. **Create** — the device check's verdict for this video, the part kept
    and the file size chosen, calibration probe included (§7); any
@@ -775,7 +776,7 @@ designed and built for Chrome, and this browser has not passed all the checks
 for it to run. The system check at the foot of the page says what is
 missing." When it passes, the system check alone says so (VH-98, VH-121,
 VH-182.1). The load-time check asks for a
-secure context, WebCodecs, the H.264 encoder at a 1080p25 "Larger / better"
+secure context, WebCodecs, the H.264 encoder at a 1080p25 "High quality"
 configuration, the AAC encoder in stereo and mono, the presence of the
 private storage API (whether it can be written, and how much, is pre-flight's
 question) and the worker; a refused AAC encoder is a warning rather than a block, since a
@@ -837,7 +838,7 @@ v1 is complete when:
    ±0.1 LU.
 4. No audible pumping on a deliberately variable-level test recording,
    confirmed by listening and by short-term loudness plot.
-5. Slide text in the "Smaller / reduced" output remains legible at 100% zoom
+5. Slide text in the "Smaller file" output remains legible at 100% zoom
    against the source.
 6. A screen recording on a non-standard frame-rate grid — 16.000 or
    30.303 fps — produces output with correct A/V sync across the full

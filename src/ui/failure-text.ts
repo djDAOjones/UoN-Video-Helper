@@ -73,7 +73,7 @@ export function failureText(code: FailureCode, reason?: FailureReason): FailureT
     case 'output-unreadable':
       return { what: failure.outputUnreadable.what, next: failure.tryAgain }
     case 'out-of-space':
-      return { what: failure.outOfSpace.what, next: failure.outOfSpace.next({ smaller: t().preset.labels.smaller }) }
+      return { what: failure.outOfSpace.what, next: failure.outOfSpace.next({ smaller: t().preset.inSentence.smaller }) }
     case 'encoder-refused':
       return failure.encoderRefused
     case 'check-failed':

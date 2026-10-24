@@ -104,7 +104,7 @@ function reasonText(code: PreflightReasonCode, summary: PreflightSummary, contex
       // another block has taken those steps off the page (VH-123).
       const size = formatFileSize(summary.verdict.requiredStorageBytes)
       return setupStepsResolve(summary.verdict)
-        ? reasons.insufficientStorageResolvable({ size, smaller: t().preset.labels.smaller })
+        ? reasons.insufficientStorageResolvable({ size, smaller: t().preset.inSentence.smaller })
         : reasons.insufficientStorage({ size })
     }
     case 'storage-unknown':
@@ -233,7 +233,7 @@ export function verdictText(summary: PreflightSummary, context: BlockContext = E
       // quality, and the person looking at the video is the one who can tell
       // (VH-19). Not when the cap above already decided the size: the class
       // changed nothing then, and claiming it did would be untrue.
-      lines.push(preflight.slides({ best: t().preset.labels.best }))
+      lines.push(preflight.slides({ best: t().preset.inSentence.best }))
     }
   }
 

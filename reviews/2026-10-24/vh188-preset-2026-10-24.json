@@ -1,0 +1,1235 @@
+[
+ {
+  "key": "step__en-GB__w1280__light",
+  "lang": "en-GB",
+  "view": "w1280",
+  "mode": "light",
+  "choices": [
+   {
+    "id": "best",
+    "label": "High quality, for publishing",
+    "expected": "High quality, for publishing",
+    "labelLines": 1,
+    "detail": "For EchoVideo, YouTube, and similar sites.",
+    "expectedDetail": "For EchoVideo, YouTube, and similar sites.",
+    "detailLines": 1
+   },
+   {
+    "id": "smaller",
+    "label": "Smaller file, for assignments and sharing",
+    "expected": "Smaller file, for assignments and sharing",
+    "labelLines": 1,
+    "detail": "For Moodle assignment uploads, email, and messages.",
+    "expectedDetail": "For Moodle assignment uploads, email, and messages.",
+    "detailLines": 1
+   }
+  ],
+  "legend": "File size / quality",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__en-GB__w1280__dark",
+  "lang": "en-GB",
+  "view": "w1280",
+  "mode": "dark",
+  "choices": [
+   {
+    "id": "best",
+    "label": "High quality, for publishing",
+    "expected": "High quality, for publishing",
+    "labelLines": 1,
+    "detail": "For EchoVideo, YouTube, and similar sites.",
+    "expectedDetail": "For EchoVideo, YouTube, and similar sites.",
+    "detailLines": 1
+   },
+   {
+    "id": "smaller",
+    "label": "Smaller file, for assignments and sharing",
+    "expected": "Smaller file, for assignments and sharing",
+    "labelLines": 1,
+    "detail": "For Moodle assignment uploads, email, and messages.",
+    "expectedDetail": "For Moodle assignment uploads, email, and messages.",
+    "detailLines": 1
+   }
+  ],
+  "legend": "File size / quality",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__en-GB__w1280__forced-light",
+  "lang": "en-GB",
+  "view": "w1280",
+  "mode": "forced-light",
+  "choices": [
+   {
+    "id": "best",
+    "label": "High quality, for publishing",
+    "expected": "High quality, for publishing",
+    "labelLines": 1,
+    "detail": "For EchoVideo, YouTube, and similar sites.",
+    "expectedDetail": "For EchoVideo, YouTube, and similar sites.",
+    "detailLines": 1
+   },
+   {
+    "id": "smaller",
+    "label": "Smaller file, for assignments and sharing",
+    "expected": "Smaller file, for assignments and sharing",
+    "labelLines": 1,
+    "detail": "For Moodle assignment uploads, email, and messages.",
+    "expectedDetail": "For Moodle assignment uploads, email, and messages.",
+    "detailLines": 1
+   }
+  ],
+  "legend": "File size / quality",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__en-GB__w1280__forced-dark",
+  "lang": "en-GB",
+  "view": "w1280",
+  "mode": "forced-dark",
+  "choices": [
+   {
+    "id": "best",
+    "label": "High quality, for publishing",
+    "expected": "High quality, for publishing",
+    "labelLines": 1,
+    "detail": "For EchoVideo, YouTube, and similar sites.",
+    "expectedDetail": "For EchoVideo, YouTube, and similar sites.",
+    "detailLines": 1
+   },
+   {
+    "id": "smaller",
+    "label": "Smaller file, for assignments and sharing",
+    "expected": "Smaller file, for assignments and sharing",
+    "labelLines": 1,
+    "detail": "For Moodle assignment uploads, email, and messages.",
+    "expectedDetail": "For Moodle assignment uploads, email, and messages.",
+    "detailLines": 1
+   }
+  ],
+  "legend": "File size / quality",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__en-GB__w375__light",
+  "lang": "en-GB",
+  "view": "w375",
+  "mode": "light",
+  "choices": [
+   {
+    "id": "best",
+    "label": "High quality, for publishing",
+    "expected": "High quality, for publishing",
+    "labelLines": 1,
+    "detail": "For EchoVideo, YouTube, and similar sites.",
+    "expectedDetail": "For EchoVideo, YouTube, and similar sites.",
+    "detailLines": 2
+   },
+   {
+    "id": "smaller",
+    "label": "Smaller file, for assignments and sharing",
+    "expected": "Smaller file, for assignments and sharing",
+    "labelLines": 2,
+    "detail": "For Moodle assignment uploads, email, and messages.",
+    "expectedDetail": "For Moodle assignment uploads, email, and messages.",
+    "detailLines": 2
+   }
+  ],
+  "legend": "File size / quality",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__en-GB__w375__dark",
+  "lang": "en-GB",
+  "view": "w375",
+  "mode": "dark",
+  "choices": [
+   {
+    "id": "best",
+    "label": "High quality, for publishing",
+    "expected": "High quality, for publishing",
+    "labelLines": 1,
+    "detail": "For EchoVideo, YouTube, and similar sites.",
+    "expectedDetail": "For EchoVideo, YouTube, and similar sites.",
+    "detailLines": 2
+   },
+   {
+    "id": "smaller",
+    "label": "Smaller file, for assignments and sharing",
+    "expected": "Smaller file, for assignments and sharing",
+    "labelLines": 2,
+    "detail": "For Moodle assignment uploads, email, and messages.",
+    "expectedDetail": "For Moodle assignment uploads, email, and messages.",
+    "detailLines": 2
+   }
+  ],
+  "legend": "File size / quality",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__en-GB__w375__forced-light",
+  "lang": "en-GB",
+  "view": "w375",
+  "mode": "forced-light",
+  "choices": [
+   {
+    "id": "best",
+    "label": "High quality, for publishing",
+    "expected": "High quality, for publishing",
+    "labelLines": 1,
+    "detail": "For EchoVideo, YouTube, and similar sites.",
+    "expectedDetail": "For EchoVideo, YouTube, and similar sites.",
+    "detailLines": 2
+   },
+   {
+    "id": "smaller",
+    "label": "Smaller file, for assignments and sharing",
+    "expected": "Smaller file, for assignments and sharing",
+    "labelLines": 2,
+    "detail": "For Moodle assignment uploads, email, and messages.",
+    "expectedDetail": "For Moodle assignment uploads, email, and messages.",
+    "detailLines": 2
+   }
+  ],
+  "legend": "File size / quality",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__en-GB__w375__forced-dark",
+  "lang": "en-GB",
+  "view": "w375",
+  "mode": "forced-dark",
+  "choices": [
+   {
+    "id": "best",
+    "label": "High quality, for publishing",
+    "expected": "High quality, for publishing",
+    "labelLines": 1,
+    "detail": "For EchoVideo, YouTube, and similar sites.",
+    "expectedDetail": "For EchoVideo, YouTube, and similar sites.",
+    "detailLines": 2
+   },
+   {
+    "id": "smaller",
+    "label": "Smaller file, for assignments and sharing",
+    "expected": "Smaller file, for assignments and sharing",
+    "labelLines": 2,
+    "detail": "For Moodle assignment uploads, email, and messages.",
+    "expectedDetail": "For Moodle assignment uploads, email, and messages.",
+    "detailLines": 2
+   }
+  ],
+  "legend": "File size / quality",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__en-GB__w320__light",
+  "lang": "en-GB",
+  "view": "w320",
+  "mode": "light",
+  "choices": [
+   {
+    "id": "best",
+    "label": "High quality, for publishing",
+    "expected": "High quality, for publishing",
+    "labelLines": 1,
+    "detail": "For EchoVideo, YouTube, and similar sites.",
+    "expectedDetail": "For EchoVideo, YouTube, and similar sites.",
+    "detailLines": 2
+   },
+   {
+    "id": "smaller",
+    "label": "Smaller file, for assignments and sharing",
+    "expected": "Smaller file, for assignments and sharing",
+    "labelLines": 2,
+    "detail": "For Moodle assignment uploads, email, and messages.",
+    "expectedDetail": "For Moodle assignment uploads, email, and messages.",
+    "detailLines": 3
+   }
+  ],
+  "legend": "File size / quality",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__en-GB__w320__dark",
+  "lang": "en-GB",
+  "view": "w320",
+  "mode": "dark",
+  "choices": [
+   {
+    "id": "best",
+    "label": "High quality, for publishing",
+    "expected": "High quality, for publishing",
+    "labelLines": 1,
+    "detail": "For EchoVideo, YouTube, and similar sites.",
+    "expectedDetail": "For EchoVideo, YouTube, and similar sites.",
+    "detailLines": 2
+   },
+   {
+    "id": "smaller",
+    "label": "Smaller file, for assignments and sharing",
+    "expected": "Smaller file, for assignments and sharing",
+    "labelLines": 2,
+    "detail": "For Moodle assignment uploads, email, and messages.",
+    "expectedDetail": "For Moodle assignment uploads, email, and messages.",
+    "detailLines": 3
+   }
+  ],
+  "legend": "File size / quality",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__en-GB__w320__forced-light",
+  "lang": "en-GB",
+  "view": "w320",
+  "mode": "forced-light",
+  "choices": [
+   {
+    "id": "best",
+    "label": "High quality, for publishing",
+    "expected": "High quality, for publishing",
+    "labelLines": 1,
+    "detail": "For EchoVideo, YouTube, and similar sites.",
+    "expectedDetail": "For EchoVideo, YouTube, and similar sites.",
+    "detailLines": 2
+   },
+   {
+    "id": "smaller",
+    "label": "Smaller file, for assignments and sharing",
+    "expected": "Smaller file, for assignments and sharing",
+    "labelLines": 2,
+    "detail": "For Moodle assignment uploads, email, and messages.",
+    "expectedDetail": "For Moodle assignment uploads, email, and messages.",
+    "detailLines": 3
+   }
+  ],
+  "legend": "File size / quality",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__en-GB__w320__forced-dark",
+  "lang": "en-GB",
+  "view": "w320",
+  "mode": "forced-dark",
+  "choices": [
+   {
+    "id": "best",
+    "label": "High quality, for publishing",
+    "expected": "High quality, for publishing",
+    "labelLines": 1,
+    "detail": "For EchoVideo, YouTube, and similar sites.",
+    "expectedDetail": "For EchoVideo, YouTube, and similar sites.",
+    "detailLines": 2
+   },
+   {
+    "id": "smaller",
+    "label": "Smaller file, for assignments and sharing",
+    "expected": "Smaller file, for assignments and sharing",
+    "labelLines": 2,
+    "detail": "For Moodle assignment uploads, email, and messages.",
+    "expectedDetail": "For Moodle assignment uploads, email, and messages.",
+    "detailLines": 3
+   }
+  ],
+  "legend": "File size / quality",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__zh-Hans__w1280__light",
+  "lang": "zh-Hans",
+  "view": "w1280",
+  "mode": "light",
+  "choices": [
+   {
+    "id": "best",
+    "label": "高质量，用于发布",
+    "expected": "高质量，用于发布",
+    "labelLines": 1,
+    "detail": "适用于 EchoVideo、YouTube 及类似网站。",
+    "expectedDetail": "适用于 EchoVideo、YouTube 及类似网站。",
+    "detailLines": 1
+   },
+   {
+    "id": "smaller",
+    "label": "较小的文件，用于作业和分享",
+    "expected": "较小的文件，用于作业和分享",
+    "labelLines": 1,
+    "detail": "适用于 Moodle 作业上传、电子邮件和消息。",
+    "expectedDetail": "适用于 Moodle 作业上传、电子邮件和消息。",
+    "detailLines": 1
+   }
+  ],
+  "legend": "文件大小/质量",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__zh-Hans__w1280__dark",
+  "lang": "zh-Hans",
+  "view": "w1280",
+  "mode": "dark",
+  "choices": [
+   {
+    "id": "best",
+    "label": "高质量，用于发布",
+    "expected": "高质量，用于发布",
+    "labelLines": 1,
+    "detail": "适用于 EchoVideo、YouTube 及类似网站。",
+    "expectedDetail": "适用于 EchoVideo、YouTube 及类似网站。",
+    "detailLines": 1
+   },
+   {
+    "id": "smaller",
+    "label": "较小的文件，用于作业和分享",
+    "expected": "较小的文件，用于作业和分享",
+    "labelLines": 1,
+    "detail": "适用于 Moodle 作业上传、电子邮件和消息。",
+    "expectedDetail": "适用于 Moodle 作业上传、电子邮件和消息。",
+    "detailLines": 1
+   }
+  ],
+  "legend": "文件大小/质量",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__zh-Hans__w1280__forced-light",
+  "lang": "zh-Hans",
+  "view": "w1280",
+  "mode": "forced-light",
+  "choices": [
+   {
+    "id": "best",
+    "label": "高质量，用于发布",
+    "expected": "高质量，用于发布",
+    "labelLines": 1,
+    "detail": "适用于 EchoVideo、YouTube 及类似网站。",
+    "expectedDetail": "适用于 EchoVideo、YouTube 及类似网站。",
+    "detailLines": 1
+   },
+   {
+    "id": "smaller",
+    "label": "较小的文件，用于作业和分享",
+    "expected": "较小的文件，用于作业和分享",
+    "labelLines": 1,
+    "detail": "适用于 Moodle 作业上传、电子邮件和消息。",
+    "expectedDetail": "适用于 Moodle 作业上传、电子邮件和消息。",
+    "detailLines": 1
+   }
+  ],
+  "legend": "文件大小/质量",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__zh-Hans__w1280__forced-dark",
+  "lang": "zh-Hans",
+  "view": "w1280",
+  "mode": "forced-dark",
+  "choices": [
+   {
+    "id": "best",
+    "label": "高质量，用于发布",
+    "expected": "高质量，用于发布",
+    "labelLines": 1,
+    "detail": "适用于 EchoVideo、YouTube 及类似网站。",
+    "expectedDetail": "适用于 EchoVideo、YouTube 及类似网站。",
+    "detailLines": 1
+   },
+   {
+    "id": "smaller",
+    "label": "较小的文件，用于作业和分享",
+    "expected": "较小的文件，用于作业和分享",
+    "labelLines": 1,
+    "detail": "适用于 Moodle 作业上传、电子邮件和消息。",
+    "expectedDetail": "适用于 Moodle 作业上传、电子邮件和消息。",
+    "detailLines": 1
+   }
+  ],
+  "legend": "文件大小/质量",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__zh-Hans__w375__light",
+  "lang": "zh-Hans",
+  "view": "w375",
+  "mode": "light",
+  "choices": [
+   {
+    "id": "best",
+    "label": "高质量，用于发布",
+    "expected": "高质量，用于发布",
+    "labelLines": 1,
+    "detail": "适用于 EchoVideo、YouTube 及类似网站。",
+    "expectedDetail": "适用于 EchoVideo、YouTube 及类似网站。",
+    "detailLines": 2
+   },
+   {
+    "id": "smaller",
+    "label": "较小的文件，用于作业和分享",
+    "expected": "较小的文件，用于作业和分享",
+    "labelLines": 1,
+    "detail": "适用于 Moodle 作业上传、电子邮件和消息。",
+    "expectedDetail": "适用于 Moodle 作业上传、电子邮件和消息。",
+    "detailLines": 2
+   }
+  ],
+  "legend": "文件大小/质量",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__zh-Hans__w375__dark",
+  "lang": "zh-Hans",
+  "view": "w375",
+  "mode": "dark",
+  "choices": [
+   {
+    "id": "best",
+    "label": "高质量，用于发布",
+    "expected": "高质量，用于发布",
+    "labelLines": 1,
+    "detail": "适用于 EchoVideo、YouTube 及类似网站。",
+    "expectedDetail": "适用于 EchoVideo、YouTube 及类似网站。",
+    "detailLines": 2
+   },
+   {
+    "id": "smaller",
+    "label": "较小的文件，用于作业和分享",
+    "expected": "较小的文件，用于作业和分享",
+    "labelLines": 1,
+    "detail": "适用于 Moodle 作业上传、电子邮件和消息。",
+    "expectedDetail": "适用于 Moodle 作业上传、电子邮件和消息。",
+    "detailLines": 2
+   }
+  ],
+  "legend": "文件大小/质量",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__zh-Hans__w375__forced-light",
+  "lang": "zh-Hans",
+  "view": "w375",
+  "mode": "forced-light",
+  "choices": [
+   {
+    "id": "best",
+    "label": "高质量，用于发布",
+    "expected": "高质量，用于发布",
+    "labelLines": 1,
+    "detail": "适用于 EchoVideo、YouTube 及类似网站。",
+    "expectedDetail": "适用于 EchoVideo、YouTube 及类似网站。",
+    "detailLines": 2
+   },
+   {
+    "id": "smaller",
+    "label": "较小的文件，用于作业和分享",
+    "expected": "较小的文件，用于作业和分享",
+    "labelLines": 1,
+    "detail": "适用于 Moodle 作业上传、电子邮件和消息。",
+    "expectedDetail": "适用于 Moodle 作业上传、电子邮件和消息。",
+    "detailLines": 2
+   }
+  ],
+  "legend": "文件大小/质量",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__zh-Hans__w375__forced-dark",
+  "lang": "zh-Hans",
+  "view": "w375",
+  "mode": "forced-dark",
+  "choices": [
+   {
+    "id": "best",
+    "label": "高质量，用于发布",
+    "expected": "高质量，用于发布",
+    "labelLines": 1,
+    "detail": "适用于 EchoVideo、YouTube 及类似网站。",
+    "expectedDetail": "适用于 EchoVideo、YouTube 及类似网站。",
+    "detailLines": 2
+   },
+   {
+    "id": "smaller",
+    "label": "较小的文件，用于作业和分享",
+    "expected": "较小的文件，用于作业和分享",
+    "labelLines": 1,
+    "detail": "适用于 Moodle 作业上传、电子邮件和消息。",
+    "expectedDetail": "适用于 Moodle 作业上传、电子邮件和消息。",
+    "detailLines": 2
+   }
+  ],
+  "legend": "文件大小/质量",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__zh-Hans__w320__light",
+  "lang": "zh-Hans",
+  "view": "w320",
+  "mode": "light",
+  "choices": [
+   {
+    "id": "best",
+    "label": "高质量，用于发布",
+    "expected": "高质量，用于发布",
+    "labelLines": 1,
+    "detail": "适用于 EchoVideo、YouTube 及类似网站。",
+    "expectedDetail": "适用于 EchoVideo、YouTube 及类似网站。",
+    "detailLines": 2
+   },
+   {
+    "id": "smaller",
+    "label": "较小的文件，用于作业和分享",
+    "expected": "较小的文件，用于作业和分享",
+    "labelLines": 1,
+    "detail": "适用于 Moodle 作业上传、电子邮件和消息。",
+    "expectedDetail": "适用于 Moodle 作业上传、电子邮件和消息。",
+    "detailLines": 2
+   }
+  ],
+  "legend": "文件大小/质量",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__zh-Hans__w320__dark",
+  "lang": "zh-Hans",
+  "view": "w320",
+  "mode": "dark",
+  "choices": [
+   {
+    "id": "best",
+    "label": "高质量，用于发布",
+    "expected": "高质量，用于发布",
+    "labelLines": 1,
+    "detail": "适用于 EchoVideo、YouTube 及类似网站。",
+    "expectedDetail": "适用于 EchoVideo、YouTube 及类似网站。",
+    "detailLines": 2
+   },
+   {
+    "id": "smaller",
+    "label": "较小的文件，用于作业和分享",
+    "expected": "较小的文件，用于作业和分享",
+    "labelLines": 1,
+    "detail": "适用于 Moodle 作业上传、电子邮件和消息。",
+    "expectedDetail": "适用于 Moodle 作业上传、电子邮件和消息。",
+    "detailLines": 2
+   }
+  ],
+  "legend": "文件大小/质量",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__zh-Hans__w320__forced-light",
+  "lang": "zh-Hans",
+  "view": "w320",
+  "mode": "forced-light",
+  "choices": [
+   {
+    "id": "best",
+    "label": "高质量，用于发布",
+    "expected": "高质量，用于发布",
+    "labelLines": 1,
+    "detail": "适用于 EchoVideo、YouTube 及类似网站。",
+    "expectedDetail": "适用于 EchoVideo、YouTube 及类似网站。",
+    "detailLines": 2
+   },
+   {
+    "id": "smaller",
+    "label": "较小的文件，用于作业和分享",
+    "expected": "较小的文件，用于作业和分享",
+    "labelLines": 1,
+    "detail": "适用于 Moodle 作业上传、电子邮件和消息。",
+    "expectedDetail": "适用于 Moodle 作业上传、电子邮件和消息。",
+    "detailLines": 2
+   }
+  ],
+  "legend": "文件大小/质量",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__zh-Hans__w320__forced-dark",
+  "lang": "zh-Hans",
+  "view": "w320",
+  "mode": "forced-dark",
+  "choices": [
+   {
+    "id": "best",
+    "label": "高质量，用于发布",
+    "expected": "高质量，用于发布",
+    "labelLines": 1,
+    "detail": "适用于 EchoVideo、YouTube 及类似网站。",
+    "expectedDetail": "适用于 EchoVideo、YouTube 及类似网站。",
+    "detailLines": 2
+   },
+   {
+    "id": "smaller",
+    "label": "较小的文件，用于作业和分享",
+    "expected": "较小的文件，用于作业和分享",
+    "labelLines": 1,
+    "detail": "适用于 Moodle 作业上传、电子邮件和消息。",
+    "expectedDetail": "适用于 Moodle 作业上传、电子邮件和消息。",
+    "detailLines": 2
+   }
+  ],
+  "legend": "文件大小/质量",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__ms-MY__w1280__light",
+  "lang": "ms-MY",
+  "view": "w1280",
+  "mode": "light",
+  "choices": [
+   {
+    "id": "best",
+    "label": "Kualiti tinggi, untuk penerbitan",
+    "expected": "Kualiti tinggi, untuk penerbitan",
+    "labelLines": 1,
+    "detail": "Untuk EchoVideo, YouTube dan laman yang serupa.",
+    "expectedDetail": "Untuk EchoVideo, YouTube dan laman yang serupa.",
+    "detailLines": 1
+   },
+   {
+    "id": "smaller",
+    "label": "Fail lebih kecil, untuk tugasan dan perkongsian",
+    "expected": "Fail lebih kecil, untuk tugasan dan perkongsian",
+    "labelLines": 1,
+    "detail": "Untuk muat naik tugasan Moodle, e-mel dan mesej.",
+    "expectedDetail": "Untuk muat naik tugasan Moodle, e-mel dan mesej.",
+    "detailLines": 1
+   }
+  ],
+  "legend": "Saiz/kualiti fail",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__ms-MY__w1280__dark",
+  "lang": "ms-MY",
+  "view": "w1280",
+  "mode": "dark",
+  "choices": [
+   {
+    "id": "best",
+    "label": "Kualiti tinggi, untuk penerbitan",
+    "expected": "Kualiti tinggi, untuk penerbitan",
+    "labelLines": 1,
+    "detail": "Untuk EchoVideo, YouTube dan laman yang serupa.",
+    "expectedDetail": "Untuk EchoVideo, YouTube dan laman yang serupa.",
+    "detailLines": 1
+   },
+   {
+    "id": "smaller",
+    "label": "Fail lebih kecil, untuk tugasan dan perkongsian",
+    "expected": "Fail lebih kecil, untuk tugasan dan perkongsian",
+    "labelLines": 1,
+    "detail": "Untuk muat naik tugasan Moodle, e-mel dan mesej.",
+    "expectedDetail": "Untuk muat naik tugasan Moodle, e-mel dan mesej.",
+    "detailLines": 1
+   }
+  ],
+  "legend": "Saiz/kualiti fail",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__ms-MY__w1280__forced-light",
+  "lang": "ms-MY",
+  "view": "w1280",
+  "mode": "forced-light",
+  "choices": [
+   {
+    "id": "best",
+    "label": "Kualiti tinggi, untuk penerbitan",
+    "expected": "Kualiti tinggi, untuk penerbitan",
+    "labelLines": 1,
+    "detail": "Untuk EchoVideo, YouTube dan laman yang serupa.",
+    "expectedDetail": "Untuk EchoVideo, YouTube dan laman yang serupa.",
+    "detailLines": 1
+   },
+   {
+    "id": "smaller",
+    "label": "Fail lebih kecil, untuk tugasan dan perkongsian",
+    "expected": "Fail lebih kecil, untuk tugasan dan perkongsian",
+    "labelLines": 1,
+    "detail": "Untuk muat naik tugasan Moodle, e-mel dan mesej.",
+    "expectedDetail": "Untuk muat naik tugasan Moodle, e-mel dan mesej.",
+    "detailLines": 1
+   }
+  ],
+  "legend": "Saiz/kualiti fail",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__ms-MY__w1280__forced-dark",
+  "lang": "ms-MY",
+  "view": "w1280",
+  "mode": "forced-dark",
+  "choices": [
+   {
+    "id": "best",
+    "label": "Kualiti tinggi, untuk penerbitan",
+    "expected": "Kualiti tinggi, untuk penerbitan",
+    "labelLines": 1,
+    "detail": "Untuk EchoVideo, YouTube dan laman yang serupa.",
+    "expectedDetail": "Untuk EchoVideo, YouTube dan laman yang serupa.",
+    "detailLines": 1
+   },
+   {
+    "id": "smaller",
+    "label": "Fail lebih kecil, untuk tugasan dan perkongsian",
+    "expected": "Fail lebih kecil, untuk tugasan dan perkongsian",
+    "labelLines": 1,
+    "detail": "Untuk muat naik tugasan Moodle, e-mel dan mesej.",
+    "expectedDetail": "Untuk muat naik tugasan Moodle, e-mel dan mesej.",
+    "detailLines": 1
+   }
+  ],
+  "legend": "Saiz/kualiti fail",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__ms-MY__w375__light",
+  "lang": "ms-MY",
+  "view": "w375",
+  "mode": "light",
+  "choices": [
+   {
+    "id": "best",
+    "label": "Kualiti tinggi, untuk penerbitan",
+    "expected": "Kualiti tinggi, untuk penerbitan",
+    "labelLines": 1,
+    "detail": "Untuk EchoVideo, YouTube dan laman yang serupa.",
+    "expectedDetail": "Untuk EchoVideo, YouTube dan laman yang serupa.",
+    "detailLines": 2
+   },
+   {
+    "id": "smaller",
+    "label": "Fail lebih kecil, untuk tugasan dan perkongsian",
+    "expected": "Fail lebih kecil, untuk tugasan dan perkongsian",
+    "labelLines": 2,
+    "detail": "Untuk muat naik tugasan Moodle, e-mel dan mesej.",
+    "expectedDetail": "Untuk muat naik tugasan Moodle, e-mel dan mesej.",
+    "detailLines": 2
+   }
+  ],
+  "legend": "Saiz/kualiti fail",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__ms-MY__w375__dark",
+  "lang": "ms-MY",
+  "view": "w375",
+  "mode": "dark",
+  "choices": [
+   {
+    "id": "best",
+    "label": "Kualiti tinggi, untuk penerbitan",
+    "expected": "Kualiti tinggi, untuk penerbitan",
+    "labelLines": 1,
+    "detail": "Untuk EchoVideo, YouTube dan laman yang serupa.",
+    "expectedDetail": "Untuk EchoVideo, YouTube dan laman yang serupa.",
+    "detailLines": 2
+   },
+   {
+    "id": "smaller",
+    "label": "Fail lebih kecil, untuk tugasan dan perkongsian",
+    "expected": "Fail lebih kecil, untuk tugasan dan perkongsian",
+    "labelLines": 2,
+    "detail": "Untuk muat naik tugasan Moodle, e-mel dan mesej.",
+    "expectedDetail": "Untuk muat naik tugasan Moodle, e-mel dan mesej.",
+    "detailLines": 2
+   }
+  ],
+  "legend": "Saiz/kualiti fail",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__ms-MY__w375__forced-light",
+  "lang": "ms-MY",
+  "view": "w375",
+  "mode": "forced-light",
+  "choices": [
+   {
+    "id": "best",
+    "label": "Kualiti tinggi, untuk penerbitan",
+    "expected": "Kualiti tinggi, untuk penerbitan",
+    "labelLines": 1,
+    "detail": "Untuk EchoVideo, YouTube dan laman yang serupa.",
+    "expectedDetail": "Untuk EchoVideo, YouTube dan laman yang serupa.",
+    "detailLines": 2
+   },
+   {
+    "id": "smaller",
+    "label": "Fail lebih kecil, untuk tugasan dan perkongsian",
+    "expected": "Fail lebih kecil, untuk tugasan dan perkongsian",
+    "labelLines": 2,
+    "detail": "Untuk muat naik tugasan Moodle, e-mel dan mesej.",
+    "expectedDetail": "Untuk muat naik tugasan Moodle, e-mel dan mesej.",
+    "detailLines": 2
+   }
+  ],
+  "legend": "Saiz/kualiti fail",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__ms-MY__w375__forced-dark",
+  "lang": "ms-MY",
+  "view": "w375",
+  "mode": "forced-dark",
+  "choices": [
+   {
+    "id": "best",
+    "label": "Kualiti tinggi, untuk penerbitan",
+    "expected": "Kualiti tinggi, untuk penerbitan",
+    "labelLines": 1,
+    "detail": "Untuk EchoVideo, YouTube dan laman yang serupa.",
+    "expectedDetail": "Untuk EchoVideo, YouTube dan laman yang serupa.",
+    "detailLines": 2
+   },
+   {
+    "id": "smaller",
+    "label": "Fail lebih kecil, untuk tugasan dan perkongsian",
+    "expected": "Fail lebih kecil, untuk tugasan dan perkongsian",
+    "labelLines": 2,
+    "detail": "Untuk muat naik tugasan Moodle, e-mel dan mesej.",
+    "expectedDetail": "Untuk muat naik tugasan Moodle, e-mel dan mesej.",
+    "detailLines": 2
+   }
+  ],
+  "legend": "Saiz/kualiti fail",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__ms-MY__w320__light",
+  "lang": "ms-MY",
+  "view": "w320",
+  "mode": "light",
+  "choices": [
+   {
+    "id": "best",
+    "label": "Kualiti tinggi, untuk penerbitan",
+    "expected": "Kualiti tinggi, untuk penerbitan",
+    "labelLines": 1,
+    "detail": "Untuk EchoVideo, YouTube dan laman yang serupa.",
+    "expectedDetail": "Untuk EchoVideo, YouTube dan laman yang serupa.",
+    "detailLines": 2
+   },
+   {
+    "id": "smaller",
+    "label": "Fail lebih kecil, untuk tugasan dan perkongsian",
+    "expected": "Fail lebih kecil, untuk tugasan dan perkongsian",
+    "labelLines": 2,
+    "detail": "Untuk muat naik tugasan Moodle, e-mel dan mesej.",
+    "expectedDetail": "Untuk muat naik tugasan Moodle, e-mel dan mesej.",
+    "detailLines": 2
+   }
+  ],
+  "legend": "Saiz/kualiti fail",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__ms-MY__w320__dark",
+  "lang": "ms-MY",
+  "view": "w320",
+  "mode": "dark",
+  "choices": [
+   {
+    "id": "best",
+    "label": "Kualiti tinggi, untuk penerbitan",
+    "expected": "Kualiti tinggi, untuk penerbitan",
+    "labelLines": 1,
+    "detail": "Untuk EchoVideo, YouTube dan laman yang serupa.",
+    "expectedDetail": "Untuk EchoVideo, YouTube dan laman yang serupa.",
+    "detailLines": 2
+   },
+   {
+    "id": "smaller",
+    "label": "Fail lebih kecil, untuk tugasan dan perkongsian",
+    "expected": "Fail lebih kecil, untuk tugasan dan perkongsian",
+    "labelLines": 2,
+    "detail": "Untuk muat naik tugasan Moodle, e-mel dan mesej.",
+    "expectedDetail": "Untuk muat naik tugasan Moodle, e-mel dan mesej.",
+    "detailLines": 2
+   }
+  ],
+  "legend": "Saiz/kualiti fail",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__ms-MY__w320__forced-light",
+  "lang": "ms-MY",
+  "view": "w320",
+  "mode": "forced-light",
+  "choices": [
+   {
+    "id": "best",
+    "label": "Kualiti tinggi, untuk penerbitan",
+    "expected": "Kualiti tinggi, untuk penerbitan",
+    "labelLines": 1,
+    "detail": "Untuk EchoVideo, YouTube dan laman yang serupa.",
+    "expectedDetail": "Untuk EchoVideo, YouTube dan laman yang serupa.",
+    "detailLines": 2
+   },
+   {
+    "id": "smaller",
+    "label": "Fail lebih kecil, untuk tugasan dan perkongsian",
+    "expected": "Fail lebih kecil, untuk tugasan dan perkongsian",
+    "labelLines": 2,
+    "detail": "Untuk muat naik tugasan Moodle, e-mel dan mesej.",
+    "expectedDetail": "Untuk muat naik tugasan Moodle, e-mel dan mesej.",
+    "detailLines": 2
+   }
+  ],
+  "legend": "Saiz/kualiti fail",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "step__ms-MY__w320__forced-dark",
+  "lang": "ms-MY",
+  "view": "w320",
+  "mode": "forced-dark",
+  "choices": [
+   {
+    "id": "best",
+    "label": "Kualiti tinggi, untuk penerbitan",
+    "expected": "Kualiti tinggi, untuk penerbitan",
+    "labelLines": 1,
+    "detail": "Untuk EchoVideo, YouTube dan laman yang serupa.",
+    "expectedDetail": "Untuk EchoVideo, YouTube dan laman yang serupa.",
+    "detailLines": 2
+   },
+   {
+    "id": "smaller",
+    "label": "Fail lebih kecil, untuk tugasan dan perkongsian",
+    "expected": "Fail lebih kecil, untuk tugasan dan perkongsian",
+    "labelLines": 2,
+    "detail": "Untuk muat naik tugasan Moodle, e-mel dan mesej.",
+    "expectedDetail": "Untuk muat naik tugasan Moodle, e-mel dan mesej.",
+    "detailLines": 2
+   }
+  ],
+  "legend": "Saiz/kualiti fail",
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "sentences__en-GB",
+  "lang": "en-GB",
+  "sentences": [
+   {
+    "key": "preflight.slides",
+    "name": "high quality",
+    "text": "This looks like slides or a screen recording, so the file is made smaller still. If it is mostly camera footage, choose high quality instead."
+   },
+   {
+    "key": "status.storageWayOut",
+    "name": "the smaller file",
+    "text": "Keep less of the video, choose the smaller file, or free some space, then press Check again."
+   },
+   {
+    "key": "preflight.reasons.insufficientStorageResolvable",
+    "name": "the smaller file",
+    "text": "There is not enough free space on this device. This job needs about 120 MB of working space. Free some space and try again, keep less of the video, or choose the smaller file."
+   },
+   {
+    "key": "failure.outOfSpace.next",
+    "name": "the smaller file",
+    "text": "Free some space, or choose the smaller file, and try again."
+   }
+  ],
+  "ok": true
+ },
+ {
+  "key": "sentences__zh-Hans",
+  "lang": "zh-Hans",
+  "sentences": [
+   {
+    "key": "preflight.slides",
+    "name": "高质量",
+    "text": "这看起来像是幻灯片或屏幕录像，所以文件大小会进一步缩小。如果主要是摄像机拍摄的视频，请选择高质量。"
+   },
+   {
+    "key": "status.storageWayOut",
+    "name": "较小的文件",
+    "text": "减少视频长度，选择较小的文件，或者释放一些空间，然后按“再次检查”。"
+   },
+   {
+    "key": "preflight.reasons.insufficientStorageResolvable",
+    "name": "较小的文件",
+    "text": "此设备上的可用空间不足。此作业需要大约 120 MB 的工作空间。请释放一些空间后重试，或保留更少的视频内容，或选择较小的文件。"
+   },
+   {
+    "key": "failure.outOfSpace.next",
+    "name": "较小的文件",
+    "text": "腾出一些空间，或者选择较小的文件，然后重试。"
+   }
+  ],
+  "ok": true
+ },
+ {
+  "key": "sentences__ms-MY",
+  "lang": "ms-MY",
+  "sentences": [
+   {
+    "key": "preflight.slides",
+    "name": "kualiti tinggi",
+    "text": "Ini kelihatan seperti slaid atau rakaman skrin, jadi fail tersebut dibuat lebih kecil. Jika kebanyakannya rakaman kamera, pilih kualiti tinggi sebagai gantinya."
+   },
+   {
+    "key": "status.storageWayOut",
+    "name": "fail yang lebih kecil",
+    "text": "Kurangkan video, pilih fail yang lebih kecil atau kosongkan sedikit ruang, kemudian tekan Semak semula."
+   },
+   {
+    "key": "preflight.reasons.insufficientStorageResolvable",
+    "name": "fail yang lebih kecil",
+    "text": "Ruang kosong pada peranti ini tidak mencukupi. Kerja ini memerlukan kira-kira 120 MB ruang kerja. Kosongkan sedikit ruang dan cuba lagi, kurangkan video atau pilih fail yang lebih kecil."
+   },
+   {
+    "key": "failure.outOfSpace.next",
+    "name": "fail yang lebih kecil",
+    "text": "Kosongkan sedikit ruang atau pilih fail yang lebih kecil dan cuba lagi."
+   }
+  ],
+  "ok": true
+ },
+ {
+  "key": "record__best__en-GB__w1280",
+  "lang": "en-GB",
+  "id": "best",
+  "said": "Finished video — 1.1 MB Made from short-2s.mp4: the whole video (2 seconds), high quality, a cut to the blue closing card. It is not saved yet. It stays here until you start another video or close this tab. Save the video",
+  "expected": "high quality",
+  "named": true,
+  "label": false,
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "record__smaller__en-GB__w1280",
+  "lang": "en-GB",
+  "id": "smaller",
+  "said": "Finished video — 527 kB Made from short-2s.mp4: the whole video (2 seconds), a smaller file, a cut to the blue closing card. It is not saved yet. It stays here until you start another video or close this tab. Save the video",
+  "expected": "a smaller file",
+  "named": true,
+  "label": false,
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "record__best__zh-Hans__w1280",
+  "lang": "zh-Hans",
+  "id": "best",
+  "said": "完成的视频 — 1.1 MB 由 short-2s.mp4 构成：完整视频（2秒钟）、高质量、镜头切换到蓝色结束卡。 视频尚未保存。它会一直显示在这里，直到您开始制作另一个视频或关闭此标签页。 保存视频",
+  "expected": "高质量",
+  "named": true,
+  "label": false,
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "record__smaller__zh-Hans__w1280",
+  "lang": "zh-Hans",
+  "id": "smaller",
+  "said": "完成的视频 — 527 kB 由 short-2s.mp4 构成：完整视频（2秒钟）、较小的文件、镜头切换到蓝色结束卡。 视频尚未保存。它会一直显示在这里，直到您开始制作另一个视频或关闭此标签页。 保存视频",
+  "expected": "较小的文件",
+  "named": true,
+  "label": false,
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "record__best__ms-MY__w1280",
+  "lang": "ms-MY",
+  "id": "best",
+  "said": "Video siap — 1.1 MB Dibuat daripada short-2s.mp4: keseluruhan video (2 saat), kualiti tinggi, potongan kepada kad penutup biru. Ia belum disimpan. Ia kekal di sini sehingga anda memulakan video lain atau menutup tab ini. Simpan video itu",
+  "expected": "kualiti tinggi",
+  "named": true,
+  "label": false,
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ },
+ {
+  "key": "record__smaller__ms-MY__w1280",
+  "lang": "ms-MY",
+  "id": "smaller",
+  "said": "Video siap — 527 kB Dibuat daripada short-2s.mp4: keseluruhan video (2 saat), fail yang lebih kecil, potongan kepada kad penutup biru. Ia belum disimpan. Ia kekal di sini sehingga anda memulakan video lain atau menutup tab ini. Simpan video itu",
+  "expected": "fail yang lebih kecil",
+  "named": true,
+  "label": false,
+  "old": [],
+  "overflowX": false,
+  "ok": true
+ }
+]

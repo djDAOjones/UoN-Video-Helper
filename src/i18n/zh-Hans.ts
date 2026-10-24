@@ -303,12 +303,20 @@ export const zhHans: Messages = {
   preset: {
     legend: '文件大小/质量',
     labels: {
-      best: '更大/更好',
-      smaller: '更小/减少',
+      best: '高质量，用于发布',
+      smaller: '较小的文件，用于作业和分享',
     },
     details: {
-      best: '例如 EchoVideo 或 YouTube 等。',
-      smaller: '适用于上传到 Moodle 作业、通过即时消息或电子邮件发送等。',
+      best: '适用于 EchoVideo、YouTube 及类似网站。',
+      smaller: '适用于 Moodle 作业上传、电子邮件和消息。',
+    },
+    inRecord: {
+      best: '高质量',
+      smaller: '较小的文件',
+    },
+    inSentence: {
+      best: '高质量',
+      smaller: '较小的文件',
     },
   },
   create: {
@@ -346,7 +354,7 @@ export const zhHans: Messages = {
       '这就是您最初使用的文件。请选择不同的名称或文件夹，因为此工具绝不会更改您的原始文件。',
     saved:
       '已保存。请打开保存的文件进行检查，然后将其上传到您要使用的地方，或者在步骤 1 中选择另一个视频。',
-    storageWayOut: '减少视频长度，选择“{smaller}”，或者释放一些空间，然后按“再次检查”。',
+    storageWayOut: '减少视频长度，选择{smaller}，或者释放一些空间，然后按“再次检查”。',
     creating: '正在制作视频。{notice}',
     ready: '您的视频已准备就绪。',
     couldNotCreate: '视频无法制作。{sentence}',
@@ -498,7 +506,7 @@ export const zhHans: Messages = {
       insecureContext:
         '此页面需要安全连接才能处理您的视频。请使用 https:// 地址打开，如果您自行运行，则请使用 localhost。',
       insufficientStorageResolvable:
-        '此设备上的可用空间不足。此作业需要大约 {size} 的工作空间。请释放一些空间后重试，或保留更少的视频内容，或选择 {smaller}。',
+        '此设备上的可用空间不足。此作业需要大约 {size} 的工作空间。请释放一些空间后重试，或保留更少的视频内容，或选择{smaller}。',
       insufficientStorage:
         '此设备上的可用空间不足。此作业需要大约 {size} 的工作空间。请释放一些空间后重试。',
       storageUnknown:

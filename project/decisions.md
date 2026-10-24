@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-24 — VH-188 — The outputs named for what each is and is for; short forms for sentences and the record, which drops the purpose
+
+**Decision:** The two outputs take B6's names and details, "High quality, for publishing" and "Smaller file, for assignments and sharing", in `index.html`, the tables and `PRESETS[id].label`. Sentences that name one take new `preset.inSentence.*` ("high quality", "the smaller file"). The record's `{output}` takes new `preset.inRecord.*` ("high quality", "a smaller file"), without the purpose, as B6 allows. Spec §6, §9.1, §10 and §13 take S1 to S10.
+
+**Rationale:** With the purpose, the record read "…from 0:30.0 to 2:30.0, a smaller file, for assignments and sharing, the white closing graphics…": its comma list of part, output and closing gained what reads as a fourth item. Every new English string was graded by `readingGrade` before the build, and all pass (most are under the eight-word prose threshold). The four sentences that name an output are composed in three languages and checked in Chrome; the slides line needs a high-bitrate screen recording no fixture is, so its unit test draws it. Two Chinese sentences lost the quotation marks or spaces round `{smaller}`, now words in the sentence. 45 Chrome cases pass (`reviews/2026-10-24/vh188-preset-2026-10-24.md`); the longer English name takes two lines at 375 and 320 px. Codex astra: "Commit after the musts below"; its musts, a stale comment in `index.html` and this close, are done. Digest rules applied: Nielsen 2 (the user's words: what the file is and what it is for) and 4 (one name per output, one short form per use).
+
+**Supersedes:** none
+
+**Deferred:** VH-189
+
 ## 2026-10-24 — VH-187 — The top of the page: plain promises, the owner's promise 2, the browser note only when a check has not passed
 
 **Decision:** The lede loses its lead-in, and its promises and `app.description` take the sheet's B4 words, but promise 2 is the owner's own, "Levels audio for consistent listening experience." The browser note shows `browserNote.notPassed` only when a check fails or warns, which outranks a check still pending; otherwise it is hidden, and `pending` and `passed` are gone. Spec §10 takes S17 and S18.
@@ -525,16 +535,6 @@ Each sentence was read against the shipped code: `ends-early.ts` and `ENDS_EARLY
 **Decision:** `summarise()`, `closingResultText()` and `studentIdsHelperText()` are retired, and their assertions now test `readLine()`, `closingResultLines()` and `studentIdsHelperLines()`, which the page calls. A Submission date template the renderer cannot split wraps as ordinary text, because one unbreakable piece would be refused with an error that no edit clears.
 
 **Rationale:** R2-12 and R2-13, and the rank-3 VH-146 and VH-144 findings, in `reviews/2026-10-22/claude-review-of-codex-run.md`. `readLine()` returns the read sentence and "No sound." apart, because the page draws the second in bold. The test that joins the closing lines joins them as the retired function did, so every sentence assertion stands unchanged. The mutation was reproduced before the fix: it failed for English and Malay only. `spike-cards.html` was re-run because `title-card.ts` changed: ALL PASS. Standards: house conventions, regression tests by category, no hollow tests, minimal change; UI-STANDARDS, a disabled control explains itself; WCAG 1.3.1. No change a user can see, and no string or dependency changed. Not checked by a second model.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-22 — VH-151 — Disabled controls look disabled; the status mark gets its own weight role
-
-**Decision:** a system check's pass or fail mark takes `--type-weight-mark` (700), a role of its own, because it is a status glyph, not a heading. The fix that keeps a locked, invalid textarea's dashed edge, `:not(:disabled)` on the invalid rule, also applies to the text field, which had the same defect.
-
-**Rationale:** R2-6, R2-11 and the rank-3 page and VH-145 findings of `reviews/2026-10-22/claude-review-of-codex-run.md`, as VH-151's criteria name them. `:not(:disabled)` on the invalid rule was chosen over another selector in the disabled group, which kept that group and its VH-150 pin unchanged. Before the fix, the old trim rule held the field at 192 px in a 182 px row at 280 px. It overflowed its row but stayed short of the page edge, so a narrower frame would have scrolled, as the review's arithmetic said. Headless Chrome was driven over CDP, with forced colours emulated, an 18 px default font set and the sample `AMCS3059` read; the measurements are in `reviews/2026-10-22/vh151-browser.json`. VH-150.3's states needed a finished or failed job, and this walk reached none of them, so that line stands. Standards: UI-STANDARDS, disabled reads as disabled and forced colours; WCAG 1.4.10 and 2.5.5; Carbon, tokens, not literals; house conventions, regression tests by category and minimal change. No colour changes except the arrow's, no string and no dependency changed. Not checked by a second model.
 
 **Supersedes:** none
 

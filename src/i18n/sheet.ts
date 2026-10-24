@@ -126,6 +126,8 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
   ],
   ['closing.result', 'Step 4: the line under the controls saying what the closing will do'],
   ['preset', 'Step 5, File size / quality'],
+  ['preset.inRecord', 'Step 6: the finished video\'s one-line summary, "Made from …"'],
+  ['preset.inSentence', 'Inside other sentences: the device check, the status line and an error box'],
   ['create', 'Step 6, Create: buttons and labels'],
   ['status', 'Step 6: the status line under the buttons, also read out by screen readers'],
   ['status.verdictSpoken', 'Not shown: read out by screen readers when the device check finishes'],
@@ -240,8 +242,8 @@ const PLACEHOLDERS: Readonly<Record<string, string>> = {
     'a list of facts about the video, like "4 minutes 12 seconds, 1920 × 1080, stereo (two channels)"',
   found: 'a list, like "2 caption tracks and 1 chapter track"',
   remedy: 'another sentence from this sheet, saying what to do',
-  smaller: 'the name of the smaller output, from preset.labels.smaller',
-  best: 'the name of the larger output, from preset.labels.best',
+  smaller: 'the smaller output, named in a sentence, from preset.inSentence.smaller',
+  best: 'the larger output, named in a sentence, from preset.inSentence.best',
   notice: 'another sentence from this sheet (progress.jobNotice)',
   sentence: 'an error message from this sheet',
   heading: 'a heading from this sheet',
@@ -257,7 +259,7 @@ const PLACEHOLDERS: Readonly<Record<string, string>> = {
   left: 'the time left, from progress.timeLeft or progress.fewSecondsLeft',
   app: 'the product name, from app.title',
   part: 'what part of the video was kept, from result.keptWhole or result.keptPart',
-  output: 'the output chosen, from preset.labels',
+  output: 'the output chosen, from preset.inRecord',
   closing: 'how the video closes, from result.closing…',
   title: 'a heading from this sheet',
   detail: 'a sentence from this sheet',
@@ -391,8 +393,16 @@ const NOTES: Readonly<Record<string, string>> = {
     'Drawn in bold under the logo at the end of the video, like a stamp on a document, so it must fit on one line: keep it about as short as the English. A change here means the closing videos are built again.',
   'result.closingInternal':
     'Adds to how the video closes, like "a cut to the blue closing card, marked “Internal use only”". Keep the quotation marks.',
-  'preset.labels.best': 'The name of the larger output. Other rows quote it.',
-  'preset.labels.smaller': 'The name of the smaller output. Other rows quote it.',
+  'preset.labels.best': 'The name of the larger output: what it is, then what it is for.',
+  'preset.labels.smaller': 'The name of the smaller output: what it is, then what it is for.',
+  'preset.inRecord.best':
+    'The larger output, in the list after "Made from …" (result.summary): the start of preset.labels.best, without what it is for.',
+  'preset.inRecord.smaller':
+    'The smaller output, in the list after "Made from …" (result.summary): the start of preset.labels.smaller, without what it is for.',
+  'preset.inSentence.best':
+    'The larger output, named inside a sentence, after "choose": the start of preset.labels.best. Other rows quote it.',
+  'preset.inSentence.smaller':
+    'The smaller output, named inside a sentence, after "choose": the start of preset.labels.smaller. Other rows quote it.',
   'systemCheck.marks.pass': 'A one-word mark beside a check that passed.',
   'systemCheck.marks.fail': 'A one-word mark beside a check that failed.',
   'systemCheck.marks.warn':
