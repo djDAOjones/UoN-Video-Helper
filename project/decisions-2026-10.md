@@ -658,3 +658,13 @@
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-21 — PLAN-4 — Phase 4 and the authorised Codex run close
+
+**Decision:** Phase 4 closes with VH-144, VH-145 and VH-146 shipped, reconciled against its Items list. The authorised run and its report are complete. No next phase is approved: VH-13 in Next remains blocked by VH-M2, so further implementation order needs owner direction.
+
+**Rationale:** VH-144 pays V-20/V-23, VH-145 V-19/V-25, and VH-146 V-30 without changing the card floor or words. Local recall before editing scored 8/8 (2,2,2,2): latest implementation closes VH-146/VH-145/VH-144/VH-142 are anchored by their close headings and Phase 4/3 trajectory; VH-144’s shared reason and field width provide the phase decision and why; wish-list/backlog locate human, spec and maintainer deferrals; the handoff’s six-step run and backlog’s blocked Next establish the absence of an approved next phase. This is local, not a fresh-session handoff. The report and changed translation-key list are in reviews/2026-10-21; the reserved writing review is explicitly captured as a wish line. Milestone audit again finds zero runtime and 14 development findings (10 high, 1 moderate, 3 low), covered by the existing V3-HARNESS audit wish. No dependencies changed. House conventions: milestone audit, complete ledger and retained verification evidence. Known missing-sample and frozen-canon warnings remain covered by their existing wishes. Taken gateless under the handoff; no second-model review or human acceptance is claimed.
+
+**Supersedes:** none
+
+**Deferred:** none

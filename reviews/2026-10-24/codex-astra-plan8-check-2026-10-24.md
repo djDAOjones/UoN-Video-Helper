@@ -1,0 +1,22 @@
+<!-- markdownlint-disable -->
+<!-- Codex astra (codex exec -m gpt-6-astra -s read-only), check of PLAN-8, 2026-10-24, at main b7937c2 with the working-tree diff; brief: codex-astra-plan8-brief-2026-10-24.md. The reply, verbatim but for its links, set as code references. All five musts are applied: U2 added (UI-STANDARDS 2,399), the browser note's fail-or-warn precedence and mixed-state tests in VH-187, VH-187 freed of VH-191, S21 and VH-192 cover the finished video's added cards, and the VH-132 supersession recorded with its scope. Both shoulds are applied: INTAKE.5's value half retired on the sheet and in the decision, and the sheet states the whitespace convention, labels heading corrections, and spells out the five errors. -->
+
+Commit after the musts below
+
+1. **must — Make VH-194 achievable within budget.** U1 reduces UI-STANDARDS from 2,406 to **2,404**, but `VH-194.md:9` permits only the listed corrections and requires 2,400 words. Add the remaining word trade to the approval sheet and update its totals. The spec calculation is correct: **8,096 words**, with every intermediate item below 8,100.
+
+2. **must — Resolve Q8’s mixed pending/failure states.** `VH-187.md:10` says step 1 is the only status while checks run; the next criterion requires `notPassed` for any failed or warning check. Currently, `system-check.ts:70` checks `pending` first. Specify that an observed failure/warning takes precedence, and require cases containing both `pending` and `fail`/`warn`. Simply removing the pending string would hide those alerts.
+
+3. **must — Remove VH-187’s dependency on a later item.** `VH-187.md:10` requires Video language already moved by VH-191, whereas the fixed order places VH-191 later (`wording sheet:5`). Keep the move in VH-191 and make VH-187’s acceptance describe the page at its own close.
+
+4. **must — Correct the finished player’s accessibility rationale.** S21 merely broadens “preview” to “players” while retaining the claim that their content is the user’s recording, outside the app’s control (`sheet:378`). The finished video also contains generated title cards, submission labels and closing text. `VH-192.md:34`’s silent-closing/logotype argument does not cover those. Require their accessibility assessment and distinguish them from source footage in the proposed exception; place any resulting wording on the approval sheet.
+
+5. **must — Record the scoped supersession.** PLAN-8 says `Supersedes: none` (`decisions.md:49`), although settled Q4 changes VH-132’s explicit placement and “never locked” decision (`decisions-2026-10.md:218`). Name that earlier decision and delimit the change, as rule 4 requires. Protected-document approval can remain pending.
+
+6. **should — Account for INTAKE.5’s omitted requirement.** The removed wish at `b7937c2` requested shorter labels **with the explanation in the value**. B1 only changes labels, and VH-186 only requires those changes (`sheet:25`, `VH-186.md:9`). Preserve that requirement in approved value rows, or explicitly record its disposition rather than treating the whole wish as covered.
+
+7. **should — Tighten the approval sheet’s precision.** All **31 substantive replacements** match once after whitespace normalization; fourteen are not literal matches because wrapping differs. State that convention. S5 changes the §6.2 heading but is labelled under §6.1 (`sheet:154`). Also expand the five error replacements at `sheet:76` into complete proposed strings: the current messages use different sentence openings.
+
+8. **may — Retain the answer handling and approval blockers.** Within the supplied record, the quotations are consistent, including Q4’s spelling. Q1/Q1a/Q2 reach VH-182’s addresses and contact text; Q3 reaches VH-192; Q4 reaches VH-191; Q8 is explicit, subject to point 2. B6, B11, the help links, S1–S10 and S25 are marked provisional. Q5–Q7 remain blocked. Independent authentication of the original chat quotations is unavailable from this candidate.
+
+9. **may — Retain the remaining ledger structure.** All **21 removed wishes** have promotion traces; INTAKE.2 remains. Items and Deferred contain the same fourteen IDs—thirteen implementation items plus the close—and each remains in the backlog. The archive move is verbatim and its count is correctly 65. Backlog and decision-slice counts are 989 and 853 words. Apart from the issues above, I found no additional control beyond the agreed additions. No correction has been applied to `src/` or `docs/`; I ran neither the gate nor a build.
