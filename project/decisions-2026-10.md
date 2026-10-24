@@ -744,3 +744,24 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Items:** VH-150, VH-151, VH-152, VH-153
 
 **Deferred:** none
+
+## 2026-10-22 — PLAN-5 — The owner's answers of 22 October: six more Phase 5 items, the spec rows approved, the infrastructure deferred
+
+**Decision:** Phase 5 gains six items after VH-153, each from an owner answer in chat on 2026-10-22: VH-154 (Page language into the header band), VH-155 ("audio", not "sound", and "This tool"), VH-156 (the writing review's 24 proposals), VH-157 (a title card with nothing typed), VH-158 (a cut-short Matroska or WebM file said) and VH-159 (the approved spec rows applied); the internal infrastructure waits until the app settles; VH-14's Xerte upload is the owner's, today.
+
+**Rationale:** The owner's words, answering the orchestrator chat's list of open questions:
+
+- VH-143.1, the frame above step 1: "agreed" — the recommendation stands: Page language moves into the header band on the right, the two video switchers stay under the lede. Promoted to VH-154.
+- VH-143.3, "audio" or "sound", "This app" or "This tool": "audio and tool" — the page says "audio" for the one concept, where it now says "sound" (the writing review §4 notes the owner's rule favours "audio" as a word shared across languages), and the browser sentence says "This tool". Promoted to VH-155.
+- PLAN-4.1, the writing review's 24 proposals: "approved". Promoted to VH-156, with PLAN-5.1 (the Chinese `failure.captured`) in the same change; VH-153 still changes its four shared rows once, as its Now says.
+- VH-138.1, a title card with only the date: "perhaps a warning and any other recommended good UX and accessible friendly course of action (focus attention or control to that parameter?)" — a date-only card is not made silently; the agent recommends the accessible pattern at VH-157's start, with focus moved to the card's first field. Promoted to VH-157.
+- VH-139.4, a cut-short Matroska or WebM file: "yes, something along the lines of 'the video file is shorter than expected, please check it before using'". Mediabunny's index declares only what it can read, so VH-158 first establishes a reliable signal; if none exists, it reports back rather than guessing. Promoted to VH-158.
+- PLAN-5.2, the two "recordings": "use 'video' for the person's own thing, as the rest of the app already does ('Your video is ready', 'Creating your video'), and describe the technical limit without the word 'recording' at all." Folded into VH-156.
+- The spec approvals: "yes to all" — VH-139.1, VH-140.1, VH-142.1, VH-148.1 and VH-138.3, applied by VH-159 last in the phase so the spec says what Phase 5 ships. The spec stands at 7,757 of 7,800 words, so VH-159 may need a budget decision; VH-141.1 waits for VH-150's replacement draft.
+- Housekeeping, V31-UPGRADE.1, INTAKE.8 and V3-HARNESS.1: "defer all internal infrastructure such as 3.1 upgrade. we will look at this once the app is settled." The three lines, and VH-147.1, stay on the wish list.
+- Announce progress: "done" — PLAN-5's entry above stands: Announce progress stays.
+- VH-14: "this is happening today, via Xerte". The person checks (NVDA, VoiceOver, Windows contrast themes, the Teams link, `samples/`) go to colleagues in Disability Support Services, and the translations to campus colleagues, both on the owner's asking; their wish lines stay open until a result comes back.
+
+**Supersedes:** none
+
+**Deferred:** none

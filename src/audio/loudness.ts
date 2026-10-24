@@ -32,7 +32,7 @@ import { designKWeighting } from './kweighting'
 /** BS.1770-4 eq. 2: the offset that cancels K-weighting's gain at 1 kHz. */
 const LOUDNESS_OFFSET = -0.691
 /** BS.1770-4 section 3: gating block length and hop (75% overlap). */
-const BLOCK_SECONDS = 0.4
+export const BLOCK_SECONDS = 0.4
 const INTEGRATED_HOP_SECONDS = 0.1
 /** EBU Tech 3341: the short-term window. */
 const SHORT_TERM_SECONDS = 3

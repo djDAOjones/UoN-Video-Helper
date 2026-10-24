@@ -42,7 +42,12 @@ import { OpfsWorkspace, sweepOrphanedJobs } from '../media/opfs'
 import { requireReadableOutputVideo } from '../media/output-integrity'
 import { verifyOutputAudio } from '../media/output-verification'
 import { JobFailureError, classifyFailure, failureReasonFor, type FailureCode } from './failure'
-import { CancelledError, runPipeline, throwIfAborted } from '../media/pipeline'
+import {
+  CancelledError,
+  keptRangeOnFrames,
+  runPipeline,
+  throwIfAborted,
+} from '../media/pipeline'
 import { preflightVerdict, type PreflightSummary } from '../media/preflight'
 import { calibrationProbe } from '../media/probe'
 import { brandingAllowanceSeconds, drawTitleCardFrame } from '../media/title-card-frame'
@@ -519,8 +524,16 @@ async function handlePreflight(
     if (report.audio === null || report.audio.canDecode) {
       const audioInput = openInput(file)
       const audioTrack = await audioInput.getPrimaryAudioTrack()
+      // The sound the job will judge: the kept range on frame edges, as the
+      // pipeline places it, so a keep near one block is not called silent
+      // here and given sound there (VH-185, Codex review).
+      const pictureTrack = keptRange ? await audioInput.getPrimaryVideoTrack() : null
+      const soundRange =
+        keptRange && pictureTrack ? await keptRangeOnFrames(pictureTrack, keptRange) : keptRange
       const analysisStartedAt = performance.now()
-      const analysis = audioTrack ? await analyseSourceAudio(audioTrack, signal, keptRange) : null
+      const measured = audioTrack ? await analyseSourceAudio(audioTrack, signal, soundRange) : null
+      // Too little sound in the part kept to level is no sound (VH-185).
+      const analysis = measured && !('silent' in measured) ? measured : null
       if (analysis) {
         analysisPass = {
           wallSeconds: (performance.now() - analysisStartedAt) / 1000,
@@ -533,10 +546,10 @@ async function handlePreflight(
       const soundShort = audioTrack
         ? shortfall(
             {
-              decodedEndSeconds: analysis?.decodedEndSeconds ?? null,
-              ...(await declaredExtent(audioTrack, keptRange)),
+              decodedEndSeconds: measured?.decodedEndSeconds ?? null,
+              ...(await declaredExtent(audioTrack, soundRange)),
             },
-            keptRange?.startSeconds ?? 0,
+            soundRange?.startSeconds ?? 0,
           )
         : null
       audioWarnings = detectSourceWarnings(analysis, soundShort, fileCutShort)

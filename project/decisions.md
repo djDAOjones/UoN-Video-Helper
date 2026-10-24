@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-24 — VH-185 — A kept sound shorter than the meter's 400 ms block is no sound: a silent job, said before Create
+
+**Decision:** A trimmed part whose decoded sound is shorter than `BLOCK_SECONDS` (now exported from `src/audio/loudness.ts`) is a silent keep: pre-flight shows the existing "This video has no audio" and the job runs with no audio track, so the output check no longer refuses it after the encode. Untrimmed files are out of scope, unchanged, as wish line VH-185.1.
+
+**Rationale:** VH-139's case (sound from 4 s, kept 0:00–0:04, 21 ms of AAC priming) failed "invalid-measurement" after the whole encode. `traverse` now counts decoded, kept frames apart from gap-fill; `analyseSourceAudio` and `planAudio` return a `KeptSilence` carrying the decode's end, because returning `null` made pre-flight say "The file ends early … at 0:00" in place of no-audio, and the result would have said the same. The untrimmed guard stays as an earlier Codex review set it, since the item and its case are a trim's and the no-audio words are unproven for a whole short track. The output carries no audio for the sliver. Tests reproduce the case and failed before the fix; 400 ms and more still levels; the EBU harness passes unchanged. 42 Chrome cases pass (`reviews/2026-10-24/vh185-sliver-2026-10-24.md`). Codex astra: "Commit after the musts below"; its must, that pre-flight and the job judge different ranges (the job's cuts sit on frame edges), is fixed by one `keptRangeOnFrames` for both, with a regression test and 9 Chrome cases re-run.
+
+**Supersedes:** none
+
+**Deferred:** VH-186
+
 ## 2026-10-24 — VH-184 — The onset toggletip closes when focus moves on, and is edged as help, not a notification
 
 **Decision:** Focus arriving anywhere outside the "?" and its text closes the toggletip, so Tab and Shift+Tab never leave it open; Escape closes it and returns focus to the "?" unless focus is on a control elsewhere. Its edge becomes 1 px all round in the existing `--border-subtle`, not the notification's 4 px rail.
@@ -556,24 +566,3 @@ Spec §9.2 and §11 name the email as the one feedback route. VH-160 drafts that
 **Items:** VH-160, VH-137, VH-162, VH-14
 
 **Deferred:** VH-161, VH-13, VH-17, VH-113
-
-## 2026-10-22 — PLAN-5 — The owner's answers of 22 October: six more Phase 5 items, the spec rows approved, the infrastructure deferred
-
-**Decision:** Phase 5 gains six items after VH-153, each from an owner answer in chat on 2026-10-22: VH-154 (Page language into the header band), VH-155 ("audio", not "sound", and "This tool"), VH-156 (the writing review's 24 proposals), VH-157 (a title card with nothing typed), VH-158 (a cut-short Matroska or WebM file said) and VH-159 (the approved spec rows applied); the internal infrastructure waits until the app settles; VH-14's Xerte upload is the owner's, today.
-
-**Rationale:** The owner's words, answering the orchestrator chat's list of open questions:
-
-- VH-143.1, the frame above step 1: "agreed" — the recommendation stands: Page language moves into the header band on the right, the two video switchers stay under the lede. Promoted to VH-154.
-- VH-143.3, "audio" or "sound", "This app" or "This tool": "audio and tool" — the page says "audio" for the one concept, where it now says "sound" (the writing review §4 notes the owner's rule favours "audio" as a word shared across languages), and the browser sentence says "This tool". Promoted to VH-155.
-- PLAN-4.1, the writing review's 24 proposals: "approved". Promoted to VH-156, with PLAN-5.1 (the Chinese `failure.captured`) in the same change; VH-153 still changes its four shared rows once, as its Now says.
-- VH-138.1, a title card with only the date: "perhaps a warning and any other recommended good UX and accessible friendly course of action (focus attention or control to that parameter?)" — a date-only card is not made silently; the agent recommends the accessible pattern at VH-157's start, with focus moved to the card's first field. Promoted to VH-157.
-- VH-139.4, a cut-short Matroska or WebM file: "yes, something along the lines of 'the video file is shorter than expected, please check it before using'". Mediabunny's index declares only what it can read, so VH-158 first establishes a reliable signal; if none exists, it reports back rather than guessing. Promoted to VH-158.
-- PLAN-5.2, the two "recordings": "use 'video' for the person's own thing, as the rest of the app already does ('Your video is ready', 'Creating your video'), and describe the technical limit without the word 'recording' at all." Folded into VH-156.
-- The spec approvals: "yes to all" — VH-139.1, VH-140.1, VH-142.1, VH-148.1 and VH-138.3, applied by VH-159 last in the phase so the spec says what Phase 5 ships. The spec stands at 7,757 of 7,800 words, so VH-159 may need a budget decision; VH-141.1 waits for VH-150's replacement draft.
-- Housekeeping, V31-UPGRADE.1, INTAKE.8 and V3-HARNESS.1: "defer all internal infrastructure such as 3.1 upgrade. we will look at this once the app is settled." The three lines, and VH-147.1, stay on the wish list.
-- Announce progress: "done" — PLAN-5's entry above stands: Announce progress stays.
-- VH-14: "this is happening today, via Xerte". The person checks (NVDA, VoiceOver, Windows contrast themes, the Teams link, `samples/`) go to colleagues in Disability Support Services, and the translations to campus colleagues, both on the owner's asking; their wish lines stay open until a result comes back.
-
-**Supersedes:** none
-
-**Deferred:** none

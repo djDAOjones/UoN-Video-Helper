@@ -22,6 +22,7 @@ import {
   VideoSampleSource,
   type AudioSample,
   type Input,
+  type InputVideoTrack,
 } from 'mediabunny'
 
 import type { AudioWarning } from '../audio/warnings'
@@ -37,7 +38,12 @@ import {
 import type { OutputShape, Preset } from '../config/presets'
 import { INTEGRATED_TOLERANCE_LU, TARGET_INTEGRATED_LUFS } from '../config/audio'
 import { JobFailureError } from '../workers/failure'
-import { createContentAudioProcessor, planAudio } from './audio-plan'
+import {
+  createContentAudioProcessor,
+  planAudio,
+  type AudioPlan,
+  type KeptSilence,
+} from './audio-plan'
 import { toSample } from './audio-frames'
 import {
   BrandingRenderer,
@@ -236,6 +242,28 @@ export function throwIfAborted(signal: AbortSignal | undefined): void {
 }
 
 /**
+ * A kept range with each cut on the edge of the frame it falls in, so the
+ * sound and the picture start and stop on the same instant (VH-95). Packet
+ * metadata only: nothing is decoded to find them. Pre-flight's sound pass
+ * takes the same range as the job, so both judge the same sound (VH-185).
+ */
+export async function keptRangeOnFrames(
+  videoTrack: InputVideoTrack,
+  requested: KeptRange,
+): Promise<KeptRange> {
+  const packets = new EncodedPacketSink(videoTrack)
+  const frameAt = async (seconds: number): Promise<FrameSpan | null> => {
+    const packet = await packets.getPacket(seconds, { metadataOnly: true })
+    return packet ? { timestampSeconds: packet.timestamp, durationSeconds: packet.duration } : null
+  }
+  return snapKeptRangeToFrames(
+    requested,
+    await frameAt(requested.startSeconds),
+    await frameAt(requested.endSeconds),
+  )
+}
+
+/**
  * Runs the full video pipeline and returns the finished file.
  *
  * On cancellation or failure the output is abandoned and the workspace is
@@ -283,22 +311,11 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
   if (!videoTrack) throw new Error('The source has no video track')
   const audioTrack = await input.getPrimaryAudioTrack()
 
-  // Each cut on the edge of the frame it falls in, so the sound and the
-  // picture start and stop on the same instant (VH-95). Packet metadata only:
-  // nothing is decoded to find them.
+  // Each cut on the edge of the frame it falls in ({@link keptRangeOnFrames}).
   let keptRange = options.keptRange ?? null
   if (keptRange) {
-    const packets = new EncodedPacketSink(videoTrack)
-    const frameAt = async (seconds: number): Promise<FrameSpan | null> => {
-      const packet = await packets.getPacket(seconds, { metadataOnly: true })
-      return packet ? { timestampSeconds: packet.timestamp, durationSeconds: packet.duration } : null
-    }
     const requested = keptRange
-    keptRange = snapKeptRangeToFrames(
-      requested,
-      await frameAt(requested.startSeconds),
-      await frameAt(requested.endSeconds),
-    )
+    keptRange = await keptRangeOnFrames(videoTrack, requested)
     log.info('pipeline', 'kept range placed on frame edges', {
       requestedSeconds: [requested.startSeconds, requested.endSeconds],
       keptSeconds: [keptRange.startSeconds, keptRange.endSeconds],
@@ -327,7 +344,9 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
 
   // Passes A and B. The encode cannot start until the single linear gain is
   // known, and the gain is not knowable until the chain has been measured.
-  let audioPlan = null
+  let audioPlan: AudioPlan | null = null
+  /** A part kept with too little sound to level: a silent job (VH-185). */
+  let silentKeep: KeptSilence | null = null
   if (audioTrack) {
     onProgress?.({ stage: 'analysing', fraction: 0 })
     // Both traversals report, throttled: the analysis is two full passes over
@@ -335,7 +354,7 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
     // the signal that a worker is wedged, saying nothing for minutes is how a
     // healthy long job got itself cancelled (VH-51).
     let analysed = 0
-    audioPlan = await planAudio(
+    const planned = await planAudio(
       audioTrack,
       signal,
       () => {
@@ -350,6 +369,8 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       // applause must not drag the gain the viewer hears (VH-95).
       keptRange,
     )
+    if ('silent' in planned) silentKeep = planned
+    else audioPlan = planned
     throwIfAborted(signal)
     // Known now, said now. A plan the solver could not bring inside the
     // contract would be refused by the output check after the whole encode
@@ -531,7 +552,9 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
   // Where each lane's own decoded content ended, in source seconds, so a file
   // whose data stops before its index is told apart from a whole one (VH-139).
   let pictureEndSeconds: number | null = null
-  let soundEndSeconds: number | null = null
+  // A silent keep's sliver of sound decoded whole, so the sound did not stop
+  // early: it is where the decode ended, never the start of the part kept.
+  let soundEndSeconds: number | null = silentKeep?.decodedEndSeconds ?? null
 
   const renderer = new BrandingRenderer(shape, options.backgroundColour)
 

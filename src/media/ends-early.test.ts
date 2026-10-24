@@ -223,7 +223,10 @@ describe('the analysis pass, over a real file', () => {
   it('raises nothing for a whole file whose sound starts at the out-point (Codex review)', async () => {
     const bytes = await pcmMp4({ spans: [[1.5, 3]] })
     const range = { startSeconds: 0, endSeconds: 1.5 }
-    expect(await analyseSourceAudio(await soundTrackOf(bytes), undefined, range)).toBeNull()
+    expect(await analyseSourceAudio(await soundTrackOf(bytes), undefined, range)).toEqual({
+      silent: true,
+      decodedEndSeconds: null,
+    })
     expect(await soundShort(bytes, range)).toBeNull()
   })
 

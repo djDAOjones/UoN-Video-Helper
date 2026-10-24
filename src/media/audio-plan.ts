@@ -39,6 +39,7 @@ import { AudioAnalyser, type AudioAnalysis } from '../audio/analyse'
 import { AudioChain } from '../audio/chain'
 import { DecodeDamageGate, type TimedBlock } from '../audio/decode-damage'
 import { solveChainGainDb } from '../audio/gain-solve'
+import { BLOCK_SECONDS } from '../audio/loudness'
 import { buildGainEnvelope, type GainEnvelope } from '../audio/macrolevel'
 import { GAP_SILENCE_BLOCK_SECONDS, LIMITER } from '../config/audio'
 import { log } from '../core/logger'
@@ -75,11 +76,45 @@ export interface AudioPlan {
   readonly predictedOutputLufs: number | null
 }
 
+/**
+ * What a pass over a kept range gives when the range holds too little sound
+ * to level (VH-185): the job is a silent one. Where the sound decoded there
+ * ends is still said, so a sliver that decoded whole is never told as a file
+ * that stops early (VH-139).
+ */
+export interface KeptSilence {
+  readonly silent: true
+  /** Where the last sound decoded in the part kept ends, or `null` when none decoded. */
+  readonly decodedEndSeconds: number | null
+}
+
 /** What one traversal produced. */
 interface Traversal {
   readonly analysis: AudioAnalysis
   /** Frames the traversal emitted, gap-fill and flush included. */
   readonly frames: number
+  /** Frames decoded from the source and kept: sound, never gap-fill (VH-185). */
+  readonly decodedFrames: number
+}
+
+/**
+ * Whether a kept range holds too little sound to level: less than one of the
+ * meter's gating blocks, so no block can be measured and the part's loudness
+ * is no number at all. A sliver of a late sound — 22 ms of priming kept
+ * before a cut (VH-139.6) — is a silent part, not one the output check
+ * refuses after the whole encode (VH-185). Untrimmed, unchanged.
+ */
+function keptTooLittleSound(
+  traversal: Traversal,
+  range: KeptRange | null,
+  sampleRate: number,
+): boolean {
+  return range !== null && traversal.decodedFrames / sampleRate < BLOCK_SECONDS
+}
+
+/** A silent keep, from a traversal of the source. */
+function keptSilence(traversal: Traversal): KeptSilence {
+  return { silent: true, decodedEndSeconds: traversal.analysis.decodedEndSeconds ?? null }
 }
 
 /**
@@ -129,6 +164,7 @@ async function traverse(
     keptAudioAnchorSeconds(range, range ? await track.getFirstTimestamp() : null),
   )
   let frames = 0
+  let decodedFrames = 0
   /** The end of the last decoded block kept, in source seconds (VH-139). */
   let decodedEndSeconds: number | null = null
 
@@ -155,6 +191,7 @@ async function traverse(
     if (signal?.aborted) return
     const keptFrames = kept.planar[0]?.length ?? 0
     gaps.accept(keptFrames)
+    decodedFrames += keptFrames
     const keptEndSeconds = kept.timestampSeconds + keptFrames / sampleRate
     if (decodedEndSeconds === null || keptEndSeconds > decodedEndSeconds)
       decodedEndSeconds = keptEndSeconds
@@ -197,7 +234,7 @@ async function traverse(
     })
   }
   const analysis = analyser.finish()
-  if (!gate) return { analysis, frames }
+  if (!gate) return { analysis, frames, decodedFrames }
   // A stretch that starts in the block holding the in-point is said at the
   // in-point: the warning names times inside the part that will be seen.
   const from = range?.startSeconds ?? 0
@@ -208,6 +245,7 @@ async function traverse(
       decodedEndSeconds,
     },
     frames,
+    decodedFrames,
   }
 }
 
@@ -225,16 +263,17 @@ export async function analyseSourceAudio(
   signal?: AbortSignal,
   /** The kept range, so the warnings describe the part that will be seen (VH-95). */
   range: KeptRange | null = null,
-): Promise<AudioAnalysis | null> {
+): Promise<AudioAnalysis | KeptSilence> {
   const [sampleRate, channelCount] = await Promise.all([
     track.getSampleRate(),
     track.getNumberOfChannels(),
   ])
   const traversal = await traverse(track, sampleRate, channelCount, null, signal, range, true)
   // A kept range can hold no sound — the track starts after the out-point,
-  // or the cut sits inside a hole. That is a silent source, and says so,
-  // rather than an analysis of nothing (Codex review). Untrimmed, unchanged.
-  if (range && traversal.frames === 0) return null
+  // or the cut sits inside a hole — or less than the meter can measure. That
+  // is a silent source, and says so, rather than an analysis of nothing
+  // (Codex review, VH-185).
+  if (keptTooLittleSound(traversal, range, sampleRate)) return keptSilence(traversal)
   return traversal.analysis
 }
 
@@ -280,7 +319,7 @@ export async function planAudio(
    * applied to another (VH-95).
    */
   range: KeptRange | null = null,
-): Promise<AudioPlan | null> {
+): Promise<AudioPlan | KeptSilence> {
   const [sampleRate, channelCount] = await Promise.all([
     track.getSampleRate(),
     track.getNumberOfChannels(),
@@ -297,11 +336,12 @@ export async function planAudio(
     true,
     onSample,
   )
-  // Nothing to level: the kept range holds no sound. The job is a silent one
-  // and the caller adds no audio track (Codex review). Untrimmed, unchanged.
-  if (range && source.frames === 0) {
+  // Nothing to level: the kept range holds no sound, or less than one block.
+  // The job is a silent one and the caller adds no audio track (Codex
+  // review, VH-185).
+  if (keptTooLittleSound(source, range, sampleRate)) {
     log.info('audio', 'kept range holds no sound; treating the job as silent')
-    return null
+    return keptSilence(source)
   }
   const { analysis } = source
   const envelope = buildGainEnvelope({

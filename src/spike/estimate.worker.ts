@@ -113,7 +113,7 @@ self.onmessage = async (event: MessageEvent<EstimateRunRequest>): Promise<void> 
     const audioTrack = await openInput(file).getPrimaryAudioTrack()
     const analysisStartedAt = performance.now()
     const analysed = audioTrack ? await analyseSourceAudio(audioTrack) : null
-    const analysis = analysed
+    const analysis = analysed && !('silent' in analysed)
       ? { wallSeconds: since(analysisStartedAt), audioSeconds: analysed.durationSeconds }
       : null
 
