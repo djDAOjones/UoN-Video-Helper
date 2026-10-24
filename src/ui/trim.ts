@@ -9,7 +9,12 @@
  * Pure, so the wording and the arithmetic are tested in Node.
  */
 
-import { KEPT_MIN_SECONDS, TRIM_KEY_STEP_SECONDS, TRIM_PAGE_STEP_SECONDS } from '../config/trim'
+import {
+  KEPT_MIN_SECONDS,
+  TRIM_KEY_STEP_SECONDS,
+  TRIM_PAGE_STEP_FRACTION,
+  TRIM_PAGE_STEP_SECONDS,
+} from '../config/trim'
 import { t } from '../i18n'
 import {
   KeptRangeError,
@@ -152,14 +157,18 @@ export function trimHandleText(seconds: number, durationSeconds: number): string
  *
  * The handles are native range inputs with `step="any"`, so they can hold the
  * exact time "Set start here" gives them; the keys are handled here so one
- * press is a known distance rather than whatever the browser picks.
+ * press is a known distance rather than whatever the browser picks. A page
+ * is the larger of a fixed step and a share of the video, so a long
+ * recording can be crossed by keyboard (VH-183).
  */
 export function trimKeyTarget(
   key: string,
   value: number,
   bounds: { readonly min: number; readonly max: number },
+  durationSeconds: number,
 ): number | null {
   const clamp = (target: number) => Math.min(bounds.max, Math.max(bounds.min, target))
+  const pageSeconds = Math.max(TRIM_PAGE_STEP_SECONDS, durationSeconds * TRIM_PAGE_STEP_FRACTION)
   switch (key) {
     case 'ArrowRight':
     case 'ArrowUp':
@@ -168,9 +177,9 @@ export function trimKeyTarget(
     case 'ArrowDown':
       return clamp(value - TRIM_KEY_STEP_SECONDS)
     case 'PageUp':
-      return clamp(value + TRIM_PAGE_STEP_SECONDS)
+      return clamp(value + pageSeconds)
     case 'PageDown':
-      return clamp(value - TRIM_PAGE_STEP_SECONDS)
+      return clamp(value - pageSeconds)
     case 'Home':
       return bounds.min
     case 'End':

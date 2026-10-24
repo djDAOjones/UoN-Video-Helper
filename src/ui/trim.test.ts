@@ -141,25 +141,49 @@ describe('what the step says', () => {
 
 describe('the handles on the keyboard', () => {
   const bounds = { min: 0, max: 127 }
+  const duration = 130
 
-  it('moves one second per arrow and ten per page', () => {
-    expect(trimKeyTarget('ArrowRight', 10, bounds)).toBe(11)
-    expect(trimKeyTarget('ArrowUp', 10, bounds)).toBe(11)
-    expect(trimKeyTarget('ArrowLeft', 10, bounds)).toBe(9)
-    expect(trimKeyTarget('ArrowDown', 10, bounds)).toBe(9)
-    expect(trimKeyTarget('PageUp', 10, bounds)).toBe(20)
-    expect(trimKeyTarget('PageDown', 10, bounds)).toBe(0)
+  it('moves one second per arrow and ten per page on a short video', () => {
+    expect(trimKeyTarget('ArrowRight', 10, bounds, duration)).toBe(11)
+    expect(trimKeyTarget('ArrowUp', 10, bounds, duration)).toBe(11)
+    expect(trimKeyTarget('ArrowLeft', 10, bounds, duration)).toBe(9)
+    expect(trimKeyTarget('ArrowDown', 10, bounds, duration)).toBe(9)
+    expect(trimKeyTarget('PageUp', 10, bounds, duration)).toBe(20)
+    expect(trimKeyTarget('PageDown', 10, bounds, duration)).toBe(0)
+  })
+
+  it('pages by 1% of a long video, and still one second per arrow', () => {
+    const hour = { min: 0, max: 3597 }
+    expect(trimKeyTarget('PageUp', 1800, hour, 3600)).toBe(1836)
+    expect(trimKeyTarget('PageDown', 1800, hour, 3600)).toBe(1764)
+    expect(trimKeyTarget('ArrowRight', 1800, hour, 3600)).toBe(1801)
+    expect(trimKeyTarget('ArrowLeft', 1800, hour, 3600)).toBe(1799)
+  })
+
+  it('pages by ten seconds up to a video of a thousand, then by 1%', () => {
+    const wide = { min: 0, max: 5000 }
+    expect(trimKeyTarget('PageUp', 100, wide, 999)).toBe(110)
+    expect(trimKeyTarget('PageUp', 100, wide, 1000)).toBe(110)
+    expect(trimKeyTarget('PageUp', 100, wide, 2000)).toBe(120)
   })
 
   it('goes to either limit on Home and End, and never past one', () => {
-    expect(trimKeyTarget('Home', 50, bounds)).toBe(0)
-    expect(trimKeyTarget('End', 50, bounds)).toBe(127)
-    expect(trimKeyTarget('ArrowRight', 126.5, bounds)).toBe(127)
-    expect(trimKeyTarget('PageDown', 3, bounds)).toBe(0)
+    expect(trimKeyTarget('Home', 50, bounds, duration)).toBe(0)
+    expect(trimKeyTarget('End', 50, bounds, duration)).toBe(127)
+    expect(trimKeyTarget('ArrowRight', 126.5, bounds, duration)).toBe(127)
+    expect(trimKeyTarget('PageDown', 3, bounds, duration)).toBe(0)
+  })
+
+  it("stops a long video's page at either limit", () => {
+    const end = { min: 3, max: 3600 }
+    expect(trimKeyTarget('PageUp', 3580, end, 3600)).toBe(3600)
+    expect(trimKeyTarget('PageDown', 20, end, 3600)).toBe(3)
+    expect(trimKeyTarget('Home', 1800, end, 3600)).toBe(3)
+    expect(trimKeyTarget('End', 1800, end, 3600)).toBe(3600)
   })
 
   it('leaves every other key to the browser', () => {
-    expect(trimKeyTarget('Tab', 10, bounds)).toBeNull()
-    expect(trimKeyTarget('a', 10, bounds)).toBeNull()
+    expect(trimKeyTarget('Tab', 10, bounds, duration)).toBeNull()
+    expect(trimKeyTarget('a', 10, bounds, duration)).toBeNull()
   })
 })

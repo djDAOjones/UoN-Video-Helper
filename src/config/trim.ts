@@ -30,8 +30,19 @@ export const KEPT_EDGE_TOLERANCE_SECONDS = 0.001
 /** How far one arrow-key press moves a trim handle, in seconds. The time fields take anything finer. */
 export const TRIM_KEY_STEP_SECONDS = 1
 
-/** How far Page Up or Page Down moves a trim handle, in seconds. */
+/**
+ * The least Page Up or Page Down moves a trim handle, in seconds (VH-183).
+ * On a long video the step grows to `TRIM_PAGE_STEP_FRACTION` of it instead.
+ */
 export const TRIM_PAGE_STEP_SECONDS = 10
+
+/**
+ * The share of the video's length one Page Up or Page Down moves a trim
+ * handle when that is more than `TRIM_PAGE_STEP_SECONDS` (VH-183): 1%, so an
+ * hour-long recording is crossed in a hundred presses, not three hundred and
+ * sixty.
+ */
+export const TRIM_PAGE_STEP_FRACTION = 0.01
 
 /**
  * How long the trim must be still before the device check re-runs for it, in

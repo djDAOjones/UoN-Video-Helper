@@ -8,6 +8,10 @@
      items the canon record shipped before the migration, in v3's form;
      their why is in the frozen canon decision log (history.md). -->
 
+## Phase 8 — the owner's UX pass: the backlog and wish list, thirteen pieces
+
+- VH-183 — the trim's Page step is max(10 s, 1% of the video), from config; arrows, Home, End and the spoken value unchanged; 72 Chrome cases in three languages, three widths and four colour modes as expected; Codex astra "Commit after the musts below", the must the close (2026-10-24) — see decisions
+
 ## Phase 7 — a second design, UX and accessibility pass, with Codex astra as partner, before the cut
 
 - VH-170 — the second pass planned and ticketed: four journeys, scenarios, qualified instruments, four lenses, seven Codex astra touchpoints, eight stages; Codex's twelve points applied (2026-10-22) — see decisions

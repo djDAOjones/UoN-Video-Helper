@@ -1926,7 +1926,7 @@ for (const [range, which] of [
       which === 'start'
         ? { min: 0, max: Math.max(0, trimEnd - KEPT_MIN_SECONDS) }
         : { min: Math.min(trimDuration, trimStart + KEPT_MIN_SECONDS), max: trimDuration }
-    const target = trimKeyTarget(event.key, which === 'start' ? trimStart : trimEnd, bounds)
+    const target = trimKeyTarget(event.key, which === 'start' ? trimStart : trimEnd, bounds, trimDuration)
     if (target === null) return
     event.preventDefault()
     onRangeInput(which, target)

@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-24 — VH-183 — The keyboard trim's Page step: max(10 s, 1% of the video)
+
+**Decision:** Page Up and Page Down move a trim handle by the larger of 10 s and 1% of the video, from `TRIM_PAGE_STEP_SECONDS` and a new `TRIM_PAGE_STEP_FRACTION` in `src/config/trim.ts`, so an hour is crossed in a hundred presses. The arrows, Home, End and what a handle says are unchanged.
+
+**Rationale:** `trimKeyTarget` takes the duration from its one caller. Three new cases cover an hour (36 s), the 1,000 s crossover and the clamp at both ends of a long video. In Chrome, 72 cases (130 s and 3,600 s, three languages, 1280, 375 and 320 px, four colour modes) matched exactly, with focus held and `aria-valuetext` unchanged (`reviews/2026-10-24/vh183-page-step-2026-10-24.md`). Codex astra: "Commit after the musts below"; its one must was this close-out, and its may, the run's readings kept, applied. Digest rules: WCAG 2.1.3 Keyboard (No Exception); Nielsen 7.
+
+**Supersedes:** none
+
+**Deferred:** none
+
 ## 2026-10-24 — PLAN-8 — the sheet approved: round 2's Q5 to Q7 on its recommendations, with four wording changes of the owner's
 
 **Decision:** The owner approved the Phase 8 wording sheet and round 2, so every Phase 8 item builds from the sheet's final words. Q5: "High quality, for publishing" and "Smaller file, for assignments and sharing". Q6: a measured warning after the job above 3 LU of limiting. Q7: help links labelled "Staff:" or "Students:", none following the Video type. The owner's four changes are the final words.
@@ -611,17 +621,5 @@ VH-149.1 is promoted into the four items. None of the writing review's 24 propos
 **Supersedes:** 2026-10-21 — VH-141 — State changes retain their meaning and hand focus on
 
 **Items:** VH-150, VH-151, VH-152, VH-153
-
-**Deferred:** none
-
-## 2026-10-22 — V31-UPGRADE — The project runs pm-next v3.1: tools, verbs and the start-notice hook replaced as a set, the record kept
-
-**Decision:** the project runs pm-next v3.1 (PM-Skills lab b5c6f4b) from the commit carrying this entry — its twelve tools and four verbs, the item schema's Now section, the start notice as a third session hook — and, each in a commit of its own after it, the wish lines take permanent IDs, each trajectory phase goes oldest first, and the WCAG 2.2 AAA digest takes v3's repair; because the owner's relayed word of 2026-10-21 approved v3.1 and asked for the upgrade, after this project's day-21 reading was sealed.
-
-**Rationale:** The lab's V31-FIELD-1, by v3.1's upgrade route (lab/next-v31/CHANGELOG.md, "Existing installations — v3 to v3.1", and the lab's V31-DEPLOY procedure). The archived decisions and their index moved beside decisions.md, project/archive/decisions-2026-10.md to project/decisions-2026-10.md and project/archive/INDEX.md to project/archive-index.md, in a commit of its own (36736be), and v3.1's migrate tool was committed alone (8ff2f0f), both before the snapshot. The snapshot at 8ff2f0f, against the pinned build 155f145: 905 tracked files; 25 open and 38 shipped lines, 65 decision entries, 40 wish lines, 51 item files, 5 digests, 2 archive files. Its inventory, project/migration/upgrade-v3.1.json, sits beside the canon migration's inventory and census, kept byte for byte. `node tools/migrate.mjs --verify --upgrade v3.1` before the commit: migrate: 0 failure(s), 2 warning(s) — that no commit was named yet, and that .claude/settings.json changed, the hook merge this route calls for, on the owner's word below. project/items/_schema.md was v3's unedited copy and takes v3.1's (V31-NOW). `node tools/harness.mjs --hooks-only --harness claude` merged the start notice (tools/handover.mjs on SessionStart startup and clear) into .claude/settings.json as a third group, every other setting kept, the note's dashes re-serialised as characters; .claude/settings.intake.json, for intake only, is unchanged. The Session line stays at 200k. The comments in wish-list.md, decisions.md and trajectory.md now state v3.1's wish-line form, the archive's place and the order within a phase; structure.md's tools and verbs rows name v3.1's set. The profile, rules file and brief are unchanged and keep the owner's signatures; the profile's Gate line, "the v3 checker", still names the v3 family's checker, and a wording correction is proposed to the owner in the pull request. Between this commit and the stamp, v3.1's checker fails each of the 40 unstamped wish lines, as V31-WISH-IDS's note foresees. This entry supersedes the intake's in its build clause only, "pm-next v3's (PM-Skills-lab commit 155f145)"; the rest of it stands. Authority: the owner's words of 2026-10-21 in the lab's orchestrator chat, relayed and not seen by him in this chat: "I approve all the 3.1 aspects and want AI to proceed through to the upgrade as much as possible, proceeding on the basi of recommendations." (01:05 BST) and "you have permission for everything including model changes, proceed" (about 01:10). The pull request is his to merge; it was rebuilt on main b07f1b2, after the overnight runs' and VH-149's 23 commits, on his word of 2026-10-22, relayed: "Rebuild both pull requests now anyway, accepting that they may conflict again before I merge." Local edits, each disposed:
-
-- Migration edit: tools/migrate.mjs — re-applied — v3.1's copy, committed alone before the snapshot
-
-**Supersedes:** 2026-10-01 — INTAKE — UoN Video Helper adopts pm-next v3 from canon 4.9.2
 
 **Deferred:** none
