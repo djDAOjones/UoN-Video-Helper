@@ -53,21 +53,22 @@ export function summariseChecks(states: readonly CheckState[]): ChecksSummary {
 }
 
 /**
- * The sentence under the intro that says which browser the app is built for.
+ * The sentence under the promises that says which browser the app is built
+ * for, or nothing.
  *
- * The maintainer's line, "designed and built for Chrome", stays in every
- * state; what follows it is what the load-time check found, so a browser that
- * has passed every check — Edge on a managed laptop, say — is not told it
- * "may not work" by a page that has just found that it does (maintainer,
- * 2026-10-01, revising VH-98's one fixed sentence). A warning counts as not
- * passed: the one warning the check raises is a sound encoder the browser
- * refuses, which stops every video with sound (VH-49).
+ * It is said only when a load-time check has not passed: while the checks
+ * run, step 1 says so, and a pass is the System check's to say, so nothing
+ * stands above step 1 on a browser that works (VH-187, revising the
+ * maintainer's three forms of 2026-10-01). A fail or a warn already seen
+ * outranks a check still pending, so a browser that cannot run the tool is
+ * told at once. A warning counts as not passed: the one warning the check
+ * raises is a sound encoder the browser refuses, which stops every video
+ * with sound (VH-49).
  *
- * @param states - One per check row, in any order. Empty reads as pending.
+ * @param states - One per check row, in any order.
+ * @returns The sentence, or null when there is nothing to say.
  */
-export function browserNote(states: readonly CheckState[]): string {
-  const { browserNote: note } = t()
-  if (states.length === 0 || states.includes('pending')) return note.pending
-  if (states.includes('fail') || states.includes('warn')) return note.notPassed
-  return note.passed
+export function browserNote(states: readonly CheckState[]): string | null {
+  if (states.includes('fail') || states.includes('warn')) return t().browserNote.notPassed
+  return null
 }

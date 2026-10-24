@@ -284,11 +284,11 @@ describe('the closing graphics, word for word (VH-149)', () => {
 
 // VH-153: the words the review of Codex's 21 October run found disagreeing.
 describe('the words after VH-148 (VH-153)', () => {
-  it.each(Object.entries(LANGUAGE_TABLES))('%s opens all three browser sentences alike', (_tag, table) => {
-    const { pending, notPassed, passed } = table.browserNote
-    const shared = [...pending].findIndex((char, index) => char !== notPassed[index])
-    expect(shared).toBeGreaterThan(10)
-    expect(passed.startsWith(pending.slice(0, shared))).toBe(true)
+  // VH-187 left one of the three: the sentence for a check not passed, which
+  // still names Chrome, the maintainer's line.
+  it.each(Object.entries(LANGUAGE_TABLES))('%s keeps one browser sentence, naming Chrome', (_tag, table) => {
+    expect(Object.keys(table.browserNote)).toEqual(['notPassed'])
+    expect(table.browserNote.notPassed).toContain('Chrome')
   })
 
   it('Chinese and Malay say step 6 with its button’s verb', () => {

@@ -24,7 +24,7 @@ export const msMY: Messages = {
   app: {
     title: 'Pembantu Video UoN',
     description:
-      'Tambahkan penjenamaan Universiti Nottingham yang diluluskan dan tahap audio yang konsisten pada video dan dapatkan semula fail yang dioptimumkan, tanpa memuat naiknya ke mana-mana sahaja.',
+      'Tambahkan penjenamaan Universiti Nottingham yang diluluskan pada video, seimbangkan audionya dan dapatkan fail video yang saiz dan formatnya sesuai untuk tujuan penggunaan anda, tanpa memuat naiknya ke mana-mana.',
     skipLink: 'Langkau ke kandungan utama',
   },
   language: {
@@ -37,22 +37,17 @@ export const msMY: Messages = {
     },
   },
   lede: {
-    intro: 'Alat ini melakukan perkara berikut pada video anda:',
     promises: [
-      'Menambah penjenamaan yang diluluskan.',
-      'Memastikan tahap audio yang konsisten.',
-      'Mengeluarkan jenis dan saiz fail yang dioptimumkan.',
+      'Menambah penjenamaan Universiti yang diluluskan.',
+      'Menyeimbangkan audio untuk pengalaman mendengar yang konsisten.',
+      'Menghasilkan fail video yang saiz dan formatnya sesuai untuk tujuan penggunaan anda.',
     ],
     privacy:
       'Video anda diproses pada peranti anda, ia tidak pernah dimuat naik dan fail asal tidak berubah.',
   },
   browserNote: {
-    pending:
-      'Alat ini direka bentuk dan dibina untuk Chrome, jadi pelayar lain mungkin tidak berfungsi.',
     notPassed:
       'Alat ini direka bentuk dan dibina untuk Chrome, dan pelayar ini belum lulus semua pemeriksaan yang diperlukan untuk menjalankannya. Pemeriksaan sistem di kaki halaman menyatakan apa yang hilang.',
-    passed:
-      'Alat ini direka bentuk dan dibina untuk Chrome, dan pelayar ini telah lulus pemeriksaan yang diperlukan untuk menjalankannya.',
   },
   videoKind: {
     label: 'Jenis video',

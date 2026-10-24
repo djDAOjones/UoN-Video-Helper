@@ -7,7 +7,7 @@
     <meta
       name="description"
       data-i18n-attr="content:app.description"
-      content="Add approved University of Nottingham branding and consistent audio levels to a video, and get an optimised file back, without uploading it anywhere."
+      content="Add the University of Nottingham’s approved branding to a video, level its audio, and get a video file sized and formatted for your intended use, without uploading it anywhere."
     />
   </head>
   <body>
@@ -39,19 +39,20 @@
            under the input, and a promise repeated is a promise skimmed
            (VH-85). The browser sentence is the maintainer's answer to "does it
            work everywhere": it is built and tested for Chrome, and says so
-           rather than letting another browser fail part-way (2026-09-30). -->
+           rather than letting another browser fail part-way (2026-09-30). It
+           shows only when a load-time check has not passed; while they run,
+           step 1 says so, and a pass is the System check's to say (VH-187). -->
       <div class="lede">
-        <p data-i18n="lede.intro">This tool does the following to your video:</p>
         <ul>
-          <li data-i18n="lede.promises.0">Adds approved branding.</li>
-          <li data-i18n="lede.promises.1">Ensures consistent audio levels.</li>
-          <li data-i18n="lede.promises.2">Outputs an optimised file type and size.</li>
+          <li data-i18n="lede.promises.0">Adds the University’s approved branding.</li>
+          <li data-i18n="lede.promises.1">Levels audio for consistent listening experience.</li>
+          <li data-i18n="lede.promises.2">Makes a video file sized and formatted for your intended use.</li>
         </ul>
         <p data-i18n="lede.privacy">
           Your video is processed on your device, it is never uploaded, and the original file does
           not change.
         </p>
-        <p id="browser-note" data-i18n="browserNote.pending">This tool is designed and built for Chrome, so other browsers may not work.</p>
+        <p id="browser-note" hidden></p>
       </div>
 
       <!-- VH-131, 2026-10-19. Staff video or Student submission, above the

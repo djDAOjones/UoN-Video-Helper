@@ -82,31 +82,29 @@ describe('the system check summary (VH-88)', () => {
   })
 })
 
-describe('the browser sentence (2026-10-01)', () => {
-  const lead = 'This tool is designed and built for Chrome'
+describe('the browser sentence (2026-10-01, VH-187)', () => {
+  const notPassed =
+    'This tool is designed and built for Chrome, and this browser has not passed all the checks for it to run. The system check at the foot of the page says what is missing.'
 
-  it('keeps the maintainer\'s line in every state', () => {
-    for (const states of [[], ['pending'], ['pass'], ['fail'], ['warn']] as const) {
-      expect(browserNote(states).startsWith(lead)).toBe(true)
-    }
+  it('says nothing while the checks run: step 1 says so', () => {
+    expect(browserNote([])).toBeNull()
+    expect(browserNote(['pending', 'pending'])).toBeNull()
+    expect(browserNote(['pass', 'pending'])).toBeNull()
   })
 
-  it('says other browsers may not work until the checks are in', () => {
-    expect(browserNote([])).toBe(`${lead}, so other browsers may not work.`)
-    expect(browserNote(['pass', 'pending'])).toBe(`${lead}, so other browsers may not work.`)
-  })
-
-  it('does not turn away a browser that has passed every check', () => {
-    expect(browserNote(['pass', 'pass', 'pass', 'pass', 'pass', 'pass'])).toBe(
-      `${lead}, and this browser has passed the checks for it to run.`,
-    )
+  it('says nothing when every check passes: the System check says so', () => {
+    expect(browserNote(['pass', 'pass', 'pass', 'pass', 'pass', 'pass'])).toBeNull()
   })
 
   it('says a failed or a warned check has not been passed, and where to look', () => {
-    const expected = `${lead}, and this browser has not passed all the checks for it to run. The system check at the foot of the page says what is missing.`
-    expect(browserNote(['pass', 'fail', 'pass'])).toBe(expected)
+    expect(browserNote(['pass', 'fail', 'pass'])).toBe(notPassed)
     // The AAC refusal is a warning, not a failure, because a silent video
     // still runs — but it is not a pass for the sentence's purpose.
-    expect(browserNote(['pass', 'warn', 'pass'])).toBe(expected)
+    expect(browserNote(['pass', 'warn', 'pass'])).toBe(notPassed)
+  })
+
+  it('says so at once, while another check is still pending (Q8)', () => {
+    expect(browserNote(['pending', 'fail', 'pass'])).toBe(notPassed)
+    expect(browserNote(['pass', 'warn', 'pending'])).toBe(notPassed)
   })
 })

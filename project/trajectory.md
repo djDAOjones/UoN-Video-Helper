@@ -14,6 +14,7 @@
 - VH-184 — the onset toggletip closes when focus moves on, Escape returns focus to its "?", and it is edged in 1 px `--border-subtle`, not the notification's rail; a before on the base, 36 Chrome cases after; Codex astra "Commit after the musts below", the must the close (2026-10-24) — see decisions
 - VH-185 — a kept sound under one 400 ms gating block is no sound: "This video has no audio" before Create, a silent job that finishes; the block is loudness.ts's own; the decode's end carried so the sliver is not "ends early"; 42 Chrome cases (2026-10-24) — see decisions
 - VH-186 — the System check's four labels shortened (English at 320 px from 4/4/3/3 lines to 2/3/2/2), "Unknown" and "Less than a second" alone in Video properties, the unchecked caption warning completed with the existing passage; no "about unknown"; 72 Chrome cases; Codex astra "Commit after the musts below", the musts done (2026-10-24) — see decisions
+- VH-187 — the lede's lead-in gone, its promises in plain words with the owner's own promise 2 after the sheet's failed the readability gate, the browser note only on a fail or warn, which outranks pending; the file button 80 to 128 px higher, never lower; 99 Chrome cases; Codex astra "Commit after the musts below", the must the close (2026-10-24) — see decisions
 
 ## Phase 7 — a second design, UX and accessibility pass, with Codex astra as partner, before the cut
 

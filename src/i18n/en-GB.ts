@@ -54,7 +54,7 @@ export const enGB = {
   app: {
     title: 'UoN Video Helper',
     description:
-      'Add approved University of Nottingham branding and consistent audio levels to a video, and get an optimised file back, without uploading it anywhere.',
+      'Add the University of Nottingham’s approved branding to a video, level its audio, and get a video file sized and formatted for your intended use, without uploading it anywhere.',
     skipLink: 'Skip to main content',
   },
 
@@ -77,22 +77,19 @@ export const enGB = {
   },
 
   lede: {
-    intro: 'This tool does the following to your video:',
     promises: [
-      'Adds approved branding.',
-      'Ensures consistent audio levels.',
-      'Outputs an optimised file type and size.',
+      'Adds the University’s approved branding.',
+      'Levels audio for consistent listening experience.',
+      'Makes a video file sized and formatted for your intended use.',
     ],
     privacy:
       'Your video is processed on your device, it is never uploaded, and the original file does not change.',
   },
 
+  /** Shown only when a load-time check has not passed (VH-187). */
   browserNote: {
-    pending: 'This tool is designed and built for Chrome, so other browsers may not work.',
     notPassed:
       'This tool is designed and built for Chrome, and this browser has not passed all the checks for it to run. The system check at the foot of the page says what is missing.',
-    passed:
-      'This tool is designed and built for Chrome, and this browser has passed the checks for it to run.',
   },
 
   /** The switch above the six steps (VH-131). */

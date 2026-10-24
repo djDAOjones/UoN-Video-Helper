@@ -798,10 +798,13 @@ function updateSystemCheckSummary(): void {
   )
   const { result, problems } = summariseChecks(states)
   systemCheckSummary.textContent = t().systemCheck.summary({ result })
-  // The intro's browser sentence reports the same result, in the one place a
-  // user reads before choosing anything. Not a live region: it settles within
-  // the first second, long before a screen reader reaches it.
-  browserNoteLine.textContent = browserNote(states)
+  // The browser sentence says a check not passed in the one place a user
+  // reads before choosing anything, and is absent otherwise (VH-187). Not a
+  // live region: the worker's check can take seconds, and a failure that
+  // stops the tool is announced by step 1's own status line.
+  const note = browserNote(states)
+  browserNoteLine.textContent = note ?? ''
+  browserNoteLine.hidden = note === null
   if (problems > problemsShown) systemCheck.open = true
   problemsShown = problems
 }
@@ -3688,8 +3691,9 @@ languageSwitcher.link.addEventListener('click', (event) => {
 /**
  * Says the whole page again in the language just chosen, in place. After the
  * failures and the tab title, whose listeners come first. The static words
- * go first, because the progress bar's name and the browser sentence are
- * bound and carry live words over their defaults, written again below.
+ * go first, because the progress bar's name is bound and carries live words
+ * over its default, written again below; the browser sentence is written
+ * again below too.
  */
 onLanguageChange(() => {
   document.documentElement.lang = language()

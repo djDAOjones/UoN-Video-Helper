@@ -71,27 +71,26 @@ describe('what the tool does, and where it works (2026-09-30)', () => {
   it('lists the three things it does, in the maintainer\'s words', () => {
     const items = [...lede.matchAll(/<li>([^<]+)<\/li>/g)].map((match) => match[1]!.trim())
     // Each a line a person reads as a line: a capital and a full stop
-    // (VH-124); the words are the maintainer's (VH-85).
+    // (VH-124); the words are the maintainer's (VH-85, VH-187), with no
+    // lead-in sentence above them.
     expect(items).toEqual([
-      'Adds approved branding.',
-      'Ensures consistent audio levels.',
-      'Outputs an optimised file type and size.',
+      'Adds the University’s approved branding.',
+      'Levels audio for consistent listening experience.',
+      'Makes a video file sized and formatted for your intended use.',
     ])
+    expect(lede).not.toMatch(/<p[^>]*>[^<]*:\s*<\/p>\s*<ul>/)
   })
 
-  it('says which browser it is built for, before anything is chosen', () => {
+  it('has a place to say which browser it is built for, shown only when a check has not passed', () => {
     // The answer to "does it work in Edge, Firefox and Safari": it is built
     // and tested for Chrome, and says so, rather than let another browser
-    // fail part-way through a job. Since 2026-10-01 the sentence is rewritten
-    // once the load-time check lands (`browserNote`), so this is what a
-    // browser reads before that — and what one without scripts reads at all.
-    expect(visibleText).toContain(
-      'This tool is designed and built for Chrome, so other browsers may not work.',
-    )
-    expect(markup).toMatch(/<p id="browser-note">This tool is designed and built for Chrome/)
-    expect(markup.indexOf('designed and built for Chrome')).toBeLessThan(
-      markup.indexOf('id="file-input"'),
-    )
+    // fail part-way through a job. Since VH-187 the sentence is written only
+    // when a load-time check fails or warns (`browserNote`): while they run,
+    // step 1 says so, and a pass is the System check's to say. So the page
+    // starts with the place empty and hidden, above the file input.
+    expect(markup).toMatch(/<p id="browser-note" hidden><\/p>/)
+    expect(markup.indexOf('id="browser-note"')).toBeLessThan(markup.indexOf('id="file-input"'))
+    expect(visibleText).not.toContain('designed and built for Chrome')
   })
 })
 

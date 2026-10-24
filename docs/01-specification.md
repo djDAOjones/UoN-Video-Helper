@@ -769,14 +769,12 @@ Responsive and fully readable on phones and tablets. Processing is
 
 ## 10. Browser support
 
-**The app is designed and built for Chrome, and says so** before anything is
-chosen — and says what the load-time support check found, so a browser that
-has passed is not turned away (VH-98, 2026-09-30; revised 2026-10-01,
-VH-121). One sentence in three forms: "This tool is designed and built for
-Chrome, so other browsers may not work" until the checks land; "…and this
-browser has passed the checks for it to run" when every check passes; "…and
-this browser has not passed all the checks for it to run. The system check at
-the foot of the page says what is missing" otherwise. The load-time check asks for a
+**The app is designed and built for Chrome, and says so** above step 1 when
+the load-time support check has not passed, in the words "This tool is
+designed and built for Chrome, and this browser has not passed all the checks
+for it to run. The system check at the foot of the page says what is
+missing." When it passes, the system check alone says so (VH-98, VH-121,
+VH-182.1). The load-time check asks for a
 secure context, WebCodecs, the H.264 encoder at a 1080p25 "Larger / better"
 configuration, the AAC encoder in stereo and mono, the presence of the
 private storage API (whether it can be written, and how much, is pre-flight's
@@ -786,7 +784,7 @@ silent video still runs, and the sentence treats it as not passed.
 | Browser | Status |
 | --- | --- |
 | Chrome (desktop) | Supported — the browser the app is built and checked in |
-| Edge (desktop), Safari (macOS/iOS) 26+ | Not certified. Not refused: runs if the support check passes, and the page says so when it does |
+| Edge (desktop), Safari (macOS/iOS) 26+ | Not certified. Not refused: runs if the support check passes, and the system check says so |
 | Firefox (desktop) | Refused for any video with sound — it cannot create AAC audio (VH-49). A silent video runs |
 | Safari below 26 | Not supported — clear message |
 | Firefox on Android | Not supported — WebCodecs not exposed |

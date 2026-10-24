@@ -330,7 +330,6 @@ const NOTES: Readonly<Record<string, string>> = {
   'language.machine.title': 'The heading of the note, so no full stop.',
   'language.machine.link':
     'The words of a link that opens an email to the maintainer, with your language in its subject.',
-  'lede.intro': 'Introduces the three lines that follow.',
   'trim.format': 'Keep the example times 1:05.5 and 65.5 as they are.',
   'trim.problem.notATime.start': 'Keep the example times 1:05.5 and 65.5 as they are.',
   'trim.problem.notATime.end': 'Keep the example times 1:05.5 and 65.5 as they are.',
