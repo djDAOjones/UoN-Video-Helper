@@ -1,0 +1,314 @@
+/**
+ * VH-193.2 scratch probe (read-only verification, not a repo test).
+ *
+ * Drives the real `planAudio` over in-memory PCM MP4s and checks the bite's
+ * non-finite and lowered-ceiling paths against the plan's own return value,
+ * not the log. Two modules are wrapped, never replaced:
+ *  - `audio/chain.ts`: the real AudioChain, subclassed to record each pass's
+ *    gain and ceiling and (for one case) to blank or NaN the limited output;
+ *  - `media/codec-probe.ts`: the real `limiterCeilingFor`; only `CodecProbe`
+ *    is faked (Node has no WebCodecs encoder), returning a chosen overshoot.
+ */
+
+import { describe, expect, it, vi } from 'vitest'
+
+import {
+  BufferTarget,
+  EncodedAudioPacketSource,
+  EncodedPacket,
+  Mp4OutputFormat,
+  Output,
+} from '/Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/node_modules/mediabunny/dist/modules/src/index.js'
+import { soundTrackOf } from '/Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/test/helpers/pcm-mp4.ts'
+import { AudioAnalyser } from '/Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/src/audio/analyse.ts'
+import { detectProductionWarnings } from '/Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/src/audio/warnings.ts'
+import {
+  HEAVY_LIMITING_LU,
+  LIMITER,
+} from '/Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/src/config/audio.ts'
+import {
+  clearLogRecords,
+  getLogRecords,
+} from '/Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/src/core/logger.ts'
+import { planAudio } from '/Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/src/media/audio-plan.ts'
+import { limiterCeilingFor } from '/Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/src/media/codec-probe.ts'
+
+interface PassRecord {
+  gainDb: number | null
+  ceiling: number | undefined
+  input: Float32Array[][]
+}
+
+const state = vi.hoisted(() => ({
+  passes: [] as PassRecord[],
+  /** 'real' | 'zero' | 'nan': what a LIMITED pass emits. */
+  limitedOutput: 'real' as 'real' | 'zero' | 'nan',
+  codec: null as null | { costLu: number; overshootDb: number; probedSeconds: number },
+  RealChain: null as unknown as new (options: Record<string, unknown>) => {
+    process(channels: readonly Float32Array[]): Float32Array[]
+    flush(): Float32Array[]
+  },
+}))
+
+vi.mock(
+  '/Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/src/audio/chain.ts',
+  async (importOriginal) => {
+    const real = (await importOriginal()) as { AudioChain: typeof state.RealChain }
+    state.RealChain = real.AudioChain
+    class RecordingChain extends (real.AudioChain as unknown as new (o: Record<string, unknown>) => {
+      process(channels: readonly Float32Array[]): Float32Array[]
+      flush(): Float32Array[]
+    }) {
+      private readonly record: PassRecord
+      constructor(options: Record<string, unknown>) {
+        super(options)
+        this.record = {
+          gainDb: options['gainDb'] as number | null,
+          ceiling: options['limiterCeilingDbtp'] as number | undefined,
+          input: [],
+        }
+        state.passes.push(this.record)
+      }
+      override process(channels: readonly Float32Array[]): Float32Array[] {
+        this.record.input.push(channels.map((channel) => channel.slice()))
+        return this.shape(super.process(channels))
+      }
+      override flush(): Float32Array[] {
+        return this.shape(super.flush())
+      }
+      private shape(out: Float32Array[]): Float32Array[] {
+        if (this.record.gainDb === null || state.limitedOutput === 'real') return out
+        const value = state.limitedOutput === 'zero' ? 0 : Number.NaN
+        return out.map((channel) => new Float32Array(channel.length).fill(value))
+      }
+    }
+    return { ...real, AudioChain: RecordingChain }
+  },
+)
+
+vi.mock(
+  '/Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/src/media/codec-probe.ts',
+  async (importOriginal) => {
+    const real = (await importOriginal()) as Record<string, unknown>
+    return {
+      ...real,
+      CodecProbe: {
+        open: async () => ({
+          add: async () => {},
+          cancel: async () => {},
+          finish: async () => state.codec,
+        }),
+      },
+    }
+  },
+)
+
+const RATE = 48_000
+const CHANNELS = 2
+
+/** 16-bit PCM MP4 of `seconds`, sample i of every channel = `signal(i / RATE)`. */
+async function pcmOf(seconds: number, signal: (t: number) => number): Promise<Uint8Array> {
+  const output = new Output({
+    format: new Mp4OutputFormat({ fastStart: 'in-memory' }),
+    target: new BufferTarget(),
+  })
+  const source = new EncodedAudioPacketSource('pcm-s16')
+  output.addAudioTrack(source)
+  await output.start()
+  const blockFrames = RATE / 10
+  const blocks = Math.round((seconds * RATE) / blockFrames)
+  for (let b = 0; b < blocks; b++) {
+    const samples = new Int16Array(blockFrames * CHANNELS)
+    for (let f = 0; f < blockFrames; f++) {
+      const v = Math.max(-32768, Math.min(32767, Math.round(signal((b * blockFrames + f) / RATE) * 32767)))
+      for (let c = 0; c < CHANNELS; c++) samples[f * CHANNELS + c] = v
+    }
+    await source.add(
+      new EncodedPacket(new Uint8Array(samples.buffer), 'key', b * 0.1, 0.1),
+      b === 0
+        ? { decoderConfig: { codec: 'pcm-s16', sampleRate: RATE, numberOfChannels: CHANNELS } }
+        : undefined,
+    )
+  }
+  await output.finalize()
+  return new Uint8Array(output.target.buffer!)
+}
+
+/** Like the VH-193 Chrome fixture `clicks-20s.mp4`: a quiet tone and a loud 3 ms burst every 250 ms. */
+const clicks = (t: number): number => {
+  const tone = 0.005 * Math.sin(2 * Math.PI * 440 * t)
+  const burst = t % 0.25 < 0.003 ? 0.3 * Math.sin(2 * Math.PI * 2000 * t) : 0
+  return tone + burst
+}
+
+/** Speech-like: a 220 Hz tone with a 4 Hz syllable envelope and some peaks; light limiting. */
+const moderate = (t: number): number =>
+  0.05 * (0.6 + 0.4 * Math.sin(2 * Math.PI * 4 * t)) * Math.sin(2 * Math.PI * 220 * t) +
+  (t % 0.5 < 0.002 ? 0.12 : 0)
+
+const loggedPlan = () =>
+  getLogRecords().find((entry) => entry.message === 'chain planned')?.data as
+    | Record<string, unknown>
+    | undefined
+
+/** Integrated loudness of the recorded unlimited pass's input, run through a FRESH real chain. */
+function independentLufs(
+  input: Float32Array[][],
+  envelope: unknown,
+  gainDb: number | null,
+  ceiling?: number,
+): number {
+  const chain = new state.RealChain({
+    sampleRate: RATE,
+    channelCount: CHANNELS,
+    envelope,
+    gainDb,
+    ...(ceiling === undefined ? {} : { limiterCeilingDbtp: ceiling }),
+  })
+  const analyser = new AudioAnalyser({ sampleRate: RATE, channelCount: CHANNELS })
+  for (const block of input) analyser.addFrames(chain.process(block.map((c) => c.slice())))
+  analyser.addFrames(chain.flush())
+  return analyser.finish().integratedLufs
+}
+
+async function plan(
+  bytes: Uint8Array,
+  options: { encode?: boolean; limitedOutput?: 'real' | 'zero' | 'nan' } = {},
+) {
+  state.passes = []
+  state.limitedOutput = options.limitedOutput ?? 'real'
+  clearLogRecords()
+  const result = await planAudio(
+    await soundTrackOf(bytes),
+    undefined,
+    undefined,
+    options.encode ? (() => ({}) as never) : undefined,
+    null,
+  )
+  if ('silent' in result) throw new Error('expected a plan, got a silent keep')
+  return result
+}
+
+describe('VH-193.2 probe: the bite’s non-finite paths, read from the plan', () => {
+  it('N1 untrimmed digital silence: no limited pass, bite null, no warning, log null', async () => {
+    const result = await plan(await pcmOf(3, () => 0))
+    console.log('N1', {
+      integrated: result.analysis.integratedLufs,
+      gainDb: result.gainDb,
+      bite: result.limiterBiteLu,
+      passes: state.passes.map((p) => p.gainDb),
+      logged: loggedPlan()?.['limiterBiteLu'],
+    })
+    expect(Number.isFinite(result.analysis.integratedLufs)).toBe(false)
+    expect(result.gainDb).toBe(0)
+    expect(state.passes.every((p) => p.gainDb === null)).toBe(true)
+    expect(result.limiterBiteLu).toBeNull()
+    expect(loggedPlan()?.['limiterBiteLu']).toBeNull()
+    expect(
+      detectProductionWarnings({ limiterBiteLu: result.limiterBiteLu, metadataCarried: true }),
+    ).toEqual([])
+  })
+
+  it('N2 a limited pass that measures -Infinity (unlimited finite): bite null, no throw', async () => {
+    const result = await plan(await pcmOf(4, moderate), { limitedOutput: 'zero' })
+    const limited = state.passes.filter((p) => p.gainDb !== null)
+    console.log('N2', {
+      gainDb: result.gainDb,
+      bite: result.limiterBiteLu,
+      predicted: result.predictedOutputLufs,
+      limitedPasses: limited.length,
+      logged: loggedPlan()?.['limiterBiteLu'],
+      loggedLimited: loggedPlan()?.['limitedLufs'],
+    })
+    expect(limited.length).toBe(1) // the solver breaks on the first non-finite pass
+    expect(result.limiterBiteLu).toBeNull()
+    expect(loggedPlan()?.['limiterBiteLu']).toBeNull()
+    expect(detectProductionWarnings({ limiterBiteLu: result.limiterBiteLu, metadataCarried: true })).toEqual([])
+  })
+
+  it('N3 a limited pass whose samples are NaN: bite null, no throw', async () => {
+    const result = await plan(await pcmOf(4, moderate), { limitedOutput: 'nan' })
+    console.log('N3', {
+      bite: result.limiterBiteLu,
+      logged: loggedPlan()?.['limiterBiteLu'],
+      loggedLimited: loggedPlan()?.['limitedLufs'],
+    })
+    expect(result.limiterBiteLu).toBeNull()
+    expect(loggedPlan()?.['limiterBiteLu']).toBeNull()
+  })
+
+  it('N4 the warning rule on the non-finite values it could be handed', () => {
+    const codes = (limiterBiteLu: number | null) =>
+      detectProductionWarnings({ limiterBiteLu, metadataCarried: true }).map((w) => w.code)
+    console.log('N4', {
+      nan: codes(Number.NaN),
+      negInf: codes(Number.NEGATIVE_INFINITY),
+      posInf: codes(Number.POSITIVE_INFINITY),
+    })
+    expect(codes(Number.NaN)).toEqual([])
+    expect(codes(Number.NEGATIVE_INFINITY)).toEqual([])
+    // Not reachable from planAudio (both operands are isFinite-guarded and the gain is
+    // finite), but the rule itself would warn on +Infinity.
+    expect(codes(Number.POSITIVE_INFINITY)).toEqual(['heavy-limiting'])
+  })
+})
+
+describe('VH-193.2 probe: the lowered-ceiling path, read from the plan', () => {
+  for (const [name, signal] of [
+    ['clicks', clicks],
+    ['moderate', moderate],
+  ] as const) {
+    it(`L1 ${name}: the bite is measured under the lowered ceiling pass C will run`, async () => {
+      const bytes = await pcmOf(6, signal)
+
+      // Nominal: no encoder config, so no probe and the standing ceiling.
+      const nominal = await plan(bytes)
+      expect(nominal.limiterCeilingDbtp).toBe(LIMITER.ceilingDbtp)
+
+      // Lowered: the faked probe reports a 2.5 dB overshoot and no loudness cost,
+      // so only the ceiling differs from the nominal run.
+      state.codec = { costLu: 0, overshootDb: 2.5, probedSeconds: 6 }
+      const lowered = await plan(bytes, { encode: true })
+      state.codec = null
+      const passes = state.passes.map((p) => ({ gainDb: p.gainDb, ceiling: p.ceiling }))
+      const unlimitedInput = state.passes[0]!.input
+      const logged = loggedPlan()
+
+      const expectedCeiling = limiterCeilingFor(2.5)
+      const U = independentLufs(unlimitedInput, lowered.envelope, null)
+      const atLowered = independentLufs(unlimitedInput, lowered.envelope, lowered.gainDb, expectedCeiling)
+      const atNominal = independentLufs(unlimitedInput, lowered.envelope, lowered.gainDb, LIMITER.ceilingDbtp)
+      const biteIfLowered = U + lowered.gainDb - atLowered
+      const biteIfNominal = U + lowered.gainDb - atNominal
+
+      console.log(`L1 ${name}`, {
+        nominalCeiling: nominal.limiterCeilingDbtp,
+        loweredCeiling: lowered.limiterCeilingDbtp,
+        nominalPlanBite: nominal.limiterBiteLu,
+        loweredPlanBite: lowered.limiterBiteLu,
+        loweredGainDb: lowered.gainDb,
+        biteIfLowered,
+        biteIfNominal,
+        loggedBite: logged?.['limiterBiteLu'],
+        loggedCeiling: logged?.['limiterCeilingDbtp'],
+        passes,
+        threshold: HEAVY_LIMITING_LU,
+      })
+
+      expect(lowered.limiterCeilingDbtp).toBe(expectedCeiling)
+      expect(expectedCeiling).toBeLessThan(LIMITER.ceilingDbtp)
+      // Pass 1 probes under the standing ceiling, is re-measured under the
+      // lowered one at the SAME gain, and every later pass keeps the lowered one.
+      expect(passes[0]!.gainDb).toBeNull()
+      expect(passes[1]!.ceiling).toBe(LIMITER.ceilingDbtp)
+      expect(passes[2]!.gainDb).toBe(passes[1]!.gainDb)
+      expect(passes.slice(2).every((p) => p.ceiling === expectedCeiling)).toBe(true)
+      expect(passes.at(-1)!.gainDb).toBe(lowered.gainDb)
+      // The plan's bite is the lowered-ceiling chain's, not the nominal one's.
+      expect(lowered.limiterBiteLu).toBeCloseTo(biteIfLowered, 6)
+      if (Math.abs(biteIfLowered - biteIfNominal) > 0.01) {
+        expect(Math.abs((lowered.limiterBiteLu ?? Number.NaN) - biteIfNominal)).toBeGreaterThan(0.01)
+      }
+    })
+  }
+})

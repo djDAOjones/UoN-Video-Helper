@@ -1,0 +1,224 @@
+
+ RUN  v4.1.11 /Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper
+
+stdout | ../../../../../../../../private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/1dea4dbb-1ec4-4f11-94cc-21a7721cbef7/scratchpad/agent4/vh193-2-bite.probe.test.ts > VH-193.2 probe: the bite’s non-finite paths, read from the plan > N1 untrimmed digital silence: no limited pass, bite null, no warning, log null
+[audio] chain planned {
+  sourceIntegratedLufs: null,
+  loudnessRangeLu: 0,
+  macroLevelling: false,
+  damageSilenced: 0,
+  afterChainLufs: null,
+  limitedLufs: null,
+  limiterBiteLu: null,
+  codecCostLu: null,
+  codecOvershootDb: null,
+  codecProbedSeconds: null,
+  limiterCeilingDbtp: -3,
+  predictedOutputLufs: null,
+  refinementPasses: 0,
+  converged: true,
+  gainDb: 0,
+  planningMs: 36
+}
+
+stdout | ../../../../../../../../private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/1dea4dbb-1ec4-4f11-94cc-21a7721cbef7/scratchpad/agent4/vh193-2-bite.probe.test.ts > VH-193.2 probe: the bite’s non-finite paths, read from the plan > N1 untrimmed digital silence: no limited pass, bite null, no warning, log null
+N1 {
+  integrated: -Infinity,
+  gainDb: 0,
+  bite: null,
+  passes: [ null ],
+  logged: null
+}
+
+stdout | ../../../../../../../../private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/1dea4dbb-1ec4-4f11-94cc-21a7721cbef7/scratchpad/agent4/vh193-2-bite.probe.test.ts > VH-193.2 probe: the bite’s non-finite paths, read from the plan > N2 a limited pass that measures -Infinity (unlimited finite): bite null, no throw
+[audio] chain planned {
+  sourceIntegratedLufs: -30,
+  loudnessRangeLu: 0,
+  macroLevelling: false,
+  damageSilenced: 0,
+  afterChainLufs: -30.05,
+  limitedLufs: null,
+  limiterBiteLu: null,
+  codecCostLu: null,
+  codecOvershootDb: null,
+  codecProbedSeconds: null,
+  limiterCeilingDbtp: -3,
+  predictedOutputLufs: null,
+  refinementPasses: 1,
+  converged: false,
+  gainDb: 14.05,
+  planningMs: 66
+}
+
+stdout | ../../../../../../../../private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/1dea4dbb-1ec4-4f11-94cc-21a7721cbef7/scratchpad/agent4/vh193-2-bite.probe.test.ts > VH-193.2 probe: the bite’s non-finite paths, read from the plan > N2 a limited pass that measures -Infinity (unlimited finite): bite null, no throw
+N2 {
+  gainDb: 14.053149648258124,
+  bite: null,
+  predicted: null,
+  limitedPasses: 1,
+  logged: null,
+  loggedLimited: null
+}
+
+ ✓ ../../../../../../../../private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/1dea4dbb-1ec4-4f11-94cc-21a7721cbef7/scratchpad/agent4/vh193-2-bite.probe.test.ts > VH-193.2 probe: the bite’s non-finite paths, read from the plan > N1 untrimmed digital silence: no limited pass, bite null, no warning, log null 49ms
+ ✓ ../../../../../../../../private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/1dea4dbb-1ec4-4f11-94cc-21a7721cbef7/scratchpad/agent4/vh193-2-bite.probe.test.ts > VH-193.2 probe: the bite’s non-finite paths, read from the plan > N2 a limited pass that measures -Infinity (unlimited finite): bite null, no throw 83ms
+stdout | ../../../../../../../../private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/1dea4dbb-1ec4-4f11-94cc-21a7721cbef7/scratchpad/agent4/vh193-2-bite.probe.test.ts > VH-193.2 probe: the bite’s non-finite paths, read from the plan > N3 a limited pass whose samples are NaN: bite null, no throw
+[audio] chain planned {
+  sourceIntegratedLufs: -30,
+  loudnessRangeLu: 0,
+  macroLevelling: false,
+  damageSilenced: 0,
+  afterChainLufs: -30.05,
+  limitedLufs: null,
+  limiterBiteLu: null,
+  codecCostLu: null,
+  codecOvershootDb: null,
+  codecProbedSeconds: null,
+  limiterCeilingDbtp: -3,
+  predictedOutputLufs: null,
+  refinementPasses: 1,
+  converged: false,
+  gainDb: 14.05,
+  planningMs: 51
+}
+
+stdout | ../../../../../../../../private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/1dea4dbb-1ec4-4f11-94cc-21a7721cbef7/scratchpad/agent4/vh193-2-bite.probe.test.ts > VH-193.2 probe: the bite’s non-finite paths, read from the plan > N3 a limited pass whose samples are NaN: bite null, no throw
+N3 { bite: null, logged: null, loggedLimited: null }
+
+stdout | ../../../../../../../../private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/1dea4dbb-1ec4-4f11-94cc-21a7721cbef7/scratchpad/agent4/vh193-2-bite.probe.test.ts > VH-193.2 probe: the bite’s non-finite paths, read from the plan > N4 the warning rule on the non-finite values it could be handed
+N4 { nan: [], negInf: [], posInf: [ 'heavy-limiting' ] }
+
+stdout | ../../../../../../../../private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/1dea4dbb-1ec4-4f11-94cc-21a7721cbef7/scratchpad/agent4/vh193-2-bite.probe.test.ts > VH-193.2 probe: the lowered-ceiling path, read from the plan > L1 clicks: the bite is measured under the lowered ceiling pass C will run
+[audio] chain planned {
+  sourceIntegratedLufs: -27.34,
+  loudnessRangeLu: 0,
+  macroLevelling: false,
+  damageSilenced: 0,
+  afterChainLufs: -27.34,
+  limitedLufs: -16.19,
+  limiterBiteLu: 18.84,
+  codecCostLu: null,
+  codecOvershootDb: null,
+  codecProbedSeconds: null,
+  limiterCeilingDbtp: -3,
+  predictedOutputLufs: null,
+  refinementPasses: 6,
+  converged: false,
+  gainDb: 30,
+  planningMs: 251
+}
+
+stdout | ../../../../../../../../private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/1dea4dbb-1ec4-4f11-94cc-21a7721cbef7/scratchpad/agent4/vh193-2-bite.probe.test.ts > VH-193.2 probe: the lowered-ceiling path, read from the plan > L1 clicks: the bite is measured under the lowered ceiling pass C will run
+[audio] chain planned {
+  sourceIntegratedLufs: -27.34,
+  loudnessRangeLu: 0,
+  macroLevelling: false,
+  damageSilenced: 0,
+  afterChainLufs: -27.34,
+  limitedLufs: -16.03,
+  limiterBiteLu: 19.84,
+  codecCostLu: 0,
+  codecOvershootDb: 2.5,
+  codecProbedSeconds: 6,
+  limiterCeilingDbtp: -5,
+  predictedOutputLufs: -16.03,
+  refinementPasses: 6,
+  converged: true,
+  gainDb: 31.15,
+  planningMs: 281
+}
+
+stdout | ../../../../../../../../private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/1dea4dbb-1ec4-4f11-94cc-21a7721cbef7/scratchpad/agent4/vh193-2-bite.probe.test.ts > VH-193.2 probe: the lowered-ceiling path, read from the plan > L1 clicks: the bite is measured under the lowered ceiling pass C will run
+L1 clicks {
+  nominalCeiling: -3,
+  loweredCeiling: -5,
+  nominalPlanBite: 18.840677878370652,
+  loweredPlanBite: 19.843452162817123,
+  loweredGainDb: 31.15433483549322,
+  biteIfLowered: 19.843452162817123,
+  biteIfNominal: 19.265696000014234,
+  loggedBite: 19.84,
+  loggedCeiling: -5,
+  passes: [
+    { gainDb: null, ceiling: -3 },
+    { gainDb: 11.342175143228747, ceiling: -3 },
+    { gainDb: 11.342175143228747, ceiling: -5 },
+    { gainDb: 17.342175143228747, ceiling: -5 },
+    { gainDb: 23.342175143228747, ceiling: -5 },
+    { gainDb: 29.342175143228747, ceiling: -5 },
+    { gainDb: 31.949827771717143, ceiling: -5 },
+    { gainDb: 31.15433483549322, ceiling: -5 }
+  ],
+  threshold: 3
+}
+
+ ✓ ../../../../../../../../private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/1dea4dbb-1ec4-4f11-94cc-21a7721cbef7/scratchpad/agent4/vh193-2-bite.probe.test.ts > VH-193.2 probe: the bite’s non-finite paths, read from the plan > N3 a limited pass whose samples are NaN: bite null, no throw 65ms
+ ✓ ../../../../../../../../private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/1dea4dbb-1ec4-4f11-94cc-21a7721cbef7/scratchpad/agent4/vh193-2-bite.probe.test.ts > VH-193.2 probe: the bite’s non-finite paths, read from the plan > N4 the warning rule on the non-finite values it could be handed 0ms
+ ✓ ../../../../../../../../private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/1dea4dbb-1ec4-4f11-94cc-21a7721cbef7/scratchpad/agent4/vh193-2-bite.probe.test.ts > VH-193.2 probe: the lowered-ceiling path, read from the plan > L1 clicks: the bite is measured under the lowered ceiling pass C will run 616ms
+stdout | ../../../../../../../../private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/1dea4dbb-1ec4-4f11-94cc-21a7721cbef7/scratchpad/agent4/vh193-2-bite.probe.test.ts > VH-193.2 probe: the lowered-ceiling path, read from the plan > L1 moderate: the bite is measured under the lowered ceiling pass C will run
+[audio] chain planned {
+  sourceIntegratedLufs: -30,
+  loudnessRangeLu: 0,
+  macroLevelling: false,
+  damageSilenced: 0,
+  afterChainLufs: -30.05,
+  limitedLufs: -16.06,
+  limiterBiteLu: 0.06,
+  codecCostLu: null,
+  codecOvershootDb: null,
+  codecProbedSeconds: null,
+  limiterCeilingDbtp: -3,
+  predictedOutputLufs: null,
+  refinementPasses: 1,
+  converged: true,
+  gainDb: 14.05,
+  planningMs: 71
+}
+
+stdout | ../../../../../../../../private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/1dea4dbb-1ec4-4f11-94cc-21a7721cbef7/scratchpad/agent4/vh193-2-bite.probe.test.ts > VH-193.2 probe: the lowered-ceiling path, read from the plan > L1 moderate: the bite is measured under the lowered ceiling pass C will run
+[audio] chain planned {
+  sourceIntegratedLufs: -30,
+  loudnessRangeLu: 0,
+  macroLevelling: false,
+  damageSilenced: 0,
+  afterChainLufs: -30.05,
+  limitedLufs: -16.08,
+  limiterBiteLu: 0.54,
+  codecCostLu: 0,
+  codecOvershootDb: 2.5,
+  codecProbedSeconds: 6,
+  limiterCeilingDbtp: -5,
+  predictedOutputLufs: -16.08,
+  refinementPasses: 2,
+  converged: true,
+  gainDb: 14.51,
+  planningMs: 131
+}
+
+stdout | ../../../../../../../../private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/1dea4dbb-1ec4-4f11-94cc-21a7721cbef7/scratchpad/agent4/vh193-2-bite.probe.test.ts > VH-193.2 probe: the lowered-ceiling path, read from the plan > L1 moderate: the bite is measured under the lowered ceiling pass C will run
+L1 moderate {
+  nominalCeiling: -3,
+  loweredCeiling: -5,
+  nominalPlanBite: 0.0602699606350221,
+  loweredPlanBite: 0.5397181853887751,
+  loweredGainDb: 14.508765255363471,
+  biteIfLowered: 0.5397181853887751,
+  biteIfNominal: 0.16036980349609387,
+  loggedBite: 0.54,
+  loggedCeiling: -5,
+  passes: [
+    { gainDb: null, ceiling: -3 },
+    { gainDb: 14.048678426000642, ceiling: -3 },
+    { gainDb: 14.048678426000642, ceiling: -5 },
+    { gainDb: 14.508765255363471, ceiling: -5 }
+  ],
+  threshold: 3
+}
+
+ ✓ ../../../../../../../../private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/1dea4dbb-1ec4-4f11-94cc-21a7721cbef7/scratchpad/agent4/vh193-2-bite.probe.test.ts > VH-193.2 probe: the lowered-ceiling path, read from the plan > L1 moderate: the bite is measured under the lowered ceiling pass C will run 278ms
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  19:13:54
+   Duration  1.41s (transform 131ms, setup 0ms, import 208ms, tests 1.09s, environment 0ms)
+

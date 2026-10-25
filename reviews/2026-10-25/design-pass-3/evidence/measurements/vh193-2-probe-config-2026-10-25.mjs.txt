@@ -1,0 +1,24 @@
+// Scratch config for the VH-193.2 bite probe. No imports, so nothing resolves
+// from this folder. Root is the repo (read only); every cache goes here.
+const REPO =
+  '/Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper'
+const HERE =
+  '/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/1dea4dbb-1ec4-4f11-94cc-21a7721cbef7/scratchpad/agent4'
+
+export default {
+  root: REPO,
+  cacheDir: `${HERE}/vite-cache`,
+  define: {
+    __APP_VERSION__: JSON.stringify('probe'),
+    __BUILD_ID__: JSON.stringify('probe'),
+    __BRANDING_DIR__: JSON.stringify('branding/'),
+  },
+  resolve: { dedupe: ['mediabunny', 'vitest'] },
+  test: {
+    environment: 'node',
+    dir: HERE,
+    include: ['**/*.probe.test.ts'],
+    testTimeout: 120_000,
+    cache: false,
+  },
+}
