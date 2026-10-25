@@ -200,6 +200,7 @@ async function main() {
   const m = writeManifest(run, {
     appRoot: APP_ROOT,
     browserVersion: browser.version.Browser,
+    browserCommandLine: (await browser.send('Browser.getBrowserCommandLine').catch((e) => ({ arguments: ['unread: ' + String(e.message ?? e).slice(0, 80)] }))).arguments?.filter((a) => !/user-data-dir|remote-debugging-port/.test(a)),
     scaling: 'Emulation.setDeviceMetricsOverride per view; Page.setFontSizes for the default font; Chrome page zoom not settable over the protocol (proxy views only)',
     // Four enlargement categories, kept apart (M-04).
     enlargement: {
@@ -211,7 +212,7 @@ async function main() {
     unresolved: [
       "Chrome page zoom at 200% and 400% itself (proxy views stand in; on the person list)",
       'what a screen reader says (exposure only: the AX tree and the DOM change log are persisted per record)',
-      "native select popups and the video player's inner controls by keys",
+      "native select popups by keys; the video player's inner controls are walked by the focused accessibility node (P-06), their rings read on a held frame with the user agent's 2.4.13 exception where it holds, and a control Tab does not reach, or one whose box is empty at rest (the volume slider), is cannot determine",
       'transient states: asserted before and after the instruments, not captured mid-transition',
       "a dialog's entry, use and exit at enlargement: overflow and clipping are measured there; the keys route runs at 1280 only",
       'a range thumb and track: non-text contrast by pixels (cannot determine in contrastExtra)',

@@ -1717,13 +1717,6 @@ Object.assign(SCENARIOS, {
     focus: [PROPS],
     fixtures: ['short-0.4s.mp4'],
   },
-  'S-104': {
-    name: '"Unknown" alone',
-    state: `!!M.el('#source-report details[open]') && [...document.querySelectorAll('#source-report dd')].some((d) => d.textContent.trim() === M.msg('format.alone.unknown'))`,
-    setup: async (w, lang) => { await ready(w, lang, 'noduration-10s.webm'); await w.click(PROPS); await sleep(300) },
-    focus: [PROPS],
-    fixtures: ['noduration-10s.webm'],
-  },
   'S-105': {
     name: 'The unchecked caption warning, completed',
     state: `M.has('source.losses.uncheckedTitle', '#source-report') || M.has('source.losses.uncheckedTitle')`,
@@ -1797,9 +1790,9 @@ Object.assign(SCENARIOS, {
   },
   'S-110': {
     name: 'The slides sentence',
-    state: `!!M.verdict() && M.checked('preset') === 'smaller' && M.has('preflight.slides', '#preflight-report')`,
+    state: `!!M.verdict() && M.checked('preset') === 'smaller' && M.says('preflight.slides', { best: { msg: 'preset.inSentence.best' } }, '#preflight-report')`,
     setup: async (w, lang) => { await ready(w, lang, 'slides-60s.mp4'); await w.click('#preset-choice input[value="smaller"]'); await w.waitSettled(); await until(w, 'M.verdict()', 'the verdict') },
-    asserts: [X('the sentence word for word', `M.text('#preflight-report').includes(M.msg('preflight.slides'))`)],
+    asserts: [X('the sentence word for word, its output named "high quality"', `M.says('preflight.slides', { best: { msg: 'preset.inSentence.best' } }, '#preflight-report')`)],
     focus: ['#preset-choice input:checked', CREATE],
     fixtures: ['slides-60s.mp4'],
   },
@@ -2258,19 +2251,21 @@ Object.assign(SCENARIOS, {
   'S-140': {
     name: 'A QuickTime Animation file with no audio (wish VH-193.3), the closing asset',
     ...EN_1280,
-    state: `M.finished() || M.res() === 'failure' || M.running()`,
+    state: `M.finished() || M.res() === 'failure' || M.running() || M.kindIn('#source-block') === 'error'`,
     // Read from samples/ (never written): walked with a 15-minute limit, its outcome recorded either way.
-    setup: async (w, lang) => { await ready(w, lang, SAMPLE_QTRLE, { timeout: 300000 }); obsOf(w).t0 = Date.now(); await create(w); await untilDone(w, 'an outcome within 15 minutes', 900000).catch(() => { obsOf(w).timedOut = true }) },
-    asserts: [found('the outcome: a finished video, a failure and its code, or still running at the limit', async (o, w) => ({ seconds: Math.round((Date.now() - o.t0) / 1000), timedOut: !!o.timedOut, res: await mx(w, 'M.res()'), stage: await mx(w, `M.text('#process-progress-text')`), text: await mx(w, `M.text('#process-result').replace(/\\s+/g, ' ').slice(0, 300)`) }))],
+    // Blocked at read in Chrome 156 (fixtures-proof-2026-10-25.json, N13): a block is its outcome, and Create is not offered.
+    setup: async (w, lang) => { await ready(w, lang, SAMPLE_QTRLE, { timeout: 300000 }); obsOf(w).t0 = Date.now(); if (await mx(w, `M.kindIn('#source-block') === 'error'`)) { obsOf(w).blocked = true; return } await create(w); await untilDone(w, 'an outcome within 15 minutes', 900000).catch(() => { obsOf(w).timedOut = true }) },
+    asserts: [found('the outcome: a finished video, a failure and its code, or still running at the limit', async (o, w) => ({ seconds: Math.round((Date.now() - o.t0) / 1000), blocked: !!o.blocked, block: await mx(w, `M.text('#source-block').replace(/\\s+/g, ' ').trim().slice(0, 200)`), timedOut: !!o.timedOut, res: await mx(w, 'M.res()'), stage: await mx(w, `M.text('#process-progress-text')`), text: await mx(w, `M.text('#process-result').replace(/\\s+/g, ' ').slice(0, 300)`) }))],
     focus: [RESULT],
     fixtures: [SAMPLE_QTRLE],
   },
   'S-140n': {
     name: "A QuickTime Animation file with no audio, N13 (the closing asset's made twin)",
     ...EN_1280,
-    state: `M.finished() || M.res() === 'failure' || M.running()`,
-    setup: async (w, lang) => { await ready(w, lang, 'qtrle-5s.mov', { timeout: 300000 }); obsOf(w).t0 = Date.now(); await create(w); await untilDone(w, 'an outcome within 15 minutes', 900000).catch(() => { obsOf(w).timedOut = true }) },
-    asserts: [found('the outcome: a finished video, a failure and its code, or still running at the limit', async (o, w) => ({ seconds: Math.round((Date.now() - o.t0) / 1000), timedOut: !!o.timedOut, res: await mx(w, 'M.res()'), text: await mx(w, `M.text('#process-result').replace(/\\s+/g, ' ').slice(0, 300)`) }))],
+    state: `M.finished() || M.res() === 'failure' || M.running() || M.kindIn('#source-block') === 'error'`,
+    // Blocked at read in Chrome 156 (fixtures-proof-2026-10-25.json, N13): a block is its outcome, and Create is not offered.
+    setup: async (w, lang) => { await ready(w, lang, 'qtrle-5s.mov', { timeout: 300000 }); obsOf(w).t0 = Date.now(); if (await mx(w, `M.kindIn('#source-block') === 'error'`)) { obsOf(w).blocked = true; return } await create(w); await untilDone(w, 'an outcome within 15 minutes', 900000).catch(() => { obsOf(w).timedOut = true }) },
+    asserts: [found('the outcome: a finished video, a failure and its code, or still running at the limit', async (o, w) => ({ seconds: Math.round((Date.now() - o.t0) / 1000), blocked: !!o.blocked, block: await mx(w, `M.text('#source-block').replace(/\\s+/g, ' ').trim().slice(0, 200)`), timedOut: !!o.timedOut, res: await mx(w, 'M.res()'), text: await mx(w, `M.text('#process-result').replace(/\\s+/g, ' ').slice(0, 300)`) }))],
     focus: [RESULT],
     fixtures: ['qtrle-5s.mov'],
   },
@@ -2472,6 +2467,7 @@ SCENARIOS['S-144'].state = SCENARIOS['S-141'].state
 
 // Source-only: never walked, each with its reason (scenarios-2026-10-25.md).
 export const SOURCE_ONLY = {
+  'S-104': '"Unknown" alone: walked only if N11 reads with no duration (scenarios file); it does not: the page reads noduration-10s.webm as "10 seconds" (fixtures-proof-2026-10-25.json, N11), and no other fixture is known that the page reads with a fact missing; src/ui/format.test.ts and src/ui/source-panel.test.ts',
   'S-154': 'VH-186\'s estimate with no time: no fixture gives a non-finite estimate; src/ui/preflight-panel.test.ts:175, and a fact not read beyond the duration by src/ui/format.test.ts:45 and :50 and src/ui/source-panel.test.ts:332 (P-03)',
 }
 
@@ -2625,7 +2621,7 @@ ROUTES['K-player'] = {
     { key: 'Space', axExpect: '^button "pause"', native: true, noFocusRing: true, state: `!document.querySelector(${JSON.stringify(P8_PLAYER)}).paused`, wait: 600, note: 'Space plays (the control becomes pause)' },
     { key: 'Space', axExpect: '^button "play"', native: true, noFocusRing: true, state: `document.querySelector(${JSON.stringify(P8_PLAYER)}).paused`, note: 'Space again pauses' },
     { key: 'Tab', axExpect: '^slider "volume"', native: true, noFocusRing: true, note: UA_RING },
-    { key: 'Tab', axExpect: '^button "(mute|unmute)"', native: true, noFocusRing: true },
+    { key: 'Tab', axExpect: '^button "(mute|un-?mute)"', native: true, noFocusRing: true, note: 'mute (Chrome names it "un-mute" while muted)' },
     { key: 'Tab', axExpect: '^button "enter full screen"', native: true, noFocusRing: true },
     { key: 'Tab', axExpect: '^button "show more media controls"', native: true, noFocusRing: true },
     { key: 'Tab', axExpect: '^slider "video time scrubber"', native: true, noFocusRing: true },

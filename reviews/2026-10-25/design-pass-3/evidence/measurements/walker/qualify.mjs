@@ -77,6 +77,9 @@ export const QUAL_INIT = String.raw`
     const checked = (name) => { const el = document.querySelector('input[name="' + name + '"]:checked'); return el ? el.value : null; };
     const body = getComputedStyle(document.body);
     return {
+      // VH-198: a page Chrome treats as hidden throttles its timers to 1 s and
+      // defers media loading, so the app is not measured as a person sees it.
+      visibility: document.visibilityState,
       lang: document.documentElement.lang,
       viewport: { w: window.innerWidth, h: window.innerHeight, dpr: window.devicePixelRatio },
       rootFontPx: parseFloat(getComputedStyle(document.documentElement).fontSize),
@@ -412,6 +415,11 @@ export const QUAL_INIT = String.raw`
 export async function assertReached(w, expect) {
   const seen = await w.evaluate('window.__qual.observed()')
   const problems = []
+  // VH-198: every record in a visible page. Headless Chrome reports every
+  // page but its first as hidden unless launched with
+  // --disable-backgrounding-occluded-windows (and, with it here,
+  // --disable-background-timer-throttling --disable-renderer-backgrounding).
+  if (seen.visibility !== 'visible') problems.push(`page ${seen.visibility}: timers throttled and media deferred; launch Chrome with --disable-backgrounding-occluded-windows`)
   if (expect.lang && seen.lang !== expect.lang) problems.push(`lang ${seen.lang}, expected ${expect.lang}`)
   const m = expect.mode ?? 'light'
   const want = {

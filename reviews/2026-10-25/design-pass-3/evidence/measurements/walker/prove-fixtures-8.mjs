@@ -6,13 +6,15 @@
 //   FIX=<fixtures> OUT_ROOT=<scratch>/out APP_URL=http://localhost:5181/ CDP_PORT=9231 \
 //     node prove-fixtures-8.mjs [N6 N7 …]       (headless Chrome, a Vite dev server)
 import { writeFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { join, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { connectBrowser } from './cdp.mjs'
 import { Walk, F, sleep, OUT_ROOT } from './walk.mjs'
 import { QUAL_INIT, focusByKeyboard } from './qualify.mjs'
 import { MX_INIT, ready } from './scenarios.mjs'
 import { P8_INIT, watchWorkers } from './phase8.mjs'
 
+const SAMPLE = join(process.env.APP_ROOT ?? join(dirname(fileURLToPath(import.meta.url)), '../../../../../..'), 'samples', 'UoN Closing Logo Fade Blue 2025.mov')
 const browser = await connectBrowser()
 const only = process.argv.slice(2)
 const results = []
@@ -68,18 +70,24 @@ await one('N11', 'noduration-10s.webm: a duration not written (S-104), to be pro
 })
 await one('N12', 'slides-60s.mp4: classed as screen and not capped (S-110), to be proved', async (w) => {
   await ready(w, 'en-GB', 'slides-60s.mp4'); await w.click('#preset-choice input[value="smaller"]'); await w.waitSettled(); await until(w, 'M.verdict()', 'verdict')
-  const slides = await mx(w, `M.text('#preflight-report').includes(M.msg('preflight.slides'))`)
+  // Composed with its substituted name: "…choose {best} instead." (M.says).
+  const slides = await mx(w, `M.says('preflight.slides', { best: { msg: 'preset.inSentence.best' } }, '#preflight-report')`)
   return { outcome: slides ? 'pass' : 'fail', slidesLine: slides, report: await mx(w, `M.text('#preflight-report').replace(/\\s+/g, ' ').slice(0, 300)`), consequence: slides ? 'S-110 walked' : 'S-110 source-only' }
 })
 await one('N13', 'qtrle-5s.mov: read and checked (S-140n; its job is S-140n\'s record)', async (w) => {
+  // The closing asset it stands for, read only (samples/ is never written): how the page takes it, beside N13.
+  await ready(w, 'en-GB', SAMPLE, { timeout: 300000 })
+  const sample = await mx(w, `({ verdict: M.verdict(), block: M.kindIn('#source-block'), heading: M.text('#preflight-report .notification-title'), blockText: M.text('#source-block').replace(/\\s+/g, ' ').trim().slice(0, 160) })`)
   await ready(w, 'en-GB', 'qtrle-5s.mov', { timeout: 300000 })
-  return { outcome: (await mx(w, '!!M.verdict() || !!M.kindIn("#source-block")')) ? 'pass' : 'fail', verdict: await mx(w, 'M.verdict()'), block: await mx(w, 'M.kindIn("#source-block")'), heading: await mx(w, `M.text('#preflight-report .notification-title')`) }
+  // Read either way; whether it stands for the closing asset is recorded: a block here is not the sample's ten-minute job.
+  return { outcome: (await mx(w, '!!M.verdict() || !!M.kindIn("#source-block")')) ? 'pass' : 'fail', verdict: await mx(w, 'M.verdict()'), block: await mx(w, 'M.kindIn("#source-block")'), blockText: await mx(w, `M.text('#source-block').replace(/\\s+/g, ' ').trim().slice(0, 240)`), heading: await mx(w, `M.text('#preflight-report .notification-title')`), sample, twin: 'compared with the sample read just before' }
 })
 await one('N14', 'late-sound-3.71s-25fps-10s.mp4: the frame-snap case (S-153), to be proved', async (w) => {
-  await ready(w, 'en-GB', 'late-sound-3.71s-25fps-10s.mp4')
-  await endAt(w, '0:04.08'); const onEdge = await noAudio(w) // 370 ms, on a frame's edge: a sliver
-  await endAt(w, '0:04.1'); const inFrame = await noAudio(w) // 390 ms asked, 410 ms once placed on 4.12 s
-  return { outcome: onEdge === true && inFrame === false ? 'pass' : 'fail', at408: { noAudio: onEdge, keptMs: 370 }, at410: { noAudio: inFrame, askedMs: 390, placedMs: 410 }, consequence: onEdge === true && inFrame === false ? 'S-153 walked' : 'S-153 source-only' }
+  // Each on a fresh read: the End field shows one decimal, so 0:04.08 then 0:04.1 would be no change.
+  await ready(w, 'en-GB', 'late-sound-3.71s-25fps-10s.mp4'); await endAt(w, '0:04.08'); const onEdge = await noAudio(w) // 370 ms, on a frame's edge: a sliver
+  await ready(w, 'en-GB', 'late-sound-3.71s-25fps-10s.mp4'); await endAt(w, '0:04.1'); const inFrame = await noAudio(w) // 390 ms asked, 410 ms once placed on 4.12 s
+  const range = await w.evaluate(`document.getElementById('trim-end-range').valueAsNumber`)
+  return { outcome: onEdge === true && inFrame === false ? 'pass' : 'fail', at408: { noAudio: onEdge, keptMs: 370 }, at410: { noAudio: inFrame, askedMs: 390, placedMs: 410, endRange: range }, consequence: onEdge === true && inFrame === false ? 'S-153 walked' : 'S-153 source-only' }
 })
 browser.close()
 writeFileSync(join(OUT_ROOT, 'fixtures-proof-8.json'), JSON.stringify(results, null, 1))

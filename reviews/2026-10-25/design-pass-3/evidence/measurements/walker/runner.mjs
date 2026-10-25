@@ -175,7 +175,7 @@ function unresolvedFrom(recs) {
 }
 
 /** The manifest: what ran, on what, and what stayed unresolved. */
-export function writeManifest(run, { appRoot, browserVersion, fixtures = [], scaling, enlargement, unresolved = [] }) {
+export function writeManifest(run, { appRoot, browserVersion, browserCommandLine, fixtures = [], scaling, enlargement, unresolved = [] }) {
   const git = (...a) => { try { return execFileSync('git', ['-C', appRoot, ...a], { encoding: 'utf8' }).trim() } catch { return 'unknown' } }
   const instruments = readdirSync(HERE).filter((f) => /\.(mjs|sh)$/.test(f)).sort().map((f) => ({ file: f, sha256: sha(readFileSync(join(HERE, f))) }))
   const v = run.verify()
@@ -195,6 +195,8 @@ export function writeManifest(run, { appRoot, browserVersion, fixtures = [], sca
     source: { commit: git('rev-parse', 'HEAD'), dirty: git('status', '--porcelain', '--', 'src', 'index.html', 'public') !== '' },
     instruments: { revision: sha(instruments.map((i) => i.sha256).join('')), files: instruments },
     browser: browserVersion,
+    // VH-198: the flags the pages ran under (visible pages need --disable-backgrounding-occluded-windows).
+    browserCommandLine,
     os: `${platform()} ${release()} ${arch()}`,
     views: [...new Set(recs.map((r) => JSON.stringify({ view: r.view, actual: r.reached?.seen?.viewport, rootFontPx: r.reached?.seen?.rootFontPx })))].map((s) => JSON.parse(s)),
     scaling,
