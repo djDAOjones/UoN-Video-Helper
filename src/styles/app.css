@@ -1324,13 +1324,20 @@ details[open] > .disclosure-summary::before {
 /*
  * The browser's own player: full width, never taller than most of the
  * window, and letterboxed in the brand blue rather than black (the brand
- * allows no black).
+ * allows no black). Step 2's plays the original; the finished card's, the
+ * new video (VH-192).
  */
-.trim-preview {
+.trim-preview,
+.result-player {
   display: block;
   width: 100%;
   max-height: var(--preview-max-height);
   background: var(--uon-brand-bg);
+}
+
+/* Set apart from the card's lines above it as its actions are. */
+.result-player {
+  margin-top: var(--spacing-05);
 }
 
 /*

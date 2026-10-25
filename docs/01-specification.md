@@ -630,7 +630,8 @@ larger file.
 6. **Create** — the device check's verdict for this video, the part kept
    and the file size chosen, calibration probe included (§7); any
    audio-quality warnings (§5.4); then "Create the video", with named
-   progress and a cancel button, and "Save the video" when it is done.
+   progress and a cancel button, and "Save the video" when it is done; the
+   finished video plays in its card (VH-182.6).
 
    The finished video carries a one-line summary of its job — file, the title
    card when there is one ("a 5-second staff title card", "a 5-second submission
@@ -737,14 +738,14 @@ in writing (§13).
 
 Exceptions recorded:
 
-- **The preview's content** (1.2.1–1.2.8, 2.3.1–2.3.2). *Reason:* it is the
+- **The players' content** (1.2.1–1.2.8, 2.3.1–2.3.2). *Reason:* it is the
   user's own recording, outside the page's control. *Impact:* its captions,
   descriptions and flash safety are whatever the recording has; a statement
   of partial conformance for third-party content acknowledges that
   non-conformance rather than excusing it. *Mitigation:* nothing autoplays,
-  and the controls are the user agent's; any media the app itself supplied
-  would need alternatives of its own. *Decision:* accepted, maintainer,
-  2026-10-01.
+  and the controls are the user agent's; the finished video's added cards
+  are silent, and their words are chosen on this page (VH-182.6).
+  *Decision:* accepted, maintainer, 2026-10-01.
 - **Units of file size** (3.1.4): kB, MB, GB, TB. *Reason:* every device's
   own screens show sizes so. *Impact:* a reader new to them sees a size
   without its unit's name. *Mitigation:* each output is named for its purpose

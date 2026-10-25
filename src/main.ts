@@ -2854,8 +2854,53 @@ function confirmDiscardThenStart(): void {
   panel.focus()
 }
 
+/**
+ * The finished video's player (VH-192), kept with the job it plays: a
+ * re-render of the same result — "Keep it", another file chosen — reuses it
+ * rather than making another object URL. Unsaved results only, a "Previous
+ * video" and a download included; it leaves the card once a save completes.
+ */
+let resultPlayer: { readonly jobId: string; readonly url: string; readonly video: HTMLVideoElement } | null = null
+
+/**
+ * The browser's own player over the job's working file, streamed from OPFS
+ * as the save is (never read whole), named by the card's title, and silent
+ * until pressed: nothing autoplays (spec 9.3).
+ */
+function resultPlayerFor(kept: RetainedResult, labelledBy: string): HTMLVideoElement {
+  if (resultPlayer?.jobId !== kept.jobId) {
+    releaseResultPlayer()
+    const video = document.createElement('video')
+    video.className = 'result-player'
+    video.controls = true
+    video.preload = 'metadata'
+    video.playsInline = true
+    const url = URL.createObjectURL(kept.file)
+    video.src = url
+    resultPlayer = { jobId: kept.jobId, url, video }
+  }
+  resultPlayer.video.setAttribute('aria-labelledby', labelledBy)
+  return resultPlayer.video
+}
+
+/**
+ * Stops the player and lets its object URL go, before the working file it
+ * reads can. A closed tab needs nothing: the document's object URLs end with it.
+ */
+function releaseResultPlayer(): void {
+  if (!resultPlayer) return
+  const { video, url } = resultPlayer
+  video.pause()
+  video.removeAttribute('src')
+  video.load()
+  video.remove()
+  URL.revokeObjectURL(url)
+  resultPlayer = null
+}
+
 /** Forgets the retained result, freeing whatever the save route still held. */
 function releaseUnsavedResult(): void {
+  releaseResultPlayer()
   unsavedResult?.release()
   unsavedResult = null
   updateLeaveWarning()
@@ -3235,7 +3280,9 @@ function renderResult(kept: RetainedResult): HTMLElement {
   // The leave warning catches a reload; it cannot catch a crash or a
   // discarded tab, which is why the sentence is here. Gone once it is saved.
   const lifetime = body('')
-  heading.append(lifetime)
+  // The player after the card's lines, before the lifetime and Save: the
+  // owner's 2A (VH-192).
+  heading.append(resultPlayerFor(kept, title?.id ?? ''), lifetime)
   // The output's warnings beside the result's notification, never inside it:
   // one notification nested in another drew two rails (VH-150).
   const resultWarnings = document.createElement('div')
@@ -3387,6 +3434,11 @@ function renderResult(kept: RetainedResult): HTMLElement {
         // Saving again would read a workspace that no longer exists, so the
         // control stops offering it rather than failing when taken up.
         saved = true
+        // The player reads the working file the clean-up below removes, so
+        // it leaves the card now (VH-192, the owner's 1A); focus in it goes
+        // to the card.
+        const fromPlayer = focusHeldBy(resultPlayer ? [resultPlayer.video] : [])
+        releaseResultPlayer()
         lifetime.remove()
         paint()
         // The save is over when the file is out, not when the scratch is
@@ -3397,6 +3449,7 @@ function renderResult(kept: RetainedResult): HTMLElement {
         offerSaveStop(false)
         setSaveInFlight(false)
         fromGone(heading)
+        fromPlayer(heading)
         // Clean-up is not delivery. The file is out; a scratch that cannot be
         // removed is logged, never announced as a failed save under a button
         // that already reads "Saved" (U-15).

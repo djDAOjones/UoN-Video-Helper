@@ -702,6 +702,51 @@ describe('which video a change is for (VH-140, VH-191)', () => {
   })
 })
 
+describe('the finished video plays in its card (VH-192)', () => {
+  const mainSource = readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8')
+  const css = readFileSync(new URL('../src/styles/app.css', import.meta.url), 'utf8')
+  const bodyOf = (name: string): string =>
+    new RegExp(`function ${name}\\([^)]*\\)(?:: [^{]+)? \\{([\\s\\S]*?)\\n\\}`).exec(mainSource)?.[1] ?? ''
+  const player = bodyOf('resultPlayerFor')
+  const release = bodyOf('releaseResultPlayer')
+  const render = bodyOf('renderResult')
+
+  it('is the browser’s own player, named by the card’s title, loading only its metadata, never autoplaying', () => {
+    expect(player).toContain("document.createElement('video')")
+    expect(player).toContain('video.controls = true')
+    expect(player).toContain("video.preload = 'metadata'")
+    expect(player).toContain("setAttribute('aria-labelledby', labelledBy)")
+    expect(player).not.toMatch(/autoplay|\.play\(/i)
+    expect(render).toContain("resultPlayerFor(kept, title?.id ?? '')")
+  })
+
+  it('sits after the card’s lines, before the lifetime line and Save (the owner’s 2A)', () => {
+    expect(render).toMatch(/heading\.append\(resultPlayerFor\([^)]*\), lifetime\)/)
+    expect(render.indexOf('resultPlayerFor(')).toBeLessThan(render.indexOf('actions.append(save)'))
+  })
+
+  it('makes one object URL per job, reused on a re-render, and stops and revokes it on release', () => {
+    expect(player).toContain('resultPlayer?.jobId !== kept.jobId')
+    // The finished file, never the original it was made from.
+    expect(player.match(/URL\.createObjectURL/g)).toHaveLength(1)
+    expect(player).toContain('URL.createObjectURL(kept.file)')
+    expect(release).toContain('video.pause()')
+    expect(release).toContain("video.removeAttribute('src')")
+    expect(release).toContain('URL.revokeObjectURL(url)')
+  })
+
+  it('leaves with a discarded result, and before a completed save’s clean-up (the owner’s 1A)', () => {
+    expect(bodyOf('releaseUnsavedResult')).toMatch(/^\s*releaseResultPlayer\(\)/)
+    const completed = render.slice(render.indexOf('saved = true'), render.indexOf("request({ kind: 'discard', jobId }"))
+    expect(completed).toContain('releaseResultPlayer()')
+    expect(completed).toContain('fromPlayer(heading)')
+  })
+
+  it('is drawn as step 2’s player is', () => {
+    expect(css).toMatch(/\.trim-preview,\s*\.result-player \{/)
+  })
+})
+
 describe('Step 3 says its rules before Create (VH-140)', () => {
   const step = /<section[^>]*id="step-title"[\s\S]*?<\/section>/.exec(markup)?.[0] ?? ''
   const submission = /<div id="submission-card-fields"[\s\S]*?<p class="helper" id="submission-card-filled">/.exec(step)?.[0] ?? ''

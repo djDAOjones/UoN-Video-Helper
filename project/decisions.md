@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-25 — VH-192 — The finished video plays in its card while it is unsaved, after the card's lines and before the lifetime line and Save
+
+**Decision:** The finished card holds the browser's own player over the job's working file, named by the card's title, loading metadata only and never autoplaying, with no new words (B10). It stays while the video is unsaved, a "Previous video" and a download included, and leaves the card once a save completes, before the clean-up removes its file. Spec §9.1 and §9.3 take S20 and S21.
+
+**Rationale:** Q3, the owner's answer: "proceed with your recommendation", option A, a plain player in the finished card. On the two open points, verbatim: "1A and 2A: the player shows only while the video is unsaved and leaves the card once a save completes; it sits after the card's lines, before the lifetime line and Save". One player and one object URL are made per job, over the OPFS `File` the save reads, so nothing is read whole. They are reused when the same job re-renders ("Keep it", another file chosen) and released (pause, `src` dropped, URL revoked) on Discard and before a completed save's `discard`. Focus on the player then goes to the card. A closed tab's URLs end with the document; a `pagehide` revoke would break a restore from the back-forward cache. The save's clean-up rule is unchanged. Focus at a job's end stays on the card (VH-178). Nothing reads the player: a failed playback leaves the result, Save and the record as they were. Media (1.2.x, 2.3.x): the added title or submission card is one still picture over silence, and the closing graphics are silent with their recorded cut, fade or slide. Neither adds a flashing mechanism, and their words are chosen on the page. They sit under S21's accepted limitation, which does not claim 1.2.x conformance. The statement's preview-only line is wish line VH-192.1. Chrome: `player-192.mjs`, 36 matrix cases and 9 flows (`reviews/2026-10-24/vh192-player-2026-10-25.md`). Codex astra: "Commit after the musts below". Its three musts are done (the close, this media assessment, and a check that the player plays the new video, not the original), and its shoulds are taken in part, the rest going to VH-198 as wish line VH-192.2 (`reviews/2026-10-24/codex-astra-vh192-check-2026-10-25.md`). Digest rules applied: WCAG 2.2 AAA's media line (1.2.x under S21's recorded exception) and 2.4.3 focus order; Carbon, no autoplay and the notification's existing spacing tokens; Nielsen 1 and 3 (see the result, and leave it before saving); house conventions, streaming everywhere.
+
+**Supersedes:** none
+
+**Deferred:** VH-193
+
 ## 2026-10-25 — VH-191 — Video language moves to the top of step 3, before the title card choice, and locks with step 3; the next-video line is Video type's alone
 
 **Decision:** The Video language choice moves from under Video type to the top of step 3, under its heading and the lock note and before the title card choice, outside that group. It stays in view with the card off or on and on a student submission. It locks with step 3 while a video is made or saved. `#video-next` moves into Video type with B9's words as `videoKind.nextVideo`, and `videoLanguage.nextVideo` is gone. Spec §9.1 takes S19.
@@ -519,25 +529,5 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 This check ran in the session that wrote the record, not in a fresh one, so it does not prove a handoff. VH-160 also drafts the correction for spec §9.2 and §11, which name email as the one feedback route, as a wish line for the owner (PLAN-6).
 
 **Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-22 — VH-159 — The spec says what Phase 5 ships: eight approved rows applied, its budget raised to 8,100 words
-
-**Decision:** the eight approved spec rows are applied to §5.4, §6.2, §7.2, §9.1, §9.2, §9.3 and §10, each in the page's shipped words, and rules.md's routed budget for the spec rises from 7,800 to 8,100 words, because the rows bring it to 8,031 and the owner allowed up to 8,500.
-
-**Rationale:** The owner's words in chat on 2026-10-22: "Approve VH-150.1, VH-155.1 and VH-157.1 as worded, and raise the spec budget to what the approved rows need, up to 8,500 words. Start VH-159." The earlier approvals are PLAN-5's "yes to all" (VH-139.1, VH-140.1, VH-142.1, VH-148.1, VH-138.3). Rows applied:
-
-- §5.4: VH-142.1's damage-row ending; VH-139.1's "File ends early" row.
-- §6.2: VH-148.1's heading and the helper's words.
-- §7.2: VH-139.1's check.
-- §9.1: VH-140.1's line under the switches, Step 3's rule and the record naming the card and a video language; VH-148.1's read outcome; VH-157.1's "no title, department or authors".
-- §9.2: VH-140.1's line naming the job's type and language beside the progress.
-- §9.3: VH-150.1's 2.2.2 reading, replacing VH-141.1; VH-138.3's evidence limitations.
-- §10: VH-155.1's "This tool" and VH-148.1's "the checks for it to run".
-
-Each sentence was read against the shipped code: `ends-early.ts` and `ENDS_EARLY_MARGIN_SECONDS`, `runningJobText`, `summaryWithCard`, `nextVideo`, both `fieldsRule` strings, `browserNote`, `readSummary`, `decodeDamage`, and the absence of any Show progress control. Four words follow later shipped wording, not the draft: "sound" is "audio" in VH-139.1's rows and "No sound." is "No audio." (VH-155), "original recording" is "original video" (VH-156), and §10 quotes the three browser sentences as VH-153 left them ("so other browsers", "all the checks"). VH-138.3's defects while they stand (3.3.2, 3.1.2, 4.1.3, two 2.4.3 hand-offs) are not listed, because VH-140 and VH-141 fixed them; what only a person can confirm is in the new evidence paragraph. VH-158's cut-short warning has no §5.4 row and none was approved, so VH-159.1 drafts one. 274 words added; 8,100 leaves 69. No code changed. Applied: the rules file's protected-paths line (`docs/*.md` changes only by owner-approved wording) and wcag-2.2-aaa's Exceptions recorded: 2.2.2 is read as essential, not excepted, so the digest gains no exception.
-
-**Supersedes:** 2026-10-20 — PLAN-2 — The spec's budget rises to 7,800; the Always section drops two lines the profile holds; the Xerte link opens a new tab
 
 **Deferred:** none
