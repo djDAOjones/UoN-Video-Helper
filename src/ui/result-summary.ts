@@ -184,9 +184,10 @@ export function jobSummaryText(record: JobRecord, made: KeptRange | null = null)
 
 /**
  * The line under the progress bar: the video being made, as it was started
- * — its type and its video language, named as the switches name them — since
- * neither switch is locked and either may say otherwise by now (VH-140,
- * audit V-05).
+ * — its type and its video language, named as their choices name them — since
+ * the switch is never locked, and Video language, locked with step 3, still
+ * follows the page's until picked, so either may say otherwise by now
+ * (VH-140, VH-191, audit V-05).
  */
 export function runningJobText(record: JobRecord): string {
   return t().progress.job({

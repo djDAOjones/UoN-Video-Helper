@@ -584,12 +584,12 @@ diagnostics bundle stay English.
 The screen is six numbered steps (VH-91, VH-96, VH-127). Above them, a switch
 chooses "Staff video" or "Student submission" (VH-131). It opens on Staff video,
 is remembered in this browser and is never locked, so switching keeps the video,
-the trim, every choice, a running job and a result. Under it, "Video language"
-chooses the language of the words the app adds to the video (VH-132). It shows
-the page's language until someone picks one, then keeps the pick when the page's
-changes; it too is remembered and never locked, and a job reads it at its start.
-While a video is made or shown, a line under the switches says a change is for
-the next video (VH-140). Step 1 is there from the start; steps 2–6 appear once a
+the trim, every choice, a running job and a result. In step 3, "Video language"
+chooses the language of the words the app adds to the video (VH-132, VH-182.2).
+It shows the page's language until someone picks one, then keeps the pick when
+the page's changes; it is remembered, locked with step 3, and read by a job at
+its start. While a video is made or shown, a line under the switch says a change
+is for the next video (VH-140). Step 1 is there from the start; steps 2–6 appear once a
 video has been read, and each holds a safe default, so a staff video left alone
 keeps the whole video, with no title card, a clean-cut blue closing and the
 larger file.

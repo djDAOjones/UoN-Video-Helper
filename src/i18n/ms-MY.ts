@@ -65,13 +65,13 @@ export const msMY: Messages = {
       staff: 'Anda memilih grafik penutup, dan sama ada grafik itu memaparkan “{words}”.',
       submission: 'Jika video mempunyai grafik penutup, grafik itu memaparkan “{words}”.',
     },
+    nextVideo: 'Perubahan pada jenis video digunakan untuk video seterusnya yang anda buat.',
   },
   videoLanguage: {
     label: 'Bahasa video',
-    helper: 'Perkataan yang ditambah oleh alat pada video anda adalah dalam bahasa ini.',
+    helper:
+      'Perkataan yang ditambah oleh alat pada video anda, pada kad tajuk dan grafik penutup, adalah dalam bahasa ini.',
     typed: 'Apa yang anda taip dikekalkan seperti yang ditaip.',
-    nextVideo:
-      'Perubahan pada jenis video atau bahasa video digunakan untuk video seterusnya yang anda buat.',
   },
   steps: {
     choose: 'Pilih video',

@@ -1199,8 +1199,8 @@ details[open] > .disclosure-summary::before {
  * segments wrap, so each keeps all four edges and overlaps its neighbour's
  * by one hairline rather than dropping its left edge. Staff video or Student
  * submission (VH-131), above the steps, is sized the same way, and so is the
- * video's language under it (VH-132). Their legends are section headings
- * (Type roles).
+ * video's language at the top of step 3 (VH-132, VH-191). Their legends are
+ * section headings (Type roles).
  */
 
 .helper-line {

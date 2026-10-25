@@ -103,28 +103,11 @@
           </label>
         </div>
         <p class="helper" id="video-kind-result"></p>
-      </fieldset>
-
-      <!-- VH-132, 2026-10-19. The language of the words the app draws into
-           the video — Internal use only, and the title cards' labels — under
-           the switch, because both say what the video is and no one step
-           owns it. Its segments are the page language's, built from the same
-           list (`languageSegments`), each name in its own language with its
-           own `lang`. It shows the page's language until someone picks one,
-           then keeps the pick and remembers it in this browser; never
-           locked. The line beneath is read on demand, not announced. -->
-      <fieldset class="segmented video-language" id="video-language" aria-describedby="video-language-helper video-next">
-        <legend class="label" data-i18n="videoLanguage.label">Video language</legend>
-        <p class="helper" id="video-language-helper">
-          <span class="helper-line" data-i18n="videoLanguage.helper">Words the tool adds to your video are in this language.</span>
-          <span class="helper-line" data-i18n="videoLanguage.typed">What you type is kept as typed.</span>
-        </p>
-        <!-- VH-140, 2026-10-21. Under both switches, and tied to both: only
-             while a video is being made or a finished one is on screen,
-             that a change is for the next video — neither is locked, and
-             the job keeps what it started with. Empty while hidden, so
-             neither group's description reads it. Moved under the switch
-             when this choice is hidden. Read on demand, not announced. -->
+        <!-- VH-140, 2026-10-21; VH-191, 2026-10-25. Only while a video is
+             being made or a finished one is on screen, that a change of side
+             is for the next video: the switch is never locked, and the job
+             keeps what it started with. Empty while hidden, so the group's
+             description does not read it. Read on demand, not announced. -->
         <p class="helper" id="video-next" hidden></p>
       </fieldset>
 
@@ -263,6 +246,23 @@
 
       <section class="panel step" id="step-title" aria-labelledby="title-heading" hidden>
         <h2 id="title-heading"><span class="step-number">3.</span> <span data-i18n="steps.titleCard">Title card</span></h2>
+        <!-- VH-132, 2026-10-19; VH-191, 2026-10-25. The language of the
+             words the app draws into the video — the title cards' labels and
+             date, and Internal use only — at the top of step 3, before the
+             title card choice, so it stays in view whether or not the card
+             is on (the owner's choice A). Its segments are the page
+             language's, built from the same list (`languageSegments`), each
+             name in its own language with its own `lang`. It shows the
+             page's language until someone picks one, then keeps the pick and
+             remembers it in this browser; it locks with step 3 while a video
+             is made or saved. The line beneath is read on demand. -->
+        <fieldset class="segmented video-language" id="video-language" aria-describedby="video-language-helper">
+          <legend class="label" data-i18n="videoLanguage.label">Video language</legend>
+          <p class="helper" id="video-language-helper">
+            <span class="helper-line" data-i18n="videoLanguage.helper">Words the tool adds to your video, on the title card and the closing graphics, are in this language.</span>
+            <span class="helper-line" data-i18n="videoLanguage.typed">What you type is kept as typed.</span>
+          </p>
+        </fieldset>
         <fieldset class="choice" id="title-card-choice">
           <legend class="visually-hidden" data-i18n="titleCard.legend">Title card</legend>
           <!-- VH-127, 2026-10-19. A staff video's optional card, five seconds
@@ -608,8 +608,9 @@
              the milestones say it. -->
         <p class="helper progress-time-left" id="process-time-left" hidden></p>
         <!-- VH-140, 2026-10-21. The video being made, as it was started: its
-             type and video language, since the switches above stay live and
-             may say otherwise by now. NOT live: it does not change. -->
+             type and video language, since Video type stays live and Video
+             language follows the page's until picked (VH-191), so either may
+             say otherwise by now. NOT live: it does not change. -->
         <p class="helper" id="process-job" hidden></p>
         <!-- Spec 7.5, said once at the start of every job. Visible while the
              job runs; announced with the first status line (VH-109). -->

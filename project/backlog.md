@@ -37,7 +37,6 @@ The public release, 0.2.0, on Xerte (PLAN-6).
 
 ### Phase 8 — the owner's UX pass, then a third full design pass
 
-- [ ] VH-191 — Video language moves into step 3, apart from Page language — since 2026-10-24
 - [ ] VH-192 — Watch the finished video in its card before saving — since 2026-10-24
 - [ ] VH-193 — A warning after the job when levelling needed heavy limiting — since 2026-10-24
 - [ ] VH-194 — The spec's and UI-STANDARDS' Phase 7 corrections applied — since 2026-10-24

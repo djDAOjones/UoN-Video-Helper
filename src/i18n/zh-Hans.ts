@@ -64,12 +64,12 @@ export const zhHans: Messages = {
       staff: '由您选择结尾图形，以及是否显示“{words}”。',
       submission: '如果视频有结尾图形，图形会显示“{words}”。',
     },
+    nextVideo: '对视频类型的更改将用于您制作的下一个视频。',
   },
   videoLanguage: {
     label: '视频语言',
-    helper: '工具添加到视频中的文字使用此语言。',
+    helper: '工具添加到视频中的文字（标题卡和结尾图形上的文字）使用此语言。',
     typed: '您输入的内容将按原样保留。',
-    nextVideo: '对视频类型或视频语言的更改将用于您制作的下一个视频。',
   },
   steps: {
     choose: '选择一个视频',

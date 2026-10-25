@@ -504,7 +504,7 @@ function chosenVideoKind(): VideoKind {
 }
 
 /**
- * The video's text language as picked under the switch (VH-132), or `null`
+ * The video's text language as picked in step 3 (VH-132, VH-191), or `null`
  * while nobody has picked one and it follows the page's. Read before the
  * closing controls are first in step, so their first paint quotes it.
  */
@@ -663,19 +663,16 @@ videoKindChoice.addEventListener('change', () => {
   withdrawDiscardQuestion()
 })
 
-// --- The video's text language (VH-132) ------------------------------------
-// Under the switch, one segment per language offered, built as the page's
+// --- The video's text language (VH-132, VH-191) ----------------------------
+// At the top of step 3, one segment per language offered, built as the page's
 // switcher's are. It shows the page's language until someone picks one; a
 // pick is kept when the page's language changes and is remembered in this
-// browser. Never locked, like the switch: a running job keeps the words it
-// started with, and the next job reads the pick. A choice of one is no
-// choice, so a page offering one language hides it.
+// browser. It locks with step 3 while a video is made or saved, and a job
+// reads it at its start. A choice of one is no choice, so a page offering
+// one language hides it.
 
 const videoLanguageOptions = languageOptions(LANGUAGES_OFFERED, chosenVideoLanguage())
 videoLanguageChoice.hidden = videoLanguageOptions.length === 0
-// The line saying a change is for the next video belongs under both
-// switches; with no language choice to show, it goes under the switch.
-if (videoLanguageChoice.hidden) videoKindChoice.append(videoNextLine)
 required<HTMLLegendElement>('#video-language > legend').after(
   languageSegments('video-language', videoLanguageOptions),
 )
@@ -2174,12 +2171,13 @@ function resultOfChosenFile(): boolean {
 let resultStanding = false
 
 /**
- * The line under the two switches: while a job runs or a result stands, a
- * change to either is for the next video, since neither is locked and the
- * job and its record keep what they started with (VH-140, audit V-05).
+ * The line under the switch: while a job runs or a result stands, a change of
+ * side is for the next video, since the switch is never locked and the job
+ * and its record keep what they started with (VH-140, audit V-05). Video
+ * language locks with step 3 instead (VH-191).
  */
 function paintVideoNext(): void {
-  paintLine(videoNextLine, jobInFlight || resultStanding ? t().videoLanguage.nextVideo : null)
+  paintLine(videoNextLine, jobInFlight || resultStanding ? t().videoKind.nextVideo : null)
 }
 show(videoNextLine, paintVideoNext)
 
@@ -2457,6 +2455,7 @@ function applyControlLock(): void {
   presetChoice.disabled = locked
   brandingChoice.disabled = locked
   titleCardChoice.disabled = locked
+  videoLanguageChoice.disabled = locked
   startButton.disabled = locked
   // The trim is part of what the job was started for. A video too short to
   // trim has nothing to move, and says so in the line beneath.
@@ -2900,7 +2899,7 @@ function beginJob(file: File): void {
   // Read once, so the job and the record of it cannot disagree.
   const videoKind = chosenVideoKind()
   const closing = chosenClosing()
-  // The video's text language: the pick under the switch, or the page's (VH-132).
+  // The video's text language: the pick in step 3, or the page's (VH-132, VH-191).
   const wordsLanguage = chosenVideoLanguage()
   const branding = brandingChoiceFor(closing, wordsLanguage)
   const keptRange = jobKeptRange
@@ -2961,7 +2960,8 @@ function beginJob(file: File): void {
   withdrawVerdict()
   setJobInFlight(true)
   // The job's own type and video language with its progress, from its
-  // record: the switches above stay live and may say otherwise (VH-140).
+  // record: Video type stays live, and Video language follows the page's
+  // until picked, so either may say otherwise (VH-140, VH-191).
   show(processJobLine, () => paintQuoting(processJobLine, runningJobText(record), record.wordsLanguage))
   processJobLine.hidden = false
   fromCreate(cancelButton)

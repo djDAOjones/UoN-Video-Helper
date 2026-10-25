@@ -653,33 +653,44 @@ describe('Staff video or Student submission (VH-131)', () => {
   })
 })
 
-describe('the video’s language (VH-132)', () => {
+describe('the video’s language (VH-132, VH-191)', () => {
   const fieldset = /<fieldset[^>]*id="video-language"[\s\S]*?<\/fieldset>/.exec(markup)?.[0] ?? ''
+  const step = /<section[^>]*id="step-title"[\s\S]*?<\/section>/.exec(markup)?.[0] ?? ''
+  const applyLock = /function applyControlLock\(\): void \{([\s\S]*?)\n\}/.exec(
+    readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8'),
+  )?.[1] ?? ''
 
-  it('has a visible label, and ties the line beneath to the group', () => {
+  it('has a visible label, and ties its own line beneath to the group', () => {
     expect(fieldset).toMatch(/<legend class="label">Video language<\/legend>/)
-    // The next-video line is the group's too (VH-140), after its own.
-    expect(fieldset).toContain('aria-describedby="video-language-helper video-next"')
+    // The next-video line is Video type's alone now (VH-191).
+    expect(fieldset).toContain('aria-describedby="video-language-helper"')
+    expect(fieldset).not.toContain('video-next')
     expect(fieldset).toContain('id="video-language-helper"')
     expect(fieldset).toContain(enGB.videoLanguage.helper)
   })
 
-  it('sits under the switch and above Step 1, outside every fieldset the job lock disables', () => {
-    expect(markup.indexOf('id="video-language"')).toBeGreaterThan(markup.indexOf('id="video-kind"'))
-    expect(markup.indexOf('id="video-language"')).toBeLessThan(markup.indexOf('id="step-choose"'))
-    for (const id of ['branding-choice', 'preset-choice']) {
-      const locked = new RegExp(`<fieldset[^>]*id="${id}"[\\s\\S]*?<\\/fieldset>`).exec(markup)?.[0] ?? ''
-      expect(locked).not.toContain('id="video-language"')
-    }
+  it('sits at the top of step 3, under its heading and before the title card choice', () => {
+    expect(step).toContain('id="video-language"')
+    expect(markup.indexOf('id="video-language"')).toBeGreaterThan(markup.indexOf('id="title-heading"'))
+    expect(markup.indexOf('id="video-language"')).toBeLessThan(markup.indexOf('id="title-card-choice"'))
+    // Outside the title card's own group, so it stays in view with the card off.
+    const card = /<fieldset[^>]*id="title-card-choice"[\s\S]*?<\/fieldset>/.exec(markup)?.[0] ?? ''
+    expect(card).not.toContain('id="video-language"')
+  })
+
+  it('locks with step 3 while a video is made or saved', () => {
+    expect(applyLock).toContain('titleCardChoice.disabled = locked')
+    expect(applyLock).toContain('videoLanguageChoice.disabled = locked')
   })
 })
 
-describe('which video a change is for (VH-140)', () => {
-  const language = /<fieldset[^>]*id="video-language"[\s\S]*?<\/fieldset>/.exec(markup)?.[0] ?? ''
+describe('which video a change is for (VH-140, VH-191)', () => {
+  const kind = /<fieldset[^>]*id="video-kind"[\s\S]*?<\/fieldset>/.exec(markup)?.[0] ?? ''
 
-  it('has one line under both switches, hidden and empty until a job runs or a result stands', () => {
-    expect(language).toMatch(/<p class="helper" id="video-next" hidden><\/p>/)
+  it('has one line under the switch, hidden and empty until a job runs or a result stands', () => {
+    expect(kind).toMatch(/<p class="helper" id="video-next" hidden><\/p>/)
     expect(markup.match(/id="video-next"/g)).toHaveLength(1)
+    expect(enGB.videoKind.nextVideo).toBe('Changes to the video type apply to the next video you make.')
   })
 
   it('names the running job beside its progress, not in a live region', () => {

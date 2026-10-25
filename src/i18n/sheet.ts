@@ -68,14 +68,17 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
     'videoKind.result',
     'Above Step 1: the line under the switch, saying what the choice means for the closing',
   ],
-  ['videoLanguage', 'Above Step 1: the choice of language for the words drawn into the video'],
   [
-    'videoLanguage.typed',
-    'Above Step 1: under the video language choice, on the line after videoLanguage.helper',
+    'videoKind.nextVideo',
+    'Above Step 1: under the video type, only while a video is being made or a finished one is on screen',
   ],
   [
-    'videoLanguage.nextVideo',
-    'Above Step 1: under the video type and the video language, only while a video is being made or a finished one is on screen',
+    'videoLanguage',
+    'Step 3, at the top, before the title card: the choice of language for the words drawn into the video',
+  ],
+  [
+    'videoLanguage.typed',
+    'Step 3, at the top: under the video language choice, on the line after videoLanguage.helper',
   ],
   ['steps', 'The heading of each of the six steps'],
   ['choose', 'Step 1, Choose a video'],
@@ -361,9 +364,9 @@ const NOTES: Readonly<Record<string, string>> = {
   'videoLanguage.label':
     'The label over the choice, also read out by screen readers. Use the same word for "video" as videoKind.label and for "language" as language.label.',
   'videoLanguage.helper':
-    'The words the app draws into the video, such as closing.internalWords, follow this choice; the page itself does not.',
-  'videoLanguage.nextVideo':
-    'Neither choice is locked while a video is made, and a change does not alter that video. Use the same words as videoKind.label and videoLanguage.label.',
+    'The words the app draws into the video, such as closing.internalWords and the title card’s labels, follow this choice; the page itself does not. Use the same words as titleCard.add for "title card" and closing.types.none for "closing graphics".',
+  'videoKind.nextVideo':
+    'The video type is not locked while a video is made, and a change does not alter that video. Use the same words as videoKind.label.',
   'titleCard.add':
     'The label of a checkbox that adds the card before the video. titleCard.empty quotes it: use the same words there.',
   'titleCard.title':
@@ -450,7 +453,7 @@ const NOTES: Readonly<Record<string, string>> = {
   'result.videoLanguage':
     'Follows the summary when the words the app drew into the video are in another language than the page. Use the same words as videoLanguage.label.',
   'progress.job':
-    'Names the video being made as it was started, since the choices above the steps may have changed since. Use the same words as videoLanguage.label.',
+    'Names the video being made as it was started, since the video type above the steps may have changed since. Use the same words as videoLanguage.label.',
   'result.endedEarly.together': 'In place of result.endedEarly.both when the picture and the audio stop in the same second.',
   'result.endedEarly.held':
     'Follows one of the sentences above when the picture stopped and the video has closing graphics: until they start, the last picture stays on screen.',

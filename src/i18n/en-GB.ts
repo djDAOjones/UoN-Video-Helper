@@ -110,20 +110,25 @@ export const enGB = {
       staff: 'You choose the closing graphics, and whether they say “{words}”.',
       submission: 'If the video has closing graphics, they say “{words}”.',
     },
+    /**
+     * Under the switch while a video is being made or a finished one is on
+     * screen (VH-140, VH-191): it is never locked, and a change is not for
+     * that video.
+     */
+    nextVideo: 'Changes to the video type apply to the next video you make.',
   },
 
-  /** The choice under the switch: the language of the words drawn into the video (VH-132). */
+  /**
+   * At the top of step 3: the language of the words drawn into the video
+   * (VH-132, VH-191).
+   */
   videoLanguage: {
     /** Its visible label, which is also its accessible name. */
     label: 'Video language',
     /** The line under it: what the choice changes, and so what it does not. */
-    helper: 'Words the tool adds to your video are in this language.',
+    helper:
+      'Words the tool adds to your video, on the title card and the closing graphics, are in this language.',
     typed: 'What you type is kept as typed.',
-    /**
-     * Under both switches while a video is being made or a finished one is on
-     * screen (VH-140): neither is locked, and a change is not for that video.
-     */
-    nextVideo: 'Changes to the video type or video language apply to the next video you make.',
   },
 
   steps: {
@@ -566,7 +571,7 @@ export const enGB = {
     withTimeLeft: '{progress}. {left}',
     /**
      * Under the bar: the video being made, as it was started (VH-140), since
-     * the switches above may say otherwise by now.
+     * the video type and video language on the page may say otherwise by now.
      */
     job: 'This video: {kind}. Video language: {language}.',
     ready: 'Ready',
