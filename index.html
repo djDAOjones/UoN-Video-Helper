@@ -407,8 +407,8 @@
                combination onto the job its old radio produced.
                A control that cannot change anything is disabled and says why
                in visible text, and the line beneath states what the current
-               selection will do — which is also what stops "None" under
-               "Animation type" reading as "no animation". That is Cut. -->
+               selection will do. VH-189: the no-closing type says "No closing
+               graphics", so it no longer reads as "no animation". That is Cut. -->
           <div class="control-grid">
             <div class="field">
               <label class="label" for="closing-type" data-i18n="closing.typeLabel">Animation type</label>
@@ -416,11 +416,11 @@
                 <option value="cut" data-i18n="closing.types.cut" selected>Cut</option>
                 <option value="fade" data-i18n="closing.types.fade">Fade</option>
                 <option value="slide" data-i18n="closing.types.slide">Slide</option>
-                <option value="none" data-i18n="closing.types.none">None</option>
+                <option value="none" data-i18n="closing.types.none">No closing graphics</option>
               </select></span>
             </div>
             <div class="field field--wide">
-              <label class="label" for="closing-onset" data-i18n="closing.onsetLabel">Animation onset</label>
+              <label class="label" for="closing-onset" data-i18n="closing.onsetLabel">Plays over</label>
               <div class="control-with-help">
                 <span class="select-wrap"><select
                   class="select"
@@ -428,8 +428,8 @@
                   aria-describedby="closing-none-reason closing-onset-reason closing-result"
                   disabled
                 >
-                  <option value="existing" data-i18n="closing.onsets.existing" selected>Over existing</option>
-                  <option value="freeze" data-i18n="closing.onsets.freeze">Over generated freeze frame</option>
+                  <option value="existing" data-i18n="closing.onsets.existing" selected>The last second of video</option>
+                  <option value="freeze" data-i18n="closing.onsets.freeze">A held last frame</option>
                 </select></span>
                 <!-- A toggletip, not a tooltip: a button that discloses text,
                      by click, Enter or Space, never by hover alone. -->
@@ -437,7 +437,7 @@
                   class="button button--secondary help-button"
                   type="button"
                   id="onset-help-button"
-                  aria-label="About animation onset"
+                  aria-label="About what the graphics play over"
                   data-i18n-attr="aria-label:closing.helpLabel"
                   aria-expanded="false"
                   aria-controls="onset-help"
@@ -452,11 +452,11 @@
                      of the sentence after it (VH-105). -->
                 <div class="toggletip" id="onset-help" hidden>
                   <p>
-                    <strong data-i18n="closing.helpExistingTerm">Over existing</strong> <span data-i18n="closing.helpExistingText">— the closing graphics play over the last second of
-                    your video. They cover that second as they build.</span>
+                    <strong data-i18n="closing.helpExistingTerm">The last second of video</strong> <span data-i18n="closing.helpExistingText">— the closing graphics cover it as
+                    they build.</span>
                   </p>
                   <p>
-                    <strong data-i18n="closing.helpFreezeTerm">Over generated freeze frame</strong> <span data-i18n="closing.helpFreezeText">— your last frame is held for one
+                    <strong data-i18n="closing.helpFreezeTerm">A held last frame</strong> <span data-i18n="closing.helpFreezeText">— your last frame is held for one
                     extra second. The closing graphics play over that, so nothing in your video is
                     covered.</span>
                   </p>

@@ -1,7 +1,7 @@
 /**
  * When the onset toggletip closes (VH-124, VH-184).
  *
- * The "?" beside "Animation onset" discloses its text in the page flow, and
+ * The "?" beside "Plays over" discloses its text in the page flow, and
  * focus stays on the button. Moving focus on to anything else closes it, so
  * Tab and Shift+Tab never leave it open over what comes next; a click on its
  * own text does not, since that moves focus nowhere. Escape closes it from

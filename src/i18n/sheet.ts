@@ -337,13 +337,13 @@ const NOTES: Readonly<Record<string, string>> = {
   'trim.problem.notATime.end': 'Keep the example times 1:05.5 and 65.5 as they are.',
   'trim.handleBeginning': 'Completes "Start, at the beginning" for screen readers.',
   'trim.handleEnd': 'Completes "End, at the end" for screen readers.',
-  'closing.helpExistingText': 'Follows "Over existing" on the same line, so it starts with a dash.',
-  'closing.helpFreezeText':
-    'Follows "Over generated freeze frame" on the same line, so it starts with a dash.',
+  'closing.helpExistingText':
+    'Follows "The last second of video" on the same line, so it starts with a dash; "it" is that second.',
+  'closing.helpFreezeText': 'Follows "A held last frame" on the same line, so it starts with a dash.',
   'closing.notUsedWith.cut':
     'Names the animation type "Cut"; use the same word as closing.types.cut.',
   'closing.notUsedWith.none':
-    'Names the animation type "None"; use the same word as closing.types.none.',
+    'Says the animation type "No closing graphics" is chosen; use the same words for "closing graphics" as closing.types.none.',
   'videoKind.label': 'The label over the switch, also read out by screen readers.',
   'videoLanguage.label':
     'The label over the choice, also read out by screen readers. Use the same word for "video" as videoKind.label and for "language" as language.label.',

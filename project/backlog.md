@@ -37,7 +37,6 @@ The public release, 0.2.0, on Xerte (PLAN-6).
 
 ### Phase 8 — the owner's UX pass: the backlog and wish list, thirteen pieces
 
-- [ ] VH-189 — Step 4's labels in the result line's plain words — since 2026-10-24
 - [ ] VH-190 — "Create the video again" while a finished video is on screen — since 2026-10-24
 - [ ] VH-182 — The footer's contact routes grouped by need; Send feedback renamed Report a problem — since 2026-10-24
 - [ ] VH-191 — Video language moves into step 3, apart from Page language — since 2026-10-24

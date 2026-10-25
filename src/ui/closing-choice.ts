@@ -4,8 +4,9 @@
  * Three controls replaced four described radios (VH-90), and what the radios
  * said went with them: what happens to the last second of the user's video,
  * and how many seconds are added. The result line here says it again, for
- * whatever is currently selected — and it is what stops "None" under
- * "Animation type" reading as "no animation", which is what Cut is.
+ * whatever is currently selected — and it once stopped "None" under
+ * "Animation type" reading as "no animation", which is what Cut is; the type
+ * now says "No closing graphics" itself (VH-189).
  *
  * Pure, so every combination's sentence is tested in Node.
  */
@@ -57,7 +58,7 @@ export function closingResultLines(controls: ClosingControls, wordsLanguage: Lan
 }
 
 /**
- * Why "Animation onset" cannot be changed, or `null` when it can.
+ * Why "Plays over" cannot be changed, or `null` when it can.
  *
  * A disabled control leaves the tab order and cannot explain itself, so the
  * reason is visible text beside it.

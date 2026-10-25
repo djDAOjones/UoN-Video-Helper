@@ -704,7 +704,7 @@ videoLanguageChoice.addEventListener('change', (event) => {
 })
 
 /**
- * The "?" beside "Animation onset": a toggletip.
+ * The "?" beside "Plays over": a toggletip.
  *
  * A button that discloses text, so it works by click, Enter and Space and
  * never by hover alone. Focus stays on the button; Escape, focus moving on or

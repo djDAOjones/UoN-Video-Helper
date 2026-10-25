@@ -252,18 +252,17 @@ export const msMY: Messages = {
       cut: 'Potong',
       fade: 'Pudar',
       slide: 'Luncur',
-      none: 'Tiada',
+      none: 'Tiada grafik penutup',
     },
-    onsetLabel: 'Permulaan animasi',
+    onsetLabel: 'Dimainkan di atas',
     onsets: {
-      existing: 'Di atas yang sedia ada',
-      freeze: 'Di atas bingkai pembekuan yang dijana',
+      existing: 'Saat terakhir video',
+      freeze: 'Bingkai akhir ditahan',
     },
-    helpLabel: 'Perihal permulaan animasi',
-    helpExistingTerm: 'Di atas yang sedia ada',
-    helpExistingText:
-      '— grafik penutup dimainkan pada saat terakhir video anda. Ia menutupi saat itu semasa ia terbentuk.',
-    helpFreezeTerm: 'Di atas bingkai pembekuan yang dijana',
+    helpLabel: 'Perihal apa yang ditindih grafik',
+    helpExistingTerm: 'Saat terakhir video',
+    helpExistingText: '— grafik penutup menutupinya semasa ia terbentuk.',
+    helpFreezeTerm: 'Bingkai akhir ditahan',
     helpFreezeText:
       '— bingkai terakhir anda ditahan selama satu saat tambahan. Grafik penutup dimainkan di atasnya, jadi tiada apa-apa dalam video anda diliputi.',
     colourLabel: 'Warna',
@@ -275,7 +274,7 @@ export const msMY: Messages = {
     internalWords: 'Untuk kegunaan dalaman sahaja',
     notUsedWith: {
       cut: 'Tidak digunakan dengan Potong.',
-      none: 'Tidak digunakan dengan Tiada.',
+      none: 'Tidak digunakan tanpa grafik penutup.',
     },
     internalForSubmission: 'Sentiasa dihidupkan untuk serahan pelajar.',
     result: {

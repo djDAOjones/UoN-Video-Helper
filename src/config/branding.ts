@@ -93,7 +93,7 @@ export interface BrandingChoice {
  */
 export type ClosingType = 'cut' | 'fade' | 'slide' | 'none'
 
-/** "Animation onset": what sits under the 1 s build, for the types that play it. */
+/** "Plays over": what sits under the 1 s build, for the types that play it. */
 export type ClosingOnset = 'existing' | 'freeze'
 
 /** The state of the closing controls, exactly as the screen holds it. */

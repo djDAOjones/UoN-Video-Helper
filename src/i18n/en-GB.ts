@@ -304,14 +304,13 @@ export const enGB = {
   closing: {
     legend: 'Closing graphics',
     typeLabel: 'Animation type',
-    types: { cut: 'Cut', fade: 'Fade', slide: 'Slide', none: 'None' },
-    onsetLabel: 'Animation onset',
-    onsets: { existing: 'Over existing', freeze: 'Over generated freeze frame' },
-    helpLabel: 'About animation onset',
-    helpExistingTerm: 'Over existing',
-    helpExistingText:
-      '— the closing graphics play over the last second of your video. They cover that second as they build.',
-    helpFreezeTerm: 'Over generated freeze frame',
+    types: { cut: 'Cut', fade: 'Fade', slide: 'Slide', none: 'No closing graphics' },
+    onsetLabel: 'Plays over',
+    onsets: { existing: 'The last second of video', freeze: 'A held last frame' },
+    helpLabel: 'About what the graphics play over',
+    helpExistingTerm: 'The last second of video',
+    helpExistingText: '— the closing graphics cover it as they build.',
+    helpFreezeTerm: 'A held last frame',
     helpFreezeText:
       '— your last frame is held for one extra second. The closing graphics play over that, so nothing in your video is covered.',
     colourLabel: 'Colour',
@@ -325,7 +324,7 @@ export const enGB = {
      */
     internalWords: 'Internal use only',
     /** Why a control is locked, naming the animation type that locks it. */
-    notUsedWith: { cut: 'Not used with Cut.', none: 'Not used with None.' },
+    notUsedWith: { cut: 'Not used with Cut.', none: 'Not used without closing graphics.' },
     /** Why "Internal use only" is locked on, naming the side of the switch that locks it (VH-131). */
     internalForSubmission: 'Always on for a student submission.',
     result: {

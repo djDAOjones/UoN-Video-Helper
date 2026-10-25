@@ -187,21 +187,21 @@ last decoded one — a torn or black-flashed final frame would otherwise be
 held full-screen for a second.
 
 **On screen the modes are three controls, not one choice** (VH-90).
-*Animation type* is Cut, Fade, Slide or None; *Animation onset* is Over
-existing or Over generated freeze frame, and means something only for Fade
-and Slide; *Colour* is Blue or White.
+*Animation type* is Cut, Fade, Slide or No closing graphics; *Plays over*
+is The last second of video or A held last frame, and means something only
+for Fade and Slide; *Colour* is Blue or White.
 
-| Type | Onset | Result |
+| Type | Plays over | Result |
 | --- | --- | --- |
 | Cut | — | hard cut |
-| Fade or Slide | Over existing | over picture |
-| Fade or Slide | Over generated freeze frame | over freeze frame |
-| None | — | no closing |
+| Fade or Slide | The last second of video | over picture |
+| Fade or Slide | A held last frame | over freeze frame |
+| No closing graphics | — | no closing |
 
-A control that cannot change the result — onset under Cut or None, colour
-under None — is disabled, with its reason in visible text. One line beneath
-the controls says what the current selection will do, taken from the same
-mapping the job uses, so it cannot promise a different file.
+A control that cannot change the result — Plays over under Cut, both under
+No closing graphics — is disabled, with its reason in visible text. One
+line beneath the controls says what the current selection will do, taken
+from the same mapping the job uses, so it cannot promise a different file.
 
 **The alpha is premultiplied**, matted with black — measured on the masters,
 not assumed. The composite is therefore

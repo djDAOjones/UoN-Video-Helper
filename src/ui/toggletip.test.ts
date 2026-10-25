@@ -20,7 +20,7 @@ function scene() {
     button: part(),
     tip: part([tipText]),
     tipText,
-    select: { name: 'Animation onset' },
+    select: { name: 'Plays over' },
     colour: { name: 'Colour: Blue' },
   }
 }

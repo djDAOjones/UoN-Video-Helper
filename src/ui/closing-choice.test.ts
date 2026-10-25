@@ -59,8 +59,8 @@ describe('the result line (VH-90)', () => {
     expect(text).toContain(`Adds ${closingAddedSeconds(choice.mode!)} seconds.`)
   })
 
-  it('makes "None" unmistakable, because under "Animation type" it reads as no animation', () => {
-    // Cut is the closing with no animation. None removes the closing.
+  it('makes no closing unmistakable, because under "Animation type" it could read as no animation', () => {
+    // Cut is the closing with no animation. No closing graphics removes the closing.
     const none = shown({ type: 'none', onset: 'freeze', colour: 'white', internal: false })
     expect(none).toMatch(/No University closing/)
     expect(shown({ type: 'cut', onset: 'freeze', colour: 'white', internal: false })).toMatch(
@@ -96,13 +96,13 @@ describe('the result line (VH-90)', () => {
 describe('why a control is disabled (VH-90)', () => {
   it('disables onset under Cut and None, and says which', () => {
     expect(onsetDisabledReason('cut')).toBe('Not used with Cut.')
-    expect(onsetDisabledReason('none')).toBe('Not used with None.')
+    expect(onsetDisabledReason('none')).toBe('Not used without closing graphics.')
     expect(onsetDisabledReason('fade')).toBeNull()
     expect(onsetDisabledReason('slide')).toBeNull()
   })
 
   it('disables colour under None only', () => {
-    expect(colourDisabledReason('none')).toBe('Not used with None.')
+    expect(colourDisabledReason('none')).toBe('Not used without closing graphics.')
     for (const type of ['cut', 'fade', 'slide'] as const) {
       expect(colourDisabledReason(type)).toBeNull()
     }
@@ -132,7 +132,7 @@ describe('Internal use only in the result line (VH-126)', () => {
   })
 
   it('is disabled under None only, and says why', () => {
-    expect(internalDisabledReason('none')).toBe('Not used with None.')
+    expect(internalDisabledReason('none')).toBe('Not used without closing graphics.')
     for (const type of ['cut', 'fade', 'slide'] as const) {
       expect(internalDisabledReason(type)).toBeNull()
     }
@@ -153,7 +153,7 @@ describe('the Internal use only box on each side of the switch (VH-131)', () => 
     expect(internalCheckboxState('staff', 'none', true)).toEqual({
       checked: true,
       disabled: true,
-      reason: 'Not used with None.',
+      reason: 'Not used without closing graphics.',
     })
   })
 
@@ -173,7 +173,7 @@ describe('the Internal use only box on each side of the switch (VH-131)', () => 
     expect(internalCheckboxState('submission', 'none', false)).toEqual({
       checked: true,
       disabled: true,
-      reason: 'Not used with None.',
+      reason: 'Not used without closing graphics.',
     })
   })
 
@@ -189,7 +189,7 @@ describe('one visible reason for None (VH-144)', () => {
   it('shares None across the three locks, on both sides of the switch', () => {
     for (const kind of ['staff', 'submission'] as const) {
       const internal = internalCheckboxState(kind, 'none', false)
-      expect(visibleClosingReasons('none', internal.reason)).toEqual({ shared: 'Not used with None.', onset: null, internal: null })
+      expect(visibleClosingReasons('none', internal.reason)).toEqual({ shared: 'Not used without closing graphics.', onset: null, internal: null })
     }
   })
   it('shows the shared reason for None alone, every other type keeping its own', () => {

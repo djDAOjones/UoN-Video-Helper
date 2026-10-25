@@ -468,8 +468,8 @@ describe('the closing controls (VH-90)', () => {
 
   it('offers every onset the config knows, in the order asked for', () => {
     expect(options('closing-onset').map(([value, text]) => [value, text])).toEqual([
-      ['existing', 'Over existing'],
-      ['freeze', 'Over generated freeze frame'],
+      ['existing', 'The last second of video'],
+      ['freeze', 'A held last frame'],
     ])
     expect(options('closing-onset').map(([value]) => value)).toEqual([...CLOSING_ONSETS])
   })
@@ -502,7 +502,7 @@ describe('the closing controls (VH-90)', () => {
     // what it is about, because "?" says nothing to a screen reader.
     const button = /<button[^>]*id="onset-help-button"[^>]*>/.exec(markup)?.[0] ?? ''
     expect(button).toContain('type="button"')
-    expect(button).toContain('aria-label="About animation onset"')
+    expect(button).toContain('aria-label="About what the graphics play over"')
     expect(button).toContain('aria-expanded="false"')
     expect(button).toContain('aria-controls="onset-help"')
     expect(markup).toMatch(/id="onset-help"[^>]*\shidden/)
