@@ -2595,12 +2595,6 @@ amend('S-91', {
   asserts: [X('the metadata warning beside the card, not inside it', `!!window.__p8.warnBox() && window.__p8.warnBox().textContent.includes(M.msg('warnings.metadataLost.heading')) && !M.text(${JSON.stringify(P8_CARD)}).includes(M.msg('warnings.metadataLost.heading'))`), RECORD_SHORT],
 })
 
-// Carried routes Phase 8 broke: the player's controls now sit between the
-// card and Save, and Video language in step 3 (the scenarios file's
-// "Keyboard route per journey"; their full Phase 8 revision is VH-198's next step).
-for (const id of ['J1', 'J2', 'J3']) for (const s of ROUTES[id].steps) if (s.untilState === FOCUS_ON(SAVE) && s.repeat === 6) { s.repeat = 16; s.note = (s.note ?? '') + ' (through the player\'s controls, VH-192)' }
-for (const s of ROUTES.J4.steps) if (s.until === 'video-language=' || (s.until === 'video-kind=' && s.repeat === 4)) { s.repeat = 120; s.note = (s.note ?? '') + ' (Video language is in step 3 now, VH-191)' }
-
 // K-player (new): the player by keys, by the focused accessibility node,
 // from the card the job's end focused. Chrome 156's inventory, as the pilot
 // read it: play, volume, mute, full screen, more controls, the time slider.
@@ -2620,11 +2614,10 @@ ROUTES['K-player'] = {
     { key: 'Tab', axExpect: '^button "(play|pause)"', native: true, noFocusRing: true, note: 'play' },
     { key: 'Space', axExpect: '^button "pause"', native: true, noFocusRing: true, state: `!document.querySelector(${JSON.stringify(P8_PLAYER)}).paused`, wait: 600, note: 'Space plays (the control becomes pause)' },
     { key: 'Space', axExpect: '^button "play"', native: true, noFocusRing: true, state: `document.querySelector(${JSON.stringify(P8_PLAYER)}).paused`, note: 'Space again pauses' },
-    { key: 'Tab', axExpect: '^slider "volume"', native: true, noFocusRing: true, note: UA_RING },
-    { key: 'Tab', axExpect: '^button "(mute|un-?mute)"', native: true, noFocusRing: true, note: 'mute (Chrome names it "un-mute" while muted)' },
-    { key: 'Tab', axExpect: '^button "enter full screen"', native: true, noFocusRing: true },
-    { key: 'Tab', axExpect: '^button "show more media controls"', native: true, noFocusRing: true },
-    { key: 'Tab', axExpect: '^slider "video time scrubber"', native: true, noFocusRing: true },
+    // VH-198: the controls between play and the time slider are the ones Chrome shows at this width: at
+    // 1280 px volume, mute ("un-mute" while muted), full screen and more controls; at 320 px full screen
+    // goes into More. Each stop is kept in the step's `stops`; S-127's playerKeys judges the inventory.
+    { key: 'Tab', axUntil: '^slider "video time scrubber"', repeat: 8, native: true, noFocusRing: true, note: 'Tab through the controls Chrome shows at this width to the time slider; ' + UA_RING },
     { setup: async (w) => { await w.evaluate(`window.__kpT = document.querySelector(${JSON.stringify(P8_PLAYER)}).currentTime`) }, note: 'setup: the time read before the seek' },
     { key: 'ArrowRight', axExpect: '^slider "video time scrubber"', native: true, noFocusRing: true, wait: 400, state: `(() => { const v = document.querySelector(${JSON.stringify(P8_PLAYER)}); return v.paused && v.currentTime > window.__kpT; })()`, note: 'seeking by keys, apart from play: the time moves, playback stays paused' },
     { key: 'Tab', state: FOCUS_ON(SAVE), note: 'the next Tab after the last control reaches Save the video' },
@@ -2635,6 +2628,120 @@ ROUTES['K-player'] = {
     { waitFor: MX(`M.has('status.saved', '#save-status')`), timeout: 300000, state: `!document.querySelector('video.result-player') && ${FOCUS_ON(RESULT)}`, note: 'S-131: saved; the player leaves and focus is on the card' },
   ],
 }
+
+// Carried routes, revised whole for the Phase 8 page (scenarios-2026-10-25.md,
+// "Keyboard route per journey"): each journey's chain of scenarios walked by
+// keys, the Phase 8 stops asserted where the chain names them. Carried steps
+// keep their keys and assertions; Tab counts allow for the format "?", the
+// player's controls between the card and Save, and Video language in step 3.
+const LANG_RING = `['en-GB', 'zh-Hans', 'ms-MY']` // src/config/languages.ts:35, the segments' order
+const VLANG_AFTER = (n) => `${LANG_RING}[(${LANG_RING}.indexOf(document.documentElement.lang) + ${n}) % 3]`
+const TIP_OPEN = (id) => MX(`M.vis('#${id}') && M.el('#${id}-button').getAttribute('aria-expanded') === 'true'`)
+const TIP_SHUT = (id) => MX(`!M.vis('#${id}') && M.el('#${id}-button').getAttribute('aria-expanded') === 'false'`)
+const START_AT = (v) => MX(`M.el('#trim-start-range').valueAsNumber === ${v}`)
+const BEFORE_CARD = `(() => { const c = document.querySelector(${JSON.stringify(P8_CARD)}); const a = document.activeElement; return !!c && a !== c && a !== document.body && !!(c.compareDocumentPosition(a) & Node.DOCUMENT_POSITION_PRECEDING); })()`
+const ONE_PLAYER_NOW = `document.querySelectorAll('video.result-player').length === 1`
+/** The steps of a carried route from the one whose note starts `from` to the one whose note starts `to`, both kept. */
+const stepsOf = (id, from, to) => {
+  const s = ROUTES[id].steps
+  const i = s.findIndex((x) => x.note?.startsWith(from)), j = s.findIndex((x) => x.note?.startsWith(to))
+  if (i < 0 || j < i) throw new Error(`${id}: no steps from "${from}" to "${to}"`)
+  return s.slice(i, j + 1)
+}
+/** The carried step whose note starts `note`, with `over` merged. */
+const stepOf = (id, note, over = {}) => {
+  const x = ROUTES[id].steps.find((s) => s.note?.startsWith(note))
+  if (!x) throw new Error(`${id}: no step "${note}"`)
+  return { ...x, ...over }
+}
+const SAVE_TAB = { key: 'Tab', untilState: FOCUS_ON(SAVE), repeat: 16, note: "Tab to Save the video, through the player's controls (VH-192)" }
+
+// J1: S-03 → S-141 → S-142 → S-12 → S-14 → S-15 → S-16 → S-92 → S-119 → S-17 →
+// S-95 → S-97 → S-36 → S-37 → S-39 → S-44 → S-47 → S-48 → S-123 → S-49 → S-72 →
+// S-53 → S-126 → S-127 → S-114 → S-58 → S-59 → S-61 → S-62.
+const J1_PICK = ROUTES.J1.steps.findIndex((s) => s.setup && /lecture-360s/.test(s.note ?? ''))
+ROUTES.J1.steps = [
+  { key: 'Tab', until: 'format-help-button', repeat: 20, state: TIP_SHUT('format-help'), note: 'S-03, S-141: from the top, past Page language, Tab to "About the video format"' },
+  { key: 'Enter', state: TIP_OPEN('format-help'), expect: 'format-help-button', note: 'S-141: Enter opens it; focus stays on the "?"' },
+  { key: 'Tab', expect: 'video-kind=', state: TIP_SHUT('format-help'), note: 'S-142: Tab closes it on Video type' },
+  { key: 'Tab', until: 'file-input', repeat: 10, note: 'Tab on to Choose file' },
+  ROUTES.J1.steps[J1_PICK],
+  ...stepsOf('J1', 'S-12, S-14, S-15', 'S-16: Enter opens Video properties'),
+  { key: 'Tab', untilState: FOCUS_ON('#trim-start-range'), repeat: 20, note: "S-92: Tab past step 2's preview controls to the start handle" },
+  { key: 'PageUp', state: START_AT(10), expect: 'trim-start-range', note: 'S-92: Page Up, 10 s (lecture-360s: max(10 s, 1% = 3.6 s))' },
+  { key: 'PageUp', state: START_AT(20), expect: 'trim-start-range', note: 'S-92: Page Up, 20 s' },
+  { key: 'PageDown', state: START_AT(10), expect: 'trim-start-range', note: 'S-92: Page Down, 10 s' },
+  { key: 'Home', state: START_AT(0), expect: 'trim-start-range', waitFor: MX('M.proceed() && M.create()'), timeout: 120000, note: 'S-92: Home, 0: the whole video kept; the check settles again' },
+  { key: 'Tab', until: 'video-language=', repeat: 20, state: MX(`document.activeElement.checked === true && M.checked('video-language') === document.documentElement.lang`), note: 'S-119: on through the trim to step 3: Video language, one stop, its checked radio' },
+  { key: 'Tab', expect: 'title-card-on', state: MX(`!M.el('#title-card-on').checked`), note: 'S-119: then Add a title card, unticked' },
+  { key: 'Tab', until: 'onset-help-button', repeat: 60, note: 'Tab on to step 4\'s "?" (About animation onset)' },
+  stepOf('J1', 'S-17: Enter opens the toggletip'),
+  { key: 'Tab', state: TIP_SHUT('onset-help') + ' && ' + FOCUS_ON('#closing-colour input:checked'), note: 'S-95: Tab closes it on the Blue radio' },
+  { key: 'Tab', shift: true, expect: 'onset-help-button', note: 'S-97: Shift+Tab back to the "?"' },
+  { key: 'Enter', state: TIP_OPEN('onset-help'), expect: 'onset-help-button', note: 'S-97: Enter opens it again' },
+  stepOf('J1', 'Escape closes it; focus stays', { note: 'S-97: Escape closes it; focus stays on the "?"' }),
+  ...stepsOf('J1', 'S-36: Shift+Tab back to Add a title card', 'S-49: the time left shows'),
+  stepOf('J1', 'S-72: Shift+Tab to Video properties while the job runs', { state: MX(`M.running() && M.el('#video-language').disabled`), note: 'S-72, S-123: Shift+Tab to Video properties while the job runs, past the disabled Video language' }),
+  stepOf('J1', 'S-72, S-53: the job finishes'),
+  { key: 'Tab', untilState: PLAYER_ACTIVE, repeat: 80, axExpect: '^Video ', noFocusRing: true, note: "S-126: Tab on to the finished video's player, named by the card's title" },
+  { key: 'Tab', untilState: FOCUS_ON(SAVE), repeat: 12, note: "S-127: Tab through the player's controls to Save the video" },
+  { key: 'Tab', shift: true, untilState: `!(${PLAYER_ACTIVE}) && !(${FOCUS_ON(SAVE)})`, repeat: 14, state: BEFORE_CARD, note: 'S-127: Shift+Tab back through them and out to the control before the card, never the card (tabIndex -1, src/main.ts:3277)' },
+  { key: 'Tab', untilState: FOCUS_ON(CREATE), repeat: 40, state: MX(CREATE_READS('create.again', true)), note: 'S-114: Tab to Create, which reads "Create the video again", secondary' },
+  ...stepsOf('J1', 'S-58: Enter asks the discard question', 'S-59: Keep it redraws the result'),
+  SAVE_TAB,
+  stepOf('J1', 'S-61, S-62: Enter saves'),
+]
+
+// J2: S-03 → S-07 → S-12 → S-14 → S-15 → S-121 → S-122 → S-40 → S-41 → S-42 →
+// S-45 → S-48 → S-43 → S-123 → S-53 → S-61 → S-62.
+ROUTES.J2.steps = [
+  ...ROUTES.J2.steps.slice(0, ROUTES.J2.steps.findIndex((s) => s.note?.startsWith('S-40'))),
+  { key: 'Tab', until: 'video-language=', repeat: 60, state: MX(`document.activeElement.checked === true && M.el('#title-card-on').disabled && M.el('#title-card-on').checked`), note: 'S-121: Tab from the trim reaches Video language, the box below it ticked and locked' },
+  { key: 'ArrowRight', state: MX(`M.checked('video-language') === ${VLANG_AFTER(1)} && !!document.activeElement.closest('#video-language')`), expect: 'video-language=', note: 'S-122: an arrow picks the next language (on the English page 中文); focus on its radio' },
+  { key: 'ArrowRight', state: MX(`M.checked('video-language') === ${VLANG_AFTER(2)}`), expect: 'video-language=', note: 'S-122: a second picks the one after (on the English page Bahasa Melayu)' },
+  stepOf('J2', 'S-40: Tab to the first of the four fields', { until: undefined, repeat: undefined, expect: 'submission-card-assignment', note: 'S-40: Tab on to the first of the four fields, the box being locked' }),
+  ...stepsOf('J2', 'S-45: Tab on to Create', 'Tab to Create; no field is marked'),
+  stepOf('J2', 'S-48, S-43: the job runs', { state: FOCUS_ON(CANCEL) + ' && ' + MX(`M.el('#title-card-choice').disabled && M.el('#video-language').disabled`), note: 'S-48, S-43, S-123: the job runs; the fields and Video language are locked; Cancel has focus' }),
+  stepOf('J2', 'S-53: finished'),
+  SAVE_TAB,
+  stepOf('J2', 'S-61, S-62: saved'),
+]
+
+// J3: S-02; S-106 (F17); S-28 → S-29 → S-15; S-31 → S-35; S-56 → S-57 → S-53 →
+// S-132 (F15a, in place) → S-69 (F4e revised) → S-62; S-74 → S-75 → S-77 →
+// S-80 → S-148.
+ROUTES.J3.steps = [
+  stepOf('J3', 'S-02: the chooser is shut'),
+  stepOf('J3', 'Follow the remedy', { note: 'Follow the remedy: Tab on to Report a problem' }),
+  { setup: async (w) => { await releaseFault(w, 'F2'); await applyFault(w, 'F17'); await w.goto() }, note: 'setup: F2 released, F17 set; the page reloaded' },
+  { key: 'Tab', until: 'file-input', repeat: 40, state: MX(`!M.el('#browser-note').hidden && M.is('browserNote.notPassed', '#browser-note') && M.el('#check-aac')?.dataset.state === 'warn' && !M.el('#file-input').disabled`), note: 'S-106: the browser note above step 1 on a warn (F17); Tab reaches Choose file, which is open' },
+  { setup: async (w) => { await releaseFault(w, 'F17'); await w.goto() }, note: 'setup: F17 released; the page reloaded' },
+  ...stepsOf('J3', 'Tab to Choose file', 'S-53: finished; focus to the result'),
+  { setup: async (w) => { await w.evaluate(`window.__j3card = document.querySelector('#process-result').textContent`); await applyFault(w, 'F15a'); await sleep(600) }, note: 'setup: F15a in place, an error event on the result player' },
+  { wait: 0, state: MX(`M.text('#process-result') === window.__j3card && !M.saveBtn().disabled && ${ONE_PLAYER_NOW}`) + ' && ' + FOCUS_ON(RESULT), note: 'S-132: nothing on the card changed; Save still offered; focus unmoved on the result' },
+  SAVE_TAB,
+  ...stepsOf('J3', 'S-69: the save fails (F4e)', 'S-80: the copy refused'),
+  { key: 'Escape', expect: 'feedback-report', state: `!document.querySelector('dialog[open]')`, note: 'S-148: Escape closes the dialog; focus back on Report this problem' },
+  { key: 'Tab', until: 'feedback-open', repeat: 80, note: "S-148: Tab on to the footer's Report a problem, past the System check's and the statement's summaries and the two help links" },
+  { key: 'Enter', expect: 'feedback-message', state: IN_DIALOG, note: 'S-148: Enter opens the same dialog, focus on the message' },
+  { key: 'Escape', expect: 'feedback-open', state: `!document.querySelector('dialog[open]')`, note: 'S-148: Escape returns focus to Report a problem' },
+]
+
+// J4: S-53 → S-13 → S-63 → S-116 → S-129 → S-64 → S-65 → S-71 → S-30 → S-58 →
+// S-60 → S-48 → S-50 → S-123 → S-53.
+const J4_NEXT = ROUTES.J4.steps.findIndex((s) => s.setup && /lecture-60s/.test(s.note ?? ''))
+ROUTES.J4.steps = [
+  ...ROUTES.J4.steps.slice(0, J4_NEXT),
+  { ...ROUTES.J4.steps[J4_NEXT], state: MX(`M.previous() && M.has('result.endedEarly', '#process-result > .notification[data-kind="success"]') && ${CREATE_READS('create.create', true)} && ${ONE_PLAYER_NOW}`) },
+  stepOf('J4', 'S-13, S-63, S-64', { note: 'S-13, S-63, S-116, S-129, S-64: the replacement read and checked beside "Previous video", its ended-early line and its player kept; Create reads "Create the video", secondary; focus on the chooser' }),
+  ...ROUTES.J4.steps.slice(J4_NEXT + 2, ROUTES.J4.steps.findIndex((s) => s.note?.startsWith('S-71: Student submission beside the kept result')) + 1),
+  { key: 'Tab', until: 'video-language=', repeat: 120, state: MX(`!M.el('#video-language').disabled`), note: 'S-71: Tab on to Video language in step 3, free beside the kept result' },
+  stepOf('J4', 'S-71: another video language', { state: MX(`M.checked('video-language') !== document.documentElement.lang && M.is('videoKind.nextVideo', '#video-next')`), note: 'S-71: another video language; the next-video line names the video type only' }),
+  stepOf('J4', 'Shift+Tab back to Video type', { repeat: 120 }),
+  ...stepsOf('J4', 'Back to Staff video', 'Shift+Tab to Video type while the job runs'),
+  stepOf('J4', 'S-50: switched while running', { state: MX(`M.running() && M.checked('video-kind') === 'submission' && M.vis('#video-next') && M.has('videoKind.options.staff', '#process-job') && M.el('#video-language').disabled`), note: 'S-50, S-123: switched while running; the job keeps Staff video; Video language locked' }),
+  stepOf('J4', 'S-53: finished; focus stays on the radio'),
+]
 
 // The predicates read the page through window.__mx (MX_INIT), as `M`.
 const wrap = (expr) => `(() => { const M = window.__mx; return (${expr}); })()`
@@ -2922,5 +3029,26 @@ export const TRANSITIONS = {
 PLANS.vh198proof = () => [
   ...['S-03', 'S-126', 'S-127', 'S-131', 'S-135', 'S-141', 'S-145', 'S-119', 'S-123'].map((id) => ({ id, lang: 'en-GB', view: 'w1280', mode: 'light' })),
   { id: 'S-142', lang: 'zh-Hans', view: 'w1280', mode: 'light' },
+  { id: 'K-player', lang: 'en-GB', view: 'w1280', mode: 'light' },
+]
+
+// VH-198: pass 3's pilot, at Phase 7's second pilot's breadth (PLANS.pilot2:
+// every mode, more views, a second language), with Phase 8's states added,
+// each through every instrument: the player (S-126 passive, S-127 by keys,
+// K-player), both "?" (S-17 the onset's, S-141 the format's), the footer's
+// headings (S-145), the limiting warning (S-135), Video language (S-119),
+// Create's "again" label (S-114), and the closing asset's twin (S-140n).
+// The modes, views and languages the Phase 8 states take are a sample of
+// the parts' recipes: colour, motion, spacing and both type modes, 320 px,
+// Chinese and Malay.
+PLANS.pilot3 = () => [
+  ...PLANS.pilot2(),
+  ...['S-126', 'S-127', 'S-17', 'S-141', 'S-145', 'S-135', 'S-119', 'S-114', 'S-140n'].map((id) => ({ id, lang: 'en-GB', view: 'w1280', mode: 'light' })),
+  ...['S-126', 'S-141'].flatMap((id) => ['dark', 'forced-light', 'forced-dark', 'reduced-motion'].map((mode) => ({ id, lang: 'en-GB', view: 'w1280', mode }))),
+  ...['S-145'].flatMap((id) => ['font32', 'fallback'].map((mode) => ({ id, lang: 'en-GB', view: 'w1280', mode }))),
+  ...['S-126', 'S-127', 'S-141', 'S-145', 'K-player'].map((id) => ({ id, lang: 'en-GB', view: 'w320', mode: 'light' })),
+  ...['S-141', 'S-135'].map((id) => ({ id, lang: 'en-GB', view: 'w320', mode: 'spacing' })),
+  ...['S-126', 'S-135', 'S-119', 'S-114', 'S-145'].map((id) => ({ id, lang: 'zh-Hans', view: 'w1280', mode: 'light' })),
+  ...['S-141', 'S-145'].map((id) => ({ id, lang: 'ms-MY', view: 'w1280', mode: 'light' })),
   { id: 'K-player', lang: 'en-GB', view: 'w1280', mode: 'light' },
 ]

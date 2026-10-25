@@ -165,6 +165,9 @@ async function main() {
     const { id, lang, view, variant } = recs[0]
     const route = ROUTES[id]
     const sc = scenarioFor(recs[0])
+    // VH-198: each record's time, its group's setup apart, for the estimate's calibration.
+    const t0 = Date.now()
+    let setupMs
     // The walk's own log lives under the run's unique id, never a shared folder (M-08).
     const w = await openWalk(browser, `${run.name}-${run.runId}/${slug([id, variant, lang, view, recs[0].mode === 'fallback' ? 'fallback' : ''].filter(Boolean).join('-'))}`, run)
     try {
@@ -172,8 +175,11 @@ async function main() {
       await setViewport(w, view)
       await withholdFonts(w, recs[0].mode === 'fallback')
       await (route ?? sc).setup(w, lang)
+      setupMs = Date.now() - t0
       for (const rec of recs) {
         const key = recordKey(rec)
+        const r0 = Date.now()
+        const timing = () => ({ setupMs, recordMs: Date.now() - r0, firstOfGroup: rec === recs[0] })
         try {
           await setMode(w, rec.mode)
           if (sc?.afterMode) await sc.afterMode(w)
@@ -181,10 +187,10 @@ async function main() {
             const k = await keysRoute(w, route.steps)
             const reached = await assertReached(w, { lang, mode: rec.mode, viewport: rec.viewport })
             const exposure = await persistExposure(w, run, key, { ax: true })
-            run.record(rec, { status: reached.outcome === 'pass' ? 'ok' : 'failed', reached, faults: w.faults ?? [], instruments: { keys: k }, exposure })
+            run.record(rec, { timing: timing(), status: reached.outcome === 'pass' ? 'ok' : 'failed', reached, faults: w.faults ?? [], instruments: { keys: k }, exposure })
           } else {
             const reached = await assertReached(w, { lang, mode: rec.mode, state: sc.state, viewport: rec.viewport })
-            if (reached.outcome !== 'pass') { run.record(rec, { status: 'failed', reached }); console.log('not reached ' + key + ': ' + reached.problems.join('; ').slice(0, 200)); continue }
+            if (reached.outcome !== 'pass') { run.record(rec, { timing: timing(), status: 'failed', reached }); console.log('not reached ' + key + ': ' + reached.problems.join('; ').slice(0, 200)); continue }
             const ins = await instruments(w, sc, rec, run)
             // The state asserted again after the instruments: a record whose state expired fails (M-01);
             // a scenario may name what must still hold (VH-172's `hold`, default its state).
@@ -194,15 +200,15 @@ async function main() {
             const exposure = await persistExposure(w, run, key)
             const expired = reachedAfter.outcome !== 'pass'
             if (expired) console.log('state lost ' + key)
-            run.record(rec, { status: expired ? 'failed' : 'ok', stateExpired: expired || undefined, reached, reachedAfter, faults: w.faults ?? [], instruments: ins, readings, page, exposure })
+            run.record(rec, { timing: timing(), status: expired ? 'failed' : 'ok', stateExpired: expired || undefined, reached, reachedAfter, faults: w.faults ?? [], instruments: ins, readings, page, exposure })
           }
           console.log('recorded ' + key)
         } catch (e) {
-          run.record(rec, { status: 'failed', error: String(e.stack ?? e).slice(0, 400) })
+          run.record(rec, { timing: timing(), status: 'failed', error: String(e.stack ?? e).slice(0, 400) })
         }
       }
     } catch (e) {
-      for (const rec of recs) run.record(rec, { status: 'failed', error: 'setup: ' + String(e.message ?? e).slice(0, 300) })
+      for (const rec of recs) run.record(rec, { timing: { setupMs: Date.now() - t0, failedInSetup: true }, status: 'failed', error: 'setup: ' + String(e.message ?? e).slice(0, 300) })
       console.log('setup failed ' + [id, lang, view].join(' ') + ': ' + String(e.message ?? e).slice(0, 200))
     } finally {
       await w.close()

@@ -518,6 +518,9 @@ const KEY = {
   ArrowUp: { key: 'ArrowUp', code: 'ArrowUp', vk: 38 },
   Home: { key: 'Home', code: 'Home', vk: 36 },
   End: { key: 'End', code: 'End', vk: 35 },
+  // VH-198: the trim's Page step by keys in J1 (S-92).
+  PageUp: { key: 'PageUp', code: 'PageUp', vk: 33 },
+  PageDown: { key: 'PageDown', code: 'PageDown', vk: 34 },
   Shift: { key: 'Shift', code: 'ShiftLeft', vk: 16 },
 }
 export async function key(w, name, { shift = false } = {}) {
@@ -591,13 +594,15 @@ export async function keysRoute(w, steps, { settle } = {}) {
     const beforeEvidence = await w.evaluate('({ focused: window.__qual.focused(), status: window.__qual.statusText() })')
     let presses = 0
     let waited = null
+    const stops = []
     const typed = s.type ?? s.text
     if (s.setup) {
       await s.setup(w)
     } else if (typed !== undefined) {
       await typeKeys(w, typed); presses = [...typed].length
     } else if (s.axUntil) {
-      for (; presses < (s.repeat ?? 20); ) { await key(w, s.key ?? 'Tab', { shift: s.shift }); presses++; if (new RegExp(s.axUntil).test(await axFocused(w))) break }
+      // VH-198: each stop on the way kept, so a route records the native controls Chrome shows at this width.
+      for (; presses < (s.repeat ?? 20); ) { await key(w, s.key ?? 'Tab', { shift: s.shift }); presses++; const at = await axFocused(w); stops.push(at); if (new RegExp(s.axUntil).test(at)) break }
     } else if (s.until || s.untilState) {
       const re = s.until ? new RegExp(s.until) : null
       for (; presses < (s.repeat ?? 40); ) { await key(w, s.key ?? 'Tab', { shift: s.shift }); presses++; if (re ? re.test(await w.evaluate('window.__qual.observed().active')) : await truthy(w, s.untilState)) break }
@@ -623,7 +628,7 @@ export async function keysRoute(w, steps, { settle } = {}) {
     if (outcome === 'pass' && !s.setup && after.active !== 'body' && !visibleFocus && !s.noFocusRing) outcome = 'fail'
     if (outcome === 'fail') failed = true
     if (outcome === 'cannot-determine') unknown = true
-    log.push({ key: s.setup ? 'setup' : typed !== undefined ? 'type ' + JSON.stringify(typed) : !s.key && !s.until && !s.untilState && !s.axUntil ? 'wait' : (s.shift ? 'Shift+' : '') + (s.key ?? 'Tab'), presses, from: before, to: after.active, ax, focusVisible: visibleFocus, expect: want ?? s.untilState ?? s.axExpect ?? s.axUntil ?? null, value: s.value, waited: waited ?? undefined, outcome, note: s.note, before: beforeEvidence, after: afterEvidence })
+    log.push({ key: s.setup ? 'setup' : typed !== undefined ? 'type ' + JSON.stringify(typed) : !s.key && !s.until && !s.untilState && !s.axUntil ? 'wait' : (s.shift ? 'Shift+' : '') + (s.key ?? 'Tab'), presses, from: before, to: after.active, ax, ...(stops.length ? { stops } : {}), focusVisible: visibleFocus, expect: want ?? s.untilState ?? s.axExpect ?? s.axUntil ?? null, value: s.value, waited: waited ?? undefined, outcome, note: s.note, before: beforeEvidence, after: afterEvidence })
   }
   return { outcome: failed ? 'fail' : unknown ? 'cannot-determine' : 'pass', steps: log }
 }
