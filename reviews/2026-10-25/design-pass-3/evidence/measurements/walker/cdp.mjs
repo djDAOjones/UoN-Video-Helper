@@ -33,11 +33,13 @@ export async function connectBrowser(port = Number(process.env.CDP_PORT ?? 9222)
     const key = (m.sessionId ?? '') + '|' + m.method
     for (const fn of listeners.get(key) ?? []) fn(m.params)
   }
+  // VH-198: CDP_TRACE=1 names any call still unanswered after 15 s, once.
+  if (process.env.CDP_TRACE) setInterval(() => { const now = Date.now(); for (const p of pending.values()) if (!p.told && now - p.t > 15000) { p.told = true; console.error(`cdp: ${p.method} unanswered for ${Math.round((now - p.t) / 1000)} s ${p.detail}`) } }, 5000).unref()
   const send = (method, params = {}, sessionId) =>
     new Promise((resolve, reject) => {
       if (closed) return reject(new Error(`${method}: ${closed}`))
       const id = ++nextId
-      pending.set(id, { resolve, reject, method })
+      pending.set(id, { resolve, reject, method, t: Date.now(), detail: JSON.stringify(params).slice(0, 160) })
       ws.send(JSON.stringify(sessionId ? { id, method, params, sessionId } : { id, method, params }))
     })
   const on = (sessionId, method, fn) => {

@@ -565,6 +565,16 @@ const truthy = (w, expr) => w.evaluate(`(() => { try { return !!(${expr}); } cat
  * inside the route (the native file chooser is the browser's own, VH-168; a
  * fault), logged as setup, never counted as a key.
  */
+// VH-198 (P-06): inside the native player `document.activeElement` is the
+// <video> throughout, so a step may name the focused accessibility node it
+// presses until (`axUntil`) or expects (`axExpect`), as "role \"name\"".
+async function axFocused(w) {
+  await w.page.send('Accessibility.enable')
+  const { nodes } = await w.page.send('Accessibility.getFullAXTree')
+  const f = nodes.filter((n) => prop(n, 'focused') && n.role?.value !== 'RootWebArea').at(-1)
+  return f ? `${f.role?.value} "${f.name?.value ?? ''}"` : 'none'
+}
+
 export async function keysRoute(w, steps, { settle } = {}) {
   const log = []
   let failed = false, unknown = false
@@ -578,6 +588,8 @@ export async function keysRoute(w, steps, { settle } = {}) {
       await s.setup(w)
     } else if (typed !== undefined) {
       await typeKeys(w, typed); presses = [...typed].length
+    } else if (s.axUntil) {
+      for (; presses < (s.repeat ?? 20); ) { await key(w, s.key ?? 'Tab', { shift: s.shift }); presses++; if (new RegExp(s.axUntil).test(await axFocused(w))) break }
     } else if (s.until || s.untilState) {
       const re = s.until ? new RegExp(s.until) : null
       for (; presses < (s.repeat ?? 40); ) { await key(w, s.key ?? 'Tab', { shift: s.shift }); presses++; if (re ? re.test(await w.evaluate('window.__qual.observed().active')) : await truthy(w, s.untilState)) break }
@@ -596,12 +608,14 @@ export async function keysRoute(w, steps, { settle } = {}) {
     if (outcome === 'pass' && want && !new RegExp(want).test(after.active)) outcome = s.native ? 'cannot-determine' : 'fail'
     if (outcome === 'pass' && s.untilState && !(await truthy(w, s.untilState))) outcome = s.native ? 'cannot-determine' : 'fail'
     if (outcome === 'pass' && s.state && !(await truthy(w, s.state))) outcome = s.native ? 'cannot-determine' : 'fail'
+    const ax = s.axExpect || s.axUntil ? await axFocused(w) : undefined
+    if (outcome === 'pass' && (s.axExpect || s.axUntil) && !new RegExp(s.axExpect ?? s.axUntil).test(ax)) outcome = s.native ? 'cannot-determine' : 'fail'
     const afterEvidence = await w.evaluate('({ focused: window.__qual.focused(), status: window.__qual.statusText() })')
     if (outcome === 'pass' && s.value !== undefined && !new RegExp(s.value).test(afterEvidence.focused.value ?? '')) outcome = 'fail'
     if (outcome === 'pass' && !s.setup && after.active !== 'body' && !visibleFocus && !s.noFocusRing) outcome = 'fail'
     if (outcome === 'fail') failed = true
     if (outcome === 'cannot-determine') unknown = true
-    log.push({ key: s.setup ? 'setup' : typed !== undefined ? 'type ' + JSON.stringify(typed) : !s.key && !s.until && !s.untilState ? 'wait' : (s.shift ? 'Shift+' : '') + (s.key ?? 'Tab'), presses, from: before, to: after.active, focusVisible: visibleFocus, expect: want ?? s.untilState ?? null, value: s.value, waited: waited ?? undefined, outcome, note: s.note, before: beforeEvidence, after: afterEvidence })
+    log.push({ key: s.setup ? 'setup' : typed !== undefined ? 'type ' + JSON.stringify(typed) : !s.key && !s.until && !s.untilState && !s.axUntil ? 'wait' : (s.shift ? 'Shift+' : '') + (s.key ?? 'Tab'), presses, from: before, to: after.active, ax, focusVisible: visibleFocus, expect: want ?? s.untilState ?? s.axExpect ?? s.axUntil ?? null, value: s.value, waited: waited ?? undefined, outcome, note: s.note, before: beforeEvidence, after: afterEvidence })
   }
   return { outcome: failed ? 'fail' : unknown ? 'cannot-determine' : 'pass', steps: log }
 }
@@ -937,6 +951,13 @@ export const VIEWS = {
   // zoom cannot be set over the protocol, so it stays on the person list.
   zoom200proxy: { width: 640, height: 450, deviceScaleFactor: 2, mobile: false },
   zoom400proxy: { width: 320, height: 225, deviceScaleFactor: 4, mobile: false },
+  // VH-198: pass 3's widths (scenarios-2026-10-25.md S-111 to S-113, S-144):
+  // either side of step 4's 25rem query, the 640 px proxy width at full
+  // height, and S-144's 800 x 600.
+  w800: { width: 800, height: 600, deviceScaleFactor: 1, mobile: false },
+  w640: { width: 640, height: 900, deviceScaleFactor: 1, mobile: false },
+  w401: { width: 401, height: 900, deviceScaleFactor: 1, mobile: false },
+  w400: { width: 400, height: 900, deviceScaleFactor: 1, mobile: false },
 }
 export const UA_MOBILE = 'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Mobile Safari/537.36'
 

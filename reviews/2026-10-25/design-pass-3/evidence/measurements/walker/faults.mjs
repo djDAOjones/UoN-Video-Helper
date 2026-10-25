@@ -98,28 +98,33 @@ export const FAULTS = {
   F4a: {
     name: 'the save picker cancelled',
     for: 'S-67',
-    before: (w) => init(w, `window.showSaveFilePicker = async () => { throw new DOMException('The user aborted a request.', 'AbortError'); };`),
+    before: async (w) => { w.scriptF4a = (await init(w, `window.showSaveFilePicker = async () => { throw new DOMException('The user aborted a request.', 'AbortError'); };`)).identifier },
+    // VH-198: released for a later load in the same walk (S-133 runs four saves).
+    release: async (w) => { if (w.scriptF4a) await w.page.send('Page.removeScriptToEvaluateOnNewDocument', { identifier: w.scriptF4a }); w.scriptF4a = null },
   },
   F4b: {
     name: 'a slow writable',
     for: 'S-61, S-65, S-66 (saving, and stopping it): the check asserts Saving with Stop saving offered, then Save stopped; VH-178 slows it to 3 s a chunk so a check settles while it still runs',
     // opts.ms: the wait before each chunk is written (VH-178's variant: 3000).
-    before: (w, { ms = 400 } = {}) => init(w, `(() => { const real = window.showSaveFilePicker; window.showSaveFilePicker = async (o) => { const h = await real(o);
+    before: async (w, { ms = 400 } = {}) => { w.scriptF4b = (await init(w, `(() => { const real = window.showSaveFilePicker; window.showSaveFilePicker = async (o) => { const h = await real(o);
       return { kind: 'file', name: h.name, getFile: () => h.getFile(), isSameEntry: (x) => h.isSameEntry(x), remove: () => h.remove(),
         createWritable: async () => { const out = await h.createWritable();
-          return new WritableStream({ async write(c) { await new Promise((r) => setTimeout(r, ${Number(ms)})); await out.write(c); }, close: () => out.close(), abort: (r) => out.abort(r) }); } }; }; })();`),
+          return new WritableStream({ async write(c) { await new Promise((r) => setTimeout(r, ${Number(ms)})); await out.write(c); }, close: () => out.close(), abort: (r) => out.abort(r) }); } }; }; })();`)).identifier },
+    release: async (w) => { if (w.scriptF4b) await w.page.send('Page.removeScriptToEvaluateOnNewDocument', { identifier: w.scriptF4b }); w.scriptF4b = null },
   },
   F4c: {
     name: "the picker's file is the source",
     for: 'S-68 (refused: the source file)',
-    before: (w) => init(w, `(() => { const real = window.showSaveFilePicker; window.showSaveFilePicker = async (o) => { const h = await real(o); const src = document.querySelector('#file-input').files[0];
-      return { kind: 'file', name: src.name, getFile: async () => src, isSameEntry: (x) => h.isSameEntry(x), remove: () => h.remove(), createWritable: () => h.createWritable() }; }; })();`),
+    before: async (w) => { w.scriptF4c = (await init(w, `(() => { const real = window.showSaveFilePicker; window.showSaveFilePicker = async (o) => { const h = await real(o); const src = document.querySelector('#file-input').files[0];
+      return { kind: 'file', name: src.name, getFile: async () => src, isSameEntry: (x) => h.isSameEntry(x), remove: () => h.remove(), createWritable: () => h.createWritable() }; }; })();`)).identifier },
+    release: async (w) => { if (w.scriptF4c) await w.page.send('Page.removeScriptToEvaluateOnNewDocument', { identifier: w.scriptF4c }); w.scriptF4c = null },
   },
   F4d: {
     name: 'createWritable rejects',
     for: "S-70's hand-off, not a failure: saveFile falls back to a download (src/media/save.ts:178-196)",
-    before: (w) => init(w, `(() => { const real = window.showSaveFilePicker; window.showSaveFilePicker = async (o) => { const h = await real(o);
-      return { kind: 'file', name: h.name, getFile: () => h.getFile(), isSameEntry: (x) => h.isSameEntry(x), remove: () => h.remove(), createWritable: async () => { throw new DOMException('Denied', 'NotAllowedError'); } }; }; })();`),
+    before: async (w) => { w.scriptF4d = (await init(w, `(() => { const real = window.showSaveFilePicker; window.showSaveFilePicker = async (o) => { const h = await real(o);
+      return { kind: 'file', name: h.name, getFile: () => h.getFile(), isSameEntry: (x) => h.isSameEntry(x), remove: () => h.remove(), createWritable: async () => { throw new DOMException('Denied', 'NotAllowedError'); } }; }; })();`)).identifier },
+    release: async (w) => { if (w.scriptF4d) await w.page.send('Page.removeScriptToEvaluateOnNewDocument', { identifier: w.scriptF4d }); w.scriptF4d = null },
   },
   F4e: {
     name: 'no picker, and URL.createObjectURL throws (revised, VH-198)',
@@ -180,18 +185,24 @@ export const FAULTS = {
     name: 'the pre-flight throws',
     for: "S-89 (device check failed): the worker's navigator.hardwareConcurrency, read once by inspectCapabilities (src/media/capability.ts:190) inside the pre-flight's try, throws an unclassified error, so the worker answers check-failed (job.worker.ts:620-625)",
     before: (w) => workerPrelude(w, 'F10', `Object.defineProperty(WorkerNavigator.prototype, 'hardwareConcurrency', { configurable: true, get() { throw new Error('fault F10'); } });`),
+    release: (w) => dropPrelude(w, 'F10'),
   },
   F11: {
     name: "the job's messages dropped once it runs",
     for: "S-90 (failed, locks held while the job stops): the worker's first stage message reaches the page, then every message is dropped, the cancel's answer too, so the watchdog stops the job after WORKER_SILENCE_LIMIT_MS (120 s) and the locks hold 10 s more",
     before: (w) => workerPrelude(w, 'F11', `(() => { const real = self.postMessage.bind(self); let quiet = false; self.postMessage = (m, ...rest) => { if (quiet) return; if (m && m.kind === 'stage') quiet = true; return real(m, ...rest); }; })();`),
+    release: (w) => dropPrelude(w, 'F11'),
   },
   F12: {
     name: 'a working-space write fails part-way',
     for: "S-56 (out of space part-way) and S-57 (retry): the worker's FileSystemSyncAccessHandle.write throws QuotaExceededError once a job has written opts.bytes, which the worker classifies as out-of-space (src/workers/failure.ts:88); only once, so the retry runs",
-    // opts.bytes: what is written before the write fails.
-    before: (w, { bytes = 256 * 1024 } = {}) => workerPrelude(w, 'F12', `(() => { const real = FileSystemSyncAccessHandle.prototype.write; let written = 0, failed = false;
-      FileSystemSyncAccessHandle.prototype.write = function (data, o) { if (!failed) { written += data.byteLength; if (written > ${Number(bytes)}) { failed = true; throw new DOMException('fault F12', 'QuotaExceededError'); } } return real.call(this, data, o); }; })();`),
+    // opts.bytes: what is written before the write fails. VH-198: opts.job, the
+    // job (by the worker's 'process' messages, src/workers/job.worker.ts:99)
+    // whose writes count, so a made-again video fails and the first does not
+    // (S-118); unset, every write counts from the worker's start, as before.
+    before: (w, { bytes = 256 * 1024, job = 0 } = {}) => workerPrelude(w, 'F12', `(() => { const real = FileSystemSyncAccessHandle.prototype.write; let written = 0, failed = false, jobs = 0; const only = ${Number(job)};
+      if (only) self.addEventListener('message', (e) => { if (e.data && e.data.kind === 'process') { jobs++; written = 0; } });
+      FileSystemSyncAccessHandle.prototype.write = function (data, o) { if (!failed && (!only || jobs === only)) { written += data.byteLength; if (written > ${Number(bytes)}) { failed = true; throw new DOMException('fault F12', 'QuotaExceededError'); } } return real.call(this, data, o); }; })();`),
     // VH-172: released for a route's later loads.
     release: (w) => dropPrelude(w, 'F12'),
   },
@@ -298,6 +309,7 @@ export async function applyFault(w, id, opts) {
   w.faultsSeen = w.faultsSeen ?? []
   w.appUrl = w.appUrl ?? (() => process.env.APP_URL ?? 'http://localhost:5173/')
   w.faults = [...(w.faults ?? []), id]
+  ;(w.activeFaults = w.activeFaults ?? new Set()).add(id)
   if (f.before) await f.before(w, opts)
   if (f.now) await f.now(w, opts)
 }
@@ -308,6 +320,12 @@ export async function releaseFault(w, id) {
   if (!f?.release) throw new Error('fault ' + id + ' has no release')
   await f.release(w)
   w.faultsReleased = [...(w.faultsReleased ?? []), id]
+  w.activeFaults?.delete(id)
+}
+
+/** VH-198: every fault set on this walk and not yet released, released (a later load runs without them). */
+export async function releaseAll(w) {
+  for (const id of [...(w.activeFaults ?? [])]) if (FAULTS[id]?.release) await releaseFault(w, id)
 }
 
 /** Navigate without waiting for boot (F1 holds it). */

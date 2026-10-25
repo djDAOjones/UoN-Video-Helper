@@ -3,9 +3,16 @@
 // change underneath: every walked scenario (setup, state predicate, focus
 // list), the keyboard routes J1-J4 and K-dialog, the plans, and the gaps.
 // matrix.mjs imports SCENARIOS, ROUTES, PLANS, MX_INIT and GAPS from here.
+import { dirname, join, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { F, sleep } from './walk.mjs'
 import { IN_DIALOG, IN_DIALOG_OR_OUT, focusByKeyboard, key } from './qualify.mjs'
-import { applyFault, releaseFault, gotoNoWait } from './faults.mjs'
+import { FAULTS, applyFault, releaseFault, releaseAll, gotoNoWait } from './faults.mjs'
+import { spokenAtCompletion } from './phase8.mjs'
+
+// VH-198: S-140 reads the closing asset from samples/ (never written there).
+const APP_ROOT = process.env.APP_ROOT ?? resolve(dirname(fileURLToPath(import.meta.url)), '../../../../../..')
+const SAMPLE_QTRLE = join(APP_ROOT, 'samples', 'UoN Closing Logo Fade Blue 2025.mov')
 
 // ---------------------------------------------------------------------------
 // In-page helpers for the state predicates (VH-172). Language-independent: a
@@ -66,7 +73,7 @@ export const MX_INIT = String.raw`
   // VH-172 (VH-164's contract): a mailto: link the page follows is logged as prepared (recipient, subject and body present, length), then followed as before.
   M.mailto = [];
   const click0 = HTMLAnchorElement.prototype.click;
-  HTMLAnchorElement.prototype.click = function () { if (/^mailto:/i.test(this.href)) { const u = this.href, q = u.indexOf('?'); M.mailto.push({ t: Math.round(performance.now()), chars: u.length, to: decodeURIComponent(u.slice(7, q > 0 ? q : undefined)), subject: /[?&]subject=/.test(u), body: /[?&]body=/.test(u) }); } return click0.call(this); };
+  HTMLAnchorElement.prototype.click = function () { if (/^mailto:/i.test(this.href)) { const u = this.href, q = u.indexOf('?'); M.mailto.push({ t: Math.round(performance.now()), chars: u.length, to: decodeURIComponent(u.slice(7, q > 0 ? q : undefined)), subject: /[?&]subject=/.test(u), subjectText: q > 0 ? new URLSearchParams(u.slice(q + 1)).get('subject') : null, body: /[?&]body=/.test(u) }); } return click0.call(this); };
 })();
 `
 
@@ -115,7 +122,7 @@ const until = (w, expr, label, timeout = 120000) => w.waitFor(`(() => { const M 
 
 export async function ready(w, lang, file = 'lecture-60s.mp4', { timeout = 300000 } = {}) {
   await fresh(w, lang)
-  await w.setFiles(F(file))
+  await w.setFiles(file.startsWith('/') ? file : F(file))
   await w.waitSettled({ timeout })
   await until(w, 'M.verdict() || M.kindIn("#source-block") || M.kindIn("#source-report") === "error"', 'a verdict', timeout)
 }
@@ -1061,6 +1068,9 @@ export const SCENARIOS = {
   },
 }
 function M_SUB_FOCUS() { return ['#submission-card-assignment', '#submission-card-module', '#submission-card-convenor', '#submission-card-ids'] }
+// VH-198: Phase 7's scenarios, before pass 3's are added at the end of this
+// module, so PLANS.priority stays the frozen 699 keys (the plan's part 1).
+const PHASE7_IDS = new Set(Object.keys(SCENARIOS))
 
 // Walked scenarios the matrix cannot hold as records, each with its reason:
 // named gaps in the manifest, never a faked pass.
@@ -1306,6 +1316,7 @@ const LONG_NAMES = ['S-53-W', 'S-53-LW', 'S-58-W', 'S-58-LW', 'S-63-W', 'S-63-LW
 const J = ['J1', 'J2', 'J3', 'J4']
 const okLang = (id, lang) => !SCENARIOS[id].langs || SCENARIOS[id].langs.includes(lang)
 const okView = (id, view) => !SCENARIOS[id].views || SCENARIOS[id].views.includes(view)
+// VH-198: S-154 is in SOURCE_ONLY, not SCENARIOS, so it is never walked.
 const scenarioIds = () => Object.keys(SCENARIOS).filter((id) => !SCENARIOS[id].fixOnly)
 
 PLANS.matrix = () => [
@@ -1358,8 +1369,8 @@ const rec = (id, lang, view, mode) => ({ id, lang, view, mode })
 PLANS.priority = () => {
   const out = new Map()
   const add = (r) => { if (SCENARIOS[r.id] && (!okLang(r.id, r.lang) || !okView(r.id, r.view))) return; const k = [r.id, r.lang, r.view, r.mode].join('|'); if (!out.has(k)) out.set(k, r) }
-  // Every scenario once in its base cell, as smoke.
-  for (const r of PLANS.smoke()) add(r)
+  // Every scenario once in its base cell, as smoke: Phase 7's (VH-198 keeps part 1 frozen).
+  for (const r of PLANS.smoke()) if (PHASE7_IDS.has(r.id) || ROUTES[r.id]) add(r)
   // Language and width for layout- and text-dependent scenarios, light.
   for (const id of FINITE) for (const [lang, view] of HEAVY.includes(id) ? HEAVY_CELLS : ALL_CELLS) add(rec(id, lang, view, 'light'))
   for (const id of TEXT) for (const [lang, view] of TEXT_CELLS) add(rec(id, lang, view, 'light'))
@@ -1458,6 +1469,1177 @@ const V45_REST = ['S-04', 'S-08', 'S-11', 'S-14', 'S-16', 'S-18', 'S-19', 'S-20'
 PLANS['vh181-rest'] = () => V45_REST.flatMap((id) => LANGS.map((lang) => rec(id, lang, SCENARIOS[id].views?.[0] ?? 'w320', 'light'))).filter((r) => okLang(r.id, r.lang) && okView(r.id, r.view))
 
 
+// ---------------------------------------------------------------------------
+// VH-198: pass 3's scenarios S-92 to S-153 (scenarios-2026-10-25.md, "New
+// scenarios"), each with the setup, assertions and expectations its row gives.
+// A record reaches one final state; a row that is a sequence (keys, faults, a
+// flow) runs it in setup and keeps what it saw in `w.obs`, which `asserts`
+// judge, so a sequence is evidence in the record and never a pass by default.
+// `p8` names the active Phase 8 instruments (phase8.mjs) the record runs;
+// the passive ones run in every record. S-154 is source-only (SOURCE_ONLY).
+// Narrower languages and views follow the plan's recipes
+// (sizing-2026-10-25.mjs): ONE, OUTCOME4, COLOUR12 and S-112's, S-113's,
+// S-130's, S-140's and S-144's own.
+const P8_CARD = '#process-result > .notification[data-kind="success"]'
+const P8_PLAYER = P8_CARD + ' video.result-player'
+const EN_1280 = { langs: ['en-GB'], langsWhy: 'the plan\'s recipe ONE: a slow setup, walked once (sizing-2026-10-25.mjs)', views: ['w1280'], viewsWhy: 'the plan\'s recipe ONE' }
+const OUTCOME = { views: ['w1280', 'w320'], viewsWhy: 'the plan\'s recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure' }
+const AT_1280 = { views: ['w1280'], viewsWhy: 'the plan\'s recipe COLOUR12: three languages at 1280 px in four colour modes' }
+const LANG_CYCLE = ['en-GB', 'zh-Hans', 'ms-MY'] // src/config/languages.ts:35, the segments' order
+const before = (lang) => LANG_CYCLE[(LANG_CYCLE.indexOf(lang) + 2) % 3] // ArrowRight from it picks `lang`
+const anotherLang = (lang) => (lang === 'en-GB' ? 'zh-Hans' : 'en-GB')
+const obsOf = (w) => (w.obs = w.obs ?? {})
+const brief = (o) => JSON.parse(JSON.stringify(o, (k, v) => (typeof v === 'string' && v.length > 200 ? v.slice(0, 200) + '…' : v)))
+/** An assertion on what the setup saw. */
+const see = (what, test) => ({ what, fn: async (w) => { const o = obsOf(w); try { const r = await test(o, w); if (r && typeof r === 'object' && 'outcome' in r) return r; return { outcome: r ? 'pass' : 'fail', seen: brief(o) } } catch (e) { return { outcome: 'cannot-determine', why: String(e.message ?? e).slice(0, 160) } } } })
+/** A reading kept beside the record, not judged. */
+const found = (what, get) => ({ what, fn: async (w) => ({ outcome: 'not-counted', why: 'recorded as found, not judged here', found: brief(await get(obsOf(w), w)) }) })
+const X = (what, expr) => ({ what, expr })
+const playerSrc = (w) => w.evaluate(`(() => { const v = document.querySelector(${JSON.stringify(P8_PLAYER)}); return v ? v.getAttribute('src') : null })()`)
+const fetches = (w, url) => (url ? w.evaluate(`fetch(${JSON.stringify(url)}).then((r) => r.ok, () => false)`) : Promise.resolve(false))
+const markPlayer = (w) => w.evaluate(`(window.__p0 = document.querySelector(${JSON.stringify(P8_PLAYER)}), !!window.__p0)`)
+const SAME_PLAYER = `!!window.__p0 && document.querySelector(${JSON.stringify(P8_PLAYER)}) === window.__p0`
+const CREATE_READS = (path, secondary) => `M.is('${path}', '#process-actions > button:nth-child(2)') && M.btn(2).classList.contains('button--secondary') === ${secondary}`
+const SAVED = `M.res() === 'result' && M.saveBtn().disabled && M.has('status.saved', '#save-status')`
+const readHandle = (w, id) => w.evaluate(`(() => { const r = document.getElementById('${id}'); return { v: Math.round(r.valueAsNumber * 1000) / 1000, text: r.getAttribute('aria-valuetext'), focused: document.activeElement === r } })()`)
+/** Keys on a trim handle, each reading kept; the first press's withdrawal read at once. */
+async function handleKeys(w, id, keys) {
+  await focusByKeyboard(w, '#' + id)
+  const out = [{ key: 'start', ...(await readHandle(w, id)) }]
+  for (const k of keys) {
+    await w.press(k)
+    const r = { key: k, ...(await readHandle(w, id)) }
+    if (out.length === 1) r.atOnce = await mx(w, `({ verdict: !!M.verdict(), stop: M.checking() })`)
+    out.push(r)
+  }
+  return out
+}
+const vals = (steps) => steps.map((s) => s.v)
+const same = (a, b) => JSON.stringify(a) === JSON.stringify(b)
+/** The page language set by setup, without moving focus (a programmatic change, recorded as setup). */
+const setPageLanguage = async (w, tag) => { await w.evaluate(`(() => { const r = document.querySelector('#language-switcher input[value="${tag}"]'); if (r.checked) return; r.checked = true; r.dispatchEvent(new Event('change', { bubbles: true })); })()`); await sleep(400) }
+const STATUS_SINCE = (t) => `(() => { const want = window.__mx.msg('status.checking'); return window.__p8.status.filter((s) => s.t > ${t} && s.text === want).length })()`
+const focusIs = (sel) => `document.activeElement === document.querySelector(${JSON.stringify(sel)})`
+const activeDesc = (w) => w.evaluate(`(() => { const a = document.activeElement; if (!a || a === document.body) return 'body'; return a.id ? '#' + a.id : a.tagName.toLowerCase() + (a.name ? '[name=' + a.name + ']' : '') + (a.type === 'radio' ? '=' + a.value : '') + (a.matches && a.matches(${JSON.stringify(P8_CARD)}) ? ' (the card)' : ''); })()`)
+const tipState = (w, id) => w.evaluate(`(() => { const t = document.getElementById('${id}'); const b = document.getElementById('${id}-button'); return { open: !!t && !t.hidden, expanded: b && b.getAttribute('aria-expanded') }; })()`)
+const fade = async (w) => { await w.select('#closing-type', 'fade'); await w.waitSettled() }
+/** A finished job beside which the player stands, its element marked and its URL kept. */
+async function finishedWithPlayer(w, lang, file = 'short-2s.mp4', beforeCreate) {
+  await finished(w, lang, file, beforeCreate)
+  await markPlayer(w)
+  obsOf(w).src = await playerSrc(w)
+}
+async function untilDone(w, label, timeout = 600000) { await until(w, `M.finished() || M.res() === 'failure'`, label, timeout); await sleep(400) }
+const HEAVY_TITLE = `M.msg('warnings.heavyLimiting.heading')`
+const META_TITLE = `M.msg('warnings.metadataLost.heading')`
+const WARN_TEXT = `(() => { const b = window.__p8.warnBox(); return b ? b.textContent.replace(/\\s+/g, ' ') : '' })()`
+
+Object.assign(SCENARIOS, {
+  // VH-183: the trim's Page step.
+  'S-92': {
+    name: 'Trim Page step, a short video',
+    state: `M.proceed() && ${focusIs('#trim-end-range')}`,
+    hold: `M.proceed()`,
+    setup: async (w, lang) => {
+      await ready(w, lang, 'lecture-130s.mp4')
+      const o = obsOf(w)
+      o.start = await handleKeys(w, 'trim-start-range', ['PageUp', 'PageUp', 'PageDown', 'ArrowRight', 'End', 'PageUp', 'Home', 'PageDown'])
+      o.end = await handleKeys(w, 'trim-end-range', ['PageDown', 'PageUp', 'Home', 'PageDown', 'End'])
+      o.lastPress = Date.now()
+      await w.waitSettled(); await until(w, 'M.proceed()', 'the settled verdict')
+      o.checksAfterLast = await w.evaluate(STATUS_SINCE(o.lastPress))
+    },
+    asserts: [
+      see('start handle 0, 10, 20, 10, 11, 127, 127, 0, 0', (o) => same(vals(o.start), [0, 10, 20, 10, 11, 127, 127, 0, 0])),
+      see('end handle 130, 120, 130, 3, 3, 130', (o) => same(vals(o.end), [130, 120, 130, 3, 3, 130])),
+      see('each value said in words; focus stays on the handle', (o) => [...o.start, ...o.end].every((s) => s.text && s.focused)),
+      see('the first press withdraws the verdict and offers Stop at once', (o) => !o.start[1].atOnce.verdict && o.start[1].atOnce.stop),
+      see('one check after the keys settle', (o) => o.checksAfterLast === 1),
+    ],
+    focus: [{ sel: '#trim-start-range', ref: 'thumb' }, { sel: '#trim-end-range', ref: 'thumb' }],
+    fixtures: ['lecture-130s.mp4'],
+  },
+  'S-93': {
+    name: 'Trim Page step, an hour',
+    ...OUTCOME,
+    state: `M.proceed() && ${focusIs('#trim-end-range')}`,
+    hold: `M.proceed()`,
+    setup: async (w, lang) => {
+      await ready(w, lang, 'still-3600s.mp4')
+      const o = obsOf(w)
+      o.start = await handleKeys(w, 'trim-start-range', ['PageUp', 'PageUp', 'PageDown', 'ArrowRight', 'End', 'PageUp', 'Home', 'PageDown'])
+      o.end = await handleKeys(w, 'trim-end-range', ['PageDown', 'PageUp', 'Home', 'PageDown', 'End'])
+      o.lastPress = Date.now()
+      await w.waitSettled({ timeout: 300000 }); await until(w, 'M.proceed()', 'the settled verdict', 300000)
+      o.checksAfterLast = await w.evaluate(STATUS_SINCE(o.lastPress))
+    },
+    asserts: [
+      see('start handle 0, 36, 72, 36, 37, 3597, 3597, 0, 0', (o) => same(vals(o.start), [0, 36, 72, 36, 37, 3597, 3597, 0, 0])),
+      see('end handle 3600, 3564, 3600, 3, 3, 3600', (o) => same(vals(o.end), [3600, 3564, 3600, 3, 3, 3600])),
+      see('the words in English: 36 seconds, 1 minute 12 seconds, 59 minutes 57 seconds', (o, w) => w.evaluate('document.documentElement.lang').then((l) => (l !== 'en-GB' ? { outcome: 'not-applicable', why: 'the English words only' } : o.start[1].text === '36 seconds' && o.start[2].text === '1 minute 12 seconds' && o.start[5].text === '59 minutes 57 seconds'))),
+      see('the first press withdraws the verdict and offers Stop at once', (o) => !o.start[1].atOnce.verdict && o.start[1].atOnce.stop),
+      see('exactly one check after the last press', (o) => o.checksAfterLast === 1),
+    ],
+    focus: [{ sel: '#trim-start-range', ref: 'thumb' }],
+    fixtures: ['still-3600s.mp4'],
+  },
+  'S-94': {
+    name: 'Trim Page step at the 1% boundary',
+    ...EN_1280,
+    state: `M.proceed() && ${focusIs('#trim-start-range')}`,
+    hold: `M.proceed()`,
+    setup: async (w, lang) => {
+      const o = obsOf(w)
+      await ready(w, lang, 'still-1000s.mp4', { timeout: 600000 })
+      o.s1000 = await handleKeys(w, 'trim-start-range', ['PageUp', 'PageDown'])
+      await w.setFiles(F('still-1100s.mp4')); await w.waitSettled({ timeout: 600000 }); await until(w, 'M.proceed()', 'the 1,100 s verdict', 600000)
+      o.s1100 = await handleKeys(w, 'trim-start-range', ['PageUp', 'PageDown'])
+      await w.waitSettled({ timeout: 600000 }); await until(w, 'M.proceed()', 'settled', 600000)
+    },
+    asserts: [
+      see('1,000 s: 0, 10, 0 (the floor and 1% agree)', (o) => same(vals(o.s1000), [0, 10, 0])),
+      see('1,100 s: 0, 11, 0', (o) => same(vals(o.s1100), [0, 11, 0])),
+      see('"10 seconds" and "11 seconds"', (o) => o.s1000[1].text === '10 seconds' && o.s1100[1].text === '11 seconds'),
+      found('a fractional page (10.5 s at 1,050 s): untested in source and not walked', () => ({ absent: 'src/ui/trim.test.ts:163-168 covers only 999, 1,000 and 2,000 s' })),
+    ],
+    focus: [{ sel: '#trim-start-range', ref: 'thumb' }],
+    fixtures: ['still-1000s.mp4', 'still-1100s.mp4'],
+  },
+  // VH-184: the onset "?" closed by focus.
+  'S-95': {
+    name: 'Onset help closed by Tab',
+    state: `!M.vis('#onset-help') && M.el('#onset-help-button').getAttribute('aria-expanded') === 'false' && ${focusIs('#closing-colour input:checked')}`,
+    hold: `!M.vis('#onset-help')`,
+    setup: async (w, lang) => {
+      await ready(w, lang); await fade(w)
+      const o = obsOf(w)
+      await focusByKeyboard(w, '#onset-help-button'); await key(w, 'Tab'); o.closedTab = await activeDesc(w)
+      await focusByKeyboard(w, '#onset-help-button'); await key(w, 'Enter'); o.opened = await tipState(w, 'onset-help')
+      await key(w, 'Tab'); o.openTab = await activeDesc(w); o.after = await tipState(w, 'onset-help')
+    },
+    asserts: [see('Enter opens it; Tab closes it and lands where it lands with it closed (the Blue colour)', (o) => o.opened.open && !o.after.open && o.after.expanded === 'false' && o.openTab === o.closedTab)],
+    focus: ['#closing-colour input:checked'],
+    fixtures: ['lecture-60s.mp4'],
+  },
+  'S-96': {
+    name: 'Onset help closed by Shift+Tab',
+    state: `!M.vis('#onset-help') && ${focusIs('#closing-onset')}`,
+    hold: `!M.vis('#onset-help')`,
+    setup: async (w, lang) => {
+      await ready(w, lang); await fade(w)
+      const o = obsOf(w)
+      await focusByKeyboard(w, '#onset-help-button'); await key(w, 'Tab', { shift: true }); o.closedBack = await activeDesc(w)
+      await focusByKeyboard(w, '#onset-help-button'); await key(w, 'Enter'); o.opened = await tipState(w, 'onset-help')
+      await key(w, 'Tab', { shift: true }); o.openBack = await activeDesc(w); o.after = await tipState(w, 'onset-help')
+    },
+    asserts: [see('Shift+Tab closes it, focus on the "Plays over" select', (o) => o.opened.open && !o.after.open && o.openBack === o.closedBack && o.openBack === '#closing-onset')],
+    focus: ['#closing-onset'],
+    fixtures: ['lecture-60s.mp4'],
+  },
+  'S-97': {
+    name: 'Onset help closed by Escape, or by a click elsewhere',
+    state: `!M.vis('#onset-help') && M.el('#onset-help-button').getAttribute('aria-expanded') === 'false'`,
+    setup: async (w, lang) => {
+      await ready(w, lang); await fade(w)
+      const o = obsOf(w)
+      await focusByKeyboard(w, '#onset-help-button'); await key(w, 'Enter'); await key(w, 'Escape'); o.escape = { ...(await tipState(w, 'onset-help')), focus: await activeDesc(w) }
+      await focusByKeyboard(w, '#onset-help-button'); await key(w, 'Enter'); await w.click('#onset-help p'); o.clickText = await tipState(w, 'onset-help')
+      await key(w, 'Escape'); o.escapeAfterText = { ...(await tipState(w, 'onset-help')), focus: await activeDesc(w) }
+      await focusByKeyboard(w, '#onset-help-button'); await key(w, 'Enter'); await w.click('#closing-colour legend'); o.clickElsewhere = { ...(await tipState(w, 'onset-help')), focus: await activeDesc(w) }
+    },
+    asserts: [
+      see('Escape closes it; focus on the "?"', (o) => !o.escape.open && o.escape.focus === '#onset-help-button'),
+      see('a click on its text keeps it open; Escape then closes it, focus on the "?"', (o) => o.clickText.open && !o.escapeAfterText.open && o.escapeAfterText.focus === '#onset-help-button'),
+      see('a click elsewhere closes it', (o) => !o.clickElsewhere.open),
+    ],
+    focus: ['#onset-help-button'],
+    fixtures: ['lecture-60s.mp4'],
+  },
+  'S-98': {
+    name: "Onset help's edge",
+    state: `M.vis('#onset-help') && M.el('#onset-help-button').getAttribute('aria-expanded') === 'true'`,
+    setup: async (w, lang) => { await ready(w, lang); await w.click('#onset-help-button'); await sleep(200) },
+    asserts: [
+      X('1 px all round, solid, in --border-subtle (or the forced palette), not a rail', `(() => { const t = M.el('#onset-help'); const cs = getComputedStyle(t); const p = document.createElement('div'); p.style.borderTop = '1px solid var(--border-subtle)'; document.body.append(p); const tok = getComputedStyle(p).borderTopColor; p.remove(); const sides = ['Top', 'Right', 'Bottom', 'Left']; return sides.every((s) => cs['border' + s + 'Width'] === '1px' && cs['border' + s + 'Style'] === 'solid' && (matchMedia('(forced-colors: active)').matches || cs['border' + s + 'Color'] === tok)); })()`),
+      found('the edge against the tip\'s ground and the step\'s (3:1 is 1.4.11\'s floor)', async (o, w) => w.evaluate(`(() => { const parse = (c) => (c.match(/[\\d.]+/g) || []).slice(0, 3).map(Number); const L = (c) => { const m = parse(c).map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4) }); return 0.2126 * m[0] + 0.7152 * m[1] + 0.0722 * m[2] }; const K = (a, b) => { const x = L(a), y = L(b); return Math.round((Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05) * 100) / 100 }; const t = document.getElementById('onset-help'); const edge = getComputedStyle(t).borderTopColor; let g = t, bg = 'rgba(0, 0, 0, 0)'; while (g && /rgba\\(0, 0, 0, 0\\)|transparent/.test(bg)) { bg = getComputedStyle(g).backgroundColor; g = g.parentElement } let s = t.parentElement, sbg = 'rgba(0, 0, 0, 0)'; while (s && /rgba\\(0, 0, 0, 0\\)|transparent/.test(sbg)) { sbg = getComputedStyle(s).backgroundColor; s = s.parentElement } return { edge, tipGround: bg, stepGround: sbg, againstTip: K(edge, bg), againstStep: K(edge, sbg) }; })()`)),
+    ],
+    focus: ['#onset-help-button'],
+    fixtures: ['lecture-60s.mp4'],
+  },
+  // VH-185: a sliver of late sound.
+  'S-99': {
+    name: 'A kept sliver of sound: no audio before Create',
+    state: `M.kindIn('#audio-warnings') === 'warning' && M.has('warnings.noAudio.heading', '#audio-warnings') && !M.has('warnings.endsEarly.heading', '#audio-warnings')`,
+    setup: async (w, lang) => { await ready(w, lang, 'late-sound-10s.mp4'); await w.type('#trim-end', '0:04'); await w.press('Tab'); obsOf(w).afterTab = await activeDesc(w); await w.waitSettled(); await until(w, `M.has('warnings.noAudio.heading', '#audio-warnings')`, 'the no-audio note', 60000) },
+    asserts: [see('Tab from End time lands on "Set end here", where Tab puts it (S-34)', (o) => o.afterTab === '#trim-set-end')],
+    focus: ['#trim-end', CREATE],
+    fixtures: ['late-sound-10s.mp4'],
+  },
+  'S-100': {
+    name: 'A kept sliver: the job finishes silent',
+    ...OUTCOME,
+    state: `M.finished() && !M.has('warnings.endsEarly.heading', '#process-result')`,
+    setup: async (w, lang) => { await ready(w, lang, 'late-sound-10s.mp4'); await w.type('#trim-end', '0:04'); await w.press('Tab'); await w.waitSettled(); await create(w); await untilDone(w, 'finished') },
+    asserts: [
+      X('the record keeps 0:00.0 to 0:04.0 of the 10 s file', `M.text(${JSON.stringify(P8_CARD)}).includes('0:04.0')`),
+      see('no plan, so no heavy-limiting warning (a silent job)', async (o, w) => ({ outcome: (w.p8planned?.planned ?? []).length === 0 && !(await mx(w, `${WARN_TEXT}.includes(${HEAVY_TITLE})`)) ? 'pass' : 'fail', planned: (w.p8planned?.planned ?? []).length })),
+    ],
+    focus: [SAVE],
+    fixtures: ['late-sound-10s.mp4'],
+  },
+  'S-101': {
+    name: 'The control: 0.6 s of sound kept',
+    ...EN_1280,
+    state: `M.finished()`,
+    setup: async (w, lang) => { await ready(w, lang, 'late-sound-3.4s-10s.mp4'); await w.type('#trim-end', '0:04'); await w.press('Tab'); await w.waitSettled(); obsOf(w).noAudioBefore = await mx(w, `M.has('warnings.noAudio.heading', '#audio-warnings')`); await create(w); await untilDone(w, 'finished') },
+    asserts: [
+      see('no no-audio note before Create', (o) => o.noAudioBefore === false),
+      see('levelled: the job planned its sound', (o, w) => (w.p8planned?.planned ?? []).length > 0),
+    ],
+    focus: [SAVE],
+    fixtures: ['late-sound-3.4s-10s.mp4'],
+  },
+  'S-102': {
+    name: 'An untrimmed file with under 400 ms of sound (wish VH-185.1)',
+    ...EN_1280,
+    state: `M.finished() || M.res() === 'failure'`,
+    setup: async (w, lang) => { await ready(w, lang, 'late-sound-9.7s-10s.mp4'); const o = obsOf(w); o.verdictNotes = await mx(w, `M.text('#audio-warnings').replace(/\\s+/g, ' ').trim().slice(0, 300)`); await create(w); await untilDone(w, 'an outcome') },
+    asserts: [found('the verdict\'s notes, then the outcome (not judged against VH-185, whose scope it is not)', async (o, w) => ({ notes: o.verdictNotes, outcome: await mx(w, `M.res()`), text: await mx(w, `M.text('#process-result').replace(/\\s+/g, ' ').slice(0, 300)`), planned: (w.p8planned?.planned ?? []).length }))],
+    focus: [RESULT],
+    fixtures: ['late-sound-9.7s-10s.mp4'],
+  },
+  // VH-186: a fact said alone.
+  'S-103': {
+    name: '"Less than a second" alone',
+    state: `!!M.el('#source-report details[open]') && [...document.querySelectorAll('#source-report dd')].some((d) => d.textContent.trim() === M.msg('format.alone.lessThanASecond'))`,
+    setup: async (w, lang) => { await ready(w, lang, 'short-0.4s.mp4'); await w.click(PROPS); await sleep(300) },
+    asserts: [X('the trim is locked, as S-21 (too short to trim)', `M.el('#trim-start').disabled || M.has('trim.tooShort', '#step-trim')`)],
+    focus: [PROPS],
+    fixtures: ['short-0.4s.mp4'],
+  },
+  'S-104': {
+    name: '"Unknown" alone',
+    state: `!!M.el('#source-report details[open]') && [...document.querySelectorAll('#source-report dd')].some((d) => d.textContent.trim() === M.msg('format.alone.unknown'))`,
+    setup: async (w, lang) => { await ready(w, lang, 'noduration-10s.webm'); await w.click(PROPS); await sleep(300) },
+    focus: [PROPS],
+    fixtures: ['noduration-10s.webm'],
+  },
+  'S-105': {
+    name: 'The unchecked caption warning, completed',
+    state: `M.has('source.losses.uncheckedTitle', '#source-report') || M.has('source.losses.uncheckedTitle')`,
+    setup: async (w, lang) => ready(w, lang, 'lecture-30s.mkv'),
+    asserts: [X('its detail goes on with the caption passage (B3)', `(() => { const t = document.body.textContent.replace(/\\s+/g, ' '); const d = M.msg('source.losses.uncheckedDetail'), c = M.msg('source.losses.captionsConsequence'); return t.includes(d.trim()) && t.includes(c.trim()) && t.indexOf(c.trim()) > t.indexOf(d.trim()); })()`)],
+    focus: [FILE, CREATE],
+    fixtures: ['lecture-30s.mkv'],
+  },
+  // VH-187: the browser note.
+  'S-106': {
+    name: 'The browser note on a warn',
+    state: `M.el('#check-aac')?.dataset.state === 'warn' && [...document.querySelectorAll('#checks .check')].filter((r) => r.id !== 'check-aac').every((r) => r.dataset.state === 'pass') && !M.el('#browser-note').hidden && M.is('browserNote.notPassed', '#browser-note') && !M.el('#file-input').disabled`,
+    setup: async (w, lang) => { await applyFault(w, 'F17'); await fresh(w, lang) },
+    asserts: [X('System check says one warning, its aac row "Not supported — a video with audio cannot be made here"', `M.has('systemCheck.values.aacNotSupported', '#check-aac')`), X('the note is not a live region', `!M.el('#browser-note').closest('[aria-live],[role=status],[role=alert]')`)],
+    focus: [FILE, '#system-check summary'],
+    faults: ['F17'], fixtures: [],
+  },
+  'S-107': {
+    name: 'The browser note beside a check still pending',
+    state: `M.el('#check-worker')?.dataset.state === 'pending' && M.has('choose.starting', '#source-status') && !M.el('#browser-note').hidden && M.is('browserNote.notPassed', '#browser-note')`,
+    // Two loads, each read inside the worker ping's 5 s deadline: F1 with F2 (kept), then F1 with F17 (the record).
+    setup: async (w, lang) => {
+      const o = obsOf(w)
+      await fresh(w, lang); await w.page.send('Network.setCacheDisabled', { cacheDisabled: true })
+      await applyFault(w, 'F1'); await applyFault(w, 'F2'); await gotoNoWait(w)
+      o.withF2 = await mx(w, `({ worker: M.el('#check-worker')?.dataset.state, note: !M.el('#browser-note').hidden && M.is('browserNote.notPassed', '#browser-note'), starting: M.has('choose.starting', '#source-status') })`)
+      await releaseFault(w, 'F1'); await releaseFault(w, 'F2')
+      await applyFault(w, 'F1'); await applyFault(w, 'F17'); await gotoNoWait(w)
+    },
+    asserts: [see('with F2: still pending, the note shown above the starting line', (o) => o.withF2.worker === 'pending' && o.withF2.note && o.withF2.starting), found('a check settling after a file is chosen', () => ({ sourceOnly: 'Not in this pass (scenarios file)' }))],
+    focus: [RADIO_LANG],
+    faults: ['F1', 'F2', 'F17'], fixtures: [],
+  },
+  // VH-188: the outputs' names.
+  'S-108': {
+    name: "Step 5's names and details",
+    state: `M.proceed() && M.create()`,
+    setup: async (w, lang) => ready(w, lang, 'lecture-30s.mp4'),
+    asserts: [
+      X('B6\'s names and details', `['best', 'smaller'].every((id) => M.text('#preset-choice').includes(M.msg('preset.labels.' + id)) && M.text('#preset-choice').includes(M.msg('preset.details.' + id)))`),
+      X('no old name or "etc."', `!/Larger \\/ better|Smaller \\/ reduced|\\betc\\.|等|\\bdll\\./.test(M.text('#preset-choice'))`),
+      X('the legend "File size / quality"', `M.text('#preset-choice legend').trim() === M.msg('preset.legend')`),
+    ],
+    focus: ['#preset-choice input:checked'],
+    fixtures: ['lecture-30s.mp4'],
+  },
+  'S-109': {
+    name: 'The record names each output',
+    state: `M.previous() && !!M.verdict()`,
+    setup: async (w, lang) => {
+      const o = obsOf(w)
+      const record = () => mx(w, `M.text(${JSON.stringify(P8_CARD)} + ' > p:nth-of-type(2)') || M.text(${JSON.stringify(P8_CARD)})`)
+      await ready(w, lang, 'short-2s.mp4'); await w.click('#preset-choice input[value="smaller"]'); await w.waitSettled(); await create(w); await untilDone(w, 'smaller made')
+      o.smaller = await record()
+      await w.click('#preset-choice input[value="best"]'); await w.waitSettled()
+      await question(w); o.question = await mx(w, `M.text('#process-result')`)
+      await w.click('#process-result .button--danger'); await untilDone(w, 'best made')
+      o.best = await record()
+      await question(w); o.questionBest = await mx(w, `M.text('#process-result')`)
+      await w.click('#process-result .button--secondary'); await sleep(400); o.kept = await record()
+      await w.setFiles(F('silent-10s.mp4')); await w.waitSettled(); await until(w, 'M.verdict()', 'next verdict'); o.previous = await record()
+      o.words = await mx(w, `({ best: M.msg('preset.inRecord.best'), smaller: M.msg('preset.inRecord.smaller'), labels: [M.msg('preset.labels.best'), M.msg('preset.labels.smaller')] })`)
+    },
+    asserts: [
+      see('the smaller output in its short form, without the purpose', (o) => o.smaller.includes(o.words.smaller) && !o.words.labels.some((l) => o.smaller.includes(l))),
+      see('high quality in its short form, in the card, the question, after Keep it and under "Previous video"', (o) => [o.best, o.questionBest, o.kept, o.previous].every((t) => t.includes(o.words.best) && !o.words.labels.some((l) => t.includes(l)))),
+      see('the question over the smaller file says its short form', (o) => o.question.includes(o.words.smaller)),
+    ],
+    focus: [SAVE, FILE],
+    fixtures: ['short-2s.mp4', 'silent-10s.mp4'],
+  },
+  'S-110': {
+    name: 'The slides sentence',
+    state: `!!M.verdict() && M.checked('preset') === 'smaller' && M.has('preflight.slides', '#preflight-report')`,
+    setup: async (w, lang) => { await ready(w, lang, 'slides-60s.mp4'); await w.click('#preset-choice input[value="smaller"]'); await w.waitSettled(); await until(w, 'M.verdict()', 'the verdict') },
+    asserts: [X('the sentence word for word', `M.text('#preflight-report').includes(M.msg('preflight.slides'))`)],
+    focus: ['#preset-choice input:checked', CREATE],
+    fixtures: ['slides-60s.mp4'],
+  },
+  // VH-189: step 4's labels.
+  'S-111': {
+    name: "Step 4's labels at a wide view",
+    // The plan's recipe walks it in every cell (FULL); below the 25rem query the
+    // "?" moves beside the label, which S-112 asserts, so this record's
+    // placement assertion holds above it only.
+    state: `M.proceed() && M.el('#closing-type').value === 'fade'`,
+    setup: async (w, lang) => { await ready(w, lang); await fade(w) },
+    asserts: [
+      X('"Animation type" with Cut, Fade, Slide and "No closing graphics"', `['cut', 'fade', 'slide', 'none'].every((v) => [...M.el('#closing-type').options].some((o) => o.value === v && o.textContent.trim() === M.msg('closing.types.' + v)))`),
+      X('"Plays over" with its two options', `['existing', 'freeze'].every((v) => [...M.el('#closing-onset').options].some((o) => o.value === v && o.textContent.trim() === M.msg('closing.onsets.' + v)))`),
+      X('the "?" named "About what the graphics play over"', `M.el('#onset-help-button').getAttribute('aria-label') === M.msg('closing.helpLabel')`),
+      { what: 'each label its select\'s accessible name', fn: async (w) => { const names = {}; const { root } = await w.page.send('DOM.getDocument', { depth: 0 }); for (const id of ['closing-type', 'closing-onset']) { const { nodeId } = await w.page.send('DOM.querySelector', { nodeId: root.nodeId, selector: '#' + id }); const { nodes } = await w.page.send('Accessibility.getPartialAXTree', { nodeId, fetchRelatives: false }); names[id] = nodes[0]?.name?.value } const want = await mx(w, `({ type: M.text('label[for="closing-type"]').trim(), onset: M.msg('closing.onsetLabel') })`); return { outcome: names['closing-type'] === want.type && names['closing-onset'] === want.onset ? 'pass' : 'fail', names, want } } },
+      X('every option inside its select\'s room', `['closing-type', 'closing-onset'].every((id) => { const s = M.el('#' + id); const c = document.createElement('canvas').getContext('2d'); c.font = getComputedStyle(s).font; const room = s.clientWidth - parseFloat(getComputedStyle(s).paddingLeft) - parseFloat(getComputedStyle(s).paddingRight); return [...s.options].every((o) => c.measureText(o.textContent.trim()).width <= room + 1); })`),
+      { what: 'the "?" beside the select (above the 25rem query)', fn: async (w) => { const r = await w.evaluate(`(() => { const b = document.getElementById('onset-help-button').getBoundingClientRect(), s = document.getElementById('closing-onset').getBoundingClientRect(); return { narrow: matchMedia('(max-width: 25rem)').matches, beside: b.top < s.bottom && b.bottom > s.top && b.left >= s.right - 1 }; })()`); return r.narrow ? { outcome: 'not-applicable', why: 'below the 25rem query: S-112\'s' } : { outcome: r.beside ? 'pass' : 'fail', ...r } } },
+    ],
+    focus: ['#closing-type', '#closing-onset', '#onset-help-button'],
+    fixtures: ['lecture-60s.mp4'],
+  },
+  'S-112': {
+    name: 'Below about 400 px: the "?" beside "Plays over"',
+    views: ['w401', 'w400', 'w375', 'w320'], viewsWhy: 'scenarios file: either side of the 25rem query',
+    state: `M.proceed() && !M.vis('#onset-help') && ${focusIs('#onset-help-button')}`,
+    hold: `M.proceed()`,
+    setup: async (w, lang) => {
+      await ready(w, lang); await fade(w)
+      const o = obsOf(w)
+      await focusByKeyboard(w, '#onset-help-button'); await key(w, 'Enter'); o.open = await tipState(w, 'onset-help')
+      o.tipUnderSelect = await w.evaluate(`(() => { const t = document.getElementById('onset-help').getBoundingClientRect(), s = document.getElementById('closing-onset').getBoundingClientRect(); return t.top >= s.bottom - 1; })()`)
+      await key(w, 'Tab'); o.tab = await activeDesc(w); o.afterTab = await tipState(w, 'onset-help')
+      await focusByKeyboard(w, '#onset-help-button'); await key(w, 'Enter'); await key(w, 'Escape'); o.escape = { ...(await tipState(w, 'onset-help')), focus: await activeDesc(w) }
+    },
+    asserts: [
+      X('at 401 px beside the select; at 400 px and below beside the label', `(() => { const b = M.el('#onset-help-button').getBoundingClientRect(), s = M.el('#closing-onset').getBoundingClientRect(), l = M.el('label[for="closing-onset"]').getBoundingClientRect(); const narrow = matchMedia('(max-width: 25rem)').matches; return narrow ? b.top < l.bottom && b.bottom > l.top && b.bottom <= s.top + 1 : b.top < s.bottom && b.bottom > s.top; })()`),
+      X('the Tab order unchanged: the select, then the "?"', `(() => { const s = M.el('#closing-onset'), b = M.el('#onset-help-button'); return !!(s.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING); })()`),
+      X('every option inside its select\'s room', `['closing-type', 'closing-onset'].every((id) => { const s = M.el('#' + id); const c = document.createElement('canvas').getContext('2d'); c.font = getComputedStyle(s).font; const room = s.clientWidth - parseFloat(getComputedStyle(s).paddingLeft) - parseFloat(getComputedStyle(s).paddingRight); return [...s.options].every((o) => c.measureText(o.textContent.trim()).width <= room + 1); })`),
+      see('it opens under the select; Tab closes it; Escape returns focus to the "?"', (o) => o.open.open && o.tipUnderSelect && !o.afterTab.open && !o.escape.open && o.escape.focus === '#onset-help-button'),
+    ],
+    focus: ['#onset-help-button', '#closing-onset'],
+    fixtures: ['lecture-60s.mp4'],
+  },
+  'S-113': {
+    name: 'Step 4 at the 32 px font',
+    views: ['w1280', 'w640', 'w401', 'w320'], viewsWhy: 'scenarios file: at 1280, 640, 401 and 320 px under the 32 px font',
+    state: `M.proceed() && M.el('#closing-type').value === 'fade'`,
+    setup: async (w, lang) => { await ready(w, lang); await fade(w) },
+    asserts: [
+      X('the 25rem query follows the text size: the "?" beside the select only above 800 px', `(() => { const b = M.el('#onset-help-button').getBoundingClientRect(), s = M.el('#closing-onset').getBoundingClientRect(); const beside = b.top < s.bottom && b.bottom > s.top; return beside === !matchMedia('(max-width: 25rem)').matches; })()`),
+      found('the room in each select, and options clipped (wish VH-189.1, beyond 1.4.4 and 1.4.10)', (o, w) => w.evaluate(`['closing-type', 'closing-onset'].map((id) => { const s = document.getElementById(id); const c = document.createElement('canvas').getContext('2d'); c.font = getComputedStyle(s).font; const room = Math.round(s.clientWidth - parseFloat(getComputedStyle(s).paddingLeft) - parseFloat(getComputedStyle(s).paddingRight)); return { id, room, clipped: [...s.options].filter((o) => c.measureText(o.textContent.trim()).width > room + 1).map((o) => o.value) }; })`)),
+    ],
+    focus: ['#closing-onset', '#onset-help-button'],
+    fixtures: ['lecture-60s.mp4'],
+  },
+  // VH-190: Create's label.
+  'S-114': {
+    name: 'Create again, unsaved',
+    state: `M.finished() && !M.saveBtn().disabled && ${CREATE_READS('create.again', true)}`,
+    setup: async (w, lang) => finished(w, lang),
+    asserts: [X('its accessible name is its label: no aria-label', `!M.btn(2).hasAttribute('aria-label') && !M.btn(2).hasAttribute('aria-labelledby')`), X('not clipped', `M.btn(2).scrollWidth <= M.btn(2).clientWidth + 1 && M.btn(2).getBoundingClientRect().right <= document.documentElement.clientWidth + 0.5`)],
+    focus: [CREATE, SAVE],
+    fixtures: ['lecture-30s.mp4'],
+  },
+  'S-115': {
+    name: 'Create again, saved',
+    ...OUTCOME,
+    state: `M.running() && M.res() === 'none' && ${focusIs(CANCEL)}`,
+    hold: `M.running()`,
+    setup: async (w, lang) => {
+      const o = obsOf(w)
+      await finished(w, lang, 'lecture-360s.mp4'); await saveWith(w); await w.waitSaved()
+      o.before = await mx(w, `({ again: ${CREATE_READS('create.again', true)} })`)
+      await w.click(w.createButton()); await sleep(150); o.asked = await mx(w, `M.res() === 'question'`)
+      await w.waitRunning(); await encoding(w)
+    },
+    asserts: [see('before: "Create the video again", secondary', (o) => o.before.again), see('nothing unsaved, so no question', (o) => o.asked === false)],
+    focus: [CANCEL],
+    fixtures: ['lecture-360s.mp4'],
+  },
+  'S-116': {
+    name: 'Create beside a Previous video',
+    state: `M.previous() && M.saveBtn().disabled && ${CREATE_READS('create.create', false)}`,
+    setup: async (w, lang) => {
+      const o = obsOf(w)
+      await finished(w, lang); await w.setFiles(F('lecture-60s.mp4')); await w.waitSettled(); await until(w, 'M.verdict()', 'next verdict')
+      if (await mx(w, 'M.ack()')) { await w.click(w.acknowledgeButton()); await sleep(300) }
+      o.unsaved = await mx(w, `M.previous() && ${CREATE_READS('create.create', true)}`)
+      await saveWith(w); await w.waitSaved()
+    },
+    asserts: [see('unsaved beside it: "Create the video", secondary', (o) => o.unsaved === true)],
+    focus: [CREATE, FILE],
+    fixtures: ['lecture-30s.mp4', 'lecture-60s.mp4'],
+  },
+  'S-117': {
+    name: "Create's label through a page-language change",
+    state: `M.finished() && M.is('create.again', '#process-actions > button:nth-child(2)') && ${focusIs(CREATE)}`,
+    hold: `M.finished() && M.is('create.again', '#process-actions > button:nth-child(2)')`,
+    setup: async (w, lang) => {
+      const o = obsOf(w)
+      o.lang = lang
+      // a: set by setup, focus on Create unmoved.
+      await finished(w, anotherLang(lang))
+      await focusByKeyboard(w, CREATE); await setPageLanguage(w, lang)
+      o.a = await mx(w, `({ again: M.is('create.again', '#process-actions > button:nth-child(2)'), focus: document.activeElement === M.btn(2), lang: document.documentElement.lang })`)
+      // b: by keys, from the language before this one: Shift+Tab to Page language, ArrowRight, Tab back to Create.
+      await setPageLanguage(w, before(lang)); await focusByKeyboard(w, CREATE)
+      let n = 0; while (n++ < 160 && !(await w.evaluate(`!!document.activeElement && document.activeElement.matches('#language-switcher input')`))) await key(w, 'Tab', { shift: true })
+      o.bPresses = n; await key(w, 'ArrowRight'); await sleep(400)
+      o.b = { onSwitcher: await w.evaluate(`!!document.activeElement.closest('#language-switcher')`), lang: await w.evaluate('document.documentElement.lang') }
+      n = 0; while (n++ < 160 && !(await w.evaluate(`document.activeElement === document.querySelector('#process-actions > button:nth-child(2)')`))) await key(w, 'Tab')
+      o.bBack = n
+    },
+    asserts: [
+      see('a: set by setup, relabelled in place, focus kept on Create', (o) => o.a.again && o.a.focus),
+      see('b: by keys, focus on Page language\'s radio after ArrowRight, the page in its language; Create relabelled when Tab returns (the state)', (o) => o.b.onSwitcher && o.b.lang === o.lang),
+    ],
+    focus: [CREATE],
+    fixtures: ['lecture-30s.mp4'],
+  },
+  'S-118': {
+    name: 'Made again, then cancelled or failed',
+    ...OUTCOME,
+    state: `M.res() === 'failure' && M.has('failure.outOfSpace.what', '#process-result') && ${CREATE_READS('create.create', false)}`,
+    setup: async (w, lang) => {
+      const o = obsOf(w)
+      // F12 counts only the second job's writes: the first finishes, the made-again one fails part-way.
+      await applyFault(w, 'F12', { job: 3 })
+      await finished(w, lang, 'lecture-30s.mp4'); await saveWith(w); await w.waitSaved()
+      await w.click(w.createButton()); await w.waitRunning(); await encoding(w); await w.click(CANCEL); await until(w, 'M.idle() && M.create()', 'cancelled', 60000); await sleep(300)
+      o.cancelled = await mx(w, `({ create: ${CREATE_READS('create.create', false)}, none: M.res() === 'none', focus: document.activeElement === M.btn(2) })`)
+      await w.click(w.createButton()); await w.waitFailed()
+    },
+    asserts: [see('after the cancel: "Create the video", primary, no result; focus on Create', (o) => o.cancelled.create && o.cancelled.none && o.cancelled.focus)],
+    focus: [RESULT, CREATE],
+    faults: ['F12'], fixtures: ['lecture-30s.mp4'],
+  },
+  // VH-191: Video language at the top of step 3.
+  'S-119': {
+    name: 'Video language at the top of step 3, the card off',
+    state: `M.proceed() && M.checked('video-kind') === 'staff' && !M.el('#title-card-on').checked && M.checked('video-language') === document.documentElement.lang`,
+    setup: async (w, lang) => ready(w, lang),
+    asserts: [
+      X('the legend and its two helper lines in the page\'s words', `M.text('#video-language legend').trim() === M.msg('videoLanguage.label') && M.text('#video-language-helper').replace(/\\s+/g, ' ').trim() === M.msg('videoLanguage.helper') + ' ' + M.msg('videoLanguage.typed')`),
+      X('three segments, each in its own language', `[...document.querySelectorAll('#video-language .segment')].length === 3 && [...document.querySelectorAll('#video-language input')].every((i) => (i.closest('[lang]') || {}).lang === i.value)`),
+      { what: 'the group named by its legend, described by its helper alone', fn: async (w) => { const { root } = await w.page.send('DOM.getDocument', { depth: 0 }); const { nodeId } = await w.page.send('DOM.querySelector', { nodeId: root.nodeId, selector: '#video-language' }); const { nodes } = await w.page.send('Accessibility.getPartialAXTree', { nodeId, fetchRelatives: false }); const want = await mx(w, `({ name: M.msg('videoLanguage.label'), desc: M.text('#video-language-helper').replace(/\\s+/g, ' ').trim() })`); const n = nodes[0]; return { outcome: n?.name?.value === want.name && (n?.description?.value ?? '').replace(/\s+/g, ' ').trim() === want.desc ? 'pass' : 'fail', name: n?.name?.value, description: n?.description?.value } } },
+    ],
+    focus: [RADIO_VLANG, '#title-card-on'],
+    fixtures: ['lecture-60s.mp4'],
+  },
+  'S-120': {
+    name: 'Video language, the card on',
+    state: `M.el('#title-card-on').checked && M.vis('#title-card-fields') && ${focusIs('#title-card-on')}`,
+    hold: `M.el('#title-card-on').checked && M.vis('#title-card-fields')`,
+    setup: async (w, lang) => { await ready(w, lang); await focusByKeyboard(w, '#title-card-on'); await key(w, 'Space'); await sleep(300) },
+    asserts: [X('Video language above the fields, outside the card choice', `!M.el('#title-card-choice').contains(M.el('#video-language')) && !!(M.el('#video-language').compareDocumentPosition(M.el('#title-card-fields')) & Node.DOCUMENT_POSITION_FOLLOWING)`), X('the date filled in the video language', `M.el('#title-card-date').value.includes(new Intl.DateTimeFormat(M.checked('video-language'), { month: 'long' }).format(new Date())) || /\\d/.test(M.el('#title-card-date').value)`)],
+    focus: ['#title-card-on', RADIO_VLANG],
+    fixtures: ['lecture-60s.mp4'],
+  },
+  'S-121': {
+    name: 'Video language on a submission',
+    state: `M.checked('video-kind') === 'submission' && M.vis('#submission-card-fields') && M.el('#title-card-on').checked && M.el('#title-card-on').disabled && M.vis('#video-language')`,
+    setup: async (w, lang) => SCENARIOS['S-40'].setup(w, lang),
+    asserts: [X('Video language above the ticked, locked box and its four fields', `!!(M.el('#video-language').compareDocumentPosition(M.el('#title-card-on')) & Node.DOCUMENT_POSITION_FOLLOWING) && !M.el('#title-card-choice').contains(M.el('#video-language'))`)],
+    focus: [RADIO_VLANG, ...M_SUB_FOCUS().slice(0, 1)],
+    fixtures: ['lecture-60s.mp4'],
+  },
+  'S-122': {
+    name: 'Video language picked by keys',
+    state: `M.chosen() && !!M.verdict() && M.checked('video-language') === window.__p8pick && window.__audit.boot.langAtDCL === document.documentElement.lang`,
+    setup: async (w, lang) => {
+      const o = obsOf(w); o.lang = lang
+      await ready(w, lang)
+      await focusByKeyboard(w, RADIO_VLANG); await key(w, 'ArrowRight'); await sleep(300)
+      o.pick = await mx(w, `M.checked('video-language')`); o.afterPick = await w.evaluate(`!!document.activeElement.closest('#video-language')`)
+      await setPageLanguage(w, anotherLang(lang)); o.keptBySetup = await mx(w, `M.checked('video-language')`); o.focusAfterSetup = await activeDesc(w)
+      await focusByKeyboard(w, RADIO_LANG)
+      for (let i = 0; i < 3 && (await w.evaluate('document.documentElement.lang')) !== lang; i++) { await key(w, 'ArrowRight'); await sleep(400) }
+      o.byKeys = { onSwitcher: await w.evaluate(`!!document.activeElement.closest('#language-switcher')`), kept: await mx(w, `M.checked('video-language')`) }
+      await w.goto(); await w.setFiles(F('lecture-60s.mp4')); await w.waitSettled(); await until(w, 'M.verdict()', 'the verdict after reload')
+      await w.evaluate(`window.__p8pick = ${JSON.stringify(o.pick)}`)
+    },
+    asserts: [
+      see('an arrow picks the next language; focus on its radio', (o) => o.pick !== o.lang && o.afterPick),
+      see('kept through a page-language change by setup and by keys (focus on Page language)', (o) => o.keptBySetup === o.pick && o.byKeys.kept === o.pick && o.byKeys.onSwitcher),
+    ],
+    focus: [RADIO_VLANG],
+    fixtures: ['lecture-60s.mp4'],
+  },
+  'S-123': {
+    name: 'Video language locked while running',
+    ...OUTCOME,
+    state: `M.running() && M.el('#video-language').disabled && M.is('create.lockedMaking', '#step-title .lock-note') && !M.el('#video-kind').disabled && M.checked('video-language') === document.documentElement.lang`,
+    hold: `M.running() && M.el('#video-language').disabled`,
+    setup: async (w, lang) => {
+      const o = obsOf(w)
+      await running(w, anotherLang(lang)); o.jobLine = await mx(w, `M.text('#process-job')`)
+      o.jobLanguageName = await w.evaluate(`(document.querySelector('#video-language input[value="${anotherLang(lang)}"]').closest('.segment') || {}).textContent.trim()`)
+      await setPageLanguage(w, lang)
+    },
+    asserts: [
+      X('the next-video line names the video type only', `!M.vis('#video-next') || M.is('videoKind.nextVideo', '#video-next')`),
+      see('the job keeps the language it started with', async (o, w) => ({ outcome: (await mx(w, `M.text('#process-job')`)).includes(o.jobLanguageName) ? 'pass' : 'cannot-determine', jobLine: await mx(w, `M.text('#process-job')`), started: o.jobLanguageName })),
+    ],
+    focus: [CANCEL, RADIO_KIND],
+    fixtures: ['still-3600s.mp4'],
+  },
+  'S-124': {
+    name: 'Video language locked while saving, and freed',
+    ...OUTCOME,
+    state: `M.res() === 'failure' && !M.el('#video-language').disabled && M.idle()`,
+    setup: async (w, lang) => {
+      const o = obsOf(w)
+      await applyFault(w, 'F4b', { ms: 3000 }); await applyFault(w, 'F12', { job: 3 })
+      await finished(w, lang, 'lecture-30s.mp4'); await saveWith(w); await until(w, 'M.saving()', 'saving', 10000)
+      o.saving = await mx(w, `({ locked: M.el('#video-language').disabled, note: M.is('create.lockedSaving', '#step-title .lock-note') })`)
+      await w.click(STOP_SAVE_SEL); await until(w, 'M.has("status.saveStopped", "#save-status")', 'save stopped', 60000)
+      o.afterSave = await mx(w, `!M.el('#video-language').disabled`)
+      await question(w); await w.click('#process-result .button--danger'); await w.waitRunning(); await encoding(w); await w.click(CANCEL); await until(w, 'M.idle() && M.create()', 'cancelled', 60000); await sleep(300)
+      o.afterCancel = await mx(w, `!M.el('#video-language').disabled`)
+      await create(w); await w.waitFailed()
+    },
+    asserts: [
+      see('saving: locked, "Locked while your video is being saved."', (o) => o.saving.locked && o.saving.note),
+      see('free after the save stops, after a cancel and after a failure', (o, w) => o.afterSave && o.afterCancel),
+    ],
+    focus: [RESULT],
+    faults: ['F4b', 'F12'], fixtures: ['lecture-30s.mp4'],
+  },
+  'S-125': {
+    name: "Video language and the card's date",
+    state: `M.el('#title-card-on').checked && M.vis('#title-card-fields') && M.el('#title-card-date').value.length > 0`,
+    setup: async (w, lang) => {
+      const o = obsOf(w)
+      await ready(w, anotherLang(lang)); await w.click('#title-card-on'); await sleep(300)
+      o.date0 = await mx(w, `M.el('#title-card-date').value`)
+      // Nothing picked: a page-language change fills the untouched date again in the new language.
+      await setPageLanguage(w, lang); o.date1 = await mx(w, `M.el('#title-card-date').value`)
+      // A pick: the date follows the pick (ms-MY, or English on the Malay page).
+      const pick = lang === 'ms-MY' ? 'en-GB' : 'ms-MY'
+      await w.click(`#video-language input[value="${pick}"]`); await sleep(400)
+      o.pick = pick; o.date2 = await mx(w, `M.el('#title-card-date').value`)
+      o.month = { [lang]: await w.evaluate(`new Intl.DateTimeFormat(${JSON.stringify(lang)}, { month: 'long' }).format(new Date())`), [pick]: await w.evaluate(`new Intl.DateTimeFormat(${JSON.stringify(pick)}, { month: 'long' }).format(new Date())`) }
+    },
+    asserts: [
+      see('nothing picked: the untouched date follows the page language', (o) => o.date1 !== o.date0 || o.date1.includes(o.month[Object.keys(o.month)[0]])),
+      see('picked: the date in the picked language', (o) => o.date2.includes(o.month[o.pick]) || (o.pick === 'en-GB' && /\d/.test(o.date2) && o.date2 !== o.date1)),
+    ],
+    focus: [RADIO_VLANG, '#title-card-date'],
+    fixtures: ['lecture-60s.mp4'],
+  },
+  // VH-192: the finished video's player.
+  'S-126': {
+    name: "The finished card's player",
+    state: `M.finished() && document.querySelectorAll('video.result-player').length === 1 && !!document.querySelector(${JSON.stringify(P8_PLAYER)})`,
+    setup: async (w, lang) => finished(w, lang, 'short-2s.mp4'),
+    asserts: [
+      X('the new video, not the original: 6.04 s against step 2\'s 2 s on short-2s', `(async () => { const v = document.querySelector(${JSON.stringify(P8_PLAYER)}); for (let i = 0; i < 100 && v.readyState < 1 && !v.error; i++) await new Promise((r) => setTimeout(r, 100)); return v.readyState >= 1 && Math.abs(v.duration - M.el('#trim-preview').duration) > 1; })()`),
+      X('paused, and the card holds focus if it was handed on', `document.querySelector(${JSON.stringify(P8_PLAYER)}).paused`),
+    ],
+    focus: [SAVE, CREATE],
+    fixtures: ['short-2s.mp4'],
+  },
+  'S-127': {
+    name: "The player's controls by keys",
+    state: `M.finished() && !!document.querySelector(${JSON.stringify(P8_PLAYER)})`,
+    setup: async (w, lang) => finished(w, lang, 'short-2s.mp4'),
+    p8: ['playerKeys'],
+    focus: [SAVE],
+    fixtures: ['short-2s.mp4'],
+  },
+  'S-128': {
+    name: 'Played, then a language change, the question and Keep it',
+    state: `M.finished() && ${SAME_PLAYER} && document.activeElement === document.querySelector(${JSON.stringify(P8_CARD)})`,
+    hold: `M.finished() && ${SAME_PLAYER}`,
+    setup: async (w, lang) => {
+      const o = obsOf(w)
+      await finishedWithPlayer(w, anotherLang(lang))
+      o.name0 = await mx(w, `M.text(${JSON.stringify(P8_CARD)} + ' .notification-title')`)
+      o.played = await w.evaluate(`(async () => { const v = window.__p0; v.muted = true; const t0 = v.currentTime; await v.play(); await new Promise((r) => setTimeout(r, 800)); return v.paused ? -1 : Math.round((v.currentTime - t0) * 100) / 100 })()`)
+      await setPageLanguage(w, lang)
+      o.renamed = await mx(w, `({ same: ${SAME_PLAYER}, playing: !window.__p0.paused, name: M.text(${JSON.stringify(P8_CARD)} + ' .notification-title') })`)
+      await question(w); o.asked = await w.evaluate(`({ players: document.querySelectorAll('video.result-player').length, paused: window.__p0.paused })`)
+      await w.click('#process-result .button--secondary'); await sleep(400)
+      o.kept = { same: await mx(w, SAME_PLAYER), src: await playerSrc(w) }
+    },
+    asserts: [
+      see('it plays: currentTime advancing about 0.76 s in 0.8 s', (o) => o.played > 0.5),
+      see('renamed in the new language, the same element, playing on', (o) => o.renamed.same && o.renamed.playing && o.renamed.name !== o.name0),
+      see('the question takes it off the page, paused', (o) => o.asked.players === 0 && o.asked.paused),
+      see('Keep it puts back the same element and URL', (o) => o.kept.same && o.kept.src === o.src),
+    ],
+    focus: [SAVE],
+    fixtures: ['short-2s.mp4'],
+  },
+  'S-129': {
+    name: 'The player under a Previous video',
+    state: `M.previous() && !!M.verdict() && ${SAME_PLAYER} && ${CREATE_READS('create.create', true)}`,
+    setup: async (w, lang) => { await finishedWithPlayer(w, lang); await w.setFiles(F('silent-10s.mp4')); await w.waitSettled(); await until(w, 'M.verdict()', 'next verdict') },
+    asserts: [see('the same URL', async (o, w) => (await playerSrc(w)) === o.src)],
+    focus: [FILE, SAVE],
+    fixtures: ['short-2s.mp4', 'silent-10s.mp4'],
+  },
+  'S-130': {
+    name: 'The player through a download hand-off',
+    views: ['w375'], viewsWhy: 'the plan\'s recipe: the phone, three languages (sizing-2026-10-25.mjs)',
+    state: `M.res() === 'result' && M.has('save.download', '#save-status') && M.lifetime('result.lifetimeDelivered') && ${SAME_PLAYER}`,
+    // The phone view has no save dialog, so the page hands off to a download; never with F15b.
+    setup: async (w, lang) => { await applyFault(w, 'F4d'); await finishedWithPlayer(w, lang); await saveWith(w); await w.waitSaved(); await sleep(500) },
+    asserts: [see('the same URL, which still fetches', async (o, w) => (await playerSrc(w)) === o.src && (await fetches(w, o.src)))],
+    focus: [SAVE, CREATE],
+    faults: ['F4d'], fixtures: ['short-2s.mp4'],
+  },
+  'S-131': {
+    name: 'Saved: the player leaves',
+    ...OUTCOME,
+    state: `${SAVED} && document.querySelectorAll('video.result-player').length === 0 && !M.lifetime('result.lifetime')`,
+    setup: async (w, lang) => {
+      const o = obsOf(w)
+      await applyFault(w, 'F4b', { ms: 3000 }); await finishedWithPlayer(w, lang, 'lecture-30s.mp4')
+      await w.evaluate(`(async () => { const v = window.__p0; v.muted = true; await v.play() })()`)
+      await saveWith(w); await until(w, 'M.saving()', 'saving', 10000)
+      await focusByKeyboard(w, P8_PLAYER); o.during = await w.evaluate(`({ playing: !window.__p0.paused, focused: document.activeElement === window.__p0 })`)
+      await until(w, `M.has('status.saved', '#save-status')`, 'saved', 300000); await sleep(400)
+      o.after = await w.evaluate(`({ connected: window.__p0.isConnected, src: window.__p0.getAttribute('src'), paused: window.__p0.paused, focusCard: document.activeElement === document.querySelector(${JSON.stringify(P8_CARD)}) })`)
+      o.fetchesAfter = await fetches(w, o.src)
+    },
+    asserts: [
+      see('it plays while the save streams, with focus in it', (o) => o.during.playing && o.during.focused),
+      see('saved: paused, its source dropped, its URL revoked, out of the card; focus on the card', (o) => !o.after.connected && !o.after.src && o.after.paused && !o.fetchesAfter && o.after.focusCard),
+      X('Save reads "Saved", disabled', `M.saveBtn().textContent.trim() === M.msg('create.saved') && M.saveBtn().disabled`),
+    ],
+    focus: [RESULT],
+    faults: ['F4b'], fixtures: ['lecture-30s.mp4'],
+  },
+  'S-132': {
+    name: 'A failed playback',
+    ...OUTCOME,
+    state: `M.finished() && !M.saveBtn().disabled && !!document.querySelector(${JSON.stringify(P8_PLAYER)})?.error`,
+    // F15a in place on one page (kept), then F15b for real on a second load (the record).
+    setup: async (w, lang) => {
+      const o = obsOf(w)
+      await finishedWithPlayer(w, lang)
+      o.before = await mx(w, `M.text('#process-result')`); await applyFault(w, 'F15a'); await sleep(600); o.afterF15a = await mx(w, `M.text('#process-result')`)
+      o.f15aSaveEnabled = await mx(w, '!M.saveBtn().disabled')
+      await applyFault(w, 'F15b'); await finished(w, lang, 'short-2s.mp4')
+      o.error = await w.evaluate(`(async () => { const v = document.querySelector(${JSON.stringify(P8_PLAYER)}); for (let i = 0; i < 80 && !v.error; i++) await new Promise((r) => setTimeout(r, 100)); return v.error ? v.error.code : null })()`)
+    },
+    asserts: [
+      see('F15a: nothing listens; the card, record, warnings and Save unchanged', (o) => o.before === o.afterF15a && o.f15aSaveEnabled),
+      see('F15b: the player\'s MediaError recorded', (o) => ({ outcome: o.error ? 'pass' : 'fail', mediaError: o.error })),
+    ],
+    focus: [SAVE],
+    faults: ['F15a', 'F15b'], fixtures: ['short-2s.mp4'],
+  },
+  'S-133': {
+    name: 'A cancelled or failed save keeps the player',
+    ...OUTCOME,
+    state: `M.res() === 'result' && M.kindIn('#save-error') === 'error' && !M.saveBtn().disabled && ${SAME_PLAYER}`,
+    // F4a, F4b stopped and F4c on one load, each kept; then the revised F4e on its own load (the record).
+    setup: async (w, lang) => {
+      const o = obsOf(w)
+      const still = async () => ({ same: await mx(w, SAME_PLAYER), src: (await playerSrc(w)) === o.src, loaded: await w.evaluate(`(document.querySelector(${JSON.stringify(P8_PLAYER)}) || {}).readyState >= 1`) })
+      await applyFault(w, 'F4a'); await finishedWithPlayer(w, lang)
+      await saveWith(w); await w.waitSaved(); o.f4a = await still()
+      await releaseAll(w); await applyFault(w, 'F4b', { ms: 3000 }); await finishedWithPlayer(w, lang, 'lecture-30s.mp4')
+      await saveWith(w); await until(w, 'M.saving()', 'saving', 10000); await w.click(STOP_SAVE_SEL); await until(w, 'M.has("status.saveStopped", "#save-status")', 'stopped', 60000); o.f4b = await still()
+      await releaseAll(w); await applyFault(w, 'F4c'); await finishedWithPlayer(w, lang)
+      await saveWith(w); await w.waitSaved(); o.f4c = await still()
+      await releaseAll(w); await applyFault(w, 'F4e'); await finishedWithPlayer(w, lang)
+      await saveWith(w); await until(w, 'M.kindIn("#save-error") === "error"', 'save failed', 30000); await sleep(300)
+    },
+    asserts: [
+      see('F4a (cancelled): the same player and URL, loaded', (o) => o.f4a.same && o.f4a.src && o.f4a.loaded),
+      see('F4b (stopped): the same player and URL, loaded', (o) => o.f4b.same && o.f4b.src && o.f4b.loaded),
+      see('F4c (refused): the same player and URL, loaded', (o) => o.f4c.same && o.f4c.src && o.f4c.loaded),
+      see('F4e revised (failed): the same player and URL', async (o, w) => (await playerSrc(w)) === o.src),
+    ],
+    focus: [SAVE],
+    faults: ['F4a', 'F4b', 'F4c', 'F4e'], fixtures: ['short-2s.mp4', 'lecture-30s.mp4'],
+  },
+  'S-134': {
+    name: 'A back-forward-cache restore',
+    ...EN_1280,
+    state: `(window.__f19 && window.__f19.shows.some((s) => s.persisted)) ? M.finished() && !!document.querySelector(${JSON.stringify(P8_PLAYER)}) : !M.chosen()`,
+    setup: async (w, lang) => { await applyFault(w, 'F19'); await finishedWithPlayer(w, lang); await FAULTS.F19.leave(w) },
+    asserts: [
+      see('restored from the cache, or Chrome\'s reasons recorded ("cannot determine" when it loads afresh)', (o, w) => (w.f19?.restored ? { outcome: 'pass', restored: true } : { outcome: 'cannot-determine', why: 'Chrome loaded the page afresh: ' + (w.f19?.notUsed?.reasons ?? ['no reason given']).join('; ') })),
+      see('restored: the same player, its URL still fetching, and it plays', async (o, w) => {
+        if (!w.f19?.restored) return { outcome: 'not-applicable', why: 'not restored' }
+        const played = await w.evaluate(`(async () => { const v = document.querySelector(${JSON.stringify(P8_PLAYER)}); v.muted = true; try { await v.play() } catch (e) { return -1 } await new Promise((r) => setTimeout(r, 600)); const t = v.currentTime; v.pause(); v.currentTime = 0; return t })()`)
+        return { outcome: (await playerSrc(w)) === o.src && (await fetches(w, o.src)) && played > 0 ? 'pass' : 'fail', played }
+      }),
+    ],
+    focus: [SAVE],
+    faults: ['F19'], fixtures: ['short-2s.mp4'],
+  },
+  // VH-193: the heavy-limiting warning.
+  'S-135': {
+    name: 'The heavy-limiting warning',
+    state: `M.finished() && ${WARN_TEXT}.includes(${HEAVY_TITLE}) && !M.saveBtn().disabled`,
+    setup: async (w, lang) => finished(w, lang, 'clicks-20s.mp4'),
+    asserts: [see('the bite read from the worker\'s "chain planned" line is over 3 LU', (o, w) => { const p = (w.p8planned?.planned ?? []).at(-1); return { outcome: p && p.limiterBiteLu > 3 ? 'pass' : 'fail', bite: p?.limiterBiteLu ?? null } })],
+    focus: [SAVE],
+    fixtures: ['clicks-20s.mp4'],
+  },
+  'S-136': {
+    name: 'Both production warnings',
+    ...OUTCOME,
+    state: `M.finished() && ${WARN_TEXT}.includes(${HEAVY_TITLE}) && ${WARN_TEXT}.includes(${META_TITLE})`,
+    setup: async (w, lang) => { await applyFault(w, 'F16'); await finished(w, lang, 'clicks-20s.mp4') },
+    asserts: [X('heavy limiting first, the metadata second, beside the card, not inside it', `${WARN_TEXT}.indexOf(${HEAVY_TITLE}) < ${WARN_TEXT}.indexOf(${META_TITLE}) && !M.text(${JSON.stringify(P8_CARD)}).includes(${META_TITLE})`)],
+    focus: [SAVE],
+    faults: ['F16'], fixtures: ['clicks-20s.mp4'],
+  },
+  'S-137': {
+    name: 'The warning unchanged after a save',
+    state: `${SAVED} && ${WARN_TEXT}.includes(${HEAVY_TITLE})`,
+    setup: async (w, lang) => {
+      const o = obsOf(w)
+      await finished(w, anotherLang(lang), 'clicks-20s.mp4'); o.before = await mx(w, WARN_TEXT)
+      await saveWith(w); await w.waitSaved(); o.afterSave = await mx(w, WARN_TEXT)
+      await setPageLanguage(w, lang)
+    },
+    asserts: [see('word for word beside "Saved."', (o) => o.before === o.afterSave), X('then in the new language', `${WARN_TEXT}.includes(M.msg('warnings.heavyLimiting.detail'))`)],
+    focus: [RESULT],
+    fixtures: ['clicks-20s.mp4'],
+  },
+  'S-138': {
+    name: 'Both warnings on a retained result',
+    ...OUTCOME,
+    state: `M.previous() && ${WARN_TEXT}.includes(${HEAVY_TITLE}) && ${WARN_TEXT}.includes(${META_TITLE}) && ${WARN_TEXT}.indexOf(${HEAVY_TITLE}) < ${WARN_TEXT}.indexOf(${META_TITLE})`,
+    setup: async (w, lang) => {
+      const o = obsOf(w)
+      const both = () => mx(w, `${WARN_TEXT}.includes(${HEAVY_TITLE}) && ${WARN_TEXT}.includes(${META_TITLE}) && ${WARN_TEXT}.indexOf(${HEAVY_TITLE}) < ${WARN_TEXT}.indexOf(${META_TITLE})`)
+      await applyFault(w, 'F16'); await applyFault(w, 'F4d'); await finished(w, anotherLang(lang), 'clicks-20s.mp4')
+      await saveWith(w); await w.waitSaved(); o.download = await both()
+      await question(w); await w.click('#process-result .button--secondary'); await sleep(400); o.keep = await both()
+      await w.setFiles(F('lecture-60s.mp4')); await w.waitSettled(); await until(w, 'M.verdict()', 'next verdict'); o.previous = await both()
+      await setPageLanguage(w, lang)
+    },
+    asserts: [see('both, heavy first, through the download, Keep it and "Previous video"', (o) => o.download && o.keep && o.previous)],
+    focus: [SAVE, FILE],
+    faults: ['F16', 'F4d'], fixtures: ['clicks-20s.mp4', 'lecture-60s.mp4'],
+  },
+  'S-139': {
+    name: 'A level file does not warn',
+    ...EN_1280,
+    state: `M.finished() && !${WARN_TEXT}.includes(${HEAVY_TITLE})`,
+    setup: async (w, lang) => finished(w, lang, 'lecture-30s.mp4'),
+    asserts: [see('the bite logged under 3 LU (0.00 on lecture-30s)', (o, w) => { const p = (w.p8planned?.planned ?? []).at(-1); return { outcome: p && p.limiterBiteLu !== null && p.limiterBiteLu < 3 ? 'pass' : 'fail', bite: p?.limiterBiteLu ?? null } })],
+    focus: [SAVE],
+    fixtures: ['lecture-30s.mp4'],
+  },
+  'S-140': {
+    name: 'A QuickTime Animation file with no audio (wish VH-193.3), the closing asset',
+    ...EN_1280,
+    state: `M.finished() || M.res() === 'failure' || M.running()`,
+    // Read from samples/ (never written): walked with a 15-minute limit, its outcome recorded either way.
+    setup: async (w, lang) => { await ready(w, lang, SAMPLE_QTRLE, { timeout: 300000 }); obsOf(w).t0 = Date.now(); await create(w); await untilDone(w, 'an outcome within 15 minutes', 900000).catch(() => { obsOf(w).timedOut = true }) },
+    asserts: [found('the outcome: a finished video, a failure and its code, or still running at the limit', async (o, w) => ({ seconds: Math.round((Date.now() - o.t0) / 1000), timedOut: !!o.timedOut, res: await mx(w, 'M.res()'), stage: await mx(w, `M.text('#process-progress-text')`), text: await mx(w, `M.text('#process-result').replace(/\\s+/g, ' ').slice(0, 300)`) }))],
+    focus: [RESULT],
+    fixtures: [SAMPLE_QTRLE],
+  },
+  'S-140n': {
+    name: "A QuickTime Animation file with no audio, N13 (the closing asset's made twin)",
+    ...EN_1280,
+    state: `M.finished() || M.res() === 'failure' || M.running()`,
+    setup: async (w, lang) => { await ready(w, lang, 'qtrle-5s.mov', { timeout: 300000 }); obsOf(w).t0 = Date.now(); await create(w); await untilDone(w, 'an outcome within 15 minutes', 900000).catch(() => { obsOf(w).timedOut = true }) },
+    asserts: [found('the outcome: a finished video, a failure and its code, or still running at the limit', async (o, w) => ({ seconds: Math.round((Date.now() - o.t0) / 1000), timedOut: !!o.timedOut, res: await mx(w, 'M.res()'), text: await mx(w, `M.text('#process-result').replace(/\\s+/g, ' ').slice(0, 300)`) }))],
+    focus: [RESULT],
+    fixtures: ['qtrle-5s.mov'],
+  },
+  // VH-196: "About the video format".
+  'S-141': {
+    name: '"About the video format" open',
+    state: `!M.chosen() && M.vis('#format-help') && M.el('#format-help-button').getAttribute('aria-expanded') === 'true' && ${focusIs('#format-help-button')}`,
+    hold: `M.vis('#format-help')`,
+    setup: async (w, lang) => { await fresh(w, lang); await focusByKeyboard(w, '#format-help-button'); await key(w, 'Enter'); await sleep(200) },
+    asserts: [
+      X('the hint word for word', `M.text('#format-help').replace(/\\s+/g, ' ').trim() === M.msg('lede.formatHelp.text')`),
+      X('the "?" 44 x 44 after its promise\'s text; the tip under it, in the item', `(() => { const b = M.el('#format-help-button').getBoundingClientRect(), t = M.el('#format-help').getBoundingClientRect(), li = M.el('#format-help-button').closest('li').getBoundingClientRect(); return b.width >= 44 && b.height >= 44 && t.top >= b.bottom - 0.5 && t.left >= li.left - 1 && t.right <= li.right + 1; })()`),
+      X('said by its polite region', `M.el('#format-help').closest('[aria-live="polite"]') !== null`),
+    ],
+    p8: ['formatTip'],
+    focus: ['#format-help-button'],
+    fixtures: [],
+  },
+  'S-142': {
+    name: '"About the video format" closed',
+    state: `!M.chosen() && !M.vis('#format-help') && M.el('#format-help-button').getAttribute('aria-expanded') === 'false'`,
+    setup: async (w, lang) => {
+      const o = obsOf(w)
+      await fresh(w, lang)
+      await focusByKeyboard(w, '#format-help-button'); await key(w, 'Enter'); await key(w, 'Tab'); o.tab = { focus: await activeDesc(w), ...(await tipState(w, 'format-help')) }
+      await focusByKeyboard(w, '#format-help-button'); await key(w, 'Enter'); await key(w, 'Tab', { shift: true }); o.shiftTab = { focus: await activeDesc(w), onSwitcher: await w.evaluate(`!!document.activeElement.closest('#language-switcher')`), onNotice: await w.evaluate(`!!document.activeElement.closest('#language-notice')`), ...(await tipState(w, 'format-help')) }
+      await focusByKeyboard(w, '#format-help-button'); await key(w, 'Enter'); await key(w, 'Escape'); o.escape = { focus: await activeDesc(w), ...(await tipState(w, 'format-help')) }
+      await focusByKeyboard(w, '#format-help-button'); await key(w, 'Enter'); await w.click('#format-help p'); o.clickText = await tipState(w, 'format-help'); await w.click('.page-title'); o.clickTitle = await tipState(w, 'format-help')
+      o.expect = await w.evaluate(`({ kind: (() => { const r = document.querySelector('#video-kind input:checked'); return '#' + (r.id || '') })(), notice: !!document.querySelector('#language-notice a') && document.querySelector('#language-notice a').getClientRects().length > 0 })`)
+    },
+    asserts: [
+      see('Tab: closed, focus on Video type\'s checked radio', (o) => !o.tab.open && /video-kind/.test(o.tab.focus)),
+      see('Shift+Tab: closed, focus on Page language\'s radio in English, the notice\'s link in Chinese and Malay', (o) => !o.shiftTab.open && (o.expect.notice ? o.shiftTab.onNotice : o.shiftTab.onSwitcher)),
+      see('Escape: closed, focus on the "?"', (o) => !o.escape.open && o.escape.focus === '#format-help-button'),
+      see('a click on its text keeps it open; a click on the page title closes it', (o) => o.clickText.open && !o.clickTitle.open),
+    ],
+    p8: ['formatTip'],
+    focus: ['#format-help-button'],
+    fixtures: [],
+  },
+  'S-143': {
+    name: 'Two toggletips',
+    state: `M.chosen() && !M.vis('#format-help') && !M.vis('#onset-help') && ${focusIs('#format-help-button')}`,
+    hold: `M.chosen() && !M.vis('#format-help') && !M.vis('#onset-help')`,
+    setup: async (w, lang) => {
+      const o = obsOf(w); const both = async () => ({ format: (await tipState(w, 'format-help')).open, onset: (await tipState(w, 'onset-help')).open })
+      await ready(w, lang); await fade(w)
+      await focusByKeyboard(w, '#format-help-button'); await key(w, 'Enter'); o.s1 = await both()
+      let n = 0; while (n++ < 120 && !(await w.evaluate(`document.activeElement === document.getElementById('onset-help-button')`))) await key(w, 'Tab')
+      o.s2 = await both(); await key(w, 'Enter'); o.s3 = await both()
+      await w.click('#format-help-button'); o.s4 = await both()
+      await key(w, 'Escape'); o.s5 = { ...(await both()), focus: await activeDesc(w) }
+    },
+    asserts: [see('never both open; each closes the other; Escape closes only the open one, focus on its own "?"', (o) => o.s1.format && !o.s2.format && o.s3.onset && !(o.s4.format && o.s4.onset) && o.s4.format && !o.s5.format && !o.s5.onset && o.s5.focus === '#format-help-button')],
+    p8: ['formatTip'],
+    focus: ['#format-help-button', '#onset-help-button'],
+    fixtures: ['lecture-60s.mp4'],
+  },
+  'S-144': {
+    name: 'The lede at 320 px with its tip open',
+    langs: ['en-GB'], langsWhy: 'the plan\'s recipe: English at 320 px open; S-144p takes the three languages closed',
+    views: ['w320'], viewsWhy: 'the plan\'s recipe',
+    state: null, // S-141's, set below
+    hold: `M.vis('#format-help')`,
+    setup: async (w, lang) => SCENARIOS['S-141'].setup(w, lang),
+    asserts: [X('nothing off the page with the tip open', `document.documentElement.scrollWidth <= document.documentElement.clientWidth && M.el('#format-help').getBoundingClientRect().right <= document.documentElement.clientWidth + 0.5`)],
+    focus: ['#format-help-button'],
+    fixtures: [],
+  },
+  'S-144p': {
+    name: "The lede closed: the file button's place",
+    views: ['w1280', 'w800', 'w375', 'w320'], viewsWhy: 'the plan\'s recipe: 1280 x 900, 800 x 600, 375 x 812 and 320 x 568',
+    state: `!M.chosen() && !M.vis('#format-help')`,
+    setup: async (w, lang) => fresh(w, lang),
+    asserts: [
+      { what: 'the file button never lower than VH-196\'s after-reading (top-187.mjs, rings-179.mjs v18)', fn: async (w) => { const r = await w.evaluate(`({ top: Math.round(document.getElementById('file-input').getBoundingClientRect().top + scrollY), w: innerWidth, h: innerHeight, lang: document.documentElement.lang })`); const after = { 1280: { 'en-GB': 804, 'zh-Hans': 954, 'ms-MY': 1065 }, 320: { 'en-GB': 1169, 'zh-Hans': 1243, 'ms-MY': 1527 } }[r.w]?.[r.lang]; return after === undefined ? { outcome: 'not-counted', why: 'recorded: no after-reading at this view', ...r } : { outcome: r.top <= after + 1 ? 'pass' : 'fail', afterReading: after, ...r } } },
+      found('the first screen: whether the file button is in it (V-18)', (o, w) => w.evaluate(`({ top: Math.round(document.getElementById('file-input').getBoundingClientRect().top), innerHeight })`)),
+    ],
+    focus: [FILE],
+    fixtures: [],
+  },
+  // VH-182: the footer and Report a problem.
+  'S-145': {
+    name: "The footer's headings, on either video type",
+    state: `!M.chosen() && !document.querySelector('dialog[open]') && M.checked('video-kind') === 'staff'`,
+    setup: async (w, lang) => {
+      const o = obsOf(w)
+      const routes = () => w.evaluate(`[...document.querySelectorAll('.footer-help a, .footer-help button')].map((a) => ({ id: a.id, text: a.textContent.trim(), href: a.href || null }))`)
+      await fresh(w, lang); o.staff = await routes()
+      await w.chooseKind('submission'); o.submission = await routes(); await w.chooseKind('staff')
+      await w.evaluate('window.scrollTo(0, document.documentElement.scrollHeight)'); await sleep(300)
+    },
+    afterMode: async (w) => { await w.evaluate('window.scrollTo(0, document.documentElement.scrollHeight)'); await sleep(300) },
+    asserts: [see('on Student submission both the staff and the student routes stay, the same words and addresses', (o) => o.staff.length === 4 && same(o.staff, o.submission))],
+    focus: ['#contact-creators', '#contact-self-service', '#feedback-open', '#feedback-form-link'],
+    fixtures: [],
+  },
+  'S-146': {
+    name: "Report a problem's dialog and email",
+    state: `!!document.querySelector('dialog#feedback-dialog[open]') && M.has('feedback.opened', '#feedback-status')`,
+    setup: async (w, lang) => { await feedbackOpen(w, lang); await w.type('#feedback-message', 'The page worked well for me.'); await w.click(SUBMIT); await sleep(500) },
+    asserts: [
+      X('the dialog named "Report a problem"', `M.text('#feedback-dialog h2').trim() === M.msg('feedback.heading')`),
+      X('the intro names the learning content team\'s address', `M.says('feedback.intro', { address: 'UI-Learning-Content@nottingham.ac.uk' }, '#feedback-dialog')`),
+      X('the email to that address, its subject "UoN Video Helper problem report…"', `M.mailto.length > 0 && M.mailto.at(-1).to === 'UI-Learning-Content@nottingham.ac.uk' && /^UoN Video Helper problem report/.test(M.mailto.at(-1).subjectText || '')`),
+    ],
+    focus: ['#feedback-message', SUBMIT],
+    fixtures: [],
+  },
+  'S-147': {
+    name: 'The errors that name the button',
+    state: `M.res() === 'failure' && M.has('failure.encoderRefused.what', '#process-result') && M.has('failure.encoderRefused.next', '#process-result')`,
+    // F18 here; F1 held past 5 s, F10 and F11 are S-01b's, S-89's and S-90a's
+    // records, whose assertions say the button's name (amended below), so the
+    // watchdog's two minutes are not spent again in every cell.
+    setup: async (w, lang) => { await applyFault(w, 'F18'); await ready(w, lang, 'lecture-30s.mp4'); await create(w); await w.waitFailed(); obsOf(w).fired = (w.p8planned?.faults ?? []).filter((f) => f.args[0] === 'fault F18').map((f) => f.args.slice(1)) },
+    asserts: [
+      X('failure.encoderRefused.next names Report a problem', `M.msg('failure.encoderRefused.next').includes(M.msg('feedback.open')) || document.documentElement.lang !== 'en-GB'`),
+      see('the job\'s own encode refused, once (F18\'s branch)', (o) => ({ outcome: o.fired?.length === 1 ? 'pass' : 'fail', fired: o.fired })),
+      found('failure.unlevellable.next', () => ({ sourceOnly: 'no fault is known that makes a recording unlevellable (src/ui/failure-text.test.ts)' })),
+    ],
+    focus: [RESULT, CREATE],
+    faults: ['F18'], fixtures: ['lecture-30s.mp4'],
+  },
+  'S-148': {
+    name: 'Two report buttons',
+    state: `!!document.querySelector('dialog#feedback-dialog[open]') && M.vis('#errors-panel') && window.__p8opener === 'feedback-open'`,
+    setup: async (w, lang) => {
+      const o = obsOf(w)
+      await fresh(w, lang); await applyFault(w, 'F8'); await sleep(500)
+      await w.click('#feedback-report'); await sleep(300); o.firstOpen = await w.evaluate(`!!document.querySelector('dialog#feedback-dialog[open]')`)
+      await key(w, 'Escape'); await sleep(200); o.afterEscape = await activeDesc(w)
+      await w.click('#feedback-open'); await sleep(300); await w.evaluate(`window.__p8opener = 'feedback-open'`)
+      o.panelKeeps = await mx(w, `M.text('#errors-panel').includes(M.text('#feedback-report').trim())`)
+    },
+    asserts: [see('Report this problem opens the dialog; Escape returns focus to it; Report a problem opens the same dialog', (o) => o.firstOpen && o.afterEscape === '#feedback-report' && o.panelKeeps)],
+    focus: ['#feedback-message', '#feedback-close'],
+    faults: ['F8'], fixtures: [],
+  },
+  'S-149': {
+    name: 'Focus on Video language when a check blocks',
+    ...AT_1280,
+    state: `M.kindIn('#source-block') === 'error' && M.el('#step-trim').hidden && M.el('#step-title').hidden && ${focusIs('#file-input')}`,
+    hold: `M.kindIn('#source-block') === 'error' && M.el('#step-title').hidden`,
+    setup: async (w, lang) => { await applyFault(w, 'F14'); await ready(w, lang, 'lecture-30s.mp4'); await focusByKeyboard(w, RADIO_VLANG); await w.setFiles(F('prores-1080p.mov')); await until(w, `M.kindIn('#source-block') === 'error'`, 'the block', 120000); await sleep(400) },
+    focus: [FILE],
+    faults: ['F14'], fixtures: ['lecture-30s.mp4', 'prores-1080p.mov'],
+  },
+  'S-150': {
+    name: 'A job made with focus on Announce progress',
+    ...AT_1280,
+    state: `M.finished() && document.activeElement === document.querySelector(${JSON.stringify(P8_CARD)}) && !!document.querySelector(${JSON.stringify(P8_PLAYER)})`,
+    hold: `M.finished()`,
+    setup: async (w, lang) => { await ready(w, lang, 'lecture-30s.mp4'); await create(w); await w.waitRunning(); await until(w, `M.vis('#announce-progress')`, 'Announce progress', 30000); await focusByKeyboard(w, '#announce-progress'); await w.waitFinished() },
+    asserts: [X('the card, now taller with the player, holds focus', `document.querySelector(${JSON.stringify(P8_CARD)}).getBoundingClientRect().height > 200`)],
+    focus: [RESULT],
+    fixtures: ['lecture-30s.mp4'],
+  },
+  'S-151': {
+    name: 'Completion with Announce progress off',
+    ...OUTCOME,
+    state: `M.finished() && ${WARN_TEXT}.includes(${HEAVY_TITLE}) && ${WARN_TEXT}.includes(${META_TITLE}) && !M.el('#announce-progress').checked`,
+    setup: async (w, lang) => { await applyFault(w, 'F16'); await ready(w, lang, 'clicks-20s.mp4'); await create(w); await w.waitRunning(); await until(w, `M.vis('#announce-progress')`, 'Announce progress', 30000); await w.click('#announce-progress'); obsOf(w).unticked = await mx(w, `!M.el('#announce-progress').checked`); await w.waitFinished() },
+    asserts: [
+      see('unticked while the job ran (it shows only then)', (o) => o.unticked),
+      { what: '#status inside the completion interval: "Your video is ready." then both titles, heavy first; earlier history not counted', fn: async (w) => { const s = await spokenAtCompletion(w); if (!s) return { outcome: 'cannot-determine', why: 'no completion watched' }; const words = await mx(w, `({ ready: M.msg('status.ready'), heavy: ${HEAVY_TITLE}, meta: ${META_TITLE} })`); const said = s.texts.find((t) => t.includes(words.ready) && t.includes(words.heavy)); return { outcome: said && said.indexOf(words.ready) < said.indexOf(words.heavy) && said.indexOf(words.heavy) < said.indexOf(words.meta) ? 'pass' : 'fail', interval: [s.from, s.to], said: said ?? s.texts.slice(-3) } } },
+    ],
+    focus: [RESULT],
+    faults: ['F16'], fixtures: ['clicks-20s.mp4'],
+  },
+  'S-152': {
+    name: 'A failed playback beside the limiting warning',
+    ...OUTCOME,
+    state: `M.finished() && ${WARN_TEXT}.includes(${HEAVY_TITLE}) && !M.saveBtn().disabled && !!document.querySelector(${JSON.stringify(P8_PLAYER)})?.error`,
+    setup: async (w, lang) => { await applyFault(w, 'F15b'); await finished(w, lang, 'clicks-20s.mp4'); obsOf(w).error = await w.evaluate(`(async () => { const v = document.querySelector(${JSON.stringify(P8_PLAYER)}); for (let i = 0; i < 80 && !v.error; i++) await new Promise((r) => setTimeout(r, 100)); return v.error ? v.error.code : null })()`) },
+    asserts: [see('the player\'s MediaError recorded; the warning first and word for word', (o) => ({ outcome: o.error ? 'pass' : 'fail', mediaError: o.error }))],
+    focus: [SAVE],
+    faults: ['F15b'], fixtures: ['clicks-20s.mp4'],
+  },
+  'S-153': {
+    name: 'A kept sound that frame placement takes over one block',
+    ...EN_1280,
+    state: `M.finished()`,
+    setup: async (w, lang) => {
+      const o = obsOf(w)
+      await ready(w, lang, 'late-sound-3.71s-25fps-10s.mp4'); await w.type('#trim-end', '0:04.1'); await w.press('Tab'); await w.waitSettled(); await until(w, 'M.verdict()', 'the verdict')
+      o.noAudioBefore = await mx(w, `M.has('warnings.noAudio.heading', '#audio-warnings')`)
+      await create(w); await untilDone(w, 'an outcome')
+    },
+    asserts: [
+      see('no "This video has no audio" for 3.71 to 4.10 s (390 ms asked, 410 ms on frames)', (o) => o.noAudioBefore === false),
+      see('finished levelled: the job planned its sound', (o, w) => (w.p8planned?.planned ?? []).length > 0),
+    ],
+    focus: [SAVE],
+    fixtures: ['late-sound-3.71s-25fps-10s.mp4'],
+  },
+})
+SCENARIOS['S-144'].state = SCENARIOS['S-141'].state
+
+// Source-only: never walked, each with its reason (scenarios-2026-10-25.md).
+export const SOURCE_ONLY = {
+  'S-154': 'VH-186\'s estimate with no time: no fixture gives a non-finite estimate; src/ui/preflight-panel.test.ts:175, and a fact not read beyond the duration by src/ui/format.test.ts:45 and :50 and src/ui/source-panel.test.ts:332 (P-03)',
+}
+
+// ---------------------------------------------------------------------------
+// VH-198: the carried scenarios Phase 8 changed ("Carried scenarios Phase 8
+// changed"), amended so no assertion passes on Phase 7's text, place or
+// emphasis: assertions added, and the state, setup or focus list replaced
+// where the change made the old one false or blind.
+function amend(id, { asserts = [], p8 = [], ...rest }) {
+  const sc = SCENARIOS[id]
+  if (!sc) throw new Error('amend: no scenario ' + id)
+  Object.assign(sc, rest)
+  sc.asserts = [...(sc.asserts ?? []), ...asserts]
+  if (p8.length) sc.p8 = [...new Set([...(sc.p8 ?? []), ...p8])]
+}
+const NOTE_HIDDEN = X('the browser note hidden and empty (VH-187)', `M.el('#browser-note').hidden && M.text('#browser-note').trim() === ''`)
+const NOTE_SHOWN = X('the browser note says browserNote.notPassed (VH-187)', `!M.el('#browser-note').hidden && M.is('browserNote.notPassed', '#browser-note')`)
+const NAMES_BUTTON = (path, sel = 'body') => X(`${path} names the Report a problem button`, `M.has('${path}', '${sel}') && M.msg('${path}').includes(M.msg('feedback.open'))`)
+const AGAIN = X('Create reads "Create the video again" (VH-190)', `M.is('create.again', ${JSON.stringify(CREATE)})`)
+const AGAIN_SECONDARY = X('Create reads "Create the video again", secondary (VH-190)', CREATE_READS('create.again', true))
+const RECORD_SHORT = X('the record\'s output in its short form, without the purpose (VH-188)', `M.text('#process-result').includes(M.msg('preset.inRecord.best')) && !M.text('#process-result').includes(M.msg('preset.labels.best'))`)
+const ONE_PLAYER = X('the card holds its player (VH-192)', `document.querySelectorAll('video.result-player').length === 1 && !!document.querySelector(${JSON.stringify(P8_PLAYER)})`)
+const NO_PLAYER = X('no result player in the document (VH-192)', `document.querySelectorAll('video.result-player').length === 0`)
+const TEAM = 'UI-Learning-Content@nottingham.ac.uk'
+const TEAM_IN_DIALOG = X('the lines name the learning content team\'s address (VH-182)', `M.text('#feedback-dialog').includes('${TEAM}')`)
+
+amend('S-01', { asserts: [NOTE_HIDDEN] })
+amend('S-01b', { asserts: [NOTE_SHOWN, NAMES_BUTTON('failure.startup.workerNotStarted')] })
+amend('S-02', { asserts: [NOTE_SHOWN, X('B1\'s labels: "Video processing (WebCodecs)" named, no bracketed explanation beyond the format and API names', `/WebCodecs/.test(M.text('#check-webcodecs'))`)] })
+amend('S-03', {
+  p8: ['formatTip'],
+  asserts: [
+    X('the owner\'s five promises, in order', `(() => { const items = [...document.querySelectorAll('.lede > ul > li')].map((li) => (li.querySelector('span') || li).textContent.replace(/\\s+/g, ' ').trim()); return items.length === 5 && items.every((t, i) => t === M.msg('lede.promises.' + i)); })()`),
+    X('"About the video format" 44 x 44, collapsed, controlling #format-help', `(() => { const b = M.el('#format-help-button'); const r = b.getBoundingClientRect(); return r.width >= 44 && r.height >= 44 && b.getAttribute('aria-expanded') === 'false' && b.getAttribute('aria-controls') === 'format-help'; })()`),
+    NOTE_HIDDEN,
+    X('no Video language before step 1', `!(M.el('#video-language').compareDocumentPosition(M.el('#step-choose')) & Node.DOCUMENT_POSITION_FOLLOWING) || M.el('#step-title').hidden`),
+    { what: 'Tab from the top: skip link, Page language, (the notice\'s link), About the video format, Video type, Choose file', fn: async (w) => {
+      // The sequential-focus starting point put at the top: the body focused, as after a load.
+      await w.evaluate(`(() => { window.scrollTo(0, 0); document.body.tabIndex = -1; document.body.focus(); document.body.removeAttribute('tabindex'); })()`)
+      const stops = []
+      for (let i = 0; i < 12; i++) { await key(w, 'Tab'); const s = await w.evaluate(`(() => { const a = document.activeElement; return a.closest('#language-switcher') ? 'page language' : a.closest('#language-notice') ? 'notice link' : a.id === 'format-help-button' ? 'format ?' : a.closest('#video-kind') ? 'video type' : a.id === 'file-input' ? 'choose file' : a.matches('a[href^="#"]') ? 'skip link' : (a.id || a.tagName.toLowerCase()); })()`); stops.push(s); if (s === 'choose file') break }
+      await w.evaluate(`document.activeElement && document.activeElement.blur()`)
+      const notice = await w.evaluate(`!!document.querySelector('#language-notice a') && document.querySelector('#language-notice a').getClientRects().length > 0`)
+      const want = ['skip link', 'page language', ...(notice ? ['notice link'] : []), 'format ?', 'video type', 'choose file']
+      return { outcome: same(stops, want) ? 'pass' : 'fail', stops, want }
+    } },
+    found('app.description, read as it stands for VH-200', (o, w) => w.evaluate(`(document.querySelector('meta[name="description"]') || {}).content || null`)),
+  ],
+})
+amend('S-07', { focus: [RADIO_KIND], asserts: [X('#video-next inside #video-kind, hidden; the line under Video type unchanged', `M.el('#video-kind').contains(M.el('#video-next')) && !M.vis('#video-next')`)] })
+amend('S-08', { asserts: [X('the helper is B9\'s two lines', `M.text('#video-language-helper').replace(/\\s+/g, ' ').trim() === M.msg('videoLanguage.helper') + ' ' + M.msg('videoLanguage.typed')`)] })
+amend('S-15', { asserts: [X('Create reads "Create the video", primary', CREATE_READS('create.create', false)), X('"Plays over" labels the onset select', `M.text('label[for="closing-onset"]').trim() === M.msg('closing.onsetLabel')`)] })
+amend('S-17', { asserts: [X('the "?" named "About what the graphics play over"; its terms renamed', `M.el('#onset-help-button').getAttribute('aria-label') === M.msg('closing.helpLabel') && M.text('#onset-help').includes(M.msg('closing.helpExistingTerm')) && M.text('#onset-help').includes(M.msg('closing.helpFreezeTerm'))`)] })
+amend('S-24', { asserts: [X('Create reads "Create the video"', `M.is('create.create', ${JSON.stringify(CREATE)})`)] })
+amend('S-30', { asserts: [X('Create reads "Create the video", secondary, beside the kept result', CREATE_READS('create.create', true)), ONE_PLAYER] })
+amend('S-31', { asserts: [
+  X('the way out pinned with its substituted name: "…choose the smaller file, or free some space…"', `M.says('status.storageWayOut', { smaller: { msg: 'preset.inSentence.smaller' } }, '#status')`),
+  X('no old output name', `!/Smaller \\/ reduced/.test(document.body.textContent) && M.text('#source-block').includes(M.msg('preset.inSentence.smaller'))`),
+] })
+amend('S-45b', { asserts: [X('the reason "Not used without closing graphics."', `document.body.textContent.includes(M.msg('closing.notUsedWith.none'))`)] })
+amend('S-48', { asserts: [X('the next-video line names the video type only', `!M.vis('#video-next') || M.is('videoKind.nextVideo', '#video-next')`)] })
+amend('S-50', {
+  name: 'Type switched while running (Video language now locks: S-123)',
+  state: `M.running() && M.checked('video-kind') === 'submission' && M.vis('#video-next') && M.is('videoKind.nextVideo', '#video-next') && M.has('videoKind.options.staff', '#process-job') && M.el('#video-language').disabled`,
+  setup: async (w, lang) => { await running(w, lang); await w.chooseKind('submission'); await sleep(300) },
+  focus: [RADIO_KIND],
+})
+amend('S-52', { asserts: [X('Create reads "Create the video", primary', CREATE_READS('create.create', false))] })
+amend('S-53', { asserts: [AGAIN_SECONDARY, RECORD_SHORT, ONE_PLAYER, X('no "Worth knowing about the finished video" on a level lecture', `!window.__p8.warnBox()`)] })
+for (const id of ['S-53-W', 'S-53-LW', 'S-54a', 'S-54b', 'S-54c', 'S-54d', 'S-55a', 'S-55b', 'S-55c']) amend(id, { asserts: [AGAIN, RECORD_SHORT, ONE_PLAYER] })
+amend('S-56', { asserts: [
+  X('the next step pinned with its substituted name: "Free some space, or choose the smaller file, and try again."', `M.says('failure.outOfSpace.next', { smaller: { msg: 'preset.inSentence.smaller' } }, '#process-result')`),
+  X('Create reads "Create the video"', `M.is('create.create', ${JSON.stringify(CREATE)})`),
+] })
+for (const id of ['S-58', 'S-58-W', 'S-58-LW']) {
+  const file = id === 'S-58-W' ? LONG_W : id === 'S-58-LW' ? LONG_UNDERSCORES : 'lecture-30s.mp4'
+  amend(id, {
+    setup: async (w, lang) => { await finished(w, lang, file); obsOf(w).src = await playerSrc(w); await question(w) },
+    asserts: [NO_PLAYER, AGAIN, see('its URL not revoked', async (o, w) => fetches(w, o.src))],
+  })
+}
+amend('S-59', {
+  setup: async (w, lang) => { await finishedWithPlayer(w, lang, 'lecture-30s.mp4'); await question(w); await w.click('#process-result .button--secondary'); await sleep(400) },
+  asserts: [X('Keep it puts back the same player element', SAME_PLAYER), see('and the same URL', async (o, w) => (await playerSrc(w)) === o.src), RECORD_SHORT, AGAIN, X('focus on the card', `document.activeElement === document.querySelector(${JSON.stringify(P8_CARD)})`)],
+})
+amend('S-60', {
+  setup: async (w, lang) => { await finishedWithPlayer(w, lang, 'lecture-360s.mp4'); await question(w); await w.click('#process-result .button--danger'); await w.waitRunning(); await encoding(w) },
+  asserts: [X('the old player without a source', `!!window.__p0 && !window.__p0.getAttribute('src') && !window.__p0.isConnected`), see('its URL no longer fetching', async (o, w) => !(await fetches(w, o.src)))],
+})
+amend('S-61', { asserts: [ONE_PLAYER, AGAIN, X('Video language locked, "Locked while your video is being saved."', `M.el('#video-language').disabled && M.is('create.lockedSaving', '#step-title .lock-note')`)] })
+amend('S-62', {
+  setup: async (w, lang) => { await finishedWithPlayer(w, lang, 'lecture-30s.mp4'); await saveWith(w); await w.waitSaved() },
+  asserts: [NO_PLAYER, AGAIN_SECONDARY, see('its URL no longer fetching', async (o, w) => !(await fetches(w, o.src)))],
+})
+for (const id of ['S-63', 'S-63-W', 'S-63-LW']) amend(id, { asserts: [ONE_PLAYER, X('Create reads "Create the video", secondary', CREATE_READS('create.create', true)), RECORD_SHORT] })
+for (const id of ['S-64', 'S-65']) amend(id, { asserts: [ONE_PLAYER] })
+for (const id of ['S-66', 'S-67', 'S-68', 'S-69']) amend(id, { asserts: [ONE_PLAYER, AGAIN] })
+for (const id of ['S-70a', 'S-70b']) amend(id, { asserts: [ONE_PLAYER, AGAIN, RECORD_SHORT] })
+amend('S-71', { asserts: [X('the next-video line names the video type only; no videoLanguage.nextVideo', `M.is('videoKind.nextVideo', '#video-next') && M.msg('videoLanguage.nextVideo') === undefined`), AGAIN] })
+amend('S-72a', { asserts: [ONE_PLAYER, AGAIN] })
+amend('S-72b', { asserts: [NO_PLAYER] })
+amend('S-75', { asserts: [X('the dialog named "Report a problem"', `M.text('#feedback-dialog h2').trim() === M.msg('feedback.heading')`), X('the intro names the team\'s address', `M.says('feedback.intro', { address: '${TEAM}' }, '#feedback-dialog')`)] })
+amend('S-76', { asserts: [X('the dialog named "Report a problem"', `M.text('#feedback-dialog h2').trim() === M.msg('feedback.heading')`)] })
+amend('S-78', { asserts: [X('the email to the team, subject "UoN Video Helper problem report…"', `M.mailto.length > 0 && M.mailto.at(-1).to === '${TEAM}' && /^UoN Video Helper problem report/.test(M.mailto.at(-1).subjectText || '')`), TEAM_IN_DIALOG] })
+amend('S-78k', { asserts: [X('the email to the team', `M.mailto.length > 0 && M.mailto.at(-1).to === '${TEAM}'`)] })
+for (const id of ['S-79a', 'S-79b', 'S-80a', 'S-80b']) amend(id, { asserts: [TEAM_IN_DIALOG] })
+amend('S-81', { asserts: [X('the contact line names the learning content team, its link to the same address', `M.says('statement.contact.text', { address: '${TEAM}' }, '#accessibility-statement') && [...document.querySelectorAll('#accessibility-statement a[href^="mailto:"]')].some((a) => a.href.includes('${TEAM}'))`)] })
+amend('S-83', {
+  focus: ['#feedback-open', '#feedback-form-link', '#contact-creators', '#contact-self-service'],
+  asserts: [X('"Email the learning content team" gone from the footer; no mailto: in it', `!document.getElementById('contact-learning-content') && !document.querySelector('.footer-help a[href^="mailto:"]')`)],
+})
+amend('S-86', {
+  state: `M.chosen() && !!M.verdict() && M.checked('video-language') === ${OTHER_VIDEO_LANGUAGE} && window.__audit.boot.langAtDCL === document.documentElement.lang`,
+  setup: async (w, lang) => { await ready(w, lang, 'lecture-30s.mp4'); await w.click(`#video-language input[value="${otherVideoLanguage(lang)}"]`); await sleep(300); await w.goto(); obsOf(w).hiddenAfterReload = await mx(w, `M.el('#step-title').hidden`); await w.setFiles(F('lecture-30s.mp4')); await w.waitSettled(); await until(w, 'M.verdict()', 'the verdict after reload') },
+  fixtures: ['lecture-30s.mp4'],
+  asserts: [see('after the reload step 3 is hidden until a video is read', (o) => o.hiddenAfterReload === true)],
+})
+amend('S-88', { asserts: [ONE_PLAYER, AGAIN] })
+amend('S-89', { asserts: [NAMES_BUTTON('failure.checkFailed.next', '#preflight-report')] })
+for (const id of ['S-90a', 'S-90b']) amend(id, { asserts: [NAMES_BUTTON('failure.tryAgain', '#process-result')] })
+amend('S-90a', { asserts: [X('Video language held with the other locks', `M.el('#video-language').disabled`)] })
+amend('S-91', {
+  setup: async (w, lang) => { await applyFault(w, 'F6a'); await applyFault(w, 'F16'); await finished(w, lang, 'lecture-30s.mp4', async () => { await w.select('#closing-type', 'fade'); await w.waitSettled() }); await w.setFiles(F('lecture-60s.mp4')); await w.waitSettled(); await until(w, 'M.verdict()', 'next verdict') },
+  faults: ['F6a', 'F16'],
+  asserts: [X('the metadata warning beside the card, not inside it', `!!window.__p8.warnBox() && window.__p8.warnBox().textContent.includes(M.msg('warnings.metadataLost.heading')) && !M.text(${JSON.stringify(P8_CARD)}).includes(M.msg('warnings.metadataLost.heading'))`), RECORD_SHORT],
+})
+
+// Carried routes Phase 8 broke: the player's controls now sit between the
+// card and Save, and Video language in step 3 (the scenarios file's
+// "Keyboard route per journey"; their full Phase 8 revision is VH-198's next step).
+for (const id of ['J1', 'J2', 'J3']) for (const s of ROUTES[id].steps) if (s.untilState === FOCUS_ON(SAVE) && s.repeat === 6) { s.repeat = 16; s.note = (s.note ?? '') + ' (through the player\'s controls, VH-192)' }
+for (const s of ROUTES.J4.steps) if (s.until === 'video-language=' || (s.until === 'video-kind=' && s.repeat === 4)) { s.repeat = 120; s.note = (s.note ?? '') + ' (Video language is in step 3 now, VH-191)' }
+
+// K-player (new): the player by keys, by the focused accessibility node,
+// from the card the job's end focused. Chrome 156's inventory, as the pilot
+// read it: play, volume, mute, full screen, more controls, the time slider.
+// A control Tab does not reach is "cannot determine" (native), never a pass.
+const PLAYER_ACTIVE = `document.activeElement === document.querySelector(${JSON.stringify(P8_PLAYER)})`
+const UA_RING = 'the ring is the user agent\'s, inside the player\'s shadow tree: read by pixels in S-127 (phase8.mjs playerKeys)'
+ROUTES['K-player'] = {
+  name: 'K-player: the finished video\'s player by keys, forward and back, and a save while focus is in it',
+  setup: async (w, lang) => { await applyFault(w, 'F4b', { ms: 3000 }); await fresh(w, lang); await w.setFiles(F('short-2s.mp4')); await w.waitSettled(); await until(w, 'M.proceed() && M.create()', 'ready') },
+  fixtures: ['short-2s.mp4'],
+  faults: ['F4b'],
+  steps: [
+    { key: 'Tab', untilState: FOCUS_ON(CREATE), repeat: 80, note: 'Tab to Create' },
+    { key: 'Enter', waitFor: MX('M.finished()'), timeout: 300000, state: FOCUS_ON(RESULT), note: 'S-53: the job finishes; focus handed from Cancel to the card' },
+    { setup: async (w) => { await w.evaluate(`(() => { const v = document.querySelector(${JSON.stringify(P8_PLAYER)}); v.muted = true; })()`) }, note: 'setup: the player muted by script, so a key\'s play is never refused for sound' },
+    { key: 'Tab', axExpect: '^Video ', state: PLAYER_ACTIVE, noFocusRing: true, note: 'the player itself, named by the card\'s title' },
+    { key: 'Tab', axExpect: '^button "(play|pause)"', native: true, noFocusRing: true, note: 'play' },
+    { key: 'Space', axExpect: '^button "pause"', native: true, noFocusRing: true, state: `!document.querySelector(${JSON.stringify(P8_PLAYER)}).paused`, wait: 600, note: 'Space plays (the control becomes pause)' },
+    { key: 'Space', axExpect: '^button "play"', native: true, noFocusRing: true, state: `document.querySelector(${JSON.stringify(P8_PLAYER)}).paused`, note: 'Space again pauses' },
+    { key: 'Tab', axExpect: '^slider "volume"', native: true, noFocusRing: true, note: UA_RING },
+    { key: 'Tab', axExpect: '^button "(mute|unmute)"', native: true, noFocusRing: true },
+    { key: 'Tab', axExpect: '^button "enter full screen"', native: true, noFocusRing: true },
+    { key: 'Tab', axExpect: '^button "show more media controls"', native: true, noFocusRing: true },
+    { key: 'Tab', axExpect: '^slider "video time scrubber"', native: true, noFocusRing: true },
+    { setup: async (w) => { await w.evaluate(`window.__kpT = document.querySelector(${JSON.stringify(P8_PLAYER)}).currentTime`) }, note: 'setup: the time read before the seek' },
+    { key: 'ArrowRight', axExpect: '^slider "video time scrubber"', native: true, noFocusRing: true, wait: 400, state: `(() => { const v = document.querySelector(${JSON.stringify(P8_PLAYER)}); return v.paused && v.currentTime > window.__kpT; })()`, note: 'seeking by keys, apart from play: the time moves, playback stays paused' },
+    { key: 'Tab', state: FOCUS_ON(SAVE), note: 'the next Tab after the last control reaches Save the video' },
+    { key: 'Tab', shift: true, untilState: `!(${PLAYER_ACTIVE})`, repeat: 12, noFocusRing: true, state: `(() => { const c = document.querySelector(${JSON.stringify(P8_CARD)}); const a = document.activeElement; return a !== c && a !== document.body && !!(c.compareDocumentPosition(a) & Node.DOCUMENT_POSITION_PRECEDING); })()`, note: 'Shift+Tab back through the controls and out to the previous real stop, never the card (tabIndex -1, src/main.ts:3277)' },
+    { key: 'Tab', untilState: FOCUS_ON(SAVE), repeat: 16, note: 'Tab forward again, through the player, to Save' },
+    { key: 'Enter', waitFor: MX('M.saving()'), timeout: 10000, state: FOCUS_ON('#save-actions > button'), note: 'S-61: saving (F4b, 3 s a chunk); Stop saving takes focus' },
+    { key: 'Tab', shift: true, untilState: PLAYER_ACTIVE, repeat: 10, noFocusRing: true, note: 'Shift+Tab passes the disabled Save into the player while it streams' },
+    { waitFor: MX(`M.has('status.saved', '#save-status')`), timeout: 300000, state: `!document.querySelector('video.result-player') && ${FOCUS_ON(RESULT)}`, note: 'S-131: saved; the player leaves and focus is on the card' },
+  ],
+}
+
 // The predicates read the page through window.__mx (MX_INIT), as `M`.
 const wrap = (expr) => `(() => { const M = window.__mx; return (${expr}); })()`
 for (const sc of Object.values(SCENARIOS)) { sc.hold = wrap(sc.hold ?? sc.state); sc.state = wrap(sc.state) }
@@ -1468,6 +2650,7 @@ export const fixturesFor = (ids) => [...new Set(ids.flatMap((id) => (ROUTES[id] 
 /** The named gaps for the manifest's `unresolved`: scenarios left out, and where a scenario exists only in part of the matrix. */
 export const GAPS = [
   ...Object.entries(LEFT_OUT).map(([id, why]) => `${id} left out of the matrix: ${why}`),
+  ...Object.entries(SOURCE_ONLY).map(([id, why]) => `${id} source-only, never walked: ${why}`),
   ...Object.entries(SCENARIOS).flatMap(([id, sc]) => [
     ...(sc.langs ? [`${id} (${sc.name}) only in ${sc.langs.join(', ')}: ${sc.langsWhy}`] : []),
     ...(sc.views ? [`${id} (${sc.name}) only at ${sc.views.join(', ')}: ${sc.viewsWhy}`] : []),
@@ -1735,3 +2918,13 @@ export const TRANSITIONS = {
     asserts: (r) => ({ inStartTime: on(r.placedOn, '#trim-start'), checkingAtFocus: r.checkingAtFocus, stepsKept: r.stepsKept, f3AndF14: r.f3AndF14 }),
   },
 }
+
+// VH-198: the Phase 8 instruments proved on the real app (player-proof and
+// the scenarios' own assertions), apart from the pilot, which is VH-198's
+// next step: the player passive and by keys, K-player, both "?", the footer's
+// headings, the limiting warning, Video language, a saved card.
+PLANS.vh198proof = () => [
+  ...['S-03', 'S-126', 'S-127', 'S-131', 'S-135', 'S-141', 'S-145', 'S-119', 'S-123'].map((id) => ({ id, lang: 'en-GB', view: 'w1280', mode: 'light' })),
+  { id: 'S-142', lang: 'zh-Hans', view: 'w1280', mode: 'light' },
+  { id: 'K-player', lang: 'en-GB', view: 'w1280', mode: 'light' },
+]

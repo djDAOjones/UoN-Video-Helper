@@ -116,20 +116,24 @@ const AUTHOR_STYLES_PLAYER = `(() => { const hits = []; const look = (rules) => 
 
 // ---------------------------------------------------------------------------
 // The native player: passive.
-const PLAYER_READ = `(() => { ${WORDS} const doc = document.documentElement;
+// Read once the player's metadata has loaded or failed, up to 10 s: Chrome
+// loads a headless page's media lazily, and until then it draws fewer
+// controls (no mute, volume or full screen before it knows the tracks).
+const PLAYER_READ = `(async () => { ${WORDS} const doc = document.documentElement;
   const card = document.querySelector('${CARD}'); const all = [...document.querySelectorAll('video.result-player')];
   const v = card && card.querySelector('video.result-player');
   const savedLine = W('status.saved'); const saveStatus = ((document.getElementById('save-status') || {}).textContent || '').trim();
   const saved = !!savedLine && saveStatus.startsWith(savedLine.split('.')[0]);
   const base = { card: !!card, players: all.length, inCard: !!v, saved, dialogOpen: !!document.querySelector('dialog[open]') };
   if (!v) return base;
+  const t0 = performance.now(); for (let i = 0; i < 100 && v.readyState < 1 && !v.error; i++) await new Promise((r) => setTimeout(r, 100)); const waitedMs = Math.round(performance.now() - t0);
   const ps = [...card.querySelectorAll(':scope > p')]; const title = card.querySelector('.notification-title');
   const lifetime = ps.find((p) => p.textContent === W('result.lifetime') || p.textContent === W('result.lifetimeDelivered'));
   const actions = card.querySelector(':scope > .actions');
   const after = (a, b) => !!(a && b && (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING));
   const r = v.getBoundingClientRect(); const cap = parseFloat(getComputedStyle(v).maxHeight);
   return { ...base, src: v.getAttribute('src'), blob: (v.getAttribute('src') || '').startsWith('blob:'), controls: v.controls, preload: v.preload, autoplayAttr: v.hasAttribute('autoplay'), autoplay: v.autoplay,
-    paused: v.paused, currentTime: v.currentTime, readyState: v.readyState, error: v.error ? v.error.code : null, duration: v.duration,
+    paused: v.paused, currentTime: v.currentTime, readyState: v.readyState, waitedMs, error: v.error ? v.error.code : null, duration: v.duration,
     labelledBy: v.getAttribute('aria-labelledby'), titleId: title && title.id, title: title ? title.textContent.trim() : null,
     linesBefore: ps.filter((p) => p !== lifetime && !p.hidden).every((p) => after(p, v)), beforeLifetime: lifetime ? after(v, lifetime) : null, beforeActions: after(v, actions),
     host: { w: Math.round(r.width), h: Math.round(r.height), left: Math.round(r.left), right: Math.round(r.right) }, innerWidth, maxHeight: Number.isFinite(cap) ? cap : null,
@@ -154,7 +158,7 @@ export async function playerRows(w) {
   rows.push(row('controls, preload metadata, no autoplay', r.controls && r.preload === 'metadata' && !r.autoplayAttr && !r.autoplay ? 'pass' : 'fail', { controls: r.controls, preload: r.preload, autoplay: r.autoplay || r.autoplayAttr }))
   if (r.finish) rows.push(row('paused a second after the card appeared', r.finish.paused === true ? 'pass' : 'fail', r.finish))
   else rows.push(row('paused a second after the card appeared', 'cannot-determine', { why: 'no job finished on this page while it was watched' }))
-  rows.push(row('an object URL whose metadata loads', r.blob && r.error === null && r.readyState >= 1 ? 'pass' : r.blob && r.error !== null ? 'fail' : 'cannot-determine', { blob: r.blob, error: r.error, readyState: r.readyState, duration: r.duration }))
+  rows.push(row('an object URL whose metadata loads', r.blob && r.error === null && r.readyState >= 1 ? 'pass' : r.blob && r.error !== null ? 'fail' : 'cannot-determine', { blob: r.blob, error: r.error, readyState: r.readyState, waitedMs: r.waitedMs, duration: r.duration, why: r.readyState < 1 && r.error === null ? 'metadata not loaded within 10 s' : undefined }))
   rows.push(row('after the card\'s lines, before the lifetime line and Save', r.linesBefore && r.beforeLifetime !== false && r.beforeActions ? 'pass' : 'fail', { linesBefore: r.linesBefore, beforeLifetime: r.beforeLifetime, beforeActions: r.beforeActions }))
   rows.push(row('the host inside the page, no taller than its cap', r.host.w > 0 && r.host.left >= 0 && r.host.right <= r.innerWidth && (r.maxHeight === null || r.host.h <= r.maxHeight + 1) && !r.overflowX ? 'pass' : 'fail', { host: r.host, maxHeight: r.maxHeight, overflowX: r.overflowX }))
   // The name and the controls, from the tree.
@@ -212,11 +216,14 @@ export async function playerKeys(w, { sel = PLAYER, run, key: recKey } = {}) {
   const before = await w.evaluate(`(() => { const v = ${MEDIA(sel)}; return { paused: v.paused, t: v.currentTime, muted: v.muted, scrollY } })()`)
   await w.evaluate(`window.__p8restore = document.activeElement`)
   const dom = await backendId(w, sel)
+  // A held frame: paused, seeked to a fixed time, muted for the scripted parts (setup, not a key),
+  // once the frame data has loaded (up to 10 s), so play and seek have something to move.
+  const loaded = await w.evaluate(`(async () => { const v = ${MEDIA(sel)}; for (let i = 0; i < 100 && v.readyState < 2 && !v.error; i++) await new Promise((r) => setTimeout(r, 100)); return { readyState: v.readyState, error: v.error ? v.error.code : null } })()`)
+  if (loaded.readyState < 2) rows.push(row('the player\'s frames loaded for the keys', 'cannot-determine', { ...loaded, why: 'no frame data within 10 s: play and seek cannot be proved' }))
+  await w.evaluate(`(async () => { const v = ${MEDIA(sel)}; v.muted = true; v.pause(); const at = Math.min(0.5, (v.duration || 1) / 2); if (Math.abs(v.currentTime - at) > 0.01) { v.currentTime = at; await new Promise((r) => { v.addEventListener('seeked', r, { once: true }); setTimeout(r, 3000) }) } })()`)
   const { descendants } = await axSubtree(w, dom)
   const inventory = descendants.filter((n) => !n.ignored && CONTROL_ROLES.has(n.role?.value) && prop(n, 'focusable')).map(axRow)
-  // A held frame: paused, seeked to a fixed time, muted for the scripted parts (setup, not a key).
-  await w.evaluate(`(async () => { const v = ${MEDIA(sel)}; v.muted = true; v.pause(); const at = Math.min(0.5, (v.duration || 1) / 2); if (Math.abs(v.currentTime - at) > 0.01) { v.currentTime = at; await new Promise((r) => { v.addEventListener('seeked', r, { once: true }); setTimeout(r, 3000) }) } })()`)
-  // Forward: placed by script on the control before the host (recorded as setup), then keys only.
+  // Forward: placed by script on the card before the host (recorded as setup), then keys only.
   const prev = await w.evaluate(TABBABLE_BEFORE(sel))
   const focusPrev = `(() => { const host = ${MEDIA(sel)}; const card = host.closest('.notification') || host; card.focus(); return document.activeElement === card; })()`
   const placed = await w.evaluate(focusPrev)
@@ -399,7 +406,11 @@ export async function footerRows(w) {
 export async function watchWorkers(browser, w) {
   const seen = (w.p8planned = { planned: [], workers: 0 })
   browser.on(w.page.sessionId, 'Target.attachedToTarget', async ({ sessionId, targetInfo }) => {
-    if (targetInfo.type !== 'worker') return
+    // Every auto-attached target waits for the debugger: anything but the job's
+    // worker (a media or audio target, a frame) is resumed at once, untouched,
+    // or it would hang the page (VH-198's first proof run, a playing player).
+    seen.targets = [...(seen.targets ?? []), targetInfo.type]
+    if (targetInfo.type !== 'worker') { await browser.send('Runtime.runIfWaitingForDebugger', {}, sessionId).catch(() => {}); return }
     seen.workers++
     browser.on(sessionId, 'Runtime.consoleAPICalled', async (e) => {
       // A fault's prelude says where it fired (faults.mjs F18): kept, by value.
@@ -411,8 +422,9 @@ export async function watchWorkers(browser, w) {
         seen.planned.push({ t, ...JSON.parse(r.result.value) })
       } catch { seen.planned.push({ t, unread: true }) }
     })
-    await browser.send('Runtime.enable', {}, sessionId).catch(() => {})
-    await browser.send('Runtime.runIfWaitingForDebugger', {}, sessionId).catch(() => {})
+    // Both sent at once: a paused worker may not answer Runtime.enable until it
+    // runs, and awaiting it first could leave the job's worker paused for good.
+    await Promise.all([browser.send('Runtime.enable', {}, sessionId).catch(() => {}), browser.send('Runtime.runIfWaitingForDebugger', {}, sessionId).catch(() => {})])
   })
   await w.page.send('Target.setAutoAttach', { autoAttach: true, waitForDebuggerOnStart: true, flatten: true })
   return seen
@@ -509,7 +521,8 @@ export async function assertRows(w, sc) {
   for (const a of sc.asserts) {
     try {
       if (a.fn) { const r = await a.fn(w); rows.push({ what: a.what, ...(typeof r === 'object' ? r : { outcome: r ? 'pass' : 'fail' }) }); continue }
-      const v = await w.evaluate(`(() => { const M = window.__mx; try { const v = (${a.expr}); return { ok: !!v, v: typeof v === 'object' ? v : undefined }; } catch (e) { return { error: String(e.message || e).slice(0, 160) }; } })()`)
+      // Awaited: an assertion may wait for the page (a player's metadata), and a promise is never truthy by itself.
+      const v = await w.evaluate(`(async () => { const M = window.__mx; try { const v = await (${a.expr}); return { ok: !!v, v: v && typeof v === 'object' ? v : undefined }; } catch (e) { return { error: String(e.message || e).slice(0, 160) }; } })()`)
       rows.push(row(a.what, v.error ? 'cannot-determine' : v.ok ? 'pass' : a.native ? 'cannot-determine' : 'fail', { why: v.error, expr: a.expr.slice(0, 160) }))
     } catch (e) { rows.push(row(a.what, 'cannot-determine', { why: String(e.message ?? e).slice(0, 160) })) }
   }
