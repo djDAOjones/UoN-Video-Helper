@@ -37,7 +37,6 @@ The public release, 0.2.0, on Xerte (PLAN-6).
 
 ### Phase 8 — the owner's UX pass, then a third full design pass
 
-- [~] VH-197 — Pass 3 planned, Codex astra critiquing — since 2026-10-25
 - [ ] VH-198 — Pass 3's instruments re-proved; blind review launched — since 2026-10-25
 - [ ] VH-199 — Pass 3's evidence run — since 2026-10-25
 - [ ] VH-200 — Pass 3 judged: journeys, Carbon, Nielsen, WCAG — since 2026-10-25
