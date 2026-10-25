@@ -21,7 +21,7 @@ import { fileURLToPath } from 'node:url'
 import { connectBrowser } from './cdp.mjs'
 import { Walk, sleep } from './walk.mjs'
 import { QUAL_INIT, VIEWS, assertReached, axTree, focusArea, fileButtonInk, keysRoute, closeAnalysis, setViewport, setMode, withholdFonts, pageShot, pressedVsHover, typeRoles } from './qualify.mjs'
-import { Run, writeManifest, writeDigest, aggregate, recordKey } from './runner.mjs'
+import { Run, writeManifest, writeDigest, aggregate, recordKey, browserCommandLine } from './runner.mjs'
 import { SCENARIOS, ROUTES, PLANS, MX_INIT, GAPS, READINGS } from './scenarios.mjs'
 import { P8_INIT, PHASE8_INSTRUMENTS, phase8Instruments, watchWorkers } from './phase8.mjs'
 // VH-198: the third pass's five parts and twelve runs, by name (parts.mjs).
@@ -219,7 +219,7 @@ async function main() {
   const m = writeManifest(run, {
     appRoot: APP_ROOT,
     browserVersion: browser.version.Browser,
-    browserCommandLine: (await browser.send('Browser.getBrowserCommandLine').catch((e) => ({ arguments: ['unread: ' + String(e.message ?? e).slice(0, 80)] }))).arguments?.filter((a) => !/user-data-dir|remote-debugging-port/.test(a)),
+    browserCommandLine: await browserCommandLine(browser),
     scaling: 'Emulation.setDeviceMetricsOverride per view; Page.setFontSizes for the default font; Chrome page zoom not settable over the protocol (proxy views only)',
     // Four enlargement categories, kept apart (M-04).
     enlargement: {

@@ -153,6 +153,29 @@ export class Run {
 const sha = (buf) => createHash('sha256').update(buf).digest('hex').slice(0, 16)
 /** The keys' identity, as VH-172's and VH-176's manifests hashed them (report-172.mjs). */
 export const keysSha = (keys) => sha([...keys].sort().join('\n'))
+// The flags pages must run under to stay visible (VH-198): without them
+// headless Chrome treats every page but its first as hidden.
+export const VISIBLE_PAGE_FLAGS = ['--disable-background-timer-throttling', '--disable-renderer-backgrounding', '--disable-backgrounding-occluded-windows']
+/**
+ * Chrome's own flags, for the manifest. Browser.getBrowserCommandLine answers
+ * only under --enable-automation, so otherwise the browser process's arguments
+ * are read from the OS by its pid (SystemInfo.getProcessInfo, then ps).
+ */
+export async function browserCommandLine(browser) {
+  const keep = (a) => a.filter((x) => !/user-data-dir|remote-debugging-port/.test(x))
+  const say = (source, args) => ({ source, arguments: keep(args), visiblePageFlagsMissing: VISIBLE_PAGE_FLAGS.filter((f) => !args.includes(f)) })
+  const viaCdp = await browser.send('Browser.getBrowserCommandLine').then((r) => r.arguments, () => null)
+  if (viaCdp) return say('Browser.getBrowserCommandLine', viaCdp)
+  try {
+    const { processInfo } = await browser.send('SystemInfo.getProcessInfo')
+    const pid = processInfo.find((p) => p.type === 'browser')?.id
+    if (!pid) throw new Error('no browser process in SystemInfo.getProcessInfo')
+    const line = execFileSync('ps', ['-o', 'args=', '-p', String(pid)], { encoding: 'utf8' }).trim()
+    return say(`ps -o args= -p ${pid} (the browser process)`, line.match(/--\S+/g) ?? [])
+  } catch (e) {
+    return { source: 'unread', why: String(e.message ?? e).slice(0, 120), visiblePageFlagsMissing: 'unknown' }
+  }
+}
 /** The instrument revision: every walker file's hash, and one hash over them (one revision across every part). */
 export function instrumentRevision() {
   const files = readdirSync(HERE).filter((f) => /\.(mjs|sh)$/.test(f)).sort().map((f) => ({ file: f, sha256: sha(readFileSync(join(HERE, f))) }))

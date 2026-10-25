@@ -24,7 +24,7 @@ import { Walk } from './walk.mjs'
 import { QUAL_INIT, focusArea, closeAnalysis, setViewport, setMode } from './qualify.mjs'
 import { TRANSITIONS, MX_INIT } from './scenarios.mjs'
 import { transitionsOf, transitionKey, assertParts } from './parts.mjs'
-import { instrumentRevision, keysSha } from './runner.mjs'
+import { instrumentRevision, keysSha, browserCommandLine } from './runner.mjs'
 
 const RUN_ROOT = process.env.RUN_ROOT
 if (!RUN_ROOT) throw new Error('set RUN_ROOT to a scratch directory')
@@ -136,7 +136,7 @@ const problems = [
   ...out.filter((r) => r.outcome === 'error').map((r) => ({ kind: 'failed', key: r.key, why: r.error?.split('\n')[0] })),
 ]
 const tally = out.reduce((o, r) => ((o[r.outcome] = (o[r.outcome] ?? 0) + 1), o), {})
-const manifest = { plan: planName ?? undefined, dir, resumes, instruments: instrumentRevision(), browser: browser.version.Browser, os: `${platform()} ${release()} ${arch()}`, coverage: { expected: want.size, observed: seen.filter((k) => want.has(k)).length, whole: !problems.length, problems, expectedKeysSha256: keysSha([...want]), observedKeysSha256: keysSha(seen) }, outcomes: tally, seconds: out.reduce((n, r) => n + (r.seconds ?? 0), 0) }
+const manifest = { plan: planName ?? undefined, dir, resumes, instruments: instrumentRevision(), browser: browser.version.Browser, browserCommandLine: await browserCommandLine(browser), os: `${platform()} ${release()} ${arch()}`, coverage: { expected: want.size, observed: seen.filter((k) => want.has(k)).length, whole: !problems.length, problems, expectedKeysSha256: keysSha([...want]), observedKeysSha256: keysSha(seen) }, outcomes: tally, seconds: out.reduce((n, r) => n + (r.seconds ?? 0), 0) }
 writeFileSync(join(dir, 'manifest.json'), JSON.stringify(manifest, null, 1))
 console.log(JSON.stringify({ expected: manifest.coverage.expected, observed: manifest.coverage.observed, whole: manifest.coverage.whole, problems, outcomes: tally }, null, 1))
 console.log('run dir: ' + dir)
