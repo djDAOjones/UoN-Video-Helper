@@ -332,6 +332,7 @@ export const zhHans: Messages = {
     announceHelp: '视频制作过程中，会为屏幕阅读器大声朗读每个阶段。最终结果总会播报。',
     progressLabel: '制作你的视频',
     create: '制作视频',
+    again: '重新制作视频',
     cancel: '取消',
     continueAnyway: '继续',
     stopCheck: '停止检查',

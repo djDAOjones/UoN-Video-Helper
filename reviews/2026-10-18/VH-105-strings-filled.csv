@@ -200,6 +200,7 @@ create.announceProgress,"Step 5, Create: buttons and labels",Announce progress,,
 create.announceHelp,"Step 5, Create: buttons and labels",Says each stage out loud for a screen reader as the video is made. The result is always announced.,,视频制作过程中，会为屏幕阅读器大声朗读每个阶段。最终结果总会播报。,Menyebutkan setiap peringkat dengan kuat untuk pembaca skrin semasa video dibuat. Keputusan sentiasa diumumkan.,"Chinese: wrong sense: 步骤 is the page's steps (it means processing stages), and 一一公布 is ""published one by one""; it was “视频制作过程中，会为屏幕阅读器大声朗读每个步骤。最终结果也会一一公布。”."
 create.progressLabel,"Step 5, Create: buttons and labels",Creating your video,,制作你的视频,Mencipta video anda,
 create.create,"Step 5, Create: buttons and labels",Create the video,,制作视频,Cipta video itu,
+create.again,"Step 6, Create: buttons and labels",Create the video again,"Replaces create.create while the video made from the file now chosen is on screen, saved or not; never beside a previous video. Use the same words as ""create the video again"" in result.endedEarly.next.",重新制作视频,Cipta video itu semula,VH-190: Chinese and Malay drafted by the agent
 create.cancel,"Step 5, Create: buttons and labels",Cancel,,取消,Batal,
 create.continueAnyway,"Step 5, Create: buttons and labels",Continue anyway,,继续,Teruskan juga,
 create.stopCheck,"Step 5, Create: buttons and labels",Stop the check,,停止检查,Hentikan pemeriksaan,

@@ -393,6 +393,7 @@ export const enGB = {
       'Says each stage out loud for a screen reader as the video is made. The result is always announced.',
     progressLabel: 'Creating your video',
     create: 'Create the video',
+    again: 'Create the video again',
     cancel: 'Cancel',
     continueAnyway: 'Continue anyway',
     stopCheck: 'Stop the check',

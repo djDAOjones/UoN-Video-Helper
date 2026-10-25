@@ -449,6 +449,8 @@ const NOTES: Readonly<Record<string, string>> = {
   'result.endedEarly.together': 'In place of result.endedEarly.both when the picture and the audio stop in the same second.',
   'result.endedEarly.held':
     'Follows one of the sentences above when the picture stopped and the video has closing graphics: until they start, the last picture stays on screen.',
+  'create.again':
+    'Replaces create.create while the video made from the file now chosen is on screen, saved or not; never beside a previous video. Use the same words as "create the video again" in result.endedEarly.next.',
   'result.endedEarly.next': 'Ends the passage. Use the same words for "create the video" as create.create.',
   'format.unknown': 'Inside a sentence, in place of a fact the app could not read.',
   'format.alone.unknown':

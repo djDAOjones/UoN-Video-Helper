@@ -347,6 +347,7 @@ export const msMY: Messages = {
       'Menyebutkan setiap peringkat dengan kuat untuk pembaca skrin semasa video dibuat. Keputusan sentiasa diumumkan.',
     progressLabel: 'Mencipta video anda',
     create: 'Cipta video itu',
+    again: 'Cipta video itu semula',
     cancel: 'Batal',
     continueAnyway: 'Teruskan juga',
     stopCheck: 'Hentikan pemeriksaan',

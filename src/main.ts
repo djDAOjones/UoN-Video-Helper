@@ -2150,6 +2150,23 @@ interface RetainedResult {
 
 let unsavedResult: RetainedResult | null = null
 
+/** The source of a saved result still on screen, so Create stays stepped down beside it. */
+let savedResultFor: File | null = null
+
+/** A finished video on screen: unsaved, or saved and still the chosen file's. */
+function resultOnScreen(): boolean {
+  return unsavedResult !== null || (savedResultFor !== null && savedResultFor === fileInput.files?.[0])
+}
+
+/**
+ * A finished video on screen made from the file now chosen, saved or not.
+ * Beside a "Previous video" Create makes a different video, not this one again.
+ */
+function resultOfChosenFile(): boolean {
+  const chosen = fileInput.files?.[0]
+  return chosen !== undefined && (unsavedResult?.source === chosen || savedResultFor === chosen)
+}
+
 /**
  * Whether a finished video's result is on the page — or the question before
  * it is discarded, which carries its record — saved or not (VH-140).
@@ -2257,12 +2274,22 @@ saveActions.append(stopSaveButton)
  */
 function labelButtons(): void {
   const { create } = t()
-  startButton.textContent = create.create
+  labelCreate()
   cancelButton.textContent = create.cancel
   acknowledgeButton.textContent = create.continueAnyway
   stopCheckButton.textContent = create.stopCheck
   checkAgainButton.textContent = create.checkAgain
   stopSaveButton.textContent = create.stopSaving
+}
+
+/**
+ * Create beside the chosen file's finished video makes it again from the
+ * current settings, and says so (VH-190); beside a previous video it reads as
+ * itself, the owner's choice. Only the label changes, so focus stays put.
+ */
+function labelCreate(): void {
+  const { create } = t()
+  startButton.textContent = resultOfChosenFile() ? create.again : create.create
 }
 labelButtons()
 
@@ -2836,18 +2863,14 @@ function releaseUnsavedResult(): void {
   syncCreateEmphasis()
 }
 
-/** The source of a saved result still on screen, so Create stays stepped down beside it. */
-let savedResultFor: File | null = null
-
 /**
  * One primary action per state (VH-112, U-13; Carbon). While a finished video
  * is on screen — unsaved, or saved and still the chosen file's — Save or what
  * follows it is the next step, and Create, which starts again, steps down.
  */
 function syncCreateEmphasis(): void {
-  const resultShown =
-    unsavedResult !== null || (savedResultFor !== null && savedResultFor === fileInput.files?.[0])
-  startButton.classList.toggle('button--secondary', resultShown)
+  startButton.classList.toggle('button--secondary', resultOnScreen())
+  labelCreate()
   syncCreateNote()
 }
 
@@ -2865,6 +2888,9 @@ function beginJob(file: File): void {
   // Create, or the question's Discard, is about to go: Cancel takes focus.
   const fromCreate = focusHeldBy([startButton, processResult])
   clearResult()
+  // No finished video stands now: if this job fails or is cancelled, Create
+  // comes back as itself, not "again" (VH-190, Codex astra).
+  syncCreateEmphasis()
   discardAsked = false
   // A running job always shows its row — Cancel lives in it (U-02).
   processActions.hidden = false
