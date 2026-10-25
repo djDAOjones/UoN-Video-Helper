@@ -14,7 +14,7 @@
 
 ## Current
 
-The public release, 0.2.0, on Xerte (PLAN-6).
+The public release on Xerte (PLAN-6): the cut after Phase 8, VH-204; 0.2.0 is not uploaded.
 
 ### Band 7 — measured, not yet fixed — CLOSED 2026-10-20
 
@@ -31,7 +31,7 @@ The public release, 0.2.0, on Xerte (PLAN-6).
 ### Phase 6 — the public release: the feedback form, the statement, the cut, Xerte
 
 - [!] VH-137 — The accessibility statement's review, due 2026-11-18, with its contradictions and its two lists corrected — since 2026-10-20 — (from: VH-130, 2026-10-18) — blocked: the owner's review and the further tests chosen
-- [!] VH-14 — Deployment: the release on Xerte, the public home, and GitHub Pages kept as the unadvertised preview — since 2026-08-24 — blocked: the owner's own work, the Xerte upload — a canon [maintainer] item
+- [!] VH-14 — Deployment: the release on Xerte, the public home, and GitHub Pages kept as the unadvertised preview — since 2026-08-24 — blocked: VH-204's cut, not 0.2.0, then the owner's own work, the Xerte upload — a canon [maintainer] item
 
 ### Phase 7 — a second design, UX and accessibility pass, with Codex astra as partner, before the cut — CLOSED 2026-10-24
 
@@ -44,6 +44,7 @@ The public release, 0.2.0, on Xerte (PLAN-6).
 - [ ] VH-202 — Pass 3's fix plan — since 2026-10-25
 - [ ] VH-203 — Pass 3's fixes, after-run, integrated check — since 2026-10-25
 - [ ] VH-195 — Phase 8 closes — since 2026-10-24
+- [ ] VH-204 — The release cut after Phase 8 closes, the one the owner uploads to Xerte — since 2026-10-25 — blocked: VH-195
 
 ### Standing — the owner's, never phase-gated
 

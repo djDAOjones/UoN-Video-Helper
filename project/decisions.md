@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-25 — VH-204 — raised: a new release is cut after Phase 8 closes, and that one goes to Xerte; 0.2.0 is not uploaded
+
+**Decision:** Phase 8 gains VH-204 after VH-195: a release cut once Phase 8 has closed, which the owner uploads to Xerte. 0.2.0 is not uploaded; VH-14 waits on VH-204's package.
+
+**Rationale:** The owner, to orchestrator #5 on 2026-10-25, verbatim: "Wait: cut a new release after Phase 8 closes and I'll upload that one to Xerte." 0.2.0 was cut on 2026-10-24 for Xerte (VH-162), before Phase 8 changed the page (VH-182 to VH-196, and pass 3's fixes to come), so its package is no longer the app. VH-204 repeats VH-162's method: the version on the cut chat's recommendation (0.3.0 unless it argues otherwise), the statement brought up to date where the release needs it, the gate, a tag, a push, then `npm run package:xerte` and the zip's path to the owner. The words are in orchestrator #5's notes, `plan8-owner-words.md`, "VH-14, the Xerte upload". VH-197's commit could not record them, since rule 3 kept it to VH-197's own lines, so they go in as VH-198's first record commit. No product code changed.
+
+**Supersedes:** 2026-10-24 — VH-162 — The cut: 0.2.0 does not wait for VH-137's November review; Xerte is the public home, GitHub Pages the preview
+
+**Deferred:** VH-204, VH-14
+
 ## 2026-10-25 — VH-197 — Pass 3's plan approved on the owner's standing word: 3,266 records, about 10.9 h, no reduction
 
 **Decision:** The third pass runs as `reviews/2026-10-25/design-pass-3/` plans it: scenarios to S-154, an eighteen-row Phase 8 contract, and the matrix in five parts by `sizing-2026-10-25.mjs`'s recipes, with Codex astra's ten points applied. VH-198 is next.
@@ -512,15 +522,5 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Supersedes:** none
 
 **Items:** VH-163
-
-**Deferred:** none
-
-## 2026-10-22 — VH-137 — The statement's contradictions and its two lists corrected ahead of the owner's review
-
-**Decision:** VH-137's agent part ships before the owner's review, on the owner's relayed "approve all, proceed": the statement's seven V-09 contradictions are corrected and its eleven list items take a capital and their language's stop, with curly apostrophes, in all three languages; the next tests split into the four spec §13 needs and two optional ones, so `statement.plans` gains `optionalIntro` and `optionalItems`; the dates, the chosen tests and the review stay the owner's, so the item stays open.
-
-**Rationale:** The owner's word, relayed from the orchestrator chat on 2026-10-22: "approve all, proceed", answering whether to apply VH-137's agent part now. Each V-09 point and its words: "only automated checks" is gone, and "partially compliant" is tied to the parts listed under "How accessible this tool is" and to no one having yet tested it with a screen reader or other assistive technology (V-06, V-07 and V-10, which the audit named, are fixed by VH-140, VH-141 and VH-149); the reading level is "of the English words"; the hand checks say "in all three languages"; the preview's limitation names audio description and other alternatives; "UoN stands for University of Nottingham" joins the short forms; the colleagues "we are asking" replaces "are checking", with "some words may be wrong until they do"; the four tests §13 criterion 10 needs are "We need them before we can say the tool fully meets the guidelines", and axe or Lighthouse and the staff session sit under "We are also thinking of:". The V-24 recommendation is applied as worded. The short-forms line was split into three sentences because one read at grade 12. The Chinese and Malay are the agent's drafts, marked in the sheet. Checked in Chrome at 375 px in all three languages: the five, four and two items, no straight apostrophe, no empty line, no sideways scroll. Standards: WCAG 2.2 AAA digest, 3.1.5 reading level; Nielsen's error prevention, in a statement that no longer contradicts itself.
-
-**Supersedes:** none
 
 **Deferred:** none
