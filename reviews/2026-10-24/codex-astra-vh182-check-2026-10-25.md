@@ -17,7 +17,7 @@ Commit after the musts below
 5. **May — Retain the implementation; acceptance audit follows.** Criteria are numbered in their order in `project/items/VH-182.md:9`.
 
    | Criterion | Assessment |
-   |---|---|
+   | --- | --- |
    | 1. Approved grouping and persistent routes | **Met.** `index.html:821` has the approved heading, questions and route order. No disclosure, panel or Video-type dependency was added. |
    | 2. Remove learning-content route | **Met.** Its link, handler, constant and translation keys are gone. The Creators note is updated at `src/i18n/sheet.ts:504`; assertions change at `test/screen-text.test.ts:488`. |
    | 3. Self Service | **Met.** Config supplies the HTTPS address; `src/main.ts:3653` applies `_blank` and `noopener noreferrer`; `README.md:37` documents it. |
