@@ -1,0 +1,691 @@
+{
+ "date": "2026-10-25",
+ "item": "VH-198",
+ "instrumentRevision": "20440da",
+ "appSource": "src/ and index.html as last changed at e226410 (VH-193); unchanged since",
+ "server": "Vite dev server on port 5181 (--strictPort), this checkout",
+ "browser": "Chrome/156.0.8078.48, headless=new, CDP port 9232",
+ "chromeFlags": [
+  "--headless=new",
+  "--no-first-run",
+  "--disable-background-timer-throttling",
+  "--disable-renderer-backgrounding",
+  "--disable-backgrounding-occluded-windows"
+ ],
+ "whyTheFlags": "Without them headless Chrome reports every page but its first as hidden: timers throttle to 1 s and media loading is deferred (a probe read 20 x 100 ms timers at 19.7-20.0 s in the second and third pages, 2.0 s in the first). Phase 7's matrix opened its analysis page early, so its later walk pages ran hidden. qualify.mjs assertReached now fails a record whose page is not visible.",
+ "fixtures": "fixtures.sh + fixtures-8.sh into the scratchpad, never samples/",
+ "run": "vh198proof-2026-10-25T20-58-40-009Z-2ec0c2",
+ "plan": "PLANS.vh198proof",
+ "records": {
+  "K-player__en-GB__w1280__light": {
+   "status": "ok",
+   "reached": "pass",
+   "problems": [],
+   "instruments": {
+    "keys": "pass"
+   },
+   "phase8NotPass": {}
+  },
+  "S-03__en-GB__w1280__light": {
+   "status": "ok",
+   "reached": "pass",
+   "problems": [],
+   "instruments": {
+    "overflow": "pass",
+    "ax": "pass",
+    "targets": "pass",
+    "contrastText": "pass",
+    "contrastExtra": "pass",
+    "measure": "pass",
+    "type": "pass",
+    "focus": "pass",
+    "player": "not-applicable",
+    "formatTip": "pass",
+    "footer": "pass",
+    "limiting": "not-applicable",
+    "videoLanguage": "pass",
+    "asserts": "pass"
+   },
+   "phase8NotPass": {
+    "player": [
+     {
+      "what": "no player without a finished card",
+      "outcome": "not-applicable",
+      "why": "no finished card on the page",
+      "players": 0,
+      "exempt": "no finished card on the page"
+     }
+    ],
+    "formatTip": [
+     {
+      "what": "apart from the onset \"?\"",
+      "outcome": "not-applicable",
+      "why": "the onset \"?\" is not on the page in this state",
+      "exempt": "the onset \"?\" is not on the page in this state"
+     }
+    ],
+    "footer": [],
+    "limiting": [
+     {
+      "what": "heavy-limiting warning",
+      "outcome": "not-applicable",
+      "why": "no finished card on the page",
+      "exempt": "no finished card on the page"
+     }
+    ],
+    "videoLanguage": [
+     {
+      "what": "Video language in step 3",
+      "outcome": "not-applicable",
+      "why": "step 3 is not shown in this state",
+      "exempt": "step 3 is not shown in this state"
+     }
+    ],
+    "asserts": [
+     {
+      "what": "app.description, read as it stands for VH-200",
+      "outcome": "not-counted",
+      "why": "recorded as found, not judged here",
+      "found": "Add the University of Nottingham’s approved branding to a video, level its audio, and get a video file sized and formatted for your intended use, without uploading it anywhere.",
+      "exempt": "recorded as found, not judged here"
+     }
+    ]
+   }
+  },
+  "S-119__en-GB__w1280__light": {
+   "status": "ok",
+   "reached": "pass",
+   "problems": [],
+   "instruments": {
+    "overflow": "pass",
+    "ax": "pass",
+    "targets": "cannot-determine",
+    "contrastText": "pass",
+    "contrastExtra": "cannot-determine",
+    "measure": "pass",
+    "type": "pass",
+    "focus": "pass",
+    "player": "not-applicable",
+    "formatTip": "not-applicable",
+    "footer": "pass",
+    "limiting": "not-applicable",
+    "videoLanguage": "pass",
+    "asserts": "pass"
+   },
+   "phase8NotPass": {
+    "player": [
+     {
+      "what": "no player without a finished card",
+      "outcome": "not-applicable",
+      "why": "no finished card on the page",
+      "players": 0,
+      "exempt": "no finished card on the page"
+     }
+    ],
+    "formatTip": [
+     {
+      "what": "format \"?\" by keys",
+      "outcome": "not-applicable",
+      "why": "walked in the scenarios that own it (S-03, S-141 to S-144)",
+      "exempt": "walked in the scenarios that own it (S-03, S-141 to S-144)"
+     }
+    ],
+    "footer": [],
+    "limiting": [
+     {
+      "what": "heavy-limiting warning",
+      "outcome": "not-applicable",
+      "why": "no finished card on the page",
+      "exempt": "no finished card on the page"
+     }
+    ],
+    "videoLanguage": [],
+    "asserts": []
+   }
+  },
+  "S-123__en-GB__w1280__light": {
+   "status": "ok",
+   "reached": "pass",
+   "problems": [],
+   "instruments": {
+    "overflow": "pass",
+    "ax": "pass",
+    "targets": "pass",
+    "contrastText": "pass",
+    "contrastExtra": "cannot-determine",
+    "measure": "cannot-determine",
+    "type": "pass",
+    "focus": "pass",
+    "player": "not-applicable",
+    "formatTip": "not-applicable",
+    "footer": "pass",
+    "limiting": "not-applicable",
+    "videoLanguage": "pass",
+    "asserts": "pass"
+   },
+   "phase8NotPass": {
+    "player": [
+     {
+      "what": "no player without a finished card",
+      "outcome": "not-applicable",
+      "why": "no finished card on the page",
+      "players": 0,
+      "exempt": "no finished card on the page"
+     }
+    ],
+    "formatTip": [
+     {
+      "what": "format \"?\" by keys",
+      "outcome": "not-applicable",
+      "why": "walked in the scenarios that own it (S-03, S-141 to S-144)",
+      "exempt": "walked in the scenarios that own it (S-03, S-141 to S-144)"
+     }
+    ],
+    "footer": [],
+    "limiting": [
+     {
+      "what": "heavy-limiting warning",
+      "outcome": "not-applicable",
+      "why": "no finished card on the page",
+      "exempt": "no finished card on the page"
+     }
+    ],
+    "videoLanguage": [],
+    "asserts": []
+   }
+  },
+  "S-126__en-GB__w1280__light": {
+   "status": "ok",
+   "reached": "pass",
+   "problems": [],
+   "instruments": {
+    "overflow": "pass",
+    "ax": "pass",
+    "targets": "pass",
+    "contrastText": "pass",
+    "contrastExtra": "cannot-determine",
+    "measure": "pass",
+    "type": "pass",
+    "focus": "pass",
+    "player": "cannot-determine",
+    "formatTip": "not-applicable",
+    "footer": "pass",
+    "limiting": "pass",
+    "videoLanguage": "pass",
+    "asserts": "pass"
+   },
+   "phase8NotPass": {
+    "player": [
+     {
+      "what": "control target",
+      "outcome": "cannot-determine",
+      "control": "slider \"volume\"",
+      "box": {
+       "w": 0,
+       "h": 48
+      },
+      "why": "no box for the control: empty"
+     },
+     {
+      "what": "control target",
+      "outcome": "fail",
+      "control": "slider \"video time scrubber\"",
+      "box": {
+       "w": 825,
+       "h": 24
+      },
+      "uaException": "user-agent control: its size is the browser's, not modified by the author (2.5.5)",
+      "exempt": "user-agent control: its size is the browser's, not modified by the author (2.5.5)"
+     }
+    ],
+    "formatTip": [
+     {
+      "what": "format \"?\" by keys",
+      "outcome": "not-applicable",
+      "why": "walked in the scenarios that own it (S-03, S-141 to S-144)",
+      "exempt": "walked in the scenarios that own it (S-03, S-141 to S-144)"
+     }
+    ],
+    "footer": [],
+    "limiting": [],
+    "videoLanguage": [],
+    "asserts": []
+   }
+  },
+  "S-127__en-GB__w1280__light": {
+   "status": "ok",
+   "reached": "pass",
+   "problems": [],
+   "instruments": {
+    "overflow": "pass",
+    "ax": "pass",
+    "targets": "pass",
+    "contrastText": "pass",
+    "contrastExtra": "cannot-determine",
+    "measure": "pass",
+    "type": "pass",
+    "focus": "pass",
+    "player": "cannot-determine",
+    "formatTip": "not-applicable",
+    "footer": "pass",
+    "limiting": "pass",
+    "videoLanguage": "pass",
+    "asserts": "not-applicable"
+   },
+   "phase8NotPass": {
+    "player": [
+     {
+      "what": "control target",
+      "outcome": "cannot-determine",
+      "control": "slider \"volume\"",
+      "box": {
+       "w": 0,
+       "h": 48
+      },
+      "why": "no box for the control: empty"
+     },
+     {
+      "what": "control target",
+      "outcome": "fail",
+      "control": "slider \"video time scrubber\"",
+      "box": {
+       "w": 825,
+       "h": 24
+      },
+      "uaException": "user-agent control: its size is the browser's, not modified by the author (2.5.5)",
+      "exempt": "user-agent control: its size is the browser's, not modified by the author (2.5.5)"
+     },
+     {
+      "what": "ring by pixels",
+      "outcome": "fail",
+      "control": "button \"play\"",
+      "host": false,
+      "box": {
+       "w": 48,
+       "h": 48
+      },
+      "areaAt3to1": 90,
+      "perimeter2px": 368,
+      "changedAny": 1182,
+      "bestRatio": 18.26,
+      "visible": true,
+      "uaException": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible",
+      "exempt": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible"
+     },
+     {
+      "what": "ring by pixels",
+      "outcome": "fail",
+      "control": "slider \"volume\"",
+      "host": false,
+      "box": {
+       "w": 12,
+       "h": 48
+      },
+      "areaAt3to1": 53,
+      "perimeter2px": 222,
+      "changedAny": 869,
+      "bestRatio": 17.47,
+      "visible": true,
+      "uaException": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible",
+      "exempt": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible"
+     },
+     {
+      "what": "ring by pixels",
+      "outcome": "fail",
+      "control": "button \"un-mute\"",
+      "host": false,
+      "box": {
+       "w": 48,
+       "h": 48
+      },
+      "areaAt3to1": 119,
+      "perimeter2px": 368,
+      "changedAny": 1808,
+      "bestRatio": 17.47,
+      "visible": true,
+      "uaException": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible",
+      "exempt": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible"
+     },
+     {
+      "what": "ring by pixels",
+      "outcome": "fail",
+      "control": "button \"enter full screen\"",
+      "host": false,
+      "box": {
+       "w": 48,
+       "h": 48
+      },
+      "areaAt3to1": 96,
+      "perimeter2px": 368,
+      "changedAny": 1406,
+      "bestRatio": 15.82,
+      "visible": true,
+      "uaException": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible",
+      "exempt": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible"
+     },
+     {
+      "what": "ring by pixels",
+      "outcome": "fail",
+      "control": "button \"show more media controls\"",
+      "host": false,
+      "box": {
+       "w": 48,
+       "h": 48
+      },
+      "areaAt3to1": 61,
+      "perimeter2px": 368,
+      "changedAny": 1297,
+      "bestRatio": 15.82,
+      "visible": true,
+      "uaException": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible",
+      "exempt": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible"
+     },
+     {
+      "what": "ring by pixels",
+      "outcome": "fail",
+      "control": "slider \"video time scrubber\"",
+      "host": false,
+      "box": {
+       "w": 825,
+       "h": 24
+      },
+      "areaAt3to1": 1851,
+      "perimeter2px": 3380,
+      "changedAny": 3404,
+      "bestRatio": 19.82,
+      "visible": true,
+      "uaException": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible",
+      "exempt": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible"
+     }
+    ],
+    "formatTip": [
+     {
+      "what": "format \"?\" by keys",
+      "outcome": "not-applicable",
+      "why": "walked in the scenarios that own it (S-03, S-141 to S-144)",
+      "exempt": "walked in the scenarios that own it (S-03, S-141 to S-144)"
+     }
+    ],
+    "footer": [],
+    "limiting": [],
+    "videoLanguage": [],
+    "asserts": [
+     {
+      "what": "the scenario's own assertions",
+      "outcome": "not-applicable",
+      "why": "the scenario declares none beyond its state",
+      "exempt": "the scenario declares none beyond its state"
+     }
+    ]
+   }
+  },
+  "S-131__en-GB__w1280__light": {
+   "status": "ok",
+   "reached": "pass",
+   "problems": [],
+   "instruments": {
+    "overflow": "pass",
+    "ax": "pass",
+    "targets": "cannot-determine",
+    "contrastText": "pass",
+    "contrastExtra": "cannot-determine",
+    "measure": "pass",
+    "type": "pass",
+    "focus": "pass",
+    "player": "pass",
+    "formatTip": "not-applicable",
+    "footer": "pass",
+    "limiting": "pass",
+    "videoLanguage": "pass",
+    "asserts": "pass"
+   },
+   "phase8NotPass": {
+    "player": [],
+    "formatTip": [
+     {
+      "what": "format \"?\" by keys",
+      "outcome": "not-applicable",
+      "why": "walked in the scenarios that own it (S-03, S-141 to S-144)",
+      "exempt": "walked in the scenarios that own it (S-03, S-141 to S-144)"
+     }
+    ],
+    "footer": [],
+    "limiting": [],
+    "videoLanguage": [],
+    "asserts": []
+   }
+  },
+  "S-135__en-GB__w1280__light": {
+   "status": "ok",
+   "reached": "pass",
+   "problems": [],
+   "instruments": {
+    "overflow": "pass",
+    "ax": "pass",
+    "targets": "cannot-determine",
+    "contrastText": "pass",
+    "contrastExtra": "cannot-determine",
+    "measure": "pass",
+    "type": "pass",
+    "focus": "pass",
+    "player": "cannot-determine",
+    "formatTip": "not-applicable",
+    "footer": "pass",
+    "limiting": "pass",
+    "videoLanguage": "pass",
+    "asserts": "pass"
+   },
+   "phase8NotPass": {
+    "player": [
+     {
+      "what": "control target",
+      "outcome": "cannot-determine",
+      "control": "slider \"volume\"",
+      "box": {
+       "w": 0,
+       "h": 48
+      },
+      "why": "no box for the control: empty"
+     },
+     {
+      "what": "control target",
+      "outcome": "fail",
+      "control": "slider \"video time scrubber\"",
+      "box": {
+       "w": 825,
+       "h": 24
+      },
+      "uaException": "user-agent control: its size is the browser's, not modified by the author (2.5.5)",
+      "exempt": "user-agent control: its size is the browser's, not modified by the author (2.5.5)"
+     }
+    ],
+    "formatTip": [
+     {
+      "what": "format \"?\" by keys",
+      "outcome": "not-applicable",
+      "why": "walked in the scenarios that own it (S-03, S-141 to S-144)",
+      "exempt": "walked in the scenarios that own it (S-03, S-141 to S-144)"
+     }
+    ],
+    "footer": [],
+    "limiting": [],
+    "videoLanguage": [],
+    "asserts": []
+   }
+  },
+  "S-141__en-GB__w1280__light": {
+   "status": "ok",
+   "reached": "pass",
+   "problems": [],
+   "instruments": {
+    "overflow": "pass",
+    "ax": "pass",
+    "targets": "pass",
+    "contrastText": "pass",
+    "contrastExtra": "pass",
+    "measure": "pass",
+    "type": "pass",
+    "focus": "pass",
+    "player": "not-applicable",
+    "formatTip": "pass",
+    "footer": "pass",
+    "limiting": "not-applicable",
+    "videoLanguage": "pass",
+    "asserts": "pass"
+   },
+   "phase8NotPass": {
+    "player": [
+     {
+      "what": "no player without a finished card",
+      "outcome": "not-applicable",
+      "why": "no finished card on the page",
+      "players": 0,
+      "exempt": "no finished card on the page"
+     }
+    ],
+    "formatTip": [
+     {
+      "what": "apart from the onset \"?\"",
+      "outcome": "not-applicable",
+      "why": "the onset \"?\" is not on the page in this state",
+      "exempt": "the onset \"?\" is not on the page in this state"
+     }
+    ],
+    "footer": [],
+    "limiting": [
+     {
+      "what": "heavy-limiting warning",
+      "outcome": "not-applicable",
+      "why": "no finished card on the page",
+      "exempt": "no finished card on the page"
+     }
+    ],
+    "videoLanguage": [
+     {
+      "what": "Video language in step 3",
+      "outcome": "not-applicable",
+      "why": "step 3 is not shown in this state",
+      "exempt": "step 3 is not shown in this state"
+     }
+    ],
+    "asserts": []
+   }
+  },
+  "S-142__zh-Hans__w1280__light": {
+   "status": "ok",
+   "reached": "pass",
+   "problems": [],
+   "instruments": {
+    "overflow": "pass",
+    "ax": "pass",
+    "targets": "pass",
+    "contrastText": "pass",
+    "contrastExtra": "pass",
+    "measure": "cannot-determine",
+    "type": "pass",
+    "focus": "pass",
+    "player": "not-applicable",
+    "formatTip": "pass",
+    "footer": "pass",
+    "limiting": "not-applicable",
+    "videoLanguage": "pass",
+    "asserts": "pass"
+   },
+   "phase8NotPass": {
+    "player": [
+     {
+      "what": "no player without a finished card",
+      "outcome": "not-applicable",
+      "why": "no finished card on the page",
+      "players": 0,
+      "exempt": "no finished card on the page"
+     }
+    ],
+    "formatTip": [
+     {
+      "what": "apart from the onset \"?\"",
+      "outcome": "not-applicable",
+      "why": "the onset \"?\" is not on the page in this state",
+      "exempt": "the onset \"?\" is not on the page in this state"
+     }
+    ],
+    "footer": [],
+    "limiting": [
+     {
+      "what": "heavy-limiting warning",
+      "outcome": "not-applicable",
+      "why": "no finished card on the page",
+      "exempt": "no finished card on the page"
+     }
+    ],
+    "videoLanguage": [
+     {
+      "what": "Video language in step 3",
+      "outcome": "not-applicable",
+      "why": "step 3 is not shown in this state",
+      "exempt": "step 3 is not shown in this state"
+     }
+    ],
+    "asserts": []
+   }
+  },
+  "S-145__en-GB__w1280__light": {
+   "status": "ok",
+   "reached": "pass",
+   "problems": [],
+   "instruments": {
+    "overflow": "pass",
+    "ax": "pass",
+    "targets": "pass",
+    "contrastText": "pass",
+    "contrastExtra": "pass",
+    "measure": "pass",
+    "type": "pass",
+    "focus": "pass",
+    "player": "not-applicable",
+    "formatTip": "not-applicable",
+    "footer": "pass",
+    "limiting": "not-applicable",
+    "videoLanguage": "pass",
+    "asserts": "pass"
+   },
+   "phase8NotPass": {
+    "player": [
+     {
+      "what": "no player without a finished card",
+      "outcome": "not-applicable",
+      "why": "no finished card on the page",
+      "players": 0,
+      "exempt": "no finished card on the page"
+     }
+    ],
+    "formatTip": [
+     {
+      "what": "format \"?\" by keys",
+      "outcome": "not-applicable",
+      "why": "walked in the scenarios that own it (S-03, S-141 to S-144)",
+      "exempt": "walked in the scenarios that own it (S-03, S-141 to S-144)"
+     }
+    ],
+    "footer": [],
+    "limiting": [
+     {
+      "what": "heavy-limiting warning",
+      "outcome": "not-applicable",
+      "why": "no finished card on the page",
+      "exempt": "no finished card on the page"
+     }
+    ],
+    "videoLanguage": [
+     {
+      "what": "Video language in step 3",
+      "outcome": "not-applicable",
+      "why": "step 3 is not shown in this state",
+      "exempt": "step 3 is not shown in this state"
+     }
+    ],
+    "asserts": []
+   }
+  }
+ }
+}

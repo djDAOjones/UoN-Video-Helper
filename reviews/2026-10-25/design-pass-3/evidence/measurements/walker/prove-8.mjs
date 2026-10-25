@@ -27,7 +27,6 @@ import { P8_INIT, playerRows, playerKeys, footerRows, limitingRows, videoLanguag
 
 const DIR = process.env.PROVE_DIR
 const FIX = process.env.FIX
-const APP = process.env.APP_URL ?? 'http://localhost:5173/'
 if (!DIR || !FIX) throw new Error('set PROVE_DIR and FIX')
 mkdirSync(DIR, { recursive: true })
 

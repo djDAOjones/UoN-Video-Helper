@@ -1,0 +1,132 @@
+[
+ {
+  "fixture": "N6",
+  "what": "clicks-20s.mp4: a bite over 3 LU by a clear margin (S-135 to S-138, S-151, S-152)",
+  "outcome": "pass",
+  "bite": 20.13,
+  "planned": {
+   "t": 1792962177887,
+   "sourceIntegratedLufs": -30.36,
+   "loudnessRangeLu": 0,
+   "macroLevelling": false,
+   "damageSilenced": 0,
+   "afterChainLufs": -30.36,
+   "limitedLufs": -16.03,
+   "limiterBiteLu": 20.13,
+   "codecCostLu": 0,
+   "codecOvershootDb": 0.056,
+   "codecProbedSeconds": 20,
+   "limiterCeilingDbtp": -3,
+   "predictedOutputLufs": -16.03,
+   "refinementPasses": 6,
+   "converged": true,
+   "gainDb": 34.46,
+   "planningMs": 760
+  },
+  "warned": true,
+  "margin": "over HEAVY_LIMITING_LU (3) by more than 5 LU",
+  "seconds": 4
+ },
+ {
+  "fixture": "N7",
+  "what": "still-1000s.mp4 and still-1100s.mp4: the 1% boundary (S-94)",
+  "outcome": "pass",
+  "s1000": [
+   {
+    "v": 10,
+    "text": "10 seconds"
+   },
+   {
+    "v": 0,
+    "text": "the beginning"
+   }
+  ],
+  "s1100": [
+   {
+    "v": 11,
+    "text": "11 seconds"
+   },
+   {
+    "v": 0,
+    "text": "the beginning"
+   }
+  ],
+  "seconds": 18
+ },
+ {
+  "fixture": "N8",
+  "what": "late sound: a, the sliver; b, the control; c, untrimmed (S-99 to S-102)",
+  "outcome": "pass",
+  "aNoAudio": true,
+  "bNoAudio": false,
+  "cVerdictNotes": null,
+  "seconds": 7
+ },
+ {
+  "fixture": "N9",
+  "what": "lecture-30s.mkv, whole: the unchecked caption warning (S-105)",
+  "outcome": "pass",
+  "title": true,
+  "passage": true,
+  "seconds": 2
+ },
+ {
+  "fixture": "N10",
+  "what": "short-0.4s.mp4: \"Less than a second\" (S-103)",
+  "outcome": "pass",
+  "duration": "Less than a second",
+  "seconds": 2
+ },
+ {
+  "fixture": "N11",
+  "what": "noduration-10s.webm: a duration not written (S-104), to be proved",
+  "outcome": "fail",
+  "duration": "10 seconds",
+  "verdict": "success",
+  "consequence": "S-104 source-only: the page reads this file's duration",
+  "seconds": 2
+ },
+ {
+  "fixture": "N12",
+  "what": "slides-60s.mp4: classed as screen and not capped (S-110), to be proved",
+  "outcome": "pass",
+  "slidesLine": true,
+  "report": "Ready to goThis should take about 20 seconds.Estimated size up to 12.3 MB.This looks like slides or a screen recording, so the file is made smaller still. If it is mostly camera footage, choose high quality instead.",
+  "consequence": "S-110 walked",
+  "seconds": 4
+ },
+ {
+  "fixture": "N13",
+  "what": "qtrle-5s.mov: read and checked (S-140n; its job is S-140n's record)",
+  "outcome": "pass",
+  "verdict": null,
+  "block": "error",
+  "blockText": "This cannot run hereThis browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead.",
+  "heading": "",
+  "sample": {
+   "verdict": null,
+   "block": "error",
+   "heading": "",
+   "blockText": "This cannot run hereThis browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again"
+  },
+  "twin": "compared with the sample read just before",
+  "seconds": 3
+ },
+ {
+  "fixture": "N14",
+  "what": "late-sound-3.71s-25fps-10s.mp4: the frame-snap case (S-153), to be proved",
+  "outcome": "pass",
+  "at408": {
+   "noAudio": true,
+   "keptMs": 370
+  },
+  "at410": {
+   "noAudio": false,
+   "askedMs": 390,
+   "placedMs": 410,
+   "endRange": 4.1
+  },
+  "consequence": "S-153 walked",
+  "seconds": 6
+ }
+]

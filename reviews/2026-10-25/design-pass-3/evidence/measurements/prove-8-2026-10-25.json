@@ -1,0 +1,941 @@
+[
+ {
+  "instrument": "player: host with no name",
+  "fixture": "player-noname-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "host named by the card's title",
+    "outcome": "fail",
+    "why": "host with no name",
+    "name": "",
+    "title": "Finished video — 1.1 MB",
+    "labelledBy": null
+   },
+   "otherCheck": {
+    "what": "route forward reaches every control",
+    "outcome": "pass"
+   }
+  }
+ },
+ {
+  "instrument": "player: the reach check, on the name fixture",
+  "fixture": "player-noname-bad",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "route forward reaches every control",
+    "outcome": "pass",
+    "placedOn": "the card, by script (setup)",
+    "stops": [
+     {
+      "role": "Video",
+      "name": "",
+      "dom": 2,
+      "ignored": false,
+      "host": true
+     },
+     {
+      "role": "button",
+      "name": "play",
+      "dom": 52,
+      "ignored": false,
+      "host": false
+     },
+     {
+      "role": "slider",
+      "name": "volume",
+      "dom": 59,
+      "ignored": false,
+      "host": false
+     },
+     {
+      "role": "button",
+      "name": "un-mute",
+      "dom": 66,
+      "ignored": false,
+      "host": false
+     },
+     {
+      "role": "button",
+      "name": "enter full screen",
+      "dom": 67,
+      "ignored": false,
+      "host": false
+     },
+     {
+      "role": "button",
+      "name": "show more media controls",
+      "dom": 69,
+      "ignored": false,
+      "host": false
+     },
+     {
+      "role": "slider",
+      "name": "video time scrubber",
+      "dom": 12,
+      "ignored": false,
+      "host": false
+     }
+    ],
+    "left": {
+     "active": {
+      "id": null,
+      "tag": "button",
+      "cls": "button",
+      "name": null,
+      "value": null,
+      "card": false
+     },
+     "ax": {
+      "role": "button",
+      "name": "Save the video",
+      "dom": 120,
+      "ignored": false
+     }
+    },
+    "inventory": [
+     {
+      "role": "button",
+      "name": "play",
+      "dom": 52,
+      "ignored": false
+     },
+     {
+      "role": "slider",
+      "name": "volume",
+      "dom": 59,
+      "ignored": false
+     },
+     {
+      "role": "button",
+      "name": "un-mute",
+      "dom": 66,
+      "ignored": false
+     },
+     {
+      "role": "button",
+      "name": "enter full screen",
+      "dom": 67,
+      "ignored": false
+     },
+     {
+      "role": "button",
+      "name": "show more media controls",
+      "dom": 69,
+      "ignored": false
+     },
+     {
+      "role": "slider",
+      "name": "video time scrubber",
+      "dom": 12,
+      "ignored": false
+     }
+    ]
+   }
+  }
+ },
+ {
+  "instrument": "player: host with no name",
+  "fixture": "player-noname-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "host named by the card's title",
+    "outcome": "pass",
+    "name": "Finished video — 1.1 MB",
+    "title": "Finished video — 1.1 MB",
+    "labelledBy": "t"
+   },
+   "otherCheck": {
+    "what": "route forward reaches every control",
+    "outcome": "pass"
+   }
+  }
+ },
+ {
+  "instrument": "player: the reach check, on the name fixture",
+  "fixture": "player-noname-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "route forward reaches every control",
+    "outcome": "pass",
+    "placedOn": "the card, by script (setup)",
+    "stops": [
+     {
+      "role": "Video",
+      "name": "Finished video — 1.1 MB",
+      "dom": 2,
+      "ignored": false,
+      "host": true
+     },
+     {
+      "role": "button",
+      "name": "play",
+      "dom": 53,
+      "ignored": false,
+      "host": false
+     },
+     {
+      "role": "slider",
+      "name": "volume",
+      "dom": 60,
+      "ignored": false,
+      "host": false
+     },
+     {
+      "role": "button",
+      "name": "un-mute",
+      "dom": 67,
+      "ignored": false,
+      "host": false
+     },
+     {
+      "role": "button",
+      "name": "enter full screen",
+      "dom": 68,
+      "ignored": false,
+      "host": false
+     },
+     {
+      "role": "button",
+      "name": "show more media controls",
+      "dom": 17,
+      "ignored": false,
+      "host": false
+     },
+     {
+      "role": "slider",
+      "name": "video time scrubber",
+      "dom": 12,
+      "ignored": false,
+      "host": false
+     }
+    ],
+    "left": {
+     "active": {
+      "id": null,
+      "tag": "button",
+      "cls": "button",
+      "name": null,
+      "value": null,
+      "card": false
+     },
+     "ax": {
+      "role": "button",
+      "name": "Save the video",
+      "dom": 120,
+      "ignored": false
+     }
+    },
+    "inventory": [
+     {
+      "role": "button",
+      "name": "play",
+      "dom": 53,
+      "ignored": false
+     },
+     {
+      "role": "slider",
+      "name": "volume",
+      "dom": 60,
+      "ignored": false
+     },
+     {
+      "role": "button",
+      "name": "un-mute",
+      "dom": 67,
+      "ignored": false
+     },
+     {
+      "role": "button",
+      "name": "enter full screen",
+      "dom": 68,
+      "ignored": false
+     },
+     {
+      "role": "button",
+      "name": "show more media controls",
+      "dom": 17,
+      "ignored": false
+     },
+     {
+      "role": "slider",
+      "name": "video time scrubber",
+      "dom": 12,
+      "ignored": false
+     }
+    ]
+   }
+  }
+ },
+ {
+  "instrument": "player: control out of reach",
+  "fixture": "player-reach-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "route forward reaches every control",
+    "outcome": "fail",
+    "why": "control out of reach: button \"play\", slider \"volume\", button \"un-mute\", button \"enter full screen\", button \"show more media controls\", slider \"video time scrubber\"",
+    "placedOn": "the card, by script (setup)",
+    "stops": [],
+    "left": {
+     "active": {
+      "id": null,
+      "tag": "button",
+      "cls": "button",
+      "name": null,
+      "value": null,
+      "card": false
+     },
+     "ax": {
+      "role": "button",
+      "name": "Save the video",
+      "dom": 120,
+      "ignored": false
+     }
+    },
+    "inventory": [
+     {
+      "role": "button",
+      "name": "play",
+      "dom": 53,
+      "ignored": false
+     },
+     {
+      "role": "slider",
+      "name": "volume",
+      "dom": 60,
+      "ignored": false
+     },
+     {
+      "role": "button",
+      "name": "un-mute",
+      "dom": 67,
+      "ignored": false
+     },
+     {
+      "role": "button",
+      "name": "enter full screen",
+      "dom": 68,
+      "ignored": false
+     },
+     {
+      "role": "button",
+      "name": "show more media controls",
+      "dom": 17,
+      "ignored": false
+     },
+     {
+      "role": "slider",
+      "name": "video time scrubber",
+      "dom": 12,
+      "ignored": false
+     }
+    ]
+   },
+   "otherCheck": {
+    "what": "host named by the card's title",
+    "outcome": "pass"
+   }
+  }
+ },
+ {
+  "instrument": "player: the name check, on the reach fixture",
+  "fixture": "player-reach-bad",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "host named by the card's title",
+    "outcome": "pass",
+    "name": "Finished video — 1.1 MB",
+    "title": "Finished video — 1.1 MB",
+    "labelledBy": "t"
+   }
+  }
+ },
+ {
+  "instrument": "player: control out of reach",
+  "fixture": "player-reach-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "route forward reaches every control",
+    "outcome": "pass",
+    "placedOn": "the card, by script (setup)",
+    "stops": [
+     {
+      "role": "Video",
+      "name": "Finished video — 1.1 MB",
+      "dom": 2,
+      "ignored": false,
+      "host": true
+     },
+     {
+      "role": "button",
+      "name": "play",
+      "dom": 53,
+      "ignored": false,
+      "host": false
+     },
+     {
+      "role": "slider",
+      "name": "volume",
+      "dom": 60,
+      "ignored": false,
+      "host": false
+     },
+     {
+      "role": "button",
+      "name": "un-mute",
+      "dom": 67,
+      "ignored": false,
+      "host": false
+     },
+     {
+      "role": "button",
+      "name": "enter full screen",
+      "dom": 68,
+      "ignored": false,
+      "host": false
+     },
+     {
+      "role": "button",
+      "name": "show more media controls",
+      "dom": 17,
+      "ignored": false,
+      "host": false
+     },
+     {
+      "role": "slider",
+      "name": "video time scrubber",
+      "dom": 9,
+      "ignored": false,
+      "host": false
+     }
+    ],
+    "left": {
+     "active": {
+      "id": null,
+      "tag": "button",
+      "cls": "button",
+      "name": null,
+      "value": null,
+      "card": false
+     },
+     "ax": {
+      "role": "button",
+      "name": "Save the video",
+      "dom": 120,
+      "ignored": false
+     }
+    },
+    "inventory": [
+     {
+      "role": "button",
+      "name": "play",
+      "dom": 53,
+      "ignored": false
+     },
+     {
+      "role": "slider",
+      "name": "volume",
+      "dom": 60,
+      "ignored": false
+     },
+     {
+      "role": "button",
+      "name": "un-mute",
+      "dom": 67,
+      "ignored": false
+     },
+     {
+      "role": "button",
+      "name": "enter full screen",
+      "dom": 68,
+      "ignored": false
+     },
+     {
+      "role": "button",
+      "name": "show more media controls",
+      "dom": 17,
+      "ignored": false
+     },
+     {
+      "role": "slider",
+      "name": "video time scrubber",
+      "dom": 9,
+      "ignored": false
+     }
+    ]
+   },
+   "otherCheck": {
+    "what": "host named by the card's title",
+    "outcome": "pass"
+   }
+  }
+ },
+ {
+  "instrument": "player: the name check, on the reach fixture",
+  "fixture": "player-reach-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "host named by the card's title",
+    "outcome": "pass",
+    "name": "Finished video — 1.1 MB",
+    "title": "Finished video — 1.1 MB",
+    "labelledBy": "t"
+   }
+  }
+ },
+ {
+  "instrument": "player: present while unsaved, gone once saved",
+  "fixture": "player-saved-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "what": "gone once a save completes",
+   "outcome": "fail",
+   "players": 1
+  }
+ },
+ {
+  "instrument": "player: present while unsaved, gone once saved",
+  "fixture": "player-unsaved-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "what": "present while unsaved, one, in the card",
+   "outcome": "pass",
+   "players": 1,
+   "inCard": true
+  }
+ },
+ {
+  "instrument": "composed wording (M.says)",
+  "fixture": "composed-old-name-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "text": "Keep less of the video, choose Smaller / reduced, or free some space, then press Check again.",
+   "phase7Matches": true
+  }
+ },
+ {
+  "instrument": "composed wording (M.says)",
+  "fixture": "composed-new-name-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "text": "Keep less of the video, choose the smaller file, or free some space, then press Check again.",
+   "phase7Matches": true
+  }
+ },
+ {
+  "instrument": "footer headings (AX levels)",
+  "fixture": "footer-app-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "failing": []
+  }
+ },
+ {
+  "instrument": "footer headings (AX levels)",
+  "fixture": "footer-h2-at-level-3-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "oneH2": {
+    "what": "one h2, by its level in the tree",
+    "outcome": "fail",
+    "h2": []
+   },
+   "order": {
+    "what": "order and levels: h2, h3 over the two help links, h3 over Report a problem, h3 over the form",
+    "outcome": "fail",
+    "seq": [
+     {
+      "role": "heading",
+      "level": 3,
+      "name": "Help and feedback"
+     },
+     {
+      "role": "heading",
+      "level": 3,
+      "name": "Need help using the tool?"
+     },
+     {
+      "role": "link",
+      "level": null,
+      "name": "Staff: ask in the Creators team on Teams (new tab)"
+     },
+     {
+      "role": "link",
+      "level": null,
+      "name": "Students: get help through Self Service (new tab)"
+     },
+     {
+      "role": "heading",
+      "level": 3,
+      "name": "Something not working?"
+     },
+     {
+      "role": "button",
+      "level": null,
+      "name": "Report a problem"
+     },
+     {
+      "role": "heading",
+      "level": 3,
+      "name": "What do you think of the tool?"
+     },
+     {
+      "role": "link",
+      "level": null,
+      "name": "Please tell us what you think in the feedback form (new tab)"
+     }
+    ]
+   },
+   "tagStill": "H2"
+  }
+ },
+ {
+  "instrument": "footer: Report a problem in its group",
+  "fixture": "footer-button-moved-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "what": "Report a problem in its group",
+   "outcome": "fail",
+   "iProblem": 4,
+   "iButton": 6,
+   "iOpinion": 5
+  }
+ },
+ {
+  "instrument": "limiting warning: first in the line spoken",
+  "fixture": "warning-said-in-an-earlier-job-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "first in the line spoken at completion, inside its interval",
+    "outcome": "fail",
+    "interval": [
+     1792962206811,
+     1792962210996
+    ],
+    "texts": [
+     "Your video is ready."
+    ]
+   },
+   "wholeHistoryWouldSay": true
+  }
+ },
+ {
+  "instrument": "limiting warning: first in the line spoken",
+  "fixture": "warning-said-at-this-completion-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "first in the line spoken at completion, inside its interval",
+    "outcome": "pass",
+    "interval": [
+     1792962208091,
+     1792962212282
+    ],
+    "texts": [
+     "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across."
+    ]
+   },
+   "wholeHistoryWouldSay": true
+  }
+ },
+ {
+  "instrument": "limiting warning: first among the card's warnings",
+  "fixture": "warning-not-first-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "first among the card's warnings",
+    "outcome": "fail",
+    "titles": [
+     "The file’s title, author, and date could not be copied across",
+     "The loudest moments were held down hard"
+    ]
+   },
+   "wholeHistoryWouldSay": true
+  }
+ },
+ {
+  "instrument": "limiting warning: present above the threshold",
+  "fixture": "warning-below-threshold-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "present above the threshold, absent below",
+    "outcome": "fail",
+    "bite": 0.5,
+    "threshold": 3,
+    "hasHeavy": true
+   },
+   "wholeHistoryWouldSay": true
+  }
+ },
+ {
+  "instrument": "limiting warning: present above the threshold",
+  "fixture": "warning-above-threshold-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "present above the threshold, absent below",
+    "outcome": "pass",
+    "bite": 20.1,
+    "threshold": 3,
+    "hasHeavy": true
+   },
+   "wholeHistoryWouldSay": true
+  }
+ },
+ {
+  "instrument": "limiting warning: present above the threshold",
+  "fixture": "no-warning-below-threshold-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "present above the threshold, absent below",
+    "outcome": "pass",
+    "bite": 0,
+    "threshold": 3,
+    "hasHeavy": false
+   },
+   "wholeHistoryWouldSay": false
+  }
+ },
+ {
+  "instrument": "limiting warning: present above the threshold",
+  "fixture": "no-warning-above-threshold-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "present above the threshold, absent below",
+    "outcome": "fail",
+    "bite": 20.1,
+    "threshold": 3,
+    "hasHeavy": false
+   },
+   "wholeHistoryWouldSay": false
+  }
+ },
+ {
+  "instrument": "format \"?\": Tab closes it",
+  "fixture": "tip-stays-open-on-tab-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "what": "Tab closes it; focus goes where it goes with it closed",
+   "outcome": "fail",
+   "open": {
+    "open": true,
+    "expanded": "true",
+    "onsetOpen": false,
+    "focus": "#after"
+   },
+   "closed": {
+    "open": false,
+    "expanded": "false",
+    "onsetOpen": false,
+    "focus": "#after"
+   }
+  }
+ },
+ {
+  "instrument": "format \"?\": Tab closes it",
+  "fixture": "tip-closes-on-tab-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "what": "Tab closes it; focus goes where it goes with it closed",
+   "outcome": "pass",
+   "open": {
+    "open": false,
+    "expanded": "false",
+    "onsetOpen": false,
+    "focus": "#after"
+   },
+   "closed": {
+    "open": false,
+    "expanded": "false",
+    "onsetOpen": false,
+    "focus": "#after"
+   }
+  }
+ },
+ {
+  "instrument": "format \"?\": edge",
+  "fixture": "tip-rail-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "what": "edge: 1 px all round in --border-subtle, not a rail",
+   "outcome": "fail",
+   "sides": [
+    {
+     "w": "1px",
+     "style": "solid",
+     "color": "rgb(141, 141, 141)"
+    },
+    {
+     "w": "1px",
+     "style": "solid",
+     "color": "rgb(141, 141, 141)"
+    },
+    {
+     "w": "1px",
+     "style": "solid",
+     "color": "rgb(141, 141, 141)"
+    },
+    {
+     "w": "4px",
+     "style": "solid",
+     "color": "rgb(15, 98, 254)"
+    }
+   ],
+   "token": "rgb(141, 141, 141)",
+   "forced": false
+  }
+ },
+ {
+  "instrument": "format \"?\": edge",
+  "fixture": "tip-edge-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "what": "edge: 1 px all round in --border-subtle, not a rail",
+   "outcome": "pass",
+   "sides": [
+    {
+     "w": "1px",
+     "style": "solid",
+     "color": "rgb(141, 141, 141)"
+    },
+    {
+     "w": "1px",
+     "style": "solid",
+     "color": "rgb(141, 141, 141)"
+    },
+    {
+     "w": "1px",
+     "style": "solid",
+     "color": "rgb(141, 141, 141)"
+    },
+    {
+     "w": "1px",
+     "style": "solid",
+     "color": "rgb(141, 141, 141)"
+    }
+   ],
+   "token": "rgb(141, 141, 141)",
+   "forced": false
+  }
+ },
+ {
+  "instrument": "Video language: place",
+  "fixture": "video-language-app-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "what": "at the top of step 3: under its heading and lock note, before the title card choice, outside it",
+   "outcome": "pass",
+   "inStep": true,
+   "afterHeading": true,
+   "afterNote": true,
+   "beforeCard": true,
+   "inCard": false,
+   "shown": true
+  }
+ },
+ {
+  "instrument": "Video language: the next-video line",
+  "fixture": "video-next-app-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "what": "the next-video line under Video type alone",
+   "outcome": "pass",
+   "nextInKind": true,
+   "kindDescribedBy": "video-kind-result video-next",
+   "langDescribedBy": "video-language-helper",
+   "nextShown": false,
+   "nextText": "",
+   "oldKeyPresent": false
+  }
+ },
+ {
+  "instrument": "Video language: place",
+  "fixture": "video-language-inside-the-card-choice-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true
+ },
+ {
+  "instrument": "Video language: the next-video line",
+  "fixture": "video-next-outside-video-type-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true
+ },
+ {
+  "instrument": "Video language: locked only while made, saved or stopping",
+  "fixture": "video-language-locked-when-idle-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true
+ }
+]

@@ -2018,7 +2018,7 @@ Object.assign(SCENARIOS, {
     },
     asserts: [
       see('saving: locked, "Locked while your video is being saved."', (o) => o.saving.locked && o.saving.note),
-      see('free after the save stops, after a cancel and after a failure', (o, w) => o.afterSave && o.afterCancel),
+      see('free after the save stops and after a cancel (after the failure: the record\'s state)', (o) => o.afterSave && o.afterCancel),
     ],
     focus: [RESULT],
     faults: ['F4b', 'F12'], fixtures: ['lecture-30s.mp4'],

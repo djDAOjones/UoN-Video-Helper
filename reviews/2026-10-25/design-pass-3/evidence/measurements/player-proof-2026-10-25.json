@@ -1,0 +1,1424 @@
+{
+ "date": "2026-10-25",
+ "item": "VH-198",
+ "instrumentRevision": "20440da",
+ "appSource": "src/ and index.html as last changed at e226410 (VH-193); unchanged since",
+ "server": "Vite dev server on port 5181 (--strictPort), this checkout",
+ "browser": "Chrome/156.0.8078.48, headless=new, CDP port 9232",
+ "chromeFlags": [
+  "--headless=new",
+  "--no-first-run",
+  "--disable-background-timer-throttling",
+  "--disable-renderer-backgrounding",
+  "--disable-backgrounding-occluded-windows"
+ ],
+ "whyTheFlags": "Without them headless Chrome reports every page but its first as hidden: timers throttle to 1 s and media loading is deferred (a probe read 20 x 100 ms timers at 19.7-20.0 s in the second and third pages, 2.0 s in the first). Phase 7's matrix opened its analysis page early, so its later walk pages ran hidden. qualify.mjs assertReached now fails a record whose page is not visible.",
+ "fixtures": "fixtures.sh + fixtures-8.sh into the scratchpad, never samples/",
+ "method": "P-06: the native control inventory and the keyboard route by the focused accessibility node (Chrome's Accessibility domain), since document.activeElement is the <video> throughout; play/pause and seek proved apart by their results (paused toggles while the time only plays on; the time moves while playback stays paused); focus pixels read with playback paused on a held frame (0.5 s), focused against nothing focused; control targets read from each control's own box, apart from the host's; the user agent's exceptions (2.5.5's target size, 2.4.13's focus appearance) applied only where the page styles no ::-webkit-media-controls part and the ring is visible (2.4.7); a control Tab does not reach, or whose box is empty at rest, is cannot determine. K-player's Shift+Tab leaves for the previous real stop: the card heading's tabIndex is -1 (src/main.ts:3277).",
+ "checks": [
+  {
+   "instrument": "player: host with no name",
+   "fixture": "player-noname-bad",
+   "outcome": "fail",
+   "wanted": "fail",
+   "proved": true,
+   "detail": {
+    "row": {
+     "what": "host named by the card's title",
+     "outcome": "fail",
+     "why": "host with no name",
+     "name": "",
+     "title": "Finished video — 1.1 MB",
+     "labelledBy": null
+    },
+    "otherCheck": {
+     "what": "route forward reaches every control",
+     "outcome": "pass"
+    }
+   }
+  },
+  {
+   "instrument": "player: the reach check, on the name fixture",
+   "fixture": "player-noname-bad",
+   "outcome": "pass",
+   "wanted": "pass",
+   "proved": true,
+   "detail": {
+    "row": {
+     "what": "route forward reaches every control",
+     "outcome": "pass",
+     "placedOn": "the card, by script (setup)",
+     "stops": [
+      {
+       "role": "Video",
+       "name": "",
+       "dom": 2,
+       "ignored": false,
+       "host": true
+      },
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 52,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 59,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 66,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "enter full screen",
+       "dom": 67,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 69,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 12,
+       "ignored": false,
+       "host": false
+      }
+     ],
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "button",
+       "cls": "button",
+       "name": null,
+       "value": null,
+       "card": false
+      },
+      "ax": {
+       "role": "button",
+       "name": "Save the video",
+       "dom": 120,
+       "ignored": false
+      }
+     },
+     "inventory": [
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 52,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 59,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 66,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "enter full screen",
+       "dom": 67,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 69,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 12,
+       "ignored": false
+      }
+     ]
+    }
+   }
+  },
+  {
+   "instrument": "player: host with no name",
+   "fixture": "player-noname-good",
+   "outcome": "pass",
+   "wanted": "pass",
+   "proved": true,
+   "detail": {
+    "row": {
+     "what": "host named by the card's title",
+     "outcome": "pass",
+     "name": "Finished video — 1.1 MB",
+     "title": "Finished video — 1.1 MB",
+     "labelledBy": "t"
+    },
+    "otherCheck": {
+     "what": "route forward reaches every control",
+     "outcome": "pass"
+    }
+   }
+  },
+  {
+   "instrument": "player: the reach check, on the name fixture",
+   "fixture": "player-noname-good",
+   "outcome": "pass",
+   "wanted": "pass",
+   "proved": true,
+   "detail": {
+    "row": {
+     "what": "route forward reaches every control",
+     "outcome": "pass",
+     "placedOn": "the card, by script (setup)",
+     "stops": [
+      {
+       "role": "Video",
+       "name": "Finished video — 1.1 MB",
+       "dom": 2,
+       "ignored": false,
+       "host": true
+      },
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 53,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 60,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 67,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "enter full screen",
+       "dom": 68,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 17,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 12,
+       "ignored": false,
+       "host": false
+      }
+     ],
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "button",
+       "cls": "button",
+       "name": null,
+       "value": null,
+       "card": false
+      },
+      "ax": {
+       "role": "button",
+       "name": "Save the video",
+       "dom": 120,
+       "ignored": false
+      }
+     },
+     "inventory": [
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 53,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 60,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 67,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "enter full screen",
+       "dom": 68,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 17,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 12,
+       "ignored": false
+      }
+     ]
+    }
+   }
+  },
+  {
+   "instrument": "player: control out of reach",
+   "fixture": "player-reach-bad",
+   "outcome": "fail",
+   "wanted": "fail",
+   "proved": true,
+   "detail": {
+    "row": {
+     "what": "route forward reaches every control",
+     "outcome": "fail",
+     "why": "control out of reach: button \"play\", slider \"volume\", button \"un-mute\", button \"enter full screen\", button \"show more media controls\", slider \"video time scrubber\"",
+     "placedOn": "the card, by script (setup)",
+     "stops": [],
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "button",
+       "cls": "button",
+       "name": null,
+       "value": null,
+       "card": false
+      },
+      "ax": {
+       "role": "button",
+       "name": "Save the video",
+       "dom": 120,
+       "ignored": false
+      }
+     },
+     "inventory": [
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 53,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 60,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 67,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "enter full screen",
+       "dom": 68,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 17,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 12,
+       "ignored": false
+      }
+     ]
+    },
+    "otherCheck": {
+     "what": "host named by the card's title",
+     "outcome": "pass"
+    }
+   }
+  },
+  {
+   "instrument": "player: the name check, on the reach fixture",
+   "fixture": "player-reach-bad",
+   "outcome": "pass",
+   "wanted": "pass",
+   "proved": true,
+   "detail": {
+    "row": {
+     "what": "host named by the card's title",
+     "outcome": "pass",
+     "name": "Finished video — 1.1 MB",
+     "title": "Finished video — 1.1 MB",
+     "labelledBy": "t"
+    }
+   }
+  },
+  {
+   "instrument": "player: control out of reach",
+   "fixture": "player-reach-good",
+   "outcome": "pass",
+   "wanted": "pass",
+   "proved": true,
+   "detail": {
+    "row": {
+     "what": "route forward reaches every control",
+     "outcome": "pass",
+     "placedOn": "the card, by script (setup)",
+     "stops": [
+      {
+       "role": "Video",
+       "name": "Finished video — 1.1 MB",
+       "dom": 2,
+       "ignored": false,
+       "host": true
+      },
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 53,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 60,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 67,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "enter full screen",
+       "dom": 68,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 17,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 9,
+       "ignored": false,
+       "host": false
+      }
+     ],
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "button",
+       "cls": "button",
+       "name": null,
+       "value": null,
+       "card": false
+      },
+      "ax": {
+       "role": "button",
+       "name": "Save the video",
+       "dom": 120,
+       "ignored": false
+      }
+     },
+     "inventory": [
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 53,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 60,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 67,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "enter full screen",
+       "dom": 68,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 17,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 9,
+       "ignored": false
+      }
+     ]
+    },
+    "otherCheck": {
+     "what": "host named by the card's title",
+     "outcome": "pass"
+    }
+   }
+  },
+  {
+   "instrument": "player: the name check, on the reach fixture",
+   "fixture": "player-reach-good",
+   "outcome": "pass",
+   "wanted": "pass",
+   "proved": true,
+   "detail": {
+    "row": {
+     "what": "host named by the card's title",
+     "outcome": "pass",
+     "name": "Finished video — 1.1 MB",
+     "title": "Finished video — 1.1 MB",
+     "labelledBy": "t"
+    }
+   }
+  },
+  {
+   "instrument": "player: present while unsaved, gone once saved",
+   "fixture": "player-saved-bad",
+   "outcome": "fail",
+   "wanted": "fail",
+   "proved": true,
+   "detail": {
+    "what": "gone once a save completes",
+    "outcome": "fail",
+    "players": 1
+   }
+  },
+  {
+   "instrument": "player: present while unsaved, gone once saved",
+   "fixture": "player-unsaved-good",
+   "outcome": "pass",
+   "wanted": "pass",
+   "proved": true,
+   "detail": {
+    "what": "present while unsaved, one, in the card",
+    "outcome": "pass",
+    "players": 1,
+    "inCard": true
+   }
+  }
+ ],
+ "settled": {
+  "F16 by the Vite path": "determined: the page's Fetch route sees the worker's import of /node_modules/.vite/deps/mediabunny.js?v=cd9f5187, Input is its own local name, and metadata-lost shows (faults-check-2026-10-25.json, F16). The route is written for the dev server's module path; against a production build, which bundles the worker, it was not tried",
+  "F18 reaching production": "determined: counted from the job's own process message, it fires at frame 61 of the job's encode and the page shows failure.encoderRefused, thrown or by the encoder's error callback (F18, F18-callback). Unarmed, it fired in the pre-flight's timed pass, which encodes more than 60 frames itself",
+  "S-134 by the back-forward cache": "determined here, not for a person: Leave site? raised and accepted, and the page restored from the cache (pageshow persisted), the same player and URL, which still fetches and plays (F19). Headless Chrome 156 with the flags above; a person's Chrome may not cache it, which S-134 records as cannot determine",
+  "the player's Tab stops": "determined at 1280 px in English (K-player, S-127): the host, play, volume, mute, full screen, more controls, the time slider, then Save; Shift+Tab back out to step 5's checked output, never the card. Other views and languages are the matrix's"
+ },
+ "personList": [
+  "the volume slider's target at rest: its box is empty (0 x 48) until it is focused or hovered (11 x 48 then): cannot determine",
+  "the user agent's rings on the inner controls: visible (2.4.7) but under 2.4.13's area; exempt as drawn by the user agent, the page styling no media-controls part",
+  "the time slider's 24 px height: the user agent's size (2.5.5's exception)"
+ ],
+ "app": {
+  "S-126 (passive: present, named, controls, targets)": {
+   "status": "ok",
+   "outcome": "cannot-determine",
+   "rows": [
+    {
+     "what": "present while unsaved, one, in the card",
+     "outcome": "pass",
+     "players": 1,
+     "inCard": true
+    },
+    {
+     "what": "controls, preload metadata, no autoplay",
+     "outcome": "pass",
+     "controls": true,
+     "preload": "metadata",
+     "autoplay": false
+    },
+    {
+     "what": "paused a second after the card appeared",
+     "outcome": "pass",
+     "t": 1792961935000,
+     "kind": "finish+1s",
+     "player": true,
+     "paused": true,
+     "currentTime": 0
+    },
+    {
+     "what": "an object URL whose metadata loads",
+     "outcome": "pass",
+     "blob": true,
+     "error": null,
+     "readyState": 4,
+     "waitedMs": 0,
+     "duration": 6.04
+    },
+    {
+     "what": "after the card's lines, before the lifetime line and Save",
+     "outcome": "pass",
+     "linesBefore": true,
+     "beforeLifetime": true,
+     "beforeActions": true
+    },
+    {
+     "what": "the host inside the page, no taller than its cap",
+     "outcome": "pass",
+     "host": {
+      "w": 825,
+      "h": 464,
+      "left": 229,
+      "right": 1054
+     },
+     "maxHeight": 540,
+     "overflowX": false
+    },
+    {
+     "what": "host named by the card's title",
+     "outcome": "pass",
+     "name": "Finished video — 1.1 MB",
+     "title": "Finished video — 1.1 MB",
+     "labelledBy": "notification-title-3"
+    },
+    {
+     "what": "control inventory, each named",
+     "outcome": "pass",
+     "controls": [
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 515,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 522,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "mute",
+       "dom": 529,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "enter full screen",
+       "dom": 530,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 532,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 534,
+       "ignored": false
+      }
+     ]
+    },
+    {
+     "what": "control target",
+     "outcome": "pass",
+     "control": "button \"play\"",
+     "box": {
+      "w": 48,
+      "h": 48
+     }
+    },
+    {
+     "what": "control target",
+     "outcome": "cannot-determine",
+     "control": "slider \"volume\"",
+     "box": {
+      "w": 0,
+      "h": 48
+     },
+     "why": "no box for the control: empty"
+    },
+    {
+     "what": "control target",
+     "outcome": "pass",
+     "control": "button \"mute\"",
+     "box": {
+      "w": 48,
+      "h": 48
+     }
+    },
+    {
+     "what": "control target",
+     "outcome": "pass",
+     "control": "button \"enter full screen\"",
+     "box": {
+      "w": 48,
+      "h": 48
+     }
+    },
+    {
+     "what": "control target",
+     "outcome": "pass",
+     "control": "button \"show more media controls\"",
+     "box": {
+      "w": 48,
+      "h": 48
+     }
+    },
+    {
+     "what": "control target",
+     "outcome": "fail",
+     "control": "slider \"video time scrubber\"",
+     "box": {
+      "w": 825,
+      "h": 24
+     },
+     "uaException": "user-agent control: its size is the browser's, not modified by the author (2.5.5)",
+     "exempt": "user-agent control: its size is the browser's, not modified by the author (2.5.5)"
+    }
+   ]
+  },
+  "S-127 (by keys: route, play/pause, seek, rings)": {
+   "status": "ok",
+   "outcome": "cannot-determine",
+   "rows": [
+    {
+     "what": "present while unsaved, one, in the card",
+     "outcome": "pass",
+     "players": 1,
+     "inCard": true
+    },
+    {
+     "what": "controls, preload metadata, no autoplay",
+     "outcome": "pass",
+     "controls": true,
+     "preload": "metadata",
+     "autoplay": false
+    },
+    {
+     "what": "paused a second after the card appeared",
+     "outcome": "pass",
+     "t": 1792961945595,
+     "kind": "finish+1s",
+     "player": true,
+     "paused": true,
+     "currentTime": 0
+    },
+    {
+     "what": "an object URL whose metadata loads",
+     "outcome": "pass",
+     "blob": true,
+     "error": null,
+     "readyState": 4,
+     "waitedMs": 0,
+     "duration": 6.04
+    },
+    {
+     "what": "after the card's lines, before the lifetime line and Save",
+     "outcome": "pass",
+     "linesBefore": true,
+     "beforeLifetime": true,
+     "beforeActions": true
+    },
+    {
+     "what": "the host inside the page, no taller than its cap",
+     "outcome": "pass",
+     "host": {
+      "w": 825,
+      "h": 464,
+      "left": 229,
+      "right": 1054
+     },
+     "maxHeight": 540,
+     "overflowX": false
+    },
+    {
+     "what": "host named by the card's title",
+     "outcome": "pass",
+     "name": "Finished video — 1.1 MB",
+     "title": "Finished video — 1.1 MB",
+     "labelledBy": "notification-title-3"
+    },
+    {
+     "what": "control inventory, each named",
+     "outcome": "pass",
+     "controls": [
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 515,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 522,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "mute",
+       "dom": 529,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "enter full screen",
+       "dom": 530,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 532,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 534,
+       "ignored": false
+      }
+     ]
+    },
+    {
+     "what": "control target",
+     "outcome": "pass",
+     "control": "button \"play\"",
+     "box": {
+      "w": 48,
+      "h": 48
+     }
+    },
+    {
+     "what": "control target",
+     "outcome": "cannot-determine",
+     "control": "slider \"volume\"",
+     "box": {
+      "w": 0,
+      "h": 48
+     },
+     "why": "no box for the control: empty"
+    },
+    {
+     "what": "control target",
+     "outcome": "pass",
+     "control": "button \"mute\"",
+     "box": {
+      "w": 48,
+      "h": 48
+     }
+    },
+    {
+     "what": "control target",
+     "outcome": "pass",
+     "control": "button \"enter full screen\"",
+     "box": {
+      "w": 48,
+      "h": 48
+     }
+    },
+    {
+     "what": "control target",
+     "outcome": "pass",
+     "control": "button \"show more media controls\"",
+     "box": {
+      "w": 48,
+      "h": 48
+     }
+    },
+    {
+     "what": "control target",
+     "outcome": "fail",
+     "control": "slider \"video time scrubber\"",
+     "box": {
+      "w": 825,
+      "h": 24
+     },
+     "uaException": "user-agent control: its size is the browser's, not modified by the author (2.5.5)",
+     "exempt": "user-agent control: its size is the browser's, not modified by the author (2.5.5)"
+    },
+    {
+     "what": "route forward reaches every control",
+     "outcome": "pass",
+     "placedOn": "the card, by script (setup)",
+     "stops": [
+      {
+       "role": "Video",
+       "name": "Finished video — 1.1 MB",
+       "dom": 130,
+       "ignored": false,
+       "host": true
+      },
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 515,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 522,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 529,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "enter full screen",
+       "dom": 530,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 532,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 534,
+       "ignored": false,
+       "host": false
+      }
+     ],
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "button",
+       "cls": "button",
+       "name": null,
+       "value": null,
+       "card": false
+      },
+      "ax": {
+       "role": "button",
+       "name": "Save the video",
+       "dom": 588,
+       "ignored": false
+      }
+     },
+     "inventory": [
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 515,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 522,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 529,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "enter full screen",
+       "dom": 530,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 532,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 534,
+       "ignored": false
+      }
+     ]
+    },
+    {
+     "what": "Tab after the last control leaves the player",
+     "outcome": "pass",
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "button",
+       "cls": "button",
+       "name": null,
+       "value": null,
+       "card": false
+      },
+      "ax": {
+       "role": "button",
+       "name": "Save the video",
+       "dom": 588,
+       "ignored": false
+      }
+     }
+    },
+    {
+     "what": "Shift+Tab goes back through the controls",
+     "outcome": "pass",
+     "stops": 7,
+     "inventory": 6
+    },
+    {
+     "what": "Shift+Tab leaves for the previous real stop, never the card",
+     "outcome": "pass",
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "input",
+       "cls": "",
+       "name": "preset",
+       "value": "best",
+       "card": false
+      },
+      "ax": {
+       "role": "radio",
+       "name": "High quality, for publishing For EchoVideo, YouTube, and similar sites.",
+       "dom": 31,
+       "ignored": false
+      }
+     },
+     "expected": {
+      "id": null,
+      "tag": "input",
+      "name": "preset",
+      "value": "best"
+     }
+    },
+    {
+     "what": "play/pause by keys",
+     "outcome": "pass",
+     "control": {
+      "role": "button",
+      "name": "play",
+      "dom": 515,
+      "ignored": false
+     },
+     "afterSpace": {
+      "paused": false,
+      "t": 1.32
+     },
+     "afterSecondSpace": {
+      "paused": true,
+      "t": 1.322
+     }
+    },
+    {
+     "what": "seek by keys, apart from play",
+     "outcome": "pass",
+     "control": {
+      "role": "slider",
+      "name": "video time scrubber",
+      "dom": 534,
+      "ignored": false
+     }
+    },
+    {
+     "what": "ring by pixels",
+     "outcome": "pass",
+     "control": "Video \"Finished video — 1.1 MB\"",
+     "host": true,
+     "box": {
+      "w": 825,
+      "h": 464
+     },
+     "areaAt3to1": 5204,
+     "perimeter2px": 5140,
+     "changedAny": 5310,
+     "bestRatio": 14.93,
+     "visible": true
+    },
+    {
+     "what": "ring by pixels",
+     "outcome": "fail",
+     "control": "button \"play\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": 90,
+     "perimeter2px": 368,
+     "changedAny": 1182,
+     "bestRatio": 18.26,
+     "visible": true,
+     "uaException": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible",
+     "exempt": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible"
+    },
+    {
+     "what": "ring by pixels",
+     "outcome": "fail",
+     "control": "slider \"volume\"",
+     "host": false,
+     "box": {
+      "w": 12,
+      "h": 48
+     },
+     "areaAt3to1": 53,
+     "perimeter2px": 222,
+     "changedAny": 869,
+     "bestRatio": 17.47,
+     "visible": true,
+     "uaException": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible",
+     "exempt": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible"
+    },
+    {
+     "what": "ring by pixels",
+     "outcome": "fail",
+     "control": "button \"un-mute\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": 119,
+     "perimeter2px": 368,
+     "changedAny": 1808,
+     "bestRatio": 17.47,
+     "visible": true,
+     "uaException": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible",
+     "exempt": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible"
+    },
+    {
+     "what": "ring by pixels",
+     "outcome": "fail",
+     "control": "button \"enter full screen\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": 96,
+     "perimeter2px": 368,
+     "changedAny": 1406,
+     "bestRatio": 15.82,
+     "visible": true,
+     "uaException": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible",
+     "exempt": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible"
+    },
+    {
+     "what": "ring by pixels",
+     "outcome": "fail",
+     "control": "button \"show more media controls\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": 61,
+     "perimeter2px": 368,
+     "changedAny": 1297,
+     "bestRatio": 15.82,
+     "visible": true,
+     "uaException": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible",
+     "exempt": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible"
+    },
+    {
+     "what": "ring by pixels",
+     "outcome": "fail",
+     "control": "slider \"video time scrubber\"",
+     "host": false,
+     "box": {
+      "w": 825,
+      "h": 24
+     },
+     "areaAt3to1": 1851,
+     "perimeter2px": 3380,
+     "changedAny": 3404,
+     "bestRatio": 19.82,
+     "visible": true,
+     "uaException": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible",
+     "exempt": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible"
+    }
+   ]
+  },
+  "S-131 (saved: gone)": {
+   "status": "ok",
+   "outcome": "pass",
+   "rows": [
+    {
+     "what": "gone once a save completes",
+     "outcome": "pass",
+     "players": 0
+    }
+   ]
+  },
+  "K-player (the route by keys alone)": {
+   "status": "ok",
+   "outcome": "pass",
+   "steps": [
+    {
+     "key": "Tab",
+     "presses": 21,
+     "from": "body",
+     "to": "button.button[button] \"Create the video\"",
+     "focusVisible": true,
+     "expect": "document.activeElement === document.querySelector(\"#process-actions > button:nth-child(2)\")",
+     "outcome": "pass",
+     "note": "Tab to Create"
+    },
+    {
+     "key": "Enter",
+     "presses": 1,
+     "from": "button.button[button] \"Create the video\"",
+     "to": "section.notification \"Finished video — 1.1 MB\"",
+     "focusVisible": true,
+     "expect": null,
+     "waited": 606,
+     "outcome": "pass",
+     "note": "S-53: the job finishes; focus handed from Cancel to the card"
+    },
+    {
+     "key": "setup",
+     "presses": 0,
+     "from": "section.notification \"Finished video — 1.1 MB\"",
+     "to": "section.notification \"Finished video — 1.1 MB\"",
+     "focusVisible": true,
+     "expect": null,
+     "outcome": "pass",
+     "note": "setup: the player muted by script, so a key's play is never refused for sound"
+    },
+    {
+     "key": "Tab",
+     "presses": 1,
+     "from": "section.notification \"Finished video — 1.1 MB\"",
+     "to": "video.result-player \"Finished video — 1.1 MB\"",
+     "ax": "Video \"Finished video — 1.1 MB\"",
+     "focusVisible": true,
+     "expect": "^Video ",
+     "outcome": "pass",
+     "note": "the player itself, named by the card's title"
+    },
+    {
+     "key": "Tab",
+     "presses": 1,
+     "from": "video.result-player \"Finished video — 1.1 MB\"",
+     "to": "video.result-player \"Finished video — 1.1 MB\"",
+     "ax": "button \"play\"",
+     "focusVisible": false,
+     "expect": "^button \"(play|pause)\"",
+     "outcome": "pass",
+     "note": "play"
+    },
+    {
+     "key": "Space",
+     "presses": 1,
+     "from": "video.result-player \"Finished video — 1.1 MB\"",
+     "to": "video.result-player \"Finished video — 1.1 MB\"",
+     "ax": "button \"pause\"",
+     "focusVisible": false,
+     "expect": "^button \"pause\"",
+     "outcome": "pass",
+     "note": "Space plays (the control becomes pause)"
+    },
+    {
+     "key": "Space",
+     "presses": 1,
+     "from": "video.result-player \"Finished video — 1.1 MB\"",
+     "to": "video.result-player \"Finished video — 1.1 MB\"",
+     "ax": "button \"play\"",
+     "focusVisible": false,
+     "expect": "^button \"play\"",
+     "outcome": "pass",
+     "note": "Space again pauses"
+    },
+    {
+     "key": "Tab",
+     "presses": 1,
+     "from": "video.result-player \"Finished video — 1.1 MB\"",
+     "to": "video.result-player \"Finished video — 1.1 MB\"",
+     "ax": "slider \"volume\"",
+     "focusVisible": false,
+     "expect": "^slider \"volume\"",
+     "outcome": "pass",
+     "note": "the ring is the user agent's, inside the player's shadow tree: read by pixels in S-127 (phase8.mjs playerKeys)"
+    },
+    {
+     "key": "Tab",
+     "presses": 1,
+     "from": "video.result-player \"Finished video — 1.1 MB\"",
+     "to": "video.result-player \"Finished video — 1.1 MB\"",
+     "ax": "button \"un-mute\"",
+     "focusVisible": false,
+     "expect": "^button \"(mute|un-?mute)\"",
+     "outcome": "pass",
+     "note": "mute (Chrome names it \"un-mute\" while muted)"
+    },
+    {
+     "key": "Tab",
+     "presses": 1,
+     "from": "video.result-player \"Finished video — 1.1 MB\"",
+     "to": "video.result-player \"Finished video — 1.1 MB\"",
+     "ax": "button \"enter full screen\"",
+     "focusVisible": false,
+     "expect": "^button \"enter full screen\"",
+     "outcome": "pass"
+    },
+    {
+     "key": "Tab",
+     "presses": 1,
+     "from": "video.result-player \"Finished video — 1.1 MB\"",
+     "to": "video.result-player \"Finished video — 1.1 MB\"",
+     "ax": "button \"show more media controls\"",
+     "focusVisible": false,
+     "expect": "^button \"show more media controls\"",
+     "outcome": "pass"
+    },
+    {
+     "key": "Tab",
+     "presses": 1,
+     "from": "video.result-player \"Finished video — 1.1 MB\"",
+     "to": "video.result-player \"Finished video — 1.1 MB\"",
+     "ax": "slider \"video time scrubber\"",
+     "focusVisible": false,
+     "expect": "^slider \"video time scrubber\"",
+     "outcome": "pass"
+    },
+    {
+     "key": "setup",
+     "presses": 0,
+     "from": "video.result-player \"Finished video — 1.1 MB\"",
+     "to": "video.result-player \"Finished video — 1.1 MB\"",
+     "focusVisible": false,
+     "expect": null,
+     "outcome": "pass",
+     "note": "setup: the time read before the seek"
+    },
+    {
+     "key": "ArrowRight",
+     "presses": 1,
+     "from": "video.result-player \"Finished video — 1.1 MB\"",
+     "to": "video.result-player \"Finished video — 1.1 MB\"",
+     "ax": "slider \"video time scrubber\"",
+     "focusVisible": false,
+     "expect": "^slider \"video time scrubber\"",
+     "outcome": "pass",
+     "note": "seeking by keys, apart from play: the time moves, playback stays paused"
+    },
+    {
+     "key": "Tab",
+     "presses": 1,
+     "from": "video.result-player \"Finished video — 1.1 MB\"",
+     "to": "button.button[button] \"Save the video\"",
+     "focusVisible": true,
+     "expect": null,
+     "outcome": "pass",
+     "note": "the next Tab after the last control reaches Save the video"
+    },
+    {
+     "key": "Shift+Tab",
+     "presses": 8,
+     "from": "button.button[button] \"Save the video\"",
+     "to": "input[radio preset=best] \"High quality, for publishing For EchoVideo, YouTube, and similar sites\"",
+     "focusVisible": true,
+     "expect": "!(document.activeElement === document.querySelector(\"#process-result > .notification[data-kind=\\\"success\\\"] video.result-player\"))",
+     "outcome": "pass",
+     "note": "Shift+Tab back through the controls and out to the previous real stop, never the card (tabIndex -1, src/main.ts:3277)"
+    },
+    {
+     "key": "Tab",
+     "presses": 8,
+     "from": "input[radio preset=best] \"High quality, for publishing For EchoVideo, YouTube, and similar sites\"",
+     "to": "button.button[button] \"Save the video\"",
+     "focusVisible": true,
+     "expect": "document.activeElement === document.querySelector(\"#process-result > .notification[data-kind=\\\"success\\\"] .actions > button.button\")",
+     "outcome": "pass",
+     "note": "Tab forward again, through the player, to Save"
+    },
+    {
+     "key": "Enter",
+     "presses": 1,
+     "from": "button.button[button] \"Save the video\"",
+     "to": "button.button.button--secondary[button] \"Stop saving\"",
+     "focusVisible": true,
+     "expect": null,
+     "waited": 1,
+     "outcome": "pass",
+     "note": "S-61: saving (F4b, 3 s a chunk); Stop saving takes focus"
+    },
+    {
+     "key": "Shift+Tab",
+     "presses": 1,
+     "from": "button.button.button--secondary[button] \"Stop saving\"",
+     "to": "video.result-player \"Finished video — 1.1 MB\"",
+     "focusVisible": false,
+     "expect": "document.activeElement === document.querySelector(\"#process-result > .notification[data-kind=\\\"success\\\"] video.result-player\")",
+     "outcome": "pass",
+     "note": "Shift+Tab passes the disabled Save into the player while it streams"
+    },
+    {
+     "key": "wait",
+     "presses": 0,
+     "from": "video.result-player \"Finished video — 1.1 MB\"",
+     "to": "section.notification \"Finished video — 1.1 MB\"",
+     "focusVisible": true,
+     "expect": null,
+     "waited": 6098,
+     "outcome": "pass",
+     "note": "S-131: saved; the player leaves and focus is on the card"
+    }
+   ]
+  }
+ }
+}

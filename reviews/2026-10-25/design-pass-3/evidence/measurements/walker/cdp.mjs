@@ -1,4 +1,5 @@
 // A minimal Chrome DevTools Protocol client over Node's own WebSocket.
+import { setInterval } from 'node:timers'
 // VH-198: CDP_PORT names another headless Chrome than :9222's, so a pass can
 // run beside one an older session left running.
 export async function connectBrowser(port = Number(process.env.CDP_PORT ?? 9222)) {

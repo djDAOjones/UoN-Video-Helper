@@ -1,0 +1,220 @@
+[
+ {
+  "fault": "F15a",
+  "outcome": "pass",
+  "branch": "error event dispatched on the result player in place; nothing on the page changed; a save then completed",
+  "unchanged": true,
+  "before": {
+   "src": "blob:http://localhost:5181/300090ec-a043-4db7-b971-e769497d6ef4",
+   "error": null,
+   "readyState": 4,
+   "paused": true
+  },
+  "after": {
+   "src": "blob:http://localhost:5181/300090ec-a043-4db7-b971-e769497d6ef4",
+   "error": null,
+   "readyState": 4,
+   "paused": true
+  },
+  "saved": {
+   "outcome": "pass",
+   "matched": "Saved. Open the saved file",
+   "saw": " | Saved. Open the saved file to check it, then upload it to where you will use it, or choose another video in step 1."
+  },
+  "seen": [
+   "F15a: error dispatched on the result player"
+  ],
+  "seconds": 4
+ },
+ {
+  "fault": "F15b",
+  "outcome": "pass",
+  "branch": "the player's own load refused: MediaError 4, 1 object URL(s) revoked before use",
+  "player": {
+   "src": "blob:http://localhost:5181/8496c05b-40b5-4ec6-abd7-63dc3edb4f15",
+   "error": 4,
+   "readyState": 0,
+   "paused": true
+  },
+  "saveEnabled": true,
+  "saved": {
+   "outcome": "pass",
+   "matched": "Saved. Open the saved file",
+   "saw": " | Saved. Open the saved file to check it, then upload it to where you will use it, or choose another video in step 1."
+  },
+  "seen": [],
+  "seconds": 5
+ },
+ {
+  "fault": "F16",
+  "outcome": "pass",
+  "matched": "title, author, and date could not be copied across",
+  "saw": " Create Your video is ready. Worth knowing about the finished video: The file’s title, author, and date could not be copied across. Finished video — 10.9 MB Made from lecture-30s.mp4: the whole video (30 seconds), high quality, a cut to the blue clos",
+  "branch": "F16: mediabunny rewritten (mediabunny.js?v=cd9f5187, Input is Input); the job's metadata carry rejected, so metadata-lost was added",
+  "seen": [
+   "F16: mediabunny rewritten (mediabunny.js?v=cd9f5187, Input is Input)"
+  ],
+  "seconds": 6
+ },
+ {
+  "fault": "F17",
+  "outcome": "pass",
+  "branch": "isConfigSupported asked for mp4a 2 time(s) on the page; the aac row warn",
+  "rows": [
+   {
+    "id": "check-secure",
+    "state": "pass"
+   },
+   {
+    "id": "check-webcodecs",
+    "state": "pass"
+   },
+   {
+    "id": "check-h264",
+    "state": "pass"
+   },
+   {
+    "id": "check-aac",
+    "state": "warn"
+   },
+   {
+    "id": "check-opfs",
+    "state": "pass"
+   },
+   {
+    "id": "check-worker",
+    "state": "pass"
+   }
+  ],
+  "note": "This tool is designed and built for Chrome, and this browser has not passed all the checks for it to run. The system che",
+  "chooserOpen": true,
+  "seen": [],
+  "seconds": 2
+ },
+ {
+  "fault": "F18",
+  "outcome": "pass",
+  "mode": "throw",
+  "branch": "fired at frame 61 (throw), after the job started: the job's encode; the page shows failure.encoderRefused",
+  "refused": {
+   "outcome": "pass",
+   "matched": "stopped encoding the video part-way through",
+   "saw": "ds, email, and messages. 6. Create The video could not be created. This browser stopped encoding the video part-way through. Your original file has not been changed. Try the other option under File size / quality. If the problem happens again,"
+  },
+  "fired": [
+   {
+    "t": 1792961653923,
+    "args": [
+     "fault F18",
+     "throw",
+     61
+    ]
+   }
+  ],
+  "seen": [
+   "F18: worker rewritten"
+  ],
+  "seconds": 4
+ },
+ {
+  "fault": "F18-callback",
+  "outcome": "pass",
+  "mode": "callback",
+  "branch": "fired at frame 61 (callback), after the job started: the job's encode; the page shows failure.encoderRefused",
+  "refused": {
+   "outcome": "pass",
+   "matched": "stopped encoding the video part-way through",
+   "saw": "ds, email, and messages. 6. Create The video could not be created. This browser stopped encoding the video part-way through. Your original file has not been changed. Try the other option under File size / quality. If the problem happens again,"
+  },
+  "fired": [
+   {
+    "t": 1792961658120,
+    "args": [
+     "fault F18",
+     "callback",
+     61
+    ]
+   }
+  ],
+  "seen": [
+   "F18: worker rewritten"
+  ],
+  "seconds": 4
+ },
+ {
+  "fault": "F19",
+  "outcome": "pass",
+  "branch": "\"Leave site?\" raised and accepted; back on the page; restored from the back-forward cache",
+  "dialogs": [
+   {
+    "type": "beforeunload",
+    "message": ""
+   }
+  ],
+  "shows": [
+   {
+    "persisted": false,
+    "t": 1792961659059
+   },
+   {
+    "persisted": true,
+    "t": 1792961661376
+   }
+  ],
+  "notUsed": null,
+  "restoredPlayer": {
+   "same": true,
+   "fetches": true,
+   "played": 0.549797
+  },
+  "seen": [
+   "F19: left (1 dialog(s)) and came back; restored from the back-forward cache"
+  ],
+  "seconds": 5
+ },
+ {
+  "fault": "F4e-revised",
+  "outcome": "pass",
+  "branch": "the job finished; the card's first object URL spared (1); the save's hand-off threw (1); the player stays with its URL",
+  "failed": {
+   "outcome": "pass",
+   "matched": "could not be saved",
+   "saw": " | The video could not be saved. It is still here to try again. | Skip to main content Page language English 简体中文 Bahasa Malaysia UoN Video Helper Lets"
+  },
+  "before": {
+   "src": "blob:http://localhost:5181/e633c08d-2b43-4e3d-9022-e25d1e138cc2",
+   "error": null,
+   "readyState": 4,
+   "paused": true
+  },
+  "after": {
+   "src": "blob:http://localhost:5181/e633c08d-2b43-4e3d-9022-e25d1e138cc2",
+   "error": null,
+   "readyState": 4,
+   "paused": true
+  },
+  "counts": {
+   "spared": 1,
+   "thrown": 1
+  },
+  "seen": [],
+  "seconds": 8
+ },
+ {
+  "fault": "F4e-inPlace",
+  "outcome": "pass",
+  "branch": "armed in place once the card stood; the save's hand-off threw (1)",
+  "failed": {
+   "outcome": "pass",
+   "matched": "could not be saved",
+   "saw": " | The video could not be saved. It is still here to try again. | Skip to main content Page language English 简体中文 Bahasa Malaysia UoN Video Helper Lets"
+  },
+  "counts": {
+   "spared": 0,
+   "thrown": 1,
+   "inPlace": true
+  },
+  "seen": [],
+  "seconds": 8
+ }
+]

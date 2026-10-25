@@ -28,6 +28,7 @@
 //
 // Words come from the page's own message tables (scenarios.mjs MX_INIT) or,
 // on a proof's fixture page, from `window.__p8words`.
+import { Buffer } from 'node:buffer'
 import { sleep } from './walk.mjs'
 import { key, analyse, DIFF, shot } from './qualify.mjs'
 
@@ -390,7 +391,7 @@ export async function footerRows(w) {
   rows.push(row('three h3, by their level in the tree', h3.length === 3 ? 'pass' : 'fail', { h3: h3.map((h) => h.name) }))
   const words = r.words
   const known = Object.values(words).every((x) => typeof x === 'string')
-  const order = seq.length === FOOTER_ORDER.length && FOOTER_ORDER.every(([role, level, k], i) => seq[i].role === role && (level === null || seq[i].level === level))
+  const order = seq.length === FOOTER_ORDER.length && FOOTER_ORDER.every(([role, level], i) => seq[i].role === role && (level === null || seq[i].level === level))
   rows.push(row('order and levels: h2, h3 over the two help links, h3 over Report a problem, h3 over the form', order ? 'pass' : 'fail', { seq }))
   rows.push(row('each in the page\'s words', !known ? 'cannot-determine' : seq.length === FOOTER_ORDER.length && FOOTER_ORDER.every(([, , k], i) => seq[i].name === words[k]) ? 'pass' : 'fail', { names: seq.map((s) => s.name), expected: FOOTER_ORDER.map(([, , k]) => words[k]) }))
   const iProblem = seq.findIndex((s) => s.role === 'heading' && s.name === words['footer.groups.problem']), iButton = seq.findIndex((s) => s.role === 'button' && s.name === words['feedback.open']), iOpinion = seq.findIndex((s) => s.role === 'heading' && s.name === words['footer.groups.opinion'])
