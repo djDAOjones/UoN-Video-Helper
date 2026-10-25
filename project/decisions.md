@@ -18,6 +18,18 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-25 — PLAN-8 — Phase 8 ends with a third full design, UX and accessibility pass, VH-197 to VH-203, in Phase 7's stages, before VH-195 closes it
+
+**Decision:** After VH-194, Phase 8 runs a third pass as thorough as Phase 7's: plan, re-proved instruments with Codex astra's blind review, the evidence run, judging, the merged report, the fix plan, and the fixes with an after-run and integrated check. VH-195 keeps only the close, as VH-177 did. The owner asked for an analysis "as thorough as before".
+
+**Rationale:** The owner asked: "does phase 8 include a concluding analysis of design, UX, and accessibility? It should include one equivalent to that which started that work, to ensure things are all good. add to the backlog if needed (it must be as thorough as before)". It did not: VH-195 held one walk of the four journeys and one Codex check, against Phase 7's eight stages (VH-170 to VH-177). The work that started Phase 8 is Phase 7's second pass, whose wish lines and held-back findings Phase 8 builds; so VH-197 to VH-203 repeat VH-170 to VH-176 one for one, item file to item file, on the Phase 8 build, as `design-pass-3`. Two things are new: a Phase 8 contract replaces the six-fix contract, one row per Phase 8 item plus Phase 7's fixes VH-178 to VH-181; and the walker gains the elements Phase 8 added (the native player, the second toggletip, the footer's headings, the limiting warning, Video language in step 3), with one more planted failure for the player. The matrix is no smaller than VH-172's run, the "before" the owner meant; any further reduction is the owner's call. VH-195's walk and integrated check move into VH-203's after-run and check, and it takes VH-177's close criteria. VH-172.1's 641 unrun cells stay a wish line, unchanged. The backlog stands at 996 of 1,000 words after these lines.
+
+**Supersedes:** 2026-10-24 — PLAN-8 — Phase 8, the owner's UX pass: thirteen pieces, VH-182 to VH-195, one wording sheet; Q5 to Q7 worked out in round 2
+
+**Items:** VH-182, VH-183, VH-184, VH-185, VH-186, VH-187, VH-188, VH-189, VH-190, VH-191, VH-192, VH-193, VH-194, VH-196, VH-197, VH-198, VH-199, VH-200, VH-201, VH-202, VH-203, VH-195
+
+**Deferred:** VH-197, VH-198, VH-199, VH-200, VH-201, VH-202, VH-203
+
 ## 2026-10-25 — VH-190 — "Create the video again" beside the chosen file's finished video; beside a "Previous video" it reads "Create the video"
 
 **Decision:** Create reads B8's `create.again`, "Create the video again", while a finished video made from the file now chosen is on screen, saved or not; at every other time, a "Previous video" included, it reads "Create the video", the owner's choice A. One helper, `labelCreate()`, sets it at boot, on a language change and on every change of the result's state. The emphasis rule and the discard question are unchanged.
@@ -527,15 +539,5 @@ Each sentence was read against the shipped code: `ends-early.ts` and `ENDS_EARLY
 **Rationale:** The owner's VH-138.1 answer (PLAN-5, 2026-10-22) asked for a warning and the accessible course, with focus to the field; in chat on 2026-10-22 they chose "Stop Create" over a warning that lets the card through on a second press, which would be a hidden mode the person must remember. Student submission already refuses this way (each empty field said beside it, the same status line, focus to the first), so both kinds now agree; Submission is unchanged. A date typed by hand, such as "Spring term", is still only a date. Chrome at 1280 px: date-only Create refused with the line, the status, focus and `aria-invalid` on Title; typing in Department clears all three; Chinese and Malay lines read; Submission's four lines and focus to Assignment unchanged. Two strings changed, with Chinese and Malay drafted by the agent and marked in the sheet; reading grades 6.8 and 4.8. Spec §9.1 step 3's "nothing on it" now means no title, department or authors: VH-157.1 for the owner. Standards (rule 8): WCAG 3.3.1, 3.3.3 and 3.3.6 from the AAA digest; Nielsen 5 and 9; UI-STANDARDS, validation near the relevant control; house conventions, regression tests by category. No dependency changed. Not checked by a second model.
 
 **Supersedes:** 2026-10-21 — VH-140 — The record names the card and a video language not the page's; a line says a switch is for the next video; Step 3 says its rule first
-
-**Deferred:** none
-
-## 2026-10-22 — VH-156 — The writing review's proposals applied; the decode-damage detail says "video" and "undamaged audio", never "recording"
-
-**Decision:** the 20 proposals VH-153 had not applied are applied to `en-GB.ts` and `index.html` as the review worded them, with "audio" where they name it; the decode-damage detail says "the original video", "not from your video" and "louder than undamaged audio can be"; Chinese and Malay rows whose meaning changed are redrafted as the agent's drafts, and rows where only an English idiom or comma changed keep their translation; the enforcement sentence says "you can contact the {service} for help", because "contact" alone put it over the reading-grade limit.
-
-**Rationale:** The owner's "approved" (PLAN-4.1) and PLAN-5.2's words (PLAN-5, 2026-10-22). VH-153 had applied `trim.intro`, `browserNote.pending`, `browserNote.notPassed` and `failure.captured`, so those four stand. 47 rows changed: 30 with Chinese and Malay drafts, `statement.plans.items.2` with Malay alone. The review's section 4 predicted the gate on "contact": 10.4 against a limit of 10; "for help" brings it to 9.8 and is true of the advisory service. The Chinese ends-early lines drop their colon for a full stop, as the English does. `inspect.ts` and `kept-range.ts` carry English copies of two errors in their thrown messages; they now say the same words. Seven test files pinned the old words; each now pins the new, and "picture size, and format" changed with its string. The spec quotes none of the changed words (§8.3's "destination must supply captions" and §7's "spaces, commas or new lines" are its own prose). VH-122's entry is superseded for its English detail's words only. Chrome, three languages: the rows a loaded file reaches; the rest VH-156.1. Standards: UI-STANDARDS, the same words for the same concepts and errors that say what next; Nielsen 9; WCAG 3.1.5; house conventions, strings through the sheet, regression tests by category, minimal change. No dependency changed. Not checked by a second model.
-
-**Supersedes:** 2026-10-20 — VH-122 — The decode-damage words stand, the Chinese without a space after 在, and §5.4 gains its row first
 
 **Deferred:** none

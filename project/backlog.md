@@ -35,13 +35,20 @@ The public release, 0.2.0, on Xerte (PLAN-6).
 
 ### Phase 7 — a second design, UX and accessibility pass, with Codex astra as partner, before the cut — CLOSED 2026-10-24
 
-### Phase 8 — the owner's UX pass: the backlog and wish list, thirteen pieces
+### Phase 8 — the owner's UX pass, then a third full design pass
 
 - [ ] VH-182 — The footer's contact routes grouped by need; Send feedback renamed Report a problem — since 2026-10-24
 - [ ] VH-191 — Video language moves into step 3, apart from Page language — since 2026-10-24
 - [ ] VH-192 — Watch the finished video in its card before saving — since 2026-10-24
 - [ ] VH-193 — A warning after the job when levelling needed heavy limiting — since 2026-10-24
 - [ ] VH-194 — The spec's and UI-STANDARDS' Phase 7 corrections applied — since 2026-10-24
+- [ ] VH-197 — Pass 3 planned, Codex astra critiquing — since 2026-10-25
+- [ ] VH-198 — Pass 3's instruments re-proved; blind review launched — since 2026-10-25
+- [ ] VH-199 — Pass 3's evidence run — since 2026-10-25
+- [ ] VH-200 — Pass 3 judged: journeys, Carbon, Nielsen, WCAG — since 2026-10-25
+- [ ] VH-201 — Pass 3's merged report — since 2026-10-25
+- [ ] VH-202 — Pass 3's fix plan — since 2026-10-25
+- [ ] VH-203 — Pass 3's fixes, after-run, integrated check — since 2026-10-25
 - [ ] VH-195 — Phase 8 closes — since 2026-10-24
 
 ### Standing — the owner's, never phase-gated

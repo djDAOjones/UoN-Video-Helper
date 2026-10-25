@@ -862,3 +862,13 @@ Spec §9.2 and §11 name the email as the one feedback route. VH-160 drafts that
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-22 — VH-156 — The writing review's proposals applied; the decode-damage detail says "video" and "undamaged audio", never "recording"
+
+**Decision:** the 20 proposals VH-153 had not applied are applied to `en-GB.ts` and `index.html` as the review worded them, with "audio" where they name it; the decode-damage detail says "the original video", "not from your video" and "louder than undamaged audio can be"; Chinese and Malay rows whose meaning changed are redrafted as the agent's drafts, and rows where only an English idiom or comma changed keep their translation; the enforcement sentence says "you can contact the {service} for help", because "contact" alone put it over the reading-grade limit.
+
+**Rationale:** The owner's "approved" (PLAN-4.1) and PLAN-5.2's words (PLAN-5, 2026-10-22). VH-153 had applied `trim.intro`, `browserNote.pending`, `browserNote.notPassed` and `failure.captured`, so those four stand. 47 rows changed: 30 with Chinese and Malay drafts, `statement.plans.items.2` with Malay alone. The review's section 4 predicted the gate on "contact": 10.4 against a limit of 10; "for help" brings it to 9.8 and is true of the advisory service. The Chinese ends-early lines drop their colon for a full stop, as the English does. `inspect.ts` and `kept-range.ts` carry English copies of two errors in their thrown messages; they now say the same words. Seven test files pinned the old words; each now pins the new, and "picture size, and format" changed with its string. The spec quotes none of the changed words (§8.3's "destination must supply captions" and §7's "spaces, commas or new lines" are its own prose). VH-122's entry is superseded for its English detail's words only. Chrome, three languages: the rows a loaded file reaches; the rest VH-156.1. Standards: UI-STANDARDS, the same words for the same concepts and errors that say what next; Nielsen 9; WCAG 3.1.5; house conventions, strings through the sheet, regression tests by category, minimal change. No dependency changed. Not checked by a second model.
+
+**Supersedes:** 2026-10-20 — VH-122 — The decode-damage words stand, the Chinese without a space after 在, and §5.4 gains its row first
+
+**Deferred:** none
