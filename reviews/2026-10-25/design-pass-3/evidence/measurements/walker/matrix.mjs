@@ -10,6 +10,9 @@
 //   VH-172: the scenarios, routes and plans live in scenarios.mjs; plans
 //   `smoke`, `matrix`, `priority` and its parts `priority-1` to `-4`; ids
 //   after the plan name keep only those records.
+//   VH-198: the third pass's parts `part1`, `part2`, `part3`, `part3b`,
+//   `part4` and their runs `run-01` to `run-12` (parts.mjs), each checked
+//   against sizing-2026-10-25.mjs before it starts or resumes.
 //     node matrix.mjs --resume <run dir>   resumes a run in place: records
 //   already ok are kept and skipped, failed ones moved to superseded/ and
 //   measured again, so an interrupted part never restarts.
@@ -21,6 +24,8 @@ import { QUAL_INIT, VIEWS, assertReached, axTree, focusArea, fileButtonInk, keys
 import { Run, writeManifest, writeDigest, aggregate, recordKey } from './runner.mjs'
 import { SCENARIOS, ROUTES, PLANS, MX_INIT, GAPS, READINGS } from './scenarios.mjs'
 import { P8_INIT, PHASE8_INSTRUMENTS, phase8Instruments, watchWorkers } from './phase8.mjs'
+// VH-198: the third pass's five parts and twelve runs, by name (parts.mjs).
+import { assertParts, partOf, runOf } from './parts.mjs'
 export { SCENARIOS, ROUTES, PLANS }
 
 const HERE = dirname(fileURLToPath(import.meta.url))
@@ -134,10 +139,18 @@ async function main() {
     run = new Run(process.argv[3])
     declared = run.declared
     planName = run.name
+    // A part or run resumed only while its declaration stands (the walker unchanged in what it declares).
+    if (partOf(planName) || runOf(planName)) {
+      await assertParts()
+      const now = PLANS[planName]().map(recordKey).sort().join('\n')
+      if (now !== declared.map(recordKey).sort().join('\n')) throw new Error(`${planName} now declares other records than this run did: rerun it whole`)
+    }
     skip = run.resume()
   } else {
     planName = process.argv[2] ?? 'pilot'
     if (!PLANS[planName]) throw new Error('no plan ' + planName)
+    // A part or a run of one, held to the sizing script and the plan before it starts.
+    if (partOf(planName) || runOf(planName)) { const c = await assertParts(); console.log(`parts as declared: ${c.total} records in ${c.runs.length} runs (the script's ${c.scriptTotal}, less ${c.sourceOnly.length} source-only); split ${c.runsSha}`) }
     const only = process.argv.slice(3)
     declared = PLANS[planName]().filter((r) => !only.length || only.includes(r.id)).map((r) => ({ ...r, requires: r.requires ?? requiredFor(r), viewport: r.viewport ?? viewportFor(r.view) }))
     run = Run.create(RUN_ROOT, planName + (only.length ? '-part' : ''), declared)

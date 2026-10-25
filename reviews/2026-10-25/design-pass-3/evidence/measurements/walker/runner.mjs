@@ -151,6 +151,13 @@ export class Run {
 }
 
 const sha = (buf) => createHash('sha256').update(buf).digest('hex').slice(0, 16)
+/** The keys' identity, as VH-172's and VH-176's manifests hashed them (report-172.mjs). */
+export const keysSha = (keys) => sha([...keys].sort().join('\n'))
+/** The instrument revision: every walker file's hash, and one hash over them (one revision across every part). */
+export function instrumentRevision() {
+  const files = readdirSync(HERE).filter((f) => /\.(mjs|sh)$/.test(f)).sort().map((f) => ({ file: f, sha256: sha(readFileSync(join(HERE, f))) }))
+  return { revision: sha(files.map((i) => i.sha256).join('')), files }
+}
 
 // What stayed unresolved, from the measurements: every "cannot determine",
 // grouped by instrument and reason, kept apart as a missing measurement or an
@@ -177,7 +184,6 @@ function unresolvedFrom(recs) {
 /** The manifest: what ran, on what, and what stayed unresolved. */
 export function writeManifest(run, { appRoot, browserVersion, browserCommandLine, fixtures = [], scaling, enlargement, unresolved = [] }) {
   const git = (...a) => { try { return execFileSync('git', ['-C', appRoot, ...a], { encoding: 'utf8' }).trim() } catch { return 'unknown' } }
-  const instruments = readdirSync(HERE).filter((f) => /\.(mjs|sh)$/.test(f)).sort().map((f) => ({ file: f, sha256: sha(readFileSync(join(HERE, f))) }))
   const v = run.verify()
   const recs = run.records()
   const tally = {}
@@ -193,7 +199,7 @@ export function writeManifest(run, { appRoot, browserVersion, browserCommandLine
   const m = {
     run: run.runId,
     source: { commit: git('rev-parse', 'HEAD'), dirty: git('status', '--porcelain', '--', 'src', 'index.html', 'public') !== '' },
-    instruments: { revision: sha(instruments.map((i) => i.sha256).join('')), files: instruments },
+    instruments: instrumentRevision(),
     browser: browserVersion,
     // VH-198: the flags the pages ran under (visible pages need --disable-backgrounding-occluded-windows).
     browserCommandLine,
@@ -204,7 +210,8 @@ export function writeManifest(run, { appRoot, browserVersion, browserCommandLine
     fixtures: used.map((f) => ({ file: basename(f), bytes: statSync(f).size, sha256: sha(readFileSync(f)) })),
     faults: [...new Set(recs.flatMap((r) => r.faults ?? []))],
     // Run completeness: every declared record present, whole and in its state and view.
-    coverage: { expected: v.expected, observed: v.observed, whole: v.whole, problems: v.problems, expectedKeys: v.expectedKeys, observedKeys: v.observedKeys },
+    // VH-198: the keys' identity hashed, as VH-172's and VH-176's manifests (observedKeysSha256).
+    coverage: { expected: v.expected, observed: v.observed, whole: v.whole, problems: v.problems, expectedKeysSha256: keysSha(v.expectedKeys), observedKeysSha256: keysSha(v.observedKeys), expectedKeys: v.expectedKeys, observedKeys: v.observedKeys },
     // Measurements, apart from completeness: what the instruments found.
     measurements: { failing: Object.fromEntries(Object.entries(tally).map(([k, t]) => [k, t.fail])), tally },
     artifacts: { count: arts.length, bytes: arts.reduce((s, a) => s + a.bytes, 0), listSha256: sha(JSON.stringify(arts)), list: 'artifacts.json (each capture: path, bytes, sha256)' },
