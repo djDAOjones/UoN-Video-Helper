@@ -842,3 +842,13 @@ Spec §9.2 and §11 name the email as the one feedback route. VH-160 drafts that
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-22 — VH-154 — Page language moves into the header band, on the right; on the band's blue its focus ring stays white under forced colours
+
+**Decision:** the page's language switcher is appended to the header band, right of the logo, with its label beside the segments from 34rem up and above them below that; the machine-translation note stays in `main` above the heading; under forced colours the band keeps its brand colours, so the switcher's focus ring there is the band's `--focus` white, not a system colour — the one token in the forced-colours block, because a system colour on a blue the theme does not repaint can fall below 3:1.
+
+**Rationale:** The owner agreed V-18's recommendation (VH-143.1, PLAN-5, 2026-10-22). At 1280 × 900 the band stays 87 px and "Choose file" moves from about 916 px to 846 px, inside the first screen. At 390 px the band wraps the switcher under the logo and the heading lands where it did before (about 211 px), so the phone gains nothing and loses nothing, as V-18 warned. At 280 px nothing scrolls sideways. A floated legend is laid out as a box in the fieldset's content, so the segments sit beside it; below 34rem, the breakpoint the facts list already uses, it unfloats so the segments keep the whole width. Headless Chrome over CDP with forced colours emulated, light and dark: the band stays Nottingham Blue, the segments take ButtonFace and Highlight, the label stays light on blue, and a keyboard Tab from the top reaches the skip link first and then the chosen radio, whose ring is 2 px solid white. The Chinese page shows the note above the heading and says the switch in the live line. Standards: UI-STANDARDS, roles inside a band and forced colours (the ring's exception recorded here); WCAG 2.4.13, 1.4.10 and 2.4.1; Nielsen 8; Carbon, tokens, not literals; house conventions, minimal change and regression tests by category. No string, colour token or dependency changed. Not checked by a second model.
+
+**Supersedes:** none
+
+**Deferred:** none

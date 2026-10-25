@@ -66,19 +66,42 @@ describe('the privacy promise (VH-85)', () => {
 })
 
 describe('what the tool does, and where it works (2026-09-30)', () => {
-  const lede = /<div class="lede">([\s\S]*?)<\/div>/.exec(markup)?.[1] ?? ''
+  // Up to the list's end: the fourth promise holds a toggletip's own divs (VH-196).
+  const lede = /<div class="lede">([\s\S]*?<\/ul>)/.exec(markup)?.[1] ?? ''
 
-  it('lists the three things it does, in the maintainer\'s words', () => {
-    const items = [...lede.matchAll(/<li>([^<]+)<\/li>/g)].map((match) => match[1]!.trim())
+  it('lists the five things it does, in the maintainer\'s words', () => {
+    // A promise's own words are the item's first text: the fourth's sit in a
+    // span before its "?" (VH-196).
+    const items = [...lede.matchAll(/<li\b[^>]*>\s*(?:<span[^>]*>)?([^<]+)</g)].map((match) =>
+      match[1]!.trim(),
+    )
     // Each a line a person reads as a line: a capital and a full stop
-    // (VH-124); the words are the maintainer's (VH-85, VH-187), with no
-    // lead-in sentence above them.
+    // (VH-124); the words are the maintainer's (VH-85, VH-187, VH-196), with
+    // no lead-in sentence above them.
     expect(items).toEqual([
-      'Adds the University’s approved branding.',
-      'Levels audio for consistent listening experience.',
-      'Makes a video file sized and formatted for your intended use.',
+      'Lets you trim unwanted footage from the start and end.',
+      'Adds opening and closing graphics.',
+      'Evens out the audio level for better audience experience.',
+      'Saves in a reliable format.',
+      'Makes the file the right size for your purpose.',
     ])
     expect(lede).not.toMatch(/<p[^>]*>[^<]*:\s*<\/p>\s*<ul>/)
+  })
+
+  it('explains the format behind a "?" beside the fourth promise, disclosed only when asked', () => {
+    // The owner's own request (VH-196): a toggletip as the onset one is, a
+    // button that says what it is about and which text it opens, the text
+    // hidden until it is pressed, in a polite live region.
+    const fourth = /<li class="promise-with-help">([\s\S]*?)<\/li>/.exec(markup)?.[1] ?? ''
+    const button = /<button([^>]*)>/.exec(fourth)?.[1] ?? ''
+    expect(button).toMatch(/type="button"/)
+    expect(button).toMatch(/aria-label="About the video format"/)
+    expect(button).toMatch(/aria-expanded="false"/)
+    expect(button).toMatch(/aria-controls="format-help"/)
+    expect(fourth).toMatch(/aria-live="polite">\s*<div class="toggletip" id="format-help" hidden>/)
+    expect(fourth.replace(/\s+/g, ' ')).toContain(
+      'Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperable video format. That means it plays on almost any phone, computer or website.',
+    )
   })
 
   it('has a place to say which browser it is built for, shown only when a check has not passed', () => {

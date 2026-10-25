@@ -1,10 +1,11 @@
 /**
- * When the onset toggletip closes (VH-124, VH-184).
+ * When a toggletip closes (VH-124, VH-184): the "?" beside "Plays over", and
+ * the one beside the lede's fourth promise (VH-196).
  *
- * The "?" beside "Plays over" discloses its text in the page flow, and
- * focus stays on the button. Moving focus on to anything else closes it, so
- * Tab and Shift+Tab never leave it open over what comes next; a click on its
- * own text does not, since that moves focus nowhere. Escape closes it from
+ * The "?" discloses its text in the page flow, and focus stays on the
+ * button. Moving focus on to anything else closes it, so Tab and Shift+Tab
+ * never leave it open over what comes next; a click on its own text does
+ * not, since that moves focus nowhere. Escape closes it from
  * the button, from its text or from nowhere, and hands focus back to the
  * button, but never takes focus from a control elsewhere. Pure but for the
  * elements it is given, so the rule is tested in Node with stand-ins; the

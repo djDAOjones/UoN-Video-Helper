@@ -1110,6 +1110,13 @@ details[open] > .disclosure-summary::before {
   margin-top: var(--paragraph-gap);
 }
 
+/* The "?" beside the lede's fourth promise, on the promise's own line, and
+   its text beneath, inside the same list item (VH-196). */
+.promise-with-help .help-button {
+  margin-left: var(--spacing-03);
+  vertical-align: middle;
+}
+
 /*
  * Colour: two native radios under a segmented skin. The input covers its face
  * and is transparent rather than removed, so the pointer target is the whole

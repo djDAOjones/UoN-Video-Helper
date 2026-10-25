@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-25 — VH-196 — The lede's five promises in the owner's words, and a "?" beside "Saves in a reliable format." that explains MP4
+
+**Decision:** The lede lists the owner's five promises. Beside the fourth, a "?" toggletip named "About the video format" holds his MP4 hint, wired with the onset "?"'s own code (`wireToggletip`). MP4's recorded meaning also accepts the hint's own "an MP4, the most interoperable video format", the owner's choice A. The spec needs no correction: it describes no lede.
+
+**Rationale:** The hint passed the reading grade (5.3) but failed the abbreviation check in `index.html`, whose text has no ".mp4". Options A, B and C went to the owner through the orchestrator. A was recognise the hint's apposition, B was no no-script English for the tip, and C was a reword. His words, verbatim: "A, and accept "About the video format" as the "?" name". So `MEANINGS.MP4` in `test/readability.test.ts` is `/\.mp4|an MP4, the most interoperable video format/`, tight to that phrasing, and nothing joins `EXCEPTED`. The name was the build's proposal, 4 words, ungraded. The orchestrator asked for a spec correction "in the S17 area", but `docs/01-specification.md` holds no lede or promise list, and S17 is the browser note. The orchestrator then said this was its mistake, so no promise list is added to the spec. The file button moves down 68 to 116 px, about where it was before VH-187 raised it. At 1280 by 900 in English it is still in the first screen (`reviews/2026-10-24/vh196-lede-2026-10-25.md`). Chrome: `tip-196.mjs` 36 of 36, `tip-184.mjs` 36 of 36 (the onset "?" unchanged), `top-187.mjs` 99 of 99. At 32 px text, 375 and 320 px overflow from the video type's segments and the statement's heading, not the lede (VH-189.1). Chinese and Malay drafted by the agent. Codex astra: "Commit after the musts below". Its must, the walker's whitespace pattern, was checked and the walker re-run, and its may to pin the whole hint was taken. Digest rules applied: WCAG 2.1.1 and 4.1.2 (a button that discloses by keyboard, with its state and name), 2.5.8 and 2.5.5 (44 px), 3.1.4 (the abbreviation's meaning beside it); Nielsen 10 (help in place, on demand); Carbon, the existing toggletip pattern and tokens.
+
+**Supersedes:** none
+
+**Deferred:** VH-190
+
 ## 2026-10-25 — VH-196 — raised: the lede's five promises in the owner's words, and an MP4 hint beside promise 4, his own exception to the no-new-control rule
 
 **Decision:** Phase 8 gains VH-196, built next, before VH-190. The lede's list becomes the owner's five promises, verbatim: "1. Lets you trim unwanted footage from the start and end. 2. Adds opening and closing graphics. 3. Evens out the audio level for better audience experience. 4. Saves in a reliable format. (?) 5. Makes the file the right size for your purpose." The "?" is a toggletip in the onset toggletip's pattern, holding the hint he accepted. It is a new control, his own request.
@@ -525,16 +535,6 @@ Each sentence was read against the shipped code: `ends-early.ts` and `ENDS_EARLY
 **Decision:** 36 rows say "audio" (音频, "audio") where they said "sound" (声音, "bunyi") for the file's audio, and the three browser sentences open "This tool" (此工具, "Alat ini"); "sound" stays for a noise in the room, for "silent" and as a verb; string keys such as `noSound` and `soundHeading` keep their names, so only words change; VH-156 writes any proposal that names the audio with "audio".
 
 **Rationale:** The owner's "audio and tool" (VH-143.3, PLAN-5, 2026-10-22), against UI-STANDARDS' one word per concept. Kept as "sound": `warnings.noisy.detail` and `warnings.veryQuiet.detail` (noises in the room), `warnings.targetMissed.detail` (the verb), Chinese 没有声音 for "silent" and 这段录音声音很小 for "very quiet". Chinese 音轨 already meant an audio track and stays; 声音通道 becomes 音频声道. The filled sheet is CRLF, not LF as VH-153's hand-over said; it is written back CRLF, and the sheet's Step 6 group heading follows. Spec §10 still quotes "This app", a correction for the owner (VH-155.1). Chrome, three languages: the browser sentence, the trim intro and Video properties' audio rows with the sample `AMCS3059`; the rows only a job, a warning or a failure reaches, VH-155.2. Standards: UI-STANDARDS, the same word for the same concept; Nielsen 2 and 4; house conventions, strings through the sheet, minimal change. No dependency changed. Not checked by a second model.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-22 — VH-154 — Page language moves into the header band, on the right; on the band's blue its focus ring stays white under forced colours
-
-**Decision:** the page's language switcher is appended to the header band, right of the logo, with its label beside the segments from 34rem up and above them below that; the machine-translation note stays in `main` above the heading; under forced colours the band keeps its brand colours, so the switcher's focus ring there is the band's `--focus` white, not a system colour — the one token in the forced-colours block, because a system colour on a blue the theme does not repaint can fall below 3:1.
-
-**Rationale:** The owner agreed V-18's recommendation (VH-143.1, PLAN-5, 2026-10-22). At 1280 × 900 the band stays 87 px and "Choose file" moves from about 916 px to 846 px, inside the first screen. At 390 px the band wraps the switcher under the logo and the heading lands where it did before (about 211 px), so the phone gains nothing and loses nothing, as V-18 warned. At 280 px nothing scrolls sideways. A floated legend is laid out as a box in the fieldset's content, so the segments sit beside it; below 34rem, the breakpoint the facts list already uses, it unfloats so the segments keep the whole width. Headless Chrome over CDP with forced colours emulated, light and dark: the band stays Nottingham Blue, the segments take ButtonFace and Highlight, the label stays light on blue, and a keyboard Tab from the top reaches the skip link first and then the chosen radio, whose ring is 2 px solid white. The Chinese page shows the note above the heading and says the switch in the live line. Standards: UI-STANDARDS, roles inside a band and forced colours (the ring's exception recorded here); WCAG 2.4.13, 1.4.10 and 2.4.1; Nielsen 8; Carbon, tokens, not literals; house conventions, minimal change and regression tests by category. No string, colour token or dependency changed. Not checked by a second model.
 
 **Supersedes:** none
 

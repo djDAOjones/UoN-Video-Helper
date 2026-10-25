@@ -77,11 +77,19 @@ export const enGB = {
   },
 
   lede: {
+    /** The owner's five, in his words (VH-196). */
     promises: [
-      'Adds the University’s approved branding.',
-      'Levels audio for consistent listening experience.',
-      'Makes a video file sized and formatted for your intended use.',
+      'Lets you trim unwanted footage from the start and end.',
+      'Adds opening and closing graphics.',
+      'Evens out the audio level for better audience experience.',
+      'Saves in a reliable format.',
+      'Makes the file the right size for your purpose.',
     ],
+    /** The "?" beside the fourth promise, and the text it discloses (VH-196). */
+    formatHelp: {
+      label: 'About the video format',
+      text: 'Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperable video format. That means it plays on almost any phone, computer or website.',
+    },
     privacy:
       'Your video is processed on your device, it is never uploaded, and the original file does not change.',
   },

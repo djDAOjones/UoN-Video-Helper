@@ -41,12 +41,39 @@
            work everywhere": it is built and tested for Chrome, and says so
            rather than letting another browser fail part-way (2026-09-30). It
            shows only when a load-time check has not passed; while they run,
-           step 1 says so, and a pass is the System check's to say (VH-187). -->
+           step 1 says so, and a pass is the System check's to say (VH-187).
+           The five promises are the owner's own; the "?" beside the fourth
+           is his own request, a toggletip like the one beside "Plays over"
+           (VH-196). -->
       <div class="lede">
         <ul>
-          <li data-i18n="lede.promises.0">Adds the University’s approved branding.</li>
-          <li data-i18n="lede.promises.1">Levels audio for consistent listening experience.</li>
-          <li data-i18n="lede.promises.2">Makes a video file sized and formatted for your intended use.</li>
+          <li data-i18n="lede.promises.0">Lets you trim unwanted footage from the start and end.</li>
+          <li data-i18n="lede.promises.1">Adds opening and closing graphics.</li>
+          <li data-i18n="lede.promises.2">Evens out the audio level for better audience experience.</li>
+          <li class="promise-with-help">
+            <span data-i18n="lede.promises.3">Saves in a reliable format.</span>
+            <button
+              class="button button--secondary help-button"
+              type="button"
+              id="format-help-button"
+              aria-label="About the video format"
+              data-i18n-attr="aria-label:lede.formatHelp.label"
+              aria-expanded="false"
+              aria-controls="format-help"
+            >
+              ?
+            </button>
+            <div class="promise-help" aria-live="polite">
+              <div class="toggletip" id="format-help" hidden>
+                <p data-i18n="lede.formatHelp.text">
+                  Videos come in many formats. Some play on one device but not another, or do not
+                  work with some apps. This tool saves your video as an MP4, the most interoperable
+                  video format. That means it plays on almost any phone, computer or website.
+                </p>
+              </div>
+            </div>
+          </li>
+          <li data-i18n="lede.promises.4">Makes the file the right size for your purpose.</li>
         </ul>
         <p data-i18n="lede.privacy">
           Your video is processed on your device, it is never uploaded, and the original file does

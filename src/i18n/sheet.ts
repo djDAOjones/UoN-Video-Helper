@@ -58,6 +58,10 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
     'Under the language switcher, only when the page is in Chinese or Malay: the note that a computer translated it',
   ],
   ['lede', 'Under the page heading: what the tool does'],
+  [
+    'lede.formatHelp',
+    'Under the page heading: the "?" beside "Saves in a reliable format." and the text it shows when pressed',
+  ],
   ['browserNote', 'Under the page heading: the note about the browser'],
   ['videoKind', 'Above Step 1: the switch between a staff video and a student submission'],
   [
@@ -340,6 +344,10 @@ const NOTES: Readonly<Record<string, string>> = {
   'closing.helpExistingText':
     'Follows "The last second of video" on the same line, so it starts with a dash; "it" is that second.',
   'closing.helpFreezeText': 'Follows "A held last frame" on the same line, so it starts with a dash.',
+  'lede.formatHelp.label':
+    'Not shown: read out by screen readers as the name of the "?" button beside lede.promises.3.',
+  'lede.formatHelp.text':
+    'Keep "MP4", the name of the video format. "Interoperable" means it works with many devices and apps.',
   'closing.notUsedWith.cut':
     'Names the animation type "Cut"; use the same word as closing.types.cut.',
   'closing.notUsedWith.none':

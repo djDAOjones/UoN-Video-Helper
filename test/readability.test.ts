@@ -113,7 +113,9 @@ export function readingGrade(text: string): number | null {
  */
 const MEANINGS: Readonly<Record<string, RegExp>> = {
   kHz: /samples a second/,
-  MP4: /\.mp4/,
+  // Or the lede's format hint, which says what an MP4 is beside it: the
+  // owner's choice A for VH-196, its words exactly, so no other text passes.
+  MP4: /\.mp4|an MP4, the most interoperable video format/,
   WebCodecs: /video processing in the browser/i,
   // The accessibility statement's (VH-130): the guidelines it measures
   // itself against, their levels, and the tools it names.

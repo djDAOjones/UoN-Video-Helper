@@ -17,6 +17,7 @@
 - VH-187 — the lede's lead-in gone, its promises in plain words with the owner's own promise 2 after the sheet's failed the readability gate, the browser note only on a fail or warn, which outranks pending; the file button 80 to 128 px higher, never lower; 99 Chrome cases; Codex astra "Commit after the musts below", the must the close (2026-10-24) — see decisions
 - VH-188 — the outputs named "High quality, for publishing" and "Smaller file, for assignments and sharing", their details without "etc.", short forms for the sentences that name one and for the record, which drops the purpose; S1–S10 applied; 45 Chrome cases; Codex astra "Commit after the musts below", the musts done (2026-10-24) — see decisions
 - VH-189 — step 4's labels in the result line's words ("No closing graphics", "Plays over", "The last second of video", "A held last frame"), S11–S16 applied; below about 400 px the "?" sits beside the label, the owner's choice, so no option is clipped at 320 px; 72 Chrome cases; Codex astra "Commit after the musts below", the musts done (2026-10-25) — see decisions
+- VH-196 — the lede's five promises in the owner's words, a "?" named "About the video format" beside the fourth holding his MP4 hint, wired with the onset "?"'s code; MP4's meaning accepts the hint's apposition, his choice A; the file button 68 to 116 px lower; 171 Chrome cases; Codex astra "Commit after the musts below", the must done (2026-10-25) — see decisions
 
 ## Phase 7 — a second design, UX and accessibility pass, with Codex astra as partner, before the cut
 

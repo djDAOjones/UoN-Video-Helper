@@ -38,10 +38,16 @@ export const msMY: Messages = {
   },
   lede: {
     promises: [
-      'Menambah penjenamaan Universiti yang diluluskan.',
-      'Menyeimbangkan audio untuk pengalaman mendengar yang konsisten.',
-      'Menghasilkan fail video yang saiz dan formatnya sesuai untuk tujuan penggunaan anda.',
+      'Membolehkan anda memotong rakaman yang tidak diingini di awal dan akhir.',
+      'Menambah grafik pembukaan dan grafik penutup.',
+      'Menyamakan paras audio untuk pengalaman penonton yang lebih baik.',
+      'Menyimpan dalam format yang boleh dipercayai.',
+      'Menjadikan saiz fail sesuai dengan tujuan anda.',
     ],
+    formatHelp: {
+      label: 'Perihal format video',
+      text: 'Video wujud dalam banyak format. Sesetengahnya dimainkan pada satu peranti tetapi tidak pada peranti lain, atau tidak berfungsi dengan sesetengah aplikasi. Alat ini menyimpan video anda sebagai MP4, format video yang paling saling boleh kendali. Ini bermakna ia boleh dimainkan pada hampir mana-mana telefon, komputer atau laman web.',
+    },
     privacy:
       'Video anda diproses pada peranti anda, ia tidak pernah dimuat naik dan fail asal tidak berubah.',
   },

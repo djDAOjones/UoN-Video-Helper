@@ -357,6 +357,8 @@ const closingInternalReason = required<HTMLParagraphElement>('#closing-internal-
 const closingResult = required<HTMLParagraphElement>('#closing-result')
 const onsetHelpButton = required<HTMLButtonElement>('#onset-help-button')
 const onsetHelp = required<HTMLDivElement>('#onset-help')
+const formatHelpButton = required<HTMLButtonElement>('#format-help-button')
+const formatHelp = required<HTMLDivElement>('#format-help')
 const trimPreview = required<HTMLVideoElement>('#trim-preview')
 const trimPreviewNote = required<HTMLParagraphElement>('#trim-preview-note')
 const trimTrack = required<HTMLDivElement>('#trim-track')
@@ -704,7 +706,8 @@ videoLanguageChoice.addEventListener('change', (event) => {
 })
 
 /**
- * The "?" beside "Plays over": a toggletip.
+ * A "?" and the text it discloses: a toggletip. Two on the page, beside
+ * "Plays over" and beside the lede's "Saves in a reliable format." (VH-196).
  *
  * A button that discloses text, so it works by click, Enter and Space and
  * never by hover alone. Focus stays on the button; Escape, focus moving on or
@@ -712,32 +715,35 @@ videoLanguageChoice.addEventListener('change', (event) => {
  * page flow rather than floating, so it can never cover the control it
  * explains or the focus ring beside it.
  */
-function setOnsetHelp(open: boolean): void {
-  onsetHelp.hidden = !open
-  onsetHelpButton.setAttribute('aria-expanded', String(open))
+function wireToggletip(button: HTMLButtonElement, tip: HTMLElement): void {
+  const set = (open: boolean): void => {
+    tip.hidden = !open
+    button.setAttribute('aria-expanded', String(open))
+  }
+
+  button.addEventListener('click', () => set(button.getAttribute('aria-expanded') !== 'true'))
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || tip.hidden) return
+    const back = escapeFocusesButton(document.activeElement, document.body, button, tip)
+    set(false)
+    if (back) button.focus()
+  })
+
+  // Focus moving on closes it, so Tab never leaves it over what comes next (VH-184).
+  document.addEventListener('focusin', (event) => {
+    if (!tip.hidden && focusClosesTip(event.target, button, tip)) set(false)
+  })
+
+  document.addEventListener('click', (event) => {
+    if (tip.hidden || !(event.target instanceof Node)) return
+    if (button.contains(event.target) || tip.contains(event.target)) return
+    set(false)
+  })
 }
 
-onsetHelpButton.addEventListener('click', () =>
-  setOnsetHelp(onsetHelpButton.getAttribute('aria-expanded') !== 'true'),
-)
-
-document.addEventListener('keydown', (event) => {
-  if (event.key !== 'Escape' || onsetHelp.hidden) return
-  const back = escapeFocusesButton(document.activeElement, document.body, onsetHelpButton, onsetHelp)
-  setOnsetHelp(false)
-  if (back) onsetHelpButton.focus()
-})
-
-// Focus moving on closes it, so Tab never leaves it over what comes next (VH-184).
-document.addEventListener('focusin', (event) => {
-  if (!onsetHelp.hidden && focusClosesTip(event.target, onsetHelpButton, onsetHelp)) setOnsetHelp(false)
-})
-
-document.addEventListener('click', (event) => {
-  if (onsetHelp.hidden || !(event.target instanceof Node)) return
-  if (onsetHelpButton.contains(event.target) || onsetHelp.contains(event.target)) return
-  setOnsetHelp(false)
-})
+wireToggletip(onsetHelpButton, onsetHelp)
+wireToggletip(formatHelpButton, formatHelp)
 
 // Both, in production too. `AGENTS.md` -> "Traceable version identity" wants
 // "what release is this?" AND "exactly what code is live?" answerable from a
