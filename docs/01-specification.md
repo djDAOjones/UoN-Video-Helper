@@ -307,7 +307,7 @@ reference material cannot be trusted to level real content.
 
 ### 5.4 Audio-quality warnings
 
-Derived from the Section 5.2 analysis pass and shown **before** processing.
+From the Section 5.2 analysis pass, shown **before** processing; post-processing rows, with the finished video.
 All are advisory, phrased as possibilities, and never block processing.
 
 | Condition | Trigger |
@@ -322,6 +322,7 @@ All are advisory, phrased as possibilities, and never block processing.
 | Extended silence | Any continuous span > 30 s below −60 LUFS |
 | Target not reached | Post-processing integrated loudness differs from −16 LUFS by > 1 LU |
 | No audio track | Source has no audio stream |
+| Heavy limiting | Post-processing limiting over 3 LU (`HEAVY_LIMITING_LU`) |
 
 Pumping detection from *pre-existing* processing is **deferred from v1** —
 it cannot be measured reliably enough to avoid false alarms. See open

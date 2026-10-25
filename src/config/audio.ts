@@ -257,6 +257,15 @@ export const WARNING_THRESHOLDS = {
 } as const
 
 /**
+ * Spec 5.4's heavy-limiting row (VH-193): the limiter's measured bite, in LU,
+ * above which the finished video is shown with a warning. The bite is what
+ * the solved gain should have added and the limited chain did not deliver.
+ * The 29-minute Teams recording's is about 8 LU (VH-106); 3 is the owner's
+ * choice in PLAN-8's round 2, Q6 option 1.
+ */
+export const HEAVY_LIMITING_LU = 3
+
+/**
  * Decode damage (VH-122, spec 5.4): sound a decoder cannot have made from a
  * real recording, silenced before anything measures or levels it.
  */

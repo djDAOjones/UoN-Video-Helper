@@ -25,7 +25,7 @@ import {
   type InputVideoTrack,
 } from 'mediabunny'
 
-import type { AudioWarning } from '../audio/warnings'
+import { detectProductionWarnings, type AudioWarning } from '../audio/warnings'
 import { log } from '../core/logger'
 import {
   CLOSING_DEFAULTS,
@@ -870,8 +870,10 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       // Whether a card was on, and nothing of what it says (VH-127).
       titleCard: titleCard !== null,
     })
-    const outputWarnings: AudioWarning[] = []
-    if (!metadataCarried) outputWarnings.push({ code: 'metadata-lost', detail: {} })
+    const outputWarnings = detectProductionWarnings({
+      limiterBiteLu: audioPlan?.limiterBiteLu ?? null,
+      metadataCarried,
+    })
 
     return {
       file,

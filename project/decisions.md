@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-25 — VH-193 — A warning with the finished video when levelling needed over 3 LU of limiting, measured in the job; first, and unchanged after a save
+
+**Decision:** The plan carries the limiter's measured bite, unrounded: the unlimited chain plus the solved gain, less the last limited pass before the codec. Over `HEAVY_LIMITING_LU` = 3, the finished video shows B11's warning, first among its warnings and spoken with it, and a save leaves it as it is (the owner's 1A and 2A). Spec §5.4 takes S25 and S32.
+
+**Rationale:** The owner on the open points, verbatim: "1A and 2A: heavy limiting first, before the metadata warning; after a save the warning stays as it is, with no new words". The solver returns the gain it last measured, so the last limited pass ran at that gain (`gain-solve.ts`). A non-finite pass gives no bite. `detectProductionWarnings` returns the post-processing warnings in that order, and the pipeline's `outputWarnings` carries them through the worker as before. Measured in Chrome (`reviews/2026-10-24/vh193-heavy-2026-10-25.md`): the Teams recording bites 7.94 LU and warns. Every lecture, edited piece and phone clip bites 0.00 to 2.42 LU and does not. Three files have no audio and five branding assets have no audio stream. C0413.MP4, an unedited studio interview camera original with a 19.2 LU range, bites 5.17 LU and warns. It went to the owner under the item's criterion, and his answer, verbatim: "it's not typical, so ship as is". The matrix passed 36 of 36, the under-threshold cells 3 of 3, and the completed-save flows 3 of 3. The Chinese and Malay rows are agent drafts. Codex astra: "Commit after the musts below". Its three musts are done: the evidence; the corpus walker's rounding, skips and silent jobs; and a save proven complete. Its translation flags are taken. The rest is wish lines VH-193.1 and VH-193.2 (`reviews/2026-10-24/codex-astra-vh193-check-2026-10-25.md`). Digest rules applied: Nielsen 1 (the cost of processing is visible before the save) and 9 (a cause and a way forward, without blame); Carbon's existing notification pattern, with no new control; WCAG 2.2 AAA 4.1.3 (the warning is spoken with the result); house conventions, numbers in `src/config/`.
+
+**Supersedes:** none
+
+**Deferred:** VH-194
+
 ## 2026-10-25 — VH-192 — The finished video plays in its card while it is unsaved, after the card's lines and before the lifetime line and Save
 
 **Decision:** The finished card holds the browser's own player over the job's working file, named by the card's title, loading metadata only and never autoplaying, with no new words (B10). It stays while the video is unsaved, a "Previous video" and a download included, and leaves the card once a save completes, before the clean-up removes its file. Spec §9.1 and §9.3 take S20 and S21.
@@ -510,23 +520,6 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Decision:** a link on its own line directly under Send feedback, above the help links, says "Fill in the feedback form (new tab)" (填写反馈表（在新标签页中打开）, "Isi borang maklum balas (dibuka dalam tab baharu)") and opens `FEEDBACK_FORM_URL` in `src/config/feedback.ts` in a new tab with no referrer, because the owner asked for the form near the page's foot and wants the page simple; Send feedback and the help links are unchanged.
 
 **Rationale:** The link takes `.footer-contact-link`, so it is a 44 px target with the band's link colours and needs no new token; its paragraph takes the button's existing `--spacing-05` margin. The address is set once in `main.ts`, plain: a test pins it whole and holds it to no query and no fragment, so nothing from the page, the file or the build can travel with it (rules, no media egress). A new tab is not leaving the page, so Chrome fires no `beforeunload` and a running job raises no "Leave site?"; the click was checked in the browser pane with a counting listener (0). Checked in Chrome at 1280, 375 and 320 px in English, Chinese and Malay, light and dark: 44 px, 48 px where the Malay wraps at 375 and 320, no sideways scroll; forced colours checked in headless Chrome at 1280 px in all three, where the link takes the same LinkText as the team links. The Chinese and Malay are the agent's drafts, marked in the sheet for the campus colleagues (VH-105.2). Spec §9.2 and §11 still name the email as the one feedback route; the correction is drafted as VH-160.1 for the owner. Standards: WCAG 2.5.5 and 2.4.9 (wcag-2.2-aaa digest); Nielsen's minimalist design (nielsen digest).
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-22 — PLAN-5 — Phase 5 closes with its ten items shipped; Phase 6 starts with VH-160, the feedback form link
-
-**Decision:** Phase 5 closes with VH-150 to VH-159 shipped, reconciled against PLAN-5's two entries of 2026-10-22. Phase 6's first item is VH-160, the feedback form link, because it is first in PLAN-6's order and is the only Phase 6 item with nothing blocking it: VH-137 waits on the owner's review, VH-162 cuts a release that includes both, and VH-14 is the owner's upload.
-
-**Rationale:** PLAN-5 named VH-150 to VH-153, then the owner's answers added VH-154 to VH-159. Each of the ten has a trajectory line under Phase 5, none has a backlog line, and the eight item files say shipped (VH-158 and VH-159 have none). What a person or the owner still has to do is on the wish list, not hidden in the phase: VH-150.2, VH-150.3, VH-153.1, VH-155.2, VH-156.1 and VH-158.1 are checks, and VH-159.1 is the draft §5.4 row for VH-158's warning. Local recall, from the record alone, before editing, scored 8/8 (2,2,2,2):
-
-1. VH-156, VH-157, VH-158 and VH-159, from trajectory.md's Phase 5 lines and their decision headings.
-2. VH-157: the date no longer counts towards a filled card, because it fills itself.
-3. The wish list's open lines (person checks, translations, VH-159.1, the infrastructure the owner deferred), and backlog Next (VH-13, VH-161, VH-17, VH-113), per PLAN-6's Deferred line.
-4. VH-160, in Phase 6.
-
-This check ran in the session that wrote the record, not in a fresh one, so it does not prove a handoff. VH-160 also drafts the correction for spec §9.2 and §11, which name email as the one feedback route, as a wish line for the owner (PLAN-6).
 
 **Supersedes:** none
 

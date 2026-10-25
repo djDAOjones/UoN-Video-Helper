@@ -5,13 +5,15 @@
  * for the output check to refuse a loudness measured on nothing.
  *
  * Read from real MP4s built in memory (`test/helpers/pcm-mp4.ts`), whose
- * sound comes in 100 ms blocks of a steady level.
+ * sound comes in 100 ms blocks of a steady level. The plan's measured bite
+ * (VH-193) is read from the same files.
  */
 
 import { describe, expect, it } from 'vitest'
 
 import { pcmMp4, soundTrackOf } from '../../test/helpers/pcm-mp4'
 import { BLOCK_SECONDS } from '../audio/loudness'
+import { clearLogRecords, getLogRecords } from '../core/logger'
 import { detectSourceWarnings } from '../audio/warnings'
 import { analyseSourceAudio, planAudio } from './audio-plan'
 import { declaredExtent, shortfall } from './ends-early'
@@ -115,5 +117,28 @@ describe('a sliver of late sound in the part kept (VH-185)', () => {
     expect(
       await analyseSourceAudio(await soundTrackOf(await pcmMp4({ spans: [[0, 0.2]] }))),
     ).not.toHaveProperty('silent')
+  })
+})
+
+describe('the limiter’s bite, measured in the plan (VH-193)', () => {
+  it('is the logged figures’ own: the unlimited chain plus the gain, less the limited pass', async () => {
+    clearLogRecords()
+    const plan = await planAudio(
+      await soundTrackOf(await pcmMp4({ spans: [[0, 3]] })),
+      undefined,
+      undefined,
+      undefined,
+      keptTo(3),
+    )
+    if ('silent' in plan) throw new Error('levelled, not silent')
+    const logged = getLogRecords().find((entry) => entry.message === 'chain planned')?.data as
+      Record<string, number> | undefined
+    expect(plan.limiterBiteLu).not.toBeNull()
+    // Unrounded in the plan; the log's figures are rounded to the hundredth.
+    expect(logged?.['limiterBiteLu']).toBeCloseTo(plan.limiterBiteLu ?? Number.NaN, 2)
+    expect(plan.limiterBiteLu).toBeCloseTo(
+      (logged?.['afterChainLufs'] ?? 0) + plan.gainDb - (logged?.['limitedLufs'] ?? 0),
+      1,
+    )
   })
 })

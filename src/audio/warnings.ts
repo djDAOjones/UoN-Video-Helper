@@ -10,7 +10,7 @@
  * belong in the UI. Keeping them apart is what lets both be tested.
  */
 
-import { MINIMUM_GAP_DEPTH_LU, WARNING_THRESHOLDS } from '../config/audio'
+import { HEAVY_LIMITING_LU, MINIMUM_GAP_DEPTH_LU, WARNING_THRESHOLDS } from '../config/audio'
 import type { Shortfall } from '../media/ends-early'
 import type { AudioAnalysis } from './analyse'
 
@@ -26,6 +26,7 @@ export type AudioWarningCode =
   | 'extended-silence'
   | 'target-missed'
   | 'metadata-lost'
+  | 'heavy-limiting'
 
 export interface AudioWarning {
   readonly code: AudioWarningCode
@@ -185,4 +186,27 @@ export function detectOutputWarning(
     code: 'target-missed',
     detail: { integratedLufs: outputIntegratedLufs, missedBy },
   }
+}
+
+/**
+ * What producing the file cost, spec 5.4's post-processing rows, in the order
+ * the finished video shows them: heavy limiting first, since it asks something
+ * of the user before they save (VH-193, the owner's 1A), then the carried
+ * metadata.
+ *
+ * @param produced.limiterBiteLu - The plan's measured bite, never predicted,
+ *   or `null` when none was measured.
+ * @param produced.metadataCarried - Whether the file's tags were carried across.
+ */
+export function detectProductionWarnings(produced: {
+  readonly limiterBiteLu: number | null
+  readonly metadataCarried: boolean
+}): AudioWarning[] {
+  const found: AudioWarning[] = []
+  const { limiterBiteLu } = produced
+  if (limiterBiteLu !== null && limiterBiteLu > HEAVY_LIMITING_LU) {
+    found.push({ code: 'heavy-limiting', detail: { limiterBiteLu } })
+  }
+  if (!produced.metadataCarried) found.push({ code: 'metadata-lost', detail: {} })
+  return found
 }

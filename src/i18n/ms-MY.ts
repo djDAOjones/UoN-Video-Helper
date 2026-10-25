@@ -637,6 +637,11 @@ export const msMY: Messages = {
       detail:
         'Video ini bagus untuk digunakan; cuma ia mungkin kedengaran sedikit lebih senyap atau lebih kuat daripada video lain yang diratakan dengan alat ini.',
     },
+    heavyLimiting: {
+      heading: 'Bahagian paling kuat telah ditekan dengan banyak',
+      detail:
+        'Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menyimpannya. Lain kali, cuba ubah cara anda merakam bunyi.',
+    },
     metadataLost: {
       heading: 'Tajuk, pengarang dan tarikh fail tidak dapat disalin',
       detail:

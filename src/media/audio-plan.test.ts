@@ -34,6 +34,7 @@ const plan: AudioPlan = {
   codec: null,
   limiterCeilingDbtp: LIMITER.ceilingDbtp,
   predictedOutputLufs: null,
+  limiterBiteLu: null,
 }
 
 function block(timestampSeconds: number, frames = BLOCK_FRAMES): AudioSample {

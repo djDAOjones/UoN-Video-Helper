@@ -716,6 +716,11 @@ export const enGB = {
       detail:
         'The video is fine to use; it may just sound slightly quieter or louder than other videos levelled with this tool.',
     },
+    heavyLimiting: {
+      heading: 'The loudest moments were held down hard',
+      detail:
+        'To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound.',
+    },
     metadataLost: {
       heading: 'The file’s title, author, and date could not be copied across',
       detail:

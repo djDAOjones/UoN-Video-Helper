@@ -74,6 +74,14 @@ export interface AudioPlan {
    * the contract is known before a frame is encoded (VH-110).
    */
   readonly predictedOutputLufs: number | null
+  /**
+   * The limiter's measured bite, in LU, unrounded: what the solved gain
+   * should have added to the unlimited chain, less what the last limited
+   * pass, run at that gain, delivered before the codec. `null` when no
+   * limited pass gave a figure. Over `HEAVY_LIMITING_LU` the finished video
+   * carries a warning (VH-193).
+   */
+  readonly limiterBiteLu: number | null
 }
 
 /**
@@ -454,6 +462,12 @@ export async function planAudio(
   // Read through a widened local: TypeScript cannot see the closure's writes.
   const cost = codec as CodecCost | null
   const limited = chainLufs as number | null
+  // The solver returns the gain it last measured, so the last limited pass
+  // ran at `solution.gainDb` (VH-193).
+  const limiterBiteLu =
+    limited !== null && Number.isFinite(limited) && Number.isFinite(solution.unlimitedLufs)
+      ? solution.unlimitedLufs + solution.gainDb - limited
+      : null
 
   log.info('audio', 'chain planned', {
     sourceIntegratedLufs: round(analysis.integratedLufs),
@@ -464,14 +478,15 @@ export async function planAudio(
     damageSilenced: analysis.damageSilencedAtSeconds?.length ?? 0,
     afterChainLufs: round(solution.unlimitedLufs),
     // What the chain that actually runs produced at the solved gain. The
-    // difference between this and `afterChainLufs` is the limiter's bite, and
-    // it is the number VH-50 was hiding.
+    // difference between this and `afterChainLufs` plus the gain is the
+    // limiter's bite, and it is the number VH-50 was hiding.
     limitedLufs:
       limited !== null
         ? round(limited)
         : solution.measuredLufs === null
           ? null
           : round(solution.measuredLufs),
+    limiterBiteLu: limiterBiteLu === null ? null : round(limiterBiteLu),
     // What the codec then took, and what that predicts for the finished
     // file. The decoded-output check in the worker measures the real thing.
     codecCostLu: cost ? Math.round(cost.costLu * 1000) / 1000 : null,
@@ -496,6 +511,7 @@ export async function planAudio(
     codec: cost,
     limiterCeilingDbtp,
     predictedOutputLufs: solution.measuredLufs,
+    limiterBiteLu,
   }
 }
 

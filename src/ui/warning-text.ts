@@ -97,6 +97,8 @@ export function warningText(warning: AudioWarning): WarningText {
       return warnings.targetMissed
     case 'metadata-lost':
       return warnings.metadataLost
+    case 'heavy-limiting':
+      return warnings.heavyLimiting
   }
 }
 

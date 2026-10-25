@@ -7,12 +7,21 @@
 
 import { describe, expect, it } from 'vitest'
 
-import { COMPRESSOR, TARGET_INTEGRATED_LUFS, WARNING_THRESHOLDS } from '../config/audio'
+import {
+  COMPRESSOR,
+  HEAVY_LIMITING_LU,
+  TARGET_INTEGRATED_LUFS,
+  WARNING_THRESHOLDS,
+} from '../config/audio'
 import { tone } from '../../test/helpers/signals'
 import { Compressor } from './compressor'
 import { TruePeakDetector } from './truepeak'
 import type { AudioAnalysis } from './analyse'
-import { detectOutputWarning, detectSourceWarnings } from './warnings'
+import {
+  detectOutputWarning,
+  detectProductionWarnings,
+  detectSourceWarnings,
+} from './warnings'
 
 /** A healthy recording. Each test perturbs exactly one thing. */
 function healthy(overrides: Partial<AudioAnalysis> = {}): AudioAnalysis {
@@ -192,6 +201,37 @@ describe('spec 5.4 output warning', () => {
 
   it('says nothing about a silent result rather than reporting -Infinity', () => {
     expect(detectOutputWarning(Number.NEGATIVE_INFINITY, TARGET_INTEGRATED_LUFS)).toBeNull()
+  })
+})
+
+describe('spec 5.4 production warnings: heavy limiting (VH-193) and metadata', () => {
+  const codes = (limiterBiteLu: number | null, metadataCarried = true) =>
+    detectProductionWarnings({ limiterBiteLu, metadataCarried }).map((warning) => warning.code)
+
+  it('says nothing at or under the threshold', () => {
+    expect(codes(0.4)).toEqual([])
+    expect(codes(HEAVY_LIMITING_LU)).toEqual([])
+  })
+
+  it('warns over it, carrying the measured bite', () => {
+    // The Teams recording's bite, about 8 LU (VH-106).
+    const [warning] = detectProductionWarnings({ limiterBiteLu: 8.1, metadataCarried: true })
+    expect(warning?.code).toBe('heavy-limiting')
+    expect(warning?.detail['limiterBiteLu']).toBe(8.1)
+    expect(codes(HEAVY_LIMITING_LU + 0.01)).toEqual(['heavy-limiting'])
+    // Over the threshold though the log, to the hundredth, says 3.00: the
+    // unrounded bite decides (Codex astra).
+    expect(codes(HEAVY_LIMITING_LU + 0.004)).toEqual(['heavy-limiting'])
+  })
+
+  it('says nothing when no bite was measured', () => {
+    expect(codes(null)).toEqual([])
+    expect(codes(Number.NaN)).toEqual([])
+  })
+
+  it('puts heavy limiting before the metadata warning, the owner’s 1A', () => {
+    expect(codes(8.1, false)).toEqual(['heavy-limiting', 'metadata-lost'])
+    expect(codes(null, false)).toEqual(['metadata-lost'])
   })
 })
 

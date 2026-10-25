@@ -27,6 +27,7 @@ const ALL = Object.keys({
   'extended-silence': true,
   'target-missed': true,
   'metadata-lost': true,
+  'heavy-limiting': true,
 } satisfies Record<AudioWarningCode, true>) as AudioWarningCode[]
 
 const sample = (code: AudioWarningCode) =>
@@ -139,5 +140,17 @@ describe('a file that ends early, said with where its sound stops (VH-139)', () 
 
   it('times a stop and an end the same way wherever they are said', () => {
     expect(shortfallTimes({ stopsAtSeconds: 20.99, endSeconds: 29.6 })).toEqual({ stops: '0:20', end: '0:30' })
+  })
+})
+
+describe('heavy limiting, said with the finished video (VH-193)', () => {
+  it('says the sheet’s B11 words, whatever the bite', () => {
+    const said = (limiterBiteLu: number) =>
+      warningText({ code: 'heavy-limiting', detail: { limiterBiteLu } })
+    expect(said(8.1).heading).toBe('The loudest moments were held down hard')
+    expect(said(8.1).detail).toBe(
+      'To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound.',
+    )
+    expect(said(3.2)).toEqual(said(8.1))
   })
 })

@@ -4,7 +4,7 @@
 
 import { describe, expect, it } from 'vitest'
 
-import type { AudioWarning } from '../audio/warnings'
+import { detectProductionWarnings, type AudioWarning } from '../audio/warnings'
 import { lossesSpoken, spoken, warningsSpoken } from './announce'
 import { warningText } from './warning-text'
 
@@ -27,6 +27,13 @@ describe('lossesSpoken', () => {
 
 describe('warningsSpoken', () => {
   const warning = { code: 'no-audio' } as AudioWarning
+
+  it('speaks heavy limiting before the metadata warning, as the card shows them (VH-193)', () => {
+    const both = detectProductionWarnings({ limiterBiteLu: 8.1, metadataCarried: false })
+    expect(warningsSpoken('Worth knowing about the finished video', both)).toBe(
+      'Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across.',
+    )
+  })
 
   it('says nothing when there are no warnings', () => {
     expect(warningsSpoken('Worth knowing about the sound', [])).toBe('')
