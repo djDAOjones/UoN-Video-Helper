@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-25 — VH-196 — raised: the lede's five promises in the owner's words, and an MP4 hint beside promise 4, his own exception to the no-new-control rule
+
+**Decision:** Phase 8 gains VH-196, built next, before VH-190. The lede's list becomes the owner's five promises, verbatim: "1. Lets you trim unwanted footage from the start and end. 2. Adds opening and closing graphics. 3. Evens out the audio level for better audience experience. 4. Saves in a reliable format. (?) 5. Makes the file the right size for your purpose." The "?" is a toggletip in the onset toggletip's pattern, holding the hint he accepted. It is a new control, his own request.
+
+**Rationale:** He raised the gap himself: "the intro text mentions all the features except for the trimming - users, especially novices, will be suprised by it". On the hint: "I want to keep mp4 and interoperable." Its text, proposed by the orchestrator and accepted by him: "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperable video format. That means it plays on almost any phone, computer or website." His revised set supersedes his earlier "final set". Promise 3 also replaces VH-187's "Levels audio for consistent listening experience." Every line passes the readability gate (2.5, under 8 words, 8.9, under 8 words, 2.3; the hint 5.3). His words and the full exchange are in orchestrator #3's notes, `plan8-owner-words.md`, "VH-196" and "VH-196 revised". Phase 8's rule is that the app stays simple, with no control beyond the approved sheet; the "?" is the owner's exception, asked for in his own words: "I also wouldn't mind a question mark with hover hint that explains the problem with variety of formats". It discloses on click, Enter or Space, never by hover alone, as VH-124 and VH-184 settled for the onset "?".
+
+**Supersedes:** 2026-10-24 — VH-187 — The top of the page: plain promises, the owner's promise 2, the browser note only when a check has not passed
+
+**Deferred:** VH-196
+
 ## 2026-10-25 — VH-189 — Step 4's labels in the result line's plain words; below about 400 px the "?" sits beside "Plays over"
 
 **Decision:** Step 4 takes B7's words: "No closing graphics", "Plays over", "The last second of video" and "A held last frame", the "?" named "About what the graphics play over", and "Not used without closing graphics."; spec §4.3 takes S11 to S16. Below about 400 px the "?" moves up beside the label, CSS only, as the owner chose: "Yes — option 2: below about 400 px, the "?" moves up beside the label ("Plays over [?]")".
@@ -525,16 +535,6 @@ Each sentence was read against the shipped code: `ends-early.ts` and `ENDS_EARLY
 **Decision:** the page's language switcher is appended to the header band, right of the logo, with its label beside the segments from 34rem up and above them below that; the machine-translation note stays in `main` above the heading; under forced colours the band keeps its brand colours, so the switcher's focus ring there is the band's `--focus` white, not a system colour — the one token in the forced-colours block, because a system colour on a blue the theme does not repaint can fall below 3:1.
 
 **Rationale:** The owner agreed V-18's recommendation (VH-143.1, PLAN-5, 2026-10-22). At 1280 × 900 the band stays 87 px and "Choose file" moves from about 916 px to 846 px, inside the first screen. At 390 px the band wraps the switcher under the logo and the heading lands where it did before (about 211 px), so the phone gains nothing and loses nothing, as V-18 warned. At 280 px nothing scrolls sideways. A floated legend is laid out as a box in the fieldset's content, so the segments sit beside it; below 34rem, the breakpoint the facts list already uses, it unfloats so the segments keep the whole width. Headless Chrome over CDP with forced colours emulated, light and dark: the band stays Nottingham Blue, the segments take ButtonFace and Highlight, the label stays light on blue, and a keyboard Tab from the top reaches the skip link first and then the chosen radio, whose ring is 2 px solid white. The Chinese page shows the note above the heading and says the switch in the live line. Standards: UI-STANDARDS, roles inside a band and forced colours (the ring's exception recorded here); WCAG 2.4.13, 1.4.10 and 2.4.1; Nielsen 8; Carbon, tokens, not literals; house conventions, minimal change and regression tests by category. No string, colour token or dependency changed. Not checked by a second model.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-22 — VH-153 — The words after VH-148 agree; the four shared rows take the approved words once, here
-
-**Decision:** `trim.intro`, `browserNote.pending`, `browserNote.notPassed` and `failure.captured` take the writing review's approved words in this item, with VH-153's fixes and PLAN-5.1's Chinese, so VH-156 applies the other proposals and leaves these four as they stand; a failed save is said from `saveFailedWhat` and `saveFailedNext`, and `saveFailed` and `source.variableFrameRate` are retired.
-
-**Rationale:** VH-153's Now, and the owner's "approved" for all 24 proposals (PLAN-5, 2026-10-22). R2-7 keeps "are added", which the review's text dropped. R2-8: Chinese 此应用专为 Chrome 浏览器设计和构建 and Malay "direka bentuk … pemeriksaan" open all three sentences, pinned for every table. R2-9: only the English said "(opens in a new tab)"; the Chinese and Malay already used their statement link's phrase, now pinned beside it. R2-10: `sheet.ts` gains where-lines for the four continuation rows and a note for `idsHelperNext`; `{max}` is explained once; its variant notes say "closing graphics"; the Creators team row says it opens Teams in a new tab; `statement.covers` loses the Joe Bell note VH-148's cut left behind. The filled sheet's English and notes columns are synced from `sheet.ts` (54 rows), its `where` column only for the rows changed, as it holds older step numbers; the repeated note was the save rows' doubled VH-141 mark, and `trim.intro`'s broken mark is re-quoted. Chinese stopped saves say 您随时可以保存, still an offer. Chrome, three languages: the passed browser sentence, the trim intro, the footer link, the smaller output's line; the rest VH-153.1. Standards: UI-STANDARDS, the same words for the same concepts and link text that stands alone; Nielsen 4; WCAG 2.4.9; house conventions, strings through the sheet, regression tests by category, minimal change. No dependency changed. Not checked by a second model.
 
 **Supersedes:** none
 

@@ -832,3 +832,13 @@ Spec §9.2 and §11 name the email as the one feedback route. VH-160 drafts that
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-22 — VH-153 — The words after VH-148 agree; the four shared rows take the approved words once, here
+
+**Decision:** `trim.intro`, `browserNote.pending`, `browserNote.notPassed` and `failure.captured` take the writing review's approved words in this item, with VH-153's fixes and PLAN-5.1's Chinese, so VH-156 applies the other proposals and leaves these four as they stand; a failed save is said from `saveFailedWhat` and `saveFailedNext`, and `saveFailed` and `source.variableFrameRate` are retired.
+
+**Rationale:** VH-153's Now, and the owner's "approved" for all 24 proposals (PLAN-5, 2026-10-22). R2-7 keeps "are added", which the review's text dropped. R2-8: Chinese 此应用专为 Chrome 浏览器设计和构建 and Malay "direka bentuk … pemeriksaan" open all three sentences, pinned for every table. R2-9: only the English said "(opens in a new tab)"; the Chinese and Malay already used their statement link's phrase, now pinned beside it. R2-10: `sheet.ts` gains where-lines for the four continuation rows and a note for `idsHelperNext`; `{max}` is explained once; its variant notes say "closing graphics"; the Creators team row says it opens Teams in a new tab; `statement.covers` loses the Joe Bell note VH-148's cut left behind. The filled sheet's English and notes columns are synced from `sheet.ts` (54 rows), its `where` column only for the rows changed, as it holds older step numbers; the repeated note was the save rows' doubled VH-141 mark, and `trim.intro`'s broken mark is re-quoted. Chinese stopped saves say 您随时可以保存, still an offer. Chrome, three languages: the passed browser sentence, the trim intro, the footer link, the smaller output's line; the rest VH-153.1. Standards: UI-STANDARDS, the same words for the same concepts and link text that stands alone; Nielsen 4; WCAG 2.4.9; house conventions, strings through the sheet, regression tests by category, minimal change. No dependency changed. Not checked by a second model.
+
+**Supersedes:** none
+
+**Deferred:** none
