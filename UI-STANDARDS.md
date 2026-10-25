@@ -241,10 +241,9 @@ implementation notes.
 - Focus appearance (WCAG 2.4.13): every indicator is at least a 2 CSS px
   solid perimeter of the control, and its pixels change by at least 3:1
   between focused and unfocused — checked on the rendered control, in light,
-  dark, a blue band and forced colours, not only as a token pair.
-- When a transition removes the control that has focus, focus passes to the
-  control that continues the task; it never leaves where a user has gone
-  to read (VH-111).
+  dark, a blue band, forced colours and a larger default font.
+- When a transition removes the focused control, focus passes to the one
+  that continues the task, never away from where a user reads (VH-111).
 - One primary button per state. While a finished result is on screen,
   starting again steps down to secondary.
 - Disabled reads as disabled at a glance: a field or segment loses its fill

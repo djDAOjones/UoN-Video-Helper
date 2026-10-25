@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-25 — VH-194 — Spec §9.3 and UI-STANDARDS take Phase 7's five corrections, S26 to S31, U1 and U2, verbatim
+
+**Decision:** Spec §9.3 counts a CJK glyph as two, hands focus on by the transition, narrows the thumbs' person-only check, records the file chooser's exception and names "Announce progress"; UI-STANDARDS adds a larger default font to 2.4.13's conditions. Documents only, as the owner approved the sheet.
+
+**Rationale:** The owner approved the wording sheet on 2026-10-24, "all seems good." (PLAN-8 — the sheet approved), promoting VH-177.1 to VH-177.5. Each old text matched once with its wrapping ignored, and each new text is in place word for word. The ledger's count takes the spec from 8,074 to 8,100 of 8,100 and UI-STANDARDS from 2,400 to 2,393 of 2,400, as the sheet said. The readability test's list and the statement were read against S29 and S30: neither is contradicted, but two gaps are wish lines, VH-194.1 (§9.3's "holds this list" now follows the file chooser, which the test does not hold) and VH-194.2 (the statement names only the Chinese and Malay pages for the file chooser). Codex astra: "Commit", with no musts (`reviews/2026-10-24/codex-astra-vh194-check-2026-10-25.md`). Digest rules applied: WCAG 2.2 AAA, every exception recorded (2.5.3) and focus appearance's conditions (2.4.13); Nielsen 3, focus handed on, never taken.
+
+**Supersedes:** none
+
+**Deferred:** VH-197
+
 ## 2026-10-25 — VH-193 — A warning with the finished video when levelling needed over 3 LU of limiting, measured in the job; first, and unchanged after a save
 
 **Decision:** The plan carries the limiter's measured bite, unrounded: the unlimited chain plus the solved gain, less the last limited pass before the codec. Over `HEAVY_LIMITING_LU` = 3, the finished video shows B11's warning, first among its warnings and spoken with it, and a save leaves it as it is (the owner's 1A and 2A). Spec §5.4 takes S25 and S32.
@@ -510,16 +520,6 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Decision:** VH-159.1's draft row is applied to spec §5.4 as worded, after File ends early, because the owner approved it: the spec is 8,074 words, inside its 8,100 budget, so the budget stands.
 
 **Rationale:** The owner's word, relayed from the orchestrator chat on 2026-10-22: "approve all, proceed", answering VH-159.1 among the open questions; the relay quoted the row and asked for it to be applied within the 8,100-word budget. The row's words match the page: the warning is said first among the warnings, "The video file is shorter than expected" (VH-158), and the margin is `ENDS_EARLY_MARGIN_SECONDS`. VH-159.1 is retired, paid.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-22 — VH-160 — The feedback form is one link under Send feedback, its plain address from config, in a new tab
-
-**Decision:** a link on its own line directly under Send feedback, above the help links, says "Fill in the feedback form (new tab)" (填写反馈表（在新标签页中打开）, "Isi borang maklum balas (dibuka dalam tab baharu)") and opens `FEEDBACK_FORM_URL` in `src/config/feedback.ts` in a new tab with no referrer, because the owner asked for the form near the page's foot and wants the page simple; Send feedback and the help links are unchanged.
-
-**Rationale:** The link takes `.footer-contact-link`, so it is a 44 px target with the band's link colours and needs no new token; its paragraph takes the button's existing `--spacing-05` margin. The address is set once in `main.ts`, plain: a test pins it whole and holds it to no query and no fragment, so nothing from the page, the file or the build can travel with it (rules, no media egress). A new tab is not leaving the page, so Chrome fires no `beforeunload` and a running job raises no "Leave site?"; the click was checked in the browser pane with a counting listener (0). Checked in Chrome at 1280, 375 and 320 px in English, Chinese and Malay, light and dark: 44 px, 48 px where the Malay wraps at 375 and 320, no sideways scroll; forced colours checked in headless Chrome at 1280 px in all three, where the link takes the same LinkText as the team links. The Chinese and Malay are the agent's drafts, marked in the sheet for the campus colleagues (VH-105.2). Spec §9.2 and §11 still name the email as the one feedback route; the correction is drafted as VH-160.1 for the owner. Standards: WCAG 2.5.5 and 2.4.9 (wcag-2.2-aaa digest); Nielsen's minimalist design (nielsen digest).
 
 **Supersedes:** none
 

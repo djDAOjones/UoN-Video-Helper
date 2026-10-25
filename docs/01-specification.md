@@ -702,8 +702,8 @@ walk where only a person can:
 - Full keyboard operation with no exception; no drag-only route.
 - Text enlargement to 200% without horizontal scrolling and, separately,
   reflow at 320 CSS px; text spacing overrides survive; running text no
-  wider than 80 characters (40 glyphs for CJK); line spacing 1.5 and a blank
-  line between paragraphs (`--paragraph-gap`, 2.5× the font size top to top,
+  wider than 80 characters (a CJK glyph counted as two, mixed lines too);
+  line spacing 1.5 and a blank line between paragraphs (`--paragraph-gap`, 2.5× the font size top to top,
   VH-124's reading of 1.4.8), as tokens, never `!important`, so the user's
   spacing wins; no justification; the user's own foreground
   and background colours not overridden; reduced motion honoured.
@@ -712,13 +712,11 @@ walk where only a person can:
 - A live region announces what the user did not cause or cannot see —
   stage changes, outcomes, validation, consequential status — never a
   control's own result on the keystroke that produced it, which is read on
-  demand. Routine progress announcements can be postponed by the user
-  (2.2.4); if that control cannot be made plain enough for a novice, stage
-  changes and the outcome alone are announced and that reading is recorded
-  below as the exception.
-- Focus is handed on, never taken: a control that removes or disables
-  itself names its successor; a job's end moves focus only if the job
-  displaced it.
+  demand. Routine progress announcements can be postponed (2.2.4), with
+  "Announce progress".
+- Focus is handed on, never taken: a transition that removes or disables
+  the focused control names its successor; a job's end moves focus only if
+  the job displaced it.
 
 Exemptions WCAG itself grants, noted so they are not mistaken for
 exceptions: the native `<video>` controls are the user agent's (2.5.5); the
@@ -730,9 +728,9 @@ they are essential to it and have no hide control. Announce progress controls
 the spoken milestones; outcomes are always announced.
 
 Evidence only a person can supply, recorded as limitations, not failures
-(VH-138): the browser's own 200% enlargement (1.4.4, 1.4.8); the Chinese
-40-glyph measure (1.4.8); the selects by keyboard (2.1.1); the slider thumbs'
-inset focus ring (2.4.13); the translated terms and reading level (3.1.3,
+(VH-138): the browser's own 200% enlargement (1.4.4, 1.4.8); the selects by
+keyboard (2.1.1); the slider thumbs' focus ring in Firefox and at a larger
+font (2.4.13); the translated terms and reading level (3.1.3,
 3.1.5); real screen readers (2.4.3, 4.1.3); Windows contrast themes (1.4.11,
 2.4.13); real phones (1.3.4, 2.5.6); and speech input, completed or deferred
 in writing (§13).
@@ -762,6 +760,11 @@ Exceptions recorded:
   reader may meet a name they do not know. *Mitigation:* the disclosure
   starts closed, nothing rests on it, and the main path names formats by file
   ending. *Decision:* accepted, maintainer, 2026-10-20.
+- **The file chooser** (2.5.3). *Reason:* it is the browser's own, and
+  translating it needs a new element. *Impact:* its "Choose File" follows the
+  browser's language and is not in its name. *Mitigation:* the step's
+  heading, "Choose a video", names it. *Decision:* accepted, VH-168 and
+  PLAN-7.
 
 `test/readability.test.ts` holds this list; any other abbreviation needs its
 meaning beside it.
