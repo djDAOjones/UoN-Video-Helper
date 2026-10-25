@@ -89,4 +89,5 @@ for R in 45 120; do
   ffmpeg -v error -y -f lavfi -i testsrc2=size=640x360:rate=$R ${=A} -t 10 -af "volume=-13dB" ${=ENC} "$OUT/hfr-${R}fps-10s.mp4"
 done
 
-ls -la "$OUT"
+# VH-198: pass 3's fixtures N6 to N14, in their own script.
+zsh "${0:A:h}/fixtures-8.sh" "$OUT"

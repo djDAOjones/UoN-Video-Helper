@@ -24,6 +24,12 @@ export const MX_INIT = String.raw`
   const norm = (s) => String(s).replace(/\s+/g, ' ');
   // A message is in a text when every literal part between its placeholders is.
   M.matches = (text, path) => { const tx = norm(text); return leaves(M.msg(path)).some((s) => { const parts = s.split(/\{[^}]+\}/).map((p) => norm(p).trim()).filter((p) => p.length >= 2); return parts.length > 0 && parts.every((p) => tx.includes(p)); }); };
+  // VH-198 (P-05): composed wording pinned with its substituted names. M.matches
+  // checks only the literal parts, so it passed S-31 with the old output name
+  // (Phase 7, scenarios.mjs:26, :449). A value is a literal, or { msg: path } for
+  // another message in the page's language; the whole sentence must be there.
+  M.compose = (path, vars = {}) => { const t = M.msg(path); if (typeof t !== 'string') return null; return t.replace(/\{([^}]+)\}/g, (m, k) => { const v = vars[k]; if (v == null) return m; if (typeof v === 'object' && v.msg) { const x = M.msg(v.msg); return typeof x === 'string' ? x : m; } return String(v); }); };
+  M.says = (path, vars, sel = 'body') => { const c = M.compose(path, vars); return !!c && !/\{[^}]+\}/.test(c) && norm(M.text(sel)).includes(norm(c).trim()); };
   M.el = (sel) => (typeof sel === 'string' ? document.querySelector(sel) : sel);
   M.text = (sel) => { const el = M.el(sel); return el ? el.textContent || '' : ''; };
   M.has = (path, sel = 'body') => M.matches(M.text(sel), path);

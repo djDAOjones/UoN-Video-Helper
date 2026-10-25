@@ -466,6 +466,9 @@ export async function axTree(w) {
     modal: !!prop(n, 'modal'),
     live: prop(n, 'live'),
     hiddenRoot: !!prop(n, 'hiddenRoot'),
+    // VH-198 (P-05): a heading's level as the tree exposes it, never the tag's.
+    level: prop(n, 'level'),
+    focused: !!prop(n, 'focused') || undefined,
   }))
   const byId = new Map(rows.map((r) => [r.id, r]))
   const kids = new Map()
@@ -487,7 +490,7 @@ export async function axTree(w) {
   const textUnder = (r) => { const out = []; const walk = (q) => { if (q.ignored && q !== r) return; if (q.role === 'StaticText' && q.name) out.push(q.name); for (const k of kids.get(q.id) ?? []) walk(k) }; walk(r); return out.join(' ').replace(/\s+/g, ' ').trim() }
   const live = exposed.filter((r) => (r.live && r.live !== 'off') || /^(status|alert|log)$/.test(r.role ?? '')).map((r) => ({ role: r.role, live: r.live, name: r.name.slice(0, 80), text: textUnder(r).slice(0, 240) }))
   const summary = exposed.filter((r) => INTERACTIVE_ROLES.has(r.role) || /heading|dialog|status|alert|group|radiogroup|progressbar/.test(r.role ?? ''))
-    .map((r) => ({ role: r.role, name: r.name.slice(0, 80), description: r.description.slice(0, 80), value: String(r.value).slice(0, 40), disabled: r.disabled || undefined, expanded: r.expanded, checked: r.checked, invalid: r.invalid && r.invalid !== 'false' ? r.invalid : undefined, required: r.required || undefined }))
+    .map((r) => ({ role: r.role, name: r.name.slice(0, 80), level: r.level, description: r.description.slice(0, 80), value: String(r.value).slice(0, 40), disabled: r.disabled || undefined, expanded: r.expanded, checked: r.checked, invalid: r.invalid && r.invalid !== 'false' ? r.invalid : undefined, required: r.required || undefined }))
   // `nodes`: the reader's full rows, parent links and ignored nodes included,
   // for the record to persist as an artifact (M-05). Exposure, not speech.
   return { outcome: rows.length < 3 ? 'cannot-determine' : problems.length ? 'fail' : 'pass', counts: { nodes: rows.length, exposed: exposed.length, interactive: exposed.filter((r) => INTERACTIVE_ROLES.has(r.role)).length }, problems, modal: modal ? modal.name : null, live, summary, label: 'accessibility-tree exposure, not speech', nodes: rows }
@@ -613,6 +616,8 @@ async function analysisPage(browser) {
   return analysis
 }
 export async function closeAnalysis() { if (analysis) { await analysis.close(); analysis = null } }
+// VH-198: the pixel helpers, for the native player's rings (phase8.mjs).
+export { analyse, DIFF, shot }
 
 async function shot(w, clip) {
   const r = await w.page.send('Page.captureScreenshot', { format: 'png', clip: { ...clip, scale: 1 }, captureBeyondViewport: false })

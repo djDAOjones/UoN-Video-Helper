@@ -20,6 +20,7 @@ import { Walk, sleep } from './walk.mjs'
 import { QUAL_INIT, VIEWS, assertReached, axTree, focusArea, fileButtonInk, keysRoute, closeAnalysis, setViewport, setMode, withholdFonts, pageShot, pressedVsHover, typeRoles } from './qualify.mjs'
 import { Run, writeManifest, writeDigest, aggregate, recordKey } from './runner.mjs'
 import { SCENARIOS, ROUTES, PLANS, MX_INIT, GAPS, READINGS } from './scenarios.mjs'
+import { P8_INIT, PHASE8_INSTRUMENTS, phase8Instruments, watchWorkers } from './phase8.mjs'
 export { SCENARIOS, ROUTES, PLANS }
 
 const HERE = dirname(fileURLToPath(import.meta.url))
@@ -34,7 +35,9 @@ if (!RUN_ROOT) throw new Error('set RUN_ROOT to a scratch directory')
 // record without them. Whatever SCENARIOS, ROUTES and PLANS hold, these
 // apply; a declared record may name its own `requires` and `viewport`.
 // VH-172 adds `type` (the eight roles, VH-166) to every scenario, and `pressed` (VH-169) where a record names controls to press.
-const SCENARIO_INSTRUMENTS = ['overflow', 'ax', 'targets', 'contrastText', 'contrastExtra', 'measure', 'type', 'focus']
+// VH-198 adds Phase 8's six (phase8.mjs): the player, the format "?", the footer's
+// headings, the limiting warning, Video language, and the scenario's own assertions.
+const SCENARIO_INSTRUMENTS = ['overflow', 'ax', 'targets', 'contrastText', 'contrastExtra', 'measure', 'type', 'focus', ...PHASE8_INSTRUMENTS]
 export const requiredFor = (r) => (ROUTES[r.id] ? ['keys'] : [...SCENARIO_INSTRUMENTS, ...(r.mode === 'reduced-motion' ? ['motion'] : []), ...(r.pressed ? ['pressed'] : [])])
 const viewportFor = (view) => { const v = VIEWS[view]; return v ? { w: v.width, h: v.height, dpr: v.deviceScaleFactor } : undefined }
 // A record's variant (a subcase of a compound scenario) merges over its scenario.
@@ -105,6 +108,9 @@ async function instruments(w, sc, rec, run) {
     await w.evaluate(`(() => { const a = document.activeElement; if (a && a !== document.body) a.blur(); window.scrollTo(0, 0); })()`)
     out.pressed = aggregate(rows)
   }
+  // VH-198: Phase 8's instruments, after the others, so their keys and clicks
+  // never move what those measured; each puts back what it changed.
+  Object.assign(out, await phase8Instruments(w, sc, { run, recKey: key, aggregate }))
   return out
 }
 
@@ -115,6 +121,9 @@ async function openWalk(browser, name, run) {
   // Every fixture a setup chooses is hashed in the manifest (M-08).
   if (run) for (const m of ['setFiles', 'drag']) { const real = w[m].bind(w); w[m] = async (file, ...rest) => { run.useFixture(file); return real(file, ...rest) } }
   await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source: MX_INIT })
+  // VH-198: the job's events on the wall clock, and the worker's "chain planned" (the limiter's bite).
+  await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source: P8_INIT })
+  await watchWorkers(browser, w)
   return w
 }
 

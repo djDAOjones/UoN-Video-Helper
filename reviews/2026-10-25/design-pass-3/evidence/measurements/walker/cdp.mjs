@@ -1,5 +1,7 @@
 // A minimal Chrome DevTools Protocol client over Node's own WebSocket.
-export async function connectBrowser(port = 9222) {
+// VH-198: CDP_PORT names another headless Chrome than :9222's, so a pass can
+// run beside one an older session left running.
+export async function connectBrowser(port = Number(process.env.CDP_PORT ?? 9222)) {
   const version = await (await fetch(`http://127.0.0.1:${port}/json/version`)).json()
   const ws = new WebSocket(version.webSocketDebuggerUrl)
   await new Promise((resolve, reject) => {

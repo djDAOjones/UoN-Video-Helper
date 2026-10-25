@@ -1,4 +1,5 @@
-// PLAN-7 (VH-171): the declared faults F1–F13 the scenarios need, each a
+// PLAN-7 (VH-171): the declared faults F1–F14 the scenarios need (VH-198 adds
+// F15 to F19 and revises F4e for pass 3), each a
 // switch set before the page loads (or, for F5, F7 and F8, in place), kept
 // apart from the keyboard route. A fault changes the browser around the app,
 // never the app's source. `node faults.mjs check` applies each one to the
@@ -121,9 +122,18 @@ export const FAULTS = {
       return { kind: 'file', name: h.name, getFile: () => h.getFile(), isSameEntry: (x) => h.isSameEntry(x), remove: () => h.remove(), createWritable: async () => { throw new DOMException('Denied', 'NotAllowedError'); } }; }; })();`),
   },
   F4e: {
-    name: 'no picker, and URL.createObjectURL throws',
-    for: 'S-69 (save failed): the only way saveFile throws; the chosen file is spared, so the preview still loads',
-    before: async (w) => { w.scriptF4e = (await init(w, `window.showSaveFilePicker = undefined; (() => { const real = URL.createObjectURL; window.__f4eRealCreateObjectURL = real; URL.createObjectURL = (b) => { if (b instanceof Blob && b.type.startsWith('video/') && b !== (document.querySelector('#file-input').files || [])[0]) throw new DOMException('fault F4e', 'NotReadableError'); return real(b); }; })();`)).identifier },
+    name: 'no picker, and URL.createObjectURL throws (revised, VH-198)',
+    for: "S-69 and S-133 (save failed). Phase 7's F4e threw for any video Blob but the chosen file; since VH-192 the card makes an object URL for the job's working file when the job ends (src/main.ts:2878), so the throw landed in the job's outcome handler and the job read as failed. Revised: the first URL made for each Blob is spared (the card's player), so only the save's hand-off (src/media/save.ts:193, the same File) throws. opts.inPlace arms it in place once the card stands instead (the scenarios file's other way); the chosen file is spared, so the preview still loads",
+    before: async (w, { inPlace = false } = {}) => {
+      if (inPlace) return
+      w.scriptF4e = (await init(w, `window.showSaveFilePicker = undefined; (() => { const real = URL.createObjectURL; window.__f4eRealCreateObjectURL = real; const spared = new WeakSet(); window.__f4e = { spared: 0, thrown: 0 };
+        URL.createObjectURL = (b) => { if (b instanceof Blob && b.type.startsWith('video/') && b !== (document.querySelector('#file-input').files || [])[0]) { if (!spared.has(b)) { spared.add(b); window.__f4e.spared++; return real(b); } window.__f4e.thrown++; throw new DOMException('fault F4e', 'NotReadableError'); } return real(b); }; })();`)).identifier
+    },
+    now: async (w, { inPlace = false } = {}) => {
+      if (!inPlace) return
+      await w.evaluate(`(() => { window.showSaveFilePicker = undefined; const real = URL.createObjectURL; window.__f4eRealCreateObjectURL = real; window.__f4e = { spared: 0, thrown: 0, inPlace: true };
+        URL.createObjectURL = (b) => { if (b instanceof Blob && b.type.startsWith('video/') && b !== (document.querySelector('#file-input').files || [])[0]) { window.__f4e.thrown++; throw new DOMException('fault F4e', 'NotReadableError'); } return real(b); }; })()`)
+    },
     // VH-172: released in place (J3's save after S-69): the real URL.createObjectURL and the
     // walk's own picker stub (walk.mjs PAGE_INIT) put back, and the script dropped for later loads.
     release: async (w) => {
@@ -199,6 +209,86 @@ export const FAULTS = {
     before: (w, { ms = 8000 } = {}) => workerPrelude(w, 'F14', `(() => { const real = self.postMessage.bind(self); self.postMessage = (m, ...rest) => { if (m && m.kind === 'preflighted') { setTimeout(() => real(m, ...rest), ${Number(ms)}); return; } return real(m, ...rest); }; })();`),
     release: (w) => dropPrelude(w, 'F14'),
   },
+  // VH-198: pass 3's faults (scenarios-2026-10-25.md, "Faults and fixtures this
+  // needs"). Each says, in its record, the branch it reached (P-05).
+  F15a: {
+    name: "the finished video's player's error event",
+    for: 'S-132: the error event dispatched on the card\'s player in place, as F7 does for the preview. It proves only that nothing listens',
+    now: async (w) => { const n = await w.evaluate(`(() => { const v = document.querySelector('#process-result video.result-player'); if (!v) return 0; v.dispatchEvent(new Event('error')); return 1; })()`); w.faultsSeen.push(n ? 'F15a: error dispatched on the result player' : 'F15a: no result player to dispatch on') },
+  },
+  F15b: {
+    name: "the finished video's player refused for real",
+    for: "S-132 and S-152: every object URL made for a Blob that is not the chosen file is revoked before it is returned, so the card's player cannot load it and video.error is set; the preview's URL (src/main.ts:1782) is spared. The download hand-off makes its URL the same way (src/media/save.ts:193), so F15b is never set with a download",
+    before: async (w) => { w.scriptF15b = (await init(w, `(() => { const real = URL.createObjectURL; window.__f15b = { revoked: 0 }; URL.createObjectURL = (b) => { const u = real(b); if (b instanceof Blob && b !== (document.querySelector('#file-input').files || [])[0]) { URL.revokeObjectURL(u); window.__f15b.revoked++; } return u; }; })();`)).identifier },
+    release: async (w) => { if (w.scriptF15b) await w.page.send('Page.removeScriptToEvaluateOnNewDocument', { identifier: w.scriptF15b }); w.scriptF15b = null },
+  },
+  F16: {
+    name: "the metadata's carry fails",
+    for: "S-91, S-136, S-138, S-151: the prebundled mediabunny module, as the worker requests it from Vite (/node_modules/.vite/deps/mediabunny.js), rewritten at the Response stage with one line that makes Input.prototype.getMetadataTags reject, the class's local name read from the bundle's own export list. Only src/media/pipeline.ts:508 calls it, inside the try that sets metadataCarried = false (:517), so detectProductionWarnings adds metadata-lost (src/audio/warnings.ts:210). opts.workerSession also routes it on the worker's own session (auto-attached), if the page's does not see the worker's import",
+    before: (w) => route(w, 'F16', {
+      urlPattern: '*mediabunny.js*', requestStage: 'Response',
+      match: (p) => /\/mediabunny\.js(\?|$)/.test(p.request.url),
+      handle: async (p) => {
+        const { body, base64Encoded } = await w.page.send('Fetch.getResponseBody', { requestId: p.requestId })
+        const src = base64Encoded ? Buffer.from(body, 'base64').toString('utf8') : body
+        const list = [...src.matchAll(/export\s*\{([^}]*)\}/g)].at(-1)?.[1] ?? ''
+        const entry = list.split(',').map((x) => x.trim()).find((x) => x === 'Input' || / as Input$/.test(x))
+        const local = entry ? entry.split(/\s+as\s+/)[0] : null
+        w.faultsSeen.push(local ? `F16: mediabunny rewritten (${p.request.url.replace(/^.*\//, '')}, Input is ${local})` : 'F16: mediabunny seen, Input not in its export list')
+        const line = local ? `\n;${local}.prototype.getMetadataTags = function () { return Promise.reject(new Error('fault F16')); };\n` : ''
+        await w.page.send('Fetch.fulfillRequest', { requestId: p.requestId, responseCode: 200, responseHeaders: p.responseHeaders.filter((h) => !/^content-length$/i.test(h.name)), body: Buffer.from(src + line).toString('base64') })
+      },
+    }),
+    release: (w) => unroute(w, 'F16'),
+  },
+  F17: {
+    name: 'the AAC encoder refused',
+    for: "S-106 and S-107: VH-187's NO_AAC (walker/top-187.mjs:33-35), declared: AudioEncoder.isConfigSupported answers supported: false for any mp4a codec, so the System check's aac row warns (src/main.ts:1131) and the rest pass",
+    before: async (w) => { w.scriptF17 = (await init(w, `(() => { const real = AudioEncoder.isConfigSupported.bind(AudioEncoder); window.__f17 = { asked: 0 }; AudioEncoder.isConfigSupported = async (c) => { if (String(c.codec).startsWith('mp4a')) { window.__f17.asked++; return { supported: false, config: c }; } return real(c); }; })();`)).identifier },
+    release: async (w) => { if (w.scriptF17) await w.page.send('Page.removeScriptToEvaluateOnNewDocument', { identifier: w.scriptF17 }); w.scriptF17 = null },
+  },
+  F18: {
+    name: 'the encoder refuses part-way',
+    for: "S-147: a worker prelude makes VideoEncoder.prototype.encode throw DOMException('fault F18', 'EncodingError') once opts.frames frames (default 60) have been fed, once only, which classifyFailure names encoder-refused (src/workers/failure.ts:89). opts.mode 'callback' instead calls the encoder's own error callback with that exception, as a real refusal does. The prelude logs the frame it fired at, so the record says it was the job's encode, not a probe's",
+    // Only the job's own encode counts: frames are counted from the worker's
+    // 'process' message on (src/workers/job.worker.ts:99), since the pre-flight's
+    // timed pass encodes more than 60 frames itself (VH-198's first check fired there).
+    before: (w, { frames = 60, mode = 'throw' } = {}) => workerPrelude(w, 'F18', `(() => { let armed = false, fed = 0, fired = false; self.addEventListener('message', (e) => { if (e.data && e.data.kind === 'process') { armed = true; fed = 0; } });
+      const due = () => { if (!armed || fired) return false; fed++; if (fed > ${Number(frames)}) { fired = true; return true; } return false; };
+      ` + (mode === 'callback'
+      ? `const Real = VideoEncoder; self.VideoEncoder = class extends Real { constructor(init) { const onError = init.error; super({ ...init, error: (e) => onError(e) }); this.__onError = onError; } encode(f, o) { if (due()) { console.warn('fault F18', 'callback', fed); try { f.close(); } catch {} this.__onError(new DOMException('fault F18', 'EncodingError')); return; } return super.encode(f, o); } }; })();`
+      : `const real = VideoEncoder.prototype.encode; VideoEncoder.prototype.encode = function (f, o) { if (due()) { console.warn('fault F18', 'throw', fed); throw new DOMException('fault F18', 'EncodingError'); } return real.call(this, f, o); }; })();`)),
+    release: (w) => dropPrelude(w, 'F18'),
+  },
+  F19: {
+    name: 'the page left and come back',
+    for: "S-134: with an unsaved result the leave warning is set (src/main.ts:2372-2383), so Page.navigate to about:blank raises \"Leave site?\", accepted by Page.handleJavaScriptDialog; then Page.navigateToHistoryEntry goes back. An init script records pageshow's persisted, and Page.backForwardCacheNotUsed gives Chrome's reasons when it loads the page afresh",
+    before: async (w) => {
+      w.scriptF19 = (await init(w, `(() => { window.__f19 = { shows: [] }; addEventListener('pageshow', (e) => window.__f19.shows.push({ persisted: e.persisted, t: Date.now() })); })();`)).identifier
+      w.f19 = { dialogs: [], notUsed: null }
+      w.page.on('Page.javascriptDialogOpening', (d) => { w.f19.dialogs.push({ type: d.type, message: d.message }); w.page.send('Page.handleJavaScriptDialog', { accept: true }).catch(() => undefined) })
+      w.page.on('Page.backForwardCacheNotUsed', (e) => { w.f19.notUsed = { reasons: (e.notRestoredExplanations ?? []).map((x) => `${x.type}: ${x.reason}`) } })
+    },
+    // The leave and the return: set by `before`; `leave` runs in place once the
+    // unsaved result stands (not `now`, which applyFault would run at once).
+    leave: async (w) => {
+      if (!w.f19) throw new Error('F19 needs its before step')
+      const left = w.page.once('Page.frameNavigated', (p) => !p.frame.parentId && p.frame.url === 'about:blank')
+      await w.page.send('Page.navigate', { url: 'about:blank' }).catch((e) => w.f19.dialogs.push({ error: String(e.message ?? e) }))
+      await Promise.race([left, sleep(8000)])
+      const { currentIndex, entries } = await w.page.send('Page.getNavigationHistory')
+      const back = entries[currentIndex - 1]
+      const returned = w.page.once('Page.frameNavigated', (p) => !p.frame.parentId)
+      await w.page.send('Page.navigateToHistoryEntry', { entryId: back.id })
+      await Promise.race([returned, sleep(15000)])
+      await sleep(1500)
+      const shows = await w.evaluate(`(window.__f19 || { shows: [] }).shows`).catch(() => [])
+      w.f19.shows = shows
+      w.f19.restored = shows.some((s) => s.persisted)
+      w.faultsSeen.push(`F19: left (${w.f19.dialogs.length} dialog(s)) and came back; ${w.f19.restored ? 'restored from the back-forward cache' : 'loaded afresh' + (w.f19.notUsed ? ': ' + w.f19.notUsed.reasons.slice(0, 4).join('; ') : '')}`)
+    },
+    release: async (w) => { if (w.scriptF19) await w.page.send('Page.removeScriptToEvaluateOnNewDocument', { identifier: w.scriptF19 }); w.scriptF19 = null },
+  },
 }
 
 /** Set a fault on a walk before navigation; `now` faults run at once. */
@@ -234,6 +324,7 @@ export async function gotoNoWait(w) {
 async function check() {
   const { connectBrowser } = await import('./cdp.mjs')
   const { Walk, F } = await import('./walk.mjs')
+  const { P8_INIT, watchWorkers } = await import('./phase8.mjs')
   const browser = await connectBrowser()
   const results = []
   const status = `((document.getElementById('process-status')||{}).innerText||'') + ' | ' + ((document.getElementById('save-status')||{}).innerText||'')`
@@ -245,6 +336,9 @@ async function check() {
     const w = new Walk(browser, 'fault-' + id, opts)
     await w.open()
     w.browser = browser
+    // VH-198: the job's events on the wall clock, and the worker's console (a fault's prelude says where it fired).
+    await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source: P8_INIT })
+    await watchWorkers(browser, w)
     const t0 = Date.now()
     try {
       const r = await fn(w)
@@ -296,6 +390,88 @@ async function check() {
   for (const [id, re] of [['F6a', /animation could not be loaded, so this video cuts/], ['F6b', /closing graphics could not be loaded/]]) {
     await one(id, async (w) => { await applyFault(w, id); await w.goto(); await w.setFiles(F('lecture-30s.mp4')); await w.waitSettled(); await w.select('#closing-type', 'fade'); await w.waitSettled(); await w.click(w.createButton()); await w.waitFinished(); return has(await body(w), re) })
   }
+  // VH-198: pass 3's faults, each with the branch it reached (P-05).
+  const PLAYER = '#process-result video.result-player'
+  // The player as it stands once its metadata has loaded or failed (up to 8 s: a load can wait for the page to be drawn).
+  const player = (w) => w.evaluate(`(async () => { const v = document.querySelector('${PLAYER}'); if (!v) return null; for (let i = 0; i < 80 && v.readyState < 1 && !v.error; i++) await new Promise((r) => setTimeout(r, 100)); return { src: v.getAttribute('src'), error: v.error ? v.error.code : null, readyState: v.readyState, paused: v.paused } })()`)
+  const reads = (w, url) => w.evaluate(`fetch(${JSON.stringify(url)}).then((r) => r.ok, () => false)`)
+  const saveEnabled = (w) => w.evaluate(`(() => { const b = document.querySelector(${JSON.stringify('#process-result button.button:not(.button--secondary):not(.button--danger)')}); return !!b && !b.disabled })()`)
+  await one('F15a', async (w) => {
+    await finished(w, 'short-2s.mp4'); const before = await player(w); const text0 = await body(w)
+    await applyFault(w, 'F15a'); await sleep(800)
+    const after = await player(w); const text1 = await body(w)
+    const unchanged = text0 === text1 && !!after && after.src === before.src && (await saveEnabled(w))
+    await w.click(w.saveButton()); await w.waitSaved(); const saved = has(await w.evaluate(status), /Saved\. Open the saved file/)
+    return { outcome: unchanged && saved.outcome === 'pass' ? 'pass' : 'fail', branch: 'error event dispatched on the result player in place; nothing on the page changed; a save then completed', unchanged, before, after, saved }
+  })
+  await one('F15b', async (w) => {
+    await applyFault(w, 'F15b'); await finished(w, 'short-2s.mp4'); await sleep(1500)
+    const p = await player(w); const revoked = await w.evaluate(`(window.__f15b || {}).revoked`)
+    const card = has(await body(w), /Finished video/)
+    const enabled = await saveEnabled(w)
+    await w.click(w.saveButton()); await w.waitSaved(); const saved = has(await w.evaluate(status), /Saved\. Open the saved file/)
+    const reached = !!p && p.error !== null && revoked >= 1
+    return { outcome: reached && card.outcome === 'pass' && enabled && saved.outcome === 'pass' ? 'pass' : 'fail', branch: reached ? `the player's own load refused: MediaError ${p.error}, ${revoked} object URL(s) revoked before use` : `not reached: ${revoked} URL(s) revoked, the player's error ${p?.error}, readyState ${p?.readyState}`, player: p, saveEnabled: enabled, saved }
+  })
+  await one('F16', async (w) => {
+    await applyFault(w, 'F16'); await finished(w, 'lecture-30s.mp4')
+    const r = has(await body(w), /title, author, and date could not be copied across/)
+    const rewritten = w.faultsSeen.find((x) => /^F16: mediabunny rewritten/.test(x))
+    return { ...r, outcome: r.outcome === 'pass' && rewritten ? 'pass' : 'fail', branch: rewritten ? `${rewritten}; the job's metadata carry rejected, so metadata-lost was added` : 'the mediabunny module was not seen by the page\'s Fetch route: undetermined until the pilot' }
+  })
+  await one('F17', async (w) => {
+    await applyFault(w, 'F17'); await w.goto(); await sleep(1500)
+    const rows = await w.evaluate(`[...document.querySelectorAll('#checks .check')].map((r) => ({ id: r.id, state: r.dataset.state }))`)
+    const aac = rows.find((r) => r.id === 'check-aac'); const others = rows.filter((r) => r.id !== 'check-aac')
+    const note = await w.evaluate(`(() => { const n = document.getElementById('browser-note'); return n && !n.hidden ? n.textContent.trim() : null })()`)
+    const open = !(await w.evaluate(`document.querySelector('#file-input').disabled`))
+    const asked = await w.evaluate(`(window.__f17 || {}).asked`)
+    const ok = aac?.state === 'warn' && others.every((r) => r.state === 'pass') && /has not passed/.test(note ?? '') && open
+    return { outcome: ok ? 'pass' : 'fail', branch: `isConfigSupported asked for mp4a ${asked} time(s) on the page; the aac row ${aac?.state}`, rows, note: note?.slice(0, 120), chooserOpen: open }
+  })
+  for (const mode of ['throw', 'callback']) {
+    await one('F18' + (mode === 'callback' ? '-callback' : ''), async (w) => {
+      await applyFault(w, 'F18', { mode }); await w.goto(); await w.setFiles(F('lecture-30s.mp4')); await w.waitSettled(); await w.click(w.createButton())
+      await w.waitFailed().catch(() => undefined)
+      const text = await body(w)
+      const refused = has(text, /stopped encoding the video part-way through/)
+      const fired = (w.p8planned?.faults ?? []).filter((f) => f.args[0] === 'fault F18')
+      const events = await w.evaluate(`window.__p8.events`)
+      const start = events.find((e) => e.kind === 'start')
+      const inJob = fired.length > 0 && !!start && fired[0].t >= start.t - 500
+      const shown = /failure|stopped|could not/i.test(text) ? (text.match(/[^.]*(stopped encoding|could not be made|went wrong)[^.]*\./i) || [''])[0].trim().slice(0, 160) : null
+      return { outcome: refused.outcome === 'pass' && inJob ? 'pass' : 'fail', mode, branch: fired.length ? `fired at frame ${fired[0].args[2]} (${mode}), ${inJob ? 'after the job started: the job\'s encode' : 'before any job: a probe\'s encode'}; the page ${refused.outcome === 'pass' ? 'shows failure.encoderRefused' : 'does not show failure.encoderRefused: ' + JSON.stringify(shown)}` : 'the prelude never fired', refused, fired }
+    })
+  }
+  await one('F19', async (w) => {
+    await applyFault(w, 'F19'); await finished(w, 'short-2s.mp4'); const before = await player(w)
+    await FAULTS.F19.leave(w)
+    const f = w.f19
+    const back = await w.evaluate(`location.href`).catch(() => null)
+    let restoredPlayer = null
+    if (f.restored) {
+      const p = await player(w)
+      const played = p ? await w.evaluate(`(async () => { const v = document.querySelector('${PLAYER}'); v.muted = true; try { await v.play() } catch (e) { return String(e) } await new Promise((r) => setTimeout(r, 600)); const t = v.currentTime; v.pause(); return t })()`) : null
+      restoredPlayer = { same: !!p && p.src === before?.src, fetches: p ? await reads(w, p.src) : false, played }
+    }
+    const reached = f.dialogs.some((d) => d.type === 'beforeunload') && /localhost|127\.0\.0\.1/.test(back ?? '')
+    return { outcome: reached ? 'pass' : 'fail', branch: `"Leave site?" ${f.dialogs.some((d) => d.type === 'beforeunload') ? 'raised and accepted' : 'not raised'}; back on the page; ${f.restored ? 'restored from the back-forward cache' : 'loaded afresh, Chrome\'s reasons: ' + (f.notUsed?.reasons ?? ['none given']).join('; ')}`, dialogs: f.dialogs, shows: f.shows, notUsed: f.notUsed, restoredPlayer }
+  })
+  await one('F4e-revised', async (w) => {
+    await applyFault(w, 'F4e'); await finished(w, 'lecture-30s.mp4'); const before = await player(w)
+    await w.click(w.saveButton()); await sleep(2500)
+    const failed = has(await w.evaluate(status) + ' | ' + await body(w), /could not be saved/)
+    const after = await player(w); const counts = await w.evaluate(`window.__f4e`)
+    const stays = !!after && after.src === before?.src && after.error === null
+    return { outcome: failed.outcome === 'pass' && stays && counts.spared === 1 && counts.thrown >= 1 ? 'pass' : 'fail', branch: `the job finished; the card's first object URL spared (${counts.spared}); the save's hand-off threw (${counts.thrown}); the player stays with its URL`, failed, before, after, counts }
+  })
+  await one('F4e-inPlace', async (w) => {
+    await finished(w, 'lecture-30s.mp4'); const before = await player(w)
+    await applyFault(w, 'F4e', { inPlace: true }); await w.click(w.saveButton()); await sleep(2500)
+    const failed = has(await w.evaluate(status) + ' | ' + await body(w), /could not be saved/)
+    const after = await player(w); const counts = await w.evaluate(`window.__f4e`)
+    return { outcome: failed.outcome === 'pass' && !!after && after.src === before?.src ? 'pass' : 'fail', branch: `armed in place once the card stood; the save's hand-off threw (${counts.thrown})`, failed, counts }
+  })
   browser.close()
   const { writeFileSync } = await import('node:fs')
   const { join } = await import('node:path')
