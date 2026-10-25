@@ -30,9 +30,10 @@ export const STATEMENT_NEXT_REVIEW_DATE = '2026-11-18'
 export const WAVE_CHECK_DATE = '2026-10-18'
 
 /**
- * Who a reader writes to about a barrier, and who reviewed the statement:
- * the owner, named on 2026-10-18 as the contact and reviewer. The same
- * address feedback goes to, so it is the feedback config's, not a copy.
+ * Who a reader writes to about a barrier: the learning content team, where
+ * problem reports go (VH-182, Q1a). The owner, named on 2026-10-18, still
+ * reviews the statement. The same address Report a problem uses, so it is
+ * the feedback config's, not a copy.
  */
 export const ACCESSIBILITY_CONTACT_ADDRESS = FEEDBACK_ADDRESS
 

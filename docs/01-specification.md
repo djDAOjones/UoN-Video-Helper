@@ -677,11 +677,12 @@ larger file.
   leaves the device.
 - Cancel is always available and leaves no partial file.
 - Help and feedback in one place on every state, blocked and running
-  included. Feedback is prepared as an email the user sends from their own
-  email app, seeing every word first; the details the app adds are named
-  facts about the app and the job, never the media or its name, while the
-  user's own message goes as written. A copy route stands in when email
-  cannot. The page promises only the response the maintainer will honour.
+  included, grouped by need: help, a problem, an opinion. "Report a
+  problem" prepares an email the user sends from their own email app,
+  seeing every word first; the details the app adds are named facts about
+  the app and the job, never the media or its name, while the user's own
+  message goes as written. A copy route stands in when email cannot. The
+  page promises only the response the maintainer will honour.
 
 ### 9.3 Accessibility
 
@@ -802,9 +803,9 @@ who is already there or cannot change browser.
 
 - **Privacy:** no media leaves the device. No analytics carrying filenames
   or media characteristics. Verifiable by inspecting network activity. The
-  one outbound route is feedback (§9.2): an email the user sends from their
-  own app, whose app-added details are named, allow-listed facts they see
-  first.
+  one outbound route the app prepares is a problem report (§9.2): an email
+  the user sends from their own app, whose app-added details are named,
+  allow-listed facts they see first.
 - **Deployment:** static files only. No server-side processing, no build
   requirement beyond a bundler, no special response headers.
 - **Licensing:** all dependencies permissive (MPL-2.0 or better). No GPL

@@ -178,33 +178,29 @@ a {
   margin: 0 0 var(--spacing-05);
 }
 
-/* The feedback button sits between the two footer panels and the version
-   line. */
-.feedback-entry {
+/*
+ * The footer's routes, grouped by need under one heading (VH-182), between
+ * the two footer panels and the version line, unboxed in the band. Each
+ * question sits close over its route or routes, and each group ends a gap
+ * before the next. Each link is on a line of its own, so it is a 44 px target
+ * like any control (2.5.5); the band's colour roles give it the same
+ * light-on-blue pair and white focus ring as every other link in here.
+ */
+.footer-help h2 {
   margin: 0 0 var(--spacing-05);
 }
 
-/* The feedback form's link, on its own line under the button (VH-160). */
+.footer-help h3 {
+  margin: 0 0 var(--spacing-03);
+}
+
+.footer-help-list,
+.feedback-entry,
 .feedback-form-entry {
   margin: 0 0 var(--spacing-05);
 }
 
-/*
- * The two teams to write to (VH-130), under the feedback button. Each link is
- * on a line of its own, so it is a 44 px target like any control (2.5.5); the
- * band's colour roles give it the same light-on-blue pair and white focus
- * ring as every other link in here.
- */
-.footer-contacts {
-  margin: 0 0 var(--spacing-05);
-}
-
-.footer-contacts-intro {
-  margin: 0;
-}
-
-.footer-contacts-list {
-  margin: 0;
+.footer-help-list {
   padding: 0;
   list-style: none;
 }
@@ -1604,9 +1600,11 @@ details[open] > .disclosure-summary::before {
 }
 
 /* Panel heading: heading-03. Every `h2`: the steps, Errors captured, the
-   feedback dialog and the footer's two. */
+   problem report's dialog, the footer's two panels and its Help and
+   feedback. */
 .panel h2,
-.dialog h2 {
+.dialog h2,
+.footer-help h2 {
   font-size: var(--type-heading-03);
   font-weight: var(--type-weight-heading);
   line-height: var(--line-height-heading-03);
@@ -1615,6 +1613,7 @@ details[open] > .disclosure-summary::before {
 /* Section heading: like heading-compact-02. A title naming the group after it. */
 .notification-title,
 .statement-body h3,
+.footer-help h3,
 .language-switcher > legend,
 .video-kind > legend,
 .video-language > legend {

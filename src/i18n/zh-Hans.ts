@@ -632,7 +632,7 @@ export const zhHans: Messages = {
     },
     unlevellable: {
       what: '由于这段录音的音频无法达到正常水平，所以没有制作视频。',
-      next: '请使用“发送反馈”按钮报告问题，该按钮会附上有助于解决问题的详细信息。',
+      next: '请使用“报告问题”按钮，该按钮会附上有助于解决问题的详细信息。',
     },
     outputLoudness: {
       what: '最终的音频没有达到正常水平，所以视频没有保留。',
@@ -649,11 +649,11 @@ export const zhHans: Messages = {
     },
     encoderRefused: {
       what: '这个浏览器在视频编码过程中停止了。',
-      next: '请尝试“文件大小/质量”下的另一个选项。如果问题再次出现，请使用“发送反馈”按钮报告问题，该按钮会附上有助于解决问题的详细信息。',
+      next: '请尝试“文件大小/质量”下的另一个选项。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。',
     },
     checkFailed: {
       what: '设备检查未完成。',
-      next: '点击“再次检查”重新运行一次检查。如果检查仍然失败，请使用“发送反馈”按钮报告问题。',
+      next: '点击“再次检查”重新运行一次检查。如果检查仍然失败，请使用“报告问题”按钮。',
     },
     timedOut: {
       what: '由于该任务停止报告进度，因此被停止了。',
@@ -666,7 +666,7 @@ export const zhHans: Messages = {
       what: '视频制作过程中出现错误。',
     },
     tryAgain:
-      '请再试一次。如果问题再次出现，请使用“发送反馈”按钮报告问题，该按钮会附上有助于解决问题的详细信息。',
+      '请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。',
     startup: {
       insecure: '此页面需要建立安全连接才能处理您的视频。请通过以 https:// 开头的地址打开它。',
       noWebCodecs: '此浏览器无法处理视频，因此该工具无法在此运行。{remedy}',
@@ -674,7 +674,7 @@ export const zhHans: Messages = {
       noWorkingStore:
         '此浏览器没有为该工具提供足够的空间来制作视频。如果您使用隐私浏览模式，通常可以使用普通窗口。{remedy}',
       workerNotStarted:
-        '执行操作的工具部分未启动。请重新加载页面。如果问题再次出现，请使用“发送反馈”按钮报告问题。',
+        '执行操作的工具部分未启动。请重新加载页面。如果问题再次出现，请使用“报告问题”按钮报告。',
     },
     captured:
       '工具出现故障。正在制作的视频可能无法完成；您的原始文件不受影响。请使用“报告此问题”按钮报告，该按钮会附上这些详细信息。',
@@ -726,8 +726,8 @@ export const zhHans: Messages = {
     report: '报告此问题',
   },
   feedback: {
-    open: '发送反馈',
-    heading: '发送反馈',
+    open: '报告问题',
+    heading: '报告问题',
     intro: '您的邮件将通过您自己的电子邮件应用程序发送到 {address}。您将在邮件发送前看到它。',
     messageLabel: '您的留言',
     writeFirst: '请先写好信息。',
@@ -772,7 +772,7 @@ export const zhHans: Messages = {
     },
     contact: {
       heading: '反馈与联系方式',
-      text: '如果您在使用本工具时发现问题，或需要以其他形式获取其中的信息，请发送电子邮件至 {address} 联系 Joe Bell。',
+      text: '如果您在使用本工具时发现问题，或需要以其他形式获取其中的信息，请发送电子邮件至 {address} 联系学习内容团队。',
     },
     enforcement: {
       heading: '执行程序',
@@ -814,11 +814,16 @@ export const zhHans: Messages = {
     },
   },
   footer: {
-    feedbackForm: '填写反馈表（在新标签页中打开）',
+    heading: '帮助和反馈',
+    groups: {
+      help: '需要使用本工具的帮助？',
+      problem: '有功能无法正常使用？',
+      opinion: '您觉得本工具怎么样？',
+    },
+    feedbackForm: '请在反馈表中告诉我们您的想法（在新标签页中打开）',
     contact: {
-      intro: '如需有关本工具的帮助：',
-      creators: 'Teams 上的创作团队（在新标签页中打开）',
-      learningContent: '发送电子邮件至学习内容团队',
+      creators: '教职员工：在 Teams 上的创作团队中提问（在新标签页中打开）',
+      selfService: '学生：通过 Self Service 获取帮助（在新标签页中打开）',
     },
   },
   save: {

@@ -696,8 +696,9 @@
         <!-- VH-130. The accessibility statement, on this page rather than one
              of its own (owner, 2026-10-18), after the GOV.UK model statement.
              The same anatomy as the System check, and beside it, so the two
-             disclosures read as one group and the feedback button is not
-             wedged between look-alikes; it stays above the version line.
+             disclosures read as one group and the help and feedback routes
+             are not wedged between look-alikes; they stay above the version
+             line.
              Closed until asked for; `main.ts` opens it when the address ends
              #accessibility-statement, so a course page can link to it. The
              four sentences with a date, the address or a link in them are
@@ -806,37 +807,38 @@
             <p id="statement-about"></p>
           </div>
         </details>
-        <!-- On a surface that is always there, and usable during a job: a hung
-             job is the thing most worth reporting (VH-93). -->
-        <p class="feedback-entry">
-          <button type="button" class="button button--secondary" id="feedback-open" data-i18n="feedback.open">
-            Send feedback
-          </button>
-        </p>
-        <!-- VH-160. The feedback form, for what people think of the tool: a
-             link on its own line under the button, not a second control, and
-             a 44 px target like the team links below. `main.ts` gives it its
-             address from `config/feedback.ts`, plain, and a new tab, so a
-             running job raises no "Leave site?". -->
-        <p class="feedback-form-entry">
-          <a class="footer-contact-link" id="feedback-form-link" data-i18n="footer.feedbackForm">Fill in the feedback form (new tab)</a>
-        </p>
-        <!-- VH-130. The two teams to write to, each a link on a line of its
-             own: so its words say where it goes without the line above
-             (2.4.9), and it is a 44 px target, with no sentence round it to
-             take the inline exception. `main.ts` gives each its `mailto:`
-             from `config/feedback.ts`, and sends the click the way every
-             email link goes, so a running job raises no "Leave site?". -->
-        <div class="footer-contacts">
-          <p class="footer-contacts-intro" data-i18n="footer.contact.intro">For help with this tool:</p>
-          <ul class="footer-contacts-list">
+        <!-- VH-182. Every route, grouped by what the person wants: help, a
+             problem, an opinion. A `div`, not a `section`, so the footer
+             gains no landmark; unboxed in the band, as the links were, and
+             nothing follows the Video type (Q7). Each link is on a line of
+             its own, so its words say alone where it goes (2.4.9) and it is
+             a 44 px target, with no sentence round it to take the inline
+             exception. `main.ts` gives each link its address from
+             `config/feedback.ts` and a new tab, so a running job raises no
+             "Leave site?". The button is on a surface that is always there,
+             and usable during a job: a hung job is the thing most worth
+             reporting (VH-93). -->
+        <div class="footer-help">
+          <h2 data-i18n="footer.heading">Help and feedback</h2>
+          <h3 data-i18n="footer.groups.help">Need help using the tool?</h3>
+          <ul class="footer-help-list">
             <li>
-              <a class="footer-contact-link" id="contact-creators" data-i18n="footer.contact.creators">Creators team on Teams (new tab)</a>
+              <a class="footer-contact-link" id="contact-creators" data-i18n="footer.contact.creators">Staff: ask in the Creators team on Teams (new tab)</a>
             </li>
             <li>
-              <a class="footer-contact-link" id="contact-learning-content" data-i18n="footer.contact.learningContent">Email the learning content team</a>
+              <a class="footer-contact-link" id="contact-self-service" data-i18n="footer.contact.selfService">Students: get help through Self Service (new tab)</a>
             </li>
           </ul>
+          <h3 data-i18n="footer.groups.problem">Something not working?</h3>
+          <p class="feedback-entry">
+            <button type="button" class="button button--secondary" id="feedback-open" data-i18n="feedback.open">
+              Report a problem
+            </button>
+          </p>
+          <h3 data-i18n="footer.groups.opinion">What do you think of the tool?</h3>
+          <p class="feedback-form-entry">
+            <a class="footer-contact-link" id="feedback-form-link" data-i18n="footer.feedbackForm">Please tell us what you think in the feedback form (new tab)</a>
+          </p>
         </div>
         <p class="version" id="version-line">Loading…</p>
       </div>
@@ -847,13 +849,13 @@
          dialog never says "Sent" — it cannot know (VH-93). -->
     <dialog class="dialog" id="feedback-dialog" aria-labelledby="feedback-heading">
       <form id="feedback-form" novalidate>
-        <h2 id="feedback-heading" data-i18n="feedback.heading">Send feedback</h2>
+        <h2 id="feedback-heading" data-i18n="feedback.heading">Report a problem</h2>
         <!-- One sentence with the address inside it, written whole by
              `main.ts` so each language can place the address where its
              grammar puts it (VH-105). -->
         <p class="dialog-intro" id="feedback-intro">
-          Your message goes to the maintainer from your own email app. You will see the email
-          before it is sent.
+          Your message goes to the learning content team from your own email app. You will see
+          the email before it is sent.
         </p>
         <div class="field">
           <label class="label" for="feedback-message" data-i18n="feedback.messageLabel">Your message</label>

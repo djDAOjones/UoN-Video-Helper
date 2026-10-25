@@ -168,7 +168,11 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
   ['failure.captured', 'The Errors captured panel, when something in the tool goes wrong'],
   ['systemCheck', 'The System check at the foot of the page'],
   ['errors', 'The Errors captured panel, only shown when something in the tool goes wrong'],
-  ['feedback', 'The Send feedback dialog'],
+  ['feedback', 'The Report a problem dialog'],
+  [
+    'feedback.open',
+    'The foot of the page, under "Something not working?": the button that opens the Report a problem dialog',
+  ],
   [
     'statement',
     'The Accessibility statement at the foot of the page, a panel that opens: its running text',
@@ -200,21 +204,19 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
     'The Accessibility statement: a list item, under "We are also thinking of:"',
   ],
   ['statement.about.heading', 'The Accessibility statement: a subheading'],
+  ['footer.heading', 'The foot of the page: the heading over the help and feedback routes'],
+  ['footer.groups', 'The foot of the page: a small heading, a question over the route or routes for it'],
   [
     'footer.feedbackForm',
-    'The foot of the page, directly under the Send feedback button: a link that opens the feedback form, in a new tab',
-  ],
-  [
-    'footer.contact.intro',
-    'The foot of the page, under the Send feedback button: the line over the two team links',
+    'The foot of the page, under "What do you think of the tool?": a link that opens the feedback form, in a new tab',
   ],
   [
     'footer.contact.creators',
-    'The foot of the page, under the Send feedback button: a link that opens the creators team on Microsoft Teams, in a new tab',
+    'The foot of the page, under "Need help using the tool?": a link for staff that opens the creators team on Microsoft Teams, in a new tab',
   ],
   [
-    'footer.contact.learningContent',
-    'The foot of the page, under the Send feedback button: a link that opens an email to the learning content team',
+    'footer.contact.selfService',
+    'The foot of the page, under "Need help using the tool?": a link for students that opens the University’s Self Service website, in a new tab',
   ],
   ['save', 'Step 6: saving the finished video'],
   ['save.pickerDescription', 'The save dialog, naming the kind of file'],
@@ -323,6 +325,9 @@ const NEXT_TEST =
   'A test still needed, under "What we plan to test next". It starts with a capital, where your language has one, and ends with your language’s full stop, as the English does (VH-137).'
 const COMPLETES_THINKING_OF =
   'Follows "We are also thinking of:". It starts with a capital, where your language has one, and ends with your language’s full stop, as the English does (VH-137).'
+/** The footer's three questions (VH-182). */
+const FOOTER_QUESTION =
+  'A small heading, a question the route or routes under it answer. It is never part of a link’s words, so each link still says alone where it goes.'
 
 /** The same note on every line of a list, keyed `prefix.0`, `prefix.1` and on. */
 function listNotes(prefix: string, items: readonly string[], note: string): Record<string, string> {
@@ -471,7 +476,7 @@ const NOTES: Readonly<Record<string, string>> = {
   'statement.limits.items.4':
     'Keep UoN, MB, GB, H.264 and AAC as they are: these short forms are what the sentence is about. Keep University of Nottingham as app.title’s note gives it.',
   'statement.contact.text':
-    'Keep the name Joe Bell as it is. The email address is shown as a link.',
+    '"The learning content team" is the name of a University team: translate it plainly. The email address is shown as a link.',
   'statement.enforcement.text':
     'The Equality and Human Rights Commission is an official UK body: give its English name with a translation in brackets, or name it as your language normally would.',
   'statement.enforcement.service':
@@ -491,14 +496,15 @@ const NOTES: Readonly<Record<string, string>> = {
   ...listNotes('statement.plans.optionalItems', enGB.statement.plans.optionalItems, COMPLETES_THINKING_OF),
   'statement.plans.optionalItems.0': `${COMPLETES_THINKING_OF} Keep axe and Lighthouse as they are: they are the names of tools.`,
   'statement.about.dates': 'Keep the name Joe Bell as it is.',
+  'footer.groups.help': FOOTER_QUESTION,
+  'footer.groups.problem': FOOTER_QUESTION,
+  'footer.groups.opinion': FOOTER_QUESTION,
   'footer.feedbackForm':
-    'The words of a link on a line of its own, so they must say alone where it goes and that it opens in a new tab: use the same words for "new tab" as footer.contact.creators. "Feedback" is the same word as in the Send feedback button. The form asks what people think of the tool.',
-  'footer.contact.intro':
-    'Introduces the two links that follow, one under the other. Each link makes sense on its own.',
+    'The words of a link on a line of its own, so they must say alone where it goes and that it opens in a new tab: use the same words for "new tab" as footer.contact.creators. The form asks what people think of the tool; the words are warm and invite them to say.',
   'footer.contact.creators':
-    'The words of a link on a line of its own, so they must say alone where it goes and that it opens in a new tab: use the same words for "new tab" as statement.enforcement.service. Keep the name Teams as it is. "Creators team" is the name of a University team: translate it plainly, and use the same word for "team" as in footer.contact.learningContent.',
-  'footer.contact.learningContent':
-    'The words of a link on a line of its own, so they must say alone that it opens an email. "The learning content team" is the name of a University team: translate it plainly, and use the same word for "team" as in footer.contact.creators.',
+    'The words of a link on a line of its own, so they must say alone who it is for, where it goes and that it opens in a new tab: use the same words for "new tab" as statement.enforcement.service. Keep the name Teams as it is. "Creators team" is the name of a University team: translate it plainly. "Staff:" says who the link is for; use the same pattern as "Students:" in footer.contact.selfService.',
+  'footer.contact.selfService':
+    'The words of a link on a line of its own, so they must say alone who it is for, where it goes and that it opens in a new tab: use the same words for "new tab" as footer.contact.creators. "Self Service" is the name of the University’s own help website: keep it as it is. "Students:" says who the link is for; use the same pattern as "Staff:" in footer.contact.creators.',
 }
 
 /** A row of the translator's sheet. */

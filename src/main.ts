@@ -48,7 +48,7 @@ import {
   FEEDBACK_MAILTO_MAX_CHARACTERS,
   FEEDBACK_SUBJECT,
   FEEDBACK_WORKER_LOG_WAIT_MS,
-  LEARNING_CONTENT_TEAM_ADDRESS,
+  SELF_SERVICE_URL,
 } from './config/feedback'
 import {
   BOOT_CHECK_SOURCE,
@@ -3643,18 +3643,17 @@ feedbackFormLink.href = FEEDBACK_FORM_URL
 feedbackFormLink.target = '_blank'
 feedbackFormLink.rel = 'noopener noreferrer'
 
-// --- The footer's team contacts (VH-130) ------------------------------------
-// Labels repaint with the page; destinations remain the owner's named config.
+// --- The footer's help links (VH-130, VH-182) ------------------------------
+// Staff's and students' own, each in a new tab. Labels repaint with the page;
+// destinations remain the owner's named config.
 const creatorsLink = required<HTMLAnchorElement>('#contact-creators')
 creatorsLink.href = CREATORS_TEAM_URL
 creatorsLink.target = '_blank'
 creatorsLink.rel = 'noopener noreferrer'
-const learningContentLink = required<HTMLAnchorElement>('#contact-learning-content')
-learningContentLink.href = `mailto:${LEARNING_CONTENT_TEAM_ADDRESS}`
-learningContentLink.addEventListener('click', (event) => {
-  event.preventDefault()
-  openMailto(learningContentLink.href)
-})
+const selfServiceLink = required<HTMLAnchorElement>('#contact-self-service')
+selfServiceLink.href = SELF_SERVICE_URL
+selfServiceLink.target = '_blank'
+selfServiceLink.rel = 'noopener noreferrer'
 
 // --- Language (VH-105) -----------------------------------------------------
 // Chosen in the header band, remembered in this browser only, and changed

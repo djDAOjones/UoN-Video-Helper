@@ -28,6 +28,19 @@ Three things are worth knowing before using it in anger:
   put them back on 2026-08-27, and VH-90 made the choice three controls —
   type, onset, colour — on 2026-09-30.
 
+## Help and feedback
+
+The page's footer groups its routes by need (VH-182); every address is in
+[`src/config/feedback.ts`](src/config/feedback.ts):
+
+- **Help, staff:** the Creators team on Teams (`CREATORS_TEAM_URL`).
+- **Help, students:** University Self Service, <https://selfservice.nottingham.ac.uk>
+  (`SELF_SERVICE_URL`).
+- **A problem:** the Report a problem button prepares an email, with details
+  that help find the fault, to the learning content team
+  (`FEEDBACK_ADDRESS`); the user sends it from their own email app.
+- **An opinion:** the feedback form (`FEEDBACK_FORM_URL`).
+
 ## Quick start
 
 ```bash

@@ -676,7 +676,7 @@ export const msMY: Messages = {
     },
     unlevellable: {
       what: 'Audio rakaman ini tidak dapat dibawa ke tahap biasa, jadi video itu tidak dibuat.',
-      next: 'Laporkan masalah itu dengan butang Hantar maklum balas, yang menambah butiran yang akan membantu.',
+      next: 'Gunakan butang Laporkan masalah, yang menambah butiran yang akan membantu.',
     },
     outputLoudness: {
       what: 'Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan.',
@@ -693,11 +693,11 @@ export const msMY: Messages = {
     },
     encoderRefused: {
       what: 'Pelayar ini berhenti mengekod video di pertengahan jalan.',
-      next: 'Cuba pilihan lain di bawah Saiz/kualiti fail. Jika masalah itu berlaku lagi, laporkannya dengan butang Hantar maklum balas, yang menambah butiran yang akan membantu.',
+      next: 'Cuba pilihan lain di bawah Saiz/kualiti fail. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu.',
     },
     checkFailed: {
       what: 'Pemeriksaan peranti tidak selesai.',
-      next: 'Tekan Semak semula untuk menjalankan semakan sekali lagi. Jika semakan gagal lagi, laporkan masalah itu dengan butang Hantar maklum balas.',
+      next: 'Tekan Semak semula untuk menjalankan semakan sekali lagi. Jika semakan gagal lagi, gunakan butang Laporkan masalah.',
     },
     timedOut: {
       what: 'Kerja itu berhenti melaporkan kemajuan, jadi ia dihentikan.',
@@ -710,7 +710,7 @@ export const msMY: Messages = {
       what: 'Ada masalah yang berlaku semasa membuat video.',
     },
     tryAgain:
-      'Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Hantar maklum balas, yang menambah butiran yang akan membantu.',
+      'Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu.',
     startup: {
       insecure:
         'Halaman ini memerlukan sambungan yang selamat sebelum ia boleh berfungsi dengan video anda. Bukanya di alamat yang bermula dengan https://.',
@@ -721,7 +721,7 @@ export const msMY: Messages = {
       noWorkingStore:
         'Pelayar ini tidak memberikan ruang kerja kepada alat ini untuk mencipta video. Jika anda melayari secara peribadi, tetingkap biasa biasanya berfungsi. {remedy}',
       workerNotStarted:
-        'Bahagian alat yang melakukan kerja tidak bermula. Muat semula halaman. Jika masalah itu berlaku lagi, laporkannya dengan butang Hantar maklum balas.',
+        'Bahagian alat yang melakukan kerja tidak bermula. Muat semula halaman. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah.',
     },
     captured:
       'Sesuatu yang tidak kena telah berlaku dalam alat ini. Video yang sedang dibuat mungkin tidak siap; fail asal anda tidak terjejas. Laporkan masalah itu dengan butang Laporkan masalah ini, yang akan menambah butiran ini.',
@@ -774,8 +774,8 @@ export const msMY: Messages = {
     report: 'Laporkan masalah ini',
   },
   feedback: {
-    open: 'Hantar maklum balas',
-    heading: 'Hantar maklum balas',
+    open: 'Laporkan masalah',
+    heading: 'Laporkan masalah',
     intro:
       'Mesej anda dihantar ke {address} daripada aplikasi e-mel anda sendiri. Anda akan melihat e-mel tersebut sebelum ia dihantar.',
     messageLabel: 'Mesej anda',
@@ -823,7 +823,7 @@ export const msMY: Messages = {
     },
     contact: {
       heading: 'Maklum balas dan maklumat hubungan',
-      text: 'Jika anda menemui masalah dengan alat ini, atau memerlukan maklumatnya dalam bentuk lain, sila hantar e-mel kepada Joe Bell di {address}.',
+      text: 'Jika anda menemui masalah dengan alat ini, atau memerlukan maklumatnya dalam bentuk lain, sila hantar e-mel kepada pasukan kandungan pembelajaran di {address}.',
     },
     enforcement: {
       heading: 'Prosedur penguatkuasaan',
@@ -867,11 +867,17 @@ export const msMY: Messages = {
     },
   },
   footer: {
-    feedbackForm: 'Isi borang maklum balas (dibuka dalam tab baharu)',
+    heading: 'Bantuan dan maklum balas',
+    groups: {
+      help: 'Perlukan bantuan menggunakan alat ini?',
+      problem: 'Ada sesuatu yang tidak berfungsi?',
+      opinion: 'Apakah pendapat anda tentang alat ini?',
+    },
+    feedbackForm:
+      'Sila beritahu kami pendapat anda dalam borang maklum balas (dibuka dalam tab baharu)',
     contact: {
-      intro: 'Untuk bantuan dengan alat ini:',
-      creators: 'Pasukan pencipta di Teams (dibuka dalam tab baharu)',
-      learningContent: 'Hantar e-mel kepada pasukan kandungan pembelajaran',
+      creators: 'Kakitangan: tanya dalam pasukan pencipta di Teams (dibuka dalam tab baharu)',
+      selfService: 'Pelajar: dapatkan bantuan melalui Self Service (dibuka dalam tab baharu)',
     },
   },
   save: {

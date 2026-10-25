@@ -20,7 +20,8 @@ import {
   CREATORS_TEAM_URL,
   FEEDBACK_ADDRESS,
   FEEDBACK_FORM_URL,
-  LEARNING_CONTENT_TEAM_ADDRESS,
+  FEEDBACK_SUBJECT,
+  SELF_SERVICE_URL,
 } from '../src/config/feedback'
 import { PRESETS, type PresetId } from '../src/config/presets'
 import { DEFAULT_VIDEO_KIND, VIDEO_KINDS } from '../src/config/video-kind'
@@ -431,21 +432,66 @@ describe('the accessibility statement (VH-130)', () => {
   })
 })
 
-describe('the footer\'s team contacts (VH-130)', () => {
+describe('the footer\'s routes, grouped by need (VH-130, VH-182)', () => {
   const footer = /<footer[\s\S]*?<\/footer>/.exec(markup)?.[0] ?? ''
   const mainSource = readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8')
   /** Any email address written out, as a literal would be. */
   const anAddress = /[\w.%+-]+@[\w-]+(?:\.[\w-]+)+/
+  const escape = (text: string): string => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const link = (id: string, words: string): string =>
+    `<a class="footer-contact-link" id="${id}">${escape(words)}</a>`
 
-  it('offers each team as a link on a line of its own, under the feedback button and above the version', () => {
-    for (const [id, words] of [
-      ['contact-creators', enGB.footer.contact.creators],
-      ['contact-learning-content', enGB.footer.contact.learningContent],
-    ] as const) {
-      expect(footer).toMatch(new RegExp(`<li>\\s*<a class="footer-contact-link" id="${id}">${words.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}</a>\\s*</li>`))
-      expect(footer.indexOf(`id="${id}"`)).toBeGreaterThan(footer.indexOf('id="feedback-open"'))
-      expect(footer.indexOf(`id="${id}"`)).toBeLessThan(footer.indexOf('id="version-line"'))
-    }
+  it('reads as one heading, then three questions, each over its own routes, above the version', () => {
+    // The sheet's VH-182 rows, in order: help (staff first), a problem, an opinion.
+    const { heading, groups, contact, feedbackForm } = enGB.footer
+    expect(footer).toMatch(
+      new RegExp(
+        [
+          '<div class="footer-help">',
+          `<h2>${escape(heading)}</h2>`,
+          `<h3>${escape(groups.help)}</h3>`,
+          '<ul class="footer-help-list">',
+          '<li>',
+          link('contact-creators', contact.creators),
+          '</li>',
+          '<li>',
+          link('contact-self-service', contact.selfService),
+          '</li>',
+          '</ul>',
+          `<h3>${escape(groups.problem)}</h3>`,
+          '<p class="feedback-entry">',
+          '<button type="button" class="button button--secondary" id="feedback-open">',
+          escape(enGB.feedback.open),
+          '</button>',
+          '</p>',
+          `<h3>${escape(groups.opinion)}</h3>`,
+          '<p class="feedback-form-entry">',
+          link('feedback-form-link', feedbackForm),
+          '</p>',
+          '</div>',
+          '<p class="version" id="version-line">',
+        ].join('\\s*'),
+      ),
+    )
+    expect(heading).toBe('Help and feedback')
+    expect(groups).toEqual({
+      help: 'Need help using the tool?',
+      problem: 'Something not working?',
+      opinion: 'What do you think of the tool?',
+    })
+    expect(contact).toEqual({
+      creators: 'Staff: ask in the Creators team on Teams (new tab)',
+      selfService: 'Students: get help through Self Service (new tab)',
+    })
+    expect(enGB.feedback.open).toBe('Report a problem')
+    expect(enGB.feedback.heading).toBe('Report a problem')
+  })
+
+  it('adds no landmark and no email link: the learning content team is reached by Report a problem', () => {
+    expect(footer).not.toMatch(/<section|<nav|<aside|\srole=|aria-label/)
+    expect(footer).not.toContain('mailto:')
+    expect(footer).not.toContain('contact-learning-content')
+    expect(mainSource).not.toContain('learningContentLink')
   })
 
   it('takes each address from config, never from the page or the script', () => {
@@ -453,22 +499,43 @@ describe('the footer\'s team contacts (VH-130)', () => {
     // in either file would be a second copy to forget when a team's arrives.
     expect(html).not.toMatch(anAddress)
     expect(mainSource).not.toMatch(anAddress)
-    expect(mainSource).toContain('creatorsLink.href = CREATORS_TEAM_URL')
-    expect(mainSource).toContain('learningContentLink.href = `mailto:${LEARNING_CONTENT_TEAM_ADDRESS}`')
+    expect(html).not.toContain('selfservice.nottingham.ac.uk')
+    expect(mainSource).not.toContain('selfservice.nottingham.ac.uk')
+    expect(mainSource).toContain('creatorsLink.href = CREATORS_TEAM_URL\n')
+    expect(mainSource).toContain('selfServiceLink.href = SELF_SERVICE_URL\n')
   })
 
-  it('uses the owner’s two supplied destinations, leaving feedback at the owner’s address (VH-148)', () => {
+  it('uses the owner’s destinations: problem reports to the learning content team (VH-148, VH-182)', () => {
     // The whole address the hand-off gave, not only its host (VH-153).
     expect(CREATORS_TEAM_URL).toBe(
       'https://teams.microsoft.com/l/team/19%3A14c7a4d2bf43456fa0c3c52c851fb097%40thread.tacv2/conversations?groupId=bd942b5f-5389-410c-abf2-9ba087360738&tenantId=67bda7ee-fd80-41ef-ac91-358418290a1e',
     )
-    expect(LEARNING_CONTENT_TEAM_ADDRESS).toBe('UI-Learning-Content@nottingham.ac.uk')
-    expect(FEEDBACK_ADDRESS).toBe('joe.bell@nottingham.ac.uk')
-    expect(mainSource).toContain("creatorsLink.target = '_blank'")
-    expect(mainSource).toContain("creatorsLink.rel = 'noopener noreferrer'")
-    // VH-124’s full-stop rule excludes these two links: a link is a label like a button.
+    expect(SELF_SERVICE_URL).toBe('https://selfservice.nottingham.ac.uk')
+    expect(FEEDBACK_ADDRESS).toBe('UI-Learning-Content@nottingham.ac.uk')
+    expect(FEEDBACK_SUBJECT).toBe('UoN Video Helper problem report')
+    for (const name of ['creatorsLink', 'selfServiceLink']) {
+      expect(mainSource).toContain(`${name}.target = '_blank'`)
+      expect(mainSource).toContain(`${name}.rel = 'noopener noreferrer'`)
+    }
+    // VH-124’s full-stop rule excludes these links: a link is a label like a button.
     expect(enGB.footer.contact.creators).not.toMatch(/\.$/)
-    expect(enGB.footer.contact.learningContent).not.toMatch(/\.$/)
+    expect(enGB.footer.contact.selfService).not.toMatch(/\.$/)
+  })
+
+  it('names the button by its new name wherever a message points to it', () => {
+    const sources = ['../index.html', '../src/i18n/en-GB.ts', '../README.md'].map((path) =>
+      readFileSync(new URL(path, import.meta.url), 'utf8'),
+    )
+    for (const source of sources) expect(source).not.toContain('Send feedback')
+    for (const next of [
+      enGB.failure.unlevellable.next,
+      enGB.failure.encoderRefused.next,
+      enGB.failure.checkFailed.next,
+      enGB.failure.tryAgain,
+      enGB.failure.startup.workerNotStarted,
+    ]) {
+      expect(next).toContain('the Report a problem button')
+    }
   })
 })
 
@@ -830,11 +897,11 @@ describe('the footer\'s feedback form (VH-160)', () => {
   const footer = /<footer[\s\S]*?<\/footer>/.exec(markup)?.[0] ?? ''
   const mainSource = readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8')
 
-  it('is one link on its own line, directly under Send feedback and above the team links', () => {
+  it('is one link on its own line, under the opinion question, the footer’s last route', () => {
     expect(footer).toMatch(
-      /<\/button>\s*<\/p>\s*<p class="feedback-form-entry">\s*<a class="footer-contact-link" id="feedback-form-link">Fill in the feedback form \(new tab\)<\/a>\s*<\/p>\s*<div class="footer-contacts">/,
+      /<h3>What do you think of the tool\?<\/h3>\s*<p class="feedback-form-entry">\s*<a class="footer-contact-link" id="feedback-form-link">Please tell us what you think in the feedback form \(new tab\)<\/a>\s*<\/p>\s*<\/div>/,
     )
-    expect(enGB.footer.feedbackForm).toBe('Fill in the feedback form (new tab)')
+    expect(enGB.footer.feedbackForm).toBe('Please tell us what you think in the feedback form (new tab)')
     expect(enGB.footer.feedbackForm).not.toMatch(/\.$/)
   })
 

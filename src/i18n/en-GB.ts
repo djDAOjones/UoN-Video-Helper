@@ -752,7 +752,7 @@ export const enGB = {
     },
     unlevellable: {
       what: 'The audio of this recording cannot be brought to the usual level, so the video was not made.',
-      next: 'Report the problem with the Send feedback button, which adds details that will help.',
+      next: 'Use the Report a problem button, which adds details that will help.',
     },
     outputLoudness: {
       what: 'The finished audio did not come out at the usual level, so the video was not kept.',
@@ -767,11 +767,11 @@ export const enGB = {
     },
     encoderRefused: {
       what: 'This browser stopped encoding the video part-way through.',
-      next: 'Try the other option under File size / quality. If the problem happens again, report it with the Send feedback button, which adds details that will help.',
+      next: 'Try the other option under File size / quality. If the problem happens again, report it with the Report a problem button, which adds details that will help.',
     },
     checkFailed: {
       what: 'The device check did not finish.',
-      next: 'Press Check again to run the check once more. If the check fails again, report the problem with the Send feedback button.',
+      next: 'Press Check again to run the check once more. If the check fails again, use the Report a problem button.',
     },
     timedOut: { what: 'The job stopped reporting progress, so it was stopped.' },
     titleCardRefused: {
@@ -781,7 +781,7 @@ export const enGB = {
     unknown: { what: 'Something went wrong while creating the video.' },
     /** The next step for the failures whose remedy is to try again. */
     tryAgain:
-      'Try again. If the problem happens again, report it with the Send feedback button, which adds details that will help.',
+      'Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help.',
     startup: {
       insecure:
         'This page needs a secure connection before it can work with your video. Open it at an address that starts https://.',
@@ -791,7 +791,7 @@ export const enGB = {
       noWorkingStore:
         'This browser gives the tool no working space to create a video in. If you are browsing privately, an ordinary window usually works. {remedy}',
       workerNotStarted:
-        'The part of the tool that does the work did not start. Reload the page. If the problem happens again, report it with the Send feedback button.',
+        'The part of the tool that does the work did not start. Reload the page. If the problem happens again, report it with the Report a problem button.',
     },
     captured:
       'Something in the tool went wrong. A video being made may not finish; your original file is not affected. Report the problem with the Report this problem button, which adds these details.',
@@ -838,8 +838,8 @@ export const enGB = {
   },
 
   feedback: {
-    open: 'Send feedback',
-    heading: 'Send feedback',
+    open: 'Report a problem',
+    heading: 'Report a problem',
     intro:
       'Your message goes to {address} from your own email app. You will see the email before it is sent.',
     messageLabel: 'Your message',
@@ -899,7 +899,7 @@ export const enGB = {
     contact: {
       heading: 'Feedback and contact',
       /** `{address}` is a link that opens an email to it. */
-      text: 'If you find a problem with this tool, or need its information in another way, email Joe Bell at {address}.',
+      text: 'If you find a problem with this tool, or need its information in another way, email the learning content team at {address}.',
     },
     enforcement: {
       heading: 'Enforcement procedure',
@@ -947,18 +947,24 @@ export const enGB = {
   },
 
   /**
-   * The foot of the page. The feedback form, in a new tab, under Send
-   * feedback (VH-160); then the two help routes (VH-148): the Creators team
-   * on Teams in a new tab, and the learning content team by email, all
-   * from `config/feedback.ts`. Each link's words say where it goes
-   * on their own (WCAG 2.4.9), so none leans on the line above.
+   * The foot of the page, its routes grouped by need under one heading
+   * (VH-182): help, staff's and students' own links, each in a new tab
+   * (VH-148); a problem, the Report a problem button; an opinion, the
+   * feedback form in a new tab (VH-160); every address from
+   * `config/feedback.ts`. Each link's words say where it goes on their own
+   * (WCAG 2.4.9), so none leans on the question above it.
    */
   footer: {
-    feedbackForm: 'Fill in the feedback form (new tab)',
+    heading: 'Help and feedback',
+    groups: {
+      help: 'Need help using the tool?',
+      problem: 'Something not working?',
+      opinion: 'What do you think of the tool?',
+    },
+    feedbackForm: 'Please tell us what you think in the feedback form (new tab)',
     contact: {
-      intro: 'For help with this tool:',
-      creators: 'Creators team on Teams (new tab)',
-      learningContent: 'Email the learning content team',
+      creators: 'Staff: ask in the Creators team on Teams (new tab)',
+      selfService: 'Students: get help through Self Service (new tab)',
     },
   },
 

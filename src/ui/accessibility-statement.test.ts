@@ -48,7 +48,7 @@ describe('messageParts', () => {
     const english = compile<typeof enGB>(LANGUAGE_TABLES['en-GB']!)
     expect(messageParts(english.statement.contact.text, ['address'])).toEqual([
       {
-        text: 'If you find a problem with this tool, or need its information in another way, email Joe Bell at ',
+        text: 'If you find a problem with this tool, or need its information in another way, email the learning content team at ',
       },
       { slot: 'address' },
       { text: '.' },

@@ -137,7 +137,7 @@ describe('what a report never says', () => {
 describe('the mailto link', () => {
   const lines = ['App: v0.1.0+20260930.abc1234', 'Browser: Chrome 142 on macOS', 'Stage: failed', 'Recent log:', '  info a: one', '  info a: two']
 
-  it('addresses the maintainer, with the subject and a CRLF body', () => {
+  it('addresses the configured recipient, with the subject and a CRLF body', () => {
     const { url, keptDetails } = feedbackMailto({
       address: 'someone@example.ac.uk',
       subject: 'Feedback v0.1.0',

@@ -1,34 +1,38 @@
 /**
- * Where feedback goes, and how much of it fits in one email link (VH-93).
+ * Where a problem report goes, and how much of it fits in one email link
+ * (VH-93), and the footer's other routes (VH-182).
  *
- * Feedback leaves through the user's own email app, never through a request
+ * A report leaves through the user's own email app, never through a request
  * the app makes: "no media egress" and acceptance criterion 9 stay exactly as
  * they were. These are the numbers that shape that email.
  */
 
 /**
- * The maintainer's address, as asked for on 2026-09-30. It is public either
- * way — in the shipped bundle and in this repository. A role address would
- * survive a change of maintainer; changing it is this one line.
+ * The learning content team's address, where problem reports go (VH-182, the
+ * owner's answer of 2026-10-24). A role address, so it survives a change of
+ * maintainer; the accessibility statement's contact follows it.
  */
-export const FEEDBACK_ADDRESS = 'joe.bell@nottingham.ac.uk'
+export const FEEDBACK_ADDRESS = 'UI-Learning-Content@nottingham.ac.uk'
 
-/** The learning content team's own Creators team on Teams; a help link, opened in a new tab (VH-148). */
+/** The learning content team's own Creators team on Teams; staff's help link, opened in a new tab (VH-148). */
 export const CREATORS_TEAM_URL = 'https://teams.microsoft.com/l/team/19%3A14c7a4d2bf43456fa0c3c52c851fb097%40thread.tacv2/conversations?groupId=bd942b5f-5389-410c-abf2-9ba087360738&tenantId=67bda7ee-fd80-41ef-ac91-358418290a1e'
 
 /**
+ * University Self Service, students' help link, opened in a new tab: students
+ * cannot open the Creators team (VH-182, the owner's answer of 2026-10-24).
+ */
+export const SELF_SERVICE_URL = 'https://selfservice.nottingham.ac.uk'
+
+/**
  * The feedback form, supplied by the owner for the public release (VH-160):
- * what people think of the tool, beside Send feedback, which stays the route
- * for a problem. A plain address, opened in a new tab: nothing from the page
- * is ever added to it (the rules' no-egress line).
+ * what people think of the tool, beside Report a problem, which stays the
+ * route for a problem. A plain address, opened in a new tab: nothing from the
+ * page is ever added to it (the rules' no-egress line).
  */
 export const FEEDBACK_FORM_URL = 'https://forms.cloud.microsoft/e/Meg347QQvs'
 
-/** The learning content team's own address, supplied by the owner (VH-148). */
-export const LEARNING_CONTENT_TEAM_ADDRESS = 'UI-Learning-Content@nottingham.ac.uk'
-
 /** The email's subject. The build identity is appended, so a report names the code it is about. */
-export const FEEDBACK_SUBJECT = 'UoN Video Helper feedback'
+export const FEEDBACK_SUBJECT = 'UoN Video Helper problem report'
 
 /**
  * Where better wording for a machine-translated page goes (VH-105): the

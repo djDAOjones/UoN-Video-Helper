@@ -37,7 +37,6 @@ The public release, 0.2.0, on Xerte (PLAN-6).
 
 ### Phase 8 — the owner's UX pass, then a third full design pass
 
-- [ ] VH-182 — The footer's contact routes grouped by need; Send feedback renamed Report a problem — since 2026-10-24
 - [ ] VH-191 — Video language moves into step 3, apart from Page language — since 2026-10-24
 - [ ] VH-192 — Watch the finished video in its card before saving — since 2026-10-24
 - [ ] VH-193 — A warning after the job when levelling needed heavy limiting — since 2026-10-24
