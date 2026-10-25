@@ -1,0 +1,1724 @@
+{
+ "item": "VH-198",
+ "plan": "pilot3",
+ "date": "2026-10-25",
+ "what": "Pass 3's pilot: Phase 7's second pilot (PLANS.pilot2, 43 records: every mode at 1280 px, every view and enlargement record, the dialog, a second language) with Phase 8's states through every instrument (32 records: the player passive and by keys, both \"?\", the footer's headings, the limiting warning, Video language, Create's \"again\" label, the closing asset's twin, K-player)",
+ "run": "pilot3-2026-10-25T22-24-36-920Z-6a19fb",
+ "source": {
+  "commit": "083a545b9bb59179fd4ed09dbe53008d445a7fd5",
+  "dirty": false
+ },
+ "appSource": "src/ and index.html as last changed at e226410 (VH-193); unchanged since",
+ "server": "Vite dev server on port 5181 (--strictPort), this checkout",
+ "instruments": {
+  "revision": "6ed245d297623aec",
+  "files": [
+   {
+    "file": "again-190.mjs",
+    "sha256": "c87210f9f463f16c"
+   },
+   {
+    "file": "cdp.mjs",
+    "sha256": "236e93be01a46929"
+   },
+   {
+    "file": "design-walk.mjs",
+    "sha256": "50c2b05bda2e7e61"
+   },
+   {
+    "file": "digest.mjs",
+    "sha256": "b58bfc4e16da02cd"
+   },
+   {
+    "file": "faults.mjs",
+    "sha256": "5c05247ed6b14940"
+   },
+   {
+    "file": "fixtures-8.sh",
+    "sha256": "6a5a26162277e63e"
+   },
+   {
+    "file": "fixtures.sh",
+    "sha256": "1bfa84726c516d2f"
+   },
+   {
+    "file": "footer-182.mjs",
+    "sha256": "33abec1f70001c0f"
+   },
+   {
+    "file": "heavy-193.mjs",
+    "sha256": "54cbff0b91b93218"
+   },
+   {
+    "file": "inventory.mjs",
+    "sha256": "c2c16ea752c5e01e"
+   },
+   {
+    "file": "labels-189.mjs",
+    "sha256": "b4e39a730b577c3f"
+   },
+   {
+    "file": "lang-191.mjs",
+    "sha256": "ea6bec378b7c6779"
+   },
+   {
+    "file": "matrix.mjs",
+    "sha256": "4879ecd6b95cd716"
+   },
+   {
+    "file": "name-181.mjs",
+    "sha256": "7c2a15e25096c1d5"
+   },
+   {
+    "file": "note-180.mjs",
+    "sha256": "961d9427eeac771f"
+   },
+   {
+    "file": "page-183.mjs",
+    "sha256": "e1936c38cc88e158"
+   },
+   {
+    "file": "parts.mjs",
+    "sha256": "41ac1539a3d83b55"
+   },
+   {
+    "file": "phase8.mjs",
+    "sha256": "0a229c4e24326116"
+   },
+   {
+    "file": "player-192.mjs",
+    "sha256": "9e586e52bf2ff91d"
+   },
+   {
+    "file": "preset-188.mjs",
+    "sha256": "9008b6c98979053b"
+   },
+   {
+    "file": "prove-172.mjs",
+    "sha256": "03e07056cf331744"
+   },
+   {
+    "file": "prove-8.mjs",
+    "sha256": "e7f45fb2d7e64dce"
+   },
+   {
+    "file": "prove-fixtures-8.mjs",
+    "sha256": "c5e1baf6d247a6a3"
+   },
+   {
+    "file": "prove.mjs",
+    "sha256": "53e489d92f425692"
+   },
+   {
+    "file": "qualify.mjs",
+    "sha256": "43703283e00deaa1"
+   },
+   {
+    "file": "report-172.mjs",
+    "sha256": "a60f519698952657"
+   },
+   {
+    "file": "rings-179.mjs",
+    "sha256": "19578e809609f224"
+   },
+   {
+    "file": "runner.mjs",
+    "sha256": "580d6fc54bcaaa0c"
+   },
+   {
+    "file": "scenarios.mjs",
+    "sha256": "5d5629cacc60550f"
+   },
+   {
+    "file": "sliver-185.mjs",
+    "sha256": "3382b51be3d137e2"
+   },
+   {
+    "file": "tip-184.mjs",
+    "sha256": "589f75dc5976fff3"
+   },
+   {
+    "file": "tip-196.mjs",
+    "sha256": "050fc920ff41b6ec"
+   },
+   {
+    "file": "tokens.mjs",
+    "sha256": "59bff4a79c7984ff"
+   },
+   {
+    "file": "top-187.mjs",
+    "sha256": "1d8f24021effb424"
+   },
+   {
+    "file": "transitions.mjs",
+    "sha256": "6071979d791a1731"
+   },
+   {
+    "file": "walk.mjs",
+    "sha256": "119a8ff6e7d2410f"
+   },
+   {
+    "file": "wcag-checks.mjs",
+    "sha256": "2496aa09cfcbadda"
+   },
+   {
+    "file": "words-186.mjs",
+    "sha256": "fcd79b36b6d9f22d"
+   }
+  ]
+ },
+ "oneRevision": "every part and run VH-199 walks runs at this revision; a change to the walker after a part has run reruns that part (plan, \"Running it\")",
+ "browser": "Chrome/156.0.8078.48",
+ "browserCommandLine": {
+  "source": "ps -o args= -p 15773 (the browser process)",
+  "arguments": [
+   "--headless=new",
+   "--no-first-run",
+   "--no-default-browser-check",
+   "--disable-background-timer-throttling",
+   "--disable-renderer-backgrounding",
+   "--disable-backgrounding-occluded-windows"
+  ],
+  "visiblePageFlagsMissing": []
+ },
+ "os": "darwin 25.6.0 arm64",
+ "views": [
+  {
+   "view": "w1280",
+   "actual": {
+    "w": 1280,
+    "h": 900,
+    "dpr": 1
+   },
+   "rootFontPx": 16
+  },
+  {
+   "view": "w320",
+   "actual": {
+    "w": 320,
+    "h": 568,
+    "dpr": 1
+   },
+   "rootFontPx": 16
+  },
+  {
+   "view": "landscape",
+   "actual": {
+    "w": 812,
+    "h": 375,
+    "dpr": 3
+   },
+   "rootFontPx": 16
+  },
+  {
+   "view": "short",
+   "actual": {
+    "w": 1280,
+    "h": 480,
+    "dpr": 1
+   },
+   "rootFontPx": 16
+  },
+  {
+   "view": "w1280",
+   "actual": {
+    "w": 1280,
+    "h": 900,
+    "dpr": 1
+   },
+   "rootFontPx": 32
+  },
+  {
+   "view": "w375",
+   "actual": {
+    "w": 375,
+    "h": 812,
+    "dpr": 3
+   },
+   "rootFontPx": 16
+  },
+  {
+   "view": "zoom200proxy",
+   "actual": {
+    "w": 640,
+    "h": 450,
+    "dpr": 2
+   },
+   "rootFontPx": 16
+  },
+  {
+   "view": "zoom400proxy",
+   "actual": {
+    "w": 320,
+    "h": 225,
+    "dpr": 4
+   },
+   "rootFontPx": 16
+  }
+ ],
+ "scaling": "Emulation.setDeviceMetricsOverride per view; Page.setFontSizes for the default font; Chrome page zoom not settable over the protocol (proxy views only)",
+ "enlargement": {
+  "reflow": {
+   "what": "a CSS viewport 320 px wide (and the 375 px phone)",
+   "views": [
+    "w320",
+    "w375"
+   ],
+   "records": 12
+  },
+  "proxy": {
+   "what": "the CSS viewport and device pixel ratio Chrome's 200% and 400% page zoom give a 1280 x 900 window",
+   "views": [
+    "zoom200proxy",
+    "zoom400proxy"
+   ],
+   "records": 6,
+   "realZoom": "unresolved: Chrome page zoom cannot be set over the protocol; on the person list"
+  },
+  "defaultFont32": {
+   "what": "the browser's default-font preference at 32 px (Page.setFontSizes)",
+   "mode": "font32",
+   "records": 4
+  },
+  "syntheticTextOnly": {
+   "status": "not run",
+   "what": "text-only enlargement by an injected style: not implemented, so unqualified"
+  }
+ },
+ "fixtures": [
+  {
+   "file": "clicks-20s.mp4",
+   "bytes": 6610092,
+   "sha256": "3223521f81f2be81"
+  },
+  {
+   "file": "lecture-30s.mp4",
+   "bytes": 10093018,
+   "sha256": "fe66c0ad6bcc160d"
+  },
+  {
+   "file": "lecture-60s.mp4",
+   "bytes": 20222028,
+   "sha256": "ce10e0ce0579c4b6"
+  },
+  {
+   "file": "qtrle-5s.mov",
+   "bytes": 35521170,
+   "sha256": "91cf5144e8d2aa68"
+  },
+  {
+   "file": "short-2s.mp4",
+   "bytes": 643360,
+   "sha256": "b51cc942eb4d6f65"
+  }
+ ],
+ "faults": [
+  "F4b"
+ ],
+ "coverage": {
+  "expected": 77,
+  "observed": 77,
+  "whole": true,
+  "problems": [],
+  "expectedKeysSha256": "fdc4e3dd17ebc634",
+  "observedKeysSha256": "fdc4e3dd17ebc634",
+  "expectedKeys": [
+   "K-dialog__en-GB__w1280__light",
+   "K-player__en-GB__w1280__light",
+   "K-player__en-GB__w320__light",
+   "S-03__en-GB__landscape__light",
+   "S-03__en-GB__short__light",
+   "S-03__en-GB__w1280__dark",
+   "S-03__en-GB__w1280__fallback",
+   "S-03__en-GB__w1280__font32",
+   "S-03__en-GB__w1280__forced-dark",
+   "S-03__en-GB__w1280__forced-light",
+   "S-03__en-GB__w1280__light",
+   "S-03__en-GB__w1280__reduced-motion",
+   "S-03__en-GB__w1280__spacing",
+   "S-03__en-GB__w320__light",
+   "S-03__en-GB__w375__light",
+   "S-03__en-GB__zoom200proxy__light",
+   "S-03__en-GB__zoom400proxy__light",
+   "S-03__zh-Hans__w1280__light",
+   "S-114__en-GB__w1280__light",
+   "S-114__zh-Hans__w1280__light",
+   "S-119__en-GB__w1280__light",
+   "S-119__zh-Hans__w1280__light",
+   "S-126__en-GB__w1280__dark",
+   "S-126__en-GB__w1280__forced-dark",
+   "S-126__en-GB__w1280__forced-light",
+   "S-126__en-GB__w1280__light",
+   "S-126__en-GB__w1280__reduced-motion",
+   "S-126__en-GB__w320__light",
+   "S-126__zh-Hans__w1280__light",
+   "S-127__en-GB__w1280__light",
+   "S-127__en-GB__w320__light",
+   "S-135__en-GB__w1280__light",
+   "S-135__en-GB__w320__spacing",
+   "S-135__zh-Hans__w1280__light",
+   "S-140n__en-GB__w1280__light",
+   "S-141__en-GB__w1280__dark",
+   "S-141__en-GB__w1280__forced-dark",
+   "S-141__en-GB__w1280__forced-light",
+   "S-141__en-GB__w1280__light",
+   "S-141__en-GB__w1280__reduced-motion",
+   "S-141__en-GB__w320__light",
+   "S-141__en-GB__w320__spacing",
+   "S-141__ms-MY__w1280__light",
+   "S-145__en-GB__w1280__fallback",
+   "S-145__en-GB__w1280__font32",
+   "S-145__en-GB__w1280__light",
+   "S-145__en-GB__w320__light",
+   "S-145__ms-MY__w1280__light",
+   "S-145__zh-Hans__w1280__light",
+   "S-15__en-GB__landscape__light",
+   "S-15__en-GB__short__light",
+   "S-15__en-GB__w1280__dark",
+   "S-15__en-GB__w1280__fallback",
+   "S-15__en-GB__w1280__font32",
+   "S-15__en-GB__w1280__forced-dark",
+   "S-15__en-GB__w1280__forced-light",
+   "S-15__en-GB__w1280__light",
+   "S-15__en-GB__w1280__reduced-motion",
+   "S-15__en-GB__w1280__spacing",
+   "S-15__en-GB__w320__light",
+   "S-15__en-GB__w375__light",
+   "S-15__en-GB__zoom200proxy__light",
+   "S-15__en-GB__zoom400proxy__light",
+   "S-15__zh-Hans__w1280__light",
+   "S-17__en-GB__w1280__light",
+   "S-76__en-GB__w1280__dark",
+   "S-76__en-GB__w1280__fallback",
+   "S-76__en-GB__w1280__font32",
+   "S-76__en-GB__w1280__forced-dark",
+   "S-76__en-GB__w1280__forced-light",
+   "S-76__en-GB__w1280__light",
+   "S-76__en-GB__w1280__reduced-motion",
+   "S-76__en-GB__w1280__spacing",
+   "S-76__en-GB__w320__light",
+   "S-76__en-GB__zoom200proxy__light",
+   "S-76__en-GB__zoom400proxy__light",
+   "S-76__zh-Hans__w1280__light"
+  ],
+  "observedKeys": [
+   "K-dialog__en-GB__w1280__light",
+   "K-player__en-GB__w1280__light",
+   "K-player__en-GB__w320__light",
+   "S-03__en-GB__landscape__light",
+   "S-03__en-GB__short__light",
+   "S-03__en-GB__w1280__dark",
+   "S-03__en-GB__w1280__fallback",
+   "S-03__en-GB__w1280__font32",
+   "S-03__en-GB__w1280__forced-dark",
+   "S-03__en-GB__w1280__forced-light",
+   "S-03__en-GB__w1280__light",
+   "S-03__en-GB__w1280__reduced-motion",
+   "S-03__en-GB__w1280__spacing",
+   "S-03__en-GB__w320__light",
+   "S-03__en-GB__w375__light",
+   "S-03__en-GB__zoom200proxy__light",
+   "S-03__en-GB__zoom400proxy__light",
+   "S-03__zh-Hans__w1280__light",
+   "S-114__en-GB__w1280__light",
+   "S-114__zh-Hans__w1280__light",
+   "S-119__en-GB__w1280__light",
+   "S-119__zh-Hans__w1280__light",
+   "S-126__en-GB__w1280__dark",
+   "S-126__en-GB__w1280__forced-dark",
+   "S-126__en-GB__w1280__forced-light",
+   "S-126__en-GB__w1280__light",
+   "S-126__en-GB__w1280__reduced-motion",
+   "S-126__en-GB__w320__light",
+   "S-126__zh-Hans__w1280__light",
+   "S-127__en-GB__w1280__light",
+   "S-127__en-GB__w320__light",
+   "S-135__en-GB__w1280__light",
+   "S-135__en-GB__w320__spacing",
+   "S-135__zh-Hans__w1280__light",
+   "S-140n__en-GB__w1280__light",
+   "S-141__en-GB__w1280__dark",
+   "S-141__en-GB__w1280__forced-dark",
+   "S-141__en-GB__w1280__forced-light",
+   "S-141__en-GB__w1280__light",
+   "S-141__en-GB__w1280__reduced-motion",
+   "S-141__en-GB__w320__light",
+   "S-141__en-GB__w320__spacing",
+   "S-141__ms-MY__w1280__light",
+   "S-145__en-GB__w1280__fallback",
+   "S-145__en-GB__w1280__font32",
+   "S-145__en-GB__w1280__light",
+   "S-145__en-GB__w320__light",
+   "S-145__ms-MY__w1280__light",
+   "S-145__zh-Hans__w1280__light",
+   "S-15__en-GB__landscape__light",
+   "S-15__en-GB__short__light",
+   "S-15__en-GB__w1280__dark",
+   "S-15__en-GB__w1280__fallback",
+   "S-15__en-GB__w1280__font32",
+   "S-15__en-GB__w1280__forced-dark",
+   "S-15__en-GB__w1280__forced-light",
+   "S-15__en-GB__w1280__light",
+   "S-15__en-GB__w1280__reduced-motion",
+   "S-15__en-GB__w1280__spacing",
+   "S-15__en-GB__w320__light",
+   "S-15__en-GB__w375__light",
+   "S-15__en-GB__zoom200proxy__light",
+   "S-15__en-GB__zoom400proxy__light",
+   "S-15__zh-Hans__w1280__light",
+   "S-17__en-GB__w1280__light",
+   "S-76__en-GB__w1280__dark",
+   "S-76__en-GB__w1280__fallback",
+   "S-76__en-GB__w1280__font32",
+   "S-76__en-GB__w1280__forced-dark",
+   "S-76__en-GB__w1280__forced-light",
+   "S-76__en-GB__w1280__light",
+   "S-76__en-GB__w1280__reduced-motion",
+   "S-76__en-GB__w1280__spacing",
+   "S-76__en-GB__w320__light",
+   "S-76__en-GB__zoom200proxy__light",
+   "S-76__en-GB__zoom400proxy__light",
+   "S-76__zh-Hans__w1280__light"
+  ],
+  "byClass": {
+   "lang": {
+    "en-GB": 67,
+    "zh-Hans": 8,
+    "ms-MY": 2
+   },
+   "view": {
+    "w1280": 55,
+    "w320": 10,
+    "landscape": 2,
+    "short": 2,
+    "w375": 2,
+    "zoom200proxy": 3,
+    "zoom400proxy": 3
+   },
+   "mode": {
+    "light": 44,
+    "dark": 5,
+    "fallback": 4,
+    "font32": 4,
+    "forced-dark": 5,
+    "forced-light": 5,
+    "reduced-motion": 5,
+    "spacing": 5
+   }
+  }
+ },
+ "observedKeysSha256": "fdc4e3dd17ebc634",
+ "measurements": {
+  "failing": {
+   "keys": 0,
+   "overflow": 0,
+   "ax": 0,
+   "targets": 0,
+   "contrastText": 0,
+   "contrastExtra": 0,
+   "measure": 0,
+   "type": 0,
+   "focus": 1,
+   "player": 0,
+   "formatTip": 0,
+   "footer": 0,
+   "limiting": 0,
+   "videoLanguage": 0,
+   "asserts": 0,
+   "motion": 0
+  },
+  "tally": {
+   "keys": {
+    "pass": 3,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 0,
+    "items": {
+     "pass": 50
+    }
+   },
+   "overflow": {
+    "pass": 74,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 0,
+    "items": {}
+   },
+   "ax": {
+    "pass": 74,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 0,
+    "items": {}
+   },
+   "targets": {
+    "pass": 50,
+    "fail": 0,
+    "cannot-determine": 24,
+    "not-applicable": 0,
+    "items": {
+     "exempt": 249,
+     "pass": 1543,
+     "cannot-determine": 47
+    }
+   },
+   "contrastText": {
+    "pass": 74,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 0,
+    "items": {
+     "exempt": 494,
+     "pass": 3484
+    }
+   },
+   "contrastExtra": {
+    "pass": 42,
+    "fail": 0,
+    "cannot-determine": 32,
+    "not-applicable": 0,
+    "items": {
+     "exempt": 121,
+     "pass": 368,
+     "cannot-determine": 65
+    }
+   },
+   "measure": {
+    "pass": 66,
+    "fail": 0,
+    "cannot-determine": 8,
+    "not-applicable": 0,
+    "items": {
+     "pass": 3480,
+     "cannot-determine": 10
+    }
+   },
+   "type": {
+    "pass": 74,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 0,
+    "items": {
+     "pass": 444
+    }
+   },
+   "focus": {
+    "pass": 60,
+    "fail": 1,
+    "cannot-determine": 13,
+    "not-applicable": 0,
+    "items": {
+     "pass": 219,
+     "cannot-determine": 27,
+     "fail": 1
+    }
+   },
+   "player": {
+    "pass": 0,
+    "fail": 0,
+    "cannot-determine": 14,
+    "not-applicable": 60,
+    "items": {
+     "exempt": 85,
+     "pass": 179,
+     "cannot-determine": 14
+    }
+   },
+   "formatTip": {
+    "pass": 23,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 51,
+    "items": {
+     "pass": 230,
+     "exempt": 74
+    }
+   },
+   "footer": {
+    "pass": 62,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 12,
+    "items": {
+     "pass": 372,
+     "exempt": 12
+    }
+   },
+   "limiting": {
+    "pass": 14,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 60,
+    "items": {
+     "exempt": 60,
+     "pass": 23
+    }
+   },
+   "videoLanguage": {
+    "pass": 74,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 0,
+    "items": {
+     "pass": 138,
+     "exempt": 42
+    }
+   },
+   "asserts": {
+    "pass": 71,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 3,
+    "items": {
+     "pass": 175,
+     "exempt": 18
+    }
+   },
+   "motion": {
+    "pass": 5,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 0,
+    "items": {
+     "exempt": 23,
+     "pass": 5
+    }
+   }
+  }
+ },
+ "artifacts": {
+  "count": 746,
+  "bytes": 34159709,
+  "listSha256": "8f500653a1f3aa0c",
+  "list": "artifacts.json (each capture: path, bytes, sha256)"
+ },
+ "unresolved": {
+  "fromMeasurements": [
+   {
+    "instrument": "contrastExtra",
+    "kind": "measurement",
+    "why": "painted pseudo-elements: non-text contrast needs a pixel reading (person check)",
+    "records": [
+     "S-114__en-GB__w1280__light",
+     "S-114__zh-Hans__w1280__light",
+     "S-119__en-GB__w1280__light",
+     "S-119__zh-Hans__w1280__light",
+     "S-126__en-GB__w1280__dark",
+     "S-126__en-GB__w1280__forced-dark"
+    ],
+    "rows": 64,
+    "recordCount": 32
+   },
+   {
+    "instrument": "targets",
+    "kind": "interpretation",
+    "why": "a disc: its hit box is n x n, no n px square fits inside; the reading is VH-n's",
+    "records": [
+     "S-114__en-GB__w1280__light",
+     "S-114__zh-Hans__w1280__light",
+     "S-119__en-GB__w1280__light",
+     "S-119__zh-Hans__w1280__light",
+     "S-135__en-GB__w1280__light",
+     "S-135__en-GB__w320__spacing"
+    ],
+    "rows": 46,
+    "recordCount": 23
+   },
+   {
+    "instrument": "focus",
+    "kind": "interpretation",
+    "why": "passes against the painted disc, fails against the n px circular reference: the reading is VH-n's",
+    "records": [
+     "S-15__en-GB__landscape__light",
+     "S-15__en-GB__short__light",
+     "S-15__en-GB__w1280__fallback",
+     "S-15__en-GB__w1280__font32",
+     "S-15__en-GB__w1280__forced-light",
+     "S-15__en-GB__w1280__light"
+    ],
+    "rows": 26,
+    "recordCount": 13
+   },
+   {
+    "instrument": "player",
+    "kind": "measurement",
+    "why": "no box for the control: empty",
+    "records": [
+     "S-114__en-GB__w1280__light",
+     "S-114__zh-Hans__w1280__light",
+     "S-126__en-GB__w1280__dark",
+     "S-126__en-GB__w1280__forced-dark",
+     "S-126__en-GB__w1280__forced-light",
+     "S-126__en-GB__w1280__light"
+    ],
+    "rows": 14,
+    "recordCount": 14
+   },
+   {
+    "instrument": "measure",
+    "kind": "interpretation",
+    "why": "mixed scripts: each character against n and CJK n plus Latin n disagree; the reading is VH-n's",
+    "records": [
+     "S-03__zh-Hans__w1280__light",
+     "S-114__zh-Hans__w1280__light",
+     "S-119__zh-Hans__w1280__light",
+     "S-126__zh-Hans__w1280__light",
+     "S-135__zh-Hans__w1280__light",
+     "S-145__zh-Hans__w1280__light"
+    ],
+    "rows": 10,
+    "recordCount": 8
+   },
+   {
+    "instrument": "focus",
+    "kind": "measurement",
+    "why": "no element",
+    "records": [
+     "S-140n__en-GB__w1280__light"
+    ],
+    "rows": 1,
+    "recordCount": 1
+   },
+   {
+    "instrument": "contrastExtra",
+    "kind": "measurement",
+    "why": "changed pixels lie outside the button's content box: not glyphs alone",
+    "records": [
+     "S-15__en-GB__landscape__light"
+    ],
+    "rows": 1,
+    "recordCount": 1
+   },
+   {
+    "instrument": "targets",
+    "kind": "measurement",
+    "why": "larger than the viewport or clipped",
+    "records": [
+     "S-76__en-GB__zoom400proxy__light"
+    ],
+    "rows": 1,
+    "recordCount": 1
+   }
+  ],
+  "manual": [
+   "Chrome page zoom at 200% and 400% itself (proxy views stand in; on the person list)",
+   "what a screen reader says (exposure only: the AX tree and the DOM change log are persisted per record)",
+   "native select popups by keys; the video player's inner controls are walked by the focused accessibility node (P-06), their rings read on a held frame with the user agent's 2.4.13 exception where it holds, and a control Tab does not reach, or one whose box is empty at rest (the volume slider), is cannot determine",
+   "transient states: asserted before and after the instruments, not captured mid-transition",
+   "a dialog's entry, use and exit at enlargement: overflow and clipping are measured there; the keys route runs at 1280 only",
+   "a range thumb and track: non-text contrast by pixels (cannot determine in contrastExtra)",
+   "synthetic text-only enlargement: not run",
+   "off-page elements (the skip link before focus): target and contrast read when shown, by the person",
+   "S-12 left out of the matrix: Reading is over before the instruments finish, even for the 6-hour still (VH-172 smoke: the read line had become \"Video read.\" by the re-check); no declared fault holds the read",
+   "S-13 left out of the matrix: as S-12: the replacement's read is over before the instruments finish; the settled S-63 is measured instead",
+   "S-34 left out of the matrix: the check after a trim lasts about as long as any check of a short file, well under the instruments' run; S-14 holds the same checking state on the 6-hour still, so this one is not measured apart",
+   "S-51 left out of the matrix: Cancelling lasts about 9 ms (scenario list), far under the instruments' run, and no declared fault holds it",
+   "S-104 source-only, never walked: \"Unknown\" alone: walked only if N11 reads with no duration (scenarios file); it does not: the page reads noduration-10s.webm as \"10 seconds\" (fixtures-proof-2026-10-25.json, N11), and no other fixture is known that the page reads with a fact missing; src/ui/format.test.ts and src/ui/source-panel.test.ts",
+   "S-154 source-only, never walked: VH-186's estimate with no time: no fixture gives a non-finite estimate; src/ui/preflight-panel.test.ts:175, and a fact not read beyond the duration by src/ui/format.test.ts:45 and :50 and src/ui/source-panel.test.ts:332 (P-03)",
+   "S-05 (Machine-translation notice) only in zh-Hans, ms-MY: the notice is never shown on the English page (src/ui/language-switcher.ts:140)",
+   "S-26a (Phone discouraged) only at w375: the mobile-device verdict needs the phone view (userAgentData.mobile, set by asPhone, src/media/capability.ts:72); at 1280 and 320 px the page is a computer",
+   "S-26b (Phone discouraged: acknowledged, Create shown) only at w375: the mobile-device verdict needs the phone view (userAgentData.mobile, set by asPhone, src/media/capability.ts:72); at 1280 and 320 px the page is a computer",
+   "S-93 (Trim Page step, an hour) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-94 (Trim Page step at the 1% boundary) only in en-GB: the plan's recipe ONE: a slow setup, walked once (sizing-2026-10-25.mjs)",
+   "S-94 (Trim Page step at the 1% boundary) only at w1280: the plan's recipe ONE",
+   "S-100 (A kept sliver: the job finishes silent) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-101 (The control: 0.6 s of sound kept) only in en-GB: the plan's recipe ONE: a slow setup, walked once (sizing-2026-10-25.mjs)",
+   "S-101 (The control: 0.6 s of sound kept) only at w1280: the plan's recipe ONE",
+   "S-102 (An untrimmed file with under 400 ms of sound (wish VH-185.1)) only in en-GB: the plan's recipe ONE: a slow setup, walked once (sizing-2026-10-25.mjs)",
+   "S-102 (An untrimmed file with under 400 ms of sound (wish VH-185.1)) only at w1280: the plan's recipe ONE",
+   "S-112 (Below about 400 px: the \"?\" beside \"Plays over\") only at w401, w400, w375, w320: scenarios file: either side of the 25rem query",
+   "S-113 (Step 4 at the 32 px font) only at w1280, w640, w401, w320: scenarios file: at 1280, 640, 401 and 320 px under the 32 px font",
+   "S-115 (Create again, saved) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-118 (Made again, then cancelled or failed) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-123 (Video language locked while running) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-124 (Video language locked while saving, and freed) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-130 (The player through a download hand-off) only at w375: the plan's recipe: the phone, three languages (sizing-2026-10-25.mjs)",
+   "S-131 (Saved: the player leaves) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-132 (A failed playback) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-133 (A cancelled or failed save keeps the player) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-134 (A back-forward-cache restore) only in en-GB: the plan's recipe ONE: a slow setup, walked once (sizing-2026-10-25.mjs)",
+   "S-134 (A back-forward-cache restore) only at w1280: the plan's recipe ONE",
+   "S-136 (Both production warnings) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-138 (Both warnings on a retained result) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-139 (A level file does not warn) only in en-GB: the plan's recipe ONE: a slow setup, walked once (sizing-2026-10-25.mjs)",
+   "S-139 (A level file does not warn) only at w1280: the plan's recipe ONE",
+   "S-140 (A QuickTime Animation file with no audio (wish VH-193.3), the closing asset) only in en-GB: the plan's recipe ONE: a slow setup, walked once (sizing-2026-10-25.mjs)",
+   "S-140 (A QuickTime Animation file with no audio (wish VH-193.3), the closing asset) only at w1280: the plan's recipe ONE",
+   "S-140n (A QuickTime Animation file with no audio, N13 (the closing asset's made twin)) only in en-GB: the plan's recipe ONE: a slow setup, walked once (sizing-2026-10-25.mjs)",
+   "S-140n (A QuickTime Animation file with no audio, N13 (the closing asset's made twin)) only at w1280: the plan's recipe ONE",
+   "S-144 (The lede at 320 px with its tip open) only in en-GB: the plan's recipe: English at 320 px open; S-144p takes the three languages closed",
+   "S-144 (The lede at 320 px with its tip open) only at w320: the plan's recipe",
+   "S-144p (The lede closed: the file button's place) only at w1280, w800, w375, w320: the plan's recipe: 1280 x 900, 800 x 600, 375 x 812 and 320 x 568",
+   "S-149 (Focus on Video language when a check blocks) only at w1280: the plan's recipe COLOUR12: three languages at 1280 px in four colour modes",
+   "S-150 (A job made with focus on Announce progress) only at w1280: the plan's recipe COLOUR12: three languages at 1280 px in four colour modes",
+   "S-151 (Completion with Announce progress off) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-152 (A failed playback beside the limiting warning) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-153 (A kept sound that frame placement takes over one block) only in en-GB: the plan's recipe ONE: a slow setup, walked once (sizing-2026-10-25.mjs)",
+   "S-153 (A kept sound that frame placement takes over one block) only at w1280: the plan's recipe ONE",
+   "S-84 (page language at narrow width) is S-03 at 320 px: the light matrix covers it"
+  ]
+ },
+ "timing": {
+  "wallClockSeconds": 557,
+  "measured": {
+   "route": {
+    "records": 10,
+    "measured_s": 94,
+    "estimate_s": 238,
+    "ratio": 0.396
+   },
+   "carried": {
+    "records": 43,
+    "measured_s": 288,
+    "estimate_s": 327,
+    "ratio": 0.881
+   },
+   "phase8": {
+    "records": 30,
+    "measured_s": 235,
+    "estimate_s": 297,
+    "ratio": 0.79
+   },
+   "qtrle": {
+    "records": 1,
+    "measured_s": 4,
+    "estimate_s": 86,
+    "ratio": 0.041
+   },
+   "journey": {
+    "records": 16,
+    "measured_s": 671,
+    "estimate_s": 1370,
+    "ratio": 0.489
+   }
+  },
+  "overall": {
+   "measured_s": 1292,
+   "estimate_s": 2318,
+   "ratio": 0.557
+  }
+ },
+ "calibration": {
+  "method": "each record's measured seconds (its group's setup on the first record, then its own) against the sizing script's estimate for the same records, by class: carried, Phase 8, the short routes; J1 to J4, which the pilot does not hold, keep the script's estimate; part 2's transitions keep VH-176's measured 1,250 s; S-140 and S-140n block at read, so their 900 s and 120 s allowances fall to the read",
+  "parts": [
+   {
+    "part": "1",
+    "records": 699,
+    "transitions": 0,
+    "estimate_s": 8610,
+    "calibrated_s": 7304
+   },
+   {
+    "part": "2",
+    "records": 157,
+    "transitions": 48,
+    "estimate_s": 2234,
+    "calibrated_s": 2117
+   },
+   {
+    "part": "3",
+    "records": 2131,
+    "transitions": 0,
+    "estimate_s": 22525,
+    "calibrated_s": 18078
+   },
+   {
+    "part": "3b",
+    "records": 216,
+    "transitions": 0,
+    "estimate_s": 6645,
+    "calibrated_s": 5705
+   },
+   {
+    "part": "4",
+    "records": 16,
+    "transitions": 0,
+    "estimate_s": 885,
+    "calibrated_s": 413
+   }
+  ],
+  "runs": [
+   {
+    "name": "run-01",
+    "part": "1",
+    "records": 369,
+    "transitions": 0,
+    "estimate_s": 4303,
+    "calibrated_s": 3755
+   },
+   {
+    "name": "run-02",
+    "part": "1",
+    "records": 330,
+    "transitions": 0,
+    "estimate_s": 4307,
+    "calibrated_s": 3548
+   },
+   {
+    "name": "run-03",
+    "part": "2",
+    "records": 157,
+    "transitions": 48,
+    "estimate_s": 2234,
+    "calibrated_s": 2117
+   },
+   {
+    "name": "run-04",
+    "part": "3",
+    "records": 358,
+    "transitions": 0,
+    "estimate_s": 3757,
+    "calibrated_s": 3115
+   },
+   {
+    "name": "run-05",
+    "part": "3",
+    "records": 383,
+    "transitions": 0,
+    "estimate_s": 3742,
+    "calibrated_s": 2587
+   },
+   {
+    "name": "run-06",
+    "part": "3",
+    "records": 338,
+    "transitions": 0,
+    "estimate_s": 3758,
+    "calibrated_s": 3059
+   },
+   {
+    "name": "run-07",
+    "part": "3",
+    "records": 355,
+    "transitions": 0,
+    "estimate_s": 3756,
+    "calibrated_s": 3135
+   },
+   {
+    "name": "run-08",
+    "part": "3",
+    "records": 367,
+    "transitions": 0,
+    "estimate_s": 3756,
+    "calibrated_s": 3082
+   },
+   {
+    "name": "run-09",
+    "part": "3",
+    "records": 330,
+    "transitions": 0,
+    "estimate_s": 3757,
+    "calibrated_s": 3099
+   },
+   {
+    "name": "run-10",
+    "part": "3b",
+    "records": 103,
+    "transitions": 0,
+    "estimate_s": 3323,
+    "calibrated_s": 2830
+   },
+   {
+    "name": "run-11",
+    "part": "3b",
+    "records": 113,
+    "transitions": 0,
+    "estimate_s": 3322,
+    "calibrated_s": 2874
+   },
+   {
+    "name": "run-12",
+    "part": "4",
+    "records": 16,
+    "transitions": 0,
+    "estimate_s": 885,
+    "calibrated_s": 413
+   }
+  ],
+  "totalCalibrated_h": 9.3
+ },
+ "parts": {
+  "ok": true,
+  "problems": [],
+  "total": 3267,
+  "scriptTotal": 3298,
+  "sourceOnly": 31,
+  "runsSha": "05493ee20ebbfc06",
+  "rows": [
+   {
+    "part": "1",
+    "name": "part1",
+    "declared": 699,
+    "scenarioRecords": 699,
+    "transitions": 0,
+    "sourceOnly": 0,
+    "script": 699,
+    "plan": 699,
+    "scenarios": 120,
+    "scriptEstimate_s": 8600,
+    "estimate_s": 8610
+   },
+   {
+    "part": "2",
+    "name": "part2",
+    "declared": 205,
+    "scenarioRecords": 157,
+    "transitions": 48,
+    "sourceOnly": 0,
+    "script": 205,
+    "plan": 205,
+    "scenarios": 15,
+    "scriptEstimate_s": 2202,
+    "estimate_s": 2234
+   },
+   {
+    "part": "3",
+    "name": "part3",
+    "declared": 2131,
+    "scenarioRecords": 2131,
+    "transitions": 0,
+    "sourceOnly": 31,
+    "script": 2162,
+    "plan": 2162,
+    "scenarios": 143,
+    "scriptEstimate_s": 22721,
+    "estimate_s": 22525
+   },
+   {
+    "part": "3b",
+    "name": "part3b",
+    "declared": 216,
+    "scenarioRecords": 216,
+    "transitions": 0,
+    "sourceOnly": 0,
+    "script": 216,
+    "plan": 184,
+    "scenarios": 48,
+    "scriptEstimate_s": 6645,
+    "estimate_s": 6645
+   },
+   {
+    "part": "4",
+    "name": "part4",
+    "declared": 16,
+    "scenarioRecords": 16,
+    "transitions": 0,
+    "sourceOnly": 0,
+    "script": 16,
+    "plan": 16,
+    "scenarios": 5,
+    "scriptEstimate_s": 885,
+    "estimate_s": 885
+   }
+  ],
+  "runs": [
+   {
+    "name": "run-01",
+    "part": "1",
+    "records": 369,
+    "transitions": 0,
+    "scenarios": 60,
+    "estimate_s": 4303,
+    "ids": [
+     "S-02",
+     "S-03",
+     "S-05",
+     "S-06a",
+     "S-08",
+     "S-10",
+     "S-14",
+     "S-17",
+     "S-19",
+     "S-22",
+     "S-26b",
+     "S-27",
+     "S-29",
+     "S-31",
+     "S-32",
+     "S-35",
+     "S-37b",
+     "S-38",
+     "S-39",
+     "S-41",
+     "S-42",
+     "S-ID1",
+     "S-ID3",
+     "S-45b",
+     "S-47a",
+     "S-47b",
+     "S-48",
+     "S-49",
+     "S-52",
+     "S-53",
+     "S-53-LW",
+     "S-54a",
+     "S-54b",
+     "S-54d",
+     "S-55c",
+     "S-57",
+     "S-58",
+     "S-58-LW",
+     "S-59",
+     "S-60",
+     "S-61",
+     "S-63-LW",
+     "S-68",
+     "S-69",
+     "S-70b",
+     "S-71",
+     "S-74",
+     "S-75",
+     "S-78",
+     "S-79a",
+     "S-80a",
+     "S-81",
+     "S-83",
+     "S-85",
+     "S-87",
+     "S-89",
+     "S-90a",
+     "S-90b",
+     "J3",
+     "K-dialog"
+    ]
+   },
+   {
+    "name": "run-02",
+    "part": "1",
+    "records": 330,
+    "transitions": 0,
+    "scenarios": 60,
+    "estimate_s": 4307,
+    "ids": [
+     "S-01",
+     "S-01b",
+     "S-04",
+     "S-06b",
+     "S-07",
+     "S-09",
+     "S-11",
+     "S-15",
+     "S-16",
+     "S-18",
+     "S-20",
+     "S-21",
+     "S-23",
+     "S-24",
+     "S-25a",
+     "S-25b",
+     "S-26a",
+     "S-28",
+     "S-30",
+     "S-33",
+     "S-36",
+     "S-37a",
+     "S-40",
+     "S-ID2",
+     "S-43",
+     "S-44",
+     "S-45a",
+     "S-46",
+     "S-47c",
+     "S-50",
+     "S-53-W",
+     "S-54c",
+     "S-55a",
+     "S-55b",
+     "S-56",
+     "S-58-W",
+     "S-62",
+     "S-63",
+     "S-63-W",
+     "S-64",
+     "S-65",
+     "S-66",
+     "S-67",
+     "S-70a",
+     "S-70c",
+     "S-72a",
+     "S-72b",
+     "S-73",
+     "S-76",
+     "S-77",
+     "S-78k",
+     "S-79b",
+     "S-80b",
+     "S-82",
+     "S-86",
+     "S-88",
+     "S-91",
+     "J1",
+     "J2",
+     "J4"
+    ]
+   },
+   {
+    "name": "run-03",
+    "part": "2",
+    "records": 157,
+    "transitions": 48,
+    "scenarios": 15,
+    "estimate_s": 2234,
+    "ids": [
+     "S-79a",
+     "S-79b",
+     "S-15",
+     "S-03",
+     "S-58",
+     "S-07",
+     "S-16",
+     "S-16-45",
+     "S-16-120",
+     "S-47a",
+     "S-47b",
+     "S-47c",
+     "S-53",
+     "S-17",
+     "S-46"
+    ]
+   },
+   {
+    "name": "run-04",
+    "part": "3",
+    "records": 358,
+    "transitions": 0,
+    "scenarios": 23,
+    "estimate_s": 3757,
+    "ids": [
+     "S-97",
+     "S-107",
+     "S-116",
+     "S-128",
+     "S-131",
+     "S-135",
+     "S-143",
+     "S-149",
+     "S-07",
+     "S-14",
+     "S-53-LW",
+     "S-64",
+     "S-01b",
+     "S-56",
+     "S-78",
+     "S-86",
+     "S-89",
+     "S-90a",
+     "S-59",
+     "S-61",
+     "S-66",
+     "S-69",
+     "S-72b"
+    ]
+   },
+   {
+    "name": "run-05",
+    "part": "3",
+    "records": 383,
+    "transitions": 0,
+    "scenarios": 24,
+    "estimate_s": 3742,
+    "ids": [
+     "S-92",
+     "S-103",
+     "S-110",
+     "S-113",
+     "S-121",
+     "S-122",
+     "S-132",
+     "S-134",
+     "S-140",
+     "S-141",
+     "S-144",
+     "S-147",
+     "S-17",
+     "S-47c",
+     "S-53-W",
+     "S-55b",
+     "S-01",
+     "S-23",
+     "S-71",
+     "S-78k",
+     "S-91",
+     "S-54b",
+     "S-60",
+     "S-70a"
+    ]
+   },
+   {
+    "name": "run-06",
+    "part": "3",
+    "records": 338,
+    "transitions": 0,
+    "scenarios": 24,
+    "estimate_s": 3758,
+    "ids": [
+     "S-95",
+     "S-105",
+     "S-111",
+     "S-112",
+     "S-118",
+     "S-125",
+     "S-136",
+     "S-137",
+     "S-139",
+     "S-140n",
+     "S-148",
+     "S-41",
+     "S-43",
+     "S-53",
+     "S-55c",
+     "S-58-W",
+     "S-02",
+     "S-30",
+     "S-52",
+     "S-80a",
+     "S-90b",
+     "S-54a",
+     "S-54c",
+     "S-70b"
+    ]
+   },
+   {
+    "name": "run-07",
+    "part": "3",
+    "records": 355,
+    "transitions": 0,
+    "scenarios": 24,
+    "estimate_s": 3756,
+    "ids": [
+     "S-93",
+     "S-94",
+     "S-96",
+     "S-106",
+     "S-114",
+     "S-115",
+     "S-127",
+     "S-142",
+     "S-150",
+     "S-153",
+     "S-04",
+     "S-47b",
+     "S-55a",
+     "S-58-LW",
+     "S-76",
+     "S-83",
+     "S-06a",
+     "S-31",
+     "S-57",
+     "S-80b",
+     "S-54d",
+     "S-62",
+     "S-70c",
+     "S-72a"
+    ]
+   },
+   {
+    "name": "run-08",
+    "part": "3",
+    "records": 367,
+    "transitions": 0,
+    "scenarios": 24,
+    "estimate_s": 3756,
+    "ids": [
+     "S-98",
+     "S-101",
+     "S-108",
+     "S-117",
+     "S-124",
+     "S-126",
+     "S-129",
+     "S-138",
+     "S-144p",
+     "S-145",
+     "S-151",
+     "S-24",
+     "S-36",
+     "S-46",
+     "S-63",
+     "S-63-W",
+     "S-75",
+     "S-08",
+     "S-16",
+     "S-79b",
+     "S-82",
+     "S-65",
+     "S-67",
+     "S-88"
+    ]
+   },
+   {
+    "name": "run-09",
+    "part": "3",
+    "records": 330,
+    "transitions": 0,
+    "scenarios": 24,
+    "estimate_s": 3757,
+    "ids": [
+     "S-99",
+     "S-100",
+     "S-102",
+     "S-109",
+     "S-119",
+     "S-120",
+     "S-123",
+     "S-130",
+     "S-133",
+     "S-146",
+     "S-152",
+     "S-03",
+     "S-15",
+     "S-40",
+     "S-47a",
+     "S-48",
+     "S-58",
+     "S-63-LW",
+     "S-77",
+     "S-45b",
+     "S-79a",
+     "S-81",
+     "S-50",
+     "S-68"
+    ]
+   },
+   {
+    "name": "run-10",
+    "part": "3b",
+    "records": 103,
+    "transitions": 0,
+    "scenarios": 25,
+    "estimate_s": 3323,
+    "ids": [
+     "S-05",
+     "S-11",
+     "S-19",
+     "S-21",
+     "S-22",
+     "S-26b",
+     "S-28",
+     "S-33",
+     "S-37a",
+     "S-37b",
+     "S-42",
+     "S-ID3",
+     "S-45a",
+     "S-49",
+     "S-74",
+     "S-85",
+     "S-93",
+     "S-100",
+     "S-113",
+     "S-115",
+     "S-123",
+     "S-124",
+     "S-131",
+     "S-136",
+     "S-152"
+    ]
+   },
+   {
+    "name": "run-11",
+    "part": "3b",
+    "records": 113,
+    "transitions": 0,
+    "scenarios": 23,
+    "estimate_s": 3322,
+    "ids": [
+     "S-06b",
+     "S-09",
+     "S-10",
+     "S-18",
+     "S-20",
+     "S-25a",
+     "S-25b",
+     "S-26a",
+     "S-27",
+     "S-29",
+     "S-32",
+     "S-35",
+     "S-38",
+     "S-39",
+     "S-ID2",
+     "S-44",
+     "S-73",
+     "S-87",
+     "S-118",
+     "S-132",
+     "S-133",
+     "S-138",
+     "S-151"
+    ]
+   },
+   {
+    "name": "run-12",
+    "part": "4",
+    "records": 16,
+    "transitions": 0,
+    "scenarios": 5,
+    "estimate_s": 885,
+    "ids": [
+     "J2",
+     "J3",
+     "J4",
+     "K-dialog",
+     "K-player"
+    ]
+   }
+  ],
+  "reconciliation": {
+   "part3bBeyondPlan": {
+    "records": 32,
+    "byScenario": [
+     "S-93 2",
+     "S-100 2",
+     "S-113 6",
+     "S-115 2",
+     "S-118 2",
+     "S-123 2",
+     "S-124 2",
+     "S-131 2",
+     "S-132 2",
+     "S-133 2",
+     "S-136 2",
+     "S-138 2",
+     "S-151 2",
+     "S-152 2"
+    ],
+    "cells": [
+     "zh-Hans w320 light",
+     "ms-MY w320 light",
+     "en-GB w1280 light",
+     "en-GB w320 light",
+     "zh-Hans w1280 light",
+     "ms-MY w1280 light"
+    ]
+   },
+   "part3SourceOnly": {
+    "records": 31,
+    "byScenario": [
+     "S-104 31"
+    ]
+   },
+   "part1Widened": [
+    "S-03|zh-Hans|w1280|light: 0 → 1 (#file-input)",
+    "S-03|ms-MY|w1280|light: 0 → 1 (#file-input)",
+    "S-03|zh-Hans|w1280|dark: 0 → 1 (#file-input)",
+    "S-03|zh-Hans|w1280|forced-light: 0 → 1 (#file-input)",
+    "S-03|zh-Hans|w1280|forced-dark: 0 → 1 (#file-input)"
+   ],
+   "transitionsInBothSets": [
+    "T-46.1 en-GB light",
+    "T-46.2 en-GB light",
+    "T-46.3 en-GB light"
+   ]
+  }
+ },
+ "proofs": [
+  {
+   "file": "prove-2026-10-25.json",
+   "results": 77,
+   "proved": 77,
+   "instrumentsRevision": "6ed245d297623aec"
+  },
+  {
+   "file": "prove-172-2026-10-25.json",
+   "results": 8,
+   "proved": 8,
+   "instrumentsRevision": "6ed245d297623aec"
+  },
+  {
+   "file": "prove-8-2026-10-25.json",
+   "results": 31,
+   "proved": 31,
+   "instrumentsRevision": "6ed245d297623aec"
+  },
+  {
+   "file": "faults-check-2026-10-25.json",
+   "results": 27,
+   "reachedTheirState": 27,
+   "instrumentsRevision": "6ed245d297623aec"
+  },
+  {
+   "file": "fixtures-proof-2026-10-25.json",
+   "results": 9,
+   "passed": 8,
+   "instrumentsRevision": "the first agent's, at 20440da's walker; no fixture recipe changed since",
+   "exception": "N11 reads as 10 seconds: S-104 source-only by its contingency"
+  }
+ ],
+ "routes": [
+  {
+   "run": "part1-part-2026-10-25T22-33-54-171Z-c68558",
+   "instrumentsRevision": "6ed245d297623aec",
+   "expected": 7,
+   "observed": 7,
+   "whole": true,
+   "problems": [],
+   "keys": {
+    "pass": 3,
+    "fail": 0,
+    "cannot-determine": 4,
+    "not-applicable": 0,
+    "items": {
+     "pass": 295,
+     "cannot-determine": 4
+    }
+   },
+   "observedKeysSha256": "2be13220af6d5b78"
+  },
+  {
+   "run": "part4-2026-10-25T22-39-48-171Z-1844bf",
+   "instrumentsRevision": "6ed245d297623aec",
+   "expected": 16,
+   "observed": 16,
+   "whole": true,
+   "problems": [],
+   "keys": {
+    "pass": 16,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 0,
+    "items": {
+     "pass": 403
+    }
+   },
+   "observedKeysSha256": "e7e9580dd4964937"
+  }
+ ],
+ "transitions": {
+  "run": "transitions-run-03-2026-10-25T22-46-10-562Z",
+  "plan": "run-03",
+  "instrumentsRevision": "6ed245d297623aec",
+  "coverage": {
+   "expected": 48,
+   "observed": 48,
+   "whole": true,
+   "problems": [],
+   "expectedKeysSha256": "c5ed7d541ac7f106",
+   "observedKeysSha256": "c5ed7d541ac7f106"
+  },
+  "outcomes": {
+   "pass": 48
+  },
+  "seconds": 1272,
+  "browserCommandLine": {
+   "source": "ps -o args= -p 15773 (the browser process)",
+   "arguments": [
+    "--headless=new",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--disable-background-timer-throttling",
+    "--disable-renderer-backgrounding",
+    "--disable-backgrounding-occluded-windows"
+   ],
+   "visiblePageFlagsMissing": []
+  }
+ },
+ "candidateFindings": [
+  "S-15 at the 32 px default font: step 5's checked output's ring 284 of 304 px² (2.4.13); in VH-176's after-run the record's focus was cannot-determine from the thumbs alone. For VH-200; not rank 1",
+  "T-46.1: the focused card runs past the window (292 to 990 px of 900 in English, 255 to 953 in Chinese and Malay) where VH-176 read it inside (292 to 518), the player having made the card taller. For VH-200"
+ ],
+ "s140": {
+  "cause": "not a OneDrive placeholder (no dataless flag; 154,096 blocks of 512 bytes for 78,894,855 bytes) nor a sandbox: the page reads the file, finds a QuickTime Animation (qtrle) video track Chrome cannot decode, and blocks at step 1 with failure.reasons.noSourceDecodeHere in about 2 to 3 s; N13 the same",
+  "ownerAction": "none"
+ }
+}

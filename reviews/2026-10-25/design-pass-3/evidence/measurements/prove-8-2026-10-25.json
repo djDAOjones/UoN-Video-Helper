@@ -42,35 +42,35 @@
      {
       "role": "button",
       "name": "play",
-      "dom": 52,
+      "dom": 53,
       "ignored": false,
       "host": false
      },
      {
       "role": "slider",
       "name": "volume",
-      "dom": 59,
+      "dom": 60,
       "ignored": false,
       "host": false
      },
      {
       "role": "button",
       "name": "un-mute",
-      "dom": 66,
-      "ignored": false,
-      "host": false
-     },
-     {
-      "role": "button",
-      "name": "enter full screen",
       "dom": 67,
       "ignored": false,
       "host": false
      },
      {
       "role": "button",
+      "name": "enter full screen",
+      "dom": 68,
+      "ignored": false,
+      "host": false
+     },
+     {
+      "role": "button",
       "name": "show more media controls",
-      "dom": 69,
+      "dom": 17,
       "ignored": false,
       "host": false
      },
@@ -102,31 +102,31 @@
      {
       "role": "button",
       "name": "play",
-      "dom": 52,
+      "dom": 53,
       "ignored": false
      },
      {
       "role": "slider",
       "name": "volume",
-      "dom": 59,
+      "dom": 60,
       "ignored": false
      },
      {
       "role": "button",
       "name": "un-mute",
-      "dom": 66,
-      "ignored": false
-     },
-     {
-      "role": "button",
-      "name": "enter full screen",
       "dom": 67,
       "ignored": false
      },
      {
       "role": "button",
+      "name": "enter full screen",
+      "dom": 68,
+      "ignored": false
+     },
+     {
+      "role": "button",
       "name": "show more media controls",
-      "dom": 69,
+      "dom": 17,
       "ignored": false
      },
      {
@@ -311,31 +311,31 @@
      {
       "role": "button",
       "name": "play",
-      "dom": 53,
+      "dom": 52,
       "ignored": false
      },
      {
       "role": "slider",
       "name": "volume",
-      "dom": 60,
+      "dom": 59,
       "ignored": false
      },
      {
       "role": "button",
       "name": "un-mute",
-      "dom": 67,
+      "dom": 66,
       "ignored": false
      },
      {
       "role": "button",
       "name": "enter full screen",
-      "dom": 68,
+      "dom": 67,
       "ignored": false
      },
      {
       "role": "button",
       "name": "show more media controls",
-      "dom": 17,
+      "dom": 69,
       "ignored": false
      },
      {
@@ -425,7 +425,7 @@
      {
       "role": "slider",
       "name": "video time scrubber",
-      "dom": 9,
+      "dom": 12,
       "ignored": false,
       "host": false
      }
@@ -480,7 +480,7 @@
      {
       "role": "slider",
       "name": "video time scrubber",
-      "dom": 9,
+      "dom": 12,
       "ignored": false
      }
     ]
@@ -650,8 +650,8 @@
     "what": "first in the line spoken at completion, inside its interval",
     "outcome": "fail",
     "interval": [
-     1792962206811,
-     1792962210996
+     1792967062698,
+     1792967066886
     ],
     "texts": [
      "Your video is ready."
@@ -671,8 +671,8 @@
     "what": "first in the line spoken at completion, inside its interval",
     "outcome": "pass",
     "interval": [
-     1792962208091,
-     1792962212282
+     1792967063990,
+     1792967068173
     ],
     "texts": [
      "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across."

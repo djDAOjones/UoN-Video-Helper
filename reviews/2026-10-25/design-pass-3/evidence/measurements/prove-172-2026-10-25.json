@@ -1,0 +1,218 @@
+[
+ {
+  "instrument": "pressed",
+  "fixture": "pressed-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "why": "pressed looks as hovered",
+   "active": true,
+   "hoverBg": "rgb(0, 80, 230)",
+   "downBg": "rgb(0, 80, 230)",
+   "hoverVsDown": {
+    "changedAny": 0,
+    "changedAt3to1": 0,
+    "best": 1
+   },
+   "keyboard": {
+    "outcome": "fail",
+    "ringDrawn": true,
+    "upVsHeld": {
+     "changedAny": 0,
+     "changedAt3to1": 0,
+     "best": 1
+    }
+   }
+  }
+ },
+ {
+  "instrument": "pressed",
+  "fixture": "pressed-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "active": true,
+   "hoverBg": "rgb(0, 80, 230)",
+   "downBg": "rgb(0, 45, 156)",
+   "hoverVsDown": {
+    "changedAny": 3233,
+    "changedAt3to1": 0,
+    "best": 1.77
+   },
+   "keyboard": {
+    "outcome": "pass",
+    "ringDrawn": true,
+    "upVsHeld": {
+     "changedAny": 3244,
+     "changedAt3to1": 0,
+     "best": 2.26
+    }
+   }
+  }
+ },
+ {
+  "instrument": "pressed",
+  "fixture": "pressed-ring-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "why": "the focus ring is not drawn while Space is held",
+   "active": true,
+   "hoverBg": "rgb(0, 80, 230)",
+   "downBg": "rgb(0, 45, 156)",
+   "hoverVsDown": {
+    "changedAny": 3233,
+    "changedAt3to1": 0,
+    "best": 1.77
+   },
+   "keyboard": {
+    "outcome": "fail",
+    "ringDrawn": false,
+    "upVsHeld": {
+     "changedAny": 3784,
+     "changedAt3to1": 540,
+     "best": 18.1
+    }
+   }
+  }
+ },
+ {
+  "instrument": "pressed",
+  "fixture": "disabled-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "why": "a disabled control changes when held",
+   "active": true,
+   "hoverBg": "rgb(198, 198, 198)",
+   "downBg": "rgb(141, 141, 141)",
+   "restVsDown": {
+    "changedAny": 3269,
+    "changedAt3to1": 0,
+    "best": 1.95
+   }
+  }
+ },
+ {
+  "instrument": "pressed",
+  "fixture": "disabled-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "why": "disabled wins: the press leaves the rest look",
+   "active": true,
+   "hoverBg": "rgb(198, 198, 198)",
+   "downBg": "rgb(198, 198, 198)",
+   "restVsDown": {
+    "changedAny": 0,
+    "changedAt3to1": 0,
+    "best": 1
+   }
+  }
+ },
+ {
+  "instrument": "pressed",
+  "fixture": "a press never clicks",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "title": "fixture"
+  }
+ },
+ {
+  "instrument": "type",
+  "fixture": "type-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "look": "Lora / 1.75rem / 1.25 / 700",
+    "role": "page title",
+    "rendered": "Times ×5",
+    "outcome": "pass"
+   },
+   {
+    "look": "Lora / 1.25rem / 1.4 / 700",
+    "role": "panel heading",
+    "rendered": "Times ×5",
+    "outcome": "pass"
+   },
+   {
+    "look": "Arial / 1rem / 1.5 / 400",
+    "role": "body",
+    "rendered": "Arial ×10",
+    "outcome": "pass"
+   },
+   {
+    "look": "Arial / 0.875rem / 1.5 / 400",
+    "role": "supporting",
+    "rendered": "Arial ×16",
+    "outcome": "pass"
+   },
+   {
+    "look": "monospace / 0.875rem / 1.5 / 400",
+    "role": "code",
+    "rendered": "Menlo ×4",
+    "outcome": "pass"
+   },
+   {
+    "look": "Arial / 0.938rem / 1.5 / 400",
+    "role": null,
+    "rendered": "Arial ×15",
+    "outcome": "fail"
+   },
+   {
+    "look": "Georgia / 1rem / 1.5 / 400",
+    "role": null,
+    "rendered": "Georgia ×15",
+    "outcome": "fail"
+   }
+  ]
+ },
+ {
+  "instrument": "type",
+  "fixture": "type-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": [
+   {
+    "look": "Lora / 1.75rem / 1.25 / 700",
+    "role": "page title",
+    "rendered": "Times ×5",
+    "outcome": "pass"
+   },
+   {
+    "look": "Lora / 1.25rem / 1.4 / 700",
+    "role": "panel heading",
+    "rendered": "Times ×5",
+    "outcome": "pass"
+   },
+   {
+    "look": "Arial / 1rem / 1.5 / 400",
+    "role": "body",
+    "rendered": "Arial ×10",
+    "outcome": "pass"
+   },
+   {
+    "look": "Arial / 0.875rem / 1.5 / 400",
+    "role": "supporting",
+    "rendered": "Arial ×16",
+    "outcome": "pass"
+   },
+   {
+    "look": "monospace / 0.875rem / 1.5 / 400",
+    "role": "code",
+    "rendered": "Menlo ×4",
+    "outcome": "pass"
+   }
+  ]
+ }
+]
