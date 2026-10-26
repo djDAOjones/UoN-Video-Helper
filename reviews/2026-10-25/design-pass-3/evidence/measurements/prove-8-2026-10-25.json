@@ -341,7 +341,7 @@
      {
       "role": "slider",
       "name": "video time scrubber",
-      "dom": 9,
+      "dom": 12,
       "ignored": false
      }
     ]
@@ -650,12 +650,14 @@
     "what": "first in the line spoken at completion, with every warning title in order",
     "outcome": "fail",
     "completion": {
-     "t": 1792975575827,
-     "text": "Your video is ready."
+     "t": 1793002006394,
+     "text": "Your video is ready.",
+     "cardNew": true,
+     "opensWithReady": true
     },
-    "window": [
-     1792975574891,
-     1792975576891
+    "job": [
+     1793002006271,
+     1793002006394
     ],
     "expected": [
      "The loudest moments were held down hard"
@@ -677,12 +679,14 @@
     "what": "first in the line spoken at completion, with every warning title in order",
     "outcome": "pass",
     "completion": {
-     "t": 1792975577117,
-     "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across."
+     "t": 1793002007517,
+     "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across.",
+     "cardNew": true,
+     "opensWithReady": true
     },
-    "window": [
-     1792975576182,
-     1792975578182
+    "job": [
+     1793002007393,
+     1793002007517
     ],
     "expected": [
      "The loudest moments were held down hard",
@@ -965,12 +969,14 @@
     "what": "first in the line spoken at completion, with every warning title in order",
     "outcome": "fail",
     "completion": {
-     "t": 1792975591157,
-     "text": "Your video is ready."
+     "t": 1793002020823,
+     "text": "Your video is ready.",
+     "cardNew": true,
+     "opensWithReady": true
     },
-    "window": [
-     1792975590223,
-     1792975592223
+    "job": [
+     1793002020296,
+     1793002020823
     ],
     "expected": [
      "The loudest moments were held down hard",
@@ -978,13 +984,15 @@
     ],
     "earlier": [
      {
-      "t": 1792975590751,
-      "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across."
+      "t": 1793002020419,
+      "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across.",
+      "cardNew": false
      }
     ],
     "why": "missing from the completion's line: The loudest moments were held down hard; The file’s title, author, and date could not be copied across"
    },
-   "replacedReadingWouldPass": true
+   "replacedReadingWouldPass": true,
+   "windowReadingWouldPass": false
   }
  },
  {
@@ -998,12 +1006,14 @@
     "what": "first in the line spoken at completion, with every warning title in order",
     "outcome": "fail",
     "completion": {
-     "t": 1792975592107,
-     "text": "Your video is ready. The loudest moments were held down hard."
+     "t": 1793002021695,
+     "text": "Your video is ready. The loudest moments were held down hard.",
+     "cardNew": true,
+     "opensWithReady": true
     },
-    "window": [
-     1792975591171,
-     1792975593171
+    "job": [
+     1793002021571,
+     1793002021695
     ],
     "expected": [
      "The loudest moments were held down hard",
@@ -1012,7 +1022,8 @@
     "earlier": [],
     "why": "missing from the completion's line: The file’s title, author, and date could not be copied across"
    },
-   "replacedReadingWouldPass": true
+   "replacedReadingWouldPass": true,
+   "windowReadingWouldPass": false
   }
  },
  {
@@ -1026,12 +1037,14 @@
     "what": "first in the line spoken at completion, with every warning title in order",
     "outcome": "fail",
     "completion": {
-     "t": 1792975593439,
-     "text": "Your video is ready."
+     "t": 1793002022958,
+     "text": "Your video is ready.",
+     "cardNew": true,
+     "opensWithReady": true
     },
-    "window": [
-     1792975592504,
-     1792975594504
+    "job": [
+     1793002022432,
+     1793002022958
     ],
     "expected": [
      "The loudest moments were held down hard",
@@ -1039,13 +1052,15 @@
     ],
     "earlier": [
      {
-      "t": 1792975593037,
-      "text": "Your video is ready. The loudest moments were held down hard."
+      "t": 1793002022554,
+      "text": "Your video is ready. The loudest moments were held down hard.",
+      "cardNew": false
      }
     ],
     "why": "missing from the completion's line: The loudest moments were held down hard; The file’s title, author, and date could not be copied across"
    },
-   "replacedReadingWouldPass": true
+   "replacedReadingWouldPass": true,
+   "windowReadingWouldPass": false
   }
  },
  {
@@ -1059,12 +1074,14 @@
     "what": "first in the line spoken at completion, with every warning title in order",
     "outcome": "pass",
     "completion": {
-     "t": 1792975594782,
-     "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across."
+     "t": 1793002024214,
+     "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across.",
+     "cardNew": true,
+     "opensWithReady": true
     },
-    "window": [
-     1792975593848,
-     1792975595848
+    "job": [
+     1793002023687,
+     1793002024214
     ],
     "expected": [
      "The loudest moments were held down hard",
@@ -1072,12 +1089,119 @@
     ],
     "earlier": [
      {
-      "t": 1792975594375,
-      "text": "Your video is ready. The loudest moments were held down hard."
+      "t": 1793002023810,
+      "text": "Your video is ready. The loudest moments were held down hard.",
+      "cardNew": false
      }
     ]
    },
-   "replacedReadingWouldPass": true
+   "replacedReadingWouldPass": true,
+   "windowReadingWouldPass": true
+  }
+ },
+ {
+  "instrument": "limiting warning: the completion's own write, every title in order",
+  "fixture": "every-title-500-ms-early-no-completion-write-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "first in the line spoken at completion, with every warning title in order",
+    "outcome": "fail",
+    "completion": null,
+    "job": [
+     1793002024941,
+     1793002025568
+    ],
+    "expected": [
+     "The loudest moments were held down hard",
+     "The file’s title, author, and date could not be copied across"
+    ],
+    "earlier": [
+     {
+      "t": 1793002025065,
+      "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across.",
+      "cardNew": false
+     }
+    ],
+    "why": "no write to the status line in the mutation that drew the finished card"
+   },
+   "replacedReadingWouldPass": true,
+   "windowReadingWouldPass": true
+  }
+ },
+ {
+  "instrument": "limiting warning: the completion's own write, every title in order",
+  "fixture": "completion-write-without-the-ready-sentence-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "first in the line spoken at completion, with every warning title in order",
+    "outcome": "fail",
+    "completion": {
+     "t": 1793002026919,
+     "text": "The loudest moments were held down hard. The file’s title, author, and date could not be copied across.",
+     "cardNew": true,
+     "opensWithReady": false
+    },
+    "job": [
+     1793002026291,
+     1793002026919
+    ],
+    "expected": [
+     "The loudest moments were held down hard",
+     "The file’s title, author, and date could not be copied across"
+    ],
+    "earlier": [
+     {
+      "t": 1793002026414,
+      "text": "Checking the video.",
+      "cardNew": false
+     }
+    ],
+    "why": "the write in the mutation that drew the card does not open with the page's \"status.ready\""
+   },
+   "replacedReadingWouldPass": true,
+   "windowReadingWouldPass": true
+  }
+ },
+ {
+  "instrument": "limiting warning: the completion's own write, every title in order",
+  "fixture": "every-title-in-the-completion-write-500-ms-after-another-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "first in the line spoken at completion, with every warning title in order",
+    "outcome": "pass",
+    "completion": {
+     "t": 1793002028281,
+     "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across.",
+     "cardNew": true,
+     "opensWithReady": true
+    },
+    "job": [
+     1793002027653,
+     1793002028281
+    ],
+    "expected": [
+     "The loudest moments were held down hard",
+     "The file’s title, author, and date could not be copied across"
+    ],
+    "earlier": [
+     {
+      "t": 1793002027776,
+      "text": "Checking the video.",
+      "cardNew": false
+     }
+    ]
+   },
+   "replacedReadingWouldPass": true,
+   "windowReadingWouldPass": true
   }
  },
  {
@@ -1318,14 +1442,14 @@
      "control": "button \"play\"",
      "outcome": "cannot-determine",
      "ringPx": {
-      "any": 7,
+      "any": 0,
       "at3to1": 0
      },
      "residualPx": {
-      "any": 924,
+      "any": 925,
       "at3to1": 0
      },
-     "why": "a ring of 7 px, none of it at 3:1 against what it covers: whether it is visible is VH-200's"
+     "why": "no ring: an outline:none on the control leaves its focused pixels unchanged; a focus-only change other than a ring remains (925 px, 0 at 3:1: the user agent's hover-and-focus highlight, or a disclosure); whether that alone is a visible indicator is VH-200's"
     },
     {
      "control": "slider \"volume\"",
@@ -1370,14 +1494,14 @@
      "control": "slider \"video time scrubber\"",
      "outcome": "cannot-determine",
      "ringPx": {
-      "any": 74,
+      "any": 104,
       "at3to1": 0
      },
      "residualPx": {
       "any": 106,
       "at3to1": 72
      },
-     "why": "a ring of 74 px, none of it at 3:1 against what it covers: whether it is visible is VH-200's"
+     "why": "a ring of 104 px, none of it at 3:1 against what it covers: whether it is visible is VH-200's"
     }
    ],
    "replacedReadingWouldPass": true
@@ -1447,8 +1571,8 @@
     "control": "button \"show more media controls\"",
     "host": false,
     "pseudo": "-internal-media-controls-overflow-button",
-    "onOffPx": 1317,
-    "why": "the ring cannot be isolated from the controls' other redraw: no author style reaches ::-internal-media-controls-overflow-button; focused against unfocused differs by 1317 px, the highlight and any disclosure included"
+    "onOffPx": 1322,
+    "why": "the ring cannot be isolated from the controls' other redraw: no author style reaches ::-internal-media-controls-overflow-button; focused against unfocused differs by 1322 px, the highlight and any disclosure included"
    }
   }
  },
@@ -1469,6 +1593,7 @@
      "h": 48
     },
     "areaAt3to1": 90,
+    "redrawAt3to1": 90,
     "perimeter2px": 368,
     "bestRatio": 18.26,
     "exceptions": {
@@ -1504,7 +1629,8 @@
      "w": 48,
      "h": 48
     },
-    "areaAt3to1": 63,
+    "areaAt3to1": null,
+    "redrawAt3to1": 63,
     "perimeter2px": 368,
     "bestRatio": 15.77,
     "exceptions": {
@@ -1540,13 +1666,14 @@
      "w": 48,
      "h": 48
     },
-    "areaAt3to1": 0,
+    "areaAt3to1": 14,
+    "redrawAt3to1": 0,
     "perimeter2px": 368,
     "bestRatio": 1.83,
     "exceptions": {
      "userAgentOnly": {
       "holds": false,
-      "evidence": "an author outline:none on ::-webkit-media-controls-play-button removed 24 px of the ring: the author can adjust it"
+      "evidence": "an author outline:none on ::-webkit-media-controls-play-button removed 31 px of the ring: the author can adjust it"
      },
      "unmodified": {
       "holds": false,
@@ -1567,7 +1694,7 @@
       "backgroundRules": []
      }
     },
-    "why": "under 2.4.13's area, and the author styles the ring, so neither exception holds"
+    "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 14 of 368, and the author styles the ring, so neither exception holds"
    }
   }
  },
@@ -1588,6 +1715,7 @@
      "h": 48
     },
     "areaAt3to1": 90,
+    "redrawAt3to1": 90,
     "perimeter2px": 368,
     "bestRatio": 18.26,
     "exceptions": {
@@ -1620,9 +1748,152 @@
       ]
      }
     },
-    "why": "under 2.4.13's area; the first exception does not hold (an author outline:none on ::-webkit-media-controls-play-button removed 292 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (#process-result video.result-player { background: #0f62fe; background-image: initial; background-position-x: initial; background-position-y: initial; background): whether that is the indicator's background is VH-200's",
+    "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 90 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-play-button removed 292 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (#process-result video.result-player { background: #0f62fe; background-image: initial; background-position-x: initial; background-position-y: initial; background): whether that is the indicator's background is VH-200's",
     "unresolved": "interpretation"
    }
+  }
+ },
+ {
+  "instrument": "player 2.4.13: no ring, a disclosure redraw over the area (in memory)",
+  "fixture": "appearance-no-ring-disclosure-redraw-bad",
+  "outcome": "cannot-determine",
+  "wanted": "cannot-determine",
+  "proved": true,
+  "detail": {
+   "row": {
+    "outcome": "cannot-determine",
+    "exceptions": {
+     "userAgentOnly": {
+      "holds": null,
+      "evidence": "an author outline:none changed nothing: no ring to adjust"
+     },
+     "unmodified": {
+      "holds": null,
+      "indicator": true,
+      "indicatorRules": [],
+      "background": false,
+      "backgroundRules": [
+       {
+        "selector": "#process-result video.result-player",
+        "props": [
+         "background: #0f62fe"
+        ]
+       }
+      ]
+     }
+    },
+    "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 0 of 176; the first exception is not established (an author outline:none changed nothing: no ring to adjust); the second: the ring is unmodified, but the host's backdrop is set by the author (#process-result video.result-player { background: #0f62fe }): whether that is the indicator's background is VH-200's",
+    "unresolved": "interpretation"
+   },
+   "redrawAt3to1": 900,
+   "replacedReadingWouldPass": true
+  }
+ },
+ {
+  "instrument": "player 2.4.13: a ring not isolated, the redraw over the area (in memory)",
+  "fixture": "appearance-ring-not-isolated-bad",
+  "outcome": "cannot-determine",
+  "wanted": "cannot-determine",
+  "proved": true,
+  "detail": {
+   "row": {
+    "outcome": "cannot-determine",
+    "exceptions": {
+     "userAgentOnly": {
+      "holds": null,
+      "evidence": "not probed: no pseudo-element an author style could name"
+     },
+     "unmodified": {
+      "holds": null,
+      "indicator": true,
+      "indicatorRules": [],
+      "background": false,
+      "backgroundRules": [
+       {
+        "selector": "#process-result video.result-player",
+        "props": [
+         "background: #0f62fe"
+        ]
+       }
+      ]
+     }
+    },
+    "why": "2.4.13's area not established: the ring's own pixels cannot be told from the controls' other redraw (no author style reaches ::-webkit-media-controls-mute-button); the first exception is not established (not probed: no pseudo-element an author style could name); the second: the ring is unmodified, but the host's backdrop is set by the author (#process-result video.result-player { background: #0f62fe }): whether that is the indicator's background is VH-200's",
+    "unresolved": "interpretation"
+   },
+   "redrawAt3to1": 900,
+   "replacedReadingWouldPass": true
+  }
+ },
+ {
+  "instrument": "player 2.4.13: the ring's own pixels over the area (in memory)",
+  "fixture": "appearance-ring-over-the-area-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "outcome": "pass"
+   }
+  }
+ },
+ {
+  "instrument": "player 2.4.13: the rings suppressed, the redraw kept",
+  "fixture": "player-rings-suppressed-2413-bad",
+  "outcome": "no pass",
+  "wanted": "no pass",
+  "proved": true,
+  "detail": {
+   "rows": [
+    {
+     "control": "button \"play\"",
+     "outcome": "fail",
+     "areaAt3to1": 0,
+     "redrawAt3to1": 0,
+     "perimeter2px": 368,
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 0 of 368, and the author styles the ring, so neither exception holds"
+    },
+    {
+     "control": "slider \"volume\"",
+     "outcome": "fail",
+     "areaAt3to1": 0,
+     "redrawAt3to1": 112,
+     "perimeter2px": 384,
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 0 of 384, and the author styles the ring, so neither exception holds"
+    },
+    {
+     "control": "button \"un-mute\"",
+     "outcome": "fail",
+     "areaAt3to1": 0,
+     "redrawAt3to1": 0,
+     "perimeter2px": 368,
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 0 of 368, and the author styles the ring, so neither exception holds"
+    },
+    {
+     "control": "button \"enter full screen\"",
+     "outcome": "fail",
+     "areaAt3to1": 0,
+     "redrawAt3to1": 14,
+     "perimeter2px": 368,
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 0 of 368, and the author styles the ring, so neither exception holds"
+    },
+    {
+     "control": "button \"show more media controls\"",
+     "outcome": "fail",
+     "areaAt3to1": null,
+     "redrawAt3to1": 63,
+     "perimeter2px": 368
+    },
+    {
+     "control": "slider \"video time scrubber\"",
+     "outcome": "fail",
+     "areaAt3to1": 0,
+     "redrawAt3to1": 72,
+     "perimeter2px": 2640,
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 0 of 2640, and the author styles the ring, so neither exception holds"
+    }
+   ],
+   "replacedReadingWouldPass": false
   }
  },
  {
@@ -1715,19 +1986,19 @@
      {
       "role": "slider",
       "name": "video time scrubber",
-      "value": 1.3256200551986694,
-      "valuetext": "1.32562"
+      "value": 1.3254799842834473,
+      "valuetext": "1.32548"
      },
      {
       "role": "slider",
       "name": "video time scrubber",
-      "value": 1.345620036125183,
-      "valuetext": "1.34562"
+      "value": 1.345479965209961,
+      "valuetext": "1.34548"
      }
     ],
     "media": [
-     1.326,
-     1.346
+     1.325,
+     1.345
     ]
    }
   }

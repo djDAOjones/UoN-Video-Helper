@@ -58,9 +58,15 @@ export const P8_INIT = String.raw`
   let running = false, awaiting = false, saving = false, statusText = null, warnText = null;
   const warnBox = () => { const c = document.querySelector('${CARD}'); if (!c) return null; for (let e = c.nextElementSibling; e; e = e.nextElementSibling) { const n = e.matches('.notification') ? e : e.querySelector('.notification'); if (n) return n; } return null; };
   P.warnBox = warnBox;
+  // cardNew: a write in the same mutation batch as a newly drawn finished card
+  // (a new element), so the completion's write is bound to the mutation that
+  // drew the card, never to a time window (Codex astra's re-check, 26 October,
+  // M-01): the app writes the line in the same task as it draws the card.
+  let lastCard = null;
   const tick = (recs) => {
     const line = document.getElementById('status');
-    if (line && recs && recs.some((m) => m.target === line || line.contains(m.target))) P.writes.push({ t: Date.now(), text: norm(line.textContent) });
+    const cardEl = document.querySelector('${CARD}'); const cardNew = !!cardEl && cardEl !== lastCard; lastCard = cardEl;
+    if (line && recs && recs.some((m) => m.target === line || line.contains(m.target))) P.writes.push({ t: Date.now(), text: norm(line.textContent), cardNew });
     const on = shown(document.getElementById('process-progress'));
     if (on && !running) { P.events.push({ t: Date.now(), kind: 'start' }); awaiting = true; }
     running = on;
@@ -252,20 +258,26 @@ export function visibleVerdict({ isolated, pseudo, ringAny, ring3, residualAny, 
   return { outcome: 'fail', why: 'nothing changes when the control is focused (2.4.7)' }
 }
 /**
- * 2.4.13 by area; short of it, its two exceptions apart: (i) a ring the user
+ * 2.4.13 by area, the area the ring's own pixels: those an author outline
+ * removal changes with focus and disclosure unchanged (`ringArea3`, at 3:1),
+ * never the whole focused-against-unfocused redraw, which holds the user
+ * agent's highlight and any disclosure (Codex astra's re-check, 26 October,
+ * M-02); where the ring cannot be isolated, its area is not established.
+ * Short of the area, or without it, its two exceptions apart: (i) a ring the user
  * agent draws that the author cannot adjust, refuted where the instrument's
  * own author style removed it, supported where no author selector reaches
  * the control (an -internal- pseudo-element); (ii) neither the ring nor its
  * background modified by the author, read from the author rules matching the
  * focused control and the host's backdrop. What neither settles is VH-200's.
  */
-export function appearanceVerdict({ isHost, area3, perimeter, error, pseudo, isolated, ringAny, indicatorRules, backdropRules }) {
+export function appearanceVerdict({ isHost, ringArea3, perimeter, error, pseudo, isolated, ringAny, indicatorRules, backdropRules }) {
   if (error) return { outcome: 'cannot-determine', why: 'pixels unread: ' + error }
-  if (area3 >= perimeter) return { outcome: 'pass' }
+  if (isolated && ringArea3 >= perimeter) return { outcome: 'pass' }
+  const short = isolated ? `under 2.4.13's area: the ring's own pixels at 3:1 are ${ringArea3} of ${perimeter}` : `2.4.13's area not established: the ring's own pixels cannot be told from the controls' other redraw (${pseudo ? 'no author style reaches ::' + pseudo : 'no author style reaches this control'})`
   if (isHost) {
-    if (indicatorRules.error) return { outcome: 'cannot-determine', why: 'under 2.4.13\'s area; ' + indicatorRules.error }
-    if (indicatorRules.rules.length) return { outcome: 'fail', why: 'under 2.4.13\'s area: the author styles the host\'s ring', indicatorRules: indicatorRules.rules }
-    return { outcome: 'cannot-determine', why: 'under 2.4.13\'s area: the host\'s ring is the user agent\'s default on an author element, which an author outline can change; whether the page around it is an unmodified background is VH-200\'s', unresolved: 'interpretation' }
+    if (indicatorRules.error) return { outcome: 'cannot-determine', why: short + '; ' + indicatorRules.error }
+    if (indicatorRules.rules.length) return { outcome: 'fail', why: short + ': the author styles the host\'s ring', indicatorRules: indicatorRules.rules }
+    return { outcome: 'cannot-determine', why: short + ': the host\'s ring is the user agent\'s default on an author element, which an author outline can change; whether the page around it is an unmodified background is VH-200\'s', unresolved: 'interpretation' }
   }
   const internal = !!pseudo && pseudo.startsWith('-internal-')
   const userAgentOnly = isolated
@@ -275,11 +287,11 @@ export function appearanceVerdict({ isHost, area3, perimeter, error, pseudo, iso
   const background = backdropRules.error ? null : !backdropRules.rules.length
   const unmodified = { holds: indicator === false ? false : indicator && background ? true : null, indicator, indicatorRules: indicatorRules.rules ?? indicatorRules.error, background, backgroundRules: backdropRules.rules ?? backdropRules.error }
   const exceptions = { userAgentOnly, unmodified }
-  if (indicator === false) return { outcome: 'fail', exceptions, why: 'under 2.4.13\'s area, and the author styles the ring, so neither exception holds' }
+  if (indicator === false) return { outcome: 'fail', exceptions, why: short + ', and the author styles the ring, so neither exception holds' }
   if (userAgentOnly.holds) return { outcome: 'fail', exceptions, uaException: `2.4.13's first exception: the user agent's ring, which the author cannot adjust (${userAgentOnly.evidence})` }
   if (unmodified.holds) return { outcome: 'fail', exceptions, uaException: '2.4.13\'s second exception: neither the ring nor its background is modified by the author (no author rule on the control or the host\'s backdrop)' }
   const bgSaid = background === false ? `the host's backdrop is set by the author (${backdropRules.rules.map((x) => x.selector + ' { ' + x.props.join('; ') + ' }').join(', ').slice(0, 160)})` : 'the backdrop\'s rules unread'
-  return { outcome: 'cannot-determine', exceptions, why: `under 2.4.13's area; the first exception ${userAgentOnly.holds === false ? 'does not hold' : 'is not established'} (${userAgentOnly.evidence}); the second: the ring is unmodified, but ${bgSaid}: whether that is the indicator's background is VH-200's`, unresolved: 'interpretation' }
+  return { outcome: 'cannot-determine', exceptions, why: `${short}; the first exception ${userAgentOnly.holds === false ? 'does not hold' : 'is not established'} (${userAgentOnly.evidence}); the second: the ring is unmodified, but ${bgSaid}: whether that is the indicator's background is VH-200's`, unresolved: 'interpretation' }
 }
 /** 2.4.11 and 2.4.12: author content painted over the focused control, apart from the ring's appearance and the exceptions; the viewport's edge is not author content. */
 export function occlusionVerdict(c) {
@@ -543,9 +555,11 @@ export async function playerKeys(w, { sel = PLAYER, run, key: recKey } = {}) {
     const n = (q, k) => (q && !q.error ? Math.round(q[k] / px) : 0)
     const vis = visibleVerdict({ isolated: !!ref && !ring.error && !residual.error, pseudo, ringAny: n(ring, 'changedAny'), ring3: n(ring, 'changed3'), residualAny: n(residual, 'changedAny'), residual3: n(residual, 'changed3'), onOffAny: n(d, 'changedAny') })
     rows.push(row('focus visible (2.4.7)', vis.outcome, { control: label, host: isHost, pseudo: pseudo ?? undefined, ringPx: ring ? { any: n(ring, 'changedAny'), at3to1: n(ring, 'changed3') } : undefined, residualPx: residual ? { any: n(residual, 'changedAny'), at3to1: n(residual, 'changed3') } : undefined, onOffPx: n(d, 'changedAny'), why: vis.why, unresolved: vis.unresolved }))
-    const area3 = n(d, 'changed3'), perimeter = Math.round(4 * (b.w + b.h) - 16)
-    const app = appearanceVerdict({ isHost, area3, perimeter, error: d.error, pseudo, isolated: !!ref, ringAny: n(ring, 'changedAny'), indicatorRules, backdropRules })
-    const r = row('focus appearance (2.4.13)', app.outcome, { control: label, host: isHost, box: { w: Math.round(b.w), h: Math.round(b.h) }, areaAt3to1: area3, perimeter2px: perimeter, bestRatio: d.best, exceptions: app.exceptions, uaException: app.uaException, why: app.why, unresolved: app.unresolved })
+    // 2.4.13's area is the ring's own pixels (ring: focused with the ring removed against focused), never the whole redraw (re-check, 26 October).
+    const ringIsolated = !!ref && !ring.error
+    const ringArea3 = ringIsolated ? n(ring, 'changed3') : null, redraw3 = n(d, 'changed3'), perimeter = Math.round(4 * (b.w + b.h) - 16)
+    const app = appearanceVerdict({ isHost, ringArea3, perimeter, error: d.error, pseudo, isolated: ringIsolated, ringAny: n(ring, 'changedAny'), indicatorRules, backdropRules })
+    const r = row('focus appearance (2.4.13)', app.outcome, { control: label, host: isHost, box: { w: Math.round(b.w), h: Math.round(b.h) }, areaAt3to1: ringArea3, redrawAt3to1: redraw3, perimeter2px: perimeter, bestRatio: d.best, exceptions: app.exceptions, uaException: app.uaException, why: app.why, unresolved: app.unresolved })
     if (run && recKey) { r.clips = [run.artifact(`${recKey}__p8ring-${i}-off.png`, Buffer.from(off, 'base64')), run.artifact(`${recKey}__p8ring-${i}-on.png`, Buffer.from(on, 'base64')), ...(ref ? [run.artifact(`${recKey}__p8ring-${i}-ringoff.png`, Buffer.from(ref, 'base64'))] : [])] }
     rows.push(r)
     // Back to this stop by keys: place on the card and Tab i+1 times.
@@ -713,23 +727,27 @@ export async function watchWorkers(browser, w) {
 
 /**
  * The line spoken at completion: the completion's own write to the status
- * line, never an earlier write in the same job (Codex astra's method check,
- * 25 October, M-01). The documented order: the app writes the line in the
- * same task as it draws the finished card, and hides the progress in the
- * job's `finally`, a microtask later (src/main.ts, the job's `.then` and
- * `.finally`), so the completion's write is the last write at or before the
- * "finish" tick (progress hidden, card drawn), within COMPLETION_MS of it;
- * failing that, the first write within COMPLETION_MS after it. `texts` holds
- * that one write, or nothing; `earlier` the job's other writes, as evidence.
+ * line, bound to the mutation that drew the finished card, never to a time
+ * window (Codex astra's method check, 25 October, M-01, and its re-check,
+ * 26 October). The app writes the line in the same task as it draws the card
+ * and hides the progress in the job's `finally`, a microtask later
+ * (src/main.ts, the job's `.then` and `.finally`), so the completion's write
+ * is the write recorded in the same mutation batch as the new card
+ * (`cardNew`), inside this job (its start to its "finish" tick), and it opens
+ * with the page's "status.ready". A job whose card was drawn with no such
+ * write has no completion write: `texts` is empty and `why` says so. `earlier`
+ * holds the job's other writes, as evidence, never as the completion.
  */
-export const COMPLETION_MS = 1000
 export async function spokenAtCompletion(w) {
-  return w.evaluate(`(() => { const P = window.__p8; if (!P) return null; const fin = P.events.filter((e) => e.kind === 'finish').at(-1); if (!fin) return null;
-    const start = P.events.filter((e) => e.kind === 'start' && e.t <= fin.t).at(-1); const from = start ? start.t : fin.t - ${COMPLETION_MS};
-    const writes = (P.writes || P.status).filter((s) => s.t > from && s.t <= fin.t + ${COMPLETION_MS});
-    const before = writes.filter((s) => s.t <= fin.t && s.t >= fin.t - ${COMPLETION_MS}).at(-1), after = writes.find((s) => s.t > fin.t);
-    const c = before || after || null;
-    return { from: fin.t - ${COMPLETION_MS}, to: fin.t + ${COMPLETION_MS}, finish: fin.t, completion: c, texts: c ? [c.text] : [], earlier: writes.filter((s) => s !== c && s.t < (c ? c.t : fin.t)).map((s) => ({ t: s.t, text: s.text.slice(0, 160) })).slice(-3) }; })()`)
+  return w.evaluate(`(() => { ${WORDS} const P = window.__p8; if (!P) return null; const fin = P.events.filter((e) => e.kind === 'finish').at(-1); if (!fin) return null;
+    const start = P.events.filter((e) => e.kind === 'start' && e.t <= fin.t).at(-1); const from = start ? start.t : null;
+    const ready = W('status.ready');
+    const writes = (P.writes || []).filter((s) => (from === null || s.t >= from) && s.t <= fin.t);
+    const c = writes.filter((s) => s.cardNew).at(-1) || null;
+    const opens = !!c && !!ready && c.text.startsWith(ready);
+    return { from, to: fin.t, finish: fin.t, ready: ready ?? null, completion: c ? { ...c, opensWithReady: opens } : null, texts: opens ? [c.text] : [],
+      earlier: writes.filter((s) => s !== c).map((s) => ({ t: s.t, text: s.text.slice(0, 160), cardNew: !!s.cardNew })).slice(-3),
+      why: !start ? 'the job\\'s start was not watched' : !c ? 'no write to the status line in the mutation that drew the finished card' : !opens ? 'the write in the mutation that drew the card does not open with the page\\'s "status.ready"' : undefined }; })()`)
 }
 
 const LIMIT_READ = `(() => { ${WORDS} const P = window.__p8 || { events: [], warnings: [] };
@@ -788,14 +806,16 @@ export async function limitingRows(w) {
   const what = 'first in the line spoken at completion, with every warning title in order'
   if (!spoken) rows.push(row(what, 'cannot-determine', { why: 'no completion was watched on this page' }))
   else if (r.lang !== r.fin.lang) rows.push(row(what, 'cannot-determine', { why: 'the page language changed since the completion: the titles on the card are in another language now', completion: spoken.completion }))
+  else if (!spoken.from) rows.push(row(what, 'cannot-determine', { why: spoken.why, completion: spoken.completion }))
   else {
-    const said = spoken.completion?.text ?? null
+    // Only the write bound to the card's mutation counts; none is a fail, as the app always makes it (re-check, 26 October).
+    const said = spoken.texts[0] ?? null
     const expected = [r.heavy, ...r.titles.filter((t) => t !== r.heavy)]
     const at = expected.map((t) => (said ? said.indexOf(t) : -1))
     const missing = expected.filter((t, i) => at[i] < 0)
     const inOrder = at.every((x, i) => i === 0 || x > at[i - 1])
-    rows.push(row(what, said && !missing.length && inOrder ? 'pass' : 'fail', { completion: spoken.completion, window: [spoken.from, spoken.to], expected, earlier: spoken.earlier,
-      why: !said ? `no write to the status line within ${COMPLETION_MS} ms of the finished card` : missing.length ? 'missing from the completion\'s line: ' + missing.join('; ') : !inOrder ? 'the titles are not in order, the heavy one first' : undefined }))
+    rows.push(row(what, said && !missing.length && inOrder ? 'pass' : 'fail', { completion: spoken.completion, job: [spoken.from, spoken.to], expected, earlier: spoken.earlier,
+      why: !said ? spoken.why : missing.length ? 'missing from the completion\'s line: ' + missing.join('; ') : !inOrder ? 'the titles are not in order, the heavy one first' : undefined }))
   }
   if (r.saved) {
     const unchanged = r.beforeSave && r.beforeSave.lang === r.lang ? r.beforeSave.text === r.text.replace(/\s+/g, ' ').trim() : null
@@ -862,3 +882,7 @@ export async function phase8Instruments(w, sc, { run, recKey, aggregate }) {
   return out
 }
 export const PHASE8_INSTRUMENTS = ['player', 'formatTip', 'footer', 'limiting', 'videoLanguage', 'asserts']
+// The rows a scenario that opts in must hold (Codex astra's re-check, 26 October, M-01; matrix.mjs `expectsFor`):
+// the player by keys, with a player on the page, and the format "?" where it can be reached.
+export const PLAYER_KEY_ROWS = ['route forward reaches every control', 'Tab after the last control leaves the player', 'play/pause by keys', 'seek by keys, apart from play', 'focus visible (2.4.7)', 'focus appearance (2.4.13)', 'not hidden by author content (2.4.11, 2.4.12)']
+export const FORMAT_TIP_ROWS = ['named, and its text, in the page\'s words', 'the "?" at least 44 x 44', 'Enter opens it; focus stays on the "?"', 'edge: 1 px all round in --border-subtle, not a rail', 'gap: under the "?", inside its item and the page', 'Tab closes it; focus goes where it goes with it closed', 'Shift+Tab closes it; focus goes where it goes with it closed', 'Space opens it; Escape closes it, focus on the "?"', 'a click on its text keeps it open; Escape then closes it, focus on the "?"', 'a click elsewhere closes it']

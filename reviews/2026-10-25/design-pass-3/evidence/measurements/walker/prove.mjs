@@ -18,7 +18,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 import { connectBrowser } from './cdp.mjs'
 import { Walk } from './walk.mjs'
 import { QUAL_INIT, IN_DIALOG, IN_DIALOG_OR_OUT, axTree, focusArea, fileButtonInk, keysRoute, closeAnalysis, withholdFonts, pressedAppearance, motionWatch } from './qualify.mjs'
-import { Run, aggregate } from './runner.mjs'
+import { Run, aggregate, recordKey } from './runner.mjs'
 import { Buffer } from 'node:buffer'
 
 const DIR = process.env.PROVE_DIR
@@ -249,6 +249,47 @@ clean.record(r('S-80', { variant: 'copied' }), ok())
 clean.record(r('ROUTE'), rec({ keys: { outcome: 'pass', declared: 2, steps: [step(), step()] } }))
 clean.record(r('SUBJECTS'), rec({ focus: aggregate([{ el: '#a', outcome: 'pass' }, { el: '#b', outcome: 'pass' }]) }))
 results.push({ instrument: 'runner', fixture: 'whole', outcome: clean.verify().whole ? 'pass' : 'fail', wanted: 'pass', proved: clean.verify().whole, detail: clean.verify().problems })
+// Codex astra's re-check (26 October), M-01: the real declarations carry what each record must hold
+// (matrix.mjs `expectsFor`): the pilot's and part 4's own records, one for each kind of expectation. A
+// subject dropped from one fails the run for that reason alone; the same records whole pass.
+process.env.RUN_ROOT ??= join(DIR, 'runs')
+const { declareRecord, PLANS: REAL } = await import('./matrix.mjs')
+const realDecls = [...REAL.pilot3(), ...REAL.part4()].map(declareRecord)
+// A record for each kind, each a different record (a run declares a key once), the kind with the fewest records chosen first.
+const KINDS = ['keys', 'focus', 'asserts', 'subresults', 'player', 'formatTip'], taken = new Set(), chosen = {}
+for (const name of [...KINDS].sort((a, b) => realDecls.filter((x) => x.expects?.[a]).length - realDecls.filter((x) => x.expects?.[b]).length)) {
+  const decl = realDecls.find((x) => x.expects?.[name] && !taken.has(recordKey(x)))
+  if (decl) taken.add(recordKey(decl))
+  chosen[name] = decl
+}
+const picks = KINDS.map((name) => ({ name, decl: chosen[name] }))
+const fill = (decl, drop) => {
+  const ins = {}
+  for (const name of decl.requires) {
+    const want = decl.expects?.[name]
+    if (name === 'overflow') ins[name] = { outcome: 'pass', scrollWidth: 1280, clientWidth: 1280, hscroll: false }
+    else if (name === 'ax') ins[name] = { outcome: 'pass', counts: { nodes: 3 }, problems: [] }
+    else if (name === 'keys') ins[name] = { outcome: 'pass', declared: want.steps, steps: Array.from({ length: want.steps - (drop === name ? 1 : 0) }, () => step()) }
+    else ins[name] = aggregate((want?.subjects ?? ['a row']).filter((x, i, all) => !(drop === name && i === all.length - 1)).map((x) => ({ what: x, sel: x, outcome: 'pass' })))
+  }
+  return ok({ reached: { outcome: 'pass', seen: { viewport: decl.viewport } }, instruments: ins })
+}
+const found = picks.filter((p) => p.decl)
+results.push({ instrument: 'runner: real declarations', fixture: 'every kind of expectation found in the pilot and part 4', outcome: found.length === picks.length ? 'pass' : 'fail', wanted: 'pass', proved: found.length === picks.length, detail: picks.map((p) => ({ name: p.name, key: p.decl ? recordKey(p.decl) : null, expects: p.decl?.expects?.[p.name] })) })
+const dropRun = Run.create(join(DIR, 'runs'), 'prove-declared-drop', found.map((p) => p.decl))
+for (const p of found) dropRun.record(p.decl, fill(p.decl, p.name))
+const dv = dropRun.verify()
+for (const p of found) {
+  const k = recordKey(p.decl), got = dv.problems.filter((x) => x.key === k)
+  const last = p.decl.expects[p.name].subjects?.at(-1)
+  const why = p.name === 'keys' ? new RegExp(`${p.decl.expects.keys.steps - 1} steps recorded of ${p.decl.expects.keys.steps} given`) : new RegExp('expected subjects missing: ' + last.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+  const proved = got.length === 1 && got[0].kind === 'evidence' && got[0].instrument === p.name && why.test(got[0].why)
+  results.push({ instrument: 'runner: real declarations', fixture: `${k}: a ${p.name === 'keys' ? 'step' : 'subject'} dropped from ${p.name}`, outcome: got.length ? 'fail' : 'pass', wanted: 'fail', proved, detail: got })
+}
+const wholeRun = Run.create(join(DIR, 'runs'), 'prove-declared-whole', found.map((p) => p.decl))
+for (const p of found) wholeRun.record(p.decl, fill(p.decl, null))
+const wv = wholeRun.verify()
+results.push({ instrument: 'runner: real declarations', fixture: 'the same records whole', outcome: wv.whole ? 'pass' : 'fail', wanted: 'pass', proved: wv.whole, detail: wv.problems })
 
 writeFileSync(join(DIR, 'prove.json'), JSON.stringify(results, null, 1))
 for (const x of results) console.log(`${x.proved ? 'PROVED' : 'NOT PROVED'}  ${x.instrument} on ${x.fixture}: ${x.outcome} (wanted ${x.wanted})`)

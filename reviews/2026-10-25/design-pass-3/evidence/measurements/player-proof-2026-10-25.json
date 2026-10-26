@@ -1,11 +1,11 @@
 {
  "date": "2026-10-26",
  "item": "VH-198",
- "instrumentRevision": "2d16e337abe51539",
- "after": "Codex astra's method check of 25 October, M-01 to M-04 applied (instruments-2026-10-25.md, \"After Codex astra's method check\")",
+ "instrumentRevision": "2cbba731c59d8036",
+ "after": "Codex astra's method check of 25 October, M-01 to M-05 applied, and its re-check of 26 October, its three musts applied (instruments-2026-10-25.md, \"After Codex astra's method check\" and \"After Codex astra's re-check\")",
  "appSource": "src/ and index.html as last changed at e226410 (VH-193); unchanged since",
  "source": {
-  "commit": "1cd71f2a22e69db6cd44594e9398589ccae8530e",
+  "commit": "ddc3d159b1f3894744e5a8f895f306875cf77956",
   "dirty": false,
   "diffSha256": "e3b0c44298fc1c14"
  },
@@ -21,8 +21,8 @@
  ],
  "whyTheFlags": "Without them headless Chrome reports every page but its first as hidden: timers throttle to 1 s and media loading is deferred (a probe read 20 x 100 ms timers at 19.7-20.0 s in the second and third pages, 2.0 s in the first). Phase 7's matrix opened its analysis page early, so its later walk pages ran hidden. qualify.mjs assertReached now fails a record whose page is not visible.",
  "fixtures": "fixtures.sh + fixtures-8.sh into the scratchpad, never samples/",
- "run": "vh198proof-2026-10-26T00-48-14-316Z-685d65",
- "method": "P-06, as M-02 bounds it: the native control inventory and the keyboard route by the focused accessibility node (Chrome's Accessibility domain), since document.activeElement is the <video> throughout; the route held to the inventory by identity forward and back (phase8.mjs compareStops); play/pause and seek proved apart by their results, and the control's exposed name or value read from the tree around each (4.1.2; whether a change is notified is not observed); each stop on a held frame (0.5 s), three readings apart: 2.4.7 by the ring alone, isolated by an author outline:none on the control's ::-webkit-media-controls pseudo-element with focus and disclosure unchanged (phase8.mjs visibleVerdict), 2.4.13 by area and, short of it, each exception by its own evidence (the first refuted where the instrument's own author style removed the ring, supported where no author selector reaches an -internal- pseudo-element; the second from the author rules on the control and the host's backdrop, CSS.getMatchedStylesForNode) (appearanceVerdict), 2.4.11 and 2.4.12 by an 8 x 8 hit test for author content over the control (occlusionVerdict); targets (2.5.5) by geometry at rest and, where the box is empty at rest, once disclosed by hovering the nearest control, by hit area (DOM.getNodeForLocation with user-agent shadow trees, document coordinates), and the user agent's size exception only where no author rule sets the control's size (targetVerdict). K-player's Shift+Tab leaves for the previous real stop: the card heading's tabIndex is -1 (src/main.ts:3277).",
+ "run": "vh198proof-2026-10-26T08-08-54-652Z-f7ed5f",
+ "method": "P-06, as M-02 bounds it: the native control inventory and the keyboard route by the focused accessibility node (Chrome's Accessibility domain), since document.activeElement is the <video> throughout; the route held to the inventory by identity forward and back (phase8.mjs compareStops); play/pause and seek proved apart by their results, and the control's exposed name or value read from the tree around each (4.1.2; whether a change is notified is not observed); each stop on a held frame (0.5 s), three readings apart: 2.4.7 by the ring alone, isolated by an author outline:none on the control's ::-webkit-media-controls pseudo-element with focus and disclosure unchanged (phase8.mjs visibleVerdict), 2.4.13 by area, the area the ring's own pixels at 3:1 (focused with the ring removed by the instrument's author outline:none, against focused; never the whole focused-against-unfocused redraw, which holds the user agent's highlight and any disclosure; where the ring cannot be isolated the area is not established), and, short of it or without it, each exception by its own evidence (the first refuted where the instrument's own author style removed the ring, supported where no author selector reaches an -internal- pseudo-element; the second from the author rules on the control and the host's backdrop, CSS.getMatchedStylesForNode) (appearanceVerdict), 2.4.11 and 2.4.12 by an 8 x 8 hit test for author content over the control (occlusionVerdict); targets (2.5.5) by geometry at rest and, where the box is empty at rest, once disclosed by hovering the nearest control, by hit area (DOM.getNodeForLocation with user-agent shadow trees, document coordinates), and the user agent's size exception only where no author rule sets the control's size (targetVerdict). K-player's Shift+Tab leaves for the previous real stop: the card heading's tabIndex is -1 (src/main.ts:3277).",
  "checks": [
   {
    "instrument": "player: host with no name",
@@ -366,7 +366,7 @@
       {
        "role": "slider",
        "name": "video time scrubber",
-       "dom": 9,
+       "dom": 12,
        "ignored": false
       }
      ]
@@ -569,14 +569,14 @@
       "control": "button \"play\"",
       "outcome": "cannot-determine",
       "ringPx": {
-       "any": 7,
+       "any": 0,
        "at3to1": 0
       },
       "residualPx": {
-       "any": 924,
+       "any": 925,
        "at3to1": 0
       },
-      "why": "a ring of 7 px, none of it at 3:1 against what it covers: whether it is visible is VH-200's"
+      "why": "no ring: an outline:none on the control leaves its focused pixels unchanged; a focus-only change other than a ring remains (925 px, 0 at 3:1: the user agent's hover-and-focus highlight, or a disclosure); whether that alone is a visible indicator is VH-200's"
      },
      {
       "control": "slider \"volume\"",
@@ -621,14 +621,14 @@
       "control": "slider \"video time scrubber\"",
       "outcome": "cannot-determine",
       "ringPx": {
-       "any": 74,
+       "any": 104,
        "at3to1": 0
       },
       "residualPx": {
        "any": 106,
        "at3to1": 72
       },
-      "why": "a ring of 74 px, none of it at 3:1 against what it covers: whether it is visible is VH-200's"
+      "why": "a ring of 104 px, none of it at 3:1 against what it covers: whether it is visible is VH-200's"
      }
     ],
     "replacedReadingWouldPass": true
@@ -698,8 +698,8 @@
      "control": "button \"show more media controls\"",
      "host": false,
      "pseudo": "-internal-media-controls-overflow-button",
-     "onOffPx": 1317,
-     "why": "the ring cannot be isolated from the controls' other redraw: no author style reaches ::-internal-media-controls-overflow-button; focused against unfocused differs by 1317 px, the highlight and any disclosure included"
+     "onOffPx": 1322,
+     "why": "the ring cannot be isolated from the controls' other redraw: no author style reaches ::-internal-media-controls-overflow-button; focused against unfocused differs by 1322 px, the highlight and any disclosure included"
     }
    }
   },
@@ -720,6 +720,7 @@
       "h": 48
      },
      "areaAt3to1": 90,
+     "redrawAt3to1": 90,
      "perimeter2px": 368,
      "bestRatio": 18.26,
      "exceptions": {
@@ -755,7 +756,8 @@
       "w": 48,
       "h": 48
      },
-     "areaAt3to1": 63,
+     "areaAt3to1": null,
+     "redrawAt3to1": 63,
      "perimeter2px": 368,
      "bestRatio": 15.77,
      "exceptions": {
@@ -791,13 +793,14 @@
       "w": 48,
       "h": 48
      },
-     "areaAt3to1": 0,
+     "areaAt3to1": 14,
+     "redrawAt3to1": 0,
      "perimeter2px": 368,
      "bestRatio": 1.83,
      "exceptions": {
       "userAgentOnly": {
        "holds": false,
-       "evidence": "an author outline:none on ::-webkit-media-controls-play-button removed 24 px of the ring: the author can adjust it"
+       "evidence": "an author outline:none on ::-webkit-media-controls-play-button removed 31 px of the ring: the author can adjust it"
       },
       "unmodified": {
        "holds": false,
@@ -818,7 +821,7 @@
        "backgroundRules": []
       }
      },
-     "why": "under 2.4.13's area, and the author styles the ring, so neither exception holds"
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 14 of 368, and the author styles the ring, so neither exception holds"
     }
    }
   },
@@ -839,6 +842,7 @@
       "h": 48
      },
      "areaAt3to1": 90,
+     "redrawAt3to1": 90,
      "perimeter2px": 368,
      "bestRatio": 18.26,
      "exceptions": {
@@ -871,9 +875,152 @@
        ]
       }
      },
-     "why": "under 2.4.13's area; the first exception does not hold (an author outline:none on ::-webkit-media-controls-play-button removed 292 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (#process-result video.result-player { background: #0f62fe; background-image: initial; background-position-x: initial; background-position-y: initial; background): whether that is the indicator's background is VH-200's",
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 90 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-play-button removed 292 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (#process-result video.result-player { background: #0f62fe; background-image: initial; background-position-x: initial; background-position-y: initial; background): whether that is the indicator's background is VH-200's",
      "unresolved": "interpretation"
     }
+   }
+  },
+  {
+   "instrument": "player 2.4.13: no ring, a disclosure redraw over the area (in memory)",
+   "fixture": "appearance-no-ring-disclosure-redraw-bad",
+   "outcome": "cannot-determine",
+   "wanted": "cannot-determine",
+   "proved": true,
+   "detail": {
+    "row": {
+     "outcome": "cannot-determine",
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": null,
+       "evidence": "an author outline:none changed nothing: no ring to adjust"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "selector": "#process-result video.result-player",
+         "props": [
+          "background: #0f62fe"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 0 of 176; the first exception is not established (an author outline:none changed nothing: no ring to adjust); the second: the ring is unmodified, but the host's backdrop is set by the author (#process-result video.result-player { background: #0f62fe }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    "redrawAt3to1": 900,
+    "replacedReadingWouldPass": true
+   }
+  },
+  {
+   "instrument": "player 2.4.13: a ring not isolated, the redraw over the area (in memory)",
+   "fixture": "appearance-ring-not-isolated-bad",
+   "outcome": "cannot-determine",
+   "wanted": "cannot-determine",
+   "proved": true,
+   "detail": {
+    "row": {
+     "outcome": "cannot-determine",
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": null,
+       "evidence": "not probed: no pseudo-element an author style could name"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "selector": "#process-result video.result-player",
+         "props": [
+          "background: #0f62fe"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "2.4.13's area not established: the ring's own pixels cannot be told from the controls' other redraw (no author style reaches ::-webkit-media-controls-mute-button); the first exception is not established (not probed: no pseudo-element an author style could name); the second: the ring is unmodified, but the host's backdrop is set by the author (#process-result video.result-player { background: #0f62fe }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    "redrawAt3to1": 900,
+    "replacedReadingWouldPass": true
+   }
+  },
+  {
+   "instrument": "player 2.4.13: the ring's own pixels over the area (in memory)",
+   "fixture": "appearance-ring-over-the-area-good",
+   "outcome": "pass",
+   "wanted": "pass",
+   "proved": true,
+   "detail": {
+    "row": {
+     "outcome": "pass"
+    }
+   }
+  },
+  {
+   "instrument": "player 2.4.13: the rings suppressed, the redraw kept",
+   "fixture": "player-rings-suppressed-2413-bad",
+   "outcome": "no pass",
+   "wanted": "no pass",
+   "proved": true,
+   "detail": {
+    "rows": [
+     {
+      "control": "button \"play\"",
+      "outcome": "fail",
+      "areaAt3to1": 0,
+      "redrawAt3to1": 0,
+      "perimeter2px": 368,
+      "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 0 of 368, and the author styles the ring, so neither exception holds"
+     },
+     {
+      "control": "slider \"volume\"",
+      "outcome": "fail",
+      "areaAt3to1": 0,
+      "redrawAt3to1": 112,
+      "perimeter2px": 384,
+      "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 0 of 384, and the author styles the ring, so neither exception holds"
+     },
+     {
+      "control": "button \"un-mute\"",
+      "outcome": "fail",
+      "areaAt3to1": 0,
+      "redrawAt3to1": 0,
+      "perimeter2px": 368,
+      "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 0 of 368, and the author styles the ring, so neither exception holds"
+     },
+     {
+      "control": "button \"enter full screen\"",
+      "outcome": "fail",
+      "areaAt3to1": 0,
+      "redrawAt3to1": 14,
+      "perimeter2px": 368,
+      "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 0 of 368, and the author styles the ring, so neither exception holds"
+     },
+     {
+      "control": "button \"show more media controls\"",
+      "outcome": "fail",
+      "areaAt3to1": null,
+      "redrawAt3to1": 63,
+      "perimeter2px": 368
+     },
+     {
+      "control": "slider \"video time scrubber\"",
+      "outcome": "fail",
+      "areaAt3to1": 0,
+      "redrawAt3to1": 72,
+      "perimeter2px": 2640,
+      "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 0 of 2640, and the author styles the ring, so neither exception holds"
+     }
+    ],
+    "replacedReadingWouldPass": false
    }
   },
   {
@@ -966,19 +1113,19 @@
       {
        "role": "slider",
        "name": "video time scrubber",
-       "value": 1.3256200551986694,
-       "valuetext": "1.32562"
+       "value": 1.3254799842834473,
+       "valuetext": "1.32548"
       },
       {
        "role": "slider",
        "name": "video time scrubber",
-       "value": 1.345620036125183,
-       "valuetext": "1.34562"
+       "value": 1.345479965209961,
+       "valuetext": "1.34548"
       }
      ],
      "media": [
-      1.326,
-      1.346
+      1.325,
+      1.345
      ]
     }
    }
@@ -1296,7 +1443,7 @@
   "the volume slider's target": "measured: 0 x 48 at rest, 52 x 48 once disclosed by hovering the mute button; its hit area holds a 44 px square (49 of 49 points): 2.5.5 passes, where the first proof left it \"cannot determine: no box\"",
   "the time slider's target": "825 x 24, a hit run of 24 px high: no 44 px square; no author rule sets its size, so 2.5.5's user-agent exception holds (an exemption with its reason, never a pass)",
   "the rings, 2.4.7": "the ring isolated and visible at 3:1 on the host, play, volume, un-mute, full screen and the time slider; the overflow button (\"show more media controls\") cannot be isolated (::-internal-media-controls-overflow-button: no author selector reaches it), so its 2.4.7 is \"cannot determine\", the user agent's hover-and-focus highlight included in its 1,305 px focused-against-unfocused change",
-  "the rings, 2.4.13": "the host passes by area; the overflow button is under the area and exempt by the first exception (no author selector reaches it); play, volume, un-mute, full screen and the time slider are under the area, the first exception refuted (the instrument's own author outline:none removed each ring), and the second left to VH-200: the ring is unmodified, but the host's backdrop is the author's (.trim-preview, .result-player { background })",
+  "the rings, 2.4.13": "by the rings' own pixels at 3:1: the host passes by area (5,204 against its 5,140 px perimeter); play, volume, un-mute, full screen and the time slider are under the area (90 of 368, 102 of 384, 99 of 368, 96 of 368 and 1,783 of 3,380; the whole focus redraw, which the reading before the re-check counted, was 90, 219, 110, 98 and 1,855), the first exception refuted (the instrument's own author outline:none removed each ring), and the second left to VH-200: the ring is unmodified, but the host's backdrop is the author's (.trim-preview, .result-player { background }); the overflow button's area is not established (no author selector reaches ::-internal-media-controls-overflow-button, so its ring cannot be isolated; its redraw is 63 px) and it is exempt by the first exception",
   "the rings, 2.4.11 and 2.4.12": "no author content over any stop (8 x 8 hit test each)",
   "4.1.2": "play/pause's exposed name follows playback and the time slider's exposed value follows the seek; whether either change is notified to assistive technology is not observed (\"cannot determine\", unresolved as a measurement)"
  },
@@ -1309,7 +1456,7 @@
  "app": {
   "S-126 (passive: present, named, controls, targets)": {
    "status": "ok",
-   "revision": "2d16e337abe51539",
+   "revision": "2cbba731c59d8036",
    "outcome": "pass",
    "rows": [
     {
@@ -1328,7 +1475,7 @@
     {
      "what": "paused a second after the card appeared",
      "outcome": "pass",
-     "t": 1792975709767,
+     "t": 1793002149863,
      "kind": "finish+1s",
      "player": true,
      "paused": true,
@@ -1566,7 +1713,7 @@
   },
   "S-127 (by keys: route, play/pause, seek, rings)": {
    "status": "ok",
-   "revision": "2d16e337abe51539",
+   "revision": "2cbba731c59d8036",
    "outcome": "cannot-determine",
    "rows": [
     {
@@ -1585,7 +1732,7 @@
     {
      "what": "paused a second after the card appeared",
      "outcome": "pass",
-     "t": 1792975721816,
+     "t": 1793002161748,
      "kind": "finish+1s",
      "player": true,
      "paused": true,
@@ -2042,11 +2189,11 @@
      },
      "afterSpace": {
       "paused": false,
-      "t": 1.322
+      "t": 1.323
      },
      "afterSecondSpace": {
       "paused": true,
-      "t": 1.337
+      "t": 1.336
      }
     },
     {
@@ -2084,19 +2231,19 @@
       {
        "role": "slider",
        "name": "video time scrubber",
-       "value": 1.337380051612854,
-       "valuetext": "1.33738"
+       "value": 1.3360400199890137,
+       "valuetext": "1.33604"
       },
       {
        "role": "slider",
        "name": "video time scrubber",
-       "value": 1.397779941558838,
-       "valuetext": "1.39778"
+       "value": 1.396440029144287,
+       "valuetext": "1.39644"
       }
      ],
      "media": [
-      1.337,
-      1.398
+      1.336,
+      1.396
      ]
     },
     {
@@ -2125,14 +2272,14 @@
      "control": "Video \"Finished video — 1.1 MB\"",
      "host": true,
      "ringPx": {
-      "any": 5268,
+      "any": 5304,
       "at3to1": 5204
      },
      "residualPx": {
       "any": 0,
       "at3to1": 0
      },
-     "onOffPx": 5268
+     "onOffPx": 5304
     },
     {
      "what": "focus appearance (2.4.13)",
@@ -2144,6 +2291,7 @@
       "h": 464
      },
      "areaAt3to1": 5204,
+     "redrawAt3to1": 5204,
      "perimeter2px": 5140,
      "bestRatio": 14.93
     },
@@ -2168,11 +2316,11 @@
      "host": false,
      "pseudo": "-webkit-media-controls-play-button",
      "ringPx": {
-      "any": 285,
+      "any": 292,
       "at3to1": 90
      },
      "residualPx": {
-      "any": 915,
+      "any": 914,
       "at3to1": 0
      },
      "onOffPx": 1200
@@ -2187,12 +2335,13 @@
       "h": 48
      },
      "areaAt3to1": 90,
+     "redrawAt3to1": 90,
      "perimeter2px": 368,
      "bestRatio": 18.26,
      "exceptions": {
       "userAgentOnly": {
        "holds": false,
-       "evidence": "an author outline:none on ::-webkit-media-controls-play-button removed 285 px of the ring: the author can adjust it"
+       "evidence": "an author outline:none on ::-webkit-media-controls-play-button removed 292 px of the ring: the author can adjust it"
       },
       "unmodified": {
        "holds": null,
@@ -2210,7 +2359,7 @@
        ]
       }
      },
-     "why": "under 2.4.13's area; the first exception does not hold (an author outline:none on ::-webkit-media-controls-play-button removed 285 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 90 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-play-button removed 292 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
      "unresolved": "interpretation"
     },
     {
@@ -2252,7 +2401,8 @@
       "w": 52,
       "h": 48
      },
-     "areaAt3to1": 219,
+     "areaAt3to1": 102,
+     "redrawAt3to1": 219,
      "perimeter2px": 384,
      "bestRatio": 17.61,
      "exceptions": {
@@ -2276,7 +2426,7 @@
        ]
       }
      },
-     "why": "under 2.4.13's area; the first exception does not hold (an author outline:none on ::-webkit-media-controls-volume-slider removed 378 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 102 of 384; the first exception does not hold (an author outline:none on ::-webkit-media-controls-volume-slider removed 378 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
      "unresolved": "interpretation"
     },
     {
@@ -2318,7 +2468,8 @@
       "w": 48,
       "h": 48
      },
-     "areaAt3to1": 110,
+     "areaAt3to1": 99,
+     "redrawAt3to1": 110,
      "perimeter2px": 368,
      "bestRatio": 17.61,
      "exceptions": {
@@ -2342,7 +2493,7 @@
        ]
       }
      },
-     "why": "under 2.4.13's area; the first exception does not hold (an author outline:none on ::-webkit-media-controls-mute-button removed 382 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 99 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-mute-button removed 382 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
      "unresolved": "interpretation"
     },
     {
@@ -2366,14 +2517,14 @@
      "host": false,
      "pseudo": "-webkit-media-controls-fullscreen-button",
      "ringPx": {
-      "any": 384,
+      "any": 385,
       "at3to1": 96
      },
      "residualPx": {
       "any": 1023,
       "at3to1": 2
      },
-     "onOffPx": 1407
+     "onOffPx": 1408
     },
     {
      "what": "focus appearance (2.4.13)",
@@ -2384,13 +2535,14 @@
       "w": 48,
       "h": 48
      },
-     "areaAt3to1": 98,
+     "areaAt3to1": 96,
+     "redrawAt3to1": 98,
      "perimeter2px": 368,
      "bestRatio": 15.82,
      "exceptions": {
       "userAgentOnly": {
        "holds": false,
-       "evidence": "an author outline:none on ::-webkit-media-controls-fullscreen-button removed 384 px of the ring: the author can adjust it"
+       "evidence": "an author outline:none on ::-webkit-media-controls-fullscreen-button removed 385 px of the ring: the author can adjust it"
       },
       "unmodified": {
        "holds": null,
@@ -2408,7 +2560,7 @@
        ]
       }
      },
-     "why": "under 2.4.13's area; the first exception does not hold (an author outline:none on ::-webkit-media-controls-fullscreen-button removed 384 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 96 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-fullscreen-button removed 385 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
      "unresolved": "interpretation"
     },
     {
@@ -2443,7 +2595,8 @@
       "w": 48,
       "h": 48
      },
-     "areaAt3to1": 63,
+     "areaAt3to1": null,
+     "redrawAt3to1": 63,
      "perimeter2px": 368,
      "bestRatio": 15.82,
      "exceptions": {
@@ -2491,7 +2644,7 @@
      "host": false,
      "pseudo": "-webkit-media-controls-timeline",
      "ringPx": {
-      "any": 3370,
+      "any": 3374,
       "at3to1": 1783
      },
      "residualPx": {
@@ -2509,13 +2662,14 @@
       "w": 825,
       "h": 24
      },
-     "areaAt3to1": 1855,
+     "areaAt3to1": 1783,
+     "redrawAt3to1": 1855,
      "perimeter2px": 3380,
-     "bestRatio": 19.92,
+     "bestRatio": 19.82,
      "exceptions": {
       "userAgentOnly": {
        "holds": false,
-       "evidence": "an author outline:none on ::-webkit-media-controls-timeline removed 3370 px of the ring: the author can adjust it"
+       "evidence": "an author outline:none on ::-webkit-media-controls-timeline removed 3374 px of the ring: the author can adjust it"
       },
       "unmodified": {
        "holds": null,
@@ -2533,14 +2687,14 @@
        ]
       }
      },
-     "why": "under 2.4.13's area; the first exception does not hold (an author outline:none on ::-webkit-media-controls-timeline removed 3370 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 1783 of 3380; the first exception does not hold (an author outline:none on ::-webkit-media-controls-timeline removed 3374 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
      "unresolved": "interpretation"
     }
    ]
   },
   "S-131 (saved: gone)": {
    "status": "ok",
-   "revision": "2d16e337abe51539",
+   "revision": "2cbba731c59d8036",
    "outcome": "pass",
    "rows": [
     {
@@ -2552,7 +2706,7 @@
   },
   "K-player (the route by keys alone)": {
    "status": "ok",
-   "revision": "2d16e337abe51539",
+   "revision": "2cbba731c59d8036",
    "outcome": "pass",
    "steps": [
     {
@@ -2572,7 +2726,7 @@
      "to": "section.notification \"Finished video — 1.1 MB\"",
      "focusVisible": true,
      "expect": null,
-     "waited": 609,
+     "waited": 611,
      "outcome": "pass",
      "note": "S-53: the job finishes; focus handed from Cancel to the card"
     },
@@ -2706,7 +2860,7 @@
      "to": "button.button.button--secondary[button] \"Stop saving\"",
      "focusVisible": true,
      "expect": null,
-     "waited": 2,
+     "waited": 1,
      "outcome": "pass",
      "note": "S-61: saving (F4b, 3 s a chunk); Stop saving takes focus"
     },
@@ -2727,7 +2881,7 @@
      "to": "section.notification \"Finished video — 1.1 MB\"",
      "focusVisible": true,
      "expect": null,
-     "waited": 5921,
+     "waited": 6096,
      "outcome": "pass",
      "note": "S-131: saved; the player leaves and focus is on the card"
     }

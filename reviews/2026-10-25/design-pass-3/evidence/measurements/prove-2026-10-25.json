@@ -988,7 +988,7 @@
    ],
    "entries": [
     {
-     "t": 158,
+     "t": 157,
      "kind": "live-text",
      "region": "#st",
      "hidden": false,
@@ -1366,6 +1366,193 @@
  {
   "instrument": "runner",
   "fixture": "whole",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": []
+ },
+ {
+  "instrument": "runner: real declarations",
+  "fixture": "every kind of expectation found in the pilot and part 4",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": [
+   {
+    "name": "keys",
+    "key": "K-dialog__en-GB__w1280__light",
+    "expects": {
+     "steps": 18
+    }
+   },
+   {
+    "name": "focus",
+    "key": "S-03__en-GB__w1280__forced-light",
+    "expects": {
+     "subjects": [
+      "#file-input",
+      "#video-kind input:checked",
+      "#feedback-open",
+      "#language-switcher input:checked"
+     ]
+    }
+   },
+   {
+    "name": "asserts",
+    "key": "S-03__en-GB__w1280__dark",
+    "expects": {
+     "subjects": [
+      "the owner's five promises, in order",
+      "\"About the video format\" 44 x 44, collapsed, controlling #format-help",
+      "the browser note hidden and empty (VH-187)",
+      "no Video language before step 1",
+      "Tab from the top: skip link, Page language, (the notice's link), About the video format, Video type, Choose file",
+      "app.description, read as it stands for VH-200"
+     ]
+    }
+   },
+   {
+    "name": "subresults",
+    "key": "S-76__en-GB__w1280__font32",
+    "expects": {
+     "subjects": [
+      "exit by Escape: the dialog closes; focus back on Report a problem (where the page stands is the instruments' scroll, so not judged here)",
+      "entry by keys: Report a problem reached by Shift+Tab and Tab, in the window and uncovered; Enter opens the dialog; focus on the message field, inside it, in the window and uncovered",
+      "use: the message typed where focus stood reads back",
+      "use: Tab reaches What will be sent, Open email app, Copy message and details and Close, each inside the dialog, in the window and uncovered",
+      "use: Open email app, by Enter, hands the message to the email app (\"opened\" said), the dialog still open",
+      "exit by Close: Close in the window and uncovered; the dialog closes; focus back on Report a problem, in the window and uncovered"
+     ]
+    }
+   },
+   {
+    "name": "player",
+    "key": "S-127__en-GB__w1280__light",
+    "expects": {
+     "subjects": [
+      "route forward reaches every control",
+      "Tab after the last control leaves the player",
+      "play/pause by keys",
+      "seek by keys, apart from play",
+      "focus visible (2.4.7)",
+      "focus appearance (2.4.13)",
+      "not hidden by author content (2.4.11, 2.4.12)"
+     ]
+    }
+   },
+   {
+    "name": "formatTip",
+    "key": "S-03__en-GB__w1280__light",
+    "expects": {
+     "subjects": [
+      "named, and its text, in the page's words",
+      "the \"?\" at least 44 x 44",
+      "Enter opens it; focus stays on the \"?\"",
+      "edge: 1 px all round in --border-subtle, not a rail",
+      "gap: under the \"?\", inside its item and the page",
+      "Tab closes it; focus goes where it goes with it closed",
+      "Shift+Tab closes it; focus goes where it goes with it closed",
+      "Space opens it; Escape closes it, focus on the \"?\"",
+      "a click on its text keeps it open; Escape then closes it, focus on the \"?\"",
+      "a click elsewhere closes it"
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "instrument": "runner: real declarations",
+  "fixture": "K-dialog__en-GB__w1280__light: a step dropped from keys",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "evidence",
+    "key": "K-dialog__en-GB__w1280__light",
+    "instrument": "keys",
+    "why": "17 steps recorded of 18 given"
+   }
+  ]
+ },
+ {
+  "instrument": "runner: real declarations",
+  "fixture": "S-03__en-GB__w1280__forced-light: a subject dropped from focus",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "evidence",
+    "key": "S-03__en-GB__w1280__forced-light",
+    "instrument": "focus",
+    "why": "expected subjects missing: #language-switcher input:checked"
+   }
+  ]
+ },
+ {
+  "instrument": "runner: real declarations",
+  "fixture": "S-03__en-GB__w1280__dark: a subject dropped from asserts",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "evidence",
+    "key": "S-03__en-GB__w1280__dark",
+    "instrument": "asserts",
+    "why": "expected subjects missing: app.description, read as it stands for VH-200"
+   }
+  ]
+ },
+ {
+  "instrument": "runner: real declarations",
+  "fixture": "S-76__en-GB__w1280__font32: a subject dropped from subresults",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "evidence",
+    "key": "S-76__en-GB__w1280__font32",
+    "instrument": "subresults",
+    "why": "expected subjects missing: exit by Close: Close in the window and uncovered; the dialog closes; focus back on Report a problem, in the window and uncovered"
+   }
+  ]
+ },
+ {
+  "instrument": "runner: real declarations",
+  "fixture": "S-127__en-GB__w1280__light: a subject dropped from player",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "evidence",
+    "key": "S-127__en-GB__w1280__light",
+    "instrument": "player",
+    "why": "expected subjects missing: not hidden by author content (2.4.11, 2.4.12)"
+   }
+  ]
+ },
+ {
+  "instrument": "runner: real declarations",
+  "fixture": "S-03__en-GB__w1280__light: a subject dropped from formatTip",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "evidence",
+    "key": "S-03__en-GB__w1280__light",
+    "instrument": "formatTip",
+    "why": "expected subjects missing: a click elsewhere closes it"
+   }
+  ]
+ },
+ {
+  "instrument": "runner: real declarations",
+  "fixture": "the same records whole",
   "outcome": "pass",
   "wanted": "pass",
   "proved": true,

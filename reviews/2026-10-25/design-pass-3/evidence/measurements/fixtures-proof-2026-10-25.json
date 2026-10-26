@@ -5,7 +5,7 @@
   "outcome": "pass",
   "bite": 20.13,
   "planned": {
-   "t": 1792976339180,
+   "t": 1793002750923,
    "sourceIntegratedLufs": -30.36,
    "loudnessRangeLu": 0,
    "macroLevelling": false,
@@ -21,7 +21,7 @@
    "refinementPasses": 6,
    "converged": true,
    "gainDb": 34.46,
-   "planningMs": 699
+   "planningMs": 702
   },
   "warned": true,
   "margin": "over HEAVY_LIMITING_LU (3) by more than 5 LU",

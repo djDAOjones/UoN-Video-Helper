@@ -35,7 +35,7 @@ import { connectBrowser } from './cdp.mjs'
 import { Walk, sleep } from './walk.mjs'
 import { QUAL_INIT, closeAnalysis } from './qualify.mjs'
 import { MX_INIT } from './scenarios.mjs'
-import { P8_INIT, playerRows, playerKeys, footerRows, limitingRows, videoLanguageRows, formatTip, exposedChange, compareStops, targetVerdict } from './phase8.mjs'
+import { P8_INIT, playerRows, playerKeys, footerRows, limitingRows, videoLanguageRows, formatTip, exposedChange, compareStops, targetVerdict, appearanceVerdict } from './phase8.mjs'
 
 const DIR = process.env.PROVE_DIR
 const FIX = process.env.FIX
@@ -50,7 +50,7 @@ const card = ({ labelled = true, reach = true, saved = false } = {}) => `<button
   <p>${saved ? '' : CARD_WORDS['result.lifetime']}</p><div class="actions"><button class="button" type="button">Save the video</button></div></section></div>
   <p id="save-status">${saved ? CARD_WORDS['status.saved'] : ''}</p>`
 // The finished card's warnings and the status line, driven through two jobs by P8_INIT's own observer.
-const WARN_WORDS = { ...CARD_WORDS, 'warnings.heavyLimiting.heading': 'The loudest moments were held down hard', 'warnings.heavyLimiting.detail': 'To reach the usual level, the tool had to hold down the loudest moments.', 'warnings.metadataLost.heading': 'The file’s title, author, and date could not be copied across' }
+const WARN_WORDS = { ...CARD_WORDS, 'status.ready': 'Your video is ready.', 'warnings.heavyLimiting.heading': 'The loudest moments were held down hard', 'warnings.heavyLimiting.detail': 'To reach the usual level, the tool had to hold down the loudest moments.', 'warnings.metadataLost.heading': 'The file’s title, author, and date could not be copied across' }
 const WARN_PAGE = page(`<progress id="process-progress" hidden></progress><p id="status" role="status"></p><div id="process-result"></div>`, '', WARN_WORDS)
 const TIP_GOOD_SCRIPT = `const b = document.getElementById('format-help-button'), t = document.getElementById('format-help'); const set = (o) => { t.hidden = !o; b.setAttribute('aria-expanded', String(o)); };
   b.addEventListener('click', () => set(t.hidden)); document.addEventListener('focusin', (e) => { if (!b.contains(e.target) && !t.contains(e.target)) set(false); });
@@ -144,8 +144,12 @@ async function drive(w, jobs) {
   for (const j of jobs) {
     await w.evaluate(`(() => { document.getElementById('process-result').replaceChildren(); document.getElementById('process-progress').hidden = false; })()`); await sleep(120)
     // A job's status writes, in order: a text, or { text, wait } (M-01, 25 October: an earlier write in the same job).
-    for (const st of [].concat(j.status)) { const s = typeof st === 'string' ? { text: st } : st; await w.evaluate(`document.getElementById('status').textContent = ${JSON.stringify(s.text)}`); await sleep(s.wait ?? 60) }
-    await w.evaluate(`(() => { document.getElementById('process-progress').hidden = true; const r = document.getElementById('process-result'); r.innerHTML = '<section class="notification" data-kind="success"><p class="notification-title">Finished video — 1 MB</p></section>' + ${JSON.stringify(j.warnings ? `<div><section class="notification" data-kind="warning"><ul>${j.warnings.map((x) => `<li><strong>${x}</strong> ${x === WARN_WORDS['warnings.heavyLimiting.heading'] ? WARN_WORDS['warnings.heavyLimiting.detail'] : ''}</li>`).join('')}</ul></section></div>` : '')}; })()`); await sleep(150)
+    // The last is the completion's own write, made in one task with the card, as the app makes it (src/main.ts,
+    // the job's .then); `completionWrite: false` draws the card with no write (Codex astra's re-check, 26 October).
+    const writes = [].concat(j.status).map((st) => (typeof st === 'string' ? { text: st } : st))
+    const last = j.completionWrite === false ? null : writes.pop()
+    for (const s of writes) { await w.evaluate(`document.getElementById('status').textContent = ${JSON.stringify(s.text)}`); await sleep(s.wait ?? 60) }
+    await w.evaluate(`(() => { ${last ? `document.getElementById('status').textContent = ${JSON.stringify(last.text)};` : ''} document.getElementById('process-progress').hidden = true; const r = document.getElementById('process-result'); r.innerHTML = '<section class="notification" data-kind="success"><p class="notification-title">Finished video — 1 MB</p></section>' + ${JSON.stringify(j.warnings ? `<div><section class="notification" data-kind="warning"><ul>${j.warnings.map((x) => `<li><strong>${x}</strong> ${x === WARN_WORDS['warnings.heavyLimiting.heading'] ? WARN_WORDS['warnings.heavyLimiting.detail'] : ''}</li>`).join('')}</ul></section></div>` : '')}; })()`); await sleep(150)
   }
 }
 await tryOne('limiting', async () => {
@@ -217,6 +221,10 @@ await tryOne('limiting, the completion\'s write', async () => {
     ['metadata-title-missing-from-the-completion-bad', 'fail', /missing from the completion's line: The file’s title/, [{ status: `Your video is ready. ${H}.`, warnings: [H, MLOST] }]],
     ['early-heavy-warning-free-completion-metadata-missing-bad', 'fail', /missing from the completion's line/, [{ status: [{ text: `Your video is ready. ${H}.`, wait: 400 }, { text: 'Your video is ready.' }], warnings: [H, MLOST] }]],
     ['every-title-in-the-completion-in-order-good', 'pass', null, [{ status: [{ text: `Your video is ready. ${H}.`, wait: 400 }, { text: `Your video is ready. ${H}. ${MLOST}.` }], warnings: [H, MLOST] }]],
+    // Codex astra's re-check (26 October): every title written 500 ms before the card, and no write with the card.
+    ['every-title-500-ms-early-no-completion-write-bad', 'fail', /no write to the status line in the mutation that drew the finished card/, [{ status: [{ text: `Your video is ready. ${H}. ${MLOST}.`, wait: 500 }], completionWrite: false, warnings: [H, MLOST] }]],
+    ['completion-write-without-the-ready-sentence-bad', 'fail', /does not open with the page's "status.ready"/, [{ status: [{ text: 'Checking the video.', wait: 500 }, { text: `${H}. ${MLOST}.` }], warnings: [H, MLOST] }]],
+    ['every-title-in-the-completion-write-500-ms-after-another-good', 'pass', null, [{ status: [{ text: 'Checking the video.', wait: 500 }, { text: `Your video is ready. ${H}. ${MLOST}.` }], warnings: [H, MLOST] }]],
   ]
   for (const [fixture, wanted, why, jobs] of cases) {
     const w = await open(fixture, { html: WARN_PAGE })
@@ -229,7 +237,11 @@ await tryOne('limiting, the completion\'s write', async () => {
       // The reading this replaces: any status text since the job's start holding the heavy title, the metadata title checked only if said.
       const texts = (await w.evaluate('window.__p8.status')).filter((s) => s.t > start.t && s.t <= fin.t + 4000).map((s) => s.text)
       const old = texts.find((t) => t.includes(H)); const oldPass = !!old && (!old.includes(MLOST) || old.indexOf(H) < old.indexOf(MLOST))
-      proveWhy('limiting warning: the completion\'s own write, every title in order', fixture, r, wanted, why, { replacedReadingWouldPass: oldPass })
+      // The reading the re-check replaced: the last write within 1 s at or before the finish, else the first within 1 s after.
+      const writes = (await w.evaluate('window.__p8.writes')).filter((s) => s.t > start.t && s.t <= fin.t + 1000)
+      const win = writes.filter((s) => s.t <= fin.t && s.t >= fin.t - 1000).at(-1) ?? writes.find((s) => s.t > fin.t)
+      const winPass = !!win && win.text.includes(H) && win.text.includes(MLOST) && win.text.indexOf(H) < win.text.indexOf(MLOST)
+      proveWhy('limiting warning: the completion\'s own write, every title in order', fixture, r, wanted, why, { replacedReadingWouldPass: oldPass, windowReadingWouldPass: winPass })
     } finally { await w.close() }
   }
 })
@@ -302,6 +314,20 @@ await tryOne('player focus', async () => {
   proveWhy('player 2.4.13: an author-styled ring, neither exception', 'player-ring-restyled-bad', rPlay.uaException ? { ...rPlay, outcome: 'exempt' } : rPlay, 'fail', /the author styles the ring/)
   const backdrop = await playerFixture('player-host-backdrop', '#process-result video.result-player { background: #0f62fe; }', '', (w) => playerKeys(w))
   proveWhy('player 2.4.13: an author backdrop leaves the second exception to VH-200', 'player-host-backdrop-undetermined', app(backdrop, /"play"/), 'cannot-determine', /backdrop is set by the author.*VH-200/)
+  // Codex astra's re-check (26 October): 2.4.13's area is the ring's own pixels, never the whole focus redraw.
+  // In memory: no ring with a disclosure redraw over the area, and a ring not isolated, each with an author
+  // backdrop so neither exception settles it; the twin, a ring whose own pixels make the area. The redraw
+  // these replace is over the area in both failing cases, so the replaced reading would have passed them.
+  const rules0 = { rules: [] }, backdropSet = { rules: [{ selector: '#process-result video.result-player', props: ['background: #0f62fe'] }] }
+  const appArgs = { isHost: false, perimeter: 176, pseudo: '-webkit-media-controls-mute-button', indicatorRules: rules0, backdropRules: backdropSet }
+  proveWhy('player 2.4.13: no ring, a disclosure redraw over the area (in memory)', 'appearance-no-ring-disclosure-redraw-bad', appearanceVerdict({ ...appArgs, isolated: true, ringArea3: 0, ringAny: 0 }), 'cannot-determine', /the ring's own pixels at 3:1 are 0 of 176/, { redrawAt3to1: 900, replacedReadingWouldPass: 900 >= 176 })
+  proveWhy('player 2.4.13: a ring not isolated, the redraw over the area (in memory)', 'appearance-ring-not-isolated-bad', appearanceVerdict({ ...appArgs, isolated: false, ringArea3: null, ringAny: 0 }), 'cannot-determine', /area not established/, { redrawAt3to1: 900, replacedReadingWouldPass: 900 >= 176 })
+  proveWhy('player 2.4.13: the ring\'s own pixels over the area (in memory)', 'appearance-ring-over-the-area-good', appearanceVerdict({ ...appArgs, isolated: true, ringArea3: 200, ringAny: 220 }), 'pass', null)
+  // On the page: an author outline:none on the controls Chrome lets an author style leaves no ring, and the
+  // focus redraw (the user agent's highlight, the volume slider's disclosure) never makes 2.4.13 pass.
+  const sApp = suppressed.filter((r) => r.what === 'focus appearance (2.4.13)' && inner(r))
+  const sAppOutcome = sApp.length < STYLEABLE.length ? 'missing' : sApp.some((r) => r.outcome === 'pass') ? 'pass' : 'no pass'
+  prove('player 2.4.13: the rings suppressed, the redraw kept', 'player-rings-suppressed-2413-bad', sAppOutcome, 'no pass', { rows: sApp.map((r) => ({ control: r.control, outcome: r.outcome, areaAt3to1: r.areaAt3to1, redrawAt3to1: r.redrawAt3to1, perimeter2px: r.perimeter2px, why: r.why })), replacedReadingWouldPass: sApp.some((r) => r.redrawAt3to1 >= r.perimeter2px) })
   // 2.4.11 and 2.4.12: author content over the play button; its twin, the native page.
   const cover = `<div id="cover" style="position:absolute;background:#fff;z-index:2"></div><script>addEventListener('load', () => { const r = document.querySelector('video.result-player').getBoundingClientRect(); Object.assign(document.getElementById('cover').style, { left: r.left + scrollX + 'px', top: r.bottom + scrollY - 72 + 'px', width: '60px', height: '30px' }) })</script>`
   const occluded = await playerFixture('player-occluded', '', cover, (w) => playerKeys(w))

@@ -1,11 +1,11 @@
 {
  "date": "2026-10-26",
  "item": "VH-198",
- "instrumentRevision": "2d16e337abe51539",
- "after": "Codex astra's method check of 25 October, M-01 to M-04 applied (instruments-2026-10-25.md, \"After Codex astra's method check\")",
+ "instrumentRevision": "2cbba731c59d8036",
+ "after": "Codex astra's method check of 25 October, M-01 to M-05 applied, and its re-check of 26 October, its three musts applied (instruments-2026-10-25.md, \"After Codex astra's method check\" and \"After Codex astra's re-check\")",
  "appSource": "src/ and index.html as last changed at e226410 (VH-193); unchanged since",
  "source": {
-  "commit": "1cd71f2a22e69db6cd44594e9398589ccae8530e",
+  "commit": "ddc3d159b1f3894744e5a8f895f306875cf77956",
   "dirty": false,
   "diffSha256": "e3b0c44298fc1c14"
  },
@@ -21,7 +21,7 @@
  ],
  "whyTheFlags": "Without them headless Chrome reports every page but its first as hidden: timers throttle to 1 s and media loading is deferred (a probe read 20 x 100 ms timers at 19.7-20.0 s in the second and third pages, 2.0 s in the first). Phase 7's matrix opened its analysis page early, so its later walk pages ran hidden. qualify.mjs assertReached now fails a record whose page is not visible.",
  "fixtures": "fixtures.sh + fixtures-8.sh into the scratchpad, never samples/",
- "run": "vh198proof-2026-10-26T00-48-14-316Z-685d65",
+ "run": "vh198proof-2026-10-26T08-08-54-652Z-f7ed5f",
  "plan": "PLANS.vh198proof",
  "coverage": {
   "expected": 11,
@@ -31,7 +31,7 @@
  },
  "provenance": {
   "pinnedAtCreation": true,
-  "created": "2026-10-26T00:48:14.439Z",
+  "created": "2026-10-26T08:08:54.782Z",
   "resumes": [],
   "held": true,
   "problems": [],
@@ -40,7 +40,7 @@
  "records": {
   "K-player__en-GB__w1280__light": {
    "status": "ok",
-   "revision": "2d16e337abe51539",
+   "revision": "2cbba731c59d8036",
    "reached": "pass",
    "problems": [],
    "instruments": {
@@ -50,7 +50,7 @@
   },
   "S-03__en-GB__w1280__light": {
    "status": "ok",
-   "revision": "2d16e337abe51539",
+   "revision": "2cbba731c59d8036",
    "reached": "pass",
    "problems": [],
    "instruments": {
@@ -117,7 +117,7 @@
   },
   "S-119__en-GB__w1280__light": {
    "status": "ok",
-   "revision": "2d16e337abe51539",
+   "revision": "2cbba731c59d8036",
    "reached": "pass",
    "problems": [],
    "instruments": {
@@ -169,7 +169,7 @@
   },
   "S-123__en-GB__w1280__light": {
    "status": "ok",
-   "revision": "2d16e337abe51539",
+   "revision": "2cbba731c59d8036",
    "reached": "pass",
    "problems": [],
    "instruments": {
@@ -221,7 +221,7 @@
   },
   "S-126__en-GB__w1280__light": {
    "status": "ok",
-   "revision": "2d16e337abe51539",
+   "revision": "2cbba731c59d8036",
    "reached": "pass",
    "problems": [],
    "instruments": {
@@ -300,7 +300,7 @@
   },
   "S-127__en-GB__w1280__light": {
    "status": "ok",
-   "revision": "2d16e337abe51539",
+   "revision": "2cbba731c59d8036",
    "reached": "pass",
    "problems": [],
    "instruments": {
@@ -378,12 +378,13 @@
        "h": 48
       },
       "areaAt3to1": 90,
+      "redrawAt3to1": 90,
       "perimeter2px": 368,
       "bestRatio": 18.26,
       "exceptions": {
        "userAgentOnly": {
         "holds": false,
-        "evidence": "an author outline:none on ::-webkit-media-controls-play-button removed 285 px of the ring: the author can adjust it"
+        "evidence": "an author outline:none on ::-webkit-media-controls-play-button removed 292 px of the ring: the author can adjust it"
        },
        "unmodified": {
         "holds": null,
@@ -401,7 +402,7 @@
         ]
        }
       },
-      "why": "under 2.4.13's area; the first exception does not hold (an author outline:none on ::-webkit-media-controls-play-button removed 285 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+      "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 90 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-play-button removed 292 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
       "unresolved": "interpretation"
      },
      {
@@ -413,7 +414,8 @@
        "w": 52,
        "h": 48
       },
-      "areaAt3to1": 219,
+      "areaAt3to1": 102,
+      "redrawAt3to1": 219,
       "perimeter2px": 384,
       "bestRatio": 17.61,
       "exceptions": {
@@ -437,7 +439,7 @@
         ]
        }
       },
-      "why": "under 2.4.13's area; the first exception does not hold (an author outline:none on ::-webkit-media-controls-volume-slider removed 378 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+      "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 102 of 384; the first exception does not hold (an author outline:none on ::-webkit-media-controls-volume-slider removed 378 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
       "unresolved": "interpretation"
      },
      {
@@ -449,7 +451,8 @@
        "w": 48,
        "h": 48
       },
-      "areaAt3to1": 110,
+      "areaAt3to1": 99,
+      "redrawAt3to1": 110,
       "perimeter2px": 368,
       "bestRatio": 17.61,
       "exceptions": {
@@ -473,7 +476,7 @@
         ]
        }
       },
-      "why": "under 2.4.13's area; the first exception does not hold (an author outline:none on ::-webkit-media-controls-mute-button removed 382 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+      "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 99 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-mute-button removed 382 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
       "unresolved": "interpretation"
      },
      {
@@ -485,13 +488,14 @@
        "w": 48,
        "h": 48
       },
-      "areaAt3to1": 98,
+      "areaAt3to1": 96,
+      "redrawAt3to1": 98,
       "perimeter2px": 368,
       "bestRatio": 15.82,
       "exceptions": {
        "userAgentOnly": {
         "holds": false,
-        "evidence": "an author outline:none on ::-webkit-media-controls-fullscreen-button removed 384 px of the ring: the author can adjust it"
+        "evidence": "an author outline:none on ::-webkit-media-controls-fullscreen-button removed 385 px of the ring: the author can adjust it"
        },
        "unmodified": {
         "holds": null,
@@ -509,7 +513,7 @@
         ]
        }
       },
-      "why": "under 2.4.13's area; the first exception does not hold (an author outline:none on ::-webkit-media-controls-fullscreen-button removed 384 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+      "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 96 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-fullscreen-button removed 385 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
       "unresolved": "interpretation"
      },
      {
@@ -530,7 +534,8 @@
        "w": 48,
        "h": 48
       },
-      "areaAt3to1": 63,
+      "areaAt3to1": null,
+      "redrawAt3to1": 63,
       "perimeter2px": 368,
       "bestRatio": 15.82,
       "exceptions": {
@@ -566,13 +571,14 @@
        "w": 825,
        "h": 24
       },
-      "areaAt3to1": 1855,
+      "areaAt3to1": 1783,
+      "redrawAt3to1": 1855,
       "perimeter2px": 3380,
-      "bestRatio": 19.92,
+      "bestRatio": 19.82,
       "exceptions": {
        "userAgentOnly": {
         "holds": false,
-        "evidence": "an author outline:none on ::-webkit-media-controls-timeline removed 3370 px of the ring: the author can adjust it"
+        "evidence": "an author outline:none on ::-webkit-media-controls-timeline removed 3374 px of the ring: the author can adjust it"
        },
        "unmodified": {
         "holds": null,
@@ -590,7 +596,7 @@
         ]
        }
       },
-      "why": "under 2.4.13's area; the first exception does not hold (an author outline:none on ::-webkit-media-controls-timeline removed 3370 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+      "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 1783 of 3380; the first exception does not hold (an author outline:none on ::-webkit-media-controls-timeline removed 3374 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
       "unresolved": "interpretation"
      }
     ],
@@ -617,7 +623,7 @@
   },
   "S-131__en-GB__w1280__light": {
    "status": "ok",
-   "revision": "2d16e337abe51539",
+   "revision": "2cbba731c59d8036",
    "reached": "pass",
    "problems": [],
    "instruments": {
@@ -654,7 +660,7 @@
   },
   "S-135__en-GB__w1280__light": {
    "status": "ok",
-   "revision": "2d16e337abe51539",
+   "revision": "2cbba731c59d8036",
    "reached": "pass",
    "problems": [],
    "instruments": {
@@ -733,7 +739,7 @@
   },
   "S-141__en-GB__w1280__light": {
    "status": "ok",
-   "revision": "2d16e337abe51539",
+   "revision": "2cbba731c59d8036",
    "reached": "pass",
    "problems": [],
    "instruments": {
@@ -792,7 +798,7 @@
   },
   "S-142__zh-Hans__w1280__light": {
    "status": "ok",
-   "revision": "2d16e337abe51539",
+   "revision": "2cbba731c59d8036",
    "reached": "pass",
    "problems": [],
    "instruments": {
@@ -851,7 +857,7 @@
   },
   "S-145__en-GB__w1280__light": {
    "status": "ok",
-   "revision": "2d16e337abe51539",
+   "revision": "2cbba731c59d8036",
    "reached": "pass",
    "problems": [],
    "instruments": {

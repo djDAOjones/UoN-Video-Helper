@@ -23,7 +23,7 @@ import { Walk, F, sleep } from './walk.mjs'
 import { QUAL_INIT, VIEWS, assertReached, axTree, focusArea, fileButtonInk, keysRoute, closeAnalysis, setViewport, setMode, withholdFonts, pageShot, pressedVsHover, typeRoles } from './qualify.mjs'
 import { Run, writeManifest, writeDigest, aggregate, recordKey, browserCommandLine } from './runner.mjs'
 import { SCENARIOS, ROUTES, PLANS, MX_INIT, GAPS, READINGS } from './scenarios.mjs'
-import { P8_INIT, PHASE8_INSTRUMENTS, phase8Instruments, watchWorkers, assertRows } from './phase8.mjs'
+import { P8_INIT, PHASE8_INSTRUMENTS, PLAYER_KEY_ROWS, FORMAT_TIP_ROWS, phase8Instruments, watchWorkers, assertRows } from './phase8.mjs'
 // VH-198: the third pass's five parts and twelve runs, by name (parts.mjs).
 import { assertParts, partOf, runOf } from './parts.mjs'
 export { SCENARIOS, ROUTES, PLANS }
@@ -52,6 +52,28 @@ const viewportFor = (view) => { const v = VIEWS[view]; return v ? { w: v.width, 
 // A record's variant (a subcase of a compound scenario) merges over its scenario.
 const scenarioFor = (r) => { const sc = SCENARIOS[r.id]; return sc && r.variant && sc.variants?.[r.variant] ? { ...sc, ...sc.variants[r.variant] } : sc }
 export const hasSubresults = (r) => { const s = scenarioFor(r)?.subresults; return !!s && (!s.when || !!s.when(r)) }
+// Codex astra's re-check (26 October), M-01: what each record must hold, from its own
+// declaration, so a subject dropped from a real record fails the run (runner.mjs `verify`):
+// a route's steps; a scenario's focus targets, the controls it presses, its own assertions and
+// its subresults' assertions; and the Phase 8 rows it opts into (the player by keys, the format "?").
+export function expectsFor(r) {
+  const route = ROUTES[r.id]
+  if (route) return { keys: { steps: route.steps.length } }
+  const sc = scenarioFor(r)
+  if (!sc) return undefined
+  const out = {}
+  const sels = (sc.focus ?? []).map((f) => (typeof f === 'string' ? f : f.sel))
+  if (sels.length) out.focus = { subjects: sels }
+  if (r.pressed?.length) out.pressed = { subjects: r.pressed }
+  if (sc.asserts?.length) out.asserts = { subjects: sc.asserts.map((a) => a.what) }
+  if (hasSubresults(r) && sc.subresults.asserts?.length) out.subresults = { subjects: sc.subresults.asserts.map((a) => a.what) }
+  const p8 = new Set(sc.p8 ?? [])
+  if (p8.has('playerKeys')) out.player = { subjects: PLAYER_KEY_ROWS }
+  if (p8.has('formatTip')) out.formatTip = { subjects: FORMAT_TIP_ROWS }
+  return out
+}
+/** A plan's record as a run declares it: what it requires, the view it must reach, and what it must hold. */
+export const declareRecord = (r) => ({ ...r, requires: r.requires ?? requiredFor(r), viewport: r.viewport ?? viewportFor(r.view), expects: r.expects ?? expectsFor(r) })
 // The fixtures a run's declared records name (each scenario's or route's `fixtures`), pinned by hash when the run is created (M-03).
 const declaredFixtures = (declared) => [...new Set(declared.flatMap((r) => (ROUTES[r.id] ?? scenarioFor(r))?.fixtures ?? []))].map((f) => (f.startsWith('/') ? f : F(f)))
 const slug = (s) => String(s).replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40)
@@ -172,7 +194,7 @@ async function main() {
     // A part or a run of one, held to the sizing script and the plan before it starts.
     if (partOf(planName) || runOf(planName)) { const c = await assertParts(); console.log(`parts as declared: ${c.total} records in ${c.runs.length} runs (the script's ${c.scriptTotal}, less ${c.sourceOnly.length} source-only); split ${c.runsSha}`) }
     const only = process.argv.slice(3)
-    declared = PLANS[planName]().filter((r) => !only.length || only.includes(r.id)).map((r) => ({ ...r, requires: r.requires ?? requiredFor(r), viewport: r.viewport ?? viewportFor(r.view) }))
+    declared = PLANS[planName]().filter((r) => !only.length || only.includes(r.id)).map(declareRecord)
     run = Run.create(RUN_ROOT, planName + (only.length ? '-part' : ''), declared, { appRoot: APP_ROOT, fixtures: declaredFixtures(declared) })
   }
   const started = Date.now()

@@ -4,18 +4,19 @@ The walker is Phase 7's, copied into `walker/` from
 `reviews/2026-10-22/design-pass-2/evidence/measurements/walker/` at
 `4ec3d31` (`walker/SOURCE.md`); the old bundle is untouched.
 `git diff 4ec3d31 -- reviews/2026-10-25/design-pass-3/evidence/measurements/walker/`
-is the instrument diff. After Codex astra's method check (its own
-section, below), every proof, the pilot, and the routes and transitions
-walked before VH-199 were run again on 26 October at one instrument
-revision, **`2d16e337abe51539`** (`runner.mjs:235–238`
+is the instrument diff. After Codex astra's method check and its
+re-check (their own sections, below), every proof, the pilot, and the
+routes and transitions walked before VH-199 were run again on 26 October
+at one instrument revision, **`2cbba731c59d8036`** (`runner.mjs:235–238`
 `instrumentRevision()`: a hash over each `.mjs` and `.sh` file's hash in
 `walker/`), the walker as this document's commit holds it, with `src/`
 and `index.html` as `e226410` (VH-193) left them (source commit
-`1cd71f2`, nothing uncommitted). Each run pinned that revision when it
+`ddc3d15`, nothing uncommitted). Each run pinned that revision when it
 was created, and every record carries it. The first proofs and pilot,
-at `6ed245d297623aec`, stay in git at `d403a72`. Every part VH-199
-walks must run at `2d16e337abe51539`; a change to the walker after a
-part has run reruns that part (the plan, "Running it").
+at `6ed245d297623aec`, stay in git at `d403a72`; those after the method
+check, at `2d16e337abe51539`, at `ddc3d15`. Every part VH-199 walks must
+run at `2cbba731c59d8036`; a change to the walker after a part has run
+reruns that part (the plan, "Running it").
 
 The browser was Chrome 156.0.8078.48, `--headless=new`, on macOS
 (darwin 25.6.0, arm64), driven over the DevTools protocol on its own
@@ -150,11 +151,11 @@ made source-only with no contingency.
 
 | Part | What it walks | Plan | Script, new walker | Declared | Script's estimate | Calibrated |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| 1 | `PLANS.priority`, carried | 699 | 699 | 699 | 8,600 s | 7,618 s |
-| 2 | the fix plans' keys beyond part 1, and VH-178's transitions | 205 | 157 + 48 | 157 + 48 | 2,202 s | 2,139 s |
-| 3 | Phase 8 in full | 2,162 | 2,162 | 2,131 | 22,721 s | 19,180 s |
-| 3b | every other walked scenario in the nine light cells | 184 | 216 | 216 | 6,645 s | 5,824 s |
-| 4 | the routes whole, less part 1's | 16 | 16 | 16 | 885 s | 416 s |
+| 1 | `PLANS.priority`, carried | 699 | 699 | 699 | 8,600 s | 7,646 s |
+| 2 | the fix plans' keys beyond part 1, and VH-178's transitions | 205 | 157 + 48 | 157 + 48 | 2,202 s | 2,142 s |
+| 3 | Phase 8 in full | 2,162 | 2,162 | 2,131 | 22,721 s | 19,235 s |
+| 3b | every other walked scenario in the nine light cells | 184 | 216 | 216 | 6,645 s | 5,841 s |
+| 4 | the routes whole, less part 1's | 16 | 16 | 16 | 885 s | 417 s |
 | | **Total** | **3,266** | **3,298** | **3,267** | 41,053 s, 11.4 h | 9.8 h |
 
 The declared records' own estimate differs from the script's by the
@@ -166,18 +167,18 @@ estimate to about an hour (largest scenario first, to the lightest run):
 
 | Run | Part | Records | Scenarios | Script's estimate | Calibrated |
 | --- | --- | ---: | ---: | ---: | ---: |
-| run-01 | 1 | 369 | 60 | 4,303 s | 3,926 s |
-| run-02 | 1 | 330 | 60 | 4,307 s | 3,691 s |
-| run-03 | 2 | 157 + 48 transitions | 15 | 2,234 s | 2,139 s |
-| run-04 | 3 | 358 | 23 | 3,757 s | 3,328 s |
-| run-05 | 3 | 383 | 24 | 3,742 s | 2,735 s |
-| run-06 | 3 | 338 | 24 | 3,758 s | 3,192 s |
-| run-07 | 3 | 355 | 24 | 3,756 s | 3,512 s |
-| run-08 | 3 | 367 | 24 | 3,756 s | 3,256 s |
-| run-09 | 3 | 330 | 24 | 3,757 s | 3,158 s |
-| run-10 | 3b | 103 | 25 | 3,323 s | 2,889 s |
-| run-11 | 3b | 113 | 23 | 3,322 s | 2,935 s |
-| run-12 | 4 | 16 | 5 | 885 s | 416 s |
+| run-01 | 1 | 369 | 60 | 4,303 s | 3,941 s |
+| run-02 | 1 | 330 | 60 | 4,307 s | 3,704 s |
+| run-03 | 2 | 157 + 48 transitions | 15 | 2,234 s | 2,142 s |
+| run-04 | 3 | 358 | 23 | 3,757 s | 3,339 s |
+| run-05 | 3 | 383 | 24 | 3,742 s | 2,744 s |
+| run-06 | 3 | 338 | 24 | 3,758 s | 3,201 s |
+| run-07 | 3 | 355 | 24 | 3,756 s | 3,521 s |
+| run-08 | 3 | 367 | 24 | 3,756 s | 3,265 s |
+| run-09 | 3 | 330 | 24 | 3,757 s | 3,165 s |
+| run-10 | 3b | 103 | 25 | 3,323 s | 2,897 s |
+| run-11 | 3b | 113 | 23 | 3,322 s | 2,944 s |
+| run-12 | 4 | 16 | 5 | 885 s | 417 s |
 
 Part 2's run is two commands, `node matrix.mjs run-03` for its 157
 records and `node transitions.mjs --plan run-03` for its 48 transitions.
@@ -213,16 +214,16 @@ them out would need the recipe changed by decision; it is not proposed.
 
 ## Proved to detect, again
 
-Every proof suite was run again on 26 October at `2d16e337abe51539`,
-one at a time, its failing fixtures and mutated pages written to the
-scratchpad only:
+Every proof suite was run again on 26 October at `2cbba731c59d8036`,
+after Codex astra's re-check, one at a time, its failing fixtures and
+mutated pages written to the scratchpad only:
 
 | Suite | Results | File |
 | --- | --- | --- |
-| The instruments (`prove.mjs`, VH-171, Phase 7's method check and M-01's runner cases) | 85 of 85 proved: the 77 before, each as in `prove-2026-10-23.json`, and 8 new | `prove-2026-10-25.json` |
+| The instruments (`prove.mjs`, VH-171, Phase 7's method check, M-01's runner cases and the re-check's real declarations) | 93 of 93 proved: the 77 before, each as in `prove-2026-10-23.json`, 8 of M-01 and 8 of the re-check | `prove-2026-10-25.json` |
 | `pressed` and `type` (`prove-172.mjs`, VH-172) | 8 of 8 | `prove-172-2026-10-25.json` |
-| Phase 8's instruments (`prove-8.mjs`, with M-01's and M-02's cases) | 65 of 65: the 31 before and 34 new | `prove-8-2026-10-25.json` |
-| The player (P-06): `prove-8.mjs`'s 33 player checks, and S-126, S-127, S-131 and K-player on the app (`PLANS.vh198proof`) | 33 of 33; the app's records as "After Codex astra's method check", M-02, settles them | `player-proof-2026-10-25.json` |
+| Phase 8's instruments (`prove-8.mjs`, with M-01's, M-02's and the re-check's cases) | 72 of 72: the 31 before, 34 of M-01 and M-02, and 7 of the re-check | `prove-8-2026-10-25.json` |
+| The player (P-06): `prove-8.mjs`'s 37 player checks, and S-126, S-127, S-131 and K-player on the app (`PLANS.vh198proof`) | 37 of 37; the app's records as "After Codex astra's method check", M-02, settles them, with 2.4.13's area the ring's own pixels ("After Codex astra's re-check") | `player-proof-2026-10-25.json` |
 | Phase 8's instruments on the app (`node matrix.mjs vh198proof`, 11 records) | 11 of 11, whole, every record at the revision | `phase8-app-proof-2026-10-25.json` |
 | Every fault (`faults.mjs check`): Phase 7's F1 to F14 on the Phase 8 page, and F15 to F19 and F4e revised, each reporting the branch it reached | 27 of 27 reach their state | `faults-check-2026-10-25.json` |
 | N6 to N14 (`prove-fixtures-8.mjs`), N14 on its measured timing (M-04) | 8 of 9, N11 the exception: it reads as 10 seconds, so S-104 is source-only | `fixtures-proof-2026-10-25.json` |
@@ -263,7 +264,8 @@ The checks the plan names each have a failing case and a passing twin:
   missing-variant records each fail a run; a capture is never
   overwritten; a whole run passes.
 - **Codex astra's four musts**: each gap with its failing case and
-  passing twin, in "After Codex astra's method check", below.
+  passing twin, in "After Codex astra's method check", below; and its
+  re-check's three, in "After Codex astra's re-check".
 
 ## The pilot
 
@@ -283,7 +285,7 @@ instrument ran on every scenario record, and S-76's four enlargement
 records (320 px, both proxies, the 32 px font) ran their subresults
 (M-04).
 
-Run `pilot3-2026-10-26T01-03-59-114Z-ca4cb2`, at `2d16e337abe51539`: **77 declared, 77 observed, whole**: no missing, duplicate, stale, undeclared, failed, state-expired or wrong-view record, every required instrument present with its evidence, none passing on nothing (`runner.mjs:133–198` `verify`). The provenance pinned at creation held (no drift, no record off the revision). Every page was visible, and the manifest reads Chrome's flags from the browser process (ps, pid 67067), none of the three missing. It took 613 s (557 s at `6ed245d297623aec`); 761 captures (35.3 MB), each hashed; `expectedKeysSha256` and `observedKeysSha256` both `fdc4e3dd17ebc634`. By class: English 67, Chinese 8, Malay 2; seven views (1280, 375 and 320 px, landscape, short, both proxies) and all eight modes.
+Run `pilot3-2026-10-26T08-23-14-752Z-26da6c`, at `2cbba731c59d8036`: **77 declared, 77 observed, whole**: no missing, duplicate, stale, undeclared, failed, state-expired or wrong-view record, every required instrument present with its evidence and every record holding the subjects its declaration expects, none passing on nothing (`runner.mjs:133–198` `verify`). The provenance pinned at creation held (no drift, no record off the revision). Every page was visible, and the manifest reads Chrome's flags from the browser process (ps, pid 42753), none of the three missing. It took 614 s (613 s at `2d16e337abe51539`, 557 s at `6ed245d297623aec`); 761 captures (35.3 MB), each hashed; `expectedKeysSha256` and `observedKeysSha256` both `fdc4e3dd17ebc634`. By class: English 67, Chinese 8, Malay 2; seven views (1280, 375 and 320 px, landscape, short, both proxies) and all eight modes.
 
 Records by instrument (the routes' `keys` rows are K-dialog's and K-player's):
 
@@ -307,7 +309,7 @@ Records by instrument (the routes' `keys` rows are K-dialog's and K-player's):
 | `keys` | 3 | 0 | 0 | 0 |
 | `subresults` | 4 | 0 | 0 | 0 |
 
-The one failing record is S-15 at the 32 px font (below), as at `6ed245d297623aec` and on two earlier revisions, `f37a3c13a26ca902` (75 records, before K-player and S-127 at 320 px joined) and `410b9be3ca3b6234` (77): whole, the one failure, the same unresolved groups but the player's. Every Phase 8 instrument passed or was "not applicable" where its element was absent: the player wherever there was no finished card, `formatTip` outside the scenarios that own it, `limiting` without a finished card. The player's 14 "cannot determine" records at `6ed245d297623aec` (the volume slider's empty box at rest) are gone: the slider is measured once disclosed (52 × 48, a 44 px square of hits, 49 of 49 points), so the twelve records with a finished player (S-126 in seven, S-135 in three, S-114 in two) pass. Its two "cannot determine" records are S-127's, at 1280 and 320 px, under M-02's settlement: whether a change is notified (4.1.2, not observed); the overflow button's 2.4.7 (no ring can be isolated); and the inner rings under 2.4.13's area, the second exception left to VH-200 (below). S-76's four subresults pass: the dialog entered, used and left by keys at 320 px, both proxies and the 32 px font, focus back on its opener.
+The one failing record is S-15 at the 32 px font (below), as at `2d16e337abe51539` and `6ed245d297623aec` and on two earlier revisions, `f37a3c13a26ca902` (75 records, before K-player and S-127 at 320 px joined) and `410b9be3ca3b6234` (77): whole, the one failure, the same unresolved groups but the player's. Every Phase 8 instrument passed or was "not applicable" where its element was absent: the player wherever there was no finished card, `formatTip` outside the scenarios that own it, `limiting` without a finished card. The player's 14 "cannot determine" records at `6ed245d297623aec` (the volume slider's empty box at rest) are gone: the slider is measured once disclosed (52 × 48, a 44 px square of hits, 49 of 49 points), so the twelve records with a finished player (S-126 in seven, S-135 in three, S-114 in two) pass. Its two "cannot determine" records are S-127's, at 1280 and 320 px, under M-02's settlement: whether a change is notified (4.1.2, not observed); the overflow button's 2.4.7 (no ring can be isolated); and the inner rings under 2.4.13's area, the second exception left to VH-200 (below). Against the pilot at `2d16e337abe51539`, record by record, no instrument's outcome changed; one row did: S-127's volume ring at 320 px, which passed 2.4.13 by the whole focus redraw (446 px against a 384 px perimeter, the slider's disclosure in it), is under the area by its own pixels (103) and "cannot determine" with the other inner rings (the player's rows: 221 pass, 13 "cannot determine", 76 exempt). S-135's three records pass on the completion's own write, bound to the mutation that drew the card and opening with the page's own "ready" sentence, in English and Chinese. S-76's four subresults pass: the dialog entered, used and left by keys at 320 px, both proxies and the 32 px font, focus back on its opener.
 
 The manifest is `pilot-manifest-2026-10-25.json`, in Phase 7's form:
 source commit, the instrument revision and every file's hash, the
@@ -328,14 +330,16 @@ revision when it was created and held it to the end:
 
 | Run | Records | Whole | Outcome | Measured |
 | --- | ---: | --- | --- | ---: |
-| `part4-2026-10-26T01-40-04-807Z-d107b9`: part 4, J2 to J4 and K-dialog in Chinese and Malay at 1280 px and English at 320 px, K-player in its four cells | 16 | yes | 16 pass, 403 of 403 steps; `observedKeysSha256` `e7e9580dd4964937` | 386 s |
-| `transitions-run-03-2026-10-26T01-47-10-573Z`: part 2's 48 transitions (`--plan run-03`) | 48 | yes | transitions 48 pass; rings 44 pass, 4 not read by design (T-46c and T-46d, save and watchdog: the successor is not a control whose ring is read); none unresolved; keys `c5ed7d541ac7f106`, expected and observed | 1,214 s |
-| `part1-part-2026-10-26T02-07-52-603Z-de278e`: J1 in Chinese, Malay and English at 1280 px and English at 320 px; J2, J3 and J4 in English at 1280 px | 7 | yes | J2 to J4 pass; each J1 "cannot determine" on one step alone, ArrowDown on the native Animation type select (Chrome opens its popup rather than step the value, as Phase 7 recorded); 295 of 299 steps pass | 354 s |
-| `m04-small-2026-10-26T02-14-07-819Z-340ab3`: S-132 and S-152's save, S-76's dialog at the 32 px font, 320 px and the 400 % proxy, and S-149's read-failure branch, through `matrix.mjs` with nothing in the walker changed | 6 | yes | subresults: S-132, S-152 and S-76's three pass; S-149 reaches the branch and records focus on the body (a finding, below) | 78 s |
+| `part4-2026-10-26T08-34-34-929Z-5ae852`: part 4, J2 to J4 and K-dialog in Chinese and Malay at 1280 px and English at 320 px, K-player in its four cells | 16 | yes | 16 pass, 403 of 403 steps; `observedKeysSha256` `e7e9580dd4964937` | 384 s |
+| `transitions-run-03-2026-10-26T08-41-20-101Z`: part 2's 48 transitions (`--plan run-03`) | 48 | yes | transitions 48 pass; rings 44 pass, 4 not read by design (T-46c and T-46d, save and watchdog: the successor is not a control whose ring is read); none unresolved; keys `c5ed7d541ac7f106`, expected and observed | 1,214 s |
+| `part1-part-2026-10-26T09-01-57-182Z-e9247c`: J1 in Chinese, Malay and English at 1280 px and English at 320 px; J2, J3 and J4 in English at 1280 px | 7 | yes | J2 to J4 pass; each J1 "cannot determine" on one step alone, ArrowDown on the native Animation type select (Chrome opens its popup rather than step the value, as Phase 7 recorded); 295 of 299 steps pass | 357 s |
+| `m04-small-2026-10-26T09-08-10-431Z-1c8425`: S-132 and S-152's save, S-76's dialog at the 32 px font, 320 px and the 400 % proxy, and S-149's read-failure branch, through `matrix.mjs` with nothing in the walker changed | 6 | yes | subresults: S-132, S-152 and S-76's three pass; S-149 reaches the branch and records focus on the body (a finding, below) | 79 s |
 
 These are qualification runs, kept in the scratchpad; VH-199 walks every
-part afresh. Part 4's first attempt (`part4-2026-10-26T01-14-34-078Z-4af3d1`)
-hung at J4 in Malay: after its last file was chosen (`lecture-360s.mp4`,
+part afresh. Each holds the same outcomes as at `2d16e337abe51539`, record
+by record, and none stalled at `2cbba731c59d8036`. At
+`2d16e337abe51539`, part 4's first attempt
+(`part4-2026-10-26T01-14-34-078Z-4af3d1`) hung at J4 in Malay: after its last file was chosen (`lecture-360s.mp4`,
 while it was checked) the page's renderer stopped answering the
 protocol (`Runtime.evaluate` and `Page.enable` unanswered, no CPU), a
 minute after the same steps passed in Chinese. The walker waits on the
@@ -343,14 +347,16 @@ page without a guard, so the run stood rather than failing the record.
 It was stopped after 21 minutes, Chrome restarted with a fresh profile,
 and part 4 run again whole, above. The cause was not found; a page
 `chrome://settings/help` also opened in the browser's default context in
-both Chromes, outside the walker's own contexts. VH-199 should watch for
+both Chromes, and again in this rerun's, outside the walker's own
+contexts. VH-199 should watch for
 a part that stops recording and resume it in place.
 
 Readings in them for VH-200, not instrument faults: T-46.1's focused
 card runs past the window (292 to 990 px of 900 in English, 255 to 953
 px in Chinese and Malay), where VH-176 read it inside (292 to 518 px),
 since the player made the card taller; in English forced-dark it read
-292 to 676 px this time (990 px at `6ed245d297623aec`), a geometry that
+292 to 676 px this time, as at `2d16e337abe51539` (990 px at
+`6ed245d297623aec`), a geometry that
 turns on the player's state at the moment of reading. K-player at 320 px
 finds full screen under More, the controls Chrome shows at that width.
 
@@ -362,30 +368,31 @@ records:
 
 | Class | Records | Measured | Script's estimate | Ratio | Ratio, added costs apart |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| carried scenarios (the pilot) | 43 | 312 s | 327 s | 0.954 | 0.899 |
-| Phase 8's scenarios (the pilot) | 30 | 266 s | 297 s | 0.895 | 0.798 |
-| K-dialog and K-player (the pilot and part 4) | 10 | 95 s | 238 s | 0.40 | 0.40 |
-| J1 to J4 (the route runs) | 16 | 673 s | 1,370 s | 0.492 | 0.492 |
+| carried scenarios (the pilot) | 43 | 313 s | 327 s | 0.957 | 0.902 |
+| Phase 8's scenarios (the pilot) | 30 | 267 s | 297 s | 0.898 | 0.799 |
+| K-dialog and K-player (the pilot and part 4) | 10 | 95 s | 238 s | 0.401 | 0.401 |
+| J1 to J4 (the route runs) | 16 | 675 s | 1,370 s | 0.493 | 0.493 |
 | S-140n (the pilot) | 1 | 4 s | 86 s | 0.042 | 0.042 |
 
 Applied by class as the first calibration did, the matrix comes to about
-10.2 h. That overstates it: the pilot holds the new costs in a larger
+10.3 h. That overstates it: the pilot holds the new costs in a larger
 share than the parts do (S-76's four subresults among 43 carried
 records, 14 finished players among 30 Phase 8 records), and the ratio
 spreads them over every record of the class. Taken as their own, each
 measured as the same pilot record's seconds here less at
 `6ed245d297623aec`: a finished, unsaved player adds 1.6 s a record
-(M-02's targets and author rules), S-127's keys 5.0 s (three readings at
-each stop), S-76's dialog subresults 4.4 s (its own setup and the
-dialog). Every other record moved 0.15 s (2 %). With the ratios taken
+(M-02's targets and author rules), S-127's keys 4.9 s (three readings at
+each stop), S-76's dialog subresults 4.5 s (its own setup and the
+dialog). Every other record moved 0.17 s (3 %). With the ratios taken
 without those costs and the costs added back by count (about 495
 records with a finished player, by their scenario's state; 39 of S-127;
 8 of S-76's subresults), and S-132, S-152 and S-149's subresults from the
-small run above (12.8 s, 8.9 s and 32.5 s a record: within the script's
-allotment but S-149's three, 19 s more), the matrix comes to about
-**9.8 h** against the script's 11.4 h (9.3 h at `6ed245d297623aec`):
-about 17 minutes of added cost, 1 minute of it the subresults, and the
-2 % drift. The twelve runs come to between 7 and 65 minutes.
+small run above (13.0 s, 8.9 s and 32.6 s a record: within the script's
+allotment but S-149's three, 20 s more), the matrix comes to about
+**9.8 h** against the script's 11.4 h, as at `2d16e337abe51539` (9.3 h at
+`6ed245d297623aec`): about 17 minutes of added cost, 1 minute of it the
+subresults, and the 3 % drift; the re-check's changes add no measurable
+time. The twelve runs come to between 7 and 66 minutes.
 
 J1 to J4, which the pilot does not hold, are calibrated from the route
 runs above; part 2's transitions keep VH-176's measured 1,250 s, which
@@ -437,9 +444,11 @@ From the pilot's measurements (the manifest's `unresolved`):
     no author style, so its ring cannot be isolated from the user
     agent's hover-and-focus highlight; whether that change alone is a
     visible indicator is VH-200's to read;
-  - the inner rings under 2.4.13's area (play, volume, mute, full
-    screen, the time slider at 1280 px; at 320 px the volume ring
-    passes by area): the first exception does not hold, since the
+  - the inner rings under 2.4.13's area, read from each ring's own
+    pixels (play, volume, mute, full screen and the time slider at
+    1280 px; play, volume, mute and the time slider at 320 px, where
+    the volume ring no longer passes on the slider's disclosure): the
+    first exception does not hold, since the
     instrument's own author `outline: none` removes each ring; the
     second turns on whether the host's author backdrop
     (`.trim-preview, .result-player { background }`) is the indicator's
@@ -524,12 +533,14 @@ title; the footer's measure estimated characters from widths.
   write to the status line (the last at or before the finished card, or
   the first after it, within `COMPLETION_MS`, 1 s), never an earlier
   write in the job; `phase8.mjs:786–799`: that write must hold every
-  title on the card, the heavy one first, in order.
+  title on the card, the heavy one first, in order. The re-check
+  replaced the window with the card's own mutation ("After Codex
+  astra's re-check").
 - `qualify.mjs:282–284` exposes the qualified rendered-line reader as
   `Q.renderedLines`; `phase8.mjs:655–663` measures the footer by it, a
   mixed line "cannot determine" where the two counts disagree.
 
-**Proved** (`prove-2026-10-25.json`, 85 of 85: the 77 before and 8 new;
+**Proved** (`prove-2026-10-25.json`, 85 of 85 at `2d16e337abe51539`: the 77 before and 8 new;
 `prove-8-2026-10-25.json`): a bare pass, a route passing on `steps: []`,
 `keysRoute` given no steps recorded as a pass, a route short of its
 steps, a route with no count, a missing expected subject and a pass over
@@ -568,7 +579,9 @@ not identities; the volume slider stayed "cannot determine: no box";
   exception by its own evidence: the first refuted where the
   instrument's own author style removed the ring, supported where no
   author selector reaches it; the second from the author's rules on the
-  control and on the host's backdrop.
+  control and on the host's backdrop. The area was then the whole focus
+  redraw; the re-check made it the ring's own pixels ("After Codex
+  astra's re-check").
 - `:284–290` (`occlusionVerdict`; `coverage`, `:209–225`): 2.4.11 and
   2.4.12 by an 8 × 8 hit test for author content over the control, apart
   from the ring.
@@ -582,7 +595,7 @@ not identities; the volume slider stayed "cannot determine: no box";
   and value (the time slider) read from the tree around each operation;
   whether a change is notified stays "cannot determine" (not observed).
 
-**Proved** (`prove-8-2026-10-25.json`, 65 of 65: the 31 before and 34
+**Proved** (`prove-8-2026-10-25.json`, 65 of 65 at `2d16e337abe51539`: the 31 before and 34
 new, `player-proof-2026-10-25.json`): `player-rings-suppressed-bad` is
 not settled as visible, `player-rings-native-good` passes;
 `player-ring-restyled-bad` fails 2.4.13 with neither exception,
@@ -680,15 +693,145 @@ by default.
 change" and in "What VH-199 needs to know". No instrument changed.
 **Applied.**
 
+## After Codex astra's re-check
+
+Codex astra's re-check
+(`../../codex-astra-method-recheck-2026-10-26.md`, from its brief
+`../../codex-astra-method-recheck-brief-2026-10-26.md`) found the
+instruments "Not fit": three musts, each rank 1, on M-01 and M-02. Each
+is applied; none was refused. The walker after them is revision
+`2cbba731c59d8036`; every proof, the pilot and the qualification runs
+above ran again on it, and each must's failing cases and passing twin
+are in the files named. Its two "may" points need no change: the other
+repairs stand as M-01 to M-05 left them, and the stall guard stays with
+VH-198.1 for a watched VH-199 run, by the procedure in "What VH-199
+needs to know".
+
+### The declarations' `expects` (must, M-01)
+
+**Asked.** No real declaration set `expects`, so a record whose
+instrument dropped a subject still passed `verify`; only the synthetic
+proof supplied expectations. Wire them into the real declarations and
+prove that a dropped subject fails.
+
+**Changed.**
+
+- `matrix.mjs:55–76` (`expectsFor`, `declareRecord`) and `:197`: every
+  record a plan declares carries `expects`, read from its own
+  declaration: a route's step count; a scenario's focus targets, the
+  controls it presses, its own assertions, and its subresults'
+  assertions where they apply; the player's seven rows by keys
+  (`PLAYER_KEY_ROWS`, `phase8.mjs:887`) where the scenario opts into
+  `playerKeys`, and the format "?"'s ten rows (`FORMAT_TIP_ROWS`,
+  `phase8.mjs:888`) where it opts into `formatTip`. In the pilot, 74
+  records expect their focus targets, 72 their assertions, 23 the "?"'s
+  rows, 4 their subresults, 3 a route's steps and 2 the player's rows;
+  part 4's 16 expect their steps.
+- `runner.mjs:159–172` (`verify`) is unchanged: it already failed a
+  record short of its `expects`, matched on a row's what, element,
+  selector or control.
+
+**Proved** (`prove-2026-10-25.json`, 93 of 93: the 85 before and 8 new):
+from `PLANS.pilot3` and `PLANS.part4`'s own declarations, one record for
+each kind of expectation (K-dialog's steps; S-03's focus targets,
+assertions and "?" rows, in three of its records; S-76's subresults at
+the 32 px font; S-127's player rows at 1280 px): a step or a subject
+dropped from each fails the run, the subject named, and the same six
+records whole pass (`prove.mjs:252–292`). The proof first took S-03 for
+three kinds, and `Run.create` refuses a key declared twice; each kind
+now takes a different record, the kind with the fewest records first
+(`prove.mjs:258–265`). The pilot, part 4 and every qualification run
+were whole with the expectations in place. **Applied.**
+
+### The completion's write bound to the card's mutation (must, M-01)
+
+**Asked.** The completion's write was still found by a one-second window
+around the finished card: in memory, a status write 500 ms before the
+card holding every title, with no write at the completion, passed every
+limiting row. Bind the announcement to the completion's own mutation,
+and add that case beside a passing twin.
+
+**Changed.**
+
+- `phase8.mjs:61–69` (`P8_INIT`): each write to the status line is
+  recorded with `cardNew`, whether the same mutation batch drew a new
+  finished card. The app writes the line in the same task as it draws
+  the card (`src/main.ts:3038–3080`, the job's `.then`), so the write
+  and the card arrive in one batch.
+- `phase8.mjs:728–751` (`spokenAtCompletion`): the completion's write is
+  the job's write marked `cardNew`, from the job's start to its finished
+  tick, and it must open with the page's own `status.ready`; there is no
+  time window (`COMPLETION_MS` is gone). A job whose card came with no
+  such write has no completion write, and says why.
+- `phase8.mjs:804–819` (`limitingRows`): only that write counts; none is
+  a fail, since the app always makes it; a job whose start was not
+  watched is "cannot determine".
+- `scenarios.mjs:2546`: S-136's assertion reads the same write.
+
+**Proved** (`prove-8-2026-10-25.json`, 72 of 72: the 65 before and 7
+new): `prove-8.mjs:142–154` drives a job's last write in one task with
+the card, as the app does;
+`every-title-500-ms-early-no-completion-write-bad` (Codex astra's case)
+and `completion-write-without-the-ready-sentence-bad` fail, and the
+one-second window passed both (`windowReadingWouldPass`);
+`every-title-in-the-completion-write-500-ms-after-another-good` passes;
+M-01's earlier cases keep their outcomes. On the app, S-135's three
+pilot records pass on the completion's own write, drawn with the card
+(`cardNew`) and opening with the page's "ready" sentence, in English and
+Chinese. **Applied.**
+
+### 2.4.13's area: the ring's own pixels (must, M-02)
+
+**Asked.** 2.4.13's area counted the whole focused-against-unfocused
+redraw: in memory, an absent ring with enough disclosure redraw passed,
+and the suppression proof checked only 2.4.7. Require established ring
+pixels, or "cannot determine", and prove the difference. This applies
+the WCAG digest's 2.4.13 rule.
+
+**Changed.**
+
+- `phase8.mjs:260–295` (`appearanceVerdict`): the area is `ringArea3`,
+  the ring's own pixels at 3:1 (focused with the ring removed by the
+  instrument's author `outline: none`, against focused, focus and
+  disclosure unchanged), never the whole redraw, which holds the user
+  agent's highlight and any disclosure. It passes only where the ring is
+  isolated and its pixels reach the 2 px perimeter; where the ring
+  cannot be isolated the area is "not established". The exceptions are
+  read as M-02 left them.
+- `phase8.mjs:558–562` (`playerKeys`): the row carries `areaAt3to1`, the
+  ring's, and `redrawAt3to1`, the whole redraw, apart.
+
+**Proved** (`prove-8-2026-10-25.json`): in memory, with an author
+backdrop so neither exception settles it,
+`appearance-no-ring-disclosure-redraw-bad` (no ring, a 900 px redraw
+against a 176 px perimeter) and `appearance-ring-not-isolated-bad` are
+"cannot determine", where the redraw reading passed both;
+`appearance-ring-over-the-area-good` passes. On the page,
+`player-rings-suppressed-2413-bad` (an author `outline: none` on the
+player's controls) gives no 2.4.13 pass: each inner control's ring has 0
+px of its own, or is not isolated (`prove-8.mjs:317–330`). In this
+Chrome that page's redraw is under the area too, so the page case holds
+the new reading and the in-memory cases tell it from the old. On the app
+(the pilot and `PLANS.vh198proof`), S-127's rows keep their outcomes but
+one. The host passes by its ring's own pixels (5,204 against a 5,140 px
+perimeter at 1280 px; 1,204 against 1,140 at 320 px); the inner rings
+are under the area by theirs (at 1280 px: play 90, volume 102, un-mute
+99 and full screen 96, of 368 to 384; the time slider 1,783 of 3,380);
+the overflow button's area is not established, and it stays exempt by
+the first exception. The volume ring at 320 px, which passed by the
+redraw (446 of 384, the slider's disclosure in it), is "cannot
+determine" by its own pixels (103 of 384). **Applied.**
+
 ## What VH-199 needs to know
 
 - **One revision across all twelve runs.** Every part and run walks at
-  `2d16e337abe51539`, the revision every proof, the pilot and the
-  qualification runs above ran at. The runner pins it with the source
-  and the fixtures when a run is created (`runner.mjs:50–132`), stamps
-  every record with it, and the manifest names any record off it as a
-  problem, so the run is not whole (`runner.mjs:349–364`). A change to
-  the walker after a part has run reruns that part.
+  `2cbba731c59d8036`, the revision every proof, the pilot and the
+  qualification runs above ran at, after Codex astra's re-check. The
+  runner pins it with the source and the fixtures when a run is created
+  (`runner.mjs:50–132`), stamps every record with it, and the manifest
+  names any record off it as a problem, so the run is not whole
+  (`runner.mjs:349–364`). A change to the walker after a part has run
+  reruns that part.
 - **A resume is refused on drift.** `node matrix.mjs --resume <dir>` and
   `node transitions.mjs --resume <dir>` refuse, before anything in the
   run changes, if the walker, the source (its commit or an uncommitted
@@ -696,6 +839,14 @@ change" and in "What VH-199 needs to know". No instrument changed.
   what the run pinned (`runner.mjs:95–130`; `transitions.mjs:59–71`;
   `prove-resume-2026-10-25.json`). The answer is to rerun the part, not
   to edit the run.
+- **A record missing an expected subject is not whole.** Each declared
+  record carries what it must hold, from its own declaration
+  (`matrix.mjs:55–76`): a route's steps, a scenario's focus targets,
+  pressed controls and assertions, its subresults' assertions, and the
+  player's and the format "?"'s rows where it opts into them. A record
+  whose instrument drops one is not whole, nor is its run
+  (`runner.mjs:159–172`): find why the subject went missing before the
+  part is run again, and never loosen the declaration to pass it.
 - **A page that stops answering stalls a run.** The walker waits on the
   page without a guard, so a renderer that stops answering the protocol
   (part 4's first attempt here, "The routes, walked whole before
