@@ -96,6 +96,33 @@ export const P8_INIT = String.raw`
 const WORDS = `const W = (p) => { const m = window.__mx && window.__mx.msg && window.__mx.msg(p); return m != null ? m : (window.__p8words || {})[p]; };`
 const row = (what, outcome, extra = {}) => ({ what, outcome, ...extra })
 
+/**
+ * A ring's pixels that are a focus indicator (Codex astra's second re-check,
+ * 26 October, M-02), from three shots of one clip: unfocused, focused with the
+ * ring removed by the instrument's author style, and focused. A pixel is the
+ * ring's where the removal changes it; it counts as indicator only where the
+ * focused shot also differs from the unfocused one there (any change, and at
+ * 3:1, the WCAG digest's 2.4.13 rule), so a ring drawn whether focused or not
+ * is never an indicator. At 3:1 the pixel must be the ring's at 3:1 too (the
+ * removal changes it at 3:1, as the ring was isolated before), so a faint
+ * shot-to-shot change inside a highlight or a disclosure is never counted by
+ * that highlight's contrast against unfocused. `other` is the focus-only
+ * change outside the ring (the user agent's highlight, a disclosure); `onOff`
+ * all of it.
+ */
+export const RING_INDICATOR = `(([OFF, REF, ON], L, K) => {
+  if (OFF.width !== ON.width || OFF.height !== ON.height || REF.width !== ON.width || REF.height !== ON.height) return { error: 'size differs' };
+  let ringAny = 0, ring3 = 0, indicatorAny = 0, indicator3 = 0, otherAny = 0, other3 = 0, onOffAny = 0;
+  const lum = (D, i) => L(D.data[i], D.data[i + 1], D.data[i + 2]);
+  for (let i = 0; i < ON.data.length; i += 4) {
+    const on = lum(ON, i), kr = K(lum(REF, i), on), ko = K(lum(OFF, i), on);
+    if (ko > 1.02) onOffAny++;
+    if (kr > 1.02) { ringAny++; if (kr >= 3) ring3++; if (ko > 1.02) indicatorAny++; if (kr >= 3 && ko >= 3) indicator3++; }
+    else { if (ko > 1.02) otherAny++; if (ko >= 3) other3++; }
+  }
+  return { ringAny, ring3, indicatorAny, indicator3, otherAny, other3, onOffAny };
+})`
+
 async function backendId(w, sel) {
   const { root } = await w.page.send('DOM.getDocument', { depth: 0 })
   const { nodeId } = await w.page.send('DOM.querySelector', { nodeId: root.nodeId, selector: sel })
@@ -249,20 +276,22 @@ export function targetVerdict({ rest, available, disclosedBy, hit, sizing }) {
   if (sizing.rules.length) return { outcome: 'fail', why: `${short}; the author sets its size, so 2.5.5's user-agent exception does not hold`, authorSizing: sizing.rules }
   return { outcome: 'fail', why: short, uaException: 'the user agent\'s size: no author rule sets this control\'s size (2.5.5)' }
 }
-/** 2.4.7: the ring alone, isolated by an author outline:none on the control with focus and disclosure unchanged; any other focus-only change is not settled here. */
+/** 2.4.7: the ring alone, isolated by an author outline:none on the control with focus and disclosure unchanged, its pixels counted where they change against unfocused (RING_INDICATOR; second re-check, 26 October); any other focus-only change is not settled here. */
 export function visibleVerdict({ isolated, pseudo, ringAny, ring3, residualAny, residual3, onOffAny }) {
   if (!isolated) return { outcome: 'cannot-determine', why: `the ring cannot be isolated from the controls' other redraw: no author style reaches ${pseudo ? '::' + pseudo : 'this control'}; focused against unfocused differs by ${onOffAny} px, the highlight and any disclosure included` }
   if (ring3 > 0) return { outcome: 'pass' }
   if (ringAny > 0) return { outcome: 'cannot-determine', why: `a ring of ${ringAny} px, none of it at 3:1 against what it covers: whether it is visible is VH-200's`, unresolved: 'interpretation' }
-  if (residualAny > 0) return { outcome: 'cannot-determine', why: `no ring: an outline:none on the control leaves its focused pixels unchanged; a focus-only change other than a ring remains (${residualAny} px, ${residual3} at 3:1: the user agent's hover-and-focus highlight, or a disclosure); whether that alone is a visible indicator is VH-200's`, unresolved: 'interpretation' }
+  if (residualAny > 0) return { outcome: 'cannot-determine', why: `no ring that changes on focus: an outline:none on the control leaves no focused pixel that differs from unfocused; a focus-only change other than a ring remains (${residualAny} px, ${residual3} at 3:1: the user agent's hover-and-focus highlight, or a disclosure); whether that alone is a visible indicator is VH-200's`, unresolved: 'interpretation' }
   return { outcome: 'fail', why: 'nothing changes when the control is focused (2.4.7)' }
 }
 /**
  * 2.4.13 by area, the area the ring's own pixels: those an author outline
- * removal changes with focus and disclosure unchanged (`ringArea3`, at 3:1),
- * never the whole focused-against-unfocused redraw, which holds the user
- * agent's highlight and any disclosure (Codex astra's re-check, 26 October,
- * M-02); where the ring cannot be isolated, its area is not established.
+ * removal changes with focus and disclosure unchanged, counted where they
+ * meet 3:1 against the unfocused state (`ringArea3`, RING_INDICATOR's
+ * `indicator3`), never the whole focused-against-unfocused redraw, which
+ * holds the user agent's highlight and any disclosure, and never a ring drawn
+ * whether focused or not (Codex astra's re-checks, 26 October, M-02); where
+ * the ring cannot be isolated, its area is not established.
  * Short of the area, or without it, its two exceptions apart: (i) a ring the user
  * agent draws that the author cannot adjust, refuted where the instrument's
  * own author style removed it, supported where no author selector reaches
@@ -273,7 +302,7 @@ export function visibleVerdict({ isolated, pseudo, ringAny, ring3, residualAny, 
 export function appearanceVerdict({ isHost, ringArea3, perimeter, error, pseudo, isolated, ringAny, indicatorRules, backdropRules }) {
   if (error) return { outcome: 'cannot-determine', why: 'pixels unread: ' + error }
   if (isolated && ringArea3 >= perimeter) return { outcome: 'pass' }
-  const short = isolated ? `under 2.4.13's area: the ring's own pixels at 3:1 are ${ringArea3} of ${perimeter}` : `2.4.13's area not established: the ring's own pixels cannot be told from the controls' other redraw (${pseudo ? 'no author style reaches ::' + pseudo : 'no author style reaches this control'})`
+  const short = isolated ? `under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are ${ringArea3} of ${perimeter}` : `2.4.13's area not established: the ring's own pixels cannot be told from the controls' other redraw (${pseudo ? 'no author style reaches ::' + pseudo : 'no author style reaches this control'})`
   if (isHost) {
     if (indicatorRules.error) return { outcome: 'cannot-determine', why: short + '; ' + indicatorRules.error }
     if (indicatorRules.rules.length) return { outcome: 'fail', why: short + ': the author styles the host\'s ring', indicatorRules: indicatorRules.rules }
@@ -550,15 +579,15 @@ export async function playerKeys(w, { sel = PLAYER, run, key: recKey } = {}) {
     const off = await shot(w, clip)
     const px = vp.dpr * vp.dpr
     const d = await analyse(w, DIFF, off, on)
-    const ring = ref ? await analyse(w, DIFF, ref, on) : null
-    const residual = ref ? await analyse(w, DIFF, off, ref) : null
+    // The ring's pixels counted only where they change against unfocused (second re-check, 26 October): 2.4.7 and 2.4.13 alike.
+    const ring = ref ? await analyse(w, RING_INDICATOR, off, ref, on) : null
     const n = (q, k) => (q && !q.error ? Math.round(q[k] / px) : 0)
-    const vis = visibleVerdict({ isolated: !!ref && !ring.error && !residual.error, pseudo, ringAny: n(ring, 'changedAny'), ring3: n(ring, 'changed3'), residualAny: n(residual, 'changedAny'), residual3: n(residual, 'changed3'), onOffAny: n(d, 'changedAny') })
-    rows.push(row('focus visible (2.4.7)', vis.outcome, { control: label, host: isHost, pseudo: pseudo ?? undefined, ringPx: ring ? { any: n(ring, 'changedAny'), at3to1: n(ring, 'changed3') } : undefined, residualPx: residual ? { any: n(residual, 'changedAny'), at3to1: n(residual, 'changed3') } : undefined, onOffPx: n(d, 'changedAny'), why: vis.why, unresolved: vis.unresolved }))
-    // 2.4.13's area is the ring's own pixels (ring: focused with the ring removed against focused), never the whole redraw (re-check, 26 October).
     const ringIsolated = !!ref && !ring.error
-    const ringArea3 = ringIsolated ? n(ring, 'changed3') : null, redraw3 = n(d, 'changed3'), perimeter = Math.round(4 * (b.w + b.h) - 16)
-    const app = appearanceVerdict({ isHost, ringArea3, perimeter, error: d.error, pseudo, isolated: ringIsolated, ringAny: n(ring, 'changedAny'), indicatorRules, backdropRules })
+    const vis = visibleVerdict({ isolated: ringIsolated, pseudo, ringAny: n(ring, 'indicatorAny'), ring3: n(ring, 'indicator3'), residualAny: n(ring, 'otherAny'), residual3: n(ring, 'other3'), onOffAny: n(d, 'changedAny') })
+    rows.push(row('focus visible (2.4.7)', vis.outcome, { control: label, host: isHost, pseudo: pseudo ?? undefined, ringPx: ring ? { any: n(ring, 'indicatorAny'), at3to1: n(ring, 'indicator3'), drawnAny: n(ring, 'ringAny'), drawnAt3to1: n(ring, 'ring3') } : undefined, residualPx: ring ? { any: n(ring, 'otherAny'), at3to1: n(ring, 'other3') } : undefined, onOffPx: n(d, 'changedAny'), why: vis.why, unresolved: vis.unresolved }))
+    // 2.4.13's area: the ring's own pixels at 3:1 against unfocused, never the whole redraw (re-checks, 26 October).
+    const ringArea3 = ringIsolated ? n(ring, 'indicator3') : null, redraw3 = n(d, 'changed3'), perimeter = Math.round(4 * (b.w + b.h) - 16)
+    const app = appearanceVerdict({ isHost, ringArea3, perimeter, error: d.error, pseudo, isolated: ringIsolated, ringAny: n(ring, 'ringAny'), indicatorRules, backdropRules })
     const r = row('focus appearance (2.4.13)', app.outcome, { control: label, host: isHost, box: { w: Math.round(b.w), h: Math.round(b.h) }, areaAt3to1: ringArea3, redrawAt3to1: redraw3, perimeter2px: perimeter, bestRatio: d.best, exceptions: app.exceptions, uaException: app.uaException, why: app.why, unresolved: app.unresolved })
     if (run && recKey) { r.clips = [run.artifact(`${recKey}__p8ring-${i}-off.png`, Buffer.from(off, 'base64')), run.artifact(`${recKey}__p8ring-${i}-on.png`, Buffer.from(on, 'base64')), ...(ref ? [run.artifact(`${recKey}__p8ring-${i}-ringoff.png`, Buffer.from(ref, 'base64'))] : [])] }
     rows.push(r)

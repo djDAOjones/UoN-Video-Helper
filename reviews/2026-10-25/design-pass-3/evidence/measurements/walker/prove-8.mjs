@@ -33,9 +33,9 @@ import { mkdirSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { connectBrowser } from './cdp.mjs'
 import { Walk, sleep } from './walk.mjs'
-import { QUAL_INIT, closeAnalysis } from './qualify.mjs'
+import { QUAL_INIT, closeAnalysis, analyse, DIFF } from './qualify.mjs'
 import { MX_INIT } from './scenarios.mjs'
-import { P8_INIT, playerRows, playerKeys, footerRows, limitingRows, videoLanguageRows, formatTip, exposedChange, compareStops, targetVerdict, appearanceVerdict } from './phase8.mjs'
+import { P8_INIT, playerRows, playerKeys, footerRows, limitingRows, videoLanguageRows, formatTip, exposedChange, compareStops, targetVerdict, appearanceVerdict, visibleVerdict, RING_INDICATOR } from './phase8.mjs'
 
 const DIR = process.env.PROVE_DIR
 const FIX = process.env.FIX
@@ -320,7 +320,7 @@ await tryOne('player focus', async () => {
   // these replace is over the area in both failing cases, so the replaced reading would have passed them.
   const rules0 = { rules: [] }, backdropSet = { rules: [{ selector: '#process-result video.result-player', props: ['background: #0f62fe'] }] }
   const appArgs = { isHost: false, perimeter: 176, pseudo: '-webkit-media-controls-mute-button', indicatorRules: rules0, backdropRules: backdropSet }
-  proveWhy('player 2.4.13: no ring, a disclosure redraw over the area (in memory)', 'appearance-no-ring-disclosure-redraw-bad', appearanceVerdict({ ...appArgs, isolated: true, ringArea3: 0, ringAny: 0 }), 'cannot-determine', /the ring's own pixels at 3:1 are 0 of 176/, { redrawAt3to1: 900, replacedReadingWouldPass: 900 >= 176 })
+  proveWhy('player 2.4.13: no ring, a disclosure redraw over the area (in memory)', 'appearance-no-ring-disclosure-redraw-bad', appearanceVerdict({ ...appArgs, isolated: true, ringArea3: 0, ringAny: 0 }), 'cannot-determine', /the ring's own pixels at 3:1 against unfocused are 0 of 176/, { redrawAt3to1: 900, replacedReadingWouldPass: 900 >= 176 })
   proveWhy('player 2.4.13: a ring not isolated, the redraw over the area (in memory)', 'appearance-ring-not-isolated-bad', appearanceVerdict({ ...appArgs, isolated: false, ringArea3: null, ringAny: 0 }), 'cannot-determine', /area not established/, { redrawAt3to1: 900, replacedReadingWouldPass: 900 >= 176 })
   proveWhy('player 2.4.13: the ring\'s own pixels over the area (in memory)', 'appearance-ring-over-the-area-good', appearanceVerdict({ ...appArgs, isolated: true, ringArea3: 200, ringAny: 220 }), 'pass', null)
   // On the page: an author outline:none on the controls Chrome lets an author style leaves no ring, and the
@@ -362,6 +362,31 @@ await tryOne('player focus', async () => {
   const scrolled = await (async () => { const w = await open('player-scrolled', { html: page('<div style="height:2400px"></div>' + card(), '', CARD_WORDS) }); try { await w.evaluate(`(async () => { const v = document.querySelector('video.result-player'); for (let i = 0; i < 80 && v.readyState < 2 && !v.error; i++) await new Promise((r) => setTimeout(r, 100)); v.scrollIntoView({ block: 'center' }); })()`); return { passive: await playerRows(w), keys: await playerKeys(w) } } finally { await w.close() } })()
   proveWhy('player 2.5.5: the native control by hit area, the page scrolled', 'player-target-native-scrolled-good', mute(scrolled.passive), 'pass', null)
   proveWhy('player 2.4.11/2.4.12: the native page scrolled, nothing over the control', 'player-unoccluded-scrolled-good', occ(scrolled.keys), 'pass', null)
+})
+
+// Codex astra's second re-check (26 October), M-02: a ring's pixels count only where they meet 3:1 against
+// the unfocused state. Synthetic shots of one clip (a 20 x 16 control, a 2 px blue ring 3 px outside it),
+// analysed as the player's are (unfocused, focused with the ring removed, focused): a ring drawn focused or
+// not is no indicator, the same ring drawn only on focus is. Each through 2.4.13's and 2.4.7's verdicts, the
+// reading the re-check replaced (the ring removed against focused) kept beside.
+await tryOne('ring indicator pixels', async () => {
+  const w = await open('ring-indicator-synthetic', { html: page('') })
+  try {
+    const shotOf = (ring) => w.evaluate(`(() => { const c = document.createElement('canvas'); c.width = 60; c.height = 40; const x = c.getContext('2d'); x.fillStyle = '#ffffff'; x.fillRect(0, 0, 60, 40); x.fillStyle = '#8d8d8d'; x.fillRect(20, 12, 20, 16); if (${ring}) { x.strokeStyle = '#0f62fe'; x.lineWidth = 2; x.strokeRect(17, 9, 26, 22); } return c.toDataURL('image/png').split(',')[1]; })()`)
+    const withRing = await shotOf(true), noRing = await shotOf(false)
+    const perimeter = Math.round(4 * (20 + 16) - 16)
+    const args = { isHost: false, perimeter, pseudo: '-webkit-media-controls-play-button', indicatorRules: { rules: [] }, backdropRules: { rules: [{ selector: '#process-result video.result-player', props: ['background: #0f62fe'] }] } }
+    for (const [fixture, off, wanted13, wanted7, why] of [
+      ['ring-drawn-focused-or-not-bad', withRing, 'cannot-determine', 'not a pass', /the ring's own pixels at 3:1 against unfocused are 0 of 128/],
+      ['ring-drawn-on-focus-good', noRing, 'pass', 'pass', null],
+    ]) {
+      const a = await analyse(w, RING_INDICATOR, off, noRing, withRing)
+      const old = await analyse(w, DIFF, noRing, withRing)
+      proveWhy('player 2.4.13: ring pixels at 3:1 against unfocused (synthetic shots)', fixture, appearanceVerdict({ ...args, isolated: true, ringArea3: a.indicator3, ringAny: a.ringAny }), wanted13, why, { reading: a, replacedRingArea3: old.changed3, replacedReadingWouldPass: old.changed3 >= perimeter })
+      const vis = visibleVerdict({ isolated: true, pseudo: args.pseudo, ringAny: a.indicatorAny, ring3: a.indicator3, residualAny: a.otherAny, residual3: a.other3, onOffAny: a.onOffAny })
+      prove('player 2.4.7: ring pixels that change against unfocused (synthetic shots)', fixture, vis.outcome === 'pass' ? 'pass' : 'not a pass', wanted7, { row: vis, reading: a, replacedReadingWouldPass: old.changed3 > 0 })
+    }
+  } finally { await w.close() }
 })
 
 await closeAnalysis()

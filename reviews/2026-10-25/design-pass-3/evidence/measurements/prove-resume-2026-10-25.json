@@ -1,5 +1,5 @@
 {
- "dir": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/27e7f48d-1fd3-4e4c-8d41-20d6c1cb6ab2/scratchpad/vh198-3/d/proveresume/resume-2026-10-26T08-20-04-525Z",
+ "dir": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/27e7f48d-1fd3-4e4c-8d41-20d6c1cb6ab2/scratchpad/vh198-3/d/r2/proveresume/resume-2026-10-26T09-45-18-414Z",
  "results": [
   {
    "fixture": "matrix: provenance pinned at creation, the run interrupted after its first record",
@@ -9,21 +9,21 @@
    "detail": {
     "provenance": {
      "source": {
-      "commit": "73ace18bf58ffbb19e6fc8cf06ed47e8eae0762a",
+      "commit": "c47f365d5121b8f230a9808dffcd40b211fd7527",
       "dirty": false,
       "diffSha256": "e3b0c44298fc1c14"
      },
-     "revision": "2cbba731c59d8036",
+     "revision": "2e7b0c044ce11f2b",
      "fixtures": [
       {
        "file": "notvideo.mp4",
-       "path": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/27e7f48d-1fd3-4e4c-8d41-20d6c1cb6ab2/scratchpad/vh198-3/d/proveresume/resume-2026-10-26T08-20-04-525Z/fixtures/notvideo.mp4",
+       "path": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/27e7f48d-1fd3-4e4c-8d41-20d6c1cb6ab2/scratchpad/vh198-3/d/r2/proveresume/resume-2026-10-26T09-45-18-414Z/fixtures/notvideo.mp4",
        "bytes": 21,
        "sha256": "2dab03b2a72b7abb"
       },
       {
        "file": "prores-1080p.mov",
-       "path": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/27e7f48d-1fd3-4e4c-8d41-20d6c1cb6ab2/scratchpad/vh198-3/d/proveresume/resume-2026-10-26T08-20-04-525Z/fixtures/prores-1080p.mov",
+       "path": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/27e7f48d-1fd3-4e4c-8d41-20d6c1cb6ab2/scratchpad/vh198-3/d/r2/proveresume/resume-2026-10-26T09-45-18-414Z/fixtures/prores-1080p.mov",
        "bytes": 6695676,
        "sha256": "5b2f69913cb74db0"
       }
@@ -32,19 +32,19 @@
     "ledger": [
      {
       "file": "prores-1080p.mov",
-      "path": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/27e7f48d-1fd3-4e4c-8d41-20d6c1cb6ab2/scratchpad/vh198-3/d/proveresume/resume-2026-10-26T08-20-04-525Z/fixtures/prores-1080p.mov",
+      "path": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/27e7f48d-1fd3-4e4c-8d41-20d6c1cb6ab2/scratchpad/vh198-3/d/r2/proveresume/resume-2026-10-26T09-45-18-414Z/fixtures/prores-1080p.mov",
       "bytes": 6695676,
       "sha256": "5b2f69913cb74db0",
       "firstUsedInAttempt": 1,
-      "at": "2026-10-26T08:20:05.893Z"
+      "at": "2026-10-26T09:45:19.814Z"
      },
      {
       "file": "notvideo.mp4",
-      "path": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/27e7f48d-1fd3-4e4c-8d41-20d6c1cb6ab2/scratchpad/vh198-3/d/proveresume/resume-2026-10-26T08-20-04-525Z/fixtures/notvideo.mp4",
+      "path": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/27e7f48d-1fd3-4e4c-8d41-20d6c1cb6ab2/scratchpad/vh198-3/d/r2/proveresume/resume-2026-10-26T09-45-18-414Z/fixtures/notvideo.mp4",
       "bytes": 21,
       "sha256": "2dab03b2a72b7abb",
       "firstUsedInAttempt": 1,
-      "at": "2026-10-26T08:20:06.625Z"
+      "at": "2026-10-26T09:45:20.541Z"
      }
     ]
    }
@@ -55,8 +55,8 @@
    "outcome": "refused, the run unchanged",
    "proved": true,
    "detail": [
-    "Error: resume refused: resume-proof-2026-10-26T08-20-04-675Z-88f11a no longer stands on what it pinned:",
-    "  instrument revision dd731372dab5c99d, not the run's 2cbba731c59d8036 (changed: qualify.mjs)"
+    "Error: resume refused: resume-proof-2026-10-26T09-45-18-593Z-6ab914 no longer stands on what it pinned:",
+    "  instrument revision 7410020083a20a1c, not the run's 2e7b0c044ce11f2b (changed: qualify.mjs)"
    ]
   },
   {
@@ -65,8 +65,8 @@
    "outcome": "refused, the run unchanged",
    "proved": true,
    "detail": [
-    "Error: resume refused: resume-proof-2026-10-26T08-20-04-675Z-88f11a no longer stands on what it pinned:",
-    "  source commit 2aacb347c6ce0b91fef62a8cda866555738e0471, not the run's 73ace18bf58ffbb19e6fc8cf06ed47e8eae0762a"
+    "Error: resume refused: resume-proof-2026-10-26T09-45-18-593Z-6ab914 no longer stands on what it pinned:",
+    "  source commit f1f838b0b41a0c3154761d7fd54aebddbc464945, not the run's c47f365d5121b8f230a9808dffcd40b211fd7527"
    ]
   },
   {
@@ -75,7 +75,7 @@
    "outcome": "refused, the run unchanged",
    "proved": true,
    "detail": [
-    "Error: resume refused: resume-proof-2026-10-26T08-20-04-675Z-88f11a no longer stands on what it pinned:",
+    "Error: resume refused: resume-proof-2026-10-26T09-45-18-593Z-6ab914 no longer stands on what it pinned:",
     "  source tree differs from the run's: uncommitted src/, index.html or public/ e3b0c44298fc1c14 then, 831b4257941f1cc9 now"
    ]
   },
@@ -85,7 +85,7 @@
    "outcome": "refused, the run unchanged",
    "proved": true,
    "detail": [
-    "Error: resume refused: resume-proof-2026-10-26T08-20-04-675Z-88f11a no longer stands on what it pinned:",
+    "Error: resume refused: resume-proof-2026-10-26T09-45-18-593Z-6ab914 no longer stands on what it pinned:",
     "  fixture notvideo.mp4 is 4b5901f9009c5f00, not the 2dab03b2a72b7abb the run pinned"
    ]
   },
@@ -111,16 +111,16 @@
     ],
     "provenance": {
      "pinnedAtCreation": true,
-     "created": "2026-10-26T08:20:04.746Z",
+     "created": "2026-10-26T09:45:18.666Z",
      "resumes": [
-      "2026-10-26T08:20:10.815Z"
+      "2026-10-26T09:45:24.765Z"
      ],
      "held": true,
      "problems": [],
      "recordsOffRevision": 0
     },
     "resumes": [
-     "2026-10-26T08:20:10.815Z"
+     "2026-10-26T09:45:24.765Z"
     ],
     "attempts": {
      "S-29": 1,
@@ -136,11 +136,11 @@
    "proved": true,
    "detail": {
     "source": {
-     "commit": "73ace18bf58ffbb19e6fc8cf06ed47e8eae0762a",
+     "commit": "c47f365d5121b8f230a9808dffcd40b211fd7527",
      "dirty": false,
      "diffSha256": "e3b0c44298fc1c14"
     },
-    "revision": "2cbba731c59d8036",
+    "revision": "2e7b0c044ce11f2b",
     "fixtures": [
      {
       "file": "lecture-60s.mp4",
@@ -195,8 +195,8 @@
    "proved": true,
    "detail": [
     "  if (problems.length) throw new Error(`resume refused: ${dir} no longer stands on what it pinned:\\n  ${problems.join('\\n  ')}`)",
-    "Error: resume refused: /private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/27e7f48d-1fd3-4e4c-8d41-20d6c1cb6ab2/scratchpad/vh198-3/d/proveresume/resume-2026-10-26T08-20-04-525Z/runs/transitions-2026-10-26T08-20-15-189Z no longer stands on what it pinned:",
-    "  instrument revision dd731372dab5c99d, not the run's 2cbba731c59d8036 (changed: qualify.mjs)"
+    "Error: resume refused: /private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/27e7f48d-1fd3-4e4c-8d41-20d6c1cb6ab2/scratchpad/vh198-3/d/r2/proveresume/resume-2026-10-26T09-45-18-414Z/runs/transitions-2026-10-26T09-45-29-129Z no longer stands on what it pinned:",
+    "  instrument revision 7410020083a20a1c, not the run's 2e7b0c044ce11f2b (changed: qualify.mjs)"
    ]
   },
   {
@@ -206,8 +206,8 @@
    "proved": true,
    "detail": [
     "  if (problems.length) throw new Error(`resume refused: ${dir} no longer stands on what it pinned:\\n  ${problems.join('\\n  ')}`)",
-    "Error: resume refused: /private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/27e7f48d-1fd3-4e4c-8d41-20d6c1cb6ab2/scratchpad/vh198-3/d/proveresume/resume-2026-10-26T08-20-04-525Z/runs/transitions-2026-10-26T08-20-15-189Z no longer stands on what it pinned:",
-    "  source commit 2e8df3126f78da89559b733a8607aa9790f16dcd, not the run's 73ace18bf58ffbb19e6fc8cf06ed47e8eae0762a"
+    "Error: resume refused: /private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/27e7f48d-1fd3-4e4c-8d41-20d6c1cb6ab2/scratchpad/vh198-3/d/r2/proveresume/resume-2026-10-26T09-45-18-414Z/runs/transitions-2026-10-26T09-45-29-129Z no longer stands on what it pinned:",
+    "  source commit ea0d126feedcef8b480844bd5a10e0006a68dc44, not the run's c47f365d5121b8f230a9808dffcd40b211fd7527"
    ]
   },
   {
@@ -217,7 +217,7 @@
    "proved": true,
    "detail": [
     "  if (problems.length) throw new Error(`resume refused: ${dir} no longer stands on what it pinned:\\n  ${problems.join('\\n  ')}`)",
-    "Error: resume refused: /private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/27e7f48d-1fd3-4e4c-8d41-20d6c1cb6ab2/scratchpad/vh198-3/d/proveresume/resume-2026-10-26T08-20-04-525Z/runs/transitions-2026-10-26T08-20-15-189Z no longer stands on what it pinned:",
+    "Error: resume refused: /private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/27e7f48d-1fd3-4e4c-8d41-20d6c1cb6ab2/scratchpad/vh198-3/d/r2/proveresume/resume-2026-10-26T09-45-18-414Z/runs/transitions-2026-10-26T09-45-29-129Z no longer stands on what it pinned:",
     "  source tree differs from the run's: uncommitted src/, index.html or public/ e3b0c44298fc1c14 then, 831b4257941f1cc9 now"
    ]
   },
@@ -228,7 +228,7 @@
    "proved": true,
    "detail": [
     "  if (problems.length) throw new Error(`resume refused: ${dir} no longer stands on what it pinned:\\n  ${problems.join('\\n  ')}`)",
-    "Error: resume refused: /private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/27e7f48d-1fd3-4e4c-8d41-20d6c1cb6ab2/scratchpad/vh198-3/d/proveresume/resume-2026-10-26T08-20-04-525Z/runs/transitions-2026-10-26T08-20-15-189Z no longer stands on what it pinned:",
+    "Error: resume refused: /private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/27e7f48d-1fd3-4e4c-8d41-20d6c1cb6ab2/scratchpad/vh198-3/d/r2/proveresume/resume-2026-10-26T09-45-18-414Z/runs/transitions-2026-10-26T09-45-29-129Z no longer stands on what it pinned:",
     "  fixture lecture-60s.mp4 is 398fe0b22cdc819f, not the ce10e0ce0579c4b6 the run pinned"
    ]
   },
@@ -239,7 +239,7 @@
    "proved": true,
    "detail": {
     "resumes": [
-     "2026-10-26T08:20:27.694Z"
+     "2026-10-26T09:45:41.707Z"
     ],
     "fixtures": [
      {

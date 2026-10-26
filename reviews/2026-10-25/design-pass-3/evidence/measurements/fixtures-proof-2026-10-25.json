@@ -5,7 +5,7 @@
   "outcome": "pass",
   "bite": 20.13,
   "planned": {
-   "t": 1793002750923,
+   "t": 1793007873809,
    "sourceIntegratedLufs": -30.36,
    "loudnessRangeLu": 0,
    "macroLevelling": false,
@@ -21,7 +21,7 @@
    "refinementPasses": 6,
    "converged": true,
    "gainDb": 34.46,
-   "planningMs": 702
+   "planningMs": 717
   },
   "warned": true,
   "margin": "over HEAVY_LIMITING_LU (3) by more than 5 LU",
@@ -60,7 +60,7 @@
   "aNoAudio": true,
   "bNoAudio": false,
   "cVerdictNotes": null,
-  "seconds": 8
+  "seconds": 7
  },
  {
   "fixture": "N9",
@@ -171,6 +171,6 @@
    "keptFromFirstPacketMs": 431.3
   },
   "consequence": "S-153 walked",
-  "seconds": 7
+  "seconds": 6
  }
 ]

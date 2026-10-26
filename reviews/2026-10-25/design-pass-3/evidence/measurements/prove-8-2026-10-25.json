@@ -390,42 +390,42 @@
      {
       "role": "button",
       "name": "play",
-      "dom": 53,
+      "dom": 52,
       "ignored": false,
       "host": false
      },
      {
       "role": "slider",
       "name": "volume",
-      "dom": 60,
+      "dom": 59,
       "ignored": false,
       "host": false
      },
      {
       "role": "button",
       "name": "un-mute",
-      "dom": 67,
+      "dom": 66,
       "ignored": false,
       "host": false
      },
      {
       "role": "button",
       "name": "enter full screen",
-      "dom": 68,
+      "dom": 67,
       "ignored": false,
       "host": false
      },
      {
       "role": "button",
       "name": "show more media controls",
-      "dom": 17,
+      "dom": 69,
       "ignored": false,
       "host": false
      },
      {
       "role": "slider",
       "name": "video time scrubber",
-      "dom": 12,
+      "dom": 10,
       "ignored": false,
       "host": false
      }
@@ -450,37 +450,37 @@
      {
       "role": "button",
       "name": "play",
-      "dom": 53,
+      "dom": 52,
       "ignored": false
      },
      {
       "role": "slider",
       "name": "volume",
-      "dom": 60,
+      "dom": 59,
       "ignored": false
      },
      {
       "role": "button",
       "name": "un-mute",
-      "dom": 67,
+      "dom": 66,
       "ignored": false
      },
      {
       "role": "button",
       "name": "enter full screen",
-      "dom": 68,
+      "dom": 67,
       "ignored": false
      },
      {
       "role": "button",
       "name": "show more media controls",
-      "dom": 17,
+      "dom": 69,
       "ignored": false
      },
      {
       "role": "slider",
       "name": "video time scrubber",
-      "dom": 12,
+      "dom": 10,
       "ignored": false
      }
     ]
@@ -650,14 +650,14 @@
     "what": "first in the line spoken at completion, with every warning title in order",
     "outcome": "fail",
     "completion": {
-     "t": 1793002006394,
+     "t": 1793007079637,
      "text": "Your video is ready.",
      "cardNew": true,
      "opensWithReady": true
     },
     "job": [
-     1793002006271,
-     1793002006394
+     1793007079505,
+     1793007079637
     ],
     "expected": [
      "The loudest moments were held down hard"
@@ -679,14 +679,14 @@
     "what": "first in the line spoken at completion, with every warning title in order",
     "outcome": "pass",
     "completion": {
-     "t": 1793002007517,
+     "t": 1793007080791,
      "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across.",
      "cardNew": true,
      "opensWithReady": true
     },
     "job": [
-     1793002007393,
-     1793002007517
+     1793007080662,
+     1793007080791
     ],
     "expected": [
      "The loudest moments were held down hard",
@@ -969,14 +969,14 @@
     "what": "first in the line spoken at completion, with every warning title in order",
     "outcome": "fail",
     "completion": {
-     "t": 1793002020823,
+     "t": 1793007094484,
      "text": "Your video is ready.",
      "cardNew": true,
      "opensWithReady": true
     },
     "job": [
-     1793002020296,
-     1793002020823
+     1793007093945,
+     1793007094484
     ],
     "expected": [
      "The loudest moments were held down hard",
@@ -984,7 +984,7 @@
     ],
     "earlier": [
      {
-      "t": 1793002020419,
+      "t": 1793007094073,
       "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across.",
       "cardNew": false
      }
@@ -1006,14 +1006,14 @@
     "what": "first in the line spoken at completion, with every warning title in order",
     "outcome": "fail",
     "completion": {
-     "t": 1793002021695,
+     "t": 1793007095387,
      "text": "Your video is ready. The loudest moments were held down hard.",
      "cardNew": true,
      "opensWithReady": true
     },
     "job": [
-     1793002021571,
-     1793002021695
+     1793007095260,
+     1793007095387
     ],
     "expected": [
      "The loudest moments were held down hard",
@@ -1037,14 +1037,14 @@
     "what": "first in the line spoken at completion, with every warning title in order",
     "outcome": "fail",
     "completion": {
-     "t": 1793002022958,
+     "t": 1793007096679,
      "text": "Your video is ready.",
      "cardNew": true,
      "opensWithReady": true
     },
     "job": [
-     1793002022432,
-     1793002022958
+     1793007096143,
+     1793007096679
     ],
     "expected": [
      "The loudest moments were held down hard",
@@ -1052,7 +1052,7 @@
     ],
     "earlier": [
      {
-      "t": 1793002022554,
+      "t": 1793007096267,
       "text": "Your video is ready. The loudest moments were held down hard.",
       "cardNew": false
      }
@@ -1074,14 +1074,14 @@
     "what": "first in the line spoken at completion, with every warning title in order",
     "outcome": "pass",
     "completion": {
-     "t": 1793002024214,
+     "t": 1793007097968,
      "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across.",
      "cardNew": true,
      "opensWithReady": true
     },
     "job": [
-     1793002023687,
-     1793002024214
+     1793007097434,
+     1793007097968
     ],
     "expected": [
      "The loudest moments were held down hard",
@@ -1089,7 +1089,7 @@
     ],
     "earlier": [
      {
-      "t": 1793002023810,
+      "t": 1793007097557,
       "text": "Your video is ready. The loudest moments were held down hard.",
       "cardNew": false
      }
@@ -1111,8 +1111,8 @@
     "outcome": "fail",
     "completion": null,
     "job": [
-     1793002024941,
-     1793002025568
+     1793007098731,
+     1793007099363
     ],
     "expected": [
      "The loudest moments were held down hard",
@@ -1120,7 +1120,7 @@
     ],
     "earlier": [
      {
-      "t": 1793002025065,
+      "t": 1793007098856,
       "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across.",
       "cardNew": false
      }
@@ -1142,14 +1142,14 @@
     "what": "first in the line spoken at completion, with every warning title in order",
     "outcome": "fail",
     "completion": {
-     "t": 1793002026919,
+     "t": 1793007100764,
      "text": "The loudest moments were held down hard. The file’s title, author, and date could not be copied across.",
      "cardNew": true,
      "opensWithReady": false
     },
     "job": [
-     1793002026291,
-     1793002026919
+     1793007100129,
+     1793007100764
     ],
     "expected": [
      "The loudest moments were held down hard",
@@ -1157,7 +1157,7 @@
     ],
     "earlier": [
      {
-      "t": 1793002026414,
+      "t": 1793007100253,
       "text": "Checking the video.",
       "cardNew": false
      }
@@ -1179,14 +1179,14 @@
     "what": "first in the line spoken at completion, with every warning title in order",
     "outcome": "pass",
     "completion": {
-     "t": 1793002028281,
+     "t": 1793007102144,
      "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across.",
      "cardNew": true,
      "opensWithReady": true
     },
     "job": [
-     1793002027653,
-     1793002028281
+     1793007101509,
+     1793007102144
     ],
     "expected": [
      "The loudest moments were held down hard",
@@ -1194,7 +1194,7 @@
     ],
     "earlier": [
      {
-      "t": 1793002027776,
+      "t": 1793007101633,
       "text": "Checking the video.",
       "cardNew": false
      }
@@ -1442,64 +1442,74 @@
      "control": "button \"play\"",
      "outcome": "cannot-determine",
      "ringPx": {
-      "any": 0,
-      "at3to1": 0
+      "any": 7,
+      "at3to1": 0,
+      "drawnAny": 7,
+      "drawnAt3to1": 0
      },
      "residualPx": {
-      "any": 925,
+      "any": 918,
       "at3to1": 0
      },
-     "why": "no ring: an outline:none on the control leaves its focused pixels unchanged; a focus-only change other than a ring remains (925 px, 0 at 3:1: the user agent's hover-and-focus highlight, or a disclosure); whether that alone is a visible indicator is VH-200's"
+     "why": "a ring of 7 px, none of it at 3:1 against what it covers: whether it is visible is VH-200's"
     },
     {
      "control": "slider \"volume\"",
      "outcome": "cannot-determine",
      "ringPx": {
       "any": 0,
-      "at3to1": 0
+      "at3to1": 0,
+      "drawnAny": 0,
+      "drawnAt3to1": 0
      },
      "residualPx": {
       "any": 2171,
       "at3to1": 112
      },
-     "why": "no ring: an outline:none on the control leaves its focused pixels unchanged; a focus-only change other than a ring remains (2171 px, 112 at 3:1: the user agent's hover-and-focus highlight, or a disclosure); whether that alone is a visible indicator is VH-200's"
+     "why": "no ring that changes on focus: an outline:none on the control leaves no focused pixel that differs from unfocused; a focus-only change other than a ring remains (2171 px, 112 at 3:1: the user agent's hover-and-focus highlight, or a disclosure); whether that alone is a visible indicator is VH-200's"
     },
     {
      "control": "button \"un-mute\"",
      "outcome": "cannot-determine",
      "ringPx": {
       "any": 0,
-      "at3to1": 0
+      "at3to1": 0,
+      "drawnAny": 0,
+      "drawnAt3to1": 0
      },
      "residualPx": {
       "any": 1512,
       "at3to1": 0
      },
-     "why": "no ring: an outline:none on the control leaves its focused pixels unchanged; a focus-only change other than a ring remains (1512 px, 0 at 3:1: the user agent's hover-and-focus highlight, or a disclosure); whether that alone is a visible indicator is VH-200's"
+     "why": "no ring that changes on focus: an outline:none on the control leaves no focused pixel that differs from unfocused; a focus-only change other than a ring remains (1512 px, 0 at 3:1: the user agent's hover-and-focus highlight, or a disclosure); whether that alone is a visible indicator is VH-200's"
     },
     {
      "control": "button \"enter full screen\"",
      "outcome": "cannot-determine",
      "ringPx": {
       "any": 0,
-      "at3to1": 0
+      "at3to1": 0,
+      "drawnAny": 0,
+      "drawnAt3to1": 0
      },
      "residualPx": {
-      "any": 1024,
+      "any": 1038,
       "at3to1": 14
      },
-     "why": "no ring: an outline:none on the control leaves its focused pixels unchanged; a focus-only change other than a ring remains (1024 px, 14 at 3:1: the user agent's hover-and-focus highlight, or a disclosure); whether that alone is a visible indicator is VH-200's"
+     "why": "no ring that changes on focus: an outline:none on the control leaves no focused pixel that differs from unfocused; a focus-only change other than a ring remains (1038 px, 14 at 3:1: the user agent's hover-and-focus highlight, or a disclosure); whether that alone is a visible indicator is VH-200's"
     },
     {
      "control": "slider \"video time scrubber\"",
      "outcome": "cannot-determine",
      "ringPx": {
       "any": 104,
-      "at3to1": 0
+      "at3to1": 0,
+      "drawnAny": 104,
+      "drawnAt3to1": 0
      },
      "residualPx": {
-      "any": 106,
-      "at3to1": 72
+      "any": 2,
+      "at3to1": 0
      },
      "why": "a ring of 104 px, none of it at 3:1 against what it covers: whether it is visible is VH-200's"
     }
@@ -1520,7 +1530,9 @@
      "outcome": "pass",
      "ringPx": {
       "any": 292,
-      "at3to1": 90
+      "at3to1": 90,
+      "drawnAny": 292,
+      "drawnAt3to1": 90
      }
     },
     {
@@ -1528,7 +1540,9 @@
      "outcome": "pass",
      "ringPx": {
       "any": 389,
-      "at3to1": 102
+      "at3to1": 102,
+      "drawnAny": 389,
+      "drawnAt3to1": 102
      }
     },
     {
@@ -1536,7 +1550,9 @@
      "outcome": "pass",
      "ringPx": {
       "any": 382,
-      "at3to1": 100
+      "at3to1": 100,
+      "drawnAny": 382,
+      "drawnAt3to1": 100
      }
     },
     {
@@ -1544,15 +1560,19 @@
      "outcome": "pass",
      "ringPx": {
       "any": 387,
-      "at3to1": 96
+      "at3to1": 96,
+      "drawnAny": 387,
+      "drawnAt3to1": 96
      }
     },
     {
      "control": "slider \"video time scrubber\"",
      "outcome": "pass",
      "ringPx": {
-      "any": 2578,
-      "at3to1": 1400
+      "any": 2550,
+      "at3to1": 1400,
+      "drawnAny": 2550,
+      "drawnAt3to1": 1400
      }
     }
    ]
@@ -1571,8 +1591,8 @@
     "control": "button \"show more media controls\"",
     "host": false,
     "pseudo": "-internal-media-controls-overflow-button",
-    "onOffPx": 1322,
-    "why": "the ring cannot be isolated from the controls' other redraw: no author style reaches ::-internal-media-controls-overflow-button; focused against unfocused differs by 1322 px, the highlight and any disclosure included"
+    "onOffPx": 1317,
+    "why": "the ring cannot be isolated from the controls' other redraw: no author style reaches ::-internal-media-controls-overflow-button; focused against unfocused differs by 1317 px, the highlight and any disclosure included"
    }
   }
  },
@@ -1630,7 +1650,7 @@
      "h": 48
     },
     "areaAt3to1": null,
-    "redrawAt3to1": 63,
+    "redrawAt3to1": 75,
     "perimeter2px": 368,
     "bestRatio": 15.77,
     "exceptions": {
@@ -1666,14 +1686,14 @@
      "w": 48,
      "h": 48
     },
-    "areaAt3to1": 14,
+    "areaAt3to1": 0,
     "redrawAt3to1": 0,
     "perimeter2px": 368,
     "bestRatio": 1.83,
     "exceptions": {
      "userAgentOnly": {
       "holds": false,
-      "evidence": "an author outline:none on ::-webkit-media-controls-play-button removed 31 px of the ring: the author can adjust it"
+      "evidence": "an author outline:none on ::-webkit-media-controls-play-button removed 24 px of the ring: the author can adjust it"
      },
      "unmodified": {
       "holds": false,
@@ -1694,7 +1714,7 @@
       "backgroundRules": []
      }
     },
-    "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 14 of 368, and the author styles the ring, so neither exception holds"
+    "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 0 of 368, and the author styles the ring, so neither exception holds"
    }
   }
  },
@@ -1721,7 +1741,7 @@
     "exceptions": {
      "userAgentOnly": {
       "holds": false,
-      "evidence": "an author outline:none on ::-webkit-media-controls-play-button removed 292 px of the ring: the author can adjust it"
+      "evidence": "an author outline:none on ::-webkit-media-controls-play-button removed 285 px of the ring: the author can adjust it"
      },
      "unmodified": {
       "holds": null,
@@ -1748,7 +1768,7 @@
       ]
      }
     },
-    "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 90 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-play-button removed 292 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (#process-result video.result-player { background: #0f62fe; background-image: initial; background-position-x: initial; background-position-y: initial; background): whether that is the indicator's background is VH-200's",
+    "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 90 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-play-button removed 285 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (#process-result video.result-player { background: #0f62fe; background-image: initial; background-position-x: initial; background-position-y: initial; background): whether that is the indicator's background is VH-200's",
     "unresolved": "interpretation"
    }
   }
@@ -1782,7 +1802,7 @@
       ]
      }
     },
-    "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 0 of 176; the first exception is not established (an author outline:none changed nothing: no ring to adjust); the second: the ring is unmodified, but the host's backdrop is set by the author (#process-result video.result-player { background: #0f62fe }): whether that is the indicator's background is VH-200's",
+    "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 0 of 176; the first exception is not established (an author outline:none changed nothing: no ring to adjust); the second: the ring is unmodified, but the host's backdrop is set by the author (#process-result video.result-player { background: #0f62fe }): whether that is the indicator's background is VH-200's",
     "unresolved": "interpretation"
    },
    "redrawAt3to1": 900,
@@ -1851,7 +1871,7 @@
      "areaAt3to1": 0,
      "redrawAt3to1": 0,
      "perimeter2px": 368,
-     "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 0 of 368, and the author styles the ring, so neither exception holds"
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 0 of 368, and the author styles the ring, so neither exception holds"
     },
     {
      "control": "slider \"volume\"",
@@ -1859,7 +1879,7 @@
      "areaAt3to1": 0,
      "redrawAt3to1": 112,
      "perimeter2px": 384,
-     "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 0 of 384, and the author styles the ring, so neither exception holds"
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 0 of 384, and the author styles the ring, so neither exception holds"
     },
     {
      "control": "button \"un-mute\"",
@@ -1867,7 +1887,7 @@
      "areaAt3to1": 0,
      "redrawAt3to1": 0,
      "perimeter2px": 368,
-     "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 0 of 368, and the author styles the ring, so neither exception holds"
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 0 of 368, and the author styles the ring, so neither exception holds"
     },
     {
      "control": "button \"enter full screen\"",
@@ -1875,13 +1895,13 @@
      "areaAt3to1": 0,
      "redrawAt3to1": 14,
      "perimeter2px": 368,
-     "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 0 of 368, and the author styles the ring, so neither exception holds"
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 0 of 368, and the author styles the ring, so neither exception holds"
     },
     {
      "control": "button \"show more media controls\"",
      "outcome": "fail",
      "areaAt3to1": null,
-     "redrawAt3to1": 63,
+     "redrawAt3to1": 75,
      "perimeter2px": 368
     },
     {
@@ -1890,7 +1910,7 @@
      "areaAt3to1": 0,
      "redrawAt3to1": 72,
      "perimeter2px": 2640,
-     "why": "under 2.4.13's area: the ring's own pixels at 3:1 are 0 of 2640, and the author styles the ring, so neither exception holds"
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 0 of 2640, and the author styles the ring, so neither exception holds"
     }
    ],
    "replacedReadingWouldPass": false
@@ -1986,19 +2006,19 @@
      {
       "role": "slider",
       "name": "video time scrubber",
-      "value": 1.3254799842834473,
-      "valuetext": "1.32548"
+      "value": 1.3313699960708618,
+      "valuetext": "1.33137"
      },
      {
       "role": "slider",
       "name": "video time scrubber",
-      "value": 1.345479965209961,
-      "valuetext": "1.34548"
+      "value": 1.3513699769973755,
+      "valuetext": "1.35137"
      }
     ],
     "media": [
-     1.325,
-     1.345
+     1.331,
+     1.351
     ]
    }
   }
@@ -2308,6 +2328,119 @@
      "coveredBy": []
     }
    }
+  }
+ },
+ {
+  "instrument": "player 2.4.13: ring pixels at 3:1 against unfocused (synthetic shots)",
+  "fixture": "ring-drawn-focused-or-not-bad",
+  "outcome": "cannot-determine",
+  "wanted": "cannot-determine",
+  "proved": true,
+  "detail": {
+   "row": {
+    "outcome": "cannot-determine",
+    "exceptions": {
+     "userAgentOnly": {
+      "holds": false,
+      "evidence": "an author outline:none on ::-webkit-media-controls-play-button removed 192 px of the ring: the author can adjust it"
+     },
+     "unmodified": {
+      "holds": null,
+      "indicator": true,
+      "indicatorRules": [],
+      "background": false,
+      "backgroundRules": [
+       {
+        "selector": "#process-result video.result-player",
+        "props": [
+         "background: #0f62fe"
+        ]
+       }
+      ]
+     }
+    },
+    "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 0 of 128; the first exception does not hold (an author outline:none on ::-webkit-media-controls-play-button removed 192 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (#process-result video.result-player { background: #0f62fe }): whether that is the indicator's background is VH-200's",
+    "unresolved": "interpretation"
+   },
+   "reading": {
+    "ringAny": 192,
+    "ring3": 192,
+    "indicatorAny": 0,
+    "indicator3": 0,
+    "otherAny": 0,
+    "other3": 0,
+    "onOffAny": 0
+   },
+   "replacedRingArea3": 192,
+   "replacedReadingWouldPass": true
+  }
+ },
+ {
+  "instrument": "player 2.4.7: ring pixels that change against unfocused (synthetic shots)",
+  "fixture": "ring-drawn-focused-or-not-bad",
+  "outcome": "not a pass",
+  "wanted": "not a pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "outcome": "fail",
+    "why": "nothing changes when the control is focused (2.4.7)"
+   },
+   "reading": {
+    "ringAny": 192,
+    "ring3": 192,
+    "indicatorAny": 0,
+    "indicator3": 0,
+    "otherAny": 0,
+    "other3": 0,
+    "onOffAny": 0
+   },
+   "replacedReadingWouldPass": true
+  }
+ },
+ {
+  "instrument": "player 2.4.13: ring pixels at 3:1 against unfocused (synthetic shots)",
+  "fixture": "ring-drawn-on-focus-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "outcome": "pass"
+   },
+   "reading": {
+    "ringAny": 192,
+    "ring3": 192,
+    "indicatorAny": 192,
+    "indicator3": 192,
+    "otherAny": 0,
+    "other3": 0,
+    "onOffAny": 192
+   },
+   "replacedRingArea3": 192,
+   "replacedReadingWouldPass": true
+  }
+ },
+ {
+  "instrument": "player 2.4.7: ring pixels that change against unfocused (synthetic shots)",
+  "fixture": "ring-drawn-on-focus-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "outcome": "pass"
+   },
+   "reading": {
+    "ringAny": 192,
+    "ring3": 192,
+    "indicatorAny": 192,
+    "indicator3": 192,
+    "otherAny": 0,
+    "other3": 0,
+    "onOffAny": 192
+   },
+   "replacedReadingWouldPass": true
   }
  }
 ]
