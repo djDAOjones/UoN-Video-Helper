@@ -311,37 +311,37 @@
      {
       "role": "button",
       "name": "play",
-      "dom": 52,
+      "dom": 53,
       "ignored": false
      },
      {
       "role": "slider",
       "name": "volume",
-      "dom": 59,
+      "dom": 60,
       "ignored": false
      },
      {
       "role": "button",
       "name": "un-mute",
-      "dom": 66,
-      "ignored": false
-     },
-     {
-      "role": "button",
-      "name": "enter full screen",
       "dom": 67,
       "ignored": false
      },
      {
       "role": "button",
+      "name": "enter full screen",
+      "dom": 68,
+      "ignored": false
+     },
+     {
+      "role": "button",
       "name": "show more media controls",
-      "dom": 69,
+      "dom": 17,
       "ignored": false
      },
      {
       "role": "slider",
       "name": "video time scrubber",
-      "dom": 12,
+      "dom": 9,
       "ignored": false
      }
     ]
@@ -647,15 +647,21 @@
   "proved": true,
   "detail": {
    "row": {
-    "what": "first in the line spoken at completion, inside its interval",
+    "what": "first in the line spoken at completion, with every warning title in order",
     "outcome": "fail",
-    "interval": [
-     1792967062698,
-     1792967066886
+    "completion": {
+     "t": 1792975575827,
+     "text": "Your video is ready."
+    },
+    "window": [
+     1792975574891,
+     1792975576891
     ],
-    "texts": [
-     "Your video is ready."
-    ]
+    "expected": [
+     "The loudest moments were held down hard"
+    ],
+    "earlier": [],
+    "why": "missing from the completion's line: The loudest moments were held down hard"
    },
    "wholeHistoryWouldSay": true
   }
@@ -668,15 +674,21 @@
   "proved": true,
   "detail": {
    "row": {
-    "what": "first in the line spoken at completion, inside its interval",
+    "what": "first in the line spoken at completion, with every warning title in order",
     "outcome": "pass",
-    "interval": [
-     1792967063990,
-     1792967068173
+    "completion": {
+     "t": 1792975577117,
+     "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across."
+    },
+    "window": [
+     1792975576182,
+     1792975578182
     ],
-    "texts": [
-     "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across."
-    ]
+    "expected": [
+     "The loudest moments were held down hard",
+     "The file’s title, author, and date could not be copied across"
+    ],
+    "earlier": []
    },
    "wholeHistoryWouldSay": true
   }
@@ -710,6 +722,7 @@
     "what": "present above the threshold, absent below",
     "outcome": "fail",
     "bite": 0.5,
+    "evidence": "the logged bite (\"chain planned\")",
     "threshold": 3,
     "hasHeavy": true
    },
@@ -727,6 +740,7 @@
     "what": "present above the threshold, absent below",
     "outcome": "pass",
     "bite": 20.1,
+    "evidence": "the logged bite (\"chain planned\")",
     "threshold": 3,
     "hasHeavy": true
    },
@@ -744,6 +758,7 @@
     "what": "present above the threshold, absent below",
     "outcome": "pass",
     "bite": 0,
+    "evidence": "the logged bite (\"chain planned\")",
     "threshold": 3,
     "hasHeavy": false
    },
@@ -761,6 +776,7 @@
     "what": "present above the threshold, absent below",
     "outcome": "fail",
     "bite": 20.1,
+    "evidence": "the logged bite (\"chain planned\")",
     "threshold": 3,
     "hasHeavy": false
    },
@@ -937,5 +953,1090 @@
   "outcome": "fail",
   "wanted": "fail",
   "proved": true
+ },
+ {
+  "instrument": "limiting warning: the completion's own write, every title in order",
+  "fixture": "heavy-said-early-in-this-job-warning-free-completion-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "first in the line spoken at completion, with every warning title in order",
+    "outcome": "fail",
+    "completion": {
+     "t": 1792975591157,
+     "text": "Your video is ready."
+    },
+    "window": [
+     1792975590223,
+     1792975592223
+    ],
+    "expected": [
+     "The loudest moments were held down hard",
+     "The file’s title, author, and date could not be copied across"
+    ],
+    "earlier": [
+     {
+      "t": 1792975590751,
+      "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across."
+     }
+    ],
+    "why": "missing from the completion's line: The loudest moments were held down hard; The file’s title, author, and date could not be copied across"
+   },
+   "replacedReadingWouldPass": true
+  }
+ },
+ {
+  "instrument": "limiting warning: the completion's own write, every title in order",
+  "fixture": "metadata-title-missing-from-the-completion-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "first in the line spoken at completion, with every warning title in order",
+    "outcome": "fail",
+    "completion": {
+     "t": 1792975592107,
+     "text": "Your video is ready. The loudest moments were held down hard."
+    },
+    "window": [
+     1792975591171,
+     1792975593171
+    ],
+    "expected": [
+     "The loudest moments were held down hard",
+     "The file’s title, author, and date could not be copied across"
+    ],
+    "earlier": [],
+    "why": "missing from the completion's line: The file’s title, author, and date could not be copied across"
+   },
+   "replacedReadingWouldPass": true
+  }
+ },
+ {
+  "instrument": "limiting warning: the completion's own write, every title in order",
+  "fixture": "early-heavy-warning-free-completion-metadata-missing-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "first in the line spoken at completion, with every warning title in order",
+    "outcome": "fail",
+    "completion": {
+     "t": 1792975593439,
+     "text": "Your video is ready."
+    },
+    "window": [
+     1792975592504,
+     1792975594504
+    ],
+    "expected": [
+     "The loudest moments were held down hard",
+     "The file’s title, author, and date could not be copied across"
+    ],
+    "earlier": [
+     {
+      "t": 1792975593037,
+      "text": "Your video is ready. The loudest moments were held down hard."
+     }
+    ],
+    "why": "missing from the completion's line: The loudest moments were held down hard; The file’s title, author, and date could not be copied across"
+   },
+   "replacedReadingWouldPass": true
+  }
+ },
+ {
+  "instrument": "limiting warning: the completion's own write, every title in order",
+  "fixture": "every-title-in-the-completion-in-order-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "first in the line spoken at completion, with every warning title in order",
+    "outcome": "pass",
+    "completion": {
+     "t": 1792975594782,
+     "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across."
+    },
+    "window": [
+     1792975593848,
+     1792975595848
+    ],
+    "expected": [
+     "The loudest moments were held down hard",
+     "The file’s title, author, and date could not be copied across"
+    ],
+    "earlier": [
+     {
+      "t": 1792975594375,
+      "text": "Your video is ready. The loudest moments were held down hard."
+     }
+    ]
+   },
+   "replacedReadingWouldPass": true
+  }
+ },
+ {
+  "instrument": "limiting warning: the bite's evidence",
+  "fixture": "no-plan-log-in-this-job-bad",
+  "outcome": "cannot-determine",
+  "wanted": "cannot-determine",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "present above the threshold, absent below",
+    "outcome": "cannot-determine",
+    "why": "no \"chain planned\" or \"encode complete\" record inside this job: the bite is missing, not null",
+    "hasHeavy": false
+   },
+   "replacedReadingWouldPass": true
+  }
+ },
+ {
+  "instrument": "limiting warning: the bite's evidence",
+  "fixture": "unreadable-plan-log-bad",
+  "outcome": "cannot-determine",
+  "wanted": "cannot-determine",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "present above the threshold, absent below",
+    "outcome": "cannot-determine",
+    "why": "the job's \"chain planned\" record could not be read",
+    "hasHeavy": false
+   },
+   "replacedReadingWouldPass": true
+  }
+ },
+ {
+  "instrument": "limiting warning: the bite's evidence",
+  "fixture": "planned-job-plan-log-unseen-bad",
+  "outcome": "cannot-determine",
+  "wanted": "cannot-determine",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "present above the threshold, absent below",
+    "outcome": "cannot-determine",
+    "why": "the job planned its sound (\"encode complete\" logged an audio gain), but its \"chain planned\" record was not seen",
+    "hasHeavy": false
+   },
+   "replacedReadingWouldPass": true
+  }
+ },
+ {
+  "instrument": "limiting warning: the bite's evidence",
+  "fixture": "logged-null-bite-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "present above the threshold, absent below",
+    "outcome": "pass",
+    "bite": null,
+    "evidence": "a logged null bite (\"chain planned\", limiterBiteLu null)",
+    "threshold": 3,
+    "hasHeavy": false
+   },
+   "replacedReadingWouldPass": true
+  }
+ },
+ {
+  "instrument": "limiting warning: the bite's evidence",
+  "fixture": "no-plan-job-established-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "present above the threshold, absent below",
+    "outcome": "pass",
+    "bite": null,
+    "evidence": "no plan: \"encode complete\" logged audioGainDb null (no audio, or a kept part too quiet to level), so the job had no bite",
+    "threshold": 3,
+    "hasHeavy": false
+   },
+   "replacedReadingWouldPass": true
+  }
+ },
+ {
+  "instrument": "footer: each heading's line by counted characters",
+  "fixture": "footer-heading-81-narrow-characters-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "measure: each heading under 80 characters a line (40 CJK), counted as rendered",
+    "outcome": "fail",
+    "headings": [
+     {
+      "text": "l l l l l l l l l l l l l l l l l l l l l l l l l ",
+      "lines": [
+       {
+        "text": "l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l",
+        "latin": 81,
+        "cjk": 0,
+        "chars": 81,
+        "outcome": "fail"
+       }
+      ]
+     },
+     {
+      "text": "Help with videos",
+      "lines": [
+       {
+        "text": "Help with videos",
+        "latin": 16,
+        "cjk": 0,
+        "chars": 16,
+        "outcome": "pass"
+       }
+      ]
+     },
+     {
+      "text": "Problem",
+      "lines": [
+       {
+        "text": "Problem",
+        "latin": 7,
+        "cjk": 0,
+        "chars": 7,
+        "outcome": "pass"
+       }
+      ]
+     },
+     {
+      "text": "Opinion",
+      "lines": [
+       {
+        "text": "Opinion",
+        "latin": 7,
+        "cjk": 0,
+        "chars": 7,
+        "outcome": "pass"
+       }
+      ]
+     }
+    ],
+    "longest": 81,
+    "worst": {
+     "heading": "l l l l l l l l l l l l l l l l l l l l l l l l l ",
+     "text": "l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l",
+     "latin": 81,
+     "cjk": 0,
+     "chars": 81,
+     "outcome": "fail"
+    }
+   },
+   "counted": 81,
+   "replacedEstimate": 45,
+   "replacedReadingWouldPass": true
+  }
+ },
+ {
+  "instrument": "footer: each heading's line by counted characters",
+  "fixture": "footer-heading-79-wide-characters-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "measure: each heading under 80 characters a line (40 CJK), counted as rendered",
+    "outcome": "pass",
+    "headings": [
+     {
+      "text": "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+      "lines": [
+       {
+        "text": "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+        "latin": 79,
+        "cjk": 0,
+        "chars": 79,
+        "outcome": "pass"
+       }
+      ]
+     },
+     {
+      "text": "Help with videos",
+      "lines": [
+       {
+        "text": "Help with videos",
+        "latin": 16,
+        "cjk": 0,
+        "chars": 16,
+        "outcome": "pass"
+       }
+      ]
+     },
+     {
+      "text": "Problem",
+      "lines": [
+       {
+        "text": "Problem",
+        "latin": 7,
+        "cjk": 0,
+        "chars": 7,
+        "outcome": "pass"
+       }
+      ]
+     },
+     {
+      "text": "Opinion",
+      "lines": [
+       {
+        "text": "Opinion",
+        "latin": 7,
+        "cjk": 0,
+        "chars": 7,
+        "outcome": "pass"
+       }
+      ]
+     }
+    ],
+    "longest": 79
+   },
+   "counted": 79,
+   "replacedEstimate": 149,
+   "replacedReadingWouldPass": false
+  }
+ },
+ {
+  "instrument": "player 2.4.7: the ring alone, an author outline:none on the controls",
+  "fixture": "player-rings-suppressed-bad",
+  "outcome": "cannot-determine",
+  "wanted": "cannot-determine",
+  "proved": true,
+  "detail": {
+   "rows": [
+    {
+     "control": "button \"play\"",
+     "outcome": "cannot-determine",
+     "ringPx": {
+      "any": 7,
+      "at3to1": 0
+     },
+     "residualPx": {
+      "any": 924,
+      "at3to1": 0
+     },
+     "why": "a ring of 7 px, none of it at 3:1 against what it covers: whether it is visible is VH-200's"
+    },
+    {
+     "control": "slider \"volume\"",
+     "outcome": "cannot-determine",
+     "ringPx": {
+      "any": 0,
+      "at3to1": 0
+     },
+     "residualPx": {
+      "any": 2171,
+      "at3to1": 112
+     },
+     "why": "no ring: an outline:none on the control leaves its focused pixels unchanged; a focus-only change other than a ring remains (2171 px, 112 at 3:1: the user agent's hover-and-focus highlight, or a disclosure); whether that alone is a visible indicator is VH-200's"
+    },
+    {
+     "control": "button \"un-mute\"",
+     "outcome": "cannot-determine",
+     "ringPx": {
+      "any": 0,
+      "at3to1": 0
+     },
+     "residualPx": {
+      "any": 1512,
+      "at3to1": 0
+     },
+     "why": "no ring: an outline:none on the control leaves its focused pixels unchanged; a focus-only change other than a ring remains (1512 px, 0 at 3:1: the user agent's hover-and-focus highlight, or a disclosure); whether that alone is a visible indicator is VH-200's"
+    },
+    {
+     "control": "button \"enter full screen\"",
+     "outcome": "cannot-determine",
+     "ringPx": {
+      "any": 0,
+      "at3to1": 0
+     },
+     "residualPx": {
+      "any": 1024,
+      "at3to1": 14
+     },
+     "why": "no ring: an outline:none on the control leaves its focused pixels unchanged; a focus-only change other than a ring remains (1024 px, 14 at 3:1: the user agent's hover-and-focus highlight, or a disclosure); whether that alone is a visible indicator is VH-200's"
+    },
+    {
+     "control": "slider \"video time scrubber\"",
+     "outcome": "cannot-determine",
+     "ringPx": {
+      "any": 74,
+      "at3to1": 0
+     },
+     "residualPx": {
+      "any": 106,
+      "at3to1": 72
+     },
+     "why": "a ring of 74 px, none of it at 3:1 against what it covers: whether it is visible is VH-200's"
+    }
+   ],
+   "replacedReadingWouldPass": true
+  }
+ },
+ {
+  "instrument": "player 2.4.7: the ring alone, the native page",
+  "fixture": "player-rings-native-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "rows": [
+    {
+     "control": "button \"play\"",
+     "outcome": "pass",
+     "ringPx": {
+      "any": 292,
+      "at3to1": 90
+     }
+    },
+    {
+     "control": "slider \"volume\"",
+     "outcome": "pass",
+     "ringPx": {
+      "any": 389,
+      "at3to1": 102
+     }
+    },
+    {
+     "control": "button \"un-mute\"",
+     "outcome": "pass",
+     "ringPx": {
+      "any": 382,
+      "at3to1": 100
+     }
+    },
+    {
+     "control": "button \"enter full screen\"",
+     "outcome": "pass",
+     "ringPx": {
+      "any": 387,
+      "at3to1": 96
+     }
+    },
+    {
+     "control": "slider \"video time scrubber\"",
+     "outcome": "pass",
+     "ringPx": {
+      "any": 2578,
+      "at3to1": 1400
+     }
+    }
+   ]
+  }
+ },
+ {
+  "instrument": "player 2.4.7: a control no author style reaches is not settled",
+  "fixture": "player-overflow-not-isolable",
+  "outcome": "cannot-determine",
+  "wanted": "cannot-determine",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "focus visible (2.4.7)",
+    "outcome": "cannot-determine",
+    "control": "button \"show more media controls\"",
+    "host": false,
+    "pseudo": "-internal-media-controls-overflow-button",
+    "onOffPx": 1317,
+    "why": "the ring cannot be isolated from the controls' other redraw: no author style reaches ::-internal-media-controls-overflow-button; focused against unfocused differs by 1317 px, the highlight and any disclosure included"
+   }
+  }
+ },
+ {
+  "instrument": "player 2.4.13: the second exception, ring and backdrop unmodified",
+  "fixture": "player-ring-unmodified-good",
+  "outcome": "exempt",
+  "wanted": "exempt",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "focus appearance (2.4.13)",
+    "outcome": "fail",
+    "control": "button \"play\"",
+    "host": false,
+    "box": {
+     "w": 48,
+     "h": 48
+    },
+    "areaAt3to1": 90,
+    "perimeter2px": 368,
+    "bestRatio": 18.26,
+    "exceptions": {
+     "userAgentOnly": {
+      "holds": false,
+      "evidence": "an author outline:none on ::-webkit-media-controls-play-button removed 292 px of the ring: the author can adjust it"
+     },
+     "unmodified": {
+      "holds": true,
+      "indicator": true,
+      "indicatorRules": [],
+      "background": true,
+      "backgroundRules": []
+     }
+    },
+    "uaException": "2.4.13's second exception: neither the ring nor its background is modified by the author (no author rule on the control or the host's backdrop)"
+   }
+  }
+ },
+ {
+  "instrument": "player 2.4.13: the first exception, a ring no author selector reaches",
+  "fixture": "player-internal-ring-good",
+  "outcome": "exempt",
+  "wanted": "exempt",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "focus appearance (2.4.13)",
+    "outcome": "fail",
+    "control": "button \"show more media controls\"",
+    "host": false,
+    "box": {
+     "w": 48,
+     "h": 48
+    },
+    "areaAt3to1": 63,
+    "perimeter2px": 368,
+    "bestRatio": 15.77,
+    "exceptions": {
+     "userAgentOnly": {
+      "holds": true,
+      "evidence": "no author selector reaches ::-internal-media-controls-overflow-button"
+     },
+     "unmodified": {
+      "holds": true,
+      "indicator": true,
+      "indicatorRules": [],
+      "background": true,
+      "backgroundRules": []
+     }
+    },
+    "uaException": "2.4.13's first exception: the user agent's ring, which the author cannot adjust (no author selector reaches ::-internal-media-controls-overflow-button)"
+   }
+  }
+ },
+ {
+  "instrument": "player 2.4.13: an author-styled ring, neither exception",
+  "fixture": "player-ring-restyled-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "focus appearance (2.4.13)",
+    "outcome": "fail",
+    "control": "button \"play\"",
+    "host": false,
+    "box": {
+     "w": 48,
+     "h": 48
+    },
+    "areaAt3to1": 0,
+    "perimeter2px": 368,
+    "bestRatio": 1.83,
+    "exceptions": {
+     "userAgentOnly": {
+      "holds": false,
+      "evidence": "an author outline:none on ::-webkit-media-controls-play-button removed 24 px of the ring: the author can adjust it"
+     },
+     "unmodified": {
+      "holds": false,
+      "indicator": false,
+      "indicatorRules": [
+       {
+        "origin": "regular",
+        "selector": "#process-result video.result-player::-webkit-media-controls-play-button",
+        "props": [
+         "outline: 1px dotted #8d8d8d !important",
+         "outline-color: rgb(141, 141, 141) !important",
+         "outline-style: dotted !important",
+         "outline-width: 1px !important"
+        ]
+       }
+      ],
+      "background": true,
+      "backgroundRules": []
+     }
+    },
+    "why": "under 2.4.13's area, and the author styles the ring, so neither exception holds"
+   }
+  }
+ },
+ {
+  "instrument": "player 2.4.13: an author backdrop leaves the second exception to VH-200",
+  "fixture": "player-host-backdrop-undetermined",
+  "outcome": "cannot-determine",
+  "wanted": "cannot-determine",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "focus appearance (2.4.13)",
+    "outcome": "cannot-determine",
+    "control": "button \"play\"",
+    "host": false,
+    "box": {
+     "w": 48,
+     "h": 48
+    },
+    "areaAt3to1": 90,
+    "perimeter2px": 368,
+    "bestRatio": 18.26,
+    "exceptions": {
+     "userAgentOnly": {
+      "holds": false,
+      "evidence": "an author outline:none on ::-webkit-media-controls-play-button removed 292 px of the ring: the author can adjust it"
+     },
+     "unmodified": {
+      "holds": null,
+      "indicator": true,
+      "indicatorRules": [],
+      "background": false,
+      "backgroundRules": [
+       {
+        "origin": "regular",
+        "selector": "#process-result video.result-player",
+        "props": [
+         "background: #0f62fe",
+         "background-image: initial",
+         "background-position-x: initial",
+         "background-position-y: initial",
+         "background-size: initial",
+         "background-repeat: initial",
+         "background-attachment: initial",
+         "background-origin: initial",
+         "background-clip: initial",
+         "background-color: rgb(15, 98, 254)"
+        ]
+       }
+      ]
+     }
+    },
+    "why": "under 2.4.13's area; the first exception does not hold (an author outline:none on ::-webkit-media-controls-play-button removed 292 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (#process-result video.result-player { background: #0f62fe; background-image: initial; background-position-x: initial; background-position-y: initial; background): whether that is the indicator's background is VH-200's",
+    "unresolved": "interpretation"
+   }
+  }
+ },
+ {
+  "instrument": "player 2.4.11/2.4.12: author content over a control, apart from its ring",
+  "fixture": "player-occluded-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "not hidden by author content (2.4.11, 2.4.12)",
+    "outcome": "fail",
+    "control": "button \"play\"",
+    "host": false,
+    "coverage": {
+     "samples": 64,
+     "outside": 0,
+     "own": 24,
+     "userAgent": 0,
+     "author": 40,
+     "coveredBy": [
+      "div#cover"
+     ]
+    },
+    "why": "2.4.12: partly hidden by author content (div#cover), 40 of 64 points; 2.4.11 holds: not entirely hidden"
+   }
+  }
+ },
+ {
+  "instrument": "player 2.4.11/2.4.12: author content over a control, apart from its ring",
+  "fixture": "player-unoccluded-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "not hidden by author content (2.4.11, 2.4.12)",
+    "outcome": "pass",
+    "control": "button \"play\"",
+    "host": false,
+    "coverage": {
+     "samples": 64,
+     "outside": 0,
+     "own": 64,
+     "userAgent": 0,
+     "author": 0,
+     "coveredBy": []
+    }
+   }
+  }
+ },
+ {
+  "instrument": "player 4.1.2: play/pause state exposed (4.1.2)",
+  "fixture": "player-native-play-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "play/pause state exposed (4.1.2)",
+    "outcome": "pass",
+    "exposed": [
+     {
+      "role": "button",
+      "name": "play"
+     },
+     {
+      "role": "button",
+      "name": "pause"
+     },
+     {
+      "role": "button",
+      "name": "play"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "instrument": "player 4.1.2: time slider value exposed (4.1.2)",
+  "fixture": "player-native-seek-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "time slider value exposed (4.1.2)",
+    "outcome": "pass",
+    "exposed": [
+     {
+      "role": "slider",
+      "name": "video time scrubber",
+      "value": 1.3256200551986694,
+      "valuetext": "1.32562"
+     },
+     {
+      "role": "slider",
+      "name": "video time scrubber",
+      "value": 1.345620036125183,
+      "valuetext": "1.34562"
+     }
+    ],
+    "media": [
+     1.326,
+     1.346
+    ]
+   }
+  }
+ },
+ {
+  "instrument": "player 4.1.2: playback toggles, the name does not (in memory)",
+  "fixture": "exposed-name-unchanged-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "row": {
+    "outcome": "fail",
+    "why": "playback toggled, but the control's exposed name did not follow it"
+   }
+  }
+ },
+ {
+  "instrument": "player 4.1.2: the time moves, the value does not (in memory)",
+  "fixture": "exposed-value-unchanged-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "row": {
+    "outcome": "fail",
+    "why": "the time moved, but the slider's exposed value did not"
+   }
+  }
+ },
+ {
+  "instrument": "player: Shift+Tab stops by identity, a count that matches (in memory)",
+  "fixture": "reverse-stops-repeat-one-miss-one-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "compared": {
+    "ok": false,
+    "missing": [
+     "button \"play\""
+    ],
+    "foreign": [],
+    "repeats": 1
+   },
+   "replacedReadingWouldPass": true
+  }
+ },
+ {
+  "instrument": "player: Shift+Tab stops by identity, the native page",
+  "fixture": "reverse-stops-native-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "Shift+Tab goes back through the controls",
+    "outcome": "pass",
+    "stops": [
+     {
+      "role": "slider",
+      "name": "video time scrubber",
+      "dom": 12,
+      "ignored": false,
+      "host": false
+     },
+     {
+      "role": "button",
+      "name": "show more media controls",
+      "dom": 17,
+      "ignored": false,
+      "host": false
+     },
+     {
+      "role": "button",
+      "name": "enter full screen",
+      "dom": 69,
+      "ignored": false,
+      "host": false
+     },
+     {
+      "role": "button",
+      "name": "un-mute",
+      "dom": 68,
+      "ignored": false,
+      "host": false
+     },
+     {
+      "role": "slider",
+      "name": "volume",
+      "dom": 61,
+      "ignored": false,
+      "host": false
+     },
+     {
+      "role": "button",
+      "name": "play",
+      "dom": 54,
+      "ignored": false,
+      "host": false
+     },
+     {
+      "role": "Video",
+      "name": "Finished video — 1.1 MB",
+      "dom": 2,
+      "ignored": false,
+      "host": true
+     }
+    ],
+    "inventory": 6
+   }
+  }
+ },
+ {
+  "instrument": "player 2.5.5: a control empty at rest, measured disclosed",
+  "fixture": "player-volume-disclosed-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "control target",
+    "outcome": "pass",
+    "control": "slider \"volume\"",
+    "box": {
+     "w": 52,
+     "h": 48
+    },
+    "geometry": {
+     "rest": {
+      "w": 0,
+      "h": 48
+     },
+     "available": {
+      "w": 52,
+      "h": 48
+     },
+     "disclosedBy": "hovering button \"mute\""
+    },
+    "hitArea": {
+     "hitW": 52,
+     "hitH": 48,
+     "square44": true,
+     "squareHits": "49 of 49"
+    }
+   }
+  }
+ },
+ {
+  "instrument": "player 2.5.5: unavailable readings named apart (in memory)",
+  "fixture": "target-geometry-unavailable",
+  "outcome": "cannot-determine",
+  "wanted": "cannot-determine",
+  "proved": true,
+  "detail": {
+   "row": {
+    "outcome": "cannot-determine",
+    "why": "geometry unavailable: Could not compute box model."
+   }
+  }
+ },
+ {
+  "instrument": "player 2.5.5: unavailable readings named apart (in memory)",
+  "fixture": "target-empty-never-disclosed",
+  "outcome": "cannot-determine",
+  "wanted": "cannot-determine",
+  "proved": true,
+  "detail": {
+   "row": {
+    "outcome": "cannot-determine",
+    "why": "geometry 0 x 48 at rest, and not disclosed by hovering the other controls: no target to measure"
+   }
+  }
+ },
+ {
+  "instrument": "player 2.5.5: unavailable readings named apart (in memory)",
+  "fixture": "target-hit-area-unavailable",
+  "outcome": "cannot-determine",
+  "wanted": "cannot-determine",
+  "proved": true,
+  "detail": {
+   "row": {
+    "outcome": "cannot-determine",
+    "why": "hit area unavailable (no point of its box hits the control); geometry 48 x 48"
+   }
+  }
+ },
+ {
+  "instrument": "player 2.5.5: an author-sized control, no user-agent exception",
+  "fixture": "player-target-author-sized-bad",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "control target",
+    "outcome": "fail",
+    "control": "button \"mute\"",
+    "box": {
+     "w": 24,
+     "h": 24
+    },
+    "geometry": {
+     "rest": {
+      "w": 24,
+      "h": 24
+     }
+    },
+    "hitArea": {
+     "hitW": 24,
+     "hitH": 24,
+     "square44": false
+    },
+    "authorSizing": [
+     {
+      "origin": "regular",
+      "selector": "#process-result video.result-player::-webkit-media-controls-mute-button",
+      "props": [
+       "width: 24px !important",
+       "min-width: 24px !important",
+       "height: 24px !important"
+      ]
+     }
+    ],
+    "why": "no 44 px square of hits (a hit run of 24 x 24 px); the author sets its size, so 2.5.5's user-agent exception does not hold"
+   }
+  }
+ },
+ {
+  "instrument": "player 2.5.5: the native control by hit area",
+  "fixture": "player-target-native-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "control target",
+    "outcome": "pass",
+    "control": "button \"mute\"",
+    "box": {
+     "w": 48,
+     "h": 48
+    },
+    "geometry": {
+     "rest": {
+      "w": 48,
+      "h": 48
+     }
+    },
+    "hitArea": {
+     "hitW": 48,
+     "hitH": 48,
+     "square44": true,
+     "squareHits": "49 of 49"
+    }
+   }
+  }
+ },
+ {
+  "instrument": "player 2.5.5: the native control by hit area, the page scrolled",
+  "fixture": "player-target-native-scrolled-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "control target",
+    "outcome": "pass",
+    "control": "button \"mute\"",
+    "box": {
+     "w": 48,
+     "h": 48
+    },
+    "geometry": {
+     "rest": {
+      "w": 48,
+      "h": 48
+     }
+    },
+    "hitArea": {
+     "hitW": 48,
+     "hitH": 48,
+     "square44": true,
+     "squareHits": "49 of 49"
+    }
+   }
+  }
+ },
+ {
+  "instrument": "player 2.4.11/2.4.12: the native page scrolled, nothing over the control",
+  "fixture": "player-unoccluded-scrolled-good",
+  "outcome": "pass",
+  "wanted": "pass",
+  "proved": true,
+  "detail": {
+   "row": {
+    "what": "not hidden by author content (2.4.11, 2.4.12)",
+    "outcome": "pass",
+    "control": "button \"play\"",
+    "host": false,
+    "coverage": {
+     "samples": 64,
+     "outside": 0,
+     "own": 64,
+     "userAgent": 0,
+     "author": 0,
+     "coveredBy": []
+    }
+   }
+  }
  }
 ]

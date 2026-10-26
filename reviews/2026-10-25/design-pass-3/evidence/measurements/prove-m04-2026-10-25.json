@@ -1,0 +1,546 @@
+[
+ {
+  "case": "dialog-enlarged-clipped-bad",
+  "scenario": "S-76",
+  "view": "zoom400proxy",
+  "mode": "light",
+  "wanted": "fail",
+  "outcome": "fail",
+  "proved": true,
+  "rows": [
+   {
+    "what": "exit by Escape: the dialog closes; focus back on Report a problem (where the page stands is the instruments' scroll, so not judged here)",
+    "outcome": "pass",
+    "focus": {
+     "el": "button#feedback-open.button.button--secondary[button] \"Report a problem\"",
+     "id": "feedback-open",
+     "tag": "button",
+     "type": "button",
+     "inDialog": false,
+     "box": [
+      24,
+      90,
+      158,
+      44
+     ],
+     "window": [
+      320,
+      225
+     ],
+     "shows": true,
+     "covered": false,
+     "seen": true
+    },
+    "onOpener": true
+   },
+   {
+    "what": "entry by keys: Report a problem reached by Shift+Tab and Tab, in the window and uncovered; Enter opens the dialog; focus on the message field, inside it, in the window and uncovered",
+    "outcome": "fail",
+    "focus": {
+     "el": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+     "id": "feedback-message",
+     "tag": "textarea",
+     "type": "textarea",
+     "inDialog": true,
+     "box": [
+      49,
+      266,
+      222,
+      170
+     ],
+     "window": [
+      320,
+      225
+     ],
+     "shows": false,
+     "covered": null,
+     "seen": false
+    }
+   },
+   {
+    "what": "use: the message typed where focus stood reads back",
+    "outcome": "pass"
+   },
+   {
+    "what": "use: Tab reaches What will be sent, Open email app, Copy message and details and Close, each inside the dialog, in the window and uncovered",
+    "outcome": "fail",
+    "missing": [],
+    "notSeen": [
+     "summary.disclosure-summary \"What will be sent with it\" [49,452,222,44] shows false covered null",
+     "button.button[submit] \"Open email app\" [49,520,149,44] shows false covered null",
+     "button#feedback-copy.button.button--secondary[button] \"Copy message and details\" [49,576,215,44] shows false covered null",
+     "button#feedback-close.button.button--secondary[button] \"Close\" [49,632,86,44] shows false covered null"
+    ]
+   },
+   {
+    "what": "use: Open email app, by Enter, hands the message to the email app (\"opened\" said), the dialog still open",
+    "outcome": "pass",
+    "focus": {
+     "el": "button.button[submit] \"Open email app\"",
+     "id": null,
+     "tag": "button",
+     "type": "submit",
+     "inDialog": true,
+     "box": [
+      49,
+      520,
+      149,
+      44
+     ],
+     "window": [
+      320,
+      225
+     ],
+     "shows": false,
+     "covered": null,
+     "seen": false
+    }
+   },
+   {
+    "what": "exit by Close: Close in the window and uncovered; the dialog closes; focus back on Report a problem, in the window and uncovered",
+    "outcome": "fail",
+    "focus": {
+     "el": "button#feedback-open.button.button--secondary[button] \"Report a problem\"",
+     "id": "feedback-open",
+     "tag": "button",
+     "type": "button",
+     "inDialog": false,
+     "box": [
+      24,
+      96,
+      158,
+      44
+     ],
+     "window": [
+      320,
+      225
+     ],
+     "shows": true,
+     "covered": false,
+     "seen": true
+    },
+    "onOpener": true
+   }
+  ],
+  "seconds": 6
+ },
+ {
+  "case": "dialog-enlarged-focus-lost-bad",
+  "scenario": "S-76",
+  "view": "zoom400proxy",
+  "mode": "light",
+  "wanted": "fail",
+  "outcome": "fail",
+  "proved": true,
+  "rows": [
+   {
+    "what": "exit by Escape: the dialog closes; focus back on Report a problem (where the page stands is the instruments' scroll, so not judged here)",
+    "outcome": "fail",
+    "focus": {
+     "el": "body",
+     "seen": false
+    },
+    "onOpener": false
+   },
+   {
+    "what": "entry by keys: Report a problem reached by Shift+Tab and Tab, in the window and uncovered; Enter opens the dialog; focus on the message field, inside it, in the window and uncovered",
+    "outcome": "pass",
+    "focus": {
+     "el": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+     "id": "feedback-message",
+     "tag": "textarea",
+     "type": "textarea",
+     "inDialog": true,
+     "box": [
+      49,
+      88,
+      222,
+      170
+     ],
+     "window": [
+      320,
+      225
+     ],
+     "shows": true,
+     "covered": false,
+     "seen": true
+    }
+   },
+   {
+    "what": "use: the message typed where focus stood reads back",
+    "outcome": "pass"
+   },
+   {
+    "what": "use: Tab reaches What will be sent, Open email app, Copy message and details and Close, each inside the dialog, in the window and uncovered",
+    "outcome": "pass",
+    "missing": [],
+    "notSeen": []
+   },
+   {
+    "what": "use: Open email app, by Enter, hands the message to the email app (\"opened\" said), the dialog still open",
+    "outcome": "pass",
+    "focus": {
+     "el": "button.button[submit] \"Open email app\"",
+     "id": null,
+     "tag": "button",
+     "type": "submit",
+     "inDialog": true,
+     "box": [
+      49,
+      34,
+      149,
+      44
+     ],
+     "window": [
+      320,
+      225
+     ],
+     "shows": true,
+     "covered": false,
+     "seen": true
+    }
+   },
+   {
+    "what": "exit by Close: Close in the window and uncovered; the dialog closes; focus back on Report a problem, in the window and uncovered",
+    "outcome": "fail",
+    "focus": {
+     "el": "body",
+     "seen": false
+    },
+    "onOpener": false
+   }
+  ],
+  "seconds": 6
+ },
+ {
+  "case": "dialog-enlarged-good",
+  "scenario": "S-76",
+  "view": "zoom400proxy",
+  "mode": "light",
+  "wanted": "pass",
+  "outcome": "pass",
+  "proved": true,
+  "rows": [
+   {
+    "what": "exit by Escape: the dialog closes; focus back on Report a problem (where the page stands is the instruments' scroll, so not judged here)",
+    "outcome": "pass",
+    "focus": {
+     "el": "button#feedback-open.button.button--secondary[button] \"Report a problem\"",
+     "id": "feedback-open",
+     "tag": "button",
+     "type": "button",
+     "inDialog": false,
+     "box": [
+      24,
+      90,
+      158,
+      44
+     ],
+     "window": [
+      320,
+      225
+     ],
+     "shows": true,
+     "covered": false,
+     "seen": true
+    },
+    "onOpener": true
+   },
+   {
+    "what": "entry by keys: Report a problem reached by Shift+Tab and Tab, in the window and uncovered; Enter opens the dialog; focus on the message field, inside it, in the window and uncovered",
+    "outcome": "pass",
+    "focus": {
+     "el": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+     "id": "feedback-message",
+     "tag": "textarea",
+     "type": "textarea",
+     "inDialog": true,
+     "box": [
+      49,
+      88,
+      222,
+      170
+     ],
+     "window": [
+      320,
+      225
+     ],
+     "shows": true,
+     "covered": false,
+     "seen": true
+    }
+   },
+   {
+    "what": "use: the message typed where focus stood reads back",
+    "outcome": "pass"
+   },
+   {
+    "what": "use: Tab reaches What will be sent, Open email app, Copy message and details and Close, each inside the dialog, in the window and uncovered",
+    "outcome": "pass",
+    "missing": [],
+    "notSeen": []
+   },
+   {
+    "what": "use: Open email app, by Enter, hands the message to the email app (\"opened\" said), the dialog still open",
+    "outcome": "pass",
+    "focus": {
+     "el": "button.button[submit] \"Open email app\"",
+     "id": null,
+     "tag": "button",
+     "type": "submit",
+     "inDialog": true,
+     "box": [
+      49,
+      34,
+      149,
+      44
+     ],
+     "window": [
+      320,
+      225
+     ],
+     "shows": true,
+     "covered": false,
+     "seen": true
+    }
+   },
+   {
+    "what": "exit by Close: Close in the window and uncovered; the dialog closes; focus back on Report a problem, in the window and uncovered",
+    "outcome": "pass",
+    "focus": {
+     "el": "button#feedback-open.button.button--secondary[button] \"Report a problem\"",
+     "id": "feedback-open",
+     "tag": "button",
+     "type": "button",
+     "inDialog": false,
+     "box": [
+      24,
+      96,
+      158,
+      44
+     ],
+     "window": [
+      320,
+      225
+     ],
+     "shows": true,
+     "covered": false,
+     "seen": true
+    },
+    "onOpener": true
+   }
+  ],
+  "seconds": 6
+ },
+ {
+  "case": "dialog-font32-good",
+  "scenario": "S-76",
+  "view": "w1280",
+  "mode": "font32",
+  "wanted": "pass",
+  "outcome": "pass",
+  "proved": true,
+  "rows": [
+   {
+    "what": "exit by Escape: the dialog closes; focus back on Report a problem (where the page stands is the instruments' scroll, so not judged here)",
+    "outcome": "pass",
+    "focus": {
+     "el": "button#feedback-open.button.button--secondary[button] \"Report a problem\"",
+     "id": "feedback-open",
+     "tag": "button",
+     "type": "button",
+     "inDialog": false,
+     "box": [
+      48,
+      574,
+      314,
+      76
+     ],
+     "window": [
+      1280,
+      900
+     ],
+     "shows": true,
+     "covered": false,
+     "seen": true
+    },
+    "onOpener": true
+   },
+   {
+    "what": "entry by keys: Report a problem reached by Shift+Tab and Tab, in the window and uncovered; Enter opens the dialog; focus on the message field, inside it, in the window and uncovered",
+    "outcome": "pass",
+    "focus": {
+     "el": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+     "id": "feedback-message",
+     "tag": "textarea",
+     "type": "textarea",
+     "inDialog": true,
+     "box": [
+      97,
+      419,
+      896,
+      338
+     ],
+     "window": [
+      1280,
+      900
+     ],
+     "shows": true,
+     "covered": false,
+     "seen": true
+    }
+   },
+   {
+    "what": "use: the message typed where focus stood reads back",
+    "outcome": "pass"
+   },
+   {
+    "what": "use: Tab reaches What will be sent, Open email app, Copy message and details and Close, each inside the dialog, in the window and uncovered",
+    "outcome": "pass",
+    "missing": [],
+    "notSeen": []
+   },
+   {
+    "what": "use: Open email app, by Enter, hands the message to the email app (\"opened\" said), the dialog still open",
+    "outcome": "pass",
+    "focus": {
+     "el": "button.button[submit] \"Open email app\"",
+     "id": null,
+     "tag": "button",
+     "type": "submit",
+     "inDialog": true,
+     "box": [
+      97,
+      653,
+      296,
+      76
+     ],
+     "window": [
+      1280,
+      900
+     ],
+     "shows": true,
+     "covered": false,
+     "seen": true
+    }
+   },
+   {
+    "what": "exit by Close: Close in the window and uncovered; the dialog closes; focus back on Report a problem, in the window and uncovered",
+    "outcome": "pass",
+    "focus": {
+     "el": "button#feedback-open.button.button--secondary[button] \"Report a problem\"",
+     "id": "feedback-open",
+     "tag": "button",
+     "type": "button",
+     "inDialog": false,
+     "box": [
+      48,
+      574,
+      314,
+      76
+     ],
+     "window": [
+      1280,
+      900
+     ],
+     "shows": true,
+     "covered": false,
+     "seen": true
+    },
+    "onOpener": true
+   }
+  ],
+  "seconds": 6
+ },
+ {
+  "case": "save-after-failed-player-refused-bad",
+  "scenario": "S-132",
+  "view": "w1280",
+  "mode": "light",
+  "wanted": "fail",
+  "outcome": "fail",
+  "proved": true,
+  "rows": [
+   {
+    "what": "the failed player stood when Save was pressed: its MediaError recorded, Save enabled",
+    "outcome": "pass"
+   },
+   {
+    "what": "Save completes as S-62: \"Saved.\", Save disabled, not saving, no lifetime line",
+    "outcome": "fail"
+   },
+   {
+    "what": "the saved file written: one save more, its bytes over zero",
+    "outcome": "fail"
+   }
+  ],
+  "seconds": 7
+ },
+ {
+  "case": "save-after-failed-player-good",
+  "scenario": "S-132",
+  "view": "w1280",
+  "mode": "light",
+  "wanted": "pass",
+  "outcome": "pass",
+  "proved": true,
+  "rows": [
+   {
+    "what": "the failed player stood when Save was pressed: its MediaError recorded, Save enabled",
+    "outcome": "pass"
+   },
+   {
+    "what": "Save completes as S-62: \"Saved.\", Save disabled, not saving, no lifetime line",
+    "outcome": "pass"
+   },
+   {
+    "what": "the saved file written: one save more, its bytes over zero",
+    "outcome": "pass"
+   }
+  ],
+  "seconds": 7
+ },
+ {
+  "case": "read-failure-branch-reached",
+  "scenario": "S-149",
+  "view": "w1280",
+  "mode": "light",
+  "wanted": "branch row pass; focus row pass or fail (recorded)",
+  "outcome": "branch pass, focus fail",
+  "proved": true,
+  "rows": [
+   {
+    "what": "reached: lecture-30s.mp4 read, focus on a Video language radio in the shown step 3, notvideo.mp4 chosen; the read fails and the setup steps are withdrawn",
+    "outcome": "pass"
+   },
+   {
+    "what": "focus handed to the file input, the chooser that stays, never lost to the page (2.4.3; the hand-off S-149 asserts for a block)",
+    "outcome": "fail",
+    "focus": "body"
+   }
+  ],
+  "seconds": 29
+ },
+ {
+  "case": "read-failure-branch-readable-twin",
+  "scenario": "S-149",
+  "view": "w1280",
+  "mode": "light",
+  "wanted": "cannot-determine (both rows)",
+  "outcome": "branch cannot-determine, focus cannot-determine",
+  "proved": true,
+  "rows": [
+   {
+    "what": "reached: lecture-30s.mp4 read, focus on a Video language radio in the shown step 3, notvideo.mp4 chosen; the read fails and the setup steps are withdrawn",
+    "outcome": "cannot-determine",
+    "why": "the read-failure branch was not reached"
+   },
+   {
+    "what": "focus handed to the file input, the chooser that stays, never lost to the page (2.4.3; the hand-off S-149 asserts for a block)",
+    "outcome": "cannot-determine",
+    "why": "the read-failure branch was not reached"
+   }
+  ],
+  "seconds": 37
+ }
+]

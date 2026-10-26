@@ -1,24 +1,46 @@
 {
- "date": "2026-10-25",
+ "date": "2026-10-26",
  "item": "VH-198",
- "instrumentRevision": "20440da",
+ "instrumentRevision": "2d16e337abe51539",
+ "after": "Codex astra's method check of 25 October, M-01 to M-04 applied (instruments-2026-10-25.md, \"After Codex astra's method check\")",
  "appSource": "src/ and index.html as last changed at e226410 (VH-193); unchanged since",
+ "source": {
+  "commit": "1cd71f2a22e69db6cd44594e9398589ccae8530e",
+  "dirty": false,
+  "diffSha256": "e3b0c44298fc1c14"
+ },
  "server": "Vite dev server on port 5181 (--strictPort), this checkout",
- "browser": "Chrome/156.0.8078.48, headless=new, CDP port 9232",
+ "browser": "Chrome/156.0.8078.48, headless=new, CDP port 9251",
  "chromeFlags": [
   "--headless=new",
   "--no-first-run",
+  "--no-default-browser-check",
   "--disable-background-timer-throttling",
   "--disable-renderer-backgrounding",
   "--disable-backgrounding-occluded-windows"
  ],
  "whyTheFlags": "Without them headless Chrome reports every page but its first as hidden: timers throttle to 1 s and media loading is deferred (a probe read 20 x 100 ms timers at 19.7-20.0 s in the second and third pages, 2.0 s in the first). Phase 7's matrix opened its analysis page early, so its later walk pages ran hidden. qualify.mjs assertReached now fails a record whose page is not visible.",
  "fixtures": "fixtures.sh + fixtures-8.sh into the scratchpad, never samples/",
- "run": "vh198proof-2026-10-25T20-58-40-009Z-2ec0c2",
+ "run": "vh198proof-2026-10-26T00-48-14-316Z-685d65",
  "plan": "PLANS.vh198proof",
+ "coverage": {
+  "expected": 11,
+  "observed": 11,
+  "whole": true,
+  "problems": []
+ },
+ "provenance": {
+  "pinnedAtCreation": true,
+  "created": "2026-10-26T00:48:14.439Z",
+  "resumes": [],
+  "held": true,
+  "problems": [],
+  "recordsOffRevision": 0
+ },
  "records": {
   "K-player__en-GB__w1280__light": {
    "status": "ok",
+   "revision": "2d16e337abe51539",
    "reached": "pass",
    "problems": [],
    "instruments": {
@@ -28,6 +50,7 @@
   },
   "S-03__en-GB__w1280__light": {
    "status": "ok",
+   "revision": "2d16e337abe51539",
    "reached": "pass",
    "problems": [],
    "instruments": {
@@ -94,6 +117,7 @@
   },
   "S-119__en-GB__w1280__light": {
    "status": "ok",
+   "revision": "2d16e337abe51539",
    "reached": "pass",
    "problems": [],
    "instruments": {
@@ -145,6 +169,7 @@
   },
   "S-123__en-GB__w1280__light": {
    "status": "ok",
+   "revision": "2d16e337abe51539",
    "reached": "pass",
    "problems": [],
    "instruments": {
@@ -196,6 +221,7 @@
   },
   "S-126__en-GB__w1280__light": {
    "status": "ok",
+   "revision": "2d16e337abe51539",
    "reached": "pass",
    "problems": [],
    "instruments": {
@@ -207,7 +233,7 @@
     "measure": "pass",
     "type": "pass",
     "focus": "pass",
-    "player": "cannot-determine",
+    "player": "pass",
     "formatTip": "not-applicable",
     "footer": "pass",
     "limiting": "pass",
@@ -218,24 +244,44 @@
     "player": [
      {
       "what": "control target",
-      "outcome": "cannot-determine",
-      "control": "slider \"volume\"",
-      "box": {
-       "w": 0,
-       "h": 48
-      },
-      "why": "no box for the control: empty"
-     },
-     {
-      "what": "control target",
       "outcome": "fail",
       "control": "slider \"video time scrubber\"",
       "box": {
        "w": 825,
        "h": 24
       },
-      "uaException": "user-agent control: its size is the browser's, not modified by the author (2.5.5)",
-      "exempt": "user-agent control: its size is the browser's, not modified by the author (2.5.5)"
+      "geometry": {
+       "rest": {
+        "w": 825,
+        "h": 24
+       }
+      },
+      "hitArea": {
+       "hitW": 161,
+       "hitH": 24,
+       "capped": true,
+       "square44": false
+      },
+      "uaException": "the user agent's size: no author rule sets this control's size (2.5.5)",
+      "hostAuthorSizing": [
+       {
+        "origin": "regular",
+        "selector": ".trim-preview, .result-player",
+        "props": [
+         "width: 100%",
+         "max-height: var(--preview-max-height)"
+        ]
+       },
+       {
+        "origin": "regular",
+        "selector": ".result-player",
+        "props": [
+         "margin-top: var(--spacing-05)"
+        ]
+       }
+      ],
+      "why": "no 44 px square of hits (a hit run of 161 x 24 px)",
+      "exempt": "the user agent's size: no author rule sets this control's size (2.5.5)"
      }
     ],
     "formatTip": [
@@ -254,6 +300,7 @@
   },
   "S-127__en-GB__w1280__light": {
    "status": "ok",
+   "revision": "2d16e337abe51539",
    "reached": "pass",
    "problems": [],
    "instruments": {
@@ -276,28 +323,54 @@
     "player": [
      {
       "what": "control target",
-      "outcome": "cannot-determine",
-      "control": "slider \"volume\"",
-      "box": {
-       "w": 0,
-       "h": 48
-      },
-      "why": "no box for the control: empty"
-     },
-     {
-      "what": "control target",
       "outcome": "fail",
       "control": "slider \"video time scrubber\"",
       "box": {
        "w": 825,
        "h": 24
       },
-      "uaException": "user-agent control: its size is the browser's, not modified by the author (2.5.5)",
-      "exempt": "user-agent control: its size is the browser's, not modified by the author (2.5.5)"
+      "geometry": {
+       "rest": {
+        "w": 825,
+        "h": 24
+       }
+      },
+      "hitArea": {
+       "hitW": 161,
+       "hitH": 24,
+       "capped": true,
+       "square44": false
+      },
+      "uaException": "the user agent's size: no author rule sets this control's size (2.5.5)",
+      "hostAuthorSizing": [
+       {
+        "origin": "regular",
+        "selector": ".trim-preview, .result-player",
+        "props": [
+         "width: 100%",
+         "max-height: var(--preview-max-height)"
+        ]
+       },
+       {
+        "origin": "regular",
+        "selector": ".result-player",
+        "props": [
+         "margin-top: var(--spacing-05)"
+        ]
+       }
+      ],
+      "why": "no 44 px square of hits (a hit run of 161 x 24 px)",
+      "exempt": "the user agent's size: no author rule sets this control's size (2.5.5)"
      },
      {
-      "what": "ring by pixels",
-      "outcome": "fail",
+      "what": "notification of these changes (4.1.2)",
+      "outcome": "cannot-determine",
+      "why": "the exposed name and value are read from the tree before and after; whether a change event reaches assistive technology is not observed",
+      "unresolved": "measurement"
+     },
+     {
+      "what": "focus appearance (2.4.13)",
+      "outcome": "cannot-determine",
       "control": "button \"play\"",
       "host": false,
       "box": {
@@ -306,65 +379,150 @@
       },
       "areaAt3to1": 90,
       "perimeter2px": 368,
-      "changedAny": 1182,
       "bestRatio": 18.26,
-      "visible": true,
-      "uaException": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible",
-      "exempt": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible"
+      "exceptions": {
+       "userAgentOnly": {
+        "holds": false,
+        "evidence": "an author outline:none on ::-webkit-media-controls-play-button removed 285 px of the ring: the author can adjust it"
+       },
+       "unmodified": {
+        "holds": null,
+        "indicator": true,
+        "indicatorRules": [],
+        "background": false,
+        "backgroundRules": [
+         {
+          "origin": "regular",
+          "selector": ".trim-preview, .result-player",
+          "props": [
+           "background: var(--uon-brand-bg)"
+          ]
+         }
+        ]
+       }
+      },
+      "why": "under 2.4.13's area; the first exception does not hold (an author outline:none on ::-webkit-media-controls-play-button removed 285 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+      "unresolved": "interpretation"
      },
      {
-      "what": "ring by pixels",
-      "outcome": "fail",
+      "what": "focus appearance (2.4.13)",
+      "outcome": "cannot-determine",
       "control": "slider \"volume\"",
       "host": false,
       "box": {
-       "w": 12,
+       "w": 52,
        "h": 48
       },
-      "areaAt3to1": 53,
-      "perimeter2px": 222,
-      "changedAny": 869,
-      "bestRatio": 17.47,
-      "visible": true,
-      "uaException": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible",
-      "exempt": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible"
+      "areaAt3to1": 219,
+      "perimeter2px": 384,
+      "bestRatio": 17.61,
+      "exceptions": {
+       "userAgentOnly": {
+        "holds": false,
+        "evidence": "an author outline:none on ::-webkit-media-controls-volume-slider removed 378 px of the ring: the author can adjust it"
+       },
+       "unmodified": {
+        "holds": null,
+        "indicator": true,
+        "indicatorRules": [],
+        "background": false,
+        "backgroundRules": [
+         {
+          "origin": "regular",
+          "selector": ".trim-preview, .result-player",
+          "props": [
+           "background: var(--uon-brand-bg)"
+          ]
+         }
+        ]
+       }
+      },
+      "why": "under 2.4.13's area; the first exception does not hold (an author outline:none on ::-webkit-media-controls-volume-slider removed 378 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+      "unresolved": "interpretation"
      },
      {
-      "what": "ring by pixels",
-      "outcome": "fail",
+      "what": "focus appearance (2.4.13)",
+      "outcome": "cannot-determine",
       "control": "button \"un-mute\"",
       "host": false,
       "box": {
        "w": 48,
        "h": 48
       },
-      "areaAt3to1": 119,
+      "areaAt3to1": 110,
       "perimeter2px": 368,
-      "changedAny": 1808,
-      "bestRatio": 17.47,
-      "visible": true,
-      "uaException": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible",
-      "exempt": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible"
+      "bestRatio": 17.61,
+      "exceptions": {
+       "userAgentOnly": {
+        "holds": false,
+        "evidence": "an author outline:none on ::-webkit-media-controls-mute-button removed 382 px of the ring: the author can adjust it"
+       },
+       "unmodified": {
+        "holds": null,
+        "indicator": true,
+        "indicatorRules": [],
+        "background": false,
+        "backgroundRules": [
+         {
+          "origin": "regular",
+          "selector": ".trim-preview, .result-player",
+          "props": [
+           "background: var(--uon-brand-bg)"
+          ]
+         }
+        ]
+       }
+      },
+      "why": "under 2.4.13's area; the first exception does not hold (an author outline:none on ::-webkit-media-controls-mute-button removed 382 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+      "unresolved": "interpretation"
      },
      {
-      "what": "ring by pixels",
-      "outcome": "fail",
+      "what": "focus appearance (2.4.13)",
+      "outcome": "cannot-determine",
       "control": "button \"enter full screen\"",
       "host": false,
       "box": {
        "w": 48,
        "h": 48
       },
-      "areaAt3to1": 96,
+      "areaAt3to1": 98,
       "perimeter2px": 368,
-      "changedAny": 1406,
       "bestRatio": 15.82,
-      "visible": true,
-      "uaException": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible",
-      "exempt": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible"
+      "exceptions": {
+       "userAgentOnly": {
+        "holds": false,
+        "evidence": "an author outline:none on ::-webkit-media-controls-fullscreen-button removed 384 px of the ring: the author can adjust it"
+       },
+       "unmodified": {
+        "holds": null,
+        "indicator": true,
+        "indicatorRules": [],
+        "background": false,
+        "backgroundRules": [
+         {
+          "origin": "regular",
+          "selector": ".trim-preview, .result-player",
+          "props": [
+           "background: var(--uon-brand-bg)"
+          ]
+         }
+        ]
+       }
+      },
+      "why": "under 2.4.13's area; the first exception does not hold (an author outline:none on ::-webkit-media-controls-fullscreen-button removed 384 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+      "unresolved": "interpretation"
      },
      {
-      "what": "ring by pixels",
+      "what": "focus visible (2.4.7)",
+      "outcome": "cannot-determine",
+      "control": "button \"show more media controls\"",
+      "host": false,
+      "pseudo": "-internal-media-controls-overflow-button",
+      "onOffPx": 1305,
+      "why": "the ring cannot be isolated from the controls' other redraw: no author style reaches ::-internal-media-controls-overflow-button; focused against unfocused differs by 1305 px, the highlight and any disclosure included"
+     },
+     {
+      "what": "focus appearance (2.4.13)",
       "outcome": "fail",
       "control": "button \"show more media controls\"",
       "host": false,
@@ -372,30 +530,68 @@
        "w": 48,
        "h": 48
       },
-      "areaAt3to1": 61,
+      "areaAt3to1": 63,
       "perimeter2px": 368,
-      "changedAny": 1297,
       "bestRatio": 15.82,
-      "visible": true,
-      "uaException": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible",
-      "exempt": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible"
+      "exceptions": {
+       "userAgentOnly": {
+        "holds": true,
+        "evidence": "no author selector reaches ::-internal-media-controls-overflow-button"
+       },
+       "unmodified": {
+        "holds": null,
+        "indicator": true,
+        "indicatorRules": [],
+        "background": false,
+        "backgroundRules": [
+         {
+          "origin": "regular",
+          "selector": ".trim-preview, .result-player",
+          "props": [
+           "background: var(--uon-brand-bg)"
+          ]
+         }
+        ]
+       }
+      },
+      "uaException": "2.4.13's first exception: the user agent's ring, which the author cannot adjust (no author selector reaches ::-internal-media-controls-overflow-button)",
+      "exempt": "2.4.13's first exception: the user agent's ring, which the author cannot adjust (no author selector reaches ::-internal-media-controls-overflow-button)"
      },
      {
-      "what": "ring by pixels",
-      "outcome": "fail",
+      "what": "focus appearance (2.4.13)",
+      "outcome": "cannot-determine",
       "control": "slider \"video time scrubber\"",
       "host": false,
       "box": {
        "w": 825,
        "h": 24
       },
-      "areaAt3to1": 1851,
+      "areaAt3to1": 1855,
       "perimeter2px": 3380,
-      "changedAny": 3404,
-      "bestRatio": 19.82,
-      "visible": true,
-      "uaException": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible",
-      "exempt": "a ring the user agent draws, not modified by the author (2.4.13); 2.4.7 holds: it is visible"
+      "bestRatio": 19.92,
+      "exceptions": {
+       "userAgentOnly": {
+        "holds": false,
+        "evidence": "an author outline:none on ::-webkit-media-controls-timeline removed 3370 px of the ring: the author can adjust it"
+       },
+       "unmodified": {
+        "holds": null,
+        "indicator": true,
+        "indicatorRules": [],
+        "background": false,
+        "backgroundRules": [
+         {
+          "origin": "regular",
+          "selector": ".trim-preview, .result-player",
+          "props": [
+           "background: var(--uon-brand-bg)"
+          ]
+         }
+        ]
+       }
+      },
+      "why": "under 2.4.13's area; the first exception does not hold (an author outline:none on ::-webkit-media-controls-timeline removed 3370 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+      "unresolved": "interpretation"
      }
     ],
     "formatTip": [
@@ -421,6 +617,7 @@
   },
   "S-131__en-GB__w1280__light": {
    "status": "ok",
+   "revision": "2d16e337abe51539",
    "reached": "pass",
    "problems": [],
    "instruments": {
@@ -457,6 +654,7 @@
   },
   "S-135__en-GB__w1280__light": {
    "status": "ok",
+   "revision": "2d16e337abe51539",
    "reached": "pass",
    "problems": [],
    "instruments": {
@@ -468,7 +666,7 @@
     "measure": "pass",
     "type": "pass",
     "focus": "pass",
-    "player": "cannot-determine",
+    "player": "pass",
     "formatTip": "not-applicable",
     "footer": "pass",
     "limiting": "pass",
@@ -479,24 +677,44 @@
     "player": [
      {
       "what": "control target",
-      "outcome": "cannot-determine",
-      "control": "slider \"volume\"",
-      "box": {
-       "w": 0,
-       "h": 48
-      },
-      "why": "no box for the control: empty"
-     },
-     {
-      "what": "control target",
       "outcome": "fail",
       "control": "slider \"video time scrubber\"",
       "box": {
        "w": 825,
        "h": 24
       },
-      "uaException": "user-agent control: its size is the browser's, not modified by the author (2.5.5)",
-      "exempt": "user-agent control: its size is the browser's, not modified by the author (2.5.5)"
+      "geometry": {
+       "rest": {
+        "w": 825,
+        "h": 24
+       }
+      },
+      "hitArea": {
+       "hitW": 161,
+       "hitH": 24,
+       "capped": true,
+       "square44": false
+      },
+      "uaException": "the user agent's size: no author rule sets this control's size (2.5.5)",
+      "hostAuthorSizing": [
+       {
+        "origin": "regular",
+        "selector": ".trim-preview, .result-player",
+        "props": [
+         "width: 100%",
+         "max-height: var(--preview-max-height)"
+        ]
+       },
+       {
+        "origin": "regular",
+        "selector": ".result-player",
+        "props": [
+         "margin-top: var(--spacing-05)"
+        ]
+       }
+      ],
+      "why": "no 44 px square of hits (a hit run of 161 x 24 px)",
+      "exempt": "the user agent's size: no author rule sets this control's size (2.5.5)"
      }
     ],
     "formatTip": [
@@ -515,6 +733,7 @@
   },
   "S-141__en-GB__w1280__light": {
    "status": "ok",
+   "revision": "2d16e337abe51539",
    "reached": "pass",
    "problems": [],
    "instruments": {
@@ -573,6 +792,7 @@
   },
   "S-142__zh-Hans__w1280__light": {
    "status": "ok",
+   "revision": "2d16e337abe51539",
    "reached": "pass",
    "problems": [],
    "instruments": {
@@ -631,6 +851,7 @@
   },
   "S-145__en-GB__w1280__light": {
    "status": "ok",
+   "revision": "2d16e337abe51539",
    "reached": "pass",
    "problems": [],
    "instruments": {

@@ -1534,6 +1534,111 @@ const HEAVY_TITLE = `M.msg('warnings.heavyLimiting.heading')`
 const META_TITLE = `M.msg('warnings.metadataLost.heading')`
 const WARN_TEXT = `(() => { const b = window.__p8.warnBox(); return b ? b.textContent.replace(/\\s+/g, ' ') : '' })()`
 
+// ---------------------------------------------------------------------------
+// Codex astra's method check, M-04: what a scenario promises after its state,
+// run by matrix.mjs once that state is measured and kept, and recorded as the
+// record's `subresults` instrument (`when` names the records it holds for).
+
+/** S-132, S-152: once the failed player is measured, Save pressed and completed as S-62, the file written (its bytes read from the stub's store). */
+async function saveAfterFailedPlayer(w) {
+  const o = obsOf(w)
+  const read = () => w.evaluate(`(async () => { const M = window.__mx; const v = document.querySelector(${JSON.stringify(P8_PLAYER)}); const s = window.__audit.saves.at(-1); let bytes = null; try { const d = await (await navigator.storage.getDirectory()).getDirectoryHandle('audit-saves'); bytes = (await (await d.getFileHandle(s.name)).getFile()).size } catch (e) { bytes = null } return { mediaError: v && v.error ? v.error.code : null, saveEnabled: !!M.saveBtn() && !M.saveBtn().disabled, saves: window.__audit.saves.length, name: s ? s.name : null, bytes, status: M.text('#save-status').replace(/\\s+/g, ' ').trim(), warn: ${WARN_TEXT} } })()`)
+  o.beforeSave = await read()
+  await saveWith(w)
+  // Either outcome ends the wait (a refused save is S-69's error line); the assertions say which it was.
+  await until(w, `(${SAVED} && !M.saving()) || M.kindIn('#save-error') === 'error'`, 'the save completed or failed', 300000)
+  await sleep(400)
+  o.afterSave = await read()
+}
+const SAVE_AFTER_FAILED_PLAYER = [
+  see('the failed player stood when Save was pressed: its MediaError recorded, Save enabled', (o) => ({ outcome: o.beforeSave.mediaError && o.beforeSave.saveEnabled ? 'pass' : 'fail', mediaError: o.beforeSave.mediaError, saveEnabled: o.beforeSave.saveEnabled })),
+  X('Save completes as S-62: "Saved.", Save disabled, not saving, no lifetime line', `M.res() === 'result' && M.saveBtn().disabled && !M.saving() && M.has('status.saved', '#save-status') && !M.lifetime('result.lifetime')`),
+  see('the saved file written: one save more, its bytes over zero', (o) => ({ outcome: o.afterSave.saves === o.beforeSave.saves + 1 && o.afterSave.bytes > 0 ? 'pass' : 'fail', file: o.afterSave.name, bytes: o.afterSave.bytes, saves: [o.beforeSave.saves, o.afterSave.saves], status: o.afterSave.status })),
+]
+export const SAVE_AFTER_FAILED_PLAYER_SUB = { what: 'once the failed player is measured, Save completes as S-62 (scenarios file, S-132 and S-152)', run: saveAfterFailedPlayer, asserts: SAVE_AFTER_FAILED_PLAYER }
+
+/** Where focus stands: inside the open dialog or not, its box in the window, and the middle of what shows uncovered (read where it is; the browser's own scroll on focus allowed). */
+const FOCUS_SEEN = `(() => { const a = document.activeElement; if (!a || a === document.body) return { el: 'body', seen: false }; const r = a.getBoundingClientRect(); const x0 = Math.max(0, r.left), y0 = Math.max(0, r.top), x1 = Math.min(innerWidth, r.right), y1 = Math.min(innerHeight, r.bottom); const shows = x1 - x0 >= 1 && y1 - y0 >= 1; let covered = null; if (shows) { const e = document.elementFromPoint((x0 + x1) / 2, (y0 + y1) / 2); covered = !(e && (e === a || a.contains(e))); } return { el: window.__audit.desc(a).slice(0, 80), id: a.id || null, tag: a.tagName.toLowerCase(), type: a.type || null, inDialog: !!a.closest('dialog[open]'), box: [Math.round(r.left), Math.round(r.top), Math.round(r.width), Math.round(r.height)], window: [innerWidth, innerHeight], shows, covered, seen: shows && covered === false }; })()`
+const DIALOG_OPEN = `!!document.querySelector('dialog#feedback-dialog[open]')`
+const DIALOG_TEXT = 'Checked at enlargement.'
+/**
+ * S-76 at enlargement: Report a problem's dialog left by Escape, its opener
+ * reached by keys (Shift+Tab, Tab), entered by Enter, used (typed, each
+ * control by Tab, the email handed off) and left by Close, by keys. Escape
+ * leaves the dialog the record measured, behind which the instruments
+ * scrolled the page to its top, and the HTML standard returns focus without
+ * scrolling: so Escape is held to where focus went, and Close, after the
+ * opener was reached by keys, to where it went and that it is in view.
+ */
+async function dialogByKeys(w) {
+  const o = obsOf(w)
+  const d = (o.dialog = {})
+  const at = () => w.evaluate(FOCUS_SEEN)
+  const open = () => w.evaluate(DIALOG_OPEN)
+  await key(w, 'Escape'); await sleep(300)
+  d.escape = { open: await open(), onOpener: await w.evaluate(FOCUS_ON('#feedback-open')), focus: await at() }
+  await key(w, 'Tab', { shift: true }); await sleep(150); await key(w, 'Tab'); await sleep(250)
+  d.opener = { onOpener: await w.evaluate(FOCUS_ON('#feedback-open')), focus: await at() }
+  // Where focus was lost, the opener is focused for the steps that follow; the entry row has already failed.
+  if (!d.opener.onOpener) await focusByKeyboard(w, '#feedback-open')
+  await key(w, 'Enter'); await sleep(400)
+  d.enter = { open: await open(), onMessage: await w.evaluate(FOCUS_ON('#feedback-message')), focus: await at() }
+  await w.page.send('Input.insertText', { text: DIALOG_TEXT }); await sleep(150)
+  d.typed = await w.evaluate(`document.getElementById('feedback-message').value`)
+  d.stops = []
+  for (let i = 0; i < 8; i++) { await key(w, 'Tab'); await sleep(150); const f = await at(); d.stops.push(f); if (f.id === 'feedback-close' || !f.inDialog) break }
+  try {
+    await tabUntil(w, FOCUS_ON(SUBMIT), { shift: true, max: 6 })
+    const before = await mx(w, 'M.mailto.length')
+    await key(w, 'Enter'); await sleep(600)
+    d.handoff = { mailto: (await mx(w, 'M.mailto.length')) > before, opened: await mx(w, `M.has('feedback.opened', '#feedback-status')`), open: await open(), focus: await at() }
+  } catch (e) { d.handoff = { error: String(e.message ?? e).slice(0, 160) } }
+  try {
+    await tabUntil(w, FOCUS_ON('#feedback-close'), { max: 6 })
+    d.closeFocus = await at()
+    await key(w, 'Enter'); await sleep(300)
+    d.close = { open: await open(), onOpener: await w.evaluate(FOCUS_ON('#feedback-open')), focus: await at() }
+  } catch (e) { d.closeFocus = { error: String(e.message ?? e).slice(0, 160) }; d.close = { open: await open(), focus: await at() } }
+}
+const STOPS = [['What will be sent', (f) => f.tag === 'summary'], ['Open email app', (f) => f.type === 'submit'], ['Copy message and details', (f) => f.id === 'feedback-copy'], ['Close', (f) => f.id === 'feedback-close']]
+export const DIALOG_ENLARGED_SUB = {
+  what: "Report a problem's dialog operated by keys where it stands enlarged: left by Escape, entered by Enter, used, left by Close (M-04; the plan's enlargement: content and function, dialogs included)",
+  when: (r) => r.mode === 'font32' || (r.mode === 'light' && ['w320', 'zoom200proxy', 'zoom400proxy'].includes(r.view)),
+  run: dialogByKeys,
+  asserts: [
+    see('exit by Escape: the dialog closes; focus back on Report a problem (where the page stands is the instruments\' scroll, so not judged here)', (o) => ({ outcome: !o.dialog.escape.open && o.dialog.escape.onOpener ? 'pass' : 'fail', ...o.dialog.escape })),
+    see('entry by keys: Report a problem reached by Shift+Tab and Tab, in the window and uncovered; Enter opens the dialog; focus on the message field, inside it, in the window and uncovered', (o) => ({ outcome: o.dialog.opener.onOpener && o.dialog.opener.focus.seen && o.dialog.enter.open && o.dialog.enter.onMessage && o.dialog.enter.focus.inDialog && o.dialog.enter.focus.seen ? 'pass' : 'fail', opener: o.dialog.opener, ...o.dialog.enter })),
+    see('use: the message typed where focus stood reads back', (o) => ({ outcome: o.dialog.typed === DIALOG_TEXT ? 'pass' : 'fail', typed: o.dialog.typed })),
+    see('use: Tab reaches What will be sent, Open email app, Copy message and details and Close, each inside the dialog, in the window and uncovered', (o) => { const s = o.dialog.stops; const missing = STOPS.filter(([, is]) => !s.some(is)).map(([n]) => n); const bad = s.filter((f) => !f.inDialog || !f.seen); return { outcome: !missing.length && !bad.length ? 'pass' : 'fail', missing, notSeen: bad, stops: s.map((f) => `${f.el} ${JSON.stringify(f.box)} ${f.seen ? 'seen' : 'NOT SEEN'}`) } }),
+    see('use: Open email app, by Enter, hands the message to the email app ("opened" said), the dialog still open', (o) => ({ outcome: o.dialog.handoff.mailto && o.dialog.handoff.opened && o.dialog.handoff.open ? 'pass' : 'fail', ...o.dialog.handoff })),
+    see('exit by Close: Close in the window and uncovered; the dialog closes; focus back on Report a problem, in the window and uncovered', (o) => ({ outcome: o.dialog.closeFocus.seen && !o.dialog.close.open && o.dialog.close.onOpener && o.dialog.close.focus.seen ? 'pass' : 'fail', closeFocus: o.dialog.closeFocus, ...o.dialog.close })),
+  ],
+}
+
+/** S-149's light records (V-46, VH-178): a readable file read, focus put on a Video language radio by keys, then an unreadable replacement chosen; where focus goes. */
+export async function readFailureBranch(w, file = 'notvideo.mp4') {
+  const o = obsOf(w)
+  await w.setFiles(F('lecture-30s.mp4')); await w.waitSettled()
+  await until(w, 'M.verdict()', 'a verdict on the readable file', 120000)
+  await focusByKeyboard(w, RADIO_VLANG)
+  const placedOn = await activeDesc(w)
+  const shownBefore = await mx(w, `({ trim: !M.el('#step-trim').hidden, title: !M.el('#step-title').hidden })`)
+  const mark = await focusMark(w)
+  await w.setFiles(F(file)); await w.waitSettled()
+  await until(w, `M.kindIn('#source-report') === 'error' || M.kindIn('#source-block') === 'error' || !!M.verdict()`, 'the replacement read', 120000); await sleep(400)
+  const read = await mx(w, `({ unreadable: M.kindIn('#source-report') === 'error', block: M.kindIn('#source-block'), verdict: !!M.verdict(), trimHidden: M.el('#step-trim').hidden, titleHidden: M.el('#step-title').hidden })`)
+  o.readFailure = { file, placedOn, shownBefore, read, branch: /video-language/.test(placedOn) && shownBefore.title && read.unreadable && read.trimHidden && read.titleHidden, focus: await readFocus(w, mark, '#file-input') }
+}
+export const READ_FAILURE_SUB = {
+  what: "the read-failure branch (Codex astra's blind review V-46, VH-178): an unreadable replacement chosen while a Video language radio has focus; where focus goes",
+  when: (r) => r.mode === 'light',
+  run: (w) => readFailureBranch(w),
+  asserts: [
+    see('reached: lecture-30s.mp4 read, focus on a Video language radio in the shown step 3, notvideo.mp4 chosen; the read fails and the setup steps are withdrawn', (o) => ({ outcome: o.readFailure.branch ? 'pass' : 'cannot-determine', ...(o.readFailure.branch ? {} : { why: 'the read-failure branch was not reached' }), placedOn: o.readFailure.placedOn, shownBefore: o.readFailure.shownBefore, read: o.readFailure.read })),
+    see('focus handed to the file input, the chooser that stays, never lost to the page (2.4.3; the hand-off S-149 asserts for a block)', (o) => (o.readFailure.branch ? { outcome: o.readFailure.focus.landed ? 'pass' : 'fail', focus: o.readFailure.focus.el, moves: o.readFailure.focus.moves, inView: o.readFailure.focus.inView } : { outcome: 'cannot-determine', why: 'the read-failure branch was not reached' })),
+  ],
+}
+
 Object.assign(SCENARIOS, {
   // VH-183: the trim's Page step.
   'S-92': {
@@ -2139,13 +2244,18 @@ Object.assign(SCENARIOS, {
       await finishedWithPlayer(w, lang)
       o.before = await mx(w, `M.text('#process-result')`); await applyFault(w, 'F15a'); await sleep(600); o.afterF15a = await mx(w, `M.text('#process-result')`)
       o.f15aSaveEnabled = await mx(w, '!M.saveBtn().disabled')
-      await applyFault(w, 'F15b'); await finished(w, lang, 'short-2s.mp4')
+      // The second load leaves an unsaved result, so the page's leave warning (src/main.ts:2372–2383)
+      // raises "Leave site?", which held the load for good: accepted, as F19 accepts it, for this load only.
+      const off = w.page.on('Page.javascriptDialogOpening', (d) => { if (d.type === 'beforeunload') { o.leaveWarning = true; w.page.send('Page.handleJavaScriptDialog', { accept: true }).catch(() => undefined) } })
+      try { await applyFault(w, 'F15b'); await finished(w, lang, 'short-2s.mp4') } finally { off() }
       o.error = await w.evaluate(`(async () => { const v = document.querySelector(${JSON.stringify(P8_PLAYER)}); for (let i = 0; i < 80 && !v.error; i++) await new Promise((r) => setTimeout(r, 100)); return v.error ? v.error.code : null })()`)
     },
     asserts: [
       see('F15a: nothing listens; the card, record, warnings and Save unchanged', (o) => o.before === o.afterF15a && o.f15aSaveEnabled),
       see('F15b: the player\'s MediaError recorded', (o) => ({ outcome: o.error ? 'pass' : 'fail', mediaError: o.error })),
     ],
+    // M-04: then Save completes as S-62, a subresult of the record.
+    subresults: SAVE_AFTER_FAILED_PLAYER_SUB,
     focus: [SAVE],
     faults: ['F15a', 'F15b'], fixtures: ['short-2s.mp4'],
   },
@@ -2411,8 +2521,10 @@ Object.assign(SCENARIOS, {
     state: `M.kindIn('#source-block') === 'error' && M.el('#step-trim').hidden && M.el('#step-title').hidden && ${focusIs('#file-input')}`,
     hold: `M.kindIn('#source-block') === 'error' && M.el('#step-title').hidden`,
     setup: async (w, lang) => { await applyFault(w, 'F14'); await ready(w, lang, 'lecture-30s.mp4'); await focusByKeyboard(w, RADIO_VLANG); await w.setFiles(F('prores-1080p.mov')); await until(w, `M.kindIn('#source-block') === 'error'`, 'the block', 120000); await sleep(400) },
+    // M-04: the read-failure branch beside the block's, in the light records: S-149 itself unchanged.
+    subresults: READ_FAILURE_SUB,
     focus: [FILE],
-    faults: ['F14'], fixtures: ['lecture-30s.mp4', 'prores-1080p.mov'],
+    faults: ['F14'], fixtures: ['lecture-30s.mp4', 'prores-1080p.mov', 'notvideo.mp4'],
   },
   'S-150': {
     name: 'A job made with focus on Announce progress',
@@ -2442,6 +2554,8 @@ Object.assign(SCENARIOS, {
     state: `M.finished() && ${WARN_TEXT}.includes(${HEAVY_TITLE}) && !M.saveBtn().disabled && !!document.querySelector(${JSON.stringify(P8_PLAYER)})?.error`,
     setup: async (w, lang) => { await applyFault(w, 'F15b'); await finished(w, lang, 'clicks-20s.mp4'); obsOf(w).error = await w.evaluate(`(async () => { const v = document.querySelector(${JSON.stringify(P8_PLAYER)}); for (let i = 0; i < 80 && !v.error; i++) await new Promise((r) => setTimeout(r, 100)); return v.error ? v.error.code : null })()`) },
     asserts: [see('the player\'s MediaError recorded; the warning first and word for word', (o) => ({ outcome: o.error ? 'pass' : 'fail', mediaError: o.error }))],
+    // M-04: then Save completes as S-62, the warning standing word for word beside "Saved.".
+    subresults: { ...SAVE_AFTER_FAILED_PLAYER_SUB, asserts: [...SAVE_AFTER_FAILED_PLAYER, see('the heavy-limiting warning stands word for word beside "Saved."', (o) => ({ outcome: !!o.beforeSave.warn && o.afterSave.warn === o.beforeSave.warn ? 'pass' : 'fail', before: o.beforeSave.warn.slice(0, 160), after: o.afterSave.warn.slice(0, 160) })), X('its heading still in the result\'s warnings', `${WARN_TEXT}.includes(${HEAVY_TITLE})`)] },
     focus: [SAVE],
     faults: ['F15b'], fixtures: ['clicks-20s.mp4'],
   },
@@ -2570,7 +2684,8 @@ amend('S-71', { asserts: [X('the next-video line names the video type only; no v
 amend('S-72a', { asserts: [ONE_PLAYER, AGAIN] })
 amend('S-72b', { asserts: [NO_PLAYER] })
 amend('S-75', { asserts: [X('the dialog named "Report a problem"', `M.text('#feedback-dialog h2').trim() === M.msg('feedback.heading')`), X('the intro names the team\'s address', `M.says('feedback.intro', { address: '${TEAM}' }, '#feedback-dialog')`)] })
-amend('S-76', { asserts: [X('the dialog named "Report a problem"', `M.text('#feedback-dialog h2').trim() === M.msg('feedback.heading')`)] })
+// M-04: at enlargement (320 px, both proxies, the 32 px font) the dialog is operated by keys too, as the record's subresults.
+amend('S-76', { subresults: DIALOG_ENLARGED_SUB, asserts: [X('the dialog named "Report a problem"', `M.text('#feedback-dialog h2').trim() === M.msg('feedback.heading')`)] })
 amend('S-78', { asserts: [X('the email to the team, subject "UoN Video Helper problem report…"', `M.mailto.length > 0 && M.mailto.at(-1).to === '${TEAM}' && /^UoN Video Helper problem report/.test(M.mailto.at(-1).subjectText || '')`), TEAM_IN_DIALOG] })
 amend('S-78k', { asserts: [X('the email to the team', `M.mailto.length > 0 && M.mailto.at(-1).to === '${TEAM}'`)] })
 for (const id of ['S-79a', 'S-79b', 'S-80a', 'S-80b']) amend(id, { asserts: [TEAM_IN_DIALOG] })
@@ -2600,7 +2715,7 @@ amend('S-91', {
 // read it: play, volume, mute, full screen, more controls, the time slider.
 // A control Tab does not reach is "cannot determine" (native), never a pass.
 const PLAYER_ACTIVE = `document.activeElement === document.querySelector(${JSON.stringify(P8_PLAYER)})`
-const UA_RING = 'the ring is the user agent\'s, inside the player\'s shadow tree: read by pixels in S-127 (phase8.mjs playerKeys)'
+const UA_RING = 'the ring is drawn by the user agent inside the player\'s shadow tree, so this route does not judge it; S-127 (phase8.mjs playerKeys) reads it on a held frame: 2.4.7 by the ring isolated with an author outline:none where a style reaches the control, 2.4.13 by area and each exception\'s evidence, 2.4.11 and 2.4.12 by hit test'
 ROUTES['K-player'] = {
   name: 'K-player: the finished video\'s player by keys, forward and back, and a save while focus is in it',
   setup: async (w, lang) => { await applyFault(w, 'F4b', { ms: 3000 }); await fresh(w, lang); await w.setFiles(F('short-2s.mp4')); await w.waitSettled(); await until(w, 'M.proceed() && M.create()', 'ready') },

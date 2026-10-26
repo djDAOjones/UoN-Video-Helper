@@ -1,17 +1,19 @@
 {
  "item": "VH-198",
  "plan": "pilot3",
- "date": "2026-10-25",
- "what": "Pass 3's pilot: Phase 7's second pilot (PLANS.pilot2, 43 records: every mode at 1280 px, every view and enlargement record, the dialog, a second language) with Phase 8's states through every instrument (32 records: the player passive and by keys, both \"?\", the footer's headings, the limiting warning, Video language, Create's \"again\" label, the closing asset's twin, K-player)",
- "run": "pilot3-2026-10-25T22-24-36-920Z-6a19fb",
+ "date": "2026-10-26",
+ "bundleDate": "2026-10-25",
+ "what": "Pass 3's pilot: Phase 7's second pilot (PLANS.pilot2, 43 records: every mode at 1280 px, every view and enlargement record, the dialog, a second language) with Phase 8's states through every instrument (34 records: the player passive and by keys, both \"?\", the footer's headings, the limiting warning, Video language, Create's \"again\" label, the closing asset's twin, K-player)",
+ "run": "pilot3-2026-10-26T01-03-59-114Z-ca4cb2",
  "source": {
-  "commit": "083a545b9bb59179fd4ed09dbe53008d445a7fd5",
-  "dirty": false
+  "commit": "1cd71f2a22e69db6cd44594e9398589ccae8530e",
+  "dirty": false,
+  "diffSha256": "e3b0c44298fc1c14"
  },
  "appSource": "src/ and index.html as last changed at e226410 (VH-193); unchanged since",
  "server": "Vite dev server on port 5181 (--strictPort), this checkout",
  "instruments": {
-  "revision": "6ed245d297623aec",
+  "revision": "2d16e337abe51539",
   "files": [
    {
     "file": "again-190.mjs",
@@ -35,7 +37,7 @@
    },
    {
     "file": "fixtures-8.sh",
-    "sha256": "6a5a26162277e63e"
+    "sha256": "63fa545bc29e59f5"
    },
    {
     "file": "fixtures.sh",
@@ -63,7 +65,7 @@
    },
    {
     "file": "matrix.mjs",
-    "sha256": "4879ecd6b95cd716"
+    "sha256": "82b1b495a6593474"
    },
    {
     "file": "name-181.mjs",
@@ -83,7 +85,7 @@
    },
    {
     "file": "phase8.mjs",
-    "sha256": "0a229c4e24326116"
+    "sha256": "6c1d4306bb6a8322"
    },
    {
     "file": "player-192.mjs",
@@ -99,19 +101,27 @@
    },
    {
     "file": "prove-8.mjs",
-    "sha256": "e7f45fb2d7e64dce"
+    "sha256": "5dfd1aca33cbf783"
    },
    {
     "file": "prove-fixtures-8.mjs",
-    "sha256": "c5e1baf6d247a6a3"
+    "sha256": "f070fb844cfef3c7"
+   },
+   {
+    "file": "prove-m04.mjs",
+    "sha256": "d5d8cef75177d065"
+   },
+   {
+    "file": "prove-resume.mjs",
+    "sha256": "2e282c03e4ec4436"
    },
    {
     "file": "prove.mjs",
-    "sha256": "53e489d92f425692"
+    "sha256": "5cf6563ce4a876da"
    },
    {
     "file": "qualify.mjs",
-    "sha256": "43703283e00deaa1"
+    "sha256": "4f3606f0ca620da2"
    },
    {
     "file": "report-172.mjs",
@@ -123,11 +133,11 @@
    },
    {
     "file": "runner.mjs",
-    "sha256": "580d6fc54bcaaa0c"
+    "sha256": "e0b95b012f1e78fc"
    },
    {
     "file": "scenarios.mjs",
-    "sha256": "5d5629cacc60550f"
+    "sha256": "080fea563dceeae2"
    },
    {
     "file": "sliver-185.mjs",
@@ -151,7 +161,7 @@
    },
    {
     "file": "transitions.mjs",
-    "sha256": "6071979d791a1731"
+    "sha256": "fbc3a958e9f17bd0"
    },
    {
     "file": "walk.mjs",
@@ -167,10 +177,19 @@
    }
   ]
  },
+ "provenance": {
+  "pinnedAtCreation": true,
+  "created": "2026-10-26T01:03:59.271Z",
+  "resumes": [],
+  "held": true,
+  "problems": [],
+  "recordsOffRevision": 0
+ },
+ "afterMethodCheck": "Codex astra's method check of 25 October, M-01 to M-04 applied to the walker and M-05 in the instruments document (instruments-2026-10-25.md, \"After Codex astra's method check\"); every proof, this pilot and the qualification runs at this one revision",
  "oneRevision": "every part and run VH-199 walks runs at this revision; a change to the walker after a part has run reruns that part (plan, \"Running it\")",
  "browser": "Chrome/156.0.8078.48",
  "browserCommandLine": {
-  "source": "ps -o args= -p 15773 (the browser process)",
+  "source": "ps -o args= -p 67067 (the browser process)",
   "arguments": [
    "--headless=new",
    "--no-first-run",
@@ -280,6 +299,10 @@
    "mode": "font32",
    "records": 4
   },
+  "dialogOperated": {
+   "what": "Report a problem's dialog (S-76) entered by Enter on its opener, used (the message typed, every control reached by Tab inside the window and uncovered, the email handed off) and left by Escape and by Close, focus back on the opener, by keys, at 320 px, both proxies and the 32 px font (the record's subresults)",
+   "records": 4
+  },
   "syntheticTextOnly": {
    "status": "not run",
    "what": "text-only enlargement by an injected style: not implemented, so unqualified"
@@ -289,27 +312,32 @@
   {
    "file": "clicks-20s.mp4",
    "bytes": 6610092,
-   "sha256": "3223521f81f2be81"
+   "sha256": "3223521f81f2be81",
+   "firstUsedInAttempt": 1
   },
   {
    "file": "lecture-30s.mp4",
    "bytes": 10093018,
-   "sha256": "fe66c0ad6bcc160d"
+   "sha256": "fe66c0ad6bcc160d",
+   "firstUsedInAttempt": 1
   },
   {
    "file": "lecture-60s.mp4",
    "bytes": 20222028,
-   "sha256": "ce10e0ce0579c4b6"
+   "sha256": "ce10e0ce0579c4b6",
+   "firstUsedInAttempt": 1
   },
   {
    "file": "qtrle-5s.mov",
    "bytes": 35521170,
-   "sha256": "91cf5144e8d2aa68"
+   "sha256": "91cf5144e8d2aa68",
+   "firstUsedInAttempt": 1
   },
   {
    "file": "short-2s.mp4",
    "bytes": 643360,
-   "sha256": "b51cc942eb4d6f65"
+   "sha256": "b51cc942eb4d6f65",
+   "firstUsedInAttempt": 1
   }
  ],
  "faults": [
@@ -525,7 +553,8 @@
    "limiting": 0,
    "videoLanguage": 0,
    "asserts": 0,
-   "motion": 0
+   "motion": 0,
+   "subresults": 0
   },
   "tally": {
    "keys": {
@@ -614,14 +643,14 @@
     }
    },
    "player": {
-    "pass": 0,
+    "pass": 12,
     "fail": 0,
-    "cannot-determine": 14,
+    "cannot-determine": 2,
     "not-applicable": 60,
     "items": {
-     "exempt": 85,
-     "pass": 179,
-     "cannot-determine": 14
+     "exempt": 76,
+     "pass": 222,
+     "cannot-determine": 12
     }
    },
    "formatTip": {
@@ -683,13 +712,22 @@
      "exempt": 23,
      "pass": 5
     }
+   },
+   "subresults": {
+    "pass": 4,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 0,
+    "items": {
+     "pass": 24
+    }
    }
   }
  },
  "artifacts": {
-  "count": 746,
-  "bytes": 34159709,
-  "listSha256": "8f500653a1f3aa0c",
+  "count": 761,
+  "bytes": 35298942,
+  "listSha256": "fe67e75f1b1060c2",
   "list": "artifacts.json (each capture: path, bytes, sha256)"
  },
  "unresolved": {
@@ -740,21 +778,6 @@
     "recordCount": 13
    },
    {
-    "instrument": "player",
-    "kind": "measurement",
-    "why": "no box for the control: empty",
-    "records": [
-     "S-114__en-GB__w1280__light",
-     "S-114__zh-Hans__w1280__light",
-     "S-126__en-GB__w1280__dark",
-     "S-126__en-GB__w1280__forced-dark",
-     "S-126__en-GB__w1280__forced-light",
-     "S-126__en-GB__w1280__light"
-    ],
-    "rows": 14,
-    "recordCount": 14
-   },
-   {
     "instrument": "measure",
     "kind": "interpretation",
     "why": "mixed scripts: each character against n and CJK n plus Latin n disagree; the reading is VH-n's",
@@ -768,6 +791,81 @@
     ],
     "rows": 10,
     "recordCount": 8
+   },
+   {
+    "instrument": "player",
+    "kind": "measurement",
+    "why": "the exposed name and value are read from the tree before and after; whether a change event reaches assistive technology is not observed",
+    "records": [
+     "S-127__en-GB__w1280__light",
+     "S-127__en-GB__w320__light"
+    ],
+    "rows": 2,
+    "recordCount": 2
+   },
+   {
+    "instrument": "player",
+    "kind": "interpretation",
+    "why": "under n.n's area; the first exception does not hold (an author outline:none on ::-webkit-media-controls-play-button removed n px of the ring",
+    "records": [
+     "S-127__en-GB__w1280__light",
+     "S-127__en-GB__w320__light"
+    ],
+    "rows": 2,
+    "recordCount": 2
+   },
+   {
+    "instrument": "player",
+    "kind": "interpretation",
+    "why": "under n.n's area; the first exception does not hold (an author outline:none on ::-webkit-media-controls-mute-button removed n px of the ring",
+    "records": [
+     "S-127__en-GB__w1280__light",
+     "S-127__en-GB__w320__light"
+    ],
+    "rows": 2,
+    "recordCount": 2
+   },
+   {
+    "instrument": "player",
+    "kind": "measurement",
+    "why": "the ring cannot be isolated from the controls' other redraw: no author style reaches ::-internal-media-controls-overflow-button; focused aga",
+    "records": [
+     "S-127__en-GB__w1280__light",
+     "S-127__en-GB__w320__light"
+    ],
+    "rows": 2,
+    "recordCount": 2
+   },
+   {
+    "instrument": "player",
+    "kind": "interpretation",
+    "why": "under n.n's area; the first exception does not hold (an author outline:none on ::-webkit-media-controls-timeline removed n px of the ring: t",
+    "records": [
+     "S-127__en-GB__w1280__light",
+     "S-127__en-GB__w320__light"
+    ],
+    "rows": 2,
+    "recordCount": 2
+   },
+   {
+    "instrument": "player",
+    "kind": "interpretation",
+    "why": "under n.n's area; the first exception does not hold (an author outline:none on ::-webkit-media-controls-volume-slider removed n px of the ri",
+    "records": [
+     "S-127__en-GB__w1280__light"
+    ],
+    "rows": 1,
+    "recordCount": 1
+   },
+   {
+    "instrument": "player",
+    "kind": "interpretation",
+    "why": "under n.n's area; the first exception does not hold (an author outline:none on ::-webkit-media-controls-fullscreen-button removed n px of th",
+    "records": [
+     "S-127__en-GB__w1280__light"
+    ],
+    "rows": 1,
+    "recordCount": 1
    },
    {
     "instrument": "focus",
@@ -803,9 +901,10 @@
   "manual": [
    "Chrome page zoom at 200% and 400% itself (proxy views stand in; on the person list)",
    "what a screen reader says (exposure only: the AX tree and the DOM change log are persisted per record)",
-   "native select popups by keys; the video player's inner controls are walked by the focused accessibility node (P-06), their rings read on a held frame with the user agent's 2.4.13 exception where it holds, and a control Tab does not reach, or one whose box is empty at rest (the volume slider), is cannot determine",
+   "native select popups by keys; the video player's inner controls are walked by the focused accessibility node (P-06) and held to the inventory by identity both ways (S-127 fails a control it does not reach; a native step of K-player's that misses is cannot determine); the volume slider, empty at rest, is measured once disclosed by hovering the control beside it, its target by hit test; each ring is read on a held frame three ways apart (M-02), and stays cannot determine for 2.4.7 where no author style can isolate it (the overflow button's -internal- pseudo-element) or where only a focus-only change other than a ring is left (the user agent's hover-and-focus highlight), for 2.4.13 short of its area where neither exception is established (the host's backdrop is the author's), and for 4.1.2 whether a change is notified (not observed)",
    "transient states: asserted before and after the instruments, not captured mid-transition",
-   "a dialog's entry, use and exit at enlargement: overflow and clipping are measured there; the keys route runs at 1280 only",
+   "the read failure's exception path (src/main.ts:1495–1500, the inspection request itself failing): S-149's subresults reach the failed reply (main.ts:1481–1486) with notvideo.mp4; no fault makes the request throw",
+   "a dialog's entry, use and exit at enlargement: operated by keys for Report a problem's dialog (S-76's subresults) at 320 px, both proxies and the 32 px font; the K-dialog route itself runs at 1280 and 320 px only, and the other dialog states are measured there for overflow and clipping",
    "a range thumb and track: non-text contrast by pixels (cannot determine in contrastExtra)",
    "synthetic text-only enlargement: not run",
    "off-page elements (the skip link before focus): target and contrast read when shown, by the person",
@@ -859,82 +958,153 @@
   ]
  },
  "timing": {
-  "wallClockSeconds": 557,
+  "wallClockSeconds": 613,
   "measured": {
    "route": {
     "records": 10,
-    "measured_s": 94,
+    "measured_s": 95,
     "estimate_s": 238,
-    "ratio": 0.396
+    "ratio": 0.4
    },
    "carried": {
     "records": 43,
-    "measured_s": 288,
+    "measured_s": 312,
     "estimate_s": 327,
-    "ratio": 0.881
+    "ratio": 0.954
    },
    "phase8": {
     "records": 30,
-    "measured_s": 235,
+    "measured_s": 266,
     "estimate_s": 297,
-    "ratio": 0.79
+    "ratio": 0.895
    },
    "qtrle": {
     "records": 1,
     "measured_s": 4,
     "estimate_s": 86,
-    "ratio": 0.041
+    "ratio": 0.042
    },
    "journey": {
     "records": 16,
-    "measured_s": 671,
+    "measured_s": 673,
     "estimate_s": 1370,
-    "ratio": 0.489
+    "ratio": 0.492
    }
   },
   "overall": {
-   "measured_s": 1292,
+   "measured_s": 1350,
    "estimate_s": 2318,
-   "ratio": 0.557
+   "ratio": 0.582
   }
  },
  "calibration": {
-  "method": "each record's measured seconds (its group's setup on the first record, then its own) against the sizing script's estimate for the same records, by class: carried, Phase 8, the short routes; J1 to J4, which the pilot does not hold, keep the script's estimate; part 2's transitions keep VH-176's measured 1,250 s; S-140 and S-140n block at read, so their 900 s and 120 s allowances fall to the read",
+  "method": "each record's measured seconds (its group's setup on the first record, then its own) against the sizing script's estimate for the same records, by class: carried and Phase 8 from the pilot, K-dialog and K-player from the pilot and part 4, J1 to J4 from the route runs (part 1's seven route cells and part 4); part 2's transitions keep VH-176's measured 1,250 s; S-140 and S-140n block at read, so their 900 s and 120 s allowances fall to the read; M-04's subresults the pilot does not hold (S-132, S-152, S-149) are added from a small run of their records at this revision, less what their class ratio already allots",
+  "subresultsMeasured": {
+   "S-132 en-GB w1280 light": {
+    "seconds": 12.8,
+    "revision": "2d16e337abe51539"
+   },
+   "S-149 zh-Hans w1280 light": {
+    "seconds": 32.5,
+    "revision": "2d16e337abe51539"
+   },
+   "S-152 en-GB w320 light": {
+    "seconds": 8.9,
+    "revision": "2d16e337abe51539"
+   },
+   "S-76 en-GB zoom400proxy light": {
+    "seconds": 8,
+    "revision": "2d16e337abe51539"
+   }
+  },
+  "addedCosts": "M-01 to M-04's added costs taken as their own, each measured as the same pilot record's seconds at this revision less at 6ed245d297623aec (a finished, unsaved player, by its scenario's state; S-127's keys; S-76's dialog subresults), the class ratios from this pilot with those costs taken out, the costs added back per record",
+  "addedPerRecord_s": {
+   "player": 1.57,
+   "playerKeys": 4.97,
+   "dialogSub": 4.45
+  },
+  "classesBase": {
+   "route": {
+    "records": 10,
+    "base_s": 95,
+    "estimate_s": 238,
+    "ratio": 0.4
+   },
+   "carried": {
+    "records": 43,
+    "base_s": 294,
+    "estimate_s": 327,
+    "ratio": 0.899
+   },
+   "phase8": {
+    "records": 30,
+    "base_s": 237,
+    "estimate_s": 297,
+    "ratio": 0.798
+   },
+   "qtrle": {
+    "records": 1,
+    "base_s": 4,
+    "estimate_s": 86,
+    "ratio": 0.042
+   },
+   "journey": {
+    "records": 16,
+    "base_s": 673,
+    "estimate_s": 1370,
+    "ratio": 0.492
+   }
+  },
   "parts": [
    {
     "part": "1",
     "records": 699,
     "transitions": 0,
-    "estimate_s": 8610,
-    "calibrated_s": 7304
+    "players": 91,
+    "playerKeys": 0,
+    "dialogSub": 6,
+    "added_s": 170,
+    "calibrated_s": 7618
    },
    {
     "part": "2",
     "records": 157,
     "transitions": 48,
-    "estimate_s": 2234,
-    "calibrated_s": 2117
+    "players": 3,
+    "playerKeys": 0,
+    "dialogSub": 0,
+    "added_s": 5,
+    "calibrated_s": 2139
    },
    {
     "part": "3",
     "records": 2131,
     "transitions": 0,
-    "estimate_s": 22525,
-    "calibrated_s": 18078
+    "players": 391,
+    "playerKeys": 39,
+    "dialogSub": 2,
+    "added_s": 836,
+    "calibrated_s": 19180
    },
    {
     "part": "3b",
     "records": 216,
     "transitions": 0,
-    "estimate_s": 6645,
-    "calibrated_s": 5705
+    "players": 10,
+    "playerKeys": 0,
+    "dialogSub": 0,
+    "added_s": 16,
+    "calibrated_s": 5824
    },
    {
     "part": "4",
     "records": 16,
     "transitions": 0,
-    "estimate_s": 885,
-    "calibrated_s": 413
+    "players": 0,
+    "playerKeys": 0,
+    "dialogSub": 0,
+    "added_s": 0,
+    "calibrated_s": 416
    }
   ],
   "runs": [
@@ -943,99 +1113,237 @@
     "part": "1",
     "records": 369,
     "transitions": 0,
-    "estimate_s": 4303,
-    "calibrated_s": 3755
+    "calibrated_s": 3926
    },
    {
     "name": "run-02",
     "part": "1",
     "records": 330,
     "transitions": 0,
-    "estimate_s": 4307,
-    "calibrated_s": 3548
+    "calibrated_s": 3691
    },
    {
     "name": "run-03",
     "part": "2",
     "records": 157,
     "transitions": 48,
-    "estimate_s": 2234,
-    "calibrated_s": 2117
+    "calibrated_s": 2139
    },
    {
     "name": "run-04",
     "part": "3",
     "records": 358,
     "transitions": 0,
-    "estimate_s": 3757,
-    "calibrated_s": 3115
+    "calibrated_s": 3328,
+    "subresultsAllowance_s": 19
    },
    {
     "name": "run-05",
     "part": "3",
     "records": 383,
     "transitions": 0,
-    "estimate_s": 3742,
-    "calibrated_s": 2587
+    "calibrated_s": 2735
    },
    {
     "name": "run-06",
     "part": "3",
     "records": 338,
     "transitions": 0,
-    "estimate_s": 3758,
-    "calibrated_s": 3059
+    "calibrated_s": 3192
    },
    {
     "name": "run-07",
     "part": "3",
     "records": 355,
     "transitions": 0,
-    "estimate_s": 3756,
-    "calibrated_s": 3135
+    "calibrated_s": 3512
    },
    {
     "name": "run-08",
     "part": "3",
     "records": 367,
     "transitions": 0,
-    "estimate_s": 3756,
-    "calibrated_s": 3082
+    "calibrated_s": 3256
    },
    {
     "name": "run-09",
     "part": "3",
     "records": 330,
     "transitions": 0,
-    "estimate_s": 3757,
-    "calibrated_s": 3099
+    "calibrated_s": 3158
    },
    {
     "name": "run-10",
     "part": "3b",
     "records": 103,
     "transitions": 0,
-    "estimate_s": 3323,
-    "calibrated_s": 2830
+    "calibrated_s": 2889
    },
    {
     "name": "run-11",
     "part": "3b",
     "records": 113,
     "transitions": 0,
-    "estimate_s": 3322,
-    "calibrated_s": 2874
+    "calibrated_s": 2935
    },
    {
     "name": "run-12",
     "part": "4",
     "records": 16,
     "transitions": 0,
-    "estimate_s": 885,
-    "calibrated_s": 413
+    "calibrated_s": 416
    }
   ],
-  "totalCalibrated_h": 9.3
+  "totalCalibrated_h": 9.77,
+  "plainClassRatio": {
+   "what": "the class ratios applied as the first calibration did, which spread the pilot's added costs over every record of a class",
+   "parts": [
+    {
+     "part": "1",
+     "records": 699,
+     "transitions": 0,
+     "subresults": 6,
+     "estimate_s": 8610,
+     "subresultsAllowance_s": 0,
+     "calibrated_s": 7883
+    },
+    {
+     "part": "2",
+     "records": 157,
+     "transitions": 48,
+     "subresults": 0,
+     "estimate_s": 2234,
+     "subresultsAllowance_s": 0,
+     "calibrated_s": 2189
+    },
+    {
+     "part": "3",
+     "records": 2131,
+     "transitions": 0,
+     "subresults": 13,
+     "estimate_s": 22525,
+     "subresultsAllowance_s": 19,
+     "calibrated_s": 20093
+    },
+    {
+     "part": "3b",
+     "records": 216,
+     "transitions": 0,
+     "subresults": 4,
+     "estimate_s": 6645,
+     "subresultsAllowance_s": 0,
+     "calibrated_s": 6243
+    },
+    {
+     "part": "4",
+     "records": 16,
+     "transitions": 0,
+     "subresults": 0,
+     "estimate_s": 885,
+     "subresultsAllowance_s": 0,
+     "calibrated_s": 416
+    }
+   ],
+   "runs": [
+    {
+     "name": "run-01",
+     "part": "1",
+     "records": 369,
+     "transitions": 0,
+     "estimate_s": 4303,
+     "calibrated_s": 4064
+    },
+    {
+     "name": "run-02",
+     "part": "1",
+     "records": 330,
+     "transitions": 0,
+     "estimate_s": 4307,
+     "calibrated_s": 3818
+    },
+    {
+     "name": "run-03",
+     "part": "2",
+     "records": 157,
+     "transitions": 48,
+     "estimate_s": 2234,
+     "calibrated_s": 2189
+    },
+    {
+     "name": "run-04",
+     "part": "3",
+     "records": 358,
+     "transitions": 0,
+     "estimate_s": 3757,
+     "calibrated_s": 3477
+    },
+    {
+     "name": "run-05",
+     "part": "3",
+     "records": 383,
+     "transitions": 0,
+     "estimate_s": 3742,
+     "calibrated_s": 2873
+    },
+    {
+     "name": "run-06",
+     "part": "3",
+     "records": 338,
+     "transitions": 0,
+     "estimate_s": 3758,
+     "calibrated_s": 3390
+    },
+    {
+     "name": "run-07",
+     "part": "3",
+     "records": 355,
+     "transitions": 0,
+     "estimate_s": 3756,
+     "calibrated_s": 3470
+    },
+    {
+     "name": "run-08",
+     "part": "3",
+     "records": 367,
+     "transitions": 0,
+     "estimate_s": 3756,
+     "calibrated_s": 3436
+    },
+    {
+     "name": "run-09",
+     "part": "3",
+     "records": 330,
+     "transitions": 0,
+     "estimate_s": 3757,
+     "calibrated_s": 3448
+    },
+    {
+     "name": "run-10",
+     "part": "3b",
+     "records": 103,
+     "transitions": 0,
+     "estimate_s": 3323,
+     "calibrated_s": 3107
+    },
+    {
+     "name": "run-11",
+     "part": "3b",
+     "records": 113,
+     "transitions": 0,
+     "estimate_s": 3322,
+     "calibrated_s": 3135
+    },
+    {
+     "name": "run-12",
+     "part": "4",
+     "records": 16,
+     "transitions": 0,
+     "estimate_s": 885,
+     "calibrated_s": 416
+    }
+   ],
+   "totalCalibrated_h": 10.23
+  }
  },
  "parts": {
   "ok": true,
@@ -1615,40 +1923,60 @@
  "proofs": [
   {
    "file": "prove-2026-10-25.json",
-   "results": 77,
-   "proved": 77,
-   "instrumentsRevision": "6ed245d297623aec"
+   "results": 85,
+   "proved": 85,
+   "instrumentsRevision": "2d16e337abe51539"
   },
   {
    "file": "prove-172-2026-10-25.json",
    "results": 8,
    "proved": 8,
-   "instrumentsRevision": "6ed245d297623aec"
+   "instrumentsRevision": "2d16e337abe51539"
   },
   {
    "file": "prove-8-2026-10-25.json",
-   "results": 31,
-   "proved": 31,
-   "instrumentsRevision": "6ed245d297623aec"
+   "results": 65,
+   "proved": 65,
+   "instrumentsRevision": "2d16e337abe51539"
+  },
+  {
+   "file": "prove-resume-2026-10-25.json",
+   "results": 12,
+   "proved": 12,
+   "instrumentsRevision": "2d16e337abe51539"
+  },
+  {
+   "file": "prove-m04-2026-10-25.json",
+   "results": 8,
+   "proved": 8,
+   "instrumentsRevision": "2d16e337abe51539"
   },
   {
    "file": "faults-check-2026-10-25.json",
    "results": 27,
    "reachedTheirState": 27,
-   "instrumentsRevision": "6ed245d297623aec"
+   "instrumentsRevision": "2d16e337abe51539"
   },
   {
    "file": "fixtures-proof-2026-10-25.json",
    "results": 9,
    "passed": 8,
-   "instrumentsRevision": "the first agent's, at 20440da's walker; no fixture recipe changed since",
+   "instrumentsRevision": "2d16e337abe51539",
    "exception": "N11 reads as 10 seconds: S-104 source-only by its contingency"
+  },
+  {
+   "file": "player-proof-2026-10-25.json",
+   "instrumentsRevision": "2d16e337abe51539"
+  },
+  {
+   "file": "phase8-app-proof-2026-10-25.json",
+   "instrumentsRevision": "2d16e337abe51539"
   }
  ],
  "routes": [
   {
-   "run": "part1-part-2026-10-25T22-33-54-171Z-c68558",
-   "instrumentsRevision": "6ed245d297623aec",
+   "run": "part1-part-2026-10-26T02-07-52-603Z-de278e",
+   "instrumentsRevision": "2d16e337abe51539",
    "expected": 7,
    "observed": 7,
    "whole": true,
@@ -1666,8 +1994,8 @@
    "observedKeysSha256": "2be13220af6d5b78"
   },
   {
-   "run": "part4-2026-10-25T22-39-48-171Z-1844bf",
-   "instrumentsRevision": "6ed245d297623aec",
+   "run": "part4-2026-10-26T01-40-04-807Z-d107b9",
+   "instrumentsRevision": "2d16e337abe51539",
    "expected": 16,
    "observed": 16,
    "whole": true,
@@ -1685,9 +2013,15 @@
   }
  ],
  "transitions": {
-  "run": "transitions-run-03-2026-10-25T22-46-10-562Z",
+  "run": "transitions-run-03-2026-10-26T01-47-10-573Z",
   "plan": "run-03",
-  "instrumentsRevision": "6ed245d297623aec",
+  "instrumentsRevision": "2d16e337abe51539",
+  "provenance": {
+   "pinnedAtCreation": true,
+   "held": true,
+   "problems": [],
+   "recordsOffRevision": 0
+  },
   "coverage": {
    "expected": 48,
    "observed": 48,
@@ -1696,12 +2030,23 @@
    "expectedKeysSha256": "c5ed7d541ac7f106",
    "observedKeysSha256": "c5ed7d541ac7f106"
   },
+  "transitions": {
+   "pass": 48
+  },
+  "rings": {
+   "pass": 44,
+   "not-read": 4
+  },
   "outcomes": {
    "pass": 48
   },
-  "seconds": 1272,
+  "seconds": 1214,
+  "unresolved": {
+   "fromMeasurements": [],
+   "errors": []
+  },
   "browserCommandLine": {
-   "source": "ps -o args= -p 15773 (the browser process)",
+   "source": "ps -o args= -p 71315 (the browser process)",
    "arguments": [
     "--headless=new",
     "--no-first-run",
@@ -1714,8 +2059,10 @@
   }
  },
  "candidateFindings": [
-  "S-15 at the 32 px default font: step 5's checked output's ring 284 of 304 px² (2.4.13); in VH-176's after-run the record's focus was cannot-determine from the thumbs alone. For VH-200; not rank 1",
-  "T-46.1: the focused card runs past the window (292 to 990 px of 900 in English, 255 to 953 in Chinese and Malay) where VH-176 read it inside (292 to 518), the player having made the card taller. For VH-200"
+  "S-15 at the 32 px default font: step 5's checked output's ring 284 of 304 px² (2.4.13), as at 6ed245d297623aec; in VH-176's after-run the record's focus was cannot-determine from the thumbs alone. For VH-200; not rank 1",
+  "T-46.1: the focused card runs past the window (292 to 990 px of 900 in English, 255 to 953 in Chinese and Malay; English forced-dark read 292 to 676 in this run, 990 at 6ed245d297623aec) where VH-176 read it inside (292 to 518), the player having made the card taller. For VH-200",
+  "S-149's read-failure branch (M-04 subresults, zh-Hans light, run m04-small-2026-10-26T02-14-07-819Z-340ab3 at this revision): the read of notvideo.mp4 fails after a readable file with focus on Video language, and focus goes to the body (V-46, VH-178). A product finding for VH-200, not an instrument fault",
+  "The player's inner rings (play, volume, mute, full screen, the time slider) are under 2.4.13's area; the first exception is refuted (an author outline:none removes each), and the second turns on whether the host's author backdrop (.trim-preview, .result-player { background }) is the indicator's background: VH-200's interpretation (S-127, cannot determine)"
  ],
  "s140": {
   "cause": "not a OneDrive placeholder (no dataless flag; 154,096 blocks of 512 bytes for 78,894,855 bytes) nor a sandbox: the page reads the file, finds a QuickTime Animation (qtrle) video track Chrome cannot decode, and blocks at step 1 with failure.reasons.noSourceDecodeHere in about 2 to 3 s; N13 the same",

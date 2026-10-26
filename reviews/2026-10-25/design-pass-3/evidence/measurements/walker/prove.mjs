@@ -5,7 +5,11 @@
 // way, on a run with a missing, a duplicate, a stale, an undeclared and a
 // failed record, and (Codex astra's method check, M-01) an empty
 // measurement, a wrong view, a missing instrument, an expired state and a
-// missing variant; a capture is never overwritten (M-08).
+// missing variant; a capture is never overwritten (M-08). Codex astra's
+// method check of 25 October, M-01: a route given no steps is not a pass,
+// and the runner rejects a bare pass, a route passing on `steps: []`, a route
+// short of its steps or with no count given, a missing expected subject and
+// a pass over a counted failing row, each beside a passing twin.
 //
 //   PROVE_DIR=<scratch>/prove OUT_ROOT=<scratch>/out node prove.mjs   (headless Chrome on :9222)
 import { copyFileSync, mkdirSync, writeFileSync } from 'node:fs'
@@ -152,6 +156,9 @@ for (const v of ['bad', 'good']) {
   await on('fonts', async (w) => { const f = await w.evaluate('document.fonts.ready.then(() => ({ booted: !!window.booted, faces: [...document.fonts].map((x) => x.status) }))'); expect('fallback faces withheld', 'fonts-' + (v === 'bad' ? 'not-withheld' : 'withheld'), f.booted && f.faces.length && f.faces.every((s) => s === 'error') ? 'pass' : 'fail', want, { ...f, failed: w.fontsFailed }) }, (w) => withholdFonts(w, v === 'good'))
 }
 await on('file-ink-inert', async (w) => { const c = await fileButtonInk(w, '#f'); expect('file button text by pixels, behind a modal', 'file-ink-inert', c.outcome, 'inert', c) })
+// Codex astra's method check (25 October), M-01: a route given no steps walked nothing, never a pass.
+let emptyRoute = null
+await on('keys-good', async (w) => { emptyRoute = await keysRoute(w, []); expect('keys-only route, given no steps', 'empty-route', emptyRoute.outcome, 'cannot-determine', emptyRoute) })
 
 // Codex astra's method check (23 October): M-02 to M-05 and M-07, each proved.
 const linesOf = (l) => l.map((x) => ({ kind: x.kind, house: x.house.within, worst: x.worst }))
@@ -212,9 +219,35 @@ let threw = false
 neg.artifact('S-80~copied__en-GB__w1280__light__page.png', Buffer.from('one'))
 try { neg.artifact('S-80~copied__en-GB__w1280__light__page.png', Buffer.from('two')) } catch { threw = true }
 results.push({ instrument: 'runner', fixture: 'capture overwritten', outcome: threw ? 'fail' : 'pass', wanted: 'fail', proved: threw })
-const clean = Run.create(join(DIR, 'runs'), 'prove-clean', [d('A'), d('S-80', { variant: 'copied' })])
+// Codex astra's method check (25 October), M-01: no pass without its evidence. Each failing
+// record fails for its own reason, named by the runner; each has a passing twin in prove-clean.
+const step = (outcome = 'pass') => ({ key: 'Tab', outcome })
+const route = (id, extra = {}) => d(id, { requires: ['keys'], ...extra })
+const rec = (instruments) => ok({ instruments })
+const ev = Run.create(join(DIR, 'runs'), 'prove-evidence', [d('BARE'), route('NOSTEPS'), route('EMPTYROUTE'), route('SHORT', { expects: { keys: { steps: 3 } } }), route('UNDECLARED'), d('SUBJECT', { expects: { focus: { subjects: ['#a', '#b'] } } }), d('OVERPASS')])
+ev.record(r('BARE'), rec({ focus: { outcome: 'pass' } }))
+ev.record(r('NOSTEPS'), rec({ keys: { outcome: 'pass', steps: [] } }))
+ev.record(r('EMPTYROUTE'), rec({ keys: { ...emptyRoute, outcome: 'pass' } }))
+ev.record(r('SHORT'), rec({ keys: { outcome: 'pass', declared: 3, steps: [step(), step()] } }))
+ev.record(r('UNDECLARED'), rec({ keys: { outcome: 'pass', steps: [step(), step()] } }))
+ev.record(r('SUBJECT'), rec({ focus: aggregate([{ el: '#a', outcome: 'pass' }]) }))
+ev.record(r('OVERPASS'), rec({ focus: { outcome: 'pass', items: [{ el: '#a', outcome: 'pass' }, { el: '#b', outcome: 'fail' }] } }))
+const evv = ev.verify()
+const said = (key) => evv.problems.filter((p) => p.key?.startsWith(key + '__'))
+for (const [fixture, key, kind, why] of [
+  ['a bare pass', 'BARE', 'no-evidence', /no rows, steps or readings/],
+  ['a route passing on steps: []', 'NOSTEPS', 'empty-pass', /no steps/],
+  ['an empty route (keysRoute given no steps) recorded as a pass', 'EMPTYROUTE', 'empty-pass', /no steps/],
+  ['a route short of its declared steps', 'SHORT', 'evidence', /2 steps recorded of 3 given/],
+  ['a route passing with no step count given', 'UNDECLARED', 'evidence', /no step count given/],
+  ['a row subject the declaration expects, missing', 'SUBJECT', 'evidence', /expected subjects missing: #b/],
+  ['a pass over a counted failing row', 'OVERPASS', 'evidence', /counted row that did not pass/],
+]) results.push({ instrument: 'runner: evidence', fixture, outcome: said(key).some((p) => p.kind === kind && why.test(p.why)) ? 'fail' : 'pass', wanted: 'fail', proved: said(key).length === 1 && said(key)[0].kind === kind && why.test(said(key)[0].why), detail: said(key) })
+const clean = Run.create(join(DIR, 'runs'), 'prove-clean', [d('A'), d('S-80', { variant: 'copied' }), route('ROUTE', { expects: { keys: { steps: 2 } } }), d('SUBJECTS', { expects: { focus: { subjects: ['#a', '#b'] } } })])
 clean.record(r('A'), ok())
 clean.record(r('S-80', { variant: 'copied' }), ok())
+clean.record(r('ROUTE'), rec({ keys: { outcome: 'pass', declared: 2, steps: [step(), step()] } }))
+clean.record(r('SUBJECTS'), rec({ focus: aggregate([{ el: '#a', outcome: 'pass' }, { el: '#b', outcome: 'pass' }]) }))
 results.push({ instrument: 'runner', fixture: 'whole', outcome: clean.verify().whole ? 'pass' : 'fail', wanted: 'pass', proved: clean.verify().whole, detail: clean.verify().problems })
 
 writeFileSync(join(DIR, 'prove.json'), JSON.stringify(results, null, 1))

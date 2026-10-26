@@ -5,7 +5,7 @@
   "outcome": "pass",
   "bite": 20.13,
   "planned": {
-   "t": 1792962177887,
+   "t": 1792976339180,
    "sourceIntegratedLufs": -30.36,
    "loudnessRangeLu": 0,
    "macroLevelling": false,
@@ -21,7 +21,7 @@
    "refinementPasses": 6,
    "converged": true,
    "gainDb": 34.46,
-   "planningMs": 760
+   "planningMs": 699
   },
   "warned": true,
   "margin": "over HEAVY_LIMITING_LU (3) by more than 5 LU",
@@ -51,7 +51,7 @@
     "text": "the beginning"
    }
   ],
-  "seconds": 18
+  "seconds": 16
  },
  {
   "fixture": "N8",
@@ -60,7 +60,7 @@
   "aNoAudio": true,
   "bNoAudio": false,
   "cVerdictNotes": null,
-  "seconds": 7
+  "seconds": 8
  },
  {
   "fixture": "N9",
@@ -116,17 +116,61 @@
   "fixture": "N14",
   "what": "late-sound-3.71s-25fps-10s.mp4: the frame-snap case (S-153), to be proved",
   "outcome": "pass",
+  "timing": {
+   "source": "ffprobe (packets) and ffmpeg (decoded samples)",
+   "firstPacketS": 3.688667,
+   "primingS": 0.021333,
+   "primingSamples": 1024,
+   "secondPacketS": 3.71,
+   "decodedStartS": 3.71,
+   "decodedSamples": 303104,
+   "decodeFromFirstPacket": true,
+   "onsetSample": 1027,
+   "onsetS": 3.710063,
+   "peak": 0.0303,
+   "frames": [
+    [
+     4,
+     4.04
+    ],
+    [
+     4.04,
+     4.08
+    ],
+    [
+     4.08,
+     4.12
+    ],
+    [
+     4.12,
+     4.16
+    ],
+    [
+     4.16,
+     4.2
+    ]
+   ]
+  },
+  "measured": true,
+  "ranges": true,
+  "page": true,
   "at408": {
+   "askedS": 4.08,
    "noAudio": true,
-   "keptMs": 370
+   "placedS": 4.08,
+   "askedMs": 370,
+   "keptMs": 370,
+   "keptFromFirstPacketMs": 391.3
   },
   "at410": {
+   "askedS": 4.1,
    "noAudio": false,
+   "placedS": 4.12,
    "askedMs": 390,
-   "placedMs": 410,
-   "endRange": 4.1
+   "keptMs": 410,
+   "keptFromFirstPacketMs": 431.3
   },
   "consequence": "S-153 walked",
-  "seconds": 6
+  "seconds": 7
  }
 ]

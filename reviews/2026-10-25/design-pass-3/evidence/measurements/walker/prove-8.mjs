@@ -15,6 +15,18 @@
 //   the warning judged by the bite; the format "?" by keys and its edge;
 //   Video language's place and the next-video line; a saved card's player.
 //
+//   Codex astra's method check of 25 October, M-01 and M-02, each gap with a
+//   failing case and its twin: the completion's own write holding every
+//   warning title in order (an early announcement in the same job, a missing
+//   metadata title); the bite's evidence (no plan log in the job, an
+//   unreadable log, a planned job whose log was unseen, against a logged
+//   null bite and an established no-plan job); the footer's measure by
+//   counted characters; the player's 2.4.7 by the ring alone (an author
+//   outline:none on the controls), 2.4.13's two exceptions apart, author
+//   content over a control (2.4.11/2.4.12), the exposed state around
+//   play/pause and seek (4.1.2), Shift+Tab's stops by identity, and targets
+//   by geometry at rest and disclosed and by hit area.
+//
 //   PROVE_DIR=<scratch>/prove FIX=<fixtures> APP_URL=http://localhost:5181/ \
 //     CDP_PORT=9231 node prove-8.mjs          (headless Chrome, a Vite dev server)
 import { mkdirSync, writeFileSync } from 'node:fs'
@@ -23,7 +35,7 @@ import { connectBrowser } from './cdp.mjs'
 import { Walk, sleep } from './walk.mjs'
 import { QUAL_INIT, closeAnalysis } from './qualify.mjs'
 import { MX_INIT } from './scenarios.mjs'
-import { P8_INIT, playerRows, playerKeys, footerRows, limitingRows, videoLanguageRows, formatTip } from './phase8.mjs'
+import { P8_INIT, playerRows, playerKeys, footerRows, limitingRows, videoLanguageRows, formatTip, exposedChange, compareStops, targetVerdict } from './phase8.mjs'
 
 const DIR = process.env.PROVE_DIR
 const FIX = process.env.FIX
@@ -131,7 +143,8 @@ async function drive(w, jobs) {
   // Each job: start (progress shown), what the status line says, then the finished card with its warnings.
   for (const j of jobs) {
     await w.evaluate(`(() => { document.getElementById('process-result').replaceChildren(); document.getElementById('process-progress').hidden = false; })()`); await sleep(120)
-    await w.evaluate(`document.getElementById('status').textContent = ${JSON.stringify(j.status)}`); await sleep(60)
+    // A job's status writes, in order: a text, or { text, wait } (M-01, 25 October: an earlier write in the same job).
+    for (const st of [].concat(j.status)) { const s = typeof st === 'string' ? { text: st } : st; await w.evaluate(`document.getElementById('status').textContent = ${JSON.stringify(s.text)}`); await sleep(s.wait ?? 60) }
     await w.evaluate(`(() => { document.getElementById('process-progress').hidden = true; const r = document.getElementById('process-result'); r.innerHTML = '<section class="notification" data-kind="success"><p class="notification-title">Finished video — 1 MB</p></section>' + ${JSON.stringify(j.warnings ? `<div><section class="notification" data-kind="warning"><ul>${j.warnings.map((x) => `<li><strong>${x}</strong> ${x === WARN_WORDS['warnings.heavyLimiting.heading'] ? WARN_WORDS['warnings.heavyLimiting.detail'] : ''}</li>`).join('')}</ul></section></div>` : '')}; })()`); await sleep(150)
   }
 }
@@ -185,6 +198,144 @@ await tryOne('video language', async () => {
     await w.evaluate(`document.getElementById('video-language').disabled = true`)
     prove('Video language: locked only while made, saved or stopping', 'video-language-locked-when-idle-bad', rowOf(await videoLanguageRows(w), 'locked while').outcome, 'fail')
   } finally { await w.close() }
+})
+
+// ---------------------------------------------------------------------------
+// Codex astra's method check (25 October), M-01 and M-02: each gap it found,
+// a failing case beside a passing twin, each failing for the reason the
+// instrument names (its row's `why`), and where the replaced reading would
+// have passed the failing case, that reading kept in the detail.
+const proveWhy = (instrument, fixture, r, wanted, why, detail = {}) => {
+  const outcome = r.outcome === wanted && (!why || why.test(r.why ?? '')) ? r.outcome : `${r.outcome}${why && !why.test(r.why ?? '') ? ' (another reason)' : ''}`
+  prove(instrument, fixture, outcome, wanted, { row: r, ...detail })
+}
+// M-01: the line spoken at completion is the completion's own write, holding every title in order.
+await tryOne('limiting, the completion\'s write', async () => {
+  const H = WARN_WORDS['warnings.heavyLimiting.heading'], MLOST = WARN_WORDS['warnings.metadataLost.heading']
+  const cases = [
+    ['heavy-said-early-in-this-job-warning-free-completion-bad', 'fail', /missing from the completion's line/, [{ status: [{ text: `Your video is ready. ${H}. ${MLOST}.`, wait: 400 }, { text: 'Your video is ready.' }], warnings: [H, MLOST] }]],
+    ['metadata-title-missing-from-the-completion-bad', 'fail', /missing from the completion's line: The file’s title/, [{ status: `Your video is ready. ${H}.`, warnings: [H, MLOST] }]],
+    ['early-heavy-warning-free-completion-metadata-missing-bad', 'fail', /missing from the completion's line/, [{ status: [{ text: `Your video is ready. ${H}.`, wait: 400 }, { text: 'Your video is ready.' }], warnings: [H, MLOST] }]],
+    ['every-title-in-the-completion-in-order-good', 'pass', null, [{ status: [{ text: `Your video is ready. ${H}.`, wait: 400 }, { text: `Your video is ready. ${H}. ${MLOST}.` }], warnings: [H, MLOST] }]],
+  ]
+  for (const [fixture, wanted, why, jobs] of cases) {
+    const w = await open(fixture, { html: WARN_PAGE })
+    try {
+      await drive(w, jobs)
+      const ev = await w.evaluate('window.__p8.events')
+      const fin = ev.filter((e) => e.kind === 'finish').at(-1), start = ev.filter((e) => e.kind === 'start').at(-1)
+      w.p8planned = { workers: 1, planned: [{ t: Math.round((start.t + fin.t) / 2), limiterBiteLu: 20.1 }], completed: [] }
+      const r = rowOf(await limitingRows(w), 'first in the line spoken')
+      // The reading this replaces: any status text since the job's start holding the heavy title, the metadata title checked only if said.
+      const texts = (await w.evaluate('window.__p8.status')).filter((s) => s.t > start.t && s.t <= fin.t + 4000).map((s) => s.text)
+      const old = texts.find((t) => t.includes(H)); const oldPass = !!old && (!old.includes(MLOST) || old.indexOf(H) < old.indexOf(MLOST))
+      proveWhy('limiting warning: the completion\'s own write, every title in order', fixture, r, wanted, why, { replacedReadingWouldPass: oldPass })
+    } finally { await w.close() }
+  }
+})
+// M-01: a logged null bite and an established no-plan job, apart from missing or unreadable evidence.
+await tryOne('limiting, the bite\'s evidence', async () => {
+  const cases = [
+    ['no-plan-log-in-this-job-bad', 'cannot-determine', /missing, not null/, (j) => ({ workers: 1, planned: [{ t: j[0].mid, limiterBiteLu: 0 }], completed: [] })],
+    ['unreadable-plan-log-bad', 'cannot-determine', /could not be read/, (j) => ({ workers: 1, planned: [{ t: j.at(-1).mid, unread: true }], completed: [] })],
+    ['planned-job-plan-log-unseen-bad', 'cannot-determine', /was not seen/, (j) => ({ workers: 1, planned: [], completed: [{ t: j.at(-1).mid, audioGainDb: -3.2 }] })],
+    ['logged-null-bite-good', 'pass', null, (j) => ({ workers: 1, planned: [{ t: j.at(-1).mid, limiterBiteLu: null }], completed: [] })],
+    ['no-plan-job-established-good', 'pass', null, (j) => ({ workers: 1, planned: [], completed: [{ t: j.at(-1).mid, audioGainDb: null }] })],
+  ]
+  for (const [fixture, wanted, why, seen] of cases) {
+    const w = await open(fixture, { html: WARN_PAGE })
+    try {
+      await drive(w, [{ status: 'Your video is ready.' }, { status: 'Your video is ready.' }])
+      const ev = await w.evaluate('window.__p8.events')
+      const starts = ev.filter((e) => e.kind === 'start'), fins = ev.filter((e) => e.kind === 'finish')
+      const jobs = starts.map((s, i) => ({ mid: Math.round((s.t + fins[i].t) / 2) }))
+      w.p8planned = seen(jobs)
+      const r = rowOf(await limitingRows(w), 'present above the threshold')
+      // The reading this replaces: an attached worker with no plan in the job read as a null bite; an unreadable plan as null.
+      proveWhy('limiting warning: the bite\'s evidence', fixture, r, wanted, why, { replacedReadingWouldPass: true })
+    } finally { await w.close() }
+  }
+})
+// M-01: the footer's measure by counted rendered characters (qualify.mjs's reader), not width over an average.
+const FOOTER_WORDS = { 'footer.heading': 'Help', 'footer.groups.help': 'Help with videos', 'footer.contact.creators': 'Creators', 'footer.contact.selfService': 'Self Service', 'footer.groups.problem': 'Problem', 'feedback.open': 'Report a problem', 'footer.groups.opinion': 'Opinion', 'footer.feedbackForm': 'Feedback form' }
+const FOOTER_PAGE = (h2) => page(`<footer><div class="footer-help"><h2 style="white-space:nowrap">${h2}</h2><h3>Help with videos</h3><p><a href="#c">Creators</a> <a href="#s">Self Service</a></p><h3>Problem</h3><p><button id="feedback-open" type="button">Report a problem</button></p><h3>Opinion</h3><p><a href="#f">Feedback form</a></p></div></footer>`, '', FOOTER_WORDS)
+await tryOne('footer measure', async () => {
+  for (const [fixture, text, wanted, why] of [['footer-heading-81-narrow-characters-bad', Array(41).fill('l').join(' '), 'fail', null], ['footer-heading-79-wide-characters-good', 'W'.repeat(79), 'pass', null]]) {
+    const w = await open(fixture, { html: FOOTER_PAGE(text) })
+    try {
+      const r = rowOf(await footerRows(w), 'measure')
+      // The estimate this replaces: the widest rect over the average width of a Latin pangram.
+      const old = await w.evaluate(`(() => { const h = document.querySelector('.footer-help h2'); const range = document.createRange(); range.selectNodeContents(h); const widest = Math.max(0, ...[...range.getClientRects()].map((q) => q.width)); const probe = document.createElement('span'); probe.textContent = 'the quick brown fox jumps over the lazy dog 0123456789'; probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap'; h.append(probe); const avg = probe.getBoundingClientRect().width / probe.textContent.length; probe.remove(); return Math.round(widest / avg) })()`)
+      proveWhy('footer: each heading\'s line by counted characters', fixture, r, wanted, why, { counted: r.worst?.chars ?? r.longest, replacedEstimate: old, replacedReadingWouldPass: old <= 80 })
+    } finally { await w.close() }
+  }
+})
+
+// M-02: the player's focus, targets, traversal and exposed state.
+const STYLEABLE = ['play-button', 'mute-button', 'fullscreen-button', 'timeline', 'volume-slider']
+const PS = '#process-result video.result-player::-webkit-media-controls-'
+const playerPage = (style = '', extra = '') => page(card() + extra, style, CARD_WORDS)
+const playerFixture = async (name, style, extra, fn) => {
+  const w = await open(name, { html: playerPage(style, extra) })
+  try { await w.evaluate(`(async () => { const v = document.querySelector('video.result-player'); for (let i = 0; i < 80 && v.readyState < 2 && !v.error; i++) await new Promise((r) => setTimeout(r, 100)); })()`); return await fn(w) } finally { await w.close() }
+}
+const inner = (r) => r.control && !/^Video /.test(r.control)
+await tryOne('player focus', async () => {
+  // 2.4.7: an author outline:none on the controls Chrome lets an author style, the highlight and disclosure redraw kept; its twin, the native page.
+  const suppress = STYLEABLE.map((p) => `${PS}${p} { outline: none !important; }`).join('')
+  const native = await playerFixture('player-native', '', '', async (w) => ({ keys: await playerKeys(w), passive: await playerRows(w) }))
+  const suppressed = await playerFixture('player-rings-suppressed', suppress, '', (w) => playerKeys(w))
+  const vis = (rows) => rows.filter((r) => r.what === 'focus visible (2.4.7)' && inner(r) && STYLEABLE.some((p) => r.pseudo === '-webkit-media-controls-' + p))
+  const verdict = (rows) => (!rows.length ? 'missing' : rows.some((r) => r.outcome === 'pass') ? 'pass' : rows.some((r) => r.outcome === 'fail') ? 'fail' : 'cannot-determine')
+  const sRows = vis(suppressed), nRows = vis(native.keys)
+  prove('player 2.4.7: the ring alone, an author outline:none on the controls', 'player-rings-suppressed-bad', sRows.length === STYLEABLE.length ? verdict(sRows) : 'missing', 'cannot-determine', { rows: sRows.map((r) => ({ control: r.control, outcome: r.outcome, ringPx: r.ringPx, residualPx: r.residualPx, why: r.why })), replacedReadingWouldPass: sRows.every((r) => r.onOffPx > 0) })
+  prove('player 2.4.7: the ring alone, the native page', 'player-rings-native-good', nRows.length === STYLEABLE.length && nRows.every((r) => r.outcome === 'pass') ? 'pass' : verdict(nRows), 'pass', { rows: nRows.map((r) => ({ control: r.control, outcome: r.outcome, ringPx: r.ringPx })) })
+  const overflowVis = native.keys.find((r) => r.what === 'focus visible (2.4.7)' && /more media controls/.test(r.control ?? ''))
+  proveWhy('player 2.4.7: a control no author style reaches is not settled', 'player-overflow-not-isolable', overflowVis ?? { outcome: 'missing' }, 'cannot-determine', /cannot be isolated/)
+  // 2.4.13's exceptions, apart: (i) refuted by the instrument's own author style, supported for an -internal- control; (ii) from the author rules.
+  const app = (rows, re) => rows.find((r) => r.what === 'focus appearance (2.4.13)' && re.test(r.control ?? '')) ?? { outcome: 'missing' }
+  const nPlay = app(native.keys, /"play"/), nMore = app(native.keys, /more media controls/)
+  prove('player 2.4.13: the second exception, ring and backdrop unmodified', 'player-ring-unmodified-good', nPlay.uaException && /second exception/.test(nPlay.uaException) && nPlay.exceptions?.userAgentOnly?.holds === false ? 'exempt' : nPlay.outcome, 'exempt', { row: nPlay })
+  prove('player 2.4.13: the first exception, a ring no author selector reaches', 'player-internal-ring-good', nMore.uaException && /first exception/.test(nMore.uaException) ? 'exempt' : nMore.outcome, 'exempt', { row: nMore })
+  const restyled = await playerFixture('player-ring-restyled', `${PS}play-button { outline: 1px dotted #8d8d8d !important; }`, '', (w) => playerKeys(w))
+  const rPlay = app(restyled, /"play"/)
+  proveWhy('player 2.4.13: an author-styled ring, neither exception', 'player-ring-restyled-bad', rPlay.uaException ? { ...rPlay, outcome: 'exempt' } : rPlay, 'fail', /the author styles the ring/)
+  const backdrop = await playerFixture('player-host-backdrop', '#process-result video.result-player { background: #0f62fe; }', '', (w) => playerKeys(w))
+  proveWhy('player 2.4.13: an author backdrop leaves the second exception to VH-200', 'player-host-backdrop-undetermined', app(backdrop, /"play"/), 'cannot-determine', /backdrop is set by the author.*VH-200/)
+  // 2.4.11 and 2.4.12: author content over the play button; its twin, the native page.
+  const cover = `<div id="cover" style="position:absolute;background:#fff;z-index:2"></div><script>addEventListener('load', () => { const r = document.querySelector('video.result-player').getBoundingClientRect(); Object.assign(document.getElementById('cover').style, { left: r.left + scrollX + 'px', top: r.bottom + scrollY - 72 + 'px', width: '60px', height: '30px' }) })</script>`
+  const occluded = await playerFixture('player-occluded', '', cover, (w) => playerKeys(w))
+  const occ = (rows) => rows.find((r) => r.what.startsWith('not hidden by author content') && /"play"/.test(r.control ?? '')) ?? { outcome: 'missing' }
+  proveWhy('player 2.4.11/2.4.12: author content over a control, apart from its ring', 'player-occluded-bad', occ(occluded), 'fail', /2\.4\.12: partly hidden by author content \(div#cover\)/)
+  proveWhy('player 2.4.11/2.4.12: author content over a control, apart from its ring', 'player-unoccluded-good', occ(native.keys), 'pass', null)
+  // 4.1.2: the exposed name and value around play/pause and seek; their failing cases in memory (a native control cannot be made to hide its own state).
+  for (const what of ['play/pause state exposed (4.1.2)', 'time slider value exposed (4.1.2)']) proveWhy('player 4.1.2: ' + what, 'player-native-' + (what.startsWith('play') ? 'play' : 'seek') + '-good', rowOf(native.keys, what), 'pass', null)
+  const playBad = exposedChange('play', { a: { paused: true }, b: { paused: false }, c: { paused: true } }, { a: { name: 'play' }, b: { name: 'play' }, c: { name: 'play' } })
+  const seekBad = exposedChange('seek', { a: { t: 0.5 }, b: { t: 0.7 } }, { a: { value: 0.5 }, b: { value: 0.5 } })
+  proveWhy('player 4.1.2: playback toggles, the name does not (in memory)', 'exposed-name-unchanged-bad', playBad, 'fail', /did not follow it/)
+  proveWhy('player 4.1.2: the time moves, the value does not (in memory)', 'exposed-value-unchanged-bad', seekBad, 'fail', /exposed value did not/)
+  // Reverse traversal by identity: the same number of stops, one control twice and another never (in memory), against the native page's.
+  const inv = [{ dom: 1, role: 'button', name: 'play' }, { dom: 2, role: 'slider', name: 'volume' }, { dom: 3, role: 'slider', name: 'video time scrubber' }]
+  const dup = compareStops([{ dom: 3, role: 'slider', name: 'video time scrubber' }, { dom: 2, role: 'slider', name: 'volume' }, { dom: 2, role: 'slider', name: 'volume' }], inv)
+  prove('player: Shift+Tab stops by identity, a count that matches (in memory)', 'reverse-stops-repeat-one-miss-one-bad', dup.ok ? 'pass' : 'fail', 'fail', { compared: dup, replacedReadingWouldPass: 3 >= inv.length })
+  prove('player: Shift+Tab stops by identity, the native page', 'reverse-stops-native-good', rowOf(native.keys, 'Shift+Tab goes back').outcome, 'pass', { row: rowOf(native.keys, 'Shift+Tab goes back') })
+  // Targets: the volume slider's geometry, at rest and disclosed, with its hit area; the three unavailable readings named apart (in memory).
+  const vol = native.passive.find((r) => r.what === 'control target' && /volume/.test(r.control ?? '')) ?? { outcome: 'missing' }
+  prove('player 2.5.5: a control empty at rest, measured disclosed', 'player-volume-disclosed-good', vol.geometry?.rest?.w === 0 && vol.geometry?.available?.w > 0 && vol.geometry?.disclosedBy && !vol.hitArea?.unavailable ? vol.outcome : 'cannot-determine', 'pass', { row: vol })
+  const box = { x: 0, y: 0, w: 48, h: 48 }
+  for (const [fixture, args, why] of [
+    ['target-geometry-unavailable', { rest: { error: 'Could not compute box model.' }, hit: {}, sizing: { rules: [] } }, /^geometry unavailable/],
+    ['target-empty-never-disclosed', { rest: { ...box, w: 0 }, hit: { unavailable: 'no geometry to test' }, sizing: { rules: [] } }, /at rest, and not disclosed/],
+    ['target-hit-area-unavailable', { rest: box, hit: { unavailable: 'no point of its box hits the control' }, sizing: { rules: [] } }, /^hit area unavailable/],
+  ]) proveWhy('player 2.5.5: unavailable readings named apart (in memory)', fixture, targetVerdict(args), 'cannot-determine', why)
+  const sized = await playerFixture('player-target-author-sized', `${PS}mute-button { width: 24px !important; min-width: 24px !important; height: 24px !important; }`, '', (w) => playerRows(w))
+  const mute = (rows) => rows.find((r) => r.what === 'control target' && /mute/.test(r.control ?? '')) ?? { outcome: 'missing' }
+  proveWhy('player 2.5.5: an author-sized control, no user-agent exception', 'player-target-author-sized-bad', mute(sized).uaException ? { ...mute(sized), outcome: 'exempt' } : mute(sized), 'fail', /the author sets its size/)
+  proveWhy('player 2.5.5: the native control by hit area', 'player-target-native-good', mute(native.passive), 'pass', null)
+  // The same readings on a scrolled page (the app's card sits 2,900 px down): hit tests take the document's coordinates.
+  const scrolled = await (async () => { const w = await open('player-scrolled', { html: page('<div style="height:2400px"></div>' + card(), '', CARD_WORDS) }); try { await w.evaluate(`(async () => { const v = document.querySelector('video.result-player'); for (let i = 0; i < 80 && v.readyState < 2 && !v.error; i++) await new Promise((r) => setTimeout(r, 100)); v.scrollIntoView({ block: 'center' }); })()`); return { passive: await playerRows(w), keys: await playerKeys(w) } } finally { await w.close() } })()
+  proveWhy('player 2.5.5: the native control by hit area, the page scrolled', 'player-target-native-scrolled-good', mute(scrolled.passive), 'pass', null)
+  proveWhy('player 2.4.11/2.4.12: the native page scrolled, nothing over the control', 'player-unoccluded-scrolled-good', occ(scrolled.keys), 'pass', null)
 })
 
 await closeAnalysis()

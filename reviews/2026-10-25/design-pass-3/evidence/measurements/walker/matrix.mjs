@@ -19,11 +19,11 @@
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { connectBrowser } from './cdp.mjs'
-import { Walk, sleep } from './walk.mjs'
+import { Walk, F, sleep } from './walk.mjs'
 import { QUAL_INIT, VIEWS, assertReached, axTree, focusArea, fileButtonInk, keysRoute, closeAnalysis, setViewport, setMode, withholdFonts, pageShot, pressedVsHover, typeRoles } from './qualify.mjs'
 import { Run, writeManifest, writeDigest, aggregate, recordKey, browserCommandLine } from './runner.mjs'
 import { SCENARIOS, ROUTES, PLANS, MX_INIT, GAPS, READINGS } from './scenarios.mjs'
-import { P8_INIT, PHASE8_INSTRUMENTS, phase8Instruments, watchWorkers } from './phase8.mjs'
+import { P8_INIT, PHASE8_INSTRUMENTS, phase8Instruments, watchWorkers, assertRows } from './phase8.mjs'
 // VH-198: the third pass's five parts and twelve runs, by name (parts.mjs).
 import { assertParts, partOf, runOf } from './parts.mjs'
 export { SCENARIOS, ROUTES, PLANS }
@@ -43,10 +43,17 @@ if (!RUN_ROOT) throw new Error('set RUN_ROOT to a scratch directory')
 // VH-198 adds Phase 8's six (phase8.mjs): the player, the format "?", the footer's
 // headings, the limiting warning, Video language, and the scenario's own assertions.
 const SCENARIO_INSTRUMENTS = ['overflow', 'ax', 'targets', 'contrastText', 'contrastExtra', 'measure', 'type', 'focus', ...PHASE8_INSTRUMENTS]
-export const requiredFor = (r) => (ROUTES[r.id] ? ['keys'] : [...SCENARIO_INSTRUMENTS, ...(r.mode === 'reduced-motion' ? ['motion'] : []), ...(r.pressed ? ['pressed'] : [])])
+// Codex astra's method check, M-04: a scenario may promise what follows its state (a save
+// completing after a failed player, a dialog entered, used and left at enlargement, a
+// read failure's focus). It declares `subresults` (`when` names the records it holds
+// for); they run once the state is measured and kept, and are required in the record.
+export const requiredFor = (r) => (ROUTES[r.id] ? ['keys'] : [...SCENARIO_INSTRUMENTS, ...(r.mode === 'reduced-motion' ? ['motion'] : []), ...(r.pressed ? ['pressed'] : []), ...(hasSubresults(r) ? ['subresults'] : [])])
 const viewportFor = (view) => { const v = VIEWS[view]; return v ? { w: v.width, h: v.height, dpr: v.deviceScaleFactor } : undefined }
 // A record's variant (a subcase of a compound scenario) merges over its scenario.
 const scenarioFor = (r) => { const sc = SCENARIOS[r.id]; return sc && r.variant && sc.variants?.[r.variant] ? { ...sc, ...sc.variants[r.variant] } : sc }
+export const hasSubresults = (r) => { const s = scenarioFor(r)?.subresults; return !!s && (!s.when || !!s.when(r)) }
+// The fixtures a run's declared records name (each scenario's or route's `fixtures`), pinned by hash when the run is created (M-03).
+const declaredFixtures = (declared) => [...new Set(declared.flatMap((r) => (ROUTES[r.id] ?? scenarioFor(r))?.fixtures ?? []))].map((f) => (f.startsWith('/') ? f : F(f)))
 const slug = (s) => String(s).replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40)
 
 // The DOM change log since the last record on this page, persisted; the AX
@@ -119,6 +126,18 @@ async function instruments(w, sc, rec, run) {
   return out
 }
 
+/** M-04: a scenario's subresults, after its record's state is measured: the steps, then their assertions as rows, the page kept. */
+async function subresultsOf(w, sc, rec, run) {
+  const s = sc.subresults
+  try {
+    await s.run(w, rec)
+    const out = aggregate(await assertRows(w, { asserts: s.asserts }))
+    return { what: s.what, ...out, page: run.artifact(`${recordKey(rec)}__subresults.png`, await pageShot(w)) }
+  } catch (e) {
+    return { what: s.what, outcome: 'cannot-determine', why: 'the subresults did not run: ' + String(e.message ?? e).slice(0, 240), rows: 0, counted: 0, exempt: 0, items: [] }
+  }
+}
+
 async function openWalk(browser, name, run) {
   const w = new Walk(browser, name)
   await w.open()
@@ -145,7 +164,8 @@ async function main() {
       const now = PLANS[planName]().map(recordKey).sort().join('\n')
       if (now !== declared.map(recordKey).sort().join('\n')) throw new Error(`${planName} now declares other records than this run did: rerun it whole`)
     }
-    skip = run.resume()
+    // M-03: refused unless the source, the instrument revision and every fixture are what the run pinned.
+    skip = run.resume({ appRoot: APP_ROOT })
   } else {
     planName = process.argv[2] ?? 'pilot'
     if (!PLANS[planName]) throw new Error('no plan ' + planName)
@@ -153,14 +173,15 @@ async function main() {
     if (partOf(planName) || runOf(planName)) { const c = await assertParts(); console.log(`parts as declared: ${c.total} records in ${c.runs.length} runs (the script's ${c.scriptTotal}, less ${c.sourceOnly.length} source-only); split ${c.runsSha}`) }
     const only = process.argv.slice(3)
     declared = PLANS[planName]().filter((r) => !only.length || only.includes(r.id)).map((r) => ({ ...r, requires: r.requires ?? requiredFor(r), viewport: r.viewport ?? viewportFor(r.view) }))
-    run = Run.create(RUN_ROOT, planName + (only.length ? '-part' : ''), declared)
+    run = Run.create(RUN_ROOT, planName + (only.length ? '-part' : ''), declared, { appRoot: APP_ROOT, fixtures: declaredFixtures(declared) })
   }
   const started = Date.now()
   const browser = await connectBrowser()
   console.log(`run ${run.runId}: ${declared.length} records declared${resuming ? `, ${skip.size} kept from before (attempt ${run.attempt})` : ''}, ${browser.version.Browser}`)
   // Group by scenario, variant, language, view and fonts: one setup, then each mode.
+  // A record with subresults changes its page after it is measured, so it has a setup of its own (M-04).
   const groups = new Map()
-  for (const r of declared.filter((d) => !skip.has(recordKey(d)))) { const k = [r.id, r.variant ?? '', r.lang, r.view, r.mode === 'fallback'].join('|'); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(r) }
+  for (const r of declared.filter((d) => !skip.has(recordKey(d)))) { const k = [r.id, r.variant ?? '', r.lang, r.view, r.mode === 'fallback', hasSubresults(r) ? r.mode : ''].join('|'); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(r) }
   for (const recs of groups.values()) {
     const { id, lang, view, variant } = recs[0]
     const route = ROUTES[id]
@@ -199,6 +220,8 @@ async function main() {
             const page = run.artifact(`${key}__page.png`, await pageShot(w))
             const exposure = await persistExposure(w, run, key)
             const expired = reachedAfter.outcome !== 'pass'
+            // M-04: what the scenario promises after its state, once the state is measured and kept, as its own instrument.
+            if (!expired && hasSubresults(rec)) ins.subresults = await subresultsOf(w, sc, rec, run)
             if (expired) console.log('state lost ' + key)
             run.record(rec, { timing: timing(), status: expired ? 'failed' : 'ok', stateExpired: expired || undefined, reached, reachedAfter, faults: w.faults ?? [], instruments: ins, readings, page, exposure })
           }
@@ -226,14 +249,17 @@ async function main() {
       reflow: { what: 'a CSS viewport 320 px wide (and the 375 px phone)', views: ['w320', 'w375'], records: keysOf((r) => ['w320', 'w375'].includes(r.view)).length },
       proxy: { what: "the CSS viewport and device pixel ratio Chrome's 200% and 400% page zoom give a 1280 x 900 window", views: ['zoom200proxy', 'zoom400proxy'], records: keysOf((r) => /zoom\d+proxy/.test(r.view)).length, realZoom: 'unresolved: Chrome page zoom cannot be set over the protocol; on the person list' },
       defaultFont32: { what: "the browser's default-font preference at 32 px (Page.setFontSizes)", mode: 'font32', records: keysOf((r) => r.mode === 'font32').length },
+      // M-04: a representative dialog operated, not only measured, at enlargement.
+      dialogOperated: { what: "Report a problem's dialog (S-76) entered by Enter on its opener, used (the message typed, every control reached by Tab inside the window and uncovered, the email handed off) and left by Escape and by Close, focus back on the opener, by keys, at 320 px, both proxies and the 32 px font (the record's subresults)", records: keysOf((r) => r.id === 'S-76' && hasSubresults(r)).length },
       syntheticTextOnly: { status: 'not run', what: 'text-only enlargement by an injected style: not implemented, so unqualified' },
     },
     unresolved: [
       "Chrome page zoom at 200% and 400% itself (proxy views stand in; on the person list)",
       'what a screen reader says (exposure only: the AX tree and the DOM change log are persisted per record)',
-      "native select popups by keys; the video player's inner controls are walked by the focused accessibility node (P-06), their rings read on a held frame with the user agent's 2.4.13 exception where it holds, and a control Tab does not reach, or one whose box is empty at rest (the volume slider), is cannot determine",
+      "native select popups by keys; the video player's inner controls are walked by the focused accessibility node (P-06) and held to the inventory by identity both ways (S-127 fails a control it does not reach; a native step of K-player's that misses is cannot determine); the volume slider, empty at rest, is measured once disclosed by hovering the control beside it, its target by hit test; each ring is read on a held frame three ways apart (M-02), and stays cannot determine for 2.4.7 where no author style can isolate it (the overflow button's -internal- pseudo-element) or where only a focus-only change other than a ring is left (the user agent's hover-and-focus highlight), for 2.4.13 short of its area where neither exception is established (the host's backdrop is the author's), and for 4.1.2 whether a change is notified (not observed)",
       'transient states: asserted before and after the instruments, not captured mid-transition',
-      "a dialog's entry, use and exit at enlargement: overflow and clipping are measured there; the keys route runs at 1280 only",
+      "the read failure's exception path (src/main.ts:1495–1500, the inspection request itself failing): S-149's subresults reach the failed reply (main.ts:1481–1486) with notvideo.mp4; no fault makes the request throw",
+      "a dialog's entry, use and exit at enlargement: operated by keys for Report a problem's dialog (S-76's subresults) at 320 px, both proxies and the 32 px font; the K-dialog route itself runs at 1280 and 320 px only, and the other dialog states are measured there for overflow and clipping",
       'a range thumb and track: non-text contrast by pixels (cannot determine in contrastExtra)',
       'synthetic text-only enlargement: not run',
       'off-page elements (the skip link before focus): target and contrast read when shown, by the person',

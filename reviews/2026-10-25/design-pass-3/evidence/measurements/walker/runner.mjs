@@ -46,50 +46,72 @@ export function aggregate(items, { exempt = () => false, empty = 'cannot-determi
 }
 
 export class Run {
-  static create(root, name, declared) {
+  /**
+   * Codex astra's method check, M-03: the run's provenance is pinned in
+   * run.json before anything is measured: the source (its commit and any
+   * uncommitted difference, by hash), the instrument revision (every walker
+   * file by hash) and the fixtures the declared records name, by hash.
+   */
+  static create(root, name, declared, { appRoot = APP_ROOT, fixtures = [] } = {}) {
     const runId = new Date().toISOString().replace(/[:.]/g, '-') + '-' + randomBytes(3).toString('hex')
     const dir = join(root, `${name}-${runId}`)
     if (existsSync(dir)) throw new Error('run directory exists: ' + dir)
-    mkdirSync(join(dir, 'captures'), { recursive: true })
     const keys = declared.map(recordKey)
     const dup = keys.filter((k, i) => keys.indexOf(k) !== i)
     if (dup.length) throw new Error('declared twice: ' + dup.join(', '))
-    writeFileSync(join(dir, 'run.json'), JSON.stringify({ runId, name, created: new Date().toISOString(), declared }, null, 1))
+    const provenance = { ...provenanceNow(appRoot), appRoot, fixtures: [...new Set(fixtures)].sort().map(fixtureIdentity) }
+    mkdirSync(join(dir, 'captures'), { recursive: true })
+    writeFileSync(join(dir, 'run.json'), JSON.stringify({ runId, name, created: new Date().toISOString(), provenance, declared }, null, 1))
     return new Run(dir)
   }
   constructor(dir) {
     this.dir = dir
     const meta = JSON.parse(readFileSync(join(dir, 'run.json'), 'utf8'))
-    Object.assign(this, { runId: meta.runId, name: meta.name, declared: meta.declared })
-    this.fixtures = new Set()
+    Object.assign(this, { runId: meta.runId, name: meta.name, declared: meta.declared, created: meta.created, resumes: meta.resumes ?? [] })
+    this.provenance = meta.provenance ?? null
+    // M-03: the fixture ledger (fixtures.jsonl), every fixture used, by its hash at first use, across every attempt: a resume keeps it, never starts it empty.
+    this.ledger = new FixtureLedger(dir, this.provenance?.fixtures)
+    this.fixtures = new Set(this.ledger.paths())
   }
-  /** Writes one record, once. A second write of the same key is logged as a duplicate. */
+  /** Writes one record, once, stamped with the run's pinned instrument revision. A second write of the same key is logged as a duplicate. */
   record(r, data) {
     const file = join(this.dir, recordKey(r) + '.json')
     if (existsSync(file)) {
       appendFileSync(join(this.dir, 'duplicates.log'), recordKey(r) + '\n')
       return file
     }
-    writeFileSync(file, JSON.stringify({ runId: this.runId, key: recordKey(r), ...r, ...data }, (k, v) => (v && v.type === 'Buffer' ? undefined : v), 1))
+    writeFileSync(file, JSON.stringify({ runId: this.runId, key: recordKey(r), revision: this.provenance?.instruments?.revision ?? null, attempt: this.attempt ?? 1, ...r, ...data }, (k, v) => (v && v.type === 'Buffer' ? undefined : v), 1))
     return file
+  }
+  /** What differs from the provenance the run pinned (source, instruments, every pinned or used fixture); none means it still holds. */
+  provenanceProblems(appRoot = this.provenance?.appRoot ?? APP_ROOT) {
+    if (!this.provenance) return ['the run pinned no provenance when it was created (a run from before M-03): rerun it whole']
+    return provenanceProblems(this.provenance, appRoot, this.ledger.entries())
   }
   /**
    * VH-172: the run resumed in place. A declared record already written and
    * ok is kept and skipped; one written but not ok is moved to superseded/
    * (kept, never counted) and measured again. Returns the keys to skip.
+   * M-03: refused, before anything in the run is changed, unless the source,
+   * the instrument revision and every fixture are those it pinned; a record
+   * is kept only if it was measured under the run's revision.
    */
-  resume() {
+  resume({ appRoot } = {}) {
+    const problems = this.provenanceProblems(appRoot)
+    if (problems.length) throw new Error(`resume refused: ${basename(this.dir)} no longer stands on what it pinned:\n  ${problems.join('\n  ')}`)
     const meta = JSON.parse(readFileSync(join(this.dir, 'run.json'), 'utf8'))
     meta.resumes = [...(meta.resumes ?? []), new Date().toISOString()]
     writeFileSync(join(this.dir, 'run.json'), JSON.stringify(meta, null, 1))
+    this.resumes = meta.resumes
     this.attempt = meta.resumes.length + 1
+    this.ledger.attempt = this.attempt
     const keep = new Set()
     for (const d of this.declared) {
       const k = recordKey(d), f = join(this.dir, k + '.json')
       if (!existsSync(f)) continue
       let rec = null
       try { rec = JSON.parse(readFileSync(f, 'utf8')) } catch { /* unreadable: measured again */ }
-      if (rec && rec.status === 'ok' && !rec.stateExpired && rec.runId === this.runId) { keep.add(k); continue }
+      if (rec && rec.status === 'ok' && !rec.stateExpired && rec.runId === this.runId && rec.revision === this.provenance.instruments.revision) { keep.add(k); continue }
       mkdirSync(join(this.dir, 'superseded'), { recursive: true })
       renameSync(f, join(this.dir, 'superseded', `${k}~a${this.attempt - 1}.json`))
     }
@@ -106,8 +128,8 @@ export class Run {
     appendFileSync(join(this.dir, 'artifacts.jsonl'), JSON.stringify(a) + '\n')
     return a
   }
-  /** A fixture the run used, hashed in the manifest. */
-  useFixture(file) { this.fixtures.add(file) }
+  /** A fixture the run used: hashed at first use into the ledger; refused if it differs from the identity pinned at creation. */
+  useFixture(file) { this.ledger.use(file); this.fixtures.add(file) }
   verify() {
     const declared = new Map(this.declared.map((d) => [recordKey(d), d]))
     const problems = []
@@ -128,8 +150,41 @@ export class Run {
         const ins = rec.instruments?.[name]
         if (!ins || !OUTCOMES.has(ins.outcome)) problems.push({ kind: 'missing-instrument', key: k, instrument: name, outcome: ins?.outcome })
       }
-      for (const [name, ins] of Object.entries(rec.instruments ?? {}))
-        if (ins?.outcome === 'pass' && Array.isArray(ins.items) && !ins.items.some((i) => !i.exempt && i.outcome === 'pass')) problems.push({ kind: 'empty-pass', key: k, instrument: name })
+      // Codex astra's method check (25 October), M-01: no pass without its
+      // evidence. Every required instrument, and any instrument that passes,
+      // must carry a shape the runner reads: rows (`items`), a route's
+      // `steps`, the document's widths (overflow) or the tree's nodes (ax).
+      // A pass rests on what was measured: a counted row passing and none
+      // counted otherwise; a route's steps, as many as it was given
+      // (`declared`, or the declaration's `expects[name].steps`), each
+      // passing. A declaration may name the rows' subjects it expects
+      // (`expects[name].subjects`, matched on a row's what, el, sel or
+      // control); a record short of them is not whole.
+      for (const [name, ins] of Object.entries(rec.instruments ?? {})) {
+        if (!ins || !OUTCOMES.has(ins.outcome) || (ins.outcome !== 'pass' && !(d.requires ?? []).includes(name))) continue
+        const want = d.expects?.[name] ?? {}
+        const say = (kind, why) => problems.push({ kind, key: k, instrument: name, why })
+        if (Array.isArray(ins.items)) {
+          const odd = ins.items.find((i) => !i || !(OUTCOMES.has(i.outcome) || EXEMPT.has(i.outcome)))
+          const missing = (want.subjects ?? []).filter((s) => !ins.items.some((i) => [i.what, i.el, i.sel, i.control].includes(s)))
+          const counted = ins.items.filter((i) => !i.exempt && !EXEMPT.has(i.outcome))
+          if (odd) say('evidence', 'a row without a known outcome: ' + JSON.stringify(odd).slice(0, 80))
+          else if (missing.length) say('evidence', 'expected subjects missing: ' + missing.join(', '))
+          else if (ins.outcome === 'pass' && !counted.some((i) => i.outcome === 'pass')) say('empty-pass', 'a pass with no counted row passing')
+          else if (ins.outcome === 'pass' && counted.some((i) => i.outcome !== 'pass')) say('evidence', 'a pass over a counted row that did not pass')
+        } else if (Array.isArray(ins.steps)) {
+          const given = want.steps ?? ins.declared
+          if (ins.steps.some((s) => !s || !OUTCOMES.has(s.outcome))) say('evidence', 'a step without a known outcome')
+          else if (given !== undefined && ins.steps.length !== given) say('evidence', `${ins.steps.length} steps recorded of ${given} given`)
+          else if (ins.outcome === 'pass' && !ins.steps.length) say('empty-pass', 'a route passing on no steps')
+          else if (ins.outcome === 'pass' && given === undefined) say('evidence', 'a route passing with no step count given')
+          else if (ins.outcome === 'pass' && ins.steps.some((s) => s.outcome !== 'pass')) say('evidence', 'a route passing over a step that did not pass')
+        } else if (name === 'overflow' || typeof ins.scrollWidth === 'number') {
+          if (ins.outcome === 'pass' && !(typeof ins.scrollWidth === 'number' && typeof ins.clientWidth === 'number' && ins.hscroll === false)) say('evidence', 'a pass without the document\'s widths')
+        } else if (name === 'ax' || ins.counts) {
+          if (ins.outcome === 'pass' && !(ins.counts?.nodes >= 3 && Array.isArray(ins.problems) && !ins.problems.length)) say('evidence', 'a pass without the tree\'s nodes')
+        } else say('no-evidence', ins.outcome === 'pass' ? 'a pass with no rows, steps or readings' : 'no rows, steps or readings')
+      }
       if (d.viewport) {
         const got = rec.reached?.seen?.viewport
         const bad = !got || Object.entries(d.viewport).some(([q, v]) => got[q] !== v)
@@ -182,10 +237,84 @@ export function instrumentRevision() {
   return { revision: sha(files.map((i) => i.sha256).join('')), files }
 }
 
+// ---------------------------------------------------------------------------
+// Codex astra's method check, M-03: provenance pinned when a run is created,
+// held on every resume and in the manifest, for the matrix and the
+// transitions alike.
+export const APP_ROOT = process.env.APP_ROOT ?? join(HERE, '../../../../../..')
+const SOURCE_PATHS = ['src', 'index.html', 'public']
+/** The source's identity: its commit, and any uncommitted difference to src/, index.html or public/ (tracked and untracked), by hash. */
+export function sourceIdentity(appRoot = APP_ROOT) {
+  const git = (...a) => { try { return execFileSync('git', ['-C', appRoot, ...a], { encoding: 'utf8', maxBuffer: 1 << 28 }) } catch { return null } }
+  const status = git('status', '--porcelain', '--', ...SOURCE_PATHS)
+  const untracked = (git('ls-files', '--others', '--exclude-standard', '--', ...SOURCE_PATHS) ?? '').split('\n').filter(Boolean).sort()
+  const h = createHash('sha256').update(git('diff', 'HEAD', '--binary', '--', ...SOURCE_PATHS) ?? 'unread')
+  for (const f of untracked) { h.update(`\0${f}\0`); try { h.update(readFileSync(join(appRoot, f))) } catch { h.update('unread') } }
+  return { commit: git('rev-parse', 'HEAD')?.trim() ?? 'unknown', dirty: status === null ? 'unknown' : status.trim() !== '', diffSha256: h.digest('hex').slice(0, 16) }
+}
+const hashed = new Map()
+/** A fixture by name, bytes and hash (read once per size and time); one that is not there is named missing. */
+export function fixtureIdentity(file) {
+  if (!existsSync(file)) return { file: basename(file), path: file, missing: true }
+  const st = statSync(file), k = `${file}|${st.size}|${st.mtimeMs}`
+  if (!hashed.has(k)) hashed.set(k, sha(readFileSync(file)))
+  return { file: basename(file), path: file, bytes: st.size, sha256: hashed.get(k) }
+}
+/** The source and the instrument revision as they stand now. */
+export const provenanceNow = (appRoot = APP_ROOT) => ({ source: sourceIdentity(appRoot), instruments: instrumentRevision() })
+/** Each way what stands now differs from what a run pinned: its source, its instrument revision (the files named), a fixture it pinned or used. */
+export function provenanceProblems(pinned, appRoot = APP_ROOT, used = []) {
+  const now = provenanceNow(appRoot)
+  const out = []
+  if (now.source.commit !== pinned.source?.commit) out.push(`source commit ${now.source.commit}, not the run's ${pinned.source?.commit}`)
+  else if (now.source.diffSha256 !== pinned.source?.diffSha256 || now.source.dirty !== pinned.source?.dirty) out.push(`source tree differs from the run's: uncommitted src/, index.html or public/ ${pinned.source?.diffSha256} then, ${now.source.diffSha256} now`)
+  if (now.instruments.revision !== pinned.instruments?.revision) {
+    const was = new Map((pinned.instruments?.files ?? []).map((f) => [f.file, f.sha256]))
+    const is = new Map(now.instruments.files.map((f) => [f.file, f.sha256]))
+    const changed = [...new Set([...was.keys(), ...is.keys()])].filter((f) => was.get(f) !== is.get(f)).sort()
+    out.push(`instrument revision ${now.instruments.revision}, not the run's ${pinned.instruments?.revision} (changed: ${changed.join(', ') || 'none named'})`)
+  }
+  const seen = new Set()
+  for (const [how, list] of [['pinned', pinned.fixtures ?? []], ['used', used]]) for (const f of list) {
+    if (f.missing || seen.has(f.path)) continue
+    seen.add(f.path)
+    const n = fixtureIdentity(f.path)
+    if (n.missing) out.push(`fixture ${f.file} is gone (${f.path})`)
+    else if (n.sha256 !== f.sha256) out.push(`fixture ${f.file} is ${n.sha256}, not the ${f.sha256} the run ${how}`)
+  }
+  return out
+}
+/** A run's fixtures as used: each hashed at first use into <dir>/fixtures.jsonl and kept across resumes; one pinned at creation must still be that file. */
+export class FixtureLedger {
+  constructor(dir, pinned = [], attempt = 1) {
+    this.file = join(dir, 'fixtures.jsonl')
+    this.pinned = new Map((pinned ?? []).map((f) => [f.path, f]))
+    this.attempt = attempt
+    this.map = new Map()
+    if (existsSync(this.file)) for (const l of readFileSync(this.file, 'utf8').split('\n').filter(Boolean)) { const f = JSON.parse(l); if (!this.map.has(f.path)) this.map.set(f.path, f) }
+  }
+  use(file) {
+    if (this.map.has(file)) return this.map.get(file)
+    const id = { ...fixtureIdentity(file), firstUsedInAttempt: this.attempt, at: new Date().toISOString() }
+    const p = this.pinned.get(file)
+    if (p && !p.missing && p.sha256 !== id.sha256) throw new Error(`fixture ${id.file} is ${id.sha256 ?? 'missing'}, not the ${p.sha256} pinned when the run was created`)
+    this.map.set(file, id)
+    appendFileSync(this.file, JSON.stringify(id) + '\n')
+    return id
+  }
+  entries() { return [...this.map.values()] }
+  paths() { return [...this.map.keys()] }
+}
+/** The ledger and the pinned fixtures as the manifests list them. */
+export const fixturesForManifest = (ledger, pinned = []) => ({
+  used: ledger.entries().map(({ file, bytes, sha256, missing, firstUsedInAttempt }) => ({ file, bytes, sha256, ...(missing ? { missing } : {}), firstUsedInAttempt })).sort((a, b) => a.file.localeCompare(b.file)),
+  pinned: (pinned ?? []).map(({ file, bytes, sha256, missing }) => ({ file, bytes, sha256, ...(missing ? { missing } : {}) })),
+})
+
 // What stayed unresolved, from the measurements: every "cannot determine",
 // grouped by instrument and reason, kept apart as a missing measurement or an
 // interpretation left to VH-173.
-function unresolvedFrom(recs) {
+export function unresolvedFrom(recs) {
   const groups = new Map()
   const add = (rec, name, row, fallback) => {
     const why = String(row.why ?? fallback ?? 'no reason given').replace(/\d+(\.\d+)?/g, 'n').slice(0, 140)
@@ -205,8 +334,7 @@ function unresolvedFrom(recs) {
 }
 
 /** The manifest: what ran, on what, and what stayed unresolved. */
-export function writeManifest(run, { appRoot, browserVersion, browserCommandLine, fixtures = [], scaling, enlargement, unresolved = [] }) {
-  const git = (...a) => { try { return execFileSync('git', ['-C', appRoot, ...a], { encoding: 'utf8' }).trim() } catch { return 'unknown' } }
+export function writeManifest(run, { appRoot = APP_ROOT, browserVersion, browserCommandLine, fixtures = [], scaling, enlargement, unresolved = [] }) {
   const v = run.verify()
   const recs = run.records()
   const tally = {}
@@ -218,11 +346,22 @@ export function writeManifest(run, { appRoot, browserVersion, browserCommandLine
   }
   const arts = run.artifacts()
   writeFileSync(join(run.dir, 'artifacts.json'), JSON.stringify(arts, null, 1))
-  const used = [...new Set([...fixtures, ...run.fixtures])].filter((f) => existsSync(f)).sort()
+  // M-03: the provenance the run pinned at creation, held to what stands now
+  // (source, instruments, every pinned or used fixture) and to each record's
+  // revision; a difference is a completeness problem, never a footnote.
+  const drift = []
+  for (const f of fixtures) try { run.useFixture(f) } catch (e) { drift.push(String(e.message ?? e)) }
+  drift.push(...run.provenanceProblems(appRoot))
+  const pinned = run.provenance
+  const offRevision = pinned ? recs.filter((r) => r.revision !== pinned.instruments.revision).map((r) => r.key) : []
+  const problems = [...v.problems, ...drift.map((why) => ({ kind: 'provenance', why })), ...offRevision.map((key) => ({ kind: 'off-revision', key, why: 'measured under another instrument revision than the run pinned' }))]
+  const fx = fixturesForManifest(run.ledger, pinned?.fixtures)
   const m = {
     run: run.runId,
-    source: { commit: git('rev-parse', 'HEAD'), dirty: git('status', '--porcelain', '--', 'src', 'index.html', 'public') !== '' },
-    instruments: instrumentRevision(),
+    // What the run pinned when it was created (M-03); `provenance` says whether it still held when this manifest was written.
+    source: pinned?.source ?? sourceIdentity(appRoot),
+    instruments: pinned?.instruments ?? instrumentRevision(),
+    provenance: { pinnedAtCreation: !!pinned, created: run.created, resumes: run.resumes, held: !drift.length, problems: drift, recordsOffRevision: offRevision.length },
     browser: browserVersion,
     // VH-198: the flags the pages ran under (visible pages need --disable-backgrounding-occluded-windows).
     browserCommandLine,
@@ -230,11 +369,13 @@ export function writeManifest(run, { appRoot, browserVersion, browserCommandLine
     views: [...new Set(recs.map((r) => JSON.stringify({ view: r.view, actual: r.reached?.seen?.viewport, rootFontPx: r.reached?.seen?.rootFontPx })))].map((s) => JSON.parse(s)),
     scaling,
     enlargement,
-    fixtures: used.map((f) => ({ file: basename(f), bytes: statSync(f).size, sha256: sha(readFileSync(f)) })),
+    // Every fixture used, by its hash at first use and the attempt that first used it (the ledger, kept across resumes); and those pinned at creation.
+    fixtures: fx.used,
+    fixturesPinned: fx.pinned,
     faults: [...new Set(recs.flatMap((r) => r.faults ?? []))],
-    // Run completeness: every declared record present, whole and in its state and view.
+    // Run completeness: every declared record present, whole and in its state and view, under the provenance the run pinned.
     // VH-198: the keys' identity hashed, as VH-172's and VH-176's manifests (observedKeysSha256).
-    coverage: { expected: v.expected, observed: v.observed, whole: v.whole, problems: v.problems, expectedKeysSha256: keysSha(v.expectedKeys), observedKeysSha256: keysSha(v.observedKeys), expectedKeys: v.expectedKeys, observedKeys: v.observedKeys },
+    coverage: { expected: v.expected, observed: v.observed, whole: v.whole && !drift.length && !offRevision.length, problems, expectedKeysSha256: keysSha(v.expectedKeys), observedKeysSha256: keysSha(v.observedKeys), expectedKeys: v.expectedKeys, observedKeys: v.observedKeys },
     // Measurements, apart from completeness: what the instruments found.
     measurements: { failing: Object.fromEntries(Object.entries(tally).map(([k, t]) => [k, t.fail])), tally },
     artifacts: { count: arts.length, bytes: arts.reduce((s, a) => s + a.bytes, 0), listSha256: sha(JSON.stringify(arts)), list: 'artifacts.json (each capture: path, bytes, sha256)' },

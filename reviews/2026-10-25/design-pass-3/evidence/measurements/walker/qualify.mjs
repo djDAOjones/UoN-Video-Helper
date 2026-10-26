@@ -279,6 +279,9 @@ export const QUAL_INIT = String.raw`
       return { text, latin, cjk, chars: total, widthPx: cs.length ? Math.round(cs[cs.length - 1].r - cs[0].l) : 0, outcome };
     }).filter((x) => x.chars > 0);
   };
+  // VH-198 (Codex astra's method check, 25 October, M-01): the same reader for
+  // an instrument that names its own elements (phase8.mjs's footer headings).
+  Q.renderedLines = (el) => renderedLines(el);
   // An input's value or a textarea's, laid out in a copy of the field's
   // content box with its type settings (a value has no text node to range over).
   const fieldLines = (el) => {
@@ -630,7 +633,11 @@ export async function keysRoute(w, steps, { settle } = {}) {
     if (outcome === 'cannot-determine') unknown = true
     log.push({ key: s.setup ? 'setup' : typed !== undefined ? 'type ' + JSON.stringify(typed) : !s.key && !s.until && !s.untilState && !s.axUntil ? 'wait' : (s.shift ? 'Shift+' : '') + (s.key ?? 'Tab'), presses, from: before, to: after.active, ax, ...(stops.length ? { stops } : {}), focusVisible: visibleFocus, expect: want ?? s.untilState ?? s.axExpect ?? s.axUntil ?? null, value: s.value, waited: waited ?? undefined, outcome, note: s.note, before: beforeEvidence, after: afterEvidence })
   }
-  return { outcome: failed ? 'fail' : unknown ? 'cannot-determine' : 'pass', steps: log }
+  // Codex astra's method check (25 October), M-01: a route given no steps
+  // walked nothing, which is never a pass; the count given travels with the
+  // steps, so the runner can hold the record to it.
+  if (!steps.length) return { outcome: 'cannot-determine', why: 'a route with no steps: nothing walked', declared: 0, steps: log }
+  return { outcome: failed ? 'fail' : unknown ? 'cannot-determine' : 'pass', declared: steps.length, steps: log }
 }
 
 // ---------------------------------------------------------------------------

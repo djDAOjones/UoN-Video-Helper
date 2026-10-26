@@ -44,7 +44,8 @@ done
 # N14 (to be proved), VH-185's frame-snap case (S-153): N8's recipe at 25 fps,
 # the sound offset so that its first decoded sample, after the priming, falls
 # at 3.71 s. Kept only if 3.71 to 4.10 s holds under 400 ms of sound and the
-# range placed on frames (to 4.12 s) over it; the pilot reads the first packet.
+# range placed on frames (to 4.12 s) over it: prove-fixtures-8.mjs reads the
+# first packet, the priming and the frame grid with ffprobe (M-04).
 ffmpeg -v error -y ${=V} -itsoffset 3.71 ${=A} -t 10 -af "volume=-13dB,aformat=channel_layouts=stereo" ${=ENC} "$OUT/late-sound-3.71s-25fps-10s.mp4"
 
 # N9, the unchecked caption warning (S-105): lecture-30s.mp4 remuxed to

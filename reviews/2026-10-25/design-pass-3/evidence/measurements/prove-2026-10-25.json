@@ -530,6 +530,19 @@
   }
  },
  {
+  "instrument": "keys-only route, given no steps",
+  "fixture": "empty-route",
+  "outcome": "cannot-determine",
+  "wanted": "cannot-determine",
+  "proved": true,
+  "detail": {
+   "outcome": "cannot-determine",
+   "why": "a route with no steps: nothing walked",
+   "declared": 0,
+   "steps": []
+  }
+ },
+ {
   "instrument": "file button text by glyph pixels, contrasting border",
   "fixture": "file-ink-border-bad",
   "outcome": "fail",
@@ -1136,7 +1149,8 @@
    {
     "kind": "empty-pass",
     "key": "EMPTY__en-GB__w1280__light",
-    "instrument": "focus"
+    "instrument": "focus",
+    "why": "a pass with no counted row passing"
    }
   ]
  },
@@ -1243,6 +1257,111 @@
   "outcome": "fail",
   "wanted": "fail",
   "proved": true
+ },
+ {
+  "instrument": "runner: evidence",
+  "fixture": "a bare pass",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "no-evidence",
+    "key": "BARE__en-GB__w1280__light",
+    "instrument": "focus",
+    "why": "a pass with no rows, steps or readings"
+   }
+  ]
+ },
+ {
+  "instrument": "runner: evidence",
+  "fixture": "a route passing on steps: []",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "empty-pass",
+    "key": "NOSTEPS__en-GB__w1280__light",
+    "instrument": "keys",
+    "why": "a route passing on no steps"
+   }
+  ]
+ },
+ {
+  "instrument": "runner: evidence",
+  "fixture": "an empty route (keysRoute given no steps) recorded as a pass",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "empty-pass",
+    "key": "EMPTYROUTE__en-GB__w1280__light",
+    "instrument": "keys",
+    "why": "a route passing on no steps"
+   }
+  ]
+ },
+ {
+  "instrument": "runner: evidence",
+  "fixture": "a route short of its declared steps",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "evidence",
+    "key": "SHORT__en-GB__w1280__light",
+    "instrument": "keys",
+    "why": "2 steps recorded of 3 given"
+   }
+  ]
+ },
+ {
+  "instrument": "runner: evidence",
+  "fixture": "a route passing with no step count given",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "evidence",
+    "key": "UNDECLARED__en-GB__w1280__light",
+    "instrument": "keys",
+    "why": "a route passing with no step count given"
+   }
+  ]
+ },
+ {
+  "instrument": "runner: evidence",
+  "fixture": "a row subject the declaration expects, missing",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "evidence",
+    "key": "SUBJECT__en-GB__w1280__light",
+    "instrument": "focus",
+    "why": "expected subjects missing: #b"
+   }
+  ]
+ },
+ {
+  "instrument": "runner: evidence",
+  "fixture": "a pass over a counted failing row",
+  "outcome": "fail",
+  "wanted": "fail",
+  "proved": true,
+  "detail": [
+   {
+    "kind": "evidence",
+    "key": "OVERPASS__en-GB__w1280__light",
+    "instrument": "focus",
+    "why": "a pass over a counted row that did not pass"
+   }
+  ]
  },
  {
   "instrument": "runner",
