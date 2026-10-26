@@ -18,6 +18,48 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-26 — VH-198 — Pass 3's instruments qualified at revision 2e7b0c044ce11f2b: Codex astra's method check and three re-checks, 3,267 records, about 9.8 h
+
+**Decision:** VH-198 closes. The walker is extended for Phase 8, re-proved and qualified at instrument revision `2e7b0c044ce11f2b`, and every page is walked visible. Codex astra's method check gave five points and its first two re-checks four rank 1 musts; all were applied, none refused, and the third re-check said "Fit for VH-199". The matrix is 3,267 records in twelve runs, about 9.8 h, with S-104 source-only. The blind review's D-05 (rank 1), D-06 and V-46 go to VH-200. VH-199 is next.
+
+**Rationale:**
+
+- **Walker.** The design-pass-2 walker was copied byte for byte (`SOURCE.md`, source `4ec3d31`) and extended for each element Phase 8 added: the finished video's player, the second "?", the footer's headings, the limiting warning and Video language. The extension adds S-92 to S-153, S-140n and S-144p; faults F15 to F19 and F4e; and fixtures N6 to N14.
+- **Proofs** at `2e7b0c044ce11f2b` (`56e373c`): prove 93/93, prove-172 8/8, prove-8 76/76, player 41/41, the app run 11/11, faults 27/27, fixtures 8 of 9 (N11 the declared exception), prove-resume 12/12, prove-m04 8/8.
+- **The visible-page method.** Headless Chrome hid every page but the first: timers throttled to 1 s, media deferred, as Phase 7's later walk pages ran. A record now fails unless its page is visible. Chrome runs with `--disable-backgrounding-occluded-windows`, `--disable-background-timer-throttling` and `--disable-renderer-backgrounding`, and each manifest reads them from the browser process. It is a comparison-method change against VH-176 (M-05): a timing, readiness or paint difference is "attribution unresolved" unless a matched probe settles it.
+- **Parts.** 1: 699 · 2: 157 + 48 · 3: 2,131 · 3b: 216 · 4: 16. That is 3,267, the sizing script's 3,298 less S-104's 31, and at least the approved 3,266, so there is no reduction. 3b's +32 are counted as the script counts them, which is more coverage.
+- **S-104 is source-only** by its own contingency: N11's duration reads as 10 seconds.
+- **The pilot** `pilot3-2026-10-26T09-47-41-142Z-db5c25`: 77 of 77 whole, keys `fdc4e3dd17ebc634`. The qualification runs were part 4 16/16, the transitions 48/48, the route cells 7/7 and the subresults 6/6, at `2cbba731c59d8036`. They stand at the final revision: its only change is the player's ring reading, which only S-127 opts into and none of them calls. The calibration is about 9.8 h (9.83 h) against the script's 11.4 h, which stays the upper bound.
+- **The blind review** was saved verbatim before any finding (`dad952b`). D-05 is rank 1: VH-185's "This video has no audio" is said for real sound under one 400 ms block. D-06 is rank 2, and so is V-46/VH-178. They go to VH-200 (its Notes) with three pilot readings:
+  - S-15's ring at 32 px, 284 of 304 px²;
+  - T-46.1's card past the window;
+  - S-149's read-failure branch, with focus left on the body.
+- **The method check** said "Fit after the musts below" (`1cd71f2`). M-01 to M-05 were applied at `2d16e337abe51539`.
+- **Re-check 1** said "Not fit" (`6df3490`), with three rank 1 musts, all applied at `2cbba731c59d8036`:
+  - real declarations carry `expects`;
+  - the completion's write is bound to the card's mutation;
+  - 2.4.13's area is the ring's own pixels. S-127's volume ring at 320 px moved from pass, by the whole redraw (446 of 384), to "cannot determine", by its own pixels (103 of 384); no record's outcome changed.
+- **Re-check 2** said "Not fit" (`6df3490`), with one rank 1 must: an outline drawn whether focused or not passed 2.4.13, its contrast read against the ring-removed image. A ring pixel now counts only where it meets 3:1 against unfocused, for 2.4.7 too, at `2e7b0c044ce11f2b` (`56e373c`). The rerun found two repairs. At 3:1 the ring must also stand at 3:1 (`kr >= 3 && ko >= 3`), because faint removal pixels inside a disclosure had passed M-02's 2.4.7 negative. And the first exception's `ringAny` read a missing field. No outcome changed in the pilot.
+- **Re-check 3** said "Fit for VH-199" (`codex-astra-method-recheck-3-2026-10-26.md`). It confirmed the `kr >= 3 && ko >= 3` judgement and found no regression, coverage reduction or qualification run needing a rerun. Its one may goes to wish line VH-198.2: 2.4.7's "cannot determine" words name one comparison where two apply. The outcome is sound and the row carries both counts; changing the words now would move the revision.
+- **Records that would have hung.** S-132's "Leave site?" hang is fixed in its setup. Part 4's first attempt hung 21 minutes at J4 in Malay, cause not found. The guard is wish line VH-198.1; VH-199 watches each run, restarts Chrome and resumes.
+- **VH-193.2** is narrowed to two absent tests for VH-202, after a 6 of 6 scratch probe.
+- **No product code changed.**
+- **CI was red on three checkpoints.** The Verify lines of `877f3ab`, `cc5a52b` and `20440da` read "review files only; node tools/check.mjs 0/0". They overstated the gate by omission: `npm run lint` lints the walker, and the full gate did not run on those commits. CI was red on Pages runs 40229271406, 40232548332 and 40233727718 (`Buffer` and `setInterval` undefined; `k`, `APP` and `w` unused). Each failed before deploying, so the preview stayed on the last green build. `d43a7f5`'s lint fixes made run 40234029957 green. History is not rewritten. Since then every commit is gated on exactly what it holds.
+- **The owner's gateless word** for Phase 8 decided each point (VH-197's entry).
+- **Digest rules applied**, from WCAG 2.2 AAA, as instruments rather than verdicts:
+  - 2.4.13, by the ring's own pixels at 3:1 against unfocused, each exception on its own evidence;
+  - 2.4.7, by the same pixels;
+  - 2.4.11 and 2.4.12, author content only;
+  - 2.5.5, the user agent's exception only where no author rule sizes a control;
+  - 1.4.6, measured contrast;
+  - 2.1.3, keyboard.
+
+  Every exception is recorded: where the user agent draws the player's controls, the exception is named or "cannot determine" is left per control, for VH-200. The Carbon and Nielsen lenses go to VH-200 unchanged.
+
+**Supersedes:** none
+
+**Deferred:** VH-199, VH-200, VH-202
+
 ## 2026-10-25 — VH-204 — raised: a new release is cut after Phase 8 closes, and that one goes to Xerte; 0.2.0 is not uploaded
 
 **Decision:** Phase 8 gains VH-204 after VH-195: a release cut once Phase 8 has closed, which the owner uploads to Xerte. 0.2.0 is not uploaded; VH-14 waits on VH-204's package.
@@ -510,17 +552,5 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Rationale:** Codex astra's blind review for VH-163 found it in source (`required<HTMLFormElement>('#feedback-form')` took the first match, the link VH-160 put above the dialog), and it was reproduced in Chrome on `5e3de2b`: an empty Open email app went to `/?` with the dialog gone. After the fix, the same click keeps the page, shows "Write a message first." and moves focus to the message; the link still opens the form's plain address in a new tab with no referrer. VH-160's test pinned the link's markup with the duplicate ID, so it now pins `feedback-form-link`. The email app itself was not opened from the browser pane. Live on the pilot from `f95599b` until this push. Standards: Nielsen 3 and 5 (nielsen digest); UI-STANDARDS → Error prevention and recovery.
 
 **Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-22 — PLAN-6 — VH-163, a design pass, joins Phase 6 before the cut; its fixes are planned as items ahead of VH-162
-
-**Decision:** VH-163, a design pass for one type scale, one reading measure and one grid, judged for design, UX and WCAG 2.2 AAA in all three languages, sits in Phase 6 before VH-162; it reviews, with Codex's blind review and critique, then plans its rank 1 and 2 fixes as Phase 6 items ahead of the cut for the owner to approve, adding no control; because the owner asked for it and chose this in chat.
-
-**Rationale:** The owner asked in chat on 2026-10-22: "I want to do another design pass. I am seeing an [un]necessary variety of font styling, text section width, etc. can you create a work item / ticket that will thoroughly review to make it excellent from a design an UX perspective (and accessibility of course)." Asked three questions, the owner answered: "Before the cut (Recommended)", "Yes, blind then critique (Recommended)" and "Review, then a fix phase (Recommended)". A first look at the empty page in Chrome found nine text styles in two faces, three left edges besides the column's, running text at 489 px beside helpers at 428 px (55ch follows the font size), the Chinese column 151 px wider, and the header band's 20 px inset beside the main column's 24 px at 375 px; the evidence is in VH-163's notes. VH-143 found the tokens held; this pass judges how they combine, so V-18 to V-30 are not re-found. The owner's rule that the page stays simple holds: consolidation only, the progress bar kept. VH-162 now starts once VH-137, VH-163 and its fix items ship; whether it also waits for the statement review on 18 November is still the owner's.
-
-**Supersedes:** none
-
-**Items:** VH-163
 
 **Deferred:** none

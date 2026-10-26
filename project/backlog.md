@@ -37,7 +37,6 @@ The public release on Xerte (PLAN-6): the cut after Phase 8, VH-204; 0.2.0 is no
 
 ### Phase 8 — the owner's UX pass, then a third full design pass
 
-- [ ] VH-198 — Pass 3's instruments re-proved; blind review launched — since 2026-10-25
 - [ ] VH-199 — Pass 3's evidence run — since 2026-10-25
 - [ ] VH-200 — Pass 3 judged: journeys, Carbon, Nielsen, WCAG — since 2026-10-25
 - [ ] VH-201 — Pass 3's merged report — since 2026-10-25
