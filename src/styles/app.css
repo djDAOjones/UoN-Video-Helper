@@ -1107,10 +1107,38 @@ details[open] > .disclosure-summary::before {
 }
 
 /* The "?" beside the lede's fourth promise, on the promise's own line, and
-   its text beneath, inside the same list item (VH-196). */
+   its text beneath, inside the same list item (VH-196). Drawn at the text's
+   own size, a checkbox glyph's square, so the promise keeps the line height
+   of the other four; its 44 px target is drawn round it by a centred
+   `::after`, so 2.5.5 needs no exception. The gap beside it and the tip's
+   step down clear that target (VH-205). */
 .promise-with-help .help-button {
-  margin-left: var(--spacing-03);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--control-size);
+  height: var(--control-size);
+  min-width: 0;
+  min-height: 0;
+  margin-left: var(--spacing-04);
+  padding: 0;
+  line-height: var(--line-height-heading);
   vertical-align: middle;
+}
+
+.promise-with-help .help-button::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--target-min);
+  height: var(--target-min);
+  transform: translate(-50%, -50%);
+}
+
+.promise-with-help .toggletip {
+  margin-top: var(--spacing-04);
 }
 
 /*

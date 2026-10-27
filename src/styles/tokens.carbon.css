@@ -100,7 +100,8 @@
      as the file input clips its button's (V-40). */
   --focus-room: calc(var(--focus-width) + var(--focus-offset));
 
-  /* Native checkbox and radio glyphs, and the status mark column. */
+  /* Native checkbox and radio glyphs, the status mark column, and the "?"
+     drawn inline in the lede's text (VH-205). */
   --control-size: 1.25rem;
   --mark-width: 1.5rem;
 

@@ -265,6 +265,29 @@ describe('type weights (VH-145, pinned by VH-151)', () => {
   })
 })
 
+describe('the lede’s "?" (VH-205)', () => {
+  const block = (selector: string): string =>
+    new RegExp(`${selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\{([^}]*)\\}`).exec(rules)?.[1] ?? ''
+
+  it('draws the "?" at the text’s own size, so the promise keeps its line height', () => {
+    // At the target floor it made the fourth promise's row 44 px against the
+    // other four's 24 px.
+    const button = block('.promise-with-help .help-button')
+    expect(button).toMatch(/width:\s*var\(--control-size\);/)
+    expect(button).toMatch(/height:\s*var\(--control-size\);/)
+    expect(button).toMatch(/min-height:\s*0;/)
+    expect(button).toMatch(/position:\s*relative;/)
+  })
+
+  it('keeps a 44 px target round it, which the tip and the gap clear', () => {
+    const target = block('.promise-with-help .help-button::after')
+    expect(target).toMatch(/width:\s*var\(--target-min\);/)
+    expect(target).toMatch(/height:\s*var\(--target-min\);/)
+    expect(target).toMatch(/position:\s*absolute;/)
+    expect(block('.promise-with-help .toggletip')).toMatch(/margin-top:\s*var\(--spacing-04\);/)
+  })
+})
+
 describe('long words and the trim handles under forced colours (VH-165)', () => {
   const forced = /@media \(forced-colors: active\)\s*\{([\s\S]*?)\n\}/.exec(rules)?.[1] ?? ''
 

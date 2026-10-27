@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-27 — VH-205 — The lede's "?" drawn at the text's own size with its 44 px target round it, built before Pass 3's fix stage and deployed to the preview
+
+**Decision:** The format "?" beside the fourth promise is a checkbox glyph's square, `--control-size` (20 px at the default font), so every promise keeps the 24 px line; a centred `::after` draws its 44 × 44 px target, so 2.5.5 needs no exception, and the gap beside it and the tip's step down, `--spacing-04`, clear that target. Built now on the owner's word, not in VH-203.
+
+**Rationale:** The owner, in chat on 2026-10-27, first "Keep the "?" fix where it is: judged in VH-200, planned in VH-202, fixed in VH-203.", then, the same morning, "do the fix turbo please and deploy". The remedy is the one VH-200's note of 2026-10-26 proposed, adding no control. Checked in Chrome at 1024 px, light: the five promises 24, 24, 24, 24 and 24 px high (the fourth was 44), the "?" 20 × 20 px, a point 21 px from its centre hits it and 23 px does not, the tip's top 0.65 px below the target, opened and closed by click and by Enter with the ring visible, no console error; at 320 px in English, Chinese and Malay every promise a whole number of lines and no sideways scroll; dark the same; at a 32 px default font the "?" 40 px in a 48 px line. Forced colours were not emulated; the button keeps `.button--secondary`'s forced-colour rules. Turbo, on the owner's word: not walked with the pass's walker and not checked by Codex astra. VH-200 judges VH-199's 44 px row as fixed here, and VH-203's after-run and integrated check measure it once the walker's 2.5.5 reading counts a target drawn round the control (VH-205.1). Digest rule applied: wcag-2.2-aaa, 2.5.5 Target Size (Enhanced). Built in a worktree apart from VH-199's close in the main checkout (rule 3).
+
+**Supersedes:** none
+
+**Deferred:** VH-200, VH-203
+
 ## 2026-10-26 — VH-198 — Pass 3's instruments qualified at revision 2e7b0c044ce11f2b: Codex astra's method check and three re-checks, 3,267 records, about 9.8 h
 
 **Decision:** VH-198 closes. The walker is extended for Phase 8, re-proved and qualified at instrument revision `2e7b0c044ce11f2b`, and every page is walked visible. Codex astra's method check gave five points and its first two re-checks four rank 1 musts; all were applied, none refused, and the third re-check said "Fit for VH-199". The matrix is 3,267 records in twelve runs, about 9.8 h, with S-104 source-only. The blind review's D-05 (rank 1), D-06 and V-46 go to VH-200. VH-199 is next.
@@ -544,13 +554,3 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Supersedes:** none
 
 **Deferred:** VH-165, VH-166, VH-167, VH-168, VH-169
-
-## 2026-10-22 — VH-164 — The feedback form link takes its own ID, so Open email app opens the email again
-
-**Decision:** VH-160's footer link becomes `#feedback-form-link`, leaving `#feedback-form` to the dialog's form, and a test holds every ID in the page to one use, because with two `#feedback-form`s the form's lookup found the link, Open email app submitted the form natively and the page reloaded, losing the draft, a chosen video and every choice; the owner chose to fix it at once, ahead of VH-163's plan.
-
-**Rationale:** Codex astra's blind review for VH-163 found it in source (`required<HTMLFormElement>('#feedback-form')` took the first match, the link VH-160 put above the dialog), and it was reproduced in Chrome on `5e3de2b`: an empty Open email app went to `/?` with the dialog gone. After the fix, the same click keeps the page, shows "Write a message first." and moves focus to the message; the link still opens the form's plain address in a new tab with no referrer. VH-160's test pinned the link's markup with the duplicate ID, so it now pins `feedback-form-link`. The email app itself was not opened from the browser pane. Live on the pilot from `f95599b` until this push. Standards: Nielsen 3 and 5 (nielsen digest); UI-STANDARDS → Error prevention and recovery.
-
-**Supersedes:** none
-
-**Deferred:** none
