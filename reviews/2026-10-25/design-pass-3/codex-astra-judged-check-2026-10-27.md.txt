@@ -1,0 +1,44 @@
+<!-- markdownlint-disable -->
+<!-- Codex astra's close check of the judged files, findings and checklist for the third design pass (VH-200), 2026-10-27, kept as written. It ran with `codex exec -m gpt-6-astra -s read-only` in the repository's working tree at 25b6ccb, outside any commit of VH-200's. Its brief is codex-astra-judged-check-brief-2026-10-27.md. -->
+
+Three corrections block this review; the writer must also establish the close checks. I ran no commands or project code, changed nothing, and opened no file over 1 MB.
+
+Paths below are relative to `reviews/2026-10-25/design-pass-3/`, unless stated otherwise. **May — met** means the material can remain.
+
+| Acceptance criterion | Assessment and place |
+|---|---|
+| Blind review saved first | **May — met.** Recorded before judging: `judged-2026-10-27.md:32`; VH-198’s earlier decision, `project/decisions.md:67`. |
+| J1–J4 and page heights | **May — met.** All five journey dimensions covered: `judged-2026-10-27.md:142`, `:223`, `:250`, `:291`; comparative heights at `:99`. |
+| Carbon and visual design | **May — met**, with measurement gaps explicitly named. Scenario judgements, roles, measure, components and colour states: `judged-2026-10-27.md:357`, `:389`, `:408`, `:433`, `:468`. |
+| Nielsen, recovery and wording | **May — substantially met.** Ten rows, failure/warning coverage and approved-sheet comparison: `judged-2026-10-27.md:538`, `:596`, `:719`. S-113’s disposition needs correction below. |
+| WCAG 86 criteria | **Must — not yet met consistently.** Complete table, historical verdicts, gap types and mixed-script counts exist, but two contrast verdicts contradict its evidence rule. |
+| Draft findings | **May — met.** Six findings in the required format: `judged-2026-10-27.md:836`. Ranks and identities are defensible; directions add no control, checkbox or element. |
+| Person checklist | **Must — not yet fully usable.** Required contents and Phase 8 additions are present, but two task sequences need prerequisites. |
+| No product changes; green gate/checker | **Must — verification incomplete.** Reviewed product files match the index. Current VH-200 gate/checker results are not established by these artifacts; `project/items/VH-200.md:16`. |
+
+1. **Must — correct the contrast verdicts and consequent counts.**  
+   [wcag-2026-10-27.md:75](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/wcag-2026-10-27.md:75>) marks 1.4.3 “met”, and `:78` inherits that for 1.4.6, despite six file-button text readings being c-d. `evidence/measurements/digest-contrastExtra-2026-10-27.md:38` explicitly says the changed pixels are **not glyphs alone**; 14.3079:1 therefore does not settle their text contrast. Unlike VH-205’s later change, these records belong to this run. Apply the same rule used for the 17 uncertain target rows: missing evidence unless independent evidence settles these six. With those two verdicts changed, Counts become **35 met, 10 met-in-source, 2 defect, 11 accepted limitation, 11 missing evidence, 17 n-a**. Update “Against 23 October” too.
+
+2. **Must — give S-113’s broader overflow an accurate disposition.**  
+   [judged-2026-10-27.md:363](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/judged-2026-10-27.md:363>) and `:921` say its scenario expects sideways scrolling and route everything to VH-189.1. But `scenarios-2026-10-25.md:153` and `project/wish-list.md:56` describe **select-option clipping**. The digest identifies page overflow from language/video-kind/colour radios and Set buttons, reaching 444–528 px (`evidence/measurements/digest-overflow-2026-10-27.md:20`, `:32`). Judge those additional controls explicitly and retain their follow-up, whether under the existing item with an explicit scope statement or another finding. Being outside the separate 320 px reflow test does not itself dispose of the usability friction.
+
+3. **Must — make the checklist’s error and announcement tasks executable.**  
+   [person-checklist-2026-10-27.md:94](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/person-checklist-2026-10-27.md:94>) asks testers to choose the unreadable file and then type into Start time. That failure hides Trim (`src/main.ts:1767`): insert a readable-file reload. At `:290`, unticking Announce progress precedes making a video, although the checkbox appears only during a job (`src/main.ts:2405`). Specify a preparation run to store “off”, or instruct unticking during the target run. This matters because the introduction prioritises tasks I–N independently.
+
+4. **Must — establish the writer’s close evidence.**  
+   Record the settled `npm run check` and `node tools/check.mjs` results for the final content, then complete VH-200’s ledger close. The available previous Verify line belongs to VH-199, not this change (`project/profile.md:25`; `project/items/VH-200.md:16`).
+
+5. **Should — tighten two WCAG evidence descriptions.**  
+   `wcag-2026-10-27.md:82` says the mixed lines are “none over either limit”, but the 721 c-d rows exceed the strict 40-character reading. Say they pass the weighted house count and retain the separate G204 reasoning. At `:84`, “line height 1.5 for every text role” is false: heading roles use 1.25 and 1.4 (`src/styles/tokens.carbon.css:64`). Restrict that claim to the relevant running-text roles.
+
+6. **Should — correct small factual overstatements.**  
+   `judged-2026-10-27.md:67` attributes the statement’s +288 px to the footer group, while its own `:113` attributes it to the statement update and contact wording. Also, `person-checklist-2026-10-27.md:219` promises that the next Tab reaches Skip to main content; the supplied S-149 evidence establishes focus on `body`, not that subsequent Tab destination. Ask testers to report it.
+
+7. **May — retain the other routed judgements, findings and comparisons.**  
+   D-05, D-06 and V-46 are addressed at `judged-2026-10-27.md:838`, `:851`, `:864`; S-15 at `:483`; T-46.1 at `:162`; remaining held/matrix observations at `:914` and the relevant WCAG rows. VH-205 is separately labelled at `:369`; all **823** finish+1s rows remain neither pass nor fail (`:47`). V-46 retains its old ID, V-18 is narrowed, and V-48/V-49 are distinct from earlier findings. Rank 1 for misleading omitted-audio wording and rank 2 for the remaining findings are consistent.
+
+   The three comparisons give evidence-based resolutions or retain technical uncertainty: `attrib-compare-2026-10-27.md:23`, `vh205-compare-2026-10-27.md:5`, `wcag-compare-2026-10-27.md:25`. The current Counts arithmetic and every inherited Phase 7 verdict tally correctly before correction 1.
+
+   The checklist otherwise covers the planned additions, build link, clips, expected outcomes and report form. Its address matches `src/config/feedback.ts:15`. Applied digest rules: Carbon productive consistency; Nielsen status, recovery and minimalism; WCAG explicit evidence, focus and target exceptions.
+
+Commit after the musts below

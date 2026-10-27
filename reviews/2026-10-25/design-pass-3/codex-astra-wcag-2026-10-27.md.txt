@@ -1,0 +1,95 @@
+<!-- markdownlint-disable -->
+<!-- Codex astra's blind verdicts on the WCAG criteria changed, partial or failed, and on the rank 1 and 2 findings for the third design pass (VH-200), 2026-10-27, kept as written. It ran with `codex exec -m gpt-6-astra -s read-only` in the repository's working tree at 25b6ccb, outside any commit of VH-200's. Its brief is codex-astra-wcag-brief-2026-10-27.md. -->
+
+**VH-200 blind verdict.** These verdicts cover VH-199’s measured build, not a fresh conformance assessment of VH-205. All 823 finish+1s rows are unverified; timing differences from VH-176 remain **attribution unresolved**. “Cannot determine” contributes no pass. I read repository files only, checked their sizes before opening, changed nothing and ran no project code.
+
+Below, `M/` means `reviews/2026-10-25/design-pass-3/evidence/measurements/`; digest and contract citations carry the date `2026-10-27`. Phase 7 means its supplied WCAG table.
+
+**Part A — criterion verdicts**
+
+- **1.4.2 — met-in-source.** The finished player has controls, metadata preload and no autoplay (`src/main.ts:2870`); seeking pauses the preview (`src/ui/preview-seek.ts:41`). S-126 independently records paused arrival ×39 (`M/contract-2026-10-27.md:25`). The invalid delayed readings leave broader arrival behaviour unresolved. **Unchanged** from Phase 7.
+
+- **1.4.4 — met on the tested enlargement conditions.** There are 216 passing font32 records and 66 passing zoom proxies (`M/digest-overflow-2026-10-27.md:15`). Actual browser zoom remains unverified. S-113’s six combined enlarged-font/narrow-width failures remain a real layout limitation under VH-189.1; sideways scrolling alone does not establish loss under 1.4.4. **Unchanged**, with that additional limitation explicit.
+
+- **1.4.10 — met on the separate reflow tests.** The 34 400% proxies pass; 937 w320 records pass. The three failing w320 records also impose font32 (`M/digest-overflow-2026-10-27.md:17`). That combined stress condition must not be presented as passing, or conflated with the separate 320 CSS-pixel test. Actual browser zoom remains unresolved. **Unchanged** on the specified test scope.
+
+- **1.4.11 — gap: missing evidence.** The old enlarged-thumb defect is no longer reproduced, but thumb/track contrast still requires pixel evidence: 4,962 undetermined contrastExtra rows (`M/digest-contrastExtra-2026-10-27.md:11`, `:32`). Real Windows themes remain unverified. **Narrowed** from Phase 7’s defect plus missing evidence; focus-area failures do not automatically establish this criterion’s adjacent-colour failure.
+
+- **1.4.12 — met.** All 323 spacing records pass (`M/digest-overflow-2026-10-27.md:15`). User-supplied spacing tools remain a person check. **Unchanged**, with broader coverage.
+
+- **2.1.1 — gap: missing evidence.** There are 716 passing keyboard steps, but four native-select steps remain undetermined (`M/digest-keys-2026-10-27.md:11`, `:32`). Native-player coverage improves substantially; it does not settle those popups. **Unchanged**.
+  
+  **2.1.3 — gap: missing evidence**, for the same unresolved steps. No path-dependent exception or timed-keystroke requirement supplies a different outcome. **Unchanged**.
+
+- **2.4.3 — gap: defect.** S-149 loses focus to `body` in all three w1280 light-language records (`M/digest-subresults-2026-10-27.md:32`; `src/main.ts:1767`). The 48 passing transitions cover other paths. Both unreadable-file failure branches need recovery. **Same gap classification**, but now a demonstrated VH-191 regression exposing V-46’s incomplete fix.
+
+- **2.4.7 — gap: missing evidence.** S-127 has 39 undetermined overflow-control focus readings (`M/digest-player-2026-10-27.md:37`). Failure to isolate an outline proves neither invisible focus nor visible focus. Neither 2.4.13 exception transfers here. **Changed from met**, because the new player evidence identifies an unresolved component.
+
+- **2.4.11 — met; 2.4.12 — met**, within measured states. S-127’s author-occlusion checks report no failing or undetermined occlusion rows; the reader distinguishes viewport edges from author content (`M/walker/phase8.mjs:325`, `:567`; `M/digest-player-2026-10-27.md:30`). T-46.1’s taller card extending below the viewport is therefore not itself either failure (`M/contract-2026-10-27.md:29`). Untested states remain outside scope. **Both unchanged**.
+
+- **2.4.13 — gap: defect and missing evidence.** The onset button fails once and Creators link eight times (`M/digest-focus-2026-10-27.md:34`). The rectangular-reference failures for the circular preset radio and fragmented statement link are not valid defect demonstrations; the latter still needs its fragment perimeter. S-127’s 183 adjustable native-control readings remain unresolved: the first exception is disproved, while the second requires the indicator’s actual background, not merely the video host’s backdrop (`M/walker/phase8.mjs:311`). **Still a defect gap**, with different demonstrated defects after the original repairs. VH-205’s new ring remains unwalked.
+
+- **2.5.3 — gap: accepted limitation.** The browser’s “Choose File” still falls outside the accessible name. The explicit owner decision now records this limitation (`docs/01-specification.md:763`); other changed labels have measured name checks (`M/contract-2026-10-27.md:22`, `:23`). Speech-input consequences remain unverified. **Changed from defect to accepted limitation**, not to met.
+
+- **2.5.5 — gap: missing evidence.** There are 93,553 passing target rows. Inline links, unchanged native controls and equivalent trim controls have applicable exceptions. However, 17 oversized/clipped target rows remain unmeasured (`M/digest-targets-2026-10-27.md:11`, `:38`); these are not demonstrated undersized targets. VH-205’s 44-pixel pseudo-element exists in source (`src/styles/app.css:1130`) but has no measured hit-area result. **Changed from met** to preserve these uncertainties.
+  
+  **2.5.8 — gap: missing evidence.** The ≥44-pixel results support the minimum threshold, but the omitted hit readings do not establish 24-pixel compliance either. **Changed from met** for the same evidence boundary.
+
+- **3.1.3 — gap: missing evidence.** English explanations exist, including the format explanation (`src/i18n/en-GB.ts:89`), but native review of Chinese/Malay terminology remains outstanding, particularly the limiting warning (`project/wish-list.md:59`). **Unchanged**.
+
+- **3.1.5 — gap: missing evidence.** The English readability test is supporting evidence, not comprehension proof; it uses an approximate formula and English copy homes (`test/readability.test.ts:10`, `:31`). Chinese/Malay reading level remains unresolved. **Unchanged**.
+
+- **4.1.2 — gap: missing evidence.** General AX exposure passes in 3,183 records, but S-127’s 39 change-notification readings are undetermined (`M/digest-ax-2026-10-27.md:10`; `M/digest-player-2026-10-27.md:35`). F15b’s meaningful “Unable to play media” name is not itself a defect. **Changed from met** because native-control notification remains unobserved.
+
+- **4.1.3 — met for measured programmatic exposure.** AX passes in 3,183 records; S-151 confirms both warning titles in the completion write with progress announcements off ×6 (`M/contract-2026-10-27.md:26`). Actual speech delivery and language-change suppression remain unresolved. Announcing titles does not supply D-06’s listening instruction. **Unchanged**.
+
+**Part B — findings and direction**
+
+1. **No-audio notice: stands, rank 1.** S-99 reaches the notice ×31 and S-100 finishes ×6; output tracks were not inspected (`M/contract-2026-10-27.md:18`). Independently, the source classifies genuine decoded sound under 400 ms as silent (`src/media/audio-plan.ts:104`, `:120`, `:350`), while claiming absence (`src/i18n/en-GB.ts:670`). This can mislead a novice and damage trust. **Nielsen 1, 2 and 9.** Reuse the warning to distinguish omitted short sound, explain the consequence and suggest keeping more. No new element or threshold change.
+
+2. **Limiting-warning placement: stands, rank 2.** S-135–S-138/S-151 establish warning presence, persistence and title announcements, not useful placement. The player and Save precede the warning container (`src/main.ts:3285`, `:3327`); speech contains headings only (`src/ui/announce.ts:42`). **Nielsen 5 and 6; UI-STANDARDS contextual guidance.** Move the existing warning before player and Save; include its existing listening instruction in completion speech. Preserve Save availability and unchanged-after-save wording. No new element.
+
+3. **S-149 / V-46: stands, rank 2.** Three measured failures establish lost task position, not lost work. **WCAG 2.4.3; UI-STANDARDS:245.** Capture displaced focus before either unreadable-file withdrawal and use the existing hand-off to the chooser, preserving focus elsewhere and in the dialog.
+
+4. **Onset “?”: stands, rank 2.** S-113 ms-MY w320 font32 records **460/464 px²** (`M/digest-focus-2026-10-27.md:35`). **WCAG 2.4.13.** Neither rounding nor a presumed measurement tolerance closes it. Adjust existing ring geometry or clearance; the precise lost-pixel mechanism remains unproved. No new element.
+
+5. **Creators link: stands, rank 2.** Eight records show **1,108/1,264** or **1,595/1,968 px²**. This is a rectangular `inline-flex` component, not a fragmented inline link; its lower outline crosses the following link’s text (`src/styles/app.css:210`; `M/matrix-2026-10-27.md:95`). **WCAG 2.4.13.** Adjust existing spacing/outline placement while retaining the target size.
+
+6. **V-18: narrowed, still rank 2.** The [painted-button readings](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/evidence/measurements/readings-2026-10-27/rings-179-v18.json:12>) agree with the contract’s VH-179 row: desktop **650–694, 800–844, 890–934**; narrow **950–994, 1,045–1,089, 1,287–1,331**. English and Chinese now fit desktop; Malay shows only its first 10 pixels. All narrow cases remain below the first screen. **Nielsen 8; Carbon productive/task-focused layout.** Further compression or reordering of existing introductory content is an **owner layout decision**. No new control is warranted; VH-205’s net geometry remains unmeasured.
+
+Applied digest rules: WCAG keyboard, targets and focus; Nielsen status, prevention, recognition and minimalism; Carbon productive layout. None of these directions needs a new element.
+
+**Part A summary**
+
+| Criterion | Verdict | Against Phase 7 |
+|---|---|---|
+| 1.4.2 | Met-in-source | Same |
+| 1.4.4 | Met, scoped | Same; combined stress unresolved |
+| 1.4.10 | Met, scoped | Same; combined stress unresolved |
+| 1.4.11 | Gap—missing evidence | Defect component narrowed |
+| 1.4.12 | Met | Same |
+| 2.1.1 | Gap—missing evidence | Same |
+| 2.1.3 | Gap—missing evidence | Same |
+| 2.4.3 | Gap—defect | Same category; regression exposed |
+| 2.4.7 | Gap—missing evidence | Was met |
+| 2.4.11 | Met | Same |
+| 2.4.12 | Met | Same |
+| 2.4.13 | Gap—defect + missing evidence | Different defects; player unresolved |
+| 2.5.3 | Gap—accepted limitation | Was defect |
+| 2.5.5 | Gap—missing evidence | Was met |
+| 2.5.8 | Gap—missing evidence | Was met |
+| 3.1.3 | Gap—missing evidence | Same |
+| 3.1.5 | Gap—missing evidence | Same |
+| 4.1.2 | Gap—missing evidence | Was met |
+| 4.1.3 | Met, exposure only | Same |
+
+**Part B summary**
+
+| Finding | Stands | Rank |
+|---|---|---:|
+| D-05 no-audio notice | Yes | 1 |
+| D-06 warning placement | Yes | 2 |
+| S-149 / V-46 focus loss | Yes | 2 |
+| Onset “?” ring | Yes | 2 |
+| Creators link ring | Yes | 2 |
+| V-18 first action | Yes, narrowed | 2 |

@@ -1,0 +1,35 @@
+<!-- markdownlint-disable -->
+<!-- Codex astra's blind verdicts on VH-205's "?" (cc12788) for the third design pass (VH-200), 2026-10-27, kept as written. It ran with `codex exec -m gpt-6-astra -s read-only` in the repository's working tree at 25b6ccb, outside any commit of VH-200's. Its brief is codex-astra-vh205-brief-2026-10-27.md. -->
+
+**VH-200 blind verdict on VH-205 (`cc12788`): the owner’s row-height finding is fixed on the recorded manual evidence. Accessibility verification remains incomplete.** I did not run the app or seek Claude’s verdict.
+
+All “manually checked” labels below refer strictly to readings reported in [project/decisions.md:59](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/project/decisions.md:59>).
+
+1. **2.5.5 Target Size (Enhanced) and 2.5.8 Target Size (Minimum) — manually checked in VH-205, limited.**  
+   The decision reports a 20 × 20 px visible button, a hit 21 px from its centre and no hit at 23 px. That supports the enlarged target’s operation. The CSS specifies a centred 44 × 44 px pseudo-element, which would satisfy both size thresholds if fully actionable. Two reported points do not establish the entire square, its corners, clipping or interference across layouts. Those are **to be measured in VH-203’s after-run**, after [VH-205.1](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/project/wish-list.md:66>) changes the walker to measure the actual target. A 20 × 20 button-box reading alone cannot decide compliance.
+
+2. **2.4.13 Focus Appearance — to be measured in VH-203’s after-run.**  
+   No indicator-area or focused-versus-unfocused contrast reading is reported. Source inspection is encouraging: the inherited outline is 2 px with a 2 px offset ([app.css:107](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/src/styles/app.css:107>), [tokens.carbon.css:97](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/src/styles/tokens.carbon.css:97>)). Its area is judged against the **visible component**, so the invisible 44 px hit extension does not itself require a 44 px focus perimeter. That follows [WCAG’s visual-presentation rule](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance.html). Rendered area, contrast and interference remain unmeasured.
+
+   **2.4.7 Focus Visible — manually checked in VH-205.**  
+   The decision explicitly reports opening and closing with Enter while the ring was visible. This supports visibility in that reading; it is not a complete keyboard-state or colour-mode verification.
+
+3. **1.4.4 Resize Text and 1.4.10 Reflow — manually checked in VH-205, within the stated conditions.**  
+   At 320 px, English, Chinese and Malay promises occupied whole numbers of lines without sideways scrolling; the decision says dark was the same. At a 32 px default font, the button measured 40 px within a 48 px line. These support responsive wrapping and proportional enlargement. They do not establish every combination of enlarged font, language, width, browser zoom and open-tip state.
+
+4. **1.4.12 Text Spacing — missing.**  
+   No spacing-override reading is reported. Narrow-screen and enlarged-font checks cannot substitute for applying line, paragraph, letter and word spacing together without content or functionality loss. See [WCAG’s Text Spacing requirements](https://www.w3.org/WAI/WCAG22/Understanding/text-spacing.html). The authored 1.25 line-height is not itself a failure; accommodation of overrides is the unanswered question.
+
+5. **Forced colours — missing.**  
+   The decision explicitly says they were not emulated. Retaining secondary-button rules and the system-colour outline is source evidence only ([app.css:1793](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/src/styles/app.css:1793>), [app.css:1927](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/src/styles/app.css:1927>)). Neither inheritance nor a future run counts as completed verification.
+
+**The owner’s finding:** yes, within the recorded conditions. The decision reports all five rows at 24 px at 1024 px/light, replacing the fourth row’s 44 px. The change removes that button’s 44 px layout minimum while preserving a separate pointer target.
+
+**What the evidence cannot show:** VH-199 walked `a3039c3`; its passing format-tip and target readings describe the old button. They cannot certify `cc12788`. The added tests inspect CSS declarations, not rendered geometry or interaction ([stylesheet.test.ts:268](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/test/stylesheet.test.ts:268>)).
+
+**Risks introduced by the diff, not demonstrated failures:**
+
+- The absolute target extends beyond the compact row without reserving space. It can intrude into neighbouring text or intercept selection/taps after wrapping. The reported 0.65 px clearance above the open tip is narrow and specific to that reading ([app.css:1130](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/src/styles/app.css:1130>)).
+- Fixed width/height, zero padding and removed minimums reduce accommodation for text-spacing overrides or different font metrics; clipping, overlap and ring interference need rendered checks ([app.css:1115](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/src/styles/app.css:1115>)).
+
+Digest applied: `wcag-2.2-aaa`, particularly 2.5.5 and 2.4.13.
