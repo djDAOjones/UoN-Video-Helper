@@ -1003,3 +1003,13 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Items:** VH-165, VH-166, VH-167, VH-169, VH-168
 
 **Deferred:** none
+
+## 2026-10-22 — VH-163 — The owner approves the five design fixes: footer headings at Lora 20, a 28rem measure, the native file chooser, V-36 and V-37 in VH-166
+
+**Decision:** the owner approves PLAN-6's five design-fix items in its order, and VH-163 closes: VH-166 gives the footer's two headings the panel heading look (Lora 20) and takes V-36's phone inset and V-37's footer gap; VH-167 starts the measure at 28rem and confirms it by line count in the browser; VH-168 keeps the browser's own file chooser and records the limitation, so it becomes record-only with no page change; because these are the owner's answers to the five questions in VH-163's Now.
+
+**Rationale:** The owner's words, relayed from the orchestrator chat on 2026-10-22: "Approve the five fix items. Footer headings match the steps (Lora 20). Start the measure at 28rem and confirm by line count. Keep the browser's own file chooser and record the limitation. Fold V-36 and V-37 into VH-166. Start building in a fresh chat." VH-166's criteria lose their "if the owner takes them" branches; VH-167's value is a start, so the 1.4.8 line count may move it, and a change from 28rem is recorded at its close; VH-168's label branch is withdrawn under the no-new-element rule, so it records the limitation in a decision and corrects the spec or statement only where they claim the chooser is translated. VH-165 starts now.
+
+**Supersedes:** 2026-10-22 — PLAN-6 — The design pass's fixes: five Phase 6 items ahead of the cut, each waiting on the owner's approval
+
+**Deferred:** VH-165, VH-166, VH-167, VH-169, VH-168

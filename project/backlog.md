@@ -37,7 +37,6 @@ The public release on Xerte (PLAN-6): the cut after Phase 8, VH-204; 0.2.0 is no
 
 ### Phase 8 — the owner's UX pass, then a third full design pass
 
-- [ ] VH-201 — Pass 3's merged report — since 2026-10-25
 - [ ] VH-202 — Pass 3's fix plan — since 2026-10-25
 - [ ] VH-203 — Pass 3's fixes, after-run, integrated check — since 2026-10-25
 - [ ] VH-195 — Phase 8 closes — since 2026-10-24

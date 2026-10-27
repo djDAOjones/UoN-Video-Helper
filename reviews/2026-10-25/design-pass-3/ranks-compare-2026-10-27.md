@@ -1,0 +1,27 @@
+# VH-201 — the merge and ranks: Claude's against Codex astra's blind ranking
+
+VH-201 #1, 2026-10-27. **Claude's** merge and ranks (`ranks-claude-2026-10-27.md`) were saved before Codex astra ran. **Codex** ranked from the neutral sheet (`findings-neutral-2026-10-27.md`), its own blind review, the raw run records and the source, with none of Claude's or VH-200's conclusions: brief `codex-astra-ranks-brief-2026-10-27.md`, answer `codex-astra-ranks-2026-10-27.md`, verbatim. Each difference of fact is settled on the evidence; each of judgement is listed with both positions in the report's "For the owner", for VH-202's ask.
+
+## Agreed
+
+- **The merge.** D-05, D-06 and V-46 are each borne out by the source at HEAD and the run's records (S-99, S-135, S-149), and each maps to the sheet's finding of the same ID: D-05 kept as its own (V-51), D-06 kept as its own (V-52), V-46 merged under V-46. Both say S-99 shows the notice but not audible sound removed, which rests on the source and the tests; both say V-46's case with a result standing is unobserved.
+- **The ranks.** V-51 (D-05) rank 1; V-52 (D-06), V-46, V-48 and V-49 rank 2; V-18 rank 2. The standards agree: Nielsen 1 and 2 for V-51; Nielsen 5 and 6, not 3.3.3, for V-52; 2.4.3 and the successor rule for V-46; 2.4.13 for V-48 and V-49, each on a rectangular author box whose reference is right.
+- **Not findings:** O-1, the 32 px radio ring (an instrument reference; the disc's perimeter is below 284 by either arithmetic, Claude's annulus inside the edge about 239 px², Codex's circumference times 2 px about 251); O-2, S-81's wrapped link (a fragment-aware reference is needed); O-3, the player's rings (unresolved: their backgrounds unread, and exposure not delivery). Codex adds that the `outline: none` in O-3's rows is the walker's probe, not a page rule: true (the rows' `indicatorRules` are empty), and the report says the probe.
+
+## Codex only
+
+- **S-113 ms-MY w320 reaches 528 px, not 520.** Settled for Codex: the record's `scrollWidth` is 528 (`S-113__ms-MY__w320__font32`, `instruments.overflow`); the sheet copied the digest's grouped row. The report's range, 444–528, stands.
+- **V-18's readings are not HEAD's.** Settled for Codex: they were taken at `a3039c3`, before VH-205, which took the fourth promise's row from 44 to 24 px by VH-205's manual readings. At HEAD the button sits about 20 px higher by subtraction, unmeasured, so Malay at 1280 × 900 would still cross the fold by about 14 px. The report says so, and VH-203's after-run re-reads it. The sheet's list of what sits above the button left out the privacy line and Video type (`index.html:78`, `93`): a fault of the sheet, not of the readings.
+- **For the owner, V-51's threshold:** keep the 400 ms rule with true words, or reconsider keeping the sound. Listed for the owner (below).
+
+## Claude only
+
+- None of substance. Claude's file adds S-131 (a completed save removes the player) to V-52 and VH-185's criterion, which asks for the owner's words if the sentence is untrue for this case (`project/items/VH-185.md:9`), to V-51; Codex names the same removal and the same standards.
+
+## Disagreed
+
+1. **V-50's rank.** Claude: rank 3, as VH-200 drafted it. No adopted rule is breached: spec §9.3 commits to text enlargement to 200% without horizontal scrolling "and, separately, reflow at 320 CSS px" (`docs/01-specification.md:703–704`), and both hold apart (the 32 px font at 1280 and every 320 px record at the default size pass); step 4's selects in the same condition are a recorded limitation, wish VH-189.1. Codex: rank 2, on the rank rule's "real friction": a person with a 32 px font on a phone must scroll sideways to read the choices and reach Set. **Judgement, for the owner.** The evidence settles less than that: no WCAG failure is established, and spec §9.3 names the two conditions separately. It does not settle the rank rule's other ground, real friction, which VH-200's own text concedes. The report keeps rank 3 and lists both positions; the remedy is CSS only either way, and VH-202's ask carries it.
+2. **O-4, the player under a playback fault.** Claude: no finding. F15b breaks playback on purpose; the host's name "Unable to play media." is Chrome's and true of the state; the card, its record and Save stay, and nothing shows that a video the page made fails to play in the page outside the fault. Codex: a finding, rank 2 (Nielsen 9): the warning's "play the new video before you save it" stands when playback is unavailable (S-152), and the player has no recovery handling (`src/main.ts:2870`). **Judgement, for the owner.** The fact is agreed: under F15b the warning stands and no app recovery runs. Whether a fault-only state's guidance is a finding is a judgement. Either way, V-52's fix plan checks its reordered warning in F15b's state, since the two touch the same words, and adds no element.
+3. **The statement's media limitation** names only the preview (`src/i18n/en-GB.ts:904`), where spec §9.3 covers both players (`docs/01-specification.md:740`): agreed as fact. Claude: not a finding of this pass; it is wish VH-192.1, routed to VH-137, and the statement's words are the owner's, as Codex's blind review set it aside (`codex-astra-blind-review-2026-10-25.md:284`). Codex: rank 2 documentation debt, owned by VH-192.1, no new ID and no drafted words. **Judgement, for the owner.**
+
+*Revised after Codex astra's critique (R-04): the statement's limitation moved from "Codex only, set aside" to here, and V-50's settled fact narrowed.*

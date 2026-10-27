@@ -18,6 +18,33 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-27 — VH-201 — Pass 3's report merged: D-05 and D-06 kept as V-51 and V-52, seven findings, Codex astra's blind ranks the same on six, five questions for the owner
+
+**Decision:** VH-201 closes. `design-pass-3-2026-10-27.md` is Pass 3's report: seven findings, none needing a new element. V-51 (D-05) is at rank 1; V-52 (D-06), V-46 (regressed), V-48, V-49 and V-18 (incomplete) at rank 2; V-50 at rank 3. V-51's words wait for the owner. VH-202 is next.
+
+**Rationale:**
+
+- **The merge** (`reviews/2026-10-25/design-pass-3/design-pass-3-2026-10-27.md`, "How it was done"):
+  - D-05 is V-51, its own: verified in source and the unit tests (`src/media/audio-plan.ts:120`; `src/media/sub-block-sound.test.ts:61`, `97`), and the notice read in S-99 ×31, whose sliver is encoder priming. A kept sliver of audible sound was not walked.
+  - D-06 is V-52, its own: verified in source (`src/main.ts:3285`, `3327`, `3497`) and in S-135's records, the tree's order and the completion write.
+  - Codex's V-46 is merged under V-46, regressed (S-149 ×3). None is set aside.
+- **V-51's direction:** words the owner approves, carrying the cause, the consequence and a recovery that applies, with the omission's reason carried into the existing warning (`src/workers/job.worker.ts:535`, `src/audio/warnings.ts:92`). No control; the 400 ms threshold stays unless the owner changes it. The report drafts no words.
+- **Codex astra**, on the owner's word ("please also do everything in partnership with codex as a comparison. codex astra should be used liberally but you decide"):
+  - Claude's ranks were saved first (`ranks-claude-2026-10-27.md`). Codex then ranked blind from a neutral sheet of observations (`findings-neutral-2026-10-27.md`), forbidden every file that carries a rank. Compared in `ranks-compare-2026-10-27.md`: the same rank on six of seven.
+  - Its corrections were taken: S-113's Malay record at 320 px reaches 528 px, and V-18's readings are VH-205's before, so its place at HEAD is unmeasured.
+  - Three disagreements of judgement go to the owner: V-50 at rank 3 or 2; whether the warning's guidance when the finished video cannot play (F15b) is a finding; and whether the statement's preview-only media limitation is rank 2 debt under VH-192.1.
+  - Its critique of the draft, `codex-astra-report-critique-2026-10-27.md`, said "Commit after the musts below". All five musts were applied and none refused: success claims scoped ("at most one filled action"; exposure, not speech); V-51's remedy through the data path; V-50's full list of offenders; the statement and V-50 kept contested; and VH-200's unread readings, the run's conditions and VH-205's labels carried.
+- **Carried unchanged to VH-203's after-run:** the four accepted gaps, the 823 finish+1s rows, VH-200.1's three readings, VH-205's "?" with its labels, 1.4.3 and 1.4.6, VH-185's output tracks and V-46's J4 case. What pass 3 lacked besides is wish VH-201.2.
+- **For the owner,** wish VH-201.1, for VH-202's ask: V-51's words and threshold, V-50's rank, the failed-playback guidance, V-18's Phase 7 acceptance, and the statement's limitation.
+- **No product code changed,** and no page was walked. Digest rules applied:
+  - nielsen, "status visible and announced; errors say what next" (V-51, V-52);
+  - wcag-2.2-aaa, 2.4.3, 2.4.13 and "every exception recorded";
+  - carbon, one primary per state.
+
+**Supersedes:** none
+
+**Deferred:** VH-202, VH-203
+
 ## 2026-10-27 — VH-200 — Pass 3 judged: seven draft findings, D-05 at rank 1, V-46 regressed; VH-205's "?" the owner's fix, labelled
 
 **Decision:** VH-200 closes. `judged-2026-10-27.md`, `wcag-2026-10-27.md` and `person-checklist-2026-10-27.md` judge the Phase 8 page from VH-199's evidence. There are seven draft findings and none needs a new element: D-05 at rank 1; D-06, V-46 (regressed), V-48, V-49 and V-18 (incomplete) at rank 2; V-50 at rank 3. VH-201 is next.
@@ -602,13 +629,3 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Supersedes:** none
 
 **Deferred:** none
-
-## 2026-10-22 — VH-163 — The owner approves the five design fixes: footer headings at Lora 20, a 28rem measure, the native file chooser, V-36 and V-37 in VH-166
-
-**Decision:** the owner approves PLAN-6's five design-fix items in its order, and VH-163 closes: VH-166 gives the footer's two headings the panel heading look (Lora 20) and takes V-36's phone inset and V-37's footer gap; VH-167 starts the measure at 28rem and confirms it by line count in the browser; VH-168 keeps the browser's own file chooser and records the limitation, so it becomes record-only with no page change; because these are the owner's answers to the five questions in VH-163's Now.
-
-**Rationale:** The owner's words, relayed from the orchestrator chat on 2026-10-22: "Approve the five fix items. Footer headings match the steps (Lora 20). Start the measure at 28rem and confirm by line count. Keep the browser's own file chooser and record the limitation. Fold V-36 and V-37 into VH-166. Start building in a fresh chat." VH-166's criteria lose their "if the owner takes them" branches; VH-167's value is a start, so the 1.4.8 line count may move it, and a change from 28rem is recorded at its close; VH-168's label branch is withdrawn under the no-new-element rule, so it records the limitation in a decision and corrects the spec or statement only where they claim the chooser is translated. VH-165 starts now.
-
-**Supersedes:** 2026-10-22 — PLAN-6 — The design pass's fixes: five Phase 6 items ahead of the cut, each waiting on the owner's approval
-
-**Deferred:** VH-165, VH-166, VH-167, VH-169, VH-168
