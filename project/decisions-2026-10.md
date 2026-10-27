@@ -1075,3 +1075,13 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-23 — VH-171 — The instruments qualified: Codex astra's eight musts applied, VH-172's setups merged, S-25 reached by a worker clock
+
+**Decision:** VH-171 ships with all eight of Codex astra's method-check musts, M-01 to M-08, applied and none refused, VH-172's scenario setups merged into the walker, N5 added, and S-25's slow verdict reached by a new fault, F13, the worker's clock at twice real time, because CPU throttling cannot reach the worker and the 21,600 s still never settled; the instruments are fit for the matrix.
+
+**Rationale:** Codex's verdict, as given: "Fit after the musts below" (`reviews/2026-10-22/design-pass-2/codex-astra-method-check-2026-10-23.md`). Each must's application is in `instruments-2026-10-22.md` under "Codex astra's method check, applied (23 October)"; proofs 77 of 77, faults 17 of 17 and F13, pilot 2 43 of 43 whole, smoke 119 of 119 whole across a run and a part run (`smoke-2026-10-23.json`). F13 is an instrument, not a product change; it was accepted on the owner's standing instruction of 2026-10-23: "work through to the end of VH-177, archive and spawn as you go, proceed with your recommendations, universal permission is granted". Limits kept for a person: range thumb and track contrast; the dialog used by keys at enlargement; Chrome's own page zoom. Candidate findings for VH-173 are listed in the instruments file, none judged here. No product code changed.
+
+**Supersedes:** none
+
+**Deferred:** VH-172

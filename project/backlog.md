@@ -37,7 +37,6 @@ The public release on Xerte (PLAN-6) is VH-204's cut.
 
 ### Phase 8 — the owner's UX pass, then a third full design pass
 
-- [ ] VH-207 — V-46: chooser focus — since 2026-10-27 — (from: VH-202, 2026-10-27)
 - [ ] VH-208 — V-52's warnings — since 2026-10-27 — (from: VH-202, 2026-10-27)
 - [!] VH-212 — F15b's advice — since 2026-10-27 — (from: VH-202, 2026-10-27) — blocked: the owner
 - [!] VH-213 — VH-185.1: whole-video sound — since 2026-10-27 — (from: VH-185, 2026-10-24) — blocked: the owner

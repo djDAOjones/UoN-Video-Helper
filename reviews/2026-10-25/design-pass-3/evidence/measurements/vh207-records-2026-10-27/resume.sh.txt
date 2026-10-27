@@ -1,0 +1,17 @@
+#!/bin/zsh
+# VH-207 #1: a run resumed in place by the walker's own runner (matrix.mjs --resume) until whole, as VH-199 did
+# (resume-until-whole.sh): records ok are kept, failed ones moved to superseded/ and measured again.
+# Usage: resume.sh <walker dir> <run dir> [max=4]; power and load recorded before each attempt.
+S=/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207
+export CDP_PORT=9251 APP_URL=${APP_URL:-http://localhost:5181/} FIX=$S/fix OUT_ROOT=$S/out RUN_ROOT=${RUN_ROOT:-$S/runs}
+WALKER=$1; D=$2; MAX=${3:-4}; LOG=$S/logs/resume-${D:t}.log
+for i in $(seq 1 $MAX); do
+  p=$(zsh $S/power.sh) || { echo "POWER-STOP $p" >> $LOG; exit 3; }
+  echo "=== resume $i $(date -u +%FT%TZ) $p" >> $LOG
+  print -r -- "{\"plan\":\"${D:t}\",\"resume\":$i,\"at\":\"$(date -u +%FT%TZ)\",\"power\":$(node -e 'console.log(JSON.stringify(process.argv[1]))' "$p")}" >> $RUN_ROOT/vh207-resumes.jsonl
+  (cd "$WALKER" && node matrix.mjs --resume "$D") >> $LOG 2>&1
+  rc=$?
+  echo "=== resume $i end exit $rc" >> $LOG
+  [ $rc -eq 0 ] && { echo "whole after resume $i"; exit 0; }
+done
+echo "not whole after $MAX resumes"; exit 1

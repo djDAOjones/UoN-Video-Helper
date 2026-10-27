@@ -1,0 +1,15 @@
+1. **Must 1 — resolved:** `trimClear` is captured before the reading lock; all eight before/after probe pairs confirm the repaired hand-on at choosing, retained focus after failure, and untouched next Tab, matching §2a.
+
+2. **Must 2 — still a must:** `focusByKeyboard` presses Shift then calls `.focus()`; S-149’s use establishes precedent, not keyboard traversal. The unchanged routes support regression coverage but do not supply the explicitly required variants reached by keys. Rewalk those starting controls with Tab/Shift+Tab.
+
+3. **Must 3 — still a must:** Counts confirmed: 144 before readings skip instrumentation; `back: true` occurs 144 times after and 24 before. Restoration supports the expected result but does not satisfy the explicit pre-instrument Tab requirement. The untouched probe covers eight English `trim-clear` cases; S-149 still lacks next-Tab readings. Remeasure the missing/affected cells.
+
+4. **Must 4 — resolved:** The retained content audit establishes 1,497 matching blobs, only two declared walker overlays differing, no missing files, and source timestamps matching `5893d9d`; the provenance row records this evidence.
+
+Must 5 remains close work: the full green gate on the frozen candidate.
+
+Ledger defect noticed: VH-207 is marked closed while disputed acceptance points remain; its own criterion requires leaving it open for the owner if Claude disagrees.
+
+Applied digest rules: WCAG keyboard path and focus appearance; Nielsen 3, user control and freedom.
+
+Verdict: Commit after the musts below

@@ -1,0 +1,45 @@
+// VH-207 #2: a read-only probe for Codex's must 1 (blind check): focus on "Use the whole video" (#trim-clear)
+// when an unreadable file is chosen, which the reading lock disables. Built from the walker's own modules,
+// as (b) is, with only the placed control different; not a walker change. Reads, before any instrument moves
+// focus: the element at the choosing and once the read has failed, then one Tab. Usage: node probe.mjs <label>
+const W = 'file:///Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe%20Bell%20UoN%20Files/2_Projects/2026-08-24%20UoN%20Video%20Helper/reviews/2026-10-25/design-pass-3/evidence/measurements/walker/'
+const { connectBrowser } = await import(W + 'cdp.mjs')
+const { Walk, F, sleep } = await import(W + 'walk.mjs')
+const { QUAL_INIT, setViewport, setMode, focusByKeyboard, key } = await import(W + 'qualify.mjs')
+const { SCENARIOS, MX_INIT } = await import(W + 'scenarios.mjs')
+const { P8_INIT, watchWorkers } = await import(W + 'phase8.mjs')
+const ON = `(() => { const a = document.activeElement; return !a || a === document.body ? 'body' : (a.id ? '#' + a.id : a.tagName.toLowerCase() + (a.textContent ? ' "' + a.textContent.trim().slice(0, 30) + '"' : '')) })()`
+const label = process.argv[2] ?? 'probe'
+const browser = await connectBrowser()
+const rows = []
+for (const view of ['w1280', 'w320']) for (const mode of ['light', 'dark', 'forced-light', 'forced-dark']) {
+  const w = new Walk(browser, `vh207-probe-trimclear/${label}-${view}-${mode}`)
+  await w.open()
+  for (const source of [QUAL_INIT, MX_INIT, P8_INIT]) await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source })
+  await watchWorkers(browser, w)
+  await setViewport(w, view); await setMode(w, mode)
+  await SCENARIOS['S-149b'].setup(w, 'en-GB')
+  const r = { label, view, mode }
+  await w.setFiles(F('lecture-30s.mp4')); await w.waitSettled()
+  await w.waitFor(`!!window.__mx.verdict()`, { label: 'a verdict', timeout: 120000 })
+  await focusByKeyboard(w, '#trim-start-range'); await key(w, 'ArrowRight'); await sleep(300)
+  r.clearEnabled = await w.evaluate(`!document.getElementById('trim-clear').disabled`)
+  await focusByKeyboard(w, '#trim-clear')
+  r.placedOn = await w.evaluate(ON)
+  await w.evaluate(`(() => { window.__p = null; document.addEventListener('change', (e) => { if (window.__p || e.target?.id !== 'file-input') return; window.__p = { on: ${ON}, clearDisabled: document.getElementById('trim-clear').disabled } }) })()`)
+  await w.setFiles(F('notvideo.mp4')); await w.waitSettled()
+  r.atChoosing = await w.evaluate('window.__p')
+  await w.waitFor(`!!document.querySelector('#source-report .notification[data-kind="error"]')`, { label: 'the read failed', timeout: 120000 }); await sleep(400)
+  r.unreadable = true
+  r.trimHidden = await w.evaluate(`document.getElementById('step-trim').hidden`)
+  r.after = await w.evaluate(ON)
+  r.focusVisible = await w.evaluate(`document.activeElement !== document.body && document.activeElement.matches(':focus-visible')`)
+  await key(w, 'Tab'); await sleep(150)
+  r.nextTab = await w.evaluate(ON)
+  r.reached = r.clearEnabled && r.placedOn === '#trim-clear' && r.atChoosing?.clearDisabled === true && r.trimHidden
+  rows.push(r); console.log(JSON.stringify(r))
+  await w.close()
+}
+const { writeFileSync } = await import('node:fs')
+writeFileSync(process.env.OUT ?? `probe-trimclear-${label}.json`, JSON.stringify({ label, at: new Date().toISOString(), rows }, null, 1))
+process.exit(0)

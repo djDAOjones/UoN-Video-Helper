@@ -1,0 +1,142 @@
+{
+ "label": "before",
+ "at": "2026-10-27T22:30:59.790Z",
+ "rows": [
+  {
+   "label": "before",
+   "view": "w1280",
+   "mode": "light",
+   "clearEnabled": true,
+   "placedOn": "#trim-clear",
+   "atChoosing": {
+    "on": "#trim-clear",
+    "clearDisabled": true
+   },
+   "unreadable": true,
+   "trimHidden": true,
+   "after": "body",
+   "focusVisible": false,
+   "nextTab": "summary \"System check — all passed\"",
+   "reached": true
+  },
+  {
+   "label": "before",
+   "view": "w1280",
+   "mode": "dark",
+   "clearEnabled": true,
+   "placedOn": "#trim-clear",
+   "atChoosing": {
+    "on": "#trim-clear",
+    "clearDisabled": true
+   },
+   "unreadable": true,
+   "trimHidden": true,
+   "after": "body",
+   "focusVisible": false,
+   "nextTab": "summary \"System check — all passed\"",
+   "reached": true
+  },
+  {
+   "label": "before",
+   "view": "w1280",
+   "mode": "forced-light",
+   "clearEnabled": true,
+   "placedOn": "#trim-clear",
+   "atChoosing": {
+    "on": "#trim-clear",
+    "clearDisabled": true
+   },
+   "unreadable": true,
+   "trimHidden": true,
+   "after": "body",
+   "focusVisible": false,
+   "nextTab": "summary \"System check — all passed\"",
+   "reached": true
+  },
+  {
+   "label": "before",
+   "view": "w1280",
+   "mode": "forced-dark",
+   "clearEnabled": true,
+   "placedOn": "#trim-clear",
+   "atChoosing": {
+    "on": "#trim-clear",
+    "clearDisabled": true
+   },
+   "unreadable": true,
+   "trimHidden": true,
+   "after": "body",
+   "focusVisible": false,
+   "nextTab": "summary \"System check — all passed\"",
+   "reached": true
+  },
+  {
+   "label": "before",
+   "view": "w320",
+   "mode": "light",
+   "clearEnabled": true,
+   "placedOn": "#trim-clear",
+   "atChoosing": {
+    "on": "#trim-clear",
+    "clearDisabled": true
+   },
+   "unreadable": true,
+   "trimHidden": true,
+   "after": "body",
+   "focusVisible": false,
+   "nextTab": "summary \"System check — all passed\"",
+   "reached": true
+  },
+  {
+   "label": "before",
+   "view": "w320",
+   "mode": "dark",
+   "clearEnabled": true,
+   "placedOn": "#trim-clear",
+   "atChoosing": {
+    "on": "#trim-clear",
+    "clearDisabled": true
+   },
+   "unreadable": true,
+   "trimHidden": true,
+   "after": "body",
+   "focusVisible": false,
+   "nextTab": "summary \"System check — all passed\"",
+   "reached": true
+  },
+  {
+   "label": "before",
+   "view": "w320",
+   "mode": "forced-light",
+   "clearEnabled": true,
+   "placedOn": "#trim-clear",
+   "atChoosing": {
+    "on": "#trim-clear",
+    "clearDisabled": true
+   },
+   "unreadable": true,
+   "trimHidden": true,
+   "after": "body",
+   "focusVisible": false,
+   "nextTab": "summary \"System check — all passed\"",
+   "reached": true
+  },
+  {
+   "label": "before",
+   "view": "w320",
+   "mode": "forced-dark",
+   "clearEnabled": true,
+   "placedOn": "#trim-clear",
+   "atChoosing": {
+    "on": "#trim-clear",
+    "clearDisabled": true
+   },
+   "unreadable": true,
+   "trimHidden": true,
+   "after": "body",
+   "focusVisible": false,
+   "nextTab": "summary \"System check — all passed\"",
+   "reached": true
+  }
+ ]
+}

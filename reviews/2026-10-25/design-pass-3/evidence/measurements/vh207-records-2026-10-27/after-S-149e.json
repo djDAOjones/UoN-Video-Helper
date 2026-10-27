@@ -1,0 +1,2790 @@
+{
+ "label": "after",
+ "scenario": "S-149e",
+ "cells": [
+  {
+   "key": "S-149e__en-GB__w1280__light",
+   "run": "vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04/S-149e__en-GB__w1280__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1110,
+    "recordMs": 9717,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "e",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "button",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": true,
+      "result": "result",
+      "saveShown": true,
+      "newSave": true,
+      "dialog": false
+     },
+     "readMs": 1115,
+     "atChoosing": {
+      "on": "button.button[button] \"Save the video\"",
+      "same": false,
+      "wasConnected": false,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "button.button[button] \"Save the video\"",
+     "visible": true,
+     "moves": [
+      "button.button[button] \"Save the video\""
+     ],
+     "inView": {
+      "top": 640,
+      "bottom": 684,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "button.button[button] \"Save the video\"",
+      "id": null,
+      "tag": "button",
+      "type": "button",
+      "inDialog": false,
+      "box": [
+       229,
+       640,
+       143,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#process-result > .notification[data-kind=\"success\"] .actions > button.button",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 796,
+      "perimeter2px": 731,
+      "bestRatio": 14.93,
+      "changedAny": 796,
+      "controlPx": [
+       143,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"System check — all passed\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       185,
+       604,
+       910,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149e__en-GB__w1280__dark",
+   "run": "vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04/S-149e__en-GB__w1280__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1099,
+    "recordMs": 9406,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "e",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "button",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": true,
+      "result": "result",
+      "saveShown": true,
+      "newSave": true,
+      "dialog": false
+     },
+     "readMs": 1113,
+     "atChoosing": {
+      "on": "button.button[button] \"Save the video\"",
+      "same": false,
+      "wasConnected": false,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "button.button[button] \"Save the video\"",
+     "visible": true,
+     "moves": [
+      "button.button[button] \"Save the video\""
+     ],
+     "inView": {
+      "top": 640,
+      "bottom": 684,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "button.button[button] \"Save the video\"",
+      "id": null,
+      "tag": "button",
+      "type": "button",
+      "inDialog": false,
+      "box": [
+       229,
+       640,
+       143,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#process-result > .notification[data-kind=\"success\"] .actions > button.button",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 796,
+      "perimeter2px": 731,
+      "bestRatio": 11.35,
+      "changedAny": 796,
+      "controlPx": [
+       143,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"System check — all passed\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       185,
+       604,
+       910,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149e__en-GB__w1280__forced-light",
+   "run": "vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04/S-149e__en-GB__w1280__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1086,
+    "recordMs": 9576,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "e",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "button",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": true,
+      "result": "result",
+      "saveShown": true,
+      "newSave": true,
+      "dialog": false
+     },
+     "readMs": 1115,
+     "atChoosing": {
+      "on": "button.button[button] \"Save the video\"",
+      "same": false,
+      "wasConnected": false,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "button.button[button] \"Save the video\"",
+     "visible": true,
+     "moves": [
+      "button.button[button] \"Save the video\""
+     ],
+     "inView": {
+      "top": 640,
+      "bottom": 684,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "button.button[button] \"Save the video\"",
+      "id": null,
+      "tag": "button",
+      "type": "button",
+      "inDialog": false,
+      "box": [
+       229,
+       640,
+       143,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#process-result > .notification[data-kind=\"success\"] .actions > button.button",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 796,
+      "perimeter2px": 731,
+      "bestRatio": 21,
+      "changedAny": 796,
+      "controlPx": [
+       143,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"System check — all passed\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       185,
+       604,
+       910,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149e__en-GB__w1280__forced-dark",
+   "run": "vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04/S-149e__en-GB__w1280__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1105,
+    "recordMs": 9669,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "e",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "button",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": true,
+      "result": "result",
+      "saveShown": true,
+      "newSave": true,
+      "dialog": false
+     },
+     "readMs": 1117,
+     "atChoosing": {
+      "on": "button.button[button] \"Save the video\"",
+      "same": false,
+      "wasConnected": false,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "button.button[button] \"Save the video\"",
+     "visible": true,
+     "moves": [
+      "button.button[button] \"Save the video\""
+     ],
+     "inView": {
+      "top": 640,
+      "bottom": 684,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "button.button[button] \"Save the video\"",
+      "id": null,
+      "tag": "button",
+      "type": "button",
+      "inDialog": false,
+      "box": [
+       229,
+       640,
+       143,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#process-result > .notification[data-kind=\"success\"] .actions > button.button",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 796,
+      "perimeter2px": 731,
+      "bestRatio": 21,
+      "changedAny": 796,
+      "controlPx": [
+       143,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"System check — all passed\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       185,
+       604,
+       910,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149e__en-GB__w320__light",
+   "run": "vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04/S-149e__en-GB__w320__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1090,
+    "recordMs": 9443,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "e",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "button",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": true,
+      "result": "result",
+      "saveShown": true,
+      "newSave": true,
+      "dialog": false
+     },
+     "readMs": 1115,
+     "atChoosing": {
+      "on": "button.button[button] \"Save the video\"",
+      "same": false,
+      "wasConnected": false,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "button.button[button] \"Save the video\"",
+     "visible": true,
+     "moves": [
+      "button.button[button] \"Save the video\""
+     ],
+     "inView": {
+      "top": 461,
+      "bottom": 505,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "button.button[button] \"Save the video\"",
+      "id": null,
+      "tag": "button",
+      "type": "button",
+      "inDialog": false,
+      "box": [
+       69,
+       461,
+       143,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#process-result > .notification[data-kind=\"success\"] .actions > button.button",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 796,
+      "perimeter2px": 731,
+      "bestRatio": 14.93,
+      "changedAny": 796,
+      "controlPx": [
+       143,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"System check — all passed\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       25,
+       438,
+       270,
+       80
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149e__en-GB__w320__dark",
+   "run": "vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04/S-149e__en-GB__w320__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1118,
+    "recordMs": 9549,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "e",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "button",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": true,
+      "result": "result",
+      "saveShown": true,
+      "newSave": true,
+      "dialog": false
+     },
+     "readMs": 1114,
+     "atChoosing": {
+      "on": "button.button[button] \"Save the video\"",
+      "same": false,
+      "wasConnected": false,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "button.button[button] \"Save the video\"",
+     "visible": true,
+     "moves": [
+      "button.button[button] \"Save the video\""
+     ],
+     "inView": {
+      "top": 461,
+      "bottom": 505,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "button.button[button] \"Save the video\"",
+      "id": null,
+      "tag": "button",
+      "type": "button",
+      "inDialog": false,
+      "box": [
+       69,
+       461,
+       143,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#process-result > .notification[data-kind=\"success\"] .actions > button.button",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 796,
+      "perimeter2px": 731,
+      "bestRatio": 11.35,
+      "changedAny": 796,
+      "controlPx": [
+       143,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"System check — all passed\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       25,
+       438,
+       270,
+       80
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149e__en-GB__w320__forced-light",
+   "run": "vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04/S-149e__en-GB__w320__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1112,
+    "recordMs": 9576,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "e",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "button",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": true,
+      "result": "result",
+      "saveShown": true,
+      "newSave": true,
+      "dialog": false
+     },
+     "readMs": 1117,
+     "atChoosing": {
+      "on": "button.button[button] \"Save the video\"",
+      "same": false,
+      "wasConnected": false,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "button.button[button] \"Save the video\"",
+     "visible": true,
+     "moves": [
+      "button.button[button] \"Save the video\""
+     ],
+     "inView": {
+      "top": 461,
+      "bottom": 505,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "button.button[button] \"Save the video\"",
+      "id": null,
+      "tag": "button",
+      "type": "button",
+      "inDialog": false,
+      "box": [
+       69,
+       461,
+       143,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#process-result > .notification[data-kind=\"success\"] .actions > button.button",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 796,
+      "perimeter2px": 731,
+      "bestRatio": 21,
+      "changedAny": 796,
+      "controlPx": [
+       143,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"System check — all passed\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       25,
+       438,
+       270,
+       80
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149e__en-GB__w320__forced-dark",
+   "run": "vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04/S-149e__en-GB__w320__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1127,
+    "recordMs": 9559,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "e",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "button",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": true,
+      "result": "result",
+      "saveShown": true,
+      "newSave": true,
+      "dialog": false
+     },
+     "readMs": 1113,
+     "atChoosing": {
+      "on": "button.button[button] \"Save the video\"",
+      "same": false,
+      "wasConnected": false,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "button.button[button] \"Save the video\"",
+     "visible": true,
+     "moves": [
+      "button.button[button] \"Save the video\""
+     ],
+     "inView": {
+      "top": 461,
+      "bottom": 505,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "button.button[button] \"Save the video\"",
+      "id": null,
+      "tag": "button",
+      "type": "button",
+      "inDialog": false,
+      "box": [
+       69,
+       461,
+       143,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#process-result > .notification[data-kind=\"success\"] .actions > button.button",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 796,
+      "perimeter2px": 731,
+      "bestRatio": 21,
+      "changedAny": 796,
+      "controlPx": [
+       143,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"System check — all passed\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       25,
+       438,
+       270,
+       80
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149e__zh-Hans__w1280__light",
+   "run": "vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04/S-149e__zh-Hans__w1280__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1530,
+    "recordMs": 9472,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "e",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "button",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": true,
+      "result": "result",
+      "saveShown": true,
+      "newSave": true,
+      "dialog": false
+     },
+     "readMs": 1117,
+     "atChoosing": {
+      "on": "button.button[button] \"保存视频\"",
+      "same": false,
+      "wasConnected": false,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "button.button[button] \"保存视频\"",
+     "visible": true,
+     "moves": [
+      "button.button[button] \"保存视频\""
+     ],
+     "inView": {
+      "top": 640,
+      "bottom": 684,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "button.button[button] \"保存视频\"",
+      "id": null,
+      "tag": "button",
+      "type": "button",
+      "inDialog": false,
+      "box": [
+       229,
+       640,
+       106,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#process-result > .notification[data-kind=\"success\"] .actions > button.button",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 648,
+      "perimeter2px": 584,
+      "bestRatio": 14.93,
+      "changedAny": 648,
+      "controlPx": [
+       106,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"系统检查 — 全部通过\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       185,
+       604,
+       910,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .webm 结尾。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149e__zh-Hans__w1280__dark",
+   "run": "vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04/S-149e__zh-Hans__w1280__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1542,
+    "recordMs": 9785,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "e",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "button",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": true,
+      "result": "result",
+      "saveShown": true,
+      "newSave": true,
+      "dialog": false
+     },
+     "readMs": 1114,
+     "atChoosing": {
+      "on": "button.button[button] \"保存视频\"",
+      "same": false,
+      "wasConnected": false,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "button.button[button] \"保存视频\"",
+     "visible": true,
+     "moves": [
+      "button.button[button] \"保存视频\""
+     ],
+     "inView": {
+      "top": 640,
+      "bottom": 684,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "button.button[button] \"保存视频\"",
+      "id": null,
+      "tag": "button",
+      "type": "button",
+      "inDialog": false,
+      "box": [
+       229,
+       640,
+       106,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#process-result > .notification[data-kind=\"success\"] .actions > button.button",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 648,
+      "perimeter2px": 584,
+      "bestRatio": 11.35,
+      "changedAny": 648,
+      "controlPx": [
+       106,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"系统检查 — 全部通过\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       185,
+       604,
+       910,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .webm 结尾。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149e__zh-Hans__w1280__forced-light",
+   "run": "vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04/S-149e__zh-Hans__w1280__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1573,
+    "recordMs": 9780,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "e",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "button",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": true,
+      "result": "result",
+      "saveShown": true,
+      "newSave": true,
+      "dialog": false
+     },
+     "readMs": 1114,
+     "atChoosing": {
+      "on": "button.button[button] \"保存视频\"",
+      "same": false,
+      "wasConnected": false,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "button.button[button] \"保存视频\"",
+     "visible": true,
+     "moves": [
+      "button.button[button] \"保存视频\""
+     ],
+     "inView": {
+      "top": 640,
+      "bottom": 684,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "button.button[button] \"保存视频\"",
+      "id": null,
+      "tag": "button",
+      "type": "button",
+      "inDialog": false,
+      "box": [
+       229,
+       640,
+       106,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#process-result > .notification[data-kind=\"success\"] .actions > button.button",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 648,
+      "perimeter2px": 584,
+      "bestRatio": 21,
+      "changedAny": 648,
+      "controlPx": [
+       106,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"系统检查 — 全部通过\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       185,
+       604,
+       910,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .webm 结尾。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149e__zh-Hans__w1280__forced-dark",
+   "run": "vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04/S-149e__zh-Hans__w1280__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1516,
+    "recordMs": 9671,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "e",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "button",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": true,
+      "result": "result",
+      "saveShown": true,
+      "newSave": true,
+      "dialog": false
+     },
+     "readMs": 1115,
+     "atChoosing": {
+      "on": "button.button[button] \"保存视频\"",
+      "same": false,
+      "wasConnected": false,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "button.button[button] \"保存视频\"",
+     "visible": true,
+     "moves": [
+      "button.button[button] \"保存视频\""
+     ],
+     "inView": {
+      "top": 640,
+      "bottom": 684,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "button.button[button] \"保存视频\"",
+      "id": null,
+      "tag": "button",
+      "type": "button",
+      "inDialog": false,
+      "box": [
+       229,
+       640,
+       106,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#process-result > .notification[data-kind=\"success\"] .actions > button.button",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 648,
+      "perimeter2px": 584,
+      "bestRatio": 21,
+      "changedAny": 648,
+      "controlPx": [
+       106,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"系统检查 — 全部通过\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       185,
+       604,
+       910,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .webm 结尾。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149e__zh-Hans__w320__light",
+   "run": "vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04/S-149e__zh-Hans__w320__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1529,
+    "recordMs": 9249,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "e",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "button",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": true,
+      "result": "result",
+      "saveShown": true,
+      "newSave": true,
+      "dialog": false
+     },
+     "readMs": 1113,
+     "atChoosing": {
+      "on": "button.button[button] \"保存视频\"",
+      "same": false,
+      "wasConnected": false,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "button.button[button] \"保存视频\"",
+     "visible": true,
+     "moves": [
+      "button.button[button] \"保存视频\""
+     ],
+     "inView": {
+      "top": 461,
+      "bottom": 505,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "button.button[button] \"保存视频\"",
+      "id": null,
+      "tag": "button",
+      "type": "button",
+      "inDialog": false,
+      "box": [
+       69,
+       461,
+       106,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#process-result > .notification[data-kind=\"success\"] .actions > button.button",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 648,
+      "perimeter2px": 584,
+      "bestRatio": 14.93,
+      "changedAny": 648,
+      "controlPx": [
+       106,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"系统检查 — 全部通过\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       25,
+       438,
+       270,
+       52
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .webm 结尾。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149e__zh-Hans__w320__dark",
+   "run": "vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04/S-149e__zh-Hans__w320__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1532,
+    "recordMs": 9605,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "e",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "button",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": true,
+      "result": "result",
+      "saveShown": true,
+      "newSave": true,
+      "dialog": false
+     },
+     "readMs": 1129,
+     "atChoosing": {
+      "on": "button.button[button] \"保存视频\"",
+      "same": false,
+      "wasConnected": false,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "button.button[button] \"保存视频\"",
+     "visible": true,
+     "moves": [
+      "button.button[button] \"保存视频\""
+     ],
+     "inView": {
+      "top": 461,
+      "bottom": 505,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "button.button[button] \"保存视频\"",
+      "id": null,
+      "tag": "button",
+      "type": "button",
+      "inDialog": false,
+      "box": [
+       69,
+       461,
+       106,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#process-result > .notification[data-kind=\"success\"] .actions > button.button",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 648,
+      "perimeter2px": 584,
+      "bestRatio": 11.35,
+      "changedAny": 648,
+      "controlPx": [
+       106,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"系统检查 — 全部通过\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       25,
+       438,
+       270,
+       52
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .webm 结尾。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149e__zh-Hans__w320__forced-light",
+   "run": "vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04/S-149e__zh-Hans__w320__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1527,
+    "recordMs": 9417,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "e",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "button",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": true,
+      "result": "result",
+      "saveShown": true,
+      "newSave": true,
+      "dialog": false
+     },
+     "readMs": 1115,
+     "atChoosing": {
+      "on": "button.button[button] \"保存视频\"",
+      "same": false,
+      "wasConnected": false,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "button.button[button] \"保存视频\"",
+     "visible": true,
+     "moves": [
+      "button.button[button] \"保存视频\""
+     ],
+     "inView": {
+      "top": 461,
+      "bottom": 505,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "button.button[button] \"保存视频\"",
+      "id": null,
+      "tag": "button",
+      "type": "button",
+      "inDialog": false,
+      "box": [
+       69,
+       461,
+       106,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#process-result > .notification[data-kind=\"success\"] .actions > button.button",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 648,
+      "perimeter2px": 584,
+      "bestRatio": 21,
+      "changedAny": 648,
+      "controlPx": [
+       106,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"系统检查 — 全部通过\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       25,
+       438,
+       270,
+       52
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .webm 结尾。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149e__zh-Hans__w320__forced-dark",
+   "run": "vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04/S-149e__zh-Hans__w320__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1543,
+    "recordMs": 9552,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "e",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "button",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": true,
+      "result": "result",
+      "saveShown": true,
+      "newSave": true,
+      "dialog": false
+     },
+     "readMs": 1140,
+     "atChoosing": {
+      "on": "button.button[button] \"保存视频\"",
+      "same": false,
+      "wasConnected": false,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "button.button[button] \"保存视频\"",
+     "visible": true,
+     "moves": [
+      "button.button[button] \"保存视频\""
+     ],
+     "inView": {
+      "top": 461,
+      "bottom": 505,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "button.button[button] \"保存视频\"",
+      "id": null,
+      "tag": "button",
+      "type": "button",
+      "inDialog": false,
+      "box": [
+       69,
+       461,
+       106,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#process-result > .notification[data-kind=\"success\"] .actions > button.button",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 648,
+      "perimeter2px": 584,
+      "bestRatio": 21,
+      "changedAny": 648,
+      "controlPx": [
+       106,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"系统检查 — 全部通过\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       25,
+       438,
+       270,
+       52
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .webm 结尾。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149e__ms-MY__w1280__light",
+   "run": "vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04/S-149e__ms-MY__w1280__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1526,
+    "recordMs": 9666,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "e",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "button",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": true,
+      "result": "result",
+      "saveShown": true,
+      "newSave": true,
+      "dialog": false
+     },
+     "readMs": 1116,
+     "atChoosing": {
+      "on": "button.button[button] \"Simpan video itu\"",
+      "same": false,
+      "wasConnected": false,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "button.button[button] \"Simpan video itu\"",
+     "visible": true,
+     "moves": [
+      "button.button[button] \"Simpan video itu\""
+     ],
+     "inView": {
+      "top": 628,
+      "bottom": 672,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "button.button[button] \"Simpan video itu\"",
+      "id": null,
+      "tag": "button",
+      "type": "button",
+      "inDialog": false,
+      "box": [
+       229,
+       628,
+       154,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#process-result > .notification[data-kind=\"success\"] .actions > button.button",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 840,
+      "perimeter2px": 774,
+      "bestRatio": 14.93,
+      "changedAny": 840,
+      "controlPx": [
+       154,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"Pemeriksaan sistem — semua lulus\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       185,
+       604,
+       910,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan fail video, atau ia mungkin rosak. Nama fail video biasanya berakhir dengan .mp4, .mov, .mkv atau .webm. Fail asal anda tidak diubah. Pilih …",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149e__ms-MY__w1280__dark",
+   "run": "vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04/S-149e__ms-MY__w1280__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1586,
+    "recordMs": 9852,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "e",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "button",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": true,
+      "result": "result",
+      "saveShown": true,
+      "newSave": true,
+      "dialog": false
+     },
+     "readMs": 1115,
+     "atChoosing": {
+      "on": "button.button[button] \"Simpan video itu\"",
+      "same": false,
+      "wasConnected": false,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "button.button[button] \"Simpan video itu\"",
+     "visible": true,
+     "moves": [
+      "button.button[button] \"Simpan video itu\""
+     ],
+     "inView": {
+      "top": 628,
+      "bottom": 672,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "button.button[button] \"Simpan video itu\"",
+      "id": null,
+      "tag": "button",
+      "type": "button",
+      "inDialog": false,
+      "box": [
+       229,
+       628,
+       154,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#process-result > .notification[data-kind=\"success\"] .actions > button.button",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 840,
+      "perimeter2px": 774,
+      "bestRatio": 11.35,
+      "changedAny": 840,
+      "controlPx": [
+       154,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"Pemeriksaan sistem — semua lulus\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       185,
+       604,
+       910,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan fail video, atau ia mungkin rosak. Nama fail video biasanya berakhir dengan .mp4, .mov, .mkv atau .webm. Fail asal anda tidak diubah. Pilih …",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149e__ms-MY__w1280__forced-light",
+   "run": "vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04/S-149e__ms-MY__w1280__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1535,
+    "recordMs": 9750,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "e",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "button",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": true,
+      "result": "result",
+      "saveShown": true,
+      "newSave": true,
+      "dialog": false
+     },
+     "readMs": 1116,
+     "atChoosing": {
+      "on": "button.button[button] \"Simpan video itu\"",
+      "same": false,
+      "wasConnected": false,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "button.button[button] \"Simpan video itu\"",
+     "visible": true,
+     "moves": [
+      "button.button[button] \"Simpan video itu\""
+     ],
+     "inView": {
+      "top": 628,
+      "bottom": 672,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "button.button[button] \"Simpan video itu\"",
+      "id": null,
+      "tag": "button",
+      "type": "button",
+      "inDialog": false,
+      "box": [
+       229,
+       628,
+       154,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#process-result > .notification[data-kind=\"success\"] .actions > button.button",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 840,
+      "perimeter2px": 774,
+      "bestRatio": 21,
+      "changedAny": 840,
+      "controlPx": [
+       154,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"Pemeriksaan sistem — semua lulus\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       185,
+       604,
+       910,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan fail video, atau ia mungkin rosak. Nama fail video biasanya berakhir dengan .mp4, .mov, .mkv atau .webm. Fail asal anda tidak diubah. Pilih …",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149e__ms-MY__w1280__forced-dark",
+   "run": "vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04/S-149e__ms-MY__w1280__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1526,
+    "recordMs": 9731,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "e",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "button",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": true,
+      "result": "result",
+      "saveShown": true,
+      "newSave": true,
+      "dialog": false
+     },
+     "readMs": 1117,
+     "atChoosing": {
+      "on": "button.button[button] \"Simpan video itu\"",
+      "same": false,
+      "wasConnected": false,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "button.button[button] \"Simpan video itu\"",
+     "visible": true,
+     "moves": [
+      "button.button[button] \"Simpan video itu\""
+     ],
+     "inView": {
+      "top": 628,
+      "bottom": 672,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "button.button[button] \"Simpan video itu\"",
+      "id": null,
+      "tag": "button",
+      "type": "button",
+      "inDialog": false,
+      "box": [
+       229,
+       628,
+       154,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#process-result > .notification[data-kind=\"success\"] .actions > button.button",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 840,
+      "perimeter2px": 774,
+      "bestRatio": 21,
+      "changedAny": 840,
+      "controlPx": [
+       154,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"Pemeriksaan sistem — semua lulus\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       185,
+       604,
+       910,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan fail video, atau ia mungkin rosak. Nama fail video biasanya berakhir dengan .mp4, .mov, .mkv atau .webm. Fail asal anda tidak diubah. Pilih …",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149e__ms-MY__w320__light",
+   "run": "vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04/S-149e__ms-MY__w320__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1518,
+    "recordMs": 9450,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "e",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "button",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": true,
+      "result": "result",
+      "saveShown": true,
+      "newSave": true,
+      "dialog": false
+     },
+     "readMs": 1114,
+     "atChoosing": {
+      "on": "button.button[button] \"Simpan video itu\"",
+      "same": false,
+      "wasConnected": false,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "button.button[button] \"Simpan video itu\"",
+     "visible": true,
+     "moves": [
+      "button.button[button] \"Simpan video itu\""
+     ],
+     "inView": {
+      "top": 485,
+      "bottom": 529,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "button.button[button] \"Simpan video itu\"",
+      "id": null,
+      "tag": "button",
+      "type": "button",
+      "inDialog": false,
+      "box": [
+       69,
+       485,
+       154,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#process-result > .notification[data-kind=\"success\"] .actions > button.button",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 840,
+      "perimeter2px": 774,
+      "bestRatio": 14.93,
+      "changedAny": 840,
+      "controlPx": [
+       154,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"Pemeriksaan sistem — semua lulus\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       25,
+       438,
+       270,
+       80
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan fail video, atau ia mungkin rosak. Nama fail video biasanya berakhir dengan .mp4, .mov, .mkv atau .webm. Fail asal anda tidak diubah. Pilih …",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149e__ms-MY__w320__dark",
+   "run": "vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04/S-149e__ms-MY__w320__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1534,
+    "recordMs": 9713,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "e",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "button",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": true,
+      "result": "result",
+      "saveShown": true,
+      "newSave": true,
+      "dialog": false
+     },
+     "readMs": 1117,
+     "atChoosing": {
+      "on": "button.button[button] \"Simpan video itu\"",
+      "same": false,
+      "wasConnected": false,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "button.button[button] \"Simpan video itu\"",
+     "visible": true,
+     "moves": [
+      "button.button[button] \"Simpan video itu\""
+     ],
+     "inView": {
+      "top": 485,
+      "bottom": 529,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "button.button[button] \"Simpan video itu\"",
+      "id": null,
+      "tag": "button",
+      "type": "button",
+      "inDialog": false,
+      "box": [
+       69,
+       485,
+       154,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#process-result > .notification[data-kind=\"success\"] .actions > button.button",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 840,
+      "perimeter2px": 774,
+      "bestRatio": 11.35,
+      "changedAny": 840,
+      "controlPx": [
+       154,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"Pemeriksaan sistem — semua lulus\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       25,
+       438,
+       270,
+       80
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan fail video, atau ia mungkin rosak. Nama fail video biasanya berakhir dengan .mp4, .mov, .mkv atau .webm. Fail asal anda tidak diubah. Pilih …",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149e__ms-MY__w320__forced-light",
+   "run": "vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04/S-149e__ms-MY__w320__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1532,
+    "recordMs": 9522,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "e",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "button",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": true,
+      "result": "result",
+      "saveShown": true,
+      "newSave": true,
+      "dialog": false
+     },
+     "readMs": 1116,
+     "atChoosing": {
+      "on": "button.button[button] \"Simpan video itu\"",
+      "same": false,
+      "wasConnected": false,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "button.button[button] \"Simpan video itu\"",
+     "visible": true,
+     "moves": [
+      "button.button[button] \"Simpan video itu\""
+     ],
+     "inView": {
+      "top": 485,
+      "bottom": 529,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "button.button[button] \"Simpan video itu\"",
+      "id": null,
+      "tag": "button",
+      "type": "button",
+      "inDialog": false,
+      "box": [
+       69,
+       485,
+       154,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#process-result > .notification[data-kind=\"success\"] .actions > button.button",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 840,
+      "perimeter2px": 774,
+      "bestRatio": 21,
+      "changedAny": 840,
+      "controlPx": [
+       154,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"Pemeriksaan sistem — semua lulus\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       25,
+       438,
+       270,
+       80
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan fail video, atau ia mungkin rosak. Nama fail video biasanya berakhir dengan .mp4, .mov, .mkv atau .webm. Fail asal anda tidak diubah. Pilih …",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149e__ms-MY__w320__forced-dark",
+   "run": "vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-de-2026-10-27T21-20-54-086Z-bc0b04/S-149e__ms-MY__w320__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1541,
+    "recordMs": 9663,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "e",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "button",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": true,
+      "result": "result",
+      "saveShown": true,
+      "newSave": true,
+      "dialog": false
+     },
+     "readMs": 1117,
+     "atChoosing": {
+      "on": "button.button[button] \"Simpan video itu\"",
+      "same": false,
+      "wasConnected": false,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "button.button[button] \"Simpan video itu\"",
+     "visible": true,
+     "moves": [
+      "button.button[button] \"Simpan video itu\""
+     ],
+     "inView": {
+      "top": 485,
+      "bottom": 529,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "button.button[button] \"Simpan video itu\"",
+      "id": null,
+      "tag": "button",
+      "type": "button",
+      "inDialog": false,
+      "box": [
+       69,
+       485,
+       154,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#process-result > .notification[data-kind=\"success\"] .actions > button.button",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 840,
+      "perimeter2px": 774,
+      "bestRatio": 21,
+      "changedAny": 840,
+      "controlPx": [
+       154,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"Pemeriksaan sistem — semua lulus\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       25,
+       438,
+       270,
+       80
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan fail video, atau ia mungkin rosak. Nama fail video biasanya berakhir dengan .mp4, .mov, .mkv atau .webm. Fail asal anda tidak diubah. Pilih …",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  }
+ ]
+}

@@ -1,0 +1,34 @@
+<!-- markdownlint-disable -->
+# VH-207 #1 — the walker additions proved (Step C)
+
+Base `5893d9d`, exported with `git archive` to the scratch `base/`, the two changed walker files overlaid (`diff -r` against the repo's walker: empty), `npm ci --prefer-offline` there, Vite on :5181 (`--strictPort`) from the export, headless Chrome 156.0.8078.48 on :9251 with the three visible-page flags. Fixtures from `fixtures.sh`'s own lines for the six files the cells use; their hashes equal VH-199 run-04's (`lecture-30s` fe66c0ad6bcc160d, `notvideo` 2dab03b2a72b7abb, `prores-1080p` 5b2f69913cb74db0, `lecture-60s`, `lecture-360s`, `truncated-30s`).
+
+## The additions held to the base walker
+
+`additions-check.mjs` (copied here as `additions-check.mjs.txt`, result `additions-check.json`): every existing scenario, route, transition, plan (all 15 of `scenarios.mjs`'s, records hashed), gap, `READ_FAILURE_SUB`, `MX_INIT`, `READINGS` and fault is identical by source text to the base walker's; the only difference reported, S-140, is its absolute `samples/` path (the two copies sit in different folders; equal once the root is normalised). New: S-149a to S-149f (each `fixOnly`) and F20. `node parts.mjs check`: ok, runs split `05493ee20ebbfc06` (= `RUNS_SHA`). ESLint on the two files: clean.
+
+## F20 — `node faults.mjs check F20 F20-twin` (`faults-check-F20.json`)
+
+| Case | Outcome | Branch |
+| --- | --- | --- |
+| F20 | pass | lecture-30s.mp4 read; "F20: withheld the worker's answer (failed) to inspection 2, request 4"; the replacement's read ended after 120 s in the took-too-long failure in `#source-report` (the catch, main.ts:1495–1500) |
+| F20-twin (unset) | pass | the replacement's read ended after 9 ms in the failed reply's failure ("This file could not be read as a video…", main.ts:1481–1486), not took-too-long |
+
+## The pilot — S-149 and each variant once, en-GB, w1280, light (`proof-pilot.json`)
+
+Run `vh207-pilot-p2-2026-10-27T19-34-23-187Z-005938`: 7 declared, 7 observed, whole; AC, 100 %, powermode 2, load 4.7. Every reached row passes.
+
+| Scenario | Reached | Focus at the choosing | Focus row | Where focus went | Next Tab |
+| --- | --- | --- | --- | --- | --- |
+| S-149 (its subresult) | pass | — | fail | body | — |
+| S-149a | pass | the Video language radio | fail | body | System check summary (footer) |
+| S-149b | pass | `#trim-start-range` (disabled, still active) | fail | body | System check summary (footer) |
+| S-149c (F20) | pass, took-too-long after 120 s | `#file-input`, then Tab ×2 to the Video language radio while pending | fail | body | System check summary (footer) |
+| S-149d | pass, step 6 and Save kept | the Video language radio | fail | body | the result player ("Previous video") |
+| S-149e | pass, the Save replaced | body (the focused Save gone at the choosing) | fail | body | the result player |
+| S-149f (f1) | pass, dialog open | `#feedback-message` | pass | `#feedback-message`, ring 2537/2456 px² pass | "What will be sent with it" |
+| S-149f (f2) | pass | body (lede clicked) | pass | body | the Video type radio "Staff video" |
+
+The first pilot (`vh207-pilot-p1-2026-10-27T19-30-11-079Z-ed7b89`, kept) reached the same rows; its "at the choosing" was read after `setFiles` returned, which races the failed reply (9 ms). The variants now read it in the change event as it bubbles to the document, after the page's own handler and before any answer (an addition inside the variants' own function), and the pilot was run again.
+
+The declaration form: new SCENARIOS entries `S-149a` to `S-149f`, each `fixOnly` (out of the pass's frozen plans, as S-16-45 is), empty-page setup (F20 first for (c)), and a sub-result whose `when` holds for every record, so the runner gives each record its own setup and the variant runs in that record's own colour mode. S-149's own sub-result runs only in light, after a block, so it could not carry the dark and forced cells or (c)'s fault.

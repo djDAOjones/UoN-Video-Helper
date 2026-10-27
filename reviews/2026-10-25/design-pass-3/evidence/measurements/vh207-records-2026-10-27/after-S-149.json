@@ -1,0 +1,810 @@
+{
+ "label": "after",
+ "scenario": "S-149",
+ "cells": [
+  {
+   "key": "S-149__en-GB__w1280__light",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149__en-GB__w1280__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19419,
+    "recordMs": 12988,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     },
+     "readFailure": {
+      "reached": "pass",
+      "focusRow": "pass",
+      "focus": "input#file-input.file-input[file] \"1. Choose a video\"",
+      "moves": [
+       "input#file-input.file-input[file] \"1. Choose a video\""
+      ],
+      "inView": {
+       "top": 424,
+       "bottom": 476,
+       "inWindow": true,
+       "sampled": 5,
+       "covered": 0
+      }
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149__en-GB__w1280__dark",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149__en-GB__w1280__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 18938,
+    "recordMs": 2629,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__en-GB__w1280__forced-light",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149__en-GB__w1280__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 18725,
+    "recordMs": 2717,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__en-GB__w1280__forced-dark",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149__en-GB__w1280__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 18749,
+    "recordMs": 2685,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__en-GB__w320__light",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149__en-GB__w320__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 18812,
+    "recordMs": 12810,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     },
+     "readFailure": {
+      "reached": "pass",
+      "focusRow": "pass",
+      "focus": "input#file-input.file-input[file] \"1. Choose a video\"",
+      "moves": [
+       "input#file-input.file-input[file] \"1. Choose a video\""
+      ],
+      "inView": {
+       "top": 258,
+       "bottom": 310,
+       "inWindow": true,
+       "sampled": 5,
+       "covered": 0
+      }
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149__en-GB__w320__dark",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149__en-GB__w320__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 18894,
+    "recordMs": 2382,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__en-GB__w320__forced-light",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149__en-GB__w320__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 18754,
+    "recordMs": 2406,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__en-GB__w320__forced-dark",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149__en-GB__w320__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 18744,
+    "recordMs": 2384,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__zh-Hans__w1280__light",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149__zh-Hans__w1280__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19515,
+    "recordMs": 13082,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     },
+     "readFailure": {
+      "reached": "pass",
+      "focusRow": "pass",
+      "focus": "input#file-input.file-input[file] \"1. 选择一个视频\"",
+      "moves": [
+       "input#file-input.file-input[file] \"1. 选择一个视频\""
+      ],
+      "inView": {
+       "top": 424,
+       "bottom": 476,
+       "inWindow": true,
+       "sampled": 5,
+       "covered": 0
+      }
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149__zh-Hans__w1280__dark",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149__zh-Hans__w1280__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19208,
+    "recordMs": 2633,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__zh-Hans__w1280__forced-light",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149__zh-Hans__w1280__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19170,
+    "recordMs": 2591,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__zh-Hans__w1280__forced-dark",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149__zh-Hans__w1280__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19174,
+    "recordMs": 2640,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__zh-Hans__w320__light",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149__zh-Hans__w320__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19388,
+    "recordMs": 12853,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     },
+     "readFailure": {
+      "reached": "pass",
+      "focusRow": "pass",
+      "focus": "input#file-input.file-input[file] \"1. 选择一个视频\"",
+      "moves": [
+       "input#file-input.file-input[file] \"1. 选择一个视频\""
+      ],
+      "inView": {
+       "top": 258,
+       "bottom": 310,
+       "inWindow": true,
+       "sampled": 5,
+       "covered": 0
+      }
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149__zh-Hans__w320__dark",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149__zh-Hans__w320__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19383,
+    "recordMs": 2431,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__zh-Hans__w320__forced-light",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149__zh-Hans__w320__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19171,
+    "recordMs": 2402,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__zh-Hans__w320__forced-dark",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149__zh-Hans__w320__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19197,
+    "recordMs": 2376,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__ms-MY__w1280__light",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149__ms-MY__w1280__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19321,
+    "recordMs": 13052,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     },
+     "readFailure": {
+      "reached": "pass",
+      "focusRow": "pass",
+      "focus": "input#file-input.file-input[file] \"1. Pilih video\"",
+      "moves": [
+       "input#file-input.file-input[file] \"1. Pilih video\""
+      ],
+      "inView": {
+       "top": 424,
+       "bottom": 476,
+       "inWindow": true,
+       "sampled": 5,
+       "covered": 0
+      }
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149__ms-MY__w1280__dark",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149__ms-MY__w1280__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19183,
+    "recordMs": 2737,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__ms-MY__w1280__forced-light",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149__ms-MY__w1280__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19254,
+    "recordMs": 2614,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__ms-MY__w1280__forced-dark",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149__ms-MY__w1280__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19295,
+    "recordMs": 2673,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__ms-MY__w320__light",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149__ms-MY__w320__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19308,
+    "recordMs": 12743,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     },
+     "readFailure": {
+      "reached": "pass",
+      "focusRow": "pass",
+      "focus": "input#file-input.file-input[file] \"1. Pilih video\"",
+      "moves": [
+       "input#file-input.file-input[file] \"1. Pilih video\""
+      ],
+      "inView": {
+       "top": 258,
+       "bottom": 310,
+       "inWindow": true,
+       "sampled": 5,
+       "covered": 0
+      }
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149__ms-MY__w320__dark",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149__ms-MY__w320__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19291,
+    "recordMs": 2490,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__ms-MY__w320__forced-light",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149__ms-MY__w320__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19244,
+    "recordMs": 2449,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__ms-MY__w320__forced-dark",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149__ms-MY__w320__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19170,
+    "recordMs": 2462,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  }
+ ]
+}

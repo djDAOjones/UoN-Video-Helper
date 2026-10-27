@@ -1,0 +1,189 @@
+// VH-207 #1's driver: S-149 and its variants S-149a to S-149f (V-46), and the
+// eight keyboard routes, walked by the pass's own runner (matrix.mjs), unchanged,
+// on a plan this driver declares in memory; then the records summarised.
+// Nothing here is written into the walker or the repository.
+//
+//   walk       declares the plan `vh207-<label>-<name>` (PLANS, in memory) and
+//              runs matrix.mjs's main on it in this process, so the walker's
+//              own Run (provenance, verify, manifest, digest) holds the records.
+//   summarise  reads run dirs and writes <label>-<scenario>.json, <label>-routes.json
+//              and <label>-summary.md into --out.
+//
+//   APP_URL=http://localhost:5181/ CDP_PORT=9251 FIX=<fixtures> OUT_ROOT=<out> RUN_ROOT=<runs> \
+//     node vh207-driver.mjs walk --walker <walker dir> --label before --name v1 \
+//       --scenarios S-149a,S-149b --langs en-GB,zh-Hans,ms-MY --views w1280,w320 \
+//       --modes light,dark,forced-light,forced-dark [--routes eight|J1:en-GB:w1280,...]
+//   node vh207-driver.mjs summarise --label before --out <dir> [--cite <run dir>] <run dir> …
+import { pathToFileURL } from 'node:url'
+import { join, resolve, basename, dirname } from 'node:path'
+import { readFileSync, writeFileSync, existsSync, readdirSync, appendFileSync, mkdirSync } from 'node:fs'
+import { execFileSync } from 'node:child_process'
+import { fileURLToPath } from 'node:url'
+
+const HERE = dirname(fileURLToPath(import.meta.url))
+const list = (s) => String(s ?? '').split(',').map((x) => x.trim()).filter(Boolean)
+function parse(argv) {
+  const out = { _: [] }
+  for (let i = 0; i < argv.length; i++) {
+    if (argv[i].startsWith('--')) { const k = argv[i].slice(2); const v = argv[i + 1] && !argv[i + 1].startsWith('--') ? argv[++i] : true; out[k] = v }
+    else out._.push(argv[i])
+  }
+  return out
+}
+const args = parse(process.argv.slice(2))
+// The eight routes the brief names: J1 to J4 and K-dialog in English at 1280 px,
+// J1 in Chinese and Malay at 1280 px and in English at 320 px, all light
+// (matrix.mjs builds them as PLANS.priority does, scenarios.mjs:1394–1397).
+const EIGHT = [['J1', 'en-GB', 'w1280'], ['J2', 'en-GB', 'w1280'], ['J3', 'en-GB', 'w1280'], ['J4', 'en-GB', 'w1280'], ['K-dialog', 'en-GB', 'w1280'], ['J1', 'zh-Hans', 'w1280'], ['J1', 'ms-MY', 'w1280'], ['J1', 'en-GB', 'w320']].map(([id, lang, view]) => ({ id, lang, view, mode: 'light' }))
+
+async function walk() {
+  for (const k of ['APP_URL', 'CDP_PORT', 'FIX', 'OUT_ROOT', 'RUN_ROOT']) if (!process.env[k]) throw new Error('set ' + k)
+  if (!args.walker) throw new Error('--walker <walker dir>')
+  const walker = resolve(args.walker)
+  const label = args.label ?? 'before'
+  const scenarios = list(args.scenarios)
+  const langs = list(args.langs ?? 'en-GB,zh-Hans,ms-MY'), views = list(args.views ?? 'w1280,w320'), modes = list(args.modes ?? 'light,dark,forced-light,forced-dark')
+  const routes = args.routes === 'eight' ? EIGHT : list(args.routes).map((r) => { const [id, lang, view, mode = 'light'] = r.split(':'); return { id, lang, view, mode } })
+  const records = [...scenarios.flatMap((id) => langs.flatMap((lang) => views.flatMap((view) => modes.map((mode) => ({ id, lang, view, mode }))))), ...routes]
+  if (!records.length) throw new Error('nothing declared')
+  const plan = `vh207-${label}-${args.name ?? 'run'}`
+  // Power and load at the run's start (the brief: AC only, recorded per run).
+  let power, onAc = true
+  try { power = execFileSync('zsh', [join(HERE, 'power.sh')], { encoding: 'utf8' }).trim() } catch (e) { power = String(e.stdout ?? e.message).trim(); onAc = false }
+  mkdirSync(process.env.RUN_ROOT, { recursive: true })
+  appendFileSync(join(process.env.RUN_ROOT, 'vh207-ledger.jsonl'), JSON.stringify({ plan, label, at: new Date().toISOString(), power, onAc, walker, appUrl: process.env.APP_URL, cdpPort: process.env.CDP_PORT, fixtures: process.env.FIX, records: records.length, ids: [...new Set(records.map((r) => r.id))] }) + '\n')
+  console.log('power: ' + power)
+  if (!onAc) { console.log('POWER-STOP: not on AC'); process.exit(3) }
+  const matrixUrl = pathToFileURL(join(walker, 'matrix.mjs')).href
+  const { PLANS, SCENARIOS, ROUTES } = await import(new URL('./scenarios.mjs', matrixUrl).href)
+  for (const r of records) if (!SCENARIOS[r.id] && !ROUTES[r.id]) throw new Error('the walker holds no ' + r.id)
+  PLANS[plan] = () => records.map((r) => ({ ...r }))
+  // matrix.mjs runs its main when it is the entry point: it is made so, unchanged.
+  process.argv = [process.argv[0], fileURLToPath(matrixUrl), plan]
+  await import(matrixUrl)
+}
+
+// ---------------------------------------------------------------------------
+const RESERVED = new Set(['run.json', 'manifest.json', 'artifacts.json'])
+const readRun = (dir) => {
+  const run = JSON.parse(readFileSync(join(dir, 'run.json'), 'utf8'))
+  const manifest = existsSync(join(dir, 'manifest.json')) ? JSON.parse(readFileSync(join(dir, 'manifest.json'), 'utf8')) : null
+  const recs = readdirSync(dir).filter((f) => f.endsWith('.json') && !RESERVED.has(f)).map((f) => ({ file: join(dir, f), ...JSON.parse(readFileSync(join(dir, f), 'utf8')) }))
+  return { dir, run, manifest, recs }
+}
+const short = (s, n = 90) => (s == null ? '—' : String(s).replace(/\s+/g, ' ').replace(/\|/g, '/').slice(0, n))
+const elOf = (f) => (!f ? '—' : f.el === 'body' ? 'body' : (f.id ? '#' + f.id : f.tag ?? '') + (f.type ? `[${f.type}]` : '') + (f.el ? ` "${short(f.el.replace(/^[^"]*"/, '').replace(/"$/, ''), 28)}"` : ''))
+const ringOf = (g) => (!g ? '—' : g.outcome === 'not-applicable' ? 'n/a (body)' : `${g.outcome} ${g.areaAt3to1 ?? '?'}/${g.perimeter2px ?? '?'} px²${g.focusVisible === false ? ', not :focus-visible' : ''}`)
+const seenOf = (s) => (!s ? '—' : s.el === 'body' ? '—' : `${s.shows ? 'shows' : 'NOT SHOWN'}${s.covered ? ', COVERED' : ''}`)
+
+/** One record's readings: for a variant, each reading's reached and focus rows; for S-149, its state, ring and subresults. */
+function rowsOf(rec) {
+  const sub = rec.instruments?.subresults
+  const items = sub?.items ?? []
+  const ringIns = (rec.instruments?.focus?.items ?? []).map((i) => ({ sel: i.sel, outcome: i.outcome, areaAt3to1: i.areaAt3to1, perimeter2px: i.perimeter2px, focusVisible: i.focusVisible, why: i.why }))
+  if (rec.id === 'S-149') {
+    const out = { reading: 'S-149', status: rec.status, state: rec.reached?.outcome, stateFocus: rec.reached?.outcome === 'pass' ? '#file-input (the state holds it)' : short(rec.reached?.problems?.join('; ') ?? rec.error), fileRing: ringIns[0] ?? null }
+    if (items.length) out.readFailure = { reached: items[0]?.outcome, focusRow: items[1]?.outcome, focus: items[1]?.focus ?? null, moves: items[1]?.moves, inView: items[1]?.inView, why: items[1]?.why ?? items[0]?.why }
+    if (sub && !items.length) out.readFailure = { outcome: sub.outcome, why: sub.why }
+    return [out]
+  }
+  if (!sub) return [{ reading: rec.id, status: rec.status, error: short(rec.error ?? rec.reached?.problems?.join('; '), 300) }]
+  if (!items.length) return [{ reading: rec.id, status: rec.status, subresults: sub.outcome, error: short(sub.why, 300) }]
+  const out = []
+  for (let i = 0; i + 1 < items.length; i += 2) {
+    const reached = items[i], focus = items[i + 1]
+    const k = (/^reached \((f\d)\)/.exec(reached.what) ?? [])[1] ?? rec.id.replace('S-149', '')
+    out.push({ reading: k, status: rec.status, reached: reached.outcome, reachedWhy: reached.why, placedOn: reached.placedOn, read: reached.read, readMs: reached.readMs, pending: reached.pending, atChoosing: reached.atChoosing, f20: reached.f20, focusRow: focus.outcome, focus: focus.focus, visible: focus.visible, moves: focus.moves, inView: focus.inView, seen: focus.seen, ring: focus.ring, nextTab: focus.nextTab, statusLine: focus.status, why: focus.why })
+  }
+  return out
+}
+
+function summarise() {
+  const label = args.label ?? 'before'
+  const out = resolve(args.out ?? '.')
+  mkdirSync(out, { recursive: true })
+  const runs = args._.slice(1).map((d) => readRun(resolve(d)))
+  const ledgerOf = (run) => {
+    const f = join(dirname(run.dir), 'vh207-ledger.jsonl')
+    if (!existsSync(f)) return null
+    return readFileSync(f, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)).filter((l) => l.plan === run.run.name).at(-1) ?? null
+  }
+  const byId = new Map()
+  const routes = []
+  for (const r of runs) for (const rec of r.recs) {
+    if (['J1', 'J2', 'J3', 'J4', 'K-dialog', 'K-player'].includes(rec.id)) { routes.push({ r, rec }); continue }
+    if (!byId.has(rec.id)) byId.set(rec.id, [])
+    byId.get(rec.id).push({ r, rec })
+  }
+  const order = (a, b) => ['en-GB', 'zh-Hans', 'ms-MY'].indexOf(a.rec.lang) - ['en-GB', 'zh-Hans', 'ms-MY'].indexOf(b.rec.lang) || ['w1280', 'w320'].indexOf(a.rec.view) - ['w1280', 'w320'].indexOf(b.rec.view) || ['light', 'dark', 'forced-light', 'forced-dark'].indexOf(a.rec.mode) - ['light', 'dark', 'forced-light', 'forced-dark'].indexOf(b.rec.mode)
+  const L = ['<!-- markdownlint-disable -->', `# VH-207 — the ${label} walk (S-149, its variants (a) to (f), the eight routes)`, '']
+  L.push('## Runs', '', '| Run | Records | Ok | Whole | Started | Power and load at start |', '| --- | ---: | ---: | --- | --- | --- |')
+  for (const r of runs) { const l = ledgerOf(r); L.push(`| \`${basename(r.dir)}\` | ${r.recs.length} | ${r.recs.filter((x) => x.status === 'ok').length} | ${r.manifest ? (r.manifest.coverage.whole ? 'whole' : 'not whole: ' + short(r.manifest.coverage.problems.map((p) => p.kind + ' ' + (p.key ?? '')).join('; '), 160)) : 'no manifest'} | ${r.run.created} | ${short(l?.power, 260)} |`) }
+  L.push('')
+  // Resumes in place (resume.sh: matrix.mjs --resume), each with its power and load.
+  for (const r of runs) {
+    const f = join(dirname(r.dir), 'vh207-resumes.jsonl')
+    const rs = existsSync(f) ? readFileSync(f, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)).filter((x) => x.plan === basename(r.dir)) : []
+    if (rs.length) L.push(`Resumed in place: \`${basename(r.dir)}\`, ${rs.length} attempt(s) after the first (records kept: ${r.recs.filter((x) => (x.attempt ?? 1) === 1).length} from the first, ${r.recs.filter((x) => (x.attempt ?? 1) > 1).map((x) => `${x.key} a${x.attempt}`).join(', ')}).`, ...rs.map((x) => `- resume ${x.resume}: ${short(x.power, 260)}`), '')
+  }
+  const gaps = []
+  const json = {}
+  for (const [id, list] of [...byId.entries()].sort()) {
+    list.sort(order)
+    const cells = list.map(({ r, rec }) => ({ key: rec.key, run: basename(r.dir), record: rec.file, status: rec.status, error: rec.error ? short(rec.error, 400) : undefined, timing: rec.timing, faults: rec.faults, readings: rowsOf(rec), subresults: rec.instruments?.subresults ? { outcome: rec.instruments.subresults.outcome, why: rec.instruments.subresults.why } : undefined }))
+    json[id] = cells
+    writeFileSync(join(out, `${label}-${id}.json`), JSON.stringify({ label, scenario: id, cells }, null, 1))
+    L.push(`## ${id}`, '')
+    const count = new Map()
+    if (id === 'S-149') {
+      L.push('| Cell | Status | State (the block; focus on the file input) | File input ring (focus instrument) | Read-failure subresult (light): reached / focus / where |', '| --- | --- | --- | --- | --- |')
+      for (const c of cells) { const x = c.readings[0]; L.push(`| ${c.key.replace(/^S-149__/, '')} | ${c.status} | ${x.state ?? '—'}${x.state === 'pass' ? '' : ': ' + short(x.stateFocus, 80)} | ${ringOf(x.fileRing)} | ${x.readFailure ? `${x.readFailure.reached ?? x.readFailure.outcome} / ${x.readFailure.focusRow ?? '—'} / ${short(x.readFailure.focus ?? x.readFailure.why, 60)}` : '—'} |`); if (x.readFailure?.focus) count.set('read failure → ' + x.readFailure.focus, (count.get('read failure → ' + x.readFailure.focus) ?? 0) + 1); if (c.status !== 'ok') gaps.push(`${c.key}: ${c.status} ${short(c.error ?? x.stateFocus, 200)}`) }
+    } else {
+      L.push('| Cell | Reading | Reached | Focus at the choosing | Focus row | Focused element | :focus-visible | Shows (2.4.11) | Ring (2.4.13: area at 3:1 / 2 px perimeter) | Next Tab | Source status line (4.1.3) | Read |', '| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: |')
+      for (const c of cells) for (const x of c.readings) {
+        if (x.error || x.subresults) { L.push(`| ${c.key.replace(/^S-149\w__/, '')} | ${x.reading} | ${x.status} | — | — | — | — | — | — | — | ${short(x.error, 120)} | — |`); gaps.push(`${c.key}: ${short(x.error, 240)}`); continue }
+        const el = x.seen ? elOf(x.seen) : short(x.focus, 40)
+        const at = x.atChoosing ? `${x.atChoosing.on === 'body' ? 'body' : short(x.atChoosing.on.replace(/ ".*/, ''), 40)}${x.atChoosing.wasConnected === false ? ' (the focused Save replaced)' : ''}` : '—'
+        L.push(`| ${c.key.replace(/^S-149\w__/, '')} | ${x.reading} | ${x.reached} | ${at} | ${x.focusRow} | ${el} | ${x.visible ?? '—'} | ${seenOf(x.seen)} | ${ringOf(x.ring)} | ${elOf(x.nextTab)} | ${x.statusLine ? `${x.statusLine.failure ? 'failure said' : 'FAILURE NOT SAID'}${x.statusLine.tookTooLong ? ' (took too long)' : ''}: "${short(x.statusLine.text, 60)}"` : '—'} | ${x.readMs ? Math.round(x.readMs / 1000) + ' s' : '—'} |`)
+        const k = `(${x.reading}) ${x.reached === 'pass' ? el.replace(/ ".*/, '') : 'not reached'}`
+        count.set(k, (count.get(k) ?? 0) + 1)
+        if (x.reached !== 'pass') gaps.push(`${c.key} (${x.reading}): reached ${x.reached}: ${short(x.reachedWhy ?? x.why, 200)}`)
+      }
+    }
+    L.push('', 'Focused element after the read, by count: ' + ([...count.entries()].map(([k, n]) => `${k} ×${n}`).join('; ') || '—'), '')
+  }
+  if (routes.length) {
+    L.push('## The eight keyboard routes', '', '| Route | Status | keys | Steps pass / fail / c-d | First not passing |', '| --- | --- | --- | --- | --- |')
+    const rj = []
+    for (const { r, rec } of routes.sort((a, b) => a.rec.key.localeCompare(b.rec.key))) {
+      const k = rec.instruments?.keys
+      const steps = k?.steps ?? []
+      const n = (o) => steps.filter((s) => s.outcome === o).length
+      const bad = steps.find((s) => s.outcome !== 'pass')
+      L.push(`| ${rec.key} | ${rec.status} | ${k?.outcome ?? '—'} | ${n('pass')} / ${n('fail')} / ${n('cannot-determine')} of ${k?.declared ?? '?'} | ${bad ? short(`${bad.note ?? bad.key}: ${bad.to} ${bad.waited ?? ''}`, 140) : '—'} |`)
+      rj.push({ key: rec.key, run: basename(r.dir), record: rec.file, status: rec.status, keys: k ? { outcome: k.outcome, declared: k.declared, pass: n('pass'), fail: n('fail'), cannotDetermine: n('cannot-determine'), notPassing: steps.filter((s) => s.outcome !== 'pass').map((s) => ({ note: s.note, key: s.key, to: s.to, expect: s.expect, waited: s.waited, outcome: s.outcome })) } : null, error: rec.error })
+      if (rec.status !== 'ok') gaps.push(`${rec.key}: ${rec.status} ${short(rec.error ?? rec.reached?.problems?.join('; '), 200)}`)
+      for (const s of steps) if (typeof s.waited === 'string') gaps.push(`${rec.key}: a wait timed out: ${short(s.note, 80)} (${s.waited})`)
+    }
+    writeFileSync(join(out, `${label}-routes.json`), JSON.stringify({ label, routes: rj }, null, 1))
+    json.routes = rj
+    L.push('')
+  }
+  if (args.cite) {
+    const c = readRun(resolve(args.cite))
+    const s149 = c.recs.filter((x) => x.id === 'S-149').sort((a, b) => a.key.localeCompare(b.key))
+    L.push('## VH-199, cited', '', `Run \`${c.run.runId}\` (\`${c.dir}\`), the pass's evidence run at source a3039c3 and revision ${c.run.provenance?.instruments?.revision ?? '?'}: S-149's ${s149.length} records, COLOUR12 at 1280 px.`, '', '| Record | Status | State | Read-failure subresult: reached / focus / where |', '| --- | --- | --- | --- |')
+    for (const x of s149) { const it = x.instruments?.subresults?.items ?? []; L.push(`| ${x.key} | ${x.status} | ${x.reached?.outcome} | ${it.length ? `${it[0].outcome} / ${it[1]?.outcome} / ${it[1]?.focus ?? '—'}` : '—'} |`) }
+    L.push('')
+  }
+  L.push('## Gaps, timeouts and cells not reached', '', ...(gaps.length ? gaps.map((g) => '- ' + g) : ['- none']), '')
+  if (args.append && existsSync(resolve(args.append))) L.push(readFileSync(resolve(args.append), 'utf8'))
+  writeFileSync(join(out, `${label}-summary.md`), L.join('\n') + '\n')
+  if (args.combined) writeFileSync(resolve(args.combined), JSON.stringify({ label, runs: runs.map((r) => ({ dir: r.dir, runId: r.run.runId, whole: r.manifest?.coverage?.whole, problems: r.manifest?.coverage?.problems, ledger: ledgerOf(r) })), scenarios: json }, null, 1))
+  console.log(`wrote ${label}-summary.md and ${byId.size} scenario file(s)${routes.length ? ' and the routes' : ''} to ${out}`)
+}
+
+const cmd = args._[0]
+if (cmd === 'walk') await walk()
+else if (cmd === 'summarise') summarise()
+else { console.error('usage: node vh207-driver.mjs walk|summarise …'); process.exit(2) }

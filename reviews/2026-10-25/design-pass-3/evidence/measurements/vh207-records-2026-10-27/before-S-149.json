@@ -1,0 +1,762 @@
+{
+ "label": "before",
+ "scenario": "S-149",
+ "cells": [
+  {
+   "key": "S-149__en-GB__w1280__light",
+   "run": "vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899/S-149__en-GB__w1280__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19199,
+    "recordMs": 13352,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     },
+     "readFailure": {
+      "reached": "pass",
+      "focusRow": "fail",
+      "focus": "body",
+      "moves": [],
+      "inView": null
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "fail"
+   }
+  },
+  {
+   "key": "S-149__en-GB__w1280__dark",
+   "run": "vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899/S-149__en-GB__w1280__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 18824,
+    "recordMs": 2572,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__en-GB__w1280__forced-light",
+   "run": "vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899/S-149__en-GB__w1280__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 18760,
+    "recordMs": 2660,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__en-GB__w1280__forced-dark",
+   "run": "vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899/S-149__en-GB__w1280__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 18792,
+    "recordMs": 2729,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__en-GB__w320__light",
+   "run": "vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899/S-149__en-GB__w320__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 18795,
+    "recordMs": 12854,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     },
+     "readFailure": {
+      "reached": "pass",
+      "focusRow": "fail",
+      "focus": "body",
+      "moves": [],
+      "inView": null
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "fail"
+   }
+  },
+  {
+   "key": "S-149__en-GB__w320__dark",
+   "run": "vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899/S-149__en-GB__w320__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 18820,
+    "recordMs": 2417,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__en-GB__w320__forced-light",
+   "run": "vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899/S-149__en-GB__w320__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 18741,
+    "recordMs": 2373,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__en-GB__w320__forced-dark",
+   "run": "vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899/S-149__en-GB__w320__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 18800,
+    "recordMs": 2439,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__zh-Hans__w1280__light",
+   "run": "vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899/S-149__zh-Hans__w1280__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19365,
+    "recordMs": 13000,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     },
+     "readFailure": {
+      "reached": "pass",
+      "focusRow": "fail",
+      "focus": "body",
+      "moves": [],
+      "inView": null
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "fail"
+   }
+  },
+  {
+   "key": "S-149__zh-Hans__w1280__dark",
+   "run": "vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899/S-149__zh-Hans__w1280__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19256,
+    "recordMs": 2635,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__zh-Hans__w1280__forced-light",
+   "run": "vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899/S-149__zh-Hans__w1280__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19187,
+    "recordMs": 2595,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__zh-Hans__w1280__forced-dark",
+   "run": "vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899/S-149__zh-Hans__w1280__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19170,
+    "recordMs": 2684,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__zh-Hans__w320__light",
+   "run": "vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899/S-149__zh-Hans__w320__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19118,
+    "recordMs": 12744,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     },
+     "readFailure": {
+      "reached": "pass",
+      "focusRow": "fail",
+      "focus": "body",
+      "moves": [],
+      "inView": null
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "fail"
+   }
+  },
+  {
+   "key": "S-149__zh-Hans__w320__dark",
+   "run": "vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899/S-149__zh-Hans__w320__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19300,
+    "recordMs": 2366,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__zh-Hans__w320__forced-light",
+   "run": "vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899/S-149__zh-Hans__w320__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19185,
+    "recordMs": 2373,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__zh-Hans__w320__forced-dark",
+   "run": "vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899/S-149__zh-Hans__w320__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19318,
+    "recordMs": 2488,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__ms-MY__w1280__light",
+   "run": "vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899/S-149__ms-MY__w1280__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19246,
+    "recordMs": 13048,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     },
+     "readFailure": {
+      "reached": "pass",
+      "focusRow": "fail",
+      "focus": "body",
+      "moves": [],
+      "inView": null
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "fail"
+   }
+  },
+  {
+   "key": "S-149__ms-MY__w1280__dark",
+   "run": "vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899/S-149__ms-MY__w1280__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19187,
+    "recordMs": 2582,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__ms-MY__w1280__forced-light",
+   "run": "vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899/S-149__ms-MY__w1280__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19288,
+    "recordMs": 2742,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__ms-MY__w1280__forced-dark",
+   "run": "vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899/S-149__ms-MY__w1280__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19352,
+    "recordMs": 2714,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__ms-MY__w320__light",
+   "run": "vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899/S-149__ms-MY__w320__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19281,
+    "recordMs": 12649,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     },
+     "readFailure": {
+      "reached": "pass",
+      "focusRow": "fail",
+      "focus": "body",
+      "moves": [],
+      "inView": null
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "fail"
+   }
+  },
+  {
+   "key": "S-149__ms-MY__w320__dark",
+   "run": "vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899/S-149__ms-MY__w320__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19273,
+    "recordMs": 2422,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__ms-MY__w320__forced-light",
+   "run": "vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899/S-149__ms-MY__w320__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19217,
+    "recordMs": 2551,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  },
+  {
+   "key": "S-149__ms-MY__w320__forced-dark",
+   "run": "vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899/S-149__ms-MY__w320__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 19111,
+    "recordMs": 2509,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F14"
+   ],
+   "readings": [
+    {
+     "reading": "S-149",
+     "status": "ok",
+     "state": "pass",
+     "stateFocus": "#file-input (the state holds it)",
+     "fileRing": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "focusVisible": true
+     }
+    }
+   ]
+  }
+ ]
+}

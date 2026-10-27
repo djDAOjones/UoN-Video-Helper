@@ -1,0 +1,15 @@
+Verdict: Commit
+
+Musts: none.
+
+Notes:
+
+- Musts 1 and 4 remain resolved: `trimClear` is captured at `src/main.ts:1419`; all eight probe pairs support the correction. The retained source audit still establishes the before’s identity.
+- The owner’s answer is verbatim in `vh207-codex-compare-2026-10-27.md:28`, `project/items/VH-207.md:45`, and `project/decisions.md:25`. The close accurately limits his ruling to accepting the existing readings. Musts 2 and 3 are settled.
+- The records support 168 cells plus eight routes per side, the stated focus outcomes, rings, guards and F20 proof. The additional successors remain explicitly distinguished as proved by source reading.
+- The close entry follows the ledger grammar. VH-171’s archive move is verbatim and append-only; the index agrees. Backlog, trajectory, item Notes and V-46’s Disposition agree. No unrecorded deferral or fully paid wish left open was found.
+- Must 5 is satisfied by the reported green gate on this frozen tree. I independently ran `node tools/check.mjs`: **0 failures, 0 warnings**. No tests or dependencies changed; the existing EBU skip remains.
+- The drafted commit accurately describes the candidate and quotes the owner exactly. Populate `Verify:` with the planned post-evidence rerun and use `Checked: gpt-6-astra — Commit — V-46`.
+- No unexplained changes found among the ten modified files and 65 untracked evidence files.
+
+Digest rules applied: WCAG 2.4.3 and focus appearance; Nielsen 3, user control and freedom.

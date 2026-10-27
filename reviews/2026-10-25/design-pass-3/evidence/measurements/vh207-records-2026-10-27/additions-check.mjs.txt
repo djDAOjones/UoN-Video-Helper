@@ -1,0 +1,46 @@
+// VH-207 #1: the walker additions held to the base walker: every existing
+// scenario, route, plan, gap, transition and fault declares and behaves as
+// before (by source text and by the plans' records); only S-149a to S-149f
+// and F20 are new. Usage: node additions-check.mjs <base walker dir> <candidate walker dir>
+import { pathToFileURL } from 'node:url'
+import { join } from 'node:path'
+import { createHash } from 'node:crypto'
+
+const [orig, cand] = process.argv.slice(2)
+const load = async (dir) => ({ sc: await import(pathToFileURL(join(dir, 'scenarios.mjs')).href + '?' + dir.length), f: await import(pathToFileURL(join(dir, 'faults.mjs')).href + '?' + dir.length) })
+const A = await load(orig)
+const B = await load(cand)
+const sha = (x) => createHash('sha256').update(x).digest('hex').slice(0, 16)
+const src = (v) => JSON.stringify(v, (k, x) => (typeof x === 'function' ? 'fn:' + x.toString() : x))
+const problems = []
+const sameKeys = (name, a, b, allowNew) => {
+  const ka = Object.keys(a), kb = Object.keys(b)
+  const gone = ka.filter((k) => !kb.includes(k)), added = kb.filter((k) => !ka.includes(k))
+  if (gone.length) problems.push(`${name}: gone ${gone.join(', ')}`)
+  const bad = added.filter((k) => !allowNew.includes(k))
+  if (bad.length) problems.push(`${name}: unexpected new ${bad.join(', ')}`)
+  for (const k of ka) if (kb.includes(k) && src(a[k]) !== src(b[k])) problems.push(`${name}.${k}: declaration differs`)
+  return added
+}
+const newScen = sameKeys('SCENARIOS', A.sc.SCENARIOS, B.sc.SCENARIOS, ['S-149a', 'S-149b', 'S-149c', 'S-149d', 'S-149e', 'S-149f'])
+sameKeys('ROUTES', A.sc.ROUTES, B.sc.ROUTES, [])
+sameKeys('TRANSITIONS', A.sc.TRANSITIONS, B.sc.TRANSITIONS, [])
+const newFaults = sameKeys('FAULTS', A.f.FAULTS, B.f.FAULTS, ['F20'])
+const plans = {}
+for (const p of Object.keys(A.sc.PLANS)) {
+  const a = sha(JSON.stringify(A.sc.PLANS[p]())), b = B.sc.PLANS[p] ? sha(JSON.stringify(B.sc.PLANS[p]())) : 'missing'
+  plans[p] = { base: a, candidate: b, records: A.sc.PLANS[p]().length }
+  if (a !== b) problems.push(`PLANS.${p}: records differ`)
+}
+for (const p of Object.keys(B.sc.PLANS)) if (!A.sc.PLANS[p]) problems.push(`PLANS.${p}: new`)
+if (src(A.sc.GAPS) !== src(B.sc.GAPS)) problems.push('GAPS differ')
+if (src(A.sc.SOURCE_ONLY) !== src(B.sc.SOURCE_ONLY)) problems.push('SOURCE_ONLY differs')
+if (src(A.sc.READ_FAILURE_SUB) !== src(B.sc.READ_FAILURE_SUB)) problems.push('READ_FAILURE_SUB differs')
+for (const n of ['MX_INIT', 'READINGS']) if (A.sc[n] !== B.sc[n]) problems.push(n + ' differs')
+const exA = Object.keys(A.sc).sort(), exB = Object.keys(B.sc).sort()
+if (JSON.stringify(exA) !== JSON.stringify(exB)) problems.push(`scenarios.mjs exports differ: ${exB.filter((x) => !exA.includes(x)).join(', ')} new; ${exA.filter((x) => !exB.includes(x)).join(', ')} gone`)
+const fx = Object.keys(A.f).sort(), fy = Object.keys(B.f).sort()
+if (JSON.stringify(fx) !== JSON.stringify(fy)) problems.push('faults.mjs exports differ')
+for (const id of newScen) if (!B.sc.SCENARIOS[id].fixOnly) problems.push(`${id} is not fixOnly`)
+console.log(JSON.stringify({ ok: !problems.length, problems, newScenarios: newScen, newFaults, plans }, null, 1))
+process.exit(problems.length ? 1 : 0)

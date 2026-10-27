@@ -1,0 +1,12 @@
+#!/bin/zsh
+# VH-207 #1: the before, on the base export (5893d9d) served at :5181, with the candidate walker. Three walks at once; the routes after (d) and (e).
+S=/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207
+WB=/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/base/reviews/2026-10-25/design-pass-3/evidence/measurements/walker
+zsh $S/go.sh before-c "$WB" --label before --name c --scenarios S-149c &
+P1=$!
+zsh $S/go.sh before-s149abf "$WB" --label before --name s149abf --scenarios S-149,S-149a,S-149b,S-149f &
+P2=$!
+zsh $S/go.sh before-de "$WB" --label before --name de --scenarios S-149d,S-149e && true
+zsh $S/go.sh before-routes "$WB" --label before --name routes --routes eight
+wait $P1 $P2
+echo "before done $(date -u +%FT%TZ)"

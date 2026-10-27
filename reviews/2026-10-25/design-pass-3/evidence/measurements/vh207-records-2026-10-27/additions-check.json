@@ -1,0 +1,94 @@
+{
+ "ok": false,
+ "problems": [
+  "SCENARIOS.S-140: declaration differs"
+ ],
+ "newScenarios": [
+  "S-149a",
+  "S-149b",
+  "S-149c",
+  "S-149d",
+  "S-149e",
+  "S-149f"
+ ],
+ "newFaults": [
+  "F20"
+ ],
+ "plans": {
+  "pilot": {
+   "base": "78899aac9a21544a",
+   "candidate": "78899aac9a21544a",
+   "records": 10
+  },
+  "pilot2": {
+   "base": "71c17b3d71c4aa25",
+   "candidate": "71c17b3d71c4aa25",
+   "records": 43
+  },
+  "matrix": {
+   "base": "bf5e82bbc908d4c5",
+   "candidate": "bf5e82bbc908d4c5",
+   "records": 1886
+  },
+  "smoke": {
+   "base": "b4305c5f48b7fb8b",
+   "candidate": "b4305c5f48b7fb8b",
+   "records": 183
+  },
+  "priority": {
+   "base": "f6d225bb364a0371",
+   "candidate": "f6d225bb364a0371",
+   "records": 699
+  },
+  "priority-1": {
+   "base": "939d8dd4c0e5a24d",
+   "candidate": "939d8dd4c0e5a24d",
+   "records": 151
+  },
+  "priority-2": {
+   "base": "0883b4a4b2946f12",
+   "candidate": "0883b4a4b2946f12",
+   "records": 151
+  },
+  "priority-3": {
+   "base": "966578ec0892c4f0",
+   "candidate": "966578ec0892c4f0",
+   "records": 224
+  },
+  "priority-4": {
+   "base": "db8a22f79103bb14",
+   "candidate": "db8a22f79103bb14",
+   "records": 173
+  },
+  "vh179": {
+   "base": "93c6a07b21b71a24",
+   "candidate": "93c6a07b21b71a24",
+   "records": 184
+  },
+  "vh180": {
+   "base": "df7be36e24c51663",
+   "candidate": "df7be36e24c51663",
+   "records": 150
+  },
+  "vh181": {
+   "base": "e3ff2d1ad23caf0e",
+   "candidate": "e3ff2d1ad23caf0e",
+   "records": 105
+  },
+  "vh181-rest": {
+   "base": "8ae1861a608d321a",
+   "candidate": "8ae1861a608d321a",
+   "records": 246
+  },
+  "vh198proof": {
+   "base": "50fd418306bf793f",
+   "candidate": "50fd418306bf793f",
+   "records": 11
+  },
+  "pilot3": {
+   "base": "4a9cd5517d4f0c09",
+   "candidate": "4a9cd5517d4f0c09",
+   "records": 77
+  }
+ }
+}

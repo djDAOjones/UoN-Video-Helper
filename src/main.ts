@@ -1397,6 +1397,32 @@ const repaintDropRefusal = installDropZone({
 fileInput.addEventListener('change', () => {
   const file = fileInput.files?.[0]
   if (!file) return
+  // Noted before anything below takes it away (V-46). The choosing hides or
+  // empties the check's Stop, the read, the verdict and Create's row; its
+  // reading lock disables the trim, "Use the whole video" included; and the result shown again or cleared
+  // replaces its card and Save, or the "discard it?" question, and moves its
+  // player out and back. Each drops focus to the page.
+  const fromChoosing = focusHeldBy([
+    stopCheckButton,
+    checkAgainButton,
+    sourceReport,
+    sourceBlock,
+    preflightReport,
+    audioWarnings,
+    processActions,
+    trimStartRange,
+    trimEndRange,
+    trimStartField,
+    trimEndField,
+    trimSetStart,
+    trimSetEnd,
+    trimClear,
+  ])
+  const fromResult = focusHeldBy([processResult])
+  const asked = discardAsked
+  const was = document.activeElement
+  const shownCard = processResult.firstElementChild
+  const player = resultPlayer?.video ?? null
   // Everything already in flight described the previous file.
   const current = beginSelection()
 
@@ -1441,10 +1467,24 @@ fileInput.addEventListener('change', () => {
   // just replaced (VH-79). Re-rendering restores the result the question
   // interrupted, which is also the only route back to saving it.
   if (unsavedResult) {
-    renderResult(unsavedResult)
+    const card = renderResult(unsavedResult)
+    // The same control in the result shown again: its card, its player or its
+    // Save. The question it retires goes to the card it restores, as "Keep
+    // it" does.
+    const same =
+      asked || was === shownCard
+        ? card
+        : was === player
+          ? player
+          : card.querySelector<HTMLElement>('.actions > button')
+    fromResult(...(same ? [same] : []), fileInput)
   } else {
     clearResult()
+    fromResult(fileInput)
   }
+  // The rest has no successor of its own until the new file is read: the
+  // chooser the person just used continues the task.
+  fromChoosing(fileInput)
 
   void (async () => {
     try {
@@ -1754,6 +1794,12 @@ function clearTrimPreview(): void {
  * the step says why — reading, or unreadable.
  */
 function clearTrim(notice: 'reading' | 'unreadable'): void {
+  // An unreadable file takes the setup steps away, and step 6 unless a result
+  // stands. Both read failures, the worker's failed reply and the exception,
+  // end here, so focus in those steps is noted here, once, before anything
+  // changes: the lock below disables some of their controls first (V-46).
+  const shown = { setup: false, create: resultStanding }
+  const fromSteps = focusHeldBy(notice === 'unreadable' ? stepsWithdrawnBy(shown) : [])
   clearTrimPreview()
   trimPreviewNote.hidden = true
   trimNotice = notice
@@ -1764,10 +1810,14 @@ function clearTrim(notice: 'reading' | 'unreadable'): void {
   for (const range of [trimStartRange, trimEndRange]) range.max = '0'
   applyControlLock()
   if (notice === 'unreadable') {
-    revealLaterSteps({ setup: false, create: resultStanding })
+    revealLaterSteps(shown)
     // The chooser leads again only when no result stands: beside one, its
     // Save stays the one primary button (VH-150, the owner's word).
     if (!resultStanding) fileInput.classList.remove('file-input--chosen')
+    // To the chooser the person just used. A save can start while the read
+    // is pending, and it shuts the chooser: Stop saving continues the task,
+    // as at a block.
+    fromSteps(fileInput, stopSaveButton)
   }
 }
 

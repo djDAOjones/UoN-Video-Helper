@@ -7,6 +7,8 @@ import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { F, sleep } from './walk.mjs'
 import { IN_DIALOG, IN_DIALOG_OR_OUT, focusByKeyboard, key } from './qualify.mjs'
+// VH-207 (V-46): the ring read where a variant's focus lands, as the focus instrument reads one.
+import { focusArea } from './qualify.mjs'
 import { FAULTS, applyFault, releaseFault, releaseAll, gotoNoWait } from './faults.mjs'
 import { spokenAtCompletion } from './phase8.mjs'
 
@@ -1638,6 +1640,138 @@ export const READ_FAILURE_SUB = {
     see('focus handed to the file input, the chooser that stays, never lost to the page (2.4.3; the hand-off S-149 asserts for a block)', (o) => (o.readFailure.branch ? { outcome: o.readFailure.focus.landed ? 'pass' : 'fail', focus: o.readFailure.focus.el, moves: o.readFailure.focus.moves, inView: o.readFailure.focus.inView } : { outcome: 'cannot-determine', why: 'the read-failure branch was not reached' })),
   ],
 }
+
+// ---------------------------------------------------------------------------
+// VH-207 (V-46, WCAG 2.4.3): the read-failure branch's variants (a) to (f),
+// declared, proved and kept for VH-203. Each is a scenario of its own,
+// S-149a to S-149f, kept out of the pass's frozen plans (fixOnly: parts.mjs,
+// PLANS.matrix and smoke) and walked by VH-207's own plan in every colour
+// mode, unlike READ_FAILURE_SUB (S-149's, light only, as it is). Its setup is
+// the empty page (F20 set first for (c)); its subresults, which run in each
+// record's own mode once the page is measured (`when` holds for every record,
+// so each has a setup of its own), walk the variant by keys and read where
+// focus went before any instrument moves it.
+const VH207_ON = `(() => { const a = document.activeElement; return !a || a === document.body ? 'body' : window.__audit.desc(a).slice(0, 80); })()`
+const VH207_STEPS = MX(`({ trim: !M.el('#step-trim').hidden, title: !M.el('#step-title').hidden, create: !M.el('#step-create').hidden, result: M.res(), dialog: ${DIALOG_OPEN} })`)
+const VH207_READ = MX(`({ unreadable: M.kindIn('#source-report') === 'error', tookTooLong: M.has('failure.unreadable.tookTooLong', '#source-report'), block: M.kindIn('#source-block'), verdict: !!M.verdict(), trimHidden: M.el('#step-trim').hidden, titleHidden: M.el('#step-title').hidden, createShown: !M.el('#step-create').hidden, result: M.res(), saveShown: !!M.saveBtn() && M.vis(M.saveBtn()), newSave: !!M.saveBtn() && M.saveBtn() !== window.__vh207was, dialog: ${DIALOG_OPEN} })`)
+/** VH-207: a selector for the focused element, so its ring is read as the focus instrument reads one: its id, a radio by name and value, Save, or else a mark on it. */
+const VH207_FOCUSED = `(() => { const a = document.activeElement; if (!a || a === document.body) return null; if (a.id) return '#' + CSS.escape(a.id); if (a.type === 'radio' && a.name) return 'input[name="' + a.name + '"][value="' + a.value + '"]'; if (a.matches(${JSON.stringify(SAVE)})) return ${JSON.stringify(SAVE)}; a.setAttribute('data-vh207-focus', ''); return '[data-vh207-focus]'; })()`
+const VH207_LEDE = '.lede p[data-i18n="lede.privacy"]'
+/**
+ * VH-207: where focus stands once a variant's read has ended, read before any
+ * instrument moves it: the element and its moves (2.4.3), what shows of it
+ * (FOCUS_SEEN; 2.4.11, 2.4.12) and the source status line (4.1.3); then its
+ * ring by pixels as the focus instrument reads one (focusArea, which blurs it
+ * and puts focus back on it; 2.4.13); then one Tab, and where it lands.
+ */
+async function vh207FocusNow(w, mark, successor) {
+  const r = { focus: await readFocus(w, mark, successor), seen: await w.evaluate(FOCUS_SEEN) }
+  r.status = { text: String(await mx(w, `M.text('#source-status')`)).replace(/\s+/g, ' ').trim(), failure: await mx(w, `M.has('failure.unreadable', '#source-status')`), tookTooLong: await mx(w, `M.has('failure.unreadable.tookTooLong', '#source-status')`) }
+  const sel = await w.evaluate(VH207_FOCUSED)
+  if (sel) {
+    const f = await focusArea(w, sel, sel === FILE.sel ? { ref: FILE.ref } : {})
+    r.ring = { sel, outcome: f.outcome, why: f.why, focusVisible: f.focusVisible, areaAt3to1: f.areaAt3to1, perimeter2px: f.perimeter2px, bestRatio: f.bestRatio, changedAny: f.changedAny, controlPx: f.controlPx, paintedPx: f.paintedPx, back: await w.evaluate(`document.activeElement === document.querySelector(${JSON.stringify(sel)})`) }
+  } else r.ring = { outcome: 'not-applicable', why: 'focus on the body: no ring to read' }
+  await key(w, 'Tab'); await sleep(150)
+  r.nextTab = await w.evaluate(FOCUS_SEEN)
+  return r
+}
+/**
+ * VH-207: a variant walked by keys: lecture-30s.mp4 read to a verdict (for
+ * (d) and (e), its video then made), focus placed (`place`), notvideo.mp4
+ * chosen, `pending` run while its read is under way, the read's end awaited,
+ * and focus read at once. Without `pending`, the steps are readFailureBranch's.
+ */
+async function vh207Variant(w, v) {
+  const o = obsOf(w)
+  const ran = ((o.vh207 = o.vh207 ?? {})[v.key] = {})
+  await w.setFiles(F('lecture-30s.mp4')); await w.waitSettled()
+  await until(w, 'M.verdict()', 'a verdict on the readable file', 120000)
+  if (v.made) { await create(w); await w.waitRunning(); await w.waitFinished(); ran.made = await mx(w, 'M.finished()') }
+  ran.placed = (await v.place(w)) ?? null
+  ran.placedOn = await activeDesc(w)
+  ran.before = await w.evaluate(VH207_STEPS)
+  // At the choosing: read in the change event as it bubbles to the document,
+  // after the page's own handler on the chooser has run (clearTrim('reading'),
+  // the result re-rendered) and before the inspection can answer, which for
+  // notvideo.mp4 is within milliseconds.
+  await w.evaluate(`(() => { window.__vh207was = document.activeElement; window.__vh207at = null; document.addEventListener('change', (e) => { if (window.__vh207at || !e.target || e.target.id !== 'file-input') return; window.__vh207at = { on: ${VH207_ON}, same: document.activeElement === window.__vh207was, wasConnected: !!window.__vh207was && window.__vh207was.isConnected, trimStartDisabled: document.getElementById('trim-start-range').disabled }; }); })()`)
+  let mark = await focusMark(w)
+  const t0 = Date.now()
+  await w.setFiles(F('notvideo.mp4'))
+  ran.atChoosing = await w.evaluate('window.__vh207at')
+  if (v.pending) { ran.pending = await v.pending(w); mark = await focusMark(w) } else await w.waitSettled()
+  await until(w, `M.kindIn('#source-report') === 'error' || M.kindIn('#source-block') === 'error' || !!M.verdict()`, 'the replacement read', v.pending ? 200000 : 120000); await sleep(400)
+  ran.readMs = Date.now() - t0
+  ran.read = await w.evaluate(VH207_READ)
+  ran.f20 = (w.faultsSeen ?? []).filter((f) => f.startsWith('F20: withheld'))
+  ran.after = await vh207FocusNow(w, mark, v.successor)
+  ran.reached = !!v.reached(ran)
+  ran.landed = v.landed ? !!v.landed(ran) : ran.after.focus.landed
+}
+const VH207_VARIANTS = {
+  a: { key: 'a', successor: '#file-input', place: (w) => focusByKeyboard(w, RADIO_VLANG),
+    reached: (r) => /video-language/.test(r.placedOn) && r.before.title && r.read.unreadable && !r.read.tookTooLong && r.read.trimHidden && r.read.titleHidden },
+  b: { key: 'b', successor: '#file-input',
+    place: async (w) => { await focusByKeyboard(w, '#trim-start-range'); return { enabled: !(await w.evaluate(`document.getElementById('trim-start-range').disabled`)) } },
+    reached: (r) => /trim-start-range/.test(r.placedOn) && r.placed?.enabled && r.atChoosing?.trimStartDisabled && r.read.unreadable && !r.read.tookTooLong && r.read.trimHidden && r.read.titleHidden },
+  c: { key: 'c', successor: '#file-input', place: (w) => focusByKeyboard(w, '#file-input'),
+    pending: async (w) => {
+      const now = () => mx(w, `({ reading: !M.kindIn('#source-report') && !M.kindIn('#source-block') && M.has('choose.reading', '#source-status'), title: !M.el('#step-title').hidden })`)
+      const p = { before: await now() }
+      try { p.presses = await tabUntil(w, FOCUS_ON(RADIO_VLANG), { max: 30 }) } catch (e) { p.error = String(e.message ?? e).slice(0, 160) }
+      p.on = await activeDesc(w); p.after = await now()
+      return p
+    },
+    reached: (r) => r.f20.length > 0 && r.placedOn === '#file-input' && r.pending.before.reading && r.pending.before.title && /video-language/.test(r.pending.on) && r.pending.after.reading && r.pending.after.title && r.read.unreadable && r.read.tookTooLong && r.read.trimHidden && r.read.titleHidden },
+  d: { key: 'd', successor: '#file-input', made: true, place: (w) => focusByKeyboard(w, RADIO_VLANG),
+    reached: (r) => r.made && /video-language/.test(r.placedOn) && r.before.title && r.read.unreadable && !r.read.tookTooLong && r.read.trimHidden && r.read.titleHidden && r.read.createShown && r.read.result === 'result' && r.read.saveShown },
+  e: { key: 'e', successor: SAVE, made: true,
+    place: async (w) => { await focusByKeyboard(w, SAVE); return { onSave: await w.evaluate(FOCUS_ON(SAVE)) } },
+    reached: (r) => r.made && r.placed?.onSave && r.atChoosing?.wasConnected === false && r.read.unreadable && !r.read.tookTooLong && r.read.trimHidden && r.read.titleHidden && r.read.createShown && r.read.saveShown && r.read.newSave },
+  f1: { key: 'f1', successor: 'dialog[open]',
+    place: async (w) => { await focusByKeyboard(w, '#feedback-open'); await key(w, 'Enter'); await sleep(400); return w.evaluate(`({ open: ${DIALOG_OPEN}, onMessage: ${FOCUS_ON('#feedback-message')} })`) },
+    reached: (r) => r.placed?.open && r.placed?.onMessage && r.read.unreadable && !r.read.tookTooLong && r.read.trimHidden && r.read.titleHidden && r.read.dialog },
+  f2: { key: 'f2', successor: null,
+    place: async (w) => { await focusByKeyboard(w, RADIO_VLANG); const from = await activeDesc(w); await w.click(VH207_LEDE); await sleep(200); return { from, onBody: await w.evaluate('document.activeElement === document.body') } },
+    reached: (r) => /video-language/.test(r.placed?.from ?? '') && r.placed?.onBody && r.read.unreadable && !r.read.tookTooLong && r.read.trimHidden && r.read.titleHidden,
+    landed: (r) => r.after.focus.el === 'body' },
+}
+const vh207Ran = (r) => ({ made: r.made, placedOn: r.placedOn, placed: r.placed, before: r.before, atChoosing: r.atChoosing, pending: r.pending, read: r.read, readMs: r.readMs, f20: r.f20 })
+const vh207Focus = (r) => ({ focus: r.after.focus.el, visible: r.after.focus.visible, moves: r.after.focus.moves, inView: r.after.focus.inView, seen: r.after.seen, status: r.after.status, ring: r.after.ring, nextTab: r.after.nextTab })
+const VH207_READS = '; read before any instrument moves it, with what shows of it (2.4.11, 2.4.12), the source status line (4.1.3), its ring (2.4.13) and the next Tab'
+/** VH-207: a variant's two rows: reached (cannot determine unless the branch was reached, as READ_FAILURE_SUB's), and where focus went. */
+const vh207Rows = (k, reached, focus) => [
+  see(reached, (o) => { const r = o.vh207?.[k]; return r?.reached ? { outcome: 'pass', ...brief(vh207Ran(r)) } : { outcome: 'cannot-determine', why: r ? "the variant's branch was not reached" : 'the variant did not run', ...(r ? brief(vh207Ran(r)) : {}) } }),
+  see(focus + VH207_READS, (o) => { const r = o.vh207?.[k]; return r?.reached ? { outcome: r.landed ? 'pass' : 'fail', ...brief(vh207Focus(r)) } : { outcome: 'cannot-determine', why: "the variant's branch was not reached" } }),
+]
+const vh207Sub = (what, run, asserts) => ({ what, when: () => true, run, asserts })
+const VH207_SUB = {
+  a: vh207Sub("VH-207 (a), S-149's read-failure branch in every colour mode: focus on a Video language radio when notvideo.mp4 is chosen; the failed reply", (w) => vh207Variant(w, VH207_VARIANTS.a),
+    vh207Rows('a', 'reached: lecture-30s.mp4 read, focus on a Video language radio in the shown step 3 by keys, notvideo.mp4 chosen; the failed reply (not took-too-long) and the setup steps withdrawn', 'focus handed to the file input, never lost to the page (2.4.3)')),
+  b: vh207Sub('VH-207 (b): focus on the trim start handle when notvideo.mp4 is chosen, which the reading lock disables', (w) => vh207Variant(w, VH207_VARIANTS.b),
+    vh207Rows('b', 'reached: lecture-30s.mp4 read, focus on the trim start handle by keys, notvideo.mp4 chosen: the reading lock disables the handle at the choosing; the failed reply and the setup steps withdrawn', 'focus on the disabled handle handed to the file input, never lost to the page (2.4.3)')),
+  c: vh207Sub('VH-207 (c), the exception path (F20): focus put on a Video language radio while the read is pending; the deadline ends it', (w) => vh207Variant(w, VH207_VARIANTS.c),
+    vh207Rows('c', 'reached: F20 withheld the replacement\'s inspection; lecture-30s.mp4 read, focus on the file input, notvideo.mp4 chosen; while its read is pending (step 3 still shown) focus moved by Tab to a Video language radio; the deadline ends the read in the took-too-long failure and the setup steps withdrawn', 'focus taken while the read was pending handed to the file input, never lost to the page (2.4.3)')),
+  d: vh207Sub("VH-207 (d), J4's case: a finished video standing, focus on a Video language radio in step 3 when notvideo.mp4 is chosen beside it", (w) => vh207Variant(w, VH207_VARIANTS.d),
+    vh207Rows('d', "reached: a finished video standing unsaved (lecture-30s.mp4, Create); focus on a Video language radio in step 3 by keys, notvideo.mp4 chosen; the failed reply; steps 2 to 5 withdrawn, step 6's card and its Save kept", 'focus handed to the file input, never lost to the page (2.4.3)')),
+  e: vh207Sub('VH-207 (e): a finished video standing, focus on its Save when notvideo.mp4 is chosen, which re-renders the result', (w) => vh207Variant(w, VH207_VARIANTS.e),
+    vh207Rows('e', 'reached: a finished video standing unsaved; focus on its Save by keys, notvideo.mp4 chosen: the result re-rendered (the Save focused gone, another standing); the failed reply; steps 2 to 5 withdrawn, step 6 and its Save kept', 'focus on the re-rendered Save, the same logical control, never lost to the page (2.4.3)')),
+  f: vh207Sub("VH-207 (f), the guards, two readings: (f1) focus in the feedback dialog, (f2) a reader on the body (a click on the lede's text), when notvideo.mp4 is chosen; the page reloaded between them",
+    async (w, rec) => { await vh207Variant(w, VH207_VARIANTS.f1); await key(w, 'Escape'); await sleep(300); await fresh(w, rec.lang); await vh207Variant(w, VH207_VARIANTS.f2) },
+    [...vh207Rows('f1', 'reached (f1): lecture-30s.mp4 read; Report a problem opened by keys (Enter), focus on its message field; notvideo.mp4 chosen; the failed reply and the setup steps withdrawn, the dialog still open', 'focus stays in the feedback dialog (the guard, src/ui/focus-hand-on.ts)'),
+      ...vh207Rows('f2', "reached (f2): lecture-30s.mp4 read; focus on a Video language radio by keys, then a click on the lede's text, so focus is on the body (a reader's place); notvideo.mp4 chosen; the failed reply and the setup steps withdrawn", "focus stays on the body, not moved (the guard: a reader's place is never taken as displaced, src/ui/focus-hand-on.ts)")]),
+}
+const VH207_EMPTY = `!M.chosen() && !M.el('#file-input').disabled && M.el('#step-trim').hidden`
+const vh207Scenario = (name, subresults, more = {}) => ({ name, fixOnly: true, state: VH207_EMPTY, setup: async (w, lang) => fresh(w, lang), subresults, focus: [FILE], fixtures: ['lecture-30s.mp4', 'notvideo.mp4'], ...more })
+Object.assign(SCENARIOS, {
+  'S-149a': vh207Scenario('VH-207 (a): an unreadable replacement with focus on Video language', VH207_SUB.a),
+  'S-149b': vh207Scenario('VH-207 (b): an unreadable replacement with focus on the trim start handle', VH207_SUB.b),
+  'S-149c': vh207Scenario('VH-207 (c): the exception path, focus put on Video language while the read is pending', VH207_SUB.c, { setup: async (w, lang) => { await applyFault(w, 'F20'); await fresh(w, lang) }, faults: ['F20'] }),
+  'S-149d': vh207Scenario('VH-207 (d): an unreadable replacement beside a finished video, focus on Video language', VH207_SUB.d),
+  'S-149e': vh207Scenario("VH-207 (e): an unreadable replacement beside a finished video, focus on its Save", VH207_SUB.e),
+  'S-149f': vh207Scenario('VH-207 (f): the guards, focus in the feedback dialog and on a reader\'s place', VH207_SUB.f),
+})
 
 Object.assign(SCENARIOS, {
   // VH-183: the trim's Page step.

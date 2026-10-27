@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-27 — VH-207 — Closes: focus handed on when the choosing or an unreadable file takes the focused control away, to the file input or the same control shown again
+
+**Decision:** VH-207 closes V-46. One capture at the top of the file input's change handler hands focus on what the choosing withdraws, "Use the whole video" included, to the file input, and focus in the result to the same control shown again: Save, the player, the card, and the "discard it?" question to the card, as "Keep it" does. One capture in `clearTrim('unreadable')`, where both read failures meet, hands focus in the withdrawn steps to the file input, or to Stop saving. No element, no words, no other caller. The readings stand as walked, on the owner's answer to Codex astra's two held musts. VH-208 is next.
+
+**Rationale:** The two read failures, the worker's failed reply and the exception, both call `clearTrim('unreadable')` and are its only callers with that notice, so the capture sits once, at its top, before `applyControlLock()` disables any control; its `shown` is the one `revealLaterSteps` receives. At the choosing, the capture precedes everything the handler withdraws (the check's Stop and Check again, the read, the verdict, Create's row, and the trim's controls the reading lock disables), since several go before `clearTrim('reading')`. The re-render moves the same `<video>` into a new card, so focus on it drops to the body and is put back on it. Claude's design reading was saved first, then Codex astra's, blind: they agreed on Save, the player, the card and a cleared saved card (the file input); Codex's two other points were taken on the evidence, the question to the card (the successor "Keep it" already names for the same outcome) and the earlier withdrawals built (the item's Intent: "Choosing the file is itself part of the transition"; spec §9.3). Measured before (a `git archive` export of `5893d9d`, the candidate walker overlaid, its source identity content-checked in `before-source-check.json`) and after, 168 cells and the eight routes, with the pass's keyboard instrument: (a) to (d) from the body to the file input ×24 each, (e) from the body to the re-rendered Save ×24, (f1) and (f2) unchanged, rings passing in all four colour modes, the routes as before. The capture is in `main.ts`, which `focus-hand-on.test.ts` cannot reach: the variants are its proof, (c) walking the exception path through F20; what no variant walks is proved by reading. Codex's blind check, "Commit after the musts below", found "Use the whole video" (`#trim-clear`) missing from the choosing's capture: it was added, and a probe from the walker's own modules reads focus on the body ×8 before and on `#file-input` ×8 after (`probe-trimclear-*.json`). Its re-check, "Commit after the musts below", resolved that and the before's source identity, and held two musts that Claude read as met and the evidence could not settle: "by keys", since the variants place focus with the pass's `focusByKeyboard` (a Shift press, then `.focus()`), not by Tab traversal; and the next Tab, read after the ring instrument, which puts focus back on the same element. The owner, 2026-10-27 about 22:57Z, verbatim: "A: accept VH-207's readings as they stand (focus placed by the pass's focusByKeyboard; the next Tab read after the ring instrument, which restores focus) and close it." Nothing was re-walked. Digest rules applied: wcag-2.2-aaa 2.4.3 and "focus appearance"; nielsen 3, user control and freedom.
+
+**Supersedes:** none
+
+**Deferred:** VH-203, VH-208
+
 ## 2026-10-27 — VH-206 — Closes: a kept part with too little audio told so in the owner's words, by a typed reason on the existing no-audio warning
 
 **Decision:** VH-206 closes V-51. The `no-audio` warning carries a typed reason, `no-track` or `kept-too-little`, from `analyseSourceAudio`'s own silent result to `warningText`, not a second code, because spec §5.4 has one "No audio track" row and one outcome, and only the cause, and so the way forward, differs. The kept-part case says the owner's words; no track keeps "This video has no audio". VH-207 is next.
@@ -646,13 +656,3 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Supersedes:** none
 
 **Deferred:** VH-173
-
-## 2026-10-23 — VH-171 — The instruments qualified: Codex astra's eight musts applied, VH-172's setups merged, S-25 reached by a worker clock
-
-**Decision:** VH-171 ships with all eight of Codex astra's method-check musts, M-01 to M-08, applied and none refused, VH-172's scenario setups merged into the walker, N5 added, and S-25's slow verdict reached by a new fault, F13, the worker's clock at twice real time, because CPU throttling cannot reach the worker and the 21,600 s still never settled; the instruments are fit for the matrix.
-
-**Rationale:** Codex's verdict, as given: "Fit after the musts below" (`reviews/2026-10-22/design-pass-2/codex-astra-method-check-2026-10-23.md`). Each must's application is in `instruments-2026-10-22.md` under "Codex astra's method check, applied (23 October)"; proofs 77 of 77, faults 17 of 17 and F13, pilot 2 43 of 43 whole, smoke 119 of 119 whole across a run and a part run (`smoke-2026-10-23.json`). F13 is an instrument, not a product change; it was accepted on the owner's standing instruction of 2026-10-23: "work through to the end of VH-177, archive and spawn as you go, proceed with your recommendations, universal permission is granted". Limits kept for a person: range thumb and track contrast; the dialog used by keys at enlargement; Chrome's own page zoom. Candidate findings for VH-173 are listed in the instruments file, none judged here. No product code changed.
-
-**Supersedes:** none
-
-**Deferred:** VH-172

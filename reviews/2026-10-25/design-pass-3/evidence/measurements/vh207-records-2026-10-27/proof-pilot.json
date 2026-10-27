@@ -1,0 +1,692 @@
+{
+ "label": "pilot",
+ "runs": [
+  {
+   "dir": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-pilot-p2-2026-10-27T19-34-23-187Z-005938",
+   "runId": "2026-10-27T19-34-23-187Z-005938",
+   "whole": true,
+   "problems": [],
+   "ledger": {
+    "plan": "vh207-pilot-p2",
+    "label": "pilot",
+    "at": "2026-10-27T19:34:23.149Z",
+    "power": "2026-10-27T19:34:23Z | Now drawing from 'AC Power'  -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true  |  powermode 2  | 19:34  up  2:26, 1 user, load averages: 4.73 5.33 8.25",
+    "onAc": true,
+    "walker": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/base/reviews/2026-10-25/design-pass-3/evidence/measurements/walker",
+    "appUrl": "http://localhost:5181/",
+    "cdpPort": "9251",
+    "fixtures": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/fix",
+    "records": 7,
+    "ids": [
+     "S-149",
+     "S-149a",
+     "S-149b",
+     "S-149c",
+     "S-149d",
+     "S-149e",
+     "S-149f"
+    ]
+   }
+  }
+ ],
+ "scenarios": {
+  "S-149": [
+   {
+    "key": "S-149__en-GB__w1280__light",
+    "run": "vh207-pilot-p2-2026-10-27T19-34-23-187Z-005938",
+    "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-pilot-p2-2026-10-27T19-34-23-187Z-005938/S-149__en-GB__w1280__light.json",
+    "status": "ok",
+    "timing": {
+     "setupMs": 18871,
+     "recordMs": 13159,
+     "firstOfGroup": true
+    },
+    "faults": [
+     "F14"
+    ],
+    "readings": [
+     {
+      "reading": "S-149",
+      "status": "ok",
+      "state": "pass",
+      "stateFocus": "#file-input (the state holds it)",
+      "fileRing": {
+       "sel": "#file-input",
+       "outcome": "pass",
+       "areaAt3to1": 704,
+       "perimeter2px": 640,
+       "focusVisible": true
+      },
+      "readFailure": {
+       "reached": "pass",
+       "focusRow": "fail",
+       "focus": "body",
+       "moves": [],
+       "inView": null
+      }
+     }
+    ],
+    "subresults": {
+     "outcome": "fail"
+    }
+   }
+  ],
+  "S-149a": [
+   {
+    "key": "S-149a__en-GB__w1280__light",
+    "run": "vh207-pilot-p2-2026-10-27T19-34-23-187Z-005938",
+    "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-pilot-p2-2026-10-27T19-34-23-187Z-005938/S-149a__en-GB__w1280__light.json",
+    "status": "ok",
+    "timing": {
+     "setupMs": 1069,
+     "recordMs": 4974,
+     "firstOfGroup": true
+    },
+    "faults": [],
+    "readings": [
+     {
+      "reading": "a",
+      "status": "ok",
+      "reached": "pass",
+      "placedOn": "input[name=video-language]=en-GB",
+      "read": {
+       "unreadable": true,
+       "tookTooLong": false,
+       "block": null,
+       "verdict": false,
+       "trimHidden": true,
+       "titleHidden": true,
+       "createShown": false,
+       "result": "none",
+       "saveShown": false,
+       "newSave": false,
+       "dialog": false
+      },
+      "readMs": 1110,
+      "atChoosing": {
+       "on": "input[radio video-language=en-GB] \"English\"",
+       "same": true,
+       "wasConnected": true,
+       "trimStartDisabled": true
+      },
+      "f20": [],
+      "focusRow": "fail",
+      "focus": "body",
+      "visible": false,
+      "moves": [],
+      "inView": null,
+      "seen": {
+       "el": "body",
+       "seen": false
+      },
+      "ring": {
+       "outcome": "not-applicable",
+       "why": "focus on the body: no ring to read"
+      },
+      "nextTab": {
+       "el": "summary.disclosure-summary \"System check — all passed\"",
+       "id": null,
+       "tag": "summary",
+       "type": null,
+       "inDialog": false,
+       "box": [
+        185,
+        344,
+        910,
+        52
+       ],
+       "window": [
+        1280,
+        900
+       ],
+       "shows": true,
+       "covered": false,
+       "seen": true
+      },
+      "statusLine": {
+       "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+       "failure": true,
+       "tookTooLong": false
+      }
+     }
+    ],
+    "subresults": {
+     "outcome": "fail"
+    }
+   }
+  ],
+  "S-149b": [
+   {
+    "key": "S-149b__en-GB__w1280__light",
+    "run": "vh207-pilot-p2-2026-10-27T19-34-23-187Z-005938",
+    "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-pilot-p2-2026-10-27T19-34-23-187Z-005938/S-149b__en-GB__w1280__light.json",
+    "status": "ok",
+    "timing": {
+     "setupMs": 1072,
+     "recordMs": 4971,
+     "firstOfGroup": true
+    },
+    "faults": [],
+    "readings": [
+     {
+      "reading": "b",
+      "status": "ok",
+      "reached": "pass",
+      "placedOn": "#trim-start-range",
+      "read": {
+       "unreadable": true,
+       "tookTooLong": false,
+       "block": null,
+       "verdict": false,
+       "trimHidden": true,
+       "titleHidden": true,
+       "createShown": false,
+       "result": "none",
+       "saveShown": false,
+       "newSave": false,
+       "dialog": false
+      },
+      "readMs": 1112,
+      "atChoosing": {
+       "on": "input#trim-start-range.range-input[range] \"Start\"",
+       "same": true,
+       "wasConnected": true,
+       "trimStartDisabled": true
+      },
+      "f20": [],
+      "focusRow": "fail",
+      "focus": "body",
+      "visible": false,
+      "moves": [],
+      "inView": null,
+      "seen": {
+       "el": "body",
+       "seen": false
+      },
+      "ring": {
+       "outcome": "not-applicable",
+       "why": "focus on the body: no ring to read"
+      },
+      "nextTab": {
+       "el": "summary.disclosure-summary \"System check — all passed\"",
+       "id": null,
+       "tag": "summary",
+       "type": null,
+       "inDialog": false,
+       "box": [
+        185,
+        344,
+        910,
+        52
+       ],
+       "window": [
+        1280,
+        900
+       ],
+       "shows": true,
+       "covered": false,
+       "seen": true
+      },
+      "statusLine": {
+       "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+       "failure": true,
+       "tookTooLong": false
+      }
+     }
+    ],
+    "subresults": {
+     "outcome": "fail"
+    }
+   }
+  ],
+  "S-149c": [
+   {
+    "key": "S-149c__en-GB__w1280__light",
+    "run": "vh207-pilot-p2-2026-10-27T19-34-23-187Z-005938",
+    "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-pilot-p2-2026-10-27T19-34-23-187Z-005938/S-149c__en-GB__w1280__light.json",
+    "status": "ok",
+    "timing": {
+     "setupMs": 1086,
+     "recordMs": 124338,
+     "firstOfGroup": true
+    },
+    "faults": [
+     "F20"
+    ],
+    "readings": [
+     {
+      "reading": "c",
+      "status": "ok",
+      "reached": "pass",
+      "placedOn": "#file-input",
+      "read": {
+       "unreadable": true,
+       "tookTooLong": true,
+       "block": null,
+       "verdict": false,
+       "trimHidden": true,
+       "titleHidden": true,
+       "createShown": false,
+       "result": "none",
+       "saveShown": false,
+       "newSave": false,
+       "dialog": false
+      },
+      "readMs": 120484,
+      "pending": {
+       "before": {
+        "reading": true,
+        "title": true
+       },
+       "presses": 2,
+       "on": "input[name=video-language]=en-GB",
+       "after": {
+        "reading": true,
+        "title": true
+       }
+      },
+      "atChoosing": {
+       "on": "input#file-input.file-input.file-input--chosen[file] \"1. Choose a video\"",
+       "same": true,
+       "wasConnected": true,
+       "trimStartDisabled": true
+      },
+      "f20": [
+       "F20: withheld the worker's answer (failed) to inspection 2, request 4"
+      ],
+      "focusRow": "fail",
+      "focus": "body",
+      "visible": false,
+      "moves": [],
+      "inView": null,
+      "seen": {
+       "el": "body",
+       "seen": false
+      },
+      "ring": {
+       "outcome": "not-applicable",
+       "why": "focus on the body: no ring to read"
+      },
+      "nextTab": {
+       "el": "summary.disclosure-summary \"System check — all passed\"",
+       "id": null,
+       "tag": "summary",
+       "type": null,
+       "inDialog": false,
+       "box": [
+        185,
+        344,
+        910,
+        52
+       ],
+       "window": [
+        1280,
+        900
+       ],
+       "shows": true,
+       "covered": false,
+       "seen": true
+      },
+      "statusLine": {
+       "text": "Reading this file took longer than expected, or the tool had a problem. Your original file has not been changed. Choose a different file, or save this one again from the app that made it, as a file wh…",
+       "failure": true,
+       "tookTooLong": true
+      }
+     }
+    ],
+    "subresults": {
+     "outcome": "fail"
+    }
+   }
+  ],
+  "S-149d": [
+   {
+    "key": "S-149d__en-GB__w1280__light",
+    "run": "vh207-pilot-p2-2026-10-27T19-34-23-187Z-005938",
+    "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-pilot-p2-2026-10-27T19-34-23-187Z-005938/S-149d__en-GB__w1280__light.json",
+    "status": "ok",
+    "timing": {
+     "setupMs": 1078,
+     "recordMs": 8762,
+     "firstOfGroup": true
+    },
+    "faults": [],
+    "readings": [
+     {
+      "reading": "d",
+      "status": "ok",
+      "reached": "pass",
+      "placedOn": "input[name=video-language]=en-GB",
+      "read": {
+       "unreadable": true,
+       "tookTooLong": false,
+       "block": null,
+       "verdict": false,
+       "trimHidden": true,
+       "titleHidden": true,
+       "createShown": true,
+       "result": "result",
+       "saveShown": true,
+       "newSave": true,
+       "dialog": false
+      },
+      "readMs": 1111,
+      "atChoosing": {
+       "on": "input[radio video-language=en-GB] \"English\"",
+       "same": true,
+       "wasConnected": true,
+       "trimStartDisabled": true
+      },
+      "f20": [],
+      "focusRow": "fail",
+      "focus": "body",
+      "visible": false,
+      "moves": [],
+      "inView": null,
+      "seen": {
+       "el": "body",
+       "seen": false
+      },
+      "ring": {
+       "outcome": "not-applicable",
+       "why": "focus on the body: no ring to read"
+      },
+      "nextTab": {
+       "el": "video.result-player \"Previous video — 10.9 MB\"",
+       "id": null,
+       "tag": "video",
+       "type": null,
+       "inDialog": false,
+       "box": [
+        229,
+        65,
+        825,
+        464
+       ],
+       "window": [
+        1280,
+        900
+       ],
+       "shows": true,
+       "covered": false,
+       "seen": true
+      },
+      "statusLine": {
+       "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+       "failure": true,
+       "tookTooLong": false
+      }
+     }
+    ],
+    "subresults": {
+     "outcome": "fail"
+    }
+   }
+  ],
+  "S-149e": [
+   {
+    "key": "S-149e__en-GB__w1280__light",
+    "run": "vh207-pilot-p2-2026-10-27T19-34-23-187Z-005938",
+    "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-pilot-p2-2026-10-27T19-34-23-187Z-005938/S-149e__en-GB__w1280__light.json",
+    "status": "ok",
+    "timing": {
+     "setupMs": 1072,
+     "recordMs": 8806,
+     "firstOfGroup": true
+    },
+    "faults": [],
+    "readings": [
+     {
+      "reading": "e",
+      "status": "ok",
+      "reached": "pass",
+      "placedOn": "button",
+      "read": {
+       "unreadable": true,
+       "tookTooLong": false,
+       "block": null,
+       "verdict": false,
+       "trimHidden": true,
+       "titleHidden": true,
+       "createShown": true,
+       "result": "result",
+       "saveShown": true,
+       "newSave": true,
+       "dialog": false
+      },
+      "readMs": 1113,
+      "atChoosing": {
+       "on": "body",
+       "same": false,
+       "wasConnected": false,
+       "trimStartDisabled": true
+      },
+      "f20": [],
+      "focusRow": "fail",
+      "focus": "body",
+      "visible": false,
+      "moves": [],
+      "inView": null,
+      "seen": {
+       "el": "body",
+       "seen": false
+      },
+      "ring": {
+       "outcome": "not-applicable",
+       "why": "focus on the body: no ring to read"
+      },
+      "nextTab": {
+       "el": "video.result-player \"Previous video — 10.9 MB\"",
+       "id": null,
+       "tag": "video",
+       "type": null,
+       "inDialog": false,
+       "box": [
+        229,
+        110,
+        825,
+        464
+       ],
+       "window": [
+        1280,
+        900
+       ],
+       "shows": true,
+       "covered": false,
+       "seen": true
+      },
+      "statusLine": {
+       "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+       "failure": true,
+       "tookTooLong": false
+      }
+     }
+    ],
+    "subresults": {
+     "outcome": "fail"
+    }
+   }
+  ],
+  "S-149f": [
+   {
+    "key": "S-149f__en-GB__w1280__light",
+    "run": "vh207-pilot-p2-2026-10-27T19-34-23-187Z-005938",
+    "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs/vh207-pilot-p2-2026-10-27T19-34-23-187Z-005938/S-149f__en-GB__w1280__light.json",
+    "status": "ok",
+    "timing": {
+     "setupMs": 1086,
+     "recordMs": 9722,
+     "firstOfGroup": true
+    },
+    "faults": [],
+    "readings": [
+     {
+      "reading": "f1",
+      "status": "ok",
+      "reached": "pass",
+      "placedOn": "#feedback-message",
+      "read": {
+       "unreadable": true,
+       "tookTooLong": false,
+       "block": null,
+       "verdict": false,
+       "trimHidden": true,
+       "titleHidden": true,
+       "createShown": false,
+       "result": "none",
+       "saveShown": false,
+       "newSave": false,
+       "dialog": true
+      },
+      "readMs": 1112,
+      "atChoosing": {
+       "on": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+       "same": true,
+       "wasConnected": true,
+       "trimStartDisabled": true
+      },
+      "f20": [],
+      "focusRow": "pass",
+      "focus": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+      "visible": true,
+      "moves": [],
+      "inView": {
+       "top": 363,
+       "bottom": 533,
+       "inWindow": true,
+       "sampled": 5,
+       "covered": 0
+      },
+      "seen": {
+       "el": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+       "id": "feedback-message",
+       "tag": "textarea",
+       "type": "textarea",
+       "inDialog": true,
+       "box": [
+        353,
+        363,
+        448,
+        170
+       ],
+       "window": [
+        1280,
+        900
+       ],
+       "shows": true,
+       "covered": false,
+       "seen": true
+      },
+      "ring": {
+       "sel": "#feedback-message",
+       "outcome": "pass",
+       "focusVisible": true,
+       "areaAt3to1": 2537,
+       "perimeter2px": 2456,
+       "bestRatio": 14.31,
+       "changedAny": 2537,
+       "controlPx": [
+        448,
+        170
+       ],
+       "back": true
+      },
+      "nextTab": {
+       "el": "summary.disclosure-summary \"What will be sent with it\"",
+       "id": null,
+       "tag": "summary",
+       "type": null,
+       "inDialog": true,
+       "box": [
+        353,
+        549,
+        574,
+        44
+       ],
+       "window": [
+        1280,
+        900
+       ],
+       "shows": true,
+       "covered": false,
+       "seen": true
+      },
+      "statusLine": {
+       "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+       "failure": true,
+       "tookTooLong": false
+      }
+     },
+     {
+      "reading": "f2",
+      "status": "ok",
+      "reached": "pass",
+      "placedOn": "body",
+      "read": {
+       "unreadable": true,
+       "tookTooLong": false,
+       "block": null,
+       "verdict": false,
+       "trimHidden": true,
+       "titleHidden": true,
+       "createShown": false,
+       "result": "none",
+       "saveShown": false,
+       "newSave": false,
+       "dialog": false
+      },
+      "readMs": 1111,
+      "atChoosing": {
+       "on": "body",
+       "same": true,
+       "wasConnected": true,
+       "trimStartDisabled": true
+      },
+      "f20": [],
+      "focusRow": "pass",
+      "focus": "body",
+      "visible": false,
+      "moves": [],
+      "inView": null,
+      "seen": {
+       "el": "body",
+       "seen": false
+      },
+      "ring": {
+       "outcome": "not-applicable",
+       "why": "focus on the body: no ring to read"
+      },
+      "nextTab": {
+       "el": "input[radio video-kind=staff] \"Staff video\"",
+       "id": null,
+       "tag": "input",
+       "type": "radio",
+       "inDialog": false,
+       "box": [
+        184,
+        418,
+        106,
+        44
+       ],
+       "window": [
+        1280,
+        900
+       ],
+       "shows": true,
+       "covered": true,
+       "seen": false
+      },
+      "statusLine": {
+       "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+       "failure": true,
+       "tookTooLong": false
+      }
+     }
+    ],
+    "subresults": {
+     "outcome": "pass"
+    }
+   }
+  ]
+ }
+}

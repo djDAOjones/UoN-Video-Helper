@@ -1,0 +1,149 @@
+{
+ "label": "after",
+ "routes": [
+  {
+   "key": "J1__en-GB__w1280__light",
+   "run": "vh207-after-routes-2026-10-27T21-29-50-468Z-2dc7f7",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-routes-2026-10-27T21-29-50-468Z-2dc7f7/J1__en-GB__w1280__light.json",
+   "status": "ok",
+   "keys": {
+    "outcome": "cannot-determine",
+    "declared": 51,
+    "pass": 50,
+    "fail": 0,
+    "cannotDetermine": 1,
+    "notPassing": [
+     {
+      "note": "S-47: ArrowDown on Animation type (native select)",
+      "key": "ArrowDown",
+      "to": "select#closing-type.select[select-one] \"Animation type\"",
+      "expect": null,
+      "outcome": "cannot-determine"
+     }
+    ]
+   }
+  },
+  {
+   "key": "J1__en-GB__w320__light",
+   "run": "vh207-after-routes-2026-10-27T21-29-50-468Z-2dc7f7",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-routes-2026-10-27T21-29-50-468Z-2dc7f7/J1__en-GB__w320__light.json",
+   "status": "ok",
+   "keys": {
+    "outcome": "cannot-determine",
+    "declared": 51,
+    "pass": 50,
+    "fail": 0,
+    "cannotDetermine": 1,
+    "notPassing": [
+     {
+      "note": "S-47: ArrowDown on Animation type (native select)",
+      "key": "ArrowDown",
+      "to": "select#closing-type.select[select-one] \"Animation type\"",
+      "expect": null,
+      "outcome": "cannot-determine"
+     }
+    ]
+   }
+  },
+  {
+   "key": "J1__ms-MY__w1280__light",
+   "run": "vh207-after-routes-2026-10-27T21-29-50-468Z-2dc7f7",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-routes-2026-10-27T21-29-50-468Z-2dc7f7/J1__ms-MY__w1280__light.json",
+   "status": "ok",
+   "keys": {
+    "outcome": "cannot-determine",
+    "declared": 51,
+    "pass": 50,
+    "fail": 0,
+    "cannotDetermine": 1,
+    "notPassing": [
+     {
+      "note": "S-47: ArrowDown on Animation type (native select)",
+      "key": "ArrowDown",
+      "to": "select#closing-type.select[select-one] \"Jenis animasi\"",
+      "expect": null,
+      "outcome": "cannot-determine"
+     }
+    ]
+   }
+  },
+  {
+   "key": "J1__zh-Hans__w1280__light",
+   "run": "vh207-after-routes-2026-10-27T21-29-50-468Z-2dc7f7",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-routes-2026-10-27T21-29-50-468Z-2dc7f7/J1__zh-Hans__w1280__light.json",
+   "status": "ok",
+   "keys": {
+    "outcome": "cannot-determine",
+    "declared": 51,
+    "pass": 50,
+    "fail": 0,
+    "cannotDetermine": 1,
+    "notPassing": [
+     {
+      "note": "S-47: ArrowDown on Animation type (native select)",
+      "key": "ArrowDown",
+      "to": "select#closing-type.select[select-one] \"动画类型\"",
+      "expect": null,
+      "outcome": "cannot-determine"
+     }
+    ]
+   }
+  },
+  {
+   "key": "J2__en-GB__w1280__light",
+   "run": "vh207-after-routes-2026-10-27T21-29-50-468Z-2dc7f7",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-routes-2026-10-27T21-29-50-468Z-2dc7f7/J2__en-GB__w1280__light.json",
+   "status": "ok",
+   "keys": {
+    "outcome": "pass",
+    "declared": 22,
+    "pass": 22,
+    "fail": 0,
+    "cannotDetermine": 0,
+    "notPassing": []
+   }
+  },
+  {
+   "key": "J3__en-GB__w1280__light",
+   "run": "vh207-after-routes-2026-10-27T21-29-50-468Z-2dc7f7",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-routes-2026-10-27T21-29-50-468Z-2dc7f7/J3__en-GB__w1280__light.json",
+   "status": "ok",
+   "keys": {
+    "outcome": "pass",
+    "declared": 45,
+    "pass": 45,
+    "fail": 0,
+    "cannotDetermine": 0,
+    "notPassing": []
+   }
+  },
+  {
+   "key": "J4__en-GB__w1280__light",
+   "run": "vh207-after-routes-2026-10-27T21-29-50-468Z-2dc7f7",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-routes-2026-10-27T21-29-50-468Z-2dc7f7/J4__en-GB__w1280__light.json",
+   "status": "ok",
+   "keys": {
+    "outcome": "pass",
+    "declared": 28,
+    "pass": 28,
+    "fail": 0,
+    "cannotDetermine": 0,
+    "notPassing": []
+   }
+  },
+  {
+   "key": "K-dialog__en-GB__w1280__light",
+   "run": "vh207-after-routes-2026-10-27T21-29-50-468Z-2dc7f7",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-routes-2026-10-27T21-29-50-468Z-2dc7f7/K-dialog__en-GB__w1280__light.json",
+   "status": "ok",
+   "keys": {
+    "outcome": "pass",
+    "declared": 18,
+    "pass": 18,
+    "fail": 0,
+    "cannotDetermine": 0,
+    "notPassing": []
+   }
+  }
+ ]
+}

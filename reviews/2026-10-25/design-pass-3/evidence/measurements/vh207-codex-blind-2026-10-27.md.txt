@@ -1,0 +1,36 @@
+VH-207 needs one code correction and stronger measurement evidence before commit. Ledger edits are excluded from this review.
+
+**Musts**
+
+1. **Capture `trimClear` at choosing.** The capture in [src/main.ts:1405](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/src/main.ts:1405>) omits “Use the whole video”. After a trim, that button is enabled; `clearTrim('reading')` calls `applyControlLock()` → `renderTrim()`, which disables it at line 1855. Focus can therefore disappear before the unreadable-path capture. Include it and prove this case within variant (b); the current start-handle case cannot detect the omission.
+
+2. **Actually reach the controls by keys.** Most variants call `focusByKeyboard`, but `walker/qualify.mjs:662–666` sends Shift and then calls DOM `.focus()`. That establishes keyboard modality, not keyboard traversal. The pending-read traversal in (c) does use Tab. Rewalk the required variants using Tab/Shift+Tab to reach their starting controls, preserving the declared native-file setup mechanism.
+
+3. **Read the next Tab before the ring instrument.** [walker/scenarios.mjs:1667](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/evidence/measurements/walker/scenarios.mjs:1667>) calls `focusArea()` before Tab. That instrument scrolls, blurs and programmatically restores focus (`qualify.mjs:731–749`). Consequently, the recorded next Tab is not the untouched transition’s next Tab, contrary to the explicit criterion. Record it first and remeasure affected cells. S-149’s supplied records also lack a next-Tab reading.
+
+4. **Establish the before source’s identity.** An archive export is acceptable in principle. However, every before `run.json` has commit/dirty `unknown`; `2cc1c371db104eb5` is SHA-256/16 of the literal fallback **`unread`**, not the exported source (`runner.mjs:247–253`). The narrative identifies `5893d9d`, but the retained provenance does not verify it. Supply content-based evidence tying the served export to that commit; rerun if that cannot be established.
+
+5. **Supply the full green gate before commit.** The supplied bundle does not show `npm run check` completing on a settled machine. I independently passed TypeScript, ESLint on all three changed files, and `node tools/check.mjs`—zero failures or warnings. I did not run the full gate because this review environment prohibits its temporary writes.
+
+**Shoulds**
+
+- Preserve the original focused screenshot and pixel-comparison images when repairing the measurements. The variant summaries retain numerical ring results but discard `focusArea()`’s image buffers.
+- Exercise the additional result-card/player/discard-question successors during verification. The table correctly identifies them as source-reviewed only.
+
+**Acceptance criteria**
+
+| Criterion | Finding and evidence |
+|---|---|
+| At choosing | **Not met overall:** omitted `trimClear`. The existing six controls are captured before withdrawal; Save correctly targets the newly rendered Save (`main.ts:1468–1486`, `after-S-149e.json`). |
+| Both failure paths | **Met in code and recorded cases:** failed reply and catch converge at `clearTrim('unreadable')` (`1525`, `1539`). Its single capture precedes preview changes, locking and hiding (`1795–1819`). Whole-step containment includes title fields, closing/output controls and step 6 when no result stands. |
+| Guards and existing callers | **Met:** helper guards remain intact (`focus-hand-on.ts:85–98`); (f1)/(f2) preserve dialog/reader focus. I read every existing caller. `renderResult`, `clearResult`, “Keep it” and `withdrawDiscardQuestion` are unchanged. No stale successor or TypeScript/lint defect found. |
+| Variants and timings | **Not met as keyboard proof;** otherwise all declared cases are reached. Proof/pilot precede the after-run. Only S-149a–f, their supporting code and F20 were added to the walker. |
+| Exception fault | **Met:** `faults-check-F20.json` records the withheld reply and timeout at 120,011 ms; its twin fails normally in 9 ms. |
+| Unit-test alternative | **Met:** capture remains in `main.ts`; the table explicitly uses walker proof and reports the unchanged helper’s 13 tests. |
+| Whole stage measurement | **Not met:** musts 2–4. All 176 records per side are present; after source hash and walker revision match the candidate. |
+| WCAG re-check | **Recorded, with qualifications:** 2.1.1/2.4.3 remain affected above. 2.4.7, 2.4.11/12 and 4.1.3 readings support the measured cases. Instrumented 2.4.13 results pass: chooser 704/640 px²; Save 648–840/584–774. |
+| Routes, scope, documents | **Met as before:** 313/317 route steps pass, four unchanged S-47 indeterminates. No elements, CSS, tokens, dependencies or tests changed; progress remains. Disposition links VH-207 and its evidence. Review retention/commit metadata remain close work. |
+
+Applied digest rules: **wcag-2.2-aaa—2.4.3 and focus appearance; nielsen—3, user control and freedom.**
+
+Verdict: Commit after the musts below

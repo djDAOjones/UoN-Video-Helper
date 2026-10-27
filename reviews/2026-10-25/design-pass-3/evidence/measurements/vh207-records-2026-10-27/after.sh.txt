@@ -1,0 +1,15 @@
+#!/bin/zsh
+# VH-207 #2: the after, on the candidate (the repository's own Vite at :5181) with the repository's walker. As before.sh: three walks at once; the routes after (d) and (e).
+S=/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207
+W="/Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/evidence/measurements/walker"
+export RUN_ROOT=$S/runs-after
+mkdir -p $RUN_ROOT
+zsh $S/power.sh > $S/logs/after-power-start.txt || { echo POWER-STOP; exit 3; }
+zsh $S/go.sh after-c "$W" --label after --name c --scenarios S-149c &
+P1=$!
+zsh $S/go.sh after-s149abf "$W" --label after --name s149abf --scenarios S-149,S-149a,S-149b,S-149f &
+P2=$!
+zsh $S/go.sh after-de "$W" --label after --name de --scenarios S-149d,S-149e && true
+zsh $S/go.sh after-routes "$W" --label after --name routes --routes eight
+wait $P1 $P2
+echo "after done $(date -u +%FT%TZ)"

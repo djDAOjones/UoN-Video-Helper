@@ -1,0 +1,15 @@
+#!/bin/zsh
+# VH-207 #1 launcher: the fixed environment for a driver walk. Usage: go.sh <log-name> <walker dir> <driver walk args...>
+S=/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207
+export CDP_PORT=9251
+export APP_URL=${APP_URL:-http://localhost:5181/}
+export FIX=$S/fix
+export OUT_ROOT=$S/out
+export RUN_ROOT=${RUN_ROOT:-$S/runs}
+LOG=$S/logs/$1.log; shift
+WALKER=$1; shift
+echo "=== start $(date -u +%FT%TZ) walker $WALKER args $*" >> $LOG
+node $S/vh207-driver.mjs walk --walker "$WALKER" "$@" >> $LOG 2>&1
+rc=$?
+echo "=== end $(date -u +%FT%TZ) exit $rc" >> $LOG
+exit $rc

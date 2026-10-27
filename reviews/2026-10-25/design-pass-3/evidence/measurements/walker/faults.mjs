@@ -300,6 +300,23 @@ export const FAULTS = {
     },
     release: async (w) => { if (w.scriptF19) await w.page.send('Page.removeScriptToEvaluateOnNewDocument', { identifier: w.scriptF19 }); w.scriptF19 = null },
   },
+  // VH-207 (V-46): the read failure's exception path, which no fault reached
+  // before (matrix.mjs's unresolved list). A worker prelude, so it composes
+  // with F14 through workerPrelude.
+  F20: {
+    name: "the inspection's answer withheld",
+    for: "VH-207's variant (c), the read failure's exception path (src/main.ts:1495–1500): the worker notes the ids of the `inspect` requests it is sent (src/workers/job.worker.ts:89) and drops its answer, of any kind, to the opts.inspect-th (default 2: the first file reads, its replacement hangs), so the page's own deadline (SELECTION_DEADLINE_MS.inspect, 120 s, src/config/thresholds.ts:163; requestWithId's watchdog, src/main.ts:1192–1205) rejects and the catch shows unreadable-source, took-too-long. F14 holds only `preflighted` replies, which follow an inspection that has answered, and F11 drops messages only once a job's first stage is sent: neither reaches an inspection that never answers. The withheld inspection is said in faultsSeen from the worker's console, which watchWorkers (phase8.mjs) attaches",
+    // opts.inspect: which inspection, counted from the worker's start, has its answer withheld.
+    before: async (w, { inspect = 2 } = {}) => {
+      w.offF20 = w.browser.on(w.page.sessionId, 'Target.attachedToTarget', ({ sessionId, targetInfo }) => {
+        if (targetInfo.type === 'worker') w.browser.on(sessionId, 'Runtime.consoleAPICalled', (e) => { const a = (e.args ?? []).map((x) => x.value); if (a[0] === 'fault F20') w.faultsSeen.push(`F20: withheld the worker's answer (${a[4]}) to inspection ${a[2]}, request ${a[3]}`) })
+      })
+      await workerPrelude(w, 'F20', `(() => { const real = self.postMessage.bind(self); const at = ${Number(inspect)}; let n = 0, held = null;
+        self.addEventListener('message', (e) => { if (e.data && e.data.kind === 'inspect' && ++n === at) held = e.data.id; });
+        self.postMessage = (m, ...rest) => { if (held !== null && m && m.id === held) { console.warn('fault F20', 'withheld', at, m.id, m.kind); return; } return real(m, ...rest); }; })();`)
+    },
+    release: async (w) => { w.offF20?.(); w.offF20 = null; await dropPrelude(w, 'F20') },
+  },
 }
 
 /** Set a fault on a walk before navigation; `now` faults run at once. */
@@ -489,6 +506,30 @@ async function check() {
     const failed = has(await w.evaluate(status) + ' | ' + await body(w), /could not be saved/)
     const after = await player(w); const counts = await w.evaluate(`window.__f4e`)
     return { outcome: failed.outcome === 'pass' && !!after && after.src === before?.src ? 'pass' : 'fail', branch: `armed in place once the card stood; the save's hand-off threw (${counts.thrown})`, failed, counts }
+  })
+  // VH-207 (V-46): F20 and its twin without it. A readable file read, then
+  // notvideo.mp4 chosen: with F20 its inspection never answers, so the page's
+  // 120 s deadline ends the read in the took-too-long failure; without it the
+  // worker's failed reply ends it, in that reply's failure.
+  const replaced = async (w) => {
+    await w.goto(); await w.setFiles(F('lecture-30s.mp4')); await w.waitSettled()
+    const first = await w.evaluate(`!document.getElementById('step-trim').hidden && !document.querySelector('#source-report .notification[data-kind="error"]')`)
+    const t0 = Date.now()
+    await w.setFiles(F('notvideo.mp4'))
+    await w.waitFor(`!!document.querySelector('#source-report .notification[data-kind="error"]')`, { label: 'the replacement read failed', timeout: 200000 })
+    return { first, readMs: Date.now() - t0, report: await text(w, '#source-report') }
+  }
+  await one('F20', async (w) => {
+    await applyFault(w, 'F20'); const r = await replaced(w)
+    const long = has(r.report, /took longer than expected/)
+    const withheld = w.faultsSeen.find((x) => /^F20: withheld/.test(x))
+    return { ...long, outcome: long.outcome === 'pass' && r.first && !!withheld && r.readMs >= 110000 ? 'pass' : 'fail', branch: `${r.first ? 'lecture-30s.mp4 read' : 'the first file not read'}; ${withheld ?? 'nothing withheld'}; the replacement's read ended after ${Math.round(r.readMs / 1000)} s in ${long.outcome === 'pass' ? 'the took-too-long failure (the catch, main.ts:1495–1500)' : 'another failure'}`, firstRead: r.first, readMs: r.readMs }
+  })
+  await one('F20-twin', async (w) => {
+    const r = await replaced(w)
+    const failed = has(r.report, /could not be read as a video|went wrong reading this file|no video or audio|audio but no video/i)
+    const long = /took longer than expected/.test(r.report)
+    return { ...failed, outcome: failed.outcome === 'pass' && !long && r.first ? 'pass' : 'fail', branch: `F20 unset: the replacement's read ended after ${Math.round(r.readMs / 1000)} s in ${long ? 'the took-too-long failure' : "the worker's failed reply's failure (main.ts:1481–1486)"}`, firstRead: r.first, readMs: r.readMs }
   })
   browser.close()
   const { writeFileSync } = await import('node:fs')

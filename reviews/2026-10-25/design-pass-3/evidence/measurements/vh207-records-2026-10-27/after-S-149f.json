@@ -1,0 +1,4302 @@
+{
+ "label": "after",
+ "scenario": "S-149f",
+ "cells": [
+  {
+   "key": "S-149f__en-GB__w1280__light",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149f__en-GB__w1280__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1154,
+    "recordMs": 10103,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "f1",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#feedback-message",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": true
+     },
+     "readMs": 1114,
+     "atChoosing": {
+      "on": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+     "visible": true,
+     "moves": [],
+     "inView": {
+      "top": 363,
+      "bottom": 533,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+      "id": "feedback-message",
+      "tag": "textarea",
+      "type": "textarea",
+      "inDialog": true,
+      "box": [
+       353,
+       363,
+       448,
+       170
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#feedback-message",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 2537,
+      "perimeter2px": 2456,
+      "bestRatio": 14.31,
+      "changedAny": 2537,
+      "controlPx": [
+       448,
+       170
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"What will be sent with it\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": true,
+      "box": [
+       353,
+       549,
+       574,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+      "failure": true,
+      "tookTooLong": false
+     }
+    },
+    {
+     "reading": "f2",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "body",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 1116,
+     "atChoosing": {
+      "on": "body",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "body",
+     "visible": false,
+     "moves": [],
+     "inView": null,
+     "seen": {
+      "el": "body",
+      "seen": false
+     },
+     "ring": {
+      "outcome": "not-applicable",
+      "why": "focus on the body: no ring to read"
+     },
+     "nextTab": {
+      "el": "input[radio video-kind=staff] \"Staff video\"",
+      "id": null,
+      "tag": "input",
+      "type": "radio",
+      "inDialog": false,
+      "box": [
+       184,
+       418,
+       106,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": true,
+      "seen": false
+     },
+     "statusLine": {
+      "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149f__en-GB__w1280__dark",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149f__en-GB__w1280__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1147,
+    "recordMs": 10299,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "f1",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#feedback-message",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": true
+     },
+     "readMs": 1110,
+     "atChoosing": {
+      "on": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+     "visible": true,
+     "moves": [],
+     "inView": {
+      "top": 363,
+      "bottom": 533,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+      "id": "feedback-message",
+      "tag": "textarea",
+      "type": "textarea",
+      "inDialog": true,
+      "box": [
+       353,
+       363,
+       448,
+       170
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#feedback-message",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 2537,
+      "perimeter2px": 2456,
+      "bestRatio": 15.41,
+      "changedAny": 2537,
+      "controlPx": [
+       448,
+       170
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"What will be sent with it\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": true,
+      "box": [
+       353,
+       549,
+       574,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+      "failure": true,
+      "tookTooLong": false
+     }
+    },
+    {
+     "reading": "f2",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "body",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 1115,
+     "atChoosing": {
+      "on": "body",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "body",
+     "visible": false,
+     "moves": [],
+     "inView": null,
+     "seen": {
+      "el": "body",
+      "seen": false
+     },
+     "ring": {
+      "outcome": "not-applicable",
+      "why": "focus on the body: no ring to read"
+     },
+     "nextTab": {
+      "el": "input[radio video-kind=staff] \"Staff video\"",
+      "id": null,
+      "tag": "input",
+      "type": "radio",
+      "inDialog": false,
+      "box": [
+       184,
+       418,
+       106,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": true,
+      "seen": false
+     },
+     "statusLine": {
+      "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149f__en-GB__w1280__forced-light",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149f__en-GB__w1280__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1215,
+    "recordMs": 10078,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "f1",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#feedback-message",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": true
+     },
+     "readMs": 1117,
+     "atChoosing": {
+      "on": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+     "visible": true,
+     "moves": [],
+     "inView": {
+      "top": 363,
+      "bottom": 533,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+      "id": "feedback-message",
+      "tag": "textarea",
+      "type": "textarea",
+      "inDialog": true,
+      "box": [
+       353,
+       363,
+       448,
+       170
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#feedback-message",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 2537,
+      "perimeter2px": 2456,
+      "bestRatio": 21,
+      "changedAny": 3769,
+      "controlPx": [
+       448,
+       170
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"What will be sent with it\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": true,
+      "box": [
+       353,
+       549,
+       574,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+      "failure": true,
+      "tookTooLong": false
+     }
+    },
+    {
+     "reading": "f2",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "body",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 1115,
+     "atChoosing": {
+      "on": "body",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "body",
+     "visible": false,
+     "moves": [],
+     "inView": null,
+     "seen": {
+      "el": "body",
+      "seen": false
+     },
+     "ring": {
+      "outcome": "not-applicable",
+      "why": "focus on the body: no ring to read"
+     },
+     "nextTab": {
+      "el": "input[radio video-kind=staff] \"Staff video\"",
+      "id": null,
+      "tag": "input",
+      "type": "radio",
+      "inDialog": false,
+      "box": [
+       184,
+       418,
+       106,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": true,
+      "seen": false
+     },
+     "statusLine": {
+      "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149f__en-GB__w1280__forced-dark",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149f__en-GB__w1280__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1113,
+    "recordMs": 9824,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "f1",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#feedback-message",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": true
+     },
+     "readMs": 1112,
+     "atChoosing": {
+      "on": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+     "visible": true,
+     "moves": [],
+     "inView": {
+      "top": 363,
+      "bottom": 533,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+      "id": "feedback-message",
+      "tag": "textarea",
+      "type": "textarea",
+      "inDialog": true,
+      "box": [
+       353,
+       363,
+       448,
+       170
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#feedback-message",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 2537,
+      "perimeter2px": 2456,
+      "bestRatio": 21,
+      "changedAny": 3769,
+      "controlPx": [
+       448,
+       170
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"What will be sent with it\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": true,
+      "box": [
+       353,
+       549,
+       574,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+      "failure": true,
+      "tookTooLong": false
+     }
+    },
+    {
+     "reading": "f2",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "body",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 1114,
+     "atChoosing": {
+      "on": "body",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "body",
+     "visible": false,
+     "moves": [],
+     "inView": null,
+     "seen": {
+      "el": "body",
+      "seen": false
+     },
+     "ring": {
+      "outcome": "not-applicable",
+      "why": "focus on the body: no ring to read"
+     },
+     "nextTab": {
+      "el": "input[radio video-kind=staff] \"Staff video\"",
+      "id": null,
+      "tag": "input",
+      "type": "radio",
+      "inDialog": false,
+      "box": [
+       184,
+       418,
+       106,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": true,
+      "seen": false
+     },
+     "statusLine": {
+      "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149f__en-GB__w320__light",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149f__en-GB__w320__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1103,
+    "recordMs": 9694,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "f1",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#feedback-message",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": true
+     },
+     "readMs": 1112,
+     "atChoosing": {
+      "on": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+     "visible": true,
+     "moves": [],
+     "inView": {
+      "top": 282,
+      "bottom": 452,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+      "id": "feedback-message",
+      "tag": "textarea",
+      "type": "textarea",
+      "inDialog": true,
+      "box": [
+       49,
+       282,
+       222,
+       170
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#feedback-message",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 1633,
+      "perimeter2px": 1552,
+      "bestRatio": 14.31,
+      "changedAny": 1633,
+      "controlPx": [
+       222,
+       170
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"What will be sent with it\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": true,
+      "box": [
+       49,
+       385,
+       222,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+      "failure": true,
+      "tookTooLong": false
+     }
+    },
+    {
+     "reading": "f2",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "body",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 1115,
+     "atChoosing": {
+      "on": "body",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "body",
+     "visible": false,
+     "moves": [],
+     "inView": null,
+     "seen": {
+      "el": "body",
+      "seen": false
+     },
+     "ring": {
+      "outcome": "not-applicable",
+      "why": "focus on the body: no ring to read"
+     },
+     "nextTab": {
+      "el": "input[radio video-kind=staff] \"Staff video\"",
+      "id": null,
+      "tag": "input",
+      "type": "radio",
+      "inDialog": false,
+      "box": [
+       24,
+       384,
+       106,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": true,
+      "seen": false
+     },
+     "statusLine": {
+      "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149f__en-GB__w320__dark",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149f__en-GB__w320__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1175,
+    "recordMs": 9884,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "f1",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#feedback-message",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": true
+     },
+     "readMs": 1114,
+     "atChoosing": {
+      "on": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+     "visible": true,
+     "moves": [],
+     "inView": {
+      "top": 282,
+      "bottom": 452,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+      "id": "feedback-message",
+      "tag": "textarea",
+      "type": "textarea",
+      "inDialog": true,
+      "box": [
+       49,
+       282,
+       222,
+       170
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#feedback-message",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 1633,
+      "perimeter2px": 1552,
+      "bestRatio": 15.41,
+      "changedAny": 1633,
+      "controlPx": [
+       222,
+       170
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"What will be sent with it\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": true,
+      "box": [
+       49,
+       385,
+       222,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+      "failure": true,
+      "tookTooLong": false
+     }
+    },
+    {
+     "reading": "f2",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "body",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 1116,
+     "atChoosing": {
+      "on": "body",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "body",
+     "visible": false,
+     "moves": [],
+     "inView": null,
+     "seen": {
+      "el": "body",
+      "seen": false
+     },
+     "ring": {
+      "outcome": "not-applicable",
+      "why": "focus on the body: no ring to read"
+     },
+     "nextTab": {
+      "el": "input[radio video-kind=staff] \"Staff video\"",
+      "id": null,
+      "tag": "input",
+      "type": "radio",
+      "inDialog": false,
+      "box": [
+       24,
+       384,
+       106,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": true,
+      "seen": false
+     },
+     "statusLine": {
+      "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149f__en-GB__w320__forced-light",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149f__en-GB__w320__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1131,
+    "recordMs": 9929,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "f1",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#feedback-message",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": true
+     },
+     "readMs": 1116,
+     "atChoosing": {
+      "on": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+     "visible": true,
+     "moves": [],
+     "inView": {
+      "top": 282,
+      "bottom": 452,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+      "id": "feedback-message",
+      "tag": "textarea",
+      "type": "textarea",
+      "inDialog": true,
+      "box": [
+       49,
+       282,
+       222,
+       170
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#feedback-message",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 1633,
+      "perimeter2px": 1552,
+      "bestRatio": 21,
+      "changedAny": 2413,
+      "controlPx": [
+       222,
+       170
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"What will be sent with it\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": true,
+      "box": [
+       49,
+       385,
+       222,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+      "failure": true,
+      "tookTooLong": false
+     }
+    },
+    {
+     "reading": "f2",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "body",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 1115,
+     "atChoosing": {
+      "on": "body",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "body",
+     "visible": false,
+     "moves": [],
+     "inView": null,
+     "seen": {
+      "el": "body",
+      "seen": false
+     },
+     "ring": {
+      "outcome": "not-applicable",
+      "why": "focus on the body: no ring to read"
+     },
+     "nextTab": {
+      "el": "input[radio video-kind=staff] \"Staff video\"",
+      "id": null,
+      "tag": "input",
+      "type": "radio",
+      "inDialog": false,
+      "box": [
+       24,
+       384,
+       106,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": true,
+      "seen": false
+     },
+     "statusLine": {
+      "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149f__en-GB__w320__forced-dark",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149f__en-GB__w320__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1177,
+    "recordMs": 9919,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "f1",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#feedback-message",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": true
+     },
+     "readMs": 1114,
+     "atChoosing": {
+      "on": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+     "visible": true,
+     "moves": [],
+     "inView": {
+      "top": 282,
+      "bottom": 452,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "textarea#feedback-message.textarea[textarea] \"Your message\"",
+      "id": "feedback-message",
+      "tag": "textarea",
+      "type": "textarea",
+      "inDialog": true,
+      "box": [
+       49,
+       282,
+       222,
+       170
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#feedback-message",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 1633,
+      "perimeter2px": 1552,
+      "bestRatio": 21,
+      "changedAny": 2413,
+      "controlPx": [
+       222,
+       170
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"What will be sent with it\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": true,
+      "box": [
+       49,
+       385,
+       222,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+      "failure": true,
+      "tookTooLong": false
+     }
+    },
+    {
+     "reading": "f2",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "body",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 1113,
+     "atChoosing": {
+      "on": "body",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "body",
+     "visible": false,
+     "moves": [],
+     "inView": null,
+     "seen": {
+      "el": "body",
+      "seen": false
+     },
+     "ring": {
+      "outcome": "not-applicable",
+      "why": "focus on the body: no ring to read"
+     },
+     "nextTab": {
+      "el": "input[radio video-kind=staff] \"Staff video\"",
+      "id": null,
+      "tag": "input",
+      "type": "radio",
+      "inDialog": false,
+      "box": [
+       24,
+       384,
+       106,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": true,
+      "seen": false
+     },
+     "statusLine": {
+      "text": "This file could not be read as a video. It may not be a video file, or it may be damaged. A video file’s name usually ends .mp4, .mov, .mkv, or .webm. Your original file has not been changed. Choose a…",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149f__zh-Hans__w1280__light",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149f__zh-Hans__w1280__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1538,
+    "recordMs": 10137,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "f1",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#feedback-message",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": true
+     },
+     "readMs": 1113,
+     "atChoosing": {
+      "on": "textarea#feedback-message.textarea[textarea] \"您的留言\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "textarea#feedback-message.textarea[textarea] \"您的留言\"",
+     "visible": true,
+     "moves": [],
+     "inView": {
+      "top": 351,
+      "bottom": 521,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "textarea#feedback-message.textarea[textarea] \"您的留言\"",
+      "id": "feedback-message",
+      "tag": "textarea",
+      "type": "textarea",
+      "inDialog": true,
+      "box": [
+       353,
+       351,
+       448,
+       170
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#feedback-message",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 2537,
+      "perimeter2px": 2456,
+      "bestRatio": 14.31,
+      "changedAny": 2537,
+      "controlPx": [
+       448,
+       170
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"将随邮件发送的内容\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": true,
+      "box": [
+       353,
+       537,
+       574,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .webm 结尾。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": false
+     }
+    },
+    {
+     "reading": "f2",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "body",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 1116,
+     "atChoosing": {
+      "on": "body",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "body",
+     "visible": false,
+     "moves": [],
+     "inView": null,
+     "seen": {
+      "el": "body",
+      "seen": false
+     },
+     "ring": {
+      "outcome": "not-applicable",
+      "why": "focus on the body: no ring to read"
+     },
+     "nextTab": {
+      "el": "input[radio video-kind=staff] \"教职员工视频\"",
+      "id": null,
+      "tag": "input",
+      "type": "radio",
+      "inDialog": false,
+      "box": [
+       184,
+       538,
+       118,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": true,
+      "seen": false
+     },
+     "statusLine": {
+      "text": "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .webm 结尾。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149f__zh-Hans__w1280__dark",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149f__zh-Hans__w1280__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1561,
+    "recordMs": 10176,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "f1",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#feedback-message",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": true
+     },
+     "readMs": 1111,
+     "atChoosing": {
+      "on": "textarea#feedback-message.textarea[textarea] \"您的留言\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "textarea#feedback-message.textarea[textarea] \"您的留言\"",
+     "visible": true,
+     "moves": [],
+     "inView": {
+      "top": 351,
+      "bottom": 521,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "textarea#feedback-message.textarea[textarea] \"您的留言\"",
+      "id": "feedback-message",
+      "tag": "textarea",
+      "type": "textarea",
+      "inDialog": true,
+      "box": [
+       353,
+       351,
+       448,
+       170
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#feedback-message",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 2537,
+      "perimeter2px": 2456,
+      "bestRatio": 15.41,
+      "changedAny": 2537,
+      "controlPx": [
+       448,
+       170
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"将随邮件发送的内容\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": true,
+      "box": [
+       353,
+       537,
+       574,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .webm 结尾。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": false
+     }
+    },
+    {
+     "reading": "f2",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "body",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 1131,
+     "atChoosing": {
+      "on": "body",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "body",
+     "visible": false,
+     "moves": [],
+     "inView": null,
+     "seen": {
+      "el": "body",
+      "seen": false
+     },
+     "ring": {
+      "outcome": "not-applicable",
+      "why": "focus on the body: no ring to read"
+     },
+     "nextTab": {
+      "el": "input[radio video-kind=staff] \"教职员工视频\"",
+      "id": null,
+      "tag": "input",
+      "type": "radio",
+      "inDialog": false,
+      "box": [
+       184,
+       538,
+       118,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": true,
+      "seen": false
+     },
+     "statusLine": {
+      "text": "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .webm 结尾。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149f__zh-Hans__w1280__forced-light",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149f__zh-Hans__w1280__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1766,
+    "recordMs": 10875,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "f1",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#feedback-message",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": true
+     },
+     "readMs": 1122,
+     "atChoosing": {
+      "on": "textarea#feedback-message.textarea[textarea] \"您的留言\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "textarea#feedback-message.textarea[textarea] \"您的留言\"",
+     "visible": true,
+     "moves": [],
+     "inView": {
+      "top": 351,
+      "bottom": 521,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "textarea#feedback-message.textarea[textarea] \"您的留言\"",
+      "id": "feedback-message",
+      "tag": "textarea",
+      "type": "textarea",
+      "inDialog": true,
+      "box": [
+       353,
+       351,
+       448,
+       170
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#feedback-message",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 2537,
+      "perimeter2px": 2456,
+      "bestRatio": 21,
+      "changedAny": 3769,
+      "controlPx": [
+       448,
+       170
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"将随邮件发送的内容\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": true,
+      "box": [
+       353,
+       537,
+       574,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .webm 结尾。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": false
+     }
+    },
+    {
+     "reading": "f2",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "body",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 1124,
+     "atChoosing": {
+      "on": "body",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "body",
+     "visible": false,
+     "moves": [],
+     "inView": null,
+     "seen": {
+      "el": "body",
+      "seen": false
+     },
+     "ring": {
+      "outcome": "not-applicable",
+      "why": "focus on the body: no ring to read"
+     },
+     "nextTab": {
+      "el": "input[radio video-kind=staff] \"教职员工视频\"",
+      "id": null,
+      "tag": "input",
+      "type": "radio",
+      "inDialog": false,
+      "box": [
+       184,
+       538,
+       118,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": true,
+      "seen": false
+     },
+     "statusLine": {
+      "text": "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .webm 结尾。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149f__zh-Hans__w1280__forced-dark",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149f__zh-Hans__w1280__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1685,
+    "recordMs": 10612,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "f1",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#feedback-message",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": true
+     },
+     "readMs": 1121,
+     "atChoosing": {
+      "on": "textarea#feedback-message.textarea[textarea] \"您的留言\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "textarea#feedback-message.textarea[textarea] \"您的留言\"",
+     "visible": true,
+     "moves": [],
+     "inView": {
+      "top": 351,
+      "bottom": 521,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "textarea#feedback-message.textarea[textarea] \"您的留言\"",
+      "id": "feedback-message",
+      "tag": "textarea",
+      "type": "textarea",
+      "inDialog": true,
+      "box": [
+       353,
+       351,
+       448,
+       170
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#feedback-message",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 2537,
+      "perimeter2px": 2456,
+      "bestRatio": 21,
+      "changedAny": 3769,
+      "controlPx": [
+       448,
+       170
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"将随邮件发送的内容\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": true,
+      "box": [
+       353,
+       537,
+       574,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .webm 结尾。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": false
+     }
+    },
+    {
+     "reading": "f2",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "body",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 1120,
+     "atChoosing": {
+      "on": "body",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "body",
+     "visible": false,
+     "moves": [],
+     "inView": null,
+     "seen": {
+      "el": "body",
+      "seen": false
+     },
+     "ring": {
+      "outcome": "not-applicable",
+      "why": "focus on the body: no ring to read"
+     },
+     "nextTab": {
+      "el": "input[radio video-kind=staff] \"教职员工视频\"",
+      "id": null,
+      "tag": "input",
+      "type": "radio",
+      "inDialog": false,
+      "box": [
+       184,
+       538,
+       118,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": true,
+      "seen": false
+     },
+     "statusLine": {
+      "text": "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .webm 结尾。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149f__zh-Hans__w320__light",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149f__zh-Hans__w320__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1620,
+    "recordMs": 10470,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "f1",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#feedback-message",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": true
+     },
+     "readMs": 1117,
+     "atChoosing": {
+      "on": "textarea#feedback-message.textarea[textarea] \"您的留言\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "textarea#feedback-message.textarea[textarea] \"您的留言\"",
+     "visible": true,
+     "moves": [],
+     "inView": {
+      "top": 258,
+      "bottom": 428,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "textarea#feedback-message.textarea[textarea] \"您的留言\"",
+      "id": "feedback-message",
+      "tag": "textarea",
+      "type": "textarea",
+      "inDialog": true,
+      "box": [
+       49,
+       258,
+       222,
+       170
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#feedback-message",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 1633,
+      "perimeter2px": 1552,
+      "bestRatio": 14.31,
+      "changedAny": 1633,
+      "controlPx": [
+       222,
+       170
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"将随邮件发送的内容\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": true,
+      "box": [
+       49,
+       385,
+       222,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .webm 结尾。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": false
+     }
+    },
+    {
+     "reading": "f2",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "body",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 1116,
+     "atChoosing": {
+      "on": "body",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "body",
+     "visible": false,
+     "moves": [],
+     "inView": null,
+     "seen": {
+      "el": "body",
+      "seen": false
+     },
+     "ring": {
+      "outcome": "not-applicable",
+      "why": "focus on the body: no ring to read"
+     },
+     "nextTab": {
+      "el": "input[radio video-kind=staff] \"教职员工视频\"",
+      "id": null,
+      "tag": "input",
+      "type": "radio",
+      "inDialog": false,
+      "box": [
+       24,
+       372,
+       118,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": true,
+      "seen": false
+     },
+     "statusLine": {
+      "text": "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .webm 结尾。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149f__zh-Hans__w320__dark",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149f__zh-Hans__w320__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1600,
+    "recordMs": 9980,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "f1",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#feedback-message",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": true
+     },
+     "readMs": 1113,
+     "atChoosing": {
+      "on": "textarea#feedback-message.textarea[textarea] \"您的留言\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "textarea#feedback-message.textarea[textarea] \"您的留言\"",
+     "visible": true,
+     "moves": [],
+     "inView": {
+      "top": 258,
+      "bottom": 428,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "textarea#feedback-message.textarea[textarea] \"您的留言\"",
+      "id": "feedback-message",
+      "tag": "textarea",
+      "type": "textarea",
+      "inDialog": true,
+      "box": [
+       49,
+       258,
+       222,
+       170
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#feedback-message",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 1633,
+      "perimeter2px": 1552,
+      "bestRatio": 15.41,
+      "changedAny": 1633,
+      "controlPx": [
+       222,
+       170
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"将随邮件发送的内容\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": true,
+      "box": [
+       49,
+       385,
+       222,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .webm 结尾。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": false
+     }
+    },
+    {
+     "reading": "f2",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "body",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 1113,
+     "atChoosing": {
+      "on": "body",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "body",
+     "visible": false,
+     "moves": [],
+     "inView": null,
+     "seen": {
+      "el": "body",
+      "seen": false
+     },
+     "ring": {
+      "outcome": "not-applicable",
+      "why": "focus on the body: no ring to read"
+     },
+     "nextTab": {
+      "el": "input[radio video-kind=staff] \"教职员工视频\"",
+      "id": null,
+      "tag": "input",
+      "type": "radio",
+      "inDialog": false,
+      "box": [
+       24,
+       372,
+       118,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": true,
+      "seen": false
+     },
+     "statusLine": {
+      "text": "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .webm 结尾。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149f__zh-Hans__w320__forced-light",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149f__zh-Hans__w320__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1559,
+    "recordMs": 10006,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "f1",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#feedback-message",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": true
+     },
+     "readMs": 1113,
+     "atChoosing": {
+      "on": "textarea#feedback-message.textarea[textarea] \"您的留言\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "textarea#feedback-message.textarea[textarea] \"您的留言\"",
+     "visible": true,
+     "moves": [],
+     "inView": {
+      "top": 258,
+      "bottom": 428,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "textarea#feedback-message.textarea[textarea] \"您的留言\"",
+      "id": "feedback-message",
+      "tag": "textarea",
+      "type": "textarea",
+      "inDialog": true,
+      "box": [
+       49,
+       258,
+       222,
+       170
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#feedback-message",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 1633,
+      "perimeter2px": 1552,
+      "bestRatio": 21,
+      "changedAny": 2413,
+      "controlPx": [
+       222,
+       170
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"将随邮件发送的内容\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": true,
+      "box": [
+       49,
+       385,
+       222,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .webm 结尾。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": false
+     }
+    },
+    {
+     "reading": "f2",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "body",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 1114,
+     "atChoosing": {
+      "on": "body",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "body",
+     "visible": false,
+     "moves": [],
+     "inView": null,
+     "seen": {
+      "el": "body",
+      "seen": false
+     },
+     "ring": {
+      "outcome": "not-applicable",
+      "why": "focus on the body: no ring to read"
+     },
+     "nextTab": {
+      "el": "input[radio video-kind=staff] \"教职员工视频\"",
+      "id": null,
+      "tag": "input",
+      "type": "radio",
+      "inDialog": false,
+      "box": [
+       24,
+       372,
+       118,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": true,
+      "seen": false
+     },
+     "statusLine": {
+      "text": "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .webm 结尾。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149f__zh-Hans__w320__forced-dark",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149f__zh-Hans__w320__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1544,
+    "recordMs": 10145,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "f1",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#feedback-message",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": true
+     },
+     "readMs": 1113,
+     "atChoosing": {
+      "on": "textarea#feedback-message.textarea[textarea] \"您的留言\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "textarea#feedback-message.textarea[textarea] \"您的留言\"",
+     "visible": true,
+     "moves": [],
+     "inView": {
+      "top": 258,
+      "bottom": 428,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "textarea#feedback-message.textarea[textarea] \"您的留言\"",
+      "id": "feedback-message",
+      "tag": "textarea",
+      "type": "textarea",
+      "inDialog": true,
+      "box": [
+       49,
+       258,
+       222,
+       170
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#feedback-message",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 1633,
+      "perimeter2px": 1552,
+      "bestRatio": 21,
+      "changedAny": 2413,
+      "controlPx": [
+       222,
+       170
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"将随邮件发送的内容\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": true,
+      "box": [
+       49,
+       385,
+       222,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .webm 结尾。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": false
+     }
+    },
+    {
+     "reading": "f2",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "body",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 1117,
+     "atChoosing": {
+      "on": "body",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "body",
+     "visible": false,
+     "moves": [],
+     "inView": null,
+     "seen": {
+      "el": "body",
+      "seen": false
+     },
+     "ring": {
+      "outcome": "not-applicable",
+      "why": "focus on the body: no ring to read"
+     },
+     "nextTab": {
+      "el": "input[radio video-kind=staff] \"教职员工视频\"",
+      "id": null,
+      "tag": "input",
+      "type": "radio",
+      "inDialog": false,
+      "box": [
+       24,
+       372,
+       118,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": true,
+      "seen": false
+     },
+     "statusLine": {
+      "text": "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .webm 结尾。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149f__ms-MY__w1280__light",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149f__ms-MY__w1280__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1552,
+    "recordMs": 10573,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "f1",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#feedback-message",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": true
+     },
+     "readMs": 1117,
+     "atChoosing": {
+      "on": "textarea#feedback-message.textarea[textarea] \"Mesej anda\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "textarea#feedback-message.textarea[textarea] \"Mesej anda\"",
+     "visible": true,
+     "moves": [],
+     "inView": {
+      "top": 363,
+      "bottom": 533,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "textarea#feedback-message.textarea[textarea] \"Mesej anda\"",
+      "id": "feedback-message",
+      "tag": "textarea",
+      "type": "textarea",
+      "inDialog": true,
+      "box": [
+       353,
+       363,
+       448,
+       170
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#feedback-message",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 2537,
+      "perimeter2px": 2456,
+      "bestRatio": 14.31,
+      "changedAny": 2537,
+      "controlPx": [
+       448,
+       170
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"Apa yang akan dihantar bersamanya\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": true,
+      "box": [
+       353,
+       549,
+       574,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan fail video, atau ia mungkin rosak. Nama fail video biasanya berakhir dengan .mp4, .mov, .mkv atau .webm. Fail asal anda tidak diubah. Pilih …",
+      "failure": true,
+      "tookTooLong": false
+     }
+    },
+    {
+     "reading": "f2",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "body",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 1116,
+     "atChoosing": {
+      "on": "body",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "body",
+     "visible": false,
+     "moves": [],
+     "inView": null,
+     "seen": {
+      "el": "body",
+      "seen": false
+     },
+     "ring": {
+      "outcome": "not-applicable",
+      "why": "focus on the body: no ring to read"
+     },
+     "nextTab": {
+      "el": "input[radio video-kind=staff] \"Video staf\"",
+      "id": null,
+      "tag": "input",
+      "type": "radio",
+      "inDialog": false,
+      "box": [
+       184,
+       538,
+       101,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": true,
+      "seen": false
+     },
+     "statusLine": {
+      "text": "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan fail video, atau ia mungkin rosak. Nama fail video biasanya berakhir dengan .mp4, .mov, .mkv atau .webm. Fail asal anda tidak diubah. Pilih …",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149f__ms-MY__w1280__dark",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149f__ms-MY__w1280__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1588,
+    "recordMs": 10769,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "f1",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#feedback-message",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": true
+     },
+     "readMs": 1116,
+     "atChoosing": {
+      "on": "textarea#feedback-message.textarea[textarea] \"Mesej anda\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "textarea#feedback-message.textarea[textarea] \"Mesej anda\"",
+     "visible": true,
+     "moves": [],
+     "inView": {
+      "top": 363,
+      "bottom": 533,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "textarea#feedback-message.textarea[textarea] \"Mesej anda\"",
+      "id": "feedback-message",
+      "tag": "textarea",
+      "type": "textarea",
+      "inDialog": true,
+      "box": [
+       353,
+       363,
+       448,
+       170
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#feedback-message",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 2537,
+      "perimeter2px": 2456,
+      "bestRatio": 15.41,
+      "changedAny": 2537,
+      "controlPx": [
+       448,
+       170
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"Apa yang akan dihantar bersamanya\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": true,
+      "box": [
+       353,
+       549,
+       574,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan fail video, atau ia mungkin rosak. Nama fail video biasanya berakhir dengan .mp4, .mov, .mkv atau .webm. Fail asal anda tidak diubah. Pilih …",
+      "failure": true,
+      "tookTooLong": false
+     }
+    },
+    {
+     "reading": "f2",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "body",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 1117,
+     "atChoosing": {
+      "on": "body",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "body",
+     "visible": false,
+     "moves": [],
+     "inView": null,
+     "seen": {
+      "el": "body",
+      "seen": false
+     },
+     "ring": {
+      "outcome": "not-applicable",
+      "why": "focus on the body: no ring to read"
+     },
+     "nextTab": {
+      "el": "input[radio video-kind=staff] \"Video staf\"",
+      "id": null,
+      "tag": "input",
+      "type": "radio",
+      "inDialog": false,
+      "box": [
+       184,
+       538,
+       101,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": true,
+      "seen": false
+     },
+     "statusLine": {
+      "text": "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan fail video, atau ia mungkin rosak. Nama fail video biasanya berakhir dengan .mp4, .mov, .mkv atau .webm. Fail asal anda tidak diubah. Pilih …",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149f__ms-MY__w1280__forced-light",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149f__ms-MY__w1280__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1566,
+    "recordMs": 10365,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "f1",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#feedback-message",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": true
+     },
+     "readMs": 1113,
+     "atChoosing": {
+      "on": "textarea#feedback-message.textarea[textarea] \"Mesej anda\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "textarea#feedback-message.textarea[textarea] \"Mesej anda\"",
+     "visible": true,
+     "moves": [],
+     "inView": {
+      "top": 363,
+      "bottom": 533,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "textarea#feedback-message.textarea[textarea] \"Mesej anda\"",
+      "id": "feedback-message",
+      "tag": "textarea",
+      "type": "textarea",
+      "inDialog": true,
+      "box": [
+       353,
+       363,
+       448,
+       170
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#feedback-message",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 2537,
+      "perimeter2px": 2456,
+      "bestRatio": 21,
+      "changedAny": 3769,
+      "controlPx": [
+       448,
+       170
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"Apa yang akan dihantar bersamanya\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": true,
+      "box": [
+       353,
+       549,
+       574,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan fail video, atau ia mungkin rosak. Nama fail video biasanya berakhir dengan .mp4, .mov, .mkv atau .webm. Fail asal anda tidak diubah. Pilih …",
+      "failure": true,
+      "tookTooLong": false
+     }
+    },
+    {
+     "reading": "f2",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "body",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 1115,
+     "atChoosing": {
+      "on": "body",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "body",
+     "visible": false,
+     "moves": [],
+     "inView": null,
+     "seen": {
+      "el": "body",
+      "seen": false
+     },
+     "ring": {
+      "outcome": "not-applicable",
+      "why": "focus on the body: no ring to read"
+     },
+     "nextTab": {
+      "el": "input[radio video-kind=staff] \"Video staf\"",
+      "id": null,
+      "tag": "input",
+      "type": "radio",
+      "inDialog": false,
+      "box": [
+       184,
+       538,
+       101,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": true,
+      "seen": false
+     },
+     "statusLine": {
+      "text": "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan fail video, atau ia mungkin rosak. Nama fail video biasanya berakhir dengan .mp4, .mov, .mkv atau .webm. Fail asal anda tidak diubah. Pilih …",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149f__ms-MY__w1280__forced-dark",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149f__ms-MY__w1280__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1538,
+    "recordMs": 10125,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "f1",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#feedback-message",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": true
+     },
+     "readMs": 1111,
+     "atChoosing": {
+      "on": "textarea#feedback-message.textarea[textarea] \"Mesej anda\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "textarea#feedback-message.textarea[textarea] \"Mesej anda\"",
+     "visible": true,
+     "moves": [],
+     "inView": {
+      "top": 363,
+      "bottom": 533,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "textarea#feedback-message.textarea[textarea] \"Mesej anda\"",
+      "id": "feedback-message",
+      "tag": "textarea",
+      "type": "textarea",
+      "inDialog": true,
+      "box": [
+       353,
+       363,
+       448,
+       170
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#feedback-message",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 2537,
+      "perimeter2px": 2456,
+      "bestRatio": 21,
+      "changedAny": 3769,
+      "controlPx": [
+       448,
+       170
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"Apa yang akan dihantar bersamanya\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": true,
+      "box": [
+       353,
+       549,
+       574,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan fail video, atau ia mungkin rosak. Nama fail video biasanya berakhir dengan .mp4, .mov, .mkv atau .webm. Fail asal anda tidak diubah. Pilih …",
+      "failure": true,
+      "tookTooLong": false
+     }
+    },
+    {
+     "reading": "f2",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "body",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 1111,
+     "atChoosing": {
+      "on": "body",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "body",
+     "visible": false,
+     "moves": [],
+     "inView": null,
+     "seen": {
+      "el": "body",
+      "seen": false
+     },
+     "ring": {
+      "outcome": "not-applicable",
+      "why": "focus on the body: no ring to read"
+     },
+     "nextTab": {
+      "el": "input[radio video-kind=staff] \"Video staf\"",
+      "id": null,
+      "tag": "input",
+      "type": "radio",
+      "inDialog": false,
+      "box": [
+       184,
+       538,
+       101,
+       44
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": true,
+      "seen": false
+     },
+     "statusLine": {
+      "text": "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan fail video, atau ia mungkin rosak. Nama fail video biasanya berakhir dengan .mp4, .mov, .mkv atau .webm. Fail asal anda tidak diubah. Pilih …",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149f__ms-MY__w320__light",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149f__ms-MY__w320__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1538,
+    "recordMs": 9920,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "f1",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#feedback-message",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": true
+     },
+     "readMs": 1111,
+     "atChoosing": {
+      "on": "textarea#feedback-message.textarea[textarea] \"Mesej anda\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "textarea#feedback-message.textarea[textarea] \"Mesej anda\"",
+     "visible": true,
+     "moves": [],
+     "inView": {
+      "top": 306,
+      "bottom": 476,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "textarea#feedback-message.textarea[textarea] \"Mesej anda\"",
+      "id": "feedback-message",
+      "tag": "textarea",
+      "type": "textarea",
+      "inDialog": true,
+      "box": [
+       49,
+       306,
+       222,
+       170
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#feedback-message",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 1633,
+      "perimeter2px": 1552,
+      "bestRatio": 14.31,
+      "changedAny": 1633,
+      "controlPx": [
+       222,
+       170
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"Apa yang akan dihantar bersamanya\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": true,
+      "box": [
+       49,
+       385,
+       222,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan fail video, atau ia mungkin rosak. Nama fail video biasanya berakhir dengan .mp4, .mov, .mkv atau .webm. Fail asal anda tidak diubah. Pilih …",
+      "failure": true,
+      "tookTooLong": false
+     }
+    },
+    {
+     "reading": "f2",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "body",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 1111,
+     "atChoosing": {
+      "on": "body",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "body",
+     "visible": false,
+     "moves": [],
+     "inView": null,
+     "seen": {
+      "el": "body",
+      "seen": false
+     },
+     "ring": {
+      "outcome": "not-applicable",
+      "why": "focus on the body: no ring to read"
+     },
+     "nextTab": {
+      "el": "input[radio video-kind=staff] \"Video staf\"",
+      "id": null,
+      "tag": "input",
+      "type": "radio",
+      "inDialog": false,
+      "box": [
+       24,
+       384,
+       101,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": true,
+      "seen": false
+     },
+     "statusLine": {
+      "text": "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan fail video, atau ia mungkin rosak. Nama fail video biasanya berakhir dengan .mp4, .mov, .mkv atau .webm. Fail asal anda tidak diubah. Pilih …",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149f__ms-MY__w320__dark",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149f__ms-MY__w320__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1540,
+    "recordMs": 9931,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "f1",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#feedback-message",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": true
+     },
+     "readMs": 1110,
+     "atChoosing": {
+      "on": "textarea#feedback-message.textarea[textarea] \"Mesej anda\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "textarea#feedback-message.textarea[textarea] \"Mesej anda\"",
+     "visible": true,
+     "moves": [],
+     "inView": {
+      "top": 306,
+      "bottom": 476,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "textarea#feedback-message.textarea[textarea] \"Mesej anda\"",
+      "id": "feedback-message",
+      "tag": "textarea",
+      "type": "textarea",
+      "inDialog": true,
+      "box": [
+       49,
+       306,
+       222,
+       170
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#feedback-message",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 1633,
+      "perimeter2px": 1552,
+      "bestRatio": 15.41,
+      "changedAny": 1633,
+      "controlPx": [
+       222,
+       170
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"Apa yang akan dihantar bersamanya\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": true,
+      "box": [
+       49,
+       385,
+       222,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan fail video, atau ia mungkin rosak. Nama fail video biasanya berakhir dengan .mp4, .mov, .mkv atau .webm. Fail asal anda tidak diubah. Pilih …",
+      "failure": true,
+      "tookTooLong": false
+     }
+    },
+    {
+     "reading": "f2",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "body",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 1114,
+     "atChoosing": {
+      "on": "body",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "body",
+     "visible": false,
+     "moves": [],
+     "inView": null,
+     "seen": {
+      "el": "body",
+      "seen": false
+     },
+     "ring": {
+      "outcome": "not-applicable",
+      "why": "focus on the body: no ring to read"
+     },
+     "nextTab": {
+      "el": "input[radio video-kind=staff] \"Video staf\"",
+      "id": null,
+      "tag": "input",
+      "type": "radio",
+      "inDialog": false,
+      "box": [
+       24,
+       384,
+       101,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": true,
+      "seen": false
+     },
+     "statusLine": {
+      "text": "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan fail video, atau ia mungkin rosak. Nama fail video biasanya berakhir dengan .mp4, .mov, .mkv atau .webm. Fail asal anda tidak diubah. Pilih …",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149f__ms-MY__w320__forced-light",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149f__ms-MY__w320__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1537,
+    "recordMs": 9940,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "f1",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#feedback-message",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": true
+     },
+     "readMs": 1111,
+     "atChoosing": {
+      "on": "textarea#feedback-message.textarea[textarea] \"Mesej anda\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "textarea#feedback-message.textarea[textarea] \"Mesej anda\"",
+     "visible": true,
+     "moves": [],
+     "inView": {
+      "top": 306,
+      "bottom": 476,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "textarea#feedback-message.textarea[textarea] \"Mesej anda\"",
+      "id": "feedback-message",
+      "tag": "textarea",
+      "type": "textarea",
+      "inDialog": true,
+      "box": [
+       49,
+       306,
+       222,
+       170
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#feedback-message",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 1633,
+      "perimeter2px": 1552,
+      "bestRatio": 21,
+      "changedAny": 2413,
+      "controlPx": [
+       222,
+       170
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"Apa yang akan dihantar bersamanya\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": true,
+      "box": [
+       49,
+       385,
+       222,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan fail video, atau ia mungkin rosak. Nama fail video biasanya berakhir dengan .mp4, .mov, .mkv atau .webm. Fail asal anda tidak diubah. Pilih …",
+      "failure": true,
+      "tookTooLong": false
+     }
+    },
+    {
+     "reading": "f2",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "body",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 1112,
+     "atChoosing": {
+      "on": "body",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "body",
+     "visible": false,
+     "moves": [],
+     "inView": null,
+     "seen": {
+      "el": "body",
+      "seen": false
+     },
+     "ring": {
+      "outcome": "not-applicable",
+      "why": "focus on the body: no ring to read"
+     },
+     "nextTab": {
+      "el": "input[radio video-kind=staff] \"Video staf\"",
+      "id": null,
+      "tag": "input",
+      "type": "radio",
+      "inDialog": false,
+      "box": [
+       24,
+       384,
+       101,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": true,
+      "seen": false
+     },
+     "statusLine": {
+      "text": "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan fail video, atau ia mungkin rosak. Nama fail video biasanya berakhir dengan .mp4, .mov, .mkv atau .webm. Fail asal anda tidak diubah. Pilih …",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149f__ms-MY__w320__forced-dark",
+   "run": "vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-s149abf-2026-10-27T21-20-54-086Z-12df03/S-149f__ms-MY__w320__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1512,
+    "recordMs": 9943,
+    "firstOfGroup": true
+   },
+   "faults": [],
+   "readings": [
+    {
+     "reading": "f1",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#feedback-message",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": true
+     },
+     "readMs": 1111,
+     "atChoosing": {
+      "on": "textarea#feedback-message.textarea[textarea] \"Mesej anda\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "textarea#feedback-message.textarea[textarea] \"Mesej anda\"",
+     "visible": true,
+     "moves": [],
+     "inView": {
+      "top": 306,
+      "bottom": 476,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "textarea#feedback-message.textarea[textarea] \"Mesej anda\"",
+      "id": "feedback-message",
+      "tag": "textarea",
+      "type": "textarea",
+      "inDialog": true,
+      "box": [
+       49,
+       306,
+       222,
+       170
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#feedback-message",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 1633,
+      "perimeter2px": 1552,
+      "bestRatio": 21,
+      "changedAny": 2413,
+      "controlPx": [
+       222,
+       170
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"Apa yang akan dihantar bersamanya\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": true,
+      "box": [
+       49,
+       385,
+       222,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan fail video, atau ia mungkin rosak. Nama fail video biasanya berakhir dengan .mp4, .mov, .mkv atau .webm. Fail asal anda tidak diubah. Pilih …",
+      "failure": true,
+      "tookTooLong": false
+     }
+    },
+    {
+     "reading": "f2",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "body",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": false,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 1112,
+     "atChoosing": {
+      "on": "body",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [],
+     "focusRow": "pass",
+     "focus": "body",
+     "visible": false,
+     "moves": [],
+     "inView": null,
+     "seen": {
+      "el": "body",
+      "seen": false
+     },
+     "ring": {
+      "outcome": "not-applicable",
+      "why": "focus on the body: no ring to read"
+     },
+     "nextTab": {
+      "el": "input[radio video-kind=staff] \"Video staf\"",
+      "id": null,
+      "tag": "input",
+      "type": "radio",
+      "inDialog": false,
+      "box": [
+       24,
+       384,
+       101,
+       44
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": true,
+      "seen": false
+     },
+     "statusLine": {
+      "text": "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan fail video, atau ia mungkin rosak. Nama fail video biasanya berakhir dengan .mp4, .mov, .mkv atau .webm. Fail asal anda tidak diubah. Pilih …",
+      "failure": true,
+      "tookTooLong": false
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  }
+ ]
+}

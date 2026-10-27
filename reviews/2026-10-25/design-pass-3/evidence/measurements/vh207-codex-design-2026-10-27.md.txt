@@ -1,0 +1,17 @@
+My reading of VH-207 at `5893d9d`:
+
+1. **Successors at the choosing**
+   - **(a) Result card → re-rendered result card.** The finished video still exists; its card remains the same logical place for reading that result. Being focusable through `tabIndex = -1` counts.
+   - **(b) Player → the same player after reattachment.** `resultPlayerFor` reuses the `<video>` for the same job; `renderResult` moves it into the new card. Preserve focus if it survives; restore it there if moving the node loses it.
+   - **(c) Question panel, Discard or Keep → restored result card.** Choosing invalidates that question’s proposed job. Its buttons have no continuing equivalents; the restored card presents what remains. This also follows the existing Keep action’s successor, without changing that action.
+   - **(d) Saved card removed by `clearResult` → file input.** There is no retained result to restore. The chooser continues the new-file task.
+
+2. **Earlier removals are within my reading of “At the choosing”.** Examples include Stop checking/Check again hidden by `offerStop(null)`, the Video properties disclosure removed by `clear(sourceReport)`, and a visible Create button hidden with `processActions`. Their loss belongs to the same choosing transition; capturing immediately before `clearTrim` would already be too late.
+
+   I would capture these before the handler’s first relevant removal and hand displaced focus to the file input. Keep this local to the change handler, using the existing guarded hand-on. Capture only affected controls or containers being withdrawn—not whole surviving steps, which would wrongly include controls that remain usable.
+
+3. **I find no criterion that excludes these choices.** The named trim and Save successors are mandatory cases, not an explicit exhaustive list. The card/player/question successors are my interpretation of the general successor rule, rather than destinations expressly prescribed by VH-207.
+
+   The limits still bind: Save must return to Save; surviving focus, a reader’s place and the feedback dialog must be left alone; subsequent readable/block behaviour and every other caller must remain unchanged. A blanket result-container → Save hand-on would erase the distinctions above.
+
+Reading: Preserve the logical place when it survives, return a retired discard question to the restored result card, and use the file input when choosing removes a control with no continuing equivalent.

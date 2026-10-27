@@ -744,13 +744,13 @@ findings still number 7: 1 at rank 1, 5 at rank 2 and 1 at rank 3.
 
 ## Disposition
 
-At VH-201, 27 October; updated at VH-202's close the same day, on the owner's answer to its ask (the VH-202 close decision), at VH-211's close, on the owner's scope (the PLAN-8 entry of that date), and at VH-206's close; VH-195 makes it final at Phase 8's close.
+At VH-201, 27 October; updated at VH-202's close the same day, on the owner's answer to its ask (the VH-202 close decision), at VH-211's close, on the owner's scope (the PLAN-8 entry of that date), at VH-206's close, and at VH-207's; VH-195 makes it final at Phase 8's close.
 
 | Finding | Rank | Disposition |
 | --- | --- | --- |
 | V-51 (D-05) | 1 | Fixed by [VH-206](../../../project/items/VH-206.md) (its close decision): a typed reason on the no-audio warning, and the words the owner approved in three languages (point 2); the 400 ms rule kept (point 3), no control; spec §5.4's row corrected (point 8; wish VH-202.1 retired). Before and after, the kept sliver of audible sound walked with the output's tracks read: [vh206-no-audio-2026-10-27.md](evidence/measurements/vh206-no-audio-2026-10-27.md). VH-203's after-run re-reads it on the final page (VH-201.2) |
 | V-52 (D-06) | 2 | VH-208: the warnings before the player and Save, the listening sentence spoken; its check includes F15b's state |
-| V-46 | 2, regressed | VH-207: the hand-on at the choosing and on both read-failure paths; its check covers the J4 case (VH-201.2) |
+| V-46 | 2, regressed | Fixed by [VH-207](../../../project/items/VH-207.md) (its close decision): the hand-on at the choosing, "Use the whole video" included, and, once, on both read-failure paths, to the file input, or to the same control in the re-rendered result; no element, no other caller. Before and after, (a) to (f) and the J4 case (d), by the pass's keyboard instrument, in every colour mode, the readings accepted as walked on the owner's answer: [vh207-focus-2026-10-27.md](evidence/measurements/vh207-focus-2026-10-27.md). VH-203's after-run re-reads it on the final page (VH-201.2) |
 | V-48 | 2 | VH-210, CSS only; VH-203's after-run re-reads S-113 |
 | V-49 | 2 | VH-210, CSS only; a real Windows theme is the checklist's task D |
 | V-18 | 2, incomplete | The Phase 7 acceptance (VH-175.4) stood at the owner's answer (point 6), and the owner's addition, that old issues be solved, amends it: [VH-216](../../../project/items/VH-216.md), both cases, its remedy to the owner first (VH-211's ask, point 1); its six cases read before and after there, and in VH-203's after-run (VH-201.2) |

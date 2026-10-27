@@ -1,0 +1,342 @@
+<!-- markdownlint-disable -->
+# VH-207 — the before walk (S-149, its variants (a) to (f), the eight routes)
+
+## Runs
+
+| Run | Records | Ok | Whole | Started | Power and load at start |
+| --- | ---: | ---: | --- | --- | --- |
+| `vh207-before-c-2026-10-27T19-38-08-056Z-db6c89` | 24 | 24 | whole | 2026-10-27T19:38:08.151Z | 2026-10-27T19:38:08Z / Now drawing from 'AC Power' -InternalBattery-0 (id=22544483) 100%; charged; 0:00 remaining present: true / powermode 2 / 19:38 up 2:30, 1 user, load averages: 6.88 6.13 7.92 |
+| `vh207-before-de-2026-10-27T19-38-08-058Z-6b02ab` | 48 | 48 | whole | 2026-10-27T19:38:08.151Z | 2026-10-27T19:38:08Z / Now drawing from 'AC Power' -InternalBattery-0 (id=22544483) 100%; charged; 0:00 remaining present: true / powermode 2 / 19:38 up 2:30, 1 user, load averages: 6.88 6.13 7.92 |
+| `vh207-before-routes-2026-10-27T19-46-25-667Z-b44dc2` | 8 | 8 | whole | 2026-10-27T19:46:25.915Z | 2026-10-27T19:46:25Z / Now drawing from 'AC Power' -InternalBattery-0 (id=22544483) 100%; charged; 0:00 remaining present: true / powermode 2 / 19:46 up 2:38, 1 user, load averages: 7.53 6.75 7.46 |
+| `vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899` | 96 | 96 | whole | 2026-10-27T19:38:08.155Z | 2026-10-27T19:38:08Z / Now drawing from 'AC Power' -InternalBattery-0 (id=22544483) 100%; charged; 0:00 remaining present: true / powermode 2 / 19:38 up 2:30, 1 user, load averages: 6.88 6.13 7.92 |
+
+Resumed in place: `vh207-before-s149abf-2026-10-27T19-38-08-057Z-052899`, 2 attempt(s) after the first (records kept: 84 from the first, S-149__en-GB__w1280__forced-dark a3, S-149__en-GB__w1280__forced-light a2, S-149__en-GB__w320__forced-dark a3, S-149__en-GB__w320__forced-light a2, S-149__ms-MY__w1280__forced-dark a3, S-149__ms-MY__w1280__forced-light a2, S-149__ms-MY__w320__forced-dark a3, S-149__ms-MY__w320__forced-light a2, S-149__zh-Hans__w1280__forced-dark a3, S-149__zh-Hans__w1280__forced-light a2, S-149__zh-Hans__w320__forced-dark a3, S-149__zh-Hans__w320__forced-light a2).
+- resume 1: 2026-10-27T19:53:29Z / Now drawing from 'AC Power' -InternalBattery-0 (id=22544483) 100%; charged; 0:00 remaining present: true / powermode 2 / 19:53 up 2:45, 1 user, load averages: 4.53 6.14 6.93
+- resume 2: 2026-10-27T19:55:42Z / Now drawing from 'AC Power' -InternalBattery-0 (id=22544483) 100%; charged; 0:00 remaining present: true / powermode 2 / 19:55 up 2:47, 1 user, load averages: 3.58 5.22 6.45
+
+## S-149
+
+| Cell | Status | State (the block; focus on the file input) | File input ring (focus instrument) | Read-failure subresult (light): reached / focus / where |
+| --- | --- | --- | --- | --- |
+| en-GB__w1280__light | ok | pass | pass 704/640 px² | pass / fail / body |
+| en-GB__w1280__dark | ok | pass | pass 704/640 px² | — |
+| en-GB__w1280__forced-light | ok | pass | pass 704/640 px² | — |
+| en-GB__w1280__forced-dark | ok | pass | pass 704/640 px² | — |
+| en-GB__w320__light | ok | pass | pass 704/640 px² | pass / fail / body |
+| en-GB__w320__dark | ok | pass | pass 704/640 px² | — |
+| en-GB__w320__forced-light | ok | pass | pass 704/640 px² | — |
+| en-GB__w320__forced-dark | ok | pass | pass 704/640 px² | — |
+| zh-Hans__w1280__light | ok | pass | pass 704/640 px² | pass / fail / body |
+| zh-Hans__w1280__dark | ok | pass | pass 704/640 px² | — |
+| zh-Hans__w1280__forced-light | ok | pass | pass 704/640 px² | — |
+| zh-Hans__w1280__forced-dark | ok | pass | pass 704/640 px² | — |
+| zh-Hans__w320__light | ok | pass | pass 704/640 px² | pass / fail / body |
+| zh-Hans__w320__dark | ok | pass | pass 704/640 px² | — |
+| zh-Hans__w320__forced-light | ok | pass | pass 704/640 px² | — |
+| zh-Hans__w320__forced-dark | ok | pass | pass 704/640 px² | — |
+| ms-MY__w1280__light | ok | pass | pass 704/640 px² | pass / fail / body |
+| ms-MY__w1280__dark | ok | pass | pass 704/640 px² | — |
+| ms-MY__w1280__forced-light | ok | pass | pass 704/640 px² | — |
+| ms-MY__w1280__forced-dark | ok | pass | pass 704/640 px² | — |
+| ms-MY__w320__light | ok | pass | pass 704/640 px² | pass / fail / body |
+| ms-MY__w320__dark | ok | pass | pass 704/640 px² | — |
+| ms-MY__w320__forced-light | ok | pass | pass 704/640 px² | — |
+| ms-MY__w320__forced-dark | ok | pass | pass 704/640 px² | — |
+
+Focused element after the read, by count: read failure → body ×6
+
+## S-149a
+
+| Cell | Reading | Reached | Focus at the choosing | Focus row | Focused element | :focus-visible | Shows (2.4.11) | Ring (2.4.13: area at 3:1 / 2 px perimeter) | Next Tab | Source status line (4.1.3) | Read |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
+| en-GB__w1280__light | a | pass | input[radio video-language=en-GB] | fail | body | false | — | n/a (body) | summary "System check — all passed" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w1280__dark | a | pass | input[radio video-language=en-GB] | fail | body | false | — | n/a (body) | summary "System check — all passed" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w1280__forced-light | a | pass | input[radio video-language=en-GB] | fail | body | false | — | n/a (body) | summary "System check — all passed" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w1280__forced-dark | a | pass | input[radio video-language=en-GB] | fail | body | false | — | n/a (body) | summary "System check — all passed" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w320__light | a | pass | input[radio video-language=en-GB] | fail | body | false | — | n/a (body) | summary "System check — all passed" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w320__dark | a | pass | input[radio video-language=en-GB] | fail | body | false | — | n/a (body) | summary "System check — all passed" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w320__forced-light | a | pass | input[radio video-language=en-GB] | fail | body | false | — | n/a (body) | summary "System check — all passed" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w320__forced-dark | a | pass | input[radio video-language=en-GB] | fail | body | false | — | n/a (body) | summary "System check — all passed" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| zh-Hans__w1280__light | a | pass | input[radio video-language=zh-Hans] | fail | body | false | — | n/a (body) | summary "系统检查 — 全部通过" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w1280__dark | a | pass | input[radio video-language=zh-Hans] | fail | body | false | — | n/a (body) | summary "系统检查 — 全部通过" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w1280__forced-light | a | pass | input[radio video-language=zh-Hans] | fail | body | false | — | n/a (body) | summary "系统检查 — 全部通过" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w1280__forced-dark | a | pass | input[radio video-language=zh-Hans] | fail | body | false | — | n/a (body) | summary "系统检查 — 全部通过" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w320__light | a | pass | input[radio video-language=zh-Hans] | fail | body | false | — | n/a (body) | summary "系统检查 — 全部通过" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w320__dark | a | pass | input[radio video-language=zh-Hans] | fail | body | false | — | n/a (body) | summary "系统检查 — 全部通过" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w320__forced-light | a | pass | input[radio video-language=zh-Hans] | fail | body | false | — | n/a (body) | summary "系统检查 — 全部通过" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w320__forced-dark | a | pass | input[radio video-language=zh-Hans] | fail | body | false | — | n/a (body) | summary "系统检查 — 全部通过" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| ms-MY__w1280__light | a | pass | input[radio video-language=ms-MY] | fail | body | false | — | n/a (body) | summary "Pemeriksaan sistem — semua l" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w1280__dark | a | pass | input[radio video-language=ms-MY] | fail | body | false | — | n/a (body) | summary "Pemeriksaan sistem — semua l" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w1280__forced-light | a | pass | input[radio video-language=ms-MY] | fail | body | false | — | n/a (body) | summary "Pemeriksaan sistem — semua l" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w1280__forced-dark | a | pass | input[radio video-language=ms-MY] | fail | body | false | — | n/a (body) | summary "Pemeriksaan sistem — semua l" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w320__light | a | pass | input[radio video-language=ms-MY] | fail | body | false | — | n/a (body) | summary "Pemeriksaan sistem — semua l" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w320__dark | a | pass | input[radio video-language=ms-MY] | fail | body | false | — | n/a (body) | summary "Pemeriksaan sistem — semua l" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w320__forced-light | a | pass | input[radio video-language=ms-MY] | fail | body | false | — | n/a (body) | summary "Pemeriksaan sistem — semua l" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w320__forced-dark | a | pass | input[radio video-language=ms-MY] | fail | body | false | — | n/a (body) | summary "Pemeriksaan sistem — semua l" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+
+Focused element after the read, by count: (a) body ×24
+
+## S-149b
+
+| Cell | Reading | Reached | Focus at the choosing | Focus row | Focused element | :focus-visible | Shows (2.4.11) | Ring (2.4.13: area at 3:1 / 2 px perimeter) | Next Tab | Source status line (4.1.3) | Read |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
+| en-GB__w1280__light | b | pass | input#trim-start-range.range-input[range | fail | body | false | — | n/a (body) | summary "System check — all passed" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w1280__dark | b | pass | input#trim-start-range.range-input[range | fail | body | false | — | n/a (body) | summary "System check — all passed" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w1280__forced-light | b | pass | input#trim-start-range.range-input[range | fail | body | false | — | n/a (body) | summary "System check — all passed" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w1280__forced-dark | b | pass | input#trim-start-range.range-input[range | fail | body | false | — | n/a (body) | summary "System check — all passed" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w320__light | b | pass | input#trim-start-range.range-input[range | fail | body | false | — | n/a (body) | summary "System check — all passed" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w320__dark | b | pass | input#trim-start-range.range-input[range | fail | body | false | — | n/a (body) | summary "System check — all passed" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w320__forced-light | b | pass | input#trim-start-range.range-input[range | fail | body | false | — | n/a (body) | summary "System check — all passed" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w320__forced-dark | b | pass | input#trim-start-range.range-input[range | fail | body | false | — | n/a (body) | summary "System check — all passed" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| zh-Hans__w1280__light | b | pass | input#trim-start-range.range-input[range | fail | body | false | — | n/a (body) | summary "系统检查 — 全部通过" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w1280__dark | b | pass | input#trim-start-range.range-input[range | fail | body | false | — | n/a (body) | summary "系统检查 — 全部通过" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w1280__forced-light | b | pass | input#trim-start-range.range-input[range | fail | body | false | — | n/a (body) | summary "系统检查 — 全部通过" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w1280__forced-dark | b | pass | input#trim-start-range.range-input[range | fail | body | false | — | n/a (body) | summary "系统检查 — 全部通过" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w320__light | b | pass | input#trim-start-range.range-input[range | fail | body | false | — | n/a (body) | summary "系统检查 — 全部通过" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w320__dark | b | pass | input#trim-start-range.range-input[range | fail | body | false | — | n/a (body) | summary "系统检查 — 全部通过" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w320__forced-light | b | pass | input#trim-start-range.range-input[range | fail | body | false | — | n/a (body) | summary "系统检查 — 全部通过" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w320__forced-dark | b | pass | input#trim-start-range.range-input[range | fail | body | false | — | n/a (body) | summary "系统检查 — 全部通过" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| ms-MY__w1280__light | b | pass | input#trim-start-range.range-input[range | fail | body | false | — | n/a (body) | summary "Pemeriksaan sistem — semua l" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w1280__dark | b | pass | input#trim-start-range.range-input[range | fail | body | false | — | n/a (body) | summary "Pemeriksaan sistem — semua l" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w1280__forced-light | b | pass | input#trim-start-range.range-input[range | fail | body | false | — | n/a (body) | summary "Pemeriksaan sistem — semua l" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w1280__forced-dark | b | pass | input#trim-start-range.range-input[range | fail | body | false | — | n/a (body) | summary "Pemeriksaan sistem — semua l" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w320__light | b | pass | input#trim-start-range.range-input[range | fail | body | false | — | n/a (body) | summary "Pemeriksaan sistem — semua l" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w320__dark | b | pass | input#trim-start-range.range-input[range | fail | body | false | — | n/a (body) | summary "Pemeriksaan sistem — semua l" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w320__forced-light | b | pass | input#trim-start-range.range-input[range | fail | body | false | — | n/a (body) | summary "Pemeriksaan sistem — semua l" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w320__forced-dark | b | pass | input#trim-start-range.range-input[range | fail | body | false | — | n/a (body) | summary "Pemeriksaan sistem — semua l" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+
+Focused element after the read, by count: (b) body ×24
+
+## S-149c
+
+| Cell | Reading | Reached | Focus at the choosing | Focus row | Focused element | :focus-visible | Shows (2.4.11) | Ring (2.4.13: area at 3:1 / 2 px perimeter) | Next Tab | Source status line (4.1.3) | Read |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
+| en-GB__w1280__light | c | pass | input#file-input.file-input.file-input-- | fail | body | false | — | n/a (body) | summary "System check — all passed" | failure said (took too long): "Reading this file took longer than expected, or the tool had" | 121 s |
+| en-GB__w1280__dark | c | pass | input#file-input.file-input.file-input-- | fail | body | false | — | n/a (body) | summary "System check — all passed" | failure said (took too long): "Reading this file took longer than expected, or the tool had" | 121 s |
+| en-GB__w1280__forced-light | c | pass | input#file-input.file-input.file-input-- | fail | body | false | — | n/a (body) | summary "System check — all passed" | failure said (took too long): "Reading this file took longer than expected, or the tool had" | 120 s |
+| en-GB__w1280__forced-dark | c | pass | input#file-input.file-input.file-input-- | fail | body | false | — | n/a (body) | summary "System check — all passed" | failure said (took too long): "Reading this file took longer than expected, or the tool had" | 120 s |
+| en-GB__w320__light | c | pass | input#file-input.file-input.file-input-- | fail | body | false | — | n/a (body) | summary "System check — all passed" | failure said (took too long): "Reading this file took longer than expected, or the tool had" | 120 s |
+| en-GB__w320__dark | c | pass | input#file-input.file-input.file-input-- | fail | body | false | — | n/a (body) | summary "System check — all passed" | failure said (took too long): "Reading this file took longer than expected, or the tool had" | 121 s |
+| en-GB__w320__forced-light | c | pass | input#file-input.file-input.file-input-- | fail | body | false | — | n/a (body) | summary "System check — all passed" | failure said (took too long): "Reading this file took longer than expected, or the tool had" | 121 s |
+| en-GB__w320__forced-dark | c | pass | input#file-input.file-input.file-input-- | fail | body | false | — | n/a (body) | summary "System check — all passed" | failure said (took too long): "Reading this file took longer than expected, or the tool had" | 121 s |
+| zh-Hans__w1280__light | c | pass | input#file-input.file-input.file-input-- | fail | body | false | — | n/a (body) | summary "系统检查 — 全部通过" | failure said (took too long): "读取此文件耗时比预期长，或者该工具遇到了问题。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存" | 120 s |
+| zh-Hans__w1280__dark | c | pass | input#file-input.file-input.file-input-- | fail | body | false | — | n/a (body) | summary "系统检查 — 全部通过" | failure said (took too long): "读取此文件耗时比预期长，或者该工具遇到了问题。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存" | 121 s |
+| zh-Hans__w1280__forced-light | c | pass | input#file-input.file-input.file-input-- | fail | body | false | — | n/a (body) | summary "系统检查 — 全部通过" | failure said (took too long): "读取此文件耗时比预期长，或者该工具遇到了问题。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存" | 120 s |
+| zh-Hans__w1280__forced-dark | c | pass | input#file-input.file-input.file-input-- | fail | body | false | — | n/a (body) | summary "系统检查 — 全部通过" | failure said (took too long): "读取此文件耗时比预期长，或者该工具遇到了问题。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存" | 121 s |
+| zh-Hans__w320__light | c | pass | input#file-input.file-input.file-input-- | fail | body | false | — | n/a (body) | summary "系统检查 — 全部通过" | failure said (took too long): "读取此文件耗时比预期长，或者该工具遇到了问题。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存" | 120 s |
+| zh-Hans__w320__dark | c | pass | input#file-input.file-input.file-input-- | fail | body | false | — | n/a (body) | summary "系统检查 — 全部通过" | failure said (took too long): "读取此文件耗时比预期长，或者该工具遇到了问题。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存" | 121 s |
+| zh-Hans__w320__forced-light | c | pass | input#file-input.file-input.file-input-- | fail | body | false | — | n/a (body) | summary "系统检查 — 全部通过" | failure said (took too long): "读取此文件耗时比预期长，或者该工具遇到了问题。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存" | 121 s |
+| zh-Hans__w320__forced-dark | c | pass | input#file-input.file-input.file-input-- | fail | body | false | — | n/a (body) | summary "系统检查 — 全部通过" | failure said (took too long): "读取此文件耗时比预期长，或者该工具遇到了问题。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存" | 120 s |
+| ms-MY__w1280__light | c | pass | input#file-input.file-input.file-input-- | fail | body | false | — | n/a (body) | summary "Pemeriksaan sistem — semua l" | failure said (took too long): "Membaca fail ini mengambil masa lebih lama daripada yang dij" | 121 s |
+| ms-MY__w1280__dark | c | pass | input#file-input.file-input.file-input-- | fail | body | false | — | n/a (body) | summary "Pemeriksaan sistem — semua l" | failure said (took too long): "Membaca fail ini mengambil masa lebih lama daripada yang dij" | 121 s |
+| ms-MY__w1280__forced-light | c | pass | input#file-input.file-input.file-input-- | fail | body | false | — | n/a (body) | summary "Pemeriksaan sistem — semua l" | failure said (took too long): "Membaca fail ini mengambil masa lebih lama daripada yang dij" | 120 s |
+| ms-MY__w1280__forced-dark | c | pass | input#file-input.file-input.file-input-- | fail | body | false | — | n/a (body) | summary "Pemeriksaan sistem — semua l" | failure said (took too long): "Membaca fail ini mengambil masa lebih lama daripada yang dij" | 121 s |
+| ms-MY__w320__light | c | pass | input#file-input.file-input.file-input-- | fail | body | false | — | n/a (body) | summary "Pemeriksaan sistem — semua l" | failure said (took too long): "Membaca fail ini mengambil masa lebih lama daripada yang dij" | 120 s |
+| ms-MY__w320__dark | c | pass | input#file-input.file-input.file-input-- | fail | body | false | — | n/a (body) | summary "Pemeriksaan sistem — semua l" | failure said (took too long): "Membaca fail ini mengambil masa lebih lama daripada yang dij" | 121 s |
+| ms-MY__w320__forced-light | c | pass | input#file-input.file-input.file-input-- | fail | body | false | — | n/a (body) | summary "Pemeriksaan sistem — semua l" | failure said (took too long): "Membaca fail ini mengambil masa lebih lama daripada yang dij" | 121 s |
+| ms-MY__w320__forced-dark | c | pass | input#file-input.file-input.file-input-- | fail | body | false | — | n/a (body) | summary "Pemeriksaan sistem — semua l" | failure said (took too long): "Membaca fail ini mengambil masa lebih lama daripada yang dij" | 121 s |
+
+Focused element after the read, by count: (c) body ×24
+
+## S-149d
+
+| Cell | Reading | Reached | Focus at the choosing | Focus row | Focused element | :focus-visible | Shows (2.4.11) | Ring (2.4.13: area at 3:1 / 2 px perimeter) | Next Tab | Source status line (4.1.3) | Read |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
+| en-GB__w1280__light | d | pass | input[radio video-language=en-GB] | fail | body | false | — | n/a (body) | video "Previous video — 10.9 MB" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w1280__dark | d | pass | input[radio video-language=en-GB] | fail | body | false | — | n/a (body) | video "Previous video — 10.9 MB" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w1280__forced-light | d | pass | input[radio video-language=en-GB] | fail | body | false | — | n/a (body) | video "Previous video — 10.9 MB" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w1280__forced-dark | d | pass | input[radio video-language=en-GB] | fail | body | false | — | n/a (body) | video "Previous video — 10.9 MB" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w320__light | d | pass | input[radio video-language=en-GB] | fail | body | false | — | n/a (body) | video "Previous video — 10.9 MB" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w320__dark | d | pass | input[radio video-language=en-GB] | fail | body | false | — | n/a (body) | video "Previous video — 10.9 MB" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w320__forced-light | d | pass | input[radio video-language=en-GB] | fail | body | false | — | n/a (body) | video "Previous video — 10.9 MB" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w320__forced-dark | d | pass | input[radio video-language=en-GB] | fail | body | false | — | n/a (body) | video "Previous video — 10.9 MB" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| zh-Hans__w1280__light | d | pass | input[radio video-language=zh-Hans] | fail | body | false | — | n/a (body) | video "上一个视频 — 10.9 MB" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w1280__dark | d | pass | input[radio video-language=zh-Hans] | fail | body | false | — | n/a (body) | video "上一个视频 — 10.9 MB" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w1280__forced-light | d | pass | input[radio video-language=zh-Hans] | fail | body | false | — | n/a (body) | video "上一个视频 — 10.9 MB" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w1280__forced-dark | d | pass | input[radio video-language=zh-Hans] | fail | body | false | — | n/a (body) | video "上一个视频 — 10.9 MB" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w320__light | d | pass | input[radio video-language=zh-Hans] | fail | body | false | — | n/a (body) | video "上一个视频 — 10.9 MB" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w320__dark | d | pass | input[radio video-language=zh-Hans] | fail | body | false | — | n/a (body) | video "上一个视频 — 10.8 MB" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w320__forced-light | d | pass | input[radio video-language=zh-Hans] | fail | body | false | — | n/a (body) | video "上一个视频 — 10.9 MB" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w320__forced-dark | d | pass | input[radio video-language=zh-Hans] | fail | body | false | — | n/a (body) | video "上一个视频 — 10.9 MB" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| ms-MY__w1280__light | d | pass | input[radio video-language=ms-MY] | fail | body | false | — | n/a (body) | video "Video sebelumnya — 10.9 MB" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w1280__dark | d | pass | input[radio video-language=ms-MY] | fail | body | false | — | n/a (body) | video "Video sebelumnya — 10.9 MB" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w1280__forced-light | d | pass | input[radio video-language=ms-MY] | fail | body | false | — | n/a (body) | video "Video sebelumnya — 10.9 MB" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w1280__forced-dark | d | pass | input[radio video-language=ms-MY] | fail | body | false | — | n/a (body) | video "Video sebelumnya — 10.9 MB" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w320__light | d | pass | input[radio video-language=ms-MY] | fail | body | false | — | n/a (body) | video "Video sebelumnya — 10.9 MB" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w320__dark | d | pass | input[radio video-language=ms-MY] | fail | body | false | — | n/a (body) | video "Video sebelumnya — 10.9 MB" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w320__forced-light | d | pass | input[radio video-language=ms-MY] | fail | body | false | — | n/a (body) | video "Video sebelumnya — 10.9 MB" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w320__forced-dark | d | pass | input[radio video-language=ms-MY] | fail | body | false | — | n/a (body) | video "Video sebelumnya — 10.9 MB" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+
+Focused element after the read, by count: (d) body ×24
+
+## S-149e
+
+| Cell | Reading | Reached | Focus at the choosing | Focus row | Focused element | :focus-visible | Shows (2.4.11) | Ring (2.4.13: area at 3:1 / 2 px perimeter) | Next Tab | Source status line (4.1.3) | Read |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
+| en-GB__w1280__light | e | pass | body (the focused Save replaced) | fail | body | false | — | n/a (body) | video "Previous video — 11 MB" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w1280__dark | e | pass | body (the focused Save replaced) | fail | body | false | — | n/a (body) | video "Previous video — 10.9 MB" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w1280__forced-light | e | pass | body (the focused Save replaced) | fail | body | false | — | n/a (body) | video "Previous video — 10.9 MB" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w1280__forced-dark | e | pass | body (the focused Save replaced) | fail | body | false | — | n/a (body) | video "Previous video — 10.9 MB" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w320__light | e | pass | body (the focused Save replaced) | fail | body | false | — | n/a (body) | video "Previous video — 10.9 MB" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w320__dark | e | pass | body (the focused Save replaced) | fail | body | false | — | n/a (body) | video "Previous video — 10.9 MB" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w320__forced-light | e | pass | body (the focused Save replaced) | fail | body | false | — | n/a (body) | video "Previous video — 10.9 MB" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w320__forced-dark | e | pass | body (the focused Save replaced) | fail | body | false | — | n/a (body) | video "Previous video — 10.9 MB" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| zh-Hans__w1280__light | e | pass | body (the focused Save replaced) | fail | body | false | — | n/a (body) | video "上一个视频 — 10.9 MB" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w1280__dark | e | pass | body (the focused Save replaced) | fail | body | false | — | n/a (body) | video "上一个视频 — 10.9 MB" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w1280__forced-light | e | pass | body (the focused Save replaced) | fail | body | false | — | n/a (body) | video "上一个视频 — 10.9 MB" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w1280__forced-dark | e | pass | body (the focused Save replaced) | fail | body | false | — | n/a (body) | video "上一个视频 — 10.9 MB" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w320__light | e | pass | body (the focused Save replaced) | fail | body | false | — | n/a (body) | video "上一个视频 — 10.9 MB" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w320__dark | e | pass | body (the focused Save replaced) | fail | body | false | — | n/a (body) | video "上一个视频 — 10.9 MB" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w320__forced-light | e | pass | body (the focused Save replaced) | fail | body | false | — | n/a (body) | video "上一个视频 — 10.9 MB" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w320__forced-dark | e | pass | body (the focused Save replaced) | fail | body | false | — | n/a (body) | video "上一个视频 — 10.9 MB" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| ms-MY__w1280__light | e | pass | body (the focused Save replaced) | fail | body | false | — | n/a (body) | video "Video sebelumnya — 10.9 MB" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w1280__dark | e | pass | body (the focused Save replaced) | fail | body | false | — | n/a (body) | video "Video sebelumnya — 10.9 MB" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w1280__forced-light | e | pass | body (the focused Save replaced) | fail | body | false | — | n/a (body) | video "Video sebelumnya — 10.9 MB" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w1280__forced-dark | e | pass | body (the focused Save replaced) | fail | body | false | — | n/a (body) | video "Video sebelumnya — 10.9 MB" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w320__light | e | pass | body (the focused Save replaced) | fail | body | false | — | n/a (body) | video "Video sebelumnya — 10.9 MB" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w320__dark | e | pass | body (the focused Save replaced) | fail | body | false | — | n/a (body) | video "Video sebelumnya — 10.9 MB" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w320__forced-light | e | pass | body (the focused Save replaced) | fail | body | false | — | n/a (body) | video "Video sebelumnya — 10.9 MB" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w320__forced-dark | e | pass | body (the focused Save replaced) | fail | body | false | — | n/a (body) | video "Video sebelumnya — 10.9 MB" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+
+Focused element after the read, by count: (e) body ×24
+
+## S-149f
+
+| Cell | Reading | Reached | Focus at the choosing | Focus row | Focused element | :focus-visible | Shows (2.4.11) | Ring (2.4.13: area at 3:1 / 2 px perimeter) | Next Tab | Source status line (4.1.3) | Read |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
+| en-GB__w1280__light | f1 | pass | textarea#feedback-message.textarea[texta | pass | #feedback-message[textarea] "Your message" | true | shows | pass 2537/2456 px² | summary "What will be sent with it" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w1280__light | f2 | pass | body | pass | body | false | — | n/a (body) | input[radio] "Staff video" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w1280__dark | f1 | pass | textarea#feedback-message.textarea[texta | pass | #feedback-message[textarea] "Your message" | true | shows | pass 2537/2456 px² | summary "What will be sent with it" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w1280__dark | f2 | pass | body | pass | body | false | — | n/a (body) | input[radio] "Staff video" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w1280__forced-light | f1 | pass | textarea#feedback-message.textarea[texta | pass | #feedback-message[textarea] "Your message" | true | shows | pass 2537/2456 px² | summary "What will be sent with it" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w1280__forced-light | f2 | pass | body | pass | body | false | — | n/a (body) | input[radio] "Staff video" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w1280__forced-dark | f1 | pass | textarea#feedback-message.textarea[texta | pass | #feedback-message[textarea] "Your message" | true | shows | pass 2537/2456 px² | summary "What will be sent with it" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w1280__forced-dark | f2 | pass | body | pass | body | false | — | n/a (body) | input[radio] "Staff video" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w320__light | f1 | pass | textarea#feedback-message.textarea[texta | pass | #feedback-message[textarea] "Your message" | true | shows | pass 1633/1552 px² | summary "What will be sent with it" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w320__light | f2 | pass | body | pass | body | false | — | n/a (body) | input[radio] "Staff video" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w320__dark | f1 | pass | textarea#feedback-message.textarea[texta | pass | #feedback-message[textarea] "Your message" | true | shows | pass 1633/1552 px² | summary "What will be sent with it" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w320__dark | f2 | pass | body | pass | body | false | — | n/a (body) | input[radio] "Staff video" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w320__forced-light | f1 | pass | textarea#feedback-message.textarea[texta | pass | #feedback-message[textarea] "Your message" | true | shows | pass 1633/1552 px² | summary "What will be sent with it" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w320__forced-light | f2 | pass | body | pass | body | false | — | n/a (body) | input[radio] "Staff video" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w320__forced-dark | f1 | pass | textarea#feedback-message.textarea[texta | pass | #feedback-message[textarea] "Your message" | true | shows | pass 1633/1552 px² | summary "What will be sent with it" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| en-GB__w320__forced-dark | f2 | pass | body | pass | body | false | — | n/a (body) | input[radio] "Staff video" | failure said: "This file could not be read as a video. It may not be a vide" | 1 s |
+| zh-Hans__w1280__light | f1 | pass | textarea#feedback-message.textarea[texta | pass | #feedback-message[textarea] "您的留言" | true | shows | pass 2537/2456 px² | summary "将随邮件发送的内容" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w1280__light | f2 | pass | body | pass | body | false | — | n/a (body) | input[radio] "教职员工视频" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w1280__dark | f1 | pass | textarea#feedback-message.textarea[texta | pass | #feedback-message[textarea] "您的留言" | true | shows | pass 2537/2456 px² | summary "将随邮件发送的内容" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w1280__dark | f2 | pass | body | pass | body | false | — | n/a (body) | input[radio] "教职员工视频" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w1280__forced-light | f1 | pass | textarea#feedback-message.textarea[texta | pass | #feedback-message[textarea] "您的留言" | true | shows | pass 2537/2456 px² | summary "将随邮件发送的内容" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w1280__forced-light | f2 | pass | body | pass | body | false | — | n/a (body) | input[radio] "教职员工视频" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w1280__forced-dark | f1 | pass | textarea#feedback-message.textarea[texta | pass | #feedback-message[textarea] "您的留言" | true | shows | pass 2537/2456 px² | summary "将随邮件发送的内容" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w1280__forced-dark | f2 | pass | body | pass | body | false | — | n/a (body) | input[radio] "教职员工视频" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w320__light | f1 | pass | textarea#feedback-message.textarea[texta | pass | #feedback-message[textarea] "您的留言" | true | shows | pass 1633/1552 px² | summary "将随邮件发送的内容" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w320__light | f2 | pass | body | pass | body | false | — | n/a (body) | input[radio] "教职员工视频" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w320__dark | f1 | pass | textarea#feedback-message.textarea[texta | pass | #feedback-message[textarea] "您的留言" | true | shows | pass 1633/1552 px² | summary "将随邮件发送的内容" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w320__dark | f2 | pass | body | pass | body | false | — | n/a (body) | input[radio] "教职员工视频" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w320__forced-light | f1 | pass | textarea#feedback-message.textarea[texta | pass | #feedback-message[textarea] "您的留言" | true | shows | pass 1633/1552 px² | summary "将随邮件发送的内容" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w320__forced-light | f2 | pass | body | pass | body | false | — | n/a (body) | input[radio] "教职员工视频" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w320__forced-dark | f1 | pass | textarea#feedback-message.textarea[texta | pass | #feedback-message[textarea] "您的留言" | true | shows | pass 1633/1552 px² | summary "将随邮件发送的内容" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| zh-Hans__w320__forced-dark | f2 | pass | body | pass | body | false | — | n/a (body) | input[radio] "教职员工视频" | failure said: "此文件无法作为视频读取。它可能不是视频文件，也可能已损坏。视频文件的名称通常以 .mp4、.mov、.mkv 或 .we" | 1 s |
+| ms-MY__w1280__light | f1 | pass | textarea#feedback-message.textarea[texta | pass | #feedback-message[textarea] "Mesej anda" | true | shows | pass 2537/2456 px² | summary "Apa yang akan dihantar bersa" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w1280__light | f2 | pass | body | pass | body | false | — | n/a (body) | input[radio] "Video staf" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w1280__dark | f1 | pass | textarea#feedback-message.textarea[texta | pass | #feedback-message[textarea] "Mesej anda" | true | shows | pass 2537/2456 px² | summary "Apa yang akan dihantar bersa" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w1280__dark | f2 | pass | body | pass | body | false | — | n/a (body) | input[radio] "Video staf" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w1280__forced-light | f1 | pass | textarea#feedback-message.textarea[texta | pass | #feedback-message[textarea] "Mesej anda" | true | shows | pass 2537/2456 px² | summary "Apa yang akan dihantar bersa" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w1280__forced-light | f2 | pass | body | pass | body | false | — | n/a (body) | input[radio] "Video staf" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w1280__forced-dark | f1 | pass | textarea#feedback-message.textarea[texta | pass | #feedback-message[textarea] "Mesej anda" | true | shows | pass 2537/2456 px² | summary "Apa yang akan dihantar bersa" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w1280__forced-dark | f2 | pass | body | pass | body | false | — | n/a (body) | input[radio] "Video staf" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w320__light | f1 | pass | textarea#feedback-message.textarea[texta | pass | #feedback-message[textarea] "Mesej anda" | true | shows | pass 1633/1552 px² | summary "Apa yang akan dihantar bersa" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w320__light | f2 | pass | body | pass | body | false | — | n/a (body) | input[radio] "Video staf" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w320__dark | f1 | pass | textarea#feedback-message.textarea[texta | pass | #feedback-message[textarea] "Mesej anda" | true | shows | pass 1633/1552 px² | summary "Apa yang akan dihantar bersa" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w320__dark | f2 | pass | body | pass | body | false | — | n/a (body) | input[radio] "Video staf" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w320__forced-light | f1 | pass | textarea#feedback-message.textarea[texta | pass | #feedback-message[textarea] "Mesej anda" | true | shows | pass 1633/1552 px² | summary "Apa yang akan dihantar bersa" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w320__forced-light | f2 | pass | body | pass | body | false | — | n/a (body) | input[radio] "Video staf" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w320__forced-dark | f1 | pass | textarea#feedback-message.textarea[texta | pass | #feedback-message[textarea] "Mesej anda" | true | shows | pass 1633/1552 px² | summary "Apa yang akan dihantar bersa" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+| ms-MY__w320__forced-dark | f2 | pass | body | pass | body | false | — | n/a (body) | input[radio] "Video staf" | failure said: "Fail ini tidak dapat dibaca sebagai video. Ia mungkin bukan " | 1 s |
+
+Focused element after the read, by count: (f1) #feedback-message[textarea] ×24; (f2) body ×24
+
+## The eight keyboard routes
+
+| Route | Status | keys | Steps pass / fail / c-d | First not passing |
+| --- | --- | --- | --- | --- |
+| J1__en-GB__w1280__light | ok | cannot-determine | 50 / 0 / 1 of 51 | S-47: ArrowDown on Animation type (native select): select#closing-type.select[select-one] "Animation type"  |
+| J1__en-GB__w320__light | ok | cannot-determine | 50 / 0 / 1 of 51 | S-47: ArrowDown on Animation type (native select): select#closing-type.select[select-one] "Animation type"  |
+| J1__ms-MY__w1280__light | ok | cannot-determine | 50 / 0 / 1 of 51 | S-47: ArrowDown on Animation type (native select): select#closing-type.select[select-one] "Jenis animasi"  |
+| J1__zh-Hans__w1280__light | ok | cannot-determine | 50 / 0 / 1 of 51 | S-47: ArrowDown on Animation type (native select): select#closing-type.select[select-one] "动画类型"  |
+| J2__en-GB__w1280__light | ok | pass | 22 / 0 / 0 of 22 | — |
+| J3__en-GB__w1280__light | ok | pass | 45 / 0 / 0 of 45 | — |
+| J4__en-GB__w1280__light | ok | pass | 28 / 0 / 0 of 28 | — |
+| K-dialog__en-GB__w1280__light | ok | pass | 18 / 0 / 0 of 18 | — |
+
+## VH-199, cited
+
+Run `2026-10-26T17-47-08-808Z-d32f0f` (`/Users/joe/UoN-Video-Helper-evidence/pass3-vh199/runs/run-04-2026-10-26T17-47-08-808Z-d32f0f`), the pass's evidence run at source a3039c3 and revision 2e7b0c044ce11f2b: S-149's 12 records, COLOUR12 at 1280 px.
+
+| Record | Status | State | Read-failure subresult: reached / focus / where |
+| --- | --- | --- | --- |
+| S-149__en-GB__w1280__dark | ok | pass | — |
+| S-149__en-GB__w1280__forced-dark | ok | pass | — |
+| S-149__en-GB__w1280__forced-light | ok | pass | — |
+| S-149__en-GB__w1280__light | ok | pass | pass / fail / body |
+| S-149__ms-MY__w1280__dark | ok | pass | — |
+| S-149__ms-MY__w1280__forced-dark | ok | pass | — |
+| S-149__ms-MY__w1280__forced-light | ok | pass | — |
+| S-149__ms-MY__w1280__light | ok | pass | pass / fail / body |
+| S-149__zh-Hans__w1280__dark | ok | pass | — |
+| S-149__zh-Hans__w1280__forced-dark | ok | pass | — |
+| S-149__zh-Hans__w1280__forced-light | ok | pass | — |
+| S-149__zh-Hans__w1280__light | ok | pass | pass / fail / body |
+
+## Gaps, timeouts and cells not reached
+
+- none
+
+## Notes for reading this
+
+- **What was measured.** The app is base `5893d9d`, a `git archive` export served by Vite at :5181; the instrument is the candidate walker (the repo's `scenarios.mjs` and `faults.mjs` with VH-207's additions, overlaid on the export; `diff -r` against the repo's walker empty). The export is not a git checkout, so each run's pinned source reads commit `unknown` (the walker's `sourceIdentity` asks git); the commit is the archive's. Instrument revision and fixture hashes are pinned as usual; the six fixtures hash as in VH-199's run-04.
+- **The variants' readings** are taken in each record's sub-result, in that record's own colour mode, before any instrument moves focus: the element (`readFocus`, its moves since the choosing), `FOCUS_SEEN`, the source status line, then the ring by `focusArea` (which blurs and refocuses the same element), then one Tab. "Focus at the choosing" is read in the change event as it bubbles to the document, after the page's own handler and before the inspection can answer.
+- **S-149's resumes.** S-149 declares sub-results for light only, so its dark, forced-light and forced-dark records share one setup; its state holds focus on the file input, and the instruments of the first of them blur focus at their end (`matrix.mjs`, after the focus measurements), so the next two read "state predicate false". The run was resumed in place by the walker's own runner until whole (2 resumes), as VH-199's run-04 was for the same records (attempts 2 to 4). Not a timing wait; nothing else was re-run.
+- **"Covered" on a radio** in the Shows and Next Tab readings is `FOCUS_SEEN`'s centre hit test landing on the radio's own segment face (the input sits under its label), not on other content; it is kept as read.
+- **Where the next Tab goes after the loss** is the browser's sequential-navigation starting point left in the withdrawn steps: in (a) to (c) it skips to the footer's System check summary; in (d) and (e) to the standing result's player.
+- **The routes** match VH-199's records step for step: J2, J3, J4 and K-dialog pass; J1 (en-GB w1280 and w320, zh-Hans, ms-MY) is "cannot determine" on its one native-select step (S-47, ArrowDown on Animation type), 50 of 51 steps passing, as in VH-199.
+- **Load** stayed between about 3.5 and 8 on AC with powermode 2 (High Power set by someone else, as in VH-199's later runs); no wait timed out, so no group was re-run for timing.
+## How it was run, and how to run the after
+
+`$R` is the repository (quote it), `$W="$R/reviews/2026-10-25/design-pass-3/evidence/measurements/walker"`, `$S` the scratch folder `…/scratchpad/vh207`, `$O` this folder. The driver is `vh207-driver.mjs.txt` here (saved as `$S/vh207-driver.mjs`); `go.sh` and `power.sh` beside it set the environment and record power and load (`pmset -g batt`, `pmset -g | grep -i powermode`, `uptime`) at each run's start, stopping on battery. Plans are declared in memory (`PLANS['vh207-<label>-<name>']`), never in the walker, and run by `matrix.mjs`'s own main, unchanged.
+
+The before (base `5893d9d`, the candidate walker):
+
+```sh
+git -C "$R" archive 5893d9d | tar -x -C "$S/base"
+cp "$W/scenarios.mjs" "$W/faults.mjs" "$S/base/reviews/2026-10-25/design-pass-3/evidence/measurements/walker/"
+diff -r "$S/base/reviews/2026-10-25/design-pass-3/evidence/measurements/walker" "$W"     # empty
+(cd "$S/base" && npm ci --prefer-offline)
+zsh "$S/fixtures-vh207.sh" "$S/fix"      # fixtures.sh's own lines for the six files the cells use
+(cd "$S/base" && ./node_modules/.bin/vite --port 5181 --strictPort) &
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --remote-debugging-port=9251 \
+  --user-data-dir="$S/chrome-profile" --no-first-run --no-default-browser-check \
+  --disable-backgrounding-occluded-windows --disable-background-timer-throttling --disable-renderer-backgrounding about:blank &
+(cd "$S/base/reviews/2026-10-25/design-pass-3/evidence/measurements/walker" && CDP_PORT=9251 APP_URL=http://localhost:5181/ OUT_ROOT=$S/out/faults FIX=$S/fix node faults.mjs check F20 F20-twin)
+WB="$S/base/reviews/2026-10-25/design-pass-3/evidence/measurements/walker"
+zsh "$S/go.sh" pilot2 "$WB" --label pilot --name p2 --scenarios S-149,S-149a,S-149b,S-149c,S-149d,S-149e,S-149f --langs en-GB --views w1280 --modes light
+zsh "$S/before.sh"     # four walks: S-149c; S-149, S-149a, S-149b, S-149f; S-149d, S-149e; then --routes eight
+node "$S/vh207-driver.mjs" summarise --label before --out "$O" --cite /Users/joe/UoN-Video-Helper-evidence/pass3-vh199/runs/run-04-2026-10-26T17-47-08-808Z-d32f0f "$S"/runs/vh207-before-*
+```
+
+The defaults of `walk` are the 24 cells (`--langs en-GB,zh-Hans,ms-MY --views w1280,w320 --modes light,dark,forced-light,forced-dark`); `--routes eight` adds J1 to J4 and K-dialog in en-GB w1280, J1 in zh-Hans and ms-MY w1280 and J1 in en-GB w320, all light.
+
+The after, identically, against the repository's own Vite (the candidate source) and its own walker, so the run's provenance is `$R`'s commit and diff:
+
+```sh
+(cd "$R" && ./node_modules/.bin/vite --port 5181 --strictPort) &      # Chrome on :9251 as above
+export CDP_PORT=9251 APP_URL=http://localhost:5181/ FIX=$S/fix OUT_ROOT=$S/out RUN_ROOT=$S/runs-after
+node "$S/vh207-driver.mjs" walk --walker "$W" --label after --name c --scenarios S-149c &
+node "$S/vh207-driver.mjs" walk --walker "$W" --label after --name s149abf --scenarios S-149,S-149a,S-149b,S-149f &
+node "$S/vh207-driver.mjs" walk --walker "$W" --label after --name de --scenarios S-149d,S-149e
+node "$S/vh207-driver.mjs" walk --walker "$W" --label after --name routes --routes eight
+wait
+node "$S/vh207-driver.mjs" summarise --label after --out "$O" "$S"/runs-after/vh207-after-*
+```
+
+(`go.sh` does the same with `RUN_ROOT` and `APP_URL` overridable: `RUN_ROOT=$S/runs-after zsh "$S/go.sh" after-c "$W" --label after --name c --scenarios S-149c`.)
+

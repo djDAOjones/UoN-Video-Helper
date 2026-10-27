@@ -1,0 +1,14 @@
+{
+ "commit": "5893d9dbef1acdf7782bcd1dbb835b12090aed62",
+ "export": "scratchpad/vh207/base",
+ "checkedAt": "2026-10-27T22:22:34.268Z",
+ "blobs": 1499,
+ "same": 1497,
+ "differ": [
+  "reviews/2026-10-25/design-pass-3/evidence/measurements/walker/faults.mjs",
+  "reviews/2026-10-25/design-pass-3/evidence/measurements/walker/scenarios.mjs"
+ ],
+ "missing": [],
+ "srcBlobs": 198,
+ "srcLatestMtime": "2026-10-27T18:57:35.000Z"
+}

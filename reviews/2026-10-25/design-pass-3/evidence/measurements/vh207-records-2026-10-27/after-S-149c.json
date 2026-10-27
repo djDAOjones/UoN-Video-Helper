@@ -1,0 +1,3270 @@
+{
+ "label": "after",
+ "scenario": "S-149c",
+ "cells": [
+  {
+   "key": "S-149c__en-GB__w1280__light",
+   "run": "vh207-after-c-2026-10-27T21-20-54-086Z-0a8173",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-c-2026-10-27T21-20-54-086Z-0a8173/S-149c__en-GB__w1280__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1651,
+    "recordMs": 125740,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F20"
+   ],
+   "readings": [
+    {
+     "reading": "c",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#file-input",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": true,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 120542,
+     "pending": {
+      "before": {
+       "reading": true,
+       "title": true
+      },
+      "presses": 2,
+      "on": "input[name=video-language]=en-GB",
+      "after": {
+       "reading": true,
+       "title": true
+      }
+     },
+     "atChoosing": {
+      "on": "input#file-input.file-input.file-input--chosen[file] \"1. Choose a video\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [
+      "F20: withheld the worker's answer (failed) to inspection 2, request 4"
+     ],
+     "focusRow": "pass",
+     "focus": "input#file-input.file-input[file] \"1. Choose a video\"",
+     "visible": true,
+     "moves": [
+      "input#file-input.file-input[file] \"1. Choose a video\""
+     ],
+     "inView": {
+      "top": 424,
+      "bottom": 476,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "input#file-input.file-input[file] \"1. Choose a video\"",
+      "id": "file-input",
+      "tag": "input",
+      "type": "file",
+      "inDialog": false,
+      "box": [
+       222,
+       424,
+       836,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "bestRatio": 14.31,
+      "changedAny": 704,
+      "controlPx": [
+       836,
+       52
+      ],
+      "paintedPx": [
+       120,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"System check — all passed\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       185,
+       847,
+       910,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Reading this file took longer than expected, or the tool had a problem. Your original file has not been changed. Choose a different file, or save this one again from the app that made it, as a file wh…",
+      "failure": true,
+      "tookTooLong": true
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149c__en-GB__w1280__dark",
+   "run": "vh207-after-c-2026-10-27T21-20-54-086Z-0a8173",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-c-2026-10-27T21-20-54-086Z-0a8173/S-149c__en-GB__w1280__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1130,
+    "recordMs": 125390,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F20"
+   ],
+   "readings": [
+    {
+     "reading": "c",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#file-input",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": true,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 120517,
+     "pending": {
+      "before": {
+       "reading": true,
+       "title": true
+      },
+      "presses": 2,
+      "on": "input[name=video-language]=en-GB",
+      "after": {
+       "reading": true,
+       "title": true
+      }
+     },
+     "atChoosing": {
+      "on": "input#file-input.file-input.file-input--chosen[file] \"1. Choose a video\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [
+      "F20: withheld the worker's answer (failed) to inspection 2, request 4"
+     ],
+     "focusRow": "pass",
+     "focus": "input#file-input.file-input[file] \"1. Choose a video\"",
+     "visible": true,
+     "moves": [
+      "input#file-input.file-input[file] \"1. Choose a video\""
+     ],
+     "inView": {
+      "top": 424,
+      "bottom": 476,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "input#file-input.file-input[file] \"1. Choose a video\"",
+      "id": "file-input",
+      "tag": "input",
+      "type": "file",
+      "inDialog": false,
+      "box": [
+       222,
+       424,
+       836,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "bestRatio": 13.34,
+      "changedAny": 704,
+      "controlPx": [
+       836,
+       52
+      ],
+      "paintedPx": [
+       120,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"System check — all passed\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       185,
+       847,
+       910,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Reading this file took longer than expected, or the tool had a problem. Your original file has not been changed. Choose a different file, or save this one again from the app that made it, as a file wh…",
+      "failure": true,
+      "tookTooLong": true
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149c__en-GB__w1280__forced-light",
+   "run": "vh207-after-c-2026-10-27T21-20-54-086Z-0a8173",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-c-2026-10-27T21-20-54-086Z-0a8173/S-149c__en-GB__w1280__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1125,
+    "recordMs": 125441,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F20"
+   ],
+   "readings": [
+    {
+     "reading": "c",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#file-input",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": true,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 120559,
+     "pending": {
+      "before": {
+       "reading": true,
+       "title": true
+      },
+      "presses": 2,
+      "on": "input[name=video-language]=en-GB",
+      "after": {
+       "reading": true,
+       "title": true
+      }
+     },
+     "atChoosing": {
+      "on": "input#file-input.file-input.file-input--chosen[file] \"1. Choose a video\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [
+      "F20: withheld the worker's answer (failed) to inspection 2, request 4"
+     ],
+     "focusRow": "pass",
+     "focus": "input#file-input.file-input[file] \"1. Choose a video\"",
+     "visible": true,
+     "moves": [
+      "input#file-input.file-input[file] \"1. Choose a video\""
+     ],
+     "inView": {
+      "top": 424,
+      "bottom": 476,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "input#file-input.file-input[file] \"1. Choose a video\"",
+      "id": "file-input",
+      "tag": "input",
+      "type": "file",
+      "inDialog": false,
+      "box": [
+       222,
+       424,
+       836,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "bestRatio": 21,
+      "changedAny": 704,
+      "controlPx": [
+       836,
+       52
+      ],
+      "paintedPx": [
+       120,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"System check — all passed\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       185,
+       847,
+       910,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Reading this file took longer than expected, or the tool had a problem. Your original file has not been changed. Choose a different file, or save this one again from the app that made it, as a file wh…",
+      "failure": true,
+      "tookTooLong": true
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149c__en-GB__w1280__forced-dark",
+   "run": "vh207-after-c-2026-10-27T21-20-54-086Z-0a8173",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-c-2026-10-27T21-20-54-086Z-0a8173/S-149c__en-GB__w1280__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1169,
+    "recordMs": 125410,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F20"
+   ],
+   "readings": [
+    {
+     "reading": "c",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#file-input",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": true,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 120456,
+     "pending": {
+      "before": {
+       "reading": true,
+       "title": true
+      },
+      "presses": 2,
+      "on": "input[name=video-language]=en-GB",
+      "after": {
+       "reading": true,
+       "title": true
+      }
+     },
+     "atChoosing": {
+      "on": "input#file-input.file-input.file-input--chosen[file] \"1. Choose a video\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [
+      "F20: withheld the worker's answer (failed) to inspection 2, request 4"
+     ],
+     "focusRow": "pass",
+     "focus": "input#file-input.file-input[file] \"1. Choose a video\"",
+     "visible": true,
+     "moves": [
+      "input#file-input.file-input[file] \"1. Choose a video\""
+     ],
+     "inView": {
+      "top": 424,
+      "bottom": 476,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "input#file-input.file-input[file] \"1. Choose a video\"",
+      "id": "file-input",
+      "tag": "input",
+      "type": "file",
+      "inDialog": false,
+      "box": [
+       222,
+       424,
+       836,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "bestRatio": 21,
+      "changedAny": 704,
+      "controlPx": [
+       836,
+       52
+      ],
+      "paintedPx": [
+       120,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"System check — all passed\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       185,
+       847,
+       910,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Reading this file took longer than expected, or the tool had a problem. Your original file has not been changed. Choose a different file, or save this one again from the app that made it, as a file wh…",
+      "failure": true,
+      "tookTooLong": true
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149c__en-GB__w320__light",
+   "run": "vh207-after-c-2026-10-27T21-20-54-086Z-0a8173",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-c-2026-10-27T21-20-54-086Z-0a8173/S-149c__en-GB__w320__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1114,
+    "recordMs": 125252,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F20"
+   ],
+   "readings": [
+    {
+     "reading": "c",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#file-input",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": true,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 120573,
+     "pending": {
+      "before": {
+       "reading": true,
+       "title": true
+      },
+      "presses": 2,
+      "on": "input[name=video-language]=en-GB",
+      "after": {
+       "reading": true,
+       "title": true
+      }
+     },
+     "atChoosing": {
+      "on": "input#file-input.file-input.file-input--chosen[file] \"1. Choose a video\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [
+      "F20: withheld the worker's answer (failed) to inspection 2, request 4"
+     ],
+     "focusRow": "pass",
+     "focus": "input#file-input.file-input[file] \"1. Choose a video\"",
+     "visible": true,
+     "moves": [
+      "input#file-input.file-input[file] \"1. Choose a video\""
+     ],
+     "inView": {
+      "top": 258,
+      "bottom": 310,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "input#file-input.file-input[file] \"1. Choose a video\"",
+      "id": "file-input",
+      "tag": "input",
+      "type": "file",
+      "inDialog": false,
+      "box": [
+       62,
+       258,
+       196,
+       52
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "bestRatio": 14.31,
+      "changedAny": 704,
+      "controlPx": [
+       196,
+       52
+      ],
+      "paintedPx": [
+       120,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"System check — all passed\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       25,
+       244,
+       270,
+       80
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Reading this file took longer than expected, or the tool had a problem. Your original file has not been changed. Choose a different file, or save this one again from the app that made it, as a file wh…",
+      "failure": true,
+      "tookTooLong": true
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149c__en-GB__w320__dark",
+   "run": "vh207-after-c-2026-10-27T21-20-54-086Z-0a8173",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-c-2026-10-27T21-20-54-086Z-0a8173/S-149c__en-GB__w320__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1120,
+    "recordMs": 125138,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F20"
+   ],
+   "readings": [
+    {
+     "reading": "c",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#file-input",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": true,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 120430,
+     "pending": {
+      "before": {
+       "reading": true,
+       "title": true
+      },
+      "presses": 2,
+      "on": "input[name=video-language]=en-GB",
+      "after": {
+       "reading": true,
+       "title": true
+      }
+     },
+     "atChoosing": {
+      "on": "input#file-input.file-input.file-input--chosen[file] \"1. Choose a video\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [
+      "F20: withheld the worker's answer (failed) to inspection 2, request 4"
+     ],
+     "focusRow": "pass",
+     "focus": "input#file-input.file-input[file] \"1. Choose a video\"",
+     "visible": true,
+     "moves": [
+      "input#file-input.file-input[file] \"1. Choose a video\""
+     ],
+     "inView": {
+      "top": 258,
+      "bottom": 310,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "input#file-input.file-input[file] \"1. Choose a video\"",
+      "id": "file-input",
+      "tag": "input",
+      "type": "file",
+      "inDialog": false,
+      "box": [
+       62,
+       258,
+       196,
+       52
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "bestRatio": 13.34,
+      "changedAny": 704,
+      "controlPx": [
+       196,
+       52
+      ],
+      "paintedPx": [
+       120,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"System check — all passed\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       25,
+       244,
+       270,
+       80
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Reading this file took longer than expected, or the tool had a problem. Your original file has not been changed. Choose a different file, or save this one again from the app that made it, as a file wh…",
+      "failure": true,
+      "tookTooLong": true
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149c__en-GB__w320__forced-light",
+   "run": "vh207-after-c-2026-10-27T21-20-54-086Z-0a8173",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-c-2026-10-27T21-20-54-086Z-0a8173/S-149c__en-GB__w320__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1361,
+    "recordMs": 125282,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F20"
+   ],
+   "readings": [
+    {
+     "reading": "c",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#file-input",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": true,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 120418,
+     "pending": {
+      "before": {
+       "reading": true,
+       "title": true
+      },
+      "presses": 2,
+      "on": "input[name=video-language]=en-GB",
+      "after": {
+       "reading": true,
+       "title": true
+      }
+     },
+     "atChoosing": {
+      "on": "input#file-input.file-input.file-input--chosen[file] \"1. Choose a video\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [
+      "F20: withheld the worker's answer (failed) to inspection 2, request 4"
+     ],
+     "focusRow": "pass",
+     "focus": "input#file-input.file-input[file] \"1. Choose a video\"",
+     "visible": true,
+     "moves": [
+      "input#file-input.file-input[file] \"1. Choose a video\""
+     ],
+     "inView": {
+      "top": 258,
+      "bottom": 310,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "input#file-input.file-input[file] \"1. Choose a video\"",
+      "id": "file-input",
+      "tag": "input",
+      "type": "file",
+      "inDialog": false,
+      "box": [
+       62,
+       258,
+       196,
+       52
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "bestRatio": 21,
+      "changedAny": 704,
+      "controlPx": [
+       196,
+       52
+      ],
+      "paintedPx": [
+       120,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"System check — all passed\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       25,
+       244,
+       270,
+       80
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Reading this file took longer than expected, or the tool had a problem. Your original file has not been changed. Choose a different file, or save this one again from the app that made it, as a file wh…",
+      "failure": true,
+      "tookTooLong": true
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149c__en-GB__w320__forced-dark",
+   "run": "vh207-after-c-2026-10-27T21-20-54-086Z-0a8173",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-c-2026-10-27T21-20-54-086Z-0a8173/S-149c__en-GB__w320__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1253,
+    "recordMs": 125336,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F20"
+   ],
+   "readings": [
+    {
+     "reading": "c",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#file-input",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": true,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 120415,
+     "pending": {
+      "before": {
+       "reading": true,
+       "title": true
+      },
+      "presses": 2,
+      "on": "input[name=video-language]=en-GB",
+      "after": {
+       "reading": true,
+       "title": true
+      }
+     },
+     "atChoosing": {
+      "on": "input#file-input.file-input.file-input--chosen[file] \"1. Choose a video\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [
+      "F20: withheld the worker's answer (failed) to inspection 2, request 4"
+     ],
+     "focusRow": "pass",
+     "focus": "input#file-input.file-input[file] \"1. Choose a video\"",
+     "visible": true,
+     "moves": [
+      "input#file-input.file-input[file] \"1. Choose a video\""
+     ],
+     "inView": {
+      "top": 258,
+      "bottom": 310,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "input#file-input.file-input[file] \"1. Choose a video\"",
+      "id": "file-input",
+      "tag": "input",
+      "type": "file",
+      "inDialog": false,
+      "box": [
+       62,
+       258,
+       196,
+       52
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "bestRatio": 21,
+      "changedAny": 704,
+      "controlPx": [
+       196,
+       52
+      ],
+      "paintedPx": [
+       120,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"System check — all passed\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       25,
+       244,
+       270,
+       80
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Reading this file took longer than expected, or the tool had a problem. Your original file has not been changed. Choose a different file, or save this one again from the app that made it, as a file wh…",
+      "failure": true,
+      "tookTooLong": true
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149c__zh-Hans__w1280__light",
+   "run": "vh207-after-c-2026-10-27T21-20-54-086Z-0a8173",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-c-2026-10-27T21-20-54-086Z-0a8173/S-149c__zh-Hans__w1280__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1544,
+    "recordMs": 125309,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F20"
+   ],
+   "readings": [
+    {
+     "reading": "c",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#file-input",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": true,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 120491,
+     "pending": {
+      "before": {
+       "reading": true,
+       "title": true
+      },
+      "presses": 2,
+      "on": "input[name=video-language]=zh-Hans",
+      "after": {
+       "reading": true,
+       "title": true
+      }
+     },
+     "atChoosing": {
+      "on": "input#file-input.file-input.file-input--chosen[file] \"1. 选择一个视频\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [
+      "F20: withheld the worker's answer (failed) to inspection 2, request 4"
+     ],
+     "focusRow": "pass",
+     "focus": "input#file-input.file-input[file] \"1. 选择一个视频\"",
+     "visible": true,
+     "moves": [
+      "input#file-input.file-input[file] \"1. 选择一个视频\""
+     ],
+     "inView": {
+      "top": 0,
+      "bottom": 52,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "input#file-input.file-input[file] \"1. 选择一个视频\"",
+      "id": "file-input",
+      "tag": "input",
+      "type": "file",
+      "inDialog": false,
+      "box": [
+       222,
+       0,
+       836,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "bestRatio": 14.31,
+      "changedAny": 704,
+      "controlPx": [
+       836,
+       52
+      ],
+      "paintedPx": [
+       120,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"系统检查 — 全部通过\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       185,
+       802,
+       910,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "读取此文件耗时比预期长，或者该工具遇到了问题。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": true
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149c__zh-Hans__w1280__dark",
+   "run": "vh207-after-c-2026-10-27T21-20-54-086Z-0a8173",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-c-2026-10-27T21-20-54-086Z-0a8173/S-149c__zh-Hans__w1280__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1529,
+    "recordMs": 125203,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F20"
+   ],
+   "readings": [
+    {
+     "reading": "c",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#file-input",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": true,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 120420,
+     "pending": {
+      "before": {
+       "reading": true,
+       "title": true
+      },
+      "presses": 2,
+      "on": "input[name=video-language]=zh-Hans",
+      "after": {
+       "reading": true,
+       "title": true
+      }
+     },
+     "atChoosing": {
+      "on": "input#file-input.file-input.file-input--chosen[file] \"1. 选择一个视频\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [
+      "F20: withheld the worker's answer (failed) to inspection 2, request 4"
+     ],
+     "focusRow": "pass",
+     "focus": "input#file-input.file-input[file] \"1. 选择一个视频\"",
+     "visible": true,
+     "moves": [
+      "input#file-input.file-input[file] \"1. 选择一个视频\""
+     ],
+     "inView": {
+      "top": 0,
+      "bottom": 52,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "input#file-input.file-input[file] \"1. 选择一个视频\"",
+      "id": "file-input",
+      "tag": "input",
+      "type": "file",
+      "inDialog": false,
+      "box": [
+       222,
+       0,
+       836,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "bestRatio": 13.34,
+      "changedAny": 704,
+      "controlPx": [
+       836,
+       52
+      ],
+      "paintedPx": [
+       120,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"系统检查 — 全部通过\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       185,
+       802,
+       910,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "读取此文件耗时比预期长，或者该工具遇到了问题。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": true
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149c__zh-Hans__w1280__forced-light",
+   "run": "vh207-after-c-2026-10-27T21-20-54-086Z-0a8173",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-c-2026-10-27T21-20-54-086Z-0a8173/S-149c__zh-Hans__w1280__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1519,
+    "recordMs": 125624,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F20"
+   ],
+   "readings": [
+    {
+     "reading": "c",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#file-input",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": true,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 120600,
+     "pending": {
+      "before": {
+       "reading": true,
+       "title": true
+      },
+      "presses": 2,
+      "on": "input[name=video-language]=zh-Hans",
+      "after": {
+       "reading": true,
+       "title": true
+      }
+     },
+     "atChoosing": {
+      "on": "input#file-input.file-input.file-input--chosen[file] \"1. 选择一个视频\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [
+      "F20: withheld the worker's answer (failed) to inspection 2, request 4"
+     ],
+     "focusRow": "pass",
+     "focus": "input#file-input.file-input[file] \"1. 选择一个视频\"",
+     "visible": true,
+     "moves": [
+      "input#file-input.file-input[file] \"1. 选择一个视频\""
+     ],
+     "inView": {
+      "top": 0,
+      "bottom": 52,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "input#file-input.file-input[file] \"1. 选择一个视频\"",
+      "id": "file-input",
+      "tag": "input",
+      "type": "file",
+      "inDialog": false,
+      "box": [
+       222,
+       0,
+       836,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "bestRatio": 21,
+      "changedAny": 704,
+      "controlPx": [
+       836,
+       52
+      ],
+      "paintedPx": [
+       120,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"系统检查 — 全部通过\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       185,
+       802,
+       910,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "读取此文件耗时比预期长，或者该工具遇到了问题。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": true
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149c__zh-Hans__w1280__forced-dark",
+   "run": "vh207-after-c-2026-10-27T21-20-54-086Z-0a8173",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-c-2026-10-27T21-20-54-086Z-0a8173/S-149c__zh-Hans__w1280__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1534,
+    "recordMs": 125268,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F20"
+   ],
+   "readings": [
+    {
+     "reading": "c",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#file-input",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": true,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 120535,
+     "pending": {
+      "before": {
+       "reading": true,
+       "title": true
+      },
+      "presses": 2,
+      "on": "input[name=video-language]=zh-Hans",
+      "after": {
+       "reading": true,
+       "title": true
+      }
+     },
+     "atChoosing": {
+      "on": "input#file-input.file-input.file-input--chosen[file] \"1. 选择一个视频\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [
+      "F20: withheld the worker's answer (failed) to inspection 2, request 4"
+     ],
+     "focusRow": "pass",
+     "focus": "input#file-input.file-input[file] \"1. 选择一个视频\"",
+     "visible": true,
+     "moves": [
+      "input#file-input.file-input[file] \"1. 选择一个视频\""
+     ],
+     "inView": {
+      "top": 0,
+      "bottom": 52,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "input#file-input.file-input[file] \"1. 选择一个视频\"",
+      "id": "file-input",
+      "tag": "input",
+      "type": "file",
+      "inDialog": false,
+      "box": [
+       222,
+       0,
+       836,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "bestRatio": 21,
+      "changedAny": 704,
+      "controlPx": [
+       836,
+       52
+      ],
+      "paintedPx": [
+       120,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"系统检查 — 全部通过\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       185,
+       802,
+       910,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "读取此文件耗时比预期长，或者该工具遇到了问题。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": true
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149c__zh-Hans__w320__light",
+   "run": "vh207-after-c-2026-10-27T21-20-54-086Z-0a8173",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-c-2026-10-27T21-20-54-086Z-0a8173/S-149c__zh-Hans__w320__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1541,
+    "recordMs": 125101,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F20"
+   ],
+   "readings": [
+    {
+     "reading": "c",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#file-input",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": true,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 120463,
+     "pending": {
+      "before": {
+       "reading": true,
+       "title": true
+      },
+      "presses": 2,
+      "on": "input[name=video-language]=zh-Hans",
+      "after": {
+       "reading": true,
+       "title": true
+      }
+     },
+     "atChoosing": {
+      "on": "input#file-input.file-input.file-input--chosen[file] \"1. 选择一个视频\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [
+      "F20: withheld the worker's answer (failed) to inspection 2, request 4"
+     ],
+     "focusRow": "pass",
+     "focus": "input#file-input.file-input[file] \"1. 选择一个视频\"",
+     "visible": true,
+     "moves": [
+      "input#file-input.file-input[file] \"1. 选择一个视频\""
+     ],
+     "inView": {
+      "top": 258,
+      "bottom": 310,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "input#file-input.file-input[file] \"1. 选择一个视频\"",
+      "id": "file-input",
+      "tag": "input",
+      "type": "file",
+      "inDialog": false,
+      "box": [
+       62,
+       258,
+       196,
+       52
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "bestRatio": 14.31,
+      "changedAny": 704,
+      "controlPx": [
+       196,
+       52
+      ],
+      "paintedPx": [
+       120,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"系统检查 — 全部通过\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       25,
+       258,
+       270,
+       52
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "读取此文件耗时比预期长，或者该工具遇到了问题。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": true
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149c__zh-Hans__w320__dark",
+   "run": "vh207-after-c-2026-10-27T21-20-54-086Z-0a8173",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-c-2026-10-27T21-20-54-086Z-0a8173/S-149c__zh-Hans__w320__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1539,
+    "recordMs": 125089,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F20"
+   ],
+   "readings": [
+    {
+     "reading": "c",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#file-input",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": true,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 120442,
+     "pending": {
+      "before": {
+       "reading": true,
+       "title": true
+      },
+      "presses": 2,
+      "on": "input[name=video-language]=zh-Hans",
+      "after": {
+       "reading": true,
+       "title": true
+      }
+     },
+     "atChoosing": {
+      "on": "input#file-input.file-input.file-input--chosen[file] \"1. 选择一个视频\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [
+      "F20: withheld the worker's answer (failed) to inspection 2, request 4"
+     ],
+     "focusRow": "pass",
+     "focus": "input#file-input.file-input[file] \"1. 选择一个视频\"",
+     "visible": true,
+     "moves": [
+      "input#file-input.file-input[file] \"1. 选择一个视频\""
+     ],
+     "inView": {
+      "top": 258,
+      "bottom": 310,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "input#file-input.file-input[file] \"1. 选择一个视频\"",
+      "id": "file-input",
+      "tag": "input",
+      "type": "file",
+      "inDialog": false,
+      "box": [
+       62,
+       258,
+       196,
+       52
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "bestRatio": 13.34,
+      "changedAny": 704,
+      "controlPx": [
+       196,
+       52
+      ],
+      "paintedPx": [
+       120,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"系统检查 — 全部通过\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       25,
+       258,
+       270,
+       52
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "读取此文件耗时比预期长，或者该工具遇到了问题。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": true
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149c__zh-Hans__w320__forced-light",
+   "run": "vh207-after-c-2026-10-27T21-20-54-086Z-0a8173",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-c-2026-10-27T21-20-54-086Z-0a8173/S-149c__zh-Hans__w320__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1523,
+    "recordMs": 125044,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F20"
+   ],
+   "readings": [
+    {
+     "reading": "c",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#file-input",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": true,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 120442,
+     "pending": {
+      "before": {
+       "reading": true,
+       "title": true
+      },
+      "presses": 2,
+      "on": "input[name=video-language]=zh-Hans",
+      "after": {
+       "reading": true,
+       "title": true
+      }
+     },
+     "atChoosing": {
+      "on": "input#file-input.file-input.file-input--chosen[file] \"1. 选择一个视频\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [
+      "F20: withheld the worker's answer (failed) to inspection 2, request 4"
+     ],
+     "focusRow": "pass",
+     "focus": "input#file-input.file-input[file] \"1. 选择一个视频\"",
+     "visible": true,
+     "moves": [
+      "input#file-input.file-input[file] \"1. 选择一个视频\""
+     ],
+     "inView": {
+      "top": 258,
+      "bottom": 310,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "input#file-input.file-input[file] \"1. 选择一个视频\"",
+      "id": "file-input",
+      "tag": "input",
+      "type": "file",
+      "inDialog": false,
+      "box": [
+       62,
+       258,
+       196,
+       52
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "bestRatio": 21,
+      "changedAny": 704,
+      "controlPx": [
+       196,
+       52
+      ],
+      "paintedPx": [
+       120,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"系统检查 — 全部通过\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       25,
+       258,
+       270,
+       52
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "读取此文件耗时比预期长，或者该工具遇到了问题。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": true
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149c__zh-Hans__w320__forced-dark",
+   "run": "vh207-after-c-2026-10-27T21-20-54-086Z-0a8173",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-c-2026-10-27T21-20-54-086Z-0a8173/S-149c__zh-Hans__w320__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1531,
+    "recordMs": 125079,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F20"
+   ],
+   "readings": [
+    {
+     "reading": "c",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#file-input",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": true,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 120472,
+     "pending": {
+      "before": {
+       "reading": true,
+       "title": true
+      },
+      "presses": 2,
+      "on": "input[name=video-language]=zh-Hans",
+      "after": {
+       "reading": true,
+       "title": true
+      }
+     },
+     "atChoosing": {
+      "on": "input#file-input.file-input.file-input--chosen[file] \"1. 选择一个视频\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [
+      "F20: withheld the worker's answer (failed) to inspection 2, request 4"
+     ],
+     "focusRow": "pass",
+     "focus": "input#file-input.file-input[file] \"1. 选择一个视频\"",
+     "visible": true,
+     "moves": [
+      "input#file-input.file-input[file] \"1. 选择一个视频\""
+     ],
+     "inView": {
+      "top": 258,
+      "bottom": 310,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "input#file-input.file-input[file] \"1. 选择一个视频\"",
+      "id": "file-input",
+      "tag": "input",
+      "type": "file",
+      "inDialog": false,
+      "box": [
+       62,
+       258,
+       196,
+       52
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "bestRatio": 21,
+      "changedAny": 704,
+      "controlPx": [
+       196,
+       52
+      ],
+      "paintedPx": [
+       120,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"系统检查 — 全部通过\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       25,
+       258,
+       270,
+       52
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "读取此文件耗时比预期长，或者该工具遇到了问题。您的原始文件未被更改。请选择其他文件，或者使用创建该文件的应用程序将其另存为文件名以 .mp4 结尾的文件。",
+      "failure": true,
+      "tookTooLong": true
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149c__ms-MY__w1280__light",
+   "run": "vh207-after-c-2026-10-27T21-20-54-086Z-0a8173",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-c-2026-10-27T21-20-54-086Z-0a8173/S-149c__ms-MY__w1280__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1538,
+    "recordMs": 125368,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F20"
+   ],
+   "readings": [
+    {
+     "reading": "c",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#file-input",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": true,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 120542,
+     "pending": {
+      "before": {
+       "reading": true,
+       "title": true
+      },
+      "presses": 2,
+      "on": "input[name=video-language]=ms-MY",
+      "after": {
+       "reading": true,
+       "title": true
+      }
+     },
+     "atChoosing": {
+      "on": "input#file-input.file-input.file-input--chosen[file] \"1. Pilih video\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [
+      "F20: withheld the worker's answer (failed) to inspection 2, request 4"
+     ],
+     "focusRow": "pass",
+     "focus": "input#file-input.file-input[file] \"1. Pilih video\"",
+     "visible": true,
+     "moves": [
+      "input#file-input.file-input[file] \"1. Pilih video\""
+     ],
+     "inView": {
+      "top": 424,
+      "bottom": 476,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "input#file-input.file-input[file] \"1. Pilih video\"",
+      "id": "file-input",
+      "tag": "input",
+      "type": "file",
+      "inDialog": false,
+      "box": [
+       222,
+       424,
+       836,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "bestRatio": 14.31,
+      "changedAny": 704,
+      "controlPx": [
+       836,
+       52
+      ],
+      "paintedPx": [
+       120,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"Pemeriksaan sistem — semua lulus\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       185,
+       847,
+       910,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Membaca fail ini mengambil masa lebih lama daripada yang dijangkakan, atau alat tersebut menghadapi masalah. Fail asal anda tidak diubah. Pilih fail lain atau simpan fail ini sekali lagi daripada apli…",
+      "failure": true,
+      "tookTooLong": true
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149c__ms-MY__w1280__dark",
+   "run": "vh207-after-c-2026-10-27T21-20-54-086Z-0a8173",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-c-2026-10-27T21-20-54-086Z-0a8173/S-149c__ms-MY__w1280__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1575,
+    "recordMs": 125309,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F20"
+   ],
+   "readings": [
+    {
+     "reading": "c",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#file-input",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": true,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 120444,
+     "pending": {
+      "before": {
+       "reading": true,
+       "title": true
+      },
+      "presses": 2,
+      "on": "input[name=video-language]=ms-MY",
+      "after": {
+       "reading": true,
+       "title": true
+      }
+     },
+     "atChoosing": {
+      "on": "input#file-input.file-input.file-input--chosen[file] \"1. Pilih video\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [
+      "F20: withheld the worker's answer (failed) to inspection 2, request 4"
+     ],
+     "focusRow": "pass",
+     "focus": "input#file-input.file-input[file] \"1. Pilih video\"",
+     "visible": true,
+     "moves": [
+      "input#file-input.file-input[file] \"1. Pilih video\""
+     ],
+     "inView": {
+      "top": 424,
+      "bottom": 476,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "input#file-input.file-input[file] \"1. Pilih video\"",
+      "id": "file-input",
+      "tag": "input",
+      "type": "file",
+      "inDialog": false,
+      "box": [
+       222,
+       424,
+       836,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "bestRatio": 13.34,
+      "changedAny": 704,
+      "controlPx": [
+       836,
+       52
+      ],
+      "paintedPx": [
+       120,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"Pemeriksaan sistem — semua lulus\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       185,
+       847,
+       910,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Membaca fail ini mengambil masa lebih lama daripada yang dijangkakan, atau alat tersebut menghadapi masalah. Fail asal anda tidak diubah. Pilih fail lain atau simpan fail ini sekali lagi daripada apli…",
+      "failure": true,
+      "tookTooLong": true
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149c__ms-MY__w1280__forced-light",
+   "run": "vh207-after-c-2026-10-27T21-20-54-086Z-0a8173",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-c-2026-10-27T21-20-54-086Z-0a8173/S-149c__ms-MY__w1280__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1535,
+    "recordMs": 125281,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F20"
+   ],
+   "readings": [
+    {
+     "reading": "c",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#file-input",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": true,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 120445,
+     "pending": {
+      "before": {
+       "reading": true,
+       "title": true
+      },
+      "presses": 2,
+      "on": "input[name=video-language]=ms-MY",
+      "after": {
+       "reading": true,
+       "title": true
+      }
+     },
+     "atChoosing": {
+      "on": "input#file-input.file-input.file-input--chosen[file] \"1. Pilih video\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [
+      "F20: withheld the worker's answer (failed) to inspection 2, request 4"
+     ],
+     "focusRow": "pass",
+     "focus": "input#file-input.file-input[file] \"1. Pilih video\"",
+     "visible": true,
+     "moves": [
+      "input#file-input.file-input[file] \"1. Pilih video\""
+     ],
+     "inView": {
+      "top": 424,
+      "bottom": 476,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "input#file-input.file-input[file] \"1. Pilih video\"",
+      "id": "file-input",
+      "tag": "input",
+      "type": "file",
+      "inDialog": false,
+      "box": [
+       222,
+       424,
+       836,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "bestRatio": 21,
+      "changedAny": 704,
+      "controlPx": [
+       836,
+       52
+      ],
+      "paintedPx": [
+       120,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"Pemeriksaan sistem — semua lulus\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       185,
+       847,
+       910,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Membaca fail ini mengambil masa lebih lama daripada yang dijangkakan, atau alat tersebut menghadapi masalah. Fail asal anda tidak diubah. Pilih fail lain atau simpan fail ini sekali lagi daripada apli…",
+      "failure": true,
+      "tookTooLong": true
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149c__ms-MY__w1280__forced-dark",
+   "run": "vh207-after-c-2026-10-27T21-20-54-086Z-0a8173",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-c-2026-10-27T21-20-54-086Z-0a8173/S-149c__ms-MY__w1280__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1548,
+    "recordMs": 125273,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F20"
+   ],
+   "readings": [
+    {
+     "reading": "c",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#file-input",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": true,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 120420,
+     "pending": {
+      "before": {
+       "reading": true,
+       "title": true
+      },
+      "presses": 2,
+      "on": "input[name=video-language]=ms-MY",
+      "after": {
+       "reading": true,
+       "title": true
+      }
+     },
+     "atChoosing": {
+      "on": "input#file-input.file-input.file-input--chosen[file] \"1. Pilih video\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [
+      "F20: withheld the worker's answer (failed) to inspection 2, request 4"
+     ],
+     "focusRow": "pass",
+     "focus": "input#file-input.file-input[file] \"1. Pilih video\"",
+     "visible": true,
+     "moves": [
+      "input#file-input.file-input[file] \"1. Pilih video\""
+     ],
+     "inView": {
+      "top": 424,
+      "bottom": 476,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "input#file-input.file-input[file] \"1. Pilih video\"",
+      "id": "file-input",
+      "tag": "input",
+      "type": "file",
+      "inDialog": false,
+      "box": [
+       222,
+       424,
+       836,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "bestRatio": 21,
+      "changedAny": 704,
+      "controlPx": [
+       836,
+       52
+      ],
+      "paintedPx": [
+       120,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"Pemeriksaan sistem — semua lulus\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       185,
+       847,
+       910,
+       52
+      ],
+      "window": [
+       1280,
+       900
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Membaca fail ini mengambil masa lebih lama daripada yang dijangkakan, atau alat tersebut menghadapi masalah. Fail asal anda tidak diubah. Pilih fail lain atau simpan fail ini sekali lagi daripada apli…",
+      "failure": true,
+      "tookTooLong": true
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149c__ms-MY__w320__light",
+   "run": "vh207-after-c-2026-10-27T21-20-54-086Z-0a8173",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-c-2026-10-27T21-20-54-086Z-0a8173/S-149c__ms-MY__w320__light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1519,
+    "recordMs": 125110,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F20"
+   ],
+   "readings": [
+    {
+     "reading": "c",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#file-input",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": true,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 120442,
+     "pending": {
+      "before": {
+       "reading": true,
+       "title": true
+      },
+      "presses": 2,
+      "on": "input[name=video-language]=ms-MY",
+      "after": {
+       "reading": true,
+       "title": true
+      }
+     },
+     "atChoosing": {
+      "on": "input#file-input.file-input.file-input--chosen[file] \"1. Pilih video\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [
+      "F20: withheld the worker's answer (failed) to inspection 2, request 4"
+     ],
+     "focusRow": "pass",
+     "focus": "input#file-input.file-input[file] \"1. Pilih video\"",
+     "visible": true,
+     "moves": [
+      "input#file-input.file-input[file] \"1. Pilih video\""
+     ],
+     "inView": {
+      "top": 258,
+      "bottom": 310,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "input#file-input.file-input[file] \"1. Pilih video\"",
+      "id": "file-input",
+      "tag": "input",
+      "type": "file",
+      "inDialog": false,
+      "box": [
+       62,
+       258,
+       196,
+       52
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "bestRatio": 14.31,
+      "changedAny": 704,
+      "controlPx": [
+       196,
+       52
+      ],
+      "paintedPx": [
+       120,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"Pemeriksaan sistem — semua lulus\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       25,
+       244,
+       270,
+       80
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Membaca fail ini mengambil masa lebih lama daripada yang dijangkakan, atau alat tersebut menghadapi masalah. Fail asal anda tidak diubah. Pilih fail lain atau simpan fail ini sekali lagi daripada apli…",
+      "failure": true,
+      "tookTooLong": true
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149c__ms-MY__w320__dark",
+   "run": "vh207-after-c-2026-10-27T21-20-54-086Z-0a8173",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-c-2026-10-27T21-20-54-086Z-0a8173/S-149c__ms-MY__w320__dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1528,
+    "recordMs": 125115,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F20"
+   ],
+   "readings": [
+    {
+     "reading": "c",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#file-input",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": true,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 120468,
+     "pending": {
+      "before": {
+       "reading": true,
+       "title": true
+      },
+      "presses": 2,
+      "on": "input[name=video-language]=ms-MY",
+      "after": {
+       "reading": true,
+       "title": true
+      }
+     },
+     "atChoosing": {
+      "on": "input#file-input.file-input.file-input--chosen[file] \"1. Pilih video\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [
+      "F20: withheld the worker's answer (failed) to inspection 2, request 4"
+     ],
+     "focusRow": "pass",
+     "focus": "input#file-input.file-input[file] \"1. Pilih video\"",
+     "visible": true,
+     "moves": [
+      "input#file-input.file-input[file] \"1. Pilih video\""
+     ],
+     "inView": {
+      "top": 258,
+      "bottom": 310,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "input#file-input.file-input[file] \"1. Pilih video\"",
+      "id": "file-input",
+      "tag": "input",
+      "type": "file",
+      "inDialog": false,
+      "box": [
+       62,
+       258,
+       196,
+       52
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "bestRatio": 13.34,
+      "changedAny": 704,
+      "controlPx": [
+       196,
+       52
+      ],
+      "paintedPx": [
+       120,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"Pemeriksaan sistem — semua lulus\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       25,
+       244,
+       270,
+       80
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Membaca fail ini mengambil masa lebih lama daripada yang dijangkakan, atau alat tersebut menghadapi masalah. Fail asal anda tidak diubah. Pilih fail lain atau simpan fail ini sekali lagi daripada apli…",
+      "failure": true,
+      "tookTooLong": true
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149c__ms-MY__w320__forced-light",
+   "run": "vh207-after-c-2026-10-27T21-20-54-086Z-0a8173",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-c-2026-10-27T21-20-54-086Z-0a8173/S-149c__ms-MY__w320__forced-light.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1517,
+    "recordMs": 125189,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F20"
+   ],
+   "readings": [
+    {
+     "reading": "c",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#file-input",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": true,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 120531,
+     "pending": {
+      "before": {
+       "reading": true,
+       "title": true
+      },
+      "presses": 2,
+      "on": "input[name=video-language]=ms-MY",
+      "after": {
+       "reading": true,
+       "title": true
+      }
+     },
+     "atChoosing": {
+      "on": "input#file-input.file-input.file-input--chosen[file] \"1. Pilih video\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [
+      "F20: withheld the worker's answer (failed) to inspection 2, request 4"
+     ],
+     "focusRow": "pass",
+     "focus": "input#file-input.file-input[file] \"1. Pilih video\"",
+     "visible": true,
+     "moves": [
+      "input#file-input.file-input[file] \"1. Pilih video\""
+     ],
+     "inView": {
+      "top": 258,
+      "bottom": 310,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "input#file-input.file-input[file] \"1. Pilih video\"",
+      "id": "file-input",
+      "tag": "input",
+      "type": "file",
+      "inDialog": false,
+      "box": [
+       62,
+       258,
+       196,
+       52
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "bestRatio": 21,
+      "changedAny": 704,
+      "controlPx": [
+       196,
+       52
+      ],
+      "paintedPx": [
+       120,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"Pemeriksaan sistem — semua lulus\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       25,
+       244,
+       270,
+       80
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Membaca fail ini mengambil masa lebih lama daripada yang dijangkakan, atau alat tersebut menghadapi masalah. Fail asal anda tidak diubah. Pilih fail lain atau simpan fail ini sekali lagi daripada apli…",
+      "failure": true,
+      "tookTooLong": true
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  },
+  {
+   "key": "S-149c__ms-MY__w320__forced-dark",
+   "run": "vh207-after-c-2026-10-27T21-20-54-086Z-0a8173",
+   "record": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh207/runs-after/vh207-after-c-2026-10-27T21-20-54-086Z-0a8173/S-149c__ms-MY__w320__forced-dark.json",
+   "status": "ok",
+   "timing": {
+    "setupMs": 1530,
+    "recordMs": 125169,
+    "firstOfGroup": true
+   },
+   "faults": [
+    "F20"
+   ],
+   "readings": [
+    {
+     "reading": "c",
+     "status": "ok",
+     "reached": "pass",
+     "placedOn": "#file-input",
+     "read": {
+      "unreadable": true,
+      "tookTooLong": true,
+      "block": null,
+      "verdict": false,
+      "trimHidden": true,
+      "titleHidden": true,
+      "createShown": false,
+      "result": "none",
+      "saveShown": false,
+      "newSave": false,
+      "dialog": false
+     },
+     "readMs": 120492,
+     "pending": {
+      "before": {
+       "reading": true,
+       "title": true
+      },
+      "presses": 2,
+      "on": "input[name=video-language]=ms-MY",
+      "after": {
+       "reading": true,
+       "title": true
+      }
+     },
+     "atChoosing": {
+      "on": "input#file-input.file-input.file-input--chosen[file] \"1. Pilih video\"",
+      "same": true,
+      "wasConnected": true,
+      "trimStartDisabled": true
+     },
+     "f20": [
+      "F20: withheld the worker's answer (failed) to inspection 2, request 4"
+     ],
+     "focusRow": "pass",
+     "focus": "input#file-input.file-input[file] \"1. Pilih video\"",
+     "visible": true,
+     "moves": [
+      "input#file-input.file-input[file] \"1. Pilih video\""
+     ],
+     "inView": {
+      "top": 258,
+      "bottom": 310,
+      "inWindow": true,
+      "sampled": 5,
+      "covered": 0
+     },
+     "seen": {
+      "el": "input#file-input.file-input[file] \"1. Pilih video\"",
+      "id": "file-input",
+      "tag": "input",
+      "type": "file",
+      "inDialog": false,
+      "box": [
+       62,
+       258,
+       196,
+       52
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "ring": {
+      "sel": "#file-input",
+      "outcome": "pass",
+      "focusVisible": true,
+      "areaAt3to1": 704,
+      "perimeter2px": 640,
+      "bestRatio": 21,
+      "changedAny": 704,
+      "controlPx": [
+       196,
+       52
+      ],
+      "paintedPx": [
+       120,
+       44
+      ],
+      "back": true
+     },
+     "nextTab": {
+      "el": "summary.disclosure-summary \"Pemeriksaan sistem — semua lulus\"",
+      "id": null,
+      "tag": "summary",
+      "type": null,
+      "inDialog": false,
+      "box": [
+       25,
+       244,
+       270,
+       80
+      ],
+      "window": [
+       320,
+       568
+      ],
+      "shows": true,
+      "covered": false,
+      "seen": true
+     },
+     "statusLine": {
+      "text": "Membaca fail ini mengambil masa lebih lama daripada yang dijangkakan, atau alat tersebut menghadapi masalah. Fail asal anda tidak diubah. Pilih fail lain atau simpan fail ini sekali lagi daripada apli…",
+      "failure": true,
+      "tookTooLong": true
+     }
+    }
+   ],
+   "subresults": {
+    "outcome": "pass"
+   }
+  }
+ ]
+}

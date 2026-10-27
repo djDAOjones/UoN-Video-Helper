@@ -1,0 +1,5 @@
+#!/bin/zsh
+# VH-207 #1: the power and load at a run's start, as the brief asks (pmset -g batt, powermode, uptime). Exit 3 on battery.
+b=$(pmset -g batt | tr '\n' ' '); m=$(pmset -g | grep -i powermode | tr -s ' ' | tr '\n' ' '); u=$(uptime)
+echo "$(date -u +%FT%TZ) | ${b} | ${m} | ${u}"
+case "$b" in *"AC Power"*) exit 0;; *) exit 3;; esac
