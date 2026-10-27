@@ -1,0 +1,23 @@
+The earlier blocking musts are met. One explicit scope-recording requirement remains unmet.
+
+- **Must — not met: backlog detail.** `project/backlog.md:45` has `[ ]` and “to plan into fix items before VH-203”, but omits the two “?” changes, A/B’s individual IDs and both owner-first conditions requested for that line. These are correctly recorded in `project/items/VH-211.md:10–14`; carry them into the backlog line. The backlog currently uses 891 of 1,000 words.
+
+- **Must — met: earlier stale item text.** VH-201’s questions are answered (`project/items/VH-201.md:19`); the threshold is settled (`project/items/VH-206.md:5`); F15b’s original ruling and subsequent owner-first wording work are distinguished (`project/items/VH-208.md:13`); VH-209 is taken at rank 3 (`project/items/VH-209.md:5`).
+
+- **Must — met: earlier wish corrections.** VH-175.4 records the amended acceptance, VH-211’s remedy planning and owner-first condition (`project/wish-list.md:51`). VH-202.1 records narrow approval, VH-206’s ownership and retirement after verification (`project/wish-list.md:70`).
+
+- **Must — met: original quotations and approved work.** Both original messages match verbatim (`project/decisions.md:27`, `:29`). All six V-51 strings match the unchanged ask table character for character (`project/items/VH-206.md:11–13`). Documents permission remains confined to the specified row within 8,100 words (`:24`); the five-item order remains (`project/backlog.md:40–44`).
+
+- **Must — met: new scope.** The third message matches verbatim, with chat, timestamp and Orchestrator #13’s transcript check (`project/decisions.md:33`). The screenshots/build, both changes, overlap caveat, shared onset styling, every supplied ID, 214 cells and exclusions match (`:34–37`). Both owner-first conditions are explicit (`project/items/VH-211.md:14`). Nothing is added, dropped or implemented; planning remains the next worker’s (`project/decisions.md:39`).
+
+- **Must — met: VH-211 and VH-203.** VH-211’s schema, provenance, position and planning workflow remain sound; `[ ]` correctly replaces the superseded owner blocker (`project/backlog.md:45`; `project/items/VH-211.md:15`, `:23`). All “?” capture requirements remain (`project/items/VH-203.md:17`). “ensure everything passes UX / design / Accessibility” is quoted and explicitly attributed as Backlog review’s reading (`:18`).
+
+- **Must — met: disposition, closure and structure.** Disposition rows agree with the decision, including V-18, F15b and the excluded statement (`reviews/2026-10-25/design-pass-3/design-pass-3-2026-10-27.md:751–759`). VH-202 leaves the backlog and gains its trajectory line (`project/trajectory.md:33`); VH-201.1 retires and VH-201.2 remains (`project/decisions.md:41`). Supersedes is exact (`:45`); archival is verbatim and indexed (`project/archive-index.md:3`). No product or `docs/` changes. Checker: **0 failures, 1 warning**, still requiring the promised VH-201.1 commit-body retirement trace. Full gate not rerun.
+
+- **Should — partly met: historical snapshots.** The ask and report questions are marked answered (`fix-plan-2026-10-27.md:136`; report `:655`, both in the review folder above). However, the fix plan’s earlier table still says “Waits” (`:23`, `:26`). Mark the whole pre-answer plan accordingly.
+
+- **Should — met:** “is asking” is gone (`project/decisions.md:31`; `project/items/VH-211.md:5`).
+
+- **May — terminology:** change “V-18’s six accepted cases” to “formerly accepted cases” (`project/items/VH-209.md:12`) to reflect the amended acceptance.
+
+Commit after the musts below

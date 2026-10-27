@@ -1,0 +1,31 @@
+You are Codex astra, checking VH-202's close step before its commit, in the UoN Video Helper repository (read-only). Do not run anything that writes, and do not open any file over 1 MB.
+
+The close carries no new judgement: it records the owner's answer to VH-202's ask and lets the approved items go ahead. Check that it does exactly that, accurately and completely, and nothing more. Claude's own verdict is not given to you.
+
+## The source of the owner's answer (the only source; quoted from the orchestrator's brief)
+On 2026-10-27, in the "Backlog review" chat (`local_59428ffc-7efd-4ae6-b7ef-bd83074f4596`), the owner answered VH-202's ask, verbatim: "as reccomended, and convery me the 9 point ask here". That chat had asked the owner: "Send "as recommended" for all nine points to Orchestrator #13?", showing the build order, point 2's en-GB words with Codex's alternative marked not recommended, and the other recommendations in short. It then showed the owner the nine points in full at about 14:40Z. Orchestrator #13 read that chat's transcript: the words and what was shown match, and the nine points match the ask committed in `f0b4dae`.
+The owner's addition, the same day, in the same chat, verbatim: "I accept everything, but even old issues should be solved for. we also need to make sure that question mark about file formats looks good".
+The orchestrator's reading: "I accept everything" confirms the nine points. "even old issues should be solved for" asks for fixes, not acceptances; it certainly reaches point 6 (V-18, accepted in Phase 7 as VH-175.4, is now to be solved, its remedy still to plan); which other old issues the owner means is NOT settled and must not be decided by this close. "that question mark about file formats" is VH-205's format "?" beside the lede's fourth promise: to look right, not only measure right. Point 8 (the spec §5.4 correction) is routed to VH-206 by the orchestrator's settlement, as a narrow approval: this one row, within the spec's 8,100 words, no wider `docs/` permission.
+
+## What the close must do
+- A new VH-202 decision quoting both messages verbatim with their source and what they answered; saying the Backlog review chat showed the owner the nine points in full at ~14:40Z; point 6 amended by the addition.
+- VH-206: the approved words (the fix plan's "The owner's ask", point 2's table) written in verbatim; unblocked; its Documents criterion replaced by one that makes the spec §5.4 "No audio track" correction for the kept-part case, recording the narrow approval; wish VH-202.1 stays open until that correction is made and verified.
+- VH-209 unblocked (taken at rank 3).
+- A new backlog line in Phase 8 before VH-203, `[!]`, blocked on the owner's scope, "the old issues the owner asked solved", V-18 named, with the next free VH ID and an item file; planned with `verbs/plan.md`, Claude first and Codex blind, once the owner gives the scope.
+- VH-203's criteria: its after-run captures the format "?" in its states, in the three languages, the colour modes and at the 32 px font; those captures go to the owner; a change the owner asks for becomes a fix item before VH-203 closes.
+- Wish VH-201.1 retired (the commit body will carry "VH-201.1 — retired — <reason>"); VH-201.2 kept open.
+- Every Now and Open question line the answer makes stale updated (VH-202, VH-206, VH-209, and any other).
+- The report's Disposition rows updated; VH-202 struck from the backlog with a trajectory line; `tools/archive.mjs` run as needed.
+- No product code and nothing under `docs/`.
+
+## What it wrote
+The uncommitted diff against `f0b4dae` (`git diff f0b4dae`, plus the untracked `project/items/VH-211.md`). A copy of the whole diff is at `/Users/joe/Library/Application Support/Claude/side-session-notes/local_88f0776a-d796-4d3f-a83c-cdc8d693139d/vh202-2-close.diff`. Reference: `reviews/2026-10-25/design-pass-3/fix-plan-2026-10-27.md` ("The owner's ask", "For VH-202's close"), `project/items/`, `project/wish-list.md`, `AGENTS.md`, `project/items/_schema.md`.
+
+## Check
+1. Each requirement above: met or not, with file:line.
+2. Are the quotations and the V-51 words exactly verbatim (compare the words in VH-206 with the fix plan's table, character for character)?
+3. Does anything decide what the owner left open (the old issues' scope beyond V-18), widen the `docs/` permission, change the plan's items or order, or make a judgement the answer did not make?
+4. Is anything stale left (a Now line, a backlog mark, a Disposition row, a "waits for the owner" phrase) that the answer settles?
+5. Record rules: the decision's grammar and Supersedes line, rule 5 (every deferral a line), the schema for VH-211, the backlog line form.
+
+Give each point as **must** (blocks the commit), **should** or **may**, with file:line. End with one verdict line: "Commit", "Commit after the musts below", or "Revise". Keep it under 900 words.

@@ -18,6 +18,34 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-27 — VH-202 — Closes: the owner's answer "as reccomended" on all nine points; the owner's addition and scope open VH-211, the format "?" and old issues A and B to plan
+
+**Decision:** VH-202 closes. The owner answered its ask as recommended, so VH-206 to VH-210 go ahead in the plan's order: VH-206 with the approved words and spec §5.4's row (point 8), VH-209 taken at rank 3. The owner's addition and scope ask that old issues be solved, not accepted: V-18's acceptance (point 6) is amended, and VH-211 plans the format "?"'s two changes and groups A and B into fix items before VH-203. VH-203's after-run captures the "?" for the owner, and its integrated check takes "ensure everything passes UX / design / Accessibility" as its bar.
+
+**Rationale:**
+
+- **The answer.** On 2026-10-27, in the "Backlog review" chat (`local_59428ffc-7efd-4ae6-b7ef-bd83074f4596`), the owner answered VH-202's ask, verbatim: "as reccomended, and convery me the 9 point ask here". That chat had asked: "Send "as recommended" for all nine points to Orchestrator #13?", showing the build order, point 2's en-GB words with Codex's alternative marked not recommended, and the other recommendations in short. As the owner asked, it then showed the nine points in full, at about 14:40Z. Orchestrator #13 read that chat's transcript: the words and what was shown match, and the nine points match the ask committed in `f0b4dae`.
+- **Each point, as recommended:** (1) the plan approved; (2) Claude's V-51 words, in three languages, as the ask's table gives them; (3) the 400 ms rule kept; (4) V-50 taken at rank 3, as VH-209; (5) F15b not a finding, with VH-208 recording its state; (6) V-18's Phase 7 acceptance stands, and VH-203 measures the button and reports to the owner; (7) the statement's limitation left to VH-137, with no new item; (8) the spec correction, wish VH-202.1, approved within the spec's 8,100-word budget; (9) no controls.
+- **The owner's addition,** the same day, in the same chat, verbatim: "I accept everything, but even old issues should be solved for. we also need to make sure that question mark about file formats looks good".
+  - "I accept everything" confirms the nine points.
+  - "even old issues should be solved for" asks for fixes, not acceptances. It amends point 6, and supersedes PLAN-7's decision of 2026-10-23 in its V-18 acceptance alone: V-18, accepted in Phase 7 as VH-175.4, is to be solved, its remedy still to plan; VH-203 still measures the button. Which other old issues were meant, the scope below settles.
+  - "that question mark about file formats looks good" is VH-205's "?" beside the lede's fourth promise: it is to look right, not only measure right. VH-203's after-run now captures it in its states, in the three languages, the colour modes and at the 32 px font, for the owner; a change the owner asks for becomes a fix item before VH-203 closes.
+- **The scope, a third message.** Typed by the owner in the Backlog review chat at 14:51:20Z, the same day (Orchestrator #13 checked that chat's transcript), verbatim: "yes to the question mark, and A and B. ensure everything passes UX / design / Accessibility". What was shown, as that chat relayed it:
+  - **the "?"** (VH-205), from three screenshots of the preview at `cc12788`, two changes: the gap, 16 px today, to about 8 px (the 44 px `::after` target may then overlap the end of "format."); and an open state, filled dark while `aria-expanded="true"`, like the chosen "Staff video" segment, which the onset "?" takes too, since it shares `.help-button`. Neither touches the target or the words;
+  - **group A, page defects:** V-18 (VH-175.4), its 320 × 568 remedy to the owner before it is built; VH-189.1, VH-186.1, VH-139.5, VH-185.1 and VH-193.3; F15b, its words to the owner first;
+  - **group B, checks in Chrome:** VH-150.3, VH-153.1, VH-155.2, VH-156.1, VH-158.1, and VH-172.1's 214 unread matrix cells;
+  - **not taken:** C, native readers, screen-reader and listening checks; D, the statement, which is VH-137's, and the stale spec and doc lines VH-194.1, VH-162.1 and VH-116.1; E, tooling.
+
+  VH-211 holds this scope, `[ ]`, to plan into fix items before VH-203 with `verbs/plan.md`, Claude first and Codex blind, compared and critiqued; the plan step is the next worker's, and this close plans nothing. "ensure everything passes UX / design / Accessibility" becomes the bar for VH-203's integrated check: that reading is the Backlog review chat's, recorded as such.
+- **What goes ahead.** VH-206 takes the approved words verbatim and is unblocked. Point 8 is routed to it, as Orchestrator #13 settled: its Documents criterion now makes spec §5.4's "No audio track" correction for the kept-part case. The owner's approval is narrow: point 8, this one row, within the spec's 8,100 words; no wider `docs/` permission follows. Wish VH-202.1 stays open until that correction is made and verified, then retires. VH-209 is unblocked; VH-207, VH-208 and VH-210 go ahead on the approved plan. The plan's items and order are unchanged, so PLAN-8 takes no note.
+- **The record.** Wish VH-201.1 retires: the answer settles its five questions. VH-201.2 stays open for VH-203's after-run. The report's Disposition rows name the items, and the Now lines of VH-202, VH-203 and VH-206 to VH-210 are rewritten.
+- **Codex astra,** on the owner's word: the close carries no new judgement, so Codex's check of the close diff before the commit is the comparison.
+- **Digest rules:** none applied; no product code and nothing under `docs/` changed here.
+
+**Supersedes:** 2026-10-23 — PLAN-7 — The owner decides the four wish lines: one name for step 4, a forced-colour hover, V-18 accepted, the statement edited once
+
+**Deferred:** VH-206, VH-207, VH-208, VH-209, VH-210, VH-211, VH-203
+
 ## 2026-10-27 — VH-202 — Checkpoint: the fix plan, Codex astra's blind fix items compared, its critique applied, one ask to the owner; VH-202 stays open
 
 **Decision:** VH-202 stays open, blocked on the owner's answer to its ask, which a short close step quotes. The plan, the compare, the critique and the ask are done. VH-206's words and VH-209 wait for him; nothing contested is built first, and the approved items need only his approval of the plan.
@@ -624,16 +652,6 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Decision:** each button kind held down takes its own fill from three new roles, `--interactive-active`, `--layer-active` and `--button-danger-active`, never when disabled; forced colours invert the pair; segments need none; because held down, every button drew its hover fill (V-39).
 
 **Rationale:** The next step past each hover fails 7:1 (blue-60 under white 4.21:1, blue-40 under Nottingham Blue 6.39:1, red-40 6.50:1), so pressed takes new roles. Light: the primary blue-90 (white 11.35:1), a secondary blue-20 (Nottingham Blue 10.32:1), Discard red-90 (white 15.22:1, darker than rest, as Carbon's danger press). Dark and the band: the primary blue-10 (12.66:1, between Portland Stone at rest and blue-20 hovered), a secondary blue-80 (Portland Stone 7.58:1), Discard red-10 (14.02:1). Forced colours: a primary or the unchosen Choose file turns HighlightText with Highlight words; a secondary or the chosen Choose file ButtonText with ButtonFace words, `forced-color-adjust: none` on the pressed state only. A segment needs none: a press ends in the chosen fill, the strongest state it has. Measured with real CDP mouse presses in Chrome 155 at 1280 px, nine kinds, light, dark and forced, in three languages: 81 presses matched `:active` and drew the hover fill before, and 81 a fill of their own after; Use the whole video, disabled, held down keeps its rest look in every theme. Evidence: `reviews/2026-10-22/design-pass/evidence/measurements/vh169-pressed-2026-10-22.md`. Standards: wcag-2.2-aaa 1.4.6, 1.4.11, 2.4.13; carbon tokens and component states; nielsen 1.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-22 — VH-167 — One reading measure, 28rem, for every size and language; counted, no line over 1.4.8's limits
-
-**Decision:** `--measure` is `28rem` (448 px), one width for running text of every size and language, the owner's starting value kept because the counted lines read well in all three languages; `--measure-cjk` and its `:lang(zh)` rule are retired; the measure caps `.fact-note` and `.radio-detail` as it caps the text fields; the toggletip's paragraphs take `--paragraph-gap`; because `55ch` and `40em` resolved against each element's own font and stopped one column's text at four widths (V-33).
-
-**Rationale:** Counted in Chrome 155 at 1280 px, empty, ready and finished, with the longest fact note probed: English 63 characters at 16 px and 78 at 14 px (before 70 and 79), Malay 63 and 70 (69 and 72), Chinese 29 glyphs at 16 px (40) and, at 14 px, 32 in full-width equivalents (43.5): the one line at 41 counted one for one holds a file name. Before, two Chinese lines passed 40: the uncapped fact note (48) and that notification (47). At 375 px the column is narrower than the measure and nothing changes. Body, helper, notification and fact-note text all stop at 448 px in every language, where they stopped at 489, 428, 640 and 560. At 320 px and at 200 % no sideways scroll, and walk.mjs's 1.4.12 sheet clips nothing. English helper text at 78 is the nearest to 80; a longer English notification line is the thing to watch. Evidence: `reviews/2026-10-22/design-pass/evidence/measurements/vh167-measure-2026-10-22.md`. VH-105's Chinese measure is withdrawn; its Chinese faces stay. Standards: wcag-2.2-aaa 1.4.8 (80 characters, 40 CJK glyphs, a blank line between paragraphs), 1.4.10, 1.4.12; carbon tokens, not literals; nielsen 4.
 
 **Supersedes:** none
 

@@ -1,0 +1,7 @@
+- **Must — met.** [project/backlog.md:45](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/project/backlog.md:45>) now includes both “?” changes, every A and B identifier, VH-172.1’s 214 cells, and both owner-first conditions: V-18’s 320 × 568 remedy and F15b’s words. It accurately matches `project/items/VH-211.md:10–14` and `project/decisions.md:34–39`. Nothing is added or dropped from the recorded scope; planning remains future work before VH-203. It preserves the backlog’s single-line form, including status, permanent ID, date and provenance.
+
+- **Should — met.** [fix-plan-2026-10-27.md:3](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/fix-plan-2026-10-27.md:3>) explicitly marks the plan as pre-answer and points to the subsequent answer, addition and scope. The original plan remains intact.
+
+- **May — applied accurately.** [project/items/VH-209.md:12](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/project/items/VH-209.md:12>) says “formerly accepted”, matching the superseded V-18 acceptance while preserving the before/after measurement guard.
+
+Commit

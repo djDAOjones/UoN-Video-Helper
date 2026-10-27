@@ -652,6 +652,8 @@ compared in [`ranks-compare-2026-10-27.md`](ranks-compare-2026-10-27.md)).
 
 ## For the owner
 
+*Answered at VH-202's close, 27 October (the VH-202 close decision); kept as it was asked.*
+
 Disagreements of judgement between Claude and Codex astra, each with
 both positions, and the owner's questions, for VH-202's ask (wish
 VH-201.1). The approved work goes on; only the contested point waits.
@@ -742,16 +744,16 @@ findings still number 7: 1 at rank 1, 5 at rank 2 and 1 at rank 3.
 
 ## Disposition
 
-At VH-201, 27 October; VH-195 makes it final at Phase 8's close.
+At VH-201, 27 October; updated at VH-202's close the same day, on the owner's answer to its ask (the VH-202 close decision); VH-195 makes it final at Phase 8's close.
 
 | Finding | Rank | Disposition |
 | --- | --- | --- |
-| V-51 (D-05) | 1 | VH-202: a fix item whose words wait for the owner's approval in three languages (VH-201.1); no control, the threshold unchanged unless he says otherwise. VH-203's after-run walks a kept sliver of audible sound and reads the output's tracks (VH-201.2) |
-| V-52 (D-06) | 2 | VH-202: a fix item; the warnings before the player and Save, the listening sentence spoken; its check includes F15b's state |
-| V-46 | 2, regressed | VH-202: a fix item; the hand-on on both read-failure paths; its check covers the J4 case (VH-201.2) |
-| V-48 | 2 | VH-202: a fix item, CSS only; VH-203's after-run re-reads S-113 |
-| V-49 | 2 | VH-202: a fix item, CSS only; a real Windows theme is the checklist's task D |
-| V-18 | 2, incomplete | Accepted in Phase 7, wish VH-175.4; VH-202 asks whether the acceptance stands (VH-201.1); its place at HEAD read in VH-203's after-run (VH-201.2) |
-| V-50 | 3 | VH-202: a proposal to the owner, its rank his to settle (VH-201.1); CSS only |
-| The failed-playback guidance | — | For the owner, a finding or not (VH-201.1) |
-| The statement's media limitation | — | For the owner, rank 2 under VH-192.1 or set aside (VH-201.1); its words stay VH-137's |
+| V-51 (D-05) | 1 | VH-206, in the words the owner approved in three languages (point 2); the 400 ms rule kept (point 3), no control; spec §5.4's row corrected there (point 8, wish VH-202.1). VH-203's after-run walks a kept sliver of audible sound and reads the output's tracks (VH-201.2) |
+| V-52 (D-06) | 2 | VH-208: the warnings before the player and Save, the listening sentence spoken; its check includes F15b's state |
+| V-46 | 2, regressed | VH-207: the hand-on at the choosing and on both read-failure paths; its check covers the J4 case (VH-201.2) |
+| V-48 | 2 | VH-210, CSS only; VH-203's after-run re-reads S-113 |
+| V-49 | 2 | VH-210, CSS only; a real Windows theme is the checklist's task D |
+| V-18 | 2, incomplete | The Phase 7 acceptance (VH-175.4) stood at the owner's answer (point 6), and the owner's addition, that old issues be solved, amends it: VH-211, in the owner's scope (group A), its 320 × 568 remedy to the owner before it is built. Its place at HEAD read in VH-203's after-run and reported to the owner (VH-201.2) |
+| V-50 | 3 | VH-209, taken by the owner at rank 3 (point 4); CSS only |
+| The failed-playback guidance | — | Not a finding (point 5); VH-208 records the state. The owner's scope puts its words in VH-211 (group A), drafted for the owner first |
+| The statement's media limitation | — | Left to VH-137, with no new item (point 7); its words stay VH-137's, wish VH-192.1. The owner's scope leaves it out (group D) |

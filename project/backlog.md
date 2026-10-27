@@ -37,12 +37,12 @@ The public release on Xerte (PLAN-6): the cut after Phase 8, VH-204; 0.2.0 is no
 
 ### Phase 8 — the owner's UX pass, then a third full design pass
 
-- [~] VH-202 — Pass 3's fix plan — since 2026-10-25 — blocked: the owner's answer to VH-202's ask
-- [!] VH-206 — V-51: a kept part with too little audio told so, in the owner's words — since 2026-10-27 — (from: VH-202, 2026-10-27) — blocked: the owner's answer to VH-202's ask
+- [ ] VH-206 — V-51: a kept part with too little audio told so, in the owner's words — since 2026-10-27 — (from: VH-202, 2026-10-27)
 - [ ] VH-207 — V-46: focus to the file chooser when an unreadable file withdraws its step — since 2026-10-27 — (from: VH-202, 2026-10-27)
 - [ ] VH-208 — V-52: the finished video's warnings before its player and Save, and spoken — since 2026-10-27 — (from: VH-202, 2026-10-27)
-- [!] VH-209 — V-50: the page in its column at a 32 px font on a phone width, if taken — since 2026-10-27 — (from: VH-202, 2026-10-27) — blocked: the owner's answer to VH-202's ask
+- [ ] VH-209 — V-50: the page in its column at a 32 px font on a phone width — since 2026-10-27 — (from: VH-202, 2026-10-27)
 - [ ] VH-210 — V-48 and V-49: two focus rings drawn whole — since 2026-10-27 — (from: VH-202, 2026-10-27)
+- [ ] VH-211 — To plan into fix items before VH-203, as the owner asked: the format "?"'s gap to about 8 px and a dark open state; A, V-18 (VH-175.4), VH-189.1, VH-186.1, VH-139.5, VH-185.1, VH-193.3 and F15b; B, VH-150.3, VH-153.1, VH-155.2, VH-156.1, VH-158.1 and VH-172.1's 214 cells; V-18's 320 × 568 remedy and F15b's words to the owner first — since 2026-10-27 — (from: VH-202, 2026-10-27)
 - [ ] VH-203 — Pass 3's fixes, after-run, integrated check — since 2026-10-25
 - [ ] VH-195 — Phase 8 closes — since 2026-10-24
 - [ ] VH-204 — The release cut after Phase 8 closes, the one the owner uploads to Xerte — since 2026-10-25 — blocked: VH-195
