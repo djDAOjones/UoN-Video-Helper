@@ -1,8 +1,9 @@
 /**
  * VH-185, wish line VH-139.6: a part kept that holds less sound than one of
- * the meter's gating blocks is no sound to level. Pre-flight says the video
- * has no audio and the job runs silent, rather than encoding the whole video
- * for the output check to refuse a loudness measured on nothing.
+ * the meter's gating blocks is no sound to level. Pre-flight says so and the
+ * job runs silent, rather than encoding the whole video for the output check
+ * to refuse a loudness measured on nothing. Since VH-206, pre-flight says the
+ * part kept has too little audio, not that the video has none.
  *
  * Read from real MP4s built in memory (`test/helpers/pcm-mp4.ts`), whose
  * sound comes in 100 ms blocks of a steady level. The plan's measured bite
@@ -11,7 +12,7 @@
 
 import { describe, expect, it } from 'vitest'
 
-import { pcmMp4, soundTrackOf } from '../../test/helpers/pcm-mp4'
+import { cutShort, pcmMp4, soundTrackOf } from '../../test/helpers/pcm-mp4'
 import { BLOCK_SECONDS } from '../audio/loudness'
 import { clearLogRecords, getLogRecords } from '../core/logger'
 import { detectSourceWarnings } from '../audio/warnings'
@@ -22,12 +23,35 @@ import { snapKeptRangeToFrames } from './kept-range'
 /** Kept from the start to `endSeconds`, as a trim's out-point. */
 const keptTo = (endSeconds: number) => ({ startSeconds: 0, endSeconds })
 
+/**
+ * Pre-flight's warnings as the worker composes them (`job.worker.ts`): the
+ * analysis's own result, silent or not, and where the sound stops short of
+ * the index, each as code and cause (VH-206).
+ */
+async function preflight(
+  bytes: Uint8Array,
+  range: { readonly startSeconds: number; readonly endSeconds: number },
+) {
+  const track = await soundTrackOf(bytes)
+  const measured = await analyseSourceAudio(track, undefined, range)
+  const short = shortfall(
+    {
+      decodedEndSeconds: measured.decodedEndSeconds ?? null,
+      ...(await declaredExtent(track, range)),
+    },
+    range.startSeconds,
+  )
+  return detectSourceWarnings(measured, short, false).map((warning) => [warning.code, warning.reason])
+}
+
+const TOO_LITTLE_KEPT = [['no-audio', 'kept-too-little']]
+
 describe('a sliver of late sound in the part kept (VH-185)', () => {
   // VH-139's case: a sound starting at 4 s, kept to 0:04, held 22 ms of the
   // encoder's priming. Here the first block starts 20 ms before the cut.
   const sliver = () => pcmMp4({ spans: [[3.98, 6]] })
 
-  it('is no sound to pre-flight, which says the video has no audio and nothing else', async () => {
+  it('is no sound to pre-flight, which says the part kept has too little and nothing else', async () => {
     const track = await soundTrackOf(await sliver())
     const measured = await analyseSourceAudio(track, undefined, keptTo(4))
     expect(measured).toEqual({ silent: true, decodedEndSeconds: 4 })
@@ -41,9 +65,24 @@ describe('a sliver of late sound in the part kept (VH-185)', () => {
       0,
     )
     expect(short).toBeNull()
-    expect(detectSourceWarnings(null, short, false).map((warning) => warning.code)).toEqual([
-      'no-audio',
-    ])
+    expect(await preflight(await sliver(), keptTo(4))).toEqual(TOO_LITTLE_KEPT)
+  })
+
+  it('says too little kept, not no audio, for a part with no sound decoded at all (VH-206)', async () => {
+    // The track starts after the out-point: the file has audio, and keeping
+    // more is the way forward.
+    expect(await preflight(await pcmMp4({ spans: [[5, 6]] }), keptTo(4))).toEqual(TOO_LITTLE_KEPT)
+  })
+
+  it('says the file ends early, not too little kept, where the sound it declares never arrives (VH-206)', async () => {
+    // Cut at half its bytes, the sound stops near 5 s; the 2 s kept after it,
+    // over the 1 s margin, is declared and never decoded.
+    const cut = cutShort(await pcmMp4({ spans: [[0, 10]] }), 0.5)
+    const range = { startSeconds: 6, endSeconds: 8 }
+    expect(await analyseSourceAudio(await soundTrackOf(cut), undefined, range)).toMatchObject({
+      silent: true,
+    })
+    expect(await preflight(cut, range)).toEqual([['ends-early', undefined]])
   })
 
   it('makes the job a silent one, with no plan to level and the decode’s end kept', async () => {
@@ -68,6 +107,9 @@ describe('a sliver of late sound in the part kept (VH-185)', () => {
     expect(
       await analyseSourceAudio(await soundTrackOf(whole), undefined, keptTo(1.5)),
     ).not.toHaveProperty('silent')
+    // Pre-flight says the cause of the one under, and nothing of the whole block (VH-206).
+    expect(await preflight(under, keptTo(1.5))).toEqual(TOO_LITTLE_KEPT)
+    expect(await preflight(whole, keptTo(1.5))).not.toContainEqual(TOO_LITTLE_KEPT[0])
   })
 
   it('still levels a part kept with a block of sound or more', async () => {
@@ -107,6 +149,11 @@ describe('a sliver of late sound in the part kept (VH-185)', () => {
     expect(placed.endSeconds).toBeCloseTo(4.12, 9)
     expect(await analyseSourceAudio(track, undefined, asked)).toMatchObject({ silent: true })
     expect(await analyseSourceAudio(track, undefined, placed)).not.toHaveProperty('silent')
+    // As asked, it is too little kept (VH-206); as placed, it is levelled and
+    // pre-flight says nothing of it.
+    const bytes = await pcmMp4({ spans: [[3.71, 6]] })
+    expect(await preflight(bytes, asked)).toEqual(TOO_LITTLE_KEPT)
+    expect(await preflight(bytes, placed)).not.toContainEqual(TOO_LITTLE_KEPT[0])
     expect(await planAudio(track, undefined, undefined, undefined, placed)).not.toHaveProperty(
       'silent',
     )

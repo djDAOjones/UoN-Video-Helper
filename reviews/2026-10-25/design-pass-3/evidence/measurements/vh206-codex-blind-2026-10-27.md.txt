@@ -1,0 +1,39 @@
+Verdict: Commit after the musts below
+
+**Musts**
+
+1. **Complete the required language coverage.** `src/ui/warning-text.test.ts:172` exercises only the two `no-audio` reasons across languages; `ends-early` is tested only in English at `:127`. Add language-parameterised checks composing detection with wording for absent track, insufficient decoded sound, zero decoded sound, and declared sound that never arrives. The last must retain `ends-early`. This closes `project/items/VH-206.md:17`.
+
+2. **Resolve the failed text-spacing controls.** In `after-textspacing.json`, records `S-99__zh-Hans__w1280`, `sliver-N14__zh-Hans__w1280` and `S-20__zh-Hans__w1280` have `control.pass: false` (`:1473`, `:2954`, `:4459`): clipping and spilling are detected, but the intended overlap is not. `textspacing-206.mjs.txt:203` nevertheless marks them `ok`. Make the control demonstrably produce overlap, rerun those cells, and propagate control failures into the outcome. Reconcile the table’s `1.4.12` claim at `vh206-no-audio-2026-10-27.md:114`. This is an evidence defect, not an observed panel failure.
+
+3. **Add the evidence link.** `reviews/2026-10-25/design-pass-3/design-pass-3-2026-10-27.md:751` names VH-206 but omits its measurement file. Link `evidence/measurements/vh206-no-audio-2026-10-27.md`, as the item requires.
+
+4. **Verify the final candidate before committing.** `project/items/VH-206.md:25` requires the settled-machine gate and subsequent ledger check. The supplied green gate predates the walker/spec/rules edits. After repairs, run and record `npm run check`, then `node tools/check.mjs`, name the required digest rules, and obtain the required follow-up review. I ran neither gate.
+
+**Shoulds**
+
+1. None beyond the musts.
+
+**Notes**
+
+1. No production-code defect found. `job.worker.ts:557` preserves `measured`; `warnings.ts:99–109` preserves ordering and selects `kept-too-little` for zero decoded sound unless shortfall requires `ends-early`. The reason stays outside `detail`. `warning-text.ts:71` selects the correct copy. Untrimmed behaviour remains unchanged through `audio-plan.ts:120`; that file and `src/audio/loudness.ts` are untouched.
+
+2. The records support the expected behaviour across 192 pre-flight reads and 36 jobs. S-20 retains its words; S-101, S-153 and both exact-block cases remain warning-free. Output tracks and verification results match before/after; S-100 and N14 have no audio track. Longer wrapping—Malay reaches eleven item lines at 320 px—causes no measured overflow. Source/walker hashes match the candidate; all 41 recorded checksums match.
+
+3. WCAG 3.3.1, 3.3.3 and 2.4.6 are supported by the copy; 1.4.8’s measure and 1.4.10 by the records. The 4.1.3 evidence establishes live-region text, not an actual screen-reader listening test. The table appropriately limits 3.1.5’s grading claim to English. No test was deleted, skipped or weakened.
+
+**Acceptance criteria**
+
+- **Reason carried — met:** worker `:557`; warnings `:99–109`; wording `:71`.
+- **Owner’s words — met:** all three languages match verbatim; `sheet.ts:449`, CSV rows 344–345 and `tables.test.ts:341` agree, including translation provenance.
+- **Threshold and meter unchanged — met:** `audio-plan.ts:120`; no meter diff.
+- **Tests — not met completely:** generated 50 ms/390 ms and boundary cases are covered; language coverage needs must 1.
+- **Walker predicates — met:** only three approved moves; S-20 unchanged; all 45 proof reads precede the after run.
+- **Job unchanged — met:** `after-S-100.json` and `after-sliver-N14.json`, all six groups each.
+- **Stage rule: measurements — met:** required scenario/language/width/mode matrix present.
+- **Stage rule: WCAG — not shown completely:** must 2.
+- **Stage rule: tokens — met:** no styling, controls, elements or progress-bar changes.
+- **Stage rule: documents — met:** only §5.4’s row changed; ledger counting gives **8,121/8,200** words.
+- **Stage rule: gate — not shown for final candidate:** must 4.
+- **Stage rule: blind review — met for this candidate:** repaired candidate requires re-check.
+- **Stage rule: linked — not met:** must 3.

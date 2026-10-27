@@ -1,0 +1,75 @@
+<!-- markdownlint-disable -->
+# VH-206 — before-rerun: the no-audio warning, measured
+
+Source `446f702` (app src tree 71f2fd4e7807a484), walker tree fa89e31784ec02f9 (`/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/65f25a13-2893-4bf3-ada8-1b14a95646bd/scratchpad/vh206/base/reviews/2026-10-25/design-pass-3/evidence/measurements/walker`), Chrome/156.0.8078.48, Node v24.21.0, served at http://127.0.0.1:5181/, CDP :9251. 2026-10-27T16:51:42.856Z to 2026-10-27T16:54:02.390Z.
+
+Power: AC at every check (14 checks, none on battery); powermode            2; 1-minute load 4.83 to 8.03. Flags: load 8.03 before block-aac en-GB w320.
+
+Fixtures (sha256/16): `late-sound-block-aac-25fps-10s.mp4` 5f278ef7acc01fcc, `late-sound-block-pcm-25fps-10s.mov` 0d609568f6e7e128.
+
+## Counts
+
+| Cell | Groups ok | Pre-flight cells read (lang × width × mode) | Job cells (lang × width, read in each mode) | Modes reached |
+| --- | ---: | ---: | ---: | --- |
+| block-aac | 6 / 6 | 24 | 6 (24 reads) | 48 pass, 0 not |
+| block-pcm | 6 / 6 | 24 | 6 (24 reads) | 48 pass, 0 not |
+| **All** | | **48** | **12** | |
+
+## What pre-flight shows, per cell and language (light, 1280; the same in every mode and width unless noted)
+
+### block-aac — Exact block, N8 recipe: first AAC packet (the priming) at 3.600000 s (pts 172800/48000), kept 0:00-0:04.0 (a frame edge, so not moved): 19,200 decoded samples = 400.0 ms (21.3 ms priming, 378.7 ms tone)
+
+| Lang | Verdict | Panel title | Item heading [table key] | Item detail [table key] | Spoken (#status, as announced) | Same in all 8 reads? |
+| --- | --- | --- | --- | --- | --- | --- |
+| en-GB | success: Ready to go | — (no panel) | — | — | Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. | yes |
+| zh-Hans | success: 准备就绪 | — (no panel) | — | — | 设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 | yes |
+| ms-MY | success: Sedia untuk bermula | — (no panel) | — | — | Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. | yes |
+
+| Lang | Width | Lines per item (heading + detail), each item | Panel lines (title / tail) | Overflow (any mode) | Longest line, chars | zh weighted max (CJK + Latin/2, vs 40) | 1.4.8 worst | Trim | Console / page errors |
+| --- | --- | --- | --- | --- | ---: | ---: | --- | --- | --- |
+| en-GB | w1280 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+| en-GB | w320 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+| zh-Hans | w1280 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+| zh-Hans | w320 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+| ms-MY | w1280 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+| ms-MY | w320 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+
+| Lang | Width | Job | Kept (card) | Placed range (worker) | Plan / gain | Output check (worker) | Output file: tracks | Durations (s) | Spoken at completion | Result warnings |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| en-GB | w1280 | result (finished) | 0:00.0 to 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19.5 | output verified {"integratedLufs":-16.35,"truePeakDbtp":-13.23,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.469333 | Your video is ready. | none |
+| en-GB | w320 | result (finished) | 0:00.0 to 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19.5 | output verified {"integratedLufs":-16.35,"truePeakDbtp":-13.23,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.469333 | Your video is ready. | none |
+| zh-Hans | w1280 | result (finished) | 0:00.0 到 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19.5 | output verified {"integratedLufs":-16.35,"truePeakDbtp":-13.23,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.469333 | 您的视频已准备就绪。 | none |
+| zh-Hans | w320 | result (finished) | 0:00.0 到 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19.5 | output verified {"integratedLufs":-16.35,"truePeakDbtp":-13.23,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.469333 | 您的视频已准备就绪。 | none |
+| ms-MY | w1280 | result (finished) | 0:00.0 hingga 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19.5 | output verified {"integratedLufs":-16.35,"truePeakDbtp":-13.23,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.469333 | Video anda sudah siap. | none |
+| ms-MY | w320 | result (finished) | 0:00.0 hingga 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19.5 | output verified {"integratedLufs":-16.35,"truePeakDbtp":-13.23,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.469333 | Video anda sudah siap. | none |
+
+### block-pcm — Exact block, PCM twin: 16-bit PCM in MOV, no priming, sound from 3.600000 s, kept 0:00-0:04.0: 19,200 samples of tone = 400.0 ms
+
+| Lang | Verdict | Panel title | Item heading [table key] | Item detail [table key] | Spoken (#status, as announced) | Same in all 8 reads? |
+| --- | --- | --- | --- | --- | --- | --- |
+| en-GB | success: Ready to go | — (no panel) | — | — | Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. | yes |
+| zh-Hans | success: 准备就绪 | — (no panel) | — | — | 设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 | yes |
+| ms-MY | success: Sedia untuk bermula | — (no panel) | — | — | Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. | yes |
+
+| Lang | Width | Lines per item (heading + detail), each item | Panel lines (title / tail) | Overflow (any mode) | Longest line, chars | zh weighted max (CJK + Latin/2, vs 40) | 1.4.8 worst | Trim | Console / page errors |
+| --- | --- | --- | --- | --- | ---: | ---: | --- | --- | --- |
+| en-GB | w1280 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+| en-GB | w320 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+| zh-Hans | w1280 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+| zh-Hans | w320 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+| ms-MY | w1280 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+| ms-MY | w320 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+
+| Lang | Width | Job | Kept (card) | Placed range (worker) | Plan / gain | Output check (worker) | Output file: tracks | Durations (s) | Spoken at completion | Result warnings |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| en-GB | w1280 | result (finished) | 0:00.0 to 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19.3 | output verified {"integratedLufs":-16.31,"truePeakDbtp":-13.9,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.469333 | Your video is ready. | none |
+| en-GB | w320 | result (finished) | 0:00.0 to 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19.3 | output verified {"integratedLufs":-16.31,"truePeakDbtp":-13.9,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.469333 | Your video is ready. | none |
+| zh-Hans | w1280 | result (finished) | 0:00.0 到 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19.3 | output verified {"integratedLufs":-16.31,"truePeakDbtp":-13.9,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.469333 | 您的视频已准备就绪。 | none |
+| zh-Hans | w320 | result (finished) | 0:00.0 到 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19.3 | output verified {"integratedLufs":-16.31,"truePeakDbtp":-13.9,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.469333 | 您的视频已准备就绪。 | none |
+| ms-MY | w1280 | result (finished) | 0:00.0 hingga 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19.3 | output verified {"integratedLufs":-16.31,"truePeakDbtp":-13.9,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.469333 | Video anda sudah siap. | none |
+| ms-MY | w320 | result (finished) | 0:00.0 hingga 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19.3 | output verified {"integratedLufs":-16.31,"truePeakDbtp":-13.9,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.469333 | Video anda sudah siap. | none |
+
+## Cited from VH-199 (not re-read here)
+
+S-99 en-GB w1280 light: "This video has no audio" and its detail in the accessibility tree, nodes 538–539 of `run-09-2026-10-27T03-48-28-340Z-6d6b18/captures/S-99__en-GB__w1280__light__ax.json`, as `reviews/2026-10-25/design-pass-3/design-pass-3-2026-10-27.md:278` and `codex-astra-report-critique-2026-10-27.md:77` cite it (the run itself is kept outside the repository and was not read here). This probe did not measure that cell.
+

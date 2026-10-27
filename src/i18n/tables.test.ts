@@ -337,3 +337,33 @@ describe('step 4, one name (VH-181)', () => {
     }
   })
 })
+
+describe('too little kept, in the owner’s words (VH-206)', () => {
+  // Approved at VH-202's close, point 2; the Chinese and Malay machine
+  // translations, as the ask marked them.
+  const OWNER = {
+    'en-GB': {
+      heading: 'The part you kept has too little audio to level',
+      detail:
+        'The new video will have no audio. If you want the audio, move the start or end time to keep more of the video where there is audio.',
+    },
+    'zh-Hans': {
+      heading: '您保留的部分音频太少，无法调节音量',
+      detail: '新视频将没有音频。如果您需要音频，请调整开始时间或结束时间，多保留一些有音频的部分。',
+    },
+    'ms-MY': {
+      heading: 'Bahagian yang anda simpan mempunyai terlalu sedikit audio untuk diratakan',
+      detail:
+        'Video baharu tidak akan mempunyai audio. Jika anda mahukan audio itu, ubah masa mula atau masa tamat untuk menyimpan lebih banyak bahagian video yang ada audio.',
+    },
+  } as const
+
+  it.each(Object.entries(LANGUAGE_TABLES))('%s says them verbatim', (tag, table) => {
+    expect(table.warnings.keptTooLittleAudio).toEqual(OWNER[tag as keyof typeof OWNER])
+  })
+
+  it.each(Object.entries(LANGUAGE_TABLES))('%s tells them apart from a file with no audio track', (_tag, table) => {
+    expect(table.warnings.noAudio.heading).not.toBe(table.warnings.keptTooLittleAudio.heading)
+    expect(table.warnings.noAudio.detail).not.toBe(table.warnings.keptTooLittleAudio.detail)
+  })
+})

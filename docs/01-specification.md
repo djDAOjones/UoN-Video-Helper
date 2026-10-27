@@ -321,7 +321,7 @@ All are advisory, phrased as possibilities, and never block processing.
 | Likely background noise | Noise floor (10th-percentile short-term) > −50 LUFS |
 | Extended silence | Any continuous span > 30 s below −60 LUFS |
 | Target not reached | Post-processing integrated loudness differs from −16 LUFS by > 1 LU |
-| No audio track | Source has no audio stream |
+| No audio track | Source has no audio stream, or a trimmed part kept holds under one 400 ms gating block of sound (`BLOCK_SECONDS`), so the new video has none |
 | Heavy limiting | Post-processing limiting over 3 LU (`HEAVY_LIMITING_LU`) |
 
 Pumping detection from *pre-existing* processing is **deferred from v1** —

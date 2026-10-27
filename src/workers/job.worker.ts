@@ -552,7 +552,9 @@ async function handlePreflight(
             soundRange?.startSeconds ?? 0,
           )
         : null
-      audioWarnings = detectSourceWarnings(analysis, soundShort, fileCutShort)
+      // The silent result itself, not `analysis`: it is what tells too little
+      // kept from no track at all, and the two are worded apart (VH-206).
+      audioWarnings = detectSourceWarnings(measured, soundShort, fileCutShort)
       // A trim can keep a part with no sound; the job is then a silent one
       // (VH-95), and asks nothing of the audio encoder.
       if (analysis === null) keptHasSound = false

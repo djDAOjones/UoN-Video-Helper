@@ -1774,8 +1774,9 @@ Object.assign(SCENARIOS, {
   // VH-185: a sliver of late sound.
   'S-99': {
     name: 'A kept sliver of sound: no audio before Create',
-    state: `M.kindIn('#audio-warnings') === 'warning' && M.has('warnings.noAudio.heading', '#audio-warnings') && !M.has('warnings.endsEarly.heading', '#audio-warnings')`,
-    setup: async (w, lang) => { await ready(w, lang, 'late-sound-10s.mp4'); await w.type('#trim-end', '0:04'); await w.press('Tab'); obsOf(w).afterTab = await activeDesc(w); await w.waitSettled(); await until(w, `M.has('warnings.noAudio.heading', '#audio-warnings')`, 'the no-audio note', 60000) },
+    // VH-206: the kept-part words, not the absent-track words S-20 keeps.
+    state: `M.kindIn('#audio-warnings') === 'warning' && M.has('warnings.keptTooLittleAudio.heading', '#audio-warnings') && !M.has('warnings.endsEarly.heading', '#audio-warnings')`,
+    setup: async (w, lang) => { await ready(w, lang, 'late-sound-10s.mp4'); await w.type('#trim-end', '0:04'); await w.press('Tab'); obsOf(w).afterTab = await activeDesc(w); await w.waitSettled(); await until(w, `M.has('warnings.keptTooLittleAudio.heading', '#audio-warnings')`, 'the too-little-kept note', 60000) },
     asserts: [see('Tab from End time lands on "Set end here", where Tab puts it (S-34)', (o) => o.afterTab === '#trim-set-end')],
     focus: ['#trim-end', CREATE],
     fixtures: ['late-sound-10s.mp4'],
@@ -1796,7 +1797,7 @@ Object.assign(SCENARIOS, {
     name: 'The control: 0.6 s of sound kept',
     ...EN_1280,
     state: `M.finished()`,
-    setup: async (w, lang) => { await ready(w, lang, 'late-sound-3.4s-10s.mp4'); await w.type('#trim-end', '0:04'); await w.press('Tab'); await w.waitSettled(); obsOf(w).noAudioBefore = await mx(w, `M.has('warnings.noAudio.heading', '#audio-warnings')`); await create(w); await untilDone(w, 'finished') },
+    setup: async (w, lang) => { await ready(w, lang, 'late-sound-3.4s-10s.mp4'); await w.type('#trim-end', '0:04'); await w.press('Tab'); await w.waitSettled(); obsOf(w).noAudioBefore = await mx(w, `M.has('warnings.noAudio.heading', '#audio-warnings') || M.has('warnings.keptTooLittleAudio.heading', '#audio-warnings')`); await create(w); await untilDone(w, 'finished') },
     asserts: [
       see('no no-audio note before Create', (o) => o.noAudioBefore === false),
       see('levelled: the job planned its sound', (o, w) => (w.p8planned?.planned ?? []).length > 0),
@@ -2566,11 +2567,11 @@ Object.assign(SCENARIOS, {
     setup: async (w, lang) => {
       const o = obsOf(w)
       await ready(w, lang, 'late-sound-3.71s-25fps-10s.mp4'); await w.type('#trim-end', '0:04.1'); await w.press('Tab'); await w.waitSettled(); await until(w, 'M.verdict()', 'the verdict')
-      o.noAudioBefore = await mx(w, `M.has('warnings.noAudio.heading', '#audio-warnings')`)
+      o.noAudioBefore = await mx(w, `M.has('warnings.noAudio.heading', '#audio-warnings') || M.has('warnings.keptTooLittleAudio.heading', '#audio-warnings')`)
       await create(w); await untilDone(w, 'an outcome')
     },
     asserts: [
-      see('no "This video has no audio" for 3.71 to 4.10 s (390 ms asked, 410 ms on frames)', (o) => o.noAudioBefore === false),
+      see('no "This video has no audio" or too-little-kept note for 3.71 to 4.10 s (390 ms asked, 410 ms on frames)', (o) => o.noAudioBefore === false),
       see('finished levelled: the job planned its sound', (o, w) => (w.p8planned?.planned ?? []).length > 0),
     ],
     focus: [SAVE],

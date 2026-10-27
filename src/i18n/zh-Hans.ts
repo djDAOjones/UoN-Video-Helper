@@ -553,6 +553,11 @@ export const zhHans: Messages = {
       detail:
         '由于没有需要调节音量的音频，所以后续工作将在没有音频的情况下进行。如果您需要音频，请在发布前检查录音。',
     },
+    keptTooLittleAudio: {
+      heading: '您保留的部分音频太少，无法调节音量',
+      detail:
+        '新视频将没有音频。如果您需要音频，请调整开始时间或结束时间，多保留一些有音频的部分。',
+    },
     decodeDamage: {
       heading: {
         one: '一处损坏的片段将被静音',

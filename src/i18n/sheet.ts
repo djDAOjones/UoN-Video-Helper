@@ -446,6 +446,10 @@ const NOTES: Readonly<Record<string, string>> = {
     'Said when an MKV or WebM file stops part-way and its own bytes show it, as an interrupted copy leaves it. Warning headings are read one after another inside warnings.spoken, so no full stop.',
   'warnings.cutShort.detail':
     'Said in place of warnings.endsEarly.detail for an MKV or WebM file, which gives no time the audio should reach. "The new video" is the one this tool makes.',
+  'warnings.keptTooLittleAudio.heading':
+    'Said in place of warnings.noAudio.heading when the file has audio but the part the trim kept holds too little of it to level. Warning headings are read one after another inside warnings.spoken, so no full stop.',
+  'warnings.keptTooLittleAudio.detail':
+    'Said in place of warnings.noAudio.detail. "The start or end time" are the trim\'s two times: use the same words as trim.startTime and trim.endTime. "The new video" is the one this tool makes.',
   'result.summaryWithCard.staff':
     'The card a staff video opens with. Use the same words for "staff" as videoKind.options.staff and for "title card" as steps.titleCard.',
   'result.summaryWithCard.submission':

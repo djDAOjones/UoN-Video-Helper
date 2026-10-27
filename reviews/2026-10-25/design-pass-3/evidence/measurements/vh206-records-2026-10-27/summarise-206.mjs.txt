@@ -1,0 +1,98 @@
+// VH-206: the probe's records as one Markdown table set.
+//   node summarise-206.mjs <results dir> <label>   -> <results dir>/<label>-summary.md
+import { readFileSync, readdirSync, writeFileSync } from 'node:fs'
+import { join } from 'node:path'
+
+const [dir, label = 'before'] = process.argv.slice(2)
+const run = JSON.parse(readFileSync(join(dir, `${label}-run.json`), 'utf8'))
+const cells = run.cells.filter((c) => readdirSync(dir).includes(`${label}-${c}.json`)).map((c) => [c, JSON.parse(readFileSync(join(dir, `${label}-${c}.json`), 'utf8'))])
+const esc = (s) => String(s ?? '').replace(/\|/g, '\\|')
+const uniq = (a) => [...new Set(a)]
+const out = []
+const P = (s = '') => out.push(s)
+
+const loads = run.power.filter((p) => p.load1 != null).map((p) => p.load1)
+P('<!-- markdownlint-disable -->')
+P(`# VH-206 — ${label}: the no-audio warning, measured`)
+P()
+P(`Source \`${run.source}\` (app src tree ${run.appSrcSha}), walker tree ${run.walkerSha} (\`${run.walker}\`), ${run.chrome}, Node ${run.node}, served at ${run.appUrl}, CDP :${run.cdpPort}. ${run.started} to ${run.ended}.`)
+P()
+P(`Power: AC at every check (${run.power.length} checks, ${run.power.every((p) => p.ac) ? 'none on battery' : 'SOME ON BATTERY'}); ${uniq(run.power.map((p) => p.powermode)).join(' / ')}; 1-minute load ${Math.min(...loads)} to ${Math.max(...loads)}. Flags: ${run.flags.length ? run.flags.join('; ') : 'none'}.`)
+P()
+P(`Fixtures (sha256/16): ${Object.entries(run.fixtures).map(([f, h]) => `\`${f}\` ${h}`).join(', ')}.`)
+P()
+
+// Counts
+P('## Counts')
+P()
+P('| Cell | Groups ok | Pre-flight cells read (lang × width × mode) | Job cells (lang × width, read in each mode) | Modes reached |')
+P('| --- | ---: | ---: | ---: | --- |')
+let preTotal = 0, jobTotal = 0
+for (const [c, recs] of cells) {
+  const ok = recs.filter((r) => r.status === 'ok')
+  const pre = ok.reduce((n, r) => n + Object.keys(r.pre ?? {}).length, 0)
+  const job = ok.filter((r) => r.job).length
+  preTotal += pre; jobTotal += job
+  const reached = ok.flatMap((r) => [...Object.values(r.pre ?? {}), ...Object.values(r.job ?? {})].map((m) => m.reached.outcome))
+  P(`| ${c} | ${ok.length} / ${recs.length} | ${pre} | ${job ? `${job} (${job * run.modes.length} reads)` : '—'} | ${reached.filter((x) => x === 'pass').length} pass, ${reached.filter((x) => x !== 'pass').length} not |`)
+}
+P(`| **All** | | **${preTotal}** | **${jobTotal}** | |`)
+P()
+
+// Headings per cell and language
+P('## What pre-flight shows, per cell and language (light, 1280; the same in every mode and width unless noted)')
+P()
+for (const [c, recs] of cells) {
+  const ok = recs.filter((r) => r.status === 'ok')
+  P(`### ${c}${recs[0]?.what ? ` — ${esc(recs[0].what)}` : ''}`)
+  P()
+  P('| Lang | Verdict | Panel title | Item heading [table key] | Item detail [table key] | Spoken (#status, as announced) | Same in all 8 reads? |')
+  P('| --- | --- | --- | --- | --- | --- | --- |')
+  for (const lang of run.langs) {
+    const rs = ok.filter((r) => r.lang === lang)
+    if (!rs.length) { P(`| ${lang} | not read | | | | | |`); continue }
+    const all = rs.flatMap((r) => Object.values(r.pre))
+    const sig = (p) => JSON.stringify([p.verdict, p.warnings?.title, p.warnings?.items?.map((i) => [i.heading, i.detail]), p.status?.announced])
+    const L = (rs.find((r) => r.view === 'w1280') ?? rs[0]).pre.light
+    const items = L.warnings?.items ?? []
+    P(`| ${lang} | ${esc(L.verdict.kind)}: ${esc(L.verdict.heading)} | ${esc(L.warnings?.title ?? '— (no panel)')} | ${items.map((i) => `${esc(i.heading)} [${i.headingKeys.join(',')}]`).join('<br>') || '—'} | ${items.map((i) => `${esc(i.detail)} [${i.detailKeys.join(',')}]`).join('<br>') || '—'} | ${esc(L.status?.announced)} | ${uniq(all.map(sig)).length === 1 ? 'yes' : `NO: ${uniq(all.map(sig)).length} variants`} |`)
+  }
+  P()
+  P('| Lang | Width | Lines per item (heading + detail), each item | Panel lines (title / tail) | Overflow (any mode) | Longest line, chars | zh weighted max (CJK + Latin/2, vs 40) | 1.4.8 worst | Trim | Console / page errors |')
+  P('| --- | --- | --- | --- | --- | ---: | ---: | --- | --- | --- |')
+  for (const r of ok) {
+    const L = r.pre.light
+    const modesOver = Object.entries(r.pre).filter(([, p]) => p.page.hscroll || (p.warnings?.overflow ?? []).length).map(([m]) => m)
+    const linesVary = uniq(Object.values(r.pre).map((p) => JSON.stringify((p.warnings?.items ?? []).map((i) => i.linesPerItem)))).length > 1
+    const errs = [...(r.console ?? []).filter((x) => x.type !== 'warning'), ...Object.values(r.pre).flatMap((p) => p.errors ?? [])]
+    P(`| ${r.lang} | ${r.view} | ${(L.warnings?.items ?? []).map((i) => `${i.linesPerItem} (${i.headingLines} + ${i.detailLines})`).join(', ') || '—'}${linesVary ? ' (varies by mode)' : ''} | ${L.warnings ? `${L.warnings.titleLines} / ${L.warnings.tail.map((t) => t.lines).join('+')}` : '—'} | ${modesOver.length ? modesOver.join(', ') : 'none'} | ${L.warnings?.measure.maxChars ?? '—'} | ${r.lang === 'zh-Hans' ? L.warnings?.measure.maxWeighted ?? '—' : '—'} | ${L.warnings?.measure.worst ?? '—'} | ${esc(L.trim.start)}–${esc(L.trim.end)} | ${errs.length ? esc(errs.map((e) => e.text ?? e.message).join('; ').slice(0, 120)) : 'none'} |`)
+  }
+  for (const r of recs.filter((x) => x.status !== 'ok')) P(`| ${r.lang} | ${r.view} | FAILED: ${esc(r.error?.split('\n')[0]).slice(0, 160)} | | | | | | | |`)
+  P()
+  const asserts = ok.flatMap((r) => (r.scenarioAsserts ?? []).map((a) => `${a.outcome}`))
+  if (asserts.length) { P(`The scenario's own assertions: ${uniq(ok.flatMap((r) => (r.scenarioAsserts ?? []).map((a) => a.what))).map((w) => `"${esc(w)}"`).join('; ')} — ${asserts.filter((a) => a === 'pass').length} pass, ${asserts.filter((a) => a !== 'pass').length} not, across ${ok.length} groups.`); P() }
+  const jobs = ok.filter((r) => r.job)
+  if (jobs.length) {
+    P('| Lang | Width | Job | Kept (card) | Placed range (worker) | Plan / gain | Output check (worker) | Output file: tracks | Durations (s) | Spoken at completion | Result warnings |')
+    P('| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |')
+    for (const r of jobs) {
+      const J = r.job.light
+      const wl = (m) => r.workerLogs.filter((l) => l.args?.[1] === m).at(-1)?.args?.[2]
+      const placed = wl('kept range placed on frame edges')
+      const verified = r.workerLogs.filter((l) => /output (verified|failed verification)/.test(l.args?.[1] ?? '')).at(-1)
+      const silent = r.workerLogs.some((l) => l.args?.[1] === 'kept range holds no sound; treating the job as silent')
+      const enc = wl('encode complete')
+      const T = r.output?.tracks
+      P(`| ${r.lang} | ${r.view} | ${J.res}${J.finished ? ' (finished)' : ''} | ${esc((J.keptRecord ?? []).join(', '))} | ${placed ? `${JSON.stringify(placed.requestedSeconds)} → ${JSON.stringify(placed.keptSeconds)}` : '—'} | ${r.planned.count} planned; gain ${enc ? enc.audioGainDb : '?'}${silent ? '; "kept range holds no sound"' : ''} | ${verified ? `${verified.args[1]} ${JSON.stringify(verified.args[2])}` : '—'} | ${T ? `${T.count}: ${T.streams.map((s) => `${s.kind} ${s.codec}`).join(', ')}` : esc(r.output?.error ?? r.output?.why)} | ${T ? `file ${T.durationS}; ${T.streams.map((s) => `${s.kind} ${s.durationS}`).join(', ')}` : '—'} | ${esc(r.spokenAtCompletion?.texts?.join(' ') ?? r.spokenAtCompletion?.why)} | ${J.resultWarnings ? esc(J.resultWarnings.items.map((i) => i.heading).join('; ')) : 'none'} |`)
+    }
+    P()
+  }
+}
+P('## Cited from VH-199 (not re-read here)')
+P()
+const s99 = cells.find(([c]) => c === 'S-99')?.[1]?.find((r) => r.lang === 'en-GB' && r.view === 'w1280')?.pre?.light
+const s99h = s99?.warnings?.items?.map((i) => i.heading) ?? []
+P(`S-99 en-GB w1280 light: "This video has no audio" and its detail in the accessibility tree, nodes 538–539 of \`run-09-2026-10-27T03-48-28-340Z-6d6b18/captures/S-99__en-GB__w1280__light__ax.json\`, as \`reviews/2026-10-25/design-pass-3/design-pass-3-2026-10-27.md:278\` and \`codex-astra-report-critique-2026-10-27.md:77\` cite it (the run itself is kept outside the repository and was not read here). ${s99 ? `This probe also measured that cell: heading(s) ${s99h.map((h) => `"${h}"`).join(', ') || 'none'}, ${s99h.includes('This video has no audio') ? 'the same words as cited' : 'NOT the words cited'}.` : 'This probe did not measure that cell.'}`)
+P()
+writeFileSync(join(dir, `${label}-summary.md`), out.join('\n') + '\n')
+console.log(`${dir}/${label}-summary.md: ${preTotal} pre-flight cells, ${jobTotal} job cells`)

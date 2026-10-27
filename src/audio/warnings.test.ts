@@ -54,6 +54,39 @@ describe('spec 5.4 source warnings', () => {
 
   it('no audio track', () => {
     expect(codes(null)).toEqual(['no-audio'])
+    expect(detectSourceWarnings(null)[0]?.reason).toBe('no-track')
+  })
+
+  it('too little sound kept to level — the same code, with the cause said (VH-206)', () => {
+    const warnings = detectSourceWarnings({ silent: true, decodedEndSeconds: 4 })
+    expect(warnings).toEqual([{ code: 'no-audio', detail: {}, reason: 'kept-too-little' }])
+  })
+
+  it('no sound decoded in the part kept is too little kept, not no track (VH-206)', () => {
+    // The file has a track; keeping more is the way forward.
+    expect(detectSourceWarnings({ silent: true, decodedEndSeconds: null })[0]?.reason).toBe(
+      'kept-too-little',
+    )
+  })
+
+  it('a kept part whose declared sound never arrives stays cut short, whatever the silence (VH-206)', () => {
+    const short = { stopsAtSeconds: 25, endSeconds: 30 }
+    expect(
+      detectSourceWarnings({ silent: true, decodedEndSeconds: null }, short).map((w) => w.code),
+    ).toEqual(['ends-early'])
+    expect(
+      detectSourceWarnings({ silent: true, decodedEndSeconds: 25 }, short, true).map((w) => w.code),
+    ).toEqual(['cut-short', 'ends-early'])
+  })
+
+  it('a reason only on the no-audio warning (VH-206)', () => {
+    const short = { stopsAtSeconds: 20.84, endSeconds: 30 }
+    const warnings = detectSourceWarnings(
+      healthy({ clippedSampleCount: WARNING_THRESHOLDS.clippingSampleCount }),
+      short,
+      true,
+    )
+    expect(warnings.every((w) => w.reason === undefined)).toBe(true)
   })
 
   it('a file that ends early — said first, with where its sound stops and should have reached (VH-139)', () => {
@@ -90,6 +123,12 @@ describe('spec 5.4 source warnings', () => {
 
   it('a Matroska file cut short with no audio says both, the cut first', () => {
     expect(detectSourceWarnings(null, null, true).map((w) => w.code)).toEqual(['cut-short', 'no-audio'])
+    expect(
+      detectSourceWarnings({ silent: true, decodedEndSeconds: 4 }, null, true).map((w) => [w.code, w.reason]),
+    ).toEqual([
+      ['cut-short', undefined],
+      ['no-audio', 'kept-too-little'],
+    ])
   })
 
   it('decode damage — said first, with every time it was silenced at (VH-122)', () => {

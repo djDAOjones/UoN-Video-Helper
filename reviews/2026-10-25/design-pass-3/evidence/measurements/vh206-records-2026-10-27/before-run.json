@@ -1,0 +1,853 @@
+{
+ "label": "before",
+ "source": "446f702",
+ "started": "2026-10-27T16:41:51.049Z",
+ "appUrl": "http://127.0.0.1:5181/",
+ "cdpPort": "9251",
+ "chrome": "Chrome/156.0.8078.48",
+ "node": "v24.21.0",
+ "walker": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/65f25a13-2893-4bf3-ada8-1b14a95646bd/scratchpad/vh206/base/reviews/2026-10-25/design-pass-3/evidence/measurements/walker",
+ "walkerSha": "fa89e31784ec02f9",
+ "appSrcSha": "71f2fd4e7807a484",
+ "appRoot": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/65f25a13-2893-4bf3-ada8-1b14a95646bd/scratchpad/vh206/base",
+ "fixtures": {
+  "late-sound-10s.mp4": "7c57a6ad93218f3c",
+  "silent-10s.mp4": "300cc12d64341acc",
+  "late-sound-3.4s-10s.mp4": "1d6c169c1705fe9e",
+  "late-sound-3.71s-25fps-10s.mp4": "cd20254060f8d292",
+  "late-sound-block-aac-25fps-10s.mp4": "5f278ef7acc01fcc",
+  "late-sound-block-pcm-25fps-10s.mov": "0d609568f6e7e128"
+ },
+ "cells": [
+  "S-99",
+  "S-100",
+  "S-20",
+  "S-101",
+  "S-153",
+  "sliver-N14",
+  "block-aac",
+  "block-pcm"
+ ],
+ "langs": [
+  "en-GB",
+  "zh-Hans",
+  "ms-MY"
+ ],
+ "views": [
+  "w1280",
+  "w320"
+ ],
+ "modes": [
+  "light",
+  "dark",
+  "forced-light",
+  "forced-dark"
+ ],
+ "argv": [],
+ "power": [
+  {
+   "t": "2026-10-27T16:41:51.128Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; finishing charge; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:41  up 7 days, 15:12, 1 user, load averages: 4.65 4.77 5.60",
+   "load1": 4.65,
+   "load": [
+    4.65,
+    4.77,
+    5.6
+   ]
+  },
+  {
+   "cell": "S-99",
+   "lang": "en-GB",
+   "view": "w1280",
+   "t": "2026-10-27T16:41:51.154Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; finishing charge; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:41  up 7 days, 15:12, 1 user, load averages: 4.65 4.77 5.60",
+   "load1": 4.65,
+   "load": [
+    4.65,
+    4.77,
+    5.6
+   ]
+  },
+  {
+   "cell": "S-99",
+   "lang": "en-GB",
+   "view": "w320",
+   "t": "2026-10-27T16:41:57.554Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; finishing charge; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:41  up 7 days, 15:12, 1 user, load averages: 4.60 4.76 5.59",
+   "load1": 4.6,
+   "load": [
+    4.6,
+    4.76,
+    5.59
+   ]
+  },
+  {
+   "cell": "S-99",
+   "lang": "zh-Hans",
+   "view": "w1280",
+   "t": "2026-10-27T16:42:03.849Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; finishing charge; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:42  up 7 days, 15:12, 1 user, load averages: 4.63 4.76 5.58",
+   "load1": 4.63,
+   "load": [
+    4.63,
+    4.76,
+    5.58
+   ]
+  },
+  {
+   "cell": "S-99",
+   "lang": "zh-Hans",
+   "view": "w320",
+   "t": "2026-10-27T16:42:10.610Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:42  up 7 days, 15:12, 1 user, load averages: 4.58 4.75 5.58",
+   "load1": 4.58,
+   "load": [
+    4.58,
+    4.75,
+    5.58
+   ]
+  },
+  {
+   "cell": "S-99",
+   "lang": "ms-MY",
+   "view": "w1280",
+   "t": "2026-10-27T16:42:17.342Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; finishing charge; (no estimate) present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:42  up 7 days, 15:12, 1 user, load averages: 4.26 4.68 5.54",
+   "load1": 4.26,
+   "load": [
+    4.26,
+    4.68,
+    5.54
+   ]
+  },
+  {
+   "cell": "S-99",
+   "lang": "ms-MY",
+   "view": "w320",
+   "t": "2026-10-27T16:42:24.074Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; finishing charge; (no estimate) present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:42  up 7 days, 15:12, 1 user, load averages: 4.00 4.61 5.51",
+   "load1": 4,
+   "load": [
+    4,
+    4.61,
+    5.51
+   ]
+  },
+  {
+   "cell": "S-100",
+   "lang": "en-GB",
+   "view": "w1280",
+   "t": "2026-10-27T16:42:30.792Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; finishing charge; (no estimate) present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:42  up 7 days, 15:12, 1 user, load averages: 4.08 4.62 5.51",
+   "load1": 4.08,
+   "load": [
+    4.08,
+    4.62,
+    5.51
+   ]
+  },
+  {
+   "cell": "S-100",
+   "lang": "en-GB",
+   "view": "w320",
+   "t": "2026-10-27T16:42:41.665Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; finishing charge; (no estimate) present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:42  up 7 days, 15:12, 1 user, load averages: 3.55 4.48 5.44",
+   "load1": 3.55,
+   "load": [
+    3.55,
+    4.48,
+    5.44
+   ]
+  },
+  {
+   "cell": "S-100",
+   "lang": "zh-Hans",
+   "view": "w1280",
+   "t": "2026-10-27T16:42:52.567Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; finishing charge; (no estimate) present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:42  up 7 days, 15:13, 1 user, load averages: 4.12 4.56 5.46",
+   "load1": 4.12,
+   "load": [
+    4.12,
+    4.56,
+    5.46
+   ]
+  },
+  {
+   "cell": "S-100",
+   "lang": "zh-Hans",
+   "view": "w320",
+   "t": "2026-10-27T16:43:04.058Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; finishing charge; (no estimate) present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:43  up 7 days, 15:13, 1 user, load averages: 3.96 4.51 5.43",
+   "load1": 3.96,
+   "load": [
+    3.96,
+    4.51,
+    5.43
+   ]
+  },
+  {
+   "cell": "S-100",
+   "lang": "ms-MY",
+   "view": "w1280",
+   "t": "2026-10-27T16:43:15.457Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; finishing charge; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:43  up 7 days, 15:13, 1 user, load averages: 4.66 4.64 5.46",
+   "load1": 4.66,
+   "load": [
+    4.66,
+    4.64,
+    5.46
+   ]
+  },
+  {
+   "cell": "S-100",
+   "lang": "ms-MY",
+   "view": "w320",
+   "t": "2026-10-27T16:43:26.857Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; finishing charge; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:43  up 7 days, 15:13, 1 user, load averages: 4.93 4.70 5.47",
+   "load1": 4.93,
+   "load": [
+    4.93,
+    4.7,
+    5.47
+   ]
+  },
+  {
+   "cell": "S-20",
+   "lang": "en-GB",
+   "view": "w1280",
+   "t": "2026-10-27T16:43:38.248Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; finishing charge; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:43  up 7 days, 15:13, 1 user, load averages: 4.86 4.70 5.46",
+   "load1": 4.86,
+   "load": [
+    4.86,
+    4.7,
+    5.46
+   ]
+  },
+  {
+   "cell": "S-20",
+   "lang": "en-GB",
+   "view": "w320",
+   "t": "2026-10-27T16:43:43.113Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; finishing charge; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:43  up 7 days, 15:13, 1 user, load averages: 4.63 4.65 5.44",
+   "load1": 4.63,
+   "load": [
+    4.63,
+    4.65,
+    5.44
+   ]
+  },
+  {
+   "cell": "S-20",
+   "lang": "zh-Hans",
+   "view": "w1280",
+   "t": "2026-10-27T16:43:47.974Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; finishing charge; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:43  up 7 days, 15:13, 1 user, load averages: 4.26 4.57 5.41",
+   "load1": 4.26,
+   "load": [
+    4.26,
+    4.57,
+    5.41
+   ]
+  },
+  {
+   "cell": "S-20",
+   "lang": "zh-Hans",
+   "view": "w320",
+   "t": "2026-10-27T16:43:53.280Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; finishing charge; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:43  up 7 days, 15:14, 1 user, load averages: 3.92 4.50 5.38",
+   "load1": 3.92,
+   "load": [
+    3.92,
+    4.5,
+    5.38
+   ]
+  },
+  {
+   "cell": "S-20",
+   "lang": "ms-MY",
+   "view": "w1280",
+   "t": "2026-10-27T16:43:58.619Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; finishing charge; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:43  up 7 days, 15:14, 1 user, load averages: 3.77 4.46 5.36",
+   "load1": 3.77,
+   "load": [
+    3.77,
+    4.46,
+    5.36
+   ]
+  },
+  {
+   "cell": "S-20",
+   "lang": "ms-MY",
+   "view": "w320",
+   "t": "2026-10-27T16:44:03.930Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; finishing charge; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:44  up 7 days, 15:14, 1 user, load averages: 3.95 4.48 5.36",
+   "load1": 3.95,
+   "load": [
+    3.95,
+    4.48,
+    5.36
+   ]
+  },
+  {
+   "cell": "S-101",
+   "lang": "en-GB",
+   "view": "w1280",
+   "t": "2026-10-27T16:44:09.235Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; finishing charge; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:44  up 7 days, 15:14, 1 user, load averages: 3.87 4.46 5.35",
+   "load1": 3.87,
+   "load": [
+    3.87,
+    4.46,
+    5.35
+   ]
+  },
+  {
+   "cell": "S-101",
+   "lang": "en-GB",
+   "view": "w320",
+   "t": "2026-10-27T16:44:20.273Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; finishing charge; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:44  up 7 days, 15:14, 1 user, load averages: 3.65 4.39 5.31",
+   "load1": 3.65,
+   "load": [
+    3.65,
+    4.39,
+    5.31
+   ]
+  },
+  {
+   "cell": "S-101",
+   "lang": "zh-Hans",
+   "view": "w1280",
+   "t": "2026-10-27T16:44:31.261Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; finishing charge; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:44  up 7 days, 15:14, 1 user, load averages: 3.94 4.42 5.31",
+   "load1": 3.94,
+   "load": [
+    3.94,
+    4.42,
+    5.31
+   ]
+  },
+  {
+   "cell": "S-101",
+   "lang": "zh-Hans",
+   "view": "w320",
+   "t": "2026-10-27T16:44:42.689Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; finishing charge; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:44  up 7 days, 15:14, 1 user, load averages: 3.94 4.41 5.29",
+   "load1": 3.94,
+   "load": [
+    3.94,
+    4.41,
+    5.29
+   ]
+  },
+  {
+   "cell": "S-101",
+   "lang": "ms-MY",
+   "view": "w1280",
+   "t": "2026-10-27T16:44:54.159Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; finishing charge; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:44  up 7 days, 15:15, 1 user, load averages: 5.32 4.67 5.38",
+   "load1": 5.32,
+   "load": [
+    5.32,
+    4.67,
+    5.38
+   ]
+  },
+  {
+   "cell": "S-101",
+   "lang": "ms-MY",
+   "view": "w320",
+   "t": "2026-10-27T16:45:05.565Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; finishing charge; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:45  up 7 days, 15:15, 1 user, load averages: 5.20 4.67 5.36",
+   "load1": 5.2,
+   "load": [
+    5.2,
+    4.67,
+    5.36
+   ]
+  },
+  {
+   "cell": "S-153",
+   "lang": "en-GB",
+   "view": "w1280",
+   "t": "2026-10-27T16:45:16.961Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:45  up 7 days, 15:15, 1 user, load averages: 5.03 4.65 5.35",
+   "load1": 5.03,
+   "load": [
+    5.03,
+    4.65,
+    5.35
+   ]
+  },
+  {
+   "cell": "S-153",
+   "lang": "en-GB",
+   "view": "w320",
+   "t": "2026-10-27T16:45:27.921Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:45  up 7 days, 15:15, 1 user, load averages: 4.72 4.60 5.32",
+   "load1": 4.72,
+   "load": [
+    4.72,
+    4.6,
+    5.32
+   ]
+  },
+  {
+   "cell": "S-153",
+   "lang": "zh-Hans",
+   "view": "w1280",
+   "t": "2026-10-27T16:45:39.135Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:45  up 7 days, 15:15, 1 user, load averages: 4.89 4.64 5.32",
+   "load1": 4.89,
+   "load": [
+    4.89,
+    4.64,
+    5.32
+   ]
+  },
+  {
+   "cell": "S-153",
+   "lang": "zh-Hans",
+   "view": "w320",
+   "t": "2026-10-27T16:45:50.606Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:45  up 7 days, 15:15, 1 user, load averages: 4.85 4.64 5.31",
+   "load1": 4.85,
+   "load": [
+    4.85,
+    4.64,
+    5.31
+   ]
+  },
+  {
+   "cell": "S-153",
+   "lang": "ms-MY",
+   "view": "w1280",
+   "t": "2026-10-27T16:46:02.054Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:46  up 7 days, 15:16, 1 user, load averages: 5.00 4.69 5.32",
+   "load1": 5,
+   "load": [
+    5,
+    4.69,
+    5.32
+   ]
+  },
+  {
+   "cell": "S-153",
+   "lang": "ms-MY",
+   "view": "w320",
+   "t": "2026-10-27T16:46:13.489Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:46  up 7 days, 15:16, 1 user, load averages: 4.84 4.66 5.30",
+   "load1": 4.84,
+   "load": [
+    4.84,
+    4.66,
+    5.3
+   ]
+  },
+  {
+   "cell": "sliver-N14",
+   "lang": "en-GB",
+   "view": "w1280",
+   "t": "2026-10-27T16:46:24.931Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:46  up 7 days, 15:16, 1 user, load averages: 5.17 4.74 5.32",
+   "load1": 5.17,
+   "load": [
+    5.17,
+    4.74,
+    5.32
+   ]
+  },
+  {
+   "cell": "sliver-N14",
+   "lang": "en-GB",
+   "view": "w320",
+   "t": "2026-10-27T16:46:36.380Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:46  up 7 days, 15:16, 1 user, load averages: 5.53 4.84 5.35",
+   "load1": 5.53,
+   "load": [
+    5.53,
+    4.84,
+    5.35
+   ]
+  },
+  {
+   "cell": "sliver-N14",
+   "lang": "zh-Hans",
+   "view": "w1280",
+   "t": "2026-10-27T16:46:47.759Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:46  up 7 days, 15:16, 1 user, load averages: 4.84 4.71 5.30",
+   "load1": 4.84,
+   "load": [
+    4.84,
+    4.71,
+    5.3
+   ]
+  },
+  {
+   "cell": "sliver-N14",
+   "lang": "zh-Hans",
+   "view": "w320",
+   "t": "2026-10-27T16:46:59.601Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:46  up 7 days, 15:17, 1 user, load averages: 4.80 4.70 5.29",
+   "load1": 4.8,
+   "load": [
+    4.8,
+    4.7,
+    5.29
+   ]
+  },
+  {
+   "cell": "sliver-N14",
+   "lang": "ms-MY",
+   "view": "w1280",
+   "t": "2026-10-27T16:47:11.244Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:47  up 7 days, 15:17, 1 user, load averages: 4.33 4.60 5.24",
+   "load1": 4.33,
+   "load": [
+    4.33,
+    4.6,
+    5.24
+   ]
+  },
+  {
+   "cell": "sliver-N14",
+   "lang": "ms-MY",
+   "view": "w320",
+   "t": "2026-10-27T16:47:23.254Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:47  up 7 days, 15:17, 1 user, load averages: 4.35 4.60 5.23",
+   "load1": 4.35,
+   "load": [
+    4.35,
+    4.6,
+    5.23
+   ]
+  },
+  {
+   "cell": "block-aac",
+   "lang": "en-GB",
+   "view": "w1280",
+   "t": "2026-10-27T16:47:35.046Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:47  up 7 days, 15:17, 1 user, load averages: 4.13 4.54 5.20",
+   "load1": 4.13,
+   "load": [
+    4.13,
+    4.54,
+    5.2
+   ]
+  },
+  {
+   "cell": "block-aac",
+   "lang": "en-GB",
+   "view": "w320",
+   "t": "2026-10-27T16:47:46.425Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:47  up 7 days, 15:17, 1 user, load averages: 4.31 4.57 5.20",
+   "load1": 4.31,
+   "load": [
+    4.31,
+    4.57,
+    5.2
+   ]
+  },
+  {
+   "cell": "block-aac",
+   "lang": "zh-Hans",
+   "view": "w1280",
+   "t": "2026-10-27T16:47:57.855Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:47  up 7 days, 15:18, 1 user, load averages: 4.76 4.65 5.22",
+   "load1": 4.76,
+   "load": [
+    4.76,
+    4.65,
+    5.22
+   ]
+  },
+  {
+   "cell": "block-aac",
+   "lang": "zh-Hans",
+   "view": "w320",
+   "t": "2026-10-27T16:48:09.723Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:48  up 7 days, 15:18, 1 user, load averages: 4.41 4.58 5.19",
+   "load1": 4.41,
+   "load": [
+    4.41,
+    4.58,
+    5.19
+   ]
+  },
+  {
+   "cell": "block-aac",
+   "lang": "ms-MY",
+   "view": "w1280",
+   "t": "2026-10-27T16:48:21.582Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:48  up 7 days, 15:18, 1 user, load averages: 4.27 4.53 5.16",
+   "load1": 4.27,
+   "load": [
+    4.27,
+    4.53,
+    5.16
+   ]
+  },
+  {
+   "cell": "block-aac",
+   "lang": "ms-MY",
+   "view": "w320",
+   "t": "2026-10-27T16:48:33.387Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:48  up 7 days, 15:18, 1 user, load averages: 16.00 6.99 6.02",
+   "load1": 16,
+   "load": [
+    16,
+    6.99,
+    6.02
+   ]
+  },
+  {
+   "cell": "block-pcm",
+   "lang": "en-GB",
+   "view": "w1280",
+   "t": "2026-10-27T16:48:45.286Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:48  up 7 days, 15:18, 1 user, load averages: 19.06 7.95 6.37",
+   "load1": 19.06,
+   "load": [
+    19.06,
+    7.95,
+    6.37
+   ]
+  },
+  {
+   "cell": "block-pcm",
+   "lang": "en-GB",
+   "view": "w320",
+   "t": "2026-10-27T16:48:57.219Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:48  up 7 days, 15:19, 1 user, load averages: 18.00 8.26 6.51",
+   "load1": 18,
+   "load": [
+    18,
+    8.26,
+    6.51
+   ]
+  },
+  {
+   "cell": "block-pcm",
+   "lang": "zh-Hans",
+   "view": "w1280",
+   "t": "2026-10-27T16:49:08.603Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:49  up 7 days, 15:19, 1 user, load averages: 16.92 8.35 6.56",
+   "load1": 16.92,
+   "load": [
+    16.92,
+    8.35,
+    6.56
+   ]
+  },
+  {
+   "cell": "block-pcm",
+   "lang": "zh-Hans",
+   "view": "w320",
+   "t": "2026-10-27T16:49:20.362Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:49  up 7 days, 15:19, 1 user, load averages: 16.16 8.47 6.63",
+   "load1": 16.16,
+   "load": [
+    16.16,
+    8.47,
+    6.63
+   ]
+  },
+  {
+   "cell": "block-pcm",
+   "lang": "ms-MY",
+   "view": "w1280",
+   "t": "2026-10-27T16:49:32.127Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:49  up 7 days, 15:19, 1 user, load averages: 14.24 8.43 6.65",
+   "load1": 14.24,
+   "load": [
+    14.24,
+    8.43,
+    6.65
+   ]
+  },
+  {
+   "cell": "block-pcm",
+   "lang": "ms-MY",
+   "view": "w320",
+   "t": "2026-10-27T16:49:43.856Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:49  up 7 days, 15:19, 1 user, load averages: 12.97 8.35 6.64",
+   "load1": 12.97,
+   "load": [
+    12.97,
+    8.35,
+    6.64
+   ]
+  },
+  {
+   "t": "2026-10-27T16:49:55.584Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=21889123)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "16:49  up 7 days, 15:20, 1 user, load averages: 11.73 8.23 6.62",
+   "load1": 11.73,
+   "load": [
+    11.73,
+    8.23,
+    6.62
+   ]
+  }
+ ],
+ "flags": [
+  "load 16 before block-aac ms-MY w320",
+  "load 19.06 before block-pcm en-GB w1280",
+  "load 18 before block-pcm en-GB w320",
+  "load 16.92 before block-pcm zh-Hans w1280",
+  "load 16.16 before block-pcm zh-Hans w320",
+  "load 14.24 before block-pcm ms-MY w1280",
+  "load 12.97 before block-pcm ms-MY w320"
+ ],
+ "ended": "2026-10-27T16:49:55.584Z"
+}

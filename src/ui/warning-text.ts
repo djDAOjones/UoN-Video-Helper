@@ -67,7 +67,8 @@ export function warningText(warning: AudioWarning): WarningText {
         ),
       }
     case 'no-audio':
-      return warnings.noAudio
+      // The cause, and so the way forward: keep more, or check the recording (VH-206).
+      return warning.reason === 'kept-too-little' ? warnings.keptTooLittleAudio : warnings.noAudio
     case 'decode-damage': {
       const count = warning.atSeconds?.length ?? 0
       return {

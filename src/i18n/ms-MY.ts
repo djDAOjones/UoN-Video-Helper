@@ -592,6 +592,11 @@ export const msMY: Messages = {
       detail:
         'Tiada audio untuk diratakan, jadi kerja selebihnya berjalan tanpanya. Jika anda menjangkakan audio, semak rakaman sebelum menerbitkan.',
     },
+    keptTooLittleAudio: {
+      heading: 'Bahagian yang anda simpan mempunyai terlalu sedikit audio untuk diratakan',
+      detail:
+        'Video baharu tidak akan mempunyai audio. Jika anda mahukan audio itu, ubah masa mula atau masa tamat untuk menyimpan lebih banyak bahagian video yang ada audio.',
+    },
     decodeDamage: {
       heading: {
         one: 'Satu bahagian yang rosak akan disenyapkan',

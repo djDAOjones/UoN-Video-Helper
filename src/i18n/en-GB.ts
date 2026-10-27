@@ -672,6 +672,12 @@ export const enGB = {
       detail:
         'There is no audio to level, so the rest of the job runs without it. If you expected audio, check the recording before publishing.',
     },
+    /** Said in place of noAudio when the file has audio but the part kept holds too little to level (VH-206): the owner's words. */
+    keptTooLittleAudio: {
+      heading: 'The part you kept has too little audio to level',
+      detail:
+        'The new video will have no audio. If you want the audio, move the start or end time to keep more of the video where there is audio.',
+    },
     /** Said when a damaged moment in the file's sound is made silent (VH-122). {times} is a list of times, like "1:22 and 3:05". */
     decodeDamage: {
       heading: {

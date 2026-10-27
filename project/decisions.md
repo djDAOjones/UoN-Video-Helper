@@ -18,6 +18,26 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-27 — VH-206 — Closes: a kept part with too little audio told so in the owner's words, by a typed reason on the existing no-audio warning
+
+**Decision:** VH-206 closes V-51. The `no-audio` warning carries a typed reason, `no-track` or `kept-too-little`, from `analyseSourceAudio`'s own silent result to `warningText`, not a second code, because spec §5.4 has one "No audio track" row and one outcome, and only the cause, and so the way forward, differs. The kept-part case says the owner's words; no track keeps "This video has no audio". VH-207 is next.
+
+**Rationale:** `job.worker.ts` passes `measured`, not the reduced `analysis`, to `detectSourceWarnings`, which takes `AudioAnalysis | KeptSilence | null`: `null` is `no-track`, a `KeptSilence` `kept-too-little`, none decoded included, since the file has a track and keeping more is the recovery. A declared sound that never arrives stays `ends-early`; `cut-short` stays first; `detail` holds no reason; untrimmed files are unchanged, and `BLOCK_SECONDS` and `loudness.ts` are untouched. The words are the item's, verbatim, Chinese and Malay machine-translated as the ask marked them, with translator notes and the strings sheet's rows. Tests: 17 by VH-206 #1 and 3 for Codex's must 1, one per language composing detection and wording for every cause. The walker's S-99 state and wait read the kept-part heading; S-101's and S-153's negative reads reject either note; S-20 is unchanged; each was proved in three languages before the after (45 of 45 reads). 192 pre-flight and 36 job cells were measured on `446f702` and on the candidate, in three languages, two widths and four modes, on AC. The after's high-load groups were re-run at low load and came out identical. S-99, S-100 and the sliver N14 say the new words in all 72 reads. S-20 is unchanged, and S-101, S-153 and both exact blocks say nothing. S-100 and the sliver have one video track and no audio track, and the levelled cells' LUFS are unchanged. WCAG 3.3.1, 3.3.3, 3.1.5 (grade 3.7 and 3.8), 4.1.3, 2.4.6, 1.4.8, 1.4.10 and 1.4.12 are met for the change (`vh206-no-audio-2026-10-27.md`). Spec §5.4's row adds 21 words, so the spec is 8,121 under the new 8,200 budget. Codex astra, blind: "Commit after the musts below"; all four were done, and its compare is beside the table. Wish VH-202.1 retires, paid; VH-201.2 stays open, as only its sliver part is paid here; VH-206.1 records three probes still reading the old heading. Digest rules applied: nielsen 1, 2 and 9; house-conventions "Fail loudly on data loss"; wcag-2.2-aaa 3.1.5 and 4.1.3.
+
+**Supersedes:** none
+
+**Deferred:** VH-203, VH-207
+
+## 2026-10-27 — VH-206 — The spec's budget raised from 8,100 to 8,200 words for three approved rows, on the owner's word
+
+**Decision:** `project/rules.md`'s By task budget for `docs/01-specification.md` rises from 8,100 to 8,200 words, for the approved rows in VH-206, VH-213 and VH-216 only. VH-206's §5.4 row takes 21 (the spec 8,121), leaving 79 for VH-213's widening of that row and VH-216's §9.1 line; every other `docs/` edit still needs the owner's word.
+
+**Rationale:** The owner, in his own turn in Orchestrator #15's chat, about 16:43Z on 2026-10-27, verbatim: "Yes: raise docs/01-specification.md's budget from 8,100 to 8,200 words, for the approved rows in VH-206, VH-213 and VH-216. Record it as a decision." He was answering #15's question "Raise the spec's word budget from 8,100 to 8,200 for Phase 8's approved spec rows?", and had been shown that the spec was exactly 8,100 words at `446f702` by `tools/ledger.mjs`'s count (whitespace words after comments and fences), so §5.4's approved row, which adds words (33 as first drafted, about 4 at the shortest), could not fit within VH-202's "within 8,100 words"; that VH-213 widens the same row and VH-216 changes §9.1; and that the other route was trims elsewhere in `docs/`, each his to approve. VH-206's first worker had stopped there, as its brief required. Recorded in VH-206's commit because VH-206 needs it first. The raise changes only that budget cell; `project/profile.md` and the rest of `project/rules.md` are unchanged, and the approval of each row stays as its own item records it. Of the VH-202 close decision, this supersedes point 8's "within the spec's 8,100 words" limit only; the rest of it stands.
+
+**Supersedes:** 2026-10-27 — VH-202 — Closes: the owner's answer "as reccomended" on all nine points; the owner's addition and scope open VH-211, the format "?" and old issues A and B to plan
+
+**Deferred:** VH-213, VH-216
+
 ## 2026-10-27 — PLAN-8 — The owner's old issues planned: VH-212 to VH-224 for the format "?", A and B, before VH-203; VH-211 closes
 
 **Decision:** VH-211 closes, and Phase 8 gains thirteen items before VH-203, built after VH-208 in this order: VH-212 (F15b), VH-213 (VH-185.1), VH-214 (VH-193.3), VH-215 (VH-139.5), VH-216 (V-18), VH-217 (the format "?"), VH-209, VH-218 (VH-186.1), VH-219 (VH-189.1), VH-210, then B's checks, VH-220 to VH-224. Each keeps VH-203's stage rule and none adds a control; VH-212, VH-213, VH-216 and VH-203's sizing wait on the owner's ask.
@@ -636,25 +656,3 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Supersedes:** none
 
 **Deferred:** VH-172
-
-## 2026-10-22 — PLAN-7 — A second design, UX and accessibility pass, with Codex astra as partner at every stage, gates the cut
-
-**Decision:** Phase 7, a second whole-page pass judged as four journeys and every scenario, in three languages, three widths, enlargement, dark and forced colours and by keyboard alone, runs as eight stage items, VH-170 to VH-177, before VH-162; Codex astra checks the plan, reviews blind, checks the method, critiques the report and the fix plan, checks every fix before commit and checks the fixes together; because the owner asked for it, with Codex as a full partner.
-
-**Rationale:** The owner's words: "lets design and run another full design / ux / accessibility pass. thorough planning and ticketed before execution". Told that in VH-163 Codex reviewed blind and critiqued the report but checked none of VH-164 to VH-169, the owner wanted Codex as a full partner. The plan is `reviews/2026-10-22/design-pass-2/plan-2026-10-22.md`. Codex critiqued the draft at `6a207b3` ("Revise before approval", twelve points, all must) and all twelve are applied, P-04 qualified: the instruments are qualified before the matrix, the evidence stage split in two, the blind review run on a frozen snapshot, the six fixes verified to a contract, VoiceOver with Safari kept as spec §13 names it. A disagreement of fact is settled by evidence or recorded unresolved; one of judgement goes to the owner, and only that remedy waits. The owner's rule holds: consolidate, no new control, checkbox or element, the progress bar kept. Person checks for Disability Support Services keep their status; the pass claims neither §13 criterion 10 nor full conformance. VH-162 carries "blocked: Phase 7"; VH-137 and VH-14 are unaffected. Fix items join the Items line in VH-175's entry. The owner approved in chat on 2026-10-22, answering three questions: "Approve", "Before the cut" and "Keep as planned".
-
-**Supersedes:** none
-
-**Items:** VH-170, VH-171, VH-172, VH-173, VH-174, VH-175, VH-176, VH-177
-
-**Deferred:** VH-171, VH-172, VH-173, VH-174, VH-175, VH-176, VH-177
-
-## 2026-10-22 — VH-168 — The file chooser stays native: its words follow the browser's language, its name the page's
-
-**Decision:** Choose file keeps the browser's own file input, so its button and "No file chosen" stay in the browser's language on a Chinese or Malay page, while its accessible name, the step heading, follows the page's; no page change, because translating those words needs a new element, which the owner's simplicity rule rules out.
-
-**Rationale:** The owner's words, in VH-163's closing decision: "Keep the browser's own file chooser and record the limitation." Chrome draws both phrases inside the native input and CSS cannot change them. Checked in Chrome 155 with the browser in English: in all three page languages the input's accessible name is the step heading ("1. Choose a video", "1. 选择一个视频", "1. Pilih video") and its value "No file chosen", the browser's words. Neither record claims otherwise: spec §9 says the page repaints in the chosen language and §9.2 checks every string the page can show, which the browser's own words are not; the accessibility statement's five limitations do not mention the chooser and claim nothing about it. So no correction is proposed to either. Evidence: `reviews/2026-10-22/design-pass/evidence/v35-1280-zh-file-input.png`, `…/v35-1280-ms-file-input.png`. Standards: wcag-2.2-aaa 3.1.2 (the page's parts carry their language; the input's words are the browser's); nielsen 4 (one Choose file, as every page has it); carbon one primary per state.
-
-**Supersedes:** none
-
-**Deferred:** none

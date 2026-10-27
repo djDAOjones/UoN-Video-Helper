@@ -1,0 +1,5203 @@
+{
+ "what": "VH-206 #2: WCAG 1.4.12 (Text Spacing) for #audio-warnings, light mode, the walker's SPACING_CSS and textSpacing()",
+ "source": "446f702+vh206-862659258c2f",
+ "started": "2026-10-27T18:06:18.688Z",
+ "appUrl": "http://127.0.0.1:5181/",
+ "cdpPort": "9251",
+ "chrome": "Chrome/156.0.8078.48",
+ "node": "v24.21.0",
+ "walker": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/b6f15dad-582f-4a01-ba6e-22cbbbb1b50b/scratchpad/vh206ts/cand/reviews/2026-10-25/design-pass-3/evidence/measurements/walker",
+ "walkerSha": "50ca03e0540b29a3",
+ "appSrcSha": "6a4e3e0f02074639",
+ "spacingCss": {
+  "text": "* { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; } p { margin-bottom: 2em !important; }",
+  "from": "walk.mjs:120"
+ },
+ "wcagInit": {
+  "from": "wcag-checks.mjs:18-113",
+  "sha256": "b95d6bf652f151eb",
+  "textSpacingAt": "wcag-checks.mjs:63"
+ },
+ "fixtures": {
+  "late-sound-10s.mp4": "7c57a6ad93218f3c",
+  "late-sound-3.71s-25fps-10s.mp4": "cd20254060f8d292",
+  "silent-10s.mp4": "300cc12d64341acc"
+ },
+ "filter": "kept: an entry whose path (W.path, sliced as textSpacing slices it: 90 for clipped/spills, 70 for overlaps) names a visible element that is #audio-warnings itself (self), inside it (inside), contains it (ancestor) or whose box intersects its box (intersects). inPanel counts entries with any relation but ancestor.",
+ "cells": [
+  "S-99",
+  "sliver-N14",
+  "S-20"
+ ],
+ "langs": [
+  "en-GB",
+  "zh-Hans",
+  "ms-MY"
+ ],
+ "views": [
+  "w1280",
+  "w320"
+ ],
+ "mode": "light",
+ "loadMax": 8,
+ "power": [
+  {
+   "t": "2026-10-27T18:06:18.751Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:06  up 58 mins, 1 user, load averages: 7.87 9.86 15.48",
+   "load1": 7.87,
+   "load": [
+    7.87,
+    9.86,
+    15.48
+   ]
+  },
+  {
+   "key": "S-99__en-GB__w1280",
+   "at": "start",
+   "label": "before setup",
+   "t": "2026-10-27T18:06:18.773Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:06  up 58 mins, 1 user, load averages: 7.87 9.86 15.48",
+   "load1": 7.87,
+   "load": [
+    7.87,
+    9.86,
+    15.48
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "S-99__en-GB__w1280",
+   "at": "read",
+   "label": "before the read",
+   "t": "2026-10-27T18:06:22.640Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:06  up 58 mins, 1 user, load averages: 7.48 9.75 15.41",
+   "load1": 7.48,
+   "load": [
+    7.48,
+    9.75,
+    15.41
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "S-99__en-GB__w320",
+   "at": "start",
+   "label": "before setup",
+   "t": "2026-10-27T18:06:23.327Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:06  up 58 mins, 1 user, load averages: 7.48 9.75 15.41",
+   "load1": 7.48,
+   "load": [
+    7.48,
+    9.75,
+    15.41
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "S-99__en-GB__w320",
+   "at": "read",
+   "label": "before the read",
+   "t": "2026-10-27T18:06:27.193Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:06  up 58 mins, 1 user, load averages: 7.36 9.69 15.35",
+   "load1": 7.36,
+   "load": [
+    7.36,
+    9.69,
+    15.35
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "S-99__zh-Hans__w1280",
+   "at": "start",
+   "label": "before setup",
+   "t": "2026-10-27T18:06:27.861Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:06  up 58 mins, 1 user, load averages: 7.36 9.69 15.35",
+   "load1": 7.36,
+   "load": [
+    7.36,
+    9.69,
+    15.35
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "S-99__zh-Hans__w1280",
+   "at": "read",
+   "label": "before the read",
+   "t": "2026-10-27T18:06:32.151Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:06  up 58 mins, 1 user, load averages: 7.01 9.57 15.28",
+   "load1": 7.01,
+   "load": [
+    7.01,
+    9.57,
+    15.28
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "S-99__zh-Hans__w320",
+   "at": "start",
+   "label": "before setup",
+   "t": "2026-10-27T18:06:32.816Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:06  up 58 mins, 1 user, load averages: 7.01 9.57 15.28",
+   "load1": 7.01,
+   "load": [
+    7.01,
+    9.57,
+    15.28
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "S-99__zh-Hans__w320",
+   "at": "read",
+   "label": "before the read",
+   "t": "2026-10-27T18:06:37.084Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:06  up 58 mins, 1 user, load averages: 6.93 9.51 15.23",
+   "load1": 6.93,
+   "load": [
+    6.93,
+    9.51,
+    15.23
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "S-99__ms-MY__w1280",
+   "at": "start",
+   "label": "before setup",
+   "t": "2026-10-27T18:06:37.756Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:06  up 58 mins, 1 user, load averages: 6.93 9.51 15.23",
+   "load1": 6.93,
+   "load": [
+    6.93,
+    9.51,
+    15.23
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "S-99__ms-MY__w1280",
+   "at": "read",
+   "label": "before the read",
+   "t": "2026-10-27T18:06:42.041Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:06  up 58 mins, 1 user, load averages: 7.02 9.49 15.18",
+   "load1": 7.02,
+   "load": [
+    7.02,
+    9.49,
+    15.18
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "S-99__ms-MY__w320",
+   "at": "start",
+   "label": "before setup",
+   "t": "2026-10-27T18:06:42.712Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:06  up 58 mins, 1 user, load averages: 7.02 9.49 15.18",
+   "load1": 7.02,
+   "load": [
+    7.02,
+    9.49,
+    15.18
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "S-99__ms-MY__w320",
+   "at": "read",
+   "label": "before the read",
+   "t": "2026-10-27T18:06:47.000Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:06  up 58 mins, 1 user, load averages: 6.77 9.40 15.12",
+   "load1": 6.77,
+   "load": [
+    6.77,
+    9.4,
+    15.12
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "sliver-N14__en-GB__w1280",
+   "at": "start",
+   "label": "before setup",
+   "t": "2026-10-27T18:06:47.669Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:06  up 58 mins, 1 user, load averages: 6.77 9.40 15.12",
+   "load1": 6.77,
+   "load": [
+    6.77,
+    9.4,
+    15.12
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "sliver-N14__en-GB__w1280",
+   "at": "read",
+   "label": "before the read",
+   "t": "2026-10-27T18:06:51.928Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:06  up 58 mins, 1 user, load averages: 6.47 9.29 15.05",
+   "load1": 6.47,
+   "load": [
+    6.47,
+    9.29,
+    15.05
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "sliver-N14__en-GB__w320",
+   "at": "start",
+   "label": "before setup",
+   "t": "2026-10-27T18:06:52.597Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:06  up 58 mins, 1 user, load averages: 6.47 9.29 15.05",
+   "load1": 6.47,
+   "load": [
+    6.47,
+    9.29,
+    15.05
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "sliver-N14__en-GB__w320",
+   "at": "read",
+   "label": "before the read",
+   "t": "2026-10-27T18:06:56.856Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:06  up 58 mins, 1 user, load averages: 6.59 9.27 15.00",
+   "load1": 6.59,
+   "load": [
+    6.59,
+    9.27,
+    15
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "sliver-N14__zh-Hans__w1280",
+   "at": "start",
+   "label": "before setup",
+   "t": "2026-10-27T18:06:57.530Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:06  up 58 mins, 1 user, load averages: 6.59 9.27 15.00",
+   "load1": 6.59,
+   "load": [
+    6.59,
+    9.27,
+    15
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "sliver-N14__zh-Hans__w1280",
+   "at": "read",
+   "label": "before the read",
+   "t": "2026-10-27T18:07:02.230Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:07  up 59 mins, 1 user, load averages: 6.39 9.18 14.94",
+   "load1": 6.39,
+   "load": [
+    6.39,
+    9.18,
+    14.94
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "sliver-N14__zh-Hans__w320",
+   "at": "start",
+   "label": "before setup",
+   "t": "2026-10-27T18:07:02.898Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:07  up 59 mins, 1 user, load averages: 6.39 9.18 14.94",
+   "load1": 6.39,
+   "load": [
+    6.39,
+    9.18,
+    14.94
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "sliver-N14__zh-Hans__w320",
+   "at": "read",
+   "label": "before the read",
+   "t": "2026-10-27T18:07:07.578Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:07  up 59 mins, 1 user, load averages: 6.60 9.18 14.90",
+   "load1": 6.6,
+   "load": [
+    6.6,
+    9.18,
+    14.9
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "sliver-N14__ms-MY__w1280",
+   "at": "start",
+   "label": "before setup",
+   "t": "2026-10-27T18:07:08.249Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:07  up 59 mins, 1 user, load averages: 6.60 9.18 14.90",
+   "load1": 6.6,
+   "load": [
+    6.6,
+    9.18,
+    14.9
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "sliver-N14__ms-MY__w1280",
+   "at": "read",
+   "label": "before the read",
+   "t": "2026-10-27T18:07:12.933Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:07  up 59 mins, 1 user, load averages: 6.47 9.11 14.85",
+   "load1": 6.47,
+   "load": [
+    6.47,
+    9.11,
+    14.85
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "sliver-N14__ms-MY__w320",
+   "at": "start",
+   "label": "before setup",
+   "t": "2026-10-27T18:07:13.608Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:07  up 59 mins, 1 user, load averages: 6.47 9.11 14.85",
+   "load1": 6.47,
+   "load": [
+    6.47,
+    9.11,
+    14.85
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "sliver-N14__ms-MY__w320",
+   "at": "read",
+   "label": "before the read",
+   "t": "2026-10-27T18:11:08.879Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:11  up  1:03, 1 user, load averages: 7.63 12.37 15.35",
+   "load1": 7.63,
+   "load": [
+    7.63,
+    12.37,
+    15.35
+   ],
+   "waitedS": 231,
+   "polls": [
+    8.19,
+    12.4,
+    22.23,
+    27.26,
+    27.08,
+    29.76,
+    30.75,
+    27.39,
+    23.73,
+    21.8,
+    19.68,
+    17.95,
+    18,
+    16.5,
+    15.87,
+    16.07,
+    15.32,
+    14.06,
+    12.68,
+    11.33,
+    10.21,
+    9.18,
+    8.47,
+    7.63
+   ],
+   "below": true
+  },
+  {
+   "key": "S-20__en-GB__w1280",
+   "at": "start",
+   "label": "before setup",
+   "t": "2026-10-27T18:11:09.548Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:11  up  1:03, 1 user, load averages: 7.63 12.37 15.35",
+   "load1": 7.63,
+   "load": [
+    7.63,
+    12.37,
+    15.35
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "S-20__en-GB__w1280",
+   "at": "read",
+   "label": "before the read",
+   "t": "2026-10-27T18:11:12.023Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:11  up  1:03, 1 user, load averages: 7.18 12.20 15.27",
+   "load1": 7.18,
+   "load": [
+    7.18,
+    12.2,
+    15.27
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "S-20__en-GB__w320",
+   "at": "start",
+   "label": "before setup",
+   "t": "2026-10-27T18:11:12.688Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:11  up  1:03, 1 user, load averages: 7.18 12.20 15.27",
+   "load1": 7.18,
+   "load": [
+    7.18,
+    12.2,
+    15.27
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "S-20__en-GB__w320",
+   "at": "read",
+   "label": "before the read",
+   "t": "2026-10-27T18:11:15.148Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:11  up  1:03, 1 user, load averages: 6.93 12.07 15.21",
+   "load1": 6.93,
+   "load": [
+    6.93,
+    12.07,
+    15.21
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "S-20__zh-Hans__w1280",
+   "at": "start",
+   "label": "before setup",
+   "t": "2026-10-27T18:11:15.813Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:11  up  1:03, 1 user, load averages: 6.93 12.07 15.21",
+   "load1": 6.93,
+   "load": [
+    6.93,
+    12.07,
+    15.21
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "S-20__zh-Hans__w1280",
+   "at": "read",
+   "label": "before the read",
+   "t": "2026-10-27T18:11:18.703Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:11  up  1:03, 1 user, load averages: 6.93 12.07 15.21",
+   "load1": 6.93,
+   "load": [
+    6.93,
+    12.07,
+    15.21
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "S-20__zh-Hans__w320",
+   "at": "start",
+   "label": "before setup",
+   "t": "2026-10-27T18:11:19.366Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:11  up  1:03, 1 user, load averages: 6.93 12.07 15.21",
+   "load1": 6.93,
+   "load": [
+    6.93,
+    12.07,
+    15.21
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "S-20__zh-Hans__w320",
+   "at": "read",
+   "label": "before the read",
+   "t": "2026-10-27T18:11:22.253Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:11  up  1:03, 1 user, load averages: 6.53 11.90 15.13",
+   "load1": 6.53,
+   "load": [
+    6.53,
+    11.9,
+    15.13
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "S-20__ms-MY__w1280",
+   "at": "start",
+   "label": "before setup",
+   "t": "2026-10-27T18:11:22.917Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:11  up  1:03, 1 user, load averages: 6.53 11.90 15.13",
+   "load1": 6.53,
+   "load": [
+    6.53,
+    11.9,
+    15.13
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "S-20__ms-MY__w1280",
+   "at": "read",
+   "label": "before the read",
+   "t": "2026-10-27T18:11:25.803Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:11  up  1:03, 1 user, load averages: 7.53 12.02 15.15",
+   "load1": 7.53,
+   "load": [
+    7.53,
+    12.02,
+    15.15
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "S-20__ms-MY__w320",
+   "at": "start",
+   "label": "before setup",
+   "t": "2026-10-27T18:11:26.468Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:11  up  1:03, 1 user, load averages: 7.53 12.02 15.15",
+   "load1": 7.53,
+   "load": [
+    7.53,
+    12.02,
+    15.15
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "key": "S-20__ms-MY__w320",
+   "at": "read",
+   "label": "before the read",
+   "t": "2026-10-27T18:11:29.355Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:11  up  1:03, 1 user, load averages: 7.53 12.02 15.15",
+   "load1": 7.53,
+   "load": [
+    7.53,
+    12.02,
+    15.15
+   ],
+   "waitedS": 0,
+   "below": true
+  },
+  {
+   "at": "end",
+   "t": "2026-10-27T18:11:30.022Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "18:11  up  1:03, 1 user, load averages: 7.53 12.02 15.15",
+   "load1": 7.53,
+   "load": [
+    7.53,
+    12.02,
+    15.15
+   ]
+  }
+ ],
+ "flags": [],
+ "records": [
+  {
+   "key": "S-99__en-GB__w1280",
+   "cell": "S-99",
+   "scenario": "S-99",
+   "what": "A kept sliver of sound: no audio before Create",
+   "lang": "en-GB",
+   "view": "w1280",
+   "mode": "light",
+   "expectKey": "warnings.keptTooLittleAudio.heading",
+   "powerAtStart": {
+    "label": "before setup",
+    "t": "2026-10-27T18:06:18.773Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:06  up 58 mins, 1 user, load averages: 7.87 9.86 15.48",
+    "load1": 7.87,
+    "load": [
+     7.87,
+     9.86,
+     15.48
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "stateFrom": "S-99.state",
+   "reached": {
+    "outcome": "pass",
+    "problems": []
+   },
+   "headings": [
+    "The part you kept has too little audio to level"
+   ],
+   "without": {
+    "withSheet": false,
+    "page": {
+     "vw": 1280,
+     "scrollWidth": 1280,
+     "hscroll": false,
+     "spacingSheet": false
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "Worth knowing about the audio",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "The part you kept has too little audio to level",
+       "headingLines": 1,
+       "detailLines": 2,
+       "linesPerItem": 3,
+       "lines": {
+        "heading": [
+         "The part you kept has too little audio to level"
+        ],
+        "detail": [
+         "The new video will have no audio. If you want the audio, move the start",
+         "or end time to keep more of the video where there is audio."
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      2
+     ]
+    },
+    "geom": {
+     "left": 209,
+     "right": 1071,
+     "top": 3046,
+     "height": 191,
+     "width": 862
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "powerAtRead": {
+    "label": "before the read",
+    "t": "2026-10-27T18:06:22.640Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:06  up 58 mins, 1 user, load averages: 7.48 9.75 15.41",
+    "load1": 7.48,
+    "load": [
+     7.48,
+     9.75,
+     15.41
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "sheet": {
+    "present": true,
+    "sameAsWalker": true,
+    "inHead": true,
+    "lineHeight": "21px",
+    "letterSpacing": "1.68px"
+   },
+   "reachedWithSheet": {
+    "outcome": "pass",
+    "problems": [],
+    "spacing": true
+   },
+   "with": {
+    "withSheet": true,
+    "page": {
+     "vw": 1280,
+     "scrollWidth": 1280,
+     "hscroll": false,
+     "spacingSheet": true
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "Worth knowing about the audio",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "The part you kept has too little audio to level",
+       "headingLines": 1,
+       "detailLines": 3,
+       "linesPerItem": 4,
+       "lines": {
+        "heading": [
+         "The part you kept has too little audio to level"
+        ],
+        "detail": [
+         "The new video will have no audio. If you want the",
+         "audio, move the start or end time to keep more of the",
+         "video where there is audio."
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      2
+     ]
+    },
+    "geom": {
+     "left": 209,
+     "right": 1071,
+     "top": 3483,
+     "height": 308,
+     "width": 862
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "control": {
+    "inPanel": {
+     "clipped": 2,
+     "spills": 1,
+     "overlaps": 1
+    },
+    "pass": true
+   },
+   "sheetRemoved": true,
+   "status": "ok",
+   "console": [],
+   "ms": 4513
+  },
+  {
+   "key": "S-99__en-GB__w320",
+   "cell": "S-99",
+   "scenario": "S-99",
+   "what": "A kept sliver of sound: no audio before Create",
+   "lang": "en-GB",
+   "view": "w320",
+   "mode": "light",
+   "expectKey": "warnings.keptTooLittleAudio.heading",
+   "powerAtStart": {
+    "label": "before setup",
+    "t": "2026-10-27T18:06:23.327Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:06  up 58 mins, 1 user, load averages: 7.48 9.75 15.41",
+    "load1": 7.48,
+    "load": [
+     7.48,
+     9.75,
+     15.41
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "stateFrom": "S-99.state",
+   "reached": {
+    "outcome": "pass",
+    "problems": []
+   },
+   "headings": [
+    "The part you kept has too little audio to level"
+   ],
+   "without": {
+    "withSheet": false,
+    "page": {
+     "vw": 320,
+     "scrollWidth": 320,
+     "hscroll": false,
+     "spacingSheet": false
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "Worth knowing about the audio",
+     "titleLines": 2,
+     "items": [
+      {
+       "heading": "The part you kept has too little audio to level",
+       "headingLines": 2,
+       "detailLines": 5,
+       "linesPerItem": 7,
+       "lines": {
+        "heading": [
+         "The part you kept has too",
+         "little audio to level"
+        ],
+        "detail": [
+         "The new video will have no",
+         "audio. If you want the audio,",
+         "move the start or end time to",
+         "keep more of the video where",
+         "there is audio."
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      3
+     ]
+    },
+    "geom": {
+     "left": 49,
+     "right": 271,
+     "top": 3712,
+     "height": 320,
+     "width": 222
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "powerAtRead": {
+    "label": "before the read",
+    "t": "2026-10-27T18:06:27.193Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:06  up 58 mins, 1 user, load averages: 7.36 9.69 15.35",
+    "load1": 7.36,
+    "load": [
+     7.36,
+     9.69,
+     15.35
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "sheet": {
+    "present": true,
+    "sameAsWalker": true,
+    "inHead": true,
+    "lineHeight": "21px",
+    "letterSpacing": "1.68px"
+   },
+   "reachedWithSheet": {
+    "outcome": "pass",
+    "problems": [],
+    "spacing": true
+   },
+   "with": {
+    "withSheet": true,
+    "page": {
+     "vw": 320,
+     "scrollWidth": 320,
+     "hscroll": false,
+     "spacingSheet": true
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "Worth knowing about the audio",
+     "titleLines": 2,
+     "items": [
+      {
+       "heading": "The part you kept has too little audio to level",
+       "headingLines": 3,
+       "detailLines": 7,
+       "linesPerItem": 10,
+       "lines": {
+        "heading": [
+         "The part you kept",
+         "has too little audio",
+         "to level"
+        ],
+        "detail": [
+         "The new video will",
+         "have no audio. If you",
+         "want the audio, move",
+         "the start or end time",
+         "to keep more of the",
+         "video where there is",
+         "audio."
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      4
+     ]
+    },
+    "geom": {
+     "left": 49,
+     "right": 271,
+     "top": 4536,
+     "height": 500,
+     "width": 222
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "control": {
+    "inPanel": {
+     "clipped": 2,
+     "spills": 1,
+     "overlaps": 2
+    },
+    "pass": true
+   },
+   "sheetRemoved": true,
+   "status": "ok",
+   "console": [],
+   "ms": 4519
+  },
+  {
+   "key": "S-99__zh-Hans__w1280",
+   "cell": "S-99",
+   "scenario": "S-99",
+   "what": "A kept sliver of sound: no audio before Create",
+   "lang": "zh-Hans",
+   "view": "w1280",
+   "mode": "light",
+   "expectKey": "warnings.keptTooLittleAudio.heading",
+   "powerAtStart": {
+    "label": "before setup",
+    "t": "2026-10-27T18:06:27.861Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:06  up 58 mins, 1 user, load averages: 7.36 9.69 15.35",
+    "load1": 7.36,
+    "load": [
+     7.36,
+     9.69,
+     15.35
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "stateFrom": "S-99.state",
+   "reached": {
+    "outcome": "pass",
+    "problems": []
+   },
+   "headings": [
+    "您保留的部分音频太少，无法调节音量"
+   ],
+   "without": {
+    "withSheet": false,
+    "page": {
+     "vw": 1280,
+     "scrollWidth": 1280,
+     "hscroll": false,
+     "spacingSheet": false
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "值得了解的音频特性",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "您保留的部分音频太少，无法调节音量",
+       "headingLines": 1,
+       "detailLines": 2,
+       "linesPerItem": 3,
+       "lines": {
+        "heading": [
+         "您保留的部分音频太少，无法调节音量"
+        ],
+        "detail": [
+         "新视频将没有音频。如果您需要音频，请调整开始时间或结束时间，多保",
+         "留一些有音频的部分。"
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      1
+     ]
+    },
+    "geom": {
+     "left": 209,
+     "right": 1071,
+     "top": 3127,
+     "height": 170,
+     "width": 862
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "powerAtRead": {
+    "label": "before the read",
+    "t": "2026-10-27T18:06:32.151Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:06  up 58 mins, 1 user, load averages: 7.01 9.57 15.28",
+    "load1": 7.01,
+    "load": [
+     7.01,
+     9.57,
+     15.28
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "sheet": {
+    "present": true,
+    "sameAsWalker": true,
+    "inHead": true,
+    "lineHeight": "21px",
+    "letterSpacing": "1.68px"
+   },
+   "reachedWithSheet": {
+    "outcome": "pass",
+    "problems": [],
+    "spacing": true
+   },
+   "with": {
+    "withSheet": true,
+    "page": {
+     "vw": 1280,
+     "scrollWidth": 1280,
+     "hscroll": false,
+     "spacingSheet": true
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "值得了解的音频特性",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "您保留的部分音频太少，无法调节音量",
+       "headingLines": 1,
+       "detailLines": 2,
+       "linesPerItem": 3,
+       "lines": {
+        "heading": [
+         "您保留的部分音频太少，无法调节音量"
+        ],
+        "detail": [
+         "新视频将没有音频。如果您需要音频，请调整开始时间或结束时",
+         "间，多保留一些有音频的部分。"
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      1
+     ]
+    },
+    "geom": {
+     "left": 209,
+     "right": 1071,
+     "top": 3535,
+     "height": 266,
+     "width": 862
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "control": {
+    "inPanel": {
+     "clipped": 2,
+     "spills": 1,
+     "overlaps": 0
+    },
+    "pass": false
+   },
+   "sheetRemoved": true,
+   "status": "ok",
+   "console": [],
+   "ms": 4934
+  },
+  {
+   "key": "S-99__zh-Hans__w320",
+   "cell": "S-99",
+   "scenario": "S-99",
+   "what": "A kept sliver of sound: no audio before Create",
+   "lang": "zh-Hans",
+   "view": "w320",
+   "mode": "light",
+   "expectKey": "warnings.keptTooLittleAudio.heading",
+   "powerAtStart": {
+    "label": "before setup",
+    "t": "2026-10-27T18:06:32.816Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:06  up 58 mins, 1 user, load averages: 7.01 9.57 15.28",
+    "load1": 7.01,
+    "load": [
+     7.01,
+     9.57,
+     15.28
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "stateFrom": "S-99.state",
+   "reached": {
+    "outcome": "pass",
+    "problems": []
+   },
+   "headings": [
+    "您保留的部分音频太少，无法调节音量"
+   ],
+   "without": {
+    "withSheet": false,
+    "page": {
+     "vw": 320,
+     "scrollWidth": 320,
+     "hscroll": false,
+     "spacingSheet": false
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "值得了解的音频特性",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "您保留的部分音频太少，无法调节音量",
+       "headingLines": 2,
+       "detailLines": 4,
+       "linesPerItem": 6,
+       "lines": {
+        "heading": [
+         "您保留的部分音频太少，无法",
+         "调节音量"
+        ],
+        "detail": [
+         "新视频将没有音频。如果您需",
+         "要音频，请调整开始时间或结",
+         "束时间，多保留一些有音频的",
+         "部分。"
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      3
+     ]
+    },
+    "geom": {
+     "left": 49,
+     "right": 271,
+     "top": 3712,
+     "height": 275,
+     "width": 222
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "powerAtRead": {
+    "label": "before the read",
+    "t": "2026-10-27T18:06:37.084Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:06  up 58 mins, 1 user, load averages: 6.93 9.51 15.23",
+    "load1": 6.93,
+    "load": [
+     6.93,
+     9.51,
+     15.23
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "sheet": {
+    "present": true,
+    "sameAsWalker": true,
+    "inHead": true,
+    "lineHeight": "21px",
+    "letterSpacing": "1.68px"
+   },
+   "reachedWithSheet": {
+    "outcome": "pass",
+    "problems": [],
+    "spacing": true
+   },
+   "with": {
+    "withSheet": true,
+    "page": {
+     "vw": 320,
+     "scrollWidth": 320,
+     "hscroll": false,
+     "spacingSheet": true
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "值得了解的音频特性",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "您保留的部分音频太少，无法调节音量",
+       "headingLines": 2,
+       "detailLines": 4,
+       "linesPerItem": 6,
+       "lines": {
+        "heading": [
+         "您保留的部分音频太少，",
+         "无法调节音量"
+        ],
+        "detail": [
+         "新视频将没有音频。如果",
+         "您需要音频，请调整开始",
+         "时间或结束时间，多保留",
+         "一些有音频的部分。"
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      3
+     ]
+    },
+    "geom": {
+     "left": 49,
+     "right": 271,
+     "top": 4117,
+     "height": 371,
+     "width": 222
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "control": {
+    "inPanel": {
+     "clipped": 2,
+     "spills": 1,
+     "overlaps": 2
+    },
+    "pass": true
+   },
+   "sheetRemoved": true,
+   "status": "ok",
+   "console": [],
+   "ms": 4914
+  },
+  {
+   "key": "S-99__ms-MY__w1280",
+   "cell": "S-99",
+   "scenario": "S-99",
+   "what": "A kept sliver of sound: no audio before Create",
+   "lang": "ms-MY",
+   "view": "w1280",
+   "mode": "light",
+   "expectKey": "warnings.keptTooLittleAudio.heading",
+   "powerAtStart": {
+    "label": "before setup",
+    "t": "2026-10-27T18:06:37.756Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:06  up 58 mins, 1 user, load averages: 6.93 9.51 15.23",
+    "load1": 6.93,
+    "load": [
+     6.93,
+     9.51,
+     15.23
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "stateFrom": "S-99.state",
+   "reached": {
+    "outcome": "pass",
+    "problems": []
+   },
+   "headings": [
+    "Bahagian yang anda simpan mempunyai terlalu sedikit audio untuk diratakan"
+   ],
+   "without": {
+    "withSheet": false,
+    "page": {
+     "vw": 1280,
+     "scrollWidth": 1280,
+     "hscroll": false,
+     "spacingSheet": false
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "Perlu diketahui tentang audionya",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "Bahagian yang anda simpan mempunyai terlalu sedikit audio untuk diratakan",
+       "headingLines": 2,
+       "detailLines": 3,
+       "linesPerItem": 5,
+       "lines": {
+        "heading": [
+         "Bahagian yang anda simpan mempunyai terlalu sedikit audio",
+         "untuk diratakan"
+        ],
+        "detail": [
+         "Video baharu tidak akan mempunyai audio. Jika anda mahukan audio",
+         "itu, ubah masa mula atau masa tamat untuk menyimpan lebih banyak",
+         "bahagian video yang ada audio."
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      2
+     ]
+    },
+    "geom": {
+     "left": 209,
+     "right": 1071,
+     "top": 3286,
+     "height": 233,
+     "width": 862
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "powerAtRead": {
+    "label": "before the read",
+    "t": "2026-10-27T18:06:42.041Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:06  up 58 mins, 1 user, load averages: 7.02 9.49 15.18",
+    "load1": 7.02,
+    "load": [
+     7.02,
+     9.49,
+     15.18
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "sheet": {
+    "present": true,
+    "sameAsWalker": true,
+    "inHead": true,
+    "lineHeight": "21px",
+    "letterSpacing": "1.68px"
+   },
+   "reachedWithSheet": {
+    "outcome": "pass",
+    "problems": [],
+    "spacing": true
+   },
+   "with": {
+    "withSheet": true,
+    "page": {
+     "vw": 1280,
+     "scrollWidth": 1280,
+     "hscroll": false,
+     "spacingSheet": true
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "Perlu diketahui tentang audionya",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "Bahagian yang anda simpan mempunyai terlalu sedikit audio untuk diratakan",
+       "headingLines": 2,
+       "detailLines": 4,
+       "linesPerItem": 6,
+       "lines": {
+        "heading": [
+         "Bahagian yang anda simpan mempunyai terlalu",
+         "sedikit audio untuk diratakan"
+        ],
+        "detail": [
+         "Video baharu tidak akan mempunyai audio. Jika anda",
+         "mahukan audio itu, ubah masa mula atau masa tamat",
+         "untuk menyimpan lebih banyak bahagian video yang",
+         "ada audio."
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      3
+     ]
+    },
+    "geom": {
+     "left": 209,
+     "right": 1071,
+     "top": 3884,
+     "height": 371,
+     "width": 862
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "control": {
+    "inPanel": {
+     "clipped": 2,
+     "spills": 1,
+     "overlaps": 2
+    },
+    "pass": true
+   },
+   "sheetRemoved": true,
+   "status": "ok",
+   "console": [],
+   "ms": 4933
+  },
+  {
+   "key": "S-99__ms-MY__w320",
+   "cell": "S-99",
+   "scenario": "S-99",
+   "what": "A kept sliver of sound: no audio before Create",
+   "lang": "ms-MY",
+   "view": "w320",
+   "mode": "light",
+   "expectKey": "warnings.keptTooLittleAudio.heading",
+   "powerAtStart": {
+    "label": "before setup",
+    "t": "2026-10-27T18:06:42.712Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:06  up 58 mins, 1 user, load averages: 7.02 9.49 15.18",
+    "load1": 7.02,
+    "load": [
+     7.02,
+     9.49,
+     15.18
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "stateFrom": "S-99.state",
+   "reached": {
+    "outcome": "pass",
+    "problems": []
+   },
+   "headings": [
+    "Bahagian yang anda simpan mempunyai terlalu sedikit audio untuk diratakan"
+   ],
+   "without": {
+    "withSheet": false,
+    "page": {
+     "vw": 320,
+     "scrollWidth": 320,
+     "hscroll": false,
+     "spacingSheet": false
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "Perlu diketahui tentang audionya",
+     "titleLines": 2,
+     "items": [
+      {
+       "heading": "Bahagian yang anda simpan mempunyai terlalu sedikit audio untuk diratakan",
+       "headingLines": 4,
+       "detailLines": 7,
+       "linesPerItem": 11,
+       "lines": {
+        "heading": [
+         "Bahagian yang anda",
+         "simpan mempunyai terlalu",
+         "sedikit audio untuk",
+         "diratakan"
+        ],
+        "detail": [
+         "Video baharu tidak akan",
+         "mempunyai audio. Jika anda",
+         "mahukan audio itu, ubah",
+         "masa mula atau masa tamat",
+         "untuk menyimpan lebih",
+         "banyak bahagian video yang",
+         "ada audio."
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      5
+     ]
+    },
+    "geom": {
+     "left": 49,
+     "right": 271,
+     "top": 4176,
+     "height": 446,
+     "width": 222
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "powerAtRead": {
+    "label": "before the read",
+    "t": "2026-10-27T18:06:47.000Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:06  up 58 mins, 1 user, load averages: 6.77 9.40 15.12",
+    "load1": 6.77,
+    "load": [
+     6.77,
+     9.4,
+     15.12
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "sheet": {
+    "present": true,
+    "sameAsWalker": true,
+    "inHead": true,
+    "lineHeight": "21px",
+    "letterSpacing": "1.68px"
+   },
+   "reachedWithSheet": {
+    "outcome": "pass",
+    "problems": [],
+    "spacing": true
+   },
+   "with": {
+    "withSheet": true,
+    "page": {
+     "vw": 320,
+     "scrollWidth": 320,
+     "hscroll": false,
+     "spacingSheet": true
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "Perlu diketahui tentang audionya",
+     "titleLines": 2,
+     "items": [
+      {
+       "heading": "Bahagian yang anda simpan mempunyai terlalu sedikit audio untuk diratakan",
+       "headingLines": 4,
+       "detailLines": 9,
+       "linesPerItem": 13,
+       "lines": {
+        "heading": [
+         "Bahagian yang anda",
+         "simpan mempunyai",
+         "terlalu sedikit audio",
+         "untuk diratakan"
+        ],
+        "detail": [
+         "Video baharu tidak",
+         "akan mempunyai",
+         "audio. Jika anda",
+         "mahukan audio itu,",
+         "ubah masa mula atau",
+         "masa tamat untuk",
+         "menyimpan lebih",
+         "banyak bahagian video",
+         "yang ada audio."
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      7
+     ]
+    },
+    "geom": {
+     "left": 49,
+     "right": 271,
+     "top": 5133,
+     "height": 626,
+     "width": 222
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "control": {
+    "inPanel": {
+     "clipped": 2,
+     "spills": 1,
+     "overlaps": 4
+    },
+    "pass": true
+   },
+   "sheetRemoved": true,
+   "status": "ok",
+   "console": [],
+   "ms": 4935
+  },
+  {
+   "key": "sliver-N14__en-GB__w1280",
+   "cell": "sliver-N14",
+   "scenario": null,
+   "what": "N14: AAC sound from 3.71 s, kept 0:00-0:04.0 (ready, End time, Tab, settled, as no-audio-206-probe-after.mjs)",
+   "lang": "en-GB",
+   "view": "w1280",
+   "mode": "light",
+   "expectKey": "warnings.keptTooLittleAudio.heading",
+   "powerAtStart": {
+    "label": "before setup",
+    "t": "2026-10-27T18:06:47.669Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:06  up 58 mins, 1 user, load averages: 6.77 9.40 15.12",
+    "load1": 6.77,
+    "load": [
+     6.77,
+     9.4,
+     15.12
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "stateFrom": "S-99.state (the kept-part note)",
+   "reached": {
+    "outcome": "pass",
+    "problems": []
+   },
+   "headings": [
+    "The part you kept has too little audio to level"
+   ],
+   "without": {
+    "withSheet": false,
+    "page": {
+     "vw": 1280,
+     "scrollWidth": 1280,
+     "hscroll": false,
+     "spacingSheet": false
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "Worth knowing about the audio",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "The part you kept has too little audio to level",
+       "headingLines": 1,
+       "detailLines": 2,
+       "linesPerItem": 3,
+       "lines": {
+        "heading": [
+         "The part you kept has too little audio to level"
+        ],
+        "detail": [
+         "The new video will have no audio. If you want the audio, move the start",
+         "or end time to keep more of the video where there is audio."
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      2
+     ]
+    },
+    "geom": {
+     "left": 209,
+     "right": 1071,
+     "top": 3046,
+     "height": 191,
+     "width": 862
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "powerAtRead": {
+    "label": "before the read",
+    "t": "2026-10-27T18:06:51.928Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:06  up 58 mins, 1 user, load averages: 6.47 9.29 15.05",
+    "load1": 6.47,
+    "load": [
+     6.47,
+     9.29,
+     15.05
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "sheet": {
+    "present": true,
+    "sameAsWalker": true,
+    "inHead": true,
+    "lineHeight": "21px",
+    "letterSpacing": "1.68px"
+   },
+   "reachedWithSheet": {
+    "outcome": "pass",
+    "problems": [],
+    "spacing": true
+   },
+   "with": {
+    "withSheet": true,
+    "page": {
+     "vw": 1280,
+     "scrollWidth": 1280,
+     "hscroll": false,
+     "spacingSheet": true
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "Worth knowing about the audio",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "The part you kept has too little audio to level",
+       "headingLines": 1,
+       "detailLines": 3,
+       "linesPerItem": 4,
+       "lines": {
+        "heading": [
+         "The part you kept has too little audio to level"
+        ],
+        "detail": [
+         "The new video will have no audio. If you want the",
+         "audio, move the start or end time to keep more of the",
+         "video where there is audio."
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      2
+     ]
+    },
+    "geom": {
+     "left": 209,
+     "right": 1071,
+     "top": 3483,
+     "height": 308,
+     "width": 862
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "control": {
+    "inPanel": {
+     "clipped": 2,
+     "spills": 1,
+     "overlaps": 1
+    },
+    "pass": true
+   },
+   "sheetRemoved": true,
+   "status": "ok",
+   "console": [],
+   "ms": 4906
+  },
+  {
+   "key": "sliver-N14__en-GB__w320",
+   "cell": "sliver-N14",
+   "scenario": null,
+   "what": "N14: AAC sound from 3.71 s, kept 0:00-0:04.0 (ready, End time, Tab, settled, as no-audio-206-probe-after.mjs)",
+   "lang": "en-GB",
+   "view": "w320",
+   "mode": "light",
+   "expectKey": "warnings.keptTooLittleAudio.heading",
+   "powerAtStart": {
+    "label": "before setup",
+    "t": "2026-10-27T18:06:52.597Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:06  up 58 mins, 1 user, load averages: 6.47 9.29 15.05",
+    "load1": 6.47,
+    "load": [
+     6.47,
+     9.29,
+     15.05
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "stateFrom": "S-99.state (the kept-part note)",
+   "reached": {
+    "outcome": "pass",
+    "problems": []
+   },
+   "headings": [
+    "The part you kept has too little audio to level"
+   ],
+   "without": {
+    "withSheet": false,
+    "page": {
+     "vw": 320,
+     "scrollWidth": 320,
+     "hscroll": false,
+     "spacingSheet": false
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "Worth knowing about the audio",
+     "titleLines": 2,
+     "items": [
+      {
+       "heading": "The part you kept has too little audio to level",
+       "headingLines": 2,
+       "detailLines": 5,
+       "linesPerItem": 7,
+       "lines": {
+        "heading": [
+         "The part you kept has too",
+         "little audio to level"
+        ],
+        "detail": [
+         "The new video will have no",
+         "audio. If you want the audio,",
+         "move the start or end time to",
+         "keep more of the video where",
+         "there is audio."
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      3
+     ]
+    },
+    "geom": {
+     "left": 49,
+     "right": 271,
+     "top": 3712,
+     "height": 320,
+     "width": 222
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "powerAtRead": {
+    "label": "before the read",
+    "t": "2026-10-27T18:06:56.856Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:06  up 58 mins, 1 user, load averages: 6.59 9.27 15.00",
+    "load1": 6.59,
+    "load": [
+     6.59,
+     9.27,
+     15
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "sheet": {
+    "present": true,
+    "sameAsWalker": true,
+    "inHead": true,
+    "lineHeight": "21px",
+    "letterSpacing": "1.68px"
+   },
+   "reachedWithSheet": {
+    "outcome": "pass",
+    "problems": [],
+    "spacing": true
+   },
+   "with": {
+    "withSheet": true,
+    "page": {
+     "vw": 320,
+     "scrollWidth": 320,
+     "hscroll": false,
+     "spacingSheet": true
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "Worth knowing about the audio",
+     "titleLines": 2,
+     "items": [
+      {
+       "heading": "The part you kept has too little audio to level",
+       "headingLines": 3,
+       "detailLines": 7,
+       "linesPerItem": 10,
+       "lines": {
+        "heading": [
+         "The part you kept",
+         "has too little audio",
+         "to level"
+        ],
+        "detail": [
+         "The new video will",
+         "have no audio. If you",
+         "want the audio, move",
+         "the start or end time",
+         "to keep more of the",
+         "video where there is",
+         "audio."
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      4
+     ]
+    },
+    "geom": {
+     "left": 49,
+     "right": 271,
+     "top": 4536,
+     "height": 500,
+     "width": 222
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "control": {
+    "inPanel": {
+     "clipped": 2,
+     "spills": 1,
+     "overlaps": 2
+    },
+    "pass": true
+   },
+   "sheetRemoved": true,
+   "status": "ok",
+   "console": [],
+   "ms": 4909
+  },
+  {
+   "key": "sliver-N14__zh-Hans__w1280",
+   "cell": "sliver-N14",
+   "scenario": null,
+   "what": "N14: AAC sound from 3.71 s, kept 0:00-0:04.0 (ready, End time, Tab, settled, as no-audio-206-probe-after.mjs)",
+   "lang": "zh-Hans",
+   "view": "w1280",
+   "mode": "light",
+   "expectKey": "warnings.keptTooLittleAudio.heading",
+   "powerAtStart": {
+    "label": "before setup",
+    "t": "2026-10-27T18:06:57.530Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:06  up 58 mins, 1 user, load averages: 6.59 9.27 15.00",
+    "load1": 6.59,
+    "load": [
+     6.59,
+     9.27,
+     15
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "stateFrom": "S-99.state (the kept-part note)",
+   "reached": {
+    "outcome": "pass",
+    "problems": []
+   },
+   "headings": [
+    "您保留的部分音频太少，无法调节音量"
+   ],
+   "without": {
+    "withSheet": false,
+    "page": {
+     "vw": 1280,
+     "scrollWidth": 1280,
+     "hscroll": false,
+     "spacingSheet": false
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "值得了解的音频特性",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "您保留的部分音频太少，无法调节音量",
+       "headingLines": 1,
+       "detailLines": 2,
+       "linesPerItem": 3,
+       "lines": {
+        "heading": [
+         "您保留的部分音频太少，无法调节音量"
+        ],
+        "detail": [
+         "新视频将没有音频。如果您需要音频，请调整开始时间或结束时间，多保",
+         "留一些有音频的部分。"
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      1
+     ]
+    },
+    "geom": {
+     "left": 209,
+     "right": 1071,
+     "top": 3127,
+     "height": 170,
+     "width": 862
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "powerAtRead": {
+    "label": "before the read",
+    "t": "2026-10-27T18:07:02.230Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:07  up 59 mins, 1 user, load averages: 6.39 9.18 14.94",
+    "load1": 6.39,
+    "load": [
+     6.39,
+     9.18,
+     14.94
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "sheet": {
+    "present": true,
+    "sameAsWalker": true,
+    "inHead": true,
+    "lineHeight": "21px",
+    "letterSpacing": "1.68px"
+   },
+   "reachedWithSheet": {
+    "outcome": "pass",
+    "problems": [],
+    "spacing": true
+   },
+   "with": {
+    "withSheet": true,
+    "page": {
+     "vw": 1280,
+     "scrollWidth": 1280,
+     "hscroll": false,
+     "spacingSheet": true
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "值得了解的音频特性",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "您保留的部分音频太少，无法调节音量",
+       "headingLines": 1,
+       "detailLines": 2,
+       "linesPerItem": 3,
+       "lines": {
+        "heading": [
+         "您保留的部分音频太少，无法调节音量"
+        ],
+        "detail": [
+         "新视频将没有音频。如果您需要音频，请调整开始时间或结束时",
+         "间，多保留一些有音频的部分。"
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      1
+     ]
+    },
+    "geom": {
+     "left": 209,
+     "right": 1071,
+     "top": 3535,
+     "height": 266,
+     "width": 862
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "control": {
+    "inPanel": {
+     "clipped": 2,
+     "spills": 1,
+     "overlaps": 0
+    },
+    "pass": false
+   },
+   "sheetRemoved": true,
+   "status": "ok",
+   "console": [],
+   "ms": 5349
+  },
+  {
+   "key": "sliver-N14__zh-Hans__w320",
+   "cell": "sliver-N14",
+   "scenario": null,
+   "what": "N14: AAC sound from 3.71 s, kept 0:00-0:04.0 (ready, End time, Tab, settled, as no-audio-206-probe-after.mjs)",
+   "lang": "zh-Hans",
+   "view": "w320",
+   "mode": "light",
+   "expectKey": "warnings.keptTooLittleAudio.heading",
+   "powerAtStart": {
+    "label": "before setup",
+    "t": "2026-10-27T18:07:02.898Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:07  up 59 mins, 1 user, load averages: 6.39 9.18 14.94",
+    "load1": 6.39,
+    "load": [
+     6.39,
+     9.18,
+     14.94
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "stateFrom": "S-99.state (the kept-part note)",
+   "reached": {
+    "outcome": "pass",
+    "problems": []
+   },
+   "headings": [
+    "您保留的部分音频太少，无法调节音量"
+   ],
+   "without": {
+    "withSheet": false,
+    "page": {
+     "vw": 320,
+     "scrollWidth": 320,
+     "hscroll": false,
+     "spacingSheet": false
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "值得了解的音频特性",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "您保留的部分音频太少，无法调节音量",
+       "headingLines": 2,
+       "detailLines": 4,
+       "linesPerItem": 6,
+       "lines": {
+        "heading": [
+         "您保留的部分音频太少，无法",
+         "调节音量"
+        ],
+        "detail": [
+         "新视频将没有音频。如果您需",
+         "要音频，请调整开始时间或结",
+         "束时间，多保留一些有音频的",
+         "部分。"
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      3
+     ]
+    },
+    "geom": {
+     "left": 49,
+     "right": 271,
+     "top": 3712,
+     "height": 275,
+     "width": 222
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "powerAtRead": {
+    "label": "before the read",
+    "t": "2026-10-27T18:07:07.578Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:07  up 59 mins, 1 user, load averages: 6.60 9.18 14.90",
+    "load1": 6.6,
+    "load": [
+     6.6,
+     9.18,
+     14.9
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "sheet": {
+    "present": true,
+    "sameAsWalker": true,
+    "inHead": true,
+    "lineHeight": "21px",
+    "letterSpacing": "1.68px"
+   },
+   "reachedWithSheet": {
+    "outcome": "pass",
+    "problems": [],
+    "spacing": true
+   },
+   "with": {
+    "withSheet": true,
+    "page": {
+     "vw": 320,
+     "scrollWidth": 320,
+     "hscroll": false,
+     "spacingSheet": true
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "值得了解的音频特性",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "您保留的部分音频太少，无法调节音量",
+       "headingLines": 2,
+       "detailLines": 4,
+       "linesPerItem": 6,
+       "lines": {
+        "heading": [
+         "您保留的部分音频太少，",
+         "无法调节音量"
+        ],
+        "detail": [
+         "新视频将没有音频。如果",
+         "您需要音频，请调整开始",
+         "时间或结束时间，多保留",
+         "一些有音频的部分。"
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      3
+     ]
+    },
+    "geom": {
+     "left": 49,
+     "right": 271,
+     "top": 4117,
+     "height": 371,
+     "width": 222
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "control": {
+    "inPanel": {
+     "clipped": 2,
+     "spills": 1,
+     "overlaps": 2
+    },
+    "pass": true
+   },
+   "sheetRemoved": true,
+   "status": "ok",
+   "console": [],
+   "ms": 5326
+  },
+  {
+   "key": "sliver-N14__ms-MY__w1280",
+   "cell": "sliver-N14",
+   "scenario": null,
+   "what": "N14: AAC sound from 3.71 s, kept 0:00-0:04.0 (ready, End time, Tab, settled, as no-audio-206-probe-after.mjs)",
+   "lang": "ms-MY",
+   "view": "w1280",
+   "mode": "light",
+   "expectKey": "warnings.keptTooLittleAudio.heading",
+   "powerAtStart": {
+    "label": "before setup",
+    "t": "2026-10-27T18:07:08.249Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:07  up 59 mins, 1 user, load averages: 6.60 9.18 14.90",
+    "load1": 6.6,
+    "load": [
+     6.6,
+     9.18,
+     14.9
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "stateFrom": "S-99.state (the kept-part note)",
+   "reached": {
+    "outcome": "pass",
+    "problems": []
+   },
+   "headings": [
+    "Bahagian yang anda simpan mempunyai terlalu sedikit audio untuk diratakan"
+   ],
+   "without": {
+    "withSheet": false,
+    "page": {
+     "vw": 1280,
+     "scrollWidth": 1280,
+     "hscroll": false,
+     "spacingSheet": false
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "Perlu diketahui tentang audionya",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "Bahagian yang anda simpan mempunyai terlalu sedikit audio untuk diratakan",
+       "headingLines": 2,
+       "detailLines": 3,
+       "linesPerItem": 5,
+       "lines": {
+        "heading": [
+         "Bahagian yang anda simpan mempunyai terlalu sedikit audio",
+         "untuk diratakan"
+        ],
+        "detail": [
+         "Video baharu tidak akan mempunyai audio. Jika anda mahukan audio",
+         "itu, ubah masa mula atau masa tamat untuk menyimpan lebih banyak",
+         "bahagian video yang ada audio."
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      2
+     ]
+    },
+    "geom": {
+     "left": 209,
+     "right": 1071,
+     "top": 3286,
+     "height": 233,
+     "width": 862
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "powerAtRead": {
+    "label": "before the read",
+    "t": "2026-10-27T18:07:12.933Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:07  up 59 mins, 1 user, load averages: 6.47 9.11 14.85",
+    "load1": 6.47,
+    "load": [
+     6.47,
+     9.11,
+     14.85
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "sheet": {
+    "present": true,
+    "sameAsWalker": true,
+    "inHead": true,
+    "lineHeight": "21px",
+    "letterSpacing": "1.68px"
+   },
+   "reachedWithSheet": {
+    "outcome": "pass",
+    "problems": [],
+    "spacing": true
+   },
+   "with": {
+    "withSheet": true,
+    "page": {
+     "vw": 1280,
+     "scrollWidth": 1280,
+     "hscroll": false,
+     "spacingSheet": true
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "Perlu diketahui tentang audionya",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "Bahagian yang anda simpan mempunyai terlalu sedikit audio untuk diratakan",
+       "headingLines": 2,
+       "detailLines": 4,
+       "linesPerItem": 6,
+       "lines": {
+        "heading": [
+         "Bahagian yang anda simpan mempunyai terlalu",
+         "sedikit audio untuk diratakan"
+        ],
+        "detail": [
+         "Video baharu tidak akan mempunyai audio. Jika anda",
+         "mahukan audio itu, ubah masa mula atau masa tamat",
+         "untuk menyimpan lebih banyak bahagian video yang",
+         "ada audio."
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      3
+     ]
+    },
+    "geom": {
+     "left": 209,
+     "right": 1071,
+     "top": 3884,
+     "height": 371,
+     "width": 862
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "control": {
+    "inPanel": {
+     "clipped": 2,
+     "spills": 1,
+     "overlaps": 2
+    },
+    "pass": true
+   },
+   "sheetRemoved": true,
+   "status": "ok",
+   "console": [],
+   "ms": 5333
+  },
+  {
+   "key": "sliver-N14__ms-MY__w320",
+   "cell": "sliver-N14",
+   "scenario": null,
+   "what": "N14: AAC sound from 3.71 s, kept 0:00-0:04.0 (ready, End time, Tab, settled, as no-audio-206-probe-after.mjs)",
+   "lang": "ms-MY",
+   "view": "w320",
+   "mode": "light",
+   "expectKey": "warnings.keptTooLittleAudio.heading",
+   "powerAtStart": {
+    "label": "before setup",
+    "t": "2026-10-27T18:07:13.608Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:07  up 59 mins, 1 user, load averages: 6.47 9.11 14.85",
+    "load1": 6.47,
+    "load": [
+     6.47,
+     9.11,
+     14.85
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "stateFrom": "S-99.state (the kept-part note)",
+   "reached": {
+    "outcome": "pass",
+    "problems": []
+   },
+   "headings": [
+    "Bahagian yang anda simpan mempunyai terlalu sedikit audio untuk diratakan"
+   ],
+   "without": {
+    "withSheet": false,
+    "page": {
+     "vw": 320,
+     "scrollWidth": 320,
+     "hscroll": false,
+     "spacingSheet": false
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "Perlu diketahui tentang audionya",
+     "titleLines": 2,
+     "items": [
+      {
+       "heading": "Bahagian yang anda simpan mempunyai terlalu sedikit audio untuk diratakan",
+       "headingLines": 4,
+       "detailLines": 7,
+       "linesPerItem": 11,
+       "lines": {
+        "heading": [
+         "Bahagian yang anda",
+         "simpan mempunyai terlalu",
+         "sedikit audio untuk",
+         "diratakan"
+        ],
+        "detail": [
+         "Video baharu tidak akan",
+         "mempunyai audio. Jika anda",
+         "mahukan audio itu, ubah",
+         "masa mula atau masa tamat",
+         "untuk menyimpan lebih",
+         "banyak bahagian video yang",
+         "ada audio."
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      5
+     ]
+    },
+    "geom": {
+     "left": 49,
+     "right": 271,
+     "top": 4176,
+     "height": 446,
+     "width": 222
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "powerAtRead": {
+    "label": "before the read",
+    "t": "2026-10-27T18:11:08.879Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:11  up  1:03, 1 user, load averages: 7.63 12.37 15.35",
+    "load1": 7.63,
+    "load": [
+     7.63,
+     12.37,
+     15.35
+    ],
+    "waitedS": 231,
+    "polls": [
+     8.19,
+     12.4,
+     22.23,
+     27.26,
+     27.08,
+     29.76,
+     30.75,
+     27.39,
+     23.73,
+     21.8,
+     19.68,
+     17.95,
+     18,
+     16.5,
+     15.87,
+     16.07,
+     15.32,
+     14.06,
+     12.68,
+     11.33,
+     10.21,
+     9.18,
+     8.47,
+     7.63
+    ],
+    "below": true
+   },
+   "sheet": {
+    "present": true,
+    "sameAsWalker": true,
+    "inHead": true,
+    "lineHeight": "21px",
+    "letterSpacing": "1.68px"
+   },
+   "reachedWithSheet": {
+    "outcome": "pass",
+    "problems": [],
+    "spacing": true
+   },
+   "with": {
+    "withSheet": true,
+    "page": {
+     "vw": 320,
+     "scrollWidth": 320,
+     "hscroll": false,
+     "spacingSheet": true
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "Perlu diketahui tentang audionya",
+     "titleLines": 2,
+     "items": [
+      {
+       "heading": "Bahagian yang anda simpan mempunyai terlalu sedikit audio untuk diratakan",
+       "headingLines": 4,
+       "detailLines": 9,
+       "linesPerItem": 13,
+       "lines": {
+        "heading": [
+         "Bahagian yang anda",
+         "simpan mempunyai",
+         "terlalu sedikit audio",
+         "untuk diratakan"
+        ],
+        "detail": [
+         "Video baharu tidak",
+         "akan mempunyai",
+         "audio. Jika anda",
+         "mahukan audio itu,",
+         "ubah masa mula atau",
+         "masa tamat untuk",
+         "menyimpan lebih",
+         "banyak bahagian video",
+         "yang ada audio."
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      7
+     ]
+    },
+    "geom": {
+     "left": 49,
+     "right": 271,
+     "top": 5133,
+     "height": 626,
+     "width": 222
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "control": {
+    "inPanel": {
+     "clipped": 2,
+     "spills": 1,
+     "overlaps": 4
+    },
+    "pass": true
+   },
+   "sheetRemoved": true,
+   "status": "ok",
+   "console": [],
+   "ms": 235922
+  },
+  {
+   "key": "S-20__en-GB__w1280",
+   "cell": "S-20",
+   "scenario": "S-20",
+   "what": "No audio",
+   "lang": "en-GB",
+   "view": "w1280",
+   "mode": "light",
+   "expectKey": "warnings.noAudio.heading",
+   "powerAtStart": {
+    "label": "before setup",
+    "t": "2026-10-27T18:11:09.548Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:11  up  1:03, 1 user, load averages: 7.63 12.37 15.35",
+    "load1": 7.63,
+    "load": [
+     7.63,
+     12.37,
+     15.35
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "stateFrom": "S-20.state",
+   "reached": {
+    "outcome": "pass",
+    "problems": []
+   },
+   "headings": [
+    "This video has no audio"
+   ],
+   "without": {
+    "withSheet": false,
+    "page": {
+     "vw": 1280,
+     "scrollWidth": 1280,
+     "hscroll": false,
+     "spacingSheet": false
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "Worth knowing about the audio",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "This video has no audio",
+       "headingLines": 1,
+       "detailLines": 2,
+       "linesPerItem": 3,
+       "lines": {
+        "heading": [
+         "This video has no audio"
+        ],
+        "detail": [
+         "There is no audio to level, so the rest of the job runs without it. If you",
+         "expected audio, check the recording before publishing."
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      2
+     ]
+    },
+    "geom": {
+     "left": 209,
+     "right": 1071,
+     "top": 3046,
+     "height": 191,
+     "width": 862
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "powerAtRead": {
+    "label": "before the read",
+    "t": "2026-10-27T18:11:12.023Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:11  up  1:03, 1 user, load averages: 7.18 12.20 15.27",
+    "load1": 7.18,
+    "load": [
+     7.18,
+     12.2,
+     15.27
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "sheet": {
+    "present": true,
+    "sameAsWalker": true,
+    "inHead": true,
+    "lineHeight": "21px",
+    "letterSpacing": "1.68px"
+   },
+   "reachedWithSheet": {
+    "outcome": "pass",
+    "problems": [],
+    "spacing": true
+   },
+   "with": {
+    "withSheet": true,
+    "page": {
+     "vw": 1280,
+     "scrollWidth": 1280,
+     "hscroll": false,
+     "spacingSheet": true
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "Worth knowing about the audio",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "This video has no audio",
+       "headingLines": 1,
+       "detailLines": 3,
+       "linesPerItem": 4,
+       "lines": {
+        "heading": [
+         "This video has no audio"
+        ],
+        "detail": [
+         "There is no audio to level, so the rest of the job runs",
+         "without it. If you expected audio, check the recording",
+         "before publishing."
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      2
+     ]
+    },
+    "geom": {
+     "left": 209,
+     "right": 1071,
+     "top": 3483,
+     "height": 308,
+     "width": 862
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "control": {
+    "inPanel": {
+     "clipped": 2,
+     "spills": 1,
+     "overlaps": 1
+    },
+    "pass": true
+   },
+   "sheetRemoved": true,
+   "status": "ok",
+   "console": [],
+   "ms": 3118
+  },
+  {
+   "key": "S-20__en-GB__w320",
+   "cell": "S-20",
+   "scenario": "S-20",
+   "what": "No audio",
+   "lang": "en-GB",
+   "view": "w320",
+   "mode": "light",
+   "expectKey": "warnings.noAudio.heading",
+   "powerAtStart": {
+    "label": "before setup",
+    "t": "2026-10-27T18:11:12.688Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:11  up  1:03, 1 user, load averages: 7.18 12.20 15.27",
+    "load1": 7.18,
+    "load": [
+     7.18,
+     12.2,
+     15.27
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "stateFrom": "S-20.state",
+   "reached": {
+    "outcome": "pass",
+    "problems": []
+   },
+   "headings": [
+    "This video has no audio"
+   ],
+   "without": {
+    "withSheet": false,
+    "page": {
+     "vw": 320,
+     "scrollWidth": 320,
+     "hscroll": false,
+     "spacingSheet": false
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "Worth knowing about the audio",
+     "titleLines": 2,
+     "items": [
+      {
+       "heading": "This video has no audio",
+       "headingLines": 1,
+       "detailLines": 5,
+       "linesPerItem": 6,
+       "lines": {
+        "heading": [
+         "This video has no audio"
+        ],
+        "detail": [
+         "There is no audio to level, so",
+         "the rest of the job runs",
+         "without it. If you expected",
+         "audio, check the recording",
+         "before publishing."
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      3
+     ]
+    },
+    "geom": {
+     "left": 49,
+     "right": 271,
+     "top": 3733,
+     "height": 299,
+     "width": 222
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "powerAtRead": {
+    "label": "before the read",
+    "t": "2026-10-27T18:11:15.148Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:11  up  1:03, 1 user, load averages: 6.93 12.07 15.21",
+    "load1": 6.93,
+    "load": [
+     6.93,
+     12.07,
+     15.21
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "sheet": {
+    "present": true,
+    "sameAsWalker": true,
+    "inHead": true,
+    "lineHeight": "21px",
+    "letterSpacing": "1.68px"
+   },
+   "reachedWithSheet": {
+    "outcome": "pass",
+    "problems": [],
+    "spacing": true
+   },
+   "with": {
+    "withSheet": true,
+    "page": {
+     "vw": 320,
+     "scrollWidth": 320,
+     "hscroll": false,
+     "spacingSheet": true
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "Worth knowing about the audio",
+     "titleLines": 2,
+     "items": [
+      {
+       "heading": "This video has no audio",
+       "headingLines": 2,
+       "detailLines": 7,
+       "linesPerItem": 9,
+       "lines": {
+        "heading": [
+         "This video has no",
+         "audio"
+        ],
+        "detail": [
+         "There is no audio to",
+         "level, so the rest of",
+         "the job runs without",
+         "it. If you expected",
+         "audio, check the",
+         "recording before",
+         "publishing."
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      4
+     ]
+    },
+    "geom": {
+     "left": 49,
+     "right": 271,
+     "top": 4536,
+     "height": 479,
+     "width": 222
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "control": {
+    "inPanel": {
+     "clipped": 2,
+     "spills": 1,
+     "overlaps": 2
+    },
+    "pass": true
+   },
+   "sheetRemoved": true,
+   "status": "ok",
+   "console": [],
+   "ms": 3107
+  },
+  {
+   "key": "S-20__zh-Hans__w1280",
+   "cell": "S-20",
+   "scenario": "S-20",
+   "what": "No audio",
+   "lang": "zh-Hans",
+   "view": "w1280",
+   "mode": "light",
+   "expectKey": "warnings.noAudio.heading",
+   "powerAtStart": {
+    "label": "before setup",
+    "t": "2026-10-27T18:11:15.813Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:11  up  1:03, 1 user, load averages: 6.93 12.07 15.21",
+    "load1": 6.93,
+    "load": [
+     6.93,
+     12.07,
+     15.21
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "stateFrom": "S-20.state",
+   "reached": {
+    "outcome": "pass",
+    "problems": []
+   },
+   "headings": [
+    "这段视频没有音频"
+   ],
+   "without": {
+    "withSheet": false,
+    "page": {
+     "vw": 1280,
+     "scrollWidth": 1280,
+     "hscroll": false,
+     "spacingSheet": false
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "值得了解的音频特性",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "这段视频没有音频",
+       "headingLines": 1,
+       "detailLines": 2,
+       "linesPerItem": 3,
+       "lines": {
+        "heading": [
+         "这段视频没有音频"
+        ],
+        "detail": [
+         "由于没有需要调节音量的音频，所以后续工作将在没有音频的情况下进",
+         "行。如果您需要音频，请在发布前检查录音。"
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      1
+     ]
+    },
+    "geom": {
+     "left": 209,
+     "right": 1071,
+     "top": 3127,
+     "height": 170,
+     "width": 862
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "powerAtRead": {
+    "label": "before the read",
+    "t": "2026-10-27T18:11:18.703Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:11  up  1:03, 1 user, load averages: 6.93 12.07 15.21",
+    "load1": 6.93,
+    "load": [
+     6.93,
+     12.07,
+     15.21
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "sheet": {
+    "present": true,
+    "sameAsWalker": true,
+    "inHead": true,
+    "lineHeight": "21px",
+    "letterSpacing": "1.68px"
+   },
+   "reachedWithSheet": {
+    "outcome": "pass",
+    "problems": [],
+    "spacing": true
+   },
+   "with": {
+    "withSheet": true,
+    "page": {
+     "vw": 1280,
+     "scrollWidth": 1280,
+     "hscroll": false,
+     "spacingSheet": true
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "值得了解的音频特性",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "这段视频没有音频",
+       "headingLines": 1,
+       "detailLines": 2,
+       "linesPerItem": 3,
+       "lines": {
+        "heading": [
+         "这段视频没有音频"
+        ],
+        "detail": [
+         "由于没有需要调节音量的音频，所以后续工作将在没有音频的情",
+         "况下进行。如果您需要音频，请在发布前检查录音。"
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      1
+     ]
+    },
+    "geom": {
+     "left": 209,
+     "right": 1071,
+     "top": 3535,
+     "height": 266,
+     "width": 862
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "control": {
+    "inPanel": {
+     "clipped": 2,
+     "spills": 1,
+     "overlaps": 0
+    },
+    "pass": false
+   },
+   "sheetRemoved": true,
+   "status": "ok",
+   "console": [],
+   "ms": 3534
+  },
+  {
+   "key": "S-20__zh-Hans__w320",
+   "cell": "S-20",
+   "scenario": "S-20",
+   "what": "No audio",
+   "lang": "zh-Hans",
+   "view": "w320",
+   "mode": "light",
+   "expectKey": "warnings.noAudio.heading",
+   "powerAtStart": {
+    "label": "before setup",
+    "t": "2026-10-27T18:11:19.366Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:11  up  1:03, 1 user, load averages: 6.93 12.07 15.21",
+    "load1": 6.93,
+    "load": [
+     6.93,
+     12.07,
+     15.21
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "stateFrom": "S-20.state",
+   "reached": {
+    "outcome": "pass",
+    "problems": []
+   },
+   "headings": [
+    "这段视频没有音频"
+   ],
+   "without": {
+    "withSheet": false,
+    "page": {
+     "vw": 320,
+     "scrollWidth": 320,
+     "hscroll": false,
+     "spacingSheet": false
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "值得了解的音频特性",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "这段视频没有音频",
+       "headingLines": 1,
+       "detailLines": 4,
+       "linesPerItem": 5,
+       "lines": {
+        "heading": [
+         "这段视频没有音频"
+        ],
+        "detail": [
+         "由于没有需要调节音量的音",
+         "频，所以后续工作将在没有音",
+         "频的情况下进行。如果您需要",
+         "音频，请在发布前检查录音。"
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      3
+     ]
+    },
+    "geom": {
+     "left": 49,
+     "right": 271,
+     "top": 3712,
+     "height": 254,
+     "width": 222
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "powerAtRead": {
+    "label": "before the read",
+    "t": "2026-10-27T18:11:22.253Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:11  up  1:03, 1 user, load averages: 6.53 11.90 15.13",
+    "load1": 6.53,
+    "load": [
+     6.53,
+     11.9,
+     15.13
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "sheet": {
+    "present": true,
+    "sameAsWalker": true,
+    "inHead": true,
+    "lineHeight": "21px",
+    "letterSpacing": "1.68px"
+   },
+   "reachedWithSheet": {
+    "outcome": "pass",
+    "problems": [],
+    "spacing": true
+   },
+   "with": {
+    "withSheet": true,
+    "page": {
+     "vw": 320,
+     "scrollWidth": 320,
+     "hscroll": false,
+     "spacingSheet": true
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "值得了解的音频特性",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "这段视频没有音频",
+       "headingLines": 1,
+       "detailLines": 5,
+       "linesPerItem": 6,
+       "lines": {
+        "heading": [
+         "这段视频没有音频"
+        ],
+        "detail": [
+         "由于没有需要调节音量的",
+         "音频，所以后续工作将在",
+         "没有音频的情况下进行。",
+         "如果您需要音频，请在发",
+         "布前检查录音。"
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      3
+     ]
+    },
+    "geom": {
+     "left": 49,
+     "right": 271,
+     "top": 4117,
+     "height": 371,
+     "width": 222
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "control": {
+    "inPanel": {
+     "clipped": 2,
+     "spills": 1,
+     "overlaps": 1
+    },
+    "pass": true
+   },
+   "sheetRemoved": true,
+   "status": "ok",
+   "console": [],
+   "ms": 3532
+  },
+  {
+   "key": "S-20__ms-MY__w1280",
+   "cell": "S-20",
+   "scenario": "S-20",
+   "what": "No audio",
+   "lang": "ms-MY",
+   "view": "w1280",
+   "mode": "light",
+   "expectKey": "warnings.noAudio.heading",
+   "powerAtStart": {
+    "label": "before setup",
+    "t": "2026-10-27T18:11:22.917Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:11  up  1:03, 1 user, load averages: 6.53 11.90 15.13",
+    "load1": 6.53,
+    "load": [
+     6.53,
+     11.9,
+     15.13
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "stateFrom": "S-20.state",
+   "reached": {
+    "outcome": "pass",
+    "problems": []
+   },
+   "headings": [
+    "Video ini tiada audio"
+   ],
+   "without": {
+    "withSheet": false,
+    "page": {
+     "vw": 1280,
+     "scrollWidth": 1280,
+     "hscroll": false,
+     "spacingSheet": false
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "Perlu diketahui tentang audionya",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "Video ini tiada audio",
+       "headingLines": 1,
+       "detailLines": 2,
+       "linesPerItem": 3,
+       "lines": {
+        "heading": [
+         "Video ini tiada audio"
+        ],
+        "detail": [
+         "Tiada audio untuk diratakan, jadi kerja selebihnya berjalan tanpanya.",
+         "Jika anda menjangkakan audio, semak rakaman sebelum menerbitkan."
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      2
+     ]
+    },
+    "geom": {
+     "left": 209,
+     "right": 1071,
+     "top": 3286,
+     "height": 191,
+     "width": 862
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "powerAtRead": {
+    "label": "before the read",
+    "t": "2026-10-27T18:11:25.803Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:11  up  1:03, 1 user, load averages: 7.53 12.02 15.15",
+    "load1": 7.53,
+    "load": [
+     7.53,
+     12.02,
+     15.15
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "sheet": {
+    "present": true,
+    "sameAsWalker": true,
+    "inHead": true,
+    "lineHeight": "21px",
+    "letterSpacing": "1.68px"
+   },
+   "reachedWithSheet": {
+    "outcome": "pass",
+    "problems": [],
+    "spacing": true
+   },
+   "with": {
+    "withSheet": true,
+    "page": {
+     "vw": 1280,
+     "scrollWidth": 1280,
+     "hscroll": false,
+     "spacingSheet": true
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "Perlu diketahui tentang audionya",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "Video ini tiada audio",
+       "headingLines": 1,
+       "detailLines": 3,
+       "linesPerItem": 4,
+       "lines": {
+        "heading": [
+         "Video ini tiada audio"
+        ],
+        "detail": [
+         "Tiada audio untuk diratakan, jadi kerja selebihnya",
+         "berjalan tanpanya. Jika anda menjangkakan audio,",
+         "semak rakaman sebelum menerbitkan."
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      3
+     ]
+    },
+    "geom": {
+     "left": 209,
+     "right": 1071,
+     "top": 3884,
+     "height": 329,
+     "width": 862
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "control": {
+    "inPanel": {
+     "clipped": 2,
+     "spills": 1,
+     "overlaps": 1
+    },
+    "pass": true
+   },
+   "sheetRemoved": true,
+   "status": "ok",
+   "console": [],
+   "ms": 3530
+  },
+  {
+   "key": "S-20__ms-MY__w320",
+   "cell": "S-20",
+   "scenario": "S-20",
+   "what": "No audio",
+   "lang": "ms-MY",
+   "view": "w320",
+   "mode": "light",
+   "expectKey": "warnings.noAudio.heading",
+   "powerAtStart": {
+    "label": "before setup",
+    "t": "2026-10-27T18:11:26.468Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:11  up  1:03, 1 user, load averages: 7.53 12.02 15.15",
+    "load1": 7.53,
+    "load": [
+     7.53,
+     12.02,
+     15.15
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "stateFrom": "S-20.state",
+   "reached": {
+    "outcome": "pass",
+    "problems": []
+   },
+   "headings": [
+    "Video ini tiada audio"
+   ],
+   "without": {
+    "withSheet": false,
+    "page": {
+     "vw": 320,
+     "scrollWidth": 320,
+     "hscroll": false,
+     "spacingSheet": false
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "Perlu diketahui tentang audionya",
+     "titleLines": 2,
+     "items": [
+      {
+       "heading": "Video ini tiada audio",
+       "headingLines": 1,
+       "detailLines": 6,
+       "linesPerItem": 7,
+       "lines": {
+        "heading": [
+         "Video ini tiada audio"
+        ],
+        "detail": [
+         "Tiada audio untuk diratakan,",
+         "jadi kerja selebihnya berjalan",
+         "tanpanya. Jika anda",
+         "menjangkakan audio, semak",
+         "rakaman sebelum",
+         "menerbitkan."
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      5
+     ]
+    },
+    "geom": {
+     "left": 49,
+     "right": 271,
+     "top": 4176,
+     "height": 362,
+     "width": 222
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "powerAtRead": {
+    "label": "before the read",
+    "t": "2026-10-27T18:11:29.355Z",
+    "ac": true,
+    "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+    "powermode": "powermode            2",
+    "uptime": "18:11  up  1:03, 1 user, load averages: 7.53 12.02 15.15",
+    "load1": 7.53,
+    "load": [
+     7.53,
+     12.02,
+     15.15
+    ],
+    "waitedS": 0,
+    "below": true
+   },
+   "sheet": {
+    "present": true,
+    "sameAsWalker": true,
+    "inHead": true,
+    "lineHeight": "21px",
+    "letterSpacing": "1.68px"
+   },
+   "reachedWithSheet": {
+    "outcome": "pass",
+    "problems": [],
+    "spacing": true
+   },
+   "with": {
+    "withSheet": true,
+    "page": {
+     "vw": 320,
+     "scrollWidth": 320,
+     "hscroll": false,
+     "spacingSheet": true
+    },
+    "panel": {
+     "kind": "warning",
+     "title": "Perlu diketahui tentang audionya",
+     "titleLines": 2,
+     "items": [
+      {
+       "heading": "Video ini tiada audio",
+       "headingLines": 1,
+       "detailLines": 7,
+       "linesPerItem": 8,
+       "lines": {
+        "heading": [
+         "Video ini tiada audio"
+        ],
+        "detail": [
+         "Tiada audio untuk",
+         "diratakan, jadi kerja",
+         "selebihnya berjalan",
+         "tanpanya. Jika anda",
+         "menjangkakan audio,",
+         "semak rakaman",
+         "sebelum menerbitkan."
+        ]
+       }
+      }
+     ],
+     "tailLines": [
+      7
+     ]
+    },
+    "geom": {
+     "left": 49,
+     "right": 271,
+     "top": 5133,
+     "height": 521,
+     "width": 222
+    },
+    "pageTotals": {
+     "clipped": 1,
+     "spills": 1,
+     "overlaps": 0,
+     "spillsCapped": false,
+     "overlapsCapped": false
+    },
+    "kept": {
+     "clipped": [],
+     "spills": [],
+     "overlaps": []
+    },
+    "inPanel": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "ancestorsOnly": {
+     "clipped": 0,
+     "spills": 0,
+     "overlaps": 0
+    },
+    "pageAll": {
+     "clipped": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "overflow": "control",
+       "scroll": "31x31",
+       "client": "18x18",
+       "text": "?"
+      }
+     ],
+     "spills": [
+      {
+       "el": "li.promise-with-help > button#format-help-button.button.button--secondary",
+       "scrollH": 31,
+       "clientH": 18,
+       "height": "20px"
+      }
+     ],
+     "overlaps": []
+    }
+   },
+   "control": {
+    "inPanel": {
+     "clipped": 2,
+     "spills": 1,
+     "overlaps": 2
+    },
+    "pass": true
+   },
+   "sheetRemoved": true,
+   "status": "ok",
+   "console": [],
+   "ms": 3533
+  }
+ ],
+ "ended": "2026-10-27T18:11:30.022Z"
+}

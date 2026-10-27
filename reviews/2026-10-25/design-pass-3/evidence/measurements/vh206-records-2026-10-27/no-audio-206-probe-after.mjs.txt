@@ -1,0 +1,285 @@
+// VH-206's probe: the before and after of "a kept part with too little audio",
+// walked with the pass's walker modules (imported read-only from WALKER; no
+// walker file is added or changed). For each cell group (cell, language,
+// width) it runs the scenario's own setup (S-99, S-100, S-20, S-101, S-153
+// from scenarios.mjs, verbatim) or the probe's own (the audible sliver N14,
+// the exact block), reads pre-flight in every colour mode just before Create
+// (a click on Create or Continue anyway is intercepted for the read), then,
+// for a job cell, runs the job to its end, reads the result in every mode,
+// saves it (the walker's OPFS save picker) and reads the saved file's tracks
+// with ffprobe.
+//
+//   WALKER=<walker dir> APP_URL=http://127.0.0.1:5181/ CDP_PORT=9251 \
+//   FIX=<fixtures> OUT_ROOT=<scratch>/out RESULTS=<results dir> \
+//   LABEL=before SOURCE=446f702 [FILES_DIR=<where the saved videos go>] \
+//     node no-audio-206-probe.mjs [--cells S-99,S-100,S-20,S-101,S-153,sliver-N14,block-aac,block-pcm]
+//       [--langs en-GB,zh-Hans,ms-MY] [--views w1280,w320] [--modes light,dark,forced-light,forced-dark]
+//
+// Writes RESULTS/<LABEL>-<cell>.json (one per cell id) and RESULTS/<LABEL>-run.json.
+import { execFileSync } from 'node:child_process'
+import { createHash } from 'node:crypto'
+import { mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs'
+import { join, resolve } from 'node:path'
+import { pathToFileURL } from 'node:url'
+
+const env = (k) => { const v = process.env[k]; if (!v) throw new Error(`set ${k}`); return v }
+const WALKER = resolve(env('WALKER'))
+const RESULTS = resolve(env('RESULTS'))
+const LABEL = process.env.LABEL ?? 'before'
+env('APP_URL'); env('CDP_PORT'); env('FIX'); env('OUT_ROOT')
+const APP_ROOT = process.env.APP_ROOT ?? resolve(WALKER, '../../../../../..')
+const args = process.argv.slice(2)
+const opt = (name, fallback) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1].split(',') : fallback }
+const cellsWanted = opt('--cells', ['S-99', 'S-100', 'S-20', 'S-101', 'S-153', 'sliver-N14', 'block-aac', 'block-pcm'])
+const langs = opt('--langs', ['en-GB', 'zh-Hans', 'ms-MY'])
+const views = opt('--views', ['w1280', 'w320'])
+const modes = opt('--modes', ['light', 'dark', 'forced-light', 'forced-dark'])
+mkdirSync(RESULTS, { recursive: true })
+
+const imp = (f) => import(pathToFileURL(join(WALKER, f)).href)
+const { connectBrowser } = await imp('cdp.mjs')
+const { Walk, F, sleep } = await imp('walk.mjs')
+const { QUAL_INIT, VIEWS, setViewport, setMode, assertReached, closeAnalysis } = await imp('qualify.mjs')
+const { SCENARIOS, MX_INIT, ready } = await imp('scenarios.mjs')
+const { P8_INIT, watchWorkers, assertRows, spokenAtCompletion } = await imp('phase8.mjs')
+
+// ---------------------------------------------------------------------------
+// The cells. A scenario cell runs SCENARIOS[id].setup as declared; a custom
+// cell runs S-99's steps (ready, End time, Tab, settled) and S-100's Create.
+const CELLS = {
+  'S-99': { scenario: 'S-99', job: false },
+  'S-100': { scenario: 'S-100', job: true },
+  'S-20': { scenario: 'S-20', job: false },
+  'S-101': { scenario: 'S-101', job: true },
+  'S-153': { scenario: 'S-153', job: true },
+  'sliver-N14': { file: 'late-sound-3.71s-25fps-10s.mp4', trimEnd: '0:04.0', job: true,
+    what: 'N14: AAC sound from 3.71 s (first packet, the priming, 3.688667 s), kept 0:00-0:04.0 (a 25 fps frame edge): 311.3 ms decoded (21.3 ms priming, 290 ms of tone)' },
+  'block-aac': { file: 'late-sound-block-aac-25fps-10s.mp4', trimEnd: '0:04.0', job: true,
+    what: 'Exact block, N8 recipe: first AAC packet (the priming) at 3.600000 s (pts 172800/48000), kept 0:00-0:04.0 (a frame edge, so not moved): 19,200 decoded samples = 400.0 ms (21.3 ms priming, 378.7 ms tone)' },
+  'block-pcm': { file: 'late-sound-block-pcm-25fps-10s.mov', trimEnd: '0:04.0', job: true,
+    what: 'Exact block, PCM twin: 16-bit PCM in MOV, no priming, sound from 3.600000 s, kept 0:00-0:04.0: 19,200 samples of tone = 400.0 ms' },
+}
+for (const c of cellsWanted) if (!CELLS[c]) throw new Error('no cell ' + c)
+
+// ---------------------------------------------------------------------------
+// In-page reads. Language-independent: warning keys are found from the page's
+// own message table (window.__mx, MX_INIT), so the after's new key is named
+// without this file knowing it.
+const COMMON = String.raw`
+  const M = window.__mx, Q = window.__qual, A = window.__audit; const lang = document.documentElement.lang;
+  const norm = (s) => (s || '').replace(/\s+/g, ' ').trim();
+  const lines = (el) => (el ? Q.renderedLines(el).map((L) => ({ text: L.text, chars: L.chars, cjk: L.cjk, latin: L.latin, weighted: L.cjk + L.latin / 2, widthPx: L.widthPx, outcome: L.outcome })) : []);
+  const wkeys = () => Object.keys((M.tables[lang] || {}).warnings || {});
+  const keysFor = (el, part) => wkeys().filter((k) => { const p = 'warnings.' + k + '.' + part; const v = M.msg(p); if (v == null || typeof v === 'function') return false; return part === 'heading' ? M.is(p, el) || M.matches(norm(el.textContent), p) : M.matches(norm(el.textContent), p); });
+  const vw = document.documentElement.clientWidth;
+  const overflowIn = (root) => { if (!root) return []; const bad = []; for (const el of [root, ...root.querySelectorAll('*')]) { if (!A.visible(el)) continue; const r = el.getBoundingClientRect(); if (r.right > vw + 1 || r.left < -1) bad.push({ el: A.desc(el).slice(0, 70), left: Math.round(r.left), right: Math.round(r.right) }); if (el.scrollWidth > el.clientWidth + 1 && getComputedStyle(el).overflowX !== 'visible') bad.push({ el: A.desc(el).slice(0, 70), clipped: el.scrollWidth - el.clientWidth }); } return bad; };
+  const panel = (n) => { if (!n) return null; const title = n.querySelector(':scope > .notification-title');
+    const items = [...n.querySelectorAll(':scope > .notification-list > li')].map((li) => { const t = li.querySelector('.notification-item-title'); const d = li.querySelector('.notification-body'); const tl = lines(t), dl = lines(d);
+      return { heading: norm(t && t.textContent), detail: norm(d && d.textContent), headingKeys: t ? keysFor(t, 'heading') : [], detailKeys: d ? keysFor(d, 'detail') : [], headingLines: tl.length, detailLines: dl.length, linesPerItem: tl.length + dl.length, lines: { heading: tl, detail: dl } }; });
+    const tail = [...n.querySelectorAll(':scope > .notification-body')].map((p) => ({ text: norm(p.textContent), lines: lines(p) }));
+    const all = [...lines(title), ...items.flatMap((i) => [...i.lines.heading, ...i.lines.detail]), ...tail.flatMap((t) => t.lines)];
+    return { kind: n.dataset.kind, title: norm(title && title.textContent), titleLines: lines(title).length, items, tail: tail.map((t) => ({ text: t.text, lines: t.lines.length })),
+      measure: { maxChars: Math.max(0, ...all.map((L) => L.chars)), maxCjk: Math.max(0, ...all.map((L) => L.cjk)), maxWeighted: Math.max(0, ...all.map((L) => L.weighted)), worst: all.some((L) => L.outcome === 'fail') ? 'fail' : all.some((L) => L.outcome === 'cannot-determine') ? 'cannot-determine' : 'pass', lines: all.length },
+      overflow: overflowIn(n) }; };
+  const statusRead = (id) => { const s = document.getElementById(id); if (!s) return null; const hid = [...s.querySelectorAll('.visually-hidden')].map((x) => norm(x.textContent)).join(' '); const clone = s.cloneNode(true); clone.querySelectorAll('.visually-hidden').forEach((x) => x.remove()); return { announced: norm(s.textContent), shown: norm(clone.textContent), spokenOnly: hid }; };
+  const media = { dark: matchMedia('(prefers-color-scheme: dark)').matches, forced: matchMedia('(forced-colors: active)').matches };
+  const page = { lang, vw, hscroll: document.documentElement.scrollWidth > vw, scrollWidth: document.documentElement.scrollWidth };
+  const errors = (A.errors || []).slice();
+`
+const READ_PRE = `(() => { ${COMMON}
+  const box = document.getElementById('audio-warnings');
+  const shown = !!box && M.vis(box) && box.children.length > 0;
+  const lastWrite = (window.__p8 && window.__p8.writes || []).at(-1) || null;
+  return { media, page, errors,
+    verdict: { kind: M.verdict(), heading: norm(M.text('#preflight-report .notification-title')) },
+    trim: { start: (document.getElementById('trim-start') || {}).value, end: (document.getElementById('trim-end') || {}).value },
+    warnings: shown ? panel(box.querySelector('.notification')) : null,
+    noAudioHeading: M.has('warnings.noAudio.heading', '#audio-warnings'), keptTooLittleHeading: M.has('warnings.keptTooLittleAudio.heading', '#audio-warnings'), endsEarlyHeading: M.has('warnings.endsEarly.heading', '#audio-warnings'),
+    status: statusRead('status'), sourceStatus: statusRead('source-status'), lastStatusWrite: lastWrite ? { t: lastWrite.t, text: norm(lastWrite.text) } : null,
+    liveRegions: Q.statusText(), checking: M.checking() };
+})()`
+const READ_JOB = `(() => { ${COMMON}
+  const r = document.getElementById('process-result');
+  const card = document.querySelector('#process-result > .notification');
+  const wb = window.__p8 && window.__p8.warnBox ? window.__p8.warnBox() : null;
+  return { media, page, errors, res: M.res(), finished: M.finished(),
+    card: card ? { kind: card.dataset.kind, title: norm(M.text('#process-result > .notification > .notification-title')), text: norm(card.textContent).slice(0, 900), overflow: overflowIn(card) } : null,
+    keptRecord: norm(r ? r.textContent : '').match(/\\d+:\\d\\d\\.\\d[^\\d]{1,12}\\d+:\\d\\d\\.\\d/g),
+    resultWarnings: wb ? panel(wb) : null,
+    endedEarly: M.has('result.endedEarly.sound', '#process-result') || M.has('result.endedEarly.both', '#process-result'),
+    status: statusRead('status'), audioWarningsStill: norm(M.text('#audio-warnings')).slice(0, 300) };
+})()`
+
+// ---------------------------------------------------------------------------
+const sha = (buf) => createHash('sha256').update(buf).digest('hex')
+const treeSha = (dir) => { const h = createHash('sha256'); const walk = (d) => { for (const n of readdirSync(d).sort()) { const p = join(d, n); if (statSync(p).isDirectory()) walk(p); else h.update(p.slice(dir.length) + '\0' + sha(readFileSync(p)) + '\n') } }; walk(dir); return h.digest('hex').slice(0, 16) }
+const sh = (cmd, a) => { try { return execFileSync(cmd, a, { encoding: 'utf8' }).trim() } catch (e) { return 'error: ' + String(e.message).slice(0, 120) } }
+const power = () => {
+  const batt = sh('pmset', ['-g', 'batt']); const pm = sh('pmset', ['-g']).split('\n').filter((l) => /powermode/i.test(l)).map((l) => l.trim()).join('; ')
+  const up = sh('uptime', []); const load = (up.match(/load averages?: ([\d.]+)[ ,]+([\d.]+)[ ,]+([\d.]+)/) || []).slice(1).map(Number)
+  return { t: new Date().toISOString(), ac: /AC Power/.test(batt), batt: batt.split('\n').map((l) => l.trim()).join(' | '), powermode: pm, uptime: up, load1: load[0], load: load }
+}
+const until = (w, expr, label, timeout = 120000) => w.waitFor(`(() => { const M = window.__mx; try { return !!(${expr}); } catch (e) { return false; } })()`, { label, timeout })
+const mx = (w, expr) => w.evaluate(`(() => { const M = window.__mx; return ${expr}; })()`)
+
+function ffprobe(file) {
+  const j = JSON.parse(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'stream=index,codec_type,codec_name,duration,start_time,nb_frames,sample_rate,channels,width,height,r_frame_rate:format=duration,nb_streams,format_name', '-of', 'json', file], { encoding: 'utf8' }))
+  const streams = (j.streams || []).map((s) => ({ index: s.index, kind: s.codec_type, codec: s.codec_name, durationS: s.duration != null ? Number(s.duration) : null, startS: s.start_time != null ? Number(s.start_time) : null, frames: s.nb_frames != null ? Number(s.nb_frames) : null, ...(s.codec_type === 'audio' ? { sampleRate: Number(s.sample_rate), channels: s.channels } : {}), ...(s.codec_type === 'video' ? { size: `${s.width}x${s.height}`, rate: s.r_frame_rate } : {}) }))
+  const kinds = streams.map((s) => s.kind)
+  return { format: j.format?.format_name, durationS: j.format?.duration != null ? Number(j.format.duration) : null, count: streams.length, video: kinds.filter((k) => k === 'video').length, audio: kinds.filter((k) => k === 'audio').length, other: kinds.filter((k) => k !== 'video' && k !== 'audio').length, streams }
+}
+
+/** Every worker's console, all arguments by value (the walker's watchWorkers keeps only two records). */
+function watchWorkerLogs(browser, w) {
+  const logs = (w.workerLogs = [])
+  browser.on(w.page.sessionId, 'Target.attachedToTarget', ({ sessionId, targetInfo }) => {
+    if (targetInfo.type !== 'worker') return
+    const url = (targetInfo.url || '').replace(/^.*\//, '').slice(0, 60)
+    browser.on(sessionId, 'Runtime.consoleAPICalled', async (e) => {
+      const t = Date.now()
+      const vals = await Promise.all((e.args || []).map(async (a) => {
+        if (a.type !== 'object' || !a.objectId) return a.value ?? a.description ?? null
+        try { const r = await browser.send('Runtime.callFunctionOn', { objectId: a.objectId, functionDeclaration: 'function () { try { return JSON.stringify(this) } catch (e) { return String(this) } }', returnByValue: true }, sessionId); return JSON.parse(r.result.value) } catch { return a.description ?? null }
+      }))
+      logs.push({ t, worker: url, type: e.type, args: vals })
+    })
+  })
+}
+
+async function openWalk(browser, name) {
+  const w = new Walk(browser, name)
+  await w.open()
+  w.console = []
+  w.page.on('Runtime.consoleAPICalled', (e) => { if (e.type === 'error' || e.type === 'warning') w.console.push({ t: Date.now(), type: e.type, text: e.args.map((a) => a.value ?? a.description ?? '').join(' ').slice(0, 300) }) })
+  w.page.on('Runtime.exceptionThrown', (e) => w.console.push({ t: Date.now(), type: 'exception', text: (e.exceptionDetails.exception?.description ?? e.exceptionDetails.text).slice(0, 300) }))
+  await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source: QUAL_INIT })
+  await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source: MX_INIT })
+  await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source: P8_INIT })
+  await watchWorkers(browser, w)
+  watchWorkerLogs(browser, w)
+  return w
+}
+
+/** One read per mode, the page's state asserted with each (lang, mode, view; the scenario's state where it has one); light put back. */
+async function readModes(w, expr, { lang, view, state }) {
+  const out = {}
+  const v = VIEWS[view]
+  for (const mode of modes) {
+    await setMode(w, mode)
+    await sleep(250)
+    const reached = await assertReached(w, { lang, mode, viewport: { w: v.width, h: v.height, dpr: v.deviceScaleFactor }, state })
+    out[mode] = { reached: { outcome: reached.outcome, problems: reached.problems }, ...(await w.evaluate(expr)) }
+  }
+  await setMode(w, 'light')
+  await sleep(200)
+  return out
+}
+
+async function createJob(w) {
+  if (await mx(w, 'M.ack()')) { await w.click(w.acknowledgeButton()); await sleep(200) }
+  await w.click(w.createButton())
+}
+
+async function saveAndProbe(w, dir, key) {
+  const saveSel = '#process-result > .notification[data-kind="success"] .actions > button.button'
+  if (!(await mx(w, `!!M.saveBtn() && M.vis(M.saveBtn())`))) return { saved: false, why: 'no Save on the page' }
+  const before = (await w.evaluate('window.__audit.saves.length'))
+  await w.click(saveSel)
+  await w.waitFor(`window.__audit.saves.length > ${before}`, { label: 'the save picker', timeout: 30000 })
+  await w.waitSaved()
+  const saveStatus = await w.evaluate(`(document.getElementById('save-status') || {}).textContent.replace(/\\s+/g, ' ').trim()`)
+  const got = await w.evaluate(`(async () => { const root = await navigator.storage.getDirectory(); const d = await root.getDirectoryHandle('audit-saves'); const name = window.__audit.saves.at(-1).name; const f = await (await d.getFileHandle(name)).getFile(); const b = new Uint8Array(await f.arrayBuffer()); let s = ''; for (let i = 0; i < b.length; i += 0x8000) s += String.fromCharCode.apply(null, b.subarray(i, i + 0x8000)); return { name, size: b.length, b64: btoa(s) }; })()`)
+  const buf = Buffer.from(got.b64, 'base64')
+  const file = join(dir, `${key}__${got.name.replace(/[^\w.-]+/g, '_')}`)
+  writeFileSync(file, buf)
+  return { saved: true, saveStatus, name: got.name, bytes: got.size, sha256: sha(buf).slice(0, 16), file, tracks: ffprobe(file) }
+}
+
+// ---------------------------------------------------------------------------
+const stamp = new Date().toISOString().replace(/[:.]/g, '-')
+// The saved videos (a few MB each) go to FILES_DIR, by default beside the records.
+const runDir = resolve(process.env.FILES_DIR ?? join(RESULTS, `${LABEL}-files`))
+mkdirSync(runDir, { recursive: true })
+const browser = await connectBrowser()
+const fixturesUsed = [...new Set(cellsWanted.map((c) => CELLS[c].file ?? SCENARIOS[c]?.fixtures?.[0]).filter(Boolean))]
+const run = {
+  label: LABEL, source: process.env.SOURCE ?? null, started: new Date().toISOString(), appUrl: process.env.APP_URL, cdpPort: process.env.CDP_PORT,
+  chrome: browser.version.Browser, node: process.version, walker: WALKER, walkerSha: treeSha(WALKER), appSrcSha: treeSha(join(APP_ROOT, 'src')), appRoot: APP_ROOT,
+  fixtures: Object.fromEntries(fixturesUsed.map((f) => [f, sha(readFileSync(F(f))).slice(0, 16)])),
+  cells: cellsWanted, langs, views, modes, argv: process.argv.slice(2), power: [power()], flags: [],
+}
+if (!run.power[0].ac) { run.flags.push('on battery at the start: stopped'); writeFileSync(join(RESULTS, `${LABEL}-run.json`), JSON.stringify(run, null, 1)); console.log('ON BATTERY: stopped'); process.exit(2) }
+if (run.power[0].load1 > 8) run.flags.push(`load ${run.power[0].load1} at the start (above 8)`)
+console.log(`${LABEL}: ${run.chrome}, walker ${run.walkerSha}, app src ${run.appSrcSha}, load ${run.power[0].load.join(' ')}`)
+
+let stop = false
+for (const cellId of cellsWanted) {
+  if (stop) break
+  const cell = CELLS[cellId]
+  const sc = cell.scenario ? SCENARIOS[cell.scenario] : null
+  const recs = []
+  for (const lang of langs) for (const view of views) {
+    if (stop) break
+    const p0 = power()
+    run.power.push({ cell: cellId, lang, view, ...p0 })
+    if (!p0.ac) { run.flags.push(`on battery before ${cellId} ${lang} ${view}: stopped`); stop = true; break }
+    if (p0.load1 > 8) run.flags.push(`load ${p0.load1} before ${cellId} ${lang} ${view}`)
+    const key = `${cellId}__${lang}__${view}`
+    const t0 = Date.now()
+    const rec = { key, cell: cellId, scenario: cell.scenario ?? null, what: cell.what ?? sc?.name, lang, view, modesRead: modes, powerAtStart: { ac: p0.ac, load: p0.load, powermode: p0.powermode } }
+    const w = await openWalk(browser, `${LABEL}-${stamp}/${key}`)
+    try {
+      await setViewport(w, view)
+      // A click on Create (or Continue anyway) is where pre-flight is read: the scenario's own setup runs on unchanged.
+      const realClick = w.click.bind(w)
+      w.click = async (sel, ...rest) => {
+        if (!rec.pre && (sel === w.createButton() || sel === w.acknowledgeButton())) { rec.preAt = Date.now() - t0; rec.pre = await readModes(w, READ_PRE, { lang, view }) }
+        return realClick(sel, ...rest)
+      }
+      if (sc) {
+        await sc.setup(w, lang)
+      } else {
+        await ready(w, lang, cell.file)
+        await w.type('#trim-end', cell.trimEnd)
+        await w.press('Tab')
+        await w.waitSettled({ timeout: 180000 })
+        await until(w, 'M.verdict() && !M.checking()', 'the verdict after the trim', 180000)
+        await sleep(400)
+        if (cell.job) { await createJob(w); await w.waitRunning(); await until(w, `M.finished() || M.res() === 'failure'`, 'the job’s end', 600000); await sleep(400) }
+      }
+      if (!rec.pre) rec.pre = await readModes(w, READ_PRE, { lang, view, state: sc?.state })
+      rec.obs = w.obs ?? null
+      if (cell.job) {
+        rec.job = await readModes(w, READ_JOB, { lang, view, state: sc?.state })
+        rec.spokenAtCompletion = await spokenAtCompletion(w).catch((e) => ({ error: String(e.message ?? e).slice(0, 200) }))
+        rec.planned = { count: (w.p8planned?.planned ?? []).length, completed: w.p8planned?.completed ?? [], workers: w.p8planned?.workers }
+        rec.output = await saveAndProbe(w, runDir, key).catch((e) => ({ saved: false, error: String(e.message ?? e).slice(0, 300) }))
+      }
+      if (sc) rec.scenarioAsserts = await assertRows(w, sc).catch((e) => [{ what: 'assertRows', outcome: 'cannot-determine', why: String(e.message ?? e).slice(0, 200) }])
+      rec.status = 'ok'
+    } catch (e) {
+      rec.status = 'failed'
+      rec.error = String(e.stack ?? e).slice(0, 600)
+      try { rec.atFailure = await w.evaluate(READ_PRE) } catch { /* page gone */ }
+    } finally {
+      rec.workerLogs = (w.workerLogs ?? []).map((l) => ({ ...l, t: l.t - t0 }))
+      rec.console = (w.console ?? []).map((l) => ({ ...l, t: l.t - t0 }))
+      rec.ms = Date.now() - t0
+      await w.close().catch(() => {})
+    }
+    const L = rec.pre?.light
+    console.log(`${rec.status} ${key} ${Math.round(rec.ms / 1000)} s: ${L?.warnings ? L.warnings.items.map((i) => i.heading).join(' | ') : 'no warning'}${rec.job ? ` -> ${rec.job.light?.res}; tracks ${rec.output?.tracks ? `${rec.output.tracks.video}v ${rec.output.tracks.audio}a` : rec.output?.error ?? '?'}` : ''}`)
+    recs.push(rec)
+  }
+  writeFileSync(join(RESULTS, `${LABEL}-${cellId}.json`), JSON.stringify(recs, null, 1))
+}
+run.power.push(power())
+run.ended = new Date().toISOString()
+const pe = run.power.at(-1)
+if (!pe.ac) run.flags.push('on battery at the end')
+if (new Set(run.power.map((p) => p.powermode)).size > 1) run.flags.push('power mode changed during the run')
+writeFileSync(join(RESULTS, `${LABEL}-run.json`), JSON.stringify(run, null, 1))
+await closeAnalysis().catch(() => {})
+browser.close()
+console.log(`done: ${RESULTS}`)
+process.exit(0)

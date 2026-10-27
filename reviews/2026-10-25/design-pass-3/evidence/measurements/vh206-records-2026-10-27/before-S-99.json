@@ -1,0 +1,4992 @@
+[
+ {
+  "key": "S-99__en-GB__w1280",
+  "cell": "S-99",
+  "scenario": "S-99",
+  "what": "A kept sliver of sound: no audio before Create",
+  "lang": "en-GB",
+  "view": "w1280",
+  "modesRead": [
+   "light",
+   "dark",
+   "forced-light",
+   "forced-dark"
+  ],
+  "powerAtStart": {
+   "ac": true,
+   "load": [
+    4.65,
+    4.77,
+    5.6
+   ],
+   "powermode": "powermode            2"
+  },
+  "pre": {
+   "light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": false
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Ready to go"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:04.0"
+    },
+    "warnings": {
+     "kind": "warning",
+     "title": "Worth knowing about the audio",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "This video has no audio",
+       "detail": "There is no audio to level, so the rest of the job runs without it. If you expected audio, check the recording before publishing.",
+       "headingKeys": [
+        "noAudio"
+       ],
+       "detailKeys": [
+        "noAudio"
+       ],
+       "headingLines": 1,
+       "detailLines": 2,
+       "linesPerItem": 3,
+       "lines": {
+        "heading": [
+         {
+          "text": "This video has no audio",
+          "chars": 23,
+          "cjk": 0,
+          "latin": 23,
+          "weighted": 11.5,
+          "widthPx": 159,
+          "outcome": "pass"
+         }
+        ],
+        "detail": [
+         {
+          "text": "There is no audio to level, so the rest of the job runs without it. If you",
+          "chars": 74,
+          "cjk": 0,
+          "latin": 74,
+          "weighted": 37,
+          "widthPx": 423,
+          "outcome": "pass"
+         },
+         {
+          "text": "expected audio, check the recording before publishing.",
+          "chars": 54,
+          "cjk": 0,
+          "latin": 54,
+          "weighted": 27,
+          "widthPx": 339,
+          "outcome": "pass"
+         }
+        ]
+       }
+      }
+     ],
+     "tail": [
+      {
+       "text": "None of these stop you continuing. Your original file is not changed either way.",
+       "lines": 2
+      }
+     ],
+     "measure": {
+      "maxChars": 74,
+      "maxCjk": 0,
+      "maxWeighted": 37,
+      "worst": "pass",
+      "lines": 6
+     },
+     "overflow": []
+    },
+    "noAudioHeading": true,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio.",
+     "shown": "",
+     "spokenOnly": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio."
+    },
+    "sourceStatus": {
+     "announced": "Video read.",
+     "shown": "Video read.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793119314085,
+     "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio."
+    },
+    "liveRegions": [
+     {
+      "region": "div.promise-help",
+      "text": "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperabl"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video read."
+     },
+     {
+      "region": "div",
+      "text": "The last second of video — the closing graphics cover it as they build. A held last frame — your last frame is held for one extra second. The closing graphics p"
+     },
+     {
+      "region": "#status",
+      "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio."
+     }
+    ],
+    "checking": false
+   },
+   "dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": false
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Ready to go"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:04.0"
+    },
+    "warnings": {
+     "kind": "warning",
+     "title": "Worth knowing about the audio",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "This video has no audio",
+       "detail": "There is no audio to level, so the rest of the job runs without it. If you expected audio, check the recording before publishing.",
+       "headingKeys": [
+        "noAudio"
+       ],
+       "detailKeys": [
+        "noAudio"
+       ],
+       "headingLines": 1,
+       "detailLines": 2,
+       "linesPerItem": 3,
+       "lines": {
+        "heading": [
+         {
+          "text": "This video has no audio",
+          "chars": 23,
+          "cjk": 0,
+          "latin": 23,
+          "weighted": 11.5,
+          "widthPx": 159,
+          "outcome": "pass"
+         }
+        ],
+        "detail": [
+         {
+          "text": "There is no audio to level, so the rest of the job runs without it. If you",
+          "chars": 74,
+          "cjk": 0,
+          "latin": 74,
+          "weighted": 37,
+          "widthPx": 423,
+          "outcome": "pass"
+         },
+         {
+          "text": "expected audio, check the recording before publishing.",
+          "chars": 54,
+          "cjk": 0,
+          "latin": 54,
+          "weighted": 27,
+          "widthPx": 339,
+          "outcome": "pass"
+         }
+        ]
+       }
+      }
+     ],
+     "tail": [
+      {
+       "text": "None of these stop you continuing. Your original file is not changed either way.",
+       "lines": 2
+      }
+     ],
+     "measure": {
+      "maxChars": 74,
+      "maxCjk": 0,
+      "maxWeighted": 37,
+      "worst": "pass",
+      "lines": 6
+     },
+     "overflow": []
+    },
+    "noAudioHeading": true,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio.",
+     "shown": "",
+     "spokenOnly": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio."
+    },
+    "sourceStatus": {
+     "announced": "Video read.",
+     "shown": "Video read.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793119314085,
+     "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio."
+    },
+    "liveRegions": [
+     {
+      "region": "div.promise-help",
+      "text": "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperabl"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video read."
+     },
+     {
+      "region": "div",
+      "text": "The last second of video — the closing graphics cover it as they build. A held last frame — your last frame is held for one extra second. The closing graphics p"
+     },
+     {
+      "region": "#status",
+      "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio."
+     }
+    ],
+    "checking": false
+   },
+   "forced-light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": true
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Ready to go"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:04.0"
+    },
+    "warnings": {
+     "kind": "warning",
+     "title": "Worth knowing about the audio",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "This video has no audio",
+       "detail": "There is no audio to level, so the rest of the job runs without it. If you expected audio, check the recording before publishing.",
+       "headingKeys": [
+        "noAudio"
+       ],
+       "detailKeys": [
+        "noAudio"
+       ],
+       "headingLines": 1,
+       "detailLines": 2,
+       "linesPerItem": 3,
+       "lines": {
+        "heading": [
+         {
+          "text": "This video has no audio",
+          "chars": 23,
+          "cjk": 0,
+          "latin": 23,
+          "weighted": 11.5,
+          "widthPx": 159,
+          "outcome": "pass"
+         }
+        ],
+        "detail": [
+         {
+          "text": "There is no audio to level, so the rest of the job runs without it. If you",
+          "chars": 74,
+          "cjk": 0,
+          "latin": 74,
+          "weighted": 37,
+          "widthPx": 423,
+          "outcome": "pass"
+         },
+         {
+          "text": "expected audio, check the recording before publishing.",
+          "chars": 54,
+          "cjk": 0,
+          "latin": 54,
+          "weighted": 27,
+          "widthPx": 339,
+          "outcome": "pass"
+         }
+        ]
+       }
+      }
+     ],
+     "tail": [
+      {
+       "text": "None of these stop you continuing. Your original file is not changed either way.",
+       "lines": 2
+      }
+     ],
+     "measure": {
+      "maxChars": 74,
+      "maxCjk": 0,
+      "maxWeighted": 37,
+      "worst": "pass",
+      "lines": 6
+     },
+     "overflow": []
+    },
+    "noAudioHeading": true,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio.",
+     "shown": "",
+     "spokenOnly": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio."
+    },
+    "sourceStatus": {
+     "announced": "Video read.",
+     "shown": "Video read.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793119314085,
+     "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio."
+    },
+    "liveRegions": [
+     {
+      "region": "div.promise-help",
+      "text": "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperabl"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video read."
+     },
+     {
+      "region": "div",
+      "text": "The last second of video — the closing graphics cover it as they build. A held last frame — your last frame is held for one extra second. The closing graphics p"
+     },
+     {
+      "region": "#status",
+      "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio."
+     }
+    ],
+    "checking": false
+   },
+   "forced-dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": true
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Ready to go"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:04.0"
+    },
+    "warnings": {
+     "kind": "warning",
+     "title": "Worth knowing about the audio",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "This video has no audio",
+       "detail": "There is no audio to level, so the rest of the job runs without it. If you expected audio, check the recording before publishing.",
+       "headingKeys": [
+        "noAudio"
+       ],
+       "detailKeys": [
+        "noAudio"
+       ],
+       "headingLines": 1,
+       "detailLines": 2,
+       "linesPerItem": 3,
+       "lines": {
+        "heading": [
+         {
+          "text": "This video has no audio",
+          "chars": 23,
+          "cjk": 0,
+          "latin": 23,
+          "weighted": 11.5,
+          "widthPx": 159,
+          "outcome": "pass"
+         }
+        ],
+        "detail": [
+         {
+          "text": "There is no audio to level, so the rest of the job runs without it. If you",
+          "chars": 74,
+          "cjk": 0,
+          "latin": 74,
+          "weighted": 37,
+          "widthPx": 423,
+          "outcome": "pass"
+         },
+         {
+          "text": "expected audio, check the recording before publishing.",
+          "chars": 54,
+          "cjk": 0,
+          "latin": 54,
+          "weighted": 27,
+          "widthPx": 339,
+          "outcome": "pass"
+         }
+        ]
+       }
+      }
+     ],
+     "tail": [
+      {
+       "text": "None of these stop you continuing. Your original file is not changed either way.",
+       "lines": 2
+      }
+     ],
+     "measure": {
+      "maxChars": 74,
+      "maxCjk": 0,
+      "maxWeighted": 37,
+      "worst": "pass",
+      "lines": 6
+     },
+     "overflow": []
+    },
+    "noAudioHeading": true,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio.",
+     "shown": "",
+     "spokenOnly": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio."
+    },
+    "sourceStatus": {
+     "announced": "Video read.",
+     "shown": "Video read.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793119314085,
+     "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio."
+    },
+    "liveRegions": [
+     {
+      "region": "div.promise-help",
+      "text": "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperabl"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video read."
+     },
+     {
+      "region": "div",
+      "text": "The last second of video — the closing graphics cover it as they build. A held last frame — your last frame is held for one extra second. The closing graphics p"
+     },
+     {
+      "region": "#status",
+      "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio."
+     }
+    ],
+    "checking": false
+   }
+  },
+  "obs": {
+   "afterTab": "#trim-set-end"
+  },
+  "scenarioAsserts": [
+   {
+    "what": "Tab from End time lands on \"Set end here\", where Tab puts it (S-34)",
+    "outcome": "pass",
+    "seen": {
+     "afterTab": "#trim-set-end"
+    }
+   }
+  ],
+  "status": "ok",
+  "workerLogs": [
+   {
+    "t": 773,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (worker)"
+    ]
+   },
+   {
+    "t": 774,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[worker]",
+     "job worker ready"
+    ]
+   },
+   {
+    "t": 774,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[worker]",
+     "ping received"
+    ]
+   },
+   {
+    "t": 1227,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.016,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 1235,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.016,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 1235,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "device capabilities inspected",
+     {
+      "hasWebCodecs": true,
+      "hasOpfs": true,
+      "deviceClass": "desktop",
+      "hardwareConcurrency": 10,
+      "quotaBytes": 10737418428,
+      "availableBytes": 10737418240
+     }
+    ]
+   },
+   {
+    "t": 1249,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1280,
+      "height": 720,
+      "bitrate": 2648219
+     }
+    ]
+   },
+   {
+    "t": 1320,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 2,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 1605,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[probe]",
+     "calibration complete",
+     {
+      "framesEncoded": 75,
+      "videoFramesPerSecond": 411,
+      "audioRealtimeFactor": 91,
+      "estimatedSeconds": 3,
+      "videoSeconds": 0.6,
+      "brandingSeconds": 0.6,
+      "audioPlanningSeconds": 1.3,
+      "audioProcessingSeconds": 0.1,
+      "verificationSeconds": 0.1
+     }
+    ]
+   },
+   {
+    "t": 2656,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.016,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 2656,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "device capabilities inspected",
+     {
+      "hasWebCodecs": true,
+      "hasOpfs": true,
+      "deviceClass": "desktop",
+      "hardwareConcurrency": 10,
+      "quotaBytes": 10737418428,
+      "availableBytes": 10737418240
+     }
+    ]
+   },
+   {
+    "t": 2667,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1280,
+      "height": 720,
+      "bitrate": 2648219
+     }
+    ]
+   },
+   {
+    "t": 2930,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[probe]",
+     "calibration complete",
+     {
+      "framesEncoded": 75,
+      "videoFramesPerSecond": 385,
+      "audioRealtimeFactor": null,
+      "estimatedSeconds": 1,
+      "videoSeconds": 0.3,
+      "brandingSeconds": 0.6,
+      "audioPlanningSeconds": 0,
+      "audioProcessingSeconds": 0,
+      "verificationSeconds": 0
+     }
+    ]
+   }
+  ],
+  "console": [],
+  "ms": 6341
+ },
+ {
+  "key": "S-99__en-GB__w320",
+  "cell": "S-99",
+  "scenario": "S-99",
+  "what": "A kept sliver of sound: no audio before Create",
+  "lang": "en-GB",
+  "view": "w320",
+  "modesRead": [
+   "light",
+   "dark",
+   "forced-light",
+   "forced-dark"
+  ],
+  "powerAtStart": {
+   "ac": true,
+   "load": [
+    4.6,
+    4.76,
+    5.59
+   ],
+   "powermode": "powermode            2"
+  },
+  "pre": {
+   "light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": false
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Ready to go"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:04.0"
+    },
+    "warnings": {
+     "kind": "warning",
+     "title": "Worth knowing about the audio",
+     "titleLines": 2,
+     "items": [
+      {
+       "heading": "This video has no audio",
+       "detail": "There is no audio to level, so the rest of the job runs without it. If you expected audio, check the recording before publishing.",
+       "headingKeys": [
+        "noAudio"
+       ],
+       "detailKeys": [
+        "noAudio"
+       ],
+       "headingLines": 1,
+       "detailLines": 5,
+       "linesPerItem": 6,
+       "lines": {
+        "heading": [
+         {
+          "text": "This video has no audio",
+          "chars": 23,
+          "cjk": 0,
+          "latin": 23,
+          "weighted": 11.5,
+          "widthPx": 159,
+          "outcome": "pass"
+         }
+        ],
+        "detail": [
+         {
+          "text": "There is no audio to level, so",
+          "chars": 30,
+          "cjk": 0,
+          "latin": 30,
+          "weighted": 15,
+          "widthPx": 179,
+          "outcome": "pass"
+         },
+         {
+          "text": "the rest of the job runs",
+          "chars": 24,
+          "cjk": 0,
+          "latin": 24,
+          "weighted": 12,
+          "widthPx": 139,
+          "outcome": "pass"
+         },
+         {
+          "text": "without it. If you expected",
+          "chars": 27,
+          "cjk": 0,
+          "latin": 27,
+          "weighted": 13.5,
+          "widthPx": 158,
+          "outcome": "pass"
+         },
+         {
+          "text": "audio, check the recording",
+          "chars": 26,
+          "cjk": 0,
+          "latin": 26,
+          "weighted": 13,
+          "widthPx": 164,
+          "outcome": "pass"
+         },
+         {
+          "text": "before publishing.",
+          "chars": 18,
+          "cjk": 0,
+          "latin": 18,
+          "weighted": 9,
+          "widthPx": 111,
+          "outcome": "pass"
+         }
+        ]
+       }
+      }
+     ],
+     "tail": [
+      {
+       "text": "None of these stop you continuing. Your original file is not changed either way.",
+       "lines": 3
+      }
+     ],
+     "measure": {
+      "maxChars": 33,
+      "maxCjk": 0,
+      "maxWeighted": 16.5,
+      "worst": "pass",
+      "lines": 11
+     },
+     "overflow": []
+    },
+    "noAudioHeading": true,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio.",
+     "shown": "",
+     "spokenOnly": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio."
+    },
+    "sourceStatus": {
+     "announced": "Video read.",
+     "shown": "Video read.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793119320375,
+     "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio."
+    },
+    "liveRegions": [
+     {
+      "region": "div.promise-help",
+      "text": "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperabl"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video read."
+     },
+     {
+      "region": "div",
+      "text": "The last second of video — the closing graphics cover it as they build. A held last frame — your last frame is held for one extra second. The closing graphics p"
+     },
+     {
+      "region": "#status",
+      "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio."
+     }
+    ],
+    "checking": false
+   },
+   "dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": false
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Ready to go"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:04.0"
+    },
+    "warnings": {
+     "kind": "warning",
+     "title": "Worth knowing about the audio",
+     "titleLines": 2,
+     "items": [
+      {
+       "heading": "This video has no audio",
+       "detail": "There is no audio to level, so the rest of the job runs without it. If you expected audio, check the recording before publishing.",
+       "headingKeys": [
+        "noAudio"
+       ],
+       "detailKeys": [
+        "noAudio"
+       ],
+       "headingLines": 1,
+       "detailLines": 5,
+       "linesPerItem": 6,
+       "lines": {
+        "heading": [
+         {
+          "text": "This video has no audio",
+          "chars": 23,
+          "cjk": 0,
+          "latin": 23,
+          "weighted": 11.5,
+          "widthPx": 159,
+          "outcome": "pass"
+         }
+        ],
+        "detail": [
+         {
+          "text": "There is no audio to level, so",
+          "chars": 30,
+          "cjk": 0,
+          "latin": 30,
+          "weighted": 15,
+          "widthPx": 179,
+          "outcome": "pass"
+         },
+         {
+          "text": "the rest of the job runs",
+          "chars": 24,
+          "cjk": 0,
+          "latin": 24,
+          "weighted": 12,
+          "widthPx": 139,
+          "outcome": "pass"
+         },
+         {
+          "text": "without it. If you expected",
+          "chars": 27,
+          "cjk": 0,
+          "latin": 27,
+          "weighted": 13.5,
+          "widthPx": 158,
+          "outcome": "pass"
+         },
+         {
+          "text": "audio, check the recording",
+          "chars": 26,
+          "cjk": 0,
+          "latin": 26,
+          "weighted": 13,
+          "widthPx": 164,
+          "outcome": "pass"
+         },
+         {
+          "text": "before publishing.",
+          "chars": 18,
+          "cjk": 0,
+          "latin": 18,
+          "weighted": 9,
+          "widthPx": 111,
+          "outcome": "pass"
+         }
+        ]
+       }
+      }
+     ],
+     "tail": [
+      {
+       "text": "None of these stop you continuing. Your original file is not changed either way.",
+       "lines": 3
+      }
+     ],
+     "measure": {
+      "maxChars": 33,
+      "maxCjk": 0,
+      "maxWeighted": 16.5,
+      "worst": "pass",
+      "lines": 11
+     },
+     "overflow": []
+    },
+    "noAudioHeading": true,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio.",
+     "shown": "",
+     "spokenOnly": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio."
+    },
+    "sourceStatus": {
+     "announced": "Video read.",
+     "shown": "Video read.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793119320375,
+     "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio."
+    },
+    "liveRegions": [
+     {
+      "region": "div.promise-help",
+      "text": "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperabl"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video read."
+     },
+     {
+      "region": "div",
+      "text": "The last second of video — the closing graphics cover it as they build. A held last frame — your last frame is held for one extra second. The closing graphics p"
+     },
+     {
+      "region": "#status",
+      "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio."
+     }
+    ],
+    "checking": false
+   },
+   "forced-light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": true
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Ready to go"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:04.0"
+    },
+    "warnings": {
+     "kind": "warning",
+     "title": "Worth knowing about the audio",
+     "titleLines": 2,
+     "items": [
+      {
+       "heading": "This video has no audio",
+       "detail": "There is no audio to level, so the rest of the job runs without it. If you expected audio, check the recording before publishing.",
+       "headingKeys": [
+        "noAudio"
+       ],
+       "detailKeys": [
+        "noAudio"
+       ],
+       "headingLines": 1,
+       "detailLines": 5,
+       "linesPerItem": 6,
+       "lines": {
+        "heading": [
+         {
+          "text": "This video has no audio",
+          "chars": 23,
+          "cjk": 0,
+          "latin": 23,
+          "weighted": 11.5,
+          "widthPx": 159,
+          "outcome": "pass"
+         }
+        ],
+        "detail": [
+         {
+          "text": "There is no audio to level, so",
+          "chars": 30,
+          "cjk": 0,
+          "latin": 30,
+          "weighted": 15,
+          "widthPx": 179,
+          "outcome": "pass"
+         },
+         {
+          "text": "the rest of the job runs",
+          "chars": 24,
+          "cjk": 0,
+          "latin": 24,
+          "weighted": 12,
+          "widthPx": 139,
+          "outcome": "pass"
+         },
+         {
+          "text": "without it. If you expected",
+          "chars": 27,
+          "cjk": 0,
+          "latin": 27,
+          "weighted": 13.5,
+          "widthPx": 158,
+          "outcome": "pass"
+         },
+         {
+          "text": "audio, check the recording",
+          "chars": 26,
+          "cjk": 0,
+          "latin": 26,
+          "weighted": 13,
+          "widthPx": 164,
+          "outcome": "pass"
+         },
+         {
+          "text": "before publishing.",
+          "chars": 18,
+          "cjk": 0,
+          "latin": 18,
+          "weighted": 9,
+          "widthPx": 111,
+          "outcome": "pass"
+         }
+        ]
+       }
+      }
+     ],
+     "tail": [
+      {
+       "text": "None of these stop you continuing. Your original file is not changed either way.",
+       "lines": 3
+      }
+     ],
+     "measure": {
+      "maxChars": 33,
+      "maxCjk": 0,
+      "maxWeighted": 16.5,
+      "worst": "pass",
+      "lines": 11
+     },
+     "overflow": []
+    },
+    "noAudioHeading": true,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio.",
+     "shown": "",
+     "spokenOnly": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio."
+    },
+    "sourceStatus": {
+     "announced": "Video read.",
+     "shown": "Video read.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793119320375,
+     "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio."
+    },
+    "liveRegions": [
+     {
+      "region": "div.promise-help",
+      "text": "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperabl"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video read."
+     },
+     {
+      "region": "div",
+      "text": "The last second of video — the closing graphics cover it as they build. A held last frame — your last frame is held for one extra second. The closing graphics p"
+     },
+     {
+      "region": "#status",
+      "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio."
+     }
+    ],
+    "checking": false
+   },
+   "forced-dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": true
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Ready to go"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:04.0"
+    },
+    "warnings": {
+     "kind": "warning",
+     "title": "Worth knowing about the audio",
+     "titleLines": 2,
+     "items": [
+      {
+       "heading": "This video has no audio",
+       "detail": "There is no audio to level, so the rest of the job runs without it. If you expected audio, check the recording before publishing.",
+       "headingKeys": [
+        "noAudio"
+       ],
+       "detailKeys": [
+        "noAudio"
+       ],
+       "headingLines": 1,
+       "detailLines": 5,
+       "linesPerItem": 6,
+       "lines": {
+        "heading": [
+         {
+          "text": "This video has no audio",
+          "chars": 23,
+          "cjk": 0,
+          "latin": 23,
+          "weighted": 11.5,
+          "widthPx": 159,
+          "outcome": "pass"
+         }
+        ],
+        "detail": [
+         {
+          "text": "There is no audio to level, so",
+          "chars": 30,
+          "cjk": 0,
+          "latin": 30,
+          "weighted": 15,
+          "widthPx": 179,
+          "outcome": "pass"
+         },
+         {
+          "text": "the rest of the job runs",
+          "chars": 24,
+          "cjk": 0,
+          "latin": 24,
+          "weighted": 12,
+          "widthPx": 139,
+          "outcome": "pass"
+         },
+         {
+          "text": "without it. If you expected",
+          "chars": 27,
+          "cjk": 0,
+          "latin": 27,
+          "weighted": 13.5,
+          "widthPx": 158,
+          "outcome": "pass"
+         },
+         {
+          "text": "audio, check the recording",
+          "chars": 26,
+          "cjk": 0,
+          "latin": 26,
+          "weighted": 13,
+          "widthPx": 164,
+          "outcome": "pass"
+         },
+         {
+          "text": "before publishing.",
+          "chars": 18,
+          "cjk": 0,
+          "latin": 18,
+          "weighted": 9,
+          "widthPx": 111,
+          "outcome": "pass"
+         }
+        ]
+       }
+      }
+     ],
+     "tail": [
+      {
+       "text": "None of these stop you continuing. Your original file is not changed either way.",
+       "lines": 3
+      }
+     ],
+     "measure": {
+      "maxChars": 33,
+      "maxCjk": 0,
+      "maxWeighted": 16.5,
+      "worst": "pass",
+      "lines": 11
+     },
+     "overflow": []
+    },
+    "noAudioHeading": true,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio.",
+     "shown": "",
+     "spokenOnly": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio."
+    },
+    "sourceStatus": {
+     "announced": "Video read.",
+     "shown": "Video read.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793119320375,
+     "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio."
+    },
+    "liveRegions": [
+     {
+      "region": "div.promise-help",
+      "text": "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperabl"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video read."
+     },
+     {
+      "region": "div",
+      "text": "The last second of video — the closing graphics cover it as they build. A held last frame — your last frame is held for one extra second. The closing graphics p"
+     },
+     {
+      "region": "#status",
+      "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio."
+     }
+    ],
+    "checking": false
+   }
+  },
+  "obs": {
+   "afterTab": "#trim-set-end"
+  },
+  "scenarioAsserts": [
+   {
+    "what": "Tab from End time lands on \"Set end here\", where Tab puts it (S-34)",
+    "outcome": "pass",
+    "seen": {
+     "afterTab": "#trim-set-end"
+    }
+   }
+  ],
+  "status": "ok",
+  "workerLogs": [
+   {
+    "t": 668,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (worker)"
+    ]
+   },
+   {
+    "t": 668,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[worker]",
+     "job worker ready"
+    ]
+   },
+   {
+    "t": 668,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[worker]",
+     "ping received"
+    ]
+   },
+   {
+    "t": 1119,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.016,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 1126,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.016,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 1127,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "device capabilities inspected",
+     {
+      "hasWebCodecs": true,
+      "hasOpfs": true,
+      "deviceClass": "desktop",
+      "hardwareConcurrency": 10,
+      "quotaBytes": 10737418428,
+      "availableBytes": 10737418240
+     }
+    ]
+   },
+   {
+    "t": 1138,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1280,
+      "height": 720,
+      "bitrate": 2648219
+     }
+    ]
+   },
+   {
+    "t": 1205,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 2,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 1471,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[probe]",
+     "calibration complete",
+     {
+      "framesEncoded": 75,
+      "videoFramesPerSecond": 406,
+      "audioRealtimeFactor": 95,
+      "estimatedSeconds": 3,
+      "videoSeconds": 0.6,
+      "brandingSeconds": 0.6,
+      "audioPlanningSeconds": 1.2,
+      "audioProcessingSeconds": 0.1,
+      "verificationSeconds": 0.1
+     }
+    ]
+   },
+   {
+    "t": 2553,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.016,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 2553,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "device capabilities inspected",
+     {
+      "hasWebCodecs": true,
+      "hasOpfs": true,
+      "deviceClass": "desktop",
+      "hardwareConcurrency": 10,
+      "quotaBytes": 10737418428,
+      "availableBytes": 10737418240
+     }
+    ]
+   },
+   {
+    "t": 2564,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1280,
+      "height": 720,
+      "bitrate": 2648219
+     }
+    ]
+   },
+   {
+    "t": 2820,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[probe]",
+     "calibration complete",
+     {
+      "framesEncoded": 75,
+      "videoFramesPerSecond": 408,
+      "audioRealtimeFactor": null,
+      "estimatedSeconds": 1,
+      "videoSeconds": 0.2,
+      "brandingSeconds": 0.6,
+      "audioPlanningSeconds": 0,
+      "audioProcessingSeconds": 0,
+      "verificationSeconds": 0
+     }
+    ]
+   }
+  ],
+  "console": [],
+  "ms": 6244
+ },
+ {
+  "key": "S-99__zh-Hans__w1280",
+  "cell": "S-99",
+  "scenario": "S-99",
+  "what": "A kept sliver of sound: no audio before Create",
+  "lang": "zh-Hans",
+  "view": "w1280",
+  "modesRead": [
+   "light",
+   "dark",
+   "forced-light",
+   "forced-dark"
+  ],
+  "powerAtStart": {
+   "ac": true,
+   "load": [
+    4.63,
+    4.76,
+    5.58
+   ],
+   "powermode": "powermode            2"
+  },
+  "pre": {
+   "light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": false
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "准备就绪"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:04.0"
+    },
+    "warnings": {
+     "kind": "warning",
+     "title": "值得了解的音频特性",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "这段视频没有音频",
+       "detail": "由于没有需要调节音量的音频，所以后续工作将在没有音频的情况下进行。如果您需要音频，请在发布前检查录音。",
+       "headingKeys": [
+        "noAudio"
+       ],
+       "detailKeys": [
+        "noAudio"
+       ],
+       "headingLines": 1,
+       "detailLines": 2,
+       "linesPerItem": 3,
+       "lines": {
+        "heading": [
+         {
+          "text": "这段视频没有音频",
+          "chars": 8,
+          "cjk": 8,
+          "latin": 0,
+          "weighted": 8,
+          "widthPx": 112,
+          "outcome": "pass"
+         }
+        ],
+        "detail": [
+         {
+          "text": "由于没有需要调节音量的音频，所以后续工作将在没有音频的情况下进",
+          "chars": 31,
+          "cjk": 31,
+          "latin": 0,
+          "weighted": 31,
+          "widthPx": 434,
+          "outcome": "pass"
+         },
+         {
+          "text": "行。如果您需要音频，请在发布前检查录音。",
+          "chars": 20,
+          "cjk": 20,
+          "latin": 0,
+          "weighted": 20,
+          "widthPx": 280,
+          "outcome": "pass"
+         }
+        ]
+       }
+      }
+     ],
+     "tail": [
+      {
+       "text": "这些都不会阻止您继续操作。您的原始文件也不会因此而改变。",
+       "lines": 1
+      }
+     ],
+     "measure": {
+      "maxChars": 31,
+      "maxCjk": 31,
+      "maxWeighted": 31,
+      "worst": "pass",
+      "lines": 5
+     },
+     "overflow": []
+    },
+    "noAudioHeading": true,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。",
+     "shown": "",
+     "spokenOnly": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。"
+    },
+    "sourceStatus": {
+     "announced": "视频已读取。",
+     "shown": "视频已读取。",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793119327137,
+     "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。"
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "页面语言：简体中文。"
+     },
+     {
+      "region": "div.promise-help",
+      "text": "视频有许多格式。有些格式在一台设备上可以播放，在另一台上却不行，或者无法在某些应用中使用。此工具会将您的视频保存为 MP4，这是兼容性最好的视频格式。这意味着它几乎可以在任何手机、电脑或网站上播放。"
+     },
+     {
+      "region": "#source-status",
+      "text": "视频已读取。"
+     },
+     {
+      "region": "div",
+      "text": "视频的最后一秒 — 结尾图形在逐渐出现时会覆盖这一秒。 定格的最后一帧 — 最后一帧画面会额外停留一秒钟。结尾图形会覆盖这一秒，所以视频中的所有内容都不会被遮挡。"
+     },
+     {
+      "region": "#status",
+      "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。"
+     }
+    ],
+    "checking": false
+   },
+   "dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": false
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "准备就绪"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:04.0"
+    },
+    "warnings": {
+     "kind": "warning",
+     "title": "值得了解的音频特性",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "这段视频没有音频",
+       "detail": "由于没有需要调节音量的音频，所以后续工作将在没有音频的情况下进行。如果您需要音频，请在发布前检查录音。",
+       "headingKeys": [
+        "noAudio"
+       ],
+       "detailKeys": [
+        "noAudio"
+       ],
+       "headingLines": 1,
+       "detailLines": 2,
+       "linesPerItem": 3,
+       "lines": {
+        "heading": [
+         {
+          "text": "这段视频没有音频",
+          "chars": 8,
+          "cjk": 8,
+          "latin": 0,
+          "weighted": 8,
+          "widthPx": 112,
+          "outcome": "pass"
+         }
+        ],
+        "detail": [
+         {
+          "text": "由于没有需要调节音量的音频，所以后续工作将在没有音频的情况下进",
+          "chars": 31,
+          "cjk": 31,
+          "latin": 0,
+          "weighted": 31,
+          "widthPx": 434,
+          "outcome": "pass"
+         },
+         {
+          "text": "行。如果您需要音频，请在发布前检查录音。",
+          "chars": 20,
+          "cjk": 20,
+          "latin": 0,
+          "weighted": 20,
+          "widthPx": 280,
+          "outcome": "pass"
+         }
+        ]
+       }
+      }
+     ],
+     "tail": [
+      {
+       "text": "这些都不会阻止您继续操作。您的原始文件也不会因此而改变。",
+       "lines": 1
+      }
+     ],
+     "measure": {
+      "maxChars": 31,
+      "maxCjk": 31,
+      "maxWeighted": 31,
+      "worst": "pass",
+      "lines": 5
+     },
+     "overflow": []
+    },
+    "noAudioHeading": true,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。",
+     "shown": "",
+     "spokenOnly": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。"
+    },
+    "sourceStatus": {
+     "announced": "视频已读取。",
+     "shown": "视频已读取。",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793119327137,
+     "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。"
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "页面语言：简体中文。"
+     },
+     {
+      "region": "div.promise-help",
+      "text": "视频有许多格式。有些格式在一台设备上可以播放，在另一台上却不行，或者无法在某些应用中使用。此工具会将您的视频保存为 MP4，这是兼容性最好的视频格式。这意味着它几乎可以在任何手机、电脑或网站上播放。"
+     },
+     {
+      "region": "#source-status",
+      "text": "视频已读取。"
+     },
+     {
+      "region": "div",
+      "text": "视频的最后一秒 — 结尾图形在逐渐出现时会覆盖这一秒。 定格的最后一帧 — 最后一帧画面会额外停留一秒钟。结尾图形会覆盖这一秒，所以视频中的所有内容都不会被遮挡。"
+     },
+     {
+      "region": "#status",
+      "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。"
+     }
+    ],
+    "checking": false
+   },
+   "forced-light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": true
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "准备就绪"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:04.0"
+    },
+    "warnings": {
+     "kind": "warning",
+     "title": "值得了解的音频特性",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "这段视频没有音频",
+       "detail": "由于没有需要调节音量的音频，所以后续工作将在没有音频的情况下进行。如果您需要音频，请在发布前检查录音。",
+       "headingKeys": [
+        "noAudio"
+       ],
+       "detailKeys": [
+        "noAudio"
+       ],
+       "headingLines": 1,
+       "detailLines": 2,
+       "linesPerItem": 3,
+       "lines": {
+        "heading": [
+         {
+          "text": "这段视频没有音频",
+          "chars": 8,
+          "cjk": 8,
+          "latin": 0,
+          "weighted": 8,
+          "widthPx": 112,
+          "outcome": "pass"
+         }
+        ],
+        "detail": [
+         {
+          "text": "由于没有需要调节音量的音频，所以后续工作将在没有音频的情况下进",
+          "chars": 31,
+          "cjk": 31,
+          "latin": 0,
+          "weighted": 31,
+          "widthPx": 434,
+          "outcome": "pass"
+         },
+         {
+          "text": "行。如果您需要音频，请在发布前检查录音。",
+          "chars": 20,
+          "cjk": 20,
+          "latin": 0,
+          "weighted": 20,
+          "widthPx": 280,
+          "outcome": "pass"
+         }
+        ]
+       }
+      }
+     ],
+     "tail": [
+      {
+       "text": "这些都不会阻止您继续操作。您的原始文件也不会因此而改变。",
+       "lines": 1
+      }
+     ],
+     "measure": {
+      "maxChars": 31,
+      "maxCjk": 31,
+      "maxWeighted": 31,
+      "worst": "pass",
+      "lines": 5
+     },
+     "overflow": []
+    },
+    "noAudioHeading": true,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。",
+     "shown": "",
+     "spokenOnly": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。"
+    },
+    "sourceStatus": {
+     "announced": "视频已读取。",
+     "shown": "视频已读取。",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793119327137,
+     "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。"
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "页面语言：简体中文。"
+     },
+     {
+      "region": "div.promise-help",
+      "text": "视频有许多格式。有些格式在一台设备上可以播放，在另一台上却不行，或者无法在某些应用中使用。此工具会将您的视频保存为 MP4，这是兼容性最好的视频格式。这意味着它几乎可以在任何手机、电脑或网站上播放。"
+     },
+     {
+      "region": "#source-status",
+      "text": "视频已读取。"
+     },
+     {
+      "region": "div",
+      "text": "视频的最后一秒 — 结尾图形在逐渐出现时会覆盖这一秒。 定格的最后一帧 — 最后一帧画面会额外停留一秒钟。结尾图形会覆盖这一秒，所以视频中的所有内容都不会被遮挡。"
+     },
+     {
+      "region": "#status",
+      "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。"
+     }
+    ],
+    "checking": false
+   },
+   "forced-dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": true
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "准备就绪"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:04.0"
+    },
+    "warnings": {
+     "kind": "warning",
+     "title": "值得了解的音频特性",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "这段视频没有音频",
+       "detail": "由于没有需要调节音量的音频，所以后续工作将在没有音频的情况下进行。如果您需要音频，请在发布前检查录音。",
+       "headingKeys": [
+        "noAudio"
+       ],
+       "detailKeys": [
+        "noAudio"
+       ],
+       "headingLines": 1,
+       "detailLines": 2,
+       "linesPerItem": 3,
+       "lines": {
+        "heading": [
+         {
+          "text": "这段视频没有音频",
+          "chars": 8,
+          "cjk": 8,
+          "latin": 0,
+          "weighted": 8,
+          "widthPx": 112,
+          "outcome": "pass"
+         }
+        ],
+        "detail": [
+         {
+          "text": "由于没有需要调节音量的音频，所以后续工作将在没有音频的情况下进",
+          "chars": 31,
+          "cjk": 31,
+          "latin": 0,
+          "weighted": 31,
+          "widthPx": 434,
+          "outcome": "pass"
+         },
+         {
+          "text": "行。如果您需要音频，请在发布前检查录音。",
+          "chars": 20,
+          "cjk": 20,
+          "latin": 0,
+          "weighted": 20,
+          "widthPx": 280,
+          "outcome": "pass"
+         }
+        ]
+       }
+      }
+     ],
+     "tail": [
+      {
+       "text": "这些都不会阻止您继续操作。您的原始文件也不会因此而改变。",
+       "lines": 1
+      }
+     ],
+     "measure": {
+      "maxChars": 31,
+      "maxCjk": 31,
+      "maxWeighted": 31,
+      "worst": "pass",
+      "lines": 5
+     },
+     "overflow": []
+    },
+    "noAudioHeading": true,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。",
+     "shown": "",
+     "spokenOnly": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。"
+    },
+    "sourceStatus": {
+     "announced": "视频已读取。",
+     "shown": "视频已读取。",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793119327137,
+     "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。"
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "页面语言：简体中文。"
+     },
+     {
+      "region": "div.promise-help",
+      "text": "视频有许多格式。有些格式在一台设备上可以播放，在另一台上却不行，或者无法在某些应用中使用。此工具会将您的视频保存为 MP4，这是兼容性最好的视频格式。这意味着它几乎可以在任何手机、电脑或网站上播放。"
+     },
+     {
+      "region": "#source-status",
+      "text": "视频已读取。"
+     },
+     {
+      "region": "div",
+      "text": "视频的最后一秒 — 结尾图形在逐渐出现时会覆盖这一秒。 定格的最后一帧 — 最后一帧画面会额外停留一秒钟。结尾图形会覆盖这一秒，所以视频中的所有内容都不会被遮挡。"
+     },
+     {
+      "region": "#status",
+      "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。"
+     }
+    ],
+    "checking": false
+   }
+  },
+  "obs": {
+   "afterTab": "#trim-set-end"
+  },
+  "scenarioAsserts": [
+   {
+    "what": "Tab from End time lands on \"Set end here\", where Tab puts it (S-34)",
+    "outcome": "pass",
+    "seen": {
+     "afterTab": "#trim-set-end"
+    }
+   }
+  ],
+  "status": "ok",
+  "workerLogs": [
+   {
+    "t": 677,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (worker)"
+    ]
+   },
+   {
+    "t": 677,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[worker]",
+     "job worker ready"
+    ]
+   },
+   {
+    "t": 677,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[worker]",
+     "ping received"
+    ]
+   },
+   {
+    "t": 1598,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.016,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 1606,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.016,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 1606,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "device capabilities inspected",
+     {
+      "hasWebCodecs": true,
+      "hasOpfs": true,
+      "deviceClass": "desktop",
+      "hardwareConcurrency": 10,
+      "quotaBytes": 10737418428,
+      "availableBytes": 10737418240
+     }
+    ]
+   },
+   {
+    "t": 1616,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1280,
+      "height": 720,
+      "bitrate": 2648219
+     }
+    ]
+   },
+   {
+    "t": 1681,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 2,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 1935,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[probe]",
+     "calibration complete",
+     {
+      "framesEncoded": 75,
+      "videoFramesPerSecond": 432,
+      "audioRealtimeFactor": 98,
+      "estimatedSeconds": 3,
+      "videoSeconds": 0.6,
+      "brandingSeconds": 0.6,
+      "audioPlanningSeconds": 1.2,
+      "audioProcessingSeconds": 0.1,
+      "verificationSeconds": 0.1
+     }
+    ]
+   },
+   {
+    "t": 3023,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.016,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 3023,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "device capabilities inspected",
+     {
+      "hasWebCodecs": true,
+      "hasOpfs": true,
+      "deviceClass": "desktop",
+      "hardwareConcurrency": 10,
+      "quotaBytes": 10737418428,
+      "availableBytes": 10737418240
+     }
+    ]
+   },
+   {
+    "t": 3033,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1280,
+      "height": 720,
+      "bitrate": 2648219
+     }
+    ]
+   },
+   {
+    "t": 3287,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[probe]",
+     "calibration complete",
+     {
+      "framesEncoded": 75,
+      "videoFramesPerSecond": 410,
+      "audioRealtimeFactor": null,
+      "estimatedSeconds": 1,
+      "videoSeconds": 0.2,
+      "brandingSeconds": 0.6,
+      "audioPlanningSeconds": 0,
+      "audioProcessingSeconds": 0,
+      "verificationSeconds": 0
+     }
+    ]
+   }
+  ],
+  "console": [],
+  "ms": 6695
+ },
+ {
+  "key": "S-99__zh-Hans__w320",
+  "cell": "S-99",
+  "scenario": "S-99",
+  "what": "A kept sliver of sound: no audio before Create",
+  "lang": "zh-Hans",
+  "view": "w320",
+  "modesRead": [
+   "light",
+   "dark",
+   "forced-light",
+   "forced-dark"
+  ],
+  "powerAtStart": {
+   "ac": true,
+   "load": [
+    4.58,
+    4.75,
+    5.58
+   ],
+   "powermode": "powermode            2"
+  },
+  "pre": {
+   "light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": false
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "准备就绪"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:04.0"
+    },
+    "warnings": {
+     "kind": "warning",
+     "title": "值得了解的音频特性",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "这段视频没有音频",
+       "detail": "由于没有需要调节音量的音频，所以后续工作将在没有音频的情况下进行。如果您需要音频，请在发布前检查录音。",
+       "headingKeys": [
+        "noAudio"
+       ],
+       "detailKeys": [
+        "noAudio"
+       ],
+       "headingLines": 1,
+       "detailLines": 4,
+       "linesPerItem": 5,
+       "lines": {
+        "heading": [
+         {
+          "text": "这段视频没有音频",
+          "chars": 8,
+          "cjk": 8,
+          "latin": 0,
+          "weighted": 8,
+          "widthPx": 112,
+          "outcome": "pass"
+         }
+        ],
+        "detail": [
+         {
+          "text": "由于没有需要调节音量的音",
+          "chars": 12,
+          "cjk": 12,
+          "latin": 0,
+          "weighted": 12,
+          "widthPx": 168,
+          "outcome": "pass"
+         },
+         {
+          "text": "频，所以后续工作将在没有音",
+          "chars": 13,
+          "cjk": 13,
+          "latin": 0,
+          "weighted": 13,
+          "widthPx": 182,
+          "outcome": "pass"
+         },
+         {
+          "text": "频的情况下进行。如果您需要",
+          "chars": 13,
+          "cjk": 13,
+          "latin": 0,
+          "weighted": 13,
+          "widthPx": 182,
+          "outcome": "pass"
+         },
+         {
+          "text": "音频，请在发布前检查录音。",
+          "chars": 13,
+          "cjk": 13,
+          "latin": 0,
+          "weighted": 13,
+          "widthPx": 182,
+          "outcome": "pass"
+         }
+        ]
+       }
+      }
+     ],
+     "tail": [
+      {
+       "text": "这些都不会阻止您继续操作。您的原始文件也不会因此而改变。",
+       "lines": 3
+      }
+     ],
+     "measure": {
+      "maxChars": 13,
+      "maxCjk": 13,
+      "maxWeighted": 13,
+      "worst": "pass",
+      "lines": 9
+     },
+     "overflow": []
+    },
+    "noAudioHeading": true,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。",
+     "shown": "",
+     "spokenOnly": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。"
+    },
+    "sourceStatus": {
+     "announced": "视频已读取。",
+     "shown": "视频已读取。",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793119333850,
+     "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。"
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "页面语言：简体中文。"
+     },
+     {
+      "region": "div.promise-help",
+      "text": "视频有许多格式。有些格式在一台设备上可以播放，在另一台上却不行，或者无法在某些应用中使用。此工具会将您的视频保存为 MP4，这是兼容性最好的视频格式。这意味着它几乎可以在任何手机、电脑或网站上播放。"
+     },
+     {
+      "region": "#source-status",
+      "text": "视频已读取。"
+     },
+     {
+      "region": "div",
+      "text": "视频的最后一秒 — 结尾图形在逐渐出现时会覆盖这一秒。 定格的最后一帧 — 最后一帧画面会额外停留一秒钟。结尾图形会覆盖这一秒，所以视频中的所有内容都不会被遮挡。"
+     },
+     {
+      "region": "#status",
+      "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。"
+     }
+    ],
+    "checking": false
+   },
+   "dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": false
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "准备就绪"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:04.0"
+    },
+    "warnings": {
+     "kind": "warning",
+     "title": "值得了解的音频特性",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "这段视频没有音频",
+       "detail": "由于没有需要调节音量的音频，所以后续工作将在没有音频的情况下进行。如果您需要音频，请在发布前检查录音。",
+       "headingKeys": [
+        "noAudio"
+       ],
+       "detailKeys": [
+        "noAudio"
+       ],
+       "headingLines": 1,
+       "detailLines": 4,
+       "linesPerItem": 5,
+       "lines": {
+        "heading": [
+         {
+          "text": "这段视频没有音频",
+          "chars": 8,
+          "cjk": 8,
+          "latin": 0,
+          "weighted": 8,
+          "widthPx": 112,
+          "outcome": "pass"
+         }
+        ],
+        "detail": [
+         {
+          "text": "由于没有需要调节音量的音",
+          "chars": 12,
+          "cjk": 12,
+          "latin": 0,
+          "weighted": 12,
+          "widthPx": 168,
+          "outcome": "pass"
+         },
+         {
+          "text": "频，所以后续工作将在没有音",
+          "chars": 13,
+          "cjk": 13,
+          "latin": 0,
+          "weighted": 13,
+          "widthPx": 182,
+          "outcome": "pass"
+         },
+         {
+          "text": "频的情况下进行。如果您需要",
+          "chars": 13,
+          "cjk": 13,
+          "latin": 0,
+          "weighted": 13,
+          "widthPx": 182,
+          "outcome": "pass"
+         },
+         {
+          "text": "音频，请在发布前检查录音。",
+          "chars": 13,
+          "cjk": 13,
+          "latin": 0,
+          "weighted": 13,
+          "widthPx": 182,
+          "outcome": "pass"
+         }
+        ]
+       }
+      }
+     ],
+     "tail": [
+      {
+       "text": "这些都不会阻止您继续操作。您的原始文件也不会因此而改变。",
+       "lines": 3
+      }
+     ],
+     "measure": {
+      "maxChars": 13,
+      "maxCjk": 13,
+      "maxWeighted": 13,
+      "worst": "pass",
+      "lines": 9
+     },
+     "overflow": []
+    },
+    "noAudioHeading": true,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。",
+     "shown": "",
+     "spokenOnly": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。"
+    },
+    "sourceStatus": {
+     "announced": "视频已读取。",
+     "shown": "视频已读取。",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793119333850,
+     "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。"
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "页面语言：简体中文。"
+     },
+     {
+      "region": "div.promise-help",
+      "text": "视频有许多格式。有些格式在一台设备上可以播放，在另一台上却不行，或者无法在某些应用中使用。此工具会将您的视频保存为 MP4，这是兼容性最好的视频格式。这意味着它几乎可以在任何手机、电脑或网站上播放。"
+     },
+     {
+      "region": "#source-status",
+      "text": "视频已读取。"
+     },
+     {
+      "region": "div",
+      "text": "视频的最后一秒 — 结尾图形在逐渐出现时会覆盖这一秒。 定格的最后一帧 — 最后一帧画面会额外停留一秒钟。结尾图形会覆盖这一秒，所以视频中的所有内容都不会被遮挡。"
+     },
+     {
+      "region": "#status",
+      "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。"
+     }
+    ],
+    "checking": false
+   },
+   "forced-light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": true
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "准备就绪"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:04.0"
+    },
+    "warnings": {
+     "kind": "warning",
+     "title": "值得了解的音频特性",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "这段视频没有音频",
+       "detail": "由于没有需要调节音量的音频，所以后续工作将在没有音频的情况下进行。如果您需要音频，请在发布前检查录音。",
+       "headingKeys": [
+        "noAudio"
+       ],
+       "detailKeys": [
+        "noAudio"
+       ],
+       "headingLines": 1,
+       "detailLines": 4,
+       "linesPerItem": 5,
+       "lines": {
+        "heading": [
+         {
+          "text": "这段视频没有音频",
+          "chars": 8,
+          "cjk": 8,
+          "latin": 0,
+          "weighted": 8,
+          "widthPx": 112,
+          "outcome": "pass"
+         }
+        ],
+        "detail": [
+         {
+          "text": "由于没有需要调节音量的音",
+          "chars": 12,
+          "cjk": 12,
+          "latin": 0,
+          "weighted": 12,
+          "widthPx": 168,
+          "outcome": "pass"
+         },
+         {
+          "text": "频，所以后续工作将在没有音",
+          "chars": 13,
+          "cjk": 13,
+          "latin": 0,
+          "weighted": 13,
+          "widthPx": 182,
+          "outcome": "pass"
+         },
+         {
+          "text": "频的情况下进行。如果您需要",
+          "chars": 13,
+          "cjk": 13,
+          "latin": 0,
+          "weighted": 13,
+          "widthPx": 182,
+          "outcome": "pass"
+         },
+         {
+          "text": "音频，请在发布前检查录音。",
+          "chars": 13,
+          "cjk": 13,
+          "latin": 0,
+          "weighted": 13,
+          "widthPx": 182,
+          "outcome": "pass"
+         }
+        ]
+       }
+      }
+     ],
+     "tail": [
+      {
+       "text": "这些都不会阻止您继续操作。您的原始文件也不会因此而改变。",
+       "lines": 3
+      }
+     ],
+     "measure": {
+      "maxChars": 13,
+      "maxCjk": 13,
+      "maxWeighted": 13,
+      "worst": "pass",
+      "lines": 9
+     },
+     "overflow": []
+    },
+    "noAudioHeading": true,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。",
+     "shown": "",
+     "spokenOnly": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。"
+    },
+    "sourceStatus": {
+     "announced": "视频已读取。",
+     "shown": "视频已读取。",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793119333850,
+     "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。"
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "页面语言：简体中文。"
+     },
+     {
+      "region": "div.promise-help",
+      "text": "视频有许多格式。有些格式在一台设备上可以播放，在另一台上却不行，或者无法在某些应用中使用。此工具会将您的视频保存为 MP4，这是兼容性最好的视频格式。这意味着它几乎可以在任何手机、电脑或网站上播放。"
+     },
+     {
+      "region": "#source-status",
+      "text": "视频已读取。"
+     },
+     {
+      "region": "div",
+      "text": "视频的最后一秒 — 结尾图形在逐渐出现时会覆盖这一秒。 定格的最后一帧 — 最后一帧画面会额外停留一秒钟。结尾图形会覆盖这一秒，所以视频中的所有内容都不会被遮挡。"
+     },
+     {
+      "region": "#status",
+      "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。"
+     }
+    ],
+    "checking": false
+   },
+   "forced-dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": true
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "准备就绪"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:04.0"
+    },
+    "warnings": {
+     "kind": "warning",
+     "title": "值得了解的音频特性",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "这段视频没有音频",
+       "detail": "由于没有需要调节音量的音频，所以后续工作将在没有音频的情况下进行。如果您需要音频，请在发布前检查录音。",
+       "headingKeys": [
+        "noAudio"
+       ],
+       "detailKeys": [
+        "noAudio"
+       ],
+       "headingLines": 1,
+       "detailLines": 4,
+       "linesPerItem": 5,
+       "lines": {
+        "heading": [
+         {
+          "text": "这段视频没有音频",
+          "chars": 8,
+          "cjk": 8,
+          "latin": 0,
+          "weighted": 8,
+          "widthPx": 112,
+          "outcome": "pass"
+         }
+        ],
+        "detail": [
+         {
+          "text": "由于没有需要调节音量的音",
+          "chars": 12,
+          "cjk": 12,
+          "latin": 0,
+          "weighted": 12,
+          "widthPx": 168,
+          "outcome": "pass"
+         },
+         {
+          "text": "频，所以后续工作将在没有音",
+          "chars": 13,
+          "cjk": 13,
+          "latin": 0,
+          "weighted": 13,
+          "widthPx": 182,
+          "outcome": "pass"
+         },
+         {
+          "text": "频的情况下进行。如果您需要",
+          "chars": 13,
+          "cjk": 13,
+          "latin": 0,
+          "weighted": 13,
+          "widthPx": 182,
+          "outcome": "pass"
+         },
+         {
+          "text": "音频，请在发布前检查录音。",
+          "chars": 13,
+          "cjk": 13,
+          "latin": 0,
+          "weighted": 13,
+          "widthPx": 182,
+          "outcome": "pass"
+         }
+        ]
+       }
+      }
+     ],
+     "tail": [
+      {
+       "text": "这些都不会阻止您继续操作。您的原始文件也不会因此而改变。",
+       "lines": 3
+      }
+     ],
+     "measure": {
+      "maxChars": 13,
+      "maxCjk": 13,
+      "maxWeighted": 13,
+      "worst": "pass",
+      "lines": 9
+     },
+     "overflow": []
+    },
+    "noAudioHeading": true,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。",
+     "shown": "",
+     "spokenOnly": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。"
+    },
+    "sourceStatus": {
+     "announced": "视频已读取。",
+     "shown": "视频已读取。",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793119333850,
+     "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。"
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "页面语言：简体中文。"
+     },
+     {
+      "region": "div.promise-help",
+      "text": "视频有许多格式。有些格式在一台设备上可以播放，在另一台上却不行，或者无法在某些应用中使用。此工具会将您的视频保存为 MP4，这是兼容性最好的视频格式。这意味着它几乎可以在任何手机、电脑或网站上播放。"
+     },
+     {
+      "region": "#source-status",
+      "text": "视频已读取。"
+     },
+     {
+      "region": "div",
+      "text": "视频的最后一秒 — 结尾图形在逐渐出现时会覆盖这一秒。 定格的最后一帧 — 最后一帧画面会额外停留一秒钟。结尾图形会覆盖这一秒，所以视频中的所有内容都不会被遮挡。"
+     },
+     {
+      "region": "#status",
+      "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。"
+     }
+    ],
+    "checking": false
+   }
+  },
+  "obs": {
+   "afterTab": "#trim-set-end"
+  },
+  "scenarioAsserts": [
+   {
+    "what": "Tab from End time lands on \"Set end here\", where Tab puts it (S-34)",
+    "outcome": "pass",
+    "seen": {
+     "afterTab": "#trim-set-end"
+    }
+   }
+  ],
+  "status": "ok",
+  "workerLogs": [
+   {
+    "t": 668,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (worker)"
+    ]
+   },
+   {
+    "t": 668,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[worker]",
+     "job worker ready"
+    ]
+   },
+   {
+    "t": 669,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[worker]",
+     "ping received"
+    ]
+   },
+   {
+    "t": 1549,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.016,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 1557,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.016,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 1557,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "device capabilities inspected",
+     {
+      "hasWebCodecs": true,
+      "hasOpfs": true,
+      "deviceClass": "desktop",
+      "hardwareConcurrency": 10,
+      "quotaBytes": 10737418428,
+      "availableBytes": 10737418240
+     }
+    ]
+   },
+   {
+    "t": 1568,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1280,
+      "height": 720,
+      "bitrate": 2648219
+     }
+    ]
+   },
+   {
+    "t": 1632,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 2,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 1913,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[probe]",
+     "calibration complete",
+     {
+      "framesEncoded": 75,
+      "videoFramesPerSecond": 416,
+      "audioRealtimeFactor": 98,
+      "estimatedSeconds": 3,
+      "videoSeconds": 0.6,
+      "brandingSeconds": 0.6,
+      "audioPlanningSeconds": 1.2,
+      "audioProcessingSeconds": 0.1,
+      "verificationSeconds": 0.1
+     }
+    ]
+   },
+   {
+    "t": 2968,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.016,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 2968,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "device capabilities inspected",
+     {
+      "hasWebCodecs": true,
+      "hasOpfs": true,
+      "deviceClass": "desktop",
+      "hardwareConcurrency": 10,
+      "quotaBytes": 10737418428,
+      "availableBytes": 10737418240
+     }
+    ]
+   },
+   {
+    "t": 2979,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1280,
+      "height": 720,
+      "bitrate": 2648219
+     }
+    ]
+   },
+   {
+    "t": 3240,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[probe]",
+     "calibration complete",
+     {
+      "framesEncoded": 75,
+      "videoFramesPerSecond": 396,
+      "audioRealtimeFactor": null,
+      "estimatedSeconds": 1,
+      "videoSeconds": 0.3,
+      "brandingSeconds": 0.6,
+      "audioPlanningSeconds": 0,
+      "audioProcessingSeconds": 0,
+      "verificationSeconds": 0
+     }
+    ]
+   }
+  ],
+  "console": [],
+  "ms": 6667
+ },
+ {
+  "key": "S-99__ms-MY__w1280",
+  "cell": "S-99",
+  "scenario": "S-99",
+  "what": "A kept sliver of sound: no audio before Create",
+  "lang": "ms-MY",
+  "view": "w1280",
+  "modesRead": [
+   "light",
+   "dark",
+   "forced-light",
+   "forced-dark"
+  ],
+  "powerAtStart": {
+   "ac": true,
+   "load": [
+    4.26,
+    4.68,
+    5.54
+   ],
+   "powermode": "powermode            2"
+  },
+  "pre": {
+   "light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": false
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Sedia untuk bermula"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:04.0"
+    },
+    "warnings": {
+     "kind": "warning",
+     "title": "Perlu diketahui tentang audionya",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "Video ini tiada audio",
+       "detail": "Tiada audio untuk diratakan, jadi kerja selebihnya berjalan tanpanya. Jika anda menjangkakan audio, semak rakaman sebelum menerbitkan.",
+       "headingKeys": [
+        "noAudio"
+       ],
+       "detailKeys": [
+        "noAudio"
+       ],
+       "headingLines": 1,
+       "detailLines": 2,
+       "linesPerItem": 3,
+       "lines": {
+        "heading": [
+         {
+          "text": "Video ini tiada audio",
+          "chars": 21,
+          "cjk": 0,
+          "latin": 21,
+          "weighted": 10.5,
+          "widthPx": 136,
+          "outcome": "pass"
+         }
+        ],
+        "detail": [
+         {
+          "text": "Tiada audio untuk diratakan, jadi kerja selebihnya berjalan tanpanya.",
+          "chars": 69,
+          "cjk": 0,
+          "latin": 69,
+          "weighted": 34.5,
+          "widthPx": 426,
+          "outcome": "pass"
+         },
+         {
+          "text": "Jika anda menjangkakan audio, semak rakaman sebelum menerbitkan.",
+          "chars": 64,
+          "cjk": 0,
+          "latin": 64,
+          "weighted": 32,
+          "widthPx": 442,
+          "outcome": "pass"
+         }
+        ]
+       }
+      }
+     ],
+     "tail": [
+      {
+       "text": "Tiada satu pun daripada ini yang menghalang anda daripada meneruskan. Fail asal anda tidak diubah dalam apa jua cara.",
+       "lines": 2
+      }
+     ],
+     "measure": {
+      "maxChars": 69,
+      "maxCjk": 0,
+      "maxWeighted": 34.5,
+      "worst": "pass",
+      "lines": 6
+     },
+     "overflow": []
+    },
+    "noAudioHeading": true,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio.",
+     "shown": "",
+     "spokenOnly": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio."
+    },
+    "sourceStatus": {
+     "announced": "Video dibaca.",
+     "shown": "Video dibaca.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793119340595,
+     "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio."
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "Bahasa halaman: Bahasa Malaysia."
+     },
+     {
+      "region": "div.promise-help",
+      "text": "Video wujud dalam banyak format. Sesetengahnya dimainkan pada satu peranti tetapi tidak pada peranti lain, atau tidak berfungsi dengan sesetengah aplikasi. Alat"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video dibaca."
+     },
+     {
+      "region": "div",
+      "text": "Saat terakhir video — grafik penutup menutupinya semasa ia terbentuk. Bingkai akhir ditahan — bingkai terakhir anda ditahan selama satu saat tambahan. Grafik pe"
+     },
+     {
+      "region": "#status",
+      "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: "
+     }
+    ],
+    "checking": false
+   },
+   "dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": false
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Sedia untuk bermula"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:04.0"
+    },
+    "warnings": {
+     "kind": "warning",
+     "title": "Perlu diketahui tentang audionya",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "Video ini tiada audio",
+       "detail": "Tiada audio untuk diratakan, jadi kerja selebihnya berjalan tanpanya. Jika anda menjangkakan audio, semak rakaman sebelum menerbitkan.",
+       "headingKeys": [
+        "noAudio"
+       ],
+       "detailKeys": [
+        "noAudio"
+       ],
+       "headingLines": 1,
+       "detailLines": 2,
+       "linesPerItem": 3,
+       "lines": {
+        "heading": [
+         {
+          "text": "Video ini tiada audio",
+          "chars": 21,
+          "cjk": 0,
+          "latin": 21,
+          "weighted": 10.5,
+          "widthPx": 136,
+          "outcome": "pass"
+         }
+        ],
+        "detail": [
+         {
+          "text": "Tiada audio untuk diratakan, jadi kerja selebihnya berjalan tanpanya.",
+          "chars": 69,
+          "cjk": 0,
+          "latin": 69,
+          "weighted": 34.5,
+          "widthPx": 426,
+          "outcome": "pass"
+         },
+         {
+          "text": "Jika anda menjangkakan audio, semak rakaman sebelum menerbitkan.",
+          "chars": 64,
+          "cjk": 0,
+          "latin": 64,
+          "weighted": 32,
+          "widthPx": 442,
+          "outcome": "pass"
+         }
+        ]
+       }
+      }
+     ],
+     "tail": [
+      {
+       "text": "Tiada satu pun daripada ini yang menghalang anda daripada meneruskan. Fail asal anda tidak diubah dalam apa jua cara.",
+       "lines": 2
+      }
+     ],
+     "measure": {
+      "maxChars": 69,
+      "maxCjk": 0,
+      "maxWeighted": 34.5,
+      "worst": "pass",
+      "lines": 6
+     },
+     "overflow": []
+    },
+    "noAudioHeading": true,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio.",
+     "shown": "",
+     "spokenOnly": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio."
+    },
+    "sourceStatus": {
+     "announced": "Video dibaca.",
+     "shown": "Video dibaca.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793119340595,
+     "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio."
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "Bahasa halaman: Bahasa Malaysia."
+     },
+     {
+      "region": "div.promise-help",
+      "text": "Video wujud dalam banyak format. Sesetengahnya dimainkan pada satu peranti tetapi tidak pada peranti lain, atau tidak berfungsi dengan sesetengah aplikasi. Alat"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video dibaca."
+     },
+     {
+      "region": "div",
+      "text": "Saat terakhir video — grafik penutup menutupinya semasa ia terbentuk. Bingkai akhir ditahan — bingkai terakhir anda ditahan selama satu saat tambahan. Grafik pe"
+     },
+     {
+      "region": "#status",
+      "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: "
+     }
+    ],
+    "checking": false
+   },
+   "forced-light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": true
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Sedia untuk bermula"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:04.0"
+    },
+    "warnings": {
+     "kind": "warning",
+     "title": "Perlu diketahui tentang audionya",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "Video ini tiada audio",
+       "detail": "Tiada audio untuk diratakan, jadi kerja selebihnya berjalan tanpanya. Jika anda menjangkakan audio, semak rakaman sebelum menerbitkan.",
+       "headingKeys": [
+        "noAudio"
+       ],
+       "detailKeys": [
+        "noAudio"
+       ],
+       "headingLines": 1,
+       "detailLines": 2,
+       "linesPerItem": 3,
+       "lines": {
+        "heading": [
+         {
+          "text": "Video ini tiada audio",
+          "chars": 21,
+          "cjk": 0,
+          "latin": 21,
+          "weighted": 10.5,
+          "widthPx": 136,
+          "outcome": "pass"
+         }
+        ],
+        "detail": [
+         {
+          "text": "Tiada audio untuk diratakan, jadi kerja selebihnya berjalan tanpanya.",
+          "chars": 69,
+          "cjk": 0,
+          "latin": 69,
+          "weighted": 34.5,
+          "widthPx": 426,
+          "outcome": "pass"
+         },
+         {
+          "text": "Jika anda menjangkakan audio, semak rakaman sebelum menerbitkan.",
+          "chars": 64,
+          "cjk": 0,
+          "latin": 64,
+          "weighted": 32,
+          "widthPx": 442,
+          "outcome": "pass"
+         }
+        ]
+       }
+      }
+     ],
+     "tail": [
+      {
+       "text": "Tiada satu pun daripada ini yang menghalang anda daripada meneruskan. Fail asal anda tidak diubah dalam apa jua cara.",
+       "lines": 2
+      }
+     ],
+     "measure": {
+      "maxChars": 69,
+      "maxCjk": 0,
+      "maxWeighted": 34.5,
+      "worst": "pass",
+      "lines": 6
+     },
+     "overflow": []
+    },
+    "noAudioHeading": true,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio.",
+     "shown": "",
+     "spokenOnly": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio."
+    },
+    "sourceStatus": {
+     "announced": "Video dibaca.",
+     "shown": "Video dibaca.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793119340595,
+     "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio."
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "Bahasa halaman: Bahasa Malaysia."
+     },
+     {
+      "region": "div.promise-help",
+      "text": "Video wujud dalam banyak format. Sesetengahnya dimainkan pada satu peranti tetapi tidak pada peranti lain, atau tidak berfungsi dengan sesetengah aplikasi. Alat"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video dibaca."
+     },
+     {
+      "region": "div",
+      "text": "Saat terakhir video — grafik penutup menutupinya semasa ia terbentuk. Bingkai akhir ditahan — bingkai terakhir anda ditahan selama satu saat tambahan. Grafik pe"
+     },
+     {
+      "region": "#status",
+      "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: "
+     }
+    ],
+    "checking": false
+   },
+   "forced-dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": true
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Sedia untuk bermula"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:04.0"
+    },
+    "warnings": {
+     "kind": "warning",
+     "title": "Perlu diketahui tentang audionya",
+     "titleLines": 1,
+     "items": [
+      {
+       "heading": "Video ini tiada audio",
+       "detail": "Tiada audio untuk diratakan, jadi kerja selebihnya berjalan tanpanya. Jika anda menjangkakan audio, semak rakaman sebelum menerbitkan.",
+       "headingKeys": [
+        "noAudio"
+       ],
+       "detailKeys": [
+        "noAudio"
+       ],
+       "headingLines": 1,
+       "detailLines": 2,
+       "linesPerItem": 3,
+       "lines": {
+        "heading": [
+         {
+          "text": "Video ini tiada audio",
+          "chars": 21,
+          "cjk": 0,
+          "latin": 21,
+          "weighted": 10.5,
+          "widthPx": 136,
+          "outcome": "pass"
+         }
+        ],
+        "detail": [
+         {
+          "text": "Tiada audio untuk diratakan, jadi kerja selebihnya berjalan tanpanya.",
+          "chars": 69,
+          "cjk": 0,
+          "latin": 69,
+          "weighted": 34.5,
+          "widthPx": 426,
+          "outcome": "pass"
+         },
+         {
+          "text": "Jika anda menjangkakan audio, semak rakaman sebelum menerbitkan.",
+          "chars": 64,
+          "cjk": 0,
+          "latin": 64,
+          "weighted": 32,
+          "widthPx": 442,
+          "outcome": "pass"
+         }
+        ]
+       }
+      }
+     ],
+     "tail": [
+      {
+       "text": "Tiada satu pun daripada ini yang menghalang anda daripada meneruskan. Fail asal anda tidak diubah dalam apa jua cara.",
+       "lines": 2
+      }
+     ],
+     "measure": {
+      "maxChars": 69,
+      "maxCjk": 0,
+      "maxWeighted": 34.5,
+      "worst": "pass",
+      "lines": 6
+     },
+     "overflow": []
+    },
+    "noAudioHeading": true,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio.",
+     "shown": "",
+     "spokenOnly": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio."
+    },
+    "sourceStatus": {
+     "announced": "Video dibaca.",
+     "shown": "Video dibaca.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793119340595,
+     "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio."
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "Bahasa halaman: Bahasa Malaysia."
+     },
+     {
+      "region": "div.promise-help",
+      "text": "Video wujud dalam banyak format. Sesetengahnya dimainkan pada satu peranti tetapi tidak pada peranti lain, atau tidak berfungsi dengan sesetengah aplikasi. Alat"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video dibaca."
+     },
+     {
+      "region": "div",
+      "text": "Saat terakhir video — grafik penutup menutupinya semasa ia terbentuk. Bingkai akhir ditahan — bingkai terakhir anda ditahan selama satu saat tambahan. Grafik pe"
+     },
+     {
+      "region": "#status",
+      "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: "
+     }
+    ],
+    "checking": false
+   }
+  },
+  "obs": {
+   "afterTab": "#trim-set-end"
+  },
+  "scenarioAsserts": [
+   {
+    "what": "Tab from End time lands on \"Set end here\", where Tab puts it (S-34)",
+    "outcome": "pass",
+    "seen": {
+     "afterTab": "#trim-set-end"
+    }
+   }
+  ],
+  "status": "ok",
+  "workerLogs": [
+   {
+    "t": 663,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (worker)"
+    ]
+   },
+   {
+    "t": 663,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[worker]",
+     "job worker ready"
+    ]
+   },
+   {
+    "t": 663,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[worker]",
+     "ping received"
+    ]
+   },
+   {
+    "t": 1563,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.016,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 1570,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.016,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 1570,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "device capabilities inspected",
+     {
+      "hasWebCodecs": true,
+      "hasOpfs": true,
+      "deviceClass": "desktop",
+      "hardwareConcurrency": 10,
+      "quotaBytes": 10737418428,
+      "availableBytes": 10737418240
+     }
+    ]
+   },
+   {
+    "t": 1581,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1280,
+      "height": 720,
+      "bitrate": 2648219
+     }
+    ]
+   },
+   {
+    "t": 1646,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 2,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 1920,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[probe]",
+     "calibration complete",
+     {
+      "framesEncoded": 75,
+      "videoFramesPerSecond": 376,
+      "audioRealtimeFactor": 97,
+      "estimatedSeconds": 3,
+      "videoSeconds": 0.7,
+      "brandingSeconds": 0.7,
+      "audioPlanningSeconds": 1.2,
+      "audioProcessingSeconds": 0.1,
+      "verificationSeconds": 0.1
+     }
+    ]
+   },
+   {
+    "t": 2983,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.016,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 2984,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "device capabilities inspected",
+     {
+      "hasWebCodecs": true,
+      "hasOpfs": true,
+      "deviceClass": "desktop",
+      "hardwareConcurrency": 10,
+      "quotaBytes": 10737418428,
+      "availableBytes": 10737418240
+     }
+    ]
+   },
+   {
+    "t": 2994,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1280,
+      "height": 720,
+      "bitrate": 2648219
+     }
+    ]
+   },
+   {
+    "t": 3253,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[probe]",
+     "calibration complete",
+     {
+      "framesEncoded": 75,
+      "videoFramesPerSecond": 391,
+      "audioRealtimeFactor": null,
+      "estimatedSeconds": 1,
+      "videoSeconds": 0.3,
+      "brandingSeconds": 0.6,
+      "audioPlanningSeconds": 0,
+      "audioProcessingSeconds": 0,
+      "verificationSeconds": 0
+     }
+    ]
+   }
+  ],
+  "console": [],
+  "ms": 6673
+ },
+ {
+  "key": "S-99__ms-MY__w320",
+  "cell": "S-99",
+  "scenario": "S-99",
+  "what": "A kept sliver of sound: no audio before Create",
+  "lang": "ms-MY",
+  "view": "w320",
+  "modesRead": [
+   "light",
+   "dark",
+   "forced-light",
+   "forced-dark"
+  ],
+  "powerAtStart": {
+   "ac": true,
+   "load": [
+    4,
+    4.61,
+    5.51
+   ],
+   "powermode": "powermode            2"
+  },
+  "pre": {
+   "light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": false
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Sedia untuk bermula"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:04.0"
+    },
+    "warnings": {
+     "kind": "warning",
+     "title": "Perlu diketahui tentang audionya",
+     "titleLines": 2,
+     "items": [
+      {
+       "heading": "Video ini tiada audio",
+       "detail": "Tiada audio untuk diratakan, jadi kerja selebihnya berjalan tanpanya. Jika anda menjangkakan audio, semak rakaman sebelum menerbitkan.",
+       "headingKeys": [
+        "noAudio"
+       ],
+       "detailKeys": [
+        "noAudio"
+       ],
+       "headingLines": 1,
+       "detailLines": 6,
+       "linesPerItem": 7,
+       "lines": {
+        "heading": [
+         {
+          "text": "Video ini tiada audio",
+          "chars": 21,
+          "cjk": 0,
+          "latin": 21,
+          "weighted": 10.5,
+          "widthPx": 136,
+          "outcome": "pass"
+         }
+        ],
+        "detail": [
+         {
+          "text": "Tiada audio untuk diratakan,",
+          "chars": 28,
+          "cjk": 0,
+          "latin": 28,
+          "weighted": 14,
+          "widthPx": 176,
+          "outcome": "pass"
+         },
+         {
+          "text": "jadi kerja selebihnya berjalan",
+          "chars": 30,
+          "cjk": 0,
+          "latin": 30,
+          "weighted": 15,
+          "widthPx": 181,
+          "outcome": "pass"
+         },
+         {
+          "text": "tanpanya. Jika anda",
+          "chars": 19,
+          "cjk": 0,
+          "latin": 19,
+          "weighted": 9.5,
+          "widthPx": 125,
+          "outcome": "pass"
+         },
+         {
+          "text": "menjangkakan audio, semak",
+          "chars": 25,
+          "cjk": 0,
+          "latin": 25,
+          "weighted": 12.5,
+          "widthPx": 178,
+          "outcome": "pass"
+         },
+         {
+          "text": "rakaman sebelum",
+          "chars": 15,
+          "cjk": 0,
+          "latin": 15,
+          "weighted": 7.5,
+          "widthPx": 111,
+          "outcome": "pass"
+         },
+         {
+          "text": "menerbitkan.",
+          "chars": 12,
+          "cjk": 0,
+          "latin": 12,
+          "weighted": 6,
+          "widthPx": 81,
+          "outcome": "pass"
+         }
+        ]
+       }
+      }
+     ],
+     "tail": [
+      {
+       "text": "Tiada satu pun daripada ini yang menghalang anda daripada meneruskan. Fail asal anda tidak diubah dalam apa jua cara.",
+       "lines": 5
+      }
+     ],
+     "measure": {
+      "maxChars": 30,
+      "maxCjk": 0,
+      "maxWeighted": 15,
+      "worst": "pass",
+      "lines": 14
+     },
+     "overflow": []
+    },
+    "noAudioHeading": true,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio.",
+     "shown": "",
+     "spokenOnly": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio."
+    },
+    "sourceStatus": {
+     "announced": "Video dibaca.",
+     "shown": "Video dibaca.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793119347322,
+     "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio."
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "Bahasa halaman: Bahasa Malaysia."
+     },
+     {
+      "region": "div.promise-help",
+      "text": "Video wujud dalam banyak format. Sesetengahnya dimainkan pada satu peranti tetapi tidak pada peranti lain, atau tidak berfungsi dengan sesetengah aplikasi. Alat"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video dibaca."
+     },
+     {
+      "region": "div",
+      "text": "Saat terakhir video — grafik penutup menutupinya semasa ia terbentuk. Bingkai akhir ditahan — bingkai terakhir anda ditahan selama satu saat tambahan. Grafik pe"
+     },
+     {
+      "region": "#status",
+      "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: "
+     }
+    ],
+    "checking": false
+   },
+   "dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": false
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Sedia untuk bermula"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:04.0"
+    },
+    "warnings": {
+     "kind": "warning",
+     "title": "Perlu diketahui tentang audionya",
+     "titleLines": 2,
+     "items": [
+      {
+       "heading": "Video ini tiada audio",
+       "detail": "Tiada audio untuk diratakan, jadi kerja selebihnya berjalan tanpanya. Jika anda menjangkakan audio, semak rakaman sebelum menerbitkan.",
+       "headingKeys": [
+        "noAudio"
+       ],
+       "detailKeys": [
+        "noAudio"
+       ],
+       "headingLines": 1,
+       "detailLines": 6,
+       "linesPerItem": 7,
+       "lines": {
+        "heading": [
+         {
+          "text": "Video ini tiada audio",
+          "chars": 21,
+          "cjk": 0,
+          "latin": 21,
+          "weighted": 10.5,
+          "widthPx": 136,
+          "outcome": "pass"
+         }
+        ],
+        "detail": [
+         {
+          "text": "Tiada audio untuk diratakan,",
+          "chars": 28,
+          "cjk": 0,
+          "latin": 28,
+          "weighted": 14,
+          "widthPx": 176,
+          "outcome": "pass"
+         },
+         {
+          "text": "jadi kerja selebihnya berjalan",
+          "chars": 30,
+          "cjk": 0,
+          "latin": 30,
+          "weighted": 15,
+          "widthPx": 181,
+          "outcome": "pass"
+         },
+         {
+          "text": "tanpanya. Jika anda",
+          "chars": 19,
+          "cjk": 0,
+          "latin": 19,
+          "weighted": 9.5,
+          "widthPx": 125,
+          "outcome": "pass"
+         },
+         {
+          "text": "menjangkakan audio, semak",
+          "chars": 25,
+          "cjk": 0,
+          "latin": 25,
+          "weighted": 12.5,
+          "widthPx": 178,
+          "outcome": "pass"
+         },
+         {
+          "text": "rakaman sebelum",
+          "chars": 15,
+          "cjk": 0,
+          "latin": 15,
+          "weighted": 7.5,
+          "widthPx": 111,
+          "outcome": "pass"
+         },
+         {
+          "text": "menerbitkan.",
+          "chars": 12,
+          "cjk": 0,
+          "latin": 12,
+          "weighted": 6,
+          "widthPx": 81,
+          "outcome": "pass"
+         }
+        ]
+       }
+      }
+     ],
+     "tail": [
+      {
+       "text": "Tiada satu pun daripada ini yang menghalang anda daripada meneruskan. Fail asal anda tidak diubah dalam apa jua cara.",
+       "lines": 5
+      }
+     ],
+     "measure": {
+      "maxChars": 30,
+      "maxCjk": 0,
+      "maxWeighted": 15,
+      "worst": "pass",
+      "lines": 14
+     },
+     "overflow": []
+    },
+    "noAudioHeading": true,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio.",
+     "shown": "",
+     "spokenOnly": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio."
+    },
+    "sourceStatus": {
+     "announced": "Video dibaca.",
+     "shown": "Video dibaca.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793119347322,
+     "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio."
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "Bahasa halaman: Bahasa Malaysia."
+     },
+     {
+      "region": "div.promise-help",
+      "text": "Video wujud dalam banyak format. Sesetengahnya dimainkan pada satu peranti tetapi tidak pada peranti lain, atau tidak berfungsi dengan sesetengah aplikasi. Alat"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video dibaca."
+     },
+     {
+      "region": "div",
+      "text": "Saat terakhir video — grafik penutup menutupinya semasa ia terbentuk. Bingkai akhir ditahan — bingkai terakhir anda ditahan selama satu saat tambahan. Grafik pe"
+     },
+     {
+      "region": "#status",
+      "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: "
+     }
+    ],
+    "checking": false
+   },
+   "forced-light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": true
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Sedia untuk bermula"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:04.0"
+    },
+    "warnings": {
+     "kind": "warning",
+     "title": "Perlu diketahui tentang audionya",
+     "titleLines": 2,
+     "items": [
+      {
+       "heading": "Video ini tiada audio",
+       "detail": "Tiada audio untuk diratakan, jadi kerja selebihnya berjalan tanpanya. Jika anda menjangkakan audio, semak rakaman sebelum menerbitkan.",
+       "headingKeys": [
+        "noAudio"
+       ],
+       "detailKeys": [
+        "noAudio"
+       ],
+       "headingLines": 1,
+       "detailLines": 6,
+       "linesPerItem": 7,
+       "lines": {
+        "heading": [
+         {
+          "text": "Video ini tiada audio",
+          "chars": 21,
+          "cjk": 0,
+          "latin": 21,
+          "weighted": 10.5,
+          "widthPx": 136,
+          "outcome": "pass"
+         }
+        ],
+        "detail": [
+         {
+          "text": "Tiada audio untuk diratakan,",
+          "chars": 28,
+          "cjk": 0,
+          "latin": 28,
+          "weighted": 14,
+          "widthPx": 176,
+          "outcome": "pass"
+         },
+         {
+          "text": "jadi kerja selebihnya berjalan",
+          "chars": 30,
+          "cjk": 0,
+          "latin": 30,
+          "weighted": 15,
+          "widthPx": 181,
+          "outcome": "pass"
+         },
+         {
+          "text": "tanpanya. Jika anda",
+          "chars": 19,
+          "cjk": 0,
+          "latin": 19,
+          "weighted": 9.5,
+          "widthPx": 125,
+          "outcome": "pass"
+         },
+         {
+          "text": "menjangkakan audio, semak",
+          "chars": 25,
+          "cjk": 0,
+          "latin": 25,
+          "weighted": 12.5,
+          "widthPx": 178,
+          "outcome": "pass"
+         },
+         {
+          "text": "rakaman sebelum",
+          "chars": 15,
+          "cjk": 0,
+          "latin": 15,
+          "weighted": 7.5,
+          "widthPx": 111,
+          "outcome": "pass"
+         },
+         {
+          "text": "menerbitkan.",
+          "chars": 12,
+          "cjk": 0,
+          "latin": 12,
+          "weighted": 6,
+          "widthPx": 81,
+          "outcome": "pass"
+         }
+        ]
+       }
+      }
+     ],
+     "tail": [
+      {
+       "text": "Tiada satu pun daripada ini yang menghalang anda daripada meneruskan. Fail asal anda tidak diubah dalam apa jua cara.",
+       "lines": 5
+      }
+     ],
+     "measure": {
+      "maxChars": 30,
+      "maxCjk": 0,
+      "maxWeighted": 15,
+      "worst": "pass",
+      "lines": 14
+     },
+     "overflow": []
+    },
+    "noAudioHeading": true,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio.",
+     "shown": "",
+     "spokenOnly": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio."
+    },
+    "sourceStatus": {
+     "announced": "Video dibaca.",
+     "shown": "Video dibaca.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793119347322,
+     "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio."
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "Bahasa halaman: Bahasa Malaysia."
+     },
+     {
+      "region": "div.promise-help",
+      "text": "Video wujud dalam banyak format. Sesetengahnya dimainkan pada satu peranti tetapi tidak pada peranti lain, atau tidak berfungsi dengan sesetengah aplikasi. Alat"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video dibaca."
+     },
+     {
+      "region": "div",
+      "text": "Saat terakhir video — grafik penutup menutupinya semasa ia terbentuk. Bingkai akhir ditahan — bingkai terakhir anda ditahan selama satu saat tambahan. Grafik pe"
+     },
+     {
+      "region": "#status",
+      "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: "
+     }
+    ],
+    "checking": false
+   },
+   "forced-dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": true
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Sedia untuk bermula"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:04.0"
+    },
+    "warnings": {
+     "kind": "warning",
+     "title": "Perlu diketahui tentang audionya",
+     "titleLines": 2,
+     "items": [
+      {
+       "heading": "Video ini tiada audio",
+       "detail": "Tiada audio untuk diratakan, jadi kerja selebihnya berjalan tanpanya. Jika anda menjangkakan audio, semak rakaman sebelum menerbitkan.",
+       "headingKeys": [
+        "noAudio"
+       ],
+       "detailKeys": [
+        "noAudio"
+       ],
+       "headingLines": 1,
+       "detailLines": 6,
+       "linesPerItem": 7,
+       "lines": {
+        "heading": [
+         {
+          "text": "Video ini tiada audio",
+          "chars": 21,
+          "cjk": 0,
+          "latin": 21,
+          "weighted": 10.5,
+          "widthPx": 136,
+          "outcome": "pass"
+         }
+        ],
+        "detail": [
+         {
+          "text": "Tiada audio untuk diratakan,",
+          "chars": 28,
+          "cjk": 0,
+          "latin": 28,
+          "weighted": 14,
+          "widthPx": 176,
+          "outcome": "pass"
+         },
+         {
+          "text": "jadi kerja selebihnya berjalan",
+          "chars": 30,
+          "cjk": 0,
+          "latin": 30,
+          "weighted": 15,
+          "widthPx": 181,
+          "outcome": "pass"
+         },
+         {
+          "text": "tanpanya. Jika anda",
+          "chars": 19,
+          "cjk": 0,
+          "latin": 19,
+          "weighted": 9.5,
+          "widthPx": 125,
+          "outcome": "pass"
+         },
+         {
+          "text": "menjangkakan audio, semak",
+          "chars": 25,
+          "cjk": 0,
+          "latin": 25,
+          "weighted": 12.5,
+          "widthPx": 178,
+          "outcome": "pass"
+         },
+         {
+          "text": "rakaman sebelum",
+          "chars": 15,
+          "cjk": 0,
+          "latin": 15,
+          "weighted": 7.5,
+          "widthPx": 111,
+          "outcome": "pass"
+         },
+         {
+          "text": "menerbitkan.",
+          "chars": 12,
+          "cjk": 0,
+          "latin": 12,
+          "weighted": 6,
+          "widthPx": 81,
+          "outcome": "pass"
+         }
+        ]
+       }
+      }
+     ],
+     "tail": [
+      {
+       "text": "Tiada satu pun daripada ini yang menghalang anda daripada meneruskan. Fail asal anda tidak diubah dalam apa jua cara.",
+       "lines": 5
+      }
+     ],
+     "measure": {
+      "maxChars": 30,
+      "maxCjk": 0,
+      "maxWeighted": 15,
+      "worst": "pass",
+      "lines": 14
+     },
+     "overflow": []
+    },
+    "noAudioHeading": true,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio.",
+     "shown": "",
+     "spokenOnly": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio."
+    },
+    "sourceStatus": {
+     "announced": "Video dibaca.",
+     "shown": "Video dibaca.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793119347322,
+     "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio."
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "Bahasa halaman: Bahasa Malaysia."
+     },
+     {
+      "region": "div.promise-help",
+      "text": "Video wujud dalam banyak format. Sesetengahnya dimainkan pada satu peranti tetapi tidak pada peranti lain, atau tidak berfungsi dengan sesetengah aplikasi. Alat"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video dibaca."
+     },
+     {
+      "region": "div",
+      "text": "Saat terakhir video — grafik penutup menutupinya semasa ia terbentuk. Bingkai akhir ditahan — bingkai terakhir anda ditahan selama satu saat tambahan. Grafik pe"
+     },
+     {
+      "region": "#status",
+      "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: "
+     }
+    ],
+    "checking": false
+   }
+  },
+  "obs": {
+   "afterTab": "#trim-set-end"
+  },
+  "scenarioAsserts": [
+   {
+    "what": "Tab from End time lands on \"Set end here\", where Tab puts it (S-34)",
+    "outcome": "pass",
+    "seen": {
+     "afterTab": "#trim-set-end"
+    }
+   }
+  ],
+  "status": "ok",
+  "workerLogs": [
+   {
+    "t": 650,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (worker)"
+    ]
+   },
+   {
+    "t": 650,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[worker]",
+     "job worker ready"
+    ]
+   },
+   {
+    "t": 650,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[worker]",
+     "ping received"
+    ]
+   },
+   {
+    "t": 1546,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.016,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 1552,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.016,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 1553,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "device capabilities inspected",
+     {
+      "hasWebCodecs": true,
+      "hasOpfs": true,
+      "deviceClass": "desktop",
+      "hardwareConcurrency": 10,
+      "quotaBytes": 10737418428,
+      "availableBytes": 10737418240
+     }
+    ]
+   },
+   {
+    "t": 1563,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1280,
+      "height": 720,
+      "bitrate": 2648219
+     }
+    ]
+   },
+   {
+    "t": 1626,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 2,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 1896,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[probe]",
+     "calibration complete",
+     {
+      "framesEncoded": 75,
+      "videoFramesPerSecond": 401,
+      "audioRealtimeFactor": 99,
+      "estimatedSeconds": 3,
+      "videoSeconds": 0.6,
+      "brandingSeconds": 0.6,
+      "audioPlanningSeconds": 1.2,
+      "audioProcessingSeconds": 0.1,
+      "verificationSeconds": 0.1
+     }
+    ]
+   },
+   {
+    "t": 2974,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.016,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 2974,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "device capabilities inspected",
+     {
+      "hasWebCodecs": true,
+      "hasOpfs": true,
+      "deviceClass": "desktop",
+      "hardwareConcurrency": 10,
+      "quotaBytes": 10737418428,
+      "availableBytes": 10737418240
+     }
+    ]
+   },
+   {
+    "t": 2985,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1280,
+      "height": 720,
+      "bitrate": 2648219
+     }
+    ]
+   },
+   {
+    "t": 3248,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[probe]",
+     "calibration complete",
+     {
+      "framesEncoded": 75,
+      "videoFramesPerSecond": 394,
+      "audioRealtimeFactor": null,
+      "estimatedSeconds": 1,
+      "videoSeconds": 0.3,
+      "brandingSeconds": 0.6,
+      "audioPlanningSeconds": 0,
+      "audioProcessingSeconds": 0,
+      "verificationSeconds": 0
+     }
+    ]
+   }
+  ],
+  "console": [],
+  "ms": 6671
+ }
+]

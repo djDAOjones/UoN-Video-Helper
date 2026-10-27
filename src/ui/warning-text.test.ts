@@ -4,10 +4,13 @@
  * mechanical: no jargon, no blame, and always a next step.
  */
 
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
 
-import type { AudioWarningCode } from '../audio/warnings'
+import { detectSourceWarnings } from '../audio/warnings'
+import type { AudioWarningCode, NoAudioReason } from '../audio/warnings'
 import { DECODE_DAMAGE } from '../config/audio'
+import { LANGUAGES_OFFERED } from '../config/languages'
+import { setLanguage, t } from '../i18n'
 import { damageTimes, shortfallTimes, warningText } from './warning-text'
 
 /**
@@ -141,6 +144,62 @@ describe('a file that ends early, said with where its sound stops (VH-139)', () 
   it('times a stop and an end the same way wherever they are said', () => {
     expect(shortfallTimes({ stopsAtSeconds: 20.99, endSeconds: 29.6 })).toEqual({ stops: '0:20', end: '0:30' })
   })
+})
+
+describe('no audio, said by its cause (VH-206)', () => {
+  afterEach(() => setLanguage('en-GB'))
+  const said = (reason?: NoAudioReason) =>
+    warningText({ code: 'no-audio', detail: {}, ...(reason ? { reason } : {}) })
+
+  it('keeps a file with no audio track’s words as they were', () => {
+    expect(said('no-track')).toEqual({
+      heading: 'This video has no audio',
+      detail:
+        'There is no audio to level, so the rest of the job runs without it. If you expected audio, check the recording before publishing.',
+    })
+    // A warning with no reason is told as before.
+    expect(said()).toEqual(said('no-track'))
+  })
+
+  it('says the part kept has too little, and to keep more, never to check the recording', () => {
+    const { heading, detail } = said('kept-too-little')
+    expect(heading).toBe('The part you kept has too little audio to level')
+    expect(detail).toBe(
+      'The new video will have no audio. If you want the audio, move the start or end time to keep more of the video where there is audio.',
+    )
+    expect(detail).not.toMatch(/check the recording/i)
+  })
+
+  it.each(LANGUAGES_OFFERED)('words each cause from %s’s own table', (tag) => {
+    setLanguage(tag)
+    const { warnings } = t()
+    expect(said('kept-too-little')).toEqual(warnings.keptTooLittleAudio)
+    expect(said('no-track')).toEqual(warnings.noAudio)
+    expect(warnings.keptTooLittleAudio.heading).not.toBe(warnings.noAudio.heading)
+  })
+
+  it.each(LANGUAGES_OFFERED)(
+    'in %s, each cause found by detection is said in its own words',
+    (tag) => {
+      setLanguage(tag)
+      const { warnings } = t()
+      const headings = (...args: Parameters<typeof detectSourceWarnings>) =>
+        detectSourceWarnings(...args).map((warning) => warningText(warning).heading)
+      // No audio track: today's words.
+      expect(headings(null)).toEqual([warnings.noAudio.heading])
+      // Too little sound decoded in the part kept, or none: the kept-part words.
+      expect(headings({ silent: true, decodedEndSeconds: 3.98 })).toEqual([
+        warnings.keptTooLittleAudio.heading,
+      ])
+      expect(headings({ silent: true, decodedEndSeconds: null })).toEqual([
+        warnings.keptTooLittleAudio.heading,
+      ])
+      // Sound the part declares and never delivers: the file ends early, not too little kept.
+      expect(
+        headings({ silent: true, decodedEndSeconds: null }, { stopsAtSeconds: 25, endSeconds: 30 }),
+      ).toEqual([warnings.endsEarly.heading])
+    },
+  )
 })
 
 describe('heavy limiting, said with the finished video (VH-193)', () => {

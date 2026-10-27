@@ -1,0 +1,118 @@
+// VH-206 #2: the moved predicates proved on the candidate page, before any after cell is read.
+// For each language: the candidate page with the walker's own MX_INIT and QUAL_INIT
+// (installed as the probe installs them), the language chosen as the walker chooses it,
+// window.__mx.tables[lang] loaded; then #audio-warnings is given one visible
+// <div class="notification" data-kind="warning"><p class="notification-title">HEADING</p></div>
+// for three cases (the absent-track heading, the kept-part heading, an empty panel), and
+// each expression, read from SCENARIOS (candidate and base walkers, not retyped), is
+// evaluated in the wrapper its walker uses for it.
+//
+//   CAND_WALKER=<cand walker> BASE_WALKER=<base walker> APP_URL=http://127.0.0.1:5181/ CDP_PORT=9251 \
+//   FIX=<fixtures> OUT_ROOT=<scratch>/out-proof RESULTS=<results dir> SOURCE=<candidate id> \
+//     node predicate-proof-206.mjs
+import { execFileSync } from 'node:child_process'
+import { writeFileSync } from 'node:fs'
+import { join, resolve } from 'node:path'
+import { pathToFileURL } from 'node:url'
+
+const env = (k) => { const v = process.env[k]; if (!v) throw new Error(`set ${k}`); return v }
+const CAND = resolve(env('CAND_WALKER')), BASE = resolve(env('BASE_WALKER')), RESULTS = resolve(env('RESULTS'))
+env('APP_URL'); env('CDP_PORT'); env('OUT_ROOT')
+const imp = (dir, f) => import(pathToFileURL(join(dir, f)).href)
+const { connectBrowser } = await imp(CAND, 'cdp.mjs')
+const { Walk, sleep } = await imp(CAND, 'walk.mjs')
+const { QUAL_INIT, setViewport } = await imp(CAND, 'qualify.mjs')
+const { SCENARIOS: SC_CAND, MX_INIT, fresh } = await imp(CAND, 'scenarios.mjs')
+const { SCENARIOS: SC_BASE } = await imp(BASE, 'scenarios.mjs')
+
+const sh = (cmd, a) => { try { return execFileSync(cmd, a, { encoding: 'utf8' }).trim() } catch (e) { return 'error: ' + String(e.message).slice(0, 120) } }
+const power = () => {
+  const batt = sh('pmset', ['-g', 'batt']); const pm = sh('pmset', ['-g']).split('\n').filter((l) => /powermode/i.test(l)).map((l) => l.trim()).join('; ')
+  const up = sh('uptime', []); const load = (up.match(/load averages?: ([\d.]+)[ ,]+([\d.]+)[ ,]+([\d.]+)/) || []).slice(1).map(Number)
+  return { t: new Date().toISOString(), ac: /AC Power/.test(batt), batt: batt.split('\n').map((l) => l.trim()).join(' | '), powermode: pm, uptime: up, load1: load[0], load }
+}
+
+// ---------------------------------------------------------------------------
+// The expressions, read from the walkers' own declarations.
+const one = (arr, what) => { if (arr.length !== 1) throw new Error(`${what}: ${arr.length} matches`); return arr[0] }
+const unwrap = (s, what) => one([...s.matchAll(/^\(\(\) => \{ const M = window\.__mx; return \(([\s\S]*)\); \}\)\(\)$/g)].map((m) => m[1]), what)
+function expressionsOf(SC, which) {
+  const s99state = unwrap(SC['S-99'].state, `${which} S-99 state`)
+  const s99wait = one([...SC['S-99'].setup.toString().matchAll(/until\(w, `([^`]*)`/g)].map((m) => m[1]), `${which} S-99 wait`)
+  const nab = (id) => one([...SC[id].setup.toString().matchAll(/noAudioBefore = await mx\(w, `([^`]*)`\)/g)].map((m) => m[1]), `${which} ${id} noAudioBefore`)
+  const s20state = unwrap(SC['S-20'].state, `${which} S-20 state`)
+  const s20part = one([...s20state.matchAll(/M\.has\('[^']+', '#audio-warnings'\)/g)].map((m) => m[0]), `${which} S-20 #audio-warnings part`)
+  return {
+    'S-99 state': { expr: s99state, wrapped: SC['S-99'].state, how: 'assertReached: !!(wrapped state) in try/catch (qualify.mjs:445)' },
+    'S-99 wait': { expr: s99wait, how: 'until(): const M = window.__mx; !!(expr) in try/catch (scenarios.mjs until)' },
+    'S-101 noAudioBefore': { expr: nab('S-101'), how: 'mx(): const M = window.__mx; return expr (raw value); asserted === false' },
+    'S-153 noAudioBefore': { expr: nab('S-153'), how: 'mx(): const M = window.__mx; return expr (raw value); asserted === false' },
+    'S-20 #audio-warnings part': { expr: s20part, fullState: s20state, how: 'the M.has(…, #audio-warnings) term of S-20\'s state, !!(expr)' },
+  }
+}
+const EX = { candidate: expressionsOf(SC_CAND, 'candidate'), base: expressionsOf(SC_BASE, 'base') }
+
+const evalOf = (name, e) => {
+  if (name === 'S-99 state') return `(() => { try { return { v: !!(${e.wrapped}) }; } catch (x) { return { v: false, threw: String(x) }; } })()`
+  if (name.endsWith('noAudioBefore')) return `(() => { const M = window.__mx; try { return { v: ${e.expr} }; } catch (x) { return { v: null, threw: String(x) }; } })()`
+  return `(() => { const M = window.__mx; try { return { v: !!(${e.expr}) }; } catch (x) { return { v: false, threw: String(x) }; } })()`
+}
+
+const CASES = { absent: 'warnings.noAudio.heading', kept: 'warnings.keptTooLittleAudio.heading', empty: null }
+const setCase = (key) => `(() => {
+  const M = window.__mx; const box = document.getElementById('audio-warnings'); const unhid = [];
+  for (let e = box; e && e.nodeType === 1; e = e.parentElement) if (e.hasAttribute('hidden')) { e.removeAttribute('hidden'); unhid.push(e.id || e.tagName.toLowerCase()); }
+  box.innerHTML = '';
+  const heading = ${key ? `M.msg(${JSON.stringify(key)})` : 'null'};
+  if (${key ? 'true' : 'false'}) { const d = document.createElement('div'); d.className = 'notification'; d.dataset.kind = 'warning'; const p = document.createElement('p'); p.className = 'notification-title'; p.textContent = heading; d.appendChild(p); box.appendChild(d); }
+  return { heading, unhid, html: box.innerHTML, boxVisible: M.vis(box), divVisible: box.firstElementChild ? M.vis(box.firstElementChild) : null, kindIn: M.kindIn('#audio-warnings'), text: box.textContent };
+})()`
+
+// Expected on the candidate (the brief's step 2).
+const EXPECT = {
+  'S-99 state': { absent: false, kept: true, empty: false },
+  'S-99 wait': { absent: false, kept: true, empty: false },
+  'S-101 noAudioBefore': { absent: true, kept: true, empty: false },
+  'S-153 noAudioBefore': { absent: true, kept: true, empty: false },
+  'S-20 #audio-warnings part': { absent: true, kept: false, empty: false },
+}
+
+const run = { what: 'VH-206 #2: the moved predicates, proved on the candidate page', source: process.env.SOURCE ?? null, started: new Date().toISOString(), appUrl: process.env.APP_URL, cdpPort: process.env.CDP_PORT, candWalker: CAND, baseWalker: BASE, power: [power()], expressions: EX, expected: EXPECT, results: [], mismatches: [] }
+if (!run.power[0].ac) { console.log('ON BATTERY: stopped'); writeFileSync(join(RESULTS, 'after-predicate-proof.json'), JSON.stringify(run, null, 1)); process.exit(2) }
+const browser = await connectBrowser()
+run.chrome = browser.version.Browser
+for (const lang of ['en-GB', 'zh-Hans', 'ms-MY']) {
+  const w = new Walk(browser, `proof-${lang}`)
+  await w.open()
+  await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source: QUAL_INIT })
+  await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source: MX_INIT })
+  try {
+    await setViewport(w, 'w1280')
+    await fresh(w, lang)
+    await w.waitFor(`document.documentElement.lang === ${JSON.stringify(lang)} && !!window.__mx && !!window.__mx.tables[${JSON.stringify(lang)}]`, { label: `the ${lang} table`, timeout: 60000 })
+    await sleep(300)
+    const page = await w.evaluate(`({ lang: document.documentElement.lang, tables: Object.keys(window.__mx.tables), visibility: document.visibilityState, vw: document.documentElement.clientWidth })`)
+    for (const [cname, key] of Object.entries(CASES)) {
+      const setup = await w.evaluate(setCase(key))
+      const rec = { lang, case: cname, key, page, setup, candidate: {}, base: {} }
+      for (const which of ['candidate', 'base']) for (const [name, e] of Object.entries(EX[which])) rec[which][name] = await w.evaluate(evalOf(name, e))
+      rec.after = await w.evaluate(`document.getElementById('audio-warnings').innerHTML`)
+      rec.stable = rec.after === setup.html
+      for (const [name, exp] of Object.entries(EXPECT)) {
+        const got = rec.candidate[name].v
+        if (got !== exp[cname] || rec.candidate[name].threw) run.mismatches.push({ lang, case: cname, expression: name, expected: exp[cname], got, threw: rec.candidate[name].threw ?? null })
+      }
+      if (!rec.stable) run.mismatches.push({ lang, case: cname, expression: '(the panel changed while read)' })
+      if (key && !(setup.divVisible && setup.kindIn === 'warning' && typeof setup.heading === 'string')) run.mismatches.push({ lang, case: cname, expression: '(set-up: the note not visible, or no heading in the table)', setup })
+      run.results.push(rec)
+      console.log(lang, cname, JSON.stringify(setup.heading), Object.entries(rec.candidate).map(([n, r]) => `${n}=${r.v}`).join(' '), '| base', Object.entries(rec.base).map(([n, r]) => `${n}=${r.v}`).join(' '))
+    }
+  } finally { await w.close().catch(() => {}) }
+}
+run.power.push(power())
+run.ended = new Date().toISOString()
+run.outcome = run.mismatches.length ? 'NOT AS EXPECTED' : 'as expected'
+writeFileSync(join(RESULTS, 'after-predicate-proof.json'), JSON.stringify(run, null, 1))
+browser.close()
+console.log(run.outcome, run.mismatches.length ? JSON.stringify(run.mismatches) : '')
+process.exit(run.mismatches.length ? 1 : 0)

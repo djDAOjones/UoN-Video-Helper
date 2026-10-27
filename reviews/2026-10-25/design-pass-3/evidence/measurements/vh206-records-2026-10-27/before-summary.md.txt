@@ -1,0 +1,266 @@
+<!-- markdownlint-disable -->
+# VH-206 — before: the no-audio warning, measured
+
+Source `446f702` (app src tree 71f2fd4e7807a484), walker tree fa89e31784ec02f9 (`/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/65f25a13-2893-4bf3-ada8-1b14a95646bd/scratchpad/vh206/base/reviews/2026-10-25/design-pass-3/evidence/measurements/walker`), Chrome/156.0.8078.48, Node v24.21.0, served at http://127.0.0.1:5181/, CDP :9251. 2026-10-27T16:41:51.049Z to 2026-10-27T16:49:55.584Z.
+
+Power: AC at every check (50 checks, none on battery); powermode            2; 1-minute load 3.55 to 19.06. Flags: load 16 before block-aac ms-MY w320; load 19.06 before block-pcm en-GB w1280; load 18 before block-pcm en-GB w320; load 16.92 before block-pcm zh-Hans w1280; load 16.16 before block-pcm zh-Hans w320; load 14.24 before block-pcm ms-MY w1280; load 12.97 before block-pcm ms-MY w320.
+
+Fixtures (sha256/16): `late-sound-10s.mp4` 7c57a6ad93218f3c, `silent-10s.mp4` 300cc12d64341acc, `late-sound-3.4s-10s.mp4` 1d6c169c1705fe9e, `late-sound-3.71s-25fps-10s.mp4` cd20254060f8d292, `late-sound-block-aac-25fps-10s.mp4` 5f278ef7acc01fcc, `late-sound-block-pcm-25fps-10s.mov` 0d609568f6e7e128.
+
+## Counts
+
+| Cell | Groups ok | Pre-flight cells read (lang × width × mode) | Job cells (lang × width, read in each mode) | Modes reached |
+| --- | ---: | ---: | ---: | --- |
+| S-99 | 6 / 6 | 24 | — | 24 pass, 0 not |
+| S-100 | 6 / 6 | 24 | 6 (24 reads) | 48 pass, 0 not |
+| S-20 | 6 / 6 | 24 | — | 24 pass, 0 not |
+| S-101 | 6 / 6 | 24 | 6 (24 reads) | 48 pass, 0 not |
+| S-153 | 6 / 6 | 24 | 6 (24 reads) | 48 pass, 0 not |
+| sliver-N14 | 6 / 6 | 24 | 6 (24 reads) | 48 pass, 0 not |
+| block-aac | 6 / 6 | 24 | 6 (24 reads) | 48 pass, 0 not |
+| block-pcm | 6 / 6 | 24 | 6 (24 reads) | 48 pass, 0 not |
+| **All** | | **192** | **36** | |
+
+## What pre-flight shows, per cell and language (light, 1280; the same in every mode and width unless noted)
+
+### S-99 — A kept sliver of sound: no audio before Create
+
+| Lang | Verdict | Panel title | Item heading [table key] | Item detail [table key] | Spoken (#status, as announced) | Same in all 8 reads? |
+| --- | --- | --- | --- | --- | --- | --- |
+| en-GB | success: Ready to go | Worth knowing about the audio | This video has no audio [noAudio] | There is no audio to level, so the rest of the job runs without it. If you expected audio, check the recording before publishing. [noAudio] | Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio. | yes |
+| zh-Hans | success: 准备就绪 | 值得了解的音频特性 | 这段视频没有音频 [noAudio] | 由于没有需要调节音量的音频，所以后续工作将在没有音频的情况下进行。如果您需要音频，请在发布前检查录音。 [noAudio] | 设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。 | yes |
+| ms-MY | success: Sedia untuk bermula | Perlu diketahui tentang audionya | Video ini tiada audio [noAudio] | Tiada audio untuk diratakan, jadi kerja selebihnya berjalan tanpanya. Jika anda menjangkakan audio, semak rakaman sebelum menerbitkan. [noAudio] | Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio. | yes |
+
+| Lang | Width | Lines per item (heading + detail), each item | Panel lines (title / tail) | Overflow (any mode) | Longest line, chars | zh weighted max (CJK + Latin/2, vs 40) | 1.4.8 worst | Trim | Console / page errors |
+| --- | --- | --- | --- | --- | ---: | ---: | --- | --- | --- |
+| en-GB | w1280 | 3 (1 + 2) | 1 / 2 | none | 74 | — | pass | 0:00.0–0:04.0 | none |
+| en-GB | w320 | 6 (1 + 5) | 2 / 3 | none | 33 | — | pass | 0:00.0–0:04.0 | none |
+| zh-Hans | w1280 | 3 (1 + 2) | 1 / 1 | none | 31 | 31 | pass | 0:00.0–0:04.0 | none |
+| zh-Hans | w320 | 5 (1 + 4) | 1 / 3 | none | 13 | 13 | pass | 0:00.0–0:04.0 | none |
+| ms-MY | w1280 | 3 (1 + 2) | 1 / 2 | none | 69 | — | pass | 0:00.0–0:04.0 | none |
+| ms-MY | w320 | 7 (1 + 6) | 2 / 5 | none | 30 | — | pass | 0:00.0–0:04.0 | none |
+
+The scenario's own assertions: "Tab from End time lands on "Set end here", where Tab puts it (S-34)" — 6 pass, 0 not, across 6 groups.
+
+### S-100 — A kept sliver: the job finishes silent
+
+| Lang | Verdict | Panel title | Item heading [table key] | Item detail [table key] | Spoken (#status, as announced) | Same in all 8 reads? |
+| --- | --- | --- | --- | --- | --- | --- |
+| en-GB | success: Ready to go | Worth knowing about the audio | This video has no audio [noAudio] | There is no audio to level, so the rest of the job runs without it. If you expected audio, check the recording before publishing. [noAudio] | Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio. | yes |
+| zh-Hans | success: 准备就绪 | 值得了解的音频特性 | 这段视频没有音频 [noAudio] | 由于没有需要调节音量的音频，所以后续工作将在没有音频的情况下进行。如果您需要音频，请在发布前检查录音。 [noAudio] | 设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。 | yes |
+| ms-MY | success: Sedia untuk bermula | Perlu diketahui tentang audionya | Video ini tiada audio [noAudio] | Tiada audio untuk diratakan, jadi kerja selebihnya berjalan tanpanya. Jika anda menjangkakan audio, semak rakaman sebelum menerbitkan. [noAudio] | Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio. | yes |
+
+| Lang | Width | Lines per item (heading + detail), each item | Panel lines (title / tail) | Overflow (any mode) | Longest line, chars | zh weighted max (CJK + Latin/2, vs 40) | 1.4.8 worst | Trim | Console / page errors |
+| --- | --- | --- | --- | --- | ---: | ---: | --- | --- | --- |
+| en-GB | w1280 | 3 (1 + 2) | 1 / 2 | none | 74 | — | pass | 0:00.0–0:04.0 | none |
+| en-GB | w320 | 6 (1 + 5) | 2 / 3 | none | 33 | — | pass | 0:00.0–0:04.0 | none |
+| zh-Hans | w1280 | 3 (1 + 2) | 1 / 1 | none | 31 | 31 | pass | 0:00.0–0:04.0 | none |
+| zh-Hans | w320 | 5 (1 + 4) | 1 / 3 | none | 13 | 13 | pass | 0:00.0–0:04.0 | none |
+| ms-MY | w1280 | 3 (1 + 2) | 1 / 2 | none | 69 | — | pass | 0:00.0–0:04.0 | none |
+| ms-MY | w320 | 7 (1 + 6) | 2 / 5 | none | 30 | — | pass | 0:00.0–0:04.0 | none |
+
+The scenario's own assertions: "the record keeps 0:00.0 to 0:04.0 of the 10 s file"; "no plan, so no heavy-limiting warning (a silent job)" — 12 pass, 0 not, across 6 groups.
+
+| Lang | Width | Job | Kept (card) | Placed range (worker) | Plan / gain | Output check (worker) | Output file: tracks | Durations (s) | Spoken at completion | Result warnings |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| en-GB | w1280 | result (finished) | 0:00.0 to 0:04.0 | [0,4] → [0,4] | 0 planned; gain null; "kept range holds no sound" | output verified {"audio":"none-in-kept-range"} | 1: video h264 | file 8; video 8 | Your video is ready. | none |
+| en-GB | w320 | result (finished) | 0:00.0 to 0:04.0 | [0,4] → [0,4] | 0 planned; gain null; "kept range holds no sound" | output verified {"audio":"none-in-kept-range"} | 1: video h264 | file 8; video 8 | Your video is ready. | none |
+| zh-Hans | w1280 | result (finished) | 0:00.0 到 0:04.0 | [0,4] → [0,4] | 0 planned; gain null; "kept range holds no sound" | output verified {"audio":"none-in-kept-range"} | 1: video h264 | file 8; video 8 | 您的视频已准备就绪。 | none |
+| zh-Hans | w320 | result (finished) | 0:00.0 到 0:04.0 | [0,4] → [0,4] | 0 planned; gain null; "kept range holds no sound" | output verified {"audio":"none-in-kept-range"} | 1: video h264 | file 8; video 8 | 您的视频已准备就绪。 | none |
+| ms-MY | w1280 | result (finished) | 0:00.0 hingga 0:04.0 | [0,4] → [0,4] | 0 planned; gain null; "kept range holds no sound" | output verified {"audio":"none-in-kept-range"} | 1: video h264 | file 8; video 8 | Video anda sudah siap. | none |
+| ms-MY | w320 | result (finished) | 0:00.0 hingga 0:04.0 | [0,4] → [0,4] | 0 planned; gain null; "kept range holds no sound" | output verified {"audio":"none-in-kept-range"} | 1: video h264 | file 8; video 8 | Video anda sudah siap. | none |
+
+### S-20 — No audio
+
+| Lang | Verdict | Panel title | Item heading [table key] | Item detail [table key] | Spoken (#status, as announced) | Same in all 8 reads? |
+| --- | --- | --- | --- | --- | --- | --- |
+| en-GB | success: Ready to go | Worth knowing about the audio | This video has no audio [noAudio] | There is no audio to level, so the rest of the job runs without it. If you expected audio, check the recording before publishing. [noAudio] | Device check complete. Ready to go. This should take a few seconds. Estimated size up to 6.8 MB. Worth knowing about the audio: This video has no audio. | yes |
+| zh-Hans | success: 准备就绪 | 值得了解的音频特性 | 这段视频没有音频 [noAudio] | 由于没有需要调节音量的音频，所以后续工作将在没有音频的情况下进行。如果您需要音频，请在发布前检查录音。 [noAudio] | 设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达6.8 MB。 值得了解的音频特性：这段视频没有音频。 | yes |
+| ms-MY | success: Sedia untuk bermula | Perlu diketahui tentang audionya | Video ini tiada audio [noAudio] | Tiada audio untuk diratakan, jadi kerja selebihnya berjalan tanpanya. Jika anda menjangkakan audio, semak rakaman sebelum menerbitkan. [noAudio] | Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 6.8 MB. Perlu diketahui tentang audionya: Video ini tiada audio. | yes |
+
+| Lang | Width | Lines per item (heading + detail), each item | Panel lines (title / tail) | Overflow (any mode) | Longest line, chars | zh weighted max (CJK + Latin/2, vs 40) | 1.4.8 worst | Trim | Console / page errors |
+| --- | --- | --- | --- | --- | ---: | ---: | --- | --- | --- |
+| en-GB | w1280 | 3 (1 + 2) | 1 / 2 | none | 74 | — | pass | 0:00.0–0:10.0 | none |
+| en-GB | w320 | 6 (1 + 5) | 2 / 3 | none | 33 | — | pass | 0:00.0–0:10.0 | none |
+| zh-Hans | w1280 | 3 (1 + 2) | 1 / 1 | none | 31 | 31 | pass | 0:00.0–0:10.0 | none |
+| zh-Hans | w320 | 5 (1 + 4) | 1 / 3 | none | 13 | 13 | pass | 0:00.0–0:10.0 | none |
+| ms-MY | w1280 | 3 (1 + 2) | 1 / 2 | none | 69 | — | pass | 0:00.0–0:10.0 | none |
+| ms-MY | w320 | 7 (1 + 6) | 2 / 5 | none | 30 | — | pass | 0:00.0–0:10.0 | none |
+
+The scenario's own assertions: "the scenario's own assertions" — 0 pass, 6 not, across 6 groups.
+
+### S-101 — The control: 0.6 s of sound kept
+
+| Lang | Verdict | Panel title | Item heading [table key] | Item detail [table key] | Spoken (#status, as announced) | Same in all 8 reads? |
+| --- | --- | --- | --- | --- | --- | --- |
+| en-GB | success: Ready to go | — (no panel) | — | — | Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. | yes |
+| zh-Hans | success: 准备就绪 | — (no panel) | — | — | 设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 | yes |
+| ms-MY | success: Sedia untuk bermula | — (no panel) | — | — | Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. | yes |
+
+| Lang | Width | Lines per item (heading + detail), each item | Panel lines (title / tail) | Overflow (any mode) | Longest line, chars | zh weighted max (CJK + Latin/2, vs 40) | 1.4.8 worst | Trim | Console / page errors |
+| --- | --- | --- | --- | --- | ---: | ---: | --- | --- | --- |
+| en-GB | w1280 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+| en-GB | w320 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+| zh-Hans | w1280 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+| zh-Hans | w320 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+| ms-MY | w1280 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+| ms-MY | w320 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+
+The scenario's own assertions: "no no-audio note before Create"; "levelled: the job planned its sound" — 12 pass, 0 not, across 6 groups.
+
+| Lang | Width | Job | Kept (card) | Placed range (worker) | Plan / gain | Output check (worker) | Output file: tracks | Durations (s) | Spoken at completion | Result warnings |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| en-GB | w1280 | result (finished) | 0:00.0 to 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19 | output verified {"integratedLufs":-16.24,"truePeakDbtp":-13.67,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.704 | Your video is ready. | none |
+| en-GB | w320 | result (finished) | 0:00.0 to 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19 | output verified {"integratedLufs":-16.24,"truePeakDbtp":-13.67,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.704 | Your video is ready. | none |
+| zh-Hans | w1280 | result (finished) | 0:00.0 到 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19 | output verified {"integratedLufs":-16.24,"truePeakDbtp":-13.67,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.704 | 您的视频已准备就绪。 | none |
+| zh-Hans | w320 | result (finished) | 0:00.0 到 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19 | output verified {"integratedLufs":-16.24,"truePeakDbtp":-13.67,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.704 | 您的视频已准备就绪。 | none |
+| ms-MY | w1280 | result (finished) | 0:00.0 hingga 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19 | output verified {"integratedLufs":-16.24,"truePeakDbtp":-13.67,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.704 | Video anda sudah siap. | none |
+| ms-MY | w320 | result (finished) | 0:00.0 hingga 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19 | output verified {"integratedLufs":-16.24,"truePeakDbtp":-13.67,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.704 | Video anda sudah siap. | none |
+
+### S-153 — A kept sound that frame placement takes over one block
+
+| Lang | Verdict | Panel title | Item heading [table key] | Item detail [table key] | Spoken (#status, as announced) | Same in all 8 reads? |
+| --- | --- | --- | --- | --- | --- | --- |
+| en-GB | success: Ready to go | — (no panel) | — | — | Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. | yes |
+| zh-Hans | success: 准备就绪 | — (no panel) | — | — | 设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 | yes |
+| ms-MY | success: Sedia untuk bermula | — (no panel) | — | — | Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. | yes |
+
+| Lang | Width | Lines per item (heading + detail), each item | Panel lines (title / tail) | Overflow (any mode) | Longest line, chars | zh weighted max (CJK + Latin/2, vs 40) | 1.4.8 worst | Trim | Console / page errors |
+| --- | --- | --- | --- | --- | ---: | ---: | --- | --- | --- |
+| en-GB | w1280 | — | — | none | — | — | — | 0:00.0–0:04.1 | none |
+| en-GB | w320 | — | — | none | — | — | — | 0:00.0–0:04.1 | none |
+| zh-Hans | w1280 | — | — | none | — | — | — | 0:00.0–0:04.1 | none |
+| zh-Hans | w320 | — | — | none | — | — | — | 0:00.0–0:04.1 | none |
+| ms-MY | w1280 | — | — | none | — | — | — | 0:00.0–0:04.1 | none |
+| ms-MY | w320 | — | — | none | — | — | — | 0:00.0–0:04.1 | none |
+
+The scenario's own assertions: "no "This video has no audio" for 3.71 to 4.10 s (390 ms asked, 410 ms on frames)"; "finished levelled: the job planned its sound" — 12 pass, 0 not, across 6 groups.
+
+| Lang | Width | Job | Kept (card) | Placed range (worker) | Plan / gain | Output check (worker) | Output file: tracks | Durations (s) | Spoken at completion | Result warnings |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| en-GB | w1280 | result (finished) | 0:00.0 to 0:04.1 | [0,4.1] → [0,4.12] | 1 planned; gain 19.3 | output verified {"integratedLufs":-16.47,"truePeakDbtp":-13.46,"onTarget":true} | 2: video h264, audio aac | file 8.12; video 8.12, audio 0.512 | Your video is ready. | none |
+| en-GB | w320 | result (finished) | 0:00.0 to 0:04.1 | [0,4.1] → [0,4.12] | 1 planned; gain 19.3 | output verified {"integratedLufs":-16.47,"truePeakDbtp":-13.46,"onTarget":true} | 2: video h264, audio aac | file 8.12; video 8.12, audio 0.512 | Your video is ready. | none |
+| zh-Hans | w1280 | result (finished) | 0:00.0 到 0:04.1 | [0,4.1] → [0,4.12] | 1 planned; gain 19.3 | output verified {"integratedLufs":-16.47,"truePeakDbtp":-13.46,"onTarget":true} | 2: video h264, audio aac | file 8.12; video 8.12, audio 0.512 | 您的视频已准备就绪。 | none |
+| zh-Hans | w320 | result (finished) | 0:00.0 到 0:04.1 | [0,4.1] → [0,4.12] | 1 planned; gain 19.3 | output verified {"integratedLufs":-16.47,"truePeakDbtp":-13.46,"onTarget":true} | 2: video h264, audio aac | file 8.12; video 8.12, audio 0.512 | 您的视频已准备就绪。 | none |
+| ms-MY | w1280 | result (finished) | 0:00.0 hingga 0:04.1 | [0,4.1] → [0,4.12] | 1 planned; gain 19.3 | output verified {"integratedLufs":-16.47,"truePeakDbtp":-13.46,"onTarget":true} | 2: video h264, audio aac | file 8.12; video 8.12, audio 0.512 | Video anda sudah siap. | none |
+| ms-MY | w320 | result (finished) | 0:00.0 hingga 0:04.1 | [0,4.1] → [0,4.12] | 1 planned; gain 19.3 | output verified {"integratedLufs":-16.47,"truePeakDbtp":-13.46,"onTarget":true} | 2: video h264, audio aac | file 8.12; video 8.12, audio 0.512 | Video anda sudah siap. | none |
+
+### sliver-N14 — N14: AAC sound from 3.71 s (first packet, the priming, 3.688667 s), kept 0:00-0:04.0 (a 25 fps frame edge): 311.3 ms decoded (21.3 ms priming, 290 ms of tone)
+
+| Lang | Verdict | Panel title | Item heading [table key] | Item detail [table key] | Spoken (#status, as announced) | Same in all 8 reads? |
+| --- | --- | --- | --- | --- | --- | --- |
+| en-GB | success: Ready to go | Worth knowing about the audio | This video has no audio [noAudio] | There is no audio to level, so the rest of the job runs without it. If you expected audio, check the recording before publishing. [noAudio] | Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. Worth knowing about the audio: This video has no audio. | yes |
+| zh-Hans | success: 准备就绪 | 值得了解的音频特性 | 这段视频没有音频 [noAudio] | 由于没有需要调节音量的音频，所以后续工作将在没有音频的情况下进行。如果您需要音频，请在发布前检查录音。 [noAudio] | 设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 值得了解的音频特性：这段视频没有音频。 | yes |
+| ms-MY | success: Sedia untuk bermula | Perlu diketahui tentang audionya | Video ini tiada audio [noAudio] | Tiada audio untuk diratakan, jadi kerja selebihnya berjalan tanpanya. Jika anda menjangkakan audio, semak rakaman sebelum menerbitkan. [noAudio] | Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. Perlu diketahui tentang audionya: Video ini tiada audio. | yes |
+
+| Lang | Width | Lines per item (heading + detail), each item | Panel lines (title / tail) | Overflow (any mode) | Longest line, chars | zh weighted max (CJK + Latin/2, vs 40) | 1.4.8 worst | Trim | Console / page errors |
+| --- | --- | --- | --- | --- | ---: | ---: | --- | --- | --- |
+| en-GB | w1280 | 3 (1 + 2) | 1 / 2 | none | 74 | — | pass | 0:00.0–0:04.0 | none |
+| en-GB | w320 | 6 (1 + 5) | 2 / 3 | none | 33 | — | pass | 0:00.0–0:04.0 | none |
+| zh-Hans | w1280 | 3 (1 + 2) | 1 / 1 | none | 31 | 31 | pass | 0:00.0–0:04.0 | none |
+| zh-Hans | w320 | 5 (1 + 4) | 1 / 3 | none | 13 | 13 | pass | 0:00.0–0:04.0 | none |
+| ms-MY | w1280 | 3 (1 + 2) | 1 / 2 | none | 69 | — | pass | 0:00.0–0:04.0 | none |
+| ms-MY | w320 | 7 (1 + 6) | 2 / 5 | none | 30 | — | pass | 0:00.0–0:04.0 | none |
+
+| Lang | Width | Job | Kept (card) | Placed range (worker) | Plan / gain | Output check (worker) | Output file: tracks | Durations (s) | Spoken at completion | Result warnings |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| en-GB | w1280 | result (finished) | 0:00.0 to 0:04.0 | [0,4] → [0,4] | 0 planned; gain null; "kept range holds no sound" | output verified {"audio":"none-in-kept-range"} | 1: video h264 | file 8; video 8 | Your video is ready. | none |
+| en-GB | w320 | result (finished) | 0:00.0 to 0:04.0 | [0,4] → [0,4] | 0 planned; gain null; "kept range holds no sound" | output verified {"audio":"none-in-kept-range"} | 1: video h264 | file 8; video 8 | Your video is ready. | none |
+| zh-Hans | w1280 | result (finished) | 0:00.0 到 0:04.0 | [0,4] → [0,4] | 0 planned; gain null; "kept range holds no sound" | output verified {"audio":"none-in-kept-range"} | 1: video h264 | file 8; video 8 | 您的视频已准备就绪。 | none |
+| zh-Hans | w320 | result (finished) | 0:00.0 到 0:04.0 | [0,4] → [0,4] | 0 planned; gain null; "kept range holds no sound" | output verified {"audio":"none-in-kept-range"} | 1: video h264 | file 8; video 8 | 您的视频已准备就绪。 | none |
+| ms-MY | w1280 | result (finished) | 0:00.0 hingga 0:04.0 | [0,4] → [0,4] | 0 planned; gain null; "kept range holds no sound" | output verified {"audio":"none-in-kept-range"} | 1: video h264 | file 8; video 8 | Video anda sudah siap. | none |
+| ms-MY | w320 | result (finished) | 0:00.0 hingga 0:04.0 | [0,4] → [0,4] | 0 planned; gain null; "kept range holds no sound" | output verified {"audio":"none-in-kept-range"} | 1: video h264 | file 8; video 8 | Video anda sudah siap. | none |
+
+### block-aac — Exact block, N8 recipe: first AAC packet (the priming) at 3.600000 s (pts 172800/48000), kept 0:00-0:04.0 (a frame edge, so not moved): 19,200 decoded samples = 400.0 ms (21.3 ms priming, 378.7 ms tone)
+
+| Lang | Verdict | Panel title | Item heading [table key] | Item detail [table key] | Spoken (#status, as announced) | Same in all 8 reads? |
+| --- | --- | --- | --- | --- | --- | --- |
+| en-GB | success: Ready to go | — (no panel) | — | — | Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. | yes |
+| zh-Hans | success: 准备就绪 | — (no panel) | — | — | 设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 | yes |
+| ms-MY | success: Sedia untuk bermula | — (no panel) | — | — | Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. | yes |
+
+| Lang | Width | Lines per item (heading + detail), each item | Panel lines (title / tail) | Overflow (any mode) | Longest line, chars | zh weighted max (CJK + Latin/2, vs 40) | 1.4.8 worst | Trim | Console / page errors |
+| --- | --- | --- | --- | --- | ---: | ---: | --- | --- | --- |
+| en-GB | w1280 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+| en-GB | w320 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+| zh-Hans | w1280 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+| zh-Hans | w320 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+| ms-MY | w1280 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+| ms-MY | w320 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+
+| Lang | Width | Job | Kept (card) | Placed range (worker) | Plan / gain | Output check (worker) | Output file: tracks | Durations (s) | Spoken at completion | Result warnings |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| en-GB | w1280 | result (finished) | 0:00.0 to 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19.5 | output verified {"integratedLufs":-16.35,"truePeakDbtp":-13.23,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.469333 | Your video is ready. | none |
+| en-GB | w320 | result (finished) | 0:00.0 to 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19.5 | output verified {"integratedLufs":-16.35,"truePeakDbtp":-13.23,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.469333 | Your video is ready. | none |
+| zh-Hans | w1280 | result (finished) | 0:00.0 到 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19.5 | output verified {"integratedLufs":-16.35,"truePeakDbtp":-13.23,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.469333 | 您的视频已准备就绪。 | none |
+| zh-Hans | w320 | result (finished) | 0:00.0 到 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19.5 | output verified {"integratedLufs":-16.35,"truePeakDbtp":-13.23,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.469333 | 您的视频已准备就绪。 | none |
+| ms-MY | w1280 | result (finished) | 0:00.0 hingga 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19.5 | output verified {"integratedLufs":-16.35,"truePeakDbtp":-13.23,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.469333 | Video anda sudah siap. | none |
+| ms-MY | w320 | result (finished) | 0:00.0 hingga 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19.5 | output verified {"integratedLufs":-16.35,"truePeakDbtp":-13.23,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.469333 | Video anda sudah siap. | none |
+
+### block-pcm — Exact block, PCM twin: 16-bit PCM in MOV, no priming, sound from 3.600000 s, kept 0:00-0:04.0: 19,200 samples of tone = 400.0 ms
+
+| Lang | Verdict | Panel title | Item heading [table key] | Item detail [table key] | Spoken (#status, as announced) | Same in all 8 reads? |
+| --- | --- | --- | --- | --- | --- | --- |
+| en-GB | success: Ready to go | — (no panel) | — | — | Device check complete. Ready to go. This should take a few seconds. Estimated size up to 5.1 MB. | yes |
+| zh-Hans | success: 准备就绪 | — (no panel) | — | — | 设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达5.1 MB。 | yes |
+| ms-MY | success: Sedia untuk bermula | — (no panel) | — | — | Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 5.1 MB. | yes |
+
+| Lang | Width | Lines per item (heading + detail), each item | Panel lines (title / tail) | Overflow (any mode) | Longest line, chars | zh weighted max (CJK + Latin/2, vs 40) | 1.4.8 worst | Trim | Console / page errors |
+| --- | --- | --- | --- | --- | ---: | ---: | --- | --- | --- |
+| en-GB | w1280 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+| en-GB | w320 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+| zh-Hans | w1280 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+| zh-Hans | w320 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+| ms-MY | w1280 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+| ms-MY | w320 | — | — | none | — | — | — | 0:00.0–0:04.0 | none |
+
+| Lang | Width | Job | Kept (card) | Placed range (worker) | Plan / gain | Output check (worker) | Output file: tracks | Durations (s) | Spoken at completion | Result warnings |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| en-GB | w1280 | result (finished) | 0:00.0 to 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19.3 | output verified {"integratedLufs":-16.31,"truePeakDbtp":-13.9,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.469333 | Your video is ready. | none |
+| en-GB | w320 | result (finished) | 0:00.0 to 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19.3 | output verified {"integratedLufs":-16.31,"truePeakDbtp":-13.9,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.469333 | Your video is ready. | none |
+| zh-Hans | w1280 | result (finished) | 0:00.0 到 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19.3 | output verified {"integratedLufs":-16.31,"truePeakDbtp":-13.9,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.469333 | 您的视频已准备就绪。 | none |
+| zh-Hans | w320 | result (finished) | 0:00.0 到 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19.3 | output verified {"integratedLufs":-16.31,"truePeakDbtp":-13.9,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.469333 | 您的视频已准备就绪。 | none |
+| ms-MY | w1280 | result (finished) | 0:00.0 hingga 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19.3 | output verified {"integratedLufs":-16.31,"truePeakDbtp":-13.9,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.469333 | Video anda sudah siap. | none |
+| ms-MY | w320 | result (finished) | 0:00.0 hingga 0:04.0 | [0,4] → [0,4] | 1 planned; gain 19.3 | output verified {"integratedLufs":-16.31,"truePeakDbtp":-13.9,"onTarget":true} | 2: video h264, audio aac | file 8; video 8, audio 0.469333 | Video anda sudah siap. | none |
+
+## Cited from VH-199 (not re-read here)
+
+S-99 en-GB w1280 light: "This video has no audio" and its detail in the accessibility tree, nodes 538–539 of `run-09-2026-10-27T03-48-28-340Z-6d6b18/captures/S-99__en-GB__w1280__light__ax.json`, as `reviews/2026-10-25/design-pass-3/design-pass-3-2026-10-27.md:278` and `codex-astra-report-critique-2026-10-27.md:77` cite it (the run itself is kept outside the repository and was not read here). This probe also measured that cell: heading(s) "This video has no audio", the same words as cited.
+
+## Load, and the exact block measured again
+
+The main run was on AC throughout, power mode 2 (High Power) unchanged. The 1-minute load was 3.55 to 6.3 for S-99 to block-aac zh-Hans, then rose to 16-19 from block-aac ms-MY w320 through every block-pcm group (other processes, not this run). Those two cells were measured again at load 4.8-8.0 (`before-rerun-*.json`, `before-rerun-summary.md`, one group starting at 8.03). All 12 groups are the same in both runs: headings, spoken line, verdict, state reached, job outcome, placed range, plan count, the worker's output check, and the output tracks (kind, start, duration).
+
+## Read beside the brief (observed, not judged)
+
+- `#status` is wholly visually hidden at pre-flight in every cell (`shown` is empty). The warning is heard only as its heading, after the panel title: "… Worth knowing about the audio: This video has no audio."
+- Every output, silent or levelled, is 8 s long (or 8.12 s for S-153) because it includes the 4 s blue closing card. A silent keep has 1 video track (h264, start 0, 8 s) and no audio track. A levelled keep has video plus AAC audio starting where the sound starts: S-101 3.378667 s for 0.704 s; S-153 3.688667 s for 0.512 s; the exact block 3.6 s for 0.469333 s. In levelled outputs ffprobe reads the video start as 0.04 s; in silent ones it reads 0.
+
+## How it was measured
+
+- **Base.** `git -C "$R" archive 446f702 | tar -x -C "$S/base"`, `npm ci --prefer-offline` in `$S/base`. Nothing written under `$R`; no walker file added or changed. The probe imports the export's walker (`$S/base/reviews/2026-10-25/design-pass-3/evidence/measurements/walker/`: `cdp.mjs`, `walk.mjs`, `qualify.mjs`, `scenarios.mjs`, `phase8.mjs`) read-only.
+- **Serving.** Vite 8.2.2 from `$S/base`, `--port 5181 --strictPort --host 127.0.0.1`. Headless Chrome 156.0.8078.48 `--headless=new --remote-debugging-port=9251 --user-data-dir=$S/chrome-profile --no-first-run --no-default-browser-check --disable-backgrounding-occluded-windows --disable-background-timer-throttling --disable-renderer-backgrounding`. Every read asserted a visible page, the language, the view (width, height, scale) and the mode (`assertReached`), plus the scenario's own state predicate where the scenario has one.
+- **Cells.** One setup per (cell, language, width), in light, as the matrix does. Pre-flight read in light, dark, forced-light and forced-dark, at the moment before Create (the probe intercepts the click on Create or Continue anyway, so S-100's, S-101's and S-153's setups run unchanged). A job cell then runs the job in light, reads the result in each of the four modes, clicks Save (the walker's OPFS save picker), copies the saved file out and reads its tracks with `ffprobe`. The scenarios' own assertions are run with `phase8.mjs`'s `assertRows`.
+- **What is read per pre-flight cell.** The headings and details as drawn in `#audio-warnings`, with the message-table key each matches (`window.__mx`, so the after's new key is named without the probe knowing it); `#status` as announced (its visible part and its visually hidden part); `#source-status`; the verdict; rendered lines per element (`window.__qual.renderedLines`, the walker's own 1.4.8 reader), lines per item, characters per line, CJK count and the weighted count (CJK + Latin/2, against 40); overflow (document scroll, and any element in the panel past the viewport or clipped); page errors and console errors.
+- **Fixtures.** `$S/fixtures-vh206.sh` (copied here as `fixtures-vh206.sh.txt`) runs the walker's own recipe lines verbatim by `sed -n` from the export's `fixtures.sh` (:6–8, :21: `silent-10s.mp4`) and `fixtures-8.sh` (:39–42: N8 `late-sound-10s.mp4`, `-3.4s-`, `-9.7s-`; :49: N14 `late-sound-3.71s-25fps-10s.mp4`), so the heavy unrelated fixtures (the 3,600 and 10,800 s stills) were not made. N14 is a fixture there. ffprobe: N14's first audio packet (the priming) at pts 177056/48000 = 3.688667 s, the tone from 3.71 s; video frame edges at 3.96, 4.00, 4.04 s.
+- **The exact block.** Two fixtures of my own on N8's recipe: `late-sound-block-aac-25fps-10s.mp4` (`-itsoffset 3.621334`, so the first AAC packet, the priming, is at pts 172800/48000 = 3.600000 s exactly), and its twin `late-sound-block-pcm-25fps-10s.mov` (16-bit PCM in MOV, `-itsoffset 3.6`, first sample at pts 172800 = 3.600000 s, no priming). Each kept 0:00 to 0:04.0. 4.00 s is a frame edge, so `keptRangeOnFrames` leaves it (the worker logged `requestedSeconds [0, 4]` → `keptSeconds [0, 4]`). What the guard counts (`decodedFrames`, from the first packet) is 19,200 samples = 400.0 ms = `BLOCK_SECONDS`. For the AAC file that is 21.3 ms of priming and 378.7 ms of tone. For the PCM file it is 400 ms of tone.
+- **The VH-199 cell.** S-99 en-GB w1280 light is cited, not re-read: see the section above. Every other cell was measured here, and so was that one.
+
+## Rerun (the after, or another base)
+
+```sh
+R="<the repo>"; S="<scratch>/vh206"; O="<results dir>"
+CAND="$S/cand"                      # the candidate's export or worktree, served on its own port
+WALKER="$CAND/reviews/2026-10-25/design-pass-3/evidence/measurements/walker"   # the candidate's walker (its moved predicates)
+zsh "$S/fixtures-vh206.sh" "$WALKER" "$S/fix"          # same fixtures; the run records each fixture's sha256
+(cd "$CAND" && node_modules/.bin/vite --port 5181 --strictPort --host 127.0.0.1) &
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --remote-debugging-port=9251 \
+  --user-data-dir="$S/chrome-profile" --no-first-run --no-default-browser-check \
+  --disable-backgrounding-occluded-windows --disable-background-timer-throttling --disable-renderer-backgrounding about:blank &
+cd "$S" && WALKER="$WALKER" APP_URL=http://127.0.0.1:5181/ CDP_PORT=9251 FIX="$S/fix" \
+  OUT_ROOT="$S/out-after" RESULTS="$O" FILES_DIR="$S/after-files" LABEL=after SOURCE=<candidate sha> \
+  node no-audio-206-probe.mjs        # defaults: all 8 cells, en-GB,zh-Hans,ms-MY, w1280,w320, light,dark,forced-light,forced-dark
+node "$S/summarise-206.mjs" "$O" after
+```
+
+Options: `--cells`, `--langs`, `--views` and `--modes`, each taking a comma list. The before was this command with `WALKER` = the base export's walker, `LABEL=before`, `SOURCE=446f702`. The exact-block cells were rerun as `LABEL=before-rerun --cells block-aac,block-pcm` once the load was down.

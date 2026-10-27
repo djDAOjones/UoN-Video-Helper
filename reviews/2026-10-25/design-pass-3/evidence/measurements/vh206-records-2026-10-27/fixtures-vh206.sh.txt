@@ -1,0 +1,19 @@
+#!/bin/zsh
+# VH-206 fixtures: the walker's own recipe lines, extracted verbatim from the
+# base export (fixtures.sh :6-8, :21; fixtures-8.sh :39-42, :49), plus two
+# exact-block fixtures built on the same recipe. Usage: zsh fixtures-vh206.sh <walker dir> <out dir>
+set -e
+WALKER="$1"; OUT="$2"; mkdir -p "$OUT"
+# --- verbatim from the walker (sed -n), so the recipe is the base's own
+eval "$(sed -n 6,8p "$WALKER/fixtures.sh")"
+eval "$(sed -n 21p "$WALKER/fixtures.sh")"            # silent-10s.mp4 (S-20)
+eval "$(sed -n 39,42p "$WALKER/fixtures-8.sh")"       # N8 a/b/c: late-sound-10s, -3.4s-, -9.7s- (S-99..S-102)
+eval "$(sed -n 49p "$WALKER/fixtures-8.sh")"          # N14: late-sound-3.71s-25fps-10s.mp4 (S-153, the audible sliver)
+# --- VH-206: exactly one 400 ms block, kept to 0:04.0 (a 25 fps frame edge).
+# EB-aac: N8's recipe, -itsoffset chosen so the first AAC packet (the priming,
+# 1024 samples) sits at exactly 3.600 s: 3.6 + 1024/48000 = 3.6213333, written
+# 3.621334 so the rescale to 1/48000 lands on 173824 either way.
+ffmpeg -v error -y ${=V} -itsoffset 3.621334 ${=A} -t 10 -af "volume=-13dB,aformat=channel_layouts=stereo" ${=ENC} "$OUT/late-sound-block-aac-25fps-10s.mp4"
+# EB-pcm: the same picture and tone as 16-bit PCM in MOV (no priming), sound from exactly 3.600 s.
+ffmpeg -v error -y ${=V} -itsoffset 3.6 ${=A} -t 10 -af "volume=-13dB,aformat=channel_layouts=stereo" -c:v libx264 -preset veryfast -pix_fmt yuv420p -c:a pcm_s16le "$OUT/late-sound-block-pcm-25fps-10s.mov"
+ls -la "$OUT"

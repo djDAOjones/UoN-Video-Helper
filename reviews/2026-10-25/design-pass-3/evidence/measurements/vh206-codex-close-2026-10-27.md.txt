@@ -1,0 +1,15 @@
+Verdict: Commit
+
+1. **Musts: none.** All four blind-check musts are satisfied.
+
+**Notes:** The composition test at `src/ui/warning-text.test.ts:181` covers all four causes in every language, including declared sound that never arrives retaining `ends-early`.
+
+The text-spacing repair is supported: all four rerun controls catch clipping, spilling and heading/detail overlap; restoration succeeds and the panels remain clean. `textspacing-206-v2.mjs.txt:234` propagates control failures into the outcome. The table’s `1.4.12` row at `vh206-no-audio-2026-10-27.md:114` accurately records both the original defect and its repair. All 43 evidence checksums match.
+
+V-51’s Disposition at `design-pass-3-2026-10-27.md:751` links the evidence. Must 4 is met on your supplied exact-tree gate report: 1,582 passed and the pre-existing skip. I independently reran `node tools/check.mjs`: zero failures, one warning for VH-202.1’s removal, matching the retirement trace specified for the commit body. I did not rerun the full gate.
+
+`vh206-codex-compare-2026-10-27.md` accurately represents both verdicts, the coverage disagreement and its resolution, and the control repair.
+
+The ledger close is consistent. `project/decisions.md:35` records the owner’s quoted approval, source, question, information shown and narrow supersession scope; `:37` matches VH-202’s close heading exactly. Both archived entries moved verbatim; surviving entries are unchanged and the archive index agrees. The backlog removal, trajectory line, wish replacement and item’s Now/Notes match the work. Required digest rules are named at `:25`.
+
+Only §5.4’s row changes in the spec, now **8,121/8,200 words**; only its budget cell changes in `project/rules.md`. The measured source hash is recovered by removing only the new composition test and its import; the walker hash matches. No unexplained changes or unsupported material close claims found.

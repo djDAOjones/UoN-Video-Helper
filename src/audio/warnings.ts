@@ -11,6 +11,7 @@
  */
 
 import { HEAVY_LIMITING_LU, MINIMUM_GAP_DEPTH_LU, WARNING_THRESHOLDS } from '../config/audio'
+import type { KeptSilence } from '../media/audio-plan'
 import type { Shortfall } from '../media/ends-early'
 import type { AudioAnalysis } from './analyse'
 
@@ -28,12 +29,23 @@ export type AudioWarningCode =
   | 'metadata-lost'
   | 'heavy-limiting'
 
+/**
+ * Why there is no audio to level (VH-206): the file has no audio track, or
+ * the part kept holds less sound than one of the meter's gating blocks
+ * (VH-185). One spec 5.4 row and one outcome, a new video with no audio, so
+ * one code; the cause decides the words, since "check the recording" is the
+ * wrong way forward for a person who hears sound in the part they kept.
+ */
+export type NoAudioReason = 'no-track' | 'kept-too-little'
+
 export interface AudioWarning {
   readonly code: AudioWarningCode
   /** Measured values, so the wording can be specific rather than vague. */
   readonly detail: Readonly<Record<string, number>>
   /** The moments a warning is about, in source seconds, earliest first: decode damage's (VH-122). */
   readonly atSeconds?: readonly number[]
+  /** Why there is no audio: the no-audio warning's, and only its (VH-206). */
+  readonly reason?: NoAudioReason
 }
 
 /** Nth percentile of an ascending set, nearest-rank. */
@@ -67,8 +79,9 @@ function longestRunBelow(
 /**
  * Warnings derived from the source, before anything is processed.
  *
- * @param analysis - The pass-A measurement, or `null` when the file has no
- *   audio track at all, or none in the part kept.
+ * @param analysis - The pass-A measurement; a {@link KeptSilence} when the part
+ *   kept holds too little sound to level, none decoded included (VH-185); or
+ *   `null` when the file has no audio track at all.
  * @param soundShort - Where the sound stops short of what the file's index
  *   declares (VH-139, `media/ends-early.ts`), or `null` when it does not.
  * @param fileCutShort - Whether a Matroska or WebM file's own bytes show it
@@ -76,7 +89,7 @@ function longestRunBelow(
  *   the times by.
  */
 export function detectSourceWarnings(
-  analysis: AudioAnalysis | null,
+  analysis: AudioAnalysis | KeptSilence | null,
   soundShort: Shortfall | null = null,
   fileCutShort = false,
 ): AudioWarning[] {
@@ -89,7 +102,12 @@ export function detectSourceWarnings(
     : []
   // A kept part whose sound the file declares and never delivers is cut
   // short, not silent: saying "no sound" there would name the wrong cause.
-  if (!analysis) return [...cutShort, ...(endsEarly.length > 0 ? endsEarly : [{ code: 'no-audio' as const, detail: {} }])]
+  // Otherwise the cause is said too: a track with too little kept, whose
+  // recovery is to keep more, is not a file with none (VH-206).
+  if (!analysis || 'silent' in analysis) {
+    const reason: NoAudioReason = analysis ? 'kept-too-little' : 'no-track'
+    return [...cutShort, ...(endsEarly.length > 0 ? endsEarly : [{ code: 'no-audio' as const, detail: {}, reason }])]
+  }
 
   const warnings: AudioWarning[] = [...cutShort, ...endsEarly]
   const { clippedSampleCount, truePeakDbtp, integratedLufs, loudnessRangeLu } = analysis

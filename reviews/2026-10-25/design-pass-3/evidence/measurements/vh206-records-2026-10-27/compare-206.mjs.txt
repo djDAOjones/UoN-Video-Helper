@@ -1,0 +1,56 @@
+// VH-206 #2: before vs after, group by group, field by field.
+//   node compare-206.mjs <results dir> <before label> <after label> [cells]  -> stdout JSON
+import { readFileSync, existsSync } from 'node:fs'
+import { join } from 'node:path'
+const [dir, bl = 'before', al = 'after', cellsArg] = process.argv.slice(2)
+const cells = cellsArg ? cellsArg.split(',') : ['S-99', 'S-100', 'S-20', 'S-101', 'S-153', 'sliver-N14', 'block-aac', 'block-pcm']
+const load = (label, c) => { const f = join(dir, `${label}-${c}.json`); return existsSync(f) ? JSON.parse(readFileSync(f, 'utf8')) : null }
+const pick = (r) => {
+  if (!r) return null
+  const modes = Object.keys(r.pre ?? {})
+  const pre = (m) => { const p = r.pre[m]; const w = p.warnings; return {
+    reached: p.reached.outcome, verdict: p.verdict, trim: p.trim, title: w?.title ?? null,
+    items: (w?.items ?? []).map((i) => ({ heading: i.heading, detail: i.detail, hk: i.headingKeys, dk: i.detailKeys, lines: [i.headingLines, i.detailLines] })),
+    titleLines: w?.titleLines ?? null, tail: w?.tail ?? null, measure: w?.measure ?? null, overflow: (w?.overflow ?? []).length, hscroll: p.page.hscroll,
+    announced: p.status?.announced, shown: p.status?.shown, noAudio: p.noAudioHeading, kept: p.keptTooLittleHeading ?? null, endsEarly: p.endsEarlyHeading, errors: (p.errors ?? []).length } }
+  const wl = (m) => (r.workerLogs ?? []).filter((l) => l.args?.[1] === m).at(-1)?.args?.[2]
+  const verified = (r.workerLogs ?? []).filter((l) => /output (verified|failed verification)/.test(l.args?.[1] ?? '')).at(-1)
+  const T = r.output?.tracks
+  const job = r.job ? { res: Object.fromEntries(Object.entries(r.job).map(([m, j]) => [m, [j.res, j.finished, j.reached.outcome, j.resultWarnings ? j.resultWarnings.items.map((i) => i.heading) : null, j.endedEarly]])),
+    kept: r.job.light.keptRecord, cardTitle: r.job.light.card?.title, placed: wl('kept range placed on frame edges'), planned: r.planned?.count, gain: wl('encode complete')?.audioGainDb ?? null,
+    silent: (r.workerLogs ?? []).some((l) => l.args?.[1] === 'kept range holds no sound; treating the job as silent'),
+    verified: verified ? [verified.args[1], verified.args[2]] : null, spoken: r.spokenAtCompletion?.texts ?? null,
+    tracks: T ? { count: T.count, video: T.video, audio: T.audio, format: T.format, dur: T.durationS, streams: T.streams.map((s) => ({ kind: s.kind, codec: s.codec, start: s.startS, dur: s.durationS, frames: s.frames })) } : r.output } : null
+  return { status: r.status, error: r.error ?? null, asserts: (r.scenarioAsserts ?? []).map((a) => [a.what, a.outcome]), consoleErrors: (r.console ?? []).filter((x) => x.type !== 'warning').map((x) => x.text), pre: Object.fromEntries(modes.map((m) => [m, pre(m)])), job }
+}
+const out = []
+for (const c of cells) {
+  const B = load(bl, c), A = load(al, c)
+  if (!A) continue
+  for (const a of A) {
+    const b = B?.find((x) => x.lang === a.lang && x.view === a.view)
+    out.push({ cell: c, lang: a.lang, view: a.view, before: pick(b), after: pick(a), loadAfter: a.powerAtStart?.load?.[0], loadBefore: b?.powerAtStart?.load?.[0] })
+  }
+}
+// Differences, ignoring the words of the warning items and the spoken line (compared separately).
+const diffs = []
+const cmp = (path, x, y, rec) => { if (JSON.stringify(x) !== JSON.stringify(y)) diffs.push({ key: `${rec.cell} ${rec.lang} ${rec.view}`, path, before: x, after: y }) }
+for (const rec of out) {
+  const b = rec.before, a = rec.after
+  if (!b) { diffs.push({ key: `${rec.cell} ${rec.lang} ${rec.view}`, path: 'before missing' }); continue }
+  cmp('status', b.status, a.status, rec); cmp('asserts', b.asserts, a.asserts, rec); cmp('consoleErrors', b.consoleErrors, a.consoleErrors, rec)
+  for (const m of Object.keys(a.pre)) {
+    const P = b.pre[m], Q = a.pre[m]
+    for (const k of ['reached', 'verdict', 'trim', 'title', 'titleLines', 'tail', 'overflow', 'hscroll', 'shown', 'endsEarly', 'errors']) cmp(`pre.${m}.${k}`, P?.[k], Q?.[k], rec)
+    cmp(`pre.${m}.itemCount`, P?.items.length, Q?.items.length, rec)
+  }
+  if (a.job || b.job) {
+    const J = b.job ?? {}, K = a.job ?? {}
+    for (const k of ['res', 'kept', 'cardTitle', 'placed', 'planned', 'silent', 'spoken']) cmp(`job.${k}`, J[k], K[k], rec)
+    cmp('job.gain', J.gain, K.gain, rec)
+    cmp('job.verified', J.verified, K.verified, rec)
+    const st = (t) => t?.streams?.map((s) => [s.kind, s.codec, s.start, s.dur]) ?? t
+    cmp('job.tracks', [J.tracks?.count, J.tracks?.dur, st(J.tracks)], [K.tracks?.count, K.tracks?.dur, st(K.tracks)], rec)
+  }
+}
+console.log(JSON.stringify({ groups: out.length, diffs, out }, null, 1))

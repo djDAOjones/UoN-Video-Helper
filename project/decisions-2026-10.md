@@ -1053,3 +1053,25 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-22 — PLAN-7 — A second design, UX and accessibility pass, with Codex astra as partner at every stage, gates the cut
+
+**Decision:** Phase 7, a second whole-page pass judged as four journeys and every scenario, in three languages, three widths, enlargement, dark and forced colours and by keyboard alone, runs as eight stage items, VH-170 to VH-177, before VH-162; Codex astra checks the plan, reviews blind, checks the method, critiques the report and the fix plan, checks every fix before commit and checks the fixes together; because the owner asked for it, with Codex as a full partner.
+
+**Rationale:** The owner's words: "lets design and run another full design / ux / accessibility pass. thorough planning and ticketed before execution". Told that in VH-163 Codex reviewed blind and critiqued the report but checked none of VH-164 to VH-169, the owner wanted Codex as a full partner. The plan is `reviews/2026-10-22/design-pass-2/plan-2026-10-22.md`. Codex critiqued the draft at `6a207b3` ("Revise before approval", twelve points, all must) and all twelve are applied, P-04 qualified: the instruments are qualified before the matrix, the evidence stage split in two, the blind review run on a frozen snapshot, the six fixes verified to a contract, VoiceOver with Safari kept as spec §13 names it. A disagreement of fact is settled by evidence or recorded unresolved; one of judgement goes to the owner, and only that remedy waits. The owner's rule holds: consolidate, no new control, checkbox or element, the progress bar kept. Person checks for Disability Support Services keep their status; the pass claims neither §13 criterion 10 nor full conformance. VH-162 carries "blocked: Phase 7"; VH-137 and VH-14 are unaffected. Fix items join the Items line in VH-175's entry. The owner approved in chat on 2026-10-22, answering three questions: "Approve", "Before the cut" and "Keep as planned".
+
+**Supersedes:** none
+
+**Items:** VH-170, VH-171, VH-172, VH-173, VH-174, VH-175, VH-176, VH-177
+
+**Deferred:** VH-171, VH-172, VH-173, VH-174, VH-175, VH-176, VH-177
+
+## 2026-10-22 — VH-168 — The file chooser stays native: its words follow the browser's language, its name the page's
+
+**Decision:** Choose file keeps the browser's own file input, so its button and "No file chosen" stay in the browser's language on a Chinese or Malay page, while its accessible name, the step heading, follows the page's; no page change, because translating those words needs a new element, which the owner's simplicity rule rules out.
+
+**Rationale:** The owner's words, in VH-163's closing decision: "Keep the browser's own file chooser and record the limitation." Chrome draws both phrases inside the native input and CSS cannot change them. Checked in Chrome 155 with the browser in English: in all three page languages the input's accessible name is the step heading ("1. Choose a video", "1. 选择一个视频", "1. Pilih video") and its value "No file chosen", the browser's words. Neither record claims otherwise: spec §9 says the page repaints in the chosen language and §9.2 checks every string the page can show, which the browser's own words are not; the accessibility statement's five limitations do not mention the chooser and claim nothing about it. So no correction is proposed to either. Evidence: `reviews/2026-10-22/design-pass/evidence/v35-1280-zh-file-input.png`, `…/v35-1280-ms-file-input.png`. Standards: wcag-2.2-aaa 3.1.2 (the page's parts carry their language; the input's words are the browser's); nielsen 4 (one Choose file, as every page has it); carbon one primary per state.
+
+**Supersedes:** none
+
+**Deferred:** none
