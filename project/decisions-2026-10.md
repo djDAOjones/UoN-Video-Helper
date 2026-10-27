@@ -1013,3 +1013,23 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Supersedes:** 2026-10-22 — PLAN-6 — The design pass's fixes: five Phase 6 items ahead of the cut, each waiting on the owner's approval
 
 **Deferred:** VH-165, VH-166, VH-167, VH-169, VH-168
+
+## 2026-10-22 — VH-166 — One type set: eight roles, each one rule; the footer's headings at Lora 20; the band's phone inset and the footer's gap
+
+**Decision:** the page's text takes eight roles, each one rule in `app.css` after the components and before forced colours, naming every selector that wears it, and no component rule sets its own size, weight or line height; every `h2`, the footer's two included, is the panel heading, Lora 20/28/700 on a new `--line-height-heading-03: 1.4`; the switchers' legends, notification titles and the statement's `h3` are one section heading, 16/24/600; below the 60rem layout width the header band takes the column's 24 px inset (the desktop logo stays 20 px from the window); the footer's panels take `.panel`'s 24 px; because the owner approved V-32, V-36 and V-37 in VH-163's closing decision.
+
+**Rationale:** Roles: page title 28/35/700 (`heading-04`), panel heading 20/28/700 (`heading-03`), section heading 16/24/600 (like `heading-compact-02`), body and editable text 16/24/400 (like `body-02`), supporting 14/21/400 (`body-compact-01`), compact emphasis 14/21/600 (`heading-compact-01`; a chosen segment, a notification item's title, Help, `strong` in compact text), status mark 14/21/700 (VH-151), code mono 14/21/400 (`code-01`); local adaptations in the brand's faces, tracking `normal`. The footer's `h2`s lose `font: inherit` and the summary its 16/600; the file chooser's button keeps `font: inherit` and stays out of the lists (V-38). The legends fall from 700 to 600, which Arial draws as one Bold, and stay larger than their 14 px segments, as VH-148 asked. The design walk before and after on the same build, 33 captures each: type changed only where planned; each step 2 px shorter, each footer bar 4 px taller (52 px), the footer 24 px taller; at 375 px the logo and the page language 4 px right; at 375 px the English System check and the Malay statement headings wrap to two lines; no sideways scroll. The inventory falls from 16 styles to 13, one per heading kind (`reviews/2026-10-22/design-pass/evidence/measurements/vh166-type-roles-2026-10-22.md`). With 1.4.12 spacing in Chrome at 1280 px no heading clips. Only VH-148's 16 px footer headings clause is superseded. UI-STANDARDS names the roles and the band's phone inset, the brand rule's exception, at 2,396 of 2,400 words. Standards: carbon productive type and the spacing scale; nielsen 4; wcag-2.2-aaa 1.4.6 (no colour changed), 1.4.10, 1.4.12, 2.5.5 (the bars stay one target).
+
+**Supersedes:** 2026-10-21 — VH-148 — The owner’s sign-off changes, including the footer
+
+**Deferred:** none
+
+## 2026-10-22 — VH-165 — Running text breaks a word longer than its line; the thumbs' forced-colour ring is one rule per engine
+
+**Decision:** `overflow-wrap: anywhere` joins the shared running-text rule (`p, li, dd`), so a file name or student ID with no space breaks where it must and every other word still breaks only at a space; the forced-colours focus-ring rule for the trim handles is split into one rule per engine, because Chrome dropped the joint rule whole and the ring never took `CanvasText`.
+
+**Rationale:** Every place V-34 named is a `p` (the notification bodies, the field errors, the status lines), so the one shared rule covers them and no control takes the wrap; no clipping, ellipsis or `break-all`. The design walk gains `en-long-320`, `zh-long-320` and `ms-long-320` with the long-name and long-ID fixtures and a text-range spill check beside the document-width check. Before, in English: the finished, discard and previous states 1,425 px wide at 320 px (1,601 spaced), the underscored name 421, the ID error 837. After: 108 measurements in three languages, six states, light, dark and forced colours, with and without 1.4.12 spacing, all 320 px with no spill (`reviews/2026-10-22/design-pass/evidence/measurements/vh165-long-names-2026-10-22.md`). The same walk with ordinary names at 1280 and 375 px (English, Chinese at 1280, Malay at 375) left every element's box and line count unchanged in 21 states. The thumb rule now appears in Chrome's CSSOM and the focused thumb's ring computes to `CanvasText`, near-black in a light forced palette and white in a dark one. Standards: wcag-2.2-aaa 1.4.10 and 1.4.12, 2.4.13; nielsen 9.
+
+**Supersedes:** none
+
+**Deferred:** none

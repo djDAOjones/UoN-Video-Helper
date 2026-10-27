@@ -18,6 +18,35 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-27 — VH-202 — Checkpoint: the fix plan, Codex astra's blind fix items compared, its critique applied, one ask to the owner; VH-202 stays open
+
+**Decision:** VH-202 stays open, blocked on the owner's answer to its ask, which a short close step quotes. The plan, the compare, the critique and the ask are done. VH-206's words and VH-209 wait for him; nothing contested is built first, and the approved items need only his approval of the plan.
+
+**Rationale:**
+
+- **The ask** is the fix plan's last section (`reviews/2026-10-25/design-pass-3/fix-plan-2026-10-27.md`, "The owner's ask"): nine points, each with a recommendation. They are the plan and its order; V-51's words in three languages, marked as the owner's to approve as V-45's were; the 400 ms rule (kept); V-50's rank and whether to take it (taken, rank 3, as VH-209); F15b (not a finding); V-18 (the acceptance stands); the statement's limitation (VH-192.1, VH-137's words); the spec correction for V-51 (wish VH-202.1); and no control. The disagreements with Codex carry both positions: VH-201.1's five questions, V-51's words and V-50's place.
+- **Codex astra, on the owner's word** ("please also do everything in partnership with codex as a comparison. codex astra should be used liberally but you decide"):
+  - Claude's plan was saved first (`claude-fixplan-2026-10-27.md`). Codex then drafted fix items blind, from the report, the source, the schema and VH-203's stage rule (`codex-astra-fixitems-brief-2026-10-27.md`, `codex-astra-fixitems-2026-10-27.md`).
+  - Compared in `fixplan-compare-2026-10-27.md`: the same items, order and remedies. Five Codex points were taken: a typed reason for V-51; V-46's capture before `clearTrim`'s lock; VH-150's test and the walker's `warnBox` moved for V-52; more scenarios; and 1.4.12. One was refused: an owner question in VH-208's file.
+  - Its critique of the plan, `codex-astra-fixplan-critique-2026-10-27.md` from `codex-astra-fixplan-critique-brief-2026-10-27.md`, said "Approve after the musts below". All five musts were applied and none refused. P-01: VH-207 captures at the choosing too, where the trim's lock and the result's re-render act first. P-02: each before not in VH-199's records is measured on the item's own base, and the 32 px font in the dark and forced modes is qualified first. P-03: the walker's warning checks move with V-51 and V-52. P-04: the plan's approval, not V-51's words, is what the other items wait for. P-05: Codex's V-18 position, provisional until HEAD is measured, is stated as its own.
+- **Digest rules applied:** nielsen 1, 2, 5, 6 and 9 ("errors say what next"); wcag-2.2-aaa 2.4.3, 2.4.13 and "every exception recorded"; carbon "one primary per state"; house conventions "Fail loudly on data loss". No product code changed.
+
+**Supersedes:** none
+
+**Deferred:** VH-206, VH-207, VH-208, VH-209, VH-210, VH-203
+
+## 2026-10-27 — PLAN-8 — Pass 3's fix plan: VH-206 to VH-210 for six findings, built after VH-202 and before VH-203
+
+**Decision:** Phase 8 gains five fix items, in this order: VH-206 (V-51, rank 1, in the owner's words), VH-207 (V-46), VH-208 (V-52), VH-209 (V-50, only if the owner takes it) and VH-210 (V-48 and V-49). Each keeps VH-203's stage rule, and none adds a control.
+
+**Rationale:** Planned with `verbs/plan.md` from pass 3's report; the plan is `reviews/2026-10-25/design-pass-3/fix-plan-2026-10-27.md`. The order: V-51 first as the one rank 1, its data path and strings untouched by the CSS that follows; VH-207 leads if its words wait. V-46 next, the one level A failure and a regression, walked by keys before any CSS moves. V-52 third, the finished card's order in `main.ts`, before the CSS reads the card. V-50 before the rings, since V-48's one record is among its six. The rings last, on the final DOM and CSS. V-18 has no fix item; it was accepted in Phase 7 (VH-175.4), and whether that stands is in the ask. The backlog stands at 891 of 1,000 words after these lines.
+
+**Supersedes:** none
+
+**Items:** VH-206, VH-207, VH-208, VH-209, VH-210
+
+**Deferred:** VH-206, VH-207, VH-208, VH-209, VH-210
+
 ## 2026-10-27 — VH-201 — Pass 3's report merged: D-05 and D-06 kept as V-51 and V-52, seven findings, Codex astra's blind ranks the same on six, five questions for the owner
 
 **Decision:** VH-201 closes. `design-pass-3-2026-10-27.md` is Pass 3's report: seven findings, none needing a new element. V-51 (D-05) is at rank 1; V-52 (D-06), V-46 (regressed), V-48, V-49 and V-18 (incomplete) at rank 2; V-50 at rank 3. V-51's words wait for the owner. VH-202 is next.
@@ -605,26 +634,6 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Decision:** `--measure` is `28rem` (448 px), one width for running text of every size and language, the owner's starting value kept because the counted lines read well in all three languages; `--measure-cjk` and its `:lang(zh)` rule are retired; the measure caps `.fact-note` and `.radio-detail` as it caps the text fields; the toggletip's paragraphs take `--paragraph-gap`; because `55ch` and `40em` resolved against each element's own font and stopped one column's text at four widths (V-33).
 
 **Rationale:** Counted in Chrome 155 at 1280 px, empty, ready and finished, with the longest fact note probed: English 63 characters at 16 px and 78 at 14 px (before 70 and 79), Malay 63 and 70 (69 and 72), Chinese 29 glyphs at 16 px (40) and, at 14 px, 32 in full-width equivalents (43.5): the one line at 41 counted one for one holds a file name. Before, two Chinese lines passed 40: the uncapped fact note (48) and that notification (47). At 375 px the column is narrower than the measure and nothing changes. Body, helper, notification and fact-note text all stop at 448 px in every language, where they stopped at 489, 428, 640 and 560. At 320 px and at 200 % no sideways scroll, and walk.mjs's 1.4.12 sheet clips nothing. English helper text at 78 is the nearest to 80; a longer English notification line is the thing to watch. Evidence: `reviews/2026-10-22/design-pass/evidence/measurements/vh167-measure-2026-10-22.md`. VH-105's Chinese measure is withdrawn; its Chinese faces stay. Standards: wcag-2.2-aaa 1.4.8 (80 characters, 40 CJK glyphs, a blank line between paragraphs), 1.4.10, 1.4.12; carbon tokens, not literals; nielsen 4.
-
-**Supersedes:** none
-
-**Deferred:** none
-
-## 2026-10-22 — VH-166 — One type set: eight roles, each one rule; the footer's headings at Lora 20; the band's phone inset and the footer's gap
-
-**Decision:** the page's text takes eight roles, each one rule in `app.css` after the components and before forced colours, naming every selector that wears it, and no component rule sets its own size, weight or line height; every `h2`, the footer's two included, is the panel heading, Lora 20/28/700 on a new `--line-height-heading-03: 1.4`; the switchers' legends, notification titles and the statement's `h3` are one section heading, 16/24/600; below the 60rem layout width the header band takes the column's 24 px inset (the desktop logo stays 20 px from the window); the footer's panels take `.panel`'s 24 px; because the owner approved V-32, V-36 and V-37 in VH-163's closing decision.
-
-**Rationale:** Roles: page title 28/35/700 (`heading-04`), panel heading 20/28/700 (`heading-03`), section heading 16/24/600 (like `heading-compact-02`), body and editable text 16/24/400 (like `body-02`), supporting 14/21/400 (`body-compact-01`), compact emphasis 14/21/600 (`heading-compact-01`; a chosen segment, a notification item's title, Help, `strong` in compact text), status mark 14/21/700 (VH-151), code mono 14/21/400 (`code-01`); local adaptations in the brand's faces, tracking `normal`. The footer's `h2`s lose `font: inherit` and the summary its 16/600; the file chooser's button keeps `font: inherit` and stays out of the lists (V-38). The legends fall from 700 to 600, which Arial draws as one Bold, and stay larger than their 14 px segments, as VH-148 asked. The design walk before and after on the same build, 33 captures each: type changed only where planned; each step 2 px shorter, each footer bar 4 px taller (52 px), the footer 24 px taller; at 375 px the logo and the page language 4 px right; at 375 px the English System check and the Malay statement headings wrap to two lines; no sideways scroll. The inventory falls from 16 styles to 13, one per heading kind (`reviews/2026-10-22/design-pass/evidence/measurements/vh166-type-roles-2026-10-22.md`). With 1.4.12 spacing in Chrome at 1280 px no heading clips. Only VH-148's 16 px footer headings clause is superseded. UI-STANDARDS names the roles and the band's phone inset, the brand rule's exception, at 2,396 of 2,400 words. Standards: carbon productive type and the spacing scale; nielsen 4; wcag-2.2-aaa 1.4.6 (no colour changed), 1.4.10, 1.4.12, 2.5.5 (the bars stay one target).
-
-**Supersedes:** 2026-10-21 — VH-148 — The owner’s sign-off changes, including the footer
-
-**Deferred:** none
-
-## 2026-10-22 — VH-165 — Running text breaks a word longer than its line; the thumbs' forced-colour ring is one rule per engine
-
-**Decision:** `overflow-wrap: anywhere` joins the shared running-text rule (`p, li, dd`), so a file name or student ID with no space breaks where it must and every other word still breaks only at a space; the forced-colours focus-ring rule for the trim handles is split into one rule per engine, because Chrome dropped the joint rule whole and the ring never took `CanvasText`.
-
-**Rationale:** Every place V-34 named is a `p` (the notification bodies, the field errors, the status lines), so the one shared rule covers them and no control takes the wrap; no clipping, ellipsis or `break-all`. The design walk gains `en-long-320`, `zh-long-320` and `ms-long-320` with the long-name and long-ID fixtures and a text-range spill check beside the document-width check. Before, in English: the finished, discard and previous states 1,425 px wide at 320 px (1,601 spaced), the underscored name 421, the ID error 837. After: 108 measurements in three languages, six states, light, dark and forced colours, with and without 1.4.12 spacing, all 320 px with no spill (`reviews/2026-10-22/design-pass/evidence/measurements/vh165-long-names-2026-10-22.md`). The same walk with ordinary names at 1280 and 375 px (English, Chinese at 1280, Malay at 375) left every element's box and line count unchanged in 21 states. The thumb rule now appears in Chrome's CSSOM and the focused thumb's ring computes to `CanvasText`, near-black in a light forced palette and white in a dark one. Standards: wcag-2.2-aaa 1.4.10 and 1.4.12, 2.4.13; nielsen 9.
 
 **Supersedes:** none
 
