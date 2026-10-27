@@ -1,0 +1,60 @@
+The brief Codex astra was given for its blind fix items (VH-211, 2026-10-27), verbatim. It ran with codex exec -m gpt-6-astra -s read-only in the working tree at 51a7201, after Claude's plan was saved and before any plan-bearing edit. Kept as .md.txt: it names a path outside the repository.
+
+You are Codex astra, drafting fix items blind for VH-211 (the plan step for the owner's "old issues") in the UoN Video Helper repository, read-only, at HEAD `51a7201`. Claude has drafted its own plan and saved it outside the repository; you have not seen it, and you must not look for it. This is a comparison the owner asked for: "please also do everything in partnership with codex as a comparison. codex astra should be used liberally but you decide" (the owner, 2026-10-27).
+
+## The owner's scope (verbatim; its only source)
+
+On 2026-10-27 at 14:51:20Z, in the "Backlog review" chat, the owner typed: "yes to the question mark, and A and B. ensure everything passes UX / design / Accessibility". It answered his earlier addition to VH-202's answer: "I accept everything, but even old issues should be solved for. we also need to make sure that question mark about file formats looks good". VH-202's close decision (`project/decisions.md`, the newest entry) quotes both and opened VH-211 (`project/items/VH-211.md`).
+
+What he was shown, and so what is in scope (fourteen pieces):
+
+- **The "?"** — VH-205's format "?" beside the lede's fourth promise (`index.html`, the lede; VH-205's decision in `project/decisions.md`). Two changes: (1) the gap before the "?", 16 px today, to about 8 px, checking that the 44 px `::after` target doesn't overlap the end of "format."; (2) an open state: filled dark while `aria-expanded="true"`, like the chosen "Staff video" segment. The onset "?" changes too, through the shared `.help-button`. Neither change touches the target or the words.
+- **A, seven page defects:** V-18 (wish VH-175.4); VH-189.1; VH-186.1; VH-139.5; VH-185.1; VH-193.3; F15b.
+- **B, six checks in Chrome:** VH-150.3, VH-153.1, VH-155.2, VH-156.1, VH-158.1, and VH-172.1's 214 unread matrix cells.
+- **Not taken:** C (native readers, screen-reader and listening checks), D (the accessibility statement: VH-137, VH-194.1, VH-162.1, VH-116.1), E (tooling). Plan none of them.
+- **"ensure everything passes UX / design / Accessibility"** is the bar for VH-203's integrated check (already written into `project/items/VH-203.md`).
+- **Two go to the owner before they are built:** V-18's remedy at 320 × 568 (V-18 keeps both its cases: Malay at 1280 × 900, and all three languages at 320 × 568), and F15b's words. Everything else in scope is to be built or checked without a further stop.
+
+## What you may read
+
+1. **The wish lines in scope:** `project/wish-list.md` lines 39 (VH-139.5), 44–49 (VH-150.3, VH-153.1, VH-155.2, VH-156.1, VH-158.1, VH-172.1), 51 (VH-175.4, V-18), 54–56 (VH-185.1, VH-186.1, VH-189.1) and 61 (VH-193.3). Each names its source item or review; read those only where the line doesn't answer.
+2. **V-18:** `reviews/2026-10-25/design-pass-3/design-pass-3-2026-10-27.md` lines 400–427. **F15b:** the same report's "For the owner" (from line 653), point on F15b, and `reviews/2026-10-25/design-pass-3/fix-plan-2026-10-27.md` line 161 (the ask's point 5) and its "The owner's ask". The report's "Disposition" (from line 745).
+3. **VH-172.1's keys:** `reviews/2026-10-25/design-pass-3/evidence/measurements/unrun-2026-10-27.json`, `stillUnrun` (214 keys, `scenario__lang__width__mode`), and `matrix-2026-10-27.md` beside it.
+4. **The rule each fix item keeps:** `project/items/VH-203.md`, "Acceptance criteria", the stage rule's first bullet and its five sub-bullets, and "Each fix linked". The existing fix items `project/items/VH-206.md` to `VH-210.md` show the form, and they are already ordered VH-206, VH-207, VH-208, VH-209, VH-210; VH-206 (rank 1) stays first. The item schema is `project/items/_schema.md`.
+5. **The source and tests**: `src/`, `index.html`, `test/`; the walker and scenarios under `reviews/2026-10-25/design-pass-3/` (`scenarios-2026-10-25.md`, `evidence/measurements/walker/`), and the evidence digests there.
+6. **The standards**: `UI-STANDARDS.md`, `project/digests/*.md`, `docs/01-specification.md`, `project/profile.md`, `project/rules.md`.
+7. The rest of the repository as you need it, but see below.
+
+## What you must not read until your answer is written
+
+- Anything under `/Users/joe/Library/Application Support/Claude/side-session-notes/`. Claude's plan is there.
+- Any file whose name contains `vh211` or `VH-211-plan`, anywhere.
+
+Do not run the app, the tests, the walker or a browser. Change no file.
+
+## Constraints (established, not choices)
+
+- **No new control, checkbox or element** in any remedy; the progress bar stays. A remedy that would need one goes to the owner, recommended for or against.
+- **`docs/` is protected:** a needed spec change is a wish line for the owner and a stop, not an edit.
+- **Walker changes** are covered by the owner's "yes to … A and B" only where an item's own criteria name them for those checks.
+- **VH-203's stage rule, whole, in every fix item's criteria**, with that item's scenarios, languages, widths, colour modes, WCAG criteria and digest rules filled in. A check item (B) keeps the rule's walker, Codex check, gate and Disposition parts; a defect it finds becomes a fix item, planned the same way, before VH-203.
+- **The sizing rule:** one worker carries one item. A worker reaches about 120k tokens before its first edit (about 75k fixed overhead, 45k reading), hands back at about 170k and keeps 30k for its hand-over, within a 200k session. So each item, its Codex runs, review and close included, must fit about 50k of work. Split or group to fit. VH-172.1's 214 cells must each be assigned to a bounded batch, each batch in an item that fits, with a reconciliation that all 214 are read once.
+- **B and VH-203:** B's checks may fold into VH-203's after-run only if VH-203's existing work, sized with them, still fits; otherwise they stand as their own check items.
+- **Existing items the plan touches** are updated, for example VH-209's "Out of scope" line for step 4's selects (VH-189.1).
+- All new items go in Phase 8 before VH-203.
+
+## What to do
+
+1. **Fix items.** Draft the fix and check items for all fourteen pieces, to the item schema: for each, a working title, the pieces it covers, an Intent, the files and lines it touches (from the source at HEAD), Acceptance criteria with VH-203's stage rule carried whole and filled in (scenarios and records its before and after read, languages, widths, colour modes, WCAG criteria re-checked, digest rules it would name), any walker change, new element, `docs/` edit or coverage question it needs, and a size against the sizing rule. Group as you judge best, and say why.
+2. **The order** of your items beside VH-206 to VH-210, with its reason.
+3. **V-18 at 320 × 568:** what rise is needed, the options (measured from the records, or argued), the one you recommend, and whether it adds an element. And Malay at 1280 × 900.
+4. **F15b's words:** what is wrong, where the words live, and your draft in en-GB, zh-Hans and ms-MY.
+5. **The "?"'s two changes:** the CSS that sets the gap today, what the 8 px gap does to the `::after` target's overlap with "format.", how you would keep the target clear, and the open state's tokens, hover, forced colours and contrast.
+6. **VH-172.1's batches:** every key's batch (by rule, not listed), each batch's count, and how the reconciliation proves all 214 read once.
+7. **B and VH-203:** fold or stand alone, with VH-203 sized.
+8. **Risks:** anything that would make an item larger than one session, cross another item's files, or need a `docs/` correction.
+9. **For the owner:** any point you would put to the owner rather than settle, in a sentence each, with your recommendation.
+
+## Format
+
+Markdown to standard output, nothing else. A heading per part above. End with one summary table: item, pieces, files, size, order. A file and line, or a record key, for every claim. Under 2,500 words.

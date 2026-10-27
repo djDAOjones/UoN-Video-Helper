@@ -1,0 +1,29 @@
+The brief Codex astra was given for its critique of the merged plan (VH-211, 2026-10-27), verbatim. It ran with codex exec -m gpt-6-astra -s read-only in the working tree at 51a7201, before any repository edit. Kept as .md.txt: it names a path outside the repository.
+
+You are Codex astra, critiquing the merged plan for VH-211 (the owner's "old issues" planned into fix items) in the UoN Video Helper repository, read-only, at HEAD `51a7201`. Your blind fix items are done; Claude has now compared them with its own plan and merged the two.
+
+## Read
+
+In `/Users/joe/Library/Application Support/Claude/side-session-notes/local_1a755c44-7436-48ad-a0ab-85bacbe15cc3/`:
+- `vh211-plan.md` — the merged plan (the subject of this critique);
+- `vh211-plan-compare.md` — the compare: what was agreed, taken from you, refused with a reason, or settled;
+- `vh211-owner-ask.md` — the owner's ask (at most 300 words, plain words, a recommendation first);
+- `vh211-claude-plan.md` and `vh211-codex-fixitems.md` — the two blind plans; `vh211-codex-fixitems-brief.md` — the scope, constraints and sizing rule you were given.
+
+In the repository, whatever you need to check a claim: `project/items/VH-203.md` (the stage rule), `project/items/VH-206.md` to `VH-211.md`, `project/wish-list.md`, `project/decisions.md` (the VH-202 close entry), the report and fix plan under `reviews/2026-10-25/design-pass-3/`, `src/`, `test/`, `docs/01-specification.md`, `UI-STANDARDS.md`, `project/digests/`.
+
+Do not run the app, the tests, the walker or a browser. Change no file.
+
+## Judge
+
+1. **Scope:** all fourteen pieces planned, nothing added (C, D and E untaken), nothing dropped; each promoted wish line wholly carried or its remainder kept as a line.
+2. **The refusals and settlements in the compare:** for each place your blind plan differs and Claude refused or settled it, is the reason sound on the evidence cited? Where it is not, say whether the point should be applied or held for the owner.
+3. **Each item:** fits about 50k of work under the sizing rule; carries VH-203's stage rule whole; names its scenarios, widths, languages, modes, WCAG criteria, digest rules, walker changes and any `docs/` or coverage question; its file and line claims are right at HEAD.
+4. **The order** and its reasons.
+5. **The "?":** whether the record (`project/items/VH-211.md`, criteria) supports building about 8 px with the `::after` target untouched and its overlap with "format." measured and reported, rather than asking the owner.
+6. **The ask:** true, complete for what the plan can't settle, each point's recommendation first, at most 300 words; the translations sound.
+7. **Anything else** that would make an item fail at its close.
+
+## Format
+
+Markdown to standard output, nothing else. A numbered list of points, each marked **must** (the plan is wrong or incomplete without it), **should** or **note**, with its evidence (file and line, or the document and section) and the change you propose. Then a one-line verdict. Under 1,200 words.

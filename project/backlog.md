@@ -14,7 +14,7 @@
 
 ## Current
 
-The public release on Xerte (PLAN-6): the cut after Phase 8, VH-204; 0.2.0 is not uploaded.
+The public release on Xerte (PLAN-6) is VH-204's cut.
 
 ### Band 7 — measured, not yet fixed — CLOSED 2026-10-20
 
@@ -37,15 +37,27 @@ The public release on Xerte (PLAN-6): the cut after Phase 8, VH-204; 0.2.0 is no
 
 ### Phase 8 — the owner's UX pass, then a third full design pass
 
-- [ ] VH-206 — V-51: a kept part with too little audio told so, in the owner's words — since 2026-10-27 — (from: VH-202, 2026-10-27)
-- [ ] VH-207 — V-46: focus to the file chooser when an unreadable file withdraws its step — since 2026-10-27 — (from: VH-202, 2026-10-27)
-- [ ] VH-208 — V-52: the finished video's warnings before its player and Save, and spoken — since 2026-10-27 — (from: VH-202, 2026-10-27)
-- [ ] VH-209 — V-50: the page in its column at a 32 px font on a phone width — since 2026-10-27 — (from: VH-202, 2026-10-27)
-- [ ] VH-210 — V-48 and V-49: two focus rings drawn whole — since 2026-10-27 — (from: VH-202, 2026-10-27)
-- [ ] VH-211 — To plan into fix items before VH-203, as the owner asked: the format "?"'s gap to about 8 px and a dark open state; A, V-18 (VH-175.4), VH-189.1, VH-186.1, VH-139.5, VH-185.1, VH-193.3 and F15b; B, VH-150.3, VH-153.1, VH-155.2, VH-156.1, VH-158.1 and VH-172.1's 214 cells; V-18's 320 × 568 remedy and F15b's words to the owner first — since 2026-10-27 — (from: VH-202, 2026-10-27)
-- [ ] VH-203 — Pass 3's fixes, after-run, integrated check — since 2026-10-25
+- [ ] VH-206 — V-51: too little kept audio — since 2026-10-27 — (from: VH-202, 2026-10-27)
+- [ ] VH-207 — V-46: chooser focus — since 2026-10-27 — (from: VH-202, 2026-10-27)
+- [ ] VH-208 — V-52's warnings — since 2026-10-27 — (from: VH-202, 2026-10-27)
+- [!] VH-212 — F15b's advice — since 2026-10-27 — (from: VH-202, 2026-10-27) — blocked: the owner
+- [!] VH-213 — VH-185.1: whole-video sound — since 2026-10-27 — (from: VH-185, 2026-10-24) — blocked: the owner
+- [ ] VH-214 — VH-193.3: QuickTime — since 2026-10-27 — (from: VH-193, 2026-10-25)
+- [ ] VH-215 — VH-139.5: card length — since 2026-10-27 — (from: VH-139, 2026-10-21)
+- [!] VH-216 — V-18: first screen — since 2026-10-27 — (from: VH-175, 2026-10-23) — blocked: the owner
+- [ ] VH-217 — The format "?" — since 2026-10-27 — (from: VH-202, 2026-10-27)
+- [ ] VH-209 — V-50: 32 px phones — since 2026-10-27 — (from: VH-202, 2026-10-27)
+- [ ] VH-218 — VH-186.1: check rows — since 2026-10-27 — (from: VH-186, 2026-10-24)
+- [ ] VH-219 — VH-189.1: step 4's selects — since 2026-10-27 — (from: VH-189, 2026-10-25)
+- [ ] VH-210 — V-48, V-49: rings — since 2026-10-27 — (from: VH-202, 2026-10-27)
+- [ ] VH-220 — Check VH-150.3 — since 2026-10-27 — (from: VH-150, 2026-10-22)
+- [ ] VH-221 — Check VH-153.1 — since 2026-10-27 — (from: VH-153, 2026-10-22)
+- [ ] VH-222 — Check VH-155.2, VH-156.1, VH-158.1 — since 2026-10-27 — (from: VH-155, 2026-10-22)
+- [ ] VH-223 — VH-172.1, batch A — since 2026-10-27 — (from: VH-172, 2026-10-23)
+- [ ] VH-224 — VH-172.1, batch B — since 2026-10-27 — (from: VH-172, 2026-10-23)
+- [!] VH-203 — Pass 3's after-run — since 2026-10-25 — blocked: the owner
 - [ ] VH-195 — Phase 8 closes — since 2026-10-24
-- [ ] VH-204 — The release cut after Phase 8 closes, the one the owner uploads to Xerte — since 2026-10-25 — blocked: VH-195
+- [ ] VH-204 — The release cut for Xerte — since 2026-10-25 — blocked: VH-195
 
 ### Standing — the owner's, never phase-gated
 

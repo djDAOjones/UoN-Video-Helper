@@ -1043,3 +1043,13 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-22 — VH-169 — A pressed state for each button kind: a fill of its own, never hover's; forced colours inverted
+
+**Decision:** each button kind held down takes its own fill from three new roles, `--interactive-active`, `--layer-active` and `--button-danger-active`, never when disabled; forced colours invert the pair; segments need none; because held down, every button drew its hover fill (V-39).
+
+**Rationale:** The next step past each hover fails 7:1 (blue-60 under white 4.21:1, blue-40 under Nottingham Blue 6.39:1, red-40 6.50:1), so pressed takes new roles. Light: the primary blue-90 (white 11.35:1), a secondary blue-20 (Nottingham Blue 10.32:1), Discard red-90 (white 15.22:1, darker than rest, as Carbon's danger press). Dark and the band: the primary blue-10 (12.66:1, between Portland Stone at rest and blue-20 hovered), a secondary blue-80 (Portland Stone 7.58:1), Discard red-10 (14.02:1). Forced colours: a primary or the unchosen Choose file turns HighlightText with Highlight words; a secondary or the chosen Choose file ButtonText with ButtonFace words, `forced-color-adjust: none` on the pressed state only. A segment needs none: a press ends in the chosen fill, the strongest state it has. Measured with real CDP mouse presses in Chrome 155 at 1280 px, nine kinds, light, dark and forced, in three languages: 81 presses matched `:active` and drew the hover fill before, and 81 a fill of their own after; Use the whole video, disabled, held down keeps its rest look in every theme. Evidence: `reviews/2026-10-22/design-pass/evidence/measurements/vh169-pressed-2026-10-22.md`. Standards: wcag-2.2-aaa 1.4.6, 1.4.11, 2.4.13; carbon tokens and component states; nielsen 1.
+
+**Supersedes:** none
+
+**Deferred:** none
