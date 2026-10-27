@@ -1,0 +1,36 @@
+<!-- markdownlint-disable -->
+<!-- Codex astra (codex exec -m gpt-6-astra -s read-only), check of VH-199's close before the commit, 2026-10-27, run read-only in the working tree at a3039c3 with the close uncommitted, session 01a17cfc-d970-7061-a34d-638bc9c3ecfb, ending 10:59Z, exit 0; brief: codex-astra-close-brief-2026-10-27.md. The reply, verbatim. Kept as .md.txt: its links are absolute paths with spaces, which the repository's link check reads as broken. -->
+
+Commit after the musts below
+
+**Criteria:** Against `a3039c3`: (1) the matrix meets the approved plan with the four accepted gaps; (2) coverage reconciles, but the finish+1s interpretation needs correction; (3) all eighteen digests exist and compare against VH-176, with corrections below; (4) the eighteen-row contract and regression attribution are present, and **12 holds / 5 partial / 1 regressed remains defensible**; (5) no captures are proposed for commit; (6) the saved provenance supports the blind-review sequence; (7) no product code changed, but I have not certified the gate/checker result.
+
+**Support:** Independently merging E reproduced 3,207 records, the language/view/mode totals, all 48 passing transitions, and exactly 427 recovered / 214 remaining wish cells. The 699-key outcome changes match the compare. Samples confirm S-81’s 1,361/1,865, the checked-radio 284/304, S-149’s three `body` outcomes, and the six painted-button positions. All 36 run-file bodies match their originals; run-09’s original `.md` is preserved as `.md.txt`.
+
+**The seven settlements:** I accept VH-182 **partial** pending perimeter interpretation; VH-185 **partial** without track inspection; VH-187 **holds** because fallback is outside its stated must; VH-188 **partial** with unresolved ring attribution; VH-189 **holds** within its declared scope and recorded enlargement limitation; VH-191 **regressed**, supported by the relocation and read-failure branch; and VH-178 **holds** for its specified transitions, with the new exposure attributed to VH-191.
+
+**Every “Codex only” point:** S-133’s missing keys are correctly restored; S-59’s ordering explanation is supported by reached focus and the subsequent blur; missing output-track inspection correctly makes VH-185 partial; carrying D-05 into VH-200 is acceptable for this evidence-stage close while retaining rank 1; VH-191’s regression attribution is sound; and the shared unresolved classes remain legitimate handoffs, subject to the corrected explanations below. My remaining disagreements concern evidence interpretation and attribution, not the eighteen item verdicts.
+
+**The record:** Rules 3–6 are otherwise satisfied: the item identity, decision form, archive move, backlog removal, trajectory, wish-line narrowing and Notes agree. VH-192.2’s retirement is defensible because residual measurement obligations continue through VH-199.1, VH-200 and VH-203. Rule 9 remains conditional on the actual green verification result, the promised commit declarations and trace lines, replacement of `CLOSE-CHECK`, and the profile’s push procedure.
+
+**Musts**
+
+1. In [compare:12](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/contract-compare-2026-10-27.md:12>), preserve Codex’s explicit **“including nominal passes”** qualification: E contains **823 finish+1s rows—769 raw passes and 54 raw failures**—so mark the whole class unverified and propagate that scope into the decision, matrix, player digest, contract and VH-203 Notes.
+
+2. Correct [compare:28](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/contract-compare-2026-10-27.md:28>) and the contract’s VH-184 row: S-98’s `instruments.asserts.items[].found` **does re-read** the edge ratios—4.08/3.91 light, 4.71/5.53 dark and 21/21 forced—so the allegation that Codex substituted historical measurements is false.
+
+3. Correct [compare:29](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/contract-compare-2026-10-27.md:29>) and the contract’s VH-182 row: `#contact-creators` already exists at `ec26c49:index.html:797`, so describe its changed wording/layout and newly measured failures rather than calling it a new element outside the item.
+
+4. Replace [measure digest:20](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/evidence/measurements/digest-measure-2026-10-27.md:20>)’s unsupported explanation about invisible boxes, wrapped runs and fixed heights with the recorded mixed-script counting ambiguity.
+
+5. Correct [contract:25](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/evidence/measurements/contract-2026-10-27.md:25>) and the player digest’s explanation: the 183 unresolved 2.4.13 rows require exception interpretation—sampled Play explicitly has `userAgentOnly.holds:false` and `unmodified.holds:null`—while the 39 visibility and 39 notification rows are separate measurement gaps, not blanket user-agent exemptions.
+
+**Mays**
+
+1. In [contrastExtra digest:24](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/evidence/measurements/digest-contrastExtra-2026-10-27.md:24>), correct the net row increase from **15 to 10**.
+
+2. In [contract:29](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/evidence/measurements/contract-2026-10-27.md:29>), label **313 passing steps** as part 1’s comparison subset and **716** as the full route total.
+
+3. In [matrix:102](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/evidence/measurements/matrix-2026-10-27.md:102>), correct S-21’s disabled-focus count from **8 to 9**.
+
+No files changed; no gate, checker, walker, Vite or browser run.

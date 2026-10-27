@@ -1,0 +1,482 @@
+[
+ {
+  "key": "S-03__en-GB__light__held",
+  "id": "S-03",
+  "lang": "en-GB",
+  "mode": "light",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 120,
+   "h": 44
+  },
+  "ringAt3to1": 704,
+  "perimeter2px": 640,
+  "best": 14.31,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-03__en-GB__dark__held",
+  "id": "S-03",
+  "lang": "en-GB",
+  "mode": "dark",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 120,
+   "h": 44
+  },
+  "ringAt3to1": 704,
+  "perimeter2px": 640,
+  "best": 13.34,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-03__en-GB__forced-light__held",
+  "id": "S-03",
+  "lang": "en-GB",
+  "mode": "forced-light",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 120,
+   "h": 44
+  },
+  "ringAt3to1": 704,
+  "perimeter2px": 640,
+  "best": 21,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-03__en-GB__forced-dark__held",
+  "id": "S-03",
+  "lang": "en-GB",
+  "mode": "forced-dark",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 120,
+   "h": 44
+  },
+  "ringAt3to1": 704,
+  "perimeter2px": 640,
+  "best": 21,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-03__en-GB__font32__held",
+  "id": "S-03",
+  "lang": "en-GB",
+  "mode": "font32",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 238,
+   "h": 76
+  },
+  "ringAt3to1": 1304,
+  "perimeter2px": 1240,
+  "best": 14.31,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-03__zh-Hans__light__held",
+  "id": "S-03",
+  "lang": "zh-Hans",
+  "mode": "light",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 120,
+   "h": 44
+  },
+  "ringAt3to1": 704,
+  "perimeter2px": 640,
+  "best": 14.31,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-03__zh-Hans__dark__held",
+  "id": "S-03",
+  "lang": "zh-Hans",
+  "mode": "dark",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 120,
+   "h": 44
+  },
+  "ringAt3to1": 704,
+  "perimeter2px": 640,
+  "best": 13.34,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-03__zh-Hans__forced-light__held",
+  "id": "S-03",
+  "lang": "zh-Hans",
+  "mode": "forced-light",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 120,
+   "h": 44
+  },
+  "ringAt3to1": 704,
+  "perimeter2px": 640,
+  "best": 21,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-03__zh-Hans__forced-dark__held",
+  "id": "S-03",
+  "lang": "zh-Hans",
+  "mode": "forced-dark",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 120,
+   "h": 44
+  },
+  "ringAt3to1": 704,
+  "perimeter2px": 640,
+  "best": 21,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-03__zh-Hans__font32__held",
+  "id": "S-03",
+  "lang": "zh-Hans",
+  "mode": "font32",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 238,
+   "h": 76
+  },
+  "ringAt3to1": 1304,
+  "perimeter2px": 1240,
+  "best": 14.31,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-03__ms-MY__light__held",
+  "id": "S-03",
+  "lang": "ms-MY",
+  "mode": "light",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 120,
+   "h": 44
+  },
+  "ringAt3to1": 704,
+  "perimeter2px": 640,
+  "best": 14.31,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-03__ms-MY__dark__held",
+  "id": "S-03",
+  "lang": "ms-MY",
+  "mode": "dark",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 120,
+   "h": 44
+  },
+  "ringAt3to1": 704,
+  "perimeter2px": 640,
+  "best": 13.34,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-03__ms-MY__forced-light__held",
+  "id": "S-03",
+  "lang": "ms-MY",
+  "mode": "forced-light",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 120,
+   "h": 44
+  },
+  "ringAt3to1": 704,
+  "perimeter2px": 640,
+  "best": 21,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-03__ms-MY__forced-dark__held",
+  "id": "S-03",
+  "lang": "ms-MY",
+  "mode": "forced-dark",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 120,
+   "h": 44
+  },
+  "ringAt3to1": 704,
+  "perimeter2px": 640,
+  "best": 21,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-03__ms-MY__font32__held",
+  "id": "S-03",
+  "lang": "ms-MY",
+  "mode": "font32",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 238,
+   "h": 76
+  },
+  "ringAt3to1": 1304,
+  "perimeter2px": 1240,
+  "best": 14.31,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-15__en-GB__light__held",
+  "id": "S-15",
+  "lang": "en-GB",
+  "mode": "light",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 120,
+   "h": 44
+  },
+  "ringAt3to1": 704,
+  "perimeter2px": 640,
+  "best": 14.31,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-15__en-GB__dark__held",
+  "id": "S-15",
+  "lang": "en-GB",
+  "mode": "dark",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 120,
+   "h": 44
+  },
+  "ringAt3to1": 704,
+  "perimeter2px": 640,
+  "best": 13.34,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-15__en-GB__forced-light__held",
+  "id": "S-15",
+  "lang": "en-GB",
+  "mode": "forced-light",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 120,
+   "h": 44
+  },
+  "ringAt3to1": 704,
+  "perimeter2px": 640,
+  "best": 21,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-15__en-GB__forced-dark__held",
+  "id": "S-15",
+  "lang": "en-GB",
+  "mode": "forced-dark",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 120,
+   "h": 44
+  },
+  "ringAt3to1": 704,
+  "perimeter2px": 640,
+  "best": 21,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-15__en-GB__font32__held",
+  "id": "S-15",
+  "lang": "en-GB",
+  "mode": "font32",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 238,
+   "h": 76
+  },
+  "ringAt3to1": 1304,
+  "perimeter2px": 1240,
+  "best": 14.31,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-15__zh-Hans__light__held",
+  "id": "S-15",
+  "lang": "zh-Hans",
+  "mode": "light",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 120,
+   "h": 44
+  },
+  "ringAt3to1": 704,
+  "perimeter2px": 640,
+  "best": 14.31,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-15__zh-Hans__dark__held",
+  "id": "S-15",
+  "lang": "zh-Hans",
+  "mode": "dark",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 120,
+   "h": 44
+  },
+  "ringAt3to1": 704,
+  "perimeter2px": 640,
+  "best": 13.34,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-15__zh-Hans__forced-light__held",
+  "id": "S-15",
+  "lang": "zh-Hans",
+  "mode": "forced-light",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 120,
+   "h": 44
+  },
+  "ringAt3to1": 704,
+  "perimeter2px": 640,
+  "best": 21,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-15__zh-Hans__forced-dark__held",
+  "id": "S-15",
+  "lang": "zh-Hans",
+  "mode": "forced-dark",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 120,
+   "h": 44
+  },
+  "ringAt3to1": 704,
+  "perimeter2px": 640,
+  "best": 21,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-15__zh-Hans__font32__held",
+  "id": "S-15",
+  "lang": "zh-Hans",
+  "mode": "font32",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 238,
+   "h": 76
+  },
+  "ringAt3to1": 1304,
+  "perimeter2px": 1240,
+  "best": 14.31,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-15__ms-MY__light__held",
+  "id": "S-15",
+  "lang": "ms-MY",
+  "mode": "light",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 120,
+   "h": 44
+  },
+  "ringAt3to1": 704,
+  "perimeter2px": 640,
+  "best": 14.31,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-15__ms-MY__dark__held",
+  "id": "S-15",
+  "lang": "ms-MY",
+  "mode": "dark",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 120,
+   "h": 44
+  },
+  "ringAt3to1": 704,
+  "perimeter2px": 640,
+  "best": 13.34,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-15__ms-MY__forced-light__held",
+  "id": "S-15",
+  "lang": "ms-MY",
+  "mode": "forced-light",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 120,
+   "h": 44
+  },
+  "ringAt3to1": 704,
+  "perimeter2px": 640,
+  "best": 21,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-15__ms-MY__forced-dark__held",
+  "id": "S-15",
+  "lang": "ms-MY",
+  "mode": "forced-dark",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 120,
+   "h": 44
+  },
+  "ringAt3to1": 704,
+  "perimeter2px": 640,
+  "best": 21,
+  "outcome": "pass"
+ },
+ {
+  "key": "S-15__ms-MY__font32__held",
+  "id": "S-15",
+  "lang": "ms-MY",
+  "mode": "font32",
+  "active": true,
+  "focusVisible": true,
+  "button": {
+   "w": 238,
+   "h": 76
+  },
+  "ringAt3to1": 1304,
+  "perimeter2px": 1240,
+  "best": 14.31,
+  "outcome": "pass"
+ }
+]

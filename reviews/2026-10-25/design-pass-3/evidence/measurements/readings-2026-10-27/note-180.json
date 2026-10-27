@@ -1,0 +1,104 @@
+[
+ {
+  "key": "hfr-45fps__en-GB",
+  "lang": "en-GB",
+  "file": "hfr-45fps-10s.mp4",
+  "larger": {
+   "term": "Frame rate",
+   "detail": "45 frames a second",
+   "note": "To reach a standard frame rate, some frames will be repeated or left out.",
+   "preset": "best"
+  },
+  "smaller": {
+   "term": "Frame rate",
+   "detail": "45 frames a second",
+   "note": "To reach a standard frame rate, some frames will be repeated or left out.",
+   "preset": "smaller"
+  }
+ },
+ {
+  "key": "hfr-120fps__en-GB",
+  "lang": "en-GB",
+  "file": "hfr-120fps-10s.mp4",
+  "larger": {
+   "term": "Frame rate",
+   "detail": "120 frames a second",
+   "note": "To reach a standard frame rate, some frames will be repeated or left out.",
+   "preset": "best"
+  },
+  "smaller": {
+   "term": "Frame rate",
+   "detail": "120 frames a second",
+   "note": "To reach a standard frame rate, some frames will be repeated or left out.",
+   "preset": "smaller"
+  }
+ },
+ {
+  "key": "hfr-45fps__zh-Hans",
+  "lang": "zh-Hans",
+  "file": "hfr-45fps-10s.mp4",
+  "larger": {
+   "term": "帧率",
+   "detail": "每秒 45 帧",
+   "note": "为采用标准帧速率，某些帧将会重复或被舍弃。",
+   "preset": "best"
+  },
+  "smaller": {
+   "term": "帧率",
+   "detail": "每秒 45 帧",
+   "note": "为采用标准帧速率，某些帧将会重复或被舍弃。",
+   "preset": "smaller"
+  }
+ },
+ {
+  "key": "hfr-120fps__zh-Hans",
+  "lang": "zh-Hans",
+  "file": "hfr-120fps-10s.mp4",
+  "larger": {
+   "term": "帧率",
+   "detail": "每秒 120 帧",
+   "note": "为采用标准帧速率，某些帧将会重复或被舍弃。",
+   "preset": "best"
+  },
+  "smaller": {
+   "term": "帧率",
+   "detail": "每秒 120 帧",
+   "note": "为采用标准帧速率，某些帧将会重复或被舍弃。",
+   "preset": "smaller"
+  }
+ },
+ {
+  "key": "hfr-45fps__ms-MY",
+  "lang": "ms-MY",
+  "file": "hfr-45fps-10s.mp4",
+  "larger": {
+   "term": "Kadar bingkai",
+   "detail": "45 bingkai sesaat",
+   "note": "Untuk mencapai kadar bingkai standard, beberapa bingkai akan diulang atau ditinggalkan.",
+   "preset": "best"
+  },
+  "smaller": {
+   "term": "Kadar bingkai",
+   "detail": "45 bingkai sesaat",
+   "note": "Untuk mencapai kadar bingkai standard, beberapa bingkai akan diulang atau ditinggalkan.",
+   "preset": "smaller"
+  }
+ },
+ {
+  "key": "hfr-120fps__ms-MY",
+  "lang": "ms-MY",
+  "file": "hfr-120fps-10s.mp4",
+  "larger": {
+   "term": "Kadar bingkai",
+   "detail": "120 bingkai sesaat",
+   "note": "Untuk mencapai kadar bingkai standard, beberapa bingkai akan diulang atau ditinggalkan.",
+   "preset": "best"
+  },
+  "smaller": {
+   "term": "Kadar bingkai",
+   "detail": "120 bingkai sesaat",
+   "note": "Untuk mencapai kadar bingkai standard, beberapa bingkai akan diulang atau ditinggalkan.",
+   "preset": "smaller"
+  }
+ }
+]

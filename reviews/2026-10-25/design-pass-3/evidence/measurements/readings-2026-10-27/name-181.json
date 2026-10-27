@@ -1,0 +1,182 @@
+[
+ {
+  "key": "en-GB__w1280",
+  "lang": "en-GB",
+  "view": "w1280",
+  "heading": "4. Closing graphics",
+  "name": "Closing graphics",
+  "legend": "Closing graphics",
+  "box": {
+   "width": 862,
+   "height": 28
+  },
+  "lines": 1,
+  "font": "20px 700 / 28px",
+  "stepCounts": {
+   "name": 5,
+   "noun": 5,
+   "old": [
+    0,
+    0,
+    0
+   ]
+  },
+  "pageOld": [
+   0,
+   0,
+   0
+  ],
+  "axHeading": "4. Closing graphics",
+  "axGroup": "Closing graphics"
+ },
+ {
+  "key": "en-GB__w320",
+  "lang": "en-GB",
+  "view": "w320",
+  "heading": "4. Closing graphics",
+  "name": "Closing graphics",
+  "legend": "Closing graphics",
+  "box": {
+   "width": 222,
+   "height": 28
+  },
+  "lines": 1,
+  "font": "20px 700 / 28px",
+  "stepCounts": {
+   "name": 5,
+   "noun": 5,
+   "old": [
+    0,
+    0,
+    0
+   ]
+  },
+  "pageOld": [
+   0,
+   0,
+   0
+  ],
+  "axHeading": "4. Closing graphics",
+  "axGroup": "Closing graphics"
+ },
+ {
+  "key": "zh-Hans__w1280",
+  "lang": "zh-Hans",
+  "view": "w1280",
+  "heading": "4. 结尾图形",
+  "name": "结尾图形",
+  "legend": "结尾图形",
+  "box": {
+   "width": 862,
+   "height": 28
+  },
+  "lines": 1,
+  "font": "20px 700 / 28px",
+  "stepCounts": {
+   "name": 5,
+   "noun": 5,
+   "old": [
+    0,
+    0,
+    0
+   ]
+  },
+  "pageOld": [
+   0,
+   0,
+   0
+  ],
+  "axHeading": "4. 结尾图形",
+  "axGroup": "结尾图形"
+ },
+ {
+  "key": "zh-Hans__w320",
+  "lang": "zh-Hans",
+  "view": "w320",
+  "heading": "4. 结尾图形",
+  "name": "结尾图形",
+  "legend": "结尾图形",
+  "box": {
+   "width": 222,
+   "height": 28
+  },
+  "lines": 1,
+  "font": "20px 700 / 28px",
+  "stepCounts": {
+   "name": 5,
+   "noun": 5,
+   "old": [
+    0,
+    0,
+    0
+   ]
+  },
+  "pageOld": [
+   0,
+   0,
+   0
+  ],
+  "axHeading": "4. 结尾图形",
+  "axGroup": "结尾图形"
+ },
+ {
+  "key": "ms-MY__w1280",
+  "lang": "ms-MY",
+  "view": "w1280",
+  "heading": "4. Grafik penutup",
+  "name": "Grafik penutup",
+  "legend": "Grafik penutup",
+  "box": {
+   "width": 862,
+   "height": 28
+  },
+  "lines": 1,
+  "font": "20px 700 / 28px",
+  "stepCounts": {
+   "name": 5,
+   "noun": 5,
+   "old": [
+    0,
+    0,
+    0
+   ]
+  },
+  "pageOld": [
+   0,
+   0,
+   0
+  ],
+  "axHeading": "4. Grafik penutup",
+  "axGroup": "Grafik penutup"
+ },
+ {
+  "key": "ms-MY__w320",
+  "lang": "ms-MY",
+  "view": "w320",
+  "heading": "4. Grafik penutup",
+  "name": "Grafik penutup",
+  "legend": "Grafik penutup",
+  "box": {
+   "width": 222,
+   "height": 28
+  },
+  "lines": 1,
+  "font": "20px 700 / 28px",
+  "stepCounts": {
+   "name": 5,
+   "noun": 5,
+   "old": [
+    0,
+    0,
+    0
+   ]
+  },
+  "pageOld": [
+   0,
+   0,
+   0
+  ],
+  "axHeading": "4. Grafik penutup",
+  "axGroup": "Grafik penutup"
+ }
+]

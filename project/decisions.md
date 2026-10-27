@@ -18,6 +18,40 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-27 — VH-199 — Pass 3's evidence run: 3,207 of 3,219 records and 48 transitions, four gaps the owner accepted, the Phase 8 contract verified, VH-191 regressed
+
+**Decision:** VH-199 closes. The matrix is whole but for four gaps the owner accepted, each measured in VH-203's after-run on a walker fixed as wish VH-199.1. Eighteen digests sit beside VH-176's after-run. The contract: 12 hold, 5 partial, and VH-191 regressed, focus lost when an unreadable file withdraws step 3's Video language. Codex astra drafted the table blind and checked the close. VH-200 is next.
+
+**Rationale:**
+
+- **The account** (`reviews/2026-10-25/design-pass-3/evidence/measurements/matrix-2026-10-27.md`): twelve runs on `a3039c3` at instrument revision `2e7b0c044ce11f2b`, Chrome 156.0.8078.48, every page visible. 3,207 of 3,219 records are ok and the 48 transitions whole. The 12 missing records and one assert are the gaps below. No failed or missing record counts as a pass. The finish+1s player row counts as unverified in all 823 rows that carry it, its 769 nominal passes included, and so do F15b's intended failures (12 records).
+- **The four gaps**, with the owner's rulings verbatim:
+  - **S-107 `fallback` ×3** (run-04): the walker's `fonts` route takes F1's held worker (`qualify.mjs:1017`, `faults.mjs:19`). "Yes: accept run-04 at 355/358 with the three S-107 fallback records named as a gap, and measure them in VH-203's after-run once the walker is fixed alongside VH-198.1 and VH-198.2."
+  - **S-92 ×31 and S-93 ×6, the check count**: the assert reads 0 (`STATUS_SINCE`, `scenarios.mjs:1521`). **S-55c `fallback` ×3** (run-06): the same `fonts` route. One ruling covers both: "Yes: accept both gaps in run-04's pattern. Run-05 stands whole with S-92/S-93's check-count assert named an instrument gap, run-06 is accepted at 335/338 with the three S-55c fallback records named a gap, and VH-203's after-run measures both once the walker is fixed."
+  - **S-133 ×6** (run-09 ×4, run-11 ×2), not recorded: `goto` (`walk.mjs:297`) has no `beforeunload` handler. "Yes: accept S-133's 6 records (4 in run-09, 2 in run-11) as a named instrument gap in run-04's pattern, and measure them in VH-203's after-run once the walker is fixed (VH-198.1 plus a beforeunload handler)."
+- **The digests:** one per instrument, eighteen, each beside VH-176's after-run on part 1's 699 keys, with every changed reading explained by subject. A timing, readiness or paint difference is "attribution unresolved" (M-05): run-01 ran on battery, and run-11's later records and run-12 in macOS High Power.
+- **The contract** (`contract-2026-10-27.md`):
+  - **Partial:** VH-182 (S-81's statement link, 1,361 of 1,865 px², passed in VH-176's after-run and fails ×11 since VH-182's contact line wraps it; the shortfall is the enclosing box's perimeter, so the verdict waits for VH-200), VH-183 (the one-check rule), VH-185 (the output's tracks not read), VH-188 (the 32 px ring, 284 of 304, attribution unresolved) and VH-192 (the finish+1s rows, S-133, S-127's controls and their 2.4.13 exceptions).
+  - **VH-191 regressed:** `3c20550` moved Video language into `#step-title`, which the read-failure branch withdraws with no hand-on (`clearTrim('unreadable')`, `src/main.ts:1486`, `1500`), so focus on a radio goes to `body` (S-149 ×3). VH-200 judges it with V-46.
+  - **Five readings** the contract names and the runs did not take were taken for the close on `a3039c3`: `rings-179.mjs` `v18`, `colours` and `held`; `note-180.mjs`; `name-181.mjs` (`readings-2026-10-27/`).
+- **Codex astra**, on the owner's words of 2026-10-27: "is everything being done in partnership with codex? codex astra should be used liberally"; "please also proceed gatelessly as I'm going to bed. only ask if critical"; "please also do everything in partnership with codex as a comparison. codex astra should be used liberally but you decide".
+  - Each run from run-05 had a blind attribution, compared with Claude's (`evidence/runs/`, verbatim).
+  - The contract table was drafted blind and compared (`contract-compare-2026-10-27.md`). Seven verdicts differed. Codex's VH-182, VH-185, VH-188 and VH-191 were taken, and Claude's VH-187, VH-189 and VH-178 were kept, each with its reason. Codex also found S-133 hidden from VH-192's tally, and S-59's "focus on the card" ×9 to be the walker blurring before its asserts.
+  - Its "close concern", VH-185's sub-400 ms rule, is VH-198's D-05, rank 1, already in VH-200's Notes.
+  - The close check said "Commit after the musts below" (`codex-astra-close-check-2026-10-27.md.txt`). Its five musts were applied, none refused: the finish+1s class is unverified in all 823 rows, S-98 re-reads VH-184's edge, `#contact-creators` is an existing link VH-182 reworded, the measure's cannot-determine rows are mixed-script lines, and S-127's 2.4.13 rows need their exceptions interpreted. Its three mays were applied too.
+- **The record:**
+  - wish VH-199.1 is the walker change;
+  - VH-172.1 is narrowed to the 214 cells still unrun;
+  - VH-192.2 retires, since the player is walked (S-126 to S-134, K-player);
+  - VH-203's Notes name the after-run's records;
+  - VH-200's Notes point to the held rows.
+- **No product code changed.** No capture is committed; the full run stays in `/Users/joe/UoN-Video-Helper-evidence/pass3-vh199`.
+- **Digest rule applied**, WCAG 2.2 AAA's "every exception recorded": 2.4.13's and 2.5.5's user-agent exceptions and the declared person checks are named row by row, never counted as passes.
+
+**Supersedes:** none
+
+**Deferred:** VH-200, VH-203
+
 ## 2026-10-27 — VH-205 — The lede's "?" drawn at the text's own size with its 44 px target round it, built before Pass 3's fix stage and deployed to the preview
 
 **Decision:** The format "?" beside the fourth promise is a checkbox glyph's square, `--control-size` (20 px at the default font), so every promise keeps the 24 px line; a centred `::after` draws its 44 × 44 px target, so 2.5.5 needs no exception, and the gap beside it and the tip's step down, `--spacing-04`, clear that target. Built now on the owner's word, not in VH-203.
@@ -544,13 +578,3 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Items:** VH-165, VH-166, VH-167, VH-169, VH-168
 
 **Deferred:** none
-
-## 2026-10-22 — VH-163 — The design pass: 9 findings, V-31 shipped, six at rank 2 planned, two rank 3 proposals to the owner
-
-**Decision:** the design pass stands as `reviews/2026-10-22/design-pass/design-pass-2026-10-22.md`, V-31 to V-39, with Codex astra's blind review and critique kept as written: V-31 shipped as VH-164; V-32 to V-35, V-38 and V-39 at rank 2 become PLAN-6's five design-fix items; V-36 and V-37 at rank 3 go to the owner; VH-163 stays open until the owner approves the plan, because the item requires that approval before any fix is built.
-
-**Rationale:** The walker measured 33 captures in three languages at 1280 and 375 px, light, dark and forced colours: nine text tuples and seven Chinese twins, prose at 489 px beside helpers at 428 (640 and 560 in Chinese), every gap on the scale. Live checks confirmed V-34 (a long file name scrolls the page sideways at 320 px), V-35 (the chooser's English words in a Chinese or Malay page) and V-39 (pressed looks hovered). Codex's critique was applied but for raising V-37's footer gap to rank 2: a gap in a band of its own misleads no one. It corrected the pass's scope claims, its Carbon references (two are expressive), the panel heading to 20/28, 28rem to a candidate, V-34's cause (no long-name fixture), and V-35's recommendation to the native chooser under the owner's rule. Standards: Nielsen 1, 2, 4 and 9; WCAG 1.4.8, 1.4.10, 1.4.12, 2.4.13; Carbon productive type and button states.
-
-**Supersedes:** none
-
-**Deferred:** VH-165, VH-166, VH-167, VH-168, VH-169

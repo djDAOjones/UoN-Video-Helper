@@ -1,0 +1,1226 @@
+{
+ "VH-182": {
+  "scenarios": 20,
+  "records": 425,
+  "absent": [],
+  "gaps": [],
+  "assertRows": {
+   "pass": 542,
+   "exempt": 62
+  },
+  "ins": {
+   "ax": {
+    "pass": 421
+   },
+   "overflow": {
+    "pass": 421
+   },
+   "targets": {
+    "pass": 373,
+    "cannot-determine": 48
+   },
+   "contrastText": {
+    "pass": 421
+   },
+   "contrastExtra": {
+    "pass": 358,
+    "cannot-determine": 63
+   },
+   "measure": {
+    "pass": 348,
+    "cannot-determine": 73
+   },
+   "type": {
+    "pass": 421
+   },
+   "focus": {
+    "pass": 402,
+    "fail": 19
+   },
+   "player": {
+    "not-applicable": 421
+   },
+   "formatTip": {
+    "not-applicable": 421
+   },
+   "footer": {
+    "not-applicable": 262,
+    "pass": 159
+   },
+   "limiting": {
+    "not-applicable": 421
+   },
+   "videoLanguage": {
+    "pass": 421
+   },
+   "asserts": {
+    "pass": 390,
+    "not-applicable": 31
+   },
+   "keys": {
+    "pass": 4
+   },
+   "pressed": {
+    "pass": 4
+   },
+   "subresults": {
+    "pass": 8
+   }
+  },
+  "bad": {
+   "focus | fail | #accessibility-statement a": {
+    "S-81": 11
+   },
+   "focus | fail | #contact-creators": {
+    "S-83": 4,
+    "S-145": 4
+   }
+  }
+ },
+ "VH-183": {
+  "scenarios": 7,
+  "records": 65,
+  "absent": [
+   "S-34"
+  ],
+  "gaps": [],
+  "assertRows": {
+   "exempt": 32,
+   "pass": 147,
+   "fail": 37
+  },
+  "ins": {
+   "ax": {
+    "pass": 65
+   },
+   "overflow": {
+    "pass": 65
+   },
+   "targets": {
+    "cannot-determine": 56,
+    "pass": 9
+   },
+   "contrastText": {
+    "pass": 65
+   },
+   "contrastExtra": {
+    "cannot-determine": 65
+   },
+   "measure": {
+    "pass": 55,
+    "cannot-determine": 10
+   },
+   "type": {
+    "pass": 65
+   },
+   "focus": {
+    "pass": 26,
+    "cannot-determine": 39
+   },
+   "player": {
+    "not-applicable": 65
+   },
+   "formatTip": {
+    "not-applicable": 65
+   },
+   "footer": {
+    "pass": 65
+   },
+   "limiting": {
+    "not-applicable": 65
+   },
+   "videoLanguage": {
+    "pass": 65
+   },
+   "asserts": {
+    "not-applicable": 27,
+    "fail": 37,
+    "pass": 1
+   }
+  },
+  "bad": {
+   "asserts | fail | one check after the keys settle": {
+    "S-92": 31
+   },
+   "asserts | fail | exactly one check after the last press": {
+    "S-93": 6
+   }
+  }
+ },
+ "VH-184": {
+  "scenarios": 7,
+  "records": 206,
+  "absent": [],
+  "gaps": [],
+  "assertRows": {
+   "pass": 304,
+   "exempt": 31
+  },
+  "ins": {
+   "ax": {
+    "pass": 206
+   },
+   "overflow": {
+    "pass": 206
+   },
+   "targets": {
+    "cannot-determine": 206
+   },
+   "contrastText": {
+    "pass": 206
+   },
+   "contrastExtra": {
+    "cannot-determine": 206
+   },
+   "measure": {
+    "pass": 169,
+    "cannot-determine": 37
+   },
+   "type": {
+    "pass": 206
+   },
+   "focus": {
+    "pass": 206
+   },
+   "player": {
+    "not-applicable": 206
+   },
+   "formatTip": {
+    "not-applicable": 175,
+    "pass": 31
+   },
+   "footer": {
+    "pass": 206
+   },
+   "limiting": {
+    "not-applicable": 206
+   },
+   "videoLanguage": {
+    "pass": 206
+   },
+   "asserts": {
+    "pass": 206
+   }
+  },
+  "bad": {}
+ },
+ "VH-185": {
+  "scenarios": 9,
+  "records": 101,
+  "absent": [],
+  "gaps": [],
+  "assertRows": {
+   "exempt": 31,
+   "pass": 78
+  },
+  "ins": {
+   "ax": {
+    "pass": 101
+   },
+   "overflow": {
+    "pass": 101
+   },
+   "targets": {
+    "cannot-determine": 101
+   },
+   "contrastText": {
+    "pass": 101
+   },
+   "contrastExtra": {
+    "cannot-determine": 101
+   },
+   "measure": {
+    "pass": 85,
+    "cannot-determine": 16
+   },
+   "type": {
+    "pass": 101
+   },
+   "focus": {
+    "pass": 101
+   },
+   "player": {
+    "not-applicable": 62,
+    "pass": 39
+   },
+   "formatTip": {
+    "not-applicable": 101
+   },
+   "footer": {
+    "pass": 101
+   },
+   "limiting": {
+    "not-applicable": 62,
+    "pass": 39
+   },
+   "videoLanguage": {
+    "pass": 101
+   },
+   "asserts": {
+    "not-applicable": 31,
+    "pass": 70
+   }
+  },
+  "bad": {}
+ },
+ "VH-186": {
+  "scenarios": 11,
+  "records": 192,
+  "absent": [
+   "S-104",
+   "S-154"
+  ],
+  "gaps": [],
+  "assertRows": {
+   "pass": 210,
+   "exempt": 87,
+   "fail": 31
+  },
+  "ins": {
+   "ax": {
+    "pass": 192
+   },
+   "overflow": {
+    "pass": 192
+   },
+   "targets": {
+    "pass": 59,
+    "cannot-determine": 133
+   },
+   "contrastText": {
+    "pass": 192
+   },
+   "contrastExtra": {
+    "pass": 28,
+    "cannot-determine": 164
+   },
+   "measure": {
+    "pass": 157,
+    "cannot-determine": 35
+   },
+   "type": {
+    "pass": 192
+   },
+   "focus": {
+    "pass": 169,
+    "cannot-determine": 23
+   },
+   "player": {
+    "not-applicable": 192
+   },
+   "formatTip": {
+    "not-applicable": 192
+   },
+   "footer": {
+    "pass": 192
+   },
+   "limiting": {
+    "not-applicable": 192
+   },
+   "videoLanguage": {
+    "pass": 192
+   },
+   "asserts": {
+    "pass": 74,
+    "not-applicable": 87,
+    "fail": 31
+   }
+  },
+  "bad": {
+   "asserts | fail | one check after the keys settle": {
+    "S-92": 31
+   }
+  }
+ },
+ "VH-187": {
+  "scenarios": 7,
+  "records": 132,
+  "absent": [],
+  "gaps": [
+   "S-107__en-GB__w1280__fallback",
+   "S-107__zh-Hans__w1280__fallback",
+   "S-107__ms-MY__w1280__fallback"
+  ],
+  "assertRows": {
+   "pass": 331,
+   "exempt": 64
+  },
+  "ins": {
+   "ax": {
+    "pass": 132
+   },
+   "overflow": {
+    "pass": 132
+   },
+   "targets": {
+    "pass": 132
+   },
+   "contrastText": {
+    "pass": 132
+   },
+   "contrastExtra": {
+    "pass": 132
+   },
+   "measure": {
+    "pass": 112,
+    "cannot-determine": 20
+   },
+   "type": {
+    "pass": 132
+   },
+   "focus": {
+    "pass": 132
+   },
+   "player": {
+    "not-applicable": 132
+   },
+   "formatTip": {
+    "not-applicable": 96,
+    "pass": 36
+   },
+   "footer": {
+    "pass": 132
+   },
+   "limiting": {
+    "not-applicable": 132
+   },
+   "videoLanguage": {
+    "pass": 132
+   },
+   "asserts": {
+    "pass": 132
+   },
+   "pressed": {
+    "pass": 12
+   }
+  },
+  "bad": {}
+ },
+ "VH-188": {
+  "scenarios": 12,
+  "records": 279,
+  "absent": [],
+  "gaps": [],
+  "assertRows": {
+   "pass": 777
+  },
+  "ins": {
+   "ax": {
+    "pass": 279
+   },
+   "overflow": {
+    "pass": 279
+   },
+   "targets": {
+    "cannot-determine": 279
+   },
+   "contrastText": {
+    "pass": 279
+   },
+   "contrastExtra": {
+    "cannot-determine": 279
+   },
+   "measure": {
+    "pass": 233,
+    "cannot-determine": 46
+   },
+   "type": {
+    "pass": 279
+   },
+   "focus": {
+    "pass": 273,
+    "fail": 6
+   },
+   "player": {
+    "not-applicable": 136,
+    "pass": 130,
+    "fail": 13
+   },
+   "formatTip": {
+    "not-applicable": 279
+   },
+   "footer": {
+    "pass": 279
+   },
+   "limiting": {
+    "not-applicable": 136,
+    "pass": 143
+   },
+   "videoLanguage": {
+    "pass": 279
+   },
+   "asserts": {
+    "pass": 279
+   },
+   "pressed": {
+    "pass": 16
+   }
+  },
+  "bad": {
+   "focus | fail | #preset-choice input:checked": {
+    "S-110": 3,
+    "S-108": 3
+   },
+   "player | fail | paused a second after the card appeared [finish+1s]": {
+    "S-109": 13
+   }
+  }
+ },
+ "VH-189": {
+  "scenarios": 10,
+  "records": 267,
+  "absent": [],
+  "gaps": [],
+  "assertRows": {
+   "pass": 322,
+   "exempt": 185
+  },
+  "ins": {
+   "ax": {
+    "pass": 267
+   },
+   "overflow": {
+    "pass": 261,
+    "fail": 6
+   },
+   "targets": {
+    "cannot-determine": 267
+   },
+   "contrastText": {
+    "pass": 267
+   },
+   "contrastExtra": {
+    "cannot-determine": 267
+   },
+   "measure": {
+    "pass": 221,
+    "cannot-determine": 46
+   },
+   "type": {
+    "pass": 267
+   },
+   "focus": {
+    "pass": 266,
+    "fail": 1
+   },
+   "player": {
+    "not-applicable": 267
+   },
+   "formatTip": {
+    "not-applicable": 267
+   },
+   "footer": {
+    "pass": 267
+   },
+   "limiting": {
+    "not-applicable": 267
+   },
+   "videoLanguage": {
+    "pass": 267
+   },
+   "asserts": {
+    "pass": 143,
+    "not-applicable": 124
+   }
+  },
+  "bad": {
+   "overflow | record fail": {
+    "S-113": 6
+   },
+   "focus | fail | #onset-help-button": {
+    "S-113": 1
+   }
+  }
+ },
+ "VH-190": {
+  "scenarios": 12,
+  "records": 279,
+  "absent": [],
+  "gaps": [],
+  "assertRows": {
+   "pass": 673
+  },
+  "ins": {
+   "ax": {
+    "pass": 279
+   },
+   "overflow": {
+    "pass": 279
+   },
+   "targets": {
+    "cannot-determine": 261,
+    "pass": 18
+   },
+   "contrastText": {
+    "pass": 279
+   },
+   "contrastExtra": {
+    "cannot-determine": 267,
+    "pass": 12
+   },
+   "measure": {
+    "pass": 226,
+    "cannot-determine": 53
+   },
+   "type": {
+    "pass": 279
+   },
+   "focus": {
+    "pass": 267,
+    "cannot-determine": 12
+   },
+   "player": {
+    "not-applicable": 86,
+    "pass": 193
+   },
+   "formatTip": {
+    "not-applicable": 279
+   },
+   "footer": {
+    "pass": 279
+   },
+   "limiting": {
+    "not-applicable": 86,
+    "pass": 193
+   },
+   "videoLanguage": {
+    "pass": 279
+   },
+   "asserts": {
+    "pass": 279
+   },
+   "pressed": {
+    "pass": 20
+   }
+  },
+  "bad": {}
+ },
+ "VH-191": {
+  "scenarios": 21,
+  "records": 425,
+  "absent": [],
+  "gaps": [],
+  "assertRows": {
+   "pass": 648,
+   "exempt": 161
+  },
+  "ins": {
+   "ax": {
+    "pass": 425
+   },
+   "overflow": {
+    "pass": 425
+   },
+   "targets": {
+    "pass": 118,
+    "cannot-determine": 307
+   },
+   "contrastText": {
+    "pass": 425
+   },
+   "contrastExtra": {
+    "pass": 91,
+    "cannot-determine": 334
+   },
+   "measure": {
+    "pass": 342,
+    "cannot-determine": 83
+   },
+   "type": {
+    "pass": 425
+   },
+   "focus": {
+    "pass": 425
+   },
+   "pressed": {
+    "pass": 12
+   },
+   "player": {
+    "not-applicable": 404,
+    "pass": 15,
+    "fail": 6
+   },
+   "formatTip": {
+    "pass": 36,
+    "not-applicable": 389
+   },
+   "footer": {
+    "pass": 425
+   },
+   "limiting": {
+    "not-applicable": 404,
+    "pass": 21
+   },
+   "videoLanguage": {
+    "pass": 425
+   },
+   "asserts": {
+    "pass": 300,
+    "not-applicable": 125
+   },
+   "subresults": {
+    "fail": 3
+   }
+  },
+  "bad": {
+   "player | fail | paused a second after the card appeared [finish+1s]": {
+    "S-88": 6
+   },
+   "subresults | fail | focus handed to the file input, the chooser that stays, neve": {
+    "S-149": 3
+   }
+  }
+ },
+ "VH-192": {
+  "scenarios": 30,
+  "records": 433,
+  "absent": [],
+  "gaps": [
+   "S-133__en-GB__w1280__light",
+   "S-133__zh-Hans__w1280__light",
+   "S-133__ms-MY__w1280__light",
+   "S-133__en-GB__w320__light",
+   "S-133__zh-Hans__w320__light",
+   "S-133__ms-MY__w320__light"
+  ],
+  "assertRows": {
+   "pass": 938,
+   "fail": 9,
+   "exempt": 48
+  },
+  "ins": {
+   "ax": {
+    "pass": 429
+   },
+   "overflow": {
+    "pass": 429
+   },
+   "targets": {
+    "cannot-determine": 298,
+    "pass": 131
+   },
+   "contrastText": {
+    "pass": 429
+   },
+   "contrastExtra": {
+    "cannot-determine": 429
+   },
+   "measure": {
+    "pass": 350,
+    "cannot-determine": 79
+   },
+   "type": {
+    "pass": 429
+   },
+   "focus": {
+    "pass": 417,
+    "cannot-determine": 12
+   },
+   "pressed": {
+    "pass": 20
+   },
+   "player": {
+    "pass": 297,
+    "not-applicable": 49,
+    "fail": 44,
+    "cannot-determine": 39
+   },
+   "formatTip": {
+    "not-applicable": 429
+   },
+   "footer": {
+    "pass": 429
+   },
+   "limiting": {
+    "pass": 380,
+    "not-applicable": 49
+   },
+   "videoLanguage": {
+    "pass": 429
+   },
+   "asserts": {
+    "pass": 372,
+    "fail": 9,
+    "not-applicable": 48
+   },
+   "subresults": {
+    "pass": 12
+   },
+   "keys": {
+    "pass": 4
+   }
+  },
+  "bad": {
+   "asserts | fail | focus on the card": {
+    "S-59": 9
+   },
+   "player | fail | paused a second after the card appeared [finish+1s]": {
+    "S-128": 31,
+    "S-59": 1
+   },
+   "player | fail | an object URL whose metadata loads": {
+    "S-132": 6,
+    "S-152": 6
+   },
+   "player | fail | host named by the card's title": {
+    "S-132": 6,
+    "S-152": 6
+   },
+   "player | cannot-determine | control inventory": {
+    "S-132": 6,
+    "S-152": 6
+   },
+   "player | cannot-determine | notification of these changes (4.1.2)": {
+    "S-127": 39
+   },
+   "player | cannot-determine | focus appearance (2.4.13)": {
+    "S-127": 183
+   },
+   "player | cannot-determine | focus visible (2.4.7)": {
+    "S-127": 39
+   }
+  }
+ },
+ "VH-193": {
+  "scenarios": 15,
+  "records": 181,
+  "absent": [],
+  "gaps": [],
+  "assertRows": {
+   "pass": 354,
+   "fail": 9,
+   "exempt": 11
+  },
+  "ins": {
+   "ax": {
+    "pass": 181
+   },
+   "overflow": {
+    "pass": 181
+   },
+   "targets": {
+    "cannot-determine": 179,
+    "pass": 2
+   },
+   "contrastText": {
+    "pass": 181
+   },
+   "contrastExtra": {
+    "cannot-determine": 179,
+    "pass": 2
+   },
+   "measure": {
+    "pass": 145,
+    "cannot-determine": 36
+   },
+   "type": {
+    "pass": 181
+   },
+   "focus": {
+    "pass": 179,
+    "cannot-determine": 2
+   },
+   "player": {
+    "pass": 160,
+    "not-applicable": 11,
+    "fail": 10
+   },
+   "formatTip": {
+    "not-applicable": 181
+   },
+   "footer": {
+    "pass": 181
+   },
+   "limiting": {
+    "pass": 133,
+    "not-applicable": 11,
+    "cannot-determine": 37
+   },
+   "videoLanguage": {
+    "pass": 181
+   },
+   "asserts": {
+    "fail": 9,
+    "pass": 161,
+    "not-applicable": 11
+   },
+   "subresults": {
+    "pass": 6
+   }
+  },
+  "bad": {
+   "asserts | fail | focus on the card": {
+    "S-59": 9
+   },
+   "player | fail | paused a second after the card appeared [finish+1s]": {
+    "S-59": 1,
+    "S-138": 3
+   },
+   "limiting | cannot-determine | first in the line spoken at completion, with every warning t": {
+    "S-137": 31,
+    "S-138": 6
+   },
+   "limiting | cannot-determine | unchanged after a save": {
+    "S-137": 31
+   },
+   "player | fail | an object URL whose metadata loads": {
+    "S-152": 6
+   },
+   "player | fail | host named by the card's title": {
+    "S-152": 6
+   },
+   "player | cannot-determine | control inventory": {
+    "S-152": 6
+   }
+  }
+ },
+ "VH-196": {
+  "scenarios": 6,
+  "records": 169,
+  "absent": [],
+  "gaps": [],
+  "assertRows": {
+   "pass": 453,
+   "exempt": 67
+  },
+  "ins": {
+   "ax": {
+    "pass": 169
+   },
+   "overflow": {
+    "pass": 169
+   },
+   "targets": {
+    "pass": 107,
+    "cannot-determine": 62
+   },
+   "contrastText": {
+    "pass": 169
+   },
+   "contrastExtra": {
+    "pass": 107,
+    "cannot-determine": 62
+   },
+   "measure": {
+    "pass": 138,
+    "cannot-determine": 31
+   },
+   "type": {
+    "pass": 169
+   },
+   "focus": {
+    "pass": 169
+   },
+   "pressed": {
+    "pass": 12
+   },
+   "player": {
+    "not-applicable": 169
+   },
+   "formatTip": {
+    "pass": 137,
+    "not-applicable": 32
+   },
+   "footer": {
+    "pass": 169
+   },
+   "limiting": {
+    "not-applicable": 169
+   },
+   "videoLanguage": {
+    "pass": 169
+   },
+   "asserts": {
+    "pass": 138,
+    "not-applicable": 31
+   }
+  },
+  "bad": {}
+ },
+ "VH-178": {
+  "scenarios": 8,
+  "records": 48,
+  "absent": [],
+  "gaps": [],
+  "assertRows": {
+   "exempt": 12,
+   "pass": 12
+  },
+  "ins": {
+   "keys": {
+    "pass": 20,
+    "cannot-determine": 4
+   },
+   "ax": {
+    "pass": 24
+   },
+   "overflow": {
+    "pass": 24
+   },
+   "targets": {
+    "pass": 12,
+    "cannot-determine": 12
+   },
+   "contrastText": {
+    "pass": 24
+   },
+   "contrastExtra": {
+    "pass": 12,
+    "cannot-determine": 12
+   },
+   "measure": {
+    "pass": 16,
+    "cannot-determine": 8
+   },
+   "type": {
+    "pass": 24
+   },
+   "focus": {
+    "pass": 24
+   },
+   "player": {
+    "not-applicable": 12,
+    "pass": 12
+   },
+   "formatTip": {
+    "not-applicable": 24
+   },
+   "footer": {
+    "pass": 24
+   },
+   "limiting": {
+    "not-applicable": 12,
+    "pass": 12
+   },
+   "videoLanguage": {
+    "pass": 24
+   },
+   "asserts": {
+    "not-applicable": 12,
+    "pass": 12
+   },
+   "subresults": {
+    "fail": 3
+   }
+  },
+  "bad": {
+   "subresults | fail | focus handed to the file input, the chooser that stays, neve": {
+    "S-149": 3
+   }
+  }
+ },
+ "VH-179": {
+  "scenarios": 14,
+  "records": 316,
+  "absent": [],
+  "gaps": [],
+  "assertRows": {
+   "pass": 759,
+   "exempt": 72
+  },
+  "ins": {
+   "ax": {
+    "pass": 316
+   },
+   "overflow": {
+    "pass": 316
+   },
+   "targets": {
+    "pass": 139,
+    "cannot-determine": 177
+   },
+   "contrastText": {
+    "pass": 316
+   },
+   "contrastExtra": {
+    "pass": 139,
+    "cannot-determine": 177
+   },
+   "measure": {
+    "pass": 263,
+    "cannot-determine": 53
+   },
+   "type": {
+    "pass": 316
+   },
+   "focus": {
+    "pass": 293,
+    "cannot-determine": 20,
+    "fail": 3
+   },
+   "pressed": {
+    "pass": 36
+   },
+   "player": {
+    "not-applicable": 194,
+    "pass": 122
+   },
+   "formatTip": {
+    "pass": 36,
+    "not-applicable": 280
+   },
+   "footer": {
+    "pass": 262,
+    "not-applicable": 54
+   },
+   "limiting": {
+    "not-applicable": 194,
+    "pass": 122
+   },
+   "videoLanguage": {
+    "pass": 316
+   },
+   "asserts": {
+    "pass": 280,
+    "not-applicable": 36
+   }
+  },
+  "bad": {
+   "focus | fail | #preset-choice input:checked": {
+    "S-15": 3
+   }
+  }
+ },
+ "VH-180": {
+  "scenarios": 10,
+  "records": 290,
+  "absent": [],
+  "gaps": [],
+  "assertRows": {
+   "pass": 433,
+   "exempt": 188
+  },
+  "ins": {
+   "ax": {
+    "pass": 290
+   },
+   "overflow": {
+    "pass": 290
+   },
+   "targets": {
+    "pass": 67,
+    "cannot-determine": 223
+   },
+   "contrastText": {
+    "pass": 290
+   },
+   "contrastExtra": {
+    "pass": 67,
+    "cannot-determine": 223
+   },
+   "measure": {
+    "pass": 235,
+    "cannot-determine": 55
+   },
+   "type": {
+    "pass": 290
+   },
+   "focus": {
+    "pass": 267,
+    "cannot-determine": 20,
+    "fail": 3
+   },
+   "pressed": {
+    "pass": 28
+   },
+   "player": {
+    "not-applicable": 250,
+    "pass": 40
+   },
+   "formatTip": {
+    "pass": 36,
+    "not-applicable": 254
+   },
+   "footer": {
+    "pass": 290
+   },
+   "limiting": {
+    "not-applicable": 250,
+    "pass": 40
+   },
+   "videoLanguage": {
+    "pass": 290
+   },
+   "asserts": {
+    "pass": 138,
+    "not-applicable": 152
+   }
+  },
+  "bad": {
+   "focus | fail | #preset-choice input:checked": {
+    "S-15": 3
+   }
+  }
+ },
+ "VH-181": {
+  "scenarios": 10,
+  "records": 340,
+  "absent": [],
+  "gaps": [],
+  "assertRows": {
+   "pass": 732,
+   "exempt": 172
+  },
+  "ins": {
+   "ax": {
+    "pass": 340
+   },
+   "overflow": {
+    "pass": 340
+   },
+   "targets": {
+    "pass": 36,
+    "cannot-determine": 304
+   },
+   "contrastText": {
+    "pass": 340
+   },
+   "contrastExtra": {
+    "pass": 36,
+    "cannot-determine": 304
+   },
+   "measure": {
+    "pass": 277,
+    "cannot-determine": 63
+   },
+   "type": {
+    "pass": 340
+   },
+   "focus": {
+    "pass": 317,
+    "cannot-determine": 20,
+    "fail": 3
+   },
+   "pressed": {
+    "pass": 28
+   },
+   "player": {
+    "not-applicable": 300,
+    "pass": 40
+   },
+   "formatTip": {
+    "pass": 36,
+    "not-applicable": 304
+   },
+   "footer": {
+    "pass": 340
+   },
+   "limiting": {
+    "not-applicable": 300,
+    "pass": 40
+   },
+   "videoLanguage": {
+    "pass": 340
+   },
+   "asserts": {
+    "pass": 216,
+    "not-applicable": 124
+   }
+  },
+  "bad": {
+   "focus | fail | #preset-choice input:checked": {
+    "S-15": 3
+   }
+  }
+ }
+}

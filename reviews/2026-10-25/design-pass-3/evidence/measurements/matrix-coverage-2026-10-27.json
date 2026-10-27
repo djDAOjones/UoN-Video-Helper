@@ -1,0 +1,317 @@
+{
+ "dirs": [
+  "run-01-2026-10-26T12-20-53-837Z-5f97fb",
+  "run-02-2026-10-26T13-43-03-102Z-5e74aa",
+  "run-03-2026-10-26T17-08-32-217Z-c5fa9f",
+  "run-04-2026-10-26T17-47-08-808Z-d32f0f",
+  "run-05-2026-10-26T20-47-32-904Z-541edc",
+  "run-06-2026-10-27T00-08-59-773Z-753cf3",
+  "run-07-2026-10-27T01-23-38-939Z-41d41a",
+  "run-08-2026-10-27T02-49-02-205Z-c2d97d",
+  "run-09-2026-10-27T03-48-28-340Z-6d6b18",
+  "run-09-part-2026-10-27T05-04-47-007Z-e6d366",
+  "run-10-2026-10-27T05-45-03-929Z-0d1d37",
+  "run-11-part-2026-10-27T09-12-14-585Z-f0fb63",
+  "run-12-2026-10-27T09-45-16-049Z-a8fe58"
+ ],
+ "runs": [
+  {
+   "name": "run-01",
+   "part": "1",
+   "expected": 369,
+   "ok": 369,
+   "fromDirs": {
+    "run-01-2026-10-26T12-20-53-837Z-5f97fb": 369
+   },
+   "missing": [],
+   "transitions": 0
+  },
+  {
+   "name": "run-02",
+   "part": "1",
+   "expected": 330,
+   "ok": 330,
+   "fromDirs": {
+    "run-02-2026-10-26T13-43-03-102Z-5e74aa": 330
+   },
+   "missing": [],
+   "transitions": 0
+  },
+  {
+   "name": "run-03",
+   "part": "2",
+   "expected": 157,
+   "ok": 157,
+   "fromDirs": {
+    "run-03-2026-10-26T17-08-32-217Z-c5fa9f": 157
+   },
+   "missing": [],
+   "transitions": 48
+  },
+  {
+   "name": "run-04",
+   "part": "3",
+   "expected": 358,
+   "ok": 355,
+   "fromDirs": {
+    "run-04-2026-10-26T17-47-08-808Z-d32f0f": 355
+   },
+   "missing": [
+    {
+     "key": "S-107__en-GB__w1280__fallback",
+     "dir": "run-04-2026-10-26T17-47-08-808Z-d32f0f",
+     "status": "failed",
+     "why": "state predicate false: (() => { const M = window.__mx; return (M.el('#check-worker')?.dataset.state === 'pending' && M.has('choose.starting', '"
+    },
+    {
+     "key": "S-107__zh-Hans__w1280__fallback",
+     "dir": "run-04-2026-10-26T17-47-08-808Z-d32f0f",
+     "status": "failed",
+     "why": "state predicate false: (() => { const M = window.__mx; return (M.el('#check-worker')?.dataset.state === 'pending' && M.has('choose.starting', '"
+    },
+    {
+     "key": "S-107__ms-MY__w1280__fallback",
+     "dir": "run-04-2026-10-26T17-47-08-808Z-d32f0f",
+     "status": "failed",
+     "why": "state predicate false: (() => { const M = window.__mx; return (M.el('#check-worker')?.dataset.state === 'pending' && M.has('choose.starting', '"
+    }
+   ],
+   "transitions": 0
+  },
+  {
+   "name": "run-05",
+   "part": "3",
+   "expected": 383,
+   "ok": 383,
+   "fromDirs": {
+    "run-05-2026-10-26T20-47-32-904Z-541edc": 383
+   },
+   "missing": [],
+   "transitions": 0
+  },
+  {
+   "name": "run-06",
+   "part": "3",
+   "expected": 338,
+   "ok": 335,
+   "fromDirs": {
+    "run-06-2026-10-27T00-08-59-773Z-753cf3": 335
+   },
+   "missing": [
+    {
+     "key": "S-55c__en-GB__w1280__fallback",
+     "dir": "run-06-2026-10-27T00-08-59-773Z-753cf3",
+     "status": "failed",
+     "why": "setup: timeout waiting for boot"
+    },
+    {
+     "key": "S-55c__zh-Hans__w1280__fallback",
+     "dir": "run-06-2026-10-27T00-08-59-773Z-753cf3",
+     "status": "failed",
+     "why": "setup: timeout waiting for boot"
+    },
+    {
+     "key": "S-55c__ms-MY__w1280__fallback",
+     "dir": "run-06-2026-10-27T00-08-59-773Z-753cf3",
+     "status": "failed",
+     "why": "setup: timeout waiting for boot"
+    }
+   ],
+   "transitions": 0
+  },
+  {
+   "name": "run-07",
+   "part": "3",
+   "expected": 355,
+   "ok": 355,
+   "fromDirs": {
+    "run-07-2026-10-27T01-23-38-939Z-41d41a": 355
+   },
+   "missing": [],
+   "transitions": 0
+  },
+  {
+   "name": "run-08",
+   "part": "3",
+   "expected": 367,
+   "ok": 367,
+   "fromDirs": {
+    "run-08-2026-10-27T02-49-02-205Z-c2d97d": 367
+   },
+   "missing": [],
+   "transitions": 0
+  },
+  {
+   "name": "run-09",
+   "part": "3",
+   "expected": 330,
+   "ok": 326,
+   "fromDirs": {
+    "run-09-2026-10-27T03-48-28-340Z-6d6b18": 74,
+    "run-09-part-2026-10-27T05-04-47-007Z-e6d366": 252
+   },
+   "missing": [
+    {
+     "key": "S-133__en-GB__w1280__light",
+     "why": "not recorded"
+    },
+    {
+     "key": "S-133__zh-Hans__w1280__light",
+     "why": "not recorded"
+    },
+    {
+     "key": "S-133__ms-MY__w1280__light",
+     "why": "not recorded"
+    },
+    {
+     "key": "S-133__en-GB__w320__light",
+     "why": "not recorded"
+    }
+   ],
+   "transitions": 0
+  },
+  {
+   "name": "run-10",
+   "part": "3b",
+   "expected": 103,
+   "ok": 103,
+   "fromDirs": {
+    "run-10-2026-10-27T05-45-03-929Z-0d1d37": 103
+   },
+   "missing": [],
+   "transitions": 0
+  },
+  {
+   "name": "run-11",
+   "part": "3b",
+   "expected": 113,
+   "ok": 111,
+   "fromDirs": {
+    "run-11-part-2026-10-27T09-12-14-585Z-f0fb63": 111
+   },
+   "missing": [
+    {
+     "key": "S-133__zh-Hans__w320__light",
+     "why": "not recorded"
+    },
+    {
+     "key": "S-133__ms-MY__w320__light",
+     "why": "not recorded"
+    }
+   ],
+   "transitions": 0
+  },
+  {
+   "name": "run-12",
+   "part": "4",
+   "expected": 16,
+   "ok": 16,
+   "fromDirs": {
+    "run-12-2026-10-27T09-45-16-049Z-a8fe58": 16
+   },
+   "missing": [],
+   "transitions": 0
+  }
+ ],
+ "total": {
+  "expected": 3219,
+  "observed": 3207
+ },
+ "extra": [],
+ "byClass": {
+  "lang": {
+   "en-GB": {
+    "expected": 1325,
+    "observed": 1321
+   },
+   "zh-Hans": {
+    "expected": 951,
+    "observed": 947
+   },
+   "ms-MY": {
+    "expected": 943,
+    "observed": 939
+   }
+  },
+  "view": {
+   "w1280": {
+    "expected": 1720,
+    "observed": 1711
+   },
+   "w375": {
+    "expected": 437,
+    "observed": 437
+   },
+   "w320": {
+    "expected": 949,
+    "observed": 946
+   },
+   "landscape": {
+    "expected": 16,
+    "observed": 16
+   },
+   "short": {
+    "expected": 16,
+    "observed": 16
+   },
+   "zoom200proxy": {
+    "expected": 32,
+    "observed": 32
+   },
+   "zoom400proxy": {
+    "expected": 34,
+    "observed": 34
+   },
+   "w640": {
+    "expected": 3,
+    "observed": 3
+   },
+   "w401": {
+    "expected": 6,
+    "observed": 6
+   },
+   "w400": {
+    "expected": 3,
+    "observed": 3
+   },
+   "w800": {
+    "expected": 3,
+    "observed": 3
+   }
+  },
+  "mode": {
+   "light": {
+    "expected": 1527,
+    "observed": 1521
+   },
+   "dark": {
+    "expected": 289,
+    "observed": 289
+   },
+   "forced-light": {
+    "expected": 289,
+    "observed": 289
+   },
+   "forced-dark": {
+    "expected": 289,
+    "observed": 289
+   },
+   "spacing": {
+    "expected": 323,
+    "observed": 323
+   },
+   "reduced-motion": {
+    "expected": 70,
+    "observed": 70
+   },
+   "fallback": {
+    "expected": 210,
+    "observed": 204
+   },
+   "font32": {
+    "expected": 222,
+    "observed": 222
+   }
+  }
+ }
+}

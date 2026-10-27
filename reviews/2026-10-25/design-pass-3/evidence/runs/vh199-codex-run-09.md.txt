@@ -1,0 +1,20 @@
+<!-- markdownlint-disable -->
+<!-- VH-199: Codex astra's blind attribution of run-09 (codex exec -m gpt-6-astra -s read-only), from vh199-codex-run-09-brief.md; the reply, copied verbatim from the orchestrator's notes folder at the close, 2026-10-27. Kept as .md.txt: its links are absolute paths with spaces, which the repository's link check reads as broken; the text is unchanged. -->
+
+1. **Whole? No.** `run.json` and frozen `parts.mjs RUNS` agree on **330 records**. There are **136 current records: 123 ok, 13 failed; 194 unwritten**. One unwritten record entered setup; 193 were not attempted. Another **19 failed attempts** remain in `superseded/`. All 155 written attempts carry revision `2e7b0c044ce11f2b`; no ok record lacks its declared subjects or required instruments. `Run.verify()` reports only the 13 failures and 194 missing records. All **851 artifact hashes** match; six used fixtures match their pinned identities. Neither manifest nor digest exists.
+
+2. **Both stalls are the same instrument fault:** `S-133__en-GB__w1280__light`, at the first reload between the cancelled **F4a** save and the **F4b** case. `finishedWithPlayer()` eventually calls `goto()`, leaving an unsaved result. The app correctly raises `beforeunload`; S-133 installs no handler. Navigation/loading then waits indefinitely, without a deadline.
+
+   The walk’s final Save click is **04:13:14**; resume 1’s is **04:30:36**. The surviving group log corroborates resume 1; its constructor overwrites the earlier group log. The probe records three `beforeunload` dialogs, at **3, 32 and 55 seconds**, and completes setup when each is accepted after 20 seconds. This establishes an instrument deadlock, rather than machine load or an app crash. See [S-133’s setup](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/evidence/measurements/walker/scenarios.mjs:2262>).
+
+3. **Attribution:** inspection of every record’s `instruments` finds **51 failing measurement rows and no failed assertions**.
+
+   - **S-120: all 13 current failures and all 19 superseded attempts — known grouping pattern.** Setup establishes checkbox focus once; instruments subsequently blur it. Later modes fail the focus-dependent state predicate. Resume recovered six records, exactly one per pending group.
+   - **S-109: 13 “paused a second after the card appeared” failures — instrument fault.** A delayed DOM query samples the discard question, when the player is detached, recording `player:false, paused:null`. It then attributes that sample to the restored player. Saved mutations confirm the intervening question. Affected cells: all languages’ w375/light and w320/light/spacing; English w320/dark/forced-light/forced-dark; Malay w1280/fallback. See [timer and sampling code](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/evidence/measurements/walker/phase8.mjs:77>).
+   - **S-100 (4), S-109 (31), S-130 (3): 38 scrubber target failures — expected exception.** Each explicitly records native sizing and exemption. Applied digest rule: **WCAG 2.5.5’s user-agent exception**, supported by the player proof.
+   - **S-102 — app observation for VH-200/VH-185.1:** the untrimmed sub-400-ms sound file reaches the loudness refusal. Its observation is explicitly `not-counted`, not a failed assertion.
+   - Remaining “cannot determine” readings concern circular thumbs, painted contrast and mixed-script measure: declared interpretation/person checks.
+
+4. **Stop? Yes, for instrument correction:** S-133 blocks completion; S-109’s timer makes those player verdicts unreliable. Handle all three inter-case reload dialogs, correct/requalify sampling, complete the missing records and recover S-120. Preserve truthful revision provenance when rerunning. No coverage reduction is justified, and this partial run evidences no new app rank 1 problem.
+
+5. **Not fit.**
