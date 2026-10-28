@@ -1,0 +1,7 @@
+#!/bin/zsh
+# vh213: wait for the walk lock (checking every 60 s), take it with mkdir, write owner.txt.
+N=/Users/joe/UoN-Video-Helper-side
+WHAT=$1
+while ! mkdir "$N/walk.lock" 2>/dev/null; do sleep 60; done
+printf 'VH-213 #3\n%s\n%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$WHAT" > "$N/walk.lock/owner.txt"
+echo "LOCK TAKEN $(date -u +%H:%M:%SZ)"

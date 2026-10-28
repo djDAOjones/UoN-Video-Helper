@@ -85,15 +85,20 @@ export interface AudioPlan {
 }
 
 /**
- * What a pass over a kept range gives when the range holds too little sound
- * to level (VH-185): the job is a silent one. Where the sound decoded there
- * ends is still said, so a sliver that decoded whole is never told as a file
- * that stops early (VH-139).
+ * What a pass gives when the part kept holds too little sound to level
+ * (VH-185), whether a trim kept it or the whole video is kept (VH-213): the
+ * job is a silent one. Where the sound decoded there ends is still said, so a
+ * sliver that decoded whole is never told as a file that stops early (VH-139).
  */
 export interface KeptSilence {
   readonly silent: true
   /** Where the last sound decoded in the part kept ends, or `null` when none decoded. */
   readonly decodedEndSeconds: number | null
+  /**
+   * Present when nothing was trimmed, so the part kept is the whole video
+   * (VH-213): its way forward is not a trim's, and it is worded apart.
+   */
+  readonly whole?: true
 }
 
 /** What one traversal produced. */
@@ -106,23 +111,24 @@ interface Traversal {
 }
 
 /**
- * Whether a kept range holds too little sound to level: less than one of the
+ * Whether the part kept holds too little sound to level: less than one of the
  * meter's gating blocks, so no block can be measured and the part's loudness
  * is no number at all. A sliver of a late sound — 22 ms of priming kept
  * before a cut (VH-139.6) — is a silent part, not one the output check
- * refuses after the whole encode (VH-185). Untrimmed, unchanged.
+ * refuses after the whole encode (VH-185). The same for an untrimmed video,
+ * whose part kept is the whole (VH-213). Decoded sound decides: the silence
+ * that fills a gap is never counted as sound.
  */
-function keptTooLittleSound(
-  traversal: Traversal,
-  range: KeptRange | null,
-  sampleRate: number,
-): boolean {
-  return range !== null && traversal.decodedFrames / sampleRate < BLOCK_SECONDS
+function keptTooLittleSound(traversal: Traversal, sampleRate: number): boolean {
+  return traversal.decodedFrames / sampleRate < BLOCK_SECONDS
 }
 
-/** A silent keep, from a traversal of the source. */
-function keptSilence(traversal: Traversal): KeptSilence {
-  return { silent: true, decodedEndSeconds: traversal.analysis.decodedEndSeconds ?? null }
+/** A silent keep, from a traversal of the source; `range` is `null` for the whole video. */
+function keptSilence(traversal: Traversal, range: KeptRange | null): KeptSilence {
+  const decodedEndSeconds = traversal.analysis.decodedEndSeconds ?? null
+  return range
+    ? { silent: true, decodedEndSeconds }
+    : { silent: true, decodedEndSeconds, whole: true }
 }
 
 /**
@@ -278,10 +284,10 @@ export async function analyseSourceAudio(
   ])
   const traversal = await traverse(track, sampleRate, channelCount, null, signal, range, true)
   // A kept range can hold no sound — the track starts after the out-point,
-  // or the cut sits inside a hole — or less than the meter can measure. That
-  // is a silent source, and says so, rather than an analysis of nothing
-  // (Codex review, VH-185).
-  if (keptTooLittleSound(traversal, range, sampleRate)) return keptSilence(traversal)
+  // or the cut sits inside a hole — or less than the meter can measure, and
+  // so can a whole video (VH-213). That is a silent source, and says so,
+  // rather than an analysis of nothing (Codex review, VH-185).
+  if (keptTooLittleSound(traversal, sampleRate)) return keptSilence(traversal, range)
   return traversal.analysis
 }
 
@@ -344,12 +350,12 @@ export async function planAudio(
     true,
     onSample,
   )
-  // Nothing to level: the kept range holds no sound, or less than one block.
-  // The job is a silent one and the caller adds no audio track (Codex
-  // review, VH-185).
-  if (keptTooLittleSound(source, range, sampleRate)) {
+  // Nothing to level: the part kept, trimmed or whole, holds no sound, or
+  // less than one block. The job is a silent one and the caller adds no
+  // audio track (Codex review, VH-185; VH-213).
+  if (keptTooLittleSound(source, sampleRate)) {
     log.info('audio', 'kept range holds no sound; treating the job as silent')
-    return keptSilence(source)
+    return keptSilence(source, range)
   }
   const { analysis } = source
   const envelope = buildGainEnvelope({

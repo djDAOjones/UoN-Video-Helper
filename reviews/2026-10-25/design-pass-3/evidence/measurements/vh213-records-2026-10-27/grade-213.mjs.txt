@@ -1,0 +1,8 @@
+// The repo's own syllables() and readingGrade() (test/readability.test.ts), read from the file, types stripped, run on the new and old en-GB words.
+import { readFileSync } from 'node:fs'
+const src = readFileSync(process.argv[2], 'utf8')
+const fn = (name) => { const m = src.match(new RegExp(`(?:export )?function ${name}\\([\\s\\S]*?\\n}\\n`)); return m[0].replace(/^export /, '').replace(/\(word: string\): number/, '(word)').replace(/\(text: string\): number \| null/, '(text)') }
+const code = fn('syllables') + fn('readingGrade') + 'return { syllables, readingGrade }'
+const { readingGrade } = new Function(code)()
+const LIMIT = Number(src.match(/const READING_GRADE_LIMIT = (\d+)/)[1]), PROSE = Number(src.match(/const PROSE_WORDS = (\d+)/)[1])
+for (const t of process.argv.slice(3)) { const words = t.split(/\s+/).length; const sentences = t.split(/(?<=[.!?])\s+/).filter((p) => /\w/.test(p)).length; const g = readingGrade(t); console.log(JSON.stringify({ text: t, words, sentences, grade: g == null ? null : Math.round(g * 10) / 10, measured: words >= PROSE, limit: LIMIT, over: words >= PROSE && g > LIMIT })) }

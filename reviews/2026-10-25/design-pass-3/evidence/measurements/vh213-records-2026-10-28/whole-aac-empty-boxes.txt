@@ -1,0 +1,14 @@
+/ftyp bytes 24
+/moov/mvhd bytes 108
+/moov/trak/tkhd track 1 duration 0
+/moov/trak/mdia/mdhd timescale 12800 duration 0
+/moov/trak/mdia/hdlr handler vide
+/moov/trak/mdia/minf/stbl/stsz sample_count 0
+/moov/trak/tkhd track 2 duration 0
+/moov/trak/mdia/mdhd timescale 48000 duration 0
+/moov/trak/mdia/hdlr handler soun
+/moov/trak/mdia/minf/stbl/stsz sample_count 0
+/moof/traf/tfhd track 1
+/moof/traf/trun sample_count 250
+/mdat bytes 3170701
+/mfra bytes 67

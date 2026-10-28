@@ -1,0 +1,24 @@
+Verdict: Commit
+
+1. **Musts — none.**
+2. **Shoulds — none.**
+3. **Note — ledger conforms.** The newest [decision:21](/Users/joe/UoN-Video-Helper-side/vh213/project/decisions.md:21) records both owner answers faithfully, names VH-185’s heading exactly, and limits supersession to untrimmed scope. VH-213’s removal follows [backlog:3](/Users/joe/UoN-Video-Helper-side/vh213/project/backlog.md:3); [trajectory:36](/Users/joe/UoN-Video-Helper-side/vh213/project/trajectory.md:36) is one truthful line at Phase 8’s end. [Wish-list:62](/Users/joe/UoN-Video-Helper-side/vh213/project/wish-list.md:62) fairly captures must 1 for both paths. No deferral lacks a line. VH-185.1’s promotion is traced in commit `446f702`, and its closure in decision:23. Item Now and Notes agree.
+4. **Note — archive correct.** [VH-171:1079](/Users/joe/UoN-Video-Helper-side/vh213/project/decisions-2026-10.md:1079) moved verbatim; [index:3](/Users/joe/UoN-Video-Helper-side/vh213/project/archive-index.md:3) correctly lists 96 entries through 23 October, including VH-171.
+5. **Note — candidate verified.** Full diff SHA-1: `23b9041d1c852c8163dbcf82af86f189ab37899d`. The original 16-file diff remains `cd985a8d4dcf…`; source/walker hashes and all 52+15 record hashes match. The [table:108](/Users/joe/UoN-Video-Helper-side/vh213/reviews/2026-10-25/design-pass-3/evidence/measurements/vh213-whole-sub-block-2026-10-27.md:108), records and links agree. Inventory: 24 tracked changes, 74 untracked, nothing staged. No additional defect found. Both withheld files stayed unopened.
+6. **Note — commit obligations.** Owed: `Verify:` with the supplied gate results; `Checked: gpt-6-astra — Commit — VH-185.1`; and the body quoting “Same rule as a trim (Recommended)” and “Yes, all three” with their [sources:44](/Users/joe/UoN-Video-Helper-side/vh213/project/items/VH-213.md:44). Name Nielsen 1, “status visible and announced”; Nielsen 9, “errors say what next”; house-conventions “Fail loudly on data loss”; and “warns before processing starts”. Absence of this close verdict from the ledger is correct.
+
+- **Owner’s choice/rule — met**, including the authorised exception (item:44–45; decision:23).
+- **Reason carried — met:** three causes reach the worker and wording ([warnings.ts:40](/Users/joe/UoN-Video-Helper-side/vh213/src/audio/warnings.ts:40)).
+- **Owner’s words — met:** all languages verbatim; translations marked (table:60).
+- **S-102 predicate — met:** strengthened and proved before the after-read (table:36).
+- **Spec row — met:** approved widening; 8,123 words, 77 free ([spec:324](/Users/joe/UoN-Video-Helper-side/vh213/docs/01-specification.md:324)).
+- **Sheet — met:** notes, CSV and tables agree ([sheet.ts:453](/Users/joe/UoN-Video-Helper-side/vh213/src/i18n/sheet.ts:453)).
+- **Tests — met:** obsolete untrimmed assertion meaningfully replaced; trimmed cases preserved; no other deletion, weakening or new skip ([sub-block-sound.test.ts:164](/Users/joe/UoN-Video-Helper-side/vh213/src/media/sub-block-sound.test.ts:164)).
+- **Stage measurements — met:** boundaries, controls, modes and output tracks, including zero decoded (table:32, 167).
+- **Stage WCAG — met within stated scope**, with reading level assessed in English (table:94).
+- **Stage tokens/elements — met:** no production numeric literal, CSS, control or element added (table:100; diff).
+- **Stage documents — met:** approved spec row only; UI-STANDARDS unchanged, 2,393 words.
+- **Stage gate — met on supplied evidence:** 1,598 passed, one pre-existing skip; checker zero failures, existing warning covered by wish VH-122.1. Not rerun. Commit declarations owed.
+- **Stage Codex check — met by this review;** `Checked:` owed.
+- **Stage linkage — met** ([Disposition:759](/Users/joe/UoN-Video-Helper-side/vh213/reviews/2026-10-25/design-pass-3/design-pass-3-2026-10-27.md:759)).
+- **Sized — met as recorded:** seven workers handed back under VH-213; no remedy expanded its scope (item:46).

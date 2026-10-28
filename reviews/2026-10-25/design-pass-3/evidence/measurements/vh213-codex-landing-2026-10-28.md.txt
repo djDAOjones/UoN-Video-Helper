@@ -1,0 +1,15 @@
+Verdict: Commit
+
+1. **Musts — none.**
+
+2. **Shoulds — refresh three dates.** [VH-212:25](/Users/joe/UoN-Video-Helper-side/vh213/project/items/VH-212.md:25), [VH-214:25](/Users/joe/UoN-Video-Helper-side/vh213/project/items/VH-214.md:25) and [VH-215:25](/Users/joe/UoN-Video-Helper-side/vh213/project/items/VH-215.md:25) still say `Updated: 2026-10-27`, although their Now sections were rewritten on 28 October. Change these to `2026-10-28`, following the item schema’s “date of its last rewrite”. This is a minor record correction.
+
+3. **Note — rebase verified.** The 103-file diff hashes to `b71b2ceb834fa064fc5784fe4e5fa4f84215bd5a`. All 91 permitted non-project patches match before and after rebasing, ignoring hunk positions and blob headers; the two excluded files have identical blob IDs. The reverse comparison also preserves all 206 landed non-project patches. VH-208’s S-136/S-91 assertions and `renderWarnings` changes remain intact beside VH-213’s additions.
+
+4. **Note — ledger preserved.** No landed decision, trajectory line or wish line was lost or altered. The PLAN-7 and VH-174 entries moved verbatim, including whitespace; the archive index correctly reports 100 entries. VH-213’s close decision is unchanged.
+
+5. **Note — order reconciled.** The [new PLAN-8 entry:21](/Users/joe/UoN-Video-Helper-side/vh213/project/decisions.md:21) names VH-211’s heading exactly in Supersedes and limits supersession to build order. The four Next-step lines agree with it; VH-212’s wording approval remains a prerequisite. VH-225 remains last before VH-203, and VH-226 after VH-204. The decision slice is exactly 1,000 words. The owner quotations are consistent with the repository record; their external originals were not consulted.
+
+6. **Note — Landing is accurate.** [§8:216](/Users/joe/UoN-Video-Helper-side/vh213/reviews/2026-10-25/design-pass-3/evidence/measurements/vh213-whole-sub-block-2026-10-27.md:216) correctly distinguishes the preserved measurements on `5893d9d` from VH-203’s future combined after-run.
+
+7. **Note — amendment bookkeeping.** Update the commit’s stale `Verify:` account to the supplied rebased result: 1,600 passed, one pre-existing skip, AC/load 5.67; carry this landing verdict in `Checked:`. The gate was not rerun. Both excluded reviews stayed unopened; no files were changed.

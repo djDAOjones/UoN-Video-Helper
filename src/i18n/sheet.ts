@@ -450,6 +450,10 @@ const NOTES: Readonly<Record<string, string>> = {
     'Said in place of warnings.noAudio.heading when the file has audio but the part the trim kept holds too little of it to level. Warning headings are read one after another inside warnings.spoken, so no full stop.',
   'warnings.keptTooLittleAudio.detail':
     'Said in place of warnings.noAudio.detail. "The start or end time" are the trim\'s two times: use the same words as trim.startTime and trim.endTime. "The new video" is the one this tool makes.',
+  'warnings.wholeTooLittleAudio.heading':
+    'Said in place of warnings.noAudio.heading when the file has audio but the whole video, with nothing trimmed, holds too little of it to level. Warning headings are read one after another inside warnings.spoken, so no full stop.',
+  'warnings.wholeTooLittleAudio.detail':
+    'Said in place of warnings.noAudio.detail. "Level" means the same as in warnings.keptTooLittleAudio.heading. "The new video" is the one this tool makes; "your original file" is the one the person chose, which is never changed.',
   'result.summaryWithCard.staff':
     'The card a staff video opens with. Use the same words for "staff" as videoKind.options.staff and for "title card" as steps.titleCard.',
   'result.summaryWithCard.submission':

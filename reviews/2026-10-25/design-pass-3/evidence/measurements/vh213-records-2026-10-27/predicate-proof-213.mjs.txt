@@ -1,0 +1,181 @@
+// VH-213: S-102's strengthened predicate proved on the candidate page, before
+// any after cell is read; VH-206's predicate-proof-206.mjs, its cases and
+// expressions changed. For each language: the candidate page with the
+// walker's own MX_INIT and QUAL_INIT, the language chosen as the walker
+// chooses it, window.__mx.tables[lang] loaded. Then:
+//  1. the note: #audio-warnings is given one visible warning notification
+//     holding the case's headings, and each expression, read from the walkers'
+//     own exports and SCENARIOS (candidate and base, not retyped), is
+//     evaluated in the wrapper its walker uses;
+//  2. the state: #process-result is given a finished card or a failure card,
+//     and both walkers' S-102 state is evaluated as assertReached wraps it;
+//  3. the tracks: the finished card is given the walker's player
+//     (video.result-player) over a blob of a known fixture, and the
+//     candidate's own outputTracks(w) reads it (ffprobe); with no player it
+//     is null;
+//  4. the asserts: the candidate's S-102 assert rows, run as assertRows runs
+//     them, on seen values that pass and on each one that should fail.
+//
+//   CAND_WALKER=<cand walker> BASE_WALKER=<base walker> APP_URL=http://127.0.0.1:5181/ CDP_PORT=9251 \
+//   FIX=<fixtures> OUT_ROOT=<scratch>/out-proof RESULTS=<results dir> SOURCE=<candidate id> \
+//     node predicate-proof-213.mjs
+import { execFileSync } from 'node:child_process'
+import { readFileSync, writeFileSync } from 'node:fs'
+import { join, resolve } from 'node:path'
+import { pathToFileURL } from 'node:url'
+
+const env = (k) => { const v = process.env[k]; if (!v) throw new Error(`set ${k}`); return v }
+const CAND = resolve(env('CAND_WALKER')), BASE = resolve(env('BASE_WALKER')), RESULTS = resolve(env('RESULTS')), FIX = resolve(env('FIX'))
+env('APP_URL'); env('CDP_PORT'); env('OUT_ROOT')
+const imp = (dir, f) => import(pathToFileURL(join(dir, f)).href)
+const { connectBrowser } = await imp(CAND, 'cdp.mjs')
+const { Walk, sleep } = await imp(CAND, 'walk.mjs')
+const { QUAL_INIT, setViewport } = await imp(CAND, 'qualify.mjs')
+const { SCENARIOS: SC_CAND, MX_INIT, fresh, WHOLE_NOTE, outputTracks } = await imp(CAND, 'scenarios.mjs')
+const { SCENARIOS: SC_BASE } = await imp(BASE, 'scenarios.mjs')
+
+const sh = (cmd, a) => { try { return execFileSync(cmd, a, { encoding: 'utf8' }).trim() } catch (e) { return 'error: ' + String(e.message).slice(0, 120) } }
+const power = () => {
+  const batt = sh('pmset', ['-g', 'batt']); const pm = sh('pmset', ['-g']).split('\n').filter((l) => /powermode/i.test(l)).map((l) => l.trim()).join('; ')
+  const up = sh('uptime', []); const load = (up.match(/load averages?: ([\d.]+)[ ,]+([\d.]+)[ ,]+([\d.]+)/) || []).slice(1).map(Number)
+  return { t: new Date().toISOString(), ac: /AC Power/.test(batt), batt: batt.split('\n').map((l) => l.trim()).join(' | '), powermode: pm, uptime: up, load1: load[0], load }
+}
+
+// ---------------------------------------------------------------------------
+// The expressions, read from the walkers' own declarations.
+const one = (arr, what) => { if (arr.length !== 1) throw new Error(`${what}: ${arr.length} matches`); return arr[0] }
+const unwrap = (s, what) => one([...s.matchAll(/^\(\(\) => \{ const M = window\.__mx; return \(([\s\S]*)\); \}\)\(\)$/g)].map((m) => m[1]), what)
+const candSetup = SC_CAND['S-102'].setup.toString()
+if (!candSetup.includes('o.wholeNote = await mx(w, WHOLE_NOTE)')) throw new Error('the candidate S-102 setup does not read WHOLE_NOTE')
+if (!candSetup.includes('o.tracks = await outputTracks(w)')) throw new Error('the candidate S-102 setup does not read outputTracks')
+const nab = (SC, id, which) => one([...SC[id].setup.toString().matchAll(/noAudioBefore = await mx\(w, `([^`]*)`\)/g)].map((m) => m[1]), `${which} ${id} noAudioBefore`)
+const NOTE_EX = {
+  'S-102 wholeNote (candidate)': { expr: WHOLE_NOTE, how: 'mx(): const M = window.__mx; return expr (raw value); asserted === true' },
+  'S-99 state (candidate, unchanged)': { expr: unwrap(SC_CAND['S-99'].state, 'S-99'), how: '!!(expr)' },
+  'S-101 noAudioBefore (candidate, unchanged)': { expr: nab(SC_CAND, 'S-101', 'candidate'), how: 'raw; asserted === false' },
+  'S-153 noAudioBefore (candidate, unchanged)': { expr: nab(SC_CAND, 'S-153', 'candidate'), how: 'raw; asserted === false' },
+}
+for (const [id, k] of [['S-99', 'state'], ['S-20', 'state']]) if (SC_CAND[id][k] !== SC_BASE[id][k]) throw new Error(`${id} ${k} differs between the walkers`)
+for (const id of ['S-101', 'S-153']) if (nab(SC_CAND, id, 'c') !== nab(SC_BASE, id, 'b')) throw new Error(`${id} noAudioBefore differs between the walkers`)
+const STATE = { candidate: SC_CAND['S-102'].state, base: SC_BASE['S-102'].state }
+
+const NOTE_CASES = {
+  'no track': ['warnings.noAudio.heading'],
+  'part kept': ['warnings.keptTooLittleAudio.heading'],
+  'whole video': ['warnings.wholeTooLittleAudio.heading'],
+  'whole video and ends early': ['warnings.wholeTooLittleAudio.heading', 'warnings.endsEarly.heading'],
+  'ends early': ['warnings.endsEarly.heading'],
+  empty: [],
+}
+const NOTE_EXPECT = {
+  'S-102 wholeNote (candidate)': { 'no track': false, 'part kept': false, 'whole video': true, 'whole video and ends early': false, 'ends early': false, empty: false },
+  'S-99 state (candidate, unchanged)': { 'no track': false, 'part kept': true, 'whole video': false, 'whole video and ends early': false, 'ends early': false, empty: false },
+  'S-101 noAudioBefore (candidate, unchanged)': { 'no track': true, 'part kept': true, 'whole video': false, 'whole video and ends early': false, 'ends early': false, empty: false },
+  'S-153 noAudioBefore (candidate, unchanged)': { 'no track': true, 'part kept': true, 'whole video': false, 'whole video and ends early': false, 'ends early': false, empty: false },
+}
+const UNHIDE = (id) => `const box = document.getElementById('${id}'); const unhid = []; for (let e = box; e && e.nodeType === 1; e = e.parentElement) if (e.hasAttribute('hidden')) { e.removeAttribute('hidden'); unhid.push(e.id || e.tagName.toLowerCase()); } box.innerHTML = '';`
+const setNote = (keys) => `(() => { const M = window.__mx; ${UNHIDE('audio-warnings')}
+  const headings = ${JSON.stringify(keys)}.map((k) => M.msg(k));
+  if (headings.length) { const d = document.createElement('div'); d.className = 'notification'; d.dataset.kind = 'warning'; const p = document.createElement('p'); p.className = 'notification-title'; p.textContent = M.msg('preflight.headings.warnOne') && typeof M.msg('preflight.headings.warnOne') === 'string' ? M.msg('preflight.headings.warnOne') : 'Notes'; d.appendChild(p);
+    const ul = document.createElement('ul'); ul.className = 'notification-list'; for (const h of headings) { const li = document.createElement('li'); const t = document.createElement('p'); t.className = 'notification-item-title'; t.textContent = h; li.appendChild(t); ul.appendChild(li); } d.appendChild(ul); box.appendChild(d); }
+  return { headings, unhid, boxVisible: M.vis(box), divVisible: box.firstElementChild ? M.vis(box.firstElementChild) : null, kindIn: M.kindIn('#audio-warnings'), text: box.textContent };
+})()`
+const evalNote = (name, e) => name.includes('noAudioBefore') || name.includes('wholeNote')
+  ? `(() => { const M = window.__mx; try { return { v: ${e.expr} }; } catch (x) { return { v: null, threw: String(x) }; } })()`
+  : `(() => { const M = window.__mx; try { return { v: !!(${e.expr}) }; } catch (x) { return { v: false, threw: String(x) }; } })()`
+
+// The result area: a finished card, a failure card, or empty. The card's title is the page's own message.
+const setResult = (kind, playerB64) => `(() => { const M = window.__mx; ${UNHIDE('process-result')}
+  if (${JSON.stringify(kind)} === 'empty') return { kind: 'empty', res: M.res() };
+  const s = document.createElement('section'); s.className = 'notification'; s.dataset.kind = ${JSON.stringify(kind)} === 'finished' ? 'success' : 'error';
+  const p = document.createElement('p'); p.className = 'notification-title'; p.textContent = ${JSON.stringify(kind)} === 'finished' ? M.compose('result.finished', {}) : M.msg('failure.headings.generic') || 'Failed'; s.appendChild(p);
+  ${playerB64 ? '' : '/* no player */'}
+  box.appendChild(s);
+  return { kind: ${JSON.stringify(kind)}, res: M.res(), finished: M.finished(), title: p.textContent };
+})()`
+const addPlayer = (b64) => `(async () => { const card = document.querySelector('#process-result > .notification[data-kind="success"]'); const bin = atob(${JSON.stringify(b64)}); const b = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) b[i] = bin.charCodeAt(i); const v = document.createElement('video'); v.className = 'result-player'; v.setAttribute('src', URL.createObjectURL(new Blob([b], { type: 'video/mp4' }))); card.appendChild(v); return { bytes: b.length }; })()`
+const evalState = (wrapped) => `(() => { try { return { v: !!(${wrapped}) }; } catch (x) { return { v: false, threw: String(x) }; } })()`
+const STATE_EXPECT = { finished: { candidate: true, base: true }, failure: { candidate: false, base: true }, empty: { candidate: false, base: false } }
+const TRACK_FILES = { 'silent-10s.mp4': { video: 1, audio: 0, other: 0 }, 'late-sound-3.4s-10s.mp4': { video: 1, audio: 1, other: 0 } }
+
+// The assert rows, as assertRows runs a `see` row: fn(w) with w.obs and w.p8planned set.
+const SEEN = {
+  pass: { obs: { wholeNote: true, tracks: { video: 1, audio: 0, other: 0 } }, planned: [], expect: ['pass', 'pass', 'pass'] },
+  'no note': { obs: { wholeNote: false, tracks: { video: 1, audio: 0, other: 0 } }, planned: [], expect: ['fail', 'pass', 'pass'] },
+  levelled: { obs: { wholeNote: true, tracks: { video: 1, audio: 0, other: 0 } }, planned: [{ t: 1 }], expect: ['pass', 'fail', 'pass'] },
+  'sound kept': { obs: { wholeNote: true, tracks: { video: 1, audio: 1, other: 0 } }, planned: [], expect: ['pass', 'pass', 'fail'] },
+  'no tracks read': { obs: { wholeNote: true, tracks: null }, planned: [], expect: ['pass', 'pass', 'fail'] },
+}
+
+const run = { what: 'VH-213: S-102\'s strengthened predicate, proved on the candidate page', source: process.env.SOURCE ?? null, started: new Date().toISOString(), appUrl: process.env.APP_URL, cdpPort: process.env.CDP_PORT, candWalker: CAND, baseWalker: BASE, power: [power()], expressions: { note: NOTE_EX, state: STATE }, expected: { note: NOTE_EXPECT, state: STATE_EXPECT, tracks: TRACK_FILES, asserts: SEEN }, results: [], mismatches: [] }
+if (!run.power[0].ac) { console.log('ON BATTERY: stopped'); writeFileSync(join(RESULTS, 'after-predicate-proof.json'), JSON.stringify(run, null, 1)); process.exit(2) }
+const browser = await connectBrowser()
+run.chrome = browser.version.Browser
+for (const lang of ['en-GB', 'zh-Hans', 'ms-MY']) {
+  const w = new Walk(browser, `proof-${lang}`)
+  await w.open()
+  await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source: QUAL_INIT })
+  await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source: MX_INIT })
+  try {
+    await setViewport(w, 'w1280')
+    await fresh(w, lang)
+    await w.waitFor(`document.documentElement.lang === ${JSON.stringify(lang)} && !!window.__mx && !!window.__mx.tables[${JSON.stringify(lang)}]`, { label: `the ${lang} table`, timeout: 60000 })
+    await sleep(300)
+    const page = await w.evaluate(`({ lang: document.documentElement.lang, tables: Object.keys(window.__mx.tables), visibility: document.visibilityState, vw: document.documentElement.clientWidth, wholeHeading: window.__mx.msg('warnings.wholeTooLittleAudio.heading') })`)
+    // 1. the note
+    for (const [cname, keys] of Object.entries(NOTE_CASES)) {
+      const setup = await w.evaluate(setNote(keys))
+      const rec = { lang, part: 'note', case: cname, keys, page, setup, candidate: {} }
+      for (const [name, e] of Object.entries(NOTE_EX)) rec.candidate[name] = await w.evaluate(evalNote(name, e))
+      for (const [name, exp] of Object.entries(NOTE_EXPECT)) {
+        const got = rec.candidate[name].v
+        if (got !== exp[cname] || rec.candidate[name].threw) run.mismatches.push({ lang, part: 'note', case: cname, expression: name, expected: exp[cname], got, threw: rec.candidate[name].threw ?? null })
+      }
+      if (keys.length && !(setup.divVisible && setup.kindIn === 'warning' && setup.headings.every((h) => typeof h === 'string'))) run.mismatches.push({ lang, part: 'note', case: cname, expression: '(set-up: the note not visible, or a heading missing from the table)', setup })
+      run.results.push(rec)
+      console.log(lang, 'note', cname, Object.entries(rec.candidate).map(([n, r]) => `${n.split(' ')[0]}=${r.v}`).join(' '))
+    }
+    await w.evaluate(setNote([]))
+    // 2. the state
+    for (const kind of ['finished', 'failure', 'empty']) {
+      const setup = await w.evaluate(setResult(kind))
+      const rec = { lang, part: 'state', case: kind, setup, candidate: await w.evaluate(evalState(STATE.candidate)), base: await w.evaluate(evalState(STATE.base)) }
+      for (const which of ['candidate', 'base']) if (rec[which].v !== STATE_EXPECT[kind][which]) run.mismatches.push({ lang, part: 'state', case: kind, walker: which, expected: STATE_EXPECT[kind][which], got: rec[which].v })
+      run.results.push(rec)
+      console.log(lang, 'state', kind, `candidate=${rec.candidate.v} base=${rec.base.v}`, JSON.stringify(setup))
+    }
+    // 3. the tracks (once, in English: ffprobe reads bytes, not words)
+    if (lang === 'en-GB') {
+      await w.evaluate(setResult('finished'))
+      const none = await outputTracks(w)
+      run.results.push({ lang, part: 'tracks', case: 'no player', got: none })
+      if (none !== null) run.mismatches.push({ part: 'tracks', case: 'no player', expected: null, got: none })
+      for (const [file, exp] of Object.entries(TRACK_FILES)) {
+        await w.evaluate(setResult('finished'))
+        const added = await w.evaluate(addPlayer(readFileSync(join(FIX, file)).toString('base64')))
+        const got = await outputTracks(w)
+        run.results.push({ lang, part: 'tracks', case: file, added, got, expected: exp })
+        if (JSON.stringify(got) !== JSON.stringify(exp)) run.mismatches.push({ part: 'tracks', case: file, expected: exp, got })
+        console.log('tracks', file, JSON.stringify(got))
+      }
+      // 4. the asserts
+      for (const [cname, s] of Object.entries(SEEN)) {
+        w.obs = JSON.parse(JSON.stringify(s.obs)); w.p8planned = { planned: s.planned }
+        const rows = []
+        for (const row of SC_CAND['S-102'].asserts) rows.push({ what: row.what, ...(await row.fn(w)) })
+        const got = rows.map((r) => r.outcome)
+        run.results.push({ part: 'asserts', case: cname, rows, expected: s.expect })
+        if (JSON.stringify(got) !== JSON.stringify(s.expect)) run.mismatches.push({ part: 'asserts', case: cname, expected: s.expect, got })
+        console.log('asserts', cname, got.join(' '))
+      }
+      w.obs = undefined; w.p8planned = undefined
+    }
+  } finally { await w.close().catch(() => {}) }
+}
+run.power.push(power())
+run.ended = new Date().toISOString()
+run.outcome = run.mismatches.length ? 'NOT AS EXPECTED' : 'as expected'
+writeFileSync(join(RESULTS, 'after-predicate-proof.json'), JSON.stringify(run, null, 1))
+browser.close()
+console.log(run.outcome, run.mismatches.length ? JSON.stringify(run.mismatches) : '')
+process.exit(run.mismatches.length ? 1 : 0)

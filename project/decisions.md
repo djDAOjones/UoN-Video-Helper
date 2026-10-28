@@ -18,6 +18,26 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-28 — PLAN-8 — VH-213 and VH-214 run beside the main line with walks queued; Codex's blind check alongside Claude's verdict
+
+**Decision:** VH-213 and VH-214 run in their own worktrees beside the main line, one walk or gate at a time by the walk lock; each lands on the orchestrator's go, rebased, gated and re-checked. VH-213 lands before VH-212 or VH-215 starts. Codex's blind check starts alongside Claude's verdict, kept blind.
+
+**Rationale:** The owner, 2026-10-27 ~20:12Z, verbatim: "Yes, pass both to Orchestrator #16: run VH-214 and VH-213 in their own worktrees beside the main line with the walks queued, and start Codex's blind check alongside Claude's verdict, keeping it blind." On power, 2026-10-27 ~22:57Z, verbatim: "Yes, send it to Orchestrator #17 with the conditions: walks run on battery while it is above 50%, stop at a clean point at 50%, a before and its after in the same power mode, and I'll take the battery off Low Power myself." Source of both: the orchestrators' notes, `plan8-owner-words.md`. He was shown the shared files that keep the line serial, the trade-off (a side item measured against the build it branched from, the combination in VH-203's after-run) and about 3–5 h saved from each change. VH-211's PLAN-8 entry is superseded for the build order only: VH-213 and VH-214 no longer wait their turn in it. VH-213 shares `src/i18n/sheet.ts` with VH-212 and `src/workers/job.worker.ts` with VH-215, and VH-203's after-run measures the combination. The blind check never sees Claude's verdict, which is saved before its answer is read. Walks and gates run on AC, or on battery above 50% and not in Low Power, stopping cleanly at 50%, with an item's before and after in the same power mode. The close check before commit is unchanged, so VH-203's stage rule ("Codex astra's check before commit … of the final candidate diff") holds. VH-213 landed first, on 39a56bc; the second side item to land doesn't repeat this.
+
+**Supersedes:** 2026-10-27 — PLAN-8 — The owner's old issues planned: VH-212 to VH-224 for the format "?", A and B, before VH-203; VH-211 closes
+
+**Deferred:** VH-214
+
+## 2026-10-28 — VH-213 — Closes: a whole video with less than 400 ms of sound told so before Create, as a kept part is, on the owner's choice
+
+**Decision:** VH-213 closes wish VH-185.1. An untrimmed source with under one block (`BLOCK_SECONDS`) of decoded sound is a silent job warned before Create, as VH-185 made a kept part, by a third typed reason, `whole-too-little`, in the owner's words; decoded sound decides, and `cut-short` and `ends-early` keep their precedence. Spec §5.4's row covers a whole video. A partly decoded file that ends early is the owner's exception, wish VH-213.1. VH-185's decision is superseded for its untrimmed scope only.
+
+**Rationale:** The owner, in the "Backlog review" chat, 2026-10-27 ~16:18Z, typed by him: "help me resolve VH-212, VH-213, and VH-216"; for VH-213 he chose "Same rule as a trim (Recommended)", not "Refuse before Create", with the item's drafts verbatim. Codex astra's blind check said "Revise": its must 2, the none-decoded control, was measured, and its should 3, the load account, corrected. Its must 1, a partly decoded file that ends early told only that the video is silent after its decoded sound stops, went to the owner. On 2026-10-28 ~09:57Z, in his own turn to Orchestrator #19, he answered verbatim "Yes, all three" to "Go ahead on all three as recommended?", whose first point was "VH-213's must 1, option (a): a wish line for both paths, and VH-213 closes without the repair." A repair would change VH-185's and VH-206's settled precedence for both paths. The re-check said "Commit". The base's test "leaves an untrimmed file as it was" was replaced by whole-file cases, not deleted or skipped. Evidence: `vh213-whole-sub-block-2026-10-27.md`.
+
+**Supersedes:** 2026-10-24 — VH-185 — A kept sound shorter than the meter's 400 ms block is no sound: a silent job, said before Create
+
+**Deferred:** VH-203
+
 ## 2026-10-28 — PLAN-8 — VH-225 raised: the app renamed UoN Video Finisher, before VH-203, on the owner's word
 
 **Decision:** VH-225 renames the app UoN Video Finisher, with its repository and Pages address, last before VH-203 so every earlier walk keeps one name and the release contains it; the project folder is VH-226, after VH-204.
@@ -636,25 +656,3 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Deferred:** VH-181, VH-179, VH-137
 
 **Items:** VH-181
-
-## 2026-10-23 — PLAN-7 — The fix plan: VH-178 to VH-180 for seven findings; the owner's ask decided on the standing instruction
-
-**Decision:** Three fix items join Phase 7 before VH-176. VH-178 fixes the focus successor (V-46). VH-179 draws the three rings whole and brings the feedback field to the measure (V-40, V-41, V-42, V-33). VH-180 fixes the frame-rate note (V-47). The owner's choices are decided on the owner's standing instruction, and none adds a control.
-
-**Rationale:** The owner's words of 2026-10-23: "work through to the end of VH-177, archive and spawn as you go, proceed with your recommendations, universal permission is granted". Decided under them, with both positions in `reviews/2026-10-22/design-pass-2/fix-plan-2026-10-23.md`. The fix plan is approved. Mixed Chinese and Latin lines take the weighted reading (a glyph counts as two against 80), so 1.4.8 is met by G204; Codex had counted raw against 40. V-47 is rank 2, since nothing is lost (Codex said 1), and gets one neutral sentence. V-43 extends VH-168's limitation to 2.5.3 with no page change, and its wording goes to VH-137 (VH-175.2). V-18 is accepted, since no element may move; a native reader's wording is VH-175.1. V-45 is not decided here: both of its names are the owner's own (VH-148), so it is VH-175.3. V-44 is VH-174.1. Codex's verdict, as given: "Approve after the musts below" (`codex-astra-fixplan-critique-2026-10-23.md`); F-01 to F-05 applied, none refused. Order: VH-178 first, the one level A failure and the one behaviour change; VH-179 next, the CSS that can move layout; VH-180 last, the strings, measured on the final CSS. Standards: wcag-2.2-aaa, carbon, nielsen digests.
-
-**Supersedes:** none
-
-**Items:** VH-178, VH-179, VH-180
-
-**Deferred:** VH-178, VH-179, VH-180, VH-176
-
-## 2026-10-23 — VH-174 — The report merged: D-01 and D-04 become V-46 and V-47, D-02 and D-03 merge; Codex's seven points applied but one
-
-**Decision:** `design-pass-2-2026-10-23.md` merges Codex's blind review and VH-173's judging into ten findings at rank 2 or 3. It applies R-01 to R-06, applies R-07 for V-45 and refuses it for V-44. Two judgement calls go to VH-175's ask: the mixed-script line count and V-47's rank. Each point was settled by live evidence or source.
-
-**Rationale:** Codex's verdict, as given: "Commit after the musts below" (`codex-astra-report-critique-2026-10-23.md`, from `codex-astra-report-brief-2026-10-23.md`). D-01 became V-46, with all three cases confirmed live (focus falls to the body). D-02 merged into V-33. D-03 merged into V-40. D-04 became V-47, confirmed live with a 120 fps file and under the Smaller preset. R-01: 1.4.8 is met by mechanism (G204), and the 86 mixed lines stay unresolved against the house rule. R-02: VH-169 is partial. R-06: V-18's remedy is the owner's. R-07 is refused for V-44 because no adopted rule asks for an authored hover inside a forced palette (wish line VH-174.1). V-45 was raised to rank 2. Standards: wcag-2.2-aaa, nielsen, carbon digests. No product code changed.
-
-**Supersedes:** none
-
-**Deferred:** VH-175

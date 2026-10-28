@@ -1,0 +1,32 @@
+// VH-213: one line per group (cell, language, width), from the probe's records.
+//   node summarise-213.mjs <results dir> <label>  -> stdout
+import { readFileSync, existsSync } from 'node:fs'
+import { join } from 'node:path'
+const [dir, label] = process.argv.slice(2)
+const cells = ['S-102', 'S-20', 'S-99', 'S-101', 'S-153', 'whole-390', 'whole-400', 'whole-410', 'whole-cut']
+const run = JSON.parse(readFileSync(join(dir, `${label}-run.json`), 'utf8'))
+console.log(`${label}: ${run.source} chrome ${run.chrome} walker ${run.walkerSha} src ${run.appSrcSha} ${run.started}–${run.ended} flags ${JSON.stringify(run.flags)}`)
+const loads = run.power.map((p) => p.load1).filter((x) => x != null)
+console.log(`load1 ${Math.min(...loads)}–${Math.max(...loads)}; AC all ${run.power.every((p) => p.ac)}; modes ${[...new Set(run.power.map((p) => p.powermode))].join('|')}`)
+for (const c of cells) {
+  const f = join(dir, `${label}-${c}.json`)
+  if (!existsSync(f)) { console.log(c, 'MISSING'); continue }
+  for (const r of JSON.parse(readFileSync(f, 'utf8'))) {
+    const modes = Object.keys(r.pre ?? {})
+    const pre = (m) => r.pre?.[m]
+    const heads = (m) => (pre(m)?.warnings?.items ?? []).map((i) => i.headingKeys.join('+') || '?').join(',') || '-'
+    const same = modes.every((m) => heads(m) === heads('light'))
+    const reached = modes.map((m) => pre(m)?.reached?.outcome?.[0] ?? '?').join('')
+    const L = pre('light')
+    const flags = L ? `n${+L.noAudioHeading}k${+L.keptTooLittleHeading}w${+!!L.wholeTooLittleHeading}e${+L.endsEarlyHeading}` : '?'
+    const job = r.job ? Object.values(r.job).map((j) => j.res + (j.finished ? 'F' : '') + j.reached.outcome[0]).join(',') : ''
+    const wl = (re) => (r.workerLogs ?? []).some((l) => re.test(l.args?.[1] ?? ''))
+    const ver = (r.workerLogs ?? []).filter((l) => /output (verified|failed verification)/.test(l.args?.[1] ?? '')).at(-1)
+    const T = r.output?.tracks
+    const asserts = (r.scenarioAsserts ?? []).map((a) => a.outcome[0]).join('')
+    const errs = modes.reduce((n, m) => n + (pre(m)?.errors ?? []).length, 0) + (r.console ?? []).filter((x) => x.type !== 'warning').length
+    console.log([c, r.lang, r.view, r.status, `pre[${reached}] ${heads('light')}${same ? '' : ' (MODES DIFFER)'} ${flags} verdict ${L?.verdict?.kind}`,
+      r.job ? `job[${job}] planned ${r.planned?.count} silent ${wl(/kept range holds no sound/)} verified ${ver ? JSON.stringify(ver.args[2]).slice(0, 90) : '-'} tracks ${T ? `${T.video}v${T.audio}a` : (r.output?.why ?? r.output?.error ?? '-').slice(0, 40)}` : '',
+      `asserts ${asserts || '-'} errs ${errs} load ${r.powerAtStart?.load?.[0]} ${Math.round(r.ms / 1000)}s`].join(' | '))
+  }
+}

@@ -3,7 +3,8 @@
  * the meter's gating blocks is no sound to level. Pre-flight says so and the
  * job runs silent, rather than encoding the whole video for the output check
  * to refuse a loudness measured on nothing. Since VH-206, pre-flight says the
- * part kept has too little audio, not that the video has none.
+ * part kept has too little audio, not that the video has none. Since VH-213,
+ * an untrimmed video takes the same rule, and its own words (wish VH-185.1).
  *
  * Read from real MP4s built in memory (`test/helpers/pcm-mp4.ts`), whose
  * sound comes in 100 ms blocks of a steady level. The plan's measured bite
@@ -30,7 +31,7 @@ const keptTo = (endSeconds: number) => ({ startSeconds: 0, endSeconds })
  */
 async function preflight(
   bytes: Uint8Array,
-  range: { readonly startSeconds: number; readonly endSeconds: number },
+  range: { readonly startSeconds: number; readonly endSeconds: number } | null,
 ) {
   const track = await soundTrackOf(bytes)
   const measured = await analyseSourceAudio(track, undefined, range)
@@ -39,7 +40,7 @@ async function preflight(
       decodedEndSeconds: measured.decodedEndSeconds ?? null,
       ...(await declaredExtent(track, range)),
     },
-    range.startSeconds,
+    range?.startSeconds ?? 0,
   )
   return detectSourceWarnings(measured, short, false).map((warning) => [warning.code, warning.reason])
 }
@@ -158,12 +159,95 @@ describe('a sliver of late sound in the part kept (VH-185)', () => {
       'silent',
     )
   })
+})
 
-  it('leaves an untrimmed file as it was', async () => {
-    // Out of this item's scope (decisions, VH-185): the guard is the trim's.
+describe('a whole video with too little sound, nothing trimmed (VH-213)', () => {
+  // The owner's choice, VH-211's ask point 3: the trim's rule, the whole
+  // video's own words. 10 ms blocks, so a case sits 10 ms either side of the
+  // meter's block.
+  const whole = (to: number) => pcmMp4({ spans: [[0, to]], blockSeconds: 0.01 })
+  const TOO_LITTLE_WHOLE = [['no-audio', 'whole-too-little']]
+
+  it('says a file with no audio track has none, as before', () => {
+    // No track reaches no analysis: the worker passes `null` (`job.worker.ts`).
     expect(
-      await analyseSourceAudio(await soundTrackOf(await pcmMp4({ spans: [[0, 0.2]] }))),
-    ).not.toHaveProperty('silent')
+      detectSourceWarnings(null, null, false).map((warning) => [warning.code, warning.reason]),
+    ).toEqual([['no-audio', 'no-track']])
+  })
+
+  it('says a track with no sound decoded, and none declared, has too little, not no track', () => {
+    // A track whose index declares nothing (`declaredExtent`), so nothing stops short.
+    expect(
+      detectSourceWarnings({ silent: true, decodedEndSeconds: null, whole: true }, null, false).map(
+        (warning) => [warning.code, warning.reason],
+      ),
+    ).toEqual(TOO_LITTLE_WHOLE)
+  })
+
+  it('is no sound just under one block, said in the whole video’s words', async () => {
+    const measured = await analyseSourceAudio(await soundTrackOf(await whole(BLOCK_SECONDS - 0.01)))
+    expect(measured).toMatchObject({ silent: true, whole: true })
+    expect(measured.decodedEndSeconds).toBeCloseTo(BLOCK_SECONDS - 0.01, 9)
+    expect(await preflight(await whole(BLOCK_SECONDS - 0.01), null)).toEqual(TOO_LITTLE_WHOLE)
+  })
+
+  it('levels exactly one block, and just over, saying nothing of them', async () => {
+    for (const to of [BLOCK_SECONDS, BLOCK_SECONDS + 0.01]) {
+      const bytes = await whole(to)
+      expect(await analyseSourceAudio(await soundTrackOf(bytes)), String(to)).not.toHaveProperty(
+        'silent',
+      )
+      // Levelled, so no no-audio note; the helper's quiet level is very quiet.
+      expect(
+        (await preflight(bytes, null)).map(([code]) => code),
+        String(to),
+      ).not.toContain('no-audio')
+      expect(
+        await planAudio(await soundTrackOf(bytes)),
+        String(to),
+      ).not.toHaveProperty('silent')
+    }
+  })
+
+  it('counts decoded sound, never the silence that fills the gap before it', async () => {
+    // S-102's shape: 300 ms of sound at the end of 10 s, a hole before it.
+    const late = await pcmMp4({ spans: [[9.7, 10]] })
+    const measured = await analyseSourceAudio(await soundTrackOf(late))
+    expect(measured).toMatchObject({ silent: true, whole: true })
+    expect(measured.decodedEndSeconds).toBeCloseTo(10, 9)
+    expect(await preflight(late, null)).toEqual(TOO_LITTLE_WHOLE)
+  })
+
+  it('makes the job a silent one, with the decode’s end kept', async () => {
+    const plan = await planAudio(await soundTrackOf(await whole(BLOCK_SECONDS - 0.01)))
+    expect(plan).toMatchObject({ silent: true, whole: true })
+    expect('silent' in plan ? plan.decodedEndSeconds : null).toBeCloseTo(BLOCK_SECONDS - 0.01, 9)
+  })
+
+  it('says the file ends early, not too little, where no sound decodes of what it declares', async () => {
+    // Cut to its first 2%, inside the muxer's first half-second chunk: none
+    // of the 10 s the index declares decodes.
+    const cut = cutShort(await pcmMp4({ spans: [[0, 10]] }), 0.02)
+    expect(await analyseSourceAudio(await soundTrackOf(cut))).toEqual({
+      silent: true,
+      decodedEndSeconds: null,
+      whole: true,
+    })
+    expect(await preflight(cut, null)).toEqual([['ends-early', undefined]])
+    expect(await planAudio(await soundTrackOf(cut))).toMatchObject({ silent: true, whole: true })
+  })
+
+  it('leaves a trimmed keep’s words as VH-206 made them', async () => {
+    // The same sliver, trimmed to 0:04: the part-kept words, never the whole video's.
+    const silent = await analyseSourceAudio(
+      await soundTrackOf(await pcmMp4({ spans: [[3.98, 6]] })),
+      undefined,
+      keptTo(4),
+    )
+    expect(silent).not.toHaveProperty('whole')
+    expect(await preflight(await pcmMp4({ spans: [[3.98, 6]] }), keptTo(4))).toEqual(
+      TOO_LITTLE_KEPT,
+    )
   })
 })
 

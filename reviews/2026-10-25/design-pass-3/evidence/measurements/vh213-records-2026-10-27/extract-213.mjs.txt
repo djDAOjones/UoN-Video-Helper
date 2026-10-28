@@ -1,0 +1,41 @@
+// VH-213 #3: the table's per-cell readings, from a records folder, for
+// 1.4.8 (line measure), 2.4.6 (the heading), 4.1.3 (announced and spoken).
+// Usage: node extract-213.mjs <records dir> <label> [cells...]
+import { readFileSync, existsSync } from 'node:fs'
+import { join } from 'node:path'
+
+const [DIR, LABEL, ...want] = process.argv.slice(2)
+const cells = want.length ? want : ['S-102', 'whole-390', 'whole-cut', 'S-99', 'S-20']
+for (const c of cells) {
+  const f = join(DIR, `${LABEL}-${c}.json`)
+  if (!existsSync(f)) { console.log(`${c}: no record`); continue }
+  for (const g of JSON.parse(readFileSync(f, 'utf8'))) {
+    const rows = []
+    for (const [mode, p] of Object.entries(g.pre ?? {})) {
+      const w = p.warnings ?? {}
+      const items = w.items ?? []
+      const heads = items.map((i) => i.heading)
+      const ann = p.status?.announced ?? ''
+      rows.push({
+        mode,
+        reached: p.reached?.outcome,
+        title: w.title ?? null,
+        keys: items.map((i) => i.headingKeys?.join('+')).join(','),
+        lines: items.map((i) => `${i.headingLines}/${i.detailLines}`).join(','),
+        maxChars: w.measure?.maxChars, maxCjk: w.measure?.maxCjk, maxWeighted: w.measure?.maxWeighted, worst: w.measure?.worst,
+        overflow: (w.overflow ?? []).length, hscroll: p.page?.hscroll,
+        announcedHasHeading: heads.length ? heads.every((h) => ann.includes(h)) : null,
+        heads, details: items.map((i) => i.detail), announced: ann,
+      })
+    }
+    const sig = (r) => JSON.stringify({ ...r, mode: undefined })
+    const same = rows.every((r) => sig(r) === sig(rows[0]))
+    const j = g.job ? Object.values(g.job)[0] : null
+    console.log(`${g.key} modes ${rows.map((r) => r.mode).join('/')} ${same ? 'identical across modes' : 'DIFFER across modes'}`)
+    for (const r of same ? rows.slice(0, 1) : rows) {
+      console.log(`  [${same ? 'all' : r.mode}] reached ${r.reached} title ${JSON.stringify(r.title)} keys ${r.keys} lines(h/d) ${r.lines} maxChars ${r.maxChars} maxCjk ${r.maxCjk} weighted ${r.maxWeighted} ${r.worst} overflow ${r.overflow} hscroll ${r.hscroll} announcedHasHeading ${r.announcedHasHeading}`)
+      if (g.view === 'w1280') { console.log(`    heading ${JSON.stringify(r.heads)}`); console.log(`    detail ${JSON.stringify(r.details)}`); console.log(`    announced ${JSON.stringify(r.announced)}`) }
+    }
+    if (j) console.log(`  job res ${j.res} card ${JSON.stringify(j.card?.title)} ready ${JSON.stringify(g.spokenAtCompletion?.ready ?? null)} planned ${g.planned?.count} tracks ${g.output?.tracks ? `${g.output.tracks.video}v${g.output.tracks.audio}a${g.output.tracks.other}o` : 'none'} asserts ${(g.scenarioAsserts ?? []).map((a) => a.outcome).join(',')}`)
+  }
+}

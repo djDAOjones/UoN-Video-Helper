@@ -1,0 +1,4788 @@
+[
+ {
+  "key": "S-102__en-GB__w1280",
+  "cell": "S-102",
+  "scenario": "S-102",
+  "what": "An untrimmed file with under 400 ms of sound (wish VH-185.1)",
+  "lang": "en-GB",
+  "view": "w1280",
+  "modesRead": [
+   "light",
+   "dark",
+   "forced-light",
+   "forced-dark"
+  ],
+  "powerAtStart": {
+   "ac": true,
+   "load": [
+    3.73,
+    4.65,
+    6.06
+   ],
+   "powermode": "powermode            2"
+  },
+  "preAt": 2010,
+  "pre": {
+   "light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": false
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Ready to go"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:10.0"
+    },
+    "warnings": null,
+    "noAudioHeading": false,
+    "keptTooLittleHeading": false,
+    "wholeTooLittleHeading": false,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB.",
+     "shown": "",
+     "spokenOnly": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB."
+    },
+    "sourceStatus": {
+     "announced": "Video read.",
+     "shown": "Video read.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793139146272,
+     "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB."
+    },
+    "liveRegions": [
+     {
+      "region": "div.promise-help",
+      "text": "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperabl"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video read."
+     },
+     {
+      "region": "div",
+      "text": "The last second of video — the closing graphics cover it as they build. A held last frame — your last frame is held for one extra second. The closing graphics p"
+     },
+     {
+      "region": "#status",
+      "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB."
+     }
+    ],
+    "checking": false
+   },
+   "dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": false
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Ready to go"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:10.0"
+    },
+    "warnings": null,
+    "noAudioHeading": false,
+    "keptTooLittleHeading": false,
+    "wholeTooLittleHeading": false,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB.",
+     "shown": "",
+     "spokenOnly": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB."
+    },
+    "sourceStatus": {
+     "announced": "Video read.",
+     "shown": "Video read.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793139146272,
+     "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB."
+    },
+    "liveRegions": [
+     {
+      "region": "div.promise-help",
+      "text": "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperabl"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video read."
+     },
+     {
+      "region": "div",
+      "text": "The last second of video — the closing graphics cover it as they build. A held last frame — your last frame is held for one extra second. The closing graphics p"
+     },
+     {
+      "region": "#status",
+      "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB."
+     }
+    ],
+    "checking": false
+   },
+   "forced-light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": true
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Ready to go"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:10.0"
+    },
+    "warnings": null,
+    "noAudioHeading": false,
+    "keptTooLittleHeading": false,
+    "wholeTooLittleHeading": false,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB.",
+     "shown": "",
+     "spokenOnly": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB."
+    },
+    "sourceStatus": {
+     "announced": "Video read.",
+     "shown": "Video read.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793139146272,
+     "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB."
+    },
+    "liveRegions": [
+     {
+      "region": "div.promise-help",
+      "text": "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperabl"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video read."
+     },
+     {
+      "region": "div",
+      "text": "The last second of video — the closing graphics cover it as they build. A held last frame — your last frame is held for one extra second. The closing graphics p"
+     },
+     {
+      "region": "#status",
+      "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB."
+     }
+    ],
+    "checking": false
+   },
+   "forced-dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": true
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Ready to go"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:10.0"
+    },
+    "warnings": null,
+    "noAudioHeading": false,
+    "keptTooLittleHeading": false,
+    "wholeTooLittleHeading": false,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB.",
+     "shown": "",
+     "spokenOnly": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB."
+    },
+    "sourceStatus": {
+     "announced": "Video read.",
+     "shown": "Video read.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793139146272,
+     "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB."
+    },
+    "liveRegions": [
+     {
+      "region": "div.promise-help",
+      "text": "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperabl"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video read."
+     },
+     {
+      "region": "div",
+      "text": "The last second of video — the closing graphics cover it as they build. A held last frame — your last frame is held for one extra second. The closing graphics p"
+     },
+     {
+      "region": "#status",
+      "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB."
+     }
+    ],
+    "checking": false
+   }
+  },
+  "obs": {
+   "verdictNotes": ""
+  },
+  "job": {
+   "light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": false
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "res": "failure",
+    "finished": false,
+    "card": {
+     "kind": "error",
+     "title": "The finished audio did not come out at the usual level, so the video was not kept.",
+     "text": "The finished audio did not come out at the usual level, so the video was not kept.Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help. [dev: Output audio failed verification: loudness-out-of-range]",
+     "overflow": []
+    },
+    "keptRecord": null,
+    "resultWarnings": null,
+    "endedEarly": false,
+    "status": {
+     "announced": "The video could not be created. The finished audio did not come out at the usual level, so the video was not kept. Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help. [dev: Output audio failed verification: loudness-out-of-range]",
+     "shown": "",
+     "spokenOnly": "The video could not be created. The finished audio did not come out at the usual level, so the video was not kept. Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help. [dev: Output audio failed verification: loudness-out-of-range]"
+    },
+    "audioWarningsStill": ""
+   },
+   "dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": false
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "res": "failure",
+    "finished": false,
+    "card": {
+     "kind": "error",
+     "title": "The finished audio did not come out at the usual level, so the video was not kept.",
+     "text": "The finished audio did not come out at the usual level, so the video was not kept.Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help. [dev: Output audio failed verification: loudness-out-of-range]",
+     "overflow": []
+    },
+    "keptRecord": null,
+    "resultWarnings": null,
+    "endedEarly": false,
+    "status": {
+     "announced": "The video could not be created. The finished audio did not come out at the usual level, so the video was not kept. Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help. [dev: Output audio failed verification: loudness-out-of-range]",
+     "shown": "",
+     "spokenOnly": "The video could not be created. The finished audio did not come out at the usual level, so the video was not kept. Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help. [dev: Output audio failed verification: loudness-out-of-range]"
+    },
+    "audioWarningsStill": ""
+   },
+   "forced-light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": true
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "res": "failure",
+    "finished": false,
+    "card": {
+     "kind": "error",
+     "title": "The finished audio did not come out at the usual level, so the video was not kept.",
+     "text": "The finished audio did not come out at the usual level, so the video was not kept.Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help. [dev: Output audio failed verification: loudness-out-of-range]",
+     "overflow": []
+    },
+    "keptRecord": null,
+    "resultWarnings": null,
+    "endedEarly": false,
+    "status": {
+     "announced": "The video could not be created. The finished audio did not come out at the usual level, so the video was not kept. Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help. [dev: Output audio failed verification: loudness-out-of-range]",
+     "shown": "",
+     "spokenOnly": "The video could not be created. The finished audio did not come out at the usual level, so the video was not kept. Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help. [dev: Output audio failed verification: loudness-out-of-range]"
+    },
+    "audioWarningsStill": ""
+   },
+   "forced-dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": true
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "res": "failure",
+    "finished": false,
+    "card": {
+     "kind": "error",
+     "title": "The finished audio did not come out at the usual level, so the video was not kept.",
+     "text": "The finished audio did not come out at the usual level, so the video was not kept.Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help. [dev: Output audio failed verification: loudness-out-of-range]",
+     "overflow": []
+    },
+    "keptRecord": null,
+    "resultWarnings": null,
+    "endedEarly": false,
+    "status": {
+     "announced": "The video could not be created. The finished audio did not come out at the usual level, so the video was not kept. Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help. [dev: Output audio failed verification: loudness-out-of-range]",
+     "shown": "",
+     "spokenOnly": "The video could not be created. The finished audio did not come out at the usual level, so the video was not kept. Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help. [dev: Output audio failed verification: loudness-out-of-range]"
+    },
+    "audioWarningsStill": ""
+   }
+  },
+  "spokenAtCompletion": null,
+  "planned": {
+   "count": 1,
+   "completed": [
+    {
+     "t": 1793139150495,
+     "audioGainDb": 0
+    }
+   ],
+   "workers": 1
+  },
+  "output": {
+   "saved": false,
+   "why": "no Save on the page"
+  },
+  "scenarioAsserts": [
+   {
+    "what": "the verdict's notes, then the outcome (not judged against VH-185, whose scope it is not)",
+    "outcome": "not-counted",
+    "why": "recorded as found, not judged here",
+    "found": {
+     "notes": "",
+     "outcome": "failure",
+     "text": "The finished audio did not come out at the usual level, so the video was not kept.Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem …",
+     "planned": 1
+    }
+   }
+  ],
+  "status": "ok",
+  "workerLogs": [
+   {
+    "t": 845,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (worker)"
+    ]
+   },
+   {
+    "t": 845,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[worker]",
+     "job worker ready"
+    ]
+   },
+   {
+    "t": 845,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[worker]",
+     "ping received"
+    ]
+   },
+   {
+    "t": 1314,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.02,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 1319,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.02,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 1320,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "device capabilities inspected",
+     {
+      "hasWebCodecs": true,
+      "hasOpfs": true,
+      "deviceClass": "desktop",
+      "hardwareConcurrency": 10,
+      "quotaBytes": 10737418428,
+      "availableBytes": 10737418240
+     }
+    ]
+   },
+   {
+    "t": 1331,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1280,
+      "height": 720,
+      "bitrate": 2648219
+     }
+    ]
+   },
+   {
+    "t": 1345,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 2,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 1693,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[probe]",
+     "calibration complete",
+     {
+      "framesEncoded": 75,
+      "videoFramesPerSecond": 377,
+      "audioRealtimeFactor": 29,
+      "estimatedSeconds": 2,
+      "videoSeconds": 0.7,
+      "brandingSeconds": 0.7,
+      "audioPlanningSeconds": 0.2,
+      "audioProcessingSeconds": 0,
+      "verificationSeconds": 0
+     }
+    ]
+   },
+   {
+    "t": 5036,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.02,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 5036,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[worker]",
+     "output shape selected",
+     {
+      "presetId": "best",
+      "contentClass": "unknown",
+      "videoBitrateBps": 2648219,
+      "bitrateBasis": "blended-with-source"
+     }
+    ]
+   },
+   {
+    "t": 5037,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[opfs]",
+     "workspace opened",
+     {
+      "jobId": "job-4",
+      "directoryName": "s7004c4db-job-4"
+     }
+    ]
+   },
+   {
+    "t": 5039,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[pipeline]",
+     "source lanes do not start together",
+     {
+      "videoOffsetSeconds": 0,
+      "audioOffsetSeconds": 9.679
+     }
+    ]
+   },
+   {
+    "t": 5051,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[audio]",
+     "chain planned",
+     {
+      "sourceIntegratedLufs": null,
+      "loudnessRangeLu": 0,
+      "macroLevelling": false,
+      "damageSilenced": 0,
+      "afterChainLufs": null,
+      "limitedLufs": null,
+      "limiterBiteLu": null,
+      "codecCostLu": null,
+      "codecOvershootDb": null,
+      "codecProbedSeconds": null,
+      "limiterCeilingDbtp": -3,
+      "predictedOutputLufs": null,
+      "refinementPasses": 0,
+      "converged": true,
+      "gainDb": 0,
+      "planningMs": 11
+     }
+    ]
+   },
+   {
+    "t": 5053,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[branding]",
+     "clip loaded",
+     {
+      "segment": "closing",
+      "url": "http://127.0.0.1:5181/branding/closing-tail-blue-1080p.mp4",
+      "durationSeconds": 4
+     }
+    ]
+   },
+   {
+    "t": 5054,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[pipeline]",
+     "metadata tags carried over",
+     {
+      "keys": 1
+     }
+    ]
+   },
+   {
+    "t": 5071,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[encoder-delay]",
+     "measured",
+     {
+      "codec": "aac",
+      "delayMs": 44
+     }
+    ]
+   },
+   {
+    "t": 5916,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[pipeline]",
+     "encode complete",
+     {
+      "preset": "best",
+      "framesFed": 250,
+      "outputBytes": 3697084,
+      "width": 1280,
+      "height": 720,
+      "frameRate": 25,
+      "audioGainDb": 0,
+      "openingSeconds": 0,
+      "closingSeconds": 4,
+      "timelineSeconds": 14,
+      "keptRange": null,
+      "brandingRequested": "false/true",
+      "brandingApplied": "false/true",
+      "titleCard": false
+     }
+    ]
+   },
+   {
+    "t": 5931,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "[worker]",
+     "output failed verification",
+     {
+      "code": "loudness-out-of-range",
+      "integratedLufs": -36.71921355614518,
+      "truePeakDbtp": -32.7424929883655
+     }
+    ]
+   },
+   {
+    "t": 5932,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[opfs]",
+     "workspace disposed",
+     {
+      "jobId": "job-4"
+     }
+    ]
+   },
+   {
+    "t": 5932,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "[worker]",
+     "processing failed",
+     {
+      "code": "output-loudness",
+      "reason": "Output audio failed verification: loudness-out-of-range"
+     }
+    ]
+   }
+  ],
+  "console": [],
+  "ms": 9381
+ },
+ {
+  "key": "S-102__en-GB__w320",
+  "cell": "S-102",
+  "scenario": "S-102",
+  "what": "An untrimmed file with under 400 ms of sound (wish VH-185.1)",
+  "lang": "en-GB",
+  "view": "w320",
+  "modesRead": [
+   "light",
+   "dark",
+   "forced-light",
+   "forced-dark"
+  ],
+  "powerAtStart": {
+   "ac": true,
+   "load": [
+    4.25,
+    4.73,
+    6.08
+   ],
+   "powermode": "powermode            2"
+  },
+  "preAt": 1797,
+  "pre": {
+   "light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": false
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Ready to go"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:10.0"
+    },
+    "warnings": null,
+    "noAudioHeading": false,
+    "keptTooLittleHeading": false,
+    "wholeTooLittleHeading": false,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB.",
+     "shown": "",
+     "spokenOnly": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB."
+    },
+    "sourceStatus": {
+     "announced": "Video read.",
+     "shown": "Video read.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793139155429,
+     "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB."
+    },
+    "liveRegions": [
+     {
+      "region": "div.promise-help",
+      "text": "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperabl"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video read."
+     },
+     {
+      "region": "div",
+      "text": "The last second of video — the closing graphics cover it as they build. A held last frame — your last frame is held for one extra second. The closing graphics p"
+     },
+     {
+      "region": "#status",
+      "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB."
+     }
+    ],
+    "checking": false
+   },
+   "dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": false
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Ready to go"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:10.0"
+    },
+    "warnings": null,
+    "noAudioHeading": false,
+    "keptTooLittleHeading": false,
+    "wholeTooLittleHeading": false,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB.",
+     "shown": "",
+     "spokenOnly": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB."
+    },
+    "sourceStatus": {
+     "announced": "Video read.",
+     "shown": "Video read.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793139155429,
+     "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB."
+    },
+    "liveRegions": [
+     {
+      "region": "div.promise-help",
+      "text": "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperabl"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video read."
+     },
+     {
+      "region": "div",
+      "text": "The last second of video — the closing graphics cover it as they build. A held last frame — your last frame is held for one extra second. The closing graphics p"
+     },
+     {
+      "region": "#status",
+      "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB."
+     }
+    ],
+    "checking": false
+   },
+   "forced-light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": true
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Ready to go"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:10.0"
+    },
+    "warnings": null,
+    "noAudioHeading": false,
+    "keptTooLittleHeading": false,
+    "wholeTooLittleHeading": false,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB.",
+     "shown": "",
+     "spokenOnly": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB."
+    },
+    "sourceStatus": {
+     "announced": "Video read.",
+     "shown": "Video read.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793139155429,
+     "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB."
+    },
+    "liveRegions": [
+     {
+      "region": "div.promise-help",
+      "text": "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperabl"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video read."
+     },
+     {
+      "region": "div",
+      "text": "The last second of video — the closing graphics cover it as they build. A held last frame — your last frame is held for one extra second. The closing graphics p"
+     },
+     {
+      "region": "#status",
+      "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB."
+     }
+    ],
+    "checking": false
+   },
+   "forced-dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": true
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Ready to go"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:10.0"
+    },
+    "warnings": null,
+    "noAudioHeading": false,
+    "keptTooLittleHeading": false,
+    "wholeTooLittleHeading": false,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB.",
+     "shown": "",
+     "spokenOnly": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB."
+    },
+    "sourceStatus": {
+     "announced": "Video read.",
+     "shown": "Video read.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793139155429,
+     "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB."
+    },
+    "liveRegions": [
+     {
+      "region": "div.promise-help",
+      "text": "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperabl"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video read."
+     },
+     {
+      "region": "div",
+      "text": "The last second of video — the closing graphics cover it as they build. A held last frame — your last frame is held for one extra second. The closing graphics p"
+     },
+     {
+      "region": "#status",
+      "text": "Device check complete. Ready to go. This should take a few seconds. Estimated size up to 7.2 MB."
+     }
+    ],
+    "checking": false
+   }
+  },
+  "obs": {
+   "verdictNotes": ""
+  },
+  "job": {
+   "light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": false
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "res": "failure",
+    "finished": false,
+    "card": {
+     "kind": "error",
+     "title": "The finished audio did not come out at the usual level, so the video was not kept.",
+     "text": "The finished audio did not come out at the usual level, so the video was not kept.Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help. [dev: Output audio failed verification: loudness-out-of-range]",
+     "overflow": []
+    },
+    "keptRecord": null,
+    "resultWarnings": null,
+    "endedEarly": false,
+    "status": {
+     "announced": "The video could not be created. The finished audio did not come out at the usual level, so the video was not kept. Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help. [dev: Output audio failed verification: loudness-out-of-range]",
+     "shown": "",
+     "spokenOnly": "The video could not be created. The finished audio did not come out at the usual level, so the video was not kept. Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help. [dev: Output audio failed verification: loudness-out-of-range]"
+    },
+    "audioWarningsStill": ""
+   },
+   "dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": false
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "res": "failure",
+    "finished": false,
+    "card": {
+     "kind": "error",
+     "title": "The finished audio did not come out at the usual level, so the video was not kept.",
+     "text": "The finished audio did not come out at the usual level, so the video was not kept.Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help. [dev: Output audio failed verification: loudness-out-of-range]",
+     "overflow": []
+    },
+    "keptRecord": null,
+    "resultWarnings": null,
+    "endedEarly": false,
+    "status": {
+     "announced": "The video could not be created. The finished audio did not come out at the usual level, so the video was not kept. Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help. [dev: Output audio failed verification: loudness-out-of-range]",
+     "shown": "",
+     "spokenOnly": "The video could not be created. The finished audio did not come out at the usual level, so the video was not kept. Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help. [dev: Output audio failed verification: loudness-out-of-range]"
+    },
+    "audioWarningsStill": ""
+   },
+   "forced-light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": true
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "res": "failure",
+    "finished": false,
+    "card": {
+     "kind": "error",
+     "title": "The finished audio did not come out at the usual level, so the video was not kept.",
+     "text": "The finished audio did not come out at the usual level, so the video was not kept.Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help. [dev: Output audio failed verification: loudness-out-of-range]",
+     "overflow": []
+    },
+    "keptRecord": null,
+    "resultWarnings": null,
+    "endedEarly": false,
+    "status": {
+     "announced": "The video could not be created. The finished audio did not come out at the usual level, so the video was not kept. Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help. [dev: Output audio failed verification: loudness-out-of-range]",
+     "shown": "",
+     "spokenOnly": "The video could not be created. The finished audio did not come out at the usual level, so the video was not kept. Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help. [dev: Output audio failed verification: loudness-out-of-range]"
+    },
+    "audioWarningsStill": ""
+   },
+   "forced-dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": true
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "res": "failure",
+    "finished": false,
+    "card": {
+     "kind": "error",
+     "title": "The finished audio did not come out at the usual level, so the video was not kept.",
+     "text": "The finished audio did not come out at the usual level, so the video was not kept.Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help. [dev: Output audio failed verification: loudness-out-of-range]",
+     "overflow": []
+    },
+    "keptRecord": null,
+    "resultWarnings": null,
+    "endedEarly": false,
+    "status": {
+     "announced": "The video could not be created. The finished audio did not come out at the usual level, so the video was not kept. Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help. [dev: Output audio failed verification: loudness-out-of-range]",
+     "shown": "",
+     "spokenOnly": "The video could not be created. The finished audio did not come out at the usual level, so the video was not kept. Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help. [dev: Output audio failed verification: loudness-out-of-range]"
+    },
+    "audioWarningsStill": ""
+   }
+  },
+  "spokenAtCompletion": null,
+  "planned": {
+   "count": 1,
+   "completed": [
+    {
+     "t": 1793139159668,
+     "audioGainDb": 0
+    }
+   ],
+   "workers": 1
+  },
+  "output": {
+   "saved": false,
+   "why": "no Save on the page"
+  },
+  "scenarioAsserts": [
+   {
+    "what": "the verdict's notes, then the outcome (not judged against VH-185, whose scope it is not)",
+    "outcome": "not-counted",
+    "why": "recorded as found, not judged here",
+    "found": {
+     "notes": "",
+     "outcome": "failure",
+     "text": "The finished audio did not come out at the usual level, so the video was not kept.Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem …",
+     "planned": 1
+    }
+   }
+  ],
+  "status": "ok",
+  "workerLogs": [
+   {
+    "t": 651,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (worker)"
+    ]
+   },
+   {
+    "t": 651,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[worker]",
+     "job worker ready"
+    ]
+   },
+   {
+    "t": 651,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[worker]",
+     "ping received"
+    ]
+   },
+   {
+    "t": 1099,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.02,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 1105,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.02,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 1106,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "device capabilities inspected",
+     {
+      "hasWebCodecs": true,
+      "hasOpfs": true,
+      "deviceClass": "desktop",
+      "hardwareConcurrency": 10,
+      "quotaBytes": 10737418428,
+      "availableBytes": 10737418240
+     }
+    ]
+   },
+   {
+    "t": 1116,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1280,
+      "height": 720,
+      "bitrate": 2648219
+     }
+    ]
+   },
+   {
+    "t": 1130,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 2,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 1423,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[probe]",
+     "calibration complete",
+     {
+      "framesEncoded": 75,
+      "videoFramesPerSecond": 341,
+      "audioRealtimeFactor": 29,
+      "estimatedSeconds": 2,
+      "videoSeconds": 0.7,
+      "brandingSeconds": 0.7,
+      "audioPlanningSeconds": 0.2,
+      "audioProcessingSeconds": 0,
+      "verificationSeconds": 0
+     }
+    ]
+   },
+   {
+    "t": 4825,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.02,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 4825,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[worker]",
+     "output shape selected",
+     {
+      "presetId": "best",
+      "contentClass": "unknown",
+      "videoBitrateBps": 2648219,
+      "bitrateBasis": "blended-with-source"
+     }
+    ]
+   },
+   {
+    "t": 4826,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[opfs]",
+     "workspace opened",
+     {
+      "jobId": "job-4",
+      "directoryName": "sbe7684fc-job-4"
+     }
+    ]
+   },
+   {
+    "t": 4828,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[pipeline]",
+     "source lanes do not start together",
+     {
+      "videoOffsetSeconds": 0,
+      "audioOffsetSeconds": 9.679
+     }
+    ]
+   },
+   {
+    "t": 4841,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[audio]",
+     "chain planned",
+     {
+      "sourceIntegratedLufs": null,
+      "loudnessRangeLu": 0,
+      "macroLevelling": false,
+      "damageSilenced": 0,
+      "afterChainLufs": null,
+      "limitedLufs": null,
+      "limiterBiteLu": null,
+      "codecCostLu": null,
+      "codecOvershootDb": null,
+      "codecProbedSeconds": null,
+      "limiterCeilingDbtp": -3,
+      "predictedOutputLufs": null,
+      "refinementPasses": 0,
+      "converged": true,
+      "gainDb": 0,
+      "planningMs": 10
+     }
+    ]
+   },
+   {
+    "t": 4841,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[branding]",
+     "clip loaded",
+     {
+      "segment": "closing",
+      "url": "http://127.0.0.1:5181/branding/closing-tail-blue-1080p.mp4",
+      "durationSeconds": 4
+     }
+    ]
+   },
+   {
+    "t": 4843,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[pipeline]",
+     "metadata tags carried over",
+     {
+      "keys": 1
+     }
+    ]
+   },
+   {
+    "t": 4852,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[encoder-delay]",
+     "measured",
+     {
+      "codec": "aac",
+      "delayMs": 44
+     }
+    ]
+   },
+   {
+    "t": 5663,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[pipeline]",
+     "encode complete",
+     {
+      "preset": "best",
+      "framesFed": 250,
+      "outputBytes": 3697084,
+      "width": 1280,
+      "height": 720,
+      "frameRate": 25,
+      "audioGainDb": 0,
+      "openingSeconds": 0,
+      "closingSeconds": 4,
+      "timelineSeconds": 14,
+      "keptRange": null,
+      "brandingRequested": "false/true",
+      "brandingApplied": "false/true",
+      "titleCard": false
+     }
+    ]
+   },
+   {
+    "t": 5679,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "[worker]",
+     "output failed verification",
+     {
+      "code": "loudness-out-of-range",
+      "integratedLufs": -36.71921355614518,
+      "truePeakDbtp": -32.7424929883655
+     }
+    ]
+   },
+   {
+    "t": 5680,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[opfs]",
+     "workspace disposed",
+     {
+      "jobId": "job-4"
+     }
+    ]
+   },
+   {
+    "t": 5680,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "[worker]",
+     "processing failed",
+     {
+      "code": "output-loudness",
+      "reason": "Output audio failed verification: loudness-out-of-range"
+     }
+    ]
+   }
+  ],
+  "console": [],
+  "ms": 9169
+ },
+ {
+  "key": "S-102__zh-Hans__w1280",
+  "cell": "S-102",
+  "scenario": "S-102",
+  "what": "An untrimmed file with under 400 ms of sound (wish VH-185.1)",
+  "lang": "zh-Hans",
+  "view": "w1280",
+  "modesRead": [
+   "light",
+   "dark",
+   "forced-light",
+   "forced-dark"
+  ],
+  "powerAtStart": {
+   "ac": true,
+   "load": [
+    4.21,
+    4.71,
+    6.05
+   ],
+   "powermode": "powermode            2"
+  },
+  "preAt": 2228,
+  "pre": {
+   "light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": false
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "准备就绪"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:10.0"
+    },
+    "warnings": null,
+    "noAudioHeading": false,
+    "keptTooLittleHeading": false,
+    "wholeTooLittleHeading": false,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。",
+     "shown": "",
+     "spokenOnly": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。"
+    },
+    "sourceStatus": {
+     "announced": "视频已读取。",
+     "shown": "视频已读取。",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793139165066,
+     "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。"
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "页面语言：简体中文。"
+     },
+     {
+      "region": "div.promise-help",
+      "text": "视频有许多格式。有些格式在一台设备上可以播放，在另一台上却不行，或者无法在某些应用中使用。此工具会将您的视频保存为 MP4，这是兼容性最好的视频格式。这意味着它几乎可以在任何手机、电脑或网站上播放。"
+     },
+     {
+      "region": "#source-status",
+      "text": "视频已读取。"
+     },
+     {
+      "region": "div",
+      "text": "视频的最后一秒 — 结尾图形在逐渐出现时会覆盖这一秒。 定格的最后一帧 — 最后一帧画面会额外停留一秒钟。结尾图形会覆盖这一秒，所以视频中的所有内容都不会被遮挡。"
+     },
+     {
+      "region": "#status",
+      "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。"
+     }
+    ],
+    "checking": false
+   },
+   "dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": false
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "准备就绪"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:10.0"
+    },
+    "warnings": null,
+    "noAudioHeading": false,
+    "keptTooLittleHeading": false,
+    "wholeTooLittleHeading": false,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。",
+     "shown": "",
+     "spokenOnly": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。"
+    },
+    "sourceStatus": {
+     "announced": "视频已读取。",
+     "shown": "视频已读取。",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793139165066,
+     "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。"
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "页面语言：简体中文。"
+     },
+     {
+      "region": "div.promise-help",
+      "text": "视频有许多格式。有些格式在一台设备上可以播放，在另一台上却不行，或者无法在某些应用中使用。此工具会将您的视频保存为 MP4，这是兼容性最好的视频格式。这意味着它几乎可以在任何手机、电脑或网站上播放。"
+     },
+     {
+      "region": "#source-status",
+      "text": "视频已读取。"
+     },
+     {
+      "region": "div",
+      "text": "视频的最后一秒 — 结尾图形在逐渐出现时会覆盖这一秒。 定格的最后一帧 — 最后一帧画面会额外停留一秒钟。结尾图形会覆盖这一秒，所以视频中的所有内容都不会被遮挡。"
+     },
+     {
+      "region": "#status",
+      "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。"
+     }
+    ],
+    "checking": false
+   },
+   "forced-light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": true
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "准备就绪"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:10.0"
+    },
+    "warnings": null,
+    "noAudioHeading": false,
+    "keptTooLittleHeading": false,
+    "wholeTooLittleHeading": false,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。",
+     "shown": "",
+     "spokenOnly": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。"
+    },
+    "sourceStatus": {
+     "announced": "视频已读取。",
+     "shown": "视频已读取。",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793139165066,
+     "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。"
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "页面语言：简体中文。"
+     },
+     {
+      "region": "div.promise-help",
+      "text": "视频有许多格式。有些格式在一台设备上可以播放，在另一台上却不行，或者无法在某些应用中使用。此工具会将您的视频保存为 MP4，这是兼容性最好的视频格式。这意味着它几乎可以在任何手机、电脑或网站上播放。"
+     },
+     {
+      "region": "#source-status",
+      "text": "视频已读取。"
+     },
+     {
+      "region": "div",
+      "text": "视频的最后一秒 — 结尾图形在逐渐出现时会覆盖这一秒。 定格的最后一帧 — 最后一帧画面会额外停留一秒钟。结尾图形会覆盖这一秒，所以视频中的所有内容都不会被遮挡。"
+     },
+     {
+      "region": "#status",
+      "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。"
+     }
+    ],
+    "checking": false
+   },
+   "forced-dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": true
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "准备就绪"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:10.0"
+    },
+    "warnings": null,
+    "noAudioHeading": false,
+    "keptTooLittleHeading": false,
+    "wholeTooLittleHeading": false,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。",
+     "shown": "",
+     "spokenOnly": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。"
+    },
+    "sourceStatus": {
+     "announced": "视频已读取。",
+     "shown": "视频已读取。",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793139165066,
+     "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。"
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "页面语言：简体中文。"
+     },
+     {
+      "region": "div.promise-help",
+      "text": "视频有许多格式。有些格式在一台设备上可以播放，在另一台上却不行，或者无法在某些应用中使用。此工具会将您的视频保存为 MP4，这是兼容性最好的视频格式。这意味着它几乎可以在任何手机、电脑或网站上播放。"
+     },
+     {
+      "region": "#source-status",
+      "text": "视频已读取。"
+     },
+     {
+      "region": "div",
+      "text": "视频的最后一秒 — 结尾图形在逐渐出现时会覆盖这一秒。 定格的最后一帧 — 最后一帧画面会额外停留一秒钟。结尾图形会覆盖这一秒，所以视频中的所有内容都不会被遮挡。"
+     },
+     {
+      "region": "#status",
+      "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。"
+     }
+    ],
+    "checking": false
+   }
+  },
+  "obs": {
+   "verdictNotes": ""
+  },
+  "job": {
+   "light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": false
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "res": "failure",
+    "finished": false,
+    "card": {
+     "kind": "error",
+     "title": "最终的音频没有达到正常水平，所以视频没有保留。",
+     "text": "最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]",
+     "overflow": []
+    },
+    "keptRecord": null,
+    "resultWarnings": null,
+    "endedEarly": false,
+    "status": {
+     "announced": "视频无法制作。最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]",
+     "shown": "",
+     "spokenOnly": "视频无法制作。最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]"
+    },
+    "audioWarningsStill": ""
+   },
+   "dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": false
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "res": "failure",
+    "finished": false,
+    "card": {
+     "kind": "error",
+     "title": "最终的音频没有达到正常水平，所以视频没有保留。",
+     "text": "最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]",
+     "overflow": []
+    },
+    "keptRecord": null,
+    "resultWarnings": null,
+    "endedEarly": false,
+    "status": {
+     "announced": "视频无法制作。最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]",
+     "shown": "",
+     "spokenOnly": "视频无法制作。最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]"
+    },
+    "audioWarningsStill": ""
+   },
+   "forced-light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": true
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "res": "failure",
+    "finished": false,
+    "card": {
+     "kind": "error",
+     "title": "最终的音频没有达到正常水平，所以视频没有保留。",
+     "text": "最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]",
+     "overflow": []
+    },
+    "keptRecord": null,
+    "resultWarnings": null,
+    "endedEarly": false,
+    "status": {
+     "announced": "视频无法制作。最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]",
+     "shown": "",
+     "spokenOnly": "视频无法制作。最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]"
+    },
+    "audioWarningsStill": ""
+   },
+   "forced-dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": true
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "res": "failure",
+    "finished": false,
+    "card": {
+     "kind": "error",
+     "title": "最终的音频没有达到正常水平，所以视频没有保留。",
+     "text": "最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]",
+     "overflow": []
+    },
+    "keptRecord": null,
+    "resultWarnings": null,
+    "endedEarly": false,
+    "status": {
+     "announced": "视频无法制作。最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]",
+     "shown": "",
+     "spokenOnly": "视频无法制作。最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]"
+    },
+    "audioWarningsStill": ""
+   }
+  },
+  "spokenAtCompletion": null,
+  "planned": {
+   "count": 1,
+   "completed": [
+    {
+     "t": 1793139169335,
+     "audioGainDb": 0
+    }
+   ],
+   "workers": 1
+  },
+  "output": {
+   "saved": false,
+   "why": "no Save on the page"
+  },
+  "scenarioAsserts": [
+   {
+    "what": "the verdict's notes, then the outcome (not judged against VH-185, whose scope it is not)",
+    "outcome": "not-counted",
+    "why": "recorded as found, not judged here",
+    "found": {
+     "notes": "",
+     "outcome": "failure",
+     "text": "最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]",
+     "planned": 1
+    }
+   }
+  ],
+  "status": "ok",
+  "workerLogs": [
+   {
+    "t": 639,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (worker)"
+    ]
+   },
+   {
+    "t": 640,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[worker]",
+     "job worker ready"
+    ]
+   },
+   {
+    "t": 640,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[worker]",
+     "ping received"
+    ]
+   },
+   {
+    "t": 1532,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.02,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 1539,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.02,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 1539,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "device capabilities inspected",
+     {
+      "hasWebCodecs": true,
+      "hasOpfs": true,
+      "deviceClass": "desktop",
+      "hardwareConcurrency": 10,
+      "quotaBytes": 10737418428,
+      "availableBytes": 10737418240
+     }
+    ]
+   },
+   {
+    "t": 1551,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1280,
+      "height": 720,
+      "bitrate": 2648219
+     }
+    ]
+   },
+   {
+    "t": 1565,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 2,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 1845,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[probe]",
+     "calibration complete",
+     {
+      "framesEncoded": 75,
+      "videoFramesPerSecond": 367,
+      "audioRealtimeFactor": 28,
+      "estimatedSeconds": 2,
+      "videoSeconds": 0.7,
+      "brandingSeconds": 0.7,
+      "audioPlanningSeconds": 0.2,
+      "audioProcessingSeconds": 0,
+      "verificationSeconds": 0
+     }
+    ]
+   },
+   {
+    "t": 5251,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.02,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 5252,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[worker]",
+     "output shape selected",
+     {
+      "presetId": "best",
+      "contentClass": "unknown",
+      "videoBitrateBps": 2648219,
+      "bitrateBasis": "blended-with-source"
+     }
+    ]
+   },
+   {
+    "t": 5253,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[opfs]",
+     "workspace opened",
+     {
+      "jobId": "job-4",
+      "directoryName": "s9bdbe482-job-4"
+     }
+    ]
+   },
+   {
+    "t": 5254,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[pipeline]",
+     "source lanes do not start together",
+     {
+      "videoOffsetSeconds": 0,
+      "audioOffsetSeconds": 9.679
+     }
+    ]
+   },
+   {
+    "t": 5269,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[audio]",
+     "chain planned",
+     {
+      "sourceIntegratedLufs": null,
+      "loudnessRangeLu": 0,
+      "macroLevelling": false,
+      "damageSilenced": 0,
+      "afterChainLufs": null,
+      "limitedLufs": null,
+      "limiterBiteLu": null,
+      "codecCostLu": null,
+      "codecOvershootDb": null,
+      "codecProbedSeconds": null,
+      "limiterCeilingDbtp": -3,
+      "predictedOutputLufs": null,
+      "refinementPasses": 0,
+      "converged": true,
+      "gainDb": 0,
+      "planningMs": 10
+     }
+    ]
+   },
+   {
+    "t": 5271,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[branding]",
+     "clip loaded",
+     {
+      "segment": "closing",
+      "url": "http://127.0.0.1:5181/branding/closing-tail-blue-1080p.mp4",
+      "durationSeconds": 4
+     }
+    ]
+   },
+   {
+    "t": 5272,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[pipeline]",
+     "metadata tags carried over",
+     {
+      "keys": 1
+     }
+    ]
+   },
+   {
+    "t": 5283,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[encoder-delay]",
+     "measured",
+     {
+      "codec": "aac",
+      "delayMs": 44
+     }
+    ]
+   },
+   {
+    "t": 6115,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[pipeline]",
+     "encode complete",
+     {
+      "preset": "best",
+      "framesFed": 250,
+      "outputBytes": 3697084,
+      "width": 1280,
+      "height": 720,
+      "frameRate": 25,
+      "audioGainDb": 0,
+      "openingSeconds": 0,
+      "closingSeconds": 4,
+      "timelineSeconds": 14,
+      "keptRange": null,
+      "brandingRequested": "false/true",
+      "brandingApplied": "false/true",
+      "titleCard": false
+     }
+    ]
+   },
+   {
+    "t": 6127,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "[worker]",
+     "output failed verification",
+     {
+      "code": "loudness-out-of-range",
+      "integratedLufs": -36.71921355614518,
+      "truePeakDbtp": -32.7424929883655
+     }
+    ]
+   },
+   {
+    "t": 6128,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[opfs]",
+     "workspace disposed",
+     {
+      "jobId": "job-4"
+     }
+    ]
+   },
+   {
+    "t": 6128,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "[worker]",
+     "processing failed",
+     {
+      "code": "output-loudness",
+      "reason": "Output audio failed verification: loudness-out-of-range"
+     }
+    ]
+   }
+  ],
+  "console": [],
+  "ms": 9595
+ },
+ {
+  "key": "S-102__zh-Hans__w320",
+  "cell": "S-102",
+  "scenario": "S-102",
+  "what": "An untrimmed file with under 400 ms of sound (wish VH-185.1)",
+  "lang": "zh-Hans",
+  "view": "w320",
+  "modesRead": [
+   "light",
+   "dark",
+   "forced-light",
+   "forced-dark"
+  ],
+  "powerAtStart": {
+   "ac": true,
+   "load": [
+    4.04,
+    4.66,
+    6.03
+   ],
+   "powermode": "powermode            2"
+  },
+  "preAt": 2225,
+  "pre": {
+   "light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": false
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "准备就绪"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:10.0"
+    },
+    "warnings": null,
+    "noAudioHeading": false,
+    "keptTooLittleHeading": false,
+    "wholeTooLittleHeading": false,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。",
+     "shown": "",
+     "spokenOnly": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。"
+    },
+    "sourceStatus": {
+     "announced": "视频已读取。",
+     "shown": "视频已读取。",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793139174703,
+     "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。"
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "页面语言：简体中文。"
+     },
+     {
+      "region": "div.promise-help",
+      "text": "视频有许多格式。有些格式在一台设备上可以播放，在另一台上却不行，或者无法在某些应用中使用。此工具会将您的视频保存为 MP4，这是兼容性最好的视频格式。这意味着它几乎可以在任何手机、电脑或网站上播放。"
+     },
+     {
+      "region": "#source-status",
+      "text": "视频已读取。"
+     },
+     {
+      "region": "div",
+      "text": "视频的最后一秒 — 结尾图形在逐渐出现时会覆盖这一秒。 定格的最后一帧 — 最后一帧画面会额外停留一秒钟。结尾图形会覆盖这一秒，所以视频中的所有内容都不会被遮挡。"
+     },
+     {
+      "region": "#status",
+      "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。"
+     }
+    ],
+    "checking": false
+   },
+   "dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": false
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "准备就绪"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:10.0"
+    },
+    "warnings": null,
+    "noAudioHeading": false,
+    "keptTooLittleHeading": false,
+    "wholeTooLittleHeading": false,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。",
+     "shown": "",
+     "spokenOnly": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。"
+    },
+    "sourceStatus": {
+     "announced": "视频已读取。",
+     "shown": "视频已读取。",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793139174703,
+     "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。"
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "页面语言：简体中文。"
+     },
+     {
+      "region": "div.promise-help",
+      "text": "视频有许多格式。有些格式在一台设备上可以播放，在另一台上却不行，或者无法在某些应用中使用。此工具会将您的视频保存为 MP4，这是兼容性最好的视频格式。这意味着它几乎可以在任何手机、电脑或网站上播放。"
+     },
+     {
+      "region": "#source-status",
+      "text": "视频已读取。"
+     },
+     {
+      "region": "div",
+      "text": "视频的最后一秒 — 结尾图形在逐渐出现时会覆盖这一秒。 定格的最后一帧 — 最后一帧画面会额外停留一秒钟。结尾图形会覆盖这一秒，所以视频中的所有内容都不会被遮挡。"
+     },
+     {
+      "region": "#status",
+      "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。"
+     }
+    ],
+    "checking": false
+   },
+   "forced-light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": true
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "准备就绪"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:10.0"
+    },
+    "warnings": null,
+    "noAudioHeading": false,
+    "keptTooLittleHeading": false,
+    "wholeTooLittleHeading": false,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。",
+     "shown": "",
+     "spokenOnly": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。"
+    },
+    "sourceStatus": {
+     "announced": "视频已读取。",
+     "shown": "视频已读取。",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793139174703,
+     "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。"
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "页面语言：简体中文。"
+     },
+     {
+      "region": "div.promise-help",
+      "text": "视频有许多格式。有些格式在一台设备上可以播放，在另一台上却不行，或者无法在某些应用中使用。此工具会将您的视频保存为 MP4，这是兼容性最好的视频格式。这意味着它几乎可以在任何手机、电脑或网站上播放。"
+     },
+     {
+      "region": "#source-status",
+      "text": "视频已读取。"
+     },
+     {
+      "region": "div",
+      "text": "视频的最后一秒 — 结尾图形在逐渐出现时会覆盖这一秒。 定格的最后一帧 — 最后一帧画面会额外停留一秒钟。结尾图形会覆盖这一秒，所以视频中的所有内容都不会被遮挡。"
+     },
+     {
+      "region": "#status",
+      "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。"
+     }
+    ],
+    "checking": false
+   },
+   "forced-dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": true
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "准备就绪"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:10.0"
+    },
+    "warnings": null,
+    "noAudioHeading": false,
+    "keptTooLittleHeading": false,
+    "wholeTooLittleHeading": false,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。",
+     "shown": "",
+     "spokenOnly": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。"
+    },
+    "sourceStatus": {
+     "announced": "视频已读取。",
+     "shown": "视频已读取。",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793139174703,
+     "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。"
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "页面语言：简体中文。"
+     },
+     {
+      "region": "div.promise-help",
+      "text": "视频有许多格式。有些格式在一台设备上可以播放，在另一台上却不行，或者无法在某些应用中使用。此工具会将您的视频保存为 MP4，这是兼容性最好的视频格式。这意味着它几乎可以在任何手机、电脑或网站上播放。"
+     },
+     {
+      "region": "#source-status",
+      "text": "视频已读取。"
+     },
+     {
+      "region": "div",
+      "text": "视频的最后一秒 — 结尾图形在逐渐出现时会覆盖这一秒。 定格的最后一帧 — 最后一帧画面会额外停留一秒钟。结尾图形会覆盖这一秒，所以视频中的所有内容都不会被遮挡。"
+     },
+     {
+      "region": "#status",
+      "text": "设备检查完成。准备就绪。这应该只需要几秒钟。预计大小最大可达7.2 MB。"
+     }
+    ],
+    "checking": false
+   }
+  },
+  "obs": {
+   "verdictNotes": ""
+  },
+  "job": {
+   "light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": false
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "res": "failure",
+    "finished": false,
+    "card": {
+     "kind": "error",
+     "title": "最终的音频没有达到正常水平，所以视频没有保留。",
+     "text": "最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]",
+     "overflow": []
+    },
+    "keptRecord": null,
+    "resultWarnings": null,
+    "endedEarly": false,
+    "status": {
+     "announced": "视频无法制作。最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]",
+     "shown": "",
+     "spokenOnly": "视频无法制作。最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]"
+    },
+    "audioWarningsStill": ""
+   },
+   "dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": false
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "res": "failure",
+    "finished": false,
+    "card": {
+     "kind": "error",
+     "title": "最终的音频没有达到正常水平，所以视频没有保留。",
+     "text": "最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]",
+     "overflow": []
+    },
+    "keptRecord": null,
+    "resultWarnings": null,
+    "endedEarly": false,
+    "status": {
+     "announced": "视频无法制作。最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]",
+     "shown": "",
+     "spokenOnly": "视频无法制作。最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]"
+    },
+    "audioWarningsStill": ""
+   },
+   "forced-light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": true
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "res": "failure",
+    "finished": false,
+    "card": {
+     "kind": "error",
+     "title": "最终的音频没有达到正常水平，所以视频没有保留。",
+     "text": "最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]",
+     "overflow": []
+    },
+    "keptRecord": null,
+    "resultWarnings": null,
+    "endedEarly": false,
+    "status": {
+     "announced": "视频无法制作。最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]",
+     "shown": "",
+     "spokenOnly": "视频无法制作。最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]"
+    },
+    "audioWarningsStill": ""
+   },
+   "forced-dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": true
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "res": "failure",
+    "finished": false,
+    "card": {
+     "kind": "error",
+     "title": "最终的音频没有达到正常水平，所以视频没有保留。",
+     "text": "最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]",
+     "overflow": []
+    },
+    "keptRecord": null,
+    "resultWarnings": null,
+    "endedEarly": false,
+    "status": {
+     "announced": "视频无法制作。最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]",
+     "shown": "",
+     "spokenOnly": "视频无法制作。最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]"
+    },
+    "audioWarningsStill": ""
+   }
+  },
+  "spokenAtCompletion": null,
+  "planned": {
+   "count": 1,
+   "completed": [
+    {
+     "t": 1793139178983,
+     "audioGainDb": 0
+    }
+   ],
+   "workers": 1
+  },
+  "output": {
+   "saved": false,
+   "why": "no Save on the page"
+  },
+  "scenarioAsserts": [
+   {
+    "what": "the verdict's notes, then the outcome (not judged against VH-185, whose scope it is not)",
+    "outcome": "not-counted",
+    "why": "recorded as found, not judged here",
+    "found": {
+     "notes": "",
+     "outcome": "failure",
+     "text": "最终的音频没有达到正常水平，所以视频没有保留。您的原始文件未被更改。请再试一次。如果问题再次出现，请使用“报告问题”按钮报告，该按钮会附上有助于解决问题的详细信息。[dev: Output audio failed verification: loudness-out-of-range]",
+     "planned": 1
+    }
+   }
+  ],
+  "status": "ok",
+  "workerLogs": [
+   {
+    "t": 644,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (worker)"
+    ]
+   },
+   {
+    "t": 645,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[worker]",
+     "job worker ready"
+    ]
+   },
+   {
+    "t": 645,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[worker]",
+     "ping received"
+    ]
+   },
+   {
+    "t": 1529,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.02,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 1535,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.02,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 1535,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "device capabilities inspected",
+     {
+      "hasWebCodecs": true,
+      "hasOpfs": true,
+      "deviceClass": "desktop",
+      "hardwareConcurrency": 10,
+      "quotaBytes": 10737418428,
+      "availableBytes": 10737418240
+     }
+    ]
+   },
+   {
+    "t": 1546,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1280,
+      "height": 720,
+      "bitrate": 2648219
+     }
+    ]
+   },
+   {
+    "t": 1559,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 2,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 1842,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[probe]",
+     "calibration complete",
+     {
+      "framesEncoded": 75,
+      "videoFramesPerSecond": 358,
+      "audioRealtimeFactor": 30,
+      "estimatedSeconds": 2,
+      "videoSeconds": 0.7,
+      "brandingSeconds": 0.7,
+      "audioPlanningSeconds": 0.2,
+      "audioProcessingSeconds": 0,
+      "verificationSeconds": 0
+     }
+    ]
+   },
+   {
+    "t": 5235,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.02,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 5235,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[worker]",
+     "output shape selected",
+     {
+      "presetId": "best",
+      "contentClass": "unknown",
+      "videoBitrateBps": 2648219,
+      "bitrateBasis": "blended-with-source"
+     }
+    ]
+   },
+   {
+    "t": 5236,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[opfs]",
+     "workspace opened",
+     {
+      "jobId": "job-4",
+      "directoryName": "s88b3e713-job-4"
+     }
+    ]
+   },
+   {
+    "t": 5237,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[pipeline]",
+     "source lanes do not start together",
+     {
+      "videoOffsetSeconds": 0,
+      "audioOffsetSeconds": 9.679
+     }
+    ]
+   },
+   {
+    "t": 5247,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[audio]",
+     "chain planned",
+     {
+      "sourceIntegratedLufs": null,
+      "loudnessRangeLu": 0,
+      "macroLevelling": false,
+      "damageSilenced": 0,
+      "afterChainLufs": null,
+      "limitedLufs": null,
+      "limiterBiteLu": null,
+      "codecCostLu": null,
+      "codecOvershootDb": null,
+      "codecProbedSeconds": null,
+      "limiterCeilingDbtp": -3,
+      "predictedOutputLufs": null,
+      "refinementPasses": 0,
+      "converged": true,
+      "gainDb": 0,
+      "planningMs": 9
+     }
+    ]
+   },
+   {
+    "t": 5250,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[branding]",
+     "clip loaded",
+     {
+      "segment": "closing",
+      "url": "http://127.0.0.1:5181/branding/closing-tail-blue-1080p.mp4",
+      "durationSeconds": 4
+     }
+    ]
+   },
+   {
+    "t": 5252,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[pipeline]",
+     "metadata tags carried over",
+     {
+      "keys": 1
+     }
+    ]
+   },
+   {
+    "t": 5261,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[encoder-delay]",
+     "measured",
+     {
+      "codec": "aac",
+      "delayMs": 44
+     }
+    ]
+   },
+   {
+    "t": 6123,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[pipeline]",
+     "encode complete",
+     {
+      "preset": "best",
+      "framesFed": 250,
+      "outputBytes": 3697084,
+      "width": 1280,
+      "height": 720,
+      "frameRate": 25,
+      "audioGainDb": 0,
+      "openingSeconds": 0,
+      "closingSeconds": 4,
+      "timelineSeconds": 14,
+      "keptRange": null,
+      "brandingRequested": "false/true",
+      "brandingApplied": "false/true",
+      "titleCard": false
+     }
+    ]
+   },
+   {
+    "t": 6136,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "[worker]",
+     "output failed verification",
+     {
+      "code": "loudness-out-of-range",
+      "integratedLufs": -36.71921355614518,
+      "truePeakDbtp": -32.7424929883655
+     }
+    ]
+   },
+   {
+    "t": 6137,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[opfs]",
+     "workspace disposed",
+     {
+      "jobId": "job-4"
+     }
+    ]
+   },
+   {
+    "t": 6137,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "[worker]",
+     "processing failed",
+     {
+      "code": "output-loudness",
+      "reason": "Output audio failed verification: loudness-out-of-range"
+     }
+    ]
+   }
+  ],
+  "console": [],
+  "ms": 9576
+ },
+ {
+  "key": "S-102__ms-MY__w1280",
+  "cell": "S-102",
+  "scenario": "S-102",
+  "what": "An untrimmed file with under 400 ms of sound (wish VH-185.1)",
+  "lang": "ms-MY",
+  "view": "w1280",
+  "modesRead": [
+   "light",
+   "dark",
+   "forced-light",
+   "forced-dark"
+  ],
+  "powerAtStart": {
+   "ac": true,
+   "load": [
+    3.94,
+    4.62,
+    6
+   ],
+   "powermode": "powermode            2"
+  },
+  "preAt": 2217,
+  "pre": {
+   "light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": false
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Sedia untuk bermula"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:10.0"
+    },
+    "warnings": null,
+    "noAudioHeading": false,
+    "keptTooLittleHeading": false,
+    "wholeTooLittleHeading": false,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB.",
+     "shown": "",
+     "spokenOnly": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB."
+    },
+    "sourceStatus": {
+     "announced": "Video dibaca.",
+     "shown": "Video dibaca.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793139184337,
+     "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB."
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "Bahasa halaman: Bahasa Malaysia."
+     },
+     {
+      "region": "div.promise-help",
+      "text": "Video wujud dalam banyak format. Sesetengahnya dimainkan pada satu peranti tetapi tidak pada peranti lain, atau tidak berfungsi dengan sesetengah aplikasi. Alat"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video dibaca."
+     },
+     {
+      "region": "div",
+      "text": "Saat terakhir video — grafik penutup menutupinya semasa ia terbentuk. Bingkai akhir ditahan — bingkai terakhir anda ditahan selama satu saat tambahan. Grafik pe"
+     },
+     {
+      "region": "#status",
+      "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB."
+     }
+    ],
+    "checking": false
+   },
+   "dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": false
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Sedia untuk bermula"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:10.0"
+    },
+    "warnings": null,
+    "noAudioHeading": false,
+    "keptTooLittleHeading": false,
+    "wholeTooLittleHeading": false,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB.",
+     "shown": "",
+     "spokenOnly": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB."
+    },
+    "sourceStatus": {
+     "announced": "Video dibaca.",
+     "shown": "Video dibaca.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793139184337,
+     "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB."
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "Bahasa halaman: Bahasa Malaysia."
+     },
+     {
+      "region": "div.promise-help",
+      "text": "Video wujud dalam banyak format. Sesetengahnya dimainkan pada satu peranti tetapi tidak pada peranti lain, atau tidak berfungsi dengan sesetengah aplikasi. Alat"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video dibaca."
+     },
+     {
+      "region": "div",
+      "text": "Saat terakhir video — grafik penutup menutupinya semasa ia terbentuk. Bingkai akhir ditahan — bingkai terakhir anda ditahan selama satu saat tambahan. Grafik pe"
+     },
+     {
+      "region": "#status",
+      "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB."
+     }
+    ],
+    "checking": false
+   },
+   "forced-light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": true
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Sedia untuk bermula"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:10.0"
+    },
+    "warnings": null,
+    "noAudioHeading": false,
+    "keptTooLittleHeading": false,
+    "wholeTooLittleHeading": false,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB.",
+     "shown": "",
+     "spokenOnly": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB."
+    },
+    "sourceStatus": {
+     "announced": "Video dibaca.",
+     "shown": "Video dibaca.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793139184337,
+     "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB."
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "Bahasa halaman: Bahasa Malaysia."
+     },
+     {
+      "region": "div.promise-help",
+      "text": "Video wujud dalam banyak format. Sesetengahnya dimainkan pada satu peranti tetapi tidak pada peranti lain, atau tidak berfungsi dengan sesetengah aplikasi. Alat"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video dibaca."
+     },
+     {
+      "region": "div",
+      "text": "Saat terakhir video — grafik penutup menutupinya semasa ia terbentuk. Bingkai akhir ditahan — bingkai terakhir anda ditahan selama satu saat tambahan. Grafik pe"
+     },
+     {
+      "region": "#status",
+      "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB."
+     }
+    ],
+    "checking": false
+   },
+   "forced-dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": true
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Sedia untuk bermula"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:10.0"
+    },
+    "warnings": null,
+    "noAudioHeading": false,
+    "keptTooLittleHeading": false,
+    "wholeTooLittleHeading": false,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB.",
+     "shown": "",
+     "spokenOnly": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB."
+    },
+    "sourceStatus": {
+     "announced": "Video dibaca.",
+     "shown": "Video dibaca.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793139184337,
+     "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB."
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "Bahasa halaman: Bahasa Malaysia."
+     },
+     {
+      "region": "div.promise-help",
+      "text": "Video wujud dalam banyak format. Sesetengahnya dimainkan pada satu peranti tetapi tidak pada peranti lain, atau tidak berfungsi dengan sesetengah aplikasi. Alat"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video dibaca."
+     },
+     {
+      "region": "div",
+      "text": "Saat terakhir video — grafik penutup menutupinya semasa ia terbentuk. Bingkai akhir ditahan — bingkai terakhir anda ditahan selama satu saat tambahan. Grafik pe"
+     },
+     {
+      "region": "#status",
+      "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB."
+     }
+    ],
+    "checking": false
+   }
+  },
+  "obs": {
+   "verdictNotes": ""
+  },
+  "job": {
+   "light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": false
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "res": "failure",
+    "finished": false,
+    "card": {
+     "kind": "error",
+     "title": "Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan.",
+     "text": "Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan.Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu. [dev: Output audio failed verification: loudness-out-of-range]",
+     "overflow": []
+    },
+    "keptRecord": null,
+    "resultWarnings": null,
+    "endedEarly": false,
+    "status": {
+     "announced": "Video itu tidak dapat dicipta. Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan. Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu. [dev: Output audio failed verification: loudness-out-of-range]",
+     "shown": "",
+     "spokenOnly": "Video itu tidak dapat dicipta. Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan. Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu. [dev: Output audio failed verification: loudness-out-of-range]"
+    },
+    "audioWarningsStill": ""
+   },
+   "dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": false
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "res": "failure",
+    "finished": false,
+    "card": {
+     "kind": "error",
+     "title": "Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan.",
+     "text": "Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan.Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu. [dev: Output audio failed verification: loudness-out-of-range]",
+     "overflow": []
+    },
+    "keptRecord": null,
+    "resultWarnings": null,
+    "endedEarly": false,
+    "status": {
+     "announced": "Video itu tidak dapat dicipta. Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan. Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu. [dev: Output audio failed verification: loudness-out-of-range]",
+     "shown": "",
+     "spokenOnly": "Video itu tidak dapat dicipta. Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan. Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu. [dev: Output audio failed verification: loudness-out-of-range]"
+    },
+    "audioWarningsStill": ""
+   },
+   "forced-light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": true
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "res": "failure",
+    "finished": false,
+    "card": {
+     "kind": "error",
+     "title": "Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan.",
+     "text": "Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan.Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu. [dev: Output audio failed verification: loudness-out-of-range]",
+     "overflow": []
+    },
+    "keptRecord": null,
+    "resultWarnings": null,
+    "endedEarly": false,
+    "status": {
+     "announced": "Video itu tidak dapat dicipta. Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan. Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu. [dev: Output audio failed verification: loudness-out-of-range]",
+     "shown": "",
+     "spokenOnly": "Video itu tidak dapat dicipta. Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan. Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu. [dev: Output audio failed verification: loudness-out-of-range]"
+    },
+    "audioWarningsStill": ""
+   },
+   "forced-dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": true
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "res": "failure",
+    "finished": false,
+    "card": {
+     "kind": "error",
+     "title": "Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan.",
+     "text": "Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan.Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu. [dev: Output audio failed verification: loudness-out-of-range]",
+     "overflow": []
+    },
+    "keptRecord": null,
+    "resultWarnings": null,
+    "endedEarly": false,
+    "status": {
+     "announced": "Video itu tidak dapat dicipta. Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan. Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu. [dev: Output audio failed verification: loudness-out-of-range]",
+     "shown": "",
+     "spokenOnly": "Video itu tidak dapat dicipta. Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan. Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu. [dev: Output audio failed verification: loudness-out-of-range]"
+    },
+    "audioWarningsStill": ""
+   }
+  },
+  "spokenAtCompletion": null,
+  "planned": {
+   "count": 1,
+   "completed": [
+    {
+     "t": 1793139188642,
+     "audioGainDb": 0
+    }
+   ],
+   "workers": 1
+  },
+  "output": {
+   "saved": false,
+   "why": "no Save on the page"
+  },
+  "scenarioAsserts": [
+   {
+    "what": "the verdict's notes, then the outcome (not judged against VH-185, whose scope it is not)",
+    "outcome": "not-counted",
+    "why": "recorded as found, not judged here",
+    "found": {
+     "notes": "",
+     "outcome": "failure",
+     "text": "Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan.Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masal…",
+     "planned": 1
+    }
+   }
+  ],
+  "status": "ok",
+  "workerLogs": [
+   {
+    "t": 641,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (worker)"
+    ]
+   },
+   {
+    "t": 642,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[worker]",
+     "job worker ready"
+    ]
+   },
+   {
+    "t": 642,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[worker]",
+     "ping received"
+    ]
+   },
+   {
+    "t": 1520,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.02,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 1527,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.02,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 1527,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "device capabilities inspected",
+     {
+      "hasWebCodecs": true,
+      "hasOpfs": true,
+      "deviceClass": "desktop",
+      "hardwareConcurrency": 10,
+      "quotaBytes": 10737418428,
+      "availableBytes": 10737418240
+     }
+    ]
+   },
+   {
+    "t": 1538,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1280,
+      "height": 720,
+      "bitrate": 2648219
+     }
+    ]
+   },
+   {
+    "t": 1552,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 2,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 1855,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[probe]",
+     "calibration complete",
+     {
+      "framesEncoded": 75,
+      "videoFramesPerSecond": 325,
+      "audioRealtimeFactor": 29,
+      "estimatedSeconds": 2,
+      "videoSeconds": 0.8,
+      "brandingSeconds": 0.8,
+      "audioPlanningSeconds": 0.2,
+      "audioProcessingSeconds": 0,
+      "verificationSeconds": 0
+     }
+    ]
+   },
+   {
+    "t": 5250,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.02,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 5250,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[worker]",
+     "output shape selected",
+     {
+      "presetId": "best",
+      "contentClass": "unknown",
+      "videoBitrateBps": 2648219,
+      "bitrateBasis": "blended-with-source"
+     }
+    ]
+   },
+   {
+    "t": 5252,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[opfs]",
+     "workspace opened",
+     {
+      "jobId": "job-4",
+      "directoryName": "s384ad3c6-job-4"
+     }
+    ]
+   },
+   {
+    "t": 5253,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[pipeline]",
+     "source lanes do not start together",
+     {
+      "videoOffsetSeconds": 0,
+      "audioOffsetSeconds": 9.679
+     }
+    ]
+   },
+   {
+    "t": 5265,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[audio]",
+     "chain planned",
+     {
+      "sourceIntegratedLufs": null,
+      "loudnessRangeLu": 0,
+      "macroLevelling": false,
+      "damageSilenced": 0,
+      "afterChainLufs": null,
+      "limitedLufs": null,
+      "limiterBiteLu": null,
+      "codecCostLu": null,
+      "codecOvershootDb": null,
+      "codecProbedSeconds": null,
+      "limiterCeilingDbtp": -3,
+      "predictedOutputLufs": null,
+      "refinementPasses": 0,
+      "converged": true,
+      "gainDb": 0,
+      "planningMs": 10
+     }
+    ]
+   },
+   {
+    "t": 5266,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[branding]",
+     "clip loaded",
+     {
+      "segment": "closing",
+      "url": "http://127.0.0.1:5181/branding/closing-tail-blue-1080p.mp4",
+      "durationSeconds": 4
+     }
+    ]
+   },
+   {
+    "t": 5267,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[pipeline]",
+     "metadata tags carried over",
+     {
+      "keys": 1
+     }
+    ]
+   },
+   {
+    "t": 5276,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[encoder-delay]",
+     "measured",
+     {
+      "codec": "aac",
+      "delayMs": 44
+     }
+    ]
+   },
+   {
+    "t": 6161,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[pipeline]",
+     "encode complete",
+     {
+      "preset": "best",
+      "framesFed": 250,
+      "outputBytes": 3697084,
+      "width": 1280,
+      "height": 720,
+      "frameRate": 25,
+      "audioGainDb": 0,
+      "openingSeconds": 0,
+      "closingSeconds": 4,
+      "timelineSeconds": 14,
+      "keptRange": null,
+      "brandingRequested": "false/true",
+      "brandingApplied": "false/true",
+      "titleCard": false
+     }
+    ]
+   },
+   {
+    "t": 6176,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "[worker]",
+     "output failed verification",
+     {
+      "code": "loudness-out-of-range",
+      "integratedLufs": -36.71921355614518,
+      "truePeakDbtp": -32.7424929883655
+     }
+    ]
+   },
+   {
+    "t": 6177,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[opfs]",
+     "workspace disposed",
+     {
+      "jobId": "job-4"
+     }
+    ]
+   },
+   {
+    "t": 6177,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "[worker]",
+     "processing failed",
+     {
+      "code": "output-loudness",
+      "reason": "Output audio failed verification: loudness-out-of-range"
+     }
+    ]
+   }
+  ],
+  "console": [],
+  "ms": 9592
+ },
+ {
+  "key": "S-102__ms-MY__w320",
+  "cell": "S-102",
+  "scenario": "S-102",
+  "what": "An untrimmed file with under 400 ms of sound (wish VH-185.1)",
+  "lang": "ms-MY",
+  "view": "w320",
+  "modesRead": [
+   "light",
+   "dark",
+   "forced-light",
+   "forced-dark"
+  ],
+  "powerAtStart": {
+   "ac": true,
+   "load": [
+    4.39,
+    4.7,
+    6.01
+   ],
+   "powermode": "powermode            2"
+  },
+  "preAt": 2220,
+  "pre": {
+   "light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": false
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Sedia untuk bermula"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:10.0"
+    },
+    "warnings": null,
+    "noAudioHeading": false,
+    "keptTooLittleHeading": false,
+    "wholeTooLittleHeading": false,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB.",
+     "shown": "",
+     "spokenOnly": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB."
+    },
+    "sourceStatus": {
+     "announced": "Video dibaca.",
+     "shown": "Video dibaca.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793139193961,
+     "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB."
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "Bahasa halaman: Bahasa Malaysia."
+     },
+     {
+      "region": "div.promise-help",
+      "text": "Video wujud dalam banyak format. Sesetengahnya dimainkan pada satu peranti tetapi tidak pada peranti lain, atau tidak berfungsi dengan sesetengah aplikasi. Alat"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video dibaca."
+     },
+     {
+      "region": "div",
+      "text": "Saat terakhir video — grafik penutup menutupinya semasa ia terbentuk. Bingkai akhir ditahan — bingkai terakhir anda ditahan selama satu saat tambahan. Grafik pe"
+     },
+     {
+      "region": "#status",
+      "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB."
+     }
+    ],
+    "checking": false
+   },
+   "dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": false
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Sedia untuk bermula"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:10.0"
+    },
+    "warnings": null,
+    "noAudioHeading": false,
+    "keptTooLittleHeading": false,
+    "wholeTooLittleHeading": false,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB.",
+     "shown": "",
+     "spokenOnly": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB."
+    },
+    "sourceStatus": {
+     "announced": "Video dibaca.",
+     "shown": "Video dibaca.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793139193961,
+     "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB."
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "Bahasa halaman: Bahasa Malaysia."
+     },
+     {
+      "region": "div.promise-help",
+      "text": "Video wujud dalam banyak format. Sesetengahnya dimainkan pada satu peranti tetapi tidak pada peranti lain, atau tidak berfungsi dengan sesetengah aplikasi. Alat"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video dibaca."
+     },
+     {
+      "region": "div",
+      "text": "Saat terakhir video — grafik penutup menutupinya semasa ia terbentuk. Bingkai akhir ditahan — bingkai terakhir anda ditahan selama satu saat tambahan. Grafik pe"
+     },
+     {
+      "region": "#status",
+      "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB."
+     }
+    ],
+    "checking": false
+   },
+   "forced-light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": true
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Sedia untuk bermula"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:10.0"
+    },
+    "warnings": null,
+    "noAudioHeading": false,
+    "keptTooLittleHeading": false,
+    "wholeTooLittleHeading": false,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB.",
+     "shown": "",
+     "spokenOnly": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB."
+    },
+    "sourceStatus": {
+     "announced": "Video dibaca.",
+     "shown": "Video dibaca.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793139193961,
+     "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB."
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "Bahasa halaman: Bahasa Malaysia."
+     },
+     {
+      "region": "div.promise-help",
+      "text": "Video wujud dalam banyak format. Sesetengahnya dimainkan pada satu peranti tetapi tidak pada peranti lain, atau tidak berfungsi dengan sesetengah aplikasi. Alat"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video dibaca."
+     },
+     {
+      "region": "div",
+      "text": "Saat terakhir video — grafik penutup menutupinya semasa ia terbentuk. Bingkai akhir ditahan — bingkai terakhir anda ditahan selama satu saat tambahan. Grafik pe"
+     },
+     {
+      "region": "#status",
+      "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB."
+     }
+    ],
+    "checking": false
+   },
+   "forced-dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": true
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": {
+     "kind": "success",
+     "heading": "Sedia untuk bermula"
+    },
+    "trim": {
+     "start": "0:00.0",
+     "end": "0:10.0"
+    },
+    "warnings": null,
+    "noAudioHeading": false,
+    "keptTooLittleHeading": false,
+    "wholeTooLittleHeading": false,
+    "endsEarlyHeading": false,
+    "status": {
+     "announced": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB.",
+     "shown": "",
+     "spokenOnly": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB."
+    },
+    "sourceStatus": {
+     "announced": "Video dibaca.",
+     "shown": "Video dibaca.",
+     "spokenOnly": ""
+    },
+    "lastStatusWrite": {
+     "t": 1793139193961,
+     "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB."
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "Bahasa halaman: Bahasa Malaysia."
+     },
+     {
+      "region": "div.promise-help",
+      "text": "Video wujud dalam banyak format. Sesetengahnya dimainkan pada satu peranti tetapi tidak pada peranti lain, atau tidak berfungsi dengan sesetengah aplikasi. Alat"
+     },
+     {
+      "region": "#source-status",
+      "text": "Video dibaca."
+     },
+     {
+      "region": "div",
+      "text": "Saat terakhir video — grafik penutup menutupinya semasa ia terbentuk. Bingkai akhir ditahan — bingkai terakhir anda ditahan selama satu saat tambahan. Grafik pe"
+     },
+     {
+      "region": "#status",
+      "text": "Pemeriksaan peranti selesai. Sedia untuk bermula. Ini sepatutnya mengambil masa beberapa saat. Anggaran saiz sehingga 7.2 MB."
+     }
+    ],
+    "checking": false
+   }
+  },
+  "obs": {
+   "verdictNotes": ""
+  },
+  "job": {
+   "light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": false
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "res": "failure",
+    "finished": false,
+    "card": {
+     "kind": "error",
+     "title": "Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan.",
+     "text": "Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan.Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu. [dev: Output audio failed verification: loudness-out-of-range]",
+     "overflow": []
+    },
+    "keptRecord": null,
+    "resultWarnings": null,
+    "endedEarly": false,
+    "status": {
+     "announced": "Video itu tidak dapat dicipta. Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan. Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu. [dev: Output audio failed verification: loudness-out-of-range]",
+     "shown": "",
+     "spokenOnly": "Video itu tidak dapat dicipta. Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan. Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu. [dev: Output audio failed verification: loudness-out-of-range]"
+    },
+    "audioWarningsStill": ""
+   },
+   "dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": false
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "res": "failure",
+    "finished": false,
+    "card": {
+     "kind": "error",
+     "title": "Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan.",
+     "text": "Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan.Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu. [dev: Output audio failed verification: loudness-out-of-range]",
+     "overflow": []
+    },
+    "keptRecord": null,
+    "resultWarnings": null,
+    "endedEarly": false,
+    "status": {
+     "announced": "Video itu tidak dapat dicipta. Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan. Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu. [dev: Output audio failed verification: loudness-out-of-range]",
+     "shown": "",
+     "spokenOnly": "Video itu tidak dapat dicipta. Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan. Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu. [dev: Output audio failed verification: loudness-out-of-range]"
+    },
+    "audioWarningsStill": ""
+   },
+   "forced-light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": true
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "res": "failure",
+    "finished": false,
+    "card": {
+     "kind": "error",
+     "title": "Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan.",
+     "text": "Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan.Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu. [dev: Output audio failed verification: loudness-out-of-range]",
+     "overflow": []
+    },
+    "keptRecord": null,
+    "resultWarnings": null,
+    "endedEarly": false,
+    "status": {
+     "announced": "Video itu tidak dapat dicipta. Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan. Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu. [dev: Output audio failed verification: loudness-out-of-range]",
+     "shown": "",
+     "spokenOnly": "Video itu tidak dapat dicipta. Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan. Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu. [dev: Output audio failed verification: loudness-out-of-range]"
+    },
+    "audioWarningsStill": ""
+   },
+   "forced-dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": true
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "res": "failure",
+    "finished": false,
+    "card": {
+     "kind": "error",
+     "title": "Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan.",
+     "text": "Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan.Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu. [dev: Output audio failed verification: loudness-out-of-range]",
+     "overflow": []
+    },
+    "keptRecord": null,
+    "resultWarnings": null,
+    "endedEarly": false,
+    "status": {
+     "announced": "Video itu tidak dapat dicipta. Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan. Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu. [dev: Output audio failed verification: loudness-out-of-range]",
+     "shown": "",
+     "spokenOnly": "Video itu tidak dapat dicipta. Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan. Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masalah, yang menambah butiran yang akan membantu. [dev: Output audio failed verification: loudness-out-of-range]"
+    },
+    "audioWarningsStill": ""
+   }
+  },
+  "spokenAtCompletion": null,
+  "planned": {
+   "count": 1,
+   "completed": [
+    {
+     "t": 1793139198209,
+     "audioGainDb": 0
+    }
+   ],
+   "workers": 1
+  },
+  "output": {
+   "saved": false,
+   "why": "no Save on the page"
+  },
+  "scenarioAsserts": [
+   {
+    "what": "the verdict's notes, then the outcome (not judged against VH-185, whose scope it is not)",
+    "outcome": "not-counted",
+    "why": "recorded as found, not judged here",
+    "found": {
+     "notes": "",
+     "outcome": "failure",
+     "text": "Audio yang telah siap tidak keluar pada tahap biasa, jadi video itu tidak dapat disimpan.Fail asal anda tidak diubah. Cuba lagi. Jika masalah itu berlaku lagi, laporkannya dengan butang Laporkan masal…",
+     "planned": 1
+    }
+   }
+  ],
+  "status": "ok",
+  "workerLogs": [
+   {
+    "t": 645,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (worker)"
+    ]
+   },
+   {
+    "t": 645,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[worker]",
+     "job worker ready"
+    ]
+   },
+   {
+    "t": 646,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[worker]",
+     "ping received"
+    ]
+   },
+   {
+    "t": 1521,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.02,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 1527,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.02,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 1527,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "device capabilities inspected",
+     {
+      "hasWebCodecs": true,
+      "hasOpfs": true,
+      "deviceClass": "desktop",
+      "hardwareConcurrency": 10,
+      "quotaBytes": 10737418428,
+      "availableBytes": 10737418240
+     }
+    ]
+   },
+   {
+    "t": 1538,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1280,
+      "height": 720,
+      "bitrate": 2648219
+     }
+    ]
+   },
+   {
+    "t": 1551,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 2,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 1845,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[probe]",
+     "calibration complete",
+     {
+      "framesEncoded": 75,
+      "videoFramesPerSecond": 341,
+      "audioRealtimeFactor": 32,
+      "estimatedSeconds": 2,
+      "videoSeconds": 0.7,
+      "brandingSeconds": 0.7,
+      "audioPlanningSeconds": 0.2,
+      "audioProcessingSeconds": 0,
+      "verificationSeconds": 0
+     }
+    ]
+   },
+   {
+    "t": 5233,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "MP4",
+      "durationSeconds": 10.02,
+      "videoCodec": "avc",
+      "resolution": "1280x720",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": "aac",
+      "channels": 2,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 1
+     }
+    ]
+   },
+   {
+    "t": 5233,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[worker]",
+     "output shape selected",
+     {
+      "presetId": "best",
+      "contentClass": "unknown",
+      "videoBitrateBps": 2648219,
+      "bitrateBasis": "blended-with-source"
+     }
+    ]
+   },
+   {
+    "t": 5234,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[opfs]",
+     "workspace opened",
+     {
+      "jobId": "job-4",
+      "directoryName": "s80fca5a5-job-4"
+     }
+    ]
+   },
+   {
+    "t": 5235,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[pipeline]",
+     "source lanes do not start together",
+     {
+      "videoOffsetSeconds": 0,
+      "audioOffsetSeconds": 9.679
+     }
+    ]
+   },
+   {
+    "t": 5246,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[audio]",
+     "chain planned",
+     {
+      "sourceIntegratedLufs": null,
+      "loudnessRangeLu": 0,
+      "macroLevelling": false,
+      "damageSilenced": 0,
+      "afterChainLufs": null,
+      "limitedLufs": null,
+      "limiterBiteLu": null,
+      "codecCostLu": null,
+      "codecOvershootDb": null,
+      "codecProbedSeconds": null,
+      "limiterCeilingDbtp": -3,
+      "predictedOutputLufs": null,
+      "refinementPasses": 0,
+      "converged": true,
+      "gainDb": 0,
+      "planningMs": 10
+     }
+    ]
+   },
+   {
+    "t": 5248,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[branding]",
+     "clip loaded",
+     {
+      "segment": "closing",
+      "url": "http://127.0.0.1:5181/branding/closing-tail-blue-1080p.mp4",
+      "durationSeconds": 4
+     }
+    ]
+   },
+   {
+    "t": 5249,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[pipeline]",
+     "metadata tags carried over",
+     {
+      "keys": 1
+     }
+    ]
+   },
+   {
+    "t": 5258,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[encoder-delay]",
+     "measured",
+     {
+      "codec": "aac",
+      "delayMs": 44
+     }
+    ]
+   },
+   {
+    "t": 6094,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[pipeline]",
+     "encode complete",
+     {
+      "preset": "best",
+      "framesFed": 250,
+      "outputBytes": 3697084,
+      "width": 1280,
+      "height": 720,
+      "frameRate": 25,
+      "audioGainDb": 0,
+      "openingSeconds": 0,
+      "closingSeconds": 4,
+      "timelineSeconds": 14,
+      "keptRange": null,
+      "brandingRequested": "false/true",
+      "brandingApplied": "false/true",
+      "titleCard": false
+     }
+    ]
+   },
+   {
+    "t": 6106,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "[worker]",
+     "output failed verification",
+     {
+      "code": "loudness-out-of-range",
+      "integratedLufs": -36.71921355614518,
+      "truePeakDbtp": -32.7424929883655
+     }
+    ]
+   },
+   {
+    "t": 6107,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[opfs]",
+     "workspace disposed",
+     {
+      "jobId": "job-4"
+     }
+    ]
+   },
+   {
+    "t": 6107,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "[worker]",
+     "processing failed",
+     {
+      "code": "output-loudness",
+      "reason": "Output audio failed verification: loudness-out-of-range"
+     }
+    ]
+   }
+  ],
+  "console": [],
+  "ms": 9578
+ }
+]

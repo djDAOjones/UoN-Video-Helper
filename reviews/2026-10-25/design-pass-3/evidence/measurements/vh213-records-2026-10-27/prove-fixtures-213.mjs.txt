@@ -1,0 +1,60 @@
+// VH-213's fixture proof: each fixture read with ffprobe (streams, the first
+// and last audio packets) and ffmpeg (the audio decoded to 16-bit samples and
+// counted; the video frames counted), then held to what the cell declares.
+// Independent of the app: no app code is run. Usage:
+//   node prove-fixtures-213.mjs <fixtures dir> <out.json>
+import { execFileSync } from 'node:child_process'
+import { createHash } from 'node:crypto'
+import { readFileSync, writeFileSync } from 'node:fs'
+import { join } from 'node:path'
+
+const [FIX, OUT] = process.argv.slice(2)
+const run = (cmd, a, o = {}) => execFileSync(cmd, a, { maxBuffer: 1 << 28, ...o })
+const probe = (file, ...a) => JSON.parse(run('ffprobe', ['-v', 'error', ...a, '-of', 'json', file], { encoding: 'utf8' }))
+const BLOCK_SAMPLES = 0.4 * 48000 // src/audio/loudness.ts BLOCK_SECONDS, read, at 48 kHz
+
+function read(name) {
+  const file = join(FIX, name)
+  const streams = probe(file, '-show_entries', 'stream=index,codec_type,codec_name,duration,sample_rate,channels').streams
+  const audio = streams.find((s) => s.codec_type === 'audio') ?? null
+  const out = { name, sha256: createHash('sha256').update(readFileSync(file)).digest('hex').slice(0, 16), bytes: readFileSync(file).length,
+    streams: streams.map((s) => ({ kind: s.codec_type, codec: s.codec_name, declaredS: s.duration != null ? Number(s.duration) : null })) }
+  if (audio) {
+    const packets = probe(file, '-select_streams', 'a:0', '-show_entries', 'packet=pts_time,duration_time,size,pos').packets
+    // Only packets whose bytes are in the file: a cut file's index lists the rest.
+    const size = out.bytes
+    const present = packets.filter((p) => Number(p.pos) + Number(p.size) <= size)
+    out.audio = {
+      codec: audio.codec_name, sampleRate: Number(audio.sample_rate), channels: audio.channels,
+      packetsIndexed: packets.length, packetsPresent: present.length,
+      firstPacketS: present.length ? Number(present[0].pts_time) : null,
+      presentEndS: present.length ? Number(present.at(-1).pts_time) + Number(present.at(-1).duration_time) : null,
+    }
+    let pcm
+    try { pcm = run('ffmpeg', ['-v', 'error', '-i', file, '-map', '0:a:0', '-f', 's16le', '-acodec', 'pcm_s16le', '-'], { stdio: ['ignore', 'pipe', 'ignore'] }) } catch (e) { pcm = e.stdout ?? Buffer.alloc(0) }
+    out.audio.decodedSamples = pcm.length / (2 * audio.channels)
+    out.audio.decodedMs = Math.round((out.audio.decodedSamples / Number(audio.sample_rate)) * 100000) / 100
+    out.audio.underOneBlock = out.audio.decodedSamples < BLOCK_SAMPLES
+  }
+  const v = probe(file, '-count_frames', '-select_streams', 'v:0', '-show_entries', 'stream=nb_read_frames').streams[0]
+  out.videoFramesDecoded = v ? Number(v.nb_read_frames) : null
+  return out
+}
+
+// What each cell declares, held as the proof's verdict.
+const DECLARED = {
+  'silent-10s.mp4': (r) => !r.audio && r.streams.length === 1,
+  'late-sound-9.7s-10s.mp4': (r) => r.audio && r.audio.underOneBlock && r.audio.decodedSamples > 0 && r.audio.firstPacketS > 9.6,
+  'whole-pcm-390ms-10s.mov': (r) => r.audio?.decodedSamples === 18720 && Math.abs(r.audio.firstPacketS - 9.61) < 1e-6,
+  'whole-pcm-400ms-10s.mov': (r) => r.audio?.decodedSamples === 19200 && Math.abs(r.audio.firstPacketS - 9.6) < 1e-6,
+  'whole-pcm-410ms-10s.mov': (r) => r.audio?.decodedSamples === 19680 && Math.abs(r.audio.firstPacketS - 9.59) < 1e-6,
+  // The index declares 10 s of both tracks; under one block of sound, and a picture, arrive.
+  'whole-pcm-cut-10s.mov': (r) => r.audio && r.audio.underOneBlock && r.audio.decodedSamples > 0 && r.streams.every((s) => s.declaredS >= 9.99) && r.videoFramesDecoded >= 1,
+  'late-sound-10s.mp4': (r) => !!r.audio,
+  'late-sound-3.4s-10s.mp4': (r) => !!r.audio,
+  'late-sound-3.71s-25fps-10s.mp4': (r) => !!r.audio,
+}
+const results = Object.keys(DECLARED).map((name) => { const r = read(name); return { ...r, proved: !!DECLARED[name](r) } })
+writeFileSync(OUT, JSON.stringify({ at: new Date().toISOString(), ffmpeg: run('ffmpeg', ['-version'], { encoding: 'utf8' }).split('\n')[0], results }, null, 1))
+for (const r of results) console.log(`${r.proved ? 'PROVED' : 'NOT PROVED'} ${r.name} ${r.sha256} ${r.audio ? `${r.audio.codec} first ${r.audio.firstPacketS} decoded ${r.audio.decodedSamples} (${r.audio.decodedMs} ms) packets ${r.audio.packetsPresent}/${r.audio.packetsIndexed}` : 'no audio'} video frames ${r.videoFramesDecoded} declared ${r.streams.map((s) => `${s.kind} ${s.declaredS}`).join(', ')}`)
+process.exit(results.every((r) => r.proved) ? 0 : 1)

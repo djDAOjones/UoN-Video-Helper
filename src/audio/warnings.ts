@@ -32,11 +32,12 @@ export type AudioWarningCode =
 /**
  * Why there is no audio to level (VH-206): the file has no audio track, or
  * the part kept holds less sound than one of the meter's gating blocks
- * (VH-185). One spec 5.4 row and one outcome, a new video with no audio, so
- * one code; the cause decides the words, since "check the recording" is the
- * wrong way forward for a person who hears sound in the part they kept.
+ * (VH-185), or the whole video does, untrimmed (VH-213). One spec 5.4 row and
+ * one outcome, a new video with no audio, so one code; the cause decides the
+ * words, since "check the recording" is the wrong way forward for a person
+ * who hears sound in the part they kept, and "keep more" is for a trim.
  */
-export type NoAudioReason = 'no-track' | 'kept-too-little'
+export type NoAudioReason = 'no-track' | 'kept-too-little' | 'whole-too-little'
 
 export interface AudioWarning {
   readonly code: AudioWarningCode
@@ -80,8 +81,8 @@ function longestRunBelow(
  * Warnings derived from the source, before anything is processed.
  *
  * @param analysis - The pass-A measurement; a {@link KeptSilence} when the part
- *   kept holds too little sound to level, none decoded included (VH-185); or
- *   `null` when the file has no audio track at all.
+ *   kept, trimmed or whole, holds too little sound to level, none decoded
+ *   included (VH-185, VH-213); or `null` when the file has no audio track at all.
  * @param soundShort - Where the sound stops short of what the file's index
  *   declares (VH-139, `media/ends-early.ts`), or `null` when it does not.
  * @param fileCutShort - Whether a Matroska or WebM file's own bytes show it
@@ -103,9 +104,14 @@ export function detectSourceWarnings(
   // A kept part whose sound the file declares and never delivers is cut
   // short, not silent: saying "no sound" there would name the wrong cause.
   // Otherwise the cause is said too: a track with too little kept, whose
-  // recovery is to keep more, is not a file with none (VH-206).
+  // recovery is to keep more, is not a file with none (VH-206), and a whole
+  // video with too little has no more to keep (VH-213).
   if (!analysis || 'silent' in analysis) {
-    const reason: NoAudioReason = analysis ? 'kept-too-little' : 'no-track'
+    const reason: NoAudioReason = !analysis
+      ? 'no-track'
+      : analysis.whole
+        ? 'whole-too-little'
+        : 'kept-too-little'
     return [...cutShort, ...(endsEarly.length > 0 ? endsEarly : [{ code: 'no-audio' as const, detail: {}, reason }])]
   }
 

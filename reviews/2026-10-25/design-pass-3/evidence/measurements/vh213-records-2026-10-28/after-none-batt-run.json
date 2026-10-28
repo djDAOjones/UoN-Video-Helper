@@ -1,0 +1,167 @@
+{
+ "label": "after-none-batt",
+ "source": "5893d9d+vh213-cd985a8d4dcf",
+ "started": "2026-10-28T10:36:18.428Z",
+ "appUrl": "http://127.0.0.1:5181/",
+ "cdpPort": "9251",
+ "chrome": "Chrome/156.0.8078.74",
+ "node": "v24.21.0",
+ "walker": "/Users/joe/UoN-Video-Helper-side/vh213/reviews/2026-10-25/design-pass-3/evidence/measurements/walker",
+ "walkerSha": "bfa144b6c464ad6f",
+ "appSrcSha": "f6f370581d326565",
+ "appRoot": "/Users/joe/UoN-Video-Helper-side/vh213",
+ "fixtures": {
+  "whole-aac-empty-10s.mp4": "ae7306f0e0fdd1a8"
+ },
+ "cells": [
+  "whole-none"
+ ],
+ "langs": [
+  "en-GB",
+  "zh-Hans",
+  "ms-MY"
+ ],
+ "views": [
+  "w1280",
+  "w320"
+ ],
+ "modes": [
+  "light",
+  "dark",
+  "forced-light",
+  "forced-dark"
+ ],
+ "argv": [
+  "--cells",
+  "whole-none"
+ ],
+ "power": [
+  {
+   "t": "2026-10-28T10:36:18.481Z",
+   "ac": false,
+   "batt": "Now drawing from 'Battery Power' | -InternalBattery-0 (id=21889123)\t96%; discharging; 6:07 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "10:36  up  2:47, 1 user, load averages: 6.20 9.08 7.52",
+   "load1": 6.2,
+   "load": [
+    6.2,
+    9.08,
+    7.52
+   ]
+  },
+  {
+   "cell": "whole-none",
+   "lang": "en-GB",
+   "view": "w1280",
+   "t": "2026-10-28T10:36:18.510Z",
+   "ac": false,
+   "batt": "Now drawing from 'Battery Power' | -InternalBattery-0 (id=21889123)\t96%; discharging; 6:07 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "10:36  up  2:47, 1 user, load averages: 6.20 9.08 7.52",
+   "load1": 6.2,
+   "load": [
+    6.2,
+    9.08,
+    7.52
+   ]
+  },
+  {
+   "cell": "whole-none",
+   "lang": "en-GB",
+   "view": "w320",
+   "t": "2026-10-28T10:36:29.039Z",
+   "ac": false,
+   "batt": "Now drawing from 'Battery Power' | -InternalBattery-0 (id=21889123)\t95%; discharging; 6:11 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "10:36  up  2:47, 1 user, load averages: 6.98 9.11 7.56",
+   "load1": 6.98,
+   "load": [
+    6.98,
+    9.11,
+    7.56
+   ]
+  },
+  {
+   "cell": "whole-none",
+   "lang": "zh-Hans",
+   "view": "w1280",
+   "t": "2026-10-28T10:36:39.410Z",
+   "ac": false,
+   "batt": "Now drawing from 'Battery Power' | -InternalBattery-0 (id=21889123)\t95%; discharging; 6:11 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "10:36  up  2:47, 1 user, load averages: 6.37 8.90 7.51",
+   "load1": 6.37,
+   "load": [
+    6.37,
+    8.9,
+    7.51
+   ]
+  },
+  {
+   "cell": "whole-none",
+   "lang": "zh-Hans",
+   "view": "w320",
+   "t": "2026-10-28T10:36:50.230Z",
+   "ac": false,
+   "batt": "Now drawing from 'Battery Power' | -InternalBattery-0 (id=21889123)\t95%; discharging; 6:11 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "10:36  up  2:48, 1 user, load averages: 5.62 8.66 7.43",
+   "load1": 5.62,
+   "load": [
+    5.62,
+    8.66,
+    7.43
+   ]
+  },
+  {
+   "cell": "whole-none",
+   "lang": "ms-MY",
+   "view": "w1280",
+   "t": "2026-10-28T10:37:01.030Z",
+   "ac": false,
+   "batt": "Now drawing from 'Battery Power' | -InternalBattery-0 (id=21889123)\t95%; discharging; 6:11 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "10:37  up  2:48, 1 user, load averages: 5.07 8.44 7.37",
+   "load1": 5.07,
+   "load": [
+    5.07,
+    8.44,
+    7.37
+   ]
+  },
+  {
+   "cell": "whole-none",
+   "lang": "ms-MY",
+   "view": "w320",
+   "t": "2026-10-28T10:37:11.853Z",
+   "ac": false,
+   "batt": "Now drawing from 'Battery Power' | -InternalBattery-0 (id=21889123)\t95%; discharging; 6:11 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "10:37  up  2:48, 1 user, load averages: 4.60 8.23 7.31",
+   "load1": 4.6,
+   "load": [
+    4.6,
+    8.23,
+    7.31
+   ]
+  },
+  {
+   "t": "2026-10-28T10:37:22.683Z",
+   "ac": false,
+   "batt": "Now drawing from 'Battery Power' | -InternalBattery-0 (id=21889123)\t95%; discharging; 6:21 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "10:37  up  2:48, 1 user, load averages: 4.36 8.06 7.26",
+   "load1": 4.36,
+   "load": [
+    4.36,
+    8.06,
+    7.26
+   ]
+  }
+ ],
+ "flags": [
+  "on battery at the start (Now drawing from 'Battery Power' | -InternalBattery-0 (id=21889123)\t96%; discharging; 6:07 remaining present: true; powermode            2): walked under the Power test",
+  "on battery at the end (Now drawing from 'Battery Power' | -InternalBattery-0 (id=21889123)\t95%; discharging; 6:21 remaining present: true)"
+ ],
+ "ended": "2026-10-28T10:37:22.683Z"
+}

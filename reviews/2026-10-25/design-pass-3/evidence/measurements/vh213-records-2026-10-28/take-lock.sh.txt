@@ -1,0 +1,15 @@
+#!/bin/zsh
+# vh213: wait for the walk lock (checking every 60 s), take it with mkdir, write owner.txt.
+# VH-213 #5: a lock held more than 3 h (by the lock directory's birth time) ends
+# the wait with exit 9, naming its owner.txt, so the wait becomes a check-in.
+N=/Users/joe/UoN-Video-Helper-side
+WHAT=$1
+while ! mkdir "$N/walk.lock" 2>/dev/null; do
+  B=$(stat -f %B "$N/walk.lock" 2>/dev/null)
+  if [[ -n $B ]] && (( $(date +%s) - B > 10800 )); then
+    echo "LOCK HELD OVER 3 H: $(head -1 "$N/walk.lock/owner.txt" 2>&1) | $(sed -n 2p "$N/walk.lock/owner.txt" 2>&1)"; exit 9
+  fi
+  sleep 60
+done
+printf 'VH-213 #5\n%s\n%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$WHAT" > "$N/walk.lock/owner.txt"
+echo "LOCK TAKEN $(date -u +%H:%M:%SZ)"

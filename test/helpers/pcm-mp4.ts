@@ -28,6 +28,8 @@ export const PCM_BLOCK_SECONDS = 0.1
 export interface PcmMp4Options {
   /** Where the sound starts and stops, in seconds; a gap between two spans is a hole. */
   readonly spans: ReadonlyArray<readonly [number, number]>
+  /** Each block's length, {@link PCM_BLOCK_SECONDS} unless a test needs finer steps (VH-213). */
+  readonly blockSeconds?: number
 }
 
 /** Muxes the spans' blocks as 16-bit PCM at a quiet, steady level. */
@@ -40,16 +42,17 @@ export async function pcmMp4(options: PcmMp4Options): Promise<Uint8Array> {
   const source = new EncodedAudioPacketSource('pcm-s16')
   output.addAudioTrack(source)
   await output.start()
-  const blockFrames = Math.round(PCM_BLOCK_SECONDS * PCM_SAMPLE_RATE)
+  const blockSeconds = options.blockSeconds ?? PCM_BLOCK_SECONDS
+  const blockFrames = Math.round(blockSeconds * PCM_SAMPLE_RATE)
   let first = true
   for (const [from, to] of options.spans) {
-    for (let index = 0; from + index * PCM_BLOCK_SECONDS < to - 1e-9; index++) {
+    for (let index = 0; from + index * blockSeconds < to - 1e-9; index++) {
       const samples = new Int16Array(blockFrames * PCM_CHANNELS).fill(1000)
       const packet = new EncodedPacket(
         new Uint8Array(samples.buffer),
         'key',
-        from + index * PCM_BLOCK_SECONDS,
-        PCM_BLOCK_SECONDS,
+        from + index * blockSeconds,
+        blockSeconds,
       )
       await source.add(
         packet,

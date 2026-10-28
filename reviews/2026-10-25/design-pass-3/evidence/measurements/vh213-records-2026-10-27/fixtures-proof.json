@@ -1,0 +1,268 @@
+{
+ "at": "2026-10-27T21:38:59.100Z",
+ "ffmpeg": "ffmpeg version 9.0.2 Copyright (c) 2000-2026 the FFmpeg developers",
+ "results": [
+  {
+   "name": "silent-10s.mp4",
+   "sha256": "300cc12d64341acc",
+   "bytes": 3174578,
+   "streams": [
+    {
+     "kind": "video",
+     "codec": "h264",
+     "declaredS": 10
+    }
+   ],
+   "videoFramesDecoded": 250,
+   "proved": true
+  },
+  {
+   "name": "late-sound-9.7s-10s.mp4",
+   "sha256": "80c9e7776e345639",
+   "bytes": 3180616,
+   "streams": [
+    {
+     "kind": "video",
+     "codec": "h264",
+     "declaredS": 10
+    },
+    {
+     "kind": "audio",
+     "codec": "aac",
+     "declaredS": 0.341333
+    }
+   ],
+   "audio": {
+    "codec": "aac",
+    "sampleRate": 48000,
+    "channels": 2,
+    "packetsIndexed": 16,
+    "packetsPresent": 16,
+    "firstPacketS": 9.678667,
+    "presentEndS": 10.02,
+    "decodedSamples": 16384,
+    "decodedMs": 341.33,
+    "underOneBlock": true
+   },
+   "videoFramesDecoded": 250,
+   "proved": true
+  },
+  {
+   "name": "whole-pcm-390ms-10s.mov",
+   "sha256": "5dd09b602ef6537c",
+   "bytes": 3250018,
+   "streams": [
+    {
+     "kind": "video",
+     "codec": "h264",
+     "declaredS": 10
+    },
+    {
+     "kind": "audio",
+     "codec": "pcm_s16le",
+     "declaredS": 0.39
+    }
+   ],
+   "audio": {
+    "codec": "pcm_s16le",
+    "sampleRate": 48000,
+    "channels": 2,
+    "packetsIndexed": 19,
+    "packetsPresent": 19,
+    "firstPacketS": 9.61,
+    "presentEndS": 10,
+    "decodedSamples": 18720,
+    "decodedMs": 390,
+    "underOneBlock": true
+   },
+   "videoFramesDecoded": 250,
+   "proved": true
+  },
+  {
+   "name": "whole-pcm-400ms-10s.mov",
+   "sha256": "8dbef979864fa16b",
+   "bytes": 3251914,
+   "streams": [
+    {
+     "kind": "video",
+     "codec": "h264",
+     "declaredS": 10
+    },
+    {
+     "kind": "audio",
+     "codec": "pcm_s16le",
+     "declaredS": 0.4
+    }
+   ],
+   "audio": {
+    "codec": "pcm_s16le",
+    "sampleRate": 48000,
+    "channels": 2,
+    "packetsIndexed": 19,
+    "packetsPresent": 19,
+    "firstPacketS": 9.6,
+    "presentEndS": 10,
+    "decodedSamples": 19200,
+    "decodedMs": 400,
+    "underOneBlock": false
+   },
+   "videoFramesDecoded": 250,
+   "proved": true
+  },
+  {
+   "name": "whole-pcm-410ms-10s.mov",
+   "sha256": "cbaf30849097c58a",
+   "bytes": 3253878,
+   "streams": [
+    {
+     "kind": "video",
+     "codec": "h264",
+     "declaredS": 10
+    },
+    {
+     "kind": "audio",
+     "codec": "pcm_s16le",
+     "declaredS": 0.41
+    }
+   ],
+   "audio": {
+    "codec": "pcm_s16le",
+    "sampleRate": 48000,
+    "channels": 2,
+    "packetsIndexed": 20,
+    "packetsPresent": 20,
+    "firstPacketS": 9.59,
+    "presentEndS": 10,
+    "decodedSamples": 19680,
+    "decodedMs": 410,
+    "underOneBlock": false
+   },
+   "videoFramesDecoded": 250,
+   "proved": true
+  },
+  {
+   "name": "whole-pcm-cut-10s.mov",
+   "sha256": "cd0277b392eb0fe6",
+   "bytes": 196622,
+   "streams": [
+    {
+     "kind": "video",
+     "codec": "h264",
+     "declaredS": 10
+    },
+    {
+     "kind": "audio",
+     "codec": "pcm_s16le",
+     "declaredS": 10
+    }
+   ],
+   "audio": {
+    "codec": "pcm_s16le",
+    "sampleRate": 48000,
+    "channels": 2,
+    "packetsIndexed": 15,
+    "packetsPresent": 15,
+    "firstPacketS": 0,
+    "presentEndS": 0.32,
+    "decodedSamples": 15360,
+    "decodedMs": 320,
+    "underOneBlock": true
+   },
+   "videoFramesDecoded": 10,
+   "proved": true
+  },
+  {
+   "name": "late-sound-10s.mp4",
+   "sha256": "7c57a6ad93218f3c",
+   "bytes": 3274403,
+   "streams": [
+    {
+     "kind": "video",
+     "codec": "h264",
+     "declaredS": 10
+    },
+    {
+     "kind": "audio",
+     "codec": "aac",
+     "declaredS": 6.037333
+    }
+   ],
+   "audio": {
+    "codec": "aac",
+    "sampleRate": 48000,
+    "channels": 2,
+    "packetsIndexed": 283,
+    "packetsPresent": 283,
+    "firstPacketS": 3.978667,
+    "presentEndS": 10.016,
+    "decodedSamples": 289792,
+    "decodedMs": 6037.33,
+    "underOneBlock": false
+   },
+   "videoFramesDecoded": 250,
+   "proved": true
+  },
+  {
+   "name": "late-sound-3.4s-10s.mp4",
+   "sha256": "1d6c169c1705fe9e",
+   "bytes": 3284224,
+   "streams": [
+    {
+     "kind": "video",
+     "codec": "h264",
+     "declaredS": 10
+    },
+    {
+     "kind": "audio",
+     "codec": "aac",
+     "declaredS": 6.634667
+    }
+   ],
+   "audio": {
+    "codec": "aac",
+    "sampleRate": 48000,
+    "channels": 2,
+    "packetsIndexed": 311,
+    "packetsPresent": 311,
+    "firstPacketS": 3.378667,
+    "presentEndS": 10.013333000000001,
+    "decodedSamples": 318464,
+    "decodedMs": 6634.67,
+    "underOneBlock": false
+   },
+   "videoFramesDecoded": 250,
+   "proved": true
+  },
+  {
+   "name": "late-sound-3.71s-25fps-10s.mp4",
+   "sha256": "cd20254060f8d292",
+   "bytes": 3278969,
+   "streams": [
+    {
+     "kind": "video",
+     "codec": "h264",
+     "declaredS": 10
+    },
+    {
+     "kind": "audio",
+     "codec": "aac",
+     "declaredS": 6.314667
+    }
+   ],
+   "audio": {
+    "codec": "aac",
+    "sampleRate": 48000,
+    "channels": 2,
+    "packetsIndexed": 296,
+    "packetsPresent": 296,
+    "firstPacketS": 3.688667,
+    "presentEndS": 10.003333,
+    "decodedSamples": 303104,
+    "decodedMs": 6314.67,
+    "underOneBlock": false
+   },
+   "videoFramesDecoded": 250,
+   "proved": true
+  }
+ ]
+}

@@ -1,0 +1,41 @@
+<!-- markdownlint-disable -->
+
+# VH-213 — Claude's verdict (VH-213 #3), saved 2026-10-27 before Codex astra's blind answer is read
+
+Candidate: `side/vh213` at `5893d9d` plus the unstaged diff, sha1 `cd985a8d4dcf…`, 16 files. Evidence: `reviews/2026-10-25/design-pass-3/evidence/measurements/vh213-whole-sub-block-2026-10-27.md` and `vh213-records-2026-10-27/`.
+
+**Overall: meets VH-213, subject to the gate and the low-load re-run agreeing with the main after.**
+
+1. **The rule extended — met.** `keptTooLittleSound` drops its `range !== null` gate, so an untrimmed track with under `BLOCK_SECONDS` of decoded sound is a `KeptSilence`, marked `whole: true` when `range` is `null`. `traversal.decodedFrames` counts decoded frames, never gap-fill, so S-102's 300 ms after a 9.7 s hole is too little (unit test and walk). Pre-flight warns; `planAudio` returns the same silent result, so the job runs silent and finishes, source untouched. `loudness.ts` and `BLOCK_SECONDS` are unchanged; `pipeline.ts` needed nothing. The boundary holds: 390 ms silent, 400 and 410 ms levelled, in the tests and the walk.
+2. **The reason carried — met.** `NoAudioReason` adds `'whole-too-little'`; `detectSourceWarnings` picks no-track, whole or kept; `warningText` switches on it. The three are told apart in the walk: S-20, S-99 and S-102 each show their own heading.
+3. **The owner's words — met.** The item's drafts, verbatim, in en-GB, zh-Hans and ms-MY; the sheet notes and CSV rows mark the Chinese and Malay as machine translations, as VH-206 did.
+4. **S-102's predicate — met.** It requires `M.finished()`, the whole note alone, no plan, and 1v0a read from the file; proved "as expected" on the candidate before the after, each assertion failing its control.
+5. **Spec §5.4 — met.** "a trimmed part kept" → "the part kept, whole or trimmed,": 8,121 → 8,123 words, 77 under 8,200, so VH-216's 2 are left.
+6. **The replaced test — legitimate, not a deletion (rule 7).** The old "leaves an untrimmed file as it was" asserted that a 200 ms untrimmed file is *not* silent, the exact behaviour the owner's choice reverses. It cannot stay true. It is replaced, in the same file, by cases that hold the same input class to the new rule: just under, exactly and just over one block; S-102's shape; none decoded with none declared; and the cut file. VH-206's trimmed cases and words are pinned unchanged. The close must say "replaced, not deleted or skipped", and the gate must show no skip beyond the existing EBU `it.skip`.
+7. **whole-cut — the right outcome; the ends-early words still read true.** The file declares 10 s and delivers 320 ms. The criterion says a declared sound that never arrives stays ends-early. That is the true cause, and its recovery, "choose a complete copy", is the right way forward. "After 0:00, the new video will be silent" was a promise the base broke: it failed `invalid-measurement` after the whole encode. Now it is kept: a finished video with no audio track. "Silent" and "no audio track" are the same to the viewer. The cut's "0:00" is VH-139's rounding of 0.32 s, not this item's. No change is owed. Note it for VH-203's after-run.
+8. **The load judgement — a low-load re-run is owed for the after, not the before.** 45 of the after's 54 groups started above 8, up to 14.4, and the before's 5 at 8.10–9.72; VH-206 re-ran its high-load groups. The main after's outcomes are identical across each cell's six groups and four modes, and the unchanged cells match the before to the hundredth of a LU, so I expect the re-run to agree.
+9. **WCAG — met:** 4.1.3 (heading announced after the panel title, "Your video is ready." at the end); 2.4.6 (a distinct, descriptive heading); 3.1.5 (5.2 and 5.0, limit 10, en-GB); 1.4.8 (71 and 66 characters at 1280, zh-Hans weighted 32 and 13, under 40). Tokens: no CSS, no element.
+10. **Digest rules** to name at close: nielsen 1, "status visible and announced" (said before Create and announced) and 9, "errors say what next" (the cause, and that the original keeps its sound); house-conventions, "Fail loudly on data loss": the dropped sound is warned before processing starts.
+
+**Risks noted, not blocking:** a trim that keeps almost the whole video still gets the part-kept words ("keep more"), VH-206's scope, unchanged. And a whole file of decoded digital silence over 400 ms is not this rule; the loudness path handles it, as before.
+
+**Addendum, 23:25Z, still before any Codex run:** the low-load re-run (23:15:58–23:24:40Z, AC, load 3.11–7.67, no flag) read the same as the main after in all 54 groups, load stripped. Chrome had updated from 156.0.8078.48 to .74 between the runs, and that changed no outcome either. Point 8 is settled, and the verdict stands, subject to the gate.
+
+## Re-check points — Claude's reading (VH-213 #6), saved before Codex astra's re-check is started or read
+
+The points are those of the re-check brief (`$N/vh213-codex-recheck-brief.md`): must 2's repair, should 3's fix, must 1's disposition, and everything added since the blind run.
+
+1. **Must 2 (the none-decoded control): repaired.** `whole-aac-empty-10s.mp4` is proved independently of app code. The ffprobe/ffmpeg predicate requires an AAC track, 0 packets indexed, 0 samples decoded and 250 video frames; `fixtures-proof.vh213-5.json` has 10 of 10 PROVED, and the boxes read agrees: track 2 `soun` has 0 samples and the fragment carries track 1 only. It is declared as a probe cell (`what:`), with no walker change: the walker trees are the main runs' `50ca03e0540b29a3` and `bfa144b6c464ad6f`. It was walked before, on the `5893d9d` export, and after, on the candidate, in 3 languages × 2 widths × 4 modes, with the output's tracks read. Before: no note and "Ready to go", then the job fails after the encode (`missing-audio`), with no file. After: the whole video's note alone, before Create, in each language; the job finishes silent, verified `none-in-kept-range`, and the file is 1v0a. The pair `before-none-batt` / `after-none-batt` match in power mode: battery, mode 2, 95–97%. The battery before's 4 flagged groups and 1 straddle read the same as its own low-load group and as all 6 of the AC before (5.50–8.28), so the outcome stands as a qualitative comparison. A caveat, not a defect: the AC before's probe and walk-script versions were not kept, only their sha1s; the pair's versions are kept.
+2. **Should 3 (the load account): fixed.** I re-read `before-run.json` and `after-run.json`. S-101 has 1 flagged group and whole-cut 4, with whole-cut's 2 unflagged groups (en-GB 1280, ms-MY 320). The straddles are S-99 ms-MY 320 (7.72, then 8.14) and whole-cut en-GB 1280 (5.09, then 8.10). The main after's end check of 19.07 carries no raw flag. The table now says each of these, and it marks the correction as dated.
+3. **Must 1 (a partly decoded file that ends early): disposed of by the owner.** "Yes, all three" (2026-10-28 ~09:57Z) is option (a): a wish line for both paths and no repair. The table's §7 quotes it, with its source and the question he answered. Nothing in the code, tests, words or walker changes for it, which is right: the precedence stays as VH-185 and VH-206 settled it. The wish line VH-213.1 is named in §7 but is not yet in `project/wish-list.md`. It is owed at the ledger step and is checked at close, not here.
+4. **Added since the blind run:**
+   - the dated records folder `vh213-records-2026-10-28/`, 15 files whose sha256s match the table;
+   - the table's §6 and §7, with edits in §§1 and 3;
+   - the en-GB 320 px longest line corrected from 33 to 31; the records read 31 for S-102, its re-run, whole-390 and whole-none;
+   - the blind brief, the blind answer, the compare and Claude's verdict copied beside the table by VH-213 #4.
+
+   The link check finds 0 broken and markdownlint 0 issues. No code, test, word, walker or spec change has been made since the blind run, so the tracked diff's sha1 is still `cd985a8d4dcf`.
+
+**Verdict: meets VH-213 for the re-checked points.** Owed at close: wish VH-213.1, the item's Notes and linkage, and the ledger, with the gate and Codex's close check.
+
+*Saved in Claude's notes at 2026-10-28T11:07:49Z, before the re-check started (11:08:20Z); copied here after the compare, at 2026-10-28T11:16:07Z.*

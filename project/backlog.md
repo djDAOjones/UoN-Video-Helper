@@ -38,7 +38,6 @@ The public release on Xerte (PLAN-6) is VH-204's cut.
 ### Phase 8 — the owner's UX pass, then a third full design pass
 
 - [!] VH-212 — F15b's advice — since 2026-10-27 — (from: VH-202, 2026-10-27) — blocked: the owner
-- [!] VH-213 — VH-185.1: whole-video sound — since 2026-10-27 — (from: VH-185, 2026-10-24) — blocked: the owner
 - [ ] VH-214 — VH-193.3: QuickTime — since 2026-10-27 — (from: VH-193, 2026-10-25)
 - [ ] VH-215 — VH-139.5: card length — since 2026-10-27 — (from: VH-139, 2026-10-21)
 - [!] VH-216 — V-18: first screen — since 2026-10-27 — (from: VH-175, 2026-10-23) — blocked: the owner

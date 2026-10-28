@@ -79,6 +79,25 @@ describe('spec 5.4 source warnings', () => {
     ).toEqual(['cut-short', 'ends-early'])
   })
 
+  it('too little sound in a whole video, nothing trimmed — told apart from a part kept (VH-213)', () => {
+    expect(detectSourceWarnings({ silent: true, decodedEndSeconds: 9.99, whole: true })).toEqual([
+      { code: 'no-audio', detail: {}, reason: 'whole-too-little' },
+    ])
+    // None decoded and none declared: still the whole video's, never no track.
+    expect(
+      detectSourceWarnings({ silent: true, decodedEndSeconds: null, whole: true })[0]?.reason,
+    ).toBe('whole-too-little')
+  })
+
+  it('a whole video whose declared sound never arrives stays cut short (VH-213)', () => {
+    const short = { stopsAtSeconds: 0, endSeconds: 10 }
+    expect(
+      detectSourceWarnings({ silent: true, decodedEndSeconds: null, whole: true }, short).map(
+        (w) => w.code,
+      ),
+    ).toEqual(['ends-early'])
+  })
+
   it('a reason only on the no-audio warning (VH-206)', () => {
     const short = { stopsAtSeconds: 20.84, endSeconds: 30 }
     const warnings = detectSourceWarnings(

@@ -1,0 +1,22 @@
+Verdict: Commit
+
+1. **Musts — none for this re-check.** Fit to proceed to the ledger and separate close check.
+2. **Shoulds — none.**
+3. **Note — provenance holds.** The tracked diff SHA-1 is `cd985a8d4dcfb5c8ec74326475d524383aae0673`; candidate source/walker hashes match. All **52 earlier and 15 new record hashes** match, with no unlisted files. All table links resolve. The corrected **31 characters** agrees with every cited en-GB/320 reading ([table:72](/Users/joe/UoN-Video-Helper-side/vh213/reviews/2026-10-25/design-pass-3/evidence/measurements/vh213-whole-sub-block-2026-10-27.md:72)).
+4. **Note — instrument qualification.** Adding only `whole-none`’s declaration to the retained 27 October probe reproduces the AC probe’s recorded SHA-1, `9b6ddbf7636c…`. Its subsequent changes concern power gating/logging, not page reads. The old launch-script bytes are absent, so that script’s change cannot independently be proved; [table:183](/Users/joe/UoN-Video-Helper-side/vh213/reviews/2026-10-25/design-pass-3/evidence/measurements/vh213-whole-sub-block-2026-10-27.md:183) acknowledges this. It does not undermine the battery pair using the retained versions.
+5. **Note — power/load account is adequate.** The matched pair stays on battery, mode 2, above 50% (97→96%, then 96→95%). Its high loads, straddle and terminal reading are disclosed; the earlier AC run is identified separately. Comparisons support qualitative outcomes, not timings (`before-none-batt-run.json`, `after-none-batt-run.json`; table:175–183).
+6. **Note — standards.** Applied Nielsen’s visible/announced status and recovery rules, house-conventions’ explicit data-loss warning, and WCAG’s touched text/status checks. No gate was run; the excluded files remain unopened.
+
+**Must 2 — repaired.** `fixtures-proof.vh213-5.json` independently records ffprobe/ffmpeg results: AAC track present, zero indexed packets, zero decoded samples, 250 video frames. The boxes record corroborates the empty audio track. Proof at 08:50Z precedes both befores and the after; before records already contain the cell declaration. All three languages × two widths × four modes are present. Both befores show no note, then `missing-audio`, with no saved output. Every after warns before Create, finishes, verifies, and yields **1 video/0 audio tracks** (`*-whole-none.json`). The control is met.
+
+**Should 3 — fixed.** [Table:13 and :17](/Users/joe/UoN-Video-Helper-side/vh213/reviews/2026-10-25/design-pass-3/evidence/measurements/vh213-whole-sub-block-2026-10-27.md:13) correctly state the two unflagged whole-cut groups, both before straddles, start-only flagging and terminal 19.07. The main after’s additional straddles are covered by its complete low-load rerun (`before-run.json`, `after-run.json`, `after-rerun-run.json`).
+
+**Must 1 — disposed of truly.** [Table:211](/Users/joe/UoN-Video-Helper-side/vh213/reviews/2026-10-25/design-pass-3/evidence/measurements/vh213-whole-sub-block-2026-10-27.md:211) faithfully records “Yes, all three” and closure without repair. VH-213.1’s proposed wording fairly covers both paths. Nothing newly added promises or depends on that repair; the defect remains deferred.
+
+- **Owner’s choice/rule — met under the authorised disposition;** record the exception at close.
+- **Stage measurements — met:** the missing zero-decoded control is now evidenced.
+- **Stage gate — owed at close:** both required commands and digest declarations (item:21).
+- **Stage Codex check — re-check met; final close check and saved verdict owed** (item:22).
+- **Stage linkage — owed at close:** Disposition:759 still awaits the evidence link.
+- **Sizing — owed at close:** budget/handoff accounting remains unshown (item:24).
+- **Ledger — owed at close:** Notes, status/backlog, trajectory, decision, VH-213.1 and retirement of the paid-off wish.

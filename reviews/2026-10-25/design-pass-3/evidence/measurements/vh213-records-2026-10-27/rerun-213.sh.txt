@@ -1,0 +1,40 @@
+#!/bin/zsh
+# VH-213 #3: the after re-walked at low load, under the shared lock.
+# Waits (60 s checks) for the 1-minute load to fall below 8, then for the
+# lock; on AC only (the before ran on AC); servers from $W; the after probe
+# into records-rerun/; servers stopped by PID; the lock released only when
+# every PID has exited and owner.txt names VH-213 #3. No walker change since
+# #2's proof, so no proof is owed.
+S=${0:A:h}
+N=/Users/joe/UoN-Video-Helper-side
+W=$N/vh213
+WREL=reviews/2026-10-25/design-pass-3/evidence/measurements/walker
+LOG=$S/rerun-213.log
+say() { echo "$(date -u +%H:%M:%SZ) $*" | tee -a $LOG }
+load1() { sysctl -n vm.loadavg | awk '{print $2}' }
+power() { say "power: $(pmset -g batt | head -1 | tr -d "'") | $(pmset -g | grep -i powermode | xargs) | load $(uptime | sed 's/.*averages: //')" }
+release() {
+  if [[ "$(head -1 $N/walk.lock/owner.txt 2>/dev/null)" != "VH-213 #3" ]]; then say "LOCK NOT MINE, kept"; return 1; fi
+  for f in chrome vite; do P=$(cat "$S/$f-vh213.pid" 2>/dev/null); [[ -n $P ]] && kill -0 $P 2>/dev/null && { say "$f $P ALIVE, lock kept"; return 1; }; done
+  rm -r "$N/walk.lock" && say "LOCK RELEASED"
+}
+while true; do
+  while (( $(load1) >= 8 )); do sleep 60; done
+  say "load $(load1) below 8; waiting for the lock"
+  zsh $S/take-lock.sh "VH-213 #3 after re-walk at low load: whole-213-probe on $W, Vite :5181 + Chrome :9251" | tee -a $LOG
+  if ! pmset -g batt | grep -q "AC Power"; then say "ON BATTERY: no walk (the before ran on AC)"; release; exit 4; fi
+  if (( $(load1) < 8 )); then break; fi
+  say "load $(load1) at 8 or above after the lock: released, waiting again"; release || exit 7
+done
+power
+DIFFSHA=$(git -C $W diff --binary | shasum | awk '{print substr($1,1,12)}')
+zsh $S/servers.sh start $W | tee -a $LOG
+[[ ${pipestatus[1]} -eq 0 ]] || { say "SERVERS FAILED (ports busy?)"; release; exit 3; }
+say "after re-walk start (candidate 5893d9d+vh213-$DIFFSHA)"
+mkdir -p $S/records-rerun
+env APP_URL=http://127.0.0.1:5181/ CDP_PORT=9251 FIX=$S/fix RESULTS=$S/records-rerun WALKER=$W/$WREL OUT_ROOT=$S/out-rerun LABEL=after SOURCE=5893d9d+vh213-$DIFFSHA node $S/whole-213-probe.mjs > $S/probe-rerun.log 2>&1
+say "after re-walk exit $?"; tail -5 $S/probe-rerun.log | tee -a $LOG
+power
+zsh $S/servers.sh stop | tee -a $LOG
+release
+say "RERUN DONE"

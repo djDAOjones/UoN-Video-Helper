@@ -1,0 +1,59 @@
+#!/bin/zsh
+# VH-213 #3: one phase of the walk, under the shared lock.
+#   walk-213.sh before   — wait for and take the lock; AC and ports checked;
+#                          servers from $S/base (git archive 5893d9d); the before
+#                          probe; servers stopped by PID. The lock is kept.
+#   walk-213.sh after    — (lock held) servers from $W; S-102's predicate proof,
+#                          which must print "as expected"; the after probe;
+#                          servers stopped by PID; the lock released only when
+#                          every PID has exited and owner.txt names VH-213 #3.
+S=${0:A:h}
+N=/Users/joe/UoN-Video-Helper-side
+W=$N/vh213
+WREL=reviews/2026-10-25/design-pass-3/evidence/measurements/walker
+LOG=$S/walk-213.log
+say() { echo "$(date -u +%H:%M:%SZ) $*" | tee -a $LOG }
+power() { say "power: $(pmset -g batt | head -1 | tr -d "'") | $(pmset -g | grep -i powermode | xargs) | load $(uptime | sed 's/.*averages: //')" }
+release() {
+  if [[ "$(head -1 $N/walk.lock/owner.txt 2>/dev/null)" != "VH-213 #3" ]]; then say "LOCK NOT MINE, kept"; return 1; fi
+  for f in chrome vite; do P=$(cat "$S/$f-vh213.pid" 2>/dev/null); [[ -n $P ]] && kill -0 $P 2>/dev/null && { say "$f $P ALIVE, lock kept"; return 1; }; done
+  rm -r "$N/walk.lock" && say "LOCK RELEASED"
+}
+ac_or_out() {
+  if ! pmset -g batt | grep -q "AC Power"; then say "ON BATTERY: no walk"; return 1; fi
+}
+COMMON=(APP_URL=http://127.0.0.1:5181/ CDP_PORT=9251 FIX=$S/fix RESULTS=$S/records)
+case $1 in
+before)
+  say "waiting for the lock"
+  zsh $S/take-lock.sh "VH-213 before walk: whole-213-probe on git archive 5893d9d ($S/base), Vite :5181 + Chrome :9251" | tee -a $LOG
+  ac_or_out || { release; exit 4; }
+  power
+  zsh $S/servers.sh start $S/base | tee -a $LOG
+  [[ ${pipestatus[1]} -eq 0 ]] || { say "SERVERS FAILED (ports busy?)"; release; exit 3; }
+  say "before probe start"
+  env $COMMON WALKER=$S/base/$WREL OUT_ROOT=$S/out-before LABEL=before SOURCE=5893d9d-archive node $S/whole-213-probe.mjs > $S/probe-before.log 2>&1
+  say "before probe exit $?"; tail -5 $S/probe-before.log | tee -a $LOG
+  power
+  zsh $S/servers.sh stop | tee -a $LOG
+  say "BEFORE DONE (lock kept)" ;;
+after)
+  [[ "$(head -1 $N/walk.lock/owner.txt 2>/dev/null)" == "VH-213 #3" ]] || { say "LOCK NOT HELD"; exit 5; }
+  ac_or_out || { release; exit 4; }
+  printf 'VH-213 #3\n%s\n%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "VH-213 predicate proof + after walk on $W, Vite :5181 + Chrome :9251" > $N/walk.lock/owner.txt
+  DIFFSHA=$(git -C $W diff --binary | shasum | awk '{print substr($1,1,12)}')
+  power
+  zsh $S/servers.sh start $W | tee -a $LOG
+  [[ ${pipestatus[1]} -eq 0 ]] || { say "SERVERS FAILED (ports busy?)"; release; exit 3; }
+  say "predicate proof start (candidate 5893d9d+vh213-$DIFFSHA)"
+  env $COMMON CAND_WALKER=$W/$WREL BASE_WALKER=$S/base/$WREL OUT_ROOT=$S/out-proof SOURCE=5893d9d+vh213-$DIFFSHA node $S/predicate-proof-213.mjs > $S/proof.log 2>&1
+  PX=$?; say "proof exit $PX"; tail -4 $S/proof.log | tee -a $LOG
+  if [[ $PX -ne 0 ]] || ! grep -q "as expected" $S/proof.log; then say "PROOF NOT AS EXPECTED: no after"; zsh $S/servers.sh stop | tee -a $LOG; release; exit 6; fi
+  say "after probe start"
+  env $COMMON WALKER=$W/$WREL OUT_ROOT=$S/out-after LABEL=after SOURCE=5893d9d+vh213-$DIFFSHA node $S/whole-213-probe.mjs > $S/probe-after.log 2>&1
+  say "after probe exit $?"; tail -5 $S/probe-after.log | tee -a $LOG
+  power
+  zsh $S/servers.sh stop | tee -a $LOG
+  release
+  say "AFTER DONE" ;;
+esac

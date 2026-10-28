@@ -1,0 +1,35 @@
+Verdict: Revise
+
+1. **Must — disclose all discarded audio on partial truncation.** [audio-plan.ts:356](/Users/joe/UoN-Video-Helper-side/vh213/src/media/audio-plan.ts:356) now makes these whole files silent, but [warnings.ts:115](/Users/joe/UoN-Video-Helper-side/vh213/src/audio/warnings.ts:115) suppresses the whole-video notice whenever `ends-early` exists. A code-derived counterexample: 160 ms decoded near 1 s and 160 ms near 5 s, with the index declaring 10 s. Everything is discarded, yet the warning only promises silence after 0:05. Disclose whole-job silence while retaining damage-warning priority and the approved words. Add a regression test and browser evidence for this path.
+
+2. **Must — measure the zero-decoded case.** The [probe’s cells:51](/Users/joe/UoN-Video-Helper-side/vh213/reviews/2026-10-25/design-pass-3/evidence/measurements/vh213-records-2026-10-27/whole-213-probe.mjs.txt:51) omit it: `whole-cut` decodes 320 ms; S-20 has no track. Add an independently proved track with zero decoded samples, before and after, across the required languages, widths and modes, including output tracks.
+
+3. **Should — correct the load account.** [Table:17](/Users/joe/UoN-Video-Helper-side/vh213/reviews/2026-10-25/design-pass-3/evidence/measurements/vh213-whole-sub-block-2026-10-27.md:17) says “other five groups”; whole-cut has only **two** unflagged groups. Start-only flags also miss threshold-straddling intervals: before S-99 ms-MY/320 is bracketed by 7.72→8.14, and whole-cut en-GB/1280 by 5.09→8.10 (`before-run.json`). Annotate these; the after’s terminal 19.07 also lacks a raw flag.
+
+4. **Note — provenance holds.** All 52 record hashes, the candidate diff SHA-1, and both candidate tree hashes match. The low-load after reproduces every recorded pre-flight/result read after removing clocks. Unchanged controls have identical words, lines, overflow and spoken text.
+
+5. **Note — standards and close.** Applied Nielsen’s visible/announced status and recovery rules, house-conventions’ explicit data-loss warning, and WCAG’s touched text/status checks. No production numeric literal, CSS, control or element was added; the progress bar and `loudness.ts` are untouched. Gates and close-ledger checks remain pending, as instructed.
+
+**Replaced test: sound.** The obsolete untrimmed assertion becomes meaningful boundary, decoding and planning cases at [sub-block-sound.test.ts:164](/Users/joe/UoN-Video-Helper-side/vh213/src/media/sub-block-sound.test.ts:164). Trimmed cases remain; no other test was deleted, skipped or weakened.
+
+**whole-cut: sound for this fixture.** `before-whole-cut.json` fails verification; the after finishes 1v0a while retaining `ends-early`. “Silent after 0:00” fits this output and the approved decoded-sound rule. Its zero-based timing conceals must 1.
+
+**Load judgement: sound for these qualitative comparisons, with incomplete flagging.** All sampled runs use AC/power mode 2; low-load before groups reproduce the flagged outcomes, and the complete after rerun agrees. This supports functionality/layout, not timing claims.
+
+Acceptance criteria:
+
+- **Owner’s choice/rule — not met fully:** approval is supplied; ordinary sub-block cases finish silently, source untouched, using decoded frames only ([audio-plan.ts:208](/Users/joe/UoN-Video-Helper-side/vh213/src/media/audio-plan.ts:208)); must 1 leaves a warning gap.
+- **Reason carried — met:** three typed causes reach worker detection and wording (`warnings.ts:40`, `job.worker.ts:559`, `warning-text.ts:72`); damage precedence remains.
+- **Owner’s words — met:** all three languages match the item verbatim; machine translations are marked (`en-GB.ts:682`, `zh-Hans.ts:561`, `ms-MY.ts:600`, CSV:346).
+- **S-102 predicate — met:** only S-102 and its supporting helpers change; other named scenarios remain unchanged. `after-predicate-proof.json` finishes before the after run starts.
+- **Spec row — met:** sole `docs/` change, consistent with the rule; **8,123 words, 77 free** (`01-specification.md:324`).
+- **Sheet — met:** translator notes, CSV and tables agree (`sheet.ts:453`, CSV:346).
+- **Tests — met for specified coverage:** all five categories and multilingual wording are pinned (`sub-block-sound.test.ts:171`, `warning-text.test.ts:189`, `tables.test.ts:371`).
+- **Stage measurements — not met:** recorded boundaries and controls pass; zero-decoded coverage is missing.
+- **Stage WCAG — met within the table’s stated scope:** 1.4.8, 2.4.6, 4.1.3 and 1.4.10 supported; 3.1.5 assessed only in English (table:90).
+- **Stage tokens/elements — met:** diff inspection.
+- **Stage documents — met:** approved row only; UI-STANDARDS unchanged at 2,393 words.
+- **Stage gate — not shown:** deliberately not run.
+- **Stage Codex check — not met yet:** this review requires repair and re-check.
+- **Stage linkage — not met yet:** Disposition:759 names VH-213 but awaits its evidence link at close.
+- **Sizing — not shown:** supplied records contain no worker-budget accounting.

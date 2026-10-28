@@ -367,3 +367,39 @@ describe('too little kept, in the owner’s words (VH-206)', () => {
     expect(table.warnings.noAudio.detail).not.toBe(table.warnings.keptTooLittleAudio.detail)
   })
 })
+
+describe('too little in a whole video, in the owner’s words (VH-213)', () => {
+  // His choice in the Backlog review chat, 2026-10-27, VH-211's ask point 3:
+  // the item's drafts, the Chinese and Malay machine translations, as the item
+  // marked them.
+  const OWNER = {
+    'en-GB': {
+      heading: 'This video has too little audio to level',
+      detail:
+        'It has less than half a second of sound, too short to level, so the new video will have no audio. Your original file keeps its sound.',
+    },
+    'zh-Hans': {
+      heading: '此视频的音频太少，无法调节音量',
+      detail: '它的声音不到半秒，太短，无法调节音量，因此新视频将没有音频。您的原始文件仍保留声音。',
+    },
+    'ms-MY': {
+      heading: 'Video ini mempunyai terlalu sedikit audio untuk diratakan',
+      detail:
+        'Bunyinya kurang daripada setengah saat, terlalu pendek untuk diratakan, jadi video baharu tidak akan mempunyai audio. Fail asal anda masih mengekalkan bunyinya.',
+    },
+  } as const
+
+  it.each(Object.entries(LANGUAGE_TABLES))('%s says them verbatim', (tag, table) => {
+    expect(table.warnings.wholeTooLittleAudio).toEqual(OWNER[tag as keyof typeof OWNER])
+  })
+
+  it.each(Object.entries(LANGUAGE_TABLES))(
+    '%s tells them apart from a file with no audio track and from a part kept',
+    (_tag, table) => {
+      for (const other of [table.warnings.noAudio, table.warnings.keptTooLittleAudio]) {
+        expect(table.warnings.wholeTooLittleAudio.heading).not.toBe(other.heading)
+        expect(table.warnings.wholeTooLittleAudio.detail).not.toBe(other.detail)
+      }
+    },
+  )
+})

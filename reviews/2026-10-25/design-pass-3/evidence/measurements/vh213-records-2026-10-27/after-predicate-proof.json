@@ -1,0 +1,1382 @@
+{
+ "what": "VH-213: S-102's strengthened predicate, proved on the candidate page",
+ "source": "5893d9d+vh213-cd985a8d4dcf",
+ "started": "2026-10-27T22:21:13.148Z",
+ "appUrl": "http://127.0.0.1:5181/",
+ "cdpPort": "9251",
+ "candWalker": "/Users/joe/UoN-Video-Helper-side/vh213/reviews/2026-10-25/design-pass-3/evidence/measurements/walker",
+ "baseWalker": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/5aa9e3dc-b404-48a3-98b0-afe9d275f3cf/scratchpad/vh213/base/reviews/2026-10-25/design-pass-3/evidence/measurements/walker",
+ "power": [
+  {
+   "t": "2026-10-27T22:21:13.181Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "22:21  up  5:13, 1 user, load averages: 6.78 6.19 6.20",
+   "load1": 6.78,
+   "load": [
+    6.78,
+    6.19,
+    6.2
+   ]
+  },
+  {
+   "t": "2026-10-27T22:21:19.379Z",
+   "ac": true,
+   "batt": "Now drawing from 'AC Power' | -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true",
+   "powermode": "powermode            2",
+   "uptime": "22:21  up  5:13, 1 user, load averages: 7.32 6.33 6.25",
+   "load1": 7.32,
+   "load": [
+    7.32,
+    6.33,
+    6.25
+   ]
+  }
+ ],
+ "expressions": {
+  "note": {
+   "S-102 wholeNote (candidate)": {
+    "expr": "M.kindIn('#audio-warnings') === 'warning' && M.has('warnings.wholeTooLittleAudio.heading', '#audio-warnings') && !M.has('warnings.keptTooLittleAudio.heading', '#audio-warnings') && !M.has('warnings.noAudio.heading', '#audio-warnings') && !M.has('warnings.endsEarly.heading', '#audio-warnings')",
+    "how": "mx(): const M = window.__mx; return expr (raw value); asserted === true"
+   },
+   "S-99 state (candidate, unchanged)": {
+    "expr": "M.kindIn('#audio-warnings') === 'warning' && M.has('warnings.keptTooLittleAudio.heading', '#audio-warnings') && !M.has('warnings.endsEarly.heading', '#audio-warnings')",
+    "how": "!!(expr)"
+   },
+   "S-101 noAudioBefore (candidate, unchanged)": {
+    "expr": "M.has('warnings.noAudio.heading', '#audio-warnings') || M.has('warnings.keptTooLittleAudio.heading', '#audio-warnings')",
+    "how": "raw; asserted === false"
+   },
+   "S-153 noAudioBefore (candidate, unchanged)": {
+    "expr": "M.has('warnings.noAudio.heading', '#audio-warnings') || M.has('warnings.keptTooLittleAudio.heading', '#audio-warnings')",
+    "how": "raw; asserted === false"
+   }
+  },
+  "state": {
+   "candidate": "(() => { const M = window.__mx; return (M.finished()); })()",
+   "base": "(() => { const M = window.__mx; return (M.finished() || M.res() === 'failure'); })()"
+  }
+ },
+ "expected": {
+  "note": {
+   "S-102 wholeNote (candidate)": {
+    "no track": false,
+    "part kept": false,
+    "whole video": true,
+    "whole video and ends early": false,
+    "ends early": false,
+    "empty": false
+   },
+   "S-99 state (candidate, unchanged)": {
+    "no track": false,
+    "part kept": true,
+    "whole video": false,
+    "whole video and ends early": false,
+    "ends early": false,
+    "empty": false
+   },
+   "S-101 noAudioBefore (candidate, unchanged)": {
+    "no track": true,
+    "part kept": true,
+    "whole video": false,
+    "whole video and ends early": false,
+    "ends early": false,
+    "empty": false
+   },
+   "S-153 noAudioBefore (candidate, unchanged)": {
+    "no track": true,
+    "part kept": true,
+    "whole video": false,
+    "whole video and ends early": false,
+    "ends early": false,
+    "empty": false
+   }
+  },
+  "state": {
+   "finished": {
+    "candidate": true,
+    "base": true
+   },
+   "failure": {
+    "candidate": false,
+    "base": true
+   },
+   "empty": {
+    "candidate": false,
+    "base": false
+   }
+  },
+  "tracks": {
+   "silent-10s.mp4": {
+    "video": 1,
+    "audio": 0,
+    "other": 0
+   },
+   "late-sound-3.4s-10s.mp4": {
+    "video": 1,
+    "audio": 1,
+    "other": 0
+   }
+  },
+  "asserts": {
+   "pass": {
+    "obs": {
+     "wholeNote": true,
+     "tracks": {
+      "video": 1,
+      "audio": 0,
+      "other": 0
+     }
+    },
+    "planned": [],
+    "expect": [
+     "pass",
+     "pass",
+     "pass"
+    ]
+   },
+   "no note": {
+    "obs": {
+     "wholeNote": false,
+     "tracks": {
+      "video": 1,
+      "audio": 0,
+      "other": 0
+     }
+    },
+    "planned": [],
+    "expect": [
+     "fail",
+     "pass",
+     "pass"
+    ]
+   },
+   "levelled": {
+    "obs": {
+     "wholeNote": true,
+     "tracks": {
+      "video": 1,
+      "audio": 0,
+      "other": 0
+     }
+    },
+    "planned": [
+     {
+      "t": 1
+     }
+    ],
+    "expect": [
+     "pass",
+     "fail",
+     "pass"
+    ]
+   },
+   "sound kept": {
+    "obs": {
+     "wholeNote": true,
+     "tracks": {
+      "video": 1,
+      "audio": 1,
+      "other": 0
+     }
+    },
+    "planned": [],
+    "expect": [
+     "pass",
+     "pass",
+     "fail"
+    ]
+   },
+   "no tracks read": {
+    "obs": {
+     "wholeNote": true,
+     "tracks": null
+    },
+    "planned": [],
+    "expect": [
+     "pass",
+     "pass",
+     "fail"
+    ]
+   }
+  }
+ },
+ "results": [
+  {
+   "lang": "en-GB",
+   "part": "note",
+   "case": "no track",
+   "keys": [
+    "warnings.noAudio.heading"
+   ],
+   "page": {
+    "lang": "en-GB",
+    "tables": [
+     "en-GB",
+     "zh-Hans",
+     "ms-MY"
+    ],
+    "visibility": "visible",
+    "vw": 1280,
+    "wholeHeading": "This video has too little audio to level"
+   },
+   "setup": {
+    "headings": [
+     "This video has no audio"
+    ],
+    "unhid": [
+     "step-create"
+    ],
+    "boxVisible": true,
+    "divVisible": true,
+    "kindIn": "warning",
+    "text": "NotesThis video has no audio"
+   },
+   "candidate": {
+    "S-102 wholeNote (candidate)": {
+     "v": false
+    },
+    "S-99 state (candidate, unchanged)": {
+     "v": false
+    },
+    "S-101 noAudioBefore (candidate, unchanged)": {
+     "v": true
+    },
+    "S-153 noAudioBefore (candidate, unchanged)": {
+     "v": true
+    }
+   }
+  },
+  {
+   "lang": "en-GB",
+   "part": "note",
+   "case": "part kept",
+   "keys": [
+    "warnings.keptTooLittleAudio.heading"
+   ],
+   "page": {
+    "lang": "en-GB",
+    "tables": [
+     "en-GB",
+     "zh-Hans",
+     "ms-MY"
+    ],
+    "visibility": "visible",
+    "vw": 1280,
+    "wholeHeading": "This video has too little audio to level"
+   },
+   "setup": {
+    "headings": [
+     "The part you kept has too little audio to level"
+    ],
+    "unhid": [],
+    "boxVisible": true,
+    "divVisible": true,
+    "kindIn": "warning",
+    "text": "NotesThe part you kept has too little audio to level"
+   },
+   "candidate": {
+    "S-102 wholeNote (candidate)": {
+     "v": false
+    },
+    "S-99 state (candidate, unchanged)": {
+     "v": true
+    },
+    "S-101 noAudioBefore (candidate, unchanged)": {
+     "v": true
+    },
+    "S-153 noAudioBefore (candidate, unchanged)": {
+     "v": true
+    }
+   }
+  },
+  {
+   "lang": "en-GB",
+   "part": "note",
+   "case": "whole video",
+   "keys": [
+    "warnings.wholeTooLittleAudio.heading"
+   ],
+   "page": {
+    "lang": "en-GB",
+    "tables": [
+     "en-GB",
+     "zh-Hans",
+     "ms-MY"
+    ],
+    "visibility": "visible",
+    "vw": 1280,
+    "wholeHeading": "This video has too little audio to level"
+   },
+   "setup": {
+    "headings": [
+     "This video has too little audio to level"
+    ],
+    "unhid": [],
+    "boxVisible": true,
+    "divVisible": true,
+    "kindIn": "warning",
+    "text": "NotesThis video has too little audio to level"
+   },
+   "candidate": {
+    "S-102 wholeNote (candidate)": {
+     "v": true
+    },
+    "S-99 state (candidate, unchanged)": {
+     "v": false
+    },
+    "S-101 noAudioBefore (candidate, unchanged)": {
+     "v": false
+    },
+    "S-153 noAudioBefore (candidate, unchanged)": {
+     "v": false
+    }
+   }
+  },
+  {
+   "lang": "en-GB",
+   "part": "note",
+   "case": "whole video and ends early",
+   "keys": [
+    "warnings.wholeTooLittleAudio.heading",
+    "warnings.endsEarly.heading"
+   ],
+   "page": {
+    "lang": "en-GB",
+    "tables": [
+     "en-GB",
+     "zh-Hans",
+     "ms-MY"
+    ],
+    "visibility": "visible",
+    "vw": 1280,
+    "wholeHeading": "This video has too little audio to level"
+   },
+   "setup": {
+    "headings": [
+     "This video has too little audio to level",
+     "The file ends early"
+    ],
+    "unhid": [],
+    "boxVisible": true,
+    "divVisible": true,
+    "kindIn": "warning",
+    "text": "NotesThis video has too little audio to levelThe file ends early"
+   },
+   "candidate": {
+    "S-102 wholeNote (candidate)": {
+     "v": false
+    },
+    "S-99 state (candidate, unchanged)": {
+     "v": false
+    },
+    "S-101 noAudioBefore (candidate, unchanged)": {
+     "v": false
+    },
+    "S-153 noAudioBefore (candidate, unchanged)": {
+     "v": false
+    }
+   }
+  },
+  {
+   "lang": "en-GB",
+   "part": "note",
+   "case": "ends early",
+   "keys": [
+    "warnings.endsEarly.heading"
+   ],
+   "page": {
+    "lang": "en-GB",
+    "tables": [
+     "en-GB",
+     "zh-Hans",
+     "ms-MY"
+    ],
+    "visibility": "visible",
+    "vw": 1280,
+    "wholeHeading": "This video has too little audio to level"
+   },
+   "setup": {
+    "headings": [
+     "The file ends early"
+    ],
+    "unhid": [],
+    "boxVisible": true,
+    "divVisible": true,
+    "kindIn": "warning",
+    "text": "NotesThe file ends early"
+   },
+   "candidate": {
+    "S-102 wholeNote (candidate)": {
+     "v": false
+    },
+    "S-99 state (candidate, unchanged)": {
+     "v": false
+    },
+    "S-101 noAudioBefore (candidate, unchanged)": {
+     "v": false
+    },
+    "S-153 noAudioBefore (candidate, unchanged)": {
+     "v": false
+    }
+   }
+  },
+  {
+   "lang": "en-GB",
+   "part": "note",
+   "case": "empty",
+   "keys": [],
+   "page": {
+    "lang": "en-GB",
+    "tables": [
+     "en-GB",
+     "zh-Hans",
+     "ms-MY"
+    ],
+    "visibility": "visible",
+    "vw": 1280,
+    "wholeHeading": "This video has too little audio to level"
+   },
+   "setup": {
+    "headings": [],
+    "unhid": [],
+    "boxVisible": true,
+    "divVisible": null,
+    "kindIn": null,
+    "text": ""
+   },
+   "candidate": {
+    "S-102 wholeNote (candidate)": {
+     "v": false
+    },
+    "S-99 state (candidate, unchanged)": {
+     "v": false
+    },
+    "S-101 noAudioBefore (candidate, unchanged)": {
+     "v": false
+    },
+    "S-153 noAudioBefore (candidate, unchanged)": {
+     "v": false
+    }
+   }
+  },
+  {
+   "lang": "en-GB",
+   "part": "state",
+   "case": "finished",
+   "setup": {
+    "kind": "finished",
+    "res": "result",
+    "finished": true,
+    "title": "Finished video — {size}"
+   },
+   "candidate": {
+    "v": true
+   },
+   "base": {
+    "v": true
+   }
+  },
+  {
+   "lang": "en-GB",
+   "part": "state",
+   "case": "failure",
+   "setup": {
+    "kind": "failure",
+    "res": "failure",
+    "finished": false,
+    "title": "Failed"
+   },
+   "candidate": {
+    "v": false
+   },
+   "base": {
+    "v": true
+   }
+  },
+  {
+   "lang": "en-GB",
+   "part": "state",
+   "case": "empty",
+   "setup": {
+    "kind": "empty",
+    "res": "none"
+   },
+   "candidate": {
+    "v": false
+   },
+   "base": {
+    "v": false
+   }
+  },
+  {
+   "lang": "en-GB",
+   "part": "tracks",
+   "case": "no player",
+   "got": null
+  },
+  {
+   "lang": "en-GB",
+   "part": "tracks",
+   "case": "silent-10s.mp4",
+   "added": {
+    "bytes": 3174578
+   },
+   "got": {
+    "video": 1,
+    "audio": 0,
+    "other": 0
+   },
+   "expected": {
+    "video": 1,
+    "audio": 0,
+    "other": 0
+   }
+  },
+  {
+   "lang": "en-GB",
+   "part": "tracks",
+   "case": "late-sound-3.4s-10s.mp4",
+   "added": {
+    "bytes": 3284224
+   },
+   "got": {
+    "video": 1,
+    "audio": 1,
+    "other": 0
+   },
+   "expected": {
+    "video": 1,
+    "audio": 1,
+    "other": 0
+   }
+  },
+  {
+   "part": "asserts",
+   "case": "pass",
+   "rows": [
+    {
+     "what": "before Create, the whole video's too-little note, no other no-audio note and no ends-early",
+     "outcome": "pass",
+     "seen": {
+      "wholeNote": true,
+      "tracks": {
+       "video": 1,
+       "audio": 0,
+       "other": 0
+      }
+     }
+    },
+    {
+     "what": "finished silent: no plan to level",
+     "outcome": "pass",
+     "seen": {
+      "wholeNote": true,
+      "tracks": {
+       "video": 1,
+       "audio": 0,
+       "other": 0
+      }
+     }
+    },
+    {
+     "what": "the finished file's tracks, read: one video, no audio",
+     "outcome": "pass",
+     "tracks": {
+      "video": 1,
+      "audio": 0,
+      "other": 0
+     }
+    }
+   ],
+   "expected": [
+    "pass",
+    "pass",
+    "pass"
+   ]
+  },
+  {
+   "part": "asserts",
+   "case": "no note",
+   "rows": [
+    {
+     "what": "before Create, the whole video's too-little note, no other no-audio note and no ends-early",
+     "outcome": "fail",
+     "seen": {
+      "wholeNote": false,
+      "tracks": {
+       "video": 1,
+       "audio": 0,
+       "other": 0
+      }
+     }
+    },
+    {
+     "what": "finished silent: no plan to level",
+     "outcome": "pass",
+     "seen": {
+      "wholeNote": false,
+      "tracks": {
+       "video": 1,
+       "audio": 0,
+       "other": 0
+      }
+     }
+    },
+    {
+     "what": "the finished file's tracks, read: one video, no audio",
+     "outcome": "pass",
+     "tracks": {
+      "video": 1,
+      "audio": 0,
+      "other": 0
+     }
+    }
+   ],
+   "expected": [
+    "fail",
+    "pass",
+    "pass"
+   ]
+  },
+  {
+   "part": "asserts",
+   "case": "levelled",
+   "rows": [
+    {
+     "what": "before Create, the whole video's too-little note, no other no-audio note and no ends-early",
+     "outcome": "pass",
+     "seen": {
+      "wholeNote": true,
+      "tracks": {
+       "video": 1,
+       "audio": 0,
+       "other": 0
+      }
+     }
+    },
+    {
+     "what": "finished silent: no plan to level",
+     "outcome": "fail",
+     "seen": {
+      "wholeNote": true,
+      "tracks": {
+       "video": 1,
+       "audio": 0,
+       "other": 0
+      }
+     }
+    },
+    {
+     "what": "the finished file's tracks, read: one video, no audio",
+     "outcome": "pass",
+     "tracks": {
+      "video": 1,
+      "audio": 0,
+      "other": 0
+     }
+    }
+   ],
+   "expected": [
+    "pass",
+    "fail",
+    "pass"
+   ]
+  },
+  {
+   "part": "asserts",
+   "case": "sound kept",
+   "rows": [
+    {
+     "what": "before Create, the whole video's too-little note, no other no-audio note and no ends-early",
+     "outcome": "pass",
+     "seen": {
+      "wholeNote": true,
+      "tracks": {
+       "video": 1,
+       "audio": 1,
+       "other": 0
+      }
+     }
+    },
+    {
+     "what": "finished silent: no plan to level",
+     "outcome": "pass",
+     "seen": {
+      "wholeNote": true,
+      "tracks": {
+       "video": 1,
+       "audio": 1,
+       "other": 0
+      }
+     }
+    },
+    {
+     "what": "the finished file's tracks, read: one video, no audio",
+     "outcome": "fail",
+     "tracks": {
+      "video": 1,
+      "audio": 1,
+      "other": 0
+     }
+    }
+   ],
+   "expected": [
+    "pass",
+    "pass",
+    "fail"
+   ]
+  },
+  {
+   "part": "asserts",
+   "case": "no tracks read",
+   "rows": [
+    {
+     "what": "before Create, the whole video's too-little note, no other no-audio note and no ends-early",
+     "outcome": "pass",
+     "seen": {
+      "wholeNote": true,
+      "tracks": null
+     }
+    },
+    {
+     "what": "finished silent: no plan to level",
+     "outcome": "pass",
+     "seen": {
+      "wholeNote": true,
+      "tracks": null
+     }
+    },
+    {
+     "what": "the finished file's tracks, read: one video, no audio",
+     "outcome": "fail",
+     "tracks": null
+    }
+   ],
+   "expected": [
+    "pass",
+    "pass",
+    "fail"
+   ]
+  },
+  {
+   "lang": "zh-Hans",
+   "part": "note",
+   "case": "no track",
+   "keys": [
+    "warnings.noAudio.heading"
+   ],
+   "page": {
+    "lang": "zh-Hans",
+    "tables": [
+     "en-GB",
+     "zh-Hans",
+     "ms-MY"
+    ],
+    "visibility": "visible",
+    "vw": 1280,
+    "wholeHeading": "此视频的音频太少，无法调节音量"
+   },
+   "setup": {
+    "headings": [
+     "这段视频没有音频"
+    ],
+    "unhid": [
+     "step-create"
+    ],
+    "boxVisible": true,
+    "divVisible": true,
+    "kindIn": "warning",
+    "text": "Notes这段视频没有音频"
+   },
+   "candidate": {
+    "S-102 wholeNote (candidate)": {
+     "v": false
+    },
+    "S-99 state (candidate, unchanged)": {
+     "v": false
+    },
+    "S-101 noAudioBefore (candidate, unchanged)": {
+     "v": true
+    },
+    "S-153 noAudioBefore (candidate, unchanged)": {
+     "v": true
+    }
+   }
+  },
+  {
+   "lang": "zh-Hans",
+   "part": "note",
+   "case": "part kept",
+   "keys": [
+    "warnings.keptTooLittleAudio.heading"
+   ],
+   "page": {
+    "lang": "zh-Hans",
+    "tables": [
+     "en-GB",
+     "zh-Hans",
+     "ms-MY"
+    ],
+    "visibility": "visible",
+    "vw": 1280,
+    "wholeHeading": "此视频的音频太少，无法调节音量"
+   },
+   "setup": {
+    "headings": [
+     "您保留的部分音频太少，无法调节音量"
+    ],
+    "unhid": [],
+    "boxVisible": true,
+    "divVisible": true,
+    "kindIn": "warning",
+    "text": "Notes您保留的部分音频太少，无法调节音量"
+   },
+   "candidate": {
+    "S-102 wholeNote (candidate)": {
+     "v": false
+    },
+    "S-99 state (candidate, unchanged)": {
+     "v": true
+    },
+    "S-101 noAudioBefore (candidate, unchanged)": {
+     "v": true
+    },
+    "S-153 noAudioBefore (candidate, unchanged)": {
+     "v": true
+    }
+   }
+  },
+  {
+   "lang": "zh-Hans",
+   "part": "note",
+   "case": "whole video",
+   "keys": [
+    "warnings.wholeTooLittleAudio.heading"
+   ],
+   "page": {
+    "lang": "zh-Hans",
+    "tables": [
+     "en-GB",
+     "zh-Hans",
+     "ms-MY"
+    ],
+    "visibility": "visible",
+    "vw": 1280,
+    "wholeHeading": "此视频的音频太少，无法调节音量"
+   },
+   "setup": {
+    "headings": [
+     "此视频的音频太少，无法调节音量"
+    ],
+    "unhid": [],
+    "boxVisible": true,
+    "divVisible": true,
+    "kindIn": "warning",
+    "text": "Notes此视频的音频太少，无法调节音量"
+   },
+   "candidate": {
+    "S-102 wholeNote (candidate)": {
+     "v": true
+    },
+    "S-99 state (candidate, unchanged)": {
+     "v": false
+    },
+    "S-101 noAudioBefore (candidate, unchanged)": {
+     "v": false
+    },
+    "S-153 noAudioBefore (candidate, unchanged)": {
+     "v": false
+    }
+   }
+  },
+  {
+   "lang": "zh-Hans",
+   "part": "note",
+   "case": "whole video and ends early",
+   "keys": [
+    "warnings.wholeTooLittleAudio.heading",
+    "warnings.endsEarly.heading"
+   ],
+   "page": {
+    "lang": "zh-Hans",
+    "tables": [
+     "en-GB",
+     "zh-Hans",
+     "ms-MY"
+    ],
+    "visibility": "visible",
+    "vw": 1280,
+    "wholeHeading": "此视频的音频太少，无法调节音量"
+   },
+   "setup": {
+    "headings": [
+     "此视频的音频太少，无法调节音量",
+     "文件提前结束"
+    ],
+    "unhid": [],
+    "boxVisible": true,
+    "divVisible": true,
+    "kindIn": "warning",
+    "text": "Notes此视频的音频太少，无法调节音量文件提前结束"
+   },
+   "candidate": {
+    "S-102 wholeNote (candidate)": {
+     "v": false
+    },
+    "S-99 state (candidate, unchanged)": {
+     "v": false
+    },
+    "S-101 noAudioBefore (candidate, unchanged)": {
+     "v": false
+    },
+    "S-153 noAudioBefore (candidate, unchanged)": {
+     "v": false
+    }
+   }
+  },
+  {
+   "lang": "zh-Hans",
+   "part": "note",
+   "case": "ends early",
+   "keys": [
+    "warnings.endsEarly.heading"
+   ],
+   "page": {
+    "lang": "zh-Hans",
+    "tables": [
+     "en-GB",
+     "zh-Hans",
+     "ms-MY"
+    ],
+    "visibility": "visible",
+    "vw": 1280,
+    "wholeHeading": "此视频的音频太少，无法调节音量"
+   },
+   "setup": {
+    "headings": [
+     "文件提前结束"
+    ],
+    "unhid": [],
+    "boxVisible": true,
+    "divVisible": true,
+    "kindIn": "warning",
+    "text": "Notes文件提前结束"
+   },
+   "candidate": {
+    "S-102 wholeNote (candidate)": {
+     "v": false
+    },
+    "S-99 state (candidate, unchanged)": {
+     "v": false
+    },
+    "S-101 noAudioBefore (candidate, unchanged)": {
+     "v": false
+    },
+    "S-153 noAudioBefore (candidate, unchanged)": {
+     "v": false
+    }
+   }
+  },
+  {
+   "lang": "zh-Hans",
+   "part": "note",
+   "case": "empty",
+   "keys": [],
+   "page": {
+    "lang": "zh-Hans",
+    "tables": [
+     "en-GB",
+     "zh-Hans",
+     "ms-MY"
+    ],
+    "visibility": "visible",
+    "vw": 1280,
+    "wholeHeading": "此视频的音频太少，无法调节音量"
+   },
+   "setup": {
+    "headings": [],
+    "unhid": [],
+    "boxVisible": true,
+    "divVisible": null,
+    "kindIn": null,
+    "text": ""
+   },
+   "candidate": {
+    "S-102 wholeNote (candidate)": {
+     "v": false
+    },
+    "S-99 state (candidate, unchanged)": {
+     "v": false
+    },
+    "S-101 noAudioBefore (candidate, unchanged)": {
+     "v": false
+    },
+    "S-153 noAudioBefore (candidate, unchanged)": {
+     "v": false
+    }
+   }
+  },
+  {
+   "lang": "zh-Hans",
+   "part": "state",
+   "case": "finished",
+   "setup": {
+    "kind": "finished",
+    "res": "result",
+    "finished": true,
+    "title": "完成的视频 — {size}"
+   },
+   "candidate": {
+    "v": true
+   },
+   "base": {
+    "v": true
+   }
+  },
+  {
+   "lang": "zh-Hans",
+   "part": "state",
+   "case": "failure",
+   "setup": {
+    "kind": "failure",
+    "res": "failure",
+    "finished": false,
+    "title": "Failed"
+   },
+   "candidate": {
+    "v": false
+   },
+   "base": {
+    "v": true
+   }
+  },
+  {
+   "lang": "zh-Hans",
+   "part": "state",
+   "case": "empty",
+   "setup": {
+    "kind": "empty",
+    "res": "none"
+   },
+   "candidate": {
+    "v": false
+   },
+   "base": {
+    "v": false
+   }
+  },
+  {
+   "lang": "ms-MY",
+   "part": "note",
+   "case": "no track",
+   "keys": [
+    "warnings.noAudio.heading"
+   ],
+   "page": {
+    "lang": "ms-MY",
+    "tables": [
+     "en-GB",
+     "zh-Hans",
+     "ms-MY"
+    ],
+    "visibility": "visible",
+    "vw": 1280,
+    "wholeHeading": "Video ini mempunyai terlalu sedikit audio untuk diratakan"
+   },
+   "setup": {
+    "headings": [
+     "Video ini tiada audio"
+    ],
+    "unhid": [
+     "step-create"
+    ],
+    "boxVisible": true,
+    "divVisible": true,
+    "kindIn": "warning",
+    "text": "NotesVideo ini tiada audio"
+   },
+   "candidate": {
+    "S-102 wholeNote (candidate)": {
+     "v": false
+    },
+    "S-99 state (candidate, unchanged)": {
+     "v": false
+    },
+    "S-101 noAudioBefore (candidate, unchanged)": {
+     "v": true
+    },
+    "S-153 noAudioBefore (candidate, unchanged)": {
+     "v": true
+    }
+   }
+  },
+  {
+   "lang": "ms-MY",
+   "part": "note",
+   "case": "part kept",
+   "keys": [
+    "warnings.keptTooLittleAudio.heading"
+   ],
+   "page": {
+    "lang": "ms-MY",
+    "tables": [
+     "en-GB",
+     "zh-Hans",
+     "ms-MY"
+    ],
+    "visibility": "visible",
+    "vw": 1280,
+    "wholeHeading": "Video ini mempunyai terlalu sedikit audio untuk diratakan"
+   },
+   "setup": {
+    "headings": [
+     "Bahagian yang anda simpan mempunyai terlalu sedikit audio untuk diratakan"
+    ],
+    "unhid": [],
+    "boxVisible": true,
+    "divVisible": true,
+    "kindIn": "warning",
+    "text": "NotesBahagian yang anda simpan mempunyai terlalu sedikit audio untuk diratakan"
+   },
+   "candidate": {
+    "S-102 wholeNote (candidate)": {
+     "v": false
+    },
+    "S-99 state (candidate, unchanged)": {
+     "v": true
+    },
+    "S-101 noAudioBefore (candidate, unchanged)": {
+     "v": true
+    },
+    "S-153 noAudioBefore (candidate, unchanged)": {
+     "v": true
+    }
+   }
+  },
+  {
+   "lang": "ms-MY",
+   "part": "note",
+   "case": "whole video",
+   "keys": [
+    "warnings.wholeTooLittleAudio.heading"
+   ],
+   "page": {
+    "lang": "ms-MY",
+    "tables": [
+     "en-GB",
+     "zh-Hans",
+     "ms-MY"
+    ],
+    "visibility": "visible",
+    "vw": 1280,
+    "wholeHeading": "Video ini mempunyai terlalu sedikit audio untuk diratakan"
+   },
+   "setup": {
+    "headings": [
+     "Video ini mempunyai terlalu sedikit audio untuk diratakan"
+    ],
+    "unhid": [],
+    "boxVisible": true,
+    "divVisible": true,
+    "kindIn": "warning",
+    "text": "NotesVideo ini mempunyai terlalu sedikit audio untuk diratakan"
+   },
+   "candidate": {
+    "S-102 wholeNote (candidate)": {
+     "v": true
+    },
+    "S-99 state (candidate, unchanged)": {
+     "v": false
+    },
+    "S-101 noAudioBefore (candidate, unchanged)": {
+     "v": false
+    },
+    "S-153 noAudioBefore (candidate, unchanged)": {
+     "v": false
+    }
+   }
+  },
+  {
+   "lang": "ms-MY",
+   "part": "note",
+   "case": "whole video and ends early",
+   "keys": [
+    "warnings.wholeTooLittleAudio.heading",
+    "warnings.endsEarly.heading"
+   ],
+   "page": {
+    "lang": "ms-MY",
+    "tables": [
+     "en-GB",
+     "zh-Hans",
+     "ms-MY"
+    ],
+    "visibility": "visible",
+    "vw": 1280,
+    "wholeHeading": "Video ini mempunyai terlalu sedikit audio untuk diratakan"
+   },
+   "setup": {
+    "headings": [
+     "Video ini mempunyai terlalu sedikit audio untuk diratakan",
+     "Fail ini berakhir lebih awal"
+    ],
+    "unhid": [],
+    "boxVisible": true,
+    "divVisible": true,
+    "kindIn": "warning",
+    "text": "NotesVideo ini mempunyai terlalu sedikit audio untuk diratakanFail ini berakhir lebih awal"
+   },
+   "candidate": {
+    "S-102 wholeNote (candidate)": {
+     "v": false
+    },
+    "S-99 state (candidate, unchanged)": {
+     "v": false
+    },
+    "S-101 noAudioBefore (candidate, unchanged)": {
+     "v": false
+    },
+    "S-153 noAudioBefore (candidate, unchanged)": {
+     "v": false
+    }
+   }
+  },
+  {
+   "lang": "ms-MY",
+   "part": "note",
+   "case": "ends early",
+   "keys": [
+    "warnings.endsEarly.heading"
+   ],
+   "page": {
+    "lang": "ms-MY",
+    "tables": [
+     "en-GB",
+     "zh-Hans",
+     "ms-MY"
+    ],
+    "visibility": "visible",
+    "vw": 1280,
+    "wholeHeading": "Video ini mempunyai terlalu sedikit audio untuk diratakan"
+   },
+   "setup": {
+    "headings": [
+     "Fail ini berakhir lebih awal"
+    ],
+    "unhid": [],
+    "boxVisible": true,
+    "divVisible": true,
+    "kindIn": "warning",
+    "text": "NotesFail ini berakhir lebih awal"
+   },
+   "candidate": {
+    "S-102 wholeNote (candidate)": {
+     "v": false
+    },
+    "S-99 state (candidate, unchanged)": {
+     "v": false
+    },
+    "S-101 noAudioBefore (candidate, unchanged)": {
+     "v": false
+    },
+    "S-153 noAudioBefore (candidate, unchanged)": {
+     "v": false
+    }
+   }
+  },
+  {
+   "lang": "ms-MY",
+   "part": "note",
+   "case": "empty",
+   "keys": [],
+   "page": {
+    "lang": "ms-MY",
+    "tables": [
+     "en-GB",
+     "zh-Hans",
+     "ms-MY"
+    ],
+    "visibility": "visible",
+    "vw": 1280,
+    "wholeHeading": "Video ini mempunyai terlalu sedikit audio untuk diratakan"
+   },
+   "setup": {
+    "headings": [],
+    "unhid": [],
+    "boxVisible": true,
+    "divVisible": null,
+    "kindIn": null,
+    "text": ""
+   },
+   "candidate": {
+    "S-102 wholeNote (candidate)": {
+     "v": false
+    },
+    "S-99 state (candidate, unchanged)": {
+     "v": false
+    },
+    "S-101 noAudioBefore (candidate, unchanged)": {
+     "v": false
+    },
+    "S-153 noAudioBefore (candidate, unchanged)": {
+     "v": false
+    }
+   }
+  },
+  {
+   "lang": "ms-MY",
+   "part": "state",
+   "case": "finished",
+   "setup": {
+    "kind": "finished",
+    "res": "result",
+    "finished": true,
+    "title": "Video siap — {size}"
+   },
+   "candidate": {
+    "v": true
+   },
+   "base": {
+    "v": true
+   }
+  },
+  {
+   "lang": "ms-MY",
+   "part": "state",
+   "case": "failure",
+   "setup": {
+    "kind": "failure",
+    "res": "failure",
+    "finished": false,
+    "title": "Failed"
+   },
+   "candidate": {
+    "v": false
+   },
+   "base": {
+    "v": true
+   }
+  },
+  {
+   "lang": "ms-MY",
+   "part": "state",
+   "case": "empty",
+   "setup": {
+    "kind": "empty",
+    "res": "none"
+   },
+   "candidate": {
+    "v": false
+   },
+   "base": {
+    "v": false
+   }
+  }
+ ],
+ "mismatches": [],
+ "chrome": "Chrome/156.0.8078.48",
+ "ended": "2026-10-27T22:21:19.379Z",
+ "outcome": "as expected"
+}

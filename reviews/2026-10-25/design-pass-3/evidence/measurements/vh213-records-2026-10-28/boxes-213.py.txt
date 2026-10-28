@@ -1,0 +1,20 @@
+# VH-213 #5: the MP4 boxes that declare a file's tracks and their samples (moov's tkhd, mdhd, stsz; each fragment's tfhd), read from the bytes alone.
+import struct,sys
+d=open(sys.argv[1],'rb').read()
+def boxes(s,e,path=''):
+    i=s
+    while i+8<=e:
+        sz,t=struct.unpack('>I4s',d[i:i+8]); t=t.decode('latin1'); h=8
+        if sz==1: sz=struct.unpack('>Q',d[i+8:i+16])[0]; h=16
+        if sz==0: sz=e-i
+        p=path+'/'+t; v=d[i+h] if i+h<len(d) else 0
+        if t in('moov','trak','mdia','minf','stbl','mvex','moof','traf'): boxes(i+h,i+sz,p)
+        elif t=='mdhd': ts,du=(struct.unpack('>II',d[i+h+12:i+h+20]) if v==0 else struct.unpack('>IQ',d[i+h+20:i+h+32])); print(p,'timescale',ts,'duration',du)
+        elif t=='tkhd': print(p,'track',struct.unpack('>I',d[i+h+12:i+h+16] if v==0 else d[i+h+20:i+h+24])[0],'duration',struct.unpack('>I',d[i+h+20:i+h+24])[0] if v==0 else struct.unpack('>Q',d[i+h+28:i+h+36])[0])
+        elif t=='hdlr': print(p,'handler',d[i+h+8:i+h+12].decode('latin1'))
+        elif t=='stsz': print(p,'sample_count',struct.unpack('>I',d[i+h+8:i+h+12])[0])
+        elif t=='tfhd': print(p,'track',struct.unpack('>I',d[i+h+4:i+h+8])[0])
+        elif t=='trun': print(p,'sample_count',struct.unpack('>I',d[i+h+4:i+h+8])[0])
+        elif t in('ftyp','mdat','mfra','mvhd','mehd','sidx'): print(p,'bytes',sz)
+        i+=sz
+boxes(0,len(d))

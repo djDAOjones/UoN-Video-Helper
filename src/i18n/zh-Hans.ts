@@ -558,6 +558,11 @@ export const zhHans: Messages = {
       detail:
         '新视频将没有音频。如果您需要音频，请调整开始时间或结束时间，多保留一些有音频的部分。',
     },
+    wholeTooLittleAudio: {
+      heading: '此视频的音频太少，无法调节音量',
+      detail:
+        '它的声音不到半秒，太短，无法调节音量，因此新视频将没有音频。您的原始文件仍保留声音。',
+    },
     decodeDamage: {
       heading: {
         one: '一处损坏的片段将被静音',

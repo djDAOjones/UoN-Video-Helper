@@ -1,0 +1,21 @@
+#!/bin/zsh
+# vh213: start or stop Vite (:5181) and headless Chrome (:9251) by PID.
+#   servers.sh start <app root> | servers.sh stop
+S=${0:A:h}
+case $1 in
+start)
+  APP=$2
+  if lsof -nP -i :5181 -i :9251 >/dev/null 2>&1; then echo "PORTS BUSY"; lsof -nP -i :5181 -i :9251; exit 3; fi
+  (cd "$APP" && exec node node_modules/vite/bin/vite.js --port 5181 --strictPort --host 127.0.0.1 > "$S/vite-vh213.log" 2>&1) &
+  echo $! > "$S/vite-vh213.pid"
+  rm -rf "$S/chrome-profile-vh213"
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --remote-debugging-port=9251 --user-data-dir="$S/chrome-profile-vh213" --no-first-run --disable-background-timer-throttling --disable-renderer-backgrounding --disable-backgrounding-occluded-windows about:blank > "$S/chrome-vh213.log" 2>&1 &
+  echo $! > "$S/chrome-vh213.pid"
+  for i in {1..60}; do curl -s -o /dev/null http://127.0.0.1:5181/ && curl -s -o /dev/null http://127.0.0.1:9251/json/version && break; sleep 1; done
+  echo "vite $(cat $S/vite-vh213.pid) chrome $(cat $S/chrome-vh213.pid) from $APP"; curl -s http://127.0.0.1:9251/json/version | grep -o '"Browser": "[^"]*"' ;;
+stop)
+  for f in chrome vite; do P=$(cat "$S/$f-vh213.pid" 2>/dev/null); [[ -n $P ]] && kill $P 2>/dev/null; done
+  for i in {1..30}; do lsof -nP -i :5181 -i :9251 >/dev/null 2>&1 || break; sleep 1; done
+  for f in chrome vite; do P=$(cat "$S/$f-vh213.pid" 2>/dev/null); [[ -n $P ]] && kill -0 $P 2>/dev/null && echo "$f $P still alive"; done
+  lsof -nP -i :5181 -i :9251 && echo "PORTS STILL BUSY" || echo "stopped; ports free" ;;
+esac

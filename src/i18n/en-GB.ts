@@ -678,6 +678,12 @@ export const enGB = {
       detail:
         'The new video will have no audio. If you want the audio, move the start or end time to keep more of the video where there is audio.',
     },
+    /** Said in place of noAudio when the file has audio but the whole video, untrimmed, holds too little to level (VH-213): the owner's words. */
+    wholeTooLittleAudio: {
+      heading: 'This video has too little audio to level',
+      detail:
+        'It has less than half a second of sound, too short to level, so the new video will have no audio. Your original file keeps its sound.',
+    },
     /** Said when a damaged moment in the file's sound is made silent (VH-122). {times} is a list of times, like "1:22 and 3:05". */
     decodeDamage: {
       heading: {

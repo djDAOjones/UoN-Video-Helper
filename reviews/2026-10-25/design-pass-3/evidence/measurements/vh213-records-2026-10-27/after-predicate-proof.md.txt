@@ -1,0 +1,40 @@
+22:21:14 page loaded http://127.0.0.1:5181/
+en-GB note no track S-102=false S-99=false S-101=true S-153=true
+en-GB note part kept S-102=false S-99=true S-101=true S-153=true
+en-GB note whole video S-102=true S-99=false S-101=false S-153=false
+en-GB note whole video and ends early S-102=false S-99=false S-101=false S-153=false
+en-GB note ends early S-102=false S-99=false S-101=false S-153=false
+en-GB note empty S-102=false S-99=false S-101=false S-153=false
+en-GB state finished candidate=true base=true {"kind":"finished","res":"result","finished":true,"title":"Finished video — {size}"}
+en-GB state failure candidate=false base=true {"kind":"failure","res":"failure","finished":false,"title":"Failed"}
+en-GB state empty candidate=false base=false {"kind":"empty","res":"none"}
+tracks silent-10s.mp4 {"video":1,"audio":0,"other":0}
+tracks late-sound-3.4s-10s.mp4 {"video":1,"audio":1,"other":0}
+asserts pass pass pass pass
+asserts no note fail pass pass
+asserts levelled pass fail pass
+asserts sound kept pass pass fail
+asserts no tracks read pass pass fail
+22:21:16 page loaded http://127.0.0.1:5181/
+22:21:16 click #language-switcher input[value="zh-Hans"]
+zh-Hans note no track S-102=false S-99=false S-101=true S-153=true
+zh-Hans note part kept S-102=false S-99=true S-101=true S-153=true
+zh-Hans note whole video S-102=true S-99=false S-101=false S-153=false
+zh-Hans note whole video and ends early S-102=false S-99=false S-101=false S-153=false
+zh-Hans note ends early S-102=false S-99=false S-101=false S-153=false
+zh-Hans note empty S-102=false S-99=false S-101=false S-153=false
+zh-Hans state finished candidate=true base=true {"kind":"finished","res":"result","finished":true,"title":"完成的视频 — {size}"}
+zh-Hans state failure candidate=false base=true {"kind":"failure","res":"failure","finished":false,"title":"Failed"}
+zh-Hans state empty candidate=false base=false {"kind":"empty","res":"none"}
+22:21:18 page loaded http://127.0.0.1:5181/
+22:21:18 click #language-switcher input[value="ms-MY"]
+ms-MY note no track S-102=false S-99=false S-101=true S-153=true
+ms-MY note part kept S-102=false S-99=true S-101=true S-153=true
+ms-MY note whole video S-102=true S-99=false S-101=false S-153=false
+ms-MY note whole video and ends early S-102=false S-99=false S-101=false S-153=false
+ms-MY note ends early S-102=false S-99=false S-101=false S-153=false
+ms-MY note empty S-102=false S-99=false S-101=false S-153=false
+ms-MY state finished candidate=true base=true {"kind":"finished","res":"result","finished":true,"title":"Video siap — {size}"}
+ms-MY state failure candidate=false base=true {"kind":"failure","res":"failure","finished":false,"title":"Failed"}
+ms-MY state empty candidate=false base=false {"kind":"empty","res":"none"}
+as expected 

@@ -1,0 +1,36 @@
+#!/bin/zsh
+# VH-213 fixtures: the walker's own recipe lines, extracted verbatim from the
+# base export (fixtures.sh :6-8, :21; fixtures-8.sh :39-42, :49), as VH-206's
+# fixtures-vh206.sh took them, plus the item's whole-video controls on the same
+# picture and tone. Usage: zsh fixtures-vh213.sh <walker dir> <out dir>
+set -e
+WALKER="$1"; OUT="$2"; mkdir -p "$OUT"
+# --- verbatim from the walker (sed -n), so the recipe is the base's own
+eval "$(sed -n 6,8p "$WALKER/fixtures.sh")"
+eval "$(sed -n 21p "$WALKER/fixtures.sh")"            # silent-10s.mp4 (S-20)
+eval "$(sed -n 39,42p "$WALKER/fixtures-8.sh")"       # N8 a/b/c: late-sound-10s, -3.4s-, -9.7s- (S-99, S-101, S-102)
+eval "$(sed -n 49p "$WALKER/fixtures-8.sh")"          # N14: late-sound-3.71s-25fps-10s.mp4 (S-153)
+# --- VH-213's controls: a whole video, nothing trimmed. 16-bit PCM in MOV, so
+# no priming and every sample counted: the walker's tone, its length set on the
+# source (the output's -t cuts sound only at a 1,024-sample frame), from 9.61,
+# 9.60 and 9.59 s of 10 s: 390, 400 and 410 ms of sound (18,720, 19,200 and
+# 19,680 samples).
+PCM="-c:v libx264 -preset veryfast -pix_fmt yuv420p -c:a pcm_s16le"
+for MS in 390 400 410; do
+  OFF=$(printf '%.2f' $(( 10 - MS / 1000.0 )))
+  ffmpeg -v error -y ${=V} -itsoffset $OFF -f lavfi -i "sine=frequency=440:sample_rate=48000:duration=0.$MS" -t 10 -af "volume=-13dB,aformat=channel_layouts=stereo" ${=PCM} "$OUT/whole-pcm-${MS}ms-10s.mov"
+done
+# The ends-early control: 10 s of tone, index first (+faststart), then the
+# file cut to its first CUT_BYTES bytes, so the index declares 10 s of sound
+# and under 400 ms of it arrives (the proof reads how much).
+ffmpeg -v error -y ${=V} ${=A} -t 10 -af "volume=-13dB,aformat=channel_layouts=stereo" ${=PCM} -movflags +faststart "$OUT/whole-pcm-10s.mov"
+head -c ${CUT_BYTES:-196622} "$OUT/whole-pcm-10s.mov" > "$OUT/whole-pcm-cut-10s.mov"
+rm "$OUT/whole-pcm-10s.mov"
+# The none-decoded control (VH-213 #5; Codex's blind must 2): the walker's
+# picture, 10 s, with an AAC audio track that holds no sample, so its sound is
+# neither declared nor decoded. A fragmented MP4 (empty_moov) writes every
+# track in its moov and only the samples that arrive in its fragments; the
+# audio input gives none (anullsrc of duration 0). negative_cts_offsets keeps
+# the picture at 0-10 s, as in the walker's own fixtures.
+ffmpeg -v error -y ${=V} -f lavfi -i "anullsrc=r=48000:cl=stereo:d=0" -map 0:v -map 1:a -t 10 -c:v libx264 -preset veryfast -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +frag_keyframe+empty_moov+default_base_moof+negative_cts_offsets "$OUT/whole-aac-empty-10s.mp4"
+ls -la "$OUT"

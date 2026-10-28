@@ -597,6 +597,11 @@ export const msMY: Messages = {
       detail:
         'Video baharu tidak akan mempunyai audio. Jika anda mahukan audio itu, ubah masa mula atau masa tamat untuk menyimpan lebih banyak bahagian video yang ada audio.',
     },
+    wholeTooLittleAudio: {
+      heading: 'Video ini mempunyai terlalu sedikit audio untuk diratakan',
+      detail:
+        'Bunyinya kurang daripada setengah saat, terlalu pendek untuk diratakan, jadi video baharu tidak akan mempunyai audio. Fail asal anda masih mengekalkan bunyinya.',
+    },
     decodeDamage: {
       heading: {
         one: 'Satu bahagian yang rosak akan disenyapkan',

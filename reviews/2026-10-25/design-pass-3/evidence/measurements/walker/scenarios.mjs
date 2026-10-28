@@ -3,6 +3,9 @@
 // change underneath: every walked scenario (setup, state predicate, focus
 // list), the keyboard routes J1-J4 and K-dialog, the plans, and the gaps.
 // matrix.mjs imports SCENARIOS, ROUTES, PLANS, MX_INIT and GAPS from here.
+import { Buffer } from 'node:buffer'
+import { execFileSync } from 'node:child_process'
+import { writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { F, sleep } from './walk.mjs'
@@ -1532,6 +1535,21 @@ async function finishedWithPlayer(w, lang, file = 'short-2s.mp4', beforeCreate) 
   obsOf(w).src = await playerSrc(w)
 }
 async function untilDone(w, label, timeout = 600000) { await until(w, `M.finished() || M.res() === 'failure'`, label, timeout); await sleep(400) }
+/**
+ * VH-213: the finished video's tracks, from the bytes the card's player holds
+ * (VH-192), read by ffprobe, so the card stays as found: nothing is saved.
+ * `null` when no player stands, as beside a failure.
+ */
+export async function outputTracks(w) {
+  const b64 = await w.evaluate(`(async () => { const v = document.querySelector(${JSON.stringify(P8_PLAYER)}); const src = v && v.getAttribute('src'); if (!src) return null; const b = new Uint8Array(await (await fetch(src)).arrayBuffer()); let s = ''; for (let i = 0; i < b.length; i += 0x8000) s += String.fromCharCode.apply(null, b.subarray(i, i + 0x8000)); return btoa(s); })()`)
+  if (!b64) return null
+  const file = join(w.dir, 'output-tracks.mp4')
+  writeFileSync(file, Buffer.from(b64, 'base64'))
+  const kinds = JSON.parse(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'stream=codec_type', '-of', 'json', file], { encoding: 'utf8' })).streams.map((x) => x.codec_type)
+  return { video: kinds.filter((k) => k === 'video').length, audio: kinds.filter((k) => k === 'audio').length, other: kinds.filter((k) => k !== 'video' && k !== 'audio').length }
+}
+/** VH-213: before Create, the whole video's too-little note, and no other no-audio note or ends-early. */
+export const WHOLE_NOTE = `M.kindIn('#audio-warnings') === 'warning' && M.has('warnings.wholeTooLittleAudio.heading', '#audio-warnings') && !M.has('warnings.keptTooLittleAudio.heading', '#audio-warnings') && !M.has('warnings.noAudio.heading', '#audio-warnings') && !M.has('warnings.endsEarly.heading', '#audio-warnings')`
 const HEAVY_TITLE = `M.msg('warnings.heavyLimiting.heading')`
 const META_TITLE = `M.msg('warnings.metadataLost.heading')`
 const WARN_TEXT = `(() => { const b = window.__p8.warnBox(); return b ? b.textContent.replace(/\\s+/g, ' ') : '' })()`
@@ -1940,11 +1958,16 @@ Object.assign(SCENARIOS, {
     fixtures: ['late-sound-3.4s-10s.mp4'],
   },
   'S-102': {
-    name: 'An untrimmed file with under 400 ms of sound (wish VH-185.1)',
+    name: 'An untrimmed file with under 400 ms of sound: told before Create, made silent (VH-213)',
     ...EN_1280,
-    state: `M.finished() || M.res() === 'failure'`,
-    setup: async (w, lang) => { await ready(w, lang, 'late-sound-9.7s-10s.mp4'); const o = obsOf(w); o.verdictNotes = await mx(w, `M.text('#audio-warnings').replace(/\\s+/g, ' ').trim().slice(0, 300)`); await create(w); await untilDone(w, 'an outcome') },
-    asserts: [found('the verdict\'s notes, then the outcome (not judged against VH-185, whose scope it is not)', async (o, w) => ({ notes: o.verdictNotes, outcome: await mx(w, `M.res()`), text: await mx(w, `M.text('#process-result').replace(/\\s+/g, ' ').slice(0, 300)`), planned: (w.p8planned?.planned ?? []).length }))],
+    // VH-213, the owner's choice (VH-211's ask, point 3): the chosen outcome required, a finished video, never the loudness refusal.
+    state: `M.finished()`,
+    setup: async (w, lang) => { await ready(w, lang, 'late-sound-9.7s-10s.mp4'); const o = obsOf(w); o.verdictNotes = await mx(w, `M.text('#audio-warnings').replace(/\\s+/g, ' ').trim().slice(0, 300)`); o.wholeNote = await mx(w, WHOLE_NOTE); await create(w); await untilDone(w, 'an outcome'); o.tracks = await outputTracks(w) },
+    asserts: [
+      see('before Create, the whole video\'s too-little note, no other no-audio note and no ends-early', (o) => o.wholeNote === true),
+      see('finished silent: no plan to level', (o, w) => (w.p8planned?.planned ?? []).length === 0),
+      see('the finished file\'s tracks, read: one video, no audio', (o) => ({ outcome: o.tracks && o.tracks.video === 1 && o.tracks.audio === 0 && o.tracks.other === 0 ? 'pass' : 'fail', tracks: o.tracks ?? null })),
+    ],
     focus: [RESULT],
     fixtures: ['late-sound-9.7s-10s.mp4'],
   },

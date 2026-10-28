@@ -532,7 +532,8 @@ async function handlePreflight(
         keptRange && pictureTrack ? await keptRangeOnFrames(pictureTrack, keptRange) : keptRange
       const analysisStartedAt = performance.now()
       const measured = audioTrack ? await analyseSourceAudio(audioTrack, signal, soundRange) : null
-      // Too little sound in the part kept to level is no sound (VH-185).
+      // Too little sound in the part kept to level is no sound (VH-185), the
+      // whole video's included when nothing is trimmed (VH-213).
       const analysis = measured && !('silent' in measured) ? measured : null
       if (analysis) {
         analysisPass = {
@@ -553,10 +554,12 @@ async function handlePreflight(
           )
         : null
       // The silent result itself, not `analysis`: it is what tells too little
-      // kept from no track at all, and the two are worded apart (VH-206).
+      // kept, or too little in the whole video, from no track at all, and
+      // each is worded apart (VH-206, VH-213).
       audioWarnings = detectSourceWarnings(measured, soundShort, fileCutShort)
-      // A trim can keep a part with no sound; the job is then a silent one
-      // (VH-95), and asks nothing of the audio encoder.
+      // A trim can keep a part with no sound, and a whole video can hold too
+      // little; the job is then a silent one (VH-95, VH-213), and asks nothing
+      // of the audio encoder.
       if (analysis === null) keptHasSound = false
     }
     // `analyseSourceAudio` stops at the next sample rather than throwing, so

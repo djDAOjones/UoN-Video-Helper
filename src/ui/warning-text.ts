@@ -67,8 +67,16 @@ export function warningText(warning: AudioWarning): WarningText {
         ),
       }
     case 'no-audio':
-      // The cause, and so the way forward: keep more, or check the recording (VH-206).
-      return warning.reason === 'kept-too-little' ? warnings.keptTooLittleAudio : warnings.noAudio
+      // The cause, and so the way forward: keep more, or check the recording
+      // (VH-206); for a whole video, that the original keeps its sound (VH-213).
+      switch (warning.reason) {
+        case 'kept-too-little':
+          return warnings.keptTooLittleAudio
+        case 'whole-too-little':
+          return warnings.wholeTooLittleAudio
+        default:
+          return warnings.noAudio
+      }
     case 'decode-damage': {
       const count = warning.atSeconds?.length ?? 0
       return {

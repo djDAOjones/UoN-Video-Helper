@@ -170,12 +170,24 @@ describe('no audio, said by its cause (VH-206)', () => {
     expect(detail).not.toMatch(/check the recording/i)
   })
 
+  it('says a whole video has too little, and that the original keeps its sound (VH-213)', () => {
+    const { heading, detail } = said('whole-too-little')
+    expect(heading).toBe('This video has too little audio to level')
+    expect(detail).toBe(
+      'It has less than half a second of sound, too short to level, so the new video will have no audio. Your original file keeps its sound.',
+    )
+    // Nothing was trimmed, so no time to move; and the recording has sound.
+    expect(detail).not.toMatch(/start or end time|check the recording/i)
+  })
+
   it.each(LANGUAGES_OFFERED)('words each cause from %s’s own table', (tag) => {
     setLanguage(tag)
     const { warnings } = t()
     expect(said('kept-too-little')).toEqual(warnings.keptTooLittleAudio)
+    expect(said('whole-too-little')).toEqual(warnings.wholeTooLittleAudio)
     expect(said('no-track')).toEqual(warnings.noAudio)
     expect(warnings.keptTooLittleAudio.heading).not.toBe(warnings.noAudio.heading)
+    expect(new Set([warnings.noAudio, warnings.keptTooLittleAudio, warnings.wholeTooLittleAudio].map((w) => w.heading)).size).toBe(3)
   })
 
   it.each(LANGUAGES_OFFERED)(
@@ -197,6 +209,20 @@ describe('no audio, said by its cause (VH-206)', () => {
       // Sound the part declares and never delivers: the file ends early, not too little kept.
       expect(
         headings({ silent: true, decodedEndSeconds: null }, { stopsAtSeconds: 25, endSeconds: 30 }),
+      ).toEqual([warnings.endsEarly.heading])
+      // Too little in a whole video, nothing trimmed, or none decoded: its own words (VH-213).
+      expect(headings({ silent: true, decodedEndSeconds: 10, whole: true })).toEqual([
+        warnings.wholeTooLittleAudio.heading,
+      ])
+      expect(headings({ silent: true, decodedEndSeconds: null, whole: true })).toEqual([
+        warnings.wholeTooLittleAudio.heading,
+      ])
+      // And a whole video's declared sound that never arrives still ends early.
+      expect(
+        headings(
+          { silent: true, decodedEndSeconds: null, whole: true },
+          { stopsAtSeconds: 0, endSeconds: 10 },
+        ),
       ).toEqual([warnings.endsEarly.heading])
     },
   )

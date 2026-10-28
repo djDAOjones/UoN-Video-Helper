@@ -1,0 +1,86 @@
+#!/bin/zsh
+# VH-213 #5: the none-decoded control (cell whole-none) walked alone, on the
+# model of rerun-213.sh. One run per call, each taking the lock afresh and
+# releasing it at its own end; nothing holds the lock across a check-in.
+#   walk-none-213.sh before — servers from $S/base (git archive 5893d9d)
+#   walk-none-213.sh after  — servers from $W, the candidate (run only once
+#                             #19's message quotes the owner's answer)
+# Each run: waits (60 s checks) for the 1-minute load below 8, then for the
+# lock (take-lock.sh; a lock held over 3 h ends the wait, exit 9); the contract's
+# "Power" test (AC, or battery above 50% and not Low Power; 10:31Z the Mac was
+# on battery, so the before is re-walked there and the pair matches); the ports
+# checked after the lock and before any process (servers.sh start); the probe
+# with --cells whole-none and its own LABEL, RESULTS and OUT_ROOT, so nothing
+# of #3's (records/, out-before/, out-after/) is written; the servers stopped
+# by PID (TERM, then KILL after 30 s); the lock released only when every PID
+# has exited, the ports are free, no chrome-profile-vh213 process is left and
+# owner.txt names VH-213 #5. Exit codes: 0 done, 3 ports busy, 4 battery,
+# 6 probe failed, 7 lock not releasable (kept: an escalation), 9 lock held 3 h.
+S=${0:A:h}
+N=/Users/joe/UoN-Video-Helper-side
+W=$N/vh213
+WREL=reviews/2026-10-25/design-pass-3/evidence/measurements/walker
+PHASE=$1
+case $PHASE in
+before) APP=$S/base; SOURCE=5893d9d-archive ;;
+after) APP=$W; SOURCE=5893d9d+vh213-$(git -C $W diff --binary | shasum | awk '{print substr($1,1,12)}') ;;
+*) echo "usage: walk-none-213.sh before|after"; exit 2 ;;
+esac
+# LABEL is set after the lock, by the power source: <phase>-none on AC, <phase>-none-batt on battery.
+RES=$S/records-none
+LOG=$S/walk-none-213.log
+say() { echo "$(date -u +%H:%M:%SZ) [$PHASE] $*" | tee -a $LOG }
+load1() { sysctl -n vm.loadavg | awk '{print $2}' }
+power() { say "power: $(pmset -g batt | head -1 | tr -d "'") | $(pmset -g batt | sed -n 2p | xargs) | $(pmset -g | grep -i powermode | xargs) | load $(uptime | sed 's/.*averages: //')" }
+mine() { [[ "$(head -1 $N/walk.lock/owner.txt 2>/dev/null)" == "VH-213 #5" ]] }
+stopall() {
+  zsh $S/servers.sh stop | tee -a $LOG
+  for f in chrome vite; do
+    P=$(cat "$S/$f-vh213.pid" 2>/dev/null); [[ -z $P ]] && continue
+    for i in {1..30}; do kill -0 $P 2>/dev/null || break; sleep 1; done
+    if kill -0 $P 2>/dev/null; then
+      say "$f $P alive 30 s after TERM: KILL"; kill -KILL $P 2>/dev/null
+      for i in {1..10}; do kill -0 $P 2>/dev/null || break; sleep 1; done
+    fi
+  done
+}
+release() {
+  mine || { say "LOCK NOT MINE ($(head -1 $N/walk.lock/owner.txt 2>&1)), kept"; return 1 }
+  for f in chrome vite; do P=$(cat "$S/$f-vh213.pid" 2>/dev/null); [[ -n $P ]] && kill -0 $P 2>/dev/null && { say "$f $P ALIVE, lock kept"; return 1 }; done
+  if [[ $1 != started-none ]] && lsof -nP -i :5181 -i :9251 >/dev/null 2>&1; then say "PORTS BUSY, lock kept"; lsof -nP -i :5181 -i :9251 | tee -a $LOG; return 1; fi
+  if pgrep -f chrome-profile-vh213 >/dev/null 2>&1; then say "chrome-profile-vh213 process left, lock kept"; pgrep -fl chrome-profile-vh213 | tee -a $LOG; return 1; fi
+  rm -r "$N/walk.lock" && say "LOCK RELEASED"
+}
+rm -f "$S/chrome-vh213.pid" "$S/vite-vh213.pid"
+while true; do
+  while (( $(load1) >= 8 )); do sleep 60; done
+  say "load $(load1) below 8; waiting for the lock"
+  zsh $S/take-lock.sh "VH-213 #5 $PHASE walk of the none-decoded control (whole-213-probe --cells whole-none) on $APP, Vite :5181 + Chrome :9251" | tee -a $LOG
+  TL=${pipestatus[1]}
+  [[ $TL -eq 9 ]] && { say "LOCK HELD OVER 3 H: no walk"; exit 9 }
+  mine || { say "LOCK NOT TAKEN (take-lock exit $TL)"; exit 7 }
+  # The contract's "Power" test: AC, or battery above 50% and not Low Power (powermode / lowpowermode 1).
+  LVL=$(pmset -g batt | grep -o '[0-9]*%' | tr -d %)
+  if ! pmset -g batt | grep -q "AC Power" && { (( LVL <= 50 )) || pmset -g | grep -qE '(lowpowermode|powermode)[[:space:]]+1\b'; }; then say "POWER NOT FIT: battery $LVL% or Low Power: no walk"; power; release started-none; exit 4; fi
+  pmset -g batt | grep -q "AC Power" && LABEL=$PHASE-none || LABEL=$PHASE-none-batt
+  if [[ -e $RES/$LABEL-run.json ]]; then say "$RES/$LABEL-run.json exists: not overwritten"; release started-none; exit 2; fi
+  if (( $(load1) < 8 )); then break; fi
+  say "load $(load1) at 8 or above after the lock: released, waiting again"; release started-none || exit 7
+done
+power
+zsh $S/servers.sh start $APP | tee -a $LOG
+if [[ ${pipestatus[1]} -ne 0 ]]; then
+  say "SERVERS FAILED (ports busy?)"
+  if [[ -s $S/vite-vh213.pid || -s $S/chrome-vh213.pid ]]; then stopall; release || exit 7; else release started-none || exit 7; fi
+  exit 3
+fi
+mkdir -p $RES; OUT=$S/out-$LABEL
+say "$PHASE probe start (SOURCE $SOURCE, LABEL $LABEL)"
+env APP_URL=http://127.0.0.1:5181/ CDP_PORT=9251 FIX=$S/fix RESULTS=$RES WALKER=$APP/$WREL OUT_ROOT=$OUT LABEL=$LABEL SOURCE=$SOURCE node $S/whole-213-probe.mjs --cells whole-none > $S/probe-$LABEL.log 2>&1
+PX=$?
+say "$PHASE probe exit $PX"; tail -8 $S/probe-$LABEL.log | tee -a $LOG
+power
+stopall
+release || exit 7
+[[ $PX -eq 0 ]] || exit 6
+say "$PHASE DONE"
