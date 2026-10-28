@@ -18,6 +18,18 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-28 — PLAN-8 — VH-225 raised: the app renamed UoN Video Finisher, before VH-203, on the owner's word
+
+**Decision:** VH-225 renames the app UoN Video Finisher, with its repository and Pages address, last before VH-203 so every earlier walk keeps one name and the release contains it; the project folder is VH-226, after VH-204.
+
+**Rationale:** The owner's words, verbatim, typos kept, in the "Backlog review" chat on 2026-10-28 at about 11:50Z, typed by him, relayed to Orchestrator #20 (`plan8-owner-words.md`): "I have an time / change - it is to be called UoN Video Finisher (rather than UoN Video Helper). please add to the backlog and let the orchestrator chat know - the next release must contain the rename". Placed last before VH-203, so every earlier item's walks keep one name and VH-203's after-run measures the renamed page; before VH-204, so the release contains it. The hidden identifiers (the localStorage keys, the OPFS folder, the job name, the package name) are kept unless a migration is proved with no loss, since renaming them otherwise is data loss. The repository question, answered by him in "Backlog review", relayed to Orchestrator #21 and checked by Orchestrator #22 as his own turns: at about 15:00Z, to "Should the GitHub repository and preview web address change to the new name too?", verbatim: "Rename those too"; so the repository and the Pages address are renamed, with vite's base, the branding path, the profile's remote URL and every link to the old address, the repository's own rename a GitHub setting, his click or a session's with his go-ahead at that step, never done unasked. At about 15:18Z, to "Should the project folder on your Mac be renamed too?", whose shown option read "rename the project folder too, but only at a quiet point when no sessions or walks are running, after the release", verbatim: "Yes, at a quiet point". Orchestrator #22's ruling: the folder is not in VH-225's scope, since VH-225 lands before VH-203 and the folder goes after VH-204's release, when nothing runs; it is VH-226, its own line after VH-204, marked `[!]` because its open question is his: whether /Users/joe/UoN-Video-Helper-side follows, asked at its time. VH-225's six criteria and VH-226's one are drafts, which each item's own worker refines before its build, with Codex astra's blind check. Written by a ledger-only commit from the checkout's single writer after VH-208's push, under rule 3. Neither backlog line has a `from` field: the grammar takes only an ID there (`tools/ledger.mjs`, :288), so the owner's source is in the item files and here, as VH-204's line, raised on his word, carries none.
+
+**Supersedes:** none
+
+**Items:** VH-182, VH-183, VH-184, VH-185, VH-186, VH-187, VH-188, VH-189, VH-190, VH-191, VH-192, VH-193, VH-194, VH-196, VH-197, VH-198, VH-205, VH-199, VH-200, VH-201, VH-202, VH-211, VH-206, VH-207, VH-208, VH-212, VH-213, VH-214, VH-215, VH-216, VH-217, VH-209, VH-218, VH-219, VH-210, VH-220, VH-221, VH-222, VH-223, VH-224, VH-225, VH-203, VH-195, VH-204, VH-226
+
+**Deferred:** VH-225, VH-226
+
 ## 2026-10-28 — VH-208 — Closes: the finished video's warnings before its player and Save, and heavy limiting's listening sentence in the completion line
 
 **Decision:** VH-208 closes V-52. The output's warnings are the finished card's own content, after its title and lines and before the player, the lifetime line and Save, with no rail of their own, so no notification nests in another, in every paint: a "Previous video", after "Keep it", after a save and after a language change. The completion's live-region write carries heavy limiting's existing detail whole after the titles, Announce progress on or off; other warnings keep their titles alone. No element, no words; VH-193's and VH-192's decisions stand. VH-212 is next.
@@ -646,13 +658,3 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Supersedes:** none
 
 **Deferred:** VH-175
-
-## 2026-10-23 — VH-173 — The review judged: eight draft findings, none rank 1, none adding a control; WCAG 18 gaps typed
-
-**Decision:** VH-173 judges the pass in `judged-2026-10-23.md` and `wcag-2026-10-23.md`: V-18 and V-33 incomplete, V-40 to V-43 at rank 2, and V-44 and V-45 at rank 3; it adds no control; because the matrix and source settle each one.
-
-**Rationale:** Findings: V-18, the first action below the first screen in Chinese and Malay at 1280 px and in all three at 320 px; V-33, the feedback field's lines of 524–541 px; V-40, the file button's ring clipped, 110 records; V-41, the thumbs' ring lost at a 32 px font; V-42, the switcher's ring under forced-light; V-43, "Choose File" not in the input's name (it reopens part of VH-168, so it is for the owner); V-44, no hover under forced colours; V-45, "Closing branding" against "closing graphics". WCAG: 40 met, 11 met-in-source, 17 n-a, 18 gaps (4 defects: 1.4.11, 2.4.3 with D-01, 2.4.13, 2.5.3; 10 accepted limitations; 4 missing evidence: 2.1.1, 2.1.3, 3.1.3, 3.1.5). 1.4.8 is met on a stated reading, a CJK glyph counted as two against 80; counting one against 40 fails 86 records, and VH-174 tests the reading. D-01's first case was confirmed live. D-01 to D-04 merge in VH-174. Nielsen: seven hold; 4, 8 and 9 hold with exceptions. Person checklist: `person-checklist-2026-10-23.md`. Unrun cells and missing fixtures: VH-172.1, VH-173.1. Standards: wcag-2.2-aaa, nielsen, carbon digests. No product code changed.
-
-**Supersedes:** none
-
-**Deferred:** VH-174

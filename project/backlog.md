@@ -52,9 +52,11 @@ The public release on Xerte (PLAN-6) is VH-204's cut.
 - [ ] VH-222 — Check VH-155.2, VH-156.1, VH-158.1 — since 2026-10-27 — (from: VH-155, 2026-10-22)
 - [ ] VH-223 — VH-172.1, batch A — since 2026-10-27 — (from: VH-172, 2026-10-23)
 - [ ] VH-224 — VH-172.1, batch B — since 2026-10-27 — (from: VH-172, 2026-10-23)
+- [ ] VH-225 — The rename to UoN Video Finisher — since 2026-10-28
 - [!] VH-203 — Pass 3's after-run — since 2026-10-25 — blocked: the owner
 - [ ] VH-195 — Phase 8 closes — since 2026-10-24
 - [ ] VH-204 — The release cut for Xerte — since 2026-10-25 — blocked: VH-195
+- [!] VH-226 — The project folder renamed — since 2026-10-28 — blocked: VH-204
 
 ### Standing — the owner's, never phase-gated
 

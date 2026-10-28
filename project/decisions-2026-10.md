@@ -1095,3 +1095,13 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Supersedes:** none
 
 **Deferred:** VH-173
+
+## 2026-10-23 — VH-173 — The review judged: eight draft findings, none rank 1, none adding a control; WCAG 18 gaps typed
+
+**Decision:** VH-173 judges the pass in `judged-2026-10-23.md` and `wcag-2026-10-23.md`: V-18 and V-33 incomplete, V-40 to V-43 at rank 2, and V-44 and V-45 at rank 3; it adds no control; because the matrix and source settle each one.
+
+**Rationale:** Findings: V-18, the first action below the first screen in Chinese and Malay at 1280 px and in all three at 320 px; V-33, the feedback field's lines of 524–541 px; V-40, the file button's ring clipped, 110 records; V-41, the thumbs' ring lost at a 32 px font; V-42, the switcher's ring under forced-light; V-43, "Choose File" not in the input's name (it reopens part of VH-168, so it is for the owner); V-44, no hover under forced colours; V-45, "Closing branding" against "closing graphics". WCAG: 40 met, 11 met-in-source, 17 n-a, 18 gaps (4 defects: 1.4.11, 2.4.3 with D-01, 2.4.13, 2.5.3; 10 accepted limitations; 4 missing evidence: 2.1.1, 2.1.3, 3.1.3, 3.1.5). 1.4.8 is met on a stated reading, a CJK glyph counted as two against 80; counting one against 40 fails 86 records, and VH-174 tests the reading. D-01's first case was confirmed live. D-01 to D-04 merge in VH-174. Nielsen: seven hold; 4, 8 and 9 hold with exceptions. Person checklist: `person-checklist-2026-10-23.md`. Unrun cells and missing fixtures: VH-172.1, VH-173.1. Standards: wcag-2.2-aaa, nielsen, carbon digests. No product code changed.
+
+**Supersedes:** none
+
+**Deferred:** VH-174
