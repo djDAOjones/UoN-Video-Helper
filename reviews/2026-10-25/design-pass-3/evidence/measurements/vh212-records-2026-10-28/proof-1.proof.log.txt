@@ -1,0 +1,83 @@
+21:19:09 page loaded http://localhost:5181/
+PROBE OK  en-GB: new 1, old 0, owner's detail whole true
+PROBE OK  zh-Hans: new 1, old 0, owner's detail whole true
+PROBE OK  ms-MY: new 1, old 0, owner's detail whole true
+21:19:12 page loaded http://localhost:5181/
+PROVED  en-GB heading and detail word for word on new-page-new-table-good: pass (wanted pass)
+PROVED  en-GB first among the card's warnings on new-page-new-table-good: pass (wanted pass)
+PROVED  en-GB first in the line spoken on new-page-new-table-good: pass (wanted pass)
+PROVED  en-GB the heavy warning's detail whole after its title on new-page-new-table-good: pass (wanted pass)
+21:19:13 page loaded http://localhost:5181/
+PROVED  en-GB heading and detail word for word on old-page-new-table-bad: fail (wanted fail)
+PROVED  en-GB the heavy warning's detail whole after its title on old-page-new-table-bad: fail (wanted fail)
+21:19:14 page loaded http://localhost:5181/
+PROVED  en-GB heading and detail word for word, unmoved (the card holds the new words) on old-completion-new-table-bad: pass (wanted pass)
+PROVED  en-GB the heavy warning's detail whole after its title on old-completion-new-table-bad: fail (wanted fail)
+21:19:15 page loaded http://localhost:5181/
+PROVED  en-GB the heavy warning's detail whole after its title on heading-only-bad: fail (wanted fail)
+PROVED  en-GB first in the line spoken, unmoved (every title is said) on heading-only-bad: pass (wanted pass)
+21:19:16 page loaded http://localhost:5181/
+PROVED  en-GB unchanged after a save on save-kept-good: pass (wanted pass)
+21:19:18 page loaded http://localhost:5181/
+PROVED  en-GB unchanged after a save on save-changed-bad: fail (wanted fail)
+21:19:20 page loaded http://localhost:5181/
+PROVED  en-GB S-137 "then in the new language" (zh-Hans) on language-kept-good: pass (wanted pass)
+PROVED  en-GB heading and detail word for word (zh-Hans) on language-kept-good: pass (wanted pass)
+PROVED  en-GB the heavy warning's detail whole after its title: cannot-determine once the language changed on language-kept-good: cannot-determine (wanted cannot-determine)
+21:19:21 page loaded http://localhost:5181/
+PROVED  en-GB S-137 "then in the new language" (zh-Hans) on language-old-words-bad: fail (wanted fail)
+PROVED  en-GB heading and detail word for word (zh-Hans) on language-old-words-bad: fail (wanted fail)
+PROVED  en-GB the heavy warning's detail whole after its title: cannot-determine once the language changed on language-old-words-bad: cannot-determine (wanted cannot-determine)
+21:19:22 page loaded http://localhost:5181/
+PROVED  zh-Hans heading and detail word for word on new-page-new-table-good: pass (wanted pass)
+PROVED  zh-Hans first among the card's warnings on new-page-new-table-good: pass (wanted pass)
+PROVED  zh-Hans first in the line spoken on new-page-new-table-good: pass (wanted pass)
+PROVED  zh-Hans the heavy warning's detail whole after its title on new-page-new-table-good: pass (wanted pass)
+21:19:24 page loaded http://localhost:5181/
+PROVED  zh-Hans heading and detail word for word on old-page-new-table-bad: fail (wanted fail)
+PROVED  zh-Hans the heavy warning's detail whole after its title on old-page-new-table-bad: fail (wanted fail)
+21:19:25 page loaded http://localhost:5181/
+PROVED  zh-Hans heading and detail word for word, unmoved (the card holds the new words) on old-completion-new-table-bad: pass (wanted pass)
+PROVED  zh-Hans the heavy warning's detail whole after its title on old-completion-new-table-bad: fail (wanted fail)
+21:19:26 page loaded http://localhost:5181/
+PROVED  zh-Hans the heavy warning's detail whole after its title on heading-only-bad: fail (wanted fail)
+PROVED  zh-Hans first in the line spoken, unmoved (every title is said) on heading-only-bad: pass (wanted pass)
+21:19:27 page loaded http://localhost:5181/
+PROVED  zh-Hans unchanged after a save on save-kept-good: pass (wanted pass)
+21:19:29 page loaded http://localhost:5181/
+PROVED  zh-Hans unchanged after a save on save-changed-bad: fail (wanted fail)
+21:19:30 page loaded http://localhost:5181/
+PROVED  zh-Hans S-137 "then in the new language" (ms-MY) on language-kept-good: pass (wanted pass)
+PROVED  zh-Hans heading and detail word for word (ms-MY) on language-kept-good: pass (wanted pass)
+PROVED  zh-Hans the heavy warning's detail whole after its title: cannot-determine once the language changed on language-kept-good: cannot-determine (wanted cannot-determine)
+21:19:32 page loaded http://localhost:5181/
+PROVED  zh-Hans S-137 "then in the new language" (ms-MY) on language-old-words-bad: fail (wanted fail)
+PROVED  zh-Hans heading and detail word for word (ms-MY) on language-old-words-bad: fail (wanted fail)
+PROVED  zh-Hans the heavy warning's detail whole after its title: cannot-determine once the language changed on language-old-words-bad: cannot-determine (wanted cannot-determine)
+21:19:33 page loaded http://localhost:5181/
+PROVED  ms-MY heading and detail word for word on new-page-new-table-good: pass (wanted pass)
+PROVED  ms-MY first among the card's warnings on new-page-new-table-good: pass (wanted pass)
+PROVED  ms-MY first in the line spoken on new-page-new-table-good: pass (wanted pass)
+PROVED  ms-MY the heavy warning's detail whole after its title on new-page-new-table-good: pass (wanted pass)
+21:19:34 page loaded http://localhost:5181/
+PROVED  ms-MY heading and detail word for word on old-page-new-table-bad: fail (wanted fail)
+PROVED  ms-MY the heavy warning's detail whole after its title on old-page-new-table-bad: fail (wanted fail)
+21:19:35 page loaded http://localhost:5181/
+PROVED  ms-MY heading and detail word for word, unmoved (the card holds the new words) on old-completion-new-table-bad: pass (wanted pass)
+PROVED  ms-MY the heavy warning's detail whole after its title on old-completion-new-table-bad: fail (wanted fail)
+21:19:37 page loaded http://localhost:5181/
+PROVED  ms-MY the heavy warning's detail whole after its title on heading-only-bad: fail (wanted fail)
+PROVED  ms-MY first in the line spoken, unmoved (every title is said) on heading-only-bad: pass (wanted pass)
+21:19:38 page loaded http://localhost:5181/
+PROVED  ms-MY unchanged after a save on save-kept-good: pass (wanted pass)
+21:19:39 page loaded http://localhost:5181/
+PROVED  ms-MY unchanged after a save on save-changed-bad: fail (wanted fail)
+21:19:41 page loaded http://localhost:5181/
+PROVED  ms-MY S-137 "then in the new language" (en-GB) on language-kept-good: pass (wanted pass)
+PROVED  ms-MY heading and detail word for word (en-GB) on language-kept-good: pass (wanted pass)
+PROVED  ms-MY the heavy warning's detail whole after its title: cannot-determine once the language changed on language-kept-good: cannot-determine (wanted cannot-determine)
+21:19:42 page loaded http://localhost:5181/
+PROVED  ms-MY S-137 "then in the new language" (en-GB) on language-old-words-bad: fail (wanted fail)
+PROVED  ms-MY heading and detail word for word (en-GB) on language-old-words-bad: fail (wanted fail)
+PROVED  ms-MY the heavy warning's detail whole after its title: cannot-determine once the language changed on language-old-words-bad: cannot-determine (wanted cannot-determine)
+probe ok; proved 54 of 54

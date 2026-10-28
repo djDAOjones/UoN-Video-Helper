@@ -1,0 +1,34 @@
+The implementation matches the owner’s words. I found one blocking evidence overclaim and one minor numerical correction. No files were changed.
+
+**Must**
+
+- Correct 3.1.5 in the [measurement table](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/evidence/measurements/vh212-playback-advice-2026-10-28.md:118>). It currently says “holds” for all three languages based on the agent’s reading. [Specification §9.3](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/docs/01-specification.md:730>) explicitly reserves translated terms and reading level for a person. Retain the textual assessment, but record Chinese and Malay reading-level validation as **not shown—a limitation**, linked to existing wish VH-105.2. Re-check that correction before commit.
+
+**Should**
+
+- Correct the table’s before-load median at line 36: the 34 samples in `before-1.load.log.txt` have median **5.955, approximately 5.96**, not 5.92. This does not change the settled load judgement.
+
+Acceptance-criterion assessment:
+
+| Criterion | Status and evidence |
+|---|---|
+| Owner’s words | **Met.** `en-GB.ts:734`, `zh-Hans.ts:613`, `ms-MY.ts:653`: independently verified each complete file equals its base with exactly the approved replacement. Each detail contains its new clause once and its old clause zero times. Surrounding punctuation, spacing, cause, consequence, next-time advice and all other messages/headings are unchanged. The sentences read correctly and permit checking a saved file when playback here fails. |
+| Spoken as VH-208 left it | **Met.** `announce.ts:45–50` still appends the complete detail once. Records show the changed clause in all 144 warning completions, including S-151 with progress announcements off. I independently counted matching status-write totals before/after in all 192 mutation captures. Actual speech remains a limitation. |
+| Sheet | **Met.** Filled CSV row 367 preserves CRLF, carries the approved translations, translator note and machine-translation attribution. `sheet.ts:457` matches its note. In-memory regeneration independently confirms both complete translated tables equal the filled sheet; `tables.test.ts:223` retains that check. |
+| Tests | **Met by inspection and supplied results.** `tables.test.ts:407` and `warning-text.test.ts:233` pin new/reject old clauses in every language; the English complete-detail assertion remains. Seven cases added; none deleted, skipped or weakened. No apparent TypeScript/lint risk or falsely described assertion. The reported 1,607 passes/one existing skip were not rerun. |
+| Walker | **Met.** No walker diff; independently recomputed revision `198cfe660331f1bf`. `scenarios.mjs:31–34` loads served tables; `phase8.mjs:791` reads their detail. The relevant predicates therefore follow the words. The three-language probe and 54/54 proof precede the after-run. |
+| Before/after measurement | **Met, with the numerical correction above.** Both complete 192-cell matrices verified; before provenance is clean `b4ec37a`, after source hash matches the current candidate. All 49 evidence copies match their sources’ SHA-1s. Clause counts, dimensions, line counts, VH-199 reference tallies, completion coverage and S-152’s assertion plus five subresults agree with the records. |
+| WCAG re-check | **Met for 1.4.8’s measured scope, 1.4.10, 2.4.6 and 4.1.3 exposure; not met as recorded for 3.1.5.** Enlargement and actual speech are correctly limited. Apply the must above for translated reading level. |
+| Tokens | **Met.** No CSS, configuration, runtime numeric literal, listener, state, element, control or checkbox change; progress bar retained. |
+| Documents | **Met.** No UI-STANDARDS rule changes. Spec line 325 defines the heavy-limiting threshold, not its playback wording; no specification correction or new docs wish is needed. |
+| Gate and digest naming | **At the close.** Run settled-machine `npm run check`, then `node tools/check.mjs`; retain existing tests and record results. |
+| Codex check and Disposition link | **At the close.** Preserve this verdict, repair/re-check the must, complete the separate close check and link the evidence in the report’s Disposition row. |
+| Sizing | **Scope fits.** Actual worker token expenditure is **not shown**; no outgrown remedy or scope expansion appears in the candidate. |
+
+S-138’s 12 changed player outcomes are supported as the existing timing defect: the sampled player is absent, not playing unexpectedly. VH-208 §7 documents the same race; wish VH-199.1 already covers it. No additional line or re-run is needed.
+
+Both comment edits follow ruling 2. Leave `WARN_WORDS` unchanged: its self-test supplies and checks its own words. **At close**, record that ruling and reason in the compare, add its required VH-203 wish line, and complete the owner-answer and ledger updates.
+
+Nielsen 9 is applied through actionable advice; WCAG 4.1.3 through unchanged single-write exposure; 3.1.5 through the plain-language change, subject to the human-validation limitation above.
+
+Verdict: Commit after the musts below

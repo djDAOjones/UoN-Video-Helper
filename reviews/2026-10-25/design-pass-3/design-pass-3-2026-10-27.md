@@ -744,7 +744,7 @@ findings still number 7: 1 at rank 1, 5 at rank 2 and 1 at rank 3.
 
 ## Disposition
 
-At VH-201, 27 October; updated at VH-202's close the same day, on the owner's answer to its ask (the VH-202 close decision), at VH-211's close, on the owner's scope (the PLAN-8 entry of that date), at VH-206's close, at VH-207's, and at VH-208's; VH-195 makes it final at Phase 8's close.
+At VH-201, 27 October; updated at VH-202's close the same day, on the owner's answer to its ask (the VH-202 close decision), at VH-211's close, on the owner's scope (the PLAN-8 entry of that date), at VH-206's close, at VH-207's, at VH-208's, and at VH-212's; VH-195 makes it final at Phase 8's close.
 
 | Finding | Rank | Disposition |
 | --- | --- | --- |
@@ -755,6 +755,6 @@ At VH-201, 27 October; updated at VH-202's close the same day, on the owner's an
 | V-49 | 2 | VH-210, CSS only; a real Windows theme is the checklist's task D |
 | V-18 | 2, incomplete | The Phase 7 acceptance (VH-175.4) stood at the owner's answer (point 6), and the owner's addition, that old issues be solved, amends it: [VH-216](../../../project/items/VH-216.md), both cases, its remedy to the owner first (VH-211's ask, point 1); its six cases read before and after there, and in VH-203's after-run (VH-201.2) |
 | V-50 | 3 | VH-209, taken by the owner at rank 3 (point 4); CSS only |
-| The failed-playback guidance | — | Not a finding (point 5); VH-208 records the state. The owner's scope (group A) supersedes that ruling: [VH-212](../../../project/items/VH-212.md), its words to the owner first (VH-211's ask, point 2) |
+| The failed-playback guidance | — | Not a finding (point 5); VH-208 records the state. The owner's scope (group A) supersedes that ruling: fixed by [VH-212](../../../project/items/VH-212.md) (its close decision): heavy limiting's advice says "so play the new video before you use it", the owner's words (VH-211's ask, point 2, as Backlog review put it to him), true whether or not the new video plays here, the Chinese and Malay machine-translated; no element, no walker diff. Before and after, 192 cells, 0 findings, the reading level in zh-Hans and ms-MY a person's (wish VH-105.2): [vh212-playback-advice-2026-10-28.md](evidence/measurements/vh212-playback-advice-2026-10-28.md). VH-203's after-run takes wish VH-212.1 |
 | The owner's old issues (VH-211) | — | Group A: [VH-213](../../../project/items/VH-213.md) (VH-185.1, its route to the owner, point 3; closed on the owner's same rule as a trim, before and after in [vh213-whole-sub-block-2026-10-27.md](evidence/measurements/vh213-whole-sub-block-2026-10-27.md)), [VH-214](../../../project/items/VH-214.md) (VH-193.3; closed, a walk hang, no product diff: [its table](evidence/measurements/vh214-quicktime-2026-10-27.md)), [VH-215](../../../project/items/VH-215.md) (VH-139.5), [VH-218](../../../project/items/VH-218.md) (VH-186.1), [VH-219](../../../project/items/VH-219.md) (VH-189.1); the format "?", [VH-217](../../../project/items/VH-217.md); group B's checks, [VH-220](../../../project/items/VH-220.md) to [VH-224](../../../project/items/VH-224.md). Each links its evidence file here at its close |
 | The statement's media limitation | — | Left to VH-137, with no new item (point 7); its words stay VH-137's, wish VH-192.1. The owner's scope leaves it out (group D) |

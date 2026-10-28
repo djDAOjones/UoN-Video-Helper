@@ -1,0 +1,14 @@
+start 2026-10-28T20:24:44Z
+Now drawing from 'AC Power'
+ -InternalBattery-0 (id=21889123)	100%; charged; 0:00 remaining present: true
+ powermode            2
+20:24  up 12:36, 1 user, load averages: 4.89 19.02 61.74
+commit b4ec37a162f1a650f44c3dd4adcadea9485071eb
+porcelain lines 0
+instrument revision 198cfe660331f1bf
+job1 exit 0 2026-10-28T20:37:15Z
+job2 exit 0 2026-10-28T20:41:36Z
+end 2026-10-28T20:41:36Z
+Now drawing from 'AC Power'
+ -InternalBattery-0 (id=21889123)	100%; charged; 0:00 remaining present: true
+20:41  up 12:52, 1 user, load averages: 2.73 7.66 24.88

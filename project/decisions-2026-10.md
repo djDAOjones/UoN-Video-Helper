@@ -1139,3 +1139,13 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Deferred:** VH-181, VH-179, VH-137
 
 **Items:** VH-181
+
+## 2026-10-23 — VH-178 — Focus passes on when finished work takes its control away: every control named, a successor that can take focus
+
+**Decision:** Each `focusHeldBy` caller names every control its transition removes: Announce progress with Cancel, and the withdrawn steps in the blocking branch only. The hand-on focuses the first successor that can take focus, Stop saving during a save. The rule moves to `src/ui/focus-hand-on.ts`; no element is added (V-46).
+
+**Rationale:** Before, at 392077f, all three cases left focus on the body. After, they reach the result, the file input and Stop saving in 36 cells, three languages by four colour modes, placed by keys. Each cell asserts its declared conditions and finds the successor in the window and uncovered. The variants were walked: every ending, a reader moving, the dialogue open, and the ready and storage verdicts that keep focus. The routes pass 238 of 242 as before, with S-72a and S-72b held. Thirteen unit tests pin the rule. The file input's ring still fails (V-40, VH-179). Codex astra's check said "Commit after the musts below"; all four musts were applied and its re-check said "Commit". Evidence: `vh178-focus-2026-10-23.md`. Decided on the owner's standing instruction, "work through to the end of VH-177, archive and spawn as you go, proceed with your recommendations, universal permission is granted": (a) a walker fault, F14, holds the check's answer for 8 s so keys can reach Start time, since `prores-1080p.mov` blocks about 20 ms after its check starts; (b) the fallback is each caller's ordered choice, not one rule in the helper; (c) Cancel's click counts focus on Announce progress as held; (d) the module has no line in `project/architecture.md`, whose `ui/` map lists only some modules.
+
+**Supersedes:** none
+
+**Deferred:** VH-179, VH-176

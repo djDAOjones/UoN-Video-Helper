@@ -215,7 +215,7 @@ export function detectOutputWarning(
 /**
  * What producing the file cost, spec 5.4's post-processing rows, in the order
  * the finished video shows them: heavy limiting first, since it asks something
- * of the user before they save (VH-193, the owner's 1A), then the carried
+ * of the user before they use it (VH-193, the owner's 1A), then the carried
  * metadata.
  *
  * @param produced.limiterBiteLu - The plan's measured bite, never predicted,

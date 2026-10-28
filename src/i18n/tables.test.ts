@@ -403,3 +403,32 @@ describe('too little in a whole video, in the owner’s words (VH-213)', () => {
     },
   )
 })
+
+describe('heavy limiting’s advice, in the owner’s words (VH-212)', () => {
+  // His choice in the Backlog review chat, 2026-10-27, VH-211's ask point 2:
+  // "before you use it", true whether or not the new video plays here (F15b);
+  // the Chinese and Malay machine-translated as Backlog review marked them.
+  const CLAUSE = {
+    'en-GB': { now: 'so play the new video before you use it.', was: 'before you save it' },
+    'zh-Hans': { now: '所以请在使用之前播放新视频。', was: '保存之前' },
+    'ms-MY': { now: 'jadi mainkan video baharu sebelum anda menggunakannya.', was: 'menyimpannya' },
+  } as const
+
+  it.each(Object.entries(LANGUAGE_TABLES))('%s says the clause, not the old one', (tag, table) => {
+    const { now, was } = CLAUSE[tag as keyof typeof CLAUSE]
+    expect(table.warnings.heavyLimiting.detail).toContain(now)
+    expect(table.warnings.heavyLimiting.detail).not.toContain(was)
+  })
+
+  it('carries the clause and its translator’s note into the filled sheet', () => {
+    const key = 'warnings.heavyLimiting.detail'
+    const [heading, ...rows] = parseCsv(
+      readFileSync(new URL(`../../${FILLED_SHEET}`, import.meta.url), 'utf8'),
+    )
+    const filled = rows.find((cells) => cells[0] === key)!
+    const row = sheetRows().find((sheetRow) => sheetRow.key === key)!
+    expect(filled[heading!.indexOf('English')]).toBe(row.english)
+    expect(filled[heading!.indexOf('notes')]).toBe(row.notes)
+    expect(row.notes).toContain('before you use it')
+  })
+})

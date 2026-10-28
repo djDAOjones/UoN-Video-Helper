@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-28 — VH-212 — Closes: heavy limiting's advice in the owner's words, true whether or not the new video plays here
+
+**Decision:** VH-212 closes F15b: heavy limiting's detail says "so play the new video before you use it", the owner's words, in place of "so play the new video before you save it", which a person whose player cannot play the new video (S-152) cannot do; the Chinese and Malay are machine translations, marked so. Only that clause changes: no element, state, listener or walker diff. VH-215 is next.
+
+**Rationale:** The owner, in the "Backlog review" chat, 2026-10-27 ~16:18Z, typed by him: "help me resolve VH-212, VH-213, and VH-216"; for VH-212 (VH-211's ask, point 2) he chose, as the tool returned it, ""before you use it" (Recommended)": en-GB "so play the new video before you save it" → "so play the new video before you use it"; zh-Hans "所以请在保存之前播放新视频" → "所以请在使用之前播放新视频"; ms-MY "sebelum anda menyimpannya" → "sebelum anda menggunakannya"; not taken, "before you publish or submit it". At ~18:06Z, in the same chat, Backlog review recorded that he was never shown the ask's longer recommendation ("so play the new video here and listen. If it will not play here, save it and play the saved file before you share it."): his words are Backlog review's option, and they stand. Source: the orchestrators' notes, `plan8-owner-words.md`. Orchestrator #22's ruling at VH-212 #1's check-in: the walker's self-test words, `prove-8.mjs:54`'s `WARN_WORDS`, stay unchanged, since its proof is word-independent and a change is a walker change beyond the criteria (wish VH-212.1); the stale comments in `announce.ts` and `warnings.ts` change to his words. The walker's predicates read the served tables, so none needed a diff, and one instrument revision (`198cfe660331f1bf`) read the before on `b4ec37a` and the after: 192 cells each, 0 findings, 0 notes; S-138's player row moved in 12 cells both ways, the walker's timing, wish VH-199.1's. Claude's verdict, "Commit, after the close's own record", was saved before Codex astra's blind answer, "Commit after the musts below", was opened; its must, 3.1.5's reading level a person's to confirm (spec §9.3; zh-Hans and ms-MY not shown, wish VH-105.2), and its should, the before's load median, were repaired in the table, and the re-check said "Commit". Digest rules: nielsen 9; wcag-2.2-aaa 3.1.5 and 4.1.3. Evidence: `vh212-playback-advice-2026-10-28.md`.
+
+**Supersedes:** none
+
+**Deferred:** VH-203
+
 ## 2026-10-28 — VH-214 — Closes: the walk hung, not the page; S-140 and S-140n bounded, no product diff
 
 **Decision:** VH-214 closes VH-193.3 with no product diff: the page refuses "UoN Closing Logo Fade Blue 2025.mov" and N13 before Create, by the pre-flight's `noSourceDecodeHere`, in every cell, so VH-193's ten minutes were its walk's Create test clicking the withdrawn step 6's hidden Create; S-140 and S-140n gain a bound and three accepted outcomes, proved before the after, the approved walker change.
@@ -644,13 +654,3 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Supersedes:** none
 
 **Deferred:** VH-177
-
-## 2026-10-23 — VH-178 — Focus passes on when finished work takes its control away: every control named, a successor that can take focus
-
-**Decision:** Each `focusHeldBy` caller names every control its transition removes: Announce progress with Cancel, and the withdrawn steps in the blocking branch only. The hand-on focuses the first successor that can take focus, Stop saving during a save. The rule moves to `src/ui/focus-hand-on.ts`; no element is added (V-46).
-
-**Rationale:** Before, at 392077f, all three cases left focus on the body. After, they reach the result, the file input and Stop saving in 36 cells, three languages by four colour modes, placed by keys. Each cell asserts its declared conditions and finds the successor in the window and uncovered. The variants were walked: every ending, a reader moving, the dialogue open, and the ready and storage verdicts that keep focus. The routes pass 238 of 242 as before, with S-72a and S-72b held. Thirteen unit tests pin the rule. The file input's ring still fails (V-40, VH-179). Codex astra's check said "Commit after the musts below"; all four musts were applied and its re-check said "Commit". Evidence: `vh178-focus-2026-10-23.md`. Decided on the owner's standing instruction, "work through to the end of VH-177, archive and spawn as you go, proceed with your recommendations, universal permission is granted": (a) a walker fault, F14, holds the check's answer for 8 s so keys can reach Start time, since `prores-1080p.mov` blocks about 20 ms after its check starts; (b) the fallback is each caller's ordered choice, not one rule in the helper; (c) Cancel's click counts focus on Announce progress as held; (d) the module has no line in `project/architecture.md`, whose `ui/` map lists only some modules.
-
-**Supersedes:** none
-
-**Deferred:** VH-179, VH-176

@@ -1,0 +1,51 @@
+**Implementable, with the evidence limits below.** This was a read-only design check; no network, walks or gate runs.
+
+References: `I` = `src/i18n`; `U` = `src/ui`; `B` = `reviews/2026-10-25/design-pass-3`; `M` = `B/evidence/measurements`; `W` = `M/walker`; `V` = `M/vh208-warnings-2026-10-28.md`; `R` = `reviews/2026-10-18/VH-105-strings-filled.csv`; “item” = `project/items/VH-212.md`.
+
+1. **Exact change.** Each old clause occurs once in its respective table (`I/en-GB.ts:734`, `I/zh-Hans.ts:613`, `I/ms-MY.ts:653`):
+
+   - “so play the new video before you save it” → “so play the new video before you use it”
+   - “所以请在保存之前播放新视频” → “所以请在使用之前播放新视频”
+   - “sebelum anda menyimpannya” → “sebelum anda menggunakannya”
+
+   Full resulting details:
+
+   **en-GB:** “To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you use it. Next time, try adjusting how you record the sound.”
+
+   **zh-Hans:** “为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在使用之前播放新视频。下次录音时，可以尝试调整录制声音的方式。”
+
+   **ms-MY:** “Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menggunakannya. Lain kali, cuba ubah cara anda merakam bunyi.”
+
+   `R:367`: English, Chinese and Malay cells receive those complete strings; key/location remain. **Notes:** ‘Said with the finished video after heavy limiting. “The new video” is the one this tool makes. “Before you use it” does not require playback here or before saving.’ Insert that exact note under `warnings.heavyLimiting.detail` in `I/sheet.ts:341`, beside the models at `:449–456`; `sheetRows` supplies it (`:544–557`).
+
+   **Changed by the agent:** “VH-193: Chinese and Malay drafted by the agent; VH-212: the owner's approved clause (Backlog review, 2026-10-27); Chinese and Malay machine-translated”, following `R:344–347`.
+
+   Regenerate Chinese/Malay using `scripts/strings-table.mjs:7–13`; never hand-edit them. No other product wording, punctuation, spacing or behaviour changes.
+
+2. **Tests.** Replace `U/warning-text.test.ts:237` with the English detail above; retain heading and bite-invariance assertions (`:235,239`). `U/announce.test.ts:44` becomes “so play the new video before you use it.”; update its test name (`:41`). Dynamic whole-detail/order/gap expectations (`:35–37,45–62`) remain.
+
+   Extend warning and table tests with independent literal expectations above for all three languages, rejecting old clauses. Retain `I/tables.test.ts:222–230`’s regeneration equality; additionally pin the filled row’s English and notes against `sheetRows`. Existing equality checks translated columns, not English/notes (`:228`). Delete/skip nothing (item`:12,18`).
+
+3. **Completion.** `U/warning-text.ts:109–110` returns the table entry; `U/announce.ts:45–50` appends its detail whole once. `src/main.ts:3122–3129` writes that completion regardless of progress preference, which gates routine progress at `:2089–2103`. The other caller (`:1666`) handles preflight warnings; heavy limiting is production-only (`src/audio/warnings.ts:225–234`). Notifications announce nothing themselves (`U/notification.ts:35–38`); language repaint quietens regions (`src/main.ts:3793–3810`). Thus there is no second automatic announcement path. Actual speech remains a human check (`V:108`).
+
+4. **Walker.**
+
+   - **(a)** `W/phase8.mjs:791`, consumed at `:826–866`, and `W/scenarios.mjs:2641`: no wording diff; `W`/`M.msg` read current tables (`phase8.mjs:101`; `scenarios.mjs:29–34`).
+   - **(b)** `W/prove-8.mjs:54,146,161`: change only `:54`’s literal; `:146`/`:161` inherit it.
+   - **(c)** `W/heavy-193.mjs:82` is a standalone reader, outside these predicates; unchanged. Its obsolete selector (`:78`) already has `project/wish-list.md:63`. `W/prove-fixtures-8.mjs:80` tests N6’s heading/bite, not detail; unchanged. Heading-only matches `scenarios.mjs:1705` and `prove-8.mjs:232` likewise need no edit.
+
+   S-135/136/138/151/152’s heading/state checks remain; shared `limitingRows` checks detail. S-137 explicitly checks translated detail; save comparisons read whole warning text (`scenarios.mjs:2615–2658,2851–2870,1717`).
+
+   Before after-reading, declare changes/no-changes and prove new/new passes, old DOM/new table fails, old completion/new table fails, heading-only fails, and save/language retention in three languages. Preserve existing positive/negative fixtures (`prove-8.mjs:163–190`). Freeze one instrument revision for both walks (`runner.mjs:234–237`). Fixture work and the height probe support the criteria outside the named predicates; no unrelated predicate repair.
+
+5. **Matrix.** Reuse **zero** VH-199 before cells: source `a3039c3`/revision `2e7b0c044ce11f2b` differ (`M/matrix-2026-10-27.md:5`); runs 04/09 used AC, Low Power off (`:68`). Walk all 192 on `b4ec37a`, then candidate, with matched instruments/power (item`:14`; `project/decisions.md:35`).
+
+   Each cell records exact detail, paragraph height/lines, separately labelled warning-container height, completion mutation text/count, and absence where applicable. S-131’s permitted English/1280 record has bite 0/no warning (`run-04/S-131__en-GB__w1280__light.json:4592–4597`); preserve S-132’s actual absence/presence (`scenarios.mjs:2547–2568`). S-151 requires detail with progress off (`:2851–2858`). S-137/138 completion uses the finishing language, not final page language (`V:116`). S-152 records MediaError, enabled Save, retained warning, then successful saving and unchanged warning (`scenarios.mjs:2863–2870,1714–1728`).
+
+   VH-199 has **no warning height**: `boxPx` is width (`W/qualify.mjs:309`). Write “not recorded”; never infer height. S-135 light line counts, English/Chinese/Malay: **1280: 4/3/5; 320: 9/7/11** (the six permitted run-04 JSONs, respectively `:3970,4098,4150;4188,4272,4432`). S-152 English/1280 has four (`run-09-part/S-152__en-GB__w1280__light.json:3981`). Other historical cells remain uninspected here. Qualify paragraph-height capture before either walk; VH-208’s probe measures containers (`M/vh208-records-2026-10-28/vh208-driver.mjs.txt:32–41`).
+
+6. **Sentences.** All three replacements read grammatically with unchanged punctuation/spacing and permit playback elsewhere before use. They provide no explicit save-and-play fallback. Any doubt about that sufficiency goes to the owner; his supplied 18:06Z clarification controls, not item`:9`’s longer-ask reference.
+
+7. **WCAG before/after.** **1.4.8:** line lengths, alignment/spacing, colour mechanism, 200% enlargement (`project/digests/wcag-2.2-aaa.md:38–44`). **1.4.10:** 320px reflow/clipping, retaining real-zoom limitations. **2.4.6:** descriptive headings and accessible names. **4.1.3:** one complete status write, progress on/off (`V:187–190`). **3.1.5:** whole-sentence comprehension and English readability; retain Chinese/Malay human-review gaps (`test/readability.test.ts:173–186`; `B/wcag-2026-10-27.md:129`).
+
+8. **Limits and close.** Literal historical-height comparison is unavailable; missing native-language or speech evidence cannot become a pass. Record the supplied approval, measurements and report linkage (item`:9,14,19–20`; `B/design-pass-3-2026-10-27.md:758`). Then run both required checks (item`:18`). Flag stale saving-related comments (`U/announce.ts:40–43`; `src/audio/warnings.ts:217–219`). No CSS or standards rule changes are needed; no `docs/` edit is approved (item`:16–17`). Name Nielsen “errors say what next” and WCAG 3.1.5/4.1.3 at close (`:18`).

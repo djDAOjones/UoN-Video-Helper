@@ -38,10 +38,10 @@ describe('warningsSpoken', () => {
     )
   })
 
-  it('says heavy limiting’s advice to play the video before saving it, chosen by its code; other warnings keep their title alone (V-52)', () => {
+  it('says heavy limiting’s advice to play the video before using it, chosen by its code; other warnings keep their title alone (V-52)', () => {
     const heavyOnly = detectProductionWarnings({ limiterBiteLu: 8.1, metadataCarried: true })
     const said = warningsSpoken('Worth knowing about the finished video', heavyOnly)
-    expect(said).toContain('so play the new video before you save it.')
+    expect(said).toContain('so play the new video before you use it.')
     expect(said.indexOf(t().warnings.heavyLimiting.detail)).toBeGreaterThan(
       said.indexOf(t().warnings.heavyLimiting.heading),
     )

@@ -1,0 +1,20 @@
+# VH-212 #4: one line per cell from a walk's walker records, read only: the cell, its run, status and revision, every
+# instrument's outcome, and the failing rows' names of each instrument that fails. Screenshots and captures stay out.
+# Usage: python3 -I -B extract-1.py <walk dir> <out jsonl>
+import json, sys, glob, os
+W, OUT = sys.argv[1], sys.argv[2]
+rows = []
+for f in sorted(glob.glob(os.path.join(W, 'runs', '*', 'S-*.json'))):
+    r = json.load(open(f))
+    ins = r.get('instruments') or {}
+    fails = {}
+    for n, v in ins.items():
+        if isinstance(v, dict) and isinstance(v.get('items'), list):
+            fr = sorted({str(i.get('what') or i.get('row') or i.get('name') or i.get('el') or '')[:90] for i in v['items'] if isinstance(i, dict) and i.get('outcome') == 'fail'})
+            if fr: fails[n] = fr
+    rows.append({'run': os.path.basename(os.path.dirname(f)), 'id': r['id'], 'lang': r['lang'], 'view': r['view'], 'mode': r['mode'],
+                 'status': r.get('status'), 'revision': r.get('revision'),
+                 'outcomes': {n: (v.get('outcome') if isinstance(v, dict) else None) for n, v in sorted(ins.items())}, 'failRows': fails})
+with open(OUT, 'w') as o:
+    for x in rows: o.write(json.dumps(x, ensure_ascii=False) + '\n')
+print(len(rows), 'cells ->', OUT)

@@ -1,0 +1,169 @@
+// VH-212 #3: the proof before the after-read, and the served-table probe, with no walker diff. The walker's own
+// `limitingRows` (phase8.mjs) and S-137's "then in the new language" assertion (scenarios.mjs, read by phase8's
+// `assertRows`) run unchanged on synthetic pages drawn on the candidate's own origin, where MX_INIT's `__mx.msg`
+// reads the served tables (`/src/i18n/<tag>.ts`): the "new table" is the candidate's. The card's words are this
+// file's own literals (the owner's words whole, and the base's), never read from the table, so the page and the
+// table are independent. Nothing is written into the walker or the repository.
+//
+//   CDP_PORT=9251 APP_URL=http://localhost:5181/ OUT_ROOT=<out>/pages \
+//     node vh212-proof.mjs --walker <walker dir> --out <out dir>
+//
+// The probe: for each language, the app's own language switch, then `window.__mx.msg('warnings.heavyLimiting.detail')`
+// holds the new clause and not the old, equals the owner's detail whole, and the heading is the base's.
+// The proof, per language (24 cases): a new page with the new table passes; an old page with the new table fails;
+// an old completion line with the new table fails; heading-only fails; a save keeps it (and a changed one fails);
+// a language change keeps it (and the old words in the new language fail).
+import { writeFileSync, mkdirSync } from 'node:fs'
+import { join } from 'node:path'
+import { pathToFileURL } from 'node:url'
+
+const arg = (k) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : undefined }
+const WALKER = arg('--walker'), OUT = arg('--out')
+if (!WALKER || !OUT) throw new Error('usage: --walker <dir> --out <dir>')
+mkdirSync(OUT, { recursive: true })
+const load = (f) => import(pathToFileURL(join(WALKER, f)).href)
+const { connectBrowser } = await load('cdp.mjs')
+const { Walk, sleep } = await load('walk.mjs')
+const { QUAL_INIT } = await load('qualify.mjs')
+const { MX_INIT, SCENARIOS } = await load('scenarios.mjs')
+const { P8_INIT, limitingRows, assertRows } = await load('phase8.mjs')
+
+const LANGS = ['en-GB', 'zh-Hans', 'ms-MY']
+// The owner's words (Backlog review, 2026-10-27), the detail whole, and the base's (b4ec37a).
+const NEW = {
+  'en-GB': 'To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you use it. Next time, try adjusting how you record the sound.',
+  'zh-Hans': '为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在使用之前播放新视频。下次录音时，可以尝试调整录制声音的方式。',
+  'ms-MY': 'Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menggunakannya. Lain kali, cuba ubah cara anda merakam bunyi.',
+}
+const OLD = {
+  'en-GB': 'To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound.',
+  'zh-Hans': '为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在保存之前播放新视频。下次录音时，可以尝试调整录制声音的方式。',
+  'ms-MY': 'Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menyimpannya. Lain kali, cuba ubah cara anda merakam bunyi.',
+}
+const CLAUSE = {
+  'en-GB': { now: 'so play the new video before you use it', was: 'so play the new video before you save it' },
+  'zh-Hans': { now: '所以请在使用之前播放新视频', was: '所以请在保存之前播放新视频' },
+  'ms-MY': { now: 'sebelum anda menggunakannya', was: 'sebelum anda menyimpannya' },
+}
+const HEADING_BASE = { 'en-GB': 'The loudest moments were held down hard' }
+
+const browser = await connectBrowser()
+async function open(name) {
+  const w = new Walk(browser, 'vh212-proof-' + name)
+  await w.open()
+  w.browser = browser
+  for (const source of [QUAL_INIT, MX_INIT, P8_INIT]) await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source })
+  await w.goto()
+  await w.waitFor(`(() => { const t = window.__mx && window.__mx.tables; return !!t && ${JSON.stringify(LANGS)}.every((g) => !!t[g]) })()`, { label: 'the served tables', timeout: 30000 })
+  return w
+}
+const served = (w, path, tag) => w.evaluate(`window.__mx.msg(${JSON.stringify(path)}, ${JSON.stringify(tag)})`)
+
+// ---------------------------------------------------------------------------
+// The probe of the served table, by the app's own language switch.
+const probe = { at: new Date().toISOString(), langs: {} }
+{
+  const w = await open('probe')
+  try {
+    for (const tag of LANGS) {
+      await w.evaluate(`(() => { const r = document.querySelector('#language-switcher input[value="${tag}"]'); if (r.checked) return; r.checked = true; r.dispatchEvent(new Event('change', { bubbles: true })); })()`); await sleep(400)
+      const r = await w.evaluate(`(() => ({ lang: document.documentElement.lang, detail: window.__mx.msg('warnings.heavyLimiting.detail'), heading: window.__mx.msg('warnings.heavyLimiting.heading') }))()`)
+      const count = (s, x) => s.split(x).length - 1
+      probe.langs[tag] = { ...r, langMatches: r.lang === tag, newClause: count(r.detail ?? '', CLAUSE[tag].now), oldClause: count(r.detail ?? '', CLAUSE[tag].was), equalsOwnersDetail: r.detail === NEW[tag], headingAsBase: HEADING_BASE[tag] ? r.heading === HEADING_BASE[tag] : null }
+      const ok = probe.langs[tag].langMatches && probe.langs[tag].newClause === 1 && probe.langs[tag].oldClause === 0 && probe.langs[tag].equalsOwnersDetail
+      probe.langs[tag].ok = ok
+      console.log(`${ok ? 'PROBE OK' : 'PROBE NOT OK'}  ${tag}: new ${probe.langs[tag].newClause}, old ${probe.langs[tag].oldClause}, owner's detail whole ${probe.langs[tag].equalsOwnersDetail}`)
+    }
+    // Leave the remembered language as the walks expect it.
+    await w.evaluate(`(() => { const r = document.querySelector('#language-switcher input[value="en-GB"]'); if (!r.checked) { r.checked = true; r.dispatchEvent(new Event('change', { bubbles: true })); } })()`); await sleep(400)
+    probe.endLang = await w.evaluate('document.documentElement.lang')
+  } finally { await w.close() }
+}
+probe.ok = LANGS.every((g) => probe.langs[g].ok)
+writeFileSync(join(OUT, 'probe.json'), JSON.stringify(probe, null, 2) + '\n')
+
+// ---------------------------------------------------------------------------
+// The proof: synthetic pages on the candidate's origin, driven through one job as prove-8.mjs's `drive` does (its
+// inside layout, VH-208's W1), read by the walker's unchanged `limitingRows`.
+const SHELL = `<main><progress id="process-progress" hidden></progress><p id="status" role="status"></p><div id="process-result"></div><div id="save-actions" hidden><button type="button">Save</button></div><p id="save-status"></p></main>`
+const list = (items) => `<ul class="notification-list">${items.map(([h, d]) => `<li><strong>${h}</strong> ${d ? `<p class="notification-body">${d}</p>` : ''}</li>`).join('')}</ul>`
+const cardHtml = (items) => `<section class="notification" data-kind="success"><p class="notification-title">Finished video — 1 MB</p><div>${list(items)}</div><p class="notification-body">It is not saved yet.</p></section>`
+async function job(w, tag, statusText, items) {
+  await w.evaluate(`(() => { document.body.innerHTML = ${JSON.stringify(SHELL)}; document.documentElement.lang = ${JSON.stringify(tag)}; })()`); await sleep(150)
+  await w.evaluate(`document.getElementById('process-progress').hidden = false`); await sleep(120)
+  await w.evaluate(`(() => { document.getElementById('status').textContent = ${JSON.stringify(statusText)}; document.getElementById('process-progress').hidden = true; document.getElementById('process-result').innerHTML = ${JSON.stringify(cardHtml(items))}; })()`); await sleep(150)
+  const ev = await w.evaluate('window.__p8.events')
+  const fin = ev.filter((e) => e.kind === 'finish').at(-1), start = ev.filter((e) => e.kind === 'start').at(-1)
+  w.p8planned = { workers: 1, planned: [{ t: Math.round((start.t + fin.t) / 2), limiterBiteLu: 20.1 }] }
+}
+const rowOf = (rows, what) => rows.find((r) => r.what.startsWith(what)) ?? { outcome: 'missing', what }
+const DETAIL = "the heavy warning's detail whole after its title"
+const WORD = 'heading and detail word for word'
+const THEN = SCENARIOS['S-137'].asserts.find((a) => a.what === 'then in the new language')
+if (!THEN || !THEN.expr) throw new Error("S-137's 'then in the new language' assertion not found")
+const results = []
+const prove = (lang, check, fixture, r, wanted, why) => {
+  const outcome = r.outcome === wanted && (!why || why.test(r.why ?? '')) ? r.outcome : `${r.outcome}${why && !why.test(r.why ?? '') ? ' (another reason)' : ''}`
+  const proved = outcome === wanted
+  results.push({ lang, check, fixture, outcome, wanted, proved, row: r })
+  console.log(`${proved ? 'PROVED' : 'NOT PROVED'}  ${lang} ${check} on ${fixture}: ${outcome} (wanted ${wanted})`)
+}
+// Per language, every case on a fresh page.
+for (const [i, tag] of LANGS.entries()) {
+  const other = LANGS[(i + 1) % LANGS.length]
+  const cases = [
+    ['new-page-new-table-good', 'new', 'new', null, 'pass'],
+    ['old-page-new-table-bad', 'old', 'old', null, 'fail'],
+    ['old-completion-new-table-bad', 'new', 'old', null, 'fail'],
+    ['heading-only-bad', 'new', 'heading', null, 'fail'],
+    ['save-kept-good', 'new', 'new', 'save-kept', 'pass'],
+    ['save-changed-bad', 'new', 'new', 'save-changed', 'fail'],
+    ['language-kept-good', 'new', 'new', 'lang-new', 'pass'],
+    ['language-old-words-bad', 'new', 'new', 'lang-old', 'fail'],
+  ]
+  for (const [fixture, page, line, after, wanted] of cases) {
+    const w = await open(`${tag}-${fixture}`)
+    try {
+      const H = await served(w, 'warnings.heavyLimiting.heading', tag), MLOST = await served(w, 'warnings.metadataLost.heading', tag)
+      const READY = await served(w, 'status.ready', tag), SAVED = await served(w, 'status.saved', tag)
+      const D = page === 'new' ? NEW[tag] : OLD[tag]
+      const said = line === 'heading' ? `${READY} ${H}. ${MLOST}.` : `${READY} ${H}. ${MLOST}. ${line === 'new' ? NEW[tag] : OLD[tag]}`
+      await job(w, tag, said, [[H, D], [MLOST, null]])
+      if (after === 'save-kept' || after === 'save-changed') {
+        await w.evaluate(`document.getElementById('save-actions').hidden = false`); await sleep(150)
+        if (after === 'save-changed') { await w.evaluate(`document.querySelector('.notification-list .notification-body').textContent = ${JSON.stringify(OLD[tag])}`); await sleep(150) }
+        await w.evaluate(`(() => { document.getElementById('save-actions').hidden = true; document.getElementById('save-status').textContent = ${JSON.stringify(SAVED)}; })()`); await sleep(150)
+        const rows = await limitingRows(w)
+        prove(tag, 'unchanged after a save', fixture, rowOf(rows, 'unchanged after a save'), wanted)
+      } else if (after === 'lang-new' || after === 'lang-old') {
+        const H2 = await served(w, 'warnings.heavyLimiting.heading', other), M2 = await served(w, 'warnings.metadataLost.heading', other)
+        await w.evaluate(`(() => { document.documentElement.lang = ${JSON.stringify(other)}; document.querySelector('#process-result .notification-list').outerHTML = ${JSON.stringify(list([[H2, after === 'lang-new' ? NEW[other] : OLD[other]], [M2, null]]))}; })()`); await sleep(150)
+        const [a] = await assertRows(w, { asserts: [THEN] })
+        prove(tag, `S-137 "then in the new language" (${other})`, fixture, a, wanted)
+        const rows = await limitingRows(w)
+        prove(tag, `${WORD} (${other})`, fixture, rowOf(rows, WORD), wanted)
+        prove(tag, `${DETAIL}: cannot-determine once the language changed`, fixture, rowOf(rows, DETAIL), 'cannot-determine')
+      } else {
+        const rows = await limitingRows(w)
+        if (fixture === 'new-page-new-table-good') {
+          for (const what of [WORD, "first among the card's warnings", 'first in the line spoken', DETAIL]) prove(tag, what, fixture, rowOf(rows, what), 'pass')
+        } else if (fixture === 'old-page-new-table-bad') {
+          prove(tag, WORD, fixture, rowOf(rows, WORD), 'fail')
+          prove(tag, DETAIL, fixture, rowOf(rows, DETAIL), 'fail', /^heading only/)
+        } else if (fixture === 'old-completion-new-table-bad') {
+          prove(tag, `${WORD}, unmoved (the card holds the new words)`, fixture, rowOf(rows, WORD), 'pass')
+          prove(tag, DETAIL, fixture, rowOf(rows, DETAIL), 'fail', /^heading only/)
+        } else {
+          prove(tag, DETAIL, fixture, rowOf(rows, DETAIL), 'fail', /^heading only/)
+          prove(tag, 'first in the line spoken, unmoved (every title is said)', fixture, rowOf(rows, 'first in the line spoken'), 'pass')
+        }
+      }
+      results.at(-1).writes = await w.evaluate('window.__p8.writes')
+    } finally { await w.close() }
+  }
+}
+const proved = results.filter((r) => r.proved).length
+writeFileSync(join(OUT, 'proof.json'), JSON.stringify({ at: new Date().toISOString(), proved, of: results.length, results }, null, 2) + '\n')
+console.log(`probe ${probe.ok ? 'ok' : 'NOT OK'}; proved ${proved} of ${results.length}`)
+browser.close()
+process.exit(probe.ok && proved === results.length ? 0 : 1)

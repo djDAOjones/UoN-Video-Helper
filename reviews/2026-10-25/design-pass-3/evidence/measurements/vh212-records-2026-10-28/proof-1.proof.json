@@ -1,0 +1,1090 @@
+{
+  "at": "2026-10-28T21:19:43.597Z",
+  "proved": 54,
+  "of": 54,
+  "results": [
+    {
+      "lang": "en-GB",
+      "check": "heading and detail word for word",
+      "fixture": "new-page-new-table-good",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "heading and detail word for word",
+        "outcome": "pass"
+      }
+    },
+    {
+      "lang": "en-GB",
+      "check": "first among the card's warnings",
+      "fixture": "new-page-new-table-good",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "first among the card's warnings",
+        "outcome": "pass",
+        "titles": [
+          "The loudest moments were held down hard",
+          "The file’s title, author, and date could not be copied across"
+        ]
+      }
+    },
+    {
+      "lang": "en-GB",
+      "check": "first in the line spoken",
+      "fixture": "new-page-new-table-good",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "first in the line spoken at completion, with every warning title in order",
+        "outcome": "pass",
+        "completion": {
+          "t": 1793222352461,
+          "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you use it. Next time, try adjusting how you record the sound.",
+          "cardNew": true,
+          "opensWithReady": true
+        },
+        "job": [
+          1793222352334,
+          1793222352461
+        ],
+        "expected": [
+          "The loudest moments were held down hard",
+          "The file’s title, author, and date could not be copied across"
+        ],
+        "earlier": []
+      }
+    },
+    {
+      "lang": "en-GB",
+      "check": "the heavy warning's detail whole after its title",
+      "fixture": "new-page-new-table-good",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "the heavy warning's detail whole after its title, in the line spoken at completion",
+        "outcome": "pass",
+        "completion": {
+          "t": 1793222352461,
+          "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you use it. Next time, try adjusting how you record the sound.",
+          "cardNew": true,
+          "opensWithReady": true
+        },
+        "heavyDetail": "To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you use it. Next time, try adjusting how you record the sound.",
+        "titleAt": 21,
+        "detailAt": 125
+      },
+      "writes": [
+        {
+          "t": 1793222352461,
+          "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you use it. Next time, try adjusting how you record the sound.",
+          "cardNew": true
+        }
+      ]
+    },
+    {
+      "lang": "en-GB",
+      "check": "heading and detail word for word",
+      "fixture": "old-page-new-table-bad",
+      "outcome": "fail",
+      "wanted": "fail",
+      "proved": true,
+      "row": {
+        "what": "heading and detail word for word",
+        "outcome": "fail"
+      }
+    },
+    {
+      "lang": "en-GB",
+      "check": "the heavy warning's detail whole after its title",
+      "fixture": "old-page-new-table-bad",
+      "outcome": "fail",
+      "wanted": "fail",
+      "proved": true,
+      "row": {
+        "what": "the heavy warning's detail whole after its title, in the line spoken at completion",
+        "outcome": "fail",
+        "completion": {
+          "t": 1793222353636,
+          "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound.",
+          "cardNew": true,
+          "opensWithReady": true
+        },
+        "heavyDetail": "To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you use it. Next time, try adjusting how you record the sound.",
+        "titleAt": 21,
+        "detailAt": -1,
+        "why": "heading only: the heavy warning's detail is not in the completion's line, whole"
+      },
+      "writes": [
+        {
+          "t": 1793222353636,
+          "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound.",
+          "cardNew": true
+        }
+      ]
+    },
+    {
+      "lang": "en-GB",
+      "check": "heading and detail word for word, unmoved (the card holds the new words)",
+      "fixture": "old-completion-new-table-bad",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "heading and detail word for word",
+        "outcome": "pass"
+      }
+    },
+    {
+      "lang": "en-GB",
+      "check": "the heavy warning's detail whole after its title",
+      "fixture": "old-completion-new-table-bad",
+      "outcome": "fail",
+      "wanted": "fail",
+      "proved": true,
+      "row": {
+        "what": "the heavy warning's detail whole after its title, in the line spoken at completion",
+        "outcome": "fail",
+        "completion": {
+          "t": 1793222354825,
+          "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound.",
+          "cardNew": true,
+          "opensWithReady": true
+        },
+        "heavyDetail": "To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you use it. Next time, try adjusting how you record the sound.",
+        "titleAt": 21,
+        "detailAt": -1,
+        "why": "heading only: the heavy warning's detail is not in the completion's line, whole"
+      },
+      "writes": [
+        {
+          "t": 1793222354825,
+          "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound.",
+          "cardNew": true
+        }
+      ]
+    },
+    {
+      "lang": "en-GB",
+      "check": "the heavy warning's detail whole after its title",
+      "fixture": "heading-only-bad",
+      "outcome": "fail",
+      "wanted": "fail",
+      "proved": true,
+      "row": {
+        "what": "the heavy warning's detail whole after its title, in the line spoken at completion",
+        "outcome": "fail",
+        "completion": {
+          "t": 1793222356016,
+          "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across.",
+          "cardNew": true,
+          "opensWithReady": true
+        },
+        "heavyDetail": "To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you use it. Next time, try adjusting how you record the sound.",
+        "titleAt": 21,
+        "detailAt": -1,
+        "why": "heading only: the heavy warning's detail is not in the completion's line, whole"
+      }
+    },
+    {
+      "lang": "en-GB",
+      "check": "first in the line spoken, unmoved (every title is said)",
+      "fixture": "heading-only-bad",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "first in the line spoken at completion, with every warning title in order",
+        "outcome": "pass",
+        "completion": {
+          "t": 1793222356016,
+          "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across.",
+          "cardNew": true,
+          "opensWithReady": true
+        },
+        "job": [
+          1793222355890,
+          1793222356016
+        ],
+        "expected": [
+          "The loudest moments were held down hard",
+          "The file’s title, author, and date could not be copied across"
+        ],
+        "earlier": []
+      },
+      "writes": [
+        {
+          "t": 1793222356016,
+          "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across.",
+          "cardNew": true
+        }
+      ]
+    },
+    {
+      "lang": "en-GB",
+      "check": "unchanged after a save",
+      "fixture": "save-kept-good",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "unchanged after a save",
+        "outcome": "pass"
+      },
+      "writes": [
+        {
+          "t": 1793222357191,
+          "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you use it. Next time, try adjusting how you record the sound.",
+          "cardNew": true
+        }
+      ]
+    },
+    {
+      "lang": "en-GB",
+      "check": "unchanged after a save",
+      "fixture": "save-changed-bad",
+      "outcome": "fail",
+      "wanted": "fail",
+      "proved": true,
+      "row": {
+        "what": "unchanged after a save",
+        "outcome": "fail"
+      },
+      "writes": [
+        {
+          "t": 1793222358713,
+          "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you use it. Next time, try adjusting how you record the sound.",
+          "cardNew": true
+        }
+      ]
+    },
+    {
+      "lang": "en-GB",
+      "check": "S-137 \"then in the new language\" (zh-Hans)",
+      "fixture": "language-kept-good",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "then in the new language",
+        "outcome": "pass",
+        "expr": "(() => { const b = window.__p8.warnBox(); return b ? b.textContent.replace(/\\s+/g, ' ') : '' })().includes(M.msg('warnings.heavyLimiting.detail'))"
+      }
+    },
+    {
+      "lang": "en-GB",
+      "check": "heading and detail word for word (zh-Hans)",
+      "fixture": "language-kept-good",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "heading and detail word for word",
+        "outcome": "pass"
+      }
+    },
+    {
+      "lang": "en-GB",
+      "check": "the heavy warning's detail whole after its title: cannot-determine once the language changed",
+      "fixture": "language-kept-good",
+      "outcome": "cannot-determine",
+      "wanted": "cannot-determine",
+      "proved": true,
+      "row": {
+        "what": "the heavy warning's detail whole after its title, in the line spoken at completion",
+        "outcome": "cannot-determine",
+        "why": "the page language changed since the completion: the detail on the card is in another language now",
+        "completion": {
+          "t": 1793222360400,
+          "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you use it. Next time, try adjusting how you record the sound.",
+          "cardNew": true,
+          "opensWithReady": false
+        }
+      },
+      "writes": [
+        {
+          "t": 1793222360400,
+          "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you use it. Next time, try adjusting how you record the sound.",
+          "cardNew": true
+        }
+      ]
+    },
+    {
+      "lang": "en-GB",
+      "check": "S-137 \"then in the new language\" (zh-Hans)",
+      "fixture": "language-old-words-bad",
+      "outcome": "fail",
+      "wanted": "fail",
+      "proved": true,
+      "row": {
+        "what": "then in the new language",
+        "outcome": "fail",
+        "expr": "(() => { const b = window.__p8.warnBox(); return b ? b.textContent.replace(/\\s+/g, ' ') : '' })().includes(M.msg('warnings.heavyLimiting.detail'))"
+      }
+    },
+    {
+      "lang": "en-GB",
+      "check": "heading and detail word for word (zh-Hans)",
+      "fixture": "language-old-words-bad",
+      "outcome": "fail",
+      "wanted": "fail",
+      "proved": true,
+      "row": {
+        "what": "heading and detail word for word",
+        "outcome": "fail"
+      }
+    },
+    {
+      "lang": "en-GB",
+      "check": "the heavy warning's detail whole after its title: cannot-determine once the language changed",
+      "fixture": "language-old-words-bad",
+      "outcome": "cannot-determine",
+      "wanted": "cannot-determine",
+      "proved": true,
+      "row": {
+        "what": "the heavy warning's detail whole after its title, in the line spoken at completion",
+        "outcome": "cannot-determine",
+        "why": "the page language changed since the completion: the detail on the card is in another language now",
+        "completion": {
+          "t": 1793222361761,
+          "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you use it. Next time, try adjusting how you record the sound.",
+          "cardNew": true,
+          "opensWithReady": false
+        }
+      },
+      "writes": [
+        {
+          "t": 1793222361761,
+          "text": "Your video is ready. The loudest moments were held down hard. The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you use it. Next time, try adjusting how you record the sound.",
+          "cardNew": true
+        }
+      ]
+    },
+    {
+      "lang": "zh-Hans",
+      "check": "heading and detail word for word",
+      "fixture": "new-page-new-table-good",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "heading and detail word for word",
+        "outcome": "pass"
+      }
+    },
+    {
+      "lang": "zh-Hans",
+      "check": "first among the card's warnings",
+      "fixture": "new-page-new-table-good",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "first among the card's warnings",
+        "outcome": "pass",
+        "titles": [
+          "最响亮的部分被大幅压低了",
+          "无法复制文件的标题、作者和日期"
+        ]
+      }
+    },
+    {
+      "lang": "zh-Hans",
+      "check": "first in the line spoken",
+      "fixture": "new-page-new-table-good",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "first in the line spoken at completion, with every warning title in order",
+        "outcome": "pass",
+        "completion": {
+          "t": 1793222363141,
+          "text": "您的视频已准备就绪。 最响亮的部分被大幅压低了. 无法复制文件的标题、作者和日期. 为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在使用之前播放新视频。下次录音时，可以尝试调整录制声音的方式。",
+          "cardNew": true,
+          "opensWithReady": true
+        },
+        "job": [
+          1793222363009,
+          1793222363141
+        ],
+        "expected": [
+          "最响亮的部分被大幅压低了",
+          "无法复制文件的标题、作者和日期"
+        ],
+        "earlier": []
+      }
+    },
+    {
+      "lang": "zh-Hans",
+      "check": "the heavy warning's detail whole after its title",
+      "fixture": "new-page-new-table-good",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "the heavy warning's detail whole after its title, in the line spoken at completion",
+        "outcome": "pass",
+        "completion": {
+          "t": 1793222363141,
+          "text": "您的视频已准备就绪。 最响亮的部分被大幅压低了. 无法复制文件的标题、作者和日期. 为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在使用之前播放新视频。下次录音时，可以尝试调整录制声音的方式。",
+          "cardNew": true,
+          "opensWithReady": true
+        },
+        "heavyDetail": "为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在使用之前播放新视频。下次录音时，可以尝试调整录制声音的方式。",
+        "titleAt": 11,
+        "detailAt": 42
+      },
+      "writes": [
+        {
+          "t": 1793222363141,
+          "text": "您的视频已准备就绪。 最响亮的部分被大幅压低了. 无法复制文件的标题、作者和日期. 为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在使用之前播放新视频。下次录音时，可以尝试调整录制声音的方式。",
+          "cardNew": true
+        }
+      ]
+    },
+    {
+      "lang": "zh-Hans",
+      "check": "heading and detail word for word",
+      "fixture": "old-page-new-table-bad",
+      "outcome": "fail",
+      "wanted": "fail",
+      "proved": true,
+      "row": {
+        "what": "heading and detail word for word",
+        "outcome": "fail"
+      }
+    },
+    {
+      "lang": "zh-Hans",
+      "check": "the heavy warning's detail whole after its title",
+      "fixture": "old-page-new-table-bad",
+      "outcome": "fail",
+      "wanted": "fail",
+      "proved": true,
+      "row": {
+        "what": "the heavy warning's detail whole after its title, in the line spoken at completion",
+        "outcome": "fail",
+        "completion": {
+          "t": 1793222364334,
+          "text": "您的视频已准备就绪。 最响亮的部分被大幅压低了. 无法复制文件的标题、作者和日期. 为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在保存之前播放新视频。下次录音时，可以尝试调整录制声音的方式。",
+          "cardNew": true,
+          "opensWithReady": true
+        },
+        "heavyDetail": "为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在使用之前播放新视频。下次录音时，可以尝试调整录制声音的方式。",
+        "titleAt": 11,
+        "detailAt": -1,
+        "why": "heading only: the heavy warning's detail is not in the completion's line, whole"
+      },
+      "writes": [
+        {
+          "t": 1793222364334,
+          "text": "您的视频已准备就绪。 最响亮的部分被大幅压低了. 无法复制文件的标题、作者和日期. 为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在保存之前播放新视频。下次录音时，可以尝试调整录制声音的方式。",
+          "cardNew": true
+        }
+      ]
+    },
+    {
+      "lang": "zh-Hans",
+      "check": "heading and detail word for word, unmoved (the card holds the new words)",
+      "fixture": "old-completion-new-table-bad",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "heading and detail word for word",
+        "outcome": "pass"
+      }
+    },
+    {
+      "lang": "zh-Hans",
+      "check": "the heavy warning's detail whole after its title",
+      "fixture": "old-completion-new-table-bad",
+      "outcome": "fail",
+      "wanted": "fail",
+      "proved": true,
+      "row": {
+        "what": "the heavy warning's detail whole after its title, in the line spoken at completion",
+        "outcome": "fail",
+        "completion": {
+          "t": 1793222365558,
+          "text": "您的视频已准备就绪。 最响亮的部分被大幅压低了. 无法复制文件的标题、作者和日期. 为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在保存之前播放新视频。下次录音时，可以尝试调整录制声音的方式。",
+          "cardNew": true,
+          "opensWithReady": true
+        },
+        "heavyDetail": "为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在使用之前播放新视频。下次录音时，可以尝试调整录制声音的方式。",
+        "titleAt": 11,
+        "detailAt": -1,
+        "why": "heading only: the heavy warning's detail is not in the completion's line, whole"
+      },
+      "writes": [
+        {
+          "t": 1793222365558,
+          "text": "您的视频已准备就绪。 最响亮的部分被大幅压低了. 无法复制文件的标题、作者和日期. 为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在保存之前播放新视频。下次录音时，可以尝试调整录制声音的方式。",
+          "cardNew": true
+        }
+      ]
+    },
+    {
+      "lang": "zh-Hans",
+      "check": "the heavy warning's detail whole after its title",
+      "fixture": "heading-only-bad",
+      "outcome": "fail",
+      "wanted": "fail",
+      "proved": true,
+      "row": {
+        "what": "the heavy warning's detail whole after its title, in the line spoken at completion",
+        "outcome": "fail",
+        "completion": {
+          "t": 1793222366755,
+          "text": "您的视频已准备就绪。 最响亮的部分被大幅压低了. 无法复制文件的标题、作者和日期.",
+          "cardNew": true,
+          "opensWithReady": true
+        },
+        "heavyDetail": "为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在使用之前播放新视频。下次录音时，可以尝试调整录制声音的方式。",
+        "titleAt": 11,
+        "detailAt": -1,
+        "why": "heading only: the heavy warning's detail is not in the completion's line, whole"
+      }
+    },
+    {
+      "lang": "zh-Hans",
+      "check": "first in the line spoken, unmoved (every title is said)",
+      "fixture": "heading-only-bad",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "first in the line spoken at completion, with every warning title in order",
+        "outcome": "pass",
+        "completion": {
+          "t": 1793222366755,
+          "text": "您的视频已准备就绪。 最响亮的部分被大幅压低了. 无法复制文件的标题、作者和日期.",
+          "cardNew": true,
+          "opensWithReady": true
+        },
+        "job": [
+          1793222366629,
+          1793222366755
+        ],
+        "expected": [
+          "最响亮的部分被大幅压低了",
+          "无法复制文件的标题、作者和日期"
+        ],
+        "earlier": []
+      },
+      "writes": [
+        {
+          "t": 1793222366755,
+          "text": "您的视频已准备就绪。 最响亮的部分被大幅压低了. 无法复制文件的标题、作者和日期.",
+          "cardNew": true
+        }
+      ]
+    },
+    {
+      "lang": "zh-Hans",
+      "check": "unchanged after a save",
+      "fixture": "save-kept-good",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "unchanged after a save",
+        "outcome": "pass"
+      },
+      "writes": [
+        {
+          "t": 1793222367966,
+          "text": "您的视频已准备就绪。 最响亮的部分被大幅压低了. 无法复制文件的标题、作者和日期. 为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在使用之前播放新视频。下次录音时，可以尝试调整录制声音的方式。",
+          "cardNew": true
+        }
+      ]
+    },
+    {
+      "lang": "zh-Hans",
+      "check": "unchanged after a save",
+      "fixture": "save-changed-bad",
+      "outcome": "fail",
+      "wanted": "fail",
+      "proved": true,
+      "row": {
+        "what": "unchanged after a save",
+        "outcome": "fail"
+      },
+      "writes": [
+        {
+          "t": 1793222369487,
+          "text": "您的视频已准备就绪。 最响亮的部分被大幅压低了. 无法复制文件的标题、作者和日期. 为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在使用之前播放新视频。下次录音时，可以尝试调整录制声音的方式。",
+          "cardNew": true
+        }
+      ]
+    },
+    {
+      "lang": "zh-Hans",
+      "check": "S-137 \"then in the new language\" (ms-MY)",
+      "fixture": "language-kept-good",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "then in the new language",
+        "outcome": "pass",
+        "expr": "(() => { const b = window.__p8.warnBox(); return b ? b.textContent.replace(/\\s+/g, ' ') : '' })().includes(M.msg('warnings.heavyLimiting.detail'))"
+      }
+    },
+    {
+      "lang": "zh-Hans",
+      "check": "heading and detail word for word (ms-MY)",
+      "fixture": "language-kept-good",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "heading and detail word for word",
+        "outcome": "pass"
+      }
+    },
+    {
+      "lang": "zh-Hans",
+      "check": "the heavy warning's detail whole after its title: cannot-determine once the language changed",
+      "fixture": "language-kept-good",
+      "outcome": "cannot-determine",
+      "wanted": "cannot-determine",
+      "proved": true,
+      "row": {
+        "what": "the heavy warning's detail whole after its title, in the line spoken at completion",
+        "outcome": "cannot-determine",
+        "why": "the page language changed since the completion: the detail on the card is in another language now",
+        "completion": {
+          "t": 1793222371179,
+          "text": "您的视频已准备就绪。 最响亮的部分被大幅压低了. 无法复制文件的标题、作者和日期. 为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在使用之前播放新视频。下次录音时，可以尝试调整录制声音的方式。",
+          "cardNew": true,
+          "opensWithReady": false
+        }
+      },
+      "writes": [
+        {
+          "t": 1793222371179,
+          "text": "您的视频已准备就绪。 最响亮的部分被大幅压低了. 无法复制文件的标题、作者和日期. 为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在使用之前播放新视频。下次录音时，可以尝试调整录制声音的方式。",
+          "cardNew": true
+        }
+      ]
+    },
+    {
+      "lang": "zh-Hans",
+      "check": "S-137 \"then in the new language\" (ms-MY)",
+      "fixture": "language-old-words-bad",
+      "outcome": "fail",
+      "wanted": "fail",
+      "proved": true,
+      "row": {
+        "what": "then in the new language",
+        "outcome": "fail",
+        "expr": "(() => { const b = window.__p8.warnBox(); return b ? b.textContent.replace(/\\s+/g, ' ') : '' })().includes(M.msg('warnings.heavyLimiting.detail'))"
+      }
+    },
+    {
+      "lang": "zh-Hans",
+      "check": "heading and detail word for word (ms-MY)",
+      "fixture": "language-old-words-bad",
+      "outcome": "fail",
+      "wanted": "fail",
+      "proved": true,
+      "row": {
+        "what": "heading and detail word for word",
+        "outcome": "fail"
+      }
+    },
+    {
+      "lang": "zh-Hans",
+      "check": "the heavy warning's detail whole after its title: cannot-determine once the language changed",
+      "fixture": "language-old-words-bad",
+      "outcome": "cannot-determine",
+      "wanted": "cannot-determine",
+      "proved": true,
+      "row": {
+        "what": "the heavy warning's detail whole after its title, in the line spoken at completion",
+        "outcome": "cannot-determine",
+        "why": "the page language changed since the completion: the detail on the card is in another language now",
+        "completion": {
+          "t": 1793222372545,
+          "text": "您的视频已准备就绪。 最响亮的部分被大幅压低了. 无法复制文件的标题、作者和日期. 为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在使用之前播放新视频。下次录音时，可以尝试调整录制声音的方式。",
+          "cardNew": true,
+          "opensWithReady": false
+        }
+      },
+      "writes": [
+        {
+          "t": 1793222372545,
+          "text": "您的视频已准备就绪。 最响亮的部分被大幅压低了. 无法复制文件的标题、作者和日期. 为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在使用之前播放新视频。下次录音时，可以尝试调整录制声音的方式。",
+          "cardNew": true
+        }
+      ]
+    },
+    {
+      "lang": "ms-MY",
+      "check": "heading and detail word for word",
+      "fixture": "new-page-new-table-good",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "heading and detail word for word",
+        "outcome": "pass"
+      }
+    },
+    {
+      "lang": "ms-MY",
+      "check": "first among the card's warnings",
+      "fixture": "new-page-new-table-good",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "first among the card's warnings",
+        "outcome": "pass",
+        "titles": [
+          "Bahagian paling kuat telah ditekan dengan banyak",
+          "Tajuk, pengarang dan tarikh fail tidak dapat disalin"
+        ]
+      }
+    },
+    {
+      "lang": "ms-MY",
+      "check": "first in the line spoken",
+      "fixture": "new-page-new-table-good",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "first in the line spoken at completion, with every warning title in order",
+        "outcome": "pass",
+        "completion": {
+          "t": 1793222373882,
+          "text": "Video anda sudah siap. Bahagian paling kuat telah ditekan dengan banyak. Tajuk, pengarang dan tarikh fail tidak dapat disalin. Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menggunakannya. Lain kali, cuba ubah cara anda merakam bunyi.",
+          "cardNew": true,
+          "opensWithReady": true
+        },
+        "job": [
+          1793222373757,
+          1793222373882
+        ],
+        "expected": [
+          "Bahagian paling kuat telah ditekan dengan banyak",
+          "Tajuk, pengarang dan tarikh fail tidak dapat disalin"
+        ],
+        "earlier": []
+      }
+    },
+    {
+      "lang": "ms-MY",
+      "check": "the heavy warning's detail whole after its title",
+      "fixture": "new-page-new-table-good",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "the heavy warning's detail whole after its title, in the line spoken at completion",
+        "outcome": "pass",
+        "completion": {
+          "t": 1793222373882,
+          "text": "Video anda sudah siap. Bahagian paling kuat telah ditekan dengan banyak. Tajuk, pengarang dan tarikh fail tidak dapat disalin. Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menggunakannya. Lain kali, cuba ubah cara anda merakam bunyi.",
+          "cardNew": true,
+          "opensWithReady": true
+        },
+        "heavyDetail": "Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menggunakannya. Lain kali, cuba ubah cara anda merakam bunyi.",
+        "titleAt": 23,
+        "detailAt": 127
+      },
+      "writes": [
+        {
+          "t": 1793222373882,
+          "text": "Video anda sudah siap. Bahagian paling kuat telah ditekan dengan banyak. Tajuk, pengarang dan tarikh fail tidak dapat disalin. Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menggunakannya. Lain kali, cuba ubah cara anda merakam bunyi.",
+          "cardNew": true
+        }
+      ]
+    },
+    {
+      "lang": "ms-MY",
+      "check": "heading and detail word for word",
+      "fixture": "old-page-new-table-bad",
+      "outcome": "fail",
+      "wanted": "fail",
+      "proved": true,
+      "row": {
+        "what": "heading and detail word for word",
+        "outcome": "fail"
+      }
+    },
+    {
+      "lang": "ms-MY",
+      "check": "the heavy warning's detail whole after its title",
+      "fixture": "old-page-new-table-bad",
+      "outcome": "fail",
+      "wanted": "fail",
+      "proved": true,
+      "row": {
+        "what": "the heavy warning's detail whole after its title, in the line spoken at completion",
+        "outcome": "fail",
+        "completion": {
+          "t": 1793222375056,
+          "text": "Video anda sudah siap. Bahagian paling kuat telah ditekan dengan banyak. Tajuk, pengarang dan tarikh fail tidak dapat disalin. Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menyimpannya. Lain kali, cuba ubah cara anda merakam bunyi.",
+          "cardNew": true,
+          "opensWithReady": true
+        },
+        "heavyDetail": "Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menggunakannya. Lain kali, cuba ubah cara anda merakam bunyi.",
+        "titleAt": 23,
+        "detailAt": -1,
+        "why": "heading only: the heavy warning's detail is not in the completion's line, whole"
+      },
+      "writes": [
+        {
+          "t": 1793222375056,
+          "text": "Video anda sudah siap. Bahagian paling kuat telah ditekan dengan banyak. Tajuk, pengarang dan tarikh fail tidak dapat disalin. Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menyimpannya. Lain kali, cuba ubah cara anda merakam bunyi.",
+          "cardNew": true
+        }
+      ]
+    },
+    {
+      "lang": "ms-MY",
+      "check": "heading and detail word for word, unmoved (the card holds the new words)",
+      "fixture": "old-completion-new-table-bad",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "heading and detail word for word",
+        "outcome": "pass"
+      }
+    },
+    {
+      "lang": "ms-MY",
+      "check": "the heavy warning's detail whole after its title",
+      "fixture": "old-completion-new-table-bad",
+      "outcome": "fail",
+      "wanted": "fail",
+      "proved": true,
+      "row": {
+        "what": "the heavy warning's detail whole after its title, in the line spoken at completion",
+        "outcome": "fail",
+        "completion": {
+          "t": 1793222376279,
+          "text": "Video anda sudah siap. Bahagian paling kuat telah ditekan dengan banyak. Tajuk, pengarang dan tarikh fail tidak dapat disalin. Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menyimpannya. Lain kali, cuba ubah cara anda merakam bunyi.",
+          "cardNew": true,
+          "opensWithReady": true
+        },
+        "heavyDetail": "Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menggunakannya. Lain kali, cuba ubah cara anda merakam bunyi.",
+        "titleAt": 23,
+        "detailAt": -1,
+        "why": "heading only: the heavy warning's detail is not in the completion's line, whole"
+      },
+      "writes": [
+        {
+          "t": 1793222376279,
+          "text": "Video anda sudah siap. Bahagian paling kuat telah ditekan dengan banyak. Tajuk, pengarang dan tarikh fail tidak dapat disalin. Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menyimpannya. Lain kali, cuba ubah cara anda merakam bunyi.",
+          "cardNew": true
+        }
+      ]
+    },
+    {
+      "lang": "ms-MY",
+      "check": "the heavy warning's detail whole after its title",
+      "fixture": "heading-only-bad",
+      "outcome": "fail",
+      "wanted": "fail",
+      "proved": true,
+      "row": {
+        "what": "the heavy warning's detail whole after its title, in the line spoken at completion",
+        "outcome": "fail",
+        "completion": {
+          "t": 1793222377477,
+          "text": "Video anda sudah siap. Bahagian paling kuat telah ditekan dengan banyak. Tajuk, pengarang dan tarikh fail tidak dapat disalin.",
+          "cardNew": true,
+          "opensWithReady": true
+        },
+        "heavyDetail": "Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menggunakannya. Lain kali, cuba ubah cara anda merakam bunyi.",
+        "titleAt": 23,
+        "detailAt": -1,
+        "why": "heading only: the heavy warning's detail is not in the completion's line, whole"
+      }
+    },
+    {
+      "lang": "ms-MY",
+      "check": "first in the line spoken, unmoved (every title is said)",
+      "fixture": "heading-only-bad",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "first in the line spoken at completion, with every warning title in order",
+        "outcome": "pass",
+        "completion": {
+          "t": 1793222377477,
+          "text": "Video anda sudah siap. Bahagian paling kuat telah ditekan dengan banyak. Tajuk, pengarang dan tarikh fail tidak dapat disalin.",
+          "cardNew": true,
+          "opensWithReady": true
+        },
+        "job": [
+          1793222377352,
+          1793222377477
+        ],
+        "expected": [
+          "Bahagian paling kuat telah ditekan dengan banyak",
+          "Tajuk, pengarang dan tarikh fail tidak dapat disalin"
+        ],
+        "earlier": []
+      },
+      "writes": [
+        {
+          "t": 1793222377477,
+          "text": "Video anda sudah siap. Bahagian paling kuat telah ditekan dengan banyak. Tajuk, pengarang dan tarikh fail tidak dapat disalin.",
+          "cardNew": true
+        }
+      ]
+    },
+    {
+      "lang": "ms-MY",
+      "check": "unchanged after a save",
+      "fixture": "save-kept-good",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "unchanged after a save",
+        "outcome": "pass"
+      },
+      "writes": [
+        {
+          "t": 1793222378677,
+          "text": "Video anda sudah siap. Bahagian paling kuat telah ditekan dengan banyak. Tajuk, pengarang dan tarikh fail tidak dapat disalin. Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menggunakannya. Lain kali, cuba ubah cara anda merakam bunyi.",
+          "cardNew": true
+        }
+      ]
+    },
+    {
+      "lang": "ms-MY",
+      "check": "unchanged after a save",
+      "fixture": "save-changed-bad",
+      "outcome": "fail",
+      "wanted": "fail",
+      "proved": true,
+      "row": {
+        "what": "unchanged after a save",
+        "outcome": "fail"
+      },
+      "writes": [
+        {
+          "t": 1793222380188,
+          "text": "Video anda sudah siap. Bahagian paling kuat telah ditekan dengan banyak. Tajuk, pengarang dan tarikh fail tidak dapat disalin. Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menggunakannya. Lain kali, cuba ubah cara anda merakam bunyi.",
+          "cardNew": true
+        }
+      ]
+    },
+    {
+      "lang": "ms-MY",
+      "check": "S-137 \"then in the new language\" (en-GB)",
+      "fixture": "language-kept-good",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "then in the new language",
+        "outcome": "pass",
+        "expr": "(() => { const b = window.__p8.warnBox(); return b ? b.textContent.replace(/\\s+/g, ' ') : '' })().includes(M.msg('warnings.heavyLimiting.detail'))"
+      }
+    },
+    {
+      "lang": "ms-MY",
+      "check": "heading and detail word for word (en-GB)",
+      "fixture": "language-kept-good",
+      "outcome": "pass",
+      "wanted": "pass",
+      "proved": true,
+      "row": {
+        "what": "heading and detail word for word",
+        "outcome": "pass"
+      }
+    },
+    {
+      "lang": "ms-MY",
+      "check": "the heavy warning's detail whole after its title: cannot-determine once the language changed",
+      "fixture": "language-kept-good",
+      "outcome": "cannot-determine",
+      "wanted": "cannot-determine",
+      "proved": true,
+      "row": {
+        "what": "the heavy warning's detail whole after its title, in the line spoken at completion",
+        "outcome": "cannot-determine",
+        "why": "the page language changed since the completion: the detail on the card is in another language now",
+        "completion": {
+          "t": 1793222381863,
+          "text": "Video anda sudah siap. Bahagian paling kuat telah ditekan dengan banyak. Tajuk, pengarang dan tarikh fail tidak dapat disalin. Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menggunakannya. Lain kali, cuba ubah cara anda merakam bunyi.",
+          "cardNew": true,
+          "opensWithReady": false
+        }
+      },
+      "writes": [
+        {
+          "t": 1793222381863,
+          "text": "Video anda sudah siap. Bahagian paling kuat telah ditekan dengan banyak. Tajuk, pengarang dan tarikh fail tidak dapat disalin. Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menggunakannya. Lain kali, cuba ubah cara anda merakam bunyi.",
+          "cardNew": true
+        }
+      ]
+    },
+    {
+      "lang": "ms-MY",
+      "check": "S-137 \"then in the new language\" (en-GB)",
+      "fixture": "language-old-words-bad",
+      "outcome": "fail",
+      "wanted": "fail",
+      "proved": true,
+      "row": {
+        "what": "then in the new language",
+        "outcome": "fail",
+        "expr": "(() => { const b = window.__p8.warnBox(); return b ? b.textContent.replace(/\\s+/g, ' ') : '' })().includes(M.msg('warnings.heavyLimiting.detail'))"
+      }
+    },
+    {
+      "lang": "ms-MY",
+      "check": "heading and detail word for word (en-GB)",
+      "fixture": "language-old-words-bad",
+      "outcome": "fail",
+      "wanted": "fail",
+      "proved": true,
+      "row": {
+        "what": "heading and detail word for word",
+        "outcome": "fail"
+      }
+    },
+    {
+      "lang": "ms-MY",
+      "check": "the heavy warning's detail whole after its title: cannot-determine once the language changed",
+      "fixture": "language-old-words-bad",
+      "outcome": "cannot-determine",
+      "wanted": "cannot-determine",
+      "proved": true,
+      "row": {
+        "what": "the heavy warning's detail whole after its title, in the line spoken at completion",
+        "outcome": "cannot-determine",
+        "why": "the page language changed since the completion: the detail on the card is in another language now",
+        "completion": {
+          "t": 1793222383241,
+          "text": "Video anda sudah siap. Bahagian paling kuat telah ditekan dengan banyak. Tajuk, pengarang dan tarikh fail tidak dapat disalin. Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menggunakannya. Lain kali, cuba ubah cara anda merakam bunyi.",
+          "cardNew": true,
+          "opensWithReady": false
+        }
+      },
+      "writes": [
+        {
+          "t": 1793222383241,
+          "text": "Video anda sudah siap. Bahagian paling kuat telah ditekan dengan banyak. Tajuk, pengarang dan tarikh fail tidak dapat disalin. Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menggunakannya. Lain kali, cuba ubah cara anda merakam bunyi.",
+          "cardNew": true
+        }
+      ]
+    }
+  ]
+}

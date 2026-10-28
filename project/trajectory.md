@@ -37,6 +37,7 @@
 - VH-208 — the finished video's warnings moved into its card, before the player, the lifetime line and Save, with no rail of their own, in every paint; the completion line carries heavy limiting's existing listening sentence whole; no element, no words; VH-150's pin and the walker's checks moved, not dropped, S-136's and S-91's asserts on the owner's ruling; 198 cells before and after; Codex astra's musts done (2026-10-28) — see decisions
 - VH-213 — a whole video with less than 400 ms of sound warned before Create and made silent, as a kept part is, in the owner's words; the none-decoded control measured; a part-decoded file that ends early the owner's exception, wish VH-213.1 (2026-10-28) — see decisions
 - VH-214 — VH-193's ten minutes were the walk's, not the page's: the QuickTime Animation file and N13 refused before Create in every cell, the walk's Create test clicking a hidden button; S-140 and S-140n bounded with three accepted outcomes, proved 41 of 41; no product diff; Codex astra "Close" after four rounds of musts (2026-10-28) — see decisions
+- VH-212 — heavy limiting's advice made true whether or not the new video plays here: "so play the new video before you use it", the owner's words, in three languages, the Chinese and Malay machine-translated; no element, state or listener, no walker diff; 192 cells before and after, 0 findings; Codex astra's blind must, the reading level a person's, recorded (2026-10-28) — see decisions
 
 ## Phase 7 — a second design, UX and accessibility pass, with Codex astra as partner, before the cut
 

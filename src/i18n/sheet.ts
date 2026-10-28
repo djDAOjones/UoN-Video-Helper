@@ -454,6 +454,8 @@ const NOTES: Readonly<Record<string, string>> = {
     'Said in place of warnings.noAudio.heading when the file has audio but the whole video, with nothing trimmed, holds too little of it to level. Warning headings are read one after another inside warnings.spoken, so no full stop.',
   'warnings.wholeTooLittleAudio.detail':
     'Said in place of warnings.noAudio.detail. "Level" means the same as in warnings.keptTooLittleAudio.heading. "The new video" is the one this tool makes; "your original file" is the one the person chose, which is never changed.',
+  'warnings.heavyLimiting.detail':
+    '"The new video" is the one this tool makes. Keep "before you use it" general, not "before you save it" or "here": the new video may not play in this tool.',
   'result.summaryWithCard.staff':
     'The card a staff video opens with. Use the same words for "staff" as videoKind.options.staff and for "title card" as steps.titleCard.',
   'result.summaryWithCard.submission':

@@ -1,0 +1,16 @@
+Verdict: Commit
+
+Musts: none.
+
+Notes:
+
+- No regression from the re-check. The ten-file build diff is byte-identical to its snapshot; the table retains the stated SHA-1. All 18 tracked changes and 61 untracked files match the frozen candidate. All 49 records listed in `sources.txt` match their hashes.
+- All ten copied review files equal their permitted sources. They preserve the design disagreement, ruling, blind findings, repairs and re-check verdict faithfully.
+- The ledger close is consistent and supported: decision grammar, backlog removal including blocker, trajectory, item Now/Notes, and report disposition/link. VH-178 moved verbatim; the archive index correctly records 102 entries.
+- The item, decision and drafted commit faithfully quote the owner’s answer and distinguish Backlog review’s option from the ask’s longer recommendation.
+- Rules 5 and 6 hold. VH-212.1 records the unchanged walker fixture and comment; VH-199.1 covers S-138’s timing row; VH-105.2 retains translated reading-level validation. No unrecorded follow-up or paid-off open line found.
+- The measurement claims agree with the supplied table and records. No unexplained change appears in the diff. Applied Nielsen 9 and WCAG 3.1.5/4.1.3, retaining the human-evidence limitations.
+- I independently ran `node tools/check.mjs`: **0 failures, 0 warnings**. The full gate result is supplied evidence, not independently rerun here. The existing EBU skip is unchanged.
+- The drafted commit is accurate. Fill `Verify:` with the actual planned gate-rerun result and use `Checked: gpt-6-astra — Commit — F15b`.
+
+No files changed.

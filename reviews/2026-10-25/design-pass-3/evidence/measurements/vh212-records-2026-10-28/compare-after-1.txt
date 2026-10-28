@@ -1,0 +1,81 @@
+before 192 cells, after 192 cells; findings 0; notes 0
+body-new-S-131-0: 24
+body-new-S-132-0: 24
+body-new-S-135-2: 24
+body-new-S-136-2: 24
+body-new-S-137-2: 24
+body-new-S-138-1: 24
+body-new-S-151-2: 24
+body-new-S-152-2: 24
+card-new-S-131-0: 24
+card-new-S-132-0: 24
+card-new-S-135-1: 24
+card-new-S-136-1: 24
+card-new-S-137-1: 24
+card-new-S-138-1: 24
+card-new-S-151-1: 24
+card-new-S-152-1: 24
+cutShort-ms-MY-before-0-after-0: 64
+detail-new-S-131-0: 24
+detail-new-S-132-0: 24
+detail-new-S-135-1: 24
+detail-new-S-136-1: 24
+detail-new-S-137-1: 24
+detail-new-S-138-1: 24
+detail-new-S-151-1: 24
+detail-new-S-152-1: 24
+geomDiff-S-135-en-GB: 4
+geomDiff-S-136-en-GB: 4
+geomDiff-S-137-en-GB: 4
+geomDiff-S-138-en-GB: 4
+geomDiff-S-151-en-GB: 4
+geomDiff-S-152-en-GB: 4
+present-S-131-False: 24
+present-S-132-False: 24
+present-S-135-True: 24
+present-S-136-True: 24
+present-S-137-True: 24
+present-S-138-True: 24
+present-S-151-True: 24
+present-S-152-True: 24
+status-new-S-131-0: 24
+status-new-S-132-0: 24
+status-new-S-135-1: 24
+status-new-S-136-1: 24
+status-new-S-137-1: 24
+status-new-S-138-0: 24
+status-new-S-151-1: 24
+status-new-S-152-1: 24
+table-new-S-131-1: 24
+table-new-S-132-1: 24
+table-new-S-135-1: 24
+table-new-S-136-1: 24
+table-new-S-137-1: 24
+table-new-S-138-1: 24
+table-new-S-151-1: 24
+table-new-S-152-1: 24
+geometry differences (cell: field before -> after)
+  S-135/en-GB/w320/dark: widestLinePx 184 -> 177
+  S-135/en-GB/w320/forced-dark: widestLinePx 184 -> 177
+  S-135/en-GB/w320/forced-light: widestLinePx 184 -> 177
+  S-135/en-GB/w320/light: widestLinePx 184 -> 177
+  S-136/en-GB/w320/dark: widestLinePx 184 -> 177
+  S-136/en-GB/w320/forced-dark: widestLinePx 184 -> 177
+  S-136/en-GB/w320/forced-light: widestLinePx 184 -> 177
+  S-136/en-GB/w320/light: widestLinePx 184 -> 177
+  S-137/en-GB/w320/dark: widestLinePx 184 -> 177
+  S-137/en-GB/w320/forced-dark: widestLinePx 184 -> 177
+  S-137/en-GB/w320/forced-light: widestLinePx 184 -> 177
+  S-137/en-GB/w320/light: widestLinePx 184 -> 177
+  S-138/en-GB/w320/dark: widestLinePx 184 -> 177
+  S-138/en-GB/w320/forced-dark: widestLinePx 184 -> 177
+  S-138/en-GB/w320/forced-light: widestLinePx 184 -> 177
+  S-138/en-GB/w320/light: widestLinePx 184 -> 177
+  S-151/en-GB/w320/dark: widestLinePx 184 -> 177
+  S-151/en-GB/w320/forced-dark: widestLinePx 184 -> 177
+  S-151/en-GB/w320/forced-light: widestLinePx 184 -> 177
+  S-151/en-GB/w320/light: widestLinePx 184 -> 177
+  S-152/en-GB/w320/dark: widestLinePx 184 -> 177
+  S-152/en-GB/w320/forced-dark: widestLinePx 184 -> 177
+  S-152/en-GB/w320/forced-light: widestLinePx 184 -> 177
+  S-152/en-GB/w320/light: widestLinePx 184 -> 177

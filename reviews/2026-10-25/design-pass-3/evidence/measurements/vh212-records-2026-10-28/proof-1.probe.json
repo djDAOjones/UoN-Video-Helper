@@ -1,0 +1,40 @@
+{
+  "at": "2026-10-28T21:19:09.033Z",
+  "langs": {
+    "en-GB": {
+      "lang": "en-GB",
+      "detail": "To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you use it. Next time, try adjusting how you record the sound.",
+      "heading": "The loudest moments were held down hard",
+      "langMatches": true,
+      "newClause": 1,
+      "oldClause": 0,
+      "equalsOwnersDetail": true,
+      "headingAsBase": true,
+      "ok": true
+    },
+    "zh-Hans": {
+      "lang": "zh-Hans",
+      "detail": "为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在使用之前播放新视频。下次录音时，可以尝试调整录制声音的方式。",
+      "heading": "最响亮的部分被大幅压低了",
+      "langMatches": true,
+      "newClause": 1,
+      "oldClause": 0,
+      "equalsOwnersDetail": true,
+      "headingAsBase": null,
+      "ok": true
+    },
+    "ms-MY": {
+      "lang": "ms-MY",
+      "detail": "Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menggunakannya. Lain kali, cuba ubah cara anda merakam bunyi.",
+      "heading": "Bahagian paling kuat telah ditekan dengan banyak",
+      "langMatches": true,
+      "newClause": 1,
+      "oldClause": 0,
+      "equalsOwnersDetail": true,
+      "headingAsBase": null,
+      "ok": true
+    }
+  },
+  "endLang": "en-GB",
+  "ok": true
+}

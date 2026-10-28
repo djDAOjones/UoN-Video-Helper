@@ -1,0 +1,38 @@
+# VH-212 #4: VH-199's line counts for heavy limiting's detail, read only, for the table's reference column.
+# Usage: python3 -I -B vh199-lines-1.py <VH-199 runs dir> <out json> <out txt>
+# For each of VH-212's eight scenarios in the runs hand-over 1 names, every record <id>__<lang>__<view>__<mode>.json:
+# the measure item whose el begins 'p.notification-body "' + the detail's opening in the cell's language
+# (lines, boxPx, house.widestLinePx); a record with no such item is "no warning". VH-199 holds no height.
+import json, sys, glob, os, collections
+RUNS, OUT_JSON, OUT_TXT = sys.argv[1:4]
+OPEN = {'en-GB': 'To reach the usual level', 'zh-Hans': '为了达到通常的水平', 'ms-MY': 'Untuk mencapai tahap biasa'}
+WHERE = {'S-135': ['run-04'], 'S-131': ['run-04', 'run-10'], 'S-132': ['run-05', 'run-11-part'], 'S-136': ['run-06', 'run-10'],
+         'S-137': ['run-06'], 'S-138': ['run-08', 'run-11-part'], 'S-151': ['run-08', 'run-11-part'], 'S-152': ['run-09-part', 'run-10']}
+out, agg = [], collections.defaultdict(collections.Counter)
+for sid, runs in WHERE.items():
+    for rp in runs:
+        for d in sorted(glob.glob(os.path.join(RUNS, rp + '-2026-*'))):
+            for f in sorted(glob.glob(os.path.join(d, f'{sid}__*.json'))):
+                parts = os.path.basename(f)[:-5].split('__')
+                if len(parts) != 4:
+                    continue
+                _, lang, view, mode = parts
+                r = json.load(open(f))
+                items = (((r.get('instruments') or {}).get('measure') or {}).get('items')) or []
+                hit = [it for it in items if str(it.get('el', '')).startswith('p.notification-body "' + OPEN.get(lang, '\0'))]
+                if hit:
+                    it = hit[0]
+                    ln = it.get('lines'); n = len(ln) if isinstance(ln, list) else ln
+                    val = (n, it.get('boxPx'), (it.get('house') or {}).get('widestLinePx'))
+                    if len(hit) > 1:
+                        val = val + (f'{len(hit)} items',)
+                else:
+                    val = 'no warning'
+                out.append({'run': os.path.basename(d), 'id': sid, 'lang': lang, 'view': view, 'mode': mode, 'read': val})
+                agg[(sid, lang, view)][str(val)] += 1
+json.dump(out, open(OUT_JSON, 'w'), ensure_ascii=False, indent=1)
+with open(OUT_TXT, 'w') as o:
+    o.write(f'{len(out)} records read; (lines, boxPx, widestLinePx) by scenario, language, view: count\n')
+    for k in sorted(agg):
+        o.write(f"{' '.join(k)}: {dict(agg[k])}\n")
+print(open(OUT_TXT).read())

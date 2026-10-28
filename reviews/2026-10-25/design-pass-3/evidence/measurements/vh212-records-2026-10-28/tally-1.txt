@@ -1,0 +1,79 @@
+records before 192 after 192; same cells True
+1. instrument outcomes differing before/after: 12
+   DIFF ('player', 'fail', 'pass', ('S-138', 'zh-Hans', 'w1280', 'dark'))
+   DIFF ('player', 'fail', 'pass', ('S-138', 'zh-Hans', 'w1280', 'forced-dark'))
+   DIFF ('player', 'fail', 'pass', ('S-138', 'zh-Hans', 'w1280', 'forced-light'))
+   DIFF ('player', 'fail', 'pass', ('S-138', 'zh-Hans', 'w1280', 'light'))
+   DIFF ('player', 'pass', 'fail', ('S-138', 'en-GB', 'w1280', 'dark'))
+   DIFF ('player', 'pass', 'fail', ('S-138', 'en-GB', 'w1280', 'forced-dark'))
+   DIFF ('player', 'pass', 'fail', ('S-138', 'en-GB', 'w1280', 'forced-light'))
+   DIFF ('player', 'pass', 'fail', ('S-138', 'en-GB', 'w1280', 'light'))
+   DIFF ('player', 'pass', 'fail', ('S-138', 'ms-MY', 'w320', 'dark'))
+   DIFF ('player', 'pass', 'fail', ('S-138', 'ms-MY', 'w320', 'forced-dark'))
+   DIFF ('player', 'pass', 'fail', ('S-138', 'ms-MY', 'w320', 'forced-light'))
+   DIFF ('player', 'pass', 'fail', ('S-138', 'ms-MY', 'w320', 'light'))
+   after, outcome counts by instrument (192 cells): asserts pass 192; ax pass 192; contrastExtra cannot-determine 192; contrastText pass 192; focus cannot-determine 32; focus pass 160; footer pass 192; formatTip not-applicable 192; limiting cannot-determine 48; limiting pass 144; measure cannot-determine 40; measure pass 152; overflow pass 192; player fail 68; player pass 124; subresults pass 48; targets fail 192; type fail 192; videoLanguage pass 192
+2. overflow at 320 px (side, outcome, hscroll, offenders, clipped, spills): ('after', 'pass', False, 0, 0, 0) 96; ('before', 'pass', False, 0, 0, 0) 96
+3. measure item for the detail (side, lang, view, outcome, within, worst chars, worst cjk, lines): count
+   ('after', 'en-GB', 'w1280', 'pass', True, 72, 0, 4): 24
+   ('after', 'en-GB', 'w320', 'pass', True, 29, 0, 9): 24
+   ('after', 'ms-MY', 'w1280', 'pass', True, 69, 0, 5): 24
+   ('after', 'ms-MY', 'w320', 'pass', True, 27, 0, 11): 24
+   ('after', 'zh-Hans', 'w1280', 'pass', True, 32, 32, 3): 24
+   ('after', 'zh-Hans', 'w320', 'pass', True, 13, 13, 7): 24
+   ('before', 'en-GB', 'w1280', 'pass', True, 72, 0, 4): 24
+   ('before', 'en-GB', 'w320', 'pass', True, 30, 0, 9): 24
+   ('before', 'ms-MY', 'w1280', 'pass', True, 69, 0, 5): 24
+   ('before', 'ms-MY', 'w320', 'pass', True, 27, 0, 11): 24
+   ('before', 'zh-Hans', 'w1280', 'pass', True, 32, 32, 3): 24
+   ('before', 'zh-Hans', 'w320', 'pass', True, 13, 13, 7): 24
+4. heights (detail paragraph, item, warnBox) px, the set over the four modes: scenario lang view: before | after
+   S-131 en-GB w1280: [(None, None, None)] | [(None, None, None)]
+   S-131 en-GB w320: [(None, None, None)] | [(None, None, None)]
+   S-131 ms-MY w1280: [(None, None, None)] | [(None, None, None)]
+   S-131 ms-MY w320: [(None, None, None)] | [(None, None, None)]
+   S-131 zh-Hans w1280: [(None, None, None)] | [(None, None, None)]
+   S-131 zh-Hans w320: [(None, None, None)] | [(None, None, None)]
+   S-132 en-GB w1280: [(None, None, None)] | [(None, None, None)]
+   S-132 en-GB w320: [(None, None, None)] | [(None, None, None)]
+   S-132 ms-MY w1280: [(None, None, None)] | [(None, None, None)]
+   S-132 ms-MY w320: [(None, None, None)] | [(None, None, None)]
+   S-132 zh-Hans w1280: [(None, None, None)] | [(None, None, None)]
+   S-132 zh-Hans w320: [(None, None, None)] | [(None, None, None)]
+   S-135 en-GB w1280: [(84, 113, 149)] | [(84, 113, 149)]
+   S-135 en-GB w320: [(189, 239, 299)] | [(189, 239, 299)]
+   S-135 ms-MY w1280: [(105, 134, 170)] | [(105, 134, 170)]
+   S-135 ms-MY w320: [(231, 281, 341)] | [(231, 281, 341)]
+   S-135 zh-Hans w1280: [(63, 92, 128)] | [(63, 92, 128)]
+   S-135 zh-Hans w320: [(147, 176, 236)] | [(147, 176, 236)]
+   S-136 en-GB w1280: [(84, 113, 253)] | [(84, 113, 253)]
+   S-136 en-GB w320: [(189, 239, 508)] | [(189, 239, 508)]
+   S-136 ms-MY w1280: [(105, 134, 274)] | [(105, 134, 274)]
+   S-136 ms-MY w320: [(231, 281, 613)] | [(231, 281, 613)]
+   S-136 zh-Hans w1280: [(63, 92, 211)] | [(63, 92, 211)]
+   S-136 zh-Hans w320: [(147, 176, 403)] | [(147, 176, 403)]
+   S-137 en-GB w1280: [(84, 113, 149)] | [(84, 113, 149)]
+   S-137 en-GB w320: [(189, 239, 299)] | [(189, 239, 299)]
+   S-137 ms-MY w1280: [(105, 134, 170)] | [(105, 134, 170)]
+   S-137 ms-MY w320: [(231, 281, 341)] | [(231, 281, 341)]
+   S-137 zh-Hans w1280: [(63, 92, 128)] | [(63, 92, 128)]
+   S-137 zh-Hans w320: [(147, 176, 236)] | [(147, 176, 236)]
+   S-138 en-GB w1280: [(84, 113, 253)] | [(84, 113, 253)]
+   S-138 en-GB w320: [(189, 239, 508)] | [(189, 239, 508)]
+   S-138 ms-MY w1280: [(105, 134, 274)] | [(105, 134, 274)]
+   S-138 ms-MY w320: [(231, 281, 613)] | [(231, 281, 613)]
+   S-138 zh-Hans w1280: [(63, 92, 211)] | [(63, 92, 211)]
+   S-138 zh-Hans w320: [(147, 176, 403)] | [(147, 176, 403)]
+   S-151 en-GB w1280: [(84, 113, 253)] | [(84, 113, 253)]
+   S-151 en-GB w320: [(189, 239, 508)] | [(189, 239, 508)]
+   S-151 ms-MY w1280: [(105, 134, 274)] | [(105, 134, 274)]
+   S-151 ms-MY w320: [(231, 281, 613)] | [(231, 281, 613)]
+   S-151 zh-Hans w1280: [(63, 92, 211)] | [(63, 92, 211)]
+   S-151 zh-Hans w320: [(147, 176, 403)] | [(147, 176, 403)]
+   S-152 en-GB w1280: [(84, 113, 149)] | [(84, 113, 149)]
+   S-152 en-GB w320: [(189, 239, 299)] | [(189, 239, 299)]
+   S-152 ms-MY w1280: [(105, 134, 170)] | [(105, 134, 170)]
+   S-152 ms-MY w320: [(231, 281, 341)] | [(231, 281, 341)]
+   S-152 zh-Hans w1280: [(63, 92, 128)] | [(63, 92, 128)]
+   S-152 zh-Hans w320: [(147, 176, 236)] | [(147, 176, 236)]
+5. #status live-text writes equal before and after, by scenario: S-131 True 24; S-132 True 24; S-135 True 24; S-136 True 24; S-137 True 24; S-138 True 24; S-151 True 24; S-152 True 24

@@ -1,0 +1,94 @@
+# VH-212 #2: one walk's cells summarised from its own outputs, read only.
+# Usage: python3 -I summarise-1.py <walk dir> <old|new expected> <out json>
+# For each record: its status; from the driver's probe (runs/vh212-detail-*.jsonl): the heavy warning present or not, the
+# detail's text, the expected clause's count and the other's in the cell's language, the detail paragraph's height and
+# lines by client rects, the warnings block's height; from the record: the measure item for the detail paragraph (lines,
+# boxPx, widest line), the limiting rows, the completion write's clause counts (from the W2 row), the asserts and subresults.
+import json, sys, glob, os, collections
+
+walk, expect, out = sys.argv[1], sys.argv[2], sys.argv[3]
+OTHER = 'new' if expect == 'old' else 'old'
+CL = {
+    'old': {'en-GB': 'so play the new video before you save it', 'zh-Hans': '所以请在保存之前播放新视频', 'ms-MY': 'sebelum anda menyimpannya'},
+    'new': {'en-GB': 'so play the new video before you use it', 'zh-Hans': '所以请在使用之前播放新视频', 'ms-MY': 'sebelum anda menggunakannya'},
+}
+OPEN = {'en-GB': 'To reach the usual level', 'zh-Hans': '为了达到通常的水平', 'ms-MY': 'Untuk mencapai tahap biasa'}
+LANGS = ('en-GB', 'zh-Hans', 'ms-MY')
+
+probe = collections.defaultdict(list)
+for f in glob.glob(os.path.join(walk, 'runs', 'vh212-detail-*.jsonl')):
+    for line in open(f, encoding='utf-8'):
+        d = json.loads(line)
+        leaf = d['walk'].split('/')[-1]
+        sid = '-'.join(leaf.split('-')[:2]); view = leaf.split('-')[-1]; lang = '-'.join(leaf.split('-')[2:-1])
+        probe[(sid, lang, view, d['mode'])].append(d)
+
+def outcomes(items):
+    return [(i.get('what', '')[:70], i.get('outcome')) for i in items or []]
+
+cells = []
+for f in sorted(glob.glob(os.path.join(walk, 'runs', '*', 'S-*.json'))):
+    r = json.load(open(f, encoding='utf-8'))
+    sid, lang, view, mode = r['id'], r['lang'], r['view'], r['mode']
+    c = {'id': sid, 'lang': lang, 'view': view, 'mode': mode, 'status': r['status'], 'revision': r.get('revision'), 'run': r.get('runId')}
+    ps = probe.get((sid, lang, view, mode), [])
+    c['probeReads'] = len(ps)
+    if ps:
+        p = ps[0]
+        c['pageLang'] = p.get('lang'); c['present'] = bool(p.get('heavyPresent')); c['cardWhere'] = p.get('cardWhere')
+        c['detail'] = p.get('detail'); c['detailIsTable'] = p.get('detailIsTable')
+        dc = p.get('detailClauses') or {}
+        c['expectInDetail'] = (dc.get(expect) or {}).get(lang); c['otherInDetail'] = (dc.get(OTHER) or {}).get(lang)
+        c['otherLangsInDetail'] = sum(v for k in ('old', 'new') for l, v in (dc.get(k) or {}).items() if l != lang)
+        tc = p.get('tableClauses') or {}
+        c['tableExpect'] = (tc.get(expect) or {}).get(lang); c['tableOther'] = (tc.get(OTHER) or {}).get(lang)
+        rc = p.get('rects') or {}
+        c['detailP_h'] = (rc.get('detailP') or {}).get('h'); c['detailP_w'] = (rc.get('detailP') or {}).get('w')
+        c['warnBox_h'] = (rc.get('warnBox') or {}).get('h'); c['item_h'] = (rc.get('item') or {}).get('h')
+        c['probeLines'] = p.get('probeLines'); c['lineHeight'] = p.get('lineHeight')
+        c['probeError'] = p.get('error')
+    ins = r.get('instruments') or {}
+    items = (ins.get('measure') or {}).get('items') or []
+    m = [it for it in items if str(it.get('el', '')).startswith('p.notification-body "' + OPEN.get(lang, '~'))]
+    c['measureMatches'] = len(m)
+    if m:
+        c['measureLines'] = len(m[0].get('lines') or []); c['boxPx'] = m[0].get('boxPx'); c['widestLinePx'] = (m[0].get('house') or {}).get('widestLinePx')
+    lim = (ins.get('limiting') or {}).get('items') or []
+    c['limiting'] = outcomes(lim)
+    w2 = [i for i in lim if str(i.get('what', '')).startswith("the heavy warning's detail whole")]
+    if w2 and isinstance(w2[0].get('completion'), dict):
+        t = w2[0]['completion'].get('text') or ''
+        c['completionLang'] = [l for l in LANGS if OPEN[l] in t]
+        c['completionClauses'] = {k: {l: t.count(CL[k][l]) for l in LANGS} for k in ('old', 'new')}
+        c['completionText'] = t
+    c['asserts'] = outcomes((ins.get('asserts') or {}).get('items'))
+    sub = ins.get('subresults')
+    if isinstance(sub, dict):
+        c['subresults'] = outcomes(((sub.get('instruments') or {}).get('asserts') or {}).get('items') or sub.get('items'))
+    cells.append(c)
+
+json.dump({'walk': walk, 'expect': expect, 'cells': cells}, open(out, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+
+# The aggregates, per scenario.
+print('cells', len(cells), 'statuses', dict(collections.Counter(c['status'] for c in cells)), 'revisions', sorted({c['revision'] for c in cells}))
+for sid in sorted({c['id'] for c in cells}):
+    cs = [c for c in cells if c['id'] == sid]
+    pres = sum(1 for c in cs if c.get('present'))
+    good = sum(1 for c in cs if c.get('present') and c.get('expectInDetail') == 1 and c.get('otherInDetail') == 0 and c.get('otherLangsInDetail') == 0 and c.get('detailIsTable') and c.get('pageLang') == c['lang'])
+    lim = collections.Counter(o for c in cs for o in c['limiting'])
+    print(f"{sid}: {len(cs)} cells, probe reads {collections.Counter(c['probeReads'] for c in cs)}, present {pres}, the {expect} clause once and alone in its language {good}, measure matches {collections.Counter(c['measureMatches'] for c in cs)}")
+    for k, v in sorted(lim.items()):
+        print('   ', v, '|', k[0], '|', k[1])
+    print('    asserts', dict(collections.Counter(o for c in cs for o in c['asserts'])))
+    if any('subresults' in c for c in cs):
+        print('    subresults', dict(collections.Counter(o for c in cs for o in c.get('subresults') or [])))
+    cc = [c for c in cs if 'completionClauses' in c]
+    if cc:
+        print('    completion write: cells', len(cc), 'with the', expect, 'clause in its text', sum(1 for c in cc if sum(c['completionClauses'][expect].values()) == 1 and sum(c['completionClauses'][OTHER].values()) == 0))
+geo = collections.defaultdict(set)
+for c in cells:
+    if c.get('present'):
+        geo[(c['lang'], c['view'])].add((c.get('detailP_h'), c.get('probeLines'), c.get('measureLines'), c.get('boxPx'), c.get('widestLinePx'), c.get('lineHeight')))
+print('geometry (detailP h, lines by rects, measure lines, boxPx, widest, line-height) by language and view:')
+for k in sorted(geo):
+    print('   ', k, sorted(geo[k], key=str))

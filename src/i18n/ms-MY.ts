@@ -650,7 +650,7 @@ export const msMY: Messages = {
     heavyLimiting: {
       heading: 'Bahagian paling kuat telah ditekan dengan banyak',
       detail:
-        'Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menyimpannya. Lain kali, cuba ubah cara anda merakam bunyi.',
+        'Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menggunakannya. Lain kali, cuba ubah cara anda merakam bunyi.',
     },
     metadataLost: {
       heading: 'Tajuk, pengarang dan tarikh fail tidak dapat disalin',

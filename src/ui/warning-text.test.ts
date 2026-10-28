@@ -10,6 +10,7 @@ import { detectSourceWarnings } from '../audio/warnings'
 import type { AudioWarningCode, NoAudioReason } from '../audio/warnings'
 import { DECODE_DAMAGE } from '../config/audio'
 import { LANGUAGES_OFFERED } from '../config/languages'
+import type { LanguageTag } from '../config/languages'
 import { setLanguage, t } from '../i18n'
 import { damageTimes, shortfallTimes, warningText } from './warning-text'
 
@@ -229,13 +230,35 @@ describe('no audio, said by its cause (VH-206)', () => {
 })
 
 describe('heavy limiting, said with the finished video (VH-193)', () => {
+  afterEach(() => setLanguage('en-GB'))
+  const said = (limiterBiteLu: number) =>
+    warningText({ code: 'heavy-limiting', detail: { limiterBiteLu } })
+
   it('says the sheet’s B11 words, whatever the bite', () => {
-    const said = (limiterBiteLu: number) =>
-      warningText({ code: 'heavy-limiting', detail: { limiterBiteLu } })
     expect(said(8.1).heading).toBe('The loudest moments were held down hard')
     expect(said(8.1).detail).toBe(
-      'To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound.',
+      'To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you use it. Next time, try adjusting how you record the sound.',
     )
     expect(said(3.2)).toEqual(said(8.1))
   })
+
+  // VH-212 (F15b): the owner's clause, true whether or not the new video plays
+  // here; the old one asked for a play before the save, which a player that
+  // cannot play the new video rules out.
+  const CLAUSE: Record<LanguageTag, { now: string; was: string }> = {
+    'en-GB': { now: 'so play the new video before you use it', was: 'before you save it' },
+    'zh-Hans': { now: '所以请在使用之前播放新视频', was: '保存之前' },
+    'ms-MY': { now: 'sebelum anda menggunakannya', was: 'menyimpannya' },
+  }
+
+  it.each(LANGUAGES_OFFERED)(
+    'in %s, asks for the new video to be played before it is used (VH-212)',
+    (tag) => {
+      setLanguage(tag)
+      const { detail } = said(8.1)
+      expect(detail).toBe(t().warnings.heavyLimiting.detail)
+      expect(detail).toContain(CLAUSE[tag].now)
+      expect(detail).not.toContain(CLAUSE[tag].was)
+    },
+  )
 })

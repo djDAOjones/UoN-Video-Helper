@@ -1,0 +1,66 @@
+# VH-212 #4: the tallies the table cites, before-1 against after-1, read only from the walker records and summary.json.
+# Usage: python3 -I -B tally-1.py <walk root vh212-walk> <out txt>
+# 1. every instrument's outcome, before against after, per cell; the after's distribution;
+# 2. overflow at 320 px (hscroll, offenders, clipped, spills);
+# 3. the measure item for the detail: outcome, within the house limit, worst line's characters, by language and view;
+# 4. heights (detail paragraph, item, warnBox) by scenario, language and view, before and after;
+# 5. #status live-text writes per cell (from the mutations capture), before against after.
+import json, sys, glob, os, collections
+ROOT, OUT = sys.argv[1], sys.argv[2]
+OPEN = {'en-GB': 'To reach the usual level', 'zh-Hans': '为了达到通常的水平', 'ms-MY': 'Untuk mencapai tahap biasa'}
+def recs(walk):
+    out = {}
+    for f in glob.glob(os.path.join(ROOT, walk, 'runs', '*', 'S-*.json')):
+        r = json.load(open(f)); out[(r['id'], r['lang'], r['view'], r['mode'])] = (r, os.path.dirname(f))
+    return out
+def summ(walk):
+    return {(c['id'], c['lang'], c['view'], c['mode']): c for c in json.load(open(os.path.join(ROOT, walk, 'summary.json')))['cells']}
+B, A, SB, SA = recs('before-1'), recs('after-1'), summ('before-1'), summ('after-1')
+L = []
+L.append(f'records before {len(B)} after {len(A)}; same cells {set(B) == set(A)}')
+diff, dist = collections.Counter(), collections.Counter()
+for k in sorted(A):
+    ib, ia = B[k][0]['instruments'], A[k][0]['instruments']
+    for n in sorted(set(ib) | set(ia)):
+        ob, oa = (ib.get(n) or {}).get('outcome'), (ia.get(n) or {}).get('outcome')
+        dist[(n, oa)] += 1
+        if ob != oa: diff[(n, ob, oa, k)] += 1
+L.append(f'1. instrument outcomes differing before/after: {len(diff)}')
+for x in sorted(diff): L.append(f'   DIFF {x}')
+L.append('   after, outcome counts by instrument (192 cells): ' + '; '.join(f'{n} {o} {c}' for (n, o), c in sorted(dist.items())))
+ov = collections.Counter()
+for side, R in (('before', B), ('after', A)):
+    for k, (r, _) in R.items():
+        if k[2] != 'w320': continue
+        o = r['instruments'].get('overflow') or {}
+        ov[(side, o.get('outcome'), o.get('hscroll'), o.get('offenderCount'), o.get('clippedCount'), o.get('spillCount'))] += 1
+L.append('2. overflow at 320 px (side, outcome, hscroll, offenders, clipped, spills): ' + '; '.join(f'{k} {v}' for k, v in sorted(ov.items(), key=str)))
+ms = collections.Counter()
+for side, R in (('before', B), ('after', A)):
+    for k, (r, _) in R.items():
+        its = [i for i in (r['instruments'].get('measure') or {}).get('items') or [] if str(i.get('el', '')).startswith('p.notification-body "' + OPEN[k[1]])]
+        for i in its:
+            w = i.get('worst') or {}
+            ms[(side, k[1], k[2], i.get('outcome'), (i.get('house') or {}).get('within'), w.get('chars'), w.get('cjk'), len(i.get('lines') or []))] += 1
+L.append('3. measure item for the detail (side, lang, view, outcome, within, worst chars, worst cjk, lines): count')
+for k in sorted(ms, key=str): L.append(f'   {k}: {ms[k]}')
+hh = collections.defaultdict(set)
+for side, S in (('before', SB), ('after', SA)):
+    for k, c in S.items():
+        hh[(k[0], k[1], k[2], side)].add((c.get('detailP_h'), c.get('item_h'), c.get('warnBox_h')))
+L.append('4. heights (detail paragraph, item, warnBox) px, the set over the four modes: scenario lang view: before | after')
+for k in sorted({x[:3] for x in hh}):
+    L.append(f"   {' '.join(k)}: {sorted(hh[k + ('before',)], key=str)} | {sorted(hh[k + ('after',)], key=str)}")
+sw, swd = collections.Counter(), []
+for k in sorted(A):
+    n = []
+    for (r, d) in (B[k], A[k]):
+        p = os.path.join(d, 'captures', f'{k[0]}__{k[1]}__{k[2]}__{k[3]}__mutations.json')
+        e = json.load(open(p))['entries'] if os.path.exists(p) else None
+        n.append(None if e is None else sum(1 for x in e if x.get('kind') == 'live-text' and x.get('region') == '#status'))
+    sw[(k[0], n[0] == n[1])] += 1
+    if n[0] != n[1]: swd.append((k, n))
+L.append('5. #status live-text writes equal before and after, by scenario: ' + '; '.join(f'{k[0]} {k[1]} {v}' for k, v in sorted(sw.items())))
+for x in swd: L.append(f'   DIFF {x}')
+open(OUT, 'w').write('\n'.join(L) + '\n')
+print('\n'.join(L))

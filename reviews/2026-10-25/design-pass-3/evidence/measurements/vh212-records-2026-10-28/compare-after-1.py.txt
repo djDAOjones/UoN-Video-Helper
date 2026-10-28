@@ -1,0 +1,154 @@
+# VH-212 #4: the after walk compared with the before, cell by cell, read only.
+# Usage: python3 -I compare-after-1.py <walk root vh212-walk> <out json> <out txt>
+# Reads before-1/ and after-1/ (summary.json from summarise-1.py, the driver's probe lines runs/vh212-detail-*.jsonl and,
+# for ms-MY cells, the walker records runs/<run dir>/<id>__<lang>__<view>__<mode>.json for a cut-short warning).
+# The before's own counts are the expectation: in each place (detail, card, #status, body, served table) and language,
+# after.new == before.old + before.new and after.old == 0; the detail and the completion write's text equal the before's
+# with the old clause replaced by the new; the limiting rows, asserts and subresults equal; the geometry recorded beside.
+import json, sys, glob, os, collections
+
+ROOT, OUT_JSON, OUT_TXT = sys.argv[1], sys.argv[2], sys.argv[3]
+LANGS = ['en-GB', 'zh-Hans', 'ms-MY']
+OLD = {'en-GB': 'so play the new video before you save it', 'zh-Hans': '所以请在保存之前播放新视频', 'ms-MY': 'sebelum anda menyimpannya'}
+NEW = {'en-GB': 'so play the new video before you use it', 'zh-Hans': '所以请在使用之前播放新视频', 'ms-MY': 'sebelum anda menggunakannya'}
+PLACES = ['detailClauses', 'cardClauses', 'statusClauses', 'bodyClauses', 'tableClauses']
+GEOM = ['detailP_h', 'detailP_w', 'warnBox_h', 'item_h', 'probeLines', 'lineHeight', 'measureMatches', 'measureLines', 'boxPx', 'widestLinePx']
+CUT_SHORT_MS = 'p.notification-body "Fail ini mungkin terputus'
+
+
+def swap(text):
+    if text is None:
+        return None
+    for L in LANGS:
+        text = text.replace(OLD[L], NEW[L])
+    return text
+
+
+def load(walk):
+    s = json.load(open(os.path.join(ROOT, walk, 'summary.json')))
+    cells = {(c['id'], c['lang'], c['view'], c['mode']): c for c in s['cells']}
+    probes = {}
+    for f in sorted(glob.glob(os.path.join(ROOT, walk, 'runs', 'vh212-detail-*.jsonl'))):
+        for line in open(f):
+            j = json.loads(line)
+            seg = j['walk'].split('/')[1]
+            probes.setdefault((seg, j['mode']), []).append(j)
+    return s, cells, probes
+
+
+def cut_short(walk, c):
+    hits = 0
+    for f in glob.glob(os.path.join(ROOT, walk, 'runs', '*', f"{c['id']}__{c['lang']}__{c['view']}__{c['mode']}.json")):
+        r = json.load(open(f))
+        items = (((r.get('instruments') or {}).get('measure') or {}).get('items')) or []
+        hits += sum(1 for it in items if str(it.get('el', '')).startswith(CUT_SHORT_MS))
+    return hits
+
+
+bs, bc, bp = load('before-1')
+as_, ac, ap = load('after-1')
+findings, notes, rows = [], [], []
+stats = collections.Counter()
+
+if set(bc) != set(ac):
+    findings.append(f'cell sets differ: before-only {sorted(set(bc) - set(ac))}, after-only {sorted(set(ac) - set(bc))}')
+
+for key in sorted(set(bc) & set(ac)):
+    b, a = bc[key], ac[key]
+    cid, L, view, mode = key
+    name = '/'.join(key)
+    f = []
+    if a['status'] != 'ok' or b['status'] != 'ok':
+        f.append(f"status before {b['status']} after {a['status']}")
+    if a['revision'] != b['revision']:
+        f.append(f"revision before {b['revision']} after {a['revision']}")
+    for k in ['pageLang', 'present', 'cardWhere', 'detailIsTable', 'probeReads', 'probeError']:
+        if a.get(k) != b.get(k):
+            f.append(f'{k} before {b.get(k)!r} after {a.get(k)!r}')
+    if swap(b.get('detail')) != a.get('detail'):
+        f.append('detail text is not the before with the clause replaced')
+    # summary counts: expectInDetail is old's count in the before, new's in the after
+    if a.get('expectInDetail') != b.get('expectInDetail') or a.get('otherInDetail') != 0 or a.get('otherLangsInDetail') != b.get('otherLangsInDetail'):
+        f.append(f"detail counts before {b.get('expectInDetail')}/{b.get('otherInDetail')}/{b.get('otherLangsInDetail')} after {a.get('expectInDetail')}/{a.get('otherInDetail')}/{a.get('otherLangsInDetail')}")
+    if a.get('tableExpect') != b.get('tableExpect') or a.get('tableOther') != 0:
+        f.append(f"table counts before {b.get('tableExpect')}/{b.get('tableOther')} after {a.get('tableExpect')}/{a.get('tableOther')}")
+    # completion write
+    bcc, acc = b.get('completionClauses'), a.get('completionClauses')
+    if (bcc is None) != (acc is None):
+        f.append(f'completionClauses before {bcc} after {acc}')
+    elif bcc is not None:
+        for X in LANGS:
+            if acc['old'][X] != 0 or acc['new'][X] != bcc['old'][X] + bcc['new'][X]:
+                f.append(f"completion {X}: before old {bcc['old'][X]} new {bcc['new'][X]}, after old {acc['old'][X]} new {acc['new'][X]}")
+    if a.get('completionLang') != b.get('completionLang'):
+        f.append(f"completionLang before {b.get('completionLang')} after {a.get('completionLang')}")
+    if swap(b.get('completionText')) != a.get('completionText'):
+        f.append('completion text is not the before with the clause replaced')
+    for k in ['limiting', 'asserts', 'subresults']:
+        if json.dumps(a.get(k)) != json.dumps(b.get(k)):
+            f.append(f'{k} differ: before {json.dumps(b.get(k))[:300]} after {json.dumps(a.get(k))[:300]}')
+    # probe lines
+    seg = f'{cid}-{L}-{view}'
+    pb, pa = bp.get((seg, mode), []), ap.get((seg, mode), [])
+    if len(pb) != 1 or len(pa) != 1:
+        f.append(f'probe lines before {len(pb)} after {len(pa)}')
+    place_counts = {}
+    if pb and pa:
+        jb, ja = pb[0], pa[0]
+        for k in ['heavyPresent', 'heading', 'cardWhere', 'detailIsTable', 'card', 'lang']:
+            if jb.get(k) != ja.get(k):
+                f.append(f'probe {k} before {jb.get(k)!r} after {ja.get(k)!r}')
+        if swap(jb.get('detail')) != ja.get('detail'):
+            f.append('probe detail is not the before with the clause replaced')
+        for P in PLACES:
+            cb, ca = jb.get(P), ja.get(P)
+            place_counts[P] = {'before': cb, 'after': ca}
+            if cb is None or ca is None:
+                if cb != ca:
+                    f.append(f'{P} before {cb} after {ca}')
+                continue
+            for X in LANGS:
+                if ca['old'][X] != 0 or ca['new'][X] != cb['old'][X] + cb['new'][X]:
+                    f.append(f"{P} {X}: before old {cb['old'][X]} new {cb['new'][X]}, after old {ca['old'][X]} new {ca['new'][X]}")
+                if X != L and (cb['old'][X] or cb['new'][X] or ca['old'][X] or ca['new'][X]):
+                    f.append(f'{P}: a clause in {X}, not the cell language {L}')
+                if cb['new'][X]:
+                    notes.append(f'{name}: {P} held the new {X} words {cb["new"][X]}x in the before (another message)')
+        # the expectation spelled out
+        for P, short in [('statusClauses', 'status'), ('tableClauses', 'table'), ('detailClauses', 'detail'), ('cardClauses', 'card'), ('bodyClauses', 'body')]:
+            stats[f'{short}-new-{cid}-{ja[P]["new"][L] if ja.get(P) else None}'] += 1
+        stats[f'present-{cid}-{ja.get("heavyPresent")}'] += 1
+    if L == 'ms-MY':
+        csb, csa = cut_short('before-1', b), cut_short('after-1', a)
+        stats[f'cutShort-ms-MY-before-{csb}-after-{csa}'] += 1
+    geom = {k: {'before': b.get(k), 'after': a.get(k)} for k in GEOM}
+    gdiff = {k: v for k, v in geom.items() if v['before'] != v['after']}
+    if pb and pa:
+        for r in ['warnBox', 'item', 'heading', 'detailP']:
+            rb, ra = (pb[0].get('rects') or {}).get(r), (pa[0].get('rects') or {}).get(r)
+            if rb and ra and (rb.get('h') != ra.get('h') or rb.get('w') != ra.get('w')):
+                gdiff[f'rect.{r}'] = {'before': [rb.get('w'), rb.get('h')], 'after': [ra.get('w'), ra.get('h')]}
+    if gdiff:
+        stats[f'geomDiff-{cid}-{L}'] += 1
+    findings.extend(f'{name}: {x}' for x in f)
+    rows.append({'cell': name, 'findings': f, 'geometry': geom, 'geometryDiff': gdiff, 'places': place_counts})
+
+summary = {
+    'before': {'walk': bs['walk'], 'expect': bs['expect'], 'cells': len(bc)},
+    'after': {'walk': as_['walk'], 'expect': as_['expect'], 'cells': len(ac)},
+    'findings': findings, 'notes': notes, 'stats': dict(sorted(stats.items())), 'cells': rows,
+}
+json.dump(summary, open(OUT_JSON, 'w'), ensure_ascii=False, indent=1)
+with open(OUT_TXT, 'w') as o:
+    o.write(f"before {len(bc)} cells, after {len(ac)} cells; findings {len(findings)}; notes {len(notes)}\n")
+    for x in findings:
+        o.write(f'FINDING {x}\n')
+    for x in notes:
+        o.write(f'NOTE {x}\n')
+    for k, v in sorted(stats.items()):
+        o.write(f'{k}: {v}\n')
+    o.write('geometry differences (cell: field before -> after)\n')
+    for r in rows:
+        for k, v in r['geometryDiff'].items():
+            o.write(f"  {r['cell']}: {k} {v['before']} -> {v['after']}\n")
+print(open(OUT_TXT).read()[:6000])

@@ -1,0 +1,14 @@
+**Remaining musts: none.** The repaired 3.1.5 row retains the textual assessment, removes “holds”, and explicitly records reading-level validation as a human-check limitation. Chinese and Malay remain “not shown”, linked to VH-105.2, as specification §9.3 requires. This fits §§6 and 8: neither section converts missing human evidence into a pass.
+
+**Remaining shoulds: none.** The 34 before-load samples have middle values 5.92 and 5.99: median **5.955**, correctly rounded to **5.96**. The settled load judgement is unaffected.
+
+Verification:
+
+- The table comparison produces exactly `36c36` and `118c118`, with no other changes.
+- The records folder contains 50 files; all 49 files listed in `sources.txt` match their SHA-1s.
+- Status remains 12 lines, with ten tracked files changed. The nine source files reproduce the recorded diff fingerprint `afcc5b4a56f81580`. The remaining CSV changes only the intended warning row; the permitted evidence supplies no independent pre-check CSV fingerprint, so its byte-for-byte identity rests on your unchanged-diff statement.
+- `node tools/check.mjs` passes with zero failures and zero warnings.
+
+Applied WCAG AAA coverage and specification §9.3’s human-evidence limitation rule. No files changed.
+
+Verdict: Commit

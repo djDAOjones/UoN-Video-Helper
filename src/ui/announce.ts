@@ -38,7 +38,7 @@ export function lossesSpoken(losses: readonly Loss[]): string {
  * are none.
  *
  * Heavy limiting's detail is said whole after the titles (V-52, VH-208): it
- * asks for the video to be played before it is saved, and a save takes the
+ * asks for the video to be played before it is used, and a save takes the
  * player away (VH-192), so it is advice for now, not later. Chosen by its
  * code, never its words; every other warning stays its title alone.
  */
