@@ -1,0 +1,47 @@
+Claude's verdict on #5's repair and Codex astra's second follow-up, compared by VH-214 #6, verbatim. Codex astra ran with codex exec -m gpt-6-astra -s read-only in the side worktree (branch side/vh214, base 5893d9d), blind to Claude's verdict, which was saved before its answer was read. Kept as .md.txt: it names paths outside the repository.
+
+# VH-214 — Claude's verdict on #5's repair and Codex astra's second follow-up, compared (VH-214 #6)
+
+- **Saved:**
+  - Claude's verdict is the "VH-214 #6's update for #5's repair" section of `vh214-claude-verdict.md`, saved at 2026-10-28T10:42:44Z. A line-number correction followed at 10:42:58Z, also before Codex's answer was read.
+  - Codex's second follow-up started at 10:41:59Z (PID 86932) from `vh214-codex-followup2-brief.md`. Its brief held no verdict or compare, and it was told not to read the notes folder. Its answer, `vh214-codex-followup2.md`, was saved at 10:49:20Z and read after.
+  - Kept unchanged: #2's blind check and compare (`vh214-codex-blind*.md`, `vh214-codex-compare.md`) and #4's follow-up and compare (`vh214-codex-followup*.md`, `vh214-codex-followup-compare.md`).
+- **Verdicts:** Codex says **"Do not close"**, with three musts and one should. Claude said "close, subject to the gate and the close check".
+- **Claude now agrees with Codex on reading the code.** The item stays open for a repair, still inside the approval: S-140's and S-140n's bound and outcomes, in the same block.
+- **None of the three musts changes a recorded verdict.** The after's 12 groups each showed the block about 0.1 s after the choosing, against a 330 s deadline, with a log of a few entries. So the item's finding stands: a walk hang, no product diff. The musts concern the walker's verdicts at the edges, which VH-203's after-run relies on.
+
+## Agreed
+- **Follow-up must 1 is repaired.** The phase-result checks are strict, the normal capture is bounded, and errors at or after the deadline go to the expiry (`:1631`).
+- **Must 3's 26 cases** all passed before the after.
+- **The load:** the real set's 8.15 does not weaken any branch the proof showed.
+- **Hashes and cells:** the hashes and the refusal cells agree.
+- **Scope and caveats:** the work stays inside the approval. The "Not bounded" caveat is adequate, and nothing in the candidate would stop the gate or the checker.
+
+## Codex only (Claude agrees on reading the code; all to be repaired)
+1. **Must: the recorder's 200-entry cap** (`scenarios.mjs:1568`, `:1599`).
+   - **The fault:** once the log is full it stops silently. A later change, such as a fall back to null, is lost, and `qtEvidence` judges stale evidence. Codex reproduced this in extracted code: a stale "finished" made the expiry the walk's.
+   - **Claude's reading:** `QT_OUTCOME` changes once or twice in a real run. Claude's verdict called a full log "visible", but the judgement never checks for it.
+   - **Repair:** flag an overflow, and treat the evidence around the deadline as unusable: cannot-determine. Prove it with an accepted final state and with a null one.
+2. **Must: observations, not transitions** (`:1568`, `:1648`; the table's §2 recorder lines).
+   - **The fault:** each log entry is dated when the change is seen, not when it happened. A change just before the deadline, first seen after it, is judged late and the page's.
+   - **Claude's reading:** the observer dates a DOM change within its own task. The 50 ms tick, and a busy main thread, leave a gap that is not recorded.
+   - **Repair:** record the previous observation's time with each entry, so the change lies between the two times. A change whose span crosses the deadline is ambiguous: cannot-determine, not the page's. Qualify the table's "each change" and "came … after".
+3. **Must: the snapshot reads are not strict** (`:1585`, `:1597`).
+   - **The fault:** `qtSnap` and `qtEvidence` call `byDeadline(…, false)`, so an answer that arrives after `snapMs` is still accepted. That contradicts the declared "a snapshot is read within 10 s".
+   - **Claude's reading:** the evidence inside the log is dated by the page, so lateness changes no verdict today. The declared bound should still hold.
+   - **Repair:** enforce strict expiry in both helpers. Add proofs for:
+     - a late successful answer;
+     - an already-expired, resolved promise;
+     - the recorder cases above;
+     - an error before the deadline in the read and in the job, which should be `walkError`, the walk's. Codex says that branch is unproved.
+
+   Then prove again, and walk a new after: the walker's lines change, so S-140 and S-140n are re-walked, 12 groups.
+4. **Should:** the table's "nothing handed to the row" (`:75`) needs correcting. The "nothing kept" case injects observations; Create withheld is the case that goes through the setup.
+
+## Claude only
+- None new.
+
+## Disagreed
+- None: the code settles every point, so there is no question for the owner.
+- **For the orchestrator:** this is the third round of musts. Each round has been narrower and inside the approval, and none has touched a recorded cell.
+- **Who repairs:** VH-214 #6 or its successor, from the next step: repair, prove again, walk the after, then Codex's third follow-up.

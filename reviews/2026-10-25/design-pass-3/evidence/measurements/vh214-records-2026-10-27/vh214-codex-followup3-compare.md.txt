@@ -1,0 +1,52 @@
+Claude's verdict on #7's repair and Codex astra's third follow-up, compared by VH-214 #8, verbatim. Codex astra ran with codex exec -m gpt-6-astra -s read-only in the side worktree (branch side/vh214, base 5893d9d), blind to Claude's verdict, which was saved before its answer was read. Kept as .md.txt: it names paths outside the repository.
+
+# VH-214 — Claude's verdict on #7's repair and Codex astra's third follow-up, compared (VH-214 #8)
+
+- **Saved:**
+  - Codex's third follow-up started at 2026-10-28T12:38:33Z (PID 65259) from `vh214-codex-followup3-brief.md`. Its brief held no verdict or compare, and it was told not to read the notes folder.
+  - Claude's verdict is the "VH-214 #8's update for #7's repair" section of `vh214-claude-verdict.md`, saved at 12:39:11Z, while Codex ran.
+  - Codex's answer, `vh214-codex-followup3.md`, was saved at 12:46:12Z (the process exited by 12:46:16Z). Claude read it at 12:47:31Z, after the verdict was saved.
+  - Kept unchanged: #2's blind check and compare, #4's follow-up and compare, and #6's second follow-up and compare.
+- **Verdicts:** Codex says **"Do not close"**, with two musts and two shoulds. Claude said "close, subject to the gate, the checker and the close check".
+- **Claude now agrees with Codex on all four points, on reading the code and the proof.** The item stays open for a repair, still inside the approval: how S-140's and S-140n's outcome is judged, in the same block.
+- **No recorded cell changes.** The after's 12 groups each reached "refused before Create" within the capture, about 0.1 s after the choosing. No deadline was reached, so no snapshot at expiry judged them. The finding stands: a walk hang, no product diff.
+
+## Agreed
+- The overflow (shown and hidden), the ambiguous rise to an accepted outcome and the genuinely late observation are repaired and work.
+- Strict snapshot rejection is repaired.
+- Errors route correctly before, exactly at and after both deadlines. Codex checked this in memory; the saved proof lacks some of those boundaries (must 2).
+- Load: no load-only re-run is owed for the proof's job set (8.37) or the after's last group (14.23).
+- Scope stays inside the approval. All 36 groups, 144 mode readings and the hashes reconcile.
+- "Not bounded" adequately qualifies the unbounded later reads, and nothing in the candidate would stop the gate or the checker.
+
+## Codex only (Claude agrees on reading the code; all to be repaired)
+1. **Must: late delivery is named the page's** (`scenarios.mjs:1663`; `vh214-proof.mjs.txt:285`, `:310`; the table's rows 114–115).
+   - **The fault:** the two strict-snapshot cases hold the walker's own process 400 ms after the page answered in 0–1 ms (`:278`, "the walk's process held past the snapshot's bound"). Yet the row reads "fail, the page": `!at.answered` names the page. The strict rejection cannot tell a page that never answers from a walker that took the answer late. The proof's own expectation encodes the misattribution.
+   - **Claude's reading:** `byDeadline` (`:1581`) can tell them apart. When the race returns a value and only the after-check (`Date.now() >= d.at`) throws, the answer arrived but late, and `qtEvidence`'s answer carries the page's own time `t`.
+   - **Repair:** keep strict rejection, and carry the late value on the expiry. In `qtEvidence` (and `qtSnap`, for the record), an answer the page dated inside the snapshot's bound but delivered after it is late delivery: no usable deadline evidence. `qtJudged` then reads cannot-determine, the walk. No answer at all, or one the page dated after the bound, stays "did not answer", the page's: the never-answering main-thread cases (real 10 and 14, job 10) must still read "fail, the page".
+   - Correct the two cases' expectations and the table's two rows, and add a case where the page itself answers late. Then repeat the proof before a replacement after.
+2. **Must: the overflow, ambiguity and error boundaries** (`scenarios.mjs:1610`; `vh214-proof.mjs.txt:238`).
+   - **The gap:** both overflow cases drop their first change wholly before expiry. Add proofs for:
+     - a dropped span crossing the deadline (`prev` before it, `t` at or after it): unusable;
+     - an overflow with `usable: true` (the first drop after the deadline), judged from the kept log;
+     - an ambiguous change to null;
+     - errors exactly at the deadline, and job errors after it.
+   - **Claude's reading:** Claude's verdict named the usable overflow and the fall to null as undriven, rank 2. They are cheap to drive beside must 1's re-proof, so they are owed with it.
+3. **Should: the table's load lines** (`vh214-quicktime-2026-10-27.md:24`, `:34`, `:35`).
+   - Line 24's "and the after with none" is stale: the after's last group started at 14.23.
+   - "Load can only delay the walk's side" is wrong, since the page runs on the same machine, and "so the load slowed nothing that shows" infers a cause.
+   - **Repair:** keep the conclusion, that no re-run is owed, on Codex's ground: the recorded branches occurred, and the successful outcomes have ample margin to their deadlines. The same wording goes in the next Claude section.
+4. **Should: the proof's header** (`vh214-proof.mjs.txt:6`) still says every case runs the setup and no observation is handed to the row. Correct it as the Method line was: "nothing kept" hands the row its observations.
+
+## Claude only
+- None beyond Codex's: Claude's two rank-2 branches are inside Codex's must 2.
+
+## Disagreed
+- None: the code and the proof settle every point, so there is no question for the owner.
+- **For the orchestrator:** this is the fourth round of musts. Each has been narrower and inside the approval, and none has touched a recorded cell.
+- **What the repair takes:**
+  - in `scenarios.mjs`'s block only, `byDeadline`, `qtSnap`, `qtEvidence` and `qtJudged`, with the block's comment;
+  - the proof's cases and header;
+  - the proof again, then a new after, walked: the walker's lines change, so S-140 and S-140n are re-walked, 12 groups, in the before's power mode;
+  - the table: section 2, the proof table, the load lines and section 3;
+  - Codex's fourth follow-up, `vh214-codex-followup4-*`.

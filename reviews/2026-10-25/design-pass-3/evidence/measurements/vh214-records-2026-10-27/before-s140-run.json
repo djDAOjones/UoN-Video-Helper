@@ -1,0 +1,255 @@
+{
+ "label": "before-s140",
+ "source": "5893d9d",
+ "started": "2026-10-27T22:34:16.132Z",
+ "appUrl": "http://127.0.0.1:5181/",
+ "cdpPort": "9251",
+ "chrome": "Chrome/156.0.8078.74",
+ "node": "v24.21.0",
+ "walker": "/private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/a143c0e1-fb4f-478f-bb02-47baaa7b5a8d/scratchpad/vh214/base/reviews/2026-10-25/design-pass-3/evidence/measurements/walker",
+ "walkerSha": "50ca03e0540b29a3",
+ "appSrc": "/Users/joe/UoN-Video-Helper-side/vh214/src",
+ "appSrcSha": "9c47759f40f4020b",
+ "files": {
+  "UoN Closing Logo Fade Blue 2025.mov": {
+   "sha256_16": "c84e677ebdadc468",
+   "bytes": 78894855
+  },
+  "qtrle-5s.mov": {
+   "sha256_16": "91cf5144e8d2aa68",
+   "bytes": 35521170
+  }
+ },
+ "cells": [
+  "S-140",
+  "S-140n"
+ ],
+ "langs": [
+  "en-GB",
+  "zh-Hans",
+  "ms-MY"
+ ],
+ "views": [
+  "w1280",
+  "w320"
+ ],
+ "modes": [
+  "light",
+  "dark",
+  "forced-light",
+  "forced-dark"
+ ],
+ "replayBoundMs": 720000,
+ "argv": [
+  "--cells",
+  "S-140,S-140n"
+ ],
+ "power": [
+  {
+   "t": "2026-10-27T22:34:16.257Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 13.1,
+   "load": [
+    13.1,
+    11.83,
+    9.44
+   ]
+  },
+  {
+   "cell": "S-140",
+   "lang": "en-GB",
+   "view": "w1280",
+   "t": "2026-10-27T22:34:16.284Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 13.1,
+   "load": [
+    13.1,
+    11.83,
+    9.44
+   ]
+  },
+  {
+   "cell": "S-140",
+   "lang": "en-GB",
+   "view": "w320",
+   "t": "2026-10-27T22:34:21.182Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 12.85,
+   "load": [
+    12.85,
+    11.79,
+    9.44
+   ]
+  },
+  {
+   "cell": "S-140",
+   "lang": "zh-Hans",
+   "view": "w1280",
+   "t": "2026-10-27T22:34:26.011Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 12.3,
+   "load": [
+    12.3,
+    11.7,
+    9.42
+   ]
+  },
+  {
+   "cell": "S-140",
+   "lang": "zh-Hans",
+   "view": "w320",
+   "t": "2026-10-27T22:34:31.279Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 11.64,
+   "load": [
+    11.64,
+    11.57,
+    9.39
+   ]
+  },
+  {
+   "cell": "S-140",
+   "lang": "ms-MY",
+   "view": "w1280",
+   "t": "2026-10-27T22:34:36.557Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 10.95,
+   "load": [
+    10.95,
+    11.43,
+    9.35
+   ]
+  },
+  {
+   "cell": "S-140",
+   "lang": "ms-MY",
+   "view": "w320",
+   "t": "2026-10-27T22:34:41.835Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 10.23,
+   "load": [
+    10.23,
+    11.27,
+    9.3
+   ]
+  },
+  {
+   "cell": "S-140n",
+   "lang": "en-GB",
+   "view": "w1280",
+   "t": "2026-10-27T22:34:47.095Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 9.65,
+   "load": [
+    9.65,
+    11.13,
+    9.27
+   ]
+  },
+  {
+   "cell": "S-140n",
+   "lang": "en-GB",
+   "view": "w320",
+   "t": "2026-10-27T22:34:51.931Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 9.28,
+   "load": [
+    9.28,
+    11.03,
+    9.24
+   ]
+  },
+  {
+   "cell": "S-140n",
+   "lang": "zh-Hans",
+   "view": "w1280",
+   "t": "2026-10-27T22:34:56.775Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 9.1,
+   "load": [
+    9.1,
+    10.96,
+    9.23
+   ]
+  },
+  {
+   "cell": "S-140n",
+   "lang": "zh-Hans",
+   "view": "w320",
+   "t": "2026-10-27T22:35:02.027Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 8.61,
+   "load": [
+    8.61,
+    10.83,
+    9.19
+   ]
+  },
+  {
+   "cell": "S-140n",
+   "lang": "ms-MY",
+   "view": "w1280",
+   "t": "2026-10-27T22:35:07.323Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 8.24,
+   "load": [
+    8.24,
+    10.72,
+    9.16
+   ]
+  },
+  {
+   "cell": "S-140n",
+   "lang": "ms-MY",
+   "view": "w320",
+   "t": "2026-10-27T22:35:12.600Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 8.7,
+   "load": [
+    8.7,
+    10.77,
+    9.19
+   ]
+  },
+  {
+   "t": "2026-10-27T22:35:17.859Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 9.52,
+   "load": [
+    9.52,
+    10.91,
+    9.25
+   ]
+  }
+ ],
+ "flags": [
+  "load 13.1 at the start (above 8)",
+  "load 13.1 before S-140 en-GB w1280",
+  "load 12.85 before S-140 en-GB w320",
+  "load 12.3 before S-140 zh-Hans w1280",
+  "load 11.64 before S-140 zh-Hans w320",
+  "load 10.95 before S-140 ms-MY w1280",
+  "load 10.23 before S-140 ms-MY w320",
+  "load 9.65 before S-140n en-GB w1280",
+  "load 9.28 before S-140n en-GB w320",
+  "load 9.1 before S-140n zh-Hans w1280",
+  "load 8.61 before S-140n zh-Hans w320",
+  "load 8.24 before S-140n ms-MY w1280",
+  "load 8.7 before S-140n ms-MY w320"
+ ],
+ "ended": "2026-10-27T22:35:17.859Z"
+}

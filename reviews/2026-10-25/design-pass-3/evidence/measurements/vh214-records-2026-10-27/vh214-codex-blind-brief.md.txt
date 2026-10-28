@@ -1,0 +1,16 @@
+The brief Codex astra was given for its blind check of VH-214's candidate (VH-214 #2, started 2026-10-27T22:48:51Z), verbatim. Codex astra ran with codex exec -m gpt-6-astra -s read-only in the side worktree (branch side/vh214, base 5893d9d), blind to Claude's verdict, which was saved before its answer was read. Kept as .md.txt: it names paths outside the repository.
+
+You are Codex astra, giving a blind, independent judgement, read-only. Do not edit anything. Read only inside your working directory (the git worktree, branch side/vh214, base 5893d9d). Do not read anything else under /Users/joe/UoN-Video-Helper-side/ or any notes folder: another reviewer's verdict is kept there, and this check must stay blind to it.
+
+The item: `project/items/VH-214.md` — the QuickTime Animation file VH-193's corpus walk left standing for ten minutes: the stall reproduced or ruled out, repairing only what reproduces. Its acceptance criteria are your contract. The owner approved, for this item, only: S-140's and S-140n's bound and three accepted outcomes (refused before Create, finished, failed with recovery), declared and proved before the after; a product repair only for what reproduces, in existing words. Any other walker change is out of scope.
+
+The candidate: `git diff 5893d9d` (one walker file, `reviews/2026-10-25/design-pass-3/evidence/measurements/walker/scenarios.mjs`; no `src/` change), plus the untracked evidence: the table `reviews/2026-10-25/design-pass-3/evidence/measurements/vh214-quicktime-2026-10-27.md` and its records `…/measurements/vh214-records-2026-10-27/` (JSON records; the probe, proof and summariser scripts and the logs as `.txt`). The original asset lives only in the owner's checkout and is not in your directory; its hash and size are in the records.
+
+Judge, from the code and the records:
+1. Is a page hang ruled out, and is the walk hang shown with its cause? Is the evidence enough for "no product diff"?
+2. Is the walker change correct: the bounds, the three accepted outcomes (`QT_OUTCOME`), how a wait at its bound is told apart (the page's vs the walk's), and does the proof (`proof-real.json`, `proof-job.json`) really prove each branch before the after? Any branch untested or mis-judged?
+3. Does the work stay inside the approval (only S-140's and S-140n's bound and outcomes)?
+4. Does it meet VH-203's stage rule as the item states it (cells, before and after, WCAG 2.4.3, 3.3.1, 4.1.3, tokens, documents)? Anything missing?
+5. Anything in the table that the records don't support?
+
+Answer in under 300 words. Begin with one verdict line: "Close", "Close after the musts below" or "Do not close". Then numbered points, each rank 1 (must) or rank 2 (should), naming the file and line and a concrete fix.

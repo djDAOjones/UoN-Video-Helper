@@ -1,0 +1,490 @@
+[
+ {
+  "key": "replay-193__en-GB__w1280",
+  "cell": "replay-193",
+  "scenario": null,
+  "what": "heavy-193.mjs bite routine",
+  "file": "UoN Closing Logo Fade Blue 2025.mov",
+  "lang": "en-GB",
+  "view": "w1280",
+  "modesRead": [
+   "light",
+   "dark",
+   "forced-light",
+   "forced-dark"
+  ],
+  "powerAtStart": {
+   "ac": true,
+   "load": [
+    5.69,
+    10.42,
+    10.3
+   ],
+   "powermode": "powermode            2"
+  },
+  "steps": [
+   {
+    "what": "setViewport w1280",
+    "at": 115,
+    "ms": 354
+   },
+   {
+    "what": "setMode light",
+    "at": 469,
+    "ms": 353
+   },
+   {
+    "what": "fresh en-GB",
+    "at": 822,
+    "ms": 609
+   },
+   {
+    "what": "setFiles",
+    "at": 1431,
+    "ms": 8
+   },
+   {
+    "what": "waitSettled (900 s)",
+    "at": 1439,
+    "ms": 703
+   },
+   {
+    "what": "a verdict (900 s)",
+    "at": 2142,
+    "value": "error",
+    "ms": 1
+   },
+   {
+    "what": "canCreate",
+    "at": 2143,
+    "value": true,
+    "ms": 0
+   },
+   {
+    "what": "create",
+    "at": 2143,
+    "ms": 127
+   },
+   {
+    "what": "\"chain planned\" or the job ended (1800 s)",
+    "at": 2270
+   }
+  ],
+  "replayError": "bound: the replay did not return in 720 s",
+  "atEnd": {
+   "media": {
+    "dark": false,
+    "forced": false
+   },
+   "page": {
+    "lang": "en-GB",
+    "vw": 1280,
+    "hscroll": false,
+    "scrollWidth": 1280
+   },
+   "errors": [],
+   "verdict": null,
+   "block": {
+    "kind": "error",
+    "heading": "This cannot run here",
+    "text": "This cannot run hereThis browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead.",
+    "reasonKeys": [],
+    "live": null,
+    "overflow": []
+   },
+   "report": {
+    "kind": null,
+    "text": "Video propertiesDuration5 secondsVideo formatUnknownThis browser cannot read this video format.File size78.9 MBResolution3840 × 2160Frame rate25 frames a secondAudioNo audio track foundLevelling needs audio. The rest of the job still runs.CaptionsNone found in this fileFile typeQuickTime File Format",
+    "reasonKeys": []
+   },
+   "createOffered": false,
+   "ackOffered": false,
+   "res": "none",
+   "finished": false,
+   "running": false,
+   "checking": false,
+   "result": {
+    "title": "",
+    "text": ""
+   },
+   "progress": "",
+   "focus": "body",
+   "fileInput": {
+    "disabled": false,
+    "chosen": true
+   },
+   "steps": [
+    {
+     "id": "step-choose",
+     "shown": true
+    },
+    {
+     "id": "step-trim",
+     "shown": false
+    },
+    {
+     "id": "step-title",
+     "shown": false
+    },
+    {
+     "id": "step-closing",
+     "shown": false
+    },
+    {
+     "id": "step-preset",
+     "shown": false
+    },
+    {
+     "id": "step-create",
+     "shown": false
+    }
+   ],
+   "status": {
+    "announced": "",
+    "shown": "",
+    "spokenOnly": ""
+   },
+   "sourceStatus": {
+    "announced": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead.",
+    "shown": "",
+    "spokenOnly": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead."
+   },
+   "liveRegions": [
+    {
+     "region": "div.promise-help",
+     "text": "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperabl"
+    },
+    {
+     "region": "#source-status",
+     "text": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing "
+    },
+    {
+     "region": "div",
+     "text": "The last second of video — the closing graphics cover it as they build. A held last frame — your last frame is held for one extra second. The closing graphics p"
+    },
+    {
+     "region": "#page-announcer",
+     "text": "A preview is not available for this file. You can still set the times."
+    }
+   ],
+   "marks": [
+    {
+     "what": "chosen",
+     "t": 1793133306676
+    },
+    {
+     "what": "block shown",
+     "t": 1793133306773,
+     "kind": "error"
+    }
+   ]
+  },
+  "seen193": {
+   "workers": 1,
+   "planned": null
+  },
+  "status": "ok",
+  "ms": 720122,
+  "targetsSeen": [
+   {
+    "t": 920,
+    "type": "worker",
+    "url": "job.worker.ts?worker_file&type=module",
+    "waitingForDebugger": true,
+    "sessionId": "7A357AC6A444E77FF95A0C7046E537A9"
+   }
+  ],
+  "workerLogs": [
+   {
+    "t": 998,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (worker)"
+    ]
+   },
+   {
+    "t": 999,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[worker]",
+     "job worker ready"
+    ]
+   },
+   {
+    "t": 999,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[worker]",
+     "ping received"
+    ]
+   },
+   {
+    "t": 1445,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "Unsupported video codec (sample entry type 'rle ')."
+    ]
+   },
+   {
+    "t": 1449,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "QuickTime File Format",
+      "durationSeconds": 5,
+      "videoCodec": null,
+      "resolution": "3840x2160",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": null,
+      "channels": null,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 0
+     }
+    ]
+   },
+   {
+    "t": 1452,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "Unsupported video codec (sample entry type 'rle ')."
+    ]
+   },
+   {
+    "t": 1455,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "QuickTime File Format",
+      "durationSeconds": 5,
+      "videoCodec": null,
+      "resolution": "3840x2160",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": null,
+      "channels": null,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 0
+     }
+    ]
+   },
+   {
+    "t": 1456,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "device capabilities inspected",
+     {
+      "hasWebCodecs": true,
+      "hasOpfs": true,
+      "deviceClass": "desktop",
+      "hardwareConcurrency": 10,
+      "quotaBytes": 10737418428,
+      "availableBytes": 10737418240
+     }
+    ]
+   },
+   {
+    "t": 1519,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.640033",
+      "width": 3840,
+      "height": 2160,
+      "bitrate": 24883200
+     }
+    ]
+   },
+   {
+    "t": 1533,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "Unsupported video codec (sample entry type 'rle ')."
+    ]
+   }
+  ],
+  "pageLogs": [
+   {
+    "t": 852,
+    "type": "debug",
+    "args": [
+     "[vite] connecting..."
+    ]
+   },
+   {
+    "t": 860,
+    "type": "debug",
+    "args": [
+     "[vite] connected."
+    ]
+   },
+   {
+    "t": 874,
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (main)"
+    ]
+   },
+   {
+    "t": 899,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "shell mounted"
+    ]
+   },
+   {
+    "t": 875,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "UoN Video Helper starting",
+     {
+      "appVersion": "v0.2.0",
+      "buildId": "v0.2.0+20261027.5893d9d"
+     }
+    ]
+   },
+   {
+    "t": 875,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "brand assets",
+     {
+      "logo": true,
+      "headingFont": true
+     }
+    ]
+   },
+   {
+    "t": 896,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "device class",
+     {
+      "deviceClass": "desktop"
+     }
+    ]
+   },
+   {
+    "t": 900,
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 2,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 900,
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 1,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 915,
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1920,
+      "height": 1080,
+      "bitrate": 6220800
+     }
+    ]
+   },
+   {
+    "t": 999,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "worker round-trip complete",
+     {
+      "roundTripMs": 103,
+      "workerBootMs": 1
+     }
+    ]
+   },
+   {
+    "t": 1438,
+    "type": "info",
+    "args": [
+     "[ui]",
+     "file chosen",
+     {
+      "sizeBytes": 78894855,
+      "type": "video/quicktime"
+     }
+    ]
+   },
+   {
+    "t": 1534,
+    "type": "info",
+    "args": [
+     "[ui]",
+     "preflight verdict",
+     {
+      "outcome": "block",
+      "reasons": [
+       "no-source-decode",
+       "estimate-unavailable"
+      ],
+      "presetId": "best",
+      "contentClass": "unknown",
+      "bitrateBasis": "anchor-ceiling",
+      "width": 3840,
+      "height": 2160,
+      "frameRate": 25,
+      "projectedOutputBytes": 47589120,
+      "probeMeasured": false,
+      "videoFramesPerSecond": 0,
+      "estimatedSeconds": null
+     }
+    ]
+   }
+  ],
+  "chosenToOutcomeMs": 97
+ }
+]

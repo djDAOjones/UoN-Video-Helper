@@ -1,0 +1,28 @@
+The brief for Codex astra's follow-up check of VH-214 (VH-214 #4, started 2026-10-28T08:08:04Z), verbatim. Codex astra ran with codex exec -m gpt-6-astra -s read-only in the side worktree (branch side/vh214, base 5893d9d), blind to Claude's verdict, which was saved before its answer was read. Kept as .md.txt: it names paths outside the repository.
+
+You are Codex astra, re-checking repaired points, read-only. Do not edit anything. Read only inside your working directory (the git worktree, branch side/vh214, base 5893d9d). Do not read anything under /Users/joe/UoN-Video-Helper-side/ outside this worktree, or any notes folder: another reviewer's verdict is kept there, and this check must stay independent of it.
+
+The item: `project/items/VH-214.md` (its acceptance criteria are your contract). The owner approved only: S-140's and S-140n's bound and three accepted outcomes (refused before Create, finished, failed with recovery), declared and proved before the after; a product repair only for what reproduces, in existing words. Any other walker change is out of scope.
+
+Your earlier blind check said "Do not close", with these points:
+1. must: `ready()` gave consecutive waits separate 300 s budgets; unanswered CDP evaluations could defeat both bounds; boot's 30 s timeout conflated with the read deadline.
+2. must: classification read the page when the asserts ran, not at the deadline; judge a snapshot kept at expiry.
+3. must: the proof bypassed timeout capture and deadline enforcement; exercise real setup expiry paths, unanswered evaluations and late completion, then repeat the proof before a replacement after.
+4. must: no settled-machine `npm run check` and `node tools/check.mjs` results.
+5. should: focus read only after a programmatic choice; add a chooser-focused transition and Tab, or say so.
+6. should: provenance for "ARGB" and "tmcd" in the table, or drop them.
+
+The repair and its evidence (the candidate is `git diff 5893d9d` plus the untracked files):
+- `reviews/2026-10-25/design-pass-3/evidence/measurements/walker/scenarios.mjs`, S-140 and S-140n only: `QT_BOUND`, `QT_OUTCOME`, `byDeadline`, `qtSnap`, `quickTime`, `qtJudged` (about `:1538–1615`) and the two setups (about `:2451`, `:2462`).
+- The table `reviews/2026-10-25/design-pass-3/evidence/measurements/vh214-quicktime-2026-10-27.md`, rewritten, and its records `…/measurements/vh214-records-2026-10-27/`: the new proof (`vh214-proof.mjs.txt`, `proof-real.json`, `proof-job.json`, `proof-*.log.txt`), a void first run kept as `void-*`, the after (`after-*.json`, `probe-after.log.txt`), the run script and log (`run-3.sh.txt`, `proof-then-after.sh.txt`, `run-3.log.txt`), and `ffprobe-original.txt`. The befores are unchanged from your blind check.
+- Point 4 is not yet done: the gate and the checker run under the walk lock at close, before your separate close check. Say only whether anything in the candidate would stop them.
+
+Known and declared, not to be repaired here: the runner's reads after the setup (the probe's `readModes`, the walker's state check) are unbounded, and bounding them is outside the owner's approval. Say whether that leaves any claim in the table unsupported.
+
+Judge:
+1. Are points 1, 2, 3, 5 and 6 repaired? Name any branch still untested or mis-judged, including races between the inner waits' own timeouts and the deadline.
+2. The load: the owed before ran with every group at 1-minute load 8.24–13.1, the after at 3.81–4.63, both on AC, power mode 2; the first before read the same cells on the same app at 4.15–6.88. The table judges that no low-load re-run of the before is owed. Do you agree? If not, why.
+3. Does everything stay inside the approval?
+4. Anything in the table the records don't support?
+
+Answer in under 300 words. Begin with one verdict line: "Close", "Close after the musts below" or "Do not close". Then numbered points, each rank 1 (must) or rank 2 (should), naming the file and line and a concrete fix.

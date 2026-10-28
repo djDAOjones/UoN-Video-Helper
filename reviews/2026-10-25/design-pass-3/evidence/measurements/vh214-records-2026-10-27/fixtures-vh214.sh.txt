@@ -1,0 +1,20 @@
+#!/bin/zsh
+# VH-214's fixtures, each by the pass's walker's own recipe line, read from
+# its scripts unchanged (nothing from samples/, nothing written there):
+#   N13, qtrle-5s.mov, fixtures-8.sh's one qtrle line, into <fixtures dir>;
+#   short-2s.mp4, fixtures.sh's line with its V, A and ENC, into <proof dir>,
+#   and a copy of it under N13's name, so S-140n's own setup, unchanged, is
+#   driven through a real job in the predicate proof (finished; failed with F11).
+#   zsh fixtures-vh214.sh <walker dir> <fixtures dir> <proof dir>
+set -e
+WALKER="$1"; OUT="$2"; PROOF="$3"; mkdir -p "$OUT" "$PROOF"
+LINE=$(grep -E '^ffmpeg .*-c:v qtrle "\$OUT/qtrle-5s.mov"$' "$WALKER/fixtures-8.sh")
+[[ -n "$LINE" ]] || { echo "N13's recipe not found"; exit 1 }
+echo "$LINE"; eval "$LINE"
+VARS=$(grep -E '^(V|A|ENC)=' "$WALKER/fixtures.sh")
+SHORT=$(grep -E '^ffmpeg .*"\$OUT/short-2s.mp4"$' "$WALKER/fixtures.sh")
+[[ -n "$SHORT" && $(echo "$VARS" | wc -l) -eq 3 ]] || { echo "short-2s's recipe not found"; exit 1 }
+echo "$VARS"; echo "$SHORT"
+( OUT="$PROOF"; eval "$VARS"; eval "$SHORT" )
+cp "$PROOF/short-2s.mp4" "$PROOF/qtrle-5s.mov"
+shasum -a 256 "$OUT/qtrle-5s.mov" "$PROOF/short-2s.mp4" "$PROOF/qtrle-5s.mov"

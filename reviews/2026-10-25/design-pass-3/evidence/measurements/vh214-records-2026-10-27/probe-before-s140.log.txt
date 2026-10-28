@@ -1,0 +1,46 @@
+before-s140: Chrome/156.0.8078.74, walker 50ca03e0540b29a3, app src 9c47759f40f4020b, load 13.1 11.83 9.44
+22:34:17 page loaded http://127.0.0.1:5181/
+22:34:17 file chosen: UoN Closing Logo Fade Blue 2025.mov
+ok S-140__en-GB__w1280 5 s: block error ["preflight.reasons.noSourceDecodeHere"] verdict - create false res none focus body | chosen->outcome 105 ms
+22:34:22 page loaded http://127.0.0.1:5181/
+22:34:22 file chosen: UoN Closing Logo Fade Blue 2025.mov
+ok S-140__en-GB__w320 5 s: block error ["preflight.reasons.noSourceDecodeHere"] verdict - create false res none focus body | chosen->outcome 102 ms
+22:34:27 page loaded http://127.0.0.1:5181/
+22:34:27 click #language-switcher input[value="zh-Hans"]
+22:34:27 file chosen: UoN Closing Logo Fade Blue 2025.mov
+ok S-140__zh-Hans__w1280 5 s: block error ["preflight.reasons.noSourceDecodeHere"] verdict - create false res none focus input | chosen->outcome 106 ms
+22:34:32 page loaded http://127.0.0.1:5181/
+22:34:32 click #language-switcher input[value="zh-Hans"]
+22:34:32 file chosen: UoN Closing Logo Fade Blue 2025.mov
+ok S-140__zh-Hans__w320 5 s: block error ["preflight.reasons.noSourceDecodeHere"] verdict - create false res none focus input | chosen->outcome 101 ms
+22:34:37 page loaded http://127.0.0.1:5181/
+22:34:37 click #language-switcher input[value="ms-MY"]
+22:34:38 file chosen: UoN Closing Logo Fade Blue 2025.mov
+ok S-140__ms-MY__w1280 5 s: block error ["preflight.reasons.noSourceDecodeHere"] verdict - create false res none focus input | chosen->outcome 104 ms
+22:34:42 page loaded http://127.0.0.1:5181/
+22:34:43 click #language-switcher input[value="ms-MY"]
+22:34:43 file chosen: UoN Closing Logo Fade Blue 2025.mov
+ok S-140__ms-MY__w320 5 s: block error ["preflight.reasons.noSourceDecodeHere"] verdict - create false res none focus input | chosen->outcome 99 ms
+22:34:48 page loaded http://127.0.0.1:5181/
+22:34:48 file chosen: qtrle-5s.mov
+ok S-140n__en-GB__w1280 5 s: block error ["preflight.reasons.noSourceDecodeHere"] verdict - create false res none focus body | chosen->outcome 45 ms
+22:34:53 page loaded http://127.0.0.1:5181/
+22:34:53 file chosen: qtrle-5s.mov
+ok S-140n__en-GB__w320 5 s: block error ["preflight.reasons.noSourceDecodeHere"] verdict - create false res none focus body | chosen->outcome 44 ms
+22:34:57 page loaded http://127.0.0.1:5181/
+22:34:57 click #language-switcher input[value="zh-Hans"]
+22:34:58 file chosen: qtrle-5s.mov
+ok S-140n__zh-Hans__w1280 5 s: block error ["preflight.reasons.noSourceDecodeHere"] verdict - create false res none focus input | chosen->outcome 48 ms
+22:35:03 page loaded http://127.0.0.1:5181/
+22:35:03 click #language-switcher input[value="zh-Hans"]
+22:35:03 file chosen: qtrle-5s.mov
+ok S-140n__zh-Hans__w320 5 s: block error ["preflight.reasons.noSourceDecodeHere"] verdict - create false res none focus input | chosen->outcome 57 ms
+22:35:08 page loaded http://127.0.0.1:5181/
+22:35:08 click #language-switcher input[value="ms-MY"]
+22:35:08 file chosen: qtrle-5s.mov
+ok S-140n__ms-MY__w1280 5 s: block error ["preflight.reasons.noSourceDecodeHere"] verdict - create false res none focus input | chosen->outcome 43 ms
+22:35:13 page loaded http://127.0.0.1:5181/
+22:35:13 click #language-switcher input[value="ms-MY"]
+22:35:14 file chosen: qtrle-5s.mov
+ok S-140n__ms-MY__w320 5 s: block error ["preflight.reasons.noSourceDecodeHere"] verdict - create false res none focus input | chosen->outcome 43 ms
+done: /private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/a143c0e1-fb4f-478f-bb02-47baaa7b5a8d/scratchpad/vh214/results

@@ -1,0 +1,8 @@
+ffmpeg -v error -y -f lavfi -i testsrc2=size=1920x1080:rate=25 -t 5 -an -c:v qtrle "$OUT/qtrle-5s.mov"
+V="-f lavfi -i testsrc2=size=1280x720:rate=25"
+A="-f lavfi -i sine=frequency=440:sample_rate=48000"
+ENC="-c:v libx264 -preset veryfast -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart"
+ffmpeg -v error -y ${=V} ${=A} -t 2 -af "volume=-13dB" ${=ENC} "$OUT/short-2s.mp4"
+91cf5144e8d2aa68287d6249f105e9e99361f09ec398657ad912ebc748ebbc7d  /private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/a143c0e1-fb4f-478f-bb02-47baaa7b5a8d/scratchpad/vh214/fix/qtrle-5s.mov
+b51cc942eb4d6f652bafcce95b01bb3f1c30ab4cfdd195a5d17272bf9bb3dd89  /private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/a143c0e1-fb4f-478f-bb02-47baaa7b5a8d/scratchpad/vh214/fix-proof/short-2s.mp4
+b51cc942eb4d6f652bafcce95b01bb3f1c30ab4cfdd195a5d17272bf9bb3dd89  /private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/a143c0e1-fb4f-478f-bb02-47baaa7b5a8d/scratchpad/vh214/fix-proof/qtrle-5s.mov

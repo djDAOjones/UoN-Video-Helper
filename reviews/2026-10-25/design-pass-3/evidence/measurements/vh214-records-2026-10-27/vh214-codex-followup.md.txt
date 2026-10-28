@@ -1,0 +1,11 @@
+Codex astra's answer to its follow-up check of VH-214 (started 2026-10-28T08:08:04Z), verbatim. Codex astra ran with codex exec -m gpt-6-astra -s read-only in the side worktree (branch side/vh214, base 5893d9d), blind to Claude's verdict, which was saved before its answer was read. Kept as .md.txt: it names paths outside the repository.
+
+Do not close
+
+1. **Rank 1 (must) — `walker/scenarios.mjs:1561,1598`; table `:59`.** Points 1–3 remain incomplete. An inner polling timeout can win after event-loop delay: I reproduced a 220 ms deadline yielding an untagged timeout at 260 ms, classified as the walk instead of capturing expiry. Already-expired deadlines also accept resolved promises. Enforce absolute expiry when accepting results and route elapsed inner timeouts through expiry capture; correct the table’s timer-order claim.
+
+2. **Rank 1 (must) — `walker/scenarios.mjs:1568,1592,1596`.** `atExpiry` requests current state after expiry, potentially ten seconds later; its timestamp precedes evaluation. I reproduced a late refusal being attributed to the walk. Normal outcome capture also escapes the phase deadline. Preserve timestamped evidence establishing state by the deadline, reject late observations as deadline evidence, and keep normal capture within the phase bound.
+
+3. **Rank 1 (must) — `vh214-records-2026-10-27/vh214-proof.mjs.txt:89,114,122,159`.** Add setup-driven cases for the two reproduced races, unanswered job evaluations, job expiry with an accepted outcome, outer boot expiry, and unanswered normal outcome capture. The “nothing kept” case skips setup. Repeat the repaired proof before a replacement after. Synchronise `project/decisions.md:25` and `project/trajectory.md:36`: they still describe 300 seconds and 14 cases.
+
+4. **Rank 2 (should) — `vh214-quicktime-2026-10-27.md:24,34,47,57,138`.** Points 5 and 6 are repaired by the focus limitation and ffprobe provenance. I agree no low-load before rerun is owed: unchanged qualitative outcomes have corroborating lower-load evidence; speed is not compared. Scope stays approved. Make `:47` explicitly about setup termination: unbounded subsequent reads prevent guaranteed verdict recording, although recorded cells remain supported. No additional gate/checker blocker is evident from inspection.

@@ -1,0 +1,2069 @@
+{
+ "set": "real",
+ "started": "2026-10-28T13:46:39.309Z",
+ "chrome": "Chrome/156.0.8078.74",
+ "walker": "/Users/joe/UoN-Video-Helper-side/vh214/reviews/2026-10-25/design-pass-3/evidence/measurements/walker",
+ "expectedCases": 26,
+ "cases": [
+  {
+   "name": "refused before Create, N13, en-GB (the declared bound)",
+   "want": {
+    "outcome": "pass",
+    "accepted": "refused before Create",
+    "hang": null,
+    "checks": [
+     "no deadline reached"
+    ]
+   },
+   "got": {
+    "outcome": "pass",
+    "accepted": "refused before Create",
+    "seconds": 1,
+    "created": false,
+    "blocked": true,
+    "outcomeSeen": {
+     "accepted": "refused before Create",
+     "answered": true,
+     "t": 1793195201102
+    },
+    "expired": null,
+    "atExpiry": null,
+    "walkError": null,
+    "later": "refused before Create",
+    "hang": null
+   },
+   "checks": [
+    {
+     "what": "no deadline reached",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "refused before Create, N13, zh-Hans (the declared bound)",
+   "want": {
+    "outcome": "pass",
+    "accepted": "refused before Create",
+    "hang": null,
+    "checks": [
+     "no deadline reached"
+    ]
+   },
+   "got": {
+    "outcome": "pass",
+    "accepted": "refused before Create",
+    "seconds": 2,
+    "created": false,
+    "blocked": true,
+    "outcomeSeen": {
+     "accepted": "refused before Create",
+     "answered": true,
+     "t": 1793195203342
+    },
+    "expired": null,
+    "atExpiry": null,
+    "walkError": null,
+    "later": "refused before Create",
+    "hang": null
+   },
+   "checks": [
+    {
+     "what": "no deadline reached",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "refused before Create, N13, ms-MY (the declared bound)",
+   "want": {
+    "outcome": "pass",
+    "accepted": "refused before Create",
+    "hang": null,
+    "checks": [
+     "no deadline reached"
+    ]
+   },
+   "got": {
+    "outcome": "pass",
+    "accepted": "refused before Create",
+    "seconds": 2,
+    "created": false,
+    "blocked": true,
+    "outcomeSeen": {
+     "accepted": "refused before Create",
+     "answered": true,
+     "t": 1793195205579
+    },
+    "expired": null,
+    "atExpiry": null,
+    "walkError": null,
+    "later": "refused before Create",
+    "hang": null
+   },
+   "checks": [
+    {
+     "what": "no deadline reached",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "refused before Create, the original asset, en-GB (the declared bound)",
+   "want": {
+    "outcome": "pass",
+    "accepted": "refused before Create",
+    "hang": null,
+    "checks": []
+   },
+   "got": {
+    "outcome": "pass",
+    "accepted": "refused before Create",
+    "seconds": 1,
+    "created": false,
+    "blocked": true,
+    "outcomeSeen": {
+     "accepted": "refused before Create",
+     "answered": true,
+     "t": 1793195207381
+    },
+    "expired": null,
+    "atExpiry": null,
+    "walkError": null,
+    "later": "refused before Create",
+    "hang": null
+   },
+   "checks": [],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "the read deadline (380 ms) reached while the page shows the block: the walk's",
+   "want": {
+    "outcome": "cannot-determine",
+    "accepted": "refused before Create",
+    "hang": "the walk",
+    "checks": [
+     "expired in the read"
+    ]
+   },
+   "got": {
+    "outcome": "cannot-determine",
+    "accepted": "refused before Create",
+    "seconds": 1,
+    "created": false,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "read",
+     "ms": 380,
+     "at": 1793195208858,
+     "afterMs": 983,
+     "by": "the deadline"
+    },
+    "atExpiry": {
+     "accepted": "refused before Create",
+     "acceptedAt": 1793195208528,
+     "answered": true,
+     "dated": true,
+     "deadlineAt": 1793195208858,
+     "tRead": 1793195208859,
+     "readAt": 1793195208859,
+     "seenAt": 1793195208859,
+     "nowSeen": "refused before Create",
+     "overflow": null,
+     "ambiguous": null,
+     "late": null,
+     "log": [
+      {
+       "a": null,
+       "t": 1793195208479,
+       "prev": null
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195208528,
+       "prev": 1793195208513
+      }
+     ]
+    },
+    "walkError": null,
+    "later": "refused before Create",
+    "hang": "the walk",
+    "why": "the read deadline reached; the page's own log shows \"refused before Create\" 330 ms before it"
+   },
+   "checks": [
+    {
+     "what": "expired in the read",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 380,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "the read deadline (3 s) reached with the check held by F14: the page's",
+   "want": {
+    "outcome": "fail",
+    "accepted": null,
+    "hang": "the page",
+    "checks": [
+     "expired in the read",
+     "the page answered at expiry with no outcome"
+    ]
+   },
+   "got": {
+    "outcome": "fail",
+    "accepted": null,
+    "seconds": 4,
+    "created": false,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "read",
+     "ms": 3000,
+     "at": 1793195212952,
+     "afterMs": 3607,
+     "by": "the deadline"
+    },
+    "atExpiry": {
+     "accepted": null,
+     "acceptedAt": null,
+     "answered": true,
+     "dated": true,
+     "deadlineAt": 1793195212952,
+     "tRead": 1793195212953,
+     "readAt": 1793195212953,
+     "seenAt": 1793195212953,
+     "nowSeen": null,
+     "overflow": null,
+     "ambiguous": null,
+     "late": null,
+     "log": [
+      {
+       "a": null,
+       "t": 1793195209952,
+       "prev": null
+      }
+     ]
+    },
+    "walkError": null,
+    "later": null,
+    "hang": "the page",
+    "why": "no accepted outcome by the read deadline in the page's own log"
+   },
+   "checks": [
+    {
+     "what": "expired in the read",
+     "ok": true
+    },
+    {
+     "what": "the page answered at expiry with no outcome",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 3000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "the block coming after the read deadline: still the page's",
+   "want": {
+    "outcome": "fail",
+    "accepted": null,
+    "hang": "the page",
+    "checks": [
+     "read later as refused before Create"
+    ]
+   },
+   "got": {
+    "outcome": "fail",
+    "accepted": null,
+    "seconds": 4,
+    "created": false,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "read",
+     "ms": 3000,
+     "at": 1793195212952,
+     "afterMs": 3607,
+     "by": "the deadline"
+    },
+    "atExpiry": {
+     "accepted": null,
+     "acceptedAt": null,
+     "answered": true,
+     "dated": true,
+     "deadlineAt": 1793195212952,
+     "tRead": 1793195212953,
+     "readAt": 1793195212953,
+     "seenAt": 1793195212953,
+     "nowSeen": null,
+     "overflow": null,
+     "ambiguous": null,
+     "late": null,
+     "log": [
+      {
+       "a": null,
+       "t": 1793195209952,
+       "prev": null
+      }
+     ]
+    },
+    "walkError": null,
+    "later": "refused before Create",
+    "hang": "the page",
+    "why": "no accepted outcome by the read deadline in the page's own log; \"refused before Create\" read later"
+   },
+   "checks": [
+    {
+     "what": "read later as refused before Create",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 3000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "the boot's own 30 s timeout, not the bound: the walk's",
+   "want": {
+    "outcome": "cannot-determine",
+    "accepted": null,
+    "hang": "the walk",
+    "checks": [
+     "failed in the boot",
+     "by walk.mjs's boot wait",
+     "no deadline reached"
+    ]
+   },
+   "got": {
+    "outcome": "cannot-determine",
+    "accepted": null,
+    "seconds": 30,
+    "created": false,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": null,
+    "atExpiry": null,
+    "walkError": {
+     "phase": "boot",
+     "error": "timeout waiting for boot"
+    },
+    "later": null,
+    "hang": "the walk",
+    "why": "the walk failed in its boot short of the bound: timeout waiting for boot"
+   },
+   "checks": [
+    {
+     "what": "failed in the boot",
+     "ok": true
+    },
+    {
+     "what": "by walk.mjs's boot wait",
+     "ok": true
+    },
+    {
+     "what": "no deadline reached",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "nothing kept and no deadline reached (no setup ran): no accepted outcome",
+   "want": {
+    "outcome": "fail",
+    "accepted": null,
+    "hang": null,
+    "checks": []
+   },
+   "got": {
+    "outcome": "fail",
+    "accepted": null,
+    "seconds": 0,
+    "created": false,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": null,
+    "atExpiry": null,
+    "walkError": null,
+    "later": null,
+    "hang": null,
+    "why": "no accepted outcome, and no deadline reached"
+   },
+   "checks": [],
+   "bound": null,
+   "ok": true
+  },
+  {
+   "name": "a main thread that never answers, the read deadline 3 s: the page's, ended at the deadline",
+   "want": {
+    "outcome": "fail",
+    "accepted": null,
+    "hang": "the page",
+    "checks": [
+     "expired in the read",
+     "not answered at expiry",
+     "the setup ended within the deadline and the read of it, 1 s to spare",
+     "no answer later"
+    ]
+   },
+   "got": {
+    "outcome": "fail",
+    "accepted": null,
+    "seconds": 6,
+    "created": false,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "read",
+     "ms": 3000,
+     "at": 1793195254103,
+     "afterMs": 3605,
+     "by": "the deadline"
+    },
+    "atExpiry": {
+     "accepted": null,
+     "answered": false,
+     "dated": false,
+     "deadlineAt": 1793195254103,
+     "tRead": 1793195254104,
+     "error": "the snapshot deadline, 2000 ms, reached"
+    },
+    "walkError": null,
+    "later": "no answer",
+    "hang": "the page",
+    "why": "the page did not answer at the read deadline"
+   },
+   "checks": [
+    {
+     "what": "expired in the read",
+     "ok": true
+    },
+    {
+     "what": "not answered at expiry",
+     "ok": true
+    },
+    {
+     "what": "the setup ended within the deadline and the read of it, 1 s to spare",
+     "ok": true
+    },
+    {
+     "what": "no answer later",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 3000,
+    "jobMs": 900000,
+    "snapMs": 2000
+   },
+   "ok": true
+  },
+  {
+   "name": "the inner wait's own timeout winning the race at the read deadline (3 s): the expiry, the page's",
+   "want": {
+    "outcome": "fail",
+    "accepted": null,
+    "hang": "the page",
+    "checks": [
+     "the race driven",
+     "expired in the read",
+     "by the inner wait's own timeout, sent through the expiry",
+     "not the walk's",
+     "the page answered at expiry with no outcome"
+    ]
+   },
+   "got": {
+    "outcome": "fail",
+    "accepted": null,
+    "seconds": 5,
+    "created": false,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "read",
+     "ms": 3000,
+     "at": 1793195270712,
+     "afterMs": 4607,
+     "by": "an error at or after it: timeout waiting for settled"
+    },
+    "atExpiry": {
+     "accepted": null,
+     "acceptedAt": null,
+     "answered": true,
+     "dated": true,
+     "deadlineAt": 1793195270712,
+     "tRead": 1793195271712,
+     "readAt": 1793195271712,
+     "seenAt": 1793195271712,
+     "nowSeen": null,
+     "overflow": null,
+     "ambiguous": null,
+     "late": null,
+     "log": [
+      {
+       "a": null,
+       "t": 1793195267712,
+       "prev": null
+      }
+     ]
+    },
+    "walkError": null,
+    "later": null,
+    "hang": "the page",
+    "why": "no accepted outcome by the read deadline in the page's own log"
+   },
+   "checks": [
+    {
+     "what": "the race driven",
+     "ok": true
+    },
+    {
+     "what": "expired in the read",
+     "ok": true
+    },
+    {
+     "what": "by the inner wait's own timeout, sent through the expiry",
+     "ok": true
+    },
+    {
+     "what": "not the walk's",
+     "ok": true
+    },
+    {
+     "what": "the page answered at expiry with no outcome",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 3000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "an outcome after the read deadline (3 s), seen by the read at expiry: late, the page's",
+   "want": {
+    "outcome": "fail",
+    "accepted": null,
+    "hang": "the page",
+    "checks": [
+     "expired in the read",
+     "the read at expiry saw the block",
+     "kept as late",
+     "nothing accepted by the deadline"
+    ]
+   },
+   "got": {
+    "outcome": "fail",
+    "accepted": null,
+    "seconds": 7,
+    "created": false,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "read",
+     "ms": 3000,
+     "at": 1793195275813,
+     "afterMs": 3605,
+     "by": "the deadline"
+    },
+    "atExpiry": {
+     "accepted": null,
+     "acceptedAt": null,
+     "answered": true,
+     "dated": true,
+     "deadlineAt": 1793195275813,
+     "tRead": 1793195275814,
+     "readAt": 1793195278965,
+     "seenAt": 1793195278965,
+     "nowSeen": "refused before Create",
+     "overflow": null,
+     "ambiguous": null,
+     "late": {
+      "accepted": "refused before Create",
+      "afterMs": 3055
+     },
+     "log": [
+      {
+       "a": null,
+       "t": 1793195272813,
+       "prev": null
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195278868,
+       "prev": 1793195278864
+      }
+     ]
+    },
+    "walkError": null,
+    "later": "refused before Create",
+    "hang": "the page",
+    "why": "no accepted outcome by the read deadline in the page's own log; \"refused before Create\" first seen 3055 ms after it"
+   },
+   "checks": [
+    {
+     "what": "expired in the read",
+     "ok": true
+    },
+    {
+     "what": "the read at expiry saw the block",
+     "ok": true
+    },
+    {
+     "what": "kept as late",
+     "ok": true
+    },
+    {
+     "what": "nothing accepted by the deadline",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 3000,
+    "jobMs": 900000,
+    "snapMs": 20000
+   },
+   "ok": true
+  },
+  {
+   "name": "the boot's own deadline (bootMs 2 s), not the bound: the walk's",
+   "want": {
+    "outcome": "cannot-determine",
+    "accepted": null,
+    "hang": "the walk",
+    "checks": [
+     "failed in the boot",
+     "by the boot's own deadline",
+     "no deadline of the bound reached",
+     "ended near 2 s"
+    ]
+   },
+   "got": {
+    "outcome": "cannot-determine",
+    "accepted": null,
+    "seconds": 2,
+    "created": false,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": null,
+    "atExpiry": null,
+    "walkError": {
+     "phase": "boot",
+     "error": "the boot deadline, 2000 ms, reached"
+    },
+    "later": null,
+    "hang": "the walk",
+    "why": "the walk failed in its boot short of the bound: the boot deadline, 2000 ms, reached"
+   },
+   "checks": [
+    {
+     "what": "failed in the boot",
+     "ok": true
+    },
+    {
+     "what": "by the boot's own deadline",
+     "ok": true
+    },
+    {
+     "what": "no deadline of the bound reached",
+     "ok": true
+    },
+    {
+     "what": "ended near 2 s",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 2000,
+    "readMs": 330000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "the normal capture unanswered, the read deadline 4 s: the page's, ended at the deadline",
+   "want": {
+    "outcome": "fail",
+    "accepted": null,
+    "hang": "the page",
+    "checks": [
+     "the capture was sent",
+     "expired in the read",
+     "no capture kept",
+     "not answered at expiry",
+     "ended within the deadline and the read at expiry, 1 s to spare"
+    ]
+   },
+   "got": {
+    "outcome": "fail",
+    "accepted": null,
+    "seconds": 7,
+    "created": false,
+    "blocked": true,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "read",
+     "ms": 4000,
+     "at": 1793195286540,
+     "afterMs": 4602,
+     "by": "the deadline"
+    },
+    "atExpiry": {
+     "accepted": null,
+     "answered": false,
+     "dated": false,
+     "deadlineAt": 1793195286540,
+     "tRead": 1793195286542,
+     "error": "the snapshot deadline, 2000 ms, reached"
+    },
+    "walkError": null,
+    "later": "no answer",
+    "hang": "the page",
+    "why": "the page did not answer at the read deadline"
+   },
+   "checks": [
+    {
+     "what": "the capture was sent",
+     "ok": true
+    },
+    {
+     "what": "expired in the read",
+     "ok": true
+    },
+    {
+     "what": "no capture kept",
+     "ok": true
+    },
+    {
+     "what": "not answered at expiry",
+     "ok": true
+    },
+    {
+     "what": "ended within the deadline and the read at expiry, 1 s to spare",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 4000,
+    "jobMs": 900000,
+    "snapMs": 2000
+   },
+   "ok": true
+  },
+  {
+   "name": "the recorder's log overflowed before the read deadline (3 s), the block left shown: cannot-determine, the walk's",
+   "want": {
+    "outcome": "cannot-determine",
+    "accepted": null,
+    "hang": "the walk",
+    "checks": [
+     "the 240 flips driven, ended before the deadline",
+     "expired in the read",
+     "the overflow kept as unusable, its first dropped change before the deadline",
+     "the page read at expiry as refused before Create",
+     "said so"
+    ]
+   },
+   "got": {
+    "outcome": "cannot-determine",
+    "accepted": null,
+    "seconds": 4,
+    "created": false,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "read",
+     "ms": 3000,
+     "at": 1793195303133,
+     "afterMs": 3600,
+     "by": "the deadline"
+    },
+    "atExpiry": {
+     "accepted": "refused before Create",
+     "acceptedAt": 1793195300196,
+     "answered": true,
+     "dated": true,
+     "deadlineAt": 1793195303133,
+     "tRead": 1793195303134,
+     "readAt": 1793195303134,
+     "seenAt": 1793195303134,
+     "nowSeen": "refused before Create",
+     "overflow": {
+      "accepted": null,
+      "count": 42,
+      "prevMs": -2937,
+      "afterMs": -2937,
+      "usable": false
+     },
+     "ambiguous": null,
+     "late": null,
+     "log": [
+      {
+       "a": null,
+       "t": 1793195300196,
+       "prev": 1793195300196
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195300196,
+       "prev": 1793195300196
+      },
+      {
+       "a": null,
+       "t": 1793195300196,
+       "prev": 1793195300196
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195300196,
+       "prev": 1793195300196
+      },
+      {
+       "a": null,
+       "t": 1793195300196,
+       "prev": 1793195300196
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195300196,
+       "prev": 1793195300196
+      },
+      {
+       "a": null,
+       "t": 1793195300196,
+       "prev": 1793195300196
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195300196,
+       "prev": 1793195300196
+      },
+      {
+       "a": null,
+       "t": 1793195300196,
+       "prev": 1793195300196
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195300196,
+       "prev": 1793195300196
+      },
+      {
+       "a": null,
+       "t": 1793195300196,
+       "prev": 1793195300196
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195300196,
+       "prev": 1793195300196
+      }
+     ]
+    },
+    "walkError": null,
+    "later": "refused before Create",
+    "hang": "the walk",
+    "why": "the read deadline reached; the page's own log overflowed, 42 change(s) dropped, the first observed between -2937 and -2937 ms from the deadline, so no evidence of the state at it"
+   },
+   "checks": [
+    {
+     "what": "the 240 flips driven, ended before the deadline",
+     "ok": true
+    },
+    {
+     "what": "expired in the read",
+     "ok": true
+    },
+    {
+     "what": "the overflow kept as unusable, its first dropped change before the deadline",
+     "ok": true
+    },
+    {
+     "what": "the page read at expiry as refused before Create",
+     "ok": true
+    },
+    {
+     "what": "said so",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 3000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "the recorder's log overflowed before the read deadline (3 s), the block left hidden: cannot-determine, the walk's",
+   "want": {
+    "outcome": "cannot-determine",
+    "accepted": null,
+    "hang": "the walk",
+    "checks": [
+     "the 240 flips driven, ended before the deadline",
+     "expired in the read",
+     "the overflow kept as unusable, its first dropped change before the deadline",
+     "the page read at expiry as no accepted outcome",
+     "said so"
+    ]
+   },
+   "got": {
+    "outcome": "cannot-determine",
+    "accepted": null,
+    "seconds": 4,
+    "created": false,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "read",
+     "ms": 3000,
+     "at": 1793195307218,
+     "afterMs": 3601,
+     "by": "the deadline"
+    },
+    "atExpiry": {
+     "accepted": "refused before Create",
+     "acceptedAt": 1793195304283,
+     "answered": true,
+     "dated": true,
+     "deadlineAt": 1793195307218,
+     "tRead": 1793195307218,
+     "readAt": 1793195307219,
+     "seenAt": 1793195307219,
+     "nowSeen": null,
+     "overflow": {
+      "accepted": null,
+      "count": 41,
+      "prevMs": -2935,
+      "afterMs": -2935,
+      "usable": false
+     },
+     "ambiguous": null,
+     "late": null,
+     "log": [
+      {
+       "a": null,
+       "t": 1793195304282,
+       "prev": 1793195304282
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195304282,
+       "prev": 1793195304282
+      },
+      {
+       "a": null,
+       "t": 1793195304282,
+       "prev": 1793195304282
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195304282,
+       "prev": 1793195304282
+      },
+      {
+       "a": null,
+       "t": 1793195304282,
+       "prev": 1793195304282
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195304282,
+       "prev": 1793195304282
+      },
+      {
+       "a": null,
+       "t": 1793195304282,
+       "prev": 1793195304282
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195304282,
+       "prev": 1793195304282
+      },
+      {
+       "a": null,
+       "t": 1793195304282,
+       "prev": 1793195304282
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195304282,
+       "prev": 1793195304282
+      },
+      {
+       "a": null,
+       "t": 1793195304282,
+       "prev": 1793195304282
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195304283,
+       "prev": 1793195304282
+      }
+     ]
+    },
+    "walkError": null,
+    "later": null,
+    "hang": "the walk",
+    "why": "the read deadline reached; the page's own log overflowed, 41 change(s) dropped, the first observed between -2935 and -2935 ms from the deadline, so no evidence of the state at it"
+   },
+   "checks": [
+    {
+     "what": "the 240 flips driven, ended before the deadline",
+     "ok": true
+    },
+    {
+     "what": "expired in the read",
+     "ok": true
+    },
+    {
+     "what": "the overflow kept as unusable, its first dropped change before the deadline",
+     "ok": true
+    },
+    {
+     "what": "the page read at expiry as no accepted outcome",
+     "ok": true
+    },
+    {
+     "what": "said so",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 3000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "a change made before the read deadline (3 s), first seen after it: ambiguous, cannot-determine, the walk's",
+   "want": {
+    "outcome": "cannot-determine",
+    "accepted": null,
+    "hang": "the walk",
+    "checks": [
+     "the change made before the deadline, the main thread held past it",
+     "expired in the read",
+     "first seen after the deadline, observed before it",
+     "not kept as late, nothing first seen by the deadline",
+     "said so"
+    ]
+   },
+   "got": {
+    "outcome": "cannot-determine",
+    "accepted": null,
+    "seconds": 4,
+    "created": false,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "read",
+     "ms": 3000,
+     "at": 1793195311314,
+     "afterMs": 3615,
+     "by": "the deadline"
+    },
+    "atExpiry": {
+     "accepted": null,
+     "acceptedAt": null,
+     "answered": true,
+     "dated": true,
+     "deadlineAt": 1793195311314,
+     "tRead": 1793195311315,
+     "readAt": 1793195312015,
+     "seenAt": 1793195312015,
+     "nowSeen": "refused before Create",
+     "overflow": null,
+     "ambiguous": {
+      "accepted": "refused before Create",
+      "prevMs": 299,
+      "afterMs": 700
+     },
+     "late": null,
+     "log": [
+      {
+       "a": null,
+       "t": 1793195308314,
+       "prev": null
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195312014,
+       "prev": 1793195311015
+      }
+     ]
+    },
+    "walkError": null,
+    "later": "refused before Create",
+    "hang": "the walk",
+    "why": "ambiguous at the read deadline: \"refused before Create\" first seen 700 ms after it, the previous observation 299 ms before it"
+   },
+   "checks": [
+    {
+     "what": "the change made before the deadline, the main thread held past it",
+     "ok": true
+    },
+    {
+     "what": "expired in the read",
+     "ok": true
+    },
+    {
+     "what": "first seen after the deadline, observed before it",
+     "ok": true
+    },
+    {
+     "what": "not kept as late, nothing first seen by the deadline",
+     "ok": true
+    },
+    {
+     "what": "said so",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 3000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "a successful answer taken after the snapshot's bound (300 ms), at the read deadline (2 s) and later: late delivery, cannot-determine, the walk's",
+   "want": {
+    "outcome": "cannot-determine",
+    "accepted": null,
+    "hang": "the walk",
+    "checks": [
+     "both answered inside the bound, taken after it",
+     "expired in the read",
+     "the late delivery kept, by the snapshot's deadline: dated by the page inside the bound, taken after it",
+     "later: delivered late"
+    ]
+   },
+   "got": {
+    "outcome": "cannot-determine",
+    "accepted": null,
+    "seconds": 3,
+    "created": false,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "read",
+     "ms": 2000,
+     "at": 1793195315104,
+     "afterMs": 2608,
+     "by": "the deadline"
+    },
+    "atExpiry": {
+     "accepted": null,
+     "answered": false,
+     "dated": false,
+     "deadlineAt": 1793195315104,
+     "tRead": 1793195315104,
+     "lateDelivery": {
+      "pageMs": -299,
+      "deliveredMs": 100
+     },
+     "error": "the snapshot deadline, 300 ms, reached"
+    },
+    "walkError": null,
+    "later": "delivered late",
+    "hang": "the walk",
+    "why": "the read deadline reached; the page answered the read at it 299 ms before the snapshot's bound ended, and the walk took the answer 100 ms after it, so no evidence dated by the deadline"
+   },
+   "checks": [
+    {
+     "what": "both answered inside the bound, taken after it",
+     "ok": true
+    },
+    {
+     "what": "expired in the read",
+     "ok": true
+    },
+    {
+     "what": "the late delivery kept, by the snapshot's deadline: dated by the page inside the bound, taken after it",
+     "ok": true
+    },
+    {
+     "what": "later: delivered late",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 2000,
+    "jobMs": 900000,
+    "snapMs": 300
+   },
+   "ok": true
+  },
+  {
+   "name": "an already-expired, resolved promise at the snapshot (300 ms), at the read deadline (2 s): late delivery, cannot-determine, the walk's",
+   "want": {
+    "outcome": "cannot-determine",
+    "accepted": null,
+    "hang": "the walk",
+    "checks": [
+     "the walker's own evidence expression, read before the deadline, resolved before it was handed on",
+     "expired in the read",
+     "the late delivery kept, by the snapshot's deadline: dated by the page inside the bound, taken after it"
+    ]
+   },
+   "got": {
+    "outcome": "cannot-determine",
+    "accepted": null,
+    "seconds": 3,
+    "created": false,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "read",
+     "ms": 2000,
+     "at": 1793195318990,
+     "afterMs": 2603,
+     "by": "the deadline"
+    },
+    "atExpiry": {
+     "accepted": null,
+     "answered": false,
+     "dated": false,
+     "deadlineAt": 1793195318990,
+     "tRead": 1793195318992,
+     "lateDelivery": {
+      "pageMs": -600,
+      "deliveredMs": 100
+     },
+     "error": "the snapshot deadline, 300 ms, reached"
+    },
+    "walkError": null,
+    "later": "refused before Create",
+    "hang": "the walk",
+    "why": "the read deadline reached; the page answered the read at it 600 ms before the snapshot's bound ended, and the walk took the answer 100 ms after it, so no evidence dated by the deadline"
+   },
+   "checks": [
+    {
+     "what": "the walker's own evidence expression, read before the deadline, resolved before it was handed on",
+     "ok": true
+    },
+    {
+     "what": "expired in the read",
+     "ok": true
+    },
+    {
+     "what": "the late delivery kept, by the snapshot's deadline: dated by the page inside the bound, taken after it",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 2000,
+    "jobMs": 900000,
+    "snapMs": 300
+   },
+   "ok": true
+  },
+  {
+   "name": "an error before the read deadline (the declared 330 s): the walk's",
+   "want": {
+    "outcome": "cannot-determine",
+    "accepted": null,
+    "hang": "the walk",
+    "checks": [
+     "failed in the read",
+     "by that error",
+     "no deadline reached",
+     "before the deadline"
+    ]
+   },
+   "got": {
+    "outcome": "cannot-determine",
+    "accepted": null,
+    "seconds": 1,
+    "created": false,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": null,
+    "atExpiry": null,
+    "walkError": {
+     "phase": "read",
+     "error": "a stated error in the walk: the file not chosen"
+    },
+    "later": null,
+    "hang": "the walk",
+    "why": "the walk failed in its read short of the bound: a stated error in the walk: the file not chosen"
+   },
+   "checks": [
+    {
+     "what": "failed in the read",
+     "ok": true
+    },
+    {
+     "what": "by that error",
+     "ok": true
+    },
+    {
+     "what": "no deadline reached",
+     "ok": true
+    },
+    {
+     "what": "before the deadline",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "the walk's process held past the snapshot's bound (300 ms) with the page's answer waiting, at the read deadline (2 s) and later: late delivery, cannot-determine, the walk's",
+   "want": {
+    "outcome": "cannot-determine",
+    "accepted": null,
+    "hang": "the walk",
+    "checks": [
+     "both held past the bound once sent",
+     "expired in the read",
+     "the late delivery kept: dated by the page inside the bound, taken after it",
+     "later: delivered late"
+    ]
+   },
+   "got": {
+    "outcome": "cannot-determine",
+    "accepted": null,
+    "seconds": 3,
+    "created": false,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "read",
+     "ms": 2000,
+     "at": 1793195323560,
+     "afterMs": 2601,
+     "by": "the deadline"
+    },
+    "atExpiry": {
+     "accepted": null,
+     "answered": false,
+     "dated": false,
+     "deadlineAt": 1793195323560,
+     "tRead": 1793195323560,
+     "lateDelivery": {
+      "pageMs": -299,
+      "deliveredMs": 100
+     },
+     "error": "the snapshot deadline, 300 ms, reached"
+    },
+    "walkError": null,
+    "later": "delivered late",
+    "hang": "the walk",
+    "why": "the read deadline reached; the page answered the read at it 299 ms before the snapshot's bound ended, and the walk took the answer 100 ms after it, so no evidence dated by the deadline"
+   },
+   "checks": [
+    {
+     "what": "both held past the bound once sent",
+     "ok": true
+    },
+    {
+     "what": "expired in the read",
+     "ok": true
+    },
+    {
+     "what": "the late delivery kept: dated by the page inside the bound, taken after it",
+     "ok": true
+    },
+    {
+     "what": "later: delivered late",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 2000,
+    "jobMs": 900000,
+    "snapMs": 300
+   },
+   "ok": true
+  },
+  {
+   "name": "the page's main thread held past the snapshot's bound (300 ms) before it answers, at the read deadline (2 s): a late answer, the page's",
+   "want": {
+    "outcome": "fail",
+    "accepted": null,
+    "hang": "the page",
+    "checks": [
+     "the page held, then the walk held once sent",
+     "expired in the read",
+     "the late answer kept: dated by the page at or after the bound"
+    ]
+   },
+   "got": {
+    "outcome": "fail",
+    "accepted": null,
+    "seconds": 3,
+    "created": false,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "read",
+     "ms": 2000,
+     "at": 1793195327464,
+     "afterMs": 2609,
+     "by": "the deadline"
+    },
+    "atExpiry": {
+     "accepted": null,
+     "answered": false,
+     "dated": false,
+     "deadlineAt": 1793195327464,
+     "tRead": 1793195327466,
+     "lateAnswer": {
+      "pageMs": 100,
+      "deliveredMs": 400
+     },
+     "error": "the snapshot deadline, 300 ms, reached"
+    },
+    "walkError": null,
+    "later": "refused before Create",
+    "hang": "the page",
+    "why": "the page did not answer at the read deadline; its answer dated 100 ms after the snapshot's bound"
+   },
+   "checks": [
+    {
+     "what": "the page held, then the walk held once sent",
+     "ok": true
+    },
+    {
+     "what": "expired in the read",
+     "ok": true
+    },
+    {
+     "what": "the late answer kept: dated by the page at or after the bound",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 2000,
+    "jobMs": 900000,
+    "snapMs": 300
+   },
+   "ok": true
+  },
+  {
+   "name": "the recorder's log full before the read deadline (3 s), its first dropped change across it: unusable, cannot-determine, the walk's",
+   "want": {
+    "outcome": "cannot-determine",
+    "accepted": null,
+    "hang": "the walk",
+    "checks": [
+     "the log filled and the last change made before the deadline, the main thread held past it",
+     "expired in the read",
+     "one change dropped, its span across the deadline: unusable"
+    ]
+   },
+   "got": {
+    "outcome": "cannot-determine",
+    "accepted": null,
+    "seconds": 4,
+    "created": false,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "read",
+     "ms": 3000,
+     "at": 1793195332244,
+     "afterMs": 3600,
+     "by": "the deadline"
+    },
+    "atExpiry": {
+     "accepted": "refused before Create",
+     "acceptedAt": 1793195331951,
+     "answered": true,
+     "dated": true,
+     "deadlineAt": 1793195332244,
+     "tRead": 1793195332246,
+     "readAt": 1793195332945,
+     "seenAt": 1793195332945,
+     "nowSeen": null,
+     "overflow": {
+      "accepted": null,
+      "count": 1,
+      "prevMs": -293,
+      "afterMs": 700,
+      "usable": false
+     },
+     "ambiguous": null,
+     "late": null,
+     "log": [
+      {
+       "a": null,
+       "t": 1793195331951,
+       "prev": 1793195331951
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195331951,
+       "prev": 1793195331951
+      },
+      {
+       "a": null,
+       "t": 1793195331951,
+       "prev": 1793195331951
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195331951,
+       "prev": 1793195331951
+      },
+      {
+       "a": null,
+       "t": 1793195331951,
+       "prev": 1793195331951
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195331951,
+       "prev": 1793195331951
+      },
+      {
+       "a": null,
+       "t": 1793195331951,
+       "prev": 1793195331951
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195331951,
+       "prev": 1793195331951
+      },
+      {
+       "a": null,
+       "t": 1793195331951,
+       "prev": 1793195331951
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195331951,
+       "prev": 1793195331951
+      },
+      {
+       "a": null,
+       "t": 1793195331951,
+       "prev": 1793195331951
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195331951,
+       "prev": 1793195331951
+      }
+     ]
+    },
+    "walkError": null,
+    "later": null,
+    "hang": "the walk",
+    "why": "the read deadline reached; the page's own log overflowed, 1 change(s) dropped, the first observed between -293 and 700 ms from the deadline, so no evidence of the state at it"
+   },
+   "checks": [
+    {
+     "what": "the log filled and the last change made before the deadline, the main thread held past it",
+     "ok": true
+    },
+    {
+     "what": "expired in the read",
+     "ok": true
+    },
+    {
+     "what": "one change dropped, its span across the deadline: unusable",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 3000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "the recorder's log overflowed only after the read deadline (3 s): usable, judged from the kept log, the block shown before it: the walk's",
+   "want": {
+    "outcome": "cannot-determine",
+    "accepted": "refused before Create",
+    "hang": "the walk",
+    "checks": [
+     "observed after the deadline, then 240 flips",
+     "expired in the read",
+     "overflowed, usable",
+     "nothing ambiguous; the flips kept as late",
+     "the block shown before the deadline, by the page's own time"
+    ]
+   },
+   "got": {
+    "outcome": "cannot-determine",
+    "accepted": "refused before Create",
+    "seconds": 4,
+    "created": false,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "read",
+     "ms": 3000,
+     "at": 1793195337048,
+     "afterMs": 3602,
+     "by": "the deadline"
+    },
+    "atExpiry": {
+     "accepted": "refused before Create",
+     "acceptedAt": 1793195334096,
+     "answered": true,
+     "dated": true,
+     "deadlineAt": 1793195337048,
+     "tRead": 1793195337049,
+     "readAt": 1793195337156,
+     "seenAt": 1793195337156,
+     "nowSeen": "refused before Create",
+     "overflow": {
+      "accepted": null,
+      "count": 42,
+      "prevMs": 106,
+      "afterMs": 106,
+      "usable": true
+     },
+     "ambiguous": null,
+     "late": {
+      "accepted": "refused before Create",
+      "afterMs": 100
+     },
+     "log": [
+      {
+       "a": null,
+       "t": 1793195337153,
+       "prev": 1793195337153
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195337153,
+       "prev": 1793195337153
+      },
+      {
+       "a": null,
+       "t": 1793195337153,
+       "prev": 1793195337153
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195337154,
+       "prev": 1793195337153
+      },
+      {
+       "a": null,
+       "t": 1793195337154,
+       "prev": 1793195337154
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195337154,
+       "prev": 1793195337154
+      },
+      {
+       "a": null,
+       "t": 1793195337154,
+       "prev": 1793195337154
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195337154,
+       "prev": 1793195337154
+      },
+      {
+       "a": null,
+       "t": 1793195337154,
+       "prev": 1793195337154
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195337154,
+       "prev": 1793195337154
+      },
+      {
+       "a": null,
+       "t": 1793195337154,
+       "prev": 1793195337154
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195337154,
+       "prev": 1793195337154
+      }
+     ]
+    },
+    "walkError": null,
+    "later": "refused before Create",
+    "hang": "the walk",
+    "why": "the read deadline reached; the page's own log shows \"refused before Create\" 2952 ms before it"
+   },
+   "checks": [
+    {
+     "what": "observed after the deadline, then 240 flips",
+     "ok": true
+    },
+    {
+     "what": "expired in the read",
+     "ok": true
+    },
+    {
+     "what": "overflowed, usable",
+     "ok": true
+    },
+    {
+     "what": "nothing ambiguous; the flips kept as late",
+     "ok": true
+    },
+    {
+     "what": "the block shown before the deadline, by the page's own time",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 3000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "the block hidden before the read deadline (3 s), first seen hidden after it: ambiguous, cannot-determine, the walk's",
+   "want": {
+    "outcome": "cannot-determine",
+    "accepted": null,
+    "hang": "the walk",
+    "checks": [
+     "the change made before the deadline, the main thread held past it",
+     "expired in the read",
+     "ambiguous, to no outcome, its span across the deadline"
+    ]
+   },
+   "got": {
+    "outcome": "cannot-determine",
+    "accepted": null,
+    "seconds": 4,
+    "created": false,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "read",
+     "ms": 3000,
+     "at": 1793195341236,
+     "afterMs": 3600,
+     "by": "the deadline"
+    },
+    "atExpiry": {
+     "accepted": "refused before Create",
+     "acceptedAt": 1793195338288,
+     "answered": true,
+     "dated": true,
+     "deadlineAt": 1793195341236,
+     "tRead": 1793195341238,
+     "readAt": 1793195341936,
+     "seenAt": 1793195341936,
+     "nowSeen": null,
+     "overflow": null,
+     "ambiguous": {
+      "accepted": null,
+      "prevMs": 298,
+      "afterMs": 700
+     },
+     "late": null,
+     "log": [
+      {
+       "a": null,
+       "t": 1793195338236,
+       "prev": null
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195338288,
+       "prev": 1793195338272
+      },
+      {
+       "a": null,
+       "t": 1793195341936,
+       "prev": 1793195340938
+      }
+     ]
+    },
+    "walkError": null,
+    "later": null,
+    "hang": "the walk",
+    "why": "ambiguous at the read deadline: no accepted outcome first seen 700 ms after it, the previous observation 298 ms before it"
+   },
+   "checks": [
+    {
+     "what": "the change made before the deadline, the main thread held past it",
+     "ok": true
+    },
+    {
+     "what": "expired in the read",
+     "ok": true
+    },
+    {
+     "what": "ambiguous, to no outcome, its span across the deadline",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 3000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "an error exactly at the read deadline (3 s): the expiry, judged by the log, the walk's",
+   "want": {
+    "outcome": "cannot-determine",
+    "accepted": "refused before Create",
+    "hang": "the walk",
+    "checks": [
+     "the error at the deadline, 0 to 50 ms",
+     "expired in the read",
+     "by that error, sent through the expiry",
+     "not the walk's error",
+     "the block shown before the deadline, by the page's own time"
+    ]
+   },
+   "got": {
+    "outcome": "cannot-determine",
+    "accepted": "refused before Create",
+    "seconds": 4,
+    "created": false,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "read",
+     "ms": 3000,
+     "at": 1793195346015,
+     "afterMs": 3599,
+     "by": "an error at or after it: a stated error, at the read deadline"
+    },
+    "atExpiry": {
+     "accepted": "refused before Create",
+     "acceptedAt": 1793195343076,
+     "answered": true,
+     "dated": true,
+     "deadlineAt": 1793195346015,
+     "tRead": 1793195346015,
+     "readAt": 1793195346015,
+     "seenAt": 1793195346015,
+     "nowSeen": "refused before Create",
+     "overflow": null,
+     "ambiguous": null,
+     "late": null,
+     "log": [
+      {
+       "a": null,
+       "t": 1793195343016,
+       "prev": null
+      },
+      {
+       "a": "refused before Create",
+       "t": 1793195343076,
+       "prev": 1793195343067
+      }
+     ]
+    },
+    "walkError": null,
+    "later": "refused before Create",
+    "hang": "the walk",
+    "why": "the read deadline reached; the page's own log shows \"refused before Create\" 2939 ms before it"
+   },
+   "checks": [
+    {
+     "what": "the error at the deadline, 0 to 50 ms",
+     "ok": true
+    },
+    {
+     "what": "expired in the read",
+     "ok": true
+    },
+    {
+     "what": "by that error, sent through the expiry",
+     "ok": true
+    },
+    {
+     "what": "not the walk's error",
+     "ok": true
+    },
+    {
+     "what": "the block shown before the deadline, by the page's own time",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 3000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "ok": true
+  }
+ ],
+ "unansweredSetupFromChoosingMs": 5002,
+ "innerRace": {
+  "fired": true,
+  "leftMs": 572,
+  "heldTo": 1000
+ },
+ "lateRead": {
+  "ms": 3151
+ },
+ "overflow_shown": {
+  "n": 240,
+  "startAt": 1793195300188,
+  "doneAt": 1793195300198,
+  "final": "shown"
+ },
+ "overflow_hidden": {
+  "n": 240,
+  "startAt": 1793195304274,
+  "doneAt": 1793195304284,
+  "final": "hidden"
+ },
+ "ambiguous": {
+  "sentAt": 1793195311015,
+  "changedAt": 1793195311016,
+  "heldTo": 1793195312014,
+  "deadline": 1793195311314
+ },
+ "snapshotLate": [
+  {
+   "what": "evidence",
+   "answeredMs": 1,
+   "heldMs": 400
+  },
+  {
+   "what": "later",
+   "answeredMs": 0,
+   "heldMs": 400
+  }
+ ],
+ "snapshotExpiredResolved": {
+  "readAt": 1793195318691,
+  "resolvedAt": 1793195318692,
+  "handedAt": 1793195319392,
+  "heldMs": 400,
+  "sameExpr": true
+ },
+ "snapshotWalkHeld": [
+  {
+   "what": "evidence",
+   "heldMs": 400
+  },
+  {
+   "what": "later",
+   "heldMs": 400
+  }
+ ],
+ "snapshotPageLate": {
+  "pageFrom": 1793195327466,
+  "walkMs": 700
+ },
+ "overflowCrossing": {
+  "startAt": 1793195331945,
+  "flips": 199,
+  "logAtStart": 2,
+  "fullAt": 1793195331951,
+  "full": true,
+  "lastSeen": 1793195331951,
+  "crossFlipAt": 1793195331951,
+  "heldTo": 1793195332944,
+  "deadline": 1793195332244
+ },
+ "overflowUsable": {
+  "startAt": 1793195336749,
+  "flips": 240,
+  "observedAt": 1793195337148,
+  "doneAt": 1793195337155,
+  "final": "",
+  "deadline": 1793195337048
+ },
+ "ambiguousToNull": {
+  "changedAt": 1793195340938,
+  "heldTo": 1793195341936,
+  "deadline": 1793195341236
+ },
+ "readErrorAtDeadline": {
+  "at": 1793195346015,
+  "deadline": 1793195346015
+ },
+ "ended": "2026-10-28T13:49:06.034Z",
+ "complete": true,
+ "allAsExpected": true
+}

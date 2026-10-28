@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-28 — VH-214 — Closes: the walk hung, not the page; S-140 and S-140n bounded, no product diff
+
+**Decision:** VH-214 closes VH-193.3 with no product diff: the page refuses "UoN Closing Logo Fade Blue 2025.mov" and N13 before Create, by the pre-flight's `noSourceDecodeHere`, in every cell, so VH-193's ten minutes were its walk's Create test clicking the withdrawn step 6's hidden Create; S-140 and S-140n gain a bound and three accepted outcomes, proved before the after, the approved walker change.
+
+**Rationale:** Before, on `5893d9d`: 12 of 12 groups (three languages, 1280 and 320 px, four modes each) show step 1's block 41–135 ms after the choosing, Create never shown, on Chrome 156.0.8078.48 and .74; the original read only from `samples/`. Replaying `heavy-193.mjs`'s bite routine reproduced the stall: its test `b && !b.hidden && !b.disabled` (`:147`) read the withdrawn step's button as offered, clicked it, and waited for a plan that never comes until the 720 s bound, the page still blocked, the worker logging `Unsupported video codec (sample entry type 'rle ')`. `QT_BOUND` (a verdict within 330 s, the selection's 120 s and 180 s deadlines with 30 s over; a job's end within 900 s; the boot 60 s, the walk's; each snapshot 10 s) and `QT_OUTCOME` judge each scenario: an accepted outcome passes, none by the deadline is the page's hang, a wait at its deadline beside an accepted outcome is the walk's. Each deadline is absolute: a result at or after it is its expiry, and the state at it is judged only from the page's own dated log of the outcome. An answer the page dated in time but the walk took late is late delivery, cannot-determine, the walk's, never the page's; a log that overflowed or changed across the deadline is cannot-determine too. The proof passed 41 of 41 (26 real, 15 job) before the after, which judged 12 of 12 "refused before Create", on AC in the before's power mode. 4.1.3: `#source-status` speaks the block and its next step; 2.4.3 and 3.3.1 hold; no token, control or document change. The same test elsewhere is outside the approval: wish VH-214.1; at the refusal `#page-announcer` also says "You can still set the times" with trimming withdrawn: wish VH-214.2. Codex astra: its blind check and three follow-ups said "Do not close", each point repaired inside the approval; its fourth follow-up said "Close", ruling the deadline timer's one-turn deferral inside the approval and no low-load re-run owed; its close check ran before the commit, its verdict the commit's `Checked:` line. Evidence: `reviews/2026-10-25/design-pass-3/evidence/measurements/vh214-quicktime-2026-10-27.md`.
+
+**Supersedes:** none
+
+**Deferred:** VH-203
+
 ## 2026-10-28 — PLAN-8 — VH-213 and VH-214 run beside the main line with walks queued; Codex's blind check alongside Claude's verdict
 
 **Decision:** VH-213 and VH-214 run in their own worktrees beside the main line, one walk or gate at a time by the walk lock; each lands on the orchestrator's go, rebased, gated and re-checked. VH-213 lands before VH-212 or VH-215 starts. Codex's blind check starts alongside Claude's verdict, kept blind.
@@ -644,15 +654,3 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Supersedes:** none
 
 **Deferred:** VH-179, VH-176
-
-## 2026-10-23 — PLAN-7 — The owner decides the four wish lines: one name for step 4, a forced-colour hover, V-18 accepted, the statement edited once
-
-**Decision:** VH-175.3 becomes VH-181: step 4 is "Closing graphics" everywhere, spec §6 to match. VH-174.1 joins VH-179 as a border-only hover in a system colour. VH-175.1 retires with V-18 accepted, and a native reader's wording waits as VH-175.4. VH-175.2 waits for VH-137. The owner decided each.
-
-**Rationale:** The owner's words of 2026-10-23, verbatim. On VH-175.3: "use “Closing graphics” everywhere, with the specification’s §6 line changed to match. It’s what the step’s own lines already say, and having two names breaks the project’s “no synonyms” rule." On VH-174.1: "add a border-only hover change in a system colour. It’s cheap, it helps people who use Windows contrast themes, and it touches the same CSS area as VH-179." On VH-175.1: "leave it as accepted. The only remaining fix is shorter Chinese and Malay wording, which needs a native reader, so wait for one." On VH-175.2: "leave it for VH-137’s review of the statement, so that text is only edited once." The owner approves the one `docs/01-specification.md` edit; it swaps two words for two, so the spec stays at 8,074 of its 8,100. It supersedes VH-148's sign-off (2026-10-21) for step 4's name alone, where the legend "Closing branding" stayed. For V-44 it decides what VH-174 left to the owner when it refused R-07. VH-181's Chinese and Malay rows are the agent's drafts. VH-181 goes before VH-176, so Codex astra's integrated check reads it with the rest. Campus colleagues are being asked for the native reading. The start notice showed 8576616's handover held by a chat opened at 19:26 UTC. That chat was the owner's advice-only chat ("no action"); it made no edit and the owner archived it. So this chat took the handover on the owner's standing instruction: "work through to the end of VH-177, archive and spawn as you go, proceed with your recommendations, universal permission is granted".
-
-**Supersedes:** 2026-10-21 — VH-148 — The owner’s sign-off changes, including the footer
-
-**Deferred:** VH-181, VH-179, VH-137
-
-**Items:** VH-181

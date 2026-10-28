@@ -1,0 +1,43 @@
+The brief for Codex astra's close check of VH-214 (VH-214 #12, started 2026-10-28T15:41:40Z), verbatim. Codex astra ran with codex exec -m gpt-6-astra -s read-only in the side worktree (branch side/vh214, base 5893d9d), a separate run on the complete candidate before the commit. Kept as .md.txt: it names paths outside the repository.
+
+You are Codex astra, making VH-214's close check, read-only. Do not edit anything. Read only inside your working directory (the git worktree, branch side/vh214, base 5893d9d). Do not read any file under /Users/joe/UoN-Video-Helper-side/ outside this worktree, or any notes folder: this check must stay a separate run on what the commit will hold.
+
+The item: `project/items/VH-214.md` (its acceptance criteria are your contract). The owner approved only what VH-214's own criteria declare. In the item brief's words: "The walker change approved is S-140's and S-140n's bound and three accepted outcomes (refused before Create, finished, or failed with recovery), declared and proved before the after is read. Any other walker change is a stop." The item's criterion "A bounded outcome" says they "are given a bound and three accepted outcomes, refused before Create, finished, or failed with recovery, so a product hang is told apart from a walker hang: a walker change, declared and proved before the after-read." A product repair only for what reproduces, in existing words. Any other walker change is out of scope.
+
+Your fourth follow-up said "Close", with the deferral inside the approval and no low-load re-run owed. This is the separate close check, before the commit, on the complete candidate: `git diff 5893d9d` plus the 45 untracked files (`git ls-files --others --exclude-standard`), read in full where you need them.
+- The six ledger files and what each now says of VH-214: `project/backlog.md` (its open line, at base `:44`, struck); `project/decisions.md` `:21–29` (the 2026-10-28 entry: heading, Decision, Rationale, Supersedes, Deferred); `project/items/VH-214.md` (Updated `:25`, Next step `:27`, the closing Note `:41`); `project/trajectory.md` `:36`; `project/wish-list.md` `:62–63` (VH-214.1 and VH-214.2, new); and the design-pass-3 report's Disposition row, `reviews/2026-10-25/design-pass-3/design-pass-3-2026-10-27.md:759`.
+- `reviews/2026-10-25/design-pass-3/evidence/measurements/walker/scenarios.mjs`: its three hunks (the block `:1533–1684`; S-140's and S-140n's entries `:2521`, `:2532`), unchanged since your fourth follow-up.
+- The table `reviews/2026-10-25/design-pass-3/evidence/measurements/vh214-quicktime-2026-10-27.md`, by its sections: 1 Provenance `:6`, 2 the walker change `:45`, 3 before and after `:148`, 4 the replays `:175`, 5 WCAG and the heuristic `:192`, 6 tokens and documents `:203`, 7 the records `:207` (with its new Codex line).
+- The bundle `…/measurements/vh214-records-2026-10-27/`: 44 files, among them the 15 Codex files as `vh214-codex-*.md.txt`, each a provenance line, a blank line, then the body verbatim.
+
+Known and declared, not to be repaired:
+- **Not bounded:** the runner's reads after the setup (the probe's `readModes`, the walker's state check) are unbounded, as the table declares; bounding them is outside the owner's approval.
+- **The archive warning, left for the landing:** `node tools/check.mjs` warns of 46 live decisions (budget 45); `tools/archive.mjs` runs at the landing's rebase onto main, not now. The other warning, VH-122's `samples/` path, is pre-existing: the worktree has no `samples/`.
+
+The gate on this frozen candidate, under the walk lock, 2026-10-28 14:57:13–14:57:44Z, AC 100%, power mode 2, 1-minute load 5.97 at the start: `npm run check` rc 0, 83 test files, 1,582 passed, 1 skipped (EBU 7 and 8, pre-existing, as at base); `node tools/check.mjs` rc 0, 0 failures, the 2 warnings above. It is re-run after your answer and its brief are added to the bundle.
+
+The commit message as drafted (bracketed parts are filled from the re-gate and your verdict):
+
+```
+VH-214: VH-193's ten minutes were the walk's, not the page's — the QuickTime Animation file and N13 refused before Create in every cell, the walk's Create test clicking a hidden button; S-140 and S-140n bounded with three accepted outcomes, proved 41 of 41; no product diff; VH-214 closes
+
+The page refuses "UoN Closing Logo Fade Blue 2025.mov" (read only from samples/) and the N13 fixture before Create, by the pre-flight's noSourceDecodeHere, in all 12 groups (S-140 on the original and S-140n on N13; en-GB, zh-Hans and ms-MY; 1280 and 320 px), each in light, dark, forced light and forced dark, before and after. VH-193's ten minutes were its walk's: heavy-193.mjs's Create test (`b && !b.hidden && !b.disabled`) read the withdrawn step 6's Create as offered, clicked it, and waited for a plan that never came. The one walker change is the approved one: S-140 and S-140n gain a bound and three accepted outcomes (refused before Create, finished, or failed with recovery), declared in their block of walker/scenarios.mjs and in the table, and proved 41 of 41 (26 real, 15 job) before the after was read. No src/, test/ or docs/ change.
+
+Measured and closed by VH-214's side workers, #1 to #12, in their own worktree beside the main line: the before on 5893d9d by #1; the bound repaired over four rounds of Codex astra's musts, its fourth follow-up "Close", the last repair by #9; the proof and the after's 12 groups by #10, on AC, power mode 2; the ledger and the close by #11 and #12. Evidence: reviews/2026-10-25/design-pass-3/evidence/measurements/vh214-quicktime-2026-10-27.md and vh214-records-2026-10-27/, with every Codex brief, answer and compare.
+
+VH-214.1 — new — the walkers offer Create by the button's own hidden and disabled, not by whether it is shown; not changed here, outside the approval.
+VH-214.2 — new — on a step-1 refusal #page-announcer also says the preview line though trimming is withdrawn; recorded, not judged or changed (its remedy needs words); VH-203's after-run reads it.
+
+Digest rules applied: nielsen 9 ("errors say what next"); wcag-2.2-aaa 4.1.3.
+
+Verify: npm run check green on exactly this content, settled (started at load [L], AC [level], power mode 2, after the close check's brief and answer were added): 83 test files, [P] passed, 1 skipped (EBU 7 and 8, pre-existing); [markdownlint, links and check-memory as logged]; node tools/check.mjs 0 failures, 2 warnings (46 live decisions over the budget of 45, archived by tools/archive.mjs at the landing's rebase; VH-122's samples/ path, pre-existing, the worktree has no samples/); the frozen candidate before the check, VH-214 #11's gate (started at load 5.97, AC 100%, power mode 2): 83 test files, 1,582 passed, 1 skipped; node tools/check.mjs 0 failures, the same 2 warnings
+Checked: gpt-6-astra — [your verdict, as given] — VH-193.3
+```
+
+Judge:
+1. Do the ledger (rules 4 to 6 of `AGENTS.md`), the table and the records agree with each other and with the diff? Name any line that says more, or other, than the evidence.
+2. Does everything stay inside the approval?
+3. Would anything in the candidate stop `npm run check` or `node tools/check.mjs`?
+4. Is the commit message accurate?
+
+Answer in under 400 words. Begin with one verdict line: "Verdict: Commit", "Verdict: Commit after the musts below" or "Verdict: Revise". Then numbered points, each a must or a should, naming the file and line and a concrete fix.

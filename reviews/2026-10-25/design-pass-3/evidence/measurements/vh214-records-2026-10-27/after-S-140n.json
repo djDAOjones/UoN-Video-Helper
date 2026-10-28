@@ -1,0 +1,5136 @@
+[
+ {
+  "key": "S-140n__en-GB__w1280",
+  "cell": "S-140n",
+  "scenario": "S-140n",
+  "what": "A QuickTime Animation file with no audio, N13 (the closing asset's made twin)",
+  "file": "qtrle-5s.mov",
+  "lang": "en-GB",
+  "view": "w1280",
+  "modesRead": [
+   "light",
+   "dark",
+   "forced-light",
+   "forced-dark"
+  ],
+  "powerAtStart": {
+   "ac": true,
+   "load": [
+    13.86,
+    8.36,
+    8.9
+   ],
+   "powermode": "powermode            2"
+  },
+  "setupMs": 1804,
+  "obs": {
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "tStart": 1793195858910,
+   "deadlines": {
+    "boot": 1793195918910,
+    "read": 1793196189512
+   },
+   "tChosen": 1793195859512,
+   "recorderAt": 1793195859512,
+   "t0": 1793195860224,
+   "blocked": true,
+   "outcomeSeen": {
+    "accepted": "refused before Create",
+    "answered": true,
+    "t": 1793195860225
+   },
+   "tEnd": 1793195860225
+  },
+  "out": {
+   "light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": false
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": null,
+    "block": {
+     "kind": "error",
+     "heading": "This cannot run here",
+     "text": "This cannot run hereThis browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead.",
+     "reasonKeys": [
+      "preflight.reasons.noSourceDecodeHere"
+     ],
+     "live": null,
+     "overflow": []
+    },
+    "report": {
+     "kind": null,
+     "text": "Video propertiesDuration5 secondsVideo formatUnknownThis browser cannot read this video format.File size35.5 MBResolution1920 × 1080Frame rate25 frames a secondAudioNo audio track foundLevelling needs audio. The rest of the job still runs.CaptionsNone found in this fileFile typeQuickTime File Format",
+     "reasonKeys": []
+    },
+    "createOffered": false,
+    "ackOffered": false,
+    "res": "none",
+    "finished": false,
+    "running": false,
+    "checking": false,
+    "result": {
+     "title": "",
+     "text": ""
+    },
+    "progress": "",
+    "focus": "body",
+    "fileInput": {
+     "disabled": false,
+     "chosen": true
+    },
+    "steps": [
+     {
+      "id": "step-choose",
+      "shown": true
+     },
+     {
+      "id": "step-trim",
+      "shown": false
+     },
+     {
+      "id": "step-title",
+      "shown": false
+     },
+     {
+      "id": "step-closing",
+      "shown": false
+     },
+     {
+      "id": "step-preset",
+      "shown": false
+     },
+     {
+      "id": "step-create",
+      "shown": false
+     }
+    ],
+    "status": {
+     "announced": "",
+     "shown": "",
+     "spokenOnly": ""
+    },
+    "sourceStatus": {
+     "announced": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead.",
+     "shown": "",
+     "spokenOnly": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead."
+    },
+    "liveRegions": [
+     {
+      "region": "div.promise-help",
+      "text": "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperabl"
+     },
+     {
+      "region": "#source-status",
+      "text": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing "
+     },
+     {
+      "region": "div",
+      "text": "The last second of video — the closing graphics cover it as they build. A held last frame — your last frame is held for one extra second. The closing graphics p"
+     },
+     {
+      "region": "#page-announcer",
+      "text": "A preview is not available for this file. You can still set the times."
+     }
+    ],
+    "marks": [
+     {
+      "what": "chosen",
+      "t": 1793195859518
+     },
+     {
+      "what": "block shown",
+      "t": 1793195859562,
+      "kind": "error"
+     }
+    ]
+   },
+   "dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": false
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": null,
+    "block": {
+     "kind": "error",
+     "heading": "This cannot run here",
+     "text": "This cannot run hereThis browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead.",
+     "reasonKeys": [
+      "preflight.reasons.noSourceDecodeHere"
+     ],
+     "live": null,
+     "overflow": []
+    },
+    "report": {
+     "kind": null,
+     "text": "Video propertiesDuration5 secondsVideo formatUnknownThis browser cannot read this video format.File size35.5 MBResolution1920 × 1080Frame rate25 frames a secondAudioNo audio track foundLevelling needs audio. The rest of the job still runs.CaptionsNone found in this fileFile typeQuickTime File Format",
+     "reasonKeys": []
+    },
+    "createOffered": false,
+    "ackOffered": false,
+    "res": "none",
+    "finished": false,
+    "running": false,
+    "checking": false,
+    "result": {
+     "title": "",
+     "text": ""
+    },
+    "progress": "",
+    "focus": "body",
+    "fileInput": {
+     "disabled": false,
+     "chosen": true
+    },
+    "steps": [
+     {
+      "id": "step-choose",
+      "shown": true
+     },
+     {
+      "id": "step-trim",
+      "shown": false
+     },
+     {
+      "id": "step-title",
+      "shown": false
+     },
+     {
+      "id": "step-closing",
+      "shown": false
+     },
+     {
+      "id": "step-preset",
+      "shown": false
+     },
+     {
+      "id": "step-create",
+      "shown": false
+     }
+    ],
+    "status": {
+     "announced": "",
+     "shown": "",
+     "spokenOnly": ""
+    },
+    "sourceStatus": {
+     "announced": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead.",
+     "shown": "",
+     "spokenOnly": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead."
+    },
+    "liveRegions": [
+     {
+      "region": "div.promise-help",
+      "text": "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperabl"
+     },
+     {
+      "region": "#source-status",
+      "text": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing "
+     },
+     {
+      "region": "div",
+      "text": "The last second of video — the closing graphics cover it as they build. A held last frame — your last frame is held for one extra second. The closing graphics p"
+     },
+     {
+      "region": "#page-announcer",
+      "text": "A preview is not available for this file. You can still set the times."
+     }
+    ],
+    "marks": [
+     {
+      "what": "chosen",
+      "t": 1793195859518
+     },
+     {
+      "what": "block shown",
+      "t": 1793195859562,
+      "kind": "error"
+     }
+    ]
+   },
+   "forced-light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": true
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": null,
+    "block": {
+     "kind": "error",
+     "heading": "This cannot run here",
+     "text": "This cannot run hereThis browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead.",
+     "reasonKeys": [
+      "preflight.reasons.noSourceDecodeHere"
+     ],
+     "live": null,
+     "overflow": []
+    },
+    "report": {
+     "kind": null,
+     "text": "Video propertiesDuration5 secondsVideo formatUnknownThis browser cannot read this video format.File size35.5 MBResolution1920 × 1080Frame rate25 frames a secondAudioNo audio track foundLevelling needs audio. The rest of the job still runs.CaptionsNone found in this fileFile typeQuickTime File Format",
+     "reasonKeys": []
+    },
+    "createOffered": false,
+    "ackOffered": false,
+    "res": "none",
+    "finished": false,
+    "running": false,
+    "checking": false,
+    "result": {
+     "title": "",
+     "text": ""
+    },
+    "progress": "",
+    "focus": "body",
+    "fileInput": {
+     "disabled": false,
+     "chosen": true
+    },
+    "steps": [
+     {
+      "id": "step-choose",
+      "shown": true
+     },
+     {
+      "id": "step-trim",
+      "shown": false
+     },
+     {
+      "id": "step-title",
+      "shown": false
+     },
+     {
+      "id": "step-closing",
+      "shown": false
+     },
+     {
+      "id": "step-preset",
+      "shown": false
+     },
+     {
+      "id": "step-create",
+      "shown": false
+     }
+    ],
+    "status": {
+     "announced": "",
+     "shown": "",
+     "spokenOnly": ""
+    },
+    "sourceStatus": {
+     "announced": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead.",
+     "shown": "",
+     "spokenOnly": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead."
+    },
+    "liveRegions": [
+     {
+      "region": "div.promise-help",
+      "text": "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperabl"
+     },
+     {
+      "region": "#source-status",
+      "text": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing "
+     },
+     {
+      "region": "div",
+      "text": "The last second of video — the closing graphics cover it as they build. A held last frame — your last frame is held for one extra second. The closing graphics p"
+     },
+     {
+      "region": "#page-announcer",
+      "text": "A preview is not available for this file. You can still set the times."
+     }
+    ],
+    "marks": [
+     {
+      "what": "chosen",
+      "t": 1793195859518
+     },
+     {
+      "what": "block shown",
+      "t": 1793195859562,
+      "kind": "error"
+     }
+    ]
+   },
+   "forced-dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": true
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": null,
+    "block": {
+     "kind": "error",
+     "heading": "This cannot run here",
+     "text": "This cannot run hereThis browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead.",
+     "reasonKeys": [
+      "preflight.reasons.noSourceDecodeHere"
+     ],
+     "live": null,
+     "overflow": []
+    },
+    "report": {
+     "kind": null,
+     "text": "Video propertiesDuration5 secondsVideo formatUnknownThis browser cannot read this video format.File size35.5 MBResolution1920 × 1080Frame rate25 frames a secondAudioNo audio track foundLevelling needs audio. The rest of the job still runs.CaptionsNone found in this fileFile typeQuickTime File Format",
+     "reasonKeys": []
+    },
+    "createOffered": false,
+    "ackOffered": false,
+    "res": "none",
+    "finished": false,
+    "running": false,
+    "checking": false,
+    "result": {
+     "title": "",
+     "text": ""
+    },
+    "progress": "",
+    "focus": "body",
+    "fileInput": {
+     "disabled": false,
+     "chosen": true
+    },
+    "steps": [
+     {
+      "id": "step-choose",
+      "shown": true
+     },
+     {
+      "id": "step-trim",
+      "shown": false
+     },
+     {
+      "id": "step-title",
+      "shown": false
+     },
+     {
+      "id": "step-closing",
+      "shown": false
+     },
+     {
+      "id": "step-preset",
+      "shown": false
+     },
+     {
+      "id": "step-create",
+      "shown": false
+     }
+    ],
+    "status": {
+     "announced": "",
+     "shown": "",
+     "spokenOnly": ""
+    },
+    "sourceStatus": {
+     "announced": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead.",
+     "shown": "",
+     "spokenOnly": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead."
+    },
+    "liveRegions": [
+     {
+      "region": "div.promise-help",
+      "text": "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperabl"
+     },
+     {
+      "region": "#source-status",
+      "text": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing "
+     },
+     {
+      "region": "div",
+      "text": "The last second of video — the closing graphics cover it as they build. A held last frame — your last frame is held for one extra second. The closing graphics p"
+     },
+     {
+      "region": "#page-announcer",
+      "text": "A preview is not available for this file. You can still set the times."
+     }
+    ],
+    "marks": [
+     {
+      "what": "chosen",
+      "t": 1793195859518
+     },
+     {
+      "what": "block shown",
+      "t": 1793195859562,
+      "kind": "error"
+     }
+    ]
+   }
+  },
+  "scenarioAsserts": [
+   {
+    "what": "an accepted outcome within the bound: refused before Create, finished, or failed with recovery (VH-214)",
+    "outcome": "pass",
+    "accepted": "refused before Create",
+    "seconds": 1,
+    "created": false,
+    "blocked": true,
+    "outcomeSeen": {
+     "accepted": "refused before Create",
+     "answered": true,
+     "t": 1793195860225
+    },
+    "expired": null,
+    "atExpiry": null,
+    "walkError": null,
+    "later": "refused before Create",
+    "hang": null
+   },
+   {
+    "what": "the outcome: a finished video, a failure and its code, or still running at the limit",
+    "outcome": "not-counted",
+    "why": "recorded as found, not judged here",
+    "found": {
+     "seconds": 3,
+     "blocked": true,
+     "block": "This cannot run hereThis browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4",
+     "timedOut": false,
+     "res": "none",
+     "text": ""
+    }
+   }
+  ],
+  "targets": [
+   "worker"
+  ],
+  "status": "ok",
+  "ms": 4797,
+  "targetsSeen": [
+   {
+    "t": 587,
+    "type": "worker",
+    "url": "job.worker.ts?worker_file&type=module",
+    "waitingForDebugger": true,
+    "sessionId": "7889D96C4E6A8A9E9DAA783483D38E8F"
+   }
+  ],
+  "workerLogs": [
+   {
+    "t": 663,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (worker)"
+    ]
+   },
+   {
+    "t": 663,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[worker]",
+     "job worker ready"
+    ]
+   },
+   {
+    "t": 663,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[worker]",
+     "ping received"
+    ]
+   },
+   {
+    "t": 1106,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "Unsupported video codec (sample entry type 'rle ')."
+    ]
+   },
+   {
+    "t": 1110,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "QuickTime File Format",
+      "durationSeconds": 5,
+      "videoCodec": null,
+      "resolution": "1920x1080",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": null,
+      "channels": null,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 0
+     }
+    ]
+   },
+   {
+    "t": 1114,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "Unsupported video codec (sample entry type 'rle ')."
+    ]
+   },
+   {
+    "t": 1116,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "QuickTime File Format",
+      "durationSeconds": 5,
+      "videoCodec": null,
+      "resolution": "1920x1080",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": null,
+      "channels": null,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 0
+     }
+    ]
+   },
+   {
+    "t": 1116,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "device capabilities inspected",
+     {
+      "hasWebCodecs": true,
+      "hasOpfs": true,
+      "deviceClass": "desktop",
+      "hardwareConcurrency": 10,
+      "quotaBytes": 10737418428,
+      "availableBytes": 10737418240
+     }
+    ]
+   },
+   {
+    "t": 1136,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1920,
+      "height": 1080,
+      "bitrate": 6220800
+     }
+    ]
+   },
+   {
+    "t": 1140,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "Unsupported video codec (sample entry type 'rle ')."
+    ]
+   }
+  ],
+  "pageLogs": [
+   {
+    "t": 522,
+    "type": "debug",
+    "args": [
+     "[vite] connecting..."
+    ]
+   },
+   {
+    "t": 525,
+    "type": "debug",
+    "args": [
+     "[vite] connected."
+    ]
+   },
+   {
+    "t": 542,
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (main)"
+    ]
+   },
+   {
+    "t": 567,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "shell mounted"
+    ]
+   },
+   {
+    "t": 542,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "UoN Video Helper starting",
+     {
+      "appVersion": "v0.2.0",
+      "buildId": "v0.2.0+20261028.5893d9d"
+     }
+    ]
+   },
+   {
+    "t": 543,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "brand assets",
+     {
+      "logo": true,
+      "headingFont": true
+     }
+    ]
+   },
+   {
+    "t": 564,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "device class",
+     {
+      "deviceClass": "desktop"
+     }
+    ]
+   },
+   {
+    "t": 568,
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 2,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 568,
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 1,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 583,
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1920,
+      "height": 1080,
+      "bitrate": 6220800
+     }
+    ]
+   },
+   {
+    "t": 664,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "worker round-trip complete",
+     {
+      "roundTripMs": 99,
+      "workerBootMs": 1
+     }
+    ]
+   },
+   {
+    "t": 1098,
+    "type": "info",
+    "args": [
+     "[ui]",
+     "file chosen",
+     {
+      "sizeBytes": 35521170,
+      "type": "video/quicktime"
+     }
+    ]
+   },
+   {
+    "t": 1141,
+    "type": "info",
+    "args": [
+     "[ui]",
+     "preflight verdict",
+     {
+      "outcome": "block",
+      "reasons": [
+       "no-source-decode",
+       "estimate-unavailable"
+      ],
+      "presetId": "best",
+      "contentClass": "unknown",
+      "bitrateBasis": "anchor-ceiling",
+      "width": 1920,
+      "height": 1080,
+      "frameRate": 25,
+      "projectedOutputBytes": 11897280,
+      "probeMeasured": false,
+      "videoFramesPerSecond": 0,
+      "estimatedSeconds": null
+     }
+    ]
+   }
+  ],
+  "chosenToOutcomeMs": 44
+ },
+ {
+  "key": "S-140n__en-GB__w320",
+  "cell": "S-140n",
+  "scenario": "S-140n",
+  "what": "A QuickTime Animation file with no audio, N13 (the closing asset's made twin)",
+  "file": "qtrle-5s.mov",
+  "lang": "en-GB",
+  "view": "w320",
+  "modesRead": [
+   "light",
+   "dark",
+   "forced-light",
+   "forced-dark"
+  ],
+  "powerAtStart": {
+   "ac": true,
+   "load": [
+    13.55,
+    8.38,
+    8.91
+   ],
+   "powermode": "powermode            2"
+  },
+  "setupMs": 1782,
+  "obs": {
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "tStart": 1793195863732,
+   "deadlines": {
+    "boot": 1793195923732,
+    "read": 1793196194334
+   },
+   "tChosen": 1793195864334,
+   "recorderAt": 1793195864334,
+   "t0": 1793195865046,
+   "blocked": true,
+   "outcomeSeen": {
+    "accepted": "refused before Create",
+    "answered": true,
+    "t": 1793195865046
+   },
+   "tEnd": 1793195865047
+  },
+  "out": {
+   "light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": false
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": null,
+    "block": {
+     "kind": "error",
+     "heading": "This cannot run here",
+     "text": "This cannot run hereThis browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead.",
+     "reasonKeys": [
+      "preflight.reasons.noSourceDecodeHere"
+     ],
+     "live": null,
+     "overflow": []
+    },
+    "report": {
+     "kind": null,
+     "text": "Video propertiesDuration5 secondsVideo formatUnknownThis browser cannot read this video format.File size35.5 MBResolution1920 × 1080Frame rate25 frames a secondAudioNo audio track foundLevelling needs audio. The rest of the job still runs.CaptionsNone found in this fileFile typeQuickTime File Format",
+     "reasonKeys": []
+    },
+    "createOffered": false,
+    "ackOffered": false,
+    "res": "none",
+    "finished": false,
+    "running": false,
+    "checking": false,
+    "result": {
+     "title": "",
+     "text": ""
+    },
+    "progress": "",
+    "focus": "body",
+    "fileInput": {
+     "disabled": false,
+     "chosen": true
+    },
+    "steps": [
+     {
+      "id": "step-choose",
+      "shown": true
+     },
+     {
+      "id": "step-trim",
+      "shown": false
+     },
+     {
+      "id": "step-title",
+      "shown": false
+     },
+     {
+      "id": "step-closing",
+      "shown": false
+     },
+     {
+      "id": "step-preset",
+      "shown": false
+     },
+     {
+      "id": "step-create",
+      "shown": false
+     }
+    ],
+    "status": {
+     "announced": "",
+     "shown": "",
+     "spokenOnly": ""
+    },
+    "sourceStatus": {
+     "announced": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead.",
+     "shown": "",
+     "spokenOnly": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead."
+    },
+    "liveRegions": [
+     {
+      "region": "div.promise-help",
+      "text": "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperabl"
+     },
+     {
+      "region": "#source-status",
+      "text": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing "
+     },
+     {
+      "region": "div",
+      "text": "The last second of video — the closing graphics cover it as they build. A held last frame — your last frame is held for one extra second. The closing graphics p"
+     },
+     {
+      "region": "#page-announcer",
+      "text": "A preview is not available for this file. You can still set the times."
+     }
+    ],
+    "marks": [
+     {
+      "what": "chosen",
+      "t": 1793195864340
+     },
+     {
+      "what": "block shown",
+      "t": 1793195864383,
+      "kind": "error"
+     }
+    ]
+   },
+   "dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": false
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": null,
+    "block": {
+     "kind": "error",
+     "heading": "This cannot run here",
+     "text": "This cannot run hereThis browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead.",
+     "reasonKeys": [
+      "preflight.reasons.noSourceDecodeHere"
+     ],
+     "live": null,
+     "overflow": []
+    },
+    "report": {
+     "kind": null,
+     "text": "Video propertiesDuration5 secondsVideo formatUnknownThis browser cannot read this video format.File size35.5 MBResolution1920 × 1080Frame rate25 frames a secondAudioNo audio track foundLevelling needs audio. The rest of the job still runs.CaptionsNone found in this fileFile typeQuickTime File Format",
+     "reasonKeys": []
+    },
+    "createOffered": false,
+    "ackOffered": false,
+    "res": "none",
+    "finished": false,
+    "running": false,
+    "checking": false,
+    "result": {
+     "title": "",
+     "text": ""
+    },
+    "progress": "",
+    "focus": "body",
+    "fileInput": {
+     "disabled": false,
+     "chosen": true
+    },
+    "steps": [
+     {
+      "id": "step-choose",
+      "shown": true
+     },
+     {
+      "id": "step-trim",
+      "shown": false
+     },
+     {
+      "id": "step-title",
+      "shown": false
+     },
+     {
+      "id": "step-closing",
+      "shown": false
+     },
+     {
+      "id": "step-preset",
+      "shown": false
+     },
+     {
+      "id": "step-create",
+      "shown": false
+     }
+    ],
+    "status": {
+     "announced": "",
+     "shown": "",
+     "spokenOnly": ""
+    },
+    "sourceStatus": {
+     "announced": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead.",
+     "shown": "",
+     "spokenOnly": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead."
+    },
+    "liveRegions": [
+     {
+      "region": "div.promise-help",
+      "text": "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperabl"
+     },
+     {
+      "region": "#source-status",
+      "text": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing "
+     },
+     {
+      "region": "div",
+      "text": "The last second of video — the closing graphics cover it as they build. A held last frame — your last frame is held for one extra second. The closing graphics p"
+     },
+     {
+      "region": "#page-announcer",
+      "text": "A preview is not available for this file. You can still set the times."
+     }
+    ],
+    "marks": [
+     {
+      "what": "chosen",
+      "t": 1793195864340
+     },
+     {
+      "what": "block shown",
+      "t": 1793195864383,
+      "kind": "error"
+     }
+    ]
+   },
+   "forced-light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": true
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": null,
+    "block": {
+     "kind": "error",
+     "heading": "This cannot run here",
+     "text": "This cannot run hereThis browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead.",
+     "reasonKeys": [
+      "preflight.reasons.noSourceDecodeHere"
+     ],
+     "live": null,
+     "overflow": []
+    },
+    "report": {
+     "kind": null,
+     "text": "Video propertiesDuration5 secondsVideo formatUnknownThis browser cannot read this video format.File size35.5 MBResolution1920 × 1080Frame rate25 frames a secondAudioNo audio track foundLevelling needs audio. The rest of the job still runs.CaptionsNone found in this fileFile typeQuickTime File Format",
+     "reasonKeys": []
+    },
+    "createOffered": false,
+    "ackOffered": false,
+    "res": "none",
+    "finished": false,
+    "running": false,
+    "checking": false,
+    "result": {
+     "title": "",
+     "text": ""
+    },
+    "progress": "",
+    "focus": "body",
+    "fileInput": {
+     "disabled": false,
+     "chosen": true
+    },
+    "steps": [
+     {
+      "id": "step-choose",
+      "shown": true
+     },
+     {
+      "id": "step-trim",
+      "shown": false
+     },
+     {
+      "id": "step-title",
+      "shown": false
+     },
+     {
+      "id": "step-closing",
+      "shown": false
+     },
+     {
+      "id": "step-preset",
+      "shown": false
+     },
+     {
+      "id": "step-create",
+      "shown": false
+     }
+    ],
+    "status": {
+     "announced": "",
+     "shown": "",
+     "spokenOnly": ""
+    },
+    "sourceStatus": {
+     "announced": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead.",
+     "shown": "",
+     "spokenOnly": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead."
+    },
+    "liveRegions": [
+     {
+      "region": "div.promise-help",
+      "text": "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperabl"
+     },
+     {
+      "region": "#source-status",
+      "text": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing "
+     },
+     {
+      "region": "div",
+      "text": "The last second of video — the closing graphics cover it as they build. A held last frame — your last frame is held for one extra second. The closing graphics p"
+     },
+     {
+      "region": "#page-announcer",
+      "text": "A preview is not available for this file. You can still set the times."
+     }
+    ],
+    "marks": [
+     {
+      "what": "chosen",
+      "t": 1793195864340
+     },
+     {
+      "what": "block shown",
+      "t": 1793195864383,
+      "kind": "error"
+     }
+    ]
+   },
+   "forced-dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": true
+    },
+    "page": {
+     "lang": "en-GB",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": null,
+    "block": {
+     "kind": "error",
+     "heading": "This cannot run here",
+     "text": "This cannot run hereThis browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead.",
+     "reasonKeys": [
+      "preflight.reasons.noSourceDecodeHere"
+     ],
+     "live": null,
+     "overflow": []
+    },
+    "report": {
+     "kind": null,
+     "text": "Video propertiesDuration5 secondsVideo formatUnknownThis browser cannot read this video format.File size35.5 MBResolution1920 × 1080Frame rate25 frames a secondAudioNo audio track foundLevelling needs audio. The rest of the job still runs.CaptionsNone found in this fileFile typeQuickTime File Format",
+     "reasonKeys": []
+    },
+    "createOffered": false,
+    "ackOffered": false,
+    "res": "none",
+    "finished": false,
+    "running": false,
+    "checking": false,
+    "result": {
+     "title": "",
+     "text": ""
+    },
+    "progress": "",
+    "focus": "body",
+    "fileInput": {
+     "disabled": false,
+     "chosen": true
+    },
+    "steps": [
+     {
+      "id": "step-choose",
+      "shown": true
+     },
+     {
+      "id": "step-trim",
+      "shown": false
+     },
+     {
+      "id": "step-title",
+      "shown": false
+     },
+     {
+      "id": "step-closing",
+      "shown": false
+     },
+     {
+      "id": "step-preset",
+      "shown": false
+     },
+     {
+      "id": "step-create",
+      "shown": false
+     }
+    ],
+    "status": {
+     "announced": "",
+     "shown": "",
+     "spokenOnly": ""
+    },
+    "sourceStatus": {
+     "announced": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead.",
+     "shown": "",
+     "spokenOnly": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4 — and choose that file instead."
+    },
+    "liveRegions": [
+     {
+      "region": "div.promise-help",
+      "text": "Videos come in many formats. Some play on one device but not another, or do not work with some apps. This tool saves your video as an MP4, the most interoperabl"
+     },
+     {
+      "region": "#source-status",
+      "text": "Device check complete. This cannot run here. This browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing "
+     },
+     {
+      "region": "div",
+      "text": "The last second of video — the closing graphics cover it as they build. A held last frame — your last frame is held for one extra second. The closing graphics p"
+     },
+     {
+      "region": "#page-announcer",
+      "text": "A preview is not available for this file. You can still set the times."
+     }
+    ],
+    "marks": [
+     {
+      "what": "chosen",
+      "t": 1793195864340
+     },
+     {
+      "what": "block shown",
+      "t": 1793195864383,
+      "kind": "error"
+     }
+    ]
+   }
+  },
+  "scenarioAsserts": [
+   {
+    "what": "an accepted outcome within the bound: refused before Create, finished, or failed with recovery (VH-214)",
+    "outcome": "pass",
+    "accepted": "refused before Create",
+    "seconds": 1,
+    "created": false,
+    "blocked": true,
+    "outcomeSeen": {
+     "accepted": "refused before Create",
+     "answered": true,
+     "t": 1793195865046
+    },
+    "expired": null,
+    "atExpiry": null,
+    "walkError": null,
+    "later": "refused before Create",
+    "hang": null
+   },
+   {
+    "what": "the outcome: a finished video, a failure and its code, or still running at the limit",
+    "outcome": "not-counted",
+    "why": "recorded as found, not judged here",
+    "found": {
+     "seconds": 3,
+     "blocked": true,
+     "block": "This cannot run hereThis browser cannot read the picture or audio inside this file. It was probably saved in a format made for editing software. Export it again as an MP4 — a file whose name ends .mp4",
+     "timedOut": false,
+     "res": "none",
+     "text": ""
+    }
+   }
+  ],
+  "targets": [
+   "worker"
+  ],
+  "status": "ok",
+  "ms": 4773,
+  "targetsSeen": [
+   {
+    "t": 566,
+    "type": "worker",
+    "url": "job.worker.ts?worker_file&type=module",
+    "waitingForDebugger": true,
+    "sessionId": "1D9F0C9662CBECC2321E1ECF76272620"
+   }
+  ],
+  "workerLogs": [
+   {
+    "t": 646,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (worker)"
+    ]
+   },
+   {
+    "t": 646,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[worker]",
+     "job worker ready"
+    ]
+   },
+   {
+    "t": 646,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[worker]",
+     "ping received"
+    ]
+   },
+   {
+    "t": 1084,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "Unsupported video codec (sample entry type 'rle ')."
+    ]
+   },
+   {
+    "t": 1088,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "QuickTime File Format",
+      "durationSeconds": 5,
+      "videoCodec": null,
+      "resolution": "1920x1080",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": null,
+      "channels": null,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 0
+     }
+    ]
+   },
+   {
+    "t": 1091,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "Unsupported video codec (sample entry type 'rle ')."
+    ]
+   },
+   {
+    "t": 1093,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "QuickTime File Format",
+      "durationSeconds": 5,
+      "videoCodec": null,
+      "resolution": "1920x1080",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": null,
+      "channels": null,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 0
+     }
+    ]
+   },
+   {
+    "t": 1094,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "device capabilities inspected",
+     {
+      "hasWebCodecs": true,
+      "hasOpfs": true,
+      "deviceClass": "desktop",
+      "hardwareConcurrency": 10,
+      "quotaBytes": 10737418428,
+      "availableBytes": 10737418240
+     }
+    ]
+   },
+   {
+    "t": 1112,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1920,
+      "height": 1080,
+      "bitrate": 6220800
+     }
+    ]
+   },
+   {
+    "t": 1116,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "Unsupported video codec (sample entry type 'rle ')."
+    ]
+   }
+  ],
+  "pageLogs": [
+   {
+    "t": 499,
+    "type": "debug",
+    "args": [
+     "[vite] connecting..."
+    ]
+   },
+   {
+    "t": 507,
+    "type": "debug",
+    "args": [
+     "[vite] connected."
+    ]
+   },
+   {
+    "t": 521,
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (main)"
+    ]
+   },
+   {
+    "t": 546,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "shell mounted"
+    ]
+   },
+   {
+    "t": 521,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "UoN Video Helper starting",
+     {
+      "appVersion": "v0.2.0",
+      "buildId": "v0.2.0+20261028.5893d9d"
+     }
+    ]
+   },
+   {
+    "t": 522,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "brand assets",
+     {
+      "logo": true,
+      "headingFont": true
+     }
+    ]
+   },
+   {
+    "t": 542,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "device class",
+     {
+      "deviceClass": "desktop"
+     }
+    ]
+   },
+   {
+    "t": 547,
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 2,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 547,
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 1,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 561,
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1920,
+      "height": 1080,
+      "bitrate": 6220800
+     }
+    ]
+   },
+   {
+    "t": 647,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "worker round-trip complete",
+     {
+      "roundTripMs": 104,
+      "workerBootMs": 1
+     }
+    ]
+   },
+   {
+    "t": 1076,
+    "type": "info",
+    "args": [
+     "[ui]",
+     "file chosen",
+     {
+      "sizeBytes": 35521170,
+      "type": "video/quicktime"
+     }
+    ]
+   },
+   {
+    "t": 1117,
+    "type": "info",
+    "args": [
+     "[ui]",
+     "preflight verdict",
+     {
+      "outcome": "block",
+      "reasons": [
+       "no-source-decode",
+       "estimate-unavailable"
+      ],
+      "presetId": "best",
+      "contentClass": "unknown",
+      "bitrateBasis": "anchor-ceiling",
+      "width": 1920,
+      "height": 1080,
+      "frameRate": 25,
+      "projectedOutputBytes": 11897280,
+      "probeMeasured": false,
+      "videoFramesPerSecond": 0,
+      "estimatedSeconds": null
+     }
+    ]
+   }
+  ],
+  "chosenToOutcomeMs": 43
+ },
+ {
+  "key": "S-140n__zh-Hans__w1280",
+  "cell": "S-140n",
+  "scenario": "S-140n",
+  "what": "A QuickTime Animation file with no audio, N13 (the closing asset's made twin)",
+  "file": "qtrle-5s.mov",
+  "lang": "zh-Hans",
+  "view": "w1280",
+  "modesRead": [
+   "light",
+   "dark",
+   "forced-light",
+   "forced-dark"
+  ],
+  "powerAtStart": {
+   "ac": true,
+   "load": [
+    13.43,
+    8.44,
+    8.92
+   ],
+   "powermode": "powermode            2"
+  },
+  "setupMs": 2206,
+  "obs": {
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "tStart": 1793195868552,
+   "deadlines": {
+    "boot": 1793195928552,
+    "read": 1793196199583
+   },
+   "tChosen": 1793195869583,
+   "recorderAt": 1793195869584,
+   "t0": 1793195870294,
+   "blocked": true,
+   "outcomeSeen": {
+    "accepted": "refused before Create",
+    "answered": true,
+    "t": 1793195870294
+   },
+   "tEnd": 1793195870295
+  },
+  "out": {
+   "light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": false
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": null,
+    "block": {
+     "kind": "error",
+     "heading": "无法在此处运行",
+     "text": "无法在此处运行此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。",
+     "reasonKeys": [
+      "preflight.reasons.noSourceDecodeHere"
+     ],
+     "live": null,
+     "overflow": []
+    },
+    "report": {
+     "kind": null,
+     "text": "视频属性时长5秒钟视频格式未知此浏览器无法读取此视频格式。文件大小35.5 MB分辨率1920 × 1080帧率每秒 25 帧音频未找到音轨音量调整需要音频。其他工作照常进行。字幕此文件中未找到任何内容文件类型QuickTime File Format",
+     "reasonKeys": []
+    },
+    "createOffered": false,
+    "ackOffered": false,
+    "res": "none",
+    "finished": false,
+    "running": false,
+    "checking": false,
+    "result": {
+     "title": "",
+     "text": ""
+    },
+    "progress": "",
+    "focus": "input",
+    "fileInput": {
+     "disabled": false,
+     "chosen": true
+    },
+    "steps": [
+     {
+      "id": "step-choose",
+      "shown": true
+     },
+     {
+      "id": "step-trim",
+      "shown": false
+     },
+     {
+      "id": "step-title",
+      "shown": false
+     },
+     {
+      "id": "step-closing",
+      "shown": false
+     },
+     {
+      "id": "step-preset",
+      "shown": false
+     },
+     {
+      "id": "step-create",
+      "shown": false
+     }
+    ],
+    "status": {
+     "announced": "",
+     "shown": "",
+     "spokenOnly": ""
+    },
+    "sourceStatus": {
+     "announced": "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。",
+     "shown": "",
+     "spokenOnly": "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。"
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "页面语言：简体中文。"
+     },
+     {
+      "region": "div.promise-help",
+      "text": "视频有许多格式。有些格式在一台设备上可以播放，在另一台上却不行，或者无法在某些应用中使用。此工具会将您的视频保存为 MP4，这是兼容性最好的视频格式。这意味着它几乎可以在任何手机、电脑或网站上播放。"
+     },
+     {
+      "region": "#source-status",
+      "text": "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。"
+     },
+     {
+      "region": "div",
+      "text": "视频的最后一秒 — 结尾图形在逐渐出现时会覆盖这一秒。 定格的最后一帧 — 最后一帧画面会额外停留一秒钟。结尾图形会覆盖这一秒，所以视频中的所有内容都不会被遮挡。"
+     },
+     {
+      "region": "#page-announcer",
+      "text": "此文件没有预览功能。您仍然可以设置时间。"
+     }
+    ],
+    "marks": [
+     {
+      "what": "chosen",
+      "t": 1793195869589
+     },
+     {
+      "what": "block shown",
+      "t": 1793195869633,
+      "kind": "error"
+     }
+    ]
+   },
+   "dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": false
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": null,
+    "block": {
+     "kind": "error",
+     "heading": "无法在此处运行",
+     "text": "无法在此处运行此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。",
+     "reasonKeys": [
+      "preflight.reasons.noSourceDecodeHere"
+     ],
+     "live": null,
+     "overflow": []
+    },
+    "report": {
+     "kind": null,
+     "text": "视频属性时长5秒钟视频格式未知此浏览器无法读取此视频格式。文件大小35.5 MB分辨率1920 × 1080帧率每秒 25 帧音频未找到音轨音量调整需要音频。其他工作照常进行。字幕此文件中未找到任何内容文件类型QuickTime File Format",
+     "reasonKeys": []
+    },
+    "createOffered": false,
+    "ackOffered": false,
+    "res": "none",
+    "finished": false,
+    "running": false,
+    "checking": false,
+    "result": {
+     "title": "",
+     "text": ""
+    },
+    "progress": "",
+    "focus": "input",
+    "fileInput": {
+     "disabled": false,
+     "chosen": true
+    },
+    "steps": [
+     {
+      "id": "step-choose",
+      "shown": true
+     },
+     {
+      "id": "step-trim",
+      "shown": false
+     },
+     {
+      "id": "step-title",
+      "shown": false
+     },
+     {
+      "id": "step-closing",
+      "shown": false
+     },
+     {
+      "id": "step-preset",
+      "shown": false
+     },
+     {
+      "id": "step-create",
+      "shown": false
+     }
+    ],
+    "status": {
+     "announced": "",
+     "shown": "",
+     "spokenOnly": ""
+    },
+    "sourceStatus": {
+     "announced": "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。",
+     "shown": "",
+     "spokenOnly": "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。"
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "页面语言：简体中文。"
+     },
+     {
+      "region": "div.promise-help",
+      "text": "视频有许多格式。有些格式在一台设备上可以播放，在另一台上却不行，或者无法在某些应用中使用。此工具会将您的视频保存为 MP4，这是兼容性最好的视频格式。这意味着它几乎可以在任何手机、电脑或网站上播放。"
+     },
+     {
+      "region": "#source-status",
+      "text": "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。"
+     },
+     {
+      "region": "div",
+      "text": "视频的最后一秒 — 结尾图形在逐渐出现时会覆盖这一秒。 定格的最后一帧 — 最后一帧画面会额外停留一秒钟。结尾图形会覆盖这一秒，所以视频中的所有内容都不会被遮挡。"
+     },
+     {
+      "region": "#page-announcer",
+      "text": "此文件没有预览功能。您仍然可以设置时间。"
+     }
+    ],
+    "marks": [
+     {
+      "what": "chosen",
+      "t": 1793195869589
+     },
+     {
+      "what": "block shown",
+      "t": 1793195869633,
+      "kind": "error"
+     }
+    ]
+   },
+   "forced-light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": true
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": null,
+    "block": {
+     "kind": "error",
+     "heading": "无法在此处运行",
+     "text": "无法在此处运行此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。",
+     "reasonKeys": [
+      "preflight.reasons.noSourceDecodeHere"
+     ],
+     "live": null,
+     "overflow": []
+    },
+    "report": {
+     "kind": null,
+     "text": "视频属性时长5秒钟视频格式未知此浏览器无法读取此视频格式。文件大小35.5 MB分辨率1920 × 1080帧率每秒 25 帧音频未找到音轨音量调整需要音频。其他工作照常进行。字幕此文件中未找到任何内容文件类型QuickTime File Format",
+     "reasonKeys": []
+    },
+    "createOffered": false,
+    "ackOffered": false,
+    "res": "none",
+    "finished": false,
+    "running": false,
+    "checking": false,
+    "result": {
+     "title": "",
+     "text": ""
+    },
+    "progress": "",
+    "focus": "input",
+    "fileInput": {
+     "disabled": false,
+     "chosen": true
+    },
+    "steps": [
+     {
+      "id": "step-choose",
+      "shown": true
+     },
+     {
+      "id": "step-trim",
+      "shown": false
+     },
+     {
+      "id": "step-title",
+      "shown": false
+     },
+     {
+      "id": "step-closing",
+      "shown": false
+     },
+     {
+      "id": "step-preset",
+      "shown": false
+     },
+     {
+      "id": "step-create",
+      "shown": false
+     }
+    ],
+    "status": {
+     "announced": "",
+     "shown": "",
+     "spokenOnly": ""
+    },
+    "sourceStatus": {
+     "announced": "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。",
+     "shown": "",
+     "spokenOnly": "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。"
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "页面语言：简体中文。"
+     },
+     {
+      "region": "div.promise-help",
+      "text": "视频有许多格式。有些格式在一台设备上可以播放，在另一台上却不行，或者无法在某些应用中使用。此工具会将您的视频保存为 MP4，这是兼容性最好的视频格式。这意味着它几乎可以在任何手机、电脑或网站上播放。"
+     },
+     {
+      "region": "#source-status",
+      "text": "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。"
+     },
+     {
+      "region": "div",
+      "text": "视频的最后一秒 — 结尾图形在逐渐出现时会覆盖这一秒。 定格的最后一帧 — 最后一帧画面会额外停留一秒钟。结尾图形会覆盖这一秒，所以视频中的所有内容都不会被遮挡。"
+     },
+     {
+      "region": "#page-announcer",
+      "text": "此文件没有预览功能。您仍然可以设置时间。"
+     }
+    ],
+    "marks": [
+     {
+      "what": "chosen",
+      "t": 1793195869589
+     },
+     {
+      "what": "block shown",
+      "t": 1793195869633,
+      "kind": "error"
+     }
+    ]
+   },
+   "forced-dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": true
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": null,
+    "block": {
+     "kind": "error",
+     "heading": "无法在此处运行",
+     "text": "无法在此处运行此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。",
+     "reasonKeys": [
+      "preflight.reasons.noSourceDecodeHere"
+     ],
+     "live": null,
+     "overflow": []
+    },
+    "report": {
+     "kind": null,
+     "text": "视频属性时长5秒钟视频格式未知此浏览器无法读取此视频格式。文件大小35.5 MB分辨率1920 × 1080帧率每秒 25 帧音频未找到音轨音量调整需要音频。其他工作照常进行。字幕此文件中未找到任何内容文件类型QuickTime File Format",
+     "reasonKeys": []
+    },
+    "createOffered": false,
+    "ackOffered": false,
+    "res": "none",
+    "finished": false,
+    "running": false,
+    "checking": false,
+    "result": {
+     "title": "",
+     "text": ""
+    },
+    "progress": "",
+    "focus": "input",
+    "fileInput": {
+     "disabled": false,
+     "chosen": true
+    },
+    "steps": [
+     {
+      "id": "step-choose",
+      "shown": true
+     },
+     {
+      "id": "step-trim",
+      "shown": false
+     },
+     {
+      "id": "step-title",
+      "shown": false
+     },
+     {
+      "id": "step-closing",
+      "shown": false
+     },
+     {
+      "id": "step-preset",
+      "shown": false
+     },
+     {
+      "id": "step-create",
+      "shown": false
+     }
+    ],
+    "status": {
+     "announced": "",
+     "shown": "",
+     "spokenOnly": ""
+    },
+    "sourceStatus": {
+     "announced": "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。",
+     "shown": "",
+     "spokenOnly": "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。"
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "页面语言：简体中文。"
+     },
+     {
+      "region": "div.promise-help",
+      "text": "视频有许多格式。有些格式在一台设备上可以播放，在另一台上却不行，或者无法在某些应用中使用。此工具会将您的视频保存为 MP4，这是兼容性最好的视频格式。这意味着它几乎可以在任何手机、电脑或网站上播放。"
+     },
+     {
+      "region": "#source-status",
+      "text": "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。"
+     },
+     {
+      "region": "div",
+      "text": "视频的最后一秒 — 结尾图形在逐渐出现时会覆盖这一秒。 定格的最后一帧 — 最后一帧画面会额外停留一秒钟。结尾图形会覆盖这一秒，所以视频中的所有内容都不会被遮挡。"
+     },
+     {
+      "region": "#page-announcer",
+      "text": "此文件没有预览功能。您仍然可以设置时间。"
+     }
+    ],
+    "marks": [
+     {
+      "what": "chosen",
+      "t": 1793195869589
+     },
+     {
+      "what": "block shown",
+      "t": 1793195869633,
+      "kind": "error"
+     }
+    ]
+   }
+  },
+  "scenarioAsserts": [
+   {
+    "what": "an accepted outcome within the bound: refused before Create, finished, or failed with recovery (VH-214)",
+    "outcome": "pass",
+    "accepted": "refused before Create",
+    "seconds": 2,
+    "created": false,
+    "blocked": true,
+    "outcomeSeen": {
+     "accepted": "refused before Create",
+     "answered": true,
+     "t": 1793195870294
+    },
+    "expired": null,
+    "atExpiry": null,
+    "walkError": null,
+    "later": "refused before Create",
+    "hang": null
+   },
+   {
+    "what": "the outcome: a finished video, a failure and its code, or still running at the limit",
+    "outcome": "not-counted",
+    "why": "recorded as found, not judged here",
+    "found": {
+     "seconds": 3,
+     "blocked": true,
+     "block": "无法在此处运行此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。",
+     "timedOut": false,
+     "res": "none",
+     "text": ""
+    }
+   }
+  ],
+  "targets": [
+   "worker"
+  ],
+  "status": "ok",
+  "ms": 5201,
+  "targetsSeen": [
+   {
+    "t": 560,
+    "type": "worker",
+    "url": "job.worker.ts?worker_file&type=module",
+    "waitingForDebugger": true,
+    "sessionId": "383112AD2B449C31FF93E760320BADBF"
+   }
+  ],
+  "workerLogs": [
+   {
+    "t": 634,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (worker)"
+    ]
+   },
+   {
+    "t": 634,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[worker]",
+     "job worker ready"
+    ]
+   },
+   {
+    "t": 634,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[worker]",
+     "ping received"
+    ]
+   },
+   {
+    "t": 1509,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "Unsupported video codec (sample entry type 'rle ')."
+    ]
+   },
+   {
+    "t": 1513,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "QuickTime File Format",
+      "durationSeconds": 5,
+      "videoCodec": null,
+      "resolution": "1920x1080",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": null,
+      "channels": null,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 0
+     }
+    ]
+   },
+   {
+    "t": 1516,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "Unsupported video codec (sample entry type 'rle ')."
+    ]
+   },
+   {
+    "t": 1518,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "QuickTime File Format",
+      "durationSeconds": 5,
+      "videoCodec": null,
+      "resolution": "1920x1080",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": null,
+      "channels": null,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 0
+     }
+    ]
+   },
+   {
+    "t": 1518,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "device capabilities inspected",
+     {
+      "hasWebCodecs": true,
+      "hasOpfs": true,
+      "deviceClass": "desktop",
+      "hardwareConcurrency": 10,
+      "quotaBytes": 10737418428,
+      "availableBytes": 10737418240
+     }
+    ]
+   },
+   {
+    "t": 1537,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1920,
+      "height": 1080,
+      "bitrate": 6220800
+     }
+    ]
+   },
+   {
+    "t": 1542,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "Unsupported video codec (sample entry type 'rle ')."
+    ]
+   }
+  ],
+  "pageLogs": [
+   {
+    "t": 495,
+    "type": "debug",
+    "args": [
+     "[vite] connecting..."
+    ]
+   },
+   {
+    "t": 500,
+    "type": "debug",
+    "args": [
+     "[vite] connected."
+    ]
+   },
+   {
+    "t": 516,
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (main)"
+    ]
+   },
+   {
+    "t": 540,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "shell mounted"
+    ]
+   },
+   {
+    "t": 516,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "UoN Video Helper starting",
+     {
+      "appVersion": "v0.2.0",
+      "buildId": "v0.2.0+20261028.5893d9d"
+     }
+    ]
+   },
+   {
+    "t": 517,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "brand assets",
+     {
+      "logo": true,
+      "headingFont": true
+     }
+    ]
+   },
+   {
+    "t": 537,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "device class",
+     {
+      "deviceClass": "desktop"
+     }
+    ]
+   },
+   {
+    "t": 542,
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 2,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 542,
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 1,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 556,
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1920,
+      "height": 1080,
+      "bitrate": 6220800
+     }
+    ]
+   },
+   {
+    "t": 635,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "worker round-trip complete",
+     {
+      "roundTripMs": 97,
+      "workerBootMs": 1
+     }
+    ]
+   },
+   {
+    "t": 1501,
+    "type": "info",
+    "args": [
+     "[ui]",
+     "file chosen",
+     {
+      "sizeBytes": 35521170,
+      "type": "video/quicktime"
+     }
+    ]
+   },
+   {
+    "t": 1543,
+    "type": "info",
+    "args": [
+     "[ui]",
+     "preflight verdict",
+     {
+      "outcome": "block",
+      "reasons": [
+       "no-source-decode",
+       "estimate-unavailable"
+      ],
+      "presetId": "best",
+      "contentClass": "unknown",
+      "bitrateBasis": "anchor-ceiling",
+      "width": 1920,
+      "height": 1080,
+      "frameRate": 25,
+      "projectedOutputBytes": 11897280,
+      "probeMeasured": false,
+      "videoFramesPerSecond": 0,
+      "estimatedSeconds": null
+     }
+    ]
+   }
+  ],
+  "chosenToOutcomeMs": 44
+ },
+ {
+  "key": "S-140n__zh-Hans__w320",
+  "cell": "S-140n",
+  "scenario": "S-140n",
+  "what": "A QuickTime Animation file with no audio, N13 (the closing asset's made twin)",
+  "file": "qtrle-5s.mov",
+  "lang": "zh-Hans",
+  "view": "w320",
+  "modesRead": [
+   "light",
+   "dark",
+   "forced-light",
+   "forced-dark"
+  ],
+  "powerAtStart": {
+   "ac": true,
+   "load": [
+    12.59,
+    8.35,
+    8.89
+   ],
+   "powermode": "powermode            2"
+  },
+  "setupMs": 2206,
+  "obs": {
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "tStart": 1793195873803,
+   "deadlines": {
+    "boot": 1793195933803,
+    "read": 1793196204831
+   },
+   "tChosen": 1793195874831,
+   "recorderAt": 1793195874832,
+   "t0": 1793195875544,
+   "blocked": true,
+   "outcomeSeen": {
+    "accepted": "refused before Create",
+    "answered": true,
+    "t": 1793195875544
+   },
+   "tEnd": 1793195875544
+  },
+  "out": {
+   "light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": false
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": null,
+    "block": {
+     "kind": "error",
+     "heading": "无法在此处运行",
+     "text": "无法在此处运行此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。",
+     "reasonKeys": [
+      "preflight.reasons.noSourceDecodeHere"
+     ],
+     "live": null,
+     "overflow": []
+    },
+    "report": {
+     "kind": null,
+     "text": "视频属性时长5秒钟视频格式未知此浏览器无法读取此视频格式。文件大小35.5 MB分辨率1920 × 1080帧率每秒 25 帧音频未找到音轨音量调整需要音频。其他工作照常进行。字幕此文件中未找到任何内容文件类型QuickTime File Format",
+     "reasonKeys": []
+    },
+    "createOffered": false,
+    "ackOffered": false,
+    "res": "none",
+    "finished": false,
+    "running": false,
+    "checking": false,
+    "result": {
+     "title": "",
+     "text": ""
+    },
+    "progress": "",
+    "focus": "input",
+    "fileInput": {
+     "disabled": false,
+     "chosen": true
+    },
+    "steps": [
+     {
+      "id": "step-choose",
+      "shown": true
+     },
+     {
+      "id": "step-trim",
+      "shown": false
+     },
+     {
+      "id": "step-title",
+      "shown": false
+     },
+     {
+      "id": "step-closing",
+      "shown": false
+     },
+     {
+      "id": "step-preset",
+      "shown": false
+     },
+     {
+      "id": "step-create",
+      "shown": false
+     }
+    ],
+    "status": {
+     "announced": "",
+     "shown": "",
+     "spokenOnly": ""
+    },
+    "sourceStatus": {
+     "announced": "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。",
+     "shown": "",
+     "spokenOnly": "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。"
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "页面语言：简体中文。"
+     },
+     {
+      "region": "div.promise-help",
+      "text": "视频有许多格式。有些格式在一台设备上可以播放，在另一台上却不行，或者无法在某些应用中使用。此工具会将您的视频保存为 MP4，这是兼容性最好的视频格式。这意味着它几乎可以在任何手机、电脑或网站上播放。"
+     },
+     {
+      "region": "#source-status",
+      "text": "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。"
+     },
+     {
+      "region": "div",
+      "text": "视频的最后一秒 — 结尾图形在逐渐出现时会覆盖这一秒。 定格的最后一帧 — 最后一帧画面会额外停留一秒钟。结尾图形会覆盖这一秒，所以视频中的所有内容都不会被遮挡。"
+     },
+     {
+      "region": "#page-announcer",
+      "text": "此文件没有预览功能。您仍然可以设置时间。"
+     }
+    ],
+    "marks": [
+     {
+      "what": "chosen",
+      "t": 1793195874837
+     },
+     {
+      "what": "block shown",
+      "t": 1793195874879,
+      "kind": "error"
+     }
+    ]
+   },
+   "dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": false
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": null,
+    "block": {
+     "kind": "error",
+     "heading": "无法在此处运行",
+     "text": "无法在此处运行此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。",
+     "reasonKeys": [
+      "preflight.reasons.noSourceDecodeHere"
+     ],
+     "live": null,
+     "overflow": []
+    },
+    "report": {
+     "kind": null,
+     "text": "视频属性时长5秒钟视频格式未知此浏览器无法读取此视频格式。文件大小35.5 MB分辨率1920 × 1080帧率每秒 25 帧音频未找到音轨音量调整需要音频。其他工作照常进行。字幕此文件中未找到任何内容文件类型QuickTime File Format",
+     "reasonKeys": []
+    },
+    "createOffered": false,
+    "ackOffered": false,
+    "res": "none",
+    "finished": false,
+    "running": false,
+    "checking": false,
+    "result": {
+     "title": "",
+     "text": ""
+    },
+    "progress": "",
+    "focus": "input",
+    "fileInput": {
+     "disabled": false,
+     "chosen": true
+    },
+    "steps": [
+     {
+      "id": "step-choose",
+      "shown": true
+     },
+     {
+      "id": "step-trim",
+      "shown": false
+     },
+     {
+      "id": "step-title",
+      "shown": false
+     },
+     {
+      "id": "step-closing",
+      "shown": false
+     },
+     {
+      "id": "step-preset",
+      "shown": false
+     },
+     {
+      "id": "step-create",
+      "shown": false
+     }
+    ],
+    "status": {
+     "announced": "",
+     "shown": "",
+     "spokenOnly": ""
+    },
+    "sourceStatus": {
+     "announced": "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。",
+     "shown": "",
+     "spokenOnly": "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。"
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "页面语言：简体中文。"
+     },
+     {
+      "region": "div.promise-help",
+      "text": "视频有许多格式。有些格式在一台设备上可以播放，在另一台上却不行，或者无法在某些应用中使用。此工具会将您的视频保存为 MP4，这是兼容性最好的视频格式。这意味着它几乎可以在任何手机、电脑或网站上播放。"
+     },
+     {
+      "region": "#source-status",
+      "text": "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。"
+     },
+     {
+      "region": "div",
+      "text": "视频的最后一秒 — 结尾图形在逐渐出现时会覆盖这一秒。 定格的最后一帧 — 最后一帧画面会额外停留一秒钟。结尾图形会覆盖这一秒，所以视频中的所有内容都不会被遮挡。"
+     },
+     {
+      "region": "#page-announcer",
+      "text": "此文件没有预览功能。您仍然可以设置时间。"
+     }
+    ],
+    "marks": [
+     {
+      "what": "chosen",
+      "t": 1793195874837
+     },
+     {
+      "what": "block shown",
+      "t": 1793195874879,
+      "kind": "error"
+     }
+    ]
+   },
+   "forced-light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": true
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": null,
+    "block": {
+     "kind": "error",
+     "heading": "无法在此处运行",
+     "text": "无法在此处运行此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。",
+     "reasonKeys": [
+      "preflight.reasons.noSourceDecodeHere"
+     ],
+     "live": null,
+     "overflow": []
+    },
+    "report": {
+     "kind": null,
+     "text": "视频属性时长5秒钟视频格式未知此浏览器无法读取此视频格式。文件大小35.5 MB分辨率1920 × 1080帧率每秒 25 帧音频未找到音轨音量调整需要音频。其他工作照常进行。字幕此文件中未找到任何内容文件类型QuickTime File Format",
+     "reasonKeys": []
+    },
+    "createOffered": false,
+    "ackOffered": false,
+    "res": "none",
+    "finished": false,
+    "running": false,
+    "checking": false,
+    "result": {
+     "title": "",
+     "text": ""
+    },
+    "progress": "",
+    "focus": "input",
+    "fileInput": {
+     "disabled": false,
+     "chosen": true
+    },
+    "steps": [
+     {
+      "id": "step-choose",
+      "shown": true
+     },
+     {
+      "id": "step-trim",
+      "shown": false
+     },
+     {
+      "id": "step-title",
+      "shown": false
+     },
+     {
+      "id": "step-closing",
+      "shown": false
+     },
+     {
+      "id": "step-preset",
+      "shown": false
+     },
+     {
+      "id": "step-create",
+      "shown": false
+     }
+    ],
+    "status": {
+     "announced": "",
+     "shown": "",
+     "spokenOnly": ""
+    },
+    "sourceStatus": {
+     "announced": "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。",
+     "shown": "",
+     "spokenOnly": "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。"
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "页面语言：简体中文。"
+     },
+     {
+      "region": "div.promise-help",
+      "text": "视频有许多格式。有些格式在一台设备上可以播放，在另一台上却不行，或者无法在某些应用中使用。此工具会将您的视频保存为 MP4，这是兼容性最好的视频格式。这意味着它几乎可以在任何手机、电脑或网站上播放。"
+     },
+     {
+      "region": "#source-status",
+      "text": "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。"
+     },
+     {
+      "region": "div",
+      "text": "视频的最后一秒 — 结尾图形在逐渐出现时会覆盖这一秒。 定格的最后一帧 — 最后一帧画面会额外停留一秒钟。结尾图形会覆盖这一秒，所以视频中的所有内容都不会被遮挡。"
+     },
+     {
+      "region": "#page-announcer",
+      "text": "此文件没有预览功能。您仍然可以设置时间。"
+     }
+    ],
+    "marks": [
+     {
+      "what": "chosen",
+      "t": 1793195874837
+     },
+     {
+      "what": "block shown",
+      "t": 1793195874879,
+      "kind": "error"
+     }
+    ]
+   },
+   "forced-dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": true
+    },
+    "page": {
+     "lang": "zh-Hans",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": null,
+    "block": {
+     "kind": "error",
+     "heading": "无法在此处运行",
+     "text": "无法在此处运行此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。",
+     "reasonKeys": [
+      "preflight.reasons.noSourceDecodeHere"
+     ],
+     "live": null,
+     "overflow": []
+    },
+    "report": {
+     "kind": null,
+     "text": "视频属性时长5秒钟视频格式未知此浏览器无法读取此视频格式。文件大小35.5 MB分辨率1920 × 1080帧率每秒 25 帧音频未找到音轨音量调整需要音频。其他工作照常进行。字幕此文件中未找到任何内容文件类型QuickTime File Format",
+     "reasonKeys": []
+    },
+    "createOffered": false,
+    "ackOffered": false,
+    "res": "none",
+    "finished": false,
+    "running": false,
+    "checking": false,
+    "result": {
+     "title": "",
+     "text": ""
+    },
+    "progress": "",
+    "focus": "input",
+    "fileInput": {
+     "disabled": false,
+     "chosen": true
+    },
+    "steps": [
+     {
+      "id": "step-choose",
+      "shown": true
+     },
+     {
+      "id": "step-trim",
+      "shown": false
+     },
+     {
+      "id": "step-title",
+      "shown": false
+     },
+     {
+      "id": "step-closing",
+      "shown": false
+     },
+     {
+      "id": "step-preset",
+      "shown": false
+     },
+     {
+      "id": "step-create",
+      "shown": false
+     }
+    ],
+    "status": {
+     "announced": "",
+     "shown": "",
+     "spokenOnly": ""
+    },
+    "sourceStatus": {
+     "announced": "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。",
+     "shown": "",
+     "spokenOnly": "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。"
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "页面语言：简体中文。"
+     },
+     {
+      "region": "div.promise-help",
+      "text": "视频有许多格式。有些格式在一台设备上可以播放，在另一台上却不行，或者无法在某些应用中使用。此工具会将您的视频保存为 MP4，这是兼容性最好的视频格式。这意味着它几乎可以在任何手机、电脑或网站上播放。"
+     },
+     {
+      "region": "#source-status",
+      "text": "设备检查完成。无法在此处运行。此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。"
+     },
+     {
+      "region": "div",
+      "text": "视频的最后一秒 — 结尾图形在逐渐出现时会覆盖这一秒。 定格的最后一帧 — 最后一帧画面会额外停留一秒钟。结尾图形会覆盖这一秒，所以视频中的所有内容都不会被遮挡。"
+     },
+     {
+      "region": "#page-announcer",
+      "text": "此文件没有预览功能。您仍然可以设置时间。"
+     }
+    ],
+    "marks": [
+     {
+      "what": "chosen",
+      "t": 1793195874837
+     },
+     {
+      "what": "block shown",
+      "t": 1793195874879,
+      "kind": "error"
+     }
+    ]
+   }
+  },
+  "scenarioAsserts": [
+   {
+    "what": "an accepted outcome within the bound: refused before Create, finished, or failed with recovery (VH-214)",
+    "outcome": "pass",
+    "accepted": "refused before Create",
+    "seconds": 2,
+    "created": false,
+    "blocked": true,
+    "outcomeSeen": {
+     "accepted": "refused before Create",
+     "answered": true,
+     "t": 1793195875544
+    },
+    "expired": null,
+    "atExpiry": null,
+    "walkError": null,
+    "later": "refused before Create",
+    "hang": null
+   },
+   {
+    "what": "the outcome: a finished video, a failure and its code, or still running at the limit",
+    "outcome": "not-counted",
+    "why": "recorded as found, not judged here",
+    "found": {
+     "seconds": 3,
+     "blocked": true,
+     "block": "无法在此处运行此浏览器无法读取此文件中的图片或音频。该文件可能以编辑软件专用格式保存。请将其重新导出为 MP4 格式（文件名以 .mp4 结尾），然后选择该文件。",
+     "timedOut": false,
+     "res": "none",
+     "text": ""
+    }
+   }
+  ],
+  "targets": [
+   "worker"
+  ],
+  "status": "ok",
+  "ms": 5200,
+  "targetsSeen": [
+   {
+    "t": 559,
+    "type": "worker",
+    "url": "job.worker.ts?worker_file&type=module",
+    "waitingForDebugger": true,
+    "sessionId": "42D09D02152ECEE3816AB4C5FAEFEEE6"
+   }
+  ],
+  "workerLogs": [
+   {
+    "t": 631,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (worker)"
+    ]
+   },
+   {
+    "t": 632,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[worker]",
+     "job worker ready"
+    ]
+   },
+   {
+    "t": 632,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[worker]",
+     "ping received"
+    ]
+   },
+   {
+    "t": 1508,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "Unsupported video codec (sample entry type 'rle ')."
+    ]
+   },
+   {
+    "t": 1511,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "QuickTime File Format",
+      "durationSeconds": 5,
+      "videoCodec": null,
+      "resolution": "1920x1080",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": null,
+      "channels": null,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 0
+     }
+    ]
+   },
+   {
+    "t": 1515,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "Unsupported video codec (sample entry type 'rle ')."
+    ]
+   },
+   {
+    "t": 1517,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "QuickTime File Format",
+      "durationSeconds": 5,
+      "videoCodec": null,
+      "resolution": "1920x1080",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": null,
+      "channels": null,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 0
+     }
+    ]
+   },
+   {
+    "t": 1517,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "device capabilities inspected",
+     {
+      "hasWebCodecs": true,
+      "hasOpfs": true,
+      "deviceClass": "desktop",
+      "hardwareConcurrency": 10,
+      "quotaBytes": 10737418428,
+      "availableBytes": 10737418240
+     }
+    ]
+   },
+   {
+    "t": 1536,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1920,
+      "height": 1080,
+      "bitrate": 6220800
+     }
+    ]
+   },
+   {
+    "t": 1539,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "Unsupported video codec (sample entry type 'rle ')."
+    ]
+   }
+  ],
+  "pageLogs": [
+   {
+    "t": 497,
+    "type": "debug",
+    "args": [
+     "[vite] connecting..."
+    ]
+   },
+   {
+    "t": 504,
+    "type": "debug",
+    "args": [
+     "[vite] connected."
+    ]
+   },
+   {
+    "t": 517,
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (main)"
+    ]
+   },
+   {
+    "t": 540,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "shell mounted"
+    ]
+   },
+   {
+    "t": 517,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "UoN Video Helper starting",
+     {
+      "appVersion": "v0.2.0",
+      "buildId": "v0.2.0+20261028.5893d9d"
+     }
+    ]
+   },
+   {
+    "t": 517,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "brand assets",
+     {
+      "logo": true,
+      "headingFont": true
+     }
+    ]
+   },
+   {
+    "t": 537,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "device class",
+     {
+      "deviceClass": "desktop"
+     }
+    ]
+   },
+   {
+    "t": 541,
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 2,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 541,
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 1,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 554,
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1920,
+      "height": 1080,
+      "bitrate": 6220800
+     }
+    ]
+   },
+   {
+    "t": 632,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "worker round-trip complete",
+     {
+      "roundTripMs": 95,
+      "workerBootMs": 1
+     }
+    ]
+   },
+   {
+    "t": 1501,
+    "type": "info",
+    "args": [
+     "[ui]",
+     "file chosen",
+     {
+      "sizeBytes": 35521170,
+      "type": "video/quicktime"
+     }
+    ]
+   },
+   {
+    "t": 1540,
+    "type": "info",
+    "args": [
+     "[ui]",
+     "preflight verdict",
+     {
+      "outcome": "block",
+      "reasons": [
+       "no-source-decode",
+       "estimate-unavailable"
+      ],
+      "presetId": "best",
+      "contentClass": "unknown",
+      "bitrateBasis": "anchor-ceiling",
+      "width": 1920,
+      "height": 1080,
+      "frameRate": 25,
+      "projectedOutputBytes": 11897280,
+      "probeMeasured": false,
+      "videoFramesPerSecond": 0,
+      "estimatedSeconds": null
+     }
+    ]
+   }
+  ],
+  "chosenToOutcomeMs": 42
+ },
+ {
+  "key": "S-140n__ms-MY__w1280",
+  "cell": "S-140n",
+  "scenario": "S-140n",
+  "what": "A QuickTime Animation file with no audio, N13 (the closing asset's made twin)",
+  "file": "qtrle-5s.mov",
+  "lang": "ms-MY",
+  "view": "w1280",
+  "modesRead": [
+   "light",
+   "dark",
+   "forced-light",
+   "forced-dark"
+  ],
+  "powerAtStart": {
+   "ac": true,
+   "load": [
+    13.19,
+    8.55,
+    8.95
+   ],
+   "powermode": "powermode            2"
+  },
+  "setupMs": 2209,
+  "obs": {
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "tStart": 1793195879050,
+   "deadlines": {
+    "boot": 1793195939050,
+    "read": 1793196210081
+   },
+   "tChosen": 1793195880081,
+   "recorderAt": 1793195880082,
+   "t0": 1793195880793,
+   "blocked": true,
+   "outcomeSeen": {
+    "accepted": "refused before Create",
+    "answered": true,
+    "t": 1793195880794
+   },
+   "tEnd": 1793195880794
+  },
+  "out": {
+   "light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": false
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": null,
+    "block": {
+     "kind": "error",
+     "heading": "Ini tidak boleh dijalankan di sini",
+     "text": "Ini tidak boleh dijalankan di siniPelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut.",
+     "reasonKeys": [
+      "preflight.reasons.noSourceDecodeHere"
+     ],
+     "live": null,
+     "overflow": []
+    },
+    "report": {
+     "kind": null,
+     "text": "Ciri-ciri videoTempoh5 saatFormat videoTidak diketahuiPelayar ini tidak dapat membaca format video ini.Saiz fail35.5 MBResolusi1920 × 1080Kadar bingkai25 bingkai sesaatAudioTiada trek audio ditemuiPerataan memerlukan audio. Kerja selebihnya masih berjalan.KapsyenTiada yang ditemui dalam fail iniJeni",
+     "reasonKeys": []
+    },
+    "createOffered": false,
+    "ackOffered": false,
+    "res": "none",
+    "finished": false,
+    "running": false,
+    "checking": false,
+    "result": {
+     "title": "",
+     "text": ""
+    },
+    "progress": "",
+    "focus": "input",
+    "fileInput": {
+     "disabled": false,
+     "chosen": true
+    },
+    "steps": [
+     {
+      "id": "step-choose",
+      "shown": true
+     },
+     {
+      "id": "step-trim",
+      "shown": false
+     },
+     {
+      "id": "step-title",
+      "shown": false
+     },
+     {
+      "id": "step-closing",
+      "shown": false
+     },
+     {
+      "id": "step-preset",
+      "shown": false
+     },
+     {
+      "id": "step-create",
+      "shown": false
+     }
+    ],
+    "status": {
+     "announced": "",
+     "shown": "",
+     "spokenOnly": ""
+    },
+    "sourceStatus": {
+     "announced": "Pemeriksaan peranti selesai. Ini tidak boleh dijalankan di sini. Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut.",
+     "shown": "",
+     "spokenOnly": "Pemeriksaan peranti selesai. Ini tidak boleh dijalankan di sini. Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut."
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "Bahasa halaman: Bahasa Malaysia."
+     },
+     {
+      "region": "div.promise-help",
+      "text": "Video wujud dalam banyak format. Sesetengahnya dimainkan pada satu peranti tetapi tidak pada peranti lain, atau tidak berfungsi dengan sesetengah aplikasi. Alat"
+     },
+     {
+      "region": "#source-status",
+      "text": "Pemeriksaan peranti selesai. Ini tidak boleh dijalankan di sini. Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam "
+     },
+     {
+      "region": "div",
+      "text": "Saat terakhir video — grafik penutup menutupinya semasa ia terbentuk. Bingkai akhir ditahan — bingkai terakhir anda ditahan selama satu saat tambahan. Grafik pe"
+     },
+     {
+      "region": "#page-announcer",
+      "text": "Pratonton tidak tersedia untuk fail ini. Anda masih boleh menetapkan masa."
+     }
+    ],
+    "marks": [
+     {
+      "what": "chosen",
+      "t": 1793195880088
+     },
+     {
+      "what": "block shown",
+      "t": 1793195880130,
+      "kind": "error"
+     }
+    ]
+   },
+   "dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": false
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": null,
+    "block": {
+     "kind": "error",
+     "heading": "Ini tidak boleh dijalankan di sini",
+     "text": "Ini tidak boleh dijalankan di siniPelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut.",
+     "reasonKeys": [
+      "preflight.reasons.noSourceDecodeHere"
+     ],
+     "live": null,
+     "overflow": []
+    },
+    "report": {
+     "kind": null,
+     "text": "Ciri-ciri videoTempoh5 saatFormat videoTidak diketahuiPelayar ini tidak dapat membaca format video ini.Saiz fail35.5 MBResolusi1920 × 1080Kadar bingkai25 bingkai sesaatAudioTiada trek audio ditemuiPerataan memerlukan audio. Kerja selebihnya masih berjalan.KapsyenTiada yang ditemui dalam fail iniJeni",
+     "reasonKeys": []
+    },
+    "createOffered": false,
+    "ackOffered": false,
+    "res": "none",
+    "finished": false,
+    "running": false,
+    "checking": false,
+    "result": {
+     "title": "",
+     "text": ""
+    },
+    "progress": "",
+    "focus": "input",
+    "fileInput": {
+     "disabled": false,
+     "chosen": true
+    },
+    "steps": [
+     {
+      "id": "step-choose",
+      "shown": true
+     },
+     {
+      "id": "step-trim",
+      "shown": false
+     },
+     {
+      "id": "step-title",
+      "shown": false
+     },
+     {
+      "id": "step-closing",
+      "shown": false
+     },
+     {
+      "id": "step-preset",
+      "shown": false
+     },
+     {
+      "id": "step-create",
+      "shown": false
+     }
+    ],
+    "status": {
+     "announced": "",
+     "shown": "",
+     "spokenOnly": ""
+    },
+    "sourceStatus": {
+     "announced": "Pemeriksaan peranti selesai. Ini tidak boleh dijalankan di sini. Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut.",
+     "shown": "",
+     "spokenOnly": "Pemeriksaan peranti selesai. Ini tidak boleh dijalankan di sini. Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut."
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "Bahasa halaman: Bahasa Malaysia."
+     },
+     {
+      "region": "div.promise-help",
+      "text": "Video wujud dalam banyak format. Sesetengahnya dimainkan pada satu peranti tetapi tidak pada peranti lain, atau tidak berfungsi dengan sesetengah aplikasi. Alat"
+     },
+     {
+      "region": "#source-status",
+      "text": "Pemeriksaan peranti selesai. Ini tidak boleh dijalankan di sini. Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam "
+     },
+     {
+      "region": "div",
+      "text": "Saat terakhir video — grafik penutup menutupinya semasa ia terbentuk. Bingkai akhir ditahan — bingkai terakhir anda ditahan selama satu saat tambahan. Grafik pe"
+     },
+     {
+      "region": "#page-announcer",
+      "text": "Pratonton tidak tersedia untuk fail ini. Anda masih boleh menetapkan masa."
+     }
+    ],
+    "marks": [
+     {
+      "what": "chosen",
+      "t": 1793195880088
+     },
+     {
+      "what": "block shown",
+      "t": 1793195880130,
+      "kind": "error"
+     }
+    ]
+   },
+   "forced-light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": true
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": null,
+    "block": {
+     "kind": "error",
+     "heading": "Ini tidak boleh dijalankan di sini",
+     "text": "Ini tidak boleh dijalankan di siniPelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut.",
+     "reasonKeys": [
+      "preflight.reasons.noSourceDecodeHere"
+     ],
+     "live": null,
+     "overflow": []
+    },
+    "report": {
+     "kind": null,
+     "text": "Ciri-ciri videoTempoh5 saatFormat videoTidak diketahuiPelayar ini tidak dapat membaca format video ini.Saiz fail35.5 MBResolusi1920 × 1080Kadar bingkai25 bingkai sesaatAudioTiada trek audio ditemuiPerataan memerlukan audio. Kerja selebihnya masih berjalan.KapsyenTiada yang ditemui dalam fail iniJeni",
+     "reasonKeys": []
+    },
+    "createOffered": false,
+    "ackOffered": false,
+    "res": "none",
+    "finished": false,
+    "running": false,
+    "checking": false,
+    "result": {
+     "title": "",
+     "text": ""
+    },
+    "progress": "",
+    "focus": "input",
+    "fileInput": {
+     "disabled": false,
+     "chosen": true
+    },
+    "steps": [
+     {
+      "id": "step-choose",
+      "shown": true
+     },
+     {
+      "id": "step-trim",
+      "shown": false
+     },
+     {
+      "id": "step-title",
+      "shown": false
+     },
+     {
+      "id": "step-closing",
+      "shown": false
+     },
+     {
+      "id": "step-preset",
+      "shown": false
+     },
+     {
+      "id": "step-create",
+      "shown": false
+     }
+    ],
+    "status": {
+     "announced": "",
+     "shown": "",
+     "spokenOnly": ""
+    },
+    "sourceStatus": {
+     "announced": "Pemeriksaan peranti selesai. Ini tidak boleh dijalankan di sini. Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut.",
+     "shown": "",
+     "spokenOnly": "Pemeriksaan peranti selesai. Ini tidak boleh dijalankan di sini. Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut."
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "Bahasa halaman: Bahasa Malaysia."
+     },
+     {
+      "region": "div.promise-help",
+      "text": "Video wujud dalam banyak format. Sesetengahnya dimainkan pada satu peranti tetapi tidak pada peranti lain, atau tidak berfungsi dengan sesetengah aplikasi. Alat"
+     },
+     {
+      "region": "#source-status",
+      "text": "Pemeriksaan peranti selesai. Ini tidak boleh dijalankan di sini. Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam "
+     },
+     {
+      "region": "div",
+      "text": "Saat terakhir video — grafik penutup menutupinya semasa ia terbentuk. Bingkai akhir ditahan — bingkai terakhir anda ditahan selama satu saat tambahan. Grafik pe"
+     },
+     {
+      "region": "#page-announcer",
+      "text": "Pratonton tidak tersedia untuk fail ini. Anda masih boleh menetapkan masa."
+     }
+    ],
+    "marks": [
+     {
+      "what": "chosen",
+      "t": 1793195880088
+     },
+     {
+      "what": "block shown",
+      "t": 1793195880130,
+      "kind": "error"
+     }
+    ]
+   },
+   "forced-dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": true
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 1280,
+     "hscroll": false,
+     "scrollWidth": 1280
+    },
+    "errors": [],
+    "verdict": null,
+    "block": {
+     "kind": "error",
+     "heading": "Ini tidak boleh dijalankan di sini",
+     "text": "Ini tidak boleh dijalankan di siniPelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut.",
+     "reasonKeys": [
+      "preflight.reasons.noSourceDecodeHere"
+     ],
+     "live": null,
+     "overflow": []
+    },
+    "report": {
+     "kind": null,
+     "text": "Ciri-ciri videoTempoh5 saatFormat videoTidak diketahuiPelayar ini tidak dapat membaca format video ini.Saiz fail35.5 MBResolusi1920 × 1080Kadar bingkai25 bingkai sesaatAudioTiada trek audio ditemuiPerataan memerlukan audio. Kerja selebihnya masih berjalan.KapsyenTiada yang ditemui dalam fail iniJeni",
+     "reasonKeys": []
+    },
+    "createOffered": false,
+    "ackOffered": false,
+    "res": "none",
+    "finished": false,
+    "running": false,
+    "checking": false,
+    "result": {
+     "title": "",
+     "text": ""
+    },
+    "progress": "",
+    "focus": "input",
+    "fileInput": {
+     "disabled": false,
+     "chosen": true
+    },
+    "steps": [
+     {
+      "id": "step-choose",
+      "shown": true
+     },
+     {
+      "id": "step-trim",
+      "shown": false
+     },
+     {
+      "id": "step-title",
+      "shown": false
+     },
+     {
+      "id": "step-closing",
+      "shown": false
+     },
+     {
+      "id": "step-preset",
+      "shown": false
+     },
+     {
+      "id": "step-create",
+      "shown": false
+     }
+    ],
+    "status": {
+     "announced": "",
+     "shown": "",
+     "spokenOnly": ""
+    },
+    "sourceStatus": {
+     "announced": "Pemeriksaan peranti selesai. Ini tidak boleh dijalankan di sini. Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut.",
+     "shown": "",
+     "spokenOnly": "Pemeriksaan peranti selesai. Ini tidak boleh dijalankan di sini. Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut."
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "Bahasa halaman: Bahasa Malaysia."
+     },
+     {
+      "region": "div.promise-help",
+      "text": "Video wujud dalam banyak format. Sesetengahnya dimainkan pada satu peranti tetapi tidak pada peranti lain, atau tidak berfungsi dengan sesetengah aplikasi. Alat"
+     },
+     {
+      "region": "#source-status",
+      "text": "Pemeriksaan peranti selesai. Ini tidak boleh dijalankan di sini. Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam "
+     },
+     {
+      "region": "div",
+      "text": "Saat terakhir video — grafik penutup menutupinya semasa ia terbentuk. Bingkai akhir ditahan — bingkai terakhir anda ditahan selama satu saat tambahan. Grafik pe"
+     },
+     {
+      "region": "#page-announcer",
+      "text": "Pratonton tidak tersedia untuk fail ini. Anda masih boleh menetapkan masa."
+     }
+    ],
+    "marks": [
+     {
+      "what": "chosen",
+      "t": 1793195880088
+     },
+     {
+      "what": "block shown",
+      "t": 1793195880130,
+      "kind": "error"
+     }
+    ]
+   }
+  },
+  "scenarioAsserts": [
+   {
+    "what": "an accepted outcome within the bound: refused before Create, finished, or failed with recovery (VH-214)",
+    "outcome": "pass",
+    "accepted": "refused before Create",
+    "seconds": 2,
+    "created": false,
+    "blocked": true,
+    "outcomeSeen": {
+     "accepted": "refused before Create",
+     "answered": true,
+     "t": 1793195880794
+    },
+    "expired": null,
+    "atExpiry": null,
+    "walkError": null,
+    "later": "refused before Create",
+    "hang": null
+   },
+   {
+    "what": "the outcome: a finished video, a failure and its code, or still running at the limit",
+    "outcome": "not-counted",
+    "why": "recorded as found, not judged here",
+    "found": {
+     "seconds": 3,
+     "blocked": true,
+     "block": "Ini tidak boleh dijalankan di siniPelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi ",
+     "timedOut": false,
+     "res": "none",
+     "text": ""
+    }
+   }
+  ],
+  "targets": [
+   "worker"
+  ],
+  "status": "ok",
+  "ms": 5204,
+  "targetsSeen": [
+   {
+    "t": 563,
+    "type": "worker",
+    "url": "job.worker.ts?worker_file&type=module",
+    "waitingForDebugger": true,
+    "sessionId": "B90EA4CDA718DD285E9C8F586B6CDC5B"
+   }
+  ],
+  "workerLogs": [
+   {
+    "t": 636,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (worker)"
+    ]
+   },
+   {
+    "t": 636,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[worker]",
+     "job worker ready"
+    ]
+   },
+   {
+    "t": 636,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[worker]",
+     "ping received"
+    ]
+   },
+   {
+    "t": 1512,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "Unsupported video codec (sample entry type 'rle ')."
+    ]
+   },
+   {
+    "t": 1516,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "QuickTime File Format",
+      "durationSeconds": 5,
+      "videoCodec": null,
+      "resolution": "1920x1080",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": null,
+      "channels": null,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 0
+     }
+    ]
+   },
+   {
+    "t": 1519,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "Unsupported video codec (sample entry type 'rle ')."
+    ]
+   },
+   {
+    "t": 1521,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "QuickTime File Format",
+      "durationSeconds": 5,
+      "videoCodec": null,
+      "resolution": "1920x1080",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": null,
+      "channels": null,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 0
+     }
+    ]
+   },
+   {
+    "t": 1521,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "device capabilities inspected",
+     {
+      "hasWebCodecs": true,
+      "hasOpfs": true,
+      "deviceClass": "desktop",
+      "hardwareConcurrency": 10,
+      "quotaBytes": 10737418428,
+      "availableBytes": 10737418240
+     }
+    ]
+   },
+   {
+    "t": 1539,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1920,
+      "height": 1080,
+      "bitrate": 6220800
+     }
+    ]
+   },
+   {
+    "t": 1543,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "Unsupported video codec (sample entry type 'rle ')."
+    ]
+   }
+  ],
+  "pageLogs": [
+   {
+    "t": 494,
+    "type": "debug",
+    "args": [
+     "[vite] connecting..."
+    ]
+   },
+   {
+    "t": 501,
+    "type": "debug",
+    "args": [
+     "[vite] connected."
+    ]
+   },
+   {
+    "t": 520,
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (main)"
+    ]
+   },
+   {
+    "t": 543,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "shell mounted"
+    ]
+   },
+   {
+    "t": 520,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "UoN Video Helper starting",
+     {
+      "appVersion": "v0.2.0",
+      "buildId": "v0.2.0+20261028.5893d9d"
+     }
+    ]
+   },
+   {
+    "t": 520,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "brand assets",
+     {
+      "logo": true,
+      "headingFont": true
+     }
+    ]
+   },
+   {
+    "t": 540,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "device class",
+     {
+      "deviceClass": "desktop"
+     }
+    ]
+   },
+   {
+    "t": 544,
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 2,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 544,
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 1,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 558,
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1920,
+      "height": 1080,
+      "bitrate": 6220800
+     }
+    ]
+   },
+   {
+    "t": 637,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "worker round-trip complete",
+     {
+      "roundTripMs": 96,
+      "workerBootMs": 1
+     }
+    ]
+   },
+   {
+    "t": 1503,
+    "type": "info",
+    "args": [
+     "[ui]",
+     "file chosen",
+     {
+      "sizeBytes": 35521170,
+      "type": "video/quicktime"
+     }
+    ]
+   },
+   {
+    "t": 1544,
+    "type": "info",
+    "args": [
+     "[ui]",
+     "preflight verdict",
+     {
+      "outcome": "block",
+      "reasons": [
+       "no-source-decode",
+       "estimate-unavailable"
+      ],
+      "presetId": "best",
+      "contentClass": "unknown",
+      "bitrateBasis": "anchor-ceiling",
+      "width": 1920,
+      "height": 1080,
+      "frameRate": 25,
+      "projectedOutputBytes": 11897280,
+      "probeMeasured": false,
+      "videoFramesPerSecond": 0,
+      "estimatedSeconds": null
+     }
+    ]
+   }
+  ],
+  "chosenToOutcomeMs": 42
+ },
+ {
+  "key": "S-140n__ms-MY__w320",
+  "cell": "S-140n",
+  "scenario": "S-140n",
+  "what": "A QuickTime Animation file with no audio, N13 (the closing asset's made twin)",
+  "file": "qtrle-5s.mov",
+  "lang": "ms-MY",
+  "view": "w320",
+  "modesRead": [
+   "light",
+   "dark",
+   "forced-light",
+   "forced-dark"
+  ],
+  "powerAtStart": {
+   "ac": true,
+   "load": [
+    12.45,
+    8.47,
+    8.92
+   ],
+   "powermode": "powermode            2"
+  },
+  "setupMs": 2213,
+  "obs": {
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "tStart": 1793195884302,
+   "deadlines": {
+    "boot": 1793195944302,
+    "read": 1793196215333
+   },
+   "tChosen": 1793195885333,
+   "recorderAt": 1793195885334,
+   "t0": 1793195886046,
+   "blocked": true,
+   "outcomeSeen": {
+    "accepted": "refused before Create",
+    "answered": true,
+    "t": 1793195886046
+   },
+   "tEnd": 1793195886046
+  },
+  "out": {
+   "light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": false
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": null,
+    "block": {
+     "kind": "error",
+     "heading": "Ini tidak boleh dijalankan di sini",
+     "text": "Ini tidak boleh dijalankan di siniPelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut.",
+     "reasonKeys": [
+      "preflight.reasons.noSourceDecodeHere"
+     ],
+     "live": null,
+     "overflow": []
+    },
+    "report": {
+     "kind": null,
+     "text": "Ciri-ciri videoTempoh5 saatFormat videoTidak diketahuiPelayar ini tidak dapat membaca format video ini.Saiz fail35.5 MBResolusi1920 × 1080Kadar bingkai25 bingkai sesaatAudioTiada trek audio ditemuiPerataan memerlukan audio. Kerja selebihnya masih berjalan.KapsyenTiada yang ditemui dalam fail iniJeni",
+     "reasonKeys": []
+    },
+    "createOffered": false,
+    "ackOffered": false,
+    "res": "none",
+    "finished": false,
+    "running": false,
+    "checking": false,
+    "result": {
+     "title": "",
+     "text": ""
+    },
+    "progress": "",
+    "focus": "input",
+    "fileInput": {
+     "disabled": false,
+     "chosen": true
+    },
+    "steps": [
+     {
+      "id": "step-choose",
+      "shown": true
+     },
+     {
+      "id": "step-trim",
+      "shown": false
+     },
+     {
+      "id": "step-title",
+      "shown": false
+     },
+     {
+      "id": "step-closing",
+      "shown": false
+     },
+     {
+      "id": "step-preset",
+      "shown": false
+     },
+     {
+      "id": "step-create",
+      "shown": false
+     }
+    ],
+    "status": {
+     "announced": "",
+     "shown": "",
+     "spokenOnly": ""
+    },
+    "sourceStatus": {
+     "announced": "Pemeriksaan peranti selesai. Ini tidak boleh dijalankan di sini. Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut.",
+     "shown": "",
+     "spokenOnly": "Pemeriksaan peranti selesai. Ini tidak boleh dijalankan di sini. Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut."
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "Bahasa halaman: Bahasa Malaysia."
+     },
+     {
+      "region": "div.promise-help",
+      "text": "Video wujud dalam banyak format. Sesetengahnya dimainkan pada satu peranti tetapi tidak pada peranti lain, atau tidak berfungsi dengan sesetengah aplikasi. Alat"
+     },
+     {
+      "region": "#source-status",
+      "text": "Pemeriksaan peranti selesai. Ini tidak boleh dijalankan di sini. Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam "
+     },
+     {
+      "region": "div",
+      "text": "Saat terakhir video — grafik penutup menutupinya semasa ia terbentuk. Bingkai akhir ditahan — bingkai terakhir anda ditahan selama satu saat tambahan. Grafik pe"
+     },
+     {
+      "region": "#page-announcer",
+      "text": "Pratonton tidak tersedia untuk fail ini. Anda masih boleh menetapkan masa."
+     }
+    ],
+    "marks": [
+     {
+      "what": "chosen",
+      "t": 1793195885340
+     },
+     {
+      "what": "block shown",
+      "t": 1793195885382,
+      "kind": "error"
+     }
+    ]
+   },
+   "dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": false
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": null,
+    "block": {
+     "kind": "error",
+     "heading": "Ini tidak boleh dijalankan di sini",
+     "text": "Ini tidak boleh dijalankan di siniPelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut.",
+     "reasonKeys": [
+      "preflight.reasons.noSourceDecodeHere"
+     ],
+     "live": null,
+     "overflow": []
+    },
+    "report": {
+     "kind": null,
+     "text": "Ciri-ciri videoTempoh5 saatFormat videoTidak diketahuiPelayar ini tidak dapat membaca format video ini.Saiz fail35.5 MBResolusi1920 × 1080Kadar bingkai25 bingkai sesaatAudioTiada trek audio ditemuiPerataan memerlukan audio. Kerja selebihnya masih berjalan.KapsyenTiada yang ditemui dalam fail iniJeni",
+     "reasonKeys": []
+    },
+    "createOffered": false,
+    "ackOffered": false,
+    "res": "none",
+    "finished": false,
+    "running": false,
+    "checking": false,
+    "result": {
+     "title": "",
+     "text": ""
+    },
+    "progress": "",
+    "focus": "input",
+    "fileInput": {
+     "disabled": false,
+     "chosen": true
+    },
+    "steps": [
+     {
+      "id": "step-choose",
+      "shown": true
+     },
+     {
+      "id": "step-trim",
+      "shown": false
+     },
+     {
+      "id": "step-title",
+      "shown": false
+     },
+     {
+      "id": "step-closing",
+      "shown": false
+     },
+     {
+      "id": "step-preset",
+      "shown": false
+     },
+     {
+      "id": "step-create",
+      "shown": false
+     }
+    ],
+    "status": {
+     "announced": "",
+     "shown": "",
+     "spokenOnly": ""
+    },
+    "sourceStatus": {
+     "announced": "Pemeriksaan peranti selesai. Ini tidak boleh dijalankan di sini. Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut.",
+     "shown": "",
+     "spokenOnly": "Pemeriksaan peranti selesai. Ini tidak boleh dijalankan di sini. Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut."
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "Bahasa halaman: Bahasa Malaysia."
+     },
+     {
+      "region": "div.promise-help",
+      "text": "Video wujud dalam banyak format. Sesetengahnya dimainkan pada satu peranti tetapi tidak pada peranti lain, atau tidak berfungsi dengan sesetengah aplikasi. Alat"
+     },
+     {
+      "region": "#source-status",
+      "text": "Pemeriksaan peranti selesai. Ini tidak boleh dijalankan di sini. Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam "
+     },
+     {
+      "region": "div",
+      "text": "Saat terakhir video — grafik penutup menutupinya semasa ia terbentuk. Bingkai akhir ditahan — bingkai terakhir anda ditahan selama satu saat tambahan. Grafik pe"
+     },
+     {
+      "region": "#page-announcer",
+      "text": "Pratonton tidak tersedia untuk fail ini. Anda masih boleh menetapkan masa."
+     }
+    ],
+    "marks": [
+     {
+      "what": "chosen",
+      "t": 1793195885340
+     },
+     {
+      "what": "block shown",
+      "t": 1793195885382,
+      "kind": "error"
+     }
+    ]
+   },
+   "forced-light": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": false,
+     "forced": true
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": null,
+    "block": {
+     "kind": "error",
+     "heading": "Ini tidak boleh dijalankan di sini",
+     "text": "Ini tidak boleh dijalankan di siniPelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut.",
+     "reasonKeys": [
+      "preflight.reasons.noSourceDecodeHere"
+     ],
+     "live": null,
+     "overflow": []
+    },
+    "report": {
+     "kind": null,
+     "text": "Ciri-ciri videoTempoh5 saatFormat videoTidak diketahuiPelayar ini tidak dapat membaca format video ini.Saiz fail35.5 MBResolusi1920 × 1080Kadar bingkai25 bingkai sesaatAudioTiada trek audio ditemuiPerataan memerlukan audio. Kerja selebihnya masih berjalan.KapsyenTiada yang ditemui dalam fail iniJeni",
+     "reasonKeys": []
+    },
+    "createOffered": false,
+    "ackOffered": false,
+    "res": "none",
+    "finished": false,
+    "running": false,
+    "checking": false,
+    "result": {
+     "title": "",
+     "text": ""
+    },
+    "progress": "",
+    "focus": "input",
+    "fileInput": {
+     "disabled": false,
+     "chosen": true
+    },
+    "steps": [
+     {
+      "id": "step-choose",
+      "shown": true
+     },
+     {
+      "id": "step-trim",
+      "shown": false
+     },
+     {
+      "id": "step-title",
+      "shown": false
+     },
+     {
+      "id": "step-closing",
+      "shown": false
+     },
+     {
+      "id": "step-preset",
+      "shown": false
+     },
+     {
+      "id": "step-create",
+      "shown": false
+     }
+    ],
+    "status": {
+     "announced": "",
+     "shown": "",
+     "spokenOnly": ""
+    },
+    "sourceStatus": {
+     "announced": "Pemeriksaan peranti selesai. Ini tidak boleh dijalankan di sini. Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut.",
+     "shown": "",
+     "spokenOnly": "Pemeriksaan peranti selesai. Ini tidak boleh dijalankan di sini. Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut."
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "Bahasa halaman: Bahasa Malaysia."
+     },
+     {
+      "region": "div.promise-help",
+      "text": "Video wujud dalam banyak format. Sesetengahnya dimainkan pada satu peranti tetapi tidak pada peranti lain, atau tidak berfungsi dengan sesetengah aplikasi. Alat"
+     },
+     {
+      "region": "#source-status",
+      "text": "Pemeriksaan peranti selesai. Ini tidak boleh dijalankan di sini. Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam "
+     },
+     {
+      "region": "div",
+      "text": "Saat terakhir video — grafik penutup menutupinya semasa ia terbentuk. Bingkai akhir ditahan — bingkai terakhir anda ditahan selama satu saat tambahan. Grafik pe"
+     },
+     {
+      "region": "#page-announcer",
+      "text": "Pratonton tidak tersedia untuk fail ini. Anda masih boleh menetapkan masa."
+     }
+    ],
+    "marks": [
+     {
+      "what": "chosen",
+      "t": 1793195885340
+     },
+     {
+      "what": "block shown",
+      "t": 1793195885382,
+      "kind": "error"
+     }
+    ]
+   },
+   "forced-dark": {
+    "reached": {
+     "outcome": "pass",
+     "problems": []
+    },
+    "media": {
+     "dark": true,
+     "forced": true
+    },
+    "page": {
+     "lang": "ms-MY",
+     "vw": 320,
+     "hscroll": false,
+     "scrollWidth": 320
+    },
+    "errors": [],
+    "verdict": null,
+    "block": {
+     "kind": "error",
+     "heading": "Ini tidak boleh dijalankan di sini",
+     "text": "Ini tidak boleh dijalankan di siniPelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut.",
+     "reasonKeys": [
+      "preflight.reasons.noSourceDecodeHere"
+     ],
+     "live": null,
+     "overflow": []
+    },
+    "report": {
+     "kind": null,
+     "text": "Ciri-ciri videoTempoh5 saatFormat videoTidak diketahuiPelayar ini tidak dapat membaca format video ini.Saiz fail35.5 MBResolusi1920 × 1080Kadar bingkai25 bingkai sesaatAudioTiada trek audio ditemuiPerataan memerlukan audio. Kerja selebihnya masih berjalan.KapsyenTiada yang ditemui dalam fail iniJeni",
+     "reasonKeys": []
+    },
+    "createOffered": false,
+    "ackOffered": false,
+    "res": "none",
+    "finished": false,
+    "running": false,
+    "checking": false,
+    "result": {
+     "title": "",
+     "text": ""
+    },
+    "progress": "",
+    "focus": "input",
+    "fileInput": {
+     "disabled": false,
+     "chosen": true
+    },
+    "steps": [
+     {
+      "id": "step-choose",
+      "shown": true
+     },
+     {
+      "id": "step-trim",
+      "shown": false
+     },
+     {
+      "id": "step-title",
+      "shown": false
+     },
+     {
+      "id": "step-closing",
+      "shown": false
+     },
+     {
+      "id": "step-preset",
+      "shown": false
+     },
+     {
+      "id": "step-create",
+      "shown": false
+     }
+    ],
+    "status": {
+     "announced": "",
+     "shown": "",
+     "spokenOnly": ""
+    },
+    "sourceStatus": {
+     "announced": "Pemeriksaan peranti selesai. Ini tidak boleh dijalankan di sini. Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut.",
+     "shown": "",
+     "spokenOnly": "Pemeriksaan peranti selesai. Ini tidak boleh dijalankan di sini. Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi sebagai MP4 — fail yang namanya berakhir dengan .mp4 — dan pilih fail tersebut."
+    },
+    "liveRegions": [
+     {
+      "region": "#language-status",
+      "text": "Bahasa halaman: Bahasa Malaysia."
+     },
+     {
+      "region": "div.promise-help",
+      "text": "Video wujud dalam banyak format. Sesetengahnya dimainkan pada satu peranti tetapi tidak pada peranti lain, atau tidak berfungsi dengan sesetengah aplikasi. Alat"
+     },
+     {
+      "region": "#source-status",
+      "text": "Pemeriksaan peranti selesai. Ini tidak boleh dijalankan di sini. Pelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam "
+     },
+     {
+      "region": "div",
+      "text": "Saat terakhir video — grafik penutup menutupinya semasa ia terbentuk. Bingkai akhir ditahan — bingkai terakhir anda ditahan selama satu saat tambahan. Grafik pe"
+     },
+     {
+      "region": "#page-announcer",
+      "text": "Pratonton tidak tersedia untuk fail ini. Anda masih boleh menetapkan masa."
+     }
+    ],
+    "marks": [
+     {
+      "what": "chosen",
+      "t": 1793195885340
+     },
+     {
+      "what": "block shown",
+      "t": 1793195885382,
+      "kind": "error"
+     }
+    ]
+   }
+  },
+  "scenarioAsserts": [
+   {
+    "what": "an accepted outcome within the bound: refused before Create, finished, or failed with recovery (VH-214)",
+    "outcome": "pass",
+    "accepted": "refused before Create",
+    "seconds": 2,
+    "created": false,
+    "blocked": true,
+    "outcomeSeen": {
+     "accepted": "refused before Create",
+     "answered": true,
+     "t": 1793195886046
+    },
+    "expired": null,
+    "atExpiry": null,
+    "walkError": null,
+    "later": "refused before Create",
+    "hang": null
+   },
+   {
+    "what": "the outcome: a finished video, a failure and its code, or still running at the limit",
+    "outcome": "not-counted",
+    "why": "recorded as found, not judged here",
+    "found": {
+     "seconds": 3,
+     "blocked": true,
+     "block": "Ini tidak boleh dijalankan di siniPelayar ini tidak dapat membaca gambar atau audio di dalam fail ini. Ia mungkin disimpan dalam format yang dibuat untuk perisian penyuntingan. Eksportnya sekali lagi ",
+     "timedOut": false,
+     "res": "none",
+     "text": ""
+    }
+   }
+  ],
+  "targets": [
+   "worker"
+  ],
+  "status": "ok",
+  "ms": 5206,
+  "targetsSeen": [
+   {
+    "t": 567,
+    "type": "worker",
+    "url": "job.worker.ts?worker_file&type=module",
+    "waitingForDebugger": true,
+    "sessionId": "3A171ECE576C6E8C2B29A80756341218"
+   }
+  ],
+  "workerLogs": [
+   {
+    "t": 642,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (worker)"
+    ]
+   },
+   {
+    "t": 642,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[worker]",
+     "job worker ready"
+    ]
+   },
+   {
+    "t": 642,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "log",
+    "args": [
+     "[worker]",
+     "ping received"
+    ]
+   },
+   {
+    "t": 1516,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "Unsupported video codec (sample entry type 'rle ')."
+    ]
+   },
+   {
+    "t": 1520,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "QuickTime File Format",
+      "durationSeconds": 5,
+      "videoCodec": null,
+      "resolution": "1920x1080",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": null,
+      "channels": null,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 0
+     }
+    ]
+   },
+   {
+    "t": 1523,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "Unsupported video codec (sample entry type 'rle ')."
+    ]
+   },
+   {
+    "t": 1525,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[inspect]",
+     "source inspected",
+     {
+      "container": "QuickTime File Format",
+      "durationSeconds": 5,
+      "videoCodec": null,
+      "resolution": "1920x1080",
+      "frameRate": 25,
+      "variableFrameRate": false,
+      "audioCodec": null,
+      "channels": null,
+      "subtitleTracks": 0,
+      "chapterTracks": 0,
+      "videoTracks": 1,
+      "audioTracks": 0
+     }
+    ]
+   },
+   {
+    "t": 1525,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "device capabilities inspected",
+     {
+      "hasWebCodecs": true,
+      "hasOpfs": true,
+      "deviceClass": "desktop",
+      "hardwareConcurrency": 10,
+      "quotaBytes": 10737418428,
+      "availableBytes": 10737418240
+     }
+    ]
+   },
+   {
+    "t": 1543,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1920,
+      "height": 1080,
+      "bitrate": 6220800
+     }
+    ]
+   },
+   {
+    "t": 1547,
+    "worker": "job.worker.ts?worker_file&type=module",
+    "type": "warning",
+    "args": [
+     "Unsupported video codec (sample entry type 'rle ')."
+    ]
+   }
+  ],
+  "pageLogs": [
+   {
+    "t": 499,
+    "type": "debug",
+    "args": [
+     "[vite] connecting..."
+    ]
+   },
+   {
+    "t": 505,
+    "type": "debug",
+    "args": [
+     "[vite] connected."
+    ]
+   },
+   {
+    "t": 524,
+    "type": "log",
+    "args": [
+     "[diagnostics]",
+     "global error capture installed (main)"
+    ]
+   },
+   {
+    "t": 548,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "shell mounted"
+    ]
+   },
+   {
+    "t": 524,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "UoN Video Helper starting",
+     {
+      "appVersion": "v0.2.0",
+      "buildId": "v0.2.0+20261028.5893d9d"
+     }
+    ]
+   },
+   {
+    "t": 525,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "brand assets",
+     {
+      "logo": true,
+      "headingFont": true
+     }
+    ]
+   },
+   {
+    "t": 545,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "device class",
+     {
+      "deviceClass": "desktop"
+     }
+    ]
+   },
+   {
+    "t": 549,
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 2,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 549,
+    "type": "info",
+    "args": [
+     "[capability]",
+     "audio encode support checked",
+     {
+      "supported": true,
+      "codec": "mp4a.40.2",
+      "numberOfChannels": 1,
+      "bitrate": 192000
+     }
+    ]
+   },
+   {
+    "t": 563,
+    "type": "info",
+    "args": [
+     "[capability]",
+     "encode support checked",
+     {
+      "supported": true,
+      "codec": "avc1.64002a",
+      "width": 1920,
+      "height": 1080,
+      "bitrate": 6220800
+     }
+    ]
+   },
+   {
+    "t": 643,
+    "type": "info",
+    "args": [
+     "[boot]",
+     "worker round-trip complete",
+     {
+      "roundTripMs": 97,
+      "workerBootMs": 1
+     }
+    ]
+   },
+   {
+    "t": 1508,
+    "type": "info",
+    "args": [
+     "[ui]",
+     "file chosen",
+     {
+      "sizeBytes": 35521170,
+      "type": "video/quicktime"
+     }
+    ]
+   },
+   {
+    "t": 1548,
+    "type": "info",
+    "args": [
+     "[ui]",
+     "preflight verdict",
+     {
+      "outcome": "block",
+      "reasons": [
+       "no-source-decode",
+       "estimate-unavailable"
+      ],
+      "presetId": "best",
+      "contentClass": "unknown",
+      "bitrateBasis": "anchor-ceiling",
+      "width": 1920,
+      "height": 1080,
+      "frameRate": 25,
+      "projectedOutputBytes": 11897280,
+      "probeMeasured": false,
+      "videoFramesPerSecond": 0,
+      "estimatedSeconds": null
+     }
+    ]
+   }
+  ],
+  "chosenToOutcomeMs": 42
+ }
+]

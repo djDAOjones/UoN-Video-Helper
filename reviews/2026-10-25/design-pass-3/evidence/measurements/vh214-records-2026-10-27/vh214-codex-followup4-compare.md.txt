@@ -1,0 +1,47 @@
+Claude's verdict on #9's repair and Codex astra's fourth follow-up, compared by VH-214 #11, verbatim. Codex astra ran with codex exec -m gpt-6-astra -s read-only in the side worktree (branch side/vh214, base 5893d9d), blind to Claude's verdict, which was saved before its answer was read. Kept as .md.txt: it names paths outside the repository.
+
+# VH-214 — Claude's verdict on #9's repair and Codex astra's fourth follow-up, compared (VH-214 #11)
+
+- **Saved:**
+  - Codex's fourth follow-up started at 2026-10-28T14:34:17Z (PID 78265) from `vh214-codex-followup4-brief.md`. Its brief held no verdict or compare, and it was told not to read any file in `$N` outside `$W`. It put the deferral and load questions plainly, each to be ruled explicitly, without Claude's answer.
+  - Claude's verdict is the "VH-214 #11's update for #9's repair" section of `vh214-claude-verdict.md`, saved at 14:37:32Z, while Codex ran.
+  - Codex's answer, `vh214-codex-followup4.md`, was saved at 14:39:32Z (the process exited by 14:39:38Z). Claude read it at 14:39:42Z, after the verdict was saved.
+  - Kept unchanged: #2's blind check and compare, #4's follow-up and compare, #6's second follow-up and compare, and #8's third follow-up and compare.
+- **Verdicts:** Codex says **"Close"**, with its four points all marked repaired and no fix required. Claude said "close, subject to the gate, the checker and the close check", with no must.
+- **No recorded cell changes.** The after's 12 groups each reached "refused before Create" 42–185 ms after the choosing. No deadline was reached, so no group was judged at expiry. The finding stands: a walk hang, no product diff.
+
+## The two rulings
+- **The deferral** (#9's one-turn deferral of the deadline's timer in `byDeadline`, `:1589`, `:1591`, the comment `:1557–1560`):
+  - **Codex: inside the approval.** In its words, "it repairs deadline enforcement and outcome attribution for S-140/S-140n. The absolute deadline remains strict; the deferral is declared and exercised before the replacement after."
+  - **Claude: inside the approval.** It changes how the expiry is judged, not the bound: the after-check (`:1594`) still makes any result at or after the deadline its expiry. Its only effect is that an answer already waiting is taken and told late, not lost as "no answer" (the misattribution of the third follow-up's must 1). It stays in the block, is declared in the comment and the table (`:54`), and was proved before the after by `snapshot-walk-held`, `snapshot-page-late` and the never-answering cases.
+  - **Agreed.** No stop for the owner.
+- **The load** (the proof's sets started at 7.78 and 5.65; all 12 after groups at 10.47–14.1; the AC before at 8.24–13.1):
+  - **Codex: not owed.** In its words, "all intended proof branches occurred, successful outcomes had ample deadline margin, and all 48 after group-modes match the paired before apart from timings."
+  - **Claude: not owed,** on the same ground (Codex's should 3). Claude adds that the cases' own checks test the timing they rely on, that no after group reached a deadline, and that the first before, on the same app at 4.15–6.88, agrees on every reading except its probe's misread key.
+  - **Agreed.** No re-run is owed.
+
+## Agreed
+- **Must 1, late delivery, is repaired** (`scenarios.mjs:1674`). Late delivery reads cannot-determine, the walk; a page answer dated late reads fail, the page. The two changed expectations and table rows agree with the records.
+- **Must 2, the boundaries, is repaired.** These are all driven, and all 41 cases passed before the after:
+  - the waiting answer and the late page answer;
+  - the crossing dropped span and the usable overflow;
+  - the ambiguous change to null;
+  - errors at both deadlines, and 200 ms after the job's.
+
+  Codex also names the error after the read's deadline, through the inner timeout's race, an earlier case. Neither finds a branch untested or misjudged.
+- **Should 3:** the load lines match the records and stand on the observed branches and the deadline margin.
+- **Should 4:** the proof's header names the "nothing kept" exception.
+- **Scope:** inside the approval, with no product diff. "Not bounded" (the runner's unbounded later reads) is disclaimed in the table and invalidates no recorded result. Nothing in the candidate would stop the gate or the checker.
+
+## Codex only
+- None that asks for a change. The answer (270 words) is saved verbatim.
+
+## Claude only
+- **A caveat, rank 2 at most, not a must.** The deferral and its two proof cases rely on Node's event-loop order and on undici's `ws.send` writing synchronously. A change there would show as a case not as expected, and the runner then starts no after.
+
+## Disagreed
+- None: the code and the records settle every point, so there is no question for the owner.
+- **Next: the close,** as the brief's "The close's order" gives it:
+  - revise the drafted ledger (the bounds 330, 900, 60 and 10 s; the proof's 41 cases, 26 real and 15 job; the after's 12; the late-delivery rule; `CODEX_BLIND`; the follow-ups' verdicts, this one's "Close" included; the trajectory line);
+  - copy the Codex files into the bundle as `.md.txt`;
+  - the gate and the checker under the lock, then the freeze, then the close check, then the commit.

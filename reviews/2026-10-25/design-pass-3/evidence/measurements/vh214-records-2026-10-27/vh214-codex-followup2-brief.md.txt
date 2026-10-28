@@ -1,0 +1,27 @@
+The brief for Codex astra's second follow-up of VH-214 (VH-214 #6, started 2026-10-28T10:41:59Z), verbatim. Codex astra ran with codex exec -m gpt-6-astra -s read-only in the side worktree (branch side/vh214, base 5893d9d), blind to Claude's verdict, which was saved before its answer was read. Kept as .md.txt: it names paths outside the repository.
+
+You are Codex astra, re-checking repaired points, read-only. Do not edit anything. Read only inside your working directory (the git worktree, branch side/vh214, base 5893d9d). Do not read anything under /Users/joe/UoN-Video-Helper-side/ outside this worktree, or any notes folder: another reviewer's verdict is kept there, and this check must stay independent of it.
+
+The item: `project/items/VH-214.md` (its acceptance criteria are your contract). The owner approved only: S-140's and S-140n's bound and three accepted outcomes (refused before Create, finished, failed with recovery), declared and proved before the after; a product repair only for what reproduces, in existing words. Any other walker change is out of scope.
+
+Your follow-up check said "Do not close", with these points:
+1. must (`walker/scenarios.mjs`, then `:1561,1598`): an inner polling timeout can win after event-loop delay (you reproduced a 220 ms deadline giving an untagged timeout at 260 ms, classified as the walk); already-expired deadlines accept resolved promises. Enforce absolute expiry when accepting results and route elapsed inner timeouts through expiry capture; correct the table's timer-order claim.
+2. must (then `:1568,1592,1596`): `atExpiry` requests current state after expiry, up to ten seconds later, its timestamp before the evaluation; a late refusal was attributed to the walk. Normal outcome capture escapes the phase deadline. Keep timestamped evidence of the state by the deadline, reject late observations as deadline evidence, and keep normal capture within the phase bound.
+3. must (the proof, then `vh214-proof.mjs.txt:89,114,122,159`): add setup-driven cases for the two races, unanswered job evaluations, job expiry with an accepted outcome, outer boot expiry, and unanswered normal capture; the "nothing kept" case skips setup; repeat the proof before a replacement after. Synchronise `project/decisions.md` and `project/trajectory.md` (300 s, 14 cases).
+4. should: make the table's "Not bounded" line explicit about setup termination.
+
+The repair and its evidence (the candidate is `git diff 5893d9d` plus the untracked files):
+- `reviews/2026-10-25/design-pass-3/evidence/measurements/walker/scenarios.mjs`, S-140 and S-140n only: the block at about `:1533–1653` (`QT_BOUND`, `QT_OUTCOME`, `QT_RECORDER`, `byDeadline`, `qtSnap`, `qtCapture`, `qtEvidence`, `quickTime`, `qtJudged`) and the two setups (about `:2490`, `:2501`).
+- The table `reviews/2026-10-25/design-pass-3/evidence/measurements/vh214-quicktime-2026-10-27.md`, section 2 rewritten, sections 1, 3 and 7 updated; its records `…/measurements/vh214-records-2026-10-27/`: the new proof (`vh214-proof.mjs.txt`, `proof-real.json`, `proof-job.json`, `proof-*.log.txt`; 26 cases), the new after (`after-*.json`, `probe-after.log.txt`), the runners and log (`run-3.sh.txt`, `proof-then-after.sh.txt`, `servers-vh214.sh.txt`, `run-3.log.txt`). The earlier proof, its void first run and the earlier after were removed as superseded. The befores are unchanged.
+- The ledger lines (`project/decisions.md`, `project/trajectory.md`, `project/items/VH-214.md`, `project/wish-list.md`, `project/backlog.md`, the design-pass-3 report's Disposition row) are drafts, still stale (300 s, 14 cases); they are revised at the close, and a separate close check covers them. Do not judge their wording here, only whether the table and records support what they will need to say.
+- The gate and the checker run under the walk lock at close, before the separate close check. Say only whether anything in the candidate would stop them.
+
+Known and declared, not to be repaired here: the runner's reads after the setup (the probe's `readModes`, the walker's state check) are unbounded, and bounding them is outside the owner's approval. Say whether that leaves any claim in the table unsupported.
+
+Judge:
+1. Are points 1, 2 and 3 repaired? Name any branch still untested or mis-judged, including the recorder's timing (a DOM-change observer and a 50 ms tick), its 200-entry cap, and the routing of errors at or after the deadline.
+2. The proof's real set started at 1-minute load 8.15 (the job set 3.52, the after 2.10–2.76, all on AC, power mode 2). Does that weaken any proof case?
+3. Does everything stay inside the approval?
+4. Anything in the table the records don't support?
+
+Answer in under 300 words. Begin with one verdict line: "Close", "Close after the musts below" or "Do not close". Then numbered points, each rank 1 (must) or rank 2 (should), naming the file and line and a concrete fix.

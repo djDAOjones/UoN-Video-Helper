@@ -1,0 +1,578 @@
+// VH-214's predicate proof (VH-214 #3, after Codex astra's blind check): S-140's
+// and S-140n's bound and three accepted outcomes, proved on the page before any
+// after is read. Everything judged is the candidate walker's own
+// (SCENARIOS[id].setup, which is `quickTime`, and its first assert row,
+// `qtJudged`), imported read-only from WALKER, never retyped. Every case but
+// one runs the real setup to its real end, with no observation handed to the
+// row; that one, "nothing kept", runs no setup and hands the row its
+// observations (none kept, no deadline), to drive its last branch alone. Where a
+// case is about a deadline, the deadline is shortened for that case only by
+// the walker's declared test hook, globalThis.__QT_BOUND_MS, and really
+// expires; the page's state is made by the walker's own faults (F11, F14), a
+// real fixture, or a stated change to the page (a boot that never ends, a main
+// thread that never answers, a file chooser that stays locked).
+//
+//   WALKER=<candidate walker> APP_ROOT=<checkout holding samples/> APP_URL=... CDP_PORT=9251 \
+//   FIX=<fixtures> OUT_ROOT=<scratch>/out RESULTS=<dir> node vh214-proof.mjs <set>
+//   set "real": FIX holds N13 (qtrle-5s.mov): refused ×3 languages and the original asset;
+//     the read's deadline reached with the block shown (the walk's); reached with the
+//     check held by F14 (the page's), and the block coming after it (still the page's);
+//     the boot's own 30 s told apart (the walk's); nothing kept (no deadline); a main
+//     thread that never answers (the page's, ended at the deadline).
+//   set "job": FIX holds short-2s.mp4 under N13's name: finished ×3 languages; failed
+//     with recovery (F11); the job's deadline reached while F11's job runs (the page's)
+//     and its failure coming after it (still the page's); a finish after the deadline
+//     (the page's); recovery withheld at the deadline (the page's).
+// VH-214 #5, after Codex astra's follow-up (its musts 1 to 3), adds seven cases,
+// each through the real setup, the 19 above kept as they were:
+//   real: the inner wait's own timeout winning the race (Node's event loop held
+//     past both timers, the read's deadline 3 s, F14 holding the check): the
+//     page's, by the expiry, not the walk's; an outcome arriving after the read's
+//     deadline, read by the evidence read (held until the block shows): late, the
+//     page's; the boot's own deadline (bootMs 2 s, a boot that never ends): the
+//     walk's; an unanswered normal capture (the main thread blocked as it is
+//     read, the read's deadline 4 s): the page's, ended at the deadline.
+//   job: an unanswered evaluate in the job (the main thread blocked at Create,
+//     the job's deadline 5 s): the page's; the job's deadline reached with an
+//     accepted outcome showing (the walk's wait never returning, 20 s): the
+//     walk's; no accepted outcome and no deadline, by the real setup (Create
+//     withheld by a stated style): no accepted outcome.
+// VH-214 #7, after Codex astra's second follow-up (its musts 1 to 3), adds seven
+// cases, each through the real setup, the 26 above kept as they were:
+//   real: the recorder's log overflowed before the read's deadline (a stated
+//     change flips the block's display 240 times, each flip its own task; the
+//     walk's settling wait never returns, 3 s), the block left shown and left
+//     hidden: cannot-determine, the walk's, both; a change made before the read's
+//     deadline but first seen after it (a stated style hides the block; one task
+//     shows it 300 ms before the deadline and holds the main thread 700 ms past
+//     it): ambiguous, cannot-determine, the walk's; a successful snapshot answer
+//     taken after the snapshot's bound (the walk's process held past snapMs
+//     300 ms once the answer is in), at expiry and later: no answer, the page's;
+//     an already-expired, resolved promise (the walk's own evidence expression,
+//     read 300 ms before the deadline, handed to the evidence read only after
+//     the snapshot's bound has passed): no answer, the page's; an error before
+//     the read's deadline (the file's choosing fails at once): the walk's.
+//   job: an error before the job's deadline (the click on Create fails at once):
+//     the walk's.
+// VH-214 #9, after Codex astra's third follow-up (its musts 1 and 2, and its
+// should 4 for this header), changes two expectations and adds eight cases,
+// each through the real setup, the other 31 kept as they were:
+//   real: #7's two late snapshot answers are now late delivery,
+//     cannot-determine, the walk's: the page dated each inside the snapshot's
+//     bound, and the walk took it after; the walk's process held past the
+//     snapshot's bound (300 ms) once the evidence read and the later snapshot
+//     are sent, the page's answers waiting: late delivery, the walk's; the
+//     page's main thread held past that bound before it answers (the walk's
+//     process held too, so the answer is taken): a late answer, the page's; the
+//     recorder's log filled to its 200 entries before the read's deadline (3 s),
+//     then one change made 300 ms before it with the main thread held past it,
+//     so the first dropped change's span crosses the deadline: unusable,
+//     cannot-determine, the walk's; the log overflowing only after the deadline
+//     (the main thread held across it, then 240 flips): usable, judged from the
+//     kept log, the block shown before the deadline: the walk's; the block
+//     hidden 299 ms before the deadline, the main thread held past it: an
+//     ambiguous change to no outcome, cannot-determine, the walk's; an error in
+//     the walk exactly at the read's deadline: the expiry, judged by the log,
+//     the walk's.
+//   job: an error in the job's wait exactly at the job's deadline (3 s), and
+//     one 200 ms after it, F11's silent job running: the expiry, no outcome in
+//     the log, the page's.
+// The JSON records how many cases were planned and whether all ran; the process
+// exits 1 unless every planned case ran and came out as expected.
+import { mkdirSync, writeFileSync } from 'node:fs'
+import { join, resolve } from 'node:path'
+import { pathToFileURL } from 'node:url'
+
+const env = (k) => { const v = process.env[k]; if (!v) throw new Error(`set ${k}`); return v }
+const WALKER = resolve(env('WALKER')), RESULTS = resolve(env('RESULTS'))
+const SET = process.argv[2]
+if (!['real', 'job'].includes(SET)) throw new Error('set "real" or "job"')
+mkdirSync(RESULTS, { recursive: true })
+const imp = (f) => import(pathToFileURL(join(WALKER, f)).href)
+const { connectBrowser } = await imp('cdp.mjs')
+const { Walk, sleep } = await imp('walk.mjs')
+const { QUAL_INIT, setViewport, closeAnalysis } = await imp('qualify.mjs')
+const { SCENARIOS, MX_INIT, fresh } = await imp('scenarios.mjs')
+const { P8_INIT, watchWorkers } = await imp('phase8.mjs')
+const { applyFault, releaseAll } = await imp('faults.mjs')
+
+const JUDGED = 'an accepted outcome within the bound: refused before Create, finished, or failed with recovery (VH-214)'
+const judge = async (w, id) => { const a = SCENARIOS[id].asserts[0]; if (a.what !== JUDGED) throw new Error('the first row is not the judged one'); return a.fn(w) }
+const mx = (w, expr) => w.evaluate(`(() => { const M = window.__mx; return ${expr}; })()`)
+const bounded = (p, ms, what) => Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error(`bound: ${what} did not return in ${ms / 1000} s`)), ms))])
+const browser = await connectBrowser()
+const out = { set: SET, started: new Date().toISOString(), chrome: browser.version.Browser, walker: WALKER, expectedCases: SET === 'real' ? 26 : 15, cases: [] }
+const BLOCK_ERROR = `(() => { const M = window.__mx; return M.kindIn('#source-block') === 'error'; })()`
+const LOOP = { expression: 'while (true) {}' }
+/** VH-214 #7: a stated change to the page: once step 1's block shows, its notification's display is flipped 240 times, each flip its own task, then left as `final`. */
+const FLAP = (final) => `(() => { const st = (window.__flap214 = { n: 0, startAt: null, doneAt: null, final: '${final}' }); const ch = new MessageChannel(); const note = () => document.querySelector('#source-block .notification'); ch.port1.onmessage = () => { const n = note(); if (!n) return; n.style.display = n.style.display === 'none' ? '' : 'none'; st.n++; if (st.n < 240) ch.port2.postMessage(0); else { n.style.display = st.final === 'hidden' ? 'none' : ''; st.doneAt = Date.now(); } }; const iv = setInterval(() => { const n = note(); if (n && n.dataset.kind === 'error') { clearInterval(iv); st.startAt = Date.now(); ch.port2.postMessage(0); } }, 10); })()`
+/** VH-214 #7: a stated style that hides step 1's block, removable by its id. */
+const HIDE_BLOCK = `document.addEventListener('DOMContentLoaded', () => { const s = document.createElement('style'); s.id = 'qt214-hide'; s.textContent = '#source-block .notification { display: none !important; }'; document.head.appendChild(s) })`
+/** VH-214 #7: once the file is chosen (after the boot), the walk's settling wait never returns, so the read's deadline is reached; `then` runs at the choosing. */
+const settleNever = (w, then = () => {}) => { const real = w.setFiles.bind(w); w.setFiles = async (...a) => { const r = await real(...a); w.waitSettled = () => new Promise(() => {}); then(); return r } }
+const EVIDENCE = (expr) => typeof expr === 'string' && expr.includes('__qt214 ?? null')
+const LATER = (expr) => typeof expr === 'string' && expr.includes("return ({ t: Date.now(), a: (M.kindIn('#source-block')")
+/** VH-214 #9: the walk's process held (a busy loop) for ms; returns how long. */
+const holdWalk = (ms) => { const t = Date.now(); while (Date.now() < t + ms) { /* the walk's process held */ } return Date.now() - t }
+/** VH-214 #9: the expression the walk's own wait sends while it waits for an accepted outcome in the job. */
+const UNTIL_OUTCOME = (expr) => typeof expr === 'string' && expr.includes("try { return !!((M.kindIn('#source-block')")
+/** VH-214 #9: one task in the page: step 1's block flipped, each flip seen by the recorder's own tick, until its log holds its 200 entries (at most 1000 flips); then one flip more, unseen, and the main thread held until `heldTo`, so that change is first seen after it. */
+const FILL_CROSS = (heldTo) => `(() => { const R = window.__qt214; const n = document.querySelector('#source-block .notification'); const st = (window.__fill214 = { startAt: Date.now(), flips: 0, logAtStart: R.log.length }); const flip = () => { n.style.display = n.style.display === 'none' ? '' : 'none'; st.flips++ }; while (R.log.length < 200 && st.flips < 1000) { flip(); R.tick() } st.fullAt = Date.now(); st.full = R.log.length === 200 && !R.overflow; st.lastSeen = R.seen; flip(); st.crossFlipAt = Date.now(); while (Date.now() < ${heldTo}) { /* the main thread held past the deadline */ } st.heldTo = Date.now(); })()`
+/** VH-214 #9: one task in the page: the main thread held until `heldTo`, the recorder's own tick run once (no change, so an observation after the deadline), then 240 flips of step 1's block, each seen by that tick, left shown. */
+const FLIP_AFTER = (heldTo) => `(() => { const R = window.__qt214; const n = document.querySelector('#source-block .notification'); const st = (window.__after214 = { startAt: Date.now(), flips: 0 }); while (Date.now() < ${heldTo}) { /* the main thread held across the deadline */ } R.tick(); st.observedAt = R.seen; for (let i = 0; i < 240; i++) { n.style.display = n.style.display === 'none' ? '' : 'none'; st.flips++; R.tick() } st.doneAt = Date.now(); st.final = n.style.display; })()`
+let evidenceExpr = null
+/** want: outcome, and where given accepted, hang, and checks [what, fn(got, obs)]. */
+const expectRow = (name, got, obs, want) => {
+  const checks = (want.checks ?? []).map(([what, fn]) => ({ what, ok: !!fn(got, obs) }))
+  const ok = got.outcome === want.outcome && (want.accepted === undefined || got.accepted === want.accepted) && (want.hang === undefined || got.hang === want.hang) && checks.every((c) => c.ok)
+  out.cases.push({ name, want: { outcome: want.outcome, accepted: want.accepted, hang: want.hang, checks: checks.map((c) => c.what) }, got, checks, bound: obs?.bound ?? null, ok })
+  console.log(`${ok ? 'AS EXPECTED' : 'NOT AS EXPECTED'} ${name}: ${got.outcome} / ${got.accepted} / hang ${got.hang}${got.why ? ' — ' + got.why : ''}${checks.filter((c) => !c.ok).map((c) => ' [failed: ' + c.what + ']').join('')}`)
+}
+async function open(name, extraInit = []) {
+  const w = new Walk(browser, `proof-${SET}/${name}`)
+  await w.open()
+  for (const source of [QUAL_INIT, MX_INIT, P8_INIT, ...extraInit]) await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source })
+  await watchWorkers(browser, w)
+  await setViewport(w, 'w1280')
+  return w
+}
+/** The scenario's own setup under a bound for this case only (undefined: the declared one). */
+async function setup(w, id, lang, bound) {
+  globalThis.__QT_BOUND_MS = bound
+  const t = Date.now()
+  try { await SCENARIOS[id].setup(w, lang) } finally { globalThis.__QT_BOUND_MS = undefined }
+  w.obs.setupMs = Date.now() - t
+  return w.obs
+}
+const closeW = (w) => bounded(w.close(), 20000, 'close').catch((e) => { out.closeErrors = [...(out.closeErrors ?? []), String(e.message ?? e)] })
+const phase = (p) => (g, o) => o.expired?.phase === p
+const laterIs = (v) => (g) => g.later === v
+
+try {
+  if (SET === 'real') {
+    for (const lang of ['en-GB', 'zh-Hans', 'ms-MY']) {
+      const w = await open(`refused-${lang}`)
+      const o = await setup(w, 'S-140n', lang)
+      expectRow(`refused before Create, N13, ${lang} (the declared bound)`, await judge(w, 'S-140n'), o, { outcome: 'pass', accepted: 'refused before Create', hang: null, checks: [['no deadline reached', (g, ob) => !ob.expired && !ob.walkError]] })
+      await closeW(w)
+    }
+    {
+      const w = await open('refused-original')
+      const o = await setup(w, 'S-140', 'en-GB')
+      expectRow('refused before Create, the original asset, en-GB (the declared bound)', await judge(w, 'S-140'), o, { outcome: 'pass', accepted: 'refused before Create', hang: null })
+      await closeW(w)
+    }
+    {
+      // 380 ms from the choosing ends inside the walk's settling (walk.mjs waitSettled sleeps 400 ms first); the block shows 41-135 ms after it.
+      const w = await open('read-deadline-block-shown')
+      const o = await setup(w, 'S-140n', 'en-GB', { readMs: 380 })
+      expectRow('the read deadline (380 ms) reached while the page shows the block: the walk\'s', await judge(w, 'S-140n'), o, { outcome: 'cannot-determine', accepted: 'refused before Create', hang: 'the walk', checks: [['expired in the read', phase('read')]] })
+      await closeW(w)
+    }
+    {
+      // F14 holds the pre-flight's answer 8 s; the read's deadline is 3 s.
+      const w = await open('read-deadline-check-held')
+      await applyFault(w, 'F14', { ms: 8000 })
+      const o = await setup(w, 'S-140n', 'en-GB', { readMs: 3000 })
+      expectRow('the read deadline (3 s) reached with the check held by F14: the page\'s', await judge(w, 'S-140n'), o, { outcome: 'fail', accepted: null, hang: 'the page', checks: [['expired in the read', phase('read')], ['the page answered at expiry with no outcome', (g, ob) => ob.atExpiry?.answered === true && ob.atExpiry?.accepted === null]] })
+      await w.waitFor(`(() => { const M = window.__mx; return M.kindIn('#source-block') === 'error'; })()`, { label: 'the late block', timeout: 30000 })
+      expectRow('the block coming after the read deadline: still the page\'s', await judge(w, 'S-140n'), o, { outcome: 'fail', accepted: null, hang: 'the page', checks: [['read later as refused before Create', laterIs('refused before Create')]] })
+      await releaseAll(w).catch(() => {})
+      await closeW(w)
+    }
+    {
+      // A boot that never ends: the version line kept at "Loading", so walk.mjs's own 30 s boot wait times out before the boot's declared 60 s.
+      const w = await open('boot-timeout', [`setInterval(() => { const v = document.getElementById('version-line'); if (v && v.textContent !== 'Loading') v.textContent = 'Loading' }, 50)`])
+      const o = await setup(w, 'S-140n', 'en-GB')
+      expectRow('the boot\'s own 30 s timeout, not the bound: the walk\'s', await judge(w, 'S-140n'), o, { outcome: 'cannot-determine', accepted: null, hang: 'the walk', checks: [['failed in the boot', (g, ob) => ob.walkError?.phase === 'boot'], ['by walk.mjs\'s boot wait', (g, ob) => /timeout waiting for boot/.test(ob.walkError?.error ?? '')], ['no deadline reached', (g, ob) => !ob.expired]] })
+      await closeW(w)
+    }
+    {
+      // The judged row's last branch, by itself: nothing kept, no deadline (no setup ran).
+      const w = await open('nothing-kept')
+      await fresh(w, 'en-GB')
+      w.obs = { tStart: Date.now(), tEnd: Date.now() }
+      expectRow('nothing kept and no deadline reached (no setup ran): no accepted outcome', await judge(w, 'S-140n'), w.obs, { outcome: 'fail', accepted: null, hang: null })
+      await closeW(w)
+    }
+    {
+      // A main thread that never answers: right after the file is chosen, an endless loop is evaluated in the page, not awaited.
+      const w = await open('unanswered')
+      const realSetFiles = w.setFiles.bind(w)
+      w.setFiles = async (...a) => { await realSetFiles(...a); w.page.send('Runtime.evaluate', { expression: 'while (true) {}' }).catch(() => {}) }
+      const o = await setup(w, 'S-140n', 'en-GB', { readMs: 3000, snapMs: 2000 })
+      out.unansweredSetupFromChoosingMs = o.tEnd - o.tChosen
+      expectRow('a main thread that never answers, the read deadline 3 s: the page\'s, ended at the deadline', await bounded(judge(w, 'S-140n'), 15000, 'the judged row'), o, { outcome: 'fail', accepted: null, hang: 'the page', checks: [['expired in the read', phase('read')], ['not answered at expiry', (g, ob) => ob.atExpiry?.answered === false], ['the setup ended within the deadline and the read of it, 1 s to spare', (g, ob) => ob.tEnd - ob.tChosen <= 3000 + 2000 + 1000], ['no answer later', laterIs('no answer')]] })
+      await closeW(w)
+    }
+    // VH-214 #5's cases.
+    {
+      // Must 1's race: F14 holds the check, so an inner wait (walk.mjs waitFor) is polling at the read's deadline. On the
+      // first poll answered 250-650 ms before it, Node's event loop is held (a busy loop, scheduled at once, so it runs
+      // before that poll's 200 ms sleep) until 1 s past the deadline: then the sleep's timer, due first, runs first, and
+      // waitFor throws its own "timeout waiting for" before the deadline's timer can run, as Codex reproduced.
+      const w = await open('inner-timeout-race')
+      await applyFault(w, 'F14', { ms: 8000 })
+      const realEval = w.evaluate.bind(w)
+      const race = { fired: false }
+      w.evaluate = async (expr) => {
+        const r = await realEval(expr)
+        const at = w.obs?.deadlines?.read, left = at ? at - Date.now() : null
+        if (!race.fired && left !== null && left > 250 && left < 650 && !r) { race.fired = true; race.leftMs = left; setTimeout(() => { const end = at + 1000; while (Date.now() < end) { /* the event loop held past both timers */ } race.heldTo = Date.now() - at }, 0) }
+        return r
+      }
+      const o = await setup(w, 'S-140n', 'en-GB', { readMs: 3000 })
+      w.evaluate = realEval
+      out.innerRace = race
+      expectRow('the inner wait\'s own timeout winning the race at the read deadline (3 s): the expiry, the page\'s', await judge(w, 'S-140n'), o, { outcome: 'fail', accepted: null, hang: 'the page', checks: [['the race driven', () => race.fired && race.heldTo >= 1000], ['expired in the read', phase('read')], ['by the inner wait\'s own timeout, sent through the expiry', (g, ob) => /^an error at or after it: timeout waiting for/.test(ob.expired?.by ?? '')], ['not the walk\'s', (g, ob) => !ob.walkError], ['the page answered at expiry with no outcome', (g, ob) => ob.atExpiry?.answered === true && ob.atExpiry?.accepted === null]] })
+      await releaseAll(w).catch(() => {})
+      await closeW(w)
+    }
+    {
+      // Must 2's race: F14 holds the check 6 s, the read's deadline is 3 s, and the evidence read after it is held until
+      // the block shows, so it reads the late block: kept as late, not as the state at the deadline.
+      const w = await open('late-outcome-race')
+      await applyFault(w, 'F14', { ms: 6000 })
+      const realEval = w.evaluate.bind(w)
+      const held = { ms: null }
+      w.evaluate = async (expr) => {
+        if (held.ms === null && typeof expr === 'string' && expr.includes('__qt214 ?? null')) { const t = Date.now(); while (!(await realEval(BLOCK_ERROR)) && Date.now() - t < 15000) await sleep(100); held.ms = Date.now() - t }
+        return realEval(expr)
+      }
+      const o = await setup(w, 'S-140n', 'en-GB', { readMs: 3000, snapMs: 20000 })
+      w.evaluate = realEval
+      out.lateRead = held
+      expectRow('an outcome after the read deadline (3 s), seen by the read at expiry: late, the page\'s', await judge(w, 'S-140n'), o, { outcome: 'fail', accepted: null, hang: 'the page', checks: [['expired in the read', phase('read')], ['the read at expiry saw the block', (g, ob) => ob.atExpiry?.nowSeen === 'refused before Create'], ['kept as late', (g, ob) => ob.atExpiry?.late?.accepted === 'refused before Create' && ob.atExpiry.late.afterMs >= 0], ['nothing accepted by the deadline', (g, ob) => ob.atExpiry?.answered === true && ob.atExpiry?.dated === true && ob.atExpiry?.accepted === null]] })
+      await releaseAll(w).catch(() => {})
+      await closeW(w)
+    }
+    {
+      // The boot's own deadline (bootMs, 60 s declared) shortened to 2 s, with a boot that never ends: the walk's.
+      const w = await open('boot-deadline', [`setInterval(() => { const v = document.getElementById('version-line'); if (v && v.textContent !== 'Loading') v.textContent = 'Loading' }, 50)`])
+      const o = await setup(w, 'S-140n', 'en-GB', { bootMs: 2000 })
+      expectRow('the boot\'s own deadline (bootMs 2 s), not the bound: the walk\'s', await judge(w, 'S-140n'), o, { outcome: 'cannot-determine', accepted: null, hang: 'the walk', checks: [['failed in the boot', (g, ob) => ob.walkError?.phase === 'boot'], ['by the boot\'s own deadline', (g, ob) => /^the boot deadline, 2000 ms, reached/.test(ob.walkError?.error ?? '')], ['no deadline of the bound reached', (g, ob) => !ob.expired], ['ended near 2 s', (g, ob) => ob.tEnd - ob.tStart < 2000 + 1500]] })
+      await closeW(w)
+    }
+    {
+      // The normal capture unanswered: as it is sent, the page's main thread is blocked (refused, N13); the read's deadline 4 s.
+      const w = await open('capture-unanswered')
+      const realEval = w.evaluate.bind(w)
+      const blocked = { at: null }
+      w.evaluate = async (expr) => {
+        if (blocked.at === null && typeof expr === 'string' && expr.includes('return ({ a: (M.kindIn')) { blocked.at = Date.now(); w.page.send('Runtime.evaluate', LOOP).catch(() => {}) }
+        return realEval(expr)
+      }
+      const o = await setup(w, 'S-140n', 'en-GB', { readMs: 4000, snapMs: 2000 })
+      w.evaluate = realEval
+      expectRow('the normal capture unanswered, the read deadline 4 s: the page\'s, ended at the deadline', await bounded(judge(w, 'S-140n'), 15000, 'the judged row'), o, { outcome: 'fail', accepted: null, hang: 'the page', checks: [['the capture was sent', () => blocked.at !== null], ['expired in the read', phase('read')], ['no capture kept', (g, ob) => !ob.outcomeSeen], ['not answered at expiry', (g, ob) => ob.atExpiry?.answered === false], ['ended within the deadline and the read at expiry, 1 s to spare', (g, ob) => ob.tEnd - ob.tChosen <= 4000 + 2000 + 1000]] })
+      await closeW(w)
+    }
+    // VH-214 #7's cases.
+    for (const [final, want] of [['shown', 'refused before Create'], ['hidden', null]]) {
+      // Must 1, the recorder's cap: N13's block shows, FLAP flips it 240 times (the recorder logs each, past its 200) and
+      // leaves it `final`; the read's deadline (3 s) is reached. The log's first dropped change lies before the deadline.
+      const w = await open(`recorder-overflow-${final}`, [FLAP(final)])
+      settleNever(w)
+      const o = await setup(w, 'S-140n', 'en-GB', { readMs: 3000 })
+      const flap = await mx(w, 'window.__flap214 ?? null')
+      out[`overflow_${final}`] = flap
+      expectRow(`the recorder's log overflowed before the read deadline (3 s), the block left ${final}: cannot-determine, the walk's`, await judge(w, 'S-140n'), o, { outcome: 'cannot-determine', accepted: null, hang: 'the walk', checks: [['the 240 flips driven, ended before the deadline', (g, ob) => flap?.n === 240 && flap.doneAt !== null && flap.doneAt < ob.deadlines.read], ['expired in the read', phase('read')], ['the overflow kept as unusable, its first dropped change before the deadline', (g, ob) => ob.atExpiry?.overflow?.usable === false && ob.atExpiry.overflow.count >= 40 && ob.atExpiry.overflow.afterMs < 0], [`the page read at expiry as ${want ?? 'no accepted outcome'}`, (g, ob) => ob.atExpiry?.answered === true && ob.atExpiry.nowSeen === want], ['said so', (g) => /log overflowed/.test(g.why ?? '')]] })
+      await closeW(w)
+    }
+    {
+      // Must 2, observations, not transitions: HIDE_BLOCK keeps N13's block hidden (no accepted outcome); 300 ms before the
+      // read's deadline (3 s), one task removes that style, so the block shows, and holds the main thread until 700 ms past
+      // the deadline. The change lies before the deadline; the recorder first sees it after.
+      const w = await open('ambiguous-at-deadline', [HIDE_BLOCK])
+      const trig = { sentAt: null }
+      settleNever(w, () => {
+        const at = w.obs.deadlines.read
+        setTimeout(() => { trig.sentAt = Date.now(); w.page.send('Runtime.evaluate', { expression: `(() => { document.getElementById('qt214-hide').remove(); window.__amb214 = { changedAt: Date.now() }; const end = ${at} + 700; while (Date.now() < end) { /* the main thread held */ } window.__amb214.heldTo = Date.now(); })()` }).catch(() => {}) }, Math.max(0, at - 300 - Date.now()))
+      })
+      const o = await setup(w, 'S-140n', 'en-GB', { readMs: 3000 })
+      const amb = await mx(w, 'window.__amb214 ?? null')
+      out.ambiguous = { ...trig, ...(amb ?? {}), deadline: o.deadlines.read }
+      expectRow('a change made before the read deadline (3 s), first seen after it: ambiguous, cannot-determine, the walk\'s', await judge(w, 'S-140n'), o, { outcome: 'cannot-determine', accepted: null, hang: 'the walk', checks: [['the change made before the deadline, the main thread held past it', (g, ob) => !!amb && amb.changedAt < ob.deadlines.read && amb.heldTo >= ob.deadlines.read + 700], ['expired in the read', phase('read')], ['first seen after the deadline, observed before it', (g, ob) => ob.atExpiry?.ambiguous?.accepted === 'refused before Create' && ob.atExpiry.ambiguous.prevMs > 0 && ob.atExpiry.ambiguous.afterMs >= 0], ['not kept as late, nothing first seen by the deadline', (g, ob) => ob.atExpiry?.late === null && ob.atExpiry?.accepted === null], ['said so', (g) => /^ambiguous at the read deadline/.test(g.why ?? '')]] })
+      await closeW(w)
+    }
+    {
+      // Must 3, a late successful answer (VH-214 #9: late delivery, the walk's, by the third follow-up's must 1): N13's block shows and the read's deadline (2 s) is reached. The evidence read, and
+      // the later snapshot, are answered, but the walk's process is held past the snapshot's bound (snapMs 300 ms) before
+      // the answer is taken (Node's event loop busy, so the answer resolves the race before the bound's timer can run).
+      const w = await open('snapshot-late')
+      settleNever(w)
+      const realEval = w.evaluate.bind(w)
+      const held = []
+      w.evaluate = (expr) => {
+        const what = EVIDENCE(expr) ? 'evidence' : LATER(expr) ? 'later' : null
+        if (!what) return realEval(expr)
+        if (what === 'evidence') evidenceExpr = expr
+        const t0 = Date.now()
+        return realEval(expr).then((v) => { const answeredMs = Date.now() - t0; while (Date.now() < t0 + 400) { /* the walk's process held past the snapshot's bound */ } held.push({ what, answeredMs, heldMs: Date.now() - t0 }); return v })
+      }
+      const o = await setup(w, 'S-140n', 'en-GB', { readMs: 2000, snapMs: 300 })
+      globalThis.__QT_BOUND_MS = { snapMs: 300 }
+      let g
+      try { g = await judge(w, 'S-140n') } finally { globalThis.__QT_BOUND_MS = undefined; w.evaluate = realEval }
+      out.snapshotLate = held
+      expectRow('a successful answer taken after the snapshot\'s bound (300 ms), at the read deadline (2 s) and later: late delivery, cannot-determine, the walk\'s', g, o, { outcome: 'cannot-determine', accepted: null, hang: 'the walk', checks: [['both answered inside the bound, taken after it', () => held.length === 2 && held.every((h) => h.answeredMs < 300 && h.heldMs >= 400)], ['expired in the read', phase('read')], ['the late delivery kept, by the snapshot\'s deadline: dated by the page inside the bound, taken after it', (g2, ob) => ob.atExpiry?.answered === false && /^the snapshot deadline, 300 ms, reached/.test(ob.atExpiry.error ?? '') && ob.atExpiry.lateDelivery?.pageMs < 0 && ob.atExpiry.lateDelivery.deliveredMs >= 0 && !ob.atExpiry.lateAnswer], ['later: delivered late', laterIs('delivered late')]] })
+      await closeW(w)
+    }
+    {
+      // Must 3, an already-expired, resolved promise (VH-214 #9: late delivery, the walk's, by the third follow-up's must 1): as above, but 300 ms before the read's deadline the walk's own
+      // evidence expression (as the walker sent it in the case above) is read and its answer kept; at expiry the evidence
+      // read is handed that resolved answer only after the walk's process is held past the snapshot's bound (300 ms).
+      const w = await open('snapshot-expired-resolved')
+      const realEval = w.evaluate.bind(w)
+      const pre = { p: null, readAt: null, resolvedAt: null, handedAt: null, heldMs: null, sameExpr: null }
+      settleNever(w, () => {
+        const at = w.obs.deadlines.read
+        setTimeout(() => { if (evidenceExpr) { pre.readAt = Date.now(); pre.p = realEval(evidenceExpr).then((v) => { pre.resolvedAt = Date.now(); return v }) } }, Math.max(0, at - 300 - Date.now()))
+      })
+      w.evaluate = (expr) => {
+        if (!EVIDENCE(expr) || !pre.p) return realEval(expr)
+        pre.sameExpr = expr === evidenceExpr
+        const t0 = Date.now()
+        while (Date.now() < t0 + 400) { /* the walk's process held past the snapshot's bound */ }
+        pre.handedAt = Date.now(); pre.heldMs = pre.handedAt - t0
+        return pre.p
+      }
+      const o = await setup(w, 'S-140n', 'en-GB', { readMs: 2000, snapMs: 300 })
+      w.evaluate = realEval
+      out.snapshotExpiredResolved = { ...pre, p: undefined }
+      expectRow('an already-expired, resolved promise at the snapshot (300 ms), at the read deadline (2 s): late delivery, cannot-determine, the walk\'s', await judge(w, 'S-140n'), o, { outcome: 'cannot-determine', accepted: null, hang: 'the walk', checks: [['the walker\'s own evidence expression, read before the deadline, resolved before it was handed on', () => pre.sameExpr === true && pre.resolvedAt !== null && pre.resolvedAt < pre.handedAt && pre.heldMs >= 400], ['expired in the read', phase('read')], ['the late delivery kept, by the snapshot\'s deadline: dated by the page inside the bound, taken after it', (g, ob) => ob.atExpiry?.answered === false && /^the snapshot deadline, 300 ms, reached/.test(ob.atExpiry.error ?? '') && ob.atExpiry.lateDelivery?.pageMs < 0 && ob.atExpiry.lateDelivery.deliveredMs >= 0 && !ob.atExpiry.lateAnswer]] })
+      await closeW(w)
+    }
+    {
+      // An error before the deadline in the read: the walk's choosing of the file fails at once (a stated error).
+      const w = await open('read-error')
+      w.setFiles = async () => { throw new Error('a stated error in the walk: the file not chosen') }
+      const o = await setup(w, 'S-140n', 'en-GB')
+      expectRow('an error before the read deadline (the declared 330 s): the walk\'s', await judge(w, 'S-140n'), o, { outcome: 'cannot-determine', accepted: null, hang: 'the walk', checks: [['failed in the read', (g, ob) => ob.walkError?.phase === 'read'], ['by that error', (g, ob) => /^a stated error in the walk/.test(ob.walkError?.error ?? '')], ['no deadline reached', (g, ob) => !ob.expired], ['before the deadline', (g, ob) => ob.tEnd < ob.deadlines.read]] })
+      await closeW(w)
+    }
+    // VH-214 #9's cases.
+    {
+      // Must 1, late delivery, the walk's: N13's block shows and the read's deadline (2 s) is reached. The evidence read, and
+      // the later snapshot, are sent, then the walk's process is held 400 ms, past the snapshot's bound (snapMs 300 ms), with
+      // the page's answer (0-1 ms) waiting: the bound's timer rejects a turn after it runs, so the answer is taken, late.
+      const w = await open('snapshot-walk-held')
+      settleNever(w)
+      const realEval = w.evaluate.bind(w)
+      const held = []
+      w.evaluate = (expr) => {
+        const what = EVIDENCE(expr) ? 'evidence' : LATER(expr) ? 'later' : null
+        if (!what) return realEval(expr)
+        const p = realEval(expr)
+        held.push({ what, heldMs: holdWalk(400) })
+        return p
+      }
+      const o = await setup(w, 'S-140n', 'en-GB', { readMs: 2000, snapMs: 300 })
+      globalThis.__QT_BOUND_MS = { snapMs: 300 }
+      let g
+      try { g = await judge(w, 'S-140n') } finally { globalThis.__QT_BOUND_MS = undefined; w.evaluate = realEval }
+      out.snapshotWalkHeld = held
+      expectRow('the walk\'s process held past the snapshot\'s bound (300 ms) with the page\'s answer waiting, at the read deadline (2 s) and later: late delivery, cannot-determine, the walk\'s', g, o, { outcome: 'cannot-determine', accepted: null, hang: 'the walk', checks: [['both held past the bound once sent', () => held.length === 2 && held.every((h) => h.heldMs >= 400)], ['expired in the read', phase('read')], ['the late delivery kept: dated by the page inside the bound, taken after it', (g2, ob) => ob.atExpiry?.answered === false && ob.atExpiry.lateDelivery?.pageMs < 0 && ob.atExpiry.lateDelivery.deliveredMs >= 0 && !ob.atExpiry.lateAnswer], ['later: delivered late', laterIs('delivered late')]] })
+      await closeW(w)
+    }
+    {
+      // Must 1, the page itself late, still the page's: as above, but before the evidence read is sent the page's main thread
+      // is held 400 ms, past the snapshot's bound (snapMs 300 ms), so the page dates its answer after the bound; the walk's
+      // process is held 700 ms once it is sent, so that answer is waiting when the bound's timer runs, and is taken.
+      const w = await open('snapshot-page-late')
+      settleNever(w)
+      const realEval = w.evaluate.bind(w)
+      const held = { pageFrom: null, walkMs: null }
+      w.evaluate = (expr) => {
+        if (!EVIDENCE(expr) || held.walkMs !== null) return realEval(expr)
+        held.pageFrom = Date.now()
+        w.page.send('Runtime.evaluate', { expression: '(() => { const end = Date.now() + 400; while (Date.now() < end) { /* the page held */ } })()' }).catch(() => {})
+        const p = realEval(expr)
+        held.walkMs = holdWalk(700)
+        return p
+      }
+      const o = await setup(w, 'S-140n', 'en-GB', { readMs: 2000, snapMs: 300 })
+      w.evaluate = realEval
+      out.snapshotPageLate = held
+      expectRow('the page\'s main thread held past the snapshot\'s bound (300 ms) before it answers, at the read deadline (2 s): a late answer, the page\'s', await judge(w, 'S-140n'), o, { outcome: 'fail', accepted: null, hang: 'the page', checks: [['the page held, then the walk held once sent', () => held.pageFrom !== null && held.walkMs >= 700], ['expired in the read', phase('read')], ['the late answer kept: dated by the page at or after the bound', (g, ob) => ob.atExpiry?.answered === false && ob.atExpiry.lateAnswer?.pageMs >= 0 && !ob.atExpiry.lateDelivery]] })
+      await closeW(w)
+    }
+    {
+      // Must 2, an overflow whose first dropped change's span crosses the deadline: N13's block shows; 300 ms before the
+      // read's deadline (3 s), FILL_CROSS fills the recorder's log to its 200 entries, makes one change more, unseen, and
+      // holds the main thread until 700 ms past the deadline: that change is the first dropped, (prev, t] across it.
+      const w = await open('overflow-crossing')
+      settleNever(w, () => { const at = w.obs.deadlines.read; setTimeout(() => { w.page.send('Runtime.evaluate', { expression: FILL_CROSS(at + 700) }).catch(() => {}) }, Math.max(0, at - 300 - Date.now())) })
+      const o = await setup(w, 'S-140n', 'en-GB', { readMs: 3000 })
+      const st = await mx(w, 'window.__fill214 ?? null')
+      out.overflowCrossing = { ...(st ?? {}), deadline: o.deadlines.read }
+      expectRow('the recorder\'s log full before the read deadline (3 s), its first dropped change across it: unusable, cannot-determine, the walk\'s', await judge(w, 'S-140n'), o, { outcome: 'cannot-determine', accepted: null, hang: 'the walk', checks: [['the log filled and the last change made before the deadline, the main thread held past it', (g, ob) => !!st && st.full === true && st.fullAt < ob.deadlines.read && st.crossFlipAt < ob.deadlines.read && st.heldTo >= ob.deadlines.read + 700], ['expired in the read', phase('read')], ['one change dropped, its span across the deadline: unusable', (g, ob) => ob.atExpiry?.overflow?.count === 1 && ob.atExpiry.overflow.prevMs < 0 && ob.atExpiry.overflow.afterMs >= 0 && ob.atExpiry.overflow.usable === false]] })
+      await closeW(w)
+    }
+    {
+      // Must 2, a usable overflow: N13's block shows; 300 ms before the read's deadline (3 s), FLIP_AFTER holds the main
+      // thread until 100 ms past it, observes once, then flips the block 240 times, each seen: every dropped change lies
+      // after the deadline, so the kept log judges it: the block shown before the deadline, the walk's.
+      const w = await open('overflow-usable')
+      settleNever(w, () => { const at = w.obs.deadlines.read; setTimeout(() => { w.page.send('Runtime.evaluate', { expression: FLIP_AFTER(at + 100) }).catch(() => {}) }, Math.max(0, at - 300 - Date.now())) })
+      const o = await setup(w, 'S-140n', 'en-GB', { readMs: 3000 })
+      const st = await mx(w, 'window.__after214 ?? null')
+      out.overflowUsable = { ...(st ?? {}), deadline: o.deadlines.read }
+      expectRow('the recorder\'s log overflowed only after the read deadline (3 s): usable, judged from the kept log, the block shown before it: the walk\'s', await judge(w, 'S-140n'), o, { outcome: 'cannot-determine', accepted: 'refused before Create', hang: 'the walk', checks: [['observed after the deadline, then 240 flips', (g, ob) => !!st && st.observedAt >= ob.deadlines.read && st.flips === 240], ['expired in the read', phase('read')], ['overflowed, usable', (g, ob) => ob.atExpiry?.overflow?.count > 0 && ob.atExpiry.overflow.usable === true && ob.atExpiry.overflow.prevMs >= 0], ['nothing ambiguous; the flips kept as late', (g, ob) => !!ob.atExpiry && ob.atExpiry.ambiguous === null && ob.atExpiry.late?.accepted === 'refused before Create'], ['the block shown before the deadline, by the page\'s own time', (g, ob) => ob.atExpiry?.accepted === 'refused before Create' && ob.atExpiry.acceptedAt < ob.atExpiry.deadlineAt]] })
+      await closeW(w)
+    }
+    {
+      // Must 2, an ambiguous change to no outcome: N13's block shows; 299 ms before the read's deadline (3 s), one task hides
+      // it and holds the main thread until 700 ms past the deadline: the change lies before it, first seen after it.
+      const w = await open('ambiguous-to-null')
+      settleNever(w, () => {
+        const at = w.obs.deadlines.read
+        setTimeout(() => { w.page.send('Runtime.evaluate', { expression: `(() => { document.querySelector('#source-block .notification').style.display = 'none'; window.__amb214 = { changedAt: Date.now() }; const end = ${at} + 700; while (Date.now() < end) { /* the main thread held */ } window.__amb214.heldTo = Date.now(); })()` }).catch(() => {}) }, Math.max(0, at - 299 - Date.now()))
+      })
+      const o = await setup(w, 'S-140n', 'en-GB', { readMs: 3000 })
+      const amb = await mx(w, 'window.__amb214 ?? null')
+      out.ambiguousToNull = { ...(amb ?? {}), deadline: o.deadlines.read }
+      expectRow('the block hidden before the read deadline (3 s), first seen hidden after it: ambiguous, cannot-determine, the walk\'s', await judge(w, 'S-140n'), o, { outcome: 'cannot-determine', accepted: null, hang: 'the walk', checks: [['the change made before the deadline, the main thread held past it', (g, ob) => !!amb && amb.changedAt < ob.deadlines.read && amb.heldTo >= ob.deadlines.read + 700], ['expired in the read', phase('read')], ['ambiguous, to no outcome, its span across the deadline', (g, ob) => !!ob.atExpiry?.ambiguous && ob.atExpiry.ambiguous.accepted === null && ob.atExpiry.ambiguous.prevMs > 0 && ob.atExpiry.ambiguous.afterMs >= 0]] })
+      await closeW(w)
+    }
+    {
+      // Must 2, an error exactly at the read's deadline (3 s): once the file is chosen, the walk's settling wait fails by a
+      // stated error at the deadline's own millisecond (a timer 200 ms before it, then a busy loop to it): the expiry,
+      // judged by the log: the block shown before it, the walk's.
+      const w = await open('read-error-at-deadline')
+      const err = { at: null, deadline: null }
+      settleNever(w, () => {
+        const at = w.obs.deadlines.read
+        err.deadline = at
+        w.waitSettled = () => new Promise((_, rej) => { setTimeout(() => { while (Date.now() < at) { /* to the deadline */ } err.at = Date.now(); rej(new Error('a stated error, at the read deadline')) }, Math.max(0, at - 200 - Date.now())) })
+      })
+      const o = await setup(w, 'S-140n', 'en-GB', { readMs: 3000 })
+      out.readErrorAtDeadline = err
+      expectRow('an error exactly at the read deadline (3 s): the expiry, judged by the log, the walk\'s', await judge(w, 'S-140n'), o, { outcome: 'cannot-determine', accepted: 'refused before Create', hang: 'the walk', checks: [['the error at the deadline, 0 to 50 ms', () => err.at !== null && err.at - err.deadline >= 0 && err.at - err.deadline <= 50], ['expired in the read', phase('read')], ['by that error, sent through the expiry', (g, ob) => /^an error at or after it: a stated error, at the read deadline/.test(ob.expired?.by ?? '')], ['not the walk\'s error', (g, ob) => !ob.walkError], ['the block shown before the deadline, by the page\'s own time', (g, ob) => ob.atExpiry?.accepted === 'refused before Create' && ob.atExpiry.acceptedAt < ob.atExpiry.deadlineAt]] })
+      await closeW(w)
+    }
+  } else {
+    for (const lang of ['en-GB', 'zh-Hans', 'ms-MY']) {
+      const w = await open(`finished-${lang}`)
+      const o = await setup(w, 'S-140n', lang)
+      expectRow(`finished, ${lang} (the declared bound, through a job)`, await judge(w, 'S-140n'), o, { outcome: 'pass', accepted: 'finished', hang: null, checks: [['created', (g, ob) => ob.created === true]] })
+      await closeW(w)
+    }
+    {
+      const w = await open('failed-F11')
+      await applyFault(w, 'F11')
+      const o = await setup(w, 'S-140n', 'en-GB')
+      out.f11Seconds = Math.round(o.setupMs / 1000)
+      expectRow('failed with recovery: the watchdog\'s failure by F11, en-GB (the declared bound)', await judge(w, 'S-140n'), o, { outcome: 'pass', accepted: 'failed with recovery', hang: null })
+      out.f11Result = await mx(w, `M.text('#process-result').replace(/\\s+/g, ' ').trim().slice(0, 300)`)
+      await releaseAll(w).catch(() => {})
+      await closeW(w)
+    }
+    {
+      const w = await open('job-deadline-F11')
+      await applyFault(w, 'F11')
+      const o = await setup(w, 'S-140n', 'en-GB', { jobMs: 15000 })
+      expectRow('the job deadline (15 s) reached while F11\'s silent job runs: the page\'s', await judge(w, 'S-140n'), o, { outcome: 'fail', accepted: null, hang: 'the page', checks: [['expired in the job', phase('job')], ['the page answered at expiry with no outcome', (g, ob) => ob.atExpiry?.answered === true && ob.atExpiry?.accepted === null]] })
+      out.runningAtExpiry = await mx(w, `({ running: M.running(), res: M.res() })`)
+      await w.waitFor(`(() => { const M = window.__mx; return M.res() === 'failure' && !M.running() && !M.el('#file-input').disabled; })()`, { label: 'the late failure', timeout: 240000 })
+      expectRow('the watchdog\'s failure coming after the job deadline: still the page\'s', await judge(w, 'S-140n'), o, { outcome: 'fail', accepted: null, hang: 'the page', checks: [['read later as failed with recovery', laterIs('failed with recovery')]] })
+      await releaseAll(w).catch(() => {})
+      await closeW(w)
+    }
+    {
+      const w = await open('job-deadline-finish-late')
+      const o = await setup(w, 'S-140n', 'en-GB', { jobMs: 300 })
+      expectRow('the job deadline (300 ms) reached before the job ends: the page\'s', await judge(w, 'S-140n'), o, { outcome: 'fail', accepted: null, hang: 'the page', checks: [['expired in the job', phase('job')]] })
+      await w.waitFor(`(() => { const M = window.__mx; return M.finished(); })()`, { label: 'the late finish', timeout: 120000 })
+      expectRow('a finish after the job deadline: still the page\'s', await judge(w, 'S-140n'), o, { outcome: 'fail', accepted: null, hang: 'the page', checks: [['read later as finished', laterIs('finished')]] })
+      await closeW(w)
+    }
+    {
+      // Recovery withheld: once Create is clicked, the file chooser reads disabled whatever the page sets, so F11's failure never recovers.
+      const w = await open('recovery-withheld')
+      await applyFault(w, 'F11')
+      const realClick = w.click.bind(w)
+      w.click = async (sel, ...rest) => { const r = await realClick(sel, ...rest); if (sel === w.createButton()) await w.evaluate(`Object.defineProperty(document.getElementById('file-input'), 'disabled', { get: () => true, set: () => {}, configurable: true })`); return r }
+      const o = await setup(w, 'S-140n', 'en-GB', { jobMs: 150000 })
+      out.withheldAtExpiry = await mx(w, `({ res: M.res(), running: M.running(), chooserDisabled: M.el('#file-input').disabled })`)
+      const held = out.withheldAtExpiry
+      expectRow('F11\'s failure with the file chooser still locked at the job deadline (150 s): the page\'s', await judge(w, 'S-140n'), o, { outcome: 'fail', accepted: null, hang: 'the page', checks: [['expired in the job', phase('job')], ['the failure shown, the job stopped, the chooser locked, just after expiry', () => held.res === 'failure' && !held.running && held.chooserDisabled]] })
+      await releaseAll(w).catch(() => {})
+      await closeW(w)
+    }
+    // VH-214 #5's cases.
+    {
+      // An unanswered evaluate in the job: once Create is clicked, the page's main thread is blocked; the job's deadline 5 s.
+      const w = await open('job-unanswered')
+      const realClick = w.click.bind(w)
+      w.click = async (sel, ...rest) => { const r = await realClick(sel, ...rest); if (sel === w.createButton()) w.page.send('Runtime.evaluate', LOOP).catch(() => {}); return r }
+      const o = await setup(w, 'S-140n', 'en-GB', { jobMs: 5000, snapMs: 2000 })
+      w.click = realClick
+      expectRow('a main thread that never answers in the job, the job deadline 5 s: the page\'s, ended at the deadline', await bounded(judge(w, 'S-140n'), 15000, 'the judged row'), o, { outcome: 'fail', accepted: null, hang: 'the page', checks: [['created', (g, ob) => ob.created === true], ['expired in the job', phase('job')], ['not answered at expiry', (g, ob) => ob.atExpiry?.answered === false], ['ended within the job deadline and the read at expiry, 1 s to spare', (g, ob) => ob.tEnd - (ob.deadlines.job - 5000) <= 5000 + 2000 + 1000], ['no answer later', laterIs('no answer')]] })
+      await closeW(w)
+    }
+    {
+      // The job's deadline (20 s) reached with an accepted outcome showing: once Create is clicked, the walk's wait never
+      // returns, while the 2 s job finishes; the page's own log dates the finish before the deadline: the walk's.
+      const w = await open('job-deadline-outcome-showing')
+      const realClick = w.click.bind(w), realWaitFor = w.waitFor.bind(w)
+      w.click = async (sel, ...rest) => { const r = await realClick(sel, ...rest); if (sel === w.createButton()) w.waitFor = () => new Promise(() => {}); return r }
+      const o = await setup(w, 'S-140n', 'en-GB', { jobMs: 20000 })
+      w.click = realClick; w.waitFor = realWaitFor
+      expectRow('the job deadline (20 s) reached while the page shows "finished": the walk\'s', await judge(w, 'S-140n'), o, { outcome: 'cannot-determine', accepted: 'finished', hang: 'the walk', checks: [['created', (g, ob) => ob.created === true], ['expired in the job', phase('job')], ['finished by the deadline, by the page\'s own time', (g, ob) => ob.atExpiry?.accepted === 'finished' && ob.atExpiry.acceptedAt < ob.atExpiry.deadlineAt]] })
+      await closeW(w)
+    }
+    {
+      // No accepted outcome and no deadline, through the real setup: a stated style withholds Create, so the setup
+      // reads the verdict, finds neither the block nor Create, and captures no accepted outcome.
+      const w = await open('create-withheld', [`document.addEventListener('DOMContentLoaded', () => { const s = document.createElement('style'); s.textContent = '#process-actions > button:nth-child(2) { display: none !important; }'; document.head.appendChild(s) })`])
+      const o = await setup(w, 'S-140n', 'en-GB')
+      expectRow('Create withheld: no accepted outcome, and no deadline reached, through the setup', await judge(w, 'S-140n'), o, { outcome: 'fail', accepted: null, hang: null, checks: [['not created, not blocked', (g, ob) => !ob.created && !ob.blocked], ['no deadline, no walk error', (g, ob) => !ob.expired && !ob.walkError], ['captured within the bound with no outcome', (g, ob) => ob.outcomeSeen?.answered === true && ob.outcomeSeen.accepted === null]] })
+      await closeW(w)
+    }
+    // VH-214 #7's case.
+    {
+      // An error before the deadline in the job: once Create is offered, the walk's click on it fails at once (a stated error).
+      const w = await open('job-error')
+      const realClick = w.click.bind(w)
+      w.click = async (sel, ...rest) => { if (sel === w.createButton()) throw new Error('a stated error in the walk: Create not clicked'); return realClick(sel, ...rest) }
+      const o = await setup(w, 'S-140n', 'en-GB')
+      w.click = realClick
+      expectRow('an error before the job deadline (the declared 900 s): the walk\'s', await judge(w, 'S-140n'), o, { outcome: 'cannot-determine', accepted: null, hang: 'the walk', checks: [['created', (g, ob) => ob.created === true], ['failed in the job', (g, ob) => ob.walkError?.phase === 'job'], ['by that error', (g, ob) => /^a stated error in the walk/.test(ob.walkError?.error ?? '')], ['no deadline reached', (g, ob) => !ob.expired], ['before the deadline', (g, ob) => ob.tEnd < ob.deadlines.job]] })
+      await closeW(w)
+    }
+    // VH-214 #9's cases.
+    for (const [name, afterMs] of [['at', 0], ['after', 200]]) {
+      // Must 2, an error in the job exactly at the job's deadline (3 s), and one 200 ms after it: F11's silent job runs; the
+      // walk's wait for an accepted outcome fails by a stated error (a timer 200 ms before the deadline, then a busy loop
+      // to the deadline, or past it): the expiry, judged by the log: no accepted outcome by the deadline, the page's.
+      const w = await open(`job-error-${name}-deadline`)
+      await applyFault(w, 'F11')
+      const realEval = w.evaluate.bind(w)
+      const err = { at: null, deadline: null }
+      w.evaluate = (expr) => {
+        const at = w.obs?.deadlines?.job
+        if (!at || err.deadline !== null || !UNTIL_OUTCOME(expr)) return realEval(expr)
+        err.deadline = at
+        return new Promise((_, rej) => { setTimeout(() => { while (Date.now() < at + afterMs) { /* to the deadline, or past it */ } err.at = Date.now(); rej(new Error(`a stated error in the job, ${afterMs ? `${afterMs} ms after` : 'at'} its deadline`)) }, Math.max(0, at - 200 - Date.now())) })
+      }
+      const o = await setup(w, 'S-140n', 'en-GB', { jobMs: 3000 })
+      w.evaluate = realEval
+      out[`jobError_${name}`] = err
+      expectRow(`an error in the job ${afterMs ? `${afterMs} ms after` : 'exactly at'} its deadline (3 s), F11's job running: the expiry, the page's`, await judge(w, 'S-140n'), o, { outcome: 'fail', accepted: null, hang: 'the page', checks: [['created', (g, ob) => ob.created === true], [`the error ${afterMs} to ${afterMs + 50} ms from the deadline`, () => err.at !== null && err.at - err.deadline >= afterMs && err.at - err.deadline <= afterMs + 50], ['expired in the job', phase('job')], ['by that error, sent through the expiry', (g, ob) => /^an error at or after it: a stated error in the job/.test(ob.expired?.by ?? '')], ['not the walk\'s error', (g, ob) => !ob.walkError], ['the page answered at expiry with no outcome', (g, ob) => ob.atExpiry?.answered === true && ob.atExpiry.accepted === null]] })
+      await releaseAll(w).catch(() => {})
+      await closeW(w)
+    }
+  }
+} catch (e) {
+  out.error = String(e.stack ?? e).slice(0, 800)
+  console.log('ERROR ' + out.error)
+}
+out.ended = new Date().toISOString()
+out.complete = !out.error && out.cases.length === out.expectedCases
+out.allAsExpected = out.complete && out.cases.every((c) => c.ok)
+writeFileSync(join(RESULTS, `proof-${SET}.json`), JSON.stringify(out, null, 1))
+console.log(`${SET}: ${out.cases.filter((c) => c.ok).length} of ${out.cases.length} as expected, ${out.expectedCases} planned${out.error ? ', with an error' : ''}`)
+await closeAnalysis().catch(() => {})
+browser.close()
+process.exit(out.allAsExpected ? 0 : 1)

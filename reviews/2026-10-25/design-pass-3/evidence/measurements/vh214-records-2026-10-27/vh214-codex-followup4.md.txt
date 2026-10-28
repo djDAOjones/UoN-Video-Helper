@@ -1,0 +1,15 @@
+Codex astra's answer to its fourth follow-up of VH-214 (started 2026-10-28T14:34:17Z), verbatim. Codex astra ran with codex exec -m gpt-6-astra -s read-only in the side worktree (branch side/vh214, base 5893d9d), blind to Claude's verdict, which was saved before its answer was read. Kept as .md.txt: it names paths outside the repository.
+
+Close  
+Deferral: inside the approval — it repairs deadline enforcement and outcome attribution for S-140/S-140n. The absolute deadline remains strict; the deferral is declared and exercised before the replacement after.  
+Load re-run: not owed — all intended proof branches occurred, successful outcomes had ample deadline margin, and all 48 after group-modes match the paired before apart from timings.
+
+1. **Rank 1 (must), repaired:** [scenarios.mjs:1674](/Users/joe/UoN-Video-Helper-side/vh214/reviews/2026-10-25/design-pass-3/evidence/measurements/walker/scenarios.mjs:1674). Late delivery without usable deadline evidence now yields **cannot-determine, the walk**. A page answer dated late still yields **fail, the page**. The two corrected expectations and table rows agree with the replacement records. No further fix required.
+
+2. **Rank 1 (must), repaired:** [vh214-proof.mjs.txt:359](/Users/joe/UoN-Video-Helper-side/vh214/reviews/2026-10-25/design-pass-3/evidence/measurements/vh214-records-2026-10-27/vh214-proof.mjs.txt:359). The added cases cover the waiting answer, late page answer, crossing dropped span, usable overflow, ambiguous change to null, and deadline errors. Recorded errors occur exactly at both deadlines, after the read deadline through the inner-timeout race, and 200 ms after the job deadline. All 41 cases passed before the after began. None of the requested branches remains untested or misjudged.
+
+3. **Rank 2 (should), repaired:** [vh214-quicktime-2026-10-27.md:24](/Users/joe/UoN-Video-Helper-side/vh214/reviews/2026-10-25/design-pass-3/evidence/measurements/vh214-quicktime-2026-10-27.md:24). The load account now matches the records and grounds “no re-run owed” in observed branches and deadline margin. No further fix required.
+
+4. **Rank 2 (should), repaired:** [vh214-proof.mjs.txt:6](/Users/joe/UoN-Video-Helper-side/vh214/reviews/2026-10-25/design-pass-3/evidence/measurements/vh214-records-2026-10-27/vh214-proof.mjs.txt:6). The header explicitly identifies the “nothing kept” exception. No further fix required.
+
+Everything else reviewed stays within approval; there is no product diff. The declared unbounded later reads prevent an end-to-end termination guarantee, which the table expressly disclaims; they invalidate no recorded result. No unsupported material table claim or candidate blocker for the gate/checker found. Their execution and the draft ledger close remain for the separate close check.

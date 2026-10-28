@@ -1,0 +1,45 @@
+#!/bin/zsh
+# VH-214 #2: the proof of S-140's and S-140n's bound and three accepted
+# outcomes on the candidate walker, then the after, read only if both proof
+# sets come out all as expected. Run under the walk lock, with servers-vh214.sh's
+# Vite (serving $W) and Chrome up; this script starts and stops no server.
+#   zsh proof-then-after.sh
+# VH-214 #5's repair (Codex's script check): each proof set's JSON is removed
+# before it runs, and the after starts only if every proof command exited 0
+# and wrote fresh (started after this set's start), complete (every planned
+# case recorded) results that are all as expected; an after that exits non-zero
+# is reported as such.
+# VH-214 #7: the planned counts are checked here too, the proof's 20 real and 13
+# job cases (VH-214 #5's 14 and 12 plus #7's six and one); VH-214 #9: now 26 real and
+# 15 job, with #9's six and two.
+S=${0:A:h}
+N=/Users/joe/UoN-Video-Helper-side
+R="/Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper"
+W=$N/vh214
+WK=$W/reviews/2026-10-25/design-pass-3/evidence/measurements/walker
+ENVS=(WALKER=$WK APP_ROOT="$R" APP_SRC=$W/src APP_URL=http://127.0.0.1:5181/ CDP_PORT=9251 OUT_ROOT=$S/out RESULTS=$S/results)
+onac() { pmset -g batt | grep -q "AC Power" || { echo "ON BATTERY: stopped before $1"; exit 2 } }
+CHECKJ='const fs = require("fs"); const [f, t0, exp] = process.argv.slice(1); let j; try { j = JSON.parse(fs.readFileSync(f, "utf8")) } catch (e) { console.log("no readable results: " + e.message); process.exit(1) }
+const why = []; if (Date.parse(j.started) < Date.parse(t0)) why.push("not fresh: started " + j.started + " before " + t0)
+if (j.expectedCases !== Number(exp)) why.push("planned " + j.expectedCases + ", not " + exp)
+if (j.error) why.push("an error: " + String(j.error).slice(0, 200)); if (j.complete !== true || !Array.isArray(j.cases) || j.cases.length !== j.expectedCases) why.push("not complete: " + (j.cases || []).length + " of " + j.expectedCases)
+if (j.allAsExpected !== true || !j.cases.every((c) => c.ok === true)) why.push("not all as expected: " + j.cases.filter((c) => !c.ok).map((c) => c.name).join("; "))
+console.log(why.length ? why.join(" | ") : "fresh, complete, all as expected: " + j.cases.length + " of " + j.expectedCases); process.exit(why.length ? 1 : 0)'
+cd $S
+for set in real job; do
+  onac "proof $set"
+  [[ $set == real ]] && FX=$S/fix || FX=$S/fix-proof
+  [[ $set == real ]] && EXP=26 || EXP=15
+  J=$S/results/proof-$set.json; rm -f $J
+  T0=$(date -u +%FT%TZ)
+  echo "proof $set start $T0 load $(sysctl -n vm.loadavg)"
+  env $ENVS FIX=$FX node $S/vh214-proof.mjs $set > $S/proof-$set.log 2>&1; RC=$?
+  echo "proof $set exit=$RC $(tail -1 $S/proof-$set.log)"
+  (( RC == 0 )) || { echo "PROOF $set EXITED $RC: no after"; grep -E '^(NOT AS EXPECTED|ERROR)' $S/proof-$set.log | cut -c1-300; exit 3 }
+  node -e "$CHECKJ" $J $T0 $EXP || { echo "PROOF $set NOT FRESH, COMPLETE AND ALL AS EXPECTED: no after"; grep -E '^(NOT AS EXPECTED|ERROR)' $S/proof-$set.log | cut -c1-300; exit 3 }
+done
+onac after
+echo "after start $(date -u +%FT%TZ) load $(sysctl -n vm.loadavg)"
+env $ENVS FIX=$S/fix LABEL=after SOURCE=5893d9d node $S/vh214-probe.mjs --cells S-140,S-140n > $S/probe-after.log 2>&1; RC=$?
+echo "after exit=$RC"; grep -E '^(ok|failed|exit=)' $S/probe-after.log | tail -14
+(( RC == 0 )) || { echo "AFTER EXITED $RC"; exit 4 }

@@ -1,0 +1,13 @@
+Codex astra's answer to its third follow-up of VH-214 (started 2026-10-28T12:38:33Z), verbatim. Codex astra ran with codex exec -m gpt-6-astra -s read-only in the side worktree (branch side/vh214, base 5893d9d), blind to Claude's verdict, which was saved before its answer was read. Kept as .md.txt: it names paths outside the repository.
+
+Do not close
+
+1. **Rank 1 — `walker/scenarios.mjs:1663`; `vh214-proof.mjs.txt:285,310`.** Strict snapshot rejection is repaired, but attribution remains wrong. These cases deliberately stall the **walker** after timely page answers, then assert “the page” hung. The records show answers in 0–1 ms; I independently reproduced the misclassification using the candidate helpers. Keep strict rejection, but classify late delivery without usable deadline evidence as cannot-determine, the walk. Correct the expectations and table rows 114–115; repeat the proof before a replacement after.
+
+2. **Rank 1 — `walker/scenarios.mjs:1610`; `vh214-proof.mjs.txt:238`.** Shown/hidden overflow is proved, but both cases have the first dropped observation wholly before expiry. Add proofs for a dropped span crossing expiry, overflow with `usable:true`, and an ambiguous change **to null**. The accepted-change ambiguity and genuinely late observation cases work. Saved proofs also omit exact-deadline errors and job errors after expiry; add these boundaries. My in-memory checks route errors correctly before, exactly at and after both deadlines.
+
+3. **Rank 2 — `vh214-quicktime-2026-10-27.md:24,34,35`.** Remove the stale assertion that no after group exceeded load 8, “Load can only delay the walk’s side”, and the causal inference that load slowed nothing. Neither proof start nor the 14.23 after start requires a load-only rerun: the recorded branches occurred and the successful outcomes have ample deadline margin.
+
+4. **Rank 2 — `vh214-proof.mjs.txt:6`.** Correct the remaining claim that every case runs setup without injected observations. The table’s Method line now correctly distinguishes “nothing kept” from Create withheld.
+
+Scope stays within approval. All 36 groups, 144 mode readings and hashes reconcile. Section 70 adequately qualifies the unbounded subsequent reads. No additional candidate gate/check blocker found; those runs remain for close.

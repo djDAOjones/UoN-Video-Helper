@@ -1,0 +1,61 @@
+13:49:07 page loaded http://127.0.0.1:5181/
+13:49:07 file chosen: qtrle-5s.mov
+13:49:08 click #process-actions button:nth-child(2)
+AS EXPECTED finished, en-GB (the declared bound, through a job): pass / finished / hang null
+13:49:09 page loaded http://127.0.0.1:5181/
+13:49:09 click #language-switcher input[value="zh-Hans"]
+13:49:10 file chosen: qtrle-5s.mov
+13:49:10 click #process-actions button:nth-child(2)
+AS EXPECTED finished, zh-Hans (the declared bound, through a job): pass / finished / hang null
+13:49:12 page loaded http://127.0.0.1:5181/
+13:49:12 click #language-switcher input[value="ms-MY"]
+13:49:12 file chosen: qtrle-5s.mov
+13:49:13 click #process-actions button:nth-child(2)
+AS EXPECTED finished, ms-MY (the declared bound, through a job): pass / finished / hang null
+13:49:15 page loaded http://127.0.0.1:5181/
+13:49:15 file chosen: qtrle-5s.mov
+13:49:16 click #process-actions button:nth-child(2)
+13:51:15 console.error: [ui] process request failed Object
+13:51:25 console.warning: [ui] worker never acknowledged an abandoned job Object
+AS EXPECTED failed with recovery: the watchdog's failure by F11, en-GB (the declared bound): pass / failed with recovery / hang null
+13:51:27 page loaded http://127.0.0.1:5181/
+13:51:27 file chosen: qtrle-5s.mov
+13:51:28 click #process-actions button:nth-child(2)
+AS EXPECTED the job deadline (15 s) reached while F11's silent job runs: the page's: fail / null / hang the page — no accepted outcome by the job deadline in the page's own log
+13:53:27 console.error: [ui] process request failed Object
+13:53:37 console.warning: [ui] worker never acknowledged an abandoned job Object
+AS EXPECTED the watchdog's failure coming after the job deadline: still the page's: fail / null / hang the page — no accepted outcome by the job deadline in the page's own log; "failed with recovery" read later
+13:53:39 page loaded http://127.0.0.1:5181/
+13:53:39 file chosen: qtrle-5s.mov
+13:53:39 click #process-actions button:nth-child(2)
+AS EXPECTED the job deadline (300 ms) reached before the job ends: the page's: fail / null / hang the page — no accepted outcome by the job deadline in the page's own log
+AS EXPECTED a finish after the job deadline: still the page's: fail / null / hang the page — no accepted outcome by the job deadline in the page's own log; "finished" read later
+13:53:41 page loaded http://127.0.0.1:5181/
+13:53:41 file chosen: qtrle-5s.mov
+13:53:42 click #process-actions button:nth-child(2)
+13:55:42 console.error: [ui] process request failed Object
+13:55:52 console.warning: [ui] worker never acknowledged an abandoned job Object
+AS EXPECTED F11's failure with the file chooser still locked at the job deadline (150 s): the page's: fail / null / hang the page — no accepted outcome by the job deadline in the page's own log
+13:56:13 page loaded http://127.0.0.1:5181/
+13:56:13 file chosen: qtrle-5s.mov
+13:56:14 click #process-actions button:nth-child(2)
+AS EXPECTED a main thread that never answers in the job, the job deadline 5 s: the page's, ended at the deadline: fail / null / hang the page — the page did not answer at the job deadline
+13:56:32 page loaded http://127.0.0.1:5181/
+13:56:32 file chosen: qtrle-5s.mov
+13:56:33 click #process-actions button:nth-child(2)
+AS EXPECTED the job deadline (20 s) reached while the page shows "finished": the walk's: cannot-determine / finished / hang the walk — the job deadline reached; the page's own log shows "finished" 19493 ms before it
+13:56:54 page loaded http://127.0.0.1:5181/
+13:56:54 file chosen: qtrle-5s.mov
+AS EXPECTED Create withheld: no accepted outcome, and no deadline reached, through the setup: fail / null / hang null — no accepted outcome, and no deadline reached
+13:56:56 page loaded http://127.0.0.1:5181/
+13:56:56 file chosen: qtrle-5s.mov
+AS EXPECTED an error before the job deadline (the declared 900 s): the walk's: cannot-determine / null / hang the walk — the walk failed in its job short of the bound: a stated error in the walk: Create not clicked
+13:56:58 page loaded http://127.0.0.1:5181/
+13:56:58 file chosen: qtrle-5s.mov
+13:56:59 click #process-actions button:nth-child(2)
+AS EXPECTED an error in the job exactly at its deadline (3 s), F11's job running: the expiry, the page's: fail / null / hang the page — no accepted outcome by the job deadline in the page's own log
+13:57:03 page loaded http://127.0.0.1:5181/
+13:57:03 file chosen: qtrle-5s.mov
+13:57:04 click #process-actions button:nth-child(2)
+AS EXPECTED an error in the job 200 ms after its deadline (3 s), F11's job running: the expiry, the page's: fail / null / hang the page — no accepted outcome by the job deadline in the page's own log
+job: 15 of 15 as expected, 15 planned

@@ -1,0 +1,51 @@
+// VH-214: one table per label from vh214-probe.mjs's records.
+//   node summarise-214.mjs <results dir> <label> [cells…]
+import { existsSync, readFileSync } from 'node:fs'
+import { join } from 'node:path'
+
+const [dir, label, ...want] = process.argv.slice(2)
+const cells = want.length ? want : ['S-140', 'S-140n', 'replay-193', 'replay-193n']
+const run = JSON.parse(readFileSync(join(dir, `${label}-run.json`), 'utf8'))
+const L = []
+L.push(`# ${label}: ${run.chrome}, walker ${run.walkerSha}, app src ${run.appSrcSha}, source ${run.source}`)
+L.push(`started ${run.started}, ended ${run.ended}; files ${JSON.stringify(run.files)}; flags ${JSON.stringify(run.flags)}`)
+L.push(`power: AC ${run.power.every((p) => p.ac)}, modes ${[...new Set(run.power.map((p) => p.powermode))].join(' / ')}, 1-min load ${Math.min(...run.power.map((p) => p.load1))}–${Math.max(...run.power.map((p) => p.load1))}`)
+const short = (s, n = 90) => (s == null ? '—' : String(s).length > n ? String(s).slice(0, n) + '…' : String(s))
+for (const c of cells) {
+  const f = join(dir, `${label}-${c}.json`)
+  if (!existsSync(f)) continue
+  const recs = JSON.parse(readFileSync(f, 'utf8'))
+  L.push('', `## ${c}`)
+  if (c.startsWith('replay')) {
+    for (const r of recs) {
+      L.push(`${r.key}: ${r.status}, ${Math.round(r.ms / 1000)} s; replayError ${short(r.replayError, 200)}; outcome ${JSON.stringify(r.replayOutcome ?? null)}`)
+      for (const s of r.steps ?? []) L.push(`  - ${s.what}: at ${(s.at / 1000).toFixed(1)} s, took ${s.ms != null ? (s.ms / 1000).toFixed(1) + ' s' : 'did not return'}${s.value !== undefined ? ', value ' + short(JSON.stringify(s.value), 160) : ''}${s.error ? ', error ' + short(s.error, 160) : ''}`)
+      const e = r.atEnd ?? {}
+      L.push(`  at the end: block ${e.block?.kind ?? '—'} ${JSON.stringify(e.block?.reasonKeys ?? [])}, verdict ${e.verdict ?? '—'}, Create shown ${e.createOffered}, res ${e.res}, running ${e.running}, checking ${e.checking}, steps shown ${JSON.stringify((e.steps ?? []).filter((x) => x.shown).map((x) => x.id))}, focus ${e.focus}`)
+      L.push(`  targets: ${JSON.stringify((r.targetsSeen ?? []).map((t) => t.type ? `${t.type}${t.waitingForDebugger ? '(waiting)' : ''} ${t.url}` : 'detached'))}; worker logs ${r.workerLogs?.length ?? 0}; page logs ${r.pageLogs?.length ?? 0}; workers ${r.seen193?.workers}`)
+      const marks = (e.marks ?? []).map((m) => `${m.what}${m.kind ? ' ' + m.kind : ''}`)
+      L.push(`  page marks: ${JSON.stringify(marks)}`)
+    }
+    continue
+  }
+  L.push('| Language | Width | Status | Chosen → outcome | Block, reason key | Create shown | Result | Focus (light / dark / forced light / forced dark) | Live regions at the outcome | Reached (4 modes) | Errors | H-scroll / block overflow | Judged row | Found row |')
+  L.push('| --- | --- | --- | ---: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |')
+  for (const r of recs) {
+    const o = r.out ?? {}
+    const m = Object.keys(o)
+    const lt = o.light ?? r.atFailure ?? {}
+    const judged = (r.scenarioAsserts ?? []).find((a) => /accepted outcome within the bound/.test(a.what))
+    const fnd = (r.scenarioAsserts ?? []).find((a) => /^the outcome:/.test(a.what))
+    L.push(`| ${r.lang} | ${r.view} | ${r.status} | ${r.chosenToOutcomeMs ?? '—'} ms | ${lt.block?.kind ?? '—'}, ${(lt.block?.reasonKeys ?? []).join(' ') || '—'} | ${m.map((k) => o[k].createOffered).every((x) => x === false) ? 'no' : JSON.stringify(m.map((k) => o[k].createOffered))} | ${lt.res} | ${m.map((k) => o[k].focus).join(' / ')} | ${short((lt.liveRegions ?? []).map((x) => `${x.region}: ${x.text}`).join(' ; '), 160)} | ${m.map((k) => o[k].reached?.outcome).join(' ')} | ${m.reduce((n, k) => n + (o[k].errors?.length ?? 0), 0)} | ${m.some((k) => o[k].page?.hscroll) ? 'yes' : 'no'} / ${m.reduce((n, k) => n + (o[k].block?.overflow?.length ?? 0), 0)} | ${judged ? `${judged.outcome}${judged.accepted ? ' — ' + judged.accepted : ''}${judged.hang ? ', hang ' + judged.hang : ''}${judged.seconds != null ? ', ' + judged.seconds + ' s' : ''}` : '—'} | ${fnd ? short(JSON.stringify(fnd.found), 120) : '—'} |`)
+  }
+  const r0 = recs[0]
+  if (r0) {
+    L.push('', `Block text (${r0.lang}, light): ${short(r0.out?.light?.block?.text, 400)}`)
+    L.push(`Block live: ${r0.out?.light?.block?.live}; status ${JSON.stringify(r0.out?.light?.status)}; source-status ${JSON.stringify(r0.out?.light?.sourceStatus)}`)
+    L.push(`Marks: ${JSON.stringify((r0.out?.light?.marks ?? []).map((x) => x.what + (x.kind ? ' ' + x.kind : '')))}`)
+    L.push(`Targets: ${JSON.stringify((r0.targetsSeen ?? []).map((t) => t.type ? `${t.type}${t.waitingForDebugger ? '(waiting)' : ''}` : 'detached'))}`)
+    L.push(`Worker logs (${r0.lang} ${r0.view}): ${short(JSON.stringify((r0.workerLogs ?? []).map((l) => [Math.round(l.t), l.type, ...(l.args ?? []).slice(0, 3)])), 1400)}`)
+    L.push(`Page logs (${r0.lang} ${r0.view}): ${short(JSON.stringify((r0.pageLogs ?? []).map((l) => [Math.round(l.t), l.type, ...(l.args ?? []).slice(0, 3)])), 1400)}`)
+  }
+}
+console.log(L.join('\n'))

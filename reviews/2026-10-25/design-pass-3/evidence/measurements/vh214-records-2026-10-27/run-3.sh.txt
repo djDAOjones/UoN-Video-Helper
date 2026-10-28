@@ -1,0 +1,41 @@
+#!/bin/zsh
+# VH-214 #5 (retargeted to #10 by VH-214 #10): wait for the walk lock (every 60 s), take it, check the ports and
+# AC, start Vite (serving $W) and Chrome, run the proof then the after, stop
+# both by PID, and release the lock only when they have exited and it names
+# VH-214 #10.
+# VH-214 #5's repair: a failed start runs nothing; servers-vh214.sh then stops
+# what it started (exit 4) and the lock is released only if the ports are free,
+# or kept (exit 5); power and load are recorded at the start and the end.
+S=${0:A:h}
+N=/Users/joe/UoN-Video-Helper-side
+W=$N/vh214
+ts() { date -u +%FT%TZ }
+pw() { echo "power: $(pmset -g batt | head -2 | tr '\n' ' ') $(pmset -g | grep -i powermode | tr -s ' ') load $(sysctl -n vm.loadavg)" }
+# VH-214 #7: wait (every 60 s) for the barrier, a load1 below 8 (Orchestrator #20's
+# word: start each run only below load 8), and the lock, in that order.
+load1() { sysctl -n vm.loadavg | awk '{print $2}' }
+while true; do
+  if [[ ! -f $N/walk-queue-open.txt ]]; then echo "$(ts) barrier missing" >> $S/lock-wait-3.log
+  elif (( $(load1 | awk '{print ($1 >= 8)}') )); then echo "$(ts) load1 $(load1) >= 8" >> $S/lock-wait-3.log
+  elif mkdir "$N/walk.lock" 2>/dev/null; then break
+  else echo "$(ts) lock held by $(head -1 $N/walk.lock/owner.txt 2>/dev/null)" >> $S/lock-wait-3.log; fi
+  sleep 60
+done
+printf 'VH-214 #10\n%s\nVH-214 #10 proof (real, job) then after S-140/S-140n on %s, Vite :5181 + Chrome :9251\n' "$(ts)" "$W" > $N/walk.lock/owner.txt
+echo "$(ts) lock taken"
+if lsof -nP -i :5181 -i :9251 >/dev/null 2>&1; then echo "PORTS BUSY"; lsof -nP -i :5181 -i :9251; rm -r $N/walk.lock; echo "lock released (ports busy) $(ts)"; exit 3; fi
+pmset -g batt | grep -q "AC Power" || { echo "NOT ON AC"; rm -r $N/walk.lock; echo "lock released (battery) $(ts)"; exit 2 }
+pw
+zsh $S/servers-vh214.sh start $W; SRC=$?
+if (( SRC != 0 )); then
+  echo "START FAILED rc=$SRC: no proof, no after"
+  if (( SRC == 4 )) && ! lsof -nP -i :5181 -i :9251 >/dev/null 2>&1 && head -1 $N/walk.lock/owner.txt 2>/dev/null | grep -qx 'VH-214 #10'; then rm -r $N/walk.lock && echo "lock released $(ts)"; else echo "LOCK KEPT: start rc=$SRC"; lsof -nP -i :5181 -i :9251; fi
+  exit 5
+fi
+zsh $S/proof-then-after.sh; RC=$?
+pw
+PIDS=($(cat $S/chrome-vh214.pid $S/vite-vh214.pid))
+zsh $S/servers-vh214.sh stop
+ALIVE=0; for p in $PIDS; do kill -0 $p 2>/dev/null && { echo "still alive: $p"; ALIVE=1 }; done
+if (( ALIVE == 0 && ${#PIDS} == 2 )) && ! lsof -nP -i :5181 -i :9251 >/dev/null 2>&1 && head -1 $N/walk.lock/owner.txt 2>/dev/null | grep -qx 'VH-214 #10'; then rm -r $N/walk.lock && echo "lock released $(ts)"; else echo "LOCK KEPT: pids ${PIDS} alive=$ALIVE owner=$(head -1 $N/walk.lock/owner.txt 2>/dev/null)"; fi
+echo "end rc=$RC $(ts)"

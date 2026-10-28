@@ -1127,3 +1127,15 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Supersedes:** none
 
 **Deferred:** VH-175
+
+## 2026-10-23 — PLAN-7 — The owner decides the four wish lines: one name for step 4, a forced-colour hover, V-18 accepted, the statement edited once
+
+**Decision:** VH-175.3 becomes VH-181: step 4 is "Closing graphics" everywhere, spec §6 to match. VH-174.1 joins VH-179 as a border-only hover in a system colour. VH-175.1 retires with V-18 accepted, and a native reader's wording waits as VH-175.4. VH-175.2 waits for VH-137. The owner decided each.
+
+**Rationale:** The owner's words of 2026-10-23, verbatim. On VH-175.3: "use “Closing graphics” everywhere, with the specification’s §6 line changed to match. It’s what the step’s own lines already say, and having two names breaks the project’s “no synonyms” rule." On VH-174.1: "add a border-only hover change in a system colour. It’s cheap, it helps people who use Windows contrast themes, and it touches the same CSS area as VH-179." On VH-175.1: "leave it as accepted. The only remaining fix is shorter Chinese and Malay wording, which needs a native reader, so wait for one." On VH-175.2: "leave it for VH-137’s review of the statement, so that text is only edited once." The owner approves the one `docs/01-specification.md` edit; it swaps two words for two, so the spec stays at 8,074 of its 8,100. It supersedes VH-148's sign-off (2026-10-21) for step 4's name alone, where the legend "Closing branding" stayed. For V-44 it decides what VH-174 left to the owner when it refused R-07. VH-181's Chinese and Malay rows are the agent's drafts. VH-181 goes before VH-176, so Codex astra's integrated check reads it with the rest. Campus colleagues are being asked for the native reading. The start notice showed 8576616's handover held by a chat opened at 19:26 UTC. That chat was the owner's advice-only chat ("no action"); it made no edit and the owner archived it. So this chat took the handover on the owner's standing instruction: "work through to the end of VH-177, archive and spawn as you go, proceed with your recommendations, universal permission is granted".
+
+**Supersedes:** 2026-10-21 — VH-148 — The owner’s sign-off changes, including the footer
+
+**Deferred:** VH-181, VH-179, VH-137
+
+**Items:** VH-181

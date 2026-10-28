@@ -1,0 +1,23 @@
+Claude's verdict and Codex astra's blind check, compared by VH-214 #2, verbatim. Codex astra ran with codex exec -m gpt-6-astra -s read-only in the side worktree (branch side/vh214, base 5893d9d), blind to Claude's verdict, which was saved before its answer was read. Kept as .md.txt: it names paths outside the repository.
+
+# VH-214 — Claude's verdict and Codex astra's blind check, compared (VH-214 #2)
+
+- Saved: Claude's verdict `vh214-claude-verdict.md`, file time 22:48:45Z (its last bullet says "22:55Z": mis-stamped; the correction was written at 22:48Z); Codex's blind check started 2026-10-27T22:48:51Z from `vh214-codex-blind-brief.md` (no verdict, told not to read the notes folder); its answer `vh214-codex-blind.md` saved 22:53:21Z and read after.
+- Codex: **"Do not close"**, four musts, two shoulds. Claude: "close".
+
+## Agreed
+- No page hang in the tested configurations; the walk hung on the hidden-Create test; no product diff; the walker change stays within the approval; cells, 3.3.1, 4.1.3, tokens and documents match the contract.
+
+## Codex only (Claude agrees on reading the code; all to be repaired)
+1. **Must:** `quickTime`'s read phase is three waits (`waitSettled` ×2 and the verdict, `scenarios.mjs:123–127`), each with its own 300 s, so the declared read bound can run to ~900 s; an `evaluate` the page never answers (a hung main thread) defeats every bound, which is the very hang S-140 must tell apart; `atBound` reads any "timeout waiting for", so `fresh()`'s own boot timeout would count as the page's read bound. Repair: one absolute deadline per phase, each `mx`/wait raced against it, `atBound` set by our own deadline, not the message.
+2. **Must:** the judged row reads `QT_OUTCOME` when the asserts run, so a job finishing after its bound reads "the walk"; snapshot the outcome and time at expiry and judge that.
+3. **Must:** the proof gave the row injected `readWait`/`jobWait`, not real expiries: re-prove with a short bound injected for the proof only, through the real setup, covering a read expiry, a job expiry, late completion after expiry, an unanswered evaluate (the page's main thread blocked), and boot's timeout told apart; then a new after.
+4. **Must:** the gate and the checker, settled, before the close (planned).
+5. Should: focus is read only after a programmatic choice; add a chooser-focused transition and the next Tab, or say in the table that VH-207 owns it.
+6. Should: the table's "ARGB" and "tmcd" (`:27`) came from #1's ffprobe, not the records: cite it or drop them.
+
+## Claude only
+- Wish VH-214.2 (the announcer's "You can still set the times" at the refusal), found by the table's writer.
+
+## Disagreed
+- None. The item stays open; the repair is VH-214 #3's.

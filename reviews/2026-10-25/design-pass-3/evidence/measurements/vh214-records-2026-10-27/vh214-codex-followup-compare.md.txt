@@ -1,0 +1,23 @@
+Claude's updated verdict and Codex astra's follow-up check, compared by VH-214 #4, verbatim. Codex astra ran with codex exec -m gpt-6-astra -s read-only in the side worktree (branch side/vh214, base 5893d9d), blind to Claude's verdict, which was saved before its answer was read. Kept as .md.txt: it names paths outside the repository.
+
+# VH-214 — Claude's updated verdict and Codex astra's follow-up check, compared (VH-214 #4)
+
+- Saved: Claude's updated verdict, the "VH-214 #4's update" section of `vh214-claude-verdict.md`, at 2026-10-28T08:07:30Z. Codex's follow-up started 08:08:04Z from `vh214-codex-followup-brief.md` (no verdict or compare, told not to read the notes folder); its answer, `vh214-codex-followup.md`, was saved 08:14:59Z and read after. #2's blind check and compare (`vh214-codex-blind*.md`, `vh214-codex-compare.md`) are kept unchanged.
+- Codex: **"Do not close"**, three musts and one should. Claude: "close, subject to the gate". **Claude now agrees with Codex on reading the code;** the item stays open, and the repair is VH-214 #5's.
+
+## Agreed
+- Should 5 (focus after a programmatic choice) and should 6 (ffprobe provenance) are repaired.
+- **The load:** no low-load re-run of the before is owed. The outcomes are unchanged, a first before read the same cells at lower load, and no speed is compared.
+- The work stays inside the approval. Nothing in the candidate would stop the gate or the checker.
+
+## Codex only (Claude agrees on reading the code; all to be repaired by #5)
+1. **Must, the inner timeouts' race** (`scenarios.mjs:1561`, `:1598`). `until` → `waitFor` (`walk.mjs`) polls with `sleep(200)`, and its own timeout is `qtLeft(d)`, so its timer can come due before the deadline's. When the event loop runs late, Node runs the earlier timer first, so `waitFor` throws an untagged "timeout waiting for", which the catch keeps as `walkError`, the walk's. Codex reproduced it: a 220 ms deadline gave an untagged timeout at 260 ms. Also, `byDeadline` accepts a promise that resolves after the deadline has passed. Claude's "the deadline's timer fires first" (the table's residual) was wrong; the table now says so. Repair: test the absolute deadline whenever a result is accepted (`Date.now() >= d.at` means expiry), and send any error at or after `d.at` in the read or job phase through the expiry capture.
+2. **Must, judging at expiry** (`:1568`, `:1592`, `:1596`). `qtSnap` reads the current state after the deadline, up to `snapMs` (10 s) later, and its `t` is taken before the evaluate. So an outcome that arrives late counts as showing at expiry: cannot-determine, the walk, not fail, the page. Codex reproduced it. Also, the normal capture (`outcomeSeen`) runs on the snapshot's own 10 s, outside the phase's deadline. Repair: keep evidence of the state by the deadline, for example the page's own time for the outcome (the probe already reads the marks "chosen" and "block shown error"), or the last poll before `d.at`. Treat an observation from after the deadline as late, never as deadline evidence, and keep the normal capture inside the phase's bound.
+3. **Must, the proof.** Drive these from the setups: both races; an unanswered evaluate in the job phase; a job deadline with an accepted outcome showing (the job's cannot-determine); the boot's own 60 s deadline (via `bootMs`); and an unanswered normal capture (`:1613`). The "nothing kept" case skips the setup. Then re-prove, and re-walk the after. Also bring the drafted `project/decisions.md` and `trajectory.md` up to date: they still say 300 s and 14 cases (planned as the hand-over's step 4).
+4. **Should:** the table's "Not bounded" line should say that the later reads could keep a verdict from being recorded, while the recorded cells stand. Done in the table (#4).
+
+## Claude only
+- None new.
+
+## Disagreed
+- None: the code settles every point. No owner question; the item stays open for the repair (within the approval: S-140's and S-140n's bound and outcomes only).

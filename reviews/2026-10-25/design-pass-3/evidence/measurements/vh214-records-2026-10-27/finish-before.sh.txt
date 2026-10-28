@@ -1,0 +1,24 @@
+#!/bin/zsh
+# VH-214 (#2's copy of #1's script): re-run S-140 and S-140n on the base
+# walker export with the fixed probe (reason keys read from preflight.reasons),
+# then, unless HOLD=1 keeps them for the proof and the after, stop the servers
+# servers-vh214.sh started, by their recorded PIDs, and release the walk lock
+# only when each of those PIDs has exited and the lock names VH-214 #2.
+#   [HOLD=1] [SKIP_RERUN=1] zsh finish-before.sh
+# #2's changes: paths into #2's scratch; N is the fixed folder; no hard-coded
+# PID (#1's 68640 is gone); the PIDs are servers-vh214.sh's own; the guarded
+# release below replaces "release whenever the ports are empty".
+S=${0:A:h}
+N=/Users/joe/UoN-Video-Helper-side
+R="/Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper"
+W=$N/vh214
+if [[ -z $SKIP_RERUN ]]; then
+  cd $S && WALKER=$S/base/reviews/2026-10-25/design-pass-3/evidence/measurements/walker APP_ROOT="$R" APP_SRC=$W/src APP_URL=http://127.0.0.1:5181/ CDP_PORT=9251 FIX=$S/fix OUT_ROOT=$S/out RESULTS=$S/results LABEL=before-s140 SOURCE=5893d9d node $S/vh214-probe.mjs --cells S-140,S-140n > $S/probe-before-s140.log 2>&1
+  echo "rerun exit=$?"
+  grep -E '^(ok|failed)' $S/probe-before-s140.log
+fi
+[[ -n $HOLD ]] && { echo "HOLD: servers and lock kept"; exit 0 }
+PIDS=($(cat $S/chrome-vh214.pid $S/vite-vh214.pid 2>/dev/null))
+zsh $S/servers-vh214.sh stop
+ALIVE=0; for p in $PIDS; do kill -0 $p 2>/dev/null && { echo "still alive: $p"; ALIVE=1 }; done
+if (( ALIVE == 0 && ${#PIDS} == 2 )) && head -1 "$N/walk.lock/owner.txt" 2>/dev/null | grep -qx 'VH-214 #2'; then rm -r "$N/walk.lock" && echo "lock released $(date -u +%FT%TZ)"; else echo "LOCK KEPT: pids ${PIDS} alive=$ALIVE owner=$(head -1 "$N/walk.lock/owner.txt" 2>/dev/null)"; fi

@@ -1,0 +1,959 @@
+{
+ "set": "job",
+ "started": "2026-10-28T13:49:06.173Z",
+ "chrome": "Chrome/156.0.8078.74",
+ "walker": "/Users/joe/UoN-Video-Helper-side/vh214/reviews/2026-10-25/design-pass-3/evidence/measurements/walker",
+ "expectedCases": 15,
+ "cases": [
+  {
+   "name": "finished, en-GB (the declared bound, through a job)",
+   "want": {
+    "outcome": "pass",
+    "accepted": "finished",
+    "hang": null,
+    "checks": [
+     "created"
+    ]
+   },
+   "got": {
+    "outcome": "pass",
+    "accepted": "finished",
+    "seconds": 2,
+    "created": true,
+    "blocked": false,
+    "outcomeSeen": {
+     "accepted": "finished",
+     "answered": true,
+     "t": 1793195348496
+    },
+    "expired": null,
+    "atExpiry": null,
+    "walkError": null,
+    "later": "finished",
+    "hang": null
+   },
+   "checks": [
+    {
+     "what": "created",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "finished, zh-Hans (the declared bound, through a job)",
+   "want": {
+    "outcome": "pass",
+    "accepted": "finished",
+    "hang": null,
+    "checks": [
+     "created"
+    ]
+   },
+   "got": {
+    "outcome": "pass",
+    "accepted": "finished",
+    "seconds": 2,
+    "created": true,
+    "blocked": false,
+    "outcomeSeen": {
+     "accepted": "finished",
+     "answered": true,
+     "t": 1793195351310
+    },
+    "expired": null,
+    "atExpiry": null,
+    "walkError": null,
+    "later": "finished",
+    "hang": null
+   },
+   "checks": [
+    {
+     "what": "created",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "finished, ms-MY (the declared bound, through a job)",
+   "want": {
+    "outcome": "pass",
+    "accepted": "finished",
+    "hang": null,
+    "checks": [
+     "created"
+    ]
+   },
+   "got": {
+    "outcome": "pass",
+    "accepted": "finished",
+    "seconds": 2,
+    "created": true,
+    "blocked": false,
+    "outcomeSeen": {
+     "accepted": "finished",
+     "answered": true,
+     "t": 1793195354110
+    },
+    "expired": null,
+    "atExpiry": null,
+    "walkError": null,
+    "later": "finished",
+    "hang": null
+   },
+   "checks": [
+    {
+     "what": "created",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "failed with recovery: the watchdog's failure by F11, en-GB (the declared bound)",
+   "want": {
+    "outcome": "pass",
+    "accepted": "failed with recovery",
+    "hang": null,
+    "checks": []
+   },
+   "got": {
+    "outcome": "pass",
+    "accepted": "failed with recovery",
+    "seconds": 131,
+    "created": true,
+    "blocked": false,
+    "outcomeSeen": {
+     "accepted": "failed with recovery",
+     "answered": true,
+     "t": 1793195486101
+    },
+    "expired": null,
+    "atExpiry": null,
+    "walkError": null,
+    "later": "failed with recovery",
+    "hang": null
+   },
+   "checks": [],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "the job deadline (15 s) reached while F11's silent job runs: the page's",
+   "want": {
+    "outcome": "fail",
+    "accepted": null,
+    "hang": "the page",
+    "checks": [
+     "expired in the job",
+     "the page answered at expiry with no outcome"
+    ]
+   },
+   "got": {
+    "outcome": "fail",
+    "accepted": null,
+    "seconds": 16,
+    "created": true,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "job",
+     "ms": 15000,
+     "at": 1793195502919,
+     "afterMs": 16331,
+     "by": "the deadline"
+    },
+    "atExpiry": {
+     "accepted": null,
+     "acceptedAt": null,
+     "answered": true,
+     "dated": true,
+     "deadlineAt": 1793195502919,
+     "tRead": 1793195502921,
+     "readAt": 1793195502921,
+     "seenAt": 1793195502921,
+     "nowSeen": null,
+     "overflow": null,
+     "ambiguous": null,
+     "late": null,
+     "log": [
+      {
+       "a": null,
+       "t": 1793195487206,
+       "prev": null
+      }
+     ]
+    },
+    "walkError": null,
+    "later": null,
+    "hang": "the page",
+    "why": "no accepted outcome by the job deadline in the page's own log"
+   },
+   "checks": [
+    {
+     "what": "expired in the job",
+     "ok": true
+    },
+    {
+     "what": "the page answered at expiry with no outcome",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 15000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "the watchdog's failure coming after the job deadline: still the page's",
+   "want": {
+    "outcome": "fail",
+    "accepted": null,
+    "hang": "the page",
+    "checks": [
+     "read later as failed with recovery"
+    ]
+   },
+   "got": {
+    "outcome": "fail",
+    "accepted": null,
+    "seconds": 16,
+    "created": true,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "job",
+     "ms": 15000,
+     "at": 1793195502919,
+     "afterMs": 16331,
+     "by": "the deadline"
+    },
+    "atExpiry": {
+     "accepted": null,
+     "acceptedAt": null,
+     "answered": true,
+     "dated": true,
+     "deadlineAt": 1793195502919,
+     "tRead": 1793195502921,
+     "readAt": 1793195502921,
+     "seenAt": 1793195502921,
+     "nowSeen": null,
+     "overflow": null,
+     "ambiguous": null,
+     "late": null,
+     "log": [
+      {
+       "a": null,
+       "t": 1793195487206,
+       "prev": null
+      }
+     ]
+    },
+    "walkError": null,
+    "later": "failed with recovery",
+    "hang": "the page",
+    "why": "no accepted outcome by the job deadline in the page's own log; \"failed with recovery\" read later"
+   },
+   "checks": [
+    {
+     "what": "read later as failed with recovery",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 15000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "the job deadline (300 ms) reached before the job ends: the page's",
+   "want": {
+    "outcome": "fail",
+    "accepted": null,
+    "hang": "the page",
+    "checks": [
+     "expired in the job"
+    ]
+   },
+   "got": {
+    "outcome": "fail",
+    "accepted": null,
+    "seconds": 2,
+    "created": true,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "job",
+     "ms": 300,
+     "at": 1793195620118,
+     "afterMs": 1659,
+     "by": "the deadline"
+    },
+    "atExpiry": {
+     "accepted": null,
+     "acceptedAt": null,
+     "answered": true,
+     "dated": true,
+     "deadlineAt": 1793195620118,
+     "tRead": 1793195620119,
+     "readAt": 1793195620119,
+     "seenAt": 1793195620119,
+     "nowSeen": null,
+     "overflow": null,
+     "ambiguous": null,
+     "late": null,
+     "log": [
+      {
+       "a": null,
+       "t": 1793195619093,
+       "prev": null
+      }
+     ]
+    },
+    "walkError": null,
+    "later": null,
+    "hang": "the page",
+    "why": "no accepted outcome by the job deadline in the page's own log"
+   },
+   "checks": [
+    {
+     "what": "expired in the job",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 300,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "a finish after the job deadline: still the page's",
+   "want": {
+    "outcome": "fail",
+    "accepted": null,
+    "hang": "the page",
+    "checks": [
+     "read later as finished"
+    ]
+   },
+   "got": {
+    "outcome": "fail",
+    "accepted": null,
+    "seconds": 2,
+    "created": true,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "job",
+     "ms": 300,
+     "at": 1793195620118,
+     "afterMs": 1659,
+     "by": "the deadline"
+    },
+    "atExpiry": {
+     "accepted": null,
+     "acceptedAt": null,
+     "answered": true,
+     "dated": true,
+     "deadlineAt": 1793195620118,
+     "tRead": 1793195620119,
+     "readAt": 1793195620119,
+     "seenAt": 1793195620119,
+     "nowSeen": null,
+     "overflow": null,
+     "ambiguous": null,
+     "late": null,
+     "log": [
+      {
+       "a": null,
+       "t": 1793195619093,
+       "prev": null
+      }
+     ]
+    },
+    "walkError": null,
+    "later": "finished",
+    "hang": "the page",
+    "why": "no accepted outcome by the job deadline in the page's own log; \"finished\" read later"
+   },
+   "checks": [
+    {
+     "what": "read later as finished",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 300,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "F11's failure with the file chooser still locked at the job deadline (150 s): the page's",
+   "want": {
+    "outcome": "fail",
+    "accepted": null,
+    "hang": "the page",
+    "checks": [
+     "expired in the job",
+     "the failure shown, the job stopped, the chooser locked, just after expiry"
+    ]
+   },
+   "got": {
+    "outcome": "fail",
+    "accepted": null,
+    "seconds": 151,
+    "created": true,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "job",
+     "ms": 150000,
+     "at": 1793195772350,
+     "afterMs": 151336,
+     "by": "the deadline"
+    },
+    "atExpiry": {
+     "accepted": null,
+     "acceptedAt": null,
+     "answered": true,
+     "dated": true,
+     "deadlineAt": 1793195772350,
+     "tRead": 1793195772356,
+     "readAt": 1793195772359,
+     "seenAt": 1793195772359,
+     "nowSeen": null,
+     "overflow": null,
+     "ambiguous": null,
+     "late": null,
+     "log": [
+      {
+       "a": null,
+       "t": 1793195621631,
+       "prev": null
+      }
+     ]
+    },
+    "walkError": null,
+    "later": null,
+    "hang": "the page",
+    "why": "no accepted outcome by the job deadline in the page's own log"
+   },
+   "checks": [
+    {
+     "what": "expired in the job",
+     "ok": true
+    },
+    {
+     "what": "the failure shown, the job stopped, the chooser locked, just after expiry",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 150000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "a main thread that never answers in the job, the job deadline 5 s: the page's, ended at the deadline",
+   "want": {
+    "outcome": "fail",
+    "accepted": null,
+    "hang": "the page",
+    "checks": [
+     "created",
+     "expired in the job",
+     "not answered at expiry",
+     "ended within the job deadline and the read at expiry, 1 s to spare",
+     "no answer later"
+    ]
+   },
+   "got": {
+    "outcome": "fail",
+    "accepted": null,
+    "seconds": 8,
+    "created": true,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "job",
+     "ms": 5000,
+     "at": 1793195779246,
+     "afterMs": 6374,
+     "by": "the deadline"
+    },
+    "atExpiry": {
+     "accepted": null,
+     "answered": false,
+     "dated": false,
+     "deadlineAt": 1793195779246,
+     "tRead": 1793195779247,
+     "error": "the snapshot deadline, 2000 ms, reached"
+    },
+    "walkError": null,
+    "later": "no answer",
+    "hang": "the page",
+    "why": "the page did not answer at the job deadline"
+   },
+   "checks": [
+    {
+     "what": "created",
+     "ok": true
+    },
+    {
+     "what": "expired in the job",
+     "ok": true
+    },
+    {
+     "what": "not answered at expiry",
+     "ok": true
+    },
+    {
+     "what": "ended within the job deadline and the read at expiry, 1 s to spare",
+     "ok": true
+    },
+    {
+     "what": "no answer later",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 5000,
+    "snapMs": 2000
+   },
+   "ok": true
+  },
+  {
+   "name": "the job deadline (20 s) reached while the page shows \"finished\": the walk's",
+   "want": {
+    "outcome": "cannot-determine",
+    "accepted": "finished",
+    "hang": "the walk",
+    "checks": [
+     "created",
+     "expired in the job",
+     "finished by the deadline, by the page's own time"
+    ]
+   },
+   "got": {
+    "outcome": "cannot-determine",
+    "accepted": "finished",
+    "seconds": 21,
+    "created": true,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "job",
+     "ms": 20000,
+     "at": 1793195813574,
+     "afterMs": 21320,
+     "by": "the deadline"
+    },
+    "atExpiry": {
+     "accepted": "finished",
+     "acceptedAt": 1793195794081,
+     "answered": true,
+     "dated": true,
+     "deadlineAt": 1793195813574,
+     "tRead": 1793195813575,
+     "readAt": 1793195813576,
+     "seenAt": 1793195813575,
+     "nowSeen": "finished",
+     "overflow": null,
+     "ambiguous": null,
+     "late": null,
+     "log": [
+      {
+       "a": null,
+       "t": 1793195792861,
+       "prev": null
+      },
+      {
+       "a": "finished",
+       "t": 1793195794081,
+       "prev": 1793195794062
+      }
+     ]
+    },
+    "walkError": null,
+    "later": "finished",
+    "hang": "the walk",
+    "why": "the job deadline reached; the page's own log shows \"finished\" 19493 ms before it"
+   },
+   "checks": [
+    {
+     "what": "created",
+     "ok": true
+    },
+    {
+     "what": "expired in the job",
+     "ok": true
+    },
+    {
+     "what": "finished by the deadline, by the page's own time",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 20000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "Create withheld: no accepted outcome, and no deadline reached, through the setup",
+   "want": {
+    "outcome": "fail",
+    "accepted": null,
+    "hang": null,
+    "checks": [
+     "not created, not blocked",
+     "no deadline, no walk error",
+     "captured within the bound with no outcome"
+    ]
+   },
+   "got": {
+    "outcome": "fail",
+    "accepted": null,
+    "seconds": 1,
+    "created": false,
+    "blocked": false,
+    "outcomeSeen": {
+     "accepted": null,
+     "answered": true,
+     "t": 1793195815388
+    },
+    "expired": null,
+    "atExpiry": null,
+    "walkError": null,
+    "later": null,
+    "hang": null,
+    "why": "no accepted outcome, and no deadline reached"
+   },
+   "checks": [
+    {
+     "what": "not created, not blocked",
+     "ok": true
+    },
+    {
+     "what": "no deadline, no walk error",
+     "ok": true
+    },
+    {
+     "what": "captured within the bound with no outcome",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "an error before the job deadline (the declared 900 s): the walk's",
+   "want": {
+    "outcome": "cannot-determine",
+    "accepted": null,
+    "hang": "the walk",
+    "checks": [
+     "created",
+     "failed in the job",
+     "by that error",
+     "no deadline reached",
+     "before the deadline"
+    ]
+   },
+   "got": {
+    "outcome": "cannot-determine",
+    "accepted": null,
+    "seconds": 1,
+    "created": true,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": null,
+    "atExpiry": null,
+    "walkError": {
+     "phase": "job",
+     "error": "a stated error in the walk: Create not clicked"
+    },
+    "later": null,
+    "hang": "the walk",
+    "why": "the walk failed in its job short of the bound: a stated error in the walk: Create not clicked"
+   },
+   "checks": [
+    {
+     "what": "created",
+     "ok": true
+    },
+    {
+     "what": "failed in the job",
+     "ok": true
+    },
+    {
+     "what": "by that error",
+     "ok": true
+    },
+    {
+     "what": "no deadline reached",
+     "ok": true
+    },
+    {
+     "what": "before the deadline",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 900000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "an error in the job exactly at its deadline (3 s), F11's job running: the expiry, the page's",
+   "want": {
+    "outcome": "fail",
+    "accepted": null,
+    "hang": "the page",
+    "checks": [
+     "created",
+     "the error 0 to 50 ms from the deadline",
+     "expired in the job",
+     "by that error, sent through the expiry",
+     "not the walk's error",
+     "the page answered at expiry with no outcome"
+    ]
+   },
+   "got": {
+    "outcome": "fail",
+    "accepted": null,
+    "seconds": 4,
+    "created": true,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "job",
+     "ms": 3000,
+     "at": 1793195822016,
+     "afterMs": 4319,
+     "by": "an error at or after it: a stated error in the job, at its deadline"
+    },
+    "atExpiry": {
+     "accepted": null,
+     "acceptedAt": null,
+     "answered": true,
+     "dated": true,
+     "deadlineAt": 1793195822016,
+     "tRead": 1793195822016,
+     "readAt": 1793195822016,
+     "seenAt": 1793195822016,
+     "nowSeen": null,
+     "overflow": null,
+     "ambiguous": null,
+     "late": null,
+     "log": [
+      {
+       "a": null,
+       "t": 1793195818303,
+       "prev": null
+      }
+     ]
+    },
+    "walkError": null,
+    "later": null,
+    "hang": "the page",
+    "why": "no accepted outcome by the job deadline in the page's own log"
+   },
+   "checks": [
+    {
+     "what": "created",
+     "ok": true
+    },
+    {
+     "what": "the error 0 to 50 ms from the deadline",
+     "ok": true
+    },
+    {
+     "what": "expired in the job",
+     "ok": true
+    },
+    {
+     "what": "by that error, sent through the expiry",
+     "ok": true
+    },
+    {
+     "what": "not the walk's error",
+     "ok": true
+    },
+    {
+     "what": "the page answered at expiry with no outcome",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 3000,
+    "snapMs": 10000
+   },
+   "ok": true
+  },
+  {
+   "name": "an error in the job 200 ms after its deadline (3 s), F11's job running: the expiry, the page's",
+   "want": {
+    "outcome": "fail",
+    "accepted": null,
+    "hang": "the page",
+    "checks": [
+     "created",
+     "the error 200 to 250 ms from the deadline",
+     "expired in the job",
+     "by that error, sent through the expiry",
+     "not the walk's error",
+     "the page answered at expiry with no outcome"
+    ]
+   },
+   "got": {
+    "outcome": "fail",
+    "accepted": null,
+    "seconds": 5,
+    "created": true,
+    "blocked": false,
+    "outcomeSeen": null,
+    "expired": {
+     "phase": "job",
+     "ms": 3000,
+     "at": 1793195826932,
+     "afterMs": 4546,
+     "by": "an error at or after it: a stated error in the job, 200 ms after its deadline"
+    },
+    "atExpiry": {
+     "accepted": null,
+     "acceptedAt": null,
+     "answered": true,
+     "dated": true,
+     "deadlineAt": 1793195826932,
+     "tRead": 1793195827132,
+     "readAt": 1793195827132,
+     "seenAt": 1793195827132,
+     "nowSeen": null,
+     "overflow": null,
+     "ambiguous": null,
+     "late": null,
+     "log": [
+      {
+       "a": null,
+       "t": 1793195823217,
+       "prev": null
+      }
+     ]
+    },
+    "walkError": null,
+    "later": null,
+    "hang": "the page",
+    "why": "no accepted outcome by the job deadline in the page's own log"
+   },
+   "checks": [
+    {
+     "what": "created",
+     "ok": true
+    },
+    {
+     "what": "the error 200 to 250 ms from the deadline",
+     "ok": true
+    },
+    {
+     "what": "expired in the job",
+     "ok": true
+    },
+    {
+     "what": "by that error, sent through the expiry",
+     "ok": true
+    },
+    {
+     "what": "not the walk's error",
+     "ok": true
+    },
+    {
+     "what": "the page answered at expiry with no outcome",
+     "ok": true
+    }
+   ],
+   "bound": {
+    "bootMs": 60000,
+    "readMs": 330000,
+    "jobMs": 3000,
+    "snapMs": 10000
+   },
+   "ok": true
+  }
+ ],
+ "f11Seconds": 131,
+ "f11Result": "The job stopped reporting progress, so it was stopped.Your original file has not been changed. Try again. If the problem happens again, report it with the Report a problem button, which adds details that will help.",
+ "runningAtExpiry": {
+  "running": true,
+  "res": "none"
+ },
+ "withheldAtExpiry": {
+  "res": "failure",
+  "running": false,
+  "chooserDisabled": true
+ },
+ "jobError_at": {
+  "at": 1793195822016,
+  "deadline": 1793195822016
+ },
+ "jobError_after": {
+  "at": 1793195827132,
+  "deadline": 1793195826932
+ },
+ "ended": "2026-10-28T13:57:07.167Z",
+ "complete": true,
+ "allAsExpected": true
+}

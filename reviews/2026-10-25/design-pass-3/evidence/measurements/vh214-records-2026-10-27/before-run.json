@@ -1,0 +1,274 @@
+{
+ "label": "before",
+ "source": "5893d9d",
+ "started": "2026-10-27T20:34:03.299Z",
+ "appUrl": "http://127.0.0.1:5181/",
+ "cdpPort": "9251",
+ "chrome": "Chrome/156.0.8078.48",
+ "node": "v24.21.0",
+ "walker": "/Users/joe/UoN-Video-Helper-side/vh214/reviews/2026-10-25/design-pass-3/evidence/measurements/walker",
+ "walkerSha": "50ca03e0540b29a3",
+ "appSrc": "/Users/joe/UoN-Video-Helper-side/vh214/src",
+ "appSrcSha": "9c47759f40f4020b",
+ "files": {
+  "UoN Closing Logo Fade Blue 2025.mov": {
+   "sha256_16": "c84e677ebdadc468",
+   "bytes": 78894855
+  },
+  "qtrle-5s.mov": {
+   "sha256_16": "91cf5144e8d2aa68",
+   "bytes": 35521170
+  }
+ },
+ "cells": [
+  "S-140",
+  "S-140n",
+  "replay-193",
+  "replay-193n"
+ ],
+ "langs": [
+  "en-GB",
+  "zh-Hans",
+  "ms-MY"
+ ],
+ "views": [
+  "w1280",
+  "w320"
+ ],
+ "modes": [
+  "light",
+  "dark",
+  "forced-light",
+  "forced-dark"
+ ],
+ "replayBoundMs": 720000,
+ "argv": [
+  "--cells",
+  "S-140,S-140n,replay-193,replay-193n"
+ ],
+ "power": [
+  {
+   "t": "2026-10-27T20:34:03.404Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 4.15,
+   "load": [
+    4.15,
+    11.2,
+    10.53
+   ]
+  },
+  {
+   "cell": "S-140",
+   "lang": "en-GB",
+   "view": "w1280",
+   "t": "2026-10-27T20:34:03.429Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 4.15,
+   "load": [
+    4.15,
+    11.2,
+    10.53
+   ]
+  },
+  {
+   "cell": "S-140",
+   "lang": "en-GB",
+   "view": "w320",
+   "t": "2026-10-27T20:34:08.481Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 4.94,
+   "load": [
+    4.94,
+    11.24,
+    10.55
+   ]
+  },
+  {
+   "cell": "S-140",
+   "lang": "zh-Hans",
+   "view": "w1280",
+   "t": "2026-10-27T20:34:13.309Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 6.3,
+   "load": [
+    6.3,
+    11.42,
+    10.62
+   ]
+  },
+  {
+   "cell": "S-140",
+   "lang": "zh-Hans",
+   "view": "w320",
+   "t": "2026-10-27T20:34:18.581Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 6.09,
+   "load": [
+    6.09,
+    11.21,
+    10.55
+   ]
+  },
+  {
+   "cell": "S-140",
+   "lang": "ms-MY",
+   "view": "w1280",
+   "t": "2026-10-27T20:34:23.862Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 5.92,
+   "load": [
+    5.92,
+    11.09,
+    10.51
+   ]
+  },
+  {
+   "cell": "S-140",
+   "lang": "ms-MY",
+   "view": "w320",
+   "t": "2026-10-27T20:34:29.147Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 6.25,
+   "load": [
+    6.25,
+    11.07,
+    10.51
+   ]
+  },
+  {
+   "cell": "S-140n",
+   "lang": "en-GB",
+   "view": "w1280",
+   "t": "2026-10-27T20:34:34.421Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 6.87,
+   "load": [
+    6.87,
+    11.12,
+    10.53
+   ]
+  },
+  {
+   "cell": "S-140n",
+   "lang": "en-GB",
+   "view": "w320",
+   "t": "2026-10-27T20:34:39.289Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 6.88,
+   "load": [
+    6.88,
+    11.05,
+    10.51
+   ]
+  },
+  {
+   "cell": "S-140n",
+   "lang": "zh-Hans",
+   "view": "w1280",
+   "t": "2026-10-27T20:34:44.157Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 6.41,
+   "load": [
+    6.41,
+    10.88,
+    10.45
+   ]
+  },
+  {
+   "cell": "S-140n",
+   "lang": "zh-Hans",
+   "view": "w320",
+   "t": "2026-10-27T20:34:49.457Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 6.14,
+   "load": [
+    6.14,
+    10.75,
+    10.41
+   ]
+  },
+  {
+   "cell": "S-140n",
+   "lang": "ms-MY",
+   "view": "w1280",
+   "t": "2026-10-27T20:34:54.715Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 5.88,
+   "load": [
+    5.88,
+    10.62,
+    10.36
+   ]
+  },
+  {
+   "cell": "S-140n",
+   "lang": "ms-MY",
+   "view": "w320",
+   "t": "2026-10-27T20:34:59.983Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 5.49,
+   "load": [
+    5.49,
+    10.46,
+    10.31
+   ]
+  },
+  {
+   "cell": "replay-193",
+   "lang": "en-GB",
+   "view": "w1280",
+   "t": "2026-10-27T20:35:05.239Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 5.69,
+   "load": [
+    5.69,
+    10.42,
+    10.3
+   ]
+  },
+  {
+   "cell": "replay-193n",
+   "lang": "en-GB",
+   "view": "w1280",
+   "t": "2026-10-27T20:47:05.406Z",
+   "ac": true,
+   "powermode": "powermode            2",
+   "load1": 4.77,
+   "load": [
+    4.77,
+    5.79,
+    7.71
+   ]
+  },
+  {
+   "t": "2026-10-27T20:59:05.573Z",
+   "ac": false,
+   "powermode": "powermode            1",
+   "load1": 4.54,
+   "load": [
+    4.54,
+    7.74,
+    7.67
+   ]
+  }
+ ],
+ "flags": [
+  "on battery at the end",
+  "power mode changed during the run"
+ ],
+ "ended": "2026-10-27T20:59:05.573Z"
+}

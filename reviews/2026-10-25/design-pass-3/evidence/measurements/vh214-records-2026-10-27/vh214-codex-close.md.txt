@@ -1,0 +1,11 @@
+Codex astra's answer to its close check of VH-214 (started 2026-10-28T15:41:40Z), verbatim. Codex astra ran with codex exec -m gpt-6-astra -s read-only in the side worktree (branch side/vh214, base 5893d9d), a separate run on the complete candidate before the commit. Kept as .md.txt: it names paths outside the repository.
+
+Verdict: Commit
+
+1. **Should — [project/decisions.md:25](/Users/joe/UoN-Video-Helper-side/vh214/project/decisions.md:25):** tighten three statements. Replace “41–135 ms” with “41–105 ms in the first before; 43–106 ms in the owed before”. Replace “a log that overflowed” with “an overflow unusable at the deadline”; usable overflow is judged from retained evidence. Qualify “2.4.3 … hold” with the table’s programmatic-choice limitation. These are non-blocking precision corrections. The six closing records otherwise agree and satisfy rules 4–6.
+
+2. **Should — [measurement table:122](/Users/joe/UoN-Video-Helper-side/vh214/reviews/2026-10-25/design-pass-3/evidence/measurements/vh214-quicktime-2026-10-27.md:122), also :130:** both recorded changes occurred **298 ms** before their deadlines. Use that value, or “about 300 ms”, instead of 299 ms in the case descriptions. The ambiguity verdicts remain correct.
+
+3. **Should — [project/wish-list.md:62](/Users/joe/UoN-Video-Helper-side/vh214/project/wish-list.md:62):** qualify “read `M.create()` instead” as applying to **Create**. Cancel needs a visibility check for its own button, retaining its disabled check. Correct the future-work wording only; changing either walker here remains outside approval.
+
+4. **Should — draft commit’s `Verify:` and `Checked:` lines, implementing [VH-214.md:18](/Users/joe/UoN-Video-Helper-side/vh214/project/items/VH-214.md:18):** fill the placeholders from the planned final re-gate and this verdict. Otherwise the message is accurate. The three walker hunks stay within approval, including the timer deferral; no product diff or low-load rerun is owed. Current hashes match the evidence; all 41 proof cases precede the after, and all 48 after mode readings match the paired before apart from timings. I reran `node tools/check.mjs`: **0 failures, the two declared warnings**. Syntax and diff checks pass. Your supplied successful `npm run check` covers the frozen candidate; I found no additional gate blocker. Keep archiving at the landing as declared.

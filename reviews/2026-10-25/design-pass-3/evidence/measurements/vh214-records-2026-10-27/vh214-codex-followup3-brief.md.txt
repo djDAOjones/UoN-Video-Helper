@@ -1,0 +1,27 @@
+The brief for Codex astra's third follow-up of VH-214 (VH-214 #8, started 2026-10-28T12:38:33Z), verbatim. Codex astra ran with codex exec -m gpt-6-astra -s read-only in the side worktree (branch side/vh214, base 5893d9d), blind to Claude's verdict, which was saved before its answer was read. Kept as .md.txt: it names paths outside the repository.
+
+You are Codex astra, re-checking repaired points, read-only. Do not edit anything. Read only inside your working directory (the git worktree, branch side/vh214, base 5893d9d). Do not read anything under /Users/joe/UoN-Video-Helper-side/ outside this worktree, or any notes folder: another reviewer's verdict is kept there, and this check must stay independent of it.
+
+The item: `project/items/VH-214.md` (its acceptance criteria are your contract). The owner approved only: S-140's and S-140n's bound and three accepted outcomes (refused before Create, finished, failed with recovery), declared and proved before the after; a product repair only for what reproduces, in existing words. Any other walker change is out of scope.
+
+Your second follow-up said "Do not close", with these points:
+1. must (`walker/scenarios.mjs`, then `:1568`, `:1599`): the 200-entry cap silently froze the recorder's history; in your reproduction a later null outcome was discarded and expiry named the walk on stale "finished" evidence. Preserve the deadline state or flag overflow as unusable; prove overflow with both an accepted and a null final state.
+2. must (then `:1568`, `:1648`; the table's recorder lines): observer callbacks and the 50 ms tick date observations, not transitions, so a pre-deadline change first observed afterwards was classed as late and the page's. Record evidence gaps, avoid definitive attribution where timing is ambiguous, and qualify "each change" and "came … after".
+3. must (then `:1585`, `:1597`): both snapshot helpers disabled strict expiry. Enforce absolute expiry there too; add proofs for late successful responses, already-expired resolved promises and the recorder cases above, and for an error before the deadline in the read and in the job (`walkError`); repeat the proof before a replacement after.
+4. should (the table, then `:75`): correct "nothing handed to the row": "nothing kept" injects observations; Create withheld exercises the setup.
+
+The repair and its evidence (the candidate is `git diff 5893d9d` plus the untracked files):
+- `reviews/2026-10-25/design-pass-3/evidence/measurements/walker/scenarios.mjs`, S-140 and S-140n only: the block at `:1533–1668` (`QT_BOUND` `:1572`, `QT_OUTCOME` `:1573`, `QT_RECORDER` `:1576`, `byDeadline` `:1581`, `qtSnap` `:1591`, `qtCapture` `:1596`, `qtEvidence` `:1602`, `quickTime` `:1616`, `qtJudged` `:1653`) and the two setups (`:2505`, `:2516`). The block's comment declares the change.
+- The table `reviews/2026-10-25/design-pass-3/evidence/measurements/vh214-quicktime-2026-10-27.md`: section 2's declared lines, "The repairs" (a third), the proof and its table; sections 1, 3 and 7 and the intro's range updated. Its records, `…/measurements/vh214-records-2026-10-27/`: the new proof (`vh214-proof.mjs.txt`, `proof-real.json`, `proof-job.json`, `proof-*.log.txt`; 33 cases, 20 real and 13 job, the 26 earlier ones re-run), the new after (`after-*.json`, `after-run.json`, `probe-after.log.txt`; 12 groups), the runners and log (`run-3.sh.txt`, `proof-then-after.sh.txt`, `servers-vh214.sh.txt`, `run-3.log.txt`). The earlier proof and after were removed as superseded. The befores are unchanged.
+- The ledger lines (`project/decisions.md`, `project/trajectory.md`, `project/items/VH-214.md`, `project/wish-list.md`, `project/backlog.md`, the design-pass-3 report's Disposition row) are drafts, still stale (300 s, 14 cases); they are revised at the close, and a separate close check covers them. Do not judge their wording here, only whether the table and records support what they will need to say.
+- The gate and the checker run under the walk lock at close, before the separate close check. Say only whether anything in the candidate would stop them.
+
+Known and declared, not to be repaired here: the runner's reads after the setup (the probe's `readModes`, the walker's state check) are unbounded, and bounding them is outside the owner's approval. Say whether that leaves any claim in the table unsupported.
+
+Judge:
+1. Are points 1 to 4 repaired? Name any branch still untested or mis-judged: the overflow (shown and hidden, and its `usable` test), the `prev` span and `ambiguous`, `late`, the strict snapshots, and errors before, at and after the deadline.
+2. Load, all on AC, power mode 2: the proof's real set started at 1-minute load 7.30 and its job set at 8.37; the after's groups at 3.04–5.11, except its last, S-140n in ms-MY at 320 px, at 14.23 (the run's end 13.49). The table's section 1 judges that no low-load re-run is owed. Does either start weaken any proof case or after reading, or is a re-run owed?
+3. Does everything stay inside the approval?
+4. Anything in the table the records don't support?
+
+Answer in under 300 words. Begin with one verdict line: "Close", "Close after the musts below" or "Do not close". Then numbered points, each rank 1 (must) or rank 2 (should), naming the file and line and a concrete fix.

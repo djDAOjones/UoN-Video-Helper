@@ -1,0 +1,47 @@
+#!/bin/zsh
+# vh214: start or stop Vite (:5181) and headless Chrome (:9251) by PID.
+#   servers.sh start <app root> | servers.sh stop
+# VH-214 #5's repair (Codex's script check): a PID is recorded only after its
+# start is checked as successful (the server answers on its port and the
+# process started is that port's listener); stop kills only a recorded PID that
+# is alive and is this run's own (its command line names this scratch or its
+# port), and reports any other, never killing it. Exit: 0 started or stopped;
+# 3 ports busy; 4 start failed, what it started stopped; 5 something still alive.
+S=${0:A:h}
+ours() { local c; c=$(ps -p $1 -o command= 2>/dev/null) || return 1; [[ $c == *"$S"* || $c == *"--port 5181"* || $c == *"--remote-debugging-port=9251"* ]] }
+listens() { lsof -nP -t -iTCP:$2 -sTCP:LISTEN 2>/dev/null | grep -qx "$1" }
+case $1 in
+start)
+  APP=$2
+  rm -f "$S/vite-vh214.pid" "$S/chrome-vh214.pid"
+  if lsof -nP -i :5181 -i :9251 >/dev/null 2>&1; then echo "PORTS BUSY"; lsof -nP -i :5181 -i :9251; exit 3; fi
+  (cd "$APP" && exec node node_modules/vite/bin/vite.js --port 5181 --strictPort --host 127.0.0.1 > "$S/vite-vh214.log" 2>&1) &
+  VP=$!
+  rm -rf "$S/chrome-profile-vh214"
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --remote-debugging-port=9251 --user-data-dir="$S/chrome-profile-vh214" --no-first-run --disable-background-timer-throttling --disable-renderer-backgrounding --disable-backgrounding-occluded-windows about:blank > "$S/chrome-vh214.log" 2>&1 &
+  CP=$!
+  OK=0
+  for i in {1..60}; do curl -s -o /dev/null http://127.0.0.1:5181/ && curl -s -o /dev/null http://127.0.0.1:9251/json/version && { OK=1; break }; sleep 1; done
+  if (( OK )) && listens $VP 5181 && listens $CP 9251; then
+    echo $VP > "$S/vite-vh214.pid"; echo $CP > "$S/chrome-vh214.pid"
+    echo "vite $VP chrome $CP from $APP (each answering, each its port's listener)"; curl -s http://127.0.0.1:9251/json/version | grep -o '"Browser": "[^"]*"'
+    exit 0
+  fi
+  echo "START FAILED: answered=$OK vite $VP listens=$(listens $VP 5181 && echo yes || echo no) chrome $CP listens=$(listens $CP 9251 && echo yes || echo no)"
+  for P in $CP $VP; do kill -0 $P 2>/dev/null && ours $P && kill $P; done
+  for i in {1..30}; do A=0; for P in $CP $VP; do kill -0 $P 2>/dev/null && A=1; done; (( A )) || break; sleep 1; done
+  A=0; for P in $CP $VP; do kill -0 $P 2>/dev/null && { echo "still alive: $P $(ps -p $P -o command= | cut -c1-120)"; A=1 }; done
+  (( A )) && exit 5 || exit 4 ;;
+stop)
+  for f in chrome vite; do
+    P=$(cat "$S/$f-vh214.pid" 2>/dev/null)
+    if [[ -z $P ]]; then echo "$f: no recorded PID"
+    elif ! kill -0 $P 2>/dev/null; then echo "$f $P already exited"
+    elif ours $P; then kill $P
+    else echo "$f $P NOT ATTRIBUTABLE, not killed: $(ps -p $P -o command= | cut -c1-120)"; fi
+  done
+  for i in {1..30}; do lsof -nP -i :5181 -i :9251 >/dev/null 2>&1 || break; sleep 1; done
+  A=0; for f in chrome vite; do P=$(cat "$S/$f-vh214.pid" 2>/dev/null); [[ -n $P ]] && kill -0 $P 2>/dev/null && { echo "$f $P still alive"; A=1 }; done
+  if lsof -nP -i :5181 -i :9251; then echo "PORTS STILL BUSY"; A=1; else echo "stopped; ports free"; fi
+  (( A )) && exit 5 || exit 0 ;;
+esac

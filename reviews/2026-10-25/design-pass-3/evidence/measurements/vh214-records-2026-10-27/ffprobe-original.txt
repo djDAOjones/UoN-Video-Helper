@@ -1,0 +1,67 @@
+# ffprobe ffprobe version 9.0.2, read only, 2026-10-28T08:04:17Z
+# file: samples/UoN Closing Logo Fade Blue 2025.mov, 78894855 B, sha256/16 c84e677ebdadc468
+{
+    "programs": [
+
+    ],
+    "stream_groups": [
+        {
+            "streams": [
+                {
+                    "index": 0,
+                    "codec_name": "qtrle",
+                    "codec_type": "video",
+                    "codec_tag_string": "rle ",
+                    "width": 3840,
+                    "height": 2160,
+                    "pix_fmt": "argb",
+                    "r_frame_rate": "25/1",
+                    "duration": "5.000000",
+                    "tags": {
+
+                    }
+                },
+                {
+                    "index": 1,
+                    "codec_type": "data",
+                    "codec_tag_string": "tmcd",
+                    "r_frame_rate": "0/0",
+                    "duration": "5.000000",
+                    "tags": {
+
+                    }
+                }
+            ]
+        }
+    ],
+    "streams": [
+        {
+            "index": 0,
+            "codec_name": "qtrle",
+            "codec_type": "video",
+            "codec_tag_string": "rle ",
+            "width": 3840,
+            "height": 2160,
+            "pix_fmt": "argb",
+            "r_frame_rate": "25/1",
+            "duration": "5.000000",
+            "tags": {
+                "handler_name": "Apple Video Media Handler"
+            }
+        },
+        {
+            "index": 1,
+            "codec_type": "data",
+            "codec_tag_string": "tmcd",
+            "r_frame_rate": "0/0",
+            "duration": "5.000000",
+            "tags": {
+                "handler_name": "Time Code Media Handler"
+            }
+        }
+    ],
+    "format": {
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "duration": "5.000000"
+    }
+}

@@ -1,0 +1,320 @@
+// VH-214's probe: the QuickTime Animation file VH-193's corpus walk left
+// standing, reproduced or ruled out, with the pass's walker modules (imported
+// read-only from WALKER; no walker file is added or changed by this probe).
+//
+// Cells:
+//   S-140    the original asset, samples/UoN Closing Logo Fade Blue 2025.mov,
+//            read only (APP_ROOT names the checkout that holds samples/), by
+//            SCENARIOS['S-140'].setup as declared;
+//   S-140n   N13, qtrle-5s.mov, by SCENARIOS['S-140n'].setup as declared;
+//   replay-193   the original asset driven as VH-193's corpus walk drove it
+//            (heavy-193.mjs's `bite` routine, its steps and waits, with its own
+//            worker watcher, which resumes only `worker` targets), en-GB at
+//            1280 px in light, under an outer bound of REPLAY_BOUND_MS; every
+//            auto-attached target is logged (type, url, waiting) by a passive
+//            listener that sends nothing;
+//   replay-193n  the same on N13.
+// For each scenario group (cell, language, width) the outcome is read in
+// every colour mode: inspection's verdict or step 1's block and its reason
+// key, whether Create is offered, the result, focus and the live regions;
+// with the time from the file's choosing to the outcome (stamped in the
+// page), the page's and the worker's console by value, and the scenario's
+// own assert rows.
+//
+//   WALKER=<walker dir> APP_ROOT=<checkout holding samples/> APP_SRC=<app src dir> \
+//   APP_URL=http://127.0.0.1:5181/ CDP_PORT=9251 FIX=<fixtures> OUT_ROOT=<scratch>/out \
+//   RESULTS=<results dir> LABEL=before SOURCE=5893d9d \
+//     node vh214-probe.mjs [--cells S-140,S-140n,replay-193,replay-193n]
+//       [--langs en-GB,zh-Hans,ms-MY] [--views w1280,w320] [--modes light,dark,forced-light,forced-dark]
+//
+// Writes RESULTS/<LABEL>-<cell>.json (one per cell) and RESULTS/<LABEL>-run.json.
+import { execFileSync } from 'node:child_process'
+import { createHash } from 'node:crypto'
+import { mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs'
+import { join, resolve } from 'node:path'
+import { pathToFileURL } from 'node:url'
+
+const env = (k) => { const v = process.env[k]; if (!v) throw new Error(`set ${k}`); return v }
+const WALKER = resolve(env('WALKER'))
+const RESULTS = resolve(env('RESULTS'))
+const APP_ROOT = resolve(env('APP_ROOT'))
+const APP_SRC = resolve(env('APP_SRC'))
+const LABEL = process.env.LABEL ?? 'before'
+env('APP_URL'); env('CDP_PORT'); env('FIX'); env('OUT_ROOT')
+const REPLAY_BOUND_MS = Number(process.env.REPLAY_BOUND_MS ?? 720000) // 12 min: past VH-193's ten
+const args = process.argv.slice(2)
+const opt = (name, fallback) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1].split(',') : fallback }
+const cellsWanted = opt('--cells', ['S-140', 'S-140n', 'replay-193', 'replay-193n'])
+const langs = opt('--langs', ['en-GB', 'zh-Hans', 'ms-MY'])
+const views = opt('--views', ['w1280', 'w320'])
+const modes = opt('--modes', ['light', 'dark', 'forced-light', 'forced-dark'])
+mkdirSync(RESULTS, { recursive: true })
+
+const imp = (f) => import(pathToFileURL(join(WALKER, f)).href)
+const { connectBrowser } = await imp('cdp.mjs')
+const { Walk, F, sleep } = await imp('walk.mjs')
+const { QUAL_INIT, VIEWS, setViewport, setMode, assertReached, closeAnalysis } = await imp('qualify.mjs')
+const { SCENARIOS, MX_INIT, fresh } = await imp('scenarios.mjs')
+const { P8_INIT, watchWorkers, assertRows } = await imp('phase8.mjs')
+
+const SAMPLE = join(APP_ROOT, 'samples', 'UoN Closing Logo Fade Blue 2025.mov')
+const CELLS = {
+  'S-140': { scenario: 'S-140', file: SAMPLE },
+  'S-140n': { scenario: 'S-140n', file: F('qtrle-5s.mov') },
+  'replay-193': { replay: true, file: SAMPLE },
+  'replay-193n': { replay: true, file: F('qtrle-5s.mov') },
+}
+for (const c of cellsWanted) if (!CELLS[c]) throw new Error('no cell ' + c)
+
+// ---------------------------------------------------------------------------
+// In the page, from its first script: when the file was chosen, and when each
+// outcome first showed (step 1's block, the verdict, Create, a result).
+const VH214_INIT = String.raw`
+(() => {
+  const S = (window.__vh214 = { marks: [] });
+  const mark = (what, extra) => S.marks.push({ what, t: Date.now(), ...(extra || {}) });
+  document.addEventListener('change', (e) => { if (e.target && e.target.id === 'file-input') mark('chosen'); }, true);
+  const vis = (el) => !!el && !el.hidden && el.getClientRects().length > 0;
+  const seen = {};
+  const tick = () => {
+    const probe = {
+      block: document.querySelector('#source-block .notification'),
+      report: document.querySelector('#source-report .notification[data-kind="error"]'),
+      verdict: document.querySelector('#preflight-report .notification'),
+      create: document.querySelector('#process-actions > button:nth-child(2)'),
+      result: document.querySelector('#process-result > .notification'),
+      progress: document.getElementById('process-progress'),
+    };
+    for (const [k, el] of Object.entries(probe)) {
+      const on = vis(el) && (k !== 'create' || !el.disabled);
+      if (on && !seen[k]) { seen[k] = true; mark(k + ' shown', k === 'result' || k === 'block' || k === 'verdict' ? { kind: el.dataset.kind } : undefined); }
+      if (!on && seen[k]) { seen[k] = false; mark(k + ' gone'); }
+    }
+  };
+  document.addEventListener('DOMContentLoaded', () => { tick(); new MutationObserver(tick).observe(document.documentElement, { subtree: true, childList: true, attributes: true, attributeFilter: ['hidden', 'disabled', 'class', 'data-kind'] }); });
+})();
+`
+
+const READ_OUT = String.raw`(() => {
+  const M = window.__mx, Q = window.__qual, A = window.__audit; const lang = document.documentElement.lang;
+  const norm = (s) => (s || '').replace(/\s+/g, ' ').trim();
+  const vw = document.documentElement.clientWidth;
+  const media = { dark: matchMedia('(prefers-color-scheme: dark)').matches, forced: matchMedia('(forced-colors: active)').matches };
+  const page = { lang, vw, hscroll: document.documentElement.scrollWidth > vw, scrollWidth: document.documentElement.scrollWidth };
+  // The page's own reason keys, under preflight (a block) and failure (a failed read or job); a function message matches by its literal parts.
+  const T = M.tables[lang] || {};
+  const reasons = [...Object.keys((T.preflight || {}).reasons || {}).map((k) => 'preflight.reasons.' + k), ...Object.keys((T.failure || {}).reasons || {}).map((k) => 'failure.reasons.' + k), ...Object.keys(((T.failure || {}).unreadable) || {}).map((k) => 'failure.unreadable.' + k)];
+  const keyOf = (sel) => reasons.filter((p) => { const v = M.msg(p); if (typeof v === 'string') return M.has(p, sel); if (typeof v === 'function') { try { const parts = String(v({ remedy: '\u0000', sentence: '\u0000' })).split('\u0000').map((s) => s.replace(/\s+/g, ' ').trim()).filter((s) => s.length >= 2); const tx = M.text(sel).replace(/\s+/g, ' '); return parts.length > 0 && parts.every((s) => tx.includes(s)); } catch (e) { return false; } } return false; });
+  const blockN = document.querySelector('#source-block .notification');
+  const live = (el) => { for (let e = el; e; e = e.parentElement) { const r = e.getAttribute && (e.getAttribute('aria-live') || e.getAttribute('role')); if (r && /polite|assertive|status|alert/.test(r)) return (e.id ? '#' + e.id : e.tagName.toLowerCase()) + ' ' + r; } return null; };
+  const overflowIn = (root) => { if (!root) return []; const bad = []; for (const el of [root, ...root.querySelectorAll('*')]) { if (!A.visible(el)) continue; const r = el.getBoundingClientRect(); if (r.right > vw + 1 || r.left < -1) bad.push({ el: A.desc(el).slice(0, 70), left: Math.round(r.left), right: Math.round(r.right) }); } return bad; };
+  const a = document.activeElement;
+  const focus = !a || a === document.body ? 'body' : (a.id ? '#' + a.id : a.tagName.toLowerCase() + (a.className ? '.' + String(a.className).split(' ')[0] : '')) + (a.textContent ? ' "' + norm(a.textContent).slice(0, 40) + '"' : '');
+  const statusRead = (id) => { const s = document.getElementById(id); if (!s) return null; const hid = [...s.querySelectorAll('.visually-hidden')].map((x) => norm(x.textContent)).join(' '); const clone = s.cloneNode(true); clone.querySelectorAll('.visually-hidden').forEach((x) => x.remove()); return { announced: norm(s.textContent), shown: norm(clone.textContent), spokenOnly: hid }; };
+  const fileInput = document.getElementById('file-input');
+  const steps = [...document.querySelectorAll('section.step')].map((s) => ({ id: s.id, shown: !s.hidden && s.getClientRects().length > 0 }));
+  return { media, page, errors: (A.errors || []).slice(),
+    verdict: M.verdict(),
+    block: blockN && M.vis(blockN) ? { kind: blockN.dataset.kind, heading: norm(M.text('#source-block .notification-title')), text: norm(blockN.textContent).slice(0, 400), reasonKeys: keyOf('#source-block'), live: live(blockN), overflow: overflowIn(blockN) } : null,
+    report: { kind: M.kindIn('#source-report'), text: norm(M.text('#source-report')).slice(0, 300), reasonKeys: keyOf('#source-report') },
+    createOffered: M.create() && !M.btn(2).disabled, ackOffered: M.ack(),
+    res: M.res(), finished: M.finished(), running: M.running(), checking: M.checking(),
+    result: { title: norm(M.text('#process-result > .notification > .notification-title')), text: norm(M.text('#process-result')).slice(0, 400) },
+    progress: norm(M.text('#process-progress-text')),
+    focus, fileInput: fileInput ? { disabled: fileInput.disabled, chosen: M.chosen() } : null, steps,
+    status: statusRead('status'), sourceStatus: statusRead('source-status'), liveRegions: Q.statusText(),
+    marks: (window.__vh214 || {}).marks || [] };
+})()`
+
+// ---------------------------------------------------------------------------
+const sha = (buf) => createHash('sha256').update(buf).digest('hex')
+const fileSha = (p) => { const h = createHash('sha256'); h.update(readFileSync(p)); return h.digest('hex').slice(0, 16) }
+const treeSha = (dir) => { const h = createHash('sha256'); const walk = (d) => { for (const n of readdirSync(d).sort()) { const p = join(d, n); if (statSync(p).isDirectory()) walk(p); else h.update(p.slice(dir.length) + '\0' + sha(readFileSync(p)) + '\n') } }; walk(dir); return h.digest('hex').slice(0, 16) }
+const sh = (cmd, a) => { try { return execFileSync(cmd, a, { encoding: 'utf8' }).trim() } catch (e) { return 'error: ' + String(e.message).slice(0, 120) } }
+const power = () => {
+  const batt = sh('pmset', ['-g', 'batt']); const pm = sh('pmset', ['-g']).split('\n').filter((l) => /powermode/i.test(l)).map((l) => l.trim()).join('; ')
+  const up = sh('uptime', []); const load = (up.match(/load averages?: ([\d.]+)[ ,]+([\d.]+)[ ,]+([\d.]+)/) || []).slice(1).map(Number)
+  return { t: new Date().toISOString(), ac: /AC Power/.test(batt), powermode: pm, load1: load[0], load }
+}
+const byValue = async (browser, args, sessionId) => Promise.all((args || []).map(async (a) => {
+  if (a.type !== 'object' || !a.objectId) return a.value ?? a.description ?? null
+  try { const r = await browser.send('Runtime.callFunctionOn', { objectId: a.objectId, functionDeclaration: 'function () { try { return JSON.stringify(this) } catch (e) { return String(this) } }', returnByValue: true }, sessionId); return JSON.parse(r.result.value) } catch { return a.description ?? null }
+}))
+
+/** Every worker's console, by value; the page's own console, by value; every auto-attached target, passively. */
+function watchLogs(browser, w) {
+  const workerLogs = (w.workerLogs = []), pageLogs = (w.pageLogs = []), targets = (w.targetsSeen = [])
+  browser.on(w.page.sessionId, 'Target.attachedToTarget', ({ sessionId, targetInfo, waitingForDebugger }) => {
+    targets.push({ t: Date.now(), type: targetInfo.type, url: (targetInfo.url || '').replace(/^.*\//, '').slice(0, 60), waitingForDebugger, sessionId })
+    if (targetInfo.type !== 'worker') return
+    const url = (targetInfo.url || '').replace(/^.*\//, '').slice(0, 60)
+    browser.on(sessionId, 'Runtime.consoleAPICalled', async (e) => { const t = Date.now(); workerLogs.push({ t, worker: url, type: e.type, args: await byValue(browser, e.args, sessionId) }) })
+    browser.on(sessionId, 'Runtime.exceptionThrown', (e) => workerLogs.push({ t: Date.now(), worker: url, type: 'exception', args: [(e.exceptionDetails.exception?.description ?? e.exceptionDetails.text).slice(0, 300)] }))
+  })
+  browser.on(w.page.sessionId, 'Target.detachedFromTarget', ({ sessionId }) => targets.push({ t: Date.now(), detached: sessionId }))
+  w.page.on('Runtime.consoleAPICalled', async (e) => { const t = Date.now(); pageLogs.push({ t, type: e.type, args: await byValue(browser, e.args, w.page.sessionId) }) })
+  w.page.on('Runtime.exceptionThrown', (e) => pageLogs.push({ t: Date.now(), type: 'exception', args: [(e.exceptionDetails.exception?.description ?? e.exceptionDetails.text).slice(0, 300)] }))
+}
+
+/**
+ * heavy-193.mjs's worker watcher, verbatim but for its counter's home
+ * (reviews/2026-10-22/design-pass-2/evidence/measurements/walker/heavy-193.mjs:58-73):
+ * every auto-attached target waits for the debugger, and only a `worker` is resumed.
+ */
+async function watchWorkers193(browser, w) {
+  const seen = { planned: null, workers: 0 }
+  browser.on(w.page.sessionId, 'Target.attachedToTarget', async ({ sessionId, targetInfo }) => {
+    if (targetInfo.type !== 'worker') return
+    seen.workers++
+    browser.on(sessionId, 'Runtime.consoleAPICalled', async (e) => {
+      if (e.args[1]?.value !== 'chain planned' || !e.args[2]?.objectId) return
+      const r = await browser.send('Runtime.callFunctionOn', { objectId: e.args[2].objectId, functionDeclaration: 'function () { return JSON.stringify(this) }', returnByValue: true }, sessionId)
+      seen.planned = JSON.parse(r.result.value)
+    })
+    await browser.send('Runtime.enable', {}, sessionId).catch(() => {})
+    await browser.send('Runtime.runIfWaitingForDebugger', {}, sessionId).catch(() => {})
+  })
+  await w.page.send('Target.setAutoAttach', { autoAttach: true, waitForDebuggerOnStart: true, flatten: true })
+  return seen
+}
+
+async function openWalk(browser, name, { replay = false } = {}) {
+  const w = new Walk(browser, name)
+  await w.open()
+  await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source: QUAL_INIT })
+  await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source: MX_INIT })
+  if (!replay) await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source: P8_INIT })
+  await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source: VH214_INIT })
+  watchLogs(browser, w)
+  w.seen193 = replay ? await watchWorkers193(browser, w) : null
+  if (!replay) await watchWorkers(browser, w)
+  return w
+}
+
+/** One read per mode, the page's state asserted with each; light put back. */
+async function readModes(w, { lang, view, state }) {
+  const out = {}
+  const v = VIEWS[view]
+  for (const mode of modes) {
+    await setMode(w, mode)
+    await sleep(250)
+    const reached = state ? await assertReached(w, { lang, mode, viewport: { w: v.width, h: v.height, dpr: v.deviceScaleFactor }, state }) : null
+    out[mode] = { reached: reached ? { outcome: reached.outcome, problems: reached.problems } : null, ...(await w.evaluate(READ_OUT)) }
+  }
+  await setMode(w, 'light')
+  await sleep(200)
+  return out
+}
+
+/** A read bounded in time, so a page that no longer answers is recorded as such. */
+const bounded = (p, ms, what) => Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error(`bound: ${what} did not return in ${ms / 1000} s`)), ms))])
+
+/** heavy-193.mjs's `bite` routine (its :139-173), step by step and timed, under an outer bound. */
+async function replay193(w, file, rec, t0) {
+  const steps = (rec.steps = [])
+  const step = async (what, fn) => { const s = { what, at: Date.now() - t0 }; steps.push(s); try { s.value = await fn(); s.ms = Date.now() - t0 - s.at; return s.value } catch (e) { s.error = String(e.message ?? e).slice(0, 200); s.ms = Date.now() - t0 - s.at; throw e } }
+  const mx = (expr) => w.evaluate(`(() => { const M = window.__mx; return ${expr}; })()`)
+  await step('setViewport w1280', () => setViewport(w, 'w1280'))
+  await step('setMode light', () => setMode(w, 'light'))
+  await step('fresh en-GB', () => fresh(w, 'en-GB'))
+  await step('setFiles', () => w.setFiles(file))
+  await step('waitSettled (900 s)', () => w.waitSettled({ timeout: 900000 }))
+  await step('a verdict (900 s)', () => w.waitFor(`(() => { const M = window.__mx; return M.verdict() || M.kindIn("#source-block") || M.kindIn("#source-report") === "error" })()`, { label: 'a verdict', timeout: 900000 }))
+  const canCreate = await step('canCreate', () => w.evaluate(`(() => { const b = document.querySelector(${JSON.stringify(w.createButton())}); return !!b && !b.hidden && !b.disabled })()`))
+  if (!canCreate) {
+    const reason = await step('reason', () => w.evaluate(`(() => { const t = (s) => { const e = document.querySelector(s); return e && !e.hidden ? e.textContent.replace(/\\s+/g, ' ').trim() : '' }; return [t('#source-block'), t('#source-report'), t('#preflight-report')].filter(Boolean).join(' / ').slice(0, 300) })()`))
+    rec.replayOutcome = { created: false, reason }
+    return
+  }
+  await step('create', async () => { if (await mx('M.ack()')) { await w.click(w.acknowledgeButton()); await sleep(200) } await w.click(w.createButton()) })
+  await step('"chain planned" or the job ended (1800 s)', async () => {
+    const s0 = Date.now()
+    while (!w.seen193.planned) {
+      if (Date.now() - s0 > 1800000) throw new Error('no "chain planned" in 1800 s')
+      const failed = await w.evaluate(`(() => { const p = document.getElementById('process-progress'); const r = document.getElementById('process-result'); return (!p || p.hidden) && !!r && r.children.length > 0 })()`)
+      if (failed) throw new Error('the job ended before planning')
+      await sleep(500)
+    }
+  })
+  rec.replayOutcome = { created: true, planned: w.seen193.planned }
+}
+
+// ---------------------------------------------------------------------------
+const stamp = new Date().toISOString().replace(/[:.]/g, '-')
+const browser = await connectBrowser()
+const run = {
+  label: LABEL, source: process.env.SOURCE ?? null, started: new Date().toISOString(), appUrl: process.env.APP_URL, cdpPort: process.env.CDP_PORT,
+  chrome: browser.version.Browser, node: process.version, walker: WALKER, walkerSha: treeSha(WALKER), appSrc: APP_SRC, appSrcSha: treeSha(APP_SRC),
+  files: Object.fromEntries([...new Set(cellsWanted.map((c) => CELLS[c].file))].map((f) => [f.replace(/^.*\//, ''), { sha256_16: fileSha(f), bytes: statSync(f).size }])),
+  cells: cellsWanted, langs, views, modes, replayBoundMs: REPLAY_BOUND_MS, argv: process.argv.slice(2), power: [power()], flags: [],
+}
+if (!run.power[0].ac) { run.flags.push('on battery at the start: stopped'); writeFileSync(join(RESULTS, `${LABEL}-run.json`), JSON.stringify(run, null, 1)); console.log('ON BATTERY: stopped'); process.exit(2) }
+if (run.power[0].load1 > 8) run.flags.push(`load ${run.power[0].load1} at the start (above 8)`)
+console.log(`${LABEL}: ${run.chrome}, walker ${run.walkerSha}, app src ${run.appSrcSha}, load ${run.power[0].load.join(' ')}`)
+
+let stop = false
+for (const cellId of cellsWanted) {
+  if (stop) break
+  const cell = CELLS[cellId]
+  const sc = cell.scenario ? SCENARIOS[cell.scenario] : null
+  const groups = cell.replay ? [['en-GB', 'w1280']] : langs.flatMap((l) => views.map((v) => [l, v]))
+  const recs = []
+  for (const [lang, view] of groups) {
+    if (stop) break
+    const p0 = power()
+    run.power.push({ cell: cellId, lang, view, ...p0 })
+    if (!p0.ac) { run.flags.push(`on battery before ${cellId} ${lang} ${view}: stopped`); stop = true; break }
+    if (p0.load1 > 8) run.flags.push(`load ${p0.load1} before ${cellId} ${lang} ${view}`)
+    const key = `${cellId}__${lang}__${view}`
+    const t0 = Date.now()
+    const rec = { key, cell: cellId, scenario: cell.scenario ?? null, what: sc?.name ?? 'heavy-193.mjs bite routine', file: cell.file.replace(/^.*\//, ''), lang, view, modesRead: modes, powerAtStart: { ac: p0.ac, load: p0.load, powermode: p0.powermode } }
+    let w
+    try {
+      w = await openWalk(browser, `${LABEL}-${stamp}/${key}`, { replay: !!cell.replay })
+      if (cell.replay) {
+        try { await bounded(replay193(w, cell.file, rec, t0), REPLAY_BOUND_MS, 'the replay') } catch (e) { rec.replayError = String(e.message ?? e).slice(0, 300) }
+        rec.atEnd = await bounded(w.evaluate(READ_OUT), 20000, 'the read at the end').catch((e) => ({ error: String(e.message ?? e) }))
+        rec.seen193 = { workers: w.seen193.workers, planned: w.seen193.planned }
+      } else {
+        await setViewport(w, view)
+        const realCreate = w.click.bind(w)
+        w.click = async (sel, ...rest) => { if (sel === w.createButton()) { rec.createClickedAt = Date.now() - t0; rec.atCreate = await w.evaluate(READ_OUT) } return realCreate(sel, ...rest) }
+        await sc.setup(w, lang)
+        rec.setupMs = Date.now() - t0
+        rec.obs = w.obs ?? null
+        rec.out = await readModes(w, { lang, view, state: sc.state })
+        rec.scenarioAsserts = await assertRows(w, sc).catch((e) => [{ what: 'assertRows', outcome: 'cannot-determine', why: String(e.message ?? e).slice(0, 200) }])
+        rec.targets = w.p8planned?.targets ?? null
+      }
+      rec.status = 'ok'
+    } catch (e) {
+      rec.status = 'failed'
+      rec.error = String(e.stack ?? e).slice(0, 600)
+      try { rec.atFailure = await bounded(w.evaluate(READ_OUT), 20000, 'the read at failure') } catch (e2) { rec.atFailure = { error: String(e2.message ?? e2) } }
+    } finally {
+      rec.ms = Date.now() - t0
+      if (w) {
+        rec.targetsSeen = (w.targetsSeen ?? []).map((x) => ({ ...x, t: x.t - t0 }))
+        rec.workerLogs = (w.workerLogs ?? []).map((l) => ({ ...l, t: l.t - t0 }))
+        rec.pageLogs = (w.pageLogs ?? []).map((l) => ({ ...l, t: l.t - t0 }))
+        await bounded(w.close(), 20000, 'close').catch((e) => { rec.closeError = String(e.message ?? e) })
+      }
+    }
+    const L = rec.out?.light ?? rec.atEnd ?? rec.atFailure
+    const m = (L?.marks ?? [])
+    const chosen = m.find((x) => x.what === 'chosen'), first = m.find((x) => /^(block|verdict|report|result) shown$/.test(x.what))
+    rec.chosenToOutcomeMs = chosen && first ? first.t - chosen.t : null
+    console.log(`${rec.status} ${key} ${Math.round(rec.ms / 1000)} s: block ${L?.block?.kind ?? '-'} ${JSON.stringify(L?.block?.reasonKeys ?? [])} verdict ${L?.verdict ?? '-'} create ${L?.createOffered} res ${L?.res} focus ${L?.focus} | chosen->outcome ${rec.chosenToOutcomeMs} ms${rec.replayError ? ' | ' + rec.replayError : ''}${rec.error ? ' | ' + rec.error.slice(0, 160) : ''}`)
+    recs.push(rec)
+  }
+  writeFileSync(join(RESULTS, `${LABEL}-${cellId}.json`), JSON.stringify(recs, null, 1))
+}
+run.power.push(power())
+run.ended = new Date().toISOString()
+if (!run.power.at(-1).ac) run.flags.push('on battery at the end')
+if (new Set(run.power.map((p) => p.powermode)).size > 1) run.flags.push('power mode changed during the run')
+writeFileSync(join(RESULTS, `${LABEL}-run.json`), JSON.stringify(run, null, 1))
+await closeAnalysis().catch(() => {})
+browser.close()
+console.log(`done: ${RESULTS}`)
+process.exit(0)

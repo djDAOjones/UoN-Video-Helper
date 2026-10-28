@@ -1550,6 +1550,158 @@ export async function outputTracks(w) {
 }
 /** VH-213: before Create, the whole video's too-little note, and no other no-audio note or ends-early. */
 export const WHOLE_NOTE = `M.kindIn('#audio-warnings') === 'warning' && M.has('warnings.wholeTooLittleAudio.heading', '#audio-warnings') && !M.has('warnings.keptTooLittleAudio.heading', '#audio-warnings') && !M.has('warnings.noAudio.heading', '#audio-warnings') && !M.has('warnings.endsEarly.heading', '#audio-warnings')`
+// VH-214: S-140 and S-140n bounded, with three accepted outcomes, so that a
+// hang of the page is told apart from a hang of the walk (wish VH-193.3).
+// The read's bound is the page's own: a verdict or step 1's block within the
+// selection's two deadlines, inspect 120 s and pre-flight 180 s
+// (src/config/thresholds.ts:162-165, read, not imported), with 30 s over
+// them so a page that spends both in full still ends inside it; a job's end
+// within 15 minutes, past VH-193's ten and the 120 s watchdog (thresholds.ts:37).
+// Accepted: refused before Create (step 1's block, Create not shown),
+// finished, or failed with recovery (the failure shown, the job stopped, the
+// file chooser enabled again). VH-193's walk stood ten minutes on its own
+// Create test, which read the button's `hidden` and `disabled`, not whether
+// it was shown (vh214-quicktime-2026-10-27.md).
+// Each phase has one deadline, taken as it starts (the read at the choosing,
+// the job at Create), and every wait and every read of the page inside it is
+// raced against that deadline, so a page that never answers ends there too.
+// The deadline is absolute: a result accepted at or after it is its expiry,
+// and so is any error at or after it in the read or the job, such as an inner
+// wait's own "timeout waiting for", whose timer can run first when the event
+// loop runs late; an error before it is the walk's. Every snapshot is strict
+// too: an answer taken after `snapMs` is no answer. An expiry carries the
+// value accepted at or after its deadline, so a late answer is told by the
+// page's own time of it: dated inside the snapshot's bound but taken by the
+// walk after it, it is late delivery, the walk's (no evidence dated by the
+// deadline, so at expiry cannot-determine); dated at or after the bound, or
+// no answer at all, it stays the page's. A deadline's timer rejects one turn
+// of the event loop after it fires (setImmediate), so an answer already
+// waiting when the walk's own process was held is taken, and told late, not
+// lost as no answer. The state at the deadline is
+// judged only from evidence dated by it: from the choosing, a recorder in the
+// page (`QT_RECORDER`) logs each change of the outcome as observed (on a
+// mutation, or a 50 ms tick), with the page's time it was first seen and the
+// previous observation's time, so the change lies between the two. At expiry
+// the log is brought up to date and read within `snapMs`, and the outcome is
+// its last entry first seen before the deadline (`atExpiry`). An entry whose
+// span crosses the deadline is ambiguous, and an overflow of the log's 200
+// entries whose first dropped change may lie before the deadline leaves no
+// evidence of it: either is cannot-determine, the walk's, never a pass and
+// never the page's. An entry whose previous observation is at or after the
+// deadline is late, kept for the record, never deadline evidence. The normal
+// capture is read inside the phase's deadline, and a reading the page dates
+// at or after it is late too.
+// No accepted outcome by the deadline is the page's hang, a fail, even if one
+// comes after; an accepted outcome by it is the walk's wait, not the page's.
+// Only the read's and the job's deadlines count as the bound: the boot, before
+// the choosing, has its own 60 s, past walk.mjs's own 30 s boot wait, and its
+// end, like any other error before an outcome, is the walk's. For the proof only,
+// the walker's process may shorten them: globalThis.__QT_BOUND_MS = { bootMs, readMs, jobMs, snapMs }.
+const QT_BOUND = { bootMs: 60000, readMs: 330000, jobMs: 900000, snapMs: 10000 }
+const QT_OUTCOME = `(M.kindIn('#source-block') === 'error' && !M.create() ? 'refused before Create' : M.finished() ? 'finished' : M.res() === 'failure' && !M.running() && !M.el('#file-input').disabled ? 'failed with recovery' : null)`
+const qtBound = () => ({ ...QT_BOUND, ...(globalThis.__QT_BOUND_MS ?? {}) })
+/** The page's own log of QT_OUTCOME from the choosing, as observed (on a mutation, or a 50 ms tick): each change with the page's time it was first seen (`t`) and the previous observation's (`prev`, the last that saw the old value; null for the first), so the change lies in (prev, t]; `seen` is the last observation. At most 200 entries: then `overflow` keeps the first dropped entry and a count of the dropped. */
+const QT_RECORDER = `(() => { const R = (window.__qt214 = { installedAt: Date.now(), log: [], seen: null, overflow: null }); let last; const tick = () => { const t = Date.now(); let a = null; try { a = ${QT_OUTCOME}; } catch (e) { a = null; } if (a !== last) { last = a; const x = { a, t, prev: R.seen }; if (R.log.length < 200) R.log.push(x); else if (R.overflow) R.overflow.count++; else R.overflow = { ...x, count: 1 }; } R.seen = t; }; Object.defineProperty(R, 'tick', { value: tick }); new MutationObserver(tick).observe(document.documentElement, { subtree: true, childList: true, attributes: true, characterData: true }); setInterval(tick, 50); tick(); return R.installedAt; })()`
+const qtDeadline = (phase, ms) => ({ phase, ms, at: Date.now() + ms })
+const qtLeft = (d) => Math.max(1, d.at - Date.now())
+const qtExpiry = (d) => Object.assign(new Error(`the ${d.phase} deadline, ${d.ms} ms, reached`), { qtPhase: d.phase })
+/** p raced against d; a result accepted at or after d.at is d's expiry too, carrying that late value (`qtLate`). The timer rejects one turn of the event loop after it fires, so an answer already waiting is taken first, and told late. */
+async function byDeadline(d, p) {
+  let timer, turn
+  const expiry = new Promise((_, reject) => { timer = setTimeout(() => { turn = globalThis.setImmediate(() => reject(qtExpiry(d))) }, qtLeft(d)) })
+  try {
+    const v = await Promise.race([p, expiry])
+    if (Date.now() >= d.at) throw Object.assign(qtExpiry(d), { qtLate: { value: v, at: Date.now() } })
+    return v
+  } finally { globalThis.clearTimeout(timer); globalThis.clearImmediate(turn) }
+}
+/** A snapshot's expiry that carried a late answer, by the page's own time of it (`pageMs`) and the walk's taking of it (`deliveredMs`), both from the snapshot's deadline: dated before it, late delivery, the walk's; dated at or after it, a late answer, the page's. */
+const qtLate = (e, ds) => {
+  const v = e?.qtLate
+  if (!v || typeof v.value?.t !== 'number') return {}
+  const x = { pageMs: v.value.t - ds.at, deliveredMs: v.at - ds.at }
+  return v.value.t < ds.at ? { lateDelivery: x } : { lateAnswer: x }
+}
+/** QT_OUTCOME now, read within snapMs, strictly, for the record only; a page that does not answer within it is kept as such, and an answer it dated inside it but the walk took after it as late delivery. */
+async function qtSnap(w, b) {
+  const t = Date.now(), ds = qtDeadline('snapshot', b.snapMs)
+  try { const r = await byDeadline(ds, mx(w, `({ t: Date.now(), a: ${QT_OUTCOME} })`)); return { accepted: r?.a ?? null, answered: true, t, pageAt: r?.t ?? null } } catch (e) { return { accepted: null, answered: false, t, ...qtLate(e, ds), error: String(e?.message ?? e).slice(0, 160) } }
+}
+/** The normal capture, inside the phase's deadline: a reading the page dates at or after it is late, so the deadline's expiry. */
+async function qtCapture(w, d) {
+  const r = await byDeadline(d, mx(w, `({ a: ${QT_OUTCOME}, t: Date.now() })`))
+  if (!r || !(r.t < d.at)) throw qtExpiry(d)
+  return { accepted: r.a, answered: true, t: r.t }
+}
+/** At expiry: the page's own log, brought up to date and read within snapMs, strictly. An answer the page dated inside snapMs but the walk took after it is late delivery (`lateDelivery`), no evidence; one it dated at or after it is a late answer (`lateAnswer`), no answer. The outcome by the deadline is the log's last entry first seen before it; an entry whose span (prev, t] crosses it is ambiguous; an overflow whose first dropped change may lie before it (its prev before it) is unusable; an entry whose previous observation is at or after it is late, never deadline evidence. */
+async function qtEvidence(w, d, b) {
+  const tRead = Date.now(), ds = qtDeadline('snapshot', b.snapMs)
+  let r
+  try { r = await byDeadline(ds, mx(w, `(() => { const R = window.__qt214 ?? null; if (R && R.tick) R.tick(); return { t: Date.now(), now: ${QT_OUTCOME}, R: R && { installedAt: R.installedAt, log: R.log, seen: R.seen, overflow: R.overflow } }; })()`)) } catch (e) { return { accepted: null, answered: false, dated: false, deadlineAt: d.at, tRead, ...qtLate(e, ds), error: String(e?.message ?? e).slice(0, 160) } }
+  const R = r?.R ?? null
+  const log = R?.log ?? null
+  const from = (x) => x.prev ?? x.t
+  const of = R?.overflow ?? null
+  const overflow = of ? { accepted: of.a, count: of.count, prevMs: from(of) - d.at, afterMs: of.t - d.at, usable: from(of) >= d.at } : null
+  const by = log ? (log.filter((x) => x.t < d.at).at(-1) ?? null) : null
+  const across = log ? (log.find((x) => from(x) < d.at && x.t >= d.at) ?? null) : null
+  const late = log ? (log.find((x) => from(x) >= d.at && x.a) ?? null) : null
+  return { accepted: by?.a ?? null, acceptedAt: by?.a ? by.t : null, answered: true, dated: !!log, deadlineAt: d.at, tRead, readAt: r?.t ?? null, seenAt: R?.seen ?? null, nowSeen: r?.now ?? null, overflow, ambiguous: across ? { accepted: across.a, prevMs: d.at - from(across), afterMs: across.t - d.at } : null, late: late ? { accepted: late.a, afterMs: late.t - d.at } : null, log: log ? log.slice(-12) : null }
+}
+async function quickTime(w, lang, file) {
+  const o = obsOf(w), b = qtBound()
+  o.bound = b
+  o.tStart = Date.now()
+  o.deadlines = {}
+  let d
+  const phase = (name, ms) => { d = qtDeadline(name, ms); o.deadlines[name] = d.at }
+  phase('boot', b.bootMs)
+  try {
+    await byDeadline(d, fresh(w, lang))
+    phase('read', b.readMs)
+    o.tChosen = Date.now()
+    o.recorderAt = await byDeadline(d, mx(w, QT_RECORDER))
+    await byDeadline(d, w.setFiles(file.startsWith('/') ? file : F(file)))
+    await byDeadline(d, w.waitSettled({ timeout: qtLeft(d) }))
+    await byDeadline(d, until(w, 'M.verdict() || M.kindIn("#source-block") || M.kindIn("#source-report") === "error"', 'a verdict', qtLeft(d)))
+    o.t0 = Date.now()
+    if (await byDeadline(d, mx(w, `M.kindIn('#source-block') === 'error'`))) o.blocked = true
+    else if (await byDeadline(d, mx(w, 'M.create()'))) {
+      o.created = true
+      phase('job', b.jobMs)
+      await byDeadline(d, create(w))
+      // An accepted outcome, so a failure waits for its recovery (the locks hold while the job stops).
+      await byDeadline(d, until(w, `${QT_OUTCOME} !== null`, 'an accepted outcome', qtLeft(d)))
+    }
+    o.outcomeSeen = await qtCapture(w, d)
+  } catch (e) {
+    const error = String(e?.message ?? e).slice(0, 160)
+    if ((d.phase === 'read' || d.phase === 'job') && (e?.qtPhase === d.phase || Date.now() >= d.at)) {
+      o.expired = { phase: d.phase, ms: d.ms, at: d.at, afterMs: Date.now() - o.tStart, by: e?.qtPhase === d.phase ? 'the deadline' : `an error at or after it: ${error}` }
+      o.atExpiry = await qtEvidence(w, d, b)
+      if (d.phase === 'job') o.timedOut = true
+    } else o.walkError = { phase: d.phase, error }
+  }
+  o.t0 = o.t0 ?? Date.now()
+  o.tEnd = Date.now()
+}
+const qtJudged = see('an accepted outcome within the bound: refused before Create, finished, or failed with recovery (VH-214)', async (o, w) => {
+  const later = await qtSnap(w, qtBound()) // for the record only: the verdict is what was kept
+  const seen = { seconds: Math.round(((o.tEnd ?? Date.now()) - o.tStart) / 1000), created: !!o.created, blocked: !!o.blocked, outcomeSeen: o.outcomeSeen ?? null, expired: o.expired ?? null, atExpiry: o.atExpiry ?? null, walkError: o.walkError ?? null, later: later.answered ? later.accepted : later.lateDelivery ? 'delivered late' : 'no answer' }
+  if (o.walkError) return { outcome: 'cannot-determine', accepted: null, ...seen, hang: 'the walk', why: `the walk failed in its ${o.walkError.phase} short of the bound: ${o.walkError.error}` }
+  if (o.expired) {
+    const at = o.atExpiry
+    if (at.lateDelivery) return { outcome: 'cannot-determine', accepted: null, ...seen, hang: 'the walk', why: `the ${o.expired.phase} deadline reached; the page answered the read at it ${-at.lateDelivery.pageMs} ms before the snapshot's bound ended, and the walk took the answer ${at.lateDelivery.deliveredMs} ms after it, so no evidence dated by the deadline` }
+    if (at.overflow && !at.overflow.usable) return { outcome: 'cannot-determine', accepted: null, ...seen, hang: 'the walk', why: `the ${o.expired.phase} deadline reached; the page's own log overflowed, ${at.overflow.count} change(s) dropped, the first observed between ${at.overflow.prevMs} and ${at.overflow.afterMs} ms from the deadline, so no evidence of the state at it` }
+    if (at.ambiguous) return { outcome: 'cannot-determine', accepted: null, ...seen, hang: 'the walk', why: `ambiguous at the ${o.expired.phase} deadline: ${at.ambiguous.accepted ? `"${at.ambiguous.accepted}"` : 'no accepted outcome'} first seen ${at.ambiguous.afterMs} ms after it, the previous observation ${at.ambiguous.prevMs} ms before it` }
+    if (at.accepted) return { outcome: 'cannot-determine', accepted: at.accepted, ...seen, hang: 'the walk', why: `the ${o.expired.phase} deadline reached; the page's own log shows "${at.accepted}" ${at.deadlineAt - at.acceptedAt} ms before it` }
+    const after = at.late ? `; "${at.late.accepted}" first seen ${at.late.afterMs} ms after it` : later.accepted ? `; "${later.accepted}" read later` : ''
+    return { outcome: 'fail', accepted: null, ...seen, hang: 'the page', why: !at.answered ? `the page did not answer at the ${o.expired.phase} deadline${at.lateAnswer ? `; its answer dated ${at.lateAnswer.pageMs} ms after the snapshot's bound` : ''}` : at.dated ? `no accepted outcome by the ${o.expired.phase} deadline in the page's own log${after}` : `no evidence dated by the ${o.expired.phase} deadline of an accepted outcome${after}` }
+  }
+  const s = o.outcomeSeen
+  if (s && !s.answered) return { outcome: 'fail', accepted: null, ...seen, hang: 'the page', why: 'the page did not answer when its outcome was read' }
+  return s?.accepted ? { outcome: 'pass', accepted: s.accepted, ...seen, hang: null } : { outcome: 'fail', accepted: null, ...seen, hang: null, why: 'no accepted outcome, and no deadline reached' }
+})
 const HEAVY_TITLE = `M.msg('warnings.heavyLimiting.heading')`
 const META_TITLE = `M.msg('warnings.metadataLost.heading')`
 const WARN_TEXT = `(() => { const b = window.__p8.warnBox(); return b ? b.textContent.replace(/\\s+/g, ' ') : '' })()`
@@ -2522,8 +2674,9 @@ Object.assign(SCENARIOS, {
     state: `M.finished() || M.res() === 'failure' || M.running() || M.kindIn('#source-block') === 'error'`,
     // Read from samples/ (never written): walked with a 15-minute limit, its outcome recorded either way.
     // Blocked at read in Chrome 156 (fixtures-proof-2026-10-25.json, N13): a block is its outcome, and Create is not offered.
-    setup: async (w, lang) => { await ready(w, lang, SAMPLE_QTRLE, { timeout: 300000 }); obsOf(w).t0 = Date.now(); if (await mx(w, `M.kindIn('#source-block') === 'error'`)) { obsOf(w).blocked = true; return } await create(w); await untilDone(w, 'an outcome within 15 minutes', 900000).catch(() => { obsOf(w).timedOut = true }) },
-    asserts: [found('the outcome: a finished video, a failure and its code, or still running at the limit', async (o, w) => ({ seconds: Math.round((Date.now() - o.t0) / 1000), blocked: !!o.blocked, block: await mx(w, `M.text('#source-block').replace(/\\s+/g, ' ').trim().slice(0, 200)`), timedOut: !!o.timedOut, res: await mx(w, 'M.res()'), stage: await mx(w, `M.text('#process-progress-text')`), text: await mx(w, `M.text('#process-result').replace(/\\s+/g, ' ').slice(0, 300)`) }))],
+    // VH-214: bounded, its outcome judged (QT_BOUND, qtJudged), the reading kept beside it.
+    setup: (w, lang) => quickTime(w, lang, SAMPLE_QTRLE),
+    asserts: [qtJudged, found('the outcome: a finished video, a failure and its code, or still running at the limit', async (o, w) => ({ seconds: Math.round((Date.now() - o.t0) / 1000), blocked: !!o.blocked, block: await mx(w, `M.text('#source-block').replace(/\\s+/g, ' ').trim().slice(0, 200)`), timedOut: !!o.timedOut, res: await mx(w, 'M.res()'), stage: await mx(w, `M.text('#process-progress-text')`), text: await mx(w, `M.text('#process-result').replace(/\\s+/g, ' ').slice(0, 300)`) }))],
     focus: [RESULT],
     fixtures: [SAMPLE_QTRLE],
   },
@@ -2532,8 +2685,9 @@ Object.assign(SCENARIOS, {
     ...EN_1280,
     state: `M.finished() || M.res() === 'failure' || M.running() || M.kindIn('#source-block') === 'error'`,
     // Blocked at read in Chrome 156 (fixtures-proof-2026-10-25.json, N13): a block is its outcome, and Create is not offered.
-    setup: async (w, lang) => { await ready(w, lang, 'qtrle-5s.mov', { timeout: 300000 }); obsOf(w).t0 = Date.now(); if (await mx(w, `M.kindIn('#source-block') === 'error'`)) { obsOf(w).blocked = true; return } await create(w); await untilDone(w, 'an outcome within 15 minutes', 900000).catch(() => { obsOf(w).timedOut = true }) },
-    asserts: [found('the outcome: a finished video, a failure and its code, or still running at the limit', async (o, w) => ({ seconds: Math.round((Date.now() - o.t0) / 1000), blocked: !!o.blocked, block: await mx(w, `M.text('#source-block').replace(/\\s+/g, ' ').trim().slice(0, 200)`), timedOut: !!o.timedOut, res: await mx(w, 'M.res()'), text: await mx(w, `M.text('#process-result').replace(/\\s+/g, ' ').slice(0, 300)`) }))],
+    // VH-214: bounded, its outcome judged (QT_BOUND, qtJudged), the reading kept beside it.
+    setup: (w, lang) => quickTime(w, lang, 'qtrle-5s.mov'),
+    asserts: [qtJudged, found('the outcome: a finished video, a failure and its code, or still running at the limit', async (o, w) => ({ seconds: Math.round((Date.now() - o.t0) / 1000), blocked: !!o.blocked, block: await mx(w, `M.text('#source-block').replace(/\\s+/g, ' ').trim().slice(0, 200)`), timedOut: !!o.timedOut, res: await mx(w, 'M.res()'), text: await mx(w, `M.text('#process-result').replace(/\\s+/g, ' ').slice(0, 300)`) }))],
     focus: [RESULT],
     fixtures: ['qtrle-5s.mov'],
   },

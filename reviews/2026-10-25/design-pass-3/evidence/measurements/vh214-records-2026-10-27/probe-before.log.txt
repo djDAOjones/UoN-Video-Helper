@@ -1,0 +1,55 @@
+before: Chrome/156.0.8078.48, walker 50ca03e0540b29a3, app src 9c47759f40f4020b, load 4.15 11.2 10.53
+20:34:04 page loaded http://127.0.0.1:5181/
+20:34:04 file chosen: UoN Closing Logo Fade Blue 2025.mov
+ok S-140__en-GB__w1280 5 s: block error [] verdict - create false res none focus body | chosen->outcome 102 ms
+20:34:09 page loaded http://127.0.0.1:5181/
+20:34:09 file chosen: UoN Closing Logo Fade Blue 2025.mov
+ok S-140__en-GB__w320 5 s: block error [] verdict - create false res none focus body | chosen->outcome 98 ms
+20:34:14 page loaded http://127.0.0.1:5181/
+20:34:14 click #language-switcher input[value="zh-Hans"]
+20:34:14 file chosen: UoN Closing Logo Fade Blue 2025.mov
+ok S-140__zh-Hans__w1280 5 s: block error [] verdict - create false res none focus input | chosen->outcome 97 ms
+20:34:19 page loaded http://127.0.0.1:5181/
+20:34:19 click #language-switcher input[value="zh-Hans"]
+20:34:20 file chosen: UoN Closing Logo Fade Blue 2025.mov
+ok S-140__zh-Hans__w320 5 s: block error [] verdict - create false res none focus input | chosen->outcome 105 ms
+20:34:24 page loaded http://127.0.0.1:5181/
+20:34:25 click #language-switcher input[value="ms-MY"]
+20:34:25 file chosen: UoN Closing Logo Fade Blue 2025.mov
+ok S-140__ms-MY__w1280 5 s: block error [] verdict - create false res none focus input | chosen->outcome 97 ms
+20:34:30 page loaded http://127.0.0.1:5181/
+20:34:30 click #language-switcher input[value="ms-MY"]
+20:34:30 file chosen: UoN Closing Logo Fade Blue 2025.mov
+ok S-140__ms-MY__w320 5 s: block error [] verdict - create false res none focus input | chosen->outcome 99 ms
+20:34:35 page loaded http://127.0.0.1:5181/
+20:34:35 file chosen: qtrle-5s.mov
+ok S-140n__en-GB__w1280 5 s: block error [] verdict - create false res none focus body | chosen->outcome 52 ms
+20:34:40 page loaded http://127.0.0.1:5181/
+20:34:40 file chosen: qtrle-5s.mov
+ok S-140n__en-GB__w320 5 s: block error [] verdict - create false res none focus body | chosen->outcome 48 ms
+20:34:45 page loaded http://127.0.0.1:5181/
+20:34:45 click #language-switcher input[value="zh-Hans"]
+20:34:45 file chosen: qtrle-5s.mov
+ok S-140n__zh-Hans__w1280 5 s: block error [] verdict - create false res none focus input | chosen->outcome 44 ms
+20:34:50 page loaded http://127.0.0.1:5181/
+20:34:50 click #language-switcher input[value="zh-Hans"]
+20:34:50 file chosen: qtrle-5s.mov
+ok S-140n__zh-Hans__w320 5 s: block error [] verdict - create false res none focus input | chosen->outcome 45 ms
+20:34:55 page loaded http://127.0.0.1:5181/
+20:34:55 click #language-switcher input[value="ms-MY"]
+20:34:56 file chosen: qtrle-5s.mov
+ok S-140n__ms-MY__w1280 5 s: block error [] verdict - create false res none focus input | chosen->outcome 44 ms
+20:35:01 page loaded http://127.0.0.1:5181/
+20:35:01 click #language-switcher input[value="ms-MY"]
+20:35:01 file chosen: qtrle-5s.mov
+ok S-140n__ms-MY__w320 5 s: block error [] verdict - create false res none focus input | chosen->outcome 41 ms
+20:35:06 page loaded http://127.0.0.1:5181/
+20:35:06 file chosen: UoN Closing Logo Fade Blue 2025.mov
+20:35:07 click #process-actions button:nth-child(2)
+ok replay-193__en-GB__w1280 720 s: block error [] verdict - create false res none focus body | chosen->outcome 97 ms | bound: the replay did not return in 720 s
+20:47:06 page loaded http://127.0.0.1:5181/
+20:47:06 file chosen: qtrle-5s.mov
+20:47:07 click #process-actions button:nth-child(2)
+ok replay-193n__en-GB__w1280 720 s: block error [] verdict - create false res none focus body | chosen->outcome 44 ms | bound: the replay did not return in 720 s
+done: /private/tmp/claude-501/-Users-joe-Library-CloudStorage-OneDrive-TheUniversityofNottingham--Joe-Bell-UoN-Files-2-Projects-2026-08-24-UoN-Video-Helper/6ea3eaae-a1ff-4360-9ce7-27b129447361/scratchpad/vh214/results
+exit=0

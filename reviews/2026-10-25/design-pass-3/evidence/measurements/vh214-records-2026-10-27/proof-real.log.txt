@@ -1,0 +1,73 @@
+13:46:40 page loaded http://127.0.0.1:5181/
+13:46:40 file chosen: qtrle-5s.mov
+AS EXPECTED refused before Create, N13, en-GB (the declared bound): pass / refused before Create / hang null
+13:46:42 page loaded http://127.0.0.1:5181/
+13:46:42 click #language-switcher input[value="zh-Hans"]
+13:46:42 file chosen: qtrle-5s.mov
+AS EXPECTED refused before Create, N13, zh-Hans (the declared bound): pass / refused before Create / hang null
+13:46:44 page loaded http://127.0.0.1:5181/
+13:46:44 click #language-switcher input[value="ms-MY"]
+13:46:44 file chosen: qtrle-5s.mov
+AS EXPECTED refused before Create, N13, ms-MY (the declared bound): pass / refused before Create / hang null
+13:46:46 page loaded http://127.0.0.1:5181/
+13:46:46 file chosen: UoN Closing Logo Fade Blue 2025.mov
+AS EXPECTED refused before Create, the original asset, en-GB (the declared bound): pass / refused before Create / hang null
+13:46:48 page loaded http://127.0.0.1:5181/
+13:46:48 file chosen: qtrle-5s.mov
+AS EXPECTED the read deadline (380 ms) reached while the page shows the block: the walk's: cannot-determine / refused before Create / hang the walk — the read deadline reached; the page's own log shows "refused before Create" 330 ms before it
+13:46:49 page loaded http://127.0.0.1:5181/
+13:46:49 file chosen: qtrle-5s.mov
+AS EXPECTED the read deadline (3 s) reached with the check held by F14: the page's: fail / null / hang the page — no accepted outcome by the read deadline in the page's own log
+AS EXPECTED the block coming after the read deadline: still the page's: fail / null / hang the page — no accepted outcome by the read deadline in the page's own log; "refused before Create" read later
+AS EXPECTED the boot's own 30 s timeout, not the bound: the walk's: cannot-determine / null / hang the walk — the walk failed in its boot short of the bound: timeout waiting for boot
+13:47:30 page loaded http://127.0.0.1:5181/
+AS EXPECTED nothing kept and no deadline reached (no setup ran): no accepted outcome: fail / null / hang null — no accepted outcome, and no deadline reached
+13:47:31 page loaded http://127.0.0.1:5181/
+13:47:31 file chosen: qtrle-5s.mov
+AS EXPECTED a main thread that never answers, the read deadline 3 s: the page's, ended at the deadline: fail / null / hang the page — the page did not answer at the read deadline
+13:47:47 page loaded http://127.0.0.1:5181/
+13:47:47 file chosen: qtrle-5s.mov
+AS EXPECTED the inner wait's own timeout winning the race at the read deadline (3 s): the expiry, the page's: fail / null / hang the page — no accepted outcome by the read deadline in the page's own log
+13:47:52 page loaded http://127.0.0.1:5181/
+13:47:52 file chosen: qtrle-5s.mov
+AS EXPECTED an outcome after the read deadline (3 s), seen by the read at expiry: late, the page's: fail / null / hang the page — no accepted outcome by the read deadline in the page's own log; "refused before Create" first seen 3055 ms after it
+AS EXPECTED the boot's own deadline (bootMs 2 s), not the bound: the walk's: cannot-determine / null / hang the walk — the walk failed in its boot short of the bound: the boot deadline, 2000 ms, reached
+13:48:02 page loaded http://127.0.0.1:5181/
+13:48:02 file chosen: qtrle-5s.mov
+AS EXPECTED the normal capture unanswered, the read deadline 4 s: the page's, ended at the deadline: fail / null / hang the page — the page did not answer at the read deadline
+13:48:20 page loaded http://127.0.0.1:5181/
+13:48:20 file chosen: qtrle-5s.mov
+AS EXPECTED the recorder's log overflowed before the read deadline (3 s), the block left shown: cannot-determine, the walk's: cannot-determine / null / hang the walk — the read deadline reached; the page's own log overflowed, 42 change(s) dropped, the first observed between -2937 and -2937 ms from the deadline, so no evidence of the state at it
+13:48:24 page loaded http://127.0.0.1:5181/
+13:48:24 file chosen: qtrle-5s.mov
+AS EXPECTED the recorder's log overflowed before the read deadline (3 s), the block left hidden: cannot-determine, the walk's: cannot-determine / null / hang the walk — the read deadline reached; the page's own log overflowed, 41 change(s) dropped, the first observed between -2935 and -2935 ms from the deadline, so no evidence of the state at it
+13:48:28 page loaded http://127.0.0.1:5181/
+13:48:28 file chosen: qtrle-5s.mov
+AS EXPECTED a change made before the read deadline (3 s), first seen after it: ambiguous, cannot-determine, the walk's: cannot-determine / null / hang the walk — ambiguous at the read deadline: "refused before Create" first seen 700 ms after it, the previous observation 299 ms before it
+13:48:33 page loaded http://127.0.0.1:5181/
+13:48:33 file chosen: qtrle-5s.mov
+AS EXPECTED a successful answer taken after the snapshot's bound (300 ms), at the read deadline (2 s) and later: late delivery, cannot-determine, the walk's: cannot-determine / null / hang the walk — the read deadline reached; the page answered the read at it 299 ms before the snapshot's bound ended, and the walk took the answer 100 ms after it, so no evidence dated by the deadline
+13:48:36 page loaded http://127.0.0.1:5181/
+13:48:36 file chosen: qtrle-5s.mov
+AS EXPECTED an already-expired, resolved promise at the snapshot (300 ms), at the read deadline (2 s): late delivery, cannot-determine, the walk's: cannot-determine / null / hang the walk — the read deadline reached; the page answered the read at it 600 ms before the snapshot's bound ended, and the walk took the answer 100 ms after it, so no evidence dated by the deadline
+13:48:40 page loaded http://127.0.0.1:5181/
+AS EXPECTED an error before the read deadline (the declared 330 s): the walk's: cannot-determine / null / hang the walk — the walk failed in its read short of the bound: a stated error in the walk: the file not chosen
+13:48:41 page loaded http://127.0.0.1:5181/
+13:48:41 file chosen: qtrle-5s.mov
+AS EXPECTED the walk's process held past the snapshot's bound (300 ms) with the page's answer waiting, at the read deadline (2 s) and later: late delivery, cannot-determine, the walk's: cannot-determine / null / hang the walk — the read deadline reached; the page answered the read at it 299 ms before the snapshot's bound ended, and the walk took the answer 100 ms after it, so no evidence dated by the deadline
+13:48:45 page loaded http://127.0.0.1:5181/
+13:48:45 file chosen: qtrle-5s.mov
+AS EXPECTED the page's main thread held past the snapshot's bound (300 ms) before it answers, at the read deadline (2 s): a late answer, the page's: fail / null / hang the page — the page did not answer at the read deadline; its answer dated 100 ms after the snapshot's bound
+13:48:49 page loaded http://127.0.0.1:5181/
+13:48:49 file chosen: qtrle-5s.mov
+AS EXPECTED the recorder's log full before the read deadline (3 s), its first dropped change across it: unusable, cannot-determine, the walk's: cannot-determine / null / hang the walk — the read deadline reached; the page's own log overflowed, 1 change(s) dropped, the first observed between -293 and 700 ms from the deadline, so no evidence of the state at it
+13:48:54 page loaded http://127.0.0.1:5181/
+13:48:54 file chosen: qtrle-5s.mov
+AS EXPECTED the recorder's log overflowed only after the read deadline (3 s): usable, judged from the kept log, the block shown before it: the walk's: cannot-determine / refused before Create / hang the walk — the read deadline reached; the page's own log shows "refused before Create" 2952 ms before it
+13:48:58 page loaded http://127.0.0.1:5181/
+13:48:58 file chosen: qtrle-5s.mov
+AS EXPECTED the block hidden before the read deadline (3 s), first seen hidden after it: ambiguous, cannot-determine, the walk's: cannot-determine / null / hang the walk — ambiguous at the read deadline: no accepted outcome first seen 700 ms after it, the previous observation 298 ms before it
+13:49:03 page loaded http://127.0.0.1:5181/
+13:49:03 file chosen: qtrle-5s.mov
+AS EXPECTED an error exactly at the read deadline (3 s): the expiry, judged by the log, the walk's: cannot-determine / refused before Create / hang the walk — the read deadline reached; the page's own log shows "refused before Create" 2939 ms before it
+real: 26 of 26 as expected, 26 planned
