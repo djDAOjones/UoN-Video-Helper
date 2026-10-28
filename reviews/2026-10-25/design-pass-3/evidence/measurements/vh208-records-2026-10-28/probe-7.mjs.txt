@@ -1,0 +1,64 @@
+// VH-208 #7: a read-only probe for Codex's must 4 (blind check): the moved player's keys and rings, 2.4.13 above all,
+// by the walker's own `playerKeys` (phase8.mjs:487), whose rows are PLAYER_KEY_ROWS (:935), on S-135's finished card.
+// Modelled on VH-207's `vh207-probe-trimclear.mjs.txt`: built from the walker's own modules, imported from the walker
+// folder the launcher passes, opened and set up as matrix.mjs's openWalk and record loop do (the three init scripts,
+// watchWorkers, setViewport, withholdFonts, the scenario's setup once per view, then setMode per mode, the state asserted).
+// It changes no walker file and adds no row or instrument: `playerKeys` is called as phase8Instruments calls it, without
+// `run`, so no clip is written. Usage (under the walk lock, Vite on :5181, Chrome on :9251):
+//   CDP_PORT=9251 APP_URL=http://localhost:5181/ FIX=<fixtures> OUT_ROOT=<out> PROBE_OUT=<json> \
+//     node probe-7.mjs --walker <walker dir> --label <label> [--langs en-GB] [--views w1280,w320] [--modes light,dark,forced-light,forced-dark]
+import { pathToFileURL } from 'node:url'
+import { join, resolve } from 'node:path'
+import { writeFileSync } from 'node:fs'
+
+const args = {}
+for (let i = 2; i < process.argv.length; i++) if (process.argv[i].startsWith('--')) args[process.argv[i].slice(2)] = process.argv[++i]
+for (const k of ['CDP_PORT', 'APP_URL', 'FIX', 'OUT_ROOT', 'PROBE_OUT']) if (!process.env[k]) throw new Error('set ' + k)
+if (!args.walker) throw new Error('--walker <walker dir>')
+const walker = resolve(args.walker)
+const mod = (f) => import(pathToFileURL(join(walker, f)).href)
+const { connectBrowser } = await mod('cdp.mjs')
+const { Walk } = await mod('walk.mjs')
+const { QUAL_INIT, VIEWS, setViewport, setMode, withholdFonts, assertReached } = await mod('qualify.mjs')
+const { SCENARIOS, MX_INIT } = await mod('scenarios.mjs')
+const { P8_INIT, watchWorkers, playerKeys, PLAYER_KEY_ROWS } = await mod('phase8.mjs')
+
+const list = (s, d) => (s ?? d).split(',').filter(Boolean)
+const label = args.label ?? 'probe'
+const id = 'S-135'
+const langs = list(args.langs, 'en-GB'), views = list(args.views, 'w1280,w320'), modes = list(args.modes, 'light,dark,forced-light,forced-dark')
+const sc = SCENARIOS[id]
+const browser = await connectBrowser()
+const cells = []
+for (const lang of langs) for (const view of views) {
+  const w = new Walk(browser, `vh208-probe-7/${label}-${id}-${lang}-${view}`)
+  let setupError = null
+  try {
+    await w.open()
+    for (const source of [QUAL_INIT, MX_INIT, P8_INIT]) await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source })
+    await watchWorkers(browser, w)
+    await setViewport(w, view)
+    await withholdFonts(w, false)
+    await sc.setup(w, lang)
+  } catch (e) { setupError = String(e.message ?? e).slice(0, 300) }
+  for (const mode of modes) {
+    const c = { id, lang, view, mode, at: new Date().toISOString() }
+    if (setupError) { c.error = 'setup: ' + setupError; cells.push(c); console.log(JSON.stringify({ ...c })); continue }
+    try {
+      await setMode(w, mode)
+      const v = VIEWS[view]
+      c.reached = await assertReached(w, { lang, mode, state: sc.state, viewport: { w: v.width, h: v.height, dpr: v.deviceScaleFactor } })
+      if (c.reached.outcome === 'pass') c.rows = await playerKeys(w)
+    } catch (e) { c.error = String(e.message ?? e).slice(0, 300) }
+    // The compact reading: each row by name, its control, its outcome, and any user-agent exception the walker marks.
+    c.summary = (c.rows ?? []).map((r) => [r.what, r.control ?? '', r.outcome, r.uaException ? 'UA' : ''].filter(Boolean).join(' | '))
+    c.missingRows = c.rows ? PLAYER_KEY_ROWS.filter((n) => !c.rows.some((r) => r.what === n)) : PLAYER_KEY_ROWS
+    cells.push(c)
+    console.log(JSON.stringify({ id, lang, view, mode, reached: c.reached?.outcome, problems: c.reached?.problems, error: c.error, rows: c.rows?.length ?? 0, missingRows: c.missingRows }))
+  }
+  try { await w.close() } catch {}
+}
+writeFileSync(process.env.PROBE_OUT, JSON.stringify({ label, walker, at: new Date().toISOString(), rowsExpected: PLAYER_KEY_ROWS, cells }, null, 1))
+const whole = cells.every((c) => c.rows?.length && !c.missingRows.length)
+console.log(whole ? 'every cell has its rows' : 'INCOMPLETE: a cell lacks its rows')
+process.exit(whole ? 0 : 1)

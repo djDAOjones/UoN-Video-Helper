@@ -2450,7 +2450,7 @@ Object.assign(SCENARIOS, {
     ...OUTCOME,
     state: `M.finished() && ${WARN_TEXT}.includes(${HEAVY_TITLE}) && ${WARN_TEXT}.includes(${META_TITLE})`,
     setup: async (w, lang) => { await applyFault(w, 'F16'); await finished(w, lang, 'clicks-20s.mp4') },
-    asserts: [X('heavy limiting first, the metadata second, beside the card, not inside it', `${WARN_TEXT}.indexOf(${HEAVY_TITLE}) < ${WARN_TEXT}.indexOf(${META_TITLE}) && !M.text(${JSON.stringify(P8_CARD)}).includes(${META_TITLE})`)],
+    asserts: [X('heavy limiting first, the metadata second, and no notification nested in the card', `${WARN_TEXT}.indexOf(${HEAVY_TITLE}) < ${WARN_TEXT}.indexOf(${META_TITLE}) && !document.querySelector(${JSON.stringify(P8_CARD + ' .notification')})`)],
     focus: [SAVE],
     faults: ['F16'], fixtures: ['clicks-20s.mp4'],
   },
@@ -2842,7 +2842,7 @@ amend('S-90a', { asserts: [X('Video language held with the other locks', `M.el('
 amend('S-91', {
   setup: async (w, lang) => { await applyFault(w, 'F6a'); await applyFault(w, 'F16'); await finished(w, lang, 'lecture-30s.mp4', async () => { await w.select('#closing-type', 'fade'); await w.waitSettled() }); await w.setFiles(F('lecture-60s.mp4')); await w.waitSettled(); await until(w, 'M.verdict()', 'next verdict') },
   faults: ['F6a', 'F16'],
-  asserts: [X('the metadata warning beside the card, not inside it', `!!window.__p8.warnBox() && window.__p8.warnBox().textContent.includes(M.msg('warnings.metadataLost.heading')) && !M.text(${JSON.stringify(P8_CARD)}).includes(M.msg('warnings.metadataLost.heading'))`), RECORD_SHORT],
+  asserts: [X('the metadata warning with the card, and no notification nested in it', `!!window.__p8.warnBox() && window.__p8.warnBox().textContent.includes(M.msg('warnings.metadataLost.heading')) && !document.querySelector(${JSON.stringify(P8_CARD + ' .notification')})`), RECORD_SHORT],
 })
 
 // K-player (new): the player by keys, by the focused accessibility node,

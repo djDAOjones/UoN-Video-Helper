@@ -1,0 +1,829 @@
+[
+ {
+  "walk": "before-1",
+  "runFolder": "vh208-before-a-2026-10-28T10-58-04-288Z-ff934f",
+  "run": "2026-10-28T10-58-04-288Z-ff934f",
+  "source": {
+   "commit": "unknown",
+   "dirty": "unknown",
+   "diffSha256": "2cc1c371db104eb5"
+  },
+  "instrumentRevision": "a3a4267ad47d8bd5",
+  "provenance": {
+   "pinnedAtCreation": true,
+   "created": "2026-10-28T10:58:04.378Z",
+   "resumes": [],
+   "held": true,
+   "problems": [],
+   "recordsOffRevision": 0
+  },
+  "browser": "Chrome/156.0.8078.74",
+  "os": "darwin 25.6.0 arm64",
+  "views": [
+   {
+    "view": "w1280",
+    "actual": {
+     "w": 1280,
+     "h": 900,
+     "dpr": 1
+    },
+    "rootFontPx": 16
+   },
+   {
+    "view": "w320",
+    "actual": {
+     "w": 320,
+     "h": 568,
+     "dpr": 1
+    },
+    "rootFontPx": 16
+   }
+  ],
+  "fixturesPinned": [
+   {
+    "file": "clicks-20s.mp4",
+    "bytes": 6610092,
+    "sha256": "3223521f81f2be81"
+   },
+   {
+    "file": "lecture-60s.mp4",
+    "bytes": 20222028,
+    "sha256": "ce10e0ce0579c4b6"
+   }
+  ],
+  "faults": [
+   "F16",
+   "F4d"
+  ],
+  "coverage": {
+   "expected": 102,
+   "observed": 102,
+   "whole": true,
+   "problems": [],
+   "expectedKeysSha256": "af49feb7f5175011",
+   "observedKeysSha256": "af49feb7f5175011"
+  },
+  "failing": {
+   "overflow": 0,
+   "ax": 0,
+   "targets": 102,
+   "contrastText": 0,
+   "contrastExtra": 0,
+   "measure": 0,
+   "type": 96,
+   "focus": 0,
+   "player": 4,
+   "formatTip": 0,
+   "footer": 0,
+   "limiting": 54,
+   "videoLanguage": 0,
+   "asserts": 0
+  }
+ },
+ {
+  "walk": "before-1",
+  "runFolder": "vh208-before-b-2026-10-28T10-58-09-297Z-2b835c",
+  "run": "2026-10-28T10-58-09-297Z-2b835c",
+  "source": {
+   "commit": "unknown",
+   "dirty": "unknown",
+   "diffSha256": "2cc1c371db104eb5"
+  },
+  "instrumentRevision": "a3a4267ad47d8bd5",
+  "provenance": {
+   "pinnedAtCreation": true,
+   "created": "2026-10-28T10:58:09.381Z",
+   "resumes": [],
+   "held": true,
+   "problems": [],
+   "recordsOffRevision": 0
+  },
+  "browser": "Chrome/156.0.8078.74",
+  "os": "darwin 25.6.0 arm64",
+  "views": [
+   {
+    "view": "w1280",
+    "actual": {
+     "w": 1280,
+     "h": 900,
+     "dpr": 1
+    },
+    "rootFontPx": 16
+   },
+   {
+    "view": "w320",
+    "actual": {
+     "w": 320,
+     "h": 568,
+     "dpr": 1
+    },
+    "rootFontPx": 16
+   }
+  ],
+  "fixturesPinned": [
+   {
+    "file": "clicks-20s.mp4",
+    "bytes": 6610092,
+    "sha256": "3223521f81f2be81"
+   },
+   {
+    "file": "lecture-30s.mp4",
+    "bytes": 10093018,
+    "sha256": "fe66c0ad6bcc160d"
+   }
+  ],
+  "faults": [
+   "F4b",
+   "F16",
+   "F15b"
+  ],
+  "coverage": {
+   "expected": 96,
+   "observed": 96,
+   "whole": true,
+   "problems": [],
+   "expectedKeysSha256": "c3b2acdff1a3991b",
+   "observedKeysSha256": "c3b2acdff1a3991b"
+  },
+  "failing": {
+   "overflow": 0,
+   "ax": 0,
+   "targets": 96,
+   "contrastText": 0,
+   "contrastExtra": 0,
+   "measure": 0,
+   "type": 96,
+   "focus": 0,
+   "player": 24,
+   "formatTip": 0,
+   "footer": 0,
+   "limiting": 48,
+   "videoLanguage": 0,
+   "asserts": 0,
+   "subresults": 0
+  }
+ },
+ {
+  "walk": "before-2-ac",
+  "runFolder": "vh208-before-a-2026-10-28T11-38-40-378Z-61d0a1",
+  "run": "2026-10-28T11-38-40-378Z-61d0a1",
+  "source": {
+   "commit": "unknown",
+   "dirty": "unknown",
+   "diffSha256": "2cc1c371db104eb5"
+  },
+  "instrumentRevision": "a3a4267ad47d8bd5",
+  "provenance": {
+   "pinnedAtCreation": true,
+   "created": "2026-10-28T11:38:40.476Z",
+   "resumes": [],
+   "held": true,
+   "problems": [],
+   "recordsOffRevision": 0
+  },
+  "browser": "Chrome/156.0.8078.74",
+  "os": "darwin 25.6.0 arm64",
+  "views": [
+   {
+    "view": "w1280",
+    "actual": {
+     "w": 1280,
+     "h": 900,
+     "dpr": 1
+    },
+    "rootFontPx": 16
+   },
+   {
+    "view": "w320",
+    "actual": {
+     "w": 320,
+     "h": 568,
+     "dpr": 1
+    },
+    "rootFontPx": 16
+   }
+  ],
+  "fixturesPinned": [
+   {
+    "file": "clicks-20s.mp4",
+    "bytes": 6610092,
+    "sha256": "3223521f81f2be81"
+   },
+   {
+    "file": "lecture-60s.mp4",
+    "bytes": 20222028,
+    "sha256": "ce10e0ce0579c4b6"
+   }
+  ],
+  "faults": [
+   "F16",
+   "F4d"
+  ],
+  "coverage": {
+   "expected": 102,
+   "observed": 102,
+   "whole": true,
+   "problems": [],
+   "expectedKeysSha256": "af49feb7f5175011",
+   "observedKeysSha256": "af49feb7f5175011"
+  },
+  "failing": {
+   "overflow": 0,
+   "ax": 0,
+   "targets": 102,
+   "contrastText": 0,
+   "contrastExtra": 0,
+   "measure": 0,
+   "type": 96,
+   "focus": 0,
+   "player": 24,
+   "formatTip": 0,
+   "footer": 0,
+   "limiting": 54,
+   "videoLanguage": 0,
+   "asserts": 0
+  }
+ },
+ {
+  "walk": "before-2-ac",
+  "runFolder": "vh208-before-b-2026-10-28T11-38-45-372Z-e88638",
+  "run": "2026-10-28T11-38-45-372Z-e88638",
+  "source": {
+   "commit": "unknown",
+   "dirty": "unknown",
+   "diffSha256": "2cc1c371db104eb5"
+  },
+  "instrumentRevision": "a3a4267ad47d8bd5",
+  "provenance": {
+   "pinnedAtCreation": true,
+   "created": "2026-10-28T11:38:45.453Z",
+   "resumes": [],
+   "held": true,
+   "problems": [],
+   "recordsOffRevision": 0
+  },
+  "browser": "Chrome/156.0.8078.74",
+  "os": "darwin 25.6.0 arm64",
+  "views": [
+   {
+    "view": "w1280",
+    "actual": {
+     "w": 1280,
+     "h": 900,
+     "dpr": 1
+    },
+    "rootFontPx": 16
+   },
+   {
+    "view": "w320",
+    "actual": {
+     "w": 320,
+     "h": 568,
+     "dpr": 1
+    },
+    "rootFontPx": 16
+   }
+  ],
+  "fixturesPinned": [
+   {
+    "file": "clicks-20s.mp4",
+    "bytes": 6610092,
+    "sha256": "3223521f81f2be81"
+   },
+   {
+    "file": "lecture-30s.mp4",
+    "bytes": 10093018,
+    "sha256": "fe66c0ad6bcc160d"
+   }
+  ],
+  "faults": [
+   "F4b",
+   "F16",
+   "F15b"
+  ],
+  "coverage": {
+   "expected": 96,
+   "observed": 96,
+   "whole": true,
+   "problems": [],
+   "expectedKeysSha256": "c3b2acdff1a3991b",
+   "observedKeysSha256": "c3b2acdff1a3991b"
+  },
+  "failing": {
+   "overflow": 0,
+   "ax": 0,
+   "targets": 96,
+   "contrastText": 0,
+   "contrastExtra": 0,
+   "measure": 0,
+   "type": 96,
+   "focus": 0,
+   "player": 24,
+   "formatTip": 0,
+   "footer": 0,
+   "limiting": 48,
+   "videoLanguage": 0,
+   "asserts": 0,
+   "subresults": 0
+  }
+ },
+ {
+  "walk": "before-3-ac-lowload",
+  "runFolder": "vh208-before-lowload-2026-10-28T12-16-13-179Z-aca74c",
+  "run": "2026-10-28T12-16-13-179Z-aca74c",
+  "source": {
+   "commit": "unknown",
+   "dirty": "unknown",
+   "diffSha256": "2cc1c371db104eb5"
+  },
+  "instrumentRevision": "a3a4267ad47d8bd5",
+  "provenance": {
+   "pinnedAtCreation": true,
+   "created": "2026-10-28T12:16:13.279Z",
+   "resumes": [],
+   "held": true,
+   "problems": [],
+   "recordsOffRevision": 0
+  },
+  "browser": "Chrome/156.0.8078.74",
+  "os": "darwin 25.6.0 arm64",
+  "views": [
+   {
+    "view": "w1280",
+    "actual": {
+     "w": 1280,
+     "h": 900,
+     "dpr": 1
+    },
+    "rootFontPx": 16
+   },
+   {
+    "view": "w320",
+    "actual": {
+     "w": 320,
+     "h": 568,
+     "dpr": 1
+    },
+    "rootFontPx": 16
+   }
+  ],
+  "fixturesPinned": [
+   {
+    "file": "clicks-20s.mp4",
+    "bytes": 6610092,
+    "sha256": "3223521f81f2be81"
+   },
+   {
+    "file": "lecture-30s.mp4",
+    "bytes": 10093018,
+    "sha256": "fe66c0ad6bcc160d"
+   },
+   {
+    "file": "lecture-60s.mp4",
+    "bytes": 20222028,
+    "sha256": "ce10e0ce0579c4b6"
+   }
+  ],
+  "faults": [
+   "F4b",
+   "F16",
+   "F4d",
+   "F15b"
+  ],
+  "coverage": {
+   "expected": 144,
+   "observed": 144,
+   "whole": true,
+   "problems": [],
+   "expectedKeysSha256": "054b38778970a673",
+   "observedKeysSha256": "054b38778970a673"
+  },
+  "failing": {
+   "overflow": 0,
+   "ax": 0,
+   "targets": 144,
+   "contrastText": 0,
+   "contrastExtra": 0,
+   "measure": 0,
+   "type": 144,
+   "focus": 0,
+   "player": 40,
+   "formatTip": 0,
+   "footer": 0,
+   "limiting": 96,
+   "videoLanguage": 0,
+   "asserts": 0,
+   "subresults": 0
+  }
+ },
+ {
+  "walk": "after-1",
+  "runFolder": "vh208-after-a-2026-10-28T12-46-27-589Z-5a965f",
+  "run": "2026-10-28T12-46-27-589Z-5a965f",
+  "source": {
+   "commit": "a87e0f520f52cd5920f826cbceadec6ef852ffc2",
+   "dirty": true,
+   "diffSha256": "2f010d53d3df39c6"
+  },
+  "instrumentRevision": "a3a4267ad47d8bd5",
+  "provenance": {
+   "pinnedAtCreation": true,
+   "created": "2026-10-28T12:46:27.743Z",
+   "resumes": [],
+   "held": true,
+   "problems": [],
+   "recordsOffRevision": 0
+  },
+  "browser": "Chrome/156.0.8078.74",
+  "os": "darwin 25.6.0 arm64",
+  "views": [
+   {
+    "view": "w1280",
+    "actual": {
+     "w": 1280,
+     "h": 900,
+     "dpr": 1
+    },
+    "rootFontPx": 16
+   },
+   {
+    "view": "w320",
+    "actual": {
+     "w": 320,
+     "h": 568,
+     "dpr": 1
+    },
+    "rootFontPx": 16
+   }
+  ],
+  "fixturesPinned": [
+   {
+    "file": "clicks-20s.mp4",
+    "bytes": 6610092,
+    "sha256": "3223521f81f2be81"
+   },
+   {
+    "file": "lecture-60s.mp4",
+    "bytes": 20222028,
+    "sha256": "ce10e0ce0579c4b6"
+   }
+  ],
+  "faults": [
+   "F16",
+   "F4d"
+  ],
+  "coverage": {
+   "expected": 102,
+   "observed": 102,
+   "whole": true,
+   "problems": [],
+   "expectedKeysSha256": "af49feb7f5175011",
+   "observedKeysSha256": "af49feb7f5175011"
+  },
+  "failing": {
+   "overflow": 0,
+   "ax": 0,
+   "targets": 102,
+   "contrastText": 0,
+   "contrastExtra": 0,
+   "measure": 0,
+   "type": 96,
+   "focus": 0,
+   "player": 20,
+   "formatTip": 0,
+   "footer": 0,
+   "limiting": 0,
+   "videoLanguage": 0,
+   "asserts": 0
+  }
+ },
+ {
+  "walk": "after-2",
+  "runFolder": "vh208-after-s53-2026-10-28T13-43-31-845Z-9ef178",
+  "run": "2026-10-28T13-43-31-845Z-9ef178",
+  "source": {
+   "commit": "a87e0f520f52cd5920f826cbceadec6ef852ffc2",
+   "dirty": true,
+   "diffSha256": "2f010d53d3df39c6"
+  },
+  "instrumentRevision": "a3a4267ad47d8bd5",
+  "provenance": {
+   "pinnedAtCreation": true,
+   "created": "2026-10-28T13:43:31.942Z",
+   "resumes": [],
+   "held": true,
+   "problems": [],
+   "recordsOffRevision": 0
+  },
+  "browser": "Chrome/156.0.8078.74",
+  "os": "darwin 25.6.0 arm64",
+  "views": [
+   {
+    "view": "w1280",
+    "actual": {
+     "w": 1280,
+     "h": 900,
+     "dpr": 1
+    },
+    "rootFontPx": 16
+   },
+   {
+    "view": "w320",
+    "actual": {
+     "w": 320,
+     "h": 568,
+     "dpr": 1
+    },
+    "rootFontPx": 16
+   }
+  ],
+  "fixturesPinned": [
+   {
+    "file": "lecture-30s.mp4",
+    "bytes": 10093018,
+    "sha256": "fe66c0ad6bcc160d"
+   }
+  ],
+  "faults": [],
+  "coverage": {
+   "expected": 15,
+   "observed": 15,
+   "whole": true,
+   "problems": [],
+   "expectedKeysSha256": "9487f074e47feb6b",
+   "observedKeysSha256": "9487f074e47feb6b"
+  },
+  "failing": {
+   "overflow": 0,
+   "ax": 0,
+   "targets": 15,
+   "contrastText": 0,
+   "contrastExtra": 0,
+   "measure": 0,
+   "type": 15,
+   "focus": 0,
+   "player": 0,
+   "formatTip": 0,
+   "footer": 0,
+   "limiting": 0,
+   "videoLanguage": 0,
+   "asserts": 0
+  }
+ },
+ {
+  "walk": "after-3-lowload",
+  "runFolder": "vh208-after-lowload-2026-10-28T13-59-58-548Z-07268c",
+  "run": "2026-10-28T13-59-58-548Z-07268c",
+  "source": {
+   "commit": "a87e0f520f52cd5920f826cbceadec6ef852ffc2",
+   "dirty": true,
+   "diffSha256": "2f010d53d3df39c6"
+  },
+  "instrumentRevision": "a3a4267ad47d8bd5",
+  "provenance": {
+   "pinnedAtCreation": true,
+   "created": "2026-10-28T13:59:58.661Z",
+   "resumes": [],
+   "held": true,
+   "problems": [],
+   "recordsOffRevision": 0
+  },
+  "browser": "Chrome/156.0.8078.74",
+  "os": "darwin 25.6.0 arm64",
+  "views": [
+   {
+    "view": "w1280",
+    "actual": {
+     "w": 1280,
+     "h": 900,
+     "dpr": 1
+    },
+    "rootFontPx": 16
+   },
+   {
+    "view": "w320",
+    "actual": {
+     "w": 320,
+     "h": 568,
+     "dpr": 1
+    },
+    "rootFontPx": 16
+   }
+  ],
+  "fixturesPinned": [
+   {
+    "file": "clicks-20s.mp4",
+    "bytes": 6610092,
+    "sha256": "3223521f81f2be81"
+   },
+   {
+    "file": "lecture-30s.mp4",
+    "bytes": 10093018,
+    "sha256": "fe66c0ad6bcc160d"
+   },
+   {
+    "file": "lecture-60s.mp4",
+    "bytes": 20222028,
+    "sha256": "ce10e0ce0579c4b6"
+   }
+  ],
+  "faults": [
+   "F4b",
+   "F16",
+   "F4d",
+   "F15b"
+  ],
+  "coverage": {
+   "expected": 144,
+   "observed": 144,
+   "whole": true,
+   "problems": [],
+   "expectedKeysSha256": "054b38778970a673",
+   "observedKeysSha256": "054b38778970a673"
+  },
+  "failing": {
+   "overflow": 0,
+   "ax": 0,
+   "targets": 144,
+   "contrastText": 0,
+   "contrastExtra": 0,
+   "measure": 0,
+   "type": 144,
+   "focus": 0,
+   "player": 40,
+   "formatTip": 0,
+   "footer": 0,
+   "limiting": 0,
+   "videoLanguage": 0,
+   "asserts": 0,
+   "subresults": 0
+  }
+ },
+ {
+  "walk": "after-4-lowload",
+  "runFolder": "vh208-after-lowload4-2026-10-28T14-24-30-828Z-c52404",
+  "run": "2026-10-28T14-24-30-828Z-c52404",
+  "source": {
+   "commit": "a87e0f520f52cd5920f826cbceadec6ef852ffc2",
+   "dirty": true,
+   "diffSha256": "2f010d53d3df39c6"
+  },
+  "instrumentRevision": "a3a4267ad47d8bd5",
+  "provenance": {
+   "pinnedAtCreation": true,
+   "created": "2026-10-28T14:24:30.944Z",
+   "resumes": [],
+   "held": true,
+   "problems": [],
+   "recordsOffRevision": 0
+  },
+  "browser": "Chrome/156.0.8078.74",
+  "os": "darwin 25.6.0 arm64",
+  "views": [
+   {
+    "view": "w1280",
+    "actual": {
+     "w": 1280,
+     "h": 900,
+     "dpr": 1
+    },
+    "rootFontPx": 16
+   },
+   {
+    "view": "w320",
+    "actual": {
+     "w": 320,
+     "h": 568,
+     "dpr": 1
+    },
+    "rootFontPx": 16
+   }
+  ],
+  "fixturesPinned": [
+   {
+    "file": "clicks-20s.mp4",
+    "bytes": 6610092,
+    "sha256": "3223521f81f2be81"
+   },
+   {
+    "file": "lecture-30s.mp4",
+    "bytes": 10093018,
+    "sha256": "fe66c0ad6bcc160d"
+   },
+   {
+    "file": "lecture-60s.mp4",
+    "bytes": 20222028,
+    "sha256": "ce10e0ce0579c4b6"
+   }
+  ],
+  "faults": [
+   "F16",
+   "F4d"
+  ],
+  "coverage": {
+   "expected": 17,
+   "observed": 17,
+   "whole": true,
+   "problems": [],
+   "expectedKeysSha256": "03ac66028a1b2b5d",
+   "observedKeysSha256": "03ac66028a1b2b5d"
+  },
+  "failing": {
+   "overflow": 0,
+   "ax": 0,
+   "targets": 17,
+   "contrastText": 0,
+   "contrastExtra": 0,
+   "measure": 0,
+   "type": 17,
+   "focus": 0,
+   "player": 7,
+   "formatTip": 0,
+   "footer": 0,
+   "limiting": 0,
+   "videoLanguage": 0,
+   "asserts": 0
+  }
+ },
+ {
+  "walk": "after-5-lowload",
+  "runFolder": "vh208-after-lowload5-2026-10-28T14-27-52-878Z-2e74b5",
+  "run": "2026-10-28T14-27-52-878Z-2e74b5",
+  "source": {
+   "commit": "a87e0f520f52cd5920f826cbceadec6ef852ffc2",
+   "dirty": true,
+   "diffSha256": "2f010d53d3df39c6"
+  },
+  "instrumentRevision": "a3a4267ad47d8bd5",
+  "provenance": {
+   "pinnedAtCreation": true,
+   "created": "2026-10-28T14:27:52.970Z",
+   "resumes": [],
+   "held": true,
+   "problems": [],
+   "recordsOffRevision": 0
+  },
+  "browser": "Chrome/156.0.8078.74",
+  "os": "darwin 25.6.0 arm64",
+  "views": [
+   {
+    "view": "w320",
+    "actual": {
+     "w": 320,
+     "h": 568,
+     "dpr": 1
+    },
+    "rootFontPx": 16
+   },
+   {
+    "view": "w1280",
+    "actual": {
+     "w": 1280,
+     "h": 900,
+     "dpr": 1
+    },
+    "rootFontPx": 16
+   }
+  ],
+  "fixturesPinned": [
+   {
+    "file": "clicks-20s.mp4",
+    "bytes": 6610092,
+    "sha256": "3223521f81f2be81"
+   },
+   {
+    "file": "lecture-60s.mp4",
+    "bytes": 20222028,
+    "sha256": "ce10e0ce0579c4b6"
+   }
+  ],
+  "faults": [
+   "F16",
+   "F4d"
+  ],
+  "coverage": {
+   "expected": 7,
+   "observed": 7,
+   "whole": true,
+   "problems": [],
+   "expectedKeysSha256": "3d9fe4cdcf74e485",
+   "observedKeysSha256": "3d9fe4cdcf74e485"
+  },
+  "failing": {
+   "overflow": 0,
+   "ax": 0,
+   "targets": 7,
+   "contrastText": 0,
+   "contrastExtra": 0,
+   "measure": 0,
+   "type": 7,
+   "focus": 0,
+   "player": 2,
+   "formatTip": 0,
+   "footer": 0,
+   "limiting": 0,
+   "videoLanguage": 0,
+   "asserts": 0
+  }
+ }
+]

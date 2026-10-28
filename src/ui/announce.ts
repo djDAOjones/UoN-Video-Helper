@@ -36,11 +36,18 @@ export function lossesSpoken(losses: readonly Loss[]): string {
  * Warnings under their panel heading: each one's title, which says the
  * thing; its detail sits in the panel for whoever wants it. Empty when there
  * are none.
+ *
+ * Heavy limiting's detail is said whole after the titles (V-52, VH-208): it
+ * asks for the video to be played before it is saved, and a save takes the
+ * player away (VH-192), so it is advice for now, not later. Chosen by its
+ * code, never its words; every other warning stays its title alone.
  */
 export function warningsSpoken(heading: string, warnings: readonly AudioWarning[]): string {
   if (warnings.length === 0) return ''
   const titles = warnings.map((warning) => warningText(warning).heading)
-  return t().warnings.spoken({ heading, titles: titles.join(t().meta.separators.series) })
+  const line = t().warnings.spoken({ heading, titles: titles.join(t().meta.separators.series) })
+  const heavy = warnings.find((warning) => warning.code === 'heavy-limiting')
+  return heavy ? [line, warningText(heavy).detail].join(sentenceGap()) : line
 }
 
 /** Joins the parts of a spoken announcement that have something to say. */

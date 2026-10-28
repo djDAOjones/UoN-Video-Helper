@@ -1,0 +1,365 @@
+{
+ "at": "2026-10-28T10:38:35.788Z",
+ "results": [
+  {
+   "case": "beside",
+   "spec": {
+    "where": "beside",
+    "wrap": "notification",
+    "order": [
+     "heavy",
+     "meta"
+    ]
+   },
+   "drawn": {
+    "lang": "en-GB",
+    "box": "SECTION beside the card",
+    "nested": false
+   },
+   "scenario": "S-136",
+   "what": "heavy limiting first, the metadata second, and no notification nested in the card",
+   "outcome": "pass",
+   "wanted": "pass",
+   "proved": true,
+   "old": {
+    "outcome": "pass",
+    "expected": "pass",
+    "asExpected": true
+   }
+  },
+  {
+   "case": "beside",
+   "spec": {
+    "where": "beside",
+    "wrap": "notification",
+    "order": [
+     "heavy",
+     "meta"
+    ]
+   },
+   "drawn": {
+    "lang": "en-GB",
+    "box": "SECTION beside the card",
+    "nested": false
+   },
+   "scenario": "S-91",
+   "what": "the metadata warning with the card, and no notification nested in it",
+   "outcome": "pass",
+   "wanted": "pass",
+   "proved": true,
+   "old": {
+    "outcome": "pass",
+    "expected": "pass",
+    "asExpected": true
+   }
+  },
+  {
+   "case": "inside-content-only",
+   "spec": {
+    "where": "inside",
+    "wrap": "div",
+    "order": [
+     "heavy",
+     "meta"
+    ]
+   },
+   "drawn": {
+    "lang": "en-GB",
+    "box": "DIV in the card",
+    "nested": false
+   },
+   "scenario": "S-136",
+   "what": "heavy limiting first, the metadata second, and no notification nested in the card",
+   "outcome": "pass",
+   "wanted": "pass",
+   "proved": true,
+   "old": {
+    "outcome": "fail",
+    "expected": "fail",
+    "asExpected": true
+   }
+  },
+  {
+   "case": "inside-content-only",
+   "spec": {
+    "where": "inside",
+    "wrap": "div",
+    "order": [
+     "heavy",
+     "meta"
+    ]
+   },
+   "drawn": {
+    "lang": "en-GB",
+    "box": "DIV in the card",
+    "nested": false
+   },
+   "scenario": "S-91",
+   "what": "the metadata warning with the card, and no notification nested in it",
+   "outcome": "pass",
+   "wanted": "pass",
+   "proved": true,
+   "old": {
+    "outcome": "fail",
+    "expected": "fail",
+    "asExpected": true
+   }
+  },
+  {
+   "case": "inside-nested-notification",
+   "spec": {
+    "where": "inside",
+    "wrap": "notification",
+    "order": [
+     "heavy",
+     "meta"
+    ]
+   },
+   "drawn": {
+    "lang": "en-GB",
+    "box": "SECTION in the card",
+    "nested": true
+   },
+   "scenario": "S-136",
+   "what": "heavy limiting first, the metadata second, and no notification nested in the card",
+   "outcome": "fail",
+   "wanted": "fail",
+   "proved": true,
+   "old": {
+    "outcome": "fail",
+    "expected": "fail",
+    "asExpected": true
+   }
+  },
+  {
+   "case": "inside-nested-notification",
+   "spec": {
+    "where": "inside",
+    "wrap": "notification",
+    "order": [
+     "heavy",
+     "meta"
+    ]
+   },
+   "drawn": {
+    "lang": "en-GB",
+    "box": "SECTION in the card",
+    "nested": true
+   },
+   "scenario": "S-91",
+   "what": "the metadata warning with the card, and no notification nested in it",
+   "outcome": "fail",
+   "wanted": "fail",
+   "proved": true,
+   "old": {
+    "outcome": "fail",
+    "expected": "fail",
+    "asExpected": true
+   }
+  },
+  {
+   "case": "beside-order-swapped",
+   "spec": {
+    "where": "beside",
+    "wrap": "notification",
+    "order": [
+     "meta",
+     "heavy"
+    ]
+   },
+   "drawn": {
+    "lang": "en-GB",
+    "box": "SECTION beside the card",
+    "nested": false
+   },
+   "scenario": "S-136",
+   "what": "heavy limiting first, the metadata second, and no notification nested in the card",
+   "outcome": "fail",
+   "wanted": "fail",
+   "proved": true,
+   "old": {
+    "outcome": "fail",
+    "expected": "fail",
+    "asExpected": true
+   }
+  },
+  {
+   "case": "beside-order-swapped",
+   "spec": {
+    "where": "beside",
+    "wrap": "notification",
+    "order": [
+     "meta",
+     "heavy"
+    ]
+   },
+   "drawn": {
+    "lang": "en-GB",
+    "box": "SECTION beside the card",
+    "nested": false
+   },
+   "scenario": "S-91",
+   "what": "the metadata warning with the card, and no notification nested in it",
+   "outcome": "pass",
+   "wanted": "pass",
+   "proved": true,
+   "old": {
+    "outcome": "pass",
+    "expected": "pass",
+    "asExpected": true
+   }
+  },
+  {
+   "case": "inside-order-swapped",
+   "spec": {
+    "where": "inside",
+    "wrap": "div",
+    "order": [
+     "meta",
+     "heavy"
+    ]
+   },
+   "drawn": {
+    "lang": "en-GB",
+    "box": "DIV in the card",
+    "nested": false
+   },
+   "scenario": "S-136",
+   "what": "heavy limiting first, the metadata second, and no notification nested in the card",
+   "outcome": "fail",
+   "wanted": "fail",
+   "proved": true,
+   "old": {
+    "outcome": "fail",
+    "expected": "fail",
+    "asExpected": true
+   }
+  },
+  {
+   "case": "inside-order-swapped",
+   "spec": {
+    "where": "inside",
+    "wrap": "div",
+    "order": [
+     "meta",
+     "heavy"
+    ]
+   },
+   "drawn": {
+    "lang": "en-GB",
+    "box": "DIV in the card",
+    "nested": false
+   },
+   "scenario": "S-91",
+   "what": "the metadata warning with the card, and no notification nested in it",
+   "outcome": "pass",
+   "wanted": "pass",
+   "proved": true,
+   "old": {
+    "outcome": "fail",
+    "expected": "fail",
+    "asExpected": true
+   }
+  },
+  {
+   "case": "beside-heavy-only",
+   "spec": {
+    "where": "beside",
+    "wrap": "notification",
+    "order": [
+     "heavy"
+    ]
+   },
+   "drawn": {
+    "lang": "en-GB",
+    "box": "SECTION beside the card",
+    "nested": false
+   },
+   "scenario": "S-136",
+   "what": "heavy limiting first, the metadata second, and no notification nested in the card",
+   "outcome": "fail",
+   "wanted": "fail",
+   "proved": true,
+   "old": {
+    "outcome": "fail",
+    "expected": "fail",
+    "asExpected": true
+   }
+  },
+  {
+   "case": "beside-heavy-only",
+   "spec": {
+    "where": "beside",
+    "wrap": "notification",
+    "order": [
+     "heavy"
+    ]
+   },
+   "drawn": {
+    "lang": "en-GB",
+    "box": "SECTION beside the card",
+    "nested": false
+   },
+   "scenario": "S-91",
+   "what": "the metadata warning with the card, and no notification nested in it",
+   "outcome": "fail",
+   "wanted": "fail",
+   "proved": true,
+   "old": {
+    "outcome": "fail",
+    "expected": "fail",
+    "asExpected": true
+   }
+  },
+  {
+   "case": "inside-heavy-only",
+   "spec": {
+    "where": "inside",
+    "wrap": "div",
+    "order": [
+     "heavy"
+    ]
+   },
+   "drawn": {
+    "lang": "en-GB",
+    "box": "DIV in the card",
+    "nested": false
+   },
+   "scenario": "S-136",
+   "what": "heavy limiting first, the metadata second, and no notification nested in the card",
+   "outcome": "fail",
+   "wanted": "fail",
+   "proved": true,
+   "old": {
+    "outcome": "fail",
+    "expected": "fail",
+    "asExpected": true
+   }
+  },
+  {
+   "case": "inside-heavy-only",
+   "spec": {
+    "where": "inside",
+    "wrap": "div",
+    "order": [
+     "heavy"
+    ]
+   },
+   "drawn": {
+    "lang": "en-GB",
+    "box": "DIV in the card",
+    "nested": false
+   },
+   "scenario": "S-91",
+   "what": "the metadata warning with the card, and no notification nested in it",
+   "outcome": "fail",
+   "wanted": "fail",
+   "proved": true,
+   "old": {
+    "outcome": "fail",
+    "expected": "fail",
+    "asExpected": true
+   }
+  }
+ ]
+}

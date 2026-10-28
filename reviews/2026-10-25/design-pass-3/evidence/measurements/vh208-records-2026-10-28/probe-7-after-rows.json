@@ -1,0 +1,6232 @@
+{
+ "label": "probe-7-after",
+ "walker": "/Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/evidence/measurements/walker",
+ "at": "2026-10-28T16:12:32.228Z",
+ "rowsExpected": [
+  "route forward reaches every control",
+  "Tab after the last control leaves the player",
+  "play/pause by keys",
+  "seek by keys, apart from play",
+  "focus visible (2.4.7)",
+  "focus appearance (2.4.13)",
+  "not hidden by author content (2.4.11, 2.4.12)"
+ ],
+ "cells": [
+  {
+   "id": "S-135",
+   "lang": "en-GB",
+   "view": "w1280",
+   "mode": "light",
+   "at": "2026-10-28T16:10:52.586Z",
+   "reached": {
+    "outcome": "pass",
+    "problems": [],
+    "seen": {
+     "visibility": "visible",
+     "lang": "en-GB",
+     "viewport": {
+      "w": 1280,
+      "h": 900,
+      "dpr": 1
+     },
+     "rootFontPx": 16,
+     "media": {
+      "dark": false,
+      "forced": false,
+      "reducedMotion": false,
+      "coarse": false
+     },
+     "spacing": false,
+     "fonts": [
+      "Lora:loaded"
+     ],
+     "bodyFont": "Arial, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+     "dialog": null,
+     "running": false,
+     "result": true,
+     "statementOpen": false,
+     "fileChosen": true,
+     "kind": "staff",
+     "status": "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard. To reach the usual",
+     "sourceStatus": "Video read.",
+     "active": "section.notification \"Finished video — 7.5 MB\""
+    }
+   },
+   "rows": [
+    {
+     "what": "route forward reaches every control",
+     "outcome": "pass",
+     "placedOn": "the card, by script (setup)",
+     "stops": [
+      {
+       "role": "Video",
+       "name": "Finished video — 7.5 MB",
+       "dom": 130,
+       "ignored": false,
+       "host": true
+      },
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 549,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 556,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 563,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "enter full screen",
+       "dom": 564,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 566,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 568,
+       "ignored": false,
+       "host": false
+      }
+     ],
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "button",
+       "cls": "button",
+       "name": null,
+       "value": null,
+       "card": false
+      },
+      "ax": {
+       "role": "button",
+       "name": "Save the video",
+       "dom": 620,
+       "ignored": false
+      }
+     },
+     "inventory": [
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 549,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 556,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 563,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "enter full screen",
+       "dom": 564,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 566,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 568,
+       "ignored": false
+      }
+     ]
+    },
+    {
+     "what": "Tab after the last control leaves the player",
+     "outcome": "pass",
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "button",
+       "cls": "button",
+       "name": null,
+       "value": null,
+       "card": false
+      },
+      "ax": {
+       "role": "button",
+       "name": "Save the video",
+       "dom": 620,
+       "ignored": false
+      }
+     }
+    },
+    {
+     "what": "Shift+Tab goes back through the controls",
+     "outcome": "pass",
+     "stops": [
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 568,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 566,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "enter full screen",
+       "dom": 564,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 563,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 556,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 549,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "Video",
+       "name": "Finished video — 7.5 MB",
+       "dom": 130,
+       "ignored": false,
+       "host": true
+      }
+     ],
+     "inventory": 6
+    },
+    {
+     "what": "Shift+Tab leaves for the previous real stop, never the card",
+     "outcome": "pass",
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "input",
+       "cls": "",
+       "name": "preset",
+       "value": "best",
+       "card": false
+      },
+      "ax": {
+       "role": "radio",
+       "name": "High quality, for publishing For EchoVideo, YouTube, and similar sites.",
+       "dom": 31,
+       "ignored": false
+      }
+     },
+     "expected": {
+      "id": null,
+      "tag": "input",
+      "name": "preset",
+      "value": "best"
+     }
+    },
+    {
+     "what": "play/pause by keys",
+     "outcome": "pass",
+     "control": {
+      "role": "button",
+      "name": "play",
+      "dom": 549,
+      "ignored": false
+     },
+     "before": {
+      "paused": true,
+      "t": 0.5
+     },
+     "afterSpace": {
+      "paused": false,
+      "t": 1.321
+     },
+     "afterSecondSpace": {
+      "paused": true,
+      "t": 1.343
+     }
+    },
+    {
+     "what": "play/pause state exposed (4.1.2)",
+     "outcome": "pass",
+     "exposed": [
+      {
+       "role": "button",
+       "name": "play"
+      },
+      {
+       "role": "button",
+       "name": "pause"
+      },
+      {
+       "role": "button",
+       "name": "play"
+      }
+     ]
+    },
+    {
+     "what": "seek by keys, apart from play",
+     "outcome": "pass",
+     "control": {
+      "role": "slider",
+      "name": "video time scrubber",
+      "dom": 568,
+      "ignored": false
+     },
+     "before": {
+      "paused": true,
+      "t": 1.343
+     },
+     "after": {
+      "paused": true,
+      "t": 1.584
+     }
+    },
+    {
+     "what": "time slider value exposed (4.1.2)",
+     "outcome": "pass",
+     "exposed": [
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "value": 1.3432300090789795,
+       "valuetext": "1.34323"
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "value": 1.5836299657821655,
+       "valuetext": "1.58363"
+      }
+     ],
+     "media": [
+      1.343,
+      1.584
+     ]
+    },
+    {
+     "what": "notification of these changes (4.1.2)",
+     "outcome": "cannot-determine",
+     "why": "the exposed name and value are read from the tree before and after; whether a change event reaches assistive technology is not observed",
+     "unresolved": "measurement"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "Video \"Finished video — 7.5 MB\"",
+     "host": true,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "Video \"Finished video — 7.5 MB\"",
+     "host": true,
+     "ringPx": {
+      "any": 5267,
+      "at3to1": 5204,
+      "drawnAny": 5267,
+      "drawnAt3to1": 5204
+     },
+     "residualPx": {
+      "any": 0,
+      "at3to1": 0
+     },
+     "onOffPx": 5267
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "pass",
+     "control": "Video \"Finished video — 7.5 MB\"",
+     "host": true,
+     "box": {
+      "w": 825,
+      "h": 464
+     },
+     "areaAt3to1": 5204,
+     "redrawAt3to1": 5204,
+     "perimeter2px": 5140,
+     "bestRatio": 14.93
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"play\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 62,
+      "userAgent": 2,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "button \"play\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-play-button",
+     "ringPx": {
+      "any": 292,
+      "at3to1": 90,
+      "drawnAny": 292,
+      "drawnAt3to1": 90
+     },
+     "residualPx": {
+      "any": 908,
+      "at3to1": 0
+     },
+     "onOffPx": 1200
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "button \"play\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": 90,
+     "redrawAt3to1": 90,
+     "perimeter2px": 368,
+     "bestRatio": 18.26,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-play-button removed 292 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 90 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-play-button removed 292 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "slider \"volume\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "slider \"volume\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-volume-slider",
+     "ringPx": {
+      "any": 378,
+      "at3to1": 102,
+      "drawnAny": 378,
+      "drawnAt3to1": 102
+     },
+     "residualPx": {
+      "any": 1991,
+      "at3to1": 111
+     },
+     "onOffPx": 2369
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "slider \"volume\"",
+     "host": false,
+     "box": {
+      "w": 52,
+      "h": 48
+     },
+     "areaAt3to1": 102,
+     "redrawAt3to1": 219,
+     "perimeter2px": 384,
+     "bestRatio": 17.61,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-volume-slider removed 378 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 102 of 384; the first exception does not hold (an author outline:none on ::-webkit-media-controls-volume-slider removed 378 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"un-mute\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "button \"un-mute\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-mute-button",
+     "ringPx": {
+      "any": 382,
+      "at3to1": 99,
+      "drawnAny": 382,
+      "drawnAt3to1": 99
+     },
+     "residualPx": {
+      "any": 1430,
+      "at3to1": 9
+     },
+     "onOffPx": 1812
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "button \"un-mute\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": 99,
+     "redrawAt3to1": 110,
+     "perimeter2px": 368,
+     "bestRatio": 17.61,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-mute-button removed 382 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 99 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-mute-button removed 382 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"enter full screen\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "button \"enter full screen\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-fullscreen-button",
+     "ringPx": {
+      "any": 384,
+      "at3to1": 96,
+      "drawnAny": 384,
+      "drawnAt3to1": 96
+     },
+     "residualPx": {
+      "any": 1023,
+      "at3to1": 2
+     },
+     "onOffPx": 1407
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "button \"enter full screen\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": 96,
+     "redrawAt3to1": 98,
+     "perimeter2px": 368,
+     "bestRatio": 15.82,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-fullscreen-button removed 384 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 96 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-fullscreen-button removed 384 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"show more media controls\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "cannot-determine",
+     "control": "button \"show more media controls\"",
+     "host": false,
+     "pseudo": "-internal-media-controls-overflow-button",
+     "onOffPx": 1305,
+     "why": "the ring cannot be isolated from the controls' other redraw: no author style reaches ::-internal-media-controls-overflow-button; focused against unfocused differs by 1305 px, the highlight and any disclosure included"
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "fail",
+     "control": "button \"show more media controls\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": null,
+     "redrawAt3to1": 63,
+     "perimeter2px": 368,
+     "bestRatio": 15.82,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": true,
+       "evidence": "no author selector reaches ::-internal-media-controls-overflow-button"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "uaException": "2.4.13's first exception: the user agent's ring, which the author cannot adjust (no author selector reaches ::-internal-media-controls-overflow-button)"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "slider \"video time scrubber\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "slider \"video time scrubber\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-timeline",
+     "ringPx": {
+      "any": 3355,
+      "at3to1": 1783,
+      "drawnAny": 3355,
+      "drawnAt3to1": 1783
+     },
+     "residualPx": {
+      "any": 94,
+      "at3to1": 66
+     },
+     "onOffPx": 3449
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "slider \"video time scrubber\"",
+     "host": false,
+     "box": {
+      "w": 825,
+      "h": 24
+     },
+     "areaAt3to1": 1783,
+     "redrawAt3to1": 1855,
+     "perimeter2px": 3380,
+     "bestRatio": 20.27,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-timeline removed 3355 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 1783 of 3380; the first exception does not hold (an author outline:none on ::-webkit-media-controls-timeline removed 3355 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    }
+   ],
+   "summary": [
+    "route forward reaches every control | pass",
+    "Tab after the last control leaves the player | pass",
+    "Shift+Tab goes back through the controls | pass",
+    "Shift+Tab leaves for the previous real stop, never the card | pass",
+    "play/pause by keys | [object Object] | pass",
+    "play/pause state exposed (4.1.2) | pass",
+    "seek by keys, apart from play | [object Object] | pass",
+    "time slider value exposed (4.1.2) | pass",
+    "notification of these changes (4.1.2) | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | Video \"Finished video — 7.5 MB\" | pass",
+    "focus visible (2.4.7) | Video \"Finished video — 7.5 MB\" | pass",
+    "focus appearance (2.4.13) | Video \"Finished video — 7.5 MB\" | pass",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"play\" | pass",
+    "focus visible (2.4.7) | button \"play\" | pass",
+    "focus appearance (2.4.13) | button \"play\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | slider \"volume\" | pass",
+    "focus visible (2.4.7) | slider \"volume\" | pass",
+    "focus appearance (2.4.13) | slider \"volume\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"un-mute\" | pass",
+    "focus visible (2.4.7) | button \"un-mute\" | pass",
+    "focus appearance (2.4.13) | button \"un-mute\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"enter full screen\" | pass",
+    "focus visible (2.4.7) | button \"enter full screen\" | pass",
+    "focus appearance (2.4.13) | button \"enter full screen\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"show more media controls\" | pass",
+    "focus visible (2.4.7) | button \"show more media controls\" | cannot-determine",
+    "focus appearance (2.4.13) | button \"show more media controls\" | fail | UA",
+    "not hidden by author content (2.4.11, 2.4.12) | slider \"video time scrubber\" | pass",
+    "focus visible (2.4.7) | slider \"video time scrubber\" | pass",
+    "focus appearance (2.4.13) | slider \"video time scrubber\" | cannot-determine"
+   ],
+   "missingRows": []
+  },
+  {
+   "id": "S-135",
+   "lang": "en-GB",
+   "view": "w1280",
+   "mode": "dark",
+   "at": "2026-10-28T16:11:05.327Z",
+   "reached": {
+    "outcome": "pass",
+    "problems": [],
+    "seen": {
+     "visibility": "visible",
+     "lang": "en-GB",
+     "viewport": {
+      "w": 1280,
+      "h": 900,
+      "dpr": 1
+     },
+     "rootFontPx": 16,
+     "media": {
+      "dark": true,
+      "forced": false,
+      "reducedMotion": false,
+      "coarse": false
+     },
+     "spacing": false,
+     "fonts": [
+      "Lora:loaded"
+     ],
+     "bodyFont": "Arial, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+     "dialog": null,
+     "running": false,
+     "result": true,
+     "statementOpen": false,
+     "fileChosen": true,
+     "kind": "staff",
+     "status": "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard. To reach the usual",
+     "sourceStatus": "Video read.",
+     "active": "section.notification \"Finished video — 7.5 MB\""
+    }
+   },
+   "rows": [
+    {
+     "what": "route forward reaches every control",
+     "outcome": "pass",
+     "placedOn": "the card, by script (setup)",
+     "stops": [
+      {
+       "role": "Video",
+       "name": "Finished video — 7.5 MB",
+       "dom": 130,
+       "ignored": false,
+       "host": true
+      },
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 549,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 556,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 563,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "enter full screen",
+       "dom": 564,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 566,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 568,
+       "ignored": false,
+       "host": false
+      }
+     ],
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "button",
+       "cls": "button",
+       "name": null,
+       "value": null,
+       "card": false
+      },
+      "ax": {
+       "role": "button",
+       "name": "Save the video",
+       "dom": 620,
+       "ignored": false
+      }
+     },
+     "inventory": [
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 549,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 556,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 563,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "enter full screen",
+       "dom": 564,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 566,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 568,
+       "ignored": false
+      }
+     ]
+    },
+    {
+     "what": "Tab after the last control leaves the player",
+     "outcome": "pass",
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "button",
+       "cls": "button",
+       "name": null,
+       "value": null,
+       "card": false
+      },
+      "ax": {
+       "role": "button",
+       "name": "Save the video",
+       "dom": 620,
+       "ignored": false
+      }
+     }
+    },
+    {
+     "what": "Shift+Tab goes back through the controls",
+     "outcome": "pass",
+     "stops": [
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 568,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 566,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "enter full screen",
+       "dom": 564,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 563,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 556,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 549,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "Video",
+       "name": "Finished video — 7.5 MB",
+       "dom": 130,
+       "ignored": false,
+       "host": true
+      }
+     ],
+     "inventory": 6
+    },
+    {
+     "what": "Shift+Tab leaves for the previous real stop, never the card",
+     "outcome": "pass",
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "input",
+       "cls": "",
+       "name": "preset",
+       "value": "best",
+       "card": false
+      },
+      "ax": {
+       "role": "radio",
+       "name": "High quality, for publishing For EchoVideo, YouTube, and similar sites.",
+       "dom": 31,
+       "ignored": false
+      }
+     },
+     "expected": {
+      "id": null,
+      "tag": "input",
+      "name": "preset",
+      "value": "best"
+     }
+    },
+    {
+     "what": "play/pause by keys",
+     "outcome": "pass",
+     "control": {
+      "role": "button",
+      "name": "play",
+      "dom": 549,
+      "ignored": false
+     },
+     "before": {
+      "paused": true,
+      "t": 0.5
+     },
+     "afterSpace": {
+      "paused": false,
+      "t": 1.326
+     },
+     "afterSecondSpace": {
+      "paused": true,
+      "t": 1.352
+     }
+    },
+    {
+     "what": "play/pause state exposed (4.1.2)",
+     "outcome": "pass",
+     "exposed": [
+      {
+       "role": "button",
+       "name": "play"
+      },
+      {
+       "role": "button",
+       "name": "pause"
+      },
+      {
+       "role": "button",
+       "name": "play"
+      }
+     ]
+    },
+    {
+     "what": "seek by keys, apart from play",
+     "outcome": "pass",
+     "control": {
+      "role": "slider",
+      "name": "video time scrubber",
+      "dom": 568,
+      "ignored": false
+     },
+     "before": {
+      "paused": true,
+      "t": 1.352
+     },
+     "after": {
+      "paused": true,
+      "t": 1.592
+     }
+    },
+    {
+     "what": "time slider value exposed (4.1.2)",
+     "outcome": "pass",
+     "exposed": [
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "value": 1.3517800569534302,
+       "valuetext": "1.35178"
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "value": 1.5921800136566162,
+       "valuetext": "1.59218"
+      }
+     ],
+     "media": [
+      1.352,
+      1.592
+     ]
+    },
+    {
+     "what": "notification of these changes (4.1.2)",
+     "outcome": "cannot-determine",
+     "why": "the exposed name and value are read from the tree before and after; whether a change event reaches assistive technology is not observed",
+     "unresolved": "measurement"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "Video \"Finished video — 7.5 MB\"",
+     "host": true,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "Video \"Finished video — 7.5 MB\"",
+     "host": true,
+     "ringPx": {
+      "any": 5267,
+      "at3to1": 5204,
+      "drawnAny": 5267,
+      "drawnAt3to1": 5204
+     },
+     "residualPx": {
+      "any": 0,
+      "at3to1": 0
+     },
+     "onOffPx": 5267
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "pass",
+     "control": "Video \"Finished video — 7.5 MB\"",
+     "host": true,
+     "box": {
+      "w": 825,
+      "h": 464
+     },
+     "areaAt3to1": 5204,
+     "redrawAt3to1": 5204,
+     "perimeter2px": 5140,
+     "bestRatio": 11.35
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"play\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 62,
+      "userAgent": 2,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "button \"play\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-play-button",
+     "ringPx": {
+      "any": 294,
+      "at3to1": 238,
+      "drawnAny": 294,
+      "drawnAt3to1": 238
+     },
+     "residualPx": {
+      "any": 908,
+      "at3to1": 0
+     },
+     "onOffPx": 1202
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "button \"play\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": 238,
+     "redrawAt3to1": 238,
+     "perimeter2px": 368,
+     "bestRatio": 19.03,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-play-button removed 294 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 238 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-play-button removed 294 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "slider \"volume\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "slider \"volume\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-volume-slider",
+     "ringPx": {
+      "any": 402,
+      "at3to1": 288,
+      "drawnAny": 402,
+      "drawnAt3to1": 288
+     },
+     "residualPx": {
+      "any": 1977,
+      "at3to1": 102
+     },
+     "onOffPx": 2379
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "slider \"volume\"",
+     "host": false,
+     "box": {
+      "w": 52,
+      "h": 48
+     },
+     "areaAt3to1": 288,
+     "redrawAt3to1": 405,
+     "perimeter2px": 384,
+     "bestRatio": 14.23,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-volume-slider removed 402 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 288 of 384; the first exception does not hold (an author outline:none on ::-webkit-media-controls-volume-slider removed 402 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"un-mute\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "button \"un-mute\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-mute-button",
+     "ringPx": {
+      "any": 385,
+      "at3to1": 234,
+      "drawnAny": 385,
+      "drawnAt3to1": 234
+     },
+     "residualPx": {
+      "any": 1430,
+      "at3to1": 9
+     },
+     "onOffPx": 1815
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "button \"un-mute\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": 234,
+     "redrawAt3to1": 243,
+     "perimeter2px": 368,
+     "bestRatio": 10.15,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-mute-button removed 385 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 234 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-mute-button removed 385 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"enter full screen\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "button \"enter full screen\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-fullscreen-button",
+     "ringPx": {
+      "any": 386,
+      "at3to1": 218,
+      "drawnAny": 386,
+      "drawnAt3to1": 218
+     },
+     "residualPx": {
+      "any": 1023,
+      "at3to1": 2
+     },
+     "onOffPx": 1409
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "button \"enter full screen\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": 218,
+     "redrawAt3to1": 220,
+     "perimeter2px": 368,
+     "bestRatio": 9.15,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-fullscreen-button removed 386 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 218 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-fullscreen-button removed 386 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"show more media controls\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "cannot-determine",
+     "control": "button \"show more media controls\"",
+     "host": false,
+     "pseudo": "-internal-media-controls-overflow-button",
+     "onOffPx": 1307,
+     "why": "the ring cannot be isolated from the controls' other redraw: no author style reaches ::-internal-media-controls-overflow-button; focused against unfocused differs by 1307 px, the highlight and any disclosure included"
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "fail",
+     "control": "button \"show more media controls\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": null,
+     "redrawAt3to1": 168,
+     "perimeter2px": 368,
+     "bestRatio": 10.61,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": true,
+       "evidence": "no author selector reaches ::-internal-media-controls-overflow-button"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "uaException": "2.4.13's first exception: the user agent's ring, which the author cannot adjust (no author selector reaches ::-internal-media-controls-overflow-button)"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "slider \"video time scrubber\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "slider \"video time scrubber\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-timeline",
+     "ringPx": {
+      "any": 3193,
+      "at3to1": 1748,
+      "drawnAny": 3193,
+      "drawnAt3to1": 1748
+     },
+     "residualPx": {
+      "any": 94,
+      "at3to1": 66
+     },
+     "onOffPx": 3287
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "slider \"video time scrubber\"",
+     "host": false,
+     "box": {
+      "w": 825,
+      "h": 24
+     },
+     "areaAt3to1": 1748,
+     "redrawAt3to1": 1818,
+     "perimeter2px": 3380,
+     "bestRatio": 20.27,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-timeline removed 3193 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 1748 of 3380; the first exception does not hold (an author outline:none on ::-webkit-media-controls-timeline removed 3193 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    }
+   ],
+   "summary": [
+    "route forward reaches every control | pass",
+    "Tab after the last control leaves the player | pass",
+    "Shift+Tab goes back through the controls | pass",
+    "Shift+Tab leaves for the previous real stop, never the card | pass",
+    "play/pause by keys | [object Object] | pass",
+    "play/pause state exposed (4.1.2) | pass",
+    "seek by keys, apart from play | [object Object] | pass",
+    "time slider value exposed (4.1.2) | pass",
+    "notification of these changes (4.1.2) | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | Video \"Finished video — 7.5 MB\" | pass",
+    "focus visible (2.4.7) | Video \"Finished video — 7.5 MB\" | pass",
+    "focus appearance (2.4.13) | Video \"Finished video — 7.5 MB\" | pass",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"play\" | pass",
+    "focus visible (2.4.7) | button \"play\" | pass",
+    "focus appearance (2.4.13) | button \"play\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | slider \"volume\" | pass",
+    "focus visible (2.4.7) | slider \"volume\" | pass",
+    "focus appearance (2.4.13) | slider \"volume\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"un-mute\" | pass",
+    "focus visible (2.4.7) | button \"un-mute\" | pass",
+    "focus appearance (2.4.13) | button \"un-mute\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"enter full screen\" | pass",
+    "focus visible (2.4.7) | button \"enter full screen\" | pass",
+    "focus appearance (2.4.13) | button \"enter full screen\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"show more media controls\" | pass",
+    "focus visible (2.4.7) | button \"show more media controls\" | cannot-determine",
+    "focus appearance (2.4.13) | button \"show more media controls\" | fail | UA",
+    "not hidden by author content (2.4.11, 2.4.12) | slider \"video time scrubber\" | pass",
+    "focus visible (2.4.7) | slider \"video time scrubber\" | pass",
+    "focus appearance (2.4.13) | slider \"video time scrubber\" | cannot-determine"
+   ],
+   "missingRows": []
+  },
+  {
+   "id": "S-135",
+   "lang": "en-GB",
+   "view": "w1280",
+   "mode": "forced-light",
+   "at": "2026-10-28T16:11:18.051Z",
+   "reached": {
+    "outcome": "pass",
+    "problems": [],
+    "seen": {
+     "visibility": "visible",
+     "lang": "en-GB",
+     "viewport": {
+      "w": 1280,
+      "h": 900,
+      "dpr": 1
+     },
+     "rootFontPx": 16,
+     "media": {
+      "dark": false,
+      "forced": true,
+      "reducedMotion": false,
+      "coarse": false
+     },
+     "spacing": false,
+     "fonts": [
+      "Lora:loaded"
+     ],
+     "bodyFont": "Arial, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+     "dialog": null,
+     "running": false,
+     "result": true,
+     "statementOpen": false,
+     "fileChosen": true,
+     "kind": "staff",
+     "status": "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard. To reach the usual",
+     "sourceStatus": "Video read.",
+     "active": "section.notification \"Finished video — 7.5 MB\""
+    }
+   },
+   "rows": [
+    {
+     "what": "route forward reaches every control",
+     "outcome": "pass",
+     "placedOn": "the card, by script (setup)",
+     "stops": [
+      {
+       "role": "Video",
+       "name": "Finished video — 7.5 MB",
+       "dom": 130,
+       "ignored": false,
+       "host": true
+      },
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 549,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 556,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 563,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "enter full screen",
+       "dom": 564,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 566,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 568,
+       "ignored": false,
+       "host": false
+      }
+     ],
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "button",
+       "cls": "button",
+       "name": null,
+       "value": null,
+       "card": false
+      },
+      "ax": {
+       "role": "button",
+       "name": "Save the video",
+       "dom": 620,
+       "ignored": false
+      }
+     },
+     "inventory": [
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 549,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 556,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 563,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "enter full screen",
+       "dom": 564,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 566,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 568,
+       "ignored": false
+      }
+     ]
+    },
+    {
+     "what": "Tab after the last control leaves the player",
+     "outcome": "pass",
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "button",
+       "cls": "button",
+       "name": null,
+       "value": null,
+       "card": false
+      },
+      "ax": {
+       "role": "button",
+       "name": "Save the video",
+       "dom": 620,
+       "ignored": false
+      }
+     }
+    },
+    {
+     "what": "Shift+Tab goes back through the controls",
+     "outcome": "pass",
+     "stops": [
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 568,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 566,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "enter full screen",
+       "dom": 564,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 563,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 556,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 549,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "Video",
+       "name": "Finished video — 7.5 MB",
+       "dom": 130,
+       "ignored": false,
+       "host": true
+      }
+     ],
+     "inventory": 6
+    },
+    {
+     "what": "Shift+Tab leaves for the previous real stop, never the card",
+     "outcome": "pass",
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "input",
+       "cls": "",
+       "name": "preset",
+       "value": "best",
+       "card": false
+      },
+      "ax": {
+       "role": "radio",
+       "name": "High quality, for publishing For EchoVideo, YouTube, and similar sites.",
+       "dom": 31,
+       "ignored": false
+      }
+     },
+     "expected": {
+      "id": null,
+      "tag": "input",
+      "name": "preset",
+      "value": "best"
+     }
+    },
+    {
+     "what": "play/pause by keys",
+     "outcome": "pass",
+     "control": {
+      "role": "button",
+      "name": "play",
+      "dom": 549,
+      "ignored": false
+     },
+     "before": {
+      "paused": true,
+      "t": 0.5
+     },
+     "afterSpace": {
+      "paused": false,
+      "t": 1.323
+     },
+     "afterSecondSpace": {
+      "paused": true,
+      "t": 1.349
+     }
+    },
+    {
+     "what": "play/pause state exposed (4.1.2)",
+     "outcome": "pass",
+     "exposed": [
+      {
+       "role": "button",
+       "name": "play"
+      },
+      {
+       "role": "button",
+       "name": "pause"
+      },
+      {
+       "role": "button",
+       "name": "play"
+      }
+     ]
+    },
+    {
+     "what": "seek by keys, apart from play",
+     "outcome": "pass",
+     "control": {
+      "role": "slider",
+      "name": "video time scrubber",
+      "dom": 568,
+      "ignored": false
+     },
+     "before": {
+      "paused": true,
+      "t": 1.349
+     },
+     "after": {
+      "paused": true,
+      "t": 1.59
+     }
+    },
+    {
+     "what": "time slider value exposed (4.1.2)",
+     "outcome": "pass",
+     "exposed": [
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "value": 1.3494900465011597,
+       "valuetext": "1.34949"
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "value": 1.5898900032043457,
+       "valuetext": "1.58989"
+      }
+     ],
+     "media": [
+      1.349,
+      1.59
+     ]
+    },
+    {
+     "what": "notification of these changes (4.1.2)",
+     "outcome": "cannot-determine",
+     "why": "the exposed name and value are read from the tree before and after; whether a change event reaches assistive technology is not observed",
+     "unresolved": "measurement"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "Video \"Finished video — 7.5 MB\"",
+     "host": true,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "Video \"Finished video — 7.5 MB\"",
+     "host": true,
+     "ringPx": {
+      "any": 5206,
+      "at3to1": 5204,
+      "drawnAny": 5206,
+      "drawnAt3to1": 5204
+     },
+     "residualPx": {
+      "any": 0,
+      "at3to1": 0
+     },
+     "onOffPx": 5206
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "pass",
+     "control": "Video \"Finished video — 7.5 MB\"",
+     "host": true,
+     "box": {
+      "w": 825,
+      "h": 464
+     },
+     "areaAt3to1": 5204,
+     "redrawAt3to1": 5204,
+     "perimeter2px": 5140,
+     "bestRatio": 11.31
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"play\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 62,
+      "userAgent": 2,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "button \"play\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-play-button",
+     "ringPx": {
+      "any": 258,
+      "at3to1": 233,
+      "drawnAny": 258,
+      "drawnAt3to1": 233
+     },
+     "residualPx": {
+      "any": 1028,
+      "at3to1": 964
+     },
+     "onOffPx": 1286
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "button \"play\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": 233,
+     "redrawAt3to1": 1197,
+     "perimeter2px": 368,
+     "bestRatio": 21,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-play-button removed 258 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 233 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-play-button removed 258 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "slider \"volume\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "slider \"volume\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-volume-slider",
+     "ringPx": {
+      "any": 302,
+      "at3to1": 286,
+      "drawnAny": 302,
+      "drawnAt3to1": 286
+     },
+     "residualPx": {
+      "any": 276,
+      "at3to1": 266
+     },
+     "onOffPx": 578
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "slider \"volume\"",
+     "host": false,
+     "box": {
+      "w": 52,
+      "h": 48
+     },
+     "areaAt3to1": 286,
+     "redrawAt3to1": 556,
+     "perimeter2px": 384,
+     "bestRatio": 21,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-volume-slider removed 302 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 286 of 384; the first exception does not hold (an author outline:none on ::-webkit-media-controls-volume-slider removed 302 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"un-mute\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "button \"un-mute\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-mute-button",
+     "ringPx": {
+      "any": 296,
+      "at3to1": 282,
+      "drawnAny": 296,
+      "drawnAt3to1": 282
+     },
+     "residualPx": {
+      "any": 20,
+      "at3to1": 20
+     },
+     "onOffPx": 316
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "button \"un-mute\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": 282,
+     "redrawAt3to1": 304,
+     "perimeter2px": 368,
+     "bestRatio": 21,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-mute-button removed 296 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 282 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-mute-button removed 296 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"enter full screen\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "button \"enter full screen\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-fullscreen-button",
+     "ringPx": {
+      "any": 296,
+      "at3to1": 284,
+      "drawnAny": 296,
+      "drawnAt3to1": 284
+     },
+     "residualPx": {
+      "any": 1056,
+      "at3to1": 968
+     },
+     "onOffPx": 1352
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "button \"enter full screen\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": 284,
+     "redrawAt3to1": 1252,
+     "perimeter2px": 368,
+     "bestRatio": 11.31,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-fullscreen-button removed 296 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 284 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-fullscreen-button removed 296 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"show more media controls\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "cannot-determine",
+     "control": "button \"show more media controls\"",
+     "host": false,
+     "pseudo": "-internal-media-controls-overflow-button",
+     "onOffPx": 1296,
+     "why": "the ring cannot be isolated from the controls' other redraw: no author style reaches ::-internal-media-controls-overflow-button; focused against unfocused differs by 1296 px, the highlight and any disclosure included"
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "fail",
+     "control": "button \"show more media controls\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": null,
+     "redrawAt3to1": 1246,
+     "perimeter2px": 368,
+     "bestRatio": 11.31,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": true,
+       "evidence": "no author selector reaches ::-internal-media-controls-overflow-button"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "uaException": "2.4.13's first exception: the user agent's ring, which the author cannot adjust (no author selector reaches ::-internal-media-controls-overflow-button)"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "slider \"video time scrubber\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "slider \"video time scrubber\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-timeline",
+     "ringPx": {
+      "any": 1761,
+      "at3to1": 1738,
+      "drawnAny": 1761,
+      "drawnAt3to1": 1738
+     },
+     "residualPx": {
+      "any": 12,
+      "at3to1": 0
+     },
+     "onOffPx": 1773
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "slider \"video time scrubber\"",
+     "host": false,
+     "box": {
+      "w": 825,
+      "h": 24
+     },
+     "areaAt3to1": 1738,
+     "redrawAt3to1": 1738,
+     "perimeter2px": 3380,
+     "bestRatio": 11.31,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-timeline removed 1761 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 1738 of 3380; the first exception does not hold (an author outline:none on ::-webkit-media-controls-timeline removed 1761 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    }
+   ],
+   "summary": [
+    "route forward reaches every control | pass",
+    "Tab after the last control leaves the player | pass",
+    "Shift+Tab goes back through the controls | pass",
+    "Shift+Tab leaves for the previous real stop, never the card | pass",
+    "play/pause by keys | [object Object] | pass",
+    "play/pause state exposed (4.1.2) | pass",
+    "seek by keys, apart from play | [object Object] | pass",
+    "time slider value exposed (4.1.2) | pass",
+    "notification of these changes (4.1.2) | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | Video \"Finished video — 7.5 MB\" | pass",
+    "focus visible (2.4.7) | Video \"Finished video — 7.5 MB\" | pass",
+    "focus appearance (2.4.13) | Video \"Finished video — 7.5 MB\" | pass",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"play\" | pass",
+    "focus visible (2.4.7) | button \"play\" | pass",
+    "focus appearance (2.4.13) | button \"play\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | slider \"volume\" | pass",
+    "focus visible (2.4.7) | slider \"volume\" | pass",
+    "focus appearance (2.4.13) | slider \"volume\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"un-mute\" | pass",
+    "focus visible (2.4.7) | button \"un-mute\" | pass",
+    "focus appearance (2.4.13) | button \"un-mute\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"enter full screen\" | pass",
+    "focus visible (2.4.7) | button \"enter full screen\" | pass",
+    "focus appearance (2.4.13) | button \"enter full screen\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"show more media controls\" | pass",
+    "focus visible (2.4.7) | button \"show more media controls\" | cannot-determine",
+    "focus appearance (2.4.13) | button \"show more media controls\" | fail | UA",
+    "not hidden by author content (2.4.11, 2.4.12) | slider \"video time scrubber\" | pass",
+    "focus visible (2.4.7) | slider \"video time scrubber\" | pass",
+    "focus appearance (2.4.13) | slider \"video time scrubber\" | cannot-determine"
+   ],
+   "missingRows": []
+  },
+  {
+   "id": "S-135",
+   "lang": "en-GB",
+   "view": "w1280",
+   "mode": "forced-dark",
+   "at": "2026-10-28T16:11:30.636Z",
+   "reached": {
+    "outcome": "pass",
+    "problems": [],
+    "seen": {
+     "visibility": "visible",
+     "lang": "en-GB",
+     "viewport": {
+      "w": 1280,
+      "h": 900,
+      "dpr": 1
+     },
+     "rootFontPx": 16,
+     "media": {
+      "dark": true,
+      "forced": true,
+      "reducedMotion": false,
+      "coarse": false
+     },
+     "spacing": false,
+     "fonts": [
+      "Lora:loaded"
+     ],
+     "bodyFont": "Arial, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+     "dialog": null,
+     "running": false,
+     "result": true,
+     "statementOpen": false,
+     "fileChosen": true,
+     "kind": "staff",
+     "status": "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard. To reach the usual",
+     "sourceStatus": "Video read.",
+     "active": "section.notification \"Finished video — 7.5 MB\""
+    }
+   },
+   "rows": [
+    {
+     "what": "route forward reaches every control",
+     "outcome": "pass",
+     "placedOn": "the card, by script (setup)",
+     "stops": [
+      {
+       "role": "Video",
+       "name": "Finished video — 7.5 MB",
+       "dom": 130,
+       "ignored": false,
+       "host": true
+      },
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 549,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 556,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 563,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "enter full screen",
+       "dom": 564,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 566,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 568,
+       "ignored": false,
+       "host": false
+      }
+     ],
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "button",
+       "cls": "button",
+       "name": null,
+       "value": null,
+       "card": false
+      },
+      "ax": {
+       "role": "button",
+       "name": "Save the video",
+       "dom": 620,
+       "ignored": false
+      }
+     },
+     "inventory": [
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 549,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 556,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 563,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "enter full screen",
+       "dom": 564,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 566,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 568,
+       "ignored": false
+      }
+     ]
+    },
+    {
+     "what": "Tab after the last control leaves the player",
+     "outcome": "pass",
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "button",
+       "cls": "button",
+       "name": null,
+       "value": null,
+       "card": false
+      },
+      "ax": {
+       "role": "button",
+       "name": "Save the video",
+       "dom": 620,
+       "ignored": false
+      }
+     }
+    },
+    {
+     "what": "Shift+Tab goes back through the controls",
+     "outcome": "pass",
+     "stops": [
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 568,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 566,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "enter full screen",
+       "dom": 564,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 563,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 556,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 549,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "Video",
+       "name": "Finished video — 7.5 MB",
+       "dom": 130,
+       "ignored": false,
+       "host": true
+      }
+     ],
+     "inventory": 6
+    },
+    {
+     "what": "Shift+Tab leaves for the previous real stop, never the card",
+     "outcome": "pass",
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "input",
+       "cls": "",
+       "name": "preset",
+       "value": "best",
+       "card": false
+      },
+      "ax": {
+       "role": "radio",
+       "name": "High quality, for publishing For EchoVideo, YouTube, and similar sites.",
+       "dom": 31,
+       "ignored": false
+      }
+     },
+     "expected": {
+      "id": null,
+      "tag": "input",
+      "name": "preset",
+      "value": "best"
+     }
+    },
+    {
+     "what": "play/pause by keys",
+     "outcome": "pass",
+     "control": {
+      "role": "button",
+      "name": "play",
+      "dom": 549,
+      "ignored": false
+     },
+     "before": {
+      "paused": true,
+      "t": 0.5
+     },
+     "afterSpace": {
+      "paused": false,
+      "t": 1.324
+     },
+     "afterSecondSpace": {
+      "paused": true,
+      "t": 1.339
+     }
+    },
+    {
+     "what": "play/pause state exposed (4.1.2)",
+     "outcome": "pass",
+     "exposed": [
+      {
+       "role": "button",
+       "name": "play"
+      },
+      {
+       "role": "button",
+       "name": "pause"
+      },
+      {
+       "role": "button",
+       "name": "play"
+      }
+     ]
+    },
+    {
+     "what": "seek by keys, apart from play",
+     "outcome": "pass",
+     "control": {
+      "role": "slider",
+      "name": "video time scrubber",
+      "dom": 568,
+      "ignored": false
+     },
+     "before": {
+      "paused": true,
+      "t": 1.339
+     },
+     "after": {
+      "paused": true,
+      "t": 1.579
+     }
+    },
+    {
+     "what": "time slider value exposed (4.1.2)",
+     "outcome": "pass",
+     "exposed": [
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "value": 1.3387700319290161,
+       "valuetext": "1.33877"
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "value": 1.5791699886322021,
+       "valuetext": "1.57917"
+      }
+     ],
+     "media": [
+      1.339,
+      1.579
+     ]
+    },
+    {
+     "what": "notification of these changes (4.1.2)",
+     "outcome": "cannot-determine",
+     "why": "the exposed name and value are read from the tree before and after; whether a change event reaches assistive technology is not observed",
+     "unresolved": "measurement"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "Video \"Finished video — 7.5 MB\"",
+     "host": true,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "Video \"Finished video — 7.5 MB\"",
+     "host": true,
+     "ringPx": {
+      "any": 5206,
+      "at3to1": 5204,
+      "drawnAny": 5206,
+      "drawnAt3to1": 5204
+     },
+     "residualPx": {
+      "any": 0,
+      "at3to1": 0
+     },
+     "onOffPx": 5206
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "pass",
+     "control": "Video \"Finished video — 7.5 MB\"",
+     "host": true,
+     "box": {
+      "w": 825,
+      "h": 464
+     },
+     "areaAt3to1": 5204,
+     "redrawAt3to1": 5204,
+     "perimeter2px": 5140,
+     "bestRatio": 9.1
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"play\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 62,
+      "userAgent": 2,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "button \"play\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-play-button",
+     "ringPx": {
+      "any": 288,
+      "at3to1": 52,
+      "drawnAny": 288,
+      "drawnAt3to1": 52
+     },
+     "residualPx": {
+      "any": 1016,
+      "at3to1": 0
+     },
+     "onOffPx": 1304
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "button \"play\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": 52,
+     "redrawAt3to1": 52,
+     "perimeter2px": 368,
+     "bestRatio": 19.03,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-play-button removed 288 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 52 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-play-button removed 288 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "slider \"volume\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "slider \"volume\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-volume-slider",
+     "ringPx": {
+      "any": 390,
+      "at3to1": 32,
+      "drawnAny": 390,
+      "drawnAt3to1": 170
+     },
+     "residualPx": {
+      "any": 1932,
+      "at3to1": 1828
+     },
+     "onOffPx": 2322
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "slider \"volume\"",
+     "host": false,
+     "box": {
+      "w": 52,
+      "h": 48
+     },
+     "areaAt3to1": 32,
+     "redrawAt3to1": 1932,
+     "perimeter2px": 384,
+     "bestRatio": 21,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-volume-slider removed 390 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 32 of 384; the first exception does not hold (an author outline:none on ::-webkit-media-controls-volume-slider removed 390 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"un-mute\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "button \"un-mute\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-mute-button",
+     "ringPx": {
+      "any": 380,
+      "at3to1": 68,
+      "drawnAny": 380,
+      "drawnAt3to1": 138
+     },
+     "residualPx": {
+      "any": 1495,
+      "at3to1": 1469
+     },
+     "onOffPx": 1875
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "button \"un-mute\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": 68,
+     "redrawAt3to1": 1569,
+     "perimeter2px": 368,
+     "bestRatio": 21,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-mute-button removed 380 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 68 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-mute-button removed 380 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"enter full screen\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "button \"enter full screen\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-fullscreen-button",
+     "ringPx": {
+      "any": 384,
+      "at3to1": 104,
+      "drawnAny": 384,
+      "drawnAt3to1": 104
+     },
+     "residualPx": {
+      "any": 1055,
+      "at3to1": 0
+     },
+     "onOffPx": 1439
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "button \"enter full screen\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": 104,
+     "redrawAt3to1": 104,
+     "perimeter2px": 368,
+     "bestRatio": 19.03,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-fullscreen-button removed 384 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 104 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-fullscreen-button removed 384 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"show more media controls\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "cannot-determine",
+     "control": "button \"show more media controls\"",
+     "host": false,
+     "pseudo": "-internal-media-controls-overflow-button",
+     "onOffPx": 1336,
+     "why": "the ring cannot be isolated from the controls' other redraw: no author style reaches ::-internal-media-controls-overflow-button; focused against unfocused differs by 1336 px, the highlight and any disclosure included"
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "fail",
+     "control": "button \"show more media controls\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": null,
+     "redrawAt3to1": 52,
+     "perimeter2px": 368,
+     "bestRatio": 19.03,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": true,
+       "evidence": "no author selector reaches ::-internal-media-controls-overflow-button"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "uaException": "2.4.13's first exception: the user agent's ring, which the author cannot adjust (no author selector reaches ::-internal-media-controls-overflow-button)"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "slider \"video time scrubber\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "slider \"video time scrubber\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-timeline",
+     "ringPx": {
+      "any": 2593,
+      "at3to1": 846,
+      "drawnAny": 2593,
+      "drawnAt3to1": 846
+     },
+     "residualPx": {
+      "any": 12,
+      "at3to1": 0
+     },
+     "onOffPx": 2605
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "slider \"video time scrubber\"",
+     "host": false,
+     "box": {
+      "w": 825,
+      "h": 24
+     },
+     "areaAt3to1": 846,
+     "redrawAt3to1": 846,
+     "perimeter2px": 3380,
+     "bestRatio": 19.03,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-timeline removed 2593 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 846 of 3380; the first exception does not hold (an author outline:none on ::-webkit-media-controls-timeline removed 2593 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    }
+   ],
+   "summary": [
+    "route forward reaches every control | pass",
+    "Tab after the last control leaves the player | pass",
+    "Shift+Tab goes back through the controls | pass",
+    "Shift+Tab leaves for the previous real stop, never the card | pass",
+    "play/pause by keys | [object Object] | pass",
+    "play/pause state exposed (4.1.2) | pass",
+    "seek by keys, apart from play | [object Object] | pass",
+    "time slider value exposed (4.1.2) | pass",
+    "notification of these changes (4.1.2) | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | Video \"Finished video — 7.5 MB\" | pass",
+    "focus visible (2.4.7) | Video \"Finished video — 7.5 MB\" | pass",
+    "focus appearance (2.4.13) | Video \"Finished video — 7.5 MB\" | pass",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"play\" | pass",
+    "focus visible (2.4.7) | button \"play\" | pass",
+    "focus appearance (2.4.13) | button \"play\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | slider \"volume\" | pass",
+    "focus visible (2.4.7) | slider \"volume\" | pass",
+    "focus appearance (2.4.13) | slider \"volume\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"un-mute\" | pass",
+    "focus visible (2.4.7) | button \"un-mute\" | pass",
+    "focus appearance (2.4.13) | button \"un-mute\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"enter full screen\" | pass",
+    "focus visible (2.4.7) | button \"enter full screen\" | pass",
+    "focus appearance (2.4.13) | button \"enter full screen\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"show more media controls\" | pass",
+    "focus visible (2.4.7) | button \"show more media controls\" | cannot-determine",
+    "focus appearance (2.4.13) | button \"show more media controls\" | fail | UA",
+    "not hidden by author content (2.4.11, 2.4.12) | slider \"video time scrubber\" | pass",
+    "focus visible (2.4.7) | slider \"video time scrubber\" | pass",
+    "focus appearance (2.4.13) | slider \"video time scrubber\" | cannot-determine"
+   ],
+   "missingRows": []
+  },
+  {
+   "id": "S-135",
+   "lang": "en-GB",
+   "view": "w320",
+   "mode": "light",
+   "at": "2026-10-28T16:11:48.311Z",
+   "reached": {
+    "outcome": "pass",
+    "problems": [],
+    "seen": {
+     "visibility": "visible",
+     "lang": "en-GB",
+     "viewport": {
+      "w": 320,
+      "h": 568,
+      "dpr": 1
+     },
+     "rootFontPx": 16,
+     "media": {
+      "dark": false,
+      "forced": false,
+      "reducedMotion": false,
+      "coarse": false
+     },
+     "spacing": false,
+     "fonts": [
+      "Lora:loaded"
+     ],
+     "bodyFont": "Arial, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+     "dialog": null,
+     "running": false,
+     "result": true,
+     "statementOpen": false,
+     "fileChosen": true,
+     "kind": "staff",
+     "status": "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard. To reach the usual",
+     "sourceStatus": "Video read.",
+     "active": "section.notification \"Finished video — 7.5 MB\""
+    }
+   },
+   "rows": [
+    {
+     "what": "route forward reaches every control",
+     "outcome": "pass",
+     "placedOn": "the card, by script (setup)",
+     "stops": [
+      {
+       "role": "Video",
+       "name": "Finished video — 7.5 MB",
+       "dom": 114,
+       "ignored": false,
+       "host": true
+      },
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 535,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 542,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 549,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 552,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 554,
+       "ignored": false,
+       "host": false
+      }
+     ],
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "button",
+       "cls": "button",
+       "name": null,
+       "value": null,
+       "card": false
+      },
+      "ax": {
+       "role": "button",
+       "name": "Save the video",
+       "dom": 606,
+       "ignored": false
+      }
+     },
+     "inventory": [
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 535,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 542,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 549,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 552,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 554,
+       "ignored": false
+      }
+     ]
+    },
+    {
+     "what": "Tab after the last control leaves the player",
+     "outcome": "pass",
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "button",
+       "cls": "button",
+       "name": null,
+       "value": null,
+       "card": false
+      },
+      "ax": {
+       "role": "button",
+       "name": "Save the video",
+       "dom": 606,
+       "ignored": false
+      }
+     }
+    },
+    {
+     "what": "Shift+Tab goes back through the controls",
+     "outcome": "pass",
+     "stops": [
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 554,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 552,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 549,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 542,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 535,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "Video",
+       "name": "Finished video — 7.5 MB",
+       "dom": 114,
+       "ignored": false,
+       "host": true
+      }
+     ],
+     "inventory": 5
+    },
+    {
+     "what": "Shift+Tab leaves for the previous real stop, never the card",
+     "outcome": "pass",
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "input",
+       "cls": "",
+       "name": "preset",
+       "value": "best",
+       "card": false
+      },
+      "ax": {
+       "role": "radio",
+       "name": "High quality, for publishing For EchoVideo, YouTube, and similar sites.",
+       "dom": 31,
+       "ignored": false
+      }
+     },
+     "expected": {
+      "id": null,
+      "tag": "input",
+      "name": "preset",
+      "value": "best"
+     }
+    },
+    {
+     "what": "play/pause by keys",
+     "outcome": "pass",
+     "control": {
+      "role": "button",
+      "name": "play",
+      "dom": 535,
+      "ignored": false
+     },
+     "before": {
+      "paused": true,
+      "t": 0.5
+     },
+     "afterSpace": {
+      "paused": false,
+      "t": 1.323
+     },
+     "afterSecondSpace": {
+      "paused": true,
+      "t": 1.35
+     }
+    },
+    {
+     "what": "play/pause state exposed (4.1.2)",
+     "outcome": "pass",
+     "exposed": [
+      {
+       "role": "button",
+       "name": "play"
+      },
+      {
+       "role": "button",
+       "name": "pause"
+      },
+      {
+       "role": "button",
+       "name": "play"
+      }
+     ]
+    },
+    {
+     "what": "seek by keys, apart from play",
+     "outcome": "pass",
+     "control": {
+      "role": "slider",
+      "name": "video time scrubber",
+      "dom": 554,
+      "ignored": false
+     },
+     "before": {
+      "paused": true,
+      "t": 1.35
+     },
+     "after": {
+      "paused": true,
+      "t": 1.591
+     }
+    },
+    {
+     "what": "time slider value exposed (4.1.2)",
+     "outcome": "pass",
+     "exposed": [
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "value": 1.3502099514007568,
+       "valuetext": "1.35021"
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "value": 1.5906100273132324,
+       "valuetext": "1.59061"
+      }
+     ],
+     "media": [
+      1.35,
+      1.591
+     ]
+    },
+    {
+     "what": "notification of these changes (4.1.2)",
+     "outcome": "cannot-determine",
+     "why": "the exposed name and value are read from the tree before and after; whether a change event reaches assistive technology is not observed",
+     "unresolved": "measurement"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "Video \"Finished video — 7.5 MB\"",
+     "host": true,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "Video \"Finished video — 7.5 MB\"",
+     "host": true,
+     "ringPx": {
+      "any": 1268,
+      "at3to1": 1204,
+      "drawnAny": 1268,
+      "drawnAt3to1": 1204
+     },
+     "residualPx": {
+      "any": 0,
+      "at3to1": 0
+     },
+     "onOffPx": 1268
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "pass",
+     "control": "Video \"Finished video — 7.5 MB\"",
+     "host": true,
+     "box": {
+      "w": 185,
+      "h": 104
+     },
+     "areaAt3to1": 1204,
+     "redrawAt3to1": 1204,
+     "perimeter2px": 1140,
+     "bestRatio": 14.93
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"play\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 62,
+      "userAgent": 2,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "button \"play\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-play-button",
+     "ringPx": {
+      "any": 297,
+      "at3to1": 77,
+      "drawnAny": 297,
+      "drawnAt3to1": 77
+     },
+     "residualPx": {
+      "any": 932,
+      "at3to1": 0
+     },
+     "onOffPx": 1229
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "button \"play\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": 77,
+     "redrawAt3to1": 77,
+     "perimeter2px": 368,
+     "bestRatio": 16.53,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-play-button removed 297 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 77 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-play-button removed 297 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "slider \"volume\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "slider \"volume\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-volume-slider",
+     "ringPx": {
+      "any": 391,
+      "at3to1": 98,
+      "drawnAny": 392,
+      "drawnAt3to1": 103
+     },
+     "residualPx": {
+      "any": 2037,
+      "at3to1": 316
+     },
+     "onOffPx": 2428
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "slider \"volume\"",
+     "host": false,
+     "box": {
+      "w": 52,
+      "h": 48
+     },
+     "areaAt3to1": 98,
+     "redrawAt3to1": 446,
+     "perimeter2px": 384,
+     "bestRatio": 19.42,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-volume-slider removed 392 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 98 of 384; the first exception does not hold (an author outline:none on ::-webkit-media-controls-volume-slider removed 392 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"un-mute\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "button \"un-mute\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-mute-button",
+     "ringPx": {
+      "any": 390,
+      "at3to1": 107,
+      "drawnAny": 391,
+      "drawnAt3to1": 109
+     },
+     "residualPx": {
+      "any": 1552,
+      "at3to1": 217
+     },
+     "onOffPx": 1942
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "button \"un-mute\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": 107,
+     "redrawAt3to1": 354,
+     "perimeter2px": 368,
+     "bestRatio": 19.5,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-mute-button removed 391 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 107 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-mute-button removed 391 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"show more media controls\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "cannot-determine",
+     "control": "button \"show more media controls\"",
+     "host": false,
+     "pseudo": "-internal-media-controls-overflow-button",
+     "onOffPx": 1278,
+     "why": "the ring cannot be isolated from the controls' other redraw: no author style reaches ::-internal-media-controls-overflow-button; focused against unfocused differs by 1278 px, the highlight and any disclosure included"
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "fail",
+     "control": "button \"show more media controls\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": null,
+     "redrawAt3to1": 70,
+     "perimeter2px": 368,
+     "bestRatio": 17.61,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": true,
+       "evidence": "no author selector reaches ::-internal-media-controls-overflow-button"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "uaException": "2.4.13's first exception: the user agent's ring, which the author cannot adjust (no author selector reaches ::-internal-media-controls-overflow-button)"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "slider \"video time scrubber\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "slider \"video time scrubber\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-timeline",
+     "ringPx": {
+      "any": 810,
+      "at3to1": 503,
+      "drawnAny": 810,
+      "drawnAt3to1": 503
+     },
+     "residualPx": {
+      "any": 96,
+      "at3to1": 64
+     },
+     "onOffPx": 906
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "slider \"video time scrubber\"",
+     "host": false,
+     "box": {
+      "w": 185,
+      "h": 24
+     },
+     "areaAt3to1": 503,
+     "redrawAt3to1": 575,
+     "perimeter2px": 820,
+     "bestRatio": 20.27,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-timeline removed 810 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 503 of 820; the first exception does not hold (an author outline:none on ::-webkit-media-controls-timeline removed 810 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    }
+   ],
+   "summary": [
+    "route forward reaches every control | pass",
+    "Tab after the last control leaves the player | pass",
+    "Shift+Tab goes back through the controls | pass",
+    "Shift+Tab leaves for the previous real stop, never the card | pass",
+    "play/pause by keys | [object Object] | pass",
+    "play/pause state exposed (4.1.2) | pass",
+    "seek by keys, apart from play | [object Object] | pass",
+    "time slider value exposed (4.1.2) | pass",
+    "notification of these changes (4.1.2) | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | Video \"Finished video — 7.5 MB\" | pass",
+    "focus visible (2.4.7) | Video \"Finished video — 7.5 MB\" | pass",
+    "focus appearance (2.4.13) | Video \"Finished video — 7.5 MB\" | pass",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"play\" | pass",
+    "focus visible (2.4.7) | button \"play\" | pass",
+    "focus appearance (2.4.13) | button \"play\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | slider \"volume\" | pass",
+    "focus visible (2.4.7) | slider \"volume\" | pass",
+    "focus appearance (2.4.13) | slider \"volume\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"un-mute\" | pass",
+    "focus visible (2.4.7) | button \"un-mute\" | pass",
+    "focus appearance (2.4.13) | button \"un-mute\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"show more media controls\" | pass",
+    "focus visible (2.4.7) | button \"show more media controls\" | cannot-determine",
+    "focus appearance (2.4.13) | button \"show more media controls\" | fail | UA",
+    "not hidden by author content (2.4.11, 2.4.12) | slider \"video time scrubber\" | pass",
+    "focus visible (2.4.7) | slider \"video time scrubber\" | pass",
+    "focus appearance (2.4.13) | slider \"video time scrubber\" | cannot-determine"
+   ],
+   "missingRows": []
+  },
+  {
+   "id": "S-135",
+   "lang": "en-GB",
+   "view": "w320",
+   "mode": "dark",
+   "at": "2026-10-28T16:11:59.370Z",
+   "reached": {
+    "outcome": "pass",
+    "problems": [],
+    "seen": {
+     "visibility": "visible",
+     "lang": "en-GB",
+     "viewport": {
+      "w": 320,
+      "h": 568,
+      "dpr": 1
+     },
+     "rootFontPx": 16,
+     "media": {
+      "dark": true,
+      "forced": false,
+      "reducedMotion": false,
+      "coarse": false
+     },
+     "spacing": false,
+     "fonts": [
+      "Lora:loaded"
+     ],
+     "bodyFont": "Arial, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+     "dialog": null,
+     "running": false,
+     "result": true,
+     "statementOpen": false,
+     "fileChosen": true,
+     "kind": "staff",
+     "status": "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard. To reach the usual",
+     "sourceStatus": "Video read.",
+     "active": "section.notification \"Finished video — 7.5 MB\""
+    }
+   },
+   "rows": [
+    {
+     "what": "route forward reaches every control",
+     "outcome": "pass",
+     "placedOn": "the card, by script (setup)",
+     "stops": [
+      {
+       "role": "Video",
+       "name": "Finished video — 7.5 MB",
+       "dom": 114,
+       "ignored": false,
+       "host": true
+      },
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 535,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 542,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 549,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 552,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 554,
+       "ignored": false,
+       "host": false
+      }
+     ],
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "button",
+       "cls": "button",
+       "name": null,
+       "value": null,
+       "card": false
+      },
+      "ax": {
+       "role": "button",
+       "name": "Save the video",
+       "dom": 606,
+       "ignored": false
+      }
+     },
+     "inventory": [
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 535,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 542,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 549,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 552,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 554,
+       "ignored": false
+      }
+     ]
+    },
+    {
+     "what": "Tab after the last control leaves the player",
+     "outcome": "pass",
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "button",
+       "cls": "button",
+       "name": null,
+       "value": null,
+       "card": false
+      },
+      "ax": {
+       "role": "button",
+       "name": "Save the video",
+       "dom": 606,
+       "ignored": false
+      }
+     }
+    },
+    {
+     "what": "Shift+Tab goes back through the controls",
+     "outcome": "pass",
+     "stops": [
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 554,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 552,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 549,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 542,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 535,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "Video",
+       "name": "Finished video — 7.5 MB",
+       "dom": 114,
+       "ignored": false,
+       "host": true
+      }
+     ],
+     "inventory": 5
+    },
+    {
+     "what": "Shift+Tab leaves for the previous real stop, never the card",
+     "outcome": "pass",
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "input",
+       "cls": "",
+       "name": "preset",
+       "value": "best",
+       "card": false
+      },
+      "ax": {
+       "role": "radio",
+       "name": "High quality, for publishing For EchoVideo, YouTube, and similar sites.",
+       "dom": 31,
+       "ignored": false
+      }
+     },
+     "expected": {
+      "id": null,
+      "tag": "input",
+      "name": "preset",
+      "value": "best"
+     }
+    },
+    {
+     "what": "play/pause by keys",
+     "outcome": "pass",
+     "control": {
+      "role": "button",
+      "name": "play",
+      "dom": 535,
+      "ignored": false
+     },
+     "before": {
+      "paused": true,
+      "t": 0.5
+     },
+     "afterSpace": {
+      "paused": false,
+      "t": 1.322
+     },
+     "afterSecondSpace": {
+      "paused": true,
+      "t": 1.355
+     }
+    },
+    {
+     "what": "play/pause state exposed (4.1.2)",
+     "outcome": "pass",
+     "exposed": [
+      {
+       "role": "button",
+       "name": "play"
+      },
+      {
+       "role": "button",
+       "name": "pause"
+      },
+      {
+       "role": "button",
+       "name": "play"
+      }
+     ]
+    },
+    {
+     "what": "seek by keys, apart from play",
+     "outcome": "pass",
+     "control": {
+      "role": "slider",
+      "name": "video time scrubber",
+      "dom": 554,
+      "ignored": false
+     },
+     "before": {
+      "paused": true,
+      "t": 1.355
+     },
+     "after": {
+      "paused": true,
+      "t": 1.595
+     }
+    },
+    {
+     "what": "time slider value exposed (4.1.2)",
+     "outcome": "pass",
+     "exposed": [
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "value": 1.3546600341796875,
+       "valuetext": "1.35466"
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "value": 1.5950599908828735,
+       "valuetext": "1.59506"
+      }
+     ],
+     "media": [
+      1.355,
+      1.595
+     ]
+    },
+    {
+     "what": "notification of these changes (4.1.2)",
+     "outcome": "cannot-determine",
+     "why": "the exposed name and value are read from the tree before and after; whether a change event reaches assistive technology is not observed",
+     "unresolved": "measurement"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "Video \"Finished video — 7.5 MB\"",
+     "host": true,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "Video \"Finished video — 7.5 MB\"",
+     "host": true,
+     "ringPx": {
+      "any": 1268,
+      "at3to1": 1204,
+      "drawnAny": 1268,
+      "drawnAt3to1": 1204
+     },
+     "residualPx": {
+      "any": 0,
+      "at3to1": 0
+     },
+     "onOffPx": 1268
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "pass",
+     "control": "Video \"Finished video — 7.5 MB\"",
+     "host": true,
+     "box": {
+      "w": 185,
+      "h": 104
+     },
+     "areaAt3to1": 1204,
+     "redrawAt3to1": 1204,
+     "perimeter2px": 1140,
+     "bestRatio": 11.35
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"play\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 62,
+      "userAgent": 2,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "button \"play\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-play-button",
+     "ringPx": {
+      "any": 296,
+      "at3to1": 214,
+      "drawnAny": 296,
+      "drawnAt3to1": 214
+     },
+     "residualPx": {
+      "any": 932,
+      "at3to1": 0
+     },
+     "onOffPx": 1228
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "button \"play\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": 214,
+     "redrawAt3to1": 214,
+     "perimeter2px": 368,
+     "bestRatio": 11.49,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-play-button removed 296 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 214 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-play-button removed 296 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "slider \"volume\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "slider \"volume\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-volume-slider",
+     "ringPx": {
+      "any": 390,
+      "at3to1": 210,
+      "drawnAny": 393,
+      "drawnAt3to1": 255
+     },
+     "residualPx": {
+      "any": 2037,
+      "at3to1": 316
+     },
+     "onOffPx": 2427
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "slider \"volume\"",
+     "host": false,
+     "box": {
+      "w": 52,
+      "h": 48
+     },
+     "areaAt3to1": 210,
+     "redrawAt3to1": 551,
+     "perimeter2px": 384,
+     "bestRatio": 19.17,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-volume-slider removed 393 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 210 of 384; the first exception does not hold (an author outline:none on ::-webkit-media-controls-volume-slider removed 393 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"un-mute\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "button \"un-mute\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-mute-button",
+     "ringPx": {
+      "any": 393,
+      "at3to1": 247,
+      "drawnAny": 397,
+      "drawnAt3to1": 265
+     },
+     "residualPx": {
+      "any": 1587,
+      "at3to1": 226
+     },
+     "onOffPx": 1980
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "button \"un-mute\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": 247,
+     "redrawAt3to1": 475,
+     "perimeter2px": 368,
+     "bestRatio": 17.92,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-mute-button removed 397 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 247 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-mute-button removed 397 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"show more media controls\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "cannot-determine",
+     "control": "button \"show more media controls\"",
+     "host": false,
+     "pseudo": "-internal-media-controls-overflow-button",
+     "onOffPx": 1279,
+     "why": "the ring cannot be isolated from the controls' other redraw: no author style reaches ::-internal-media-controls-overflow-button; focused against unfocused differs by 1279 px, the highlight and any disclosure included"
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "fail",
+     "control": "button \"show more media controls\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": null,
+     "redrawAt3to1": 197,
+     "perimeter2px": 368,
+     "bestRatio": 11.07,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": true,
+       "evidence": "no author selector reaches ::-internal-media-controls-overflow-button"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "uaException": "2.4.13's first exception: the user agent's ring, which the author cannot adjust (no author selector reaches ::-internal-media-controls-overflow-button)"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "slider \"video time scrubber\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "slider \"video time scrubber\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-timeline",
+     "ringPx": {
+      "any": 740,
+      "at3to1": 467,
+      "drawnAny": 740,
+      "drawnAt3to1": 467
+     },
+     "residualPx": {
+      "any": 96,
+      "at3to1": 64
+     },
+     "onOffPx": 836
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "slider \"video time scrubber\"",
+     "host": false,
+     "box": {
+      "w": 185,
+      "h": 24
+     },
+     "areaAt3to1": 467,
+     "redrawAt3to1": 538,
+     "perimeter2px": 820,
+     "bestRatio": 20.27,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-timeline removed 740 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 467 of 820; the first exception does not hold (an author outline:none on ::-webkit-media-controls-timeline removed 740 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    }
+   ],
+   "summary": [
+    "route forward reaches every control | pass",
+    "Tab after the last control leaves the player | pass",
+    "Shift+Tab goes back through the controls | pass",
+    "Shift+Tab leaves for the previous real stop, never the card | pass",
+    "play/pause by keys | [object Object] | pass",
+    "play/pause state exposed (4.1.2) | pass",
+    "seek by keys, apart from play | [object Object] | pass",
+    "time slider value exposed (4.1.2) | pass",
+    "notification of these changes (4.1.2) | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | Video \"Finished video — 7.5 MB\" | pass",
+    "focus visible (2.4.7) | Video \"Finished video — 7.5 MB\" | pass",
+    "focus appearance (2.4.13) | Video \"Finished video — 7.5 MB\" | pass",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"play\" | pass",
+    "focus visible (2.4.7) | button \"play\" | pass",
+    "focus appearance (2.4.13) | button \"play\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | slider \"volume\" | pass",
+    "focus visible (2.4.7) | slider \"volume\" | pass",
+    "focus appearance (2.4.13) | slider \"volume\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"un-mute\" | pass",
+    "focus visible (2.4.7) | button \"un-mute\" | pass",
+    "focus appearance (2.4.13) | button \"un-mute\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"show more media controls\" | pass",
+    "focus visible (2.4.7) | button \"show more media controls\" | cannot-determine",
+    "focus appearance (2.4.13) | button \"show more media controls\" | fail | UA",
+    "not hidden by author content (2.4.11, 2.4.12) | slider \"video time scrubber\" | pass",
+    "focus visible (2.4.7) | slider \"video time scrubber\" | pass",
+    "focus appearance (2.4.13) | slider \"video time scrubber\" | cannot-determine"
+   ],
+   "missingRows": []
+  },
+  {
+   "id": "S-135",
+   "lang": "en-GB",
+   "view": "w320",
+   "mode": "forced-light",
+   "at": "2026-10-28T16:12:10.423Z",
+   "reached": {
+    "outcome": "pass",
+    "problems": [],
+    "seen": {
+     "visibility": "visible",
+     "lang": "en-GB",
+     "viewport": {
+      "w": 320,
+      "h": 568,
+      "dpr": 1
+     },
+     "rootFontPx": 16,
+     "media": {
+      "dark": false,
+      "forced": true,
+      "reducedMotion": false,
+      "coarse": false
+     },
+     "spacing": false,
+     "fonts": [
+      "Lora:loaded"
+     ],
+     "bodyFont": "Arial, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+     "dialog": null,
+     "running": false,
+     "result": true,
+     "statementOpen": false,
+     "fileChosen": true,
+     "kind": "staff",
+     "status": "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard. To reach the usual",
+     "sourceStatus": "Video read.",
+     "active": "section.notification \"Finished video — 7.5 MB\""
+    }
+   },
+   "rows": [
+    {
+     "what": "route forward reaches every control",
+     "outcome": "pass",
+     "placedOn": "the card, by script (setup)",
+     "stops": [
+      {
+       "role": "Video",
+       "name": "Finished video — 7.5 MB",
+       "dom": 114,
+       "ignored": false,
+       "host": true
+      },
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 535,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 542,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 549,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 552,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 554,
+       "ignored": false,
+       "host": false
+      }
+     ],
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "button",
+       "cls": "button",
+       "name": null,
+       "value": null,
+       "card": false
+      },
+      "ax": {
+       "role": "button",
+       "name": "Save the video",
+       "dom": 606,
+       "ignored": false
+      }
+     },
+     "inventory": [
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 535,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 542,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 549,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 552,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 554,
+       "ignored": false
+      }
+     ]
+    },
+    {
+     "what": "Tab after the last control leaves the player",
+     "outcome": "pass",
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "button",
+       "cls": "button",
+       "name": null,
+       "value": null,
+       "card": false
+      },
+      "ax": {
+       "role": "button",
+       "name": "Save the video",
+       "dom": 606,
+       "ignored": false
+      }
+     }
+    },
+    {
+     "what": "Shift+Tab goes back through the controls",
+     "outcome": "pass",
+     "stops": [
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 554,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 552,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 549,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 542,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 535,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "Video",
+       "name": "Finished video — 7.5 MB",
+       "dom": 114,
+       "ignored": false,
+       "host": true
+      }
+     ],
+     "inventory": 5
+    },
+    {
+     "what": "Shift+Tab leaves for the previous real stop, never the card",
+     "outcome": "pass",
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "input",
+       "cls": "",
+       "name": "preset",
+       "value": "best",
+       "card": false
+      },
+      "ax": {
+       "role": "radio",
+       "name": "High quality, for publishing For EchoVideo, YouTube, and similar sites.",
+       "dom": 31,
+       "ignored": false
+      }
+     },
+     "expected": {
+      "id": null,
+      "tag": "input",
+      "name": "preset",
+      "value": "best"
+     }
+    },
+    {
+     "what": "play/pause by keys",
+     "outcome": "pass",
+     "control": {
+      "role": "button",
+      "name": "play",
+      "dom": 535,
+      "ignored": false
+     },
+     "before": {
+      "paused": true,
+      "t": 0.5
+     },
+     "afterSpace": {
+      "paused": false,
+      "t": 1.322
+     },
+     "afterSecondSpace": {
+      "paused": true,
+      "t": 1.35
+     }
+    },
+    {
+     "what": "play/pause state exposed (4.1.2)",
+     "outcome": "pass",
+     "exposed": [
+      {
+       "role": "button",
+       "name": "play"
+      },
+      {
+       "role": "button",
+       "name": "pause"
+      },
+      {
+       "role": "button",
+       "name": "play"
+      }
+     ]
+    },
+    {
+     "what": "seek by keys, apart from play",
+     "outcome": "pass",
+     "control": {
+      "role": "slider",
+      "name": "video time scrubber",
+      "dom": 554,
+      "ignored": false
+     },
+     "before": {
+      "paused": true,
+      "t": 1.35
+     },
+     "after": {
+      "paused": true,
+      "t": 1.591
+     }
+    },
+    {
+     "what": "time slider value exposed (4.1.2)",
+     "outcome": "pass",
+     "exposed": [
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "value": 1.3501399755477905,
+       "valuetext": "1.35014"
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "value": 1.5905400514602661,
+       "valuetext": "1.59054"
+      }
+     ],
+     "media": [
+      1.35,
+      1.591
+     ]
+    },
+    {
+     "what": "notification of these changes (4.1.2)",
+     "outcome": "cannot-determine",
+     "why": "the exposed name and value are read from the tree before and after; whether a change event reaches assistive technology is not observed",
+     "unresolved": "measurement"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "Video \"Finished video — 7.5 MB\"",
+     "host": true,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "Video \"Finished video — 7.5 MB\"",
+     "host": true,
+     "ringPx": {
+      "any": 1206,
+      "at3to1": 1204,
+      "drawnAny": 1206,
+      "drawnAt3to1": 1204
+     },
+     "residualPx": {
+      "any": 0,
+      "at3to1": 0
+     },
+     "onOffPx": 1206
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "pass",
+     "control": "Video \"Finished video — 7.5 MB\"",
+     "host": true,
+     "box": {
+      "w": 185,
+      "h": 104
+     },
+     "areaAt3to1": 1204,
+     "redrawAt3to1": 1204,
+     "perimeter2px": 1140,
+     "bestRatio": 11.31
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"play\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 62,
+      "userAgent": 2,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "button \"play\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-play-button",
+     "ringPx": {
+      "any": 248,
+      "at3to1": 228,
+      "drawnAny": 248,
+      "drawnAt3to1": 228
+     },
+     "residualPx": {
+      "any": 1018,
+      "at3to1": 964
+     },
+     "onOffPx": 1266
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "button \"play\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": 228,
+     "redrawAt3to1": 1192,
+     "perimeter2px": 368,
+     "bestRatio": 11.31,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-play-button removed 248 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 228 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-play-button removed 248 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "slider \"volume\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "slider \"volume\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-volume-slider",
+     "ringPx": {
+      "any": 302,
+      "at3to1": 270,
+      "drawnAny": 302,
+      "drawnAt3to1": 286
+     },
+     "residualPx": {
+      "any": 329,
+      "at3to1": 295
+     },
+     "onOffPx": 631
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "slider \"volume\"",
+     "host": false,
+     "box": {
+      "w": 52,
+      "h": 48
+     },
+     "areaAt3to1": 270,
+     "redrawAt3to1": 569,
+     "perimeter2px": 384,
+     "bestRatio": 21,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-volume-slider removed 302 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 270 of 384; the first exception does not hold (an author outline:none on ::-webkit-media-controls-volume-slider removed 302 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"un-mute\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "button \"un-mute\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-mute-button",
+     "ringPx": {
+      "any": 296,
+      "at3to1": 266,
+      "drawnAny": 296,
+      "drawnAt3to1": 282
+     },
+     "residualPx": {
+      "any": 259,
+      "at3to1": 200
+     },
+     "onOffPx": 555
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "button \"un-mute\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": 266,
+     "redrawAt3to1": 468,
+     "perimeter2px": 368,
+     "bestRatio": 21,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-mute-button removed 296 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 266 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-mute-button removed 296 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"show more media controls\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "cannot-determine",
+     "control": "button \"show more media controls\"",
+     "host": false,
+     "pseudo": "-internal-media-controls-overflow-button",
+     "onOffPx": 1296,
+     "why": "the ring cannot be isolated from the controls' other redraw: no author style reaches ::-internal-media-controls-overflow-button; focused against unfocused differs by 1296 px, the highlight and any disclosure included"
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "fail",
+     "control": "button \"show more media controls\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": null,
+     "redrawAt3to1": 1242,
+     "perimeter2px": 368,
+     "bestRatio": 11.31,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": true,
+       "evidence": "no author selector reaches ::-internal-media-controls-overflow-button"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "uaException": "2.4.13's first exception: the user agent's ring, which the author cannot adjust (no author selector reaches ::-internal-media-controls-overflow-button)"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "slider \"video time scrubber\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "slider \"video time scrubber\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-timeline",
+     "ringPx": {
+      "any": 481,
+      "at3to1": 457,
+      "drawnAny": 481,
+      "drawnAt3to1": 457
+     },
+     "residualPx": {
+      "any": 12,
+      "at3to1": 0
+     },
+     "onOffPx": 493
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "slider \"video time scrubber\"",
+     "host": false,
+     "box": {
+      "w": 185,
+      "h": 24
+     },
+     "areaAt3to1": 457,
+     "redrawAt3to1": 457,
+     "perimeter2px": 820,
+     "bestRatio": 11.31,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-timeline removed 481 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 457 of 820; the first exception does not hold (an author outline:none on ::-webkit-media-controls-timeline removed 481 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    }
+   ],
+   "summary": [
+    "route forward reaches every control | pass",
+    "Tab after the last control leaves the player | pass",
+    "Shift+Tab goes back through the controls | pass",
+    "Shift+Tab leaves for the previous real stop, never the card | pass",
+    "play/pause by keys | [object Object] | pass",
+    "play/pause state exposed (4.1.2) | pass",
+    "seek by keys, apart from play | [object Object] | pass",
+    "time slider value exposed (4.1.2) | pass",
+    "notification of these changes (4.1.2) | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | Video \"Finished video — 7.5 MB\" | pass",
+    "focus visible (2.4.7) | Video \"Finished video — 7.5 MB\" | pass",
+    "focus appearance (2.4.13) | Video \"Finished video — 7.5 MB\" | pass",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"play\" | pass",
+    "focus visible (2.4.7) | button \"play\" | pass",
+    "focus appearance (2.4.13) | button \"play\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | slider \"volume\" | pass",
+    "focus visible (2.4.7) | slider \"volume\" | pass",
+    "focus appearance (2.4.13) | slider \"volume\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"un-mute\" | pass",
+    "focus visible (2.4.7) | button \"un-mute\" | pass",
+    "focus appearance (2.4.13) | button \"un-mute\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"show more media controls\" | pass",
+    "focus visible (2.4.7) | button \"show more media controls\" | cannot-determine",
+    "focus appearance (2.4.13) | button \"show more media controls\" | fail | UA",
+    "not hidden by author content (2.4.11, 2.4.12) | slider \"video time scrubber\" | pass",
+    "focus visible (2.4.7) | slider \"video time scrubber\" | pass",
+    "focus appearance (2.4.13) | slider \"video time scrubber\" | cannot-determine"
+   ],
+   "missingRows": []
+  },
+  {
+   "id": "S-135",
+   "lang": "en-GB",
+   "view": "w320",
+   "mode": "forced-dark",
+   "at": "2026-10-28T16:12:21.319Z",
+   "reached": {
+    "outcome": "pass",
+    "problems": [],
+    "seen": {
+     "visibility": "visible",
+     "lang": "en-GB",
+     "viewport": {
+      "w": 320,
+      "h": 568,
+      "dpr": 1
+     },
+     "rootFontPx": 16,
+     "media": {
+      "dark": true,
+      "forced": true,
+      "reducedMotion": false,
+      "coarse": false
+     },
+     "spacing": false,
+     "fonts": [
+      "Lora:loaded"
+     ],
+     "bodyFont": "Arial, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+     "dialog": null,
+     "running": false,
+     "result": true,
+     "statementOpen": false,
+     "fileChosen": true,
+     "kind": "staff",
+     "status": "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard. To reach the usual",
+     "sourceStatus": "Video read.",
+     "active": "section.notification \"Finished video — 7.5 MB\""
+    }
+   },
+   "rows": [
+    {
+     "what": "route forward reaches every control",
+     "outcome": "pass",
+     "placedOn": "the card, by script (setup)",
+     "stops": [
+      {
+       "role": "Video",
+       "name": "Finished video — 7.5 MB",
+       "dom": 114,
+       "ignored": false,
+       "host": true
+      },
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 535,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 542,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 549,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 552,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 554,
+       "ignored": false,
+       "host": false
+      }
+     ],
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "button",
+       "cls": "button",
+       "name": null,
+       "value": null,
+       "card": false
+      },
+      "ax": {
+       "role": "button",
+       "name": "Save the video",
+       "dom": 606,
+       "ignored": false
+      }
+     },
+     "inventory": [
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 535,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 542,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 549,
+       "ignored": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 552,
+       "ignored": false
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 554,
+       "ignored": false
+      }
+     ]
+    },
+    {
+     "what": "Tab after the last control leaves the player",
+     "outcome": "pass",
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "button",
+       "cls": "button",
+       "name": null,
+       "value": null,
+       "card": false
+      },
+      "ax": {
+       "role": "button",
+       "name": "Save the video",
+       "dom": 606,
+       "ignored": false
+      }
+     }
+    },
+    {
+     "what": "Shift+Tab goes back through the controls",
+     "outcome": "pass",
+     "stops": [
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "dom": 554,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "show more media controls",
+       "dom": 552,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "un-mute",
+       "dom": 549,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "slider",
+       "name": "volume",
+       "dom": 542,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "button",
+       "name": "play",
+       "dom": 535,
+       "ignored": false,
+       "host": false
+      },
+      {
+       "role": "Video",
+       "name": "Finished video — 7.5 MB",
+       "dom": 114,
+       "ignored": false,
+       "host": true
+      }
+     ],
+     "inventory": 5
+    },
+    {
+     "what": "Shift+Tab leaves for the previous real stop, never the card",
+     "outcome": "pass",
+     "left": {
+      "active": {
+       "id": null,
+       "tag": "input",
+       "cls": "",
+       "name": "preset",
+       "value": "best",
+       "card": false
+      },
+      "ax": {
+       "role": "radio",
+       "name": "High quality, for publishing For EchoVideo, YouTube, and similar sites.",
+       "dom": 31,
+       "ignored": false
+      }
+     },
+     "expected": {
+      "id": null,
+      "tag": "input",
+      "name": "preset",
+      "value": "best"
+     }
+    },
+    {
+     "what": "play/pause by keys",
+     "outcome": "pass",
+     "control": {
+      "role": "button",
+      "name": "play",
+      "dom": 535,
+      "ignored": false
+     },
+     "before": {
+      "paused": true,
+      "t": 0.5
+     },
+     "afterSpace": {
+      "paused": false,
+      "t": 1.325
+     },
+     "afterSecondSpace": {
+      "paused": true,
+      "t": 1.354
+     }
+    },
+    {
+     "what": "play/pause state exposed (4.1.2)",
+     "outcome": "pass",
+     "exposed": [
+      {
+       "role": "button",
+       "name": "play"
+      },
+      {
+       "role": "button",
+       "name": "pause"
+      },
+      {
+       "role": "button",
+       "name": "play"
+      }
+     ]
+    },
+    {
+     "what": "seek by keys, apart from play",
+     "outcome": "pass",
+     "control": {
+      "role": "slider",
+      "name": "video time scrubber",
+      "dom": 554,
+      "ignored": false
+     },
+     "before": {
+      "paused": true,
+      "t": 1.354
+     },
+     "after": {
+      "paused": true,
+      "t": 1.594
+     }
+    },
+    {
+     "what": "time slider value exposed (4.1.2)",
+     "outcome": "pass",
+     "exposed": [
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "value": 1.3537100553512573,
+       "valuetext": "1.35371"
+      },
+      {
+       "role": "slider",
+       "name": "video time scrubber",
+       "value": 1.5941100120544434,
+       "valuetext": "1.59411"
+      }
+     ],
+     "media": [
+      1.354,
+      1.594
+     ]
+    },
+    {
+     "what": "notification of these changes (4.1.2)",
+     "outcome": "cannot-determine",
+     "why": "the exposed name and value are read from the tree before and after; whether a change event reaches assistive technology is not observed",
+     "unresolved": "measurement"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "Video \"Finished video — 7.5 MB\"",
+     "host": true,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "Video \"Finished video — 7.5 MB\"",
+     "host": true,
+     "ringPx": {
+      "any": 1206,
+      "at3to1": 1204,
+      "drawnAny": 1206,
+      "drawnAt3to1": 1204
+     },
+     "residualPx": {
+      "any": 0,
+      "at3to1": 0
+     },
+     "onOffPx": 1206
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "pass",
+     "control": "Video \"Finished video — 7.5 MB\"",
+     "host": true,
+     "box": {
+      "w": 185,
+      "h": 104
+     },
+     "areaAt3to1": 1204,
+     "redrawAt3to1": 1204,
+     "perimeter2px": 1140,
+     "bestRatio": 9.1
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"play\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 62,
+      "userAgent": 2,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "button \"play\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-play-button",
+     "ringPx": {
+      "any": 288,
+      "at3to1": 52,
+      "drawnAny": 288,
+      "drawnAt3to1": 52
+     },
+     "residualPx": {
+      "any": 1016,
+      "at3to1": 0
+     },
+     "onOffPx": 1304
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "button \"play\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": 52,
+     "redrawAt3to1": 52,
+     "perimeter2px": 368,
+     "bestRatio": 19.03,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-play-button removed 288 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 52 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-play-button removed 288 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "slider \"volume\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "slider \"volume\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-volume-slider",
+     "ringPx": {
+      "any": 390,
+      "at3to1": 43,
+      "drawnAny": 390,
+      "drawnAt3to1": 170
+     },
+     "residualPx": {
+      "any": 1940,
+      "at3to1": 1836
+     },
+     "onOffPx": 2330
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "slider \"volume\"",
+     "host": false,
+     "box": {
+      "w": 52,
+      "h": 48
+     },
+     "areaAt3to1": 43,
+     "redrawAt3to1": 1948,
+     "perimeter2px": 384,
+     "bestRatio": 21,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-volume-slider removed 390 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 43 of 384; the first exception does not hold (an author outline:none on ::-webkit-media-controls-volume-slider removed 390 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"un-mute\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "button \"un-mute\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-mute-button",
+     "ringPx": {
+      "any": 390,
+      "at3to1": 79,
+      "drawnAny": 390,
+      "drawnAt3to1": 138
+     },
+     "residualPx": {
+      "any": 1613,
+      "at3to1": 1587
+     },
+     "onOffPx": 2003
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "button \"un-mute\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": 79,
+     "redrawAt3to1": 1707,
+     "perimeter2px": 368,
+     "bestRatio": 21,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-mute-button removed 390 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 79 of 368; the first exception does not hold (an author outline:none on ::-webkit-media-controls-mute-button removed 390 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "button \"show more media controls\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "cannot-determine",
+     "control": "button \"show more media controls\"",
+     "host": false,
+     "pseudo": "-internal-media-controls-overflow-button",
+     "onOffPx": 1335,
+     "why": "the ring cannot be isolated from the controls' other redraw: no author style reaches ::-internal-media-controls-overflow-button; focused against unfocused differs by 1335 px, the highlight and any disclosure included"
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "fail",
+     "control": "button \"show more media controls\"",
+     "host": false,
+     "box": {
+      "w": 48,
+      "h": 48
+     },
+     "areaAt3to1": null,
+     "redrawAt3to1": 52,
+     "perimeter2px": 368,
+     "bestRatio": 19.03,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": true,
+       "evidence": "no author selector reaches ::-internal-media-controls-overflow-button"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "uaException": "2.4.13's first exception: the user agent's ring, which the author cannot adjust (no author selector reaches ::-internal-media-controls-overflow-button)"
+    },
+    {
+     "what": "not hidden by author content (2.4.11, 2.4.12)",
+     "outcome": "pass",
+     "control": "slider \"video time scrubber\"",
+     "host": false,
+     "coverage": {
+      "samples": 64,
+      "outside": 0,
+      "own": 64,
+      "userAgent": 0,
+      "author": 0,
+      "coveredBy": []
+     }
+    },
+    {
+     "what": "focus visible (2.4.7)",
+     "outcome": "pass",
+     "control": "slider \"video time scrubber\"",
+     "host": false,
+     "pseudo": "-webkit-media-controls-timeline",
+     "ringPx": {
+      "any": 673,
+      "at3to1": 206,
+      "drawnAny": 673,
+      "drawnAt3to1": 206
+     },
+     "residualPx": {
+      "any": 12,
+      "at3to1": 0
+     },
+     "onOffPx": 685
+    },
+    {
+     "what": "focus appearance (2.4.13)",
+     "outcome": "cannot-determine",
+     "control": "slider \"video time scrubber\"",
+     "host": false,
+     "box": {
+      "w": 185,
+      "h": 24
+     },
+     "areaAt3to1": 206,
+     "redrawAt3to1": 206,
+     "perimeter2px": 820,
+     "bestRatio": 19.03,
+     "exceptions": {
+      "userAgentOnly": {
+       "holds": false,
+       "evidence": "an author outline:none on ::-webkit-media-controls-timeline removed 673 px of the ring: the author can adjust it"
+      },
+      "unmodified": {
+       "holds": null,
+       "indicator": true,
+       "indicatorRules": [],
+       "background": false,
+       "backgroundRules": [
+        {
+         "origin": "regular",
+         "selector": ".trim-preview, .result-player",
+         "props": [
+          "background: var(--uon-brand-bg)"
+         ]
+        }
+       ]
+      }
+     },
+     "why": "under 2.4.13's area: the ring's own pixels at 3:1 against unfocused are 206 of 820; the first exception does not hold (an author outline:none on ::-webkit-media-controls-timeline removed 673 px of the ring: the author can adjust it); the second: the ring is unmodified, but the host's backdrop is set by the author (.trim-preview, .result-player { background: var(--uon-brand-bg) }): whether that is the indicator's background is VH-200's",
+     "unresolved": "interpretation"
+    }
+   ],
+   "summary": [
+    "route forward reaches every control | pass",
+    "Tab after the last control leaves the player | pass",
+    "Shift+Tab goes back through the controls | pass",
+    "Shift+Tab leaves for the previous real stop, never the card | pass",
+    "play/pause by keys | [object Object] | pass",
+    "play/pause state exposed (4.1.2) | pass",
+    "seek by keys, apart from play | [object Object] | pass",
+    "time slider value exposed (4.1.2) | pass",
+    "notification of these changes (4.1.2) | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | Video \"Finished video — 7.5 MB\" | pass",
+    "focus visible (2.4.7) | Video \"Finished video — 7.5 MB\" | pass",
+    "focus appearance (2.4.13) | Video \"Finished video — 7.5 MB\" | pass",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"play\" | pass",
+    "focus visible (2.4.7) | button \"play\" | pass",
+    "focus appearance (2.4.13) | button \"play\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | slider \"volume\" | pass",
+    "focus visible (2.4.7) | slider \"volume\" | pass",
+    "focus appearance (2.4.13) | slider \"volume\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"un-mute\" | pass",
+    "focus visible (2.4.7) | button \"un-mute\" | pass",
+    "focus appearance (2.4.13) | button \"un-mute\" | cannot-determine",
+    "not hidden by author content (2.4.11, 2.4.12) | button \"show more media controls\" | pass",
+    "focus visible (2.4.7) | button \"show more media controls\" | cannot-determine",
+    "focus appearance (2.4.13) | button \"show more media controls\" | fail | UA",
+    "not hidden by author content (2.4.11, 2.4.12) | slider \"video time scrubber\" | pass",
+    "focus visible (2.4.7) | slider \"video time scrubber\" | pass",
+    "focus appearance (2.4.13) | slider \"video time scrubber\" | cannot-determine"
+   ],
+   "missingRows": []
+  }
+ ]
+}

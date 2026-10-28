@@ -1,0 +1,52 @@
+// VH-208 #5: extract, from one walk folder, the readings the VH-208 table cites, one JSON file per scenario.
+// Usage: node extract-5.mjs <walk folder> <label> <out dir>   (reads <walk>/runs/*/S-*.json, their captures/*__ax.json, <walk>/runs/vh208-geometry-*.jsonl, <walk>/conditions.txt)
+// Per cell: status, revision, timing, faults; every instrument's outcome; the limiting, asserts, player and focus rows;
+// overflow's counts; the probe's read (painted order, places, card height, nesting, first screen); and the "6." step's
+// accessibility-tree order, walked depth first from the capture (siblings in the capture's order). Screenshots stay out.
+import fs from 'node:fs'; import path from 'node:path'
+const [walk, label, out] = process.argv.slice(2)
+const runs = path.join(walk, 'runs'); fs.mkdirSync(out, { recursive: true })
+const geo = new Map()
+for (const f of fs.readdirSync(runs)) if (/^vh208-geometry-.*\.jsonl$/.test(f))
+  for (const l of fs.readFileSync(path.join(runs, f), 'utf8').split('\n').filter(Boolean)) { const g = JSON.parse(l); geo.set(`${g.id}__${g.lang}__${g.walk.split('-').pop()}__${g.mode}`, g) }
+function axCreate(file) {
+  if (!fs.existsSync(file)) return null
+  const a = JSON.parse(fs.readFileSync(file)); const by = new Map(a.map((n) => [n.id, n])); const kids = new Map()
+  for (const n of a) if (n.parent) { if (!kids.has(n.parent)) kids.set(n.parent, []); kids.get(n.parent).push(n) }
+  const step = a.find((n) => n.role === 'region' && !n.ignored && /^6[.．]/.test(n.name)); if (!step) return null
+  const lines = [`region: ${step.name}`]
+  const walkN = (n, d) => { for (const c of kids.get(n.id) || []) {
+    if (c.ignored) { walkN(c, d); continue }
+    const r = c.role, p = by.get(c.parent)?.role
+    const skip = (r === 'StaticText' && p !== 'paragraph') || !['region', 'heading', 'paragraph', 'Video', 'button', 'list', 'listitem', 'link', 'status', 'alert', 'StaticText', 'checkbox'].includes(r)
+      || (r === 'button' && /^(play|pause|mute|unmute|enter full screen|exit full screen|show more media controls)$/.test(c.name))
+    if (!skip) lines.push(`${'  '.repeat(d + 1)}${r}${c.name ? ': ' + c.name.slice(0, 80) : ''}`)
+    walkN(c, d + (!skip && ['region', 'list', 'listitem'].includes(r) ? 1 : 0)) } }
+  walkN(step, 0); return lines
+}
+const pick = (o, ks) => o && Object.fromEntries(ks.filter((k) => k in o).map((k) => [k, o[k]]))
+const by = {}
+for (const d of fs.readdirSync(runs)) { const dir = path.join(runs, d); if (!fs.statSync(dir).isDirectory()) continue
+  for (const f of fs.readdirSync(dir).filter((x) => /^S-.*\.json$/.test(x)).sort()) {
+    const r = JSON.parse(fs.readFileSync(path.join(dir, f))); const I = r.instruments || {}
+    const g = geo.get(r.key)
+    // the completion's write is kept once per cell, as liveWrite; a row that read the same text says "liveWrite"
+    const liveWrite = I.limiting?.items?.find((i) => i.completion?.text)?.completion.text ?? null
+    const same = (t) => (t && t === liveWrite ? 'liveWrite' : t)
+    const lim = I.limiting?.items?.map((i) => ({ what: i.what, outcome: i.outcome, ...(i.why ? { why: i.why } : {}), ...(i.titles ? { titles: i.titles } : {}), ...(i.completion?.text ? { completion: same(i.completion.text) } : {}) }))
+    ;(by[r.id] ||= []).push({ key: r.key, run: r.runId, revision: r.revision, status: r.status, attempt: r.attempt, timing: r.timing, faults: r.faults,
+      outcomes: Object.fromEntries(Object.entries(I).map(([k, v]) => [k, v?.outcome])),
+      liveWrite, limiting: lim, asserts: I.asserts?.items?.map((i) => ({ ...pick(i, ['what', 'outcome', 'why']), ...(i.said ? { said: same(i.said) } : {}) })),
+      player: I.player?.items?.map((i) => pick(i, ['what', 'outcome', 'why'])),
+      focus: I.focus?.items?.map((i) => pick(i, ['sel', 'outcome', 'focusVisible', 'controlPx', 'areaAt3to1', 'perimeter2px', 'bestRatio'])),
+      overflow: pick(I.overflow, ['outcome', 'hscroll', 'scrollWidth', 'clientWidth', 'offenderCount', 'clippedCount', 'spillCount', 'scrollCount']),
+      probe: g ? pick(g, ['at', 'viewport', 'scrollY', 'active', 'activeIsCard', 'named', 'order', 'cardHeight', 'warnBoxWhere', 'warningsFromCardTop', 'warningsTitleWithinOneScreenOfCardTop', 'saveFromCardTop', 'nestedNotification']) : null,
+      axCreate: axCreate(path.join(dir, 'captures', `${r.key}__ax.json`)),
+      captures: { ax: I.ax?.nodes?.sha256 ?? null, mutations: r.exposure?.mutations ? pick(r.exposure.mutations, ['sha256', 'entries']) : null } }) } }
+const cond = fs.existsSync(path.join(walk, 'conditions.txt')) ? fs.readFileSync(path.join(walk, 'conditions.txt'), 'utf8').split('\n').filter(Boolean) : []
+for (const [id, cells] of Object.entries(by)) {
+  cells.sort((x, y) => x.key.localeCompare(y.key))
+  // one cell per line
+  const head = JSON.stringify({ label, walk: path.basename(walk), conditions: cond, scenario: id }, null, 1).replace(/\n}$/, ',\n "cells": [\n')
+  fs.writeFileSync(path.join(out, `${label}-${id}.json`), head + cells.map((c) => '  ' + JSON.stringify(c)).join(',\n') + '\n ]\n}\n')
+  console.log(`${label}-${id}.json ${cells.length} cells, ${cells.filter((c) => c.probe).length} probe reads, ${cells.filter((c) => c.axCreate).length} ax reads`) }

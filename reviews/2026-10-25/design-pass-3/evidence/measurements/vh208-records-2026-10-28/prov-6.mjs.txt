@@ -1,0 +1,12 @@
+// VH-208 #6: each run's provenance, from the runner's own manifest.json, for the table's records folder.
+// Usage: node prov-6.mjs <out.json> <walk folder> …   (reads <walk>/runs/*/manifest.json; writes one JSON file)
+import fs from 'node:fs'; import path from 'node:path'
+const [out, ...walks] = process.argv.slice(2); const all = []
+for (const walk of walks) for (const d of fs.readdirSync(path.join(walk, 'runs')).sort()) {
+  const f = path.join(walk, 'runs', d, 'manifest.json'); if (!fs.existsSync(f)) continue
+  const m = JSON.parse(fs.readFileSync(f)); const c = m.coverage || {}
+  all.push({ walk: path.basename(walk), runFolder: d, run: m.run, source: m.source, instrumentRevision: m.instruments?.revision, provenance: m.provenance,
+    browser: m.browser, os: m.os, views: m.views, fixturesPinned: m.fixturesPinned, faults: m.faults,
+    coverage: { expected: c.expected, observed: c.observed, whole: c.whole, problems: c.problems, expectedKeysSha256: c.expectedKeysSha256, observedKeysSha256: c.observedKeysSha256 },
+    failing: m.measurements?.failing }) }
+fs.writeFileSync(out, JSON.stringify(all, null, 1) + '\n'); console.log(`${all.length} runs → ${out}`)

@@ -3317,9 +3317,9 @@ function renderResult(kept: RetainedResult): HTMLElement {
   // One success notification (VH-124): the title, the job's own record —
   // fixed when it ended (A-05), since two outputs of one recording can differ
   // in trim, output and closing — a closing that did not land as chosen, the
-  // lifetime, and Save as its action. Built once here, and its words written
-  // by `paint` below: now, and again on a change of language, without the
-  // Save closure or its state being rebuilt (VH-105).
+  // output's warnings, the lifetime, and Save as its action. Built once here,
+  // and its words written by `paint` below: now, and again on a change of
+  // language, without the Save closure or its state being rebuilt (VH-105).
   const heading = notification({ kind: 'success', title: '', lines: ['', '', ''] })
   const [title, recordLine, endedLine, differsLine] = heading.querySelectorAll('p')
   // Where focus lands when the job finishes, "Keep it" restores this, or
@@ -3330,12 +3330,15 @@ function renderResult(kept: RetainedResult): HTMLElement {
   // The leave warning catches a reload; it cannot catch a crash or a
   // discarded tab, which is why the sentence is here. Gone once it is saved.
   const lifetime = body('')
+  // The output's warnings after the card's lines and before the player and
+  // Save, so the advice to play it before saving comes before both (V-52,
+  // VH-208): the card's own content, a region named by its title, never a
+  // notification nested in it, which drew two rails (VH-150).
+  const resultWarnings = document.createElement('div')
+  heading.append(resultWarnings)
   // The player after the card's lines, before the lifetime and Save: the
   // owner's 2A (VH-192).
   heading.append(resultPlayerFor(kept, title?.id ?? ''), lifetime)
-  // The output's warnings beside the result's notification, never inside it:
-  // one notification nested in another drew two rails (VH-150).
-  const resultWarnings = document.createElement('div')
   /** Which lifetime sentence stands: until saved, or — after a download — until the next video. */
   let lifetimeOf: 'unsaved' | 'delivered' = kept.delivered ? 'delivered' : 'unsaved'
 
@@ -3372,9 +3375,13 @@ function renderResult(kept: RetainedResult): HTMLElement {
     }
     lifetime.textContent =
       lifetimeOf === 'unsaved' ? t().result.lifetime : t().result.lifetimeDelivered
-    renderWarnings(resultWarnings, kept.warnings, { heading: t().warnings.finishedHeading, reassure: false })
+    renderWarnings(resultWarnings, kept.warnings, {
+      heading: t().warnings.finishedHeading,
+      reassure: false,
+      contentOnly: true,
+    })
     save.textContent = saved ? t().create.saved : t().create.save
-    if (!heading.isConnected) processResult.replaceChildren(heading, resultWarnings)
+    if (!heading.isConnected) processResult.replaceChildren(heading)
   }
   show(processResult, paint)
 

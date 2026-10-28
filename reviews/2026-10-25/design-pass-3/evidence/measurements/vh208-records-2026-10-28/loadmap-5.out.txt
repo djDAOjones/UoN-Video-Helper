@@ -1,0 +1,24 @@
+S-135 after-1 <8 19 ≥8 8 | after-3-lowload <8 24 ≥8 0
+S-136 after-1 <8 23 ≥8 4 | after-3-lowload <8 20 ≥8 4
+S-137 after-1 <8 24 ≥8 0
+S-138 after-1 <8 17 ≥8 7 | after-3-lowload <8 0 ≥8 24 | after-4-lowload <8 5 ≥8 2 | after-5-lowload <8 2 ≥8 0
+S-151 after-1 <8 16 ≥8 8 | after-3-lowload <8 0 ≥8 24 | after-4-lowload <8 3 ≥8 5 | after-5-lowload <8 5 ≥8 0
+S-131 after-1 <8 21 ≥8 3 | after-3-lowload <8 10 ≥8 14
+S-152 after-1 <8 20 ≥8 4 | after-3-lowload <8 20 ≥8 4
+S-53 after-1 <8 6 ≥8 4 | after-2 <8 13 ≥8 2 | after-4-lowload <8 2 ≥8 0
+
+high in every run: S-138__ms-MY__w1280__dark {"before-2-ac":9.15,"before-3-ac-lowload":10.6}
+high in every run: S-138__ms-MY__w1280__forced-light {"before-2-ac":9.15,"before-3-ac-lowload":10.6}
+high in every run: S-138__ms-MY__w1280__forced-dark {"before-2-ac":9.15,"before-3-ac-lowload":8.55}
+high in every run: S-131__zh-Hans__w320__light {"before-2-ac":14.17,"before-3-ac-lowload":9.37}
+high in every run: S-131__zh-Hans__w320__dark {"before-2-ac":14.17,"before-3-ac-lowload":9.37}
+high in every run: S-131__zh-Hans__w320__forced-light {"before-2-ac":14.17,"before-3-ac-lowload":9.37}
+high in every run: S-131__zh-Hans__w320__forced-dark {"before-2-ac":14.17,"before-3-ac-lowload":9.37}
+S-135 before-2-ac <8 14 ≥8 13 | before-3-ac-lowload <8 24 ≥8 0
+S-136 before-2-ac <8 6 ≥8 21 | before-3-ac-lowload <8 24 ≥8 0
+S-137 before-2-ac <8 0 ≥8 24
+S-138 before-2-ac <8 8 ≥8 16 | before-3-ac-lowload <8 16 ≥8 8
+S-151 before-2-ac <8 12 ≥8 12 | before-3-ac-lowload <8 24 ≥8 0
+S-131 before-2-ac <8 2 ≥8 22 | before-3-ac-lowload <8 20 ≥8 4
+S-152 before-2-ac <8 3 ≥8 21 | before-3-ac-lowload <8 24 ≥8 0
+S-53 before-2-ac <8 20 ≥8 4

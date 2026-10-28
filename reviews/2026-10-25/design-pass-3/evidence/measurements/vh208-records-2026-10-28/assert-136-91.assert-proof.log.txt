@@ -1,0 +1,22 @@
+10:38:30 page loaded http://localhost:5181/
+PROVED  S-136 on beside: pass (wanted pass); old pass (expected pass); box SECTION beside the card; nested false
+PROVED  S-91 on beside: pass (wanted pass); old pass (expected pass); box SECTION beside the card; nested false
+10:38:31 page loaded http://localhost:5181/
+PROVED  S-136 on inside-content-only: pass (wanted pass); old fail (expected fail); box DIV in the card; nested false
+PROVED  S-91 on inside-content-only: pass (wanted pass); old fail (expected fail); box DIV in the card; nested false
+10:38:32 page loaded http://localhost:5181/
+PROVED  S-136 on inside-nested-notification: fail (wanted fail); old fail (expected fail); box SECTION in the card; nested true
+PROVED  S-91 on inside-nested-notification: fail (wanted fail); old fail (expected fail); box SECTION in the card; nested true
+10:38:33 page loaded http://localhost:5181/
+PROVED  S-136 on beside-order-swapped: fail (wanted fail); old fail (expected fail); box SECTION beside the card; nested false
+PROVED  S-91 on beside-order-swapped: pass (wanted pass); old pass (expected pass); box SECTION beside the card; nested false
+10:38:33 page loaded http://localhost:5181/
+PROVED  S-136 on inside-order-swapped: fail (wanted fail); old fail (expected fail); box DIV in the card; nested false
+PROVED  S-91 on inside-order-swapped: pass (wanted pass); old fail (expected fail); box DIV in the card; nested false
+10:38:34 page loaded http://localhost:5181/
+PROVED  S-136 on beside-heavy-only: fail (wanted fail); old fail (expected fail); box SECTION beside the card; nested false
+PROVED  S-91 on beside-heavy-only: fail (wanted fail); old fail (expected fail); box SECTION beside the card; nested false
+10:38:35 page loaded http://localhost:5181/
+PROVED  S-136 on inside-heavy-only: fail (wanted fail); old fail (expected fail); box DIV in the card; nested false
+PROVED  S-91 on inside-heavy-only: fail (wanted fail); old fail (expected fail); box DIV in the card; nested false
+14 of 14 proved; 0 not

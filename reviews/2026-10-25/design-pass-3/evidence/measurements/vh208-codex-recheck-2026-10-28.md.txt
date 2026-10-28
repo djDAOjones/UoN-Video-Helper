@@ -1,0 +1,12 @@
+- **Must 1 — resolved.** The content comparison establishes the before as `a87e0f5` plus the three candidate walker files; `2cc1c371db104eb5` correctly denotes “unread”. The stopped job’s pinned identity matches all 81 records; after-6’s provenance agrees.
+- **Must 2 — resolved.** The results substantiate 85/85 proofs, including 16 limiting cases across both layouts, with heading-only rejected and full detail accepted; S-136/S-91 have 14/14 proofs. Revision, times, power and reported loads match.
+- **Must 3 — resolved.** Independently recounting the saved records gives **21 → 11 → 4 → 0**. After-6 covers precisely the four omitted cells below load 8, with matching comparison fields. The before’s 39 cells, including all four S-131 modes, are disclosed; the before comparisons support the stated qualification.
+- **Must 4 — resolved.** The probe calls the existing `playerKeys` and checks `PLAYER_KEY_ROWS`, without changing the walker. Each side has eight host passes, 36 cannot-determine control readings and eight reasoned exemptions; none is promoted to a pass. The person-only limitations remain consistent with §9.3.
+- **Should: S-138 mechanism — resolved.** F4d’s download retains the player; the discard question withdraws it and races `finish+1s`. VH-199.1 already covers that sampling defect.
+- **Should: 2.4.3 — resolved.** The table correctly bases support on source order and unchanged focus stops, without treating Save’s focus measurements as proof of traversal.
+
+**Point 6:** No new defect found. Reversing `wrap.diff.txt` against the current candidate reproduces the walked source hash `2f010d53d3df39c6`; only comment wrapping changed. The inventory matches 44 scenario files, ten comparisons and the listed supporting files. Sections 6 and 11 correctly identify the close’s outstanding follow-ups.
+
+**Remaining must:** Must 5—the ledger, Disposition, wish lines and green gate—remains for the separate close check, as instructed.
+
+Verdict: Commit after the musts below

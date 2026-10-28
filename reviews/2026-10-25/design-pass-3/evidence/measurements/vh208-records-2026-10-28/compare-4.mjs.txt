@@ -1,0 +1,25 @@
+// VH-208 #4: compare two walk outputs record by record (twins by key).
+// Usage: node compare-4.mjs <runsA> <runsB> [scenario,…]
+// Compares: status; limiting rows (what, outcome, why, completion text, titles); every assert row (what, outcome);
+// every instrument's outcome; the probe's order, place, nesting, card height and warnings offset.
+import fs from 'node:fs'; import path from 'node:path'
+const [A, B, only] = process.argv.slice(2); const want = only ? new Set(only.split(',')) : null
+const load = (root) => { const recs = new Map(), geo = new Map()
+  for (const d of fs.readdirSync(root)) { const p = path.join(root, d)
+    if (fs.statSync(p).isDirectory()) for (const f of fs.readdirSync(p)) { if (!/^S-.*\.json$/.test(f)) continue; const r = JSON.parse(fs.readFileSync(path.join(p, f))); recs.set(r.key, r) }
+    else if (/^vh208-geometry-.*\.jsonl$/.test(d)) for (const l of fs.readFileSync(p, 'utf8').split('\n').filter(Boolean)) { const g = JSON.parse(l); const k = `${g.id}__${g.lang}__${g.walk.split('-').pop()}__${g.mode}`; geo.set(k, g) } }
+  return { recs, geo } }
+const sig = (r) => ({ status: r.status,
+  limiting: { outcome: r.instruments?.limiting?.outcome, items: (r.instruments?.limiting?.items || []).map((i) => ({ what: i.what, outcome: i.outcome, why: i.why, text: i.completion?.text, titles: i.titles })) },
+  asserts: { outcome: r.instruments?.asserts?.outcome, items: (r.instruments?.asserts?.items || []).map((i) => ({ what: i.what, outcome: i.outcome })) },
+  instruments: Object.fromEntries(Object.entries(r.instruments || {}).map(([k, v]) => [k, v?.outcome])) })
+const gsig = (g) => g && ({ order: g.order, where: g.warnBoxWhere, nested: g.nestedNotification, cardHeight: g.cardHeight, warnFromTop: g.warningsFromCardTop, oneScreen: g.warningsTitleWithinOneScreenOfCardTop })
+const a = load(A), b = load(B); const per = {}; const diffs = []
+for (const [k, rb] of b.recs) { if (want && !want.has(rb.id)) continue; const ra = a.recs.get(k); const s = (per[rb.id] ||= { n: 0, same: 0, geoSame: 0, geoN: 0, missing: 0 })
+  if (!ra) { s.missing++; diffs.push(`${k}: no twin`); continue }
+  s.n++; const x = JSON.stringify(sig(ra)), y = JSON.stringify(sig(rb)); if (x === y) s.same++; else diffs.push(`${k}: record differs\n  A ${x}\n  B ${y}`)
+  const ga = gsig(a.geo.get(k)), gb = gsig(b.geo.get(k)); if (ga || gb) { s.geoN++; if (JSON.stringify(ga) === JSON.stringify(gb)) s.geoSame++; else diffs.push(`${k}: probe differs\n  A ${JSON.stringify(ga)}\n  B ${JSON.stringify(gb)}`) } }
+const statuses = {}; for (const r of b.recs.values()) statuses[r.status] = (statuses[r.status] || 0) + 1
+console.log('B records', b.recs.size, 'statuses', JSON.stringify(statuses), '| A records', a.recs.size)
+for (const [id, s] of Object.entries(per)) console.log(`${id}: ${s.same}/${s.n} records identical; probe ${s.geoSame}/${s.geoN}; no twin ${s.missing}`)
+console.log(diffs.length ? diffs.join('\n') : 'no differences')

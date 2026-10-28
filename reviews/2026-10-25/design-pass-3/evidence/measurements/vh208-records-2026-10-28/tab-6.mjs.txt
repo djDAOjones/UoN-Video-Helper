@@ -1,0 +1,49 @@
+// VH-208 #6: tabulate extract-5.mjs output for the table: per run and scenario, the counts the table cites.
+// Usage: node tab-6.mjs <extracts dir> [diff]
+//   no flag: per run and scenario: statuses; each instrument's outcomes; the limiting, asserts and player rows' outcomes;
+//            Save's focus rows (focusVisible, area at 3:1, 2 px perimeter, best ratio); the card's focus rows by outcome, with the
+//            card's height and the viewport's; overflow in the spacing cells;
+//            the first-screen reads at 320 px; the live writes, one per language.
+//   diff [A] [B]: run A (default before-2-ac) against run B (default after-1+after-2; "+" joins runs), cell by cell, over the cells B holds:
+//            which instrument outcomes, limiting, assert and player rows changed.
+import fs from 'node:fs'
+const [X, mode, LA = 'before-2-ac', LB = 'after-1+after-2'] = process.argv.slice(2)
+const files = fs.readdirSync(X).filter((f) => /-S-\d+\.json$/.test(f))
+const runs = {}
+for (const f of files) { const j = JSON.parse(fs.readFileSync(`${X}/${f}`)); ((runs[j.label] ||= {})[j.scenario] = j.cells) }
+const tally = (arr) => { const t = {}; for (const x of arr) t[x] = (t[x] || 0) + 1; return Object.entries(t).map(([k, v]) => `${k} ${v}`).join(', ') }
+const rows = (cells, field) => { const by = {}; for (const c of cells) { const seen = {}
+  for (const r of c[field] || []) { const k = r.what; if (k === 'control target') { seen[k] = seen[k] === 'fail' || r.outcome === 'fail' ? 'fail' : r.outcome; continue } (by[k] ||= []).push(r.outcome) }
+  for (const [k, v] of Object.entries(seen)) (by[`${k} (any of the cell's)`] ||= []).push(v) }
+  return Object.entries(by).map(([k, v]) => `    ${k}: ${tally(v)}`) }
+if (mode === 'diff') {
+  const order = ['S-135', 'S-136', 'S-137', 'S-138', 'S-151', 'S-152', 'S-131', 'S-53']
+  const of = (L, id) => L.split('+').flatMap((l) => (runs[l] || {})[id] || [])
+  console.log(`# ${LA} against ${LB}`)
+  for (const id of order) { const B = new Map(of(LA, id).map((c) => [c.key, c])); const A = of(LB, id); if (!A.length) continue
+    const ch = {}
+    for (const a of A) { const b = B.get(a.key); if (!b) { (ch['no twin'] ||= []).push(a.key); continue }
+      for (const k of new Set([...Object.keys(a.outcomes), ...Object.keys(b.outcomes)])) if (a.outcomes[k] !== b.outcomes[k]) (ch[`instrument ${k}: ${b.outcomes[k]} -> ${a.outcomes[k]}`] ||= []).push(a.key)
+      for (const f of ['limiting', 'asserts', 'player']) { const bm = (b[f] || []).map((r) => `${r.what}=${r.outcome}`), am = (a[f] || []).map((r) => `${r.what}=${r.outcome}`)
+        for (const x of am) if (!bm.includes(x)) (ch[`${f} after: ${x}`] ||= []).push(a.key)
+        for (const x of bm) if (!am.includes(x)) (ch[`${f} before: ${x}`] ||= []).push(a.key) } }
+    console.log(`## ${id}: ${A.length} cells`); for (const [k, v] of Object.entries(ch)) console.log(`  ${k}  [${v.length}]`) }
+  process.exit(0) }
+for (const [label, sc] of Object.entries(runs)) for (const [id, cells] of Object.entries(sc)) {
+  console.log(`## ${label} ${id}: ${cells.length} cells; status ${tally(cells.map((c) => c.status))}; revision ${tally(cells.map((c) => c.revision))}`)
+  const inst = {}; for (const c of cells) for (const [k, v] of Object.entries(c.outcomes)) (inst[k] ||= []).push(v)
+  console.log('  instruments: ' + Object.entries(inst).map(([k, v]) => `${k} {${tally(v)}}`).join('; '))
+  for (const f of ['limiting', 'asserts', 'player']) { const r = rows(cells, f); if (r.length) { console.log(`  ${f}:`); console.log(r.join('\n')) } }
+  const fo = cells.flatMap((c) => (c.focus || []).filter((r) => /button/.test(r.sel)))
+  if (fo.length) { const n = (k) => fo.map((r) => r[k]).filter((x) => x != null); const mm = (a) => a.length ? `${Math.min(...a)}–${Math.max(...a)}` : '-'
+    console.log(`  focus on Save: ${fo.length} rows; outcome {${tally(fo.map((r) => r.outcome))}}; focusVisible {${tally(fo.map((r) => r.focusVisible))}}; area at 3:1 ${mm(n('areaAt3to1'))}; perimeter ${mm(n('perimeter2px'))}; best ratio ${mm(n('bestRatio'))}`) }
+  const fc = cells.flatMap((c) => (c.focus || []).filter((r) => /> \.notification$/.test(r.sel)).map((r) => ({ ...r, h: c.probe?.cardHeight, vh: c.probe?.viewport?.h })))
+  if (fc.length) { const mm = (a) => a.length ? `${Math.min(...a)}–${Math.max(...a)}` : '-'; const by = {}; for (const r of fc) (by[r.outcome] ||= []).push(r)
+    console.log(`  focus on the card: ${fc.length} rows; focusVisible {${tally(fc.map((r) => r.focusVisible))}}; ` + Object.entries(by).map(([o, a]) => `${o} ${a.length}: card ${mm(a.map((r) => r.h))} px in a ${mm(a.map((r) => r.vh))} px viewport, area at 3:1 ${mm(a.map((r) => r.areaAt3to1))}, perimeter ${mm(a.map((r) => r.perimeter2px))}`).join('; ')) }
+  const sp = cells.filter((c) => /spacing$/.test(c.key))
+  if (sp.length) console.log(`  spacing cells ${sp.length}: overflow {${tally(sp.map((c) => c.overflow?.outcome))}}; hscroll {${tally(sp.map((c) => c.overflow?.hscroll))}}; clipped ${sp.map((c) => c.overflow?.clippedCount).join('/')}; spill ${sp.map((c) => c.overflow?.spillCount).join('/')}`)
+  const w = cells.filter((c) => /__w320__/.test(c.key) && c.probe?.warningsTitleWithinOneScreenOfCardTop != null)
+  if (w.length) console.log(`  w320 warnings title within one screen of the card's top: {${tally(w.map((c) => c.probe.warningsTitleWithinOneScreenOfCardTop))}}${w.filter((c) => !c.probe.warningsTitleWithinOneScreenOfCardTop).map((c) => ' false: ' + c.key).join('')}`)
+  const lw = {}; for (const c of cells) { const lang = c.key.split('__')[1]; (lw[lang] ||= new Set()).add(c.liveWrite) }
+  for (const [lang, s] of Object.entries(lw)) console.log(`  live ${lang} (${s.size}): ${[...s].map((t) => JSON.stringify(t)).join(' | ')}`)
+}

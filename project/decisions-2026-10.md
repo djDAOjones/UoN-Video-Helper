@@ -1085,3 +1085,13 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Supersedes:** none
 
 **Deferred:** VH-172
+
+## 2026-10-23 — VH-172 — The evidence run: a prioritised matrix, 699 records whole, in place of the full 1,454; the six fixes hold or hold in part, none regressed
+
+**Decision:** VH-172 runs a prioritised matrix in resumable parts instead of the plan's full matrix: every scenario once in its base cell, the language, width, mode and enlargement variants only where a check depends on them, and the six-fix cells in full. The 821 cells left unrun are listed by class with their reasons, and `PLANS.matrix` stays declared for a later run. Because the full run is about 11.6 hours on a laptop that moves between places and would be broken repeatedly, the orchestrator recommended this reduction, and the owner's standing instruction lets it proceed.
+
+**Rationale:** The owner's instruction of 2026-10-23: "work through to the end of VH-177, archive and spawn as you go, proceed with your recommendations, universal permission is granted". Codex's method check set no must on the matrix's size (M-01 to M-08 concern the instruments), so no disagreement with Codex arises. `PLANS.priority` ran 699 of 699 records whole in 2 h 20 min: 633 matrix cells and 66 six-fix cells, with none failed, missing, stale or out of view (`reviews/2026-10-22/design-pass-2/evidence/measurements/matrix-2026-10-23.md`, `matrix-manifest-2026-10-23.json`, eleven `digest-*-2026-10-23.md`). Three instrument faults were fixed and their records re-measured: the phone signal, a setup hover spoiling the file button's glyph reading, and the footer's scroll at the 32 px font. The 245 file-button text readings from parts 1–3 left "cannot determine" are a named gap; the 32 re-measured all pass. Two instruments were added, `pressed` and `type`, each proved 8 of 8. The six-fix table is in `six-fix-verification-2026-10-23.md`. VH-164 holds. VH-165 is partial: the forced-light thumb ring is to judge. VH-166 is partial: no walked state draws the code role. VH-167 holds; no state draws a fact note. VH-168 holds. VH-169 holds, 64 of 64 presses. Nothing is judged a finding here; VH-173 judges. No product code changed.
+
+**Supersedes:** none
+
+**Deferred:** VH-173

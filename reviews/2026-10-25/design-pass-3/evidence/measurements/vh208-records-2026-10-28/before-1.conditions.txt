@@ -1,0 +1,12 @@
+start 2026-10-28T10:58:03Z
+Now drawing from 'Battery Power'
+ -InternalBattery-0 (id=21889123)	90%; discharging; 7:27 remaining present: true
+ powermode            2
+10:58  up  3:09, 1 user, load averages: 7.38 11.06 12.26
+instrument revision a3a4267ad47d8bd5
+job1 exit 0 2026-10-28T11:11:06Z
+job2 exit 0 2026-10-28T11:13:37Z
+end 2026-10-28T11:13:37Z
+Now drawing from 'Battery Power'
+ -InternalBattery-0 (id=21889123)	79%; discharging; 3:57 remaining present: true
+11:13  up  3:24, 1 user, load averages: 5.64 9.02 11.18

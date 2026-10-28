@@ -1,0 +1,27 @@
+// VH-208 #5: summarise extract-5.mjs output, before-2-ac against after-1 + after-2, per scenario and lang/width group: the probe's order, place, nesting, card height, warnings from the card's top, first screen, Save's offset; the card's ax shape; the en-GB live writes.
+// Usage: node summ-5.mjs <extracts dir>
+import fs from 'node:fs'
+const X = process.argv[2]
+const load = (label, id) => { const f = `${X}/${label}-${id}.json`; return fs.existsSync(f) ? JSON.parse(fs.readFileSync(f)).cells : [] }
+const ids = ['S-135', 'S-136', 'S-137', 'S-138', 'S-151', 'S-152', 'S-131', 'S-53']
+// the card's slice of the ax order: top-level items inside the "6." region, compressed
+const shape = (ax) => { if (!ax) return null; const out = []; let inCard = false
+  for (const l of ax.slice(1)) { const d = l.match(/^ */)[0].length / 2; const t = l.trim()
+    if (d === 1 && /^region: /.test(t)) { out.push(t.startsWith('region: ') && out.length === 0 ? 'CARD[' : '|REGION:' + t.slice(8, 30)); inCard = out.length === 1; continue }
+    if (d === 2 && inCard) { if (/^region: /.test(t)) out.push('WARNINGS'); else if (/^Video/.test(t)) out.push('VIDEO'); else if (/^button: /.test(t)) out.push('BUTTON:' + t.slice(8, 24)); }
+    if (d === 1 && !/^region/.test(t)) { if (inCard) { out.push(']'); inCard = false } if (/^button/.test(t)) out.push('btn:' + t.slice(8, 20)) } }
+  return out.join(' ') }
+for (const id of ids) {
+  const B = load('before-2-ac', id), A = [...load('after-1', id), ...load('after-2', id)]
+  const groups = {}
+  for (const [side, cells] of [['B', B], ['A', A]]) for (const c of cells) { const [, lang, view, mode] = c.key.split('__'); const g = (groups[`${lang} ${view}`] ||= { B: [], A: [] }); g[side].push({ mode, c }) }
+  console.log(`## ${id}  before ${B.length} after ${A.length}`)
+  for (const [g, v] of Object.entries(groups)) {
+    const f = (arr) => { const p = arr.map(({ c }) => c.probe); const u = (fn) => [...new Set(p.map(fn).map((x) => JSON.stringify(x)))].join('/')
+      return `order ${u((x) => x?.order?.join('>'))} where ${u((x) => x?.warnBoxWhere)} nested ${u((x) => x?.nestedNotification)} h ${u((x) => x?.cardHeight)} warnTop ${u((x) => x?.warningsFromCardTop)} 1scr ${u((x) => x?.warningsTitleWithinOneScreenOfCardTop)} saveTop ${u((x) => x?.saveFromCardTop)}` }
+    console.log(` ${g} B: ${f(v.B)}`); console.log(` ${g} A: ${f(v.A)}`) }
+  const sh = (arr) => [...new Set(arr.map((c) => shape(c.axCreate)))]
+  console.log(' ax B:', sh(B).join(' || ')); console.log(' ax A:', sh(A).join(' || '))
+  const lw = (arr) => [...new Set(arr.filter((c) => c.key.includes('en-GB')).map((c) => c.liveWrite))]
+  console.log(' live en-GB B:', JSON.stringify(lw(B))); console.log(' live en-GB A:', JSON.stringify(lw(A)))
+}

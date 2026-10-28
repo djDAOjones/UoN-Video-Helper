@@ -1368,6 +1368,13 @@ details[open] > .disclosure-summary::before {
   margin-top: var(--spacing-05);
 }
 
+/* The output's warnings, the finished card's own content between its lines
+   and its player: set apart as the player is, with no rail of their own
+   (VH-150, VH-208). */
+.result-warnings {
+  margin-top: var(--spacing-05);
+}
+
 /*
  * Carbon's range slider, from two native range inputs on one track. The
  * inputs are laid over each other and let pointer events through everywhere

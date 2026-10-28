@@ -1,0 +1,966 @@
+## after-1 S-131: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {pass 20, cannot-determine 4}; type {fail 24}; focus {pass 24}; player {pass 24}; formatTip {not-applicable 24}; footer {pass 24}; limiting {pass 24}; videoLanguage {pass 24}; asserts {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+  asserts:
+    it plays while the save streams, with focus in it: pass 24
+    saved: paused, its source dropped, its URL revoked, out of the card; focus on the card: pass 24
+    Save reads "Saved", disabled: pass 24
+  player:
+    gone once a save completes: pass 24
+  focus on the card: 24 rows; focusVisible {true 24}; pass 24: card 168–234 px in a 568–900 px viewport, area at 3:1 1692–4168, perimeter 1628–4104
+  live en-GB (1): null
+  live ms-MY (1): null
+  live zh-Hans (1): null
+## after-1 S-135: 27 cells; status ok 27; revision a3a4267ad47d8bd5 27
+  instruments: overflow {pass 27}; ax {pass 27}; targets {fail 27}; contrastText {pass 27}; contrastExtra {cannot-determine 27}; measure {pass 23, cannot-determine 4}; type {fail 24, pass 3}; focus {pass 27}; player {pass 27}; formatTip {not-applicable 27}; footer {pass 27}; limiting {pass 27}; videoLanguage {pass 27}; asserts {pass 27}
+  limiting:
+    present above the threshold, absent below: pass 27
+    heading and detail word for word: pass 27
+    first among the card's warnings: pass 27
+    first in the line spoken at completion, with every warning title in order: pass 27
+    the heavy warning's detail whole after its title, in the line spoken at completion: pass 27
+  asserts:
+    the bite read from the worker's "chain planned" line is over 3 LU: pass 27
+  player:
+    present while unsaved, one, in the card: pass 27
+    controls, preload metadata, no autoplay: pass 27
+    paused a second after the card appeared: pass 27
+    an object URL whose metadata loads: pass 27
+    after the card's lines, before the lifetime line and Save: pass 27
+    the host inside the page, no taller than its cap: pass 27
+    host named by the card's title: pass 27
+    control inventory, each named: pass 27
+    control target (any of the cell's): fail 27
+  focus on Save: 27 rows; outcome {pass 27}; focusVisible {true 27}; area at 3:1 648–964; perimeter 584–900; best ratio 11.35–21
+  spacing cells 3: overflow {pass 3}; hscroll {false 3}; clipped 0/0/0; spill 0/0/0
+  w320 warnings title within one screen of the card's top: {true 15}
+  live en-GB (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound."
+  live ms-MY (1): "Video anda sudah siap. Perlu diketahui tentang video yang telah siap: Bahagian paling kuat telah ditekan dengan banyak. Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menyimpannya. Lain kali, cuba ubah cara anda merakam bunyi."
+  live zh-Hans (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了。为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在保存之前播放新视频。下次录音时，可以尝试调整录制声音的方式。"
+## after-1 S-136: 27 cells; status ok 27; revision a3a4267ad47d8bd5 27
+  instruments: overflow {pass 27}; ax {pass 27}; targets {fail 27}; contrastText {pass 27}; contrastExtra {cannot-determine 27}; measure {pass 23, cannot-determine 4}; type {fail 24, pass 3}; focus {pass 27}; player {pass 27}; formatTip {not-applicable 27}; footer {pass 27}; limiting {pass 27}; videoLanguage {pass 27}; asserts {pass 27}
+  limiting:
+    present above the threshold, absent below: pass 27
+    heading and detail word for word: pass 27
+    first among the card's warnings: pass 27
+    first in the line spoken at completion, with every warning title in order: pass 27
+    the heavy warning's detail whole after its title, in the line spoken at completion: pass 27
+  asserts:
+    heavy limiting first, the metadata second, and no notification nested in the card: pass 27
+  player:
+    present while unsaved, one, in the card: pass 27
+    controls, preload metadata, no autoplay: pass 27
+    paused a second after the card appeared: pass 27
+    an object URL whose metadata loads: pass 27
+    after the card's lines, before the lifetime line and Save: pass 27
+    the host inside the page, no taller than its cap: pass 27
+    host named by the card's title: pass 27
+    control inventory, each named: pass 27
+    control target (any of the cell's): fail 27
+  focus on Save: 27 rows; outcome {pass 27}; focusVisible {true 27}; area at 3:1 648–964; perimeter 584–900; best ratio 11.35–21
+  spacing cells 3: overflow {pass 3}; hscroll {false 3}; clipped 0/0/0; spill 0/0/0
+  w320 warnings title within one screen of the card's top: {true 15}
+  live en-GB (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound."
+  live ms-MY (1): "Video anda sudah siap. Perlu diketahui tentang video yang telah siap: Bahagian paling kuat telah ditekan dengan banyak; Tajuk, pengarang dan tarikh fail tidak dapat disalin. Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menyimpannya. Lain kali, cuba ubah cara anda merakam bunyi."
+  live zh-Hans (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了；无法复制文件的标题、作者和日期。为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在保存之前播放新视频。下次录音时，可以尝试调整录制声音的方式。"
+## after-1 S-137: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {cannot-determine 8, pass 16}; type {fail 24}; focus {pass 16, cannot-determine 8}; player {pass 24}; formatTip {not-applicable 24}; footer {pass 24}; limiting {cannot-determine 24}; videoLanguage {pass 24}; asserts {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+    heading and detail word for word: pass 24
+    first among the card's warnings: pass 24
+    first in the line spoken at completion, with every warning title in order: cannot-determine 24
+    the heavy warning's detail whole after its title, in the line spoken at completion: cannot-determine 24
+    unchanged after a save: cannot-determine 24
+  asserts:
+    word for word beside "Saved.": pass 24
+    then in the new language: pass 24
+  player:
+    gone once a save completes: pass 24
+  focus on the card: 24 rows; focusVisible {true 24}; pass 16: card 312–462 px in a 568–900 px viewport, area at 3:1 2784–4912, perimeter 2720–4848; cannot-determine 8: card 570–609 px in a 568–568 px viewport, area at 3:1 2272–2272, perimeter 3152–3308
+  w320 warnings title within one screen of the card's top: {true 12}
+  live en-GB (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了。为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在保存之前播放新视频。下次录音时，可以尝试调整录制声音的方式。"
+  live ms-MY (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound."
+  live zh-Hans (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound."
+## after-1 S-138: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {cannot-determine 8, pass 16}; type {fail 24}; focus {pass 24}; player {pass 4, fail 20}; formatTip {not-applicable 24}; footer {pass 24}; limiting {cannot-determine 24}; videoLanguage {pass 24}; asserts {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+    heading and detail word for word: pass 24
+    first among the card's warnings: pass 24
+    first in the line spoken at completion, with every warning title in order: cannot-determine 24
+    the heavy warning's detail whole after its title, in the line spoken at completion: cannot-determine 24
+  asserts:
+    both, heavy first, through the download, Keep it and "Previous video": pass 24
+  player:
+    present while unsaved, one, in the card: pass 24
+    controls, preload metadata, no autoplay: pass 24
+    paused a second after the card appeared: pass 4, fail 20
+    an object URL whose metadata loads: pass 24
+    after the card's lines, before the lifetime line and Save: pass 24
+    the host inside the page, no taller than its cap: pass 24
+    host named by the card's title: pass 24
+    control inventory, each named: pass 24
+    control target (any of the cell's): fail 24
+  focus on Save: 24 rows; outcome {pass 24}; focusVisible {true 24}; area at 3:1 648–840; perimeter 584–774; best ratio 11.35–21
+  w320 warnings title within one screen of the card's top: {true 12}
+  live en-GB (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了；无法复制文件的标题、作者和日期。为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在保存之前播放新视频。下次录音时，可以尝试调整录制声音的方式。"
+  live ms-MY (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound."
+  live zh-Hans (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound."
+## after-1 S-151: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {pass 20, cannot-determine 4}; type {fail 24}; focus {cannot-determine 24}; player {pass 24}; formatTip {not-applicable 24}; footer {pass 24}; limiting {pass 24}; videoLanguage {pass 24}; asserts {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+    heading and detail word for word: pass 24
+    first among the card's warnings: pass 24
+    first in the line spoken at completion, with every warning title in order: pass 24
+    the heavy warning's detail whole after its title, in the line spoken at completion: pass 24
+  asserts:
+    unticked while the job ran (it shows only then): pass 24
+    #status at the completion's own write (the mutation that drew the card): "Your video is ready." then both titles, heavy first; earlier writes not counted: pass 24
+  player:
+    present while unsaved, one, in the card: pass 24
+    controls, preload metadata, no autoplay: pass 24
+    paused a second after the card appeared: pass 24
+    an object URL whose metadata loads: pass 24
+    after the card's lines, before the lifetime line and Save: pass 24
+    the host inside the page, no taller than its cap: pass 24
+    host named by the card's title: pass 24
+    control inventory, each named: pass 24
+    control target (any of the cell's): fail 24
+  focus on the card: 24 rows; focusVisible {true 24}; cannot-determine 24: card 799–1072 px in a 568–900 px viewport, area at 3:1 2272–3600, perimeter 4068–7384
+  w320 warnings title within one screen of the card's top: {true 12}
+  live en-GB (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound."
+  live ms-MY (1): "Video anda sudah siap. Perlu diketahui tentang video yang telah siap: Bahagian paling kuat telah ditekan dengan banyak; Tajuk, pengarang dan tarikh fail tidak dapat disalin. Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menyimpannya. Lain kali, cuba ubah cara anda merakam bunyi."
+  live zh-Hans (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了；无法复制文件的标题、作者和日期。为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在保存之前播放新视频。下次录音时，可以尝试调整录制声音的方式。"
+## after-1 S-152: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {pass 20, cannot-determine 4}; type {fail 24}; focus {pass 24}; player {fail 24}; formatTip {not-applicable 24}; footer {pass 24}; limiting {pass 24}; videoLanguage {pass 24}; asserts {pass 24}; subresults {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+    heading and detail word for word: pass 24
+    first among the card's warnings: pass 24
+    first in the line spoken at completion, with every warning title in order: pass 24
+    the heavy warning's detail whole after its title, in the line spoken at completion: pass 24
+  asserts:
+    the player's MediaError recorded; the warning first and word for word: pass 24
+  player:
+    present while unsaved, one, in the card: pass 24
+    controls, preload metadata, no autoplay: pass 24
+    paused a second after the card appeared: pass 24
+    an object URL whose metadata loads: fail 24
+    after the card's lines, before the lifetime line and Save: pass 24
+    the host inside the page, no taller than its cap: pass 24
+    host named by the card's title: fail 24
+    control inventory: cannot-determine 24
+  focus on Save: 24 rows; outcome {pass 24}; focusVisible {true 24}; area at 3:1 648–840; perimeter 584–774; best ratio 11.35–21
+  w320 warnings title within one screen of the card's top: {true 12}
+  live en-GB (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound."
+  live ms-MY (1): "Video anda sudah siap. Perlu diketahui tentang video yang telah siap: Bahagian paling kuat telah ditekan dengan banyak. Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menyimpannya. Lain kali, cuba ubah cara anda merakam bunyi."
+  live zh-Hans (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了。为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在保存之前播放新视频。下次录音时，可以尝试调整录制声音的方式。"
+## after-1 S-53: 9 cells; status ok 9; revision a3a4267ad47d8bd5 9
+  instruments: overflow {pass 9}; ax {pass 9}; targets {fail 9}; contrastText {pass 9}; contrastExtra {cannot-determine 9}; measure {pass 8, cannot-determine 1}; type {fail 9}; focus {pass 9}; player {pass 9}; formatTip {not-applicable 9}; footer {pass 9}; limiting {pass 9}; videoLanguage {pass 9}; asserts {pass 9}
+  limiting:
+    present above the threshold, absent below: pass 9
+  asserts:
+    Create reads "Create the video again", secondary (VH-190): pass 9
+    the record's output in its short form, without the purpose (VH-188): pass 9
+    the card holds its player (VH-192): pass 9
+    no "Worth knowing about the finished video" on a level lecture: pass 9
+  player:
+    present while unsaved, one, in the card: pass 9
+    controls, preload metadata, no autoplay: pass 9
+    paused a second after the card appeared: pass 9
+    an object URL whose metadata loads: pass 9
+    after the card's lines, before the lifetime line and Save: pass 9
+    the host inside the page, no taller than its cap: pass 9
+    host named by the card's title: pass 9
+    control inventory, each named: pass 9
+    control target (any of the cell's): fail 9
+  focus on Save: 18 rows; outcome {pass 18}; focusVisible {true 18}; area at 3:1 648–988; perimeter 584–924; best ratio 9.1–21
+  live en-GB (1): null
+  live zh-Hans (1): null
+## after-2 S-53: 15 cells; status ok 15; revision a3a4267ad47d8bd5 15
+  instruments: overflow {pass 15}; ax {pass 15}; targets {fail 15}; contrastText {pass 15}; contrastExtra {cannot-determine 15}; measure {pass 12, cannot-determine 3}; type {fail 15}; focus {pass 15}; player {pass 15}; formatTip {not-applicable 15}; footer {pass 15}; limiting {pass 15}; videoLanguage {pass 15}; asserts {pass 15}
+  limiting:
+    present above the threshold, absent below: pass 15
+  asserts:
+    Create reads "Create the video again", secondary (VH-190): pass 15
+    the record's output in its short form, without the purpose (VH-188): pass 15
+    the card holds its player (VH-192): pass 15
+    no "Worth knowing about the finished video" on a level lecture: pass 15
+  player:
+    present while unsaved, one, in the card: pass 15
+    controls, preload metadata, no autoplay: pass 15
+    paused a second after the card appeared: pass 15
+    an object URL whose metadata loads: pass 15
+    after the card's lines, before the lifetime line and Save: pass 15
+    the host inside the page, no taller than its cap: pass 15
+    host named by the card's title: pass 15
+    control inventory, each named: pass 15
+    control target (any of the cell's): fail 15
+  focus on Save: 30 rows; outcome {pass 30}; focusVisible {true 30}; area at 3:1 648–976; perimeter 584–911; best ratio 9.1–21
+  live ms-MY (1): null
+  live zh-Hans (1): null
+## after-3-lowload S-131: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {pass 20, cannot-determine 4}; type {fail 24}; focus {pass 24}; player {pass 24}; formatTip {not-applicable 24}; footer {pass 24}; limiting {pass 24}; videoLanguage {pass 24}; asserts {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+  asserts:
+    it plays while the save streams, with focus in it: pass 24
+    saved: paused, its source dropped, its URL revoked, out of the card; focus on the card: pass 24
+    Save reads "Saved", disabled: pass 24
+  player:
+    gone once a save completes: pass 24
+  focus on the card: 24 rows; focusVisible {true 24}; pass 24: card 168–234 px in a 568–900 px viewport, area at 3:1 1692–4168, perimeter 1628–4104
+  live en-GB (1): null
+  live ms-MY (1): null
+  live zh-Hans (1): null
+## after-3-lowload S-135: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {pass 20, cannot-determine 4}; type {fail 24}; focus {pass 24}; player {pass 24}; formatTip {not-applicable 24}; footer {pass 24}; limiting {pass 24}; videoLanguage {pass 24}; asserts {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+    heading and detail word for word: pass 24
+    first among the card's warnings: pass 24
+    first in the line spoken at completion, with every warning title in order: pass 24
+    the heavy warning's detail whole after its title, in the line spoken at completion: pass 24
+  asserts:
+    the bite read from the worker's "chain planned" line is over 3 LU: pass 24
+  player:
+    present while unsaved, one, in the card: pass 24
+    controls, preload metadata, no autoplay: pass 24
+    paused a second after the card appeared: pass 24
+    an object URL whose metadata loads: pass 24
+    after the card's lines, before the lifetime line and Save: pass 24
+    the host inside the page, no taller than its cap: pass 24
+    host named by the card's title: pass 24
+    control inventory, each named: pass 24
+    control target (any of the cell's): fail 24
+  focus on Save: 24 rows; outcome {pass 24}; focusVisible {true 24}; area at 3:1 648–840; perimeter 584–774; best ratio 11.35–21
+  w320 warnings title within one screen of the card's top: {true 12}
+  live en-GB (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound."
+  live ms-MY (1): "Video anda sudah siap. Perlu diketahui tentang video yang telah siap: Bahagian paling kuat telah ditekan dengan banyak. Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menyimpannya. Lain kali, cuba ubah cara anda merakam bunyi."
+  live zh-Hans (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了。为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在保存之前播放新视频。下次录音时，可以尝试调整录制声音的方式。"
+## after-3-lowload S-136: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {pass 20, cannot-determine 4}; type {fail 24}; focus {pass 24}; player {pass 24}; formatTip {not-applicable 24}; footer {pass 24}; limiting {pass 24}; videoLanguage {pass 24}; asserts {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+    heading and detail word for word: pass 24
+    first among the card's warnings: pass 24
+    first in the line spoken at completion, with every warning title in order: pass 24
+    the heavy warning's detail whole after its title, in the line spoken at completion: pass 24
+  asserts:
+    heavy limiting first, the metadata second, and no notification nested in the card: pass 24
+  player:
+    present while unsaved, one, in the card: pass 24
+    controls, preload metadata, no autoplay: pass 24
+    paused a second after the card appeared: pass 24
+    an object URL whose metadata loads: pass 24
+    after the card's lines, before the lifetime line and Save: pass 24
+    the host inside the page, no taller than its cap: pass 24
+    host named by the card's title: pass 24
+    control inventory, each named: pass 24
+    control target (any of the cell's): fail 24
+  focus on Save: 24 rows; outcome {pass 24}; focusVisible {true 24}; area at 3:1 648–840; perimeter 584–774; best ratio 11.35–21
+  w320 warnings title within one screen of the card's top: {true 12}
+  live en-GB (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound."
+  live ms-MY (1): "Video anda sudah siap. Perlu diketahui tentang video yang telah siap: Bahagian paling kuat telah ditekan dengan banyak; Tajuk, pengarang dan tarikh fail tidak dapat disalin. Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menyimpannya. Lain kali, cuba ubah cara anda merakam bunyi."
+  live zh-Hans (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了；无法复制文件的标题、作者和日期。为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在保存之前播放新视频。下次录音时，可以尝试调整录制声音的方式。"
+## after-3-lowload S-138: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {cannot-determine 8, pass 16}; type {fail 24}; focus {pass 24}; player {fail 16, pass 8}; formatTip {not-applicable 24}; footer {pass 24}; limiting {cannot-determine 24}; videoLanguage {pass 24}; asserts {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+    heading and detail word for word: pass 24
+    first among the card's warnings: pass 24
+    first in the line spoken at completion, with every warning title in order: cannot-determine 24
+    the heavy warning's detail whole after its title, in the line spoken at completion: cannot-determine 24
+  asserts:
+    both, heavy first, through the download, Keep it and "Previous video": pass 24
+  player:
+    present while unsaved, one, in the card: pass 24
+    controls, preload metadata, no autoplay: pass 24
+    paused a second after the card appeared: fail 16, pass 8
+    an object URL whose metadata loads: pass 24
+    after the card's lines, before the lifetime line and Save: pass 24
+    the host inside the page, no taller than its cap: pass 24
+    host named by the card's title: pass 24
+    control inventory, each named: pass 24
+    control target (any of the cell's): fail 24
+  focus on Save: 24 rows; outcome {pass 24}; focusVisible {true 24}; area at 3:1 648–840; perimeter 584–774; best ratio 11.35–21
+  w320 warnings title within one screen of the card's top: {true 12}
+  live en-GB (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了；无法复制文件的标题、作者和日期。为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在保存之前播放新视频。下次录音时，可以尝试调整录制声音的方式。"
+  live ms-MY (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound."
+  live zh-Hans (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound."
+## after-3-lowload S-151: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {pass 20, cannot-determine 4}; type {fail 24}; focus {cannot-determine 24}; player {pass 24}; formatTip {not-applicable 24}; footer {pass 24}; limiting {pass 24}; videoLanguage {pass 24}; asserts {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+    heading and detail word for word: pass 24
+    first among the card's warnings: pass 24
+    first in the line spoken at completion, with every warning title in order: pass 24
+    the heavy warning's detail whole after its title, in the line spoken at completion: pass 24
+  asserts:
+    unticked while the job ran (it shows only then): pass 24
+    #status at the completion's own write (the mutation that drew the card): "Your video is ready." then both titles, heavy first; earlier writes not counted: pass 24
+  player:
+    present while unsaved, one, in the card: pass 24
+    controls, preload metadata, no autoplay: pass 24
+    paused a second after the card appeared: pass 24
+    an object URL whose metadata loads: pass 24
+    after the card's lines, before the lifetime line and Save: pass 24
+    the host inside the page, no taller than its cap: pass 24
+    host named by the card's title: pass 24
+    control inventory, each named: pass 24
+    control target (any of the cell's): fail 24
+  focus on the card: 24 rows; focusVisible {true 24}; cannot-determine 24: card 799–1072 px in a 568–900 px viewport, area at 3:1 2272–3600, perimeter 4068–7384
+  w320 warnings title within one screen of the card's top: {true 12}
+  live en-GB (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound."
+  live ms-MY (1): "Video anda sudah siap. Perlu diketahui tentang video yang telah siap: Bahagian paling kuat telah ditekan dengan banyak; Tajuk, pengarang dan tarikh fail tidak dapat disalin. Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menyimpannya. Lain kali, cuba ubah cara anda merakam bunyi."
+  live zh-Hans (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了；无法复制文件的标题、作者和日期。为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在保存之前播放新视频。下次录音时，可以尝试调整录制声音的方式。"
+## after-3-lowload S-152: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {pass 20, cannot-determine 4}; type {fail 24}; focus {pass 24}; player {fail 24}; formatTip {not-applicable 24}; footer {pass 24}; limiting {pass 24}; videoLanguage {pass 24}; asserts {pass 24}; subresults {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+    heading and detail word for word: pass 24
+    first among the card's warnings: pass 24
+    first in the line spoken at completion, with every warning title in order: pass 24
+    the heavy warning's detail whole after its title, in the line spoken at completion: pass 24
+  asserts:
+    the player's MediaError recorded; the warning first and word for word: pass 24
+  player:
+    present while unsaved, one, in the card: pass 24
+    controls, preload metadata, no autoplay: pass 24
+    paused a second after the card appeared: pass 24
+    an object URL whose metadata loads: fail 24
+    after the card's lines, before the lifetime line and Save: pass 24
+    the host inside the page, no taller than its cap: pass 24
+    host named by the card's title: fail 24
+    control inventory: cannot-determine 24
+  focus on Save: 24 rows; outcome {pass 24}; focusVisible {true 24}; area at 3:1 648–840; perimeter 584–774; best ratio 11.35–21
+  w320 warnings title within one screen of the card's top: {true 12}
+  live en-GB (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound."
+  live ms-MY (1): "Video anda sudah siap. Perlu diketahui tentang video yang telah siap: Bahagian paling kuat telah ditekan dengan banyak. Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menyimpannya. Lain kali, cuba ubah cara anda merakam bunyi."
+  live zh-Hans (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了。为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在保存之前播放新视频。下次录音时，可以尝试调整录制声音的方式。"
+## after-4-lowload S-138: 7 cells; status ok 7; revision a3a4267ad47d8bd5 7
+  instruments: overflow {pass 7}; ax {pass 7}; targets {fail 7}; contrastText {pass 7}; contrastExtra {cannot-determine 7}; measure {pass 7}; type {fail 7}; focus {pass 7}; player {fail 7}; formatTip {not-applicable 7}; footer {pass 7}; limiting {cannot-determine 7}; videoLanguage {pass 7}; asserts {pass 7}
+  limiting:
+    present above the threshold, absent below: pass 7
+    heading and detail word for word: pass 7
+    first among the card's warnings: pass 7
+    first in the line spoken at completion, with every warning title in order: cannot-determine 7
+    the heavy warning's detail whole after its title, in the line spoken at completion: cannot-determine 7
+  asserts:
+    both, heavy first, through the download, Keep it and "Previous video": pass 7
+  player:
+    present while unsaved, one, in the card: pass 7
+    controls, preload metadata, no autoplay: pass 7
+    paused a second after the card appeared: fail 7
+    an object URL whose metadata loads: pass 7
+    after the card's lines, before the lifetime line and Save: pass 7
+    the host inside the page, no taller than its cap: pass 7
+    host named by the card's title: pass 7
+    control inventory, each named: pass 7
+    control target (any of the cell's): fail 7
+  focus on Save: 7 rows; outcome {pass 7}; focusVisible {true 7}; area at 3:1 648–840; perimeter 584–774; best ratio 11.35–21
+  w320 warnings title within one screen of the card's top: {true 3}
+  live ms-MY (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound."
+  live zh-Hans (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound."
+## after-4-lowload S-151: 8 cells; status ok 8; revision a3a4267ad47d8bd5 8
+  instruments: overflow {pass 8}; ax {pass 8}; targets {fail 8}; contrastText {pass 8}; contrastExtra {cannot-determine 8}; measure {pass 5, cannot-determine 3}; type {fail 8}; focus {cannot-determine 8}; player {pass 8}; formatTip {not-applicable 8}; footer {pass 8}; limiting {pass 8}; videoLanguage {pass 8}; asserts {pass 8}
+  limiting:
+    present above the threshold, absent below: pass 8
+    heading and detail word for word: pass 8
+    first among the card's warnings: pass 8
+    first in the line spoken at completion, with every warning title in order: pass 8
+    the heavy warning's detail whole after its title, in the line spoken at completion: pass 8
+  asserts:
+    unticked while the job ran (it shows only then): pass 8
+    #status at the completion's own write (the mutation that drew the card): "Your video is ready." then both titles, heavy first; earlier writes not counted: pass 8
+  player:
+    present while unsaved, one, in the card: pass 8
+    controls, preload metadata, no autoplay: pass 8
+    paused a second after the card appeared: pass 8
+    an object URL whose metadata loads: pass 8
+    after the card's lines, before the lifetime line and Save: pass 8
+    the host inside the page, no taller than its cap: pass 8
+    host named by the card's title: pass 8
+    control inventory, each named: pass 8
+    control target (any of the cell's): fail 8
+  focus on the card: 8 rows; focusVisible {true 8}; cannot-determine 8: card 799–988 px in a 568–900 px viewport, area at 3:1 2272–3600, perimeter 4068–7384
+  w320 warnings title within one screen of the card's top: {true 4}
+  live ms-MY (1): "Video anda sudah siap. Perlu diketahui tentang video yang telah siap: Bahagian paling kuat telah ditekan dengan banyak; Tajuk, pengarang dan tarikh fail tidak dapat disalin. Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menyimpannya. Lain kali, cuba ubah cara anda merakam bunyi."
+  live zh-Hans (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了；无法复制文件的标题、作者和日期。为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在保存之前播放新视频。下次录音时，可以尝试调整录制声音的方式。"
+## after-4-lowload S-53: 2 cells; status ok 2; revision a3a4267ad47d8bd5 2
+  instruments: overflow {pass 2}; ax {pass 2}; targets {fail 2}; contrastText {pass 2}; contrastExtra {cannot-determine 2}; measure {pass 2}; type {fail 2}; focus {pass 2}; player {pass 2}; formatTip {not-applicable 2}; footer {pass 2}; limiting {pass 2}; videoLanguage {pass 2}; asserts {pass 2}
+  limiting:
+    present above the threshold, absent below: pass 2
+  asserts:
+    Create reads "Create the video again", secondary (VH-190): pass 2
+    the record's output in its short form, without the purpose (VH-188): pass 2
+    the card holds its player (VH-192): pass 2
+    no "Worth knowing about the finished video" on a level lecture: pass 2
+  player:
+    present while unsaved, one, in the card: pass 2
+    controls, preload metadata, no autoplay: pass 2
+    paused a second after the card appeared: pass 2
+    an object URL whose metadata loads: pass 2
+    after the card's lines, before the lifetime line and Save: pass 2
+    the host inside the page, no taller than its cap: pass 2
+    host named by the card's title: pass 2
+    control inventory, each named: pass 2
+    control target (any of the cell's): fail 2
+  focus on Save: 4 rows; outcome {pass 4}; focusVisible {true 4}; area at 3:1 840–976; perimeter 774–911; best ratio 9.1–21
+  live ms-MY (1): null
+## after-5-lowload S-138: 2 cells; status ok 2; revision a3a4267ad47d8bd5 2
+  instruments: overflow {pass 2}; ax {pass 2}; targets {fail 2}; contrastText {pass 2}; contrastExtra {cannot-determine 2}; measure {pass 2}; type {fail 2}; focus {pass 2}; player {fail 2}; formatTip {not-applicable 2}; footer {pass 2}; limiting {cannot-determine 2}; videoLanguage {pass 2}; asserts {pass 2}
+  limiting:
+    present above the threshold, absent below: pass 2
+    heading and detail word for word: pass 2
+    first among the card's warnings: pass 2
+    first in the line spoken at completion, with every warning title in order: cannot-determine 2
+    the heavy warning's detail whole after its title, in the line spoken at completion: cannot-determine 2
+  asserts:
+    both, heavy first, through the download, Keep it and "Previous video": pass 2
+  player:
+    present while unsaved, one, in the card: pass 2
+    controls, preload metadata, no autoplay: pass 2
+    paused a second after the card appeared: fail 2
+    an object URL whose metadata loads: pass 2
+    after the card's lines, before the lifetime line and Save: pass 2
+    the host inside the page, no taller than its cap: pass 2
+    host named by the card's title: pass 2
+    control inventory, each named: pass 2
+    control target (any of the cell's): fail 2
+  focus on Save: 2 rows; outcome {pass 2}; focusVisible {true 2}; area at 3:1 648–648; perimeter 584–584; best ratio 11.35–21
+  w320 warnings title within one screen of the card's top: {true 2}
+  live zh-Hans (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound."
+## after-5-lowload S-151: 5 cells; status ok 5; revision a3a4267ad47d8bd5 5
+  instruments: overflow {pass 5}; ax {pass 5}; targets {fail 5}; contrastText {pass 5}; contrastExtra {cannot-determine 5}; measure {pass 5}; type {fail 5}; focus {cannot-determine 5}; player {pass 5}; formatTip {not-applicable 5}; footer {pass 5}; limiting {pass 5}; videoLanguage {pass 5}; asserts {pass 5}
+  limiting:
+    present above the threshold, absent below: pass 5
+    heading and detail word for word: pass 5
+    first among the card's warnings: pass 5
+    first in the line spoken at completion, with every warning title in order: pass 5
+    the heavy warning's detail whole after its title, in the line spoken at completion: pass 5
+  asserts:
+    unticked while the job ran (it shows only then): pass 5
+    #status at the completion's own write (the mutation that drew the card): "Your video is ready." then both titles, heavy first; earlier writes not counted: pass 5
+  player:
+    present while unsaved, one, in the card: pass 5
+    controls, preload metadata, no autoplay: pass 5
+    paused a second after the card appeared: pass 5
+    an object URL whose metadata loads: pass 5
+    after the card's lines, before the lifetime line and Save: pass 5
+    the host inside the page, no taller than its cap: pass 5
+    host named by the card's title: pass 5
+    control inventory, each named: pass 5
+    control target (any of the cell's): fail 5
+  focus on the card: 5 rows; focusVisible {true 5}; cannot-determine 5: card 799–988 px in a 568–900 px viewport, area at 3:1 2272–3600, perimeter 4068–7384
+  w320 warnings title within one screen of the card's top: {true 4}
+  live ms-MY (1): "Video anda sudah siap. Perlu diketahui tentang video yang telah siap: Bahagian paling kuat telah ditekan dengan banyak; Tajuk, pengarang dan tarikh fail tidak dapat disalin. Untuk mencapai tahap biasa, alat ini terpaksa menekan bahagian paling kuat dalam rakaman ini dengan banyak. Ini boleh menyebabkan suara kedengaran mendatar atau termampat, jadi mainkan video baharu sebelum anda menyimpannya. Lain kali, cuba ubah cara anda merakam bunyi."
+  live zh-Hans (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了；无法复制文件的标题、作者和日期。为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在保存之前播放新视频。下次录音时，可以尝试调整录制声音的方式。"
+## before-1 S-131: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {pass 20, cannot-determine 4}; type {fail 24}; focus {pass 24}; player {pass 24}; formatTip {not-applicable 24}; footer {pass 24}; limiting {pass 24}; videoLanguage {pass 24}; asserts {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+  asserts:
+    it plays while the save streams, with focus in it: pass 24
+    saved: paused, its source dropped, its URL revoked, out of the card; focus on the card: pass 24
+    Save reads "Saved", disabled: pass 24
+  player:
+    gone once a save completes: pass 24
+  focus on the card: 24 rows; focusVisible {true 24}; pass 24: card 168–234 px in a 568–900 px viewport, area at 3:1 1692–4168, perimeter 1628–4104
+  live en-GB (1): null
+  live ms-MY (1): null
+  live zh-Hans (1): null
+## before-1 S-135: 27 cells; status ok 27; revision a3a4267ad47d8bd5 27
+  instruments: overflow {pass 27}; ax {pass 27}; targets {fail 27}; contrastText {pass 27}; contrastExtra {cannot-determine 27}; measure {pass 23, cannot-determine 4}; type {fail 24, pass 3}; focus {pass 27}; player {pass 27}; formatTip {not-applicable 27}; footer {pass 27}; limiting {fail 27}; videoLanguage {pass 27}; asserts {pass 27}
+  limiting:
+    present above the threshold, absent below: pass 27
+    heading and detail word for word: pass 27
+    first among the card's warnings: pass 27
+    first in the line spoken at completion, with every warning title in order: pass 27
+    the heavy warning's detail whole after its title, in the line spoken at completion: fail 27
+  asserts:
+    the bite read from the worker's "chain planned" line is over 3 LU: pass 27
+  player:
+    present while unsaved, one, in the card: pass 27
+    controls, preload metadata, no autoplay: pass 27
+    paused a second after the card appeared: pass 27
+    an object URL whose metadata loads: pass 27
+    after the card's lines, before the lifetime line and Save: pass 27
+    the host inside the page, no taller than its cap: pass 27
+    host named by the card's title: pass 27
+    control inventory, each named: pass 27
+    control target (any of the cell's): fail 27
+  focus on Save: 27 rows; outcome {pass 27}; focusVisible {true 27}; area at 3:1 648–964; perimeter 584–900; best ratio 11.35–21
+  spacing cells 3: overflow {pass 3}; hscroll {false 3}; clipped 0/0/0; spill 0/0/0
+  w320 warnings title within one screen of the card's top: {true 14, false 1} false: S-135__ms-MY__w320__spacing
+  live en-GB (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard."
+  live ms-MY (1): "Video anda sudah siap. Perlu diketahui tentang video yang telah siap: Bahagian paling kuat telah ditekan dengan banyak."
+  live zh-Hans (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了。"
+## before-1 S-136: 27 cells; status ok 27; revision a3a4267ad47d8bd5 27
+  instruments: overflow {pass 27}; ax {pass 27}; targets {fail 27}; contrastText {pass 27}; contrastExtra {cannot-determine 27}; measure {pass 23, cannot-determine 4}; type {fail 24, pass 3}; focus {pass 27}; player {pass 27}; formatTip {not-applicable 27}; footer {pass 27}; limiting {fail 27}; videoLanguage {pass 27}; asserts {pass 27}
+  limiting:
+    present above the threshold, absent below: pass 27
+    heading and detail word for word: pass 27
+    first among the card's warnings: pass 27
+    first in the line spoken at completion, with every warning title in order: pass 27
+    the heavy warning's detail whole after its title, in the line spoken at completion: fail 27
+  asserts:
+    heavy limiting first, the metadata second, and no notification nested in the card: pass 27
+  player:
+    present while unsaved, one, in the card: pass 27
+    controls, preload metadata, no autoplay: pass 27
+    paused a second after the card appeared: pass 27
+    an object URL whose metadata loads: pass 27
+    after the card's lines, before the lifetime line and Save: pass 27
+    the host inside the page, no taller than its cap: pass 27
+    host named by the card's title: pass 27
+    control inventory, each named: pass 27
+    control target (any of the cell's): fail 27
+  focus on Save: 27 rows; outcome {pass 27}; focusVisible {true 27}; area at 3:1 648–964; perimeter 584–900; best ratio 11.35–21
+  spacing cells 3: overflow {pass 3}; hscroll {false 3}; clipped 0/0/0; spill 0/0/0
+  w320 warnings title within one screen of the card's top: {true 14, false 1} false: S-136__ms-MY__w320__spacing
+  live en-GB (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across."
+  live ms-MY (1): "Video anda sudah siap. Perlu diketahui tentang video yang telah siap: Bahagian paling kuat telah ditekan dengan banyak; Tajuk, pengarang dan tarikh fail tidak dapat disalin."
+  live zh-Hans (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了；无法复制文件的标题、作者和日期。"
+## before-1 S-137: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {cannot-determine 8, pass 16}; type {fail 24}; focus {pass 24}; player {pass 24}; formatTip {not-applicable 24}; footer {pass 24}; limiting {cannot-determine 24}; videoLanguage {pass 24}; asserts {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+    heading and detail word for word: pass 24
+    first among the card's warnings: pass 24
+    first in the line spoken at completion, with every warning title in order: cannot-determine 24
+    the heavy warning's detail whole after its title, in the line spoken at completion: cannot-determine 24
+    unchanged after a save: cannot-determine 24
+  asserts:
+    word for word beside "Saved.": pass 24
+    then in the new language: pass 24
+  player:
+    gone once a save completes: pass 24
+  focus on the card: 24 rows; focusVisible {true 24}; pass 24: card 168–255 px in a 568–900 px viewport, area at 3:1 1776–4168, perimeter 1712–4104
+  w320 warnings title within one screen of the card's top: {true 12}
+  live en-GB (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了。"
+  live ms-MY (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard."
+  live zh-Hans (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard."
+## before-1 S-138: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {cannot-determine 8, pass 16}; type {fail 24}; focus {pass 24}; player {pass 20, fail 4}; formatTip {not-applicable 24}; footer {pass 24}; limiting {cannot-determine 24}; videoLanguage {pass 24}; asserts {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+    heading and detail word for word: pass 24
+    first among the card's warnings: pass 24
+    first in the line spoken at completion, with every warning title in order: cannot-determine 24
+    the heavy warning's detail whole after its title, in the line spoken at completion: cannot-determine 24
+  asserts:
+    both, heavy first, through the download, Keep it and "Previous video": pass 24
+  player:
+    present while unsaved, one, in the card: pass 24
+    controls, preload metadata, no autoplay: pass 24
+    paused a second after the card appeared: pass 20, fail 4
+    an object URL whose metadata loads: pass 24
+    after the card's lines, before the lifetime line and Save: pass 24
+    the host inside the page, no taller than its cap: pass 24
+    host named by the card's title: pass 24
+    control inventory, each named: pass 24
+    control target (any of the cell's): fail 24
+  focus on Save: 24 rows; outcome {pass 24}; focusVisible {true 24}; area at 3:1 648–840; perimeter 584–774; best ratio 11.35–21
+  w320 warnings title within one screen of the card's top: {true 12}
+  live en-GB (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了；无法复制文件的标题、作者和日期。"
+  live ms-MY (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across."
+  live zh-Hans (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across."
+## before-1 S-151: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {pass 20, cannot-determine 4}; type {fail 24}; focus {pass 24}; player {pass 24}; formatTip {not-applicable 24}; footer {pass 24}; limiting {fail 24}; videoLanguage {pass 24}; asserts {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+    heading and detail word for word: pass 24
+    first among the card's warnings: pass 24
+    first in the line spoken at completion, with every warning title in order: pass 24
+    the heavy warning's detail whole after its title, in the line spoken at completion: fail 24
+  asserts:
+    unticked while the job ran (it shows only then): pass 24
+    #status at the completion's own write (the mutation that drew the card): "Your video is ready." then both titles, heavy first; earlier writes not counted: pass 24
+  player:
+    present while unsaved, one, in the card: pass 24
+    controls, preload metadata, no autoplay: pass 24
+    paused a second after the card appeared: pass 24
+    an object URL whose metadata loads: pass 24
+    after the card's lines, before the lifetime line and Save: pass 24
+    the host inside the page, no taller than its cap: pass 24
+    host named by the card's title: pass 24
+    control inventory, each named: pass 24
+    control target (any of the cell's): fail 24
+  focus on the card: 24 rows; focusVisible {true 24}; pass 24: card 380–698 px in a 568–900 px viewport, area at 3:1 2456–6288, perimeter 2392–6224
+  w320 warnings title within one screen of the card's top: {true 12}
+  live en-GB (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across."
+  live ms-MY (1): "Video anda sudah siap. Perlu diketahui tentang video yang telah siap: Bahagian paling kuat telah ditekan dengan banyak; Tajuk, pengarang dan tarikh fail tidak dapat disalin."
+  live zh-Hans (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了；无法复制文件的标题、作者和日期。"
+## before-1 S-152: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {pass 20, cannot-determine 4}; type {fail 24}; focus {pass 24}; player {fail 24}; formatTip {not-applicable 24}; footer {pass 24}; limiting {fail 24}; videoLanguage {pass 24}; asserts {pass 24}; subresults {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+    heading and detail word for word: pass 24
+    first among the card's warnings: pass 24
+    first in the line spoken at completion, with every warning title in order: pass 24
+    the heavy warning's detail whole after its title, in the line spoken at completion: fail 24
+  asserts:
+    the player's MediaError recorded; the warning first and word for word: pass 24
+  player:
+    present while unsaved, one, in the card: pass 24
+    controls, preload metadata, no autoplay: pass 24
+    paused a second after the card appeared: pass 24
+    an object URL whose metadata loads: fail 24
+    after the card's lines, before the lifetime line and Save: pass 24
+    the host inside the page, no taller than its cap: pass 24
+    host named by the card's title: fail 24
+    control inventory: cannot-determine 24
+  focus on Save: 24 rows; outcome {pass 24}; focusVisible {true 24}; area at 3:1 648–840; perimeter 584–774; best ratio 11.35–21
+  w320 warnings title within one screen of the card's top: {true 12}
+  live en-GB (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard."
+  live ms-MY (1): "Video anda sudah siap. Perlu diketahui tentang video yang telah siap: Bahagian paling kuat telah ditekan dengan banyak."
+  live zh-Hans (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了。"
+## before-1 S-53: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {pass 20, cannot-determine 4}; type {fail 24}; focus {pass 24}; player {pass 24}; formatTip {not-applicable 24}; footer {pass 24}; limiting {pass 24}; videoLanguage {pass 24}; asserts {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+  asserts:
+    Create reads "Create the video again", secondary (VH-190): pass 24
+    the record's output in its short form, without the purpose (VH-188): pass 24
+    the card holds its player (VH-192): pass 24
+    no "Worth knowing about the finished video" on a level lecture: pass 24
+  player:
+    present while unsaved, one, in the card: pass 24
+    controls, preload metadata, no autoplay: pass 24
+    paused a second after the card appeared: pass 24
+    an object URL whose metadata loads: pass 24
+    after the card's lines, before the lifetime line and Save: pass 24
+    the host inside the page, no taller than its cap: pass 24
+    host named by the card's title: pass 24
+    control inventory, each named: pass 24
+    control target (any of the cell's): fail 24
+  focus on Save: 48 rows; outcome {pass 48}; focusVisible {true 48}; area at 3:1 648–988; perimeter 584–924; best ratio 9.1–21
+  live en-GB (1): null
+  live ms-MY (1): null
+  live zh-Hans (1): null
+## before-2-ac S-131: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {pass 20, cannot-determine 4}; type {fail 24}; focus {pass 24}; player {pass 24}; formatTip {not-applicable 24}; footer {pass 24}; limiting {pass 24}; videoLanguage {pass 24}; asserts {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+  asserts:
+    it plays while the save streams, with focus in it: pass 24
+    saved: paused, its source dropped, its URL revoked, out of the card; focus on the card: pass 24
+    Save reads "Saved", disabled: pass 24
+  player:
+    gone once a save completes: pass 24
+  focus on the card: 24 rows; focusVisible {true 24}; pass 24: card 168–234 px in a 568–900 px viewport, area at 3:1 1692–4168, perimeter 1628–4104
+  live en-GB (1): null
+  live ms-MY (1): null
+  live zh-Hans (1): null
+## before-2-ac S-135: 27 cells; status ok 27; revision a3a4267ad47d8bd5 27
+  instruments: overflow {pass 27}; ax {pass 27}; targets {fail 27}; contrastText {pass 27}; contrastExtra {cannot-determine 27}; measure {pass 23, cannot-determine 4}; type {fail 24, pass 3}; focus {pass 27}; player {pass 27}; formatTip {not-applicable 27}; footer {pass 27}; limiting {fail 27}; videoLanguage {pass 27}; asserts {pass 27}
+  limiting:
+    present above the threshold, absent below: pass 27
+    heading and detail word for word: pass 27
+    first among the card's warnings: pass 27
+    first in the line spoken at completion, with every warning title in order: pass 27
+    the heavy warning's detail whole after its title, in the line spoken at completion: fail 27
+  asserts:
+    the bite read from the worker's "chain planned" line is over 3 LU: pass 27
+  player:
+    present while unsaved, one, in the card: pass 27
+    controls, preload metadata, no autoplay: pass 27
+    paused a second after the card appeared: pass 27
+    an object URL whose metadata loads: pass 27
+    after the card's lines, before the lifetime line and Save: pass 27
+    the host inside the page, no taller than its cap: pass 27
+    host named by the card's title: pass 27
+    control inventory, each named: pass 27
+    control target (any of the cell's): fail 27
+  focus on Save: 27 rows; outcome {pass 27}; focusVisible {true 27}; area at 3:1 648–964; perimeter 584–900; best ratio 11.35–21
+  spacing cells 3: overflow {pass 3}; hscroll {false 3}; clipped 0/0/0; spill 0/0/0
+  w320 warnings title within one screen of the card's top: {true 14, false 1} false: S-135__ms-MY__w320__spacing
+  live en-GB (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard."
+  live ms-MY (1): "Video anda sudah siap. Perlu diketahui tentang video yang telah siap: Bahagian paling kuat telah ditekan dengan banyak."
+  live zh-Hans (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了。"
+## before-2-ac S-136: 27 cells; status ok 27; revision a3a4267ad47d8bd5 27
+  instruments: overflow {pass 27}; ax {pass 27}; targets {fail 27}; contrastText {pass 27}; contrastExtra {cannot-determine 27}; measure {pass 23, cannot-determine 4}; type {fail 24, pass 3}; focus {pass 27}; player {pass 27}; formatTip {not-applicable 27}; footer {pass 27}; limiting {fail 27}; videoLanguage {pass 27}; asserts {pass 27}
+  limiting:
+    present above the threshold, absent below: pass 27
+    heading and detail word for word: pass 27
+    first among the card's warnings: pass 27
+    first in the line spoken at completion, with every warning title in order: pass 27
+    the heavy warning's detail whole after its title, in the line spoken at completion: fail 27
+  asserts:
+    heavy limiting first, the metadata second, and no notification nested in the card: pass 27
+  player:
+    present while unsaved, one, in the card: pass 27
+    controls, preload metadata, no autoplay: pass 27
+    paused a second after the card appeared: pass 27
+    an object URL whose metadata loads: pass 27
+    after the card's lines, before the lifetime line and Save: pass 27
+    the host inside the page, no taller than its cap: pass 27
+    host named by the card's title: pass 27
+    control inventory, each named: pass 27
+    control target (any of the cell's): fail 27
+  focus on Save: 27 rows; outcome {pass 27}; focusVisible {true 27}; area at 3:1 648–964; perimeter 584–900; best ratio 11.35–21
+  spacing cells 3: overflow {pass 3}; hscroll {false 3}; clipped 0/0/0; spill 0/0/0
+  w320 warnings title within one screen of the card's top: {true 14, false 1} false: S-136__ms-MY__w320__spacing
+  live en-GB (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across."
+  live ms-MY (1): "Video anda sudah siap. Perlu diketahui tentang video yang telah siap: Bahagian paling kuat telah ditekan dengan banyak; Tajuk, pengarang dan tarikh fail tidak dapat disalin."
+  live zh-Hans (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了；无法复制文件的标题、作者和日期。"
+## before-2-ac S-137: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {cannot-determine 8, pass 16}; type {fail 24}; focus {pass 24}; player {pass 24}; formatTip {not-applicable 24}; footer {pass 24}; limiting {cannot-determine 24}; videoLanguage {pass 24}; asserts {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+    heading and detail word for word: pass 24
+    first among the card's warnings: pass 24
+    first in the line spoken at completion, with every warning title in order: cannot-determine 24
+    the heavy warning's detail whole after its title, in the line spoken at completion: cannot-determine 24
+    unchanged after a save: cannot-determine 24
+  asserts:
+    word for word beside "Saved.": pass 24
+    then in the new language: pass 24
+  player:
+    gone once a save completes: pass 24
+  focus on the card: 24 rows; focusVisible {true 24}; pass 24: card 168–255 px in a 568–900 px viewport, area at 3:1 1776–4168, perimeter 1712–4104
+  w320 warnings title within one screen of the card's top: {true 12}
+  live en-GB (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了。"
+  live ms-MY (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard."
+  live zh-Hans (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard."
+## before-2-ac S-138: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {cannot-determine 8, pass 16}; type {fail 24}; focus {pass 24}; player {fail 24}; formatTip {not-applicable 24}; footer {pass 24}; limiting {cannot-determine 24}; videoLanguage {pass 24}; asserts {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+    heading and detail word for word: pass 24
+    first among the card's warnings: pass 24
+    first in the line spoken at completion, with every warning title in order: cannot-determine 24
+    the heavy warning's detail whole after its title, in the line spoken at completion: cannot-determine 24
+  asserts:
+    both, heavy first, through the download, Keep it and "Previous video": pass 24
+  player:
+    present while unsaved, one, in the card: pass 24
+    controls, preload metadata, no autoplay: pass 24
+    paused a second after the card appeared: fail 24
+    an object URL whose metadata loads: pass 24
+    after the card's lines, before the lifetime line and Save: pass 24
+    the host inside the page, no taller than its cap: pass 24
+    host named by the card's title: pass 24
+    control inventory, each named: pass 24
+    control target (any of the cell's): fail 24
+  focus on Save: 24 rows; outcome {pass 24}; focusVisible {true 24}; area at 3:1 648–840; perimeter 584–774; best ratio 11.35–21
+  w320 warnings title within one screen of the card's top: {true 12}
+  live en-GB (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了；无法复制文件的标题、作者和日期。"
+  live ms-MY (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across."
+  live zh-Hans (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across."
+## before-2-ac S-151: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {pass 20, cannot-determine 4}; type {fail 24}; focus {pass 24}; player {pass 24}; formatTip {not-applicable 24}; footer {pass 24}; limiting {fail 24}; videoLanguage {pass 24}; asserts {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+    heading and detail word for word: pass 24
+    first among the card's warnings: pass 24
+    first in the line spoken at completion, with every warning title in order: pass 24
+    the heavy warning's detail whole after its title, in the line spoken at completion: fail 24
+  asserts:
+    unticked while the job ran (it shows only then): pass 24
+    #status at the completion's own write (the mutation that drew the card): "Your video is ready." then both titles, heavy first; earlier writes not counted: pass 24
+  player:
+    present while unsaved, one, in the card: pass 24
+    controls, preload metadata, no autoplay: pass 24
+    paused a second after the card appeared: pass 24
+    an object URL whose metadata loads: pass 24
+    after the card's lines, before the lifetime line and Save: pass 24
+    the host inside the page, no taller than its cap: pass 24
+    host named by the card's title: pass 24
+    control inventory, each named: pass 24
+    control target (any of the cell's): fail 24
+  focus on the card: 24 rows; focusVisible {true 24}; pass 24: card 380–698 px in a 568–900 px viewport, area at 3:1 2456–6288, perimeter 2392–6224
+  w320 warnings title within one screen of the card's top: {true 12}
+  live en-GB (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across."
+  live ms-MY (1): "Video anda sudah siap. Perlu diketahui tentang video yang telah siap: Bahagian paling kuat telah ditekan dengan banyak; Tajuk, pengarang dan tarikh fail tidak dapat disalin."
+  live zh-Hans (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了；无法复制文件的标题、作者和日期。"
+## before-2-ac S-152: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {pass 20, cannot-determine 4}; type {fail 24}; focus {pass 24}; player {fail 24}; formatTip {not-applicable 24}; footer {pass 24}; limiting {fail 24}; videoLanguage {pass 24}; asserts {pass 24}; subresults {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+    heading and detail word for word: pass 24
+    first among the card's warnings: pass 24
+    first in the line spoken at completion, with every warning title in order: pass 24
+    the heavy warning's detail whole after its title, in the line spoken at completion: fail 24
+  asserts:
+    the player's MediaError recorded; the warning first and word for word: pass 24
+  player:
+    present while unsaved, one, in the card: pass 24
+    controls, preload metadata, no autoplay: pass 24
+    paused a second after the card appeared: pass 24
+    an object URL whose metadata loads: fail 24
+    after the card's lines, before the lifetime line and Save: pass 24
+    the host inside the page, no taller than its cap: pass 24
+    host named by the card's title: fail 24
+    control inventory: cannot-determine 24
+  focus on Save: 24 rows; outcome {pass 24}; focusVisible {true 24}; area at 3:1 648–840; perimeter 584–774; best ratio 11.35–21
+  w320 warnings title within one screen of the card's top: {true 12}
+  live en-GB (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard."
+  live ms-MY (1): "Video anda sudah siap. Perlu diketahui tentang video yang telah siap: Bahagian paling kuat telah ditekan dengan banyak."
+  live zh-Hans (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了。"
+## before-2-ac S-53: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {pass 20, cannot-determine 4}; type {fail 24}; focus {pass 24}; player {pass 24}; formatTip {not-applicable 24}; footer {pass 24}; limiting {pass 24}; videoLanguage {pass 24}; asserts {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+  asserts:
+    Create reads "Create the video again", secondary (VH-190): pass 24
+    the record's output in its short form, without the purpose (VH-188): pass 24
+    the card holds its player (VH-192): pass 24
+    no "Worth knowing about the finished video" on a level lecture: pass 24
+  player:
+    present while unsaved, one, in the card: pass 24
+    controls, preload metadata, no autoplay: pass 24
+    paused a second after the card appeared: pass 24
+    an object URL whose metadata loads: pass 24
+    after the card's lines, before the lifetime line and Save: pass 24
+    the host inside the page, no taller than its cap: pass 24
+    host named by the card's title: pass 24
+    control inventory, each named: pass 24
+    control target (any of the cell's): fail 24
+  focus on Save: 48 rows; outcome {pass 48}; focusVisible {true 48}; area at 3:1 648–988; perimeter 584–924; best ratio 9.1–21
+  live en-GB (1): null
+  live ms-MY (1): null
+  live zh-Hans (1): null
+## before-3-ac-lowload S-131: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {pass 20, cannot-determine 4}; type {fail 24}; focus {pass 24}; player {pass 24}; formatTip {not-applicable 24}; footer {pass 24}; limiting {pass 24}; videoLanguage {pass 24}; asserts {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+  asserts:
+    it plays while the save streams, with focus in it: pass 24
+    saved: paused, its source dropped, its URL revoked, out of the card; focus on the card: pass 24
+    Save reads "Saved", disabled: pass 24
+  player:
+    gone once a save completes: pass 24
+  focus on the card: 24 rows; focusVisible {true 24}; pass 24: card 168–234 px in a 568–900 px viewport, area at 3:1 1692–4168, perimeter 1628–4104
+  live en-GB (1): null
+  live ms-MY (1): null
+  live zh-Hans (1): null
+## before-3-ac-lowload S-135: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {pass 20, cannot-determine 4}; type {fail 24}; focus {pass 24}; player {pass 24}; formatTip {not-applicable 24}; footer {pass 24}; limiting {fail 24}; videoLanguage {pass 24}; asserts {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+    heading and detail word for word: pass 24
+    first among the card's warnings: pass 24
+    first in the line spoken at completion, with every warning title in order: pass 24
+    the heavy warning's detail whole after its title, in the line spoken at completion: fail 24
+  asserts:
+    the bite read from the worker's "chain planned" line is over 3 LU: pass 24
+  player:
+    present while unsaved, one, in the card: pass 24
+    controls, preload metadata, no autoplay: pass 24
+    paused a second after the card appeared: pass 24
+    an object URL whose metadata loads: pass 24
+    after the card's lines, before the lifetime line and Save: pass 24
+    the host inside the page, no taller than its cap: pass 24
+    host named by the card's title: pass 24
+    control inventory, each named: pass 24
+    control target (any of the cell's): fail 24
+  focus on Save: 24 rows; outcome {pass 24}; focusVisible {true 24}; area at 3:1 648–840; perimeter 584–774; best ratio 11.35–21
+  w320 warnings title within one screen of the card's top: {true 12}
+  live en-GB (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard."
+  live ms-MY (1): "Video anda sudah siap. Perlu diketahui tentang video yang telah siap: Bahagian paling kuat telah ditekan dengan banyak."
+  live zh-Hans (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了。"
+## before-3-ac-lowload S-136: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {pass 20, cannot-determine 4}; type {fail 24}; focus {pass 24}; player {pass 24}; formatTip {not-applicable 24}; footer {pass 24}; limiting {fail 24}; videoLanguage {pass 24}; asserts {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+    heading and detail word for word: pass 24
+    first among the card's warnings: pass 24
+    first in the line spoken at completion, with every warning title in order: pass 24
+    the heavy warning's detail whole after its title, in the line spoken at completion: fail 24
+  asserts:
+    heavy limiting first, the metadata second, and no notification nested in the card: pass 24
+  player:
+    present while unsaved, one, in the card: pass 24
+    controls, preload metadata, no autoplay: pass 24
+    paused a second after the card appeared: pass 24
+    an object URL whose metadata loads: pass 24
+    after the card's lines, before the lifetime line and Save: pass 24
+    the host inside the page, no taller than its cap: pass 24
+    host named by the card's title: pass 24
+    control inventory, each named: pass 24
+    control target (any of the cell's): fail 24
+  focus on Save: 24 rows; outcome {pass 24}; focusVisible {true 24}; area at 3:1 648–840; perimeter 584–774; best ratio 11.35–21
+  w320 warnings title within one screen of the card's top: {true 12}
+  live en-GB (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across."
+  live ms-MY (1): "Video anda sudah siap. Perlu diketahui tentang video yang telah siap: Bahagian paling kuat telah ditekan dengan banyak; Tajuk, pengarang dan tarikh fail tidak dapat disalin."
+  live zh-Hans (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了；无法复制文件的标题、作者和日期。"
+## before-3-ac-lowload S-138: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {cannot-determine 8, pass 16}; type {fail 24}; focus {pass 24}; player {fail 16, pass 8}; formatTip {not-applicable 24}; footer {pass 24}; limiting {cannot-determine 24}; videoLanguage {pass 24}; asserts {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+    heading and detail word for word: pass 24
+    first among the card's warnings: pass 24
+    first in the line spoken at completion, with every warning title in order: cannot-determine 24
+    the heavy warning's detail whole after its title, in the line spoken at completion: cannot-determine 24
+  asserts:
+    both, heavy first, through the download, Keep it and "Previous video": pass 24
+  player:
+    present while unsaved, one, in the card: pass 24
+    controls, preload metadata, no autoplay: pass 24
+    paused a second after the card appeared: fail 16, pass 8
+    an object URL whose metadata loads: pass 24
+    after the card's lines, before the lifetime line and Save: pass 24
+    the host inside the page, no taller than its cap: pass 24
+    host named by the card's title: pass 24
+    control inventory, each named: pass 24
+    control target (any of the cell's): fail 24
+  focus on Save: 24 rows; outcome {pass 24}; focusVisible {true 24}; area at 3:1 648–840; perimeter 584–774; best ratio 11.35–21
+  w320 warnings title within one screen of the card's top: {true 12}
+  live en-GB (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了；无法复制文件的标题、作者和日期。"
+  live ms-MY (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across."
+  live zh-Hans (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across."
+## before-3-ac-lowload S-151: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {pass 20, cannot-determine 4}; type {fail 24}; focus {pass 24}; player {pass 24}; formatTip {not-applicable 24}; footer {pass 24}; limiting {fail 24}; videoLanguage {pass 24}; asserts {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+    heading and detail word for word: pass 24
+    first among the card's warnings: pass 24
+    first in the line spoken at completion, with every warning title in order: pass 24
+    the heavy warning's detail whole after its title, in the line spoken at completion: fail 24
+  asserts:
+    unticked while the job ran (it shows only then): pass 24
+    #status at the completion's own write (the mutation that drew the card): "Your video is ready." then both titles, heavy first; earlier writes not counted: pass 24
+  player:
+    present while unsaved, one, in the card: pass 24
+    controls, preload metadata, no autoplay: pass 24
+    paused a second after the card appeared: pass 24
+    an object URL whose metadata loads: pass 24
+    after the card's lines, before the lifetime line and Save: pass 24
+    the host inside the page, no taller than its cap: pass 24
+    host named by the card's title: pass 24
+    control inventory, each named: pass 24
+    control target (any of the cell's): fail 24
+  focus on the card: 24 rows; focusVisible {true 24}; pass 24: card 380–698 px in a 568–900 px viewport, area at 3:1 2456–6288, perimeter 2392–6224
+  w320 warnings title within one screen of the card's top: {true 12}
+  live en-GB (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across."
+  live ms-MY (1): "Video anda sudah siap. Perlu diketahui tentang video yang telah siap: Bahagian paling kuat telah ditekan dengan banyak; Tajuk, pengarang dan tarikh fail tidak dapat disalin."
+  live zh-Hans (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了；无法复制文件的标题、作者和日期。"
+## before-3-ac-lowload S-152: 24 cells; status ok 24; revision a3a4267ad47d8bd5 24
+  instruments: overflow {pass 24}; ax {pass 24}; targets {fail 24}; contrastText {pass 24}; contrastExtra {cannot-determine 24}; measure {pass 20, cannot-determine 4}; type {fail 24}; focus {pass 24}; player {fail 24}; formatTip {not-applicable 24}; footer {pass 24}; limiting {fail 24}; videoLanguage {pass 24}; asserts {pass 24}; subresults {pass 24}
+  limiting:
+    present above the threshold, absent below: pass 24
+    heading and detail word for word: pass 24
+    first among the card's warnings: pass 24
+    first in the line spoken at completion, with every warning title in order: pass 24
+    the heavy warning's detail whole after its title, in the line spoken at completion: fail 24
+  asserts:
+    the player's MediaError recorded; the warning first and word for word: pass 24
+  player:
+    present while unsaved, one, in the card: pass 24
+    controls, preload metadata, no autoplay: pass 24
+    paused a second after the card appeared: pass 24
+    an object URL whose metadata loads: fail 24
+    after the card's lines, before the lifetime line and Save: pass 24
+    the host inside the page, no taller than its cap: pass 24
+    host named by the card's title: fail 24
+    control inventory: cannot-determine 24
+  focus on Save: 24 rows; outcome {pass 24}; focusVisible {true 24}; area at 3:1 648–840; perimeter 584–774; best ratio 11.35–21
+  w320 warnings title within one screen of the card's top: {true 12}
+  live en-GB (1): "Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard."
+  live ms-MY (1): "Video anda sudah siap. Perlu diketahui tentang video yang telah siap: Bahagian paling kuat telah ditekan dengan banyak."
+  live zh-Hans (1): "您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了。"

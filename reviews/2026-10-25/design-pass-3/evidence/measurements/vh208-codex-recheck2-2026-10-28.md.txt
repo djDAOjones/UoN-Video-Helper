@@ -1,0 +1,12 @@
+Verdict: Commit
+
+No musts.
+
+Notes:
+
+- **Must 1 resolved.** `project/decisions.md:27` names VH-150’s exact archived heading (`project/decisions-2026-10.md:806`). The Rationale at `project/decisions.md:25` limits supersession to warnings’ placement and treatment and preserves the no-nesting invariant. This satisfies rule 4.
+- **Wording corrected.** The decision (`:25`), item (`project/items/VH-208.md:45`) and revised commit sentence supplied in this brief consistently say the verdict preceded opening Codex’s answer. That matches the compare’s chronology.
+- **Evidence pair consistent.** The saved close brief and answer read as the historical check described, retaining its must and wording note. The brief correctly retains the earlier commit draft. Verbatim copying cannot be independently certified without a separate original inside the repository; none was available for comparison.
+- Inventory matches **17 modified files and 126 untracked files**. No new defect found in the narrow changes.
+- `node tools/check.mjs`: **0 failures, 0 warnings**. Markdown lint and link checks passed. The full gate is the reported run, not independently rerun here; populate `Verify:` from the planned final run.
+- Applied house-conventions’ minimal-change discipline. No files changed.

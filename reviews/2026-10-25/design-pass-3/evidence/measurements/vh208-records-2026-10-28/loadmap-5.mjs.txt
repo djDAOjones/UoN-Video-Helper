@@ -1,0 +1,17 @@
+// VH-208 #5: the 1-minute load at each cell's probe time, from <run>.load.log (the last sample at or before it, else the first after).
+// Usage: node loadmap-5.mjs <run> [<run> …]; prints, per scenario and run, cells read at load < 8 and >= 8, and the cells read >= 8 in every run given.
+import fs from 'node:fs'; import path from 'node:path'
+const runs = process.argv.slice(2); const at = {}
+for (const run of runs) {
+  const L = fs.readFileSync(`${run}.load.log`, 'utf8').split('\n').filter(Boolean).map((l) => { const [t, , v] = l.split(' '); return [t, Number(v)] })
+  const day = fs.readFileSync(path.join(run, 'conditions.txt'), 'utf8').match(/start (\d{4}-\d\d-\d\d)/)[1]
+  const S = L.map(([t, v]) => [Date.parse(`${day}T${t}Z`), v])
+  for (const f of fs.readdirSync(path.join(run, 'runs')).filter((x) => /^vh208-geometry-.*\.jsonl$/.test(x)))
+    for (const l of fs.readFileSync(path.join(run, 'runs', f), 'utf8').split('\n').filter(Boolean)) {
+      const g = JSON.parse(l); const k = `${g.id}__${g.lang}__${g.walk.split('-').pop()}__${g.mode}`; const t = Date.parse(g.at)
+      const prev = S.filter(([s]) => s <= t).pop() ?? S[0]; (at[k] ||= {})[run] = prev[1] } }
+const per = {}
+for (const [k, v] of Object.entries(at)) { const id = k.split('__')[0]
+  for (const [run, l] of Object.entries(v)) { const p = ((per[id] ||= {})[run] ||= { low: 0, high: 0 }); l < 8 ? p.low++ : p.high++ }
+  if (Object.keys(v).length === runs.length && Object.values(v).every((l) => l >= 8)) console.log('high in every run:', k, JSON.stringify(v)) }
+for (const [id, v] of Object.entries(per)) console.log(id, Object.entries(v).map(([r, p]) => `${r} <8 ${p.low} ≥8 ${p.high}`).join(' | '))

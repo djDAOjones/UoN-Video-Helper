@@ -1,0 +1,25 @@
+Should 1's comment wrap (VH-208 #8, 2026-10-28T16:37:55Z): the walked diff (vh208-wip-7/unstaged.patch, byte-equal to wip-5's and wip-6's, the diff every after walked, diffSha256 2f010d53d3df39c6) against the candidate's git diff --binary after the wrap.
+Command: diff <walked unstaged.patch> <(git diff --binary)
+
+141c141
+< index 9230b3d..28a9aad 100644
+---
+> index 9230b3d..b172172 100644
+144c144
+< @@ -3317,7 +3317,7 @@ function renderResult(kept: RetainedResult): HTMLElement {
+---
+> @@ -3317,9 +3317,9 @@ function renderResult(kept: RetainedResult): HTMLElement {
+149,151c149,153
+< +  // output's warnings, the lifetime, and Save as its action. Built once here, and its words written
+<    // by `paint` below: now, and again on a change of language, without the
+<    // Save closure or its state being rebuilt (VH-105).
+---
+> -  // by `paint` below: now, and again on a change of language, without the
+> -  // Save closure or its state being rebuilt (VH-105).
+> +  // output's warnings, the lifetime, and Save as its action. Built once here,
+> +  // and its words written by `paint` below: now, and again on a change of
+> +  // language, without the Save closure or its state being rebuilt (VH-105).
+152a155,156
+>    const [title, recordLine, endedLine, differsLine] = heading.querySelectorAll('p')
+>    // Where focus lands when the job finishes, "Keep it" restores this, or
+diff exit 1

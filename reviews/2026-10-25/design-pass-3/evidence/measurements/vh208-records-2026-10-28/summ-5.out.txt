@@ -1,0 +1,136 @@
+## S-135  before 27 after 27
+ en-GB w1280 B: order "title>player>lifetime>save>warnings" where "beside the card" nested false h 698 warnTop 722 1scr true saveTop 637
+ en-GB w1280 A: order "title>warnings>player>lifetime>save" where "in the card" nested false h 863 warnTop 107 1scr true saveTop 802
+ en-GB w320 B: order "title>player>lifetime>save>warnings" where "beside the card" nested false h 425/515 warnTop 449/539 1scr true saveTop 364/454
+ en-GB w320 A: order "title>warnings>player>lifetime>save" where "in the card" nested false h 740/985 warnTop 173/230 1scr true saveTop 679/924
+ ms-MY w1280 B: order "title>player>lifetime>save>warnings" where "beside the card" nested false h 698 warnTop 722 1scr true saveTop 637
+ ms-MY w1280 A: order "title>warnings>player>lifetime>save" where "in the card" nested false h 884 warnTop 107 1scr true saveTop 823
+ ms-MY w320 B: order "title>player>lifetime>save>warnings" where "beside the card" nested false h 443/557 warnTop 467/581 1scr true/false saveTop 382/496
+ ms-MY w320 A: order "title>warnings>player>lifetime>save" where "in the card" nested false h 800/1111 warnTop 170/251 1scr true saveTop 739/1050
+ zh-Hans w1280 B: order "title>player>lifetime>save>warnings" where "beside the card" nested false h 698 warnTop 722 1scr true saveTop 637
+ zh-Hans w1280 A: order "title>warnings>player>lifetime>save" where "in the card" nested false h 842 warnTop 107 1scr true saveTop 781
+ zh-Hans w320 B: order "title>player>lifetime>save>warnings" where "beside the card" nested false h 380/494 warnTop 404/518 1scr true saveTop 319/433
+ zh-Hans w320 A: order "title>warnings>player>lifetime>save" where "in the card" nested false h 632/856 warnTop 128/209 1scr true saveTop 571/795
+ ax B: CARD[ VIDEO BUTTON:Save the video |REGION:Worth knowing about th btn:Create the v || CARD[ VIDEO BUTTON:Simpan video itu |REGION:Perlu diketahui tentan btn:Cipta video  || CARD[ VIDEO BUTTON:保存视频 |REGION:关于最终视频值得了解的事项 btn:重新制作视频
+ ax A: CARD[ WARNINGS VIDEO BUTTON:Save the video ] btn:Create the v || CARD[ WARNINGS VIDEO BUTTON:Simpan video itu ] btn:Cipta video  || CARD[ WARNINGS VIDEO BUTTON:保存视频 ] btn:重新制作视频
+ live en-GB B: ["Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard."]
+ live en-GB A: ["Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound."]
+## S-136  before 27 after 27
+ en-GB w1280 B: order "title>player>lifetime>save>warnings" where "beside the card" nested false h 698 warnTop 722 1scr true saveTop 637
+ en-GB w1280 A: order "title>warnings>player>lifetime>save" where "in the card" nested false h 967 warnTop 107 1scr true saveTop 906
+ en-GB w320 B: order "title>player>lifetime>save>warnings" where "beside the card" nested false h 425/515 warnTop 449/539 1scr true saveTop 364/454
+ en-GB w320 A: order "title>warnings>player>lifetime>save" where "in the card" nested false h 949/1305 warnTop 173/230 1scr true saveTop 888/1244
+ ms-MY w1280 B: order "title>player>lifetime>save>warnings" where "beside the card" nested false h 698 warnTop 722 1scr true saveTop 637
+ ms-MY w1280 A: order "title>warnings>player>lifetime>save" where "in the card" nested false h 988 warnTop 107 1scr true saveTop 927
+ ms-MY w320 B: order "title>player>lifetime>save>warnings" where "beside the card" nested false h 443/557 warnTop 467/581 1scr true/false saveTop 382/496
+ ms-MY w320 A: order "title>warnings>player>lifetime>save" where "in the card" nested false h 1072/1473 warnTop 170/251 1scr true saveTop 1011/1412
+ zh-Hans w1280 B: order "title>player>lifetime>save>warnings" where "beside the card" nested false h 698 warnTop 722 1scr true saveTop 637
+ zh-Hans w1280 A: order "title>warnings>player>lifetime>save" where "in the card" nested false h 925 warnTop 107 1scr true saveTop 864
+ zh-Hans w320 B: order "title>player>lifetime>save>warnings" where "beside the card" nested false h 380/494 warnTop 404/518 1scr true saveTop 319/433
+ zh-Hans w320 A: order "title>warnings>player>lifetime>save" where "in the card" nested false h 799/1092 warnTop 128/209 1scr true saveTop 738/1031
+ ax B: CARD[ VIDEO BUTTON:Save the video |REGION:Worth knowing about th btn:Create the v || CARD[ VIDEO BUTTON:Simpan video itu |REGION:Perlu diketahui tentan btn:Cipta video  || CARD[ VIDEO BUTTON:保存视频 |REGION:关于最终视频值得了解的事项 btn:重新制作视频
+ ax A: CARD[ WARNINGS VIDEO BUTTON:Save the video ] btn:Create the v || CARD[ WARNINGS VIDEO BUTTON:Simpan video itu ] btn:Cipta video  || CARD[ WARNINGS VIDEO BUTTON:保存视频 ] btn:重新制作视频
+ live en-GB B: ["Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across."]
+ live en-GB A: ["Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound."]
+## S-137  before 24 after 24
+ en-GB w1280 B: order "title>save>warnings" where "beside the card" nested false h 168 warnTop 192 1scr true saveTop 107
+ en-GB w1280 A: order "title>warnings>save" where "in the card" nested false h 333 warnTop 107 1scr true saveTop 272
+ en-GB w320 B: order "title>save>warnings" where "beside the card" nested false h 255 warnTop 279 1scr true saveTop 194
+ en-GB w320 A: order "title>warnings>save" where "in the card" nested false h 570 warnTop 194 1scr true saveTop 509
+ ms-MY w1280 B: order "title>save>warnings" where "beside the card" nested false h 168 warnTop 192 1scr true saveTop 107
+ ms-MY w1280 A: order "title>warnings>save" where "in the card" nested false h 354 warnTop 107 1scr true saveTop 293
+ ms-MY w320 B: order "title>save>warnings" where "beside the card" nested false h 252 warnTop 276 1scr true saveTop 191
+ ms-MY w320 A: order "title>warnings>save" where "in the card" nested false h 609 warnTop 191 1scr true saveTop 548
+ zh-Hans w1280 B: order "title>save>warnings" where "beside the card" nested false h 168 warnTop 192 1scr true saveTop 107
+ zh-Hans w1280 A: order "title>warnings>save" where "in the card" nested false h 312 warnTop 107 1scr true saveTop 251
+ zh-Hans w320 B: order "title>save>warnings" where "beside the card" nested false h 210 warnTop 234 1scr true saveTop 149
+ zh-Hans w320 A: order "title>warnings>save" where "in the card" nested false h 462 warnTop 149 1scr true saveTop 401
+ ax B: CARD[ BUTTON:Saved |REGION:Worth knowing about th btn:Create the v || CARD[ BUTTON:Disimpan |REGION:Perlu diketahui tentan btn:Cipta video  || CARD[ BUTTON:已保存 |REGION:关于最终视频值得了解的事项 btn:重新制作视频
+ ax A: CARD[ WARNINGS BUTTON:Saved ] btn:Create the v || CARD[ WARNINGS BUTTON:Disimpan ] btn:Cipta video  || CARD[ WARNINGS BUTTON:已保存 ] btn:重新制作视频
+ live en-GB B: ["您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了。"]
+ live en-GB A: ["您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了。为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在保存之前播放新视频。下次录音时，可以尝试调整录制声音的方式。"]
+## S-138  before 24 after 24
+ en-GB w1280 B: order "title>player>save>warnings" where "beside the card" nested false h 677 warnTop 701 1scr true saveTop 616
+ en-GB w1280 A: order "title>warnings>player>save" where "in the card" nested false h 946 warnTop 107 1scr true saveTop 885
+ en-GB w320 B: order "title>player>save>warnings" where "beside the card" nested false h 446 warnTop 470 1scr true saveTop 385
+ en-GB w320 A: order "title>warnings>player>save" where "in the card" nested false h 970 warnTop 194 1scr true saveTop 909
+ ms-MY w1280 B: order "title>player>save>warnings" where "beside the card" nested false h 698 warnTop 722 1scr true saveTop 637
+ ms-MY w1280 A: order "title>warnings>player>save" where "in the card" nested false h 988 warnTop 107 1scr true saveTop 927
+ ms-MY w320 B: order "title>player>save>warnings" where "beside the card" nested false h 467 warnTop 491 1scr true saveTop 406
+ ms-MY w320 A: order "title>warnings>player>save" where "in the card" nested false h 1096 warnTop 215 1scr true saveTop 1035
+ zh-Hans w1280 B: order "title>player>save>warnings" where "beside the card" nested false h 677 warnTop 701 1scr true saveTop 616
+ zh-Hans w1280 A: order "title>warnings>player>save" where "in the card" nested false h 904 warnTop 107 1scr true saveTop 843
+ zh-Hans w320 B: order "title>player>save>warnings" where "beside the card" nested false h 401 warnTop 425 1scr true saveTop 340
+ zh-Hans w320 A: order "title>warnings>player>save" where "in the card" nested false h 820 warnTop 149 1scr true saveTop 759
+ ax B: CARD[ ] |REGION:Previous video — 7.5 M |REGION:Worth knowing about th btn:Create the v || CARD[ ] |REGION:Video sebelumnya — 7.5 |REGION:Perlu diketahui tentan btn:Cipta video  || CARD[ ] |REGION:上一个视频 — 7.5 MB |REGION:关于最终视频值得了解的事项 btn:制作视频
+ ax A: CARD[ ] |REGION:Previous video — 7.5 M btn:Create the v || CARD[ ] |REGION:Video sebelumnya — 7.5 btn:Cipta video  || CARD[ ] |REGION:上一个视频 — 7.5 MB btn:制作视频
+ live en-GB B: ["您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了；无法复制文件的标题、作者和日期。"]
+ live en-GB A: ["您的视频已准备就绪。 关于最终视频值得了解的事项：最响亮的部分被大幅压低了；无法复制文件的标题、作者和日期。为了达到通常的水平，本工具不得不大幅压低这段录音中最响亮的部分。这可能会让人声听起来平淡、缺乏起伏，所以请在保存之前播放新视频。下次录音时，可以尝试调整录制声音的方式。"]
+## S-151  before 24 after 24
+ en-GB w1280 B: order "title>player>lifetime>save>warnings" where "beside the card" nested false h 698 warnTop 722 1scr true saveTop 637
+ en-GB w1280 A: order "title>warnings>player>lifetime>save" where "in the card" nested false h 967 warnTop 107 1scr true saveTop 906
+ en-GB w320 B: order "title>player>lifetime>save>warnings" where "beside the card" nested false h 425 warnTop 449 1scr true saveTop 364
+ en-GB w320 A: order "title>warnings>player>lifetime>save" where "in the card" nested false h 949 warnTop 173 1scr true saveTop 888
+ ms-MY w1280 B: order "title>player>lifetime>save>warnings" where "beside the card" nested false h 698 warnTop 722 1scr true saveTop 637
+ ms-MY w1280 A: order "title>warnings>player>lifetime>save" where "in the card" nested false h 988 warnTop 107 1scr true saveTop 927
+ ms-MY w320 B: order "title>player>lifetime>save>warnings" where "beside the card" nested false h 443 warnTop 467 1scr true saveTop 382
+ ms-MY w320 A: order "title>warnings>player>lifetime>save" where "in the card" nested false h 1072 warnTop 170 1scr true saveTop 1011
+ zh-Hans w1280 B: order "title>player>lifetime>save>warnings" where "beside the card" nested false h 698 warnTop 722 1scr true saveTop 637
+ zh-Hans w1280 A: order "title>warnings>player>lifetime>save" where "in the card" nested false h 925 warnTop 107 1scr true saveTop 864
+ zh-Hans w320 B: order "title>player>lifetime>save>warnings" where "beside the card" nested false h 380 warnTop 404 1scr true saveTop 319
+ zh-Hans w320 A: order "title>warnings>player>lifetime>save" where "in the card" nested false h 799 warnTop 128 1scr true saveTop 738
+ ax B: CARD[ VIDEO BUTTON:Save the video |REGION:Worth knowing about th btn:Create the v || CARD[ VIDEO BUTTON:Simpan video itu |REGION:Perlu diketahui tentan btn:Cipta video  || CARD[ VIDEO BUTTON:保存视频 |REGION:关于最终视频值得了解的事项 btn:重新制作视频
+ ax A: CARD[ WARNINGS VIDEO BUTTON:Save the video ] btn:Create the v || CARD[ WARNINGS VIDEO BUTTON:Simpan video itu ] btn:Cipta video  || CARD[ WARNINGS VIDEO BUTTON:保存视频 ] btn:重新制作视频
+ live en-GB B: ["Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across."]
+ live en-GB A: ["Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard; The file’s title, author, and date could not be copied across. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound."]
+## S-152  before 24 after 24
+ en-GB w1280 B: order "title>player>lifetime>save>warnings" where "beside the card" nested false h 384 warnTop 408 1scr true saveTop 323
+ en-GB w1280 A: order "title>warnings>player>lifetime>save" where "in the card" nested false h 549 warnTop 107 1scr true saveTop 488
+ en-GB w320 B: order "title>player>lifetime>save>warnings" where "beside the card" nested false h 471 warnTop 495 1scr true saveTop 410
+ en-GB w320 A: order "title>warnings>player>lifetime>save" where "in the card" nested false h 786 warnTop 173 1scr true saveTop 725
+ ms-MY w1280 B: order "title>player>lifetime>save>warnings" where "beside the card" nested false h 384 warnTop 408 1scr true saveTop 323
+ ms-MY w1280 A: order "title>warnings>player>lifetime>save" where "in the card" nested false h 570 warnTop 107 1scr true saveTop 509
+ ms-MY w320 B: order "title>player>lifetime>save>warnings" where "beside the card" nested false h 489 warnTop 513 1scr true saveTop 428
+ ms-MY w320 A: order "title>warnings>player>lifetime>save" where "in the card" nested false h 846 warnTop 170 1scr true saveTop 785
+ zh-Hans w1280 B: order "title>player>lifetime>save>warnings" where "beside the card" nested false h 384 warnTop 408 1scr true saveTop 323
+ zh-Hans w1280 A: order "title>warnings>player>lifetime>save" where "in the card" nested false h 528 warnTop 107 1scr true saveTop 467
+ zh-Hans w320 B: order "title>player>lifetime>save>warnings" where "beside the card" nested false h 426 warnTop 450 1scr true saveTop 365
+ zh-Hans w320 A: order "title>warnings>player>lifetime>save" where "in the card" nested false h 678 warnTop 128 1scr true saveTop 617
+ ax B: CARD[ VIDEO BUTTON:Save the video |REGION:Worth knowing about th btn:Create the v || CARD[ VIDEO BUTTON:Simpan video itu |REGION:Perlu diketahui tentan btn:Cipta video  || CARD[ VIDEO BUTTON:保存视频 |REGION:关于最终视频值得了解的事项 btn:重新制作视频
+ ax A: CARD[ WARNINGS VIDEO BUTTON:Save the video ] btn:Create the v || CARD[ WARNINGS VIDEO BUTTON:Simpan video itu ] btn:Cipta video  || CARD[ WARNINGS VIDEO BUTTON:保存视频 ] btn:重新制作视频
+ live en-GB B: ["Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard."]
+ live en-GB A: ["Your video is ready. Worth knowing about the finished video: The loudest moments were held down hard. To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound."]
+## S-131  before 24 after 24
+ en-GB w1280 B: order "title>save" where null nested false h 168 warnTop null 1scr null saveTop 107
+ en-GB w1280 A: order "title>save" where null nested false h 168 warnTop null 1scr null saveTop 107
+ en-GB w320 B: order "title>save" where null nested false h 234 warnTop null 1scr null saveTop 173
+ en-GB w320 A: order "title>save" where null nested false h 234 warnTop null 1scr null saveTop 173
+ ms-MY w1280 B: order "title>save" where null nested false h 168 warnTop null 1scr null saveTop 107
+ ms-MY w1280 A: order "title>save" where null nested false h 168 warnTop null 1scr null saveTop 107
+ ms-MY w320 B: order "title>save" where null nested false h 231 warnTop null 1scr null saveTop 170
+ ms-MY w320 A: order "title>save" where null nested false h 231 warnTop null 1scr null saveTop 170
+ zh-Hans w1280 B: order "title>save" where null nested false h 168 warnTop null 1scr null saveTop 107
+ zh-Hans w1280 A: order "title>save" where null nested false h 168 warnTop null 1scr null saveTop 107
+ zh-Hans w320 B: order "title>save" where null nested false h 189 warnTop null 1scr null saveTop 128
+ zh-Hans w320 A: order "title>save" where null nested false h 189 warnTop null 1scr null saveTop 128
+ ax B: CARD[ BUTTON:Saved ] btn:Create the v || CARD[ BUTTON:Disimpan ] btn:Cipta video  || CARD[ BUTTON:已保存 ] btn:重新制作视频
+ ax A: CARD[ BUTTON:Saved ] btn:Create the v || CARD[ BUTTON:Disimpan ] btn:Cipta video  || CARD[ BUTTON:已保存 ] btn:重新制作视频
+ live en-GB B: [null]
+ live en-GB A: [null]
+## S-53  before 24 after 24
+ en-GB w1280 B: order "title>player>lifetime>save" where null nested false h 698 warnTop null 1scr null saveTop 637
+ en-GB w1280 A: order "title>player>lifetime>save" where null nested false h 698 warnTop null 1scr null saveTop 637
+ en-GB w320 B: order "title>player>lifetime>save" where null nested false h 425 warnTop null 1scr null saveTop 364
+ en-GB w320 A: order "title>player>lifetime>save" where null nested false h 425 warnTop null 1scr null saveTop 364
+ ms-MY w1280 B: order "title>player>lifetime>save" where null nested false h 698 warnTop null 1scr null saveTop 637
+ ms-MY w1280 A: order "title>player>lifetime>save" where null nested false h 698 warnTop null 1scr null saveTop 637
+ ms-MY w320 B: order "title>player>lifetime>save" where null nested false h 443 warnTop null 1scr null saveTop 382
+ ms-MY w320 A: order "title>player>lifetime>save" where null nested false h 443 warnTop null 1scr null saveTop 382
+ zh-Hans w1280 B: order "title>player>lifetime>save" where null nested false h 698 warnTop null 1scr null saveTop 637
+ zh-Hans w1280 A: order "title>player>lifetime>save" where null nested false h 698 warnTop null 1scr null saveTop 637
+ zh-Hans w320 B: order "title>player>lifetime>save" where null nested false h 380 warnTop null 1scr null saveTop 319
+ zh-Hans w320 A: order "title>player>lifetime>save" where null nested false h 380 warnTop null 1scr null saveTop 319
+ ax B: CARD[ VIDEO BUTTON:Save the video ] btn:Create the v || CARD[ VIDEO BUTTON:Simpan video itu ] btn:Cipta video  || CARD[ VIDEO BUTTON:保存视频 ] btn:重新制作视频
+ ax A: CARD[ VIDEO BUTTON:Save the video ] btn:Create the v || CARD[ VIDEO BUTTON:保存视频 ] btn:重新制作视频 || CARD[ VIDEO BUTTON:Simpan video itu ] btn:Cipta video 
+ live en-GB B: [null]
+ live en-GB A: [null]

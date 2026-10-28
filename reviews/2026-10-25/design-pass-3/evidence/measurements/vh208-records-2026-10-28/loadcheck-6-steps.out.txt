@@ -1,0 +1,9 @@
+VH-208 #8, 2026-10-28T16:41:28Z: node loadcheck-6.mjs over the after runs, one more run each time (the first line of each output)
+198 cells in after-1, after-2, after-3-lowload; 21 with no read below load 8:
+198 cells in after-1, after-2, after-3-lowload, after-4-lowload; 11 with no read below load 8:
+198 cells in after-1, after-2, after-3-lowload, after-4-lowload, after-5-lowload; 4 with no read below load 8:
+  S-135__zh-Hans__w320__spacing {"after-1":8.24}
+  S-53__en-GB__w1280__dark {"after-1":8.22}
+  S-53__en-GB__w1280__forced-light {"after-1":8.22}
+  S-53__en-GB__w1280__light {"after-1":8.22}
+198 cells in after-1, after-2, after-3-lowload, after-4-lowload, after-5-lowload, after-6-lowload; 0 with no read below load 8:

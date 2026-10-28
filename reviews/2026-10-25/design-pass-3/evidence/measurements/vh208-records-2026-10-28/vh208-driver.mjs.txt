@@ -1,0 +1,107 @@
+// VH-208 #3's driver, adapted from VH-207's (`$N/vh207-walk/vh207-driver.mjs.txt`): VH-208's cells walked by the
+// pass's own runner (matrix.mjs), unchanged, on a plan declared in memory, with a read-only geometry probe that
+// wraps each walked scenario's `afterMode` in memory (after the runner's setMode, before the record is read).
+// Nothing here is written into the walker or the repository.
+//
+//   APP_URL=http://localhost:5181/ CDP_PORT=9251 FIX=<fixtures> OUT_ROOT=<out> RUN_ROOT=<runs> \
+//     node vh208-driver.mjs walk --walker <walker dir> --label before --name a \
+//       --scenarios S-135,S-136 [--langs …] [--views …] [--modes …] [--cells S-135:en-GB:w320:spacing,…]
+//
+// The probe's reads go to <RUN_ROOT>/vh208-geometry-<plan>.jsonl, one line a record, keyed by the walk's name
+// (scenario, language, view) and the mode the runner set (`w.qualMode`).
+import { pathToFileURL, fileURLToPath } from 'node:url'
+import { join, resolve } from 'node:path'
+import { appendFileSync, mkdirSync } from 'node:fs'
+import { execFileSync } from 'node:child_process'
+
+const list = (s) => String(s ?? '').split(',').map((x) => x.trim()).filter(Boolean)
+function parse(argv) {
+  const out = { _: [] }
+  for (let i = 0; i < argv.length; i++) {
+    if (argv[i].startsWith('--')) { const k = argv[i].slice(2); const v = argv[i + 1] && !argv[i + 1].startsWith('--') ? argv[++i] : true; out[k] = v }
+    else out._.push(argv[i])
+  }
+  return out
+}
+const args = parse(process.argv.slice(2))
+
+// Read-only: rectangles in document coordinates, the card's children and what follows the card, in DOM order.
+const PROBE = String.raw`(() => {
+  const M = window.__mx, CARD = '#process-result > .notification[data-kind="success"]';
+  const c = document.querySelector(CARD);
+  const r = (e) => { if (!e) return null; const b = e.getBoundingClientRect(); return { top: Math.round(b.top + scrollY), bottom: Math.round(b.bottom + scrollY), h: Math.round(b.height) }; };
+  const txt = (e) => (e.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 48);
+  const life = M && M.msg ? M.msg('result.lifetime') : null;
+  const wb = window.__p8 && window.__p8.warnBox ? window.__p8.warnBox() : null;
+  const lifeEl = c && life ? [...c.querySelectorAll('p')].find((p) => (p.textContent || '').includes(life)) : null;
+  const named = {
+    card: r(c), title: r(c && c.querySelector('.notification-title')), warnings: r(wb),
+    warningsTitle: r(wb && wb.querySelector('.notification-title, strong, li')),
+    player: r(c && c.querySelector('video.result-player')), lifetime: r(lifeEl),
+    save: r(c && c.querySelector('.actions > button.button')),
+  };
+  const order = Object.entries(named).filter(([k, v]) => v && k !== 'card' && k !== 'warningsTitle').sort((a, b) => a[1].top - b[1].top).map(([k]) => k);
+  const item = (e) => ({ tag: e.tagName.toLowerCase(), cls: String(e.className || ''), kind: e.getAttribute('data-kind') || undefined, text: txt(e), ...r(e) });
+  const cb = c ? c.getBoundingClientRect() : null, wbb = wb ? wb.getBoundingClientRect() : null;
+  const ae = document.activeElement;
+  return {
+    lang: document.documentElement.lang, viewport: { w: innerWidth, h: innerHeight }, scrollY: Math.round(scrollY),
+    active: ae ? (ae.id ? '#' + ae.id : ae.tagName.toLowerCase() + (ae.className ? '.' + String(ae.className).split(' ')[0] : '')) : null,
+    activeIsCard: !!c && ae === c,
+    named, order, cardHeight: cb ? Math.round(cb.height) : null,
+    warnBoxWhere: wb ? (c && c.contains(wb) ? 'in the card' : 'beside the card') : null,
+    warningsFromCardTop: cb && wbb ? Math.round(wbb.top - cb.top) : null,
+    warningsTitleWithinOneScreenOfCardTop: cb && wbb ? wbb.top - cb.top < innerHeight : null,
+    saveFromCardTop: cb && named.save ? Math.round(named.save.top - (cb.top + scrollY)) : null,
+    nestedNotification: !!document.querySelector(CARD + ' .notification'),
+    kids: c ? [...c.children].map(item) : [],
+    afterCard: c && c.parentElement ? [...c.parentElement.children].filter((e) => e !== c).map(item) : [],
+  };
+})()`
+
+function power() {
+  const sh = (cmd, a) => execFileSync(cmd, a, { encoding: 'utf8' })
+  const batt = sh('pmset', ['-g', 'batt']), pm = sh('pmset', ['-g']), up = sh('uptime', []).trim()
+  const ac = /AC Power/.test(batt), level = Number((batt.match(/(\d+)%/) ?? [])[1])
+  const mode = Number((pm.match(/^\s*powermode\s+(\d+)/m) ?? [])[1]), low = /lowpowermode\s+1/.test(pm) || mode === 1
+  const load = Number((up.match(/load averages?: ([\d.]+)/) ?? [])[1])
+  return { at: new Date().toISOString(), source: ac ? 'AC' : 'battery', level, powermode: mode, low, load, uptime: up, ok: ac || (level > 50 && !low) }
+}
+
+async function walk() {
+  for (const k of ['APP_URL', 'CDP_PORT', 'FIX', 'OUT_ROOT', 'RUN_ROOT']) if (!process.env[k]) throw new Error('set ' + k)
+  if (!args.walker) throw new Error('--walker <walker dir>')
+  const walker = resolve(args.walker)
+  const label = args.label ?? 'before'
+  const scenarios = list(args.scenarios)
+  const langs = list(args.langs ?? 'en-GB,zh-Hans,ms-MY'), views = list(args.views ?? 'w1280,w320'), modes = list(args.modes ?? 'light,dark,forced-light,forced-dark')
+  const cells = list(args.cells).map((r) => { const [id, lang, view, mode = 'light'] = r.split(':'); return { id, lang, view, mode } })
+  const records = [...scenarios.flatMap((id) => langs.flatMap((lang) => views.flatMap((view) => modes.map((mode) => ({ id, lang, view, mode }))))), ...cells]
+  if (!records.length) throw new Error('nothing declared')
+  const plan = `vh208-${label}-${args.name ?? 'run'}`
+  const p = power()
+  mkdirSync(process.env.RUN_ROOT, { recursive: true })
+  appendFileSync(join(process.env.RUN_ROOT, 'vh208-ledger.jsonl'), JSON.stringify({ plan, label, power: p, walker, appUrl: process.env.APP_URL, cdpPort: process.env.CDP_PORT, fixtures: process.env.FIX, records: records.length, ids: [...new Set(records.map((r) => r.id))] }) + '\n')
+  console.log('power: ' + JSON.stringify(p))
+  if (!p.ok) { console.log('POWER-STOP: battery at or below 50%, or Low Power'); process.exit(3) }
+  const matrixUrl = pathToFileURL(join(walker, 'matrix.mjs')).href
+  const { PLANS, SCENARIOS } = await import(new URL('./scenarios.mjs', matrixUrl).href)
+  for (const r of records) if (!SCENARIOS[r.id]) throw new Error('the walker holds no scenario ' + r.id)
+  const GEO = join(process.env.RUN_ROOT, `vh208-geometry-${plan}.jsonl`)
+  for (const id of new Set(records.map((r) => r.id))) {
+    const sc = SCENARIOS[id], orig = sc.afterMode
+    sc.afterMode = async (w) => {
+      if (orig) await orig(w)
+      let g
+      try { g = await w.evaluate(PROBE) } catch (e) { g = { error: String(e.message ?? e).slice(0, 200) } }
+      appendFileSync(GEO, JSON.stringify({ plan, walk: w.name, id, mode: w.qualMode, at: new Date().toISOString(), ...g }) + '\n')
+    }
+  }
+  PLANS[plan] = () => records.map((r) => ({ ...r }))
+  // matrix.mjs runs its main when it is the entry point: it is made so, unchanged.
+  process.argv = [process.argv[0], fileURLToPath(matrixUrl), plan]
+  await import(matrixUrl)
+}
+
+if (args._[0] === 'walk') await walk()
+else { console.log('usage: node vh208-driver.mjs walk --walker <dir> --label <l> --name <n> --scenarios … [--cells …]'); process.exit(2) }

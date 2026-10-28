@@ -1,0 +1,81 @@
+# before-1 against before-2-ac
+## S-135: 27 cells
+## S-136: 27 cells
+## S-137: 24 cells
+## S-138: 24 cells
+  instrument player: pass -> fail  [20]
+  player after: paused a second after the card appeared=fail  [20]
+  player before: paused a second after the card appeared=pass  [20]
+## S-151: 24 cells
+## S-152: 24 cells
+## S-131: 24 cells
+## S-53: 24 cells
+# before-1 against before-3-ac-lowload
+## S-135: 24 cells
+## S-136: 24 cells
+## S-138: 24 cells
+  instrument player: pass -> fail  [16]
+  player after: paused a second after the card appeared=fail  [16]
+  player before: paused a second after the card appeared=pass  [16]
+  instrument player: fail -> pass  [4]
+  player after: paused a second after the card appeared=pass  [4]
+  player before: paused a second after the card appeared=fail  [4]
+## S-151: 24 cells
+## S-152: 24 cells
+## S-131: 24 cells
+# before-2-ac against before-3-ac-lowload
+## S-135: 24 cells
+## S-136: 24 cells
+## S-138: 24 cells
+  instrument player: fail -> pass  [8]
+  player after: paused a second after the card appeared=pass  [8]
+  player before: paused a second after the card appeared=fail  [8]
+## S-151: 24 cells
+## S-152: 24 cells
+## S-131: 24 cells
+# before-2-ac against after-1+after-2
+## S-135: 27 cells
+  instrument limiting: fail -> pass  [27]
+  limiting after: the heavy warning's detail whole after its title, in the line spoken at completion=pass  [27]
+  limiting before: the heavy warning's detail whole after its title, in the line spoken at completion=fail  [27]
+## S-136: 27 cells
+  instrument limiting: fail -> pass  [27]
+  limiting after: the heavy warning's detail whole after its title, in the line spoken at completion=pass  [27]
+  limiting before: the heavy warning's detail whole after its title, in the line spoken at completion=fail  [27]
+## S-137: 24 cells
+  instrument focus: pass -> cannot-determine  [8]
+## S-138: 24 cells
+  instrument player: fail -> pass  [4]
+  player after: paused a second after the card appeared=pass  [4]
+  player before: paused a second after the card appeared=fail  [4]
+## S-151: 24 cells
+  instrument focus: pass -> cannot-determine  [24]
+  instrument limiting: fail -> pass  [24]
+  limiting after: the heavy warning's detail whole after its title, in the line spoken at completion=pass  [24]
+  limiting before: the heavy warning's detail whole after its title, in the line spoken at completion=fail  [24]
+## S-152: 24 cells
+  instrument limiting: fail -> pass  [24]
+  limiting after: the heavy warning's detail whole after its title, in the line spoken at completion=pass  [24]
+  limiting before: the heavy warning's detail whole after its title, in the line spoken at completion=fail  [24]
+## S-131: 24 cells
+## S-53: 24 cells
+# after-1 against after-3-lowload
+## S-135: 24 cells
+## S-136: 24 cells
+## S-138: 24 cells
+  instrument player: pass -> fail  [4]
+  player after: paused a second after the card appeared=fail  [4]
+  player before: paused a second after the card appeared=pass  [4]
+  instrument player: fail -> pass  [8]
+  player after: paused a second after the card appeared=pass  [8]
+  player before: paused a second after the card appeared=fail  [8]
+## S-151: 24 cells
+## S-152: 24 cells
+## S-131: 24 cells
+# after-1+after-2 against after-4-lowload
+## S-138: 7 cells
+## S-151: 8 cells
+## S-53: 2 cells
+# after-1 against after-5-lowload
+## S-138: 2 cells
+## S-151: 5 cells

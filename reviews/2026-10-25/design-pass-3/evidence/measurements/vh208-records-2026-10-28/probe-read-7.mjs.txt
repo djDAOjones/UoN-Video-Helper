@@ -1,0 +1,10 @@
+// Compact reading of a probe-7 output: per cell, each row's what | control | outcome | UA; then counts.
+import { readFileSync } from 'node:fs'
+const j = JSON.parse(readFileSync(process.argv[2], 'utf8'))
+const full = process.argv[3] === 'full'
+const tally = {}
+for (const c of j.cells) {
+  if (full) { console.log(`== ${c.view} ${c.mode} reached ${c.reached?.outcome} rows ${c.rows?.length}`); for (const s of c.summary) console.log('  ' + s) }
+  for (const r of c.rows ?? []) { const k = `${r.what} | ${r.outcome}${r.uaException ? ' | UA' : ''}`; tally[k] = (tally[k] ?? 0) + 1 }
+}
+console.log('-- tally over ' + j.cells.length + ' cells'); for (const [k, v] of Object.entries(tally).sort()) console.log(String(v).padStart(4) + '  ' + k)

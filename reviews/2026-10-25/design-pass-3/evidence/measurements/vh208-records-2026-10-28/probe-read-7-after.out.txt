@@ -1,0 +1,16 @@
+-- tally over 8 cells
+   8  Shift+Tab goes back through the controls | pass
+   8  Shift+Tab leaves for the previous real stop, never the card | pass
+   8  Tab after the last control leaves the player | pass
+  36  focus appearance (2.4.13) | cannot-determine
+   8  focus appearance (2.4.13) | fail | UA
+   8  focus appearance (2.4.13) | pass
+   8  focus visible (2.4.7) | cannot-determine
+  44  focus visible (2.4.7) | pass
+  52  not hidden by author content (2.4.11, 2.4.12) | pass
+   8  notification of these changes (4.1.2) | cannot-determine
+   8  play/pause by keys | pass
+   8  play/pause state exposed (4.1.2) | pass
+   8  route forward reaches every control | pass
+   8  seek by keys, apart from play | pass
+   8  time slider value exposed (4.1.2) | pass

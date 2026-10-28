@@ -1,0 +1,14 @@
+Verdict: Commit after the musts below
+
+1. **`project/decisions.md:27` — record the partial supersession.** `Supersedes: none` omits VH-150’s recorded choice of a sibling warning notification (`project/decisions-2026-10.md:806–810`). VH-208 replaces that layout. Under rule 4, name that entry’s exact heading on the Supersedes line, and clarify in the Rationale that only the warnings’ placement and treatment are superseded; the no-nesting invariant remains.
+
+Notes:
+
+- No regression found in musts 1–4 or either should. Reconstructing the walked source reproduces `2f010d53d3df39c6`; the walker remains `a3a4267ad47d8bd5`.
+- The oldest live decision moved verbatim; other historical entries are unchanged. The inventory matches 17 modified files and 124 untracked files, including 113 records. The copied reviews read consistently as historical evidence.
+- Rules 5 and 6 otherwise hold: backlog removal, trajectory, item closure and V-52’s evidence link agree. VH-208.1–VH-208.3 cover the new follow-ups; VH-199.1 covers S-138. No fully paid-off open line was found.
+- For precision, replace “Claude’s verdict saved before Codex’s blind check” in the ledger/item and drafted commit with “saved before Codex’s blind answer was opened”. The compare records the run starting at 15:09:30Z, Claude’s verdict saved at 15:11:45Z, and the answer opened at 15:20:18Z.
+- My ledger checker returned **0 failures, 0 warnings**; Markdown lint and link checks also passed. The full gate is the run reported in your brief, not independently rerun here. Repeat it after the correction and permitted evidence additions; populate `Verify:` with that result.
+- The drafted commit otherwise matches the evidence. Applied digest rules: Nielsen 1, 5 and 6; Carbon’s one primary per state; WCAG 4.1.3 as exposure.
+
+No files changed.

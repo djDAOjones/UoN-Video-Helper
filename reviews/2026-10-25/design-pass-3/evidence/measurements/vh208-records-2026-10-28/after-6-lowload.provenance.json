@@ -1,0 +1,80 @@
+[
+ {
+  "walk": "after-6-lowload",
+  "runFolder": "vh208-after-lowload6-2026-10-28T16-07-11-632Z-d62166",
+  "run": "2026-10-28T16-07-11-632Z-d62166",
+  "source": {
+   "commit": "a87e0f520f52cd5920f826cbceadec6ef852ffc2",
+   "dirty": true,
+   "diffSha256": "2f010d53d3df39c6"
+  },
+  "instrumentRevision": "a3a4267ad47d8bd5",
+  "provenance": {
+   "pinnedAtCreation": true,
+   "created": "2026-10-28T16:07:11.730Z",
+   "resumes": [],
+   "held": true,
+   "problems": [],
+   "recordsOffRevision": 0
+  },
+  "browser": "Chrome/156.0.8078.74",
+  "os": "darwin 25.6.0 arm64",
+  "views": [
+   {
+    "view": "w320",
+    "actual": {
+     "w": 320,
+     "h": 568,
+     "dpr": 1
+    },
+    "rootFontPx": 16
+   },
+   {
+    "view": "w1280",
+    "actual": {
+     "w": 1280,
+     "h": 900,
+     "dpr": 1
+    },
+    "rootFontPx": 16
+   }
+  ],
+  "fixturesPinned": [
+   {
+    "file": "clicks-20s.mp4",
+    "bytes": 6610092,
+    "sha256": "3223521f81f2be81"
+   },
+   {
+    "file": "lecture-30s.mp4",
+    "bytes": 10093018,
+    "sha256": "fe66c0ad6bcc160d"
+   }
+  ],
+  "faults": [],
+  "coverage": {
+   "expected": 4,
+   "observed": 4,
+   "whole": true,
+   "problems": [],
+   "expectedKeysSha256": "b1db8c6a538c15f4",
+   "observedKeysSha256": "b1db8c6a538c15f4"
+  },
+  "failing": {
+   "overflow": 0,
+   "ax": 0,
+   "targets": 4,
+   "contrastText": 0,
+   "contrastExtra": 0,
+   "measure": 0,
+   "type": 3,
+   "focus": 0,
+   "player": 0,
+   "formatTip": 0,
+   "footer": 0,
+   "limiting": 0,
+   "videoLanguage": 0,
+   "asserts": 0
+  }
+ }
+]

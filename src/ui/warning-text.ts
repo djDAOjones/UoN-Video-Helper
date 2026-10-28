@@ -109,25 +109,37 @@ export function warningText(warning: AudioWarning): WarningText {
  * @param options.reassure - Whether to end on "None of these stop you
  *   continuing". True before Create; false under a finished video, where
  *   there is nothing left to continue (VH-150).
+ * @param options.contentOnly - Whether to draw them as content of a
+ *   notification already around them: the same region, named by its title,
+ *   and the same list, without a rail of their own. True only inside the
+ *   finished card, where one notification nested in another drew two rails
+ *   (VH-150, VH-208).
  */
 export function renderWarnings(
   container: HTMLElement,
   warnings: readonly AudioWarning[],
-  options: { readonly heading: string; readonly reassure?: boolean },
+  options: {
+    readonly heading: string
+    readonly reassure?: boolean
+    readonly contentOnly?: boolean
+  },
 ): void {
   container.replaceChildren()
   if (warnings.length === 0) return
-  container.append(
-    notification({
-      kind: 'warning',
-      title: options.heading,
-      items: warnings.map((warning) => {
-        const { heading, detail } = warningText(warning)
-        return { title: heading, detail }
-      }),
-      // Advisory, always. Spec 5.4: none of these blocks anything, and
-      // saying so is what stops a warning reading like a refusal.
-      ...(options.reassure === false ? {} : { tail: [t().warnings.reassurance] }),
+  const box = notification({
+    kind: 'warning',
+    title: options.heading,
+    items: warnings.map((warning) => {
+      const { heading, detail } = warningText(warning)
+      return { title: heading, detail }
     }),
-  )
+    // Advisory, always. Spec 5.4: none of these blocks anything, and
+    // saying so is what stops a warning reading like a refusal.
+    ...(options.reassure === false ? {} : { tail: [t().warnings.reassurance] }),
+  })
+  if (options.contentOnly === true) {
+    box.className = 'result-warnings'
+    delete box.dataset['kind']
+  }
+  container.append(box)
 }

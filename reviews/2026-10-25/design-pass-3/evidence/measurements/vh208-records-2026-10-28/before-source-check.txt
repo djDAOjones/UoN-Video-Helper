@@ -1,0 +1,13 @@
+VH-208's before: a content check of the export the before ran on, 2026-10-28 (VH-208 #6), read-only.
+Export: vh208-walk/base/ (VH-208 #3's git archive of a87e0f5, the candidate walker overlaid). Reference: a fresh 'git archive a87e0f5' extracted to a scratch folder.
+Command: diff -rq <fresh archive> base/ -x node_modules -x dist -x .vite
+Files: fresh archive 1566; base/ outside node_modules, dist and .vite 1566.
+Differences (diff -rq, paths relative):
+  Files reviews/2026-10-25/design-pass-3/evidence/measurements/walker/phase8.mjs and reviews/2026-10-25/design-pass-3/evidence/measurements/walker/phase8.mjs differ
+  Files reviews/2026-10-25/design-pass-3/evidence/measurements/walker/prove-8.mjs and reviews/2026-10-25/design-pass-3/evidence/measurements/walker/prove-8.mjs differ
+  Files reviews/2026-10-25/design-pass-3/evidence/measurements/walker/scenarios.mjs and reviews/2026-10-25/design-pass-3/evidence/measurements/walker/scenarios.mjs differ
+The three walker files in base/ against the repository's working walker (cmp):
+  walker/phase8.mjs: identical
+  walker/prove-8.mjs: identical
+  walker/scenarios.mjs: identical
+So the before's app is a87e0f5's byte for byte, and its walker is the candidate's.

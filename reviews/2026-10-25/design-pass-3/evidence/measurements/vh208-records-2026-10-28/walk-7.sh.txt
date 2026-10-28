@@ -1,0 +1,46 @@
+#!/bin/zsh
+# VH-208 #3: a driver walk under the fixed walk lock, Vite on :5181 (in <app root>), Chrome on :9251, the jobs in parallel.
+# Usage: zsh walk-3.sh <name> <what for the lock> <walker dir> <app root> "<driver args>" ["<driver args>" …]
+# Refuses to start on battery at or below 50%, in Low Power, or at a 1-minute load of 8 or more.
+N="/Users/joe/Library/Application Support/Claude/side-session-notes/local_3609df25-8c3a-4d74-b38c-3fd78453b9de"
+NAME=$1; WHAT=$2; WALKER=$3; APP=$4; shift 4
+OUT="$N/vh208-walk/$NAME"
+LOCK=/Users/joe/UoN-Video-Helper-side/walk.lock
+[ -e "$OUT" ] && { echo "OUT EXISTS: $OUT"; exit 2; }
+B=$(pmset -g batt); PM=$(pmset -g); L=$(uptime | sed -E 's/.*load averages?: ([0-9.]+).*/\1/')
+if ! print -r -- "$B" | grep -q 'AC Power'; then
+  LV=$(print -r -- "$B" | grep -oE '[0-9]+%' | head -1 | tr -d %)
+  { [ "$LV" -gt 50 ] && ! print -r -- "$PM" | grep -qE 'lowpowermode +1|powermode +1$'; } || { echo "POWER-STOP: $LV%"; exit 7; }
+fi
+[ "$(echo "$L < 8" | bc)" = 1 ] || { echo "LOAD-STOP: $L"; exit 8; }
+mkdir "$LOCK" || { echo "LOCK HELD: $(cat $LOCK/owner.txt 2>/dev/null)"; exit 3; }
+echo "VH-208 #7 — $(date -u +%FT%TZ) — $WHAT ($NAME)" > "$LOCK/owner.txt"
+if [ -n "$(lsof -i :5181 -i :9251 2>/dev/null)" ]; then echo "PORTS BUSY:"; lsof -i :5181 -i :9251; grep -q "VH-208 #7" "$LOCK/owner.txt" && rm -r "$LOCK"; exit 4; fi
+mkdir -p "$OUT/logs"
+{ echo "start $(date -u +%FT%TZ)"; pmset -g batt | head -2; pmset -g | grep -E 'powermode|lowpowermode'; uptime; } > "$OUT/conditions.txt"
+(cd "$WALKER" && node -e "const {createHash}=require('crypto'),fs=require('fs');const sha=(b)=>createHash('sha256').update(b).digest('hex').slice(0,16);const f=fs.readdirSync('.').filter(x=>/\.(mjs|sh)$/.test(x)).sort().map(x=>sha(fs.readFileSync(x)));console.log('instrument revision '+sha(f.join('')))") >> "$OUT/conditions.txt"
+cd "$APP" || { grep -q "VH-208 #7" "$LOCK/owner.txt" && rm -r "$LOCK"; exit 5; }
+./node_modules/.bin/vite --port 5181 --strictPort --host 127.0.0.1 > "$OUT/vite.log" 2>&1 &
+VPID=$!
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --remote-debugging-port=9251 --user-data-dir="$N/vh208-walk/chrome-profile-3" --no-first-run --no-default-browser-check --disable-backgrounding-occluded-windows --disable-background-timer-throttling --disable-renderer-backgrounding about:blank > "$OUT/chrome.log" 2>&1 &
+CPID=$!
+echo "vite $VPID chrome $CPID" > "$OUT/pids.txt"
+for i in $(seq 1 60); do curl -sf http://127.0.0.1:5181/ >/dev/null && curl -sf http://127.0.0.1:9251/json/version >/dev/null && break; sleep 1; done
+JPIDS=()
+j=0
+for JOB in "$@"; do
+  j=$((j+1))
+  (cd "$N/vh208-walk" && CDP_PORT=9251 APP_URL=http://localhost:5181/ FIX="$N/vh208-walk/fix" OUT_ROOT="$OUT/out" RUN_ROOT="$OUT/runs" node vh208-driver.mjs walk --walker "$WALKER" ${=JOB} > "$OUT/logs/job$j.log" 2>&1; echo "job$j exit $? $(date -u +%FT%TZ)" >> "$OUT/conditions.txt") &
+  JPIDS+=($!)
+  echo "job$j pid $! args $JOB" >> "$OUT/pids.txt"
+  sleep 5
+done
+wait $JPIDS
+{ echo "end $(date -u +%FT%TZ)"; pmset -g batt | head -2; uptime; } >> "$OUT/conditions.txt"
+kill $CPID $VPID 2>/dev/null
+for i in $(seq 1 30); do kill -0 $CPID 2>/dev/null || kill -0 $VPID 2>/dev/null || break; sleep 1; done
+kill -0 $CPID 2>/dev/null && kill -9 $CPID; kill -0 $VPID 2>/dev/null && kill -9 $VPID
+for i in $(seq 1 30); do kill -0 $CPID 2>/dev/null || kill -0 $VPID 2>/dev/null || break; sleep 1; done
+if kill -0 $CPID 2>/dev/null || kill -0 $VPID 2>/dev/null; then echo "STILL ALIVE: vite $VPID chrome $CPID; lock kept"; exit 6; fi
+grep -q "VH-208 #7" "$LOCK/owner.txt" && rm -r "$LOCK"
+echo "done; ports: $(lsof -i :5181 -i :9251 2>/dev/null | wc -l | tr -d ' ') lines; lock: $(ls -d $LOCK 2>/dev/null || echo released)"

@@ -50,7 +50,8 @@ const card = ({ labelled = true, reach = true, saved = false } = {}) => `<button
   <p>${saved ? '' : CARD_WORDS['result.lifetime']}</p><div class="actions"><button class="button" type="button">Save the video</button></div></section></div>
   <p id="save-status">${saved ? CARD_WORDS['status.saved'] : ''}</p>`
 // The finished card's warnings and the status line, driven through two jobs by P8_INIT's own observer.
-const WARN_WORDS = { ...CARD_WORDS, 'status.ready': 'Your video is ready.', 'warnings.heavyLimiting.heading': 'The loudest moments were held down hard', 'warnings.heavyLimiting.detail': 'To reach the usual level, the tool had to hold down the loudest moments.', 'warnings.metadataLost.heading': 'The file’s title, author, and date could not be copied across' }
+// The heavy detail is the whole en-GB string (src/i18n/en-GB.ts, heavyLimiting), three sentences, so W2's "whole" is proved on it (VH-208).
+const WARN_WORDS = { ...CARD_WORDS, 'status.ready': 'Your video is ready.', 'warnings.heavyLimiting.heading': 'The loudest moments were held down hard', 'warnings.heavyLimiting.detail': 'To reach the usual level, the tool had to hold down the loudest moments of this recording hard. That can make a voice sound flat or squashed, so play the new video before you save it. Next time, try adjusting how you record the sound.', 'warnings.metadataLost.heading': 'The file’s title, author, and date could not be copied across' }
 const WARN_PAGE = page(`<progress id="process-progress" hidden></progress><p id="status" role="status"></p><div id="process-result"></div>`, '', WARN_WORDS)
 const TIP_GOOD_SCRIPT = `const b = document.getElementById('format-help-button'), t = document.getElementById('format-help'); const set = (o) => { t.hidden = !o; b.setAttribute('aria-expanded', String(o)); };
   b.addEventListener('click', () => set(t.hidden)); document.addEventListener('focusin', (e) => { if (!b.contains(e.target) && !t.contains(e.target)) set(false); });
@@ -139,8 +140,10 @@ await tryOne('footer', async () => {
 })
 
 // 4. The warning judged by the bite, and the spoken line scoped to the completion's interval.
-async function drive(w, jobs) {
-  // Each job: start (progress shown), what the status line says, then the finished card with its warnings.
+async function drive(w, jobs, layout = 'beside') {
+  // Each job: start (progress shown), what the status line says, then the finished card with its warnings:
+  // beside the card, as drawn until VH-208, or (`layout: 'inside'`, VH-208's W1) inside it, after its title.
+  const block = (ws) => ws.map((x) => `<li><strong>${x}</strong> ${x === WARN_WORDS['warnings.heavyLimiting.heading'] ? WARN_WORDS['warnings.heavyLimiting.detail'] : ''}</li>`).join('')
   for (const j of jobs) {
     await w.evaluate(`(() => { document.getElementById('process-result').replaceChildren(); document.getElementById('process-progress').hidden = false; })()`); await sleep(120)
     // A job's status writes, in order: a text, or { text, wait } (M-01, 25 October: an earlier write in the same job).
@@ -149,31 +152,42 @@ async function drive(w, jobs) {
     const writes = [].concat(j.status).map((st) => (typeof st === 'string' ? { text: st } : st))
     const last = j.completionWrite === false ? null : writes.pop()
     for (const s of writes) { await w.evaluate(`document.getElementById('status').textContent = ${JSON.stringify(s.text)}`); await sleep(s.wait ?? 60) }
-    await w.evaluate(`(() => { ${last ? `document.getElementById('status').textContent = ${JSON.stringify(last.text)};` : ''} document.getElementById('process-progress').hidden = true; const r = document.getElementById('process-result'); r.innerHTML = '<section class="notification" data-kind="success"><p class="notification-title">Finished video — 1 MB</p></section>' + ${JSON.stringify(j.warnings ? `<div><section class="notification" data-kind="warning"><ul>${j.warnings.map((x) => `<li><strong>${x}</strong> ${x === WARN_WORDS['warnings.heavyLimiting.heading'] ? WARN_WORDS['warnings.heavyLimiting.detail'] : ''}</li>`).join('')}</ul></section></div>` : '')}; })()`); await sleep(150)
+    await w.evaluate(`(() => { ${last ? `document.getElementById('status').textContent = ${JSON.stringify(last.text)};` : ''} document.getElementById('process-progress').hidden = true; const r = document.getElementById('process-result'); r.innerHTML = ${JSON.stringify(layout === 'inside'
+      ? `<section class="notification" data-kind="success"><p class="notification-title">Finished video — 1 MB</p>${j.warnings ? `<div><ul class="notification-list">${block(j.warnings)}</ul></div>` : '<div></div>'}<p class="notification-body">${CARD_WORDS['result.lifetime']}</p></section>`
+      : `<section class="notification" data-kind="success"><p class="notification-title">Finished video — 1 MB</p></section>${j.warnings ? `<div><section class="notification" data-kind="warning"><ul>${block(j.warnings)}</ul></section></div>` : ''}`)}; })()`); await sleep(150)
   }
 }
 await tryOne('limiting', async () => {
-  const H = WARN_WORDS['warnings.heavyLimiting.heading'], MLOST = WARN_WORDS['warnings.metadataLost.heading']
+  const H = WARN_WORDS['warnings.heavyLimiting.heading'], MLOST = WARN_WORDS['warnings.metadataLost.heading'], D = WARN_WORDS['warnings.heavyLimiting.detail']
+  const DETAIL = "the heavy warning's detail whole after its title"
   const cases = [
     ['warning-said-in-an-earlier-job-bad', 'first in the line spoken', 'fail', [{ status: `Your video is ready. ${H}.`, warnings: [H] }, { status: 'Your video is ready.', warnings: [H] }], 20.1],
-    ['warning-said-at-this-completion-good', 'first in the line spoken', 'pass', [{ status: 'Your video is ready.' }, { status: `Your video is ready. ${H}. ${MLOST}.`, warnings: [H, MLOST] }], 20.1],
+    // VH-208, W3: the completion's write carries the heavy warning's detail whole after its title (both rows
+    // pass), and the same write with the heading only, which passed here until VH-208, must fail for that reason.
+    ['warning-said-at-this-completion-good', ['first in the line spoken', DETAIL], 'pass', [{ status: 'Your video is ready.' }, { status: `Your video is ready. ${H}. ${MLOST}. ${D}`, warnings: [H, MLOST] }], 20.1],
+    ['warning-heading-only-bad', DETAIL, 'fail', [{ status: 'Your video is ready.' }, { status: `Your video is ready. ${H}. ${MLOST}.`, warnings: [H, MLOST] }], 20.1, /^heading only/],
     ['warning-not-first-bad', "first among the card's warnings", 'fail', [{ status: `Your video is ready. ${MLOST}. ${H}.`, warnings: [MLOST, H] }], 20.1],
     ['warning-below-threshold-bad', 'present above the threshold', 'fail', [{ status: `Your video is ready. ${H}.`, warnings: [H] }], 0.5],
     ['warning-above-threshold-good', 'present above the threshold', 'pass', [{ status: `Your video is ready. ${H}.`, warnings: [H] }], 20.1],
     ['no-warning-below-threshold-good', 'present above the threshold', 'pass', [{ status: 'Your video is ready.' }], 0.0],
     ['no-warning-above-threshold-bad', 'present above the threshold', 'fail', [{ status: 'Your video is ready.' }], 20.1],
   ]
-  for (const [fixture, what, wanted, jobs, bite] of cases) {
-    const w = await open(fixture, { html: WARN_PAGE })
+  // VH-208, W1: every case drawn in both layouts, the warnings beside the card and inside it.
+  for (const layout of ['beside', 'inside']) for (const [fixture, what, wanted, jobs, bite, why] of cases) {
+    const name = layout === 'inside' ? fixture + '-inside' : fixture
+    const w = await open(name, { html: WARN_PAGE })
     try {
-      await drive(w, jobs)
+      await drive(w, jobs, layout)
       const ev = await w.evaluate('window.__p8.events')
       const fin = ev.filter((e) => e.kind === 'finish').at(-1), start = ev.filter((e) => e.kind === 'start').at(-1)
       w.p8planned = { workers: 1, planned: [{ t: Math.round((start.t + fin.t) / 2), limiterBiteLu: bite }] }
       const rows = await limitingRows(w)
-      const r = rowOf(rows, what)
+      const rs = [].concat(what).map((x) => rowOf(rows, x))
+      const off = rs.find((x) => x.outcome !== 'pass')
+      const outcome = (off ? off.outcome : 'pass') + (why && !why.test(off?.why ?? '') ? ' (another reason)' : '')
       const wholeHistory = (await w.evaluate('window.__p8.status')).some((s) => s.text.includes(H))
-      prove('limiting warning: ' + what, fixture, r.outcome, wanted, { row: r, wholeHistoryWouldSay: wholeHistory })
+      const extra = why ? { titlesRowWouldPass: rowOf(rows, 'first in the line spoken').outcome === 'pass' } : {}
+      prove('limiting warning: ' + [].concat(what).join(' + ') + (layout === 'inside' ? ' (inside the card)' : ''), name, outcome, wanted, { row: rs.length === 1 ? rs[0] : rs, layout, box: await w.evaluate('(() => { const b = window.__p8.warnBox(); return b ? b.tagName + (b.className ? "." + b.className : "") + (b.closest(\'#process-result > .notification[data-kind="success"]\') ? " in the card" : " beside the card") : null })()'), wholeHistoryWouldSay: wholeHistory, ...extra })
     } finally { await w.close() }
   }
 })

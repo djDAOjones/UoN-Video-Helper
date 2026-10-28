@@ -56,7 +56,12 @@ export const P8_INIT = String.raw`
   const shown = (el) => !!el && !el.hidden && el.getClientRects().length > 0;
   const norm = (s) => (s || '').replace(/\s+/g, ' ').trim();
   let running = false, awaiting = false, saving = false, statusText = null, warnText = null;
-  const warnBox = () => { const c = document.querySelector('${CARD}'); if (!c) return null; for (let e = c.nextElementSibling; e; e = e.nextElementSibling) { const n = e.matches('.notification') ? e : e.querySelector('.notification'); if (n) return n; } return null; };
+  // The output's warnings, in either layout (VH-208, W1): inside the card, the
+  // card's own child that holds their titled list (the card's lines have none);
+  // else, as drawn until VH-208, the first notification after the card. Null
+  // when there are none. Whether a notification is nested in the card is read
+  // apart, never here.
+  const warnBox = () => { const c = document.querySelector('${CARD}'); if (!c) return null; const l = c.querySelector('.notification-list'); if (l) { let e = l; while (e.parentElement && e.parentElement !== c) e = e.parentElement; return e; } for (let e = c.nextElementSibling; e; e = e.nextElementSibling) { const n = e.matches('.notification') ? e : e.querySelector('.notification'); if (n) return n; } return null; };
   P.warnBox = warnBox;
   // cardNew: a write in the same mutation batch as a newly drawn finished card
   // (a new element), so the completion's write is bound to the mutation that
@@ -845,6 +850,20 @@ export async function limitingRows(w) {
     const inOrder = at.every((x, i) => i === 0 || x > at[i - 1])
     rows.push(row(what, said && !missing.length && inOrder ? 'pass' : 'fail', { completion: spoken.completion, job: [spoken.from, spoken.to], expected, earlier: spoken.earlier,
       why: !said ? spoken.why : missing.length ? 'missing from the completion\'s line: ' + missing.join('; ') : !inOrder ? 'the titles are not in order, the heavy one first' : undefined }))
+  }
+  // VH-208, W2: the same write carries the heavy warning's existing detail,
+  // whole, after its title; heading-only speech fails with its own reason.
+  // Exposure, not speech: what a screen reader says is the person checklist's.
+  const dwhat = 'the heavy warning\'s detail whole after its title, in the line spoken at completion'
+  if (!spoken) rows.push(row(dwhat, 'cannot-determine', { why: 'no completion was watched on this page' }))
+  else if (r.lang !== r.fin.lang) rows.push(row(dwhat, 'cannot-determine', { why: 'the page language changed since the completion: the detail on the card is in another language now', completion: spoken.completion }))
+  else if (!spoken.from) rows.push(row(dwhat, 'cannot-determine', { why: spoken.why, completion: spoken.completion }))
+  else {
+    const said = spoken.texts[0] ?? null
+    const h = said ? said.indexOf(r.heavy) : -1
+    const d = said && h >= 0 && r.detail ? said.indexOf(r.detail, h + r.heavy.length) : -1
+    rows.push(row(dwhat, d >= 0 ? 'pass' : 'fail', { completion: spoken.completion, heavyDetail: r.detail, titleAt: h, detailAt: d,
+      why: !said ? spoken.why : h < 0 ? 'the heavy title is not in the completion\'s line' : d >= 0 ? undefined : said.includes(r.detail) ? 'the detail is in the completion\'s line, but before the heavy title' : 'heading only: the heavy warning\'s detail is not in the completion\'s line, whole' }))
   }
   if (r.saved) {
     const unchanged = r.beforeSave && r.beforeSave.lang === r.lang ? r.beforeSave.text === r.text.replace(/\s+/g, ' ').trim() : null

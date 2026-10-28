@@ -307,11 +307,21 @@ describe('the job\'s state (VH-150)', () => {
     expect(result).toMatch(/const paint = \(\): void => \{[\s\S]*renderWarnings\(resultWarnings, kept\.warnings,/)
   })
 
-  it('regression: puts a result\'s warnings beside its notification, not inside it, and without "None of these stop you continuing"', () => {
+  it('regression: puts a result\'s warnings in its notification as content, before the player and Save, never a notification nested in it, and without "None of these stop you continuing"', () => {
     const result = body('renderResult')
-    expect(result).not.toContain('heading.append(resultWarnings)')
-    expect(result).toContain('processResult.replaceChildren(heading, resultWarnings)')
-    expect(result).toContain('{ heading: t().warnings.finishedHeading, reassure: false }')
+    // After the card's lines, before the player, the lifetime line and Save (V-52, VH-208).
+    const warningsAt = result.indexOf('heading.append(resultWarnings)')
+    expect(warningsAt).toBeGreaterThan(result.indexOf("const heading = notification({ kind: 'success'"))
+    expect(warningsAt).toBeLessThan(result.indexOf('heading.append(resultPlayerFor('))
+    expect(warningsAt).toBeLessThan(result.indexOf('actions.append(save)'))
+    expect(result).toContain('processResult.replaceChildren(heading)')
+    expect(result).not.toContain('processResult.replaceChildren(heading, resultWarnings)')
+    // One rail (VH-150): drawn content-only, never a notification of their own inside the card.
+    expect(result).toMatch(/heading: t\(\)\.warnings\.finishedHeading,\s*reassure: false,\s*contentOnly: true,/)
+    const warningSource = readFileSync(new URL('../src/ui/warning-text.ts', import.meta.url), 'utf8')
+    const draw = /export function renderWarnings\([\s\S]*?\n\}/.exec(warningSource)?.[0] ?? ''
+    expect(draw).toMatch(/if \(options\.contentOnly === true\) \{\s*box\.className = 'result-warnings'\s*delete box\.dataset\['kind'\]\s*\}/)
+    expect(draw).not.toMatch(/result-warnings[^']*notification|notification[^']*result-warnings/)
   })
 
   it('clears a failed save\'s notification with any later save message', () => {
