@@ -38,6 +38,7 @@
 - VH-213 — a whole video with less than 400 ms of sound warned before Create and made silent, as a kept part is, in the owner's words; the none-decoded control measured; a part-decoded file that ends early the owner's exception, wish VH-213.1 (2026-10-28) — see decisions
 - VH-214 — VH-193's ten minutes were the walk's, not the page's: the QuickTime Animation file and N13 refused before Create in every cell, the walk's Create test clicking a hidden button; S-140 and S-140n bounded with three accepted outcomes, proved 41 of 41; no product diff; Codex astra "Close" after four rounds of musts (2026-10-28) — see decisions
 - VH-212 — heavy limiting's advice made true whether or not the new video plays here: "so play the new video before you use it", the owner's words, in three languages, the Chinese and Malay machine-translated; no element, state or listener, no walker diff; 192 cells before and after, 0 findings; Codex astra's blind must, the reading level a person's, recorded (2026-10-28) — see decisions
+- VH-227 — the one Chinese named 中文, not 简体中文, on the owner's word, so no Traditional seems offered; the tag `zh-Hans` unchanged; one constant, its tests, the translator's note, two sheet rows and a comment; 62 × 44 px at 1280 and 320 px, light and dark; not walked, VH-203's after-run reads it (2026-10-29) — see decisions
 
 ## Phase 7 — a second design, UX and accessibility pass, with Codex astra as partner, before the cut
 

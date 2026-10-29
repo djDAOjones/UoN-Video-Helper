@@ -21,7 +21,7 @@ describe('languageOptions', () => {
   it('offers one segment per language, in the order offered, each named in its own language', () => {
     const options = languageOptions(LANGUAGES_OFFERED, 'en-GB')
     expect(options.map(({ tag }) => tag)).toEqual([...LANGUAGES_OFFERED])
-    expect(options.map(({ name }) => name)).toEqual(['English', '简体中文', 'Bahasa Malaysia'])
+    expect(options.map(({ name }) => name)).toEqual(['English', '中文', 'Bahasa Malaysia'])
     for (const { tag, name } of options) expect(name, tag).toBe(LANGUAGE_NAMES[tag])
   })
 
@@ -71,9 +71,9 @@ describe('translationFeedbackMailto', () => {
 
   it('percent-encodes the subject, so the Chinese name and the spaces survive any mail app', () => {
     const url = translationFeedbackMailto('zh-Hans')
-    // 简体中文 as UTF-8, percent-encoded; a space as %20, never a raw one or
+    // 中文 as UTF-8, percent-encoded; a space as %20, never a raw one or
     // a "+", which some mail apps leave in the subject.
-    expect(url).toContain('%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87')
+    expect(url).toContain('%E4%B8%AD%E6%96%87')
     expect(url).toContain('%20')
     expect(url).toMatch(/^[\x21-\x2a\x2c-\x7e]+$/)
   })

@@ -126,7 +126,7 @@ describe('the record names the card and the words’ language (VH-140, audit V-0
 
   it('names the words’ language when it is not the page’s, as the choice names it', () => {
     expect(jobSummaryText({ ...submission, wordsLanguage: 'zh-Hans' })).toBe(
-      'Made from Lecture 3.mp4: a 5-second submission card, then the whole video (4 minutes 12 seconds), high quality, a cut to the blue closing card, marked “仅供内部使用”. Video language: 简体中文.',
+      'Made from Lecture 3.mp4: a 5-second submission card, then the whole video (4 minutes 12 seconds), high quality, a cut to the blue closing card, marked “仅供内部使用”. Video language: 中文.',
     )
     // A video with no card and no words is named too: the choice is the job's.
     expect(jobSummaryText({ ...whole, wordsLanguage: 'ms-MY' })).toMatch(/ Video language: Bahasa Malaysia\.$/)
@@ -160,7 +160,7 @@ describe('the record names the card and the words’ language (VH-140, audit V-0
     setLanguage('ms-MY')
     const text = jobSummaryText({ ...submission, wordsLanguage: 'zh-Hans' })
     expect(text).toMatch(/^Dibuat daripada Lecture 3\.mp4: kad serahan 5 saat, kemudian /)
-    expect(text).toMatch(/ Bahasa video: 简体中文\.$/)
+    expect(text).toMatch(/ Bahasa video: 中文\.$/)
   })
 
   it('never carries the card’s words: the record has none to carry', () => {
@@ -172,7 +172,7 @@ describe('the record names the card and the words’ language (VH-140, audit V-0
   it('carries the card and the language into the question before the video is discarded', () => {
     const passage = recordPassage({ ...submission, wordsLanguage: 'zh-Hans' }, { applied: true, mode: 'hard-cut' })
     expect(passage).toContain('a 5-second submission card')
-    expect(passage).toMatch(/Video language: 简体中文\.$/)
+    expect(passage).toMatch(/Video language: 中文\.$/)
   })
 })
 
@@ -182,7 +182,7 @@ describe('the running job’s own type and language, with its progress (VH-140, 
   it('names the type and the language the job started with', () => {
     expect(runningJobText(whole)).toBe('This video: Staff video. Video language: English.')
     expect(runningJobText({ ...whole, videoKind: 'submission', wordsLanguage: 'zh-Hans' })).toBe(
-      'This video: Student submission. Video language: 简体中文.',
+      'This video: Student submission. Video language: 中文.',
     )
   })
 

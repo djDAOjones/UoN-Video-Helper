@@ -292,7 +292,7 @@ const PLACEHOLDERS: Readonly<Record<string, string>> = {
   max: 'the most student ID numbers one card holds, a number',
   digits: 'how many digits a student ID number has, a number',
   kind: 'the video type, from videoKind.options',
-  language: "a language's name in its own language, as the Video language choice shows it, like English or 简体中文",
+  language: "a language's name in its own language, as the Video language choice shows it, like English or 中文",
 }
 
 /** What a key's last parts say about when the message is used. */

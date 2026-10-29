@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-29 — VH-227 — Raised and closes: the one Chinese named 中文, not 简体中文, on the owner's word
+
+**Decision:** VH-227 names the page's one Chinese 中文 wherever a language's name shows, in place of 简体中文, because one Chinese is offered and naming its script suggested a Traditional one beside it; the tag `zh-Hans`, which tells the browser, the fonts and the screen reader the script, is unchanged. One constant changes: no element, table word, state or walker diff.
+
+**Rationale:** Someone told the owner on 2026-10-29 that Chinese has two scripts, 简体 for the mainland and 繁體 for Hong Kong and Taiwan, that naming one may suggest the other is available, and that translation apps usually say 中文. Asked whether to change the name shown and keep the tag, the owner typed in this session's chat: "Yes, change to 中文". The page's Chinese readers are at Ningbo and the Malaysia campus, who read Simplified. Spec §9's "Simplified Chinese" and "each named in its own language" stand, so no `docs/` edit. `LANGUAGE_NAMES['zh-Hans']` in `src/config/languages.ts` feeds the switcher, the Video language choice, the summary and record line, the switch's announcement and the translation email's subject. The tests that assert it follow, the subject's percent-encoded bytes among them, as do the translator's note in `src/i18n/sheet.ts`, its two rows in the filled sheet and a comment in `tokens.brand.css`; no test deleted or skipped. Chrome, the dev server from this item's worktree: the Chinese segment 62 × 44 px with `lang="zh-Hans"` and the CJK face on the English, Chinese and Malay pages, at 1280 and 320 px, light and dark; no sideways scroll at 320 px; no console error; the Chinese page announces "页面语言：中文。" and its email subject ends ": 中文". Forced colours were not emulated. VH-227 is not one of pass 3's fix items, so VH-203's stage rule does not bind it: not walked with the pass's walker and not checked by Codex astra; VH-203's after-run reads it, as it re-reads every item that lands out of order. Built in its own worktree, `side/vh227` from `7750acb`, apart from the main checkout's uncommitted work, which this session did not make (rule 3). Digest rules: nielsen 2; wcag-2.2-aaa 2.5.5, and 3.1.2 held. Item: [VH-227](items/VH-227.md).
+
+**Supersedes:** none
+
+**Deferred:** VH-203
+
 ## 2026-10-28 — VH-212 — Closes: heavy limiting's advice in the owner's words, true whether or not the new video plays here
 
 **Decision:** VH-212 closes F15b: heavy limiting's detail says "so play the new video before you use it", the owner's words, in place of "so play the new video before you save it", which a person whose player cannot play the new video (S-152) cannot do; the Chinese and Malay are machine translations, marked so. Only that clause changes: no element, state, listener or walker diff. VH-215 is next.
@@ -644,13 +654,3 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Supersedes:** none
 
 **Deferred:** none
-
-## 2026-10-23 — VH-179 — Three focus rings drawn whole, the feedback message to the measure, a forced-colour hover
-
-**Decision:** The chooser keeps its ring's room inside its own box, given back by margin, with a CanvasText ring under forced colours. The handles' disc takes px tokens. The band's ring sits 3 px inside the face in a system colour. The feedback message is capped at the measure. Forced-colour hover changes only the border, to HighlightText (V-40–V-42, V-33, V-44).
-
-**Rationale:** Before, at 7f3ea6e, the chooser's ring failed in 115 records (88/640). After, it passes at 704/640, focused and held, in three languages and four colour modes, and the button is unmoved in V-18's six readings. At the 32 px font the handles read 0 before and 230 after, against the painted disc's 157. The band failed in forced-light (416–724) and now passes at 714–1,080. The message's widest line went from 524–541 to 409–420, within 448. Hover against rest went from 0 to 296–532 px² at 3:1. The VH-178 hand-off passes in 12 cells. Codex astra said "Commit"; its one geometry may was applied, and the re-check said "Commit". Evidence: `vh179-rings-2026-10-23.md`. Decided on the owner's standing instruction, "work through to the end of VH-177, archive and spawn as you go, proceed with your recommendations, universal permission is granted": (a) the band's ring is 3 px, not 2, because a 2 px ring inside the border falls short of 2.4.13's area; (b) the hover border is HighlightText, because CanvasText and ButtonText read 1.2–1.4:1 on Highlight; (c) the chosen chooser's hover, which already changes, is left alone; (d) UI-STANDARDS gains the forced-colour ring and hover rule, its words traded in the Carbon-first bullets. A real Windows theme, a real 32 px setting and Firefox's thumb go to VH-177's person checklist.
-
-**Supersedes:** none
-
-**Deferred:** VH-177

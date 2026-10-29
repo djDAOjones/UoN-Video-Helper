@@ -141,7 +141,7 @@
  * Chinese text keeps the brand faces first, for its Latin, with the CJK face
  * behind them for its characters (VH-105). On a Chinese page this holds from
  * the root down; on any other, `app.css` applies it where a passage switches
- * into Chinese, such as the 简体中文 option of the language switcher.
+ * into Chinese, such as the 中文 option of the language switcher.
  */
 :lang(zh) {
   --font-body: Arial, var(--font-cjk);

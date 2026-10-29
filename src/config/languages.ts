@@ -19,11 +19,13 @@ export const DEFAULT_LANGUAGE: LanguageTag = 'en-GB'
  * Each language's name in its own language and script — the one label a
  * reader who does not read the page's current language can still find.
  * Signed off 2026-10-01; the exact Chinese and Malay forms are the
- * reviewers' to confirm.
+ * reviewers' to confirm. The Chinese is 中文, not 简体中文, on the owner's
+ * word (VH-227): one Chinese is offered, and naming its script suggested a
+ * Traditional one beside it. The tag stays `zh-Hans`.
  */
 export const LANGUAGE_NAMES: Readonly<Record<LanguageTag, string>> = {
   'en-GB': 'English',
-  'zh-Hans': '简体中文',
+  'zh-Hans': '中文',
   'ms-MY': 'Bahasa Malaysia',
 }
 

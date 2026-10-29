@@ -45,8 +45,8 @@ describe('switching the language', () => {
   it('has the words, the locale and the sentence gap follow at once', () => {
     setLanguage('zh-Hans')
     expect(t().app.skipLink).toBe(zhHans.app.skipLink)
-    expect(t().language.switched({ name: '简体中文' })).toBe(
-      zhHans.language.switched.replace('{name}', '简体中文'),
+    expect(t().language.switched({ name: '中文' })).toBe(
+      zhHans.language.switched.replace('{name}', '中文'),
     )
     expect(locale()).toBe('zh-Hans')
     expect(sentenceGap()).toBe('')
