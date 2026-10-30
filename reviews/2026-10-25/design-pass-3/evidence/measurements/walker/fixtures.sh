@@ -50,6 +50,14 @@ ffmpeg -v error -y ${=V} ${=A} -t 30 -af "volume=-13dB,aformat=channel_layouts=s
 SIZE=$(stat -f %z "$OUT/lecture-30s.mkv")
 head -c $(( SIZE * 7 / 10 )) "$OUT/lecture-30s.mkv" > "$OUT/cut-short-30s.mkv"
 rm "$OUT/lecture-30s.mkv"
+# VH-215 (S-23w, S-23wn): the cut WebM, VH-158's T90 of a-vp9opus.webm. 10 s of
+# testsrc2 and a sine in VP9 and Opus, written to a file so the muxer goes back
+# for its sizes, SeekHead and Duration, with its Cues at the end; then the
+# first 90 % of its bytes, as N1 is cut.
+ffmpeg -v error -y ${=V} ${=A} -t 10 -af "volume=-13dB,aformat=channel_layouts=stereo" -c:v libvpx-vp9 -deadline realtime -cpu-used 8 -b:v 500k -c:a libopus -b:a 64k "$OUT/a-vp9opus.webm"
+SIZE=$(stat -f %z "$OUT/a-vp9opus.webm")
+head -c $(( SIZE * 9 / 10 )) "$OUT/a-vp9opus.webm" > "$OUT/cut-short-10s.webm"
+rm "$OUT/a-vp9opus.webm"
 
 # N2, long low-cost 1080p stills (S-24, S-25, and the running states): one
 # frame held, so the file is small and quick to make, while the job still

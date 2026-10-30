@@ -1,0 +1,19 @@
+records before 96 after 96 same keys True
+asserts: before {'pass': 96} after {'pass': 96} cells differing 0
+ax: before {'pass': 96} after {'pass': 96} cells differing 0
+contrastExtra: before {'cannot-determine': 96} after {'cannot-determine': 96} cells differing 0
+contrastText: before {'pass': 96} after {'pass': 96} cells differing 0
+focus: before {'pass': 96} after {'pass': 96} cells differing 0
+footer: before {'pass': 96} after {'pass': 96} cells differing 0
+formatTip: before {'not-applicable': 96} after {'not-applicable': 96} cells differing 0
+limiting: before {'pass': 96} after {'pass': 96} cells differing 0
+measure: before {'cannot-determine': 16, 'pass': 80} after {'cannot-determine': 16, 'pass': 80} cells differing 0
+overflow: before {'pass': 96} after {'pass': 96} cells differing 0
+player: before {'pass': 96} after {'pass': 96} cells differing 0
+targets: before {'fail': 96} after {'fail': 96} cells differing 0
+type: before {'fail': 96} after {'fail': 96} cells differing 0
+videoLanguage: before {'pass': 96} after {'pass': 96} cells differing 0
+overflow at 320 px: before pass 48 after pass 48 of 48 | hscroll after 0
+ax problems: before total 0 after total 0
+ax live regions at the read point, equal before and after: 95 of 96
+exposure mutations entries: before {0: 72, 744: 4, 752: 4, 650: 2, 658: 2, 742: 4, 750: 4, 648: 2, 656: 2} after {0: 72, 743: 4, 751: 4, 647: 2, 655: 2, 741: 4, 749: 4, 645: 2, 653: 2} equal per cell 72 of 96

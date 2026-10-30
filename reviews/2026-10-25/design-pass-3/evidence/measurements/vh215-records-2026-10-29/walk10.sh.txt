@@ -1,0 +1,77 @@
+#!/bin/zsh
+# VH-215 #10: one group of the after walk's low-load re-run ((r2)), a copy of VH-215 #9's walk9.sh (read-only; changed only at its header, the lock's owner, the profile, WHO and its own sha1 line), itself written on VH-215 #6's walk6.sh, under the fixed walk lock (brief section 6), modelled read-only on
+# VH-215 #5's walk5.sh (itself on #4's run4.sh and VH-212's go-1.sh and walk-1.sh). Waits (checking every 60 s, up to WAITMAX s, default 2700)
+# for AC, or battery above 50 % outside Low Power, a 1-minute load below 8, no run-in-engines.mjs and a free lock;
+# checks fix-4's two walk fixtures by sha1; takes the lock as "VH-215 #10", checks :5181 and :9251 are free, records
+# the conditions, logs the load every 30 s; starts Vite (in APP, default the candidate export export-8-cand) on :5181 and headless
+# Chrome on :9251 (its own profile, chrome-profile-10); runs the export's matrix.mjs, plan vh215, with the scenario
+# ids given, FIX the read-only fix-4, under caffeinate, bounded by RUNMAX s (default 10800); stops every PID it
+# started and releases the lock.
+# Usage: zsh walk6.sh <name> <what for the lock> <scenario id...>
+N=/Users/joe/UoN-Video-Helper-side; D=$N/vh215-walk
+BASE=7750acb852a81979511ea481e6c2b18dcdda5ee4
+R="/Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper"
+NAME=$1; WHAT=$2; shift 2
+APP=${APP:-$D/export-8-cand}; CHECK=${CHECK:-cand-source-check-8.txt}
+W="$APP/reviews/2026-10-25/design-pass-3/evidence/measurements/walker"
+FIX=$D/fix-4
+OUT="$D/$NAME"; LOCK=$N/walk.lock; WHO="VH-215 #10"
+[ -e "$OUT" ] && { echo "OUT EXISTS: $OUT"; exit 2; }
+(cd "$FIX" && shasum -c --quiet - <<'EOF') || { echo "FIXTURE MISMATCH: stop"; exit 10; }
+bdc3dcb068fe7afb2ed5409ac14bf28de04ed2ae  cut-short-30s.mkv
+261002a2dd3640fcd9d3703fdc9168dff9409b45  cut-short-10s.webm
+EOF
+WAITMAX=${WAITMAX:-2700}
+ok_power() { local B PM LV; B=$(pmset -g batt); PM=$(pmset -g)
+  if print -r -- "$B" | grep -q 'AC Power'; then return 0; fi
+  LV=$(print -r -- "$B" | grep -oE '[0-9]+%' | head -1 | tr -d %)
+  [ "$LV" -gt 50 ] && ! print -r -- "$PM" | grep -qE 'lowpowermode +1|powermode +1$'; }
+load1() { uptime | sed -E 's/.*load averages?: ([0-9.]+).*/\1/'; }
+s=$(date +%s)
+while :; do
+  L=$(load1)
+  if ok_power && [ "$(echo "$L < 8" | bc)" = 1 ] && [ ! -e $LOCK ] && ! pgrep -f 'run-in-engine[s]' >/dev/null; then break; fi
+  [ $(( $(date +%s) - s )) -ge $WAITMAX ] && { echo "NOT READY $(date -u +%T) load $L lock $(cat $LOCK/owner.txt 2>/dev/null | cut -c1-80)"; exit 9; }
+  sleep 60
+done
+mkdir "$LOCK" || { echo "LOCK HELD: $(cat $LOCK/owner.txt 2>/dev/null)"; exit 3; }
+echo "$WHO — $(date -u +%FT%TZ) — $WHAT ($NAME)" > "$LOCK/owner.txt"
+if [ -n "$(lsof -i :5181 -i :9251 2>/dev/null)" ]; then echo "PORTS BUSY:"; lsof -i :5181 -i :9251; grep -q "$WHO" "$LOCK/owner.txt" && rm -r "$LOCK"; exit 4; fi
+mkdir -p "$OUT"
+{ echo "# $WHO — $WHAT ($NAME)"; echo "start $(date -u +%FT%TZ)"; pmset -g batt | head -2; pmset -g | grep -E 'powermode|lowpowermode'; uptime
+  echo "base $BASE"; echo "app $APP (a git archive export of the base with every candidate change overlaid from \$R; not a checkout)"
+  echo "\$R HEAD $(GIT_OPTIONAL_LOCKS=0 git -C "$R" rev-parse HEAD); porcelain lines $(GIT_OPTIONAL_LOCKS=0 git -C "$R" status --porcelain=v1 | wc -l | tr -d ' '); diff sha1 $(GIT_OPTIONAL_LOCKS=0 git -C "$R" diff --binary | shasum | cut -d' ' -f1)"
+  echo "commit $(GIT_OPTIONAL_LOCKS=0 git -C "$APP" rev-parse HEAD 2>/dev/null || echo 'unknown (not a checkout)')"
+  echo "source check $(shasum "$D/$CHECK" | cut -d' ' -f1) $CHECK"
+  (cd "$W" && node -e "import('./runner.mjs').then(m=>console.log('instrument revision (export walker) '+m.instrumentRevision().revision))")
+  (cd "$W" && shasum fixtures.sh scenarios.mjs card-215.mjs | sed 's/^/walker sha1 /')
+  (cd "$D" && shasum walk10.sh | sed 's/^/script sha1 /')
+  echo "fix $FIX"; (cd "$FIX" && shasum cut-short-30s.mkv cut-short-10s.webm | sed 's/^/fixture sha1 /')
+  echo "command node matrix.mjs vh215 $*"; } > "$OUT/conditions.txt" 2>&1
+( while :; do echo "$(date -u +%T) load $(load1) $(pmset -g batt | sed -nE "1s/Now drawing from '(.*)'/\1/p") $(pmset -g batt | grep -oE '[0-9]+%' | head -1) pm$(pmset -g | sed -nE 's/^ *powermode +([0-9]+).*/\1/p')" >> "$OUT/load.log"; sleep 30; done ) &
+LP=$!
+cd "$APP" || { kill $LP; grep -q "$WHO" "$LOCK/owner.txt" && rm -r "$LOCK"; exit 5; }
+./node_modules/.bin/vite --port 5181 --strictPort --host 127.0.0.1 > "$OUT/vite.log" 2>&1 &
+VPID=$!
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --remote-debugging-port=9251 --user-data-dir="$D/chrome-profile-10" --no-first-run --no-default-browser-check --disable-backgrounding-occluded-windows --disable-background-timer-throttling --disable-renderer-backgrounding about:blank > "$OUT/chrome.log" 2>&1 &
+CPID=$!
+for i in $(seq 1 60); do curl -sf http://127.0.0.1:5181/ >/dev/null && curl -sf http://127.0.0.1:9251/json/version >/dev/null && break; sleep 1; done
+echo "vite $VPID chrome $CPID load-logger $LP" > "$OUT/pids.txt"
+(cd "$W" && FIX="$FIX" OUT_ROOT="$OUT/out" RUN_ROOT="$OUT/runs" APP_ROOT="$APP" CDP_PORT=9251 APP_URL=http://localhost:5181/ node matrix.mjs vh215 "$@" > "$OUT/run.log" 2>&1; echo "run exit $? $(date -u +%FT%TZ)" >> "$OUT/conditions.txt") &
+RPID=$!
+caffeinate -i -w $RPID &
+KPID=$!
+echo "run $RPID caffeinate $KPID" >> "$OUT/pids.txt"
+( sleep ${RUNMAX:-10800}; kill $RPID 2>/dev/null && echo "RUN TIMED OUT $(date -u +%T)" >> "$OUT/conditions.txt" ) &
+TPID=$!
+wait $RPID
+pkill -P $TPID 2>/dev/null; kill $TPID 2>/dev/null
+{ echo "end $(date -u +%FT%TZ)"; pmset -g batt | head -2; pmset -g | grep -E 'powermode|lowpowermode'; uptime; } >> "$OUT/conditions.txt"
+pkill -P $LP 2>/dev/null; kill $LP $KPID 2>/dev/null
+kill $CPID $VPID 2>/dev/null
+for i in $(seq 1 30); do kill -0 $CPID 2>/dev/null || kill -0 $VPID 2>/dev/null || break; sleep 1; done
+kill -0 $CPID 2>/dev/null && kill -9 $CPID; kill -0 $VPID 2>/dev/null && kill -9 $VPID
+for i in $(seq 1 30); do kill -0 $CPID 2>/dev/null || kill -0 $VPID 2>/dev/null || break; sleep 1; done
+if kill -0 $CPID 2>/dev/null || kill -0 $VPID 2>/dev/null; then echo "STILL ALIVE: vite $VPID chrome $CPID; lock kept"; exit 6; fi
+grep -q "$WHO" "$LOCK/owner.txt" && rm -r "$LOCK"
+echo "done $(date -u +%T); $(grep '^run exit' "$OUT/conditions.txt"); ports: $(lsof -i :5181 -i :9251 2>/dev/null | wc -l | tr -d ' ') lines; lock: $(ls -d $LOCK 2>/dev/null || echo released)"

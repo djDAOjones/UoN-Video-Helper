@@ -158,4 +158,13 @@ export interface PreflightSummary {
    * than inside it.
    */
   readonly audioWarnings: readonly AudioWarning[]
+  /**
+   * The length the job will make of the part kept, in seconds: from its start,
+   * on frame edges, to where the later track's content really ends, without
+   * the card or the closing, as the spec words the running time (VH-215).
+   * Submission's card and the line under its fields print it, for this
+   * verdict's file, trim and preset only. `null` when no finite length can be
+   * known, and then no card is drawn.
+   */
+  readonly madeSeconds: number | null
 }

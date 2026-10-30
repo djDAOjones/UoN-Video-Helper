@@ -21,6 +21,7 @@ import { EncodedPacketSink, type InputTrack } from 'mediabunny'
 
 import { ENDS_EARLY_MARGIN_SECONDS } from '../config/thresholds'
 import { KEPT_EDGE_TOLERANCE_SECONDS } from '../config/trim'
+import { formatClockTime } from '../ui/clock-time'
 import type { KeptRange } from './kept-range'
 
 /** What a file's index says of one track in the part kept, in source seconds ({@link declaredExtent}). */
@@ -109,6 +110,94 @@ export async function declaredExtent(
     lastPacketSeconds: last.timestamp,
     lastPacketArrived: (await sink.getPacket(last.timestamp)) !== null,
   }
+}
+
+/**
+ * Where the picture's content really ends in the part kept, in source
+ * seconds, known before the encode so Submission's card can say the length
+ * made (VH-215); `null` when the track declares nothing there.
+ *
+ * One fact decides the read, never the container: whether the last packet
+ * the index declares in the part kept is in the file ({@link declaredExtent}).
+ * When it is — every whole file, and every Matroska or WebM file, whose index
+ * lists only the clusters that arrived — the index's end is the answer, from
+ * the one read the encode already makes. When it is not, the file was cut
+ * short inside the part kept, and its kept picture packets are read once, in
+ * order and undecoded, to the first whose bytes are missing: streamed, never
+ * held, and only for a cut file. The release guard stands behind both
+ * ({@link cardTellsMade}).
+ *
+ * @param range - The part kept on frame edges, as the pipeline places it;
+ *   `null` for the whole file.
+ * @param signal - Stops the read part-way; the caller says the cancellation.
+ */
+export async function pictureMadeEndSeconds(
+  track: InputTrack,
+  range: KeptRange | null,
+  signal?: AbortSignal,
+): Promise<number | null> {
+  const declared = await declaredExtent(track, range)
+  if (declared.lastPacketSeconds === null) return null
+  if (declared.lastPacketArrived) return declared.declaredEndSeconds
+  return arrivedEndSeconds(track, range, signal)
+}
+
+/**
+ * The latest instant a picture packet that arrived is shown until, within the
+ * part kept, as the encode's picture lane measures a decoded frame; `null`
+ * when none arrived there. One sequential pass over the packets' bytes, from
+ * the key packet the part kept starts on to the first packet the file does
+ * not hold, which Mediabunny answers with nothing: there the read ends.
+ */
+async function arrivedEndSeconds(
+  track: InputTrack,
+  range: KeptRange | null,
+  signal: AbortSignal | undefined,
+): Promise<number | null> {
+  const sink = new EncodedPacketSink(track)
+  const keptStart = range?.startSeconds ?? Number.NEGATIVE_INFINITY
+  const keptEnd = range?.endSeconds ?? Number.POSITIVE_INFINITY
+  // As the sinks' ranged reads start: on the key packet the in-point falls in,
+  // or the track's first when it starts after it.
+  const from = range ? await sink.getKeyPacket(range.startSeconds) : null
+  let endSeconds: number | null = null
+  for await (const packet of sink.packets(from ?? undefined)) {
+    if (signal?.aborted) break
+    const shownUntil = Math.min(keptEnd, packet.timestamp + packet.duration)
+    if (shownUntil > keptStart && (endSeconds === null || shownUntil > endSeconds))
+      endSeconds = shownUntil
+  }
+  return endSeconds
+}
+
+/**
+ * The length made, in seconds: from where the part kept starts to where the
+ * later of the two tracks' content ends, as {@link endedEarly}'s `made` is
+ * measured but with no margin. Submission's card prints it, and the release
+ * guard holds the encode's own against it (VH-215).
+ *
+ * @returns `null` when neither track has content in the part kept, or the
+ *   span is not a finite length: no span, and so no card.
+ */
+export function madeSpanSeconds(
+  pictureEndSeconds: number | null,
+  soundEndSeconds: number | null,
+  fromSeconds: number,
+): number | null {
+  const ends = [pictureEndSeconds, soundEndSeconds].filter((end): end is number => end !== null)
+  if (ends.length === 0) return null
+  const span = Math.max(...ends) - fromSeconds
+  return Number.isFinite(span) && span >= 0 ? span : null
+}
+
+/**
+ * The release guard's test (VH-215): whether the running time a Submission
+ * card printed is the length the encode made, both printed to the second by
+ * the card's own rule. A card known to differ from what is made is never
+ * released, with a warning or without (the item's "never knowingly false").
+ */
+export function cardTellsMade(runningTime: string, madeSeconds: number | null): boolean {
+  return madeSeconds !== null && runningTime === formatClockTime(madeSeconds)
 }
 
 /**

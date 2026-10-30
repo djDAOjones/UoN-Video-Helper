@@ -1,0 +1,30 @@
+No blocking product defect found. The candidate follows the settled design. I made no file changes and ran no tests, builds or installs.
+
+**Musts:** None.
+
+**Shoulds:**
+
+- Strengthen the release-guard regression. `src/media/ends-early.test.ts:424` supplies the shorter encode span directly and checks `cardTellsMade`; it does not exercise worker refusal, non-retention or workspace disposal. Those paths are correctly connected in source, but removing the worker’s guard would leave this test green. Describe the present evidence as a predicate regression; record a worker-path regression as a wish if deferred.
+
+**Acceptance findings:**
+
+| Criterion | Finding and evidence |
+|---|---|
+| Route found first and bounded | **Met.** The permitted trace precedes implementation. `probe-4`–`probe-6.results.jsonl` support the timings: the largest whole file’s index route takes 2 ms; the large cut’s streamed packet route takes 1,440 ms. `src/media/ends-early.ts:134` branches on `lastPacketArrived`, never container type. The loop retains a running maximum, not the media file; no additional decode or remux. |
+| Never knowingly false | **Met.** `job.worker.ts:594` joins the picture end and existing audio decode end, outside the audio timer, using the pipeline’s frame-aligned range. `pipeline.ts:893` independently returns the encode’s raw span, excluding card, closing and held picture. The Submission-only guard at `job.worker.ts:278` precedes retention and posting; mismatch reaches disposal at `:360`. Unknown span produces an empty request time and existing `failure.unknown` before drawing (`:247`). No declared-length fallback or warning-only release. |
+| Required tests | **Met**, with the should above. Both `proof-9-*.proof.jsonl` contain ten successful cases: eight cut-MP4 combinations covering whole/trimmed, best/smaller and closing on/off, plus whole-file and before-damage controls. Decoded cards change from 0:30/0:20 to 0:21/0:16; controls remain unchanged. Node additions cover reader, composition and comparison using the sibling helper, without mocked WebCodecs. No test was deleted, skipped or weakened. No additional TypeScript/lint defect found; reported checks were not rerun. |
+| No spec change expected; documents | **Met.** Calibration, `keptSeconds`, estimate inputs and the warning’s one-second margin retain their meanings. Spec §7.1 and line 128 need no correction for this implementation. No UI-STANDARDS rule changes; no `docs/` edit required. |
+| VH-203 measurements | **Met.** The supplied checks and manifests contain exactly 96 cells per side and 72 rerun cells. Before-source records establish the base application; current tracked diff hash matches the candidate-source record, and all three untracked copies match. All 85 evidence copies match `sources.txt`. Job values, load windows, ranges, proof scores and route figures agree with the supplied records. VH-199 correctly remains “not measured” for job time. Power, rerun substitutions and the settled load rulings are recorded. |
+| WCAG recheck | **Met within the stated evidence limits.** Table §6 and `instr-13.txt`/`exposure-13b.txt` support unchanged relationships, headings and wording, and unchanged live-region text/node writes. Reading-level judgement and actual screen-reader speech remain limitations, not passes, consistent with spec §9.3. Existing page-wide instrument failures are disclosed. |
+| Tokens and controls | **Met.** No CSS, config, markup, control, checkbox, listener or dependency change; progress remains. Token files stay separate. Formatter constants moved unchanged; the new logging arithmetic is unit rounding, not a configurable threshold. |
+| Sizing and scope | The resulting implementation is bounded to VH-215; no expanded remedy requiring another fix item was found. The 45k plan and same-ID handback are evidenced; complete session-by-session budget compliance is **not shown** by the permitted material. |
+
+The page’s three consumers use the verdict’s span: fit (`main.ts:2659`), filled line (`:2723`) and request (`:3049`). File, preset and committed-trim changes clear it; range comparison withdraws it during handle movement. Selection-epoch checks reject stale replies. Language repaint cannot reconstruct the old declared duration. Existing “Checking…” and cancellation remain; user-facing wording is unchanged.
+
+The walker adds only the four prescribed scenarios and their plan, retaining Staff-ready S-23 and leaving S-22 untouched. `card-215.mjs` reads decoded output pixels against varied reference renders, without OCR or dependencies. Every walk/proof conditions record names revision `17727d3522f7270d`; saved scripts, recipes, hashes and commands support rerunning.
+
+House conventions’ **Fail loudly on data loss** and **Streaming everywhere**, and Nielsen 1’s **status visible and announced**, are applied.
+
+**At the close:** rebase onto `267cb91…`; run the settled-machine gate and `node tools/check.mjs`; complete item/backlog/trajectory/decision records with the owner’s scope quoted; preserve this check and its brief; copy the table and records; link the report’s “The owner’s old issues” row; record deferred work, including table §7’s S-22 Submission follow-up. These are close obligations, not current must findings.
+
+Verdict: Commit

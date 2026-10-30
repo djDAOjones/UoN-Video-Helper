@@ -1,0 +1,98 @@
+// VH-215 #1: the route's timings, a probe (brief section 6). Read-only on the app: it opens the base app
+// served by Vite on :5181 in headless Chrome on :9251, adds one file input to the page (never the repo),
+// gives it the files below by CDP, and times each candidate route on the page's main thread through the
+// app's own modules as Vite serves them. Writes one JSON line per run to <out>/results.jsonl.
+// Usage: node route-probe.mjs <out dir> <label=path[@cut]> ...   (@cut: the file sliced to 70 % of its bytes, in the page, no copy)
+import { writeFileSync, appendFileSync } from 'node:fs'
+import { loadavg } from 'node:os'
+
+const [OUT, ...SPECS] = process.argv.slice(2)
+const CDP = 'http://127.0.0.1:9251'
+const APP = 'http://localhost:5181/'
+
+const target = await (await fetch(`${CDP}/json/new?about:blank`, { method: 'PUT' })).json()
+const ws = new WebSocket(target.webSocketDebuggerUrl)
+await new Promise((ok, no) => { ws.onopen = ok; ws.onerror = no })
+let seq = 0
+const waiting = new Map()
+ws.onmessage = (event) => {
+  const msg = JSON.parse(event.data)
+  if (msg.id && waiting.has(msg.id)) { waiting.get(msg.id)(msg); waiting.delete(msg.id) }
+}
+const send = (method, params = {}) => new Promise((ok) => { const id = ++seq; waiting.set(id, ok); ws.send(JSON.stringify({ id, method, params })) })
+const evaluate = async (expression) => {
+  const reply = await send('Runtime.evaluate', { expression, awaitPromise: true, returnByValue: true })
+  if (reply.error || reply.result.exceptionDetails) return { error: JSON.stringify(reply.error ?? reply.result.exceptionDetails).slice(0, 600) }
+  return reply.result.result.value
+}
+
+await send('Page.enable'); await send('Runtime.enable'); await send('DOM.enable')
+await send('Page.navigate', { url: APP })
+await new Promise((ok) => setTimeout(ok, 6000))
+const files = SPECS.map((spec) => spec.split('=').slice(1).join('=').replace(/@cut$/, ''))
+await evaluate(`(() => { const i = document.createElement('input'); i.type = 'file'; i.multiple = true; i.id = 'vh215probe'; document.body.appendChild(i); return true })()`)
+const doc = await send('DOM.getDocument', { depth: 0 })
+const node = await send('DOM.querySelector', { nodeId: doc.result.root.nodeId, selector: '#vh215probe' })
+await send('DOM.setFileInputFiles', { nodeId: node.result.nodeId, files })
+
+// The page-side library: each route on one Blob, timed, its answer kept.
+const setup = await evaluate(`(async () => {
+  // The very module instance the app's own modules import (Vite's pre-bundled URL, read from inspect.ts as served), so instanceof holds
+  const served = await (await fetch('/src/media/inspect.ts')).text()
+  const at = served.indexOf('/node_modules/.vite/deps/mediabunny.js')
+  if (at < 0) return 'NO MEDIABUNNY URL in: ' + served.slice(0, 400)
+  const rest = served.slice(at)
+  const mbUrl = rest.slice(0, rest.search(/["']/))
+  const mb = await import(mbUrl)
+  const { openInput, inspectFile } = await import('/src/media/inspect.ts')
+  const { analyseSourceAudio } = await import('/src/media/audio-plan.ts')
+  const { declaredExtent } = await import('/src/media/ends-early.ts')
+  const { matroskaCutShort } = await import('/src/media/matroska-cut.ts')
+  const now = () => performance.now()
+  const r3 = (x) => x == null ? null : Math.round(x * 1000) / 1000
+  window.vh215 = {
+    blob(index, cut) { const f = document.getElementById('vh215probe').files[index]; return cut ? f.slice(0, Math.floor(f.size * 7 / 10)) : f },
+    async inspect(f) { const t0 = now(); const r = await inspectFile(f); const input = openInput(f); const mk = await matroskaCutShort(f, r.container, input); return { ms: Math.round(now() - t0), container: r.container, declaredSeconds: r3(r.durationSeconds), videoDeclared: r3(r.video.durationSeconds), audioDeclared: r3(r.audio?.durationSeconds), matroskaCutShort: mk } },
+    // A: the sound's decoded end, pre-flight's own pass over the whole file
+    async sound(f) { const t0 = now(); const t = await openInput(f).getPrimaryAudioTrack(); if (!t) return { ms: 0, none: true }; const m = await analyseSourceAudio(t, undefined, null); return { ms: Math.round(now() - t0), decodedEndSeconds: r3(m.decodedEndSeconds), silent: 'silent' in m } },
+    // B: the picture's last packet whose bytes arrived, by the index: declaredExtent, then a bisection on presentation time, then a walk in decode order round it
+    async index(f) {
+      const t0 = now(); const v = await openInput(f).getPrimaryVideoTrack(); const ext = await declaredExtent(v, null)
+      const sink = new mb.EncodedPacketSink(v); let reads = 1
+      const dur = await v.computeDuration(); let end = null
+      if (ext.lastPacketArrived) { const p = await sink.getPacket(dur, { metadataOnly: true }); end = p.timestamp + p.duration }
+      else {
+        let lo = 0, hi = dur
+        for (let i = 0; i < 40 && hi - lo > 0.001; i++) { const mid = (lo + hi) / 2; const p = await sink.getPacket(mid); reads++; if (p) lo = mid; else hi = mid }
+        let p = await sink.getPacket(lo, { metadataOnly: true })
+        let k = await sink.getKeyPacket(p.timestamp, { metadataOnly: true }); reads += 2
+        let q = k; end = null; let walked = 0
+        while (q && walked < 400) { walked++; reads++; const whole = await sink.getPacket(q.timestamp); if (!whole) break; end = Math.max(end ?? 0, q.timestamp + q.duration); q = await sink.getNextPacket(q, { metadataOnly: true }) }
+      }
+      return { ms: Math.round(now() - t0), lastPacketArrived: ext.lastPacketArrived, declaredEndSeconds: r3(ext.declaredEndSeconds), pictureEndSeconds: r3(end), reads }
+    },
+    // C: the picture's end by a streamed read of every packet's bytes, no decode
+    async packets(f) { const t0 = now(); const v = await openInput(f).getPrimaryVideoTrack(); let end = null, n = 0, bytes = 0; for await (const p of new mb.EncodedPacketSink(v).packets()) { n++; bytes += p.data.byteLength; end = Math.max(end ?? 0, p.timestamp + p.duration) } return { ms: Math.round(now() - t0), packets: n, bytes, pictureEndSeconds: r3(end) } },
+    // D: the picture's end by a streamed decode, as the encode's picture lane decodes it
+    async decode(f) { const t0 = now(); const v = await openInput(f).getPrimaryVideoTrack(); let end = null, n = 0; for await (const s of new mb.VideoSampleSink(v).samples()) { n++; end = Math.max(end ?? 0, s.timestamp + s.duration); s.close() } return { ms: Math.round(now() - t0), frames: n, pictureEndSeconds: r3(end) } },
+  }
+  return true
+})()`)
+
+console.log('setup', JSON.stringify(setup).slice(0, 800))
+if (setup !== true) { ws.close(); process.exit(3) }
+writeFileSync(`${OUT}/files.json`, JSON.stringify(SPECS, null, 1))
+const ROUTES = (process.env.ROUTES ?? 'inspect,sound,index,packets,decode').split(',')
+for (const [index, spec] of SPECS.entries()) {
+  const label = spec.split('=')[0]
+  const cut = spec.endsWith('@cut')
+  for (const route of ROUTES) {
+    const started = new Date().toISOString()
+    const value = await evaluate(`vh215.${route}(vh215.blob(${index}, ${cut}))`)
+    const line = { label, cut, route, started, ended: new Date().toISOString(), load1: Math.round(loadavg()[0] * 100) / 100, ...value }
+    appendFileSync(`${OUT}/results.jsonl`, JSON.stringify(line) + '\n')
+    console.log(JSON.stringify(line))
+  }
+}
+ws.close()
+process.exit(0)

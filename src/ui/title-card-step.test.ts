@@ -389,6 +389,11 @@ describe("Submission's words, in the video's language (VH-128)", () => {
     expect(text.made).toContain('19 October 2026')
   })
 
+  it('leaves the running time empty, for the worker to refuse, when the length made is not known (VH-215)', () => {
+    expect(submissionCardText(TYPED_SUBMISSION, [ID], null, NOON, 'en-GB').runningTime).toBe('')
+    expect(submissionCardText(TYPED_SUBMISSION, [ID], 21.3, NOON, 'en-GB').runningTime).toBe('0:21')
+  })
+
   it('names one ID number in the singular', () => {
     expect(submissionCardText(TYPED_SUBMISSION, [ID], 60, NOON, 'en-GB').labels.ids).toBe(
       textIn('en-GB').titleCard.card.ids({ count: 1 }),

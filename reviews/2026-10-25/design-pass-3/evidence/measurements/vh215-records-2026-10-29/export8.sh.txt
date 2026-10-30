@@ -1,0 +1,83 @@
+#!/bin/zsh
+# VH-215 #8: the two exports (e2)'s proof serves, each checked absent first, read-only on $R (no edit, no lock, no
+# server, no browser). Modelled on #6's export-6 and its source check (before-source-check-6.txt).
+#   export-7      git archive of the base, the re-fixed walker's three files overlaid from $R, each sha1-checked
+#                 against vh215-wip-6/manifest.txt; node_modules an APFS clone (cp -Rc) of $R's with .vite removed.
+#                 Its check: before-source-check-7.txt (diff -rq against a fresh archive, in export-6's form).
+#   export-8-cand git archive of the base, every candidate change overlaid from $R (the 15 paths of
+#                 vh215-wip-7/manifest.txt: 12 modified, 3 untracked), each sha1-checked against that manifest;
+#                 node_modules as export-7's. Its check: cand-source-check-8.txt (every tracked and untracked
+#                 non-ignored path of $R's working tree byte-equal in the export, and no other file in the export,
+#                 outside node_modules, dist and .vite).
+# Why an export for the candidate, not $R itself: the after walk serves the candidate as (e2) does, and the before
+# walk served export-6 from the side folder; an export keeps the two sides served alike (off OneDrive, Vite's cache
+# outside $R), pins the candidate's bytes by its check, and leaves $R untouched.
+# Usage: zsh export8.sh <scratch dir for the fresh reference archive>
+set -u
+N=/Users/joe/UoN-Video-Helper-side; D=$N/vh215-walk
+BASE=7750acb852a81979511ea481e6c2b18dcdda5ee4
+R="/Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper"
+WREL=reviews/2026-10-25/design-pass-3/evidence/measurements/walker
+SCR=$1; REF=$SCR/ref-archive-8
+export GIT_OPTIONAL_LOCKS=0
+for x in export-7 export-8-cand before-source-check-7.txt cand-source-check-8.txt; do [ -e "$D/$x" ] && { echo "EXISTS $x: stop"; exit 2; }; done
+[ -e "$REF" ] && { echo "EXISTS $REF: stop"; exit 2; }
+gitstate() { (cd "$R" && { ls -1A .git; git status --porcelain=v1; git diff --binary | shasum; git rev-parse HEAD; } | shasum | cut -d' ' -f1); }
+G0=$(gitstate)
+[ -z "$(cd "$R" && find node_modules -flags +dataless -print 2>/dev/null | head -1)" ] || { echo "DATALESS in node_modules: stop"; exit 3; }
+
+mkdir -p "$REF" && (cd "$R" && git archive "$BASE") | tar -x -C "$REF" || { echo "REF ARCHIVE FAILED"; exit 4; }
+for E in export-7 export-8-cand; do
+  mkdir "$D/$E" && (cd "$R" && git archive "$BASE") | tar -x -C "$D/$E" || { echo "ARCHIVE FAILED $E"; exit 4; }
+done
+# export-7: the walker's three files, against wip-6's manifest
+grep -E "^(modified|untracked) [0-9a-f]{40} $WREL/" "$N/vh215-wip-6/manifest.txt" | while read -r k s p; do
+  cp -p "$R/$p" "$D/export-7/$p"; [ "$(shasum "$D/export-7/$p" | cut -d' ' -f1)" = "$s" ] && echo "export-7 overlay OK $p" || echo "export-7 overlay MISMATCH $p"; done
+# export-8-cand: every candidate path, against wip-7's manifest
+grep -E '^(modified|untracked) [0-9a-f]{40} ' "$N/vh215-wip-7/manifest.txt" | while read -r k s p; do
+  mkdir -p "$(dirname "$D/export-8-cand/$p")"; cp -p "$R/$p" "$D/export-8-cand/$p"
+  [ "$(shasum "$D/export-8-cand/$p" | cut -d' ' -f1)" = "$s" ] && echo "export-8-cand overlay OK $k $p" || echo "export-8-cand overlay MISMATCH $p"; done
+for E in export-7 export-8-cand; do
+  cp -Rc "$R/node_modules" "$D/$E/node_modules" && rm -rf "$D/$E/node_modules/.vite" && echo "$E node_modules cloned, .vite removed: $(test -e "$D/$E/node_modules/.vite" && echo PRESENT || echo absent)"
+done
+G1=$(gitstate)
+[ "$G0" = "$G1" ] && echo "R .git listing, status, diff sha1 and HEAD unchanged across the reads ($G0)" || echo "R GIT STATE CHANGED: stop ($G0 -> $G1)"
+
+ident() { (cd "$1/$WREL" && node -e "import('./runner.mjs').then(m=>{console.log('instrumentRevision() of '+process.argv[1]+\"'s walker: \"+m.instrumentRevision().revision);console.log('sourceIdentity() of '+process.argv[1]+' (not a checkout): '+JSON.stringify(m.sourceIdentity(process.argv[2])))})" "$2" "$1"); }
+
+# before-source-check-7.txt, in before-source-check-6.txt's form
+{ echo "VH-215's (e2) base side: a content check of the export the browser proof's base side runs on, $(date -u +%F) (VH-215 #8), read-only."
+  echo "Export: vh215-walk/export-7/ ('git archive $BASE' extracted, the re-fixed walker's three files overlaid from the checkout, node_modules an APFS clone (cp -Rc) of the checkout's with its .vite cache removed). Reference: a fresh 'git archive $BASE' extracted outside the side folder."
+  echo "Command: diff -rq <fresh archive> export-7/ -x node_modules -x dist -x .vite"
+  echo "Files: fresh archive $(cd "$REF" && find . -type f | wc -l | tr -d ' '); export-7/ outside node_modules, dist and .vite $(cd "$D/export-7" && find . -type f -not -path './node_modules/*' -not -path './dist/*' -not -path '*/.vite/*' | wc -l | tr -d ' ')."
+  echo "Differences (diff -rq, paths relative):"
+  (cd "$REF" && diff -rq . "$D/export-7" -x node_modules -x dist -x .vite | sed -e "s|$D/export-7/*||g" -e 's|\./||g' -e 's/^/  /')
+  echo "The three walker files in export-7/ against the checkout's working walker (cmp):"
+  for f in fixtures.sh scenarios.mjs card-215.mjs; do cmp -s "$D/export-7/$WREL/$f" "$R/$WREL/$f" && echo "  walker/$f: identical" || echo "  walker/$f: DIFFERS"; done
+  printf 'sha1 of the three in export-7/: '; for f in fixtures.sh scenarios.mjs card-215.mjs; do printf '%s %s; ' $f $(shasum "$D/export-7/$WREL/$f" | cut -d' ' -f1); done; echo
+  ident "$D/export-7" export-7
+  echo "So the base side's app is $BASE's byte for byte, and its walker is the re-fixed walker (revision 17727d3522f7270d)."
+} > "$D/before-source-check-7.txt" 2>&1
+
+# cand-source-check-8.txt: the export against $R's working tree
+LIST=$SCR/cand-paths-8.txt
+(cd "$R" && { git ls-files; git ls-files --others --exclude-standard; } | grep -v -E '^(node_modules|dist)/|/\.vite/' | LC_ALL=C sort -u) > "$LIST"
+{ echo "VH-215's (e2) candidate side: a content check of the export the browser proof's candidate side runs on, $(date -u +%F) (VH-215 #8), read-only."
+  echo "Export: vh215-walk/export-8-cand/ ('git archive $BASE' extracted; every path of vh215-wip-7/manifest.txt overlaid from the checkout's working tree, each sha1-checked against that manifest; node_modules an APFS clone (cp -Rc) of the checkout's with its .vite cache removed)."
+  echo "Checkout: HEAD $(cd "$R" && git rev-parse HEAD); porcelain lines $(cd "$R" && git status --porcelain=v1 | wc -l | tr -d ' '); git diff --binary sha1 $(cd "$R" && git diff --binary | shasum | cut -d' ' -f1); nothing staged: $(cd "$R" && git diff --cached --quiet && echo yes || echo NO)."
+  echo "Reference: the checkout's tracked files (git ls-files) and untracked non-ignored files (git ls-files --others --exclude-standard), outside node_modules, dist and .vite: $(wc -l < "$LIST" | tr -d ' ') paths."
+  echo "Each against export-8-cand/ (cmp):"
+  MISS=0; DIFF=0; while IFS= read -r p; do if [ ! -f "$D/export-8-cand/$p" ]; then echo "  MISSING $p"; MISS=$((MISS+1)); elif ! cmp -s "$R/$p" "$D/export-8-cand/$p"; then echo "  DIFFERS $p"; DIFF=$((DIFF+1)); fi; done < "$LIST"
+  echo "  missing $MISS; differing $DIFF"
+  echo "Files in export-8-cand/ outside node_modules, dist and .vite that the reference lacks:"
+  (cd "$D/export-8-cand" && find . -type f -not -path './node_modules/*' -not -path './dist/*' -not -path '*/.vite/*' | sed 's|^\./||' | LC_ALL=C sort) > "$SCR/cand-export-paths-8.txt"
+  EXTRA=$(LC_ALL=C comm -13 "$LIST" "$SCR/cand-export-paths-8.txt"); [ -z "$EXTRA" ] && echo "  none" || print -r -- "$EXTRA" | sed 's/^/  EXTRA /'
+  echo "Files: export-8-cand/ outside node_modules, dist and .vite $(wc -l < "$SCR/cand-export-paths-8.txt" | tr -d ' ')."
+  echo "Against the base (diff -rq <fresh archive> export-8-cand/ -x node_modules -x dist -x .vite):"
+  (cd "$REF" && diff -rq . "$D/export-8-cand" -x node_modules -x dist -x .vite | sed -e "s|$D/export-8-cand/*||g" -e 's|\./||g' -e 's/^/  /')
+  ident "$D/export-8-cand" export-8-cand
+  [ "$MISS" = 0 ] && [ "$DIFF" = 0 ] && [ -z "$EXTRA" ] && echo "So the candidate side's app is the checkout's working tree byte for byte outside node_modules, dist and .vite (the base plus wip-7's fifteen paths), and its walker is the re-fixed walker (revision 17727d3522f7270d)." || echo "NOT EQUAL to the checkout's working tree: stop."
+} > "$D/cand-source-check-8.txt" 2>&1
+G2=$(gitstate)
+[ "$G0" = "$G2" ] && echo "R git state unchanged at the end" || echo "R GIT STATE CHANGED at the end: stop"
+echo "export8 done $(date -u +%FT%TZ)"

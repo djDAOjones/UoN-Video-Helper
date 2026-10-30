@@ -14,6 +14,8 @@ import { IN_DIALOG, IN_DIALOG_OR_OUT, focusByKeyboard, key } from './qualify.mjs
 import { focusArea } from './qualify.mjs'
 import { FAULTS, applyFault, releaseFault, releaseAll, gotoNoWait } from './faults.mjs'
 import { spokenAtCompletion } from './phase8.mjs'
+// VH-215 (VH-139.5): the submission card's running time, read from the output.
+import { KEEP_REQUEST, readBurnedCard } from './card-215.mjs'
 
 // VH-198: S-140 reads the closing asset from samples/ (never written there).
 const APP_ROOT = process.env.APP_ROOT ?? resolve(dirname(fileURLToPath(import.meta.url)), '../../../../../..')
@@ -3479,3 +3481,83 @@ PLANS.pilot3 = () => [
   ...['S-141', 'S-145'].map((id) => ({ id, lang: 'ms-MY', view: 'w1280', mode: 'light' })),
   { id: 'K-player', lang: 'en-GB', view: 'w1280', mode: 'light' },
 ]
+
+// ---------------------------------------------------------------------------
+// VH-215 (wish VH-139.5): the submission card's running time, the length the
+// new video has. S-23's cut-short MKV (N1) and VH-158's cut WebM (T90 of
+// a-vp9opus.webm, fixtures.sh), each as Student submission with a closing on
+// (Cut) and off (none), the preset pinned to best, each running its job. The
+// setup reads, once a job: the page's settled #submission-card-filled line
+// before Create; the job's time, Create to the finished card (the output's
+// checks included), on the page's clock (P8_INIT's finish event); and the
+// burned card's running time from the output (card-215.mjs), never the page
+// line as its proxy. A job's four colour modes share its setup, and their
+// records say so. S-23's Staff-ready scenario is kept as it is; S-22 is
+// untouched. Kept out of the pass's frozen plans (fixOnly) and walked by
+// PLANS.vh215. The expectations: N1's from VH-215 #1's probe-4; the cut
+// WebM's from VH-215 #4's extents probe (extents-4): its last cluster is cut,
+// so the file reads 5.12 s and the card's time and the length made are both
+// 0:05 (the Duration element's 10.008 s is not the page's, VH-158's S2).
+const VH215_EXPECT = {
+  'cut-short-30s.mkv': { made: '0:20', declared: '0:20', maxSeconds: 40, from: "VH-215 #1's probe-4: declared 20; sound 19.925; picture 20 by index, packets and decode" },
+  'cut-short-10s.webm': { made: '0:05', declared: '0:05', maxSeconds: 20, from: "VH-215 #4's extents probe (extents-4): declared 5.121 (picture 5.12, sound 5.121); sound 5.113; picture 5.12 by index (last declared packet arrived), packets (128) and decode (128 frames)" },
+}
+const VH215_LINE = MX(`(() => { const el = M.el('#submission-card-filled'); const t = el ? el.textContent.replace(/\\s+/g, ' ').trim() : null; const m = t && t.match(/\\d+(?::\\d{2}){1,2}/); return { text: t, clock: m ? m[0] : null, shown: !!el && M.vis('#submission-card-filled') }; })()`)
+async function vh215Job(w, lang, file, closing) {
+  const o = obsOf(w), x = VH215_EXPECT[file]
+  const v = (o.vh215 = { file, closing, preset: 'best', expect: x })
+  await ready(w, lang, file)
+  await w.chooseKind('submission')
+  await submissionFill(w)
+  await w.select('#closing-type', closing)
+  await w.click('input[name="preset"][value="best"]')
+  await sleep(300)
+  await w.waitSettled()
+  await until(w, '!!M.verdict() && !M.checking()', 'the settled verdict')
+  v.atCreate = await mx(w, `({ kind: M.checked('video-kind'), preset: M.checked('preset'), closing: M.el('#closing-type').value, verdict: M.verdict(), create: M.create() })`)
+  v.lineAtCreate = await w.evaluate(VH215_LINE)
+  await w.evaluate(KEEP_REQUEST)
+  v.tCreate = await w.evaluate('Date.now()')
+  await create(w)
+  await w.waitFor(MX(`M.finished() || M.res() === 'failure'`), { label: 'the job ended', timeout: 900000, interval: 100 })
+  const events = await w.evaluate(`((window.__p8 || { events: [] }).events).filter((e) => e.t >= ${v.tCreate}).map((e) => ({ kind: e.kind, t: e.t }))`)
+  const at = (kind) => events.find((e) => e.kind === kind)?.t ?? null
+  v.job = { outcome: await mx(w, `M.finished() ? 'finished' : M.res()`), jobMs: at('finish') === null ? null : at('finish') - v.tCreate, toProgressMs: at('start') === null ? null : at('start') - v.tCreate, events, clock: "the page's (P8_INIT), Create pressed to the finished card drawn" }
+  if (v.job.outcome === 'finished') { await sleep(400); v.card = await readBurnedCard(w, { maxSeconds: x.maxSeconds }) }
+}
+const vh215Asserts = () => [
+  see('the job ended with a verified result, a finished video; its time, Create to the finished card', (o, w) => ({ outcome: o.vh215?.job?.outcome === 'finished' && Number.isFinite(o.vh215.job.jobMs) ? 'pass' : 'fail', job: brief(o.vh215?.job ?? null), atCreate: o.vh215?.atCreate ?? null, sharedBy: "this language and width's four colour modes: one setup, one job", walk: w.name })),
+  see("the burned card's running time, read from the output, is the length made", (o) => {
+    const v = o.vh215 ?? {}, c = v.card, x = v.expect ?? {}
+    if (!c || c.error) return { outcome: 'cannot-determine', why: 'no reading: ' + (c?.error ?? 'no card read'), card: brief(c ?? null) }
+    if (!c.clear) return { outcome: 'cannot-determine', why: 'the reading is not clear of the runner-up', read: c.time, card: brief(c) }
+    if (!x.made) return { outcome: 'cannot-determine', why: 'no expectation set: ' + x.from, read: c.time, card: brief(c) }
+    return { outcome: c.time === x.made ? 'pass' : 'fail', read: c.time, made: x.made, declared: x.declared, madeScore: c.scores[x.made] ?? null, declaredScore: c.scores[x.declared] ?? null, from: x.from, card: brief(c) }
+  }),
+  see("the page's settled #submission-card-filled line, before Create, states the length made", (o) => {
+    const v = o.vh215 ?? {}, l = v.lineAtCreate, x = v.expect ?? {}
+    if (!l || !l.clock) return { outcome: 'cannot-determine', why: 'no clock time in the line', line: l ?? null }
+    if (!x.made) return { outcome: 'cannot-determine', why: 'no expectation set: ' + x.from, line: l }
+    return { outcome: l.clock === x.made ? 'pass' : 'fail', line: l, made: x.made, declared: x.declared }
+  }),
+  found("the page's #submission-card-filled line in this record's mode", async (o, w) => w.evaluate(VH215_LINE)),
+]
+const vh215Scenario = (name, file, closing) => ({
+  name,
+  fixOnly: true,
+  state: `M.finished() && M.checked('video-kind') === 'submission' && !!document.querySelector('video.result-player')`,
+  setup: async (w, lang) => vh215Job(w, lang, file, closing),
+  asserts: vh215Asserts(),
+  focus: [SAVE, CREATE],
+  fixtures: [file],
+})
+Object.assign(SCENARIOS, {
+  'S-23s': vh215Scenario("VH-215: S-23's cut-short MKV as Student submission, closing Cut", 'cut-short-30s.mkv', 'cut'),
+  'S-23sn': vh215Scenario("VH-215: S-23's cut-short MKV as Student submission, no closing graphics", 'cut-short-30s.mkv', 'none'),
+  'S-23w': vh215Scenario('VH-215: the cut WebM (VH-158, T90 of a-vp9opus.webm) as Student submission, closing Cut', 'cut-short-10s.webm', 'cut'),
+  'S-23wn': vh215Scenario('VH-215: the cut WebM (VH-158, T90 of a-vp9opus.webm) as Student submission, no closing graphics', 'cut-short-10s.webm', 'none'),
+})
+// Added after the loop that wraps every scenario's state and hold (`wrap`, above), so wrapped here as it wraps them.
+for (const id of ['S-23s', 'S-23sn', 'S-23w', 'S-23wn']) { const sc = SCENARIOS[id]; sc.hold = wrap(sc.hold ?? sc.state); sc.state = wrap(sc.state) }
+// 96 records: 4 scenarios x 3 languages x 1280 and 320 px x 4 colour modes, 24 jobs (one a language and width).
+PLANS.vh215 = () => ['S-23s', 'S-23sn', 'S-23w', 'S-23wn'].flatMap((id) => LANGS.flatMap((lang) => ['w1280', 'w320'].flatMap((view) => COLOUR_MODES.map((mode) => rec(id, lang, view, mode)))))

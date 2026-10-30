@@ -8,12 +8,27 @@
  * where its decoder is.
  */
 
+import { EncodedPacketSink } from 'mediabunny'
 import { describe, expect, it } from 'vitest'
 
 import { cutShort, pcmMp4, soundTrackOf } from '../../test/helpers/pcm-mp4'
+import {
+  PICTURE_FRAME_SECONDS,
+  picturePcmMp4,
+  tracksOf,
+} from '../../test/helpers/picture-pcm-mp4'
 import { ENDS_EARLY_MARGIN_SECONDS } from '../config/thresholds'
+import { formatClockTime } from '../ui/clock-time'
 import { analyseSourceAudio } from './audio-plan'
-import { declaredExtent, endedEarly, shortfall } from './ends-early'
+import {
+  cardTellsMade,
+  declaredExtent,
+  endedEarly,
+  madeSpanSeconds,
+  pictureMadeEndSeconds,
+  shortfall,
+} from './ends-early'
+import { keptDurationSeconds } from './kept-range'
 
 /** A track whose decode reached its end; its last packet starts a 25 fps frame before it. */
 const whole = (endSeconds: number) => ({
@@ -266,5 +281,159 @@ describe('the analysis pass, over a real file', () => {
     expect(analysis?.decodedEndSeconds).toBeCloseTo(3, 6)
     expect(await soundShort(bytes, null)).toBeNull()
     expect(await soundShort(bytes, { startSeconds: 0, endSeconds: 1.5 })).toBeNull()
+  })
+})
+
+describe('the length made, known before the card is drawn (VH-215)', () => {
+  /** Ten seconds of picture and sound, as a recording interleaves them. */
+  const lecture = () => picturePcmMp4({ picture: [[0, 10]], sound: [[0, 10]] })
+
+  /** Pre-flight's length made, as the worker joins it: the sound's pass, the picture's read. */
+  const madeBeforeTheCard = async (
+    bytes: Uint8Array,
+    range: { startSeconds: number; endSeconds: number } | null,
+  ) => {
+    const { picture, sound } = await tracksOf(bytes)
+    const measured = sound ? await analyseSourceAudio(sound, undefined, range) : null
+    return madeSpanSeconds(
+      await pictureMadeEndSeconds(picture, range),
+      measured?.decodedEndSeconds ?? null,
+      range?.startSeconds ?? 0,
+    )
+  }
+
+  describe("the picture's end, read from a real file", () => {
+    it('takes a whole file’s end from its index, its last declared packet having arrived', async () => {
+      const { picture } = await tracksOf(await lecture())
+      expect((await declaredExtent(picture, null)).lastPacketArrived).toBe(true)
+      expect(await pictureMadeEndSeconds(picture, null)).toBeCloseTo(10, 6)
+    })
+
+    it('reads a cut file’s packets to the first the file does not hold, and ends there', async () => {
+      const { picture } = await tracksOf(cutShort(await lecture(), 0.7))
+      const declared = await declaredExtent(picture, null)
+      expect(declared.lastPacketArrived).toBe(false)
+      expect(declared.declaredEndSeconds).toBeCloseTo(10, 6)
+
+      const end = (await pictureMadeEndSeconds(picture, null))!
+      expect(end).toBeGreaterThan(5)
+      expect(end).toBeLessThan(9)
+      // Exactly where the bytes stop: the packet ending there arrived, the
+      // one starting there did not.
+      const sink = new EncodedPacketSink(picture)
+      expect(await sink.getPacket(end - PICTURE_FRAME_SECONDS / 2)).not.toBeNull()
+      expect(await sink.getPacket(end + PICTURE_FRAME_SECONDS / 2)).toBeNull()
+    })
+
+    it('measures a trimmed cut file within the part kept', async () => {
+      const bytes = cutShort(await lecture(), 0.7)
+      const { picture } = await tracksOf(bytes)
+      const untrimmed = (await pictureMadeEndSeconds(picture, null))!
+      expect(await pictureMadeEndSeconds(picture, { startSeconds: 2, endSeconds: 9.6 })).toBeCloseTo(
+        untrimmed,
+        6,
+      )
+    })
+
+    it('reads the index alone for a keep that ends before the damage', async () => {
+      const { picture } = await tracksOf(cutShort(await lecture(), 0.7))
+      const range = { startSeconds: 1, endSeconds: 4 }
+      expect((await declaredExtent(picture, range)).lastPacketArrived).toBe(true)
+      expect(await pictureMadeEndSeconds(picture, range)).toBeCloseTo(4, 6)
+    })
+
+    it('finds nothing of a keep that starts after the bytes stop', async () => {
+      const { picture } = await tracksOf(cutShort(await lecture(), 0.7))
+      expect(await pictureMadeEndSeconds(picture, { startSeconds: 9, endSeconds: 9.8 })).toBeNull()
+    })
+  })
+
+  describe("the span's composition", () => {
+    it('runs from the kept start to the later of the two tracks’ ends, with no margin', () => {
+      expect(madeSpanSeconds(7.04, 7.0, 0)).toBeCloseTo(7.04, 9)
+      expect(madeSpanSeconds(6.2, 7.0, 0)).toBeCloseTo(7.0, 9)
+      expect(madeSpanSeconds(7.04, 7.0, 2)).toBeCloseTo(5.04, 9)
+      // Within the record's 1 s margin, the span still says the shortfall.
+      expect(madeSpanSeconds(9.6, 9.6, 0)).toBeCloseTo(9.6, 9)
+    })
+
+    it('takes the one track there is', () => {
+      expect(madeSpanSeconds(7.04, null, 0)).toBeCloseTo(7.04, 9)
+      expect(madeSpanSeconds(null, 7.0, 1)).toBeCloseTo(6.0, 9)
+    })
+
+    it('is no span when neither track has content, or the length is not finite', () => {
+      expect(madeSpanSeconds(null, null, 0)).toBeNull()
+      expect(madeSpanSeconds(Number.POSITIVE_INFINITY, 7, 0)).toBeNull()
+      expect(madeSpanSeconds(Number.NaN, null, 0)).toBeNull()
+      expect(madeSpanSeconds(2, null, 5)).toBeNull()
+    })
+
+    it('says the length made of a cut file, never the declared length', async () => {
+      const bytes = cutShort(await lecture(), 0.7)
+      const made = (await madeBeforeTheCard(bytes, null))!
+      const { picture } = await tracksOf(bytes)
+      const declared = keptDurationSeconds(null, await picture.computeDuration())
+      expect(formatClockTime(declared)).toBe('0:10')
+      // The later track: here the sound, which ran past the picture's last
+      // whole packet before the bytes stopped.
+      expect(made).toBeGreaterThanOrEqual((await pictureMadeEndSeconds(picture, null))!)
+      expect(formatClockTime(made)).toBe('0:07')
+    })
+
+    it('says a trimmed cut file’s length made from the kept start', async () => {
+      const bytes = cutShort(await lecture(), 0.7)
+      const whole = (await madeBeforeTheCard(bytes, null))!
+      expect(await madeBeforeTheCard(bytes, { startSeconds: 2, endSeconds: 9.6 })).toBeCloseTo(
+        whole - 2,
+        1,
+      )
+    })
+
+    it('leaves a whole file’s card as it was: the kept range', async () => {
+      const bytes = await lecture()
+      expect(formatClockTime((await madeBeforeTheCard(bytes, null))!)).toBe('0:10')
+      expect(
+        formatClockTime((await madeBeforeTheCard(bytes, { startSeconds: 1, endSeconds: 7 }))!),
+      ).toBe(formatClockTime(keptDurationSeconds({ startSeconds: 1, endSeconds: 7 }, 10)))
+    })
+
+    it('runs to the sound when it outlasts the picture, and to the picture when it outlasts the sound', async () => {
+      const longSound = await picturePcmMp4({ picture: [[0, 6]], sound: [[0, 10]] })
+      expect(await madeBeforeTheCard(longSound, null)).toBeCloseTo(10, 6)
+      const longPicture = await picturePcmMp4({ picture: [[0, 10]], sound: [[0, 6]] })
+      expect(await madeBeforeTheCard(longPicture, null)).toBeCloseTo(10, 6)
+      const silent = await picturePcmMp4({ picture: [[0, 10]] })
+      expect(await madeBeforeTheCard(silent, null)).toBeCloseTo(10, 6)
+    })
+  })
+
+  describe('the release guard', () => {
+    it('lets a card go that says the length made, to the second', () => {
+      expect(cardTellsMade('0:07', 7.04)).toBe(true)
+      expect(cardTellsMade('0:07', 6.6)).toBe(true)
+    })
+
+    it('refuses a card that says another length, or a length the encode cannot give', () => {
+      expect(cardTellsMade('0:10', 7.04)).toBe(false)
+      expect(cardTellsMade('0:07', 7.6)).toBe(false)
+      expect(cardTellsMade('0:07', null)).toBe(false)
+      expect(cardTellsMade('', 7.04)).toBe(false)
+    })
+
+    it('refuses a whole file’s card when the encode made less than its last packet, which arrived (Codex re-check)', async () => {
+      const bytes = await lecture()
+      const { picture } = await tracksOf(bytes)
+      // The index's read: the last declared packet is in the file.
+      expect((await declaredExtent(picture, null)).lastPacketArrived).toBe(true)
+      const card = formatClockTime((await madeBeforeTheCard(bytes, null))!)
+      expect(card).toBe('0:10')
+      // A decoder that stopped before the last packet that arrived: the
+      // encode's own span prints shorter, so the card is never released.
+      const encodeMade = madeSpanSeconds(7.0, 7.0, 0)
+      expect(cardTellsMade(card, encodeMade)).toBe(false)
+      // The encode that reached the end lets the same card go.
+      expect(cardTellsMade(card, madeSpanSeconds(10, 10, 0))).toBe(true)
+    })
   })
 })

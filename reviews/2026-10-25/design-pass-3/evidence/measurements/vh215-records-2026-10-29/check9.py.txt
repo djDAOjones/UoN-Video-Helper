@@ -1,0 +1,23 @@
+# VH-215 #9: check6.py (VH-215 #6's, read-only) with the page-line assert's own outcome also required per record, and the card reads tallied.
+import json, sys, glob, os, collections
+rd, ids = sys.argv[1], sys.argv[2].split(',')
+m = json.load(open(os.path.join(rd, 'manifest.json')))
+cov = m['coverage']
+print('manifest: expected', cov['expected'], 'observed', cov['observed'], 'whole', cov['whole'], 'problems', cov['problems'], 'revision', m['instruments']['revision'], 'faults', len(m['faults']))
+keys = collections.Counter(); jobs = {}; bad = []
+langs, views, modes = ['en-GB', 'zh-Hans', 'ms-MY'], ['w1280', 'w320'], ['light', 'dark', 'forced-light', 'forced-dark']
+want = {f'{i}__{l}__{v}__{c}' for i in ids for l in langs for v in views for c in modes}
+for f in sorted(glob.glob(os.path.join(rd, 'S-*.json'))):
+    r = json.load(open(f)); k = r['key']; keys[k] += 1
+    items = r['instruments']['asserts']['items']
+    job = next((x for x in items if 'job' in x), {}); card = next((x for x in items if 'read' in x and 'made' in x), {})
+    line = next((x for x in items if 'line' in json.dumps(x.get('what', '')).lower() and x is not job and x is not card), {})
+    ok = r['status'] == 'ok' and r['reached']['outcome'] == 'pass' and r['reachedAfter']['outcome'] == 'pass' and r['instruments']['asserts']['outcome'] == 'pass'
+    ok = ok and job.get('job', {}).get('outcome') == 'finished' and card.get('outcome') == 'pass' and card.get('read') == card.get('made')
+    ok = ok and line.get('outcome') == 'pass'
+    w = job.get('walk'); jobs.setdefault(w, []).append(k)
+    if not ok: bad.append(k)
+    print(k, r['status'], r['reached']['outcome'], r['reachedAfter']['outcome'], 'job', job.get('job', {}).get('outcome'), job.get('job', {}).get('jobMs'), 'card', card.get('read'), card.get('made'), card.get('declared'), card.get('card', {}).get('clear'), 'line', line.get('outcome'), json.dumps(line.get('clock', line.get('line', line.get('read', ''))))[:40])
+print('records', sum(keys.values()), 'unique', len(keys), 'dupes', [k for k, n in keys.items() if n > 1], 'missing', sorted(want - set(keys)), 'extra', sorted(set(keys) - want))
+print('jobs', len(jobs), 'records per job', sorted(set(len(v) for v in jobs.values())), 'bad', bad)
+print('card reads', dict(collections.Counter(json.load(open(f))['instruments']['asserts']['items'] and next((x.get('read') for x in json.load(open(f))['instruments']['asserts']['items'] if 'read' in x and 'made' in x), None) for f in sorted(glob.glob(os.path.join(rd, 'S-*.json'))))))

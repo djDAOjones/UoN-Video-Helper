@@ -1,0 +1,29 @@
+# VH-215 #9 — proof (base) (proof-9-base)
+start 2026-10-29T13:44:38Z
+Now drawing from 'AC Power'
+ -InternalBattery-0 (id=21889123)	100%; charged; 0:00 remaining present: true
+ powermode            2
+13:44  up 1 day,  5:55, 1 user, load averages: 6.04 7.00 8.63
+base 7750acb852a81979511ea481e6c2b18dcdda5ee4
+side base
+app /Users/joe/UoN-Video-Helper-side/vh215-walk/export-7 (a git archive export of the base, the re-fixed walker overlaid; not a checkout)
+commit unknown (not a checkout)
+$R HEAD 7750acb852a81979511ea481e6c2b18dcdda5ee4; porcelain lines 25; diff sha1 c5c3d0dbc873982b1616e12b97cd221b3f3c4d30
+source check c4d6b54e502b6db8a74b24f2bbaea0b2f85aa8b5 before-source-check-7.txt
+instrument revision (export walker) 17727d3522f7270d
+walker sha1 1ea55993478be2735cad3bffd884b1f6291a83c6  fixtures.sh
+walker sha1 abef28de3156fa90ae6afae08875604bcfc84eb2  scenarios.mjs
+walker sha1 058f4c398ffe2876198961869689b7fa7e1960c1  card-215.mjs
+script sha1 577d60de5dea46f2ff2d96019a3c03ac0ed58990  proof9.sh
+script sha1 881037ab9689f15e0338118358c1333a10e5c430  proof-8.mjs
+fix /Users/joe/UoN-Video-Helper-side/vh215-walk/fix-4
+fixture sha1 a9abdd49d5ecd50a5764b8f1b6f3f830b3fced82  truncated-30s.mp4
+fixture sha1 599d7cbc21a723119e3e11c625f90b50699d66ba  lecture-30s.mp4
+read point: kind, fields, closing, preset; then the trim typed into #trim-start and #trim-end, each committed by Tab (change -> commitTrim); then !!M.verdict() && !M.checking() && #submission-card-filled not hidden with a clock time, 120 s bound; the line read; Create only after it (VH-215 #8's (r), approved by Orchestrator #26)
+command node /Users/joe/UoN-Video-Helper-side/vh215-walk/proof-8.mjs --walker /Users/joe/UoN-Video-Helper-side/vh215-walk/export-7/reviews/2026-10-25/design-pass-3/evidence/measurements/walker --fix /Users/joe/UoN-Video-Helper-side/vh215-walk/fix-4 --side base 
+run exit 0 2026-10-29T13:46:15Z
+end 2026-10-29T13:46:15Z
+Now drawing from 'AC Power'
+ -InternalBattery-0 (id=21889123)	100%; charged; 0:00 remaining present: true
+ powermode            2
+13:46  up 1 day,  5:57, 1 user, load averages: 42.97 16.58 11.99

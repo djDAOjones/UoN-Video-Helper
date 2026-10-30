@@ -63,6 +63,7 @@ function summary(
     contentClass: 'unknown',
     projectedOutputBytes: 28_500_000,
     audioWarnings: [],
+    madeSeconds: 120,
     verdict: {
       outcome,
       reasons: reasons.map(([code, reasonOutcome]) => ({ code, outcome: reasonOutcome })),

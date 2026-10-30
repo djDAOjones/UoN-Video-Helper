@@ -1,0 +1,19 @@
+Verdict: Commit
+
+Musts: None.
+
+Shoulds:
+
+1. [Measurement table:188](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/evidence/measurements/vh215-card-length-2026-10-29.md:188>) — Sharpen the distinction: source and raw captures establish which fields VH-227 reaches; their results on the rebased tree remain unmeasured. “Has not been tested by a walk” could make the established reach sound speculative.
+
+VH-227: reaches nothing beyond the record.
+
+Notes:
+
+- The owner’s quotation, question, reported option and disclosed cost are faithfully recorded. His skip decision stands. The matrix’s exclusion is disclosed, and VH-215.4 explicitly requires `PLANS.vh215` in VH-203’s after-run. This is future work, not completed measurement.
+- Must 2 is satisfied: VH-180 archived verbatim; 104 archived entries through 2026-10-24; 45 live; VH-179 once. Both decisions are whole and correctly ordered; trajectory has VH-227 before VH-215. Every base decision is preserved.
+- HEAD, parent, frozen patch hash and 125-file count match. VH-227’s eight other files are unchanged. The twelve-path diff retains `c5c3d0dbc873982b1616e12b97cd221b3f3c4d30`; the three new files match the earlier freeze. The two added close-review copies match their sources.
+- Raw captures confirm the old name across all page languages and the zh-Hans announcement. `sheet.ts` changes translator guidance; `tokens.brand.css` changes only a comment. The en-GB MP4 proof owes no rerun.
+- Rules 5 and 6 are satisfied: four wish lines, the item’s count corrected, VH-215 removed from the backlog, and no missing deferral or paid-off open line found. No unexplained diff.
+- The commit message is consistent with the evidence. Complete its acknowledged `Verify:` and `Checked:` placeholders in the planned final amend. The supplied gate on this commit is green; I did not rerun it.
+- Rule 8 names the appropriate house streaming/data-loss rules and Nielsen status rule. I changed nothing and ran no test, build or walk.

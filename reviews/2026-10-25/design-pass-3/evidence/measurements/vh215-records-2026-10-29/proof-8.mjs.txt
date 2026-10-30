@@ -1,0 +1,166 @@
+// VH-215 #8: must 7's Chrome browser proof, (e2) (brief section 5, step 4), on part A's method of VH-215 #4's
+// proof-4.mjs (cardJob and the walker's readBurnedCard). Nothing is written into the walker or the repository; the
+// walker's own modules are imported from --walker (an export's walker at instrument revision 17727d3522f7270d),
+// read-only.
+//
+// The cases: the MP4 cut (truncated-30s.mp4: lecture-30s.mp4's first 70 % of bytes; its index declares 30 s, its
+// tracks end near 20.96 s, so 0:21 is the length made), whole and trimmed (0:05 to 0:25) x best and smaller x closing
+// Cut and none (T1 to T8); the whole file, lecture-30s.mp4, as a control (C1: 0:30 on both sides); and a keep ending
+// before the damage (E1: 0:02 to 0:12, 0:10 on both sides). Each reads the running time from the output's decoded
+// opening-card pixels against the app's own renders of every time (card-215.mjs, no OCR, no dependency).
+// Expectations by side: the base draws the kept range's declared length (0:30 whole, 0:20 trimmed); the candidate
+// draws the length made (0:21 whole, 0:16 trimmed), the closing on and off alike (must 5).
+//
+// The read point (VH-215 #8's (r), approved by Orchestrator #26): the kind, the fields, the closing and the preset
+// first; then the trim typed into #trim-start and #trim-end and committed by Tab (change -> commitTrim), never a range
+// handle's input alone; then the wait for !!M.verdict() && !M.checking() AND #submission-card-filled not hidden with a
+// clock time; then the line read, the request kept and Create. On the base the line is never hidden, so the same
+// read point is the settled-verdict wait. A case whose line never shows times out at the read point, is recorded so,
+// and Create is not pressed.
+//
+//   CDP_PORT=9251 APP_URL=http://localhost:5181/ OUT=<out dir> \
+//     node proof-8.mjs --walker <walker dir> --fix <fixtures dir> --side base|cand [--only T1,C1,...] [--dry]
+import { appendFileSync, mkdirSync, existsSync } from 'node:fs'
+import { join } from 'node:path'
+import { pathToFileURL } from 'node:url'
+import { loadavg } from 'node:os'
+
+const arg = (k) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : undefined }
+const WALKER = arg('--walker'), FIXDIR = arg('--fix'), SIDE = arg('--side'), ONLY = arg('--only'), DRY = process.argv.includes('--dry')
+const OUT = process.env.OUT
+if (!WALKER || !FIXDIR || !OUT || !['base', 'cand'].includes(SIDE)) {
+  throw new Error('usage: OUT=<dir> node proof-8.mjs --walker <dir> --fix <dir> --side base|cand [--only T1,...] [--dry]')
+}
+
+const TRIM = { start: '0:05', end: '0:25' }
+const EARLY = { start: '0:02', end: '0:12' }
+const CUT = 'truncated-30s.mp4', WHOLE = 'lecture-30s.mp4'
+// declared: the kept range's declared length, as the base draws it; made: the length the new video has.
+const CASES = [
+  ...['best', 'smaller'].flatMap((preset) => ['cut', 'none'].flatMap((closing) => [
+    { trim: null, declared: '0:30', made: '0:21' },
+    { trim: TRIM, declared: '0:20', made: '0:16' },
+  ].map((t) => ({ file: CUT, preset, closing, ...t })))),
+].map((c, i) => ({ name: `T${i + 1}`, ...c }))
+CASES.push({ name: 'C1', file: WHOLE, preset: 'best', closing: 'cut', trim: null, declared: '0:30', made: '0:30' })
+CASES.push({ name: 'E1', file: CUT, preset: 'best', closing: 'cut', trim: EARLY, declared: '0:10', made: '0:10' })
+const RUN = ONLY ? CASES.filter((c) => ONLY.split(',').includes(c.name)) : CASES
+
+if (DRY) {
+  // The dry check: the case table and the walker's exports, with no browser, no server and no page.
+  for (const f of [CUT, WHOLE]) if (!existsSync(join(FIXDIR, f))) throw new Error(`fixture missing: ${f}`)
+  const load = (f) => import(pathToFileURL(join(WALKER, f)).href)
+  const need = { 'cdp.mjs': ['connectBrowser'], 'walk.mjs': ['Walk', 'sleep'], 'qualify.mjs': ['QUAL_INIT', 'setViewport'], 'scenarios.mjs': ['MX_INIT', 'ready'], 'phase8.mjs': ['P8_INIT', 'watchWorkers'], 'card-215.mjs': ['KEEP_REQUEST', 'readBurnedCard'] }
+  const missing = []
+  for (const [f, names] of Object.entries(need)) { const m = await load(f); for (const n of names) if (!(n in m)) missing.push(`${f}:${n}`) }
+  console.log(JSON.stringify({ dry: true, side: SIDE, cases: RUN.map((c) => ({ ...c, expect: SIDE === 'base' ? c.declared : c.made })), missing }))
+  process.exit(missing.length ? 1 : 0)
+}
+
+mkdirSync(OUT, { recursive: true })
+process.env.FIX = FIXDIR
+process.env.OUT_ROOT ??= join(OUT, 'pages')
+const load = (f) => import(pathToFileURL(join(WALKER, f)).href)
+const { connectBrowser } = await load('cdp.mjs')
+const { Walk, sleep } = await load('walk.mjs')
+const { QUAL_INIT, setViewport } = await load('qualify.mjs')
+const { MX_INIT, ready } = await load('scenarios.mjs')
+const { P8_INIT, watchWorkers } = await load('phase8.mjs')
+const { KEEP_REQUEST, readBurnedCard } = await load('card-215.mjs')
+
+const RESULTS = join(OUT, 'proof.jsonl')
+const put = (line) => { const l = { at: new Date().toISOString(), load1: Math.round(loadavg()[0] * 100) / 100, ...line }; appendFileSync(RESULTS, JSON.stringify(l) + '\n'); console.log(JSON.stringify(l).slice(0, 600)) }
+const mx = (w, expr) => w.evaluate(`(() => { const M = window.__mx; return ${expr}; })()`)
+const LINE = `(() => { const M = window.__mx; const el = M.el('#submission-card-filled'); const t = el ? el.textContent.replace(/\\s+/g, ' ').trim() : null; const m = t && t.match(/\\d+(?::\\d{2}){1,2}/); return { text: t, clock: m ? m[0] : null, hidden: !!el && el.hidden, shown: !!el && M.vis('#submission-card-filled') }; })()`
+const READ_POINT = `(() => { const M = window.__mx; try { const el = M.el('#submission-card-filled'); const t = el && !el.hidden ? el.textContent : ''; return !!(M.verdict() && !M.checking()) && /\\d+(?::\\d{2}){1,2}/.test(t); } catch (e) { return false; } })()`
+
+async function openWalk(browser, name) {
+  const w = new Walk(browser, name)
+  await w.open()
+  await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source: QUAL_INIT })
+  await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source: MX_INIT })
+  await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source: P8_INIT })
+  await watchWorkers(browser, w)
+  return w
+}
+
+// proof-4.mjs's cardJob, with the preset and the trim of the case, and the read point above.
+async function cardJob(w, c, maxSeconds) {
+  const v = { file: c.file, closing: c.closing, preset: c.preset, trim: c.trim }
+  await ready(w, 'en-GB', c.file)
+  await w.chooseKind('submission')
+  await w.type('#submission-card-assignment', 'Assignment 2: audit')
+  await w.type('#submission-card-module', 'AUD1001 Auditing the page')
+  await w.type('#submission-card-convenor', 'Dr A. Convenor')
+  await w.type('#submission-card-ids', '12345678 23456789')
+  await w.press('Tab')
+  await sleep(300)
+  await w.select('#closing-type', c.closing)
+  await w.click(`input[name="preset"][value="${c.preset}"]`)
+  await sleep(300)
+  if (c.trim) {
+    await w.type('#trim-start', c.trim.start)
+    await w.press('Tab')
+    await sleep(200)
+    await w.type('#trim-end', c.trim.end)
+    await w.press('Tab')
+    await sleep(300)
+    v.trimFields = await mx(w, `({ start: M.el('#trim-start').value, end: M.el('#trim-end').value })`)
+  }
+  await w.waitSettled()
+  try {
+    await w.waitFor(READ_POINT, { label: 'the read point: the settled verdict and the line shown', timeout: 120000 })
+    v.readPoint = 'reached'
+  } catch (e) {
+    v.readPoint = 'timed out'
+    v.atTimeout = await mx(w, `({ verdict: M.verdict(), checking: M.checking(), create: M.create() })`)
+    v.lineAtTimeout = await w.evaluate(LINE)
+    return v
+  }
+  v.atCreate = await mx(w, `({ kind: M.checked('video-kind'), preset: M.checked('preset'), closing: M.el('#closing-type').value, verdict: M.verdict(), create: M.create() })`)
+  v.line = await w.evaluate(LINE)
+  await w.evaluate(KEEP_REQUEST)
+  v.tCreate = await w.evaluate('Date.now()')
+  if (await mx(w, 'M.ack()')) { await w.click(w.acknowledgeButton()); await sleep(200) }
+  await w.click(w.createButton())
+  await w.waitFor(`(() => { const M = window.__mx; return M.finished() || M.res() === 'failure'; })()`, { label: 'the job ended', timeout: 900000, interval: 100 })
+  v.outcome = await mx(w, `M.finished() ? 'finished' : M.res()`)
+  v.jobWallMs = Date.now() - v.tCreate
+  if (v.outcome === 'finished') { await sleep(400); v.card = await readBurnedCard(w, { maxSeconds }) }
+  return v
+}
+
+const browser = await connectBrowser()
+put({ kind: 'start', side: SIDE, browser: browser.version?.Browser, walker: WALKER, fix: FIXDIR, readPoint: 'trim typed and committed by Tab after kind, fields, closing and preset; then !!M.verdict() && !M.checking() && #submission-card-filled not hidden with a clock time (120 s bound); Create only after it' })
+let failures = 0
+for (const c of RUN) {
+  const expect = SIDE === 'base' ? c.declared : c.made
+  const other = c.declared === c.made ? null : (SIDE === 'base' ? c.made : c.declared)
+  const w = await openWalk(browser, `vh215-proof-8/${SIDE}/${c.name}`)
+  try {
+    await setViewport(w, 'w1280')
+    const v = await cardJob(w, c, 40)
+    const k = v.card ?? {}
+    const s = k.scores ?? {}
+    const checks = {
+      readPoint: v.readPoint === 'reached',
+      lineIsExpected: v.line?.clock === expect && v.line?.hidden === false,
+      finished: v.outcome === 'finished',
+      aTime: typeof k.time === 'string' && /^\d+:\d{2}$/.test(k.time),
+      readsExpected: k.time === expect,
+      clear: k.clear === true,
+      requestedIsExpected: k.requested === expect,
+      apart: other ? Number.isFinite(s[other]) && Number.isFinite(s[expect]) && s[other] - s[expect] >= 10 : null,
+    }
+    const pass = Object.values(checks).every((x) => x === true || x === null)
+    if (!pass) failures++
+    put({ kind: 'case', side: SIDE, case: c.name, file: c.file, preset: c.preset, closing: c.closing, trim: c.trim, declared: c.declared, made: c.made, expect, other, read: k.time ?? null, clear: k.clear ?? null, requested: k.requested ?? null, expectScore: s[expect] ?? null, otherScore: other ? (s[other] ?? null) : null, pass, checks, job: v })
+  } catch (e) {
+    failures++
+    put({ kind: 'case', side: SIDE, case: c.name, pass: false, error: String(e.stack ?? e).slice(0, 600) })
+  } finally {
+    await w.close()
+  }
+}
+put({ kind: 'end', side: SIDE, cases: RUN.length, failures })
+process.exit(failures ? 1 : 0)

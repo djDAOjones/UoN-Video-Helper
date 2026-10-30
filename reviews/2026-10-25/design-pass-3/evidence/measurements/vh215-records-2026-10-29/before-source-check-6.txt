@@ -1,0 +1,16 @@
+VH-215's before: a content check of the export the before walk runs on, 2026-10-29 (VH-215 #6), read-only, after the walker's re-fix (the repair of #3's four scenarios' state and hold).
+Export: vh215-walk/export-6/ ('git archive 7750acb852a81979511ea481e6c2b18dcdda5ee4' extracted, the re-fixed walker's three files overlaid from the checkout, node_modules an APFS clone (cp -Rc) of the checkout's with its .vite cache removed). Reference: a fresh 'git archive 7750acb852a81979511ea481e6c2b18dcdda5ee4' extracted outside the side folder.
+Command: diff -rq <fresh archive> export-6/ -x node_modules -x dist -x .vite
+Files: fresh archive 1886; export-6/ outside node_modules, dist and .vite 1887.
+Differences (diff -rq, paths relative):
+  Only in reviews/2026-10-25/design-pass-3/evidence/measurements/walker: card-215.mjs
+  Files reviews/2026-10-25/design-pass-3/evidence/measurements/walker/fixtures.sh and reviews/2026-10-25/design-pass-3/evidence/measurements/walker/fixtures.sh differ
+  Files reviews/2026-10-25/design-pass-3/evidence/measurements/walker/scenarios.mjs and reviews/2026-10-25/design-pass-3/evidence/measurements/walker/scenarios.mjs differ
+The three walker files in export-6/ against the checkout's working walker (cmp):
+  walker/fixtures.sh: identical
+  walker/scenarios.mjs: identical
+  walker/card-215.mjs: identical
+sha1 of the three in export-6/: fixtures.sh 1ea55993478be2735cad3bffd884b1f6291a83c6; scenarios.mjs abef28de3156fa90ae6afae08875604bcfc84eb2; card-215.mjs 058f4c398ffe2876198961869689b7fa7e1960c1; 
+instrumentRevision() of export-6's walker: 17727d3522f7270d
+sourceIdentity() of export-6 (not a checkout): {"commit":"unknown","dirty":"unknown","diffSha256":"2cc1c371db104eb5"}
+So the before's app is 7750acb852a81979511ea481e6c2b18dcdda5ee4's byte for byte, and its walker is the re-fixed walker (revision 17727d3522f7270d).

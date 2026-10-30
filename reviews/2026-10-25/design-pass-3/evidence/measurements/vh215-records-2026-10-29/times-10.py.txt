@@ -1,0 +1,35 @@
+# VH-215 #10: rerun-times-10.txt. Per job of the re-run's scenarios: its time (Create to the finished card, jobMs) in the after walk, in the re-run and in the before, each with its load window
+# (load.log's samples from the last at or before the job's own start event to the first at or after its finish event; load1), and whether the re-run's readings (card, page line, outcome) equal the after walk's.
+# Usage: python3 -I times-10.py <after group dirs> <rerun group dirs> <before group dirs> <owed job ids>   (dirs comma-separated: each a walk-NN folder holding load.log and runs/<run>/)
+import json, sys, glob, os, collections, datetime
+def group(dirs):
+    jobs = {}
+    for g in dirs.split(','):
+        samples = []
+        for ln in open(os.path.join(g, 'load.log')):
+            p = ln.split(); samples.append((p[0], float(p[2])))
+        run = glob.glob(os.path.join(g, 'runs', '*'))[0]
+        day = os.path.basename(run).split('T')[0].replace('vh215-part-', '')
+        for f in sorted(glob.glob(os.path.join(run, 'S-*.json'))):
+            r = json.load(open(f)); items = r['instruments']['asserts']['items']
+            job = next(x for x in items if 'job' in x); card = next((x for x in items if 'read' in x and 'made' in x), {})
+            line = next((x for x in items if 'line' in x and 'read' not in x and x is not job), {})
+            jid = job['walk'].split('/')[-1]; j = job['job']; ev = {e['kind']: e['t'] for e in j.get('events', [])}
+            ok = r['status'] == 'ok' and r['instruments']['asserts']['outcome'] == 'pass' and j.get('outcome') == 'finished' and card.get('outcome') == 'pass' and line.get('outcome') == 'pass'
+            rd = jobs.setdefault(jid, dict(ms=j.get('jobMs'), start=ev.get('start'), finish=ev.get('finish'), group=os.path.basename(g), reads=set(), samples=samples))
+            rd['reads'].add((card.get('read'), (line.get('line') or {}).get('clock'), ok))
+    for jid, rd in jobs.items():
+        t0 = datetime.datetime.fromtimestamp(rd['start'] / 1000, datetime.timezone.utc).strftime('%H:%M:%S'); t1 = datetime.datetime.fromtimestamp(rd['finish'] / 1000, datetime.timezone.utc).strftime('%H:%M:%S')
+        s = rd['samples']; i0 = max([i for i, (t, _) in enumerate(s) if t <= t0] or [0]); i1 = min([i for i, (t, _) in enumerate(s) if t >= t1] or [len(s) - 1])
+        win = s[i0:i1 + 1]; rd['window'] = f'{t0}–{t1}Z, load1 {min(v for _, v in win):.2f}–{max(v for _, v in win):.2f} ({", ".join(f"{t} {v:.2f}" for t, v in win)})'; rd['maxload'] = max(v for _, v in win)
+    return jobs
+A, X, B = group(sys.argv[1]), group(sys.argv[2]), group(sys.argv[3]); owed = set(sys.argv[4].split(','))
+rng = collections.defaultdict(list)
+for jid, b in B.items(): rng[jid.rsplit('-', 2)[0]].append(b['ms'])
+print('# VH-215 #10 — rerun-times-10.txt: per job, Create to the finished card (jobMs); load windows from each group\'s load.log; written by times-10.py')
+for jid in sorted(X):
+    a, x, b = A[jid], X[jid], B[jid]; sc = jid.rsplit('-', 2)[0]; lo, hi = min(rng[sc]), max(rng[sc])
+    same_reads = x['reads'] == a['reads']; uses = 're-run' if jid in owed else 'after walk'
+    print(f"{jid}: after {a['ms']} ms ({a['group']}, {a['window']}); re-run {x['ms']} ms ({x['group']}, {x['window']}){' ABOVE 8' if x['maxload'] >= 8 else ''}; before {b['ms']} ms ({b['group']}, {b['window']}); "
+          f"re-run - after {x['ms'] - a['ms']:+d} ms, identical time {x['ms'] == a['ms']}; re-run vs the before's {sc} range {lo}–{hi} ms: {'within' if lo <= x['ms'] <= hi else ('below' if x['ms'] < lo else 'above')}; readings identical to the after walk's {same_reads} {sorted(x['reads'])}; owed {jid in owed}; the table uses the {uses}'s")
+print('re-run jobs', len(X), 'above 8', [j for j in sorted(X) if X[j]['maxload'] >= 8], 'readings differ', [j for j in sorted(X) if X[j]['reads'] != A[j]['reads']])

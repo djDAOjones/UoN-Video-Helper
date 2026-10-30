@@ -1159,3 +1159,16 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Supersedes:** none
 
 **Deferred:** VH-177
+
+## 2026-10-24 — VH-180 — A true frame-rate note: one neutral sentence that names no rate
+
+**Decision:** `source.outputRate` becomes one sentence in each language, naming no rate and true whether frames are repeated or dropped: "To reach a standard frame rate, some frames will be repeated or left out." The call site reads it as a string. The threshold, the presets and the renderer stay as they were (V-47).
+
+**Rationale:** Before, at 4e5be61, a 120 fps source read "The output will run at 60 frames a second, so some frames will be repeated". It read that under Larger and under Smaller's 30 fps cap. After, the 45 fps and 120 fps sources read the neutral sentence under both presets in three languages. The 150 walker records are whole, and no outcome changed. The note stays within 448 px at 1280 and 320, at contrast 7.58–21. V-18's six readings are unmoved. Five new tests pass: up, down, no digit, the 10% boundary, and beside `variesNote`. Codex astra said "Commit after the musts below". Its must (name the digest rules) and its boundary-test may were applied, and the re-check said "Commit". Evidence: `vh180-words-2026-10-23.md`. Decided on the owner's standing instruction, "work through to the end of VH-177, archive and spawn as you go, proceed with your recommendations, universal permission is granted":
+(a) the English opening departs from the item's draft, which would repeat `variesNote`'s "The output will use a steady frame rate";
+(b) the Chinese and Malay take `variesNote`'s term for frame rate (帧速率, kadar bingkai), as the agent's drafts, marked in the sheet;
+(c) the two fixture scenarios are `fixOnly`, so VH-176's plans keep VH-172's counts.
+
+**Supersedes:** none
+
+**Deferred:** none

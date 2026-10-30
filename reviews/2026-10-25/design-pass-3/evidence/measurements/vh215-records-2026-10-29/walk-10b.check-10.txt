@@ -1,0 +1,28 @@
+manifest: expected 24 observed 24 whole True problems [] revision 17727d3522f7270d faults 0
+S-23w__en-GB__w1280__dark ok pass pass job finished 1241 card 0:05 0:05 0:05 True line pass {"text": "The card also shows the runnin
+S-23w__en-GB__w1280__forced-dark ok pass pass job finished 1241 card 0:05 0:05 0:05 True line pass {"text": "The card also shows the runnin
+S-23w__en-GB__w1280__forced-light ok pass pass job finished 1241 card 0:05 0:05 0:05 True line pass {"text": "The card also shows the runnin
+S-23w__en-GB__w1280__light ok pass pass job finished 1241 card 0:05 0:05 0:05 True line pass {"text": "The card also shows the runnin
+S-23w__en-GB__w320__dark ok pass pass job finished 1214 card 0:05 0:05 0:05 True line pass {"text": "The card also shows the runnin
+S-23w__en-GB__w320__forced-dark ok pass pass job finished 1214 card 0:05 0:05 0:05 True line pass {"text": "The card also shows the runnin
+S-23w__en-GB__w320__forced-light ok pass pass job finished 1214 card 0:05 0:05 0:05 True line pass {"text": "The card also shows the runnin
+S-23w__en-GB__w320__light ok pass pass job finished 1214 card 0:05 0:05 0:05 True line pass {"text": "The card also shows the runnin
+S-23w__ms-MY__w1280__dark ok pass pass job finished 1239 card 0:05 0:05 0:05 True line pass {"text": "Kad ini juga menunjukkan masa 
+S-23w__ms-MY__w1280__forced-dark ok pass pass job finished 1239 card 0:05 0:05 0:05 True line pass {"text": "Kad ini juga menunjukkan masa 
+S-23w__ms-MY__w1280__forced-light ok pass pass job finished 1239 card 0:05 0:05 0:05 True line pass {"text": "Kad ini juga menunjukkan masa 
+S-23w__ms-MY__w1280__light ok pass pass job finished 1239 card 0:05 0:05 0:05 True line pass {"text": "Kad ini juga menunjukkan masa 
+S-23w__ms-MY__w320__dark ok pass pass job finished 1233 card 0:05 0:05 0:05 True line pass {"text": "Kad ini juga menunjukkan masa 
+S-23w__ms-MY__w320__forced-dark ok pass pass job finished 1233 card 0:05 0:05 0:05 True line pass {"text": "Kad ini juga menunjukkan masa 
+S-23w__ms-MY__w320__forced-light ok pass pass job finished 1233 card 0:05 0:05 0:05 True line pass {"text": "Kad ini juga menunjukkan masa 
+S-23w__ms-MY__w320__light ok pass pass job finished 1233 card 0:05 0:05 0:05 True line pass {"text": "Kad ini juga menunjukkan masa 
+S-23w__zh-Hans__w1280__dark ok pass pass job finished 1192 card 0:05 0:05 0:05 True line pass {"text": "\u5361\u7247\u4e0a\u8fd8\u4f1a
+S-23w__zh-Hans__w1280__forced-dark ok pass pass job finished 1192 card 0:05 0:05 0:05 True line pass {"text": "\u5361\u7247\u4e0a\u8fd8\u4f1a
+S-23w__zh-Hans__w1280__forced-light ok pass pass job finished 1192 card 0:05 0:05 0:05 True line pass {"text": "\u5361\u7247\u4e0a\u8fd8\u4f1a
+S-23w__zh-Hans__w1280__light ok pass pass job finished 1192 card 0:05 0:05 0:05 True line pass {"text": "\u5361\u7247\u4e0a\u8fd8\u4f1a
+S-23w__zh-Hans__w320__dark ok pass pass job finished 1238 card 0:05 0:05 0:05 True line pass {"text": "\u5361\u7247\u4e0a\u8fd8\u4f1a
+S-23w__zh-Hans__w320__forced-dark ok pass pass job finished 1238 card 0:05 0:05 0:05 True line pass {"text": "\u5361\u7247\u4e0a\u8fd8\u4f1a
+S-23w__zh-Hans__w320__forced-light ok pass pass job finished 1238 card 0:05 0:05 0:05 True line pass {"text": "\u5361\u7247\u4e0a\u8fd8\u4f1a
+S-23w__zh-Hans__w320__light ok pass pass job finished 1238 card 0:05 0:05 0:05 True line pass {"text": "\u5361\u7247\u4e0a\u8fd8\u4f1a
+records 24 unique 24 dupes [] missing [] extra []
+jobs 6 records per job [4] bad []
+card reads {'0:05': 24}

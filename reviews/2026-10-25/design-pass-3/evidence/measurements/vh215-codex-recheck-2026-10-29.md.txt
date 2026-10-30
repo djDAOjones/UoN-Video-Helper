@@ -1,0 +1,19 @@
+VH-215’s wording repair meets the should. Lines 56 and 170 correctly identify a **predicate regression**: the test supplies the shorter encode span and checks `cardTellsMade`. The worker’s refusal, non-retention and disposal are established by source inspection, not that test.
+
+The proposed wish is accurate and sufficient for recording at close: it specifies the Submission mismatch, refusal at the worker guard, non-retention and workspace disposal, exercised through the worker.
+
+The repaired lines fit §3:54’s description of behavior. §5:147 and §6:159 use broader shorthand but refer to §3, whose explicit qualification, reinforced by §7, makes the evidence’s scope clear.
+
+Verification:
+- Table SHA1 and 181-line count match; its diff contains exactly `56c56`, `147c147` and `170c170`, including the disclosed pre-existing §5 difference.
+- HEAD, twelve-file tracked diff and diff SHA1 match; nothing is staged; status has the expected fifteen entries and three untracked paths.
+- `sources.txt` matches its supplied SHA1; all 85 record copies match its hashes.
+- `card-215.mjs` matches its recorded hash. Historical hashes for `clock-time.ts` and `picture-pcm-mp4.ts` were not available in the permitted evidence, so their unchanged contents could not be independently confirmed.
+
+Remaining musts: None.
+
+Remaining shoulds: None beyond recording the supplied wish at close, as proposed.
+
+No files changed; no tests, builds or installs run.
+
+Verdict: Commit

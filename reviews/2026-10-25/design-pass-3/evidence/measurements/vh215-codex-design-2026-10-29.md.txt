@@ -1,0 +1,110 @@
+1. **Largest fixture — must.** It is **“Menopause Testimonials 4a - Audio.mp4”, 4,547,962,918 bytes**, timed whole in probe-5. The 2.81 GB cut of the second-largest file is the additional truncation test, not a substitute for timing the largest. Its front index makes that cut readable; the largest file’s end-placed index prevents the equivalent test.
+
+   On the largest: A took 2,527 ms; B 2 ms; C 2,880 ms; D 37,290 ms. These are route measurements in the stated browser conditions, not production-worker benchmarks or job times.
+
+   **Evidence:** `project/items/VH-215.md:9`; `/Users/joe/UoN-Video-Helper-side/vh215-walk/probe-5/results.jsonl:1` through `:5`; `probe-5/conditions.txt:2`, `:6`; sizes and index placement supplied in the brief.
+
+2. **Route — must; my recommendation is A + C, with the release guard in answer 3.** Reuse pre-flight’s existing decoded sound end and make one sequential, streamed read of the kept picture packets. Compute a candidate source span there, carry it in `PreflightSummary`, and bind it to the page’s current ready verdict. The page uses that value for the Submission request, its fit and its explanatory line.
+
+   C costs about 2.9 seconds on the largest file and 1.44 seconds on the repeated large-cut test. I favour its simpler sequential traversal over B’s bisection and key-packet search, whose correctness needs additional qualification around presentation/decode ordering. D establishes decoded picture extent, but adds 37.3 seconds on the largest and still cannot guarantee that a subsequent decode behaves identically.
+
+   **Neither B nor C proves what the encoder’s decoder will deliver.** They establish arrived packets. Consequently this is a candidate-before-draw route whose released result must be verified, not a claim that packet arrival proves decoding.
+
+   The exact product change is: a streamed picture-extent reader; reuse of A’s sound extent; a current-verdict duration supplied to Submission’s three consumers; and a Submission-only release check against raw encode extents. Retain scalar maxima and bounded reads, never a packet collection. Use the pipeline’s effective frame-aligned range and timeline origin.
+
+   This is a plausible bounded 45k implementation. Keep the packet traversal outside the audio-analysis timer, and leave calibration throughput, `keptSeconds`, branding allowance, estimate arithmetic, warnings and other callers’ results unchanged. No new listener, control, element, remux pass or full-picture decode is needed. If that scope proves insufficient, apply the item’s split rule.
+
+   **Evidence:** `src/workers/job.worker.ts:531`, `:534`, `:539`, `:594`; `src/media/preflight.ts:140`; `src/main.ts:1585`, `:1669`, `:3008`; `src/media/pipeline.ts:250`, `:325`; `docs/01-specification.md:449`; `project/items/VH-215.md:9`, `:12`, `:21`; `probe-5/results.jsonl:4`, `:5`; `probe-6/results.jsonl:4`, `:5`.
+
+3. **Never knowingly false — must.** When a finite candidate can be established, draw its ordinary clock time provisionally into the private working output. Release it only after the encode confirms the same printed whole seconds. If no candidate can be established, fail the Submission operation before drawing; do not substitute the declared duration, zero, a blank running time or invented “unknown” wording.
+
+   The guard is necessary. Compare using the same `formatClockTime` rounding, against an **unthresholded source span from the encode’s raw ends**, before `finished.retain` and the `processed` reply. A mismatch must dispose of the working output and fail. It must never offer the file with a warning.
+
+   The existing `unknown` failure is an honest available fallback, including its existing reassurance and recovery instructions. Do not misuse `output-unreadable` or `title-card-refused`: those assert different causes. A more specific new explanation needs the owner.
+
+   Test differences across a half-second boundary, frame-aligned versus requested trims, sound sample rounding, missing final packets and a decoder stopping before the last arrived packet. A tiny numerical discrepancy can change the printed second.
+
+   **Evidence:** `project/items/VH-215.md:10`; `src/ui/format.ts:58`; `src/media/kept-range.ts:129`, `:172`; `src/media/audio-plan.ts:209`; `src/media/pipeline.ts:645`, `:802`; `src/workers/job.worker.ts:320`, `:336`; `src/workers/failure.ts:75`; `src/ui/failure-text.ts:87`, `:93`; `src/i18n/en-GB.ts:803`.
+
+4. **The margin — must.** A null `endedEarly.made` is **not a certificate that the declared duration is correct**. The card and guard need the raw source span independently of the one-second warning threshold. Leave `endedEarly` and its existing callers unchanged.
+
+   For example, an actual span of 29.49 seconds prints `0:29`, whereas 30 seconds prints `0:30`: that is a known displayed difference despite being under one second. Conversely, 29.6 and 30 both print `0:30`; their subsecond difference does not make that whole-second statement false.
+
+   **Evidence:** `src/media/ends-early.ts:154`, `:160`, `:165`; `src/config/thresholds.ts:89`, `:99`; `src/ui/format.ts:59`; `src/main.ts:3364`.
+
+5. **Closing on — must.** Here “made” means the source span carried through, ending at the later decoded source track. It excludes the title card, closing and artificial extension of the last picture to the closing. Thus the MP4 example should say **`0:21` with the closing on and off**, although the complete files have different playback durations.
+
+   This interpretation is already established: VH-139’s record says 21 seconds while separately explaining the held picture before the closing. Do not calculate the card’s value as total MP4 duration minus two branding durations, and do not move the closing to repair the card. Counting the artificial hold as additional kept source would change the item’s established meaning.
+
+   **Evidence:** `project/items/VH-215.md:5`, `:10`; `docs/01-specification.md:128`; `src/media/ends-early.ts:70`; `src/media/pipeline.ts:446`, `:645`; `src/ui/result-summary.test.ts:253`, `:274`; `src/i18n/en-GB.ts:514`.
+
+6. **Page line and fit — must.** A worker-only correction would leave both wrong: the line promises the time the card shows, and the page fits that same time. All three consumers must use one current candidate.
+
+   **Correcting `{running}` is a data correction, not new wording.** The existing sentence’s meaning remains “this is what the card shows”; its variable already changes with trimming. That is within the requested correction. Replacing the sentence, inserting “estimated”, or supplying a new unknown/pending phrase would cross the wording stop.
+
+   During a trim re-check, invalidate the old duration immediately and withdraw the existing explanatory line until a current result arrives. Keep the existing checking status and cancellation route visible; Create already comes down. Continue field validation, but settle duration-dependent fitting only when the new value is available. An old reply, language repaint or preset change must not restore stale data.
+
+   **Evidence:** `src/main.ts:1924`, `:1934`, `:1954`, `:2572`, `:2629`, `:2685`, `:3008`; `src/i18n/en-GB.ts:291`; `index.html:418`; `UI-STANDARDS.md:125`, `:152`.
+
+7. **Tests — must.** A Node test of `submissionCardText` proves the text calculation, **not a card read from the encoded video**. The literal acceptance criterion needs Chrome integration evidence: create the output, decode a frame from its opening card and read the running time from those pixels. Capture it for review or compare the relevant rendered region; no new OCR dependency is necessary.
+
+   Run the cut MP4 through whole and trimmed cases × `best` and `smaller` × closing on and off: eight combinations. Include a whole-file control whose card time remains unchanged. The trimmed case must retain the missing tail so it actually exercises the correction; also test a keep ending before the damage.
+
+   For Node coverage, extend the audio-only helper or add a sibling under `test/helpers/` that muxes a video packet track alongside PCM, with controllable packet times and truncation. That can exercise the packet reader and duration composition without a video decoder. It cannot establish video decodability. A browser test helper must additionally create the real Submission request and capture a decoded output-card frame. Never mock WebCodecs or edit generated `test/fixtures/`.
+
+   **Evidence:** `project/items/VH-215.md:11`; `vite.config.ts:143`; `src/media/ends-early.test.ts:6`; `test/helpers/pcm-mp4.ts:2`, `:36`, `:77`; `src/ui/title-card-step.test.ts:370`; `src/acceptance/run.ts:56`; `project/digests/house-conventions.md:159`, `:181`, `:194`.
+
+8. **Cut WebM — must.** Reproduce a specifically named VH-158 case: **T90 of `a-vp9opus.webm`** is a suitable bounded choice. Generate the ten-second, 25 fps test picture and sine sound as VP9/Opus into a seekable WebM, with known sizes, Duration and end-placed Cues; retain the first 90% of its bytes using the same size-and-`head -c` pattern as the MKV recipe. Do not substitute the whole `noduration-10s.webm`, or claim byte identity with VH-158’s archived file.
+
+   Measure its inspected and surviving extents before setting expectations: 90% of bytes does not imply nine seconds of decodable content, especially when a partial cluster is discarded.
+
+   Add the explicitly authorised Submission variants: choose Student submission, use `submissionFill`, select closing `cut` and `none`, create the job and read its card and time. Preserve existing S-23 coverage rather than replacing its Staff-ready scenario. This fixture/scenario extension is within the named walker changes.
+
+   **Evidence:** `reviews/2026-10-22/vh158-matroska-cut-research.md:31`, `:45`, `:49`, `:71`, `:91`; `project/decisions-2026-10.md:888`; `reviews/2026-10-25/design-pass-3/evidence/measurements/walker/fixtures.sh:48`; the same walker’s `fixtures-8.sh:61`, `scenarios.mjs:193`, `:388`; `index.html:442`; `project/items/VH-215.md:14`.
+
+9. **S-22 — must distinguish fixture use from walker scope.** The MP4 regression is needed; an S-22 walker change is not. Use `truncated-30s.mp4`’s existing recipe in the browser integration tests, and `cutShort` for suitable Node cases. Leave S-22’s walker behaviour unchanged.
+
+   Be explicit in the evidence: S-23 already reports and makes approximately 20 seconds at the base, so an unchanged `0:20` card there does not demonstrate the original 30-to-21-second correction. The MP4 integration regression demonstrates that correction; S-23 and WebM fulfil the separately required stage matrix.
+
+   Changing S-22 to Submission in the walker would require the owner. There is no need to cross that stop.
+
+   **Evidence:** walker `scenarios.mjs:381`, `:388`; walker `fixtures.sh:39`; `test/helpers/pcm-mp4.ts:77`; `probe-4/results.jsonl:1`, `:5`, `:6`, `:10`; `project/items/VH-215.md:11`, `:14`.
+
+10. **Matrix — must.** Keep all **96 cells before and 96 after**: two fixtures × closing on/off × two widths × three languages × four colour modes. For each cell record the page’s settled card-time line, the actual output-card reading, the relevant job-time observation and links to their evidence. Check agreement, fit and visibility; do not use the page line as a proxy for the burned card.
+
+    Pin the otherwise unspecified settings, including preset and closing configuration. Both presets belong to the separate regression tests; they are not an extra axis silently added to this 96-cell matrix.
+
+    **All 96 before cells need base measurements.** The supplied VH-199 inventory contains no matching Submission-card job observation, and its source and instrument differ. Even its matching widths/languages do not turn Staff-ready records into these before cells. Qualify the authorised scenario changes first, then use the same instrument and fixtures on base `7750acb…` and the candidate, with matched power conditions.
+
+    The walker groups setup before reading colour modes. If one job supplies several mode observations, link those cells to that one measured job and identify the reuse; do not report them as independent encodes.
+
+    **Evidence:** `project/items/VH-215.md:14`; `reviews/2026-10-25/design-pass-3/evidence/measurements/matrix-2026-10-27.md:5`, `:20`, `:37`; walker `scenarios.mjs:388`; walker `matrix.mjs:211`, `:220`, `:225`; `project/decisions.md:45`.
+
+11. **Job time beside VH-199 — must.** Put **“Not measured — Staff ready verdict only; no job run”** in the VH-199 job-time column. Alongside it, report VH-215’s newly measured base and candidate job times, with an explicit boundary such as Create to verified result available, including post-encode checks.
+
+    Do not relabel `setupMs` or `recordMs` as job time, infer a time from them, or calculate a percentage change against absent data. This preserves the requested comparison table honestly; it does not manufacture a historical measurement. The raw VH-199 records were outside this review’s permitted reads, so the supplied inventory is the basis for their absence.
+
+    **Evidence:** walker `scenarios.mjs:391`; walker `matrix.mjs:211`, `:225`; `src/workers/job.worker.ts:262`, `:320`; `project/items/VH-215.md:14`; `matrix-2026-10-27.md:5`.
+
+12. **WCAG and digests — must.** Apply the four named criteria explicitly; their absence by number from the digest does not remove the item’s obligation.
+
+    For **1.3.1**, retain meaningful labels, relationships and reading order for the fields, explanatory line and result. For **2.4.6**, retain descriptive headings and labels, including Running time. For **3.1.5**, retain the approved plain wording in all three languages; a duration-only correction is not evidence of a newly completed human language review. For **4.1.3**, checking, completion and refusal must remain programmatically exposed through existing status mechanisms; stale data must not masquerade as a completed check. Avoid announcing every trim keystroke.
+
+    Apply house **“Fail loudly on data loss”** to the existing pre-flight warnings and the no-release mismatch guard; **“Streaming everywhere”** to the new read and cleanup. Apply Nielsen 1, **status visible and announced**, throughout re-checking and processing. Preserve cancellation, focus, the progress bar, token separation and existing controls. Record browser exposure checks separately from actual screen-reader or native-language verification.
+
+    Closing the eventual implementation still requires the complete matrix, green gate and structural checker, final blind diff review, and linked disposition evidence. This read-only design check supplies none of those completion claims.
+
+    **Evidence:** `project/items/VH-215.md:15`, `:16`, `:18`, `:19`, `:20`; `UI-STANDARDS.md:114`, `:123`, `:200`, `:261`, `:268`; `docs/01-specification.md:659`, `:730`; `project/digests/house-conventions.md:57`, `:61`; `project/digests/nielsen.md:17`; `project/profile.md:39`.
+
+**Musts**
+
+- Bound and record A + C, including the largest-file timing; keep calibration estimates and unrelated behaviour unchanged.
+- Use one current, frame-aligned source-span candidate for Submission’s request, page line and fit; invalidate it during re-checking.
+- Verify the printed time against unthresholded encode extents before releasing the file; fail and clean up on mismatch or unresolved duration.
+- Keep warning margins separate from card correctness, and exclude artificial holds and branding from kept source length.
+- Prove the MP4 correction by reading actual output-card pixels across the required combinations; retain a whole-file control.
+- Reproduce a named VH-158 cut WebM and restrict walker changes to the authorised Submission variants, preserving existing coverage.
+- Complete all 96 before/after cells on matched conditions; mark VH-199 job times absent and identify shared job measurements honestly.
+- Preserve approved wording, accessible status, cancellation, streaming and token rules; complete the item’s gates and final review.
+
+Verdict: fits the item with the musts above

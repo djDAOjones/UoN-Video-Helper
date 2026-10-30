@@ -1,0 +1,26 @@
+# VH-215 #10 — after walk re-run (walk-10a)
+start 2026-10-29T14:58:24Z
+Now drawing from 'AC Power'
+ -InternalBattery-0 (id=21889123)	100%; charged; 0:00 remaining present: true
+ powermode            2
+14:58  up 1 day,  7:09, 1 user, load averages: 2.98 3.53 4.74
+base 7750acb852a81979511ea481e6c2b18dcdda5ee4
+app /Users/joe/UoN-Video-Helper-side/vh215-walk/export-8-cand (a git archive export of the base with every candidate change overlaid from $R; not a checkout)
+$R HEAD 7750acb852a81979511ea481e6c2b18dcdda5ee4; porcelain lines 25; diff sha1 c5c3d0dbc873982b1616e12b97cd221b3f3c4d30
+commit unknown (not a checkout)
+source check 4a666ffc57b507fa4ab54ce66e84a00c4254a77d cand-source-check-8.txt
+instrument revision (export walker) 17727d3522f7270d
+walker sha1 1ea55993478be2735cad3bffd884b1f6291a83c6  fixtures.sh
+walker sha1 abef28de3156fa90ae6afae08875604bcfc84eb2  scenarios.mjs
+walker sha1 058f4c398ffe2876198961869689b7fa7e1960c1  card-215.mjs
+script sha1 6fd41021a7073569649d592cf3eddd9ff240ce62  walk10.sh
+fix /Users/joe/UoN-Video-Helper-side/vh215-walk/fix-4
+fixture sha1 bdc3dcb068fe7afb2ed5409ac14bf28de04ed2ae  cut-short-30s.mkv
+fixture sha1 261002a2dd3640fcd9d3703fdc9168dff9409b45  cut-short-10s.webm
+command node matrix.mjs vh215 S-23sn
+run exit 0 2026-10-29T15:02:39Z
+end 2026-10-29T15:02:39Z
+Now drawing from 'AC Power'
+ -InternalBattery-0 (id=21889123)	100%; charged; 0:00 remaining present: true
+ powermode            2
+15:02  up 1 day,  7:13, 1 user, load averages: 3.82 3.57 4.43

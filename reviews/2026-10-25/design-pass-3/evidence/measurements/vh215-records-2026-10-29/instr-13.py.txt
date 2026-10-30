@@ -1,0 +1,33 @@
+# VH-215 #13, (t2a): the walker's instruments per cell, before (walk-5b, walk-6) against after (walk-9a, walk-9b),
+# for the table's WCAG section. Read-only: reads each run's records and prints tallies. Usage: python3 -I instr-13.py <vh215-walk dir>
+import json, sys, glob, os, collections
+D = sys.argv[1]
+def load(groups):
+    out = {}
+    for g in groups:
+        for f in glob.glob(os.path.join(D, g, 'runs', '*', 'S-23*.json')):
+            r = json.load(open(f))
+            if 'instruments' not in r: continue
+            k = r.get('key') or os.path.basename(f)[:-5]
+            k = k if isinstance(k, str) else os.path.basename(f)[:-5]
+            assert k not in out, ('duplicate', k)
+            out[k] = r
+    return out
+B = load(['walk-5b', 'walk-6']); A = load(['walk-9a', 'walk-9b'])
+print('records before', len(B), 'after', len(A), 'same keys', sorted(B) == sorted(A))
+names = sorted({n for r in list(B.values()) + list(A.values()) for n in r['instruments']})
+def live(r): return json.dumps(r['instruments'].get('ax', {}).get('live'), ensure_ascii=False, sort_keys=True)
+def axp(r): return len(r['instruments'].get('ax', {}).get('problems') or [])
+def mut(r): return ((r.get('exposure') or {}).get('mutations') or {}).get('entries')
+for n in names:
+    tb = collections.Counter(B[k]['instruments'].get(n, {}).get('outcome') for k in B)
+    ta = collections.Counter(A[k]['instruments'].get(n, {}).get('outcome') for k in A)
+    diff = [k for k in B if k in A and B[k]['instruments'].get(n, {}).get('outcome') != A[k]['instruments'].get(n, {}).get('outcome')]
+    print(f'{n}: before {dict(sorted(tb.items()))} after {dict(sorted(ta.items()))} cells differing {len(diff)}' + (f' e.g. {diff[:3]}' if diff else ''))
+w320 = [k for k in A if '__w320__' in k]
+print('overflow at 320 px: before pass', sum(B[k]['instruments']['overflow']['outcome'] == 'pass' for k in w320), 'after pass', sum(A[k]['instruments']['overflow']['outcome'] == 'pass' for k in w320), 'of', len(w320),
+      '| hscroll after', sum(bool(A[k]['instruments']['overflow'].get('hscroll')) for k in w320))
+print('ax problems: before total', sum(axp(B[k]) for k in B), 'after total', sum(axp(A[k]) for k in A))
+print('ax live regions at the read point, equal before and after:', sum(live(B[k]) == live(A[k]) for k in A), 'of', len(A))
+print('exposure mutations entries: before', dict(collections.Counter(mut(B[k]) for k in B)), 'after', dict(collections.Counter(mut(A[k]) for k in A)),
+      'equal per cell', sum(mut(B[k]) == mut(A[k]) for k in A), 'of', len(A))

@@ -1,0 +1,5 @@
+{"label":"second-cut70","cut":true,"route":"inspect","started":"2026-10-29T00:03:12.299Z","ended":"2026-10-29T00:03:12.324Z","load1":6.77,"ms":22,"container":"MP4","declaredSeconds":524.587,"videoDeclared":524.56,"audioDeclared":524.587,"matroskaCutShort":false}
+{"label":"second-cut70","cut":true,"route":"sound","started":"2026-10-29T00:03:12.324Z","ended":"2026-10-29T00:03:13.943Z","load1":7.83,"ms":1618,"decodedEndSeconds":354.816,"silent":false}
+{"label":"second-cut70","cut":true,"route":"index","started":"2026-10-29T00:03:13.944Z","ended":"2026-10-29T00:03:13.959Z","load1":7.83,"ms":13,"lastPacketArrived":false,"declaredEndSeconds":524.56,"pictureEndSeconds":355.08,"reads":34}
+{"label":"second-cut70","cut":true,"route":"packets","started":"2026-10-29T00:03:13.959Z","ended":"2026-10-29T00:03:15.400Z","load1":7.83,"ms":1440,"packets":8877,"bytes":2810284568,"pictureEndSeconds":355.08}
+{"label":"second-cut70","cut":true,"route":"decode","started":"2026-10-29T00:03:15.400Z","ended":"2026-10-29T00:03:38.878Z","load1":6.67,"ms":23472,"frames":8877,"pictureEndSeconds":355.08}

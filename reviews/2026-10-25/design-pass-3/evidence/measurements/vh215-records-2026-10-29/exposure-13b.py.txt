@@ -1,0 +1,41 @@
+# VH-215 #13, (t2a), exposure-13.py corrected (each log is a dict whose "entries" hold the list): the live regions and the exposure log, before (walk-5b, walk-6) against after (walk-9a, walk-9b)
+# and the re-run (walk-10a to walk-10c), for the table's WCAG section (4.1.3, 1.3.1). Read-only.
+# Usage: python3 -I exposure-13.py <vh215-walk dir>
+import json, sys, glob, os, collections
+D = sys.argv[1]
+def load(groups):
+    out = {}
+    for g in groups:
+        for f in glob.glob(os.path.join(D, g, 'runs', '*', 'S-23*.json')):
+            r = json.load(open(f))
+            if 'instruments' in r: out[os.path.basename(f)[:-5]] = (r, os.path.dirname(f))
+    return out
+B = load(['walk-5b', 'walk-6']); A = load(['walk-9a', 'walk-9b']); Q = load(['walk-10a', 'walk-10b', 'walk-10c'])
+S = lambda x: json.dumps(x, ensure_ascii=False, sort_keys=True)
+live = lambda r: [S(x) for x in r['instruments']['ax'].get('live') or []]
+print('records: before', len(B), 'after', len(A), 're-run', len(Q))
+for name, G in (('before', B), ('after', A), ('re-run', Q)):
+    cells = [k for k in G if any('"name": "buffering"' in x for x in live(G[k][0]))]
+    print(f'{name}: cells with the player\'s "buffering" live group:', len(cells), 'of', len(G), '| by scenario and mode', dict(sorted(collections.Counter((k.split("__")[0], k.split("__")[3]) for k in cells).items())))
+for k in sorted(A):
+    lb, la = live(B[k][0]), live(A[k][0])
+    if lb != la:
+        print('live regions differ:', k, '| only before', [x for x in lb if x not in la], '| only after', [x for x in la if x not in lb],
+              '| re-run equal to before', (live(Q[k][0]) == lb) if k in Q else 'not re-run')
+def ents(rd):
+    r, d = rd; m = (r.get('exposure') or {}).get('mutations') or {}
+    return json.load(open(os.path.join(d, m['path'])))['entries'] if m.get('entries') else []
+sig = lambda e: S({x: e.get(x) for x in e if x != 't'})
+ob, oa = collections.Counter(), collections.Counter(); jobs = 0; text_live_equal = 0
+for k in sorted(A):
+    eb, ea = ents(B[k]), ents(A[k])
+    if not eb and not ea: continue
+    jobs += 1
+    cb, ca = collections.Counter(map(sig, eb)), collections.Counter(map(sig, ea))
+    for s, n in (cb - ca).items(): ob[s] += n
+    for s, n in (ca - cb).items(): oa[s] += n
+    tl = lambda es: [sig(e) for e in es if e.get('kind') != 'attr' and e.get('live')]
+    text_live_equal += tl(eb) == tl(ea)
+print('job cells with an exposure log:', jobs, '| live-region text and node writes equal, in order, before and after:', text_live_equal, 'of', jobs)
+print('entries only before, summed over the job cells:'); [print(' ', n, s) for s, n in sorted(ob.items())]
+print('entries only after, summed over the job cells:'); [print(' ', n, s) for s, n in sorted(oa.items())]

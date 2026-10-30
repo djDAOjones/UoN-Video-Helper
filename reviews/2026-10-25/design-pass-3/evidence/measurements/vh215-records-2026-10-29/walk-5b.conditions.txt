@@ -1,0 +1,25 @@
+# VH-215 #6 — before walk (walk-5b)
+start 2026-10-29T11:20:36Z
+Now drawing from 'AC Power'
+ -InternalBattery-0 (id=21889123)	100%; charged; 0:00 remaining present: true
+ powermode            2
+11:20  up 1 day,  3:31, 1 user, load averages: 5.13 7.48 6.09
+base 7750acb852a81979511ea481e6c2b18dcdda5ee4
+app /Users/joe/UoN-Video-Helper-side/vh215-walk/export-6 (a git archive export of the base, the re-fixed walker overlaid; not a checkout)
+commit unknown (not a checkout)
+source check 221e83082c5d911bffc957a14ea3f3e223e22448 before-source-check-6.txt
+instrument revision (export walker) 17727d3522f7270d
+walker sha1 1ea55993478be2735cad3bffd884b1f6291a83c6  fixtures.sh
+walker sha1 abef28de3156fa90ae6afae08875604bcfc84eb2  scenarios.mjs
+walker sha1 058f4c398ffe2876198961869689b7fa7e1960c1  card-215.mjs
+script sha1 4be23ea23e3e1b1a516a285921bb1fc15cfc55ad  walk6.sh
+fix /Users/joe/UoN-Video-Helper-side/vh215-walk/fix-4
+fixture sha1 bdc3dcb068fe7afb2ed5409ac14bf28de04ed2ae  cut-short-30s.mkv
+fixture sha1 261002a2dd3640fcd9d3703fdc9168dff9409b45  cut-short-10s.webm
+command node matrix.mjs vh215 S-23s S-23sn
+run exit 0 2026-10-29T11:29:10Z
+end 2026-10-29T11:29:10Z
+Now drawing from 'AC Power'
+ -InternalBattery-0 (id=21889123)	100%; charged; 0:00 remaining present: true
+ powermode            2
+11:29  up 1 day,  3:40, 1 user, load averages: 2.68 3.86 4.82

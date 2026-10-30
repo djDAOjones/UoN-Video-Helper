@@ -59,7 +59,7 @@ import { fitRectangle } from './conform'
 import { findFreezeFrame } from './freeze'
 import { audioEncodingConfigFor, videoEncodingConfigFor } from './encoding'
 import { measureEncoderDelay } from './encoder-delay'
-import { declaredExtent, endedEarly, type EndedEarly } from './ends-early'
+import { declaredExtent, endedEarly, madeSpanSeconds, type EndedEarly } from './ends-early'
 import {
   keptAudioAnchorSeconds,
   snapKeptRangeToFrames,
@@ -124,6 +124,13 @@ export interface PipelineResult {
    * describes the file just made.
    */
   readonly endedEarly: EndedEarly | null
+  /**
+   * The length made, as the encode's own lanes decoded it, from the kept start
+   * to where the later track ended, with no margin; `null` when neither lane
+   * decoded anything. Submission's release guard holds the card's running
+   * time against it before the file is kept or offered (VH-215).
+   */
+  readonly madeSeconds: number | null
 }
 
 /**
@@ -883,6 +890,11 @@ async function encode(options: PipelineOptions): Promise<PipelineResult> {
       contentOffsetSeconds: contentOffset,
       audioIncluded: audioSource !== null,
       endedEarly: endedShort,
+      madeSeconds: madeSpanSeconds(
+        pictureEndSeconds,
+        soundEndSeconds,
+        keptRange?.startSeconds ?? 0,
+      ),
     }
   } catch (cause) {
     // Abandon the output so no writer is left holding a file the caller is

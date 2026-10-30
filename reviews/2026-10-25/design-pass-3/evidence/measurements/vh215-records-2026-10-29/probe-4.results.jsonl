@@ -1,0 +1,15 @@
+{"label":"mkv-cut","cut":false,"route":"inspect","started":"2026-10-29T00:00:42.326Z","ended":"2026-10-29T00:00:42.355Z","load1":5.09,"ms":26,"container":"Matroska","declaredSeconds":20,"videoDeclared":20,"audioDeclared":19.925,"matroskaCutShort":true}
+{"label":"mkv-cut","cut":false,"route":"sound","started":"2026-10-29T00:00:42.356Z","ended":"2026-10-29T00:00:42.520Z","load1":5.09,"ms":164,"decodedEndSeconds":19.925,"silent":false}
+{"label":"mkv-cut","cut":false,"route":"index","started":"2026-10-29T00:00:42.520Z","ended":"2026-10-29T00:00:42.525Z","load1":5.09,"ms":4,"lastPacketArrived":true,"declaredEndSeconds":20,"pictureEndSeconds":20,"reads":1}
+{"label":"mkv-cut","cut":false,"route":"packets","started":"2026-10-29T00:00:42.525Z","ended":"2026-10-29T00:00:42.530Z","load1":5.09,"ms":4,"packets":500,"bytes":6422960,"pictureEndSeconds":20}
+{"label":"mkv-cut","cut":false,"route":"decode","started":"2026-10-29T00:00:42.531Z","ended":"2026-10-29T00:00:42.710Z","load1":5.09,"ms":179,"frames":500,"pictureEndSeconds":20}
+{"label":"mp4-cut","cut":false,"route":"inspect","started":"2026-10-29T00:00:42.710Z","ended":"2026-10-29T00:00:42.717Z","load1":5.09,"ms":6,"container":"MP4","declaredSeconds":30,"videoDeclared":30,"audioDeclared":30,"matroskaCutShort":false}
+{"label":"mp4-cut","cut":false,"route":"sound","started":"2026-10-29T00:00:42.717Z","ended":"2026-10-29T00:00:42.880Z","load1":5.09,"ms":162,"decodedEndSeconds":20.843,"silent":false}
+{"label":"mp4-cut","cut":false,"route":"index","started":"2026-10-29T00:00:42.880Z","ended":"2026-10-29T00:00:42.883Z","load1":5.09,"ms":3,"lastPacketArrived":false,"declaredEndSeconds":30,"pictureEndSeconds":20.96,"reads":42}
+{"label":"mp4-cut","cut":false,"route":"packets","started":"2026-10-29T00:00:42.884Z","ended":"2026-10-29T00:00:42.887Z","load1":5.09,"ms":3,"packets":523,"bytes":6705550,"pictureEndSeconds":20.96}
+{"label":"mp4-cut","cut":false,"route":"decode","started":"2026-10-29T00:00:42.887Z","ended":"2026-10-29T00:00:43.022Z","load1":5.09,"ms":134,"frames":523,"pictureEndSeconds":20.96}
+{"label":"mp4-whole","cut":false,"route":"inspect","started":"2026-10-29T00:00:43.022Z","ended":"2026-10-29T00:00:43.026Z","load1":5.09,"ms":4,"container":"MP4","declaredSeconds":30,"videoDeclared":30,"audioDeclared":30,"matroskaCutShort":false}
+{"label":"mp4-whole","cut":false,"route":"sound","started":"2026-10-29T00:00:43.026Z","ended":"2026-10-29T00:00:43.251Z","load1":5.09,"ms":224,"decodedEndSeconds":30.016,"silent":false}
+{"label":"mp4-whole","cut":false,"route":"index","started":"2026-10-29T00:00:43.251Z","ended":"2026-10-29T00:00:43.253Z","load1":5.09,"ms":1,"lastPacketArrived":true,"declaredEndSeconds":30,"pictureEndSeconds":30,"reads":1}
+{"label":"mp4-whole","cut":false,"route":"packets","started":"2026-10-29T00:00:43.253Z","ended":"2026-10-29T00:00:43.257Z","load1":5.09,"ms":4,"packets":750,"bytes":9588302,"pictureEndSeconds":30}
+{"label":"mp4-whole","cut":false,"route":"decode","started":"2026-10-29T00:00:43.257Z","ended":"2026-10-29T00:00:43.455Z","load1":5.09,"ms":197,"frames":750,"pictureEndSeconds":30}

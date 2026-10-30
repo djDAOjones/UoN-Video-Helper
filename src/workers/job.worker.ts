@@ -29,7 +29,13 @@ import {
   type DeviceClass,
 } from '../media/capability'
 import { measureContentClass } from '../media/content-class'
-import { declaredExtent, shortfall } from '../media/ends-early'
+import {
+  cardTellsMade,
+  declaredExtent,
+  madeSpanSeconds,
+  pictureMadeEndSeconds,
+  shortfall,
+} from '../media/ends-early'
 import { UnreadableFileError, inspectFile, openInput } from '../media/inspect'
 import { matroskaCutShort } from '../media/matroska-cut'
 import {
@@ -234,6 +240,13 @@ async function handleProcess(
       bitrateBasis: shape.bitrateBasis,
     })
 
+    // No length made, no card: Submission's running time is never the index's
+    // guess, so a card the page had no length for fails here, before the draw
+    // (VH-215).
+    const submissionCard = options.titleCard?.layout === 'submission' ? options.titleCard : null
+    if (submissionCard && submissionCard.text.runningTime === '') {
+      throw new JobFailureError('unknown', 'No length made for the submission card')
+    }
     // Fitted again with the worker's own fonts and drawn once, before anything
     // is written, so a card this fit refuses fails the job while nothing needs
     // undoing (VH-127).
@@ -258,6 +271,17 @@ async function handleProcess(
       signal,
       onProgress: ({ stage, fraction }) => post({ kind: 'stage', id, stage, fraction }),
     })
+
+    // The release guard (VH-215): a Submission card whose running time is not
+    // the length this encode made is never kept or offered, with a warning or
+    // without. Failing here disposes of the working output below.
+    if (submissionCard && !cardTellsMade(submissionCard.text.runningTime, result.madeSeconds)) {
+      log.warn('worker', 'the card would misstate the length made', {
+        madeSeconds:
+          result.madeSeconds === null ? null : Math.round(result.madeSeconds * 1000) / 1000,
+      })
+      throw new JobFailureError('unknown', 'The submission card differs from the length made')
+    }
 
     // The finished file is the only honest place to enforce criterion 2: the
     // limiter, resampler and AAC encoder all sit after the planning pass.
@@ -521,13 +545,15 @@ async function handlePreflight(
     let keptHasSound = report.audio !== null
     /** The pass, timed: the unit the estimate prices every audio stage in (VH-100). */
     let analysisPass: { wallSeconds: number; audioSeconds: number } | null = null
+    /** The length the job will make, for Submission's card (VH-215). */
+    let madeSeconds: number | null = null
     if (report.audio === null || report.audio.canDecode) {
       const audioInput = openInput(file)
       const audioTrack = await audioInput.getPrimaryAudioTrack()
       // The sound the job will judge: the kept range on frame edges, as the
       // pipeline places it, so a keep near one block is not called silent
       // here and given sound there (VH-185, Codex review).
-      const pictureTrack = keptRange ? await audioInput.getPrimaryVideoTrack() : null
+      const pictureTrack = await audioInput.getPrimaryVideoTrack()
       const soundRange =
         keptRange && pictureTrack ? await keptRangeOnFrames(pictureTrack, keptRange) : keptRange
       const analysisStartedAt = performance.now()
@@ -561,6 +587,18 @@ async function handlePreflight(
       // little; the job is then a silent one (VH-95, VH-213), and asks nothing
       // of the audio encoder.
       if (analysis === null) keptHasSound = false
+      // The length made, for Submission's card (VH-215): the sound's end from
+      // the pass above, the picture's from its packets, read after the pass's
+      // timing, which prices only the sound. Joined on the range the pipeline
+      // places, so the card says what the encode will make.
+      const pictureEnd = pictureTrack
+        ? await pictureMadeEndSeconds(pictureTrack, soundRange, signal)
+        : null
+      madeSeconds = madeSpanSeconds(
+        pictureEnd,
+        measured?.decodedEndSeconds ?? null,
+        soundRange?.startSeconds ?? 0,
+      )
     }
     // `analyseSourceAudio` stops at the next sample rather than throwing, so
     // an aborted traversal returns a report of PART of the file. Warnings
@@ -615,6 +653,7 @@ async function handlePreflight(
       contentClass,
       projectedOutputBytes: projected,
       audioWarnings,
+      madeSeconds,
       verdict: preflightVerdict({
         hasWebCodecs: capability.hasWebCodecs,
         hasOpfs: capability.hasOpfs,

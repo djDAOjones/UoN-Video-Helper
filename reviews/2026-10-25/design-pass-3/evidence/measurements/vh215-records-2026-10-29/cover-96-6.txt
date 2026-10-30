@@ -1,0 +1,2 @@
+96-cover: records 96 unique 96 dupes [] missing 0 extra 0
+[('S-23w-en-GB-w1280', 1343), ('S-23w-en-GB-w320', 1344), ('S-23w-ms-MY-w1280', 1335), ('S-23w-ms-MY-w320', 1356), ('S-23w-zh-Hans-w1280', 1303), ('S-23w-zh-Hans-w320', 1316), ('S-23wn-en-GB-w1280', 1111), ('S-23wn-en-GB-w320', 1135), ('S-23wn-ms-MY-w1280', 1109), ('S-23wn-ms-MY-w320', 1032), ('S-23wn-zh-Hans-w1280', 1099), ('S-23wn-zh-Hans-w320', 1141)]

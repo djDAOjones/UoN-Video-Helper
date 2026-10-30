@@ -1,0 +1,57 @@
+#!/bin/zsh
+# VH-215 #1: one route-timing probe under the fixed walk lock (brief section 6), modelled read-only on VH-212's go-1.sh and walk-1.sh.
+# Waits (checking every 60 s, up to WAITMAX s, default 1800) for AC at powermode 2 (or battery above 50 % outside Low Power),
+# a 1-minute load below 8 and a free lock; then takes the lock, checks :5181 and :9251 are free, starts Vite (base app, $R) and
+# headless Chrome, runs route-probe.mjs under caffeinate, logs load every 30 s, stops every PID it started and releases the lock.
+# Usage: zsh probe.sh <name> <label=path[@cut]> ...
+N=/Users/joe/UoN-Video-Helper-side; D=$N/vh215-walk
+R="/Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper"
+NAME=$1; shift
+OUT="$D/$NAME"; LOCK=$N/walk.lock; WHO="VH-215 #1"
+[ -e "$OUT" ] && { echo "OUT EXISTS: $OUT"; exit 2; }
+WAITMAX=${WAITMAX:-1800}
+ok_power() { local B PM LV; B=$(pmset -g batt); PM=$(pmset -g)
+  if print -r -- "$B" | grep -q 'AC Power'; then return 0; fi
+  LV=$(print -r -- "$B" | grep -oE '[0-9]+%' | head -1 | tr -d %)
+  [ "$LV" -gt 50 ] && ! print -r -- "$PM" | grep -qE 'lowpowermode +1|powermode +1$'; }
+load1() { uptime | sed -E 's/.*load averages?: ([0-9.]+).*/\1/'; }
+s=$(date +%s)
+while :; do
+  L=$(load1)
+  if ok_power && [ "$(echo "$L < 8" | bc)" = 1 ] && [ ! -e $LOCK ]; then break; fi
+  [ $(( $(date +%s) - s )) -ge $WAITMAX ] && { echo "NOT READY $(date -u +%T) load $L lock $(cat $LOCK/owner.txt 2>/dev/null | cut -c1-80)"; exit 9; }
+  sleep 60
+done
+mkdir "$LOCK" || { echo "LOCK HELD: $(cat $LOCK/owner.txt 2>/dev/null)"; exit 3; }
+echo "$WHO — $(date -u +%FT%TZ) — route timing ($NAME)" > "$LOCK/owner.txt"
+if [ -n "$(lsof -i :5181 -i :9251 2>/dev/null)" ]; then echo "PORTS BUSY:"; lsof -i :5181 -i :9251; grep -q "$WHO" "$LOCK/owner.txt" && rm -r "$LOCK"; exit 4; fi
+mkdir -p "$OUT"
+{ echo "start $(date -u +%FT%TZ)"; pmset -g batt | head -2; pmset -g | grep -E 'powermode|lowpowermode'; uptime
+  echo "commit $(GIT_OPTIONAL_LOCKS=0 git -C "$R" rev-parse HEAD)"; echo "porcelain lines $(GIT_OPTIONAL_LOCKS=0 git -C "$R" status --porcelain | wc -l | tr -d ' ')"
+  echo "probe sha1 $(shasum route-probe.mjs 2>/dev/null | cut -c1-12) $(shasum $D/route-probe.mjs | cut -c1-12)"; } > "$OUT/conditions.txt"
+( while :; do echo "$(date -u +%T) load $(load1) $(pmset -g batt | sed -nE "1s/Now drawing from '(.*)'/\1/p") $(pmset -g batt | grep -oE '[0-9]+%' | head -1) pm$(pmset -g | sed -nE 's/^ *powermode +([0-9]+).*/\1/p')" >> "$OUT/load.log"; sleep 30; done ) &
+LP=$!
+cd "$R" || { kill $LP; grep -q "$WHO" "$LOCK/owner.txt" && rm -r "$LOCK"; exit 5; }
+./node_modules/.bin/vite --port 5181 --strictPort --host 127.0.0.1 > "$OUT/vite.log" 2>&1 &
+VPID=$!
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --remote-debugging-port=9251 --user-data-dir="$D/chrome-profile" --no-first-run --no-default-browser-check --disable-backgrounding-occluded-windows --disable-background-timer-throttling --disable-renderer-backgrounding about:blank > "$OUT/chrome.log" 2>&1 &
+CPID=$!
+echo "vite $VPID chrome $CPID load-logger $LP" > "$OUT/pids.txt"
+for i in $(seq 1 60); do curl -sf http://127.0.0.1:5181/ >/dev/null && curl -sf http://127.0.0.1:9251/json/version >/dev/null && break; sleep 1; done
+(cd "$D" && node route-probe.mjs "$OUT" "$@" > "$OUT/probe.log" 2>&1; echo "probe exit $? $(date -u +%FT%TZ)" >> "$OUT/conditions.txt") &
+PPID2=$!
+caffeinate -i -w $PPID2 &
+KPID=$!
+echo "probe $PPID2 caffeinate $KPID" >> "$OUT/pids.txt"
+( sleep ${PROBEMAX:-2700}; kill $PPID2 2>/dev/null && echo "PROBE TIMED OUT $(date -u +%T)" >> "$OUT/conditions.txt" ) &
+TPID=$!
+wait $PPID2
+pkill -P $TPID 2>/dev/null; kill $TPID 2>/dev/null
+{ echo "end $(date -u +%FT%TZ)"; pmset -g batt | head -2; uptime; } >> "$OUT/conditions.txt"
+pkill -P $LP 2>/dev/null; kill $CPID $VPID $LP $KPID 2>/dev/null
+for i in $(seq 1 30); do kill -0 $CPID 2>/dev/null || kill -0 $VPID 2>/dev/null || break; sleep 1; done
+kill -0 $CPID 2>/dev/null && kill -9 $CPID; kill -0 $VPID 2>/dev/null && kill -9 $VPID
+for i in $(seq 1 30); do kill -0 $CPID 2>/dev/null || kill -0 $VPID 2>/dev/null || break; sleep 1; done
+if kill -0 $CPID 2>/dev/null || kill -0 $VPID 2>/dev/null; then echo "STILL ALIVE: vite $VPID chrome $CPID; lock kept"; exit 6; fi
+grep -q "$WHO" "$LOCK/owner.txt" && rm -r "$LOCK"
+echo "done; ports: $(lsof -i :5181 -i :9251 2>/dev/null | wc -l | tr -d ' ') lines; lock: $(ls -d $LOCK 2>/dev/null || echo released)"

@@ -1,0 +1,33 @@
+# VH-215 #10: the 96 after records (walk-9a, walk-9b) checked against PLANS.vh215's 96 keys, and each cell's burned card and page line against its before cell (walk-5b, walk-6), in cover-96-6.txt's form plus the per-cell lines.
+# Usage: python3 -I cover-10.py <plan keys json> <after run dirs, comma-separated> <before run dirs, comma-separated>
+import json, sys, glob, os, collections
+plan = json.load(open(sys.argv[1])); after_dirs = sys.argv[2].split(','); before_dirs = sys.argv[3].split(',')
+WANT = {'S-23s': '0:20', 'S-23sn': '0:20', 'S-23w': '0:05', 'S-23wn': '0:05'}
+def load(dirs):
+    recs = collections.defaultdict(list)
+    for d in dirs:
+        for f in sorted(glob.glob(os.path.join(d, 'S-*.json'))):
+            r = json.load(open(f)); recs[r['key']].append(r)
+    return recs
+def read(r):
+    items = r['instruments']['asserts']['items']
+    job = next((x for x in items if 'job' in x), {}); card = next((x for x in items if 'read' in x and 'made' in x), {})
+    line = next((x for x in items if 'line' in x and 'read' not in x and x is not job), {})
+    ok = r['status'] == 'ok' and r['reached']['outcome'] == 'pass' and r['reachedAfter']['outcome'] == 'pass' and r['instruments']['asserts']['outcome'] == 'pass'
+    ok = ok and job.get('job', {}).get('outcome') == 'finished' and card.get('outcome') == 'pass' and line.get('outcome') == 'pass'
+    return dict(ok=ok, card=card.get('read'), made=card.get('made'), clear=card.get('card', {}).get('clear'), line=(line.get('line') or {}).get('clock'), job=job.get('walk', '').split('/')[-1], ms=job.get('job', {}).get('jobMs'))
+for label, dirs in (('after', after_dirs), ('before', before_dirs)):
+    recs = load(dirs); n = sum(len(v) for v in recs.values())
+    print(f'96-cover ({label}: {", ".join(d.split("/vh215-walk/")[-1].split("/")[0] for d in dirs)}): records {n} unique {len(recs)} dupes {[k for k, v in recs.items() if len(v) > 1]} missing {len(set(plan) - set(recs))} extra {len(set(recs) - set(plan))}')
+    if label == 'after': A = recs
+    else: B = recs
+print(sorted({(read(v[0])['job'], read(v[0])['ms']) for v in A.values()}))
+diff = []; tally = collections.Counter()
+for k in plan:
+    a, b = read(A[k][0]), read(B[k][0]); want = WANT[k.split('__')[0]]
+    same = a['ok'] and b['ok'] and a['card'] == b['card'] == want and a['line'] == b['line'] == want and a['made'] == b['made'] == want and a['clear'] and b['clear']
+    tally[(k.split('__')[0], a['card'], a['line'], b['card'], b['line'], same)] += 1
+    if not same: diff.append((k, a, b))
+    print(k, 'after card', a['card'], 'line', a['line'], 'ok', a['ok'], '| before card', b['card'], 'line', b['line'], 'ok', b['ok'], '|', 'unchanged' if same else 'DIFFERS')
+print('per scenario (id, after card, after line, before card, before line, unchanged): count', sorted(tally.items()))
+print('cells', len(plan), 'unchanged', len(plan) - len(diff), 'differ', [d[0] for d in diff])

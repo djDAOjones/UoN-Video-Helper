@@ -1,0 +1,20 @@
+records: before 96 after 96 re-run 72
+before: cells with the player's "buffering" live group: 24 of 96 | by scenario and mode {('S-23s', 'light'): 6, ('S-23sn', 'light'): 6, ('S-23w', 'light'): 6, ('S-23wn', 'light'): 6}
+after: cells with the player's "buffering" live group: 23 of 96 | by scenario and mode {('S-23s', 'light'): 6, ('S-23sn', 'light'): 5, ('S-23w', 'light'): 6, ('S-23wn', 'light'): 6}
+re-run: cells with the player's "buffering" live group: 18 of 72 | by scenario and mode {('S-23sn', 'light'): 6, ('S-23w', 'light'): 6, ('S-23wn', 'light'): 6}
+live regions differ: S-23sn__zh-Hans__w1280__light | only before ['{"live": "polite", "name": "buffering", "role": "group", "text": ""}'] | only after [] | re-run equal to before True
+job cells with an exposure log: 24 | live-region text and node writes equal, in order, before and after: 24 of 24
+entries only before, summed over the job cells:
+  24 {"attr": "hidden", "el": "p#submission-card-assignment-error.field-error", "from": "", "kind": "attr", "live": "div", "to": ""}
+  24 {"attr": "hidden", "el": "p#submission-card-convenor-error.field-error", "from": "", "kind": "attr", "live": "div", "to": ""}
+  24 {"attr": "hidden", "el": "p#submission-card-ids-error.field-error", "from": "", "kind": "attr", "live": "div", "to": ""}
+  24 {"attr": "hidden", "el": "p#submission-card-module-error.field-error", "from": "", "kind": "attr", "live": "div", "to": ""}
+  24 {"attr": "hidden", "el": "p#title-card-authors-error.field-error", "from": "", "kind": "attr", "live": "div", "to": ""}
+  24 {"attr": "hidden", "el": "p#title-card-date-error.field-error", "from": "", "kind": "attr", "live": "div", "to": ""}
+  24 {"attr": "hidden", "el": "p#title-card-department-error.field-error", "from": "", "kind": "attr", "live": "div", "to": ""}
+  24 {"attr": "hidden", "el": "p#title-card-empty-error.field-error", "from": "", "kind": "attr", "live": "div", "to": ""}
+  24 {"attr": "hidden", "el": "p#title-card-title-error.field-error", "from": "", "kind": "attr", "live": "div", "to": ""}
+entries only after, summed over the job cells:
+  128 {"attr": "hidden", "el": "p#submission-card-filled.helper", "from": "", "kind": "attr", "to": ""}
+  24 {"attr": "hidden", "el": "p#submission-card-filled.helper", "from": "", "kind": "attr", "to": null}
+  24 {"attr": "hidden", "el": "p#submission-card-filled.helper", "from": null, "kind": "attr", "to": ""}

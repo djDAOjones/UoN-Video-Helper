@@ -68,7 +68,7 @@ import { KEPT_MIN_SECONDS, TRIM_RECHECK_DELAY_MS } from './config/trim'
 import { STUDENT_IDS_MAX, TITLE_CARD_SECONDS } from './config/cards'
 import { createWatchdog } from './core/watchdog'
 import { canEncodeAudio, checkEncodeSupport, detectDeviceClass } from './media/capability'
-import { keptDurationSeconds, type KeptRange } from './media/kept-range'
+import type { KeptRange } from './media/kept-range'
 import { saveFile, suggestedFileName } from './media/save'
 import {
   STAFF_CARD,
@@ -1450,6 +1450,7 @@ fileInput.addEventListener('change', () => {
   jobFile = null
   jobContentClass = 'unknown'
   jobKeptRange = null
+  forgetMadeSeconds()
   inspectedFile = null
   inspectedReport = null
   // The trim described the previous video. Nothing of it is kept, and a
@@ -1666,7 +1667,13 @@ async function runPreflight(file: File, current: () => boolean): Promise<void> {
             warningsSpoken(t().warnings.soundHeading, summary.audioWarnings),
           ),
       )
-      showProcessControls(file, summary.contentClass, keptRange, summary.verdict.outcome === 'discourage')
+      showProcessControls(
+        file,
+        summary.contentClass,
+        keptRange,
+        summary.madeSeconds,
+        summary.verdict.outcome === 'discourage',
+      )
       // Stop the check has gone; what it was holding up takes focus, or,
       // while a save shuts Create, Stop saving (V-46).
       fromStop(acknowledgeButton.hidden ? startButton : acknowledgeButton, stopSaveButton)
@@ -1719,6 +1726,7 @@ presetChoice.addEventListener('change', () => {
   jobFile = null
   jobContentClass = 'unknown'
   jobKeptRange = null
+  forgetMadeSeconds()
   withdrawDiscardQuestion()
   // The verdict priced the other preset (U-04).
   withdrawVerdict()
@@ -1921,7 +1929,8 @@ function renderTrim(): void {
         (trimDuration < KEPT_MIN_SECONDS ? ` ${t().trim.tooShort({ seconds: KEPT_MIN_SECONDS })}` : '')
   trimClear.disabled =
     jobInFlight || saveInFlight || (problem === null && 'range' in trim && trim.range === null)
-  // Submission's running time is the kept range, so it follows the handles (VH-128).
+  // Submission's running time is the length made of the checked range, so it
+  // is withdrawn while the handles are off it (VH-128, VH-215).
   paintSubmissionFilled()
 }
 
@@ -1941,6 +1950,7 @@ function commitTrim(): void {
   jobFile = null
   jobContentClass = 'unknown'
   jobKeptRange = null
+  forgetMadeSeconds()
   cancelTrimRecheck()
   withdrawDiscardQuestion()
   // The verdict priced the previous trim (U-04); the step now leads with the
@@ -2159,6 +2169,14 @@ let jobContentClass: ContentClass = 'unknown'
  * cleared with {@link jobFile}.
  */
 let jobKeptRange: KeptRange | null = null
+
+/**
+ * The length that verdict says the job will make of {@link jobKeptRange}:
+ * Submission's running time, on its card and on the line under its fields,
+ * and never the index's arithmetic (VH-215). Set and cleared with
+ * {@link jobFile}, so no old length outlives the verdict it came from.
+ */
+let jobMadeSeconds: number | null = null
 
 /** The running job's request id, so Cancel reaches the right one. */
 let jobCancelId: number | null = null
@@ -2565,13 +2583,28 @@ function submissionIsOn(): boolean {
 }
 
 /**
- * The trim as it stands, in seconds: the kept range, or the handles' span
- * while a typed time is being put right. The card's running time is this
- * (the owner: "discounting trimmed material").
+ * Submission's running time as the trim stands (the owner: "discounting
+ * trimmed material"): the length made that the verdict on screen carries,
+ * while the trim is the one it checked. `null` otherwise — before a verdict,
+ * through a re-check, while the handles are off the checked range or a typed
+ * time is being put right — so an old length is never said of a new trim
+ * (VH-215).
  */
-function keptSecondsNow(): number {
+function keptSecondsNow(): number | null {
+  if (jobMadeSeconds === null) return null
   const trim = currentTrim()
-  return 'range' in trim ? keptDurationSeconds(trim.range, trimDuration) : trimEnd - trimStart
+  if (!('range' in trim)) return null
+  const checked = jobKeptRange
+  const same =
+    trim.range?.startSeconds === checked?.startSeconds &&
+    trim.range?.endSeconds === checked?.endSeconds
+  return same ? jobMadeSeconds : null
+}
+
+/** The length made goes with its verdict, and the line saying it at once (VH-215). */
+function forgetMadeSeconds(): void {
+  jobMadeSeconds = null
+  paintSubmissionFilled()
 }
 
 /** What the worker reads to draw either card beside its words. */
@@ -2626,7 +2659,11 @@ function currentSubmissionProblems(): Partial<Record<SubmissionCardField, Submis
   if (!submissionIsOn()) return {}
   const typed = typedSubmission()
   const ids = studentIdTokens(typed.ids).slice(0, STUDENT_IDS_MAX)
-  const text = submissionCardText(typed, ids, keptSecondsNow(), new Date(), chosenVideoLanguage())
+  // The running time is on the card, so the fit is settled only once the
+  // length made is known (VH-215).
+  const running = keptSecondsNow()
+  if (running === null) return submissionProblems(typed, null)
+  const text = submissionCardText(typed, ids, running, new Date(), chosenVideoLanguage())
   return submissionProblems(typed, fitOnPage(submissionCardBlocks(text)))
 }
 
@@ -2679,14 +2716,19 @@ function paintTitleCardErrors(): void {
 
 /**
  * The line under Submission: what the app adds to the card, with the running
- * time as trimmed. Painted on a trim change only when the time it says
- * moves, and then the card is fitted again, since that line is on it.
+ * time the job will make. Withdrawn, its words unchanged, until a verdict for
+ * the trim on screen says it (VH-215). Fitted again only when the time it
+ * says moves, since that line is on the card.
  */
 function paintSubmissionFilled(): void {
-  const running = formatClockTime(keptSecondsNow())
+  const seconds = keptSecondsNow()
+  const running = seconds === null ? null : formatClockTime(seconds)
   const changed = running !== paintedRunningTime
   paintedRunningTime = running
-  submissionCardFilled.textContent = t().titleCard.submission.filled({ running })
+  paintLine(
+    submissionCardFilled,
+    running === null ? null : t().titleCard.submission.filled({ running }),
+  )
   if (changed) paintTitleCardErrors()
 }
 
@@ -3000,15 +3042,16 @@ function beginJob(file: File): void {
   const keptRange = jobKeptRange
   // Submission, the staff card, or nothing: its words go to the worker and
   // nowhere else, never the log, the diagnostics, the record or the file's
-  // name (VH-127, VH-128). Submission's running time is the range this job
-  // keeps, and its date is now, when the card is made.
+  // name (VH-127, VH-128). Submission's running time is the length the
+  // verdict says this job makes of its range (VH-215), and its date is now,
+  // when the card is made.
   const submissionIds = checkStudentIds(typedSubmission().ids)
   const titleCard = videoKind === 'submission'
     ? submissionCardRequest(
         submissionCardText(
           typedSubmission(),
           submissionIds.ok ? submissionIds.ids : [],
-          keptDurationSeconds(keptRange, trimDuration),
+          jobMadeSeconds,
           new Date(),
           wordsLanguage,
         ),
@@ -3285,11 +3328,14 @@ function showProcessControls(
   file: File,
   contentClass: ContentClass,
   keptRange: KeptRange | null,
+  madeSeconds: number | null,
   needsAcknowledgement = false,
 ): void {
   jobFile = file
   jobContentClass = contentClass
   jobKeptRange = keptRange
+  jobMadeSeconds = madeSeconds
+  paintSubmissionFilled()
   acknowledgeButton.hidden = !needsAcknowledgement
   startButton.hidden = needsAcknowledgement
   processActions.hidden = false

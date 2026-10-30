@@ -301,12 +301,14 @@ export function submissionProblemText(field: SubmissionCardField, problem: Submi
  * so far, and sends it when Create is pressed, with them checked.
  *
  * @param keptSeconds - The kept range after trimming, without the card or the
- *   closing (the owner: "not including anything added by the app").
+ *   closing (the owner: "not including anything added by the app"): the
+ *   length the job will make of it (VH-215). `null` when that is not known,
+ *   and the running time is then left empty, which the worker refuses to draw.
  */
 export function submissionCardText(
   typed: SubmissionTyped,
   ids: readonly string[],
-  keptSeconds: number,
+  keptSeconds: number | null,
   now: Date,
   wordsLanguage: LanguageTag,
 ): SubmissionCardText {
@@ -316,7 +318,7 @@ export function submissionCardText(
     module: typed.module,
     convenor: typed.convenor,
     ids,
-    runningTime: formatClockTime(keptSeconds),
+    runningTime: keptSeconds === null ? '' : formatClockTime(keptSeconds),
     made: words.madeValue({ date: cardDate(now, wordsLanguage) }),
     labels: {
       module: words.module,

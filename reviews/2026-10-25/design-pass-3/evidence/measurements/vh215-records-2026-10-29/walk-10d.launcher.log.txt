@@ -1,0 +1,8 @@
+PORTS BUSY:
+COMMAND   PID USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+Claude    938  joe   37u  IPv6 0xf20e6715d4a26db0      0t0  TCP localhost:61630->localhost:5181 (CLOSED)
+Claude    938  joe   39u  IPv6 0xd4f8763249cf72ae      0t0  TCP localhost:61631->localhost:5181 (CLOSED)
+Claude    938  joe   64u  IPv6 0xda31c39f1f88939b      0t0  TCP localhost:61632->localhost:5181 (CLOSED)
+Claude    938  joe   65u  IPv6 0x15825ad46a5cd66e      0t0  TCP localhost:61633->localhost:5181 (CLOSED)
+Claude    938  joe   68u  IPv6 0xcf223a052c2bf8cb      0t0  TCP localhost:61634->localhost:5181 (CLOSED)
+Claude    938  joe   70u  IPv6 0xcfa161d9d074adf2      0t0  TCP localhost:61635->localhost:5181 (CLOSED)

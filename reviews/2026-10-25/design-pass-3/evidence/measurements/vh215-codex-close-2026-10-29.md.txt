@@ -1,0 +1,21 @@
+Verdict: Commit after the musts below
+
+Musts:
+
+1. `$M/vh215-card-length-2026-10-29.md:157` and `:159` — After rebasing, renew the four scenarios’ 96-cell after-walk and its instrument/exposure comparison. The Chinese option appears on every page language; the zh-Hans cells also expose changed announcement/progress text. Preserve the original measurements as historical evidence, identify the rebased reading separately, and attribute the expected name differences to VH-227. Record that renewal in the table and commit’s rebase paragraph.
+
+2. `project/decisions.md:645`, `project/archive-index.md:3` — Keeping both closes once leaves **46 live decisions**, triggering `tools/ledger.mjs:340`. Archive VH-180 verbatim after reconciliation and regenerate the index: **104 archived entries, through 2026-10-24**. Keep VH-179 once; both branches’ existing archive changes are byte-identical. Decisions require VH-215 before VH-227; trajectory requires VH-227 before VH-215.
+
+Shoulds: None.
+
+VH-227: reaches: language names, geometry and accessibility exposure in the walks, including the zh-Hans cells. Renewal is must 1. **No MP4 browser-proof rerun is owed:** it uses en-GB, and the rename changes neither its card text nor duration calculation. `sheet.ts` changes translator guidance; `tokens.brand.css` changes a comment, with no styling change.
+
+Notes:
+
+- No regression from the re-check. The tracked build/walker diff is byte-equal to the reviewed patch. The repaired table retains precisely the disclosed differences from the blind copy.
+- The working tree matches the freeze, including all 103 untracked hashes. All thirteen copies match their permitted sources; all 85 record payloads match `sources.txt`. The decision adequately explains retaining the blind table.
+- The owner’s quotation and source match. The close’s claims, item status, report link, backlog removal and trajectory entry are supported. VH-139.5 was already promoted out of the wish-list; closing VH-215 retires its remaining open line. VH-215.1–3 record the named follow-ups; none is missing.
+- The draft commit accurately describes VH-215. Complete its rebase, `Verify:` and `Checked:` fields after renewal and the final gate. Rule 8’s named house and Nielsen rules are appropriate.
+- I ran the read-only `node tools/check.mjs`: **0 failures, 0 warnings** on this frozen tree. The supplied full-gate result remains reported evidence; I ran no tests or builds and changed no files.
+
+`$M` denotes the measurements folder named in the brief.
