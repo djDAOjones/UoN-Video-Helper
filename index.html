@@ -41,75 +41,14 @@
            work everywhere": it is built and tested for Chrome, and says so
            rather than letting another browser fail part-way (2026-09-30). It
            shows only when a load-time check has not passed; while they run,
-           step 1 says so, and a pass is the System check's to say (VH-187).
-           The five promises are the owner's own; the "?" beside the fourth
-           is his own request, a toggletip like the one beside "Plays over"
-           (VH-196). -->
+           step 1 says so, and a pass is the System check's to say (VH-187). -->
       <div class="lede">
-        <ul>
-          <li data-i18n="lede.promises.0">Lets you trim unwanted footage from the start and end.</li>
-          <li data-i18n="lede.promises.1">Adds opening and closing graphics.</li>
-          <li data-i18n="lede.promises.2">Evens out the audio level for better audience experience.</li>
-          <li class="promise-with-help">
-            <span data-i18n="lede.promises.3">Saves in a reliable format.</span>
-            <button
-              class="button button--secondary help-button"
-              type="button"
-              id="format-help-button"
-              aria-label="About the video format"
-              data-i18n-attr="aria-label:lede.formatHelp.label"
-              aria-expanded="false"
-              aria-controls="format-help"
-            >
-              ?
-            </button>
-            <div class="promise-help" aria-live="polite">
-              <div class="toggletip" id="format-help" hidden>
-                <p data-i18n="lede.formatHelp.text">
-                  Videos come in many formats. Some play on one device but not another, or do not
-                  work with some apps. This tool saves your video as an MP4, the most interoperable
-                  video format. That means it plays on almost any phone, computer or website.
-                </p>
-              </div>
-            </div>
-          </li>
-          <li data-i18n="lede.promises.4">Makes the file the right size for your purpose.</li>
-        </ul>
         <p data-i18n="lede.privacy">
           Your video is processed on your device, it is never uploaded, and the original file does
           not change.
         </p>
         <p id="browser-note" hidden></p>
       </div>
-
-      <!-- VH-131, 2026-10-19. Staff video or Student submission, above the
-           steps it shapes, chosen first and remembered in this browser.
-           Native radios under the segmented skin, as the colour and the
-           language are, and never locked by a job or a save: switching keeps
-           the video, the trim, every choice, a running job and a result. The
-           line beneath says what the side means and is read on demand, not
-           announced; what it changes is Step 4's "Internal use only", and
-           whether Step 3's title card is offered. -->
-      <fieldset class="segmented video-kind" id="video-kind" aria-describedby="video-kind-result video-next">
-        <legend class="label" data-i18n="videoKind.label">Video type</legend>
-        <div class="segments">
-          <label class="segment">
-            <input type="radio" name="video-kind" value="staff" checked />
-            <span class="segment-face" data-i18n="videoKind.options.staff" data-text="Staff video" data-i18n-attr="data-text:videoKind.options.staff">Staff video</span>
-          </label>
-          <label class="segment">
-            <input type="radio" name="video-kind" value="submission" />
-            <span class="segment-face" data-i18n="videoKind.options.submission" data-text="Student submission" data-i18n-attr="data-text:videoKind.options.submission">Student submission</span>
-          </label>
-        </div>
-        <p class="helper" id="video-kind-result"></p>
-        <!-- VH-140, 2026-10-21; VH-191, 2026-10-25. Only while a video is
-             being made or a finished one is on screen, that a change of side
-             is for the next video: the switch is never locked, and the job
-             keeps what it started with. Empty while hidden, so the group's
-             description does not read it. Read on demand, not announced. -->
-        <p class="helper" id="video-next" hidden></p>
-      </fieldset>
 
       <!-- VH-91, 2026-09-30. The steps are separate, numbered panels rather
            than fieldsets stacked under one heading. They stay open: each of
@@ -155,6 +94,36 @@
              down (U-05, VH-108). Empty for a file that can be made. -->
         <div id="source-block"></div>
       </section>
+
+      <!-- VH-131, 2026-10-19; VH-216, 2026-10-30. Staff video or Student
+           submission, below step 1 and above the steps it shapes, and
+           remembered in this browser.
+           Native radios under the segmented skin, as the colour and the
+           language are, and never locked by a job or a save: switching keeps
+           the video, the trim, every choice, a running job and a result. The
+           line beneath says what the side means and is read on demand, not
+           announced; what it changes is Step 4's "Internal use only", and
+           whether Step 3's title card is offered. -->
+      <fieldset class="segmented video-kind" id="video-kind" aria-describedby="video-kind-result video-next">
+        <legend class="label" data-i18n="videoKind.label">Video type</legend>
+        <div class="segments">
+          <label class="segment">
+            <input type="radio" name="video-kind" value="staff" checked />
+            <span class="segment-face" data-i18n="videoKind.options.staff" data-text="Staff video" data-i18n-attr="data-text:videoKind.options.staff">Staff video</span>
+          </label>
+          <label class="segment">
+            <input type="radio" name="video-kind" value="submission" />
+            <span class="segment-face" data-i18n="videoKind.options.submission" data-text="Student submission" data-i18n-attr="data-text:videoKind.options.submission">Student submission</span>
+          </label>
+        </div>
+        <p class="helper" id="video-kind-result"></p>
+        <!-- VH-140, 2026-10-21; VH-191, 2026-10-25. Only while a video is
+             being made or a finished one is on screen, that a change of side
+             is for the next video: the switch is never locked, and the job
+             keeps what it started with. Empty while hidden, so the group's
+             description does not read it. Read on demand, not announced. -->
+        <p class="helper" id="video-next" hidden></p>
+      </fieldset>
 
       <!-- VH-96. The one cut the conveyor makes: unwanted material off the
            start and the end. Left alone it keeps the whole video, and no range
@@ -673,6 +642,40 @@
           </button>
         </div>
       </section>
+
+      <!-- The five promises are the owner's own; the "?" beside the fourth
+           is his own request, a toggletip like the one beside "Plays over"
+           (VH-196). Below the steps, on his choice (VH-216), so that step 1
+           comes first: one order at every width, no CSS order and no script. -->
+      <ul class="promises">
+        <li data-i18n="lede.promises.0">Lets you trim unwanted footage from the start and end.</li>
+        <li data-i18n="lede.promises.1">Adds opening and closing graphics.</li>
+        <li data-i18n="lede.promises.2">Evens out the audio level for better audience experience.</li>
+        <li class="promise-with-help">
+          <span data-i18n="lede.promises.3">Saves in a reliable format.</span>
+          <button
+            class="button button--secondary help-button"
+            type="button"
+            id="format-help-button"
+            aria-label="About the video format"
+            data-i18n-attr="aria-label:lede.formatHelp.label"
+            aria-expanded="false"
+            aria-controls="format-help"
+          >
+            ?
+          </button>
+          <div class="promise-help" aria-live="polite">
+            <div class="toggletip" id="format-help" hidden>
+              <p data-i18n="lede.formatHelp.text">
+                Videos come in many formats. Some play on one device but not another, or do not
+                work with some apps. This tool saves your video as an MP4, the most interoperable
+                video format. That means it plays on almost any phone, computer or website.
+              </p>
+            </div>
+          </div>
+        </li>
+        <li data-i18n="lede.promises.4">Makes the file the right size for your purpose.</li>
+      </ul>
 
       <!-- Development only, and English: diagnostics are the maintainer's
            (VH-105). -->

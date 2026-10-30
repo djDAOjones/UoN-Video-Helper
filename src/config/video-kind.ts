@@ -1,5 +1,5 @@
 /**
- * Staff video or Student submission: the switch at the top of the page
+ * Staff video or Student submission: the switch below step 1
  * (VH-131).
  *
  * The owner asked for it on 2026-10-19 and answered its questions the same

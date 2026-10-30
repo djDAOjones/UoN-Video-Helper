@@ -1,0 +1,16 @@
+cells before 60, after 60, unmoved 60
+after orders {
+  'title>lede>privacy>browserNote>step1>switch>step2>step3>step4>step5>step6>announcer>errors>promises>dev': 60
+}
+headings same 60 differ 
+promises same 0 differ 60 cells
+{ 'tipShown true -> true': 60 }
+overflow moved 0 
+after missing {}
+after focus { 'format-help-button': 60 }
+vw moved []
+[
+  'S-144-en-GB-w375/font32 vw 394 vh 854',
+  'S-144-zh-Hans-w375/font32 vw 375 vh 812',
+  'S-144-ms-MY-w375/font32 vw 448 vh 971'
+]

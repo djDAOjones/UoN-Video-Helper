@@ -1,0 +1,57 @@
+// VH-216 #2: reads a before group against its after, cell by cell: reached, instruments, assert rows; the probe's order, headings, promises; the Tab traversal. Usage: node compare-2.mjs <before dir> <after dir>
+import { readdirSync, readFileSync, statSync, existsSync } from 'node:fs'
+import { join } from 'node:path'
+const load = (dir) => {
+  const runs = join(dir, 'runs'), cells = {}, probe = {}, tab = {}
+  if (!existsSync(runs)) return { cells, probe, tab }
+  for (const e of readdirSync(runs)) {
+    const p = join(runs, e)
+    if (statSync(p).isDirectory()) { for (const f of readdirSync(p).filter((x) => /^S-\d+.*\.json$/.test(x))) cells[f.replace('.json', '')] = JSON.parse(readFileSync(join(p, f), 'utf8')) }
+    else if (e.startsWith('vh216-probe-')) for (const l of readFileSync(p, 'utf8').trim().split('\n')) { const j = JSON.parse(l); probe[`${j.walk.split('/').pop()}/${j.mode}`] = j }
+    else if (e.startsWith('vh216-tab-')) for (const l of readFileSync(p, 'utf8').trim().split('\n')) { const j = JSON.parse(l); tab[j.cell] = j }
+  }
+  return { cells, probe, tab }
+}
+const [A, B] = [load(process.argv[2]), load(process.argv[3])]
+const inst = (c) => Object.fromEntries(Object.entries(c.instruments ?? {}).filter(([k]) => k !== 'asserts').map(([k, v]) => [k, v?.outcome]))
+const rows = (c) => Object.fromEntries((c.instruments?.asserts?.items ?? []).map((i) => [i.what, i.outcome]))
+const moves = {}, add = (k, cell) => (moves[k] ??= []).push(cell)
+let same = 0
+const keys = Object.keys(A.cells)
+for (const k of keys) {
+  const a = A.cells[k], b = B.cells[k]; if (!b) { add('after record missing', k); continue }
+  let moved = false
+  if (a.status !== b.status || a.reached?.outcome !== b.reached?.outcome) { add(`reached ${a.status}/${a.reached?.outcome} -> ${b.status}/${b.reached?.outcome}`, k); moved = true }
+  const ia = inst(a), ib = inst(b)
+  for (const n of new Set([...Object.keys(ia), ...Object.keys(ib)])) if (ia[n] !== ib[n]) { add(`instrument ${n}: ${ia[n]} -> ${ib[n]}`, k); moved = true }
+  const ra = rows(a), rb = rows(b)
+  for (const n of new Set([...Object.keys(ra), ...Object.keys(rb)])) if (ra[n] !== rb[n]) { add(`row "${n.slice(0, 60)}": ${ra[n]} -> ${rb[n]}`, k); moved = true }
+  if (!moved) same++
+}
+console.log(`cells before ${keys.length}, after ${Object.keys(B.cells).length}, unmoved ${same}`)
+const show = (v) => v.length <= 8 ? v.join(' ') : `${v.length} cells`
+for (const [m, v] of Object.entries(moves).sort()) console.log(`  ${m}: ${show(v)} [${v.length}]`)
+const pk = (o) => JSON.stringify(o)
+if (Object.keys(A.probe).length) {
+  const orders = {}, heads = { same: 0, diff: [] }, prom = { same: 0, diff: [] }, tipS = {}, ovr = {}
+  for (const [k, a] of Object.entries(A.probe)) {
+    const b = B.probe[k]; if (!b) { (orders.missing ??= []).push(k); continue }
+    const oo = b.order.join('>'); orders[oo] = (orders[oo] ?? 0) + 1
+    if (pk(a.headings) === pk(b.headings)) heads.same++; else heads.diff.push(k)
+    if (pk(a.promises) === pk(b.promises)) prom.same++; else prom.diff.push(k)
+    const t = `tipShown ${a.tipShown} -> ${b.tipShown}`; tipS[t] = (tipS[t] ?? 0) + 1
+    const ov = `overflow ${pk(a.overflow)} -> ${pk(b.overflow)}`; if (pk(a.overflow) !== pk(b.overflow)) ovr[k] = ov
+  }
+  console.log('after orders', orders); console.log('headings same', heads.same, 'differ', show(heads.diff)); console.log('promises same', prom.same, 'differ', show(prom.diff)); console.log(tipS)
+  console.log('overflow moved', Object.keys(ovr).length, Object.entries(ovr).slice(0, 12).map(([k, v]) => `${k}: ${v}`).join('\n  '))
+  const missing = {}; for (const [k, b] of Object.entries(B.probe)) if (b.missing?.length) missing[b.missing.join(',')] = (missing[b.missing.join(',')] ?? 0) + 1; console.log('after missing', missing)
+  const foc = {}; for (const b of Object.values(B.probe)) foc[b.focus] = (foc[b.focus] ?? 0) + 1; console.log('after focus', foc)
+  const vw = Object.entries(B.probe).filter(([k, b]) => b.modeRead.vw !== A.probe[k]?.modeRead.vw).map(([k, b]) => `${k} ${A.probe[k]?.modeRead.vw}->${b.modeRead.vw}`); console.log('vw moved', vw)
+  const wide = Object.entries(B.probe).filter(([k, b]) => /w375\/font32/.test(k)).map(([k, b]) => `${k} vw ${b.modeRead.vw} vh ${b.modeRead.vh}`); console.log(wide)
+}
+if (Object.keys(A.tab).length) {
+  const f = {}, bad = []
+  for (const [k, b] of Object.entries(B.tab)) { const s = b.forward.map((x) => x.startsWith('footer') ? 'footer' : x).join(' > '); f[s] = (f[s] ?? 0) + 1; if (b.error || !b.reverseMatches || !b.tipOk) bad.push(k) }
+  console.log('after forward', f, 'error/reverse/tip false', bad)
+  const seq = Object.keys(B.tab).filter((k) => pk(A.tab[k]?.modeRead) !== pk(B.tab[k].modeRead)); console.log('tab modeRead moved', seq)
+}

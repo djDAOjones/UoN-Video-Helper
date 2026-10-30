@@ -1,0 +1,128 @@
+[
+ {
+  "key": "v18__en-GB__w1280",
+  "lang": "en-GB",
+  "view": "w1280",
+  "input": {
+   "top": 626,
+   "bottom": 678,
+   "left": 222,
+   "height": 52
+  },
+  "painted": {
+   "top": 630,
+   "bottom": 674,
+   "left": 226,
+   "width": 120,
+   "height": 44
+  },
+  "firstScreen": 900,
+  "insideFirstScreen": true,
+  "scrolled": 0
+ },
+ {
+  "key": "v18__zh-Hans__w1280",
+  "lang": "zh-Hans",
+  "view": "w1280",
+  "input": {
+   "top": 776,
+   "bottom": 828,
+   "left": 222,
+   "height": 52
+  },
+  "painted": {
+   "top": 780,
+   "bottom": 824,
+   "left": 226,
+   "width": 120,
+   "height": 44
+  },
+  "firstScreen": 900,
+  "insideFirstScreen": true,
+  "scrolled": 0
+ },
+ {
+  "key": "v18__ms-MY__w1280",
+  "lang": "ms-MY",
+  "view": "w1280",
+  "input": {
+   "top": 866,
+   "bottom": 918,
+   "left": 222,
+   "height": 52
+  },
+  "painted": {
+   "top": 870,
+   "bottom": 914,
+   "left": 226,
+   "width": 120,
+   "height": 44
+  },
+  "firstScreen": 900,
+  "insideFirstScreen": false,
+  "scrolled": 0
+ },
+ {
+  "key": "v18__en-GB__w320",
+  "lang": "en-GB",
+  "view": "w320",
+  "input": {
+   "top": 926,
+   "bottom": 978,
+   "left": 62,
+   "height": 52
+  },
+  "painted": {
+   "top": 930,
+   "bottom": 974,
+   "left": 66,
+   "width": 120,
+   "height": 44
+  },
+  "firstScreen": 568,
+  "insideFirstScreen": false,
+  "scrolled": 0
+ },
+ {
+  "key": "v18__zh-Hans__w320",
+  "lang": "zh-Hans",
+  "view": "w320",
+  "input": {
+   "top": 1021,
+   "bottom": 1073,
+   "left": 62,
+   "height": 52
+  },
+  "painted": {
+   "top": 1025,
+   "bottom": 1069,
+   "left": 66,
+   "width": 120,
+   "height": 44
+  },
+  "firstScreen": 568,
+  "insideFirstScreen": false,
+  "scrolled": 0
+ },
+ {
+  "key": "v18__ms-MY__w320",
+  "lang": "ms-MY",
+  "view": "w320",
+  "input": {
+   "top": 1263,
+   "bottom": 1315,
+   "left": 62,
+   "height": 52
+  },
+  "painted": {
+   "top": 1267,
+   "bottom": 1311,
+   "left": 66,
+   "width": 120,
+   "height": 44
+  },
+  "firstScreen": 568,
+  "insideFirstScreen": false,
+  "scrolled": 0
+ }
+]

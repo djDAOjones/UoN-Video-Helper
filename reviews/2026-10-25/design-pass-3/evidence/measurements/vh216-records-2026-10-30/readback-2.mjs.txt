@@ -1,0 +1,35 @@
+// VH-216 #2: reads back one walk group: the matrix records (reached, whole, problems), the probe's modeRead and S-144's focus, the Tab file. Usage: node readback-2.mjs <group dir>
+import { readdirSync, readFileSync, statSync, existsSync } from 'node:fs'
+import { join } from 'node:path'
+const runs = join(process.argv[2], 'runs')
+const ls = readdirSync(runs)
+let cells = 0, reached = {}, rowFails = {}, inst = {}
+for (const run of ls.filter((d) => statSync(join(runs, d)).isDirectory()).sort()) {
+  const man = JSON.parse(readFileSync(join(runs, run, 'manifest.json'), 'utf8'))
+  const c = man.coverage ?? {}
+  console.log(`run ${run}: rev ${man.provenance?.instruments?.revision} whole ${c.whole} expected ${c.expected} observed ${c.observed} problems ${JSON.stringify(c.problems ?? [])}`)
+  for (const f of readdirSync(join(runs, run)).filter((x) => /^S-\d+.*\.json$/.test(x))) {
+    const j = JSON.parse(readFileSync(join(runs, run, f), 'utf8'))
+    cells++
+    const k = `${j.status}/${j.reached?.outcome}`; (reached[k] ??= []).push(f.replace('.json', ''))
+    for (const [n, v] of Object.entries(j.instruments ?? {})) if (v?.outcome === 'fail' || v?.outcome === 'cannot-determine') inst[`${n}:${v.outcome}`] = (inst[`${n}:${v.outcome}`] ?? 0) + 1
+    for (const i of j.instruments?.asserts?.items ?? []) if (!['pass', 'found', 'not-applicable'].includes(i.outcome)) { const r = `${i.what.slice(0, 50)}=${i.outcome}`; rowFails[r] = (rowFails[r] ?? 0) + 1 }
+  }
+}
+console.log(`records ${cells}`)
+for (const [k, v] of Object.entries(reached)) console.log(`  ${k}: ${v.length}${v.length <= 6 ? ' ' + v.join(' ') : ''}`)
+console.log('instruments', JSON.stringify(inst)); console.log('rows', JSON.stringify(rowFails))
+for (const p of ls.filter((f) => f.startsWith('vh216-probe-'))) {
+  const lines = readFileSync(join(runs, p), 'utf8').trim().split('\n').map((l) => JSON.parse(l))
+  const WID = { w1280: 1280, w640: 640, w375: 375, w320: 320 }
+  const bad = lines.filter((l) => {
+    const m = l.mode, r = l.modeRead ?? {}, v = /-(w\d+)$/.exec(l.walk)?.[1]
+    return l.error || r.fontPx !== (m === 'font32' ? 32 : 16) || r.forced !== m.startsWith('forced') || r.dark !== (m === 'dark' || m === 'forced-dark') || r.vw !== WID[v] || l.lang !== l.walk.split('/').pop().split('-').slice(2, -1).join('-')
+  }).map((l) => `${l.walk.split('/').pop()}/${l.mode}: vw ${l.modeRead?.vw} font ${l.modeRead?.fontPx} forced ${l.modeRead?.forced} dark ${l.modeRead?.dark}`)
+  const fk = lines.filter((l) => /S-144/.test(l.id)); const foc = {}; for (const l of fk) foc[l.focus] = (foc[l.focus] ?? 0) + 1
+  console.log(`${p}: ${lines.length} lines; mode read not matching ${bad.length} ${JSON.stringify(bad)}; S-144 focus ${JSON.stringify(foc)}`)
+}
+for (const p of ls.filter((f) => f.startsWith('vh216-tab-'))) {
+  const lines = readFileSync(join(runs, p), 'utf8').trim().split('\n').map((l) => JSON.parse(l))
+  console.log(`${p}: ${lines.length} lines; error ${lines.filter((l) => l.error).length}; reverse false ${lines.filter((l) => !l.reverseMatches).map((l) => l.cell)}; tip false ${lines.filter((l) => !l.tipOk).map((l) => l.cell)}`)
+}

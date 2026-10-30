@@ -58,19 +58,20 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
     'Under the language switcher, only when the page is in Chinese or Malay: the note that a computer translated it',
   ],
   ['lede', 'Under the page heading: what the tool does'],
+  ['lede.promises', 'Below the steps: what the tool does'],
   [
     'lede.formatHelp',
-    'Under the page heading: the "?" beside "Saves in a reliable format." and the text it shows when pressed',
+    'Below the steps: the "?" beside "Saves in a reliable format." and the text it shows when pressed',
   ],
   ['browserNote', 'Under the page heading: the note about the browser'],
-  ['videoKind', 'Above Step 1: the switch between a staff video and a student submission'],
+  ['videoKind', 'Below Step 1: the switch between a staff video and a student submission'],
   [
     'videoKind.result',
-    'Above Step 1: the line under the switch, saying what the choice means for the closing',
+    'Below Step 1: the line under the switch, saying what the choice means for the closing',
   ],
   [
     'videoKind.nextVideo',
-    'Above Step 1: under the video type, only while a video is being made or a finished one is on screen',
+    'Below Step 1: under the video type, only while a video is being made or a finished one is on screen',
   ],
   [
     'videoLanguage',
@@ -463,7 +464,7 @@ const NOTES: Readonly<Record<string, string>> = {
   'result.videoLanguage':
     'Follows the summary when the words the app drew into the video are in another language than the page. Use the same words as videoLanguage.label.',
   'progress.job':
-    'Names the video being made as it was started, since the video type above the steps may have changed since. Use the same words as videoLanguage.label.',
+    'Names the video being made as it was started, since the video type below Step 1 may have changed since. Use the same words as videoLanguage.label.',
   'result.endedEarly.together': 'In place of result.endedEarly.both when the picture and the audio stop in the same second.',
   'result.endedEarly.held':
     'Follows one of the sentences above when the picture stopped and the video has closing graphics: until they start, the last picture stays on screen.',

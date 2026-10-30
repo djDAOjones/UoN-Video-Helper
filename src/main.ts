@@ -496,7 +496,7 @@ function chosenPreset(): PresetId {
   return checked?.value === 'smaller' ? 'smaller' : 'best'
 }
 
-/** Which side of the switch at the top is chosen (VH-131); anything unknown reads as the default. */
+/** Which side of the switch is chosen (VH-131); anything unknown reads as the default. */
 function chosenVideoKind(): VideoKind {
   return readVideoKind(
     videoKindChoice.querySelector<HTMLInputElement>('input[name="video-kind"]:checked')?.value,
@@ -704,7 +704,7 @@ videoLanguageChoice.addEventListener('change', (event) => {
 
 /**
  * A "?" and the text it discloses: a toggletip. Two on the page, beside
- * "Plays over" and beside the lede's "Saves in a reliable format." (VH-196).
+ * "Plays over" and beside the promise "Saves in a reliable format." (VH-196).
  *
  * A button that discloses text, so it works by click, Enter and Space and
  * never by hover alone. Focus stays on the button; Escape, focus moving on or

@@ -52,7 +52,6 @@ dd {
    follow each other; a helper or status line under a control keeps its own
    closer spacing. */
 .lede p + p,
-.lede ul + p,
 .notification-body + .notification-body {
   margin-top: var(--paragraph-gap);
 }
@@ -238,7 +237,7 @@ a {
   margin: 0;
 }
 
-.lede ul {
+.promises {
   margin: 0 0 var(--spacing-05);
   padding-left: var(--spacing-06);
   list-style: square;
@@ -1106,7 +1105,7 @@ details[open] > .disclosure-summary::before {
   margin-top: var(--paragraph-gap);
 }
 
-/* The "?" beside the lede's fourth promise, on the promise's own line, and
+/* The "?" beside the fourth promise, on the promise's own line, and
    its text beneath, inside the same list item (VH-196). Drawn at the text's
    own size, a checkbox glyph's square, so the promise keeps the line height
    of the other four; its 44 px target is drawn round it by a centred
@@ -1226,7 +1225,8 @@ details[open] > .disclosure-summary::before {
  * "Bahasa Malaysia" fits at phone width; where even that does not fit, the
  * segments wrap, so each keeps all four edges and overlaps its neighbour's
  * by one hairline rather than dropping its left edge. Staff video or Student
- * submission (VH-131), above the steps, is sized the same way, and so is the
+ * submission (VH-131), below step 1 and above steps 2 to 6, is sized the same
+ * way, and so is the
  * video's language at the top of step 3 (VH-132, VH-191). Their legends are
  * section headings (Type roles).
  */

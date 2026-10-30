@@ -1,0 +1,20 @@
+// VH-216 #2: no string changed. Run from $R. For each table, the base's and the tree's text with comments stripped must be equal; index.html must hold the same data-i18n keys, the same data-i18n-attr, the same elements by tag and count.
+import { execFileSync } from 'node:child_process'
+import { readFileSync } from 'node:fs'
+const base = process.argv[2]
+const show = (p) => execFileSync('git', ['show', `${base}:${p}`], { encoding: 'utf8', maxBuffer: 1 << 26 })
+const strip = (s) => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '')
+for (const p of ['src/i18n/en-GB.ts', 'src/i18n/zh-Hans.ts', 'src/i18n/ms-MY.ts']) console.log(p, strip(show(p)) === strip(readFileSync(p, 'utf8')) ? 'same without comments' : 'DIFFERS', '; whole file', show(p) === readFileSync(p, 'utf8') ? 'identical' : 'comment differs')
+const noC = (s) => s.replace(/<!--[\s\S]*?-->/g, '')
+const count = (s, re) => { const c = {}; for (const m of s.matchAll(re)) c[m[1]] = (c[m[1]] ?? 0) + 1; return JSON.stringify(Object.entries(c).sort()) }
+const a = noC(show('index.html')), b = noC(readFileSync('index.html', 'utf8'))
+const words = (s) => s.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().split(' ').sort().join(' ')
+console.log('data-i18n', count(a, /data-i18n="([^"]+)"/g) === count(b, /data-i18n="([^"]+)"/g) ? 'same keys and counts' : 'DIFFERS', a.match(/data-i18n="/g).length)
+console.log('data-i18n-attr', count(a, /data-i18n-attr="([^"]+)"/g) === count(b, /data-i18n-attr="([^"]+)"/g) ? 'same' : 'DIFFERS')
+console.log('elements', count(a, /<([a-zA-Z][\w-]*)[\s>\/]/g) === count(b, /<([a-zA-Z][\w-]*)[\s>\/]/g) ? 'same tags and counts' : 'DIFFERS', a.match(/<[a-zA-Z]/g).length, b.match(/<[a-zA-Z]/g).length)
+console.log('markup words, sorted', words(a) === words(b) ? 'same' : 'DIFFERS')
+// The filled sheet: only "where" and notes cells, on the 14 rows.
+const parse = (t) => t.split('\n')
+const fa = parse(show('reviews/2026-10-18/VH-105-strings-filled.csv')), fb = parse(readFileSync('reviews/2026-10-18/VH-105-strings-filled.csv', 'utf8'))
+const ch = fa.flatMap((l, i) => l === fb[i] ? [] : [l.split(',')[0]])
+console.log('filled sheet lines', fa.length, fb.length, 'changed', ch.length, ch.join(' '))

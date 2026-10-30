@@ -1,0 +1,55 @@
+The candidate matches hash `7cd34e86be434481`. I found no product-code defect. The remaining requirements concern the close and its follow-up record.
+
+**Musts**
+
+1. **At the close:** obtain green `npm run check` on a settled machine, then rerun `node tools/check.mjs`; complete the decision, backlog/trajectory, V-18 Disposition link, digest citations and separate Codex close check. These are **at the close**, not presently failed criteria. My read-only structural check returned **0 failures, 0 warnings**.
+
+2. **Make the deferred walker work complete.** Besides W1/W2, S-142’s two neighbour assertions and J1’s immediate Tab expectation, record:
+   - **J4:** forward Tab from Video type to the now-earlier chooser, limited to ten presses (`walker/scenarios.mjs:1284`, retained by `:3170`). With the setup controls visible, that bound cannot reach the chooser.
+   - **J2:** the same forward direction (`:1186`), now requiring a page wrap; **S-143** likewise traverses forward from format help to the earlier onset help (`:2741`). These are route assumptions to review, not observed failures.
+   - **`tip-196.mjs:38,74`:** obsolete promise selector and screenshot selector.
+   - **`top-187.mjs:42–50`:** its promise reading now returns an empty list; its old clipping range excludes the promises.
+   - **`inventory.mjs:234`:** the block-edge grouping omits the relocated list.
+
+   Keep this comparison’s walker unchanged. Name these in the VH-203 follow-up for approval there.
+
+3. **At-close wish lines must preserve the unresolved evidence:** Chinese’s **159 px** and Malay’s **260 px** first-screen shortfalls, and the four unreached w375/font32 cells. The latter need investigation without an unsupported attribution to VH-209. Reporting them satisfies this item’s ruling; fixing them is not required here.
+
+**Shoulds**
+
+- Correct the stale “sentence under the promises” comment in `src/ui/system-check.ts:56`.
+- Move the VH-216 sheet test out of the heavy-limiting `describe` (`src/i18n/tables.test.ts:423`). Narrow the CSS test’s title: it prohibits `order`, but does not independently prove all visual ordering mechanisms or runtime Tab order.
+
+**Acceptance criteria**
+
+| Criterion | Assessment and evidence |
+|---|---|
+| Owner’s remedy | **Met.** `index.html:97,650` implements one static order, preserving heading, privacy and translation notice. No responsive node-moving script or CSS `order`. |
+| Six cases | **Met through the permitted shortfall report.** Both `six-*.summary.json` files reproduce all six table readings; four now fit. |
+| Meaningful order, retained promises/tip, unchanged words, sheet locations | **Met**, subject to the explicit coverage limits below. |
+| Before/after stage measurement | **Met with the ruled limitation.** Independently compared outcomes: 120 cells each, the same 116 reached; only W1/W2 change outcome. |
+| WCAG re-check | **Met as a scoped assessment.** Semantics, headings and sequence support 1.3.1, 1.3.2, 2.4.3 and 2.4.6. Default-font 320 px evidence supports 1.4.10; 1.4.4 remains unchanged with existing failures and unreached cells, not passed globally. |
+| Tokens, controls, progress | **Met.** Existing token declarations retained; two token systems remain separate; no added element/control/checkbox; progress retained. |
+| Documents | **Met under the owner’s override.** Exact approved substitutions only; no other newly false page-order sentence found in `docs/`; no UI-STANDARDS rule changes. |
+| Gate, digest naming, final Codex check, Disposition link | **At the close.** This is the candidate check, not the final ledger check. |
+| Sizing/handback | Bounded scope and same-ID #1/#2 evidence are shown; actual session token expenditure is **not shown**. No remedy outgrowth is evident. |
+
+**Two judgements**
+
+1. **The promises’ place is acceptable.** [The markup](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/index.html:627>) closes Errors captured before the independent list. Errors remain alongside the workflow they concern; the owner’s named elements retain their relative order. Neither 1.3.2 nor 2.4.3 requires the promises immediately after step 6. Empty, refused, ready, running and finished states preserve that sequence. `main.ts:2508` does not lock either the switch or format help.
+
+2. **Load: none requires a rerun.** The reported readings assess settled layout, DOM, focus and disclosure state—not elapsed processing time. Load samples reproduce the stated peaks/counts; the comparisons show no unexplained changed outcome. This does not validate a future timing-sensitive gate under that load.
+
+**Supporting checks and limits**
+
+I independently verified all **88 copied-file hashes**, clean-base manifests, candidate source hash, and walker revision `17727d3522f7270d`. The already-failing table matches the outcomes. All 60 Tab traversals per side agree forward/reverse and pass the recorded tip interactions.
+
+Comment-stripped `main.ts`, `toggletip.ts`, `video-kind.ts` and all language tables are unchanged. CSV parsing confirms exactly **13 location cells plus one note**, unchanged translations and preserved CRLF. No moved row is missing. No positional user-facing sentence becomes false. The promises remain general capabilities after refusal, silence or completion; their placement changes their possible interpretation, not their literal claims.
+
+CSS retains list styling and appropriate preceding panel/switch spacing; no new unused selector or state-specific defect was found. Tests remain falsifiable, with no deletion, skip or weakening apparent; no new TypeScript/lint risk identified.
+
+The [measurement table’s limits](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/evidence/measurements/vh216-first-action-2026-10-30.md:157>) are appropriate: populated states and mutual exclusion are source-reviewed, not walked here; human comprehension and screen-reader speech remain unverified. Loading `PLANS.matrix()` confirms no S-03 w640 and only English/w320/light S-144 coverage. S-144p measures the input box. No additional walk is necessary for this static move.
+
+WCAG **1.3.2/2.4.3** and Nielsen **6/8** are applied: coherent sequence, visible choices before their dependent steps, and reduced obstruction before the first action.
+
+Verdict: Commit after the musts below

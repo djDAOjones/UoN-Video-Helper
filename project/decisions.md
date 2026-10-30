@@ -18,6 +18,26 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-30 — VH-216 — The switch sits below step 1, not at the top, on the owner's choice
+
+**Decision:** The Staff/Student switch sits below step 1, above steps 2–6; only its place changes.
+
+**Rationale:** His choice "Promises + switch (Recommended)" and his spec wording; see the close entry below. VH-131's other decisions stand: it opens on Staff video, is remembered, and a submission may have no closing.
+
+**Supersedes:** 2026-10-19 — VH-131 — The switch opens on Staff video and is remembered; a submission may have no closing
+
+**Deferred:** none
+
+## 2026-10-30 — VH-216 — Closes: the owner's remedy raises the first action; four of V-18's six cases inside, two reported short
+
+**Decision:** VH-216 moves the five promises and the Staff/Student switch below step 1, the owner's choice: one order at every width, with no CSS `order`, script, word or element added. Four of V-18's six cases are inside the first screen; at 320 × 568 zh-Hans is 159 px short and ms-MY 260 px short, reported to him, wish VH-175.4 kept. The walker stays at one revision on his word, so two S-03 rows fail as he was told; the edit stays his at VH-203.
+
+**Rationale:** His words (source: the orchestrators' notes, `plan8-owner-words.md`). His scope, in the "Backlog review" chat, 2026-10-27 14:51:20Z: "yes to the question mark, and A and B. ensure everything passes UX / design / Accessibility". The remedy, ~16:18Z, typed by him: "help me resolve VH-212, VH-213, and VH-216"; on VH-216 he chose, as the tool returned it, "Promises + switch (Recommended)": the order shown was header, title, privacy line, "1. Choose a video", the switch, then the promises, with steps 2–6 between them once a video is read; not taken, "Also the translation notice" and "Promises only". The budget, ~16:43Z: "Yes: raise docs/01-specification.md's budget from 8,100 to 8,200 words, for the approved rows in VH-206, VH-213 and VH-216. Record it as a decision." The spec's wording, ~18:06Z, his choice ""below step 1" (Recommended)": §2's and §9.1's two sentences, made as three substitutions; the spec is 8,125 words. ~23:07Z on 2026-10-28: "please spawn chats as needed as I'm going to bed - you have permission to proceed as reccomended". The walker's four checks, 2026-10-30 ~10:08Z: "Yes, leave them"; he was shown that the move fails S-03's Tab row, one `.lede` selector, S-142 and J1, and he has not approved the edit itself. The two stray node loops, ~11:05Z: "Leave them". **The six cases, painted top–bottom against the fold, before → after:** en-GB 1280 × 900 630–674 → 336–380; zh-Hans 780–824 → 507–551; ms-MY 870–914 → 528–572; en-GB 320 × 568 930–974 → 496–540; zh-Hans 1025–1069 → 683–727, short by 159 px; ms-MY 1267–1311 → 784–828, short by 260 px. No word shortened, no spacing tightened and the notice not moved; his to rule. **Measured:** 120 cells a side (S-03, S-144), the same 116 reached; only S-03's two rows move, pass to fail, in 58 cells; S-144 unmoved; the Tab order read apart, 60 cells a side, in the new order forward and reverse, the "?" as VH-184 left it. WCAG 1.3.1, 1.3.2, 1.4.4, 1.4.10, 2.4.3, 2.4.6, as the table's §8 has them. **Load:** Orchestrator #32's ruling, no re-run, these being layout, DOM and focus order; Claude and Codex each judged it right. **`ul.promises` after `#errors-panel`,** his words naming no errors panel: errors stay beside the work they report; Claude and Codex's blind check agree. **Repairs:** Claude's verdict and Codex's blind check and re-check found comments the move had made false and two test points: comments and titles only, no re-walk; the table's §12. VH-196's decision is superseded in where the promises sit only; the entry above does the same for VH-131's switch. The raise's `Deferred: VH-213, VH-216` is paid off for this item. Not walked: the states with a video read, the onset tip's exclusion, speech (table §10). Evidence: `reviews/2026-10-25/design-pass-3/evidence/measurements/vh216-first-action-2026-10-30.md`, with Codex astra's files beside it.
+
+**Supersedes:** 2026-10-25 — VH-196 — The lede's five promises in the owner's words, and a "?" beside "Saves in a reliable format." that explains MP4
+
+**Deferred:** VH-203
+
 ## 2026-10-30 — VH-215 — Closes: the submission card states the length the new video has, not the length its index declares
 
 **Decision:** VH-215 closes wish VH-139.5: the submission card's running time is the length made, without the card or the closing. The picture's end is the index's one read wherever the last declared packet arrived, and one streamed read of the kept picture packets where it did not; for Student submission, a release guard refuses a card that would differ from the encode's own span. No element, control, string, walker check beyond the criteria, or spec change. Its walks were made on base 7750acb, before VH-227: the re-walk Codex asked for was skipped on the owner's decision ("Just the end"), and VH-203's after-run re-measures those 96 cells on the final page (VH-215.4).
@@ -624,30 +644,3 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Supersedes:** none
 
 **Deferred:** VH-162, VH-137
-
-## 2026-10-24 — VH-176 — The second pass verified whole: the stage rule held, the after-run with no regression, Codex astra's integrated check
-
-**Decision:** VH-176 closes on `after-run-2026-10-24.md`. It walked `PLANS.priority` again, in place of the full matrix, plus the 162 other records of the fix plans. It found no regression and explained every change. Each of VH-178 to VH-181 kept the stage rule. Codex astra's two record musts were applied. The 641 unrun matrix cells stay with wish line VH-172.1.
-
-**Rationale:** On `ec26c49`, the same 699 keys as VH-172 were walked whole in 2 h 58 min. 118 outcomes changed, none for the worse, and focus fails went from 112 to 0. Each of the 1,724 changed rows traces to one of V-40, V-41, V-42, V-33, V-44 and V-45, to VH-172's own instrument fault, or to run-to-run variation. The six earlier fixes hold, the 48 VH-178 transitions pass, and V-18 is unmoved. The gate is green at 1,523 tests. Codex astra said "Close after the musts below". The musts were the unrun count, 821 to 641, and VH-181's criterion traced to its decision. The re-check said "Close". Decided on the owner's standing instruction, "work through to the end of VH-177, archive and spawn as you go, proceed with your recommendations, universal permission is granted":
-(a) the priority plan again, so before and after are the same 699 records in under three hours;
-(b) the fix plans' extra records walked as one run, with VH-181's `vh181-rest` not repeated on unchanged code;
-(c) the musts applied in VH-181's Notes and VH-172.1, where Codex named them, with V-18's stale Disposition link corrected.
-
-**Supersedes:** none
-
-**Deferred:** VH-177
-
-## 2026-10-24 — VH-181 — One name for step 4: “Closing graphics” in three languages, spec §6 to match
-
-**Decision:** Step 4's heading and legend become "Closing graphics", 结尾图形 and "Grafik penutup", the noun the step's own lines use. `index.html`, `sheet.ts`, the README and spec §6 follow. "Closing card" and "branding" keep their own meanings. The other 82 scenarios that draw step 4 are walked in light at 320 px only (V-45).
-
-**Rationale:** The owner ruled on 23 October: "use “Closing graphics” everywhere, with the specification’s §6 line changed to match." Afterwards the old names occur 0 times on the page in three languages, and each table says the noun 35 times. The Malay heading at 320 px goes from two lines to one. Across 351 records, no instrument's outcome changed: 105 in four modes, plus 246 for Codex's must. V-18's six readings are unmoved. The spec stays at 8,074 words. Nine new parity cases pass. Codex astra twice said "Commit after the musts below". Its coverage must was applied; its re-check called the reduction sound and asked that it be recorded here. Evidence: `vh181-name-2026-10-23.md`. Decided on the owner's standing instruction, "work through to the end of VH-177, archive and spawn as you go, proceed with your recommendations, universal permission is granted":
-(a) the coverage reduction above, because the change is strings only and the seven scenarios walked in every cell read the same in each;
-(b) the Chinese and Malay names are the agent's drafts;
-(c) the README reads "opening branding and closing graphics", since the title card is not closing graphics and opening graphics is VH-23;
-(d) the filled sheet's "where it shows" column stays as the translator was sent it. The closing card's two Chinese forms go to a native reader, as wish line VH-181.1.
-
-**Supersedes:** none
-
-**Deferred:** none

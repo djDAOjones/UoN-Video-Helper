@@ -100,7 +100,7 @@ export const enGB = {
       'This tool is designed and built for Chrome, and this browser has not passed all the checks for it to run. The system check at the foot of the page says what is missing.',
   },
 
-  /** The switch above the six steps (VH-131). */
+  /** The switch below step 1, above the other five (VH-131, VH-216). */
   videoKind: {
     /** Its visible label, which is also its accessible name. */
     label: 'Video type',

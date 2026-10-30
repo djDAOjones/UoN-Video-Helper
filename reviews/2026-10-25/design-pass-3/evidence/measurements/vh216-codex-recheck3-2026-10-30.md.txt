@@ -1,0 +1,11 @@
+- **Must 1 — met.** Exact VH-131 supersession heading, location-only scope, and close sentence are correct.
+- **Must 2 — met.** VH-216.1 records all three clipping calls: `:85`, `:105`, `:122`.
+- **Should 1 — met.** V-18 restores VH-203’s after-run commitment.
+
+VH-176’s archive move preserves its text; the index and commit sentence are accurate. Frozen diff/status and all 106 untracked hashes match. The copied answer equals its source.
+
+**Remaining verification must:** authorize reading the original close brief, omitted from your explicit allowlist. Its repository copy matches the frozen hash; direct source comparison remains pending.
+
+Independent checker: **0 failures, 0 warnings**, latest ten **895/1,000 words**. Supplied full gate: 83 files, 1,626 passed, 1 skipped; markdownlint 0 issues; 0 broken links. Not rerun.
+
+Verdict: Commit after the musts below

@@ -1,0 +1,18 @@
+cells before 60, after 60, unmoved 2
+  row "Tab from the top: skip link, Page language, (the notice's li": pass -> fail: 58 cells [58]
+  row "the owner's five promises, in order": pass -> fail: 58 cells [58]
+after orders {
+  'title>lede>privacy>browserNote>step1>switch>step2>step3>step4>step5>step6>announcer>errors>promises>dev': 60
+}
+headings same 60 differ 
+promises same 0 differ 60 cells
+{ 'tipShown false -> false': 60 }
+overflow moved 0 
+after missing {}
+after focus { body: 52, INPUT: 8 }
+vw moved []
+[
+  'S-03-en-GB-w375/font32 vw 394 vh 854',
+  'S-03-zh-Hans-w375/font32 vw 375 vh 812',
+  'S-03-ms-MY-w375/font32 vw 448 vh 971'
+]

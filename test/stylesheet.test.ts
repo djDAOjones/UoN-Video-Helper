@@ -76,8 +76,12 @@ describe('the brand bands (VH-92)', () => {
   })
 
   it('use square bullets for the list of what the tool does', () => {
-    const list = /\.lede ul\s*\{([^}]*)\}/.exec(rules)?.[1] ?? ''
+    const list = /\.promises\s*\{([^}]*)\}/.exec(rules)?.[1] ?? ''
     expect(list).toMatch(/list-style:\s*square/)
+  })
+
+  it('use no CSS order property (VH-216, 1.3.2, 2.4.3)', () => {
+    expect(rules).not.toMatch(/(?<![-\w])order\s*:/)
   })
 
   it('name no colour directly: every colour in the app is a token', () => {
@@ -265,7 +269,7 @@ describe('type weights (VH-145, pinned by VH-151)', () => {
   })
 })
 
-describe('the lede’s "?" (VH-205)', () => {
+describe('the fourth promise’s "?" (VH-205)', () => {
   const block = (selector: string): string =>
     new RegExp(`${selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\{([^}]*)\\}`).exec(rules)?.[1] ?? ''
 

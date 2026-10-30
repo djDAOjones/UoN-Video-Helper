@@ -1,0 +1,5 @@
+All three repository copies match their sources by SHA-1. Status, tracked diff and all 108 untracked hashes match `vh216-frozen-r3` exactly, with no unexpected changes. The two recheck3 copies account for the increase from the prior recheck’s 106 files.
+
+The remaining verification must is met; the previous close findings remain cleared.
+
+Verdict: Commit

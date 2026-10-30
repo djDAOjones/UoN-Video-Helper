@@ -1,6 +1,6 @@
 /**
- * The switch above the five steps, Staff video or Student submission
- * (VH-131), in words, and remembered.
+ * The switch below step 1, above the other five, Staff video or Student
+ * submission (VH-131, VH-216), in words, and remembered.
  *
  * Remembered in this browser, as the language is (`i18n/preference.ts`), and
  * with the same guarded read and write, because a private window or a full

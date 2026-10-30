@@ -1,0 +1,65 @@
+**1. Page order**
+
+At every width: skip link → header/logo/Page language → translation notice when shown → title → privacy/browser note → step 1 → Video type → visible steps 2–6 → promises → `#page-announcer` → `#errors-panel` → development actions → footer’s System check, Accessibility statement, Help and feedback, version (`index.html:18,35,78,124,649,656,658,679,691,708,822,844`; `src/main.ts:3825`).
+
+Empty omits steps 2–6; read includes them. A blocked video withdraws them, except storage recovery retains them and an unsaved previous result retains step 6. Unreadable files retain step 6 when a result stands (`src/main.ts:1632,1809`). Jobs and results occupy step 6, preserving progress, locks and saving (`index.html:581,633`; `src/main.ts:2461,2508`).
+
+Promises remain outside every step and notification, before the announcer/errors pair: general capabilities stay separate from outcomes, and that pair remains adjacent.
+
+**2. Elements**
+
+Choose **the promises leave `.lede`**. Keep its existing privacy and browser paragraphs; give the existing `ul` class `promises`. Move the intact switch after step 1 and intact list after step 6 (`index.html:48,78,93,157,649`).
+
+Cost: list tests, CSS selectors and W2’s list probes change meaning. Benefit: browser-note spacing and VH-207’s privacy selector survive, including unreadable-file states outside these cells.
+
+The alternative preserves list selectors/tests but needs detached-paragraph CSS, including conditional spacing when the browser note appears, and breaks VH-207’s `f2` click target (`scenarios.mjs:1831,1908`). That is the less contained option.
+
+**3. CSS**
+
+Retarget `.lede ul` to `.promises`, retaining `margin: 0 0 var(--spacing-05)`, `padding-left: var(--spacing-06)` and square bullets. Remove the dead `.lede ul + p` selector. Retain `.lede`’s spacing, paragraph gap, switch spacing and all tip/target rules (`src/styles/app.css:54,233,241,1094,1115,1254`).
+
+No new token, breakpoint, CSS order or script; token systems remain separate (`project/rules.md:19`; `UI-STANDARDS.md:30`).
+
+**4. Tests**
+
+Retarget `test/screen-text.test.ts:71` to the specific list; scope `:96`’s fourth-promise check within it. Preserve exact wording and ARIA checks. Keep `:89` meaningful by checking the actual preceding markup for an added lead-in, rather than searching only inside the list.
+
+Change `:656` to assert step 1 closes before the switch, which precedes step 2; retain lock exclusions. Add one assertion for unique, ordered main children, including all steps, promises, announcer and errors, with containment checked.
+
+Retarget `test/stylesheet.test.ts:79`; square bullets remain required. Add explicit sheet-location and filled-sheet metadata equality checks: existing nonempty-location and translation-roundtrip tests do not establish metadata accuracy (`src/i18n/tables.test.ts:137,226`). Delete or skip nothing.
+
+**5. Sheet and comments**
+
+Split `WHERE`’s generic `lede` into privacy and promises locations; relocate `lede.formatHelp`, `videoKind`, `videoKind.result` and `videoKind.nextVideo` (`src/i18n/sheet.ts:60`). Update the filled CSV’s whereabouts cells at rows 10–17 and 19–24, and `progress.job`’s note at row 291 (`sheet.ts:466`). Preserve message order and every English/translation cell (`tables.test.ts:132`).
+
+No directional string becomes false: “choose one above”, “message below” and “foot of the page” retain their referents (`src/i18n/en-GB.ts:100,155,159`).
+
+Update stale comments at `index.html:37,85`, `app.css:231,1109`, `en-GB.ts:103`, `main.ts:499,707`, and `src/ui/video-kind.ts:2`.
+
+**6. Instruments**
+
+Walker references here mean `reviews/2026-10-25/design-pass-3/evidence/measurements/walker/`.
+
+Repeat the six painted-button measurements at scroll zero, matching recorded conditions; input rectangles are insufficient (`rings-179.mjs:55,135`). Report every shortfall in pixels.
+
+Run 120 cells per side: two scenarios × four views × three languages × five modes. Use unchanged `matrix.mjs` with external, memory-declared plans separated by mode, ensuring fresh setup: shared setup plus instrument blur can invalidate S-144’s required focus (`matrix.mjs:203`; `scenarios.mjs:2699,2894`). `w375` is 375×812, not 375×667 (`qualify.mjs:965`).
+
+Separately read DOM/accessible reading order, visible headings and complete forward/reverse Tab routes through the footer in all five states. W1 stops at Choose file (`scenarios.mjs:2939`). Check Enter/Space, Escape, inside/outside clicks, Tab/Shift+Tab against current closed-tip neighbours, and mutual exclusion with the onset tip (`phase8.mjs:622–665`).
+
+Expected new failures: S-03’s **“the owner’s five promises, in order”** and **“Tab from the top…”** (`:2931,2935`). `tip-196.mjs:38,74` loses list/clip selectors; `top-187.mjs:49` reads different content. Outside these cells, S-142’s Tab/Shift+Tab neighbour assertions and J1’s route become stale (`scenarios.mjs:2724,3095`). Existing **“44 x 44”** box-based failures remain (`:2932`; `phase8.mjs:634`; `project/wish-list.md:57`).
+
+Change **no walker row**, including W1/W2; record consequences for VH-203.
+
+**7. Accessibility and usability**
+
+1.3.1 retains list/group relationships; 1.3.2 and 2.4.3 align visual, reading and focus order; 2.4.6 retains descriptive labels. Enlargement/reflow under 1.4.4/1.4.10 require measurement, independently of fold success (`UI-STANDARDS.md:206,214,238`).
+
+Readers meet privacy before choosing; keyboard users reach file, type, active steps, then format help. Nielsen 8 gains a shorter initial task path; Nielsen 6 risks explaining capabilities too late (`project/digests/nielsen.md:27,31`).
+
+I read the promises as general capabilities, not completed operations. After blocked, silent or finished videos they risk sounding like confirmations; keeping them outside state panels is essential (`index.html:50,633`).
+
+**8. Stops**
+
+Stop for added elements, changed/new strings, walker edits, expanded remedy or `docs/` changes beyond the two approved replacements (`docs/01-specification.md:31,585`; `project/items/VH-216.md:15–20`). Report misses without moving the notice or tightening spacing. This is a source-based design, not measured approval; closure still requires both gates (`:17`).
+
+Verdict: Viable

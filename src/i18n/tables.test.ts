@@ -404,6 +404,29 @@ describe('too little in a whole video, in the owner’s words (VH-213)', () => {
   )
 })
 
+describe('the promises and the switch below step 1 (VH-216)', () => {
+  it('says where the promises and the switch moved to, in the sheet and the filled sheet (VH-216)', () => {
+    const [heading, ...rows] = parseCsv(
+      readFileSync(new URL(`../../${FILLED_SHEET}`, import.meta.url), 'utf8'),
+    )
+    const where = heading!.indexOf('where it shows on the page')
+    const notes = heading!.indexOf('notes')
+    const moved = sheetRows().filter(({ key }) => /^(lede\.promises|lede\.formatHelp|videoKind)\b/.test(key))
+    expect(moved.length).toBe(13)
+    for (const row of moved) {
+      expect(row.where, row.key).toMatch(/^Below (the steps|Step 1): /)
+      expect(rows.find((cells) => cells[0] === row.key)![where], row.key).toBe(row.where)
+    }
+    // The privacy line and the browser note stay under the heading.
+    const row = (key: string) => sheetRows().find((sheetRow) => sheetRow.key === key)!
+    expect(row('lede.privacy').where).toMatch(/^Under the page heading: /)
+    expect(row('browserNote.notPassed').where).toMatch(/^Under the page heading: /)
+    const job = row('progress.job')
+    expect(job.notes).toContain('the video type below Step 1')
+    expect(rows.find((cells) => cells[0] === 'progress.job')![notes]).toBe(job.notes)
+  })
+})
+
 describe('heavy limiting’s advice, in the owner’s words (VH-212)', () => {
   // His choice in the Backlog review chat, 2026-10-27, VH-211's ask point 2:
   // "before you use it", true whether or not the new video plays here (F15b);

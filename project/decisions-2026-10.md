@@ -1172,3 +1172,30 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Supersedes:** none
 
 **Deferred:** none
+
+## 2026-10-24 — VH-181 — One name for step 4: “Closing graphics” in three languages, spec §6 to match
+
+**Decision:** Step 4's heading and legend become "Closing graphics", 结尾图形 and "Grafik penutup", the noun the step's own lines use. `index.html`, `sheet.ts`, the README and spec §6 follow. "Closing card" and "branding" keep their own meanings. The other 82 scenarios that draw step 4 are walked in light at 320 px only (V-45).
+
+**Rationale:** The owner ruled on 23 October: "use “Closing graphics” everywhere, with the specification’s §6 line changed to match." Afterwards the old names occur 0 times on the page in three languages, and each table says the noun 35 times. The Malay heading at 320 px goes from two lines to one. Across 351 records, no instrument's outcome changed: 105 in four modes, plus 246 for Codex's must. V-18's six readings are unmoved. The spec stays at 8,074 words. Nine new parity cases pass. Codex astra twice said "Commit after the musts below". Its coverage must was applied; its re-check called the reduction sound and asked that it be recorded here. Evidence: `vh181-name-2026-10-23.md`. Decided on the owner's standing instruction, "work through to the end of VH-177, archive and spawn as you go, proceed with your recommendations, universal permission is granted":
+(a) the coverage reduction above, because the change is strings only and the seven scenarios walked in every cell read the same in each;
+(b) the Chinese and Malay names are the agent's drafts;
+(c) the README reads "opening branding and closing graphics", since the title card is not closing graphics and opening graphics is VH-23;
+(d) the filled sheet's "where it shows" column stays as the translator was sent it. The closing card's two Chinese forms go to a native reader, as wish line VH-181.1.
+
+**Supersedes:** none
+
+**Deferred:** none
+
+## 2026-10-24 — VH-176 — The second pass verified whole: the stage rule held, the after-run with no regression, Codex astra's integrated check
+
+**Decision:** VH-176 closes on `after-run-2026-10-24.md`. It walked `PLANS.priority` again, in place of the full matrix, plus the 162 other records of the fix plans. It found no regression and explained every change. Each of VH-178 to VH-181 kept the stage rule. Codex astra's two record musts were applied. The 641 unrun matrix cells stay with wish line VH-172.1.
+
+**Rationale:** On `ec26c49`, the same 699 keys as VH-172 were walked whole in 2 h 58 min. 118 outcomes changed, none for the worse, and focus fails went from 112 to 0. Each of the 1,724 changed rows traces to one of V-40, V-41, V-42, V-33, V-44 and V-45, to VH-172's own instrument fault, or to run-to-run variation. The six earlier fixes hold, the 48 VH-178 transitions pass, and V-18 is unmoved. The gate is green at 1,523 tests. Codex astra said "Close after the musts below". The musts were the unrun count, 821 to 641, and VH-181's criterion traced to its decision. The re-check said "Close". Decided on the owner's standing instruction, "work through to the end of VH-177, archive and spawn as you go, proceed with your recommendations, universal permission is granted":
+(a) the priority plan again, so before and after are the same 699 records in under three hours;
+(b) the fix plans' extra records walked as one run, with VH-181's `vh181-rest` not repeated on unchanged code;
+(c) the musts applied in VH-181's Notes and VH-172.1, where Codex named them, with V-18's stale Disposition link corrected.
+
+**Supersedes:** none
+
+**Deferred:** VH-177

@@ -1,0 +1,11 @@
+The candidate matches `9c9e1908b82afe91`. The repair is as described: four comment edits, test wrapping/movement and one test-title change. Both blob hashes match for every repaired file; the moved sheet test is verbatim. No assertion, rendered output, element, user-facing string, selector or declaration changed. All four revised comments are true. **The walks still stand; no re-walk is owed.** §12 is accurate; the copied repair and identical string proofs support it.
+
+**Must — qualify §10’s compliance reasoning.** [Line 164](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/evidence/measurements/vh216-first-action-2026-10-30.md:164>) correctly describes the markup and preceding headings, but “1.3.1 holds, since that `section` closes before them” overclaims. Closing a section does not itself establish heading relationships for heading navigation. Retain the structural observations and the explicitly untested heading-reader interpretation; remove that causal claim. This requires a record correction only.
+
+**Should 1 — remaining stale comment.** [app.css:1228](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/src/styles/app.css:1228>) still places Staff/Student “above the steps”. Say “below step 1, above steps 2–6”.
+
+**Should 2 — remaining stale suite title.** [stylesheet.test.ts:272](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/test/stylesheet.test.ts:272>) still says “the lede’s ‘?’”. Name the fourth promise instead.
+
+No other comment made false by this move surfaced in the requested sweep. The earlier close musts remain for the separate ledger check. No files changed.
+
+Verdict: Commit after the musts below

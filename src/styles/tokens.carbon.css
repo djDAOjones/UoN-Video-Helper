@@ -101,7 +101,7 @@
   --focus-room: calc(var(--focus-width) + var(--focus-offset));
 
   /* Native checkbox and radio glyphs, the status mark column, and the "?"
-     drawn inline in the lede's text (VH-205). */
+     drawn inline in the fourth promise's text (VH-205). */
   --control-size: 1.25rem;
   --mark-width: 1.5rem;
 

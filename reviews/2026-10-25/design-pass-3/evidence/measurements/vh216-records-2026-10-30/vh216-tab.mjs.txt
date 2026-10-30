@@ -1,0 +1,64 @@
+// VH-216 #1: the Tab order, a separate recorded keyboard traversal with the walker unchanged (S-03's "Tab from the top" row breaks
+// at the file chooser, so it can't supply it). A fresh page for each language, width and mode: forward from the top to the
+// footer's first stop, back by Shift+Tab to the top; then the "?" tip as VH-184 left it, modelled on phase8.mjs's formatTip and
+// S-142's rows: its closed neighbours; Enter and Space open, focus stays; Tab and Shift+Tab close, on to each neighbour; Escape
+// closes, on the "?"; a click on its text keeps it; a click on the title closes it.
+//
+//   CDP_PORT=9251 APP_URL=… RUN_ROOT=<runs> WALKER=<dir> node vh216-tab.mjs --label before [--langs …] [--views …] [--modes …]
+import { pathToFileURL } from 'node:url'
+import { join } from 'node:path'
+import { appendFileSync, mkdirSync } from 'node:fs'
+
+const W = process.env.WALKER, RUN_ROOT = process.env.RUN_ROOT
+if (!W || !RUN_ROOT) throw new Error('set WALKER and RUN_ROOT')
+const imp = (f) => import(pathToFileURL(join(W, f)).href)
+const { connectBrowser } = await imp('cdp.mjs')
+const { Walk, sleep } = await imp('walk.mjs')
+const { QUAL_INIT, closeAnalysis, setViewport, setMode, key, focusByKeyboard } = await imp('qualify.mjs')
+const { MX_INIT, fresh } = await imp('scenarios.mjs')
+
+const a = process.argv.slice(2), opt = (n, f) => { const i = a.indexOf(n); return i >= 0 ? a[i + 1].split(',') : f }
+const label = opt('--label', ['before'])[0], langs = opt('--langs', ['en-GB', 'zh-Hans', 'ms-MY']), views = opt('--views', ['w1280', 'w640', 'w375', 'w320']), modes = opt('--modes', ['light', 'dark', 'forced-light', 'forced-dark', 'font32'])
+mkdirSync(RUN_ROOT, { recursive: true })
+const OUT = join(RUN_ROOT, `vh216-tab-${label}.jsonl`)
+
+const STOP = String.raw`(() => { const a = document.activeElement; if (!a || a === document.body) return 'body';
+  if (a.closest('footer')) return 'footer: ' + (a.id || (a.tagName.toLowerCase() + ' ' + a.textContent.replace(/\s+/g, ' ').trim().slice(0, 30)));
+  if (a.closest('#language-switcher')) return 'page language'; if (a.closest('#language-notice')) return 'notice link'; if (a.id === 'format-help-button') return 'format ?';
+  if (a.closest('#video-kind')) return 'video type'; if (a.id === 'file-input') return 'choose file'; if (a.matches('a[href^="#"]')) return 'skip link'; return a.id || a.tagName.toLowerCase(); })()`
+const TIP = String.raw`(() => { const t = document.getElementById('format-help'), b = document.getElementById('format-help-button'); return { open: !t.hidden, expanded: b.getAttribute('aria-expanded') }; })()`
+const atTop = `(() => { window.scrollTo(0, 0); document.body.tabIndex = -1; document.body.focus(); document.body.removeAttribute('tabindex'); })()`
+const stopTip = async (w) => ({ stop: await w.evaluate(STOP), ...(await w.evaluate(TIP)) })
+const onHelp = (w) => focusByKeyboard(w, '#format-help-button')
+
+const browser = await connectBrowser()
+let bad = 0
+for (const lang of langs) for (const view of views) for (const mode of modes) {
+  const cell = `${lang}__${view}__${mode}`, r = { cell, lang, view, mode, label, at: new Date().toISOString() }
+  const w = new Walk(browser, `vh216-tab-${label}/${cell}`)
+  try {
+    await w.open()
+    await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source: QUAL_INIT })
+    await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source: MX_INIT })
+    await setViewport(w, view); await setMode(w, mode); await fresh(w, lang)
+    r.modeRead = await w.evaluate(`({ fontPx: parseFloat(getComputedStyle(document.documentElement).fontSize), forced: matchMedia('(forced-colors: active)').matches, dark: matchMedia('(prefers-color-scheme: dark)').matches, vw: innerWidth, vh: innerHeight, lang: document.documentElement.lang })`)
+    await w.evaluate(atTop)
+    r.forward = []
+    for (let i = 0; i < 40; i++) { await key(w, 'Tab'); const s = await w.evaluate(STOP); r.forward.push(s); if (s.startsWith('footer: ') || s === 'body') break }
+    r.reverse = []
+    for (let i = 0; i < 40; i++) { await key(w, 'Tab', { shift: true }); const s = await w.evaluate(STOP); r.reverse.push(s); if (s === 'body' || s === 'skip link') break }
+    await onHelp(w); await key(w, 'Tab'); r.closedTab = await stopTip(w)
+    await onHelp(w); await key(w, 'Tab', { shift: true }); r.closedShift = await stopTip(w)
+    await onHelp(w); await key(w, 'Enter'); r.enter = await stopTip(w); await key(w, 'Tab'); r.openTab = await stopTip(w)
+    await onHelp(w); await key(w, 'Space'); r.space = await stopTip(w); await key(w, 'Tab', { shift: true }); r.openShift = await stopTip(w)
+    await onHelp(w); await key(w, 'Enter'); await key(w, 'Escape'); r.escape = await stopTip(w)
+    await onHelp(w); await key(w, 'Enter'); await w.click('#format-help p'); r.clickText = await w.evaluate(TIP); await w.click('.page-title'); r.clickTitle = await w.evaluate(TIP)
+    const fwd = r.forward.slice(0, -1).reverse()
+    r.reverseMatches = JSON.stringify(r.reverse) === JSON.stringify(fwd)
+    r.tipOk = r.enter.open && r.enter.stop === 'format ?' && r.space.open && r.space.stop === 'format ?' && !r.openTab.open && r.openTab.stop === r.closedTab.stop && !r.openShift.open && r.openShift.stop === r.closedShift.stop && !r.escape.open && r.escape.stop === 'format ?' && r.clickText.open && !r.clickTitle.open
+    console.log(`${cell}: ${r.forward.join(' > ')} | reverse ${r.reverseMatches ? 'same' : 'DIFFERS'} | tip ${r.tipOk ? 'ok' : 'NOT OK'}`)
+  } catch (e) { r.error = String(e.stack ?? e).slice(0, 400); bad++; console.log(cell + ' ERROR ' + r.error) } finally { await w.close().catch(() => undefined) }
+  appendFileSync(OUT, JSON.stringify(r) + '\n')
+}
+console.log(`cells ${langs.length * views.length * modes.length}, errors ${bad}`)
+process.exit(0)

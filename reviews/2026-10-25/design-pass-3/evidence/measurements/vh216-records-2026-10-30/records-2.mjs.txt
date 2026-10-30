@@ -1,0 +1,32 @@
+// VH-216 #2: writes the table's records folder from the walks: each group's per-cell outcomes, probe lines, run.json and manifest.json; conditions, load and launcher logs; the Tab lines; the six summaries; the scripts as .txt; sources.txt with each copy's sha1. Usage: node records-2.mjs <records dir>
+import { readdirSync, readFileSync, statSync, writeFileSync, copyFileSync } from 'node:fs'
+import { createHash } from 'node:crypto'
+import { join } from 'node:path'
+const REC = process.argv[2], src = []
+const sha = (p) => createHash('sha1').update(readFileSync(p)).digest('hex')
+const cp = (from, to) => { copyFileSync(from, join(REC, to)); src.push(`${sha(join(REC, to))}  ${to}  vh216-walk/${from}`) }
+for (const g of ['before-s03', 'before-s144', 'before-tab', 'six-after', 'after-s03', 'after-s144', 'after-tab']) {
+  cp(`${g}/conditions.txt`, `${g}.conditions.txt`); cp(`${g}.load.log`, `${g}.load.log.txt`); cp(`${g}.launcher.log`, `${g}.launcher.log.txt`)
+  const runs = join(g, 'runs'); const out = []
+  for (const e of readdirSync(runs).sort()) {
+    const p = join(runs, e)
+    if (!statSync(p).isDirectory()) { if (e.endsWith('.jsonl') && e.startsWith('vh216-')) cp(p, `${g}.${e.replace(/^vh216-/, '').replace(/vh216-/, '')}`); continue }
+    if (e.startsWith('rings')) { cp(join(p, 'summary.json'), `${g}.summary.json`); continue }
+    const tag = e.replace(/^vh216-(before|after)-/, '').replace(/-2026.*$/, '')
+    cp(join(p, 'manifest.json'), `${g}.${tag}.manifest.json`); cp(join(p, 'run.json'), `${g}.${tag}.run.json`)
+    for (const f of readdirSync(p).filter((x) => /^S-\d+.*\.json$/.test(x)).sort()) {
+      const j = JSON.parse(readFileSync(join(p, f), 'utf8'))
+      const [id, lang, view, mode] = f.replace('.json', '').split('__')
+      out.push(JSON.stringify({ run: e, id, lang, view, mode, status: j.status, reached: j.reached?.outcome, why: j.reached?.why ?? j.reached?.problems ?? null,
+        outcomes: Object.fromEntries(Object.entries(j.instruments ?? {}).map(([k, v]) => [k, v?.outcome])),
+        rows: (j.instruments?.asserts?.items ?? []).map((i) => ({ what: i.what, outcome: i.outcome, ...(i.stops ? { stops: i.stops } : {}), ...(i.want ? { want: i.want } : {}) })) }))
+    }
+  }
+  if (out.length) { writeFileSync(join(REC, `${g}.outcomes.jsonl`), out.join('\n') + '\n'); src.push(`${sha(join(REC, `${g}.outcomes.jsonl`))}  ${g}.outcomes.jsonl  written by records-2.mjs from ${g}/runs`) }
+}
+for (const g of ['six-before']) { cp(`${g}/conditions.txt`, `${g}.conditions.txt`); cp(`${g}.load.log`, `${g}.load.log.txt`); cp(`${g}.launcher.log`, `${g}.launcher.log.txt`); const e = readdirSync(`${g}/runs`).find((x) => x.startsWith('rings')); cp(`${g}/runs/${e}/summary.json`, `${g}.summary.json`) }
+for (const s of ['vh216-driver.mjs', 'vh216-tab.mjs', 'proof-1.mjs', 'walk-1.sh', 'go-1.sh', 'walk-2.sh', 'go-2.sh', 'readback-2.mjs', 'compare-2.mjs', 'records-2.mjs', 'strings-proof-2.mjs']) cp(s, `${s}.txt`)
+cp('strings-proof-2.txt', 'strings-proof.txt'); cp('docs-word-diff-2.txt', 'docs-word-diff.txt')
+for (const c of ['s03', 's144', 'tab']) cp(`compare-${c}.txt`, `compare-${c}.txt`)
+writeFileSync(join(REC, 'sources.txt'), src.join('\n') + '\n')
+console.log(src.length, 'files')

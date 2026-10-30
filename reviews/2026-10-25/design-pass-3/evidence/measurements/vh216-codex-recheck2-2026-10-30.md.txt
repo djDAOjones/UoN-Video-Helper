@@ -1,0 +1,7 @@
+All three findings are resolved. `repair-2.diff` matches the recorded copy and current file hashes. The CSS comment correctly places Staff/Student below step 1 and above steps 2–6; the suite title correctly names the fourth promise. Only comment text and the title changed: no rendered byte, assertion or selector changed.
+
+§10’s last bullet removes the compliance inference and retains the untested heading-reader interpretation. §12’s added paragraph is accurate; its `23aedfe476a941e8` matches the requested hash command now. No re-walk is owed.
+
+No files changed. This verdict covers the repaired candidate; the ledger’s close remains outstanding.
+
+Verdict: Commit

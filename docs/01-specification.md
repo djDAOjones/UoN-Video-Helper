@@ -28,7 +28,7 @@ It solves three problems in one pass:
 - **Primary user:** UoN academic and professional-services staff, novice
   level, on a managed or personal laptop.
 - **Also students** (PLAN-1, VH-131): a student handing in a video as
-  coursework. A switch above the steps, "Staff video" or "Student
+  coursework. A switch below step 1, "Staff video" or "Student
   submission", says which; it opens on Staff video and is remembered in
   this browser.
 - **Languages** (VH-132): someone may read the page in one of its three
@@ -582,8 +582,8 @@ diagnostics bundle stay English.
 
 ### 9.1 Workflow
 
-The screen is six numbered steps (VH-91, VH-96, VH-127). Above them, a switch
-chooses "Staff video" or "Student submission" (VH-131). It opens on Staff video,
+The screen is six numbered steps (VH-91, VH-96, VH-127). Below step 1, a switch
+chooses "Staff video" or "Student submission" (VH-131, VH-216). It opens on Staff video,
 is remembered in this browser and is never locked, so switching keeps the video,
 the trim, every choice, a running job and a result. In step 3, "Video language"
 chooses the language of the words the app adds to the video (VH-132, VH-182.2).

@@ -1,0 +1,115 @@
+diff --git a/src/ui/system-check.ts b/src/ui/system-check.ts
+index 66089c1..2d377ea 100644
+--- a/src/ui/system-check.ts
++++ b/src/ui/system-check.ts
+@@ -53,7 +53,7 @@ export function summariseChecks(states: readonly CheckState[]): ChecksSummary {
+ }
+ 
+ /**
+- * The sentence under the promises that says which browser the app is built
++ * The sentence under the privacy line that says which browser the app is built
+  * for, or nothing.
+  *
+  * It is said only when a load-time check has not passed: while the checks
+diff --git a/src/config/video-kind.ts b/src/config/video-kind.ts
+index 6dfadef..01c98df 100644
+--- a/src/config/video-kind.ts
++++ b/src/config/video-kind.ts
+@@ -1,5 +1,5 @@
+ /**
+- * Staff video or Student submission: the switch at the top of the page
++ * Staff video or Student submission: the switch below step 1
+  * (VH-131).
+  *
+  * The owner asked for it on 2026-10-19 and answered its questions the same
+diff --git a/src/styles/tokens.carbon.css b/src/styles/tokens.carbon.css
+index b99d409..cd8557d 100644
+--- a/src/styles/tokens.carbon.css
++++ b/src/styles/tokens.carbon.css
+@@ -101,7 +101,7 @@
+   --focus-room: calc(var(--focus-width) + var(--focus-offset));
+ 
+   /* Native checkbox and radio glyphs, the status mark column, and the "?"
+-     drawn inline in the lede's text (VH-205). */
++     drawn inline in the fourth promise's text (VH-205). */
+   --control-size: 1.25rem;
+   --mark-width: 1.5rem;
+ 
+diff --git a/test/readability.test.ts b/test/readability.test.ts
+index 0a413cb..9a61c21 100644
+--- a/test/readability.test.ts
++++ b/test/readability.test.ts
+@@ -113,7 +113,7 @@ export function readingGrade(text: string): number | null {
+  */
+ const MEANINGS: Readonly<Record<string, RegExp>> = {
+   kHz: /samples a second/,
+-  // Or the lede's format hint, which says what an MP4 is beside it: the
++  // Or the fourth promise's format hint, which says what an MP4 is beside it: the
+   // owner's choice A for VH-196, its words exactly, so no other text passes.
+   MP4: /\.mp4|an MP4, the most interoperable video format/,
+   WebCodecs: /video processing in the browser/i,
+diff --git asrc/i18n/tables.test.ts b/src/i18n/tables.test.ts
+index 51e35e9..4b0cc17 100755
+--- asrc/i18n/tables.test.ts
++++ b/src/i18n/tables.test.ts
+@@ -404,22 +404,7 @@ describe('too little in a whole video, in the owner’s words (VH-213)', () => {
+   )
+ })
+ 
+-describe('heavy limiting’s advice, in the owner’s words (VH-212)', () => {
+-  // His choice in the Backlog review chat, 2026-10-27, VH-211's ask point 2:
+-  // "before you use it", true whether or not the new video plays here (F15b);
+-  // the Chinese and Malay machine-translated as Backlog review marked them.
+-  const CLAUSE = {
+-    'en-GB': { now: 'so play the new video before you use it.', was: 'before you save it' },
+-    'zh-Hans': { now: '所以请在使用之前播放新视频。', was: '保存之前' },
+-    'ms-MY': { now: 'jadi mainkan video baharu sebelum anda menggunakannya.', was: 'menyimpannya' },
+-  } as const
+-
+-  it.each(Object.entries(LANGUAGE_TABLES))('%s says the clause, not the old one', (tag, table) => {
+-    const { now, was } = CLAUSE[tag as keyof typeof CLAUSE]
+-    expect(table.warnings.heavyLimiting.detail).toContain(now)
+-    expect(table.warnings.heavyLimiting.detail).not.toContain(was)
+-  })
+-
++describe('the promises and the switch below step 1 (VH-216)', () => {
+   it('says where the promises and the switch moved to, in the sheet and the filled sheet (VH-216)', () => {
+     const [heading, ...rows] = parseCsv(
+       readFileSync(new URL(`../../${FILLED_SHEET}`, import.meta.url), 'utf8'),
+@@ -440,6 +425,23 @@ describe('heavy limiting’s advice, in the owner’s words (VH-212)', () => {
+     expect(job.notes).toContain('the video type below Step 1')
+     expect(rows.find((cells) => cells[0] === 'progress.job')![notes]).toBe(job.notes)
+   })
++})
++
++describe('heavy limiting’s advice, in the owner’s words (VH-212)', () => {
++  // His choice in the Backlog review chat, 2026-10-27, VH-211's ask point 2:
++  // "before you use it", true whether or not the new video plays here (F15b);
++  // the Chinese and Malay machine-translated as Backlog review marked them.
++  const CLAUSE = {
++    'en-GB': { now: 'so play the new video before you use it.', was: 'before you save it' },
++    'zh-Hans': { now: '所以请在使用之前播放新视频。', was: '保存之前' },
++    'ms-MY': { now: 'jadi mainkan video baharu sebelum anda menggunakannya.', was: 'menyimpannya' },
++  } as const
++
++  it.each(Object.entries(LANGUAGE_TABLES))('%s says the clause, not the old one', (tag, table) => {
++    const { now, was } = CLAUSE[tag as keyof typeof CLAUSE]
++    expect(table.warnings.heavyLimiting.detail).toContain(now)
++    expect(table.warnings.heavyLimiting.detail).not.toContain(was)
++  })
+ 
+   it('carries the clause and its translator’s note into the filled sheet', () => {
+     const key = 'warnings.heavyLimiting.detail'
+diff --git atest/stylesheet.test.ts b/test/stylesheet.test.ts
+index 0aad97d..e53033e 100755
+--- atest/stylesheet.test.ts
++++ b/test/stylesheet.test.ts
+@@ -80,7 +80,7 @@ describe('the brand bands (VH-92)', () => {
+     expect(list).toMatch(/list-style:\s*square/)
+   })
+ 
+-  it('reorder nothing by CSS: DOM, reading and Tab order stay one (VH-216, 1.3.2, 2.4.3)', () => {
++  it('use no CSS order property (VH-216, 1.3.2, 2.4.3)', () => {
+     expect(rules).not.toMatch(/(?<![-\w])order\s*:/)
+   })
+ 

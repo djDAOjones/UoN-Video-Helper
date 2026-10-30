@@ -1,0 +1,57 @@
+#!/bin/zsh
+# VH-216 #2: one walk or probe under the fixed walk lock, Vite on :5181 (in <app root>), Chrome on :9251, the jobs in parallel.
+# Modelled read-only on VH-212's walk-1.sh. Usage: zsh walk-1.sh <name> <what for the lock> <walker dir> <app root> "<job shell line>" ["<job shell line>" …]
+# Each job line runs in $N/vh216-walk with CDP_PORT, APP_URL, FIX, OUT_ROOT, RUN_ROOT and WALKER set; it is run by zsh -c.
+# Refuses to start on battery at or below 50%, in Low Power, or at a 1-minute load of 8 or more.
+N=/Users/joe/UoN-Video-Helper-side
+NAME=$1; WHAT=$2; WALKER=$3; APP=$4; shift 4
+D="$N/vh216-walk"; OUT="$D/$NAME"
+LOCK=/Users/joe/UoN-Video-Helper-side/walk.lock
+WHO="VH-216 #2"
+[ -e "$OUT" ] && { echo "OUT EXISTS: $OUT"; exit 2; }
+B=$(pmset -g batt); PM=$(pmset -g); L=$(uptime | sed -E 's/.*load averages?: ([0-9.]+).*/\1/')
+if ! print -r -- "$B" | grep -q 'AC Power'; then
+  LV=$(print -r -- "$B" | grep -oE '[0-9]+%' | head -1 | tr -d %)
+  { [ "$LV" -gt 50 ] && ! print -r -- "$PM" | grep -qE 'lowpowermode +1|powermode +1$'; } || { echo "POWER-STOP: $LV%"; exit 7; }
+fi
+[ "$(echo "$L < 8" | bc)" = 1 ] || { echo "LOAD-STOP: $L"; exit 8; }
+mkdir "$LOCK" || { echo "LOCK HELD: $(cat $LOCK/owner.txt 2>/dev/null)"; exit 3; }
+echo "$WHO — $(date -u +%FT%TZ) — $WHAT ($NAME)" > "$LOCK/owner.txt"
+caffeinate -i -w $$ &
+CAF=$!
+# Section 6's filter: the Claude app's CLOSED sockets are ignored and recorded; anything else is busy.
+PL="$(lsof -nP -i :5181 -i :9251 2>/dev/null | awk 'NR>1')"
+IGN=$(printf '%s\n' "$PL" | awk '$1 ~ /^Claude/ && /\(CLOSED\)$/' | grep -c .)
+BUSY=$(printf '%s\n' "$PL" | awk 'NF && !($1 ~ /^Claude/ && /\(CLOSED\)$/)' | grep -c .)
+if [ "$BUSY" != 0 ]; then echo "PORTS BUSY:"; printf '%s\n' "$PL"; grep -q "$WHO" "$LOCK/owner.txt" && rm -r "$LOCK"; kill $CAF 2>/dev/null; exit 4; fi
+mkdir -p "$OUT/logs"
+{ echo "start $(date -u +%FT%TZ)"; pmset -g batt | head -2; pmset -g | grep -E 'powermode|lowpowermode'; uptime; echo "ports: $IGN Claude CLOSED entries ignored (ruling 2)"; } > "$OUT/conditions.txt"
+{ echo "commit $(GIT_OPTIONAL_LOCKS=0 git -C "$APP" rev-parse HEAD)"; echo "porcelain lines $(GIT_OPTIONAL_LOCKS=0 git -C "$APP" status --porcelain | wc -l | tr -d ' ')"; echo "diff hash $(GIT_OPTIONAL_LOCKS=0 git -C "$APP" diff | shasum -a 1 | cut -c1-16)"; } >> "$OUT/conditions.txt"
+(cd "$WALKER" && node --input-type=module -e "const m=await import(process.cwd()+'/runner.mjs');console.log('instrument revision '+m.instrumentRevision().revision)") >> "$OUT/conditions.txt"
+cd "$APP" || { grep -q "$WHO" "$LOCK/owner.txt" && rm -r "$LOCK"; kill $CAF 2>/dev/null; exit 5; }
+./node_modules/.bin/vite --port 5181 --strictPort --host 127.0.0.1 > "$OUT/vite.log" 2>&1 &
+VPID=$!
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --remote-debugging-port=9251 --user-data-dir="$D/chrome-profile" --no-first-run --no-default-browser-check --disable-backgrounding-occluded-windows --disable-background-timer-throttling --disable-renderer-backgrounding about:blank > "$OUT/chrome.log" 2>&1 &
+CPID=$!
+echo "vite $VPID chrome $CPID caffeinate $CAF" > "$OUT/pids.txt"
+for i in $(seq 1 60); do curl -sf http://127.0.0.1:5181/ >/dev/null && curl -sf http://127.0.0.1:9251/json/version >/dev/null && break; sleep 1; done
+JPIDS=()
+j=0
+mkdir -p "$D/fix"
+for JOB in "$@"; do
+  j=$((j+1))
+  (cd "$D" && CDP_PORT=9251 APP_URL=http://localhost:5181/ FIX="$D/fix" OUT_ROOT="$OUT/out" RUN_ROOT="$OUT/runs" WALKER="$WALKER" OUTD="$OUT" zsh -c "$JOB" > "$OUT/logs/job$j.log" 2>&1; echo "job$j exit $? $(date -u +%FT%TZ)" >> "$OUT/conditions.txt") &
+  JPIDS+=($!)
+  echo "job$j pid $! line $JOB" >> "$OUT/pids.txt"
+  sleep 5
+done
+wait $JPIDS
+{ echo "end $(date -u +%FT%TZ)"; pmset -g batt | head -2; pmset -g | grep -E 'powermode|lowpowermode'; uptime; } >> "$OUT/conditions.txt"
+kill $CPID $VPID 2>/dev/null
+for i in $(seq 1 30); do kill -0 $CPID 2>/dev/null || kill -0 $VPID 2>/dev/null || break; sleep 1; done
+kill -0 $CPID 2>/dev/null && kill -9 $CPID; kill -0 $VPID 2>/dev/null && kill -9 $VPID
+for i in $(seq 1 30); do kill -0 $CPID 2>/dev/null || kill -0 $VPID 2>/dev/null || break; sleep 1; done
+if kill -0 $CPID 2>/dev/null || kill -0 $VPID 2>/dev/null; then echo "STILL ALIVE: vite $VPID chrome $CPID; lock kept"; exit 6; fi
+kill $CAF 2>/dev/null
+grep -q "$WHO" "$LOCK/owner.txt" && rm -r "$LOCK"
+echo "done; live port entries: $(lsof -nP -i :5181 -i :9251 2>/dev/null | awk 'NR>1 && !($1 ~ /^Claude/ && /\(CLOSED\)$/)' | wc -l | tr -d ' '); lock: $(ls -d $LOCK 2>/dev/null || echo released)"

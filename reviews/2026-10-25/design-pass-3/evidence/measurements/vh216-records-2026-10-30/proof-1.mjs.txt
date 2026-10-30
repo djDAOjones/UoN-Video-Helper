@@ -1,0 +1,15 @@
+// VH-216 #1: reads a walk's records back, one line a cell: reached, status, each instrument's failing count, each assert row that isn't a pass; and the run's whole/expected. Usage: node proof-1.mjs <runs dir>
+import { readdirSync, readFileSync, statSync } from 'node:fs'
+import { join } from 'node:path'
+const root = process.argv[2]
+for (const run of readdirSync(root).filter((d) => statSync(join(root, d)).isDirectory()).sort()) {
+  const files = readdirSync(join(root, run)).filter((f) => /^S-\d+.*\.json$/.test(f)).sort()
+  const man = JSON.parse(readFileSync(join(root, run, 'manifest.json'), 'utf8'))
+  console.log(`run ${run}: ${files.length} records; revision ${man.provenance?.instruments?.revision}; whole ${man.coverage?.whole}, expected ${man.coverage?.expected}, observed ${man.coverage?.observed}, problems ${JSON.stringify(man.coverage?.problems ?? [])}`)
+  for (const f of files) {
+    const j = JSON.parse(readFileSync(join(root, run, f), 'utf8'))
+    const fails = Object.entries(j.instruments ?? {}).filter(([, v]) => v?.outcome === 'fail' || v?.outcome === 'cannot-determine').map(([k, v]) => `${k}:${v.outcome}`)
+    const rows = (j.instruments?.asserts?.items ?? []).filter((i) => !['pass', 'found', 'not-applicable'].includes(i.outcome)).map((i) => `${i.what.slice(0, 44)}=${i.outcome}${i.stops ? ' stops ' + i.stops.join('>') : ''}`)
+    console.log(`  ${f}: status ${j.status}; reached ${j.reached?.outcome}; root ${j.reached?.seen?.rootFontPx}; media ${JSON.stringify(j.reached?.seen?.media ?? {})}; ${fails.join(' ')}${rows.length ? ' | ' + rows.join('; ') : ''}`)
+  }
+}

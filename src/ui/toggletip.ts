@@ -1,6 +1,6 @@
 /**
  * When a toggletip closes (VH-124, VH-184): the "?" beside "Plays over", and
- * the one beside the lede's fourth promise (VH-196).
+ * the one beside the fourth promise (VH-196).
  *
  * The "?" discloses its text in the page flow, and focus stays on the
  * button. Moving focus on to anything else closes it, so Tab and Shift+Tab

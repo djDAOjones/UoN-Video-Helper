@@ -1,0 +1,8 @@
+src/i18n/en-GB.ts same without comments ; whole file comment differs
+src/i18n/zh-Hans.ts same without comments ; whole file identical
+src/i18n/ms-MY.ts same without comments ; whole file identical
+data-i18n same keys and counts 124
+data-i18n-attr same
+elements same tags and counts 337 337
+markup words, sorted same
+filled sheet lines 522 522 changed 14 lede.promises.0 lede.promises.1 lede.promises.2 lede.promises.3 lede.promises.4 lede.formatHelp.label lede.formatHelp.text videoKind.label videoKind.options.staff videoKind.options.submission videoKind.result.staff videoKind.result.submission videoKind.nextVideo progress.job

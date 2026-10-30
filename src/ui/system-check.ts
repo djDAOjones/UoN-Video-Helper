@@ -53,7 +53,7 @@ export function summariseChecks(states: readonly CheckState[]): ChecksSummary {
 }
 
 /**
- * The sentence under the promises that says which browser the app is built
+ * The sentence under the privacy line that says which browser the app is built
  * for, or nothing.
  *
  * It is said only when a load-time check has not passed: while the checks

@@ -68,12 +68,12 @@ describe('the privacy promise (VH-85)', () => {
 
 describe('what the tool does, and where it works (2026-09-30)', () => {
   // Up to the list's end: the fourth promise holds a toggletip's own divs (VH-196).
-  const lede = /<div class="lede">([\s\S]*?<\/ul>)/.exec(markup)?.[1] ?? ''
+  const promises = /<ul class="promises">([\s\S]*?<\/ul>)/.exec(markup)?.[1] ?? ''
 
   it('lists the five things it does, in the maintainer\'s words', () => {
     // A promise's own words are the item's first text: the fourth's sit in a
     // span before its "?" (VH-196).
-    const items = [...lede.matchAll(/<li\b[^>]*>\s*(?:<span[^>]*>)?([^<]+)</g)].map((match) =>
+    const items = [...promises.matchAll(/<li\b[^>]*>\s*(?:<span[^>]*>)?([^<]+)</g)].map((match) =>
       match[1]!.trim(),
     )
     // Each a line a person reads as a line: a capital and a full stop
@@ -86,14 +86,15 @@ describe('what the tool does, and where it works (2026-09-30)', () => {
       'Saves in a reliable format.',
       'Makes the file the right size for your purpose.',
     ])
-    expect(lede).not.toMatch(/<p[^>]*>[^<]*:\s*<\/p>\s*<ul>/)
+    const before = markup.slice(0, markup.indexOf('<ul class="promises">'))
+    expect(before).not.toMatch(/<p[^>]*>[^<]*:\s*<\/p>\s*(?:<!--[\s\S]*?-->\s*)*$/)
   })
 
   it('explains the format behind a "?" beside the fourth promise, disclosed only when asked', () => {
     // The owner's own request (VH-196): a toggletip as the onset one is, a
     // button that says what it is about and which text it opens, the text
     // hidden until it is pressed, in a polite live region.
-    const fourth = /<li class="promise-with-help">([\s\S]*?)<\/li>/.exec(markup)?.[1] ?? ''
+    const fourth = /<li class="promise-with-help">([\s\S]*?)<\/li>/.exec(promises)?.[1] ?? ''
     const button = /<button([^>]*)>/.exec(fourth)?.[1] ?? ''
     expect(button).toMatch(/type="button"/)
     expect(button).toMatch(/aria-label="About the video format"/)
@@ -653,9 +654,39 @@ describe('Staff video or Student submission (VH-131)', () => {
     expect(fieldset).toContain('id="video-kind-result"')
   })
 
-  it('sits above Step 1, outside every fieldset the job lock disables', () => {
-    expect(markup.indexOf('id="video-kind"')).toBeLessThan(markup.indexOf('id="step-choose"'))
-    expect(markup.indexOf('id="video-kind"')).toBeGreaterThan(markup.indexOf('class="lede"'))
+  it('sits below Step 1, in the owner\'s whole order, one order at every width (VH-216)', () => {
+    const order = [
+      'class="page-title"',
+      'class="lede"',
+      'Your video is processed on your device',
+      'id="browser-note"',
+      'id="step-choose"',
+      'id="video-kind"',
+      'id="step-trim"',
+      'id="step-title"',
+      'id="step-closing"',
+      'id="step-preset"',
+      'id="step-create"',
+      'id="page-announcer"',
+      'id="errors-panel"',
+      'class="promises"',
+      'id="dev-actions"',
+    ]
+    const page = markup.replace(/<!--[\s\S]*?-->/g, '')
+    for (const mark of order) expect(page.split(mark).length - 1, mark).toBe(1)
+    const places = order.map((mark) => page.indexOf(mark))
+    expect(places).toEqual([...places].sort((a, b) => a - b))
+    // In `main`, and in no step or fieldset: what a job locks or a file
+    // withdraws never takes the promises with it.
+    const list = page.indexOf('class="promises"')
+    const before = page.slice(0, list)
+    expect(list).toBeGreaterThan(page.indexOf('<main'))
+    expect(list).toBeLessThan(page.indexOf('</main>'))
+    for (const tag of ['section', 'fieldset'])
+      expect(before.split(`<${tag}`).length, tag).toBe(before.split(`</${tag}>`).length)
+  })
+
+  it('sits outside every fieldset the job lock disables', () => {
     for (const id of ['branding-choice', 'preset-choice']) {
       const locked = new RegExp(`<fieldset[^>]*id="${id}"[\\s\\S]*?<\\/fieldset>`).exec(markup)?.[0] ?? ''
       expect(locked).not.toContain('name="video-kind"')
