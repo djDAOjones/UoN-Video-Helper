@@ -1199,3 +1199,32 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Supersedes:** none
 
 **Deferred:** VH-177
+
+## 2026-10-24 — VH-137 — The statement brought up to date for 0.2.0: the file chooser's limitation, October's automated check, an updated date; the November review stays
+
+**Decision:** The statement gains, in all three languages, a sixth limitation (the browser's Choose File button), a line under How we tested for October's automated check of "the page's main states", and "updated on" 24 October. "Partially compliant", the tests not yet run and the 18 November review stand, so VH-137 stays open for that review.
+
+**Rationale:** The owner, in a separate chat on 2026-10-24: "lets release 0.2.0 and update accessibility statement as appropiate. another review in november", and on the drafted wording, "all reccomendations approved"; relayed by the orchestrator with "cut now. here is some optional direction, your call if pushback:". The words are the approved drafts B1 to B3 with one change, the orchestrator's on that leave: the draft's "went through every part of the page" became "went through the page's main states", because VH-172 ran a prioritised matrix (699 records whole, 821 cells unrun) and VH-172.1 keeps 641 cells never re-read, so "every part" overstated what was checked. B1 pays wish line VH-175.2 (V-43, 2.5.3), which retires. `STATEMENT_UPDATED_DATE` is a new date in `src/config/accessibility.ts`, written by `Intl` like the others; `STATEMENT_PREPARED_DATE` and `STATEMENT_NEXT_REVIEW_DATE` are unchanged. The Chinese and Malay are the agent's drafts, through the filled sheet and `scripts/strings-table.mjs`; the machine-translation limitation covers them. No control or element is added beyond a list item and a paragraph in the statement.
+
+**Supersedes:** none
+
+**Deferred:** VH-137
+
+## 2026-10-24 — VH-177 — Phase 7 closes: eleven items shipped against PLAN-7 and the close itself; VH-162's Phase 7 block lifted, and VH-162 is next on the owner's call
+
+**Decision:** Phase 7 closes: VH-170 to VH-176 and VH-178 to VH-181 have shipped, none moved, and VH-177 ships with this close. The Disposition table is final, VH-137 has six notes for the owner's review, and the person checklist says what each check settles. VH-162's Phase 7 block is lifted, and VH-162 is the next item. It waits on the owner's call: does 0.2.0 wait for VH-137's review on 18 November?
+
+**Rationale:** PLAN-7's Items lines name twelve items: VH-170 to VH-177, VH-178 to VH-180 (the fix plan) and VH-181 (the owner's four wish lines). Each of the eleven before this close has a trajectory line and a commit (VH-170's is `eae49ea`), none has a backlog line, and each item file's Now says shipped. The person checklist claims neither §13 criterion 10 nor full conformance. No wish line is retired, because the evidence fully satisfies none: VH-150.2 needs a person's screen reader, and the cells VH-150.3 and VH-153.1 still need are among VH-172.1's 641. VH-177.1 to VH-177.4 draft the spec §9.3 corrections the pass found for the owner. VH-177.5 is UI-STANDARDS' 2.4.13 conditions, since the file is at its 2,400 words. VH-162 is next because it is the only Phase 6 item an agent can run. Its own Now leaves the timing to the owner. VH-137 and VH-14 are the owner's work. Decided on the owner's standing instruction, "work through to the end of VH-177, archive and spawn as you go, proceed with your recommendations, universal permission is granted": (a) VH-162 is marked [!] with that call as its blocker, in place of the Phase 7 one; (b) VH-137's Now is left as the owner's. Local recall, from the record alone, before editing, scored 7/8 (2,2,2,1):
+
+1. VH-179, VH-180, VH-181 and VH-176, from trajectory.md's Phase 7 lines and their decision headings.
+2. VH-180: the frame-rate note names no rate, because a fast source has frames dropped and Smaller caps the rate again (V-47).
+3. The wish list's open lines (person checks, VH-172.1's 641 cells, VH-175.2 for VH-137, VH-175.4 and VH-181.1 for native readers), backlog Next (VH-13, VH-161, VH-17, VH-113), and VH-137 for the owner's review.
+4. VH-162, in Phase 6. This scored 1, as Codex astra found. Before the edits, the open item was VH-177 in Phase 7, and VH-162 was only its successor. The repaired answer: VH-177, in Phase 7, and after it VH-162, in Phase 6, on the owner's call. The recheck scored 8/8 (2,2,2,2) and is a separate trajectory line.
+
+Codex astra checked the candidate and said "Close after the musts below". Its two musts were applied: this recall, and task H in the checklist narrowed to corrections toward VH-105.2. So were its mays on the counts, on tasks A and C, and on VH-M4's outstanding sessions. Its re-check verdict is in the commit.
+
+This check ran in the session that wrote the record, not in a fresh one, so it does not prove a handoff.
+
+**Supersedes:** none
+
+**Deferred:** VH-162, VH-137

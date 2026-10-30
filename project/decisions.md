@@ -18,6 +18,28 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-30 — PLAN-8 — The owner's five changes: nights, short notes, workers to 350k, VH-220 to VH-224 side by side, a one-page table
+
+**Decision:** On the owner's "yes": a fresh orchestrator each evening; briefs of about 30 KB and hand-overs of about 5 KB, with no Codex check of briefs; workers run straight through, with 350k the ceiling and a hand-back at about 330k; VH-220 to VH-224 run side by side after VH-225 lands; a one-page table by script from VH-217 on. The walks, the before-and-after, Codex's design and final blind checks, VH-203's full run and his bar and every unconditional stop are unchanged.
+
+**Rationale:** His word, verbatim, in the "Backlog review" chat on 2026-10-30 at about 11:36Z (source: the orchestrators' notes, `plan8-owner-words.md`, read `[user] yes` by Orchestrator #32): "yes". He was asked "Shall I send these five to Orchestrator #31 as your decision?" and shown each with its cost, the fifth's "every record is still kept, only the write-up shrinks". Orchestrator #32's rulings, on what his words leave open (`plan8-five-changes.md`): (1) the evening's hand-over and start prompt ready by about 19:30Z, a ready card until his turn. (2) From the next brief, `brief-template.md` and `handover-template.md` are the fixed forms, linking to files, orchestrators' hand-overs too, and the orchestrator adds the item's part without a brief agent; no Codex check of briefs: this supersedes the orchestrators' rule "Codex checks each new brief before it is used, retargets included", which no entry here or in the archive holds (`grep`), so the Supersedes line stays none; a start block still runs, and Claude's reading first, Codex's blind check, the compare and the check before each commit stay. (3) From VH-216 #3's (f), no per-chunk resume and no chunk test; a worker ends its turn only for a real problem or a count check; the check is one line at its own estimate of about 200k and each further 40k, because only a turn's end gives a true count (VH-208 #6's estimate ran 119k low), and the orchestrator replies with the true count; hand back when the true count plus the rest would pass about 330k, leaving about 5 KB for the hand-over; never past 350k. The profile's 200k Session line stays as written and open with him, wish PLAN-8.1, and the hook's notice is no stop. (4) Each of VH-220 to VH-224 in its own worktree, handing back by commit, one walk or gate at a time by the walk lock, on the 2026-10-28 pattern of VH-213 and VH-214; each lands on the orchestrator's go, one at a time, rebased, gated and re-checked; a landing that changes app code is told to the others, which re-read what it touches. VH-221 to VH-224's Next steps, each "Run after" the one before, are not rewritten; this entry governs how they run. (5) `table-1page.mjs`, built by VH-217's worker from VH-216's record and compare scripts, stays outside the walker, and later items reuse it; the table sits in the measurements folder with its records beside it; VH-216's table stands. Checked by `grep`: VH-203's item and the fix plan set no length for a table, so the stage rule's wording is unchanged. Left out, as he was shown: the controller trial and restructuring the code, unanswered, and neither raised as work.
+
+**Supersedes:** none
+
+**Deferred:** none
+
+## 2026-10-30 — PLAN-8 — VH-225 moved between VH-210 and VH-220, so the checks read the renamed page, on the owner's word
+
+**Decision:** VH-225 is built after VH-210 and before VH-220, not last before VH-203, so VH-220 to VH-224 read the renamed page and their "final build" is true; walks before it keep the old name, and the release still contains the rename.
+
+**Rationale:** His word, verbatim, in the "Backlog review" chat on 2026-10-30 at about 10:14Z (source: the orchestrators' notes, `plan8-owner-words.md`, read `[user] Yes, move it` by Orchestrator #31): "Yes, move it", to "Should the rename move to just after VH-210, before the checks?". He was shown the order VH-216, 217, 209, 218, 219, 210, VH-225, VH-220 to 224, VH-203, VH-195, VH-204, VH-226; the flaw, that VH-220 to VH-224 say "the final build" while VH-225 changes the on-page name after them; that the move adds no work; and that their readings wouldn't be repeated, including VH-223's and VH-224's 214 cells, a claim that chat took from VH-203's item note and asked to be checked against `PLANS`. Checked, what holds: the move schedules no re-run because of the rename, and the 214 stand outside the after-run; that nothing is ever read twice is not established. `unrun-2026-10-27.json`'s `stillUnrun` has 214 keys, 108 in VH-223's rule and 106 in VH-224's. Loaded from `scenarios.mjs` and `parts.mjs`, none is in VH-199's twelve runs (`run-01` to `run-12`, 3,219 records), the matrix VH-203's after-run walks again, and none of their 23 scenarios is one of VH-203's added S-107, S-55c, S-92, S-93, S-133 or S-113; `PLANS.matrix` (1,886 records) holds all 214, but no run walks that plan. VH-203's Notes say B's checks are not folded into the after-run. What he must be told, from the check: VH-203's item has no "214", which stands in VH-223's and VH-224's Intents, wish VH-172.1 and three earlier entries; VH-220 to VH-222 cite a row VH-199 already read, which the after-run reads as it always would, walking only the rest; six of the 214 (S-90a and S-90b, three languages, w375, light) sit also within VH-220's six states at 375 px, whatever the order, and no rule makes one reading serve both; VH-203's Notes have the after-run re-read every item that lands out of order; and a check that finds a defect raises a fix item, which re-reads what it touches. Also moved: VH-210's Next step, which named the checks next. The earlier entries' Items lists stand, as written.
+
+**Supersedes:** 2026-10-28 — PLAN-8 — VH-225 raised: the app renamed UoN Video Finisher, before VH-203, on the owner's word
+
+**Items:** VH-182, VH-183, VH-184, VH-185, VH-186, VH-187, VH-188, VH-189, VH-190, VH-191, VH-192, VH-193, VH-194, VH-196, VH-197, VH-198, VH-205, VH-199, VH-200, VH-201, VH-202, VH-211, VH-206, VH-207, VH-208, VH-212, VH-213, VH-214, VH-215, VH-216, VH-227, VH-217, VH-209, VH-218, VH-219, VH-210, VH-225, VH-220, VH-221, VH-222, VH-223, VH-224, VH-203, VH-195, VH-204, VH-226
+
+**Deferred:** VH-225, VH-220
+
 ## 2026-10-30 — VH-216 — The switch sits below step 1, not at the top, on the owner's choice
 
 **Decision:** The Staff/Student switch sits below step 1, above steps 2–6; only its place changes.
@@ -615,32 +637,3 @@ INTAKE.2 stays a wish line: only a person listening can judge the Teams output. 
 **Supersedes:** 2026-10-22 — PLAN-6 — The public release: 0.2.0 on Xerte, Phase 5 then Phase 6, the feedback form beside what exists
 
 **Deferred:** VH-14, VH-137
-
-## 2026-10-24 — VH-137 — The statement brought up to date for 0.2.0: the file chooser's limitation, October's automated check, an updated date; the November review stays
-
-**Decision:** The statement gains, in all three languages, a sixth limitation (the browser's Choose File button), a line under How we tested for October's automated check of "the page's main states", and "updated on" 24 October. "Partially compliant", the tests not yet run and the 18 November review stand, so VH-137 stays open for that review.
-
-**Rationale:** The owner, in a separate chat on 2026-10-24: "lets release 0.2.0 and update accessibility statement as appropiate. another review in november", and on the drafted wording, "all reccomendations approved"; relayed by the orchestrator with "cut now. here is some optional direction, your call if pushback:". The words are the approved drafts B1 to B3 with one change, the orchestrator's on that leave: the draft's "went through every part of the page" became "went through the page's main states", because VH-172 ran a prioritised matrix (699 records whole, 821 cells unrun) and VH-172.1 keeps 641 cells never re-read, so "every part" overstated what was checked. B1 pays wish line VH-175.2 (V-43, 2.5.3), which retires. `STATEMENT_UPDATED_DATE` is a new date in `src/config/accessibility.ts`, written by `Intl` like the others; `STATEMENT_PREPARED_DATE` and `STATEMENT_NEXT_REVIEW_DATE` are unchanged. The Chinese and Malay are the agent's drafts, through the filled sheet and `scripts/strings-table.mjs`; the machine-translation limitation covers them. No control or element is added beyond a list item and a paragraph in the statement.
-
-**Supersedes:** none
-
-**Deferred:** VH-137
-
-## 2026-10-24 — VH-177 — Phase 7 closes: eleven items shipped against PLAN-7 and the close itself; VH-162's Phase 7 block lifted, and VH-162 is next on the owner's call
-
-**Decision:** Phase 7 closes: VH-170 to VH-176 and VH-178 to VH-181 have shipped, none moved, and VH-177 ships with this close. The Disposition table is final, VH-137 has six notes for the owner's review, and the person checklist says what each check settles. VH-162's Phase 7 block is lifted, and VH-162 is the next item. It waits on the owner's call: does 0.2.0 wait for VH-137's review on 18 November?
-
-**Rationale:** PLAN-7's Items lines name twelve items: VH-170 to VH-177, VH-178 to VH-180 (the fix plan) and VH-181 (the owner's four wish lines). Each of the eleven before this close has a trajectory line and a commit (VH-170's is `eae49ea`), none has a backlog line, and each item file's Now says shipped. The person checklist claims neither §13 criterion 10 nor full conformance. No wish line is retired, because the evidence fully satisfies none: VH-150.2 needs a person's screen reader, and the cells VH-150.3 and VH-153.1 still need are among VH-172.1's 641. VH-177.1 to VH-177.4 draft the spec §9.3 corrections the pass found for the owner. VH-177.5 is UI-STANDARDS' 2.4.13 conditions, since the file is at its 2,400 words. VH-162 is next because it is the only Phase 6 item an agent can run. Its own Now leaves the timing to the owner. VH-137 and VH-14 are the owner's work. Decided on the owner's standing instruction, "work through to the end of VH-177, archive and spawn as you go, proceed with your recommendations, universal permission is granted": (a) VH-162 is marked [!] with that call as its blocker, in place of the Phase 7 one; (b) VH-137's Now is left as the owner's. Local recall, from the record alone, before editing, scored 7/8 (2,2,2,1):
-
-1. VH-179, VH-180, VH-181 and VH-176, from trajectory.md's Phase 7 lines and their decision headings.
-2. VH-180: the frame-rate note names no rate, because a fast source has frames dropped and Smaller caps the rate again (V-47).
-3. The wish list's open lines (person checks, VH-172.1's 641 cells, VH-175.2 for VH-137, VH-175.4 and VH-181.1 for native readers), backlog Next (VH-13, VH-161, VH-17, VH-113), and VH-137 for the owner's review.
-4. VH-162, in Phase 6. This scored 1, as Codex astra found. Before the edits, the open item was VH-177 in Phase 7, and VH-162 was only its successor. The repaired answer: VH-177, in Phase 7, and after it VH-162, in Phase 6, on the owner's call. The recheck scored 8/8 (2,2,2,2) and is a separate trajectory line.
-
-Codex astra checked the candidate and said "Close after the musts below". Its two musts were applied: this recall, and task H in the checklist narrowed to corrections toward VH-105.2. So were its mays on the counts, on tasks A and C, and on VH-M4's outstanding sessions. Its re-check verdict is in the commit.
-
-This check ran in the session that wrote the record, not in a fresh one, so it does not prove a handoff.
-
-**Supersedes:** none
-
-**Deferred:** VH-162, VH-137
