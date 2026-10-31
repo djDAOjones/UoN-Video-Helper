@@ -1,0 +1,7 @@
+// VH-229 #1: two pictures for the verdict, by Page.captureScreenshot without captureBeyondViewport. Writes under $OUTD.
+import { pathToFileURL } from 'node:url'; import { join } from 'node:path'; import { writeFileSync } from 'node:fs'
+const imp = (f) => import(pathToFileURL(join(process.env.WALKER, f)).href)
+const { connectBrowser } = await imp('cdp.mjs'); const { Walk, sleep } = await imp('walk.mjs'); const { QUAL_INIT, closeAnalysis, setViewport, setMode } = await imp('qualify.mjs'); const { MX_INIT, fresh } = await imp('scenarios.mjs')
+const b = await connectBrowser()
+for (const [view, open] of [['w1280', true], ['w320', false]]) { const w = new Walk(b, `shots/${view}`); await w.open(); await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source: QUAL_INIT }); await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source: MX_INIT }); await setViewport(w, view); await setMode(w, 'light'); await fresh(w, 'en-GB'); if (open) await w.evaluate(`document.getElementById('about-help-button').click()`); await sleep(300); const p = await w.page.send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false }); writeFileSync(join(process.env.OUTD, `${view}.png`), Buffer.from(p.data, 'base64')); await w.close() }
+await closeAnalysis(); b.close(); process.exit(0)

@@ -32,23 +32,73 @@
            pushed right by the logo in the band above (maintainer, 2026-09-30).
            On the University's own pages the title belongs to the content,
            not to the header. -->
-      <h1 class="page-title" data-i18n="app.title">UoN Video Helper</h1>
+      <!-- The "?" beside the title and outside the heading, so the heading's
+           name stays the title; a question mark box a novice can press, on
+           the owner's word (VH-229). -->
+      <div class="page-title-row">
+        <h1 class="page-title" data-i18n="app.title">UoN Video Helper</h1>
+        <button
+          class="button button--secondary help-button"
+          type="button"
+          id="about-help-button"
+          aria-label="About this tool"
+          data-i18n-attr="aria-label:lede.about.label"
+          aria-expanded="false"
+          aria-controls="about-help"
+        >
+          ?
+        </button>
+      </div>
 
-      <!-- The privacy sentence is said once, here, above the file input, and it
-           stays on screen through a job (spec 9.2). It used to be said again
-           under the input, and a promise repeated is a promise skimmed
-           (VH-85). The browser sentence is the maintainer's answer to "does it
-           work everywhere": it is built and tested for Chrome, and says so
-           rather than letting another browser fail part-way (2026-09-30). It
-           shows only when a load-time check has not passed; while they run,
-           step 1 says so, and a pass is the System check's to say (VH-187). -->
-      <div class="lede">
+      <!-- What the "?" opens, closed at every load, so the empty page opens on
+           the title, step 1 and the switch: the five promises, the owner's
+           own, then the privacy sentence, said once (spec 9.2, VH-229, his
+           "Hide both"; VH-85). The "?" beside the fourth is his own request, a
+           toggletip like the one beside "Plays over" (VH-196). In the page's
+           one order, at every width: no CSS order and no script. -->
+      <div class="lede" id="about-help" hidden>
+        <ul class="promises">
+          <li data-i18n="lede.promises.0">Lets you trim unwanted footage from the start and end.</li>
+          <li data-i18n="lede.promises.1">Adds opening and closing graphics.</li>
+          <li data-i18n="lede.promises.2">Evens out the audio level for better audience experience.</li>
+          <li class="promise-with-help">
+            <span data-i18n="lede.promises.3">Saves in a reliable format.</span>
+            <button
+              class="button button--secondary help-button"
+              type="button"
+              id="format-help-button"
+              aria-label="About the video format"
+              data-i18n-attr="aria-label:lede.formatHelp.label"
+              aria-expanded="false"
+              aria-controls="format-help"
+            >
+              ?
+            </button>
+            <div class="promise-help" aria-live="polite">
+              <div class="toggletip" id="format-help" hidden>
+                <p data-i18n="lede.formatHelp.text">
+                  Videos come in many formats. Some play on one device but not another, or do not
+                  work with some apps. This tool saves your video as an MP4, the most interoperable
+                  video format. That means it plays on almost any phone, computer or website.
+                </p>
+              </div>
+            </div>
+          </li>
+          <li data-i18n="lede.promises.4">Makes the file the right size for your purpose.</li>
+        </ul>
         <p data-i18n="lede.privacy">
           Your video is processed on your device, it is never uploaded, and the original file does
           not change.
         </p>
-        <p id="browser-note" hidden></p>
       </div>
+
+      <!-- Outside the panel, in view, since it warns (VH-229). The browser
+           sentence is the maintainer's answer to "does it work everywhere": it
+           is built and tested for Chrome, and says so rather than letting
+           another browser fail part-way (2026-09-30). It shows only when a
+           load-time check has not passed; while they run, step 1 says so, and
+           a pass is the System check's to say (VH-187). -->
+      <p id="browser-note" hidden></p>
 
       <!-- VH-91, 2026-09-30. The steps are separate, numbered panels rather
            than fieldsets stacked under one heading. They stay open: each of
@@ -642,40 +692,6 @@
           </button>
         </div>
       </section>
-
-      <!-- The five promises are the owner's own; the "?" beside the fourth
-           is his own request, a toggletip like the one beside "Plays over"
-           (VH-196). Below the steps, on his choice (VH-216), so that step 1
-           comes first: one order at every width, no CSS order and no script. -->
-      <ul class="promises">
-        <li data-i18n="lede.promises.0">Lets you trim unwanted footage from the start and end.</li>
-        <li data-i18n="lede.promises.1">Adds opening and closing graphics.</li>
-        <li data-i18n="lede.promises.2">Evens out the audio level for better audience experience.</li>
-        <li class="promise-with-help">
-          <span data-i18n="lede.promises.3">Saves in a reliable format.</span>
-          <button
-            class="button button--secondary help-button"
-            type="button"
-            id="format-help-button"
-            aria-label="About the video format"
-            data-i18n-attr="aria-label:lede.formatHelp.label"
-            aria-expanded="false"
-            aria-controls="format-help"
-          >
-            ?
-          </button>
-          <div class="promise-help" aria-live="polite">
-            <div class="toggletip" id="format-help" hidden>
-              <p data-i18n="lede.formatHelp.text">
-                Videos come in many formats. Some play on one device but not another, or do not
-                work with some apps. This tool saves your video as an MP4, the most interoperable
-                video format. That means it plays on almost any phone, computer or website.
-              </p>
-            </div>
-          </div>
-        </li>
-        <li data-i18n="lede.promises.4">Makes the file the right size for your purpose.</li>
-      </ul>
 
       <!-- Development only, and English: diagnostics are the maintainer's
            (VH-105). -->

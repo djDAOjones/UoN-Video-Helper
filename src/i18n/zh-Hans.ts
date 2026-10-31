@@ -37,6 +37,9 @@ export const zhHans: Messages = {
     },
   },
   lede: {
+    about: {
+      label: '关于本工具',
+    },
     promises: [
       '可以修剪掉视频开头和结尾不需要的片段。',
       '添加开场图形和结尾图形。',

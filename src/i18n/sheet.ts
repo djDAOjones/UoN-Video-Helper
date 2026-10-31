@@ -57,11 +57,11 @@ const WHERE: ReadonlyArray<readonly [string, string]> = [
     'language.machine',
     'Under the language switcher, only when the page is in Chinese or Malay: the note that a computer translated it',
   ],
-  ['lede', 'Under the page heading: what the tool does'],
-  ['lede.promises', 'Below the steps: what the tool does'],
+  ['lede', 'In the panel the "?" beside the page heading opens: what the tool does'],
+  ['lede.about', 'Beside the page heading: the "?" that opens what the tool does'],
   [
     'lede.formatHelp',
-    'Below the steps: the "?" beside "Saves in a reliable format." and the text it shows when pressed',
+    'In the panel the "?" beside the page heading opens: the "?" beside "Saves in a reliable format." and the text it shows when pressed',
   ],
   ['browserNote', 'Under the page heading: the note about the browser'],
   ['videoKind', 'Below Step 1: the switch between a staff video and a student submission'],
@@ -353,6 +353,8 @@ const NOTES: Readonly<Record<string, string>> = {
   'closing.helpExistingText':
     'Follows "The last second of video" on the same line, so it starts with a dash; "it" is that second.',
   'closing.helpFreezeText': 'Follows "A held last frame" on the same line, so it starts with a dash.',
+  'lede.about.label':
+    'Not shown: read out by screen readers as the name of the "?" button beside the page heading.',
   'lede.formatHelp.label':
     'Not shown: read out by screen readers as the name of the "?" button beside lede.promises.3.',
   'lede.formatHelp.text':

@@ -1272,3 +1272,15 @@ INTAKE.2 stays a wish line: only a person listening can judge the Teams output. 
 **Items:** VH-182, VH-183, VH-184, VH-185, VH-186, VH-187, VH-188, VH-189, VH-190, VH-191, VH-192, VH-193, VH-194, VH-195
 
 **Deferred:** VH-183, VH-184, VH-185, VH-186, VH-187, VH-188, VH-189, VH-190, VH-182, VH-191, VH-192, VH-193, VH-194, VH-195
+
+## 2026-10-24 — PLAN-8 — the sheet approved: round 2's Q5 to Q7 on its recommendations, with four wording changes of the owner's
+
+**Decision:** The owner approved the Phase 8 wording sheet and round 2, so every Phase 8 item builds from the sheet's final words. Q5: "High quality, for publishing" and "Smaller file, for assignments and sharing". Q6: a measured warning after the job above 3 LU of limiting. Q7: help links labelled "Staff:" or "Students:", none following the Video type. The owner's four changes are the final words.
+
+**Rationale:** The owner, verbatim: "all seems good." Then: "replace "Next time, speak close to the microphone, and keep it away from the keyboard and the desk." with "Try adjusting the way you handle sound" or words to that effect, but be less specific." / "change "Levels the audio so it is easy to hear." to "Levels audio for consistent listening experience". Change "Makes a video file sized for where you will use it." to "Makes a video file sized and formatted for your intended use"." / the help group to "Staff: ask in the Creators team on Teams (new tab) / Students: get help through Self Service (new tab)" / "change "Fill in the feedback form (new tab)" to something like "Please let us know by filling in the feedback form (new tab)" or words to similar effect (warm and encouraging to send feedback)". The settled words, within "words to that effect": "Next time, try adjusting how you record the sound."; "Levels the audio for a consistent listening experience."; "Makes a video file sized and formatted for your intended use."; "Please tell us what you think in the feedback form (new tab)", which still says alone where it goes (2.4.9). "Email the learning content team" leaves the footer; problem reports still reach that team through Report a problem, and the statement's contact still moves to it (Q1a). Round 2's VH-193 criterion is corrected: the limiter's bite is `afterChainLufs` + the solved gain − `limitedLufs`. S1–S10 and S25 are redrafted, and S32 corrects §5.4's introduction for the after-job rows; all corrections together take the spec to 8,100 of 8,100 words. Codex astra: "Commit after the musts below"; both musts (the warning through the pipeline's `outputWarnings`, since `detectOutputWarning` has no production caller; S32), its should and its could are applied. Working: the sheet's Round 2 section.
+
+**Supersedes:** none
+
+**Items:** VH-182, VH-186, VH-187, VH-188, VH-189, VH-190, VH-191, VH-192, VH-193, VH-194
+
+**Deferred:** VH-186, VH-187, VH-188, VH-189, VH-190, VH-182, VH-191, VH-192, VH-193, VH-194

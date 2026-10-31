@@ -1,0 +1,19 @@
+Hold
+
+1. **Reconciliation reproduces exactly**, run through Node’s module stdin without writing files: 636 cells per side, 598 reached, 578 unchanged, no newly failing row. Provenance and readability limits are acknowledged. One correction remains: `vh229-title-help-reconciled-2026-10-31.md:52` includes `states` in the wrong load range. Its medians are **5.99 before / 3.78 after**, not 11–17 / 7–10. Correct the generator’s wording at `vh229-reconcile.mjs.txt:69` too; preserve the original table.
+
+2. **Two criterion counts are stale.** [VH-229.md:11](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/project/items/VH-229.md:11>) says 8,125 specification words; the repository’s `words()` returns **8,141**. Line 23 says UI-STANDARDS has 2,399; it has **2,393**. Both remain within budget. The substantive criteria, measured refinements and owner quotations otherwise agree with the candidate; closure depends on these corrections and point 3.
+
+3. **Rule 5 misses VH-207(f2).** [wish-list.md:73](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/project/wish-list.md:73>) omits its opening prerequisite, although `vh229-design-compare-2026-10-31.md:7` agrees to report it. [scenarios.mjs:1908](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/evidence/measurements/walker/scenarios.mjs:1908>) clicks `VH207_LEDE`, now hidden; line 1933 reloads before f2. VH-203 explicitly reuses these variants (`project/items/VH-203.md:40`). Add this route to VH-216.1, leaving the walker unchanged. The other named wish edits and later-item scope claims check out; VH-229.1’s retirement is traced.
+
+4. **Rules 4/6 otherwise pass.** `project/decisions.md:23` has matching measurement numbers and limits Supersedes to the promises’ placement. The archive addition at `project/decisions-2026-10.md:1276` is verbatim; `archive-index.md:3` correctly counts 111 entries. No earlier decision content disappeared. Backlog removal and the single trajectory addition at `trajectory.md:45`, last in Phase 8, are correct.
+
+5. **Rule 8:** `project/decisions.md:25` names the applied Nielsen, Carbon and WCAG rules, acknowledges the recognition trade-off and retains the existing overflow limitation.
+
+6. **Disposition passes.** `design-pass-3-2026-10-27.md:756` correctly retains V-18 as incomplete and records the closed-panel shortfalls of 88/156 px.
+
+7. **Evidence integrity:** all **374 manifest-listed files** match `sources.txt:1` onward, including the four documented renames (`reconciled:48`). Claude’s verdict hash matches `codex-compare:5`. All four saved Codex answers are present. Their verbatim identity against external originals cannot be independently authenticated within the permitted repository; I did not read those originals.
+
+8. **Rule 7 passes on the supplied gate result.** Changes at `test/screen-text.test.ts:51` and `src/i18n/tables.test.ts:407` preserve existing protections while updating approved expectations. No new skip, deletion, dependency change or protected-path change beyond `docs/01-specification.md:678`; `samples/` and `project/rules.md` are untouched. Gates were not rerun.
+
+9. **Product review:** `index.html:38`, `src/main.ts:756` and `src/styles/app.css:179` stay within authorization. Keyboard operation, Escape priority, focus handling, accessible name/state and browser-note placement agree with the records. No additional product defect found; human screen-reader verification remains explicitly open in `wish-list.md:82`.

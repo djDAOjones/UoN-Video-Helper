@@ -675,8 +675,9 @@ larger file.
   (it never is), and what to do next — and sits where it belongs: an input
   error beside the control it concerns, and tied to it; a job or device
   failure in the step it affects, with its recovery.
-- Persistent reassurance that the source file is never modified and never
-  leaves the device.
+- Reassurance that the source file is never modified and never leaves the
+  device, one press away: the "?" beside the page title shows it and stays open
+  until pressed again.
 - Cancel is always available and leaves no partial file.
 - Help and feedback in one place on every state, blocked and running
   included, grouped by need: help, a problem, an opinion. "Report a

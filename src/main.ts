@@ -359,6 +359,8 @@ const onsetHelpButton = required<HTMLButtonElement>('#onset-help-button')
 const onsetHelp = required<HTMLDivElement>('#onset-help')
 const formatHelpButton = required<HTMLButtonElement>('#format-help-button')
 const formatHelp = required<HTMLDivElement>('#format-help')
+const aboutHelpButton = required<HTMLButtonElement>('#about-help-button')
+const aboutHelp = required<HTMLDivElement>('#about-help')
 const trimPreview = required<HTMLVideoElement>('#trim-preview')
 const trimPreviewNote = required<HTMLParagraphElement>('#trim-preview-note')
 const trimTrack = required<HTMLDivElement>('#trim-track')
@@ -739,6 +741,40 @@ function wireToggletip(button: HTMLButtonElement, tip: HTMLElement): void {
   })
 }
 
+/**
+ * The "?" beside the page title and the panel it opens: the five promises,
+ * then the privacy sentence (VH-229). Closed at every load and not remembered.
+ *
+ * Not a toggletip: it stays open until pressed again (spec 9.2), so focus
+ * moving on or a click elsewhere leaves it, and a press on "Choose file" never
+ * moves that button under the pointer. An open tip takes Escape first; then
+ * Escape closes the panel from its "?", from inside it or from nowhere, and
+ * puts focus on the "?". Escape on a control elsewhere is that control's: the
+ * panel covers nothing, and closing it would move the page under that person.
+ * Registered before the tips' own listeners, so it reads a tip still open.
+ */
+function wireAboutHelp(
+  button: HTMLButtonElement,
+  panel: HTMLElement,
+  tips: readonly HTMLElement[],
+): void {
+  const set = (open: boolean): void => {
+    panel.hidden = !open
+    button.setAttribute('aria-expanded', String(open))
+  }
+
+  button.addEventListener('click', () => set(button.getAttribute('aria-expanded') !== 'true'))
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || event.repeat || panel.hidden) return
+    if (tips.some((tip) => !tip.hidden)) return
+    if (!escapeFocusesButton(document.activeElement, document.body, button, panel)) return
+    set(false)
+    button.focus()
+  })
+}
+
+wireAboutHelp(aboutHelpButton, aboutHelp, [onsetHelp, formatHelp])
 wireToggletip(onsetHelpButton, onsetHelp)
 wireToggletip(formatHelpButton, formatHelp)
 
@@ -3822,7 +3858,7 @@ const languageSwitcher = buildLanguageSwitcher(languageOptions(LANGUAGES_OFFERED
 // above the heading it pushed step 1 below the first screen (VH-154, V-18).
 // The note stays in `main`, above the heading, where the page's words begin.
 required<HTMLElement>('#brand-header').append(languageSwitcher.fieldset)
-required<HTMLHeadingElement>('.page-title').before(languageSwitcher.notice)
+required<HTMLDivElement>('.page-title-row').before(languageSwitcher.notice)
 
 /** Puts back the live regions a switch quietened, while that is still to happen. */
 let restoreLiveRegions: (() => void) | null = null

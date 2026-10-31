@@ -77,6 +77,10 @@ export const enGB = {
   },
 
   lede: {
+    /** The "?" beside the page title, which opens the promises and the privacy line (VH-229). */
+    about: {
+      label: 'About this tool',
+    },
     /** The owner's five, in his words (VH-196). */
     promises: [
       'Lets you trim unwanted footage from the start and end.',

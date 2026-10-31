@@ -48,6 +48,56 @@ const visibleText = markup
   .replace(/<[^>]+>/g, ' ')
   .replace(/\s+/g, ' ')
 
+describe('the promises and the privacy line behind a "?" beside the title (VH-229)', () => {
+  const page = markup.replace(/<!--[\s\S]*?-->/g, '')
+  const row = /<div class="page-title-row">([\s\S]*?)<\/div>/.exec(page)?.[1] ?? ''
+  const button = /<button[^>]*id="about-help-button"[^>]*>/.exec(row)?.[0] ?? ''
+  const panelStart = page.indexOf('<div class="lede" id="about-help" hidden>')
+  const panel = page.slice(panelStart, page.indexOf('id="browser-note"'))
+  const source = readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8')
+  const wiring = /function wireAboutHelp\([\s\S]*?\n\}\n/.exec(source)?.[0] ?? ''
+
+  it('puts one named "?" beside the title and outside its heading', () => {
+    expect(row).toMatch(/<\/h1>\s*<button/)
+    expect(/<h1[^>]*>([\s\S]*?)<\/h1>/.exec(row)?.[1]).toBe('UoN Video Helper')
+    expect(button).toContain('type="button"')
+    expect(button).toContain('aria-label="About this tool"')
+    expect(button).toContain('aria-expanded="false"')
+    expect(button).toContain('aria-controls="about-help"')
+    expect(page.indexOf('id="about-help-button"')).toBeLessThan(page.indexOf('id="file-input"'))
+  })
+
+  it('holds the five promises then the privacy line in one panel, closed in the markup', () => {
+    expect(panelStart).toBeGreaterThan(-1)
+    expect(panel.indexOf('class="promises"')).toBeGreaterThan(-1)
+    expect(panel.indexOf('class="promises"')).toBeLessThan(panel.indexOf('never uploaded'))
+    expect(panel).toContain('id="format-help-button"')
+  })
+
+  it('keeps the browser note outside the panel, before step 1', () => {
+    expect(panel).not.toContain('id="browser-note"')
+    expect(page.indexOf('id="about-help"')).toBeLessThan(page.indexOf('id="browser-note"'))
+    expect(page.indexOf('id="browser-note"')).toBeLessThan(page.indexOf('id="step-choose"'))
+  })
+
+  it('closes only by a press or Escape: no focus or click listener, nothing remembered', () => {
+    expect(wiring).not.toBe('')
+    expect(wiring).not.toContain('focusin')
+    expect(wiring).not.toMatch(/addEventListener\('click', \(event\)/)
+    expect(wiring).not.toContain('Storage')
+    expect(wiring).toContain('event.repeat')
+    expect(wiring).toContain('tips.some((tip) => !tip.hidden)')
+    expect(wiring).toContain('escapeFocusesButton(document.activeElement, document.body, button, panel)')
+  })
+
+  it('hears Escape before the tips do, so an open tip takes it first', () => {
+    const about = source.indexOf('wireAboutHelp(aboutHelpButton, aboutHelp, [onsetHelp, formatHelp])')
+    expect(about).toBeGreaterThan(-1)
+    expect(about).toBeLessThan(source.indexOf('wireToggletip(onsetHelpButton, onsetHelp)'))
+    expect(about).toBeLessThan(source.indexOf('wireToggletip(formatHelpButton, formatHelp)'))
+  })
+})
+
 describe('the privacy promise (VH-85)', () => {
   it('is on the page, in the words the maintainer asked for', () => {
     expect(visibleText).toContain(
@@ -56,8 +106,8 @@ describe('the privacy promise (VH-85)', () => {
   })
 
   it('is said once', () => {
-    // Spec 9.2 wants it visible throughout; saying it twice was a second
-    // sentence to skim, not a second reassurance.
+    // One press away (spec 9.2, VH-229); saying it twice was a second sentence
+    // to skim, not a second reassurance.
     expect(visibleText.match(/never uploaded/g)).toHaveLength(1)
   })
 
@@ -656,8 +706,11 @@ describe('Staff video or Student submission (VH-131)', () => {
 
   it('sits below Step 1, in the owner\'s whole order, one order at every width (VH-216)', () => {
     const order = [
+      'class="page-title-row"',
       'class="page-title"',
+      'id="about-help-button"',
       'class="lede"',
+      'class="promises"',
       'Your video is processed on your device',
       'id="browser-note"',
       'id="step-choose"',
@@ -669,7 +722,6 @@ describe('Staff video or Student submission (VH-131)', () => {
       'id="step-create"',
       'id="page-announcer"',
       'id="errors-panel"',
-      'class="promises"',
       'id="dev-actions"',
     ]
     const page = markup.replace(/<!--[\s\S]*?-->/g, '')
@@ -917,13 +969,15 @@ describe('the page frame (VH-92)', () => {
     // the text beneath it (maintainer, 2026-09-30).
     expect(markup.match(/<h1[\s>]/g)).toHaveLength(1)
     expect(header).not.toContain('<h1')
-    expect(markup).toMatch(/<main[^>]*>\s*<h1 class="page-title">UoN Video Helper<\/h1>/)
+    expect(markup).toMatch(
+      /<main[^>]*>\s*<div class="page-title-row">\s*<h1 class="page-title">UoN Video Helper<\/h1>/,
+    )
   })
 
   it('puts the page language in the header band and its note above the heading (VH-154)', () => {
     const mainSource = readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8')
     expect(mainSource).toContain("required<HTMLElement>('#brand-header').append(languageSwitcher.fieldset)")
-    expect(mainSource).toContain("required<HTMLHeadingElement>('.page-title').before(languageSwitcher.notice)")
+    expect(mainSource).toContain("required<HTMLDivElement>('.page-title-row').before(languageSwitcher.notice)")
     // The skip link still comes before the band, so it passes over the switcher.
     expect(markup.indexOf('class="skip-link"')).toBeLessThan(markup.indexOf('<header'))
   })

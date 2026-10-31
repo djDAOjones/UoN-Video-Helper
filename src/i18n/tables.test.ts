@@ -404,22 +404,24 @@ describe('too little in a whole video, in the owner’s words (VH-213)', () => {
   )
 })
 
-describe('the promises and the switch below step 1 (VH-216)', () => {
-  it('says where the promises and the switch moved to, in the sheet and the filled sheet (VH-216)', () => {
+describe("the promises in the title's panel and the switch below step 1 (VH-216, VH-229)", () => {
+  it('says where the promises and the switch sit, in the sheet and the filled sheet (VH-216, VH-229)', () => {
     const [heading, ...rows] = parseCsv(
       readFileSync(new URL(`../../${FILLED_SHEET}`, import.meta.url), 'utf8'),
     )
     const where = heading!.indexOf('where it shows on the page')
     const notes = heading!.indexOf('notes')
     const moved = sheetRows().filter(({ key }) => /^(lede\.promises|lede\.formatHelp|videoKind)\b/.test(key))
+    const panel = 'In the panel the "?" beside the page heading opens'
     expect(moved.length).toBe(13)
     for (const row of moved) {
-      expect(row.where, row.key).toMatch(/^Below (the steps|Step 1): /)
+      expect(row.where.startsWith(panel) || row.where.startsWith('Below Step 1: '), row.key).toBe(true)
       expect(rows.find((cells) => cells[0] === row.key)![where], row.key).toBe(row.where)
     }
-    // The privacy line and the browser note stay under the heading.
+    // The privacy line goes with the promises (VH-229); the browser note stays under the heading.
     const row = (key: string) => sheetRows().find((sheetRow) => sheetRow.key === key)!
-    expect(row('lede.privacy').where).toMatch(/^Under the page heading: /)
+    expect(row('lede.privacy').where.startsWith(panel)).toBe(true)
+    expect(row('lede.about.label').where).toMatch(/^Beside the page heading: /)
     expect(row('browserNote.notPassed').where).toMatch(/^Under the page heading: /)
     const job = row('progress.job')
     expect(job.notes).toContain('the video type below Step 1')

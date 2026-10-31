@@ -1,0 +1,17 @@
+12:23:43 page loaded http://localhost:5181/
+v18__en-GB__w1280: painted 265–309 px of 900 (inside); input box 261–313
+12:23:45 page loaded http://localhost:5181/
+12:23:45 click #language-switcher input[value="zh-Hans"]
+v18__zh-Hans__w1280: painted 436–480 px of 900 (inside); input box 432–484
+12:23:48 page loaded http://localhost:5181/
+12:23:48 click #language-switcher input[value="ms-MY"]
+v18__ms-MY__w1280: painted 457–501 px of 900 (inside); input box 453–505
+12:23:51 page loaded http://localhost:5181/
+v18__en-GB__w320: painted 427–471 px of 568 (inside); input box 423–475
+12:23:53 page loaded http://localhost:5181/
+12:23:53 click #language-switcher input[value="zh-Hans"]
+v18__zh-Hans__w320: painted 612–656 px of 568 (below); input box 608–660
+12:23:56 page loaded http://localhost:5181/
+12:23:56 click #language-switcher input[value="ms-MY"]
+v18__ms-MY__w320: painted 680–724 px of 568 (below); input box 676–728
+run dir: /Users/joe/UoN-Video-Helper-side/vh229-walk/after-six/runs/rings-179-v18-2026-10-31T12-23-41-941Z

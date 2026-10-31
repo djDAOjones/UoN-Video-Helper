@@ -1,0 +1,9 @@
+Hold
+
+The five content checks pass, but the commit lacks the required `Verify:` line. The checker fails on this: [tools/check.mjs:39](/Users/joe/UoN-Video-Helper-side/vh229/tools/check.mjs:39).
+
+1. **Ledger only:** eight `project/` files changed; nothing in `src`, `docs`, `test` or `walker`. [VH-229.md:1](/Users/joe/UoN-Video-Helper-side/vh229/project/items/VH-229.md:1).
+2. **Preserved:** VH-217’s [decision:21](/Users/joe/UoN-Video-Helper-side/vh229/project/decisions.md:21), [trajectory:44](/Users/joe/UoN-Video-Helper-side/vh229/project/trajectory.md:44), backlog removal and [wish lines:77](/Users/joe/UoN-Video-Helper-side/vh229/project/wish-list.md:77). No decisions lost or altered against either base or `6dc453e`; [one archived verbatim:1242](/Users/joe/UoN-Video-Helper-side/vh229/project/decisions-2026-10.md:1242), exactly matching `archive.mjs`’s transformation.
+3. **Correct order:** VH-229 immediately precedes VH-209; no stale blocker. [backlog.md:40](/Users/joe/UoN-Video-Helper-side/vh229/project/backlog.md:40).
+4. **Build next:** no outstanding landing language; the side-branch note is past tense. [VH-229.md:30](/Users/joe/UoN-Video-Helper-side/vh229/project/items/VH-229.md:30), [VH-229.md:45](/Users/joe/UoN-Video-Helper-side/vh229/project/items/VH-229.md:45).
+5. **Owner’s words unchanged** from `6dc453e` in the [item:43](/Users/joe/UoN-Video-Helper-side/vh229/project/items/VH-229.md:43) and [decision:33](/Users/joe/UoN-Video-Helper-side/vh229/project/decisions.md:33).

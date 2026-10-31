@@ -37,6 +37,9 @@ export const msMY: Messages = {
     },
   },
   lede: {
+    about: {
+      label: 'Perihal alat ini',
+    },
     promises: [
       'Membolehkan anda memotong rakaman yang tidak diingini di awal dan akhir.',
       'Menambah grafik pembukaan dan grafik penutup.',

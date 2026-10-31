@@ -1,0 +1,11 @@
+Commit
+
+1. **Load range corrected.** `vh229-title-help-reconciled-2026-10-31.md:52` and `vh229-records-2026-10-31/vh229-reconcile.mjs.txt:69` now give `states` medians **5.99 before / 3.78 after**, matching `vh229-title-help-2026-10-31.md:39–40`. Running the generator through Node’s module stdin reproduces the reconciled page exactly.
+
+2. **Counts correct.** `project/items/VH-229.md:11` states **8,141** specification words; line **23** states **2,393** UI-STANDARDS words. Both match direct calls to `tools/ledger.mjs:14`’s `words()` and remain within budget.
+
+3. **VH-207 f2 recorded accurately.** `project/wish-list.md:73` now names the prerequisite: open the panel before clicking the privacy line. This matches `walker/scenarios.mjs:1831`’s selector, its click at **1908**, and reload before f2 at **1933**. `project/items/VH-203.md:40` includes VH-207’s variants. The walker matches the base byte-for-byte.
+
+4. **Added close records agree.** `vh229-codex-compare-2026-10-31.md:35` accurately summarises the three Holds and repairs. `vh229-codex-close-brief-2026-10-31.md:7` identifies the candidate; `vh229-codex-close-2026-10-31.md.txt:3`, **5**, and **7** preserve the findings addressed here. HEAD matches the supplied base; the tracked diff’s SHA-1 begins **22b9a52b7f836ca7**.
+
+Gate accepted as supplied: `npm run check` exit 0; ledger checker 0 failures, 0 warnings. Gates not rerun. No files edited or `side-session-notes/` folders read.

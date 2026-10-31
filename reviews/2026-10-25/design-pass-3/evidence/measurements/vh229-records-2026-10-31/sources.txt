@@ -1,0 +1,374 @@
+56c5035bd09e0e391b12303e05abcaa233fa2191  before-a.conditions.txt  vh229-walk/before-a/conditions.txt
+eb874e483e781d74af1495501accb9e04b153fbc  before-a.load.log.txt  vh229-walk/before-a.load.log
+67e13c52c25a959c2b2cbea579c83c212e71fb03  before-a.launcher.log.txt  vh229-walk/before-a.launcher.log
+2c793e44550cb7b078700e7dd78cffc62aadd717  before-a.vh229-before-a-dark.manifest.json  vh229-walk/before-a/runs/vh229-before-a-dark-2026-10-31T09-28-19-907Z-214159/manifest.json
+56f6ef97cd81ecc706368df94c71c4d265273b6e  before-a.vh229-before-a-dark.run.json  vh229-walk/before-a/runs/vh229-before-a-dark-2026-10-31T09-28-19-907Z-214159/run.json
+a1c5b6d68ce58b43a1da1a7ea4d77a3ae2492c98  before-a.vh229-before-a-font32.manifest.json  vh229-walk/before-a/runs/vh229-before-a-font32-2026-10-31T09-35-27-021Z-14910b/manifest.json
+d55f5abec93a6cdf3051136ea85a37424a7ee85e  before-a.vh229-before-a-font32.run.json  vh229-walk/before-a/runs/vh229-before-a-font32-2026-10-31T09-35-27-021Z-14910b/run.json
+b8d2e8f96695f2c076fd90698fbaf993af804a35  before-a.vh229-before-a-forced-dark.manifest.json  vh229-walk/before-a/runs/vh229-before-a-forced-dark-2026-10-31T09-33-04-278Z-7ee82e/manifest.json
+201072d19da6f9cbc9899bcb0edd929cf5ee0031  before-a.vh229-before-a-forced-dark.run.json  vh229-walk/before-a/runs/vh229-before-a-forced-dark-2026-10-31T09-33-04-278Z-7ee82e/run.json
+b8b22da061023c3724553cdeac25322521f80143  before-a.vh229-before-a-forced-light.manifest.json  vh229-walk/before-a/runs/vh229-before-a-forced-light-2026-10-31T09-30-42-326Z-4a6646/manifest.json
+25d93141e5d7193dbc5aa6ecb2b200e1ae6b12bd  before-a.vh229-before-a-forced-light.run.json  vh229-walk/before-a/runs/vh229-before-a-forced-light-2026-10-31T09-30-42-326Z-4a6646/run.json
+6b27b5dad61c2ea336900a9825d07938703eb6cb  before-a.vh229-before-a-light.manifest.json  vh229-walk/before-a/runs/vh229-before-a-light-2026-10-31T09-25-55-502Z-0d52dc/manifest.json
+9fa88c7a62511f95a1e398ce193261cb721f60a4  before-a.vh229-before-a-light.run.json  vh229-walk/before-a/runs/vh229-before-a-light-2026-10-31T09-25-55-502Z-0d52dc/run.json
+8db40a0d1e80fc2899aa5b344ad5b443afa665b3  before-a.vh229-ledger.jsonl  vh229-walk/before-a/runs/vh229-ledger.jsonl
+7605003f1281fc8d5fa7d2de9f44b197766e6d49  before-a.vh229-probe-vh229-before-a-dark.jsonl  vh229-walk/before-a/runs/vh229-probe-vh229-before-a-dark.jsonl
+08bbbe099c2a0c2363283206a462f4ab01fed6b1  before-a.vh229-probe-vh229-before-a-font32.jsonl  vh229-walk/before-a/runs/vh229-probe-vh229-before-a-font32.jsonl
+712ff11d14bec22977fed7b9affb133c087a0860  before-a.vh229-probe-vh229-before-a-forced-dark.jsonl  vh229-walk/before-a/runs/vh229-probe-vh229-before-a-forced-dark.jsonl
+af64eea68e18d2393b023e983be84c0d77059550  before-a.vh229-probe-vh229-before-a-forced-light.jsonl  vh229-walk/before-a/runs/vh229-probe-vh229-before-a-forced-light.jsonl
+0bc34f0d4ea0ff9551058389607c7def8cc32005  before-a.vh229-probe-vh229-before-a-light.jsonl  vh229-walk/before-a/runs/vh229-probe-vh229-before-a-light.jsonl
+e4e0252b6bbcc5326b9d66e445c246ad6683aa04  before-a.outcomes.jsonl  written from before-a/runs
+758ebb31f891ad2c63ef47e904f86bc991c75b99  after-a.conditions.txt  vh229-walk/after-a/conditions.txt
+684cfe82c9c5b37c5d9e82c32f9f88d935c6eb00  after-a.load.log.txt  vh229-walk/after-a.load.log
+27be842547c094cedc8ddcafd04c50260ecdfe69  after-a.launcher.log.txt  vh229-walk/after-a.launcher.log
+6901d072c75f4e9f5bc827885d38384b03aecb1e  after-a.vh229-after-a-dark.manifest.json  vh229-walk/after-a/runs/vh229-after-a-dark-2026-10-31T12-27-32-501Z-fbd607/manifest.json
+f752fb77798398a0930c930795de207434542426  after-a.vh229-after-a-dark.run.json  vh229-walk/after-a/runs/vh229-after-a-dark-2026-10-31T12-27-32-501Z-fbd607/run.json
+134b958a0e706c7cc215e512980701ef61953d71  after-a.vh229-after-a-font32.manifest.json  vh229-walk/after-a/runs/vh229-after-a-font32-2026-10-31T12-34-11-538Z-9eb878/manifest.json
+baf918c8c4f4eb71e57df4bd9585c2be25b9f6a3  after-a.vh229-after-a-font32.run.json  vh229-walk/after-a/runs/vh229-after-a-font32-2026-10-31T12-34-11-538Z-9eb878/run.json
+3df6a5233464ca9d7734c0230ff96dc3b547b0c7  after-a.vh229-after-a-forced-dark.manifest.json  vh229-walk/after-a/runs/vh229-after-a-forced-dark-2026-10-31T12-31-58-310Z-2583bb/manifest.json
+8e149d38f76077092b3c13328c67089232ba4569  after-a.vh229-after-a-forced-dark.run.json  vh229-walk/after-a/runs/vh229-after-a-forced-dark-2026-10-31T12-31-58-310Z-2583bb/run.json
+c46863f5a24bad09fe72f52a79f561c9dff554b7  after-a.vh229-after-a-forced-light.manifest.json  vh229-walk/after-a/runs/vh229-after-a-forced-light-2026-10-31T12-29-45-502Z-11fb2a/manifest.json
+1020518789946feba015584efdc87b46b7397fea  after-a.vh229-after-a-forced-light.run.json  vh229-walk/after-a/runs/vh229-after-a-forced-light-2026-10-31T12-29-45-502Z-11fb2a/run.json
+e094ccac5f83b3babdbf42c9b4b45d91b6fdbecd  after-a.vh229-after-a-light.manifest.json  vh229-walk/after-a/runs/vh229-after-a-light-2026-10-31T12-25-18-738Z-924121/manifest.json
+40db2bda9ba1bb1dff520a4ff824d8226584ba25  after-a.vh229-after-a-light.run.json  vh229-walk/after-a/runs/vh229-after-a-light-2026-10-31T12-25-18-738Z-924121/run.json
+48ecef8e46ac38d0a5fb052999c8d610b18025a3  after-a.vh229-ledger.jsonl  vh229-walk/after-a/runs/vh229-ledger.jsonl
+3986e2348eb116f0a0542a4046854e87d86e6fd4  after-a.vh229-probe-vh229-after-a-dark.jsonl  vh229-walk/after-a/runs/vh229-probe-vh229-after-a-dark.jsonl
+59c7fb994a82be1a161b28220a9eeb1e4c82af2b  after-a.vh229-probe-vh229-after-a-font32.jsonl  vh229-walk/after-a/runs/vh229-probe-vh229-after-a-font32.jsonl
+c52e4978244c532ea35140c1b4c2a5b178a95fa4  after-a.vh229-probe-vh229-after-a-forced-dark.jsonl  vh229-walk/after-a/runs/vh229-probe-vh229-after-a-forced-dark.jsonl
+cb662ffd06b840d107771d198fdd38694a7fe43c  after-a.vh229-probe-vh229-after-a-forced-light.jsonl  vh229-walk/after-a/runs/vh229-probe-vh229-after-a-forced-light.jsonl
+9df497e3dc7c293d07b14656b79bc16ca769160a  after-a.vh229-probe-vh229-after-a-light.jsonl  vh229-walk/after-a/runs/vh229-probe-vh229-after-a-light.jsonl
+73b586b1c678913c476ea71e39ba1770c698b869  after-a.outcomes.jsonl  written from after-a/runs
+7b54f8e1021ec19b56e6f305f1107b71f35aace5  before-b.conditions.txt  vh229-walk/before-b/conditions.txt
+884aa58c71a5479ff7e8ff8834da7d437272bec4  before-b.load.log.txt  vh229-walk/before-b.load.log
+1092e571a421848cafa942c83e94e10d70e955e2  before-b.launcher.log.txt  vh229-walk/before-b.launcher.log
+50b06f0a47bb73b7f254349a4b87a6729e4aa51b  before-b.vh229-before-b-dark.manifest.json  vh229-walk/before-b/runs/vh229-before-b-dark-2026-10-31T09-47-02-383Z-ac4799/manifest.json
+4cb73f26452ac28514005dedf4acc3eb9c2a12f4  before-b.vh229-before-b-dark.run.json  vh229-walk/before-b/runs/vh229-before-b-dark-2026-10-31T09-47-02-383Z-ac4799/run.json
+9782de4cb2c61514058d1a493c075ccd27f5a909  before-b.vh229-before-b-dark-font32.manifest.json  vh229-walk/before-b/runs/vh229-before-b-dark-font32-2026-10-31T10-00-18-057Z-4b2691/manifest.json
+0e3f8998ad4c7cb5ecb38da2e5260e5f5730bd5a  before-b.vh229-before-b-dark-font32.run.json  vh229-walk/before-b/runs/vh229-before-b-dark-font32-2026-10-31T10-00-18-057Z-4b2691/run.json
+3c438d3bcbab3aa561e447b7f847efed0f8c7e2a  before-b.vh229-before-b-font32.manifest.json  vh229-walk/before-b/runs/vh229-before-b-font32-2026-10-31T09-56-54-940Z-5bab50/manifest.json
+16a8795462b7e5531a33459129e2e97b0b6b9495  before-b.vh229-before-b-font32.run.json  vh229-walk/before-b/runs/vh229-before-b-font32-2026-10-31T09-56-54-940Z-5bab50/run.json
+aff9186cddd0acc4ad7ecf9b0d5bdc6740ad6b08  before-b.vh229-before-b-forced-dark.manifest.json  vh229-walk/before-b/runs/vh229-before-b-forced-dark-2026-10-31T09-53-34-606Z-2bedfd/manifest.json
+13ec9b75c5eb2cbb667f1443fd9fec4b10641bb4  before-b.vh229-before-b-forced-dark.run.json  vh229-walk/before-b/runs/vh229-before-b-forced-dark-2026-10-31T09-53-34-606Z-2bedfd/run.json
+90b02f6b0f2d48d1547b29ff758fc5a38ac82f0f  before-b.vh229-before-b-forced-dark-font32.manifest.json  vh229-walk/before-b/runs/vh229-before-b-forced-dark-font32-2026-10-31T10-07-05-784Z-a9ee78/manifest.json
+490b65cbbc766a252a3cf0c83e62f09c30b1b403  before-b.vh229-before-b-forced-dark-font32.run.json  vh229-walk/before-b/runs/vh229-before-b-forced-dark-font32-2026-10-31T10-07-05-784Z-a9ee78/run.json
+86d5c4436c3078961924e523223543c62e68c0f4  before-b.vh229-before-b-forced-light.manifest.json  vh229-walk/before-b/runs/vh229-before-b-forced-light-2026-10-31T09-50-16-261Z-f8de05/manifest.json
+5872ac2a1e5990dca52b8b5189e63092926fa193  before-b.vh229-before-b-forced-light.run.json  vh229-walk/before-b/runs/vh229-before-b-forced-light-2026-10-31T09-50-16-261Z-f8de05/run.json
+add872b2bc3595a1546d526460750b95ed1c3436  before-b.vh229-before-b-forced-light-font32.manifest.json  vh229-walk/before-b/runs/vh229-before-b-forced-light-font32-2026-10-31T10-03-41-957Z-dcefff/manifest.json
+c082b090a3967015e5b61642ab75ed3d7d67fe60  before-b.vh229-before-b-forced-light-font32.run.json  vh229-walk/before-b/runs/vh229-before-b-forced-light-font32-2026-10-31T10-03-41-957Z-dcefff/run.json
+75303c90aa0670da839cf94ff2e0e04a4f19845f  before-b.vh229-before-b-light.manifest.json  vh229-walk/before-b/runs/vh229-before-b-light-2026-10-31T09-43-46-064Z-0b3289/manifest.json
+db4f234a5fa726c9761a57e368302494a0708745  before-b.vh229-before-b-light.run.json  vh229-walk/before-b/runs/vh229-before-b-light-2026-10-31T09-43-46-064Z-0b3289/run.json
+f9df5d067c3a9468750783bca5e1143b4d10709e  before-b.vh229-ledger.jsonl  vh229-walk/before-b/runs/vh229-ledger.jsonl
+731392fb59e26a2d35f3ac3e42ef5a254e5b7fef  before-b.vh229-probe-vh229-before-b-dark-font32.jsonl  vh229-walk/before-b/runs/vh229-probe-vh229-before-b-dark-font32.jsonl
+6b4dd572b57d6ff0a1088b1203940eba63858562  before-b.vh229-probe-vh229-before-b-dark.jsonl  vh229-walk/before-b/runs/vh229-probe-vh229-before-b-dark.jsonl
+53eda08cf096b449da2d432611113f4b3b3786b0  before-b.vh229-probe-vh229-before-b-font32.jsonl  vh229-walk/before-b/runs/vh229-probe-vh229-before-b-font32.jsonl
+e411eec151d3d2c8288d79e954e83ac6a759a294  before-b.vh229-probe-vh229-before-b-forced-dark-font32.jsonl  vh229-walk/before-b/runs/vh229-probe-vh229-before-b-forced-dark-font32.jsonl
+e5993b2a096389b1149f799ee10157749be7146f  before-b.vh229-probe-vh229-before-b-forced-dark.jsonl  vh229-walk/before-b/runs/vh229-probe-vh229-before-b-forced-dark.jsonl
+385721f5944fe87a87b74b2c05234c409dee35cd  before-b.vh229-probe-vh229-before-b-forced-light-font32.jsonl  vh229-walk/before-b/runs/vh229-probe-vh229-before-b-forced-light-font32.jsonl
+8dc37df5fa42eecf532895037be1d443feff24ed  before-b.vh229-probe-vh229-before-b-forced-light.jsonl  vh229-walk/before-b/runs/vh229-probe-vh229-before-b-forced-light.jsonl
+47a60667f1c9f6fd414fddfb00a81185a2d73e81  before-b.vh229-probe-vh229-before-b-light.jsonl  vh229-walk/before-b/runs/vh229-probe-vh229-before-b-light.jsonl
+13cab4699ad5a73c61502f042a240118eb539a56  before-b.outcomes.jsonl  written from before-b/runs
+3018d28f9483edb0a7e94a76afce8e601cdd6471  after-b.conditions.txt  vh229-walk/after-b/conditions.txt
+630ba7d9eb9348416f54fe6e3c0238c31dc036a2  after-b.load.log.txt  vh229-walk/after-b.load.log
+f1da1046de92581018a8538ce5b173f35863ec16  after-b.launcher.log.txt  vh229-walk/after-b.launcher.log
+ac155cac3c738c7e06c890ad956f2f5cd68109e9  after-b.vh229-after-b-dark.manifest.json  vh229-walk/after-b/runs/vh229-after-b-dark-2026-10-31T12-40-39-782Z-94e7f5/manifest.json
+c2b5b954d0cc732b3254f56042322d375ad2077a  after-b.vh229-after-b-dark.run.json  vh229-walk/after-b/runs/vh229-after-b-dark-2026-10-31T12-40-39-782Z-94e7f5/run.json
+66a6128cee1abb36d8654e89cd6685a6e8e9117a  after-b.vh229-after-b-dark-font32.manifest.json  vh229-walk/after-b/runs/vh229-after-b-dark-font32-2026-10-31T12-53-49-037Z-2c9a2c/manifest.json
+6f60936ea4dac37b45c54600bf00d3e780e14961  after-b.vh229-after-b-dark-font32.run.json  vh229-walk/after-b/runs/vh229-after-b-dark-font32-2026-10-31T12-53-49-037Z-2c9a2c/run.json
+931c1743f2e19a65721afb3bc570da07e49ceb89  after-b.vh229-after-b-font32.manifest.json  vh229-walk/after-b/runs/vh229-after-b-font32-2026-10-31T12-50-28-928Z-51528c/manifest.json
+8d9f38d2723405ff49e6beca740ed51944a6b215  after-b.vh229-after-b-font32.run.json  vh229-walk/after-b/runs/vh229-after-b-font32-2026-10-31T12-50-28-928Z-51528c/run.json
+d1241fab8f868718ede32a15ea9ea5ed83f58552  after-b.vh229-after-b-forced-dark.manifest.json  vh229-walk/after-b/runs/vh229-after-b-forced-dark-2026-10-31T12-47-12-707Z-b92167/manifest.json
+1c4ceb1d9a95bc38ca11ae2dc0278fa59a4a6812  after-b.vh229-after-b-forced-dark.run.json  vh229-walk/after-b/runs/vh229-after-b-forced-dark-2026-10-31T12-47-12-707Z-b92167/run.json
+90cbba7fc2d820b247a618620cd9747fe54ee093  after-b.vh229-after-b-forced-dark-font32.manifest.json  vh229-walk/after-b/runs/vh229-after-b-forced-dark-font32-2026-10-31T13-00-29-564Z-c319a2/manifest.json
+e08dc2c29f82f81e5ace7bc6059f178aa84ad6ef  after-b.vh229-after-b-forced-dark-font32.run.json  vh229-walk/after-b/runs/vh229-after-b-forced-dark-font32-2026-10-31T13-00-29-564Z-c319a2/run.json
+6e49ba90ebebd81432d5eedc0e84bfd397bc6674  after-b.vh229-after-b-forced-light.manifest.json  vh229-walk/after-b/runs/vh229-after-b-forced-light-2026-10-31T12-43-56-568Z-5e203c/manifest.json
+6a930cf9c31d08bb6a4db80d4818ca5fb9533bdd  after-b.vh229-after-b-forced-light.run.json  vh229-walk/after-b/runs/vh229-after-b-forced-light-2026-10-31T12-43-56-568Z-5e203c/run.json
+10554d545253bd8e83a2fadb95df17b29e39b81c  after-b.vh229-after-b-forced-light-font32.manifest.json  vh229-walk/after-b/runs/vh229-after-b-forced-light-font32-2026-10-31T12-57-09-569Z-5340fc/manifest.json
+a0a8effaa2a15e8d7a1bcd193c9c64188a523380  after-b.vh229-after-b-forced-light-font32.run.json  vh229-walk/after-b/runs/vh229-after-b-forced-light-font32-2026-10-31T12-57-09-569Z-5340fc/run.json
+8fce7075e0b80315ee0063fa6eb0f695b19b04ba  after-b.vh229-after-b-light.manifest.json  vh229-walk/after-b/runs/vh229-after-b-light-2026-10-31T12-37-23-133Z-3a7623/manifest.json
+b3456fb617895ebe06c6d486b3f869608c9ef6c5  after-b.vh229-after-b-light.run.json  vh229-walk/after-b/runs/vh229-after-b-light-2026-10-31T12-37-23-133Z-3a7623/run.json
+2f1fa6d151d58e224bc2989d811c1e94f39b31e8  after-b.vh229-ledger.jsonl  vh229-walk/after-b/runs/vh229-ledger.jsonl
+85490cc29dc9b7545ea4f59781524c7dfc215916  after-b.vh229-probe-vh229-after-b-dark-font32.jsonl  vh229-walk/after-b/runs/vh229-probe-vh229-after-b-dark-font32.jsonl
+89eabe045e72cf0300ba6ed21589008b47eb4289  after-b.vh229-probe-vh229-after-b-dark.jsonl  vh229-walk/after-b/runs/vh229-probe-vh229-after-b-dark.jsonl
+3a1181b6ace5906ff6209db139546f23aa126bd8  after-b.vh229-probe-vh229-after-b-font32.jsonl  vh229-walk/after-b/runs/vh229-probe-vh229-after-b-font32.jsonl
+c5ef98ef558ccd49ef075bd98631094e9eccc7c7  after-b.vh229-probe-vh229-after-b-forced-dark-font32.jsonl  vh229-walk/after-b/runs/vh229-probe-vh229-after-b-forced-dark-font32.jsonl
+fa23a99fd38bd3b09383d834b0dcf256d031f2d6  after-b.vh229-probe-vh229-after-b-forced-dark.jsonl  vh229-walk/after-b/runs/vh229-probe-vh229-after-b-forced-dark.jsonl
+da84ea3a9a49bbb4f8beb8cb510d05ef9ea06589  after-b.vh229-probe-vh229-after-b-forced-light-font32.jsonl  vh229-walk/after-b/runs/vh229-probe-vh229-after-b-forced-light-font32.jsonl
+ded21c04026b61597eacef5ea4c3b57cb581d339  after-b.vh229-probe-vh229-after-b-forced-light.jsonl  vh229-walk/after-b/runs/vh229-probe-vh229-after-b-forced-light.jsonl
+2a8c041a34b2b3de190e70ac8e46b62e12f2dd2a  after-b.vh229-probe-vh229-after-b-light.jsonl  vh229-walk/after-b/runs/vh229-probe-vh229-after-b-light.jsonl
+26eadd6e50e3c83abe847af4520c1f25e51076ae  after-b.outcomes.jsonl  written from after-b/runs
+e3902aac0acdbf4d0bbbc8e86caafbe37f3c4bf7  before-c.conditions.txt  vh229-walk/before-c/conditions.txt
+24bc16a8e99d27d7344056a74abee14b790642f6  before-c.load.log.txt  vh229-walk/before-c.load.log
+05da961b842f240dd30662dac4228e552577115e  before-c.launcher.log.txt  vh229-walk/before-c.launcher.log
+4fb64e318d68de9d0cbed83fd495425730253d24  before-c.vh229-before-c-dark.manifest.json  vh229-walk/before-c/runs/vh229-before-c-dark-2026-10-31T10-17-34-882Z-a941ff/manifest.json
+18e952b3a860beb5793e0b6094556098c36cfdb4  before-c.vh229-before-c-dark.run.json  vh229-walk/before-c/runs/vh229-before-c-dark-2026-10-31T10-17-34-882Z-a941ff/run.json
+61959655fc8faadfdb4e06cf88d3f9145e21a176  before-c.vh229-before-c-dark-font32.manifest.json  vh229-walk/before-c/runs/vh229-before-c-dark-font32-2026-10-31T10-41-58-527Z-0ec024/manifest.json
+3538ca9acd18065468474bd4ecf534ec7e12e8f7  before-c.vh229-before-c-dark-font32.run.json  vh229-walk/before-c/runs/vh229-before-c-dark-font32-2026-10-31T10-41-58-527Z-0ec024/run.json
+5c9d1c7d25177968dbdc2d6dc8d8c777baeda22c  before-c.vh229-before-c-font32.manifest.json  vh229-walk/before-c/runs/vh229-before-c-font32-2026-10-31T10-35-50-408Z-a23130/manifest.json
+4571a56d1b4979539cfaabd38ef8413ceba9b8e5  before-c.vh229-before-c-font32.run.json  vh229-walk/before-c/runs/vh229-before-c-font32-2026-10-31T10-35-50-408Z-a23130/run.json
+b7073387c286438127bb43fbf81f34bab745b1f4  before-c.vh229-before-c-forced-dark.manifest.json  vh229-walk/before-c/runs/vh229-before-c-forced-dark-2026-10-31T10-29-42-974Z-342c0e/manifest.json
+849fff9603013698e2ff067bede875a40aed3eb1  before-c.vh229-before-c-forced-dark.run.json  vh229-walk/before-c/runs/vh229-before-c-forced-dark-2026-10-31T10-29-42-974Z-342c0e/run.json
+b9759d9a3e6ca2b0569c39d62be6d8b1aca7bf26  before-c.vh229-before-c-forced-dark-font32.manifest.json  vh229-walk/before-c/runs/vh229-before-c-forced-dark-font32-2026-10-31T10-54-10-162Z-5d07a4/manifest.json
+8a155452818e7c95a222d26710891c06301d1205  before-c.vh229-before-c-forced-dark-font32.run.json  vh229-walk/before-c/runs/vh229-before-c-forced-dark-font32-2026-10-31T10-54-10-162Z-5d07a4/run.json
+92ee4c2a4f0fd20736592144e1d9246d83ce7282  before-c.vh229-before-c-forced-light.manifest.json  vh229-walk/before-c/runs/vh229-before-c-forced-light-2026-10-31T10-23-38-523Z-66a506/manifest.json
+5f427460b0b3ecb0701a3c1dc6b48d16e7a5b8b8  before-c.vh229-before-c-forced-light.run.json  vh229-walk/before-c/runs/vh229-before-c-forced-light-2026-10-31T10-23-38-523Z-66a506/run.json
+46ae02c0771d5ff8a4d9b13c21bbb1607e9e8064  before-c.vh229-before-c-forced-light-font32.manifest.json  vh229-walk/before-c/runs/vh229-before-c-forced-light-font32-2026-10-31T10-48-06-182Z-d238a3/manifest.json
+321b1bec1da408f67ac9f2ac0352c4234a4c2986  before-c.vh229-before-c-forced-light-font32.run.json  vh229-walk/before-c/runs/vh229-before-c-forced-light-font32-2026-10-31T10-48-06-182Z-d238a3/run.json
+6110e601836470874a4e36ee7b3b7b3f60f091c4  before-c.vh229-before-c-light.manifest.json  vh229-walk/before-c/runs/vh229-before-c-light-2026-10-31T10-11-31-445Z-0b0bdb/manifest.json
+f80c3c8fe320213acf0cdd39c098195b59d26ee1  before-c.vh229-before-c-light.run.json  vh229-walk/before-c/runs/vh229-before-c-light-2026-10-31T10-11-31-445Z-0b0bdb/run.json
+eac4d887897bafe9369a2b57127b56c89f7dbb19  before-c.vh229-ledger.jsonl  vh229-walk/before-c/runs/vh229-ledger.jsonl
+9a27d0e08e166453b94829323d8e89f2926383eb  before-c.vh229-probe-vh229-before-c-dark-font32.jsonl  vh229-walk/before-c/runs/vh229-probe-vh229-before-c-dark-font32.jsonl
+388e7a4356d42db41f0f84f02b6d6450c071636a  before-c.vh229-probe-vh229-before-c-dark.jsonl  vh229-walk/before-c/runs/vh229-probe-vh229-before-c-dark.jsonl
+1b638d7ed2407fca0afa2bf4b2af5ef85d78f993  before-c.vh229-probe-vh229-before-c-font32.jsonl  vh229-walk/before-c/runs/vh229-probe-vh229-before-c-font32.jsonl
+3364f6165dbe20d01968cce146dd9c749d8c1496  before-c.vh229-probe-vh229-before-c-forced-dark-font32.jsonl  vh229-walk/before-c/runs/vh229-probe-vh229-before-c-forced-dark-font32.jsonl
+1b941f3d7e31f057e4f3ac9843f90426bf3ee47e  before-c.vh229-probe-vh229-before-c-forced-dark.jsonl  vh229-walk/before-c/runs/vh229-probe-vh229-before-c-forced-dark.jsonl
+a6280569a7a407654bc74b76e95ffcf7100588fe  before-c.vh229-probe-vh229-before-c-forced-light-font32.jsonl  vh229-walk/before-c/runs/vh229-probe-vh229-before-c-forced-light-font32.jsonl
+e9d090cb7496b86ed9567f98ec3b8876d4ad0af0  before-c.vh229-probe-vh229-before-c-forced-light.jsonl  vh229-walk/before-c/runs/vh229-probe-vh229-before-c-forced-light.jsonl
+da3010c46138da143c2735ca5739a7b04a8e133c  before-c.vh229-probe-vh229-before-c-light.jsonl  vh229-walk/before-c/runs/vh229-probe-vh229-before-c-light.jsonl
+b62948841ae8d11edfdf86f9bce2791427fa2b77  before-c.outcomes.jsonl  written from before-c/runs
+aed80265d1a70ee7b5e506b420939e81be6c5045  after-c.conditions.txt  vh229-walk/after-c/conditions.txt
+60e3143748eea301ab461291b2f2de2da25f8002  after-c.load.log.txt  vh229-walk/after-c.load.log
+7e40e7615b4d61575e31f590ab4cd05342f648af  after-c.launcher.log.txt  vh229-walk/after-c.launcher.log
+30462f300103c1b2dcc6057e02833562a53f7483  after-c.vh229-after-c-dark.manifest.json  vh229-walk/after-c/runs/vh229-after-c-dark-2026-10-31T13-10-47-860Z-24cc48/manifest.json
+77435a6b9fc1f8e830171a782cd5f188b65d463f  after-c.vh229-after-c-dark.run.json  vh229-walk/after-c/runs/vh229-after-c-dark-2026-10-31T13-10-47-860Z-24cc48/run.json
+90ab05d6933044dc10532d650e08642f77af7fdf  after-c.vh229-after-c-dark-font32.manifest.json  vh229-walk/after-c/runs/vh229-after-c-dark-font32-2026-10-31T13-34-29-323Z-9abc2a/manifest.json
+1409eebd354c5a11468e4e7019b945322380378f  after-c.vh229-after-c-dark-font32.run.json  vh229-walk/after-c/runs/vh229-after-c-dark-font32-2026-10-31T13-34-29-323Z-9abc2a/run.json
+8752091f560a5ef72e2e55adedc41e9b2f60d891  after-c.vh229-after-c-font32.manifest.json  vh229-walk/after-c/runs/vh229-after-c-font32-2026-10-31T13-28-32-730Z-897f11/manifest.json
+ba8854f3ae9293af55742f65a8fc29509049ee12  after-c.vh229-after-c-font32.run.json  vh229-walk/after-c/runs/vh229-after-c-font32-2026-10-31T13-28-32-730Z-897f11/run.json
+f197ff227b45e7f81d3c67c0764fad8efa09af1a  after-c.vh229-after-c-forced-dark.manifest.json  vh229-walk/after-c/runs/vh229-after-c-forced-dark-2026-10-31T13-22-38-171Z-0a4b49/manifest.json
+a55a46fb4412808b3154ae297b8f4b527f432bc8  after-c.vh229-after-c-forced-dark.run.json  vh229-walk/after-c/runs/vh229-after-c-forced-dark-2026-10-31T13-22-38-171Z-0a4b49/run.json
+73d3c796624dae8bae50d8b44d1388dc63f95fc6  after-c.vh229-after-c-forced-dark-font32.manifest.json  vh229-walk/after-c/runs/vh229-after-c-forced-dark-font32-2026-10-31T13-46-25-434Z-fde546/manifest.json
+ac57c305fe5376036968db088ea5df72aa08d3f1  after-c.vh229-after-c-forced-dark-font32.run.json  vh229-walk/after-c/runs/vh229-after-c-forced-dark-font32-2026-10-31T13-46-25-434Z-fde546/run.json
+81d94641eb1516565b9b0aea43c1a74128d81d97  after-c.vh229-after-c-forced-light.manifest.json  vh229-walk/after-c/runs/vh229-after-c-forced-light-2026-10-31T13-16-44-163Z-7b3cac/manifest.json
+0299924a783f5542bd5467a28bb85c79af979382  after-c.vh229-after-c-forced-light.run.json  vh229-walk/after-c/runs/vh229-after-c-forced-light-2026-10-31T13-16-44-163Z-7b3cac/run.json
+81f97995cf7edd4b3f01a0132c0abfabe5f7fd8d  after-c.vh229-after-c-forced-light-font32.manifest.json  vh229-walk/after-c/runs/vh229-after-c-forced-light-font32-2026-10-31T13-40-27-744Z-e5e42c/manifest.json
+9a6f85ad43a3360ef5a4e2d28774ea0ca92987ed  after-c.vh229-after-c-forced-light-font32.run.json  vh229-walk/after-c/runs/vh229-after-c-forced-light-font32-2026-10-31T13-40-27-744Z-e5e42c/run.json
+a317fcdcc6fd1e980f16800279bde97bea507c12  after-c.vh229-after-c-light.manifest.json  vh229-walk/after-c/runs/vh229-after-c-light-2026-10-31T13-04-52-335Z-b7d203/manifest.json
+d2082b5026cb8d5620229c4bd9a0d3ef010f5ee4  after-c.vh229-after-c-light.run.json  vh229-walk/after-c/runs/vh229-after-c-light-2026-10-31T13-04-52-335Z-b7d203/run.json
+327e4407a612172516b55787430ebf95ccd8cea3  after-c.vh229-ledger.jsonl  vh229-walk/after-c/runs/vh229-ledger.jsonl
+a59462526bc844a221eb3cb02be3f87b5db8f739  after-c.vh229-probe-vh229-after-c-dark-font32.jsonl  vh229-walk/after-c/runs/vh229-probe-vh229-after-c-dark-font32.jsonl
+ca3969856999acaf5ed0428c114b70b114b9ffc5  after-c.vh229-probe-vh229-after-c-dark.jsonl  vh229-walk/after-c/runs/vh229-probe-vh229-after-c-dark.jsonl
+998eb2e2fdac318c5ee0b1fad73cbcc3b863f10c  after-c.vh229-probe-vh229-after-c-font32.jsonl  vh229-walk/after-c/runs/vh229-probe-vh229-after-c-font32.jsonl
+8d47822a76b90e883e491916cf66457ea76f413a  after-c.vh229-probe-vh229-after-c-forced-dark-font32.jsonl  vh229-walk/after-c/runs/vh229-probe-vh229-after-c-forced-dark-font32.jsonl
+a7981e95e6bdfb62c7f6ca745d81cba47a08c5a1  after-c.vh229-probe-vh229-after-c-forced-dark.jsonl  vh229-walk/after-c/runs/vh229-probe-vh229-after-c-forced-dark.jsonl
+c6d32ed3f4e08b5f2c965dd5e9963ad1800a8f5c  after-c.vh229-probe-vh229-after-c-forced-light-font32.jsonl  vh229-walk/after-c/runs/vh229-probe-vh229-after-c-forced-light-font32.jsonl
+2162b698789042842649ae2afdac619b3583028c  after-c.vh229-probe-vh229-after-c-forced-light.jsonl  vh229-walk/after-c/runs/vh229-probe-vh229-after-c-forced-light.jsonl
+6e380fc7a249baa43d5bce48192520840b756216  after-c.vh229-probe-vh229-after-c-light.jsonl  vh229-walk/after-c/runs/vh229-probe-vh229-after-c-light.jsonl
+40e29b76bc5fbf95ccbbb40b17ba812e1374659a  after-c.outcomes.jsonl  written from after-c/runs
+ff1f1b0d36bf0a0a7a6bdbc4b5a6c46e727e2e10  before-c2.conditions.txt  vh229-walk/before-c2/conditions.txt
+0b9f8a98320ed77754fbf0556b317dd0bac3b9d7  before-c2.load.log.txt  vh229-walk/before-c2.load.log
+a5b9e09c61ffc75725023d1250dd3785fbddd08d  before-c2.launcher.log.txt  vh229-walk/before-c2.launcher.log
+861da4a5e997d30228be1ed86675f86566142b76  before-c2.vh229-before-c2-dark.manifest.json  vh229-walk/before-c2/runs/vh229-before-c2-dark-2026-10-31T14-30-39-013Z-e9268f/manifest.json
+beeb51c2b0541404dc24bc4524989340b6a4ebcb  before-c2.vh229-before-c2-dark.run.json  vh229-walk/before-c2/runs/vh229-before-c2-dark-2026-10-31T14-30-39-013Z-e9268f/run.json
+4c6df3f4197e671fdb8605fbe22fde1fa48e1336  before-c2.vh229-before-c2-dark-font32.run.json  vh229-walk/before-c2/runs/vh229-before-c2-dark-font32-2026-10-31T14-45-58-632Z-648ccf/run.json
+b866c623eb6388f634091713981a0e9e4bbf1978  before-c2.vh229-before-c2-font32.manifest.json  vh229-walk/before-c2/runs/vh229-before-c2-font32-2026-10-31T14-42-00-111Z-cd1c98/manifest.json
+70f5e5ad092842c4be1f13fd3a60e564e1263dc2  before-c2.vh229-before-c2-font32.run.json  vh229-walk/before-c2/runs/vh229-before-c2-font32-2026-10-31T14-42-00-111Z-cd1c98/run.json
+7f488821f772a48eb21230088fc22d90745976fa  before-c2.vh229-before-c2-forced-dark.manifest.json  vh229-walk/before-c2/runs/vh229-before-c2-forced-dark-2026-10-31T14-38-13-406Z-aaeb61/manifest.json
+d8500c06e6dade3b04f42d853b71783f203ad606  before-c2.vh229-before-c2-forced-dark.run.json  vh229-walk/before-c2/runs/vh229-before-c2-forced-dark-2026-10-31T14-38-13-406Z-aaeb61/run.json
+ee81fc49db023465067dea0c92db4f193905204a  before-c2.vh229-before-c2-forced-dark-font32.manifest.json  vh229-walk/before-c2/runs/vh229-before-c2-forced-dark-font32-2026-10-31T15-03-55-769Z-c71726/manifest.json
+0727f840262aa3ee65cdb0a33cd57a9dcf1c4629  before-c2.vh229-before-c2-forced-dark-font32.run.json  vh229-walk/before-c2/runs/vh229-before-c2-forced-dark-font32-2026-10-31T15-03-55-769Z-c71726/run.json
+f8706092dbbec2f677d53e949baca16da3a1a1be  before-c2.vh229-before-c2-forced-light.manifest.json  vh229-walk/before-c2/runs/vh229-before-c2-forced-light-2026-10-31T14-34-26-410Z-e1c30c/manifest.json
+14f16251faf1ca2826b2bc7843cb90cb0712e20d  before-c2.vh229-before-c2-forced-light.run.json  vh229-walk/before-c2/runs/vh229-before-c2-forced-light-2026-10-31T14-34-26-410Z-e1c30c/run.json
+0b89d065dab142d7fbbb9256afb4d606b9c6f47c  before-c2.vh229-before-c2-forced-light-font32.manifest.json  vh229-walk/before-c2/runs/vh229-before-c2-forced-light-font32-2026-10-31T14-46-01-181Z-cac340/manifest.json
+b27245d625dcd13bf8746afd00d276d7d5cbb3fb  before-c2.vh229-before-c2-forced-light-font32.run.json  vh229-walk/before-c2/runs/vh229-before-c2-forced-light-font32-2026-10-31T14-46-01-181Z-cac340/run.json
+6b432fa7d4ab767bb9beb37e4e6a2ae96cd2c493  before-c2.vh229-before-c2-light.manifest.json  vh229-walk/before-c2/runs/vh229-before-c2-light-2026-10-31T14-26-51-550Z-dbe225/manifest.json
+a7be90839fc40b487231d03ade3f5ae19c9f38a7  before-c2.vh229-before-c2-light.run.json  vh229-walk/before-c2/runs/vh229-before-c2-light-2026-10-31T14-26-51-550Z-dbe225/run.json
+bcc9dddc0c86bd557b3cefa9d0a831b969c4dd74  before-c2.vh229-ledger.jsonl  vh229-walk/before-c2/runs/vh229-ledger.jsonl
+c8417e8fe7b33ad2bbe2e9fdd374bf10c4f06f56  before-c2.vh229-probe-vh229-before-c2-dark.jsonl  vh229-walk/before-c2/runs/vh229-probe-vh229-before-c2-dark.jsonl
+308a5a811713a45d0ea3200aefb115ced6ebecd4  before-c2.vh229-probe-vh229-before-c2-font32.jsonl  vh229-walk/before-c2/runs/vh229-probe-vh229-before-c2-font32.jsonl
+b5bee20d772640a9ed3d5b7e33a88ed515a41ee1  before-c2.vh229-probe-vh229-before-c2-forced-dark-font32.jsonl  vh229-walk/before-c2/runs/vh229-probe-vh229-before-c2-forced-dark-font32.jsonl
+c8f516259ad7453fad4b925d7c1fa3814d9f9f5f  before-c2.vh229-probe-vh229-before-c2-forced-dark.jsonl  vh229-walk/before-c2/runs/vh229-probe-vh229-before-c2-forced-dark.jsonl
+1b79bcf6d3124163e003892595fe6aaa34b5ede3  before-c2.vh229-probe-vh229-before-c2-forced-light-font32.jsonl  vh229-walk/before-c2/runs/vh229-probe-vh229-before-c2-forced-light-font32.jsonl
+fd2570c88751712f7c42513c2b85c87c6c0e005b  before-c2.vh229-probe-vh229-before-c2-forced-light.jsonl  vh229-walk/before-c2/runs/vh229-probe-vh229-before-c2-forced-light.jsonl
+c59a46b9333a2de92eb23c3902fa110fb0ca94e7  before-c2.vh229-probe-vh229-before-c2-light.jsonl  vh229-walk/before-c2/runs/vh229-probe-vh229-before-c2-light.jsonl
+a2676b1b23f9522a773890cf2df7a78c8c87218a  before-c2.outcomes.jsonl  written from before-c2/runs
+375dd81d66a8a9bcc575499055d8a0c8285bb2f7  after-c2.conditions.txt  vh229-walk/after-c2/conditions.txt
+198f0491d702312eec0ff59baf6d9ce82e8a6f7a  after-c2.load.log.txt  vh229-walk/after-c2.load.log
+ed69e5750ca73f79caad8b63e7e2062ee30ee80f  after-c2.launcher.log.txt  vh229-walk/after-c2.launcher.log
+8b2ce96ecfa2af43275b25296ce86e6df0374b3b  after-c2.vh229-after-c2-dark.manifest.json  vh229-walk/after-c2/runs/vh229-after-c2-dark-2026-10-31T15-28-01-987Z-aa8e8b/manifest.json
+a586f9c961884a3283c7f0a38c43907b230d1efb  after-c2.vh229-after-c2-dark.run.json  vh229-walk/after-c2/runs/vh229-after-c2-dark-2026-10-31T15-28-01-987Z-aa8e8b/run.json
+15b25d0038804635403fca0fbd9586d9a6d7541b  after-c2.vh229-after-c2-dark-font32.manifest.json  vh229-walk/after-c2/runs/vh229-after-c2-dark-font32-2026-10-31T15-42-37-565Z-e310f1/manifest.json
+3ed1f14bed4651da5e9cce57721231deefcd3ce3  after-c2.vh229-after-c2-dark-font32.run.json  vh229-walk/after-c2/runs/vh229-after-c2-dark-font32-2026-10-31T15-42-37-565Z-e310f1/run.json
+9d9bd6b88a0e98cf93b05964bd8e39d3c723a497  after-c2.vh229-after-c2-font32.manifest.json  vh229-walk/after-c2/runs/vh229-after-c2-font32-2026-10-31T15-38-50-207Z-0fe32f/manifest.json
+36e45e7fc4a789c8b42f5d03e2ec931711a726de  after-c2.vh229-after-c2-font32.run.json  vh229-walk/after-c2/runs/vh229-after-c2-font32-2026-10-31T15-38-50-207Z-0fe32f/run.json
+5f33d87fe72327805cb0b1f3b9af885d1a6c4e50  after-c2.vh229-after-c2-forced-dark.manifest.json  vh229-walk/after-c2/runs/vh229-after-c2-forced-dark-2026-10-31T15-35-13-987Z-91f070/manifest.json
+5105416b4d7133b2bb1f15eb582bd85ddc2b1cef  after-c2.vh229-after-c2-forced-dark.run.json  vh229-walk/after-c2/runs/vh229-after-c2-forced-dark-2026-10-31T15-35-13-987Z-91f070/run.json
+4b6b07246b676d5942aa084002c9796dc50591aa  after-c2.vh229-after-c2-forced-dark-font32.manifest.json  vh229-walk/after-c2/runs/vh229-after-c2-forced-dark-font32-2026-10-31T15-50-11-369Z-562726/manifest.json
+c729953d3d150bd7a94ab1ca123ae0caf06e5540  after-c2.vh229-after-c2-forced-dark-font32.run.json  vh229-walk/after-c2/runs/vh229-after-c2-forced-dark-font32-2026-10-31T15-50-11-369Z-562726/run.json
+16e0e8306adbde0de11449c5f24662002d21db64  after-c2.vh229-after-c2-forced-light.manifest.json  vh229-walk/after-c2/runs/vh229-after-c2-forced-light-2026-10-31T15-31-37-970Z-c82dc5/manifest.json
+1f0a7660b4f3ea8466bf6ac977ac5a599d5bb14e  after-c2.vh229-after-c2-forced-light.run.json  vh229-walk/after-c2/runs/vh229-after-c2-forced-light-2026-10-31T15-31-37-970Z-c82dc5/run.json
+d62b995e527d1ce43230fe93cda3a155c37f865d  after-c2.vh229-after-c2-forced-light-font32.manifest.json  vh229-walk/after-c2/runs/vh229-after-c2-forced-light-font32-2026-10-31T15-46-24-596Z-d2bf25/manifest.json
+b0c78cedc08f3ad26d98914f904f4e4a4ef0763d  after-c2.vh229-after-c2-forced-light-font32.run.json  vh229-walk/after-c2/runs/vh229-after-c2-forced-light-font32-2026-10-31T15-46-24-596Z-d2bf25/run.json
+199191b5db3ca69bf640feda072b54104096f83f  after-c2.vh229-after-c2-light.manifest.json  vh229-walk/after-c2/runs/vh229-after-c2-light-2026-10-31T15-24-25-372Z-98b599/manifest.json
+21df026285765e968b9abcb47827baf0257b3287  after-c2.vh229-after-c2-light.run.json  vh229-walk/after-c2/runs/vh229-after-c2-light-2026-10-31T15-24-25-372Z-98b599/run.json
+abcb18cf0c07d31d7bab57137e6e30f2c08b06b7  after-c2.vh229-ledger.jsonl  vh229-walk/after-c2/runs/vh229-ledger.jsonl
+39bffaaaca0b0be6cada508d169d0e2a21a6405e  after-c2.vh229-probe-vh229-after-c2-dark-font32.jsonl  vh229-walk/after-c2/runs/vh229-probe-vh229-after-c2-dark-font32.jsonl
+cbe6d91da6e427288924bd90910fd1c5f6c52cc0  after-c2.vh229-probe-vh229-after-c2-dark.jsonl  vh229-walk/after-c2/runs/vh229-probe-vh229-after-c2-dark.jsonl
+b73a491e2a81517cc02a3ac71ac2e59f97e85783  after-c2.vh229-probe-vh229-after-c2-font32.jsonl  vh229-walk/after-c2/runs/vh229-probe-vh229-after-c2-font32.jsonl
+0d75b610b30f14dde64802901082445ecc9fc665  after-c2.vh229-probe-vh229-after-c2-forced-dark-font32.jsonl  vh229-walk/after-c2/runs/vh229-probe-vh229-after-c2-forced-dark-font32.jsonl
+d3424884643b6b64af54b45c693d9934103c2fa6  after-c2.vh229-probe-vh229-after-c2-forced-dark.jsonl  vh229-walk/after-c2/runs/vh229-probe-vh229-after-c2-forced-dark.jsonl
+20a7d5c59657e4812ee23cd1e38d52c1d9b276b0  after-c2.vh229-probe-vh229-after-c2-forced-light-font32.jsonl  vh229-walk/after-c2/runs/vh229-probe-vh229-after-c2-forced-light-font32.jsonl
+2e2970656bb3ca9e9529f1475eb3d8ac6fe6af55  after-c2.vh229-probe-vh229-after-c2-forced-light.jsonl  vh229-walk/after-c2/runs/vh229-probe-vh229-after-c2-forced-light.jsonl
+b6164856b7030b6c49c8e241e1ab1b68874557af  after-c2.vh229-probe-vh229-after-c2-light.jsonl  vh229-walk/after-c2/runs/vh229-probe-vh229-after-c2-light.jsonl
+374f14c0db495f9a6d5d961afc9e391e5b186fc0  after-c2.outcomes.jsonl  written from after-c2/runs
+b066b90160537d97b029334e99d09009ccc58716  before-c3.conditions.txt  vh229-walk/before-c3/conditions.txt
+3c0b3ae5feeabab9c679f3b8d1a6b0513aa6b190  before-c3.load.log.txt  vh229-walk/before-c3.load.log
+195b9c32b1dc647960ffdc84bc91c9ef298b7bf3  before-c3.launcher.log.txt  vh229-walk/before-c3.launcher.log
+74b98e954b2647850fbeb9bb98077d508fbd007e  before-c3.vh229-before-c3-dark-font32.manifest.json  vh229-walk/before-c3/runs/vh229-before-c3-dark-font32-2026-10-31T16-19-19-682Z-d715dd/manifest.json
+c1adbdbdf077d92ec563d208f959f6ef339c2342  before-c3.vh229-before-c3-dark-font32.run.json  vh229-walk/before-c3/runs/vh229-before-c3-dark-font32-2026-10-31T16-19-19-682Z-d715dd/run.json
+56fd894635fb2cce01b29fafc5fa45fb2e8a08e9  before-c3.vh229-ledger.jsonl  vh229-walk/before-c3/runs/vh229-ledger.jsonl
+5f3b5558c2beb66b01e09a6d2d3c2b02f9be68ee  before-c3.vh229-probe-vh229-before-c3-dark-font32.jsonl  vh229-walk/before-c3/runs/vh229-probe-vh229-before-c3-dark-font32.jsonl
+0de929972824370c8c7716921d512cfa899e1263  before-c3.outcomes.jsonl  written from before-c3/runs
+2d8446bdba14fb669c5b46b7f4e2e87de55797b1  after-c3.conditions.txt  vh229-walk/after-c3/conditions.txt
+9efaf3ed670e14cf27567ca9663394bc5a49df9c  after-c3.load.log.txt  vh229-walk/after-c3.load.log
+2957c915b619cd7be121dd27c2435f0f345ba6ee  after-c3.launcher.log.txt  vh229-walk/after-c3.launcher.log
+cc6ae5c6fdf86c77886734ed3af21e23ac2a14e6  after-c3.vh229-after-c3-dark-font32.manifest.json  vh229-walk/after-c3/runs/vh229-after-c3-dark-font32-2026-10-31T16-23-24-019Z-de0ec4/manifest.json
+2453e9d297608f4f74427007075c155d5bf9f192  after-c3.vh229-after-c3-dark-font32.run.json  vh229-walk/after-c3/runs/vh229-after-c3-dark-font32-2026-10-31T16-23-24-019Z-de0ec4/run.json
+cbd2628317d27c236d49733dbff2abc1cf08637b  after-c3.vh229-ledger.jsonl  vh229-walk/after-c3/runs/vh229-ledger.jsonl
+05c161d28801ab4ca1c3ce18cd87a734255d7db1  after-c3.vh229-probe-vh229-after-c3-dark-font32.jsonl  vh229-walk/after-c3/runs/vh229-probe-vh229-after-c3-dark-font32.jsonl
+43f3367464612bdbfd8d528b137c047967e03478  after-c3.outcomes.jsonl  written from after-c3/runs
+05ba6a492a3f417455a30d78323563a00c219ed4  before-states.conditions.txt  vh229-walk/before-states/conditions.txt
+b31665f27fdf5820a933c7e4b945e257d8b7e88f  before-states.load.log.txt  vh229-walk/before-states.load.log
+bf734e8b3c4b84d9f0e809abec3fbf8c05506d52  before-states.launcher.log.txt  vh229-walk/before-states.launcher.log
+2a12c5dbde5160813b66df960e49d1296780c6ee  before-states.vh229-states.jsonl  vh229-walk/before-states/runs/vh229-states.jsonl
+90ff81a25ddc9822712e0d76c92b3f6db7c101a5  after-states.conditions.txt  vh229-walk/after-states/conditions.txt
+7562df53c47b1fbf0b7191910c4c73624cd9fde9  after-states.load.log.txt  vh229-walk/after-states.load.log
+320da44a99b920f6ef425285739c702c37883b14  after-states.launcher.log.txt  vh229-walk/after-states.launcher.log
+44521ca4c9d1ec910314801ad0ed70e3b5c52cb5  after-states.vh229-states.jsonl  vh229-walk/after-states/runs/vh229-states.jsonl
+64a51679a3989f1ace2aadbd06fb71af3f3419cb  before-states2.conditions.txt  vh229-walk/before-states2/conditions.txt
+b376cc0f0fab538171193902378a3c14c45d11bd  before-states2.load.log.txt  vh229-walk/before-states2.load.log
+74687cb40cd6ea5db9355c7b376c9054e43f6ca7  before-states2.launcher.log.txt  vh229-walk/before-states2.launcher.log
+baa30160d9223f6a87edcbab99f0cde04a068191  before-states2.vh229-states.jsonl  vh229-walk/before-states2/runs/vh229-states.jsonl
+834f395e0204435ecb73d5fccca192de4b5cf32f  after-states2.conditions.txt  vh229-walk/after-states2/conditions.txt
+ef5a9568940a8f1f6ae149fef3c773f1a9fed35a  after-states2.load.log.txt  vh229-walk/after-states2.load.log
+8b400b9f64775d3a7014536925cef6f5c337fcd5  after-states2.launcher.log.txt  vh229-walk/after-states2.launcher.log
+baa30160d9223f6a87edcbab99f0cde04a068191  after-states2.vh229-states.jsonl  vh229-walk/after-states2/runs/vh229-states.jsonl
+6dbace4cc3c783e2aa742add0a51485e981a992a  vh229-driver.mjs  vh229-walk/vh229-driver.mjs
+2fbad5b538bfce73c739469ce55926b76ff31124  vh229-states.mjs  vh229-walk/vh229-states.mjs
+375f200a1657f8c7a8fb50bf98059082b899405a  vh229-states-onset.mjs  vh229-walk/vh229-states-onset.mjs
+4a2bed54a2df57a0d84653bb1298b0700ec164ed  vh229-six.mjs  vh229-walk/vh229-six.mjs
+03f3109623ec9e45334c90ce343db0a764ed116e  vh229-behaviour.mjs  vh229-walk/vh229-behaviour.mjs
+23d81b6723466ea6aa44e9f5a7073ac912738078  vh229-shots.mjs  vh229-walk/vh229-shots.mjs
+b26358c4f2a5dd80454267caab1e2dfd3a6b9b55  go.sh  vh229-walk/go.sh
+4c417171b842d8cc9ba74f457cad14352f52b14b  walk.sh  vh229-walk/walk.sh
+822979efcdcc66006810ad8a5df255d85c8f1a6f  seq.zsh  vh229-walk/seq.zsh
+19ed113abda9afe65800bdd0653ab7eaaa49bb9f  jobs.zsh  vh229-walk/jobs.zsh
+fe9203451770e75559ee150bfb7ee9d6a2cba498  table-1page.mjs  vh229-walk//Users/joe/UoN-Video-Helper-side/table-1page.mjs
+fedc9386f7435602bd3d449f141394e974cb0245  vh229-table-notes.md  vh229-walk/vh229-table-notes.md
+adc3fb6ab2160b98a4fc46a4f9e96e2235a1c3e7  detail/before-a.S-03__en-GB__w1280__dark.json  written from before-a/runs
+a49636391413a35b1afa648aed3230abb0c60ba3  detail/after-a.S-03__en-GB__w1280__dark.json  written from after-a/runs
+eeb97919ff1721412dc0c7393e633da928fe0e84  detail/before-a.S-03__en-GB__w320__dark.json  written from before-a/runs
+3783fb990cb97e883771a363f14948678759f735  detail/after-a.S-03__en-GB__w320__dark.json  written from after-a/runs
+1d37b90ca7d7da7e6dd5fc12e3e6c5b0ac82c953  detail/before-a.S-03__en-GB__w375__dark.json  written from before-a/runs
+a37b4ccd5f0cba8df8ed99159340e1e549ae108f  detail/after-a.S-03__en-GB__w375__dark.json  written from after-a/runs
+2436320faf47cbb5e9ab4fef15930a04eae4a61e  detail/before-a.S-03__en-GB__w640__dark.json  written from before-a/runs
+ec2b87491b1420144890f00ba3c1cc644d109ffb  detail/after-a.S-03__en-GB__w640__dark.json  written from after-a/runs
+73bc58fd858910e916fe1318a1cc3d8bd364109d  detail/before-a.S-03__ms-MY__w1280__dark.json  written from before-a/runs
+6458df126bb0c65f62ba91fc360bb4c6d602b26e  detail/after-a.S-03__ms-MY__w1280__dark.json  written from after-a/runs
+a619d454e63682a50230e922d20cfe0b4dac19e1  detail/before-a.S-03__ms-MY__w320__dark.json  written from before-a/runs
+86389c2eff060a36c5ca8212b988bc478894ea64  detail/after-a.S-03__ms-MY__w320__dark.json  written from after-a/runs
+26b3bc8bfbb27d22c1257fd40c0ae9cb480592fd  detail/before-a.S-03__ms-MY__w375__dark.json  written from before-a/runs
+545b14727c7afc4d4a90de2e7932fe9ca936f76d  detail/after-a.S-03__ms-MY__w375__dark.json  written from after-a/runs
+6374016213a30729e918196e95756526cb7e8416  detail/before-a.S-03__ms-MY__w640__dark.json  written from before-a/runs
+057fcfe9024bccd211fa86858a43088364eddb68  detail/after-a.S-03__ms-MY__w640__dark.json  written from after-a/runs
+6e5de3dba204f113287f442232f966a39b4a88c3  detail/before-a.S-03__zh-Hans__w1280__dark.json  written from before-a/runs
+6f2df1c34f01813ccaed087e9953e90673a7642e  detail/after-a.S-03__zh-Hans__w1280__dark.json  written from after-a/runs
+fcce271ec14cb3bc0b38202031786e2809bb43b9  detail/before-a.S-03__zh-Hans__w320__dark.json  written from before-a/runs
+18afadcc8a1506962c7f3970f04a532283124da8  detail/after-a.S-03__zh-Hans__w320__dark.json  written from after-a/runs
+924dffd588ed03915db975237ad3d17111ba5ccb  detail/before-a.S-03__zh-Hans__w375__dark.json  written from before-a/runs
+5edcdf78c52063c8778e713aeccc790fac929721  detail/after-a.S-03__zh-Hans__w375__dark.json  written from after-a/runs
+cbac36bd74e20d209ca2c56cd5ae97c31e93f090  detail/before-a.S-03__zh-Hans__w640__dark.json  written from before-a/runs
+c5c7f8d5253becc08628d117401a5067b654751c  detail/after-a.S-03__zh-Hans__w640__dark.json  written from after-a/runs
+cf6cd74a5307ffa54fdd1f8d20e9cc771f21f7ea  detail/before-a.S-03__en-GB__w1280__font32.json  written from before-a/runs
+f5112f4ffccfdd263231f788059c5ab94828c534  detail/after-a.S-03__en-GB__w1280__font32.json  written from after-a/runs
+8d5dd90ff2f1c6f5befdba1ceac6c13fa02cd591  detail/before-a.S-03__en-GB__w320__font32.json  written from before-a/runs
+b29a356b580ee4833b44a45daf6484166c7518f8  detail/after-a.S-03__en-GB__w320__font32.json  written from after-a/runs
+abac5af14d4f6660c9ee980279ad1df87254ff74  detail/before-a.S-03__en-GB__w640__font32.json  written from before-a/runs
+92adf3039b1d69587fc7c88e0260b120f401ef93  detail/after-a.S-03__en-GB__w640__font32.json  written from after-a/runs
+ba3a2262834e0d9c3809e7042e348c88cb73aa0a  detail/before-a.S-03__ms-MY__w1280__font32.json  written from before-a/runs
+2915050a8550954eabae33157a6c50911824ff46  detail/after-a.S-03__ms-MY__w1280__font32.json  written from after-a/runs
+7c23208926ff49b241c5486d40a6a4a030046c36  detail/before-a.S-03__ms-MY__w320__font32.json  written from before-a/runs
+dab2aa528ecb8851eb56cb536f5d38c717b8e926  detail/after-a.S-03__ms-MY__w320__font32.json  written from after-a/runs
+434c5c07a451c92c65c385afb2e69a65f3571fef  detail/before-a.S-03__ms-MY__w640__font32.json  written from before-a/runs
+595fbdbd02653270fff21e86390d35ec66a68d37  detail/after-a.S-03__ms-MY__w640__font32.json  written from after-a/runs
+d1d74b720a4fd0972b33cdd7251b5de522a8895c  detail/before-a.S-03__zh-Hans__w1280__font32.json  written from before-a/runs
+2219f9c96fb2df72d8fa47b09bc7dbc1b8097d30  detail/after-a.S-03__zh-Hans__w1280__font32.json  written from after-a/runs
+a68c48f3a5d08dce266cc1f399174ed3980cdaa1  detail/before-a.S-03__zh-Hans__w320__font32.json  written from before-a/runs
+5e6985097db9ffc0c5fcc1000f83e66aa9dbfb4a  detail/after-a.S-03__zh-Hans__w320__font32.json  written from after-a/runs
+c8dad3510d1061ea16c5eef63cd29823fad646db  detail/before-a.S-03__zh-Hans__w375__font32.json  written from before-a/runs
+256298afc38607daf6c3a720af9df221c8452b19  detail/after-a.S-03__zh-Hans__w375__font32.json  written from after-a/runs
+e1b3f9f6fad59b024d0957953203e4fe6d865831  detail/before-a.S-03__zh-Hans__w640__font32.json  written from before-a/runs
+004cd7fe34c7486e818231b64543397f72cb2c4a  detail/after-a.S-03__zh-Hans__w640__font32.json  written from after-a/runs
+8194a0b818372c6bb588223270d3b0187fd89d42  detail/before-a.S-03__en-GB__w1280__forced-dark.json  written from before-a/runs
+74c4fe2c6ad2fa14d5e24e2e4bf78713dac3e6d3  detail/after-a.S-03__en-GB__w1280__forced-dark.json  written from after-a/runs
+454a4d1b166edf36f56a77558c6e53c1826272a7  detail/before-a.S-03__en-GB__w320__forced-dark.json  written from before-a/runs
+0056cbefd4b48f981799432fb4473da248ff5b38  detail/after-a.S-03__en-GB__w320__forced-dark.json  written from after-a/runs
+2e1b9fcf87835da63ed5e233215217d32ade8812  detail/before-a.S-03__en-GB__w375__forced-dark.json  written from before-a/runs
+8725e3e954e3fa3cd3fefd775d2854b426a07638  detail/after-a.S-03__en-GB__w375__forced-dark.json  written from after-a/runs
+073e1a23f63eff4c829bccbb4d0164bb57d8a00b  detail/before-a.S-03__en-GB__w640__forced-dark.json  written from before-a/runs
+2a6989c4035a6664f4c9cd964c6aff36f1a721de  detail/after-a.S-03__en-GB__w640__forced-dark.json  written from after-a/runs
+c9e1a495069c50b8740d7f4882388b8d43903b03  detail/before-a.S-03__ms-MY__w1280__forced-dark.json  written from before-a/runs
+67e148b0c6cf48d25a0d31a0929ad3031348fc0b  detail/after-a.S-03__ms-MY__w1280__forced-dark.json  written from after-a/runs
+46d7dbc1c677073b0f800c998fbfcfaaf07f90ad  detail/before-a.S-03__ms-MY__w320__forced-dark.json  written from before-a/runs
+f82a4cf44e4f6427a00aeafa2dbdfcd761d20aee  detail/after-a.S-03__ms-MY__w320__forced-dark.json  written from after-a/runs
+571dee6e72b318c15e830daeed75cec0efd7b200  detail/before-a.S-03__ms-MY__w375__forced-dark.json  written from before-a/runs
+005fdc6b3e65e69baf3a7fcdfb001803ca1c67fb  detail/after-a.S-03__ms-MY__w375__forced-dark.json  written from after-a/runs
+88f64c7700a434eb99c2e3980f8a6e76da70f98f  detail/before-a.S-03__ms-MY__w640__forced-dark.json  written from before-a/runs
+90284c62bf8d158660d2b4ea64f557fa1bf89dd4  detail/after-a.S-03__ms-MY__w640__forced-dark.json  written from after-a/runs
+4dd7499df2c49618ef3bd281c5a5178c4cefe2ec  detail/before-a.S-03__zh-Hans__w1280__forced-dark.json  written from before-a/runs
+5556032c4db5d92c3b6b533c2f4e797afe64ba0f  detail/after-a.S-03__zh-Hans__w1280__forced-dark.json  written from after-a/runs
+2e19d32e7a7639340f14a6defe532933f1b2c5e4  detail/before-a.S-03__zh-Hans__w320__forced-dark.json  written from before-a/runs
+ba7a9c868c6c823ba9882499cf600c3d20f29797  detail/after-a.S-03__zh-Hans__w320__forced-dark.json  written from after-a/runs
+622b2b80cbf14a937186b14530d5a2fda502c54e  detail/before-a.S-03__zh-Hans__w375__forced-dark.json  written from before-a/runs
+7b6a08ccef1d4481f3a7fdb0448ca3f803496672  detail/after-a.S-03__zh-Hans__w375__forced-dark.json  written from after-a/runs
+b231256b6f730f90f3908eb69d5f27951d43c381  detail/before-a.S-03__zh-Hans__w640__forced-dark.json  written from before-a/runs
+2357c93264cc2ddea94894506fa14ceb5704a7e5  detail/after-a.S-03__zh-Hans__w640__forced-dark.json  written from after-a/runs
+1e27c8bedf3e34bd886b7e37a4ae8ae4d6f06a01  detail/before-a.S-03__en-GB__w1280__forced-light.json  written from before-a/runs
+38b05832dff5f5133f237df68171af3a9262bf5e  detail/after-a.S-03__en-GB__w1280__forced-light.json  written from after-a/runs
+3191c9598e1e71b3631c2f8a1c5fdeb92c763e5c  detail/before-a.S-03__en-GB__w320__forced-light.json  written from before-a/runs
+d4ef4d76302aa6ec2886206621b7781ff5fd3a52  detail/after-a.S-03__en-GB__w320__forced-light.json  written from after-a/runs
+d244afcb612de9a05bc8f50be9feecfba776df47  detail/before-a.S-03__en-GB__w375__forced-light.json  written from before-a/runs
+f1f6abe50c2f955b4cbfa411bb9a2d6b92959a93  detail/after-a.S-03__en-GB__w375__forced-light.json  written from after-a/runs
+0021468071e72b498b571d1bde7d77599229d7dc  detail/before-a.S-03__en-GB__w640__forced-light.json  written from before-a/runs
+0745ffcd0e8fde605457f9ee66a9752da26dabaa  detail/after-a.S-03__en-GB__w640__forced-light.json  written from after-a/runs
+e1815590262ea06f127f7ff85cab2ec62f4db2bc  detail/before-a.S-03__ms-MY__w1280__forced-light.json  written from before-a/runs
+8907fe85a627cf24d1d431eb9315b8abc1e075cf  detail/after-a.S-03__ms-MY__w1280__forced-light.json  written from after-a/runs
+c857ede262fdc1df5aad14274030924aa7df1257  detail/before-a.S-03__ms-MY__w320__forced-light.json  written from before-a/runs
+86f14e07fdf956df2bb82aeeea9ee81856594ced  detail/after-a.S-03__ms-MY__w320__forced-light.json  written from after-a/runs
+5996ce59b89911f65cbebaec39c1eefc8a6b978f  detail/before-a.S-03__ms-MY__w375__forced-light.json  written from before-a/runs
+f1b0057a5a79d5ace7df92f87f4cdf4d563a6791  detail/after-a.S-03__ms-MY__w375__forced-light.json  written from after-a/runs
+070acb37c472fd49dc88d909be9306f3b8865f16  detail/before-a.S-03__ms-MY__w640__forced-light.json  written from before-a/runs
+d9289fd7721f172c6a6a0dd69276e479ccd42757  detail/after-a.S-03__ms-MY__w640__forced-light.json  written from after-a/runs
+e6eb3eafe1656f7be9c654aa48a4886d37b4add1  detail/before-a.S-03__zh-Hans__w1280__forced-light.json  written from before-a/runs
+188c58336203fb9b855c836d72035904823de840  detail/after-a.S-03__zh-Hans__w1280__forced-light.json  written from after-a/runs
+786f3db7c827d9336beef29423ba7bcd63dc7a3a  detail/before-a.S-03__zh-Hans__w320__forced-light.json  written from before-a/runs
+7ae5d1cfc640ca941fb29af642b54272d95928d0  detail/after-a.S-03__zh-Hans__w320__forced-light.json  written from after-a/runs
+3d46163d0f252034915c23b81369191485689c4c  detail/before-a.S-03__zh-Hans__w375__forced-light.json  written from before-a/runs
+01ccf3cc27eaaa688252b4a0a169eb3db9e9b670  detail/after-a.S-03__zh-Hans__w375__forced-light.json  written from after-a/runs
+657b292e4ebd099e870f4d9ff82d3e6e2c9aad91  detail/before-a.S-03__zh-Hans__w640__forced-light.json  written from before-a/runs
+42fecd765eca91522ee6875bac77b1cde8225b30  detail/after-a.S-03__zh-Hans__w640__forced-light.json  written from after-a/runs
+2d501cbafab4366cf53b3f7f9533b04c09a79fec  detail/before-a.S-03__en-GB__w1280__light.json  written from before-a/runs
+087db93c58c9b71481179baf215fd981751d82ca  detail/after-a.S-03__en-GB__w1280__light.json  written from after-a/runs
+5ebf4a35e475394ec639782599210a157d633a96  detail/before-a.S-03__en-GB__w320__light.json  written from before-a/runs
+34f3dc1762caac0d3fae72cd8bd05a2f1635e454  detail/after-a.S-03__en-GB__w320__light.json  written from after-a/runs
+9a2af97c92edadf1cec56c413bf9e93a5a35011d  detail/before-a.S-03__en-GB__w375__light.json  written from before-a/runs
+99859b6570ba1fe996a6d6a4953a2ba8e6433dbf  detail/after-a.S-03__en-GB__w375__light.json  written from after-a/runs
+7039eaff985050652cd1ecf37f83012f667774ee  detail/before-a.S-03__en-GB__w640__light.json  written from before-a/runs
+120b927e76f74913711c2e1120f1e8cec80ea6ee  detail/after-a.S-03__en-GB__w640__light.json  written from after-a/runs
+42682915c90255558999addfaff6acd6f39a1ee5  detail/before-a.S-03__ms-MY__w1280__light.json  written from before-a/runs
+8dfaedd73bc99a03c26312c1bea207b1231f1d97  detail/after-a.S-03__ms-MY__w1280__light.json  written from after-a/runs
+37f6b556a63bdc19f8aad5fd5c0a41e060e7e556  detail/before-a.S-03__ms-MY__w320__light.json  written from before-a/runs
+0cc56cc0a2120a4e6396caf9943344a7bb10cdb9  detail/after-a.S-03__ms-MY__w320__light.json  written from after-a/runs
+04ce6f5e0044d0822994858409346b284dec1715  detail/before-a.S-03__ms-MY__w375__light.json  written from before-a/runs
+c1564cc798cd2a35f64ef7691af501a93f98edfa  detail/after-a.S-03__ms-MY__w375__light.json  written from after-a/runs
+38bc54ca542952a6b2699892ae613a2ab4a61a85  detail/before-a.S-03__ms-MY__w640__light.json  written from before-a/runs
+c8361d43ad730f29c94c1c5bdbc3bc265f74e8c0  detail/after-a.S-03__ms-MY__w640__light.json  written from after-a/runs
+5bb32705c7351aa3a6d7264cb7b68060c752bf0b  detail/before-a.S-03__zh-Hans__w1280__light.json  written from before-a/runs
+7aca3391c2bb1886bb9a98bfb5cc25cbfa23c6b2  detail/after-a.S-03__zh-Hans__w1280__light.json  written from after-a/runs
+25078e6863eba1eb45939774757e1418304a87b1  detail/before-a.S-03__zh-Hans__w320__light.json  written from before-a/runs
+e2cb8af85eaa3c825e23c666062193761ac62dcb  detail/after-a.S-03__zh-Hans__w320__light.json  written from after-a/runs
+41681da6f28b324788ab67bea5ab7636169a6b32  detail/before-a.S-03__zh-Hans__w375__light.json  written from before-a/runs
+eec29755c5aac06580c686289af75af71e725817  detail/after-a.S-03__zh-Hans__w375__light.json  written from after-a/runs
+39f0d0ba9656dab7d1c65f2c765e16f1157a8e3a  detail/before-a.S-03__zh-Hans__w640__light.json  written from before-a/runs
+42f9f5d4c2f56b1bd81b83c1bfa94cf610e73814  detail/after-a.S-03__zh-Hans__w640__light.json  written from after-a/runs
+83a61c00ab4f1f80ff90944192c18597589e545f  detail/before-c2.S-143__en-GB__w1280__dark-font32.json  written from before-c2/runs
+d630b82a3dc8d984a8bd172fab1bd60652463a9b  detail/after-c2.S-143__en-GB__w1280__dark-font32.json  written from after-c2/runs

@@ -48,10 +48,9 @@ dd {
 }
 
 /* One blank line between paragraphs of running text (1.4.8's paragraph
-   spacing, VH-124). The lede and a notification's body are where paragraphs
-   follow each other; a helper or status line under a control keeps its own
-   closer spacing. */
-.lede p + p,
+   spacing, VH-124). A notification's body is where paragraphs follow each
+   other; a helper or status line under a control keeps its own closer
+   spacing. */
 .notification-body + .notification-body {
   margin-top: var(--paragraph-gap);
 }
@@ -173,8 +172,24 @@ a {
 }
 
 /* The page's name, in the brand's heading face, on the content's left edge. */
-.page-title {
+/* The title and its "?" on one row: the title wraps before the "?" leaves its
+   side, so a narrow page gains one line of words and not a line for the "?"
+   alone. Only where the title's longest word and the "?" cannot share the
+   column, at the 32 px font, does the "?" take a line of its own (VH-229). */
+.page-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-03);
   margin: 0 0 var(--spacing-05);
+}
+
+.page-title {
+  flex: 1 1 min-content;
+  min-width: 0;
+  max-width: max-content;
+  margin: 0;
+  overflow-wrap: break-word;
 }
 
 /*
@@ -235,6 +250,10 @@ a {
 
 .lede p {
   margin: 0;
+}
+
+#browser-note {
+  margin: 0 0 var(--spacing-07);
 }
 
 .promises {

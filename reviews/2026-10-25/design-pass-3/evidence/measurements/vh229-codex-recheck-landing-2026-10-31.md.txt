@@ -1,0 +1,4 @@
+Commit
+Trees match exactly; commit checker reports 0 failures, 0 warnings.
+Gate results and load figures agree; AC/power mode 2 are not evidenced in those logs.
+Replace CHECKED with Commit.

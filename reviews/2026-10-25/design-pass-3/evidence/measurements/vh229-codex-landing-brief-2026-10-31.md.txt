@@ -1,0 +1,11 @@
+Read-only check of a ledger-only commit in this repository. Do not read anything under side-session-notes, nor in /Users/joe/UoN-Video-Helper-side any file named vh229-progress*, vh229-claude-*, vh229-*compare* or vh229-handover-*.
+
+The commit: `914acbd3cbb5c7fc957d1193c1c20a89b39a53f6` on branch side/vh229 (worktree /Users/joe/UoN-Video-Helper-side/vh229). Its base: 198182fb3a0d8a274316a0c84cfb160e9ac0564c. Read it by `git show`/`git diff 198182f side/vh229`.
+
+It lands a raised item, VH-229, squashing two commits (6dc453e, 27b1c9b on the old base bdf6b6d) onto main after VH-217 closed. Answer each:
+1. Is it ledger only (project/ alone; nothing in src, docs, test, walker)?
+2. Is VH-217's close (decision, trajectory, backlog strike, wish lines) kept whole, and every decision kept whole, one or more archived to project/decisions-2026-10.md by tools/archive.mjs and none lost or altered? Compare against the old commit 6dc453e for the raise's own content.
+3. Does VH-229 sit in the backlog before VH-209, with no stale "blocked: VH-217"?
+4. Does the item's Next step say the build, and does anything still name a landing yet to come?
+5. Are the owner's words in the item and decision unchanged from 6dc453e?
+Give, first, a one-word verdict: Commit or Hold; then findings, each with file and line. Be short.

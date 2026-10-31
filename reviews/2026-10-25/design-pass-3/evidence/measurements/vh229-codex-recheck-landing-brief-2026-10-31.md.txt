@@ -1,0 +1,3 @@
+Read-only re-check. The commit `5ff02a72ea88cdf409c66183df1b14053faa7c42` on local main (base 198182fb3a0d8a274316a0c84cfb160e9ac0564c) carries the same tree as the commit you just passed on five content points and held only for lacking a Verify: line. Do not read anything under side-session-notes, nor vh229-progress*, vh229-claude-*, vh229-*compare*, vh229-handover-* in /Users/joe/UoN-Video-Helper-side.
+Check: the tree equals side/vh229's (914acbd3cbb5c7fc957d1193c1c20a89b39a53f6); the message's Verify line against /Users/joe/UoN-Video-Helper-side/vh229-gate-landing2.log and .load.log and vh229-gate-landing.load.log. Its Checked line holds a placeholder word CHECKED, to be replaced by your verdict.
+Give first one word, Commit or Hold, then at most three short lines.

@@ -1,0 +1,70 @@
+// VH-229: the readings the table's notes name as the readings, per cell: each later re-walk replaces the
+// earlier group's cell, and each error row of the states probe gives way to its re-walk. Reads the records
+// only; never writes them. node reconcile.mjs <records dir> > <page>
+import { readFileSync, readdirSync } from 'node:fs'
+import { join } from 'node:path'
+const RD = process.argv[2]
+const jl = (f) => readFileSync(join(RD, f), 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l))
+const key = (r) => [r.id, r.lang, r.view, r.mode].join('__')
+const side = (s) => {
+  const m = new Map(); let dup = 0, dupDiff = 0
+  for (const g of ['a', 'b', 'c', 'c2', 'c3']) for (const r of jl(`${s}-${g}.outcomes.jsonl`)) {
+    const k = key(r), old = m.get(k)
+    if (old) { dup++; if (!['c2', 'c3'].includes(g) && JSON.stringify([old.reached, old.outcomes, old.rows]) !== JSON.stringify([r.reached, r.outcomes, r.rows])) dupDiff++ }
+    m.set(k, { ...r, group: g })
+  }
+  return { m, dup, dupDiff }
+}
+const A = side('before'), B = side('after')
+const reached = (m) => [...m.values()].filter((r) => r.status === 'ok').length
+const moves = {}, alike = {}, add = (o, k, c) => (o[k] ??= []).push(c)
+let same = 0, onlyA = [], onlyB = [], reachedMoved = []
+for (const [k, a] of A.m) {
+  const b = B.m.get(k); if (!b) { onlyA.push(k); continue }
+  let moved = false
+  if (a.status !== b.status || a.reached !== b.reached) { reachedMoved.push(k); add(moves, `reached: ${a.status}/${a.reached} → ${b.status}/${b.reached}`, k); moved = true }
+  for (const n of new Set([...Object.keys(a.outcomes ?? {}), ...Object.keys(b.outcomes ?? {})])) {
+    const x = a.outcomes?.[n], y = b.outcomes?.[n]
+    if (x !== y) { add(moves, `${n}: ${x} → ${y}`, k); moved = true } else if (x === 'fail') add(alike, n, k)
+  }
+  const rows = (c) => Object.fromEntries((c.rows ?? []).map((r) => [r.what, r.outcome]))
+  const ra = rows(a), rb = rows(b)
+  for (const n of new Set([...Object.keys(ra), ...Object.keys(rb)])) {
+    if (ra[n] !== rb[n]) { add(moves, `row "${n.slice(0, 60)}": ${ra[n]} → ${rb[n]}`, k); moved = true } else if (ra[n] === 'fail') add(alike, `row "${n.slice(0, 60)}"`, k)
+  }
+  if (!moved) same++
+}
+for (const k of B.m.keys()) if (!A.m.has(k)) onlyB.push(k)
+const newlyFails = Object.keys(moves).filter((k) => / → fail$/.test(k))
+const by = (v) => { const o = {}; for (const c of v) o[c.split('__')[0]] = (o[c.split('__')[0]] ?? 0) + 1; return Object.entries(o).map(([s, n]) => `${s} ${n}`).join(', ') }
+const notReached = (s) => { const o = {}; for (const [k, r] of s.m) if (r.status !== 'ok') { const [id, , view, mode] = k.split('__'); const t = `${id} ${view} ${mode}`; o[t] = (o[t] ?? 0) + 1 } return o }
+const NA = notReached(A), NB = notReached(B)
+
+// States.
+const states = (s) => {
+  const m = new Map(); let raw = 0, err = 0
+  for (const g of ['states', 'states2']) for (const r of jl(`${s}-${g}.vh229-states.jsonl`)) {
+    raw++; const k = [r.lang, r.view, r.mode, r.which, r.state].join('/')
+    if (r.error || r.kind === 'error') { err++; continue }
+    m.set(k, r)
+  }
+  return { m, raw, err }
+}
+const SA = states('before'), SB = states('after')
+const flat = (o, pre = '', out = {}) => { for (const [k, v] of Object.entries(o ?? {})) { if (v && typeof v === 'object' && !Array.isArray(v)) flat(v, `${pre}${k}.`, out); else out[`${pre}${k}`] = JSON.stringify(v) } return out }
+let both = 0, stSame = 0; const stMoves = {}
+for (const [k, a] of SA.m) { const b = SB.m.get(k); if (!b) continue; both++; const fa = flat(a), fb = flat(b); let mv = false; for (const f of new Set([...Object.keys(fa), ...Object.keys(fb)])) if (fa[f] !== fb[f]) { mv = true; stMoves[f] = (stMoves[f] ?? 0) + 1 } if (!mv) stSame++ }
+const whichOf = (m) => { const o = {}; for (const r of m.values()) o[r.which] = (o[r.which] ?? 0) + 1; return o }
+// Provenance of the before's re-walks.
+const prov = readdirSync(RD).filter((f) => /^(before|after)-(c2|c3|states2?|a|b|c)\.conditions\.txt$/.test(f)).map((f) => { const t = readFileSync(join(RD, f), 'utf8'); return [f.replace('.conditions.txt', ''), /diff hash (\w+)/.exec(t)?.[1]] })
+const mani = readdirSync(RD).filter((f) => /^before-(c2|c3)\..*manifest\.json$/.test(f)).map((f) => { const j = JSON.parse(readFileSync(join(RD, f), 'utf8')); return `${f.replace('.manifest.json', '')}: dirty ${j.source.dirty}, ${j.source.diffSha256}` })
+const probe = readdirSync(RD).filter((f) => /^before-(c2|c3)\.vh229-probe/.test(f)).flatMap((f) => jl(f))
+const probeOld = probe.filter((r) => (r.missing ?? []).includes('about')).length
+const P = ['<!-- markdownlint-disable -->', '# VH-229 — the title\'s "?": the table reconciled', '', 'Added at the blind check, which found the table adds re-walks to the cells they replace. [The table](vh229-title-help-2026-10-31.md) and its records stand as placed, not rewritten; its notes already named `c2` and `c3` as the readings. This page, by [`reconcile.mjs`](vh229-records-2026-10-31/vh229-reconcile.mjs.txt) from those records alone, states the readings with each later re-walk replacing the earlier cell. No code changed and nothing was re-walked for it.', '', '## Scenario cells', '', `${A.m.size} cells before and ${B.m.size} after, in S-03 and S-141 to S-144; **${reached(A.m)} reached on each side, the same cells; ${same} unmoved**; ${onlyA.length} before-only, ${onlyB.length} after-only. No cell's reach moved. **No instrument or row newly fails** (${newlyFails.length} moves to fail). The table's 841 and 858, its 17 after-only cells and its S-143 "undefined →" rows are the re-walks counted twice. Later groups replaced ${A.dup} earlier rows before and ${B.dup} after; of those within \`a\`, \`b\` and \`c\`, S-144's repeats, ${A.dupDiff + B.dupDiff} differed in outcome.`, '', '| What moved | Cells |', '| --- | --- |']
+for (const [k, v] of Object.entries(moves)) P.push(`| ${k.replace(/\|/g, '/')} | ${v.length}; ${by(v)} |`)
+P.push('', 'All of it is S-03, read closed: its `type`, `formatTip` and most of `targets` improve because the format "?" is not painted with the panel closed, not because that "?" changed; "the five promises" passes since the panel is `.lede`.', '', 'Failing alike on both sides:', '', '| Instrument or row | Cells |', '| --- | --- |')
+for (const [k, v] of Object.entries(alike).sort((x, y) => y[1].length - x[1].length)) P.push(`| ${k.replace(/\|/g, '/')} | ${v.length}; ${by(v)} |`)
+const sameNot = JSON.stringify(NA) === JSON.stringify(NB)
+const nr = {}; for (const [t, n] of Object.entries(NA)) { const id = t.split(' ')[0]; nr[id] = (nr[id] ?? 0) + n }
+P.push('', `**Not reached, ${A.m.size - reached(A.m)} cells, ${sameNot ? 'the same on each side' : 'NOT THE SAME ON EACH SIDE'}, no link claimed:** all at w375 and a 32 px font: ${Object.entries(nr).map(([s, n]) => `${s} ${n}`).join(', ')}. The phone emulation widens to the page's overflow and the walker's window check refuses them (wish VH-217.4).`, '', '## States probe', '', `Genuine readings: **${SA.m.size} before, ${SB.m.size} after**; ${SA.err} error rows on each side (the onset's, for the empty fixture folder) set aside, \`states2\` re-reading them. The ${SB.m.size - SA.m.size} after-only readings are the title's "?", which the before does not have (${SB.m.size - SA.m.size} of \`about\`). Of the ${both} on both sides, ${stSame} unmoved; ${Object.entries(stMoves).map(([k, n]) => `\`${k}\` in ${n}`).join(', ')}: the format tip's place on the page, its gap under its "?" kept. The table's 4,032 and 5,976 count the error rows.`, '', '## Provenance of the before\'s re-walks', '', `\`walk.sh\` passes the walker no \`APP_ROOT\`, so the manifests of \`before-c2\` and \`before-c3\` fingerprint the walker's own checkout, the build, not the temporary worktree the server ran from: ${[...new Set(mani.map((x) => x.split(': ')[1]))].join('; ')}, on ${mani.length} manifests. Their commit is right and their \`dirty\` and diff fields describe the wrong tree. What shows the before was served: \`conditions.txt\` read the worktree, diff hash \`${prov.find((p) => p[0] === 'before-c2')[1]}\`, 0 lines of status; and ${probeOld} of ${probe.length} page probe readings in those groups have no "?" (\`missing\` holds \`about\`). The worktree was removed after, so this is the record's word and the page's own reading, stated as such. \`before-states2\` has no manifest and the same conditions.`, '', '## Names', '', 'Three of the records were renamed from `.mjs` to `.mjs.txt` at the close, content and sha1 unchanged, because the gate lints `.mjs` and they carry two unused-name and global-name errors from their walker lineage: `vh229-shots`, `vh229-states`, `vh229-states-onset`, as `vh217-states2.mjs.txt` was. `vh229-table-notes.md` likewise took `.md.txt`, since the docs lint reads it. The table and `sources.txt` name them as they were walked.', '', '## Power and load', '', 'A before and its after match in power mode, mode 2 throughout. `a`, `b` and `c`: AC both sides, at materially different load (median 11 to 17 against 7 to 10). `states`: AC both sides, median 5.99 before and 3.78 after. `c3` and `states2`: battery above 50% both sides, comparable. `c2`: before AC then battery, after battery, and its before lost Chrome at a load peak of 150 in `dark-font32`, read `c3` for those 18. So the static readings stand, and no timing or performance conclusion is drawn from these walks.', '')
+console.log(P.join('\n'))

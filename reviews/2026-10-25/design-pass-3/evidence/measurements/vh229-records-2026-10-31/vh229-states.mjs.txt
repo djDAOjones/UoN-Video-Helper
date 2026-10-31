@@ -1,0 +1,134 @@
+// VH-217 #2, from vh229-states.mjs, on Codex's must: `Page.captureScreenshot` with `captureBeyondViewport` dropped `Page.setFontSizes`, so a 32 px condition read 16 px after its first clip, and clipped at 16. This takes its clips within the viewport, around the "?"'s item with its tip, and stops a condition whose root font is not its mode's, read before and after each clip.
+// VH-217 #1: each "?" in each condition and state, read by the page, outside the walker, on the walker's own Walk, setViewport and
+// setMode. The states: rest, hovered, focused (keyboard), pressed (mouse), pressed-key (Space held); open (mouse, ring-free), open-focused
+// (keyboard), open-hovered, open-pressed, open-pressed-key, closed-by-key, open-disabled; touch at the phone view. Named reading: the 2.5.5 after-reading is this `elementFromPoint` probe, on a 2 px grid over the 44 x 44 px square,
+// because the walker's 2.5.5 does not count a target drawn round the control (wish VH-205.1). The press is held, read, moved away and
+// released outside, so it fires no click. Nothing is written to the repository or the walker.
+//   FIX=… CDP_PORT=… APP_URL=… OUT_ROOT=… RUN_ROOT=… WALKER=… node vh229-states.mjs --out <jsonl> [--langs --views --modes] [--clips]
+import { pathToFileURL } from 'node:url'
+import { join } from 'node:path'
+import { appendFileSync, writeFileSync } from 'node:fs'
+const WALKER = process.env.WALKER
+const imp = (f) => import(pathToFileURL(join(WALKER, f)).href)
+const { connectBrowser } = await imp('cdp.mjs')
+const { Walk, sleep } = await imp('walk.mjs')
+const { QUAL_INIT, closeAnalysis, setViewport, setMode, key } = await imp('qualify.mjs')
+const { MX_INIT, ready, fresh } = await imp('scenarios.mjs')
+const args = process.argv.slice(2)
+const opt = (n, d) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1].split(',') : d }
+const OUT = opt('--out', [null])[0]; if (!OUT) throw new Error('--out')
+const langs = opt('--langs', ['en-GB', 'zh-Hans', 'ms-MY']), views = opt('--views', ['w1280', 'w640', 'w401', 'w400', 'w375', 'w320'])
+const modes = opt('--modes', ['light', 'dark', 'forced-light', 'forced-dark', 'font32', 'dark-font32', 'forced-light-font32', 'forced-dark-font32'])
+const clips = args.includes('--clips'), clipViews = new Set(['w1280', 'w320'])
+const READ = (id) => String.raw`(() => {
+  const b = document.getElementById(${JSON.stringify(id)}); if (!b) return { missing: true };
+  const shown = b.getClientRects().length > 0;
+  if (!shown) return { hiddenButton: true };
+  b.scrollIntoView({ block: 'center', inline: 'nearest' });
+  const num = (c) => { const m = (c.match(/[\d.]+/g) || []).map(Number); return { r: m[0], g: m[1], b: m[2], a: m.length > 3 ? m[3] : 1 } };
+  const lum = (c) => { const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4) }; return 0.2126 * f(c.r) + 0.7152 * f(c.g) + 0.0722 * f(c.b) };
+  const ratio = (x, y) => { const a = lum(x), c = lum(y); return Math.round(((Math.max(a, c) + 0.05) / (Math.min(a, c) + 0.05)) * 100) / 100 };
+  const under = (e) => { for (let p = e; p; p = p.parentElement) { const c = num(getComputedStyle(p).backgroundColor); if (c.a > 0) return c } return { r: 255, g: 255, b: 255, a: 1 } };
+  const cs = getComputedStyle(b), fill = under(b), page = under(b.parentElement), glyph = num(cs.color), outline = num(cs.outlineColor), border = num(cs.borderTopColor);
+  const r = b.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2, T = 44;
+  const after = getComputedStyle(b, '::after');
+  // The named 2.5.5 reading: a 2 px grid over the 44 px square round the middle.
+  let hit = 0, all = 0, off = 0; const others = {};
+  for (let y = cy - T / 2 + 1; y < cy + T / 2; y += 2) for (let x = cx - T / 2 + 1; x < cx + T / 2; x += 2) {
+    all++; if (x < 0 || y < 0 || x >= innerWidth || y >= innerHeight) { off++; continue }
+    const e = document.elementFromPoint(x, y);
+    if (e === b || (e && b.contains(e))) hit++; else { const k = e ? (e.id ? '#' + e.id : e.tagName.toLowerCase() + (e.className && typeof e.className === 'string' ? '.' + e.className.split(/\s+/)[0] : '')) : 'null'; others[k] = (others[k] || 0) + 1 }
+  }
+  // The words before it: the last character's box and its ink, on its own line or not.
+  let words = null;
+  const span = b.closest('.promise-with-help')?.querySelector('span');
+  if (span) {
+    const walker = document.createTreeWalker(span, NodeFilter.SHOW_TEXT); let last = null, n;
+    while ((n = walker.nextNode())) if (n.textContent.trim()) last = n;
+    const text = last.textContent.replace(/\s+$/, ''); const range = document.createRange(); range.setStart(last, text.length - 1); range.setEnd(last, text.length);
+    const box = range.getBoundingClientRect(); const ctx = document.createElement('canvas').getContext('2d'); const sc = getComputedStyle(span);
+    ctx.font = sc.fontStyle + ' ' + sc.fontWeight + ' ' + sc.fontSize + ' ' + sc.fontFamily; const m = ctx.measureText(text.slice(-1));
+    const inkRight = box.left + m.actualBoundingBoxRight, sameLine = r.top < box.bottom && r.bottom > box.top, midY = (box.top + box.bottom) / 2;
+    let underTarget = 0; for (let x = Math.floor(box.left); x < Math.ceil(inkRight); x++) { const e = document.elementFromPoint(x + 0.5, midY); if (e === b || (e && b.contains(e))) underTarget++ }
+    const tl = cx - T / 2;
+    words = { lastChar: text.slice(-1), sameLine, boxRight: Math.round(box.right * 100) / 100, inkRight: Math.round(inkRight * 100) / 100, verticalGap: sameLine ? null : Math.round((r.top - box.bottom) * 100) / 100, gapInkToSquare: sameLine ? Math.round((r.left - inkRight) * 100) / 100 : null, gapBoxToSquare: sameLine ? Math.round((r.left - box.right) * 100) / 100 : null, targetOverInk: sameLine ? Math.round(Math.max(0, inkRight - tl) * 100) / 100 : null, inkPxHittingTarget: underTarget };
+  }
+  const li = b.closest('li'); const rows = li ? [...li.parentElement.children].map((c) => { const s = c.querySelector('span') || c; return Math.round(s.getBoundingClientRect().height) }) : null;
+  const tipId = b.getAttribute('aria-controls'); const tip = tipId ? document.getElementById(tipId) : null; const tr = tip && !tip.hidden ? tip.getBoundingClientRect() : null;
+  const doc = document.documentElement;
+  return { box: { w: Math.round(r.width * 100) / 100, h: Math.round(r.height * 100) / 100, left: Math.round(r.left * 100) / 100, right: Math.round(r.right * 100) / 100 },
+    colours: { background: cs.backgroundColor, color: cs.color, border: cs.borderTopColor, borderStyle: cs.borderTopStyle, outline: cs.outlineColor, outlineStyle: cs.outlineStyle, outlineWidth: cs.outlineWidth, outlineOffset: cs.outlineOffset, adjust: cs.forcedColorAdjust },
+    contrast: { glyphOnFill: ratio(glyph, fill), fillOnPage: ratio(fill, page), borderOnPage: ratio(border, page), ringOnPage: cs.outlineStyle === 'none' ? null : ratio(outline, page), ringOnFill: cs.outlineStyle === 'none' ? null : ratio(outline, fill) },
+    matches: { hover: b.matches(':hover'), active: b.matches(':active'), focus: b.matches(':focus'), focusVisible: b.matches(':focus-visible'), disabled: b.matches(':disabled') }, expanded: b.getAttribute('aria-expanded'),
+    target: { grid: all, hit, offPage: off, others, afterW: after.width, afterH: after.height, content: after.content }, words, rows,
+    tip: tr ? { top: Math.round(tr.top), left: Math.round(tr.left), right: Math.round(tr.right), bottomOfTarget: Math.round(cy + T / 2), belowTarget: tr.top >= cy + T / 2 } : null,
+    overflow: { scrollWidth: doc.scrollWidth, clientWidth: doc.clientWidth }, root: parseFloat(getComputedStyle(doc).fontSize), forced: matchMedia('(forced-colors: active)').matches, dark: matchMedia('(prefers-color-scheme: dark)').matches, vw: innerWidth };
+})()`
+const centre = (w, id) => w.evaluate(`(() => { const b = document.getElementById(${JSON.stringify(id)}); b.scrollIntoView({ block: 'center', inline: 'nearest' }); const r = b.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 } })()`)
+const mouse = (w, type, x, y, extra = {}) => w.page.send('Input.dispatchMouseEvent', { type, x, y, ...(type === 'mouseMoved' ? {} : { button: 'left', clickCount: 1 }), ...extra })
+const away = (w) => mouse(w, 'mouseMoved', 1, 1)
+const closeTip = (w, id) => w.evaluate(`(() => { const b = document.getElementById(${JSON.stringify(id)}); if (b.getAttribute('aria-expanded') === 'true') b.click(); document.activeElement?.blur?.(); })()`)
+const kbFocus = async (w, id) => { await w.evaluate(`document.getElementById(${JSON.stringify(id)}).focus()`); await key(w, 'Tab', { shift: true }); await key(w, 'Tab'); return w.evaluate(`document.activeElement === document.getElementById(${JSON.stringify(id)}) && document.activeElement.matches(':focus-visible')`) }
+const space = (w, type) => w.page.send('Input.dispatchKeyEvent', { type, key: ' ', code: 'Space', windowsVirtualKeyCode: 32, nativeVirtualKeyCode: 32, ...(type === 'keyDown' ? { text: ' ' } : {}) })
+const browser = await connectBrowser()
+let n = 0, bad = 0
+for (const lang of langs) for (const view of views) for (const mode of modes) {
+  const w = new Walk(browser, `states/${lang}__${view}__${mode}`)
+  const put = (which, state, r) => { n++; appendFileSync(OUT, JSON.stringify({ lang, view, mode, which, state, ...r }) + '\n') }
+  const want = mode.endsWith('font32') ? 32 : 16
+  const font = async (at) => { const px = await w.evaluate(`parseFloat(getComputedStyle(document.documentElement).fontSize)`); if (px !== want) throw new Error(`root ${px} px, wanted ${want}, ${at}`) }
+  const shot = async (which, state, id) => {
+    if (!clips || !clipViews.has(view)) return
+    await font(`before the clip of ${which} ${state}`)
+    const r = await w.evaluate(`(() => { const b = document.getElementById(${JSON.stringify(id)}); const a = b.closest('.promise-with-help') || b.closest('.field') || b; const s = a.getBoundingClientRect(); const x0 = Math.max(0, s.left - 24), y0 = Math.max(0, s.top - 24), x1 = Math.min(innerWidth, s.right + 24), y1 = Math.min(innerHeight, s.bottom + 24); return { x: x0 + scrollX, y: y0 + scrollY, width: x1 - x0, height: y1 - y0 } })()`)
+    const png = await w.page.send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false, clip: { ...r, scale: 1 } })
+    writeFileSync(join(w.dir, `${which}-${lang}-${view}-${mode}-${state}.png`), Buffer.from(png.data, 'base64'))
+    await font(`after the clip of ${which} ${state}`)
+  }
+  try {
+    await w.open()
+    await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source: QUAL_INIT })
+    await w.page.send('Page.addScriptToEvaluateOnNewDocument', { source: MX_INIT })
+    await setViewport(w, view); await setMode(w, mode)
+    for (const [which, id, sel, prep] of [
+      ['about', 'about-help-button', '.page-title-row', async () => { await fresh(w, lang); await sleep(300) }],
+      // VH-229: the format "?" sits in the panel, so its route presses the title's "?" first, named; no such button (the before): nothing.
+      ['format', 'format-help-button', '.promise-with-help', async () => { await fresh(w, lang); await sleep(300); await w.evaluate(`(() => { const b = document.getElementById('about-help-button'); if (b && b.getAttribute('aria-expanded') === 'false') b.click() })()`); await sleep(200) }],
+      ['onset', 'onset-help-button', '#onset-help-button', async () => { await ready(w, lang); if (!(await w.evaluate(`document.getElementById('onset-help-button')?.getClientRects().length > 0`))) { await w.select('#closing-type', 'fade'); await w.waitSettled() } await sleep(200) }],
+    ]) {
+      await prep()
+      if (which === 'about' && !(await w.evaluate(`!!document.getElementById('about-help-button')`))) continue
+      const read = async (state) => { const r = await w.evaluate(READ(id)); if (r.root !== want) throw new Error(`root ${r.root} px, wanted ${want}, ${which} ${state}`); put(which, state, r); await shot(which, state, id); return r }
+      await away(w); await closeTip(w, id); await sleep(120); await read('rest')
+      let c = await centre(w, id)
+      await mouse(w, 'mouseMoved', c.x, c.y); await sleep(150); await read('hovered'); await away(w); await sleep(100)
+      const fv = await kbFocus(w, id); await sleep(100); put(which, 'focused-reached', { reached: fv }); await read('focused')
+      // Space held: pressed by key; released, it opens (an activation check), and focus stays: open and focused. Held again, pressed open; released, closed.
+      await space(w, 'keyDown'); await sleep(120); await read('pressed-key'); await space(w, 'keyUp'); await sleep(200); await read('open-focused')
+      await space(w, 'keyDown'); await sleep(120); await read('open-pressed-key'); await space(w, 'keyUp'); await sleep(200); await read('closed-by-key')
+      await w.evaluate(`document.activeElement?.blur?.()`)
+      c = await centre(w, id); await mouse(w, 'mouseMoved', c.x, c.y); await mouse(w, 'mousePressed', c.x, c.y); await sleep(150); await read('pressed')
+      await mouse(w, 'mouseMoved', 1, 1, { button: 'left', buttons: 1 }); await mouse(w, 'mouseReleased', 1, 1); await sleep(120); await closeTip(w, id)
+      // Open by the pointer: the fill with no ring; the click lands on the middle, so no touch event differs at these points.
+      c = await centre(w, id); await mouse(w, 'mouseMoved', c.x, c.y); await mouse(w, 'mousePressed', c.x, c.y); await mouse(w, 'mouseReleased', c.x, c.y); await sleep(200); await away(w); await sleep(120); await read('open')
+      c = await centre(w, id); await mouse(w, 'mouseMoved', c.x, c.y); await sleep(150); await read('open-hovered')
+      await mouse(w, 'mousePressed', c.x, c.y); await sleep(150); await read('open-pressed')
+      await mouse(w, 'mouseMoved', 1, 1, { button: 'left', buttons: 1 }); await mouse(w, 'mouseReleased', 1, 1); await sleep(120)
+      await closeTip(w, id); await away(w)
+      // Disabled while open, set here for this reading and restored, by the fieldset where it has one: the disabled rule must win.
+      await kbFocus(w, id); await key(w, 'Enter'); await sleep(200)
+      await w.evaluate(`(() => { const b = document.getElementById(${JSON.stringify(id)}); const f = b.closest('fieldset'); (f || b).disabled = true; })()`); await sleep(100); await read('open-disabled')
+      await w.evaluate(`(() => { const b = document.getElementById(${JSON.stringify(id)}); const f = b.closest('fieldset'); (f || b).disabled = false; })()`); await sleep(100); await closeTip(w, id)
+      // Touch, at the phone view: a tap opens, a tap closes, a tap outside closes; no hover stays.
+      if (w.view === 'phone') {
+        await w.click('#' + id); await sleep(200); await read('touch-open'); await w.click('#' + id); await sleep(200); await read('touch-closed')
+        await w.click('#' + id); await sleep(200); await w.click('.page-title'); await sleep(200); await read('touch-outside')
+      }
+    }
+    console.log(`read ${lang} ${view} ${mode}`)
+  } catch (e) { bad++; put('walk', 'error', { error: String(e.stack ?? e).slice(0, 400) }); console.log(`error ${lang} ${view} ${mode}: ${String(e.message ?? e).slice(0, 200)}`) } finally { await w.close().catch(() => undefined) }
+}
+await closeAnalysis()
+console.log(`${n} readings, ${bad} conditions errored`)
+browser.close()
+process.exit(bad ? 1 : 0)

@@ -1,0 +1,1164 @@
+{
+ "runId": "2026-10-31T14-26-51-550Z-dbe225",
+ "name": "vh229-before-c2-light",
+ "created": "2026-10-31T14:26:51.667Z",
+ "provenance": {
+  "source": {
+   "commit": "ff44a4f21fdd01d119b54ce3b5bace07e0f43428",
+   "dirty": true,
+   "diffSha256": "e6e6ed6c87d4cf6e"
+  },
+  "instruments": {
+   "revision": "e0a55331a7155cd3",
+   "files": [
+    {
+     "file": "again-190.mjs",
+     "sha256": "c87210f9f463f16c"
+    },
+    {
+     "file": "card-215.mjs",
+     "sha256": "fd4820886c9217c8"
+    },
+    {
+     "file": "cdp.mjs",
+     "sha256": "236e93be01a46929"
+    },
+    {
+     "file": "design-walk.mjs",
+     "sha256": "50c2b05bda2e7e61"
+    },
+    {
+     "file": "digest.mjs",
+     "sha256": "b58bfc4e16da02cd"
+    },
+    {
+     "file": "faults.mjs",
+     "sha256": "7b10cc52772035fe"
+    },
+    {
+     "file": "fixtures-8.sh",
+     "sha256": "63fa545bc29e59f5"
+    },
+    {
+     "file": "fixtures.sh",
+     "sha256": "58a1c94dcaab0dfa"
+    },
+    {
+     "file": "footer-182.mjs",
+     "sha256": "33abec1f70001c0f"
+    },
+    {
+     "file": "heavy-193.mjs",
+     "sha256": "54cbff0b91b93218"
+    },
+    {
+     "file": "inventory.mjs",
+     "sha256": "c2c16ea752c5e01e"
+    },
+    {
+     "file": "labels-189.mjs",
+     "sha256": "b4e39a730b577c3f"
+    },
+    {
+     "file": "lang-191.mjs",
+     "sha256": "ea6bec378b7c6779"
+    },
+    {
+     "file": "matrix.mjs",
+     "sha256": "a755d975c93da2db"
+    },
+    {
+     "file": "name-181.mjs",
+     "sha256": "7c2a15e25096c1d5"
+    },
+    {
+     "file": "note-180.mjs",
+     "sha256": "961d9427eeac771f"
+    },
+    {
+     "file": "page-183.mjs",
+     "sha256": "e1936c38cc88e158"
+    },
+    {
+     "file": "parts.mjs",
+     "sha256": "41ac1539a3d83b55"
+    },
+    {
+     "file": "phase8.mjs",
+     "sha256": "090f41a1c7bb6af8"
+    },
+    {
+     "file": "player-192.mjs",
+     "sha256": "9e586e52bf2ff91d"
+    },
+    {
+     "file": "preset-188.mjs",
+     "sha256": "9008b6c98979053b"
+    },
+    {
+     "file": "prove-172.mjs",
+     "sha256": "03e07056cf331744"
+    },
+    {
+     "file": "prove-8.mjs",
+     "sha256": "b8809c978b6c8ffc"
+    },
+    {
+     "file": "prove-fixtures-8.mjs",
+     "sha256": "f070fb844cfef3c7"
+    },
+    {
+     "file": "prove-m04.mjs",
+     "sha256": "d5d8cef75177d065"
+    },
+    {
+     "file": "prove-resume.mjs",
+     "sha256": "2e282c03e4ec4436"
+    },
+    {
+     "file": "prove.mjs",
+     "sha256": "190906965e7f3df0"
+    },
+    {
+     "file": "qualify.mjs",
+     "sha256": "a152d39c5a3018b7"
+    },
+    {
+     "file": "report-172.mjs",
+     "sha256": "a60f519698952657"
+    },
+    {
+     "file": "rings-179.mjs",
+     "sha256": "19578e809609f224"
+    },
+    {
+     "file": "runner.mjs",
+     "sha256": "e0b95b012f1e78fc"
+    },
+    {
+     "file": "scenarios.mjs",
+     "sha256": "f3e9d7a5ffde970f"
+    },
+    {
+     "file": "sliver-185.mjs",
+     "sha256": "3382b51be3d137e2"
+    },
+    {
+     "file": "tip-184.mjs",
+     "sha256": "589f75dc5976fff3"
+    },
+    {
+     "file": "tip-196.mjs",
+     "sha256": "050fc920ff41b6ec"
+    },
+    {
+     "file": "tokens.mjs",
+     "sha256": "59bff4a79c7984ff"
+    },
+    {
+     "file": "top-187.mjs",
+     "sha256": "1d8f24021effb424"
+    },
+    {
+     "file": "transitions.mjs",
+     "sha256": "fbc3a958e9f17bd0"
+    },
+    {
+     "file": "walk.mjs",
+     "sha256": "119a8ff6e7d2410f"
+    },
+    {
+     "file": "wcag-checks.mjs",
+     "sha256": "2496aa09cfcbadda"
+    },
+    {
+     "file": "words-186.mjs",
+     "sha256": "fcd79b36b6d9f22d"
+    }
+   ]
+  },
+  "appRoot": "/Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper",
+  "fixtures": [
+   {
+    "file": "lecture-60s.mp4",
+    "path": "/Users/joe/UoN-Video-Helper-side/vh229-walk/fix/lecture-60s.mp4",
+    "bytes": 20222028,
+    "sha256": "ce10e0ce0579c4b6"
+   }
+  ]
+ },
+ "declared": [
+  {
+   "id": "S-143",
+   "lang": "en-GB",
+   "view": "w1280",
+   "mode": "light",
+   "requires": [
+    "overflow",
+    "ax",
+    "targets",
+    "contrastText",
+    "contrastExtra",
+    "measure",
+    "type",
+    "focus",
+    "player",
+    "formatTip",
+    "footer",
+    "limiting",
+    "videoLanguage",
+    "asserts"
+   ],
+   "viewport": {
+    "w": 1280,
+    "h": 900,
+    "dpr": 1
+   },
+   "expects": {
+    "focus": {
+     "subjects": [
+      "#format-help-button",
+      "#onset-help-button"
+     ]
+    },
+    "asserts": {
+     "subjects": [
+      "never both open; each closes the other; Escape closes only the open one, focus on its own \"?\""
+     ]
+    },
+    "formatTip": {
+     "subjects": [
+      "named, and its text, in the page's words",
+      "the \"?\" at least 44 x 44",
+      "Enter opens it; focus stays on the \"?\"",
+      "edge: 1 px all round in --border-subtle, not a rail",
+      "gap: under the \"?\", inside its item and the page",
+      "Tab closes it; focus goes where it goes with it closed",
+      "Shift+Tab closes it; focus goes where it goes with it closed",
+      "Space opens it; Escape closes it, focus on the \"?\"",
+      "a click on its text keeps it open; Escape then closes it, focus on the \"?\"",
+      "a click elsewhere closes it"
+     ]
+    }
+   }
+  },
+  {
+   "id": "S-143",
+   "lang": "en-GB",
+   "view": "w640",
+   "mode": "light",
+   "requires": [
+    "overflow",
+    "ax",
+    "targets",
+    "contrastText",
+    "contrastExtra",
+    "measure",
+    "type",
+    "focus",
+    "player",
+    "formatTip",
+    "footer",
+    "limiting",
+    "videoLanguage",
+    "asserts"
+   ],
+   "viewport": {
+    "w": 640,
+    "h": 900,
+    "dpr": 1
+   },
+   "expects": {
+    "focus": {
+     "subjects": [
+      "#format-help-button",
+      "#onset-help-button"
+     ]
+    },
+    "asserts": {
+     "subjects": [
+      "never both open; each closes the other; Escape closes only the open one, focus on its own \"?\""
+     ]
+    },
+    "formatTip": {
+     "subjects": [
+      "named, and its text, in the page's words",
+      "the \"?\" at least 44 x 44",
+      "Enter opens it; focus stays on the \"?\"",
+      "edge: 1 px all round in --border-subtle, not a rail",
+      "gap: under the \"?\", inside its item and the page",
+      "Tab closes it; focus goes where it goes with it closed",
+      "Shift+Tab closes it; focus goes where it goes with it closed",
+      "Space opens it; Escape closes it, focus on the \"?\"",
+      "a click on its text keeps it open; Escape then closes it, focus on the \"?\"",
+      "a click elsewhere closes it"
+     ]
+    }
+   }
+  },
+  {
+   "id": "S-143",
+   "lang": "en-GB",
+   "view": "w401",
+   "mode": "light",
+   "requires": [
+    "overflow",
+    "ax",
+    "targets",
+    "contrastText",
+    "contrastExtra",
+    "measure",
+    "type",
+    "focus",
+    "player",
+    "formatTip",
+    "footer",
+    "limiting",
+    "videoLanguage",
+    "asserts"
+   ],
+   "viewport": {
+    "w": 401,
+    "h": 900,
+    "dpr": 1
+   },
+   "expects": {
+    "focus": {
+     "subjects": [
+      "#format-help-button",
+      "#onset-help-button"
+     ]
+    },
+    "asserts": {
+     "subjects": [
+      "never both open; each closes the other; Escape closes only the open one, focus on its own \"?\""
+     ]
+    },
+    "formatTip": {
+     "subjects": [
+      "named, and its text, in the page's words",
+      "the \"?\" at least 44 x 44",
+      "Enter opens it; focus stays on the \"?\"",
+      "edge: 1 px all round in --border-subtle, not a rail",
+      "gap: under the \"?\", inside its item and the page",
+      "Tab closes it; focus goes where it goes with it closed",
+      "Shift+Tab closes it; focus goes where it goes with it closed",
+      "Space opens it; Escape closes it, focus on the \"?\"",
+      "a click on its text keeps it open; Escape then closes it, focus on the \"?\"",
+      "a click elsewhere closes it"
+     ]
+    }
+   }
+  },
+  {
+   "id": "S-143",
+   "lang": "en-GB",
+   "view": "w400",
+   "mode": "light",
+   "requires": [
+    "overflow",
+    "ax",
+    "targets",
+    "contrastText",
+    "contrastExtra",
+    "measure",
+    "type",
+    "focus",
+    "player",
+    "formatTip",
+    "footer",
+    "limiting",
+    "videoLanguage",
+    "asserts"
+   ],
+   "viewport": {
+    "w": 400,
+    "h": 900,
+    "dpr": 1
+   },
+   "expects": {
+    "focus": {
+     "subjects": [
+      "#format-help-button",
+      "#onset-help-button"
+     ]
+    },
+    "asserts": {
+     "subjects": [
+      "never both open; each closes the other; Escape closes only the open one, focus on its own \"?\""
+     ]
+    },
+    "formatTip": {
+     "subjects": [
+      "named, and its text, in the page's words",
+      "the \"?\" at least 44 x 44",
+      "Enter opens it; focus stays on the \"?\"",
+      "edge: 1 px all round in --border-subtle, not a rail",
+      "gap: under the \"?\", inside its item and the page",
+      "Tab closes it; focus goes where it goes with it closed",
+      "Shift+Tab closes it; focus goes where it goes with it closed",
+      "Space opens it; Escape closes it, focus on the \"?\"",
+      "a click on its text keeps it open; Escape then closes it, focus on the \"?\"",
+      "a click elsewhere closes it"
+     ]
+    }
+   }
+  },
+  {
+   "id": "S-143",
+   "lang": "en-GB",
+   "view": "w375",
+   "mode": "light",
+   "requires": [
+    "overflow",
+    "ax",
+    "targets",
+    "contrastText",
+    "contrastExtra",
+    "measure",
+    "type",
+    "focus",
+    "player",
+    "formatTip",
+    "footer",
+    "limiting",
+    "videoLanguage",
+    "asserts"
+   ],
+   "viewport": {
+    "w": 375,
+    "h": 812,
+    "dpr": 3
+   },
+   "expects": {
+    "focus": {
+     "subjects": [
+      "#format-help-button",
+      "#onset-help-button"
+     ]
+    },
+    "asserts": {
+     "subjects": [
+      "never both open; each closes the other; Escape closes only the open one, focus on its own \"?\""
+     ]
+    },
+    "formatTip": {
+     "subjects": [
+      "named, and its text, in the page's words",
+      "the \"?\" at least 44 x 44",
+      "Enter opens it; focus stays on the \"?\"",
+      "edge: 1 px all round in --border-subtle, not a rail",
+      "gap: under the \"?\", inside its item and the page",
+      "Tab closes it; focus goes where it goes with it closed",
+      "Shift+Tab closes it; focus goes where it goes with it closed",
+      "Space opens it; Escape closes it, focus on the \"?\"",
+      "a click on its text keeps it open; Escape then closes it, focus on the \"?\"",
+      "a click elsewhere closes it"
+     ]
+    }
+   }
+  },
+  {
+   "id": "S-143",
+   "lang": "en-GB",
+   "view": "w320",
+   "mode": "light",
+   "requires": [
+    "overflow",
+    "ax",
+    "targets",
+    "contrastText",
+    "contrastExtra",
+    "measure",
+    "type",
+    "focus",
+    "player",
+    "formatTip",
+    "footer",
+    "limiting",
+    "videoLanguage",
+    "asserts"
+   ],
+   "viewport": {
+    "w": 320,
+    "h": 568,
+    "dpr": 1
+   },
+   "expects": {
+    "focus": {
+     "subjects": [
+      "#format-help-button",
+      "#onset-help-button"
+     ]
+    },
+    "asserts": {
+     "subjects": [
+      "never both open; each closes the other; Escape closes only the open one, focus on its own \"?\""
+     ]
+    },
+    "formatTip": {
+     "subjects": [
+      "named, and its text, in the page's words",
+      "the \"?\" at least 44 x 44",
+      "Enter opens it; focus stays on the \"?\"",
+      "edge: 1 px all round in --border-subtle, not a rail",
+      "gap: under the \"?\", inside its item and the page",
+      "Tab closes it; focus goes where it goes with it closed",
+      "Shift+Tab closes it; focus goes where it goes with it closed",
+      "Space opens it; Escape closes it, focus on the \"?\"",
+      "a click on its text keeps it open; Escape then closes it, focus on the \"?\"",
+      "a click elsewhere closes it"
+     ]
+    }
+   }
+  },
+  {
+   "id": "S-143",
+   "lang": "zh-Hans",
+   "view": "w1280",
+   "mode": "light",
+   "requires": [
+    "overflow",
+    "ax",
+    "targets",
+    "contrastText",
+    "contrastExtra",
+    "measure",
+    "type",
+    "focus",
+    "player",
+    "formatTip",
+    "footer",
+    "limiting",
+    "videoLanguage",
+    "asserts"
+   ],
+   "viewport": {
+    "w": 1280,
+    "h": 900,
+    "dpr": 1
+   },
+   "expects": {
+    "focus": {
+     "subjects": [
+      "#format-help-button",
+      "#onset-help-button"
+     ]
+    },
+    "asserts": {
+     "subjects": [
+      "never both open; each closes the other; Escape closes only the open one, focus on its own \"?\""
+     ]
+    },
+    "formatTip": {
+     "subjects": [
+      "named, and its text, in the page's words",
+      "the \"?\" at least 44 x 44",
+      "Enter opens it; focus stays on the \"?\"",
+      "edge: 1 px all round in --border-subtle, not a rail",
+      "gap: under the \"?\", inside its item and the page",
+      "Tab closes it; focus goes where it goes with it closed",
+      "Shift+Tab closes it; focus goes where it goes with it closed",
+      "Space opens it; Escape closes it, focus on the \"?\"",
+      "a click on its text keeps it open; Escape then closes it, focus on the \"?\"",
+      "a click elsewhere closes it"
+     ]
+    }
+   }
+  },
+  {
+   "id": "S-143",
+   "lang": "zh-Hans",
+   "view": "w640",
+   "mode": "light",
+   "requires": [
+    "overflow",
+    "ax",
+    "targets",
+    "contrastText",
+    "contrastExtra",
+    "measure",
+    "type",
+    "focus",
+    "player",
+    "formatTip",
+    "footer",
+    "limiting",
+    "videoLanguage",
+    "asserts"
+   ],
+   "viewport": {
+    "w": 640,
+    "h": 900,
+    "dpr": 1
+   },
+   "expects": {
+    "focus": {
+     "subjects": [
+      "#format-help-button",
+      "#onset-help-button"
+     ]
+    },
+    "asserts": {
+     "subjects": [
+      "never both open; each closes the other; Escape closes only the open one, focus on its own \"?\""
+     ]
+    },
+    "formatTip": {
+     "subjects": [
+      "named, and its text, in the page's words",
+      "the \"?\" at least 44 x 44",
+      "Enter opens it; focus stays on the \"?\"",
+      "edge: 1 px all round in --border-subtle, not a rail",
+      "gap: under the \"?\", inside its item and the page",
+      "Tab closes it; focus goes where it goes with it closed",
+      "Shift+Tab closes it; focus goes where it goes with it closed",
+      "Space opens it; Escape closes it, focus on the \"?\"",
+      "a click on its text keeps it open; Escape then closes it, focus on the \"?\"",
+      "a click elsewhere closes it"
+     ]
+    }
+   }
+  },
+  {
+   "id": "S-143",
+   "lang": "zh-Hans",
+   "view": "w401",
+   "mode": "light",
+   "requires": [
+    "overflow",
+    "ax",
+    "targets",
+    "contrastText",
+    "contrastExtra",
+    "measure",
+    "type",
+    "focus",
+    "player",
+    "formatTip",
+    "footer",
+    "limiting",
+    "videoLanguage",
+    "asserts"
+   ],
+   "viewport": {
+    "w": 401,
+    "h": 900,
+    "dpr": 1
+   },
+   "expects": {
+    "focus": {
+     "subjects": [
+      "#format-help-button",
+      "#onset-help-button"
+     ]
+    },
+    "asserts": {
+     "subjects": [
+      "never both open; each closes the other; Escape closes only the open one, focus on its own \"?\""
+     ]
+    },
+    "formatTip": {
+     "subjects": [
+      "named, and its text, in the page's words",
+      "the \"?\" at least 44 x 44",
+      "Enter opens it; focus stays on the \"?\"",
+      "edge: 1 px all round in --border-subtle, not a rail",
+      "gap: under the \"?\", inside its item and the page",
+      "Tab closes it; focus goes where it goes with it closed",
+      "Shift+Tab closes it; focus goes where it goes with it closed",
+      "Space opens it; Escape closes it, focus on the \"?\"",
+      "a click on its text keeps it open; Escape then closes it, focus on the \"?\"",
+      "a click elsewhere closes it"
+     ]
+    }
+   }
+  },
+  {
+   "id": "S-143",
+   "lang": "zh-Hans",
+   "view": "w400",
+   "mode": "light",
+   "requires": [
+    "overflow",
+    "ax",
+    "targets",
+    "contrastText",
+    "contrastExtra",
+    "measure",
+    "type",
+    "focus",
+    "player",
+    "formatTip",
+    "footer",
+    "limiting",
+    "videoLanguage",
+    "asserts"
+   ],
+   "viewport": {
+    "w": 400,
+    "h": 900,
+    "dpr": 1
+   },
+   "expects": {
+    "focus": {
+     "subjects": [
+      "#format-help-button",
+      "#onset-help-button"
+     ]
+    },
+    "asserts": {
+     "subjects": [
+      "never both open; each closes the other; Escape closes only the open one, focus on its own \"?\""
+     ]
+    },
+    "formatTip": {
+     "subjects": [
+      "named, and its text, in the page's words",
+      "the \"?\" at least 44 x 44",
+      "Enter opens it; focus stays on the \"?\"",
+      "edge: 1 px all round in --border-subtle, not a rail",
+      "gap: under the \"?\", inside its item and the page",
+      "Tab closes it; focus goes where it goes with it closed",
+      "Shift+Tab closes it; focus goes where it goes with it closed",
+      "Space opens it; Escape closes it, focus on the \"?\"",
+      "a click on its text keeps it open; Escape then closes it, focus on the \"?\"",
+      "a click elsewhere closes it"
+     ]
+    }
+   }
+  },
+  {
+   "id": "S-143",
+   "lang": "zh-Hans",
+   "view": "w375",
+   "mode": "light",
+   "requires": [
+    "overflow",
+    "ax",
+    "targets",
+    "contrastText",
+    "contrastExtra",
+    "measure",
+    "type",
+    "focus",
+    "player",
+    "formatTip",
+    "footer",
+    "limiting",
+    "videoLanguage",
+    "asserts"
+   ],
+   "viewport": {
+    "w": 375,
+    "h": 812,
+    "dpr": 3
+   },
+   "expects": {
+    "focus": {
+     "subjects": [
+      "#format-help-button",
+      "#onset-help-button"
+     ]
+    },
+    "asserts": {
+     "subjects": [
+      "never both open; each closes the other; Escape closes only the open one, focus on its own \"?\""
+     ]
+    },
+    "formatTip": {
+     "subjects": [
+      "named, and its text, in the page's words",
+      "the \"?\" at least 44 x 44",
+      "Enter opens it; focus stays on the \"?\"",
+      "edge: 1 px all round in --border-subtle, not a rail",
+      "gap: under the \"?\", inside its item and the page",
+      "Tab closes it; focus goes where it goes with it closed",
+      "Shift+Tab closes it; focus goes where it goes with it closed",
+      "Space opens it; Escape closes it, focus on the \"?\"",
+      "a click on its text keeps it open; Escape then closes it, focus on the \"?\"",
+      "a click elsewhere closes it"
+     ]
+    }
+   }
+  },
+  {
+   "id": "S-143",
+   "lang": "zh-Hans",
+   "view": "w320",
+   "mode": "light",
+   "requires": [
+    "overflow",
+    "ax",
+    "targets",
+    "contrastText",
+    "contrastExtra",
+    "measure",
+    "type",
+    "focus",
+    "player",
+    "formatTip",
+    "footer",
+    "limiting",
+    "videoLanguage",
+    "asserts"
+   ],
+   "viewport": {
+    "w": 320,
+    "h": 568,
+    "dpr": 1
+   },
+   "expects": {
+    "focus": {
+     "subjects": [
+      "#format-help-button",
+      "#onset-help-button"
+     ]
+    },
+    "asserts": {
+     "subjects": [
+      "never both open; each closes the other; Escape closes only the open one, focus on its own \"?\""
+     ]
+    },
+    "formatTip": {
+     "subjects": [
+      "named, and its text, in the page's words",
+      "the \"?\" at least 44 x 44",
+      "Enter opens it; focus stays on the \"?\"",
+      "edge: 1 px all round in --border-subtle, not a rail",
+      "gap: under the \"?\", inside its item and the page",
+      "Tab closes it; focus goes where it goes with it closed",
+      "Shift+Tab closes it; focus goes where it goes with it closed",
+      "Space opens it; Escape closes it, focus on the \"?\"",
+      "a click on its text keeps it open; Escape then closes it, focus on the \"?\"",
+      "a click elsewhere closes it"
+     ]
+    }
+   }
+  },
+  {
+   "id": "S-143",
+   "lang": "ms-MY",
+   "view": "w1280",
+   "mode": "light",
+   "requires": [
+    "overflow",
+    "ax",
+    "targets",
+    "contrastText",
+    "contrastExtra",
+    "measure",
+    "type",
+    "focus",
+    "player",
+    "formatTip",
+    "footer",
+    "limiting",
+    "videoLanguage",
+    "asserts"
+   ],
+   "viewport": {
+    "w": 1280,
+    "h": 900,
+    "dpr": 1
+   },
+   "expects": {
+    "focus": {
+     "subjects": [
+      "#format-help-button",
+      "#onset-help-button"
+     ]
+    },
+    "asserts": {
+     "subjects": [
+      "never both open; each closes the other; Escape closes only the open one, focus on its own \"?\""
+     ]
+    },
+    "formatTip": {
+     "subjects": [
+      "named, and its text, in the page's words",
+      "the \"?\" at least 44 x 44",
+      "Enter opens it; focus stays on the \"?\"",
+      "edge: 1 px all round in --border-subtle, not a rail",
+      "gap: under the \"?\", inside its item and the page",
+      "Tab closes it; focus goes where it goes with it closed",
+      "Shift+Tab closes it; focus goes where it goes with it closed",
+      "Space opens it; Escape closes it, focus on the \"?\"",
+      "a click on its text keeps it open; Escape then closes it, focus on the \"?\"",
+      "a click elsewhere closes it"
+     ]
+    }
+   }
+  },
+  {
+   "id": "S-143",
+   "lang": "ms-MY",
+   "view": "w640",
+   "mode": "light",
+   "requires": [
+    "overflow",
+    "ax",
+    "targets",
+    "contrastText",
+    "contrastExtra",
+    "measure",
+    "type",
+    "focus",
+    "player",
+    "formatTip",
+    "footer",
+    "limiting",
+    "videoLanguage",
+    "asserts"
+   ],
+   "viewport": {
+    "w": 640,
+    "h": 900,
+    "dpr": 1
+   },
+   "expects": {
+    "focus": {
+     "subjects": [
+      "#format-help-button",
+      "#onset-help-button"
+     ]
+    },
+    "asserts": {
+     "subjects": [
+      "never both open; each closes the other; Escape closes only the open one, focus on its own \"?\""
+     ]
+    },
+    "formatTip": {
+     "subjects": [
+      "named, and its text, in the page's words",
+      "the \"?\" at least 44 x 44",
+      "Enter opens it; focus stays on the \"?\"",
+      "edge: 1 px all round in --border-subtle, not a rail",
+      "gap: under the \"?\", inside its item and the page",
+      "Tab closes it; focus goes where it goes with it closed",
+      "Shift+Tab closes it; focus goes where it goes with it closed",
+      "Space opens it; Escape closes it, focus on the \"?\"",
+      "a click on its text keeps it open; Escape then closes it, focus on the \"?\"",
+      "a click elsewhere closes it"
+     ]
+    }
+   }
+  },
+  {
+   "id": "S-143",
+   "lang": "ms-MY",
+   "view": "w401",
+   "mode": "light",
+   "requires": [
+    "overflow",
+    "ax",
+    "targets",
+    "contrastText",
+    "contrastExtra",
+    "measure",
+    "type",
+    "focus",
+    "player",
+    "formatTip",
+    "footer",
+    "limiting",
+    "videoLanguage",
+    "asserts"
+   ],
+   "viewport": {
+    "w": 401,
+    "h": 900,
+    "dpr": 1
+   },
+   "expects": {
+    "focus": {
+     "subjects": [
+      "#format-help-button",
+      "#onset-help-button"
+     ]
+    },
+    "asserts": {
+     "subjects": [
+      "never both open; each closes the other; Escape closes only the open one, focus on its own \"?\""
+     ]
+    },
+    "formatTip": {
+     "subjects": [
+      "named, and its text, in the page's words",
+      "the \"?\" at least 44 x 44",
+      "Enter opens it; focus stays on the \"?\"",
+      "edge: 1 px all round in --border-subtle, not a rail",
+      "gap: under the \"?\", inside its item and the page",
+      "Tab closes it; focus goes where it goes with it closed",
+      "Shift+Tab closes it; focus goes where it goes with it closed",
+      "Space opens it; Escape closes it, focus on the \"?\"",
+      "a click on its text keeps it open; Escape then closes it, focus on the \"?\"",
+      "a click elsewhere closes it"
+     ]
+    }
+   }
+  },
+  {
+   "id": "S-143",
+   "lang": "ms-MY",
+   "view": "w400",
+   "mode": "light",
+   "requires": [
+    "overflow",
+    "ax",
+    "targets",
+    "contrastText",
+    "contrastExtra",
+    "measure",
+    "type",
+    "focus",
+    "player",
+    "formatTip",
+    "footer",
+    "limiting",
+    "videoLanguage",
+    "asserts"
+   ],
+   "viewport": {
+    "w": 400,
+    "h": 900,
+    "dpr": 1
+   },
+   "expects": {
+    "focus": {
+     "subjects": [
+      "#format-help-button",
+      "#onset-help-button"
+     ]
+    },
+    "asserts": {
+     "subjects": [
+      "never both open; each closes the other; Escape closes only the open one, focus on its own \"?\""
+     ]
+    },
+    "formatTip": {
+     "subjects": [
+      "named, and its text, in the page's words",
+      "the \"?\" at least 44 x 44",
+      "Enter opens it; focus stays on the \"?\"",
+      "edge: 1 px all round in --border-subtle, not a rail",
+      "gap: under the \"?\", inside its item and the page",
+      "Tab closes it; focus goes where it goes with it closed",
+      "Shift+Tab closes it; focus goes where it goes with it closed",
+      "Space opens it; Escape closes it, focus on the \"?\"",
+      "a click on its text keeps it open; Escape then closes it, focus on the \"?\"",
+      "a click elsewhere closes it"
+     ]
+    }
+   }
+  },
+  {
+   "id": "S-143",
+   "lang": "ms-MY",
+   "view": "w375",
+   "mode": "light",
+   "requires": [
+    "overflow",
+    "ax",
+    "targets",
+    "contrastText",
+    "contrastExtra",
+    "measure",
+    "type",
+    "focus",
+    "player",
+    "formatTip",
+    "footer",
+    "limiting",
+    "videoLanguage",
+    "asserts"
+   ],
+   "viewport": {
+    "w": 375,
+    "h": 812,
+    "dpr": 3
+   },
+   "expects": {
+    "focus": {
+     "subjects": [
+      "#format-help-button",
+      "#onset-help-button"
+     ]
+    },
+    "asserts": {
+     "subjects": [
+      "never both open; each closes the other; Escape closes only the open one, focus on its own \"?\""
+     ]
+    },
+    "formatTip": {
+     "subjects": [
+      "named, and its text, in the page's words",
+      "the \"?\" at least 44 x 44",
+      "Enter opens it; focus stays on the \"?\"",
+      "edge: 1 px all round in --border-subtle, not a rail",
+      "gap: under the \"?\", inside its item and the page",
+      "Tab closes it; focus goes where it goes with it closed",
+      "Shift+Tab closes it; focus goes where it goes with it closed",
+      "Space opens it; Escape closes it, focus on the \"?\"",
+      "a click on its text keeps it open; Escape then closes it, focus on the \"?\"",
+      "a click elsewhere closes it"
+     ]
+    }
+   }
+  },
+  {
+   "id": "S-143",
+   "lang": "ms-MY",
+   "view": "w320",
+   "mode": "light",
+   "requires": [
+    "overflow",
+    "ax",
+    "targets",
+    "contrastText",
+    "contrastExtra",
+    "measure",
+    "type",
+    "focus",
+    "player",
+    "formatTip",
+    "footer",
+    "limiting",
+    "videoLanguage",
+    "asserts"
+   ],
+   "viewport": {
+    "w": 320,
+    "h": 568,
+    "dpr": 1
+   },
+   "expects": {
+    "focus": {
+     "subjects": [
+      "#format-help-button",
+      "#onset-help-button"
+     ]
+    },
+    "asserts": {
+     "subjects": [
+      "never both open; each closes the other; Escape closes only the open one, focus on its own \"?\""
+     ]
+    },
+    "formatTip": {
+     "subjects": [
+      "named, and its text, in the page's words",
+      "the \"?\" at least 44 x 44",
+      "Enter opens it; focus stays on the \"?\"",
+      "edge: 1 px all round in --border-subtle, not a rail",
+      "gap: under the \"?\", inside its item and the page",
+      "Tab closes it; focus goes where it goes with it closed",
+      "Shift+Tab closes it; focus goes where it goes with it closed",
+      "Space opens it; Escape closes it, focus on the \"?\"",
+      "a click on its text keeps it open; Escape then closes it, focus on the \"?\"",
+      "a click elsewhere closes it"
+     ]
+    }
+   }
+  }
+ ]
+}

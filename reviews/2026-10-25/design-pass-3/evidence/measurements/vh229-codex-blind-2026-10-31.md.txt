@@ -1,0 +1,34 @@
+Hold
+
+1. **High — the comparison includes superseded evidence.** [table-1page.mjs:75](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/evidence/measurements/vh229-records-2026-10-31/table-1page.mjs:75>) adds group pairs without replacing scenario cells. Applying `c2`/`c3` and deduplicating S-144 gives **636 cells per side, 598 reached, 578 unchanged, zero after-only**. The reported 17 after-only cells and S-143 “undefined →” changes are superseded. At line 107, `states2` adds onset readings but retains 144 obsolete error rows: genuine state records total **3,888 before, 5,832 after**. No effective instrument or row newly fails. S-03’s improvements principally reflect hiding the format control; the 196 tip-position changes preserve its gap.
+
+2. **Medium — re-walk provenance is mislabelled.** [walk.sh:43](/Users/joe/UoN-Video-Helper-side/vh229-walk/walk.sh:43) passes no `APP_ROOT`; the walker fingerprints its checkout instead of the server’s clean worktree. Thus before `c2`/`c3` manifests identify the dirty after source. Their probes show the old layout, and conditions record the clean baseline: this supports genuine before readings, but the provenance must be reconciled.
+
+3. **Medium — “reads well” is not established.** [after-probe3:106](/Users/joe/UoN-Video-Helper-side/vh229-walk/after-probe3/runs/vh229-behaviour.jsonl:106) records Malay’s three-word title across four lines, followed by a separate 44 × 76 button. English also separates the button at 320/32. Containment proves neither comfortable wrapping nor readability. Existing page overflow remains. [vh229-behaviour.mjs:33](/Users/joe/UoN-Video-Helper-side/vh229-walk/vh229-behaviour.mjs:33) substitutes heading text only, testing Finisher closed: it misses its open layout, translation binding, reload and tab-title behaviour.
+
+4. **Medium — required reconciliation remains outstanding.** [wish-list.md:73](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/project/wish-list.md:73>) still describes VH-216’s obsolete routes; VH-216.3 at line 75 remains unchanged. Readability, `npm run check`, and structural-check success are not shown in the permitted evidence.
+
+5. **Power/load qualification.** [measurement table:29](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/evidence/measurements/vh229-title-help-2026-10-31.md:29>): `a/b/c/states` match AC/mode 2 but differ materially in load; `c2` changes power source and suffers the crash; `c3/states2` provide comparable battery runs. Reached static readings remain useful; timing/performance conclusions would not. No unexplained regression remains after replacement.
+
+6. **Escape is appropriately focus-scoped.** [after-probe3:121](/Users/joe/UoN-Video-Helper-side/vh229-walk/after-probe3/runs/vh229-behaviour.jsonl:121) agrees with `src/main.ts:766`: format tip closes first, then panel; panel closes from its button, interior or body and focuses its button. Elsewhere, focus and panel stay. Dialog Escape closes the dialog alone. Onset Escape closes its tip; a second Escape there leaves the panel open. Repeats do not collapse the panel.
+
+7. **Accessibility and scope.** [index.html:38](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/index.html:38>) supports 1.3.1, 1.3.2, 2.1.1, 2.4.3, 2.4.6, 2.5.5 and 4.1.2 for this disclosure. Title content survives enlargement (1.4.4); whole-page 1.4.10 remains failing. Nielsen 8 is served; 10 has findable, brief help, with human verification outstanding. Heading navigation skips the button and hidden promises; sequential screen-reader reading encounters “About this tool”, collapsed. No new heading is necessary. No excess element/string/docs/walker change or deleted, skipped or weakened existing test found. `关于本工具` and `Perihal alat ini` match existing terminology and are marked machine translations.
+
+Acceptance criteria, individually:
+
+| Criterion | Verdict and evidence |
+|---|---|
+| Spec | **Met** — `docs/01-specification.md:678` |
+| Control | **Met** — `index.html:39`; probe:109 |
+| Panel | **Met** — `index.html:62` |
+| Stays open / Escape | **Met** — `src/main.ts:753`; probe:118 |
+| Browser note | **Met** — `index.html:110`; probe:131 |
+| Narrow title | **Not met** — overflow; readability unproved, probe:34,106 |
+| One order | **Met** — `index.html:38`; probe:111 |
+| Six cases | **Met** — measurement table:102; remaining shortfalls acknowledged |
+| Words | **Not shown** — content/marking met; readability gate absent |
+| Obsolete comments/locations/tests | **Met** — `test/screen-text.test.ts:110`; `src/i18n/sheet.ts:59` |
+| VH-217 stands | **Met** — measurement table:93,109 |
+| Walker | **Not met** — unchanged revision verified; wish-list:73 redraw missing |
+| Stage rule | **Not met** — comparison defects above; 38 unique cells unreached |
+| Gate | **Not shown** — `project/items/VH-229.md:24`; closure work outstanding |
