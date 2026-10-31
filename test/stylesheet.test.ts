@@ -283,12 +283,50 @@ describe('the fourth promise’s "?" (VH-205)', () => {
     expect(button).toMatch(/position:\s*relative;/)
   })
 
-  it('keeps a 44 px target round it, which the tip and the gap clear', () => {
+  it('keeps a 44 px target round it, which the tip clears', () => {
     const target = block('.promise-with-help .help-button::after')
     expect(target).toMatch(/width:\s*var\(--target-min\);/)
     expect(target).toMatch(/height:\s*var\(--target-min\);/)
     expect(target).toMatch(/position:\s*absolute;/)
     expect(block('.promise-with-help .toggletip')).toMatch(/margin-top:\s*var\(--spacing-04\);/)
+  })
+})
+
+describe('the "?": its gap and its open state (VH-217)', () => {
+  const forced = /@media \(forced-colors: active\)\s*\{([\s\S]*?)\n\}/.exec(rules)?.[1] ?? ''
+  const fill = (source: string, selector: string): string =>
+    new RegExp(`(?:^|\\})\\s*${selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\{([^}]*)\\}`).exec(source)?.[1] ?? ''
+  const open = '.help-button[aria-expanded="true"]:not(:disabled)'
+
+  it('sets the format "?" about 8 px from its words: the small step, with the collapsed space', () => {
+    expect(fill(rules, '.promise-with-help .help-button')).toMatch(/margin-left:\s*var\(--spacing-02\);/)
+  })
+
+  it('fills the open "?" with the chosen segment\'s tokens, the border moving with the fill', () => {
+    const segment = fill(rules, '.segment input:checked + .segment-face')
+    expect(segment).toContain('background: var(--interactive)')
+    expect(segment).toContain('color: var(--text-on-interactive)')
+    expect(fill(rules, open)).toMatch(/border-color: var\(--interactive\);\s*background: var\(--interactive\);\s*color: var\(--text-on-interactive\);/)
+    expect(fill(rules, `${open}:hover`)).toMatch(/border-color: var\(--interactive-hover\);\s*background: var\(--interactive-hover\);/)
+    expect(fill(rules, `${open}:active`)).toMatch(/border-color: var\(--interactive-active\);\s*background: var\(--interactive-active\);/)
+  })
+
+  it('presses after it hovers', () => {
+    // The two are (0,4,0), so order decides between them; the secondary's hover and press, (0,2,0) and (0,3,0), lose wherever they stand.
+    expect(rules.indexOf(`${open}:active`)).toBeGreaterThan(rules.indexOf(`${open}:hover`))
+  })
+
+  it('leaves a disabled "?" to the disabled rule', () => {
+    for (const match of rules.matchAll(/([^{}]*aria-expanded="true"[^{}]*)\{/g)) {
+      for (const selector of match[1]!.split(',')) expect(selector, selector.trim()).toContain(':not(:disabled)')
+    }
+  })
+
+  it('takes the theme\'s chosen pair under forced colours, its ring CanvasText, hover the border alone, pressed inverted', () => {
+    expect(fill(forced, open)).toMatch(/forced-color-adjust: none;\s*border-color: Highlight;\s*background: Highlight;\s*color: HighlightText;/)
+    expect(fill(forced, `${open}:focus-visible`)).toContain('outline-color: CanvasText')
+    expect(fill(forced, `${open}:hover`)).toMatch(/border-color: HighlightText;\s*background: Highlight;/)
+    expect(fill(forced, `${open}:active`)).toMatch(/border-color: Highlight;\s*background: HighlightText;\s*color: Highlight;/)
   })
 })
 

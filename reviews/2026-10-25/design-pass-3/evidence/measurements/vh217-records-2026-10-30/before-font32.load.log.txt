@@ -1,0 +1,10 @@
+23:55:51 load 5.17 AC Power 80% pm2
+23:56:22 load 4.45 AC Power 80% pm2
+23:56:52 load 3.60 AC Power 80% pm2
+23:57:22 load 4.24 AC Power 80% pm2
+23:57:52 load 4.97 AC Power 80% pm2
+23:58:22 load 6.56 AC Power 80% pm2
+23:58:52 load 8.46 AC Power 80% pm2
+23:59:22 load 6.11 AC Power 80% pm2
+23:59:52 load 5.46 AC Power 80% pm2
+00:00:22 load 6.35 AC Power 80% pm2

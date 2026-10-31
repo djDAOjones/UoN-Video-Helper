@@ -1,0 +1,649 @@
+{
+ "run": "2026-10-30T14-54-44-339Z-12c0de",
+ "source": {
+  "commit": "bdf6b6d2ab8a972b2d8420a558901167ffb0ddf9",
+  "dirty": false,
+  "diffSha256": "e3b0c44298fc1c14"
+ },
+ "instruments": {
+  "revision": "e0a55331a7155cd3",
+  "files": [
+   {
+    "file": "again-190.mjs",
+    "sha256": "c87210f9f463f16c"
+   },
+   {
+    "file": "card-215.mjs",
+    "sha256": "fd4820886c9217c8"
+   },
+   {
+    "file": "cdp.mjs",
+    "sha256": "236e93be01a46929"
+   },
+   {
+    "file": "design-walk.mjs",
+    "sha256": "50c2b05bda2e7e61"
+   },
+   {
+    "file": "digest.mjs",
+    "sha256": "b58bfc4e16da02cd"
+   },
+   {
+    "file": "faults.mjs",
+    "sha256": "7b10cc52772035fe"
+   },
+   {
+    "file": "fixtures-8.sh",
+    "sha256": "63fa545bc29e59f5"
+   },
+   {
+    "file": "fixtures.sh",
+    "sha256": "58a1c94dcaab0dfa"
+   },
+   {
+    "file": "footer-182.mjs",
+    "sha256": "33abec1f70001c0f"
+   },
+   {
+    "file": "heavy-193.mjs",
+    "sha256": "54cbff0b91b93218"
+   },
+   {
+    "file": "inventory.mjs",
+    "sha256": "c2c16ea752c5e01e"
+   },
+   {
+    "file": "labels-189.mjs",
+    "sha256": "b4e39a730b577c3f"
+   },
+   {
+    "file": "lang-191.mjs",
+    "sha256": "ea6bec378b7c6779"
+   },
+   {
+    "file": "matrix.mjs",
+    "sha256": "a755d975c93da2db"
+   },
+   {
+    "file": "name-181.mjs",
+    "sha256": "7c2a15e25096c1d5"
+   },
+   {
+    "file": "note-180.mjs",
+    "sha256": "961d9427eeac771f"
+   },
+   {
+    "file": "page-183.mjs",
+    "sha256": "e1936c38cc88e158"
+   },
+   {
+    "file": "parts.mjs",
+    "sha256": "41ac1539a3d83b55"
+   },
+   {
+    "file": "phase8.mjs",
+    "sha256": "090f41a1c7bb6af8"
+   },
+   {
+    "file": "player-192.mjs",
+    "sha256": "9e586e52bf2ff91d"
+   },
+   {
+    "file": "preset-188.mjs",
+    "sha256": "9008b6c98979053b"
+   },
+   {
+    "file": "prove-172.mjs",
+    "sha256": "03e07056cf331744"
+   },
+   {
+    "file": "prove-8.mjs",
+    "sha256": "b8809c978b6c8ffc"
+   },
+   {
+    "file": "prove-fixtures-8.mjs",
+    "sha256": "f070fb844cfef3c7"
+   },
+   {
+    "file": "prove-m04.mjs",
+    "sha256": "d5d8cef75177d065"
+   },
+   {
+    "file": "prove-resume.mjs",
+    "sha256": "2e282c03e4ec4436"
+   },
+   {
+    "file": "prove.mjs",
+    "sha256": "190906965e7f3df0"
+   },
+   {
+    "file": "qualify.mjs",
+    "sha256": "a152d39c5a3018b7"
+   },
+   {
+    "file": "report-172.mjs",
+    "sha256": "a60f519698952657"
+   },
+   {
+    "file": "rings-179.mjs",
+    "sha256": "19578e809609f224"
+   },
+   {
+    "file": "runner.mjs",
+    "sha256": "e0b95b012f1e78fc"
+   },
+   {
+    "file": "scenarios.mjs",
+    "sha256": "f3e9d7a5ffde970f"
+   },
+   {
+    "file": "sliver-185.mjs",
+    "sha256": "3382b51be3d137e2"
+   },
+   {
+    "file": "tip-184.mjs",
+    "sha256": "589f75dc5976fff3"
+   },
+   {
+    "file": "tip-196.mjs",
+    "sha256": "050fc920ff41b6ec"
+   },
+   {
+    "file": "tokens.mjs",
+    "sha256": "59bff4a79c7984ff"
+   },
+   {
+    "file": "top-187.mjs",
+    "sha256": "1d8f24021effb424"
+   },
+   {
+    "file": "transitions.mjs",
+    "sha256": "fbc3a958e9f17bd0"
+   },
+   {
+    "file": "walk.mjs",
+    "sha256": "119a8ff6e7d2410f"
+   },
+   {
+    "file": "wcag-checks.mjs",
+    "sha256": "2496aa09cfcbadda"
+   },
+   {
+    "file": "words-186.mjs",
+    "sha256": "fcd79b36b6d9f22d"
+   }
+  ]
+ },
+ "provenance": {
+  "pinnedAtCreation": true,
+  "created": "2026-10-30T14:54:44.427Z",
+  "resumes": [],
+  "held": true,
+  "problems": [],
+  "recordsOffRevision": 0
+ },
+ "browser": "Chrome/156.0.8078.80",
+ "browserCommandLine": {
+  "source": "ps -o args= -p 56826 (the browser process)",
+  "arguments": [
+   "--headless=new",
+   "--no-first-run",
+   "--no-default-browser-check",
+   "--disable-backgrounding-occluded-windows",
+   "--disable-background-timer-throttling",
+   "--disable-renderer-backgrounding"
+  ],
+  "visiblePageFlagsMissing": []
+ },
+ "os": "darwin 25.6.0 arm64",
+ "views": [
+  {
+   "view": "w1280",
+   "actual": {
+    "w": 1280,
+    "h": 900,
+    "dpr": 1
+   },
+   "rootFontPx": 16
+  },
+  {
+   "view": "w320",
+   "actual": {
+    "w": 320,
+    "h": 568,
+    "dpr": 1
+   },
+   "rootFontPx": 16
+  },
+  {
+   "view": "w375",
+   "actual": {
+    "w": 375,
+    "h": 812,
+    "dpr": 3
+   },
+   "rootFontPx": 16
+  },
+  {
+   "view": "w400",
+   "actual": {
+    "w": 400,
+    "h": 900,
+    "dpr": 1
+   },
+   "rootFontPx": 16
+  },
+  {
+   "view": "w401",
+   "actual": {
+    "w": 401,
+    "h": 900,
+    "dpr": 1
+   },
+   "rootFontPx": 16
+  },
+  {
+   "view": "w640",
+   "actual": {
+    "w": 640,
+    "h": 900,
+    "dpr": 1
+   },
+   "rootFontPx": 16
+  }
+ ],
+ "scaling": "Emulation.setDeviceMetricsOverride per view; Page.setFontSizes for the default font; Chrome page zoom not settable over the protocol (proxy views only)",
+ "enlargement": {
+  "reflow": {
+   "what": "a CSS viewport 320 px wide (and the 375 px phone)",
+   "views": [
+    "w320",
+    "w375"
+   ],
+   "records": 12
+  },
+  "proxy": {
+   "what": "the CSS viewport and device pixel ratio Chrome's 200% and 400% page zoom give a 1280 x 900 window",
+   "views": [
+    "zoom200proxy",
+    "zoom400proxy"
+   ],
+   "records": 0,
+   "realZoom": "unresolved: Chrome page zoom cannot be set over the protocol; on the person list"
+  },
+  "defaultFont32": {
+   "what": "the browser's default-font preference at 32 px (Page.setFontSizes)",
+   "mode": "font32",
+   "records": 0
+  },
+  "dialogOperated": {
+   "what": "Report a problem's dialog (S-76) entered by Enter on its opener, used (the message typed, every control reached by Tab inside the window and uncovered, the email handed off) and left by Escape and by Close, focus back on the opener, by keys, at 320 px, both proxies and the 32 px font (the record's subresults)",
+   "records": 0
+  },
+  "syntheticTextOnly": {
+   "status": "not run",
+   "what": "text-only enlargement by an injected style: not implemented, so unqualified"
+  }
+ },
+ "fixtures": [
+  {
+   "file": "lecture-60s.mp4",
+   "bytes": 20222028,
+   "sha256": "ce10e0ce0579c4b6",
+   "firstUsedInAttempt": 1
+  }
+ ],
+ "fixturesPinned": [
+  {
+   "file": "lecture-60s.mp4",
+   "bytes": 20222028,
+   "sha256": "ce10e0ce0579c4b6"
+  }
+ ],
+ "faults": [],
+ "coverage": {
+  "expected": 36,
+  "observed": 36,
+  "whole": true,
+  "problems": [],
+  "expectedKeysSha256": "52183e4336f53ef5",
+  "observedKeysSha256": "52183e4336f53ef5",
+  "expectedKeys": [
+   "S-95__en-GB__w1280__forced-dark",
+   "S-95__en-GB__w320__forced-dark",
+   "S-95__en-GB__w375__forced-dark",
+   "S-95__en-GB__w400__forced-dark",
+   "S-95__en-GB__w401__forced-dark",
+   "S-95__en-GB__w640__forced-dark",
+   "S-95__ms-MY__w1280__forced-dark",
+   "S-95__ms-MY__w320__forced-dark",
+   "S-95__ms-MY__w375__forced-dark",
+   "S-95__ms-MY__w400__forced-dark",
+   "S-95__ms-MY__w401__forced-dark",
+   "S-95__ms-MY__w640__forced-dark",
+   "S-95__zh-Hans__w1280__forced-dark",
+   "S-95__zh-Hans__w320__forced-dark",
+   "S-95__zh-Hans__w375__forced-dark",
+   "S-95__zh-Hans__w400__forced-dark",
+   "S-95__zh-Hans__w401__forced-dark",
+   "S-95__zh-Hans__w640__forced-dark",
+   "S-96__en-GB__w1280__forced-dark",
+   "S-96__en-GB__w320__forced-dark",
+   "S-96__en-GB__w375__forced-dark",
+   "S-96__en-GB__w400__forced-dark",
+   "S-96__en-GB__w401__forced-dark",
+   "S-96__en-GB__w640__forced-dark",
+   "S-96__ms-MY__w1280__forced-dark",
+   "S-96__ms-MY__w320__forced-dark",
+   "S-96__ms-MY__w375__forced-dark",
+   "S-96__ms-MY__w400__forced-dark",
+   "S-96__ms-MY__w401__forced-dark",
+   "S-96__ms-MY__w640__forced-dark",
+   "S-96__zh-Hans__w1280__forced-dark",
+   "S-96__zh-Hans__w320__forced-dark",
+   "S-96__zh-Hans__w375__forced-dark",
+   "S-96__zh-Hans__w400__forced-dark",
+   "S-96__zh-Hans__w401__forced-dark",
+   "S-96__zh-Hans__w640__forced-dark"
+  ],
+  "observedKeys": [
+   "S-95__en-GB__w1280__forced-dark",
+   "S-95__en-GB__w320__forced-dark",
+   "S-95__en-GB__w375__forced-dark",
+   "S-95__en-GB__w400__forced-dark",
+   "S-95__en-GB__w401__forced-dark",
+   "S-95__en-GB__w640__forced-dark",
+   "S-95__ms-MY__w1280__forced-dark",
+   "S-95__ms-MY__w320__forced-dark",
+   "S-95__ms-MY__w375__forced-dark",
+   "S-95__ms-MY__w400__forced-dark",
+   "S-95__ms-MY__w401__forced-dark",
+   "S-95__ms-MY__w640__forced-dark",
+   "S-95__zh-Hans__w1280__forced-dark",
+   "S-95__zh-Hans__w320__forced-dark",
+   "S-95__zh-Hans__w375__forced-dark",
+   "S-95__zh-Hans__w400__forced-dark",
+   "S-95__zh-Hans__w401__forced-dark",
+   "S-95__zh-Hans__w640__forced-dark",
+   "S-96__en-GB__w1280__forced-dark",
+   "S-96__en-GB__w320__forced-dark",
+   "S-96__en-GB__w375__forced-dark",
+   "S-96__en-GB__w400__forced-dark",
+   "S-96__en-GB__w401__forced-dark",
+   "S-96__en-GB__w640__forced-dark",
+   "S-96__ms-MY__w1280__forced-dark",
+   "S-96__ms-MY__w320__forced-dark",
+   "S-96__ms-MY__w375__forced-dark",
+   "S-96__ms-MY__w400__forced-dark",
+   "S-96__ms-MY__w401__forced-dark",
+   "S-96__ms-MY__w640__forced-dark",
+   "S-96__zh-Hans__w1280__forced-dark",
+   "S-96__zh-Hans__w320__forced-dark",
+   "S-96__zh-Hans__w375__forced-dark",
+   "S-96__zh-Hans__w400__forced-dark",
+   "S-96__zh-Hans__w401__forced-dark",
+   "S-96__zh-Hans__w640__forced-dark"
+  ]
+ },
+ "measurements": {
+  "failing": {
+   "overflow": 0,
+   "ax": 0,
+   "targets": 36,
+   "contrastText": 0,
+   "contrastExtra": 0,
+   "measure": 0,
+   "type": 36,
+   "focus": 0,
+   "player": 0,
+   "formatTip": 0,
+   "footer": 0,
+   "limiting": 0,
+   "videoLanguage": 0,
+   "asserts": 0
+  },
+  "tally": {
+   "overflow": {
+    "pass": 36,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 0,
+    "items": {}
+   },
+   "ax": {
+    "pass": 36,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 0,
+    "items": {}
+   },
+   "targets": {
+    "pass": 0,
+    "fail": 36,
+    "cannot-determine": 0,
+    "not-applicable": 0,
+    "items": {
+     "exempt": 36,
+     "pass": 1176,
+     "cannot-determine": 72,
+     "fail": 36
+    }
+   },
+   "contrastText": {
+    "pass": 36,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 0,
+    "items": {
+     "exempt": 72,
+     "pass": 2802
+    }
+   },
+   "contrastExtra": {
+    "pass": 0,
+    "fail": 0,
+    "cannot-determine": 36,
+    "not-applicable": 0,
+    "items": {
+     "exempt": 36,
+     "pass": 360,
+     "cannot-determine": 72
+    }
+   },
+   "measure": {
+    "pass": 32,
+    "fail": 0,
+    "cannot-determine": 4,
+    "not-applicable": 0,
+    "items": {
+     "pass": 2474,
+     "cannot-determine": 4
+    }
+   },
+   "type": {
+    "pass": 0,
+    "fail": 36,
+    "cannot-determine": 0,
+    "not-applicable": 0,
+    "items": {
+     "pass": 216,
+     "fail": 36
+    }
+   },
+   "focus": {
+    "pass": 36,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 0,
+    "items": {
+     "pass": 36
+    }
+   },
+   "player": {
+    "pass": 0,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 36,
+    "items": {
+     "exempt": 36
+    }
+   },
+   "formatTip": {
+    "pass": 0,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 36,
+    "items": {
+     "exempt": 36
+    }
+   },
+   "footer": {
+    "pass": 36,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 0,
+    "items": {
+     "pass": 216
+    }
+   },
+   "limiting": {
+    "pass": 0,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 36,
+    "items": {
+     "exempt": 36
+    }
+   },
+   "videoLanguage": {
+    "pass": 36,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 0,
+    "items": {
+     "pass": 108
+    }
+   },
+   "asserts": {
+    "pass": 36,
+    "fail": 0,
+    "cannot-determine": 0,
+    "not-applicable": 0,
+    "items": {
+     "pass": 36
+    }
+   }
+  }
+ },
+ "artifacts": {
+  "count": 180,
+  "bytes": 19672273,
+  "listSha256": "217adf8420edd083",
+  "list": "artifacts.json (each capture: path, bytes, sha256)"
+ },
+ "unresolved": {
+  "fromMeasurements": [
+   {
+    "instrument": "targets",
+    "kind": "interpretation",
+    "why": "a disc: its hit box is n x n, no n px square fits inside; the reading is VH-n's",
+    "records": [
+     "S-95__en-GB__w1280__forced-dark",
+     "S-95__en-GB__w320__forced-dark",
+     "S-95__en-GB__w375__forced-dark",
+     "S-95__en-GB__w400__forced-dark",
+     "S-95__en-GB__w401__forced-dark",
+     "S-95__en-GB__w640__forced-dark"
+    ],
+    "rows": 72,
+    "recordCount": 36
+   },
+   {
+    "instrument": "contrastExtra",
+    "kind": "measurement",
+    "why": "painted pseudo-elements: non-text contrast needs a pixel reading (person check)",
+    "records": [
+     "S-95__en-GB__w1280__forced-dark",
+     "S-95__en-GB__w320__forced-dark",
+     "S-95__en-GB__w375__forced-dark",
+     "S-95__en-GB__w400__forced-dark",
+     "S-95__en-GB__w401__forced-dark",
+     "S-95__en-GB__w640__forced-dark"
+    ],
+    "rows": 72,
+    "recordCount": 36
+   },
+   {
+    "instrument": "measure",
+    "kind": "interpretation",
+    "why": "mixed scripts: each character against n and CJK n plus Latin n disagree; the reading is VH-n's",
+    "records": [
+     "S-95__zh-Hans__w1280__forced-dark",
+     "S-95__zh-Hans__w640__forced-dark",
+     "S-96__zh-Hans__w1280__forced-dark",
+     "S-96__zh-Hans__w640__forced-dark"
+    ],
+    "rows": 4,
+    "recordCount": 4
+   }
+  ],
+  "manual": [
+   "Chrome page zoom at 200% and 400% itself (proxy views stand in; on the person list)",
+   "what a screen reader says (exposure only: the AX tree and the DOM change log are persisted per record)",
+   "native select popups by keys; the video player's inner controls are walked by the focused accessibility node (P-06) and held to the inventory by identity both ways (S-127 fails a control it does not reach; a native step of K-player's that misses is cannot determine); the volume slider, empty at rest, is measured once disclosed by hovering the control beside it, its target by hit test; each ring is read on a held frame three ways apart (M-02), and stays cannot determine for 2.4.7 where no author style can isolate it (the overflow button's -internal- pseudo-element) or where only a focus-only change other than a ring is left (the user agent's hover-and-focus highlight), for 2.4.13 short of its area where neither exception is established (the host's backdrop is the author's), and for 4.1.2 whether a change is notified (not observed)",
+   "transient states: asserted before and after the instruments, not captured mid-transition",
+   "the read failure's exception path (src/main.ts:1495–1500, the inspection request itself failing): S-149's subresults reach the failed reply (main.ts:1481–1486) with notvideo.mp4; no fault makes the request throw",
+   "a dialog's entry, use and exit at enlargement: operated by keys for Report a problem's dialog (S-76's subresults) at 320 px, both proxies and the 32 px font; the K-dialog route itself runs at 1280 and 320 px only, and the other dialog states are measured there for overflow and clipping",
+   "a range thumb and track: non-text contrast by pixels (cannot determine in contrastExtra)",
+   "synthetic text-only enlargement: not run",
+   "off-page elements (the skip link before focus): target and contrast read when shown, by the person",
+   "S-12 left out of the matrix: Reading is over before the instruments finish, even for the 6-hour still (VH-172 smoke: the read line had become \"Video read.\" by the re-check); no declared fault holds the read",
+   "S-13 left out of the matrix: as S-12: the replacement's read is over before the instruments finish; the settled S-63 is measured instead",
+   "S-34 left out of the matrix: the check after a trim lasts about as long as any check of a short file, well under the instruments' run; S-14 holds the same checking state on the 6-hour still, so this one is not measured apart",
+   "S-51 left out of the matrix: Cancelling lasts about 9 ms (scenario list), far under the instruments' run, and no declared fault holds it",
+   "S-104 source-only, never walked: \"Unknown\" alone: walked only if N11 reads with no duration (scenarios file); it does not: the page reads noduration-10s.webm as \"10 seconds\" (fixtures-proof-2026-10-25.json, N11), and no other fixture is known that the page reads with a fact missing; src/ui/format.test.ts and src/ui/source-panel.test.ts",
+   "S-154 source-only, never walked: VH-186's estimate with no time: no fixture gives a non-finite estimate; src/ui/preflight-panel.test.ts:175, and a fact not read beyond the duration by src/ui/format.test.ts:45 and :50 and src/ui/source-panel.test.ts:332 (P-03)",
+   "S-05 (Machine-translation notice) only in zh-Hans, ms-MY: the notice is never shown on the English page (src/ui/language-switcher.ts:140)",
+   "S-26a (Phone discouraged) only at w375: the mobile-device verdict needs the phone view (userAgentData.mobile, set by asPhone, src/media/capability.ts:72); at 1280 and 320 px the page is a computer",
+   "S-26b (Phone discouraged: acknowledged, Create shown) only at w375: the mobile-device verdict needs the phone view (userAgentData.mobile, set by asPhone, src/media/capability.ts:72); at 1280 and 320 px the page is a computer",
+   "S-93 (Trim Page step, an hour) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-94 (Trim Page step at the 1% boundary) only in en-GB: the plan's recipe ONE: a slow setup, walked once (sizing-2026-10-25.mjs)",
+   "S-94 (Trim Page step at the 1% boundary) only at w1280: the plan's recipe ONE",
+   "S-100 (A kept sliver: the job finishes silent) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-101 (The control: 0.6 s of sound kept) only in en-GB: the plan's recipe ONE: a slow setup, walked once (sizing-2026-10-25.mjs)",
+   "S-101 (The control: 0.6 s of sound kept) only at w1280: the plan's recipe ONE",
+   "S-102 (An untrimmed file with under 400 ms of sound: told before Create, made silent (VH-213)) only in en-GB: the plan's recipe ONE: a slow setup, walked once (sizing-2026-10-25.mjs)",
+   "S-102 (An untrimmed file with under 400 ms of sound: told before Create, made silent (VH-213)) only at w1280: the plan's recipe ONE",
+   "S-112 (Below about 400 px: the \"?\" beside \"Plays over\") only at w401, w400, w375, w320: scenarios file: either side of the 25rem query",
+   "S-113 (Step 4 at the 32 px font) only at w1280, w640, w401, w320: scenarios file: at 1280, 640, 401 and 320 px under the 32 px font",
+   "S-115 (Create again, saved) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-118 (Made again, then cancelled or failed) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-123 (Video language locked while running) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-124 (Video language locked while saving, and freed) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-130 (The player through a download hand-off) only at w375: the plan's recipe: the phone, three languages (sizing-2026-10-25.mjs)",
+   "S-131 (Saved: the player leaves) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-132 (A failed playback) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-133 (A cancelled or failed save keeps the player) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-134 (A back-forward-cache restore) only in en-GB: the plan's recipe ONE: a slow setup, walked once (sizing-2026-10-25.mjs)",
+   "S-134 (A back-forward-cache restore) only at w1280: the plan's recipe ONE",
+   "S-136 (Both production warnings) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-138 (Both warnings on a retained result) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-139 (A level file does not warn) only in en-GB: the plan's recipe ONE: a slow setup, walked once (sizing-2026-10-25.mjs)",
+   "S-139 (A level file does not warn) only at w1280: the plan's recipe ONE",
+   "S-140 (A QuickTime Animation file with no audio (wish VH-193.3), the closing asset) only in en-GB: the plan's recipe ONE: a slow setup, walked once (sizing-2026-10-25.mjs)",
+   "S-140 (A QuickTime Animation file with no audio (wish VH-193.3), the closing asset) only at w1280: the plan's recipe ONE",
+   "S-140n (A QuickTime Animation file with no audio, N13 (the closing asset's made twin)) only in en-GB: the plan's recipe ONE: a slow setup, walked once (sizing-2026-10-25.mjs)",
+   "S-140n (A QuickTime Animation file with no audio, N13 (the closing asset's made twin)) only at w1280: the plan's recipe ONE",
+   "S-144 (The lede at 320 px with its tip open) only in en-GB: the plan's recipe: English at 320 px open; S-144p takes the three languages closed",
+   "S-144 (The lede at 320 px with its tip open) only at w320: the plan's recipe",
+   "S-144p (The lede closed: the file button's place) only at w1280, w800, w375, w320: the plan's recipe: 1280 x 900, 800 x 600, 375 x 812 and 320 x 568",
+   "S-149 (Focus on Video language when a check blocks) only at w1280: the plan's recipe COLOUR12: three languages at 1280 px in four colour modes",
+   "S-150 (A job made with focus on Announce progress) only at w1280: the plan's recipe COLOUR12: three languages at 1280 px in four colour modes",
+   "S-151 (Completion with Announce progress off) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-152 (A failed playback beside the limiting warning) only at w1280, w320: the plan's recipe OUTCOME4: three languages at 1280 px and English at 320 px; a production outcome whose look S-53, S-126 and S-135 measure",
+   "S-153 (A kept sound that frame placement takes over one block) only in en-GB: the plan's recipe ONE: a slow setup, walked once (sizing-2026-10-25.mjs)",
+   "S-153 (A kept sound that frame placement takes over one block) only at w1280: the plan's recipe ONE",
+   "S-84 (page language at narrow width) is S-03 at 320 px: the light matrix covers it"
+  ]
+ }
+}

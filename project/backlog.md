@@ -37,7 +37,6 @@ The public release on Xerte (PLAN-6) is VH-204's cut.
 
 ### Phase 8 — the owner's UX pass, then a third full design pass
 
-- [ ] VH-217 — The format "?" — since 2026-10-27 — (from: VH-202, 2026-10-27)
 - [ ] VH-209 — V-50: 32 px phones — since 2026-10-27 — (from: VH-202, 2026-10-27)
 - [ ] VH-218 — VH-186.1: check rows — since 2026-10-27 — (from: VH-186, 2026-10-24)
 - [ ] VH-219 — VH-189.1: step 4's selects — since 2026-10-27 — (from: VH-189, 2026-10-25)

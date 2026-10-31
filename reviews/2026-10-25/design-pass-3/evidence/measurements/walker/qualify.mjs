@@ -434,10 +434,14 @@ export async function assertReached(w, expect) {
     spacing: {},
     fallback: {},
     font32: {},
+    // VH-217: the 32 px font with a colour mode, declared and qualified by that item (setMode).
+    'dark-font32': { dark: true, forced: false },
+    'forced-light-font32': { dark: false, forced: true },
+    'forced-dark-font32': { dark: true, forced: true },
   }[m] ?? {}
   for (const [k, v] of Object.entries(want)) if (seen.media[k] !== v) problems.push(`${k} ${seen.media[k]}, expected ${v}`)
   if (m === 'spacing' && !seen.spacing) problems.push('text spacing sheet absent')
-  if (m === 'font32' && seen.rootFontPx !== 32) problems.push(`root font ${seen.rootFontPx}px, expected 32px`)
+  if (m.endsWith('font32') && seen.rootFontPx !== 32) problems.push(`root font ${seen.rootFontPx}px, expected 32px`)
   if (m === 'fallback' && seen.fonts.some((f) => /:loaded$/.test(f))) problems.push('a brand face loaded: ' + seen.fonts.filter((f) => /:loaded$/.test(f)).join(', '))
   if (expect.width && seen.viewport.w !== expect.width) problems.push(`viewport ${seen.viewport.w}, expected ${expect.width}`)
   // The view actually reached, width, height and scale (M-01).
@@ -992,10 +996,11 @@ export async function setViewport(w, name) {
   await setMode(w, w.qualMode ?? 'light')
 }
 
-/** Modes: light, dark, forced-light, forced-dark, reduced-motion, spacing, fallback, font32. */
+/** Modes: light, dark, forced-light, forced-dark, reduced-motion, spacing, fallback, font32; and, by VH-217, dark-font32, forced-light-font32 and forced-dark-font32. */
 export async function setMode(w, mode) {
   const forced = mode.startsWith('forced')
-  const dark = mode === 'dark' || mode === 'forced-dark'
+  const dark = mode === 'dark' || mode.startsWith('dark-') || mode.startsWith('forced-dark')
+  const font32 = mode.endsWith('font32')
   const features = [
     { name: 'prefers-color-scheme', value: dark ? 'dark' : 'light' },
     { name: 'forced-colors', value: forced ? 'active' : 'none' },
@@ -1004,7 +1009,7 @@ export async function setMode(w, mode) {
     { name: 'hover', value: w.media.pointer === 'coarse' ? 'none' : 'hover' },
   ]
   await w.page.send('Emulation.setEmulatedMedia', { features })
-  await w.page.send('Page.setFontSizes', { fontSizes: { standard: mode === 'font32' ? 32 : 16, fixed: mode === 'font32' ? 26 : 13 } })
+  await w.page.send('Page.setFontSizes', { fontSizes: { standard: font32 ? 32 : 16, fixed: font32 ? 26 : 13 } })
   await w.spacing(mode === 'spacing')
   w.qualMode = mode
   await sleep(200)

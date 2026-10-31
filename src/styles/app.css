@@ -1088,6 +1088,26 @@ details[open] > .disclosure-summary::before {
   padding-inline: 0;
 }
 
+/* The open "?" is filled, as a chosen segment is, in either palette: a state
+   that goes when its tip closes, not a second primary (VH-217). The border
+   moves with the fill, so the square shows no rim. A disabled "?" keeps the
+   disabled look, since none of these matches it. */
+.help-button[aria-expanded="true"]:not(:disabled) {
+  border-color: var(--interactive);
+  background: var(--interactive);
+  color: var(--text-on-interactive);
+}
+
+.help-button[aria-expanded="true"]:not(:disabled):hover {
+  border-color: var(--interactive-hover);
+  background: var(--interactive-hover);
+}
+
+.help-button[aria-expanded="true"]:not(:disabled):active {
+  border-color: var(--interactive-active);
+  background: var(--interactive-active);
+}
+
 /* Help, not a notification: a hairline box in the neutral edge, never the
    status rail, so it never reads as a warning (VH-184). */
 .toggletip {
@@ -1109,8 +1129,10 @@ details[open] > .disclosure-summary::before {
    its text beneath, inside the same list item (VH-196). Drawn at the text's
    own size, a checkbox glyph's square, so the promise keeps the line height
    of the other four; its 44 px target is drawn round it by a centred
-   `::after`, so 2.5.5 needs no exception. The gap beside it and the tip's
-   step down clear that target (VH-205). */
+   `::after`, so 2.5.5 needs no exception. The tip's step down clears that
+   target (VH-205). The gap beside the words does not at the default font:
+   about 8 px, on the owner's word, so the target lies over the end of the
+   last word by what the probe measured (VH-217); words are no control. */
 .promise-with-help .help-button {
   position: relative;
   display: inline-flex;
@@ -1120,7 +1142,7 @@ details[open] > .disclosure-summary::before {
   height: var(--control-size);
   min-width: 0;
   min-height: 0;
-  margin-left: var(--spacing-04);
+  margin-left: var(--spacing-02);
   padding: 0;
   line-height: var(--line-height-heading);
   vertical-align: middle;
@@ -1803,6 +1825,32 @@ body,
     border-color: ButtonText;
     background: ButtonText;
     color: ButtonFace;
+  }
+
+  /* The open "?" takes the theme's chosen pair, as a chosen segment does;
+     hover the border alone, pressed inverted, as the primary (VH-217). The
+     hover restates the fill: the token rule above outranks the first of
+     these, and with the opt-out its grey would show. */
+  .help-button[aria-expanded="true"]:not(:disabled) {
+    forced-color-adjust: none;
+    border-color: Highlight;
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  .help-button[aria-expanded="true"]:not(:disabled):focus-visible {
+    outline-color: CanvasText;
+  }
+
+  .help-button[aria-expanded="true"]:not(:disabled):hover {
+    border-color: HighlightText;
+    background: Highlight;
+  }
+
+  .help-button[aria-expanded="true"]:not(:disabled):active {
+    border-color: Highlight;
+    background: HighlightText;
+    color: Highlight;
   }
 
   .range-track::before {

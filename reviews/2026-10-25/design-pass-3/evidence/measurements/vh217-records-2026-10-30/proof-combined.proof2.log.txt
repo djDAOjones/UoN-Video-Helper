@@ -1,0 +1,130 @@
+PASS A wire unchanged: light
+PASS A wire unchanged: dark
+PASS A wire unchanged: forced-light
+PASS A wire unchanged: forced-dark
+PASS A wire unchanged: reduced-motion
+PASS A wire unchanged: spacing
+PASS A wire unchanged: fallback
+PASS A wire unchanged: font32
+PASS A dark is 16 px; dark-font32 is 32 px
+12:45:20 page loaded http://localhost:5181/
+PASS B reached en-GB w1280 dark-font32: {"root":32,"dark":true,"forced":false}
+PASS B assertReached passes en-GB w1280 dark-font32
+PASS B refuses dark-font32 asserted as forced-dark-font32: forced false, expected true
+PASS B refuses a 16 px page asserted as dark-font32: root font 16px, expected 32px
+PASS B back to dark-font32
+12:45:23 page loaded http://localhost:5181/
+PASS B reached en-GB w1280 forced-light-font32: {"root":32,"dark":false,"forced":true}
+PASS B assertReached passes en-GB w1280 forced-light-font32
+PASS B refuses forced-light-font32 asserted as dark-font32: dark false, expected true; forced true, expected false
+PASS B refuses a 16 px page asserted as forced-light-font32: root font 16px, expected 32px
+PASS B back to forced-light-font32
+12:45:25 page loaded http://localhost:5181/
+PASS B reached en-GB w1280 forced-dark-font32: {"root":32,"dark":true,"forced":true}
+PASS B assertReached passes en-GB w1280 forced-dark-font32
+PASS B refuses forced-dark-font32 asserted as dark-font32: forced true, expected false
+PASS B refuses a 16 px page asserted as forced-dark-font32: root font 16px, expected 32px
+PASS B back to forced-dark-font32
+12:45:28 page loaded http://localhost:5181/
+PASS B reached en-GB w320 dark-font32: {"root":32,"dark":true,"forced":false}
+PASS B assertReached passes en-GB w320 dark-font32
+PASS B refuses dark-font32 asserted as forced-dark-font32: forced false, expected true
+PASS B refuses a 16 px page asserted as dark-font32: root font 16px, expected 32px
+PASS B back to dark-font32
+12:45:31 page loaded http://localhost:5181/
+PASS B reached en-GB w320 forced-light-font32: {"root":32,"dark":false,"forced":true}
+PASS B assertReached passes en-GB w320 forced-light-font32
+PASS B refuses forced-light-font32 asserted as dark-font32: dark false, expected true; forced true, expected false
+PASS B refuses a 16 px page asserted as forced-light-font32: root font 16px, expected 32px
+PASS B back to forced-light-font32
+12:45:34 page loaded http://localhost:5181/
+PASS B reached en-GB w320 forced-dark-font32: {"root":32,"dark":true,"forced":true}
+PASS B assertReached passes en-GB w320 forced-dark-font32
+PASS B refuses forced-dark-font32 asserted as dark-font32: forced true, expected false
+PASS B refuses a 16 px page asserted as forced-dark-font32: root font 16px, expected 32px
+PASS B back to forced-dark-font32
+12:45:37 page loaded http://localhost:5181/
+12:45:37 click #language-switcher input[value="zh-Hans"]
+PASS B reached zh-Hans w1280 dark-font32: {"root":32,"dark":true,"forced":false}
+PASS B assertReached passes zh-Hans w1280 dark-font32
+PASS B refuses dark-font32 asserted as forced-dark-font32: forced false, expected true
+PASS B refuses a 16 px page asserted as dark-font32: root font 16px, expected 32px
+PASS B back to dark-font32
+12:45:40 page loaded http://localhost:5181/
+12:45:40 click #language-switcher input[value="zh-Hans"]
+PASS B reached zh-Hans w1280 forced-light-font32: {"root":32,"dark":false,"forced":true}
+PASS B assertReached passes zh-Hans w1280 forced-light-font32
+PASS B refuses forced-light-font32 asserted as dark-font32: dark false, expected true; forced true, expected false
+PASS B refuses a 16 px page asserted as forced-light-font32: root font 16px, expected 32px
+PASS B back to forced-light-font32
+12:45:43 page loaded http://localhost:5181/
+12:45:43 click #language-switcher input[value="zh-Hans"]
+PASS B reached zh-Hans w1280 forced-dark-font32: {"root":32,"dark":true,"forced":true}
+PASS B assertReached passes zh-Hans w1280 forced-dark-font32
+PASS B refuses forced-dark-font32 asserted as dark-font32: forced true, expected false
+PASS B refuses a 16 px page asserted as forced-dark-font32: root font 16px, expected 32px
+PASS B back to forced-dark-font32
+12:45:46 page loaded http://localhost:5181/
+12:45:46 click #language-switcher input[value="zh-Hans"]
+PASS B reached zh-Hans w320 dark-font32: {"root":32,"dark":true,"forced":false}
+PASS B assertReached passes zh-Hans w320 dark-font32
+PASS B refuses dark-font32 asserted as forced-dark-font32: forced false, expected true
+PASS B refuses a 16 px page asserted as dark-font32: root font 16px, expected 32px
+PASS B back to dark-font32
+12:45:50 page loaded http://localhost:5181/
+12:45:50 click #language-switcher input[value="zh-Hans"]
+PASS B reached zh-Hans w320 forced-light-font32: {"root":32,"dark":false,"forced":true}
+PASS B assertReached passes zh-Hans w320 forced-light-font32
+PASS B refuses forced-light-font32 asserted as dark-font32: dark false, expected true; forced true, expected false
+PASS B refuses a 16 px page asserted as forced-light-font32: root font 16px, expected 32px
+PASS B back to forced-light-font32
+12:45:53 page loaded http://localhost:5181/
+12:45:53 click #language-switcher input[value="zh-Hans"]
+PASS B reached zh-Hans w320 forced-dark-font32: {"root":32,"dark":true,"forced":true}
+PASS B assertReached passes zh-Hans w320 forced-dark-font32
+PASS B refuses forced-dark-font32 asserted as dark-font32: forced true, expected false
+PASS B refuses a 16 px page asserted as forced-dark-font32: root font 16px, expected 32px
+PASS B back to forced-dark-font32
+12:45:56 page loaded http://localhost:5181/
+12:45:56 click #language-switcher input[value="ms-MY"]
+PASS B reached ms-MY w1280 dark-font32: {"root":32,"dark":true,"forced":false}
+PASS B assertReached passes ms-MY w1280 dark-font32
+PASS B refuses dark-font32 asserted as forced-dark-font32: forced false, expected true
+PASS B refuses a 16 px page asserted as dark-font32: root font 16px, expected 32px
+PASS B back to dark-font32
+12:45:59 page loaded http://localhost:5181/
+12:45:59 click #language-switcher input[value="ms-MY"]
+PASS B reached ms-MY w1280 forced-light-font32: {"root":32,"dark":false,"forced":true}
+PASS B assertReached passes ms-MY w1280 forced-light-font32
+PASS B refuses forced-light-font32 asserted as dark-font32: dark false, expected true; forced true, expected false
+PASS B refuses a 16 px page asserted as forced-light-font32: root font 16px, expected 32px
+PASS B back to forced-light-font32
+12:46:02 page loaded http://localhost:5181/
+12:46:03 click #language-switcher input[value="ms-MY"]
+PASS B reached ms-MY w1280 forced-dark-font32: {"root":32,"dark":true,"forced":true}
+PASS B assertReached passes ms-MY w1280 forced-dark-font32
+PASS B refuses forced-dark-font32 asserted as dark-font32: forced true, expected false
+PASS B refuses a 16 px page asserted as forced-dark-font32: root font 16px, expected 32px
+PASS B back to forced-dark-font32
+12:46:06 page loaded http://localhost:5181/
+12:46:06 click #language-switcher input[value="ms-MY"]
+PASS B reached ms-MY w320 dark-font32: {"root":32,"dark":true,"forced":false}
+PASS B assertReached passes ms-MY w320 dark-font32
+PASS B refuses dark-font32 asserted as forced-dark-font32: forced false, expected true
+PASS B refuses a 16 px page asserted as dark-font32: root font 16px, expected 32px
+PASS B back to dark-font32
+12:46:09 page loaded http://localhost:5181/
+12:46:09 click #language-switcher input[value="ms-MY"]
+PASS B reached ms-MY w320 forced-light-font32: {"root":32,"dark":false,"forced":true}
+PASS B assertReached passes ms-MY w320 forced-light-font32
+PASS B refuses forced-light-font32 asserted as dark-font32: dark false, expected true; forced true, expected false
+PASS B refuses a 16 px page asserted as forced-light-font32: root font 16px, expected 32px
+PASS B back to forced-light-font32
+12:46:12 page loaded http://localhost:5181/
+12:46:12 click #language-switcher input[value="ms-MY"]
+PASS B reached ms-MY w320 forced-dark-font32: {"root":32,"dark":true,"forced":true}
+PASS B assertReached passes ms-MY w320 forced-dark-font32
+PASS B refuses forced-dark-font32 asserted as dark-font32: forced true, expected false
+PASS B refuses a 16 px page asserted as forced-dark-font32: root font 16px, expected 32px
+PASS B back to forced-dark-font32
+ALL PASS

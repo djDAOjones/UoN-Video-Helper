@@ -159,6 +159,23 @@ describe.each([
   })
 })
 
+// The open "?" (VH-217): its glyph on each of its fills, and each fill against
+// the two grounds a "?" stands on, the format's and the onset's.
+describe.each([
+  ['light', light],
+  ['dark', dark],
+])('the open "?", %s', (_contextName, tokens) => {
+  it.each(['--interactive', '--interactive-hover', '--interactive-active'])('its glyph on %s meets AAA (7:1)', (fill) => {
+    expect(contrast(resolve(tokens, '--text-on-interactive'), resolve(tokens, fill))).toBeGreaterThanOrEqual(7)
+  })
+
+  it.each(['--interactive', '--interactive-hover', '--interactive-active'])('%s against its grounds meets 1.4.11 (3:1)', (fill) => {
+    for (const ground of ['--layer-00', '--layer-01']) {
+      expect(contrast(resolve(tokens, fill), resolve(tokens, ground)), ground).toBeGreaterThanOrEqual(3)
+    }
+  })
+})
+
 describe('the brand assignments (VH-92)', () => {
   it('sets text in Nottingham Blue on light surfaces, and white on blue', () => {
     expect(resolve(light, '--text-primary')).toBe('#10263b')

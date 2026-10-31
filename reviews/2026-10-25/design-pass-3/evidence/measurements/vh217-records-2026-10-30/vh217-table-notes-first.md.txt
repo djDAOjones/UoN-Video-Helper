@@ -1,0 +1,36 @@
+## What the records can't state
+
+**The two changes, read by the `elementFromPoint` probe** (`vh217-states.mjs`, named as the 2.5.5 after-reading because the walker's reading does not count a target drawn round the control, wish VH-205.1; 3,888 readings a side):
+
+| Format "?" at rest, 16 px font | en-GB | ms-MY | zh-Hans |
+| --- | --- | --- | --- |
+| Ink to square, before → after | 17.85 → 9.85 px | 17.85 → 9.85 px | 26.37 → 18.37 px |
+| Character's box to square, before → after | 16.45 → 8.45 px | 16.45 → 8.45 px | 16.45 → 8.45 px |
+| Target over the last character's ink | 0 → 2.15 px | 0 → 2.15 px | 0 → 0 px |
+| Ink pixels a click there lands on the "?" | 0 → 4 | 0 → 3 or 4 | 0 → 0 |
+
+The Chinese full stop's ink sits at the left of a wide character, so its ink gap stays the widest; its box gap is the same 8.45 px. At the 32 px font, on the same line: 19.67 px in en-GB and ms-MY, 36.73 in zh-Hans, none of the target over the words; wrapped under the words, 12 en-GB, 4 ms-MY and 4 zh-Hans readings, 12.7 px below them, unchanged. The item expected about 4 px of overlap; the ink overlap measured is 2.15 px, and it is reported, not a stop.
+
+**The target:** every point of the 44 × 44 square on the page hits its "?", in all 3,600 readings, both sides, both "?"s. The boxes are unchanged: format 20 × 20 at 16 px and 40 × 40 at 32 px; onset 44 × 44 and 44 × 76. Sideways scroll is unchanged, 708 of 3,600 readings each side, all at the 32 px font (w320, w375, w400, w401), and none at the default font: VH-209's for S-113's six records.
+
+**The open state:** computed colours moved only in the open states: open, focused, hovered, pressed, pressed by key, touch. Glyph on fill, lowest of each: light 8.17 (hover), dark 10.32 (hover); fill on ground, lowest 7.42 (light hover) and 8.93 (dark hover). Forced light 19.04 and forced dark 13.76 to 14.37, Highlight's alpha ignored by the probe: at the 0.8 macOS gives it, composited on the ground, the worst pair is still above 7:1 by arithmetic, not read. The ring on the ground is 13.34 or higher, and CanvasText in forced colours. A disabled open "?" keeps the disabled look in every mode.
+
+**A repair, found in the clips, not by a number.** On the first candidate (`87ae1c6b75cce652`) the open "?" hovered under forced colours showed the token's grey, not Highlight: the (0,4,0) token hover beat the (0,3,0) forced rule, and `forced-color-adjust: none` let it through. Its contrast passed. The forced hover now restates `background: Highlight`, with its test (`dd171e2a95f72247`). `after-states3` re-reads every state on the repaired diff; against `after-states2`, only forced colours' open-hovered and touch-open moved, 148 readings, and only `colours` and `contrast`. Groups a to e stand on the first candidate: those scenario cells were not re-walked, since the repair is one declaration inside one forced hover rule; VH-203's after-run reads the final page.
+
+**WCAG, for what it touched:** 1.4.1 the open state is also `aria-expanded` and the tip itself, not colour alone. 1.4.6 glyph at 7:1 or above, as above. 1.4.10 no new sideways scroll, at default or 32 px. 1.4.11 fills at 3:1 or above against both grounds, as above. 1.4.13 the tip's hover and dismiss behaviour unchanged: Escape and the outside click read as before. 2.4.7 and 2.4.13 ring 2 px, offset 2 px, on both states. 2.5.5 by the probe above. 4.1.2 `aria-expanded` read true open and false closed, unchanged.
+
+**Carbon, "one primary per state":** the filled "?" is a state, as the chosen segment is, and goes when its tip closes. It is no second primary by that reading; the owner sees it in VH-203's captures.
+
+**Failing alike, reported, none edited:** `targets`, `type` and `formatTip`'s row, the walker's own 44 × 44 reading of the format "?" (wish VH-205.1, every reached cell, and S-141's row). `type`: the "?"'s 0.875rem / 1.25 / 600 is on none of the eight roles, every reached cell (wish VH-217.2). S-142's Tab and Shift+Tab neighbours (wish VH-216.1, his "Yes, leave them"). `overflow`, `nothing off the page` at the 32 px font (w320, w400, w401). `focus` on the onset "?" in ms-MY at w320, forced dark, 32 px: 20 cells, 446 px of ring against 464.
+
+**Not reached, alike:** 108 cells a side at w375, 32 px font: the window reads 394 × 854 or wider because the phone emulation widens to the page's overflow, so the walker refuses them (wish VH-217.1). In the probe's same conditions, a mouse click at the "?"'s middle missed in 20 readings on each side, and the keyboard opened all 288; 28 of 48 touch taps opened, the same each side. One more before cell failed to reach, below.
+
+**The three cells that moved,** each better after, none by the change: S-141 en-GB w320 forced-light-font32 (before: state predicate false, load 9 to 13); S-141 ms-MY w1280 forced-light-font32 (before: walk failed, load 12 to 30); S-142 zh-Hans w401 forced-light, Escape and the click rows (before: fail, load 10 to 15). Timing-sensitive cells were read against the load logs, not re-run; after-a ran at load 30 to 34 and reached them.
+
+**Load and power.** Groups ran as high as the table states, from processes not this item's; each group's gate started below 8. Readings are DOM, layout, colour and focus order, with no job or duration timed, on the precedent of VH-216's ruling. Power: mode 2 throughout. `before-states2` moved AC to battery at 17:19:33Z, `after-a` and part of `after-b` ran on battery, `after-states2` on battery: all above 50%, his rule; no group below 82%.
+
+**Void or set aside, kept:** `before-e`, light only, stopped by the Mac's restart; `before-states`, no readings, the job's folder absent; `after-states`, 2,980 readings, Chrome's socket closed within seconds of AC to battery at 21:51:58Z, the Mac then asleep until about 21:59Z. `after-states2` is not void: whole, superseded by the repair.
+
+**Beside the before:** a separate session, now ended, ran Vite on :5173 and a browser pane twice between about 14:15Z and 14:39Z, its estimate, not logged, during before-c and into before-d's start; it touched no file in this checkout. Those groups' moved rows: none.
+
+**`matrix.mjs`'s enlargement count** does not count the combined 32 px modes: a provenance count only; the probe's `rootFontPx` and the record's `seen` read 32 in them. **Not walked:** a real phone, a screen reader, Windows High Contrast. The owner sees the overlap and the look in VH-203's captures.

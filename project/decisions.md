@@ -18,6 +18,16 @@
      moves the oldest entries verbatim to project/decisions-YYYY-MM.md,
      beside this file, listed in project/archive-index.md. -->
 
+## 2026-10-31 — VH-217 — Closes: the format "?" nearer its words and both "?"s filled while open, on the owner's word
+
+**Decision:** VH-217 closes the owner's two changes. The format "?" takes `--spacing-02`: 8.45 px from its words by the character's box in three languages, 9.85 px by the ink in English and Malay and 18.37 in Chinese, whose full stop's ink sits left, reported, not respaced. Its 44 × 44 target lies over 2.15 px of "format."'s ink, reported; every sampled point hits the "?". Both "?"s fill while open with the chosen segment's tokens, a state and no second primary, and under forced colours with Highlight. No element, string, token value or `docs/` change. The walker's one change is the combined 32 px modes the item names.
+
+**Rationale:** The owner, verbatim (`plan8-owner-words.md`, read by the orchestrators): "I accept everything, but even old issues should be solved for. we also need to make sure that question mark about file formats looks good"; "yes to the question mark, and A and B. ensure everything passes UX / design / Accessibility". Measured at one instrument revision, `e0a55331a7155cd3`: 1,440 cells a side, 1,437 unmoved and the 3 others better after, a cause not shown; 108 cells at w375 and 32 px reached on neither side, stated. The clips found a forced-hover defect no number flagged, repaired; the blind check found the first states probe lost the 32 px font, repaired and re-read on both sides. Table: `vh217-format-help-2026-10-30.md`. Digest rules (rule 8): carbon, "one primary per state" and "two token systems, never collapsed"; wcag-2.2-aaa, "7:1 contrast against the brand palette" and "44 px targets".
+
+**Supersedes:** none
+
+**Deferred:** VH-203
+
 ## 2026-10-30 — PLAN-8 — The owner's five changes: nights, short notes, workers to 350k, VH-220 to VH-224 side by side, a one-page table
 
 **Decision:** On the owner's "yes": a fresh orchestrator each evening; briefs of about 30 KB and hand-overs of about 5 KB, with no Codex check of briefs; workers run straight through, with 350k the ceiling and a hand-back at about 330k; VH-220 to VH-224 run side by side after VH-225 lands; a one-page table by script from VH-217 on. The walks, the before-and-after, Codex's design and final blind checks, VH-203's full run and his bar and every unconditional stop are unchanged.
@@ -627,13 +637,3 @@ INTAKE.2 stays a wish line: only a person listening can judge the Teams output. 
 **Items:** VH-182, VH-183, VH-184, VH-185, VH-186, VH-187, VH-188, VH-189, VH-190, VH-191, VH-192, VH-193, VH-194, VH-195
 
 **Deferred:** VH-183, VH-184, VH-185, VH-186, VH-187, VH-188, VH-189, VH-190, VH-182, VH-191, VH-192, VH-193, VH-194, VH-195
-
-## 2026-10-24 — VH-162 — The cut: 0.2.0 does not wait for VH-137's November review; Xerte is the public home, GitHub Pages the preview
-
-**Decision:** 0.2.0 is cut now, tagged `v0.2.0`, and its Xerte zip built from the tagged commit for the owner to upload (VH-14). The statement was brought up to date first (VH-137, `d926bd3`) and its 18 November review stays. The brief, the profile and D5 now say Xerte is the public home and GitHub Pages the unadvertised preview from `main`.
-
-**Rationale:** This answers the question VH-177's entry left with the owner. The owner, in a separate chat on 2026-10-24: "lets release 0.2.0 and update accessibility statement as appropiate. another review in november", and on the drafts, "all reccomendations approved"; relayed by the orchestrator with "cut now. here is some optional direction, your call if pushback:". The brief and profile are owner-signed, so their words are the owner's approved drafts A1 to A5, applied verbatim; D5 gains "Answered 2026-10-22 (PLAN-6)", the owner's call in PLAN-6. `package.json` and the lockfile's root take 0.2.0 through `npm version`, which touched nothing else; no dependency changed. 0.2.0 is a release before v1: spec §13 criterion 10 is a person's walk and criterion 1's EchoVideo upload is unconfirmed, and nothing on the page claims v1 or full conformance. DEV-INFRASTRUCTURE.md's Deployment and Xerte sections still call Xerte the intended home and D5 open; that is wish line VH-162.1, outside the approved wording. It supersedes PLAN-6 only in its timing condition, that the release ships once the statement review ships: the review now follows 0.2.0 (Codex astra's must).
-
-**Supersedes:** 2026-10-22 — PLAN-6 — The public release: 0.2.0 on Xerte, Phase 5 then Phase 6, the feedback form beside what exists
-
-**Deferred:** VH-14, VH-137

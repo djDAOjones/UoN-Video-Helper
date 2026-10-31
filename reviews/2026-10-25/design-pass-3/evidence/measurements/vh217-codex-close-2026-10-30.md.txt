@@ -1,0 +1,48 @@
+**Verdict: Commit after the musts below.**
+
+The replacement evidence is valid. Two remaining corrections belong in the [current table](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/evidence/measurements/vh217-format-help-2026-10-30.md>) and its notes source.
+
+**Musts**
+
+1. **Correct the focus-area figures at table line 145.** The 20 failures are correctly distributed across five scenarios and all four enlarged modes, but they do **not** all measure 446/464 px². The retained `detail/` records give:
+
+   | Mode | Before, px² | After, px² | Required |
+   |---|---:|---:|---:|
+   | Light | 460 | 460 | 464 |
+   | Dark | 446 | 446 | 464 |
+   | Forced light | 456 | 456–458 | 464 |
+   | Forced dark | 444 | 444–446 | 464 |
+
+   For example, `detail/after-e.S-113__ms-MY__w320__font32.json` records **460**, while `detail/after-c.S-17__ms-MY__w320__forced-light-font32.json` records **458**. The outcomes remain failures on both sides; the measured areas are not universally identical.
+
+2. **Identify the wrapped counts at table line 131 as rest-state conditions.** **12 English, 4 Malay and 4 Chinese** reproduce when filtering to `state: "rest"`. Across all measured states, the corresponding counts are **156, 48 and 48 per side**. The stated **12.7 px** separation is supported. Add the qualifier rather than presenting the smaller numbers as unrestricted “readings”.
+
+These corrections require no product change or browser re-walk.
+
+**Answers and notes**
+
+1. **Must 1: satisfied.** Each replacement run contains 624 entries: **576 measured states, all at root 32**, and 48 focus-reached checks. I found no wrong colour mode, condition error or replacement open-state mismatch. The overlay uses the replacement records correctly: I independently reproduced **3,888 entries, 1,392 unchanged**, and every changed-field count in the second table.
+
+   The inspected replacement clips visibly retain enlarged text and the 40 px format square. The format “?” looks good, including its wrapped placement. Both open treatments are clear. The onset field at 320 px remains visibly cramped, with label collision and clipped select text already present before; I would not describe that whole field as satisfactory. Its remaining layout work is recorded under VH-219.
+
+2. **Must 2: satisfied apart from the two musts above.** The other named corrections are made: alpha handling, forced pressed fill, focus-failure distribution, 1.4.13’s scope, sampled-target wording, battery minimum and unresolved causation.
+
+   I reproduce the composited glyph minima of **11.2993:1 and 8.7281:1**, and **972 overflow readings per side**: 288 at w320, 300 at w375, and 192 each at w400/w401. None occurs at the default font.
+
+   The qualification output is retained; the permitted `proof2/conditions.txt` dates its successful execution to **30 October, 12:45–12:46Z**, before the first measurement. The detailed records now substantiate the focus figures and three moved cells.
+
+   The walker-capture warning is supported by its source and the inspected S-141 page PNG: normal-sized content occupies part of the enlarged canvas. The separate page probes retain the intended font. The before clone is valid: hashing the walker-only diff independently gives **`c2af35959eea2bc7`**, matching its conditions.
+
+3. **Musts 3 and 4: satisfied for this pre-commit check.** Wish lines **VH-217.4, VH-217.2 and VH-217.5** retain the coverage gap, type-role mismatch and capture fault. The compare explains the earlier numbers. VH-209’s “other widths”, VH-210’s explicit width/font matrix and VH-219’s select criteria support the later-item references; they do not claim the missing coverage has already passed. I found **no unrecorded deferral in this close**.
+
+   The Disposition evidence link is present. Backlog removal, item status, trajectory and decision agree. The archived VH-162 entry moved **verbatim**, and the index correctly reports **109 entries**. The decision names the required Carbon and WCAG digest rules.
+
+   The [gate log](</Users/joe/UoN-Video-Helper-side/vh217-gate-3.log>) reaches the end successfully: **83 test files passed; 1,643 tests passed; one pre-existing EBU skip**, unchanged from the base and tracked by VH-27. Load samples are **5.76 before and 10.75 during**; nothing here warrants another full gate for contention. My fresh `node tools/check.mjs` returned **zero failures and zero warnings**. The commit’s prescribed `Verify:` and `Checked:` lines remain the writer’s closing step.
+
+4. **The revision split is stated and sufficient.** Table line 137 distinguishes the scenario runs, repaired state runs and replacement enlargement run. No wholesale re-walk is needed. One small wording correction: **`ea2ca5648c341917` changes the test title and its explanatory comment**, not only its title. Reverting those two text changes reproduces **`dd171e2a95f72247`** exactly; neither changes an assertion or product behaviour.
+
+5. **Keeping the first table does not mislead in this arrangement.** The current table explicitly supersedes it, and the compare identifies the old conclusions as wrong where corrected. I verified that the first manifest’s retained files match their hashes after accounting for the script and notes renames; the current manifest also matches. Preserving the first table unchanged retains the review history.
+
+6. **No added source or ledger change remains unreviewed.** I reviewed the replacement probe and records, overlay generator, manifests, notes, detailed failure records, proof output, Claude verdict/compare, close diff and gate evidence. Visual inspection sampled replacement clips across both sides, both widths, all three languages and all four palettes; I did not inspect every individual PNG.
+
+I wrote nothing and read none of the prohibited material.

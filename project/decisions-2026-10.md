@@ -1228,3 +1228,13 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Supersedes:** none
 
 **Deferred:** VH-162, VH-137
+
+## 2026-10-24 — VH-162 — The cut: 0.2.0 does not wait for VH-137's November review; Xerte is the public home, GitHub Pages the preview
+
+**Decision:** 0.2.0 is cut now, tagged `v0.2.0`, and its Xerte zip built from the tagged commit for the owner to upload (VH-14). The statement was brought up to date first (VH-137, `d926bd3`) and its 18 November review stays. The brief, the profile and D5 now say Xerte is the public home and GitHub Pages the unadvertised preview from `main`.
+
+**Rationale:** This answers the question VH-177's entry left with the owner. The owner, in a separate chat on 2026-10-24: "lets release 0.2.0 and update accessibility statement as appropiate. another review in november", and on the drafts, "all reccomendations approved"; relayed by the orchestrator with "cut now. here is some optional direction, your call if pushback:". The brief and profile are owner-signed, so their words are the owner's approved drafts A1 to A5, applied verbatim; D5 gains "Answered 2026-10-22 (PLAN-6)", the owner's call in PLAN-6. `package.json` and the lockfile's root take 0.2.0 through `npm version`, which touched nothing else; no dependency changed. 0.2.0 is a release before v1: spec §13 criterion 10 is a person's walk and criterion 1's EchoVideo upload is unconfirmed, and nothing on the page claims v1 or full conformance. DEV-INFRASTRUCTURE.md's Deployment and Xerte sections still call Xerte the intended home and D5 open; that is wish line VH-162.1, outside the approved wording. It supersedes PLAN-6 only in its timing condition, that the release ships once the statement review ships: the review now follows 0.2.0 (Codex astra's must).
+
+**Supersedes:** 2026-10-22 — PLAN-6 — The public release: 0.2.0 on Xerte, Phase 5 then Phase 6, the feedback form beside what exists
+
+**Deferred:** VH-14, VH-137

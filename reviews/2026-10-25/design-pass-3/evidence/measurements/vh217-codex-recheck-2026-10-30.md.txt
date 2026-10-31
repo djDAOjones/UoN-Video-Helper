@@ -1,0 +1,7 @@
+**Commit.**
+
+- Both musts are met. `detail/` confirms focus areas of **444–460 px²**, against **464 required**, with at most **2 px²** change between sides. Wrapped **rest-state** counts are correctly **12/4/4**, with **12.7 px** separation.
+- The test-comment and onset-field wording are corrected. No additional changes found; the source/test/walker diff still hashes to `ea2ca5648c341917`, and all **388 manifest hashes match**.
+- Gate 4 passed: **83 test files, 1,643 tests**, one existing skip. Its single load sample is **3.49**. Fresh `node tools/check.mjs`: **zero failures, zero warnings**.
+
+Wrote nothing.

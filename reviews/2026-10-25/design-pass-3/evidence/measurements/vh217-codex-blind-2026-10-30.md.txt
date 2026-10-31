@@ -1,0 +1,91 @@
+**Verdict: Commit after the musts below.**
+
+The CSS repair is correct. The main blocker is evidence: **528 state readings on each side labelled as 32 px were actually taken at 16 px**, including the open-state clips at 1280 and 320 px.
+
+References below use the [measurement table](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/evidence/measurements/vh217-format-help-2026-10-30.md>) and its adjacent [records bundle](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/evidence/measurements/vh217-records-2026-10-30/>).
+
+Musts before commit:
+
+1. **Replace the affected 32 px state readings and clips, before and after.** In both `before-states2` and `after-states3`, all four enlarged modes at 1280 and 320 px record `root: 32` at rest, then `root: 16` for the subsequent eleven measured states, for both buttons and all three languages: **528 readings per side**. For example, [after-states3, line 131](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/reviews/2026-10-25/design-pass-3/evidence/measurements/vh217-records-2026-10-30/after-states3.vh217-states.jsonl:131>) has a 40 × 40 format button; line 132 has 20 × 20. Lines 136 and 140 still report 16 px. The first capture is followed by the drop; some rest clips consequently contain blank background or the footer. Guard the actual font, media and state around reads **and captures**, repair the separate probe/capture path, and re-check these conditions without expanding the settled walker change.
+
+2. **Correct and substantiate the table.** Remove its claim that the states probe reads 32 throughout the combined modes; correct the focus-failure distribution and forced pressed contrast wording described below. Retain the dated execution output of `proof-combined.mjs`: the bundle contains its source, but no qualification results proving it ran before the before-measurement. Also retain detailed records supporting numerical claims such as **446 versus 464 px²**. `table-1page.mjs:58–60` currently reduces scenario records to outcomes; “every record kept” overstates what this bundle contains.
+
+3. **Record the named follow-ups and verification link.** The table names **VH-217.1 and VH-217.2**, but neither exists in `project/wish-list.md`. Add their actual dispositions without dropping the missing coverage or type-role issue. The report’s Disposition row at `design-pass-3-2026-10-27.md:759` names VH-217 but lacks its evidence link.
+
+4. **Complete the prescribed close after the evidence re-check.** Supply a green `npm run check` on a settled machine, run the checker after the ledger changes, name the digest rules, and record the decision/trajectory/backlog close and required `Checked:` declaration. I ran `node tools/check.mjs`: **zero failures, zero warnings**. I did not run the full npm gate.
+
+Should:
+
+- Make `test/stylesheet.test.ts:314` describe its assertion accurately: it checks active-rule ordering, not specificity against secondary rules. The present cascade is sound, but that test title promises more than the assertion proves.
+
+**1. Every acceptance criterion**
+
+| Criterion | Reading |
+|---|---|
+| Gap | The prescribed token change is met: `app.css:1145`. The unchanged centred target is at `:1151`. The measured ink gaps are **9.85 px English/Malay and 18.37 px Chinese**, not approximately 8 px ink-to-square in every language. The **8.45 px character-box gap** and Chinese punctuation explanation are stated honestly at table lines 118–123. This corrects the estimate; I am not asking for another spacing change. |
+| Target, overlap, 320 px scroll | The probe’s 484 sampled points all hit their button in each of its 3,600 measured readings per side. Default-font overflow is absent. The measured overlap is reported; it is no stop. Enlarged-state coverage remains subject to must 1 and the existing overflow work. |
+| Open state, both buttons | Implemented correctly at `app.css:1095–1108` and `:1834–1853`; complete browser verification awaits must 1. |
+| Tests | Required rules are pinned at `stylesheet.test.ts:295–330`; light/dark glyph contrast and surface contrast are pinned at `contrast.test.ts:162–180`. No test was deleted or skipped in this diff. Execution remains the gate requirement. |
+| Combined cells qualified before the before | Declaration and implementation are correct at `qualify.mjs:437–444` and `:1000–1015`. The proof script tests useful positive and negative cases. Its prior execution is **not established by the supplied bundle**; the states probe also loses the font. |
+| Descriptive wording | Met: the CSS comment at `app.css:1132–1135` and test description at `stylesheet.test.ts:286` no longer claim that the gap clears the target. |
+| Carbon weighed | Met by this review: state emphasis, as explained below. |
+| Walker before/after and state matrix | All ten required scenarios have 144 declared cells per side. The declared matrix is intact, but the 108 unreached cells and invalid enlarged-state readings prevent an unqualified “fully measured” claim. |
+| WCAG re-check | Assessed below, with explicit limitations and existing failures. |
+| Tokens, elements, progress | Met. Existing semantic tokens and permitted system colours; token files remain separate; no HTML, control or progress-bar change. |
+| Documents | Met. No rule change requiring UI-STANDARDS amendment; no protected specification edit. |
+| Gate and digest rules at close | Pending must 4. Applicable rules are Carbon’s **one primary per state / two token systems**, and WCAG’s **7:1 contrast / 44 px targets**, with focus appearance also assessed. |
+| Codex check and commit declaration | This is the check; its musts require repair and re-check before the declaration is used. |
+| Disposition link | Not yet met: must 3. |
+| Sizing and hand-back | The remedy remains narrowly scoped. Worker token use and hand-back compliance cannot be verified from the permitted artifacts. |
+
+**2. CSS and the forced-hover repair**
+
+The open selector has specificity **(0,3,0)**; its hover and active selectors have **(0,4,0)**. Secondary hover is **(0,2,0)** and secondary active-with-disabled-exclusion is **(0,3,0)**. The open interaction rules therefore win, and active follows hover.
+
+Disabled controls match none of the new rules because every selector excludes `:disabled`, including inherited fieldset disablement. The existing dashed disabled treatment remains effective.
+
+The forced repair at [app.css:1845](</Users/joe/Library/CloudStorage/OneDrive-TheUniversityofNottingham/_Joe Bell UoN Files/2_Projects/2026-08-24 UoN Video Helper/src/styles/app.css:1845>) correctly restates `background: Highlight` at the token hover rule’s specificity. Forced active follows it and explicitly supplies border, fill and text colours. The open focus rule supplies `CanvasText`.
+
+**I found no analogous remaining cascade defect.** Closed, disabled, focused and pressed paths are coherent. This is a source-level finding plus the valid readings—not a claim that the missing enlarged states have been verified.
+
+**3. Carbon: state or second primary?**
+
+**A state.** The fill marks an already-open contextual disclosure and disappears when it closes. The “?” remains small, locally placed and semantically a help disclosure; it does not become another main task action. Reusing the selected segment’s tokens does not itself create a second primary button.
+
+**4. WCAG readings**
+
+| Criterion | Finding |
+|---|---|
+| **1.4.1** | Supported. The visible disclosed content provides a non-colour cue; `aria-expanded` supplies the programmatic state. ARIA alone would not establish the visual requirement. |
+| **1.4.6** | Supported by the token pairs and valid readings: minimum glyph contrast **8.17:1 light**, **10.32:1 dark**. Independently compositing the recorded forced-colour alpha gives minima about **11.30:1 forced light** and **8.73:1 forced dark**. The probe itself ignores alpha, as disclosed. |
+| **1.4.10** | No default-font horizontal overflow or new overflow established. Existing enlarged-font overflow remains VH-209’s work. The 708-reading count is reproducible, but includes incorrectly labelled font conditions and cannot establish complete enlarged coverage. |
+| **1.4.11** | The CSS treatment is sound, but the table’s “fills at 3:1” wording is too broad. Forced pressed states have **1:1 fill-to-page**; their contrasting border identifies the control. See `after-states3.vh217-states.jsonl:64`. A contrasting boundary or identifying content can satisfy the requirement; every fill need not contrast. [W3C explanation](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html) |
+| **1.4.13** | Strictly **not applicable to this activation-triggered disclosure**: hover/focus alone does not open it (`src/main.ts:715`). Escape and dismissal remain useful behaviour checks. [W3C scope](https://www.w3.org/WAI/WCAG22/Understanding/content-on-hover-or-focus.html) |
+| **2.4.7** | Visible focus is supported in the valid readings and clips. Enlarged state coverage needs replacement. |
+| **2.4.13** | **Not universally passing.** The 20 unchanged focus failures span **all four enlarged colour modes**, across S-143, S-17, S-98, S-113 and S-97, Malay at w320—not forced dark alone as table line 135 says. Examples: `after-b.outcomes.jsonl:62,98,170,242`. They belong with VH-210. A declared 2 px outline does not alone prove sufficient contrasting area. [W3C requirement](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance.html) |
+| **2.5.5** | The unchanged 44 px target and sampled hit tests support the target construction. Say “every sampled point”, and preserve the missing-condition qualification. The walker’s box-only failures remain the settled VH-205.1 limitation. |
+| **4.1.2** | Supported for the verified states: native buttons, translated accessible names, `aria-controls`, and true/false expanded state. No semantic change in this patch. |
+
+Other unsupported or inaccurate table statements:
+
+- Line 147’s claim about the states probe retaining 32 px is false.
+- “No group below 82%” is false: `after-states3.conditions.txt:14` and its load log show **80%**. This still satisfies the stated power threshold.
+- “None by the change” for the three improved cells is stronger than the evidence establishes. Load is a plausible explanation, not a demonstrated cause.
+
+**5. Sufficiency, load and coverage**
+
+The **forced-hover repair alone does not require groups a–e to be re-walked**. It changes one forced-hover background declaration. Comparing `after-states2` with `after-states3` reproduces the reported **148 changes**, confined to `colours` and `contrast` in forced open-hovered/touch-open readings. The current diff hash is the repaired `dd171e2a95f72247`.
+
+However, the state evidence is **not yet sufficient** because of must 1. The separate page probes retain the intended font in **all 1,440 readings per side**, so the demonstrated font-loss problem does not justify discarding the whole scenario walk.
+
+The high load does not by itself invalidate settled DOM, geometry or computed-colour readings. It weakens causal explanations for timing-sensitive failures. I would not require wholesale reruns—or those three improved cells solely for this CSS approval—because of the peaks. Keep their causes unresolved unless a targeted rerun establishes them.
+
+The **108 unreached cells per side are counted correctly**. This is no deliberate reduction of the declared matrix: all 1,440 cells were attempted. It is nevertheless a **real coverage shortfall**, not 108 passes or a complete w375 check. Preserve it through the missing VH-217.1 follow-up.
+
+**6. Does it look good?**
+
+**At the default font, yes.** Across the three languages, both widths and four palettes, the format “?” sits more naturally beside its sentence, and the fill clearly distinguishes open from closed. Chinese retains a wider visible punctuation gap, but the control still reads as attached to the sentence. The onset button’s larger square remains balanced, and its open treatment is consistent.
+
+**I cannot approve the requested 32 px appearance from these clips.** All 24 enlarged-labelled format-open PNGs on each side are byte-identical to their default-font equivalents. The sampled enlarged rest clips show blank space or the wrong page region. The onset clips also crop tightly around the button, so they do not establish the appearance of its complete open help panel.
+
+I wrote nothing to the repository and did not read the prohibited review material.
