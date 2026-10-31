@@ -1238,3 +1238,37 @@ This check ran in the session that wrote the record, not in a fresh one, so it d
 **Supersedes:** 2026-10-22 — PLAN-6 — The public release: 0.2.0 on Xerte, Phase 5 then Phase 6, the feedback form beside what exists
 
 **Deferred:** VH-14, VH-137
+
+## 2026-10-24 — PLAN-8 — Phase 8, the owner's UX pass: thirteen pieces, VH-182 to VH-195, one wording sheet; Q5 to Q7 worked out in round 2
+
+**Decision:** Phase 8 addresses the wish lines the owner named and the four held back, as VH-182 to VH-195 in build order, with every new word and spec correction on one sheet. VH-183 to VH-185 need no new words and start first. The owner settled Q1a, Q2, Q3, Q4 and Q8; Q5, Q6 and Q7 are worked out in round 2. The only new elements are one native player and the footer's headings and Self Service link.
+
+**Rationale:** The owner, verbatim (the two addresses set as code for the Markdown lint), to the orchestrator's nine: "students cannot open the Creators team on Teams, they should use `http://selfservice.nottingham.ac.uk` ." / "standing permission carries on for running sessions" / "lets address everything, including the four not on the list"; later the same day, "Problem reports go to `UI-Learning-Content@nottingham.ac.uk`." That is VH-182's answer 1, students cannot open the Creators team and use Self Service, and its answer 2. The sheet's answers, verbatim: Q1a "(agree)": the statement's contact moves to the learning content team, the translation note stays with the owner; Q2 `https://selfservice.nottingham.ac.uk`, "Self Service": "Yes"; Q3 "proceed with your recommendation", a plain player in the finished card; Q4 "proceed with your reccomendation", Video language into step 3; Q5 "saying if it's for assignment upload or quick sharing, which would be small, or public dissemination, which would be high quality. do some work to figure out what this should be."; Q6 "do some work to figure out best approach. maybe offer some advice to the user."; Q7 "It is, but more for staff. Students should use the IT support route. We need to figure out staff vs student paths. It's not terminal to have the staff routes exposed to students."; Q8 "ok! so long we alert folks if they're browser fails checks.", now VH-187's criterion that a failing or warning browser still sees `browserNote.notPassed`. VH-182.6, the player, is the owner's call on top of the simplicity rule: a new element, not a new kind of control. Corrections S1 to S31 (S23 a no-op) and U1 are drafts for the owner, never applied before approval; together they take the spec from 8,074 to 8,096 of its 8,100 words and UI-STANDARDS from 2,406 to 2,404, on the recommended options, so round 2's answers may change S1 to S10 and S25. Traces, each promoted with the reason that it is one of the pieces the owner asked addressed:
+INTAKE.1 — promoted to VH-183 — the Page step;
+INTAKE.6 — promoted to VH-184 — the toggletip;
+VH-139.6 — promoted to VH-185 — the late sliver;
+INTAKE.5 — promoted to VH-186 — the System check labels;
+INTAKE.7 — promoted to VH-186 — the standalone values;
+VH-138.5 — promoted to VH-186 — the caption warning;
+INTAKE.4 — promoted to VH-187 — the lead-in;
+VH-182.5 — promoted to VH-187 — the promises;
+VH-182.1 — promoted to VH-187 — the browser note;
+VH-182.4 — promoted to VH-188 — the preset names;
+VH-182.3 — promoted to VH-189 — step 4's labels;
+VH-182.7 — promoted to VH-190 — Create again;
+VH-160.1 — promoted to VH-182 — S22 and S24 carry it;
+VH-182.2 — promoted to VH-191 — the language switches;
+VH-182.6 — promoted to VH-192 — the player;
+INTAKE.3 — promoted to VH-193 — the limiting note;
+VH-177.1 — promoted to VH-194 — S30;
+VH-177.2 — promoted to VH-194 — S26 and S27;
+VH-177.3 — promoted to VH-194 — S28;
+VH-177.4 — promoted to VH-194 — S29;
+VH-177.5 — promoted to VH-194 — U1.
+INTAKE.2 stays a wish line: only a person listening can judge the Teams output. It supersedes VH-132 only in where Video language sits and in its never being locked: Q4 moves it into step 3, locked with step 3, once the owner approves S19 (Codex astra's must). INTAKE.5's other half, the explanation moved into the value, is retired: a value says only whether its check passed, and a failed check is said above step 1 by the browser note (Q8) (sheet B1).
+
+**Supersedes:** 2026-10-19 — VH-132 — Video language sits under Video type, follows the page until chosen, and is remembered
+
+**Items:** VH-182, VH-183, VH-184, VH-185, VH-186, VH-187, VH-188, VH-189, VH-190, VH-191, VH-192, VH-193, VH-194, VH-195
+
+**Deferred:** VH-183, VH-184, VH-185, VH-186, VH-187, VH-188, VH-189, VH-190, VH-182, VH-191, VH-192, VH-193, VH-194, VH-195
